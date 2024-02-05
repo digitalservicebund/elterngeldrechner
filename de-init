@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Switch from init's artifactory to regular npm registry
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+cd ed-monatsplaner-app-develop
+rm .npmrc
+npm config get registry
+sed --in-place --expression "s#artifacts.init.de:443/artifactory/api/npm/egr-npm#registry.npmjs.org#g" package-lock.json
+
+cd ..
+
+cd ed-egr-app-develop
+rm .npmrc
+npm config get registry
+sed --in-place --expression "s#artifacts.init.de:443/artifactory/api/npm/egr-npm#registry.npmjs.org#g" package-lock.json
+
+npm cache clean --force

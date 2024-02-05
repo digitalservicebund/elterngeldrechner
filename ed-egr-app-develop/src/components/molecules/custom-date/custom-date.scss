@@ -1,0 +1,54 @@
+@use "./custom-date.variables.scss" as *;
+
+.#{nsp("custom-date")} {
+  display: flex;
+  flex-direction: column;
+
+  &__label {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: rem(450);
+    color: $custom-date-label-text-color;
+    margin-bottom: rem($spacer);
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    max-width: rem(320);
+    padding: $custom-date-padding;
+    border: $custom-date-border;
+    height: rem(64);
+    margin-bottom: rem($spacer);
+
+    &:focus-within {
+      padding: $custom-date-padding-on-focus;
+      border: rem(2) solid $color-primary;
+    }
+
+    &--error {
+      border-color: $custom-date--error-color;
+    }
+
+    &--valid {
+      border-color: $custom-date--valid-color;
+    }
+  }
+
+  &__input {
+    font-family: inherit;
+    border: none;
+    height: rem(30);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__placeholder {
+    font-size: rem(14);
+    line-height: rem(18);
+    color: $color-text-light;
+  }
+}

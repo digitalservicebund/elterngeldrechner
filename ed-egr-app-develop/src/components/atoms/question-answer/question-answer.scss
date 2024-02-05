@@ -1,0 +1,9 @@
+@use "question-answer.variables" as *;
+
+.#{nsp("question-answer")} {
+  margin-bottom: rem($spacer);
+
+  &__answer {
+    font-weight: bold;
+  }
+}

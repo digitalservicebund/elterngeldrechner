@@ -1,0 +1,41 @@
+@use "rechner-result.variables" as *;
+
+.#{nsp("rechner-result")} {
+  display: grid;
+  grid-template:
+    "over-14-month"
+    "basiselterngeld"
+    "elterngeldplus" / max-content;
+  gap: rem($spacer-xl);
+
+  @media (min-width: $breakpoint-desktop) {
+    grid-template:
+      "over-14-month over-14-month"
+      "basiselterngeld elterngeldplus" / 0.6fr 0.4fr;
+  }
+
+  &__basiselterngeld {
+    grid-area: basiselterngeld;
+  }
+
+  .egr-foot-note {
+    grid-area: over-14-month;
+  }
+
+  &__elterngeldplus {
+    grid-area: elterngeldplus;
+  }
+
+  &-error {
+    display: flex;
+    align-items: center;
+    color: $color-danger;
+    gap: rem($spacer-s);
+    padding-left: rem($spacer-s);
+    border-left: rem($spacer-s) solid $color-danger;
+  }
+
+  @media only screen and (max-width: $breakpoint-desktop) {
+    width: 100vw;
+  }
+}

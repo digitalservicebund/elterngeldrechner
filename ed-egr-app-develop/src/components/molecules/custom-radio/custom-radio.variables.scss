@@ -1,0 +1,18 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$custom-radio--size: egr.rem(30) !default;
+$custom-radio--border-size: egr.rem(1) !default;
+$custom-radio--fill-size: egr.rem(16) !default;
+$custom-radio--label-spacing: egr.rem(egr.$spacer) !default;
+$custom-radio--outer-space: egr.rem(egr.$spacer) !default;
+$custom-radio--inner-space: egr.rem(egr.$spacer-s) egr.rem(egr.$spacer-s)
+  egr.rem(egr.$spacer-s) 0 !default;
+$custom-radio--background-color: egr.$color-white !default;
+$custom-radio--color: egr.$color-primary !default;
+$custom-radio--error--color: egr.$color-danger !default;
+
+$custom-radio__input--border-color: egr.$color-text !default;
+$custom-radio__input--active--border-color: $custom-radio--color !default;
+$custom-radio__input--fill-color: $custom-radio__input--active--border-color !default;
+$custom-radio__input--error--fill-color: egr.$color-danger !default;

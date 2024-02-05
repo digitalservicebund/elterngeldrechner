@@ -1,0 +1,464 @@
+import { render, screen } from "../../test-utils/test-utils";
+import userEvent from "@testing-library/user-event";
+import { configureStore, Store } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router";
+import { reducers, RootState } from "../../redux";
+import NachwuchsPage from "./NachwuchsPage";
+import {
+  initialStepNachwuchsState,
+  StepNachwuchsState,
+} from "../../redux/stepNachwuchsSlice";
+import { createElternteile, Elternteile } from "@egr/monatsplaner-app";
+import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
+import { YesNo } from "../../globals/js/calculations/model";
+import { initialMonatsplanerState } from "../../redux/monatsplanerSlice";
+import { createDefaultElternteileSettings } from "../../globals/js/elternteile-utils";
+import { DateTime } from "luxon";
+
+jest.mock("react-router");
+jest.mock("@egr/monatsplaner-app");
+
+const currentYear = new Date().getFullYear();
+
+describe("Nachwuchs Page", () => {
+  it("should increase and decrease number of expected children", async () => {
+    render(<NachwuchsPage />);
+
+    const numberField = screen.getByLabelText(
+      "Wie viele Kinder erwarten Sie (z.B. Zwillinge)?",
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+    expect(numberField).toHaveValue(1);
+
+    await userEvent.click(screen.getByRole("button", { name: "verringern" }));
+    expect(numberField).toHaveValue(0);
+  });
+
+  it("should not increase beyond 8 expected children", async () => {
+    render(<NachwuchsPage />);
+
+    const numberField = screen.getByLabelText(
+      "Wie viele Kinder erwarten Sie (z.B. Zwillinge)?",
+    );
+
+    for (let i = 0; i < 20; i++) {
+      await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+    }
+    expect(numberField).toHaveValue(8);
+  });
+
+  it("should not decrease below 0 children", async () => {
+    render(<NachwuchsPage />);
+
+    const numberField = screen.getByLabelText(
+      "Wie viele Kinder erwarten Sie (z.B. Zwillinge)?",
+    );
+
+    for (let i = 0; i < 20; i++) {
+      await userEvent.click(screen.getByRole("button", { name: "verringern" }));
+    }
+    expect(numberField).toHaveValue(0);
+  });
+
+  it("should display the typed value for the expected birthday", async () => {
+    render(<NachwuchsPage />);
+
+    const dateField = screen.getByLabelText(
+      "Wann wird Ihr Kind voraussichtlich geboren?",
+    );
+
+    await userEvent.type(dateField, "a12.12lasd!2022");
+
+    expect(dateField).toHaveValue("12.12.2022");
+  });
+
+  it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button", async () => {
+    render(<NachwuchsPage />);
+
+    const addButton = screen.getByRole("button", {
+      name: /älteres geschwisterkind hinzufügen/i,
+    });
+
+    await userEvent.click(addButton);
+
+    const dateField = screen.getByLabelText(
+      "Wann wird Ihr Kind voraussichtlich geboren?",
+    );
+
+    expect(dateField).toBeInTheDocument();
+  });
+
+  it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button and check Behinderung-Checkbox", async () => {
+    render(<NachwuchsPage />);
+
+    const addButton = screen.getByRole("button", {
+      name: /älteres geschwisterkind hinzufügen/i,
+    });
+
+    await userEvent.click(addButton);
+
+    const checkbox = screen.getByLabelText(
+      "Das Geschwisterkind hat eine Behinderung",
+    );
+
+    expect(checkbox).not.toBeChecked();
+
+    await userEvent.click(checkbox);
+    expect(checkbox).toBeChecked();
+  });
+
+  it("should change the title of the add new Geschwisterkind button after the first added child", async () => {
+    render(<NachwuchsPage />);
+
+    const addButton = screen.getByRole("button", {
+      name: /älteres geschwisterkind hinzufügen/i,
+    });
+
+    await userEvent.click(addButton);
+
+    expect(addButton).toHaveAccessibleName(
+      /weiteres geschwisterkind hinzufügen/i,
+    );
+  });
+});
+
+describe("Submitting the form", () => {
+  let store: Store<RootState>;
+  let navigate = jest.fn();
+
+  beforeEach(() => {
+    store = configureStore({ reducer: reducers });
+
+    navigate.mockClear();
+    (useNavigate as jest.Mock).mockReturnValue(navigate);
+  });
+
+  it("should persist the step", async () => {
+    render(<NachwuchsPage />, { store });
+    const expectedState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
+      geschwisterkinder: [
+        {
+          geburtsdatum: "01.03.1985",
+          istBehindert: true,
+        },
+      ],
+    };
+
+    for (let i = 0; i < 2; i++) {
+      await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+    }
+
+    const dateField = screen.getByLabelText(
+      "Wann wird Ihr Kind voraussichtlich geboren?",
+    );
+    await userEvent.type(dateField, "a12.12lasd!" + currentYear);
+
+    const addButton = screen.getByRole("button", {
+      name: /älteres geschwisterkind hinzufügen/i,
+    });
+    await userEvent.click(addButton);
+
+    const dateFieldGeschwister = screen.getByLabelText(
+      "Wann wurde das Geschwisterkind geboren?",
+    );
+    await userEvent.type(dateFieldGeschwister, "01031985");
+
+    const checkbox = screen.getByLabelText(
+      "Das Geschwisterkind hat eine Behinderung",
+    );
+    await userEvent.click(checkbox);
+
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(store.getState().stepNachwuchs).toEqual(expectedState);
+  });
+
+  it("should go to the next step", async () => {
+    const validFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
+      geschwisterkinder: [
+        {
+          geburtsdatum: "01.03.1985",
+          istBehindert: true,
+        },
+      ],
+    };
+
+    render(<NachwuchsPage />, {
+      preloadedState: { stepNachwuchs: validFormState },
+    });
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(navigate).toHaveBeenCalledWith("/erwerbstaetigkeit");
+  });
+
+  it("should accept expected birth of child that is 32 months before current date", async () => {
+    const dateMoreThan3MonthAgoInHarmonyWithBEEG = DateTime.now()
+      .minus({ month: 32 })
+      .startOf("month")
+      .toFormat("dd.MM.yyyy");
+
+    const validFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: dateMoreThan3MonthAgoInHarmonyWithBEEG,
+      geschwisterkinder: [
+        {
+          geburtsdatum: "",
+          istBehindert: true,
+        },
+      ],
+    };
+
+    render(<NachwuchsPage />, {
+      preloadedState: { stepNachwuchs: validFormState },
+    });
+    await userEvent.click(screen.getByText("Weiter"));
+    expect(
+      screen.queryByText(
+        "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  it("should not accept expected birth of child that is more than 32 months before current date", async () => {
+    const dateMoreThan3MonthAgoInHarmonyWithBEEG = DateTime.now()
+      .minus({ month: 32 })
+      .startOf("month")
+      .minus({ day: 1 })
+      .toFormat("dd.MM.yyyy");
+
+    const validFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: dateMoreThan3MonthAgoInHarmonyWithBEEG,
+      geschwisterkinder: [
+        {
+          geburtsdatum: "",
+          istBehindert: true,
+        },
+      ],
+    };
+
+    render(<NachwuchsPage />, {
+      preloadedState: { stepNachwuchs: validFormState },
+    });
+    await userEvent.click(screen.getByText("Weiter"));
+    expect(
+      screen.getByText(
+        "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("should go to the next step but filters empty Geschwisterkinder", async () => {
+    const validFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
+      geschwisterkinder: [
+        {
+          geburtsdatum: "",
+          istBehindert: true,
+        },
+      ],
+    };
+
+    store = configureStore({
+      reducer: reducers,
+      preloadedState: { stepNachwuchs: validFormState },
+    });
+
+    render(<NachwuchsPage />, { store });
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(navigate).toHaveBeenCalledWith("/erwerbstaetigkeit");
+    expect(store.getState().stepNachwuchs.geschwisterkinder).toHaveLength(0);
+  });
+
+  it("should not go to the next step if birthdate of Geschwisterkinder is not filled completely", async () => {
+    const invalidFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: "12.12.2022",
+      geschwisterkinder: [
+        {
+          geburtsdatum: "12.05.20",
+          istBehindert: false,
+        },
+      ],
+    };
+
+    store = configureStore({
+      reducer: reducers,
+      preloadedState: { stepNachwuchs: invalidFormState },
+    });
+
+    render(<NachwuchsPage />, { store });
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(navigate).not.toHaveBeenCalled();
+
+    const errorMessage = screen.getByText(
+      "Bitte das Feld vollständig ausfüllen oder leer lassen",
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("should not go to the next step if birthdate of Geschwisterkinder is after birthdate of Kind", async () => {
+    const invalidFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 2,
+      wahrscheinlichesGeburtsDatum: "12.12.2022",
+      geschwisterkinder: [
+        {
+          geburtsdatum: "13.12.2022",
+          istBehindert: false,
+        },
+      ],
+    };
+
+    store = configureStore({
+      reducer: reducers,
+      preloadedState: { stepNachwuchs: invalidFormState },
+    });
+
+    render(<NachwuchsPage />, { store });
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(navigate).not.toHaveBeenCalled();
+
+    const errorMessage = screen.getByText(
+      "Das Geschwisterkind muss älter als das Kind oben sein.",
+    );
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("should show a validation error if some information is missing and not go to the next step", async () => {
+    const invalidFormState: StepNachwuchsState = {
+      ...initialStepNachwuchsState,
+      anzahlKuenftigerKinder: 1,
+      wahrscheinlichesGeburtsDatum: "",
+      geschwisterkinder: [
+        {
+          geburtsdatum: "01.03.1985",
+          istBehindert: true,
+        },
+      ],
+    };
+    render(<NachwuchsPage />, {
+      preloadedState: { stepNachwuchs: invalidFormState },
+    });
+
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(navigate).not.toHaveBeenCalled();
+    expect(
+      screen.getByText("Dieses Feld ist erforderlich"),
+    ).toBeInTheDocument();
+  });
+
+  it("should create the Elternteile for the Monatsplaner", async () => {
+    const mockElternteile: Elternteile = {
+      ET1: { months: [{ type: "EG+" }] },
+    } as unknown as Elternteile;
+    (createElternteile as jest.Mock).mockReturnValue(mockElternteile);
+    const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
+
+    const createElternteileSettings = createDefaultElternteileSettings(
+      isoGeburtsdatum,
+      "ET1",
+      0,
+    );
+
+    const validState: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        mutterschaftssleistungen: YesNo.NO,
+      },
+      monatsplaner: {
+        ...initialMonatsplanerState,
+        mutterschutzElternteil: "ET1",
+      },
+      stepNachwuchs: {
+        ...initialStepNachwuchsState,
+        anzahlKuenftigerKinder: 1,
+        wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
+        geschwisterkinder: [
+          {
+            geburtsdatum: "",
+            istBehindert: true,
+          },
+        ],
+        mutterschaftssleistungen: YesNo.NO,
+      },
+    };
+
+    store = configureStore({
+      reducer: reducers,
+      preloadedState: validState,
+    });
+    render(<NachwuchsPage />, { store });
+
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(store.getState().monatsplaner.elternteile).toBe(mockElternteile);
+    expect(createElternteile).toHaveBeenCalledWith(createElternteileSettings);
+  });
+
+  it("should create the Elternteile for the Monatsplaner with Mehrlinge", async () => {
+    const mockElternteile: Elternteile = {
+      ET1: { months: [{ type: "EG+" }] },
+    } as unknown as Elternteile;
+    (createElternteile as jest.Mock).mockReturnValue(mockElternteile);
+    const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
+
+    const validState: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        mutterschaftssleistungen: YesNo.YES,
+      },
+      monatsplaner: {
+        ...initialMonatsplanerState,
+        mutterschutzElternteil: "ET1",
+      },
+      stepNachwuchs: {
+        ...initialStepNachwuchsState,
+        anzahlKuenftigerKinder: 2,
+        wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
+        geschwisterkinder: [
+          {
+            geburtsdatum: "",
+            istBehindert: true,
+          },
+        ],
+        mutterschaftssleistungen: YesNo.YES,
+      },
+    };
+
+    store = configureStore({
+      reducer: reducers,
+      preloadedState: validState,
+    });
+
+    const createElternteileSettings = createDefaultElternteileSettings(
+      isoGeburtsdatum,
+      "ET1",
+      3,
+    );
+
+    render(<NachwuchsPage />, { store });
+    await userEvent.click(screen.getByText("Weiter"));
+
+    expect(store.getState().monatsplaner.elternteile).toBe(mockElternteile);
+    expect(createElternteile).toHaveBeenCalledWith(createElternteileSettings);
+  });
+});

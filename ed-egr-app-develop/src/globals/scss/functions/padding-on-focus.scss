@@ -1,0 +1,5 @@
+@use "src/globals/scss/functions/rem" as *;
+
+@function substractOfPaddingOnFocus($padding, $numberOfSubstractedPixel) {
+  @return calc(rem($padding) - rem($numberOfSubstractedPixel));
+}

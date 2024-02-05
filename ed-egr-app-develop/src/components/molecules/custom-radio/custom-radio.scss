@@ -1,0 +1,87 @@
+@use "custom-radio.variables" as *;
+@use "sass:math" as math;
+
+.#{nsp("custom-radio")} {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  &__options {
+    padding: $custom-radio--inner-space;
+  }
+
+  &__option {
+    margin-bottom: $custom-radio--outer-space;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__input {
+    opacity: 0;
+    position: absolute;
+
+    &:focus {
+      + label::before {
+        border: rem(2) solid $color-primary;
+      }
+    }
+
+    &:checked {
+      + label::before {
+        border-color: $custom-radio__input--active--border-color;
+      }
+
+      + label::after {
+        background: $custom-radio__input--fill-color;
+      }
+    }
+
+    &--error {
+      + label::before {
+        border-color: $custom-radio__input--error--fill-color;
+      }
+
+      &:checked {
+        + label::after {
+          background: $custom-radio__input--error--fill-color;
+        }
+      }
+    }
+  }
+
+  &__label {
+    position: relative;
+    cursor: pointer;
+    padding-left: $custom-radio--size + $custom-radio--label-spacing;
+    line-height: $custom-radio--size;
+
+    &::before {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      top: 0;
+      left: 0;
+      border: $custom-radio--border-size solid
+        $custom-radio__input--border-color;
+      width: $custom-radio--size;
+      height: $custom-radio--size;
+      background-color: $custom-radio--background-color;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      top: math.div($custom-radio--size - $custom-radio--fill-size, 2);
+      left: math.div($custom-radio--size - $custom-radio--fill-size, 2);
+      width: $custom-radio--fill-size;
+      height: $custom-radio--fill-size;
+    }
+
+    &--error {
+      color: $custom-radio--error--color;
+    }
+  }
+}

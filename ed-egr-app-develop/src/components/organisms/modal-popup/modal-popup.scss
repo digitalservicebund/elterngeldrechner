@@ -1,0 +1,28 @@
+﻿@use "modal-popup.variables" as *;
+
+.#{nsp("modal-popup")} {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.75);
+
+  &__info {
+    position: fixed;
+    bottom: rem(10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: rem($spacer-xl);
+    background-color: $color-primary-light;
+    box-shadow: 0 0 rem(8) $color-text;
+    margin: 0 rem(20);
+  }
+
+  &__btn {
+    margin: rem(10);
+  }
+}

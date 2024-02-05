@@ -1,0 +1,1 @@
+export { ZusammenfassungUndDaten } from "./ZusammenfassungUndDaten";

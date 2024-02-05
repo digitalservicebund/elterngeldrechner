@@ -1,0 +1,9 @@
+@use "zusammenfassung-und-daten.variables" as *;
+
+.#{nsp("zusammenfassung-und-daten")} {
+  margin-top: rem($spacer-xl);
+
+  h4 {
+    color: $color-primary;
+  }
+}

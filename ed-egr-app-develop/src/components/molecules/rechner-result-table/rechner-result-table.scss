@@ -1,0 +1,85 @@
+@use "rechner-result-table.variables" as *;
+
+.#{nsp("rechner-result-table")} {
+  border-spacing: rem(4);
+  border-collapse: separate;
+  table-layout: fixed;
+
+  @media only screen and (max-width: $breakpoint-desktop) {
+    width: 100vw;
+  }
+
+  th,
+  td {
+    padding: rem($spacer-s);
+  }
+
+  th {
+    font-weight: 400;
+    line-height: rem(30);
+    width: rem(220);
+    vertical-align: top;
+
+    @media only screen and (max-width: $breakpoint-desktop) {
+      width: auto;
+    }
+  }
+
+  th &__lebensmonate {
+    box-sizing: content-box;
+    width: rem(40);
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    border-right: rem(40) solid transparent;
+  }
+
+  &__cell {
+    background-color: $color-BEG-light;
+
+    &--result {
+      border: rem(1) solid $color-BEG-light;
+      color: $color-BEG-base;
+      font-weight: 700;
+      background-color: $color-white;
+
+      .egr-foot-note-number {
+        color: $color-BEG-base;
+      }
+    }
+
+    &--total {
+      color: $color-BEG-base;
+      font-weight: 700;
+      background-color: $color-BEG-light;
+
+      .egr-foot-note-number {
+        color: $color-BEG-base;
+      }
+    }
+  }
+
+  &--elterngeldplus &__cell {
+    background-color: $color-EGP-light;
+
+    &--result {
+      border: rem(1) solid $color-EGP-light;
+      color: $color-EGP-base;
+    }
+
+    &--total {
+      color: $color-EGP-base;
+      background-color: $color-EGP-light;
+    }
+  }
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    th:first-child {
+      -webkit-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+}

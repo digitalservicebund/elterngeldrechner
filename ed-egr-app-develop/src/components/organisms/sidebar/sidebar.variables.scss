@@ -1,0 +1,27 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$sidebar-border-color: #bbbbbb !default;
+$sidebar-border-width: egr.rem(1) !default;
+
+$sidebar--padding: egr.rem(8);
+$sidebar--background-color: egr.$color-BEG-light;
+
+$sidebar-list--padding: egr.rem(20) egr.rem(2);
+
+$sidebar-list--open--height: egr.rem(350);
+
+$sidebar-list__step--color: egr.$color-text !default;
+$sidebar-list__step--spacing: egr.rem(egr.$spacer-l) !default;
+$sidebar-list__step--counter-size: egr.rem(egr.$spacer-xl) !default;
+$sidebar-list__step--counter-spacing: egr.rem(egr.$spacer) !default;
+
+$sidebar-list__step--current--background-color: egr.$color-primary-light !default;
+$sidebar-list__step--current--font-weight: 600;
+
+$sidebar-list__step--done--background-color: egr.$color-primary !default;
+$sidebar-list__step--done--color: egr.$color-white !default;
+
+// tablet view variables
+$sidebar-tablet--background-color: egr.$color-primary;
+$sidebar-tablet--margin: egr.rem(40) 0;

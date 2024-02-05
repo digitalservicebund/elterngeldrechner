@@ -1,0 +1,15 @@
+@use "paragraph.variables" as *;
+
+.#{nsp("paragraph")} {
+  font-size: $paragraph--size;
+  line-height: $paragraph--line-height;
+
+  &--large {
+    font-size: $paragraph--size--large;
+    line-height: $paragraph--line-height--large;
+  }
+
+  &--bold {
+    font-weight: $paragraph--font-weight--bold;
+  }
+}

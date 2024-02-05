@@ -1,0 +1,42 @@
+stages:
+  - install
+  - test
+  - publish
+
+# Define a global cache that is shared between stages/jobs -> installation of dependencies only done once per pipeline and not in each stage/job
+cache: &global_cache
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - node_modules
+  # Optimization: Neither test nor publish need to (or should) push to the cache, default pull-push would trigger unnecessary push operation
+  policy: pull
+
+install:
+  stage: install
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v.*$/ || $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - npm ci
+  cache:
+    <<: *global_cache
+    # Override policy of global cache. Install does not need to pull dependencies (but needs to push) and npm ci will clean install all dependencies anyway
+    policy: push
+
+test:
+  stage: test
+  rules:
+    # Only run on new version tag (always starts with v) or on merge request
+    - if: $CI_COMMIT_TAG =~ /^v.*$/ || $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - npm run lint
+    - npm run test:ci
+
+publish:
+  stage: publish
+  script:
+    - npm run build
+    - npm publish
+  rules:
+    # Only run on new version tag on default branch
+    - if: $CI_COMMIT_TAG =~ /^v.*$/
+

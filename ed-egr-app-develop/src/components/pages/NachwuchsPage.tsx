@@ -1,0 +1,49 @@
+import { FC, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import {
+  stepNachwuchsActions,
+  StepNachwuchsState,
+} from "../../redux/stepNachwuchsSlice";
+import { NachwuchsForm } from "../organisms";
+import { formSteps } from "../../utils/formSteps";
+import { Page } from "../organisms/page";
+import { stepRechnerActions } from "../../redux/stepRechnerSlice";
+
+const NachwuchsPage: FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const initialValues = useAppSelector((state) => state.stepNachwuchs);
+
+  const [isFormDirty, setFormIsDirty] = useState(false);
+
+  const handleSubmit = (values: StepNachwuchsState) => {
+    if (isFormDirty) {
+      dispatch(
+        stepRechnerActions.setHasBEGResultChangedDueToPrevFormSteps({
+          ET1: true,
+          ET2: true,
+        }),
+      );
+    }
+    dispatch(stepNachwuchsActions.submitStep(values));
+    navigate(formSteps.erwerbstaetigkeit.route);
+  };
+
+  const handleDirtyForm = (isFormDirty: boolean) => {
+    setFormIsDirty(isFormDirty);
+  };
+
+  return (
+    <Page step={formSteps.nachwuchs}>
+      <NachwuchsForm
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        handleDirtyForm={handleDirtyForm}
+      />
+    </Page>
+  );
+};
+
+export default NachwuchsPage;

@@ -1,0 +1,96 @@
+@use "monatsplaner.variables" as *;
+
+.#{nsp("monatsplaner")} {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: rem($spacer);
+  background-color: $color-off-white;
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    padding-left: 0;
+  }
+
+  &__tables {
+    display: flex;
+    flex-direction: column;
+
+    th {
+      height: rem(56); // make equal heigt in both ET tables
+    }
+
+    @media only screen and (min-width: $breakpoint-desktop) {
+      flex-direction: row;
+    }
+
+    @media print {
+      display: block;
+    }
+  }
+
+  &__header {
+    margin-bottom: rem($spacer-xl);
+  }
+
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: rem($spacer-4xl);
+    padding: rem($spacer);
+
+    @media print {
+      display: none;
+    }
+  }
+
+  &__footer-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: rem($spacer);
+    background-color: $color-off-white;
+    z-index: 1;
+  }
+
+  &__blur {
+    filter: blur(rem(2));
+
+    @media print {
+      display: none;
+    }
+  }
+
+  &__sticky-elternteil thead {
+    position: sticky;
+    top: 0;
+  }
+
+  &__blur &__sticky-elternteil thead {
+    position: unset;
+    top: unset;
+    z-index: unset;
+  }
+
+  &__button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: rem($spacer-3xl);
+    background-color: $color-white;
+
+    @media only screen and (max-width: $breakpoint-desktop) {
+      flex-direction: column-reverse;
+    }
+
+    &-backwards {
+      width: rem(280);
+      display: flex;
+      justify-content: space-between;
+
+      @media only screen and (max-width: $breakpoint-desktop) {
+        width: auto;
+        margin-top: rem($spacer);
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+@use "fonts.variables" as *;
+
+@font-face {
+  font-family: "BundesSerif";
+  src: url("#{$font-path}/BundesSerifWeb-Regular.ttf") format("truetype"),
+    url("#{$font-path}/BundesSerifWeb-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BundesSerif";
+  src: url("#{$font-path}/BundesSerifWeb-Italic.ttf") format("truetype"),
+    url("#{$font-path}/BundesSerifWeb-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "BundesSerif";
+  src: url("#{$font-path}/BundesSerifWeb-Bold.ttf") format("truetype"),
+    url("#{$font-path}/BundesSerifWeb-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BundesSans";
+  src: url("#{$font-path}/BundesSansWeb-Regular.ttf") format("truetype"),
+    url("#{$font-path}/BundesSansWeb-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BundesSans";
+  src: url("#{$font-path}/BundesSansWeb-Italic.ttf") format("truetype"),
+    url("#{$font-path}/BundesSansWeb-Italic.woff") format("woff");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "BundesSans";
+  src: url("#{$font-path}/BundesSansWeb-Bold.ttf") format("truetype"),
+    url("#{$font-path}/BundesSansWeb-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}

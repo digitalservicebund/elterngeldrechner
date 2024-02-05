@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": "warn",
+    // Must disable the base rule as it can report incorrect errors
+    // See https://typescript-eslint.io/rules/no-unused-expressions/
+    "no-unused-vars": "off",
+    // TODO: Make no-unused-vars a warning which should still trigger CI error or npm run build error
+    "@typescript-eslint/no-unused-vars": "error"
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        // disabled because no-undef is built into typescript, see:
+        // https://github.com/typescript-eslint/typescript-eslint/blob/main/docs/linting/TROUBLESHOOTING.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
+        "no-undef": "off"
+      }
+    }
+  ],
+  "plugins": ["prettier"]
+}

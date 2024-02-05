@@ -1,0 +1,45 @@
+{
+  "name": "@egr/monatsplaner-app",
+  "version": "0.6.5",
+  "description": "",
+  "main": "build/cjs/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:ci": "jest --verbose",
+    "test:watch": "jest --watch",
+    "lint": "eslint ./src/**/*.{js,ts} --fix",
+    "start": "tsc --watch",
+    "build": "tsc --build --force tsconfig.cjs.json ./tsconfig.amd.json"
+  },
+  "publishConfig": {
+    "registry": "https://artifacts.init.de/artifactory/api/npm/egr-npm-local/"
+  },
+  "files": [
+    "build/*",
+    "src/*"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.init.de:anton-plugins/ed-monatsplaner-app.git"
+  },
+  "keywords": [],
+  "author": "]init[",
+  "license": "ISC",
+  "types": "build/types/index.d.ts",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "@types/jest": "^27.4.1",
+    "@types/luxon": "^2.3.1",
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.5.1",
+    "prettier": "^2.6.1",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "luxon": "^2.5.2"
+  }
+}

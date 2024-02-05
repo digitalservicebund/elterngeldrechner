@@ -1,0 +1,9 @@
+/**
+ * Enumeration von ElterngeldArten
+ */
+export enum ElternGeldArt {
+  KEIN_BEZUG = "KEIN_BEZUG",
+  BASIS_ELTERNGELD = "BASIS_ELTERNGELD",
+  ELTERNGELD_PLUS = "ELTERNGELD_PLUS",
+  PARTNERSCHAFTS_BONUS = "PARTNERSCHAFTS_BONUS",
+}

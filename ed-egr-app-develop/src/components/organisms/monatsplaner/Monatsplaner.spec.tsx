@@ -1,0 +1,759 @@
+import { fireEvent, render, screen } from "../../../test-utils/test-utils";
+import userEvent from "@testing-library/user-event";
+import { Monatsplaner } from "./Monatsplaner";
+import nsp from "../../../globals/js/namespace";
+import { RootState } from "../../../redux";
+import { initialStepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
+import { initialStepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
+import { useNavigate } from "react-router-dom";
+import {
+  initialMonatsplanerState,
+  MonatsplanerState,
+} from "../../../redux/monatsplanerSlice";
+import { initialStepRechnerState } from "../../../redux/stepRechnerSlice";
+import {
+  changeMonth,
+  createElternteile,
+  validateElternteile,
+  ValidationResult,
+} from "@egr/monatsplaner-app";
+import { createDefaultElternteileSettings } from "../../../globals/js/elternteile-utils";
+import { YesNo } from "../../../globals/js/calculations/model";
+
+const getElternteilEGLabel = (name: string, eg: string, monthIndex: number) =>
+  `${name} ${eg} für Lebensmonat ${monthIndex + 1}`;
+
+const getElternteilBEGLabel = (name: string, monthIndex: number) =>
+  getElternteilEGLabel(name, "Basiselterngeld", monthIndex);
+
+const getElternteilEGPLabel = (name: string, monthIndex: number) =>
+  getElternteilEGLabel(name, "ElterngeldPlus", monthIndex);
+
+const getElternteil1BEGLabel = (monthIndex: number) =>
+  getElternteilBEGLabel("Elternteil 1", monthIndex);
+
+const getElternteil1PSBLabel = (monthIndex: number) =>
+  `Elternteil 1 Partnerschaftsbonus für Lebensmonat ${monthIndex + 1}`;
+
+const getElternteil1EGPlusLabel = (monthIndex: number) =>
+  getElternteilEGPLabel("Elternteil 1", monthIndex);
+
+const testLebensmonateLabels = [
+  "1 August",
+  "2 September",
+  "3 Oktober",
+  "4 November",
+  "5 Dezember",
+  "6 Januar",
+  "7 Februar",
+  "8 März",
+  "9 April",
+  "10 Mai",
+  "11 Juni",
+  "12 Juli",
+  "13 August",
+  "14 September",
+  "15 Oktober",
+  "16 November",
+  "17 Dezember",
+  "18 Januar",
+  "19 Februar",
+  "20 März",
+  "21 April",
+  "22 Mai",
+  "23 Juni",
+  "24 Juli",
+  "25 August",
+  "26 September",
+  "27 Oktober",
+  "28 November",
+  "29 Dezember",
+  "30 Januar",
+  "31 Februar",
+  "32 März",
+];
+
+jest.setTimeout(60000);
+jest.mock("react-router");
+jest.mock("@egr/monatsplaner-app", () => {
+  // mock only specific function of imported library
+  const actual = jest.requireActual("@egr/monatsplaner-app");
+
+  return {
+    ...actual,
+    validateElternteile: jest.fn(),
+  };
+});
+
+describe("Monatsplaner", () => {
+  const navigate = jest.fn();
+  const numberOfMutterschutzMonths = 2;
+
+  beforeEach(() => {
+    navigate.mockClear();
+    (useNavigate as jest.Mock).mockReturnValue(navigate);
+  });
+
+  const defaultElternteileSettings = createDefaultElternteileSettings(
+    "2022-08-08T00:00:00Z",
+    "ET1",
+    2,
+  );
+  const preloadedState: Partial<RootState> = {
+    monatsplaner: {
+      ...initialMonatsplanerState,
+      mutterschutzElternteil: "ET1",
+      settings: defaultElternteileSettings,
+      elternteile: createElternteile(defaultElternteileSettings),
+    },
+    stepAllgemeineAngaben: {
+      ...initialStepAllgemeineAngabenState,
+      antragstellende: "FuerMichSelbst",
+    },
+    stepNachwuchs: {
+      ...initialStepNachwuchsState,
+      wahrscheinlichesGeburtsDatum: "08.08.2022",
+    },
+    stepRechner: {
+      ...initialStepRechnerState,
+      ET1: {
+        ...initialStepRechnerState.ET1,
+        elterngeldResult: {
+          state: "success",
+          data: [
+            {
+              vonLebensMonat: 1,
+              bisLebensMonat: 32,
+              elternGeldPlus: 1001,
+              basisElternGeld: 2001,
+              nettoEinkommen: 3001,
+            },
+          ],
+        },
+      },
+      ET2: {
+        ...initialStepRechnerState.ET2,
+        elterngeldResult: {
+          state: "success",
+          data: [
+            {
+              vonLebensMonat: 1,
+              bisLebensMonat: 32,
+              elternGeldPlus: 1002,
+              basisElternGeld: 2002,
+              nettoEinkommen: 3002,
+            },
+          ],
+        },
+      },
+    },
+  };
+  const stateForBoth: Partial<RootState> = {
+    ...preloadedState,
+    stepAllgemeineAngaben: {
+      ...initialStepAllgemeineAngabenState,
+      antragstellende: "FuerBeide",
+      pseudonym: {
+        ET1: "Frida",
+        ET2: "Manfred",
+      },
+    },
+  };
+
+  it("should display overlay information modal when no calculation was triggered by user", () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, {
+      preloadedState: {
+        ...preloadedState,
+        stepRechner: initialStepRechnerState,
+      },
+    });
+
+    const infoText = screen.getByText(
+      "Bevor Sie den Monatsplaner nutzen können, machen Sie bitte Angaben zu Ihrem Brutto-Einkommen während des Elterngeldbezugs",
+    );
+    expect(infoText).toBeInTheDocument();
+  });
+
+  describe("Lebensmonate", () => {
+    it("should display first 18 Lebensmonate in a column with number of month and month name", () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+      for (const month of testLebensmonateLabels.slice(0, 18)) {
+        expect(screen.getByLabelText(month)).toBeInTheDocument();
+      }
+    });
+
+    it("should display all Lebensmonate in a column with number of month and month name", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+      const expandButton = screen.getByRole("button", {
+        name: "Alle Monate anzeigen",
+      });
+
+      await userEvent.click(expandButton);
+
+      for (const month of testLebensmonateLabels) {
+        expect(screen.getByLabelText(month)).toBeInTheDocument();
+      }
+    });
+
+    it("should hide the Alle Monate anzeigen Button if it was clicked", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const button = screen.getByRole("button", {
+        name: "Alle Monate anzeigen",
+      });
+
+      await userEvent.click(button);
+
+      expect(
+        screen.queryByRole("button", {
+          name: "Alle Monate anzeigen",
+        }),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it("should show the Planer for both Elternteile", () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, {
+      preloadedState: stateForBoth,
+    });
+
+    expect(screen.getByText("Frida")).toBeInTheDocument();
+    expect(screen.getByText("Manfred")).toBeInTheDocument();
+  });
+
+  it("should select a single month", async () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    const month = screen.getByLabelText(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths),
+    );
+
+    await userEvent.click(month);
+
+    const monthWrapper = screen.getByTestId(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths),
+    );
+    expect(monthWrapper).toHaveClass(nsp("monatsplaner-month--selected"));
+  });
+
+  it("should deselect a single month", async () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    const month = screen.getByLabelText(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths),
+    );
+
+    await userEvent.click(month);
+    await userEvent.click(month);
+
+    const monthWrapper = screen.getByTestId(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths),
+    );
+    expect(monthWrapper).not.toHaveClass(nsp("monatsplaner-month--selected"));
+  });
+
+  it("should select multiple months by dragging", async () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    const month1 = screen.getByLabelText(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths),
+    );
+    const month2 = screen.getByLabelText(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths + 1),
+    );
+
+    const monthWrapper = screen.getByTestId(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths + 1),
+    );
+
+    await userEvent.click(month1);
+    fireEvent.mouseOver(month2, { buttons: 1 });
+
+    expect(monthWrapper).toHaveClass(nsp("monatsplaner-month--selected"));
+  });
+
+  it("should deselect multiple months by dragging", async () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    const month1 = screen.getByLabelText(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths),
+    );
+    const month2 = screen.getByLabelText(
+      getElternteil1BEGLabel(numberOfMutterschutzMonths + 1),
+    );
+
+    //select 2 months
+    await userEvent.click(month1);
+    await userEvent.click(month2);
+    //deselect the first and drag down
+    await userEvent.click(month1);
+    fireEvent.mouseOver(month2, { buttons: 1 });
+
+    expect(month2).not.toHaveClass(nsp("monatsplaner-month--selected"));
+  });
+
+  it("should show notification on click on last available month that there are zero remaining month of this type", async () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    // select 8 month EG+ (2 MS + 8 EG+ = 6)
+    for (let i = 0; i < 8; i++) {
+      const month = screen.getByLabelText(
+        getElternteil1EGPlusLabel(numberOfMutterschutzMonths + i),
+      );
+      await userEvent.click(month);
+    }
+
+    // select 4 month BG (2 MS + 8 EG+ + 4 BG = 10)
+    for (let i = 8; i < 12; i++) {
+      await userEvent.click(
+        screen.getByLabelText(
+          getElternteil1BEGLabel(numberOfMutterschutzMonths + i),
+        ),
+      );
+    }
+
+    // select 3 month EG+ (2 MS + 8 EG+ + 4 BG + 3 EG+ = 11,5)
+    for (let i = 12; i < 15; i++) {
+      await userEvent.click(
+        screen.getByLabelText(
+          getElternteil1EGPlusLabel(numberOfMutterschutzMonths + i),
+        ),
+      );
+    }
+
+    const notificationBEGZeroMonthAvailable = screen.getByText(
+      /ihre verfügbaren Basiselterngeld-Monate sind aufgebraucht/i,
+    );
+    expect(notificationBEGZeroMonthAvailable).toBeInTheDocument();
+
+    // select 1 month EG+ (2 MS + 8 EG+ + 4 BG + 3 EG+ + 1 EG+ = 12)
+    await userEvent.click(
+      screen.getByLabelText(
+        getElternteil1EGPlusLabel(numberOfMutterschutzMonths + 15),
+      ),
+    );
+
+    const notificationEGZeroMonthAvailable = screen.getByText(
+      /ihre verfügbaren Basiselterngeld- und ElterngeldPlus-Monate sind aufgebraucht/i,
+    );
+    expect(notificationEGZeroMonthAvailable).toBeInTheDocument();
+  });
+
+  it("should show notification on click on 11 + 1 beg month", async () => {
+    //render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    render(<Monatsplaner mutterSchutzMonate={2} />, {
+      preloadedState: stateForBoth,
+    });
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    // select 9 month BG (2 MS + 9 BG = 11)
+    for (let i = 0; i < 9; i++) {
+      await userEvent.click(
+        screen.getByLabelText(
+          getElternteilBEGLabel("Frida", numberOfMutterschutzMonths + i),
+        ),
+      );
+    }
+
+    expect(
+      screen.queryByText(
+        /jeder Elternteil muss mindestens 2 und darf maximal 12 Monate Basiselterngeld beantragen/i,
+      ),
+    ).not.toBeInTheDocument();
+
+    // select 1 month BEG (2 MS + 9 BG + 1 BG = 12)
+    for (let i = 9; i < 10; i++) {
+      await userEvent.click(
+        screen.getByLabelText(
+          getElternteilBEGLabel("Frida", numberOfMutterschutzMonths + i),
+        ),
+      );
+    }
+
+    expect(
+      screen.getByText(
+        /jeder Elternteil muss mindestens 2 und darf maximal 12 Monate Basiselterngeld beantragen/i,
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("should show notification when not have continuous EG months", async () => {
+    //render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    render(<Monatsplaner mutterSchutzMonate={0} />, {
+      preloadedState: stateForBoth,
+    });
+    const mockValidateElternteile =
+      validateElternteile as jest.Mock<ValidationResult>;
+
+    mockValidateElternteile.mockReturnValue({
+      isValid: false,
+      errorCodes: ["DoesNotHaveContinuousEGAfterBEGAnspruch"],
+    });
+    mockValidateElternteile.mockClear();
+
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    const errorToastText =
+      /elterngeld muss ab dem 15. Monat durchgängig genommen werden/i;
+
+    expect(screen.queryByText(errorToastText)).not.toBeInTheDocument();
+
+    // select month 20 EGP
+    await userEvent.click(
+      screen.getByLabelText(getElternteilEGPLabel("Frida", 19)),
+    );
+
+    expect(screen.getByText(errorToastText)).toBeInTheDocument();
+  });
+
+  it("should not display empty BEG months if remaining months of this type is zero", async () => {
+    let elternteile = createElternteile(defaultElternteileSettings);
+    //select 10 month BEG (mutterschutz is preselected)
+    for (let i = 0; i < 10; i++) {
+      elternteile = changeMonth(
+        elternteile,
+        {
+          monthIndex: numberOfMutterschutzMonths + i,
+          elternteil: "ET1",
+          targetType: "BEG",
+        },
+        defaultElternteileSettings,
+      );
+    }
+    render(<Monatsplaner mutterSchutzMonate={2} />, {
+      preloadedState: {
+        ...preloadedState,
+        monatsplaner: {
+          ...(preloadedState.monatsplaner as MonatsplanerState),
+          elternteile,
+        },
+      },
+    });
+
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    const BEGmonthNotThere = screen.queryByLabelText(
+      "Elternteil 1 Basiselterngeld für Lebensmonat 13",
+    );
+
+    expect(BEGmonthNotThere).not.toBeInTheDocument();
+  });
+
+  it("should not display empty EGPlus months if remaining months of this type is zero", async () => {
+    let elternteile = createElternteile(defaultElternteileSettings);
+    //select 20 month EGPlus (mutterschutz in BEG is preselected)
+    for (let i = 0; i < 20; i++) {
+      elternteile = changeMonth(
+        elternteile,
+        {
+          monthIndex: numberOfMutterschutzMonths + i,
+          elternteil: "ET1",
+          targetType: "EG+",
+        },
+        defaultElternteileSettings,
+      );
+    }
+    render(<Monatsplaner mutterSchutzMonate={2} />, {
+      preloadedState: {
+        ...preloadedState,
+        monatsplaner: {
+          ...(preloadedState.monatsplaner as MonatsplanerState),
+          elternteile,
+        },
+      },
+    });
+
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    const EGPlusMonthNotThere = screen.queryByLabelText(
+      "Elternteil 1 ElterngeldPlus für Lebensmonat 23",
+    );
+
+    expect(EGPlusMonthNotThere).not.toBeInTheDocument();
+  });
+
+  it("should not allow to change a Mutterschutz month to EG+", () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+    for (let i = 0; i < numberOfMutterschutzMonths; i++) {
+      expect(
+        screen.queryByLabelText(
+          `Elternteil 1 ElterngeldPlus für Lebensmonat ${i + 1}`,
+        ),
+      ).not.toBeInTheDocument();
+    }
+  });
+
+  describe("PSB selection", () => {
+    it("should not show a notification if PSB is selected and if there is only one Elternteil", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(3));
+
+      await userEvent.click(PSBMonth);
+
+      expect(
+        screen.queryByText(
+          /Partnerschaftsbonus ändert sich immer auch beim anderen Elternteil/,
+        ),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should show a notification that other months was automatically selected if no PSB was selected before and there is only one Elternteil", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+
+      await userEvent.click(PSBMonth);
+
+      const infoText = screen.getByText(
+        /Auch Monat Januar wurde automatisch ausgewählt/,
+      );
+
+      expect(infoText).toBeInTheDocument();
+    });
+
+    it("should show a notification that other months was automatically selected and changes occur for other Elternteil if no PSB was selected before and there are two Elternteile", async () => {
+      const stateForBoth: Partial<RootState> = {
+        ...preloadedState,
+        stepAllgemeineAngaben: {
+          ...initialStepAllgemeineAngabenState,
+          antragstellende: "FuerBeide",
+        },
+      };
+
+      render(<Monatsplaner mutterSchutzMonate={2} />, {
+        preloadedState: stateForBoth,
+      });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(3));
+
+      await userEvent.click(PSBMonth);
+
+      const infoText1 = screen.getByText(
+        /Partnerschaftsbonus ändert sich immer auch beim anderen/,
+      );
+      const infoText2 = screen.getByText(
+        /Auch Monat Dezember wurde automatisch ausgewählt/,
+      );
+
+      expect(infoText1).toBeInTheDocument();
+      expect(infoText2).toBeInTheDocument();
+    });
+
+    it("should show a notification that a PSB month is not deselectable", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+      const secondPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(5));
+      const thirdPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(6));
+
+      await userEvent.click(PSBMonth);
+      await userEvent.click(thirdPSBMonth);
+      await userEvent.click(secondPSBMonth);
+
+      expect(
+        screen.getByText(/Dieser Monat kann nicht abgewählt werden/),
+      ).toBeInTheDocument();
+    });
+
+    it("should show a notification that a PSB month is not deselectable if user clicks in same month but other Elterngeld type column", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+      const thirdPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(6));
+      const secondBEGMonth = screen.getByLabelText(getElternteil1BEGLabel(5));
+
+      await userEvent.click(PSBMonth);
+      await userEvent.click(thirdPSBMonth);
+      await userEvent.click(secondBEGMonth);
+
+      expect(
+        screen.getByText(/Dieser Monat kann nicht abgewählt werden/),
+      ).toBeInTheDocument();
+    });
+
+    it("should not show a notification if the PSB month is deselectable", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(2));
+      const thirdPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+
+      await userEvent.click(PSBMonth);
+      await userEvent.click(thirdPSBMonth);
+      await userEvent.click(thirdPSBMonth);
+
+      expect(
+        screen.queryByText(/Dieser Monat kann nicht abgewählt werden/),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should show a notification if the PSB month is not deselectable via drag", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+      const secondPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(5));
+      const thirdPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(6));
+
+      //select all 4 PSB months
+      await userEvent.click(PSBMonth);
+      await userEvent.click(thirdPSBMonth);
+      const fourthPSBMonth = screen.getByLabelText(getElternteil1PSBLabel(7));
+      await userEvent.click(fourthPSBMonth);
+      //deselect the 4th and drag around to second
+      await userEvent.click(fourthPSBMonth);
+      fireEvent.mouseOver(secondPSBMonth, { buttons: 1 });
+
+      expect(
+        screen.getByText(/Dieser Monat kann nicht abgewählt werden/),
+      ).toBeInTheDocument();
+    });
+
+    it("should only display 4 PSB months on screen if one PSB month was selected", async () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+
+      await userEvent.click(PSBMonth);
+
+      const PSBmonths = screen.getAllByLabelText(
+        /Elternteil 1 Partnerschaftsbonus für Lebensmonat/,
+      );
+
+      expect(PSBmonths).toHaveLength(4);
+    });
+
+    it("should highlight two PSB months on mouse-over if none PSB month is selected", () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+      const PSBMonth = screen.getByLabelText(getElternteil1PSBLabel(4));
+      const highlightedMonth = screen.getByTestId(getElternteil1PSBLabel(5));
+
+      fireEvent.mouseOver(PSBMonth);
+
+      expect(highlightedMonth).toHaveClass(
+        nsp("monatsplaner-month--highlighted"),
+      );
+    });
+
+    it("should not allow to change any Mutterschutz month to PSB", () => {
+      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+      for (let i = 0; i < numberOfMutterschutzMonths; i++) {
+        expect(
+          screen.queryByLabelText(
+            `Elternteil 1 Partnerschaftsbonus für Lebensmonat ${i + 1}`,
+          ),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByLabelText(
+            `Elternteil 2 Partnerschaftsbonus für Lebensmonat ${i + 1}`,
+          ),
+        ).not.toBeInTheDocument();
+      }
+    });
+    it("should hide PSB selection if alleinerziehend", () => {
+      const { container } = render(<Monatsplaner mutterSchutzMonate={2} />, {
+        preloadedState: {
+          ...preloadedState,
+          stepAllgemeineAngaben: {
+            ...initialStepAllgemeineAngabenState,
+            antragstellende: "FuerMichSelbst",
+            alleinerziehend: YesNo.YES,
+          },
+        },
+      });
+
+      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+      const partnerschaftsbonus = container.querySelector(
+        ".egr-remaining-months__partnerschaftsbonus",
+      );
+      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+      const bonus = container.querySelector(
+        ".egr-elternteil__th--partnerschaftsbonus",
+      );
+      expect(partnerschaftsbonus).toBeNull();
+      expect(bonus).toBeNull();
+    });
+
+    it("should show PSB selection if not alleinerziehend", () => {
+      const { container } = render(<Monatsplaner mutterSchutzMonate={2} />, {
+        preloadedState: {
+          ...preloadedState,
+          stepAllgemeineAngaben: {
+            ...initialStepAllgemeineAngabenState,
+            antragstellende: "FuerMichSelbst",
+            alleinerziehend: YesNo.NO,
+          },
+        },
+      });
+
+      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+      const partnerschaftsbonus = container.querySelector(
+        ".egr-remaining-months__partnerschaftsbonus",
+      );
+      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+      const bonus = container.querySelector(
+        ".egr-elternteil__th--partnerschaftsbonus",
+      );
+      expect(partnerschaftsbonus).not.toBeNull();
+      expect(bonus).not.toBeNull();
+    });
+  });
+
+  describe("Submit validation Monatsplaner", () => {
+    const mockValidateElternteile =
+      validateElternteile as jest.Mock<ValidationResult>;
+
+    beforeEach(() => {
+      mockValidateElternteile.mockClear();
+    });
+
+    it.each([
+      [
+        /mindestens ein Elternteil muss Elterngeld beantragen/i,
+        "HasNoSelection" as const,
+      ],
+      [
+        /reduzieren Sie auf die verfügbare Anzahl von Basiselterngeld-Monaten/i,
+        "HasTakenMoreThanTheAvailableBEGMonths" as const,
+      ],
+      [
+        /nur 1 Monat Elterngeld für ein Elternteil ist nicht zulässig/i,
+        "DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll" as const,
+      ],
+      [
+        /Elterngeld muss ab dem 15. Monat durchgängig genommen werden/i,
+        "DoesNotHaveContinuousEGAfterBEGAnspruch" as const,
+      ],
+      [
+        /Basiselterngeld kann nicht nach dem 15. Monat genommen werden/i,
+        "HasTakenBEGAfterBEGAnspruch" as const,
+      ],
+    ])(
+      "should show error message %p if validation returns error code %p",
+      async (expectedText, errorCode) => {
+        render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+        mockValidateElternteile.mockReturnValue({
+          isValid: false,
+          errorCodes: [errorCode],
+        });
+
+        const submitButton = screen.getByRole("button", {
+          name: /Elterngeld beantragen/i,
+        });
+        await userEvent.click(submitButton);
+
+        expect(screen.getByText(expectedText)).toBeInTheDocument();
+
+        expect(navigate).not.toHaveBeenCalled();
+      },
+    );
+  });
+});

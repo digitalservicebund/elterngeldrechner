@@ -1,0 +1,7 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$page-padding: egr.rem(egr.$spacer-s);
+$page-sidebar-spacing: 0 egr.rem(egr.$spacer-3xl);
+$page-title-spacing: 0 0 egr.rem(egr.$spacer-xxl);
+$page-subtitle-spacing: 0 0 egr.rem(egr.$spacer-xl);

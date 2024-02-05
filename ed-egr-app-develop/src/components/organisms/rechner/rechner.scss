@@ -1,0 +1,93 @@
+@use "rechner.variables" as *;
+
+.#{nsp("rechner")} {
+  display: flex;
+  flex-direction: column;
+  gap: rem($spacer-xl);
+  margin-bottom: rem($spacer-3xl);
+
+  @media print {
+    display: none;
+  }
+
+  &__description {
+    ol {
+      list-style-type: decimal;
+      padding-left: rem($spacer-l);
+    }
+  }
+}
+
+.#{nsp("rechner-card")} {
+  &__header {
+    padding: rem($spacer-l);
+  }
+
+  &-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    p {
+      font-size: rem(24);
+      line-height: rem(40);
+    }
+
+    &__text {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      word-wrap: break-word;
+      hyphens: auto;
+      gap: rem($spacer);
+      justify-content: space-between;
+    }
+  }
+
+  &__description {
+    display: flex;
+    flex-direction: column;
+    gap: rem($spacer);
+    padding: rem($spacer) rem($spacer) 0 rem($spacer);
+
+    p {
+      font-weight: 700;
+    }
+
+    li {
+      position: relative;
+      padding-left: rem($spacer-l);
+    }
+
+    li::before {
+      content: "•";
+      position: absolute;
+      left: rem($spacer-s);
+      font-size: rem(18);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-flow: row wrap;
+    gap: rem($spacer-xxl);
+    padding: rem($spacer-xl);
+  }
+
+  &--basiselterngeld {
+    background-color: $color-BEG-light;
+
+    .#{nsp("rechner-card-title")} {
+      color: $color-BEG-base;
+    }
+  }
+
+  &--elterngeldplus {
+    background-color: $color-EGP-light;
+    margin-top: rem($spacer-xl);
+
+    .#{nsp("rechner-card-title")} {
+      color: $color-EGP-base;
+    }
+  }
+}

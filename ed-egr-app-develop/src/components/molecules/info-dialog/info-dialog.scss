@@ -1,0 +1,108 @@
+﻿@use "info-dialog.variables" as *;
+
+.#{nsp("info-dialog")} {
+  width: auto;
+  height: auto;
+
+  &__button {
+    @include info-dialog-button;
+
+    &--monatsplanner {
+      color: $color-white;
+    }
+  }
+
+  &-box {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 100;
+    width: rem(410);
+    padding: rem(10) rem(50) rem(10) rem(20);
+    margin-top: rem(1);
+    margin-left: rem(-390);
+    color: $color-text;
+    background-color: $info-dialog--background-color;
+    box-shadow: 0 0 rem(10) rgba(0, 0, 0, 0.3);
+
+    &__button {
+      @include info-dialog-button;
+      position: absolute;
+      align-self: end;
+      right: rem(5);
+    }
+
+    &__text {
+      font-size: rem(18) !important;
+      white-space: pre-line;
+    }
+
+    @media (max-width: $breakpoint-tablet) {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: auto;
+      margin-left: 0;
+      overflow: auto;
+
+      &__button {
+        top: rem(5);
+      }
+    }
+
+    &--monatsplanner-et-one {
+      margin-left: rem(20);
+      margin-top: rem(-7);
+
+      button {
+        top: 0;
+        right: auto;
+        left: rem(5);
+      }
+
+      p {
+        margin-left: rem(30);
+      }
+
+      // add cutomized breakpoint when dialog shown for ET1 (right to the info button instead of left)
+      @media (max-width: 640px) {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: auto;
+        margin-left: 0;
+
+        button {
+          top: rem(5);
+          left: auto;
+          right: rem(5);
+        }
+
+        p {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-desktop) {
+    right: rem(32);
+  }
+
+  // fit large div as possible for smaller screens
+  &--large &-box {
+    @media (min-width: 730px) {
+      width: rem(650);
+      margin-left: rem(-640);
+    }
+  }
+
+  &--monatsplanner {
+    width: fit-content;
+    margin: 0 auto;
+  }
+}

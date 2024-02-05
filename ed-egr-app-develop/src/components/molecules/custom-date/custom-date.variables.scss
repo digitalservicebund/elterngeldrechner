@@ -1,0 +1,14 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$custom-date-label-text-color: egr.$color-text !default;
+
+$custom-date-border: 1px solid egr.$color-grey-dark !default;
+$custom-date-padding: egr.rem(egr.$spacer-s) egr.rem(egr.$spacer) !default;
+$custom-date-padding-on-focus: egr.substractOfPaddingOnFocus(egr.$spacer-s, 1)
+  egr.substractOfPaddingOnFocus(egr.$spacer, 1) !default;
+
+$custom-date-margin: egr.rem(egr.$spacer-s) !default;
+
+$custom-date--error-color: egr.$color-danger !default;
+$custom-date--valid-color: egr.$color-success !default;

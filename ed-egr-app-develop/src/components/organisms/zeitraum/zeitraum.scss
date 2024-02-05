@@ -1,0 +1,20 @@
+@use "zeitraum.variables" as *;
+
+.#{nsp("zeitraum")} {
+  margin-bottom: rem($spacer);
+
+  &__controls {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    gap: rem($spacer);
+
+    > * {
+      flex: 1;
+    }
+  }
+
+  @media (min-width: $breakpoint-desktop) {
+    margin-bottom: rem($spacer-l);
+  }
+}

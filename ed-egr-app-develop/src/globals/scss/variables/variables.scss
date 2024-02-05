@@ -1,0 +1,51 @@
+// GLOBALS
+
+$nsp: "egr";
+
+// SPACINGS
+
+$spacer-xs: 4 !default;
+$spacer-s: 8 !default;
+$spacer: 16 !default;
+$spacer-l: 24 !default;
+$spacer-xl: 32 !default;
+$spacer-xxl: 40 !default;
+$spacer-3xl: 64 !default;
+$spacer-4xl: 80 !default;
+
+// COLORS
+
+$color-primary: #62396c !default;
+$color-primary-light: #e4dfed !default;
+
+$color-tertiary: #cd3363 !default;
+$color-tertiary-light: #fff3f7 !default;
+
+$color-white: #ffffff !default;
+$color-off-white: #f4f4f4 !default;
+
+$color-grey: #d6d6d6 !default;
+$color-grey-dark: #999999 !default;
+
+$color-text: #000000 !default;
+$color-text-light: #727272 !default;
+
+$color-BEG-base: #62396c !default;
+$color-BEG-light: #e4dfed !default;
+
+$color-EGP-base: #cd3363 !default;
+$color-EGP-light: #fff3f7 !default;
+
+$color-PSB-base: #0000ff !default;
+$color-PSB-light: #e8e6ff !default;
+
+$color-success: #198754 !default;
+$color-danger: #dc3545 !default;
+
+$color-ZUD: #fcf9f4 !default;
+
+// BREAKPOINTS
+
+$breakpoint-tablet: 481px;
+$breakpoint-desktop: 961px;
+$breakpoint-desktop-xxl: 1400px;

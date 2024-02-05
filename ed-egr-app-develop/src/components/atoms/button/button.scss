@@ -1,0 +1,132 @@
+@use "button.variables" as *;
+
+.#{nsp("button")} {
+  &,
+  &:visited {
+    font-size: rem(20);
+    color: $color-white;
+    line-height: rem(24);
+    padding: $button--padding;
+    border: $button--primary--border;
+    transition: all 0.3s;
+  }
+
+  &:hover {
+    background-color: $color-white;
+  }
+
+  &:active,
+  &:focus {
+    outline: 2px solid $button--outline-color;
+    outline-offset: 2px;
+  }
+
+  &__icon {
+    svg {
+      vertical-align: bottom;
+    }
+
+    &--before {
+      margin-right: rem($spacer-s);
+    }
+
+    &--after {
+      margin-left: rem($spacer-s);
+    }
+  }
+
+  &--primary {
+    &,
+    &:visited {
+      background-color: $color-primary;
+    }
+
+    &:hover {
+      color: $color-primary;
+      background-color: $color-white;
+    }
+
+    &:active,
+    &:focus {
+      color: $color-primary;
+      background-color: $color-white;
+    }
+  }
+
+  &--secondary {
+    &,
+    &:visited {
+      color: $color-primary;
+      background-color: $color-white;
+    }
+
+    &:hover {
+      color: $color-white;
+      background-color: $color-primary;
+    }
+
+    &:active,
+    &:focus {
+      color: $color-white;
+      background-color: $color-primary;
+    }
+  }
+
+  &--tertiary {
+    &,
+    &:visited {
+      background-color: $color-tertiary;
+      border: $button--tertiary--border;
+    }
+
+    &:hover {
+      color: $color-tertiary;
+      background-color: $color-white;
+    }
+
+    &:active,
+    &:focus {
+      color: $color-tertiary;
+      background-color: $color-white;
+    }
+  }
+
+  &--link {
+    padding: 0;
+
+    &,
+    &:visited {
+      border: none;
+      color: $color-primary;
+      background-color: transparent;
+      text-decoration: underline;
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &:active,
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &--disabled {
+    opacity: 0.5;
+  }
+
+  &__input {
+    &:focus {
+      outline: rem(2) solid $color-primary;
+    }
+  }
+
+  &--error &__input {
+    border-color: $button--error--color;
+  }
+
+  &--valid &__input {
+    border-color: $button--valid--color;
+  }
+}

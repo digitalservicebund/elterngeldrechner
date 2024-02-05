@@ -1,0 +1,169 @@
+import { render, screen } from "../../test-utils/test-utils";
+import userEvent from "@testing-library/user-event";
+import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
+import { useNavigate } from "react-router";
+import { reducers, RootState } from "../../redux";
+import { configureStore, Store } from "@reduxjs/toolkit";
+import {
+  initialStepErwerbstaetigkeitState,
+  StepErwerbstaetigkeitState,
+} from "../../redux/stepErwerbstaetigkeitSlice";
+import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
+import { YesNo } from "../../globals/js/calculations/model";
+
+jest.mock("react-router");
+
+describe("Erwerbstaetigkeit Page", () => {
+  it("should show the pseudonym for Elternteil 1 and 2", () => {
+    const ET1 = "Finn";
+    const ET2 = "Fiona";
+    const state: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        pseudonym: {
+          ET1,
+          ET2,
+        },
+      },
+    };
+
+    render(<ErwerbstaetigkeitPage />, { preloadedState: state });
+
+    expect(screen.getByText(ET1)).toBeInTheDocument();
+    expect(screen.getByText(ET2)).toBeInTheDocument();
+  });
+
+  it("should expand the form options if Elternteil 1 is nicht Selbststaendig", async () => {
+    render(<ErwerbstaetigkeitPage />);
+    await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
+    await userEvent.click(
+      screen.getByLabelText("Einkünfte aus nichtselbständiger Arbeit"),
+    );
+
+    expect(
+      screen.getByText(
+        "Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+    ).toBeInTheDocument();
+  });
+
+  describe.each([["Gewinneinkünfte"]])(
+    "when Elternteil has %p",
+    (selbststaendigLabeltext: string) => {
+      it("should not expand the form options", async () => {
+        render(<ErwerbstaetigkeitPage />);
+        await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
+        await userEvent.click(screen.getByLabelText(selbststaendigLabeltext));
+
+        expect(
+          screen.queryByText(
+            "Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?",
+          ),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+        ).not.toBeInTheDocument();
+      });
+
+      it("should not expand the form options for Mischeinkommen", async () => {
+        render(<ErwerbstaetigkeitPage />);
+        await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
+        await userEvent.click(
+          screen.getByLabelText("Einkünfte aus nichtselbständiger Arbeit"),
+        );
+        await userEvent.click(screen.getByLabelText(selbststaendigLabeltext));
+
+        expect(
+          screen.queryByText(
+            "Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?",
+          ),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+        ).not.toBeInTheDocument();
+      });
+    },
+  );
+
+  describe("Submitting the form", () => {
+    let store: Store<RootState>;
+    let navigate = jest.fn();
+
+    beforeEach(() => {
+      store = configureStore({ reducer: reducers });
+
+      navigate.mockClear();
+      (useNavigate as jest.Mock).mockReturnValue(navigate);
+    });
+
+    it("should persist the step", async () => {
+      const state: Partial<RootState> = {
+        stepAllgemeineAngaben: {
+          ...initialStepAllgemeineAngabenState,
+          antragstellende: "FuerBeide",
+        },
+      };
+      const expectedState: StepErwerbstaetigkeitState = {
+        ET1: {
+          ...initialStepErwerbstaetigkeitState.ET1,
+          vorGeburt: YesNo.YES,
+          isNichtSelbststaendig: true,
+          sozialVersicherungsPflichtig: YesNo.YES,
+          monatlichesBrutto: "MehrAlsMiniJob",
+        },
+        ET2: {
+          ...initialStepErwerbstaetigkeitState.ET2,
+          vorGeburt: YesNo.NO,
+        },
+      };
+      store = configureStore({ reducer: reducers, preloadedState: state });
+
+      render(<ErwerbstaetigkeitPage />, { store });
+      await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
+      await userEvent.click(
+        screen.getByLabelText("Einkünfte aus nichtselbständiger Arbeit"),
+      );
+      await userEvent.click(
+        screen.getByTestId("ET1.sozialVersicherungsPflichtig_option_0"),
+      );
+      await userEvent.click(screen.getByLabelText("mehr als 520 Euro"));
+      await userEvent.click(screen.getByTestId("ET2.vorGeburt_option_1"));
+      await userEvent.click(screen.getByText("Weiter"));
+
+      expect(store.getState().stepErwerbstaetigkeit).toEqual(expectedState);
+    });
+
+    it("should go to the next step", async () => {
+      const validFormState: StepErwerbstaetigkeitState = {
+        ...initialStepErwerbstaetigkeitState,
+        ET1: {
+          ...initialStepErwerbstaetigkeitState.ET1,
+          vorGeburt: YesNo.NO,
+        },
+        ET2: {
+          ...initialStepErwerbstaetigkeitState.ET2,
+          vorGeburt: YesNo.NO,
+        },
+      };
+
+      render(<ErwerbstaetigkeitPage />, {
+        preloadedState: { stepErwerbstaetigkeit: validFormState },
+      });
+      await userEvent.click(screen.getByText("Weiter"));
+
+      expect(navigate).toHaveBeenCalledWith("/einkommen");
+    });
+
+    it("should go to the previous step", async () => {
+      render(<ErwerbstaetigkeitPage />);
+
+      await userEvent.click(screen.getByText("Zurück"));
+
+      expect(navigate).toHaveBeenCalledWith("/nachwuchs");
+    });
+  });
+});

@@ -1,0 +1,84 @@
+@use "custom-select.variables" as *;
+
+.#{nsp("custom-select")} {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  &--auto-width &-question__control {
+    width: auto;
+  }
+
+  &-question {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__label {
+      color: $custom-select-label-text-color;
+    }
+
+    &__control {
+      position: relative;
+      width: 100%;
+      min-width: max-content;
+    }
+
+    &__input {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: $color-white;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='22' viewBox='0 0 24 24' width='22' xmlns='http://www.w3.org/2000/svg'><path d='M12 2.29289L18.3536 8.64645L17.6464 9.35355L12 3.70711L6.35355 9.35355L5.64645 8.64645L12 2.29289Z'/><path d='M12 21.7071L5.64645 15.3536L6.35355 14.6464L12 20.2929L17.6464 14.6464L18.3536 15.3536L12 21.7071Z'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: calc(100% - rem(11));
+      background-position-y: rem(11);
+      -moz-padding-start: calc(
+        rem(10) - rem(3)
+      ); // Firefox generates small padding per default, this should reset it
+      padding: $custom-select-input-padding;
+      margin-top: $custom-select-margin;
+      border: $custom-select-border;
+      cursor: pointer;
+      width: 100%;
+      min-width: max-content;
+
+      &:focus {
+        outline: none;
+        margin: calc($custom-select-margin - rem(1)) rem(-1) rem(-1) rem(-1); // fixing jumping element on focus
+        border: rem(2) solid $color-primary;
+      }
+
+      &::placeholder {
+        font-size: inherit;
+        color: $color-text-light;
+      }
+
+      &:disabled {
+        cursor: default;
+      }
+
+      &--error {
+        border-color: $color-danger;
+      }
+
+      @media only screen and (max-width: $breakpoint-tablet) {
+        font-size: rem(16);
+      }
+    }
+
+    &__option {
+      background-color: $color-white;
+      padding: $custom-select-option-padding;
+
+      &:first-of-type {
+        color: $color-text-light;
+        padding: rem(40);
+      }
+
+      &:checked {
+        box-shadow: 0 0 10px 100px #1882a8 inset;
+      }
+    }
+  }
+}

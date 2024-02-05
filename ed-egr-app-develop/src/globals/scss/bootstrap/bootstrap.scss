@@ -1,0 +1,8 @@
+// Override for default bootstrap values
+@use "bootstrap.variables" as *;
+
+// Normalization
+@use "bootstrap/scss/bootstrap-reboot";
+
+// Grid
+@use "bootstrap/scss/bootstrap-grid";

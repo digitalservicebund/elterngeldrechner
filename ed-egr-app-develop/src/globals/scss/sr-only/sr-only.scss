@@ -1,0 +1,5 @@
+@use "sr-only.mixins" as *;
+
+[data-type="sr-only"] {
+  @include sr-only();
+}

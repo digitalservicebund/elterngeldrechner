@@ -1,0 +1,15 @@
+@use "form-field-group.variables" as *;
+
+.#{nsp("form-field-group")} {
+  margin-bottom: $form-field-group-spacing;
+
+  &-description {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    &__text {
+      margin-bottom: $form-field-group-description-spacing;
+    }
+  }
+}

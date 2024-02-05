@@ -1,0 +1,42 @@
+@use "rechner-form.variables" as *;
+
+.#{nsp("rechner-form")} {
+  &__actions {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    row-gap: rem($spacer);
+    margin-top: rem($spacer-s);
+  }
+
+  &__add-action {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: rem($spacer-xl);
+  }
+
+  &__zeitraum-section {
+    display: flex;
+    flex-direction: column;
+    @media (min-width: $breakpoint-desktop) {
+      max-width: 75%;
+    }
+  }
+
+  &__zeitraum {
+    margin-bottom: rem($spacer);
+  }
+
+  &__einkommen {
+    margin-bottom: rem($spacer);
+  }
+
+  &__remove-action {
+    margin-bottom: rem($spacer-xl);
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

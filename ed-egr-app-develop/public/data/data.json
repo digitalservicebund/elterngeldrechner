@@ -1,0 +1,179 @@
+{
+  "steps": {
+    "step1": [
+      "field_name_input_text_1",
+      "field_name_input_radio_1",
+      ["field_name_input_text_22", "field_name_input_text_23"],
+      "field_name_input_checkbox_1"
+    ],
+    "step2": [
+      "field_name_input_email_1",
+      "field_name_input_select_1",
+      "field_name_input_select_2",
+      "field_name_input_date_1"
+    ]
+  },
+  "fields": {
+    "field_name_input_text_1": {
+      "name": "field_name_input_text_1",
+      "type": "text",
+      "label": "Label Input Type Text 1",
+      "attr": {
+        "aria-label": "Text Input Schritt 1",
+        "disabled": false
+      },
+      "validate": {
+        "required": "Dieses Feld ist ein Pflichtfeld",
+        "minLength": 2,
+        "minLengthMessage": "Bitte geben Sie mindestens 2 Zeichen ein",
+        "pattern": "^\\S+@\\S+$",
+        "patternMessage": "Bitte geben Sie eine gültige E-Mail Adresse ein"
+      },
+      "value": null
+    },
+    "field_name_input_radio_1": {
+      "name": "field_name_input_radio_1",
+      "type": "radio",
+      "label": "Label Input Type Radio 1",
+      "attr": {
+        "disabled": false
+      },
+      "validate": {
+        "required": "Dieses Feld ist ein Pflichtfeld"
+      },
+      "affectsVisibilityConstraint": true,
+      "options": [
+        {
+          "label": "ja",
+          "value": "1"
+        },
+        {
+          "label": "nein",
+          "value": "0"
+        }
+      ],
+      "value": null,
+      "children": ["field_name_input_text_22", "field_name_input_text_23"]
+    },
+    "field_name_input_checkbox_1": {
+      "name": "field_name_input_checkbox_1",
+      "type": "checkbox",
+      "label": "Label Input Type Checkbox 1",
+      "attr": {},
+      "validate": {
+        "required": "Dieses Feld ist ein Pflichtfeld"
+      },
+      "affectsVisibilityConstraint": true,
+      "value": null
+    },
+    "field_name_input_email_1": {
+      "name": "field_name_input_email_1",
+      "type": "email",
+      "label": "Label Input Type E-Mail 1",
+      "attr": {},
+      "validate": {
+        "pattern": "^\\S+@\\S+$",
+        "patternMessage": "Bitte geben Sie eine gültige E-Mail Adresse ein"
+      },
+      "value": null
+    },
+    "field_name_input_select_1": {
+      "name": "field_name_input_select_1",
+      "type": "select",
+      "label": "Label Input Type Select 1",
+      "attr": {},
+      "options": [
+        {
+          "placeholder": "-- Bitte wählen --"
+        },
+        {
+          "label": "Select Option 1",
+          "value": "Select Option 1"
+        },
+        {
+          "label": "Select Option 2",
+          "value": "Select Option 2"
+        }
+      ],
+      "value": null,
+      "validate": {
+        "required": false
+      },
+      "affectsVisibilityConstraint": true
+    },
+    "field_name_input_select_2": {
+      "name": "field_name_input_select_2",
+      "type": "select",
+      "label": "Label Input Type Select 2 (required)",
+      "attr": {},
+      "options": [
+        {
+          "placeholder": "-- Bitte wählen --"
+        },
+        {
+          "label": "Select Option 1",
+          "value": "Select Option 1"
+        },
+        {
+          "label": "Select Option 2",
+          "value": "Select Option 2"
+        }
+      ],
+      "value": null,
+      "validate": {
+        "required": "Dieses Feld ist ein Pflichtfeld"
+      },
+      "affectsVisibilityConstraint": true
+    },
+    "field_name_input_date_1": {
+      "name": "field_name_input_date_1",
+      "type": "date",
+      "label": "Label Input Type Date 1",
+      "attr": {},
+      "value": null
+    },
+    "field_name_input_text_2": {
+      "name": "field_name_input_text_2",
+      "type": "text",
+      "label": "Label Input Type Text 2",
+      "attr": {},
+      "value": null
+    },
+    "field_name_input_text_22": {
+      "name": "field_name_input_text_22",
+      "type": "text",
+      "label": "Label Input Type Text 22",
+      "attr": {
+        "disabled": true
+      },
+      "value": null
+    },
+    "field_name_input_text_23": {
+      "name": "field_name_input_text_23",
+      "type": "text",
+      "label": "Label Input Type Text 23",
+      "attr": {
+        "disabled": true
+      },
+      "value": null
+    },
+    "field_name_input_radio_2": {
+      "name": "field_name_input_radio_2",
+      "type": "radio",
+      "label": "Label Input Type Radio - has children",
+      "attr": {},
+      "affectsVisibilityConstraint": true,
+      "options": [
+        {
+          "label": "ja",
+          "value": 1
+        },
+        {
+          "label": "nein",
+          "value": 0
+        }
+      ],
+      "value": null
+    }
+  }
+}

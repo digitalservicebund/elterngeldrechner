@@ -1,0 +1,21 @@
+@use "label-counter.variables" as *;
+@use "src/globals/scss/typo/typo.variables" as *;
+
+.#{nsp("label-counter")} {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: $label-counter--gap;
+
+  &__label {
+    font-weight: 700;
+  }
+
+  & > * {
+    font-size: $base-font-size;
+    line-height: rem(40);
+    margin: 0;
+    text-align: center;
+  }
+}

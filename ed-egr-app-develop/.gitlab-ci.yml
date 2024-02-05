@@ -1,0 +1,84 @@
+stages:
+  - install
+  - test
+  - rollout
+  - publish
+
+variables:
+  DEPLOY_PATH: /var/www/html/EGR
+
+get-merge-id:
+  stage: install
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    # Get the MR-ID for current pipeline
+    - echo "$CI_OPEN_MERGE_REQUESTS" | cut -d',' -f1 | sed -r 's/([a-z-]+)\/([a-z-]+)\!([0-9]+)/MR_ID=\3/g' >> build.env
+  artifacts:
+    reports:
+      dotenv: build.env
+
+install:
+  stage: install
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v.*$/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - npm ci
+  artifacts:
+    name: module-cache
+    paths:
+      - node_modules/
+
+run-tests:
+  stage: test
+  rules:
+    # Only run on new version tag (always starts with v) or on merge request
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  script:
+    - npm run test-all
+  dependencies:
+    - install
+
+deploy-merge:
+  stage: rollout
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  variables:
+    TARGET_DIR: $DEPLOY_PATH/MR-$MR_ID
+  before_script:
+    - rm -rf $TARGET_DIR/
+    - mkdir $TARGET_DIR
+  script:
+    - npm run build
+    - rm -rf $TARGET_DIR/*
+    - cp -rf build/* $TARGET_DIR/
+  dependencies:
+    - get-merge-id
+    - install
+
+deploy-develop:
+  stage: rollout
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    TARGET_DIR: $DEPLOY_PATH/$CI_DEFAULT_BRANCH
+  script:
+    - npm run build
+    - rm -rf $TARGET_DIR/*
+    - cp -rf build/* $TARGET_DIR/
+  dependencies:
+    - install
+
+publish:
+  stage: publish
+  rules:
+    # Only run on new version tag
+    - if: $CI_COMMIT_TAG =~ /^v.*$/
+  script:
+    - npm run build
+    - npm publish
+  dependencies:
+    - install

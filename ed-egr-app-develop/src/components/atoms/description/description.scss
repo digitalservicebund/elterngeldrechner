@@ -1,0 +1,11 @@
+@use "description.variables" as *;
+
+.#{nsp("info-text")} {
+  font-size: rem(14);
+  line-height: rem(18);
+  margin-top: rem($spacer-s);
+
+  &--error {
+    color: $color-danger;
+  }
+}

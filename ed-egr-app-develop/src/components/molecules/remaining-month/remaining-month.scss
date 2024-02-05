@@ -1,0 +1,29 @@
+@use "remaining-month.variables" as *;
+
+.#{nsp("remaining-months")} {
+  display: grid;
+  background-color: $color-off-white;
+
+  &__label {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+  }
+
+  &__basiselterngeld {
+    color: $color-BEG-base;
+  }
+
+  &__elterngeldplus {
+    color: $color-EGP-base;
+  }
+
+  &__partnerschaftsbonus {
+    color: $color-PSB-base;
+  }
+
+  &__visual {
+    display: flex;
+    align-self: stretch;
+  }
+}

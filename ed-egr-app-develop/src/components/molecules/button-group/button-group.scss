@@ -1,0 +1,16 @@
+@use "button-group.variables" as *;
+
+.#{nsp("button-group")} {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: rem($spacer-3xl);
+
+  &--step-one {
+    justify-content: end;
+  }
+
+  @media print {
+    display: none;
+  }
+}

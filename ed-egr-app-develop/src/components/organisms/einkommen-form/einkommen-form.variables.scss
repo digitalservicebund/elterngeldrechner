@@ -1,0 +1,4 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$einkommen-form__ausfuerliche-eingabe-text--font-size: egr.rem(16) !default;

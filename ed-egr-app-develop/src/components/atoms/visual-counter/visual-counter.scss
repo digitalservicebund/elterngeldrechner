@@ -1,0 +1,92 @@
+@use "visual-counter.variables" as *;
+@use "src/globals/scss/typo/typo.variables" as *;
+
+.#{nsp("visual-counter")} {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0;
+  align-self: stretch;
+  width: 100%;
+  gap: $visual-counter--gap;
+
+  @media only screen and (max-width: $breakpoint-tablet) {
+    gap: calc($visual-counter--gap / 2);
+  }
+
+  &__basisplus {
+    display: flex;
+    flex-grow: 28;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    gap: $visual-counter--gap;
+
+    @media only screen and (max-width: $breakpoint-tablet) {
+      gap: calc($visual-counter--gap / 2);
+    }
+  }
+
+  &__bonus {
+    flex-grow: 4;
+  }
+
+  &__basis,
+  &__plus,
+  &__bonus {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: 0;
+    gap: $visual-counter--gap;
+
+    @media only screen and (max-width: $breakpoint-tablet) {
+      gap: calc($visual-counter--gap / 2);
+    }
+  }
+
+  &__basisblock,
+  &__basisblock--used,
+  &__plusblock,
+  &__plusblock--used,
+  &__bonusblock,
+  &__bonusblock--used {
+    flex: none;
+    align-self: stretch;
+    flex-grow: 1;
+    height: $visual-counter__block--height;
+    z-index: 0;
+
+    @media only screen and (max-width: $breakpoint-tablet) {
+      height: calc($visual-counter__block--height / 2);
+    }
+  }
+
+  &__bonusblock,
+  &__bonusblock--used {
+    height: calc(2 * $visual-counter__block--height + $visual-counter--gap);
+
+    @media only screen and (max-width: $breakpoint-tablet) {
+      height: calc($visual-counter__block--height + $visual-counter--gap / 2);
+    }
+  }
+
+  &__basisblock--used,
+  &__plusblock--used,
+  &__bonusblock--used {
+    background-color: $color-grey;
+  }
+
+  &__basisblock {
+    background-color: $color-BEG-base;
+  }
+
+  &__plusblock {
+    background-color: $color-EGP-base;
+  }
+
+  &__bonusblock {
+    background-color: $color-PSB-base;
+  }
+}

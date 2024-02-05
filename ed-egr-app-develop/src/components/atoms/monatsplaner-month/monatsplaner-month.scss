@@ -1,0 +1,60 @@
+@use "monatsplaner-month.variables" as *;
+
+.#{nsp("monatsplaner-month")} {
+  width: 100%;
+  user-select: none;
+
+  &__checkbox {
+    position: absolute;
+    opacity: 0;
+  }
+
+  label {
+    display: inline-block;
+    width: 100%;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  &__checkbox:checked + label,
+  &:hover > label {
+    text-decoration: none;
+  }
+
+  &:focus-within {
+    outline: rem(1) solid $color-primary;
+  }
+
+  &--beg > label {
+    color: $monatsplaner-month--beg--color;
+  }
+
+  &--beg > &__checkbox:checked + label,
+  &--beg:hover > label {
+    color: $monatsplaner-month--beg--contrast-color;
+    background: $monatsplaner-month--beg--color;
+  }
+
+  &--egplus > &__checkbox:checked + label,
+  &--egplus:hover > label {
+    color: $monatsplaner-month--egplus--contrast-color;
+    background: $monatsplaner-month--egplus--color;
+  }
+
+  &--psb > &__checkbox:checked + label,
+  &--psb:hover > label {
+    color: $monatsplaner-month--psb--contrast-color;
+    background: $monatsplaner-month--psb--color;
+  }
+
+  &--psb#{&}--highlighted > label {
+    text-decoration: none;
+    color: $monatsplaner-month--psb--contrast-color;
+    background: $monatsplaner-month--psb--color;
+  }
+
+  &--selected {
+    background-color: $monatsplaner-month--selected--color;
+  }
+}

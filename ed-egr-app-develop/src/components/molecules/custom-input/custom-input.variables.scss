@@ -1,0 +1,14 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$custom-input-label-text-color: egr.$color-text !default;
+
+$custom-input-border: 1px solid egr.$color-grey-dark !default;
+$custom-input-padding: egr.rem(egr.$spacer-s) egr.rem(egr.$spacer) !default;
+$custom-input-padding-on-focus: egr.substractOfPaddingOnFocus(egr.$spacer-s, 1)
+  egr.substractOfPaddingOnFocus(egr.$spacer, 1) !default;
+
+$custom-input-margin: egr.rem(egr.$spacer) !default;
+
+$custom-input--error-color: egr.$color-danger !default;
+$custom-input--valid-color: egr.$color-success !default;

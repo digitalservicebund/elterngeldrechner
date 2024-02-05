@@ -1,0 +1,9 @@
+@use "allgemeine-angaben-form.variables" as *;
+
+.#{nsp("allgemeine-angaben-form-elternteil1")} {
+  margin-right: $allgemeine-angaben-form-elternteil1-spacing;
+}
+
+.#{nsp("allgemeine-angaben-form-elternteil-label")} {
+  margin-right: $allgemeine-angaben-form-elternteil1-label-spacing;
+}

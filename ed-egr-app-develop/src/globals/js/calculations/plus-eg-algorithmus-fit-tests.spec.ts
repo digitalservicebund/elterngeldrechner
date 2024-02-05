@@ -1,0 +1,132 @@
+import {
+  Einkommen,
+  ErwerbsArt,
+  FinanzDaten,
+  MischEkZwischenErgebnis,
+  MutterschaftsLeistung,
+  PlanungsDaten,
+} from "./model";
+import { describeSkipOnCi } from "../../../setupTests";
+import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
+import { EgrOhneMischeinkommenExcelSheet } from "../../../test-utils/egr-ohne-mischeinkommen-excel-sheet";
+import { EgrAlteTestfaelleRoutine3ExcelSheet } from "../../../test-utils/egr-alte-testfaelle-routine3-excel-sheet";
+import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
+import { MathUtil } from "./common/math-util";
+
+/**
+ * Runs FIT tests for PlusEgAlgorithmus.
+ *
+ * Test should be skipped on ci server. Reason: We can't call the BMF Steuerrechner,
+ * because external calls are forbidden on CI environment.
+ */
+describeSkipOnCi("plus-eg-algorithmus", () => {
+  const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
+  const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
+
+  describe("should calculate ElternGeldPlusErgebnis for test cases from Testfaelle_alte_Routine3.xlsx", () => {
+    for (
+      let testCaseIndex = 0;
+      testCaseIndex < EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT;
+      testCaseIndex++
+    ) {
+      it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, async () => {
+        // given
+        const planungsDaten = createPlanungsDaten(sheet, testCaseIndex);
+        const persoenlicheDaten = sheet.createPersoenlicheDaten(testCaseIndex);
+        const finanzDaten = createFinanzDaten(sheet, testCaseIndex);
+        const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
+        const zwischenErgebnis =
+          await zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
+            persoenlicheDaten,
+            sheet.nettoVorGeburt(testCaseIndex),
+          );
+
+        // when
+        const algorithmus = new PlusEgAlgorithmus();
+        const ergebnis = await algorithmus.elterngeldPlusErgebnis(
+          planungsDaten,
+          persoenlicheDaten,
+          finanzDaten,
+          2022,
+          mischEkZwischenErgebnis,
+          zwischenErgebnis,
+        );
+
+        // then
+        expect(ergebnis).not.toBeUndefined();
+        expect(ergebnis.bruttoBasis.toNumber()).toBe(
+          sheet.ergebnisBruttoBasisImBezugsZeitraumDurchschnitt(testCaseIndex),
+        );
+        expect(ergebnis.nettoBasis.toNumber()).toBe(
+          sheet.ergebnisNettoBasisImBezugsZeitraumDurchschnitt(testCaseIndex),
+        );
+        expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(
+          sheet.ergebnisElterngeldBasisFuerMonateMitErwerbsTaetigkeit(
+            testCaseIndex,
+          ),
+        );
+        expect(ergebnis.bruttoPlus.toNumber()).toBe(
+          sheet.ergebnisBruttoPlusImBezugsZeitraumDurchschnitt(testCaseIndex),
+        );
+        expect(ergebnis.nettoPlus.toNumber()).toBe(
+          sheet.ergebnisNettoPlusImBezugsZeitraumDurchschnitt(testCaseIndex),
+        );
+        expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(
+          sheet.ergebnisElterngeldPlusFuerMonateMitErwerbsTaetigkeit(
+            testCaseIndex,
+          ),
+        );
+        expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(
+          sheet.ergebnisElterngeldPlusFuerMonateOhneErwerbsTaetigkeit(
+            testCaseIndex,
+          ),
+        );
+      });
+    }
+  });
+});
+
+const createPlanungsDaten = (
+  sheet: EgrAlteTestfaelleRoutine3ExcelSheet,
+  testCaseIndex: number,
+) => {
+  const planungsDaten = new PlanungsDaten(
+    false,
+    true,
+    false,
+    MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+  );
+  planungsDaten.planung = sheet.lebensmonateElterngeldArt(testCaseIndex);
+  return planungsDaten;
+};
+
+const createFinanzDaten = (
+  sheet: EgrAlteTestfaelleRoutine3ExcelSheet,
+  testCaseIndex: number,
+) => {
+  const finanzDaten = new FinanzDaten();
+  finanzDaten.bruttoEinkommen = new Einkommen(0);
+  finanzDaten.zahlenSieKirchenSteuer = sheet.kirchenSteuer(testCaseIndex);
+  finanzDaten.steuerKlasse = sheet.steuerKlasse(testCaseIndex);
+  finanzDaten.splittingFaktor = sheet.splittingFaktor(testCaseIndex);
+  finanzDaten.kinderFreiBetrag = sheet.kinderFreiBetrag(testCaseIndex);
+  finanzDaten.kassenArt = sheet.krankenVersicherung(testCaseIndex);
+  finanzDaten.rentenVersicherung = sheet.rentenVersicherung(testCaseIndex);
+  finanzDaten.erwerbsZeitraumLebensMonatList =
+    sheet.erwerbsZeitraumLebensMonatList(testCaseIndex);
+
+  return finanzDaten;
+};
+
+const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
+  return {
+    elterngeldbasis: MathUtil.BIG_ZERO,
+    krankenversicherungspflichtig: false,
+    netto: MathUtil.BIG_ZERO,
+    brutto: MathUtil.BIG_ZERO,
+    steuern: MathUtil.BIG_ZERO,
+    abgaben: MathUtil.BIG_ZERO,
+    rentenversicherungspflichtig: false,
+    status: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+  };
+};

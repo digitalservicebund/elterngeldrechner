@@ -1,0 +1,12 @@
+@forward "src/globals/scss";
+@use "src/globals/scss" as egr;
+
+$custom-select-label-text-color: egr.$color-text !default;
+
+$custom-select-border: egr.rem(1) solid egr.$color-grey-dark !default;
+
+$custom-select-input-padding: egr.rem(egr.$spacer-s) egr.rem(50)
+  egr.rem(egr.$spacer-s) egr.rem(egr.$spacer) !default;
+$custom-select-option-padding: egr.rem(egr.$spacer-s) egr.rem(egr.$spacer) !default;
+
+$custom-select-margin: egr.rem(egr.$spacer) !default;

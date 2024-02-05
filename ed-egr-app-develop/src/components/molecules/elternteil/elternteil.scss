@@ -1,0 +1,89 @@
+@use "elternteil.variables" as *;
+
+.#{nsp("monatsplaner--alleinerziehend")} .#{nsp("elternteil")} {
+  table-layout: auto;
+}
+
+.#{nsp("elternteil")} {
+  border-spacing: 0;
+  border-collapse: separate;
+  table-layout: fixed;
+  width: 100%;
+
+  @media only screen and (min-width: $breakpoint-desktop) {
+    width: 50%;
+
+    & + & {
+      margin-left: rem($spacer);
+    }
+  }
+
+  thead {
+    background-color: $color-off-white;
+    z-index: 0;
+  }
+
+  &__name {
+    padding: rem($spacer);
+  }
+
+  &__lebensmonat {
+    font-size: rem(14);
+    word-wrap: break-word;
+    line-height: rem(20);
+    width: rem(85);
+    padding: rem($spacer-s);
+  }
+
+  &__th {
+    font-weight: 700;
+    padding: rem($spacer-s);
+    border-bottom: rem(10) solid;
+
+    &--basiselterngeld {
+      color: $color-BEG-base;
+      border-color: $color-BEG-base;
+      background: $color-BEG-light;
+    }
+
+    &--elterngeldplus {
+      color: $color-EGP-base;
+      border-color: $color-EGP-base;
+      background: $color-EGP-light;
+    }
+
+    &--partnerschaftsbonus {
+      color: $color-PSB-base;
+      border-color: $color-PSB-base;
+      background: $color-PSB-light;
+    }
+  }
+
+  tbody > tr:nth-child(odd) > td {
+    background-color: $color-white;
+  }
+
+  tbody > tr > td {
+    height: rem(44);
+    line-height: rem(44);
+  }
+}
+
+.#{nsp("lebensmonate-cell")} {
+  border-right: rem($spacer) solid $color-off-white;
+
+  &__lebensmonat-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 rem($spacer-s);
+  }
+
+  &__number {
+    font-weight: 700;
+  }
+
+  &__label {
+    font-size: rem(14);
+  }
+}

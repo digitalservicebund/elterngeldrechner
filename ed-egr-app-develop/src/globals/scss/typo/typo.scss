@@ -1,0 +1,77 @@
+@use "typo.variables" as *;
+@use "../functions/rem" as *;
+@use "../variables" as *;
+
+html,
+body {
+  font-size: $base-font-size;
+}
+
+body {
+  font-family: $font-family-sans;
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+  font-size: rem(80);
+  line-height: rem(110);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: rem(40);
+  line-height: rem(60);
+  font-weight: 700;
+}
+
+h3 {
+  font-size: rem(28);
+  line-height: rem(44);
+  font-weight: 400;
+}
+
+h4 {
+  font-size: rem(24);
+  line-height: rem(40);
+  font-weight: 700;
+}
+
+p {
+  font-size: rem(18);
+  line-height: rem(30);
+  padding: rem($spacer-xs) 0;
+}
+
+li {
+  line-height: rem(30);
+}
+
+button {
+  font-size: rem(20);
+  line-height: rem(20);
+}
+
+label {
+  font-size: rem(18);
+}
+
+@media only screen and (max-width: $breakpoint-tablet) {
+  h2 {
+    font-size: rem(28);
+    line-height: rem(44);
+    font-weight: 400;
+  }
+
+  h3 {
+    font-size: rem(24);
+    line-height: rem(40);
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: rem(18);
+    line-height: rem(30);
+    font-weight: 700;
+  }
+}

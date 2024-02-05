@@ -1,0 +1,7 @@
+@use "zusammenfassung-und-daten-allgemein.variables" as *;
+
+.#{nsp("zusammenfassung-und-daten-allgemein")} {
+  margin-bottom: rem($spacer-xl);
+  padding: rem($spacer);
+  background-color: $color-ZUD;
+}

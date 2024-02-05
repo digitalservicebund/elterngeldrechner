@@ -33,13 +33,16 @@ jobs:
         working-directory: ./ed-egr-app-develop
         run: npm link @egr/monatsplaner-app && npm run test-all && npm run build
 
+      - name: Build preview
+        run: ./build-preview
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./ed-egr-app-develop/build
+          path: ./tmp_preview
 
       - name: Deploy to GitHub Pages
         id: deployment

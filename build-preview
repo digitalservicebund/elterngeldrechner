@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+# Create a realistic preview page
+
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o verbose
+
+rm -rf tmp_preview
+mkdir tmp_preview
+cd tmp_preview
+
+# Fetch live host page
+wget \
+  --page-requisites \
+  --convert-links \
+  --span-hosts \
+  --no-directories \
+  --execute robots=off \
+  --adjust-extension \
+  "https://familienportal.de/familienportal/meta/egr"
+
+# Remove assets from live egr
+rm chunk* main*
+
+# Copy over new assets
+cp ../ed-egr-app-develop/build/static/css/*.css .
+cp ../ed-egr-app-develop/build/static/css/*.css.map .
+cp ../ed-egr-app-develop/build/static/js/*.js .
+cp ../ed-egr-app-develop/build/static/js/*.js.map .
+
+# Special handling of svg sprite
+sprite_path=$(grep -o "/resource/crblob/.*/sprite-svg-data.svg" egr.html)
+sprite_url="https://familienportal.de${sprite_path}"
+echo $sprite_url
+wget "${sprite_url}"
+sed --in-place --expression "s#/resource/crblob/.*/sprite-svg-data.svg#sprite-svg-data.svg#" egr.html
+
+# Inject script tags
+scripts=""
+for filename in *.chunk.js; do
+    [ -e "$filename" ] || continue
+    scripts="${scripts}<script src=\"${filename}\"></script>"
+    # ... rest of the loop body
+done
+scripts="${scripts}<script src=\"$(ls main.*.js)\"></script>"
+sed --in-place --expression "s#<script src=\"chunk1.*\$#$scripts#" egr.html
+
+# Inject stylesheet
+stylesheet=$(ls main.*.css)
+sed --in-place --expression "s#main.*\.css#$stylesheet#" egr.html
+
+# Disable Matomo tracking
+sed --in-place --expression "s#window\.initMatomo();#/* tracking disabled */#" egr.html
+
+mv egr.html index.html

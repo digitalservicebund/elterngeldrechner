@@ -7,7 +7,7 @@
     "test": "jest",
     "test:ci": "jest --verbose",
     "test:watch": "jest --watch",
-    "lint": "eslint ./src/**/*.{js,ts} --fix",
+    "lint": "eslint ./src/**/*.ts --fix",
     "start": "tsc --watch",
     "build": "tsc --build --force tsconfig.cjs.json ./tsconfig.amd.json"
   },

@@ -8,6 +8,8 @@ import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
 import { stepNachwuchsSelectors } from "../../../redux/stepNachwuchsSlice";
 import { P } from "../../atoms";
 import { stepErwerbstaetigkeitElternteilSelectors } from "../../../redux/stepErwerbstaetigkeitSlice";
+import { YesNo } from "../../../globals/js/calculations/model";
+import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
 
 interface Props {
   elternteil: ElternteilType;
@@ -34,6 +36,14 @@ export const EinkommenFormElternteil: VFC<Props> = ({
       state.stepErwerbstaetigkeit[elternteil],
     ),
   );
+  const erwerbstaetigkeit = useAppSelector(
+    (state) => state.stepErwerbstaetigkeit,
+  );
+
+  const isSelbststaendig = erwerbstaetigkeit[elternteil].isSelbststaendig;
+  const isMehrereTaetigkeiten =
+    erwerbstaetigkeit[elternteil].mehrereTaetigkeiten === YesNo.YES;
+
   const isSelbstaendigAndErwerbstaetig = useAppSelector((state) =>
     stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
       state.stepErwerbstaetigkeit[elternteil],
@@ -44,15 +54,26 @@ export const EinkommenFormElternteil: VFC<Props> = ({
       state.stepErwerbstaetigkeit[elternteil],
     ),
   );
+
   const hasMiniJob = useAppSelector(
     (state) =>
       isErwerbstaetigVorGeburt &&
       state.stepErwerbstaetigkeit[elternteil].monatlichesBrutto === "MiniJob",
   );
 
+  const isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten =
+    isSelbstaendigAndErwerbstaetig || isMehrereTaetigkeiten;
+
+  const isOnlyErwerbstaetigWithOneTaetigkeit =
+    isOnlyErwerbstaetig && !isMehrereTaetigkeiten;
+
+  const antragssteller = useAppSelector(
+    stepAllgemeineAngabenSelectors.getAntragssteller,
+  );
+
   return (
     <section aria-label={elternteilName}>
-      <h2>{elternteilName}</h2>
+      {antragssteller === "FuerBeide" && <h2>{elternteilName}</h2>}
       {!isErwerbstaetigVorGeburt && (
         <P>
           Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird
@@ -60,16 +81,10 @@ export const EinkommenFormElternteil: VFC<Props> = ({
           Angaben zum Einkommen machen.
         </P>
       )}
-      {hasMiniJob && (
-        <P>
-          Da Sie unter 520 € einnehmen, wird für Sie mit dem Mindestsatz
-          gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.
-        </P>
-      )}
 
       {isErwerbstaetigVorGeburt && (
         <>
-          {isOnlyErwerbstaetig && (
+          {isOnlyErwerbstaetigWithOneTaetigkeit && (
             <NurErwerbstaetig
               elternteil={elternteil}
               monthsBeforeBirth={monthsBeforeBirthOptions}
@@ -83,11 +98,19 @@ export const EinkommenFormElternteil: VFC<Props> = ({
             />
           )}
 
-          {!hasMiniJob && <SteuerUndVersicherung elternteil={elternteil} />}
+          {!hasMiniJob && (
+            <SteuerUndVersicherung
+              elternteil={elternteil}
+              isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten={
+                isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten
+              }
+            />
+          )}
 
-          {isSelbstaendigAndErwerbstaetig && (
+          {isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
             <SelbstaendigAndErwerbstaetig
               elternteil={elternteil}
+              isSelbststaendig={isSelbststaendig}
               monthsBeforeBirth={monthsBeforeBirthOptions}
             />
           )}

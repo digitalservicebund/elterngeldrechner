@@ -118,18 +118,18 @@ describe("Allgemeine Angaben Page", () => {
         });
       });
 
-      it("alleinerzeihend - to Elternteil 1", async () => {
+      it("alleinerziehend - to Elternteil 1", async () => {
         render(<AllgemeineAngabenPage />, { store });
         const expectedState: MonatsplanerState = {
           ...initialMonatsplanerState,
           mutterschutzElternteil: "ET1",
+          settings: {
+            partnerMonate: true,
+          },
         };
-        await userEvent.click(screen.getByLabelText("Für beide"));
+        await userEvent.click(screen.getByLabelText("Nur für mich"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
-        );
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungenWer_option_0"),
         );
 
         await userEvent.click(screen.getByText("Weiter"));
@@ -140,7 +140,19 @@ describe("Allgemeine Angaben Page", () => {
         render(<AllgemeineAngabenPage />, { store });
         const expectedState: MonatsplanerState = {
           ...initialMonatsplanerState,
+          elternteile: {
+            ...initialMonatsplanerState.elternteile,
+            remainingMonths: {
+              ...initialMonatsplanerState.elternteile.remainingMonths,
+              basiselterngeld: 14,
+              elterngeldplus: 28,
+            },
+          },
           mutterschutzElternteil: "ET1",
+          partnerMonate: true,
+          settings: {
+            partnerMonate: true,
+          },
         };
         await userEvent.click(screen.getByLabelText("Für beide"));
         await userEvent.click(
@@ -158,7 +170,19 @@ describe("Allgemeine Angaben Page", () => {
         render(<AllgemeineAngabenPage />, { store });
         const expectedState: MonatsplanerState = {
           ...initialMonatsplanerState,
+          elternteile: {
+            ...initialMonatsplanerState.elternteile,
+            remainingMonths: {
+              ...initialMonatsplanerState.elternteile.remainingMonths,
+              basiselterngeld: 14,
+              elterngeldplus: 28,
+            },
+          },
           mutterschutzElternteil: "ET2",
+          partnerMonate: true,
+          settings: {
+            partnerMonate: true,
+          },
         };
         await userEvent.click(screen.getByLabelText("Für beide"));
         await userEvent.click(

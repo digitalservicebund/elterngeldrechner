@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState, VFC } from "react";
 import {
   ElterngeldType,
+  Elternteile,
   ElternteilType,
   Month,
   validateElternteile,
@@ -11,7 +12,10 @@ import {
   monatsplanerSelectors,
 } from "../../../redux/monatsplanerSlice";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
+import {
+  Antragstellende,
+  stepAllgemeineAngabenSelectors,
+} from "../../../redux/stepAllgemeineAngabenSlice";
 import { stepNachwuchsSelectors } from "../../../redux/stepNachwuchsSlice";
 import {
   ElterngeldRowsResult,
@@ -25,6 +29,9 @@ import {
   NotificationPSBChangeOtherElternteil,
   NotificationPSBNotDeselectable,
   NotificationValidationMonatsplaner,
+  NotificationBEGHintMinMax,
+  NotificationBEGHintMin,
+  NotificationBEGMax,
   P,
   Toast,
 } from "../../atoms";
@@ -41,7 +48,6 @@ import { formSteps } from "../../../utils/formSteps";
 import { EgrConst } from "../../../globals/js/egr-configuration";
 import { resetStoreAction } from "../../../redux/resetStoreAction";
 import { YesNo } from "../../../globals/js/calculations/model";
-import { NotificationBEGHintMinMax } from "../../atoms/notification";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 
@@ -82,10 +88,37 @@ const getAmountElterngeldRow = (
   });
 };
 
+const begCountOf = (months: readonly Month[]) =>
+  months.filter((month) => month.type === "BEG").length;
+
+const checkForNotificationBEGHintMinMax = (
+  elternteile: Elternteile,
+  antragstellende: Antragstellende | null,
+) => {
+  const begEt1 = begCountOf(elternteile.ET1.months);
+  const begEt2 = begCountOf(elternteile.ET2.months);
+  return (
+    antragstellende === "FuerBeide" &&
+    ((begEt1 >= 11 && begEt2 <= 1) || (begEt2 >= 11 && begEt1 <= 1))
+  );
+};
+
+const checkMaxBEG = (
+  elternteile: Elternteile,
+  antragstellende: Antragstellende | null,
+) => {
+  const begEt1 = begCountOf(elternteile.ET1.months);
+  const begEt2 = begCountOf(elternteile.ET2.months);
+  return antragstellende === "FuerBeide" && (begEt1 > 12 || begEt2 > 12);
+};
+
 export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const partnerMonate = useAppSelector(
+    (state) => state.monatsplaner.partnerMonate,
+  );
   const isMonatsplanerOverlayVisible = useAppSelector(
     stepRechnerSelectors.isMonatsplanerOverlayVisible,
   );
@@ -131,13 +164,13 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     elterngeldplus: EGPlusRemainingMonth,
   } = elternteile.remainingMonths;
 
-  const begCountOf = (months: readonly Month[]) =>
-    months.filter((month) => month.type === "BEG").length;
-
   const handleNextPage = () => {
     const validation = validateElternteile(elternteile);
+    const validationMaxBEGFailed = checkMaxBEG(elternteile, antragstellende);
 
-    if (!validation.isValid) {
+    if (validationMaxBEGFailed) {
+      setNotificationMessages([<NotificationBEGMax />]);
+    } else if (!validation.isValid) {
       setNotificationMessages([
         <NotificationValidationMonatsplaner
           errorCodes={validation.errorCodes}
@@ -155,9 +188,6 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
   const onUnMountToast = () => setNotificationMessages(null);
 
   useEffect(() => {
-    const begEt1 = begCountOf(elternteile.ET1.months);
-    const begEt2 = begCountOf(elternteile.ET2.months);
-
     const validation = validateElternteile(elternteile);
     const doesNotHaveContinuousEGAfterBEGAnspruch =
       validation &&
@@ -169,20 +199,28 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
       validation.errorCodes.includes(
         "DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll",
       );
-
-    const beg11plus1 =
-      antragstellende === "FuerBeide" &&
-      ((begEt1 === 12 && begEt2 === 0) ||
-        (begEt1 === 11 && begEt2 === 1) ||
-        (begEt2 === 12 && begEt1 === 0) ||
-        (begEt2 === 11 && begEt1 === 1));
+    const showNotificationBEGHintMinMax = checkForNotificationBEGHintMinMax(
+      elternteile,
+      antragstellende,
+    );
+    const validationMaxBEGFailed = checkMaxBEG(elternteile, antragstellende);
 
     const begAndEgPlusEmpty =
       BEGRemainingMonth === 0 && EGPlusRemainingMonth === 0;
 
     const begEmptyOnly = BEGRemainingMonth === 0 && EGPlusRemainingMonth !== 0;
 
-    if (beg11plus1 || doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll) {
+    if (validationMaxBEGFailed) {
+      setNotificationMessages([<NotificationBEGMax />]);
+    } else if (
+      doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll &&
+      alleinerziehend
+    ) {
+      setNotificationMessages([<NotificationBEGHintMin />]);
+    } else if (
+      (doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll && !alleinerziehend) ||
+      showNotificationBEGHintMinMax
+    ) {
       setNotificationMessages([<NotificationBEGHintMinMax />]);
     } else if (doesNotHaveContinuousEGAfterBEGAnspruch) {
       setNotificationMessages([
@@ -206,6 +244,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     elternteile,
     elternteile.ET1.months,
     elternteile.ET2.months,
+    alleinerziehend,
   ]);
 
   const {
@@ -243,6 +282,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
       monatsplanerActions.changeMonth({
         elternteil,
         targetType,
+        partnerMonate,
         monthIndex,
       }),
     );
@@ -296,6 +336,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
       monatsplanerActions.changeMonth({
         elternteil,
         targetType,
+        partnerMonate,
         monthIndex,
       }),
     );
@@ -323,9 +364,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
             Elterngeld für jeden Lebensmonat Ihres Kindes planen. In der Tabelle
             unten können Sie durch anklicken des jeweiligen Monats wählen, wann
             Sie welches Elterngeld bekommen möchten. Darüber sehen Sie jeweils
-            wie viele Monate Sie noch zur Verfügung haben. Hinweis für
-            Alleinerziehende: Die Ihnen zustehenden Partnermonate und
-            Partnerschaftsbonusmonate werden hier nicht angezeigt.
+            wie viele Monate Sie noch zur Verfügung haben.
           </P>
         </div>
 
@@ -338,14 +377,16 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
         >
           <RemainingMonths
             remainingMonthByType={elternteile.remainingMonths}
-            alleinerziehend={alleinerziehend}
+            partnerMonate={partnerMonate}
           />
           <div className={nsp("monatsplaner__tables")}>
             <Elternteil
               className={nsp("monatsplaner__sticky-elternteil")}
               elternteil={elternteile.ET1}
               selectablePSBMonths={selectablePSBMonths}
-              elternteilName={elternteilNames.ET1}
+              elternteilName={
+                alleinerziehend === YesNo.YES ? "" : elternteilNames.ET1
+              }
               onToggleMonth={(columnType, monthIndex) =>
                 handleToggleMonth("ET1", columnType, monthIndex)
               }
@@ -356,9 +397,9 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
               amounts={amountElterngeldRowsET1}
               hasMutterschutz={mutterschutzElternteil === "ET1"}
               mutterSchutzMonate={mutterSchutzMonate}
+              partnerMonate={partnerMonate}
               remainingMonths={elternteile.remainingMonths}
               isElternteilOne={true}
-              alleinerziehend={alleinerziehend}
             />
             {antragstellende === "FuerBeide" && (
               <Elternteil
@@ -376,6 +417,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
                 amounts={amountElterngeldRowsET2}
                 hasMutterschutz={mutterschutzElternteil === "ET2"}
                 mutterSchutzMonate={mutterSchutzMonate}
+                partnerMonate={partnerMonate}
                 remainingMonths={elternteile.remainingMonths}
                 hideLebensmonateOnDesktop={true}
               />
@@ -392,13 +434,18 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
                 }
               />
             )}
+            <P bold={false}>
+              Dieses Ergebnis ist nicht rechtsverbindlich. Erst nach der Geburt
+              Ihres Kindes kann Ihre zuständige Elterngeldstelle eine konkrete
+              und rechtsverbindliche Berechnung Ihres Anspruchs vornehmen.
+            </P>
             <Toast
               messages={notificationMessages}
               active={
                 notificationMessages !== null && notificationMessages.length > 0
               }
               onUnMount={onUnMountToast}
-              timeout={6000}
+              timeout={4500}
             />
             <div className={nsp("monatsplaner__footer-buttons")}>
               <Button

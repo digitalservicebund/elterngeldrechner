@@ -18,10 +18,21 @@ const bmfSteuerRechnerDomainFromEnv = (): string => {
 };
 
 /**
- * Available years for bmf steuerrechner call.
+ * Available years for bmf steuerrechner remote call.
  */
-export const bmfSteuerRechnerAvailableYears = (): number[] => {
-  const years = process.env.REACT_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS;
+export const bmfSteuerRechnerAvailableYearsRemote = (): number[] => {
+  const years = process.env.REACT_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE;
+  if (years === undefined) {
+    throw errorOf("BmfSteuerRechnerAvailableYearsUndefined");
+  }
+  return years.split(",").map((years) => Number.parseInt(years));
+};
+
+/**
+ * Available years for bmf steuerrechner lib.
+ */
+export const bmfSteuerRechnerAvailableYearsLib = (): number[] => {
+  const years = process.env.REACT_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB;
   if (years === undefined) {
     throw errorOf("BmfSteuerRechnerAvailableYearsUndefined");
   }
@@ -54,7 +65,7 @@ export function bmfSteuerRechnerUrlOf(
   lohnSteuerJahr: number,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ): string {
-  if (!bmfSteuerRechnerAvailableYears().includes(lohnSteuerJahr)) {
+  if (!bmfSteuerRechnerAvailableYearsRemote().includes(lohnSteuerJahr)) {
     throw errorOf("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
   }
 

@@ -117,7 +117,7 @@ export const RechnerResult: VFC<Props> = ({ elternteil }) => {
           messages={notificationMessages}
           active={!!notificationMessages}
           onUnMount={onUnMountToast}
-          timeout={15000}
+          timeout={12000}
         />
       )}
     </section>

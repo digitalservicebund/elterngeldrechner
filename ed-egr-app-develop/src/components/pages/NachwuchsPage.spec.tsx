@@ -375,6 +375,7 @@ describe("Submitting the form", () => {
       isoGeburtsdatum,
       "ET1",
       0,
+      true,
     );
 
     const validState: Partial<RootState> = {
@@ -453,6 +454,7 @@ describe("Submitting the form", () => {
       isoGeburtsdatum,
       "ET1",
       3,
+      true,
     );
 
     render(<NachwuchsPage />, { store });

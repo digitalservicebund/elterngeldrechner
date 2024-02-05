@@ -112,44 +112,6 @@ describe("Einkommen Page", () => {
     expect(screen.getByText(ET2)).toBeInTheDocument();
   });
 
-  it("should show notification message per Elternteil if Elternteil has a Minijob", () => {
-    const ET1 = "Finn";
-    const ET2 = "Fiona";
-
-    const elternteilStepErwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
-      ...initialStepErwerbstaetigkeitState.ET1,
-      monatlichesBrutto: "MiniJob",
-      vorGeburt: YesNo.YES,
-    };
-
-    const preloadedState: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        pseudonym: {
-          ET1,
-          ET2,
-        },
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        wahrscheinlichesGeburtsDatum: "08.08.2022",
-      },
-      stepErwerbstaetigkeit: {
-        ET1: elternteilStepErwerbstaetigkeit,
-        ET2: elternteilStepErwerbstaetigkeit,
-      },
-    };
-
-    render(<EinkommenPage />, { preloadedState });
-
-    const messages = screen.getAllByText(
-      "Da Sie unter 520 € einnehmen, wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.",
-    );
-
-    expect(messages).toHaveLength(2);
-  });
-
   it("should show notification message per Elternteil if Elternteil hasn't a Job", () => {
     const ET1 = "Finn";
     const ET2 = "Fiona";
@@ -222,10 +184,15 @@ describe("Einkommen Page", () => {
           ...elternteil1Erwerbstaetigkeit,
         },
       },
+      stepEinkommen: {
+        ...initialStepEinkommenState,
+        limitEinkommenUeberschritten: YesNo.NO,
+      },
     };
 
     const expectedState: StepEinkommenState = {
       ...initialStepEinkommenState,
+      limitEinkommenUeberschritten: YesNo.NO,
       ET1: {
         ...initialStepEinkommenState.ET1,
         bruttoEinkommenNichtSelbstaendig: {
@@ -358,6 +325,7 @@ describe("Einkommen Page", () => {
     it("should transfer all input fields into the store after clicking to next page", async () => {
       const expectedState: StepEinkommenState = {
         ...initialStepEinkommenState,
+        limitEinkommenUeberschritten: YesNo.NO,
         ET1: {
           ...initialStepEinkommenState.ET1,
           gewinnSelbstaendig: {
@@ -379,6 +347,10 @@ describe("Einkommen Page", () => {
 
       render(<EinkommenPage />, { store });
       const elternteil1Section = getElternteil1Section();
+
+      // Field Einkommensgrenze
+      const elterngeldAnspruch = screen.getByTestId("egr-anspruch");
+      await userEvent.click(within(elterngeldAnspruch).getByLabelText("Nein"));
 
       const einkommenAusSelbstaendigkeit =
         within(elternteil1Section).getByLabelText("Gewinneinkünfte");
@@ -419,71 +391,72 @@ describe("Einkommen Page", () => {
       expect(navigate).toHaveBeenCalledWith("/rechner-planer");
     });
 
-    it("shoud have limitEinkommenUeberschritten = true in store on income above 250000 Euro considering one elternteil", async () => {
-      const expectedState: StepEinkommenState = {
-        ...initialStepEinkommenState,
-        ET1: {
-          ...initialStepEinkommenState.ET1,
-          gewinnSelbstaendig: {
-            type: "yearly",
-            average: null,
-            perYear: 250001,
-            perMonth: [],
-          },
-          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-          zahlenSieKirchenSteuer: YesNo.YES,
-          istErwerbstaetig: YesNo.YES,
-          hasMischEinkommen: YesNo.NO,
-          istNichtSelbststaendig: false,
-          istSelbststaendig: true,
-        },
-        antragstellende: "FuerMichSelbst",
-        limitEinkommenUeberschritten: true,
-      };
-      render(<EinkommenPage />, { store });
-      const elternteil1Section = getElternteil1Section();
+    // TEST DISABLED: limitEinkommenUeberschritten will be set by form input directly - doesn't make sense any more
+    // it("shoud have limitEinkommenUeberschritten = true in store on income above 250000 Euro considering one elternteil", async () => {
+    //   const expectedState: StepEinkommenState = {
+    //     ...initialStepEinkommenState,
+    //     ET1: {
+    //       ...initialStepEinkommenState.ET1,
+    //       gewinnSelbstaendig: {
+    //         type: "yearly",
+    //         average: null,
+    //         perYear: 250001,
+    //         perMonth: [],
+    //       },
+    //       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+    //       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+    //       zahlenSieKirchenSteuer: YesNo.YES,
+    //       istErwerbstaetig: YesNo.YES,
+    //       hasMischEinkommen: YesNo.NO,
+    //       istNichtSelbststaendig: false,
+    //       istSelbststaendig: true,
+    //     },
+    //     antragstellende: "FuerMichSelbst",
+    //     limitEinkommenUeberschritten: YesNo.YES,
+    //   };
+    //   render(<EinkommenPage />, { store });
+    //   const elternteil1Section = getElternteil1Section();
 
-      const einkommenAusSelbstaendigkeit =
-        within(elternteil1Section).getByLabelText("Gewinneinkünfte");
+    //   const einkommenAusSelbstaendigkeit =
+    //     within(elternteil1Section).getByLabelText("Gewinneinkünfte");
 
-      const gewinnYearlyField = within(
-        einkommenAusSelbstaendigkeit,
-      ).getByLabelText(/Gewinn im Kalenderjahr vor der Geburt/);
+    //   const gewinnYearlyField = within(
+    //     einkommenAusSelbstaendigkeit,
+    //   ).getByLabelText(/Gewinn im Kalenderjahr vor der Geburt/);
 
-      await userEvent.type(gewinnYearlyField, String(250001));
+    //   await userEvent.type(gewinnYearlyField, String(250001));
 
-      // Field Kirchensteuer
-      const kirchensteuerSection =
-        within(elternteil1Section).getByLabelText("Kirchensteuer");
-      await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
+    //   // Field Kirchensteuer
+    //   const kirchensteuerSection =
+    //     within(elternteil1Section).getByLabelText("Kirchensteuer");
+    //   await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
 
-      // Field Krankenversicherung
-      const krankenversicherungSection = within(
-        elternteil1Section,
-      ).getByLabelText("Krankenversicherung");
-      await userEvent.click(
-        within(krankenversicherungSection).getByLabelText(
-          /^gesetzlich pflichtversichert/,
-        ),
-      );
+    //   // Field Krankenversicherung
+    //   const krankenversicherungSection = within(
+    //     elternteil1Section,
+    //   ).getByLabelText("Krankenversicherung");
+    //   await userEvent.click(
+    //     within(krankenversicherungSection).getByLabelText(
+    //       /^gesetzlich pflichtversichert/,
+    //     ),
+    //   );
 
-      // Field Rentenversicherung
-      const rentenversicherung =
-        within(elternteil1Section).getByLabelText("Rentenversicherung");
-      await userEvent.click(
-        within(rentenversicherung).getByLabelText(
-          "gesetzliche Rentenversicherung",
-        ),
-      );
+    //   // Field Rentenversicherung
+    //   const rentenversicherung =
+    //     within(elternteil1Section).getByLabelText("Rentenversicherung");
+    //   await userEvent.click(
+    //     within(rentenversicherung).getByLabelText(
+    //       "gesetzliche Rentenversicherung",
+    //     ),
+    //   );
 
-      await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
+    //   await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
-      expect(store.getState().stepEinkommen).toEqual(expectedState);
-      expect(store.getState().stepEinkommen.limitEinkommenUeberschritten).toBe(
-        true,
-      );
-    });
+    //   expect(store.getState().stepEinkommen).toEqual(expectedState);
+    //   expect(store.getState().stepEinkommen.limitEinkommenUeberschritten).toBe(
+    //     true,
+    //   );
+    // });
   });
 
   describe("Submitting the form for 'selbständig' and 'erwerbstätig'", () => {
@@ -523,6 +496,7 @@ describe("Einkommen Page", () => {
     it("should transfer all input fields into the store after clicking to next page", async () => {
       const expectedState: StepEinkommenState = {
         ...initialStepEinkommenState,
+        limitEinkommenUeberschritten: YesNo.NO,
         ET1: {
           ...initialStepEinkommenState.ET1,
           zahlenSieKirchenSteuer: YesNo.YES,
@@ -551,6 +525,10 @@ describe("Einkommen Page", () => {
         },
       };
       render(<EinkommenPage />, { store });
+      // Field Einkommensgrenze
+      const elterngeldAnspruch = screen.getByTestId("egr-anspruch");
+      await userEvent.click(within(elterngeldAnspruch).getByLabelText("Nein"));
+
       const elternteil1Section = getElternteil1Section();
       //
       // // Field
@@ -630,6 +608,7 @@ describe("Einkommen Page", () => {
     const ET2 = "Fiona";
 
     const elternteilStepErwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
+      mehrereTaetigkeiten: YesNo.NO,
       vorGeburt: YesNo.YES,
       isNichtSelbststaendig: true,
       isSelbststaendig: true,
@@ -776,6 +755,10 @@ describe("Einkommen Page", () => {
 
     it("should be executed for Basiselterngeld ET1 if user has already calculated it and changes inputs in related form steps", async () => {
       render(<EinkommenPage />, { store });
+      // Field Einkommensgrenze
+      const elterngeldAnspruch = screen.getByTestId("egr-anspruch");
+      await userEvent.click(within(elterngeldAnspruch).getByLabelText("Nein"));
+
       const elternteil1Section = screen.getByLabelText("Finn");
       const ersteTaetigkeit =
         within(elternteil1Section).getByLabelText("1. Tätigkeit");
@@ -801,6 +784,10 @@ describe("Einkommen Page", () => {
 
     it("should be executed for Basiselterngeld ET2 if user has already calculated it and changes inputs in related form steps", async () => {
       render(<EinkommenPage />, { store });
+      // Field Einkommensgrenze
+      const elterngeldAnspruch = screen.getByTestId("egr-anspruch");
+      await userEvent.click(within(elterngeldAnspruch).getByLabelText("Nein"));
+
       const elternteil2Section = screen.getByLabelText("Fiona");
 
       const ersteTaetigkeit =

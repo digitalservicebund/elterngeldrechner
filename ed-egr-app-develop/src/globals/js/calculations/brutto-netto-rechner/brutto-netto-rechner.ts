@@ -44,6 +44,11 @@ export class BruttoNettoRechner {
       rentenversicherungspflichtig = false;
       krankenversicherungspflichtig = false;
     }
+    // in 2023 only rentenversicherungspflichtig: https://www.dgb.de/schwerpunkt/minijob
+    if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
+      krankenversicherungspflichtig = false;
+      rentenversicherungspflichtig = true;
+    }
 
     let steuerKlasse = finanzDaten.steuerKlasse;
     let splittingFaktor = finanzDaten.splittingFaktor;

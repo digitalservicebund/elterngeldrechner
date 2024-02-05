@@ -11,12 +11,13 @@ import { Taetigkeit } from "./Taetigkeit";
 
 interface SelbstaendigAndErwerbstaetigProps {
   elternteil: ElternteilType;
+  isSelbststaendig: boolean;
   monthsBeforeBirth: SelectOption[];
 }
 
 export const SelbstaendigAndErwerbstaetig: VFC<
   SelbstaendigAndErwerbstaetigProps
-> = ({ elternteil, monthsBeforeBirth }) => {
+> = ({ elternteil, isSelbststaendig, monthsBeforeBirth }) => {
   const { control } = useFormContext<StepEinkommenState>();
 
   const name =
@@ -33,6 +34,7 @@ export const SelbstaendigAndErwerbstaetig: VFC<
           key={field.id}
           elternteil={elternteil}
           taetigkeitsIndex={index}
+          isSelbststaendig={isSelbststaendig}
           monthsBeforeBirth={monthsBeforeBirth}
           onRemove={() => taetigkeitenFields.remove(index)}
         />

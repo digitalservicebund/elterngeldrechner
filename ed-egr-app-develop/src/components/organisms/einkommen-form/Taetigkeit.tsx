@@ -42,8 +42,9 @@ const erwerbstaetigkeitOptions: SelectOption<Erwerbstaetigkeiten | "">[] = [
 ];
 
 interface TaetigkeitsFormProps {
-  taetigkeitsIndex: number;
   elternteil: ElternteilType;
+  taetigkeitsIndex: number;
+  isSelbststaendig: boolean;
   monthsBeforeBirth: SelectOption[];
   onRemove: () => void;
 }
@@ -51,6 +52,7 @@ interface TaetigkeitsFormProps {
 export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
   elternteil,
   taetigkeitsIndex,
+  isSelbststaendig,
   monthsBeforeBirth,
   onRemove,
 }) => {
@@ -127,19 +129,23 @@ export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
   return (
     <FormFieldGroup headline={`${taetigkeitsIndex + 1}. Tätigkeit`}>
       <FormFieldGroup>
-        <CustomSelect
-          autoWidth={true}
-          register={register}
-          name={artTaetigkeitName}
-          label="Art der Tätigkeit"
-          options={erwerbstaetigkeitOptions}
-          registerOptions={{
-            required: "Dieses Feld ist erforderlich",
-          }}
-          errors={errors}
-          required={true}
-          info={infoTexts.erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte}
-        />
+        {isSelbststaendig && (
+          <CustomSelect
+            autoWidth={true}
+            register={register}
+            name={artTaetigkeitName}
+            label="Art der Tätigkeit"
+            options={erwerbstaetigkeitOptions}
+            registerOptions={{
+              required: "Dieses Feld ist erforderlich",
+            }}
+            errors={errors}
+            required={true}
+            info={
+              infoTexts.erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte
+            }
+          />
+        )}
       </FormFieldGroup>
       <FormFieldGroup>
         <CustomNumberField

@@ -10,6 +10,7 @@ import { RechnerCardHeaderBEG } from "./RechnerCardHeaderBEG";
 import { RechnerCardHeaderEGPlus } from "./RechnerCardHeaderEGPlus";
 import nsp from "../../../globals/js/namespace";
 import { FootNote, RechnerForm, RechnerResult } from "../../molecules";
+import { YesNo } from "../../../globals/js/calculations/model";
 
 export const Rechner: VFC = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,9 @@ export const Rechner: VFC = () => {
   );
   const antragstellende = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
+  );
+  const alleinerziehend = useAppSelector(
+    stepAllgemeineAngabenSelectors.getAlleinerziehend,
   );
   const elterngeldResultStateElternteil1 = useAppSelector(
     (state) => state.stepRechner.ET1.elterngeldResult.state,
@@ -86,6 +90,7 @@ export const Rechner: VFC = () => {
       setNotificationMessages([
         <NotificationBEGResultWasRecalculated
           elternteilName={name.join(" und ")}
+          alleinerziehend={alleinerziehend}
         />,
       ]);
     }
@@ -93,6 +98,7 @@ export const Rechner: VFC = () => {
     hasElternteil1BEGResultChangedDueToPrevFormSteps,
     hasElternteil2BEGResultChangedDueToPrevFormSteps,
     elternteilNames,
+    alleinerziehend,
   ]);
 
   const onUnMountToast = () => {
@@ -150,7 +156,11 @@ export const Rechner: VFC = () => {
       </section>
 
       <RechnerForm
-        elternteilName={elternteilNames.ET1}
+        elternteilName={
+          alleinerziehend === YesNo.YES
+            ? "Elterngeld-Anspruch"
+            : elternteilNames.ET1
+        }
         elternteil="ET1"
         initialValues={initialValues}
         isResultPending={elterngeldResultStateElternteil1 === "pending"}
@@ -163,7 +173,11 @@ export const Rechner: VFC = () => {
       {antragstellende === "FuerBeide" && (
         <>
           <RechnerForm
-            elternteilName={elternteilNames.ET2}
+            elternteilName={
+              alleinerziehend === YesNo.YES
+                ? "Elterngeld-Anspruch"
+                : elternteilNames.ET2
+            }
             elternteil="ET2"
             initialValues={initialValues}
             isResultPending={elterngeldResultStateElternteil2 === "pending"}

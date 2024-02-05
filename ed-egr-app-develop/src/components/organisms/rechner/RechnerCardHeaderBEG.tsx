@@ -16,9 +16,9 @@ export const RechnerCardHeaderBEG: VFC = () => {
         <ol>
           <li>Für bis zu 12 Lebensmonate Ihres Kindes</li>
           <li>
-            2 zusätzliche Partnermonate, wenn beide Elternteile Elterngeld
-            beantragen und mindestens einer nach der Geburt weniger Einkommen
-            hat
+            2 zusätzliche Monate, wenn beide Elternteile Elterngeld beantragen
+            und mindestens ein Elternteil nach der Geburt weniger Einkommen hat
+            (Partnermonate)
           </li>
           <li>
             Monate können nach den Wünschen der Eltern untereinander aufgeteilt

@@ -29,6 +29,7 @@ export const createDefaultElternteileSettings = (
   isoGeburtstag: string,
   mutterschutzElternteil: ElternteilType,
   numberOfMutterschutzMonths: number,
+  partnerMonate: boolean,
 ): CreateElternteileSettings => {
   const geburtstag: Geburtstag = {
     geburt: isoGeburtstag,
@@ -57,11 +58,13 @@ export const createDefaultElternteileSettings = (
 
   if (numberOfMutterschutzMonths) {
     return {
+      partnerMonate,
       geburtstag,
       mutterschutz: mutterschutzSettings,
     };
   } else {
     return {
+      partnerMonate,
       geburtstag,
     };
   }

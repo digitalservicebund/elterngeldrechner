@@ -6,7 +6,12 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "prettier/prettier": "warn",
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     // Must disable the base rule as it can report incorrect errors
     // See https://typescript-eslint.io/rules/no-unused-expressions/
     "no-unused-vars": "off",

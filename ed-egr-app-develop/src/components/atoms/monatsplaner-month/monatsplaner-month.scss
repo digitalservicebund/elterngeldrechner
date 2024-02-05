@@ -17,8 +17,7 @@
     text-decoration: underline;
   }
 
-  &__checkbox:checked + label,
-  &:hover > label {
+  &__checkbox:checked + label {
     text-decoration: none;
   }
 
@@ -30,28 +29,50 @@
     color: $monatsplaner-month--beg--color;
   }
 
-  &--beg > &__checkbox:checked + label,
-  &--beg:hover > label {
+  &--beg > &__checkbox:checked + label {
     color: $monatsplaner-month--beg--contrast-color;
-    background: $monatsplaner-month--beg--color;
+    background-color: $monatsplaner-month--beg--color;
   }
 
-  &--egplus > &__checkbox:checked + label,
-  &--egplus:hover > label {
+  &--egplus > &__checkbox:checked + label {
     color: $monatsplaner-month--egplus--contrast-color;
-    background: $monatsplaner-month--egplus--color;
+    background-color: $monatsplaner-month--egplus--color;
   }
 
-  &--psb > &__checkbox:checked + label,
-  &--psb:hover > label {
+  &--psb > &__checkbox:checked + label {
     color: $monatsplaner-month--psb--contrast-color;
-    background: $monatsplaner-month--psb--color;
+    background-color: $monatsplaner-month--psb--color;
+  }
+
+  // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
+  // nach dem deselektieren des Monats die Farbe aus dem :hover CSS
+  // gesetzt wurde, un es aussah, als ob der Monat nicht deselektiert wurde.
+  // Erst nach einem Klick auf einem anderen Monat wurde dieser aktualisiert.
+  @media (hover: hover) {
+    &:hover > label {
+      text-decoration: none;
+    }
+
+    &--beg:hover > label {
+      color: $monatsplaner-month--beg--contrast-color;
+      background-color: $monatsplaner-month--beg--color;
+    }
+
+    &--egplus:hover > label {
+      color: $monatsplaner-month--egplus--contrast-color;
+      background-color: $monatsplaner-month--egplus--color;
+    }
+
+    &--psb:hover > label {
+      color: $monatsplaner-month--psb--contrast-color;
+      background-color: $monatsplaner-month--psb--color;
+    }
   }
 
   &--psb#{&}--highlighted > label {
     text-decoration: none;
     color: $monatsplaner-month--psb--contrast-color;
-    background: $monatsplaner-month--psb--color;
+    background-color: $monatsplaner-month--psb--color;
   }
 
   &--selected {

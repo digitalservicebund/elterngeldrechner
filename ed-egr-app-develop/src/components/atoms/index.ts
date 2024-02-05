@@ -12,6 +12,9 @@ export {
   NotificationBEGResultWasRecalculated,
   NotificationValidationMonatsplaner,
   NotificationMaxElterngeld,
+  NotificationBEGHintMinMax,
+  NotificationBEGHintMin,
+  NotificationBEGMax,
 } from "./notification";
 export { Spinner } from "./spinner";
 export { SplitItem } from "./split-item";

@@ -1,5 +1,6 @@
 import {
-  bmfSteuerRechnerAvailableYears,
+  bmfSteuerRechnerAvailableYearsLib,
+  bmfSteuerRechnerAvailableYearsRemote,
   bmfSteuerRechnerCodeFromEnv,
   bmfSteuerRechnerUrlOf,
 } from "./bmf-steuer-rechner-configuration";
@@ -18,9 +19,14 @@ describe("bmf-steuer-rechner-configuration", () => {
     expect(actual).toBe("2022eP");
   });
 
-  it("should use correct years", () => {
-    const actual = bmfSteuerRechnerAvailableYears();
+  it("should use correct years remote", () => {
+    const actual = bmfSteuerRechnerAvailableYearsRemote();
     expect(actual).toStrictEqual([2021, 2022]);
+  });
+
+  it("should use correct years local", () => {
+    const actual = bmfSteuerRechnerAvailableYearsLib();
+    expect(actual).toStrictEqual([2022, 2023]);
   });
 
   describe("should create correct path, when Lohnsteuerjahr is", () => {

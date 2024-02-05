@@ -3,9 +3,10 @@ import { errorOf } from "../../calculation-error-code";
 import { BmfSteuerRechnerResponseParser } from "./bmf-steuer-rechner-response-parser";
 import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 import { BmfSteuerRechnerResponse } from "./bmf-steuer-rechner-response";
-import { LST2022 } from "@bmfin/steuerrechner";
+import { LST } from "@bmfin/steuerrechner";
 import { BmfSteuerRechnerResponseConverter } from "./bmf-steuer-rechner-response-converter";
 import { BmfSteuerRechnerParameterConverter } from "./bmf-steuer-rechner-parameter-converter";
+import { LST_INPUT } from "@bmfin/steuerrechner/build/types/input";
 
 /**
  * Namespace for function to call the BMF Lohn- und Einkommensteuerrechner.
@@ -15,7 +16,7 @@ import { BmfSteuerRechnerParameterConverter } from "./bmf-steuer-rechner-paramet
  * - https://issues.init.de/secure/attachment/708773/708773_2021-11-05-PAP-2022-anlage-1.pdf
  */
 export namespace BmfSteuerRechner {
-  const USE_REMOTE_STEUER_RECHNER = false;
+  export const USE_REMOTE_STEUER_RECHNER = false;
 
   /**
    * Calls the BMF Lohn- und Einkommensteuerrechner.
@@ -36,20 +37,32 @@ export namespace BmfSteuerRechner {
         bmfSteuerRechnerParameter,
       );
     } else {
-      response = await callRechnerLib(bmfSteuerRechnerParameter);
+      response = await callRechnerLib(
+        lohnSteuerJahr,
+        bmfSteuerRechnerParameter,
+      );
     }
     return response;
   }
 }
 
 export async function callRechnerLib(
+  lohnSteuerJahr: number,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ): Promise<BmfSteuerRechnerResponse> {
   const lstInput = BmfSteuerRechnerParameterConverter.convert(
     bmfSteuerRechnerParameter,
   );
-  const lstOutput = LST2022(lstInput);
+  const lstOutput = lst(lohnSteuerJahr, lstInput);
   return BmfSteuerRechnerResponseConverter.convert(lstOutput);
+}
+
+function lst(lohnSteuerJahr: number, lstInput: LST_INPUT) {
+  if (lohnSteuerJahr === 2022) {
+    return LST("2022.1", lstInput);
+  }
+
+  return LST("2023.1", lstInput);
 }
 
 export async function callRemoteRechner(

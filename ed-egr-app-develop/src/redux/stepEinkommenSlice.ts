@@ -16,7 +16,7 @@ import {
   Antragstellende,
 } from "./stepAllgemeineAngabenSlice";
 import { DateTime } from "luxon";
-import { ElternteilType } from "@egr/monatsplaner-app/src/elternteile/elternteile";
+import { ElternteilType } from "@egr/monatsplaner-app/src/elternteile/elternteile-types";
 
 export interface Zeitraum {
   from: string;
@@ -119,7 +119,7 @@ export interface StepEinkommenState {
   ET1: StepEinkommenElternteil;
   ET2: StepEinkommenElternteil;
   antragstellende: Antragstellende | null;
-  limitEinkommenUeberschritten: boolean | null;
+  limitEinkommenUeberschritten: YesNo | null;
 }
 
 export const initialStepEinkommenState: StepEinkommenState = {
@@ -196,9 +196,6 @@ const stepEinkommenSlice = createSlice({
   initialState: initialStepEinkommenState,
   reducers: {
     submitStep: (_, { payload }: PayloadAction<SubmitStepPayload>) => {
-      // check if max income for Elterngeld is exceeded
-      const maxEinkommenAlleine = 250000;
-      const maxEinkommenZusammen = 300000;
       const einkommen: Einkommen = {
         ET1: 0,
         ET2: 0,
@@ -211,7 +208,6 @@ const stepEinkommenSlice = createSlice({
         ET1: 0,
         ET2: 0,
       };
-      let limitEinkommenUeberschritten = null;
       const elternteile: Array<ElternteilType> = ["ET1", "ET2"];
       elternteile.forEach(function (elternteil) {
         if (
@@ -233,24 +229,9 @@ const stepEinkommenSlice = createSlice({
               : einkommen[elternteil];
         }
       });
-      // if income is exceed prop limitEinkommenUeberschritten
-      // will cause an info popup to be rendered
-      if (
-        _.antragstellende === "FuerMichSelbst" &&
-        totalEinkommen["ET1"] > maxEinkommenAlleine
-      ) {
-        limitEinkommenUeberschritten = true;
-      }
-      if (
-        _.antragstellende === "FuerBeide" &&
-        totalEinkommen["ET1"] + totalEinkommen["ET2"] > maxEinkommenZusammen
-      ) {
-        limitEinkommenUeberschritten = true;
-      }
       return {
         ..._,
         ...payload,
-        limitEinkommenUeberschritten: limitEinkommenUeberschritten,
       };
     },
   },

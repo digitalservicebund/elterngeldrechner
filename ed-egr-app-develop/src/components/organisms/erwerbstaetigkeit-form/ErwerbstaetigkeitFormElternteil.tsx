@@ -14,7 +14,8 @@ import {
 import { VFC, useEffect } from "react";
 import { YesNo } from "../../../globals/js/calculations/model";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
-import { infoTexts } from "../../molecules/info-dialog/infoTexts";
+import { infoTexts } from "../../molecules/info-dialog";
+import { Antragstellende } from "../../../redux/stepAllgemeineAngabenSlice";
 
 export const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MiniJob: "520 Euro oder weniger",
@@ -35,11 +36,12 @@ const monatlichesBruttoOptions: RadioOption<MonatlichesBrutto>[] = [
 interface ErwerbstaetikeitFormElternteilProps {
   elternteil: ElternteilType;
   elternteilName: string;
+  antragssteller: Antragstellende | null;
 }
 
 const ErwerbstaetigkeitFormElternteil: VFC<
   ErwerbstaetikeitFormElternteilProps
-> = ({ elternteil, elternteilName }) => {
+> = ({ elternteil, elternteilName, antragssteller }) => {
   const {
     register,
     formState: { errors },
@@ -50,6 +52,7 @@ const ErwerbstaetigkeitFormElternteil: VFC<
   const wasErwerbstaetig = watch(`${elternteil}.vorGeburt`);
   const isNichtSelbststaendig = watch(`${elternteil}.isNichtSelbststaendig`);
   const isSelbststaendig = watch(`${elternteil}.isSelbststaendig`);
+  const mehrereTaetigkeiten = watch(`${elternteil}.mehrereTaetigkeiten`);
 
   useEffect(() => {
     if (wasErwerbstaetig === YesNo.NO) {
@@ -77,7 +80,7 @@ const ErwerbstaetigkeitFormElternteil: VFC<
   return (
     <>
       <FormFieldGroup
-        headline={elternteilName}
+        headline={antragssteller === "FuerBeide" ? elternteilName : ""}
         description="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes erwerbstätig?"
       >
         <YesNoRadio
@@ -93,30 +96,45 @@ const ErwerbstaetigkeitFormElternteil: VFC<
           <ErwerbstaetigkeitCheckboxGroup elternteil={elternteil} />
           {isNichtSelbststaendig && !isSelbststaendig && (
             <>
-              <FormFieldGroup description="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?">
+              <FormFieldGroup description="Bestand Ihre nichtselbständige Arbeit aus mehreren Tätigkeiten?">
                 <YesNoRadio
                   register={register}
                   registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-                  name={`${elternteil}.sozialVersicherungsPflichtig`}
+                  name={`${elternteil}.mehrereTaetigkeiten`}
                   errors={errors}
                   required={true}
                 />
               </FormFieldGroup>
-              <FormFieldGroup
-                description="Wie hoch war Ihr monatliches Brutto-Einkommen?"
-                info={infoTexts.minijobsMaxZahl}
-              >
-                <CustomRadio
-                  register={register}
-                  registerOptions={{
-                    required: "Dieses Feld ist erforderlich",
-                  }}
-                  name={`${elternteil}.monatlichesBrutto`}
-                  errors={errors}
-                  options={monatlichesBruttoOptions}
-                  required={true}
-                />
-              </FormFieldGroup>
+              {mehrereTaetigkeiten === YesNo.NO && (
+                <>
+                  <FormFieldGroup description="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?">
+                    <YesNoRadio
+                      register={register}
+                      registerOptions={{
+                        required: "Dieses Feld ist erforderlich",
+                      }}
+                      name={`${elternteil}.sozialVersicherungsPflichtig`}
+                      errors={errors}
+                      required={true}
+                    />
+                  </FormFieldGroup>
+                  <FormFieldGroup
+                    description="Wie hoch war Ihr monatliches Brutto-Einkommen?"
+                    info={infoTexts.minijobsMaxZahl}
+                  >
+                    <CustomRadio
+                      register={register}
+                      registerOptions={{
+                        required: "Dieses Feld ist erforderlich",
+                      }}
+                      name={`${elternteil}.monatlichesBrutto`}
+                      errors={errors}
+                      options={monatlichesBruttoOptions}
+                      required={true}
+                    />
+                  </FormFieldGroup>
+                </>
+              )}
             </>
           )}
         </>

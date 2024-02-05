@@ -11,8 +11,12 @@
     transition: all 0.3s;
   }
 
-  &:hover {
-    background-color: $color-white;
+  // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
+  // nach dem Klick der :hover Style angewendet wurde
+  @media (hover: hover) {
+    &:hover {
+      background-color: $color-white;
+    }
   }
 
   &:active,
@@ -41,9 +45,13 @@
       background-color: $color-primary;
     }
 
-    &:hover {
-      color: $color-primary;
-      background-color: $color-white;
+    // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
+    // nach dem Klick der :hover Style angewendet wurde
+    @media (hover: hover) {
+      &:hover {
+        color: $color-primary;
+        background-color: $color-white;
+      }
     }
 
     &:active,
@@ -60,9 +68,13 @@
       background-color: $color-white;
     }
 
-    &:hover {
-      color: $color-white;
-      background-color: $color-primary;
+    // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
+    // nach dem Klick der :hover Style angewendet wurde
+    @media (hover: hover) {
+      &:hover {
+        color: $color-white;
+        background-color: $color-primary;
+      }
     }
 
     &:active,
@@ -79,9 +91,13 @@
       border: $button--tertiary--border;
     }
 
-    &:hover {
-      color: $color-tertiary;
-      background-color: $color-white;
+    // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
+    // nach dem Klick der :hover Style angewendet wurde
+    @media (hover: hover) {
+      &:hover {
+        color: $color-tertiary;
+        background-color: $color-white;
+      }
     }
 
     &:active,
@@ -102,8 +118,12 @@
       text-decoration: underline;
     }
 
-    &:hover {
-      background-color: transparent;
+    // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
+    // nach dem Klick der :hover Style angewendet wurde
+    @media (hover: hover) {
+      &:hover {
+        background-color: transparent;
+      }
     }
 
     &:active,

@@ -74,6 +74,7 @@ describe("finanzDatenFactory", () => {
     },
     stepErwerbstaetigkeit: {
       ET1: {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: null,
         isNichtSelbststaendig: false,
         isSelbststaendig: false,
@@ -81,6 +82,7 @@ describe("finanzDatenFactory", () => {
         monatlichesBrutto: null,
       },
       ET2: {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -210,7 +212,7 @@ describe("finanzDatenFactory", () => {
     const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
     // then
-    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(0);
+    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(1000);
 
     // cleanup
     mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
@@ -238,7 +240,7 @@ describe("finanzDatenFactory", () => {
     const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
     // then
-    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(0);
+    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(6000);
 
     // cleanup
     mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;

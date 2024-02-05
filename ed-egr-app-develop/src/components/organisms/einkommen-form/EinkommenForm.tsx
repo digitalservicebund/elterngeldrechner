@@ -5,8 +5,16 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useAppSelector } from "../../../redux/hooks";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
 import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
-import { ButtonGroup, Split } from "../../molecules";
+import {
+  ButtonGroup,
+  Split,
+  FormFieldGroup,
+  YesNoRadio,
+} from "../../molecules";
 import { SplitItem } from "../../atoms";
+import { infoTexts } from "../../molecules/info-dialog";
+import { YesNo } from "../../../globals/js/calculations/model";
+import { EgrBerechnungParamId } from "../../../globals/js/calculations/model/egr-berechnung-param-id";
 
 interface Props {
   initialValues: StepEinkommenState;
@@ -21,7 +29,7 @@ export const EinkommenForm: VFC<Props> = ({
 }) => {
   const navigate = useNavigate();
   const methods = useForm({ defaultValues: initialValues });
-  const { isDirty, dirtyFields } = methods.formState;
+  const { isDirty, dirtyFields, errors } = methods.formState;
 
   const antragstellende = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -29,6 +37,14 @@ export const EinkommenForm: VFC<Props> = ({
   const { ET1, ET2 } = useAppSelector(
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
+  const alleinerziehend = useAppSelector(
+    stepAllgemeineAngabenSelectors.getAlleinerziehend,
+  );
+
+  const amountLimitEinkommen =
+    alleinerziehend === YesNo.YES
+      ? EgrBerechnungParamId.MAX_EINKOMMEN_ALLEIN
+      : EgrBerechnungParamId.MAX_EINKOMMEN_BEIDE;
 
   const handlePageBack = () => navigate("/erwerbstaetigkeit");
 
@@ -41,6 +57,19 @@ export const EinkommenForm: VFC<Props> = ({
       <h3>Ihr Einkommen</h3>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+          <FormFieldGroup
+            data-testid="egr-anspruch"
+            description={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${amountLimitEinkommen.toLocaleString()} Euro?`}
+            info={infoTexts.einkommenLimitÜberschritten}
+          >
+            <YesNoRadio
+              register={methods.register}
+              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+              name="limitEinkommenUeberschritten"
+              errors={errors}
+              required={true}
+            />
+          </FormFieldGroup>
           <Split>
             <SplitItem>
               <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />

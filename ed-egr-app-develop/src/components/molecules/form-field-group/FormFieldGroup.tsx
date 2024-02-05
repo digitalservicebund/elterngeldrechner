@@ -54,7 +54,7 @@ export const FormFieldGroup: FC<FormFieldGroupProps> = ({
       {headline && (
         <h3>
           {headline}
-          {markedAsRequired ? <span> *</span> : null}
+          {headline && markedAsRequired ? <span> *</span> : null}
         </h3>
       )}
       {description && (

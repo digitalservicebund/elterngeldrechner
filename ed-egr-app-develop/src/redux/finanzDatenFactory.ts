@@ -48,7 +48,7 @@ const mischEinkommenTaetigkeitenOf = (
     .map((taetigkeit) => {
       const mischEinkommenTaetigkeiten = new MischEkTaetigkeit();
 
-      if (taetigkeit?.artTaetigkeit === "Selbststaendig") {
+      if (taetigkeit.artTaetigkeit === "Selbststaendig") {
         mischEinkommenTaetigkeiten.erwerbsTaetigkeit =
           ErwerbsTaetigkeit.SELBSTSTAENDIG;
       }
@@ -121,13 +121,14 @@ export const finanzDatenOfUi = (
     stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
       stateErwerbsTaetigkeit,
     );
+  const mehrereEinkommen =
+    stateErwerbsTaetigkeit.mehrereTaetigkeiten === YesNo.YES;
   const isMiniJob = stateErwerbsTaetigkeit.monatlichesBrutto === "MiniJob";
 
   let bruttoEinkommenBeforeBirth = 0;
   if (
     stateErwerbsTaetigkeit.isNichtSelbststaendig &&
-    !isSelbstaendigAndErwerbstaetig &&
-    !isMiniJob
+    !isSelbstaendigAndErwerbstaetig
   ) {
     bruttoEinkommenBeforeBirth = averageFromAverageOrMonthly(
       state.stepEinkommen[elternteil].bruttoEinkommenNichtSelbstaendig,
@@ -155,7 +156,7 @@ export const finanzDatenOfUi = (
   finanzDaten.splittingFaktor =
     state.stepEinkommen[elternteil].splittingFaktor ?? 1.0;
 
-  if (isSelbstaendigAndErwerbstaetig) {
+  if (isSelbstaendigAndErwerbstaetig || mehrereEinkommen) {
     finanzDaten.mischEinkommenTaetigkeiten = mischEinkommenTaetigkeitenOf(
       state.stepEinkommen[elternteil]
         .taetigkeitenNichtSelbstaendigUndSelbstaendig,

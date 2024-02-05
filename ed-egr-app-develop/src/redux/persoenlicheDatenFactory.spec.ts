@@ -69,6 +69,7 @@ describe("persoenlicheDatenFactory", () => {
     },
     stepErwerbstaetigkeit: {
       ET1: {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: null,
         isNichtSelbststaendig: false,
         isSelbststaendig: false,
@@ -76,6 +77,7 @@ describe("persoenlicheDatenFactory", () => {
         monatlichesBrutto: null,
       },
       ET2: {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -197,6 +199,7 @@ describe("persoenlicheDatenFactory", () => {
   describe.each([
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: null,
         isNichtSelbststaendig: false,
         isSelbststaendig: false,
@@ -207,6 +210,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.NO,
         isNichtSelbststaendig: false,
         isSelbststaendig: false,
@@ -217,6 +221,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -227,6 +232,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -237,6 +243,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -247,6 +254,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -257,6 +265,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: false,
@@ -267,6 +276,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: false,
         isSelbststaendig: true,
@@ -277,6 +287,7 @@ describe("persoenlicheDatenFactory", () => {
     ],
     [
       {
+        mehrereTaetigkeiten: YesNo.NO,
         vorGeburt: YesNo.YES,
         isNichtSelbststaendig: true,
         isSelbststaendig: true,

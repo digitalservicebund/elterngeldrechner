@@ -29,27 +29,31 @@ export const RechnerCardHeaderEGPlus: VFC = () => {
             </li>
             <li>Halb so hoch wie Basiselterngeld</li>
             <li>
-              Besonders lohnend, wenn Sie nach der Geburt in Teilzeit arbeiten
+              Besonders lohnend, wenn Eltern nach der Geburt in Teilzeit
+              arbeiten
             </li>
             <li>
-              Auch nach dem 14. Lebensmonat, ab dann dürfen Sie den
-              Elterngeldbezug jedoch nicht mehr unterbrechen
+              Auch nach dem 14. Lebensmonat, ab dann darf der Elterngeldbezug
+              jedoch nicht mehr unterbrochen werden
             </li>
           </ol>
         </section>
         <section>
           <p>Partnerschaftsbonus</p>
           <ol>
-            <li>Zusätzliche ElterngeldPlus-Monate</li>
             <li>
-              Muss von beiden Elternteilen gleichzeitig genutzt werden -
-              Alleinerziehende können den Partnerschaftsbonus allein bekommen
+              2 bis 4 zusätzliche Lebensmonate Elterngeld-Plus, die direkt
+              aufeinander folgen
+            </li>
+            <li>Die Eltern nutzen den Partnerschaftsbonus gleichzeitig</li>
+            <li>
+              Beide arbeiten in dieser Zeit in Teilzeit, also mindestens 24 und
+              höchstens 32 Stunden pro Woche
             </li>
             <li>
-              In dieser Zeit arbeiten beide Elternteile in Teilzeit, also
-              mindestens 24 und höchstens 32 Stunden pro Woche
+              Alleinerziehende können den Partnerschaftsbonus auch allein
+              nutzen, wenn sie 24 bis 32 Stunden pro Woche arbeiten
             </li>
-            <li>Mindestens 2 und höchstens 4 Lebensmonate</li>
           </ol>
         </section>
       </div>

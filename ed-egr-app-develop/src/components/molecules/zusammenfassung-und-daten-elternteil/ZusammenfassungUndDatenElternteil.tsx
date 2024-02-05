@@ -10,7 +10,7 @@ import { erwerbstaetigkeitLabels } from "../../organisms";
 import { yesNoLabels } from "../yes-no-radio";
 import { StepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
 import { Month } from "@egr/monatsplaner-app";
-import { ElterngeldType } from "@egr/monatsplaner-app/src/elternteile/elternteile";
+import { ElterngeldType } from "@egr/monatsplaner-app/src/elternteile/elternteile-types";
 
 interface Props {
   elternteilName: string;

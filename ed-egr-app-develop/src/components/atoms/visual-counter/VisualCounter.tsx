@@ -1,6 +1,5 @@
 import { VFC } from "react";
 import nsp from "../../../globals/js/namespace";
-import { YesNo } from "../../../globals/js/calculations/model";
 
 interface VisualCounterProps {
   countBasis: number;
@@ -9,7 +8,6 @@ interface VisualCounterProps {
   maxCountPlus: number;
   countBonus: number;
   maxCountBonus: number;
-  alleinerziehend: YesNo | null;
 }
 
 export const VisualCounter: VFC<VisualCounterProps> = ({
@@ -19,7 +17,6 @@ export const VisualCounter: VFC<VisualCounterProps> = ({
   maxCountPlus,
   countBonus,
   maxCountBonus,
-  alleinerziehend,
 }) => {
   const arrayOf = (maxCount: number): Array<number> => {
     const numbers = [];
@@ -57,16 +54,14 @@ export const VisualCounter: VFC<VisualCounterProps> = ({
           ))}
         </div>
       </div>
-      {alleinerziehend !== YesNo.YES && (
-        <div className={nsp("visual-counter__bonus")}>
-          {arrayOf(maxCountBonus).map((index) => (
-            <div
-              key={index}
-              className={classNameOf("bonus", index, countBonus)}
-            ></div>
-          ))}
-        </div>
-      )}
+      <div className={nsp("visual-counter__bonus")}>
+        {arrayOf(maxCountBonus).map((index) => (
+          <div
+            key={index}
+            className={classNameOf("bonus", index, countBonus)}
+          ></div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -28,7 +28,7 @@ describe("brutto-netto-rechner", () => {
     );
 
     // then
-    expect(actual.toNumber()).toBe(546.75);
+    expect(actual.toNumber()).toBe(552.5);
   });
 });
 

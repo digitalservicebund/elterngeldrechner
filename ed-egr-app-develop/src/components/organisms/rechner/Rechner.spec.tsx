@@ -77,7 +77,9 @@ describe("Rechner", () => {
 
     render(<Rechner />, { preloadedState: state });
 
-    const rechner = screen.getByLabelText("Peter");
+    expect(screen.queryByText("Peter")).not.toBeInTheDocument();
+    expect(screen.getByText("Elterngeld-Anspruch")).toBeInTheDocument();
+    const rechner = screen.getByTestId("egr-rechner-form");
     expect(
       within(rechner).getByText("Elterngeld berechnen"),
     ).toBeInTheDocument();

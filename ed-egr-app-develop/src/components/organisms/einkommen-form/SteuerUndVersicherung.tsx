@@ -22,6 +22,7 @@ import { stepErwerbstaetigkeitElternteilSelectors } from "../../../redux/stepErw
 
 interface SteuerUndVersicherungProps {
   elternteil: ElternteilType;
+  isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten: boolean;
 }
 
 const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [
@@ -83,6 +84,7 @@ const rentenVersicherungOptions: RadioOption<RentenArt>[] = [
 
 export const SteuerUndVersicherung: VFC<SteuerUndVersicherungProps> = ({
   elternteil,
+  isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
 }) => {
   const {
     register,
@@ -95,12 +97,6 @@ export const SteuerUndVersicherung: VFC<SteuerUndVersicherungProps> = ({
 
   const isOnlySelbstaendig = useAppSelector((state) =>
     stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
-      state.stepErwerbstaetigkeit[elternteil],
-    ),
-  );
-
-  const isSelbstaendigAndErwerbstaetig = useAppSelector((state) =>
-    stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
       state.stepErwerbstaetigkeit[elternteil],
     ),
   );
@@ -155,7 +151,7 @@ export const SteuerUndVersicherung: VFC<SteuerUndVersicherungProps> = ({
           required={true}
         />
       </FormFieldGroup>
-      {!isSelbstaendigAndErwerbstaetig && (
+      {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
         <FormFieldGroup
           headline="Krankenversicherung"
           description="Wie sind Sie krankenversichert?"

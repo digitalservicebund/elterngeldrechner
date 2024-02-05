@@ -194,7 +194,10 @@ export const RechnerForm: VFC<RechnerFormProps> = ({
       className={nsp("rechner-form")}
       noValidate
     >
-      <FormFieldGroup headline={elternteilName}>
+      <FormFieldGroup
+        headline={elternteilName}
+        data-testid={"egr-rechner-form"}
+      >
         {errorKeinEinkommen && (
           <Description id={`${keinEinkommenName}-error`} error={true}>
             {errorKeinEinkommen.message}

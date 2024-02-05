@@ -105,4 +105,9 @@ export const infoTexts: Record<string, Info> = {
     id: "info-12",
     text: `Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.`,
   },
+
+  einkommenLimitÜberschritten: {
+    id: "info-13",
+    text: "Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 250.000 Euro bei Alleinerziehenden oder 300.000 Euro bei Paaren und getrennt Erziehenden. Bei Alleinerziehenden kommt es auf das alleinige Gesamteinkommen und bei Paaren und getrennt Erziehenden auf das gemeinsame Gesamteinkommen an. Dieses ergibt sich aus Ihrem Steuerbescheid für das Kalenderjahr vor der Geburt.",
+  },
 };

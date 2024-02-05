@@ -14,7 +14,6 @@ import classNames from "classnames";
 import nsp from "../../../globals/js/namespace";
 import { formatMoney } from "../rechner-result-table/RechnerResultTable";
 import Big from "big.js";
-import { YesNo } from "../../../globals/js/calculations/model";
 
 export type AmountElterngeldRow =
   | "empty"
@@ -37,10 +36,8 @@ interface Props {
   hideLebensmonateOnDesktop?: boolean;
   className?: string;
   isElternteilOne?: boolean;
-  alleinerziehend?: YesNo | null;
+  partnerMonate?: boolean;
 }
-
-const begLebensmonateVisibleLength = 14;
 
 export const Elternteil: VFC<Props> = ({
   lebensmonate,
@@ -56,9 +53,11 @@ export const Elternteil: VFC<Props> = ({
   hideLebensmonateOnDesktop,
   className,
   isElternteilOne,
-  alleinerziehend,
+  partnerMonate,
 }) => {
   const [hoverPSBIndex, setHoverPSBIndex] = useState<number | null>(null);
+
+  const begLebensmonateVisibleLength = partnerMonate ? 14 : 12;
 
   const allPSBIndices = [
     ...selectablePSBMonths.selectableIndices,
@@ -134,16 +133,14 @@ export const Elternteil: VFC<Props> = ({
           >
             Plus
           </th>
-          {alleinerziehend !== YesNo.YES && (
-            <th
-              className={classNames(
-                nsp("elternteil__th"),
-                nsp("elternteil__th--partnerschaftsbonus"),
-              )}
-            >
-              Bonus
-            </th>
-          )}
+          <th
+            className={classNames(
+              nsp("elternteil__th"),
+              nsp("elternteil__th--partnerschaftsbonus"),
+            )}
+          >
+            Bonus
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -203,28 +200,24 @@ export const Elternteil: VFC<Props> = ({
                   </MonatsplanerMonth>
                 )}
             </td>
-            {alleinerziehend !== YesNo.YES && (
-              <td>
-                {index >= mutterSchutzMonate &&
-                  index >= lowestAllowedPSBIndex &&
-                  index <= highestAllowedPSBIndex && (
-                    <MonatsplanerMonth
-                      isSelected={elternteil.months[index].type === "PSB"}
-                      isHighlighted={
-                        automaticallySelectedPSBMonthIndex === index
-                      }
-                      label={getLabel(index, "Partnerschaftsbonus")}
-                      elterngeldType="PSB"
-                      onToggle={() => onToggleMonth("PSB", index)}
-                      onDragOver={() => onDragOverMonth("PSB", index)}
-                      onMouseOver={() => setHoverPSBIndex(index)}
-                      onMouseLeave={() => setHoverPSBIndex(null)}
-                    >
-                      {getElterngeldplus(amounts[index])}
-                    </MonatsplanerMonth>
-                  )}
-              </td>
-            )}
+            <td>
+              {index >= mutterSchutzMonate &&
+                index >= lowestAllowedPSBIndex &&
+                index <= highestAllowedPSBIndex && (
+                  <MonatsplanerMonth
+                    isSelected={elternteil.months[index].type === "PSB"}
+                    isHighlighted={automaticallySelectedPSBMonthIndex === index}
+                    label={getLabel(index, "Partnerschaftsbonus")}
+                    elterngeldType="PSB"
+                    onToggle={() => onToggleMonth("PSB", index)}
+                    onDragOver={() => onDragOverMonth("PSB", index)}
+                    onMouseOver={() => setHoverPSBIndex(index)}
+                    onMouseLeave={() => setHoverPSBIndex(null)}
+                  >
+                    {getElterngeldplus(amounts[index])}
+                  </MonatsplanerMonth>
+                )}
+            </td>
           </tr>
         ))}
       </tbody>

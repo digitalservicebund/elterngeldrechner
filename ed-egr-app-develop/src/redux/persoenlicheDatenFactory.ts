@@ -35,7 +35,8 @@ const erwerbsTaetigkeitVorGeburtOf = (
     stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
       erwerbsTaetigkeit,
     );
-  if (isMischeinkommen) {
+  const mehrereEinkommen = erwerbsTaetigkeit.mehrereTaetigkeiten === YesNo.YES;
+  if (isMischeinkommen || mehrereEinkommen) {
     return ErwerbsArt.JA_MISCHEINKOMMEN;
   }
 

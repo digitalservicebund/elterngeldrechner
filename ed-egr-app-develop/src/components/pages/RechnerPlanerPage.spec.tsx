@@ -18,6 +18,7 @@ const defaultElternteileSettings = createDefaultElternteileSettings(
   "2022-08-08T00:00:00Z",
   "ET1",
   2,
+  true,
 );
 
 const preloadedState: Partial<RootState> = {

@@ -20,6 +20,7 @@ import {
 
 export interface MonatsplanerState {
   mutterschutzElternteil: ElternteilType | null;
+  partnerMonate: boolean;
   settings: CreateElternteileSettings | undefined;
   elternteile: Elternteile;
 }
@@ -27,12 +28,15 @@ export interface MonatsplanerState {
 export const initialMonatsplanerState: MonatsplanerState = {
   mutterschutzElternteil: null,
   settings: undefined,
-  elternteile: createElternteile(),
+  // EGR-244 - no conditions to get Partner Monate for only one Elternteil - property default value is true
+  partnerMonate: true,
+  elternteile: createElternteile({ partnerMonate: true }),
 };
 
 interface ChangeMonthPayload {
   elternteil: ElternteilType;
   targetType: ElterngeldType;
+  partnerMonate: boolean;
   monthIndex: number;
 }
 
@@ -116,7 +120,7 @@ const monatsplanerSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       stepAllgemeineAngabenActions.submitStep,
-      (state, { payload }) => {
+      (state: MonatsplanerState, { payload }) => {
         if (
           payload.antragstellende === "FuerMichSelbst" &&
           payload.alleinerziehend === YesNo.YES &&
@@ -126,6 +130,14 @@ const monatsplanerSlice = createSlice({
         } else if (payload.mutterschaftssleistungen === YesNo.YES) {
           state.mutterschutzElternteil = payload.mutterschaftssleistungenWer;
         }
+
+        state.settings = {
+          // EGR-244 - no conditions to get Partner Monate for only one Elternteil
+          partnerMonate: true,
+        };
+        // EGR-244 - no conditions to get Partner Monate for only one Elternteil
+        state.partnerMonate = true;
+        state.elternteile = createElternteile(state.settings);
       },
     );
 
@@ -143,6 +155,7 @@ const monatsplanerSlice = createSlice({
         wahrscheinlichesISOGeburtsDatum,
         state.mutterschutzElternteil!,
         mutterSchutzMonate,
+        state.partnerMonate,
       );
       return {
         ...state,
@@ -150,6 +163,7 @@ const monatsplanerSlice = createSlice({
         elternteile: createElternteile(settings),
       };
     });
+
     builder.addCase(resetStoreAction, () => {
       return initialMonatsplanerState;
     });

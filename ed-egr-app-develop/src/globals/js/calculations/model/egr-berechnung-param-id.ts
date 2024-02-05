@@ -82,13 +82,13 @@ export namespace EgrBerechnungParamId {
    */
   export const HOECHST_ET = Big(2770);
   /**
-   * Höchst_et
+   * Grenze_Minijob_Midijob
    */
   export const GRENZE_MINI_MIDI = Big(520); // ab 01.10.2022 (vorher 450)
   /**
-   * Höchst_et
+   * Grenze_Midijob_Max
    */
-  export const GRENZE_MIDI_MAX = Big(1300); // vorher 850
+  export const GRENZE_MIDI_MAX = Big(1300); // vorher 850 // TODO: 2000 since 01.01.2023 ?
 
   /**
    * Wir benötigen den pauschbetrag pro Monat, deshalb wird in dieser Methode diese errechnet....
@@ -101,5 +101,13 @@ export namespace EgrBerechnungParamId {
    *
    * @see setupCalculation()
    */
-  export const PAUSCH = Big(1000).div(Big(12)).prec(Big.DP, Big.RM);
+  export const PAUSCH = Big(1000).div(Big(12)).prec(Big.DP, Big.RM); // TODO: 1230 - when to change ?
+  /**
+   * Max Einkommensgrenze Bezug Elterngeld Alleinerziehende
+   */
+  export const MAX_EINKOMMEN_ALLEIN = 250000;
+  /**
+   * Max Einkommensgrenze Bezug Elterngeld Paare
+   */
+  export const MAX_EINKOMMEN_BEIDE = 300000;
 }

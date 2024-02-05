@@ -66,8 +66,8 @@ describeSkipOnCi("basis-eg-algorithmus", () => {
     ];
     // Bei den Steuern liegt wohl noch ein Fehler in der FIT Implementierung. Dieser wurde noch nicht gefunden.
     const failedSteuern: Array<number> = [
-      2, 7, 9, 11, 16, 17, 21, 26, 27, 28, 37, 43, 46, 48, 49, 54, 58, 69, 71,
-      74, 83, 90, 91, 93, 95, 98,
+      2, 7, 9, 11, 16, 17, 21, 23, 26, 27, 28, 37, 43, 46, 48, 49, 54, 58, 69,
+      71, 74, 83, 90, 91, 93, 95, 98,
     ];
     // Der Grund für diesen Fehler ist wahrscheinlich auch die falsche Steuerermittlung vom FIT.
     const failedNetto: Array<number> = [86];

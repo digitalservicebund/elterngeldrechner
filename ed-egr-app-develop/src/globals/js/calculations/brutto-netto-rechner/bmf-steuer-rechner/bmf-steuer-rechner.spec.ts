@@ -1,8 +1,8 @@
 import Big from "big.js";
 import { BmfSteuerRechnerParameter } from "./index";
-import { callRemoteRechner } from "./bmf-steuer-rechner";
+import { callRechnerLib, callRemoteRechner } from "./bmf-steuer-rechner";
 
-describe("bmf-steuer-rechner", () => {
+describe("bmf-steuer-rechner-remote", () => {
   describe.each([
     [{ LZZ: 2, RE4: 533333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "1059.75"],
     [{ LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "0.00"],
@@ -22,6 +22,50 @@ describe("bmf-steuer-rechner", () => {
       );
     });
   });
+});
+
+describe("bmf-steuer-rechner-lib", () => {
+  describe.each([
+    [2022, { LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "0.00"],
+    [2023, { LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "0.00"],
+    [
+      2022,
+      { LZZ: 2, RE4: 533333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
+      "1065.50",
+    ],
+    [
+      2023,
+      { LZZ: 2, RE4: 533333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
+      "989.08",
+    ],
+    [
+      2022,
+      { LZZ: 2, RE4: 208333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
+      "172.50",
+    ],
+    [
+      2023,
+      { LZZ: 2, RE4: 208333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
+      "145.33",
+    ],
+  ])(
+    "when year is %d and parameter are %j, then expect Lohnsteuer %d",
+    (lohnSteuerJahr, params, lstlzz) => {
+      it("should calculate Lohnsteuer", async () => {
+        global.fetch = jest.fn(() =>
+          Promise.resolve(new Response(createResponseXml(lstlzz))),
+        );
+
+        const steuerRechnerResponse = await callRechnerLib(
+          lohnSteuerJahr,
+          Object.assign(new BmfSteuerRechnerParameter(), params),
+        );
+        expect(steuerRechnerResponse.LSTLZZ.toFixed(2, Big.roundHalfUp)).toBe(
+          lstlzz,
+        );
+      });
+    },
+  );
 });
 
 function createResponseXml(lstlzz: string) {

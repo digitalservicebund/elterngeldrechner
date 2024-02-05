@@ -163,8 +163,8 @@ describe("plus-eg-algorithmus", () => {
       expect(ergebnis.nettoBasis.toNumber()).toBe(0);
       expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(0);
       expect(ergebnis.bruttoPlus.toNumber()).toBe(1950);
-      expect(ergebnis.nettoPlus.toNumber()).toBe(1366.92);
-      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(281.29);
+      expect(ergebnis.nettoPlus.toNumber()).toBe(1361.17);
+      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(285.02);
       expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(584.89);
     });
 

@@ -44,7 +44,8 @@ export const ZusammenfassungUndDaten: FC = () => {
 
   const elternteil1 = {
     stepNachwuchs,
-    elternteilName: ET1,
+    elternteilName:
+      stepAllgemeineAngaben.alleinerziehend === YesNo.YES ? "" : ET1,
     stepErwerbstaetigkeit: stepErwerbstaetigkeit.ET1,
     stepEinkommen: stepEinkommen.ET1,
     monatsplaner: monatsplaner.elternteile.ET1.months,
@@ -52,7 +53,8 @@ export const ZusammenfassungUndDaten: FC = () => {
 
   const elternteil2 = {
     stepNachwuchs,
-    elternteilName: ET2,
+    elternteilName:
+      stepAllgemeineAngaben.alleinerziehend === YesNo.YES ? "" : ET2,
     stepErwerbstaetigkeit: stepErwerbstaetigkeit.ET2,
     stepEinkommen: stepEinkommen.ET2,
     monatsplaner: monatsplaner.elternteile.ET2.months,

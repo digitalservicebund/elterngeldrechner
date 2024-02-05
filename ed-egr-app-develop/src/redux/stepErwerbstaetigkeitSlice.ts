@@ -13,6 +13,7 @@ export interface TypeOfErwerbstaetigkeit {
 
 export interface StepErwerbstaetigkeitElternteil
   extends TypeOfErwerbstaetigkeit {
+  mehrereTaetigkeiten: YesNo;
   vorGeburt: YesNo | null;
   sozialVersicherungsPflichtig: YesNo | null;
   monatlichesBrutto: MonatlichesBrutto | null;
@@ -23,6 +24,7 @@ export const initialStepErwerbstaetigkeitElternteil: StepErwerbstaetigkeitEltern
     vorGeburt: null,
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
+    mehrereTaetigkeiten: YesNo.NO,
     sozialVersicherungsPflichtig: null,
     monatlichesBrutto: null,
   };
@@ -63,8 +65,7 @@ const isOnlyErwerbstaetig = (state: StepErwerbstaetigkeitElternteil) => {
   return (
     state.vorGeburt === YesNo.YES &&
     state.isNichtSelbststaendig &&
-    !hasAnyTypeOfSelbstaendigkeit(state) &&
-    state.monatlichesBrutto !== "MiniJob"
+    !hasAnyTypeOfSelbstaendigkeit(state)
   );
 };
 

@@ -17,7 +17,10 @@ import {
 import { bmfAbgabenOf } from "./bmf-abgaben-factory";
 import { errorOf } from "../../calculation-error-code";
 import { Logger } from "../../common/logger";
-import { bmfSteuerRechnerAvailableYears } from "../bmf-steuer-rechner/bmf-steuer-rechner-configuration";
+import {
+  bmfSteuerRechnerAvailableYearsLib,
+  bmfSteuerRechnerAvailableYearsRemote,
+} from "../bmf-steuer-rechner/bmf-steuer-rechner-configuration";
 
 /**
  * EGR-Steuerrechner. Wrapper for BMF Lohn- und Einkommensteuerrechner with EGR data model.
@@ -25,19 +28,22 @@ import { bmfSteuerRechnerAvailableYears } from "../bmf-steuer-rechner/bmf-steuer
 export class EgrSteuerRechner {
   static bestLohnSteuerJahrOf(wahrscheinlichesGeburtsDatum: Date): number {
     const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
+    const jahrVorDerGeburt = geburtsDatumJahr - 1;
 
-    const availableYears = bmfSteuerRechnerAvailableYears();
-    if (availableYears.includes(geburtsDatumJahr)) {
-      return geburtsDatumJahr;
+    const availableYears = BmfSteuerRechner.USE_REMOTE_STEUER_RECHNER
+      ? bmfSteuerRechnerAvailableYearsRemote()
+      : bmfSteuerRechnerAvailableYearsLib();
+    if (availableYears.includes(jahrVorDerGeburt)) {
+      return jahrVorDerGeburt;
     }
 
     const minAvailableYear = Math.min(...availableYears);
-    if (geburtsDatumJahr < minAvailableYear) {
+    if (jahrVorDerGeburt < minAvailableYear) {
       return minAvailableYear;
     }
 
     const maxAvailableYear = Math.max(...availableYears);
-    if (geburtsDatumJahr > maxAvailableYear) {
+    if (jahrVorDerGeburt > maxAvailableYear) {
       return maxAvailableYear;
     }
 

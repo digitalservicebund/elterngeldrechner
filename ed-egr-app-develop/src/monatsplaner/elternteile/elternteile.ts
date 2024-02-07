@@ -1,4 +1,7 @@
-import { maxNumberOfPartnerschaftbonus, numberOfLebensmonate } from "../configuration";
+import {
+  maxNumberOfPartnerschaftbonus,
+  numberOfLebensmonate,
+} from "../configuration";
 import { Elternteil, Elternteile, Month } from "./elternteile-types";
 import {
   CreateElternteileSettings,
@@ -9,13 +12,17 @@ import {
 import { getBEGAnspruch } from "./beg-anspruch";
 import { getNumberOfMutterschutzMonths } from "./mutterschutz-calculator";
 
-export const createElternteile = (settings?: CreateElternteileSettings): Elternteile => {
+export const createElternteile = (
+  settings?: CreateElternteileSettings,
+): Elternteile => {
   const emptyMonth: Month = {
     type: "None",
     isMutterschutzMonth: false,
   };
 
-  const emptyMonths: Month[] = Array.from<Month>({ length: numberOfLebensmonate }).fill(emptyMonth);
+  const emptyMonths: Month[] = Array.from<Month>({
+    length: numberOfLebensmonate,
+  }).fill(emptyMonth);
 
   let begAnspruch = getBEGAnspruch(getGeburtstagSettings(settings));
   let elternteil1: Elternteil = { months: emptyMonths };
@@ -23,7 +30,10 @@ export const createElternteile = (settings?: CreateElternteileSettings): Elternt
 
   if (settings && hasMutterschutzSettings(settings)) {
     const { elternteil, endDate } = settings.mutterschutz;
-    const numberOfMutterschutzMonths = getNumberOfMutterschutzMonths(settings.geburtstag, endDate);
+    const numberOfMutterschutzMonths = getNumberOfMutterschutzMonths(
+      settings.geburtstag,
+      endDate,
+    );
     const months: Month[] = emptyMonths.map((month, index) => {
       if (index < numberOfMutterschutzMonths) {
         return { ...month, type: "BEG", isMutterschutzMonth: true };

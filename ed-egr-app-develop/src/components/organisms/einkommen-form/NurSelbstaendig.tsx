@@ -1,5 +1,5 @@
 import { VFC } from "react";
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../../../monatsplaner";
 import { useFormContext } from "react-hook-form";
 import {
   CustomNumberField,

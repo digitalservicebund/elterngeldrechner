@@ -16,7 +16,7 @@ import {
   createElternteile,
   validateElternteile,
   ValidationResult,
-} from "@egr/monatsplaner-app";
+} from "../../../monatsplaner";
 import { createDefaultElternteileSettings } from "../../../globals/js/elternteile-utils";
 import { YesNo } from "../../../globals/js/calculations/model";
 
@@ -72,9 +72,9 @@ const testLebensmonateLabels = [
 
 jest.setTimeout(90000);
 jest.mock("react-router");
-jest.mock("@egr/monatsplaner-app", () => {
+jest.mock("../../../monatsplaner", () => {
   // mock only specific function of imported library
-  const actual = jest.requireActual("@egr/monatsplaner-app");
+  const actual = jest.requireActual("../../../monatsplaner");
 
   return {
     ...actual,

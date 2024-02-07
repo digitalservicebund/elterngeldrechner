@@ -12,13 +12,17 @@ const lebensmonate: EmptyLebensmonat[] = Array.from({
   length: numberOfLebensmonate,
 }).map(() => ({}));
 
-const getLebensmonate = (geburtstag?: string): Lebensmonat[] | EmptyLebensmonat[] => {
+const getLebensmonate = (
+  geburtstag?: string,
+): Lebensmonat[] | EmptyLebensmonat[] => {
   if (!geburtstag) {
     return lebensmonate;
   }
 
   return lebensmonate.map((_, index) => {
-    const fromDate = DateTime.fromISO(geburtstag).plus({ months: index }).startOf("day");
+    const fromDate = DateTime.fromISO(geburtstag)
+      .plus({ months: index })
+      .startOf("day");
     const toDate = fromDate.plus({ months: 1 }).minus({ day: 1 }).endOf("day");
 
     return {

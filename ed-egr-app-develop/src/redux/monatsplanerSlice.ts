@@ -6,7 +6,7 @@ import {
   Elternteile,
   ElternteilType,
   Month,
-} from "@egr/monatsplaner-app";
+} from "../monatsplaner";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { YesNo } from "../globals/js/calculations/model";

@@ -1,5 +1,5 @@
 import { VFC } from "react";
-import { ErrorCode } from "@egr/monatsplaner-app";
+import { ErrorCode } from "../../../monatsplaner";
 
 interface Props {
   errorCodes: readonly ErrorCode[];

@@ -8,7 +8,7 @@ import {
   initialStepNachwuchsState,
   StepNachwuchsState,
 } from "../../redux/stepNachwuchsSlice";
-import { createElternteile, Elternteile } from "@egr/monatsplaner-app";
+import { createElternteile, Elternteile } from "../../monatsplaner";
 import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "../../globals/js/calculations/model";
 import { initialMonatsplanerState } from "../../redux/monatsplanerSlice";
@@ -16,7 +16,7 @@ import { createDefaultElternteileSettings } from "../../globals/js/elternteile-u
 import { DateTime } from "luxon";
 
 jest.mock("react-router");
-jest.mock("@egr/monatsplaner-app");
+jest.mock("../../monatsplaner");
 
 const currentYear = new Date().getFullYear();
 

@@ -1,4 +1,4 @@
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../../../monatsplaner";
 import React, { useMemo, useState, useEffect, VFC } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { stepRechnerActions } from "../../../redux/stepRechnerSlice";

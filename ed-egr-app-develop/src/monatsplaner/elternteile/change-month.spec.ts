@@ -6,7 +6,9 @@ import { DateTime } from "luxon";
 
 describe("Change Month", () => {
   const initialElternteile = createElternteile();
-  const initialElternteileWithPartnerMonate = createElternteile({ partnerMonate: true });
+  const initialElternteileWithPartnerMonate = createElternteile({
+    partnerMonate: true,
+  });
 
   it("should change the third Lebensmonat of ET1", () => {
     const elternteile: Elternteile = changeMonth(initialElternteile, {
@@ -129,7 +131,9 @@ describe("Change Month", () => {
 
       // 14 month minus 4 month already taken
       const expectedRemainingBEG = 10;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(expectedRemainingBEG);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(
+        expectedRemainingBEG,
+      );
     });
 
     it("should not increase the allowed BEG months to 14 if partnerMonate are false", () => {
@@ -159,7 +163,9 @@ describe("Change Month", () => {
 
       // 12 month minus 4 month already taken
       const expectedRemainingBEG = 8;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(expectedRemainingBEG);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(
+        expectedRemainingBEG,
+      );
     });
 
     it("should still have Partnermonate after setting one month to none", () => {
@@ -225,7 +231,9 @@ describe("Change Month", () => {
 
       // 14 month minus 4 month already taken
       const expectedRemainingBEG = 10;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(expectedRemainingBEG);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(
+        expectedRemainingBEG,
+      );
     });
 
     it("should increase the BEG months by two if both Elternteile choose BEG and they have a Frühchen", () => {
@@ -277,7 +285,9 @@ describe("Change Month", () => {
 
       //15 month minus 4 month already taken
       const expectedRemainingBEG = 11;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(expectedRemainingBEG);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(
+        expectedRemainingBEG,
+      );
     });
   });
 
@@ -310,7 +320,9 @@ describe("Change Month", () => {
           },
         );
 
-        expect(elternteile.remainingMonths.basiselterngeld).toBe(allowedAmountOfBEGMonth - 1);
+        expect(elternteile.remainingMonths.basiselterngeld).toBe(
+          allowedAmountOfBEGMonth - 1,
+        );
       },
     );
   });
@@ -323,7 +335,9 @@ describe("Change Month", () => {
         targetType: "BEG",
       });
 
-      expect(elternteile.remainingMonths.elterngeldplus).toBe(initialElternteile.remainingMonths.elterngeldplus - 2);
+      expect(elternteile.remainingMonths.elterngeldplus).toBe(
+        initialElternteile.remainingMonths.elterngeldplus - 2,
+      );
     });
 
     it("should not reduce the amount of remaining BEG month into negative if selecting EG+", () => {
@@ -385,7 +399,9 @@ describe("Change Month", () => {
 
       // 12 month of BEG minus 2 from EG+ (4 month of EG+ rounded up from 3 is equivalent 2 month BEG) minus 1 month BEG
       const expectedBEGMonths = 9;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(expectedBEGMonths);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(
+        expectedBEGMonths,
+      );
     });
 
     it("should allow double the amount of Partnermonate (4 months) if the other Elternteil also has some months selected", () => {
@@ -660,11 +676,18 @@ describe("Change Month", () => {
       elternteil: "ET1",
     };
 
-    const elternteileWithMutterschutz = createElternteile({ geburtstag, mutterschutz });
+    const elternteileWithMutterschutz = createElternteile({
+      geburtstag,
+      mutterschutz,
+    });
 
     it("should not deselect the Mutterschutz months", () => {
       let elternteile = elternteileWithMutterschutz;
-      for (let monthIndex = 0; monthIndex < numberOfMutterschutzMonths; monthIndex++) {
+      for (
+        let monthIndex = 0;
+        monthIndex < numberOfMutterschutzMonths;
+        monthIndex++
+      ) {
         elternteile = changeMonth(
           elternteileWithMutterschutz,
           {

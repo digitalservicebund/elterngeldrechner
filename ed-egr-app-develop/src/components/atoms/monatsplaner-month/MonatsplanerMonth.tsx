@@ -1,4 +1,4 @@
-import { ElterngeldType } from "@egr/monatsplaner-app";
+import { ElterngeldType } from "../../../monatsplaner";
 import React, { FC } from "react";
 import classNames from "classnames";
 import nsp from "../../../globals/js/namespace";

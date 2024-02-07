@@ -38,16 +38,26 @@ export const hasMutterschutzSettings = (
   return "mutterschutz" in settings;
 };
 
-const hasPartnerMonateSettings = (settings: CreateElternteileSettings): settings is CreateWithPartnermonateSettings => {
+const hasPartnerMonateSettings = (
+  settings: CreateElternteileSettings,
+): settings is CreateWithPartnermonateSettings => {
   return "partnerMonate" in settings;
 };
 
-export const hasGeburtstagSettings = (settings: CreateElternteileSettings): settings is CreateWithFruehchenSettings => {
+export const hasGeburtstagSettings = (
+  settings: CreateElternteileSettings,
+): settings is CreateWithFruehchenSettings => {
   return "geburtstag" in settings;
 };
 
-export const getGeburtstagSettings = (settings: CreateElternteileSettings | undefined) =>
+export const getGeburtstagSettings = (
+  settings: CreateElternteileSettings | undefined,
+) =>
   settings && hasGeburtstagSettings(settings) ? settings.geburtstag : undefined;
 
-export const getPartnerMonateSettings = (settings: CreateElternteileSettings | undefined) =>
-  settings && hasPartnerMonateSettings(settings) ? settings.partnerMonate : false;
+export const getPartnerMonateSettings = (
+  settings: CreateElternteileSettings | undefined,
+) =>
+  settings && hasPartnerMonateSettings(settings)
+    ? settings.partnerMonate
+    : false;

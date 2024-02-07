@@ -1,7 +1,17 @@
-import { countBEGMonths, countEGPlusMonths, countPSBMonths } from "../month-utils";
+import {
+  countBEGMonths,
+  countEGPlusMonths,
+  countPSBMonths,
+} from "../month-utils";
 import { maxNumberOfPartnerschaftbonus } from "../configuration";
 import { getModifiablePSBMonthIndices } from "./modifiable-psb-month";
-import { ElterngeldType, Elternteil, Elternteile, Geburtstag, Month } from "./elternteile-types";
+import {
+  ElterngeldType,
+  Elternteil,
+  Elternteile,
+  Geburtstag,
+  Month,
+} from "./elternteile-types";
 import { getNumberOfMutterschutzMonths } from "./mutterschutz-calculator";
 import {
   CreateElternteileSettings,
@@ -41,7 +51,11 @@ const canNotBeChangedDueToMutterschutz = (
   return (
     hasMutterschutzSettings(settings) &&
     (settings.mutterschutz.elternteil === elternteil || targetType === "PSB") &&
-    monthIndex < getNumberOfMutterschutzMonths(settings.geburtstag, settings.mutterschutz.endDate)
+    monthIndex <
+      getNumberOfMutterschutzMonths(
+        settings.geburtstag,
+        settings.mutterschutz.endDate,
+      )
   );
 };
 
@@ -50,18 +64,25 @@ const canNotBeChangedDueToUnmodifiablePSB = (
   elternteile: Elternteile,
 ) => {
   const currentType = elternteile[elternteil].months[monthIndex].type;
-  const { selectableIndices, deselectableIndices } = getModifiablePSBMonthIndices(
-    elternteile[elternteil].months,
-    elternteile.remainingMonths.partnerschaftsbonus,
-  );
+  const { selectableIndices, deselectableIndices } =
+    getModifiablePSBMonthIndices(
+      elternteile[elternteil].months,
+      elternteile.remainingMonths.partnerschaftsbonus,
+    );
 
   return (
     (targetType === "PSB" && !selectableIndices.includes(monthIndex)) ||
-    (targetType === "None" && currentType === "PSB" && !deselectableIndices.includes(monthIndex))
+    (targetType === "None" &&
+      currentType === "PSB" &&
+      !deselectableIndices.includes(monthIndex))
   );
 };
 
-const replaceMonthAtIndex = (replacement: Month, monthIndex: number, months: readonly Month[]): Month[] => {
+const replaceMonthAtIndex = (
+  replacement: Month,
+  monthIndex: number,
+  months: readonly Month[],
+): Month[] => {
   const modifiedMonths = [...months];
   modifiedMonths[monthIndex] = replacement;
 
@@ -83,7 +104,10 @@ const changeMonth = (
     return elternteile;
   }
 
-  if (elternteileSettings && canNotBeChangedDueToMutterschutz(changeMonthSettings, elternteileSettings)) {
+  if (
+    elternteileSettings &&
+    canNotBeChangedDueToMutterschutz(changeMonthSettings, elternteileSettings)
+  ) {
     return elternteile;
   }
 
@@ -100,17 +124,29 @@ const changeMonth = (
 
   // reset PSB of otherET for case that something else is selected
   if (currentET.months[monthIndex].type === "PSB") {
-    otherMonths = replaceMonthAtIndex({ type: "None", isMutterschutzMonth: false }, monthIndex, otherMonths);
+    otherMonths = replaceMonthAtIndex(
+      { type: "None", isMutterschutzMonth: false },
+      monthIndex,
+      otherMonths,
+    );
   }
 
   if (targetType === "PSB") {
     // PSB must always be set for both elternteile
-    otherMonths = replaceMonthAtIndex({ type: targetType, isMutterschutzMonth: false }, monthIndex, otherMonths);
+    otherMonths = replaceMonthAtIndex(
+      { type: targetType, isMutterschutzMonth: false },
+      monthIndex,
+      otherMonths,
+    );
     //if there is no PSB Month, select two PSB months
-    const hasAtLeastOnePSBMonth = currentET.months.some((month) => month.type === "PSB");
+    const hasAtLeastOnePSBMonth = currentET.months.some(
+      (month) => month.type === "PSB",
+    );
     if (!hasAtLeastOnePSBMonth) {
       const isLastMonthIndex = monthIndex === currentET.months.length - 1;
-      const automaticallySelectedPSBMonthIndex = isLastMonthIndex ? monthIndex - 1 : monthIndex + 1;
+      const automaticallySelectedPSBMonthIndex = isLastMonthIndex
+        ? monthIndex - 1
+        : monthIndex + 1;
       otherMonths = replaceMonthAtIndex(
         { type: targetType, isMutterschutzMonth: false },
         automaticallySelectedPSBMonthIndex,
@@ -150,14 +186,21 @@ const changeMonth = (
     getPartnerMonateSettings(elternteileSettings),
     getGeburtstagSettings(elternteileSettings),
   );
-  const begMonthsTakenByBoth = countBEGMonths(currentMonths) + countBEGMonths(otherMonths);
-  const egPlusMonthsTakenByBoth = countEGPlusMonths(currentMonths) + countEGPlusMonths(otherMonths);
+  const begMonthsTakenByBoth =
+    countBEGMonths(currentMonths) + countBEGMonths(otherMonths);
+  const egPlusMonthsTakenByBoth =
+    countEGPlusMonths(currentMonths) + countEGPlusMonths(otherMonths);
   let remainingMonthsBEG = anspruch - begMonthsTakenByBoth;
   if (remainingMonthsBEG > 0) {
-    remainingMonthsBEG = Math.max(0, remainingMonthsBEG - roundUp(egPlusMonthsTakenByBoth));
+    remainingMonthsBEG = Math.max(
+      0,
+      remainingMonthsBEG - roundUp(egPlusMonthsTakenByBoth),
+    );
   }
-  const remainingMonthsEGPlus = 2 * (anspruch - begMonthsTakenByBoth) - egPlusMonthsTakenByBoth;
-  const remainingPartnerschaftsbonus = maxNumberOfPartnerschaftbonus - countPSBMonths(currentMonths);
+  const remainingMonthsEGPlus =
+    2 * (anspruch - begMonthsTakenByBoth) - egPlusMonthsTakenByBoth;
+  const remainingPartnerschaftsbonus =
+    maxNumberOfPartnerschaftbonus - countPSBMonths(currentMonths);
 
   const changedCurrentET: Elternteil = {
     ...currentET,

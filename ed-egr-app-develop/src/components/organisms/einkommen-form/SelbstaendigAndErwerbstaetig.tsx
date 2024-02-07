@@ -1,4 +1,4 @@
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../../../monatsplaner";
 import { VFC } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import {

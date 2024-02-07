@@ -5,11 +5,15 @@ describe("Lebensmonate", () => {
   it("should return the list of Lebensmonate when no Geburtstag is given", () => {
     const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate();
 
-    expect(lebensmonate).toEqual(Array.from<EmptyLebensmonat>({ length: numberOfLebensmonate }).fill({}));
+    expect(lebensmonate).toEqual(
+      Array.from<EmptyLebensmonat>({ length: numberOfLebensmonate }).fill({}),
+    );
   });
 
   it("should return the list of Lebensmonate for a given Geburtstag", () => {
-    const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate("2022-01-01T00:00:00.000");
+    const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate(
+      "2022-01-01T00:00:00.000",
+    );
 
     expect(lebensmonate).toEqual([
       {
@@ -144,7 +148,9 @@ describe("Lebensmonate", () => {
   });
 
   it("should return the list of Lebensmonate for a given Geburtstag that is mid-month", () => {
-    const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate("2022-04-12T00:00:00.000");
+    const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate(
+      "2022-04-12T00:00:00.000",
+    );
 
     expect(lebensmonate).toEqual([
       {

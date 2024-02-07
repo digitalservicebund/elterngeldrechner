@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState, VFC } from "react";
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../../../monatsplaner";
 import {
   RechnerResultTable,
   RechnerResultTableRow,

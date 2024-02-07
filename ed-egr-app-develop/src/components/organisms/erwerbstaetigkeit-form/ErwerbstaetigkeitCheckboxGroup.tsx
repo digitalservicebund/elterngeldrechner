@@ -5,7 +5,7 @@ import {
   StepErwerbstaetigkeitState,
   TypeOfErwerbstaetigkeit,
 } from "../../../redux/stepErwerbstaetigkeitSlice";
-import { ElternteilType } from "@egr/monatsplaner-app";
+import { ElternteilType } from "../../../monatsplaner";
 import { infoTexts } from "../../molecules/info-dialog";
 
 interface Props {

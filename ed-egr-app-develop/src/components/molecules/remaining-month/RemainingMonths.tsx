@@ -1,5 +1,5 @@
 import { VFC } from "react";
-import { RemainingMonthByType } from "@egr/monatsplaner-app";
+import { RemainingMonthByType } from "../../../monatsplaner";
 import nsp from "../../../globals/js/namespace";
 import classNames from "classnames";
 import { LabelCounter, VisualCounter } from "../../atoms";

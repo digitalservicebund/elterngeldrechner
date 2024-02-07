@@ -5,7 +5,7 @@ import {
   ElternteilType,
   Month,
   validateElternteile,
-} from "@egr/monatsplaner-app";
+} from "../../../monatsplaner";
 import {
   getAutomaticallySelectedPSBMonthIndex,
   monatsplanerActions,

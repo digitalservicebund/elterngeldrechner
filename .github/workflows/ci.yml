@@ -25,13 +25,9 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build monatsplaner
-        working-directory: ./ed-monatsplaner-app-develop
-        run: npm install && npm run lint && npm test && npm run build && npm link
-
       - name: Build egr
         working-directory: ./ed-egr-app-develop
-        run: npm link @egr/monatsplaner-app && npm run test-all && npm run build
+        run: npm install && npm run test-all && npm run build
 
       - name: Build preview
         run: ./build-preview

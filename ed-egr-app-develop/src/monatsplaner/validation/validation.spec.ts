@@ -8,7 +8,9 @@ describe("Validation", () => {
   it("should not be valid if no month was selected", () => {
     const elternteile = createElternteile();
 
-    const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+    const validationResult = validateElternteile(
+      elternteile,
+    ) as InvalidValidationResult;
 
     expect(validationResult.isValid).toBe(false);
     expect(validationResult.errorCodes).toContain<ErrorCode>("HasNoSelection");
@@ -25,10 +27,14 @@ describe("Validation", () => {
         });
       }
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("HasTakenMoreThanTheAvailableBEGMonths");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "HasTakenMoreThanTheAvailableBEGMonths",
+      );
     });
 
     it("should not be valid to take more than the available 14 BEG months of Partnermonate for both Elternteile", () => {
@@ -57,10 +63,14 @@ describe("Validation", () => {
         );
       }
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("HasTakenMoreThanTheAvailableBEGMonths");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "HasTakenMoreThanTheAvailableBEGMonths",
+      );
     });
 
     it("should not be allowed to choose BEG after Lebensmonat 14", () => {
@@ -76,9 +86,13 @@ describe("Validation", () => {
         { partnerMonate: true },
       );
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
-      expect(validationResult.errorCodes).toContain<ErrorCode>("HasTakenBEGAfterBEGAnspruch");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "HasTakenBEGAfterBEGAnspruch",
+      );
     });
 
     it.each([
@@ -109,7 +123,9 @@ describe("Validation", () => {
           elternteil: "ET1",
         });
 
-        const validationResult = validateElternteile(elternteile, { geburtstag });
+        const validationResult = validateElternteile(elternteile, {
+          geburtstag,
+        });
 
         expect(validationResult.isValid).toBe(true);
       },
@@ -124,14 +140,21 @@ describe("Validation", () => {
         targetType: "BEG",
         elternteil: "ET1",
       });
-      const elternteileWithTwoMonthsBEG = changeMonth(elternteileWithOneMonthBEG, {
-        monthIndex: 1,
-        targetType: "BEG",
-        elternteil: "ET1",
-      });
+      const elternteileWithTwoMonthsBEG = changeMonth(
+        elternteileWithOneMonthBEG,
+        {
+          monthIndex: 1,
+          targetType: "BEG",
+          elternteil: "ET1",
+        },
+      );
 
-      const validationResultWithOneMonth = validateElternteile(elternteileWithOneMonthBEG) as InvalidValidationResult;
-      const validationResultWithTwoMonths = validateElternteile(elternteileWithTwoMonthsBEG);
+      const validationResultWithOneMonth = validateElternteile(
+        elternteileWithOneMonthBEG,
+      ) as InvalidValidationResult;
+      const validationResultWithTwoMonths = validateElternteile(
+        elternteileWithTwoMonthsBEG,
+      );
 
       expect(validationResultWithOneMonth.isValid).toBe(false);
       expect(validationResultWithOneMonth.errorCodes).toContain<ErrorCode>(
@@ -147,14 +170,21 @@ describe("Validation", () => {
         targetType: "BEG",
         elternteil: "ET2",
       });
-      const elternteileWithTwoMonthsBEG = changeMonth(elternteileWithOneMonthBEG, {
-        monthIndex: 1,
-        targetType: "BEG",
-        elternteil: "ET2",
-      });
+      const elternteileWithTwoMonthsBEG = changeMonth(
+        elternteileWithOneMonthBEG,
+        {
+          monthIndex: 1,
+          targetType: "BEG",
+          elternteil: "ET2",
+        },
+      );
 
-      const validationResultWithOneMonth = validateElternteile(elternteileWithOneMonthBEG) as InvalidValidationResult;
-      const validationResultWithTwoMonths = validateElternteile(elternteileWithTwoMonthsBEG);
+      const validationResultWithOneMonth = validateElternteile(
+        elternteileWithOneMonthBEG,
+      ) as InvalidValidationResult;
+      const validationResultWithTwoMonths = validateElternteile(
+        elternteileWithTwoMonthsBEG,
+      );
 
       expect(validationResultWithOneMonth.isValid).toBe(false);
       expect(validationResultWithOneMonth.errorCodes).toContain<ErrorCode>(
@@ -181,10 +211,14 @@ describe("Validation", () => {
         elternteil: "ET2",
       });
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll",
+      );
     });
 
     it("should be valid if at least 2 month of EG+ were taken", () => {
@@ -194,16 +228,21 @@ describe("Validation", () => {
         targetType: "EG+",
         elternteil: "ET1",
       });
-      const elternteileWithTwoMonthsEGPlus = changeMonth(elternteileWithOneMonthEGPlus, {
-        monthIndex: 1,
-        targetType: "EG+",
-        elternteil: "ET1",
-      });
+      const elternteileWithTwoMonthsEGPlus = changeMonth(
+        elternteileWithOneMonthEGPlus,
+        {
+          monthIndex: 1,
+          targetType: "EG+",
+          elternteil: "ET1",
+        },
+      );
 
       const validationResultWithOneMonth = validateElternteile(
         elternteileWithOneMonthEGPlus,
       ) as InvalidValidationResult;
-      const validationResultWithTwoMonths = validateElternteile(elternteileWithTwoMonthsEGPlus);
+      const validationResultWithTwoMonths = validateElternteile(
+        elternteileWithTwoMonthsEGPlus,
+      );
 
       expect(validationResultWithOneMonth.isValid).toBe(false);
       expect(validationResultWithOneMonth.errorCodes).toContain<ErrorCode>(
@@ -215,7 +254,9 @@ describe("Validation", () => {
     it("should be not valid if no months were taken at all", () => {
       const elternteile = createElternteile();
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
     });
@@ -229,10 +270,14 @@ describe("Validation", () => {
         elternteil: "ET1",
       });
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll",
+      );
     });
   });
 
@@ -255,10 +300,14 @@ describe("Validation", () => {
         elternteil: "ET1",
       });
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("DoesNotHaveContinuousEGAfterBEGAnspruch");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "DoesNotHaveContinuousEGAfterBEGAnspruch",
+      );
     });
 
     it("should not be valid if one Elternteil did take EG-Months before the 15th month but not after the 15th month continuously", () => {
@@ -286,10 +335,14 @@ describe("Validation", () => {
         elternteil: "ET1",
       });
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("DoesNotHaveContinuousEGAfterBEGAnspruch");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "DoesNotHaveContinuousEGAfterBEGAnspruch",
+      );
     });
 
     it("should not be valid if there is a gap between EG+-Months for ET1 and EG+-Months for ET2 after the 15th month", () => {
@@ -310,10 +363,14 @@ describe("Validation", () => {
         elternteil: "ET2",
       });
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>("DoesNotHaveContinuousEGAfterBEGAnspruch");
+      expect(validationResult.errorCodes).toContain<ErrorCode>(
+        "DoesNotHaveContinuousEGAfterBEGAnspruch",
+      );
     });
 
     it("should be valid if one Elternteil did take EG+ from the 15th month continuously", () => {
@@ -437,7 +494,9 @@ describe("Validation", () => {
         elternteil: "ET1",
       });
 
-      const validationResult = validateElternteile(elternteile) as InvalidValidationResult;
+      const validationResult = validateElternteile(
+        elternteile,
+      ) as InvalidValidationResult;
 
       expect(validationResult.isValid).toBe(false);
     });
@@ -473,10 +532,14 @@ describe("Validation", () => {
             elternteil: "ET1",
           });
 
-          const validationResult = validateElternteile(elternteile, { geburtstag }) as InvalidValidationResult;
+          const validationResult = validateElternteile(elternteile, {
+            geburtstag,
+          }) as InvalidValidationResult;
 
           expect(validationResult.isValid).toBe(false);
-          expect(validationResult.errorCodes).toContain<ErrorCode>("DoesNotHaveContinuousEGAfterBEGAnspruch");
+          expect(validationResult.errorCodes).toContain<ErrorCode>(
+            "DoesNotHaveContinuousEGAfterBEGAnspruch",
+          );
         },
       );
     });

@@ -1,4 +1,10 @@
-import { CreateElternteileSettings, Elternteile, Geburtstag, getFruehchen, Month } from "../elternteile";
+import {
+  CreateElternteileSettings,
+  Elternteile,
+  Geburtstag,
+  getFruehchen,
+  Month,
+} from "../elternteile";
 import { allOf, ValidationResult, validationRule } from "./validation-result";
 import { minNumberOfElterngeld } from "../configuration";
 import {
@@ -10,9 +16,15 @@ import {
 } from "../month-utils";
 import { getGeburtstagSettings } from "../elternteile/elternteile-setting";
 
-const hasAnySelection = validationRule("HasNoSelection", (elternteile: Elternteile) => {
-  return countFilledMonths(elternteile.ET1.months) > 0 || countFilledMonths(elternteile.ET2.months) > 0;
-});
+const hasAnySelection = validationRule(
+  "HasNoSelection",
+  (elternteile: Elternteile) => {
+    return (
+      countFilledMonths(elternteile.ET1.months) > 0 ||
+      countFilledMonths(elternteile.ET2.months) > 0
+    );
+  },
+);
 
 const hasNotTakenMoreThanTheAvailableBEGMonths = validationRule(
   "HasTakenMoreThanTheAvailableBEGMonths",
@@ -41,12 +53,14 @@ const hasAtLeast2EGMonthsOrNoneAtAll = validationRule(
 const hasContinuousEGAfterBEGAnspruch = validationRule(
   "DoesNotHaveContinuousEGAfterBEGAnspruch",
   (elternteile: Elternteile, lastMonthBEGAnspruch: number) => {
-    const monthOfBoth: Month[] = elternteile.ET1.months.map((et1Month, index) => {
-      if (et1Month.type === "None") {
-        return elternteile.ET2.months[index];
-      }
-      return et1Month;
-    });
+    const monthOfBoth: Month[] = elternteile.ET1.months.map(
+      (et1Month, index) => {
+        if (et1Month.type === "None") {
+          return elternteile.ET2.months[index];
+        }
+        return et1Month;
+      },
+    );
     const lastIndexOfEGOfBoth = lastIndexOfType(monthOfBoth, "EG+", "PSB");
 
     return (
@@ -85,8 +99,13 @@ const getLastMonthOfBEGAnspruch = (geburtstag?: Geburtstag): number => {
   return 14;
 };
 
-const validateElternteile = (elternteile: Elternteile, settings?: CreateElternteileSettings): ValidationResult => {
-  const lastMonthOfBEGAnspruch = getLastMonthOfBEGAnspruch(getGeburtstagSettings(settings));
+const validateElternteile = (
+  elternteile: Elternteile,
+  settings?: CreateElternteileSettings,
+): ValidationResult => {
+  const lastMonthOfBEGAnspruch = getLastMonthOfBEGAnspruch(
+    getGeburtstagSettings(settings),
+  );
   return allOf(
     hasAnySelection(elternteile),
     hasNotTakenMoreThanTheAvailableBEGMonths(elternteile),

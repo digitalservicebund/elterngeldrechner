@@ -15,12 +15,16 @@ const validResult: ValidationResult = {
   isValid: true,
 };
 
-export const allOf = (...validationResults: ValidationResult[]): ValidationResult => {
+export const allOf = (
+  ...validationResults: ValidationResult[]
+): ValidationResult => {
   return validationResults.reduce((previousResult, current) => {
     if (current.isValid) {
       return previousResult;
     }
-    const previousErrorCodes = previousResult.isValid ? [] : previousResult.errorCodes;
+    const previousErrorCodes = previousResult.isValid
+      ? []
+      : previousResult.errorCodes;
 
     return {
       isValid: false,
@@ -28,7 +32,7 @@ export const allOf = (...validationResults: ValidationResult[]): ValidationResul
     };
   }, validResult);
 };
-
+/* eslint-disable no-redeclare */
 /*
  * Function Overload:
  * https://www.typescriptlang.org/docs/handbook/2/functions.html#function-overloads
@@ -56,3 +60,4 @@ export function validationRule<T>(
     }
   };
 }
+/* eslint-enable no-redeclare */

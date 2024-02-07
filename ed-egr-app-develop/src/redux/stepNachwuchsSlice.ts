@@ -1,4 +1,4 @@
-import { getLebensmonate } from "@egr/monatsplaner-app";
+import { getLebensmonate } from "../monatsplaner";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SelectOption } from "../components/molecules";
 import { RootState } from "./index";

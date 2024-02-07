@@ -1,4 +1,4 @@
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../../../monatsplaner";
 import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
 import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";

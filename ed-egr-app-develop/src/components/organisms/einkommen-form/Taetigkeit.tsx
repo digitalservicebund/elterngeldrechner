@@ -1,4 +1,4 @@
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../../../monatsplaner";
 import React, { useState, VFC } from "react";
 import {
   CustomNumberField,

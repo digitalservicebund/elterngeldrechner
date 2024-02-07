@@ -83,7 +83,6 @@
   },
   "dependencies": {
     "@bmfin/steuerrechner": "^1.1.1",
-    "@egr/monatsplaner-app": "^0.7.0",
     "@reduxjs/toolkit": "^1.8.0",
     "big.js": "^6.1.1",
     "bootstrap": "^5.1.3",

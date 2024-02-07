@@ -52,7 +52,10 @@ describe("Elternteile", () => {
       geburt: dateOfBirth.toISO(),
       errechnet: expectedDateOfBirth.toISO(),
     };
-    const elternteile = createElternteile({ partnerMonate: true, geburtstag: geburtstag });
+    const elternteile = createElternteile({
+      partnerMonate: true,
+      geburtstag: geburtstag,
+    });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(15);
   });

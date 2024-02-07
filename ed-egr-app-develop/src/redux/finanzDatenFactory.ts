@@ -1,5 +1,5 @@
 import { RootState } from "./index";
-import { ElternteilType } from "@egr/monatsplaner-app";
+import { ElternteilType } from "../monatsplaner";
 import {
   Einkommen,
   ErwerbsTaetigkeit,

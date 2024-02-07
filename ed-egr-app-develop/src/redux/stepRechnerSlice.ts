@@ -4,7 +4,7 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import type { ElternteilType } from "@egr/monatsplaner-app";
+import type { ElternteilType } from "../monatsplaner";
 import type { RootState } from "./index";
 import { MutterschaftsLeistung, YesNo } from "../globals/js/calculations/model";
 import { Zeitraum } from "./stepEinkommenSlice";

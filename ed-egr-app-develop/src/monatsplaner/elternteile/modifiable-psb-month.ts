@@ -5,8 +5,13 @@ export interface ModifiablePSBMonthIndices {
   deselectableIndices: readonly number[];
 }
 
-export const getModifiablePSBMonthIndices = (months: readonly Month[], remainingMonthsPSB: number) => {
-  const currentPSBIndices = months.flatMap((month, index) => (month.type === "PSB" ? [index] : []));
+export const getModifiablePSBMonthIndices = (
+  months: readonly Month[],
+  remainingMonthsPSB: number,
+) => {
+  const currentPSBIndices = months.flatMap((month, index) =>
+    month.type === "PSB" ? [index] : [],
+  );
 
   //no PSB selected, all months are selectable
   if (currentPSBIndices.length === 0) {
@@ -33,5 +38,9 @@ export const getModifiablePSBMonthIndices = (months: readonly Month[], remaining
   }
 };
 
-export const isModifiablePSBMonth = (modifiableMonths: ModifiablePSBMonthIndices, monthIndex: number) =>
-  modifiableMonths.selectableIndices.includes(monthIndex) || modifiableMonths.deselectableIndices.includes(monthIndex);
+export const isModifiablePSBMonth = (
+  modifiableMonths: ModifiablePSBMonthIndices,
+  monthIndex: number,
+) =>
+  modifiableMonths.selectableIndices.includes(monthIndex) ||
+  modifiableMonths.deselectableIndices.includes(monthIndex);

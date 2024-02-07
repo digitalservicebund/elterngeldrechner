@@ -2,7 +2,7 @@ import { useState, VFC } from "react";
 import {
   Elternteil as MonatsplanerElternteil,
   RemainingMonthByType,
-} from "@egr/monatsplaner-app";
+} from "../../../monatsplaner";
 import { LebensmonateAfterBirth } from "../../../redux/stepNachwuchsSlice";
 import {
   getAutomaticallySelectedPSBMonthIndex,

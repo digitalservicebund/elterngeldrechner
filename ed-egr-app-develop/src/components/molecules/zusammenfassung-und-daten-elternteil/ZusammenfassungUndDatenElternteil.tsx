@@ -9,8 +9,8 @@ import { QuestionAnswer } from "../../atoms/question-answer";
 import { erwerbstaetigkeitLabels } from "../../organisms";
 import { yesNoLabels } from "../yes-no-radio";
 import { StepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
-import { Month } from "@egr/monatsplaner-app";
-import { ElterngeldType } from "@egr/monatsplaner-app/src/elternteile/elternteile-types";
+import { Month } from "../../../monatsplaner";
+import { ElterngeldType } from "../../../monatsplaner/elternteile/elternteile-types";
 
 interface Props {
   elternteilName: string;

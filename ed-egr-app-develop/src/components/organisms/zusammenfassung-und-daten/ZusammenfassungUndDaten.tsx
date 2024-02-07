@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { formSteps } from "../../../utils/formSteps";
 import { YesNo } from "../../../globals/js/calculations/model";
 import { Taetigkeit } from "../../../redux/stepEinkommenSlice";
-import { Month } from "@egr/monatsplaner-app";
+import { Month } from "../../../monatsplaner";
 
 export const ZusammenfassungUndDaten: FC = () => {
   const navigate = useNavigate();

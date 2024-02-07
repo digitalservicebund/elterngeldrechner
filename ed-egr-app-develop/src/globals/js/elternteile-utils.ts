@@ -4,7 +4,7 @@ import {
   ElternteilType,
   Geburtstag,
   MutterschutzSettings,
-} from "@egr/monatsplaner-app";
+} from "../../monatsplaner";
 import { DateTime } from "luxon";
 
 namespace NumberOfMutterschutzMonths {

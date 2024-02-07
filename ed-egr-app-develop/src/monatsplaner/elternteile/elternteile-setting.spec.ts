@@ -22,10 +22,17 @@ describe("Elternteile-Setting", () => {
   });
 
   it("should get Partnermonate false with Geburtstag", () => {
-    expect(getPartnerMonateSettings({ partnerMonate: false, geburtstag: geburtstag })).toBeFalsy();
+    expect(
+      getPartnerMonateSettings({
+        partnerMonate: false,
+        geburtstag: geburtstag,
+      }),
+    ).toBeFalsy();
   });
 
   it("should get Partnermonate true with Geburtstag", () => {
-    expect(getPartnerMonateSettings({ partnerMonate: true, geburtstag: geburtstag })).toBeTruthy();
+    expect(
+      getPartnerMonateSettings({ partnerMonate: true, geburtstag: geburtstag }),
+    ).toBeTruthy();
   });
 });

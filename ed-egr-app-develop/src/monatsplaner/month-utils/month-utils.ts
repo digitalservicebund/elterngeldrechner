@@ -1,10 +1,16 @@
 import { ElterngeldType, Month } from "../elternteile";
 
-export const firstIndexOfType = (months: readonly Month[], ...types: ElterngeldType[]): number => {
+export const firstIndexOfType = (
+  months: readonly Month[],
+  ...types: ElterngeldType[]
+): number => {
   return months.findIndex((month) => types.includes(month.type));
 };
 
-export const lastIndexOfType = (months: readonly Month[], ...types: ElterngeldType[]): number => {
+export const lastIndexOfType = (
+  months: readonly Month[],
+  ...types: ElterngeldType[]
+): number => {
   return months.reduceRight((lastIndex, month, index) => {
     if (lastIndex === -1 && types.includes(month.type)) {
       return index;
@@ -34,5 +40,7 @@ export const hasContinuousMonthsOfType = (
 ): boolean => {
   const endIndex = lastIndexOfType(months, ...types);
 
-  return !months.slice(startIndex, endIndex + 1).some((month) => !types.includes(month.type));
+  return !months
+    .slice(startIndex, endIndex + 1)
+    .some((month) => !types.includes(month.type));
 };

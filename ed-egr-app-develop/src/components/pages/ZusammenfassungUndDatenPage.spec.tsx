@@ -4,7 +4,7 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { initialStepEinkommenState } from "../../redux/stepEinkommenSlice";
 import store, { RootState } from "../../redux";
 import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
-import { createElternteile } from "@egr/monatsplaner-app";
+import { createElternteile } from "../../monatsplaner";
 import { initialStepNachwuchsState } from "../../redux/stepNachwuchsSlice";
 import { initialStepErwerbstaetigkeitState } from "../../redux/stepErwerbstaetigkeitSlice";
 import { initialStepRechnerState } from "../../redux/stepRechnerSlice";

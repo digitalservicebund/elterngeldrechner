@@ -26,7 +26,6 @@ jobs:
           node-version: 20
 
       - name: Build egr
-        working-directory: ./ed-egr-app-develop
         run: npm install && npm run test-all && npm run build
 
       - name: Build preview

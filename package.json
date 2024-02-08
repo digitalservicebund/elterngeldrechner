@@ -73,13 +73,11 @@
     "node-xlsx": "^0.21.0",
     "prettier": "^2.6.1",
     "sass": "^1.49.9",
-    "stylelint": "^14.6.1",
-    "stylelint-config-prettier": "^9.0.3",
-    "stylelint-config-recommended": "^7.0.0",
-    "stylelint-config-recommended-scss": "^6.0.0",
-    "stylelint-prettier": "^2.0.0",
-    "stylelint-scss": "^4.2.0",
-    "stylelint-selector-bem-pattern": "^2.1.1"
+    "stylelint": "^16.2.1",
+    "stylelint-config-recommended": "^14.0.0",
+    "stylelint-config-recommended-scss": "^14.0.0",
+    "stylelint-scss": "^6.1.0",
+    "stylelint-selector-bem-pattern": "^3.0.1"
   },
   "dependencies": {
     "@bmfin/steuerrechner": "^1.1.1",

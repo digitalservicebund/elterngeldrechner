@@ -1,4 +1,4 @@
-﻿import classnames from "classnames";
+import classnames from "classnames";
 import React, { useState } from "react";
 import nsp from "../../../globals/js/namespace";
 import { Icon } from "../../atoms";

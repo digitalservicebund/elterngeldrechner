@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import nsp from "../../../globals/js/namespace";
 import { Button } from "../../atoms";
 

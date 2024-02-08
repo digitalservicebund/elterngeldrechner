@@ -109,8 +109,8 @@ export const CustomNumberField = <
             error
               ? `${name}-error`
               : ariaDescribedByIfNoError
-              ? ariaDescribedByIfNoError
-              : undefined
+                ? ariaDescribedByIfNoError
+                : undefined
           }
           required={required}
         />

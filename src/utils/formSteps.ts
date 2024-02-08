@@ -1,4 +1,4 @@
-﻿export interface FormStep {
+export interface FormStep {
   text: string;
   route: string;
 }

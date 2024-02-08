@@ -24,7 +24,7 @@
 
     &:focus {
       + label::before {
-        border: rem(2) solid $color-primary;
+        border: px-to-rem(2) solid $color-primary;
       }
     }
 

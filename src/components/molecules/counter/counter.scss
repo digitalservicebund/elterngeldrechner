@@ -37,7 +37,7 @@
     }
 
     &:focus {
-      outline: rem(2) solid $color-primary;
+      outline: px-to-rem(2) solid $color-primary;
     }
   }
 

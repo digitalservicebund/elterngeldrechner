@@ -29,13 +29,16 @@
       opacity: 1;
       height: $sidebar-list--open--height;
       background-color: $sidebar--background-color;
-      transition: opacity 0.5s, height 0.5s, background-color 0.5s;
+      transition:
+        opacity 0.5s,
+        height 0.5s,
+        background-color 0.5s;
       z-index: 1;
-      top: rem(96);
+      top: px-to-rem(96);
       left: 0;
-      padding: rem($spacer) rem($spacer-l);
-      font-size: rem(16);
-      border-bottom: rem(2) solid $color-white;
+      padding: px-to-rem($spacer) px-to-rem($spacer-l);
+      font-size: px-to-rem(16);
+      border-bottom: px-to-rem(2) solid $color-white;
     }
 
     &__step {
@@ -112,11 +115,11 @@
     }
 
     strong {
-      margin-right: rem(18);
+      margin-right: px-to-rem(18);
     }
 
     @media (max-width: $breakpoint-tablet) {
-      font-size: rem(19);
+      font-size: px-to-rem(19);
     }
   }
 }

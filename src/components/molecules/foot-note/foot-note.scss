@@ -1,17 +1,17 @@
 @use "foot-note.variables" as *;
 
 .#{nsp("foot-note")} {
-  font-size: rem(18);
-  line-height: rem(30);
-  padding: rem($spacer-xs) 0 rem($spacer-xs) rem($spacer);
-  border-left: rem($spacer-s) solid $color-BEG-base;
+  font-size: px-to-rem(18);
+  line-height: px-to-rem(30);
+  padding: px-to-rem($spacer-xs) 0 px-to-rem($spacer-xs) px-to-rem($spacer);
+  border-left: px-to-rem($spacer-s) solid $color-BEG-base;
   display: flex;
 
   &__number {
-    padding-right: rem($spacer-s);
+    padding-right: px-to-rem($spacer-s);
   }
 }
 
 #egr-foot-note-for-required-fields {
-  margin-bottom: rem(40);
+  margin-bottom: px-to-rem(40);
 }

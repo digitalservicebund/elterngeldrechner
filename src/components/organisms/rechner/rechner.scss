@@ -3,8 +3,8 @@
 .#{nsp("rechner")} {
   display: flex;
   flex-direction: column;
-  gap: rem($spacer-xl);
-  margin-bottom: rem($spacer-3xl);
+  gap: px-to-rem($spacer-xl);
+  margin-bottom: px-to-rem($spacer-3xl);
 
   @media print {
     display: none;
@@ -13,14 +13,14 @@
   &__description {
     ol {
       list-style-type: decimal;
-      padding-left: rem($spacer-l);
+      padding-left: px-to-rem($spacer-l);
     }
   }
 }
 
 .#{nsp("rechner-card")} {
   &__header {
-    padding: rem($spacer-l);
+    padding: px-to-rem($spacer-l);
   }
 
   &-title {
@@ -29,8 +29,8 @@
     justify-content: space-between;
 
     p {
-      font-size: rem(24);
-      line-height: rem(40);
+      font-size: px-to-rem(24);
+      line-height: px-to-rem(40);
     }
 
     &__text {
@@ -39,7 +39,7 @@
       align-items: center;
       word-wrap: break-word;
       hyphens: auto;
-      gap: rem($spacer);
+      gap: px-to-rem($spacer);
       justify-content: space-between;
     }
   }
@@ -47,8 +47,8 @@
   &__description {
     display: flex;
     flex-direction: column;
-    gap: rem($spacer);
-    padding: rem($spacer) rem($spacer) 0 rem($spacer);
+    gap: px-to-rem($spacer);
+    padding: px-to-rem($spacer) px-to-rem($spacer) 0 px-to-rem($spacer);
 
     p {
       font-weight: 700;
@@ -56,22 +56,22 @@
 
     li {
       position: relative;
-      padding-left: rem($spacer-l);
+      padding-left: px-to-rem($spacer-l);
     }
 
     li::before {
       content: "•";
       position: absolute;
-      left: rem($spacer-s);
-      font-size: rem(18);
+      left: px-to-rem($spacer-s);
+      font-size: px-to-rem(18);
     }
   }
 
   &__content {
     display: flex;
     flex-flow: row wrap;
-    gap: rem($spacer-xxl);
-    padding: rem($spacer-xl);
+    gap: px-to-rem($spacer-xxl);
+    padding: px-to-rem($spacer-xl);
   }
 
   &--basiselterngeld {
@@ -84,7 +84,7 @@
 
   &--elterngeldplus {
     background-color: $color-EGP-light;
-    margin-top: rem($spacer-xl);
+    margin-top: px-to-rem($spacer-xl);
 
     .#{nsp("rechner-card-title")} {
       color: $color-EGP-base;

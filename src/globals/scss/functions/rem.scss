@@ -1,6 +1,6 @@
 @use "sass:math";
 @use "../fonts/fonts.variables" as font;
 
-@function rem($pixel, $context: font.$font-size) {
+@function px-to-rem($pixel, $context: font.$font-size) {
   @return math.div($pixel, $context) * 1rem;
 }

@@ -72,7 +72,7 @@
     "lint-staged": "^12.3.7",
     "node-xlsx": "^0.21.0",
     "prettier": "^3.2.5",
-    "sass": "^1.49.9",
+    "sass": "^1.70.0",
     "stylelint": "^16.2.1",
     "stylelint-config-recommended": "^14.0.0",
     "stylelint-config-recommended-scss": "^14.0.0",

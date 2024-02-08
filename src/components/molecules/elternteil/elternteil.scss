@@ -14,7 +14,7 @@
     width: 50%;
 
     & + & {
-      margin-left: rem($spacer);
+      margin-left: px-to-rem($spacer);
     }
   }
 
@@ -24,21 +24,21 @@
   }
 
   &__name {
-    padding: rem($spacer);
+    padding: px-to-rem($spacer);
   }
 
   &__lebensmonat {
-    font-size: rem(14);
+    font-size: px-to-rem(14);
     word-wrap: break-word;
-    line-height: rem(20);
-    width: rem(85);
-    padding: rem($spacer-s);
+    line-height: px-to-rem(20);
+    width: px-to-rem(85);
+    padding: px-to-rem($spacer-s);
   }
 
   &__th {
     font-weight: 700;
-    padding: rem($spacer-s);
-    border-bottom: rem(10) solid;
+    padding: px-to-rem($spacer-s);
+    border-bottom: px-to-rem(10) solid;
 
     &--basiselterngeld {
       color: $color-BEG-base;
@@ -64,19 +64,19 @@
   }
 
   tbody > tr > td {
-    height: rem(44);
-    line-height: rem(44);
+    height: px-to-rem(44);
+    line-height: px-to-rem(44);
   }
 }
 
 .#{nsp("lebensmonate-cell")} {
-  border-right: rem($spacer) solid $color-off-white;
+  border-right: px-to-rem($spacer) solid $color-off-white;
 
   &__lebensmonat-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 rem($spacer-s);
+    padding: 0 px-to-rem($spacer-s);
   }
 
   &__number {
@@ -84,6 +84,6 @@
   }
 
   &__label {
-    font-size: rem(14);
+    font-size: px-to-rem(14);
   }
 }

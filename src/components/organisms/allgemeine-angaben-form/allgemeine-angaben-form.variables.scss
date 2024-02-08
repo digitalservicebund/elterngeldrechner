@@ -1,5 +1,9 @@
 @forward "src/globals/scss";
 @use "src/globals/scss" as egr;
 
-$allgemeine-angaben-form-elternteil1-spacing: rem(egr.$spacer-xl) !default;
-$allgemeine-angaben-form-elternteil1-label-spacing: rem(egr.$spacer) !default;
+$allgemeine-angaben-form-elternteil1-spacing: px-to-rem(
+  egr.$spacer-xl
+) !default;
+$allgemeine-angaben-form-elternteil1-label-spacing: px-to-rem(
+  egr.$spacer
+) !default;

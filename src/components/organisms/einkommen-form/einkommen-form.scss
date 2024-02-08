@@ -4,27 +4,27 @@
   &__ausfuerliche-eingabe-text-et1,
   &__ausfuerliche-eingabe-text-et2 {
     font-size: $einkommen-form__ausfuerliche-eingabe-text--font-size;
-    margin: rem($spacer) 0;
+    margin: px-to-rem($spacer) 0;
   }
 
   &__per-month {
     display: flex;
     flex-flow: row wrap;
-    gap: rem($spacer);
-    margin: rem($spacer) 0;
+    gap: px-to-rem($spacer);
+    margin: px-to-rem($spacer) 0;
 
     @media (min-width: $breakpoint-desktop) {
-      gap: rem($spacer-xl) rem($spacer);
+      gap: px-to-rem($spacer-xl) px-to-rem($spacer);
     }
   }
 
   &__taetigkeit-buttons {
     display: flex;
     flex-direction: column;
-    gap: rem($spacer);
+    gap: px-to-rem($spacer);
   }
 
   &__zeitraum {
-    margin-bottom: rem($spacer-xxl);
+    margin-bottom: px-to-rem($spacer-xxl);
   }
 }

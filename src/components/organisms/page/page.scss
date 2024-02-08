@@ -5,12 +5,12 @@
   grid-template:
     "sidebar"
     "title"
-    "content" / minmax(auto, rem(1030));
+    "content" / minmax(auto, px-to-rem(1030));
 
   @media (min-width: $breakpoint-desktop-xxl) {
     grid-template:
       "- title"
-      "sidebar content" / max-content minmax(auto, rem(1030));
+      "sidebar content" / max-content minmax(auto, px-to-rem(1030));
   }
 
   &__sidebar {
@@ -30,7 +30,7 @@
   &__title {
     grid-area: title;
     margin: $page-title-spacing;
-    margin-top: rem(100);
+    margin-top: px-to-rem(100);
     @media print {
       display: none;
     }

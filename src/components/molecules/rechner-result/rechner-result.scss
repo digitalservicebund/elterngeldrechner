@@ -6,7 +6,7 @@
     "over-14-month"
     "basiselterngeld"
     "elterngeldplus" / max-content;
-  gap: rem($spacer-xl);
+  gap: px-to-rem($spacer-xl);
 
   @media (min-width: $breakpoint-desktop) {
     grid-template:
@@ -30,9 +30,9 @@
     display: flex;
     align-items: center;
     color: $color-danger;
-    gap: rem($spacer-s);
-    padding-left: rem($spacer-s);
-    border-left: rem($spacer-s) solid $color-danger;
+    gap: px-to-rem($spacer-s);
+    padding-left: px-to-rem($spacer-s);
+    border-left: px-to-rem($spacer-s) solid $color-danger;
   }
 
   @media only screen and (max-width: $breakpoint-desktop) {

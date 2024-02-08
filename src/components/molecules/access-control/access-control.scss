@@ -15,12 +15,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: rem($spacer-xl);
+    gap: px-to-rem($spacer-xl);
     color: $color-primary;
     font-weight: 700;
     text-align: center;
-    padding: rem($spacer-xl);
-    margin: rem($spacer-3xl);
+    padding: px-to-rem($spacer-xl);
+    margin: px-to-rem($spacer-3xl);
     background-color: $color-primary-light;
     z-index: 2;
 
@@ -29,7 +29,7 @@
     }
 
     @media only screen and (max-width: $breakpoint-tablet) {
-      margin: rem($spacer-l);
+      margin: px-to-rem($spacer-l);
     }
   }
 }

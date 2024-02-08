@@ -22,7 +22,7 @@
   }
 
   &:focus-within {
-    outline: rem(1) solid $color-primary;
+    outline: px-to-rem(1) solid $color-primary;
   }
 
   &--beg > label {

@@ -1,8 +1,8 @@
 @use "zusammenfassung-und-daten-elternteil.variables" as *;
 
 .#{nsp("zusammenfassung-und-daten-elternteil")} {
-  margin-bottom: rem($spacer-xl);
-  padding: rem($spacer);
+  margin-bottom: px-to-rem($spacer-xl);
+  padding: px-to-rem($spacer);
   background-color: $color-ZUD;
 
   &:last-child {
@@ -13,13 +13,13 @@
 .#{nsp("zusammenfassung-und-daten-buttons")} {
   display: flex;
   justify-content: space-between;
-  margin-top: rem($spacer-3xl);
+  margin-top: px-to-rem($spacer-3xl);
 
   &__backwards {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    margin-right: rem(20);
+    margin-right: px-to-rem(20);
   }
 
   @media only screen and (max-width: 525px) {
@@ -27,7 +27,7 @@
     justify-content: end;
 
     &__backwards {
-      margin-bottom: rem(10);
+      margin-bottom: px-to-rem(10);
       margin-right: 0;
     }
   }

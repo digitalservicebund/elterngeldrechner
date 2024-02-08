@@ -110,22 +110,22 @@ $my-component__heading--hover--fs: egr.$heading--fs;
 @use "my-component.variables" as *;
 
 .#{$nsp}my-component {
-  font-size: rem($my-component--fs);
-  // probably better: rem($ed-my-component--fs--sm)
+  font-size: px-to-rem($my-component--fs);
+  // probably better: px-to-rem($ed-my-component--fs--sm)
   
   &--small {
-    font-size: rem($my-component--small--fs);
+    font-size: px-to-rem($my-component--small--fs);
   }
 
   &__heading {
-    font-size: rem($my-component__heading--fs);
+    font-size: px-to-rem($my-component__heading--fs);
     
     &:hover {
-        font-size: rem($my-component__heading--hover--fs);
+        font-size: px-to-rem($my-component__heading--hover--fs);
     }
 
     @include media-breakpoint-up(lg) {
-      font-size: rem($my-component__heading--fs--lg);
+      font-size: px-to-rem($my-component__heading--fs--lg);
     }
   }
 }

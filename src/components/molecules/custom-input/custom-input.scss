@@ -20,7 +20,7 @@
       &:focus {
         outline: none;
         padding: $custom-input-padding-on-focus;
-        border: rem(2) solid $color-primary;
+        border: px-to-rem(2) solid $color-primary;
       }
 
       &::placeholder {
@@ -32,7 +32,7 @@
 
   &--small &__input,
   &--small &-question__input {
-    max-width: rem(200);
+    max-width: px-to-rem(200);
   }
 
   &--error &__input {

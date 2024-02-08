@@ -4,7 +4,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: rem($spacer);
+  padding: px-to-rem($spacer);
   background-color: $color-off-white;
 
   @media only screen and (max-width: $breakpoint-tablet) {
@@ -16,7 +16,7 @@
     flex-direction: column;
 
     th {
-      height: rem(56); // make equal heigt in both ET tables
+      height: px-to-rem(56); // make equal heigt in both ET tables
     }
 
     @media only screen and (min-width: $breakpoint-desktop) {
@@ -29,15 +29,15 @@
   }
 
   &__header {
-    margin-bottom: rem($spacer-xl);
+    margin-bottom: px-to-rem($spacer-xl);
   }
 
   &__footer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: rem($spacer-4xl);
-    padding: rem($spacer);
+    row-gap: px-to-rem($spacer-4xl);
+    padding: px-to-rem($spacer);
 
     @media print {
       display: none;
@@ -48,13 +48,13 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    padding: rem($spacer);
+    padding: px-to-rem($spacer);
     background-color: $color-off-white;
     z-index: 1;
   }
 
   &__blur {
-    filter: blur(rem(2));
+    filter: blur(px-to-rem(2));
 
     @media print {
       display: none;
@@ -75,7 +75,7 @@
   &__button-group {
     display: flex;
     justify-content: space-between;
-    margin-top: rem($spacer-3xl);
+    margin-top: px-to-rem($spacer-3xl);
     background-color: $color-white;
 
     @media only screen and (max-width: $breakpoint-desktop) {
@@ -83,13 +83,13 @@
     }
 
     &-backwards {
-      width: rem(280);
+      width: px-to-rem(280);
       display: flex;
       justify-content: space-between;
 
       @media only screen and (max-width: $breakpoint-desktop) {
         width: auto;
-        margin-top: rem($spacer);
+        margin-top: px-to-rem($spacer);
       }
     }
   }

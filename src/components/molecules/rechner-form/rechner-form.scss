@@ -6,15 +6,15 @@
     align-items: flex-end;
     justify-content: space-between;
     flex-flow: row wrap;
-    row-gap: rem($spacer);
-    margin-top: rem($spacer-s);
+    row-gap: px-to-rem($spacer);
+    margin-top: px-to-rem($spacer-s);
   }
 
   &__add-action {
     display: flex;
     align-items: flex-start;
     flex-direction: column;
-    gap: rem($spacer-xl);
+    gap: px-to-rem($spacer-xl);
   }
 
   &__zeitraum-section {
@@ -26,15 +26,15 @@
   }
 
   &__zeitraum {
-    margin-bottom: rem($spacer);
+    margin-bottom: px-to-rem($spacer);
   }
 
   &__einkommen {
-    margin-bottom: rem($spacer);
+    margin-bottom: px-to-rem($spacer);
   }
 
   &__remove-action {
-    margin-bottom: rem($spacer-xl);
+    margin-bottom: px-to-rem($spacer-xl);
     display: flex;
     align-items: flex-start;
     flex-direction: column;

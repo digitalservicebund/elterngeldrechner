@@ -3,9 +3,9 @@
 .#{nsp("button")} {
   &,
   &:visited {
-    font-size: rem(20);
+    font-size: px-to-rem(20);
     color: $color-white;
-    line-height: rem(24);
+    line-height: px-to-rem(24);
     padding: $button--padding;
     border: $button--primary--border;
     transition: all 0.3s;
@@ -31,11 +31,11 @@
     }
 
     &--before {
-      margin-right: rem($spacer-s);
+      margin-right: px-to-rem($spacer-s);
     }
 
     &--after {
-      margin-left: rem($spacer-s);
+      margin-left: px-to-rem($spacer-s);
     }
   }
 
@@ -138,7 +138,7 @@
 
   &__input {
     &:focus {
-      outline: rem(2) solid $color-primary;
+      outline: px-to-rem(2) solid $color-primary;
     }
   }
 

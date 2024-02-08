@@ -2,6 +2,6 @@
 
 .#{nsp("foot-note-number")} {
   position: relative;
-  top: rem(-8);
-  font-size: rem(14);
+  top: px-to-rem(-8);
+  font-size: px-to-rem(14);
 }

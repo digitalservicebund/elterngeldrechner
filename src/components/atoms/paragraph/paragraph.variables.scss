@@ -1,10 +1,10 @@
 @forward "src/globals/scss";
 @use "src/globals/scss" as egr;
 
-$paragraph--size: rem(18) !default;
-$paragraph--line-height: rem(30) !default;
+$paragraph--size: px-to-rem(18) !default;
+$paragraph--line-height: px-to-rem(30) !default;
 
-$paragraph--size--large: rem(24) !default;
-$paragraph--line-height--large: rem(40) !default;
+$paragraph--size--large: px-to-rem(24) !default;
+$paragraph--line-height--large: px-to-rem(40) !default;
 
 $paragraph--font-weight--bold: 700 !default;

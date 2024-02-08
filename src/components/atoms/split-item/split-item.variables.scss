@@ -1,9 +1,9 @@
 @forward "src/globals/scss";
 @use "src/globals/scss" as egr;
 
-$split-item--gap: egr.rem(egr.$spacer-xl) !default;
+$split-item--gap: egr.px-to-rem(egr.$spacer-xl) !default;
 $split-item--desktop-breakpoint: egr.$breakpoint-desktop !default;
 $split-item--mobile-background-color: egr.$color-off-white !default;
-$split-item--padding: egr.rem(egr.$spacer) !default;
+$split-item--padding: egr.px-to-rem(egr.$spacer) !default;
 $split-item--divider-color: egr.$color-grey !default;
-$split-item--divider-width: egr.rem(1) !default;
+$split-item--divider-width: egr.px-to-rem(1) !default;

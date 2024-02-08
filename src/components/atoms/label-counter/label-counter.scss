@@ -14,7 +14,7 @@
 
   & > * {
     font-size: $base-font-size;
-    line-height: rem(40);
+    line-height: px-to-rem(40);
     margin: 0;
     text-align: center;
   }

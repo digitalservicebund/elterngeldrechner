@@ -233,7 +233,8 @@ template {
   font-family: "BundesSerif";
   font-style: normal;
   font-weight: 400;
-  src: url(bundesserifweb-regular-ttf-data.ttf) format("truetype"),
+  src:
+    url(bundesserifweb-regular-ttf-data.ttf) format("truetype"),
     url(bundesserifweb-regular-woff-data.woff) format("woff");
 }
 
@@ -241,7 +242,8 @@ template {
   font-family: "BundesSerif";
   font-style: italic;
   font-weight: 400;
-  src: url(bundesserifweb-italic-ttf-data.ttf) format("truetype"),
+  src:
+    url(bundesserifweb-italic-ttf-data.ttf) format("truetype"),
     url(bundesserifweb-italic-woff-data.woff) format("woff");
 }
 
@@ -249,7 +251,8 @@ template {
   font-family: "BundesSerif";
   font-style: normal;
   font-weight: 700;
-  src: url(bundesserifweb-bold-ttf-data.ttf) format("truetype"),
+  src:
+    url(bundesserifweb-bold-ttf-data.ttf) format("truetype"),
     url(bundesserifweb-bold-woff-data.woff) format("woff");
 }
 
@@ -257,7 +260,8 @@ template {
   font-family: BundesSans;
   font-style: normal;
   font-weight: 400;
-  src: url(bundessansweb-regular-ttf-data.ttf) format("truetype"),
+  src:
+    url(bundessansweb-regular-ttf-data.ttf) format("truetype"),
     url(bundessansweb-regular-woff-data.woff) format("woff");
 }
 
@@ -265,7 +269,8 @@ template {
   font-family: BundesSans;
   font-style: italic;
   font-weight: 400;
-  src: url(bundessansweb-italic-ttf-data.ttf) format("truetype"),
+  src:
+    url(bundessansweb-italic-ttf-data.ttf) format("truetype"),
     url(bundessansweb-italic-woff-data.woff) format("woff");
 }
 
@@ -273,7 +278,8 @@ template {
   font-family: BundesSans;
   font-style: normal;
   font-weight: 700;
-  src: url(bundessansweb-bold-ttf-data.ttf) format("truetype"),
+  src:
+    url(bundessansweb-bold-ttf-data.ttf) format("truetype"),
     url(bundessansweb-bold-woff-data.woff) format("woff");
 }
 
@@ -281,7 +287,8 @@ template {
   font-family: fpoIcon;
   font-style: normal;
   font-weight: 400;
-  src: url(fpoicon-ttf-data.ttf) format("truetype"),
+  src:
+    url(fpoicon-ttf-data.ttf) format("truetype"),
     url(fpoicon-woff-data.woff) format("woff");
 }
 
@@ -787,7 +794,11 @@ h2[class*="module-title"],
 strong[class*="headline"],
 strong[class*="module-title"] {
   color: #6f6c6c;
-  font: normal 1.125rem/1.375em BundesSans, Helvetica, Arial, sans-serif;
+  font:
+    normal 1.125rem/1.375em BundesSans,
+    Helvetica,
+    Arial,
+    sans-serif;
   text-transform: uppercase;
 }
 
@@ -1030,23 +1041,38 @@ strong[class*="module-title"] {
 }
 
 .rte-container h1 {
-  font: 700 2.5rem/1.25em "BundesSerif", Georgia, serif;
+  font:
+    700 2.5rem/1.25em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .rte-container h2 {
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .rte-container h3 {
-  font: 700 1.25rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1.25rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .rte-container h4 {
-  font: 700 1.125rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1.125rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .rte-container h5 {
-  font: 700 1rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 ol.rte--list,
@@ -1160,7 +1186,11 @@ ol.rte--list ol ol li:before {
 
 .rte-container dd:not([class]),
 .rte-container dt:not([class]) {
-  font: 1.1875rem/1.5em BundesSans, Helvetica, Arial, sans-serif;
+  font:
+    1.1875rem/1.5em BundesSans,
+    Helvetica,
+    Arial,
+    sans-serif;
   margin: 0;
 }
 
@@ -1170,7 +1200,11 @@ ol.rte--list ol ol li:before {
 
 .rte-container figcaption p,
 .rte-container p:not([class]) {
-  font: 1.1875rem/1.5em BundesSans, Helvetica, Arial, sans-serif;
+  font:
+    1.1875rem/1.5em BundesSans,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 .rte-container h1,
@@ -1313,7 +1347,11 @@ body.show-focus-outlines .button--wine:focus {
 
 .cards__count {
   display: block;
-  font: 1.125em/1.5625em BundesSans, Helvetica, Arial, sans-serif;
+  font:
+    1.125em/1.5625em BundesSans,
+    Helvetica,
+    Arial,
+    sans-serif;
   margin-bottom: 1rem;
 }
 
@@ -1335,7 +1373,10 @@ body.show-focus-outlines .button--wine:focus {
 }
 
 .card__link {
-  font: 700 1.125rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1.125rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 @media (min-width: 960px) {
@@ -1879,7 +1920,10 @@ body.show-focus-outlines .footer__lists .link:focus {
 }
 
 .page-title {
-  font: 700 2.5rem/1.25em "BundesSerif", Georgia, serif;
+  font:
+    700 2.5rem/1.25em "BundesSerif",
+    Georgia,
+    serif;
   margin-bottom: 1.625rem;
   margin-top: 3.125rem;
   min-height: 1px;
@@ -1955,7 +1999,10 @@ body.show-focus-outlines .footer__lists .link:focus {
 }
 
 .module-title--flap {
-  font: 700 1.25rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1.25rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
   margin-top: 0;
 }
 
@@ -2379,7 +2426,10 @@ body.show-focus-outlines .header__bmfsfj-logo-link a:focus {
 
 .footer__info .footer__info-title,
 .footer__list .footer__info-title {
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 @media (min-width: 640px) {
@@ -2475,7 +2525,10 @@ body.show-focus-outlines .header__bmfsfj-logo-link a:focus {
 
 .accordion__headline {
   display: block;
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
   margin-bottom: 0.9375rem;
 }
 
@@ -2538,23 +2591,38 @@ body.show-focus-outlines .header__bmfsfj-logo-link a:focus {
 }
 
 .accordion__panel h3 {
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .accordion__panel h4 {
-  font: 700 1.25rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1.25rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .accordion__panel h5 {
-  font: 700 1.125rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1.125rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .accordion__panel h6 {
-  font: 700 1rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
 }
 
 .accordion__panel p[js-data-headline="js-accordion-h7"] {
-  font: 700 0.9375rem/1.3125em "BundesSerif", Georgia, serif;
+  font:
+    700 0.9375rem/1.3125em "BundesSerif",
+    Georgia,
+    serif;
   margin-left: 0;
   margin-right: 0;
 }
@@ -2579,7 +2647,10 @@ body.show-focus-outlines .header__bmfsfj-logo-link a:focus {
   background-color: transparent;
   border: 0;
   cursor: pointer;
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
   padding: 1.25rem 0;
   text-align: left;
 }
@@ -2602,7 +2673,10 @@ body.show-focus-outlines .rte-container .rte-accordion__control:focus {
 }
 
 #anton-egr-schnellrechner h3 {
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
   margin-bottom: 1.25rem;
 }
 
@@ -3513,7 +3587,10 @@ body.show-focus-outlines .rte-container .rte-accordion__control:focus {
 
 .selection-criteria__headline {
   display: block;
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
   margin-bottom: 0.9375rem;
 }
 
@@ -3755,7 +3832,10 @@ body.show-focus-outlines .rte-container .rte-accordion__control:focus {
 }
 
 .sidebar-module__title {
-  font: 700 1.5rem/1.5em "BundesSerif", Georgia, serif;
+  font:
+    700 1.5rem/1.5em "BundesSerif",
+    Georgia,
+    serif;
   margin-bottom: 1.25rem;
 }
 
@@ -5053,7 +5133,10 @@ body.show-focus-outlines .header-nav__link:focus {
 @media (min-width: 960px) {
   body.show-focus-outlines .header-nav__link-title:focus {
     background-color: #e9e9e9;
-    box-shadow: 0 0 0 8px #e9e9e9, 8px 0 0 8px #e9e9e9, -8px 0 0 8px #e9e9e9;
+    box-shadow:
+      0 0 0 8px #e9e9e9,
+      8px 0 0 8px #e9e9e9,
+      -8px 0 0 8px #e9e9e9;
     color: #890d48;
     outline: 0 none;
     position: relative;
@@ -6701,7 +6784,9 @@ body.show-focus-outlines .main-search__button:focus {
   border: 1px solid var(--cookie-banner-button--background);
   color: var(--cookie-banner-button--color);
   padding: 0.5rem 1rem 0.75rem;
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  transition:
+    color 0.3s ease-in-out,
+    background-color 0.3s ease-in-out;
   width: 100%;
 }
 
@@ -6855,7 +6940,10 @@ body.show-focus-outlines .main-search__button:focus {
 }
 
 .search-results-page__title {
-  font: 700 1rem/1.375em "BundesSerif", Georgia, serif;
+  font:
+    700 1rem/1.375em "BundesSerif",
+    Georgia,
+    serif;
   margin: 0 0 1.25rem;
 }
 
@@ -7012,7 +7100,11 @@ body.show-focus-outlines .main-search__button:focus {
 
 .featured-results__link {
   display: block;
-  font: 700 1.125em/1.5625em BundesSans, Helvetica, Arial, sans-serif;
+  font:
+    700 1.125em/1.5625em BundesSans,
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 .featured-results__list {
@@ -7450,7 +7542,11 @@ body.show-focus-outlines .main-search__button:focus {
 
 @media print {
   body {
-    font: 12pt Georgia, Times New Roman, Times, serif;
+    font:
+      12pt Georgia,
+      Times New Roman,
+      Times,
+      serif;
     line-height: 1.3;
   }
 
@@ -7503,7 +7599,11 @@ body.show-focus-outlines .main-search__button:focus {
   .text ul,
   p {
     color: #000;
-    font: 12pt Georgia, Times New Roman, Times, serif;
+    font:
+      12pt Georgia,
+      Times New Roman,
+      Times,
+      serif;
     line-height: 1.5;
   }
 

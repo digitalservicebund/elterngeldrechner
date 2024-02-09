@@ -11,6 +11,7 @@ interface Props {
   isHighlighted?: boolean;
   elterngeldType: ElterngeldType;
   label: string;
+  children: React.ReactNode;
   onToggle: () => void;
   onDragOver: () => void;
   onMouseOver?: () => void;

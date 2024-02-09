@@ -7,6 +7,7 @@ import { FootNote } from "../../molecules";
 
 interface PageProps {
   step: FormStep;
+  children: React.ReactNode;
 }
 
 export const Page: FC<PageProps> = ({ step, children }) => {

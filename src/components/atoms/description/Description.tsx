@@ -5,6 +5,7 @@ import nsp from "../../../globals/js/namespace";
 interface Props {
   id?: string;
   error?: boolean;
+  children: React.ReactNode;
 }
 
 export const Description: FC<Props> = ({ id, error = false, children }) => {

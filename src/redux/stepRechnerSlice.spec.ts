@@ -6,9 +6,7 @@ import reducer, {
 
 describe("stepRechnerSlice", () => {
   it("should create stepRechnerSlice with initial state", () => {
-    expect(reducer(undefined, { type: undefined })).toEqual(
-      initialStepRechnerState,
-    );
+    expect(reducer(undefined, { type: "" })).toEqual(initialStepRechnerState);
   });
   it("should set hasBEGResultChangedDueToPrevFormSteps to true on action setHasBEGResultChangedDueToPrevFormSteps", () => {
     const previousState: StepRechnerState = {

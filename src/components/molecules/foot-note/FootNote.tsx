@@ -6,6 +6,7 @@ interface Props {
   id?: string;
   number?: number;
   prefix?: string;
+  children?: React.ReactNode;
 }
 
 export const FootNote: FC<Props> = (props) => {

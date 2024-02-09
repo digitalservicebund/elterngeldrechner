@@ -6,6 +6,7 @@ interface Props {
   size?: "normal" | "large";
   bold?: boolean;
   className?: string;
+  children: React.ReactNode;
 }
 
 export const P: FC<Props> = ({

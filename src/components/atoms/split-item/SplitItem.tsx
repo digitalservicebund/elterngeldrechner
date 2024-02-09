@@ -4,6 +4,7 @@ import classNames from "classnames";
 
 interface Props {
   hasDivider?: boolean;
+  children: React.ReactNode;
 }
 
 export const SplitItem: FC<Props> = ({ hasDivider, children }) => {

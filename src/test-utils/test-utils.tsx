@@ -17,6 +17,7 @@ interface RenderOptionsWithRedux extends RenderOptions {
 
 interface TestWrapperProps {
   store: Store;
+  children: React.ReactNode;
 }
 
 const TestWrapper: FC<TestWrapperProps> = ({ store, children }) => {
@@ -35,7 +36,7 @@ const renderWithRedux = (
     ...renderOptions
   }: RenderOptionsWithRedux = {},
 ) => {
-  const Wrapper: FC = ({ children }) => (
+  const Wrapper: FC<{ children?: React.ReactNode }> = ({ children }) => (
     <TestWrapper store={store}>{children}</TestWrapper>
   );
   return render(ui, { wrapper: Wrapper, ...renderOptions });

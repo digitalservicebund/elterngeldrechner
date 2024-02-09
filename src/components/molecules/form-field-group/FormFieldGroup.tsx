@@ -8,6 +8,7 @@ interface FormFieldGroupProps extends AriaAttributes {
   headline?: string;
   description?: string;
   info?: Info;
+  children: React.ReactNode;
 }
 
 export const FormFieldGroup: FC<FormFieldGroupProps> = ({

@@ -1,4 +1,4 @@
-import Big from "big.js";
+import Big, { RoundingMode } from "big.js";
 
 /**
  * Constants for Elterngeld calculation.
@@ -101,7 +101,9 @@ export namespace EgrBerechnungParamId {
    *
    * @see setupCalculation()
    */
-  export const PAUSCH = Big(1000).div(Big(12)).prec(Big.DP, Big.RM); // TODO: 1230 - when to change ?
+  export const PAUSCH = Big(1000)
+    .div(Big(12))
+    .prec(Big.DP, Big.RM as RoundingMode); // TODO: 1230 - when to change ?
   /**
    * Max Einkommensgrenze Bezug Elterngeld Alleinerziehende
    */

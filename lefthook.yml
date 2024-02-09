@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      run: npx prettier --write '{staged_files}' && git add '{staged_files}'
+    lint:
+      glob: "*.{js,ts,jsx,tsx}"
+      run: npx eslint {staged_files}
+    stylelint:
+      glob: "*.scss"
+      run: npx stylelint {staged_files}
+    type-check:
+      run: npm run type-check

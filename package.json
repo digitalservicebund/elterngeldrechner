@@ -42,19 +42,6 @@
     "npm": ">=8.5.0"
   },
   "//comment-for-prettier": "See https://create-react-app.dev/docs/setting-up-your-editor/#formatting-code-automatically",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm}": [
-      "prettier --write"
-    ],
-    "public/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm}": [
-      "prettier --write"
-    ]
-  },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
@@ -68,8 +55,7 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
-    "husky": "^4.3.8",
-    "lint-staged": "^12.3.7",
+    "lefthook": "^1.6.1",
     "node-xlsx": "^0.23.0",
     "prettier": "^3.2.5",
     "sass": "^1.70.0",

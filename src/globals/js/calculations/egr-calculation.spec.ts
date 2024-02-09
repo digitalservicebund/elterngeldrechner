@@ -20,7 +20,7 @@ describe("egr-calculation", () => {
 
   beforeEach(() => {
     // Mocks calls to BMF Lohn- und Einkommensteuerrechner. @see: BmfSteuerRechner.queryBmfSteuerRechner()
-    global.fetch = jest.fn((url: RequestInfo) => {
+    global.fetch = jest.fn((url) => {
       // returns saved mock responses for specified URLs
       return Promise.resolve(new Response(bodyForUrl(url)));
     });
@@ -218,7 +218,7 @@ const erwerbsZeitraumLebensMonatOf = (
   return erwerbsZeitraumLebensMonat;
 };
 
-const bodyForUrl = (url: RequestInfo) => {
+const bodyForUrl = (url: any) => {
   if (typeof url !== "string") {
     return "";
   }

@@ -241,8 +241,8 @@ describe("Change Month", () => {
       const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");
       const dateOfBirth = expectedDateOfBirth.minus({ weeks: 6 });
       const geburtstag: Geburtstag = {
-        geburt: dateOfBirth.toISO(),
-        errechnet: expectedDateOfBirth.toISO(),
+        geburt: dateOfBirth.toISO() as string,
+        errechnet: expectedDateOfBirth.toISO() as string,
       };
 
       elternteile = changeMonth(
@@ -314,8 +314,8 @@ describe("Change Month", () => {
           },
           {
             geburtstag: {
-              geburt: dateOfBirth.toISO(),
-              errechnet: expectedDateOfBirth.toISO(),
+              geburt: dateOfBirth.toISO() as string,
+              errechnet: expectedDateOfBirth.toISO() as string,
             },
           },
         );
@@ -672,7 +672,7 @@ describe("Change Month", () => {
     const mutterschutz: MutterschutzSettings = {
       endDate: DateTime.fromISO(geburtstag.geburt)
         .plus({ month: numberOfMutterschutzMonths - 1 })
-        .toISO(),
+        .toISO() as string,
       elternteil: "ET1",
     };
 

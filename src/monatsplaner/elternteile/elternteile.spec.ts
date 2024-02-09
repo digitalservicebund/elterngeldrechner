@@ -37,8 +37,8 @@ describe("Elternteile", () => {
     const dateOfBirth = expectedDateOfBirth.minus({ weeks: 6 });
 
     const geburtstag: Geburtstag = {
-      geburt: dateOfBirth.toISO(),
-      errechnet: expectedDateOfBirth.toISO(),
+      geburt: dateOfBirth.toISO() as string,
+      errechnet: expectedDateOfBirth.toISO() as string,
     };
     const elternteile = createElternteile({ geburtstag });
 
@@ -49,8 +49,8 @@ describe("Elternteile", () => {
     const dateOfBirth = expectedDateOfBirth.minus({ weeks: 6 });
 
     const geburtstag: Geburtstag = {
-      geburt: dateOfBirth.toISO(),
-      errechnet: expectedDateOfBirth.toISO(),
+      geburt: dateOfBirth.toISO() as string,
+      errechnet: expectedDateOfBirth.toISO() as string,
     };
     const elternteile = createElternteile({
       partnerMonate: true,
@@ -64,8 +64,8 @@ describe("Elternteile", () => {
     const dateOfBirth = expectedDateOfBirth.minus({ weeks: 8 });
 
     const geburtstag: Geburtstag = {
-      geburt: dateOfBirth.toISO(),
-      errechnet: expectedDateOfBirth.toISO(),
+      geburt: dateOfBirth.toISO() as string,
+      errechnet: expectedDateOfBirth.toISO() as string,
     };
     const elternteile = createElternteile({ geburtstag });
 
@@ -76,8 +76,8 @@ describe("Elternteile", () => {
     const dateOfBirth = expectedDateOfBirth.minus({ weeks: 12 });
 
     const geburtstag: Geburtstag = {
-      geburt: dateOfBirth.toISO(),
-      errechnet: expectedDateOfBirth.toISO(),
+      geburt: dateOfBirth.toISO() as string,
+      errechnet: expectedDateOfBirth.toISO() as string,
     };
     const elternteile = createElternteile({ geburtstag });
 
@@ -88,8 +88,8 @@ describe("Elternteile", () => {
     const dateOfBirth = expectedDateOfBirth.minus({ weeks: 16 });
 
     const geburtstag: Geburtstag = {
-      geburt: dateOfBirth.toISO(),
-      errechnet: expectedDateOfBirth.toISO(),
+      geburt: dateOfBirth.toISO() as string,
+      errechnet: expectedDateOfBirth.toISO() as string,
     };
     const elternteile = createElternteile({ geburtstag });
 

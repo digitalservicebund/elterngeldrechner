@@ -5,8 +5,8 @@ import { getPartnerMonateSettings } from "./elternteile-setting";
 describe("Elternteile-Setting", () => {
   const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");
   const geburtstag: Geburtstag = {
-    geburt: expectedDateOfBirth.toISO(),
-    errechnet: expectedDateOfBirth.toISO(),
+    geburt: expectedDateOfBirth.toISO() as string,
+    errechnet: expectedDateOfBirth.toISO() as string,
   };
 
   it("should not has Partnermonate", () => {

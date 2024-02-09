@@ -107,8 +107,8 @@ describe("Validation", () => {
         const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");
         const dateOfBirth = expectedDateOfBirth.minus({ weeks });
         const geburtstag: Geburtstag = {
-          geburt: dateOfBirth.toISO(),
-          errechnet: expectedDateOfBirth.toISO(),
+          geburt: dateOfBirth.toISO() as string,
+          errechnet: expectedDateOfBirth.toISO() as string,
         };
         let elternteile = createElternteile({ geburtstag });
 
@@ -516,8 +516,8 @@ describe("Validation", () => {
           const monthIndex = lebensmonat - 1;
 
           const geburtstag: Geburtstag = {
-            geburt: dateOfBirth.toISO(),
-            errechnet: expectedDateOfBirth.toISO(),
+            geburt: dateOfBirth.toISO() as string,
+            errechnet: expectedDateOfBirth.toISO() as string,
           };
 
           let elternteile = createElternteile();

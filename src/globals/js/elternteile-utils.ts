@@ -53,7 +53,7 @@ export const createDefaultElternteileSettings = (
       // Pragmatic fix: substract one day of each Mutterschafts Month (just for calculation purpose)
       .plus({ days: numberOfMutterschutzMonths * -1 })
       .toUTC()
-      .toISO({ suppressMilliseconds: true }),
+      .toISO({ suppressMilliseconds: true }) as string,
   };
 
   if (numberOfMutterschutzMonths) {

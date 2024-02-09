@@ -26,8 +26,8 @@ const getLebensmonate = (
     const toDate = fromDate.plus({ months: 1 }).minus({ day: 1 }).endOf("day");
 
     return {
-      from: fromDate.toISO({ includeOffset: false }),
-      to: toDate.toISO({ includeOffset: false }),
+      from: fromDate.toISO({ includeOffset: false }) as string,
+      to: toDate.toISO({ includeOffset: false }) as string,
     };
   });
 };

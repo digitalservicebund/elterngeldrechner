@@ -22,6 +22,7 @@ export const Page: FC<PageProps> = ({ step, children }) => {
           <a
             href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752"
             target="_blank"
+            rel="noreferrer"
           >
             hier
           </a>

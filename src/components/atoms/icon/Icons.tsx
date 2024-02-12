@@ -2,6 +2,10 @@ export const icons: Record<IconNames, JSX.Element> = {
   arrow: (
     <path d="M17.5858 11L13.2929 6.70711L14.7071 5.29289L21.4142 12L14.7071 18.7071L13.2929 17.2929L17.5858 13H3V11H17.5858Z" />
   ),
+  // bell = https://github.com/mui/material-ui/blob/master/packages/mui-icons-material/material-icons/notifications_none_24px.svg
+  bell: (
+    <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z" />
+  ),
   calendar: <path d="M7 0H5V3H1V24H23V3H19V0H17V3H7V0ZM22 10H2V23H22V10Z" />,
   chevronDown: (
     <path d="M11.7071 13.2929L6.41421 8L5 9.41422L11.7071 16.1213L18.4142 9.41421L17 8L11.7071 13.2929Z" />
@@ -60,6 +64,7 @@ export const icons: Record<IconNames, JSX.Element> = {
 
 export type IconNames =
   | "arrow"
+  | "bell"
   | "calendar"
   | "chevronDown"
   | "chevronLeft"

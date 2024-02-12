@@ -21,3 +21,4 @@ export { RechnerResultTable } from "./rechner-result-table";
 export { RechnerResult } from "./rechner-result";
 export { ZusammenfassungUndDatenAllgemein } from "./zusammenfassung-und-daten-allgemein";
 export { ZusammenfassungUndDatenElternteil } from "./zusammenfassung-und-daten-elternteil";
+export { Alert } from "./alert";

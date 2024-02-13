@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import App from "./applications/App";
 import { Provider } from "react-redux";
 import store from "./redux";
@@ -10,17 +10,17 @@ import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 
 document.addEventListener("DOMContentLoaded", function () {
   const rootDiv = document.getElementById(nsp("root"));
-  const elternGeldDigitalWizardUrl =
-    rootDiv?.dataset.elternGeldDigitalWizardUrl;
+  if (!rootDiv) return;
 
-  ReactDOM.render(
+  const elternGeldDigitalWizardUrl = rootDiv.dataset.elternGeldDigitalWizardUrl;
+
+  createRoot(rootDiv).render(
     <React.StrictMode>
       <Provider store={store}>
         <App elternGeldDigitalWizardUrl={elternGeldDigitalWizardUrl} />
       </Provider>
-      <div id="egr-toast" />
+      <div id={nsp("toast")} />
     </React.StrictMode>,
-    rootDiv,
   );
 });
 

@@ -12,7 +12,7 @@ export const preloadedState = {
   },
   stepNachwuchs: {
     anzahlKuenftigerKinder: 1,
-    wahrscheinlichesGeburtsDatum: "01.01.2023",
+    wahrscheinlichesGeburtsDatum: "01.04.2024",
     geschwisterkinder: [
       {
         geburtsdatum: "24.10.2019",
@@ -34,9 +34,11 @@ export const preloadedState = {
       isSelbststaendig: false,
       sozialVersicherungsPflichtig: "YES",
       monatlichesBrutto: "MehrAlsMiniJob",
+      mehrereTaetigkeiten: "NO",
     },
   },
   stepEinkommen: {
+    limitEinkommenUeberschritten: "NO",
     ET1: {
       bruttoEinkommenNichtSelbstaendig: {
         type: "average",

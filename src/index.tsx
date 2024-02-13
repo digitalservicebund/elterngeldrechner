@@ -1,4 +1,4 @@
-import React from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./applications/App";
 import { Provider } from "react-redux";
@@ -15,12 +15,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const elternGeldDigitalWizardUrl = rootDiv.dataset.elternGeldDigitalWizardUrl;
 
   createRoot(rootDiv).render(
-    <React.StrictMode>
+    <StrictMode>
       <Provider store={store}>
         <App elternGeldDigitalWizardUrl={elternGeldDigitalWizardUrl} />
       </Provider>
       <div id={nsp("toast")} />
-    </React.StrictMode>,
+    </StrictMode>,
   );
 });
 

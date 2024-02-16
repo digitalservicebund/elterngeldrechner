@@ -18,13 +18,30 @@ export const Page: FC<PageProps> = ({ step, children }) => {
         <p>
           Für Geburten ab dem 01.04.2024 gibt es neue Regeln für das Elterngeld,
           die die Einkommensgrenze und die Möglichkeit, gleichzeitig Elterngeld
-          zu beziehen, betreffen. Mehr Details dazu finden Sie{" "}
+          zu beziehen, betreffen. Mehr Details dazu finden Sie auf der{" "}
           <a
             href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752"
             target="_blank"
             rel="noreferrer"
           >
-            hier
+            Seite des Bundes-Familienministeriums
+          </a>
+          .
+        </p>
+      ),
+    },
+    "/einkommen": {
+      headline:
+        "Bitte beachten Sie: Die Einkommensgrenze ändert sich für Geburten ab dem 01.04.2024",
+      text: (
+        <p>
+          Mehr Details dazu finden Sie auf der{" "}
+          <a
+            href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Seite des Bundes-Familienministeriums
           </a>
           .
         </p>
@@ -40,7 +57,9 @@ export const Page: FC<PageProps> = ({ step, children }) => {
       <div className={nsp("page__content")}>
         {alert && (
           <div style={{ marginBottom: "2rem" }}>
-            <Alert headline={alert.headline}>{alert.text}</Alert>
+            <Alert box headline={alert.headline}>
+              {alert.text}
+            </Alert>
           </div>
         )}
         <FootNote id={nsp("foot-note-for-required-fields")}>

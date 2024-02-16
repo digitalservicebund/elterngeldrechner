@@ -1,6 +1,7 @@
 import { VFC } from "react";
 import nsp from "../../../globals/js/namespace";
 import { InfoDialog, infoTexts } from "../../molecules/info-dialog";
+import { Alert } from "../../molecules";
 
 export const RechnerCardHeaderBEG: VFC = () => {
   return (
@@ -26,6 +27,22 @@ export const RechnerCardHeaderBEG: VFC = () => {
           </li>
           <li>Alleinerziehende können die Partnermonate auch bekommen</li>
         </ol>
+
+        <div style={{ marginTop: "1rem" }}>
+          <Alert headline="Für Geburten ab dem 01.04.2024 gibt es neue Regelungen für den parallelen Bezug von Basiselterngeld:">
+            <p>
+              Bitte informieren Sie sich auf der{" "}
+              <a
+                href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Seite des Bundes-Familienministeriums
+              </a>
+              .
+            </p>
+          </Alert>
+        </div>
       </div>
     </div>
   );

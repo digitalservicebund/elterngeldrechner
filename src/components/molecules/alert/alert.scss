@@ -5,10 +5,14 @@
   display: flex;
   flex-direction: column;
   gap: px-to-rem(4);
-  padding: px-to-rem($spacer-l) px-to-rem($spacer-xxl);
-  background-color: #e5dfee; // TODO
-  background-color: $color-primary-light;
-  border-radius: px-to-rem(8);
+
+  &--box {
+    padding: px-to-rem($spacer-l) px-to-rem($spacer-xxl);
+    background-color: #e5dfee; // TODO
+    background-color: $color-primary-light;
+    border-radius: px-to-rem(8);
+    max-width: px-to-rem(800);
+  }
 
   &__headline {
     display: flex;
@@ -21,10 +25,13 @@
 
   &__icon {
     flex-shrink: 0;
+    margin-top: px-to-rem(3);
   }
 
   & > p {
-    max-width: 70ch;
+    font-weight: normal !important;
+    line-height: 1.5;
+    padding: 0;
   }
 
   & > p > a {

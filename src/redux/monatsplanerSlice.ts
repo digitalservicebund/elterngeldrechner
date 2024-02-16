@@ -131,12 +131,16 @@ const monatsplanerSlice = createSlice({
           state.mutterschutzElternteil = payload.mutterschaftssleistungenWer;
         }
 
+        const partnerMonate =
+          payload.alleinerziehend === YesNo.YES ||
+          payload.antragstellende === "FuerBeide";
+
         state.settings = {
           // EGR-244 - no conditions to get Partner Monate for only one Elternteil
-          partnerMonate: true,
+          partnerMonate,
         };
         // EGR-244 - no conditions to get Partner Monate for only one Elternteil
-        state.partnerMonate = true;
+        state.partnerMonate = partnerMonate;
         state.elternteile = createElternteile(state.settings);
       },
     );

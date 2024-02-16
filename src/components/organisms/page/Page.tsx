@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { AriaMessage } from "../../atoms";
 import { FormStep } from "../../../utils/formSteps";
 import { Sidebar } from "../sidebar";
@@ -48,6 +48,15 @@ export const Page: FC<PageProps> = ({ step, children }) => {
       ),
     },
   }[step.route];
+
+  // scroll to top on page navigation
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className={nsp("page")}>
       <div className={nsp("page__sidebar")}>

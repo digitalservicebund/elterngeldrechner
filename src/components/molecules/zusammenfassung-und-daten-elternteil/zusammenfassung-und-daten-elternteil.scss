@@ -13,6 +13,7 @@
 .#{nsp("zusammenfassung-und-daten-buttons")} {
   display: flex;
   justify-content: space-between;
+  gap: px-to-rem($spacer);
   margin-top: px-to-rem($spacer-3xl);
 
   &__backwards {

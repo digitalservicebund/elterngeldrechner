@@ -1,7 +1,7 @@
 import { createElternteile } from "./elternteile";
 import { Elternteile, Geburtstag } from "./elternteile-types";
 import { MutterschutzSettings } from "./elternteile-setting";
-import changeMonth from "./change-month";
+import changeMonth, { ChangeMonthSettings } from "./change-month";
 import { DateTime } from "luxon";
 
 describe("Change Month", () => {
@@ -659,6 +659,22 @@ describe("Change Month", () => {
       });
 
       expect(elternteile.ET1.months[4].type).toBe("None");
+    });
+
+    it("should not allow to select any PSB months if partner months are disabled", () => {
+      let anyPSBChangeMonthSettings: ChangeMonthSettings = {
+        elternteil: "ET1",
+        monthIndex: 0,
+        targetType: "PSB",
+      };
+
+      let elternteile = changeMonth(
+        initialElternteile,
+        anyPSBChangeMonthSettings,
+        { partnerMonate: false },
+      );
+
+      expect(elternteile).toStrictEqual(initialElternteile);
     });
   });
 

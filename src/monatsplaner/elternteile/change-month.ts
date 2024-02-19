@@ -78,6 +78,17 @@ const canNotBeChangedDueToUnmodifiablePSB = (
   );
 };
 
+function canNotChangePSBBecauseNoPartnerMonths(
+  { targetType }: ChangeMonthSettings,
+  elternteileSettings?: CreateElternteileSettings,
+): boolean {
+  return (
+    targetType === "PSB" &&
+    !!elternteileSettings &&
+    !getPartnerMonateSettings(elternteileSettings)
+  );
+}
+
 const replaceMonthAtIndex = (
   replacement: Month,
   monthIndex: number,
@@ -112,6 +123,15 @@ const changeMonth = (
   }
 
   if (canNotBeChangedDueToUnmodifiablePSB(changeMonthSettings, elternteile)) {
+    return elternteile;
+  }
+
+  if (
+    canNotChangePSBBecauseNoPartnerMonths(
+      changeMonthSettings,
+      elternteileSettings,
+    )
+  ) {
     return elternteile;
   }
 

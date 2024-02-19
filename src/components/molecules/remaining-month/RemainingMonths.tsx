@@ -17,7 +17,7 @@ export const RemainingMonths: VFC<Props> = ({
 }) => {
   const maxCountBasis = partnerMonate ? 14 : 12;
   const maxCountPlus = partnerMonate ? 28 : 24;
-  const maxCountBonus = 4;
+  const maxCountBonus = partnerMonate ? 4 : 0;
 
   const countBasis = Math.max(0, remainingMonthByType.basiselterngeld);
   const countPlus = Math.max(0, remainingMonthByType.elterngeldplus);
@@ -40,13 +40,15 @@ export const RemainingMonths: VFC<Props> = ({
             maxCount={maxCountPlus}
           ></LabelCounter>
         </div>
-        <div className={nsp("remaining-months__partnerschaftsbonus")}>
-          <LabelCounter
-            label="Bonus"
-            count={countBonus}
-            maxCount={maxCountBonus}
-          ></LabelCounter>
-        </div>
+        {partnerMonate && (
+          <div className={nsp("remaining-months__partnerschaftsbonus")}>
+            <LabelCounter
+              label="Bonus"
+              count={countBonus}
+              maxCount={maxCountBonus}
+            ></LabelCounter>
+          </div>
+        )}
       </div>
       <div className={nsp("remaining-months__visual")}>
         <VisualCounter

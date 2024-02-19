@@ -133,14 +133,16 @@ export const Elternteil: VFC<Props> = ({
           >
             Plus
           </th>
-          <th
-            className={classNames(
-              nsp("elternteil__th"),
-              nsp("elternteil__th--partnerschaftsbonus"),
-            )}
-          >
-            Bonus
-          </th>
+          {partnerMonate && (
+            <th
+              className={classNames(
+                nsp("elternteil__th"),
+                nsp("elternteil__th--partnerschaftsbonus"),
+              )}
+            >
+              Bonus
+            </th>
+          )}
         </tr>
       </thead>
       <tbody>
@@ -200,24 +202,28 @@ export const Elternteil: VFC<Props> = ({
                   </MonatsplanerMonth>
                 )}
             </td>
-            <td>
-              {index >= mutterSchutzMonate &&
-                index >= lowestAllowedPSBIndex &&
-                index <= highestAllowedPSBIndex && (
-                  <MonatsplanerMonth
-                    isSelected={elternteil.months[index].type === "PSB"}
-                    isHighlighted={automaticallySelectedPSBMonthIndex === index}
-                    label={getLabel(index, "Partnerschaftsbonus")}
-                    elterngeldType="PSB"
-                    onToggle={() => onToggleMonth("PSB", index)}
-                    onDragOver={() => onDragOverMonth("PSB", index)}
-                    onMouseOver={() => setHoverPSBIndex(index)}
-                    onMouseLeave={() => setHoverPSBIndex(null)}
-                  >
-                    {getElterngeldplus(amounts[index])}
-                  </MonatsplanerMonth>
-                )}
-            </td>
+            {partnerMonate && (
+              <td>
+                {index >= mutterSchutzMonate &&
+                  index >= lowestAllowedPSBIndex &&
+                  index <= highestAllowedPSBIndex && (
+                    <MonatsplanerMonth
+                      isSelected={elternteil.months[index].type === "PSB"}
+                      isHighlighted={
+                        automaticallySelectedPSBMonthIndex === index
+                      }
+                      label={getLabel(index, "Partnerschaftsbonus")}
+                      elterngeldType="PSB"
+                      onToggle={() => onToggleMonth("PSB", index)}
+                      onDragOver={() => onDragOverMonth("PSB", index)}
+                      onMouseOver={() => setHoverPSBIndex(index)}
+                      onMouseLeave={() => setHoverPSBIndex(null)}
+                    >
+                      {getElterngeldplus(amounts[index])}
+                    </MonatsplanerMonth>
+                  )}
+              </td>
+            )}
           </tr>
         ))}
       </tbody>

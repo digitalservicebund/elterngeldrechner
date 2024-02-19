@@ -34,6 +34,8 @@ export const VisualCounter: VFC<VisualCounterProps> = ({
     return nsp(className);
   };
 
+  const bonusAvailable = maxCountBonus !== 0;
+
   return (
     <div className={nsp("visual-counter")}>
       <div className={nsp("visual-counter__basisplus")}>
@@ -54,14 +56,16 @@ export const VisualCounter: VFC<VisualCounterProps> = ({
           ))}
         </div>
       </div>
-      <div className={nsp("visual-counter__bonus")}>
-        {arrayOf(maxCountBonus).map((index) => (
-          <div
-            key={index}
-            className={classNameOf("bonus", index, countBonus)}
-          ></div>
-        ))}
-      </div>
+      {bonusAvailable && (
+        <div className={nsp("visual-counter__bonus")}>
+          {arrayOf(maxCountBonus).map((index) => (
+            <div
+              key={index}
+              className={classNameOf("bonus", index, countBonus)}
+            ></div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

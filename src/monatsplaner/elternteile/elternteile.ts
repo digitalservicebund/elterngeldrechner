@@ -52,15 +52,19 @@ export const createElternteile = (
     begAnspruch -= numberOfMutterschutzMonths;
   }
 
+  let partnerschaftsbonus = maxNumberOfPartnerschaftbonus;
+
   if (getPartnerMonateSettings(settings)) {
     begAnspruch = begAnspruch + 2;
+  } else {
+    partnerschaftsbonus = 0;
   }
 
   return {
     remainingMonths: {
       basiselterngeld: begAnspruch,
       elterngeldplus: begAnspruch * 2,
-      partnerschaftsbonus: maxNumberOfPartnerschaftbonus,
+      partnerschaftsbonus,
     },
     ET1: elternteil1,
     ET2: elternteil2,

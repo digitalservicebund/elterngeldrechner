@@ -121,14 +121,12 @@ const monatsplanerSlice = createSlice({
     builder.addCase(
       stepAllgemeineAngabenActions.submitStep,
       (state: MonatsplanerState, { payload }) => {
-        if (
-          payload.antragstellende === "FuerMichSelbst" &&
-          payload.alleinerziehend === YesNo.YES &&
-          payload.mutterschaftssleistungen === YesNo.YES
-        ) {
-          state.mutterschutzElternteil = "ET1";
-        } else if (payload.mutterschaftssleistungen === YesNo.YES) {
-          state.mutterschutzElternteil = payload.mutterschaftssleistungenWer;
+        if (payload.mutterschaftssleistungen === YesNo.YES) {
+          if (payload.antragstellende === "FuerMichSelbst") {
+            state.mutterschutzElternteil = "ET1";
+          } else {
+            state.mutterschutzElternteil = payload.mutterschaftssleistungenWer;
+          }
         }
 
         const partnerMonate =

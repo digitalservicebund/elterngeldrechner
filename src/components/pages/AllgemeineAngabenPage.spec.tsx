@@ -136,6 +136,35 @@ describe("Allgemeine Angaben Page", () => {
         expect(store.getState().monatsplaner).toEqual(expectedState);
       });
 
+      it("does not show selection which parent receives Mutterschaftsleistung if a single applicant receives Mutterschaftsleistungen", async () => {
+        render(<AllgemeineAngabenPage />, { store });
+
+        await userEvent.click(screen.getByLabelText("Nur für mich"));
+        await userEvent.click(
+          screen.getByTestId("mutterschaftssleistungen_option_0"),
+        );
+
+        expect(
+          screen.queryByText(
+            "Welcher Elternteil bezieht Mutterschaftsleistungen?",
+          ),
+        ).not.toBeInTheDocument();
+      });
+
+      it("automatically saves the first parent as Mutterschaftsleistungs receiver if a single applicant receives Mutterschaftsleistung", async () => {
+        render(<AllgemeineAngabenPage />, { store });
+
+        await userEvent.click(screen.getByLabelText("Nur für mich"));
+        await userEvent.click(
+          screen.getByTestId("mutterschaftssleistungen_option_0"),
+        );
+        await userEvent.click(screen.getByText("Weiter"));
+
+        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
+          "ET1",
+        );
+      });
+
       it("gemeinsam erziehend - to Elternteil 1", async () => {
         render(<AllgemeineAngabenPage />, { store });
         const expectedState: MonatsplanerState = {

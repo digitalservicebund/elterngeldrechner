@@ -44,13 +44,16 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
   const { isDirty, dirtyFields } = formState;
 
   const antragstellendeFormValue = watch("antragstellende");
-  const alleinerziehendFormValue = watch("alleinerziehend");
   const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
 
   const mutteschaftsleistungenOptions: RadioOption[] = [
     { value: "ET1", label: watch("pseudonym.ET1") || "Elternteil 1" },
     { value: "ET2", label: watch("pseudonym.ET2") || "Elternteil 2" },
   ];
+
+  const showMutterschaftsleistungsWerGroup =
+    antragstellendeFormValue === "FuerBeide" &&
+    mutterschaftssleistungenFormValue === YesNo.YES;
 
   useEffect(() => {
     handleDirtyForm(isDirty, dirtyFields);
@@ -128,24 +131,20 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
                   required={true}
                 />
               </FormFieldGroup>
-              {(antragstellendeFormValue === "FuerBeide" ||
-                alleinerziehendFormValue === "NO") &&
-              mutterschaftssleistungenFormValue === YesNo.YES ? (
-                <>
-                  <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
-                    <CustomRadio
-                      register={register}
-                      registerOptions={{
-                        required: "Dieses Feld ist erforderlich",
-                      }}
-                      name="mutterschaftssleistungenWer"
-                      options={mutteschaftsleistungenOptions}
-                      errors={formState.errors}
-                      required={true}
-                    />
-                  </FormFieldGroup>
-                </>
-              ) : null}
+              {showMutterschaftsleistungsWerGroup && (
+                <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
+                  <CustomRadio
+                    register={register}
+                    registerOptions={{
+                      required: "Dieses Feld ist erforderlich",
+                    }}
+                    name="mutterschaftssleistungenWer"
+                    options={mutteschaftsleistungenOptions}
+                    errors={formState.errors}
+                    required={true}
+                  />
+                </FormFieldGroup>
+              )}
             </>
           ) : null}
         </>

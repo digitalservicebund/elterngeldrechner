@@ -33,7 +33,7 @@ export const RechnerCardHeaderBEG: VFC = () => {
             <p>
               Bitte informieren Sie sich auf der{" "}
               <a
-                href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752"
+                href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/fragen-und-antworten-zu-neuregelungen-beim-elterngeld-fuer-geburten-ab-1-april-2024-228588"
                 target="_blank"
                 rel="noreferrer"
               >

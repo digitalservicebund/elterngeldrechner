@@ -37,7 +37,7 @@ echo $sprite_url
 wget "${sprite_url}"
 sed --in-place --expression "s#/resource/crblob/.*/sprite-svg-data.svg#sprite-svg-data.svg#" egr.html
 
-# Inject script tags
+# Inject app script tags
 scripts=""
 for filename in *.chunk.js; do
     [ -e "$filename" ] || continue
@@ -47,7 +47,7 @@ done
 scripts="${scripts}<script src=\"$(ls main.*.js)\"></script>"
 sed --in-place --expression "s#<script src=\"chunk1.*\$#$scripts#" egr.html
 
-# Inject stylesheet
+# Inject app stylesheet
 stylesheet=$(ls main.*.css)
 sed --in-place --expression "s#main.*\.css#$stylesheet#" egr.html
 
@@ -55,3 +55,46 @@ sed --in-place --expression "s#main.*\.css#$stylesheet#" egr.html
 sed --in-place --expression "s#window\.initMatomo();#/* tracking disabled */#" egr.html
 
 mv egr.html index.html
+
+# Inject additional css and js
+cat << EOV > inject.js
+(function() {
+  const params = new URL(document.location).searchParams;
+  const toggle = params.get("original");
+  if (toggle === "1") return;
+
+  const el = document.createElement("div");
+  el.innerText = "Testumgebung!";
+  el.className = "ds-preview-warning";
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector("body").appendChild(el);
+    document.querySelectorAll(".header__container, .breadcrumb, .page-title, .contact-flap, .footer").forEach(el => el.classList.add("ds-disable"));
+  });
+}());
+EOV
+
+cat << EOV > inject.css
+.ds-preview-warning {
+  background-color: white;
+  color: red;
+  border: 5px solid red;
+  font-weight: bold;
+  padding: 0.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-disable {
+  opacity: 0.3;
+  filter: grayscale(90%);
+  pointer-events: none;
+}
+EOV
+
+sed --in-place --expression "s#</head>#<link rel=\"stylesheet\" href=\"inject.css\"><script src=\"inject.js\"></script></head>#" index.html

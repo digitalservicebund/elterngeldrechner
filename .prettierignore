@@ -1,3 +1,4 @@
 .prettierignore
+build-preview
 *.ttf
 *.woff

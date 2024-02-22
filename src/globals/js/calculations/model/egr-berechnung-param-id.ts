@@ -107,9 +107,9 @@ export namespace EgrBerechnungParamId {
   /**
    * Max Einkommensgrenze Bezug Elterngeld Alleinerziehende
    */
-  export const MAX_EINKOMMEN_ALLEIN = 250000;
+  export const MAX_EINKOMMEN_ALLEIN = 200_000;
   /**
    * Max Einkommensgrenze Bezug Elterngeld Paare
    */
-  export const MAX_EINKOMMEN_BEIDE = 300000;
+  export const MAX_EINKOMMEN_BEIDE = 200_000;
 }

@@ -108,6 +108,6 @@ export const infoTexts: Record<string, Info> = {
 
   einkommenLimitÜberschritten: {
     id: "info-13",
-    text: "Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 250.000 Euro bei Alleinerziehenden oder 300.000 Euro bei Paaren und getrennt Erziehenden. Bei Alleinerziehenden kommt es auf das alleinige Gesamteinkommen und bei Paaren und getrennt Erziehenden auf das gemeinsame Gesamteinkommen an. Dieses ergibt sich aus Ihrem Steuerbescheid für das Kalenderjahr vor der Geburt.",
+    text: "Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 200.000 Euro. Dieses ergibt sich aus Ihrem Steuerbescheid für das Kalenderjahr vor der Geburt.",
   },
 };

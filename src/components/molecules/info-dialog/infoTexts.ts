@@ -108,6 +108,6 @@ export const infoTexts: Record<string, Info> = {
 
   einkommenLimitÜberschritten: {
     id: "info-13",
-    text: "Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 200.000 Euro. Dieses ergibt sich aus Ihrem Steuerbescheid für das Kalenderjahr vor der Geburt.",
+    text: "Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 200.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid.",
   },
 };

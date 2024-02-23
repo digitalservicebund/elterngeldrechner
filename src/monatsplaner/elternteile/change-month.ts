@@ -3,7 +3,10 @@ import {
   countEGPlusMonths,
   countPSBMonths,
 } from "../month-utils";
-import { maxNumberOfPartnerschaftbonus } from "../configuration";
+import {
+  maxNumberOfPartnerschaftbonus,
+  maxNumberOfSimultaneousBEGMonths,
+} from "../configuration";
 import { getModifiablePSBMonthIndices } from "./modifiable-psb-month";
 import {
   ElterngeldType,
@@ -89,6 +92,45 @@ function canNotChangePSBBecauseNoPartnerMonths(
   );
 }
 
+function getNumberOfSimultanuousBEGMonths(
+  elternteile: Elternteile,
+  lastRelevantMonthIndex: number,
+): number {
+  const typesET1 = elternteile.ET1.months.map(({ type }) => type);
+  const typesET2 = elternteile.ET2.months.map(({ type }) => type);
+  const typePairs = typesET1.map((type, index) => [type, typesET2[index]]);
+  const relevantPairs = typePairs.slice(0, lastRelevantMonthIndex + 1);
+  return relevantPairs.filter(([a, b]) => a === "BEG" && b === "BEG").length;
+}
+
+function canNotChangeBEGBecauseTooManySimultaneousMonths(
+  { targetType, elternteil, monthIndex }: ChangeMonthSettings,
+  elternteile: Elternteile,
+): boolean {
+  const lastRelevantMonthIndex = 11;
+
+  const choosingBEG = targetType === "BEG";
+  const choosingRelevantMonth = monthIndex <= lastRelevantMonthIndex;
+
+  const simultanuousBEGMonths = getNumberOfSimultanuousBEGMonths(
+    elternteile,
+    lastRelevantMonthIndex,
+  );
+  const limitOfSimultanuousBEGMonthsReached =
+    simultanuousBEGMonths === maxNumberOfSimultaneousBEGMonths;
+
+  const otherParent = elternteil === "ET1" ? elternteile.ET2 : elternteile.ET1;
+  const otherParentChoseBEGForSameMonth =
+    otherParent.months[monthIndex].type === "BEG";
+
+  return (
+    choosingBEG &&
+    choosingRelevantMonth &&
+    limitOfSimultanuousBEGMonthsReached &&
+    otherParentChoseBEGForSameMonth
+  );
+}
+
 const replaceMonthAtIndex = (
   replacement: Month,
   monthIndex: number,
@@ -130,6 +172,15 @@ const changeMonth = (
     canNotChangePSBBecauseNoPartnerMonths(
       changeMonthSettings,
       elternteileSettings,
+    )
+  ) {
+    return elternteile;
+  }
+
+  if (
+    canNotChangeBEGBecauseTooManySimultaneousMonths(
+      changeMonthSettings,
+      elternteile,
     )
   ) {
     return elternteile;

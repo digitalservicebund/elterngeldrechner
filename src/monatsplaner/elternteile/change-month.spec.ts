@@ -277,7 +277,7 @@ describe("Change Month", () => {
         elternteile,
         {
           elternteil: "ET2",
-          monthIndex: 2,
+          monthIndex: 3,
           targetType: "BEG",
         },
         { partnerMonate: true, geburtstag },
@@ -761,6 +761,130 @@ describe("Change Month", () => {
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("None");
+    });
+  });
+
+  describe("limited number of simultaneous BEG months", () => {
+    const firstTwelveMonthIndexes = Array.from(Array(12).keys());
+
+    it.each(firstTwelveMonthIndexes)(
+      "is possible to choose a single simultatnous BEG month within the first 12 months (month: '%s')",
+      (monthIndex) => {
+        const commonSettings = {
+          targetType: "BEG",
+          monthIndex,
+        };
+        let elternteile = { ...initialElternteile };
+
+        elternteile = changeMonth(elternteile, {
+          ...commonSettings,
+          elternteil: "ET1",
+        } as ChangeMonthSettings);
+        elternteile = changeMonth(elternteile, {
+          ...commonSettings,
+          elternteil: "ET2",
+        } as ChangeMonthSettings);
+
+        expect(elternteile.ET1.months[monthIndex].type).toBe("BEG");
+        expect(elternteile.ET2.months[monthIndex].type).toBe("BEG");
+      },
+    );
+
+    // [[0, 1], [0, 2], ... [1, 0], [1, 2], ..., [11, 9], [11, 10] ]
+    const pairsOfPossibleMonthCombinations = firstTwelveMonthIndexes.flatMap(
+      (firstMonth) =>
+        firstTwelveMonthIndexes
+          .map((secondMonth) => [firstMonth, secondMonth])
+          .filter(([firstMonth, secondMonth]) => firstMonth !== secondMonth),
+    );
+
+    it.each(pairsOfPossibleMonthCombinations)(
+      "is not possible to select a second simultaneous BEG month within the first 12 months (months '%s' and '%s')",
+      (firstMonth, secondMonth) => {
+        let elternteile = { ...initialElternteile };
+        elternteile = changeMonth(elternteile, {
+          targetType: "BEG",
+          monthIndex: firstMonth,
+          elternteil: "ET1",
+        });
+
+        elternteile = changeMonth(elternteile, {
+          targetType: "BEG",
+          monthIndex: firstMonth,
+          elternteil: "ET2",
+        });
+
+        elternteile = changeMonth(elternteile, {
+          targetType: "BEG",
+          monthIndex: secondMonth,
+          elternteil: "ET1",
+        });
+
+        elternteile = changeMonth(elternteile, {
+          targetType: "BEG",
+          monthIndex: secondMonth,
+          elternteil: "ET2",
+        });
+
+        expect(elternteile.ET1.months[firstMonth].type).toBe("BEG");
+        expect(elternteile.ET2.months[firstMonth].type).toBe("BEG");
+        expect(elternteile.ET1.months[secondMonth].type).toBe("BEG");
+        expect(elternteile.ET2.months[secondMonth].type).not.toBe("BEG");
+      },
+    );
+
+    it("is possible to select more simultaneous months after the twelve month", () => {
+      let elternteile = { ...initialElternteile };
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 0,
+        elternteil: "ET1",
+      });
+
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 0,
+        elternteil: "ET2",
+      });
+
+      // Second month of ET2 to enable additional partner months (to get past
+      // the twelve month)
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 1,
+        elternteil: "ET2",
+      });
+
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 12,
+        elternteil: "ET1",
+      });
+
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 12,
+        elternteil: "ET2",
+      });
+
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 13,
+        elternteil: "ET1",
+      });
+
+      elternteile = changeMonth(elternteile, {
+        targetType: "BEG",
+        monthIndex: 13,
+        elternteil: "ET2",
+      });
+
+      expect(elternteile.ET1.months[0].type).toBe("BEG");
+      expect(elternteile.ET2.months[0].type).toBe("BEG");
+      expect(elternteile.ET1.months[12].type).toBe("BEG");
+      expect(elternteile.ET2.months[12].type).toBe("BEG");
+      expect(elternteile.ET1.months[13].type).toBe("BEG");
+      expect(elternteile.ET2.months[13].type).toBe("BEG");
     });
   });
 });

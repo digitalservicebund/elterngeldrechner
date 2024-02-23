@@ -134,10 +134,8 @@ const monatsplanerSlice = createSlice({
           payload.antragstellende === "FuerBeide";
 
         state.settings = {
-          // EGR-244 - no conditions to get Partner Monate for only one Elternteil
           partnerMonate,
         };
-        // EGR-244 - no conditions to get Partner Monate for only one Elternteil
         state.partnerMonate = partnerMonate;
         state.elternteile = createElternteile(state.settings);
       },

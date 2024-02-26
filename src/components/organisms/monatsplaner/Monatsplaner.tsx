@@ -48,6 +48,7 @@ import { formSteps } from "../../../utils/formSteps";
 import { EgrConst } from "../../../globals/js/egr-configuration";
 import { resetStoreAction } from "../../../redux/resetStoreAction";
 import { YesNo } from "../../../globals/js/calculations/model";
+import { canNotChangeBEGBecauseTooManySimultaneousMonths } from "../../../monatsplaner/elternteile/change-month";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 
@@ -349,6 +350,24 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     dispatch(resetStoreAction());
   };
 
+  function isBEGMonthSelectable(
+    elternteil: ElternteilType,
+    monthIndex: number,
+  ): boolean {
+    const lastPossibleMonthIndex = partnerMonate ? 13 : 11;
+    const isInValidRange = monthIndex <= lastPossibleMonthIndex;
+    const moreMonthsAvailable = elternteile.remainingMonths.basiselterngeld > 0;
+    const blockedBySimulataneousMonth =
+      canNotChangeBEGBecauseTooManySimultaneousMonths(
+        { targetType: "BEG", elternteil, monthIndex },
+        elternteile,
+      );
+
+    return (
+      moreMonthsAvailable && isInValidRange && !blockedBySimulataneousMonth
+    );
+  }
+
   return (
     <>
       <div
@@ -393,6 +412,9 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
               onDragOverMonth={(columnType, monthIndex) =>
                 handleDragOver("ET1", columnType, monthIndex)
               }
+              isBEGMonthSelectable={(monthIndex: number) =>
+                isBEGMonthSelectable("ET1", monthIndex)
+              }
               lebensmonate={lebensmonate.slice(0, lebensmonateVisibleLength)}
               amounts={amountElterngeldRowsET1}
               hasMutterschutz={mutterschutzElternteil === "ET1"}
@@ -412,6 +434,9 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
                 }
                 onDragOverMonth={(columnType, monthIndex) =>
                   handleDragOver("ET2", columnType, monthIndex)
+                }
+                isBEGMonthSelectable={(monthIndex: number) =>
+                  isBEGMonthSelectable("ET2", monthIndex)
                 }
                 lebensmonate={lebensmonate.slice(0, lebensmonateVisibleLength)}
                 amounts={amountElterngeldRowsET2}

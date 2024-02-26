@@ -504,6 +504,74 @@ describe("Monatsplaner", () => {
     }
   });
 
+  describe("simultaneous BEG selection", () => {
+    const elternteile = createElternteile(defaultElternteileSettings);
+    (elternteile.ET1.months[0] as any) = { type: "BEG" };
+    (elternteile.ET2.months[0] as any) = { type: "BEG" };
+    const stateWithSingleSimultaneousBEGMonth: Partial<RootState> = {
+      monatsplaner: {
+        ...initialMonatsplanerState,
+        elternteile,
+      },
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+      },
+    };
+
+    // TODO: Use this across whole file to simplify test code.
+    function getElternteil1BEGMonth(monthIndex: number): HTMLElement {
+      const labelText = getElternteilBEGLabel("Elternteil 1", monthIndex);
+      return screen.getByLabelText(labelText);
+    }
+
+    function getElternteil2BEGMonth(monthIndex: number): HTMLElement {
+      const labelText = getElternteilBEGLabel("Elternteil 2", monthIndex);
+      return screen.getByLabelText(labelText);
+    }
+
+    function queryElternteil1BEGMonth(monthIndex: number): HTMLElement | null {
+      const labelText = getElternteilBEGLabel("Elternteil 1", monthIndex);
+      return screen.queryByLabelText(labelText);
+    }
+
+    function queryElternteil2BEGMonth(monthIndex: number): HTMLElement | null {
+      const labelText = getElternteilBEGLabel("Elternteil 2", monthIndex);
+      return screen.queryByLabelText(labelText);
+    }
+
+    it("having a simultaneous BEG month, further BEG selections disable the BEG month of the other parent", async () => {
+      render(<Monatsplaner mutterSchutzMonate={0} />, {
+        preloadedState: stateWithSingleSimultaneousBEGMonth,
+      });
+
+      await userEvent.click(getElternteil1BEGMonth(3));
+      await userEvent.click(getElternteil2BEGMonth(11));
+
+      expect(queryElternteil2BEGMonth(3)).not.toBeInTheDocument();
+      expect(queryElternteil1BEGMonth(11)).not.toBeInTheDocument();
+    });
+
+    it("having a simultaneous BEG month, no BEG months get disabled after the 12 month", async () => {
+      const preloadedState = { ...stateWithSingleSimultaneousBEGMonth };
+      preloadedState.monatsplaner!.settings = {
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+
+      // Activate additional months by second partner BEG month.
+      await userEvent.click(getElternteil1BEGMonth(3));
+
+      await userEvent.click(getElternteil1BEGMonth(12));
+      await userEvent.click(getElternteil2BEGMonth(13));
+
+      expect(queryElternteil2BEGMonth(12)).toBeInTheDocument();
+      expect(queryElternteil1BEGMonth(13)).toBeInTheDocument();
+    });
+  });
+
   describe("PSB selection", () => {
     it("should not show a notification if PSB is selected and if there is only one Elternteil", async () => {
       render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });

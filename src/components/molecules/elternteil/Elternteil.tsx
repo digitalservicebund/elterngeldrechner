@@ -29,6 +29,7 @@ interface Props {
   elternteilName: string;
   onToggleMonth: (columnType: ColumnType, monthIndex: number) => void;
   onDragOverMonth: (columnType: ColumnType, monthIndex: number) => void;
+  isBEGMonthSelectable: (index: number) => boolean;
   amounts: AmountElterngeldRow[];
   hasMutterschutz: boolean;
   mutterSchutzMonate: number;
@@ -46,6 +47,7 @@ export const Elternteil: VFC<Props> = ({
   elternteilName,
   onToggleMonth,
   onDragOverMonth,
+  isBEGMonthSelectable,
   amounts,
   hasMutterschutz,
   mutterSchutzMonate,
@@ -56,8 +58,6 @@ export const Elternteil: VFC<Props> = ({
   partnerMonate,
 }) => {
   const [hoverPSBIndex, setHoverPSBIndex] = useState<number | null>(null);
-
-  const begLebensmonateVisibleLength = partnerMonate ? 14 : 12;
 
   const allPSBIndices = [
     ...selectablePSBMonths.selectableIndices,
@@ -92,6 +92,12 @@ export const Elternteil: VFC<Props> = ({
     }
     return roundAndFormatMoney(row.amountElterngeldPlus);
   };
+
+  function isBEGCellVisible(index: number): boolean {
+    const isAlreadySelected = elternteil.months[index].type === "BEG";
+    const isSelectable = isBEGMonthSelectable(index);
+    return isAlreadySelected || isSelectable;
+  }
 
   return (
     <table className={classNames(nsp("elternteil"), className)}>
@@ -169,23 +175,21 @@ export const Elternteil: VFC<Props> = ({
               </div>
             </td>
             <td>
-              {index < begLebensmonateVisibleLength &&
-                (remainingMonths.basiselterngeld > 0 ||
-                  elternteil.months[index].type === "BEG") && (
-                  <MonatsplanerMonth
-                    isSelected={elternteil.months[index].type === "BEG"}
-                    label={getLabel(index, "Basiselterngeld")}
-                    elterngeldType="BEG"
-                    onToggle={() => onToggleMonth("BEG", index)}
-                    onDragOver={() => onDragOverMonth("BEG", index)}
-                    isMutterschutzMonth={
-                      elternteil.months[index].isMutterschutzMonth
-                    }
-                    isElternteilOne={isElternteilOne}
-                  >
-                    {getBasiselterngeld(amounts[index])}
-                  </MonatsplanerMonth>
-                )}
+              {isBEGCellVisible(index) && (
+                <MonatsplanerMonth
+                  isSelected={elternteil.months[index].type === "BEG"}
+                  label={getLabel(index, "Basiselterngeld")}
+                  elterngeldType="BEG"
+                  onToggle={() => onToggleMonth("BEG", index)}
+                  onDragOver={() => onDragOverMonth("BEG", index)}
+                  isMutterschutzMonth={
+                    elternteil.months[index].isMutterschutzMonth
+                  }
+                  isElternteilOne={isElternteilOne}
+                >
+                  {getBasiselterngeld(amounts[index])}
+                </MonatsplanerMonth>
+              )}
             </td>
             <td>
               {(!hasMutterschutz || index >= mutterSchutzMonate) &&

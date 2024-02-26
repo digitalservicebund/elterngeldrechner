@@ -103,7 +103,7 @@ function getNumberOfSimultanuousBEGMonths(
   return relevantPairs.filter(([a, b]) => a === "BEG" && b === "BEG").length;
 }
 
-function canNotChangeBEGBecauseTooManySimultaneousMonths(
+export function canNotChangeBEGBecauseTooManySimultaneousMonths(
   { targetType, elternteil, monthIndex }: ChangeMonthSettings,
   elternteile: Elternteile,
 ): boolean {

@@ -574,6 +574,37 @@ describe("Monatsplaner", () => {
       expect(queryElternteil2BEGMonth(12)).toBeInTheDocument();
       expect(queryElternteil1BEGMonth(13)).toBeInTheDocument();
     });
+    it("having a simultaneous BEG month, further BEG selections do not disable the BEG month of the other parent if multiple kids are expected", async () => {
+      const preloadedState = { ...stateWithSingleSimultaneousBEGMonth };
+      preloadedState.monatsplaner!.settings = {
+        mehrlinge: true,
+        behindertesGeschwisterkind: false,
+        partnerMonate: false,
+      };
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+
+      await userEvent.click(getElternteil1BEGMonth(3));
+      await userEvent.click(getElternteil2BEGMonth(11));
+
+      expect(queryElternteil2BEGMonth(3)).toBeInTheDocument();
+      expect(queryElternteil1BEGMonth(11)).toBeInTheDocument();
+    });
+
+    it("having a simultaneous BEG month, further BEG selections do not disable the BEG month of the other parent if there is a disabled sibling", async () => {
+      const preloadedState = { ...stateWithSingleSimultaneousBEGMonth };
+      preloadedState.monatsplaner!.settings = {
+        behindertesGeschwisterkind: true,
+        mehrlinge: false,
+        partnerMonate: false,
+      };
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+
+      await userEvent.click(getElternteil1BEGMonth(3));
+      await userEvent.click(getElternteil2BEGMonth(11));
+
+      expect(queryElternteil2BEGMonth(3)).toBeInTheDocument();
+      expect(queryElternteil1BEGMonth(11)).toBeInTheDocument();
+    });
   });
 
   describe("PSB selection", () => {

@@ -150,6 +150,10 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     (state) => state.stepAllgemeineAngaben.alleinerziehend,
   );
 
+  const elternteileSettings = useAppSelector(
+    (state) => state.monatsplaner.settings,
+  );
+
   const [notificationMessages, setNotificationMessages] = useState<
     ReactNode[] | null
   >(null);
@@ -361,6 +365,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
       canNotChangeBEGBecauseTooManySimultaneousMonths(
         { targetType: "BEG", elternteil, monthIndex },
         elternteile,
+        elternteileSettings,
       );
 
     return (

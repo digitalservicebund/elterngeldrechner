@@ -7,6 +7,8 @@ import { DateTime } from "luxon";
 describe("Change Month", () => {
   const initialElternteile = createElternteile();
   const initialElternteileWithPartnerMonate = createElternteile({
+    mehrlinge: false,
+    behindertesGeschwisterkind: false,
     partnerMonate: true,
   });
 
@@ -89,6 +91,11 @@ describe("Change Month", () => {
 
   describe("Partnermonat", () => {
     it("should increase the allowed BEG months to 14 if partnerMonate are true", () => {
+      const elternteileSettings = {
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
       let elternteile: Elternteile = initialElternteileWithPartnerMonate;
 
       elternteile = changeMonth(
@@ -98,7 +105,7 @@ describe("Change Month", () => {
           monthIndex: 1,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -107,7 +114,7 @@ describe("Change Month", () => {
           monthIndex: 2,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       elternteile = changeMonth(
@@ -117,7 +124,7 @@ describe("Change Month", () => {
           monthIndex: 2,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -126,14 +133,11 @@ describe("Change Month", () => {
           monthIndex: 3,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       // 14 month minus 4 month already taken
-      const expectedRemainingBEG = 10;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(
-        expectedRemainingBEG,
-      );
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(10);
     });
 
     it("should not increase the allowed BEG months to 14 if partnerMonate are false", () => {
@@ -162,13 +166,15 @@ describe("Change Month", () => {
       });
 
       // 12 month minus 4 month already taken
-      const expectedRemainingBEG = 8;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(
-        expectedRemainingBEG,
-      );
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(8);
     });
 
     it("should still have Partnermonate after setting one month to none", () => {
+      const elternteileSettings = {
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
       let elternteile: Elternteile = initialElternteileWithPartnerMonate;
 
       elternteile = changeMonth(
@@ -178,7 +184,7 @@ describe("Change Month", () => {
           monthIndex: 1,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -187,7 +193,7 @@ describe("Change Month", () => {
           monthIndex: 2,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       elternteile = changeMonth(
@@ -197,7 +203,7 @@ describe("Change Month", () => {
           monthIndex: 2,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -206,7 +212,7 @@ describe("Change Month", () => {
           monthIndex: 3,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -215,7 +221,7 @@ describe("Change Month", () => {
           monthIndex: 4,
           targetType: "BEG",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       // change a month back to None
@@ -226,14 +232,11 @@ describe("Change Month", () => {
           monthIndex: 4,
           targetType: "None",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       // 14 month minus 4 month already taken
-      const expectedRemainingBEG = 10;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(
-        expectedRemainingBEG,
-      );
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(10);
     });
 
     it("should increase the BEG months by two if both Elternteile choose BEG and they have a Frühchen", () => {
@@ -244,6 +247,12 @@ describe("Change Month", () => {
         geburt: dateOfBirth.toISO() as string,
         errechnet: expectedDateOfBirth.toISO() as string,
       };
+      const elternteileSettings = {
+        partnerMonate: true,
+        geburtstag,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
 
       elternteile = changeMonth(
         elternteile,
@@ -252,7 +261,7 @@ describe("Change Month", () => {
           monthIndex: 1,
           targetType: "BEG",
         },
-        { partnerMonate: true, geburtstag },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -261,7 +270,7 @@ describe("Change Month", () => {
           monthIndex: 2,
           targetType: "BEG",
         },
-        { partnerMonate: true, geburtstag },
+        elternteileSettings,
       );
 
       elternteile = changeMonth(
@@ -271,7 +280,7 @@ describe("Change Month", () => {
           monthIndex: 1,
           targetType: "BEG",
         },
-        { partnerMonate: true, geburtstag },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -280,14 +289,11 @@ describe("Change Month", () => {
           monthIndex: 3,
           targetType: "BEG",
         },
-        { partnerMonate: true, geburtstag },
+        elternteileSettings,
       );
 
       //15 month minus 4 month already taken
-      const expectedRemainingBEG = 11;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(
-        expectedRemainingBEG,
-      );
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(11);
     });
   });
 
@@ -317,6 +323,8 @@ describe("Change Month", () => {
               geburt: dateOfBirth.toISO() as string,
               errechnet: expectedDateOfBirth.toISO() as string,
             },
+            mehrlinge: false,
+            behindertesGeschwisterkind: false,
           },
         );
 
@@ -405,7 +413,13 @@ describe("Change Month", () => {
     });
 
     it("should allow double the amount of Partnermonate (4 months) if the other Elternteil also has some months selected", () => {
+      const elternteileSettings = {
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
       let elternteile = initialElternteileWithPartnerMonate;
+
       elternteile = changeMonth(
         elternteile,
         {
@@ -413,7 +427,7 @@ describe("Change Month", () => {
           monthIndex: 0,
           targetType: "EG+",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -422,7 +436,7 @@ describe("Change Month", () => {
           monthIndex: 1,
           targetType: "EG+",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -431,7 +445,7 @@ describe("Change Month", () => {
           monthIndex: 0,
           targetType: "EG+",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
       elternteile = changeMonth(
         elternteile,
@@ -440,12 +454,11 @@ describe("Change Month", () => {
           monthIndex: 1,
           targetType: "EG+",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       // double 14 BEG month - 4 month EG+
-      const expectedEGPlus = 24;
-      expect(elternteile.remainingMonths.elterngeldplus).toBe(expectedEGPlus);
+      expect(elternteile.remainingMonths.elterngeldplus).toBe(24);
     });
   });
 
@@ -671,7 +684,11 @@ describe("Change Month", () => {
       let elternteile = changeMonth(
         initialElternteile,
         anyPSBChangeMonthSettings,
-        { partnerMonate: false },
+        {
+          partnerMonate: false,
+          mehrlinge: false,
+          behindertesGeschwisterkind: false,
+        },
       );
 
       expect(elternteile).toStrictEqual(initialElternteile);
@@ -691,11 +708,13 @@ describe("Change Month", () => {
         .toISO() as string,
       elternteil: "ET1",
     };
-
-    const elternteileWithMutterschutz = createElternteile({
+    const elternteileSettings = {
       geburtstag,
       mutterschutz,
-    });
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    };
+    const elternteileWithMutterschutz = createElternteile(elternteileSettings);
 
     it("should not deselect the Mutterschutz months", () => {
       let elternteile = elternteileWithMutterschutz;
@@ -711,7 +730,7 @@ describe("Change Month", () => {
             targetType: "None",
             elternteil: mutterschutz.elternteil,
           },
-          { geburtstag, mutterschutz },
+          elternteileSettings,
         );
       }
 
@@ -728,7 +747,7 @@ describe("Change Month", () => {
           targetType: "EG+",
           elternteil: mutterschutz.elternteil,
         },
-        { geburtstag, mutterschutz },
+        elternteileSettings,
       );
 
       expect(elternteile.ET1.months[3].type).toBe("EG+");
@@ -742,7 +761,7 @@ describe("Change Month", () => {
           targetType: "EG+",
           elternteil: "ET2",
         },
-        { geburtstag, mutterschutz },
+        elternteileSettings,
       );
 
       expect(elternteile.ET2.months[0].type).toBe("EG+");
@@ -756,7 +775,7 @@ describe("Change Month", () => {
           targetType: "PSB",
           elternteil: "ET2",
         },
-        { geburtstag, mutterschutz },
+        elternteileSettings,
       );
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
@@ -832,6 +851,118 @@ describe("Change Month", () => {
         expect(elternteile.ET2.months[secondMonth].type).not.toBe("BEG");
       },
     );
+
+    it("is possible to select more than one simultaneous BEG months within the first 12 months if multiple kids are expected", () => {
+      const elternteileSettings = {
+        mehrlinge: true,
+        behindertesGeschwisterkind: false,
+        partnerMonate: false,
+      };
+
+      let elternteile = { ...initialElternteile };
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 0,
+          elternteil: "ET1",
+        },
+        elternteileSettings,
+      );
+
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 0,
+          elternteil: "ET2",
+        },
+        elternteileSettings,
+      );
+
+      // Second month of ET2 to enable additional partner months (to get past
+      // the twelve month)
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 1,
+          elternteil: "ET1",
+        },
+        elternteileSettings,
+      );
+
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 1,
+          elternteil: "ET2",
+        },
+        elternteileSettings,
+      );
+
+      expect(elternteile.ET1.months[0].type).toBe("BEG");
+      expect(elternteile.ET2.months[0].type).toBe("BEG");
+      expect(elternteile.ET1.months[1].type).toBe("BEG");
+      expect(elternteile.ET2.months[1].type).toBe("BEG");
+    });
+
+    it("is possible to select more than one simultaneous BEG months within the first 12 months if there is a disabled sibling", () => {
+      const elternteileSettings = {
+        mehrlinge: false,
+        behindertesGeschwisterkind: true,
+        partnerMonate: false,
+      };
+
+      let elternteile = { ...initialElternteile };
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 0,
+          elternteil: "ET1",
+        },
+        elternteileSettings,
+      );
+
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 0,
+          elternteil: "ET2",
+        },
+        elternteileSettings,
+      );
+
+      // Second month of ET2 to enable additional partner months (to get past
+      // the twelve month)
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 1,
+          elternteil: "ET1",
+        },
+        elternteileSettings,
+      );
+
+      elternteile = changeMonth(
+        elternteile,
+        {
+          targetType: "BEG",
+          monthIndex: 1,
+          elternteil: "ET2",
+        },
+        elternteileSettings,
+      );
+
+      expect(elternteile.ET1.months[0].type).toBe("BEG");
+      expect(elternteile.ET2.months[0].type).toBe("BEG");
+      expect(elternteile.ET1.months[1].type).toBe("BEG");
+      expect(elternteile.ET2.months[1].type).toBe("BEG");
+    });
 
     it("is possible to select more simultaneous months after the twelve month", () => {
       let elternteile = { ...initialElternteile };

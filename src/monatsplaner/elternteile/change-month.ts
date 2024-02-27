@@ -91,6 +91,16 @@ function canNotChangePSBBecauseNoPartnerMonths(
     !getPartnerMonateSettings(elternteileSettings)
   );
 }
+function isExceptionToSimulatenousMonthRestrictions(
+  elternteileSettings?: CreateElternteileSettings,
+): boolean {
+  if (elternteileSettings) {
+    const { mehrlinge, behindertesGeschwisterkind } = elternteileSettings;
+    return mehrlinge || behindertesGeschwisterkind;
+  } else {
+    return false;
+  }
+}
 
 function getNumberOfSimultanuousBEGMonths(
   elternteile: Elternteile,
@@ -106,7 +116,12 @@ function getNumberOfSimultanuousBEGMonths(
 export function canNotChangeBEGBecauseTooManySimultaneousMonths(
   { targetType, elternteil, monthIndex }: ChangeMonthSettings,
   elternteile: Elternteile,
+  elternteileSettings?: CreateElternteileSettings,
 ): boolean {
+  if (isExceptionToSimulatenousMonthRestrictions(elternteileSettings)) {
+    return false;
+  }
+
   const lastRelevantMonthIndex = 11;
 
   const choosingBEG = targetType === "BEG";
@@ -181,6 +196,7 @@ const changeMonth = (
     canNotChangeBEGBecauseTooManySimultaneousMonths(
       changeMonthSettings,
       elternteile,
+      elternteileSettings,
     )
   ) {
     return elternteile;

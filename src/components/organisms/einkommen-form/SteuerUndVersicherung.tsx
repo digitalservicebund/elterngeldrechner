@@ -36,6 +36,7 @@ const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [
 
 const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
   { value: "", label: "Bitte wählen" },
+  { value: KinderFreiBetrag.ZKF0, label: "0" },
   { value: KinderFreiBetrag.ZKF0_5, label: "0,5" },
   { value: KinderFreiBetrag.ZKF1, label: "1,0" },
   { value: KinderFreiBetrag.ZKF1_5, label: "1,5" },

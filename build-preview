@@ -90,6 +90,12 @@ cat << EOV > inject.css
   justify-content: center;
 }
 
+@media print {
+  .ds-preview-warning {
+    display: none;
+  }
+}
+
 .ds-disable {
   opacity: 0.3;
   filter: grayscale(90%);

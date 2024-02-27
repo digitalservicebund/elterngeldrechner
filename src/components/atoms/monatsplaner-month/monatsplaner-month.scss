@@ -19,6 +19,10 @@
 
   &__checkbox:checked + label {
     text-decoration: none;
+
+    @media print {
+      border: 1px solid black;
+    }
   }
 
   &:focus-within {
@@ -30,18 +34,24 @@
   }
 
   &--beg > &__checkbox:checked + label {
-    color: $monatsplaner-month--beg--contrast-color;
-    background-color: $monatsplaner-month--beg--color;
+    @media only screen {
+      color: $monatsplaner-month--beg--contrast-color;
+      background-color: $monatsplaner-month--beg--color;
+    }
   }
 
   &--egplus > &__checkbox:checked + label {
-    color: $monatsplaner-month--egplus--contrast-color;
-    background-color: $monatsplaner-month--egplus--color;
+    @media only screen {
+      color: $monatsplaner-month--egplus--contrast-color;
+      background-color: $monatsplaner-month--egplus--color;
+    }
   }
 
   &--psb > &__checkbox:checked + label {
-    color: $monatsplaner-month--psb--contrast-color;
-    background-color: $monatsplaner-month--psb--color;
+    @media only screen {
+      color: $monatsplaner-month--psb--contrast-color;
+      background-color: $monatsplaner-month--psb--color;
+    }
   }
 
   // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
@@ -71,11 +81,15 @@
 
   &--psb#{&}--highlighted > label {
     text-decoration: none;
-    color: $monatsplaner-month--psb--contrast-color;
-    background-color: $monatsplaner-month--psb--color;
+    @media only screen {
+      color: $monatsplaner-month--psb--contrast-color;
+      background-color: $monatsplaner-month--psb--color;
+    }
   }
 
   &--selected {
-    background-color: $monatsplaner-month--selected--color;
+    @media only screen {
+      background-color: $monatsplaner-month--selected--color;
+    }
   }
 }

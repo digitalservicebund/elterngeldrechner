@@ -1,5 +1,12 @@
 @use "monatsplaner.variables" as *;
 
+// Familienportal header
+.header {
+  @media print {
+    display: none;
+  }
+}
+
 .#{nsp("monatsplaner")} {
   position: relative;
   display: flex;
@@ -80,6 +87,10 @@
 
     @media only screen and (max-width: $breakpoint-desktop) {
       flex-direction: column-reverse;
+    }
+
+    @media print {
+      display: none;
     }
 
     &-backwards {

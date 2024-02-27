@@ -16,10 +16,11 @@ This App is implemented from a custom [Create React App](https://create-react-ap
 ## 1. What's included
 
 The following things are included:
+
 - TypeScript support (see also [Getting Started with TypeScript and React](https://create-react-app.dev/docs/adding-typescript/#getting-started-with-typescript-and-react))
 - SCSS support (see also [Adding a Sass Stylesheet](https://create-react-app.dev/docs/adding-a-sass-stylesheet/))
 - [\]init\['s eslint rules](https://wim.init.de/display/TC/Frontend+Linter+und+Richtlinien#FrontendLinterundRichtlinien-Javascript)
-- [\]init\['s stylelint rules](https://wim.init.de/display/TC/Frontend+Linter+und+Richtlinien#FrontendLinterundRichtlinien-(s)CSS)
+- [\]init\['s stylelint rules](<https://wim.init.de/display/TC/Frontend+Linter+und+Richtlinien#FrontendLinterundRichtlinien-(s)CSS>)
 - The recommended ]init[ frontend [editorconfig](https://wim.init.de/display/TC/Frontend+Linter+und+Richtlinien#FrontendLinterundRichtlinien-.editorconfig)
 - [\]init\['s prettier rules](https://wim.init.de/display/TC/Frontend+Linter+und+Richtlinien#FrontendLinterundRichtlinien-Prettier) that work together with eslint, editorconfic and stylelint
 - Separate package.json scripts for these tools
@@ -31,7 +32,7 @@ The following things are included:
 - Easily enforces certain node/npm versions and encourages to use the latest [LTS version](https://nodejs.org/en/about/releases/)
 - Uses [\]init\['s Atomic Design](https://wim.init.de/display/FT/Setup+Project+-+Atomic+Design) structure (as far as it makes sense for React)
 - Follows and enforces the [\]init\['s BEM guidelines](https://wim.init.de/pages/viewpage.action?pageId=64951753) using SCSS
-- [React Hook Form](https://react-hook-form.com/) for form handling and form validation. **It is important to implement uncontrolled React Form Components as far as possible to keep the Apps simplicity**. Redux stores the form values step by step on form submit in its store. These values will populate the components *Default Values* (see [Uncontrolled Components](https://reactjs.org/docs/uncontrolled-components.html) and [useForm API from React Hook Form](https://react-hook-form.com/api/useform)).
+- [React Hook Form](https://react-hook-form.com/) for form handling and form validation. **It is important to implement uncontrolled React Form Components as far as possible to keep the Apps simplicity**. Redux stores the form values step by step on form submit in its store. These values will populate the components _Default Values_ (see [Uncontrolled Components](https://reactjs.org/docs/uncontrolled-components.html) and [useForm API from React Hook Form](https://react-hook-form.com/api/useform)).
 - [React Router](https://reactrouter.com/docs/en/v6) for the individual form steps wich will be lazy loaded. Because the App should not take over the browser navigation, the router is implemented as a [Memory Router](https://reactrouter.com/docs/en/v6/api#memoryrouter).
 
 ## 2. Things to know
@@ -82,16 +83,24 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 There are further small scripts for formatting, linting or testing. Please see the `scripts` section in the `package.json` for details.
 
+#### 2.3.5. Preview locally including Familienportal wrapper
+
+```sh
+npm run build && ./build-preview  && npx http-server ./tmp_preview/
+```
+
 ## 3. App-Parameter
+
 ### 3.1. ElterngeldDigital Wizard URL
 
 EG data will be sent to the configurable url. The url must be set on the root div:
+
 ```
 <div id="egr-root" data-eltern-geld-digital-wizard-url="https://egeld-digital.dev.init/wizardFrontServlet?_m=Elterngeld"></div>
 ```
 
 Current urls are:
+
 - DEV: `https://egeld-digital.dev.init/wizardFrontServlet?_m=Elterngeld`
 - STAGE: `https://www-eao.init-ag.de/wizardFrontServlet?_m=Elterngeld`
 - PROD: `https://www.elterngeld-digital.de/wizardFrontServlet?_m=Elterngeld`
-

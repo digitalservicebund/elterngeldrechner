@@ -48,7 +48,12 @@ import { formSteps } from "../../../utils/formSteps";
 import { EgrConst } from "../../../globals/js/egr-configuration";
 import { resetStoreAction } from "../../../redux/resetStoreAction";
 import { YesNo } from "../../../globals/js/calculations/model";
-import { canNotChangeBEGBecauseTooManySimultaneousMonths } from "../../../monatsplaner/elternteile/change-month";
+import {
+  canNotChangeBEGBecauseTooManySimultaneousMonths,
+  getNumberOfSimultanuousBEGMonthsInFirstTwelveMonths,
+  isExceptionToSimulatenousMonthRestrictions,
+} from "../../../monatsplaner/elternteile/change-month";
+import { NotificationMaxSimultaneousBEGMonths } from "../../atoms/notification/NotificationMaxSimultaneousBEGMonths";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 
@@ -252,6 +257,10 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     alleinerziehend,
   ]);
 
+  useEffect(() => {
+    // TODO
+  }, []);
+
   const {
     highestAllowedDeselectablePSBIndex,
     lowestAllowedDeselectablePSBIndex,
@@ -372,6 +381,19 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
       moreMonthsAvailable && isInValidRange && !blockedBySimulataneousMonth
     );
   }
+
+  useEffect(() => {
+    const simultaneousMonths =
+      getNumberOfSimultanuousBEGMonthsInFirstTwelveMonths(elternteile);
+
+    const isException =
+      isExceptionToSimulatenousMonthRestrictions(elternteileSettings);
+
+    const showNotification = simultaneousMonths === 1 && !isException;
+
+    if (showNotification)
+      setNotificationMessages([<NotificationMaxSimultaneousBEGMonths />]);
+  }, [elternteile, elternteileSettings]);
 
   return (
     <>

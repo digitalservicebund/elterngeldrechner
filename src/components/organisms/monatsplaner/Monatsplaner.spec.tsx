@@ -509,14 +509,7 @@ describe("Monatsplaner", () => {
   });
 
   describe("simultaneous BEG selection", () => {
-    const elternteile = createElternteile(defaultElternteileSettings);
-    (elternteile.ET1.months[0] as any) = { type: "BEG" };
-    (elternteile.ET2.months[0] as any) = { type: "BEG" };
-    const stateWithSingleSimultaneousBEGMonth: Partial<RootState> = {
-      monatsplaner: {
-        ...initialMonatsplanerState,
-        elternteile,
-      },
+    const preloadedState: Partial<RootState> = {
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
         antragstellende: "FuerBeide",
@@ -544,10 +537,14 @@ describe("Monatsplaner", () => {
       return screen.queryByLabelText(labelText);
     }
 
-    it("having a simultaneous BEG month, further BEG selections disable the BEG month of the other parent", async () => {
-      render(<Monatsplaner mutterSchutzMonate={0} />, {
-        preloadedState: stateWithSingleSimultaneousBEGMonth,
-      });
+    async function selectSimultaneousBEGMonth(monthIndex: number) {
+      await userEvent.click(getElternteil1BEGMonth(monthIndex));
+      await userEvent.click(getElternteil2BEGMonth(monthIndex));
+    }
+
+    it("should disable the same BEG month of the other parent when selecting BEG months after the first simultaneous one", async () => {
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+      await selectSimultaneousBEGMonth(0);
 
       await userEvent.click(getElternteil1BEGMonth(3));
       await userEvent.click(getElternteil2BEGMonth(11));
@@ -556,14 +553,10 @@ describe("Monatsplaner", () => {
       expect(queryElternteil1BEGMonth(11)).not.toBeInTheDocument();
     });
 
-    it("having a simultaneous BEG month, no BEG months get disabled after the 12 month", async () => {
-      const preloadedState = { ...stateWithSingleSimultaneousBEGMonth };
-      preloadedState.monatsplaner!.settings = {
-        partnerMonate: true,
-        mehrlinge: false,
-        behindertesGeschwisterkind: false,
-      };
+    it("should not disable any BEG months after the 12th month", async () => {
+      // it("having a simultaneous BEG month, no BEG months get disabled after the 12 month", async () => {
       render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+      await selectSimultaneousBEGMonth(0);
 
       // Activate additional months by second partner BEG month.
       await userEvent.click(getElternteil1BEGMonth(3));
@@ -574,14 +567,21 @@ describe("Monatsplaner", () => {
       expect(queryElternteil2BEGMonth(12)).toBeInTheDocument();
       expect(queryElternteil1BEGMonth(13)).toBeInTheDocument();
     });
-    it("having a simultaneous BEG month, further BEG selections do not disable the BEG month of the other parent if multiple kids are expected", async () => {
-      const preloadedState = { ...stateWithSingleSimultaneousBEGMonth };
-      preloadedState.monatsplaner!.settings = {
-        mehrlinge: true,
-        behindertesGeschwisterkind: false,
-        partnerMonate: false,
+
+    it("should not disable any BEG month if multiple kids are expected", async () => {
+      const stateWithMehrlinge = { ...preloadedState };
+      stateWithMehrlinge.monatsplaner = {
+        ...initialMonatsplanerState,
+        settings: {
+          mehrlinge: true,
+          behindertesGeschwisterkind: false,
+          partnerMonate: false,
+        },
       };
-      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+      render(<Monatsplaner mutterSchutzMonate={0} />, {
+        preloadedState: stateWithMehrlinge,
+      });
+      await selectSimultaneousBEGMonth(0);
 
       await userEvent.click(getElternteil1BEGMonth(3));
       await userEvent.click(getElternteil2BEGMonth(11));
@@ -590,20 +590,84 @@ describe("Monatsplaner", () => {
       expect(queryElternteil1BEGMonth(11)).toBeInTheDocument();
     });
 
-    it("having a simultaneous BEG month, further BEG selections do not disable the BEG month of the other parent if there is a disabled sibling", async () => {
-      const preloadedState = { ...stateWithSingleSimultaneousBEGMonth };
-      preloadedState.monatsplaner!.settings = {
-        behindertesGeschwisterkind: true,
-        mehrlinge: false,
-        partnerMonate: false,
+    it("should not disable any BEG month if there is a disabled sibling", async () => {
+      const stateWithBehindertesGeschwisterKind = { ...preloadedState };
+      stateWithBehindertesGeschwisterKind.monatsplaner = {
+        ...initialMonatsplanerState,
+        settings: {
+          behindertesGeschwisterkind: true,
+          mehrlinge: false,
+          partnerMonate: false,
+        },
       };
-      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+      render(<Monatsplaner mutterSchutzMonate={0} />, {
+        preloadedState: stateWithBehindertesGeschwisterKind,
+      });
+      await selectSimultaneousBEGMonth(0);
 
       await userEvent.click(getElternteil1BEGMonth(3));
       await userEvent.click(getElternteil2BEGMonth(11));
 
       expect(queryElternteil2BEGMonth(3)).toBeInTheDocument();
       expect(queryElternteil1BEGMonth(11)).toBeInTheDocument();
+    });
+
+    it("should show a notification when the first simultaneous BEG month was selected", async () => {
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+
+      await selectSimultaneousBEGMonth(0);
+
+      expect(
+        screen.queryByText(
+          /In den ersten 12 Monaten kann maximal ein Monat parallel BasisElterngeld beantragt werden./,
+        ),
+      ).toBeVisible();
+    });
+
+    it("should not show a notification when multiple kids are expected", async () => {
+      const stateWithMehrlinge = { ...preloadedState };
+      stateWithMehrlinge.monatsplaner = {
+        ...initialMonatsplanerState,
+        settings: {
+          mehrlinge: true,
+          behindertesGeschwisterkind: false,
+          partnerMonate: false,
+        },
+      };
+      render(<Monatsplaner mutterSchutzMonate={0} />, {
+        preloadedState: stateWithMehrlinge,
+      });
+
+      await selectSimultaneousBEGMonth(0);
+
+      expect(
+        screen.queryByText(
+          /In den ersten 12 Monaten kann maximal ein Monat parallel BasisElterngeld beantragt werden./,
+        ),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should not show a notification when there is a disabled sibling", async () => {
+      const stateWithBehindertesGeschwisterKind = { ...preloadedState };
+      stateWithBehindertesGeschwisterKind.monatsplaner = {
+        ...initialMonatsplanerState,
+        settings: {
+          behindertesGeschwisterkind: true,
+          mehrlinge: false,
+          partnerMonate: false,
+        },
+      };
+      render(<Monatsplaner mutterSchutzMonate={0} />, {
+        preloadedState: stateWithBehindertesGeschwisterKind,
+      });
+
+      await selectSimultaneousBEGMonth(0);
+
+      expect(
+        screen.queryByText(
+          /In den ersten 12 Monaten kann maximal ein Monat parallel BasisElterngeld beantragt werden./,
+        ),
+      ).not.toBeInTheDocument();
     });
   });
 

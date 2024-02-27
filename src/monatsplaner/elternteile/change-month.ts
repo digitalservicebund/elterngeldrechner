@@ -91,7 +91,7 @@ function canNotChangePSBBecauseNoPartnerMonths(
     !getPartnerMonateSettings(elternteileSettings)
   );
 }
-function isExceptionToSimulatenousMonthRestrictions(
+export function isExceptionToSimulatenousMonthRestrictions(
   elternteileSettings?: CreateElternteileSettings,
 ): boolean {
   if (elternteileSettings) {
@@ -102,14 +102,13 @@ function isExceptionToSimulatenousMonthRestrictions(
   }
 }
 
-function getNumberOfSimultanuousBEGMonths(
+export function getNumberOfSimultanuousBEGMonthsInFirstTwelveMonths(
   elternteile: Elternteile,
-  lastRelevantMonthIndex: number,
 ): number {
   const typesET1 = elternteile.ET1.months.map(({ type }) => type);
   const typesET2 = elternteile.ET2.months.map(({ type }) => type);
   const typePairs = typesET1.map((type, index) => [type, typesET2[index]]);
-  const relevantPairs = typePairs.slice(0, lastRelevantMonthIndex + 1);
+  const relevantPairs = typePairs.slice(0, 12);
   return relevantPairs.filter(([a, b]) => a === "BEG" && b === "BEG").length;
 }
 
@@ -122,15 +121,11 @@ export function canNotChangeBEGBecauseTooManySimultaneousMonths(
     return false;
   }
 
-  const lastRelevantMonthIndex = 11;
-
   const choosingBEG = targetType === "BEG";
-  const choosingRelevantMonth = monthIndex <= lastRelevantMonthIndex;
+  const choosingRelevantMonth = monthIndex < 12;
 
-  const simultanuousBEGMonths = getNumberOfSimultanuousBEGMonths(
-    elternteile,
-    lastRelevantMonthIndex,
-  );
+  const simultanuousBEGMonths =
+    getNumberOfSimultanuousBEGMonthsInFirstTwelveMonths(elternteile);
   const limitOfSimultanuousBEGMonthsReached =
     simultanuousBEGMonths === maxNumberOfSimultaneousBEGMonths;
 

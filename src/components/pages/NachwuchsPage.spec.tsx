@@ -339,6 +339,8 @@ describe("Submitting the form", () => {
     const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
 
     const createElternteileSettings = createDefaultElternteileSettings(
+      false,
+      true,
       isoGeburtsdatum,
       "ET1",
       0,
@@ -418,6 +420,8 @@ describe("Submitting the form", () => {
     });
 
     const createElternteileSettings = createDefaultElternteileSettings(
+      true,
+      true,
       isoGeburtsdatum,
       "ET1",
       3,

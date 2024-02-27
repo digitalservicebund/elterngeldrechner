@@ -30,7 +30,11 @@ export const initialMonatsplanerState: MonatsplanerState = {
   settings: undefined,
   // EGR-244 - no conditions to get Partner Monate for only one Elternteil - property default value is true
   partnerMonate: true,
-  elternteile: createElternteile({ partnerMonate: true }),
+  elternteile: createElternteile({
+    mehrlinge: false,
+    behindertesGeschwisterkind: false,
+    partnerMonate: true,
+  }),
 };
 
 interface ChangeMonthPayload {
@@ -135,6 +139,8 @@ const monatsplanerSlice = createSlice({
 
         state.settings = {
           partnerMonate,
+          mehrlinge: false,
+          behindertesGeschwisterkind: false,
         };
         state.partnerMonate = partnerMonate;
         state.elternteile = createElternteile(state.settings);
@@ -142,6 +148,11 @@ const monatsplanerSlice = createSlice({
     );
 
     builder.addCase(stepNachwuchsActions.submitStep, (state, { payload }) => {
+      const mehrlinge = payload.anzahlKuenftigerKinder > 1;
+      const behindertesGeschwisterkind =
+        payload.geschwisterkinder.filter((kind) => kind.istBehindert).length >
+        0;
+
       const [day, month, year] =
         payload.wahrscheinlichesGeburtsDatum.split(".");
       const mutterSchutzMonate = numberOfMutterschutzMonths(
@@ -152,6 +163,8 @@ const monatsplanerSlice = createSlice({
       const wahrscheinlichesISOGeburtsDatum = `${year}-${month}-${day}T00:00:00Z`;
       // create suitable configuration for ed-monatsplaner-app API
       const settings = createDefaultElternteileSettings(
+        mehrlinge,
+        behindertesGeschwisterkind,
         wahrscheinlichesISOGeburtsDatum,
         state.mutterschutzElternteil!,
         mutterSchutzMonate,

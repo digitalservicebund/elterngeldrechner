@@ -12,6 +12,8 @@ import { createDefaultElternteileSettings } from "../../globals/js/elternteile-u
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
 
 const defaultElternteileSettings = createDefaultElternteileSettings(
+  false,
+  false,
   "2022-08-08T00:00:00Z",
   "ET1",
   2,

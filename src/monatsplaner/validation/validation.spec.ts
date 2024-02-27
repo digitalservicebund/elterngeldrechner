@@ -38,6 +38,11 @@ describe("Validation", () => {
     });
 
     it("should not be valid to take more than the available 14 BEG months of Partnermonate for both Elternteile", () => {
+      const elternteileSettings = {
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
       let elternteile = createElternteile();
       for (let i = 0; i < 10; i++) {
         elternteile = changeMonth(
@@ -47,7 +52,7 @@ describe("Validation", () => {
             targetType: "BEG",
             elternteil: "ET1",
           },
-          { partnerMonate: true },
+          elternteileSettings,
         );
       }
 
@@ -59,7 +64,7 @@ describe("Validation", () => {
             targetType: "BEG",
             elternteil: "ET2",
           },
-          { partnerMonate: true },
+          elternteileSettings,
         );
       }
 
@@ -74,6 +79,11 @@ describe("Validation", () => {
     });
 
     it("should not be allowed to choose BEG after Lebensmonat 14", () => {
+      const elternteileSettings = {
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      };
       let elternteile = createElternteile();
 
       elternteile = changeMonth(
@@ -83,7 +93,7 @@ describe("Validation", () => {
           targetType: "BEG",
           elternteil: "ET1",
         },
-        { partnerMonate: true },
+        elternteileSettings,
       );
 
       const validationResult = validateElternteile(
@@ -110,7 +120,12 @@ describe("Validation", () => {
           geburt: dateOfBirth.toISO() as string,
           errechnet: expectedDateOfBirth.toISO() as string,
         };
-        let elternteile = createElternteile({ geburtstag });
+        const elternteileSettings = {
+          geburtstag,
+          mehrlinge: false,
+          behindertesGeschwisterkind: false,
+        };
+        let elternteile = createElternteile(elternteileSettings);
 
         elternteile = changeMonth(elternteile, {
           monthIndex: 0,
@@ -123,9 +138,10 @@ describe("Validation", () => {
           elternteil: "ET1",
         });
 
-        const validationResult = validateElternteile(elternteile, {
-          geburtstag,
-        });
+        const validationResult = validateElternteile(
+          elternteile,
+          elternteileSettings,
+        );
 
         expect(validationResult.isValid).toBe(true);
       },
@@ -534,6 +550,8 @@ describe("Validation", () => {
 
           const validationResult = validateElternteile(elternteile, {
             geburtstag,
+            mehrlinge: false,
+            behindertesGeschwisterkind: false,
           }) as InvalidValidationResult;
 
           expect(validationResult.isValid).toBe(false);

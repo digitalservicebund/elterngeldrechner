@@ -10,15 +10,33 @@ describe("Elternteile-Setting", () => {
   };
 
   it("should not has Partnermonate", () => {
-    expect(getPartnerMonateSettings({ geburtstag: geburtstag })).toBeFalsy();
+    expect(
+      getPartnerMonateSettings({
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+        geburtstag: geburtstag,
+      }),
+    ).toBeFalsy();
   });
 
   it("should get Partnermonate false", () => {
-    expect(getPartnerMonateSettings({ partnerMonate: false })).toBeFalsy();
+    expect(
+      getPartnerMonateSettings({
+        partnerMonate: false,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      }),
+    ).toBeFalsy();
   });
 
   it("should get Partnermonate true", () => {
-    expect(getPartnerMonateSettings({ partnerMonate: true })).toBeTruthy();
+    expect(
+      getPartnerMonateSettings({
+        partnerMonate: true,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      }),
+    ).toBeTruthy();
   });
 
   it("should get Partnermonate false with Geburtstag", () => {
@@ -26,13 +44,20 @@ describe("Elternteile-Setting", () => {
       getPartnerMonateSettings({
         partnerMonate: false,
         geburtstag: geburtstag,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
       }),
     ).toBeFalsy();
   });
 
   it("should get Partnermonate true with Geburtstag", () => {
     expect(
-      getPartnerMonateSettings({ partnerMonate: true, geburtstag: geburtstag }),
+      getPartnerMonateSettings({
+        partnerMonate: true,
+        geburtstag: geburtstag,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      }),
     ).toBeTruthy();
   });
 });

@@ -1,15 +1,20 @@
 import { ElternteilType, Geburtstag } from "./elternteile-types";
 
+interface BaseSettings {
+  readonly mehrlinge: boolean;
+  readonly behindertesGeschwisterkind: boolean;
+}
+
 export interface MutterschutzSettings {
   readonly endDate: string;
   readonly elternteil: ElternteilType;
 }
 
-interface CreateWithPartnermonateSettings {
+interface CreateWithPartnermonateSettings extends BaseSettings {
   readonly partnerMonate: boolean;
 }
 
-interface CreateWithFruehchenSettings {
+interface CreateWithFruehchenSettings extends BaseSettings {
   readonly geburtstag: Geburtstag;
 }
 

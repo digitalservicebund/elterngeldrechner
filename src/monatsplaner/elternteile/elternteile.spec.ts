@@ -28,7 +28,11 @@ describe("Elternteile", () => {
   });
 
   it("should allow 14 Month of Basiselterngeld for each Elternteil with Partnerbonus", () => {
-    const elternteile = createElternteile({ partnerMonate: true });
+    const elternteile = createElternteile({
+      partnerMonate: true,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(14);
   });
@@ -40,7 +44,12 @@ describe("Elternteile", () => {
       geburt: dateOfBirth.toISO() as string,
       errechnet: expectedDateOfBirth.toISO() as string,
     };
-    const elternteile = createElternteile({ geburtstag });
+
+    const elternteile = createElternteile({
+      geburtstag,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(13);
   });
@@ -52,9 +61,12 @@ describe("Elternteile", () => {
       geburt: dateOfBirth.toISO() as string,
       errechnet: expectedDateOfBirth.toISO() as string,
     };
+
     const elternteile = createElternteile({
       partnerMonate: true,
       geburtstag: geburtstag,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
     });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(15);
@@ -67,7 +79,12 @@ describe("Elternteile", () => {
       geburt: dateOfBirth.toISO() as string,
       errechnet: expectedDateOfBirth.toISO() as string,
     };
-    const elternteile = createElternteile({ geburtstag });
+
+    const elternteile = createElternteile({
+      geburtstag,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(14);
   });
@@ -79,7 +96,12 @@ describe("Elternteile", () => {
       geburt: dateOfBirth.toISO() as string,
       errechnet: expectedDateOfBirth.toISO() as string,
     };
-    const elternteile = createElternteile({ geburtstag });
+
+    const elternteile = createElternteile({
+      geburtstag,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(15);
   });
@@ -91,7 +113,11 @@ describe("Elternteile", () => {
       geburt: dateOfBirth.toISO() as string,
       errechnet: expectedDateOfBirth.toISO() as string,
     };
-    const elternteile = createElternteile({ geburtstag });
+    const elternteile = createElternteile({
+      geburtstag,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(16);
   });
@@ -103,7 +129,11 @@ describe("Elternteile", () => {
   });
 
   it("should allow 2 times the amount of Basiselterngeld to be used as Elterngeld+ for Partnermonate", () => {
-    const elternteile = createElternteile({ partnerMonate: true });
+    const elternteile = createElternteile({
+      partnerMonate: true,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.remainingMonths.elterngeldplus).toBe(28);
   });
@@ -120,7 +150,12 @@ describe("Elternteile", () => {
       errechnet: dateOfBirth,
     };
 
-    const elternteile = createElternteile({ geburtstag, mutterschutz });
+    const elternteile = createElternteile({
+      geburtstag,
+      mutterschutz,
+      mehrlinge: false,
+      behindertesGeschwisterkind: false,
+    });
 
     expect(elternteile.ET1.months[0].type).toBe("BEG");
     expect(elternteile.ET1.months[1].type).toBe("BEG");

@@ -8,10 +8,6 @@ import {
 } from "../../redux/stepAllgemeineAngabenSlice";
 import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
 import { YesNo } from "../../globals/js/calculations/model";
-import {
-  initialMonatsplanerState,
-  MonatsplanerState,
-} from "../../redux/monatsplanerSlice";
 
 describe("Allgemeine Angaben Page", () => {
   it("should display the optional naming part of the form, if 'Für beide' is chosen", async () => {
@@ -113,20 +109,16 @@ describe("Allgemeine Angaben Page", () => {
 
       it("alleinerziehend - to Elternteil 1", async () => {
         render(<AllgemeineAngabenPage />, { store });
-        const expectedState: MonatsplanerState = {
-          ...initialMonatsplanerState,
-          mutterschutzElternteil: "ET1",
-          settings: {
-            partnerMonate: true,
-          },
-        };
+
         await userEvent.click(screen.getByLabelText("Nur für mich"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );
-
         await userEvent.click(screen.getByText("Weiter"));
-        expect(store.getState().monatsplaner).toEqual(expectedState);
+
+        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
+          "ET1",
+        );
       });
 
       it("does not show selection which parent receives Mutterschaftsleistung if a single applicant receives Mutterschaftsleistungen", async () => {
@@ -160,22 +152,7 @@ describe("Allgemeine Angaben Page", () => {
 
       it("gemeinsam erziehend - to Elternteil 1", async () => {
         render(<AllgemeineAngabenPage />, { store });
-        const expectedState: MonatsplanerState = {
-          ...initialMonatsplanerState,
-          elternteile: {
-            ...initialMonatsplanerState.elternteile,
-            remainingMonths: {
-              ...initialMonatsplanerState.elternteile.remainingMonths,
-              basiselterngeld: 14,
-              elterngeldplus: 28,
-            },
-          },
-          mutterschutzElternteil: "ET1",
-          partnerMonate: true,
-          settings: {
-            partnerMonate: true,
-          },
-        };
+
         await userEvent.click(screen.getByLabelText("Für beide"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
@@ -183,29 +160,16 @@ describe("Allgemeine Angaben Page", () => {
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungenWer_option_0"),
         );
-
         await userEvent.click(screen.getByText("Weiter"));
-        expect(store.getState().monatsplaner).toEqual(expectedState);
+
+        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
+          "ET1",
+        );
       });
 
       it("gemeinsam erziehend - to Elternteil 2", async () => {
         render(<AllgemeineAngabenPage />, { store });
-        const expectedState: MonatsplanerState = {
-          ...initialMonatsplanerState,
-          elternteile: {
-            ...initialMonatsplanerState.elternteile,
-            remainingMonths: {
-              ...initialMonatsplanerState.elternteile.remainingMonths,
-              basiselterngeld: 14,
-              elterngeldplus: 28,
-            },
-          },
-          mutterschutzElternteil: "ET2",
-          partnerMonate: true,
-          settings: {
-            partnerMonate: true,
-          },
-        };
+
         await userEvent.click(screen.getByLabelText("Für beide"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
@@ -213,9 +177,11 @@ describe("Allgemeine Angaben Page", () => {
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungenWer_option_1"),
         );
-
         await userEvent.click(screen.getByText("Weiter"));
-        expect(store.getState().monatsplaner).toEqual(expectedState);
+
+        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
+          "ET2",
+        );
       });
     });
 

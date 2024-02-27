@@ -84,12 +84,16 @@ describe("Monatsplaner", () => {
   const numberOfMutterschutzMonths = 2;
 
   const defaultElternteileSettings = createDefaultElternteileSettings(
+    false,
+    false,
     "2022-08-08T00:00:00Z",
     "ET1",
     2,
     true,
   );
   const defaultElternteileSettingsForBoth = createDefaultElternteileSettings(
+    false,
+    false,
     "2022-08-08T00:00:00Z",
     "ET1",
     2,

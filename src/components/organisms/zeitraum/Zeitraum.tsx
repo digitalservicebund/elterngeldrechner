@@ -8,7 +8,6 @@ import {
   Path,
   PathValue,
   RegisterOptions,
-  UnpackNestedValue,
   UseFormGetValues,
   UseFormRegister,
   UseFormSetValue,
@@ -128,12 +127,7 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
           ) !== undefined;
         if (!currentToIsInList) {
           // set selected "to" option to "Bitte wählen"
-          setValue(
-            toName,
-            "" as UnpackNestedValue<
-              PathValue<TFieldValues, Path<TFieldValues>>
-            >,
-          );
+          setValue(toName, "" as PathValue<TFieldValues, Path<TFieldValues>>);
         }
 
         // returns new "to" options

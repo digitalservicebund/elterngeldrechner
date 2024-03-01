@@ -57,7 +57,7 @@ export const CustomDate = <
           inputRef={ref}
           mask={Date}
           lazy={true}
-          autofix={true}
+          autofix="pad"
           value={value}
           blocks={{
             d: {

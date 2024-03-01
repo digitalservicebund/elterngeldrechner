@@ -119,7 +119,7 @@ export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
     setAddButtonDisabled(restFrom.length === 0);
   };
 
-  useWatch(artTaetigkeitName);
+  useWatch({ name: artTaetigkeitName });
   const artTaetigkeit = getValues(artTaetigkeitName);
   const selbststaendig = artTaetigkeit === "Selbststaendig";
   const einkommenLabel = selbststaendig

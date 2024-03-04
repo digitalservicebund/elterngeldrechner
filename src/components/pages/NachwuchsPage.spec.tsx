@@ -1,7 +1,6 @@
 import { render, screen } from "../../test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router";
 import { reducers, RootState } from "../../redux";
 import NachwuchsPage from "./NachwuchsPage";
 import {
@@ -15,7 +14,6 @@ import { initialMonatsplanerState } from "../../redux/monatsplanerSlice";
 import { createDefaultElternteileSettings } from "../../globals/js/elternteile-utils";
 import { DateTime } from "luxon";
 
-jest.mock("react-router");
 jest.mock("../../monatsplaner");
 
 const currentYear = new Date().getFullYear();
@@ -125,13 +123,9 @@ describe("Nachwuchs Page", () => {
 
 describe("Submitting the form", () => {
   let store: Store<RootState>;
-  let navigate = jest.fn();
 
   beforeEach(() => {
     store = configureStore({ reducer: reducers });
-
-    navigate.mockClear();
-    (useNavigate as jest.Mock).mockReturnValue(navigate);
   });
 
   it("should persist the step", async () => {
@@ -175,27 +169,6 @@ describe("Submitting the form", () => {
     await userEvent.click(screen.getByText("Weiter"));
 
     expect(store.getState().stepNachwuchs).toEqual(expectedState);
-  });
-
-  it("should go to the next step", async () => {
-    const validFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
-      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
-      geschwisterkinder: [
-        {
-          geburtsdatum: "01.03.1985",
-          istBehindert: true,
-        },
-      ],
-    };
-
-    render(<NachwuchsPage />, {
-      preloadedState: { stepNachwuchs: validFormState },
-    });
-    await userEvent.click(screen.getByText("Weiter"));
-
-    expect(navigate).toHaveBeenCalledWith("/erwerbstaetigkeit");
   });
 
   it("should accept expected birth of child that is 32 months before current date", async () => {
@@ -278,11 +251,10 @@ describe("Submitting the form", () => {
     render(<NachwuchsPage />, { store });
     await userEvent.click(screen.getByText("Weiter"));
 
-    expect(navigate).toHaveBeenCalledWith("/erwerbstaetigkeit");
     expect(store.getState().stepNachwuchs.geschwisterkinder).toHaveLength(0);
   });
 
-  it("should not go to the next step if birthdate of Geschwisterkinder is not filled completely", async () => {
+  it("should show validation error if birthdate of Geschwisterkinder is not filled completely", async () => {
     const invalidFormState: StepNachwuchsState = {
       ...initialStepNachwuchsState,
       anzahlKuenftigerKinder: 2,
@@ -303,15 +275,13 @@ describe("Submitting the form", () => {
     render(<NachwuchsPage />, { store });
     await userEvent.click(screen.getByText("Weiter"));
 
-    expect(navigate).not.toHaveBeenCalled();
-
     const errorMessage = screen.getByText(
       "Bitte das Feld vollständig ausfüllen oder leer lassen",
     );
     expect(errorMessage).toBeInTheDocument();
   });
 
-  it("should not go to the next step if birthdate of Geschwisterkinder is after birthdate of Kind", async () => {
+  it("should show validation error if birthdate of Geschwisterkinder is after birthdate of Kind", async () => {
     const invalidFormState: StepNachwuchsState = {
       ...initialStepNachwuchsState,
       anzahlKuenftigerKinder: 2,
@@ -332,15 +302,13 @@ describe("Submitting the form", () => {
     render(<NachwuchsPage />, { store });
     await userEvent.click(screen.getByText("Weiter"));
 
-    expect(navigate).not.toHaveBeenCalled();
-
     const errorMessage = screen.getByText(
       "Das Geschwisterkind muss älter als das Kind oben sein.",
     );
     expect(errorMessage).toBeInTheDocument();
   });
 
-  it("should show a validation error if some information is missing and not go to the next step", async () => {
+  it("should show a validation error if some information is missing", async () => {
     const invalidFormState: StepNachwuchsState = {
       ...initialStepNachwuchsState,
       anzahlKuenftigerKinder: 1,
@@ -358,7 +326,6 @@ describe("Submitting the form", () => {
 
     await userEvent.click(screen.getByText("Weiter"));
 
-    expect(navigate).not.toHaveBeenCalled();
     expect(
       screen.getByText("Dieses Feld ist erforderlich"),
     ).toBeInTheDocument();

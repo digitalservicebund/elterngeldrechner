@@ -11,15 +11,12 @@ import {
   initialStepEinkommenState,
   StepEinkommenState,
 } from "../../../redux/stepEinkommenSlice";
-import { useNavigate } from "react-router-dom";
 import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
   YesNo,
 } from "../../../globals/js/calculations/model";
-
-jest.mock("react-router");
 
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
@@ -110,13 +107,6 @@ describe("Steuer und Versicherung", () => {
   });
 
   describe("Validation of form", () => {
-    let navigate = jest.fn();
-
-    beforeEach(() => {
-      navigate.mockClear();
-      (useNavigate as jest.Mock).mockReturnValue(navigate);
-    });
-
     const validStepEinkommenState: StepEinkommenState = {
       ...initialStepEinkommenState,
       ET1: {

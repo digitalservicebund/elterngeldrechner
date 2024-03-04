@@ -13,9 +13,6 @@ import {
   StepEinkommenState,
 } from "../../../redux/stepEinkommenSlice";
 import { RentenArt, YesNo } from "../../../globals/js/calculations/model";
-import { useNavigate } from "react-router";
-
-jest.mock("react-router");
 
 const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
   ...initialStepErwerbstaetigkeitState.ET1,
@@ -105,13 +102,6 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
     });
 
     describe("Validation of form", () => {
-      let navigate = jest.fn();
-
-      beforeEach(() => {
-        navigate.mockClear();
-        (useNavigate as jest.Mock).mockReturnValue(navigate);
-      });
-
       const validStateEinkommen: StepEinkommenState = {
         ...initialStepEinkommenState,
         ET1: {

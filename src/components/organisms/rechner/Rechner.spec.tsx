@@ -8,7 +8,6 @@ import { render, screen } from "../../../test-utils/test-utils";
 import { within } from "@testing-library/react";
 import Big from "big.js";
 import userEvent from "@testing-library/user-event";
-import { useNavigate } from "react-router-dom";
 import { Rechner } from "./Rechner";
 import { StepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
 import {
@@ -20,7 +19,6 @@ import { EgrCalculation } from "../../../globals/js/calculations/egr-calculation
 import { configureStore } from "@reduxjs/toolkit";
 
 jest.mock("../../../globals/js/calculations/egr-calculation");
-jest.mock("react-router");
 
 describe("Rechner", () => {
   let simulationErgebnis: ElternGeldSimulationErgebnis;
@@ -33,8 +31,6 @@ describe("Rechner", () => {
     geschwisterkinder: [],
     mutterschaftssleistungen: YesNo.NO,
   };
-
-  const navigate = jest.fn();
 
   beforeEach(() => {
     simulationErgebnis = {
@@ -49,7 +45,6 @@ describe("Rechner", () => {
       ],
     };
 
-    navigate.mockClear();
     mockEgrSimulation.simulate.mockClear();
 
     mockEgrSimulation.simulate.mockImplementation(
@@ -58,7 +53,6 @@ describe("Rechner", () => {
     (EgrCalculation as unknown as jest.Mock).mockImplementation(
       () => mockEgrSimulation,
     );
-    (useNavigate as jest.Mock).mockReturnValue(navigate);
   });
 
   it("should show the Rechner for one Elternteil", () => {

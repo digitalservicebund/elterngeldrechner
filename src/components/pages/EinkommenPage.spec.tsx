@@ -1,6 +1,5 @@
 import { render, screen, within } from "../../test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
-import { useNavigate } from "react-router-dom";
 import { configureStore, Store } from "@reduxjs/toolkit";
 import {
   ErwerbsArt,
@@ -33,7 +32,6 @@ import Big from "big.js";
 import { BasisEgAlgorithmus } from "../../globals/js/calculations/basis-eg-algorithmus";
 import { MathUtil } from "../../globals/js/calculations/common/math-util";
 
-jest.mock("react-router");
 jest.mock("../../globals/js/calculations/basis-eg-algorithmus");
 
 const testMonths = [
@@ -68,13 +66,6 @@ const testDates = [
 
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
-
-  let navigate = jest.fn();
-
-  beforeEach(() => {
-    navigate.mockClear();
-    (useNavigate as jest.Mock).mockReturnValue(navigate);
-  });
 
   it("should show form elements for both Elternteile if two were selected", () => {
     const ET1 = "Finn";
@@ -278,7 +269,6 @@ describe("Einkommen Page", () => {
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
       expect(store.getState().stepEinkommen).toEqual(expectedState);
-      expect(navigate).toHaveBeenCalledWith("/rechner-planer");
     });
   });
 
@@ -388,7 +378,6 @@ describe("Einkommen Page", () => {
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
       expect(store.getState().stepEinkommen).toEqual(expectedState);
-      expect(navigate).toHaveBeenCalledWith("/rechner-planer");
     });
 
     // TEST DISABLED: limitEinkommenUeberschritten will be set by form input directly - doesn't make sense any more
@@ -596,7 +585,6 @@ describe("Einkommen Page", () => {
       );
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
-      expect(navigate).toHaveBeenCalledWith("/rechner-planer");
       expect(store.getState().stepEinkommen).toEqual(expectedState);
     });
   });

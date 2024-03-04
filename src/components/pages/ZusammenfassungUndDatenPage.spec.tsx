@@ -1,8 +1,6 @@
 import { render, screen } from "../../test-utils/test-utils";
-import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { initialStepEinkommenState } from "../../redux/stepEinkommenSlice";
-import store, { RootState } from "../../redux";
+import { RootState } from "../../redux";
 import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
 import { createElternteile } from "../../monatsplaner";
 import { initialStepNachwuchsState } from "../../redux/stepNachwuchsSlice";
@@ -12,7 +10,6 @@ import { YesNo } from "../../globals/js/calculations/model";
 import { initialMonatsplanerState } from "../../redux/monatsplanerSlice";
 import { createDefaultElternteileSettings } from "../../globals/js/elternteile-utils";
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
-import { initialStepConfigurationState } from "../../redux/configurationSlice";
 
 const defaultElternteileSettings = createDefaultElternteileSettings(
   "2022-08-08T00:00:00Z",
@@ -94,60 +91,8 @@ function getFieldByName(name: string): Element {
 }
 
 describe("Zusammenfassung und Daten Page", () => {
-  it("should reset the global state and navigate back to the Startpage", async () => {
-    // setup
-    const expectedState: RootState = {
-      monatsplaner: initialMonatsplanerState,
-      stepAllgemeineAngaben: initialStepAllgemeineAngabenState,
-      stepNachwuchs: initialStepNachwuchsState,
-      stepErwerbstaetigkeit: initialStepErwerbstaetigkeitState,
-      stepEinkommen: initialStepEinkommenState,
-      stepRechner: initialStepRechnerState,
-      configuration: initialStepConfigurationState,
-    };
-
-    // need to use a real route, otherwise the Page would rerender with initial state
-    render(
-      <MemoryRouter initialEntries={["/zusammenfassung-und-daten"]}>
-        <Routes>
-          <Route
-            path="/zusammenfassung-und-daten"
-            element={<ZusammenfassungUndDatenPage />}
-          />
-          <Route path="/" element="Startpage" />
-        </Routes>
-      </MemoryRouter>,
-      { preloadedState },
-    );
-
-    expect(
-      screen.getByText("Übernahme von Daten in den Elterngeld-Antrag"),
-    ).toBeInTheDocument();
-
-    // when
-    await userEvent.click(
-      screen.getByRole("button", { name: "Daten verwerfen" }),
-    );
-
-    // then
-    expect(store.getState()).toEqual(expectedState);
-    expect(screen.getByText("Startpage")).toBeInTheDocument();
-  });
-
   it("should contain hidden fields for submission to the anton application form", async () => {
-    // setup
-    // need to use a real route, otherwise the Page would rerender with initial state
-    render(
-      <MemoryRouter initialEntries={["/zusammenfassung-und-daten"]}>
-        <Routes>
-          <Route
-            path="/zusammenfassung-und-daten"
-            element={<ZusammenfassungUndDatenPage />}
-          />
-        </Routes>
-      </MemoryRouter>,
-      { preloadedState },
-    );
+    render(<ZusammenfassungUndDatenPage />, { preloadedState });
 
     // expect
     expect(

@@ -14,8 +14,6 @@ import {
 } from "../../../redux/stepEinkommenSlice";
 import { YesNo } from "../../../globals/js/calculations/model";
 
-jest.mock("react-router");
-
 const testMonths = [
   "Juli 2022",
   "Juni 2022",

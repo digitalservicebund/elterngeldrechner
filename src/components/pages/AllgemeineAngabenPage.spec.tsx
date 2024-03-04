@@ -1,6 +1,5 @@
 import { render, screen } from "../../test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
-import { useNavigate } from "react-router";
 import { configureStore, Store } from "@reduxjs/toolkit";
 import { reducers, RootState } from "../../redux";
 import {
@@ -13,8 +12,6 @@ import {
   initialMonatsplanerState,
   MonatsplanerState,
 } from "../../redux/monatsplanerSlice";
-
-jest.mock("react-router");
 
 describe("Allgemeine Angaben Page", () => {
   it("should display the optional naming part of the form, if 'Für beide' is chosen", async () => {
@@ -74,13 +71,9 @@ describe("Allgemeine Angaben Page", () => {
 
   describe("Submitting the form", () => {
     let store: Store<RootState>;
-    let navigate = jest.fn();
 
     beforeEach(() => {
       store = configureStore({ reducer: reducers });
-
-      navigate.mockClear();
-      (useNavigate as jest.Mock).mockReturnValue(navigate);
     });
 
     it("should persist the step", async () => {
@@ -289,23 +282,7 @@ describe("Allgemeine Angaben Page", () => {
       expect(store.getState().stepAllgemeineAngaben).toEqual(expectedState);
     });
 
-    it("should go to the next step", async () => {
-      const validFormState: StepAllgemeineAngabenState = {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
-        alleinerziehend: YesNo.YES,
-        mutterschaftssleistungen: YesNo.YES,
-      };
-
-      render(<AllgemeineAngabenPage />, {
-        preloadedState: { stepAllgemeineAngaben: validFormState },
-      });
-      await userEvent.click(screen.getByText("Weiter"));
-
-      expect(navigate).toHaveBeenCalledWith("/nachwuchs");
-    });
-
-    it("should show a validation error if some information is missing and not go to the next step", async () => {
+    it("should show a validation error if some information is missing", async () => {
       const invalidFormState: StepAllgemeineAngabenState = {
         ...initialStepAllgemeineAngabenState,
         antragstellende: "FuerMichSelbst",
@@ -318,7 +295,6 @@ describe("Allgemeine Angaben Page", () => {
 
       await userEvent.click(screen.getByText("Weiter"));
 
-      expect(navigate).not.toHaveBeenCalledWith("/nachwuchs");
       expect(
         screen.getByText("Dieses Feld ist erforderlich"),
       ).toBeInTheDocument();

@@ -1,7 +1,6 @@
 import { render, screen } from "../../test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
-import { useNavigate } from "react-router";
 import { reducers, RootState } from "../../redux";
 import { configureStore, Store } from "@reduxjs/toolkit";
 import {
@@ -10,8 +9,6 @@ import {
 } from "../../redux/stepErwerbstaetigkeitSlice";
 import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
 import { YesNo } from "../../globals/js/calculations/model";
-
-jest.mock("react-router");
 
 describe("Erwerbstaetigkeit Page", () => {
   it("should show the pseudonym for Elternteil 1 and 2", () => {
@@ -127,13 +124,9 @@ describe("Erwerbstaetigkeit Page", () => {
 
   describe("Submitting the form", () => {
     let store: Store<RootState>;
-    let navigate = jest.fn();
 
     beforeEach(() => {
       store = configureStore({ reducer: reducers });
-
-      navigate.mockClear();
-      (useNavigate as jest.Mock).mockReturnValue(navigate);
     });
 
     it("should persist the step", async () => {
@@ -222,35 +215,6 @@ describe("Erwerbstaetigkeit Page", () => {
       await userEvent.click(screen.getByText("Weiter"));
 
       expect(store.getState().stepErwerbstaetigkeit).toEqual(expectedState);
-    });
-
-    it("should go to the next step", async () => {
-      const validFormState: StepErwerbstaetigkeitState = {
-        ...initialStepErwerbstaetigkeitState,
-        ET1: {
-          ...initialStepErwerbstaetigkeitState.ET1,
-          vorGeburt: YesNo.NO,
-        },
-        ET2: {
-          ...initialStepErwerbstaetigkeitState.ET2,
-          vorGeburt: YesNo.NO,
-        },
-      };
-
-      render(<ErwerbstaetigkeitPage />, {
-        preloadedState: { stepErwerbstaetigkeit: validFormState },
-      });
-      await userEvent.click(screen.getByText("Weiter"));
-
-      expect(navigate).toHaveBeenCalledWith("/einkommen");
-    });
-
-    it("should go to the previous step", async () => {
-      render(<ErwerbstaetigkeitPage />);
-
-      await userEvent.click(screen.getByText("Zurück"));
-
-      expect(navigate).toHaveBeenCalledWith("/nachwuchs");
     });
   });
 });

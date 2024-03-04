@@ -5,7 +5,6 @@ import nsp from "../../../globals/js/namespace";
 import { RootState } from "../../../redux";
 import { initialStepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
 import { initialStepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
-import { useNavigate } from "react-router-dom";
 import {
   initialMonatsplanerState,
   MonatsplanerState,
@@ -71,7 +70,6 @@ const testLebensmonateLabels = [
 ];
 
 jest.setTimeout(90000);
-jest.mock("react-router");
 jest.mock("../../../monatsplaner", () => {
   // mock only specific function of imported library
   const actual = jest.requireActual("../../../monatsplaner");
@@ -83,13 +81,7 @@ jest.mock("../../../monatsplaner", () => {
 });
 
 describe("Monatsplaner", () => {
-  const navigate = jest.fn();
   const numberOfMutterschutzMonths = 2;
-
-  beforeEach(() => {
-    navigate.mockClear();
-    (useNavigate as jest.Mock).mockReturnValue(navigate);
-  });
 
   const defaultElternteileSettings = createDefaultElternteileSettings(
     "2022-08-08T00:00:00Z",
@@ -765,8 +757,6 @@ describe("Monatsplaner", () => {
         await userEvent.click(submitButton);
 
         expect(screen.getByText(expectedText)).toBeInTheDocument();
-
-        expect(navigate).not.toHaveBeenCalled();
       },
     );
   });

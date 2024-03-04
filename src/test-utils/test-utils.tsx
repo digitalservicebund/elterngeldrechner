@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { reducers, RootState } from "../redux";
 import { AriaLogProvider } from "../components/atoms";
 import Big from "big.js";
+import { MemoryRouter } from "react-router-dom";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
@@ -22,9 +23,11 @@ interface TestWrapperProps {
 
 const TestWrapper: FC<TestWrapperProps> = ({ store, children }) => {
   return (
-    <AriaLogProvider>
-      <Provider store={store}>{children}</Provider>
-    </AriaLogProvider>
+    <MemoryRouter>
+      <AriaLogProvider>
+        <Provider store={store}>{children}</Provider>
+      </AriaLogProvider>
+    </MemoryRouter>
   );
 };
 

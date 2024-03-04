@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import { render, screen, within } from "../../../test-utils/test-utils";
-import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../redux";
 import EinkommenPage from "../../pages/EinkommenPage";
 import { initialStepErwerbstaetigkeitState } from "../../../redux/stepErwerbstaetigkeitSlice";
@@ -25,8 +24,6 @@ const testMonths = [
   "September 2021",
   "August 2021",
 ];
-
-jest.mock("react-router");
 
 describe("Einkommens Page only with block Erwerbstätigkeit", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
@@ -128,13 +125,6 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
   });
 
   describe("Validation of form", () => {
-    let navigate = jest.fn();
-
-    beforeEach(() => {
-      navigate.mockClear();
-      (useNavigate as jest.Mock).mockReturnValue(navigate);
-    });
-
     const validStepEinkommenState: StepEinkommenState = {
       ...initialStepEinkommenState,
       ET1: {

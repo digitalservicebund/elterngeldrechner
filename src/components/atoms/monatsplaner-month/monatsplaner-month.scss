@@ -4,50 +4,40 @@
   width: 100%;
   user-select: none;
 
-  &__checkbox {
-    position: absolute;
-    opacity: 0;
-  }
-
-  label {
+  button {
     display: inline-block;
     width: 100%;
+    background: none;
+    border: none;
     cursor: pointer;
     text-align: center;
     text-decoration: underline;
-  }
-
-  &__checkbox:checked + label {
-    text-decoration: none;
-
-    @media print {
-      border: 1px solid black;
-    }
+    color: inherit;
   }
 
   &:focus-within {
     outline: px-to-rem(1) solid $color-primary;
   }
 
-  &--beg > label {
+  &--beg {
     color: $monatsplaner-month--beg--color;
   }
 
-  &--beg > &__checkbox:checked + label {
+  &--beg#{&}--selected {
     @media only screen {
       color: $monatsplaner-month--beg--contrast-color;
       background-color: $monatsplaner-month--beg--color;
     }
   }
 
-  &--egplus > &__checkbox:checked + label {
+  &--egplus#{&}--selected {
     @media only screen {
       color: $monatsplaner-month--egplus--contrast-color;
       background-color: $monatsplaner-month--egplus--color;
     }
   }
 
-  &--psb > &__checkbox:checked + label {
+  &--psb#{&}--selected {
     @media only screen {
       color: $monatsplaner-month--psb--contrast-color;
       background-color: $monatsplaner-month--psb--color;
@@ -59,27 +49,27 @@
   // gesetzt wurde, un es aussah, als ob der Monat nicht deselektiert wurde.
   // Erst nach einem Klick auf einem anderen Monat wurde dieser aktualisiert.
   @media (hover: hover) {
-    &:hover > label {
+    &:hover > button {
       text-decoration: none;
     }
 
-    &--beg:hover > label {
+    &--beg:hover {
       color: $monatsplaner-month--beg--contrast-color;
       background-color: $monatsplaner-month--beg--color;
     }
 
-    &--egplus:hover > label {
+    &--egplus:hover {
       color: $monatsplaner-month--egplus--contrast-color;
       background-color: $monatsplaner-month--egplus--color;
     }
 
-    &--psb:hover > label {
+    &--psb:hover {
       color: $monatsplaner-month--psb--contrast-color;
       background-color: $monatsplaner-month--psb--color;
     }
   }
 
-  &--psb#{&}--highlighted > label {
+  &--psb#{&}--highlighted {
     text-decoration: none;
     @media only screen {
       color: $monatsplaner-month--psb--contrast-color;

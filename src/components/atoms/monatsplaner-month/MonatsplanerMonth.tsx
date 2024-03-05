@@ -45,6 +45,10 @@ export const MonatsplanerMonth: FC<Props> = ({
     onMouseOver && onMouseOver();
   };
 
+  function onFocus(event: React.FocusEvent) {
+    onMouseOver && onMouseOver();
+  }
+
   return (
     <div
       className={classNames(
@@ -65,23 +69,17 @@ export const MonatsplanerMonth: FC<Props> = ({
         />
       ) : (
         <>
-          <input
-            id={label.replace(/ /g, "_")}
-            className={nsp("monatsplaner-month__checkbox")}
-            type="checkbox"
-            checked={isSelected}
-            onChange={onToggle}
-          />
-          <label
-            htmlFor={label.replace(/ /g, "_")}
+          <button
             aria-label={label}
             onMouseDown={handleMouseDown}
             onClick={handleClick}
             onMouseOver={handleMouseOver}
+            onFocus={onFocus}
+            onBlur={onMouseLeave}
             onMouseLeave={onMouseLeave}
           >
             {children}
-          </label>
+          </button>
         </>
       )}
     </div>

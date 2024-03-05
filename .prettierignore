@@ -2,3 +2,4 @@
 build-preview
 *.ttf
 *.woff
+.eslintrc

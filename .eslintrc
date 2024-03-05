@@ -3,7 +3,8 @@
     "react-app",
     "react-app/jest",
     "eslint:recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended"
   ],
   "rules": {
     "prettier/prettier": [
@@ -28,5 +29,5 @@
       }
     }
   ],
-  "plugins": ["prettier"]
+  "plugins": ["prettier", "jsx-a11y"]
 }

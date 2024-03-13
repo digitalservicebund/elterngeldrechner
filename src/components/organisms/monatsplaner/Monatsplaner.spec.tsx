@@ -553,19 +553,16 @@ describe("Monatsplaner", () => {
       expect(queryElternteil1BEGMonth(11)).not.toBeInTheDocument();
     });
 
-    it("should not disable any BEG months after the 12th month", async () => {
+    it("should always disable BEG months of the other parent after the 12th month", async () => {
       // it("having a simultaneous BEG month, no BEG months get disabled after the 12 month", async () => {
       render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
       await selectSimultaneousBEGMonth(0);
 
-      // Activate additional months by second partner BEG month.
-      await userEvent.click(getElternteil1BEGMonth(3));
-
       await userEvent.click(getElternteil1BEGMonth(12));
       await userEvent.click(getElternteil2BEGMonth(13));
 
-      expect(queryElternteil2BEGMonth(12)).toBeInTheDocument();
-      expect(queryElternteil1BEGMonth(13)).toBeInTheDocument();
+      expect(queryElternteil2BEGMonth(12)).not.toBeInTheDocument();
+      expect(queryElternteil1BEGMonth(13)).not.toBeInTheDocument();
     });
 
     it("should not disable any BEG month if multiple kids are expected", async () => {

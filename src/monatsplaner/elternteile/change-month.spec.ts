@@ -544,7 +544,22 @@ describe("Change Month", () => {
       },
     );
 
-    it("is possible to select more than one simultaneous BEG months within the first 12 months if multiple kids are expected", () => {
+    it("is not possible to select any simultaneous BEG months after the 12th", () => {
+      const elternteile = new TestElternteile();
+
+      elternteile
+        .changeMonth("ET1", 12, "BEG")
+        .changeMonth("ET2", 12, "BEG")
+        .changeMonth("ET2", 13, "BEG")
+        .changeMonth("ET1", 13, "BEG");
+
+      expect(elternteile.ET1.months[12].type).toBe("BEG");
+      expect(elternteile.ET2.months[12].type).not.toBe("BEG");
+      expect(elternteile.ET2.months[13].type).toBe("BEG");
+      expect(elternteile.ET1.months[13].type).not.toBe("BEG");
+    });
+
+    it("is possible to select multiple simultaneous BEG months also after the 12th month if multiple kids are expected", () => {
       const elternteile = new TestElternteile({
         mehrlinge: true,
         behindertesGeschwisterkind: false,
@@ -555,15 +570,19 @@ describe("Change Month", () => {
         .changeMonth("ET1", 0, "BEG")
         .changeMonth("ET2", 0, "BEG")
         .changeMonth("ET1", 1, "BEG")
-        .changeMonth("ET2", 1, "BEG");
+        .changeMonth("ET2", 1, "BEG")
+        .changeMonth("ET1", 13, "BEG")
+        .changeMonth("ET2", 13, "BEG");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("BEG");
       expect(elternteile.ET1.months[1].type).toBe("BEG");
       expect(elternteile.ET2.months[1].type).toBe("BEG");
+      expect(elternteile.ET1.months[13].type).toBe("BEG");
+      expect(elternteile.ET2.months[13].type).toBe("BEG");
     });
 
-    it("is possible to select more than one simultaneous BEG months within the first 12 months if there is a disabled sibling", () => {
+    it("is possible to select multiple simultaneous BEG months also after the 12th month if there is a disabled sibling", () => {
       const elternteile = new TestElternteile({
         behindertesGeschwisterkind: true,
         mehrlinge: false,
@@ -574,29 +593,14 @@ describe("Change Month", () => {
         .changeMonth("ET1", 0, "BEG")
         .changeMonth("ET2", 0, "BEG")
         .changeMonth("ET1", 1, "BEG")
-        .changeMonth("ET2", 1, "BEG");
-
-      expect(elternteile.ET1.months[0].type).toBe("BEG");
-      expect(elternteile.ET2.months[0].type).toBe("BEG");
-      expect(elternteile.ET1.months[1].type).toBe("BEG");
-      expect(elternteile.ET2.months[1].type).toBe("BEG");
-    });
-
-    it("is possible to select more simultaneous months after the twelve month", () => {
-      const elternteile = new TestElternteile();
-
-      elternteile
-        .changeMonth("ET1", 0, "BEG")
-        .changeMonth("ET2", 0, "BEG")
-        .changeMonth("ET1", 12, "BEG")
-        .changeMonth("ET2", 12, "BEG")
+        .changeMonth("ET2", 1, "BEG")
         .changeMonth("ET1", 13, "BEG")
         .changeMonth("ET2", 13, "BEG");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("BEG");
-      expect(elternteile.ET1.months[12].type).toBe("BEG");
-      expect(elternteile.ET2.months[12].type).toBe("BEG");
+      expect(elternteile.ET1.months[1].type).toBe("BEG");
+      expect(elternteile.ET2.months[1].type).toBe("BEG");
       expect(elternteile.ET1.months[13].type).toBe("BEG");
       expect(elternteile.ET2.months[13].type).toBe("BEG");
     });

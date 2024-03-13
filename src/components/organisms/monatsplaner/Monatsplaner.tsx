@@ -49,8 +49,8 @@ import { EgrConst } from "../../../globals/js/egr-configuration";
 import { resetStoreAction } from "../../../redux/resetStoreAction";
 import { YesNo } from "../../../globals/js/calculations/model";
 import {
-  canNotChangeBEGBecauseTooManySimultaneousMonths,
-  getNumberOfSimultanuousBEGMonthsInFirstTwelveMonths,
+  canNotChangeBEGDueToSimultaneousMonthRules,
+  reachedLimitOfSimultaneousBEGMonths,
   isExceptionToSimulatenousMonthRestrictions,
 } from "../../../monatsplaner/elternteile/change-month";
 import { NotificationMaxSimultaneousBEGMonths } from "../../atoms/notification/NotificationMaxSimultaneousBEGMonths";
@@ -371,7 +371,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     const isInValidRange = monthIndex <= lastPossibleMonthIndex;
     const moreMonthsAvailable = elternteile.remainingMonths.basiselterngeld > 0;
     const blockedBySimulataneousMonth =
-      canNotChangeBEGBecauseTooManySimultaneousMonths(
+      canNotChangeBEGDueToSimultaneousMonthRules(
         { targetType: "BEG", elternteil, monthIndex },
         elternteile,
         elternteileSettings,
@@ -382,18 +382,19 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     );
   }
 
-  useEffect(() => {
-    const simultaneousMonths =
-      getNumberOfSimultanuousBEGMonthsInFirstTwelveMonths(elternteile);
-
+  function possiblyShowNotificationForMaxSimultaneousBEGMonths() {
+    const reachedLimit = reachedLimitOfSimultaneousBEGMonths(elternteile);
     const isException =
       isExceptionToSimulatenousMonthRestrictions(elternteileSettings);
 
-    const showNotification = simultaneousMonths === 1 && !isException;
-
-    if (showNotification)
+    if (reachedLimit && !isException)
       setNotificationMessages([<NotificationMaxSimultaneousBEGMonths />]);
-  }, [elternteile, elternteileSettings]);
+  }
+
+  useEffect(possiblyShowNotificationForMaxSimultaneousBEGMonths, [
+    elternteile,
+    elternteileSettings,
+  ]);
 
   return (
     <>

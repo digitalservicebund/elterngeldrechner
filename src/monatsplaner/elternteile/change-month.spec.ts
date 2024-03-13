@@ -1,335 +1,243 @@
 import { createElternteile } from "./elternteile";
-import { Elternteile, Geburtstag } from "./elternteile-types";
-import { MutterschutzSettings } from "./elternteile-setting";
-import changeMonth, { ChangeMonthSettings } from "./change-month";
+import {
+  ElterngeldType,
+  Elternteil,
+  Elternteile,
+  Geburtstag,
+  RemainingMonthByType,
+} from "./elternteile-types";
+import {
+  CreateElternteileSettings,
+  MutterschutzSettings,
+} from "./elternteile-setting";
+import changeMonth from "./change-month";
 import { DateTime } from "luxon";
 
-describe("Change Month", () => {
-  const initialElternteile = createElternteile();
-  const initialElternteileWithPartnerMonate = createElternteile({
+/**
+ * The purpose of this class is to highly improve the readability of tests by
+ * making their code more concise. It should make test cases shorter and help
+ * the reader to grasp easily what this test is actually about.
+ *
+ * Therefore the following concepts have been used:
+ *   - Allowing to easily chain calls to change months. Many scenarios require
+ *     to change many months in a row with continuous variable re-assignment.
+ *     Sometimes it might be still good to submit calls separated.
+ *   - A flat list of named function parameters without the need to create
+ *     objects that bloat up the code by formatting. IDE inlay hints help with
+ *     the readability for names where needed.
+ *   - Meaningful order of parameters like the natural description of such an
+ *     action. Also helps to quickly grasp differences between the calls,
+ *     formatted below each other.
+ *   - Mixing the stateful approach of the source code with the Redux store
+ *     and the functional domain logic behind it (i.e. no need to pass
+ *     Elterngeld settings every time).
+ *
+ * This is only implemented in the tests to avoid a bigger refactoring of the
+ * source code for now. But is is very important to have good tests in place.
+ * Especially for this important part of the code base. Therefore this
+ * compromise as it still puts a wrapper around the source code. Which should
+ * not be necessary at best.
+ *
+ * The terminology remains basically untouched.
+ *
+ * The style to implement this as a class has been chosen for simplicity
+ * reasons. The private data field with getters mimic the original data
+ * structure is used to simplify usage and keep a strong interface.
+ *
+ * NOTE: This touched the topic of a weak domain model.
+ */
+class TestElternteile {
+  private elternteile: Elternteile;
+  private readonly settings: CreateElternteileSettings | undefined = undefined;
+
+  constructor(settings?: CreateElternteileSettings) {
+    this.elternteile = createElternteile(settings);
+    this.settings = settings;
+  }
+
+  public get ET1(): Elternteil {
+    return this.elternteile.ET1;
+  }
+
+  public get ET2(): Elternteil {
+    return this.elternteile.ET2;
+  }
+
+  public get remainingMonths(): RemainingMonthByType {
+    return this.elternteile.remainingMonths;
+  }
+
+  public changeMonth(
+    elternteil: "ET1" | "ET2",
+    monthIndex: number,
+    targetType: ElterngeldType,
+  ): this {
+    this.elternteile = changeMonth(
+      this.elternteile,
+      {
+        elternteil,
+        monthIndex,
+        targetType,
+      },
+      this.settings,
+    );
+
+    return this;
+  }
+}
+
+function createElternteileWithPartnerMonate(): TestElternteile {
+  return new TestElternteile({
+    partnerMonate: true,
     mehrlinge: false,
     behindertesGeschwisterkind: false,
-    partnerMonate: true,
   });
+}
 
+function createElternteileWithFruehchen(
+  weeksTooEarly = 6,
+  partnerMonate = false,
+): TestElternteile {
+  const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");
+  const dateOfBirth = expectedDateOfBirth.minus({ weeks: weeksTooEarly });
+  const geburtstag: Geburtstag = {
+    geburt: dateOfBirth.toISO() as string,
+    errechnet: expectedDateOfBirth.toISO() as string,
+  };
+
+  return new TestElternteile({
+    geburtstag,
+    partnerMonate,
+    mehrlinge: false,
+    behindertesGeschwisterkind: false,
+  });
+}
+
+function monthIndexRange(start: number, end: number): number[] {
+  return Array.from(Array(end + 1).keys()).slice(start, end + 1);
+}
+
+describe("Change Month", () => {
   it("should change the third Lebensmonat of ET1", () => {
-    const elternteile: Elternteile = changeMonth(initialElternteile, {
-      elternteil: "ET1",
-      monthIndex: 2,
-      targetType: "BEG",
-    });
+    const elternteile = new TestElternteile();
+
+    elternteile.changeMonth("ET1", 2, "BEG");
 
     expect(elternteile.ET1.months[2].type).toBe("BEG");
   });
 
   it("should change the third Lebensmonat of ET2", () => {
-    const elternteile: Elternteile = changeMonth(initialElternteile, {
-      elternteil: "ET2",
-      monthIndex: 2,
-      targetType: "BEG",
-    });
+    const elternteile = new TestElternteile();
+
+    elternteile.changeMonth("ET2", 2, "BEG");
 
     expect(elternteile.ET2.months[2].type).toBe("BEG");
   });
 
   it("should decrease the number of BEG for one Elternteil", () => {
-    const elternteile: Elternteile = changeMonth(initialElternteile, {
-      elternteil: "ET1",
-      monthIndex: 2,
-      targetType: "BEG",
-    });
+    const elternteile = new TestElternteile();
+
+    elternteile.changeMonth("ET1", 2, "BEG");
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(11);
   });
 
   it("should return a negative number if one Elternteil uses more BEG than it is allowed to", () => {
-    let elternteile: Elternteile = initialElternteile;
-    for (let i = 0; i < 13; i++) {
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: i,
-        targetType: "BEG",
-      });
+    const elternteile = new TestElternteile();
+
+    for (const monthIndex of monthIndexRange(0, 12)) {
+      elternteile.changeMonth("ET1", monthIndex, "BEG");
     }
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(-1);
   });
 
   it("should increase the number of BEG if a Lebensmonat with BEG is changed to not having any ElterngeldType", () => {
-    let elternteile: Elternteile = initialElternteile;
+    const elternteile = new TestElternteile();
 
-    elternteile = changeMonth(elternteile, {
-      elternteil: "ET1",
-      monthIndex: 2,
-      targetType: "BEG",
-    });
-    elternteile = changeMonth(elternteile, {
-      elternteil: "ET1",
-      monthIndex: 2,
-      targetType: "None",
-    });
+    elternteile.changeMonth("ET1", 2, "BEG");
+    elternteile.changeMonth("ET1", 2, "None");
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(12);
   });
 
   it("should reduce the number of available Basiselterngeld only once", () => {
-    let elternteile: Elternteile = initialElternteile;
+    const elternteile = new TestElternteile();
 
-    elternteile = changeMonth(elternteile, {
-      elternteil: "ET1",
-      monthIndex: 2,
-      targetType: "BEG",
-    });
-    elternteile = changeMonth(elternteile, {
-      elternteil: "ET1",
-      monthIndex: 2,
-      targetType: "BEG",
-    });
+    elternteile.changeMonth("ET1", 2, "BEG");
+    elternteile.changeMonth("ET1", 2, "BEG");
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(11);
   });
 
   describe("Partnermonat", () => {
     it("should increase the allowed BEG months to 14 if partnerMonate are true", () => {
-      const elternteileSettings = {
-        partnerMonate: true,
-        mehrlinge: false,
-        behindertesGeschwisterkind: false,
-      };
-      let elternteile: Elternteile = initialElternteileWithPartnerMonate;
+      const elternteile = createElternteileWithPartnerMonate();
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 1,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 2,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
+      elternteile
+        .changeMonth("ET1", 1, "BEG")
+        .changeMonth("ET1", 2, "BEG")
+        .changeMonth("ET2", 2, "BEG")
+        .changeMonth("ET2", 3, "BEG");
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 2,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 3,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-
-      // 14 month minus 4 month already taken
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(10);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(14 - 4);
     });
 
     it("should not increase the allowed BEG months to 14 if partnerMonate are false", () => {
-      let elternteile: Elternteile = initialElternteile;
+      const elternteile = new TestElternteile();
 
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 1,
-        targetType: "BEG",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 2,
-        targetType: "BEG",
-      });
+      elternteile
+        .changeMonth("ET1", 1, "BEG")
+        .changeMonth("ET1", 2, "BEG")
+        .changeMonth("ET1", 3, "BEG")
+        .changeMonth("ET1", 4, "BEG");
 
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 3,
-        targetType: "BEG",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 4,
-        targetType: "BEG",
-      });
-
-      // 12 month minus 4 month already taken
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(8);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(12 - 4);
     });
 
     it("should still have Partnermonate after setting one month to none", () => {
-      const elternteileSettings = {
-        partnerMonate: true,
-        mehrlinge: false,
-        behindertesGeschwisterkind: false,
-      };
-      let elternteile: Elternteile = initialElternteileWithPartnerMonate;
+      const elternteile = createElternteileWithPartnerMonate();
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 1,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 2,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
+      elternteile
+        .changeMonth("ET1", 1, "BEG")
+        .changeMonth("ET1", 2, "BEG")
+        .changeMonth("ET2", 2, "BEG")
+        .changeMonth("ET2", 3, "BEG")
+        .changeMonth("ET2", 4, "BEG")
+        .changeMonth("ET2", 4, "None");
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 2,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 3,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 4,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-
-      // change a month back to None
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 4,
-          targetType: "None",
-        },
-        elternteileSettings,
-      );
-
-      // 14 month minus 4 month already taken
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(10);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(14 - 4);
     });
 
     it("should increase the BEG months by two if both Elternteile choose BEG and they have a Frühchen", () => {
-      let elternteile: Elternteile = initialElternteileWithPartnerMonate;
-      const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");
-      const dateOfBirth = expectedDateOfBirth.minus({ weeks: 6 });
-      const geburtstag: Geburtstag = {
-        geburt: dateOfBirth.toISO() as string,
-        errechnet: expectedDateOfBirth.toISO() as string,
-      };
-      const elternteileSettings = {
-        partnerMonate: true,
-        geburtstag,
-        mehrlinge: false,
-        behindertesGeschwisterkind: false,
-      };
+      const elternteile = createElternteileWithFruehchen(6, true);
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 1,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 2,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
+      elternteile
+        .changeMonth("ET1", 1, "BEG")
+        .changeMonth("ET1", 2, "BEG")
+        .changeMonth("ET2", 1, "BEG")
+        .changeMonth("ET2", 3, "BEG");
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 1,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 3,
-          targetType: "BEG",
-        },
-        elternteileSettings,
-      );
-
-      //15 month minus 4 month already taken
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(11);
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(15 - 4);
     });
   });
 
   describe("Sonderregelung Frühgeburt", () => {
-    const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");
-
     it.each([
-      { weeks: 3, allowedAmountOfBEGMonth: 12 }, // Kein Frühchen
-      { weeks: 6, allowedAmountOfBEGMonth: 13 },
-      { weeks: 8, allowedAmountOfBEGMonth: 14 },
-      { weeks: 12, allowedAmountOfBEGMonth: 15 },
-      { weeks: 16, allowedAmountOfBEGMonth: 16 },
+      { weeksTooEarly: 3, expectedNumberOfBEGMonths: 12 }, // Kein Frühchen
+      { weeksTooEarly: 6, expectedNumberOfBEGMonths: 13 },
+      { weeksTooEarly: 8, expectedNumberOfBEGMonths: 14 },
+      { weeksTooEarly: 12, expectedNumberOfBEGMonths: 15 },
+      { weeksTooEarly: 16, expectedNumberOfBEGMonths: 16 },
     ])(
-      "should allow $allowedAmountOfBEGMonth Month of BEG if the birth was at least $weeks weeks earlier than expected",
-      ({ allowedAmountOfBEGMonth, weeks }) => {
-        const dateOfBirth = expectedDateOfBirth.minus({ weeks });
+      "should allow $expectedNumberOfBEGMonths Month of BEG if the birth was at least $weeksTooEarly weeks earlier than expected",
+      ({ weeksTooEarly, expectedNumberOfBEGMonths }) => {
+        const elternteile = createElternteileWithFruehchen(weeksTooEarly);
 
-        const elternteile = changeMonth(
-          initialElternteile,
-          {
-            elternteil: "ET1",
-            monthIndex: 2,
-            targetType: "BEG",
-          },
-          {
-            geburtstag: {
-              geburt: dateOfBirth.toISO() as string,
-              errechnet: expectedDateOfBirth.toISO() as string,
-            },
-            mehrlinge: false,
-            behindertesGeschwisterkind: false,
-          },
-        );
+        elternteile.changeMonth("ET1", 2, "BEG");
 
         expect(elternteile.remainingMonths.basiselterngeld).toBe(
-          allowedAmountOfBEGMonth - 1,
+          expectedNumberOfBEGMonths - 1,
         );
       },
     );
@@ -337,125 +245,55 @@ describe("Change Month", () => {
 
   describe("1 month of EG+ is equal to 2 month of BEG", () => {
     it("should reduce the amount of remaining EG+ month by two after changing one month to BEG", () => {
-      const elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "BEG",
-      });
+      const elternteile = new TestElternteile();
+      const initialElterngeldPlusMonths =
+        elternteile.remainingMonths.elterngeldplus;
+
+      elternteile.changeMonth("ET1", 0, "BEG");
 
       expect(elternteile.remainingMonths.elterngeldplus).toBe(
-        initialElternteile.remainingMonths.elterngeldplus - 2,
+        initialElterngeldPlusMonths - 2,
       );
     });
 
     it("should not reduce the amount of remaining BEG month into negative if selecting EG+", () => {
-      let elternteile = initialElternteile;
-      for (let i = 0; i < 10; i++) {
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: i,
-          targetType: "BEG",
-        });
+      const elternteile = new TestElternteile();
+
+      for (const monthIndex of monthIndexRange(0, 9)) {
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
       }
 
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 10,
-        targetType: "EG+",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 11,
-        targetType: "EG+",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 12,
-        targetType: "EG+",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 13,
-        targetType: "EG+",
-      });
+      elternteile
+        .changeMonth("ET1", 10, "EG+")
+        .changeMonth("ET1", 11, "EG+")
+        .changeMonth("ET1", 12, "EG+")
+        .changeMonth("ET1", 13, "EG+");
 
       expect(elternteile.remainingMonths.basiselterngeld).toBe(0);
       expect(elternteile.remainingMonths.elterngeldplus).toBe(0);
     });
 
     it("should reduce the amount of remaining BEG month by an divisible-by-two amount of EG+ months e.g taking 3 EG+ month will reduce BEG by 4", () => {
-      let elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "EG+",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 1,
-        targetType: "EG+",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 2,
-        targetType: "EG+",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 3,
-        targetType: "BEG",
-      });
+      const elternteile = new TestElternteile();
+
+      elternteile
+        .changeMonth("ET1", 0, "EG+")
+        .changeMonth("ET1", 1, "EG+")
+        .changeMonth("ET1", 2, "EG+")
+        .changeMonth("ET1", 3, "BEG");
 
       // 12 month of BEG minus 2 from EG+ (4 month of EG+ rounded up from 3 is equivalent 2 month BEG) minus 1 month BEG
-      const expectedBEGMonths = 9;
-      expect(elternteile.remainingMonths.basiselterngeld).toBe(
-        expectedBEGMonths,
-      );
+      expect(elternteile.remainingMonths.basiselterngeld).toBe(9);
     });
 
     it("should allow double the amount of Partnermonate (4 months) if the other Elternteil also has some months selected", () => {
-      const elternteileSettings = {
-        partnerMonate: true,
-        mehrlinge: false,
-        behindertesGeschwisterkind: false,
-      };
-      let elternteile = initialElternteileWithPartnerMonate;
+      const elternteile = createElternteileWithPartnerMonate();
 
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 0,
-          targetType: "EG+",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET1",
-          monthIndex: 1,
-          targetType: "EG+",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 0,
-          targetType: "EG+",
-        },
-        elternteileSettings,
-      );
-      elternteile = changeMonth(
-        elternteile,
-        {
-          elternteil: "ET2",
-          monthIndex: 1,
-          targetType: "EG+",
-        },
-        elternteileSettings,
-      );
+      elternteile
+        .changeMonth("ET1", 0, "EG+")
+        .changeMonth("ET1", 1, "EG+")
+        .changeMonth("ET2", 0, "EG+")
+        .changeMonth("ET2", 1, "EG+");
 
       // double 14 BEG month - 4 month EG+
       expect(elternteile.remainingMonths.elterngeldplus).toBe(24);
@@ -464,11 +302,9 @@ describe("Change Month", () => {
 
   describe("Partnschaftsbonus", () => {
     it("should select at least two month for both Elternteile", () => {
-      const elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 10,
-        targetType: "PSB",
-      });
+      const elternteile = new TestElternteile();
+
+      elternteile.changeMonth("ET1", 10, "PSB");
 
       expect(elternteile.ET1.months[10].type).toBe("PSB");
       expect(elternteile.ET2.months[11].type).toBe("PSB");
@@ -477,11 +313,9 @@ describe("Change Month", () => {
     });
 
     it("should select the two last months if selecting the last month", () => {
-      const elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 31,
-        targetType: "PSB",
-      });
+      const elternteile = new TestElternteile();
+
+      elternteile.changeMonth("ET1", 31, "PSB");
 
       expect(elternteile.ET1.months[30].type).toBe("PSB");
       expect(elternteile.ET2.months[31].type).toBe("PSB");
@@ -490,17 +324,10 @@ describe("Change Month", () => {
     });
 
     it("should deselect both months if one of them was deselected", () => {
-      let elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET2",
-        monthIndex: 10,
-        targetType: "PSB",
-      });
+      const elternteile = new TestElternteile();
 
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 11,
-        targetType: "None",
-      });
+      elternteile.changeMonth("ET2", 10, "PSB");
+      elternteile.changeMonth("ET1", 11, "None");
 
       expect(elternteile.ET1.months[10].type).toBe("None");
       expect(elternteile.ET1.months[11].type).toBe("None");
@@ -509,23 +336,12 @@ describe("Change Month", () => {
     });
 
     it("should deselect only one month if more than two month are selected", () => {
-      // select three months
-      let elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "PSB",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 2,
-        targetType: "PSB",
-      });
-      //deselect a month
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "None",
-      });
+      const elternteile = new TestElternteile();
+
+      elternteile
+        .changeMonth("ET1", 0, "PSB")
+        .changeMonth("ET1", 2, "PSB")
+        .changeMonth("ET1", 0, "None");
 
       expect(elternteile.ET1.months[0].type).toBe("None");
       expect(elternteile.ET1.months[1].type).toBe("PSB");
@@ -533,32 +349,19 @@ describe("Change Month", () => {
     });
 
     it("should only select two month if no other PSB month is selected", () => {
-      let elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "PSB",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 2,
-        targetType: "PSB",
-      });
+      const elternteile = new TestElternteile();
+
+      elternteile.changeMonth("ET1", 0, "PSB");
+      elternteile.changeMonth("ET1", 2, "PSB");
 
       expect(elternteile.ET1.months[3].type).toBe("None");
     });
 
     it("should change the month for the other Elternteil to None if the current Elternteil chooses BEG for a Partnerschaftsbonus month", () => {
-      let elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "PSB",
-      });
+      const elternteile = new TestElternteile();
 
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "BEG",
-      });
+      elternteile.changeMonth("ET1", 0, "PSB");
+      elternteile.changeMonth("ET1", 0, "BEG");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("None");
@@ -566,217 +369,134 @@ describe("Change Month", () => {
 
     describe("having two month selected", () => {
       it("should not allow to select a none adjacent month above the current selection", () => {
-        let elternteile = changeMonth(initialElternteile, {
-          elternteil: "ET1",
-          monthIndex: 7,
-          targetType: "PSB",
-        });
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: 5,
-          targetType: "PSB",
-        });
+        const elternteile = new TestElternteile();
+
+        elternteile.changeMonth("ET1", 7, "PSB");
+        elternteile.changeMonth("ET1", 5, "PSB");
 
         expect(elternteile.ET1.months[5].type).toBe("None");
       });
 
       it("should not allow to select a none adjacent month below the current selection", () => {
-        let elternteile = changeMonth(initialElternteile, {
-          elternteil: "ET1",
-          monthIndex: 10,
-          targetType: "PSB",
-        });
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: 15,
-          targetType: "PSB",
-        });
+        const elternteile = new TestElternteile();
+
+        elternteile.changeMonth("ET1", 10, "PSB");
+        elternteile.changeMonth("ET1", 15, "PSB");
 
         expect(elternteile.ET1.months[15].type).toBe("None");
       });
 
       it("should allow to select an adjacent month below the current selection", () => {
-        let elternteile = changeMonth(initialElternteile, {
-          elternteil: "ET1",
-          monthIndex: 10,
-          targetType: "PSB",
-        });
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: 12,
-          targetType: "PSB",
-        });
+        const elternteile = new TestElternteile();
+
+        elternteile.changeMonth("ET1", 10, "PSB");
+        elternteile.changeMonth("ET1", 12, "PSB");
 
         expect(elternteile.ET1.months[12].type).toBe("PSB");
       });
 
       it("should allow to select an adjacent month above the current selection", () => {
-        let elternteile = changeMonth(initialElternteile, {
-          elternteil: "ET1",
-          monthIndex: 10,
-          targetType: "PSB",
-        });
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: 9,
-          targetType: "PSB",
-        });
+        const elternteile = new TestElternteile();
+
+        elternteile.changeMonth("ET1", 10, "PSB");
+        elternteile.changeMonth("ET1", 9, "PSB");
 
         expect(elternteile.ET1.months[9].type).toBe("PSB");
       });
 
       it("should not allow to deselect a month in the middle", () => {
-        let elternteile = changeMonth(initialElternteile, {
-          elternteil: "ET1",
-          monthIndex: 0,
-          targetType: "PSB",
-        });
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: 2,
-          targetType: "PSB",
-        });
+        const elternteile = new TestElternteile();
 
-        elternteile = changeMonth(elternteile, {
-          elternteil: "ET1",
-          monthIndex: 1,
-          targetType: "None",
-        });
+        elternteile
+          .changeMonth("ET1", 0, "PSB")
+          .changeMonth("ET1", 2, "PSB")
+          .changeMonth("ET1", 1, "None");
 
         expect(elternteile.ET1.months[1].type).toBe("PSB");
       });
     });
 
     it("should not allow to select more than 4 PSB months", () => {
-      let elternteile = changeMonth(initialElternteile, {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "PSB",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 2,
-        targetType: "PSB",
-      });
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 3,
-        targetType: "PSB",
-      });
+      const elternteile = new TestElternteile();
 
-      //try to select a fifth month
-      elternteile = changeMonth(elternteile, {
-        elternteil: "ET1",
-        monthIndex: 4,
-        targetType: "PSB",
-      });
+      elternteile
+        .changeMonth("ET1", 0, "PSB")
+        .changeMonth("ET1", 2, "PSB")
+        .changeMonth("ET1", 3, "PSB")
+        .changeMonth("ET1", 4, "PSB");
 
       expect(elternteile.ET1.months[4].type).toBe("None");
     });
 
     it("should not allow to select any PSB months if partner months are disabled", () => {
-      let anyPSBChangeMonthSettings: ChangeMonthSettings = {
-        elternteil: "ET1",
-        monthIndex: 0,
-        targetType: "PSB",
-      };
+      const elternteile = new TestElternteile({
+        partnerMonate: false,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      });
 
-      let elternteile = changeMonth(
-        initialElternteile,
-        anyPSBChangeMonthSettings,
-        {
-          partnerMonate: false,
-          mehrlinge: false,
-          behindertesGeschwisterkind: false,
-        },
-      );
+      elternteile.changeMonth("ET1", 2, "PSB");
 
-      expect(elternteile).toStrictEqual(initialElternteile);
+      expect(elternteile.ET1.months[2].type).toBe("None");
     });
   });
 
   describe("Months with Mutterschutz", () => {
-    const numberOfMutterschutzMonths = 3;
+    function createElternteileWithMutterschutz(
+      elternteilWithMutterschutz: "ET1" | "ET2" = "ET1",
+      numberOfMutterschutzMonths = 3,
+    ): TestElternteile {
+      const geburtstag: Geburtstag = {
+        geburt: "2022-03-04T00:00:00Z",
+        errechnet: "2022-03-04T00:00:00Z",
+      };
 
-    const geburtstag: Geburtstag = {
-      geburt: "2022-03-04T00:00:00Z",
-      errechnet: "2022-03-04T00:00:00Z",
-    };
-    const mutterschutz: MutterschutzSettings = {
-      endDate: DateTime.fromISO(geburtstag.geburt)
-        .plus({ month: numberOfMutterschutzMonths - 1 })
-        .toISO() as string,
-      elternteil: "ET1",
-    };
-    const elternteileSettings = {
-      geburtstag,
-      mutterschutz,
-      mehrlinge: false,
-      behindertesGeschwisterkind: false,
-    };
-    const elternteileWithMutterschutz = createElternteile(elternteileSettings);
+      const mutterschutz: MutterschutzSettings = {
+        endDate: DateTime.fromISO(geburtstag.geburt)
+          .plus({ month: numberOfMutterschutzMonths - 1 })
+          .toISO() as string,
+        elternteil: elternteilWithMutterschutz,
+      };
+
+      return new TestElternteile({
+        geburtstag,
+        mutterschutz,
+        mehrlinge: false,
+        behindertesGeschwisterkind: false,
+      });
+    }
 
     it("should not deselect the Mutterschutz months", () => {
-      let elternteile = elternteileWithMutterschutz;
-      for (
-        let monthIndex = 0;
-        monthIndex < numberOfMutterschutzMonths;
-        monthIndex++
-      ) {
-        elternteile = changeMonth(
-          elternteileWithMutterschutz,
-          {
-            monthIndex: monthIndex,
-            targetType: "None",
-            elternteil: mutterschutz.elternteil,
-          },
-          elternteileSettings,
-        );
+      const elternteile = createElternteileWithMutterschutz("ET1", 2);
+
+      for (const monthIndex of monthIndexRange(0, 1)) {
+        elternteile.changeMonth("ET1", monthIndex, "None");
       }
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET1.months[1].type).toBe("BEG");
-      expect(elternteile.ET1.months[2].type).toBe("BEG");
     });
 
     it("should change the month after the last Mutterschutz month", () => {
-      const elternteile = changeMonth(
-        elternteileWithMutterschutz,
-        {
-          monthIndex: 3,
-          targetType: "EG+",
-          elternteil: mutterschutz.elternteil,
-        },
-        elternteileSettings,
-      );
+      const elternteile = createElternteileWithMutterschutz("ET1", 2);
 
-      expect(elternteile.ET1.months[3].type).toBe("EG+");
+      elternteile.changeMonth("ET1", 2, "EG+");
+
+      expect(elternteile.ET1.months[2].type).toBe("EG+");
     });
 
     it("should change the months for the other Elternteil", () => {
-      const elternteile = changeMonth(
-        elternteileWithMutterschutz,
-        {
-          monthIndex: 0,
-          targetType: "EG+",
-          elternteil: "ET2",
-        },
-        elternteileSettings,
-      );
+      const elternteile = createElternteileWithMutterschutz("ET1");
+
+      elternteile.changeMonth("ET2", 0, "EG+");
 
       expect(elternteile.ET2.months[0].type).toBe("EG+");
     });
 
     it("should not change any month to PSB", () => {
-      const elternteile = changeMonth(
-        elternteileWithMutterschutz,
-        {
-          monthIndex: 0,
-          targetType: "PSB",
-          elternteil: "ET2",
-        },
-        elternteileSettings,
-      );
+      const elternteile = createElternteileWithMutterschutz("ET1");
+
+      elternteile.changeMonth("ET2", 0, "PSB");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("None");
@@ -784,25 +504,13 @@ describe("Change Month", () => {
   });
 
   describe("limited number of simultaneous BEG months", () => {
-    const firstTwelveMonthIndexes = Array.from(Array(12).keys());
-
-    it.each(firstTwelveMonthIndexes)(
+    it.each(monthIndexRange(0, 11))(
       "is possible to choose a single simultatnous BEG month within the first 12 months (month: '%s')",
       (monthIndex) => {
-        const commonSettings = {
-          targetType: "BEG",
-          monthIndex,
-        };
-        let elternteile = { ...initialElternteile };
+        const elternteile = new TestElternteile();
 
-        elternteile = changeMonth(elternteile, {
-          ...commonSettings,
-          elternteil: "ET1",
-        } as ChangeMonthSettings);
-        elternteile = changeMonth(elternteile, {
-          ...commonSettings,
-          elternteil: "ET2",
-        } as ChangeMonthSettings);
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
+        elternteile.changeMonth("ET2", monthIndex, "BEG");
 
         expect(elternteile.ET1.months[monthIndex].type).toBe("BEG");
         expect(elternteile.ET2.months[monthIndex].type).toBe("BEG");
@@ -810,9 +518,10 @@ describe("Change Month", () => {
     );
 
     // [[0, 1], [0, 2], ... [1, 0], [1, 2], ..., [11, 9], [11, 10] ]
-    const pairsOfPossibleMonthCombinations = firstTwelveMonthIndexes.flatMap(
+    const firstTwelveMonths = monthIndexRange(0, 11);
+    const pairsOfPossibleMonthCombinations = firstTwelveMonths.flatMap(
       (firstMonth) =>
-        firstTwelveMonthIndexes
+        firstTwelveMonths
           .map((secondMonth) => [firstMonth, secondMonth])
           .filter(([firstMonth, secondMonth]) => firstMonth !== secondMonth),
     );
@@ -820,30 +529,13 @@ describe("Change Month", () => {
     it.each(pairsOfPossibleMonthCombinations)(
       "is not possible to select a second simultaneous BEG month within the first 12 months (months '%s' and '%s')",
       (firstMonth, secondMonth) => {
-        let elternteile = { ...initialElternteile };
-        elternteile = changeMonth(elternteile, {
-          targetType: "BEG",
-          monthIndex: firstMonth,
-          elternteil: "ET1",
-        });
+        const elternteile = new TestElternteile();
 
-        elternteile = changeMonth(elternteile, {
-          targetType: "BEG",
-          monthIndex: firstMonth,
-          elternteil: "ET2",
-        });
-
-        elternteile = changeMonth(elternteile, {
-          targetType: "BEG",
-          monthIndex: secondMonth,
-          elternteil: "ET1",
-        });
-
-        elternteile = changeMonth(elternteile, {
-          targetType: "BEG",
-          monthIndex: secondMonth,
-          elternteil: "ET2",
-        });
+        elternteile
+          .changeMonth("ET1", firstMonth, "BEG")
+          .changeMonth("ET2", firstMonth, "BEG")
+          .changeMonth("ET1", secondMonth, "BEG")
+          .changeMonth("ET2", secondMonth, "BEG");
 
         expect(elternteile.ET1.months[firstMonth].type).toBe("BEG");
         expect(elternteile.ET2.months[firstMonth].type).toBe("BEG");
@@ -853,54 +545,17 @@ describe("Change Month", () => {
     );
 
     it("is possible to select more than one simultaneous BEG months within the first 12 months if multiple kids are expected", () => {
-      const elternteileSettings = {
+      const elternteile = new TestElternteile({
         mehrlinge: true,
         behindertesGeschwisterkind: false,
         partnerMonate: false,
-      };
+      });
 
-      let elternteile = { ...initialElternteile };
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 0,
-          elternteil: "ET1",
-        },
-        elternteileSettings,
-      );
-
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 0,
-          elternteil: "ET2",
-        },
-        elternteileSettings,
-      );
-
-      // Second month of ET2 to enable additional partner months (to get past
-      // the twelve month)
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 1,
-          elternteil: "ET1",
-        },
-        elternteileSettings,
-      );
-
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 1,
-          elternteil: "ET2",
-        },
-        elternteileSettings,
-      );
+      elternteile
+        .changeMonth("ET1", 0, "BEG")
+        .changeMonth("ET2", 0, "BEG")
+        .changeMonth("ET1", 1, "BEG")
+        .changeMonth("ET2", 1, "BEG");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("BEG");
@@ -909,54 +564,17 @@ describe("Change Month", () => {
     });
 
     it("is possible to select more than one simultaneous BEG months within the first 12 months if there is a disabled sibling", () => {
-      const elternteileSettings = {
-        mehrlinge: false,
+      const elternteile = new TestElternteile({
         behindertesGeschwisterkind: true,
+        mehrlinge: false,
         partnerMonate: false,
-      };
+      });
 
-      let elternteile = { ...initialElternteile };
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 0,
-          elternteil: "ET1",
-        },
-        elternteileSettings,
-      );
-
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 0,
-          elternteil: "ET2",
-        },
-        elternteileSettings,
-      );
-
-      // Second month of ET2 to enable additional partner months (to get past
-      // the twelve month)
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 1,
-          elternteil: "ET1",
-        },
-        elternteileSettings,
-      );
-
-      elternteile = changeMonth(
-        elternteile,
-        {
-          targetType: "BEG",
-          monthIndex: 1,
-          elternteil: "ET2",
-        },
-        elternteileSettings,
-      );
+      elternteile
+        .changeMonth("ET1", 0, "BEG")
+        .changeMonth("ET2", 0, "BEG")
+        .changeMonth("ET1", 1, "BEG")
+        .changeMonth("ET2", 1, "BEG");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("BEG");
@@ -965,50 +583,15 @@ describe("Change Month", () => {
     });
 
     it("is possible to select more simultaneous months after the twelve month", () => {
-      let elternteile = { ...initialElternteile };
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 0,
-        elternteil: "ET1",
-      });
+      const elternteile = new TestElternteile();
 
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 0,
-        elternteil: "ET2",
-      });
-
-      // Second month of ET2 to enable additional partner months (to get past
-      // the twelve month)
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 1,
-        elternteil: "ET2",
-      });
-
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 12,
-        elternteil: "ET1",
-      });
-
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 12,
-        elternteil: "ET2",
-      });
-
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 13,
-        elternteil: "ET1",
-      });
-
-      elternteile = changeMonth(elternteile, {
-        targetType: "BEG",
-        monthIndex: 13,
-        elternteil: "ET2",
-      });
+      elternteile
+        .changeMonth("ET1", 0, "BEG")
+        .changeMonth("ET2", 0, "BEG")
+        .changeMonth("ET1", 12, "BEG")
+        .changeMonth("ET2", 12, "BEG")
+        .changeMonth("ET1", 13, "BEG")
+        .changeMonth("ET2", 13, "BEG");
 
       expect(elternteile.ET1.months[0].type).toBe("BEG");
       expect(elternteile.ET2.months[0].type).toBe("BEG");

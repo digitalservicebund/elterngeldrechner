@@ -52,3 +52,11 @@ jobs:
         with:
           path: ${{steps.sbom.outputs.fileName }}
           name: "SBOM"
+
+      - name: Report Deployment
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+        with:
+          project: elterngeldrechner
+          environment: staging
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}

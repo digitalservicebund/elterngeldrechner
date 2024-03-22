@@ -3,11 +3,12 @@ import { VFC } from "react";
 export const NotificationMaxSimultaneousBEGMonths: VFC = () => {
   return (
     <div>
-      In den ersten 12 Monaten kann maximal ein Monat parallel BasisElterngeld
-      beantragt werden.
+      Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12
+      Lebensmonaten gleichzeitig bekommen.
       <br />
-      Für zu früh geborene Kinder und Kinder mit Behinderung gelten andere
-      Regeln für den parallelen Bezug von Basiselterngeld.
+      Diese Einschränkung gilt nicht für besonders früh geborene Kinder,
+      Mehrlinge, Neugeborene mit Behinderung und Geschwisterkinder mit
+      Behinderung.
     </div>
   );
 };

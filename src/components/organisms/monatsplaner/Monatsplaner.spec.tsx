@@ -616,7 +616,7 @@ describe("Monatsplaner", () => {
 
       expect(
         screen.queryByText(
-          /In den ersten 12 Monaten kann maximal ein Monat parallel BasisElterngeld beantragt werden./,
+          /Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12 Lebensmonaten gleichzeitig bekommen./,
         ),
       ).toBeVisible();
     });

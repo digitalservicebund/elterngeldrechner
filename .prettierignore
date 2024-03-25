@@ -4,3 +4,4 @@ build-preview
 *.woff
 .eslintrc
 allowed-licenses
+.npmrc

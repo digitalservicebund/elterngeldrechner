@@ -31,10 +31,6 @@ export const erwerbstaetigkeitLabels: {
 
 const erwerbstaetigkeitOptions: SelectOption<Erwerbstaetigkeiten | "">[] = [
   {
-    value: "",
-    label: "Bitte wählen",
-  },
-  {
     value: "NichtSelbststaendig",
     label: erwerbstaetigkeitLabels.NichtSelbststaendig,
   },

@@ -77,18 +77,25 @@ export const CustomSelect = <TFieldValues extends FieldValues>({
             required={required}
             {...aria}
           >
-            {options.map((option) => {
-              return (
-                <option
-                  key={option.value}
-                  className={nsp("custom-select-question__option")}
-                  value={option.value}
-                  hidden={option.hidden}
-                >
-                  {option.label}
-                </option>
-              );
-            })}
+            <option
+              className={nsp("custom-select-question__option")}
+              value=""
+              disabled={required}
+              hidden={required}
+            >
+              Bitte wählen
+            </option>
+
+            {options.map((option) => (
+              <option
+                key={option.value}
+                className={nsp("custom-select-question__option")}
+                value={option.value}
+                hidden={option.hidden}
+              >
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
         {error && (

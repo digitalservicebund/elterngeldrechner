@@ -26,7 +26,6 @@ interface SteuerUndVersicherungProps {
 }
 
 const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [
-  { value: "", label: "Bitte wählen" },
   { value: SteuerKlasse.SKL1, label: "1" },
   { value: SteuerKlasse.SKL2, label: "2" },
   { value: SteuerKlasse.SKL3, label: "3" },
@@ -35,7 +34,6 @@ const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [
 ];
 
 const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
-  { value: "", label: "Bitte wählen" },
   { value: KinderFreiBetrag.ZKF0, label: "0" },
   { value: KinderFreiBetrag.ZKF0_5, label: "0,5" },
   { value: KinderFreiBetrag.ZKF1, label: "1,0" },

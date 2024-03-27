@@ -61,13 +61,8 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
     [type],
   );
 
-  const allFromOptions = useMemo(() => {
-    return [{ label: "Bitte wählen", value: "" }, ...options];
-  }, [options]);
-
   const allToOptions: SelectOption[] = useMemo(() => {
     return [
-      { label: "Bitte wählen", value: "" },
       // lists must be cloned to prevent side effects
       ...(optionsTo ? cloneOptionsList(optionsTo) : cloneOptionsList(options)),
     ];
@@ -220,7 +215,7 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
           registerOptions={zeitraumFromRegisterOptions}
           name={fromName}
           label={fromLabel}
-          options={allFromOptions}
+          options={options}
           disabled={disabled}
           aria-invalid={!!error}
           aria-describedby={error && `${name}-error`}

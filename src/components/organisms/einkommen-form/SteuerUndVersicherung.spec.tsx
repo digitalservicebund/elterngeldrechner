@@ -123,17 +123,27 @@ describe("Steuer und Versicherung", () => {
     };
 
     it("should only accept if a Steuerklasse is selected", async () => {
+      const formStateWithoutSteuerklasse = {
+        ...validFormStateNurErwerbstaetig,
+        stepEinkommen: {
+          ...validStepEinkommenState,
+          ET1: {
+            ...validStepEinkommenState.ET1,
+            steuerKlasse: null,
+          },
+        },
+      };
+
       render(<EinkommenPage />, {
-        preloadedState: validFormStateNurErwerbstaetig,
+        preloadedState: formStateWithoutSteuerklasse,
       });
+
       const elternteil1Section = getElternteil1Section();
-
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
-
       const inputField = within(elternteil1Section).getByLabelText(
         "Welche Steuerklasse haben Sie?",
       );
-      await userEvent.selectOptions(inputField, "");
+
       await userEvent.click(nextPageBtn);
       const error = within(elternteil1Section).getByText(
         "Eine Option muss ausgewählt sein",
@@ -148,17 +158,25 @@ describe("Steuer und Versicherung", () => {
     });
 
     it("should only accept if Kinderfreibeträge is selected", async () => {
+      const formStateWithoutKinderfreibetraege = {
+        ...validFormStateNurErwerbstaetig,
+        stepEinkommen: {
+          ...validStepEinkommenState,
+          ET1: {
+            ...validStepEinkommenState.ET1,
+            kinderFreiBetrag: null,
+          },
+        },
+      };
       render(<EinkommenPage />, {
-        preloadedState: validFormStateNurErwerbstaetig,
+        preloadedState: formStateWithoutKinderfreibetraege,
       });
       const elternteil1Section = getElternteil1Section();
-
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
-
       const inputField = within(elternteil1Section).getByLabelText(
         /^wie viele Kinderfreibeträge/i,
       );
-      await userEvent.selectOptions(inputField, "");
+
       await userEvent.click(nextPageBtn);
       const error = within(elternteil1Section).getByText(
         "Eine Option muss ausgewählt sein",

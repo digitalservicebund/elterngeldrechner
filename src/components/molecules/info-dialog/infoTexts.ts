@@ -43,13 +43,15 @@ export const infoTexts: Record<string, Info> = {
     id: "info-7",
     text: `Basiselterngeld können Sie für bis zu 12 Lebensmonate Ihres Kindes bekommen. Wenn Sie beide Elterngeld beantragen und mindestens einer von Ihnen nach der Geburt weniger Einkommen hat als davor, können Sie 2 zusätzliche Monate erhalten, die sogenannten „Partnermonate“.
 
-    Sie können die Elterngeldmonate nach Ihren Wünschen untereinander aufteilen. Sie können zum Beispiel gleichzeitig oder abwechselnd Elterngeld beantragen. Allerdings muss jeder von Ihnen mindestens 2 Monate beantragen. Jeden Lebensmonat, in dem Sie gleichzeitig Basiselterngeld beziehen, verbrauchen Sie zusammen 2 Monate Basiselterngeld.
-    
-    Die leibliche Mutter bekommt in den ersten Lebensmonaten meistens Mutterschaftsgeld oder andere Mutterschaftsleistungen, bei einer privaten Krankenversicherung möglicherweise Krankentagegeld während des Mutterschutzes. In diesen Fällen gelten diese Monate bei ihr automatisch als Monate mit Basiselterngeld. Das bedeutet: Sie verbraucht diese Monate als Basiselterngeldmonate. Als leibliche Mutter sollten Sie daher auf jeden Fall Basiselterngeld beantragen, solange Sie Mutterschaftsleistungen erhalten.
-    
-    Basiselterngeld können Sie nur in den ersten 14 Lebensmonaten beziehen.
-    
-    Wenn Sie alleinerziehend sind und nach der Geburt weniger Einkommen haben als davor, können Sie die Partnermonate auch bekommen, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.`,
+Sie können die Elterngeldmonate untereinander aufteilen und zum Beispiel gleichzeitig oder abwechselnd Elterngeld beantragen. Allerdings muss jeder von Ihnen mindestens 2 Monate beantragen. Jeden Lebensmonat, in dem Sie gleichzeitig Basiselterngeld beziehen, verbrauchen Sie zusammen 2 Monate Basiselterngeld.
+
+Basiselterngeld können Sie für maximal einen Monat in den ersten 12 Lebensmonaten ihres Kindes gleichzeitig bekommen. Ausnahmen: Eltern von besonders früh geborenen Kindern, die mindestens sechs Wochen vor dem errechneten Geburtstermin geboren wurden, von Zwillingen, Drillingen und weiteren Mehrlingen sowie von neugeborenen Kindern mit Behinderung und Geschwisterkindern mit Behinderung, für die sie den Geschwisterbonus erhalten, können Basiselterngeld für mehr als einen Monat gleichzeitig bekommen. Sobald einer der Elternteile ElterngeldPlus bezieht, kann der andere Elternteil auch länger als einen Monat gleichzeitig Basiselterngeld oder ElterngeldPlus bekommen.
+
+Die leibliche Mutter bekommt in den ersten Lebensmonaten meistens Mutterschaftsgeld oder andere Mutterschaftsleistungen, bei einer privaten Krankenversicherung möglicherweise Krankentagegeld während des Mutterschutzes. In diesen Fällen gelten diese Monate bei ihr automatisch als Monate mit Basiselterngeld. Das bedeutet: Sie verbraucht diese Monate als Basiselterngeld-Monate. Als leibliche Mutter beantragen Sie daher auf jeden Fall Basiselterngeld, solange Sie Mutterschaftsleistungen bekommen.
+
+Basiselterngeld können Sie nur in den ersten 14 Lebensmonaten bekommen. Ab dem 13. Lebensmonat kann ein Elternteil nur dann Basiselterngeld bekommen, wenn der andere Elternteil im selben Zeitraum entweder kein Elterngeld oder ElterngeldPlus bezieht.
+
+Wenn Sie alleinerziehend sind und nach der Geburt weniger Einkommen haben als davor, können Sie die Partnermonate auch bekommen, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.`,
   },
 
   monatsplannerPlus: {
@@ -58,7 +60,7 @@ export const infoTexts: Record<string, Info> = {
     
     Wenn Sie nach der Geburt zusätzliches Einkommen haben, zum Beispiel weil Sie Teilzeit arbeiten, dann kann das ElterngeldPlus genauso hoch sein wie das Basiselterngeld beim selben Einkommen. Dann können Sie mit zwei Monaten ElterngeldPlus also insgesamt mehr Geld bekommen als mit einem Monat Basiselterngeld.
     
-    Basiselterngeld und ElterngeldPlus können Sie miteinander kombinieren und abwechseln.
+    Basiselterngeld und ElterngeldPlus können Sie miteinander kombinieren und abwechseln. ElterngeldPlus können Sie auch länger als einen Monat gleichzeitig mit dem anderen Elternteil bekommen – unabhängig davon, ob er gleichzeitig Basiselterngeld oder ElterngeldPlus bezieht.
     
     Anders als Basiselterngeld können Sie ElterngeldPlus auch noch nach dem 14. Lebensmonat bekommen. Ab dann dürfen Sie Elterngeld aber nur noch ohne Unterbrechungen beziehen. Das bedeutet: Sie können keine Pause vom Elterngeld machen und später wieder Elterngeld für das Kind bekommen. Wenn der andere Elternteil ebenfalls Elterngeld beantragt, können Sie sich aber abwechseln.
     

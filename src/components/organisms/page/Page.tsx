@@ -3,7 +3,7 @@ import { AriaMessage } from "../../atoms";
 import { FormStep } from "../../../utils/formSteps";
 import { Sidebar } from "../sidebar";
 import nsp from "../../../globals/js/namespace";
-import { FootNote, Alert } from "../../molecules";
+import { FootNote } from "../../molecules";
 
 interface PageProps {
   step: FormStep;
@@ -11,44 +11,6 @@ interface PageProps {
 }
 
 export const Page: FC<PageProps> = ({ step, children }) => {
-  const alert = {
-    "/allgemeine-angaben": {
-      headline: "Bitte achten Sie auf die neuen Gesetzesänderungen:",
-      text: (
-        <p>
-          Für Geburten ab dem 01.04.2024 gibt es neue Regeln für das Elterngeld,
-          die die Einkommensgrenze und die Möglichkeit, gleichzeitig Elterngeld
-          zu beziehen, betreffen. Mehr Details dazu finden Sie auf der{" "}
-          <a
-            href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/fragen-und-antworten-zu-neuregelungen-beim-elterngeld-fuer-geburten-ab-1-april-2024-228588"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Seite des Bundes-Familienministeriums
-          </a>
-          .
-        </p>
-      ),
-    },
-    "/einkommen": {
-      headline:
-        "Bitte beachten Sie: Die Einkommensgrenze ändert sich für Geburten ab dem 01.04.2024",
-      text: (
-        <p>
-          Mehr Details dazu finden Sie auf der{" "}
-          <a
-            href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/fragen-und-antworten-zu-neuregelungen-beim-elterngeld-fuer-geburten-ab-1-april-2024-228588"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Seite des Bundes-Familienministeriums
-          </a>
-          .
-        </p>
-      ),
-    },
-  }[step.route];
-
   // scroll to top on page navigation
   useEffect(() => {
     window.scrollTo({
@@ -64,13 +26,6 @@ export const Page: FC<PageProps> = ({ step, children }) => {
       </div>
       <AriaMessage>{step.text}</AriaMessage>
       <div className={nsp("page__content")}>
-        {alert && (
-          <div style={{ marginBottom: "2rem" }}>
-            <Alert box headline={alert.headline}>
-              {alert.text}
-            </Alert>
-          </div>
-        )}
         <FootNote id={nsp("foot-note-for-required-fields")}>
           Die mit einem Stern (*) gekennzeichneten Felder sind Pflichtfelder und
           müssen ausgefüllt sein.

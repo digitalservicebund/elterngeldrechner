@@ -17,8 +17,8 @@ jobs:
       - name: Build egr
         run: npm install && npm run build
 
-      - name: Create archive for build assets
-        working-directory: build
+      - name: Create archive for static build assets
+        working-directory: build/static
         run: zip -r build-assets.zip .
 
       - name: Create new release

@@ -387,7 +387,7 @@ describe("Monatsplaner", () => {
 
     expect(
       screen.getByText(
-        /jeder Elternteil muss mindestens 2 und darf maximal 12 Monate Basiselterngeld beantragen/i,
+        /jeder Elternteil muss mindestens 2 und darf maximal 12 Monate Elterngeld beantragen/i,
       ),
     ).toBeInTheDocument();
   });

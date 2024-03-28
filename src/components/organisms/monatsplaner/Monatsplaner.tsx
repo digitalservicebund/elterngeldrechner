@@ -382,18 +382,30 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     );
   }
 
+  const [
+    showedNotificationForMaxSimultaneousBEGMonths,
+    setShowedNotificationForMaxSimultaneousBEGMonths,
+  ] = useState(false);
+
   function possiblyShowNotificationForMaxSimultaneousBEGMonths() {
     const reachedLimit = reachedLimitOfSimultaneousBEGMonths(elternteile);
     const isException =
       isExceptionToSimulatenousMonthRestrictions(elternteileSettings);
 
-    if (reachedLimit && !isException)
-      setNotificationMessages([<NotificationMaxSimultaneousBEGMonths />]);
+    if (reachedLimit && !isException) {
+      if (!showedNotificationForMaxSimultaneousBEGMonths) {
+        setShowedNotificationForMaxSimultaneousBEGMonths(true);
+        setNotificationMessages([<NotificationMaxSimultaneousBEGMonths />]);
+      }
+    } else {
+      setShowedNotificationForMaxSimultaneousBEGMonths(false);
+    }
   }
 
   useEffect(possiblyShowNotificationForMaxSimultaneousBEGMonths, [
     elternteile,
     elternteileSettings,
+    showedNotificationForMaxSimultaneousBEGMonths,
   ]);
 
   return (

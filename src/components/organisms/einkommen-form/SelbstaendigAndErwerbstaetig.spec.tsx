@@ -14,36 +14,6 @@ import {
 } from "../../../redux/stepEinkommenSlice";
 import { YesNo } from "../../../globals/js/calculations/model";
 
-const testMonths = [
-  "Juli 2022",
-  "Juni 2022",
-  "Mai 2022",
-  "April 2022",
-  "März 2022",
-  "Februar 2022",
-  "Januar 2022",
-  "Dezember 2021",
-  "November 2021",
-  "Oktober 2021",
-  "September 2021",
-  "August 2021",
-];
-
-const testDates = [
-  "2022-06-01",
-  "2022-05-01",
-  "2022-04-01",
-  "2022-03-01",
-  "2022-02-01",
-  "2022-01-01",
-  "2021-12-01",
-  "2021-11-01",
-  "2021-10-01",
-  "2021-09-01",
-  "2021-08-01",
-  "2021-07-01",
-];
-
 describe("Einkommens Page only with block Selbständige And Erwerbstätige", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
   const getTaetigkeit1OfElternteil1Section = () =>
@@ -146,33 +116,29 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     ).not.toBeInTheDocument();
   });
 
-  it("should show selection of the last 12 months before the expected birth date", async () => {
+  it("should show selection of 12 months", async () => {
     render(<EinkommenPage />, {
       preloadedState: stateFromPreviousSteps,
     });
-    const elternteil1Section = getElternteil1Section();
+
+    const section = getElternteil1Section();
 
     await userEvent.click(
-      within(elternteil1Section).getByText("eine Tätigkeit hinzufügen"),
+      within(section).getByText("eine Tätigkeit hinzufügen"),
     );
 
-    const einkommenElternteil1TaetigkeitenVon =
-      within(elternteil1Section).getByLabelText("von");
-    const einkommenElternteil1TaetigkeitenBis =
-      within(elternteil1Section).getByLabelText("bis");
+    const taetigkeitVonSelection = within(section).getByLabelText("von");
+    const taetigkeitBisSelection = within(section).getByLabelText("bis");
 
-    for (const month of testMonths) {
+    for (let monthIndex = 1; monthIndex <= 12; monthIndex++) {
+      const name = `${monthIndex}. Monat`;
+
       expect(
-        within(einkommenElternteil1TaetigkeitenVon).getByRole("option", {
-          name: month,
-        }),
+        within(taetigkeitVonSelection).getByRole("option", { name }),
       ).toBeInTheDocument();
-    }
-    for (const month of testMonths) {
+
       expect(
-        within(einkommenElternteil1TaetigkeitenBis).getByRole("option", {
-          name: month,
-        }),
+        within(taetigkeitBisSelection).getByRole("option", { name }),
       ).toBeInTheDocument();
     }
   });
@@ -198,20 +164,13 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     const einkommenElternteil1TaetigkeitenBis =
       within(elternteil1Section).getAllByLabelText("bis")[1];
 
-    for (const month of testMonths) {
-      expect(
-        within(einkommenElternteil1TaetigkeitenVon).getByRole("option", {
-          name: month,
-        }),
-      ).toBeInTheDocument();
-    }
-    for (const month of testMonths) {
-      expect(
-        within(einkommenElternteil1TaetigkeitenBis).getByRole("option", {
-          name: month,
-        }),
-      ).toBeInTheDocument();
-    }
+    expect(
+      within(einkommenElternteil1TaetigkeitenVon).queryAllByRole("option"),
+    ).toHaveLength(13);
+
+    expect(
+      within(einkommenElternteil1TaetigkeitenBis).queryAllByRole("option"),
+    ).toHaveLength(13);
   });
 
   it("should show 'Minijob' when choose 'Einkünfte aus nichtselbständiger Arbeit'", async () => {
@@ -281,7 +240,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
         hasRentenversicherung: true,
         none: false,
       },
-      zeitraum: [{ from: testDates[3], to: testDates[0] }],
+      zeitraum: [{ from: "9", to: "12" }],
     };
 
     const stateEinkommenValid: StepEinkommenState = {
@@ -372,11 +331,11 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
 
         await userEvent.selectOptions(
           within(zeitraum1Section).getByLabelText("von"),
-          testDates[0],
+          "12",
         );
         await userEvent.selectOptions(
           within(zeitraum1Section).getByLabelText("bis"),
-          testDates[2],
+          "10",
         );
         await userEvent.click(screen.getByText("Weiter"));
 

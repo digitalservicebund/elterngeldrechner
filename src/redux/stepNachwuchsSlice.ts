@@ -88,31 +88,6 @@ const getMonthValue = (wahrscheinlichesGeburtsDatum: string, i: number) => {
   return { monthIsoString, month };
 };
 
-/**
- * A selector to get the 12 months before the birthdate with a value and a label.
- * The value represents an ISO-Date (YYYY-MM-DD).
- * The label is the localized representation e.g. "Juni 2020".
- */
-const getMonthsBeforeBirthOptions = createSelector(
-  getWahrscheinlichesGeburtsDatum,
-  (wahrscheinlichesGeburtsDatum): SelectOption[] => {
-    const months = [];
-    for (let i = 1; i < 13; i++) {
-      const { monthIsoString, month: monthBeforeBirth } = getMonthValue(
-        wahrscheinlichesGeburtsDatum,
-        -i,
-      );
-
-      months.push({
-        label: monthAfterBirthDateFormat.format(monthBeforeBirth),
-        value: monthIsoString,
-      });
-    }
-
-    return months.reverse();
-  },
-);
-
 const getMonthsLastYearBeforeBirthOptions = createSelector(
   getWahrscheinlichesGeburtsDatum,
   (wahrscheinlichesGeburtsDatum): SelectOption[] => {
@@ -179,7 +154,6 @@ const getLebensmonateAfterBirth = createSelector(
 export const stepNachwuchsSelectors = {
   getWahrscheinlichesGeburtsDatum,
   getLebensmonateAfterBirth,
-  getMonthsBeforeBirthOptions,
   getMonthsAfterBirthOptions,
   getMonthsLastYearBeforeBirthOptions,
 };

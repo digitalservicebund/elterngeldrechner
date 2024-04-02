@@ -101,7 +101,7 @@ export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
         from: cloneOptionsList(monthsBeforeBirth),
         to: cloneOptionsList(monthsBeforeBirth),
       },
-      "Date",
+      "Integer",
       lastZeitraumValue,
     );
 
@@ -190,6 +190,7 @@ export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
                   onChangeZeitraum(zeitraumIndex, zeitraum)
                 }
                 errors={errors}
+                type="Integer"
               />
               {zeitraumFields.length > 1 && (
                 <Button

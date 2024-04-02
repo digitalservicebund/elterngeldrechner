@@ -546,12 +546,7 @@ describe("finanzDatenFactory", () => {
           artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 1000,
           isMinijob: YesNo.NO,
-          zeitraum: [
-            {
-              from: "2022-06-01",
-              to: "2022-07-01",
-            },
-          ],
+          zeitraum: [{ from: "1", to: "1" }],
           versicherungen: {
             hasRentenversicherung: true,
             hasKrankenversicherung: true,
@@ -591,12 +586,7 @@ describe("finanzDatenFactory", () => {
           artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 1000,
           isMinijob: YesNo.NO,
-          zeitraum: [
-            {
-              from: "2022-06-01",
-              to: "2022-06-30",
-            },
-          ],
+          zeitraum: [{ from: "1", to: "1" }],
           versicherungen: {
             hasRentenversicherung: true,
             hasKrankenversicherung: true,
@@ -608,12 +598,7 @@ describe("finanzDatenFactory", () => {
           artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 300,
           isMinijob: YesNo.YES,
-          zeitraum: [
-            {
-              from: "2022-06-01",
-              to: "2022-06-30",
-            },
-          ],
+          zeitraum: [{ from: "1", to: "1" }],
           versicherungen: {
             hasRentenversicherung: false,
             hasKrankenversicherung: true,
@@ -625,12 +610,7 @@ describe("finanzDatenFactory", () => {
           artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 500,
           isMinijob: YesNo.NO,
-          zeitraum: [
-            {
-              from: "2022-02-01",
-              to: "2022-04-30",
-            },
-          ],
+          zeitraum: [{ from: "3", to: "5" }],
           versicherungen: {
             hasRentenversicherung: false,
             hasKrankenversicherung: true,
@@ -642,12 +622,7 @@ describe("finanzDatenFactory", () => {
           artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 1100,
           isMinijob: YesNo.NO,
-          zeitraum: [
-            {
-              from: "2022-02-01",
-              to: "2022-05-30",
-            },
-          ],
+          zeitraum: [{ from: "2", to: "5" }],
           versicherungen: {
             hasRentenversicherung: true,
             hasKrankenversicherung: true,
@@ -659,12 +634,7 @@ describe("finanzDatenFactory", () => {
           artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 600,
           isMinijob: YesNo.NO,
-          zeitraum: [
-            {
-              from: "2022-02-01",
-              to: "2022-05-30",
-            },
-          ],
+          zeitraum: [{ from: "2", to: "5" }],
           versicherungen: {
             hasRentenversicherung: true,
             hasKrankenversicherung: true,

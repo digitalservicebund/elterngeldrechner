@@ -12,14 +12,11 @@ import {
   SteuerKlasse,
   YesNo,
 } from "../globals/js/calculations/model";
-import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import Big from "big.js";
 import { MathUtil } from "../globals/js/calculations/common/math-util";
 import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
 import { AverageOrMonthlyState, Taetigkeit } from "./stepEinkommenSlice";
-import { SelectOption } from "../components/molecules";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
-import { ZeitraumValue } from "../globals/js/ZeitraumValue";
 
 const averageFromAverageOrMonthly = (
   averageOrMonthly: AverageOrMonthlyState,
@@ -40,10 +37,9 @@ const averageFromAverageOrMonthly = (
   throw new Error("Unknown AverageOrMonthlyState Type.");
 };
 
-const mischEinkommenTaetigkeitenOf = (
-  taetigkeiten: Taetigkeit[],
-  monthsBeforeBirth: SelectOption[],
-) =>
+const ANZAHL_MONATE_PRO_JAHR = 12;
+
+const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
   taetigkeiten
     .map((taetigkeit) => {
       const mischEinkommenTaetigkeiten = new MischEkTaetigkeit();
@@ -72,17 +68,21 @@ const mischEinkommenTaetigkeitenOf = (
         .versicherungen.hasArbeitslosenversicherung
         ? YesNo.YES
         : YesNo.NO;
-      mischEinkommenTaetigkeiten.bemessungsZeitraumMonate = monthsBeforeBirth
-        .sort(
-          (a, b) =>
-            ZeitraumValue.valueOf(b.value, "Date") -
-            ZeitraumValue.valueOf(a.value, "Date"),
-        )
-        .map(({ value: monatsDatum }) =>
-          taetigkeit.zeitraum.some(
-            ({ from, to }) => monatsDatum >= from && monatsDatum <= to,
-          ),
-        );
+
+      mischEinkommenTaetigkeiten.bemessungsZeitraumMonate = Array.from(
+        { length: ANZAHL_MONATE_PRO_JAHR },
+        (_, monthIndex) => {
+          const taetigkeitHasZeitraumIncludingThisMonth =
+            taetigkeit.zeitraum.some(({ from, to }) => {
+              const indexStart = Number.parseInt(from) - 1;
+              const indexEnd = Number.parseInt(to) - 1;
+              return monthIndex >= indexStart && monthIndex <= indexEnd;
+            });
+
+          return taetigkeitHasZeitraumIncludingThisMonth;
+        },
+      );
+
       return mischEinkommenTaetigkeiten;
     })
     .filter((value) => value.getAnzahlBemessungsZeitraumMonate() > 0);
@@ -160,7 +160,6 @@ export const finanzDatenOfUi = (
     finanzDaten.mischEinkommenTaetigkeiten = mischEinkommenTaetigkeitenOf(
       state.stepEinkommen[elternteil]
         .taetigkeitenNichtSelbstaendigUndSelbstaendig,
-      stepNachwuchsSelectors.getMonthsBeforeBirthOptions(state),
     );
   }
 

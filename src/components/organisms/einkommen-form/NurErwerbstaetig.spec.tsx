@@ -10,21 +10,6 @@ import {
 } from "../../../redux/stepEinkommenSlice";
 import { YesNo } from "../../../globals/js/calculations/model";
 
-const testMonths = [
-  "Juli 2022",
-  "Juni 2022",
-  "Mai 2022",
-  "April 2022",
-  "März 2022",
-  "Februar 2022",
-  "Januar 2022",
-  "Dezember 2021",
-  "November 2021",
-  "Oktober 2021",
-  "September 2021",
-  "August 2021",
-];
-
 describe("Einkommens Page only with block Erwerbstätigkeit", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
 
@@ -90,9 +75,9 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
       );
       await userEvent.click(buttonZurAusfuerlichen);
 
-      for (const month of testMonths) {
+      for (let monthIndex = 1; monthIndex <= 12; monthIndex++) {
         expect(
-          within(elternteil1Section).getByLabelText(month),
+          within(elternteil1Section).getByLabelText(`${monthIndex}. Monat`),
         ).toBeInTheDocument();
       }
     });

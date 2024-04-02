@@ -11,6 +11,11 @@ import { stepErwerbstaetigkeitElternteilSelectors } from "../../../redux/stepErw
 import { YesNo } from "../../../globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
 
+const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
+  label: `${index + 1}. Monat`,
+  value: `${index + 1}`,
+}));
+
 interface Props {
   elternteil: ElternteilType;
   elternteilName: string;
@@ -20,9 +25,6 @@ export const EinkommenFormElternteil: VFC<Props> = ({
   elternteil,
   elternteilName,
 }) => {
-  const monthsBeforeBirthOptions = useAppSelector(
-    stepNachwuchsSelectors.getMonthsBeforeBirthOptions,
-  );
   const monthsLastYearBeforeBirthOptions = useAppSelector(
     stepNachwuchsSelectors.getMonthsLastYearBeforeBirthOptions,
   );
@@ -87,7 +89,7 @@ export const EinkommenFormElternteil: VFC<Props> = ({
           {isOnlyErwerbstaetigWithOneTaetigkeit && (
             <NurErwerbstaetig
               elternteil={elternteil}
-              monthsBeforeBirth={monthsBeforeBirthOptions}
+              monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
             />
           )}
 
@@ -111,7 +113,7 @@ export const EinkommenFormElternteil: VFC<Props> = ({
             <SelbstaendigAndErwerbstaetig
               elternteil={elternteil}
               isSelbststaendig={isSelbststaendig}
-              monthsBeforeBirth={monthsBeforeBirthOptions}
+              monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
             />
           )}
         </>

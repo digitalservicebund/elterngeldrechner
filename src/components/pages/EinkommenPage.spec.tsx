@@ -34,36 +34,6 @@ import { MathUtil } from "../../globals/js/calculations/common/math-util";
 
 jest.mock("../../globals/js/calculations/basis-eg-algorithmus");
 
-const testMonths = [
-  "Juli 2022",
-  "Juni 2022",
-  "Mai 2022",
-  "April 2022",
-  "März 2022",
-  "Februar 2022",
-  "Januar 2022",
-  "Dezember 2021",
-  "November 2021",
-  "Oktober 2021",
-  "September 2021",
-  "August 2021",
-];
-
-const testDates = [
-  "2022-06-01",
-  "2022-05-01",
-  "2022-04-01",
-  "2022-03-01",
-  "2022-02-01",
-  "2022-01-01",
-  "2021-12-01",
-  "2021-11-01",
-  "2021-10-01",
-  "2021-09-01",
-  "2021-08-01",
-  "2021-07-01",
-];
-
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
 
@@ -230,9 +200,11 @@ describe("Einkommen Page", () => {
         name: /ausführlichen Eingabe/i,
       });
       await userEvent.click(btn);
-      for (const month of testMonths) {
+      for (let monthIndex = 1; monthIndex <= 12; monthIndex++) {
         await userEvent.type(
-          within(einkommenErwerbstaetigSection).getByLabelText(month),
+          within(einkommenErwerbstaetigSection).getByLabelText(
+            `${monthIndex}. Monat`,
+          ),
           String(einkommenAverage),
         );
       }
@@ -505,8 +477,8 @@ describe("Einkommen Page", () => {
               },
               zeitraum: [
                 {
-                  from: testDates[2],
-                  to: testDates[0],
+                  from: "10",
+                  to: "12",
                 },
               ],
             },
@@ -567,11 +539,11 @@ describe("Einkommen Page", () => {
 
       await userEvent.selectOptions(
         within(taetigkeit1Section).getByLabelText("von"),
-        testDates[2],
+        "10",
       );
       await userEvent.selectOptions(
         within(taetigkeit1Section).getByLabelText("bis"),
-        testDates[0],
+        "12",
       );
       await userEvent.click(
         within(taetigkeit1Section).getByLabelText(

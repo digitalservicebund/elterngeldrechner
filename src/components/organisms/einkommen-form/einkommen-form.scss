@@ -16,6 +16,11 @@
     @media (min-width: $breakpoint-desktop) {
       gap: px-to-rem($spacer-xl) px-to-rem($spacer);
     }
+
+    ul {
+      list-style: disc;
+      padding-left: 1rem;
+    }
   }
 
   &__taetigkeit-buttons {

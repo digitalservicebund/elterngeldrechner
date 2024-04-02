@@ -66,10 +66,36 @@ export const NurErwerbstaetig: VFC<NurErwerbstaetigProps> = ({
         />
 
         {averageOrMonthlyNichtSelbstaendig === "monthly" && (
-          <section
-            aria-label="Einkommen pro Monat"
+          <fieldset
+            name="Einkommen pro Monat"
             className={nsp("einkommen-form__per-month")}
           >
+            <legend>
+              Geben Sie an, wie viel Sie in den 12 Monaten vor der Geburt Ihres
+              Kindes monatlich verdient haben.
+              <br />
+              Ausgenommen sind:
+              <ul>
+                <li>Monate in denen Sie im Mutterschutz waren</li>
+                <li>
+                  Monate in denen Sie Elterngeld für ein älteres Kind in dessen
+                  ersten 14 Lebensmonaten bekommen haben
+                </li>
+                <li>
+                  Monate, in denen Sie weniger Einkommen hatten wegen einer
+                  Erkrankung, die maßgeblich auf Ihre Schwangerschaft
+                  zurückzuführen war
+                </li>
+                <li>
+                  Monate, in denen Sie weniger Einkommen wegen Ihres
+                  Wehrdienstes oder Zivildienstes hatten
+                </li>
+              </ul>
+              Stattdessen werden frühere Monate berücksichtigt, damit der
+              Zeitraum, der für die Feststellung Ihres Einkommens vor der Geburt
+              zählt, insgesamt 12 Monate enthält.
+            </legend>
+
             {monthsBeforeBirth.map(({ label }, index) => (
               <CustomNumberField
                 key={label}
@@ -80,7 +106,7 @@ export const NurErwerbstaetig: VFC<NurErwerbstaetigProps> = ({
                 required={true}
               />
             ))}
-          </section>
+          </fieldset>
         )}
       </FormFieldGroup>
     </>

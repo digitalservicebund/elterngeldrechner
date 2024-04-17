@@ -8,20 +8,20 @@ export const RechnerCardHeaderEGPlus: VFC = () => {
       <div className={nsp("rechner-card-title")}>
         <div className={nsp("rechner-card-title__text")}>
           <h2>ElterngeldPlus</h2>
-          <p>(28 Monate verfügbar)</p>
+          <span>(28 Monate verfügbar)</span>
         </div>
         <InfoDialog isLarge info={infoTexts.monatsplannerPlus} />
       </div>
       <div className={nsp("rechner-card-title")}>
         <div className={nsp("rechner-card-title__text")}>
           <h2>und Partnerschaftsbonus</h2>
-          <p>(4 Monate verfügbar)</p>
+          <span>(4 Monate verfügbar)</span>
         </div>
         <InfoDialog isLarge info={infoTexts.monatsplannerBonus} />
       </div>
       <div className={nsp("rechner-card__description")}>
         <section>
-          <p>ElterngeldPlus</p>
+          <span>ElterngeldPlus</span>
           <ol>
             <li>
               Statt eines Lebensmonats Basiselterngeld 2 Lebensmonate
@@ -39,7 +39,7 @@ export const RechnerCardHeaderEGPlus: VFC = () => {
           </ol>
         </section>
         <section>
-          <p>Partnerschaftsbonus</p>
+          <span>Partnerschaftsbonus</span>
           <ol>
             <li>
               2 bis 4 zusätzliche Lebensmonate Elterngeld-Plus, die direkt

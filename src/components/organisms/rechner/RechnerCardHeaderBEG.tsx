@@ -8,7 +8,7 @@ export const RechnerCardHeaderBEG: VFC = () => {
       <div className={nsp("rechner-card-title")}>
         <div className={nsp("rechner-card-title__text")}>
           <h2>Basiselterngeld</h2>
-          <p>(14 Monate verfügbar)</p>
+          <span>(14 Monate verfügbar)</span>
         </div>
         <InfoDialog isLarge={true} info={infoTexts.monatsplannerBasis} />
       </div>

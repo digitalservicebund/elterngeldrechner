@@ -28,7 +28,7 @@
     align-items: center;
     justify-content: space-between;
 
-    p {
+    span {
       font-size: px-to-rem(24);
       line-height: px-to-rem(40);
     }
@@ -50,8 +50,12 @@
     gap: px-to-rem($spacer);
     padding: px-to-rem($spacer) px-to-rem($spacer) 0 px-to-rem($spacer);
 
-    p {
+    span {
       font-weight: 700;
+    }
+
+    ol {
+      padding: 0;
     }
 
     li {

@@ -23,18 +23,27 @@ h2 {
   font-size: px-to-rem(40);
   line-height: px-to-rem(60);
   font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 h3 {
   font-size: px-to-rem(28);
   line-height: px-to-rem(44);
   font-weight: 400;
+  margin-bottom: 0.5rem;
 }
 
 h4 {
   font-size: px-to-rem(24);
   line-height: px-to-rem(40);
   font-weight: 700;
+}
+
+h5 {
+  font-size: px-to-rem(22);
+  line-height: px-to-rem(27);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
 }
 
 p {
@@ -58,6 +67,13 @@ label {
 
 legend {
   font-size: px-to-rem(18);
+}
+
+input,
+select {
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
 }
 
 @media only screen and (max-width: $breakpoint-tablet) {

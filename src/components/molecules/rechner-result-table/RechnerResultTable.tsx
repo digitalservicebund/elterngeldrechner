@@ -55,7 +55,8 @@ export const RechnerResultTable: VFC<Props> = ({
           <th
             className={classNames(
               nsp("rechner-result-table__lebensmonate"),
-              hideLebensmonate && nsp("hide-on-desktop"),
+              hideLebensmonate &&
+                nsp("rechner-result-table__lebensmonate--hidden"),
             )}
           >
             Lebensmonate
@@ -77,7 +78,8 @@ export const RechnerResultTable: VFC<Props> = ({
             <tr key={vonLebensMonat}>
               <td
                 className={classNames(
-                  hideLebensmonate && nsp("hide-on-desktop"),
+                  "rechner-result-table__cell",
+                  hideLebensmonate && nsp("rechner-result-table__cell--hidden"),
                 )}
                 aria-label={
                   vonLebensMonat === bisLebensMonat

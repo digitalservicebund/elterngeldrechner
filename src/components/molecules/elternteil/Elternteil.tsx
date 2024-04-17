@@ -107,7 +107,8 @@ export const Elternteil: VFC<Props> = ({
             colSpan={1}
             className={classNames(
               nsp("elternteil__lebensmonat"),
-              hideLebensmonateOnDesktop && nsp("hide-on-desktop"),
+              hideLebensmonateOnDesktop &&
+                nsp("elternteil__lebensmonat--hidden"),
             )}
           />
           <th colSpan={3} className={nsp("elternteil__name")}>
@@ -118,7 +119,8 @@ export const Elternteil: VFC<Props> = ({
           <th
             className={classNames(
               nsp("elternteil__lebensmonat"),
-              hideLebensmonateOnDesktop && nsp("hide-on-desktop"),
+              hideLebensmonateOnDesktop &&
+                nsp("elternteil__lebensmonat--hidden"),
             )}
           >
             Lebens-monat
@@ -158,7 +160,7 @@ export const Elternteil: VFC<Props> = ({
               aria-label={`${index + 1} ${lebensmonat.labelLong}`}
               className={classNames(
                 nsp("lebensmonate-cell"),
-                hideLebensmonateOnDesktop && nsp("hide-on-desktop"),
+                hideLebensmonateOnDesktop && nsp("lebensmonate-cell--hidden"),
               )}
             >
               <div

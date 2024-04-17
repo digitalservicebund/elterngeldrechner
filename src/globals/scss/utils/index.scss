@@ -1,8 +1,0 @@
-@use "src/globals/scss/variables" as *;
-@use "src/globals/scss/functions/nsp" as *;
-
-.#{nsp("hide-on-desktop")} {
-  @media only screen and (min-width: $breakpoint-desktop) {
-    display: none !important;
-  }
-}

@@ -22,7 +22,7 @@
     }
   }
 
-  th &__lebensmonate {
+  &__lebensmonate {
     box-sizing: content-box;
     width: px-to-rem(40);
     word-wrap: break-word;
@@ -31,10 +31,22 @@
     -ms-hyphens: auto;
     hyphens: auto;
     border-right: px-to-rem(40) solid transparent;
+
+    &--hidden {
+      @media only screen and (min-width: $breakpoint-desktop) {
+        display: none;
+      }
+    }
   }
 
   &__cell {
     background-color: $color-BEG-light;
+
+    &--hidden {
+      @media only screen and (min-width: $breakpoint-desktop) {
+        display: none;
+      }
+    }
 
     &--result {
       border: px-to-rem(1) solid $color-BEG-light;

@@ -21,6 +21,7 @@
   thead {
     background-color: $color-off-white;
     z-index: 0;
+    text-align: left;
   }
 
   &__name {
@@ -33,6 +34,12 @@
     line-height: px-to-rem(20);
     width: px-to-rem(85);
     padding: px-to-rem($spacer-s);
+
+    &--hidden {
+      @media only screen and (min-width: $breakpoint-desktop) {
+        display: none;
+      }
+    }
   }
 
   &__th {
@@ -71,6 +78,12 @@
 
 .#{nsp("lebensmonate-cell")} {
   border-right: px-to-rem($spacer) solid $color-off-white;
+
+  &--hidden {
+    @media only screen and (min-width: $breakpoint-desktop) {
+      display: none;
+    }
+  }
 
   &__lebensmonat-content {
     display: flex;

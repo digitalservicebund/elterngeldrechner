@@ -4,7 +4,8 @@
     "react-app/jest",
     "eslint:recommended",
     "plugin:prettier/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
+    "plugin:tailwindcss/recommended",
   ],
   "rules": {
     "prettier/prettier": [
@@ -17,7 +18,9 @@
     // See https://typescript-eslint.io/rules/no-unused-expressions/
     "no-unused-vars": "off",
     // TODO: Make no-unused-vars a warning which should still trigger CI error or npm run build error
-    "@typescript-eslint/no-unused-vars": "error"
+    "@typescript-eslint/no-unused-vars": "error",
+    // Enable when no BEM is used anymore.
+    "tailwindcss/no-custom-classname": "off"
   },
   "overrides": [
     {

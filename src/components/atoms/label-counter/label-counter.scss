@@ -1,5 +1,4 @@
 @use "label-counter.variables" as *;
-@use "src/globals/scss/typo/typo.variables" as *;
 
 .#{nsp("label-counter")} {
   display: flex;
@@ -13,7 +12,6 @@
   }
 
   & > * {
-    font-size: $base-font-size;
     line-height: px-to-rem(40);
     margin: 0;
     text-align: center;

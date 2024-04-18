@@ -1,5 +1,5 @@
 @use "alert.variables" as *;
-@use "../../../globals/scss/fonts/fonts.variables" as *;
+@use "../../../globals/scss/variables" as *;
 
 .#{nsp("alert")} {
   display: flex;

@@ -1,5 +1,4 @@
 @use "visual-counter.variables" as *;
-@use "src/globals/scss/typo/typo.variables" as *;
 
 .#{nsp("visual-counter")} {
   display: flex;

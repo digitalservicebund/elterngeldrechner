@@ -1,14 +1,15 @@
-@use "typo.variables" as *;
 @use "../functions/rem" as *;
 @use "../variables" as *;
 
+@import "@digitalservice4germany/angie/fonts.css";
+
 html,
 body {
-  font-size: $base-font-size;
+  font-size: $font-size + px;
 }
 
 body {
-  font-family: $font-family-sans;
+  font-family: BundesSansWeb, Arial, Helvetica, sans-serif;
   font-weight: normal;
   font-style: normal;
 }

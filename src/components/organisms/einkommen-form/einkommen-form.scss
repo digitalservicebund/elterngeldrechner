@@ -17,6 +17,10 @@
       gap: px-to-rem($spacer-xl) px-to-rem($spacer);
     }
 
+    legend {
+      margin-bottom: 1.5rem;
+    }
+
     ul {
       list-style: disc;
       padding-left: 1rem;

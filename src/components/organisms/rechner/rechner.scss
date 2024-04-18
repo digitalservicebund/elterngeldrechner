@@ -84,10 +84,17 @@
 
   &--elterngeldplus {
     background-color: $color-EGP-light;
-    margin-top: px-to-rem($spacer-xl);
 
     .#{nsp("rechner-card-title")} {
       color: $color-EGP-base;
+    }
+  }
+
+  &--partnerschaftsbonus {
+    background-color: $color-PSB-light;
+
+    .#{nsp("rechner-card-title")} {
+      color: $color-PSB-base;
     }
   }
 }

@@ -8,6 +8,7 @@ import {
 } from "../../../redux/stepRechnerSlice";
 import { RechnerCardHeaderBEG } from "./RechnerCardHeaderBEG";
 import { RechnerCardHeaderEGPlus } from "./RechnerCardHeaderEGPlus";
+import { RechnerCardHeaderPSB } from "./RechnerCardHeaderPSB";
 import nsp from "../../../globals/js/namespace";
 import { FootNote, RechnerForm, RechnerResult } from "../../molecules";
 import { YesNo } from "../../../globals/js/calculations/model";
@@ -128,9 +129,15 @@ export const Rechner: VFC = () => {
       </section>
       <section
         className={nsp("rechner-card--elterngeldplus")}
-        aria-label="ElterngeldPlus und Partnerschaftsbonus"
+        aria-label="ElterngeldPlus"
       >
         <RechnerCardHeaderEGPlus />
+      </section>
+      <section
+        className={nsp("rechner-card--partnerschaftsbonus")}
+        aria-label="Partnerschaftsbonus"
+      >
+        <RechnerCardHeaderPSB />
       </section>
       <section className={nsp("rechner__description")}>
         <P bold={true}>

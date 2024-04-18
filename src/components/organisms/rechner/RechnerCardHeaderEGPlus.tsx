@@ -12,50 +12,21 @@ export const RechnerCardHeaderEGPlus: VFC = () => {
         </div>
         <InfoDialog isLarge info={infoTexts.monatsplannerPlus} />
       </div>
-      <div className={nsp("rechner-card-title")}>
-        <div className={nsp("rechner-card-title__text")}>
-          <h2>und Partnerschaftsbonus</h2>
-          <span>(4 Monate verfügbar)</span>
-        </div>
-        <InfoDialog isLarge info={infoTexts.monatsplannerBonus} />
-      </div>
       <div className={nsp("rechner-card__description")}>
-        <section>
-          <span>ElterngeldPlus</span>
-          <ol>
-            <li>
-              Statt eines Lebensmonats Basiselterngeld 2 Lebensmonate
-              ElterngeldPlus
-            </li>
-            <li>Halb so hoch wie Basiselterngeld</li>
-            <li>
-              Besonders lohnend, wenn Eltern nach der Geburt in Teilzeit
-              arbeiten
-            </li>
-            <li>
-              Auch nach dem 14. Lebensmonat, ab dann darf der Elterngeldbezug
-              jedoch nicht mehr unterbrochen werden
-            </li>
-          </ol>
-        </section>
-        <section>
-          <span>Partnerschaftsbonus</span>
-          <ol>
-            <li>
-              2 bis 4 zusätzliche Lebensmonate Elterngeld-Plus, die direkt
-              aufeinander folgen
-            </li>
-            <li>Die Eltern nutzen den Partnerschaftsbonus gleichzeitig</li>
-            <li>
-              Beide arbeiten in dieser Zeit in Teilzeit, also mindestens 24 und
-              höchstens 32 Stunden pro Woche
-            </li>
-            <li>
-              Alleinerziehende können den Partnerschaftsbonus auch allein
-              nutzen, wenn sie 24 bis 32 Stunden pro Woche arbeiten
-            </li>
-          </ol>
-        </section>
+        <ol>
+          <li>
+            Statt eines Lebensmonats Basiselterngeld 2 Lebensmonate
+            ElterngeldPlus
+          </li>
+          <li>Halb so hoch wie Basiselterngeld</li>
+          <li>
+            Besonders lohnend, wenn Eltern nach der Geburt in Teilzeit arbeiten
+          </li>
+          <li>
+            Auch nach dem 14. Lebensmonat, ab dann darf der Elterngeldbezug
+            jedoch nicht mehr unterbrochen werden
+          </li>
+        </ol>
       </div>
     </div>
   );

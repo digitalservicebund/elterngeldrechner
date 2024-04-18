@@ -45,6 +45,8 @@ export const FormFieldGroup: FC<FormFieldGroupProps> = ({
     }
   });
 
+  const showRequiredAsterisk = !!headline && !!markedAsRequired;
+
   return (
     <section
       aria-label={headline}
@@ -55,7 +57,7 @@ export const FormFieldGroup: FC<FormFieldGroupProps> = ({
       {headline && (
         <h3>
           {headline}
-          {headline && markedAsRequired ? <span> *</span> : null}
+          {showRequiredAsterisk && <span>&nbsp;*</span>}
         </h3>
       )}
       {description && (

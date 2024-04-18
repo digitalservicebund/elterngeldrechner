@@ -234,7 +234,7 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
           required={required}
           {...aria}
         />
-        <p id={name} data-type="sr-only">
+        <p id={name} className="sr-only">
           {fromValue && toValue
             ? `im Zeitraum ${fromLabel} ${fromValue} ${toLabel} ${toValue} :`
             : ""}

@@ -7,8 +7,8 @@ module.exports = {
       black: "#000000",
       primary: "#62396C",
       "primary-light": "#E4DFED",
-      teriary: "#CD3363",
-      "teriary-light": "#FFF3F7",
+      tertiary: "#A6214B",
+      "tertiary-light": "#FFF3F7",
       /* Accent */
       white: "#ffffff",
       "grey-dark": "#999999",
@@ -17,9 +17,9 @@ module.exports = {
       grey: "#D6D6D6",
       /* Semantic */
       text: "#000000",
-      "text-light": "#727272",
-      success: "#198754",
-      danger: "#DC3545",
+      "text-light": "#595959",
+      success: "#056639",
+      danger: "#B4081A",
       Basis: "#62396C",
       Plus: "#CD3363",
       Bonus: "#0000ff",

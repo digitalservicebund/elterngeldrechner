@@ -6,7 +6,7 @@ import { FieldValues, Path } from "react-hook-form";
 interface Props<TFieldValues extends FieldValues> {
   className?: string;
   type?: "button" | "submit";
-  buttonStyle?: "primary" | "secondary" | "tertiary" | "link";
+  buttonStyle?: "primary" | "secondary" | "link";
   label: string | JSX.Element;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
@@ -36,7 +36,6 @@ export const Button = <TFieldValues extends FieldValues>({
         nsp("button"),
         buttonStyle === "primary" && nsp("button--primary"),
         buttonStyle === "secondary" && nsp("button--secondary"),
-        buttonStyle === "tertiary" && nsp("button--tertiary"),
         buttonStyle === "link" && nsp("button--link"),
         disabled && nsp("button--disabled"),
         className,

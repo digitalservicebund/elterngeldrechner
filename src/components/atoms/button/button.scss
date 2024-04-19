@@ -84,29 +84,6 @@
     }
   }
 
-  &--tertiary {
-    &,
-    &:visited {
-      background-color: $color-tertiary;
-      border: $button--tertiary--border;
-    }
-
-    // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
-    // nach dem Klick der :hover Style angewendet wurde
-    @media (hover: hover) {
-      &:hover {
-        color: $color-tertiary;
-        background-color: $color-white;
-      }
-    }
-
-    &:active,
-    &:focus {
-      color: $color-tertiary;
-      background-color: $color-white;
-    }
-  }
-
   &--link {
     padding: 0;
 

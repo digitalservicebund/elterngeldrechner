@@ -23,7 +23,7 @@ jobs:
         run: zip -r build-assets.zip .
 
       - name: Create new release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
         with:
           files: build/build-assets.zip
 

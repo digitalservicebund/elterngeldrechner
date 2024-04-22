@@ -42,7 +42,7 @@ const EinkommenPage = () => {
       );
     }
     dispatch(stepEinkommenActions.submitStep(values));
-    navigate(formSteps.rechnerUndPlaner.route);
+    navigate(formSteps.elterngeldvarianten.route);
   };
 
   const handleDirtyForm = (isFormDirty: boolean, dirtyFields: object) => {

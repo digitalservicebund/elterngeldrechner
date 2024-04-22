@@ -9,7 +9,6 @@ import {
 import nsp from "../../../globals/js/namespace";
 import { FootNote, RechnerForm, RechnerResult } from "../../molecules";
 import { YesNo } from "../../../globals/js/calculations/model";
-import { ElterngeldvariantenDescriptions } from "../elterngeldvarianten";
 
 export const Rechner: VFC = () => {
   const dispatch = useAppDispatch();
@@ -114,18 +113,6 @@ export const Rechner: VFC = () => {
         Lebensmonat vom 14. Februar bis zum 13. März, der 2. Lebensmonat vom 14.
         März bis zum 13. April und so weiter.
       </FootNote>
-      <p>
-        Jeder Elternteil, der Elterngeld beantragt, muss für mindestens 2
-        Lebensmonate eine Form von Elterngeld beantragen. Elterngeld gibt es in
-        drei Varianten:
-      </p>
-
-      <section
-        aria-label="Elterngeldvarianten erklärt"
-        className="flex flex-col gap-24"
-      >
-        <ElterngeldvariantenDescriptions />
-      </section>
 
       <section className={nsp("rechner__description")}>
         <P bold={true}>

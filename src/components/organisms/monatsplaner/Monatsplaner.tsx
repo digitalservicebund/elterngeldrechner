@@ -356,7 +356,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     );
   };
 
-  const handlePageBack = () => navigate("/einkommen");
+  const handlePageBack = () => navigate(formSteps.elterngeldvarianten.route);
 
   const handleRestartForm = () => {
     navigate("/");

@@ -6,6 +6,7 @@ import "./index.scss";
 import { formSteps } from "../utils/formSteps";
 import { useAppDispatch } from "../redux/hooks";
 import { configurationActions } from "../redux/configurationSlice";
+import { ElterngeldvariantenPage } from "../components/pages/ElterngeldvariantenPage";
 
 const AllgemeineAngabenPage = lazy(
   () => import("../components/pages/AllgemeineAngabenPage"),
@@ -60,6 +61,10 @@ export const App: FC<Props> = ({ elternGeldDigitalWizardUrl }) => {
             <Route
               path={formSteps.einkommen.route}
               element={<EinkommenPage />}
+            />
+            <Route
+              path={formSteps.elterngeldvarianten.route}
+              element={<ElterngeldvariantenPage />}
             />
             <Route
               path={formSteps.rechnerUndPlaner.route}

@@ -22,6 +22,10 @@ export const formSteps: FormSteps = {
     text: "Ihr Einkommen",
     route: "/einkommen",
   },
+  elterngeldvarianten: {
+    text: "Elterngeldvarianten",
+    route: "/elterngeldvarianten",
+  },
   rechnerUndPlaner: {
     text: "Rechner und Planer",
     route: "/rechner-planer",

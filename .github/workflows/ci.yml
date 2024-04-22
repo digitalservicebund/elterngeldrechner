@@ -32,23 +32,23 @@ jobs:
         run: ./build-preview
 
       - name: Configure GitHub Pages
-        uses: actions/configure-pages@v3
+        uses: actions/configure-pages@v5
 
       - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./tmp_preview
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
 
       - uses: advanced-security/sbom-generator-action@v0.0.1
         id: sbom
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/upload-artifact@v3.1.0
+      - uses: actions/upload-artifact@v4.3.2
         with:
           path: ${{steps.sbom.outputs.fileName }}
           name: "SBOM"

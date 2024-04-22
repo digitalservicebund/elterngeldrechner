@@ -24,6 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+          cache: npm
 
       - name: Build egr
         run: npm ci && npm run test-all && npm run build

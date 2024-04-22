@@ -15,7 +15,7 @@ jobs:
           node-version-file: package.json
 
       - name: Build egr
-        run: npm install && npm run build
+        run: npm ci && npm run build
 
       - name: Create archive for static build assets
         working-directory: build/static

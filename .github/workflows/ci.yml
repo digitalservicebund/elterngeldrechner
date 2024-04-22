@@ -44,7 +44,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-      - uses: advanced-security/sbom-generator-action@ded26bf491ccc4b8c43f6c7ac2e1ff35e960c0d0
+      - uses: advanced-security/generate-sbom-action@v1 # advanced-security org is part of GitHub, thus not considered 3rd-party..
         id: sbom
         env:
           GITHUB_TOKEN: ${{ github.token }}

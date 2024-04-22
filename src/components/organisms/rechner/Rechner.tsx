@@ -6,12 +6,10 @@ import {
   stepRechnerActions,
   StepRechnerState,
 } from "../../../redux/stepRechnerSlice";
-import { RechnerCardHeaderBEG } from "./RechnerCardHeaderBEG";
-import { RechnerCardHeaderEGPlus } from "./RechnerCardHeaderEGPlus";
-import { RechnerCardHeaderPSB } from "./RechnerCardHeaderPSB";
 import nsp from "../../../globals/js/namespace";
 import { FootNote, RechnerForm, RechnerResult } from "../../molecules";
 import { YesNo } from "../../../globals/js/calculations/model";
+import { ElterngeldvariantenDescriptions } from "../elterngeldvarianten";
 
 export const Rechner: VFC = () => {
   const dispatch = useAppDispatch();
@@ -121,24 +119,14 @@ export const Rechner: VFC = () => {
         Lebensmonate eine Form von Elterngeld beantragen. Elterngeld gibt es in
         drei Varianten:
       </p>
+
       <section
-        className={nsp("rechner-card--basiselterngeld")}
-        aria-label="Basiselterngeld"
+        aria-label="Elterngeldvarianten erklärt"
+        className="flex flex-col gap-24"
       >
-        <RechnerCardHeaderBEG />
+        <ElterngeldvariantenDescriptions />
       </section>
-      <section
-        className={nsp("rechner-card--elterngeldplus")}
-        aria-label="ElterngeldPlus"
-      >
-        <RechnerCardHeaderEGPlus />
-      </section>
-      <section
-        className={nsp("rechner-card--partnerschaftsbonus")}
-        aria-label="Partnerschaftsbonus"
-      >
-        <RechnerCardHeaderPSB />
-      </section>
+
       <section className={nsp("rechner__description")}>
         <P bold={true}>
           Hier können Sie beispielhaft berechnen, wie viel Elterngeld Sie in

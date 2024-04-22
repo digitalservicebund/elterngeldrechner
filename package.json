@@ -20,7 +20,7 @@
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.scss\"",
-    "audit-licenses": "license-checker --onlyAllow=$(sed ':a; N; s/\\n/;/; ta' ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
+    "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "proxy": "https://www.bmf-steuerrechner.de",
   "eslintConfig": {

@@ -2,6 +2,9 @@
 module.exports = {
   content: ["./src/**/*.tsx"],
   theme: {
+    borderRadius: {
+      DEFAULT: "0.444rem",
+    },
     colors: {
       /* Functional */
       black: "#000000",

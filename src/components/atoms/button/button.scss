@@ -1,6 +1,8 @@
 @use "button.variables" as *;
 
 .#{nsp("button")} {
+  display: flex;
+
   &,
   &:visited {
     font-size: px-to-rem(20);

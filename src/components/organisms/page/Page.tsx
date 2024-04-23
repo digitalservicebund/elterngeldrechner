@@ -4,6 +4,7 @@ import { FormStep } from "../../../utils/formSteps";
 import { Sidebar } from "../sidebar";
 import nsp from "../../../globals/js/namespace";
 import { FootNote } from "../../molecules";
+import classNames from "classnames";
 
 interface PageProps {
   step: FormStep;
@@ -25,7 +26,7 @@ export const Page: FC<PageProps> = ({ step, children }) => {
         <Sidebar currentStep={step} />
       </div>
       <AriaMessage>{step.text}</AriaMessage>
-      <div className={nsp("page__content")}>
+      <div className={classNames(nsp("page__content"), "relative")}>
         <FootNote id={nsp("foot-note-for-required-fields")}>
           Die mit einem Stern (*) gekennzeichneten Felder sind Pflichtfelder und
           müssen ausgefüllt sein.

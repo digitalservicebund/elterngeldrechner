@@ -60,7 +60,7 @@ export function DetailsElterngeldvariante({
         <ExpandStateIcon className="!size-40" />
       </summary>
 
-      <div className="bg-grey p-24">{children}</div>
+      <div className="bg-grey px-48 py-24">{children}</div>
     </details>
   );
 }

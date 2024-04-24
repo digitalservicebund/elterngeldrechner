@@ -79,6 +79,10 @@ export const RechnerResult: VFC<Props> = ({ elternteil }) => {
     (row) => row.elternGeldPlus,
     result.data,
   );
+  const psbTableRows: RechnerResultTableRow[] = getRechnerResultTableRows(
+    (row) => row.elternGeldPlus,
+    result.data,
+  );
 
   const isAnyBEGMonthOver14Months = begTableRows.some(
     (row) => row.vonLebensMonat > 14 || row.bisLebensMonat > 14,
@@ -108,8 +112,15 @@ export const RechnerResult: VFC<Props> = ({ elternteil }) => {
       <RechnerResultTable
         className={nsp("rechner-result__elterngeldplus")}
         rows={egplusTableRows}
-        elterngeldType="Plus/Bonus"
-        titleTotal="Plus/Bonus + Netto-Einkommen"
+        elterngeldType="Plus"
+        titleTotal="Plus + Netto-Einkommen"
+        hideLebensmonate={true}
+      />
+      <RechnerResultTable
+        className={nsp("rechner-result__elterngeldbonus")}
+        rows={psbTableRows}
+        elterngeldType="Bonus"
+        titleTotal="Bonus + Netto-Einkommen"
         hideLebensmonate={true}
       />
       {notificationMessages && (

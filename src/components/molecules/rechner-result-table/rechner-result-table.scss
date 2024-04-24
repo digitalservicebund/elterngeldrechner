@@ -84,6 +84,20 @@
     }
   }
 
+  &--partnerschaftsbonus &__cell {
+    background-color: $color-PSB-light;
+
+    &--result {
+      border: px-to-rem(1) solid $color-PSB-light;
+      color: $color-PSB-base;
+    }
+
+    &--total {
+      color: $color-PSB-base;
+      background-color: $color-PSB-light;
+    }
+  }
+
   @media only screen and (max-width: $breakpoint-tablet) {
     th:first-child {
       -webkit-hyphens: auto;

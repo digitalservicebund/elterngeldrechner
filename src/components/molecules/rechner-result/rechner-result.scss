@@ -5,13 +5,14 @@
   grid-template:
     "over-14-month"
     "basiselterngeld"
-    "elterngeldplus" / max-content;
+    "elterngeldplus"
+    "partnerschaftbonus" / max-content;
   gap: px-to-rem($spacer-xl);
 
   @media (min-width: $breakpoint-desktop) {
     grid-template:
-      "over-14-month over-14-month"
-      "basiselterngeld elterngeldplus" / 0.6fr 0.4fr;
+      "over-14-month over-14-month over-14-month"
+      "basiselterngeld elterngeldplus partnerschaftsbonus" / 0.6fr 0.4fr 0.4fr;
   }
 
   &__basiselterngeld {
@@ -24,6 +25,10 @@
 
   &__elterngeldplus {
     grid-area: elterngeldplus;
+  }
+
+  &__partnerschaftsbonus {
+    grid-area: partnerschaftsbonus;
   }
 
   &-error {

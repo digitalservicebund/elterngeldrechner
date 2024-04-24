@@ -41,13 +41,13 @@ describe("Rechner Result", () => {
     expect(within(firstGroup).getByText("1 - 3")).toBeInTheDocument();
     expect(screen.getByText("1.001 €")).toBeInTheDocument(); // BEG
     expect(screen.getByText("4.002 €")).toBeInTheDocument(); //BEG + Netto
-    expect(screen.getByText("2.001 €")).toBeInTheDocument(); // EGPlus
-    expect(screen.getByText("5.002 €")).toBeInTheDocument(); // EGPlus + Netto
+    expect(screen.getAllByText("2.001 €")).toHaveLength(2); // EGPlus/Bonus
+    expect(screen.getAllByText("5.002 €")).toHaveLength(2); // EGPlus/Bonus + Netto
     expect(within(secondGroup).getByText("6 - 7")).toBeInTheDocument();
     expect(screen.getByText("1.002 €")).toBeInTheDocument(); // BEG
     expect(screen.getByText("4.004 €")).toBeInTheDocument(); //BEG + Netto
-    expect(screen.getByText("2.002 €")).toBeInTheDocument(); // EGPlus
-    expect(screen.getByText("5.004 €")).toBeInTheDocument(); // EGPlus + Netto
+    expect(screen.getAllByText("2.002 €")).toHaveLength(2); // EGPlus/Bonus
+    expect(screen.getAllByText("5.004 €")).toHaveLength(2); // EGPlus/Bonus + Netto
   });
 
   it("should not display a range of lebensmonat if the start is the same as the end", () => {
@@ -152,8 +152,8 @@ describe("Rechner Result", () => {
 
     render(<RechnerResult elternteil="ET1" />, { preloadedState });
 
-    expect(screen.getAllByLabelText("Lebensmonat 1")).toHaveLength(2);
-    expect(screen.getAllByLabelText("Lebensmonat 2")).toHaveLength(2);
+    expect(screen.getAllByLabelText("Lebensmonat 1")).toHaveLength(3);
+    expect(screen.getAllByLabelText("Lebensmonat 2")).toHaveLength(3);
     expect(screen.queryAllByLabelText("Lebensmonat 3")).toHaveLength(0);
   });
 

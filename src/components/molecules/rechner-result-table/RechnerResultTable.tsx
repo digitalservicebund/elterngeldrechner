@@ -13,7 +13,7 @@ export interface RechnerResultTableRow {
 
 interface Props {
   rows: RechnerResultTableRow[];
-  elterngeldType: "Basis" | "Plus/Bonus";
+  elterngeldType: "Basis" | "Plus" | "Bonus";
   titleTotal: string;
   markOver14Month?: boolean;
   hideLebensmonate?: boolean;
@@ -45,8 +45,10 @@ export const RechnerResultTable: VFC<Props> = ({
     <table
       className={classNames(
         nsp("rechner-result-table"),
-        elterngeldType !== "Basis" &&
+        elterngeldType === "Plus" &&
           nsp("rechner-result-table--elterngeldplus"),
+        elterngeldType === "Bonus" &&
+          nsp("rechner-result-table--partnerschaftsbonus"),
         className,
       )}
     >

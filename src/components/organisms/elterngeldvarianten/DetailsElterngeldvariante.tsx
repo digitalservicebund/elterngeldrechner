@@ -2,18 +2,24 @@ import classNames from "classnames";
 import { ReactNode, useState } from "react";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
+import { PayoutInformation } from "./PayoutInformation";
+import { PayoutAmounts } from "./types";
 
-interface Props {
+type Props = {
   summaryTitle: string;
   summaryClassName?: string;
   monthsAvailable: number;
+  parentNames: { ET1: string; ET2: string };
+  payoutAmounts: PayoutAmounts;
   children: ReactNode;
-}
+};
 
 export function DetailsElterngeldvariante({
   summaryTitle,
   summaryClassName,
   monthsAvailable,
+  parentNames,
+  payoutAmounts,
   children,
 }: Props): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,9 +38,23 @@ export function DetailsElterngeldvariante({
           summaryClassName,
         )}
       >
-        <div className="flex basis-full flex-wrap items-center gap-x-8">
-          <strong className="text-24">{summaryTitle}</strong>({monthsAvailable}{" "}
-          Monate verfügbar)
+        <div className="flex flex-wrap gap-y-10">
+          <div className="flex basis-full flex-wrap items-center gap-x-8">
+            <strong className="text-24">{summaryTitle}</strong>(
+            {monthsAvailable} Monate verfügbar)
+          </div>
+
+          <div className="flex flex-wrap gap-x-24 gap-y-8">
+            <PayoutInformation
+              parentName={parentNames.ET1}
+              amount={payoutAmounts.ET1}
+            />
+
+            <PayoutInformation
+              parentName={parentNames.ET2}
+              amount={payoutAmounts.ET2}
+            />
+          </div>
         </div>
 
         <ExpandStateIcon className="!size-40" />

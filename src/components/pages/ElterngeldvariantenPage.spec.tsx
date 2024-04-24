@@ -1,6 +1,8 @@
 import { screen } from "@testing-library/react";
 import { render } from "../../test-utils/test-utils";
-import ElterngeldvariantenPage from "./ElterngeldvariantenPage";
+import { ElterngeldvariantenPage } from "./ElterngeldvariantenPage";
+
+jest.mock("../organisms/elterngeldvarianten/usePayoutAmounts");
 
 describe("ElterngeldvariantenPage", () => {
   it("shows a section that explains the different parental allowance variants", () => {

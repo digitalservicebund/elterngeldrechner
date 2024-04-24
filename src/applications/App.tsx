@@ -1,7 +1,7 @@
 import { FC, lazy, Suspense } from "react";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AriaLogProvider, Spinner } from "../components/atoms";
-import "./index.css";
+import "../styles/tailwind.css";
 import "./index.scss";
 import { formSteps } from "../utils/formSteps";
 import { useAppDispatch } from "../redux/hooks";

@@ -6,6 +6,7 @@
 html,
 body {
   font-size: 18px;
+  line-height: px-to-rem(30);
 }
 
 body {
@@ -51,10 +52,6 @@ p {
   font-size: px-to-rem(18);
   line-height: px-to-rem(30);
   padding: px-to-rem($spacer-xs) 0;
-}
-
-li {
-  line-height: px-to-rem(30);
 }
 
 button {

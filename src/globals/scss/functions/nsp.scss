@@ -1,5 +1,0 @@
-@use "src/globals/scss/variables" as *;
-
-@function nsp($classname, $namespace: $nsp) {
-  @return $namespace + "-" + $classname;
-}

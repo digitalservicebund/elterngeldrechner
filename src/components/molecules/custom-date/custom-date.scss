@@ -23,8 +23,7 @@
     margin-bottom: px-to-rem($spacer);
 
     &:focus-within {
-      padding: $custom-date-padding-on-focus;
-      border: px-to-rem(2) solid $color-primary;
+      outline: px-to-rem(2) solid $color-primary;
     }
 
     &--error {

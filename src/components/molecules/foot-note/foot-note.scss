@@ -4,7 +4,7 @@
   font-size: px-to-rem(18);
   line-height: px-to-rem(30);
   padding: px-to-rem($spacer-xs) 0 px-to-rem($spacer-xs) px-to-rem($spacer);
-  border-left: px-to-rem($spacer-s) solid $color-BEG-base;
+  border-left: px-to-rem($spacer-s) solid $color-primary;
   display: flex;
 
   &__number {

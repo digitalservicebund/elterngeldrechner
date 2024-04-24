@@ -104,12 +104,12 @@
       align-items: center;
       width: 100%;
       border: 0;
-      background-color: $color-BEG-light;
+      background-color: $color-primary-light;
       color: $color-text;
 
       &:focus,
       &:hover {
-        background-color: $color-BEG-light;
+        background-color: $color-primary-light;
         color: $color-text;
       }
     }

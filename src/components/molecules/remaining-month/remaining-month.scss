@@ -5,21 +5,29 @@
   background-color: $color-off-white;
 
   &__label {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-basis: 30ch;
+    column-gap: px-to-rem(24);
     text-align: center;
+    margin-bottom: 20px;
+
+    > * {
+      flex-basis: 13ch;
+    }
   }
 
   &__basiselterngeld {
-    color: $color-BEG-base;
+    background-color: $color-BEG-base;
+    color: white;
   }
 
   &__elterngeldplus {
-    color: $color-EGP-base;
+    background-color: $color-EGP-base;
   }
 
   &__partnerschaftsbonus {
-    color: $color-PSB-base;
+    margin-left: auto;
+    background-color: $color-PSB-base;
   }
 
   &__visual {

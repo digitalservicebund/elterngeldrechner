@@ -40,8 +40,6 @@
   }
 
   &__cell {
-    background-color: $color-BEG-light;
-
     &--hidden {
       @media only screen and (min-width: $breakpoint-desktop) {
         display: none;
@@ -49,55 +47,35 @@
     }
 
     &--result {
-      border: px-to-rem(1) solid $color-BEG-light;
-      color: $color-BEG-base;
+      border: px-to-rem(1) solid;
       font-weight: 700;
-      background-color: $color-white;
-
-      .egr-foot-note-number {
-        color: $color-BEG-base;
-      }
     }
+  }
 
-    &--total {
-      color: $color-BEG-base;
-      font-weight: 700;
-      background-color: $color-BEG-light;
+  &--basiselterngeld &__cell {
+    color: $color-white;
+    background-color: $color-BEG-base;
 
-      .egr-foot-note-number {
-        color: $color-BEG-base;
-      }
+    &--result {
+      border-color: $color-BEG-base;
     }
   }
 
   &--elterngeldplus &__cell {
-    background-color: $color-EGP-light;
+    background-color: $color-EGP-base;
 
     &--result {
-      border: px-to-rem(1) solid $color-EGP-light;
-      color: $color-EGP-base;
-    }
-
-    &--total {
-      color: $color-EGP-base;
-      background-color: $color-EGP-light;
+      border-color: $color-EGP-base;
     }
   }
 
   &--partnerschaftsbonus &__cell {
-    background-color: $color-PSB-light;
+    background-color: $color-PSB-base;
 
     &--result {
-      border: px-to-rem(1) solid $color-PSB-light;
-      color: $color-PSB-base;
-    }
-
-    &--total {
-      color: $color-PSB-base;
-      background-color: $color-PSB-light;
+      border-color: $color-PSB-base;
     }
   }
-
   @media only screen and (max-width: $breakpoint-tablet) {
     th:first-child {
       -webkit-hyphens: auto;

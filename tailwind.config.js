@@ -21,9 +21,9 @@ module.exports = {
       "text-light": "#595959",
       success: "#056639",
       danger: "#B4081A",
-      Basis: "#62396C",
-      Plus: "#CD3363",
-      Bonus: "#0000ff",
+      Basis: "#004B76",
+      Plus: "#80CDEC",
+      Bonus: "#66B692",
     },
     fontSize: {
       base: ["1rem", { lineHeight: "1.5555rem" }],

@@ -45,6 +45,8 @@ export const RechnerResultTable: VFC<Props> = ({
     <table
       className={classNames(
         nsp("rechner-result-table"),
+        elterngeldType === "Basis" &&
+          nsp("rechner-result-table--basiselterngeld"),
         elterngeldType === "Plus" &&
           nsp("rechner-result-table--elterngeldplus"),
         elterngeldType === "Bonus" &&
@@ -100,7 +102,7 @@ export const RechnerResultTable: VFC<Props> = ({
                     <FootNoteNumber number={1} type="anchor" prefix="rechner" />
                   )}
               </td>
-              <td className={nsp("rechner-result-table__cell--total")}>
+              <td className={nsp("rechner-result-table__cell--result")}>
                 {roundAndFormatMoney(amountTotal)}
                 {markOver14Month &&
                   (vonLebensMonat > 14 || bisLebensMonat > 14) && (

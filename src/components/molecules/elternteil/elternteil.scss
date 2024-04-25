@@ -45,24 +45,21 @@
   &__th {
     font-weight: 700;
     padding: px-to-rem($spacer-s);
-    border-bottom: px-to-rem(10) solid;
+    border-bottom: px-to-rem(10) solid $color-off-white;
 
     &--basiselterngeld {
-      color: $color-BEG-base;
-      border-color: $color-BEG-base;
-      background: $color-BEG-light;
+      color: $color-white;
+      background: $color-BEG-base;
     }
 
     &--elterngeldplus {
-      color: $color-EGP-base;
-      border-color: $color-EGP-base;
-      background: $color-EGP-light;
+      color: $color-text;
+      background: $color-EGP-base;
     }
 
     &--partnerschaftsbonus {
-      color: $color-PSB-base;
-      border-color: $color-PSB-base;
-      background: $color-PSB-light;
+      color: $color-text;
+      background: $color-PSB-base;
     }
   }
 

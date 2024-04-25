@@ -1,4 +1,4 @@
-@use "monatsplaner-month.variables" as *;
+@use "src/globals/scss" as *;
 
 .#{nsp("monatsplaner-month")} {
   width: 100%;
@@ -21,28 +21,24 @@
     outline: px-to-rem(1) solid $color-primary;
   }
 
-  &--beg {
-    color: $monatsplaner-month--beg--color;
-  }
-
   &--beg#{&}--selected {
     @media only screen {
-      color: $monatsplaner-month--beg--contrast-color;
-      background-color: $monatsplaner-month--beg--color;
+      color: $color-white;
+      background-color: $color-BEG-base;
     }
   }
 
   &--egplus#{&}--selected {
     @media only screen {
-      color: $monatsplaner-month--egplus--contrast-color;
-      background-color: $monatsplaner-month--egplus--color;
+      color: $color-text;
+      background-color: $color-EGP-base;
     }
   }
 
   &--psb#{&}--selected {
     @media only screen {
-      color: $monatsplaner-month--psb--contrast-color;
-      background-color: $monatsplaner-month--psb--color;
+      color: $color-text;
+      background-color: $color-PSB-base;
     }
   }
 
@@ -56,32 +52,32 @@
     }
 
     &--beg:hover {
-      color: $monatsplaner-month--beg--contrast-color;
-      background-color: $monatsplaner-month--beg--color;
+      color: $color-white;
+      background-color: $color-BEG-base;
     }
 
     &--egplus:hover {
-      color: $monatsplaner-month--egplus--contrast-color;
-      background-color: $monatsplaner-month--egplus--color;
+      color: $color-text;
+      background-color: $color-EGP-base;
     }
 
     &--psb:hover {
-      color: $monatsplaner-month--psb--contrast-color;
-      background-color: $monatsplaner-month--psb--color;
+      color: $color-text;
+      background-color: $color-PSB-base;
     }
   }
 
   &--psb#{&}--highlighted {
     text-decoration: none;
     @media only screen {
-      color: $monatsplaner-month--psb--contrast-color;
-      background-color: $monatsplaner-month--psb--color;
+      color: $color-text;
+      background-color: $color-PSB-base;
     }
   }
 
   &--selected {
     @media only screen {
-      background-color: $monatsplaner-month--selected--color;
+      background-color: $color-primary;
     }
   }
 }

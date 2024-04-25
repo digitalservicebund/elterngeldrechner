@@ -70,7 +70,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         </DetailsElterngeldvariante>
         <DetailsElterngeldvariante
           summaryTitle="+ Partnerschaftsbonus"
-          summaryClassName="bg-Bonus text-white fill-white"
+          summaryClassName="bg-Bonus text-black fill-black"
           monthsAvailable={4}
           parentNames={parentNames}
           payoutAmounts={payoutAmounts.partnerschaftsbonus}

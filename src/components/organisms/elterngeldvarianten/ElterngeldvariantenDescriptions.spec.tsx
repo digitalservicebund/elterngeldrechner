@@ -93,18 +93,18 @@ describe("ElterngeldvariantenDescription", () => {
 
   it("shows the calculated amounts for each variants payout information", () => {
     jest.mocked(usePayoutAmounts).mockReturnValue({
-      basiselterngeld: { ET1: 1.0, ET2: 2.0 },
-      elterngeldplus: { ET1: 3.0, ET2: 4.0 },
-      partnerschaftsbonus: { ET1: 5.0, ET2: 6.0 },
+      basiselterngeld: { ET1: 1, ET2: 2 },
+      elterngeldplus: { ET1: 3, ET2: 4 },
+      partnerschaftsbonus: { ET1: 5, ET2: 6 },
     });
     render(<ElterngeldvariantenDescriptions />);
 
-    expect(screen.queryByText(/1.00/)).toBeVisible();
-    expect(screen.queryByText(/2.00/)).toBeVisible();
-    expect(screen.queryByText(/3.00/)).toBeVisible();
-    expect(screen.queryByText(/4.00/)).toBeVisible();
-    expect(screen.queryByText(/5.00/)).toBeVisible();
-    expect(screen.queryByText(/6.00/)).toBeVisible();
+    expect(screen.queryByText(/€1/)).toBeVisible();
+    expect(screen.queryByText(/€2/)).toBeVisible();
+    expect(screen.queryByText(/€3/)).toBeVisible();
+    expect(screen.queryByText(/€4/)).toBeVisible();
+    expect(screen.queryByText(/€5/)).toBeVisible();
+    expect(screen.queryByText(/€6/)).toBeVisible();
   });
 });
 

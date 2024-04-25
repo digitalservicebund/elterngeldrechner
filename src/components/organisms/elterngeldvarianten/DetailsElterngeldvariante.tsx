@@ -29,7 +29,6 @@ export function DetailsElterngeldvariante({
   return (
     <details
       className="overflow-hidden rounded bg-grey"
-      name="Elterngeldvarianten"
       onToggle={toggleIsOpen}
     >
       <summary
@@ -60,7 +59,7 @@ export function DetailsElterngeldvariante({
         <ExpandStateIcon className="!size-40" />
       </summary>
 
-      <div className="bg-grey px-48 py-24">{children}</div>
+      <div className="bg-off-white px-48 py-24">{children}</div>
     </details>
   );
 }

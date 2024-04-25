@@ -11,7 +11,7 @@ describe("PaymentInformation", () => {
       />,
     );
 
-    expect(screen.getByText("Jane", { exact: false })).toBeVisible();
+    expect(screen.queryByText("Jane", { exact: false })).toBeVisible();
   });
 
   it("displays the amount as currency with Euro symbol", () => {
@@ -23,10 +23,10 @@ describe("PaymentInformation", () => {
       />,
     );
 
-    expect(screen.getByText("€", { exact: false })).toBeVisible();
+    expect(screen.queryByText("€", { exact: false })).toBeVisible();
   });
 
-  it("displays the amount with a accuracy of two fractional digits", () => {
+  it("displays the amount with a accuracy of zero fractional digits and floors the value", () => {
     render(
       <PayoutInformation
         parentName={ANY_NAME}
@@ -35,7 +35,10 @@ describe("PaymentInformation", () => {
       />,
     );
 
-    expect(screen.getByText("10,5", { exact: false })).toBeVisible();
+    expect(screen.queryByText("10", { exact: false })).toBeVisible();
+    expect(
+      screen.queryByText("10,5", { exact: false }),
+    ).not.toBeInTheDocument();
   });
 
   it("displays the amount with thousands operator", () => {
@@ -47,7 +50,7 @@ describe("PaymentInformation", () => {
       />,
     );
 
-    expect(screen.getByText("10.000,00", { exact: false })).toBeVisible();
+    expect(screen.getByText("10.000", { exact: false })).toBeVisible();
   });
 });
 

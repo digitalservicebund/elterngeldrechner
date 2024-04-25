@@ -17,19 +17,26 @@ export function PayoutInformation({
   amount,
   testLocales,
 }: Props): ReactNode {
-  const formattedAmount = amount.toLocaleString(testLocales, {
-    style: "currency",
-    currency: "EUR",
-    currencyDisplay: "symbol",
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  const formattedAmount = formatAsCurrency(amount, testLocales);
 
   return (
-    <span>
-      <PermIdentityIcon className="inline" /> {parentName}
+    <span className="inline-flex items-center gap-4">
+      <PermIdentityIcon className="inline h-20" /> {parentName}
       <span aria-hidden="true"> | </span>
       <strong>{formattedAmount}</strong> pro Monat
     </span>
   );
+}
+
+function formatAsCurrency(
+  amount: number,
+  locales?: Intl.LocalesArgument,
+): string {
+  const rounded = Math.floor(amount);
+  return rounded.toLocaleString(locales, {
+    style: "currency",
+    currency: "EUR",
+    currencyDisplay: "symbol",
+    maximumFractionDigits: 0,
+  });
 }

@@ -32,7 +32,7 @@
     font-size: px-to-rem(14);
     word-wrap: break-word;
     line-height: px-to-rem(20);
-    width: px-to-rem(85);
+    width: px-to-rem(80);
     padding: px-to-rem($spacer-s);
 
     &--hidden {
@@ -86,17 +86,7 @@
   }
 
   &__lebensmonat-content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 px-to-rem($spacer-s);
-  }
-
-  &__number {
+    text-align: center;
     font-weight: 700;
-  }
-
-  &__label {
-    font-size: px-to-rem(14);
   }
 }

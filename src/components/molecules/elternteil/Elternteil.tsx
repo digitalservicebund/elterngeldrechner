@@ -170,9 +170,6 @@ export const Elternteil: VFC<Props> = ({
               >
                 <span className={nsp("lebensmonate-cell__number")}>
                   {index + 1}
-                </span>{" "}
-                <span className={nsp("lebensmonate-cell__label")}>
-                  {lebensmonat.labelShort}
                 </span>
               </div>
             </td>

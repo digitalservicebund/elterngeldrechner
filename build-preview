@@ -25,12 +25,7 @@ wget \
 rm chunk* main*
 
 # Copy over new assets
-cp ../build/static/css/*.css .
-cp ../build/static/css/*.css.map .
-cp ../build/static/js/*.js .
-cp ../build/static/js/*.js.map .
-mkdir  ./static
-cp --recursive ../build/static/media ./static
+cp --recursive ../build/static .
 
 # Special handling of svg sprite
 sprite_path=$(grep -o "/resource/crblob/.*/sprite-svg-data.svg" egr.html)
@@ -39,19 +34,14 @@ echo $sprite_url
 wget "${sprite_url}"
 sed --in-place --expression "s#/resource/crblob/.*/sprite-svg-data.svg#sprite-svg-data.svg#" egr.html
 
-# Inject app script tags
-scripts=""
-for filename in *.chunk.js; do
-    [ -e "$filename" ] || continue
-    scripts="${scripts}<script src=\"${filename}\"></script>"
-    # ... rest of the loop body
-done
-scripts="${scripts}<script src=\"$(ls main.*.js)\"></script>"
-sed --in-place --expression "s#<script src=\"chunk1.*\$#$scripts#" egr.html
+# Inject app scripts and style-sheets
+main_script_path=$(find ./static/js -name main.*.js )
+script_element="<script defer='defer' src='$main_script_path'></script>"
 
-# Inject app stylesheet
-stylesheet=$(ls main.*.css)
-sed --in-place --expression "s#main.*\.css#$stylesheet#" egr.html
+main_stylesheet_path=$(find ./static/css -name main.*.css)
+stylesheet_element="<link href='$main_stylesheet_path' rel='stylesheet' />"
+
+sed --in-place --expression "s#<script src=\"chunk1.*\$#$script_element$stylesheet_element#" egr.html
 
 # Disable Matomo tracking
 sed --in-place --expression "s#window\.initMatomo();#/* tracking disabled */#" egr.html

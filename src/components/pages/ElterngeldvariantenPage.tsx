@@ -23,8 +23,8 @@ export function ElterngeldvariantenPage(): ReactNode {
             Elterngeld gibt es in 3 Varianten.
             <br />
             Hier finden Sie eine Übersicht über die einzelnen
-            Elterngeldoptionen. Diese können Sie im nächsten Schritt miteinander
-            kombinieren.
+            Elterngeldvarianten. Diese können Sie im nächsten Schritt
+            miteinander kombinieren.
           </p>
 
           <ElterngeldvariantenDescriptions />
@@ -32,11 +32,11 @@ export function ElterngeldvariantenPage(): ReactNode {
 
         <Button
           buttonStyle="secondary"
-          label="zurück"
+          label="Zurück"
           onClick={navigateToPreviousStep}
         />
 
-        <Button label="zum Monatsplaner" onClick={navigateToNextStep} />
+        <Button label="Zum Monatsplaner" onClick={navigateToNextStep} />
       </div>
     </Page>
   );

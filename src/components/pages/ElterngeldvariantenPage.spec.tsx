@@ -17,14 +17,14 @@ describe("ElterngeldvariantenPage", () => {
   it("displays a button to navigate back", () => {
     render(<ElterngeldvariantenPage />);
 
-    const backButton = screen.getByRole("button", { name: "zurück" });
+    const backButton = screen.getByRole("button", { name: "Zurück" });
     expect(backButton).toBeVisible();
   });
 
   it("displays a button to the month planner", () => {
     render(<ElterngeldvariantenPage />);
 
-    const nextButton = screen.getByRole("button", { name: "zum Monatsplaner" });
+    const nextButton = screen.getByRole("button", { name: "Zum Monatsplaner" });
     expect(nextButton).toBeVisible();
   });
 });

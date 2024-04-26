@@ -35,6 +35,7 @@ const RechnerPlanerPage = () => {
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
+      <h3>Rechner und Planer</h3>
       <Rechner />
       <Monatsplaner mutterSchutzMonate={mutterSchutzMonate} />
       {showModalPopup && (

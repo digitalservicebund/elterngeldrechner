@@ -14,10 +14,6 @@
   padding: px-to-rem($spacer);
   background-color: $color-off-white;
 
-  @media only screen and (max-width: $breakpoint-tablet) {
-    padding-left: 0;
-  }
-
   &__tables {
     display: flex;
     flex-direction: column;

@@ -20,11 +20,12 @@ export function PayoutInformation({
   const formattedAmount = formatAsCurrency(amount, testLocales);
 
   return (
-    <span className="inline-flex items-center gap-4">
-      <PermIdentityIcon className="inline h-20" /> {parentName}
-      <span aria-hidden="true"> | </span>
-      <strong>{formattedAmount}</strong> pro Monat
-    </span>
+    <div className="inline-flex items-center gap-4">
+      <PermIdentityIcon className="inline h-20" />
+      <span>
+        {parentName} | <strong>{formattedAmount}</strong> pro Monat
+      </span>
+    </div>
   );
 }
 

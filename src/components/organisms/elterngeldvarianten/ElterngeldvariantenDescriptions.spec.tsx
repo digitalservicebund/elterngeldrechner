@@ -77,11 +77,17 @@ describe("ElterngeldvariantenDescription", () => {
     expect(details).toBeVisible();
   });
 
-  it("shows names of the parents for each variants payout information", () => {
+  it("shows the names and payout amounts for each parent and variants if both apply together", () => {
+    jest.mocked(usePayoutAmounts).mockReturnValue({
+      basiselterngeld: { ET1: 1, ET2: 2 },
+      elterngeldplus: { ET1: 3, ET2: 4 },
+      partnerschaftsbonus: { ET1: 5, ET2: 6 },
+    });
     render(<ElterngeldvariantenDescriptions />, {
       preloadedState: {
         stepAllgemeineAngaben: {
           ...initialStepAllgemeineAngabenState,
+          antragstellende: "FuerBeide",
           pseudonym: { ET1: "Jane", ET2: "John" },
         },
       },
@@ -89,22 +95,38 @@ describe("ElterngeldvariantenDescription", () => {
 
     expect(screen.queryAllByText(/Jane/)).toHaveLength(3);
     expect(screen.queryAllByText(/John/)).toHaveLength(3);
-  });
-
-  it("shows the calculated amounts for each variants payout information", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue({
-      basiselterngeld: { ET1: 1, ET2: 2 },
-      elterngeldplus: { ET1: 3, ET2: 4 },
-      partnerschaftsbonus: { ET1: 5, ET2: 6 },
-    });
-    render(<ElterngeldvariantenDescriptions />);
-
     expect(screen.queryByText(/€1/)).toBeVisible();
     expect(screen.queryByText(/€2/)).toBeVisible();
     expect(screen.queryByText(/€3/)).toBeVisible();
     expect(screen.queryByText(/€4/)).toBeVisible();
     expect(screen.queryByText(/€5/)).toBeVisible();
     expect(screen.queryByText(/€6/)).toBeVisible();
+  });
+
+  it("shows no name and only the  payout amounts for parent one if single applicant", () => {
+    jest.mocked(usePayoutAmounts).mockReturnValue({
+      basiselterngeld: { ET1: 1, ET2: 2 },
+      elterngeldplus: { ET1: 3, ET2: 4 },
+      partnerschaftsbonus: { ET1: 5, ET2: 6 },
+    });
+    render(<ElterngeldvariantenDescriptions />, {
+      preloadedState: {
+        stepAllgemeineAngaben: {
+          ...initialStepAllgemeineAngabenState,
+          antragstellende: "FuerMichSelbst",
+          pseudonym: { ET1: "Jane", ET2: "John" },
+        },
+      },
+    });
+
+    expect(screen.queryAllByText(/Jane/)).toHaveLength(0);
+    expect(screen.queryAllByText(/John/)).toHaveLength(0);
+    expect(screen.queryByText(/€1/)).toBeVisible();
+    expect(screen.queryByText(/€2/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/€3/)).toBeVisible();
+    expect(screen.queryByText(/€4/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/€5/)).toBeVisible();
+    expect(screen.queryByText(/€6/)).not.toBeInTheDocument();
   });
 });
 

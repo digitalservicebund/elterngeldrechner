@@ -2,7 +2,7 @@ import PermIdentityIcon from "@digitalservicebund/icons/PermIdentity";
 import { ReactNode } from "react";
 
 type Props = {
-  parentName: string;
+  parentName?: string;
   amount: number;
 
   /**
@@ -23,7 +23,8 @@ export function PayoutInformation({
     <div className="inline-flex items-center gap-4">
       <PermIdentityIcon className="inline h-20" />
       <span>
-        {parentName} | <strong>{formattedAmount}</strong> pro Monat
+        {parentName && `${parentName} | `}
+        <strong>{formattedAmount}</strong> pro Monat
       </span>
     </div>
   );

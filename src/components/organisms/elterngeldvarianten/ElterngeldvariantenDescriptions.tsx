@@ -10,6 +10,10 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
   const parentNames = useAppSelector(
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
+  const applicant = useAppSelector(
+    stepAllgemeineAngabenSelectors.getAntragssteller,
+  );
+  const isSingleApplicant = applicant === "FuerMichSelbst";
 
   if (payoutAmounts === undefined) {
     return <Spinner />;
@@ -22,6 +26,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           monthsAvailable={14}
           parentNames={parentNames}
           payoutAmounts={payoutAmounts.basiselterngeld}
+          isSingleApplicant={isSingleApplicant}
         >
           <ul className="list-disc">
             <li>
@@ -51,6 +56,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           monthsAvailable={28}
           parentNames={parentNames}
           payoutAmounts={payoutAmounts.elterngeldplus}
+          isSingleApplicant={isSingleApplicant}
         >
           <ul className="list-disc">
             <li>
@@ -74,6 +80,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           monthsAvailable={4}
           parentNames={parentNames}
           payoutAmounts={payoutAmounts.partnerschaftsbonus}
+          isSingleApplicant={isSingleApplicant}
         >
           <ul className="list-disc">
             <li>

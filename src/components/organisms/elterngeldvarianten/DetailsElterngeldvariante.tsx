@@ -11,6 +11,7 @@ type Props = {
   monthsAvailable: number;
   parentNames: { ET1: string; ET2: string };
   payoutAmounts: PayoutAmounts;
+  isSingleApplicant: boolean;
   children: ReactNode;
 };
 
@@ -20,6 +21,7 @@ export function DetailsElterngeldvariante({
   monthsAvailable,
   parentNames,
   payoutAmounts,
+  isSingleApplicant,
   children,
 }: Props): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,14 +47,16 @@ export function DetailsElterngeldvariante({
 
           <div className="flex flex-wrap gap-x-24 gap-y-8">
             <PayoutInformation
-              parentName={parentNames.ET1}
+              parentName={isSingleApplicant ? undefined : parentNames.ET1}
               amount={payoutAmounts.ET1}
             />
 
-            <PayoutInformation
-              parentName={parentNames.ET2}
-              amount={payoutAmounts.ET2}
-            />
+            {!isSingleApplicant && (
+              <PayoutInformation
+                parentName={parentNames.ET2}
+                amount={payoutAmounts.ET2}
+              />
+            )}
           </div>
         </div>
 

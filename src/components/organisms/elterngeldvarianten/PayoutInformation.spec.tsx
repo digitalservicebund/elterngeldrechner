@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { PayoutInformation } from "./PayoutInformation";
 
 describe("PaymentInformation", () => {
-  it("displays the name of the parent receiving the payout", () => {
+  it("displays the name of the parent with separator sign", () => {
     render(
       <PayoutInformation
         parentName="Jane"
@@ -11,7 +11,19 @@ describe("PaymentInformation", () => {
       />,
     );
 
-    expect(screen.queryByText("Jane", { exact: false })).toBeVisible();
+    expect(screen.queryByText("Jane |", { exact: false })).toBeVisible();
+  });
+
+  it("does not display a separator sign if no parent name given", () => {
+    render(
+      <PayoutInformation
+        parentName={undefined}
+        amount={ANY_AMOUNT}
+        testLocales={ANY_LOCALES}
+      />,
+    );
+
+    expect(screen.queryByText("|", { exact: false })).not.toBeInTheDocument();
   });
 
   it("displays the amount as currency with Euro symbol", () => {

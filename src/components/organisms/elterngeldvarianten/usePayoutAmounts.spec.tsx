@@ -36,8 +36,9 @@ describe("usePayoutAmounts", () => {
 
   it("takes the amounts of the first row for both parents", async () => {
     const calculationPromise = Promise.resolve([
+      elterngeldRow({ basisElternGeld: 0, elternGeldPlus: 0 }),
+      elterngeldRow({ basisElternGeld: 0, elternGeldPlus: 0 }),
       elterngeldRow({ basisElternGeld: 1, elternGeldPlus: 2 }),
-      elterngeldRow({ basisElternGeld: 3, elternGeldPlus: 4 }),
     ]);
     jest.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
 
@@ -54,6 +55,8 @@ describe("usePayoutAmounts", () => {
       ET2: 2,
     });
   });
+
+  it("takes the first calculated row that has no zero value due to meternity protection", () => {});
 
   it("is initially undefined", async () => {
     let resolveCalculation: (value: ElterngeldRow[]) => void = jest.fn();

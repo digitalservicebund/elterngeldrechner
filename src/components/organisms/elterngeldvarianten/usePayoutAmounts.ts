@@ -27,7 +27,10 @@ export function usePayoutAmounts() {
       calculateElterngeld(state, "ET1", EMPTY_FUTURE_INCOME),
       calculateElterngeld(state, "ET2", EMPTY_FUTURE_INCOME),
     ]).then(([rowsET1, rowsET2]) => {
-      const payoutAmounts = formatRowsToPayoutAmounts(rowsET1, rowsET2);
+      const payoutAmounts = formatRowsToPayoutAmounts(
+        findFristRepresentativeMonth(rowsET1),
+        findFristRepresentativeMonth(rowsET2),
+      );
       setPayoutAmounts(payoutAmounts);
     });
   }, [store]);
@@ -35,25 +38,35 @@ export function usePayoutAmounts() {
   return payoutAmounts;
 }
 
-function formatRowsToPayoutAmounts(
-  rowsET1: ElterngeldRow[],
-  rowsET2: ElterngeldRow[],
-) {
-  const presentativeRowET1 = rowsET1[REPRESENTATIVE_MONTH_INDEX];
-  const presentativeRowET2 = rowsET2[REPRESENTATIVE_MONTH_INDEX];
+/**
+ * The goal is to find a single amount per variant that is representative and
+ * give the user an idea how much the payout would be. But the calculated result
+ * provides a list with amounts per month. As there is no better evaluation,
+ * just the first month is taken.
+ * But as there can be scenarios like maternity protection, the first months are
+ * skipped, till the first month with a non zero payout amount. This might
+ * differ between both parents, especially in the maternity protection scenario.
+ */
+function findFristRepresentativeMonth(rows: ElterngeldRow[]): ElterngeldRow {
+  return rows.find((row) => row.basisElternGeld > 0) ?? rows[0];
+}
 
+function formatRowsToPayoutAmounts(
+  rowET1: ElterngeldRow,
+  rowET2: ElterngeldRow,
+): PayoutAmountsForAllVariants {
   return {
     basiselterngeld: {
-      ET1: presentativeRowET1.basisElternGeld,
-      ET2: presentativeRowET2.basisElternGeld,
+      ET1: rowET1.basisElternGeld,
+      ET2: rowET2.basisElternGeld,
     },
     elterngeldplus: {
-      ET1: presentativeRowET1.elternGeldPlus,
-      ET2: presentativeRowET2.elternGeldPlus,
+      ET1: rowET1.elternGeldPlus,
+      ET2: rowET2.elternGeldPlus,
     },
     partnerschaftsbonus: {
-      ET1: presentativeRowET1.elternGeldPlus,
-      ET2: presentativeRowET2.elternGeldPlus,
+      ET1: rowET1.elternGeldPlus,
+      ET2: rowET2.elternGeldPlus,
     },
   };
 }
@@ -65,11 +78,3 @@ function formatRowsToPayoutAmounts(
  * with.
  */
 const EMPTY_FUTURE_INCOME: BruttoEinkommenZeitraum[] = [];
-
-/**
- * The actual result of the current calculation is a list of values per month.
- * To provide a representative value of "that amount for that variant", the
- * first month is taken to read the values from. This strongly assumes that the
- * calculation was done without any additional income values.
- */
-const REPRESENTATIVE_MONTH_INDEX = 0;

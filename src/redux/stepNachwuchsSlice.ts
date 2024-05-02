@@ -6,7 +6,7 @@ import { resetStoreAction } from "./resetStoreAction";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { YesNo } from "../globals/js/calculations/model";
 
-export interface Kind {
+interface Kind {
   geburtsdatum: string;
   istBehindert: boolean;
 }
@@ -68,7 +68,7 @@ const getWahrscheinlichesGeburtsDatum = createSelector(
   },
 );
 
-export const monthAfterBirthDateFormat = new Intl.DateTimeFormat("de-DE", {
+const monthAfterBirthDateFormat = new Intl.DateTimeFormat("de-DE", {
   month: "long",
   year: "numeric",
 });

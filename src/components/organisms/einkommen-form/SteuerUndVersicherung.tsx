@@ -47,7 +47,7 @@ const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
   { value: KinderFreiBetrag.ZKF5, label: "5,0" },
 ];
 
-export const kassenArtLabels: { [K in KassenArt]: string } = {
+const kassenArtLabels: { [K in KassenArt]: string } = {
   [KassenArt.GESETZLICH_PFLICHTVERSICHERT]: "gesetzlich pflichtversichert",
   [KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT]:
     "nicht gesetzlich pflichtversichert",
@@ -64,7 +64,7 @@ const kassenArtOptions: RadioOption<KassenArt>[] = [
   },
 ];
 
-export const rentenVersicherungLabels: { [K in RentenArt]: string } = {
+const rentenVersicherungLabels: { [K in RentenArt]: string } = {
   [RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG]: "gesetzliche Rentenversicherung",
   [RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG]:
     "keine gesetzliche Rentenversicherung",

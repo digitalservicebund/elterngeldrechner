@@ -58,13 +58,6 @@ export namespace MathUtil {
   }
 
   /**
-   * Returns false if the value of a equals the value of b, otherwise returns true.
-   */
-  export function isNotEqual(a: Big, b: Big) {
-    return !isEqual(a, b);
-  }
-
-  /**
    * Returns true if the value of a is greater than the value of b, otherwise returns false.
    *
    * It's a wrapper function for existing egr code.

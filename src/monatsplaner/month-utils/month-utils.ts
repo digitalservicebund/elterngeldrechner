@@ -1,12 +1,5 @@
 import { ElterngeldType, Month } from "../elternteile";
 
-export const firstIndexOfType = (
-  months: readonly Month[],
-  ...types: ElterngeldType[]
-): number => {
-  return months.findIndex((month) => types.includes(month.type));
-};
-
 export const lastIndexOfType = (
   months: readonly Month[],
   ...types: ElterngeldType[]

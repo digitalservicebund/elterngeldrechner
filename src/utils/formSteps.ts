@@ -3,7 +3,7 @@ export interface FormStep {
   route: string;
 }
 
-export type FormSteps = Record<string, FormStep>;
+type FormSteps = Record<string, FormStep>;
 
 export const formSteps: FormSteps = {
   allgemeinAngaben: {

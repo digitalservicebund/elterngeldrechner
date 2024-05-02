@@ -217,17 +217,6 @@ export class PlanungsDaten {
   //
 
   /**
-   * Ermöglicht das Setzen einer ElterngeldArt für einen spezifischen Lebensmonat.
-   *
-   * @param {number} lebensMonat Lebensmonat des Kindes (nicht Index!!!)
-   * @param {ElternGeldArt} elterngeldArt Elterngeldart, die gesetzt werden soll.
-   */
-  public set(lebensMonat: number, elterngeldArt: ElternGeldArt): void {
-    const index: number = lebensMonat - 1;
-    this.planung[index] = elterngeldArt;
-  }
-
-  /**
    * Gibt die Elterngeldart für einen anhand des Index spezifizierten Monats zurück.
    *
    * @param {number} lebensMonat Lebensmonat des Kindes (nicht Index!!!)

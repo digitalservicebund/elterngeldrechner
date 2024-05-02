@@ -1,4 +1,4 @@
-export { AriaMessage, AriaLogProvider, useAriaLog } from "./aria-message";
+export { AriaMessage, AriaLogProvider } from "./aria-message";
 export { Button } from "./button";
 export { LabelCounter } from "./label-counter";
 export { Description } from "./description";

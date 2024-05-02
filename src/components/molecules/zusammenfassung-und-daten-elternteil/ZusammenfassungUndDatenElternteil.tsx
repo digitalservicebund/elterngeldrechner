@@ -20,7 +20,7 @@ interface Props {
   monatsplaner: readonly Month[];
 }
 
-export const getHumanReadableMonthType: { [K in ElterngeldType]: string } = {
+const getHumanReadableMonthType: { [K in ElterngeldType]: string } = {
   None: "-",
   PSB: "Partnerschaftsbonus",
   BEG: "Basiselterngeld",

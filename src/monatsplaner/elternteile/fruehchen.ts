@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { Geburtstag } from "./elternteile-types";
 
-export type Fruehchen = "16Weeks" | "12Weeks" | "8Weeks" | "6Weeks";
+type Fruehchen = "16Weeks" | "12Weeks" | "8Weeks" | "6Weeks";
 
 export const getFruehchen = (
   geburtstag: Geburtstag,

@@ -1,11 +1,6 @@
 export { createElternteile } from "./elternteile";
-export { getNumberOfMutterschutzMonths } from "./mutterschutz-calculator";
-export { getFruehchen, type Fruehchen } from "./fruehchen";
-export {
-  hasMutterschutzSettings,
-  type CreateElternteileSettings,
-  type MutterschutzSettings,
-} from "./elternteile-setting";
+export { getFruehchen } from "./fruehchen";
+export type { CreateElternteileSettings } from "./elternteile-setting";
 export type {
   Month,
   RemainingMonthByType,
@@ -16,9 +11,3 @@ export type {
   ElternteilType,
 } from "./elternteile-types";
 export { default as changeMonth } from "./change-month";
-export type { ChangeMonthSettings } from "./change-month";
-export {
-  getModifiablePSBMonthIndices,
-  isModifiablePSBMonth,
-} from "./modifiable-psb-month";
-export type { ModifiablePSBMonthIndices } from "./modifiable-psb-month";

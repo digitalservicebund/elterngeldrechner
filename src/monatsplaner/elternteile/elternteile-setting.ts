@@ -49,7 +49,7 @@ const hasPartnerMonateSettings = (
   return "partnerMonate" in settings;
 };
 
-export const hasGeburtstagSettings = (
+const hasGeburtstagSettings = (
   settings: CreateElternteileSettings,
 ): settings is CreateWithFruehchenSettings => {
   return "geburtstag" in settings;

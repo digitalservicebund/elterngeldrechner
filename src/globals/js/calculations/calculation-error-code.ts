@@ -1,4 +1,4 @@
-export type CalculationErrorCode =
+type CalculationErrorCode =
   | "MischEinkommenEnabledButMissingMischEinkommen"
   | "ZeitraumVonBisIllegalArgument"
   | "BmfSteuerRechnerCallFailed"

@@ -24,7 +24,7 @@ import {
 } from "./elternteile-setting";
 import { getBEGAnspruch } from "./beg-anspruch";
 
-export interface ChangeMonthSettings {
+interface ChangeMonthSettings {
   readonly elternteil: "ET1" | "ET2";
   readonly monthIndex: number;
   readonly targetType: ElterngeldType;

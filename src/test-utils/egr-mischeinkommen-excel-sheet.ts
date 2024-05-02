@@ -9,7 +9,7 @@ import { MathUtil } from "../globals/js/calculations/common/math-util";
 import Big from "big.js";
 import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 
-export type Taetigkeit = 0 | 1 | 2;
+type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];
 
 export class EgrMischeinkommenExcelSheet {

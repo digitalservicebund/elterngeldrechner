@@ -52,7 +52,7 @@ export const initialAverageOrMonthlyStateNichtSelbstaendig: AverageOrMonthlyStat
     perMonth: Array.from<number | null>({ length: 12 }).fill(null),
   };
 
-export const initialAverageOrMonthlyStateSelbstaendig: AverageOrMonthlyState = {
+const initialAverageOrMonthlyStateSelbstaendig: AverageOrMonthlyState = {
   type: "yearly",
   average: null,
   perYear: null,

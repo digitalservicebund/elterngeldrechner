@@ -1,10 +1,5 @@
 import { Month } from "./elternteile-types";
 
-export interface ModifiablePSBMonthIndices {
-  selectableIndices: readonly number[];
-  deselectableIndices: readonly number[];
-}
-
 export const getModifiablePSBMonthIndices = (
   months: readonly Month[],
   remainingMonthsPSB: number,
@@ -37,10 +32,3 @@ export const getModifiablePSBMonthIndices = (
     };
   }
 };
-
-export const isModifiablePSBMonth = (
-  modifiableMonths: ModifiablePSBMonthIndices,
-  monthIndex: number,
-) =>
-  modifiableMonths.selectableIndices.includes(monthIndex) ||
-  modifiableMonths.deselectableIndices.includes(monthIndex);

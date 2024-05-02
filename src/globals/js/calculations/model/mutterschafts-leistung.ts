@@ -4,7 +4,7 @@ export enum MutterschaftsLeistung {
   MUTTERSCHAFTS_LEISTUNG_12_WOCHEN = "MUTTERSCHAFTS_LEISTUNG_12_WOCHEN",
 }
 
-export function mutterschaftsLeistungInWochen(
+function mutterschaftsLeistungInWochen(
   mutterschaftsLeistung: MutterschaftsLeistung,
 ) {
   switch (mutterschaftsLeistung) {

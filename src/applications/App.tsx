@@ -81,5 +81,3 @@ export const App: FC<Props> = ({ elternGeldDigitalWizardUrl }) => {
     </MemoryRouter>
   );
 };
-
-export default App;

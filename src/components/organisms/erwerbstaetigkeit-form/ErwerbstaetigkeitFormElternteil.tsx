@@ -17,7 +17,7 @@ import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup
 import { infoTexts } from "../../molecules/info-dialog";
 import { Antragstellende } from "../../../redux/stepAllgemeineAngabenSlice";
 
-export const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
+const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MiniJob: "520 Euro oder weniger",
   MehrAlsMiniJob: "mehr als 520 Euro",
 };

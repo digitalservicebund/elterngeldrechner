@@ -1,6 +1,6 @@
 import { ErrorCode } from "./error-code";
 
-export interface ValidValidationResult {
+interface ValidValidationResult {
   readonly isValid: true;
 }
 

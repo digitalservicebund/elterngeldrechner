@@ -12,7 +12,7 @@ interface Props {
   elternteil: ElternteilType;
 }
 
-export const typeOfErwerbstaetigkeitLabels: {
+const typeOfErwerbstaetigkeitLabels: {
   [K in keyof TypeOfErwerbstaetigkeit]: string;
 } = {
   isNichtSelbststaendig: "Einkünfte aus nichtselbständiger Arbeit",

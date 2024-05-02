@@ -7,16 +7,6 @@ import Big, { RoundingMode } from "big.js";
  */
 export namespace EgrBerechnungParamId {
   /**
-   * Beitragsbemessungsgrenze Rentenversicherung grenze_rv_west
-   */
-  export const GRENZE_RV_WEST = Big(72600);
-
-  /**
-   * Beitragsbemessungsgrenze Rentenversicherung grenze_rv_ost
-   */
-  export const GRENZE_RV_OST = Big(62400);
-
-  /**
    * F Faktor Gleitzone f_faktor
    */
   export const F_FAKTOR = Big(0.7509); // ab 2021 (vorher 0.7547)

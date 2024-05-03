@@ -3,7 +3,12 @@
 // and https://stackoverflow.com/questions/61451631/react-testing-library-setup-for-redux-router-and-dynamic-modules-using-typescri
 
 import { FC, ReactElement } from "react";
-import { render, RenderOptions } from "@testing-library/react";
+import {
+  render,
+  renderHook,
+  RenderHookResult,
+  RenderOptions,
+} from "@testing-library/react";
 import { configureStore, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { reducers, RootState } from "../redux";
@@ -45,11 +50,25 @@ const renderWithRedux = (
   return render(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
+function renderHookWithRedux<Result, Props>(
+  render: (props: Props) => Result,
+  {
+    preloadedState,
+    store = configureStore({ reducer: reducers, preloadedState }),
+    ...renderOptions
+  }: RenderOptionsWithRedux = {},
+): RenderHookResult<Result, Props> {
+  const Wrapper: FC<{ children?: React.ReactNode }> = ({ children }) => (
+    <TestWrapper store={store}>{children}</TestWrapper>
+  );
+  return renderHook(render, { wrapper: Wrapper, ...renderOptions });
+}
+
 // re-export everything
 export * from "@testing-library/react";
 
 // override render method
-export { renderWithRedux as render };
+export { renderWithRedux as render, renderHookWithRedux as renderHook };
 
 export const toListWithTolerance = (n: number) => {
   const num = Big(n);

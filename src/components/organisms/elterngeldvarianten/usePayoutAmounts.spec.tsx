@@ -1,13 +1,9 @@
-import { act, renderHook } from "@testing-library/react";
 import {
   ElterngeldRow,
   calculateElterngeld,
 } from "../../../redux/stepRechnerSlice";
+import { act, renderHook } from "../../../test-utils/test-utils";
 import { usePayoutAmounts } from "./usePayoutAmounts";
-import { Provider } from "react-redux";
-import { ReactNode } from "react";
-import { reducers } from "../../../redux";
-import { configureStore } from "@reduxjs/toolkit";
 
 jest.mock("../../../redux/stepRechnerSlice", () => ({
   ...jest.requireActual("../../../redux/stepRechnerSlice.ts"),
@@ -18,7 +14,7 @@ describe("usePayoutAmounts", () => {
   it("triggers the calculation for both parents without any income", async () => {
     jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
 
-    renderHook(() => usePayoutAmounts(), { wrapper: WrapperWithStore });
+    renderHook(() => usePayoutAmounts());
     await act(() => ANY_CALCULATION_PROMISE);
 
     expect(calculateElterngeld).toHaveBeenCalledTimes(2);
@@ -42,9 +38,7 @@ describe("usePayoutAmounts", () => {
     ]);
     jest.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
 
-    const { result } = renderHook(() => usePayoutAmounts(), {
-      wrapper: WrapperWithStore,
-    });
+    const { result } = renderHook(() => usePayoutAmounts());
     await act(() => calculationPromise);
 
     expect(result.current).toBeDefined();
@@ -65,9 +59,7 @@ describe("usePayoutAmounts", () => {
     });
     jest.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
 
-    const { result } = renderHook(() => usePayoutAmounts(), {
-      wrapper: WrapperWithStore,
-    });
+    const { result } = renderHook(() => usePayoutAmounts());
 
     expect(result.current).toBeUndefined();
 
@@ -76,11 +68,6 @@ describe("usePayoutAmounts", () => {
     await act(() => calculationPromise);
   });
 });
-
-function WrapperWithStore(props: { children?: ReactNode }) {
-  const store = configureStore({ reducer: reducers });
-  return <Provider store={store}>{props.children}</Provider>;
-}
 
 const ANY_ELTERNGELD_ROW: ElterngeldRow = {
   basisElternGeld: 2,

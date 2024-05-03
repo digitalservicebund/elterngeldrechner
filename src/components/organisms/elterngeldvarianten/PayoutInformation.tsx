@@ -4,20 +4,10 @@ import { ReactNode } from "react";
 type Props = {
   parentName?: string;
   amount: number;
-
-  /**
-   * For testing purposes only.
-   * Leave undefined to fallback on environment settings.
-   */
-  testLocales?: Intl.LocalesArgument;
 };
 
-export function PayoutInformation({
-  parentName,
-  amount,
-  testLocales,
-}: Props): ReactNode {
-  const formattedAmount = formatAsCurrency(amount, testLocales);
+export function PayoutInformation({ parentName, amount }: Props): ReactNode {
+  const formattedAmount = formatAsCurrency(amount);
 
   return (
     <div className="inline-flex items-center gap-4">
@@ -30,12 +20,9 @@ export function PayoutInformation({
   );
 }
 
-function formatAsCurrency(
-  amount: number,
-  locales?: Intl.LocalesArgument,
-): string {
+function formatAsCurrency(amount: number): string {
   const rounded = Math.floor(amount);
-  return rounded.toLocaleString(locales, {
+  return rounded.toLocaleString(undefined, {
     style: "currency",
     currency: "EUR",
     currencyDisplay: "symbol",

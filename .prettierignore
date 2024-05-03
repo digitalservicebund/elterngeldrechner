@@ -5,3 +5,4 @@ build-preview
 .eslintrc
 allowed-licenses
 .npmrc
+.env*

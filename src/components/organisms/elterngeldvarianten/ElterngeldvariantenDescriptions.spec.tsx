@@ -95,12 +95,12 @@ describe("ElterngeldvariantenDescription", () => {
 
     expect(screen.queryAllByText(/Jane/)).toHaveLength(3);
     expect(screen.queryAllByText(/John/)).toHaveLength(3);
-    expect(screen.queryByText(/€1/)).toBeVisible();
-    expect(screen.queryByText(/€2/)).toBeVisible();
-    expect(screen.queryByText(/€3/)).toBeVisible();
-    expect(screen.queryByText(/€4/)).toBeVisible();
-    expect(screen.queryByText(/€5/)).toBeVisible();
-    expect(screen.queryByText(/€6/)).toBeVisible();
+    expect(screen.queryByText(/1 €/)).toBeVisible();
+    expect(screen.queryByText(/2 €/)).toBeVisible();
+    expect(screen.queryByText(/3 €/)).toBeVisible();
+    expect(screen.queryByText(/4 €/)).toBeVisible();
+    expect(screen.queryByText(/5 €/)).toBeVisible();
+    expect(screen.queryByText(/6 €/)).toBeVisible();
   });
 
   it("shows no name and only the  payout amounts for parent one if single applicant", () => {
@@ -121,12 +121,12 @@ describe("ElterngeldvariantenDescription", () => {
 
     expect(screen.queryAllByText(/Jane/)).toHaveLength(0);
     expect(screen.queryAllByText(/John/)).toHaveLength(0);
-    expect(screen.queryByText(/€1/)).toBeVisible();
-    expect(screen.queryByText(/€2/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/€3/)).toBeVisible();
-    expect(screen.queryByText(/€4/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/€5/)).toBeVisible();
-    expect(screen.queryByText(/€6/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/1 €/)).toBeVisible();
+    expect(screen.queryByText(/2 €/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/3 €/)).toBeVisible();
+    expect(screen.queryByText(/4 €/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/5 €/)).toBeVisible();
+    expect(screen.queryByText(/6 €/)).not.toBeInTheDocument();
   });
 });
 

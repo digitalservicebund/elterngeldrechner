@@ -27,7 +27,7 @@ jobs:
           cache: npm
 
       - name: Build egr
-        run: npm ci && npm run test-all && npm run build
+        run: source .env.test && npm ci && npm run test-all && npm run build
 
       - name: Build preview
         run: ./build-preview

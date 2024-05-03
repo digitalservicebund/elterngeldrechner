@@ -54,6 +54,8 @@ import {
   isExceptionToSimulatenousMonthRestrictions,
 } from "../../../monatsplaner/elternteile/change-month";
 import { NotificationMaxSimultaneousBEGMonths } from "../../atoms/notification/NotificationMaxSimultaneousBEGMonths";
+import { SummationFooter } from "./SummationFooter";
+import { useSummarizeData } from "./useSummarizeData";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 
@@ -408,6 +410,8 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     showedNotificationForMaxSimultaneousBEGMonths,
   ]);
 
+  const summationData = useSummarizeData();
+
   return (
     <>
       <div
@@ -499,6 +503,12 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
                 }
               />
             )}
+
+            <SummationFooter
+              className="w-full bg-white p-16"
+              data={summationData}
+            />
+
             <P bold={false}>
               Dieses Ergebnis ist nicht rechtsverbindlich. Erst nach der Geburt
               Ihres Kindes kann Ihre zuständige Elterngeldstelle eine konkrete

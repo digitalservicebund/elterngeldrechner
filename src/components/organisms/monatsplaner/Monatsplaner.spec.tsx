@@ -182,6 +182,14 @@ describe("Monatsplaner", () => {
     expect(infoText).toBeInTheDocument();
   });
 
+  it("should show summation footer", () => {
+    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+
+    const footer = screen.queryByRole("contentinfo", { name: "Gesamtsumme" });
+
+    expect(footer).toBeVisible();
+  });
+
   it("should display info text", () => {
     render(<Monatsplaner mutterSchutzMonate={2} />, {
       preloadedState: {
@@ -240,8 +248,10 @@ describe("Monatsplaner", () => {
       preloadedState: stateForBoth,
     });
 
-    expect(screen.getByText("Frida")).toBeInTheDocument();
-    expect(screen.getByText("Manfred")).toBeInTheDocument();
+    expect(screen.queryByRole("columnheader", { name: "Frida" })).toBeVisible();
+    expect(
+      screen.queryByRole("columnheader", { name: "Manfred" }),
+    ).toBeVisible();
   });
 
   it("should select a single month", async () => {

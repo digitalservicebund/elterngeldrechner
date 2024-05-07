@@ -18,6 +18,9 @@ jobs:
       - name: Build egr
         run: npm ci && npm run build
 
+      - name: Audit Licenses
+        run: npm run audit-licenses
+
       - name: Create archive for static build assets
         working-directory: build/static
         run: zip -r build-assets.zip .

@@ -15,7 +15,7 @@
     "test": "react-scripts test --verbose",
     "eject": "react-scripts eject",
     "format": "prettier --write ./src/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm} ./public/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm}",
-    "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test -- --watchAll=false && npm run audit-licenses",
+    "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test -- --watchAll=false",
     "type-check": "tsc",
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "knip": "knip",

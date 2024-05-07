@@ -26,7 +26,8 @@ module.exports = {
       Bonus: "#66B692",
     },
     fontSize: {
-      base: ["1rem", { lineHeight: "1.5555rem" }],
+      14: ["0.777rem", { lineHeight: "1.111rem" }],
+      base: ["1rem", { lineHeight: "1.555rem" }],
       20: ["1.111rem", { lineHeight: "1.111rem" }],
       22: ["1.222rem", { lineHeight: "1.555rem" }],
       24: ["1.333rem", { lineHeight: "2.222rem" }],

@@ -35,7 +35,7 @@ export function SummationFooter({ data, className }: Props): ReactNode {
         Gesamtsumme der Planung: {formattedSumOfAllAmounts}
       </strong>
 
-      <span className="basis-full italic">
+      <span className="basis-full text-14">
         Hinweis: Mutterschutz wird nicht in der Summe berücksichtigt
       </span>
     </footer>

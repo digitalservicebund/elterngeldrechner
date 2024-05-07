@@ -1,20 +1,25 @@
 import PermIdentityIcon from "@digitalservicebund/icons/PermIdentity";
-import BusinessCenterOutlinedIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import { ReactNode } from "react";
 import { SummationDataForParent } from "./types";
 import { formatAsCurrency } from "../../../utils/locale-formatting";
 
-interface Props extends SummationDataForParent {}
+interface Props extends SummationDataForParent {
+  hideSum?: boolean;
+}
 
 export function ParentSummation({
   name,
   monthCount,
   totalPayoutAmount,
   totalIncomeAmount,
+  hideSum,
 }: Props): ReactNode {
   const formattedMonthText = `${monthCount} Monat${monthCount > 1 ? "e" : ""}`;
   const formattedTotalPayoutAmount = formatAsCurrency(totalPayoutAmount);
   const formattedTotalIncomeAmount = formatAsCurrency(totalIncomeAmount);
+  const formattedTotalSum = formatAsCurrency(
+    totalPayoutAmount + totalIncomeAmount,
+  );
 
   return (
     <>
@@ -23,12 +28,9 @@ export function ParentSummation({
         <strong>{name}</strong> {formattedMonthText}
       </span>
 
-      <strong className="mt-auto">{formattedTotalPayoutAmount}</strong>
-
-      <span className="flex items-center gap-4">
-        <BusinessCenterOutlinedIcon className="inline size-24" />
-        Gehalt {formattedTotalIncomeAmount}
-      </span>
+      <span className="mt-auto">Elterngeld: {formattedTotalPayoutAmount}</span>
+      <span>Einkommen: {formattedTotalIncomeAmount}</span>
+      {!hideSum && <strong>Summe: {formattedTotalSum}</strong>}
     </>
   );
 }

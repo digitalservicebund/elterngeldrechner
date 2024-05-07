@@ -60,8 +60,8 @@ describe("SummationFooter", () => {
       />,
     );
 
-    const firstTotalPayoutAmount = screen.queryByText("1.000 €");
-    const secondTotalPayoutAmount = screen.queryByText("900 €");
+    const firstTotalPayoutAmount = screen.queryByText("Elterngeld: 1.000 €");
+    const secondTotalPayoutAmount = screen.queryByText("Elterngeld: 900 €");
 
     expect(firstTotalPayoutAmount).toBeVisible();
     expect(secondTotalPayoutAmount).toBeVisible();
@@ -80,8 +80,8 @@ describe("SummationFooter", () => {
       />,
     );
 
-    const firstTotalIncomeAmount = screen.queryByText("Gehalt 1.300 €");
-    const secondTotalIncomeAmount = screen.queryByText("Gehalt 1.200 €");
+    const firstTotalIncomeAmount = screen.queryByText("Einkommen: 1.300 €");
+    const secondTotalIncomeAmount = screen.queryByText("Einkommen: 1.200 €");
 
     expect(firstTotalIncomeAmount).toBeVisible();
     expect(secondTotalIncomeAmount).toBeVisible();
@@ -90,7 +90,58 @@ describe("SummationFooter", () => {
     ).toEqual(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
-  it("works for a single parent where hiding the name", () => {
+  it("sums up the total amounts for each parent", () => {
+    render(
+      <SummationFooter
+        data={[
+          {
+            ...ANY_SUMMATION_OF_PARENT_DATA_A,
+            totalPayoutAmount: 1000,
+            totalIncomeAmount: 1300.5,
+          },
+          {
+            ...ANY_SUMMATION_OF_PARENT_DATA_B,
+            totalPayoutAmount: 900,
+            totalIncomeAmount: 1200,
+          },
+        ]}
+      />,
+    );
+
+    const firstTotalSum = screen.queryByText("Summe: 2.300 €");
+    const secondTotalSum = screen.queryByText("Summe: 2.100 €");
+
+    expect(firstTotalSum).toBeVisible();
+    expect(secondTotalSum).toBeVisible();
+    expect(firstTotalSum?.compareDocumentPosition(secondTotalSum!)).toEqual(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
+  it("adds all amounts of both parents as final sum", () => {
+    render(
+      <SummationFooter
+        data={[
+          {
+            ...ANY_SUMMATION_OF_PARENT_DATA_A,
+            totalPayoutAmount: 1000,
+            totalIncomeAmount: 1300.5,
+          },
+          {
+            ...ANY_SUMMATION_OF_PARENT_DATA_B,
+            totalPayoutAmount: 900,
+            totalIncomeAmount: 1200,
+          },
+        ]}
+      />,
+    );
+
+    const finalSum = screen.queryByText("Gesamtsumme der Planung: 4.400 €");
+
+    expect(finalSum).toBeVisible();
+  });
+
+  it("works for a single parent where hiding the name and no intermediate sum", () => {
     render(
       <SummationFooter
         data={[
@@ -106,8 +157,12 @@ describe("SummationFooter", () => {
 
     expect(screen.queryByText("Jane")).not.toBeInTheDocument();
     expect(screen.queryByText("5 Monate")).toBeVisible();
-    expect(screen.queryByText("2.000 €")).toBeVisible();
-    expect(screen.queryByText("Gehalt 1.000 €")).toBeVisible();
+    expect(screen.queryByText("Elterngeld: 2.000 €")).toBeVisible();
+    expect(screen.queryByText("Einkommen: 1.000 €")).toBeVisible();
+    expect(screen.queryByText("Summe: 3.000 €")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Gesamtsumme der Planung: 3.000 €"),
+    ).toBeVisible();
   });
 });
 

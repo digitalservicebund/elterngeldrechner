@@ -2,6 +2,7 @@ import PermIdentityIcon from "@digitalservicebund/icons/PermIdentity";
 import BusinessCenterOutlinedIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import { ReactNode } from "react";
 import { SummationDataForParent } from "./types";
+import { formatAsCurrency } from "../../../utils/locale-formatting";
 
 interface Props extends SummationDataForParent {}
 
@@ -30,14 +31,4 @@ export function ParentSummation({
       </span>
     </>
   );
-}
-
-function formatAsCurrency(amount: number): string {
-  const rounded = Math.floor(amount);
-  return rounded.toLocaleString(undefined, {
-    style: "currency",
-    currency: "EUR",
-    currencyDisplay: "symbol",
-    maximumFractionDigits: 0,
-  });
 }

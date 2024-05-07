@@ -19,5 +19,7 @@ pre-commit:
       run: npx stylelint {staged_files}
     type-check:
       run: npm run type-check
+    audit-licenses:
+      run: npm run audit-licenses
     unused-code:
       run: npm run knip

@@ -1,19 +1,11 @@
 import { DetailsElterngeldvariante } from "./DetailsElterngeldvariante";
 import { ReactNode } from "react";
-import { useAppSelector } from "../../../redux/hooks";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
 import { Spinner } from "../../atoms";
 import { usePayoutAmounts } from "./usePayoutAmounts";
+import { PayoutAmountsForParent, PayoutAmoutForVariant } from "./types";
 
 export function ElterngeldvariantenDescriptions(): ReactNode {
   const payoutAmounts = usePayoutAmounts();
-  const parentNames = useAppSelector(
-    stepAllgemeineAngabenSelectors.getElternteilNames,
-  );
-  const applicant = useAppSelector(
-    stepAllgemeineAngabenSelectors.getAntragssteller,
-  );
-  const isSingleApplicant = applicant === "FuerMichSelbst";
 
   if (payoutAmounts === undefined) {
     return <Spinner />;
@@ -24,9 +16,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           summaryTitle="Basiselterngeld - 100% Elterngeld"
           summaryClassName="bg-Basis text-white fill-white"
           monthsAvailable={14}
-          parentNames={parentNames}
-          payoutAmounts={payoutAmounts.basiselterngeld}
-          isSingleApplicant={isSingleApplicant}
+          payoutAmounts={pickAmountsOfVariant(payoutAmounts, "basiselterngeld")}
         >
           <ul className="list-disc">
             <li>
@@ -54,9 +44,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           summaryTitle="ElterngeldPlus - 50% Elterngeld"
           summaryClassName="bg-Plus text-black fill-black"
           monthsAvailable={28}
-          parentNames={parentNames}
-          payoutAmounts={payoutAmounts.elterngeldplus}
-          isSingleApplicant={isSingleApplicant}
+          payoutAmounts={pickAmountsOfVariant(payoutAmounts, "elterngeldplus")}
         >
           <ul className="list-disc">
             <li>
@@ -78,9 +66,10 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           summaryTitle="+ Partnerschaftsbonus"
           summaryClassName="bg-Bonus text-black fill-black"
           monthsAvailable={4}
-          parentNames={parentNames}
-          payoutAmounts={payoutAmounts.partnerschaftsbonus}
-          isSingleApplicant={isSingleApplicant}
+          payoutAmounts={pickAmountsOfVariant(
+            payoutAmounts,
+            "partnerschaftsbonus",
+          )}
         >
           <ul className="list-disc">
             <li>
@@ -101,4 +90,14 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
       </>
     );
   }
+}
+
+function pickAmountsOfVariant(
+  payoutAmounts: PayoutAmountsForParent[],
+  variant: "basiselterngeld" | "elterngeldplus" | "partnerschaftsbonus",
+): PayoutAmoutForVariant[] {
+  return payoutAmounts.map((entry) => ({
+    name: entry.name,
+    amount: entry[variant],
+  }));
 }

@@ -14,7 +14,7 @@ jest.mock("./usePayoutAmounts");
  */
 describe("ElterngeldvariantenDescription", () => {
   beforeEach(() => {
-    jest.mocked(usePayoutAmounts).mockReturnValue(ANY_PAYOUT_AMOUNT);
+    jest.mocked(usePayoutAmounts).mockReturnValue([ANY_PAYOUT_AMOUNTS]);
   });
 
   it("shows no descriptions when payout amounts are still calculated", () => {
@@ -33,7 +33,7 @@ describe("ElterngeldvariantenDescription", () => {
   });
 
   it("should display a description for each Elterngeldvariante when amounts are calculated", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue(ANY_PAYOUT_AMOUNT);
+    jest.mocked(usePayoutAmounts).mockReturnValue([ANY_PAYOUT_AMOUNTS]);
     render(<ElterngeldvariantenDescriptions />);
 
     expect(
@@ -78,17 +78,25 @@ describe("ElterngeldvariantenDescription", () => {
   });
 
   it("shows the names and payout amounts for each parent and variants if both apply together", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue({
-      basiselterngeld: { ET1: 1, ET2: 2 },
-      elterngeldplus: { ET1: 3, ET2: 4 },
-      partnerschaftsbonus: { ET1: 5, ET2: 6 },
-    });
+    jest.mocked(usePayoutAmounts).mockReturnValue([
+      {
+        name: "Jane",
+        basiselterngeld: 1,
+        elterngeldplus: 2,
+        partnerschaftsbonus: 3,
+      },
+      {
+        name: "John",
+        basiselterngeld: 4,
+        elterngeldplus: 5,
+        partnerschaftsbonus: 6,
+      },
+    ]);
     render(<ElterngeldvariantenDescriptions />, {
       preloadedState: {
         stepAllgemeineAngaben: {
           ...initialStepAllgemeineAngabenState,
           antragstellende: "FuerBeide",
-          pseudonym: { ET1: "Jane", ET2: "John" },
         },
       },
     });
@@ -103,35 +111,31 @@ describe("ElterngeldvariantenDescription", () => {
     expect(screen.queryByText(/6 €/)).toBeVisible();
   });
 
-  it("shows no name and only the  payout amounts for parent one if single applicant", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue({
-      basiselterngeld: { ET1: 1, ET2: 2 },
-      elterngeldplus: { ET1: 3, ET2: 4 },
-      partnerschaftsbonus: { ET1: 5, ET2: 6 },
-    });
+  it("shows no name if single applicant", () => {
+    jest.mocked(usePayoutAmounts).mockReturnValue([
+      {
+        name: "Jane",
+        basiselterngeld: 1,
+        elterngeldplus: 2,
+        partnerschaftsbonus: 3,
+      },
+    ]);
     render(<ElterngeldvariantenDescriptions />, {
       preloadedState: {
         stepAllgemeineAngaben: {
           ...initialStepAllgemeineAngabenState,
           antragstellende: "FuerMichSelbst",
-          pseudonym: { ET1: "Jane", ET2: "John" },
         },
       },
     });
 
     expect(screen.queryAllByText(/Jane/)).toHaveLength(0);
-    expect(screen.queryAllByText(/John/)).toHaveLength(0);
-    expect(screen.queryByText(/1 €/)).toBeVisible();
-    expect(screen.queryByText(/2 €/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/3 €/)).toBeVisible();
-    expect(screen.queryByText(/4 €/)).not.toBeInTheDocument();
-    expect(screen.queryByText(/5 €/)).toBeVisible();
-    expect(screen.queryByText(/6 €/)).not.toBeInTheDocument();
   });
 });
 
-const ANY_PAYOUT_AMOUNT = {
-  basiselterngeld: { ET1: 0, ET2: 0 },
-  elterngeldplus: { ET1: 0, ET2: 0 },
-  partnerschaftsbonus: { ET1: 0, ET2: 0 },
+const ANY_PAYOUT_AMOUNTS = {
+  name: "Jane",
+  basiselterngeld: 0,
+  elterngeldplus: 0,
+  partnerschaftsbonus: 0,
 };

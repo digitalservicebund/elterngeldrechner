@@ -1,10 +1,11 @@
-export interface PayoutAmounts {
-  ET1: number;
-  ET2: number;
+export interface PayoutAmoutForVariant {
+  name: string;
+  amount: number;
 }
 
-export interface PayoutAmountsForAllVariants {
-  basiselterngeld: PayoutAmounts;
-  elterngeldplus: PayoutAmounts;
-  partnerschaftsbonus: PayoutAmounts;
+export interface PayoutAmountsForParent {
+  name: string;
+  basiselterngeld: number;
+  elterngeldplus: number;
+  partnerschaftsbonus: number;
 }

@@ -4,8 +4,10 @@ import {
   ElterngeldRow,
   calculateElterngeld,
 } from "../../../redux/stepRechnerSlice";
-import { useAppStore } from "../../../redux/hooks";
-import { PayoutAmountsForAllVariants } from "./types";
+import { useAppSelector, useAppStore } from "../../../redux/hooks";
+import { PayoutAmountsForParent } from "./types";
+import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
+import { AppStore } from "../../../redux";
 
 /**
  * Wrapper around the currently messy approach to use the calculation of the
@@ -18,24 +20,49 @@ import { PayoutAmountsForAllVariants } from "./types";
 export function usePayoutAmounts() {
   const store = useAppStore();
   const [payoutAmounts, setPayoutAmounts] =
-    useState<PayoutAmountsForAllVariants>();
+    useState<PayoutAmountsForParent[]>();
+
+  const applicant = useAppSelector(
+    (state) => state.stepAllgemeineAngaben.antragstellende,
+  );
+
+  const isSingleParent = applicant === "FuerMichSelbst";
+  const parentNames = useAppSelector(
+    stepAllgemeineAngabenSelectors.getElternteilNames,
+  );
 
   useEffect(() => {
-    const state = store.getState();
+    const promises = [
+      determinePayoutAmountForParent(store, "ET1", parentNames.ET1),
+    ];
 
-    Promise.all([
-      calculateElterngeld(state, "ET1", EMPTY_FUTURE_INCOME),
-      calculateElterngeld(state, "ET2", EMPTY_FUTURE_INCOME),
-    ]).then(([rowsET1, rowsET2]) => {
-      const payoutAmounts = formatRowsToPayoutAmounts(
-        findFristRepresentativeMonth(rowsET1),
-        findFristRepresentativeMonth(rowsET2),
+    if (!isSingleParent) {
+      promises.push(
+        determinePayoutAmountForParent(store, "ET2", parentNames.ET2),
       );
-      setPayoutAmounts(payoutAmounts);
-    });
-  }, [store]);
+    }
+
+    Promise.all(promises).then(setPayoutAmounts);
+  }, [store, isSingleParent, parentNames]);
 
   return payoutAmounts;
+}
+
+async function determinePayoutAmountForParent(
+  store: AppStore,
+  parent: "ET1" | "ET2",
+  name: string,
+): Promise<PayoutAmountsForParent> {
+  const state = store.getState();
+  const rows = await calculateElterngeld(state, parent, EMPTY_FUTURE_INCOME);
+  const { basisElternGeld, elternGeldPlus } =
+    findFristRepresentativeMonth(rows);
+  return {
+    name,
+    basiselterngeld: basisElternGeld,
+    elterngeldplus: elternGeldPlus,
+    partnerschaftsbonus: elternGeldPlus,
+  };
 }
 
 /**
@@ -49,26 +76,6 @@ export function usePayoutAmounts() {
  */
 function findFristRepresentativeMonth(rows: ElterngeldRow[]): ElterngeldRow {
   return rows.find((row) => row.basisElternGeld > 0) ?? rows[0];
-}
-
-function formatRowsToPayoutAmounts(
-  rowET1: ElterngeldRow,
-  rowET2: ElterngeldRow,
-): PayoutAmountsForAllVariants {
-  return {
-    basiselterngeld: {
-      ET1: rowET1.basisElternGeld,
-      ET2: rowET2.basisElternGeld,
-    },
-    elterngeldplus: {
-      ET1: rowET1.elternGeldPlus,
-      ET2: rowET2.elternGeldPlus,
-    },
-    partnerschaftsbonus: {
-      ET1: rowET1.elternGeldPlus,
-      ET2: rowET2.elternGeldPlus,
-    },
-  };
 }
 
 /**

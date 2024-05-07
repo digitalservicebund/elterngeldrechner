@@ -3,15 +3,13 @@ import { ReactNode, useState } from "react";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { PayoutInformation } from "./PayoutInformation";
-import { PayoutAmounts } from "./types";
+import { PayoutAmoutForVariant } from "./types";
 
 type Props = {
   summaryTitle: string;
   summaryClassName?: string;
   monthsAvailable: number;
-  parentNames: { ET1: string; ET2: string };
-  payoutAmounts: PayoutAmounts;
-  isSingleApplicant: boolean;
+  payoutAmounts: PayoutAmoutForVariant[];
   children: ReactNode;
 };
 
@@ -19,14 +17,14 @@ export function DetailsElterngeldvariante({
   summaryTitle,
   summaryClassName,
   monthsAvailable,
-  parentNames,
   payoutAmounts,
-  isSingleApplicant,
   children,
 }: Props): ReactNode {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(!isOpen);
   const ExpandStateIcon = isOpen ? ExpandLessIcon : ExpandMoreIcon;
+
+  const isSingleParent = payoutAmounts.length === 1;
 
   return (
     <details
@@ -46,17 +44,13 @@ export function DetailsElterngeldvariante({
           </div>
 
           <div className="flex flex-wrap gap-x-24 gap-y-8">
-            <PayoutInformation
-              parentName={isSingleApplicant ? undefined : parentNames.ET1}
-              amount={payoutAmounts.ET1}
-            />
-
-            {!isSingleApplicant && (
+            {payoutAmounts.map(({ name, amount }) => (
               <PayoutInformation
-                parentName={parentNames.ET2}
-                amount={payoutAmounts.ET2}
+                key={name}
+                name={isSingleParent ? undefined : name}
+                amount={amount}
               />
-            )}
+            ))}
           </div>
         </div>
 

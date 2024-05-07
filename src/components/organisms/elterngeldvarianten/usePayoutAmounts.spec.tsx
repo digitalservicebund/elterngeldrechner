@@ -1,3 +1,5 @@
+import { RootState } from "../../../redux";
+import { initialStepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
 import {
   ElterngeldRow,
   calculateElterngeld,
@@ -11,10 +13,37 @@ jest.mock("../../../redux/stepRechnerSlice", () => ({
 }));
 
 describe("usePayoutAmounts", () => {
-  it("triggers the calculation for both parents without any income", async () => {
+  it("calculates the amount only for the first parent if single applicant", async () => {
     jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
+    const preloadedState: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerMichSelbst",
+      },
+    };
 
-    renderHook(() => usePayoutAmounts());
+    const { result } = renderHook(() => usePayoutAmounts(), { preloadedState });
+    await act(() => ANY_CALCULATION_PROMISE);
+
+    expect(calculateElterngeld).toHaveBeenCalledTimes(1);
+    expect(calculateElterngeld).toHaveBeenCalledWith(
+      expect.anything(),
+      "ET1",
+      [],
+    );
+    expect(result.current).toHaveLength(1);
+  });
+
+  it("calculates the amounts for both parents if no single applicat", async () => {
+    jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
+    const preloadedState: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+      },
+    };
+
+    const { result } = renderHook(() => usePayoutAmounts(), { preloadedState });
     await act(() => ANY_CALCULATION_PROMISE);
 
     expect(calculateElterngeld).toHaveBeenCalledTimes(2);
@@ -28,9 +57,27 @@ describe("usePayoutAmounts", () => {
       "ET2",
       [],
     );
+    expect(result.current).toHaveLength(2);
   });
 
-  it("takes the amounts of the first row for both parents", async () => {
+  it("provides the correct parent names", async () => {
+    jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
+    const preloadedState: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        pseudonym: { ET1: "Jane", ET2: "John" },
+      },
+    };
+
+    const { result } = renderHook(() => usePayoutAmounts(), { preloadedState });
+    await act(() => ANY_CALCULATION_PROMISE);
+
+    expect(result.current?.[0].name).toEqual("Jane");
+    expect(result.current?.[1].name).toEqual("John");
+  });
+
+  it("takes the amounts of the first relevant row", async () => {
     const calculationPromise = Promise.resolve([
       elterngeldRow({ basisElternGeld: 0, elternGeldPlus: 0 }),
       elterngeldRow({ basisElternGeld: 0, elternGeldPlus: 0 }),
@@ -41,16 +88,10 @@ describe("usePayoutAmounts", () => {
     const { result } = renderHook(() => usePayoutAmounts());
     await act(() => calculationPromise);
 
-    expect(result.current).toBeDefined();
-    expect(result.current?.basiselterngeld).toStrictEqual({ ET1: 1, ET2: 1 });
-    expect(result.current?.elterngeldplus).toStrictEqual({ ET1: 2, ET2: 2 });
-    expect(result.current?.partnerschaftsbonus).toStrictEqual({
-      ET1: 2,
-      ET2: 2,
-    });
+    expect(result.current?.[0].basiselterngeld).toEqual(1);
+    expect(result.current?.[0].elterngeldplus).toEqual(2);
+    expect(result.current?.[0].partnerschaftsbonus).toEqual(2);
   });
-
-  it("takes the first calculated row that has no zero value due to meternity protection", () => {});
 
   it("is initially undefined", async () => {
     let resolveCalculation: (value: ElterngeldRow[]) => void = jest.fn();

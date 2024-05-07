@@ -3,25 +3,25 @@ import { PayoutInformation } from "./PayoutInformation";
 
 describe("PaymentInformation", () => {
   it("displays the name of the parent with separator sign", () => {
-    render(<PayoutInformation parentName="Jane" amount={ANY_AMOUNT} />);
+    render(<PayoutInformation name="Jane" amount={ANY_AMOUNT} />);
 
     expect(screen.queryByText("Jane |", { exact: false })).toBeVisible();
   });
 
   it("does not display a separator sign if no parent name given", () => {
-    render(<PayoutInformation parentName={undefined} amount={ANY_AMOUNT} />);
+    render(<PayoutInformation name={undefined} amount={ANY_AMOUNT} />);
 
     expect(screen.queryByText("|", { exact: false })).not.toBeInTheDocument();
   });
 
   it("displays the amount as currency with Euro symbol", () => {
-    render(<PayoutInformation parentName={ANY_NAME} amount={ANY_AMOUNT} />);
+    render(<PayoutInformation name={ANY_NAME} amount={ANY_AMOUNT} />);
 
     expect(screen.queryByText("€", { exact: false })).toBeVisible();
   });
 
   it("displays the amount with a accuracy of zero fractional digits and floors the value", () => {
-    render(<PayoutInformation parentName={ANY_NAME} amount={10.5} />);
+    render(<PayoutInformation name={ANY_NAME} amount={10.5} />);
 
     expect(screen.queryByText("10", { exact: false })).toBeVisible();
     expect(
@@ -30,7 +30,7 @@ describe("PaymentInformation", () => {
   });
 
   it("displays the amount with thousands operator", () => {
-    render(<PayoutInformation parentName={ANY_NAME} amount={10000} />);
+    render(<PayoutInformation name={ANY_NAME} amount={10000} />);
 
     expect(screen.getByText("10.000", { exact: false })).toBeVisible();
   });

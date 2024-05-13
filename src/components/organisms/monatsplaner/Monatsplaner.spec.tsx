@@ -926,7 +926,7 @@ describe("Monatsplaner", () => {
         });
 
         const submitButton = screen.getByRole("button", {
-          name: /Elterngeld beantragen/i,
+          name: "Zur Übersicht",
         });
         await userEvent.click(submitButton);
 

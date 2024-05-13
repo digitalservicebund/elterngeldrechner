@@ -357,7 +357,10 @@ export const ZusammenfassungUndDaten: FC = () => {
                 type={"hidden"}
               />
             )}
-          <Button label="Daten übernehmen" type={"submit"} />
+          <Button
+            label="Daten in Elterngeldantrag übernehmen"
+            type={"submit"}
+          />
         </form>
       </section>
     </>

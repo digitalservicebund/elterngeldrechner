@@ -547,10 +547,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
             buttonStyle="secondary"
           />
         </div>
-        <Button
-          onClick={handleNextPage}
-          label="Elterngeld beantragen und Daten übermitteln"
-        />
+        <Button onClick={handleNextPage} label="Zur Übersicht" />
       </section>
     </>
   );

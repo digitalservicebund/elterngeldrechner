@@ -64,8 +64,8 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <h3>Allgemeine Angaben</h3>
         <FormFieldGroup
-          headline="Antragstellende"
-          description="Für wen planen Sie Elterngeld zu beantragen?"
+          headline="Eltern"
+          description="Für wen planen Sie Elterngeld?"
         >
           <CustomRadio
             register={register}

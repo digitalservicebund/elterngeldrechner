@@ -98,7 +98,7 @@ describe("Zusammenfassung und Daten Page", () => {
 
     // expect
     expect(
-      screen.getByText("Übernahme von Daten in den Elterngeld-Antrag"),
+      screen.getByText("Übernahme von Daten in den Elterngeldantrag"),
     ).toBeInTheDocument();
 
     const kindGeburtstag = getFieldByName("kind_geburtstag");

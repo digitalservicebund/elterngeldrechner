@@ -159,9 +159,9 @@ export const ZusammenfassungUndDaten: FC = () => {
 
   return (
     <>
-      <h3>Übernahme von Daten in den Elterngeld-Antrag</h3>
+      <h3>Übernahme von Daten in den Elterngeldantrag</h3>
       <P>
-        Die folgenden Eingaben könne Sie in Ihren Elterngeld-Antrag übernehmen.
+        Die folgenden Eingaben könne Sie in Ihren Elterngeldantrag übernehmen.
         Bei Bedarf können Sie diese im Antrag noch einmal anpassen.
         <br /> Möchten Sie die Daten nicht in den Antrag übernehmen, sondern mit
         einem neuen Antrag starten, klicken Sie auf "Verwerfen".

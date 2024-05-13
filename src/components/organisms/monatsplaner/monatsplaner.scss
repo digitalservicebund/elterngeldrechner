@@ -81,23 +81,8 @@
     margin-top: px-to-rem($spacer-3xl);
     background-color: $color-white;
 
-    @media only screen and (max-width: $breakpoint-desktop) {
-      flex-direction: column-reverse;
-    }
-
     @media print {
       display: none;
-    }
-
-    &-backwards {
-      width: px-to-rem(280);
-      display: flex;
-      justify-content: space-between;
-
-      @media only screen and (max-width: $breakpoint-desktop) {
-        width: auto;
-        margin-top: px-to-rem($spacer);
-      }
     }
   }
 }

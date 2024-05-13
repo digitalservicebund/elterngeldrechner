@@ -2,7 +2,6 @@ import { getLebensmonate } from "../monatsplaner";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SelectOption } from "../components/molecules";
 import { RootState } from "./index";
-import { resetStoreAction } from "./resetStoreAction";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { YesNo } from "../globals/js/calculations/model";
 
@@ -42,9 +41,6 @@ const stepNachwuchsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(resetStoreAction, () => {
-      return initialStepNachwuchsState;
-    });
     builder.addCase(
       stepAllgemeineAngabenActions.submitStep,
       (state, { payload }) => {

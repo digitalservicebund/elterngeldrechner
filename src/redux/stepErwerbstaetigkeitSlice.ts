@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { resetStoreAction } from "./resetStoreAction";
 import { YesNo } from "../globals/js/calculations/model";
 
 export type Erwerbstaetigkeiten = "NichtSelbststaendig" | "Selbststaendig";
@@ -47,11 +46,6 @@ const stepErwerbstaetigkeitSlice = createSlice({
     submitStep: (_, action: PayloadAction<SubmitStepPayload>) => {
       return action.payload;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(resetStoreAction, () => {
-      return initialStepErwerbstaetigkeitState;
-    });
   },
 });
 

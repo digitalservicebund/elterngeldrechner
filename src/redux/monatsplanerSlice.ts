@@ -11,7 +11,6 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { YesNo } from "../globals/js/calculations/model";
 import { stepNachwuchsActions } from "./stepNachwuchsSlice";
-import { resetStoreAction } from "./resetStoreAction";
 import { RootState } from "./index";
 import {
   createDefaultElternteileSettings,
@@ -175,10 +174,6 @@ const monatsplanerSlice = createSlice({
         settings,
         elternteile: createElternteile(settings),
       };
-    });
-
-    builder.addCase(resetStoreAction, () => {
-      return initialMonatsplanerState;
     });
   },
 });

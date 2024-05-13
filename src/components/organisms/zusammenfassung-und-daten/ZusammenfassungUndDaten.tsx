@@ -5,12 +5,11 @@ import {
   ZusammenfassungUndDatenAllgemein,
   ZusammenfassungUndDatenElternteil,
 } from "../../molecules";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import {
   AntragstellendeSelektor,
   stepAllgemeineAngabenSelectors,
 } from "../../../redux/stepAllgemeineAngabenSlice";
-import { resetStoreAction } from "../../../redux/resetStoreAction";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "../../../utils/formSteps";
 import { YesNo } from "../../../globals/js/calculations/model";
@@ -19,7 +18,6 @@ import { Month } from "../../../monatsplaner";
 
 export const ZusammenfassungUndDaten: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const {
     stepAllgemeineAngaben,
     stepNachwuchs,
@@ -58,11 +56,6 @@ export const ZusammenfassungUndDaten: FC = () => {
     stepErwerbstaetigkeit: stepErwerbstaetigkeit.ET2,
     stepEinkommen: stepEinkommen.ET2,
     monatsplaner: monatsplaner.elternteile.ET2.months,
-  };
-
-  const onReset = () => {
-    navigate("/");
-    dispatch(resetStoreAction());
   };
 
   const mapYesNo = (yesNo: YesNo | null): string => {
@@ -163,8 +156,6 @@ export const ZusammenfassungUndDaten: FC = () => {
       <P>
         Die folgenden Eingaben könne Sie in Ihren Elterngeldantrag übernehmen.
         Bei Bedarf können Sie diese im Antrag noch einmal anpassen.
-        <br /> Möchten Sie die Daten nicht in den Antrag übernehmen, sondern mit
-        einem neuen Antrag starten, klicken Sie auf "Verwerfen".
       </P>
       <div className={nsp("zusammenfassung-und-daten")}>
         <ZusammenfassungUndDatenAllgemein allgemeineDaten={allgemeineDaten} />
@@ -175,11 +166,6 @@ export const ZusammenfassungUndDaten: FC = () => {
       </div>
       <section className={nsp("zusammenfassung-und-daten-buttons")}>
         <Button onClick={onBack} label="Zurück" buttonStyle="secondary" />
-        <Button
-          onClick={onReset}
-          label="Daten verwerfen"
-          buttonStyle="secondary"
-        />
         <form
           key={getKey()}
           method={"post"}

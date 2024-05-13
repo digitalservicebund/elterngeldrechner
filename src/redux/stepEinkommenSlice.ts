@@ -6,7 +6,6 @@ import {
   SteuerKlasse,
   YesNo,
 } from "../globals/js/calculations/model";
-import { resetStoreAction } from "./resetStoreAction";
 import {
   Erwerbstaetigkeiten,
   stepErwerbstaetigkeitActions,
@@ -236,9 +235,6 @@ const stepEinkommenSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(resetStoreAction, () => {
-      return initialStepEinkommenState;
-    });
     builder.addCase(
       stepErwerbstaetigkeitActions.submitStep,
       (state, { payload }) => {

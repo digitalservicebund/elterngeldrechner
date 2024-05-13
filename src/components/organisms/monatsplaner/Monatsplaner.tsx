@@ -46,7 +46,6 @@ import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "../../../utils/formSteps";
 import { EgrConst } from "../../../globals/js/egr-configuration";
-import { resetStoreAction } from "../../../redux/resetStoreAction";
 import { YesNo } from "../../../globals/js/calculations/model";
 import {
   canNotChangeBEGDueToSimultaneousMonthRules,
@@ -360,11 +359,6 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
 
   const handlePageBack = () => navigate(formSteps.elterngeldvarianten.route);
 
-  const handleRestartForm = () => {
-    navigate("/");
-    dispatch(resetStoreAction());
-  };
-
   function isBEGMonthSelectable(
     elternteil: ElternteilType,
     monthIndex: number,
@@ -535,18 +529,11 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
       </div>
 
       <section className={nsp("monatsplaner__button-group")}>
-        <div className={nsp("monatsplaner__button-group-backwards")}>
-          <Button
-            onClick={handlePageBack}
-            label="Zurück"
-            buttonStyle="secondary"
-          />
-          <Button
-            onClick={handleRestartForm}
-            label="Neu starten"
-            buttonStyle="secondary"
-          />
-        </div>
+        <Button
+          onClick={handlePageBack}
+          label="Zurück"
+          buttonStyle="secondary"
+        />
         <Button onClick={handleNextPage} label="Zur Übersicht" />
       </section>
     </>

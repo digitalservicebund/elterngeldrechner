@@ -8,7 +8,6 @@ import type { ElternteilType } from "../monatsplaner";
 import type { RootState } from "./index";
 import { MutterschaftsLeistung, YesNo } from "../globals/js/calculations/model";
 import { Zeitraum } from "./stepEinkommenSlice";
-import { resetStoreAction } from "./resetStoreAction";
 import { EgrCalculation } from "../globals/js/calculations/egr-calculation";
 import { persoenlicheDatenOfUi } from "./persoenlicheDatenFactory";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
@@ -292,9 +291,6 @@ const stepRechnerSlice = createSlice({
           hasResultChanged;
       },
     );
-    builder.addCase(resetStoreAction, () => {
-      return initialStepRechnerState;
-    });
   },
 });
 

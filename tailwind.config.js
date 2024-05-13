@@ -40,6 +40,15 @@ module.exports = {
       regular: "400",
       bold: "700",
     },
+    height: {
+      /*
+       * Intentionally remove heights of the default theme to avoid styling with
+       * static heights. Rather rely on more algorithmic and thereby more responsive
+       * styles like flex basis or grid fractional units.
+       * Though, certain specific heights will still be needed. These should be
+       * rather relative values and added with care.
+       */
+    },
     spacing: {
       // Currently based on the manually set 18px root font-size.
       0: "0rem",
@@ -77,6 +86,16 @@ module.exports = {
       288: "16rem",
       320: "17.777rem",
       384: "21.333rem",
+    },
+    width: {
+      /*
+       * Intentionally remove widths of the default theme to avoid styling with
+       * static widths. Rather rely on more algorithmic and thereby more
+       * responsive styles like flex basis or grid fractional units.
+       * Though, certain specific widths will still be needed. These should be
+       * rather relative values and added with care.
+       */
+      full: "100%",
     },
   },
 };

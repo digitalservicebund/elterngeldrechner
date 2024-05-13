@@ -536,7 +536,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
 
         <Button
           buttonStyle="link"
-          label="Planung downloaden"
+          label="Download der Planung"
           iconBefore={<SaveAltIcon />}
           onClick={handlePrint}
         />

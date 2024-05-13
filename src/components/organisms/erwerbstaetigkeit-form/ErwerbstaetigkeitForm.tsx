@@ -55,7 +55,7 @@ export const ErwerbstaetigkeitForm: FC<ErwerbstaetigkeitFormProps> = ({
 
   return (
     <>
-      <h3>Erwerbstätigkeit{antragssteller === "FuerMichSelbst" ? " *" : ""}</h3>
+      <h3>Erwerbstätigkeit{antragssteller === "EinElternteil" ? " *" : ""}</h3>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Split>

@@ -26,7 +26,7 @@ export function usePayoutAmounts() {
     (state) => state.stepAllgemeineAngaben.antragstellende,
   );
 
-  const isSingleParent = applicant === "FuerMichSelbst";
+  const isSingleParent = applicant === "EinElternteil";
   const parentNames = useAppSelector(
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );

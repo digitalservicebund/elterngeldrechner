@@ -273,7 +273,7 @@ describe("Einkommen Page", () => {
           istNichtSelbststaendig: false,
           istSelbststaendig: true,
         },
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
       },
     };
 
@@ -304,7 +304,7 @@ describe("Einkommen Page", () => {
           istNichtSelbststaendig: false,
           istSelbststaendig: true,
         },
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
       };
 
       render(<EinkommenPage />, { store });

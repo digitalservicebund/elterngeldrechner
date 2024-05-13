@@ -109,7 +109,7 @@ describe("Monatsplaner", () => {
     },
     stepAllgemeineAngaben: {
       ...initialStepAllgemeineAngabenState,
-      antragstellende: "FuerMichSelbst",
+      antragstellende: "EinElternteil",
     },
     stepNachwuchs: {
       ...initialStepNachwuchsState,
@@ -843,7 +843,7 @@ describe("Monatsplaner", () => {
           ...preloadedState,
           stepAllgemeineAngaben: {
             ...initialStepAllgemeineAngabenState,
-            antragstellende: "FuerMichSelbst",
+            antragstellende: "EinElternteil",
             alleinerziehend: YesNo.YES,
           },
         },
@@ -867,7 +867,7 @@ describe("Monatsplaner", () => {
           ...preloadedState,
           stepAllgemeineAngaben: {
             ...initialStepAllgemeineAngabenState,
-            antragstellende: "FuerMichSelbst",
+            antragstellende: "EinElternteil",
             alleinerziehend: YesNo.NO,
           },
         },

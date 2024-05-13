@@ -210,7 +210,7 @@ describe("useSummarizeData", () => {
     const preloadedState: Partial<RootState> = {
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
       },
     };
 

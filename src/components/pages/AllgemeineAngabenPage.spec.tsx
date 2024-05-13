@@ -18,10 +18,10 @@ describe("Allgemeine Angaben Page", () => {
     expect(screen.getByText("Ihre Namen (optional)")).toBeInTheDocument();
   });
 
-  it("should display the Alleinerziehendenstatus part of the form, if 'Nur für mich' is chosen", async () => {
+  it("should display the Alleinerziehendenstatus part of the form, if 'Ein Elternteil' is chosen", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Nur für mich"));
+    await userEvent.click(screen.getByLabelText("Ein Elternteil"));
 
     expect(screen.getByText("Alleinerziehendenstatus")).toBeInTheDocument();
   });
@@ -52,10 +52,10 @@ describe("Allgemeine Angaben Page", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("should NOT display mutterschaftssleistungenWer if 'Nur für mich' and 'mutterschaftssleistungen_option_0' are choosen", async () => {
+  it("should NOT display mutterschaftssleistungenWer if 'Ein Elternteil' and 'mutterschaftssleistungen_option_0' are choosen", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Nur für mich"));
+    await userEvent.click(screen.getByLabelText("Ein Elternteil"));
     await userEvent.click(
       screen.getByTestId("mutterschaftssleistungen_option_0"),
     );
@@ -76,12 +76,12 @@ describe("Allgemeine Angaben Page", () => {
       render(<AllgemeineAngabenPage />, { store });
       const expectedState: StepAllgemeineAngabenState = {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
         alleinerziehend: YesNo.YES,
         mutterschaftssleistungen: YesNo.YES,
       };
 
-      await userEvent.click(screen.getByLabelText("Nur für mich"));
+      await userEvent.click(screen.getByLabelText("Ein Elternteil"));
       await userEvent.click(screen.getByTestId("alleinerziehend_option_0"));
       await userEvent.click(
         screen.getByTestId("mutterschaftssleistungen_option_0"),
@@ -94,7 +94,7 @@ describe("Allgemeine Angaben Page", () => {
     describe("should assign the Mutterschutzleistungen", () => {
       const preloadedState: StepAllgemeineAngabenState = {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
         alleinerziehend: YesNo.YES,
       };
 
@@ -110,7 +110,7 @@ describe("Allgemeine Angaben Page", () => {
       it("alleinerziehend - to Elternteil 1", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
-        await userEvent.click(screen.getByLabelText("Nur für mich"));
+        await userEvent.click(screen.getByLabelText("Ein Elternteil"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );
@@ -124,7 +124,7 @@ describe("Allgemeine Angaben Page", () => {
       it("does not show selection which parent receives Mutterschaftsleistung if a single applicant receives Mutterschaftsleistungen", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
-        await userEvent.click(screen.getByLabelText("Nur für mich"));
+        await userEvent.click(screen.getByLabelText("Ein Elternteil"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );
@@ -139,7 +139,7 @@ describe("Allgemeine Angaben Page", () => {
       it("automatically saves the first parent as Mutterschaftsleistungs receiver if a single applicant receives Mutterschaftsleistung", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
-        await userEvent.click(screen.getByLabelText("Nur für mich"));
+        await userEvent.click(screen.getByLabelText("Ein Elternteil"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );
@@ -221,7 +221,7 @@ describe("Allgemeine Angaben Page", () => {
     it("should reset alleinerziehend if Antragstellende für beide", async () => {
       const preloadedState: StepAllgemeineAngabenState = {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
         alleinerziehend: YesNo.YES,
       };
 
@@ -251,7 +251,7 @@ describe("Allgemeine Angaben Page", () => {
     it("should show a validation error if some information is missing", async () => {
       const invalidFormState: StepAllgemeineAngabenState = {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
         alleinerziehend: null,
         mutterschaftssleistungen: YesNo.YES,
       };

@@ -107,7 +107,7 @@ export const ZusammenfassungUndDaten: FC = () => {
   };
 
   const isET2Present = (): boolean => {
-    return stepAllgemeineAngaben.antragstellende !== "FuerMichSelbst";
+    return stepAllgemeineAngaben.antragstellende !== "EinElternteil";
   };
 
   const hasET2Mischtaetigkeit = (): boolean => {

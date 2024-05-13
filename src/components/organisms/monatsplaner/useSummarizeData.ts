@@ -12,7 +12,7 @@ export function useSummarizeData(): SummationDataForParent[] {
   const applicant = useAppSelector(
     (state) => state.stepAllgemeineAngaben.antragstellende,
   );
-  const isSingleParent = applicant === "FuerMichSelbst";
+  const isSingleParent = applicant === "EinElternteil";
 
   const parentNames = useAppSelector(
     stepAllgemeineAngabenSelectors.getElternteilNames,

@@ -3,7 +3,7 @@ import { YesNo } from "../globals/js/calculations/model";
 import { RootState } from "./index";
 import { resetStoreAction } from "./resetStoreAction";
 
-export type Antragstellende = "FuerMichSelbst" | "FuerBeide";
+export type Antragstellende = "EinElternteil" | "FuerBeide";
 export type AntragstellendeSelektor = "ET1" | "ET2";
 
 export interface StepAllgemeineAngabenState {

@@ -18,7 +18,7 @@ describe("usePayoutAmounts", () => {
     const preloadedState: Partial<RootState> = {
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerMichSelbst",
+        antragstellende: "EinElternteil",
       },
     };
 

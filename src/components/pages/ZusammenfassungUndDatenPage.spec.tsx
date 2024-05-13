@@ -29,7 +29,7 @@ const preloadedState: Partial<RootState> = {
   },
   stepAllgemeineAngaben: {
     ...initialStepAllgemeineAngabenState,
-    antragstellende: "FuerMichSelbst",
+    antragstellende: "EinElternteil",
   },
   stepNachwuchs: {
     ...initialStepNachwuchsState,

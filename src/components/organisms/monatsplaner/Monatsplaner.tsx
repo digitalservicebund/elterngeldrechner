@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useRef, useState, VFC } from "react";
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
+import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import {
   ElterngeldType,
   Elternteile,
@@ -521,23 +522,24 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
               onUnMount={onUnMountToast}
               timeout={4500}
             />
-            <div className={nsp("monatsplaner__footer-buttons")}>
-              <Button
-                buttonStyle="link"
-                label="Planung wiederholen"
-                iconBefore={<RestartAltIcon className="fill-primary" />}
-                onClick={repeatPlanning}
-              />
-
-              <Button
-                buttonStyle="link"
-                label="Planung downloaden"
-                iconBefore={<Icon name="arrow" />}
-                onClick={handlePrint}
-              />
-            </div>
           </div>
         </div>
+      </div>
+
+      <div className="my-40 flex flex-wrap gap-12 fill-primary print:hidden">
+        <Button
+          buttonStyle="link"
+          label="Planung wiederholen"
+          iconBefore={<RestartAltIcon />}
+          onClick={repeatPlanning}
+        />
+
+        <Button
+          buttonStyle="link"
+          label="Planung downloaden"
+          iconBefore={<SaveAltIcon />}
+          onClick={handlePrint}
+        />
       </div>
 
       <section className={nsp("monatsplaner__button-group")}>

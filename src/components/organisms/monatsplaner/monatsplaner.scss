@@ -47,15 +47,6 @@
     }
   }
 
-  &__footer-buttons {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: px-to-rem($spacer);
-    background-color: $color-off-white;
-    z-index: 1;
-  }
-
   &__blur {
     filter: blur(px-to-rem(2));
 
@@ -78,7 +69,6 @@
   &__button-group {
     display: flex;
     justify-content: space-between;
-    margin-top: px-to-rem($spacer-3xl);
     background-color: $color-white;
 
     @media print {

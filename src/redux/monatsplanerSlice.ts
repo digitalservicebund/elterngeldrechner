@@ -119,6 +119,10 @@ const monatsplanerSlice = createSlice({
         elternteile: nextElternteile,
       };
     },
+    resetMonths: (state) => ({
+      ...state,
+      elternteile: createElternteile(state.settings),
+    }),
   },
   extraReducers: (builder) => {
     builder.addCase(

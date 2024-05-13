@@ -934,4 +934,33 @@ describe("Monatsplaner", () => {
       },
     );
   });
+
+  describe("repeat planning", () => {
+    it("should reset the selected months when repeat planning", async () => {
+      render(<Monatsplaner mutterSchutzMonate={0} />);
+      const firstBEGMonth = getElternteil1BEGLabel(0);
+      const monthButton = screen.getByLabelText(firstBEGMonth);
+      const monthCell = screen.getByTestId(firstBEGMonth);
+      const repeatButton = screen.getByText("Planung wiederholen");
+
+      expect(monthCell).not.toHaveClass(nsp("monatsplaner-month--selected"));
+
+      await userEvent.click(monthButton);
+      expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
+
+      await userEvent.click(repeatButton);
+      expect(monthCell).not.toHaveClass(nsp("monatsplaner-month--selected"));
+    });
+
+    it("should not reset 'Mutterschutz' months when repeat planning", async () => {
+      render(<Monatsplaner mutterSchutzMonate={1} />, { preloadedState });
+      const maternityProtectionMonth = getElternteil1BEGLabel(0);
+      const monthCell = screen.getByTestId(maternityProtectionMonth);
+      const repeatButton = screen.getByText("Planung wiederholen");
+
+      expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
+      await userEvent.click(repeatButton);
+      expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
+    });
+  });
 });

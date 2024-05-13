@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import {
   ElterngeldType,
   Elternteile,
@@ -406,6 +407,10 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
 
   const summationData = useSummarizeData();
 
+  function repeatPlanning(): void {
+    dispatch(monatsplanerActions.resetMonths());
+  }
+
   return (
     <>
       <div
@@ -517,6 +522,13 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
               timeout={4500}
             />
             <div className={nsp("monatsplaner__footer-buttons")}>
+              <Button
+                buttonStyle="link"
+                label="Planung wiederholen"
+                iconBefore={<RestartAltIcon className="fill-primary" />}
+                onClick={repeatPlanning}
+              />
+
               <Button
                 buttonStyle="link"
                 label="Planung downloaden"

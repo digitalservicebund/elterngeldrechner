@@ -525,7 +525,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
             <div className={nsp("monatsplaner__footer-buttons")}>
               <Button
                 buttonStyle="link"
-                label="Ergebnis drucken"
+                label="Planung downloaden"
                 iconBefore={<Icon name="arrow" />}
                 onClick={handlePrint}
               />

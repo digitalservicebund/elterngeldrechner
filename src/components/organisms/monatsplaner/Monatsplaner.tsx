@@ -414,7 +414,9 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
 
   function repeatPlanning(): void {
     dispatch(monatsplanerActions.resetMonths());
-    elementToViewOnRepeatPlanning.current?.scrollIntoView();
+    elementToViewOnRepeatPlanning.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }
 
   return (

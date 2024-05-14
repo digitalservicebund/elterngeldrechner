@@ -129,7 +129,7 @@ const monatsplanerSlice = createSlice({
       stepAllgemeineAngabenActions.submitStep,
       (state: MonatsplanerState, { payload }) => {
         if (payload.mutterschaftssleistungen === YesNo.YES) {
-          if (payload.antragstellende === "EinElternteil") {
+          if (payload.antragstellende === "EinenElternteil") {
             state.mutterschutzElternteil = "ET1";
           } else {
             state.mutterschutzElternteil = payload.mutterschaftssleistungenWer;

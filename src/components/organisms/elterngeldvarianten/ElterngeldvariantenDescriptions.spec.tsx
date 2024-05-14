@@ -124,7 +124,7 @@ describe("ElterngeldvariantenDescription", () => {
       preloadedState: {
         stepAllgemeineAngaben: {
           ...initialStepAllgemeineAngabenState,
-          antragstellende: "EinElternteil",
+          antragstellende: "EinenElternteil",
         },
       },
     });

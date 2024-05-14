@@ -19,12 +19,12 @@ import { infoTexts } from "../../molecules/info-dialog";
 
 export const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",
-  EinElternteil: "Ein Elternteil",
+  EinenElternteil: "Einen Elternteil",
 };
 
 const antragstellendeOptions: RadioOption<Antragstellende>[] = [
   { value: "FuerBeide", label: antragstellendeLabels.FuerBeide },
-  { value: "EinElternteil", label: antragstellendeLabels.EinElternteil },
+  { value: "EinenElternteil", label: antragstellendeLabels.EinenElternteil },
 ];
 
 interface AllgemeineAngabenFormProps {
@@ -101,7 +101,7 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
           </FormFieldGroup>
         ) : null}
 
-        {antragstellendeFormValue === "EinElternteil" ? (
+        {antragstellendeFormValue === "EinenElternteil" ? (
           <FormFieldGroup
             headline="Alleinerziehendenstatus"
             description="Sind Sie alleinerziehend?"

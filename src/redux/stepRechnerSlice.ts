@@ -299,7 +299,7 @@ const isMonatsplanerOverlayVisible = (state: RootState) => {
   const stateResultElternteil1 = state.stepRechner.ET1.elterngeldResult.state;
   const stateResultElternteil2 = state.stepRechner.ET2.elterngeldResult.state;
 
-  if (antragstellende === "EinElternteil") {
+  if (antragstellende === "EinenElternteil") {
     return stateResultElternteil1 !== "success";
   } else {
     return (

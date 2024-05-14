@@ -60,7 +60,7 @@ describe("Rechner", () => {
       stepNachwuchs,
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "EinElternteil",
+        antragstellende: "EinenElternteil",
         alleinerziehend: YesNo.YES,
         pseudonym: {
           ET1: "Peter",
@@ -106,7 +106,7 @@ describe("Rechner", () => {
       stepNachwuchs,
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
-        antragstellende: "EinElternteil",
+        antragstellende: "EinenElternteil",
         alleinerziehend: YesNo.YES,
       },
     };

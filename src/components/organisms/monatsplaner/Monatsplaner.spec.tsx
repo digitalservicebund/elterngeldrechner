@@ -962,5 +962,18 @@ describe("Monatsplaner", () => {
       await userEvent.click(repeatButton);
       expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
     });
+
+    it("triggers scrolling when repeat planning", async () => {
+      render(<Monatsplaner mutterSchutzMonate={0} />);
+      const scrollMock = jest.fn();
+      window.HTMLElement.prototype.scrollIntoView = scrollMock;
+      const repeatButton = screen.getByText("Planung wiederholen");
+
+      await userEvent.click(repeatButton);
+
+      expect(scrollMock).toHaveBeenCalledTimes(1);
+
+      scrollMock.mockRestore();
+    });
   });
 });

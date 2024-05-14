@@ -10,8 +10,8 @@ import { ReactNode } from "react";
 setupCalculation();
 jest.setTimeout(10000);
 
-// mock window.scrollTo
 window.scrollTo = jest.fn();
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 // mock only createPortal function of imported react-dom library
 jest.mock("react-dom", () => {

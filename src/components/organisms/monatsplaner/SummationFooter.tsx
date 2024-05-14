@@ -22,7 +22,7 @@ export function SummationFooter({ data, className }: Props): ReactNode {
       )}
     >
       {data.map((entry) => (
-        <div key={entry.name} className="flex basis-320 flex-col items-center">
+        <div key={entry.name} className="basis-320 flex flex-col items-center">
           <ParentSummation
             {...entry}
             name={isSingleParent ? undefined : entry.name}

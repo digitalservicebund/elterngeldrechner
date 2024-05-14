@@ -24,7 +24,7 @@ export function ParentSummation({
   return (
     <>
       <span className="flex flex-wrap items-center justify-center gap-4 text-center">
-        <PermIdentityIcon className="inline size-28" />
+        <PermIdentityIcon />
         <strong>{name}</strong> {formattedMonthText}
       </span>
 

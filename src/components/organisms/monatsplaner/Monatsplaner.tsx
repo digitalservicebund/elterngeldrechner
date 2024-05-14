@@ -444,7 +444,10 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
           aria-hidden={isMonatsplanerOverlayVisible}
           ref={elementToViewOnRepeatPlanning}
         >
-          <PlanningContingent months={planningContingentMonths} />
+          <PlanningContingent
+            className="print:hidden"
+            months={planningContingentMonths}
+          />
 
           <div className={nsp("monatsplaner__tables")}>
             <Elternteil

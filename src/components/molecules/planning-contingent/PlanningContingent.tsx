@@ -2,18 +2,20 @@ import { ReactNode } from "react";
 import { VariantLabel } from "./VariantLabel";
 import { ContingentPerVariant } from "./types";
 import { BoxGraph } from "./BoxGraph";
+import classNames from "classnames";
 
 type Props = {
   months: ContingentPerVariant;
+  className?: string;
 };
 
-export function PlanningContingent({ months }: Props): ReactNode {
+export function PlanningContingent({ months, className }: Props): ReactNode {
   const isBonusAvailable = months.bonus.available + months.bonus.taken > 0;
 
   return (
     <header
       aria-label="Kontingent von planbaren Monaten"
-      className="flex flex-wrap justify-between gap-8"
+      className={classNames("flex flex-wrap justify-between gap-8", className)}
     >
       <VariantLabel
         name="Basis"

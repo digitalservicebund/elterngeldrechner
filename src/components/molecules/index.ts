@@ -15,7 +15,7 @@ export { ButtonGroup } from "./button-group";
 export { AccessControl } from "./access-control";
 export { Elternteil } from "./elternteil";
 export type { AmountElterngeldRow } from "./elternteil";
-export { RemainingMonths } from "./remaining-month";
+export { PlanningContingent } from "./planning-contingent";
 export { RechnerForm } from "./rechner-form";
 export { RechnerResult } from "./rechner-result";
 export { ZusammenfassungUndDatenAllgemein } from "./zusammenfassung-und-daten-allgemein";

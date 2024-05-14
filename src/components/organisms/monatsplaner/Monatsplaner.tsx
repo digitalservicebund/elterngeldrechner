@@ -41,7 +41,7 @@ import {
   AccessControl,
   AmountElterngeldRow,
   Elternteil,
-  RemainingMonths,
+  PlanningContingent,
 } from "../../molecules";
 import nsp from "../../../globals/js/namespace";
 import classNames from "classnames";
@@ -57,6 +57,7 @@ import {
 import { NotificationMaxSimultaneousBEGMonths } from "../../atoms/notification/NotificationMaxSimultaneousBEGMonths";
 import { SummationFooter } from "./SummationFooter";
 import { useSummarizeData } from "./useSummarizeData";
+import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 
@@ -407,6 +408,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
   ]);
 
   const summationData = useSummarizeData();
+  const planningContingentMonths = usePlanningContingentMonths();
 
   const elementToViewOnRepeatPlanning = useRef<HTMLDivElement>(null);
 
@@ -442,10 +444,8 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
           aria-hidden={isMonatsplanerOverlayVisible}
           ref={elementToViewOnRepeatPlanning}
         >
-          <RemainingMonths
-            remainingMonthByType={elternteile.remainingMonths}
-            partnerMonate={partnerMonate}
-          />
+          <PlanningContingent months={planningContingentMonths} />
+
           <div className={nsp("monatsplaner__tables")}>
             <Elternteil
               className={nsp("monatsplaner__sticky-elternteil")}
@@ -530,7 +530,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
         </div>
       </div>
 
-      <div className="my-40 flex flex-wrap gap-12 fill-primary print:hidden">
+      <div className="my-40 flex flex-wrap gap-32 fill-primary print:hidden">
         <Button
           buttonStyle="link"
           label="Planung wiederholen"

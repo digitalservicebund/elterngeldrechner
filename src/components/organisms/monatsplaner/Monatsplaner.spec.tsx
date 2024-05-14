@@ -182,8 +182,18 @@ describe("Monatsplaner", () => {
     expect(infoText).toBeInTheDocument();
   });
 
+  it("should show contingent header", () => {
+    render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+
+    const header = screen.queryByRole("banner", {
+      name: "Kontingent von planbaren Monaten",
+    });
+
+    expect(header).toBeVisible();
+  });
+
   it("should show summation footer", () => {
-    render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
+    render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
 
     const footer = screen.queryByRole("contentinfo", { name: "Gesamtsumme" });
 
@@ -850,14 +860,9 @@ describe("Monatsplaner", () => {
       });
 
       // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
-      const partnerschaftsbonus = container.querySelector(
-        ".egr-remaining-months__partnerschaftsbonus",
-      );
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const bonus = container.querySelector(
         ".egr-elternteil__th--partnerschaftsbonus",
       );
-      expect(partnerschaftsbonus).not.toBeNull();
       expect(bonus).not.toBeNull();
     });
 
@@ -874,14 +879,9 @@ describe("Monatsplaner", () => {
       });
 
       // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
-      const partnerschaftsbonus = container.querySelector(
-        ".egr-remaining-months__partnerschaftsbonus",
-      );
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const bonus = container.querySelector(
         ".egr-elternteil__th--partnerschaftsbonus",
       );
-      expect(partnerschaftsbonus).not.toBeNull();
       expect(bonus).not.toBeNull();
     });
   });

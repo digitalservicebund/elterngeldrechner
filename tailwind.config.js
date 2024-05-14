@@ -3,7 +3,8 @@ module.exports = {
   content: ["./src/**/*.tsx"],
   theme: {
     borderRadius: {
-      DEFAULT: "0.444rem",
+      2: "0.111rem",
+      DEFAULT: "0.222rem",
     },
     colors: {
       /* Functional */

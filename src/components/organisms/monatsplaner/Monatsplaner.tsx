@@ -408,8 +408,11 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
 
   const summationData = useSummarizeData();
 
+  const elementToViewOnRepeatPlanning = useRef<HTMLDivElement>(null);
+
   function repeatPlanning(): void {
     dispatch(monatsplanerActions.resetMonths());
+    elementToViewOnRepeatPlanning.current?.scrollIntoView();
   }
 
   return (
@@ -437,6 +440,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
             isMonatsplanerOverlayVisible && nsp("monatsplaner__blur"),
           )}
           aria-hidden={isMonatsplanerOverlayVisible}
+          ref={elementToViewOnRepeatPlanning}
         >
           <RemainingMonths
             remainingMonthByType={elternteile.remainingMonths}

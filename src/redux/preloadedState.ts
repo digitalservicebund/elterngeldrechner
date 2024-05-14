@@ -88,14 +88,8 @@ export const preloadedState = {
           bruttoEinkommenDurchschnitt: 1000,
           isMinijob: "YES",
           zeitraum: [
-            {
-              from: "2022-02-01",
-              to: "2022-05-01",
-            },
-            {
-              from: "2022-01-01",
-              to: "2022-04-01",
-            },
+            { from: "1", to: "3" },
+            { from: "6", to: "9" },
           ],
           versicherungen: {
             hasRentenversicherung: true,
@@ -109,14 +103,8 @@ export const preloadedState = {
           bruttoEinkommenDurchschnitt: 2000,
           isMinijob: "NO",
           zeitraum: [
-            {
-              from: "2022-01-01",
-              to: "2022-03-01",
-            },
-            {
-              from: "2022-02-01",
-              to: "2022-04-01",
-            },
+            { from: "1", to: "5" },
+            { from: "10", to: "12" },
           ],
           versicherungen: {
             hasRentenversicherung: true,

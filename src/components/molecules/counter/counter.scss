@@ -11,9 +11,6 @@
 
   &__button {
     border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     color: $counter__button--color;
     background: $counter__button--background-color;
     width: $counter__button--size;

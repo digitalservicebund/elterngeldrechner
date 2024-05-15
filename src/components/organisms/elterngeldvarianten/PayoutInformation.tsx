@@ -11,12 +11,9 @@ export function PayoutInformation({ name, amount }: Props): ReactNode {
   const formattedAmount = formatAsCurrency(amount);
 
   return (
-    <div className="inline-flex items-center gap-4">
-      <PermIdentityIcon />
-      <span>
-        {name && `${name} | `}
-        <strong>{formattedAmount}</strong> pro Monat
-      </span>
+    <div>
+      <PermIdentityIcon /> {name && `${name} | `}
+      <strong>{formattedAmount}</strong> pro Monat
     </div>
   );
 }

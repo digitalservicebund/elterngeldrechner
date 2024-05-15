@@ -1,8 +1,6 @@
 @use "button.variables" as *;
 
 .#{nsp("button")} {
-  display: flex;
-
   &,
   &:visited {
     font-size: px-to-rem(20);
@@ -25,20 +23,6 @@
   &:focus {
     outline: 2px solid $button--outline-color;
     outline-offset: 2px;
-  }
-
-  &__icon {
-    svg {
-      vertical-align: bottom;
-    }
-
-    &--before {
-      margin-right: px-to-rem($spacer-s);
-    }
-
-    &--after {
-      margin-left: px-to-rem($spacer-s);
-    }
   }
 
   &--primary {
@@ -94,7 +78,10 @@
       border: none;
       color: $color-primary;
       background-color: transparent;
-      text-decoration: underline;
+
+      span {
+        text-decoration: underline;
+      }
     }
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten

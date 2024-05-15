@@ -45,20 +45,15 @@ export const Button = <TFieldValues extends FieldValues>({
       disabled={disabled}
       aria-label={ariaLabel}
       aria-controls={ariaControls}
+      aria-hidden={ariaHidden}
     >
-      {iconBefore && (
-        <span className={nsp("button__icon  button__icon--before")}>
-          {iconBefore}
-        </span>
-      )}
-      <span className={nsp("button__label")} aria-hidden={ariaHidden}>
-        {label}
-      </span>
-      {iconAfter && (
-        <span className={nsp("button__icon  button__icon--after")}>
-          {iconAfter}
-        </span>
-      )}
+      {iconBefore && iconBefore}
+      {iconBefore && <>&nbsp;</>}
+
+      <span>{label}</span>
+
+      {iconAfter && <>&nbsp;</>}
+      {iconAfter && iconAfter}
     </button>
   );
 };

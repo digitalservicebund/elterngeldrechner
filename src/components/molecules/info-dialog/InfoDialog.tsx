@@ -54,7 +54,7 @@ export function InfoDialog({
             onClick={() => setIsDialogOpen(false)}
             aria-label="Information schließen"
           >
-            <Icon name="cross" size={24} />
+            <Icon name="cross" />
           </button>
           <p id={info.id} className={nsp("info-dialog-box__text")}>
             {info.text}

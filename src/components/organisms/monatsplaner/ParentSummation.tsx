@@ -23,9 +23,8 @@ export function ParentSummation({
 
   return (
     <>
-      <span className="flex flex-wrap items-center justify-center gap-4 text-center">
-        <PermIdentityIcon />
-        <strong>{name}</strong> {formattedMonthText}
+      <span>
+        <PermIdentityIcon /> <strong>{name}</strong> {formattedMonthText}
       </span>
 
       <span className="mt-auto">Elterngeld: {formattedTotalPayoutAmount}</span>

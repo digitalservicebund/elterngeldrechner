@@ -12,7 +12,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --verbose",
+    "test": "craco test --verbose",
     "eject": "react-scripts eject",
     "format": "prettier --write ./src/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm} ./public/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm}",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test -- --watchAll=false",
@@ -44,6 +44,7 @@
   },
   "//comment-for-prettier": "See https://create-react-app.dev/docs/setting-up-your-editor/#formatting-code-automatically",
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "@digitalservice4germany/angie": "^1.1.1",
     "@digitalservicebund/icons": "^1.1.1",
     "@testing-library/jest-dom": "^6.4.2",
@@ -73,6 +74,7 @@
     "stylelint-scss": "^6.2.1",
     "stylelint-selector-bem-pattern": "^4.0.0",
     "tailwindcss": "^3.4.3",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.4.2"
   },
   "dependencies": {

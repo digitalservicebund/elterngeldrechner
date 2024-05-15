@@ -1,7 +1,8 @@
 import classnames from "classnames";
 import React, { useState } from "react";
 import nsp from "../../../globals/js/namespace";
-import { Icon } from "../../atoms";
+import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
+import CloseIcon from "@digitalservicebund/icons/Close";
 import { Info } from "./infoTexts";
 
 interface Props {
@@ -36,7 +37,7 @@ export function InfoDialog({
         onClick={() => setIsDialogOpen(true)}
         aria-label="Zugehörige Information zeigen"
       >
-        <Icon name="info" />
+        <InfoOutlinedIcon />
       </button>
 
       {isModalOpen && (
@@ -54,7 +55,7 @@ export function InfoDialog({
             onClick={() => setIsDialogOpen(false)}
             aria-label="Information schließen"
           >
-            <Icon name="cross" />
+            <CloseIcon />
           </button>
           <p id={info.id} className={nsp("info-dialog-box__text")}>
             {info.text}

@@ -5,7 +5,8 @@ import nsp from "../../../globals/js/namespace";
 import classNames from "classnames";
 import { FormStep, formSteps } from "../../../utils/formSteps";
 import { Button } from "../../atoms";
-import { Icon } from "../../atoms/icon";
+import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
+import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 
 interface Props {
   currentStep: FormStep;
@@ -48,7 +49,7 @@ export const Sidebar: VFC<Props> = ({ currentStep }) => {
         className={nsp("sidebar__collapse-btn")}
         onClick={() => setIsOpen(!isOpen)}
         label={buttonLabel}
-        iconAfter={<Icon name={isOpen ? "chevronUp" : "chevronDown"} />}
+        iconAfter={isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       />
 
       <ol

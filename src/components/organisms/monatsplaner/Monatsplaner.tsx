@@ -25,7 +25,6 @@ import {
 } from "../../../redux/stepRechnerSlice";
 import {
   Button,
-  Icon,
   NotificationNoFurtherMonthAvailable,
   NotificationPSBAutomaticallySelection,
   NotificationPSBChangeOtherElternteil,
@@ -37,6 +36,7 @@ import {
   P,
   Toast,
 } from "../../atoms";
+import AddIcon from "@digitalservicebund/icons/Add";
 import {
   AccessControl,
   AmountElterngeldRow,
@@ -508,7 +508,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
               <Button
                 buttonStyle="secondary"
                 label="Alle Monate anzeigen"
-                iconBefore={<Icon name="plus" />}
+                iconBefore={<AddIcon />}
                 onClick={() =>
                   setLebensmonateVisibleLength(lebensmonate.length)
                 }

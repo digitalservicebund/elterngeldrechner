@@ -11,7 +11,8 @@ import { Erwerbstaetigkeiten } from "../../../redux/stepErwerbstaetigkeitSlice";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";
 import { Versicherungen } from "./Versicherungen";
-import { Button, Icon } from "../../atoms";
+import { Button } from "../../atoms";
+import ClearIcon from "@digitalservicebund/icons/Clear";
 import nsp from "../../../globals/js/namespace";
 import { cloneOptionsList } from "../../molecules/custom-select/CustomSelect";
 import {
@@ -196,7 +197,7 @@ export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
                 <Button
                   buttonStyle="link"
                   label="Zeitraum entfernen"
-                  iconAfter={<Icon name="cross" />}
+                  iconAfter={<ClearIcon />}
                   onClick={() => {
                     setMonthsBeforeBirthList((monthsBeforeBirthList) =>
                       monthsBeforeBirthList.filter(

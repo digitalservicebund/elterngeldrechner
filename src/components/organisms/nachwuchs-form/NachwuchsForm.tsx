@@ -1,4 +1,6 @@
 import { FC, useEffect } from "react";
+import ClearIcon from "@digitalservicebund/icons/Clear";
+import AddIcon from "@digitalservicebund/icons/Add";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
@@ -12,7 +14,6 @@ import {
   ButtonGroup,
 } from "../../molecules";
 import nsp from "../../../globals/js/namespace";
-import { Icon } from "../../atoms";
 import { infoTexts } from "../../molecules/info-dialog";
 
 interface NachwuchsFormProps {
@@ -194,7 +195,7 @@ export const NachwuchsForm: FC<NachwuchsFormProps> = ({
                 />
                 <Button
                   onClick={() => remove(index)}
-                  iconAfter={<Icon name="cross" />}
+                  iconAfter={<ClearIcon />}
                   className={nsp("nachwuchs-form__geschwisterkinder-delete")}
                   buttonStyle="link"
                   label="Geschwisterkind entfernen"
@@ -205,7 +206,7 @@ export const NachwuchsForm: FC<NachwuchsFormProps> = ({
         </ul>
         <Button
           onClick={handleAppendGeschwisterkind}
-          iconBefore={<Icon name="plus" />}
+          iconBefore={<AddIcon />}
           ariaLabel={`${
             !fields.length ? "Älteres" : "Weiteres"
           } Geschwisterkind hinzufügen`}

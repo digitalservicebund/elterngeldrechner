@@ -11,7 +11,8 @@ import {
 
 import { Description } from "../../atoms";
 import classNames from "classnames";
-import { Icon } from "../../atoms/icon";
+import AddIcon from "@digitalservicebund/icons/Add";
+import RemoveIcon from "@digitalservicebund/icons/Remove";
 
 interface Props<TFieldValues extends FieldValues> {
   register: UseFormRegister<TFieldValues>;
@@ -49,7 +50,7 @@ export const Counter = <TFieldValues extends FieldValues>({
           aria-label="verringern"
           aria-controls={name}
         >
-          <Icon name="minus" />
+          <RemoveIcon />
         </button>
         <input
           {...register(name, registerOptions)}
@@ -67,7 +68,7 @@ export const Counter = <TFieldValues extends FieldValues>({
           aria-label="erhöhen"
           aria-controls={name}
         >
-          <Icon name="plus" />
+          <AddIcon />
         </button>
       </div>
       {error && (

@@ -7,7 +7,8 @@ import {
 import nsp from "../../../globals/js/namespace";
 import { useAppSelector } from "../../../redux/hooks";
 import { ElterngeldRow } from "../../../redux/stepRechnerSlice";
-import { Icon, NotificationMaxElterngeld, P, Toast } from "../../atoms";
+import { NotificationMaxElterngeld, P, Toast } from "../../atoms";
+import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import { FootNote } from "../foot-note";
 
 interface Props {
@@ -66,7 +67,7 @@ export const RechnerResult: VFC<Props> = ({ elternteil }) => {
   if (result.state === "error") {
     return (
       <P className={nsp("rechner-result-error")}>
-        <Icon name="info" /> Das Elterngeld konnte nicht berechnet werden.
+        <InfoOutlinedIcon /> Das Elterngeld konnte nicht berechnet werden.
       </P>
     );
   }

@@ -15,7 +15,8 @@ import {
   initialBruttoEinkommenZeitraum,
   StepRechnerState,
 } from "../../../redux/stepRechnerSlice";
-import { Button, Description, Icon } from "../../atoms";
+import { Button, Description } from "../../atoms";
+import ClearIcon from "@digitalservicebund/icons/Clear";
 import {
   CustomCheckbox,
   CustomNumberField,
@@ -248,7 +249,7 @@ export const RechnerForm: VFC<RechnerFormProps> = ({
               <Button
                 buttonStyle="link"
                 label="Einkommen entfernen"
-                iconAfter={<Icon name="cross" />}
+                iconAfter={<ClearIcon />}
                 onClick={() => {
                   removeEinkommen(index);
                 }}

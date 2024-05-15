@@ -537,7 +537,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
         </div>
       </div>
 
-      <div className="my-40 flex flex-wrap gap-32 fill-primary print:hidden">
+      <div className="my-40 flex flex-wrap gap-32 print:hidden">
         <Button
           buttonStyle="link"
           label="Planung wiederholen"

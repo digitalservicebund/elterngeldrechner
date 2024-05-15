@@ -14,7 +14,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
       <>
         <DetailsElterngeldvariante
           summaryTitle="Basiselterngeld - 100% Elterngeld"
-          summaryClassName="bg-Basis text-white fill-white"
+          summaryClassName="bg-Basis text-white"
           monthsAvailable={14}
           payoutAmounts={pickAmountsOfVariant(payoutAmounts, "basiselterngeld")}
         >
@@ -42,7 +42,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         </DetailsElterngeldvariante>
         <DetailsElterngeldvariante
           summaryTitle="ElterngeldPlus - 50% Elterngeld"
-          summaryClassName="bg-Plus text-black fill-black"
+          summaryClassName="bg-Plus text-black"
           monthsAvailable={28}
           payoutAmounts={pickAmountsOfVariant(payoutAmounts, "elterngeldplus")}
         >
@@ -64,7 +64,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         </DetailsElterngeldvariante>
         <DetailsElterngeldvariante
           summaryTitle="+ Partnerschaftsbonus"
-          summaryClassName="bg-Bonus text-black fill-black"
+          summaryClassName="bg-Bonus text-black"
           monthsAvailable={4}
           payoutAmounts={pickAmountsOfVariant(
             payoutAmounts,

@@ -246,6 +246,6 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
       sheet
         .nettoVorGeburt(EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT)
         .value.toNumber(),
-    ).toThrowError("testCaseIndex out of bound");
+    ).toThrow("testCaseIndex out of bound");
   });
 });

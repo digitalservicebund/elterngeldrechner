@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import AddIcon from "@digitalservicebund/icons/Add";
@@ -122,7 +122,7 @@ const checkMaxBEG = (
   return antragstellende === "FuerBeide" && (begEt1 > 12 || begEt2 > 12);
 };
 
-export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
+export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

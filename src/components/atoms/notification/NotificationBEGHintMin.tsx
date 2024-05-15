@@ -1,5 +1,3 @@
-import { VFC } from "react";
-
-export const NotificationBEGHintMin: VFC = () => {
+export const NotificationBEGHintMin = () => {
   return <div>Sie müssen mindestens zwei Monate Elterngeld beantragen.</div>;
 };

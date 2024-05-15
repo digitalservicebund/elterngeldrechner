@@ -91,19 +91,19 @@ describe("bmf-steuer-rechner-configuration", () => {
     it("2023", () => {
       expect(() =>
         bmfSteuerRechnerUrlOf(2023, new BmfSteuerRechnerParameter()),
-      ).toThrowError("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
+      ).toThrow("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
     });
 
     it("2020", () => {
       expect(() =>
         bmfSteuerRechnerUrlOf(2020, new BmfSteuerRechnerParameter()),
-      ).toThrowError("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
+      ).toThrow("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
     });
 
     it("2019", () => {
       expect(() =>
         bmfSteuerRechnerUrlOf(2019, new BmfSteuerRechnerParameter()),
-      ).toThrowError("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
+      ).toThrow("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
     });
   });
 });

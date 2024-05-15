@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import { YesNo } from "@/globals/js/calculations/model";
 
 interface Props {
@@ -6,10 +5,10 @@ interface Props {
   alleinerziehend?: YesNo | null;
 }
 
-export const NotificationBEGResultWasRecalculated: VFC<Props> = ({
+export const NotificationBEGResultWasRecalculated = ({
   elternteilName,
   alleinerziehend,
-}) => {
+}: Props) => {
   return (
     <div>
       {alleinerziehend !== YesNo.YES

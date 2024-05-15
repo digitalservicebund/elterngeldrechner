@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
 import type { ElternteilType } from "@/monatsplaner";
 import {
@@ -81,10 +80,10 @@ const rentenVersicherungOptions: RadioOption<RentenArt>[] = [
   },
 ];
 
-export const SteuerUndVersicherung: VFC<SteuerUndVersicherungProps> = ({
+export const SteuerUndVersicherung = ({
   elternteil,
   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
-}) => {
+}: SteuerUndVersicherungProps) => {
   const {
     register,
     formState: { errors },

@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, VFC } from "react";
+import { ChangeEvent, useMemo } from "react";
 import {
   FieldError,
   Path,
@@ -25,12 +25,12 @@ const typeOfVersicherungenLabels: {
   none: "keines der Genannten",
 };
 
-export const Versicherungen: VFC<VersicherungenProps> = ({
+export const Versicherungen = ({
   hasRentenversicherungName,
   hasArbeitslosenversicherungName,
   hasKrankenversicherungName,
   noneName,
-}) => {
+}: VersicherungenProps) => {
   const {
     register,
     formState: { errors },

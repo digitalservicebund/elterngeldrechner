@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Taetigkeit } from "./Taetigkeit";
 import type { ElternteilType } from "@/monatsplaner";
@@ -15,9 +14,11 @@ interface SelbstaendigAndErwerbstaetigProps {
   monthsBeforeBirth: SelectOption[];
 }
 
-export const SelbstaendigAndErwerbstaetig: VFC<
-  SelbstaendigAndErwerbstaetigProps
-> = ({ elternteil, isSelbststaendig, monthsBeforeBirth }) => {
+export const SelbstaendigAndErwerbstaetig = ({
+  elternteil,
+  isSelbststaendig,
+  monthsBeforeBirth,
+}: SelbstaendigAndErwerbstaetigProps) => {
   const { control } = useFormContext<StepEinkommenState>();
 
   const name =

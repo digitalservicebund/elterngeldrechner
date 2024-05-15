@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import nsp from "@/globals/js/namespace";
 import {
   StepErwerbstaetigkeitElternteil,
@@ -27,7 +26,7 @@ const getHumanReadableMonthType: { [K in ElterngeldType]: string } = {
   "EG+": "ElterngeldPlus",
 };
 
-const ZusammenfassungUndDatenElternteil: VFC<Props> = ({
+const ZusammenfassungUndDatenElternteil = ({
   elternteilName,
   stepErwerbstaetigkeit,
   stepEinkommen,

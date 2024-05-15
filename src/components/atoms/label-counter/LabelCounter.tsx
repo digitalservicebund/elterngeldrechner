@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface LabelCounterProps {
@@ -7,11 +6,7 @@ interface LabelCounterProps {
   maxCount: number;
 }
 
-export const LabelCounter: VFC<LabelCounterProps> = ({
-  label,
-  count,
-  maxCount,
-}) => {
+export const LabelCounter = ({ label, count, maxCount }: LabelCounterProps) => {
   return (
     <div className={nsp("label-counter")}>
       <p className={nsp("label-counter__label")}>{label}</p>

@@ -195,7 +195,7 @@ describe("plus-eg-algorithmus", () => {
             null,
             zwischenErgebnis,
           ),
-      ).rejects.toThrowError("MischEinkommenEnabledButMissingMischEinkommen");
+      ).rejects.toThrow("MischEinkommenEnabledButMissingMischEinkommen");
     });
   });
 });

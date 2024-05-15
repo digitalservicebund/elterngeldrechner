@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { VFC, useEffect } from "react";
+import { useEffect } from "react";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
 import type { ElternteilType } from "@/monatsplaner";
 import {
@@ -39,9 +39,11 @@ interface ErwerbstaetikeitFormElternteilProps {
   antragssteller: Antragstellende | null;
 }
 
-const ErwerbstaetigkeitFormElternteil: VFC<
-  ErwerbstaetikeitFormElternteilProps
-> = ({ elternteil, elternteilName, antragssteller }) => {
+const ErwerbstaetigkeitFormElternteil = ({
+  elternteil,
+  elternteilName,
+  antragssteller,
+}: ErwerbstaetikeitFormElternteilProps) => {
   const {
     register,
     formState: { errors },

@@ -1,13 +1,10 @@
-import { VFC } from "react";
 import { ErrorCode } from "@/monatsplaner";
 
 interface Props {
   errorCodes: readonly ErrorCode[];
 }
 
-export const NotificationValidationMonatsplaner: VFC<Props> = ({
-  errorCodes,
-}) => {
+export const NotificationValidationMonatsplaner = ({ errorCodes }: Props) => {
   const messages = errorCodes.map((code) => {
     switch (code) {
       case "HasNoSelection":

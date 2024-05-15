@@ -1,4 +1,4 @@
-import { MouseEvent, VFC } from "react";
+import { MouseEvent } from "react";
 import classNames from "classnames";
 import { Button } from "@/components/atoms";
 import nsp from "@/globals/js/namespace";
@@ -9,11 +9,11 @@ interface Props {
   isStepOne?: boolean;
 }
 
-export const ButtonGroup: VFC<Props> = ({
+export const ButtonGroup = ({
   onClickBackButton,
   onClickResetForm,
   isStepOne = false,
-}) => {
+}: Props) => {
   const secondButtonAttributes = onClickResetForm
     ? { onClick: onClickResetForm, label: "Neu starten" }
     : { type: "submit" as const, label: "Weiter" };

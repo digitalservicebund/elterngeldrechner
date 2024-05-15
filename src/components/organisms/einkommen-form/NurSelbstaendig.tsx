@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
 import type { ElternteilType } from "@/monatsplaner";
 import {
@@ -14,7 +13,7 @@ interface NurSelbstaendigProps {
   monthsBeforeBirth: SelectOption[];
 }
 
-export const NurSelbstaendig: VFC<NurSelbstaendigProps> = ({ elternteil }) => {
+export const NurSelbstaendig = ({ elternteil }: NurSelbstaendigProps) => {
   const { setValue, control } = useFormContext<StepEinkommenState>();
 
   setValue(`${elternteil}.gewinnSelbstaendig.type`, "yearly");

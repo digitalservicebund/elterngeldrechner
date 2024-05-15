@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState, VFC } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   NotificationBEGResultWasRecalculated,
@@ -11,7 +11,7 @@ import nsp from "@/globals/js/namespace";
 import { FootNote, RechnerForm, RechnerResult } from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
 
-export const Rechner: VFC = () => {
+export const Rechner = () => {
   const dispatch = useAppDispatch();
   const initialValues = useAppSelector((state) => state.stepRechner);
 

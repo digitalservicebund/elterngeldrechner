@@ -1,4 +1,4 @@
-import React, { useState, VFC } from "react";
+import React, { useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { Versicherungen } from "./Versicherungen";
@@ -46,13 +46,13 @@ interface TaetigkeitsFormProps {
   onRemove: () => void;
 }
 
-export const Taetigkeit: VFC<TaetigkeitsFormProps> = ({
+export const Taetigkeit = ({
   elternteil,
   taetigkeitsIndex,
   isSelbststaendig,
   monthsBeforeBirth,
   onRemove,
-}) => {
+}: TaetigkeitsFormProps) => {
   const name =
     `${elternteil}.taetigkeitenNichtSelbstaendigUndSelbstaendig` as const;
 

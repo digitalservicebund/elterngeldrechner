@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
   answer: string;
 }
 
-export const QuestionAnswer: VFC<Props> = ({ question, answer }) => {
+export const QuestionAnswer = ({ question, answer }: Props): ReactNode => {
   return (
     <div className={nsp("question-answer")}>
       <span>{question}</span>

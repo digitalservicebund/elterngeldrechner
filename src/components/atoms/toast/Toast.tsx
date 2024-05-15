@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect, VFC } from "react";
+import { Fragment, ReactNode, useEffect } from "react";
 import ReactDOM from "react-dom";
 import nsp from "@/globals/js/namespace";
 import "./toast.scss";
@@ -10,10 +10,9 @@ interface ToastProps {
   timeout: number;
 }
 
-const ToastContent: VFC<Pick<ToastProps, "messages" | "active">> = ({
-  messages,
-  active,
-}) => {
+type ToastContentProps = Pick<ToastProps, "messages" | "active">;
+
+const ToastContent = ({ messages, active }: ToastContentProps) => {
   return (
     <div className={`${nsp("toast")} ${active ? nsp("toast--active") : ""}`}>
       {messages !== null &&
@@ -24,12 +23,7 @@ const ToastContent: VFC<Pick<ToastProps, "messages" | "active">> = ({
   );
 };
 
-export const Toast: VFC<ToastProps> = ({
-  messages,
-  active,
-  onUnMount,
-  timeout,
-}) => {
+export const Toast = ({ messages, active, onUnMount, timeout }: ToastProps) => {
   useEffect(() => {
     let timerId: ReturnType<typeof setTimeout>;
     if (messages !== null && messages.length > 0) {

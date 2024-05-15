@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState, VFC } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import type { ElternteilType } from "@/monatsplaner";
 import {
@@ -33,7 +33,7 @@ const getRechnerResultTableRows = (
     });
 };
 
-export const RechnerResult: VFC<Props> = ({ elternteil }) => {
+export const RechnerResult = ({ elternteil }: Props) => {
   const result = useAppSelector(
     (state) => state.stepRechner[elternteil].elterngeldResult,
   );

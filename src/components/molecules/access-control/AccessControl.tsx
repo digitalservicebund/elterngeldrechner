@@ -1,8 +1,7 @@
-import { VFC } from "react";
 import nsp from "@/globals/js/namespace";
 import { Button, P } from "@/components/atoms";
 
-export const AccessControl: VFC = () => {
+export const AccessControl = () => {
   const handleScrollToTop = () => {
     const firstRechnerForm = document.getElementsByClassName(
       "egr-rechner-form",

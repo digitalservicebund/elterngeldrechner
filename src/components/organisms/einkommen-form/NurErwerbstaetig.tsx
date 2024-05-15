@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
 import type { ElternteilType } from "@/monatsplaner";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
@@ -16,10 +15,10 @@ interface NurErwerbstaetigProps {
   monthsBeforeBirth: SelectOption[];
 }
 
-export const NurErwerbstaetig: VFC<NurErwerbstaetigProps> = ({
+export const NurErwerbstaetig = ({
   elternteil,
   monthsBeforeBirth,
-}) => {
+}: NurErwerbstaetigProps) => {
   const { control, setValue, watch } = useFormContext<StepEinkommenState>();
 
   const averageOrMonthlyNichtSelbstaendig = watch(

@@ -116,6 +116,6 @@ describe("egr-mischeinkommen-excel-sheet", () => {
       sheet
         .nettoVorGeburt(EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT)
         .value.toNumber(),
-    ).toThrowError("testCaseIndex out of bound");
+    ).toThrow("testCaseIndex out of bound");
   });
 });

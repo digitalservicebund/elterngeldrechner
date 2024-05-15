@@ -1,4 +1,4 @@
-import { VFC, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
@@ -11,7 +11,7 @@ interface Props {
   currentStep: FormStep;
 }
 
-export const Sidebar: VFC<Props> = ({ currentStep }) => {
+export const Sidebar = ({ currentStep }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const currentStepIndex = Object.values(formSteps).findIndex(

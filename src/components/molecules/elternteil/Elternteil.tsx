@@ -1,4 +1,4 @@
-import { useState, VFC } from "react";
+import { useState } from "react";
 import classNames from "classnames";
 import Big from "big.js";
 import {
@@ -40,7 +40,7 @@ interface Props {
   partnerMonate?: boolean;
 }
 
-export const Elternteil: VFC<Props> = ({
+export const Elternteil = ({
   lebensmonate,
   selectablePSBMonths,
   elternteil,
@@ -56,7 +56,7 @@ export const Elternteil: VFC<Props> = ({
   className,
   isElternteilOne,
   partnerMonate,
-}) => {
+}: Props) => {
   const [hoverPSBIndex, setHoverPSBIndex] = useState<number | null>(null);
 
   const allPSBIndices = [

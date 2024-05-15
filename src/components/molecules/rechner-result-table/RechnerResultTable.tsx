@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import classNames from "classnames";
 import Big from "big.js";
 import nsp from "@/globals/js/namespace";
@@ -33,14 +32,14 @@ export const formatMoney = (number: number, fractionDigits?: number) => {
   });
 };
 
-export const RechnerResultTable: VFC<Props> = ({
+export const RechnerResultTable = ({
   rows,
   elterngeldType,
   titleTotal,
   markOver14Month,
   hideLebensmonate,
   className,
-}) => {
+}: Props) => {
   return (
     <table
       className={classNames(

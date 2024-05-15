@@ -1,6 +1,4 @@
-import { VFC } from "react";
-
-export const NotificationBEGHintMinMax: VFC = () => {
+export const NotificationBEGHintMinMax = () => {
   return (
     <div>
       Jeder Elternteil muss mindestens 2 und darf maximal 12 Monate Elterngeld

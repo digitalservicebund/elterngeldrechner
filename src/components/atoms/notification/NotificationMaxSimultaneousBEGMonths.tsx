@@ -1,6 +1,4 @@
-import { VFC } from "react";
-
-export const NotificationMaxSimultaneousBEGMonths: VFC = () => {
+export const NotificationMaxSimultaneousBEGMonths = () => {
   return (
     <div>
       Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12

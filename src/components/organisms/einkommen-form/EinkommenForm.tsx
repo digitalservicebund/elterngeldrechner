@@ -1,4 +1,4 @@
-import { VFC, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
@@ -22,11 +22,11 @@ interface Props {
   handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
-export const EinkommenForm: VFC<Props> = ({
+export const EinkommenForm = ({
   initialValues,
   onSubmit,
   handleDirtyForm,
-}) => {
+}: Props) => {
   const navigate = useNavigate();
   const methods = useForm({ defaultValues: initialValues });
   const { isDirty, dirtyFields, errors } = methods.formState;

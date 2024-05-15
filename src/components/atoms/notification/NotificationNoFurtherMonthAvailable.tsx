@@ -1,5 +1,3 @@
-import { VFC } from "react";
-
 type TargetType = "BEG" | "BEGAndEG+";
 
 interface Props {
@@ -15,9 +13,7 @@ const getTargetTypeName = (targetType: TargetType) => {
   }
 };
 
-export const NotificationNoFurtherMonthAvailable: VFC<Props> = ({
-  targetType,
-}) => {
+export const NotificationNoFurtherMonthAvailable = ({ targetType }: Props) => {
   return (
     <div>
       Ihre verfügbaren {getTargetTypeName(targetType)}-Monate sind aufgebraucht.

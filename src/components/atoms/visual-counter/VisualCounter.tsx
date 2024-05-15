@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface VisualCounterProps {
@@ -10,14 +9,14 @@ interface VisualCounterProps {
   maxCountBonus: number;
 }
 
-export const VisualCounter: VFC<VisualCounterProps> = ({
+export const VisualCounter = ({
   countBasis,
   maxCountBasis,
   countPlus,
   maxCountPlus,
   countBonus,
   maxCountBonus,
-}) => {
+}: VisualCounterProps) => {
   const arrayOf = (maxCount: number): Array<number> => {
     const numbers = [];
     for (let i = 1; i <= maxCount; i++) {

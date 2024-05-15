@@ -183,6 +183,6 @@ describe("egr-mischeinkommen-excel-sheet", () => {
       sheet
         .einkommen(0, EgrMischeinkommenExcelSheet.TEST_CASE_COUNT)
         .toNumber(),
-    ).toThrowError("testCaseIndex out of bound");
+    ).toThrow("testCaseIndex out of bound");
   });
 });

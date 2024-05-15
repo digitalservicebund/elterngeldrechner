@@ -1,4 +1,4 @@
-import { useMemo, VFC } from "react";
+import { useMemo } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
 import {
@@ -19,7 +19,7 @@ const typeOfErwerbstaetigkeitLabels: {
   isSelbststaendig: "Gewinneinkünfte",
 };
 
-export const ErwerbstaetigkeitCheckboxGroup: VFC<Props> = ({ elternteil }) => {
+export const ErwerbstaetigkeitCheckboxGroup = ({ elternteil }: Props) => {
   const {
     register,
     getValues,

@@ -1,4 +1,3 @@
-import { VFC } from "react";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
 import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
@@ -21,10 +20,10 @@ interface Props {
   elternteilName: string;
 }
 
-export const EinkommenFormElternteil: VFC<Props> = ({
+export const EinkommenFormElternteil = ({
   elternteil,
   elternteilName,
-}) => {
+}: Props) => {
   const monthsLastYearBeforeBirthOptions = useAppSelector(
     stepNachwuchsSelectors.getMonthsLastYearBeforeBirthOptions,
   );

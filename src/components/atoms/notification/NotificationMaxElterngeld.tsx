@@ -1,6 +1,4 @@
-import { VFC } from "react";
-
-export const NotificationMaxElterngeld: VFC = () => {
+export const NotificationMaxElterngeld = () => {
   return (
     <div>
       Von Ihrem Netto Einkommen werden höchstens 2770 Euro für die Festlegung

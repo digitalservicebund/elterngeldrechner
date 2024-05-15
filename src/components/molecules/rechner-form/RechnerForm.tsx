@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, VFC } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   FieldError,
   get,
@@ -40,14 +40,14 @@ interface RechnerFormProps {
   previousFormStepsChanged: boolean;
 }
 
-export const RechnerForm: VFC<RechnerFormProps> = ({
+export const RechnerForm = ({
   elternteilName,
   elternteil,
   initialValues,
   onSubmit,
   isResultPending,
   previousFormStepsChanged,
-}) => {
+}: RechnerFormProps) => {
   const {
     control,
     handleSubmit,

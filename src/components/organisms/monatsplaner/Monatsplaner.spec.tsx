@@ -963,18 +963,23 @@ describe("Monatsplaner", () => {
       expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
     });
 
-    it("triggers smooth scrolling when repeat planning", async () => {
+    it("triggers smooth scrolling and shifts focus when repeat planning", async () => {
       render(<Monatsplaner mutterSchutzMonate={0} />);
       const scrollMock = jest.fn();
+      const focusMock = jest.fn();
       window.HTMLElement.prototype.scrollIntoView = scrollMock;
+      window.HTMLElement.prototype.focus = focusMock;
       const repeatButton = screen.getByText("Planung wiederholen");
 
       await userEvent.click(repeatButton);
 
-      expect(scrollMock).toHaveBeenCalledTimes(1);
+      expect(scrollMock).toHaveBeenCalled();
       expect(scrollMock).toHaveBeenCalledWith({ behavior: "smooth" });
+      expect(focusMock).toHaveBeenCalled();
+      expect(focusMock).toHaveBeenCalledWith({ preventScroll: true });
 
       scrollMock.mockRestore();
+      focusMock.mockRestore();
     });
   });
 });

@@ -417,6 +417,7 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
     elementToViewOnRepeatPlanning.current?.scrollIntoView({
       behavior: "smooth",
     });
+    elementToViewOnRepeatPlanning.current?.focus({ preventScroll: true });
   }
 
   return (
@@ -428,7 +429,9 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
         )}
       >
         <div className={nsp("monatsplaner__header")}>
-          <h2>Monatsplaner</h2>
+          <h2 ref={elementToViewOnRepeatPlanning} tabIndex={-1}>
+            Monatsplaner
+          </h2>
           <P>
             Im Monatsplaner können Sie Ihre individuelle Kombination von
             Elterngeld für jeden Lebensmonat Ihres Kindes planen. In der Tabelle
@@ -444,7 +447,6 @@ export const Monatsplaner: VFC<Props> = ({ mutterSchutzMonate }) => {
             isMonatsplanerOverlayVisible && nsp("monatsplaner__blur"),
           )}
           aria-hidden={isMonatsplanerOverlayVisible}
-          ref={elementToViewOnRepeatPlanning}
         >
           <PlanningContingent
             className="print:hidden"

@@ -28,7 +28,6 @@ export const Button = <TFieldValues extends FieldValues>({
   disabled = false,
   ariaLabel,
   ariaControls,
-  ariaHidden,
 }: Props<TFieldValues>) => {
   return (
     <button
@@ -45,7 +44,6 @@ export const Button = <TFieldValues extends FieldValues>({
       disabled={disabled}
       aria-label={ariaLabel}
       aria-controls={ariaControls}
-      aria-hidden={ariaHidden}
     >
       {iconBefore && iconBefore}
       {iconBefore && <>&nbsp;</>}

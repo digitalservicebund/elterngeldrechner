@@ -209,7 +209,6 @@ export const NachwuchsForm: FC<NachwuchsFormProps> = ({
           ariaLabel={`${
             !fields.length ? "Älteres" : "Weiteres"
           } Geschwisterkind hinzufügen`}
-          ariaHidden={true}
           buttonStyle="secondary"
           label={`${
             !fields.length ? "Älteres" : "Weiteres"

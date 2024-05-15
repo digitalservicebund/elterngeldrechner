@@ -1,4 +1,4 @@
-import { ElterngeldType, Month } from "../elternteile";
+import { ElterngeldType, Month } from "@/monatsplaner/elternteile";
 
 export const lastIndexOfType = (
   months: readonly Month[],

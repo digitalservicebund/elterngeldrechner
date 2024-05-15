@@ -1,15 +1,15 @@
 import { ReactNode, useEffect, useState, VFC } from "react";
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import {
   RechnerResultTable,
   RechnerResultTableRow,
-} from "../rechner-result-table";
-import nsp from "../../../globals/js/namespace";
-import { useAppSelector } from "../../../redux/hooks";
-import { ElterngeldRow } from "../../../redux/stepRechnerSlice";
-import { NotificationMaxElterngeld, P, Toast } from "../../atoms";
+} from "@/components/molecules/rechner-result-table";
+import nsp from "@/globals/js/namespace";
+import { useAppSelector } from "@/redux/hooks";
+import { ElterngeldRow } from "@/redux/stepRechnerSlice";
+import { NotificationMaxElterngeld, P, Toast } from "@/components/atoms";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
-import { FootNote } from "../foot-note";
+import { FootNote } from "@/components/molecules/foot-note";
 
 interface Props {
   elternteil: ElternteilType;

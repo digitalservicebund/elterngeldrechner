@@ -1,4 +1,8 @@
-import { changeMonth, createElternteile, Geburtstag } from "../elternteile";
+import {
+  changeMonth,
+  createElternteile,
+  Geburtstag,
+} from "@/monatsplaner/elternteile";
 import validateElternteile from "./validation";
 import { ErrorCode } from "./error-code";
 import { InvalidValidationResult } from "./validation-result";

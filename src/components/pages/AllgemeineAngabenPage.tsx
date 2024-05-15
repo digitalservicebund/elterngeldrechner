@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
-import { AllgemeineAngabenForm } from "../organisms";
-import { Page } from "../organisms/page";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { AllgemeineAngabenForm } from "@/components/organisms";
+import { Page } from "@/components/organisms/page";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepAllgemeineAngabenActions,
   StepAllgemeineAngabenState,
-} from "../../redux/stepAllgemeineAngabenSlice";
+} from "@/redux/stepAllgemeineAngabenSlice";
 import { useNavigate } from "react-router";
-import { formSteps } from "../../utils/formSteps";
-import { stepRechnerActions } from "../../redux/stepRechnerSlice";
+import { formSteps } from "@/utils/formSteps";
+import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 
 const AllgemeineAngabenPage: FC = () => {
   const dispatch = useAppDispatch();

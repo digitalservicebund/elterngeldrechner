@@ -7,7 +7,7 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "./egr-alte-testfaelle-routine3-excel-sheet";
 
 describe("egr-alte-testfaelle-routine3-excel-sheet", () => {

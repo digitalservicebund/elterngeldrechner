@@ -6,9 +6,9 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import { IMask, IMaskInput } from "react-imask";
-import nsp from "../../../globals/js/namespace";
-import { Description } from "../../atoms";
-import { Info, InfoDialog } from "../info-dialog";
+import nsp from "@/globals/js/namespace";
+import { Description } from "@/components/atoms";
+import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 interface CustomDateProps<
   TFieldValues extends FieldValues,

@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { Page } from "../organisms/page";
-import { formSteps } from "../../utils/formSteps";
-import { ZusammenfassungUndDaten } from "../organisms/zusammenfassung-und-daten";
+import { Page } from "@/components/organisms/page";
+import { formSteps } from "@/utils/formSteps";
+import { ZusammenfassungUndDaten } from "@/components/organisms/zusammenfassung-und-daten";
 
 const ZusammenfassungUndDatenPage: FC = () => {
   return (

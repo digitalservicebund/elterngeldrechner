@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { numberOfLebensmonate } from "../configuration";
+import { numberOfLebensmonate } from "@/monatsplaner/configuration";
 
 export interface Lebensmonat {
   readonly from: string;

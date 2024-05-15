@@ -1,20 +1,20 @@
 import { VFC, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   ButtonGroup,
   Split,
   FormFieldGroup,
   YesNoRadio,
-} from "../../molecules";
-import { SplitItem } from "../../atoms";
-import { infoTexts } from "../../molecules/info-dialog";
-import { YesNo } from "../../../globals/js/calculations/model";
-import { EgrBerechnungParamId } from "../../../globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/components/molecules";
+import { SplitItem } from "@/components/atoms";
+import { infoTexts } from "@/components/molecules/info-dialog";
+import { YesNo } from "@/globals/js/calculations/model";
+import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 interface Props {
   initialValues: StepEinkommenState;

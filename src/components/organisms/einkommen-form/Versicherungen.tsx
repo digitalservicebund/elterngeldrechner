@@ -9,8 +9,8 @@ import {
 import {
   StepEinkommenState,
   TypeOfVersicherungen,
-} from "../../../redux/stepEinkommenSlice";
-import { CustomCheckbox, FormFieldGroup } from "../../molecules";
+} from "@/redux/stepEinkommenSlice";
+import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
 
 type VersicherungenProps = {
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;

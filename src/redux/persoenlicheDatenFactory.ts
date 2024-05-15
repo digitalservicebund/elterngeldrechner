@@ -1,10 +1,10 @@
 import { RootState } from "./index";
-import { ElternteilType } from "../monatsplaner";
+import { ElternteilType } from "@/monatsplaner";
 import {
   ErwerbsArt,
   PersoenlicheDaten,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";

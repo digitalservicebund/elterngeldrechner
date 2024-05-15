@@ -1,9 +1,9 @@
-import { getLebensmonate } from "../monatsplaner";
+import { getLebensmonate } from "@/monatsplaner";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SelectOption } from "../components/molecules";
+import { SelectOption } from "@/components/molecules";
 import { RootState } from "./index";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
-import { YesNo } from "../globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 
 interface Kind {
   geburtsdatum: string;

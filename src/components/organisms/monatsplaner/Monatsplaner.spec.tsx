@@ -1,23 +1,23 @@
-import { fireEvent, render, screen } from "../../../test-utils/test-utils";
+import { fireEvent, render, screen } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { Monatsplaner } from "./Monatsplaner";
-import nsp from "../../../globals/js/namespace";
-import { RootState } from "../../../redux";
-import { initialStepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
-import { initialStepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
+import nsp from "@/globals/js/namespace";
+import { RootState } from "@/redux";
+import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   initialMonatsplanerState,
   MonatsplanerState,
-} from "../../../redux/monatsplanerSlice";
-import { initialStepRechnerState } from "../../../redux/stepRechnerSlice";
+} from "@/redux/monatsplanerSlice";
+import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
 import {
   changeMonth,
   createElternteile,
   validateElternteile,
   ValidationResult,
-} from "../../../monatsplaner";
-import { createDefaultElternteileSettings } from "../../../globals/js/elternteile-utils";
-import { YesNo } from "../../../globals/js/calculations/model";
+} from "@/monatsplaner";
+import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
+import { YesNo } from "@/globals/js/calculations/model";
 
 const getElternteilEGLabel = (name: string, eg: string, monthIndex: number) =>
   `${name} ${eg} für Lebensmonat ${monthIndex + 1}`;

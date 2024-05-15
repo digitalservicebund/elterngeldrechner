@@ -1,15 +1,15 @@
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
-import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";
-import { Button, P } from "../../atoms";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { Button, P } from "@/components/atoms";
 import {
   CustomNumberField,
   FormFieldGroup,
   SelectOption,
-} from "../../molecules";
-import nsp from "../../../globals/js/namespace";
-import { infoTexts } from "../../molecules/info-dialog";
+} from "@/components/molecules";
+import nsp from "@/globals/js/namespace";
+import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurErwerbstaetigProps {
   elternteil: ElternteilType;

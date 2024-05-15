@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepNachwuchsActions,
   StepNachwuchsState,
-} from "../../redux/stepNachwuchsSlice";
-import { NachwuchsForm } from "../organisms";
-import { formSteps } from "../../utils/formSteps";
-import { Page } from "../organisms/page";
-import { stepRechnerActions } from "../../redux/stepRechnerSlice";
+} from "@/redux/stepNachwuchsSlice";
+import { NachwuchsForm } from "@/components/organisms";
+import { formSteps } from "@/utils/formSteps";
+import { Page } from "@/components/organisms/page";
+import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 
 const NachwuchsPage: FC = () => {
   const dispatch = useAppDispatch();

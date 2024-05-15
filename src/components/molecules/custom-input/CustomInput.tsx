@@ -7,10 +7,10 @@ import {
   get,
   UseFormRegister,
 } from "react-hook-form";
-import nsp from "../../../globals/js/namespace";
-import { Description } from "../../atoms";
-import { InfoDialog } from "../info-dialog/InfoDialog";
-import { Info } from "../info-dialog/infoTexts";
+import nsp from "@/globals/js/namespace";
+import { Description } from "@/components/atoms";
+import { InfoDialog } from "@/components/molecules/info-dialog/InfoDialog";
+import { Info } from "@/components/molecules/info-dialog/infoTexts";
 
 interface CustomInputProps<TFieldValues extends FieldValues> {
   register: UseFormRegister<TFieldValues>;

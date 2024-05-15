@@ -1,20 +1,20 @@
 import { FC } from "react";
-import nsp from "../../../globals/js/namespace";
-import { Button, P } from "../../atoms";
+import nsp from "@/globals/js/namespace";
+import { Button, P } from "@/components/atoms";
 import {
   ZusammenfassungUndDatenAllgemein,
   ZusammenfassungUndDatenElternteil,
-} from "../../molecules";
-import { useAppSelector } from "../../../redux/hooks";
+} from "@/components/molecules";
+import { useAppSelector } from "@/redux/hooks";
 import {
   AntragstellendeSelektor,
   stepAllgemeineAngabenSelectors,
-} from "../../../redux/stepAllgemeineAngabenSlice";
+} from "@/redux/stepAllgemeineAngabenSlice";
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "../../../utils/formSteps";
-import { YesNo } from "../../../globals/js/calculations/model";
-import { Taetigkeit } from "../../../redux/stepEinkommenSlice";
-import { Month } from "../../../monatsplaner";
+import { formSteps } from "@/utils/formSteps";
+import { YesNo } from "@/globals/js/calculations/model";
+import { Taetigkeit } from "@/redux/stepEinkommenSlice";
+import { Month } from "@/monatsplaner";
 
 export const ZusammenfassungUndDaten: FC = () => {
   const navigate = useNavigate();

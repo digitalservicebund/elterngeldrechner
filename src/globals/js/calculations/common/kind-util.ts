@@ -1,4 +1,4 @@
-import { Kind } from "../model";
+import { Kind } from "@/globals/js/calculations/model";
 
 /**
  * {@link Kind} utility functions and constants.

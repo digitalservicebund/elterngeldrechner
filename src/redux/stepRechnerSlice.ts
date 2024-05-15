@@ -4,14 +4,14 @@ import {
   createSlice,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import type { ElternteilType } from "../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import type { RootState } from "./index";
-import { MutterschaftsLeistung, YesNo } from "../globals/js/calculations/model";
+import { MutterschaftsLeistung, YesNo } from "@/globals/js/calculations/model";
 import { Zeitraum } from "./stepEinkommenSlice";
-import { EgrCalculation } from "../globals/js/calculations/egr-calculation";
+import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
 import { persoenlicheDatenOfUi } from "./persoenlicheDatenFactory";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
-import { EgrSteuerRechner } from "../globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
+import { EgrSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
 
 export interface ElterngeldRow {
   vonLebensMonat: number;

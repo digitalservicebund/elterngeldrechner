@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { RechnerForm } from "./RechnerForm";
-import { initialStepRechnerState } from "../../../redux/stepRechnerSlice";
+import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
-import store from "../../../redux";
+import store from "@/redux";
 
 describe("RechnerForm", () => {
   it("should render form and display Elternteil Name", async () => {

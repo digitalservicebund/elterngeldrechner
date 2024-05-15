@@ -1,6 +1,6 @@
 import { FC } from "react";
 import classNames from "classnames";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 
 interface Props {
   id?: string;

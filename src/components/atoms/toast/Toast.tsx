@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useEffect, VFC } from "react";
 import ReactDOM from "react-dom";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import "./toast.scss";
 
 interface ToastProps {

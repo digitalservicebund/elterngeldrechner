@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepEinkommenActions,
   StepEinkommenState,
-} from "../../redux/stepEinkommenSlice";
-import { stepRechnerActions } from "../../redux/stepRechnerSlice";
-import { formSteps } from "../../utils/formSteps";
-import { EinkommenForm } from "../organisms";
-import { Page } from "../organisms/page";
+} from "@/redux/stepEinkommenSlice";
+import { stepRechnerActions } from "@/redux/stepRechnerSlice";
+import { formSteps } from "@/utils/formSteps";
+import { EinkommenForm } from "@/components/organisms";
+import { Page } from "@/components/organisms/page";
 
 const EinkommenPage = () => {
   const dispatch = useAppDispatch();

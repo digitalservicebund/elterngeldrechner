@@ -1,6 +1,6 @@
 import classnames from "classnames";
 import React, { useState } from "react";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import { Info } from "./infoTexts";

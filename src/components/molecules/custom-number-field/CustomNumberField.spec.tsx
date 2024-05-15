@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { Button } from "../../atoms";
+import { Button } from "@/components/atoms";
 import { CustomNumberField } from "./CustomNumberField";
 
 interface TestFormValues {

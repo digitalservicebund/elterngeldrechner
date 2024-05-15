@@ -1,4 +1,4 @@
-import { ElternGeldArt, ErwerbsArt } from "../globals/js/calculations/model";
+import { ElternGeldArt, ErwerbsArt } from "@/globals/js/calculations/model";
 import { DateTime } from "luxon";
 
 export namespace FitExcelSheetUtil {

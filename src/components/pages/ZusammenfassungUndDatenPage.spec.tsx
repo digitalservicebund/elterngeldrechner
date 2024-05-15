@@ -1,14 +1,14 @@
-import { render, screen } from "../../test-utils/test-utils";
-import { initialStepEinkommenState } from "../../redux/stepEinkommenSlice";
-import { RootState } from "../../redux";
-import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
-import { createElternteile } from "../../monatsplaner";
-import { initialStepNachwuchsState } from "../../redux/stepNachwuchsSlice";
-import { initialStepErwerbstaetigkeitState } from "../../redux/stepErwerbstaetigkeitSlice";
-import { initialStepRechnerState } from "../../redux/stepRechnerSlice";
-import { YesNo } from "../../globals/js/calculations/model";
-import { initialMonatsplanerState } from "../../redux/monatsplanerSlice";
-import { createDefaultElternteileSettings } from "../../globals/js/elternteile-utils";
+import { render, screen } from "@/test-utils/test-utils";
+import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { RootState } from "@/redux";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { createElternteile } from "@/monatsplaner";
+import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
+import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
+import { YesNo } from "@/globals/js/calculations/model";
+import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
+import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
 
 const defaultElternteileSettings = createDefaultElternteileSettings(

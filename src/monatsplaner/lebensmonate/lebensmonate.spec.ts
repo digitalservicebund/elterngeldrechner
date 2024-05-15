@@ -1,5 +1,5 @@
 import getLebensmonate, { EmptyLebensmonat, Lebensmonat } from "./lebensmonate";
-import { numberOfLebensmonate } from "../configuration";
+import { numberOfLebensmonate } from "@/monatsplaner/configuration";
 
 describe("Lebensmonate", () => {
   it("should return the list of Lebensmonate when no Geburtstag is given", () => {

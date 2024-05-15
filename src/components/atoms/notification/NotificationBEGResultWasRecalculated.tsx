@@ -1,5 +1,5 @@
 import { VFC } from "react";
-import { YesNo } from "../../../globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 
 interface Props {
   elternteilName: string;

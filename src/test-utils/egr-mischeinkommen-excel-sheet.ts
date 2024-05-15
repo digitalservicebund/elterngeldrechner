@@ -4,8 +4,8 @@ import {
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
   YesNo,
-} from "../globals/js/calculations/model";
-import { MathUtil } from "../globals/js/calculations/common/math-util";
+} from "@/globals/js/calculations/model";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 import Big from "big.js";
 import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 

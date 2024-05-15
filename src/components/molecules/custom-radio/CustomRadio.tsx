@@ -7,10 +7,10 @@ import {
   get,
   FieldError,
 } from "react-hook-form";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import classNames from "classnames";
-import { Description } from "../../atoms";
-import { Info, InfoDialog } from "../info-dialog";
+import { Description } from "@/components/atoms";
+import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 type RadioValue = string | number;
 

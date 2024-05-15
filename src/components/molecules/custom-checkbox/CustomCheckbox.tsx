@@ -7,11 +7,11 @@ import {
   FieldError,
   RegisterOptions,
 } from "react-hook-form";
-import nsp from "../../../globals/js/namespace";
-import { Description } from "../../atoms";
+import nsp from "@/globals/js/namespace";
+import { Description } from "@/components/atoms";
 import classNames from "classnames";
 import { MouseEvent } from "react";
-import { InfoDialog, Info } from "../info-dialog";
+import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 interface Props<TFieldValues extends FieldValues> {
   register: UseFormRegister<TFieldValues>;

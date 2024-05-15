@@ -1,4 +1,4 @@
-import { numberOfLebensmonate } from "../configuration";
+import { numberOfLebensmonate } from "@/monatsplaner/configuration";
 import { DateTime } from "luxon";
 import type { Geburtstag, Month } from "./elternteile-types";
 import { MutterschutzSettings } from "./elternteile-setting";

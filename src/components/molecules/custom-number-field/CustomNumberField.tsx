@@ -8,9 +8,9 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import nsp from "../../../globals/js/namespace";
-import { Description } from "../../atoms";
-import { InfoDialog, Info } from "../info-dialog";
+import nsp from "@/globals/js/namespace";
+import { Description } from "@/components/atoms";
+import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 interface CustomNumberFieldProps<
   TFieldValues extends FieldValues,

@@ -9,18 +9,18 @@ import {
   SteuerKlasse,
   steuerklasseToNumber,
   YesNo,
-} from "../../model";
+} from "@/globals/js/calculations/model";
 import {
   BmfSteuerRechner,
   BmfSteuerRechnerParameter,
-} from "../bmf-steuer-rechner";
+} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 import { bmfAbgabenOf } from "./bmf-abgaben-factory";
-import { errorOf } from "../../calculation-error-code";
-import { Logger } from "../../common/logger";
+import { errorOf } from "@/globals/js/calculations/calculation-error-code";
+import { Logger } from "@/globals/js/calculations/common/logger";
 import {
   bmfSteuerRechnerAvailableYearsLib,
   bmfSteuerRechnerAvailableYearsRemote,
-} from "../bmf-steuer-rechner/bmf-steuer-rechner-configuration";
+} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-configuration";
 
 /**
  * EGR-Steuerrechner. Wrapper for BMF Lohn- und Einkommensteuerrechner with EGR data model.

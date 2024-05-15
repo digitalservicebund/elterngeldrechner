@@ -6,16 +6,16 @@ import {
   Elternteile,
   ElternteilType,
   Month,
-} from "../monatsplaner";
+} from "@/monatsplaner";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
-import { YesNo } from "../globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 import { stepNachwuchsActions } from "./stepNachwuchsSlice";
 import { RootState } from "./index";
 import {
   createDefaultElternteileSettings,
   numberOfMutterschutzMonths,
-} from "../globals/js/elternteile-utils";
+} from "@/globals/js/elternteile-utils";
 
 export interface MonatsplanerState {
   mutterschutzElternteil: ElternteilType | null;

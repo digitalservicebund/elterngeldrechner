@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 
 export const Spinner = (): ReactElement => {
   const [show, setShow] = useState(false);

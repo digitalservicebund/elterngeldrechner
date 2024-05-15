@@ -1,5 +1,5 @@
 import { VFC } from "react";
-import { ErrorCode } from "../../../monatsplaner";
+import { ErrorCode } from "@/monatsplaner";
 
 interface Props {
   errorCodes: readonly ErrorCode[];

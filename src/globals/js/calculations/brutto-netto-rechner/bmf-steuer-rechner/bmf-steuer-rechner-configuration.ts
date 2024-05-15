@@ -1,4 +1,4 @@
-import { errorOf } from "../../calculation-error-code";
+import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import {
   BmfSteuerRechnerParameter,
   urlSearchParamsOf,

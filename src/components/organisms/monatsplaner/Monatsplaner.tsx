@@ -7,22 +7,22 @@ import {
   ElternteilType,
   Month,
   validateElternteile,
-} from "../../../monatsplaner";
+} from "@/monatsplaner";
 import {
   getAutomaticallySelectedPSBMonthIndex,
   monatsplanerActions,
   monatsplanerSelectors,
-} from "../../../redux/monatsplanerSlice";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+} from "@/redux/monatsplanerSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   Antragstellende,
   stepAllgemeineAngabenSelectors,
-} from "../../../redux/stepAllgemeineAngabenSlice";
-import { stepNachwuchsSelectors } from "../../../redux/stepNachwuchsSlice";
+} from "@/redux/stepAllgemeineAngabenSlice";
+import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
 import {
   ElterngeldRowsResult,
   stepRechnerSelectors,
-} from "../../../redux/stepRechnerSlice";
+} from "@/redux/stepRechnerSlice";
 import {
   Button,
   NotificationNoFurtherMonthAvailable,
@@ -35,26 +35,26 @@ import {
   NotificationBEGMax,
   P,
   Toast,
-} from "../../atoms";
+} from "@/components/atoms";
 import AddIcon from "@digitalservicebund/icons/Add";
 import {
   AccessControl,
   AmountElterngeldRow,
   Elternteil,
   PlanningContingent,
-} from "../../molecules";
-import nsp from "../../../globals/js/namespace";
+} from "@/components/molecules";
+import nsp from "@/globals/js/namespace";
 import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "../../../utils/formSteps";
-import { EgrConst } from "../../../globals/js/egr-configuration";
-import { YesNo } from "../../../globals/js/calculations/model";
+import { formSteps } from "@/utils/formSteps";
+import { EgrConst } from "@/globals/js/egr-configuration";
+import { YesNo } from "@/globals/js/calculations/model";
 import {
   canNotChangeBEGDueToSimultaneousMonthRules,
   reachedLimitOfSimultaneousBEGMonths,
   isExceptionToSimulatenousMonthRestrictions,
-} from "../../../monatsplaner/elternteile/change-month";
-import { NotificationMaxSimultaneousBEGMonths } from "../../atoms/notification/NotificationMaxSimultaneousBEGMonths";
+} from "@/monatsplaner/elternteile/change-month";
+import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notification/NotificationMaxSimultaneousBEGMonths";
 import { SummationFooter } from "./SummationFooter";
 import { useSummarizeData } from "./useSummarizeData";
 import { usePlanningContingentMonths } from "./usePlanningContingentMonths";

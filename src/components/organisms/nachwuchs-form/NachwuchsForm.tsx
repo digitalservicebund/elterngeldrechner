@@ -4,17 +4,17 @@ import AddIcon from "@digitalservicebund/icons/Add";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
-import { StepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
-import { Button } from "../../atoms";
+import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { Button } from "@/components/atoms";
 import {
   CustomCheckbox,
   CustomDate,
   Counter,
   FormFieldGroup,
   ButtonGroup,
-} from "../../molecules";
-import nsp from "../../../globals/js/namespace";
-import { infoTexts } from "../../molecules/info-dialog";
+} from "@/components/molecules";
+import nsp from "@/globals/js/namespace";
+import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NachwuchsFormProps {
   initialValues: StepNachwuchsState;

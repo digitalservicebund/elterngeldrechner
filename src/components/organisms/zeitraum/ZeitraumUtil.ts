@@ -1,6 +1,6 @@
-import { SelectOption } from "../../molecules";
-import { cloneOptionsList } from "../../molecules/custom-select/CustomSelect";
-import { ZeitraumValue } from "../../../globals/js/ZeitraumValue";
+import { SelectOption } from "@/components/molecules";
+import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
+import { ZeitraumValue } from "@/globals/js/ZeitraumValue";
 
 // Bildet ein "von"/"bis" Zeitraum ab.
 export interface ZeitraumData {

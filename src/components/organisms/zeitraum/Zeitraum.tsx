@@ -1,5 +1,5 @@
 import React, { AriaAttributes, useCallback, useMemo, useState } from "react";
-import { CustomSelect, SelectOption } from "../../molecules";
+import { CustomSelect, SelectOption } from "@/components/molecules";
 import {
   FieldError,
   FieldErrors,
@@ -12,11 +12,11 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import { Description } from "../../atoms";
-import nsp from "../../../globals/js/namespace";
+import { Description } from "@/components/atoms";
+import nsp from "@/globals/js/namespace";
 import classNames from "classnames";
-import { cloneOptionsList } from "../../molecules/custom-select/CustomSelect";
-import { ZeitraumValue } from "../../../globals/js/ZeitraumValue";
+import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
+import { ZeitraumValue } from "@/globals/js/ZeitraumValue";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   register: UseFormRegister<TFieldValues>;

@@ -1,4 +1,4 @@
-import { SteuerKlasse } from "../globals/js/calculations/model";
+import { SteuerKlasse } from "@/globals/js/calculations/model";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {

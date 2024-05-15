@@ -1,5 +1,5 @@
 import { BmfAbgaben } from "./bmf-abgaben";
-import { BmfSteuerRechnerResponse } from "../bmf-steuer-rechner";
+import { BmfSteuerRechnerResponse } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 
 export function bmfAbgabenOf(
   bmfResponse: BmfSteuerRechnerResponse,

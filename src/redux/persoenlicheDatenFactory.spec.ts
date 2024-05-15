@@ -11,7 +11,7 @@ import {
   ErwerbsArt,
   KinderFreiBetrag,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitElternteil,

@@ -1,4 +1,4 @@
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
 import {
@@ -8,17 +8,17 @@ import {
   RadioOption,
   SelectOption,
   YesNoRadio,
-} from "../../molecules";
-import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";
+} from "@/components/molecules";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "../../../globals/js/calculations/model";
-import { infoTexts } from "../../molecules/info-dialog";
-import { useAppSelector } from "../../../redux/hooks";
-import { stepErwerbstaetigkeitElternteilSelectors } from "../../../redux/stepErwerbstaetigkeitSlice";
+} from "@/globals/js/calculations/model";
+import { infoTexts } from "@/components/molecules/info-dialog";
+import { useAppSelector } from "@/redux/hooks";
+import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 
 interface SteuerUndVersicherungProps {
   elternteil: ElternteilType;

@@ -2,11 +2,11 @@ import {
   countBEGMonths,
   countEGPlusMonths,
   countPSBMonths,
-} from "../month-utils";
+} from "@/monatsplaner/month-utils";
 import {
   maxNumberOfPartnerschaftbonus,
   maxNumberOfSimultaneousBEGMonths,
-} from "../configuration";
+} from "@/monatsplaner/configuration";
 import { getModifiablePSBMonthIndices } from "./modifiable-psb-month";
 import {
   ElterngeldType,

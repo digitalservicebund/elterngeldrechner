@@ -1,6 +1,6 @@
-import { ElterngeldType, Elternteile } from "../../../monatsplaner";
-import { useAppSelector } from "../../../redux/hooks";
-import { ContingentPerVariant } from "../../molecules/planning-contingent/types";
+import { ElterngeldType, Elternteile } from "@/monatsplaner";
+import { useAppSelector } from "@/redux/hooks";
+import { ContingentPerVariant } from "@/components/molecules/planning-contingent/types";
 
 export function usePlanningContingentMonths(): ContingentPerVariant {
   const elternteile = useAppSelector((state) => state.monatsplaner.elternteile);

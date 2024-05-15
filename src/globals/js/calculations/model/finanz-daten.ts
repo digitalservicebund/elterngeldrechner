@@ -7,7 +7,7 @@ import { YesNo } from "./yes-no";
 import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 import Big from "big.js";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
-import { MathUtil } from "../common/math-util";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { Einkommen } from "./einkommen";

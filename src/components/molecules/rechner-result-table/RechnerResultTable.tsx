@@ -1,7 +1,7 @@
 import { VFC } from "react";
 import classNames from "classnames";
-import nsp from "../../../globals/js/namespace";
-import { FootNoteNumber } from "../../atoms";
+import nsp from "@/globals/js/namespace";
+import { FootNoteNumber } from "@/components/atoms";
 import Big from "big.js";
 
 export interface RechnerResultTableRow {

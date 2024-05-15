@@ -1,4 +1,4 @@
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import React, { useState, VFC } from "react";
 import {
   CustomNumberField,
@@ -6,22 +6,22 @@ import {
   FormFieldGroup,
   SelectOption,
   YesNoRadio,
-} from "../../molecules";
-import { Erwerbstaetigkeiten } from "../../../redux/stepErwerbstaetigkeitSlice";
+} from "@/components/molecules";
+import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
-import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Versicherungen } from "./Versicherungen";
-import { Button } from "../../atoms";
+import { Button } from "@/components/atoms";
 import ClearIcon from "@digitalservicebund/icons/Clear";
-import nsp from "../../../globals/js/namespace";
-import { cloneOptionsList } from "../../molecules/custom-select/CustomSelect";
+import nsp from "@/globals/js/namespace";
+import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
 import {
   availableZeitraumOptions,
   Zeitraum,
   ZeitraumData,
   ZeitraumOptionType,
-} from "../zeitraum";
-import { infoTexts } from "../../molecules/info-dialog";
+} from "@/components/organisms/zeitraum";
+import { infoTexts } from "@/components/molecules/info-dialog";
 
 export const erwerbstaetigkeitLabels: {
   [K in Erwerbstaetigkeiten]: string;

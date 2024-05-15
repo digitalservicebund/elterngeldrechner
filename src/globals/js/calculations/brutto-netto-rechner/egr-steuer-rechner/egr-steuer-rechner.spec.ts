@@ -2,14 +2,14 @@ import Big from "big.js";
 import {
   BmfSteuerRechner,
   BmfSteuerRechnerResponse,
-} from "../bmf-steuer-rechner";
+} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import {
   ErwerbsArt,
   FinanzDaten,
   KinderFreiBetrag,
   SteuerKlasse,
-} from "../../model";
+} from "@/globals/js/calculations/model";
 import Mock = jest.Mock;
 
 describe("erg-steuer-rechner", () => {

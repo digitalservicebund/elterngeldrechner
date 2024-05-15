@@ -1,9 +1,9 @@
-import { StepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
-import { StepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
-import { QuestionAnswer } from "../../atoms/question-answer";
-import nsp from "../../../globals/js/namespace";
-import { antragstellendeLabels } from "../../organisms";
-import { yesNoLabels } from "../yes-no-radio";
+import { StepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { QuestionAnswer } from "@/components/atoms/question-answer";
+import nsp from "@/globals/js/namespace";
+import { antragstellendeLabels } from "@/components/organisms";
+import { yesNoLabels } from "@/components/molecules/yes-no-radio";
 
 type Props = {
   allgemeineDaten: StepAllgemeineAngabenState & StepNachwuchsState;

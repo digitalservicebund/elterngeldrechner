@@ -1,5 +1,5 @@
 import nsp from "./namespace";
-import PROJECT_NAMESPACE from "../../projectNamespace";
+import PROJECT_NAMESPACE from "@/projectNamespace";
 
 describe("namespace", () => {
   it("adds namespace to single className", () => {

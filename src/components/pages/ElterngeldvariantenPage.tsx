@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "../../utils/formSteps";
-import { Page } from "../organisms/page";
-import { Button } from "../atoms";
-import { ElterngeldvariantenDescriptions } from "../organisms/elterngeldvarianten";
+import { formSteps } from "@/utils/formSteps";
+import { Page } from "@/components/organisms/page";
+import { Button } from "@/components/atoms";
+import { ElterngeldvariantenDescriptions } from "@/components/organisms/elterngeldvarianten";
 import { ReactNode, useId } from "react";
 
 export function ElterngeldvariantenPage(): ReactNode {

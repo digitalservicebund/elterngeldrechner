@@ -19,8 +19,11 @@
     "no-unused-vars": "off",
     // TODO: Make no-unused-vars a warning which should still trigger CI error or npm run build error
     "@typescript-eslint/no-unused-vars": "error",
-    // Enable when no BEM is used anymore.
-    "tailwindcss/no-custom-classname": "off"
+    "tailwindcss/no-custom-classname": "off", // Enable when no BEM is used anymore.
+    "no-relative-import-paths/no-relative-import-paths": [
+      "error",
+      { "allowSameFolder": true, "rootDir": "src", "prefix": "@" }
+    ]
   },
   "overrides": [
     {
@@ -32,5 +35,5 @@
       }
     }
   ],
-  "plugins": ["prettier", "jsx-a11y"]
+  "plugins": ["prettier", "jsx-a11y", "no-relative-import-paths"]
 }

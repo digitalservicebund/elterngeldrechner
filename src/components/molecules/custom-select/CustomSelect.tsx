@@ -8,9 +8,9 @@ import {
   Path,
   get,
 } from "react-hook-form";
-import nsp from "../../../globals/js/namespace";
-import { Description } from "../../atoms";
-import { InfoDialog, Info } from "../info-dialog";
+import nsp from "@/globals/js/namespace";
+import { Description } from "@/components/atoms";
+import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 export interface SelectOption<TValue extends string = string> {
   value: TValue;

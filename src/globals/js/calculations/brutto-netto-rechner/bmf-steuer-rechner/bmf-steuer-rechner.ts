@@ -1,5 +1,5 @@
 import { bmfSteuerRechnerUrlOf } from "./bmf-steuer-rechner-configuration";
-import { errorOf } from "../../calculation-error-code";
+import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { BmfSteuerRechnerResponseParser } from "./bmf-steuer-rechner-response-parser";
 import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 import { BmfSteuerRechnerResponse } from "./bmf-steuer-rechner-response";

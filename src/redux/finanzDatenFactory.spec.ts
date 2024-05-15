@@ -22,7 +22,7 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import Big from "big.js";
 import { Erwerbstaetigkeiten } from "./stepErwerbstaetigkeitSlice";

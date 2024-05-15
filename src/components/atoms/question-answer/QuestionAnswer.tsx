@@ -1,4 +1,4 @@
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import { VFC } from "react";
 
 interface Props {

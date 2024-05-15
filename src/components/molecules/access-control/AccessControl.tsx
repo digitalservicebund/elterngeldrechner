@@ -1,6 +1,6 @@
 import { VFC } from "react";
-import nsp from "../../../globals/js/namespace";
-import { Button, P } from "../../atoms";
+import nsp from "@/globals/js/namespace";
+import { Button, P } from "@/components/atoms";
 
 export const AccessControl: VFC = () => {
   const handleScrollToTop = () => {

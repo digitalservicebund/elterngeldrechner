@@ -1,13 +1,13 @@
 import { VFC } from "react";
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import { useFormContext } from "react-hook-form";
 import {
   CustomNumberField,
   FormFieldGroup,
   SelectOption,
-} from "../../molecules";
-import { StepEinkommenState } from "../../../redux/stepEinkommenSlice";
-import { infoTexts } from "../../molecules/info-dialog";
+} from "@/components/molecules";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurSelbstaendigProps {
   elternteil: ElternteilType;

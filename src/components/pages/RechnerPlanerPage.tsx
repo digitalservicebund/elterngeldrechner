@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useAppSelector } from "../../redux/hooks";
-import { formSteps } from "../../utils/formSteps";
-import { Monatsplaner, Rechner } from "../organisms";
-import { Page } from "../organisms/page";
-import { numberOfMutterschutzMonths } from "../../globals/js/elternteile-utils";
-import ModalPopup from "../organisms/modal-popup/ModalPopup";
-import { YesNo } from "../../globals/js/calculations/model";
-import { stepAllgemeineAngabenSelectors } from "../../redux/stepAllgemeineAngabenSlice";
-import { EgrBerechnungParamId } from "../../globals/js/calculations/model/egr-berechnung-param-id";
+import { useAppSelector } from "@/redux/hooks";
+import { formSteps } from "@/utils/formSteps";
+import { Monatsplaner, Rechner } from "@/components/organisms";
+import { Page } from "@/components/organisms/page";
+import { numberOfMutterschutzMonths } from "@/globals/js/elternteile-utils";
+import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
+import { YesNo } from "@/globals/js/calculations/model";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
+import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 const RechnerPlanerPage = () => {
   const nachwuchs = useAppSelector((state) => state.stepNachwuchs);

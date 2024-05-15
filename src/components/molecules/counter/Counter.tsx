@@ -1,4 +1,4 @@
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import {
   FieldError,
   FieldValues,
@@ -9,7 +9,7 @@ import {
   FieldErrors,
 } from "react-hook-form";
 
-import { Description } from "../../atoms";
+import { Description } from "@/components/atoms";
 import classNames from "classnames";
 import AddIcon from "@digitalservicebund/icons/Add";
 import RemoveIcon from "@digitalservicebund/icons/Remove";

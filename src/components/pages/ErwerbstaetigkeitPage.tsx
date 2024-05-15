@@ -1,14 +1,14 @@
-import { Page } from "../organisms/page";
-import { ErwerbstaetigkeitForm } from "../organisms";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { Page } from "@/components/organisms/page";
+import { ErwerbstaetigkeitForm } from "@/components/organisms";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepErwerbstaetigkeitActions,
   StepErwerbstaetigkeitState,
-} from "../../redux/stepErwerbstaetigkeitSlice";
+} from "@/redux/stepErwerbstaetigkeitSlice";
 import { useNavigate } from "react-router";
-import { formSteps } from "../../utils/formSteps";
+import { formSteps } from "@/utils/formSteps";
 import { useState } from "react";
-import { stepRechnerActions } from "../../redux/stepRechnerSlice";
+import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 
 const ErwerbstaetigkeitPage = () => {
   const dispatch = useAppDispatch();

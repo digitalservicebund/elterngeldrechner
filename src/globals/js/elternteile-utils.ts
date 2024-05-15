@@ -1,9 +1,9 @@
-import { YesNo } from "../js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 import {
   CreateElternteileSettings,
   ElternteilType,
   Geburtstag,
-} from "../../monatsplaner";
+} from "@/monatsplaner";
 import { DateTime } from "luxon";
 
 namespace NumberOfMutterschutzMonths {

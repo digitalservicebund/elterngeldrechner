@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { ParentSummation } from "./ParentSummation";
 import classNames from "classnames";
 import { SummationDataForParent } from "./types";
-import { formatAsCurrency } from "../../../utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/locale-formatting";
 
 type Props = {
   className?: string;

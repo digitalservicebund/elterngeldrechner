@@ -1,13 +1,13 @@
-import { render, screen } from "../../test-utils/test-utils";
+import { render, screen } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { reducers, RootState } from "../../redux";
+import { reducers, RootState } from "@/redux";
 import {
   initialStepAllgemeineAngabenState,
   StepAllgemeineAngabenState,
-} from "../../redux/stepAllgemeineAngabenSlice";
+} from "@/redux/stepAllgemeineAngabenSlice";
 import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
-import { YesNo } from "../../globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 
 describe("Allgemeine Angaben Page", () => {
   it("should display the optional naming part of the form, if 'Für beide' is chosen", async () => {

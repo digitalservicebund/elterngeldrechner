@@ -1,5 +1,5 @@
 import { RootState } from "./index";
-import { ElternteilType } from "../monatsplaner";
+import { ElternteilType } from "@/monatsplaner";
 import {
   Einkommen,
   ErwerbsTaetigkeit,
@@ -11,9 +11,9 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import Big from "big.js";
-import { MathUtil } from "../globals/js/calculations/common/math-util";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
 import { AverageOrMonthlyState, Taetigkeit } from "./stepEinkommenSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";

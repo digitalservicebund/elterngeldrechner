@@ -5,7 +5,7 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import {
   Erwerbstaetigkeiten,
   stepErwerbstaetigkeitActions,
@@ -15,7 +15,7 @@ import {
   Antragstellende,
 } from "./stepAllgemeineAngabenSlice";
 import { DateTime } from "luxon";
-import { ElternteilType } from "../monatsplaner/elternteile/elternteile-types";
+import { ElternteilType } from "@/monatsplaner/elternteile/elternteile-types";
 
 export interface Zeitraum {
   from: string;

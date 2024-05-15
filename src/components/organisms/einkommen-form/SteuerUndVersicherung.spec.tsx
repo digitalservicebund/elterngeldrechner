@@ -1,22 +1,22 @@
 import userEvent from "@testing-library/user-event";
-import { RootState } from "../../../redux";
-import { render, screen, within } from "../../../test-utils/test-utils";
-import EinkommenPage from "../../pages/EinkommenPage";
-import { initialStepErwerbstaetigkeitState } from "../../../redux/stepErwerbstaetigkeitSlice";
+import { RootState } from "@/redux";
+import { render, screen, within } from "@/test-utils/test-utils";
+import EinkommenPage from "@/components/pages/EinkommenPage";
+import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
 import {
   initialStepNachwuchsState,
   StepNachwuchsState,
-} from "../../../redux/stepNachwuchsSlice";
+} from "@/redux/stepNachwuchsSlice";
 import {
   initialStepEinkommenState,
   StepEinkommenState,
-} from "../../../redux/stepEinkommenSlice";
+} from "@/redux/stepEinkommenSlice";
 import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
   YesNo,
-} from "../../../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

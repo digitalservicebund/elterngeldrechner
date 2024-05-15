@@ -1,12 +1,12 @@
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import { VFC } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import {
   StepEinkommenState,
   initialTaetigkeit,
-} from "../../../redux/stepEinkommenSlice";
-import { Button } from "../../atoms";
-import { SelectOption } from "../../molecules";
+} from "@/redux/stepEinkommenSlice";
+import { Button } from "@/components/atoms";
+import { SelectOption } from "@/components/molecules";
 import { Taetigkeit } from "./Taetigkeit";
 
 interface SelbstaendigAndErwerbstaetigProps {

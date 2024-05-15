@@ -1,14 +1,14 @@
-import { render, screen } from "../../test-utils/test-utils";
+import { render, screen } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
-import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
-import { reducers, RootState } from "../../redux";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { reducers, RootState } from "@/redux";
 import { configureStore, Store } from "@reduxjs/toolkit";
 import {
   initialStepErwerbstaetigkeitState,
   StepErwerbstaetigkeitState,
-} from "../../redux/stepErwerbstaetigkeitSlice";
+} from "@/redux/stepErwerbstaetigkeitSlice";
 import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
-import { YesNo } from "../../globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 
 describe("Erwerbstaetigkeit Page", () => {
   it("should show the pseudonym for Elternteil 1 and 2", () => {

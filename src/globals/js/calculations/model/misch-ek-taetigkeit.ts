@@ -1,6 +1,6 @@
 import { YesNo } from "./yes-no";
 import Big from "big.js";
-import { MathUtil } from "../common/math-util";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 /**
  * Enthält die Daten zu einer Tätigkeit bei Mischeinkommen.

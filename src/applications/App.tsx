@@ -1,14 +1,14 @@
 import { FC, lazy, Suspense } from "react";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
-import { AriaLogProvider, Spinner } from "../components/atoms";
-import "../styles/tailwind.css";
-import "../styles/axioms.css";
-import "../styles/typo.css";
+import { AriaLogProvider, Spinner } from "@/components/atoms";
+import "@/styles/tailwind.css";
+import "@/styles/axioms.css";
+import "@/styles/typo.css";
 import "./index.scss";
-import { formSteps } from "../utils/formSteps";
-import { useAppDispatch } from "../redux/hooks";
-import { configurationActions } from "../redux/configurationSlice";
-import { ElterngeldvariantenPage } from "../components/pages/ElterngeldvariantenPage";
+import { formSteps } from "@/utils/formSteps";
+import { useAppDispatch } from "@/redux/hooks";
+import { configurationActions } from "@/redux/configurationSlice";
+import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenPage";
 
 const AllgemeineAngabenPage = lazy(
   () => import("../components/pages/AllgemeineAngabenPage"),

@@ -1,15 +1,15 @@
 import { VFC } from "react";
-import type { ElternteilType } from "../../../monatsplaner";
-import { useAppSelector } from "../../../redux/hooks";
+import type { ElternteilType } from "@/monatsplaner";
+import { useAppSelector } from "@/redux/hooks";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
 import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
 import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
-import { stepNachwuchsSelectors } from "../../../redux/stepNachwuchsSlice";
-import { P } from "../../atoms";
-import { stepErwerbstaetigkeitElternteilSelectors } from "../../../redux/stepErwerbstaetigkeitSlice";
-import { YesNo } from "../../../globals/js/calculations/model";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
+import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
+import { P } from "@/components/atoms";
+import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
+import { YesNo } from "@/globals/js/calculations/model";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 
 const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
   label: `${index + 1}. Monat`,

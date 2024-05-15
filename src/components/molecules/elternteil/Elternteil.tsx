@@ -2,17 +2,17 @@ import { useState, VFC } from "react";
 import {
   Elternteil as MonatsplanerElternteil,
   RemainingMonthByType,
-} from "../../../monatsplaner";
-import { LebensmonateAfterBirth } from "../../../redux/stepNachwuchsSlice";
+} from "@/monatsplaner";
+import { LebensmonateAfterBirth } from "@/redux/stepNachwuchsSlice";
 import {
   getAutomaticallySelectedPSBMonthIndex,
   SelectedPSBMonthIndices,
-} from "../../../redux/monatsplanerSlice";
-import { MonatsplanerMonth } from "../../atoms";
-import type { ColumnType } from "../../organisms/monatsplaner/Monatsplaner";
+} from "@/redux/monatsplanerSlice";
+import { MonatsplanerMonth } from "@/components/atoms";
+import type { ColumnType } from "@/components/organisms/monatsplaner/Monatsplaner";
 import classNames from "classnames";
-import nsp from "../../../globals/js/namespace";
-import { formatMoney } from "../rechner-result-table/RechnerResultTable";
+import nsp from "@/globals/js/namespace";
+import { formatMoney } from "@/components/molecules/rechner-result-table/RechnerResultTable";
 import Big from "big.js";
 
 export type AmountElterngeldRow =

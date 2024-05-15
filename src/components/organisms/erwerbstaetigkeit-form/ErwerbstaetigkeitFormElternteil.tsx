@@ -1,21 +1,21 @@
-import type { ElternteilType } from "../../../monatsplaner";
+import type { ElternteilType } from "@/monatsplaner";
 import {
   CustomRadio,
   FormFieldGroup,
   RadioOption,
   YesNoRadio,
-} from "../../molecules";
+} from "@/components/molecules";
 import { useFormContext } from "react-hook-form";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
-} from "../../../redux/stepErwerbstaetigkeitSlice";
+} from "@/redux/stepErwerbstaetigkeitSlice";
 import { VFC, useEffect } from "react";
-import { YesNo } from "../../../globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
-import { infoTexts } from "../../molecules/info-dialog";
-import { Antragstellende } from "../../../redux/stepAllgemeineAngabenSlice";
+import { infoTexts } from "@/components/molecules/info-dialog";
+import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 
 const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MiniJob: "520 Euro oder weniger",

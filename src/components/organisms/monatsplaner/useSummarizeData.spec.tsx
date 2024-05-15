@@ -1,15 +1,15 @@
 import { useSummarizeData } from "./useSummarizeData";
-import { initialStepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
-import { renderHook } from "../../../test-utils/test-utils";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { renderHook } from "@/test-utils/test-utils";
 import {
   MonatsplanerState,
   initialMonatsplanerState,
-} from "../../../redux/monatsplanerSlice";
-import { RootState } from "../../../redux";
+} from "@/redux/monatsplanerSlice";
+import { RootState } from "@/redux";
 import {
   StepRechnerState,
   initialStepRechnerState,
-} from "../../../redux/stepRechnerSlice";
+} from "@/redux/stepRechnerSlice";
 
 describe("useSummarizeData", () => {
   it("correctly reads the names of the parents", () => {

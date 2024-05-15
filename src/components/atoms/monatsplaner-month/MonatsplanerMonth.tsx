@@ -1,8 +1,8 @@
-import { ElterngeldType } from "../../../monatsplaner";
+import { ElterngeldType } from "@/monatsplaner";
 import React, { FC } from "react";
 import classNames from "classnames";
-import nsp from "../../../globals/js/namespace";
-import { InfoDialog, infoTexts } from "../../molecules/info-dialog";
+import nsp from "@/globals/js/namespace";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 
 interface Props {
   isSelected?: boolean;

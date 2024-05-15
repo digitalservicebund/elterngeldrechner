@@ -1,4 +1,4 @@
-import { render, screen, within } from "../../test-utils/test-utils";
+import { render, screen, within } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
 import {
@@ -9,28 +9,28 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
-} from "../../globals/js/calculations/model";
-import { reducers, RootState } from "../../redux";
+} from "@/globals/js/calculations/model";
+import { reducers, RootState } from "@/redux";
 import {
   initialStepErwerbstaetigkeitState,
   StepErwerbstaetigkeitElternteil,
   StepErwerbstaetigkeitState,
-} from "../../redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "../../redux/stepNachwuchsSlice";
+} from "@/redux/stepErwerbstaetigkeitSlice";
+import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import {
   initialStepEinkommenState,
   StepEinkommenElternteil,
   StepEinkommenState,
-} from "../../redux/stepEinkommenSlice";
-import { initialStepAllgemeineAngabenState } from "../../redux/stepAllgemeineAngabenSlice";
+} from "@/redux/stepEinkommenSlice";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import EinkommenPage from "./EinkommenPage";
 import {
   initialStepRechnerState,
   StepRechnerElternteilState,
-} from "../../redux/stepRechnerSlice";
+} from "@/redux/stepRechnerSlice";
 import Big from "big.js";
-import { BasisEgAlgorithmus } from "../../globals/js/calculations/basis-eg-algorithmus";
-import { MathUtil } from "../../globals/js/calculations/common/math-util";
+import { BasisEgAlgorithmus } from "@/globals/js/calculations/basis-eg-algorithmus";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 jest.mock("../../globals/js/calculations/basis-eg-algorithmus");
 

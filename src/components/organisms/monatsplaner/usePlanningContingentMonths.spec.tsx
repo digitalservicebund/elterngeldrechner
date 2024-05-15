@@ -1,6 +1,6 @@
-import { RootState } from "../../../redux";
-import { initialMonatsplanerState } from "../../../redux/monatsplanerSlice";
-import { renderHook } from "../../../test-utils/test-utils";
+import { RootState } from "@/redux";
+import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
+import { renderHook } from "@/test-utils/test-utils";
 import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 
 describe("usePlanningContingentMonths", () => {

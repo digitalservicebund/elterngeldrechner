@@ -4,17 +4,17 @@ import {
   Geburtstag,
   getFruehchen,
   Month,
-} from "../elternteile";
+} from "@/monatsplaner/elternteile";
 import { allOf, ValidationResult, validationRule } from "./validation-result";
-import { minNumberOfElterngeld } from "../configuration";
+import { minNumberOfElterngeld } from "@/monatsplaner/configuration";
 import {
   countBEGMonths,
   countEGPlusMonths,
   countFilledMonths,
   hasContinuousMonthsOfType,
   lastIndexOfType,
-} from "../month-utils";
-import { getGeburtstagSettings } from "../elternteile/elternteile-setting";
+} from "@/monatsplaner/month-utils";
+import { getGeburtstagSettings } from "@/monatsplaner/elternteile/elternteile-setting";
 
 const hasAnySelection = validationRule(
   "HasNoSelection",

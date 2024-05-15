@@ -1,10 +1,10 @@
 import { VFC } from "react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import classNames from "classnames";
-import { FormStep, formSteps } from "../../../utils/formSteps";
-import { Button } from "../../atoms";
+import { FormStep, formSteps } from "@/utils/formSteps";
+import { Button } from "@/components/atoms";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 

@@ -2,7 +2,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
-} from "../../../redux/stepAllgemeineAngabenSlice";
+} from "@/redux/stepAllgemeineAngabenSlice";
 import {
   ButtonGroup,
   CustomInput,
@@ -11,11 +11,11 @@ import {
   RadioOption,
   Split,
   YesNoRadio,
-} from "../../molecules";
+} from "@/components/molecules";
 import { FC, useEffect } from "react";
-import { SplitItem } from "../../atoms";
-import { YesNo } from "../../../globals/js/calculations/model";
-import { infoTexts } from "../../molecules/info-dialog";
+import { SplitItem } from "@/components/atoms";
+import { YesNo } from "@/globals/js/calculations/model";
+import { infoTexts } from "@/components/molecules/info-dialog";
 
 export const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",

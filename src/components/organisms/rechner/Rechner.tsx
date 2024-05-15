@@ -1,14 +1,15 @@
 import { ReactNode, useEffect, useState, VFC } from "react";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { NotificationBEGResultWasRecalculated, P, Toast } from "../../atoms";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
-  stepRechnerActions,
-  StepRechnerState,
-} from "../../../redux/stepRechnerSlice";
-import nsp from "../../../globals/js/namespace";
-import { FootNote, RechnerForm, RechnerResult } from "../../molecules";
-import { YesNo } from "../../../globals/js/calculations/model";
+  NotificationBEGResultWasRecalculated,
+  P,
+  Toast,
+} from "@/components/atoms";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
+import { stepRechnerActions, StepRechnerState } from "@/redux/stepRechnerSlice";
+import nsp from "@/globals/js/namespace";
+import { FootNote, RechnerForm, RechnerResult } from "@/components/molecules";
+import { YesNo } from "@/globals/js/calculations/model";
 
 export const Rechner: VFC = () => {
   const dispatch = useAppDispatch();

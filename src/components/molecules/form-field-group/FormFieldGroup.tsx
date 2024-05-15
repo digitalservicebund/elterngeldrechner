@@ -1,8 +1,8 @@
 import React from "react";
 import { AriaAttributes, Children, FC, useState } from "react";
-import nsp from "../../../globals/js/namespace";
-import { P } from "../../atoms";
-import { InfoDialog, Info } from "../info-dialog";
+import nsp from "@/globals/js/namespace";
+import { P } from "@/components/atoms";
+import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 interface FormFieldGroupProps extends AriaAttributes {
   headline?: string;

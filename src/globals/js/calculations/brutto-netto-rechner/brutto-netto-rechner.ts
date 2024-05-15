@@ -8,10 +8,10 @@ import {
   NettoEinkommen,
   RentenArt,
   SteuerKlasse,
-} from "../model";
+} from "@/globals/js/calculations/model";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
-import { MathUtil } from "../common/math-util";
-import { Logger } from "../common/logger";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
+import { Logger } from "@/globals/js/calculations/common/logger";
 
 export class BruttoNettoRechner {
   private egrSteuerRechner = new EgrSteuerRechner();

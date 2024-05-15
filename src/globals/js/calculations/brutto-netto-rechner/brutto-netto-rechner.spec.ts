@@ -5,7 +5,7 @@ import {
   FinanzDaten,
   KinderFreiBetrag,
   SteuerKlasse,
-} from "../model";
+} from "@/globals/js/calculations/model";
 
 describe("brutto-netto-rechner", () => {
   const bruttoNettoRechner = new BruttoNettoRechner();

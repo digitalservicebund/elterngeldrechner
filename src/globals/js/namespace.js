@@ -1,4 +1,4 @@
-import PROJECT_NAMESPACE from "../../projectNamespace";
+import PROJECT_NAMESPACE from "@/projectNamespace";
 
 /**
  * Add project namespace to classNames.

@@ -1,6 +1,6 @@
 import { MouseEvent, VFC } from "react";
-import { Button } from "../../atoms";
-import nsp from "../../../globals/js/namespace";
+import { Button } from "@/components/atoms";
+import nsp from "@/globals/js/namespace";
 import classNames from "classnames";
 
 interface Props {

@@ -1,6 +1,6 @@
 import PermIdentityIcon from "@digitalservicebund/icons/PermIdentity";
 import { ReactNode } from "react";
-import { formatAsCurrency } from "../../../utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/locale-formatting";
 
 type Props = {
   name?: string;

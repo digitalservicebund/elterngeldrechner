@@ -1,16 +1,16 @@
 import { VFC } from "react";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 import {
   StepErwerbstaetigkeitElternteil,
   stepErwerbstaetigkeitElternteilSelectors,
-} from "../../../redux/stepErwerbstaetigkeitSlice";
-import { StepEinkommenElternteil } from "../../../redux/stepEinkommenSlice";
-import { QuestionAnswer } from "../../atoms/question-answer";
-import { erwerbstaetigkeitLabels } from "../../organisms";
-import { yesNoLabels } from "../yes-no-radio";
-import { StepNachwuchsState } from "../../../redux/stepNachwuchsSlice";
-import { Month } from "../../../monatsplaner";
-import { ElterngeldType } from "../../../monatsplaner/elternteile/elternteile-types";
+} from "@/redux/stepErwerbstaetigkeitSlice";
+import { StepEinkommenElternteil } from "@/redux/stepEinkommenSlice";
+import { QuestionAnswer } from "@/components/atoms/question-answer";
+import { erwerbstaetigkeitLabels } from "@/components/organisms";
+import { yesNoLabels } from "@/components/molecules/yes-no-radio";
+import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { Month } from "@/monatsplaner";
+import { ElterngeldType } from "@/monatsplaner/elternteile/elternteile-types";
 
 interface Props {
   elternteilName: string;

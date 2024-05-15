@@ -1,9 +1,9 @@
 import { screen } from "@testing-library/react";
 import { ElterngeldvariantenDescriptions } from "./ElterngeldvariantenDescriptions";
 import userEvent from "@testing-library/user-event";
-import { render } from "../../../test-utils/test-utils";
+import { render } from "@/test-utils/test-utils";
 import { usePayoutAmounts } from "./usePayoutAmounts";
-import { initialStepAllgemeineAngabenState } from "../../../redux/stepAllgemeineAngabenSlice";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 
 jest.mock("./usePayoutAmounts");
 

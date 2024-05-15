@@ -10,7 +10,7 @@ import {
   RentenArt,
   steuerklasseOfNumber,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 
 export class EgrOhneMischeinkommenExcelSheet {
   static TEST_CASE_COUNT = 60;

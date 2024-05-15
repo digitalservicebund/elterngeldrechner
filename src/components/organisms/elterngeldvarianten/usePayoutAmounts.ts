@@ -3,11 +3,11 @@ import {
   BruttoEinkommenZeitraum,
   ElterngeldRow,
   calculateElterngeld,
-} from "../../../redux/stepRechnerSlice";
-import { useAppSelector, useAppStore } from "../../../redux/hooks";
+} from "@/redux/stepRechnerSlice";
+import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { PayoutAmountsForParent } from "./types";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
-import { AppStore } from "../../../redux";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
+import { AppStore } from "@/redux";
 
 /**
  * Wrapper around the currently messy approach to use the calculation of the

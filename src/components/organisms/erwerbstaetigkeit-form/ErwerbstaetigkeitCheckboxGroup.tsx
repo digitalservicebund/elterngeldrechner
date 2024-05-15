@@ -1,12 +1,12 @@
 import { useMemo, VFC } from "react";
-import { CustomCheckbox, FormFieldGroup } from "../../molecules";
+import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import {
   StepErwerbstaetigkeitState,
   TypeOfErwerbstaetigkeit,
-} from "../../../redux/stepErwerbstaetigkeitSlice";
-import { ElternteilType } from "../../../monatsplaner";
-import { infoTexts } from "../../molecules/info-dialog";
+} from "@/redux/stepErwerbstaetigkeitSlice";
+import { ElternteilType } from "@/monatsplaner";
+import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface Props {
   elternteil: ElternteilType;

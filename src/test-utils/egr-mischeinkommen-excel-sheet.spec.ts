@@ -5,7 +5,7 @@ import {
   KinderFreiBetrag,
   SteuerKlasse,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 
 describe("egr-mischeinkommen-excel-sheet", () => {
   const sheet = new EgrMischeinkommenExcelSheet();

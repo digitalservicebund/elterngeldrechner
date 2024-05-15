@@ -1,6 +1,6 @@
 import { createContext, FC, useCallback, useContext, useState } from "react";
-import nsp from "../../../globals/js/namespace";
-import { P } from "../paragraph";
+import nsp from "@/globals/js/namespace";
+import { P } from "@/components/atoms/paragraph";
 
 type RemoveMessageFn = () => void;
 

@@ -1,7 +1,7 @@
 import {
   maxNumberOfPartnerschaftbonus,
   numberOfLebensmonate,
-} from "../configuration";
+} from "@/monatsplaner/configuration";
 import { Elternteil, Elternteile, Month } from "./elternteile-types";
 import {
   CreateElternteileSettings,

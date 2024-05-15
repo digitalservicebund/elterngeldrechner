@@ -13,9 +13,9 @@ import {
 import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,
-} from "../../../test-utils/egr-mischeinkommen-excel-sheet";
-import { describeSkipOnCi } from "../../../setupTests";
-import { toListWithTolerance } from "../../../test-utils/test-utils";
+} from "@/test-utils/egr-mischeinkommen-excel-sheet";
+import { describeSkipOnCi } from "@/setupTests";
+import { toListWithTolerance } from "@/test-utils/test-utils";
 
 /**
  * Runs FIT tests for BasisEgAlgorithmus.

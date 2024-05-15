@@ -12,9 +12,9 @@ import {
   RentenArt,
   steuerklasseOfNumber,
   YesNo,
-} from "../globals/js/calculations/model";
+} from "@/globals/js/calculations/model";
 import Big from "big.js";
-import { MathUtil } from "../globals/js/calculations/common/math-util";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 export class EgrAlteTestfaelleRoutine3ExcelSheet {
   static TEST_CASE_COUNT = 60;

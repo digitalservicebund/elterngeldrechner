@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { FC } from "react";
-import nsp from "../../../globals/js/namespace";
+import nsp from "@/globals/js/namespace";
 
 interface Props {
   size?: "normal" | "large";

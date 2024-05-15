@@ -4,12 +4,12 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import {
   StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
-} from "../../../redux/stepErwerbstaetigkeitSlice";
+} from "@/redux/stepErwerbstaetigkeitSlice";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
-import { stepAllgemeineAngabenSelectors } from "../../../redux/stepAllgemeineAngabenSlice";
-import { useAppSelector } from "../../../redux/hooks";
-import { ButtonGroup, Split } from "../../molecules";
-import { SplitItem } from "../../atoms";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
+import { useAppSelector } from "@/redux/hooks";
+import { ButtonGroup, Split } from "@/components/molecules";
+import { SplitItem } from "@/components/atoms";
 
 interface ErwerbstaetigkeitFormProps {
   initialValues: StepErwerbstaetigkeitState;

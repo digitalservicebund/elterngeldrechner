@@ -9,36 +9,16 @@
     "plugin:import/recommended"
   ],
   "rules": {
-    "prettier/prettier": [
-      "warn",
-      {
-        "endOfLine": "auto"
-      }
-    ],
-    // Must disable the base rule as it can report incorrect errors
-    // See https://typescript-eslint.io/rules/no-unused-expressions/
-    "no-unused-vars": "off",
-    // TODO: Make no-unused-vars a warning which should still trigger CI error or npm run build error
     "@typescript-eslint/no-unused-vars": "error",
     "tailwindcss/no-custom-classname": "off", // Enable when no BEM is used anymore.
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/order": "error",
     "no-relative-import-paths/no-relative-import-paths": [
       "error",
       { "allowSameFolder": true, "rootDir": "src", "prefix": "@" }
-    ],
-    "import/first": "error",
-    "import/newline-after-import": "error",
-    "import/order": "error"
+    ]
   },
-  "overrides": [
-    {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
-        // disabled because no-undef is built into typescript, see:
-        // https://github.com/typescript-eslint/typescript-eslint/blob/main/docs/linting/TROUBLESHOOTING.md#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
-        "no-undef": "off"
-      }
-    }
-  ],
   "plugins": ["prettier", "jsx-a11y", "no-relative-import-paths"],
   "settings": {
     "import/resolver": {

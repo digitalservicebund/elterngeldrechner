@@ -2,7 +2,7 @@
 // See https://redux.js.org/usage/writing-tests#components
 // and https://stackoverflow.com/questions/61451631/react-testing-library-setup-for-redux-router-and-dynamic-modules-using-typescri
 
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, ReactNode } from "react";
 import {
   render,
   renderHook,
@@ -23,7 +23,7 @@ interface RenderOptionsWithRedux extends RenderOptions {
 
 interface TestWrapperProps {
   store: Store;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const TestWrapper: FC<TestWrapperProps> = ({ store, children }) => {
@@ -44,7 +44,7 @@ const renderWithRedux = (
     ...renderOptions
   }: RenderOptionsWithRedux = {},
 ) => {
-  const Wrapper: FC<{ children?: React.ReactNode }> = ({ children }) => (
+  const Wrapper: FC<{ children?: ReactNode }> = ({ children }) => (
     <TestWrapper store={store}>{children}</TestWrapper>
   );
   return render(ui, { wrapper: Wrapper, ...renderOptions });
@@ -58,7 +58,7 @@ function renderHookWithRedux<Result, Props>(
     ...renderOptions
   }: RenderOptionsWithRedux = {},
 ): RenderHookResult<Result, Props> {
-  const Wrapper: FC<{ children?: React.ReactNode }> = ({ children }) => (
+  const Wrapper: FC<{ children?: ReactNode }> = ({ children }) => (
     <TestWrapper store={store}>{children}</TestWrapper>
   );
   return renderHook(render, { wrapper: Wrapper, ...renderOptions });

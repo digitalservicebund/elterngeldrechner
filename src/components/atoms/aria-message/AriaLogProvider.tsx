@@ -1,4 +1,11 @@
-import { createContext, FC, useCallback, useContext, useState } from "react";
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import nsp from "@/globals/js/namespace";
 import { P } from "@/components/atoms/paragraph";
 
@@ -15,9 +22,7 @@ const AriaLogContext = createContext<IAriaLogContext | undefined>(undefined);
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/log_role
  */
-export const AriaLogProvider: FC<{ children?: React.ReactNode }> = ({
-  children,
-}) => {
+export const AriaLogProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   const [messages, setMessages] = useState<string[]>([]);
 
   const addMessage = useCallback((message: string) => {

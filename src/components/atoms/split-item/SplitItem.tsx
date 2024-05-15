@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
   hasDivider?: boolean;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const SplitItem: FC<Props> = ({ hasDivider, children }) => {

@@ -1,12 +1,12 @@
 import classNames from "classnames";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
   size?: "normal" | "large";
   bold?: boolean;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const P: FC<Props> = ({

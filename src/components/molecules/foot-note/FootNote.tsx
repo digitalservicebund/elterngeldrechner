@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 import { FootNoteNumber } from "@/components/atoms";
 
@@ -6,7 +6,7 @@ interface Props {
   id?: string;
   number?: number;
   prefix?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 export const FootNote: FC<Props> = (props) => {

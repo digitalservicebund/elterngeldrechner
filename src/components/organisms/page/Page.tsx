@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import classNames from "classnames";
 import { AriaMessage } from "@/components/atoms";
 import { FormStep } from "@/utils/formSteps";
@@ -8,7 +8,7 @@ import { FootNote } from "@/components/molecules";
 
 interface PageProps {
   step: FormStep;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export const Page: FC<PageProps> = ({ step, children }) => {

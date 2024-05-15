@@ -7,7 +7,7 @@ interface Props<TFieldValues extends FieldValues> {
   className?: string;
   type?: "button" | "submit";
   buttonStyle?: "primary" | "secondary" | "link";
-  label: string | JSX.Element;
+  label: string | ReactNode;
   iconBefore?: ReactNode;
   iconAfter?: ReactNode;
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;

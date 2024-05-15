@@ -10,10 +10,10 @@
     "src/*"
   ],
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "build": "craco build",
     "test": "craco test --verbose",
-    "eject": "react-scripts eject",
+    "eject": "craco eject",
     "format": "prettier --write ./src/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm} ./public/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm}",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test -- --watchAll=false",
     "type-check": "tsc",

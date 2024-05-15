@@ -1,6 +1,8 @@
-import { render, screen, within } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
+import Big from "big.js";
+import EinkommenPage from "./EinkommenPage";
+import { render, screen, within } from "@/test-utils/test-utils";
 import {
   ErwerbsArt,
   KassenArt,
@@ -23,12 +25,10 @@ import {
   StepEinkommenState,
 } from "@/redux/stepEinkommenSlice";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
-import EinkommenPage from "./EinkommenPage";
 import {
   initialStepRechnerState,
   StepRechnerElternteilState,
 } from "@/redux/stepRechnerSlice";
-import Big from "big.js";
 import { BasisEgAlgorithmus } from "@/globals/js/calculations/basis-eg-algorithmus";
 import { MathUtil } from "@/globals/js/calculations/common/math-util";
 

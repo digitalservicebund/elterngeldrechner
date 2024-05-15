@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
+import classNames from "classnames";
 import { VariantLabel } from "./VariantLabel";
 import { ContingentPerVariant } from "./types";
 import { BoxGraph } from "./BoxGraph";
-import classNames from "classnames";
 
 type Props = {
   months: ContingentPerVariant;

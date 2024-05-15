@@ -1,3 +1,6 @@
+import { useFormContext } from "react-hook-form";
+import { VFC, useEffect } from "react";
+import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
 import type { ElternteilType } from "@/monatsplaner";
 import {
   CustomRadio,
@@ -5,15 +8,12 @@ import {
   RadioOption,
   YesNoRadio,
 } from "@/components/molecules";
-import { useFormContext } from "react-hook-form";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import { VFC, useEffect } from "react";
 import { YesNo } from "@/globals/js/calculations/model";
-import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 

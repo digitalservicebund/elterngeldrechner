@@ -1,22 +1,22 @@
+import * as reactRedux from "react-redux";
 import { persoenlicheDatenOfUi } from "./persoenlicheDatenFactory";
-import { RootState } from "./index";
 import {
   BruttoEinkommenZeitraum,
   initialStepRechnerState,
 } from "./stepRechnerSlice";
 import { initialMonatsplanerState } from "./monatsplanerSlice";
 import { initialAverageOrMonthlyStateNichtSelbstaendig } from "./stepEinkommenSlice";
-import * as reactRedux from "react-redux";
-import {
-  ErwerbsArt,
-  KinderFreiBetrag,
-  YesNo,
-} from "@/globals/js/calculations/model";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitElternteil,
 } from "./stepErwerbstaetigkeitSlice";
 import { initialStepConfigurationState } from "./configurationSlice";
+import { RootState } from "./index";
+import {
+  ErwerbsArt,
+  KinderFreiBetrag,
+  YesNo,
+} from "@/globals/js/calculations/model";
 
 jest.mock("react-redux", () => ({
   useSelector: jest.fn(),

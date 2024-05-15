@@ -1,3 +1,4 @@
+import Big from "big.js";
 import { BruttoEinkommen } from "./einkommen-types";
 import { KassenArt } from "./kassen-art";
 import { KinderFreiBetrag } from "./kinder-frei-betrag";
@@ -5,12 +6,11 @@ import { SteuerKlasse } from "./steuer-klasse";
 import { RentenArt } from "./renten-art";
 import { YesNo } from "./yes-no";
 import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
-import Big from "big.js";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { Einkommen } from "./einkommen";
+import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 /**
  * Angaben zum Einkommen für die Berechnung des Elterngeldes.

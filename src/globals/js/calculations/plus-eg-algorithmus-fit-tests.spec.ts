@@ -6,12 +6,12 @@ import {
   MutterschaftsLeistung,
   PlanungsDaten,
 } from "./model";
-import { describeSkipOnCi } from "@/setupTests";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
-import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
-import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { MathUtil } from "./common/math-util";
+import { describeSkipOnCi } from "@/setupTests";
+import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
+import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
 
 /**
  * Runs FIT tests for PlusEgAlgorithmus.

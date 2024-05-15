@@ -1,6 +1,6 @@
-import nsp from "@/globals/js/namespace";
 import { FC } from "react";
 import classNames from "classnames";
+import nsp from "@/globals/js/namespace";
 
 type FootNoteType = "anchor" | "note";
 

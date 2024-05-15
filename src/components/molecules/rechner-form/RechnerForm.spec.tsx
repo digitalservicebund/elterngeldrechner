@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import { RechnerForm } from "./RechnerForm";
-import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
+import { RechnerForm } from "./RechnerForm";
+import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
 import store from "@/redux";
 
 describe("RechnerForm", () => {

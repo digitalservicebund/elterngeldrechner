@@ -1,6 +1,6 @@
-import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 import { LST_INPUT } from "@bmfin/steuerrechner/build/types/input";
 import Big from "big.js";
+import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 
 export namespace BmfSteuerRechnerParameterConverter {
   export const convert = (parameter: BmfSteuerRechnerParameter): LST_INPUT => ({

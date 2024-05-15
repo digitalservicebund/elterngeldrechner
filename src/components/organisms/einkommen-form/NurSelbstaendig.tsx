@@ -1,6 +1,6 @@
 import { VFC } from "react";
-import type { ElternteilType } from "@/monatsplaner";
 import { useFormContext } from "react-hook-form";
+import type { ElternteilType } from "@/monatsplaner";
 import {
   CustomNumberField,
   FormFieldGroup,

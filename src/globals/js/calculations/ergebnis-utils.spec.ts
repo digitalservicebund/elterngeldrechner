@@ -1,6 +1,6 @@
+import Big from "big.js";
 import { ElternGeldArt, ElternGeldAusgabe } from "./model";
 import { ErgebnisUtils } from "./ergebnis-utils";
-import Big from "big.js";
 import { MathUtil } from "./common/math-util";
 
 describe("ergebnis-utils", () => {

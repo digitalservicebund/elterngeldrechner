@@ -1,5 +1,5 @@
 import { FC, lazy, Suspense } from "react";
-import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import { AriaLogProvider, Spinner } from "@/components/atoms";
 import "@/styles/tailwind.css";
 import "@/styles/axioms.css";

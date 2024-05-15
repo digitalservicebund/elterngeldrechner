@@ -1,8 +1,8 @@
-import { DetailsElterngeldvariante } from "./DetailsElterngeldvariante";
 import { ReactNode } from "react";
-import { Spinner } from "@/components/atoms";
+import { DetailsElterngeldvariante } from "./DetailsElterngeldvariante";
 import { usePayoutAmounts } from "./usePayoutAmounts";
 import { PayoutAmountsForParent, PayoutAmoutForVariant } from "./types";
+import { Spinner } from "@/components/atoms";
 
 export function ElterngeldvariantenDescriptions(): ReactNode {
   const payoutAmounts = usePayoutAmounts();

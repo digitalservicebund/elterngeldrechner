@@ -1,12 +1,12 @@
+import { DateTime } from "luxon";
+import validateElternteile from "./validation";
+import { ErrorCode } from "./error-code";
+import { InvalidValidationResult } from "./validation-result";
 import {
   changeMonth,
   createElternteile,
   Geburtstag,
 } from "@/monatsplaner/elternteile";
-import validateElternteile from "./validation";
-import { ErrorCode } from "./error-code";
-import { InvalidValidationResult } from "./validation-result";
-import { DateTime } from "luxon";
 
 describe("Validation", () => {
   it("should not be valid if no month was selected", () => {

@@ -1,9 +1,9 @@
 import classnames from "classnames";
 import React, { useState } from "react";
-import nsp from "@/globals/js/namespace";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import { Info } from "./infoTexts";
+import nsp from "@/globals/js/namespace";
 
 interface Props {
   info: Info;

@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import { render } from "@/test-utils/test-utils";
 import { ElterngeldvariantenPage } from "./ElterngeldvariantenPage";
+import { render } from "@/test-utils/test-utils";
 
 jest.mock("../organisms/elterngeldvarianten/usePayoutAmounts");
 

@@ -1,12 +1,3 @@
-import {
-  countBEGMonths,
-  countEGPlusMonths,
-  countPSBMonths,
-} from "@/monatsplaner/month-utils";
-import {
-  maxNumberOfPartnerschaftbonus,
-  maxNumberOfSimultaneousBEGMonths,
-} from "@/monatsplaner/configuration";
 import { getModifiablePSBMonthIndices } from "./modifiable-psb-month";
 import {
   ElterngeldType,
@@ -23,6 +14,15 @@ import {
   hasMutterschutzSettings,
 } from "./elternteile-setting";
 import { getBEGAnspruch } from "./beg-anspruch";
+import {
+  maxNumberOfPartnerschaftbonus,
+  maxNumberOfSimultaneousBEGMonths,
+} from "@/monatsplaner/configuration";
+import {
+  countBEGMonths,
+  countEGPlusMonths,
+  countPSBMonths,
+} from "@/monatsplaner/month-utils";
 
 interface ChangeMonthSettings {
   readonly elternteil: "ET1" | "ET2";

@@ -1,8 +1,8 @@
-import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import {
   BmfSteuerRechnerParameter,
   urlSearchParamsOf,
 } from "./bmf-steuer-rechner-parameter";
+import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 
 /**
  * Reads domain for bmf steuerrechner call from env.

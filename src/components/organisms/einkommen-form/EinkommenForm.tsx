@@ -1,9 +1,9 @@
 import { VFC, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import { useAppSelector } from "@/redux/hooks";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   ButtonGroup,

@@ -1,4 +1,5 @@
 import Big from "big.js";
+import { DateTime } from "luxon";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import {
   EgrBerechnungParamId,
@@ -11,7 +12,6 @@ import {
 } from "./model";
 import { MathUtil } from "./common/math-util";
 import { DateUtil } from "./common/date-util";
-import { DateTime } from "luxon";
 
 /**
  * Algorithmus zur Berechnung des Zwischenergebnisses des Elterngeldrechners.

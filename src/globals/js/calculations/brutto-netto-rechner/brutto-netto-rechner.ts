@@ -1,4 +1,5 @@
 import Big from "big.js";
+import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import {
   EgrBerechnungParamId,
   Einkommen,
@@ -9,7 +10,6 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
-import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import { MathUtil } from "@/globals/js/calculations/common/math-util";
 import { Logger } from "@/globals/js/calculations/common/logger";
 

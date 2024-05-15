@@ -1,3 +1,8 @@
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
+import { stepNachwuchsActions } from "./stepNachwuchsSlice";
+import { RootState } from "./index";
+import { YesNo } from "@/globals/js/calculations/model";
 import {
   changeMonth,
   createElternteile,
@@ -7,11 +12,6 @@ import {
   ElternteilType,
   Month,
 } from "@/monatsplaner";
-import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
-import { YesNo } from "@/globals/js/calculations/model";
-import { stepNachwuchsActions } from "./stepNachwuchsSlice";
-import { RootState } from "./index";
 import {
   createDefaultElternteileSettings,
   numberOfMutterschutzMonths,

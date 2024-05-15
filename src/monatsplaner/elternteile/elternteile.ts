@@ -1,7 +1,3 @@
-import {
-  maxNumberOfPartnerschaftbonus,
-  numberOfLebensmonate,
-} from "@/monatsplaner/configuration";
 import { Elternteil, Elternteile, Month } from "./elternteile-types";
 import {
   CreateElternteileSettings,
@@ -11,6 +7,10 @@ import {
 } from "./elternteile-setting";
 import { getBEGAnspruch } from "./beg-anspruch";
 import { getNumberOfMutterschutzMonths } from "./mutterschutz-calculator";
+import {
+  maxNumberOfPartnerschaftbonus,
+  numberOfLebensmonate,
+} from "@/monatsplaner/configuration";
 
 export const createElternteile = (
   settings?: CreateElternteileSettings,

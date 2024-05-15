@@ -1,13 +1,13 @@
-import type { ElternteilType } from "@/monatsplaner";
 import { VFC } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { Taetigkeit } from "./Taetigkeit";
+import type { ElternteilType } from "@/monatsplaner";
 import {
   StepEinkommenState,
   initialTaetigkeit,
 } from "@/redux/stepEinkommenSlice";
 import { Button } from "@/components/atoms";
 import { SelectOption } from "@/components/molecules";
-import { Taetigkeit } from "./Taetigkeit";
 
 interface SelbstaendigAndErwerbstaetigProps {
   elternteil: ElternteilType;

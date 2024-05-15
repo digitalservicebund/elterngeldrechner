@@ -1,4 +1,6 @@
 import xlsx from "node-xlsx";
+import Big from "big.js";
+import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 import {
   ErwerbsTaetigkeit,
   kinderFreiBetragOfNumber,
@@ -6,8 +8,6 @@ import {
   YesNo,
 } from "@/globals/js/calculations/model";
 import { MathUtil } from "@/globals/js/calculations/common/math-util";
-import Big from "big.js";
-import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 
 type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];

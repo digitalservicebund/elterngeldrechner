@@ -1,10 +1,10 @@
+import { DateTime } from "luxon";
 import { YesNo } from "@/globals/js/calculations/model";
 import {
   CreateElternteileSettings,
   ElternteilType,
   Geburtstag,
 } from "@/monatsplaner";
-import { DateTime } from "luxon";
 
 namespace NumberOfMutterschutzMonths {
   export const oneChild = 2;

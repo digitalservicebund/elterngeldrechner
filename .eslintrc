@@ -6,6 +6,7 @@
     "plugin:prettier/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:tailwindcss/recommended",
+    "plugin:import/recommended"
   ],
   "rules": {
     "prettier/prettier": [
@@ -23,7 +24,10 @@
     "no-relative-import-paths/no-relative-import-paths": [
       "error",
       { "allowSameFolder": true, "rootDir": "src", "prefix": "@" }
-    ]
+    ],
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/order": "error"
   },
   "overrides": [
     {
@@ -35,5 +39,10 @@
       }
     }
   ],
-  "plugins": ["prettier", "jsx-a11y", "no-relative-import-paths"]
+  "plugins": ["prettier", "jsx-a11y", "no-relative-import-paths"],
+  "settings": {
+    "import/resolver": {
+      "typescript": true
+    }
+  }
 }

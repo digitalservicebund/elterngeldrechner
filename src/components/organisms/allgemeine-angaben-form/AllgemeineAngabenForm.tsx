@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
+import { FC, useEffect } from "react";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
@@ -12,7 +13,6 @@ import {
   Split,
   YesNoRadio,
 } from "@/components/molecules";
-import { FC, useEffect } from "react";
 import { SplitItem } from "@/components/atoms";
 import { YesNo } from "@/globals/js/calculations/model";
 import { infoTexts } from "@/components/molecules/info-dialog";

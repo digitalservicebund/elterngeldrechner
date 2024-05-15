@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import {
   Einkommen,
   ElternGeldArt,
@@ -18,7 +19,6 @@ import {
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { MathUtil } from "./common/math-util";
-import { DateTime } from "luxon";
 
 describe("plus-eg-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();

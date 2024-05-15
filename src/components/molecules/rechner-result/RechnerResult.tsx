@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useState, VFC } from "react";
+import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import type { ElternteilType } from "@/monatsplaner";
 import {
   RechnerResultTable,
@@ -8,7 +9,6 @@ import nsp from "@/globals/js/namespace";
 import { useAppSelector } from "@/redux/hooks";
 import { ElterngeldRow } from "@/redux/stepRechnerSlice";
 import { NotificationMaxElterngeld, P, Toast } from "@/components/atoms";
-import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import { FootNote } from "@/components/molecules/foot-note";
 
 interface Props {

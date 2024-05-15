@@ -1,10 +1,10 @@
+import Big from "big.js";
 import {
   ElternGeldAusgabe,
   ElternGeldSimulationErgebnis,
   ElternGeldSimulationErgebnisRow,
   PLANUNG_ANZAHL_MONATE,
 } from "./model";
-import Big from "big.js";
 import { MathUtil } from "./common/math-util";
 import BIG_ZERO = MathUtil.BIG_ZERO;
 

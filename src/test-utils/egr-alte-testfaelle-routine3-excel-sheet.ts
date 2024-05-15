@@ -1,4 +1,5 @@
 import xlsx from "node-xlsx";
+import Big from "big.js";
 import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 import {
   Einkommen,
@@ -13,7 +14,6 @@ import {
   steuerklasseOfNumber,
   YesNo,
 } from "@/globals/js/calculations/model";
-import Big from "big.js";
 import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 export class EgrAlteTestfaelleRoutine3ExcelSheet {

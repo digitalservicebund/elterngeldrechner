@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { App } from "./applications/App";
 import { Provider } from "react-redux";
+import { App } from "./applications/App";
 import store from "./redux";
 
 import nsp from "./globals/js/namespace";

@@ -1,5 +1,5 @@
-import { YesNo } from "./yes-no";
 import Big from "big.js";
+import { YesNo } from "./yes-no";
 import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 /**

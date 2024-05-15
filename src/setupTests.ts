@@ -3,8 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
-import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 import { ReactNode } from "react";
+import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 
 // Preferences for calculations.
 setupCalculation();

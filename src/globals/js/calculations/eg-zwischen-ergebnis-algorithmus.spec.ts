@@ -1,6 +1,6 @@
+import { DateTime } from "luxon";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { Kind } from "./model";
-import { DateTime } from "luxon";
 
 describe("eg-zwischen-ergebnis-algorithmus", () => {
   describe("should calculate ende bonus u2", () => {

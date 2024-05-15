@@ -1,3 +1,4 @@
+import userEvent from "@testing-library/user-event";
 import { RootState } from "@/redux";
 import { render, screen, within } from "@/test-utils/test-utils";
 import EinkommenPage from "@/components/pages/EinkommenPage";
@@ -5,7 +6,6 @@ import {
   initialStepErwerbstaetigkeitState,
   StepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import userEvent from "@testing-library/user-event";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import {
   initialStepEinkommenState,

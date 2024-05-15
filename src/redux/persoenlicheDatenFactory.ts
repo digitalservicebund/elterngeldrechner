@@ -1,3 +1,7 @@
+import { DateTime } from "luxon";
+import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
+import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
+import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
 import { RootState } from "./index";
 import { ElternteilType } from "@/monatsplaner";
 import {
@@ -5,10 +9,6 @@ import {
   PersoenlicheDaten,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
-import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
-import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
-import { DateTime } from "luxon";
 
 const erwerbsTaetigkeitVorGeburtOf = (
   state: RootState,

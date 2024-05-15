@@ -1,5 +1,5 @@
-import { ElternGeldArt, ErwerbsArt } from "@/globals/js/calculations/model";
 import { DateTime } from "luxon";
+import { ElternGeldArt, ErwerbsArt } from "@/globals/js/calculations/model";
 
 export namespace FitExcelSheetUtil {
   export const erwerbsArtOf = (statusErwerbsArt: number) => {

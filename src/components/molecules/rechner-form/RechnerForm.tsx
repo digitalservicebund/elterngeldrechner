@@ -1,7 +1,4 @@
-import type { ElternteilType } from "@/monatsplaner";
 import React, { useMemo, useState, useEffect, VFC } from "react";
-import { useAppDispatch } from "@/redux/hooks";
-import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 import {
   FieldError,
   get,
@@ -10,12 +7,6 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
-import nsp from "@/globals/js/namespace";
-import {
-  initialBruttoEinkommenZeitraum,
-  StepRechnerState,
-} from "@/redux/stepRechnerSlice";
-import { Button, Description } from "@/components/atoms";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import {
   CustomCheckbox,
@@ -23,6 +14,15 @@ import {
   FormFieldGroup,
   SelectOption,
 } from "..";
+import type { ElternteilType } from "@/monatsplaner";
+import { useAppDispatch } from "@/redux/hooks";
+import {
+  stepRechnerActions,
+  initialBruttoEinkommenZeitraum,
+  StepRechnerState,
+} from "@/redux/stepRechnerSlice";
+import nsp from "@/globals/js/namespace";
+import { Button, Description } from "@/components/atoms";
 import {
   availableZeitraumOptions,
   Zeitraum,

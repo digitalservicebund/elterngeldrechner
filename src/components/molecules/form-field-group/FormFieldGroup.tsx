@@ -1,5 +1,4 @@
-import React from "react";
-import { AriaAttributes, Children, FC, useState } from "react";
+import React, { AriaAttributes, Children, FC, useState } from "react";
 import nsp from "@/globals/js/namespace";
 import { P } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";

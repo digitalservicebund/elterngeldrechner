@@ -1,10 +1,10 @@
 import { VFC } from "react";
-import type { ElternteilType } from "@/monatsplaner";
-import { useAppSelector } from "@/redux/hooks";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
 import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
 import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
+import { useAppSelector } from "@/redux/hooks";
+import type { ElternteilType } from "@/monatsplaner";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
 import { P } from "@/components/atoms";
 import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";

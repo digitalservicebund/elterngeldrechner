@@ -1,7 +1,7 @@
+import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 import { RootState } from "@/redux";
 import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
 import { renderHook } from "@/test-utils/test-utils";
-import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 
 describe("usePlanningContingentMonths", () => {
   it("provides the available months based on the store data", () => {

@@ -1,3 +1,4 @@
+import { allOf, ValidationResult, validationRule } from "./validation-result";
 import {
   CreateElternteileSettings,
   Elternteile,
@@ -5,7 +6,6 @@ import {
   getFruehchen,
   Month,
 } from "@/monatsplaner/elternteile";
-import { allOf, ValidationResult, validationRule } from "./validation-result";
 import { minNumberOfElterngeld } from "@/monatsplaner/configuration";
 import {
   countBEGMonths,

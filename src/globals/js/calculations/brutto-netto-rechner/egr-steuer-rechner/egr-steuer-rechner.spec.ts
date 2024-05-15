@@ -1,9 +1,9 @@
 import Big from "big.js";
+import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import {
   BmfSteuerRechner,
   BmfSteuerRechnerResponse,
 } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
-import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import {
   ErwerbsArt,
   FinanzDaten,

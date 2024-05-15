@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import { useNavigate } from "react-router";
 import { AllgemeineAngabenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -6,7 +7,6 @@ import {
   stepAllgemeineAngabenActions,
   StepAllgemeineAngabenState,
 } from "@/redux/stepAllgemeineAngabenSlice";
-import { useNavigate } from "react-router";
 import { formSteps } from "@/utils/formSteps";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 

@@ -1,10 +1,10 @@
+import { FieldValues } from "react-hook-form";
 import {
   CustomRadio,
   CustomRadioProps,
   RadioOption,
 } from "@/components/molecules/custom-radio";
 import { YesNo } from "@/globals/js/calculations/model";
-import { FieldValues } from "react-hook-form";
 
 export const yesNoLabels: { [K in YesNo]: string } = {
   [YesNo.YES]: "Ja",

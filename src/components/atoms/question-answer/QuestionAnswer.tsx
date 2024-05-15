@@ -1,5 +1,5 @@
-import nsp from "@/globals/js/namespace";
 import { VFC } from "react";
+import nsp from "@/globals/js/namespace";
 
 interface Props {
   question: string;

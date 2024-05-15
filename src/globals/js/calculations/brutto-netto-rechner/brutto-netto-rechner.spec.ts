@@ -1,5 +1,5 @@
-import { BruttoNettoRechner } from "./brutto-netto-rechner";
 import Big from "big.js";
+import { BruttoNettoRechner } from "./brutto-netto-rechner";
 import {
   ErwerbsArt,
   FinanzDaten,

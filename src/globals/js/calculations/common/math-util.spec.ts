@@ -1,5 +1,5 @@
-import { MathUtil } from "./math-util";
 import Big from "big.js";
+import { MathUtil } from "./math-util";
 
 describe("math-util", () => {
   describe("round half up with precision 2:", () => {

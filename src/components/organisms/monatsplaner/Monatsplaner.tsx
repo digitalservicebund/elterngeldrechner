@@ -1,6 +1,12 @@
 import { ReactNode, useEffect, useRef, useState, VFC } from "react";
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
+import AddIcon from "@digitalservicebund/icons/Add";
+import classNames from "classnames";
+import { useNavigate } from "react-router-dom";
+import { SummationFooter } from "./SummationFooter";
+import { useSummarizeData } from "./useSummarizeData";
+import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 import {
   ElterngeldType,
   Elternteile,
@@ -36,7 +42,6 @@ import {
   P,
   Toast,
 } from "@/components/atoms";
-import AddIcon from "@digitalservicebund/icons/Add";
 import {
   AccessControl,
   AmountElterngeldRow,
@@ -44,8 +49,6 @@ import {
   PlanningContingent,
 } from "@/components/molecules";
 import nsp from "@/globals/js/namespace";
-import classNames from "classnames";
-import { useNavigate } from "react-router-dom";
 import { formSteps } from "@/utils/formSteps";
 import { EgrConst } from "@/globals/js/egr-configuration";
 import { YesNo } from "@/globals/js/calculations/model";
@@ -55,9 +58,6 @@ import {
   isExceptionToSimulatenousMonthRestrictions,
 } from "@/monatsplaner/elternteile/change-month";
 import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notification/NotificationMaxSimultaneousBEGMonths";
-import { SummationFooter } from "./SummationFooter";
-import { useSummarizeData } from "./useSummarizeData";
-import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 

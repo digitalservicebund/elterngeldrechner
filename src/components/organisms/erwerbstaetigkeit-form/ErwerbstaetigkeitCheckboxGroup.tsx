@@ -1,6 +1,6 @@
 import { useMemo, VFC } from "react";
-import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
 import { RegisterOptions, useFormContext } from "react-hook-form";
+import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
 import {
   StepErwerbstaetigkeitState,
   TypeOfErwerbstaetigkeit,

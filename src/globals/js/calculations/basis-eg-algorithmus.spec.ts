@@ -1,3 +1,4 @@
+import Big from "big.js";
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
   createMischEkTaetigkeitOf,
@@ -11,7 +12,6 @@ import {
   SteuerKlasse,
   YesNo,
 } from "./model";
-import Big from "big.js";
 
 describe("basis-eg-algorithmus", () => {
   const basisEgAlgorithmus = new BasisEgAlgorithmus();

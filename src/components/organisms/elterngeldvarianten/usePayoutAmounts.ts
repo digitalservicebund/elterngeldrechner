@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
+import { PayoutAmountsForParent } from "./types";
 import {
   BruttoEinkommenZeitraum,
   ElterngeldRow,
   calculateElterngeld,
 } from "@/redux/stepRechnerSlice";
 import { useAppSelector, useAppStore } from "@/redux/hooks";
-import { PayoutAmountsForParent } from "./types";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { AppStore } from "@/redux";
 

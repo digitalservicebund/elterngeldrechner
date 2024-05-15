@@ -1,9 +1,9 @@
+import { SummationDataForParent } from "./types";
 import { EgrConst } from "@/globals/js/egr-configuration";
 import { ElterngeldType, Month } from "@/monatsplaner";
 import { createAppSelector, useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { ElterngeldRow, ElterngeldRowsResult } from "@/redux/stepRechnerSlice";
-import { SummationDataForParent } from "./types";
 
 export function useSummarizeData(): SummationDataForParent[] {
   const applicant = useAppSelector(

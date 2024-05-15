@@ -1,6 +1,6 @@
+import { RechnerResult } from "./RechnerResult";
 import { RootState } from "@/redux";
 import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
-import { RechnerResult } from "./RechnerResult";
 import { render, screen, within } from "@/test-utils/test-utils";
 
 describe("Rechner Result", () => {

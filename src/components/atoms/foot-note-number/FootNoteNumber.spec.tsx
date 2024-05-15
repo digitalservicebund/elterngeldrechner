@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { FootNoteNumber } from "./FootNoteNumber";
 import userEvent from "@testing-library/user-event";
+import { FootNoteNumber } from "./FootNoteNumber";
 
 describe("Foot Note Number", () => {
   describe("should create foot note number with id and anchor for it", () => {

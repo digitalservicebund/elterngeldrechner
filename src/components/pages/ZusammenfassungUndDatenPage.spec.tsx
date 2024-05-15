@@ -1,3 +1,4 @@
+import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
 import { render, screen } from "@/test-utils/test-utils";
 import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { RootState } from "@/redux";
@@ -9,7 +10,6 @@ import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
 import { YesNo } from "@/globals/js/calculations/model";
 import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
 import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
-import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
 
 const defaultElternteileSettings = createDefaultElternteileSettings(
   false,

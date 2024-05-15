@@ -1,3 +1,4 @@
+import { EgrAlteTestfaelleRoutine3ExcelSheet } from "./egr-alte-testfaelle-routine3-excel-sheet";
 import {
   ElternGeldArt,
   ErwerbsArt,
@@ -8,7 +9,6 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { EgrAlteTestfaelleRoutine3ExcelSheet } from "./egr-alte-testfaelle-routine3-excel-sheet";
 
 describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();

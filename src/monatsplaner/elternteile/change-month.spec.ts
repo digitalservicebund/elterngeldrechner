@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { createElternteile } from "./elternteile";
 import {
   ElterngeldType,
@@ -11,7 +12,6 @@ import {
   MutterschutzSettings,
 } from "./elternteile-setting";
 import changeMonth from "./change-month";
-import { DateTime } from "luxon";
 
 /**
  * The purpose of this class is to highly improve the readability of tests by

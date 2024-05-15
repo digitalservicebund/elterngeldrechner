@@ -1,3 +1,8 @@
+import { within } from "@testing-library/react";
+import Big from "big.js";
+import userEvent from "@testing-library/user-event";
+import { configureStore } from "@reduxjs/toolkit";
+import { Rechner } from "./Rechner";
 import { reducers, RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -5,10 +10,6 @@ import {
   YesNo,
 } from "@/globals/js/calculations/model";
 import { render, screen } from "@/test-utils/test-utils";
-import { within } from "@testing-library/react";
-import Big from "big.js";
-import userEvent from "@testing-library/user-event";
-import { Rechner } from "./Rechner";
 import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import {
   ElterngeldRowsResult,
@@ -16,7 +17,6 @@ import {
   StepRechnerElternteilState,
 } from "@/redux/stepRechnerSlice";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
-import { configureStore } from "@reduxjs/toolkit";
 
 jest.mock("../../../globals/js/calculations/egr-calculation");
 

@@ -1,5 +1,8 @@
-import type { ElternteilType } from "@/monatsplaner";
 import React, { useState, VFC } from "react";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import ClearIcon from "@digitalservicebund/icons/Clear";
+import { Versicherungen } from "./Versicherungen";
+import type { ElternteilType } from "@/monatsplaner";
 import {
   CustomNumberField,
   CustomSelect,
@@ -8,11 +11,8 @@ import {
   YesNoRadio,
 } from "@/components/molecules";
 import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
-import { Versicherungen } from "./Versicherungen";
 import { Button } from "@/components/atoms";
-import ClearIcon from "@digitalservicebund/icons/Clear";
 import nsp from "@/globals/js/namespace";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
 import {

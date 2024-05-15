@@ -1,5 +1,6 @@
 import Big from "big.js";
 import { BmfAbgaben } from "./bmf-abgaben";
+import { bmfAbgabenOf } from "./bmf-abgaben-factory";
 import {
   EgrBerechnungParamId,
   ErwerbsArt,
@@ -14,7 +15,6 @@ import {
   BmfSteuerRechner,
   BmfSteuerRechnerParameter,
 } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
-import { bmfAbgabenOf } from "./bmf-abgaben-factory";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { Logger } from "@/globals/js/calculations/common/logger";
 import {

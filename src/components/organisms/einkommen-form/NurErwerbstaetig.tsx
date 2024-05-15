@@ -1,6 +1,6 @@
-import type { ElternteilType } from "@/monatsplaner";
 import { VFC } from "react";
 import { useFormContext } from "react-hook-form";
+import type { ElternteilType } from "@/monatsplaner";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Button, P } from "@/components/atoms";
 import {

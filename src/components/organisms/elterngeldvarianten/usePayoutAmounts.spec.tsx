@@ -1,8 +1,8 @@
+import { usePayoutAmounts } from "./usePayoutAmounts";
 import { RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import { ElterngeldRow, calculateElterngeld } from "@/redux/stepRechnerSlice";
 import { act, renderHook } from "@/test-utils/test-utils";
-import { usePayoutAmounts } from "./usePayoutAmounts";
 
 jest.mock("../../../redux/stepRechnerSlice", () => ({
   ...jest.requireActual("../../../redux/stepRechnerSlice.ts"),

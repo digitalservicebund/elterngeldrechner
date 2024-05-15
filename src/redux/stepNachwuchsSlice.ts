@@ -1,8 +1,8 @@
-import { getLebensmonate } from "@/monatsplaner";
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SelectOption } from "@/components/molecules";
-import { RootState } from "./index";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
+import { RootState } from "./index";
+import { getLebensmonate } from "@/monatsplaner";
+import { SelectOption } from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
 
 interface Kind {

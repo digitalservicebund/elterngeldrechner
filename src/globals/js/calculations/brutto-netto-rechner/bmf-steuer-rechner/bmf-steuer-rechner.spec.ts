@@ -1,6 +1,6 @@
 import Big from "big.js";
-import { BmfSteuerRechnerParameter } from "./index";
 import { callRechnerLib, callRemoteRechner } from "./bmf-steuer-rechner";
+import { BmfSteuerRechnerParameter } from "./index";
 
 describe("bmf-steuer-rechner-remote", () => {
   describe.each([

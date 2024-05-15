@@ -1,3 +1,4 @@
+import Big from "big.js";
 import {
   ElternGeldArt,
   ElternGeldDaten,
@@ -24,7 +25,6 @@ import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmu
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { errorOf } from "./calculation-error-code";
 import { ErgebnisUtils } from "./ergebnis-utils";
-import Big from "big.js";
 import { MathUtil } from "./common/math-util";
 
 export class EgrCalculation {

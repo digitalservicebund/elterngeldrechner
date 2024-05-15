@@ -1,8 +1,9 @@
-import { render, screen } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { reducers, RootState } from "@/redux";
+import { DateTime } from "luxon";
 import NachwuchsPage from "./NachwuchsPage";
+import { render, screen } from "@/test-utils/test-utils";
+import { reducers, RootState } from "@/redux";
 import {
   initialStepNachwuchsState,
   StepNachwuchsState,
@@ -12,7 +13,6 @@ import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngaben
 import { YesNo } from "@/globals/js/calculations/model";
 import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
 import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
-import { DateTime } from "luxon";
 
 jest.mock("../../monatsplaner");
 

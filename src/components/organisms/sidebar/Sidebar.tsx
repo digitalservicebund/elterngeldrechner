@@ -1,12 +1,11 @@
-import { VFC } from "react";
+import { VFC, useState } from "react";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import nsp from "@/globals/js/namespace";
 import classNames from "classnames";
-import { FormStep, formSteps } from "@/utils/formSteps";
-import { Button } from "@/components/atoms";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
+import nsp from "@/globals/js/namespace";
+import { FormStep, formSteps } from "@/utils/formSteps";
+import { Button } from "@/components/atoms";
 
 interface Props {
   currentStep: FormStep;

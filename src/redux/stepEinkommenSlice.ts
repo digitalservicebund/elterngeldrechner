@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  KassenArt,
-  KinderFreiBetrag,
-  RentenArt,
-  SteuerKlasse,
-  YesNo,
-} from "@/globals/js/calculations/model";
+import { DateTime } from "luxon";
 import {
   Erwerbstaetigkeiten,
   stepErwerbstaetigkeitActions,
@@ -14,7 +8,13 @@ import {
   stepAllgemeineAngabenActions,
   Antragstellende,
 } from "./stepAllgemeineAngabenSlice";
-import { DateTime } from "luxon";
+import {
+  KassenArt,
+  KinderFreiBetrag,
+  RentenArt,
+  SteuerKlasse,
+  YesNo,
+} from "@/globals/js/calculations/model";
 import { ElternteilType } from "@/monatsplaner/elternteile/elternteile-types";
 
 export interface Zeitraum {

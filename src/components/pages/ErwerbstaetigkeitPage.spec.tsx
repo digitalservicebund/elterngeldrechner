@@ -1,13 +1,13 @@
-import { render, screen } from "@/test-utils/test-utils";
 import userEvent from "@testing-library/user-event";
+import { configureStore, Store } from "@reduxjs/toolkit";
+import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
+import { render, screen } from "@/test-utils/test-utils";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import { reducers, RootState } from "@/redux";
-import { configureStore, Store } from "@reduxjs/toolkit";
 import {
   initialStepErwerbstaetigkeitState,
   StepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
 import { YesNo } from "@/globals/js/calculations/model";
 
 describe("Erwerbstaetigkeit Page", () => {

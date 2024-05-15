@@ -1,7 +1,7 @@
 import { MouseEvent, VFC } from "react";
+import classNames from "classnames";
 import { Button } from "@/components/atoms";
 import nsp from "@/globals/js/namespace";
-import classNames from "classnames";
 
 interface Props {
   onClickBackButton?: (event: MouseEvent) => void;

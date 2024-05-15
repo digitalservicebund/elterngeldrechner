@@ -1,16 +1,20 @@
-import { RootState } from "./index";
-import {
-  BruttoEinkommenZeitraum,
-  initialStepRechnerState,
-} from "./stepRechnerSlice";
-import { initialMonatsplanerState } from "./monatsplanerSlice";
+import * as reactRedux from "react-redux";
+import Big from "big.js";
+import { finanzDatenOfUi } from "./finanzDatenFactory";
 import {
   AverageOrMonthlyState,
   initialAverageOrMonthlyStateNichtSelbstaendig,
   StepEinkommenElternteil,
   Taetigkeit,
 } from "./stepEinkommenSlice";
-import * as reactRedux from "react-redux";
+import { initialMonatsplanerState } from "./monatsplanerSlice";
+import {
+  BruttoEinkommenZeitraum,
+  initialStepRechnerState,
+} from "./stepRechnerSlice";
+import { Erwerbstaetigkeiten } from "./stepErwerbstaetigkeitSlice";
+import { initialStepConfigurationState } from "./configurationSlice";
+import { RootState } from "./index";
 import {
   createMischEkTaetigkeitOf,
   Einkommen,
@@ -23,10 +27,6 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { finanzDatenOfUi } from "./finanzDatenFactory";
-import Big from "big.js";
-import { Erwerbstaetigkeiten } from "./stepErwerbstaetigkeitSlice";
-import { initialStepConfigurationState } from "./configurationSlice";
 
 jest.mock("react-redux", () => ({
   useSelector: jest.fn(),

@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { ReactNode, useId } from "react";
 import { formSteps } from "@/utils/formSteps";
 import { Page } from "@/components/organisms/page";
 import { Button } from "@/components/atoms";
 import { ElterngeldvariantenDescriptions } from "@/components/organisms/elterngeldvarianten";
-import { ReactNode, useId } from "react";
 
 export function ElterngeldvariantenPage(): ReactNode {
   const descriptionIdentifier = useId();

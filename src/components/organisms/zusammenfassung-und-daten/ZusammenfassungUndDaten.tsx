@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 import nsp from "@/globals/js/namespace";
 import { Button, P } from "@/components/atoms";
 import {
@@ -10,7 +11,6 @@ import {
   AntragstellendeSelektor,
   stepAllgemeineAngabenSelectors,
 } from "@/redux/stepAllgemeineAngabenSlice";
-import { useNavigate } from "react-router-dom";
 import { formSteps } from "@/utils/formSteps";
 import { YesNo } from "@/globals/js/calculations/model";
 import { Taetigkeit } from "@/redux/stepEinkommenSlice";

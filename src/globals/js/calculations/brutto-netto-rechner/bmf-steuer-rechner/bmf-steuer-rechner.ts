@@ -1,12 +1,12 @@
+import { LST } from "@bmfin/steuerrechner";
+import { LST_INPUT } from "@bmfin/steuerrechner/build/types/input";
 import { bmfSteuerRechnerUrlOf } from "./bmf-steuer-rechner-configuration";
-import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { BmfSteuerRechnerResponseParser } from "./bmf-steuer-rechner-response-parser";
 import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 import { BmfSteuerRechnerResponse } from "./bmf-steuer-rechner-response";
-import { LST } from "@bmfin/steuerrechner";
 import { BmfSteuerRechnerResponseConverter } from "./bmf-steuer-rechner-response-converter";
 import { BmfSteuerRechnerParameterConverter } from "./bmf-steuer-rechner-parameter-converter";
-import { LST_INPUT } from "@bmfin/steuerrechner/build/types/input";
+import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 
 /**
  * Namespace for function to call the BMF Lohn- und Einkommensteuerrechner.

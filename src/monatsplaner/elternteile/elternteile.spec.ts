@@ -1,8 +1,8 @@
-import { numberOfLebensmonate } from "@/monatsplaner/configuration";
 import { DateTime } from "luxon";
 import type { Geburtstag, Month } from "./elternteile-types";
 import { MutterschutzSettings } from "./elternteile-setting";
 import { createElternteile } from "./elternteile";
+import { numberOfLebensmonate } from "@/monatsplaner/configuration";
 
 describe("Elternteile", () => {
   const expectedDateOfBirth = DateTime.fromISO("2022-03-04T00:00:00Z");

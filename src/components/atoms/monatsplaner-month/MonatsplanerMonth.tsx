@@ -1,6 +1,6 @@
-import { ElterngeldType } from "@/monatsplaner";
 import React, { FC } from "react";
 import classNames from "classnames";
+import { ElterngeldType } from "@/monatsplaner";
 import nsp from "@/globals/js/namespace";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 

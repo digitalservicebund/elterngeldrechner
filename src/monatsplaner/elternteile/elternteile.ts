@@ -52,12 +52,16 @@ export const createElternteile = (
     begAnspruch -= numberOfMutterschutzMonths;
   }
 
-  let partnerschaftsbonus = maxNumberOfPartnerschaftbonus;
+  const alwaysHasAdditionalPartnerMonths = !!settings?.alleinerziehend;
+
+  if (alwaysHasAdditionalPartnerMonths) {
+    begAnspruch += 2;
+  }
+
+  let partnerschaftsbonus = 0;
 
   if (getPartnerMonateSettings(settings)) {
-    begAnspruch = begAnspruch + 2;
-  } else {
-    partnerschaftsbonus = 0;
+    partnerschaftsbonus = maxNumberOfPartnerschaftbonus;
   }
 
   return {

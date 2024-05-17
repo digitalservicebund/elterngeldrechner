@@ -27,6 +27,8 @@ jobs:
           cache: npm
 
       - name: Build egr
+        env:
+          REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
         run: source .env.test && npm ci && npm run test-all && npm run build
 
       - name: Build preview

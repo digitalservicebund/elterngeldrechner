@@ -7,6 +7,7 @@ import store from "./redux";
 import nsp from "./globals/js/namespace";
 import reportWebVitals from "./reportWebVitals";
 import { setupCalculation } from "./globals/js/calculations/setup-calculation";
+import { setupUserTracking } from "./user-tracking";
 
 document.addEventListener("DOMContentLoaded", function () {
   const rootDiv = document.getElementById(nsp("root"));
@@ -22,6 +23,8 @@ document.addEventListener("DOMContentLoaded", function () {
       <div id={nsp("toast")} />
     </StrictMode>,
   );
+
+  setupUserTracking();
 });
 
 // If you want to start measuring performance in your app, pass a function

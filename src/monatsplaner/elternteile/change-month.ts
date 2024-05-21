@@ -144,6 +144,25 @@ export function canNotChangeBEGDueToSimultaneousMonthRules(
   return choosingAfterTheTwelveMonth || reachedLimit;
 }
 
+export function canNotChangeBEGDueToLimitReachedPerParent(
+  changeMonthSettings: ChangeMonthSettings,
+  elternteile: Elternteile,
+  elternteileSettings?: CreateElternteileSettings,
+): boolean {
+  const choosingBEGMonth = changeMonthSettings.targetType === "BEG";
+
+  const isSingleParent = !!elternteileSettings?.alleinerziehend;
+  const limitOfBEGMonths = isSingleParent ? 14 : 12;
+  const months = elternteile[changeMonthSettings.elternteil].months;
+  const numberOfAlreadyTakenBEGMonths = months.filter(
+    (month) => month.type === "BEG",
+  ).length;
+  const limitOfBEGMonthsReached =
+    numberOfAlreadyTakenBEGMonths >= limitOfBEGMonths;
+
+  return choosingBEGMonth && limitOfBEGMonthsReached;
+}
+
 const replaceMonthAtIndex = (
   replacement: Month,
   monthIndex: number,
@@ -192,6 +211,16 @@ const changeMonth = (
 
   if (
     canNotChangeBEGDueToSimultaneousMonthRules(
+      changeMonthSettings,
+      elternteile,
+      elternteileSettings,
+    )
+  ) {
+    return elternteile;
+  }
+
+  if (
+    canNotChangeBEGDueToLimitReachedPerParent(
       changeMonthSettings,
       elternteile,
       elternteileSettings,

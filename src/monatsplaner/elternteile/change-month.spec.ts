@@ -86,11 +86,14 @@ class TestElternteile {
   }
 }
 
-function createElternteileWithPartnerMonate(): TestElternteile {
+function createElternteileWithPartnerMonate(
+  alleinerziehend?: boolean,
+): TestElternteile {
   return new TestElternteile({
     partnerMonate: true,
     mehrlinge: false,
     behindertesGeschwisterkind: false,
+    alleinerziehend,
   });
 }
 
@@ -140,16 +143,6 @@ describe("Change Month", () => {
     elternteile.changeMonth("ET1", 2, "BEG");
 
     expect(elternteile.remainingMonths.basiselterngeld).toBe(11);
-  });
-
-  it("should return a negative number if one Elternteil uses more BEG than it is allowed to", () => {
-    const elternteile = new TestElternteile();
-
-    for (const monthIndex of monthIndexRange(0, 12)) {
-      elternteile.changeMonth("ET1", monthIndex, "BEG");
-    }
-
-    expect(elternteile.remainingMonths.basiselterngeld).toBe(-1);
   });
 
   it("should increase the number of BEG if a Lebensmonat with BEG is changed to not having any ElterngeldType", () => {
@@ -219,6 +212,52 @@ describe("Change Month", () => {
         .changeMonth("ET2", 3, "BEG");
 
       expect(elternteile.remainingMonths.basiselterngeld).toBe(15 - 4);
+    });
+
+    it("should not allow to take more than 12 BEG months for a parent even with partner months", () => {
+      const elternteile = createElternteileWithPartnerMonate();
+
+      monthIndexRange(0, 11).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
+      });
+      elternteile.changeMonth("ET1", 12, "BEG");
+
+      expect(elternteile.remainingMonths.basiselterngeld).toEqual(2);
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "BEG")).toEqual(
+        12,
+      );
+    });
+
+    it("should allow split the 14 months between both partners", () => {
+      const elternteile = createElternteileWithPartnerMonate();
+
+      monthIndexRange(0, 6).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
+      });
+      monthIndexRange(7, 13).forEach((monthIndex) => {
+        elternteile.changeMonth("ET2", monthIndex, "BEG");
+      });
+
+      expect(elternteile.remainingMonths.basiselterngeld).toEqual(0);
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "BEG")).toEqual(
+        7,
+      );
+      expect(countSuccessfullyChangedMonths(elternteile, "ET2", "BEG")).toEqual(
+        7,
+      );
+    });
+
+    it("should not allow to take all 14 months alone if alleinerziehend", () => {
+      const elternteile = createElternteileWithPartnerMonate(true);
+
+      monthIndexRange(0, 13).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
+      });
+
+      expect(elternteile.remainingMonths.basiselterngeld).toEqual(0);
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "BEG")).toEqual(
+        14,
+      );
     });
   });
 
@@ -606,3 +645,12 @@ describe("Change Month", () => {
     });
   });
 });
+
+function countSuccessfullyChangedMonths(
+  elternteile: TestElternteile,
+  elternteil: "ET1" | "ET2",
+  targetType: ElterngeldType,
+): number {
+  const months = elternteile[elternteil].months;
+  return months.filter((month) => month.type === targetType).length;
+}

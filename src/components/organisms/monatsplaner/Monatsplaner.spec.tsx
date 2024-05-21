@@ -477,7 +477,7 @@ describe("Monatsplaner", () => {
       "Elternteil 1 Basiselterngeld für Lebensmonat 13",
     );
 
-    expect(BEGmonthNotThere).toBeInTheDocument();
+    expect(BEGmonthNotThere).not.toBeInTheDocument();
   });
 
   it("should not display empty EGPlus months if remaining months of this type is zero", async () => {

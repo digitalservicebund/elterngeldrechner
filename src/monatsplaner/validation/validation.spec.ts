@@ -21,26 +21,6 @@ describe("Validation", () => {
   });
 
   describe("Basiselterngeld", () => {
-    it("should not be valid to take more than the available 12 BEG months for one Elternteil", () => {
-      let elternteile = createElternteile();
-      for (let i = 0; i <= 12; i++) {
-        elternteile = changeMonth(elternteile, {
-          monthIndex: i,
-          targetType: "BEG",
-          elternteil: "ET1",
-        });
-      }
-
-      const validationResult = validateElternteile(
-        elternteile,
-      ) as InvalidValidationResult;
-
-      expect(validationResult.isValid).toBe(false);
-      expect(validationResult.errorCodes).toContain<ErrorCode>(
-        "HasTakenMoreThanTheAvailableBEGMonths",
-      );
-    });
-
     it("should not be valid to take more than the available 14 BEG months of Partnermonate for both Elternteile", () => {
       const elternteileSettings = {
         partnerMonate: true,

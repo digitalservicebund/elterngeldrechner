@@ -136,11 +136,12 @@ const monatsplanerSlice = createSlice({
           }
         }
 
+        const alleinerziehend = payload.alleinerziehend === YesNo.YES;
         const partnerMonate =
-          payload.alleinerziehend === YesNo.YES ||
-          payload.antragstellende === "FuerBeide";
+          alleinerziehend || payload.antragstellende === "FuerBeide";
 
         state.settings = {
+          alleinerziehend,
           partnerMonate,
           mehrlinge: false,
           behindertesGeschwisterkind: false,
@@ -172,6 +173,7 @@ const monatsplanerSlice = createSlice({
         state.mutterschutzElternteil!,
         mutterSchutzMonate,
         state.partnerMonate,
+        state.settings?.alleinerziehend,
       );
       return {
         ...state,

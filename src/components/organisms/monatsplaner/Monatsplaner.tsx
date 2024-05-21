@@ -56,6 +56,7 @@ import {
   canNotChangeBEGDueToSimultaneousMonthRules,
   reachedLimitOfSimultaneousBEGMonths,
   isExceptionToSimulatenousMonthRestrictions,
+  canNotChangeBEGDueToLimitReachedPerParent,
 } from "@/monatsplaner/elternteile/change-month";
 import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notification/NotificationMaxSimultaneousBEGMonths";
 
@@ -369,15 +370,28 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
     const lastPossibleMonthIndex = partnerMonate ? 13 : 11;
     const isInValidRange = monthIndex <= lastPossibleMonthIndex;
     const moreMonthsAvailable = elternteile.remainingMonths.basiselterngeld > 0;
-    const blockedBySimulataneousMonth =
+    const changeMonthSettings = {
+      targetType: "BEG" as ElterngeldType,
+      elternteil,
+      monthIndex,
+    };
+    const isBlockedBySimulataneousMonth =
       canNotChangeBEGDueToSimultaneousMonthRules(
-        { targetType: "BEG", elternteil, monthIndex },
+        changeMonthSettings,
         elternteile,
         elternteileSettings,
       );
+    const isBlockedByLimitReached = canNotChangeBEGDueToLimitReachedPerParent(
+      changeMonthSettings,
+      elternteile,
+      elternteileSettings,
+    );
 
     return (
-      moreMonthsAvailable && isInValidRange && !blockedBySimulataneousMonth
+      moreMonthsAvailable &&
+      isInValidRange &&
+      !isBlockedBySimulataneousMonth &&
+      !isBlockedByLimitReached
     );
   }
 

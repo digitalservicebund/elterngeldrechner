@@ -11,7 +11,6 @@ export function waitForCookieValue(
 ): Promise<string> {
   return new Promise((resolve) => {
     const intervalId = setInterval(() => {
-      console.log("wait");
       const value = getCookies()[name];
 
       if (value !== undefined) {

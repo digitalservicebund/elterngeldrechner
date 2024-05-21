@@ -3,13 +3,10 @@ import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
 
 export async function setupUserTracking(): Promise<void> {
-  console.log("tracking");
   const tagMangerSourceUrl = getTagMangerSourceUrl();
   const isConfigured = !!tagMangerSourceUrl;
-  console.log("configured", isConfigured);
 
   if (isConfigured && (await isTrackingAllowedByUser())) {
-    console.log("allowed");
     establishDataLayer();
     setupTagManager(tagMangerSourceUrl);
   }

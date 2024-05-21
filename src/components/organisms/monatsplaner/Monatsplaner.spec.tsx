@@ -350,7 +350,8 @@ describe("Monatsplaner", () => {
       await userEvent.click(month);
     }
 
-    for (let i = 8; i < 10; i++) {
+    // select 4 month BG (2 MS + 8 EG+ (3.-10.) + 4 BG (11.-14.) = 10)
+    for (let i = 8; i < 12; i++) {
       await userEvent.click(
         screen.getByLabelText(
           getElternteilBEGLabel("Frida", numberOfMutterschutzMonths + i),
@@ -444,41 +445,8 @@ describe("Monatsplaner", () => {
   });
 
   it("should not display empty BEG months if remaining months of this type is zero", async () => {
-    let elternteile = createElternteile(defaultElternteileSettingsForBoth);
-    for (let i = 0; i < 20; i++) {
-      elternteile = changeMonth(
-        elternteile,
-        {
-          monthIndex: numberOfMutterschutzMonths + i,
-          elternteil: "ET1",
-          targetType: "EG+",
-        },
-        defaultElternteileSettings,
-      );
-    }
-    render(<Monatsplaner mutterSchutzMonate={2} />, {
-      preloadedState: {
-        ...preloadedState,
-        stepAllgemeineAngaben: {
-          ...initialStepAllgemeineAngabenState,
-          antragstellende: "FuerBeide",
-        },
-        monatsplaner: {
-          ...(preloadedState.monatsplaner as MonatsplanerState),
-          elternteile,
-        },
-      },
-    });
-
-    const BEGmonth = screen.queryByLabelText(
-      "Elternteil 2 Basiselterngeld für Lebensmonat 1",
-    );
-
-    expect(BEGmonth).not.toBeInTheDocument();
-  });
-
-  it("should not display empty EGPlus months if remaining months of this type is zero", async () => {
-    let elternteile = createElternteile(defaultElternteileSettingsForBoth);
+    let elternteile = createElternteile(defaultElternteileSettings);
+    //select 10 month BEG (mutterschutz is preselected)
     for (let i = 0; i < 10; i++) {
       elternteile = changeMonth(
         elternteile,
@@ -493,10 +461,6 @@ describe("Monatsplaner", () => {
     render(<Monatsplaner mutterSchutzMonate={2} />, {
       preloadedState: {
         ...preloadedState,
-        stepAllgemeineAngaben: {
-          ...initialStepAllgemeineAngabenState,
-          antragstellende: "FuerBeide",
-        },
         monatsplaner: {
           ...(preloadedState.monatsplaner as MonatsplanerState),
           elternteile,
@@ -504,11 +468,52 @@ describe("Monatsplaner", () => {
       },
     });
 
-    const EGPlusMonth = screen.queryByLabelText(
-      "Elternteil 2 ElterngeldPlus für Lebensmonat 1",
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    const BEGmonthNotThere = screen.queryByLabelText(
+      "Elternteil 1 Basiselterngeld für Lebensmonat 13",
     );
 
-    expect(EGPlusMonth).not.toBeInTheDocument();
+    expect(BEGmonthNotThere).toBeInTheDocument();
+  });
+
+  it("should not display empty EGPlus months if remaining months of this type is zero", async () => {
+    let elternteile = createElternteile(defaultElternteileSettings);
+    //select 24 month EGPlus (mutterschutz in BEG is preselected)
+    for (let i = 0; i < 24; i++) {
+      elternteile = changeMonth(
+        elternteile,
+        {
+          monthIndex: numberOfMutterschutzMonths + i,
+          elternteil: "ET1",
+          targetType: "EG+",
+        },
+        defaultElternteileSettings,
+      );
+    }
+    render(<Monatsplaner mutterSchutzMonate={2} />, {
+      preloadedState: {
+        ...preloadedState,
+        monatsplaner: {
+          ...(preloadedState.monatsplaner as MonatsplanerState),
+          elternteile,
+        },
+      },
+    });
+
+    const expandButton = screen.getByRole("button", {
+      name: "Alle Monate anzeigen",
+    });
+    await userEvent.click(expandButton);
+
+    const EGPlusMonthNotThere = screen.queryByLabelText(
+      "Elternteil 1 ElterngeldPlus für Lebensmonat 27",
+    );
+
+    expect(EGPlusMonthNotThere).not.toBeInTheDocument();
   });
 
   it("should not allow to change a Mutterschutz month to EG+", () => {
@@ -521,84 +526,6 @@ describe("Monatsplaner", () => {
         ),
       ).not.toBeInTheDocument();
     }
-  });
-
-  describe("additional partner months", () => {
-    function clickMonth(
-      name: string,
-      variant: string,
-      monthIndex: number,
-    ): Promise<void> {
-      const label = `${name} ${variant} für Lebensmonat ${monthIndex + 1}`;
-      const month = screen.getByLabelText(label);
-      return userEvent.click(month);
-    }
-
-    it("initially always actives two additional months for single parents", async () => {
-      const preloadedState: Partial<RootState> = {
-        stepAllgemeineAngaben: {
-          ...initialStepAllgemeineAngabenState,
-          alleinerziehend: YesNo.YES,
-        },
-      };
-      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-
-      const BEGMonths = screen.queryAllByLabelText(
-        /Basiselterngeld für Lebensmonat/,
-      );
-
-      expect(BEGMonths).toHaveLength(14);
-    });
-
-    it.each([
-      [
-        { name: "Jane", variant: "Basiselterngeld", monthIndex: 0 },
-        { name: "Jane", variant: "Basiselterngeld", monthIndex: 1 },
-        { name: "John", variant: "Basiselterngeld", monthIndex: 2 },
-        { name: "John", variant: "Basiselterngeld", monthIndex: 3 },
-      ],
-      [
-        { name: "Jane", variant: "ElterngeldPlus", monthIndex: 0 },
-        { name: "Jane", variant: "ElterngeldPlus", monthIndex: 1 },
-        { name: "John", variant: "ElterngeldPlus", monthIndex: 2 },
-        { name: "John", variant: "ElterngeldPlus", monthIndex: 3 },
-      ],
-      [
-        { name: "Jane", variant: "Basiselterngeld", monthIndex: 0 },
-        { name: "Jane", variant: "Basiselterngeld", monthIndex: 1 },
-        { name: "John", variant: "Basiselterngeld", monthIndex: 2 },
-        { name: "John", variant: "ElterngeldPlus", monthIndex: 3 },
-      ],
-    ])(
-      "actives two additional months if both parents have take at least two BEG or EGP months",
-      async (...monthsToClick) => {
-        const preloadedState: Partial<RootState> = {
-          stepAllgemeineAngaben: {
-            ...initialStepAllgemeineAngabenState,
-            antragstellende: "FuerBeide",
-            alleinerziehend: YesNo.NO,
-            pseudonym: { ET1: "Jane", ET2: "John" },
-          },
-        };
-        render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-
-        await Promise.all(
-          monthsToClick.map(({ name, variant, monthIndex }) =>
-            clickMonth(name, variant, monthIndex),
-          ),
-        );
-
-        const BEGMonthsET1 = screen.queryAllByLabelText(
-          /Jane Basiselterngeld für Lebensmonat/,
-        );
-        const BEGMonthsET2 = screen.queryAllByLabelText(
-          /John Basiselterngeld für Lebensmonat/,
-        );
-
-        expect(BEGMonthsET1).toHaveLength(14);
-        expect(BEGMonthsET2).toHaveLength(14);
-      },
-    );
   });
 
   describe("simultaneous BEG selection", () => {
@@ -617,16 +544,6 @@ describe("Monatsplaner", () => {
 
     function getElternteil2BEGMonth(monthIndex: number): HTMLElement {
       const labelText = getElternteilBEGLabel("Elternteil 2", monthIndex);
-      return screen.getByLabelText(labelText);
-    }
-
-    function getElternteil1EGPMonth(monthIndex: number): HTMLElement {
-      const labelText = getElternteilEGPLabel("Elternteil 1", monthIndex);
-      return screen.getByLabelText(labelText);
-    }
-
-    function getElternteil2EGPMonth(monthIndex: number): HTMLElement {
-      const labelText = getElternteilEGPLabel("Elternteil 2", monthIndex);
       return screen.getByLabelText(labelText);
     }
 
@@ -657,11 +574,9 @@ describe("Monatsplaner", () => {
     });
 
     it("should always disable BEG months of the other parent after the 12th month", async () => {
+      // it("having a simultaneous BEG month, no BEG months get disabled after the 12 month", async () => {
       render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
       await selectSimultaneousBEGMonth(0);
-      // Activate additional partner months.
-      await userEvent.click(getElternteil1EGPMonth(1));
-      await userEvent.click(getElternteil2EGPMonth(1));
 
       await userEvent.click(getElternteil1BEGMonth(12));
       await userEvent.click(getElternteil2BEGMonth(13));

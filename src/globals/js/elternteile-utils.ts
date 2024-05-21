@@ -31,7 +31,6 @@ export const createDefaultElternteileSettings = (
   mutterschutzElternteil: ElternteilType,
   numberOfMutterschutzMonths: number,
   partnerMonate: boolean,
-  alleinerziehend?: boolean,
 ): CreateElternteileSettings => {
   const geburtstag: Geburtstag = {
     geburt: isoGeburtstag,
@@ -43,7 +42,6 @@ export const createDefaultElternteileSettings = (
     behindertesGeschwisterkind,
     geburtstag,
     partnerMonate,
-    alleinerziehend,
   };
 
   if (numberOfMutterschutzMonths) {

@@ -56,7 +56,6 @@ import {
   canNotChangeBEGDueToSimultaneousMonthRules,
   reachedLimitOfSimultaneousBEGMonths,
   isExceptionToSimulatenousMonthRestrictions,
-  calculateBEGAnspruch,
 } from "@/monatsplaner/elternteile/change-month";
 import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notification/NotificationMaxSimultaneousBEGMonths";
 
@@ -367,13 +366,7 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
     elternteil: ElternteilType,
     monthIndex: number,
   ): boolean {
-    const anspruch = calculateBEGAnspruch(
-      elternteile.ET1.months,
-      elternteile.ET2.months,
-      partnerMonate,
-      alleinerziehend === YesNo.YES,
-    );
-    const lastPossibleMonthIndex = anspruch - 1;
+    const lastPossibleMonthIndex = partnerMonate ? 13 : 11;
     const isInValidRange = monthIndex <= lastPossibleMonthIndex;
     const moreMonthsAvailable = elternteile.remainingMonths.basiselterngeld > 0;
     const blockedBySimulataneousMonth =

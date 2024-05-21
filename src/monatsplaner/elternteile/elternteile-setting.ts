@@ -3,7 +3,6 @@ import { ElternteilType, Geburtstag } from "./elternteile-types";
 interface BaseSettings {
   readonly mehrlinge: boolean;
   readonly behindertesGeschwisterkind: boolean;
-  readonly alleinerziehend?: boolean;
 }
 
 export interface MutterschutzSettings {

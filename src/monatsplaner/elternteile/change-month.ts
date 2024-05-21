@@ -30,35 +30,20 @@ interface ChangeMonthSettings {
   readonly targetType: ElterngeldType;
 }
 
-export function calculateBEGAnspruch(
-  monthsET1: readonly Month[],
-  monthsET2: readonly Month[],
+const calculateBEGAnspruch = (
+  currentElternteilMonths: readonly Month[],
+  otherElternteilMonths: readonly Month[],
   partnerMonate: boolean,
-  alleinerziehend?: boolean,
   geburtstag?: Geburtstag,
-): number {
+): number => {
   let anspruch = getBEGAnspruch(geburtstag);
 
-  const bothParentsHaveAtLeatTwoBasisOrPlusMonths =
-    hasAtLeastTwoBasisOrPlusMonths(monthsET1) &&
-    hasAtLeastTwoBasisOrPlusMonths(monthsET2);
-
-  const isEligibleForPartnerMonths =
-    alleinerziehend ||
-    (partnerMonate && bothParentsHaveAtLeatTwoBasisOrPlusMonths);
-
-  if (isEligibleForPartnerMonths) {
+  if (partnerMonate) {
     anspruch += 2;
   }
 
   return anspruch;
-}
-
-function hasAtLeastTwoBasisOrPlusMonths(months: readonly Month[]): boolean {
-  return (
-    months.filter(({ type }) => type === "BEG" || type === "EG+").length >= 2
-  );
-}
+};
 
 const roundUp = (x: number): number => Math.ceil(x / 2);
 
@@ -284,7 +269,6 @@ const changeMonth = (
     currentMonths,
     otherMonths,
     getPartnerMonateSettings(elternteileSettings),
-    elternteileSettings?.alleinerziehend,
     getGeburtstagSettings(elternteileSettings),
   );
   const begMonthsTakenByBoth =

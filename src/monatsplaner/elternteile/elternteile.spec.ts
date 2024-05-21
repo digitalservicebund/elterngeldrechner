@@ -27,10 +27,9 @@ describe("Elternteile", () => {
     expect(elternteile.remainingMonths.basiselterngeld).toBe(12);
   });
 
-  it("should allow 14 Month of Basiselterngeld if alleinerziehend", () => {
+  it("should allow 14 Month of Basiselterngeld for each Elternteil with Partnerbonus", () => {
     const elternteile = createElternteile({
-      alleinerziehend: true,
-      partnerMonate: false,
+      partnerMonate: true,
       mehrlinge: false,
       behindertesGeschwisterkind: false,
     });
@@ -55,7 +54,7 @@ describe("Elternteile", () => {
     expect(elternteile.remainingMonths.basiselterngeld).toBe(13);
   });
 
-  it("should allow 13 Month of Basiselterngeld if the birth was at least 6 weeks earlier than expected and with Partnerbonus", () => {
+  it("should allow 15 Month of Basiselterngeld if the birth was at least 6 weeks earlier than expected and with Partnerbonus", () => {
     const dateOfBirth = expectedDateOfBirth.minus({ weeks: 6 });
 
     const geburtstag: Geburtstag = {
@@ -64,13 +63,13 @@ describe("Elternteile", () => {
     };
 
     const elternteile = createElternteile({
-      partnerMonate: false,
+      partnerMonate: true,
       geburtstag: geburtstag,
       mehrlinge: false,
       behindertesGeschwisterkind: false,
     });
 
-    expect(elternteile.remainingMonths.basiselterngeld).toBe(13);
+    expect(elternteile.remainingMonths.basiselterngeld).toBe(15);
   });
 
   it("should allow 14 Month of Basiselterngeld if the birth was at least 8 weeks earlier than expected", () => {
@@ -136,7 +135,7 @@ describe("Elternteile", () => {
       behindertesGeschwisterkind: false,
     });
 
-    expect(elternteile.remainingMonths.elterngeldplus).toBe(24);
+    expect(elternteile.remainingMonths.elterngeldplus).toBe(28);
   });
 
   it("should set the month where Elternteil does get Mutterschutz to BEG", () => {

@@ -20,7 +20,6 @@ import {
 export interface MonatsplanerState {
   mutterschutzElternteil: ElternteilType | null;
   partnerMonate: boolean;
-  alleinerziehend?: boolean;
   settings: CreateElternteileSettings | undefined;
   elternteile: Elternteile;
 }
@@ -33,7 +32,6 @@ export const initialMonatsplanerState: MonatsplanerState = {
   elternteile: createElternteile({
     mehrlinge: false,
     behindertesGeschwisterkind: false,
-    alleinerziehend: false,
     partnerMonate: true,
   }),
 };
@@ -138,17 +136,15 @@ const monatsplanerSlice = createSlice({
           }
         }
 
-        const alleinerziehend = payload.alleinerziehend === YesNo.YES;
         const partnerMonate =
-          alleinerziehend || payload.antragstellende === "FuerBeide";
+          payload.alleinerziehend === YesNo.YES ||
+          payload.antragstellende === "FuerBeide";
 
         state.settings = {
           partnerMonate,
-          alleinerziehend,
           mehrlinge: false,
           behindertesGeschwisterkind: false,
         };
-        state.alleinerziehend = alleinerziehend;
         state.partnerMonate = partnerMonate;
         state.elternteile = createElternteile(state.settings);
       },
@@ -176,7 +172,6 @@ const monatsplanerSlice = createSlice({
         state.mutterschutzElternteil!,
         mutterSchutzMonate,
         state.partnerMonate,
-        state.alleinerziehend,
       );
       return {
         ...state,

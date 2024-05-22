@@ -57,6 +57,7 @@ import {
   reachedLimitOfSimultaneousBEGMonths,
   isExceptionToSimulatenousMonthRestrictions,
   canNotChangeBEGDueToLimitReachedPerParent,
+  canNotChangeEGPDueToLimitReachedPerParent,
 } from "@/monatsplaner/elternteile/change-month";
 import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notification/NotificationMaxSimultaneousBEGMonths";
 
@@ -395,6 +396,25 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
     );
   }
 
+  function isEGPMonthSelectable(
+    elternteil: ElternteilType,
+    monthIndex: number,
+  ): boolean {
+    const changeMonthSettings = {
+      targetType: "EG+" as ElterngeldType,
+      elternteil,
+      monthIndex,
+    };
+
+    const isBlockedByLimitReached = canNotChangeEGPDueToLimitReachedPerParent(
+      changeMonthSettings,
+      elternteile,
+      elternteileSettings,
+    );
+
+    return !isBlockedByLimitReached;
+  }
+
   const [
     showedNotificationForMaxSimultaneousBEGMonths,
     setShowedNotificationForMaxSimultaneousBEGMonths,
@@ -484,6 +504,9 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
               isBEGMonthSelectable={(monthIndex: number) =>
                 isBEGMonthSelectable("ET1", monthIndex)
               }
+              isEGPMonthSelectable={(monthIndex: number) =>
+                isEGPMonthSelectable("ET1", monthIndex)
+              }
               lebensmonate={lebensmonate.slice(0, lebensmonateVisibleLength)}
               amounts={amountElterngeldRowsET1}
               hasMutterschutz={mutterschutzElternteil === "ET1"}
@@ -506,6 +529,9 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
                 }
                 isBEGMonthSelectable={(monthIndex: number) =>
                   isBEGMonthSelectable("ET2", monthIndex)
+                }
+                isEGPMonthSelectable={(monthIndex: number) =>
+                  isEGPMonthSelectable("ET2", monthIndex)
                 }
                 lebensmonate={lebensmonate.slice(0, lebensmonateVisibleLength)}
                 amounts={amountElterngeldRowsET2}

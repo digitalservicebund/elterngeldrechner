@@ -151,16 +151,47 @@ export function canNotChangeBEGDueToLimitReachedPerParent(
 ): boolean {
   const choosingBEGMonth = changeMonthSettings.targetType === "BEG";
 
-  const isSingleParent = !!elternteileSettings?.alleinerziehend;
-  const limitOfBEGMonths = isSingleParent ? 14 : 12;
+  const limit = limitOfMonthsPerParentAsEgp(elternteileSettings);
   const months = elternteile[changeMonthSettings.elternteil].months;
-  const numberOfAlreadyTakenBEGMonths = months.filter(
-    (month) => month.type === "BEG",
-  ).length;
-  const limitOfBEGMonthsReached =
-    numberOfAlreadyTakenBEGMonths >= limitOfBEGMonths;
+  const numberOfTakenMonths = getCombinedNumberOfMonthsAsEGP(months);
+  const isLimitReached = limit - numberOfTakenMonths < BEG_TO_EGP_RATIO;
 
-  return choosingBEGMonth && limitOfBEGMonthsReached;
+  return choosingBEGMonth && isLimitReached;
+}
+
+export function canNotChangeEGPDueToLimitReachedPerParent(
+  changeMonthSettings: ChangeMonthSettings,
+  elternteile: Elternteile,
+  elternteileSettings?: CreateElternteileSettings,
+): boolean {
+  const choosingEGPMonth = changeMonthSettings.targetType === "EG+";
+
+  const limit = limitOfMonthsPerParentAsEgp(elternteileSettings);
+  const months = elternteile[changeMonthSettings.elternteil].months;
+  const numberOfTakenMonths = getCombinedNumberOfMonthsAsEGP(months);
+  const isLimitReached = limit - numberOfTakenMonths < 1;
+
+  return choosingEGPMonth && isLimitReached;
+}
+
+function canNotChangeDueToLimitReachedPerParent(
+  changeMonthSettings: ChangeMonthSettings,
+  elternteile: Elternteile,
+  elternteileSettings?: CreateElternteileSettings,
+): boolean {
+  const hasReachedBegLimit = canNotChangeBEGDueToLimitReachedPerParent(
+    changeMonthSettings,
+    elternteile,
+    elternteileSettings,
+  );
+
+  const hasReachedEgpLimit = canNotChangeEGPDueToLimitReachedPerParent(
+    changeMonthSettings,
+    elternteile,
+    elternteileSettings,
+  );
+
+  return hasReachedBegLimit || hasReachedEgpLimit;
 }
 
 const replaceMonthAtIndex = (
@@ -220,7 +251,7 @@ const changeMonth = (
   }
 
   if (
-    canNotChangeBEGDueToLimitReachedPerParent(
+    canNotChangeDueToLimitReachedPerParent(
       changeMonthSettings,
       elternteile,
       elternteileSettings,
@@ -339,3 +370,34 @@ const changeMonth = (
 };
 
 export default changeMonth;
+
+function limitOfMonthsPerParentAsEgp(
+  settings?: CreateElternteileSettings,
+): number {
+  return settings?.alleinerziehend ? 28 : 24;
+}
+/**
+ * The number of months of type BEG or EG+ together. The BEG months are counted
+ * in ratio to EG+ to get a neutralized number. This is used for rules where
+ * both types of months need to be taken into consideration together.
+ *
+ * E.g.:
+ *   - 1 month BEG and 1 month EG+ makes 3 neutral months
+ *   - 2 month BEG and 1 month EG+ makes 5 neutral months
+ */
+function getCombinedNumberOfMonthsAsEGP(months: readonly Month[]): number {
+  const begMonthCount = months.filter(isBEGMonth).length;
+  const egpMonthCount = months.filter(isEGPMonth).length;
+  const begAsEgpMonthCount = begMonthCount * BEG_TO_EGP_RATIO;
+  return begAsEgpMonthCount + egpMonthCount;
+}
+
+function isBEGMonth(month: Month): boolean {
+  return month.type === "BEG";
+}
+
+function isEGPMonth(month: Month): boolean {
+  return month.type === "EG+";
+}
+
+const BEG_TO_EGP_RATIO = 2; // 1 month BEG is "worth" 2 months EGP

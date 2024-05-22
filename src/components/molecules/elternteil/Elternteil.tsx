@@ -30,6 +30,7 @@ interface Props {
   onToggleMonth: (columnType: ColumnType, monthIndex: number) => void;
   onDragOverMonth: (columnType: ColumnType, monthIndex: number) => void;
   isBEGMonthSelectable: (index: number) => boolean;
+  isEGPMonthSelectable: (index: number) => boolean;
   amounts: AmountElterngeldRow[];
   hasMutterschutz: boolean;
   mutterSchutzMonate: number;
@@ -48,6 +49,7 @@ export const Elternteil = ({
   onToggleMonth,
   onDragOverMonth,
   isBEGMonthSelectable,
+  isEGPMonthSelectable,
   amounts,
   hasMutterschutz,
   mutterSchutzMonate,
@@ -96,6 +98,12 @@ export const Elternteil = ({
   function isBEGCellVisible(index: number): boolean {
     const isAlreadySelected = elternteil.months[index].type === "BEG";
     const isSelectable = isBEGMonthSelectable(index);
+    return isAlreadySelected || isSelectable;
+  }
+
+  function isEGPCellVisible(index: number): boolean {
+    const isAlreadySelected = elternteil.months[index].type === "EG+";
+    const isSelectable = isEGPMonthSelectable(index);
     return isAlreadySelected || isSelectable;
   }
 
@@ -191,7 +199,8 @@ export const Elternteil = ({
               )}
             </td>
             <td>
-              {(!hasMutterschutz || index >= mutterSchutzMonate) &&
+              {isEGPCellVisible(index) &&
+                (!hasMutterschutz || index >= mutterSchutzMonate) &&
                 (remainingMonths.elterngeldplus > 0 ||
                   elternteil.months[index].type === "EG+") && (
                   <MonatsplanerMonth

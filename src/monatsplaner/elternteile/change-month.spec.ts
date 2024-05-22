@@ -214,7 +214,7 @@ describe("Change Month", () => {
       expect(elternteile.remainingMonths.basiselterngeld).toBe(15 - 4);
     });
 
-    it("should not allow to take more than 12 BEG months for a parent even with partner months", () => {
+    it("should not allow to take more than 12 BEG months for a parent", () => {
       const elternteile = createElternteileWithPartnerMonate();
 
       monthIndexRange(0, 11).forEach((monthIndex) => {
@@ -228,26 +228,73 @@ describe("Change Month", () => {
       );
     });
 
-    it("should allow split the 14 months between both partners", () => {
+    it("should not allow to take more than 24 EG+ months for a parent", () => {
       const elternteile = createElternteileWithPartnerMonate();
 
-      monthIndexRange(0, 6).forEach((monthIndex) => {
-        elternteile.changeMonth("ET1", monthIndex, "BEG");
+      monthIndexRange(0, 23).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "EG+");
       });
-      monthIndexRange(7, 13).forEach((monthIndex) => {
-        elternteile.changeMonth("ET2", monthIndex, "BEG");
-      });
+      elternteile.changeMonth("ET1", 24, "EG+");
 
-      expect(elternteile.remainingMonths.basiselterngeld).toEqual(0);
-      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "BEG")).toEqual(
-        7,
-      );
-      expect(countSuccessfullyChangedMonths(elternteile, "ET2", "BEG")).toEqual(
-        7,
+      expect(elternteile.remainingMonths.partnerschaftsbonus).toEqual(4);
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "EG+")).toEqual(
+        24,
       );
     });
 
-    it("should not allow to take all 14 months alone if alleinerziehend", () => {
+    it("should not allow to take too many EG+ and BEG months combined for a partner", () => {
+      const elternteile = createElternteileWithPartnerMonate();
+
+      monthIndexRange(0, 5).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
+      });
+      monthIndexRange(6, 18).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "EG+");
+      });
+      elternteile.changeMonth("ET1", 19, "EG+");
+
+      expect(elternteile.remainingMonths.basiselterngeld).toEqual(2);
+      expect(elternteile.remainingMonths.partnerschaftsbonus).toEqual(4);
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "BEG")).toEqual(
+        6,
+      );
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "EG+")).toEqual(
+        12,
+      );
+    });
+
+    it("should allow split the 14 months between both partners", () => {
+      const elternteile = createElternteileWithPartnerMonate();
+
+      monthIndexRange(0, 5).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "BEG");
+      });
+      monthIndexRange(6, 18).forEach((monthIndex) => {
+        elternteile.changeMonth("ET1", monthIndex, "EG+");
+      });
+
+      elternteile
+        .changeMonth("ET2", 0, "BEG")
+        .changeMonth("ET2", 1, "EG+")
+        .changeMonth("ET2", 2, "EG+");
+
+      expect(elternteile.remainingMonths.basiselterngeld).toEqual(0);
+      expect(elternteile.remainingMonths.elterngeldplus).toEqual(0);
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "BEG")).toEqual(
+        6,
+      );
+      expect(countSuccessfullyChangedMonths(elternteile, "ET1", "EG+")).toEqual(
+        12,
+      );
+      expect(countSuccessfullyChangedMonths(elternteile, "ET2", "BEG")).toEqual(
+        1,
+      );
+      expect(countSuccessfullyChangedMonths(elternteile, "ET2", "EG+")).toEqual(
+        2,
+      );
+    });
+
+    it("should allow to take all 14 months alone if alleinerziehend", () => {
       const elternteile = createElternteileWithPartnerMonate(true);
 
       monthIndexRange(0, 13).forEach((monthIndex) => {

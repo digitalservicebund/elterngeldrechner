@@ -332,8 +332,7 @@ describe("Monatsplaner", () => {
   });
 
   it("should show notification on click on last available month that there are zero remaining month of this type", async () => {
-    // render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
-    render(<Monatsplaner mutterSchutzMonate={2} />, {
+    render(<Monatsplaner mutterSchutzMonate={numberOfMutterschutzMonths} />, {
       preloadedState: stateForBoth,
     });
 
@@ -342,48 +341,32 @@ describe("Monatsplaner", () => {
     });
     await userEvent.click(expandButton);
 
-    // select 8 month EG+ (2 MS + 8 EG+ (3.-10.) = 6)
-    for (let i = 0; i < 8; i++) {
+    for (let monthIndex = 0; monthIndex < 20; monthIndex++) {
       const month = screen.getByLabelText(
-        getElternteilEGPLabel("Frida", numberOfMutterschutzMonths + i),
+        getElternteilEGPLabel("Frida", numberOfMutterschutzMonths + monthIndex),
       );
       await userEvent.click(month);
     }
 
-    // select 4 month BG (2 MS + 8 EG+ (3.-10.) + 4 BG (11.-14.) = 10)
-    for (let i = 8; i < 12; i++) {
+    for (let monthIndex = 0; monthIndex < 3; monthIndex++) {
       await userEvent.click(
-        screen.getByLabelText(
-          getElternteilBEGLabel("Frida", numberOfMutterschutzMonths + i),
-        ),
-      );
-    }
-
-    // select 3 month EG+ (2 MS + 8 EG+ + 4 BG + 3 EG+ = 11,5)
-    for (let i = 12; i < 19; i++) {
-      await userEvent.click(
-        screen.getByLabelText(
-          getElternteilEGPLabel("Frida", numberOfMutterschutzMonths + i),
-        ),
+        screen.getByLabelText(getElternteilEGPLabel("Manfred", monthIndex)),
       );
     }
 
     const notificationBEGZeroMonthAvailable = screen.getByText(
       /ihre verfügbaren Basiselterngeld-Monate sind aufgebraucht/i,
     );
-    expect(notificationBEGZeroMonthAvailable).toBeInTheDocument();
+    expect(notificationBEGZeroMonthAvailable).toBeVisible();
 
-    // select 1 month EG+ (2 MS + 8 EG+ + 4 BG + 3 EG+ + 1 EG+ = 12)
     await userEvent.click(
-      screen.getByLabelText(
-        getElternteilEGPLabel("Frida", numberOfMutterschutzMonths + 19),
-      ),
+      screen.getByLabelText(getElternteilEGPLabel("Manfred", 4)),
     );
 
     const notificationEGZeroMonthAvailable = screen.getByText(
       /ihre verfügbaren Basiselterngeld- und ElterngeldPlus-Monate sind aufgebraucht/i,
     );
-    expect(notificationEGZeroMonthAvailable).toBeInTheDocument();
+    expect(notificationEGZeroMonthAvailable).toBeVisible();
   });
 
   it("should show notification on click on 11 + 1 beg month", async () => {
@@ -980,6 +963,54 @@ describe("Monatsplaner", () => {
 
       scrollMock.mockRestore();
       focusMock.mockRestore();
+    });
+  });
+
+  describe("partner months", () => {
+    it("hides further months when partner reached their limit", async () => {
+      const preloadedState: Partial<RootState> = {
+        stepAllgemeineAngaben: {
+          ...initialStepAllgemeineAngabenState,
+          antragstellende: "FuerBeide",
+          pseudonym: {
+            ET1: "Jane",
+            ET2: "John",
+          },
+        },
+        monatsplaner: {
+          ...initialMonatsplanerState,
+          settings: {
+            partnerMonate: true,
+            behindertesGeschwisterkind: false,
+            mehrlinge: false,
+          },
+        },
+      };
+      render(<Monatsplaner mutterSchutzMonate={0} />, {
+        preloadedState,
+      });
+
+      const initialAvailableBEGMonthsET1 = screen.getAllByLabelText(
+        /Jane Basiselterngeld für Lebensmonat/,
+      );
+      expect(initialAvailableBEGMonthsET1).toHaveLength(14);
+
+      for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
+        const begMonthButton = screen.getByLabelText(
+          `Jane Basiselterngeld für Lebensmonat ${monthIndex + 1}`,
+        );
+        await userEvent.click(begMonthButton);
+      }
+
+      const finalBEGMonthsET1 = screen.getAllByLabelText(
+        /Jane Basiselterngeld für Lebensmonat/,
+      );
+      expect(finalBEGMonthsET1).toHaveLength(12);
+
+      const remainingBEGMonthsET2 = screen.getAllByLabelText(
+        /John Basiselterngeld für Lebensmonat/,
+      );
+      expect(remainingBEGMonthsET2).toHaveLength(14);
     });
   });
 });

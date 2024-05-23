@@ -1,7 +1,7 @@
 import nsp from "@/globals/js/namespace";
 import { Button, P } from "@/components/atoms";
 
-export const AccessControl = () => {
+export function AccessControl() {
   const handleScrollToTop = () => {
     const firstRechnerForm = document.getElementsByClassName(
       "egr-rechner-form",
@@ -26,4 +26,4 @@ export const AccessControl = () => {
       </div>
     </section>
   );
-};
+}

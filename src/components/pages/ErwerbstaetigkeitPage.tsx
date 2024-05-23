@@ -10,13 +10,13 @@ import {
 import { formSteps } from "@/utils/formSteps";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 
-const ErwerbstaetigkeitPage = () => {
+function ErwerbstaetigkeitPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const initialValues = useAppSelector((state) => state.stepErwerbstaetigkeit);
 
-  const [isFormDirty, setFormIsDirty] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
   const [dirtyFields, setDirtyFields] = useState({});
 
   const handleSubmit = (values: StepErwerbstaetigkeitState) => {
@@ -42,7 +42,7 @@ const ErwerbstaetigkeitPage = () => {
   };
 
   const handleDirtyForm = (isFormDirty: boolean, dirtyFields: object) => {
-    setFormIsDirty(isFormDirty);
+    setIsFormDirty(isFormDirty);
     setDirtyFields(dirtyFields);
   };
 
@@ -55,6 +55,6 @@ const ErwerbstaetigkeitPage = () => {
       />
     </Page>
   );
-};
+}
 
 export default ErwerbstaetigkeitPage;

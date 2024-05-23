@@ -25,12 +25,12 @@ const typeOfVersicherungenLabels: {
   none: "keines der Genannten",
 };
 
-export const Versicherungen = ({
+export function Versicherungen({
   hasRentenversicherungName,
   hasArbeitslosenversicherungName,
   hasKrankenversicherungName,
   noneName,
-}: VersicherungenProps) => {
+}: VersicherungenProps) {
   const {
     register,
     formState: { errors },
@@ -66,7 +66,7 @@ export const Versicherungen = ({
     <FormFieldGroup
       description="Ich war während der Ausübung dieser Tätigkeit"
       aria-describedby={
-        versicherungenError && "versicherungen-checkbox-group-error"
+        versicherungenError ? "versicherungen-checkbox-group-error" : undefined
       }
     >
       <CustomCheckbox
@@ -112,11 +112,11 @@ export const Versicherungen = ({
           onChange: handleChangeNoneVersicherung,
         }}
       />
-      {versicherungenError && (
+      {versicherungenError ? (
         <span id="versicherungen-checkbox-group-error">
           {versicherungenError.message}
         </span>
-      )}
+      ) : null}
     </FormFieldGroup>
   );
-};
+}

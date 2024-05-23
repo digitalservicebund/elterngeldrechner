@@ -9,7 +9,7 @@ import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
-const RechnerPlanerPage = () => {
+function RechnerPlanerPage() {
   const nachwuchs = useAppSelector((state) => state.stepNachwuchs);
   const allgemein = useAppSelector((state) => state.stepAllgemeineAngaben);
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
@@ -38,7 +38,7 @@ const RechnerPlanerPage = () => {
       <h3>Rechner und Planer</h3>
       <Rechner />
       <Monatsplaner mutterSchutzMonate={mutterSchutzMonate} />
-      {showModalPopup && (
+      {!!showModalPopup && (
         // TODO: fix text after check with ministry
         <ModalPopup
           text={`Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Falls noch nicht feststeht, ob Sie die Grenze von ${amountLimitEinkommen.toLocaleString()} Euro überschreiten, können Sie trotzdem einen Antrag stellen.`}
@@ -50,6 +50,6 @@ const RechnerPlanerPage = () => {
       )}
     </Page>
   );
-};
+}
 
 export default RechnerPlanerPage;

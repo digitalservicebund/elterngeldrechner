@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { CustomNumberField } from "./CustomNumberField";
 import { Button } from "@/components/atoms";
@@ -17,7 +16,7 @@ interface Props {
 describe.only("Custom Number Field", () => {
   const onSubmit = jest.fn();
 
-  const TestComponent: FC<Props> = ({ allowedDecimalPlaces, max }) => {
+  function TestComponent({ allowedDecimalPlaces, max }: Props) {
     const { handleSubmit, control } = useForm<TestFormValues>();
 
     return (
@@ -31,12 +30,12 @@ describe.only("Custom Number Field", () => {
         />
         <Button
           className="btn btn-outline-primary"
-          type="submit"
           label="Submit"
+          isSubmitButton
         />
       </form>
     );
-  };
+  }
 
   beforeEach(() => {
     onSubmit.mockClear();

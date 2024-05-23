@@ -23,7 +23,7 @@ interface Props<TFieldValues extends FieldValues> {
   info?: Info;
 }
 
-export const CustomCheckbox = <TFieldValues extends FieldValues>({
+export function CustomCheckbox<TFieldValues extends FieldValues>({
   register,
   registerOptions,
   name,
@@ -31,7 +31,7 @@ export const CustomCheckbox = <TFieldValues extends FieldValues>({
   errors,
   onChange,
   info,
-}: Props<TFieldValues>) => {
+}: Props<TFieldValues>) {
   let hasError = false;
   let errorMessage = "";
   if (typeof errors === "boolean") {
@@ -77,13 +77,13 @@ export const CustomCheckbox = <TFieldValues extends FieldValues>({
       >
         {label}
       </label>
-      {errorMessage && (
-        <Description id={`${name}-error`} error={true}>
+      {!!errorMessage && (
+        <Description id={`${name}-error`} error>
           {errorMessage}
         </Description>
       )}
 
-      {info && <InfoDialog info={info} />}
+      {!!info && <InfoDialog info={info} />}
     </div>
   );
-};
+}

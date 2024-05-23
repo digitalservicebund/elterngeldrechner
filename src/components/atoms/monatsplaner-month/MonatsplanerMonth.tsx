@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import classNames from "classnames";
 import { ElterngeldType } from "@/monatsplaner";
 import nsp from "@/globals/js/namespace";
@@ -18,7 +18,7 @@ interface Props {
   onMouseLeave?: () => void;
 }
 
-export const MonatsplanerMonth: FC<Props> = ({
+export function MonatsplanerMonth({
   isSelected,
   isMutterschutzMonth,
   isElternteilOne,
@@ -30,7 +30,7 @@ export const MonatsplanerMonth: FC<Props> = ({
   onMouseOver,
   onMouseLeave,
   children,
-}) => {
+}: Props) {
   const handleMouseDown = () => {
     onToggle();
   };
@@ -63,13 +63,14 @@ export const MonatsplanerMonth: FC<Props> = ({
     >
       {isMutterschutzMonth ? (
         <InfoDialog
-          isMonatsplanner={true}
+          isMonatsplanner
           isElternteilOne={isElternteilOne}
           info={infoTexts.monatsplannerMutterschaftsleistungen}
         />
       ) : (
         <>
           <button
+            type="button"
             aria-label={label}
             onMouseDown={handleMouseDown}
             onClick={handleClick}
@@ -84,4 +85,4 @@ export const MonatsplanerMonth: FC<Props> = ({
       )}
     </div>
   );
-};
+}

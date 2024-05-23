@@ -10,13 +10,13 @@ import { formSteps } from "@/utils/formSteps";
 import { EinkommenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
 
-const EinkommenPage = () => {
+function EinkommenPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const initialValues = useAppSelector((state) => state.stepEinkommen);
 
-  const [isFormDirty, setFormIsDirty] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
   const [dirtyFields, setDirtyFields] = useState({});
 
   const handleSubmit = (values: StepEinkommenState) => {
@@ -46,7 +46,7 @@ const EinkommenPage = () => {
   };
 
   const handleDirtyForm = (isFormDirty: boolean, dirtyFields: object) => {
-    setFormIsDirty(isFormDirty);
+    setIsFormDirty(isFormDirty);
     setDirtyFields(dirtyFields);
   };
 
@@ -59,6 +59,6 @@ const EinkommenPage = () => {
       />
     </Page>
   );
-};
+}
 
 export default EinkommenPage;

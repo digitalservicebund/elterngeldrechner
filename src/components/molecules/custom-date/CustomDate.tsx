@@ -19,7 +19,7 @@ interface CustomDateProps<
   info?: Info;
 }
 
-export const CustomDate = <
+export function CustomDate<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -29,7 +29,7 @@ export const CustomDate = <
   label,
   required,
   info,
-}: CustomDateProps<TFieldValues, TName>) => {
+}: CustomDateProps<TFieldValues, TName>) {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },
@@ -39,7 +39,7 @@ export const CustomDate = <
     <div className={nsp("custom-date")}>
       <div className={nsp("custom-date__label")}>
         <label htmlFor={name}>{label}</label>
-        {info && <InfoDialog info={info} />}
+        {!!info && <InfoDialog info={info} />}
       </div>
       <div
         className={classNames(
@@ -47,7 +47,7 @@ export const CustomDate = <
           error && nsp("custom-date__field--error"),
         )}
       >
-        <span className={nsp("custom-date__placeholder")} aria-hidden={true}>
+        <span className={nsp("custom-date__placeholder")} aria-hidden>
           TT.MM.JJJJ
         </span>
         <IMaskInput
@@ -56,7 +56,7 @@ export const CustomDate = <
           id={name}
           inputRef={ref}
           mask={Date}
-          lazy={true}
+          lazy
           autofix="pad"
           value={value}
           blocks={{
@@ -87,15 +87,15 @@ export const CustomDate = <
           placeholder="__.__.___"
           aria-placeholder="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
           aria-invalid={!!error}
-          aria-describedby={error && `${name}-error`}
+          aria-describedby={error ? `${name}-error` : undefined}
           required={required}
         />
       </div>
-      {error && (
-        <Description id={`${name}-error`} error={true}>
+      {!!error && (
+        <Description id={`${name}-error`} error>
           {error.message}
         </Description>
       )}
     </div>
   );
-};
+}

@@ -1,4 +1,4 @@
-import React, { AriaAttributes, Children, FC, useState } from "react";
+import React, { AriaAttributes, Children, useState } from "react";
 import nsp from "@/globals/js/namespace";
 import { P } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
@@ -10,13 +10,13 @@ interface FormFieldGroupProps extends AriaAttributes {
   children: React.ReactNode;
 }
 
-export const FormFieldGroup: FC<FormFieldGroupProps> = ({
+export function FormFieldGroup({
   headline,
   description,
   info,
   children,
   ...aria
-}) => {
+}: FormFieldGroupProps) {
   const [markedAsRequired, setMarkedAsRequired] = useState<boolean | null>(
     null,
   );
@@ -53,21 +53,21 @@ export const FormFieldGroup: FC<FormFieldGroupProps> = ({
       className={nsp("form-field-group")}
       {...aria}
     >
-      {headline && (
+      {!!headline && (
         <h3>
           {headline}
-          {showRequiredAsterisk && <span>&nbsp;*</span>}
+          {!!showRequiredAsterisk && <span>&nbsp;*</span>}
         </h3>
       )}
-      {description && (
+      {!!description && (
         <div className={nsp("form-field-group-description")}>
           <P className={nsp("form-field-group-description__text")}>
             {description}
           </P>
-          {info && <InfoDialog info={info} />}
+          {!!info && <InfoDialog info={info} />}
         </div>
       )}
       {children}
     </section>
   );
-};
+}

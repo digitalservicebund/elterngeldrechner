@@ -29,7 +29,7 @@ interface CustomNumberFieldProps<
   info?: Info;
 }
 
-export const CustomNumberField = <
+export function CustomNumberField<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
@@ -46,7 +46,7 @@ export const CustomNumberField = <
   required,
   ariaDescribedByIfNoError,
   info,
-}: CustomNumberFieldProps<TFieldValues, TName>) => {
+}: CustomNumberFieldProps<TFieldValues, TName>) {
   const registerOptions: RegisterOptions = useMemo(() => {
     return {
       required: "Dieses Feld ist erforderlich",
@@ -78,7 +78,7 @@ export const CustomNumberField = <
           className={nsp("custom-input-question__input")}
           inputRef={ref}
           mask={mask}
-          unmask={true}
+          unmask
           blocks={{
             num: {
               mask: Number,
@@ -89,7 +89,7 @@ export const CustomNumberField = <
             },
           }}
           lazy={false}
-          autofix={true}
+          autofix
           value={value === null ? "" : String(value)}
           onAccept={(value) => {
             if (!value) {
@@ -114,14 +114,14 @@ export const CustomNumberField = <
           }
           required={required}
         />
-        {error && (
-          <Description id={`${name}-error`} error={true}>
+        {!!error && (
+          <Description id={`${name}-error`} error>
             {error.message}
           </Description>
         )}
       </div>
 
-      {info && <InfoDialog info={info} />}
+      {!!info && <InfoDialog info={info} />}
     </div>
   );
-};
+}

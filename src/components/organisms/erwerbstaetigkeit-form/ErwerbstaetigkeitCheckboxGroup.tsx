@@ -19,7 +19,7 @@ const typeOfErwerbstaetigkeitLabels: {
   isSelbststaendig: "Gewinneinkünfte",
 };
 
-export const ErwerbstaetigkeitCheckboxGroup = ({ elternteil }: Props) => {
+export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
   const {
     register,
     getValues,
@@ -65,4 +65,4 @@ export const ErwerbstaetigkeitCheckboxGroup = ({ elternteil }: Props) => {
       />
     </FormFieldGroup>
   );
-};
+}

@@ -21,14 +21,14 @@ interface CustomInputProps<TFieldValues extends FieldValues> {
   info?: Info;
 }
 
-export const CustomInput = <TFieldValues extends FieldValues>({
+export function CustomInput<TFieldValues extends FieldValues>({
   register,
   name,
   label,
   errors,
   placeholder,
   info,
-}: CustomInputProps<TFieldValues>) => {
+}: CustomInputProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
 
   return (
@@ -48,17 +48,17 @@ export const CustomInput = <TFieldValues extends FieldValues>({
           type="text"
           id={name}
           placeholder={placeholder}
-          aria-describedby={error && `${name}-error`}
+          aria-describedby={error ? `${name}-error` : undefined}
           aria-invalid={!!error}
         />
-        {error && (
-          <Description id={`${name}-error`} error={true}>
+        {!!error && (
+          <Description id={`${name}-error`} error>
             {error.message}
           </Description>
         )}
       </div>
 
-      {info && <InfoDialog info={info} />}
+      {!!info && <InfoDialog info={info} />}
     </div>
   );
-};
+}

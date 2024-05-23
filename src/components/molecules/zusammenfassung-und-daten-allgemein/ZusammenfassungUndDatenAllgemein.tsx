@@ -9,7 +9,7 @@ type Props = {
   allgemeineDaten: StepAllgemeineAngabenState & StepNachwuchsState;
 };
 
-const ZusammenfassungUndDatenAllgemein = ({ allgemeineDaten }: Props) => {
+function ZusammenfassungUndDatenAllgemein({ allgemeineDaten }: Props) {
   return (
     <div className={nsp("zusammenfassung-und-daten-allgemein")}>
       <h4>Allgemeine Daten</h4>
@@ -35,6 +35,6 @@ const ZusammenfassungUndDatenAllgemein = ({ allgemeineDaten }: Props) => {
       />
     </div>
   );
-};
+}
 
 export default ZusammenfassungUndDatenAllgemein;

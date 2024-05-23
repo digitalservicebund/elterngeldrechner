@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import AddIcon from "@digitalservicebund/icons/Add";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
@@ -41,11 +41,11 @@ const validateMonth = (date: string) => {
   }
 };
 
-export const NachwuchsForm: FC<NachwuchsFormProps> = ({
+export function NachwuchsForm({
   initialValues,
   onSubmit,
   handleDirtyForm,
-}) => {
+}: NachwuchsFormProps) {
   const {
     register,
     handleSubmit,
@@ -137,7 +137,7 @@ export const NachwuchsForm: FC<NachwuchsFormProps> = ({
           }}
           name={wahrscheinlichesGeburtsDatumName}
           label="Wann wird Ihr Kind voraussichtlich geboren?"
-          required={true}
+          required
           info={infoTexts.kindGeburtsdatum}
         />
         <Counter
@@ -158,7 +158,7 @@ export const NachwuchsForm: FC<NachwuchsFormProps> = ({
           errors={formState.errors}
           onIncrease={handleIncrease}
           onDecrease={handleDecrease}
-          required={true}
+          required
         />
       </FormFieldGroup>
       <FormFieldGroup
@@ -219,4 +219,4 @@ export const NachwuchsForm: FC<NachwuchsFormProps> = ({
       <ButtonGroup onClickBackButton={handlePageBack} />
     </form>
   );
-};
+}

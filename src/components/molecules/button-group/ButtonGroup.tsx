@@ -9,11 +9,11 @@ interface Props {
   isStepOne?: boolean;
 }
 
-export const ButtonGroup = ({
+export function ButtonGroup({
   onClickBackButton,
   onClickResetForm,
   isStepOne = false,
-}: Props) => {
+}: Props) {
   const secondButtonAttributes = onClickResetForm
     ? { onClick: onClickResetForm, label: "Neu starten" }
     : { type: "submit" as const, label: "Weiter" };
@@ -36,4 +36,4 @@ export const ButtonGroup = ({
       <Button {...secondButtonAttributes} />
     </section>
   );
-};
+}

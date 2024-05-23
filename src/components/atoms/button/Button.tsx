@@ -5,7 +5,6 @@ import nsp from "@/globals/js/namespace";
 
 interface Props<TFieldValues extends FieldValues> {
   className?: string;
-  type?: "button" | "submit";
   buttonStyle?: "primary" | "secondary" | "link";
   label: string | ReactNode;
   iconBefore?: ReactNode;
@@ -15,11 +14,11 @@ interface Props<TFieldValues extends FieldValues> {
   ariaLabel?: string;
   ariaControls?: Path<TFieldValues>;
   ariaHidden?: boolean;
+  isSubmitButton?: boolean;
 }
 
-export const Button = <TFieldValues extends FieldValues>({
+export function Button<TFieldValues extends FieldValues>({
   className,
-  type = "button",
   buttonStyle = "primary",
   label,
   iconBefore,
@@ -28,7 +27,8 @@ export const Button = <TFieldValues extends FieldValues>({
   disabled = false,
   ariaLabel,
   ariaControls,
-}: Props<TFieldValues>) => {
+  isSubmitButton = false,
+}: Props<TFieldValues>) {
   return (
     <button
       className={classNames(
@@ -39,19 +39,19 @@ export const Button = <TFieldValues extends FieldValues>({
         disabled && nsp("button--disabled"),
         className,
       )}
-      type={type}
+      type={isSubmitButton ? "submit" : "button"}
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
       aria-controls={ariaControls}
     >
-      {iconBefore && iconBefore}
-      {iconBefore && <>&nbsp;</>}
+      {!!iconBefore && iconBefore}
+      {!!iconBefore && <>&nbsp;</>}
 
       <span>{label}</span>
 
-      {iconAfter && <>&nbsp;</>}
-      {iconAfter && iconAfter}
+      {!!iconAfter && <>&nbsp;</>}
+      {!!iconAfter && iconAfter}
     </button>
   );
-};
+}

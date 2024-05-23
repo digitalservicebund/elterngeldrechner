@@ -13,7 +13,7 @@ interface NurSelbstaendigProps {
   monthsBeforeBirth: SelectOption[];
 }
 
-export const NurSelbstaendig = ({ elternteil }: NurSelbstaendigProps) => {
+export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {
   const { setValue, control } = useFormContext<StepEinkommenState>();
 
   setValue(`${elternteil}.gewinnSelbstaendig.type`, "yearly");
@@ -27,10 +27,10 @@ export const NurSelbstaendig = ({ elternteil }: NurSelbstaendigProps) => {
           label="Wie hoch war Ihr Gewinn im Kalenderjahr vor der Geburt Ihres Kindes?"
           suffix="Euro"
           max={999999}
-          required={true}
+          required
           info={infoTexts.einkommenGewinneinkuenfte}
         />
       </FormFieldGroup>
     </>
   );
-};
+}

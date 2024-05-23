@@ -20,10 +20,7 @@ interface Props {
   elternteilName: string;
 }
 
-export const EinkommenFormElternteil = ({
-  elternteil,
-  elternteilName,
-}: Props) => {
+export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
   const monthsLastYearBeforeBirthOptions = useAppSelector(
     stepNachwuchsSelectors.getMonthsLastYearBeforeBirthOptions,
   );
@@ -83,16 +80,16 @@ export const EinkommenFormElternteil = ({
         </P>
       )}
 
-      {isErwerbstaetigVorGeburt && (
+      {!!isErwerbstaetigVorGeburt && (
         <>
-          {isOnlyErwerbstaetigWithOneTaetigkeit && (
+          {!!isOnlyErwerbstaetigWithOneTaetigkeit && (
             <NurErwerbstaetig
               elternteil={elternteil}
               monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
             />
           )}
 
-          {isOnlySelbstaendig && (
+          {!!isOnlySelbstaendig && (
             <NurSelbstaendig
               elternteil={elternteil}
               monthsBeforeBirth={monthsLastYearBeforeBirthOptions}
@@ -108,7 +105,7 @@ export const EinkommenFormElternteil = ({
             />
           )}
 
-          {isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
+          {!!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
             <SelbstaendigAndErwerbstaetig
               elternteil={elternteil}
               isSelbststaendig={isSelbststaendig}
@@ -119,4 +116,4 @@ export const EinkommenFormElternteil = ({
       )}
     </section>
   );
-};
+}

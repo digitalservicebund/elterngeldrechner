@@ -26,12 +26,12 @@ const getHumanReadableMonthType: { [K in ElterngeldType]: string } = {
   "EG+": "ElterngeldPlus",
 };
 
-const ZusammenfassungUndDatenElternteil = ({
+function ZusammenfassungUndDatenElternteil({
   elternteilName,
   stepErwerbstaetigkeit,
   stepEinkommen,
   monatsplaner,
-}: Props) => {
+}: Props) {
   const isErwerbstaetigVorGeburt =
     stepErwerbstaetigkeitElternteilSelectors.isErwerbstaetigVorGeburt(
       stepErwerbstaetigkeit,
@@ -55,7 +55,7 @@ const ZusammenfassungUndDatenElternteil = ({
         question="Waren Sie in den 12 Monaten vor der Geburt des Kindes erwerbstätig?"
         answer={yesNoLabels[stepErwerbstaetigkeit.vorGeburt!]}
       />
-      {isErwerbstaetigVorGeburt && (
+      {!!isErwerbstaetigVorGeburt && (
         <>
           {!hasMiniJob && (
             <>
@@ -72,7 +72,7 @@ const ZusammenfassungUndDatenElternteil = ({
             </>
           )}
 
-          {isSelbstaendigAndErwerbstaetig && (
+          {!!isSelbstaendigAndErwerbstaetig && (
             <ol>
               {stepEinkommen.taetigkeitenNichtSelbstaendigUndSelbstaendig.map(
                 (taetigkeit, index) => (
@@ -109,6 +109,6 @@ const ZusammenfassungUndDatenElternteil = ({
       )}
     </div>
   );
-};
+}
 
 export default ZusammenfassungUndDatenElternteil;

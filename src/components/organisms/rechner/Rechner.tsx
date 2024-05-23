@@ -11,7 +11,7 @@ import nsp from "@/globals/js/namespace";
 import { FootNote, RechnerForm, RechnerResult } from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
 
-export const Rechner = () => {
+export function Rechner() {
   const dispatch = useAppDispatch();
   const initialValues = useAppSelector((state) => state.stepRechner);
 
@@ -116,7 +116,7 @@ export const Rechner = () => {
       </FootNote>
 
       <section className={nsp("rechner__description")}>
-        <P bold={true}>
+        <P bold>
           Hier können Sie beispielhaft berechnen, wie viel Elterngeld Sie in
           welcher Phase Ihrer Elternzeit erwarten können. Bitte beachten Sie,
           dass das hier berechnete Ergebnis nur eine Orientierung für Sie sein
@@ -180,4 +180,4 @@ export const Rechner = () => {
       />
     </section>
   );
-};
+}

@@ -1,9 +1,9 @@
 import {
   createContext,
-  FC,
   ReactNode,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import nsp from "@/globals/js/namespace";
@@ -17,12 +17,16 @@ interface IAriaLogContext {
 
 const AriaLogContext = createContext<IAriaLogContext | undefined>(undefined);
 
+type Props = {
+  children?: ReactNode;
+};
+
 /**
  * Provides access to the ARIA-logs. By adding a message to the log the message can be read by a screen reader.
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/log_role
  */
-export const AriaLogProvider: FC<{ children?: ReactNode }> = ({ children }) => {
+export function AriaLogProvider({ children }: Props) {
   const [messages, setMessages] = useState<string[]>([]);
 
   const addMessage = useCallback((message: string) => {
@@ -34,8 +38,10 @@ export const AriaLogProvider: FC<{ children?: ReactNode }> = ({ children }) => {
       );
   }, []);
 
+  const context = useMemo(() => ({ addMessage }), [addMessage]);
+
   return (
-    <AriaLogContext.Provider value={{ addMessage }}>
+    <AriaLogContext.Provider value={context}>
       <div role="log" className={nsp("aria-log")}>
         {messages.map((message) => (
           <P key={message}>{message}</P>
@@ -45,7 +51,7 @@ export const AriaLogProvider: FC<{ children?: ReactNode }> = ({ children }) => {
       {children}
     </AriaLogContext.Provider>
   );
-};
+}
 
 export const useAriaLog = () => {
   const context = useContext(AriaLogContext);

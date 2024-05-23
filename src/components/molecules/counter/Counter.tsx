@@ -25,7 +25,7 @@ interface Props<TFieldValues extends FieldValues> {
   required: boolean;
 }
 
-export const Counter = <TFieldValues extends FieldValues>({
+export function Counter<TFieldValues extends FieldValues>({
   register,
   registerOptions,
   name,
@@ -34,7 +34,7 @@ export const Counter = <TFieldValues extends FieldValues>({
   onIncrease,
   onDecrease,
   required,
-}: Props<TFieldValues>) => {
+}: Props<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
 
   return (
@@ -57,7 +57,7 @@ export const Counter = <TFieldValues extends FieldValues>({
           className={nsp("counter__input")}
           type="number"
           id={name}
-          aria-describedby={error && `${name}-error`}
+          aria-describedby={error ? `${name}-error` : undefined}
           aria-invalid={!!error}
           required={required}
         />
@@ -71,11 +71,11 @@ export const Counter = <TFieldValues extends FieldValues>({
           <AddIcon />
         </button>
       </div>
-      {error && (
-        <Description id={`${name}-error`} error={true}>
+      {!!error && (
+        <Description id={`${name}-error`} error>
           {error.message}
         </Description>
       )}
     </div>
   );
-};
+}

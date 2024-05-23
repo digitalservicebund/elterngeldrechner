@@ -22,11 +22,11 @@ interface Props {
   handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
-export const EinkommenForm = ({
+export function EinkommenForm({
   initialValues,
   onSubmit,
   handleDirtyForm,
-}: Props) => {
+}: Props) {
   const navigate = useNavigate();
   const methods = useForm({ defaultValues: initialValues });
   const { isDirty, dirtyFields, errors } = methods.formState;
@@ -67,7 +67,7 @@ export const EinkommenForm = ({
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name="limitEinkommenUeberschritten"
               errors={errors}
-              required={true}
+              required
             />
           </FormFieldGroup>
           <Split>
@@ -75,7 +75,7 @@ export const EinkommenForm = ({
               <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
             </SplitItem>
             {antragstellende === "FuerBeide" && (
-              <SplitItem hasDivider={true}>
+              <SplitItem hasDivider>
                 <EinkommenFormElternteil
                   elternteil="ET2"
                   elternteilName={ET2}
@@ -88,4 +88,4 @@ export const EinkommenForm = ({
       </FormProvider>
     </>
   );
-};
+}

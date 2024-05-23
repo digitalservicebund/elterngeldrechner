@@ -1,4 +1,3 @@
-import { FC } from "react";
 import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
 
@@ -11,25 +10,25 @@ interface Props {
   className?: string;
 }
 
-export const FootNoteNumber: FC<Props> = (props) => {
-  const prefix = props.prefix ? `${props.prefix}-` : "";
-  const id = `footnote_${prefix}${props.number}_${Date.now()}`;
-  const className = classNames(nsp("foot-note-number"), props.className);
+export function FootNoteNumber({ type, number, prefix, className }: Props) {
+  const formatted_prefix = prefix ? `${prefix}-` : "";
+  const id = `footnote_${formatted_prefix}${number}_${Date.now()}`;
+  const allClassNames = classNames(nsp("foot-note-number"), className);
 
-  switch (props.type) {
+  switch (type) {
     case "note":
       return (
-        <span id={id} className={className}>
-          {props.number}
+        <span id={id} className={allClassNames}>
+          {number}
         </span>
       );
     case "anchor":
       return (
-        <a href={`#${id}`} className={className}>
-          {props.number}
+        <a href={`#${id}`} className={allClassNames}>
+          {number}
         </a>
       );
     default:
-      throw new Error("Unknown FootNoteType: " + props.type);
+      throw new Error("Unknown FootNoteType: " + type);
   }
-};
+}

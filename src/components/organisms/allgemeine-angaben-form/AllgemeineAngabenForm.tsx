@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
@@ -33,11 +33,11 @@ interface AllgemeineAngabenFormProps {
   handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
-export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
+export function AllgemeineAngabenForm({
   initialValues,
   onSubmit,
   handleDirtyForm,
-}) => {
+}: AllgemeineAngabenFormProps) {
   const { register, handleSubmit, watch, formState } = useForm({
     defaultValues: initialValues,
   });
@@ -73,7 +73,7 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
             name="antragstellende"
             errors={formState.errors}
             options={antragstellendeOptions}
-            required={true}
+            required
           />
         </FormFieldGroup>
 
@@ -112,7 +112,7 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name="alleinerziehend"
               errors={formState.errors}
-              required={true}
+              required
             />
           </FormFieldGroup>
         ) : null}
@@ -128,10 +128,10 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
                   registerOptions={{ required: "Dieses Feld ist erforderlich" }}
                   name="mutterschaftssleistungen"
                   errors={formState.errors}
-                  required={true}
+                  required
                 />
               </FormFieldGroup>
-              {showMutterschaftsleistungsWerGroup && (
+              {!!showMutterschaftsleistungsWerGroup && (
                 <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
                   <CustomRadio
                     register={register}
@@ -141,15 +141,15 @@ export const AllgemeineAngabenForm: FC<AllgemeineAngabenFormProps> = ({
                     name="mutterschaftssleistungenWer"
                     options={mutteschaftsleistungenOptions}
                     errors={formState.errors}
-                    required={true}
+                    required
                   />
                 </FormFieldGroup>
               )}
             </>
           ) : null}
         </>
-        <ButtonGroup isStepOne={true} />
+        <ButtonGroup isStepOne />
       </form>
     </>
   );
-};
+}

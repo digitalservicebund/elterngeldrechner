@@ -39,11 +39,11 @@ interface ErwerbstaetikeitFormElternteilProps {
   antragssteller: Antragstellende | null;
 }
 
-const ErwerbstaetigkeitFormElternteil = ({
+function ErwerbstaetigkeitFormElternteil({
   elternteil,
   elternteilName,
   antragssteller,
-}: ErwerbstaetikeitFormElternteilProps) => {
+}: ErwerbstaetikeitFormElternteilProps) {
   const {
     register,
     formState: { errors },
@@ -90,13 +90,13 @@ const ErwerbstaetigkeitFormElternteil = ({
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name={`${elternteil}.vorGeburt`}
           errors={errors}
-          required={true}
+          required
         />
       </FormFieldGroup>
       {wasErwerbstaetig === YesNo.YES && (
         <>
           <ErwerbstaetigkeitCheckboxGroup elternteil={elternteil} />
-          {isNichtSelbststaendig && !isSelbststaendig && (
+          {!!isNichtSelbststaendig && !isSelbststaendig && (
             <>
               <FormFieldGroup description="Bestand Ihre nichtselbständige Arbeit aus mehreren Tätigkeiten?">
                 <YesNoRadio
@@ -104,7 +104,7 @@ const ErwerbstaetigkeitFormElternteil = ({
                   registerOptions={{ required: "Dieses Feld ist erforderlich" }}
                   name={`${elternteil}.mehrereTaetigkeiten`}
                   errors={errors}
-                  required={true}
+                  required
                 />
               </FormFieldGroup>
               {mehrereTaetigkeiten === YesNo.NO && (
@@ -117,7 +117,7 @@ const ErwerbstaetigkeitFormElternteil = ({
                       }}
                       name={`${elternteil}.sozialVersicherungsPflichtig`}
                       errors={errors}
-                      required={true}
+                      required
                     />
                   </FormFieldGroup>
                   <FormFieldGroup
@@ -132,7 +132,7 @@ const ErwerbstaetigkeitFormElternteil = ({
                       name={`${elternteil}.monatlichesBrutto`}
                       errors={errors}
                       options={monatlichesBruttoOptions}
-                      required={true}
+                      required
                     />
                   </FormFieldGroup>
                 </>
@@ -143,6 +143,6 @@ const ErwerbstaetigkeitFormElternteil = ({
       )}
     </>
   );
-};
+}
 
 export default ErwerbstaetigkeitFormElternteil;

@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 import classNames from "classnames";
 import { AriaMessage } from "@/components/atoms";
 import { FormStep } from "@/utils/formSteps";
@@ -11,7 +11,7 @@ interface PageProps {
   children: ReactNode;
 }
 
-export const Page: FC<PageProps> = ({ step, children }) => {
+export function Page({ step, children }: PageProps) {
   // scroll to top on page navigation
   useEffect(() => {
     window.scrollTo({
@@ -38,4 +38,4 @@ export const Page: FC<PageProps> = ({ step, children }) => {
       </div>
     </div>
   );
-};
+}

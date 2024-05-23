@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
@@ -9,12 +9,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const P: FC<Props> = ({
-  size = "normal",
-  bold,
-  className,
-  children,
-}) => {
+export function P({ size = "normal", bold, className, children }: Props) {
   return (
     <p
       className={classNames(
@@ -27,4 +22,4 @@ export const P: FC<Props> = ({
       {children}
     </p>
   );
-};
+}

@@ -15,10 +15,10 @@ interface NurErwerbstaetigProps {
   monthsBeforeBirth: SelectOption[];
 }
 
-export const NurErwerbstaetig = ({
+export function NurErwerbstaetig({
   elternteil,
   monthsBeforeBirth,
-}: NurErwerbstaetigProps) => {
+}: NurErwerbstaetigProps) {
   const { control, setValue, watch } = useFormContext<StepEinkommenState>();
 
   const averageOrMonthlyNichtSelbstaendig = watch(
@@ -40,7 +40,7 @@ export const NurErwerbstaetig = ({
             name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.average`}
             label="Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt ihres Kindes monatlich brutto verdient?"
             suffix="Euro"
-            required={true}
+            required
             info={infoTexts.einkommenNichtSelbststaendig}
           />
         )}
@@ -102,7 +102,7 @@ export const NurErwerbstaetig = ({
                 name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.perMonth.${index}`}
                 label={label}
                 suffix="Euro"
-                required={true}
+                required
               />
             ))}
           </fieldset>
@@ -110,4 +110,4 @@ export const NurErwerbstaetig = ({
       </FormFieldGroup>
     </>
   );
-};
+}

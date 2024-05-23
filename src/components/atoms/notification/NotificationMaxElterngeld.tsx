@@ -1,4 +1,4 @@
-export const NotificationMaxElterngeld = () => {
+export function NotificationMaxElterngeld() {
   return (
     <div>
       Von Ihrem Netto Einkommen werden höchstens 2770 Euro für die Festlegung
@@ -9,4 +9,4 @@ export const NotificationMaxElterngeld = () => {
       Euro und Ihrem Einkommen nach der Geburt.
     </div>
   );
-};
+}

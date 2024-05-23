@@ -11,7 +11,7 @@ interface Props {
   currentStep: FormStep;
 }
 
-export const Sidebar = ({ currentStep }: Props) => {
+export function Sidebar({ currentStep }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const currentStepIndex = Object.values(formSteps).findIndex(
@@ -72,4 +72,4 @@ export const Sidebar = ({ currentStep }: Props) => {
       </ol>
     </div>
   );
-};
+}

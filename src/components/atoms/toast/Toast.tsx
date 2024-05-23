@@ -12,7 +12,7 @@ interface ToastProps {
 
 type ToastContentProps = Pick<ToastProps, "messages" | "active">;
 
-const ToastContent = ({ messages, active }: ToastContentProps) => {
+function ToastContent({ messages, active }: ToastContentProps) {
   return (
     <div className={`${nsp("toast")} ${active ? nsp("toast--active") : ""}`}>
       {messages !== null &&
@@ -21,7 +21,7 @@ const ToastContent = ({ messages, active }: ToastContentProps) => {
         ))}
     </div>
   );
-};
+}
 
 export const Toast = ({ messages, active, onUnMount, timeout }: ToastProps) => {
   useEffect(() => {

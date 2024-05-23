@@ -16,10 +16,10 @@ const booleanOptions: RadioOption<YesNo>[] = [
   { value: YesNo.NO, label: yesNoLabels.NO },
 ];
 
-const YesNoRadio = <TFieldValues extends FieldValues>(
+function YesNoRadio<TFieldValues extends FieldValues>(
   props: Omit<CustomRadioProps<TFieldValues>, "options">,
-) => {
+) {
   return <CustomRadio {...props} options={booleanOptions} />;
-};
+}
 
 export default YesNoRadio;

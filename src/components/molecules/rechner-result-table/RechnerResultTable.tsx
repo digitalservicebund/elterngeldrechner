@@ -32,14 +32,14 @@ export const formatMoney = (number: number, fractionDigits?: number) => {
   });
 };
 
-export const RechnerResultTable = ({
+export function RechnerResultTable({
   rows,
   elterngeldType,
   titleTotal,
   markOver14Month,
   hideLebensmonate,
   className,
-}: Props) => {
+}: Props) {
   return (
     <table
       className={classNames(
@@ -97,16 +97,16 @@ export const RechnerResultTable = ({
               <td className={nsp("rechner-result-table__cell--result")}>
                 {roundAndFormatMoney(amountElterngeld)}
                 {markOver14Month &&
-                  (vonLebensMonat > 14 || bisLebensMonat > 14) && (
-                    <FootNoteNumber number={1} type="anchor" prefix="rechner" />
-                  )}
+                (vonLebensMonat > 14 || bisLebensMonat > 14) ? (
+                  <FootNoteNumber number={1} type="anchor" prefix="rechner" />
+                ) : null}
               </td>
               <td className={nsp("rechner-result-table__cell--result")}>
                 {roundAndFormatMoney(amountTotal)}
                 {markOver14Month &&
-                  (vonLebensMonat > 14 || bisLebensMonat > 14) && (
-                    <FootNoteNumber number={1} type="anchor" prefix="rechner" />
-                  )}
+                (vonLebensMonat > 14 || bisLebensMonat > 14) ? (
+                  <FootNoteNumber number={1} type="anchor" prefix="rechner" />
+                ) : null}
               </td>
             </tr>
           ),
@@ -114,4 +114,4 @@ export const RechnerResultTable = ({
       </tbody>
     </table>
   );
-};
+}

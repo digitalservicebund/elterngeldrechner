@@ -80,10 +80,10 @@ const rentenVersicherungOptions: RadioOption<RentenArt>[] = [
   },
 ];
 
-export const SteuerUndVersicherung = ({
+export function SteuerUndVersicherung({
   elternteil,
   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
-}: SteuerUndVersicherungProps) => {
+}: SteuerUndVersicherungProps) {
   const {
     register,
     formState: { errors },
@@ -104,7 +104,7 @@ export const SteuerUndVersicherung = ({
       {!isOnlySelbstaendig && (
         <FormFieldGroup headline="Steuerklasse">
           <CustomSelect
-            autoWidth={true}
+            autoWidth
             register={register}
             registerOptions={{
               required: "Eine Option muss ausgewählt sein",
@@ -113,7 +113,7 @@ export const SteuerUndVersicherung = ({
             label="Welche Steuerklasse haben Sie?"
             errors={errors}
             options={steuerKlasseOptions}
-            required={true}
+            required
             info={infoTexts.einkommenSteuerklasse}
           />
         </FormFieldGroup>
@@ -121,7 +121,7 @@ export const SteuerUndVersicherung = ({
       {!isOnlySelbstaendig && numberOfGeschwisterKinder > 0 && (
         <FormFieldGroup headline="Kinderfreibeträge">
           <CustomSelect
-            autoWidth={true}
+            autoWidth
             register={register}
             registerOptions={{
               required: "Eine Option muss ausgewählt sein",
@@ -131,7 +131,7 @@ export const SteuerUndVersicherung = ({
         Gehaltsbescheinigung ersichtlich?"
             errors={errors}
             options={kinderFreiBetragOptions}
-            required={true}
+            required
           />
         </FormFieldGroup>
       )}
@@ -146,7 +146,7 @@ export const SteuerUndVersicherung = ({
           }}
           name={`${elternteil}.zahlenSieKirchenSteuer`}
           errors={errors}
-          required={true}
+          required
         />
       </FormFieldGroup>
       {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
@@ -162,11 +162,11 @@ export const SteuerUndVersicherung = ({
             name={`${elternteil}.kassenArt`}
             options={kassenArtOptions}
             errors={errors}
-            required={true}
+            required
           />
         </FormFieldGroup>
       )}
-      {isOnlySelbstaendig && (
+      {!!isOnlySelbstaendig && (
         <FormFieldGroup
           headline="Rentenversicherung"
           description="Wie sind Sie rentenversichert?"
@@ -179,10 +179,10 @@ export const SteuerUndVersicherung = ({
             name={`${elternteil}.rentenVersicherung`}
             options={rentenVersicherungOptions}
             errors={errors}
-            required={true}
+            required
           />
         </FormFieldGroup>
       )}
     </>
   );
-};
+}

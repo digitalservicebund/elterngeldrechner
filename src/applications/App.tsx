@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
 import { AriaLogProvider, Spinner } from "@/components/atoms";
 import "@/styles/tailwind.css";
@@ -29,7 +29,7 @@ interface Props {
   elternGeldDigitalWizardUrl: string | undefined;
 }
 
-export const App: FC<Props> = ({ elternGeldDigitalWizardUrl }) => {
+export function App({ elternGeldDigitalWizardUrl }: Props) {
   const dispatch = useAppDispatch();
   dispatch(
     configurationActions.configure({
@@ -81,4 +81,4 @@ export const App: FC<Props> = ({ elternGeldDigitalWizardUrl }) => {
       </AriaLogProvider>
     </MemoryRouter>
   );
-};
+}

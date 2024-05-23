@@ -12,7 +12,7 @@ export function PayoutInformation({ name, amount }: Props): ReactNode {
 
   return (
     <div>
-      <PermIdentityIcon /> {name && `${name} | `}
+      <PermIdentityIcon /> {!!name && `${name} | `}
       <strong>{formattedAmount}</strong> pro Monat
     </div>
   );

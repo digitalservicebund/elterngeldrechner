@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 import { FootNoteNumber } from "@/components/atoms";
 
@@ -9,18 +9,18 @@ interface Props {
   children?: ReactNode;
 }
 
-export const FootNote: FC<Props> = (props) => {
+export function FootNote({ id, number, prefix, children }: Props) {
   return (
-    <div id={props.id} className={nsp("foot-note")}>
-      {props.number && (
+    <div id={id} className={nsp("foot-note")}>
+      {!!number && (
         <FootNoteNumber
           type="note"
-          number={props.number}
-          prefix={props.prefix}
+          number={number}
+          prefix={prefix}
           className={nsp("foot-note__number")}
         />
       )}
-      <div className={nsp("foot-note__note")}>{props.children}</div>
+      <div className={nsp("foot-note__note")}>{children}</div>
     </div>
   );
-};
+}

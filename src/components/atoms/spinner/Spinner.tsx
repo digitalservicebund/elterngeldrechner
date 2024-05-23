@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import nsp from "@/globals/js/namespace";
 
-export const Spinner = (): ReactElement => {
+export function Spinner(): ReactElement {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -12,5 +12,5 @@ export const Spinner = (): ReactElement => {
     };
   }, []);
 
-  return <>{show && <div className={nsp("spinner")}></div>}</>;
-};
+  return <>{!!show && <div className={nsp("spinner")}></div>}</>;
+}

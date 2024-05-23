@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { AllgemeineAngabenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
@@ -10,13 +10,13 @@ import {
 import { formSteps } from "@/utils/formSteps";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 
-const AllgemeineAngabenPage: FC = () => {
+function AllgemeineAngabenPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const initialValues = useAppSelector((state) => state.stepAllgemeineAngaben);
 
-  const [isFormDirty, setFormIsDirty] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
   const handleSubmit = (values: StepAllgemeineAngabenState) => {
     if (isFormDirty) {
@@ -32,7 +32,7 @@ const AllgemeineAngabenPage: FC = () => {
   };
 
   const handleDirtyForm = (isFormDirty: boolean) => {
-    setFormIsDirty(isFormDirty);
+    setIsFormDirty(isFormDirty);
   };
 
   return (
@@ -44,6 +44,6 @@ const AllgemeineAngabenPage: FC = () => {
       />
     </Page>
   );
-};
+}
 
 export default AllgemeineAngabenPage;

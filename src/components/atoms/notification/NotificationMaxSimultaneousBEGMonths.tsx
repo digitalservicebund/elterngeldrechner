@@ -1,4 +1,4 @@
-export const NotificationMaxSimultaneousBEGMonths = () => {
+export function NotificationMaxSimultaneousBEGMonths() {
   return (
     <div>
       Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12
@@ -9,4 +9,4 @@ export const NotificationMaxSimultaneousBEGMonths = () => {
       Behinderung.
     </div>
   );
-};
+}

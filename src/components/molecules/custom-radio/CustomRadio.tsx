@@ -29,7 +29,7 @@ export interface CustomRadioProps<TFieldValues extends FieldValues> {
   info?: Info;
 }
 
-export const CustomRadio = <TFieldValues extends FieldValues>({
+export function CustomRadio<TFieldValues extends FieldValues>({
   register,
   registerOptions,
   name,
@@ -37,7 +37,7 @@ export const CustomRadio = <TFieldValues extends FieldValues>({
   errors,
   required,
   info,
-}: CustomRadioProps<TFieldValues>) => {
+}: CustomRadioProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
 
   return (
@@ -60,7 +60,7 @@ export const CustomRadio = <TFieldValues extends FieldValues>({
                 data-testid={name + "_option_" + i}
                 value={option.value}
                 key={name + "_option_" + i}
-                aria-describedby={error && `${name}-error`}
+                aria-describedby={error ? `${name}-error` : undefined}
                 required={required}
               />
               <label
@@ -73,8 +73,8 @@ export const CustomRadio = <TFieldValues extends FieldValues>({
               >
                 {option.label}
               </label>
-              {options.length - 1 === i && error && (
-                <Description id={`${name}-error`} error={true}>
+              {options.length - 1 === i && !!error && (
+                <Description id={`${name}-error`} error>
                   {error.message}
                 </Description>
               )}
@@ -83,7 +83,7 @@ export const CustomRadio = <TFieldValues extends FieldValues>({
         })}
       </div>
 
-      {info && <InfoDialog info={info} />}
+      {!!info && <InfoDialog info={info} />}
     </div>
   );
-};
+}

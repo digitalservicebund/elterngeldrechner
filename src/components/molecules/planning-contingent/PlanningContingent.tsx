@@ -24,7 +24,7 @@ export function PlanningContingent({ months, className }: Props): ReactNode {
         className="bg-Basis text-white"
       />
 
-      {isBonusAvailable && (
+      {!!isBonusAvailable && (
         <VariantLabel
           name="Bonus"
           monthsAvailable={months.bonus.available}

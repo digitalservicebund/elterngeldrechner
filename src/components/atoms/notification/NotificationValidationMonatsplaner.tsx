@@ -4,7 +4,7 @@ interface Props {
   errorCodes: readonly ErrorCode[];
 }
 
-export const NotificationValidationMonatsplaner = ({ errorCodes }: Props) => {
+export function NotificationValidationMonatsplaner({ errorCodes }: Props) {
   const messages = errorCodes.map((code) => {
     switch (code) {
       case "HasNoSelection":
@@ -29,4 +29,4 @@ export const NotificationValidationMonatsplaner = ({ errorCodes }: Props) => {
       ))}
     </>
   );
-};
+}

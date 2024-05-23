@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -10,13 +10,13 @@ import { formSteps } from "@/utils/formSteps";
 import { Page } from "@/components/organisms/page";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 
-const NachwuchsPage: FC = () => {
+function NachwuchsPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const initialValues = useAppSelector((state) => state.stepNachwuchs);
 
-  const [isFormDirty, setFormIsDirty] = useState(false);
+  const [isFormDirty, setIsFormDirty] = useState(false);
 
   const handleSubmit = (values: StepNachwuchsState) => {
     if (isFormDirty) {
@@ -32,7 +32,7 @@ const NachwuchsPage: FC = () => {
   };
 
   const handleDirtyForm = (isFormDirty: boolean) => {
-    setFormIsDirty(isFormDirty);
+    setIsFormDirty(isFormDirty);
   };
 
   return (
@@ -44,6 +44,6 @@ const NachwuchsPage: FC = () => {
       />
     </Page>
   );
-};
+}
 
 export default NachwuchsPage;

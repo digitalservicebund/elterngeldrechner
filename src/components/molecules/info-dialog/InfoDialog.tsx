@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import React, { useState } from "react";
+import { useState } from "react";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import { Info } from "./infoTexts";
@@ -18,7 +18,7 @@ export function InfoDialog({
   isMonatsplanner,
   isElternteilOne,
 }: Props) {
-  const [isModalOpen, setIsDialogOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div
@@ -34,13 +34,13 @@ export function InfoDialog({
           isMonatsplanner && nsp("info-dialog__button--monatsplanner"),
         )}
         type="button"
-        onClick={() => setIsDialogOpen(true)}
+        onClick={() => setIsModalOpen(true)}
         aria-label="Zugehörige Information zeigen"
       >
         <InfoOutlinedIcon />
       </button>
 
-      {isModalOpen && (
+      {!!isModalOpen && (
         <div
           className={classnames(
             nsp("info-dialog-box"),
@@ -52,7 +52,7 @@ export function InfoDialog({
           <button
             className={nsp("info-dialog-box__button")}
             type="button"
-            onClick={() => setIsDialogOpen(false)}
+            onClick={() => setIsModalOpen(false)}
             aria-label="Information schließen"
           >
             <CloseIcon />

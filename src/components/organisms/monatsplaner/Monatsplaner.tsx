@@ -124,7 +124,7 @@ const checkMaxBEG = (
   return antragstellende === "FuerBeide" && (begEt1 > 12 || begEt2 > 12);
 };
 
-export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
+export function Monatsplaner({ mutterSchutzMonate }: Props) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -475,7 +475,7 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
           </P>
         </div>
 
-        {isMonatsplanerOverlayVisible && <AccessControl />}
+        {!!isMonatsplanerOverlayVisible && <AccessControl />}
         <div
           className={classNames(
             isMonatsplanerOverlayVisible && nsp("monatsplaner__blur"),
@@ -513,7 +513,7 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
               mutterSchutzMonate={mutterSchutzMonate}
               partnerMonate={partnerMonate}
               remainingMonths={elternteile.remainingMonths}
-              isElternteilOne={true}
+              isElternteilOne
             />
             {antragstellende === "FuerBeide" && (
               <Elternteil
@@ -539,7 +539,7 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
                 mutterSchutzMonate={mutterSchutzMonate}
                 partnerMonate={partnerMonate}
                 remainingMonths={elternteile.remainingMonths}
-                hideLebensmonateOnDesktop={true}
+                hideLebensmonateOnDesktop
               />
             )}
           </div>
@@ -603,4 +603,4 @@ export const Monatsplaner = ({ mutterSchutzMonate }: Props) => {
       </section>
     </>
   );
-};
+}

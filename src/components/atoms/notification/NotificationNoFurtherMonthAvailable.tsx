@@ -13,10 +13,10 @@ const getTargetTypeName = (targetType: TargetType) => {
   }
 };
 
-export const NotificationNoFurtherMonthAvailable = ({ targetType }: Props) => {
+export function NotificationNoFurtherMonthAvailable({ targetType }: Props) {
   return (
     <div>
       Ihre verfügbaren {getTargetTypeName(targetType)}-Monate sind aufgebraucht.
     </div>
   );
-};
+}

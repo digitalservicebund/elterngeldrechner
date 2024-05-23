@@ -40,14 +40,14 @@ interface RechnerFormProps {
   previousFormStepsChanged: boolean;
 }
 
-export const RechnerForm = ({
+export function RechnerForm({
   elternteilName,
   elternteil,
   initialValues,
   onSubmit,
   isResultPending,
   previousFormStepsChanged,
-}: RechnerFormProps) => {
+}: RechnerFormProps) {
   const {
     control,
     handleSubmit,
@@ -195,12 +195,9 @@ export const RechnerForm = ({
       className={nsp("rechner-form")}
       noValidate
     >
-      <FormFieldGroup
-        headline={elternteilName}
-        data-testid={"egr-rechner-form"}
-      >
-        {errorKeinEinkommen && (
-          <Description id={`${keinEinkommenName}-error`} error={true}>
+      <FormFieldGroup headline={elternteilName} data-testid="egr-rechner-form">
+        {!!errorKeinEinkommen && (
+          <Description id={`${keinEinkommenName}-error`} error>
             {errorKeinEinkommen.message}
           </Description>
         )}
@@ -225,8 +222,8 @@ export const RechnerForm = ({
               name={`${name}.${index}.bruttoEinkommen`}
               label="Ihr monatliches Bruttoeinkommen oder durchschnittlicher monatlicher Gewinn während des Bezugs von Elterngeld"
               suffix="Euro"
-              stretch={true}
-              required={true}
+              stretch
+              required
               ariaDescribedByIfNoError={`${name}.${index}.zeitraum`}
             />
             <Zeitraum
@@ -243,7 +240,7 @@ export const RechnerForm = ({
               onChange={(zeitraum) => onChangeZeitraum(index, zeitraum)}
               type="Integer"
               errors={errors}
-              required={true}
+              required
             />
             <div className={nsp("rechner-form__remove-action")}>
               <Button
@@ -267,13 +264,13 @@ export const RechnerForm = ({
             />
           </div>
           <Button
-            type="submit"
             buttonStyle="primary"
             disabled={isResultPending}
             label="Elterngeld berechnen"
+            isSubmitButton
           />
         </div>
       </FormFieldGroup>
     </form>
   );
-};
+}

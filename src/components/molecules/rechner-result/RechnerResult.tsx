@@ -33,7 +33,7 @@ const getRechnerResultTableRows = (
     });
 };
 
-export const RechnerResult = ({ elternteil }: Props) => {
+export function RechnerResult({ elternteil }: Props) {
   const result = useAppSelector(
     (state) => state.stepRechner[elternteil].elterngeldResult,
   );
@@ -105,7 +105,7 @@ export const RechnerResult = ({ elternteil }: Props) => {
         titleTotal="Basis + Netto-Einkommen"
         markOver14Month={isAnyBEGMonthOver14Months}
       />
-      {isAnyBEGMonthOver14Months && (
+      {!!isAnyBEGMonthOver14Months && (
         <FootNote number={1} prefix="rechner">
           *Basiselterngeld können Sie nur bis zum 14. Lebensmonat beantragen
         </FootNote>
@@ -115,16 +115,16 @@ export const RechnerResult = ({ elternteil }: Props) => {
         rows={egplusTableRows}
         elterngeldType="Plus"
         titleTotal="Plus + Netto-Einkommen"
-        hideLebensmonate={true}
+        hideLebensmonate
       />
       <RechnerResultTable
         className={nsp("rechner-result__elterngeldbonus")}
         rows={psbTableRows}
         elterngeldType="Bonus"
         titleTotal="Bonus + Netto-Einkommen"
-        hideLebensmonate={true}
+        hideLebensmonate
       />
-      {notificationMessages && (
+      {!!notificationMessages && (
         <Toast
           messages={notificationMessages}
           active={!!notificationMessages}
@@ -134,4 +134,4 @@ export const RechnerResult = ({ elternteil }: Props) => {
       )}
     </section>
   );
-};
+}

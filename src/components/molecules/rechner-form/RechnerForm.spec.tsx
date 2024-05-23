@@ -11,10 +11,10 @@ describe("RechnerForm", () => {
     render(
       <Provider store={store}>
         <RechnerForm
-          elternteil={"ET1"}
-          elternteilName={"Elternteil 1"}
+          elternteil="ET1"
+          elternteilName="Elternteil 1"
           initialValues={initialStepRechnerState}
-          isResultPending={true}
+          isResultPending
           onSubmit={() => {}}
           previousFormStepsChanged={false}
         />
@@ -31,10 +31,10 @@ describe("RechnerForm", () => {
     render(
       <Provider store={store}>
         <RechnerForm
-          elternteil={"ET1"}
-          elternteilName={"Elternteil 1"}
+          elternteil="ET1"
+          elternteilName="Elternteil 1"
           initialValues={initialStepRechnerState}
-          isResultPending={true}
+          isResultPending
           onSubmit={() => {}}
           previousFormStepsChanged={false}
         />

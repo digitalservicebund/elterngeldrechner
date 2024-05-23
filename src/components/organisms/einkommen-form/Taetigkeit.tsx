@@ -46,13 +46,13 @@ interface TaetigkeitsFormProps {
   onRemove: () => void;
 }
 
-export const Taetigkeit = ({
+export function Taetigkeit({
   elternteil,
   taetigkeitsIndex,
   isSelbststaendig,
   monthsBeforeBirth,
   onRemove,
-}: TaetigkeitsFormProps) => {
+}: TaetigkeitsFormProps) {
   const name =
     `${elternteil}.taetigkeitenNichtSelbstaendigUndSelbstaendig` as const;
 
@@ -126,9 +126,9 @@ export const Taetigkeit = ({
   return (
     <FormFieldGroup headline={`${taetigkeitsIndex + 1}. Tätigkeit`}>
       <FormFieldGroup>
-        {isSelbststaendig && (
+        {!!isSelbststaendig && (
           <CustomSelect
-            autoWidth={true}
+            autoWidth
             register={register}
             name={artTaetigkeitName}
             label="Art der Tätigkeit"
@@ -137,7 +137,7 @@ export const Taetigkeit = ({
               required: "Dieses Feld ist erforderlich",
             }}
             errors={errors}
-            required={true}
+            required
             info={
               infoTexts.erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte
             }
@@ -169,7 +169,7 @@ export const Taetigkeit = ({
               required: "Dieses Feld ist erforderlich",
             }}
             errors={errors}
-            required={true}
+            required
             info={infoTexts.minijobsMaxZahl}
           />
         </FormFieldGroup>
@@ -246,4 +246,4 @@ export const Taetigkeit = ({
       />
     </FormFieldGroup>
   );
-};
+}

@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import nsp from "@/globals/js/namespace";
 import { Button, P } from "@/components/atoms";
@@ -16,7 +15,7 @@ import { YesNo } from "@/globals/js/calculations/model";
 import { Taetigkeit } from "@/redux/stepEinkommenSlice";
 import { Month } from "@/monatsplaner";
 
-export const ZusammenfassungUndDaten: FC = () => {
+export function ZusammenfassungUndDaten() {
   const navigate = useNavigate();
   const {
     stepAllgemeineAngaben,
@@ -168,187 +167,184 @@ export const ZusammenfassungUndDaten: FC = () => {
         <Button onClick={onBack} label="Zurück" buttonStyle="secondary" />
         <form
           key={getKey()}
-          method={"post"}
-          id={"anton-remote-eao-post-form"}
+          method="post"
+          id="anton-remote-eao-post-form"
           action={configuration.elternGeldDigitalWizardUrl}
-          encType={"application/x-www-form-urlencoded"}
+          encType="application/x-www-form-urlencoded"
         >
           <input
             key={getKey()}
-            name={"planungP1"}
+            name="planungP1"
             defaultValue={monthPlanner("ET1")}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           <input
             key={getKey()}
-            name={"mehrlinge_anzahl"}
+            name="mehrlinge_anzahl"
             defaultValue={stepNachwuchs.anzahlKuenftigerKinder}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           <input
             key={getKey()}
-            name={"kind_geburtstag"}
+            name="kind_geburtstag"
             defaultValue={stepNachwuchs.wahrscheinlichesGeburtsDatum}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           <input
             key={getKey()}
-            name={"alleinerziehend"}
+            name="alleinerziehend"
             defaultValue={getAlleinerziehend()}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           <input
             key={getKey()}
-            name={"mutterschaftsleistung"}
+            name="mutterschaftsleistung"
             defaultValue={getMutterschaftsleistungen()}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           <input
             key={getKey()}
-            name={"p1_et_vorgeburt"}
+            name="p1_et_vorgeburt"
             defaultValue={getEinkommenVorgeburt("ET1")}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           {isMischtaetigkeit("ET1") && (
-              <input
-                key={getKey()}
-                name={"p1_vg_misch_t1"}
-                defaultValue={getMischTaetigkeit("ET1", 0)}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p1_vg_misch_t2"}
-                defaultValue={getMischTaetigkeit("ET1", 1)}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p1_vg_misch_t3"}
-                defaultValue={getMischTaetigkeit("ET1", 2)}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p1_misch_kirche"}
-                defaultValue={getKirchensteuer("ET1")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            )}
+            <input
+              key={getKey()}
+              name="p1_vg_misch_t1"
+              defaultValue={getMischTaetigkeit("ET1", 0)}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p1_vg_misch_t2"
+              defaultValue={getMischTaetigkeit("ET1", 1)}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p1_vg_misch_t3"
+              defaultValue={getMischTaetigkeit("ET1", 2)}
+              readOnly
+              type="hidden"
+            />
+          ) ? (
+            <input
+              key={getKey()}
+              name="p1_misch_kirche"
+              defaultValue={getKirchensteuer("ET1")}
+              readOnly
+              type="hidden"
+            />
+          ) : null}
           <input
             key={getKey()}
-            name={"p1_et_nachgeburt"}
+            name="p1_et_nachgeburt"
             defaultValue={getEinkommenNachGeburt("ET1")}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           {hasET2Mischtaetigkeit() && (
-              <input
-                key={getKey()}
-                name={"p2_vg_misch_t1"}
-                defaultValue={getMischTaetigkeit("ET2", 0)}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_vg_misch_t2"}
-                defaultValue={getMischTaetigkeit("ET2", 1)}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_vg_misch_t3"}
-                defaultValue={getMischTaetigkeit("ET2", 2)}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_misch_kirche"}
-                defaultValue={getKirchensteuer("ET2")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            )}
+            <input
+              key={getKey()}
+              name="p2_vg_misch_t1"
+              defaultValue={getMischTaetigkeit("ET2", 0)}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p2_vg_misch_t2"
+              defaultValue={getMischTaetigkeit("ET2", 1)}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p2_vg_misch_t3"
+              defaultValue={getMischTaetigkeit("ET2", 2)}
+              readOnly
+              type="hidden"
+            />
+          ) ? (
+            <input
+              key={getKey()}
+              name="p2_misch_kirche"
+              defaultValue={getKirchensteuer("ET2")}
+              readOnly
+              type="hidden"
+            />
+          ) : null}
           <input
             key={getKey()}
-            name={"p1_vg_kirchensteuer"}
+            name="p1_vg_kirchensteuer"
             defaultValue={getKirchensteuer("ET1")}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           <input
             key={getKey()}
-            name={"p1_vg_nselbst_steuerklasse"}
+            name="p1_vg_nselbst_steuerklasse"
             defaultValue={getSteuerklasse("ET1")}
-            readOnly={true}
-            type={"hidden"}
+            readOnly
+            type="hidden"
           />
           {isET2Present() && (
-              <input
-                key={getKey()}
-                name={"planungP2"}
-                defaultValue={monthPlanner("ET2")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_et_vorgeburt"}
-                defaultValue={getEinkommenVorgeburt("ET2")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_et_nachgeburt"}
-                defaultValue={getEinkommenNachGeburt("ET2")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_vg_kirchensteuer"}
-                defaultValue={getKirchensteuer("ET2")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            ) && (
-              <input
-                key={getKey()}
-                name={"p2_vg_nselbst_steuerklasse"}
-                defaultValue={getSteuerklasse("ET2")}
-                readOnly={true}
-                type={"hidden"}
-              />
-            )}
-          <Button
-            label="Daten in Elterngeldantrag übernehmen"
-            type={"submit"}
-          />
+            <input
+              key={getKey()}
+              name="planungP2"
+              defaultValue={monthPlanner("ET2")}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p2_et_vorgeburt"
+              defaultValue={getEinkommenVorgeburt("ET2")}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p2_et_nachgeburt"
+              defaultValue={getEinkommenNachGeburt("ET2")}
+              readOnly
+              type="hidden"
+            />
+          ) && (
+            <input
+              key={getKey()}
+              name="p2_vg_kirchensteuer"
+              defaultValue={getKirchensteuer("ET2")}
+              readOnly
+              type="hidden"
+            />
+          ) ? (
+            <input
+              key={getKey()}
+              name="p2_vg_nselbst_steuerklasse"
+              defaultValue={getSteuerklasse("ET2")}
+              readOnly
+              type="hidden"
+            />
+          ) : null}
+          <Button label="Daten in Elterngeldantrag übernehmen" isSubmitButton />
         </form>
       </section>
     </>
   );
-};
+}

@@ -34,7 +34,7 @@ interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   onChange?: (v: { from: string; to: string }) => void | undefined;
 }
 
-export const Zeitraum = <TFieldValues extends FieldValues>({
+export function Zeitraum<TFieldValues extends FieldValues>({
   register,
   name,
   getValues,
@@ -49,7 +49,7 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
   onChange,
   required,
   ...aria
-}: Props<TFieldValues>) => {
+}: Props<TFieldValues>) {
   const fromName = `${name}.from` as Path<TFieldValues>;
   const toName = `${name}.to` as Path<TFieldValues>;
   suffix = suffix ? ` ${suffix}` : "";
@@ -218,7 +218,7 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
           options={options}
           disabled={disabled}
           aria-invalid={!!error}
-          aria-describedby={error && `${name}-error`}
+          aria-describedby={error ? `${name}-error` : undefined}
           required={required}
           {...aria}
         />
@@ -230,7 +230,7 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
           options={toOptions}
           disabled={disabled}
           aria-invalid={!!error}
-          aria-describedby={error && `${name}-error`}
+          aria-describedby={error ? `${name}-error` : undefined}
           required={required}
           {...aria}
         />
@@ -240,11 +240,11 @@ export const Zeitraum = <TFieldValues extends FieldValues>({
             : ""}
         </p>
       </div>
-      {error && (
-        <Description id={`${toName}-error`} error={true}>
+      {!!error && (
+        <Description id={`${toName}-error`} error>
           {error.message}
         </Description>
       )}
     </section>
   );
-};
+}

@@ -14,11 +14,11 @@ interface SelbstaendigAndErwerbstaetigProps {
   monthsBeforeBirth: SelectOption[];
 }
 
-export const SelbstaendigAndErwerbstaetig = ({
+export function SelbstaendigAndErwerbstaetig({
   elternteil,
   isSelbststaendig,
   monthsBeforeBirth,
-}: SelbstaendigAndErwerbstaetigProps) => {
+}: SelbstaendigAndErwerbstaetigProps) {
   const { control } = useFormContext<StepEinkommenState>();
 
   const name =
@@ -51,4 +51,4 @@ export const SelbstaendigAndErwerbstaetig = ({
       />
     </>
   );
-};
+}

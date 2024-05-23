@@ -9,14 +9,14 @@ interface VisualCounterProps {
   maxCountBonus: number;
 }
 
-export const VisualCounter = ({
+export function VisualCounter({
   countBasis,
   maxCountBasis,
   countPlus,
   maxCountPlus,
   countBonus,
   maxCountBonus,
-}: VisualCounterProps) => {
+}: VisualCounterProps) {
   const arrayOf = (maxCount: number): Array<number> => {
     const numbers = [];
     for (let i = 1; i <= maxCount; i++) {
@@ -55,7 +55,7 @@ export const VisualCounter = ({
           ))}
         </div>
       </div>
-      {bonusAvailable && (
+      {!!bonusAvailable && (
         <div className={nsp("visual-counter__bonus")}>
           {arrayOf(maxCountBonus).map((index) => (
             <div
@@ -67,4 +67,4 @@ export const VisualCounter = ({
       )}
     </div>
   );
-};
+}

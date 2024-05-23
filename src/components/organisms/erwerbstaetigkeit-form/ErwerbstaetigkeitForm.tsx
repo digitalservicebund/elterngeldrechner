@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
@@ -17,11 +17,11 @@ interface ErwerbstaetigkeitFormProps {
   handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
-export const ErwerbstaetigkeitForm: FC<ErwerbstaetigkeitFormProps> = ({
+export function ErwerbstaetigkeitForm({
   initialValues,
   onSubmit,
   handleDirtyForm,
-}) => {
+}: ErwerbstaetigkeitFormProps) {
   const navigate = useNavigate();
   const methods = useForm({
     defaultValues: initialValues,
@@ -69,7 +69,7 @@ export const ErwerbstaetigkeitForm: FC<ErwerbstaetigkeitFormProps> = ({
               />
             </SplitItem>
             {antragssteller === "FuerBeide" && (
-              <SplitItem hasDivider={true}>
+              <SplitItem hasDivider>
                 <ErwerbstaetigkeitFormElternteil
                   elternteil="ET2"
                   elternteilName={ET2}
@@ -83,4 +83,4 @@ export const ErwerbstaetigkeitForm: FC<ErwerbstaetigkeitFormProps> = ({
       </FormProvider>
     </>
   );
-};
+}

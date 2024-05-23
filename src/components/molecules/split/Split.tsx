@@ -1,6 +1,10 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
-export const Split: FC<{ children: ReactNode }> = ({ children }) => {
-  return <div className={nsp("split")}>{children}</div>;
+type Props = {
+  children?: ReactNode;
 };
+
+export function Split({ children }: Props) {
+  return <div className={nsp("split")}>{children}</div>;
+}

@@ -41,7 +41,7 @@ interface Props {
   partnerMonate?: boolean;
 }
 
-export const Elternteil = ({
+export function Elternteil({
   lebensmonate,
   selectablePSBMonths,
   elternteil,
@@ -58,7 +58,7 @@ export const Elternteil = ({
   className,
   isElternteilOne,
   partnerMonate,
-}: Props) => {
+}: Props) {
   const [hoverPSBIndex, setHoverPSBIndex] = useState<number | null>(null);
 
   const allPSBIndices = [
@@ -149,7 +149,7 @@ export const Elternteil = ({
           >
             Plus
           </th>
-          {partnerMonate && (
+          {!!partnerMonate && (
             <th
               className={classNames(
                 nsp("elternteil__th"),
@@ -214,7 +214,7 @@ export const Elternteil = ({
                   </MonatsplanerMonth>
                 )}
             </td>
-            {partnerMonate && (
+            {!!partnerMonate && (
               <td>
                 {index >= mutterSchutzMonate &&
                   index >= lowestAllowedPSBIndex &&
@@ -241,4 +241,4 @@ export const Elternteil = ({
       </tbody>
     </table>
   );
-};
+}

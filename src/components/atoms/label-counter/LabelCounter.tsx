@@ -6,7 +6,7 @@ interface LabelCounterProps {
   maxCount: number;
 }
 
-export const LabelCounter = ({ label, count, maxCount }: LabelCounterProps) => {
+export function LabelCounter({ label, count, maxCount }: LabelCounterProps) {
   return (
     <div className={nsp("label-counter")}>
       <p className={nsp("label-counter__label")}>{label}</p>
@@ -15,4 +15,4 @@ export const LabelCounter = ({ label, count, maxCount }: LabelCounterProps) => {
       </p>
     </div>
   );
-};
+}

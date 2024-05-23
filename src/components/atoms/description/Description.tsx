@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { ReactNode } from "react";
 import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
 
@@ -8,7 +8,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const Description: FC<Props> = ({ id, error = false, children }) => {
+export function Description({ id, error = false, children }: Props) {
   return (
     <div
       className={classNames(nsp("info-text"), error && nsp("info-text--error"))}
@@ -17,4 +17,4 @@ export const Description: FC<Props> = ({ id, error = false, children }) => {
       {children}
     </div>
   );
-};
+}

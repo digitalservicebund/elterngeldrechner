@@ -5,10 +5,10 @@ interface Props {
   alleinerziehend?: YesNo | null;
 }
 
-export const NotificationBEGResultWasRecalculated = ({
+export function NotificationBEGResultWasRecalculated({
   elternteilName,
   alleinerziehend,
-}: Props) => {
+}: Props) {
   return (
     <div>
       {alleinerziehend !== YesNo.YES
@@ -16,4 +16,4 @@ export const NotificationBEGResultWasRecalculated = ({
         : "Das Ergebnis der Berechnung hat sich verändert, da Sie Angaben im Formular geändert haben."}
     </div>
   );
-};
+}

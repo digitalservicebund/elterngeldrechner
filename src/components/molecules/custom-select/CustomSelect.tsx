@@ -36,7 +36,7 @@ interface CustomSelectProps<TFieldValues extends FieldValues> {
   info?: Info;
 }
 
-export const CustomSelect = <TFieldValues extends FieldValues>({
+export function CustomSelect<TFieldValues extends FieldValues>({
   register,
   registerOptions,
   name,
@@ -48,7 +48,7 @@ export const CustomSelect = <TFieldValues extends FieldValues>({
   disabled,
   info,
   ...aria
-}: CustomSelectProps<TFieldValues>) => {
+}: CustomSelectProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
 
   return (
@@ -73,7 +73,7 @@ export const CustomSelect = <TFieldValues extends FieldValues>({
             id={name}
             disabled={disabled}
             aria-invalid={!!error}
-            aria-describedby={error && `${name}-error`}
+            aria-describedby={error ? `${name}-error` : undefined}
             required={required}
             {...aria}
           >
@@ -98,14 +98,14 @@ export const CustomSelect = <TFieldValues extends FieldValues>({
             ))}
           </select>
         </div>
-        {error && (
-          <Description id={`${name}-error`} error={true}>
+        {!!error && (
+          <Description id={`${name}-error`} error>
             {error.message}
           </Description>
         )}
       </div>
 
-      {info && <InfoDialog info={info} />}
+      {!!info && <InfoDialog info={info} />}
     </div>
   );
-};
+}

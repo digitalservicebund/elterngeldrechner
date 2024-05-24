@@ -6,3 +6,4 @@ build-preview
 allowed-licenses
 .npmrc
 .env*
+sonar-project.properties

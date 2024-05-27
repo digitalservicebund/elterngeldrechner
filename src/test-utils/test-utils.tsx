@@ -13,7 +13,7 @@ import { configureStore, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import Big from "big.js";
 import { MemoryRouter } from "react-router-dom";
-import { reducers, RootState } from "@/redux";
+import { AppStore, reducers, RootState } from "@/redux";
 import { AriaLogProvider } from "@/components/atoms";
 
 interface RenderOptionsWithRedux extends RenderOptions {
@@ -58,12 +58,15 @@ function renderHookWithRedux<Result, Props>(
     store = configureStore({ reducer: reducers, preloadedState }),
     ...renderOptions
   }: RenderOptionsWithRedux = {},
-): RenderHookResult<Result, Props> {
+): RenderHookResult<Result, Props> & { store: AppStore } {
   function Wrapper({ children }: { readonly children?: ReactNode }) {
     return <TestWrapper store={store}>{children}</TestWrapper>;
   }
 
-  return renderHook(render, { wrapper: Wrapper, ...renderOptions });
+  return {
+    ...renderHook(render, { wrapper: Wrapper, ...renderOptions }),
+    store,
+  };
 }
 
 // re-export everything

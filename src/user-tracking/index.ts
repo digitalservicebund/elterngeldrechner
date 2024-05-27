@@ -2,6 +2,8 @@ import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
 
+export { setTrackingVariable } from "./data-layer";
+
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
   const isConfigured = !!tagMangerSourceUrl;

@@ -94,10 +94,6 @@ export function ZusammenfassungUndDaten() {
       : "0";
   };
 
-  const getKey = (): string => {
-    return `transfer-${Math.random()}`;
-  };
-
   const isET2Present = (): boolean => {
     return stepAllgemeineAngaben.antragstellende !== "EinenElternteil";
   };
@@ -166,49 +162,42 @@ export function ZusammenfassungUndDaten() {
       <section className={nsp("zusammenfassung-und-daten-buttons")}>
         <Button onClick={onBack} label="Zurück" buttonStyle="secondary" />
         <form
-          key={getKey()}
           method="post"
           id="anton-remote-eao-post-form"
           action={configuration.elternGeldDigitalWizardUrl}
           encType="application/x-www-form-urlencoded"
         >
           <input
-            key={getKey()}
             name="planungP1"
             defaultValue={monthPlanner("ET1")}
             readOnly
             type="hidden"
           />
           <input
-            key={getKey()}
             name="mehrlinge_anzahl"
             defaultValue={stepNachwuchs.anzahlKuenftigerKinder}
             readOnly
             type="hidden"
           />
           <input
-            key={getKey()}
             name="kind_geburtstag"
             defaultValue={stepNachwuchs.wahrscheinlichesGeburtsDatum}
             readOnly
             type="hidden"
           />
           <input
-            key={getKey()}
             name="alleinerziehend"
             defaultValue={getAlleinerziehend()}
             readOnly
             type="hidden"
           />
           <input
-            key={getKey()}
             name="mutterschaftsleistung"
             defaultValue={getMutterschaftsleistungen()}
             readOnly
             type="hidden"
           />
           <input
-            key={getKey()}
             name="p1_et_vorgeburt"
             defaultValue={getEinkommenVorgeburt("ET1")}
             readOnly
@@ -216,7 +205,6 @@ export function ZusammenfassungUndDaten() {
           />
           {isMischtaetigkeit("ET1") && (
             <input
-              key={getKey()}
               name="p1_vg_misch_t1"
               defaultValue={getMischTaetigkeit("ET1", 0)}
               readOnly
@@ -224,7 +212,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p1_vg_misch_t2"
               defaultValue={getMischTaetigkeit("ET1", 1)}
               readOnly
@@ -232,7 +219,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p1_vg_misch_t3"
               defaultValue={getMischTaetigkeit("ET1", 2)}
               readOnly
@@ -240,7 +226,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) ? (
             <input
-              key={getKey()}
               name="p1_misch_kirche"
               defaultValue={getKirchensteuer("ET1")}
               readOnly
@@ -248,7 +233,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) : null}
           <input
-            key={getKey()}
             name="p1_et_nachgeburt"
             defaultValue={getEinkommenNachGeburt("ET1")}
             readOnly
@@ -256,7 +240,6 @@ export function ZusammenfassungUndDaten() {
           />
           {hasET2Mischtaetigkeit() && (
             <input
-              key={getKey()}
               name="p2_vg_misch_t1"
               defaultValue={getMischTaetigkeit("ET2", 0)}
               readOnly
@@ -264,7 +247,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p2_vg_misch_t2"
               defaultValue={getMischTaetigkeit("ET2", 1)}
               readOnly
@@ -272,7 +254,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p2_vg_misch_t3"
               defaultValue={getMischTaetigkeit("ET2", 2)}
               readOnly
@@ -280,7 +261,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) ? (
             <input
-              key={getKey()}
               name="p2_misch_kirche"
               defaultValue={getKirchensteuer("ET2")}
               readOnly
@@ -288,14 +268,12 @@ export function ZusammenfassungUndDaten() {
             />
           ) : null}
           <input
-            key={getKey()}
             name="p1_vg_kirchensteuer"
             defaultValue={getKirchensteuer("ET1")}
             readOnly
             type="hidden"
           />
           <input
-            key={getKey()}
             name="p1_vg_nselbst_steuerklasse"
             defaultValue={getSteuerklasse("ET1")}
             readOnly
@@ -303,7 +281,6 @@ export function ZusammenfassungUndDaten() {
           />
           {isET2Present() && (
             <input
-              key={getKey()}
               name="planungP2"
               defaultValue={monthPlanner("ET2")}
               readOnly
@@ -311,7 +288,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p2_et_vorgeburt"
               defaultValue={getEinkommenVorgeburt("ET2")}
               readOnly
@@ -319,7 +295,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p2_et_nachgeburt"
               defaultValue={getEinkommenNachGeburt("ET2")}
               readOnly
@@ -327,7 +302,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) && (
             <input
-              key={getKey()}
               name="p2_vg_kirchensteuer"
               defaultValue={getKirchensteuer("ET2")}
               readOnly
@@ -335,7 +309,6 @@ export function ZusammenfassungUndDaten() {
             />
           ) ? (
             <input
-              key={getKey()}
               name="p2_vg_nselbst_steuerklasse"
               defaultValue={getSteuerklasse("ET2")}
               readOnly

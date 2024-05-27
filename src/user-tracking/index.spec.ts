@@ -82,26 +82,26 @@ describe("user tracking", () => {
     });
 
     it("adds the tag manger as first script to the document", async () => {
-      configureTracking("http://test.tld/tag-manager");
+      configureTracking("https://test.tld/tag-manager");
 
       await setupUserTracking();
 
       const script = document.getElementsByTagName("script").item(0);
 
       expect(script).toBeDefined();
-      expect(script?.src).toEqual("http://test.tld/tag-manager");
+      expect(script?.src).toEqual("https://test.tld/tag-manager");
       expect(script?.async).toBeTruthy();
     });
 
     it("does not add the script twice on multiple setups", async () => {
-      configureTracking("http://test.tld/tag-manager");
+      configureTracking("https://test.tld/tag-manager");
 
       await setupUserTracking();
       await setupUserTracking();
 
       const allScripts = Array.from(document.getElementsByTagName("script"));
       const tagMangerScripts = allScripts.filter(
-        (script) => script.src === "http://test.tld/tag-manager",
+        (script) => script.src === "https://test.tld/tag-manager",
       );
 
       expect(tagMangerScripts).toHaveLength(1);

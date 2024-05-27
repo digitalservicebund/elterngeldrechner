@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { SummationFooter } from "./SummationFooter";
 import { useSummarizeData } from "./useSummarizeData";
 import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
+import { usePartnerschaftlicheVerteilungTracking } from "./usePartnerschaftlicheVerteilungTracking";
 import {
   ElterngeldType,
   Elternteile,
@@ -453,6 +454,8 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     });
     elementToViewOnRepeatPlanning.current?.focus({ preventScroll: true });
   }
+
+  usePartnerschaftlicheVerteilungTracking();
 
   return (
     <>

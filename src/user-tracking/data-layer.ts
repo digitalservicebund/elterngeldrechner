@@ -8,7 +8,7 @@ export function establishDataLayer(): void {
  * Set a new or updates the value of a tracking variable. The variable will be made
  * available for triggered events by tags of the tag manager.
  */
-export function setTrackingVariable(name: string, value: unknown): void {
+export function setTrackingVariable(name: string, value?: unknown): void {
   if (window._mtm) {
     window._mtm.push({ [name]: value });
   }

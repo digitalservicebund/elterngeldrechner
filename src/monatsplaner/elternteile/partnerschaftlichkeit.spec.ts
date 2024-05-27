@@ -3,9 +3,15 @@ import { calculatePartnerschaftlichkeiteVerteilung } from "./partnerschaftlichke
 
 describe("partnerschaftlichkeit", () => {
   it("should calculate a quotient of zero if no parent takes any month", () => {
-    const quotient = calculatePartnerschaftlichkeiteVerteilung([], []);
+    const quotient = calculatePartnerschaftlichkeiteVerteilung([], [], false);
 
     expect(quotient).toEqual(0);
+  });
+
+  it("should return no quotient if there are no two parents", () => {
+    const quotient = calculatePartnerschaftlichkeiteVerteilung([], [], true);
+
+    expect(quotient).toBeUndefined();
   });
 
   it.each<{
@@ -74,6 +80,7 @@ describe("partnerschaftlichkeit", () => {
       const quotient = calculatePartnerschaftlichkeiteVerteilung(
         monthsET1,
         monthsET2,
+        false,
       );
 
       expect(quotient).toEqual(expectedQuotient);

@@ -12,17 +12,20 @@ import { ElterngeldType } from "./elternteile-types";
 export function calculatePartnerschaftlichkeiteVerteilung(
   monthsET1: ElterngeldType[],
   monthsET2: ElterngeldType[],
-): number {
-  const valueET1 = calculateValueOfElternteil(monthsET1);
-  const valueET2 = calculateValueOfElternteil(monthsET2);
+  singleApplicant: boolean,
+): number | undefined {
+  if (!singleApplicant) {
+    const valueET1 = calculateValueOfElternteil(monthsET1);
+    const valueET2 = calculateValueOfElternteil(monthsET2);
 
-  const smallerValue = Math.min(valueET1, valueET2);
-  const biggerValue = Math.max(valueET1, valueET2);
+    const smallerValue = Math.min(valueET1, valueET2);
+    const biggerValue = Math.max(valueET1, valueET2);
 
-  const hasNoPartnerschaftlichkeit = biggerValue === 0;
-  const quotient = smallerValue / biggerValue;
+    const hasNoPartnerschaftlichkeit = biggerValue === 0;
+    const quotient = smallerValue / biggerValue;
 
-  return hasNoPartnerschaftlichkeit ? 0 : quotient;
+    return hasNoPartnerschaftlichkeit ? 0 : quotient;
+  }
 }
 
 /**

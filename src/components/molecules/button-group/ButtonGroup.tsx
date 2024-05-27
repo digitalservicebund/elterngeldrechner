@@ -16,7 +16,7 @@ export function ButtonGroup({
 }: Props) {
   const secondButtonAttributes = onClickResetForm
     ? { onClick: onClickResetForm, label: "Neu starten" }
-    : { type: "submit" as const, label: "Weiter" };
+    : { isSubmitButton: true, label: "Weiter" };
 
   return (
     <section

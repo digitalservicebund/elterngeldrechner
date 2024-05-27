@@ -1,10 +1,11 @@
 import { usePartnerschaftlicheVerteilungTracking } from "./usePartnerschaftlicheVerteilungTracking";
 import { calculatePartnerschaftlichkeiteVerteilung } from "@/monatsplaner/elternteile/partnerschaftlichkeit";
-import { RootState } from "@/redux";
+import { RootState as initialStepAllgemeineAngaben } from "@/redux";
 import {
   initialMonatsplanerState,
   monatsplanerActions,
 } from "@/redux/monatsplanerSlice";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import { act, renderHook } from "@/test-utils/test-utils";
 import { setTrackingVariable } from "@/user-tracking";
 
@@ -21,7 +22,7 @@ describe("usePartnerschaftlichskeitFaktorTracking", () => {
   });
 
   it("should trigger the calculation with the lastest data", () => {
-    const preloadedState: Partial<RootState> = {
+    const preloadedState: Partial<initialStepAllgemeineAngaben> = {
       monatsplaner: {
         ...initialMonatsplanerState,
         elternteile: {
@@ -40,6 +41,7 @@ describe("usePartnerschaftlichskeitFaktorTracking", () => {
     expect(calculatePartnerschaftlichkeiteVerteilung).toHaveBeenCalledWith(
       ["BEG"],
       ["EG+"],
+      false,
     );
   });
 
@@ -55,8 +57,33 @@ describe("usePartnerschaftlichskeitFaktorTracking", () => {
     );
   });
 
+  it("should unset the tracking variable if single applicant", () => {
+    jest.mocked(calculatePartnerschaftlichkeiteVerteilung).mockRestore();
+    const preloadedState: Partial<initialStepAllgemeineAngaben> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "EinenElternteil",
+      },
+    };
+
+    renderHook(() => usePartnerschaftlicheVerteilungTracking(), {
+      preloadedState,
+    });
+
+    expect(setTrackingVariable).toHaveBeenCalledTimes(1);
+    expect(setTrackingVariable).toHaveBeenCalledWith(
+      "partnerschaftlicheverteilung",
+      undefined,
+    );
+  });
+
   it("should re-calculate the and set the variable when data changes", () => {
-    const preloadedState: Partial<RootState> = {
+    jest
+      .mocked(calculatePartnerschaftlichkeiteVerteilung)
+      .mockReturnValueOnce(0.5)
+      .mockReturnValueOnce(1);
+
+    const preloadedState: Partial<initialStepAllgemeineAngaben> = {
       monatsplaner: {
         ...initialMonatsplanerState,
         elternteile: {
@@ -66,10 +93,6 @@ describe("usePartnerschaftlichskeitFaktorTracking", () => {
         },
       },
     };
-    jest
-      .mocked(calculatePartnerschaftlichkeiteVerteilung)
-      .mockReturnValueOnce(0.5)
-      .mockReturnValueOnce(1);
 
     const { store } = renderHook(
       () => usePartnerschaftlicheVerteilungTracking(),
@@ -93,6 +116,7 @@ describe("usePartnerschaftlichskeitFaktorTracking", () => {
     expect(calculatePartnerschaftlichkeiteVerteilung).toHaveBeenLastCalledWith(
       ["BEG"],
       ["BEG"],
+      false,
     );
 
     expect(setTrackingVariable).toHaveBeenCalledTimes(2);

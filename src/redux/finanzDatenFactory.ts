@@ -28,8 +28,10 @@ const averageFromAverageOrMonthly = (
       return (
         averageOrMonthly.perMonth
           .map((value) => value ?? 0)
-          .reduce((accumulator, currentValue) => accumulator + currentValue) /
-        averageOrMonthly.perMonth.length
+          .reduce(
+            (accumulator, currentValue) => accumulator + currentValue,
+            0,
+          ) / averageOrMonthly.perMonth.length
       );
     case "yearly":
       return (averageOrMonthly.perYear ?? 0) / 12;

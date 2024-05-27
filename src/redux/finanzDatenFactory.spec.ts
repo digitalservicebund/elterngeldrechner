@@ -166,11 +166,8 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with einkommen vor geburt - kein minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = Object.assign(
-      {},
-      mockStore.stepErwerbstaetigkeit.ET2,
-    );
-    const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
     // given
     mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
@@ -193,11 +190,8 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with average einkommen vor geburt - minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = Object.assign(
-      {},
-      mockStore.stepErwerbstaetigkeit.ET2,
-    );
-    const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
     // given
     mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
@@ -221,11 +215,8 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with monthly einkommen vor geburt - minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = Object.assign(
-      {},
-      mockStore.stepErwerbstaetigkeit.ET2,
-    );
-    const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
     // given
     mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
@@ -249,11 +240,8 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with yearly gewinn vor geburt - minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = Object.assign(
-      {},
-      mockStore.stepErwerbstaetigkeit.ET2,
-    );
-    const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
     // given
     mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
@@ -391,11 +379,10 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for ET2 with gewinnSelbstaendig", () => {
         // setup
-        const erwerbsTaetigkeitSave = Object.assign(
-          {},
-          mockStore.stepErwerbstaetigkeit.ET2,
-        );
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const erwerbsTaetigkeitSave = {
+          ...mockStore.stepErwerbstaetigkeit.ET2,
+        };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
@@ -492,11 +479,10 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for ET2 with bruttoEinkommenNichtSelbstaendig", () => {
         // setup
-        const erwerbsTaetigkeitSave = Object.assign(
-          {},
-          mockStore.stepErwerbstaetigkeit.ET2,
-        );
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const erwerbsTaetigkeitSave = {
+          ...mockStore.stepErwerbstaetigkeit.ET2,
+        };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
@@ -760,11 +746,10 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for ET2 with Mischeinkommen", () => {
         // setup
-        const erwerbsTaetigkeitSave = Object.assign(
-          {},
-          mockStore.stepErwerbstaetigkeit.ET2,
-        );
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const erwerbsTaetigkeitSave = {
+          ...mockStore.stepErwerbstaetigkeit.ET2,
+        };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
@@ -812,7 +797,7 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepEinkommen.ET1.steuerKlasse = einkommenSteuerKlasse;
@@ -850,7 +835,7 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepEinkommen.ET1.kinderFreiBetrag =
@@ -883,7 +868,7 @@ describe("finanzDatenFactory", () => {
     (einkommenRentenArt: RentenArt | null, finanzDatenRentenArt: RentenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepEinkommen.ET1.rentenVersicherung = einkommenRentenArt;
@@ -915,7 +900,7 @@ describe("finanzDatenFactory", () => {
     (einkommenKassenArt: KassenArt | null, finanzDatenKassenArt: KassenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepEinkommen.ET1.kassenArt = einkommenKassenArt;
@@ -945,7 +930,7 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = Object.assign({}, mockStore.stepEinkommen.ET2);
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
         // given
         mockStore.stepEinkommen.ET1.splittingFaktor = einkommenSplittingFaktor;

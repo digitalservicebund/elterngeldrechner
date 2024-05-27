@@ -9,8 +9,8 @@ interface TestFormValues {
 }
 
 interface Props {
-  allowedDecimalPlaces?: 1;
-  max?: number;
+  readonly allowedDecimalPlaces?: 1;
+  readonly max?: number;
 }
 
 describe.only("Custom Number Field", () => {

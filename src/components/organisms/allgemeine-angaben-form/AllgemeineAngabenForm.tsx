@@ -28,9 +28,9 @@ const antragstellendeOptions: RadioOption<Antragstellende>[] = [
 ];
 
 interface AllgemeineAngabenFormProps {
-  initialValues: StepAllgemeineAngabenState;
-  onSubmit: SubmitHandler<StepAllgemeineAngabenState>;
-  handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
+  readonly initialValues: StepAllgemeineAngabenState;
+  readonly onSubmit: SubmitHandler<StepAllgemeineAngabenState>;
+  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 export function AllgemeineAngabenForm({

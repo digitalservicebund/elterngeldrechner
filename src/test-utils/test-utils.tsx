@@ -22,8 +22,8 @@ interface RenderOptionsWithRedux extends RenderOptions {
 }
 
 interface TestWrapperProps {
-  store: Store;
-  children: ReactNode;
+  readonly store: Store;
+  readonly children: ReactNode;
 }
 
 function TestWrapper({ store, children }: TestWrapperProps) {
@@ -44,7 +44,7 @@ const renderWithRedux = (
     ...renderOptions
   }: RenderOptionsWithRedux = {},
 ) => {
-  function Wrapper({ children }: { children?: ReactNode }) {
+  function Wrapper({ children }: { readonly children?: ReactNode }) {
     return <TestWrapper store={store}>{children}</TestWrapper>;
   }
 
@@ -59,7 +59,7 @@ function renderHookWithRedux<Result, Props>(
     ...renderOptions
   }: RenderOptionsWithRedux = {},
 ): RenderHookResult<Result, Props> {
-  function Wrapper({ children }: { children?: ReactNode }) {
+  function Wrapper({ children }: { readonly children?: ReactNode }) {
     return <TestWrapper store={store}>{children}</TestWrapper>;
   }
 

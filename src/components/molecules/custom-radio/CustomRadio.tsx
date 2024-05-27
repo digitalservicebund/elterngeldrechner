@@ -20,13 +20,13 @@ export interface RadioOption<TValue extends RadioValue = RadioValue> {
 }
 
 export interface CustomRadioProps<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  registerOptions?: RegisterOptions<TFieldValues>;
-  name: Path<TFieldValues>;
-  options: RadioOption[];
-  errors?: FieldErrors<TFieldValues>;
-  required?: boolean;
-  info?: Info;
+  readonly register: UseFormRegister<TFieldValues>;
+  readonly registerOptions?: RegisterOptions<TFieldValues>;
+  readonly name: Path<TFieldValues>;
+  readonly options: RadioOption[];
+  readonly errors?: FieldErrors<TFieldValues>;
+  readonly required?: boolean;
+  readonly info?: Info;
 }
 
 export function CustomRadio<TFieldValues extends FieldValues>({

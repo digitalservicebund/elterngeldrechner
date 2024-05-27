@@ -8,7 +8,7 @@ import { FormStep, formSteps } from "@/utils/formSteps";
 import { Button } from "@/components/atoms";
 
 interface Props {
-  currentStep: FormStep;
+  readonly currentStep: FormStep;
 }
 
 export function Sidebar({ currentStep }: Props) {

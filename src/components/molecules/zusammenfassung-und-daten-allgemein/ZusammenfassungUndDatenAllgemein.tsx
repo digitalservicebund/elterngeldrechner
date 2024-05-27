@@ -6,7 +6,7 @@ import { antragstellendeLabels } from "@/components/organisms";
 import { yesNoLabels } from "@/components/molecules/yes-no-radio";
 
 type Props = {
-  allgemeineDaten: StepAllgemeineAngabenState & StepNachwuchsState;
+  readonly allgemeineDaten: StepAllgemeineAngabenState & StepNachwuchsState;
 };
 
 function ZusammenfassungUndDatenAllgemein({ allgemeineDaten }: Props) {

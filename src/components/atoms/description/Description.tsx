@@ -3,9 +3,9 @@ import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
-  id?: string;
-  error?: boolean;
-  children: ReactNode;
+  readonly id?: string;
+  readonly error?: boolean;
+  readonly children: ReactNode;
 }
 
 export function Description({ id, error = false, children }: Props) {

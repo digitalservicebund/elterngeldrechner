@@ -12,7 +12,7 @@ import { NotificationMaxElterngeld, P, Toast } from "@/components/atoms";
 import { FootNote } from "@/components/molecules/foot-note";
 
 interface Props {
-  elternteil: ElternteilType;
+  readonly elternteil: ElternteilType;
 }
 
 const getRechnerResultTableRows = (

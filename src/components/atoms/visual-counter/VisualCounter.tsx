@@ -1,12 +1,12 @@
 import nsp from "@/globals/js/namespace";
 
 interface VisualCounterProps {
-  countBasis: number;
-  maxCountBasis: number;
-  countPlus: number;
-  maxCountPlus: number;
-  countBonus: number;
-  maxCountBonus: number;
+  readonly countBasis: number;
+  readonly maxCountBasis: number;
+  readonly countPlus: number;
+  readonly maxCountPlus: number;
+  readonly countBonus: number;
+  readonly maxCountBonus: number;
 }
 
 export function VisualCounter({

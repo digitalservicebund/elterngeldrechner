@@ -4,10 +4,10 @@ import nsp from "@/globals/js/namespace";
 type FootNoteType = "anchor" | "note";
 
 interface Props {
-  type: FootNoteType;
-  number: number;
-  prefix?: string;
-  className?: string;
+  readonly type: FootNoteType;
+  readonly number: number;
+  readonly prefix?: string;
+  readonly className?: string;
 }
 
 export function FootNoteNumber({ type, number, prefix, className }: Props) {

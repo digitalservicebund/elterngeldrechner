@@ -4,9 +4,9 @@ import { Button } from "@/components/atoms";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
-  onClickBackButton?: (event: MouseEvent) => void;
-  onClickResetForm?: (event: MouseEvent) => void;
-  isStepOne?: boolean;
+  readonly onClickBackButton?: (event: MouseEvent) => void;
+  readonly onClickResetForm?: (event: MouseEvent) => void;
+  readonly isStepOne?: boolean;
 }
 
 export function ButtonGroup({

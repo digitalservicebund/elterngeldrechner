@@ -4,17 +4,17 @@ import { FieldValues, Path } from "react-hook-form";
 import nsp from "@/globals/js/namespace";
 
 interface Props<TFieldValues extends FieldValues> {
-  className?: string;
-  buttonStyle?: "primary" | "secondary" | "link";
-  label: string | ReactNode;
-  iconBefore?: ReactNode;
-  iconAfter?: ReactNode;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;
-  ariaLabel?: string;
-  ariaControls?: Path<TFieldValues>;
-  ariaHidden?: boolean;
-  isSubmitButton?: boolean;
+  readonly className?: string;
+  readonly buttonStyle?: "primary" | "secondary" | "link";
+  readonly label: string | ReactNode;
+  readonly iconBefore?: ReactNode;
+  readonly iconAfter?: ReactNode;
+  readonly onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  readonly disabled?: boolean;
+  readonly ariaLabel?: string;
+  readonly ariaControls?: Path<TFieldValues>;
+  readonly ariaHidden?: boolean;
+  readonly isSubmitButton?: boolean;
 }
 
 export function Button<TFieldValues extends FieldValues>({

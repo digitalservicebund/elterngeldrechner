@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 import { ContingentPerVariant } from "./types";
 
 type Props = {
-  months: ContingentPerVariant;
-  className?: string;
+  readonly months: ContingentPerVariant;
+  readonly className?: string;
 };
 
 export function BoxGraph({ months, className }: Props): ReactNode {

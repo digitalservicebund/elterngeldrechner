@@ -9,7 +9,7 @@ import { ElternteilType } from "@/monatsplaner";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface Props {
-  elternteil: ElternteilType;
+  readonly elternteil: ElternteilType;
 }
 
 const typeOfErwerbstaetigkeitLabels: {

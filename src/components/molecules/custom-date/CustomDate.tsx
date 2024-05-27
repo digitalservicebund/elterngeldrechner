@@ -14,9 +14,9 @@ interface CustomDateProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 > extends UseControllerProps<TFieldValues, TName> {
-  label: string;
-  required?: boolean;
-  info?: Info;
+  readonly label: string;
+  readonly required?: boolean;
+  readonly info?: Info;
 }
 
 export function CustomDate<

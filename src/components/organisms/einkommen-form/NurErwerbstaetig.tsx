@@ -11,8 +11,8 @@ import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurErwerbstaetigProps {
-  elternteil: ElternteilType;
-  monthsBeforeBirth: SelectOption[];
+  readonly elternteil: ElternteilType;
+  readonly monthsBeforeBirth: SelectOption[];
 }
 
 export function NurErwerbstaetig({

@@ -9,9 +9,9 @@ import { Button } from "@/components/atoms";
 import { SelectOption } from "@/components/molecules";
 
 interface SelbstaendigAndErwerbstaetigProps {
-  elternteil: ElternteilType;
-  isSelbststaendig: boolean;
-  monthsBeforeBirth: SelectOption[];
+  readonly elternteil: ElternteilType;
+  readonly isSelbststaendig: boolean;
+  readonly monthsBeforeBirth: SelectOption[];
 }
 
 export function SelbstaendigAndErwerbstaetig({

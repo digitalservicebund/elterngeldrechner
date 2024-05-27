@@ -64,7 +64,7 @@ import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notific
 export type ColumnType = Omit<ElterngeldType, "None">;
 
 interface Props {
-  mutterSchutzMonate: number;
+  readonly mutterSchutzMonate: number;
 }
 
 interface LastToggledElterngeldType {

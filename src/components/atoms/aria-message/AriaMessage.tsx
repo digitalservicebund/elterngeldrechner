@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAriaLog } from "./AriaLogProvider";
 
 interface AriaMessageProps {
-  children: string;
+  readonly children: string;
 }
 
 export function AriaMessage({ children: message }: AriaMessageProps) {

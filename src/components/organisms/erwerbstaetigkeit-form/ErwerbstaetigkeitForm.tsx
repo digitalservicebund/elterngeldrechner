@@ -12,9 +12,9 @@ import { ButtonGroup, Split } from "@/components/molecules";
 import { SplitItem } from "@/components/atoms";
 
 interface ErwerbstaetigkeitFormProps {
-  initialValues: StepErwerbstaetigkeitState;
-  onSubmit: SubmitHandler<StepErwerbstaetigkeitState>;
-  handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
+  readonly initialValues: StepErwerbstaetigkeitState;
+  readonly onSubmit: SubmitHandler<StepErwerbstaetigkeitState>;
+  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 export function ErwerbstaetigkeitForm({

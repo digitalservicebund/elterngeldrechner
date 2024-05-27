@@ -5,17 +5,17 @@ import nsp from "@/globals/js/namespace";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 
 interface Props {
-  isSelected?: boolean;
-  isMutterschutzMonth?: boolean;
-  isElternteilOne?: boolean;
-  isHighlighted?: boolean;
-  elterngeldType: ElterngeldType;
-  label: string;
-  children: React.ReactNode;
-  onToggle: () => void;
-  onDragOver: () => void;
-  onMouseOver?: () => void;
-  onMouseLeave?: () => void;
+  readonly isSelected?: boolean;
+  readonly isMutterschutzMonth?: boolean;
+  readonly isElternteilOne?: boolean;
+  readonly isHighlighted?: boolean;
+  readonly elterngeldType: ElterngeldType;
+  readonly label: string;
+  readonly children: React.ReactNode;
+  readonly onToggle: () => void;
+  readonly onDragOver: () => void;
+  readonly onMouseOver?: () => void;
+  readonly onMouseLeave?: () => void;
 }
 
 export function MonatsplanerMonth({

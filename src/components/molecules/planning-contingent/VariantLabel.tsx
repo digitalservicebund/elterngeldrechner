@@ -2,10 +2,10 @@ import classNames from "classnames";
 import { ReactNode } from "react";
 
 type Props = {
-  name: string;
-  monthsAvailable: number;
-  monthsTaken: number;
-  className?: string;
+  readonly name: string;
+  readonly monthsAvailable: number;
+  readonly monthsTaken: number;
+  readonly className?: string;
 };
 
 export function VariantLabel({

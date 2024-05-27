@@ -16,17 +16,17 @@ interface CustomNumberFieldProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 > extends UseControllerProps<TFieldValues, TName> {
-  label: string;
-  allowedDecimalPlaces?: 1 | 2;
-  suffix?: string;
-  min?: number;
-  max?: number;
-  className?: string;
-  placeholder?: string;
-  stretch?: boolean;
-  required?: boolean;
-  ariaDescribedByIfNoError?: string;
-  info?: Info;
+  readonly label: string;
+  readonly allowedDecimalPlaces?: 1 | 2;
+  readonly suffix?: string;
+  readonly min?: number;
+  readonly max?: number;
+  readonly className?: string;
+  readonly placeholder?: string;
+  readonly stretch?: boolean;
+  readonly required?: boolean;
+  readonly ariaDescribedByIfNoError?: string;
+  readonly info?: Info;
 }
 
 export function CustomNumberField<

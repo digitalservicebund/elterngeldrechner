@@ -1,8 +1,8 @@
 import { YesNo } from "@/globals/js/calculations/model";
 
 interface Props {
-  elternteilName: string;
-  alleinerziehend?: YesNo | null;
+  readonly elternteilName: string;
+  readonly alleinerziehend?: YesNo | null;
 }
 
 export function NotificationBEGResultWasRecalculated({

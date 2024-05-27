@@ -34,9 +34,9 @@ const monatlichesBruttoOptions: RadioOption<MonatlichesBrutto>[] = [
 ];
 
 interface ErwerbstaetikeitFormElternteilProps {
-  elternteil: ElternteilType;
-  elternteilName: string;
-  antragssteller: Antragstellende | null;
+  readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragssteller: Antragstellende | null;
 }
 
 function ErwerbstaetigkeitFormElternteil({

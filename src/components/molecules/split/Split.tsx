@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
 type Props = {
-  children?: ReactNode;
+  readonly children?: ReactNode;
 };
 
 export function Split({ children }: Props) {

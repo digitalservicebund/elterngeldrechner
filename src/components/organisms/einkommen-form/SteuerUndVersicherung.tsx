@@ -20,8 +20,8 @@ import { useAppSelector } from "@/redux/hooks";
 import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 
 interface SteuerUndVersicherungProps {
-  elternteil: ElternteilType;
-  isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten: boolean;
+  readonly elternteil: ElternteilType;
+  readonly isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten: boolean;
 }
 
 const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [

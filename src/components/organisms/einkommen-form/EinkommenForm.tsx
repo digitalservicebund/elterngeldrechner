@@ -17,9 +17,9 @@ import { YesNo } from "@/globals/js/calculations/model";
 import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 interface Props {
-  initialValues: StepEinkommenState;
-  onSubmit: SubmitHandler<StepEinkommenState>;
-  handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
+  readonly initialValues: StepEinkommenState;
+  readonly onSubmit: SubmitHandler<StepEinkommenState>;
+  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 export function EinkommenForm({

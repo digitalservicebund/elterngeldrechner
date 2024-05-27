@@ -12,11 +12,11 @@ import { Month } from "@/monatsplaner";
 import { ElterngeldType } from "@/monatsplaner/elternteile/elternteile-types";
 
 interface Props {
-  elternteilName: string;
-  stepNachwuchs: StepNachwuchsState;
-  stepErwerbstaetigkeit: StepErwerbstaetigkeitElternteil;
-  stepEinkommen: StepEinkommenElternteil;
-  monatsplaner: readonly Month[];
+  readonly elternteilName: string;
+  readonly stepNachwuchs: StepNachwuchsState;
+  readonly stepErwerbstaetigkeit: StepErwerbstaetigkeitElternteil;
+  readonly stepEinkommen: StepEinkommenElternteil;
+  readonly monatsplaner: readonly Month[];
 }
 
 const getHumanReadableMonthType: { [K in ElterngeldType]: string } = {

@@ -15,14 +15,14 @@ import { Description } from "@/components/atoms";
 import nsp from "@/globals/js/namespace";
 
 interface Props<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  registerOptions?: RegisterOptions<TFieldValues>;
-  name: Path<TFieldValues>;
-  label: string;
-  errors?: FieldErrors<TFieldValues>;
-  onDecrease: () => void;
-  onIncrease: () => void;
-  required: boolean;
+  readonly register: UseFormRegister<TFieldValues>;
+  readonly registerOptions?: RegisterOptions<TFieldValues>;
+  readonly name: Path<TFieldValues>;
+  readonly label: string;
+  readonly errors?: FieldErrors<TFieldValues>;
+  readonly onDecrease: () => void;
+  readonly onIncrease: () => void;
+  readonly required: boolean;
 }
 
 export function Counter<TFieldValues extends FieldValues>({

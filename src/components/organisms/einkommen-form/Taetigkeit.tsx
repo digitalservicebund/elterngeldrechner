@@ -39,11 +39,11 @@ const erwerbstaetigkeitOptions: SelectOption<Erwerbstaetigkeiten | "">[] = [
 ];
 
 interface TaetigkeitsFormProps {
-  elternteil: ElternteilType;
-  taetigkeitsIndex: number;
-  isSelbststaendig: boolean;
-  monthsBeforeBirth: SelectOption[];
-  onRemove: () => void;
+  readonly elternteil: ElternteilType;
+  readonly taetigkeitsIndex: number;
+  readonly isSelbststaendig: boolean;
+  readonly monthsBeforeBirth: SelectOption[];
+  readonly onRemove: () => void;
 }
 
 export function Taetigkeit({

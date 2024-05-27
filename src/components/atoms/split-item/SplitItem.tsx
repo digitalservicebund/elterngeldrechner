@@ -3,8 +3,8 @@ import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
-  hasDivider?: boolean;
-  children: ReactNode;
+  readonly hasDivider?: boolean;
+  readonly children: ReactNode;
 }
 
 export function SplitItem({ hasDivider, children }: Props) {

@@ -1,9 +1,9 @@
 import nsp from "@/globals/js/namespace";
 
 interface LabelCounterProps {
-  label: string;
-  count: number;
-  maxCount: number;
+  readonly label: string;
+  readonly count: number;
+  readonly maxCount: number;
 }
 
 export function LabelCounter({ label, count, maxCount }: LabelCounterProps) {

@@ -13,12 +13,12 @@ import { InfoDialog } from "@/components/molecules/info-dialog/InfoDialog";
 import { Info } from "@/components/molecules/info-dialog/infoTexts";
 
 interface CustomInputProps<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  name: FieldPath<TFieldValues>;
-  label: string;
-  errors?: FieldErrors<TFieldValues>;
-  placeholder?: string;
-  info?: Info;
+  readonly register: UseFormRegister<TFieldValues>;
+  readonly name: FieldPath<TFieldValues>;
+  readonly label: string;
+  readonly errors?: FieldErrors<TFieldValues>;
+  readonly placeholder?: string;
+  readonly info?: Info;
 }
 
 export function CustomInput<TFieldValues extends FieldValues>({

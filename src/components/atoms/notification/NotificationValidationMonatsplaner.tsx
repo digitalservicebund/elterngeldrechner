@@ -1,7 +1,7 @@
 import { ErrorCode } from "@/monatsplaner";
 
 interface Props {
-  errorCodes: readonly ErrorCode[];
+  readonly errorCodes: readonly ErrorCode[];
 }
 
 export function NotificationValidationMonatsplaner({ errorCodes }: Props) {

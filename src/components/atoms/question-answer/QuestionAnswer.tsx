@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
-  question: string;
-  answer: string;
+  readonly question: string;
+  readonly answer: string;
 }
 
 export function QuestionAnswer({ question, answer }: Props): ReactNode {

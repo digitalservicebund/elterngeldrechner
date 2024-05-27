@@ -1,7 +1,7 @@
 type TargetType = "BEG" | "BEGAndEG+";
 
 interface Props {
-  targetType: TargetType;
+  readonly targetType: TargetType;
 }
 
 const getTargetTypeName = (targetType: TargetType) => {

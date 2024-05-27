@@ -5,8 +5,8 @@ import { ContingentPerVariant } from "./types";
 import { BoxGraph } from "./BoxGraph";
 
 type Props = {
-  months: ContingentPerVariant;
-  className?: string;
+  readonly months: ContingentPerVariant;
+  readonly className?: string;
 };
 
 export function PlanningContingent({ months, className }: Props): ReactNode {

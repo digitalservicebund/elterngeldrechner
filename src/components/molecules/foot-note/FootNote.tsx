@@ -3,10 +3,10 @@ import nsp from "@/globals/js/namespace";
 import { FootNoteNumber } from "@/components/atoms";
 
 interface Props {
-  id?: string;
-  number?: number;
-  prefix?: string;
-  children?: ReactNode;
+  readonly id?: string;
+  readonly number?: number;
+  readonly prefix?: string;
+  readonly children?: ReactNode;
 }
 
 export function FootNote({ id, number, prefix, children }: Props) {

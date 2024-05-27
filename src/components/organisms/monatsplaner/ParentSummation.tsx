@@ -4,7 +4,7 @@ import { SummationDataForParent } from "./types";
 import { formatAsCurrency } from "@/utils/locale-formatting";
 
 interface Props extends SummationDataForParent {
-  hideSum?: boolean;
+  readonly hideSum?: boolean;
 }
 
 export function ParentSummation({

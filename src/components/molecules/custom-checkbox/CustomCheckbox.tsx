@@ -14,13 +14,13 @@ import { Description } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 interface Props<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  registerOptions?: RegisterOptions<TFieldValues>;
-  name: Path<TFieldValues>;
-  label: string;
-  errors?: FieldErrors<TFieldValues> | boolean;
-  onChange?: (newValue: boolean) => void;
-  info?: Info;
+  readonly register: UseFormRegister<TFieldValues>;
+  readonly registerOptions?: RegisterOptions<TFieldValues>;
+  readonly name: Path<TFieldValues>;
+  readonly label: string;
+  readonly errors?: FieldErrors<TFieldValues> | boolean;
+  readonly onChange?: (newValue: boolean) => void;
+  readonly info?: Info;
 }
 
 export function CustomCheckbox<TFieldValues extends FieldValues>({

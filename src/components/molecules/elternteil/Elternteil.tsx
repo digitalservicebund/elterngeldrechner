@@ -23,22 +23,25 @@ export type AmountElterngeldRow =
     };
 
 interface Props {
-  lebensmonate: LebensmonateAfterBirth[];
-  selectablePSBMonths: SelectedPSBMonthIndices;
-  elternteil: MonatsplanerElternteil;
-  elternteilName: string;
-  onToggleMonth: (columnType: ColumnType, monthIndex: number) => void;
-  onDragOverMonth: (columnType: ColumnType, monthIndex: number) => void;
-  isBEGMonthSelectable: (index: number) => boolean;
-  isEGPMonthSelectable: (index: number) => boolean;
-  amounts: AmountElterngeldRow[];
-  hasMutterschutz: boolean;
-  mutterSchutzMonate: number;
-  remainingMonths: RemainingMonthByType;
-  hideLebensmonateOnDesktop?: boolean;
-  className?: string;
-  isElternteilOne?: boolean;
-  partnerMonate?: boolean;
+  readonly lebensmonate: LebensmonateAfterBirth[];
+  readonly selectablePSBMonths: SelectedPSBMonthIndices;
+  readonly elternteil: MonatsplanerElternteil;
+  readonly elternteilName: string;
+  readonly onToggleMonth: (columnType: ColumnType, monthIndex: number) => void;
+  readonly onDragOverMonth: (
+    columnType: ColumnType,
+    monthIndex: number,
+  ) => void;
+  readonly isBEGMonthSelectable: (index: number) => boolean;
+  readonly isEGPMonthSelectable: (index: number) => boolean;
+  readonly amounts: AmountElterngeldRow[];
+  readonly hasMutterschutz: boolean;
+  readonly mutterSchutzMonate: number;
+  readonly remainingMonths: RemainingMonthByType;
+  readonly hideLebensmonateOnDesktop?: boolean;
+  readonly className?: string;
+  readonly isElternteilOne?: boolean;
+  readonly partnerMonate?: boolean;
 }
 
 export function Elternteil({

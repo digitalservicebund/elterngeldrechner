@@ -26,7 +26,7 @@ const ZusammenfassungUndDatenPage = lazy(
 );
 
 interface Props {
-  elternGeldDigitalWizardUrl: string | undefined;
+  readonly elternGeldDigitalWizardUrl: string | undefined;
 }
 
 export function App({ elternGeldDigitalWizardUrl }: Props) {

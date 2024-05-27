@@ -19,19 +19,19 @@ import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSel
 import { ZeitraumValue } from "@/globals/js/ZeitraumValue";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
-  register: UseFormRegister<TFieldValues>;
-  name: Path<TFieldValues>;
-  getValues: UseFormGetValues<TFieldValues>;
-  setValue: UseFormSetValue<TFieldValues>;
-  errors?: FieldErrors<TFieldValues>;
-  options: SelectOption[];
-  optionsTo?: SelectOption[];
-  className?: string;
-  suffix?: string;
-  type?: ZeitraumValue.Type;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: (v: { from: string; to: string }) => void | undefined;
+  readonly register: UseFormRegister<TFieldValues>;
+  readonly name: Path<TFieldValues>;
+  readonly getValues: UseFormGetValues<TFieldValues>;
+  readonly setValue: UseFormSetValue<TFieldValues>;
+  readonly errors?: FieldErrors<TFieldValues>;
+  readonly options: SelectOption[];
+  readonly optionsTo?: SelectOption[];
+  readonly className?: string;
+  readonly suffix?: string;
+  readonly type?: ZeitraumValue.Type;
+  readonly disabled?: boolean;
+  readonly required?: boolean;
+  readonly onChange?: (v: { from: string; to: string }) => void | undefined;
 }
 
 export function Zeitraum<TFieldValues extends FieldValues>({

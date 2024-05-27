@@ -18,7 +18,7 @@ interface IAriaLogContext {
 const AriaLogContext = createContext<IAriaLogContext | undefined>(undefined);
 
 type Props = {
-  children?: ReactNode;
+  readonly children?: ReactNode;
 };
 
 /**

@@ -4,10 +4,10 @@ import { P } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 interface FormFieldGroupProps extends AriaAttributes {
-  headline?: string;
-  description?: string;
-  info?: Info;
-  children: React.ReactNode;
+  readonly headline?: string;
+  readonly description?: string;
+  readonly info?: Info;
+  readonly children: React.ReactNode;
 }
 
 export function FormFieldGroup({

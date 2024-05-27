@@ -9,8 +9,8 @@ import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurSelbstaendigProps {
-  elternteil: ElternteilType;
-  monthsBeforeBirth: SelectOption[];
+  readonly elternteil: ElternteilType;
+  readonly monthsBeforeBirth: SelectOption[];
 }
 
 export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {

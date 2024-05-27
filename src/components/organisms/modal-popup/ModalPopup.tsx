@@ -3,9 +3,9 @@ import nsp from "@/globals/js/namespace";
 import { Button } from "@/components/atoms";
 
 interface Props {
-  text: string;
-  buttonLabel: string;
-  onClick: () => void;
+  readonly text: string;
+  readonly buttonLabel: string;
+  readonly onClick: () => void;
 }
 
 export default function ModalPupup({ text, buttonLabel, onClick }: Props) {

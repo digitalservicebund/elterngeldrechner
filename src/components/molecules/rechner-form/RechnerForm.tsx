@@ -32,12 +32,12 @@ import {
 import { EgrConst } from "@/globals/js/egr-configuration";
 
 interface RechnerFormProps {
-  elternteilName: string;
-  elternteil: ElternteilType;
-  initialValues: StepRechnerState;
-  onSubmit: SubmitHandler<StepRechnerState>;
-  isResultPending: boolean;
-  previousFormStepsChanged: boolean;
+  readonly elternteilName: string;
+  readonly elternteil: ElternteilType;
+  readonly initialValues: StepRechnerState;
+  readonly onSubmit: SubmitHandler<StepRechnerState>;
+  readonly isResultPending: boolean;
+  readonly previousFormStepsChanged: boolean;
 }
 
 export function RechnerForm({

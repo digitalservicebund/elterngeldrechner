@@ -6,10 +6,10 @@ import { Info } from "./infoTexts";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
-  info: Info;
-  isLarge?: boolean;
-  isMonatsplanner?: boolean;
-  isElternteilOne?: boolean;
+  readonly info: Info;
+  readonly isLarge?: boolean;
+  readonly isMonatsplanner?: boolean;
+  readonly isElternteilOne?: boolean;
 }
 
 export function InfoDialog({

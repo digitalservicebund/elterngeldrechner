@@ -5,8 +5,8 @@ import { SummationDataForParent } from "./types";
 import { formatAsCurrency } from "@/utils/locale-formatting";
 
 type Props = {
-  className?: string;
-  data: SummationDataForParent[];
+  readonly className?: string;
+  readonly data: SummationDataForParent[];
 };
 
 export function SummationFooter({ data, className }: Props): ReactNode {

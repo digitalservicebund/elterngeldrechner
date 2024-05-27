@@ -17,9 +17,9 @@ import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NachwuchsFormProps {
-  initialValues: StepNachwuchsState;
-  onSubmit: SubmitHandler<StepNachwuchsState>;
-  handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
+  readonly initialValues: StepNachwuchsState;
+  readonly onSubmit: SubmitHandler<StepNachwuchsState>;
+  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 const validateMonth = (date: string) => {

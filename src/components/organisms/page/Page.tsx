@@ -7,8 +7,8 @@ import nsp from "@/globals/js/namespace";
 import { FootNote } from "@/components/molecules";
 
 interface PageProps {
-  step: FormStep;
-  children: ReactNode;
+  readonly step: FormStep;
+  readonly children: ReactNode;
 }
 
 export function Page({ step, children }: PageProps) {

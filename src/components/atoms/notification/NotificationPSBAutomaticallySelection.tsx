@@ -1,5 +1,5 @@
 interface Props {
-  label: string;
+  readonly label: string;
 }
 
 export function NotificationPSBAutomaticallySelection({ label }: Props) {

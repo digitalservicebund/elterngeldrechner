@@ -3,10 +3,10 @@ import { ReactNode } from "react";
 import nsp from "@/globals/js/namespace";
 
 interface Props {
-  size?: "normal" | "large";
-  bold?: boolean;
-  className?: string;
-  children: ReactNode;
+  readonly size?: "normal" | "large";
+  readonly bold?: boolean;
+  readonly className?: string;
+  readonly children: ReactNode;
 }
 
 export function P({ size = "normal", bold, className, children }: Props) {

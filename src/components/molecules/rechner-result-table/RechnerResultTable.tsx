@@ -11,12 +11,12 @@ export interface RechnerResultTableRow {
 }
 
 interface Props {
-  rows: RechnerResultTableRow[];
-  elterngeldType: "Basis" | "Plus" | "Bonus";
-  titleTotal: string;
-  markOver14Month?: boolean;
-  hideLebensmonate?: boolean;
-  className?: string;
+  readonly rows: RechnerResultTableRow[];
+  readonly elterngeldType: "Basis" | "Plus" | "Bonus";
+  readonly titleTotal: string;
+  readonly markOver14Month?: boolean;
+  readonly hideLebensmonate?: boolean;
+  readonly className?: string;
 }
 
 const roundAndFormatMoney = (amount: number) =>

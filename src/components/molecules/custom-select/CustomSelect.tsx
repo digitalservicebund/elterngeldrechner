@@ -24,16 +24,16 @@ export const cloneOptionsList = (options: SelectOption[]) =>
   });
 
 interface CustomSelectProps<TFieldValues extends FieldValues> {
-  register: UseFormRegister<TFieldValues>;
-  registerOptions?: RegisterOptions<TFieldValues>;
-  name: Path<TFieldValues>;
-  label: string;
-  errors?: FieldErrors<TFieldValues>;
-  options: SelectOption[];
-  autoWidth?: boolean;
-  required?: boolean;
-  disabled?: boolean;
-  info?: Info;
+  readonly register: UseFormRegister<TFieldValues>;
+  readonly registerOptions?: RegisterOptions<TFieldValues>;
+  readonly name: Path<TFieldValues>;
+  readonly label: string;
+  readonly errors?: FieldErrors<TFieldValues>;
+  readonly options: SelectOption[];
+  readonly autoWidth?: boolean;
+  readonly required?: boolean;
+  readonly disabled?: boolean;
+  readonly info?: Info;
 }
 
 export function CustomSelect<TFieldValues extends FieldValues>({

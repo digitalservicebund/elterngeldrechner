@@ -6,11 +6,11 @@ import { PayoutInformation } from "./PayoutInformation";
 import { PayoutAmoutForVariant } from "./types";
 
 type Props = {
-  summaryTitle: string;
-  summaryClassName?: string;
-  monthsAvailable: number;
-  payoutAmounts: PayoutAmoutForVariant[];
-  children: ReactNode;
+  readonly summaryTitle: string;
+  readonly summaryClassName?: string;
+  readonly monthsAvailable: number;
+  readonly payoutAmounts: PayoutAmoutForVariant[];
+  readonly children: ReactNode;
 };
 
 export function DetailsElterngeldvariante({

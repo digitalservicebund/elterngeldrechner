@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { PayoutInformation } from "./PayoutInformation";
@@ -20,17 +20,10 @@ export function DetailsElterngeldvariante({
   payoutAmounts,
   children,
 }: Props): ReactNode {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleIsOpen = () => setIsOpen(!isOpen);
-  const ExpandStateIcon = isOpen ? ExpandLessIcon : ExpandMoreIcon;
-
   const isSingleParent = payoutAmounts.length === 1;
 
   return (
-    <details
-      className="overflow-hidden rounded bg-grey"
-      onToggle={toggleIsOpen}
-    >
+    <details className="group overflow-hidden rounded bg-grey">
       <summary
         className={classNames(
           "flex justify-between list-none items-center cursor-pointer px-24 py-16",
@@ -54,7 +47,8 @@ export function DetailsElterngeldvariante({
           </div>
         </div>
 
-        <ExpandStateIcon className="min-h-40 min-w-40" />
+        <ExpandMoreIcon className="min-h-40 min-w-40 group-open:hidden" />
+        <ExpandLessIcon className="hidden min-h-40 min-w-40 group-open:block" />
       </summary>
 
       <div className="bg-off-white px-40 py-24">{children}</div>

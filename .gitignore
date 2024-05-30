@@ -29,3 +29,9 @@ yarn-error.log*
 /src/test-utils/resources/~$*.xlsx
 
 /tmp_preview
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

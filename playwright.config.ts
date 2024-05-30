@@ -29,6 +29,9 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
+  expect: {
+    toHaveScreenshot: { maxDiffPixelRatio: 0.01 },
+  },
 
   /* Configure projects for major browsers */
   projects: [
@@ -45,6 +48,11 @@ export default defineConfig({
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
+    },
+
+    {
+      name: "iphone",
+      use: { ...devices["iPhone 13"] },
     },
 
     /* Test against mobile viewports. */

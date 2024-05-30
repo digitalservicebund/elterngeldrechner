@@ -8,3 +8,4 @@ allowed-licenses
 .env*
 .sonarcloud.properties
 .gitignore
+*.png

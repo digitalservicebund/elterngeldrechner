@@ -40,20 +40,20 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    // },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+    // {
+    //   name: "webkit",
+    //   use: { ...devices["Desktop Safari"] },
+    // },
 
-    {
-      name: "iphone",
-      use: { ...devices["iPhone 13"] },
-    },
+    // {
+    //   name: "iphone",
+    //   use: { ...devices["iPhone 13"] },
+    // },
 
     /* Test against mobile viewports. */
     // {

@@ -1,4 +1,5 @@
 @use "toast.variables" as *;
+@use "src/globals/scss" as egr;
 
 ##{nsp("toast")} {
   position: relative;
@@ -17,7 +18,7 @@
   color: #fff;
   background-color: #c40046;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  padding: 0.5rem;
+  padding: egr.px-to-rem(9);
   transform: translateY(100%);
   transition: all 0.3s;
 

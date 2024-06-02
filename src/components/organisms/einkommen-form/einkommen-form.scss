@@ -18,12 +18,12 @@
     }
 
     legend {
-      margin-bottom: 1.5rem;
+      margin-bottom: px-to-rem(27);
     }
 
     ul {
       list-style: disc;
-      padding-left: 1rem;
+      padding-left: px-to-rem(18);
     }
   }
 

@@ -1,4 +1,4 @@
 @forward "src/globals/scss";
 @use "src/globals/scss" as egr;
 
-$spinner-size: 2rem;
+$spinner-size: egr.px-to-rem(36);

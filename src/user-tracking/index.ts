@@ -4,6 +4,7 @@ import { setupTagManager } from "./tag-manager";
 
 export { setTrackingVariable } from "./data-layer";
 export { trackNutzergruppe } from "./nutzergruppe";
+export { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();

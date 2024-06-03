@@ -1,17 +1,24 @@
-import { ElterngeldType } from "./elternteile-types";
-import { calculatePartnerschaftlichkeiteVerteilung } from "./partnerschaftlichkeit";
+import { setTrackingVariable } from "./data-layer";
+import { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
+import { ElterngeldType } from "@/monatsplaner";
+
+jest.mock("./data-layer.ts");
 
 describe("partnerschaftlichkeit", () => {
-  it("should calculate a quotient of zero if no parent takes any month", () => {
-    const quotient = calculatePartnerschaftlichkeiteVerteilung([], [], false);
+  it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {
+    trackPartnerschaftlicheVerteilung(ANY_MONTHS, ANY_MONTHS, false);
 
-    expect(quotient).toEqual(0);
+    expect(setTrackingVariable).toHaveBeenCalledTimes(1);
+    expect(setTrackingVariable).toHaveBeenLastCalledWith(
+      "partnerschaftlicheverteilung",
+      expect.anything(),
+    );
   });
 
-  it("should return no quotient if there are no two parents", () => {
-    const quotient = calculatePartnerschaftlichkeiteVerteilung([], [], true);
+  it("should not track anything if there are no two parents", () => {
+    trackPartnerschaftlicheVerteilung(ANY_MONTHS, ANY_MONTHS, true);
 
-    expect(quotient).toBeUndefined();
+    expect(setTrackingVariable).not.toHaveBeenCalled();
   });
 
   it.each<{
@@ -19,6 +26,11 @@ describe("partnerschaftlichkeit", () => {
     monthsET2: ElterngeldType[];
     expectedQuotient: number;
   }>([
+    {
+      monthsET1: [],
+      monthsET2: [],
+      expectedQuotient: 0,
+    },
     {
       monthsET1: ["None"],
       monthsET2: ["BEG"],
@@ -77,13 +89,14 @@ describe("partnerschaftlichkeit", () => {
   ])(
     "should calculate the correct factor (#$#)",
     ({ monthsET1, monthsET2, expectedQuotient }) => {
-      const quotient = calculatePartnerschaftlichkeiteVerteilung(
-        monthsET1,
-        monthsET2,
-        false,
-      );
+      trackPartnerschaftlicheVerteilung(monthsET1, monthsET2, false);
 
-      expect(quotient).toEqual(expectedQuotient);
+      expect(setTrackingVariable).toHaveBeenCalledWith(
+        expect.anything(),
+        expectedQuotient,
+      );
     },
   );
 });
+
+const ANY_MONTHS: ElterngeldType[] = ["BEG"];

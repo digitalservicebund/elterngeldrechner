@@ -1,4 +1,19 @@
-import { ElterngeldType } from "./elternteile-types";
+import { setTrackingVariable } from "./data-layer";
+import { ElterngeldType } from "@/monatsplaner";
+
+export function trackPartnerschaftlicheVerteilung(
+  monthsET1: ElterngeldType[],
+  monthsET2: ElterngeldType[],
+  singleApplicant: boolean,
+): void {
+  if (!singleApplicant) {
+    const verteilung = calculatePartnerschaftlichkeiteVerteilung(
+      monthsET1,
+      monthsET2,
+    );
+    setTrackingVariable(TRACKING_VARIABLE_NAME, verteilung);
+  }
+}
 
 /**
  * This is a small algorithm which calculates a quotient of how well the planned
@@ -9,23 +24,20 @@ import { ElterngeldType } from "./elternteile-types";
  *
  * @returns quotient between 0 and 1 of the distribution
  */
-export function calculatePartnerschaftlichkeiteVerteilung(
+function calculatePartnerschaftlichkeiteVerteilung(
   monthsET1: ElterngeldType[],
   monthsET2: ElterngeldType[],
-  singleApplicant: boolean,
 ): number | undefined {
-  if (!singleApplicant) {
-    const valueET1 = calculateValueOfElternteil(monthsET1);
-    const valueET2 = calculateValueOfElternteil(monthsET2);
+  const valueET1 = calculateValueOfElternteil(monthsET1);
+  const valueET2 = calculateValueOfElternteil(monthsET2);
 
-    const smallerValue = Math.min(valueET1, valueET2);
-    const biggerValue = Math.max(valueET1, valueET2);
+  const smallerValue = Math.min(valueET1, valueET2);
+  const biggerValue = Math.max(valueET1, valueET2);
 
-    const hasNoPartnerschaftlichkeit = biggerValue === 0;
-    const quotient = smallerValue / biggerValue;
+  const hasNoPartnerschaftlichkeit = biggerValue === 0;
+  const quotient = smallerValue / biggerValue;
 
-    return hasNoPartnerschaftlichkeit ? 0 : quotient;
-  }
+  return hasNoPartnerschaftlichkeit ? 0 : quotient;
 }
 
 /**
@@ -48,3 +60,5 @@ const ELTERNGELD_TYPE_TO_PARTNERSCHAFTLICHKEITS_VALUE: Record<
   PSB: 0.5,
   None: 0,
 };
+
+const TRACKING_VARIABLE_NAME = "partnerschaftlicheverteilung";

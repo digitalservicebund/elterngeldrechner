@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { calculatePartnerschaftlichkeiteVerteilung } from "@/monatsplaner/elternteile/partnerschaftlichkeit";
 import { createAppSelector, useAppSelector } from "@/redux/hooks";
-import { setTrackingVariable } from "@/user-tracking/data-layer";
+import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 /**
  * Continuously calculates the quotient for the "Partnerschaftliche Verteilung"
@@ -13,13 +12,8 @@ export function usePartnerschaftlicheVerteilungTracking(): void {
   const calculationParameters = useAppSelector(calculationParameterSelector);
 
   useEffect(() => {
-    const quotient = calculatePartnerschaftlichkeiteVerteilung(
-      calculationParameters.monthsET1,
-      calculationParameters.monthsET2,
-      calculationParameters.singleApplicant,
-    );
-
-    setTrackingVariable(TRACKING_VARIABLE_NAME, quotient);
+    const { monthsET1, monthsET2, singleApplicant } = calculationParameters;
+    trackPartnerschaftlicheVerteilung(monthsET1, monthsET2, singleApplicant);
   }, [calculationParameters]);
 }
 
@@ -35,5 +29,3 @@ const calculationParameterSelector = createAppSelector(
     singleApplicant: antragstellende === "EinenElternteil",
   }),
 );
-
-const TRACKING_VARIABLE_NAME = "partnerschaftlicheverteilung";

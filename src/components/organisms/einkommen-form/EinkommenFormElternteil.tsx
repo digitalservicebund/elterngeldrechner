@@ -71,7 +71,9 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
 
   return (
     <section aria-label={elternteilName}>
-      {antragssteller === "FuerBeide" && <h2>{elternteilName}</h2>}
+      {antragssteller === "FuerBeide" && (
+        <h2 className="mb-10">{elternteilName}</h2>
+      )}
       {!isErwerbstaetigVorGeburt && (
         <P>
           Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird

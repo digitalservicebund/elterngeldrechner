@@ -466,7 +466,11 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
         )}
       >
         <div className={nsp("monatsplaner__header")}>
-          <h2 ref={elementToViewOnRepeatPlanning} tabIndex={-1}>
+          <h2
+            ref={elementToViewOnRepeatPlanning}
+            tabIndex={-1}
+            className="mb-10"
+          >
             Monatsplaner
           </h2>
           <P>

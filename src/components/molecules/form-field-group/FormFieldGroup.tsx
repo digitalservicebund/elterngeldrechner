@@ -54,7 +54,7 @@ export function FormFieldGroup({
       {...aria}
     >
       {!!headline && (
-        <h3>
+        <h3 className="mb-10">
           {headline}
           {!!showRequiredAsterisk && <span>&nbsp;*</span>}
         </h3>

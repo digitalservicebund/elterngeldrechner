@@ -55,7 +55,7 @@ export function ErwerbstaetigkeitForm({
 
   return (
     <>
-      <h3>
+      <h3 className="mb-10">
         Erwerbstätigkeit{antragssteller === "EinenElternteil" ? " *" : ""}
       </h3>
       <FormProvider {...methods}>

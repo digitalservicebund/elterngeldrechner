@@ -1,66 +1,53 @@
-@import "@digitalservice4germany/angie/fonts.css";
-
-html,
-body {
-  font-size: 18px;
-  line-height: 30px;
-  font-family: BundesSansWeb, Arial, Helvetica, sans-serif;
-  @apply font-regular;
-}
-
-h1 {
-  @apply text-80 font-bold;
-}
-
-h2 {
-  @apply text-40 font-bold mb-10;
-}
-
-h3 {
-  @apply text-28 font-regular mb-10;
-}
-
-h4 {
-  @apply text-24 font-bold;
-}
-
-h5 {
-  @apply text-22 mb-10;
-}
-
-p {
-  @apply text-base py-4;
-}
-
-button {
-  @apply text-20 leading-none;
-}
-
-label {
+#egr-root {
   @apply text-base;
 }
 
-legend {
-  @apply text-base mb-10;
-}
-
-input,
-select {
-  font-size: inherit;
+#egr-root button,
+#egr-root select,
+#egr-root input {
   font-family: inherit;
+  font-size: inherit;
   line-height: inherit;
 }
 
+#egr-root h2 {
+  @apply text-40;
+}
+
 @media only screen and (max-width: 481px) {
-  h2 {
+  #egr-root h2 {
     @apply text-28 font-regular;
   }
+}
 
-  h3 {
+#egr-root h3 {
+  @apply text-28 font-regular;
+}
+
+@media only screen and (max-width: 481px) {
+  #egr-root h3 {
     @apply text-24 font-bold;
   }
+}
 
-  h4 {
+#egr-root h4 {
+  @apply text-24;
+}
+
+@media only screen and (max-width: 481px) {
+  #egr-root h4 {
     @apply text-base;
   }
+}
+
+#egr-root h5 {
+  @apply text-22;
+}
+
+#egr-root p {
+  @apply py-4;
+}
+
+#egr-root button {
+  @apply text-20;
 }

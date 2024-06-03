@@ -179,7 +179,7 @@ export function NachwuchsForm({
                 role="region"
                 aria-label={`${index + 1}. Geschwisterkind`}
               >
-                {index > 0 && <h3>Geschwisterkind</h3>}
+                {index > 0 && <h3 className="mb-10">Geschwisterkind</h3>}
                 <CustomDate
                   control={control}
                   rules={{

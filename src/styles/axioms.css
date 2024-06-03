@@ -1,8 +1,4 @@
-* {
-  box-sizing: border-box;
-}
-
-svg {
+#egr-root svg {
   display: inline;
   height: 1.3em;
   width: 1.3em;

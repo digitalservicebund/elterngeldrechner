@@ -2,7 +2,6 @@ import { ReactNode, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   NotificationBEGResultWasRecalculated,
-  P,
   Toast,
 } from "@/components/atoms";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
@@ -116,12 +115,12 @@ export function Rechner() {
       </FootNote>
 
       <section className={nsp("rechner__description")}>
-        <P bold>
+        <p className="font-bold">
           Hier können Sie beispielhaft berechnen, wie viel Elterngeld Sie in
           welcher Phase Ihrer Elternzeit erwarten können. Bitte beachten Sie,
           dass das hier berechnete Ergebnis nur eine Orientierung für Sie sein
           kann. Das Ergebnis ist daher nicht bindend.
-        </P>
+        </p>
         <p>Die Höhe des Elterngelds hängt von 3 Faktoren ab:</p>
         <ol>
           <li>der Höhe Ihres monatlichen Bruttoeinkommens vor der Geburt,</li>

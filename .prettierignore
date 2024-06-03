@@ -9,3 +9,4 @@ allowed-licenses
 .sonarcloud.properties
 .gitignore
 *.png
+.eslintignore

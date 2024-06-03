@@ -77,7 +77,7 @@ function ZusammenfassungUndDatenElternteil({
               {stepEinkommen.taetigkeitenNichtSelbstaendigUndSelbstaendig.map(
                 (taetigkeit, index) => (
                   <li key={index}>
-                    <h5>{index + 1}. Tätigkeit</h5>
+                    <h5 className="mb-10">{index + 1}. Tätigkeit</h5>
                     <QuestionAnswer
                       question="Art der Tätigkeit"
                       answer={
@@ -91,7 +91,7 @@ function ZusammenfassungUndDatenElternteil({
           )}
         </>
       )}
-      <h5>Geplante Lebensmonate:</h5>
+      <h5 className="mb-10">Geplante Lebensmonate:</h5>
       {monatsplaner.filter((monat) => monat.type !== "None").length === 0 ? (
         "Keine"
       ) : (

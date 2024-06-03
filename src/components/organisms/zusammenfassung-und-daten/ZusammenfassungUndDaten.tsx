@@ -147,7 +147,7 @@ export function ZusammenfassungUndDaten() {
 
   return (
     <>
-      <h3>Übernahme von Daten in den Elterngeldantrag</h3>
+      <h3 className="mb-10">Übernahme von Daten in den Elterngeldantrag</h3>
       <P>
         Die folgenden Eingaben könne Sie in Ihren Elterngeldantrag übernehmen.
         Bei Bedarf können Sie diese im Antrag noch einmal anpassen.

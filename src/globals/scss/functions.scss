@@ -2,9 +2,7 @@
 @use "src/globals/scss/variables" as *;
 
 @function px-to-rem($pixel) {
-  // Strong assumption of root font-size.
-  // In general a bad practice that needs to be removed.
-  @return math.div($pixel, 18) * 1rem;
+  @return math.div($pixel, 16) * 1rem;
 }
 
 @function nsp($classname, $namespace: $nsp) {

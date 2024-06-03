@@ -35,7 +35,7 @@ function RechnerPlanerPage() {
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      <h3>Rechner und Planer</h3>
+      <h3 className="mb-10">Rechner und Planer</h3>
       <Rechner />
       <Monatsplaner mutterSchutzMonate={mutterSchutzMonate} />
       {!!showModalPopup && (

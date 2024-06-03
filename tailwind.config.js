@@ -1,10 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.tsx"],
+  important: "#egr-root",
   theme: {
     borderRadius: {
-      2: "0.111rem",
-      DEFAULT: "0.222rem",
+      2: "0.125rem",
+      DEFAULT: "0.25rem",
     },
     colors: {
       /* Functional */
@@ -27,14 +28,14 @@ module.exports = {
       Bonus: "#66B692",
     },
     fontSize: {
-      14: ["0.777rem", { lineHeight: "1.111rem" }],
-      base: ["1rem", { lineHeight: "1.555rem" }],
-      20: ["1.111rem", { lineHeight: "1.111rem" }],
-      22: ["1.222rem", { lineHeight: "1.555rem" }],
-      24: ["1.333rem", { lineHeight: "2.222rem" }],
-      28: ["1.555rem", { lineHeight: "2.444rem" }],
-      40: ["2.222rem", { lineHeight: "3.333rem" }],
-      80: ["4.444rem", { lineHeight: "6.111rem" }],
+      14: ["0.875rem", { lineHeight: "1.429" }],
+      base: ["1.125rem", { lineHeight: "1.556" }],
+      20: ["1.25rem", { lineHeight: "1.2" }],
+      22: ["1.375rem", { lineHeight: "1.273" }],
+      24: ["1.5rem", { lineHeight: "1.667" }],
+      28: ["1.75rem", { lineHeight: "1.571" }],
+      40: ["2.5rem", { lineHeight: "1.5" }],
+      80: ["5rem", { lineHeight: "1.375" }],
     },
     fontWeight: {
       // Only weights we have font-faces for.
@@ -51,26 +52,25 @@ module.exports = {
        */
     },
     spacing: {
-      // Currently based on the manually set 18px root font-size.
-      0: "0rem",
-      1: "0.055rem",
-      2: "0.111rem",
-      4: "0.222rem",
-      6: "0.333rem",
-      8: "0.444rem",
-      10: "0.555rem",
-      16: "0.888rem",
-      20: "1.111rem",
-      24: "1.333rem",
-      32: "1.777rem",
-      40: "2.222rem",
-      56: "3.111rem",
-      80: "4.444rem",
-      96: "5.333rem",
-      112: "6.222rem",
-      128: "7.111rem",
-      144: "8rem",
-      160: "8.888rem",
+      0: "0",
+      1: "0.0625rem",
+      2: "0.125rem",
+      4: "0.25rem",
+      6: "0.375rem",
+      8: "0.5rem",
+      10: "0.625rem",
+      16: "1rem",
+      20: "1.25rem",
+      24: "1.5rem",
+      32: "2rem",
+      40: "2.5rem",
+      56: "3.5rem",
+      80: "5rem",
+      96: "6rem",
+      112: "7rem",
+      128: "8rem",
+      144: "9rem",
+      160: "10rem",
     },
     width: {
       /*

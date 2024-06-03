@@ -69,7 +69,7 @@ export function NurErwerbstaetig({
             name="Einkommen pro Monat"
             className={nsp("einkommen-form__per-month")}
           >
-            <legend>
+            <legend className="mb-10">
               Geben Sie an, wie viel Sie in den 12 Monaten vor der Geburt Ihres
               Kindes monatlich verdient haben.
               <br />

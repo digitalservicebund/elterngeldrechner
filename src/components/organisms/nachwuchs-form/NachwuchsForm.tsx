@@ -15,6 +15,8 @@ import {
 } from "@/components/molecules";
 import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
+import { trackNutzergruppe } from "@/user-tracking";
+import { parseGermanDateString } from "@/utils/locale-formatting";
 
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;
@@ -70,6 +72,9 @@ export function NachwuchsForm({
   // Registration as a number is necessary because the addition "numberFutureChildren + 1" is added like a string and results in "21"
   register("anzahlKuenftigerKinder", { valueAsNumber: true });
   const anzahlKuenftigerKinder = watch("anzahlKuenftigerKinder");
+
+  const geburtsdatum = watch("wahrscheinlichesGeburtsDatum");
+  trackNutzergruppe(parseGermanDateString(geburtsdatum));
 
   const handleDecrease = () =>
     setValue(

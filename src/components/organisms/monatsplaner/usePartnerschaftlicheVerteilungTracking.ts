@@ -19,7 +19,7 @@ export function usePartnerschaftlicheVerteilungTracking(): void {
       calculationParameters.singleApplicant,
     );
 
-    setTrackingVariable("partnerschaftlicheverteilung", quotient);
+    setTrackingVariable(TRACKING_VARIABLE_NAME, quotient);
   }, [calculationParameters]);
 }
 
@@ -35,3 +35,5 @@ const calculationParameterSelector = createAppSelector(
     singleApplicant: antragstellende === "EinenElternteil",
   }),
 );
+
+const TRACKING_VARIABLE_NAME = "partnerschaftlicheverteilung";

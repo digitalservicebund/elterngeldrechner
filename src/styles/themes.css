@@ -1,0 +1,15 @@
+.egr-elterngeld-basis {
+  @apply bg-Basis text-white;
+}
+
+.egr-elterngeld-plus {
+  @apply bg-Plus;
+}
+
+.egr-elterngeld-bonus {
+  @apply bg-Bonus;
+}
+
+.egr-elterngeld-none {
+  @apply bg-white border border-solid border-grey;
+}

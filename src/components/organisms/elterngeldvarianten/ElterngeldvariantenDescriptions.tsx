@@ -99,10 +99,46 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </p>
 
           <div className="mb-16">
-            <Example title="Elternteil 1" months={[]} />
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ]}
+            />
           </div>
           <div className="mb-32">
-            <Example title="Elternteil 2" months={[]} />
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+              ]}
+            />
           </div>
 
           <p className="mb-20 p-0">
@@ -113,10 +149,46 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </p>
 
           <div className="mb-16">
-            <Example title="Elternteil 1" months={[]} />
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                null,
+                null,
+              ]}
+            />
           </div>
           <div className="mb-32">
-            <Example title="Elternteil 2" months={[]} />
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+              ]}
+            />
           </div>
 
           <FurtherInformation />
@@ -176,10 +248,46 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </p>
 
           <div className="mb-16">
-            <Example title="Elternteil 1" months={[]} />
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+              ]}
+            />
           </div>
           <div className="mb-32">
-            <Example title="Elternteil 2" months={[]} />
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+              ]}
+            />
           </div>
 
           <p className="mb-20 p-0">
@@ -193,10 +301,46 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </p>
 
           <div className="mb-16">
-            <Example title="Elternteil 1" months={[]} />
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                null,
+                null,
+                null,
+                null,
+              ]}
+            />
           </div>
           <div className="mb-32">
-            <Example title="Elternteil 2" months={[]} />
+            <Example
+              title="Elternteil 2"
+              months={[
+                "Basis",
+                "Plus",
+                "Plus",
+                null,
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Basis",
+                null,
+              ]}
+            />
           </div>
 
           <FurtherInformation />
@@ -252,10 +396,54 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </p>
 
           <div className="mb-16">
-            <Example title="Elternteil 1" months={[]} />
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+              ]}
+            />
           </div>
           <div className="mb-32">
-            <Example title="Elternteil 2" months={[]} />
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+              ]}
+            />
           </div>
 
           <div>
@@ -271,7 +459,37 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </p>
 
           <div className="mb-32">
-            <Example title="Elternteil" months={[]} />
+            <Example
+              title="Elternteil"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+              ]}
+            />
           </div>
 
           <FurtherInformation />

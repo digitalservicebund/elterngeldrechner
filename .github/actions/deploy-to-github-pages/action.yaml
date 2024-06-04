@@ -27,7 +27,6 @@ runs:
         ./build-preview
         mv ./tmp_preview /tmp
         # Place assets
-        git fetch origin gh-pages
         git switch "${{ inputs.github_pages_branch }}"
         rm --recursive --force "./${{ inputs.path }}"
         mkdir --parents "./${{ inputs.path }}"

@@ -1,1 +1,0 @@
-export { FootNoteNumber } from "./FootNoteNumber";

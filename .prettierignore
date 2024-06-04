@@ -1,9 +1,0 @@
-.prettierignore
-build-preview
-*.ttf
-*.woff
-.eslintrc
-allowed-licenses
-.npmrc
-.env*
-.sonarcloud.properties

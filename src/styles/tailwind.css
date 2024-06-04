@@ -1,8 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Enforce TailwindCSS it's `list-none` for Safari web-browser. */
-summary.list-none::-webkit-details-marker {
-  display: none;
-}

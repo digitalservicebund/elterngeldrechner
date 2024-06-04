@@ -40,7 +40,6 @@ import {
   NotificationBEGHintMinMax,
   NotificationBEGHintMin,
   NotificationBEGMax,
-  P,
   Toast,
 } from "@/components/atoms";
 import {
@@ -473,13 +472,13 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
           >
             Monatsplaner
           </h2>
-          <P>
+          <p>
             Im Monatsplaner können Sie Ihre individuelle Kombination von
             Elterngeld für jeden Lebensmonat Ihres Kindes planen. In der Tabelle
             unten können Sie durch anklicken des jeweiligen Monats wählen, wann
             Sie welches Elterngeld bekommen möchten. Darüber sehen Sie jeweils
             wie viele Monate Sie noch zur Verfügung haben.
-          </P>
+          </p>
         </div>
 
         {!!isMonatsplanerOverlayVisible && <AccessControl />}
@@ -567,11 +566,11 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
               data={summationData}
             />
 
-            <P bold={false}>
+            <p>
               Dieses Ergebnis ist nicht rechtsverbindlich. Erst nach der Geburt
               Ihres Kindes kann Ihre zuständige Elterngeldstelle eine konkrete
               und rechtsverbindliche Berechnung Ihres Anspruchs vornehmen.
-            </P>
+            </p>
             <Toast
               messages={notificationMessages}
               active={

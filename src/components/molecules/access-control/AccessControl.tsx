@@ -1,5 +1,5 @@
 import nsp from "@/globals/js/namespace";
-import { Button, P } from "@/components/atoms";
+import { Button } from "@/components/atoms";
 
 export function AccessControl() {
   const handleScrollToTop = () => {
@@ -18,10 +18,10 @@ export function AccessControl() {
   return (
     <section className={`${nsp("access-control")}`}>
       <div className={`${nsp("access-control__content")}`}>
-        <P>
+        <p>
           Bevor Sie den Monatsplaner nutzen können, machen Sie bitte Angaben zu
           Ihrem Brutto-Einkommen während des Elterngeldbezugs
-        </P>
+        </p>
         <Button onClick={handleScrollToTop} label="Jetzt berechnen" />
       </div>
     </section>

@@ -5,7 +5,6 @@ import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
 import { useAppSelector } from "@/redux/hooks";
 import type { ElternteilType } from "@/monatsplaner";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
-import { P } from "@/components/atoms";
 import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
@@ -75,11 +74,11 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
         <h2 className="mb-10">{elternteilName}</h2>
       )}
       {!isErwerbstaetigVorGeburt && (
-        <P>
+        <p>
           Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird
           für Sie mit dem Mindestsatz gerechnet und Sie müssen keine weiteren
           Angaben zum Einkommen machen.
-        </P>
+        </p>
       )}
 
       {!!isErwerbstaetigVorGeburt && (

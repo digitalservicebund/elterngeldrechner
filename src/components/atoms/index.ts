@@ -20,4 +20,3 @@ export { Spinner } from "./spinner";
 export { SplitItem } from "./split-item";
 export { Toast } from "./toast";
 export { VisualCounter } from "./visual-counter";
-export { P } from "./paragraph";

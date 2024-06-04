@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import type { ElternteilType } from "@/monatsplaner";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
-import { Button, P } from "@/components/atoms";
+import { Button } from "@/components/atoms";
 import {
   CustomNumberField,
   FormFieldGroup,
@@ -45,14 +45,14 @@ export function NurErwerbstaetig({
           />
         )}
         {averageOrMonthlyNichtSelbstaendig === "average" && (
-          <P
+          <p
             className={nsp(
               `einkommen-form__ausfuerliche-eingabe-text-${elternteil.toLowerCase()}`,
             )}
           >
             Wenn das Einkommen zwischen den Monaten sehr schwankte, klicken Sie
             bitte auf „ausführliche Eingabe“ und geben die Monate einzeln ein.
-          </P>
+          </p>
         )}
         <Button
           buttonStyle="secondary"

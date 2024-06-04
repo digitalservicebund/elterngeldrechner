@@ -10,3 +10,4 @@ allowed-licenses
 .gitignore
 *.png
 .eslintignore
+.gitattributes

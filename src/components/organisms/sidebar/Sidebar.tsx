@@ -21,17 +21,19 @@ export function Sidebar({ currentStep }: Props) {
   const stepNumber = () => {
     switch (currentStep.route) {
       case "/nachwuchs":
-        return "2/6";
+        return "2/7";
       case "/erwerbstaetigkeit":
-        return "3/6";
+        return "3/7";
       case "/einkommen":
-        return "4/6";
+        return "4/7";
+      case "/elterngeldvarianten":
+        return "5/7";
       case "/rechner-planer":
-        return "5/6";
+        return "6/7";
       case "/zusammenfassung-und-daten":
-        return "6/6";
+        return "7/7";
       default:
-        return "1/6";
+        return "1/7";
     }
   };
 

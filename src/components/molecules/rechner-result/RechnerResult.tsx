@@ -8,7 +8,7 @@ import {
 import nsp from "@/globals/js/namespace";
 import { useAppSelector } from "@/redux/hooks";
 import { ElterngeldRow } from "@/redux/stepRechnerSlice";
-import { NotificationMaxElterngeld, P, Toast } from "@/components/atoms";
+import { NotificationMaxElterngeld, Toast } from "@/components/atoms";
 import { FootNote } from "@/components/molecules/foot-note";
 
 interface Props {
@@ -66,9 +66,9 @@ export function RechnerResult({ elternteil }: Props) {
 
   if (result.state === "error") {
     return (
-      <P className={nsp("rechner-result-error")}>
+      <p className={nsp("rechner-result-error")}>
         <InfoOutlinedIcon /> Das Elterngeld konnte nicht berechnet werden.
-      </P>
+      </p>
     );
   }
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import nsp from "@/globals/js/namespace";
-import { Button, P } from "@/components/atoms";
+import { Button } from "@/components/atoms";
 import {
   ZusammenfassungUndDatenAllgemein,
   ZusammenfassungUndDatenElternteil,
@@ -148,10 +148,10 @@ export function ZusammenfassungUndDaten() {
   return (
     <>
       <h3 className="mb-10">Übernahme von Daten in den Elterngeldantrag</h3>
-      <P>
+      <p>
         Die folgenden Eingaben könne Sie in Ihren Elterngeldantrag übernehmen.
         Bei Bedarf können Sie diese im Antrag noch einmal anpassen.
-      </P>
+      </p>
       <div className={nsp("zusammenfassung-und-daten")}>
         <ZusammenfassungUndDatenAllgemein allgemeineDaten={allgemeineDaten} />
         <ZusammenfassungUndDatenElternteil {...elternteil1} />

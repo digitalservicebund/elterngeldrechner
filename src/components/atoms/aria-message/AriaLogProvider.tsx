@@ -7,7 +7,6 @@ import {
   useState,
 } from "react";
 import nsp from "@/globals/js/namespace";
-import { P } from "@/components/atoms/paragraph";
 
 type RemoveMessageFn = () => void;
 
@@ -44,7 +43,7 @@ export function AriaLogProvider({ children }: Props) {
     <AriaLogContext.Provider value={context}>
       <div role="log" className={nsp("aria-log")}>
         {messages.map((message) => (
-          <P key={message}>{message}</P>
+          <p key={message}>{message}</p>
         ))}
       </div>
 

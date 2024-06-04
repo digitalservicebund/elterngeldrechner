@@ -1,0 +1,41 @@
+name: Deploy to GitHub Pages
+description: Builds the preview page and deploys it to GitHub pages under a certain path
+
+inputs:
+  path:
+    description: relative URL path where to put assets (e.g. '/feature/fancy-stuff/') [MUST have final slash]
+    required: true
+
+  github_pages_branch:
+    description: name of the branch used to serve GitHub pages from (configured at repository)
+    required: false
+    default: gh-pages
+
+  git_user_name:
+    description: user-name for git when creating the commit
+    required: false
+    default: ${{ github.actor }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build and publish preview page
+      shell: bash
+      run: |
+        # Build assets
+        npm run build
+        ./build-preview
+        mv ./tmp_preview /tmp
+        # Place assets
+        git switch "${{ inputs.github_pages_branch }}"
+        rm --recursive --force "./${{ inputs.path }}"
+        mkdir --parents "./${{ inputs.path }}"
+        mv /tmp/tmp_preview/* "./${{ inputs.path }}"
+        # Instruct assets
+        sed --in-place 's;\(<head>\);\1\n<base href="${{ inputs.path }}" \\\>;' "./${{ inputs.path }}/index.html"
+        # Commit and push
+        git config user.name "${{ inputs.git_user_name }}"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add "./${{ inputs.path }}"
+        git commit --message="Automated depoyment to GitHub pages (SHA - ${{ github.sha }} | ${{ github.ref_name }})"
+        git push

@@ -36,8 +36,7 @@ runs:
         # Configure git
         git config user.name "${{ inputs.git_user_name }}"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config credential.username '${{ inputs.git_user_name }}'
-        git config credential.helper '!f() { echo "password=${{ github.token }}"; }; f'
+        git remote set-url --push origin "https://${{ github.token }}@github.com/${{ github.repository }}"
         # Commit and push
         git add "./${{ inputs.path }}"
         git commit --message="Automated depoyment to GitHub pages (SHA - ${{ github.sha }} | ${{ github.ref_name }})"

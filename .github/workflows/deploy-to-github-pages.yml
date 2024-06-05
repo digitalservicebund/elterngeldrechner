@@ -50,7 +50,8 @@ jobs:
           ./build-preview
 
       - name: place assets on gh-pages branch
-        run: mv ./tmp_preview "$PAGE_PARKING_DIRECTORY"
+        run: |
+          mv ./tmp_preview "$PAGE_PARKING_DIRECTORY"
           git remote set-url origin "$GIT_REMOTE_AUTHENTICATED_URL"
           git fetch origin "$GITHUB_PAGES_BRANCH_NAME"
           git switch "$GITHUB_PAGES_BRANCH_NAME"

@@ -8,6 +8,13 @@ on:
         required: true
         type: string
 
+  workflow_call:
+    inputs:
+      path:
+        description: relative URL path where to put assets (e.g. '/feature/fancy-stuff')
+        required: true
+        type: string
+
 permissions:
   contents: write
 
@@ -29,7 +36,7 @@ jobs:
           GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
           GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
           PAGE_PARKING_DIRECTORY: /tmp
-          GITHUB_PAGES_BRANCH_NAME: gh-pages
+          GITHUB_PAGES_BRANCH_NAME: gh-pages # Configuration value of repository.
           PAGE_PATH: ./${{ inputs.path }}
           GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
 
@@ -55,3 +62,11 @@ jobs:
           git diff-index --cached --quiet HEAD ||
             git commit --message="$GIT_COMMIT_MESSAGE" &&
             git push
+
+      - name: Report deployment for statistics
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+        with:
+          project: elterngeldrechner
+          environment: staging
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}

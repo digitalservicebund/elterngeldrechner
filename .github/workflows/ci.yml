@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  basics:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,11 +27,6 @@ jobs:
           REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
         run: source .env.test && npm ci && npm run test-all && npm run build
 
-      - name: Deploy to GitHub pages
-        uses: ./.github/actions/deploy-to-github-pages
-        with:
-          path: "${{ github.ref_name }}/"
-
       - name: Generate software bill of materials
         uses: advanced-security/generate-sbom-action@v1 # advanced-security org is part of GitHub, thus not considered 3rd-party..
         id: sbom
@@ -44,13 +39,12 @@ jobs:
           path: ${{steps.sbom.outputs.fileName }}
           name: "SBOM"
 
-      - name: Report deployment for statistics
-        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
-        with:
-          project: elterngeldrechner
-          environment: staging
-          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
-          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
+  deploy:
+    needs: basics
+    uses: ./.github/workflows/deploy-to-github-pages.yml
+    with:
+      path: main
+    secrets: inherit
 
   audit-licenses:
     runs-on: ubuntu-latest

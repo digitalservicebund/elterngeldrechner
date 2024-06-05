@@ -68,7 +68,7 @@ jobs:
     steps:
       - uses: artifacts/download-artifact@v4
         with:
-          name: ${{ inputs.artifact_name || "assets" }}
+          name: ${{ inputs.artifact_name != '' && inputs.artifact_name || 'assets' }}
           path: ./assets
 
       - name: place assets on gh-pages branch

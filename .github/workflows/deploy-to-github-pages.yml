@@ -18,9 +18,22 @@ on:
 permissions:
   contents: write
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
+      PAGE_PARKING_DIRECTORY: /tmp
+      GITHUB_PAGES_BRANCH_NAME: gh-pages # Configuration value of repository.
+      PAGE_PATH: ./${{ inputs.path }}
+      GIT_CONFIG_USER_NAME: ${{ github.actor }}
+      GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
+
     steps:
       - uses: actions/checkout@v4
 
@@ -29,41 +42,34 @@ jobs:
           node-version-file: package.json
           cache: npm
 
-      - name: Build and publish
-        shell: bash
-        env:
-          GIT_CONFIG_USER_NAME: ${{ github.actor }}
-          GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-          GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
-          PAGE_PARKING_DIRECTORY: /tmp
-          GITHUB_PAGES_BRANCH_NAME: gh-pages # Configuration value of repository.
-          PAGE_PATH: ./${{ inputs.path }}
-          GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
-
+      - name: build page assets
         run: |
           set -ex
-          # Configure git
-          git config user.name "$GIT_CONFIG_USER_NAME"
-          git config user.email "$GIT_CONFIG_USER_EMAIL"
-          git remote set-url origin "$GIT_REMOTE_AUTHENTICATED_URL"
-          # Build assets
           npm ci
           npm run build
           ./build-preview
-          mv ./tmp_preview "$PAGE_PARKING_DIRECTORY"
-          # Place assets
+
+      - name: place assets on gh-pages branch
+        run: mv ./tmp_preview "$PAGE_PARKING_DIRECTORY"
+          git remote set-url origin "$GIT_REMOTE_AUTHENTICATED_URL"
           git fetch origin "$GITHUB_PAGES_BRANCH_NAME"
           git switch "$GITHUB_PAGES_BRANCH_NAME"
           rm --recursive --force "$PAGE_PATH"
           mkdir --parents "$PAGE_PATH"
           mv $PAGE_PARKING_DIRECTORY/tmp_preview/* --target-directory="$PAGE_PATH"
-          # Commit and push
+
+      - name: commit and push
+        run: |
+          set -ex
+          git config user.name "$GIT_CONFIG_USER_NAME"
+          git config user.email "$GIT_CONFIG_USER_EMAIL"
+          git remote set-url origin "$GIT_REMOTE_AUTHENTICATED_URL"
           git add "$PAGE_PATH"
           git diff-index --cached --quiet HEAD ||
             git commit --message="$GIT_COMMIT_MESSAGE" &&
             git push
 
-      - name: Report deployment for statistics
+      - name: report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
         with:
           project: elterngeldrechner

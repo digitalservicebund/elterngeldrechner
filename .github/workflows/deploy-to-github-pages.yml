@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       path:
-        description: relative URL path where to put assets (e.g. '/feature/fancy-stuff/') [MUST have final slash]
+        description: relative URL path where to put assets (e.g. '/feature/fancy-stuff')
         required: true
         type: string
 
@@ -22,13 +22,36 @@ jobs:
           node-version-file: package.json
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Build and publish
+        shell: bash
+        env:
+          GIT_CONFIG_USER_NAME: ${{ github.actor }}
+          GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
+          PAGE_PARKING_DIRECTORY: /tmp
+          GITHUB_PAGES_BRANCH_NAME: gh-pages
+          PAGE_PATH: ./${{ inputs.path }}
+          GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
 
-      - name: Build
-        run: npm run build
-
-      - name: Deploy to GitHub pages
-        uses: ./.github/actions/deploy-to-github-pages
-        with:
-          path: ${{ inputs.path }}
+        run: |
+          set -ex
+          # Configure git
+          git config user.name "$GIT_CONFIG_USER_NAME"
+          git config user.email "$GIT_CONFIG_USER_EMAIL"
+          git remote set-url origin "$GIT_REMOTE_AUTHENTICATED_URL"
+          # Build assets
+          npm ci
+          npm run build
+          ./build-preview
+          mv ./tmp_preview "$PAGE_PARKING_DIRECTORY"
+          # Place assets
+          git fetch origin "$GITHUB_PAGES_BRANCH_NAME"
+          git switch "$GITHUB_PAGES_BRANCH_NAME"
+          rm --recursive --force "$PAGE_PATH"
+          mkdir --parents "$PAGE_PATH"
+          mv $PAGE_PARKING_DIRECTORY/tmp_preview/* --target-directory="$PAGE_PATH"
+          # Commit and push
+          git add "$PAGE_PATH"
+          git diff-index --cached --quiet HEAD ||
+            git commit --message="$GIT_COMMIT_MESSAGE" &&
+            git push

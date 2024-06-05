@@ -27,21 +27,24 @@ jobs:
           REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
         run: source .env.test && npm ci && npm run test-all && npm run build
 
-      - uses: ./.github/actions/deploy-to-github-pages
+      - name: Deploy to GitHub pages
+        uses: ./.github/actions/deploy-to-github-pages
         with:
           path: "${{ github.ref_name }}/"
 
-      - uses: advanced-security/generate-sbom-action@v1 # advanced-security org is part of GitHub, thus not considered 3rd-party..
+      - name: Generate software bill of materials
+        uses: advanced-security/generate-sbom-action@v1 # advanced-security org is part of GitHub, thus not considered 3rd-party..
         id: sbom
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - uses: actions/upload-artifact@v4.3.2
+      - name: Upload artifact for software bill of materials
+        uses: actions/upload-artifact@v4.3.2
         with:
           path: ${{steps.sbom.outputs.fileName }}
           name: "SBOM"
 
-      - name: Report Deployment
+      - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
         with:
           project: elterngeldrechner

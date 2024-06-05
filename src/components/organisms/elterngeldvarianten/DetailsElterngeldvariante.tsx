@@ -31,10 +31,12 @@ export function DetailsElterngeldvariante({
         )}
       >
         <div className="flex flex-wrap gap-y-10">
-          <div className="flex basis-full flex-wrap items-center gap-x-8">
-            <strong className="text-24">{summaryTitle}</strong>(
-            {monthsAvailable} Monate verfügbar)
-          </div>
+          <h4 className="flex basis-full flex-wrap items-center gap-x-8 text-24">
+            {summaryTitle}
+            <span className="text-base font-regular">
+              ({monthsAvailable} Monate verfügbar)
+            </span>
+          </h4>
 
           <div className="flex flex-wrap gap-x-24 gap-y-8">
             {payoutAmounts.map(({ name, amount }) => (

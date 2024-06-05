@@ -23,7 +23,7 @@ export function Example({ title, months }: Props): ReactNode {
   };
 
   return (
-    <div className="flex gap-20 md:pl-56">
+    <div className="flex gap-20 md:pl-56" role="presentation">
       <div className="shrink-0 content-center">
         <PersonIcon />
         {title}

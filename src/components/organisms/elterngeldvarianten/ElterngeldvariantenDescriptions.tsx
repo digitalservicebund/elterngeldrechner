@@ -32,9 +32,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Für Paare und getrennt Erziehende gilt:</strong>
-          </div>
+          <h5 className="text-base">Für Paare und getrennt Erziehende gilt:</h5>
 
           <ul className="mb-24 list-disc pl-24">
             <li>
@@ -56,17 +54,13 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Für Alleinerziehende gilt:</strong>
-          </div>
+          <h5 className="text-base">Für Alleinerziehende gilt:</h5>
 
           <ul className="mb-24 list-disc pl-24">
             <li>14 Monate Basiselterngeld können beantragt werden</li>
           </ul>
 
-          <div>
-            <strong>Ausnahmen:</strong>
-          </div>
+          <h5 className="text-base">Ausnahmen:</h5>
 
           <p className="p-0">
             Basiselterngeld kann für mehr als einen Monat gleichzeitig bezogen
@@ -88,9 +82,9 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Beispiele für Paare und getrennt Erziehende:</strong>
-          </div>
+          <h5 className="text-base">
+            Beispiele für Paare und getrennt Erziehende:
+          </h5>
 
           <p className="mb-20 p-0">
             Elternteil 1 und Elternteil 2 beantragen jeweils 7 Monate
@@ -216,9 +210,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Für Paare und getrennt Erziehende gilt:</strong>
-          </div>
+          <h5 className="text-base">Für Paare und getrennt Erziehende gilt:</h5>
 
           <ul className="mb-24 list-disc pl-24">
             <li>
@@ -227,17 +219,15 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Für Alleinerziehende gilt:</strong>
-          </div>
+          <h5 className="text-base">Für Alleinerziehende gilt:</h5>
 
           <ul className="mb-32 list-disc pl-24">
             <li>28 Monate ElterngeldPlus können beantragt werden</li>
           </ul>
 
-          <div>
-            <strong>Beispiele für Paare und getrennt Erziehende:</strong>
-          </div>
+          <h5 className="text-base">
+            Beispiele für Paare und getrennt Erziehende:
+          </h5>
 
           <p className="mb-20 p-0">
             Elternteil 1 bekommt Basiselterngeld in den ersten 4 Lebensmonaten,
@@ -366,9 +356,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Für Paare und getrennt Erziehende gilt:</strong>
-          </div>
+          <h5 className="text-base">Für Paare und getrennt Erziehende gilt:</h5>
 
           <ul className="mb-24 list-disc pl-24">
             <li>
@@ -376,17 +364,15 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             </li>
           </ul>
 
-          <div>
-            <strong>Für Alleinerziehende gilt:</strong>
-          </div>
+          <h5 className="text-base">Für Alleinerziehende gilt:</h5>
 
           <ul className="mb-32 list-disc pl-24">
             <li>Der Partnerschaftsbonus kann auch allein beantragt werden</li>
           </ul>
 
-          <div>
-            <strong>Beispiele für Paare und getrennt Erziehende:</strong>
-          </div>
+          <h5 className="text-base">
+            Beispiele für Paare und getrennt Erziehende:
+          </h5>
 
           <p className="mb-20 p-0">
             Das Elternteil 1 bezieht in den ersten 6 Lebensmonaten
@@ -447,9 +433,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             />
           </div>
 
-          <div>
-            <strong>Ein Beispiel für Alleinerziehende:</strong>
-          </div>
+          <h5 className="text-base">Ein Beispiel für Alleinerziehende:</h5>
 
           <p className="mb-20 p-0">
             Das alleinerziehende Elternteil bezieht in den ersten 8

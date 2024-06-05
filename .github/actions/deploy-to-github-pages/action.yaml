@@ -31,8 +31,6 @@ runs:
         rm --recursive --force "./${{ inputs.path }}"
         mkdir --parents "./${{ inputs.path }}"
         mv /tmp/tmp_preview/* "./${{ inputs.path }}"
-        # Instruct assets
-        sed --in-place 's;\(<head>\);\1\n<base href="${{ inputs.path }}" \\\>;' "./${{ inputs.path }}/index.html"
         # Configure git
         git config user.name "${{ inputs.git_user_name }}"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

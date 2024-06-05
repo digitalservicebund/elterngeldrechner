@@ -22,19 +22,20 @@ runs:
     - name: Build and publish preview page
       shell: bash
       run: |
+        # Configure git
+        git config user.name "${{ inputs.git_user_name }}"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git remote set-url origin "https://${{ github.token }}@github.com/${{ github.repository }}"
         # Build assets
         npm run build
         ./build-preview
         mv ./tmp_preview /tmp
         # Place assets
+        git fetch origin ${{ inputs.github_pages_branch }}
         git switch "${{ inputs.github_pages_branch }}"
         rm --recursive --force "./${{ inputs.path }}"
         mkdir --parents "./${{ inputs.path }}"
         mv /tmp/tmp_preview/* "./${{ inputs.path }}"
-        # Configure git
-        git config user.name "${{ inputs.git_user_name }}"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git remote set-url --push origin "https://${{ github.token }}@github.com/${{ github.repository }}"
         # Commit and push
         git add "./${{ inputs.path }}"
         git commit --message="Automated depoyment to GitHub pages (SHA - ${{ github.sha }} | ${{ github.ref_name }})"

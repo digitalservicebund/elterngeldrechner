@@ -50,7 +50,7 @@ describe("ElterngeldvariantenDescription", () => {
     await userEvent.click(summary);
 
     const details = screen.getByText(
-      /Mit dem Basiselterngeld können Sie insgesamt bis zu 12 Monate Elternzeit nehmen/,
+      /Als Basiselterngeld bekommen Sie normalerweise 65 Prozent des Nettoeinkommens,/,
     );
     expect(details).toBeVisible();
   });
@@ -61,18 +61,20 @@ describe("ElterngeldvariantenDescription", () => {
 
     await userEvent.click(summary);
 
-    const details = screen.getByText(/Halb so hoch wie Basiselterngel/);
+    const details = screen.getByText(
+      /Statt eines Lebensmonats Basiselterngeld können Sie 2 Lebensmonate ElterngeldPlus bekommen/,
+    );
     expect(details).toBeVisible();
   });
 
-  it("shows details of + Partnerschaftsbonus when clicking on its summary", async () => {
+  it("shows details of Partnerschaftsbonus when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
     const summary = screen.getByText(/\+ Partnerschaftsbonus/);
 
     await userEvent.click(summary);
 
     const details = screen.getByText(
-      /Die Eltern nutzen den Partnerschaftsbonus gleichzeitig/,
+      /Für den Partnerschaftsbonus muss man 24 bis 32 Stunden pro Woche in Teilzeit arbeiten/,
     );
     expect(details).toBeVisible();
   });

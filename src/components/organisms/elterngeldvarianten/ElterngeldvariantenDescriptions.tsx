@@ -193,6 +193,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
 
           <FurtherInformation />
         </DetailsElterngeldvariante>
+
         <DetailsElterngeldvariante
           summaryTitle="ElterngeldPlus - 50% Elterngeld"
           summaryClassName="bg-Plus text-black"

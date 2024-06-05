@@ -15,6 +15,13 @@ on:
         required: true
         type: string
 
+      artifact_name:
+        description: |
+          name of an already uploaded artifact to this run that contains the page build  
+          if defined skips building and downloads the artifact instead
+        type: string
+        required: false
+
 permissions:
   contents: write
 
@@ -23,17 +30,9 @@ defaults:
     shell: bash
 
 jobs:
-  deploy:
+  build:
+    if: "${{ inputs.artifact_name == '' }}"
     runs-on: ubuntu-latest
-    env:
-      GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
-      PAGE_PARKING_DIRECTORY: /tmp
-      GITHUB_PAGES_BRANCH_NAME: gh-pages # Configuration value of repository.
-      PAGE_PATH: ./${{ inputs.path }}
-      GIT_CONFIG_USER_NAME: ${{ github.actor }}
-      GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
-      GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
-
     steps:
       - uses: actions/checkout@v4
 
@@ -49,15 +48,38 @@ jobs:
           npm run build
           ./build-preview
 
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./tmp_preview
+          name: assets
+
+  deploy:
+    needs: build
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    env:
+      GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
+      GITHUB_PAGES_BRANCH_NAME: gh-pages # Configuration value of repository.
+      PAGE_PATH: ./${{ inputs.path }}
+      GIT_CONFIG_USER_NAME: ${{ github.actor }}
+      GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
+
+    steps:
+      - uses: artifacts/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name || "assets" }}
+          path: ./assets
+
       - name: place assets on gh-pages branch
         run: |
-          mv ./tmp_preview "$PAGE_PARKING_DIRECTORY"
+          set -ex
           git remote set-url origin "$GIT_REMOTE_AUTHENTICATED_URL"
           git fetch origin "$GITHUB_PAGES_BRANCH_NAME"
           git switch "$GITHUB_PAGES_BRANCH_NAME"
           rm --recursive --force "$PAGE_PATH"
           mkdir --parents "$PAGE_PATH"
-          mv $PAGE_PARKING_DIRECTORY/tmp_preview/* --target-directory="$PAGE_PATH"
+          mv ./assets/* --target-directory="$PAGE_PATH"
 
       - name: commit and push
         run: |

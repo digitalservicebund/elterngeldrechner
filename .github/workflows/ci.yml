@@ -11,8 +11,12 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  basics:
+  lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,39 +26,65 @@ jobs:
           node-version-file: package.json
           cache: npm
 
-      - name: Build egr
+      - name: install dependencies
+        run: npm ci
+
+      - name: lint and test
+        run: source .env.test && npm run test-all
+
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_name: assets
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          cache: npm
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build assets
         env:
           REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
-        run: source .env.test && npm ci && npm run test-all && npm run build
+        run: npm run build
 
-      - name: build preview assets
+      - name: assemble preview
         run: ./build-preview
 
-      - name: upload artifact for assets
+      - name: upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./tmp_preview
           name: assets
 
-      - name: Generate software bill of materials
-        uses: advanced-security/generate-sbom-action@v1 # advanced-security org is part of GitHub, thus not considered 3rd-party..
-        id: sbom
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Upload artifact for software bill of materials
-        uses: actions/upload-artifact@v4.3.2
-        with:
-          path: ${{steps.sbom.outputs.fileName }}
-          name: "SBOM"
-
   deploy:
-    needs: basics
+    needs:
+      - test-and-lint
+      - build
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:
       path: main
-      artifact_name: assets
+      artifact_name: ${{ needs.build.outputs.artifact_name }}
     secrets: inherit
+
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: generate bill
+        uses: advanced-security/generate-sbom-action@v1 # trusted as part of GitHub organization
+        id: generate-sbom
+
+      - name: upload bill as artifact
+        uses: actions/upload-artifact@v4.3.2
+        with:
+          path: ${{ steps.sbom.outputs.fileName }}
+          name: SBOM
 
   audit-licenses:
     runs-on: ubuntu-latest

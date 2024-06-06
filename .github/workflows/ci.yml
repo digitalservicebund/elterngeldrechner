@@ -27,6 +27,15 @@ jobs:
           REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
         run: source .env.test && npm ci && npm run test-all && npm run build
 
+      - name: build preview assets
+        run: ./build-preview
+
+      - name: upload artifact for assets
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./tmp_preview
+          name: assets
+
       - name: Generate software bill of materials
         uses: advanced-security/generate-sbom-action@v1 # advanced-security org is part of GitHub, thus not considered 3rd-party..
         id: sbom
@@ -44,6 +53,7 @@ jobs:
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:
       path: main
+      artifact_name: assets
     secrets: inherit
 
   audit-licenses:

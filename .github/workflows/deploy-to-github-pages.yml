@@ -70,17 +70,18 @@ jobs:
         with:
           ref: gh-pages
 
-      - uses: actions/download-artifact@v4
+      - name: download artifact
+        uses: actions/download-artifact@v4
+        id: download-artifact
         with:
           name: ${{ inputs.artifact_name != '' && inputs.artifact_name || 'assets' }}
-          path: ./assets
 
       - name: place assets on gh-pages branch
         run: |
           set -ex
-          rm --recursive --force "$PAGE_PATH"
-          mkdir --parents "$PAGE_PATH"
-          mv ./assets/* --target-directory="$PAGE_PATH"
+          cd "$PAGE_PATH"
+          rm --recursive --force ./*
+          tar --extract --file ${{ steps.download-artifact.outputs.download-path }}
 
       - name: commit and push
         run: |

@@ -81,7 +81,7 @@ jobs:
           set -ex
           cd "$PAGE_PATH"
           rm --recursive --force ./*
-          tar --extract --file ${{ steps.download-artifact.outputs.download-path }}
+          tar --extract --file ${{ steps.download-artifact.outputs.download-path }}/artifact.tar
 
       - name: commit and push
         run: |

@@ -15,7 +15,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
     return (
       <>
         <DetailsElterngeldvariante
-          summaryTitle="Basiselterngeld - 100% Elterngeld"
+          summaryTitle="Basiselterngeld"
           summaryClassName="bg-Basis text-white"
           monthsAvailable={14}
           payoutAmounts={pickAmountsOfVariant(payoutAmounts, "basiselterngeld")}
@@ -87,9 +87,9 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </h5>
 
           <p className="mb-20 p-0">
-            Elternteil 1 und Elternteil 2 beantragen jeweils 7 Monate
-            Basiselterngeld. In den ersten 12 Monaten planen Sie einen Monat
-            parallel.
+            Elternteil 1 beantragt in den Lebensmonaten 1 bis 7 Basiselterngeld
+            und Elternteil 2 in den Lebensmonaten 7 bis 13. Im Lebensmonat 7
+            planen Sie einen Monat parallel.
           </p>
 
           <div className="mb-16">
@@ -189,7 +189,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         </DetailsElterngeldvariante>
 
         <DetailsElterngeldvariante
-          summaryTitle="ElterngeldPlus - 50% Elterngeld"
+          summaryTitle="ElterngeldPlus"
           summaryClassName="bg-Plus text-black"
           monthsAvailable={28}
           payoutAmounts={pickAmountsOfVariant(payoutAmounts, "elterngeldplus")}
@@ -376,10 +376,10 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
 
           <p className="mb-20 p-0">
             Das Elternteil 1 bezieht in den ersten 6 Lebensmonaten
-            Basiselterngeld. Vom Lebensmonat 7 bis zum 10 bezieht der Elternteil
-            2 Basiselterngeld. Die Elternteile beziehen parallel ElterngeldPlus
-            in den Lebensmonaten 11 bis 14. In den Lebensmonaten 15 bis 18
-            nutzen die Elternteile den Partnerschaftsbonus.
+            Basiselterngeld. Vom Lebensmonat 7 bis 10 bezieht der Elternteil 2
+            Basiselterngeld. Die Elternteile beziehen parallel ElterngeldPlus in
+            den Lebensmonaten 11 bis 14. In den Lebensmonaten 15 bis 18 nutzen
+            die Elternteile den Partnerschaftsbonus.
           </p>
 
           <div className="mb-16">

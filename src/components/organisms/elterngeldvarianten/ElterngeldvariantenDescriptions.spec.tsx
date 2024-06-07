@@ -22,13 +22,19 @@ describe("ElterngeldvariantenDescription", () => {
     render(<ElterngeldvariantenDescriptions />);
 
     expect(
-      screen.queryByText(/Basiselterngeld - 100% Elterngeld/),
+      screen.queryByRole("heading", {
+        name: "Basiselterngeld (14 Monate verfügbar)",
+      }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/ElterngeldPlus - 50% Elterngeld/),
+      screen.queryByRole("heading", {
+        name: "ElterngeldPlus (28 Monate verfügbar)",
+      }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText(/\+ Partnerschaftsbonus/),
+      screen.queryByRole("heading", {
+        name: "+ Partnerschaftsbonus (4 Monate verfügbar)",
+      }),
     ).not.toBeInTheDocument();
   });
 
@@ -37,15 +43,27 @@ describe("ElterngeldvariantenDescription", () => {
     render(<ElterngeldvariantenDescriptions />);
 
     expect(
-      screen.queryByText(/Basiselterngeld - 100% Elterngeld/),
+      screen.queryByRole("heading", {
+        name: "Basiselterngeld (14 Monate verfügbar)",
+      }),
     ).toBeVisible();
-    expect(screen.queryByText(/ElterngeldPlus - 50% Elterngeld/)).toBeVisible();
-    expect(screen.queryByText(/\+ Partnerschaftsbonus/)).toBeVisible();
+    expect(
+      screen.queryByRole("heading", {
+        name: "ElterngeldPlus (28 Monate verfügbar)",
+      }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("heading", {
+        name: "+ Partnerschaftsbonus (4 Monate verfügbar)",
+      }),
+    ).toBeVisible();
   });
 
   it("shows details of Basiselterngeld when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
-    const summary = screen.getByText(/Basiselterngeld - 100% Elterngeld/);
+    const summary = screen.getByRole("heading", {
+      name: "Basiselterngeld (14 Monate verfügbar)",
+    });
 
     await userEvent.click(summary);
 
@@ -57,7 +75,9 @@ describe("ElterngeldvariantenDescription", () => {
 
   it("shows details of ElterngeldPlus when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
-    const summary = screen.getByText(/ElterngeldPlus - 50% Elterngeld/);
+    const summary = screen.getByRole("heading", {
+      name: "ElterngeldPlus (28 Monate verfügbar)",
+    });
 
     await userEvent.click(summary);
 
@@ -69,7 +89,9 @@ describe("ElterngeldvariantenDescription", () => {
 
   it("shows details of Partnerschaftsbonus when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
-    const summary = screen.getByText(/\+ Partnerschaftsbonus/);
+    const summary = screen.getByRole("heading", {
+      name: "+ Partnerschaftsbonus (4 Monate verfügbar)",
+    });
 
     await userEvent.click(summary);
 

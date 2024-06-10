@@ -2,7 +2,6 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { RootState } from "./index";
 import { getLebensmonate } from "@/monatsplaner";
-import { SelectOption } from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
 
 interface Kind {
@@ -64,67 +63,6 @@ const getWahrscheinlichesGeburtsDatum = createSelector(
   },
 );
 
-const monthAfterBirthDateFormat = new Intl.DateTimeFormat("de-DE", {
-  month: "long",
-  year: "numeric",
-});
-
-const getMonthValue = (wahrscheinlichesGeburtsDatum: string, i: number) => {
-  const month = new Date(wahrscheinlichesGeburtsDatum);
-  // Der Tag wird auf 1 gesetzt bevor der Monat erhöht wird.
-  // Das ist notwendig, damit der Monat bei Tag 29, 30 oder 31 nicht
-  // um einen weiteren Monat und somit um 2 Monate erhöht wird.
-  month.setDate(1);
-  month.setMonth(month.getMonth() + i);
-  const monthIsoString = new Date(
-    Date.UTC(month.getFullYear(), month.getMonth(), month.getDate()),
-  )
-    .toISOString()
-    .split("T")[0];
-  return { monthIsoString, month };
-};
-
-const getMonthsLastYearBeforeBirthOptions = createSelector(
-  getWahrscheinlichesGeburtsDatum,
-  (wahrscheinlichesGeburtsDatum): SelectOption[] => {
-    const birthday = new Date(wahrscheinlichesGeburtsDatum);
-    const firstMonthAtBirthYear = new Date(
-      Date.UTC(birthday.getFullYear(), 0, 1),
-    ).toISOString();
-    const months = [];
-    for (let i = 1; i < 13; i++) {
-      const { monthIsoString, month: monthBeforeBirth } = getMonthValue(
-        firstMonthAtBirthYear,
-        -i,
-      );
-
-      months.push({
-        label: monthAfterBirthDateFormat.format(monthBeforeBirth),
-        value: monthIsoString,
-      });
-    }
-
-    return months;
-  },
-);
-
-const getMonthsAfterBirthOptions = createSelector(
-  getWahrscheinlichesGeburtsDatum,
-  (wahrscheinlichesGeburtsDatum): SelectOption[] => {
-    const months = [];
-    for (let i = 0; i < 32; i++) {
-      const { monthIsoString } = getMonthValue(wahrscheinlichesGeburtsDatum, i);
-
-      months.push({
-        label: `${i + 1}`,
-        value: monthIsoString,
-      });
-    }
-
-    return months;
-  },
-);
-
 export interface LebensmonateAfterBirth {
   monthIsoString: string;
   labelShort: string;
@@ -150,8 +88,6 @@ const getLebensmonateAfterBirth = createSelector(
 export const stepNachwuchsSelectors = {
   getWahrscheinlichesGeburtsDatum,
   getLebensmonateAfterBirth,
-  getMonthsAfterBirthOptions,
-  getMonthsLastYearBeforeBirthOptions,
 };
 export const stepNachwuchsActions = stepNachwuchsSlice.actions;
 export default stepNachwuchsSlice.reducer;

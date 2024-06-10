@@ -4,7 +4,6 @@ import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
 import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
 import { useAppSelector } from "@/redux/hooks";
 import type { ElternteilType } from "@/monatsplaner";
-import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
@@ -20,9 +19,6 @@ interface Props {
 }
 
 export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
-  const monthsLastYearBeforeBirthOptions = useAppSelector(
-    stepNachwuchsSelectors.getMonthsLastYearBeforeBirthOptions,
-  );
   const isErwerbstaetigVorGeburt = useAppSelector((state) =>
     stepErwerbstaetigkeitElternteilSelectors.isErwerbstaetigVorGeburt(
       state.stepErwerbstaetigkeit[elternteil],
@@ -90,12 +86,7 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
             />
           )}
 
-          {!!isOnlySelbstaendig && (
-            <NurSelbstaendig
-              elternteil={elternteil}
-              monthsBeforeBirth={monthsLastYearBeforeBirthOptions}
-            />
-          )}
+          {!!isOnlySelbstaendig && <NurSelbstaendig elternteil={elternteil} />}
 
           {!hasMiniJob && (
             <SteuerUndVersicherung

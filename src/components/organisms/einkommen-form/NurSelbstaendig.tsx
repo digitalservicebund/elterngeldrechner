@@ -1,16 +1,11 @@
 import { useFormContext } from "react-hook-form";
 import type { ElternteilType } from "@/monatsplaner";
-import {
-  CustomNumberField,
-  FormFieldGroup,
-  SelectOption,
-} from "@/components/molecules";
+import { CustomNumberField, FormFieldGroup } from "@/components/molecules";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurSelbstaendigProps {
   readonly elternteil: ElternteilType;
-  readonly monthsBeforeBirth: SelectOption[];
 }
 
 export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {

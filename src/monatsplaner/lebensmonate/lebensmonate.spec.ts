@@ -12,7 +12,7 @@ describe("Lebensmonate", () => {
 
   it("should return the list of Lebensmonate for a given Geburtstag", () => {
     const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate(
-      "2022-01-01T00:00:00.000",
+      new Date(2022, 0, 1),
     );
 
     expect(lebensmonate).toEqual([
@@ -149,7 +149,7 @@ describe("Lebensmonate", () => {
 
   it("should return the list of Lebensmonate for a given Geburtstag that is mid-month", () => {
     const lebensmonate: Lebensmonat[] | EmptyLebensmonat[] = getLebensmonate(
-      "2022-04-12T00:00:00.000",
+      new Date(2022, 3, 12),
     );
 
     expect(lebensmonate).toEqual([

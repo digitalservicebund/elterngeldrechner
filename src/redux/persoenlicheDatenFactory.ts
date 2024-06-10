@@ -62,9 +62,7 @@ export const persoenlicheDatenOfUi = (
 ): PersoenlicheDaten => {
   const wahrscheinlichesGeburtsdatum =
     stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state);
-  const persoenlicheDaten = new PersoenlicheDaten(
-    DateTime.fromISO(wahrscheinlichesGeburtsdatum).toJSDate(),
-  );
+  const persoenlicheDaten = new PersoenlicheDaten(wahrscheinlichesGeburtsdatum);
 
   persoenlicheDaten.anzahlKuenftigerKinder =
     state.stepNachwuchs.anzahlKuenftigerKinder;

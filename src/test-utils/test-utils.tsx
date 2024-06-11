@@ -15,6 +15,13 @@ import Big from "big.js";
 import { MemoryRouter } from "react-router-dom";
 import { AppStore, reducers, RootState } from "@/redux";
 import { AriaLogProvider } from "@/components/atoms";
+import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
+import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
+import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
+import { initialStepConfigurationState } from "@/redux/configurationSlice";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
@@ -84,4 +91,14 @@ export const toListWithTolerance = (n: number) => {
     num.minus(0.01).toNumber(),
     num.minus(0.02).toNumber(),
   ];
+};
+
+export const INITIAL_STATE: RootState = {
+  stepAllgemeineAngaben: initialStepAllgemeineAngabenState,
+  stepNachwuchs: initialStepNachwuchsState,
+  stepErwerbstaetigkeit: initialStepErwerbstaetigkeitState,
+  stepEinkommen: initialStepEinkommenState,
+  stepRechner: initialStepRechnerState,
+  monatsplaner: initialMonatsplanerState,
+  configuration: initialStepConfigurationState,
 };

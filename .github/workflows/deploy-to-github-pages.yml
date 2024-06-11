@@ -79,7 +79,7 @@ jobs:
       - name: place assets on gh-pages branch
         run: |
           set -ex
-          mkdir --parents --force "$PAGE_PATH"
+          mkdir --parents "$PAGE_PATH"
           cd "$PAGE_PATH"
           rm --recursive --force ./*
           tar --extract --file ${{ steps.download-artifact.outputs.download-path }}/artifact.tar

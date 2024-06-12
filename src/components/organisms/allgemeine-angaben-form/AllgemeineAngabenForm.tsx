@@ -19,7 +19,7 @@ import { infoTexts } from "@/components/molecules/info-dialog";
 
 export const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",
-  EinenElternteil: "Einen Elternteil",
+  EinenElternteil: "Für einen Elternteil",
 };
 
 const antragstellendeOptions: RadioOption<Antragstellende>[] = [

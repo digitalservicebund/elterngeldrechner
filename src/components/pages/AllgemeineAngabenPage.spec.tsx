@@ -21,7 +21,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should display the Alleinerziehendenstatus part of the form, if 'Ein Elternteil' is chosen", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Einen Elternteil"));
+    await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
 
     expect(screen.getByText("Alleinerziehendenstatus")).toBeInTheDocument();
   });
@@ -55,7 +55,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should NOT display mutterschaftssleistungenWer if 'Ein Elternteil' and 'mutterschaftssleistungen_option_0' are choosen", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Einen Elternteil"));
+    await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
     await userEvent.click(
       screen.getByTestId("mutterschaftssleistungen_option_0"),
     );
@@ -81,7 +81,7 @@ describe("Allgemeine Angaben Page", () => {
         mutterschaftssleistungen: YesNo.YES,
       };
 
-      await userEvent.click(screen.getByLabelText("Einen Elternteil"));
+      await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
       await userEvent.click(screen.getByTestId("alleinerziehend_option_0"));
       await userEvent.click(
         screen.getByTestId("mutterschaftssleistungen_option_0"),
@@ -110,7 +110,7 @@ describe("Allgemeine Angaben Page", () => {
       it("alleinerziehend - to Elternteil 1", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
-        await userEvent.click(screen.getByLabelText("Einen Elternteil"));
+        await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );
@@ -124,7 +124,7 @@ describe("Allgemeine Angaben Page", () => {
       it("does not show selection which parent receives Mutterschaftsleistung if a single applicant receives Mutterschaftsleistungen", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
-        await userEvent.click(screen.getByLabelText("Einen Elternteil"));
+        await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );
@@ -139,7 +139,7 @@ describe("Allgemeine Angaben Page", () => {
       it("automatically saves the first parent as Mutterschaftsleistungs receiver if a single applicant receives Mutterschaftsleistung", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
-        await userEvent.click(screen.getByLabelText("Einen Elternteil"));
+        await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
         await userEvent.click(
           screen.getByTestId("mutterschaftssleistungen_option_0"),
         );

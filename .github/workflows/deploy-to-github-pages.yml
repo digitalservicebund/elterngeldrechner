@@ -33,6 +33,8 @@ jobs:
   build:
     if: "${{ inputs.artifact_name == '' }}"
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: assets
     steps:
       - uses: actions/checkout@v4
 
@@ -48,7 +50,8 @@ jobs:
           npm run build
           ./build-preview
 
-      - uses: actions/upload-artifact@v4
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
         with:
           path: ./tmp_preview
           name: assets
@@ -70,19 +73,15 @@ jobs:
         with:
           ref: gh-pages
 
-      - name: download artifact
+      - name: clean up (potential) old version
+        run: rm --recursive --force "$PAGE_PATH"
+
+      - name: download artifact with assets to path
         uses: actions/download-artifact@v4
         id: download-artifact
         with:
-          name: ${{ inputs.artifact_name != '' && inputs.artifact_name || 'assets' }}
-
-      - name: place assets on gh-pages branch
-        run: |
-          set -ex
-          mkdir --parents "$PAGE_PATH"
-          cd "$PAGE_PATH"
-          rm --recursive --force ./*
-          tar --extract --file ${{ steps.download-artifact.outputs.download-path }}/artifact.tar
+          name: ${{ inputs.artifact_name != '' && inputs.artifact_name || needs.build.outputs.artifact_name }}
+          path: ${{ env.PAGE_PATH }}
 
       - name: commit and push
         run: |

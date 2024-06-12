@@ -36,21 +36,25 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
 
           <ul className="mb-24 list-disc pl-24">
             <li>
-              Basiselterngeld können Sie für bis zu 12 Lebensmonate bekommen
+              die 14 Basiselterngeldmonate können Sie untereinander aufteilen
             </li>
             <li>
-              2 zusätzliche Monate sind möglich, wenn beide Elternteile
-              Elterngeld beantragen und mindestens ein Elternteil nach der
-              Geburt weniger Einkommen hat – in diesem Fall gibt es 14 Monate
-              Basiselterngeld
+              Voraussetzung: mindestens einer von Ihnen hat in 2 Lebensmonaten
+              nach der Geburt weniger Einkommen als davor
             </li>
             <li>
-              die Basiselterngeld-Monate können Sie untereinander aufteilen
-            </li>
-            <li>
-              Sie können nur maximal einen Monat in den ersten 12 Lebensmonaten
-              ihres Kindes gleichzeitig mit Ihrem Partner oder Ihrer Partnerin
-              Basiselterngeld beziehen
+              zwei Einschränkungen gibt es:
+              <ul className="list-disc pl-24">
+                <li>
+                  Jeder Elternteil kann maximal 12 Monate Basiselterngeld
+                  bekommen
+                </li>
+                <li>
+                  Gleichzeitiger Bezug von Basiselterngeld mit Ihrem Partner
+                  oder Ihrer Partnerin ist nur maximal einen Monat in den ersten
+                  12 Lebensmonaten Ihres Kindes möglich
+                </li>
+              </ul>
             </li>
           </ul>
 

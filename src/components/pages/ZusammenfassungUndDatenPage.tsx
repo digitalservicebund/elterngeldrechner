@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
+import { DatenInAntragUebernehmenButton } from "@/components/organisms/DatenInAntragUebernehmenButton";
 import { Button } from "@/components/atoms";
 import { Planungsuebersicht } from "@/components/organisms/planungsuebersicht";
 import { Page } from "@/components/organisms/page";
@@ -33,6 +34,8 @@ function ZusammenfassungUndDatenPage() {
           label="Zurück"
           onClick={navigateToPreviousStep}
         />
+
+        <DatenInAntragUebernehmenButton />
       </div>
     </Page>
   );

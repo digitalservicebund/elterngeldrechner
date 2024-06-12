@@ -98,8 +98,8 @@ describe("Zusammenfassung und Daten Page", () => {
 
     // expect
     expect(
-      screen.getByText("Übernahme von Daten in den Elterngeldantrag"),
-    ).toBeInTheDocument();
+      screen.getByRole("heading", { name: "Zusammenfassung" }),
+    ).toBeVisible();
 
     const kindGeburtstag = getFieldByName("kind_geburtstag");
     expect(kindGeburtstag).not.toBeVisible();

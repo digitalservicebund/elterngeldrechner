@@ -18,5 +18,3 @@ export type { AmountElterngeldRow } from "./elternteil";
 export { PlanningContingent } from "./planning-contingent";
 export { RechnerForm } from "./rechner-form";
 export { RechnerResult } from "./rechner-result";
-export { ZusammenfassungUndDatenAllgemein } from "./zusammenfassung-und-daten-allgemein";
-export { ZusammenfassungUndDatenElternteil } from "./zusammenfassung-und-daten-elternteil";

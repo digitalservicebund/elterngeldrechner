@@ -2,6 +2,9 @@
 module.exports = {
   content: ["./src/**/*.tsx"],
   important: "#egr-root",
+  corePlugins: {
+    preflight: false,
+  },
   theme: {
     borderRadius: {
       2: "0.125rem",

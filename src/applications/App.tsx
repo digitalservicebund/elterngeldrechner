@@ -38,6 +38,21 @@ export function App({ elternGeldDigitalWizardUrl }: Props) {
     }),
   );
 
+  /* for development: show all pages at once */
+  const url = new URL(window.location.href);
+  const showAllPagesAtOnce = url.searchParams.get("allpages") === "1";
+  const allPages = (
+    <>
+      <AllgemeineAngabenPage />
+      <NachwuchsPage />
+      <ErwerbstaetigkeitPage />
+      <EinkommenPage />
+      <ElterngeldvariantenPage />
+      <RechnerPlanerPage />
+      <ZusammenfassungUndDatenPage />
+    </>
+  );
+
   return (
     <MemoryRouter>
       <AriaLogProvider>
@@ -51,31 +66,49 @@ export function App({ elternGeldDigitalWizardUrl }: Props) {
             />
             <Route
               path={formSteps.allgemeinAngaben.route}
-              element={<AllgemeineAngabenPage />}
+              element={
+                <>{showAllPagesAtOnce ? allPages : <AllgemeineAngabenPage />}</>
+              }
             />
             <Route
               path={formSteps.nachwuchs.route}
-              element={<NachwuchsPage />}
+              element={<>{showAllPagesAtOnce ? allPages : <NachwuchsPage />}</>}
             />
             <Route
               path={formSteps.erwerbstaetigkeit.route}
-              element={<ErwerbstaetigkeitPage />}
+              element={
+                <>{showAllPagesAtOnce ? allPages : <ErwerbstaetigkeitPage />}</>
+              }
             />
             <Route
               path={formSteps.einkommen.route}
-              element={<EinkommenPage />}
+              element={<>{showAllPagesAtOnce ? allPages : <EinkommenPage />}</>}
             />
             <Route
               path={formSteps.elterngeldvarianten.route}
-              element={<ElterngeldvariantenPage />}
+              element={
+                <>
+                  {showAllPagesAtOnce ? allPages : <ElterngeldvariantenPage />}
+                </>
+              }
             />
             <Route
               path={formSteps.rechnerUndPlaner.route}
-              element={<RechnerPlanerPage />}
+              element={
+                <>{showAllPagesAtOnce ? allPages : <RechnerPlanerPage />}</>
+              }
             />
             <Route
               path={formSteps.zusammenfassungUndDaten.route}
-              element={<ZusammenfassungUndDatenPage />}
+              element={
+                <>
+                  {showAllPagesAtOnce ? (
+                    allPages
+                  ) : (
+                    <ZusammenfassungUndDatenPage />
+                  )}
+                </>
+              }
             />
           </Routes>
         </Suspense>

@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - "*"
+  workflow_dispatch:
 
 jobs:
   release:
@@ -18,7 +19,9 @@ jobs:
       - name: Build egr
         env:
           REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
-        run: npm ci && npm run build
+        run: |
+          echo $REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE | sed 's/./& /g'
+          npm ci && npm run build
 
       - name: Audit Licenses
         run: npm run audit-licenses
@@ -27,15 +30,15 @@ jobs:
         working-directory: build/static
         run: zip -r build-assets.zip .
 
-      - name: Create new release
-        uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
-        with:
-          files: build/static/build-assets.zip
-
-      - name: Report Deployment
-        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
-        with:
-          project: elterngeldrechner
-          environment: production
-          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
-          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
+      # - name: Create new release
+      #   uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564
+      #   with:
+      #     files: build/static/build-assets.zip
+      #
+      # - name: Report Deployment
+      #   uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+      #   with:
+      #     project: elterngeldrechner
+      #     environment: production
+      #     metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+      #     metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}

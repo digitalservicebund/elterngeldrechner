@@ -1,6 +1,8 @@
+import { ReactNode } from "react";
+
 export interface Info {
   id: string;
-  text: string;
+  text: string | ReactNode;
 }
 
 export const infoTexts: Record<string, Info> = {
@@ -111,5 +113,26 @@ Wenn Sie alleinerziehend sind und nach der Geburt weniger Einkommen haben als da
   einkommenLimitÜberschritten: {
     id: "info-13",
     text: "Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 200.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen.",
+  },
+
+  mutterschaftsleistungen: {
+    id: "info-14",
+    text: (
+      <>
+        <p>
+          Während des Mutterschutzes erhalten Sie Mutterschaftsleistungen, zum
+          Beispiel:
+        </p>
+        <ul className="list-disc pl-24">
+          <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
+          <li>der Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+          <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
+        </ul>
+        <p>
+          Diese werden – wenn ein Anspruch darauf besteht – in den ersten acht
+          Wochen nach der Geburt gezahlt.
+        </p>
+      </>
+    ),
   },
 };

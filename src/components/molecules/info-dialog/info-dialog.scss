@@ -34,7 +34,6 @@
 
     &__text {
       font-size: px-to-rem(18) !important;
-      white-space: pre-line;
     }
 
     @media (max-width: $breakpoint-tablet) {

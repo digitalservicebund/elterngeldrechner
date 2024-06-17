@@ -122,6 +122,7 @@ export function AllgemeineAngabenForm({
               <FormFieldGroup
                 headline="Mutterschaftsleistungen"
                 description="Beziehen Sie Mutterschaftsleistungen?"
+                info={infoTexts.mutterschaftsleistungen}
               >
                 <YesNoRadio
                   register={register}

@@ -57,9 +57,13 @@ export function InfoDialog({
           >
             <CloseIcon />
           </button>
-          <p id={info.id} className={nsp("info-dialog-box__text")}>
-            {info.text}
-          </p>
+          <div id={info.id} className={nsp("info-dialog-box__text")}>
+            {typeof info.text === "string" ? (
+              <p className="whitespace-pre-line">{info.text}</p>
+            ) : (
+              info.text
+            )}
+          </div>
         </div>
       )}
     </div>

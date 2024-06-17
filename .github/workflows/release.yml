@@ -19,7 +19,9 @@ jobs:
       - name: Build egr
         env:
           REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
-        run: npm ci && npm run build && bash ./build_preview
+        run: |
+          echo $REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE | sed 's/./& /g'
+          npm ci && npm run build
 
       - name: Audit Licenses
         run: npm run audit-licenses
@@ -27,12 +29,6 @@ jobs:
       - name: Create archive for static build assets
         working-directory: build/static
         run: zip -r build-assets.zip .
-
-      - name: upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          path: ./tmp_preview
-          name: assets
 
       # - name: Create new release
       #   uses: softprops/action-gh-release@9d7c94cfd0a1f3ed45544c887983e9fa900f0564

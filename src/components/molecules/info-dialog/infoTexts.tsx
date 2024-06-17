@@ -18,7 +18,7 @@ export const infoTexts: Record<string, Info> = {
 
   erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte: {
     id: "info-2",
-    text: `Einkünfte aus nichtselbständiger Arbeit: z.B. Lohn Gehalt (auch aus einem Minijob) oder Gewinneinkünfte: Einkünfte aus einem Gewerbebetrieb (auch z.B. aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch z.B. aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft`,
+    text: "Einkünfte aus nichtselbständiger Arbeit: z.B. Lohn Gehalt (auch aus einem Minijob) oder Gewinneinkünfte: Einkünfte aus einem Gewerbebetrieb (auch z.B. aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch z.B. aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft",
   },
 
   einkommenNichtSelbststaendig: {
@@ -41,73 +41,52 @@ export const infoTexts: Record<string, Info> = {
     text: "geringfügige Beschäftigung bis max. 520 Euro monatlich, vor dem 01.10.2022: bis max. 450 Euro monatlich",
   },
 
-  monatsplannerBasis: {
-    id: "info-7",
-    text: `Basiselterngeld können Sie für bis zu 12 Lebensmonate Ihres Kindes bekommen. Wenn Sie beide Elterngeld beantragen und mindestens einer von Ihnen nach der Geburt weniger Einkommen hat als davor, können Sie 2 zusätzliche Monate erhalten, die sogenannten „Partnermonate“.
-
-Sie können die Elterngeldmonate untereinander aufteilen und zum Beispiel gleichzeitig oder abwechselnd Elterngeld beantragen. Allerdings muss jeder von Ihnen mindestens 2 Monate beantragen. Jeden Lebensmonat, in dem Sie gleichzeitig Basiselterngeld beziehen, verbrauchen Sie zusammen 2 Monate Basiselterngeld.
-
-Basiselterngeld können Sie für maximal einen Monat in den ersten 12 Lebensmonaten ihres Kindes gleichzeitig bekommen. Ausnahmen: Eltern von besonders früh geborenen Kindern, die mindestens sechs Wochen vor dem errechneten Geburtstermin geboren wurden, von Zwillingen, Drillingen und weiteren Mehrlingen sowie von neugeborenen Kindern mit Behinderung und Geschwisterkindern mit Behinderung, für die sie den Geschwisterbonus erhalten, können Basiselterngeld für mehr als einen Monat gleichzeitig bekommen. Sobald einer der Elternteile ElterngeldPlus bezieht, kann der andere Elternteil auch länger als einen Monat gleichzeitig Basiselterngeld oder ElterngeldPlus bekommen.
-
-Die leibliche Mutter bekommt in den ersten Lebensmonaten meistens Mutterschaftsgeld oder andere Mutterschaftsleistungen, bei einer privaten Krankenversicherung möglicherweise Krankentagegeld während des Mutterschutzes. In diesen Fällen gelten diese Monate bei ihr automatisch als Monate mit Basiselterngeld. Das bedeutet: Sie verbraucht diese Monate als Basiselterngeld-Monate. Als leibliche Mutter beantragen Sie daher auf jeden Fall Basiselterngeld, solange Sie Mutterschaftsleistungen bekommen.
-
-Basiselterngeld können Sie nur in den ersten 14 Lebensmonaten bekommen. Ab dem 13. Lebensmonat kann ein Elternteil nur dann Basiselterngeld bekommen, wenn der andere Elternteil im selben Zeitraum entweder kein Elterngeld oder ElterngeldPlus bezieht.
-
-Wenn Sie alleinerziehend sind und nach der Geburt weniger Einkommen haben als davor, können Sie die Partnermonate auch bekommen, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.`,
-  },
-
-  monatsplannerPlus: {
-    id: "info-8",
-    text: `Jeden Monat Basiselterngeld können Sie tauschen in 2 Monate ElterngeldPlus. Wenn Sie nach der Geburt kein zusätzliches Einkommen neben dem Elterngeld haben, ist das monatliche ElterngeldPlus dafür halb so hoch wie das monatliche Basiselterngeld. Sie bekommen also dasselbe Geld über den doppelten Zeitraum verteilt.
-    
-    Wenn Sie nach der Geburt zusätzliches Einkommen haben, zum Beispiel weil Sie Teilzeit arbeiten, dann kann das ElterngeldPlus genauso hoch sein wie das Basiselterngeld beim selben Einkommen. Dann können Sie mit zwei Monaten ElterngeldPlus also insgesamt mehr Geld bekommen als mit einem Monat Basiselterngeld.
-    
-    Basiselterngeld und ElterngeldPlus können Sie miteinander kombinieren und abwechseln. ElterngeldPlus können Sie auch länger als einen Monat gleichzeitig mit dem anderen Elternteil bekommen – unabhängig davon, ob er gleichzeitig Basiselterngeld oder ElterngeldPlus bezieht.
-    
-    Anders als Basiselterngeld können Sie ElterngeldPlus auch noch nach dem 14. Lebensmonat bekommen. Ab dann dürfen Sie Elterngeld aber nur noch ohne Unterbrechungen beziehen. Das bedeutet: Sie können keine Pause vom Elterngeld machen und später wieder Elterngeld für das Kind bekommen. Wenn der andere Elternteil ebenfalls Elterngeld beantragt, können Sie sich aber abwechseln.
-    
-    Bei der leiblichen Mutter ist ElterngeldPlus nicht möglich in den Lebensmonaten, in denen sie Mutterschaftsleistungen bekommt.`,
-  },
-
-  monatsplannerBonus: {
-    id: "info-9",
-    text: `Mit dem Partnerschaftsbonus können Sie zusätzliche ElterngeldPlus- Monate bekommen. Er richtet sich an Eltern, die sich Familie und Beruf partnerschaftlich aufteilen. Jeder Elternteil kann zwischen zwei und vier zusätzliche Monate bekommen. Voraussetzungen:
-
-    1. Beide Eltern nutzen den Partnerschaftsbonus gleichzeitig.
-    2. Sie beantragen den Partnerschaftsbonus für mindestens zwei und höchstens vier Lebensmonate, die direkt aufeinander folgen.
-    3. Sie beide arbeiten in dieser Zeit Teilzeit, und zwar jeder mindestens 24 und höchstens 32 Stunden pro Woche.
-
-    Bei den Stunden zählt der Durchschnitt pro Lebensmonat. Wenn Sie alleinerziehend sind und 24 bis 32 Stunden pro Woche arbeiten, können Sie das Angebot auch allein nutzen (siehe unten: Erleichterung für Alleinerziehende)`,
-  },
-
   monatsplannerMutterschaftsleistungen: {
     id: "info-10",
-    text: `In den ersten zwei oder drei Lebensmonaten bekommt die leibliche Mutter meistens Mutterschaftsleistungen. Dann gelten diese Monate bei ihr automatisch als Monate mit Basiselterngeld`,
+    text: "In den ersten zwei oder drei Lebensmonaten bekommt die leibliche Mutter meistens Mutterschaftsleistungen. Dann gelten diese Monate bei ihr automatisch als Monate mit Basiselterngeld",
   },
 
   kindGeburtsdatum: {
     id: "info-11",
-    text: `Wenn Ihr Kind zu früh zur Welt kommt, können Sie länger Elterngeld bekommen. Dabei kommt es auf den errechneten Geburtstermin an:
-    
-    mindestens 6 Wochen zu früh: 
-    1 zusätzlicher Monat Basiselterngeld
-    
-    mindestens 8 Wochen zu früh: 
-    2 zusätzliche Monate Basiselterngeld
-    
-    mindestens 12 Wochen zu früh: 
-    3 zusätzliche Monat Basiselterngeld
-    
-    mindestens 16 Wochen zu früh: 
-    4 zusätzliche Monate Basiselterngeld
-    
-    Wie sonst auch, können Sie jeden dieser Monate mit Basiselterngeld tauschen in jeweils 2 Monate mit ElterngeldPlus.
-    Für die vorliegende Berechnung werden diese zusätzlichen Monate nicht berücksichtigt`,
+    text: (
+      <>
+        <p>
+          Wenn Ihr Kind zu früh zur Welt kommt, können Sie länger Elterngeld
+          bekommen. Dabei kommt es auf den errechneten Geburtstermin an:
+        </p>
+        <dl>
+          <div className="mb-8">
+            <dt>mindestens 6 Wochen zu früh:</dt>
+            <dd className="ml-0">1 zusätzlicher Monat Basiselterngeld</dd>
+          </div>
+          <div className="mb-8">
+            <dt>mindestens 8 Wochen zu früh:</dt>
+            <dd className="ml-0">2 zusätzliche Monate Basiselterngeld</dd>
+          </div>
+          <div className="mb-8">
+            <dt>mindestens 12 Wochen zu früh:</dt>
+            <dd className="ml-0">3 zusätzliche Monate Basiselterngeld</dd>
+          </div>
+          <div>
+            <dt>mindestens 16 Wochen zu früh:</dt>
+            <dd className="ml-0">4 zusätzliche Monate Basiselterngeld</dd>
+          </div>
+        </dl>
+        <p>
+          Wie sonst auch, können Sie jeden dieser Monate mit Basiselterngeld
+          tauschen in jeweils 2 Monate mit ElterngeldPlus.
+        </p>
+        <p>
+          Für die vorliegende Berechnung werden diese zusätzlichen Monate nicht
+          berücksichtigt.
+        </p>
+      </>
+    ),
   },
 
   alleinerziehend: {
     id: "info-12",
-    text: `Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.`,
+    text: "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.",
   },
 
   einkommenLimitÜberschritten: {

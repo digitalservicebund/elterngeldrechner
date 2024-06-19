@@ -29,6 +29,12 @@
     @media print {
       display: block;
     }
+
+    td {
+      @media print {
+        border-bottom: 1pt solid black;
+      }
+    }
   }
 
   &__header {

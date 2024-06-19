@@ -4,6 +4,10 @@
   width: 100%;
   user-select: none;
 
+  @media print {
+    display: none;
+  }
+
   button {
     display: inline-block;
     font-size: inherit;
@@ -78,6 +82,10 @@
   &--selected {
     @media only screen {
       background-color: $color-primary;
+    }
+
+    @media print {
+      display: block;
     }
   }
 }

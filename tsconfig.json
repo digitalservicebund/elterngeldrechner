@@ -16,7 +16,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@digitalservicebund/icons/*": [
+        "./node_modules/@digitalservicebund/icons/*"
+      ]
     }
   },
   "include": ["src", "tests", "playwright.config.ts"]

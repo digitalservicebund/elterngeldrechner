@@ -45,7 +45,7 @@
   "//comment-for-prettier": "See https://create-react-app.dev/docs/setting-up-your-editor/#formatting-code-automatically",
   "devDependencies": {
     "@craco/craco": "^7.1.0",
-    "@digitalservicebund/icons": "^2.0.0",
+    "@digitalservicebund/icons": "^1.1.1",
     "@playwright/test": "^1.44.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "14.2.1",

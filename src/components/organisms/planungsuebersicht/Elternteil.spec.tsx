@@ -103,4 +103,5 @@ const ANY_PROPS: PlanungsdatenFuerElternteil = {
   geldInsgesamt: 0,
   zeitraeueme: [],
   details: ANY_DETAILS,
+  months: [],
 };

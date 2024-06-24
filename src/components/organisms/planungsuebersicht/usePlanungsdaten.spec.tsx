@@ -27,13 +27,13 @@ describe("usePlanungsdaten", () => {
 
   it("provides the pseudonyms of both parents as names", () => {
     const preloadedState = produce(INITIAL_STATE, (recipe) => {
-      recipe.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
+      recipe.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "" };
     });
 
     const { result } = renderHook(() => usePlanungdaten(), { preloadedState });
 
     expect(result.current[0].name).toEqual("Jane");
-    expect(result.current[1].name).toEqual("John");
+    expect(result.current[1].name).toEqual("Elternteil 2");
   });
 
   it("counts the number of all planned months", () => {

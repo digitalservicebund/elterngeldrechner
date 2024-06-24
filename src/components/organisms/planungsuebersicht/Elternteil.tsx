@@ -1,9 +1,10 @@
 import { ReactNode, useId } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
-import { PlanungsdatenFuerElternteil, Variante, Zeitraum } from "./types";
+import { PlanungsdatenFuerElternteil, Variante } from "./types";
 import { VariantenDetails } from "./VariantenDetails";
 import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatZeitraum } from "@/utils/formatZeitraum";
 
 interface Props extends PlanungsdatenFuerElternteil {}
 
@@ -58,25 +59,6 @@ export function Elternteil({
       </ul>
     </div>
   );
-}
-
-function formatZeitraum(zeitraum: Zeitraum): string {
-  const { from, to } = zeitraum;
-  const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
-
-  const formattedFrom = zeitraum.from.toLocaleDateString(undefined, {
-    day: "2-digit",
-    month: "2-digit",
-    year: isSpanningTwoYears ? "numeric" : undefined,
-  });
-
-  const formattedTo = zeitraum.to.toLocaleDateString(undefined, {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-
-  return `${formattedFrom} bis ${formattedTo}`;
 }
 
 const ELTERNGELD_VARIANTEN: Variante[] = ["BEG", "EG+", "PSB"];

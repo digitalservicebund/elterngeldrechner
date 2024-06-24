@@ -7,6 +7,7 @@ import {
   Variante,
   Month,
 } from "./types";
+import { ElterngeldType } from "@/monatsplaner";
 import { EgrConst } from "@/globals/js/egr-configuration";
 import { createAppSelector, useAppSelector } from "@/redux/hooks";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
@@ -32,7 +33,9 @@ const planungsdatenET2Selector = createPlanungsdatenSelector("ET2");
 function createPlanungsdatenSelector(elternteil: ElternteilType) {
   return createAppSelector(
     [
-      (state) => state.stepAllgemeineAngaben.pseudonym[elternteil],
+      (state) =>
+        state.stepAllgemeineAngaben.pseudonym[elternteil] ||
+        elternteil.replace("ET", "Elternteil "),
       (state) => state.monatsplaner.elternteile[elternteil].months as Month[],
       (state) => state.stepRechner[elternteil].elterngeldResult,
       stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum,
@@ -45,8 +48,34 @@ function createPlanungsdatenSelector(elternteil: ElternteilType) {
         sumUpNettoEinkommen(months, elterngeldResult),
       zeitraeueme: assembleZeitraeume(months, birthdate),
       details: combineDetails(months, elterngeldResult),
+      months: trimMonths(combineMonths(months, elterngeldResult)),
     }),
   );
+}
+
+function combineMonths(
+  months: Month[],
+  elterngeldResult: ElterngeldRowsResult,
+) {
+  const resultPerMonth = flattenElterngeldResult(elterngeldResult);
+
+  return months.map((month, index) => {
+    const elterngeld = readElterngeld(resultPerMonth[index], month.type);
+    const nettoEinkommen = resultPerMonth[index].nettoEinkommen;
+    return {
+      ...month,
+      elterngeld,
+      nettoEinkommen,
+      verfuegbaresEinkommen: elterngeld + nettoEinkommen,
+    };
+  });
+}
+
+function trimMonths(months: Month[]): Month[] {
+  const lastRelevantIndex = months.findLastIndex(
+    (month) => month.type !== "None",
+  );
+  return months.slice(0, lastRelevantIndex + 1);
 }
 
 function combineDetails(
@@ -130,7 +159,7 @@ function flattenElterngeldResult(
 
 function readElterngeld(
   resultForMonth: ElterngeldRow,
-  variante: Variante,
+  variante: ElterngeldType,
 ): number {
   switch (variante) {
     case "BEG":
@@ -138,6 +167,8 @@ function readElterngeld(
     case "EG+":
     case "PSB":
       return resultForMonth.elternGeldPlus;
+    case "None":
+      return 0;
   }
 }
 

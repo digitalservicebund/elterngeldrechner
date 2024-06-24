@@ -5,6 +5,7 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
+  plugins: [require("@tailwindcss/container-queries")],
   theme: {
     borderRadius: {
       2: "0.125rem",
@@ -18,6 +19,7 @@ module.exports = {
       /* Accent */
       white: "#ffffff",
       "grey-dark": "#999999",
+      "grey-light": "#f2f3f4",
       /* Background */
       "off-white": "#F4F4F4",
       grey: "#D6D6D6",
@@ -32,6 +34,7 @@ module.exports = {
     },
     fontSize: {
       14: ["0.875rem", { lineHeight: "1.429" }],
+      16: ["1rem", { lineHeight: "1.375" }],
       base: ["1.125rem", { lineHeight: "1.556" }],
       20: ["1.25rem", { lineHeight: "1.2" }],
       22: ["1.375rem", { lineHeight: "1.273" }],
@@ -44,6 +47,9 @@ module.exports = {
       // Only weights we have font-faces for.
       regular: "400",
       bold: "700",
+    },
+    fontFamily: {
+      sans: ["BundesSans", "Helvetica", "Arial", "sans-serif"],
     },
     height: {
       /*

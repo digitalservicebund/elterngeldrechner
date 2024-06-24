@@ -18,7 +18,7 @@ export function ElterngeldvarianteBadge({
   return (
     <span
       className={classNames(
-        "py-8 px-4 rounded text-center font-bold flex items-center justify-center",
+        "px-8 pt-6 pb-10 text-center rounded font-bold flex items-center justify-center leading-[1.444]",
         className,
         variantClassName,
       )}

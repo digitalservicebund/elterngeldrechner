@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 165:
+/***/ 2932:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -24,6 +24,7 @@ __webpack_require__.d(__webpack_exports__, {
   yp: () => (/* reexport */ NotificationPSBChangeOtherElternteil),
   ov: () => (/* reexport */ NotificationPSBNotDeselectable),
   ag: () => (/* reexport */ NotificationValidationMonatsplaner),
+  g3: () => (/* reexport */ PrintButton),
   $j: () => (/* reexport */ Spinner),
   JE: () => (/* reexport */ SplitItem),
   FN: () => (/* reexport */ Toast)
@@ -120,6 +121,13 @@ function ToastContent(_ref){let{messages,active}=_ref;return/*#__PURE__*/(0,jsx_
 function VisualCounter(_ref){let{countBasis,maxCountBasis,countPlus,maxCountPlus,countBonus,maxCountBonus}=_ref;const arrayOf=maxCount=>{const numbers=[];for(let i=1;i<=maxCount;i++){numbers.push(i);}return numbers;};const classNameOf=(classNamePart,index,count)=>{let className="visual-counter__".concat(classNamePart,"block");if(index>count){className+="--used";}return nsp(className);};const bonusAvailable=maxCountBonus!==0;return/*#__PURE__*/_jsxs("div",{className:nsp("visual-counter"),children:[/*#__PURE__*/_jsxs("div",{className:nsp("visual-counter__basisplus"),children:[/*#__PURE__*/_jsx("div",{className:nsp("visual-counter__basis"),children:arrayOf(maxCountBasis).map(index=>/*#__PURE__*/_jsx("div",{className:classNameOf("basis",index,countBasis)},index))}),/*#__PURE__*/_jsx("div",{className:nsp("visual-counter__plus"),children:arrayOf(maxCountPlus).map(index=>/*#__PURE__*/_jsx("div",{className:classNameOf("plus",index,countPlus)},index))})]}),!!bonusAvailable&&/*#__PURE__*/_jsx("div",{className:nsp("visual-counter__bonus"),children:arrayOf(maxCountBonus).map(index=>/*#__PURE__*/_jsx("div",{className:classNameOf("bonus",index,countBonus)},index))})]});}
 ;// CONCATENATED MODULE: ./src/components/atoms/visual-counter/index.ts
 
+// EXTERNAL MODULE: ./node_modules/@digitalservicebund/icons/SaveAlt.js
+var SaveAlt = __webpack_require__(4606);
+var SaveAlt_default = /*#__PURE__*/__webpack_require__.n(SaveAlt);
+;// CONCATENATED MODULE: ./src/components/atoms/print-button/PrintButton.tsx
+function PrintButton(){const handlePrint=()=>{window.print();};return/*#__PURE__*/(0,jsx_runtime.jsx)(Button,{buttonStyle:"link",label:"Download der Planung",iconBefore:/*#__PURE__*/(0,jsx_runtime.jsx)((SaveAlt_default()),{}),onClick:handlePrint});}
+;// CONCATENATED MODULE: ./src/components/atoms/print-button/index.ts
+
 ;// CONCATENATED MODULE: ./src/components/atoms/index.ts
 
 
@@ -183,8 +191,8 @@ var react_namespaceObject = /*#__PURE__*/__webpack_require__.t(react, 2);
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
 var classnames = __webpack_require__(1418);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
-// EXTERNAL MODULE: ./src/components/atoms/index.ts + 33 modules
-var atoms = __webpack_require__(165);
+// EXTERNAL MODULE: ./src/components/atoms/index.ts + 35 modules
+var atoms = __webpack_require__(2932);
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
 var react_dom = __webpack_require__(4164);
 var react_dom_namespaceObject = /*#__PURE__*/__webpack_require__.t(react_dom, 2);
@@ -6154,6 +6162,49 @@ var SvgPersonOutline = function (props) {
   }));
 };
 exports["default"] = SvgPersonOutline;
+
+/***/ }),
+
+/***/ 4606:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+var jsx_runtime_1 = __webpack_require__(184);
+var SvgSaveAlt = function (props) {
+  return (0, jsx_runtime_1.jsxs)("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    height: 24,
+    viewBox: "0 0 24 24",
+    width: 24,
+    "data-testid": "SaveAltIcon",
+    role: "graphics-symbol img",
+    focusable: "false",
+    "aria-hidden": "true"
+  }, props, {
+    children: [(0, jsx_runtime_1.jsx)("path", {
+      d: "M0 0h24v24H0z",
+      fill: "none"
+    }), (0, jsx_runtime_1.jsx)("path", {
+      d: "M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"
+    })]
+  }));
+};
+exports["default"] = SvgSaveAlt;
 
 /***/ }),
 
@@ -35161,7 +35212,7 @@ var createStructuredSelector = Object.assign(function (inputSelectorsObject) {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "static/js/" + chunkId + "." + {"1":"f872e96d","81":"17386c77","257":"eddb325c","496":"66c63145","521":"7033e7a5","597":"a898e158","623":"a49d7536","630":"b31162db","678":"2a6b4e4d"}[chunkId] + ".chunk.js";
+/******/ 			return "static/js/" + chunkId + "." + {"1":"f872e96d","81":"8971803a","205":"9150fc9e","323":"16c6572e","496":"66c63145","521":"7033e7a5","597":"aa612b11","623":"a49d7536","678":"2a6b4e4d"}[chunkId] + ".chunk.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -35347,8 +35398,8 @@ var client = __webpack_require__(1250);
 var react_redux = __webpack_require__(4420);
 // EXTERNAL MODULE: ./node_modules/react-router/dist/index.js
 var dist = __webpack_require__(7689);
-// EXTERNAL MODULE: ./src/components/atoms/index.ts + 33 modules
-var atoms = __webpack_require__(165);
+// EXTERNAL MODULE: ./src/components/atoms/index.ts + 35 modules
+var atoms = __webpack_require__(2932);
 ;// CONCATENATED MODULE: ./src/styles/tailwind.css
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const tailwind = ({});
@@ -35434,7 +35485,7 @@ function ElterngeldvariantenDescriptions(){const payoutAmounts=usePayoutAmounts(
 ;// CONCATENATED MODULE: ./src/components/pages/ElterngeldvariantenPage.tsx
 function ElterngeldvariantenPage(){const descriptionIdentifier=(0,react.useId)();const navigate=(0,dist/* useNavigate */.s0)();const navigateToPreviousStep=()=>navigate(formSteps/* formSteps */.w.einkommen.route);const navigateToNextStep=()=>navigate(formSteps/* formSteps */.w.rechnerUndPlaner.route);return/*#__PURE__*/(0,jsx_runtime.jsx)(page/* Page */.T,{step:formSteps/* formSteps */.w.elterngeldvarianten,children:/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{className:"flex flex-wrap justify-between gap-y-80",children:[/*#__PURE__*/(0,jsx_runtime.jsxs)("section",{className:"flex basis-full flex-col gap-24","aria-describedby":descriptionIdentifier,children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h3",{children:"Elterngeldvarianten"}),/*#__PURE__*/(0,jsx_runtime.jsxs)("p",{id:descriptionIdentifier,children:["Elterngeld gibt es in 3 Varianten.",/*#__PURE__*/(0,jsx_runtime.jsx)("br",{}),"Hier finden Sie eine \xDCbersicht \xFCber die einzelnen Elterngeldvarianten. Diese k\xF6nnen Sie im n\xE4chsten Schritt miteinander kombinieren."]}),/*#__PURE__*/(0,jsx_runtime.jsx)(ElterngeldvariantenDescriptions,{})]}),/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* Button */.zx,{buttonStyle:"secondary",label:"Zur\xFCck",onClick:navigateToPreviousStep}),/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* Button */.zx,{label:"Zum Monatsplaner",onClick:navigateToNextStep})]})});}
 ;// CONCATENATED MODULE: ./src/applications/App.tsx
-const AllgemeineAngabenPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(257), __webpack_require__.e(597), __webpack_require__.e(623)]).then(__webpack_require__.bind(__webpack_require__, 4623)));const NachwuchsPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(257), __webpack_require__.e(597), __webpack_require__.e(521)]).then(__webpack_require__.bind(__webpack_require__, 6521)));const ErwerbstaetigkeitPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(257), __webpack_require__.e(597), __webpack_require__.e(1)]).then(__webpack_require__.bind(__webpack_require__, 3001)));const EinkommenPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(257), __webpack_require__.e(597), __webpack_require__.e(678)]).then(__webpack_require__.bind(__webpack_require__, 5678)));const RechnerPlanerPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(257), __webpack_require__.e(597), __webpack_require__.e(81)]).then(__webpack_require__.bind(__webpack_require__, 8081)));const ZusammenfassungUndDatenPage=/*#__PURE__*/(0,react.lazy)(()=>__webpack_require__.e(/* import() */ 630).then(__webpack_require__.bind(__webpack_require__, 7630)));function App(_ref){let{elternGeldDigitalWizardUrl}=_ref;const dispatch=(0,hooks/* useAppDispatch */.TL)();dispatch(configurationActions.configure({elternGeldDigitalWizardUrl:elternGeldDigitalWizardUrl}));/* for development: show all pages at once */const url=new URL(window.location.href);const showAllPagesAtOnce=url.searchParams.get("allpages")==="1";const allPages=/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(AllgemeineAngabenPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(NachwuchsPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(ErwerbstaetigkeitPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(EinkommenPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(ElterngeldvariantenPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(RechnerPlanerPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(ZusammenfassungUndDatenPage,{})]});return/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* MemoryRouter */.VA,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* AriaLogProvider */.gM,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(react.Suspense,{fallback:/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* Spinner */.$j,{}),children:/*#__PURE__*/(0,jsx_runtime.jsxs)(dist/* Routes */.Z5,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{index:true,element:/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Navigate */.Fg,{to:formSteps/* formSteps */.w.allgemeinAngaben.route,replace:true})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.allgemeinAngaben.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(AllgemeineAngabenPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.nachwuchs.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(NachwuchsPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.erwerbstaetigkeit.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(ErwerbstaetigkeitPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.einkommen.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(EinkommenPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.elterngeldvarianten.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(ElterngeldvariantenPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.rechnerUndPlaner.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(RechnerPlanerPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.zusammenfassungUndDaten.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(ZusammenfassungUndDatenPage,{})})})]})})})});}
+const AllgemeineAngabenPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(323), __webpack_require__.e(597), __webpack_require__.e(623)]).then(__webpack_require__.bind(__webpack_require__, 4623)));const NachwuchsPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(323), __webpack_require__.e(597), __webpack_require__.e(521)]).then(__webpack_require__.bind(__webpack_require__, 6521)));const ErwerbstaetigkeitPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(323), __webpack_require__.e(597), __webpack_require__.e(1)]).then(__webpack_require__.bind(__webpack_require__, 3001)));const EinkommenPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(323), __webpack_require__.e(597), __webpack_require__.e(678)]).then(__webpack_require__.bind(__webpack_require__, 5678)));const RechnerPlanerPage=/*#__PURE__*/(0,react.lazy)(()=>Promise.all(/* import() */[__webpack_require__.e(323), __webpack_require__.e(597), __webpack_require__.e(81)]).then(__webpack_require__.bind(__webpack_require__, 8081)));const ZusammenfassungUndDatenPage=/*#__PURE__*/(0,react.lazy)(()=>__webpack_require__.e(/* import() */ 205).then(__webpack_require__.bind(__webpack_require__, 7205)));function App(_ref){let{elternGeldDigitalWizardUrl}=_ref;const dispatch=(0,hooks/* useAppDispatch */.TL)();dispatch(configurationActions.configure({elternGeldDigitalWizardUrl:elternGeldDigitalWizardUrl}));/* for development: show all pages at once */const url=new URL(window.location.href);const showAllPagesAtOnce=url.searchParams.get("allpages")==="1";const allPages=/*#__PURE__*/(0,jsx_runtime.jsxs)(jsx_runtime.Fragment,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(AllgemeineAngabenPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(NachwuchsPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(ErwerbstaetigkeitPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(EinkommenPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(ElterngeldvariantenPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(RechnerPlanerPage,{}),/*#__PURE__*/(0,jsx_runtime.jsx)(ZusammenfassungUndDatenPage,{})]});return/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* MemoryRouter */.VA,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* AriaLogProvider */.gM,{children:/*#__PURE__*/(0,jsx_runtime.jsx)(react.Suspense,{fallback:/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* Spinner */.$j,{}),children:/*#__PURE__*/(0,jsx_runtime.jsxs)(dist/* Routes */.Z5,{children:[/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{index:true,element:/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Navigate */.Fg,{to:formSteps/* formSteps */.w.allgemeinAngaben.route,replace:true})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.allgemeinAngaben.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(AllgemeineAngabenPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.nachwuchs.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(NachwuchsPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.erwerbstaetigkeit.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(ErwerbstaetigkeitPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.einkommen.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(EinkommenPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.elterngeldvarianten.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(ElterngeldvariantenPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.rechnerUndPlaner.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(RechnerPlanerPage,{})})}),/*#__PURE__*/(0,jsx_runtime.jsx)(dist/* Route */.AW,{path:formSteps/* formSteps */.w.zusammenfassungUndDaten.route,element:/*#__PURE__*/(0,jsx_runtime.jsx)(jsx_runtime.Fragment,{children:showAllPagesAtOnce?allPages:/*#__PURE__*/(0,jsx_runtime.jsx)(ZusammenfassungUndDatenPage,{})})})]})})})});}
 // EXTERNAL MODULE: ./node_modules/redux/dist/redux.mjs
 var redux = __webpack_require__(1154);
 // EXTERNAL MODULE: ./src/redux/monatsplanerSlice.ts
@@ -35482,4 +35533,4 @@ setupCalculation();
 
 /******/ })()
 ;
-//# sourceMappingURL=main.e06a5d84.js.map
+//# sourceMappingURL=main.0f969b02.js.map

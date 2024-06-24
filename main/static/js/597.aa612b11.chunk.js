@@ -28,8 +28,8 @@ var classnames = __webpack_require__(1418);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 // EXTERNAL MODULE: ./src/globals/js/namespace.js + 1 modules
 var namespace = __webpack_require__(9242);
-// EXTERNAL MODULE: ./src/components/atoms/index.ts + 33 modules
-var atoms = __webpack_require__(165);
+// EXTERNAL MODULE: ./src/components/atoms/index.ts + 35 modules
+var atoms = __webpack_require__(2932);
 // EXTERNAL MODULE: ./src/components/molecules/info-dialog/index.ts + 1 modules
 var info_dialog = __webpack_require__(6436);
 // EXTERNAL MODULE: ./node_modules/react/jsx-runtime.js
@@ -298,4 +298,4 @@ const EgrConst={lebensMonateMaxNumber:32};
 /***/ })
 
 }]);
-//# sourceMappingURL=597.a898e158.chunk.js.map
+//# sourceMappingURL=597.aa612b11.chunk.js.map

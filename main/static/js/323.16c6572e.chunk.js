@@ -1,4 +1,4 @@
-(self["webpackChunk_egr_egr_app"] = self["webpackChunk_egr_egr_app"] || []).push([[257],{
+(self["webpackChunk_egr_egr_app"] = self["webpackChunk_egr_egr_app"] || []).push([[323],{
 
 /***/ 996:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
@@ -178,49 +178,6 @@ var SvgRestartAlt = function (props) {
   }));
 };
 exports["default"] = SvgRestartAlt;
-
-/***/ }),
-
-/***/ 4606:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __assign = this && this.__assign || function () {
-  __assign = Object.assign || function (t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-    }
-    return t;
-  };
-  return __assign.apply(this, arguments);
-};
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-var jsx_runtime_1 = __webpack_require__(184);
-var SvgSaveAlt = function (props) {
-  return (0, jsx_runtime_1.jsxs)("svg", __assign({
-    xmlns: "http://www.w3.org/2000/svg",
-    height: 24,
-    viewBox: "0 0 24 24",
-    width: 24,
-    "data-testid": "SaveAltIcon",
-    role: "graphics-symbol img",
-    focusable: "false",
-    "aria-hidden": "true"
-  }, props, {
-    children: [(0, jsx_runtime_1.jsx)("path", {
-      d: "M0 0h24v24H0z",
-      fill: "none"
-    }), (0, jsx_runtime_1.jsx)("path", {
-      d: "M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"
-    })]
-  }));
-};
-exports["default"] = SvgSaveAlt;
 
 /***/ }),
 
@@ -6834,4 +6791,4 @@ function useIMask(opts, _temp) {
 /***/ })
 
 }]);
-//# sourceMappingURL=257.eddb325c.chunk.js.map
+//# sourceMappingURL=323.16c6572e.chunk.js.map

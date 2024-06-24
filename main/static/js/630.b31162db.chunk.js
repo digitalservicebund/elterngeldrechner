@@ -62,7 +62,59 @@ var formSteps = __webpack_require__(8137);
 ;// CONCATENATED MODULE: ./src/components/pages/ZusammenfassungUndDatenPage.tsx
 function ZusammenfassungUndDatenPage(){const descriptionIdentifier=(0,react.useId)();const navigate=(0,dist/* useNavigate */.s0)();const navigateToPreviousStep=()=>navigate(formSteps/* formSteps */.w.rechnerUndPlaner.route);return/*#__PURE__*/(0,jsx_runtime.jsx)(page/* Page */.T,{step:formSteps/* formSteps */.w.zusammenfassungUndDaten,children:/*#__PURE__*/(0,jsx_runtime.jsxs)("div",{className:"flex flex-wrap justify-between gap-y-80",children:[/*#__PURE__*/(0,jsx_runtime.jsxs)("section",{className:"flex basis-full flex-col gap-24","aria-describedby":descriptionIdentifier,children:[/*#__PURE__*/(0,jsx_runtime.jsx)("h3",{children:"Zusammenfassung"}),/*#__PURE__*/(0,jsx_runtime.jsx)("p",{id:descriptionIdentifier,children:"Hier finden sie eine \xDCbersicht Ihrer Planung der Elterngeldmonate"}),/*#__PURE__*/(0,jsx_runtime.jsx)(Planungsuebersicht,{})]}),/*#__PURE__*/(0,jsx_runtime.jsx)(atoms/* Button */.zx,{buttonStyle:"secondary",label:"Zur\xFCck",onClick:navigateToPreviousStep}),/*#__PURE__*/(0,jsx_runtime.jsx)(DatenInAntragUebernehmenButton,{})]})});}/* harmony default export */ const pages_ZusammenfassungUndDatenPage = (ZusammenfassungUndDatenPage);
 
+/***/ }),
+
+/***/ 6746:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   r: () => (/* binding */ EgrConst)
+/* harmony export */ });
+const EgrConst={lebensMonateMaxNumber:32};
+
+/***/ }),
+
+/***/ 996:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+var __assign = this && this.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+var jsx_runtime_1 = __webpack_require__(184);
+var SvgAdd = function (props) {
+  return (0, jsx_runtime_1.jsxs)("svg", __assign({
+    xmlns: "http://www.w3.org/2000/svg",
+    height: 24,
+    viewBox: "0 0 24 24",
+    width: 24,
+    "data-testid": "AddIcon",
+    role: "graphics-symbol img",
+    focusable: "false",
+    "aria-hidden": "true"
+  }, props, {
+    children: [(0, jsx_runtime_1.jsx)("path", {
+      d: "M0 0h24v24H0z",
+      fill: "none"
+    }), (0, jsx_runtime_1.jsx)("path", {
+      d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+    })]
+  }));
+};
+exports["default"] = SvgAdd;
+
 /***/ })
 
 }]);
-//# sourceMappingURL=630.97f7e791.chunk.js.map
+//# sourceMappingURL=630.b31162db.chunk.js.map

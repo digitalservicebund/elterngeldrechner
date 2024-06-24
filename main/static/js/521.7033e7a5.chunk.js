@@ -12,7 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7689);
 /* harmony import */ var _redux_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3153);
 /* harmony import */ var _redux_stepNachwuchsSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8632);
-/* harmony import */ var _components_organisms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8336);
+/* harmony import */ var _components_organisms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3597);
 /* harmony import */ var _utils_formSteps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8137);
 /* harmony import */ var _components_organisms_page__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(2995);
 /* harmony import */ var _redux_stepRechnerSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2760);
@@ -22,4 +22,4 @@ function NachwuchsPage(){const dispatch=(0,_redux_hooks__WEBPACK_IMPORTED_MODULE
 /***/ })
 
 }]);
-//# sourceMappingURL=521.c59aa1b2.chunk.js.map
+//# sourceMappingURL=521.7033e7a5.chunk.js.map

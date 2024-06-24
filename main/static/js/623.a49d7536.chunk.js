@@ -10,7 +10,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2791);
 /* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7689);
-/* harmony import */ var _components_organisms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8336);
+/* harmony import */ var _components_organisms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3597);
 /* harmony import */ var _components_organisms_page__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2995);
 /* harmony import */ var _redux_hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3153);
 /* harmony import */ var _redux_stepAllgemeineAngabenSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(177);
@@ -22,4 +22,4 @@ function AllgemeineAngabenPage(){const dispatch=(0,_redux_hooks__WEBPACK_IMPORTE
 /***/ })
 
 }]);
-//# sourceMappingURL=623.fdc9e420.chunk.js.map
+//# sourceMappingURL=623.a49d7536.chunk.js.map

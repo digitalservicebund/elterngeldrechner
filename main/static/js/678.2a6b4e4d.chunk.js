@@ -14,7 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _redux_stepEinkommenSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5353);
 /* harmony import */ var _redux_stepRechnerSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2760);
 /* harmony import */ var _utils_formSteps__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8137);
-/* harmony import */ var _components_organisms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8336);
+/* harmony import */ var _components_organisms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3597);
 /* harmony import */ var _components_organisms_page__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(2995);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(184);
 function EinkommenPage(){const dispatch=(0,_redux_hooks__WEBPACK_IMPORTED_MODULE_1__/* .useAppDispatch */ .TL)();const navigate=(0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__/* .useNavigate */ .s0)();const initialValues=(0,_redux_hooks__WEBPACK_IMPORTED_MODULE_1__/* .useAppSelector */ .CG)(state=>state.stepEinkommen);const[isFormDirty,setIsFormDirty]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);const[dirtyFields,setDirtyFields]=(0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({});const handleSubmit=values=>{// dirty check doesn't work on switch between average and monthly income - therefore additional checks added
@@ -23,4 +23,4 @@ if(isFormDirty||values.ET1.bruttoEinkommenNichtSelbstaendig.type!==initialValues
 /***/ })
 
 }]);
-//# sourceMappingURL=678.c5da4767.chunk.js.map
+//# sourceMappingURL=678.2a6b4e4d.chunk.js.map

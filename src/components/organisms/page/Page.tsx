@@ -4,7 +4,6 @@ import { AriaMessage } from "@/components/atoms";
 import { FormStep } from "@/utils/formSteps";
 import { Sidebar } from "@/components/organisms/sidebar";
 import nsp from "@/globals/js/namespace";
-import { FootNote } from "@/components/molecules";
 
 interface PageProps {
   readonly step: FormStep;
@@ -30,10 +29,6 @@ export function Page({ step, children }: PageProps) {
         className={classNames(nsp("page__content"), "relative")}
         id={step.text}
       >
-        <FootNote id={nsp("foot-note-for-required-fields")}>
-          Die mit einem Stern (*) gekennzeichneten Felder sind Pflichtfelder und
-          müssen ausgefüllt sein.
-        </FootNote>
         {children}
       </div>
     </div>

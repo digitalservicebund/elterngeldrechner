@@ -1,4 +1,4 @@
-import React, { AriaAttributes, Children, useState } from "react";
+import React, { AriaAttributes } from "react";
 import nsp from "@/globals/js/namespace";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
@@ -16,35 +16,6 @@ export function FormFieldGroup({
   children,
   ...aria
 }: FormFieldGroupProps) {
-  const [markedAsRequired, setMarkedAsRequired] = useState<boolean | null>(
-    null,
-  );
-
-  // search for required input fields in children and nested children (one level of nesting)
-  Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      if (child.props["required"] && !markedAsRequired) {
-        setMarkedAsRequired(true);
-      } else if (
-        child.props.children &&
-        Array.isArray(child.props.children) &&
-        !markedAsRequired
-      ) {
-        child.props.children.forEach((nestedChild: any) => {
-          if (
-            nestedChild.props &&
-            nestedChild.props["required"] &&
-            !markedAsRequired
-          ) {
-            setMarkedAsRequired(true);
-          }
-        });
-      }
-    }
-  });
-
-  const showRequiredAsterisk = !!headline && !!markedAsRequired;
-
   return (
     <section
       aria-label={headline}
@@ -52,12 +23,7 @@ export function FormFieldGroup({
       className={nsp("form-field-group")}
       {...aria}
     >
-      {!!headline && (
-        <h3 className="mb-10">
-          {headline}
-          {!!showRequiredAsterisk && <span>&nbsp;*</span>}
-        </h3>
-      )}
+      {!!headline && <h3 className="mb-10">{headline}</h3>}
       {!!description && (
         <div className={nsp("form-field-group-description")}>
           <p className={nsp("form-field-group-description__text")}>

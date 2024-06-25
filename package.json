@@ -20,6 +20,7 @@
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.scss\"",
+    "update-fpo-css": "wget \"https://familienportal.de/resource/themes/fpo/css/fpo-169894-36.css\" -O public/familienportal.css",
     "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "proxy": "https://www.bmf-steuerrechner.de",

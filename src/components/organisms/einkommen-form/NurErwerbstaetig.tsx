@@ -95,16 +95,18 @@ export function NurErwerbstaetig({
               zählt, insgesamt 12 Monate enthält.
             </legend>
 
-            {monthsBeforeBirth.map(({ label }, index) => (
-              <CustomNumberField
-                key={label}
-                control={control}
-                name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.perMonth.${index}`}
-                label={label}
-                suffix="Euro"
-                required
-              />
-            ))}
+            <div className="grid grid-cols-2 gap-16 [&_input]:w-full">
+              {monthsBeforeBirth.map(({ label }, index) => (
+                <CustomNumberField
+                  key={label}
+                  control={control}
+                  name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.perMonth.${index}`}
+                  label={label}
+                  suffix="Euro"
+                  required
+                />
+              ))}
+            </div>
           </fieldset>
         )}
       </FormFieldGroup>

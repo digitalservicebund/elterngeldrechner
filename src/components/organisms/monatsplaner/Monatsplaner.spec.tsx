@@ -517,6 +517,10 @@ describe("Monatsplaner", () => {
         ...initialStepAllgemeineAngabenState,
         antragstellende: "FuerBeide",
       },
+      stepNachwuchs: {
+        ...initialStepNachwuchsState,
+        wahrscheinlichesGeburtsDatum: "08.08.2022",
+      },
     };
 
     // TODO: Use this across whole file to simplify test code.
@@ -920,8 +924,8 @@ describe("Monatsplaner", () => {
 
   describe("repeat planning", () => {
     it("should reset the selected months when repeat planning", async () => {
-      render(<Monatsplaner mutterSchutzMonate={0} />);
-      const firstBEGMonth = getElternteil1BEGLabel(0);
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
+      const firstBEGMonth = getElternteil1BEGLabel(4);
       const monthButton = screen.getByLabelText(firstBEGMonth);
       const monthCell = screen.getByTestId(firstBEGMonth);
       const repeatButton = screen.getByText("Planung wiederholen");
@@ -947,7 +951,7 @@ describe("Monatsplaner", () => {
     });
 
     it("triggers smooth scrolling and shifts focus when repeat planning", async () => {
-      render(<Monatsplaner mutterSchutzMonate={0} />);
+      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
       const scrollMock = jest.fn();
       const focusMock = jest.fn();
       window.HTMLElement.prototype.scrollIntoView = scrollMock;
@@ -984,6 +988,10 @@ describe("Monatsplaner", () => {
             behindertesGeschwisterkind: false,
             mehrlinge: false,
           },
+        },
+        stepNachwuchs: {
+          ...initialStepNachwuchsState,
+          wahrscheinlichesGeburtsDatum: "08.08.2022",
         },
       };
       render(<Monatsplaner mutterSchutzMonate={0} />, {

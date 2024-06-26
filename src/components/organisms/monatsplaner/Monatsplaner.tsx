@@ -20,7 +20,11 @@ import {
   monatsplanerActions,
   monatsplanerSelectors,
 } from "@/redux/monatsplanerSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  createAppSelector,
+  useAppDispatch,
+  useAppSelector,
+} from "@/redux/hooks";
 import {
   Antragstellende,
   stepAllgemeineAngabenSelectors,
@@ -150,11 +154,17 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
   const mutterschutzElternteil = useAppSelector(
     (state) => state.monatsplaner.mutterschutzElternteil,
   );
-  const amountElterngeldRowsET1 = useAppSelector((state) =>
-    getAmountElterngeldRow(state.stepRechner.ET1.elterngeldResult),
+  const amountElterngeldRowsET1 = useAppSelector(
+    createAppSelector(
+      (state) => state.stepRechner.ET1.elterngeldResult,
+      getAmountElterngeldRow,
+    ),
   );
-  const amountElterngeldRowsET2 = useAppSelector((state) =>
-    getAmountElterngeldRow(state.stepRechner.ET2.elterngeldResult),
+  const amountElterngeldRowsET2 = useAppSelector(
+    createAppSelector(
+      (state) => state.stepRechner.ET2.elterngeldResult,
+      getAmountElterngeldRow,
+    ),
   );
 
   const alleinerziehend = useAppSelector(

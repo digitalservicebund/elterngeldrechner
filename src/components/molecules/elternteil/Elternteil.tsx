@@ -85,14 +85,14 @@ export function Elternteil({
     formatMoney(Big(amount).round(0).toNumber(), 0);
 
   const getBasiselterngeld = (row: AmountElterngeldRow) => {
-    if (row === "empty") {
+    if (!row || row === "empty") {
       return "-";
     }
     return roundAndFormatMoney(row.amountBasiselterngeld);
   };
 
   const getElterngeldplus = (row: AmountElterngeldRow) => {
-    if (row === "empty") {
+    if (!row || row === "empty") {
       return "-";
     }
     return roundAndFormatMoney(row.amountElterngeldPlus);

@@ -1,11 +1,12 @@
 import { Button } from "@/components/atoms";
-import { useAppSelector } from "@/redux/hooks";
 import { AntragstellendeSelektor } from "@/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/globals/js/calculations/model";
 import { Taetigkeit } from "@/redux/stepEinkommenSlice";
 import { Month } from "@/monatsplaner";
+import { useAppStore } from "@/redux/hooks";
 
 export function DatenInAntragUebernehmenButton() {
+  const store = useAppStore();
   const {
     stepAllgemeineAngaben,
     stepNachwuchs,
@@ -14,7 +15,7 @@ export function DatenInAntragUebernehmenButton() {
     stepRechner,
     monatsplaner,
     configuration,
-  } = useAppSelector((state) => state);
+  } = store.getState();
 
   const mapYesNo = (yesNo: YesNo | null): string => {
     return yesNo === YesNo.YES ? "1" : "0";

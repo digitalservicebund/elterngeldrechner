@@ -35212,7 +35212,7 @@ var createStructuredSelector = Object.assign(function (inputSelectorsObject) {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "static/js/" + chunkId + "." + {"1":"f872e96d","81":"8971803a","205":"9150fc9e","323":"16c6572e","496":"66c63145","521":"7033e7a5","597":"aa612b11","623":"a49d7536","678":"2a6b4e4d"}[chunkId] + ".chunk.js";
+/******/ 			return "static/js/" + chunkId + "." + {"1":"f872e96d","81":"8971803a","205":"9150fc9e","323":"16c6572e","496":"66c63145","521":"7033e7a5","597":"1dd3a120","623":"a49d7536","678":"2a6b4e4d"}[chunkId] + ".chunk.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -35533,4 +35533,4 @@ setupCalculation();
 
 /******/ })()
 ;
-//# sourceMappingURL=main.0f969b02.js.map
+//# sourceMappingURL=main.f45b98bf.js.map

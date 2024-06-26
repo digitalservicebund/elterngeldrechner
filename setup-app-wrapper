@@ -10,8 +10,8 @@
 # Create and populate /public folder needed to run the app locally
 # $ ./setup-app-wrapper --target public
 #
-# Create a preview page including the built app and additional js/css
-# $ ./setup-app-wrapper --target preview_folder --include-react-app \
+# Add additional js/css
+# $ ./setup-app-wrapper --target public \
 #     --include-additional-js --include-additional-css
 #
 # Keep existing wrapper when it was created today (caching)
@@ -23,16 +23,12 @@ set -o pipefail
 # set -o verbose
 
 target_directory=public
-include_react_app=false
 include_js=false
 include_css=false
 cache=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --include-react-app)
-      include_react_app=true
-      ;;
     --include-additional-js)
       include_js=true
       ;;
@@ -153,19 +149,4 @@ cat << EOV > include.css
 }
 EOV
 sed --in-place --expression "s#</head>#<link rel=\"stylesheet\" href=\"include.css\"></head>#" index.html
-fi
-
-# Include built react app (expects that the app was already built)
-if [ "$include_react_app" == "true" ]; then
-# Copy over new assets
-cp --recursive ../build/static .
-
-# Inject app scripts and style-sheets
-main_script_path=$(find ./static/js -name main.*.js )
-script_element="<script defer='defer' src='$main_script_path'></script>"
-
-main_stylesheet_path=$(find ./static/css -name main.*.css)
-stylesheet_element="<link href='$main_stylesheet_path' rel='stylesheet' />"
-
-sed --in-place --expression "s#</head>#$script_element$stylesheet_element</head>#" index.html
 fi

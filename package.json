@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "start": "./setup-app-wrapper --target public --use-cache && craco start",
-    "build": "./setup-app-wrapper --target public --use-cache && craco build",
+    "build": "./setup-app-wrapper --target public --include-additional-css --include-additional-js && craco build",
     "test": "craco test --verbose",
     "eject": "craco eject",
     "format": "prettier --write ./src/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm} ./public/**/*.{js,jsx,ts,tsx,json,css,scss,md,html,htm}",
@@ -17,7 +17,6 @@
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "lint-fix": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
     "stylelint": "stylelint \"./src/**/*.scss\"",
-    "update-fpo-css": "wget \"https://familienportal.de/resource/themes/fpo/css/fpo-169894-36.css\" -O public/familienportal.css",
     "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "eslintConfig": {

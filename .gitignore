@@ -29,6 +29,7 @@ yarn-error.log*
 /src/test-utils/resources/~$*.xlsx
 
 /tmp_preview
+/public
 
 # playwright
 /test-results/

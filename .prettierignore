@@ -1,5 +1,5 @@
 .prettierignore
-build-preview
+setup-app-wrapper
 *.ttf
 *.woff
 .eslintrc
@@ -10,4 +10,3 @@ allowed-licenses
 .gitignore
 *.png
 .eslintignore
-public/familienportal.css

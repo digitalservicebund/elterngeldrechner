@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+
+# Setup App Wrapper
+#
+# Wrap the app (widget) in a copy of the Familienportal host webpage
+# to get a development/preview environment close to production.
+#
+# Examples:
+#
+# Create and populate /public folder needed to run the app locally
+# $ ./setup-app-wrapper --target public
+#
+# Create a preview page including the built app and additional js/css
+# $ ./setup-app-wrapper --target preview_folder --include-react-app \
+#     --include-additional-js --include-additional-css
+#
+# Keep existing wrapper when it was created today (caching)
+# $ ./setup-app-wrapper --target public --use-cache
+
+set -o errexit
+set -o nounset
+set -o pipefail
+# set -o verbose
+
+target_directory=public
+include_react_app=false
+include_js=false
+include_css=false
+cache=false
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --include-react-app)
+      include_react_app=true
+      ;;
+    --include-additional-js)
+      include_js=true
+      ;;
+    --include-additional-css)
+      include_css=true
+      ;;
+    --use-cache)
+      cache=true
+      ;;
+    --target)
+      if [[ -n "$2" ]]; then
+        target_directory="$2"
+        shift
+      else
+        echo "Error: Count requires a value."
+        exit 1
+      fi
+      ;;
+    *)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+# Maybe there is nothing to do...
+if [ "$cache" == "true" ]; then
+  if [ -d "$target_directory" ]; then
+    directory_created=$(stat --format="%w" $target_directory | cut -c 1-10) # e.g. 2024-06-26
+    today=$(date +%F) # e.g. 2024-06-29
+    if [[ "$directory_created" == "$today" ]]; then
+      echo "App wrapper is up-to-date. Nothing to do."
+      exit 0
+    fi
+  fi
+fi
+
+# Clean start
+rm -rf $target_directory
+mkdir $target_directory
+cd $target_directory
+
+# Fetch live host webpage
+wget \
+  --page-requisites \
+  --convert-links \
+  --span-hosts \
+  --no-directories \
+  --execute robots=off \
+  --adjust-extension \
+  "https://familienportal.de/familienportal/meta/egr"
+
+mv egr.html index.html
+
+# Remove assets from live egr, will be replaced by new ones
+rm chunk* main*
+sed --in-place --expression "s#<script src=\"chunk1.*\$##" index.html
+
+# Special handling of svg sprite
+sprite_path=$(grep -o "/resource/crblob/.*/sprite-svg-data.svg" index.html)
+sprite_url="https://familienportal.de${sprite_path}"
+wget "${sprite_url}"
+sed --in-place --expression "s#/resource/crblob/.*/sprite-svg-data.svg#sprite-svg-data.svg#" index.html
+
+# Disable Matomo tracking
+sed --in-place --expression "s#window\.initMatomo();#/* tracking disabled */#" index.html
+
+# Include additional js to enrich the preview experience
+if [ "$include_js" == "true" ]; then
+cat << EOV > include.js
+(function() {
+  const params = new URL(document.location).searchParams;
+  const toggle = params.get("original");
+  if (toggle === "1") return;
+
+  const el = document.createElement("div");
+  el.innerText = "Testumgebung!";
+  el.className = "ds-preview-warning";
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector("body").appendChild(el);
+    document.querySelectorAll(".header__container, .breadcrumb, .page-title, .contact-flap, .footer").forEach(el => el.classList.add("ds-disable"));
+  });
+}());
+EOV
+sed --in-place --expression "s#</head>#<script src=\"include.js\"></script></head>#" index.html
+fi
+
+# Include additional css to enrich the preview experience
+if [ "$include_css" == "true" ]; then
+cat << EOV > include.css
+.ds-preview-warning {
+  background-color: white;
+  color: red;
+  border: 5px solid red;
+  font-weight: bold;
+  padding: 0.5rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media print {
+  .ds-preview-warning {
+    display: none;
+  }
+}
+
+.ds-disable {
+  opacity: 0.3;
+  filter: grayscale(90%);
+  pointer-events: none;
+}
+EOV
+sed --in-place --expression "s#</head>#<link rel=\"stylesheet\" href=\"include.css\"></head>#" index.html
+fi
+
+# Include built react app (expects that the app was already built)
+if [ "$include_react_app" == "true" ]; then
+# Copy over new assets
+cp --recursive ../build/static .
+
+# Inject app scripts and style-sheets
+main_script_path=$(find ./static/js -name main.*.js )
+script_element="<script defer='defer' src='$main_script_path'></script>"
+
+main_stylesheet_path=$(find ./static/css -name main.*.css)
+stylesheet_element="<link href='$main_stylesheet_path' rel='stylesheet' />"
+
+sed --in-place --expression "s#</head>#$script_element$stylesheet_element</head>#" index.html
+fi

@@ -83,12 +83,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 There are further small scripts for formatting, linting or testing. Please see the `scripts` section in the `package.json` for details.
 
-#### 2.3.5. Preview locally including Familienportal wrapper
-
-```sh
-npm run build && ./build-preview  && npx http-server ./tmp_preview/
-```
-
 ## 3. App-Parameter
 
 ### 3.1. ElterngeldDigital Wizard URL

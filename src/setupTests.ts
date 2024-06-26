@@ -4,6 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 import { ReactNode } from "react";
+import failOnConsole from "jest-fail-on-console";
 import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 
 // Preferences for calculations.
@@ -22,6 +23,16 @@ jest.mock("react-dom", () => {
     createPortal: (element: ReactNode) => element,
   };
 });
+
+failOnConsole({
+  shouldFailOnAssert: true,
+  shouldFailOnDebug: true,
+  shouldFailOnError: true,
+  shouldFailOnInfo: true,
+  shouldFailOnLog: true,
+  shouldFailOnWarn: true,
+});
+
 /**
  * Some test should be skipped on ci server.
  *

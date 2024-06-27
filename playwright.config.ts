@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const APP_PORT = 3001;
+const APP_BASE_URL = `http://127.0.0.1:${APP_PORT}`;
+
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
@@ -8,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL: APP_BASE_URL,
     trace: "on-first-retry",
   },
   projects: [
@@ -18,8 +21,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run start",
-    url: "http://127.0.0.1:3000",
-    reuseExistingServer: !process.env.CI,
+    command: `PORT=${APP_PORT} npm run start`,
+    url: APP_BASE_URL,
+    reuseExistingServer: false,
+    env: { ...process.env, REACT_APP_PRELOAD_STATE: "false" },
   },
 });

@@ -21,7 +21,7 @@ export const reducers = combineReducers({
 const store = configureStore({
   reducer: reducers,
   preloadedState:
-    process.env.NODE_ENV === "development"
+    process.env.REACT_APP_PRELOAD_STATE === "true"
       ? (preloadedState as any)
       : undefined,
 });

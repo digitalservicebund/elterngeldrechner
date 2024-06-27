@@ -48,12 +48,11 @@ jobs:
           set -ex
           npm ci
           npm run build
-          ./build-preview
 
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./tmp_preview
+          path: ./build
           name: assets
 
   publish:

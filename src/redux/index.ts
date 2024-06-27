@@ -21,7 +21,7 @@ export const reducers = combineReducers({
 const store = configureStore({
   reducer: reducers,
   preloadedState:
-    process.env.NODE_ENV === "development" ? preloadedState : undefined,
+    process.env.VITE_APP_PRELOAD_STATE === "true" ? preloadedState : undefined,
 });
 
 export default store;

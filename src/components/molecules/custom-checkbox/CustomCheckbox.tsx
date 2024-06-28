@@ -52,36 +52,38 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
 
   return (
     <div className={nsp("custom-checkbox")}>
-      <input
-        {...register(name, registerOptions)}
-        type="checkbox"
-        className={classNames(
-          nsp("custom-checkbox__input"),
-          hasError && nsp("custom-checkbox__input--error"),
+      <div>
+        <input
+          {...register(name, registerOptions)}
+          type="checkbox"
+          className={classNames(
+            nsp("custom-checkbox__input"),
+            hasError && nsp("custom-checkbox__input--error"),
+          )}
+          id={name}
+          onClick={onClick}
+          aria-invalid={hasError}
+          aria-describedby={
+            errorMessage && `${name}-error`
+              ? errorMessage && `${name}-error`
+              : undefined
+          }
+        />
+        <label
+          className={classNames(
+            nsp("custom-checkbox__label"),
+            hasError && nsp("custom-checkbox__label--error"),
+          )}
+          htmlFor={name}
+        >
+          {label}
+        </label>
+        {!!errorMessage && (
+          <Description id={`${name}-error`} error>
+            {errorMessage}
+          </Description>
         )}
-        id={name}
-        onClick={onClick}
-        aria-invalid={hasError}
-        aria-describedby={
-          errorMessage && `${name}-error`
-            ? errorMessage && `${name}-error`
-            : undefined
-        }
-      />
-      <label
-        className={classNames(
-          nsp("custom-checkbox__label"),
-          hasError && nsp("custom-checkbox__label--error"),
-        )}
-        htmlFor={name}
-      >
-        {label}
-      </label>
-      {!!errorMessage && (
-        <Description id={`${name}-error`} error>
-          {errorMessage}
-        </Description>
-      )}
+      </div>
 
       {!!info && <InfoDialog info={info} />}
     </div>

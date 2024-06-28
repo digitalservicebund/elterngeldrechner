@@ -43,7 +43,8 @@ export function PlanungsdetailsMonth({ month = { type: "None" } }: Props) {
                   : ""}{" "}
                 {nettoEinkommen ? (
                   <span>
-                    | <GehaltIcon /> Gehalt {formatAsCurrency(nettoEinkommen)}
+                    | <GehaltIcon /> Einkommen{" "}
+                    {formatAsCurrency(nettoEinkommen)}
                   </span>
                 ) : (
                   ""

@@ -38,14 +38,11 @@ export function PlanungsdetailsTable({
   return (
     <table className="w-full border-collapse [&_td]:pb-16 [&_th]:pb-16 [&_tr]:border-0 [&_tr]:border-b-2 [&_tr]:border-solid [&_tr]:border-grey-light">
       <thead>
-        <tr className="*:text-left *:align-top *:font-regular">
+        <tr className="text-left font-bold">
           <th scope="col">Lebensmonate</th>
           {elternteile.map(({ name }) => (
             <th scope="col" abbr={name} className="pl-32 last:pr-8" key={name}>
-              <div className="font-bold">
-                <PersonIcon /> {name}
-              </div>
-              <div className="text-16">verfügbares Einkommen pro Monat</div>
+              <PersonIcon /> {name}
             </th>
           ))}
         </tr>

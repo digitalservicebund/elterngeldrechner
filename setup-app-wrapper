@@ -68,7 +68,7 @@ if [ "$cache" == "true" ]; then
 fi
 
 # Clean start
-rm -rf $target_directory
+rm -rf $target_directory ./index.html
 mkdir $target_directory
 cd $target_directory
 
@@ -150,3 +150,6 @@ cat << EOV > include.css
 EOV
 sed --in-place --expression "s#</head>#<link rel=\"stylesheet\" href=\"include.css\"></head>#" index.html
 fi
+
+sed --in-place "s#\(</head>\)#<script type='module' src='src/index.tsx'></script>\\n\1#" index.html
+mv index.html ..

@@ -14,7 +14,7 @@ import PROJECT_NAMESPACE from "@/projectNamespace";
  * @param  {...string} classNames List of classNames to prefix with namespace
  * @returns {string} joined className string
  */
-const nsp = (...classNames) =>
+const nsp = (...classNames: string[]) =>
   classNames
     .map((classList) => classList.split(/\s/).filter(Boolean))
     .flat()

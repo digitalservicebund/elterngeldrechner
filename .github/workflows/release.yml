@@ -24,7 +24,7 @@ jobs:
         run: npm run audit-licenses
 
       - name: Create archive for static build assets
-        working-directory: build/static
+        working-directory: dist/assets
         run: zip -r build-assets.zip .
 
       - name: Create new release

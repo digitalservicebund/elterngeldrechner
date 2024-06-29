@@ -52,7 +52,7 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: ./build
+          path: ./dist
           name: assets
 
   publish:

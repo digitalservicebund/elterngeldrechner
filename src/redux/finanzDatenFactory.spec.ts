@@ -140,7 +140,7 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with bruttoEinkommenZeitraumList", () => {
     // given
-    let bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[] = [
+    const bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[] = [
       { bruttoEinkommen: 1000, zeitraum: { from: "1", to: "1" } },
     ];
 

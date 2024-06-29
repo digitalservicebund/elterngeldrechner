@@ -1,3 +1,6 @@
 tailwind.config.js
 craco.config.js
+postcss.config.js
+vite.config.ts
 /public
+/dist

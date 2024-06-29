@@ -78,9 +78,9 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     for (let i: number = 0; i < ANZAHL_MONATE_PRO_JAHR; i++) {
       let tmpBetrachtungsmonateFlag: boolean = false;
 
-      let array = finanzDaten.mischEinkommenTaetigkeiten;
+      const array = finanzDaten.mischEinkommenTaetigkeiten;
       for (let index = 0; index < array.length; index++) {
-        let mischEkTaetigkeit = array[index];
+        const mischEkTaetigkeit = array[index];
         if (mischEkTaetigkeit.bemessungsZeitraumMonate[i]) {
           tmpBetrachtungsmonateFlag = true;
         }
@@ -104,9 +104,9 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     let summe_EK_NS: Big = MathUtil.BIG_ZERO;
     let summe_EK_NS_SV: Big = MathUtil.BIG_ZERO;
     let summe_EK_GNS: Big = MathUtil.BIG_ZERO;
-    let array = finanzDaten.mischEinkommenTaetigkeiten;
+    const array = finanzDaten.mischEinkommenTaetigkeiten;
     for (let index = 0; index < array.length; index++) {
-      let mischEkTaetigkeit = array[index];
+      const mischEkTaetigkeit = array[index];
 
       const bruttoGesamt: Big =
         mischEkTaetigkeit.bruttoEinkommenDurchschnitt.mul(
@@ -172,9 +172,9 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       betrachtungszeitraumKV.push(false);
       betrachtungszeitraumAV.push(false);
       {
-        let array = finanzDaten.mischEinkommenTaetigkeiten;
+        const array = finanzDaten.mischEinkommenTaetigkeiten;
         for (let index = 0; index < array.length; index++) {
-          let mischEkTaetigkeit = array[index];
+          const mischEkTaetigkeit = array[index];
 
           if (
             mischEkTaetigkeit.bemessungsZeitraumMonate[i] &&

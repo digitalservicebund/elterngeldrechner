@@ -113,11 +113,9 @@ describeSkipOnCi("basis-eg-algorithmus", () => {
               EgrBerechnungParamId.GRENZE_MINI_MIDI,
             )
           ) {
-            // eslint-disable-next-line jest/no-conditional-expect
             expect(
               toListWithTolerance(mischEkZwischenErgebnis.abgaben.toNumber()),
             ).toContain(sheet.ergebnisAbgaben(testCaseIndex).toNumber());
-            // eslint-disable-next-line jest/no-conditional-expect
             expect(
               toListWithTolerance(mischEkZwischenErgebnis.steuern.toNumber()),
             ).toContain(sheet.ergebnisSteuern(testCaseIndex).toNumber());

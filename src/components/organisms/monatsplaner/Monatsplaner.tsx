@@ -195,11 +195,12 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     const validationMaxBEGFailed = checkMaxBEG(elternteile, antragstellende);
 
     if (validationMaxBEGFailed) {
-      setNotificationMessages([<NotificationBEGMax />]);
+      setNotificationMessages([<NotificationBEGMax key="beg-max" />]);
     } else if (!validation.isValid) {
       setNotificationMessages([
         <NotificationValidationMonatsplaner
           errorCodes={validation.errorCodes}
+          key="validation-monatsplaner-generic-error-codes"
         />,
       ]);
     } else {
@@ -237,30 +238,39 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     const begEmptyOnly = BEGRemainingMonth === 0 && EGPlusRemainingMonth !== 0;
 
     if (validationMaxBEGFailed) {
-      setNotificationMessages([<NotificationBEGMax />]);
+      setNotificationMessages([<NotificationBEGMax key="beg-max" />]);
     } else if (
       doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll &&
       alleinerziehend
     ) {
-      setNotificationMessages([<NotificationBEGHintMin />]);
+      setNotificationMessages([<NotificationBEGHintMin key="beg-hint-min" />]);
     } else if (
       (doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll && !alleinerziehend) ||
       showNotificationBEGHintMinMax
     ) {
-      setNotificationMessages([<NotificationBEGHintMinMax />]);
+      setNotificationMessages([
+        <NotificationBEGHintMinMax key="beg-hint-min-max" />,
+      ]);
     } else if (doesNotHaveContinuousEGAfterBEGAnspruch) {
       setNotificationMessages([
         <NotificationValidationMonatsplaner
           errorCodes={["DoesNotHaveContinuousEGAfterBEGAnspruch"]}
+          key="validation-monatsplaner-does-not-have-continuous-eg-after-beg-anspruch"
         />,
       ]);
     } else if (begAndEgPlusEmpty) {
       setNotificationMessages([
-        <NotificationNoFurtherMonthAvailable targetType="BEGAndEG+" />,
+        <NotificationNoFurtherMonthAvailable
+          targetType="BEGAndEG+"
+          key="no-further-month-available-beg-and-egplus"
+        />,
       ]);
     } else if (begEmptyOnly) {
       setNotificationMessages([
-        <NotificationNoFurtherMonthAvailable targetType="BEG" />,
+        <NotificationNoFurtherMonthAvailable
+          targetType="BEG"
+          key="no-further-month-available-beg"
+        />,
       ]);
     }
   }, [
@@ -304,7 +314,9 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
       monthIndex > lowestAllowedDeselectablePSBIndex &&
       monthIndex < highestAllowedDeselectablePSBIndex
     ) {
-      setNotificationMessages([<NotificationPSBNotDeselectable />]);
+      setNotificationMessages([
+        <NotificationPSBNotDeselectable key="psb-not-deselectable" />,
+      ]);
       return;
     }
 
@@ -325,12 +337,15 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
 
       setNotificationMessages([
         ...(antragstellende === "FuerBeide"
-          ? [<NotificationPSBChangeOtherElternteil />]
+          ? [
+              <NotificationPSBChangeOtherElternteil key="psb-change-other-elternteil" />,
+            ]
           : []),
         ...(automaticallySelectedIndex
           ? [
               <NotificationPSBAutomaticallySelection
                 label={lebensmonate[automaticallySelectedIndex].labelLong}
+                key="psb-automatically-selection"
               />,
             ]
           : []),
@@ -358,7 +373,9 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
       monthIndex > lowestAllowedDeselectablePSBIndex &&
       monthIndex < highestAllowedDeselectablePSBIndex
     ) {
-      setNotificationMessages([<NotificationPSBNotDeselectable />]);
+      setNotificationMessages([
+        <NotificationPSBNotDeselectable key="psb-not-deselectable" />,
+      ]);
       return;
     }
 
@@ -438,7 +455,9 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     if (reachedLimit && !isException) {
       if (!showedNotificationForMaxSimultaneousBEGMonths) {
         setShowedNotificationForMaxSimultaneousBEGMonths(true);
-        setNotificationMessages([<NotificationMaxSimultaneousBEGMonths />]);
+        setNotificationMessages([
+          <NotificationMaxSimultaneousBEGMonths key="max-simultatenous-beg-months" />,
+        ]);
       }
     } else {
       setShowedNotificationForMaxSimultaneousBEGMonths(false);

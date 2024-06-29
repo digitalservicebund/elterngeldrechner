@@ -18,7 +18,6 @@ describe("Foot Note Number", () => {
     expect(footNoteNumber1.id).toContain("footnote_1");
 
     const wrapper = screen.getByTestId("wrapper");
-    // eslint-disable-next-line testing-library/no-node-access
     const footNote1 = wrapper.querySelector(".egr-foot-note__note");
     if (footNote1 === null) {
       throw new Error("footNote1 not found");

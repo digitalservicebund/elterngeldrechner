@@ -163,11 +163,7 @@ const calculateBEG = createAsyncThunk(
 const recalculateBEG = createAsyncThunk(
   "stepRechner/recalculateBEG",
   async (
-    {
-      elternteil,
-      bruttoEinkommenZeitraum,
-      previousBEGAmount,
-    }: RecalculateElterngeldPayload,
+    { elternteil, bruttoEinkommenZeitraum }: RecalculateElterngeldPayload,
     thunkAPI,
   ) => {
     const state = thunkAPI.getState() as RootState;

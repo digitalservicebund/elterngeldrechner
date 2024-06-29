@@ -444,7 +444,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     let pbMonatBis: number = 0;
     let counter: number = 0;
     for (let index = 0; index < eg_verlauf.length; index++) {
-      let monat = eg_verlauf[index];
+      const monat = eg_verlauf[index];
       counter++;
       if (monat === ElternGeldArt.PARTNERSCHAFTS_BONUS && pbMonatVon === 0) {
         pbMonatVon = counter;

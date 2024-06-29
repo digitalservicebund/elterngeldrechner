@@ -1,13 +1,15 @@
 {
   "extends": [
-    "react-app",
-    "react-app/jest",
     "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
     "plugin:prettier/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:tailwindcss/recommended",
     "plugin:import/recommended",
     "plugin:deprecation/recommended",
+    "plugin:vitest-globals/recommended",
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
@@ -31,14 +33,26 @@
     "react/jsx-no-constructed-context-values": "error",
     "react/button-has-type": "error",
   },
-  "plugins": ["prettier", "jsx-a11y", "no-relative-import-paths"],
+  "plugins": ["@typescript-eslint", "prettier", "jsx-a11y", "no-relative-import-paths"],
   "settings": {
     "import/resolver": {
-      "typescript": true
-    }
+      "typescript": true,
+    },
+    "react": {
+      "version": "18.2",
+    },
   },
-  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true,
+    "vitest-globals/env": true,
+  },
   "parserOptions": {
     "project": "./tsconfig.json",
-  }
+    "sourceType": "module",
+    "ecmaVersion": 2020,
+  },
+  "parser": "@typescript-eslint/parser",
 }

@@ -150,7 +150,7 @@ describe("persoenlicheDatenFactory", () => {
 
   it("should create PersoenlicheDaten for ET2 with ErwerbsTaetigkeitNachGeburt", () => {
     // given
-    let bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[] = [
+    const bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[] = [
       { bruttoEinkommen: 1000, zeitraum: { from: "1", to: "1" } },
     ];
 

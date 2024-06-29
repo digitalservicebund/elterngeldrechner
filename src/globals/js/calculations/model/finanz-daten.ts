@@ -48,7 +48,7 @@ export class FinanzDaten {
       index < this.erwerbsZeitraumLebensMonatList.length;
       index++
     ) {
-      let erwerbszeitraum = this.erwerbsZeitraumLebensMonatList[index];
+      const erwerbszeitraum = this.erwerbsZeitraumLebensMonatList[index];
       for (
         let lm: number = erwerbszeitraum.vonLebensMonat;
         lm <= erwerbszeitraum.bisLebensMonat;
@@ -76,7 +76,7 @@ export class FinanzDaten {
       index < this.erwerbsZeitraumLebensMonatList.length;
       index++
     ) {
-      let erwerbszeitraum = this.erwerbsZeitraumLebensMonatList[index];
+      const erwerbszeitraum = this.erwerbsZeitraumLebensMonatList[index];
       for (
         let lm: number = erwerbszeitraum.vonLebensMonat;
         lm <= erwerbszeitraum.bisLebensMonat;

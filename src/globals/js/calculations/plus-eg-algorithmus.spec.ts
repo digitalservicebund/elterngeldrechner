@@ -61,7 +61,7 @@ describe("plus-eg-algorithmus", () => {
     ])("if geburt of child is %p", (geburtIsoDate: string, expectedLmList) => {
       it("create LebensMonateList", () => {
         // given
-        let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+        const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
 
         // when
         const plusEgAlgorithmus = new PlusEgAlgorithmus();

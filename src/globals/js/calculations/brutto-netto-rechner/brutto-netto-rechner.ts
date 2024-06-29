@@ -85,7 +85,7 @@ export class BruttoNettoRechner {
     erwerbsArtVorGeburt: ErwerbsArt,
     lohnSteuerJahr: number,
   ): Promise<NettoEinkommen> {
-    let netto: NettoEinkommen = new Einkommen(0);
+    const netto: NettoEinkommen = new Einkommen(0);
     const status: ErwerbsArt = erwerbsArtVorGeburt;
     const brutto: Big = finanzdaten.bruttoEinkommen.value;
     const art_rv: RentenArt = finanzdaten.rentenVersicherung;

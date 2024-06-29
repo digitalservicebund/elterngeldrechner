@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { Versicherungen } from "./Versicherungen";

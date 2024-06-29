@@ -45,7 +45,7 @@ export function MonatsplanerMonth({
     onMouseOver && onMouseOver();
   };
 
-  function onFocus(event: React.FocusEvent) {
+  function onFocus() {
     onMouseOver && onMouseOver();
   }
 

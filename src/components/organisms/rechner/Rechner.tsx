@@ -76,7 +76,7 @@ export function Rechner() {
 
   // effect to show notification for calculation change caused by previous input
   useEffect(() => {
-    let name = [];
+    const name = [];
     if (hasElternteil1BEGResultChangedDueToPrevFormSteps) {
       name.push(elternteilNames.ET1);
     }
@@ -89,6 +89,7 @@ export function Rechner() {
         <NotificationBEGResultWasRecalculated
           elternteilName={name.join(" und ")}
           alleinerziehend={alleinerziehend}
+          key="beg-result-was-recalculated"
         />,
       ]);
     }

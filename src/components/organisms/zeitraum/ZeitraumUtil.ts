@@ -37,7 +37,7 @@ export const availableZeitraumOptions = (
     to: cloneOptionsList(initialZeitraumOptions.to),
   };
   // from und to aller Zeiträume prüfen
-  let zeitraumList = currentZeitraumList.map((v) => {
+  const zeitraumList = currentZeitraumList.map((v) => {
     return { from: v.from, to: v.to };
   });
   if (lastZeitraumValue) {

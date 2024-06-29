@@ -1,7 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
 
-/* eslint-disable testing-library/prefer-screen-queries */
-
 const testStyles = async ({
   page,
   screenSize,

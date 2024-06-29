@@ -84,7 +84,6 @@ const preloadedState: Partial<RootState> = {
 };
 
 function getFieldByName(name: string): Element {
-  // eslint-disable-next-line testing-library/no-node-access
   const element = document.querySelector(`[name="${name}"]`);
   if (element === null) {
     throw new Error(`Element with name ${name} not found.`);

@@ -79,7 +79,7 @@ export function zaehleMonateErwerbsTaetigkeit(
     return 0;
   }
   for (let index = 0; index < erwerbsZeitraeume.length; index++) {
-    let curr = erwerbsZeitraeume[index];
+    const curr = erwerbsZeitraeume[index];
     anzahlMonate += curr.getAnzahlMonate();
   }
   return anzahlMonate;

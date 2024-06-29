@@ -46,7 +46,9 @@ export function RechnerResult({ elternteil }: Props) {
     if (result.state === "success") {
       result.data.every((value) => {
         if (value.basisElternGeld >= 1800 || value.nettoEinkommen >= 2770) {
-          setNotificationMessages([<NotificationMaxElterngeld />]);
+          setNotificationMessages([
+            <NotificationMaxElterngeld key={value.vonLebensMonat} />,
+          ]);
           return false;
         }
         return true;

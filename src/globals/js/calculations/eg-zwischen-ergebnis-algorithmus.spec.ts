@@ -15,8 +15,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       (geburtIsoDate: string, endeU2IsoDate: string) => {
         it("ohne geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
           ];
 
@@ -65,8 +65,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ) => {
         it("mit geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
             {
               nummer: 2,
@@ -106,8 +106,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ) => {
         it("mit geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
             {
               nummer: 2,
@@ -147,8 +147,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       (geburtIsoDate: string, endeU14IsoDate: string) => {
         it("ohne geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
           ];
 
@@ -194,8 +194,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ) => {
         it("mit geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
             {
               nummer: 2,
@@ -238,8 +238,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ) => {
         it("mit geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
             {
               nummer: 2,
@@ -279,8 +279,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       (geburtIsoDate: string, endeU2IsoDate: string) => {
         it("ohne geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
           ];
 
@@ -322,8 +322,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ) => {
         it("mit geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
             {
               nummer: 2,
@@ -370,8 +370,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ) => {
         it("mit geschwister", () => {
           // given
-          let geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          let geschwister: Kind[] = [
+          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+          const geschwister: Kind[] = [
             { nummer: 1, geburtsdatum: undefined, istBehindert: false },
             {
               nummer: 2,

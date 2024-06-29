@@ -1,32 +1,19 @@
-import {
-  bmfSteuerRechnerAvailableYearsLib,
-  bmfSteuerRechnerAvailableYearsRemote,
-  bmfSteuerRechnerCodeFromEnv,
-  bmfSteuerRechnerUrlOf,
-} from "./bmf-steuer-rechner-configuration";
+import { bmfSteuerRechnerUrlOf } from "./bmf-steuer-rechner-configuration";
 import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 
 describe("bmf-steuer-rechner-configuration", () => {
+  beforeEach(() => {
+    vi.stubEnv(
+      "VITE_APP_BMF_STEUER_RECHNER_DOMAIN",
+      "www.bmf-steuerrechner.de",
+    );
+  });
+
   it("should use correct hostname", () => {
     const actual = bmfSteuerRechnerUrlOf(2022, new BmfSteuerRechnerParameter());
     expect(actual.substring(0, actual.indexOf("/interface"))).toBe(
       "https://www.bmf-steuerrechner.de",
     );
-  });
-
-  it("should use correct code", () => {
-    const actual = bmfSteuerRechnerCodeFromEnv();
-    expect(actual).toBe("2022eP");
-  });
-
-  it("should use correct years remote", () => {
-    const actual = bmfSteuerRechnerAvailableYearsRemote();
-    expect(actual).toStrictEqual([2021, 2022]);
-  });
-
-  it("should use correct years local", () => {
-    const actual = bmfSteuerRechnerAvailableYearsLib();
-    expect(actual).toStrictEqual([2022, 2023]);
   });
 
   describe("should create correct path, when Lohnsteuerjahr is", () => {

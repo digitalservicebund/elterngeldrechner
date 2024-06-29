@@ -16,8 +16,8 @@ export async function setupUserTracking(): Promise<void> {
   }
 }
 
-function getTagMangerSourceUrl(): string | undefined {
-  return process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE;
+function getTagMangerSourceUrl(): string {
+  return import.meta.env.VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE;
 }
 
 async function isTrackingAllowedByUser(): Promise<boolean> {

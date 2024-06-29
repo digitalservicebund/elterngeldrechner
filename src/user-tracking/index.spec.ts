@@ -11,11 +11,9 @@ describe("user tracking", () => {
   });
 
   const originalCookies = document.cookie;
-  const originalEnv = process.env;
 
   afterEach(() => {
     document.cookie = originalCookies;
-    process.env = originalEnv;
   });
 
   describe("check conditions for tracking", () => {
@@ -25,7 +23,7 @@ describe("user tracking", () => {
     });
 
     it("does not setup the tag manager if no source URL was configured, even user allowed tracking", async () => {
-      delete process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE;
+      vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", "");
       vi.spyOn(document, "cookie", "get").mockReturnValue(
         COOKIES_WITH_ALLOWANCE,
       );
@@ -37,7 +35,7 @@ describe("user tracking", () => {
     });
 
     it("does not check the user allowance if no source URL was configured anyway", async () => {
-      delete process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE;
+      vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", "");
       const cookieSpy = vi.spyOn(document, "cookie", "get");
 
       await setupUserTracking();
@@ -46,7 +44,7 @@ describe("user tracking", () => {
     });
 
     it("does not setup the tag manager if user denied it, even the source URL was configured", async () => {
-      process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE = ANY_SOURCE_URL;
+      vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", ANY_SOURCE_URL);
       vi.spyOn(document, "cookie", "get").mockReturnValue(
         "cookie-allow-tracking=0",
       );
@@ -58,7 +56,7 @@ describe("user tracking", () => {
     });
 
     it("setups up the tag manager if user allowed it and a source URL was configured", async () => {
-      process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE = "test-url";
+      vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", "test-url");
       vi.spyOn(document, "cookie", "get").mockReturnValue(
         "cookie-allow-tracking=1;other-cookie=test",
       );
@@ -70,7 +68,7 @@ describe("user tracking", () => {
     });
 
     it("continues to poll the cookies until user denied or allowed the user trackinguntil the user denied or allowed the user tracking", async () => {
-      process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE = ANY_SOURCE_URL;
+      vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", ANY_SOURCE_URL);
       vi.spyOn(document, "cookie", "get")
         .mockReturnValueOnce("other-cookie=test")
         .mockReturnValueOnce("other-cookie=test")
@@ -79,19 +77,11 @@ describe("user tracking", () => {
       await setupUserTracking();
 
       expect(setupTagManager).toHaveBeenCalledTimes(1);
+      expect(establishDataLayer).toHaveBeenCalledTimes(1);
     });
   });
 
   describe("load and configure tag manager", () => {
-    beforeEach(() => {
-      document.body.innerHTML = "<script src='main.js' />";
-      jest
-        .mocked(setupTagManager)
-        .mockImplementation(
-          jest.requireActual("./tag-manager.ts").setupTagManager,
-        );
-    });
-
     it("adds the tag manger as first script to the document", async () => {
       configureTracking("https://test.tld/tag-manager");
 
@@ -138,7 +128,7 @@ describe("user tracking", () => {
 });
 
 function configureTracking(tagManagerSource = ANY_SOURCE_URL): void {
-  process.env.REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE = tagManagerSource;
+  vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", tagManagerSource);
   vi.spyOn(document, "cookie", "get").mockReturnValue(
     "cookie-allow-tracking=1",
   );

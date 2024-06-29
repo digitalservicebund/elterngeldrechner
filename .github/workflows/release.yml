@@ -17,7 +17,7 @@ jobs:
 
       - name: Build egr
         env:
-          REACT_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
+          VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
         run: npm ci && npm run build
 
       - name: Audit Licenses

@@ -1,11 +1,16 @@
 import { setTrackingVariable } from "./data-layer";
 import { trackNutzergruppe } from "./nutzergruppe";
 
-jest.mock("./data-layer.ts");
+vi.mock("./data-layer.ts");
 
 describe("trackNutzergruppe()", () => {
-  beforeEach(jest.useFakeTimers);
-  afterEach(jest.useRealTimers);
+  beforeEach(() => {
+    vi.useFakeTimers;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers;
+  });
 
   it("sets the tracking variabe 'nutzergruppe'", () => {
     trackNutzergruppe(ANY_BIRTHDATE);
@@ -25,7 +30,7 @@ describe("trackNutzergruppe()", () => {
   ])(
     "sets the variable to 'werdene Eltern' if the birthdate is in the future (case #$#)",
     (birthdate) => {
-      jest.setSystemTime(new Date(2024, 6, 2));
+      vi.setSystemTime(new Date(2024, 6, 2));
 
       trackNutzergruppe(birthdate);
 
@@ -45,7 +50,7 @@ describe("trackNutzergruppe()", () => {
   ])(
     "sets the variable to 'junge Eltern' if the birthdate was within the last three months (case #$#)",
     (birthdate: Date) => {
-      jest.setSystemTime(new Date(2024, 6, 2));
+      vi.setSystemTime(new Date(2024, 6, 2));
 
       trackNutzergruppe(birthdate);
 
@@ -64,7 +69,7 @@ describe("trackNutzergruppe()", () => {
   ])(
     "sets the variable to 'nachbeantragende Eltern' if the birthdate was in the past longer than three months ago (case #$#)",
     (birthdate: Date) => {
-      jest.setSystemTime(new Date(2024, 6, 2));
+      vi.setSystemTime(new Date(2024, 6, 2));
 
       trackNutzergruppe(birthdate);
 

@@ -1,28 +1,16 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
-import { ReactNode } from "react";
+import "@testing-library/jest-dom/vitest";
 import failOnConsole from "jest-fail-on-console";
+import { describe } from "vitest";
 import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 
-// Preferences for calculations.
 setupCalculation();
-jest.setTimeout(10000);
 
-window.scrollTo = jest.fn();
-window.HTMLElement.prototype.scrollIntoView = jest.fn();
+window.scrollTo = vi.fn(() => undefined);
+window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
-// mock only createPortal function of imported react-dom library
-jest.mock("react-dom", () => {
-  const actual = jest.requireActual("react-dom");
-
-  return {
-    ...actual,
-    createPortal: (element: ReactNode) => element,
-  };
-});
+const toastPortalTarget = document.createElement("div");
+toastPortalTarget.id = "egr-toast";
+document.body.appendChild(toastPortalTarget);
 
 failOnConsole({
   shouldFailOnAssert: true,
@@ -40,4 +28,4 @@ failOnConsole({
  * because external calls are forbidden on CI environment.
  */
 export const describeSkipOnCi =
-  process.env.CI === "true" ? describe.skip : describe;
+  import.meta.env.CI === "true" ? describe.skip : describe;

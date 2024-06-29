@@ -12,7 +12,7 @@ describe("brutto-netto-rechner", () => {
 
   it("should calculate test from TestErweiterterAlgorithmus.java", async () => {
     // given
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve(new Response(bmfSteuerRechnerResponse)),
     );
     const finanzDaten = new FinanzDaten();

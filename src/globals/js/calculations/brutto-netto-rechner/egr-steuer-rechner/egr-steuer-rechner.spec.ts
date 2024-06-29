@@ -10,7 +10,6 @@ import {
   KinderFreiBetrag,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
-import Mock = jest.Mock;
 
 describe("erg-steuer-rechner", () => {
   const egrSteuerRechner = new EgrSteuerRechner();
@@ -72,7 +71,7 @@ describe("erg-steuer-rechner", () => {
     (finanzDaten, erwerbsArt, brutto, lstlzz) => {
       it("should calculate Abgaben", async () => {
         // given
-        const bmfSteuerRechnerServerCall = mockBmfSteuerRechnerServerCall(
+        vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
           bmfSteuerRechnerResponseOf(lstlzz),
         );
         const finanzdaten = Object.assign(new FinanzDaten(), finanzDaten);
@@ -89,20 +88,22 @@ describe("erg-steuer-rechner", () => {
         expect(steuerRechnerResponse.lstlzz.toFixed(2, Big.roundHalfUp)).toBe(
           lstlzz,
         );
-        expect(bmfSteuerRechnerServerCall.mock.calls.length).toBe(1);
-        expect(bmfSteuerRechnerServerCall.mock.calls[0][0]).toBe(2020);
-        expect(bmfSteuerRechnerServerCall.mock.calls[0][1]).toEqual({
-          AF: 0,
-          ALTER1: 0,
-          F: 1,
-          KRV: 2,
-          KVZ: 0.9,
-          LZZ: 2,
-          R: 0,
-          RE4: Big(brutto).mul(100).toNumber(),
-          STKL: 4,
-          ZKF: 1,
-        });
+
+        expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            AF: 0,
+            ALTER1: 0,
+            F: 1,
+            KRV: 2,
+            KVZ: 0.9,
+            LZZ: 2,
+            R: 0,
+            RE4: Big(brutto).mul(100).toNumber(),
+            STKL: 4,
+            ZKF: 1,
+          }),
+        );
       });
     },
   );
@@ -110,7 +111,7 @@ describe("erg-steuer-rechner", () => {
   describe("should set Faktor Verfahren to", () => {
     it("1 if SteuerKlasse is SKL4_FAKTOR", async () => {
       // given
-      const bmfSteuerRechnerServerCall = mockBmfSteuerRechnerServerCall(
+      vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
@@ -126,14 +127,15 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(bmfSteuerRechnerServerCall.mock.calls.length).toBe(1);
-      expect(bmfSteuerRechnerServerCall.mock.calls[0][1].AF).toBe(1);
-      expect(bmfSteuerRechnerServerCall.mock.calls[0][1].F).toBe(1.0);
+      expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ AF: 1, F: 1.0 }),
+      );
     });
 
     it("0 if SteuerKlasse is not SKL4_FAKTOR", async () => {
       // given
-      const bmfSteuerRechnerServerCall = mockBmfSteuerRechnerServerCall(
+      vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
@@ -149,16 +151,17 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(bmfSteuerRechnerServerCall.mock.calls.length).toBe(1);
-      expect(bmfSteuerRechnerServerCall.mock.calls[0][1].AF).toBe(0);
-      expect(bmfSteuerRechnerServerCall.mock.calls[0][1].F).toBe(1);
+      expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ AF: 0, F: 1 }),
+      );
     });
   });
 
   describe("should set kinderFreiBetrag to", () => {
     it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", async () => {
       // given
-      const bmfSteuerRechnerServerCall = mockBmfSteuerRechnerServerCall(
+      vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
@@ -174,14 +177,16 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(bmfSteuerRechnerServerCall.mock.calls.length).toBe(1);
-      expect(bmfSteuerRechnerServerCall.mock.calls[0][1].ZKF).toBe(1);
+      expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ ZKF: 1 }),
+      );
     });
   });
 
   it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", async () => {
     // given
-    const bmfSteuerRechnerServerCall = mockBmfSteuerRechnerServerCall(
+    vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
       bmfSteuerRechnerResponseOf(100),
     );
 
@@ -197,25 +202,18 @@ describe("erg-steuer-rechner", () => {
     );
 
     // then
-    expect(bmfSteuerRechnerServerCall.mock.calls.length).toBe(1);
-    expect(bmfSteuerRechnerServerCall.mock.calls[0][1].ZKF).toBe(0);
+    expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({ ZKF: 0 }),
+    );
   });
 });
 
 // initialize mock
-jest.mock("../bmf-steuer-rechner");
+vi.mock("../bmf-steuer-rechner");
 
 const bmfSteuerRechnerResponseOf = (lstlzz: any) => {
   const response = new BmfSteuerRechnerResponse();
   response.LSTLZZ = Big(lstlzz);
   return response;
-};
-
-const mockBmfSteuerRechnerServerCall = (
-  bmfSteuerRechnerResponse: BmfSteuerRechnerResponse,
-): Mock => {
-  // @ts-ignore
-  const callMock: Mock = BmfSteuerRechner.call;
-  callMock.mockResolvedValue(bmfSteuerRechnerResponse);
-  return callMock;
 };

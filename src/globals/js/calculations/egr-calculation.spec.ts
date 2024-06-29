@@ -20,7 +20,7 @@ describe("egr-calculation", () => {
 
   beforeEach(() => {
     // Mocks calls to BMF Lohn- und Einkommensteuerrechner. @see: BmfSteuerRechner.queryBmfSteuerRechner()
-    global.fetch = jest.fn((url) => {
+    global.fetch = vi.fn((url) => {
       // returns saved mock responses for specified URLs
       return Promise.resolve(new Response(bodyForUrl(url)));
     });

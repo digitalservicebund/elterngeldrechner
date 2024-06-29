@@ -7,7 +7,7 @@ import {
 import { act, renderHook } from "@/test-utils/test-utils";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
-jest.mock("@/user-tracking/partnerschaftlichkeit");
+vi.mock("@/user-tracking/partnerschaftlichkeit");
 
 describe("usePartnerschaftlichskeitFaktorTracking", () => {
   it("should trigger the tracking of 'partnerschaftliche Verteilung'", () => {

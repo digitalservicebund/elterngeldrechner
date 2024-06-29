@@ -9,7 +9,7 @@ describe("bmf-steuer-rechner-remote", () => {
     [{ LZZ: 2, RE4: 208333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "166.75"],
   ])("when parameter are %j, then expect Lohnsteuer %d", (params, lstlzz) => {
     it("should calculate Lohnsteuer", async () => {
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve(new Response(createResponseXml(lstlzz))),
       );
 
@@ -52,7 +52,7 @@ describe("bmf-steuer-rechner-lib", () => {
     "when year is %d and parameter are %j, then expect Lohnsteuer %d",
     (lohnSteuerJahr, params, lstlzz) => {
       it("should calculate Lohnsteuer", async () => {
-        global.fetch = jest.fn(() =>
+        global.fetch = vi.fn(() =>
           Promise.resolve(new Response(createResponseXml(lstlzz))),
         );
 

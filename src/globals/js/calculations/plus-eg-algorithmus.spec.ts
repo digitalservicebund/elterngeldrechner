@@ -87,7 +87,7 @@ describe("plus-eg-algorithmus", () => {
   describe("should calculate ElternGeldPlusErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", async () => {
       // given
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve(new Response(bmfSteuerRechnerResponse)),
       );
 

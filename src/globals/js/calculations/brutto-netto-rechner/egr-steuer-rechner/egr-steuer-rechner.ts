@@ -31,8 +31,8 @@ export class EgrSteuerRechner {
     const jahrVorDerGeburt = geburtsDatumJahr - 1;
 
     const availableYears = BmfSteuerRechner.USE_REMOTE_STEUER_RECHNER
-      ? bmfSteuerRechnerAvailableYearsRemote()
-      : bmfSteuerRechnerAvailableYearsLib();
+      ? bmfSteuerRechnerAvailableYearsRemote
+      : bmfSteuerRechnerAvailableYearsLib;
     if (availableYears.includes(jahrVorDerGeburt)) {
       return jahrVorDerGeburt;
     }

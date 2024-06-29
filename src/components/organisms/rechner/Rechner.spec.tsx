@@ -18,12 +18,12 @@ import {
 } from "@/redux/stepRechnerSlice";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
 
-jest.mock("../../../globals/js/calculations/egr-calculation");
+vi.mock("../../../globals/js/calculations/egr-calculation");
 
 describe("Rechner", () => {
   let simulationErgebnis: ElternGeldSimulationErgebnis;
   const mockEgrSimulation = {
-    simulate: jest.fn(),
+    simulate: vi.fn(),
   };
   const stepNachwuchs: StepNachwuchsState = {
     anzahlKuenftigerKinder: 1,
@@ -50,7 +50,7 @@ describe("Rechner", () => {
     mockEgrSimulation.simulate.mockImplementation(
       async () => simulationErgebnis,
     );
-    (EgrCalculation as unknown as jest.Mock).mockImplementation(
+    vi.mocked(EgrCalculation as any).mockImplementation(
       () => mockEgrSimulation,
     );
   });

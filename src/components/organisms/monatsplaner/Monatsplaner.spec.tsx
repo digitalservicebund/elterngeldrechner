@@ -14,7 +14,6 @@ import {
   changeMonth,
   createElternteile,
   validateElternteile,
-  ValidationResult,
 } from "@/monatsplaner";
 import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
 import { YesNo } from "@/globals/js/calculations/model";
@@ -69,15 +68,9 @@ const testLebensmonateLabels = [
   "32 März",
 ];
 
-jest.setTimeout(90000);
-jest.mock("../../../monatsplaner", () => {
-  // mock only specific function of imported library
-  const actual = jest.requireActual("../../../monatsplaner");
-
-  return {
-    ...actual,
-    validateElternteile: jest.fn(),
-  };
+vi.mock("../../../monatsplaner", async (importOriginal) => {
+  const module = await importOriginal<typeof import("../../../monatsplaner")>();
+  return { ...module, validateElternteile: vi.fn() };
 });
 
 describe("Monatsplaner", () => {
@@ -367,7 +360,7 @@ describe("Monatsplaner", () => {
       /ihre verfügbaren Basiselterngeld- und ElterngeldPlus-Monate sind aufgebraucht/i,
     );
     expect(notificationEGZeroMonthAvailable).toBeVisible();
-  });
+  }, 6000);
 
   it("should show notification on click on 11 + 1 beg month", async () => {
     //render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
@@ -400,14 +393,12 @@ describe("Monatsplaner", () => {
     render(<Monatsplaner mutterSchutzMonate={0} />, {
       preloadedState: stateForBoth,
     });
-    const mockValidateElternteile =
-      validateElternteile as jest.Mock<ValidationResult>;
 
-    mockValidateElternteile.mockReturnValue({
+    vi.mocked(validateElternteile).mockReturnValue({
       isValid: false,
       errorCodes: ["DoesNotHaveContinuousEGAfterBEGAnspruch"],
     });
-    mockValidateElternteile.mockClear();
+    vi.mocked(validateElternteile).mockClear();
 
     const expandButton = screen.getByRole("button", {
       name: "Alle Monate anzeigen",
@@ -846,7 +837,6 @@ describe("Monatsplaner", () => {
         },
       });
 
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const bonus = container.querySelector(
         ".egr-elternteil__th--partnerschaftsbonus",
       );
@@ -865,7 +855,6 @@ describe("Monatsplaner", () => {
         },
       });
 
-      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
       const bonus = container.querySelector(
         ".egr-elternteil__th--partnerschaftsbonus",
       );
@@ -874,11 +863,8 @@ describe("Monatsplaner", () => {
   });
 
   describe("Submit validation Monatsplaner", () => {
-    const mockValidateElternteile =
-      validateElternteile as jest.Mock<ValidationResult>;
-
     beforeEach(() => {
-      mockValidateElternteile.mockClear();
+      vi.mocked(validateElternteile).mockClear();
     });
 
     it.each([
@@ -907,7 +893,7 @@ describe("Monatsplaner", () => {
       async (expectedText, errorCode) => {
         render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
 
-        mockValidateElternteile.mockReturnValue({
+        vi.mocked(validateElternteile).mockReturnValue({
           isValid: false,
           errorCodes: [errorCode],
         });
@@ -952,8 +938,8 @@ describe("Monatsplaner", () => {
 
     it("triggers smooth scrolling and shifts focus when repeat planning", async () => {
       render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-      const scrollMock = jest.fn();
-      const focusMock = jest.fn();
+      const scrollMock = vi.fn();
+      const focusMock = vi.fn();
       window.HTMLElement.prototype.scrollIntoView = scrollMock;
       window.HTMLElement.prototype.focus = focusMock;
       const repeatButton = screen.getByText("Planung wiederholen");

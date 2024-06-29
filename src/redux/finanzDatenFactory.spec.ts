@@ -28,9 +28,9 @@ import {
   YesNo,
 } from "@/globals/js/calculations/model";
 
-jest.mock("react-redux", () => ({
-  useSelector: jest.fn(),
-  useDispatch: jest.fn(),
+vi.mock("react-redux", () => ({
+  useSelector: vi.fn(),
+  useDispatch: vi.fn(),
 }));
 
 const finanzDatenOf = (data: any) => {

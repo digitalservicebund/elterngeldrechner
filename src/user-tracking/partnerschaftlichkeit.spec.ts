@@ -2,7 +2,7 @@ import { setTrackingVariable } from "./data-layer";
 import { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 import { ElterngeldType } from "@/monatsplaner";
 
-jest.mock("./data-layer.ts");
+vi.mock("./data-layer.ts");
 
 describe("partnerschaftlichkeit", () => {
   it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {

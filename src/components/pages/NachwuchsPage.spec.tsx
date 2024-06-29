@@ -14,7 +14,7 @@ import { YesNo } from "@/globals/js/calculations/model";
 import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
 import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
 
-jest.mock("../../monatsplaner");
+vi.mock("../../monatsplaner");
 
 const currentYear = new Date().getFullYear();
 
@@ -335,7 +335,7 @@ describe("Submitting the form", () => {
     const mockElternteile: Elternteile = {
       ET1: { months: [{ type: "EG+" }] },
     } as unknown as Elternteile;
-    (createElternteile as jest.Mock).mockReturnValue(mockElternteile);
+    vi.mocked(createElternteile).mockReturnValue(mockElternteile);
     const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
 
     const createElternteileSettings = createDefaultElternteileSettings(
@@ -387,7 +387,7 @@ describe("Submitting the form", () => {
     const mockElternteile: Elternteile = {
       ET1: { months: [{ type: "EG+" }] },
     } as unknown as Elternteile;
-    (createElternteile as jest.Mock).mockReturnValue(mockElternteile);
+    vi.mocked(createElternteile).mockReturnValue(mockElternteile);
     const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
 
     const validState: Partial<RootState> = {

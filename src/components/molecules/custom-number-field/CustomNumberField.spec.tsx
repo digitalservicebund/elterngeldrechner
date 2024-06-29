@@ -14,7 +14,7 @@ interface Props {
 }
 
 describe.only("Custom Number Field", () => {
-  const onSubmit = jest.fn();
+  const onSubmit = vi.fn();
 
   function TestComponent({ allowedDecimalPlaces, max }: Props) {
     const { handleSubmit, control } = useForm<TestFormValues>();

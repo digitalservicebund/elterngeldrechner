@@ -4,14 +4,15 @@ import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngaben
 import { ElterngeldRow, calculateElterngeld } from "@/redux/stepRechnerSlice";
 import { act, renderHook } from "@/test-utils/test-utils";
 
-jest.mock("../../../redux/stepRechnerSlice", () => ({
-  ...jest.requireActual("../../../redux/stepRechnerSlice.ts"),
-  calculateElterngeld: jest.fn(),
-}));
+vi.mock("../../../redux/stepRechnerSlice", async (importOriginal) => {
+  const module =
+    await importOriginal<typeof import("../../../redux/stepRechnerSlice")>();
+  return { ...module, calculateElterngeld: vi.fn() };
+});
 
 describe("usePayoutAmounts", () => {
   it("calculates the amount only for the first parent if single applicant", async () => {
-    jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
+    vi.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
     const preloadedState: Partial<RootState> = {
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
@@ -32,7 +33,7 @@ describe("usePayoutAmounts", () => {
   });
 
   it("calculates the amounts for both parents if no single applicat", async () => {
-    jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
+    vi.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
     const preloadedState: Partial<RootState> = {
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
@@ -58,7 +59,7 @@ describe("usePayoutAmounts", () => {
   });
 
   it("provides the correct parent names", async () => {
-    jest.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
+    vi.mocked(calculateElterngeld).mockReturnValue(ANY_CALCULATION_PROMISE);
     const preloadedState: Partial<RootState> = {
       stepAllgemeineAngaben: {
         ...initialStepAllgemeineAngabenState,
@@ -80,7 +81,7 @@ describe("usePayoutAmounts", () => {
       elterngeldRow({ basisElternGeld: 0, elternGeldPlus: 0 }),
       elterngeldRow({ basisElternGeld: 1, elternGeldPlus: 2 }),
     ]);
-    jest.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
+    vi.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
 
     const { result } = renderHook(() => usePayoutAmounts());
     await act(() => calculationPromise);
@@ -91,11 +92,11 @@ describe("usePayoutAmounts", () => {
   });
 
   it("is initially undefined", async () => {
-    let resolveCalculation: (value: ElterngeldRow[]) => void = jest.fn();
+    let resolveCalculation: (value: ElterngeldRow[]) => void = vi.fn();
     const calculationPromise = new Promise<ElterngeldRow[]>((resolve) => {
       resolveCalculation = resolve;
     });
-    jest.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
+    vi.mocked(calculateElterngeld).mockReturnValue(calculationPromise);
 
     const { result } = renderHook(() => usePayoutAmounts());
 

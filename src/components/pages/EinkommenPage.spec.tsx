@@ -32,7 +32,7 @@ import {
 import { BasisEgAlgorithmus } from "@/globals/js/calculations/basis-eg-algorithmus";
 import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
-jest.mock("../../globals/js/calculations/basis-eg-algorithmus");
+vi.mock("../../globals/js/calculations/basis-eg-algorithmus");
 
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
@@ -683,7 +683,7 @@ describe("Einkommen Page", () => {
     };
 
     const mockBegAlgorithmus = {
-      berechneMischNettoUndBasiselterngeld: jest.fn(),
+      berechneMischNettoUndBasiselterngeld: vi.fn(),
     };
 
     beforeEach(() => {
@@ -703,7 +703,7 @@ describe("Einkommen Page", () => {
       mockBegAlgorithmus.berechneMischNettoUndBasiselterngeld.mockResolvedValue(
         begAlgorithmusResult,
       ); // mock resolved Promise return
-      (BasisEgAlgorithmus as jest.Mock).mockImplementation(
+      vi.mocked(BasisEgAlgorithmus as any).mockImplementation(
         () => mockBegAlgorithmus,
       ); // mock Class BasisEgAlgorithmus with mock method berechneMischNettoUndBasiselterngeld above
 

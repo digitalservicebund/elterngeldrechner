@@ -19,7 +19,7 @@ describe("basis-eg-algorithmus", () => {
   describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_010219.xlsx", () => {
     it("TESTFALL NO. 1", async () => {
       // given
-      global.fetch = jest.fn(() =>
+      global.fetch = vi.fn(() =>
         Promise.resolve(new Response(bmfSteuerRechnerResponse)),
       );
       const persoenlicheDaten = new PersoenlicheDaten(

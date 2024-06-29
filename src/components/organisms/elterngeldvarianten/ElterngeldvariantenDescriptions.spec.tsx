@@ -5,7 +5,7 @@ import { usePayoutAmounts } from "./usePayoutAmounts";
 import { render } from "@/test-utils/test-utils";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 
-jest.mock("./usePayoutAmounts");
+vi.mock("./usePayoutAmounts");
 
 /*
  * Notice that the current implicit ARIA roles and attributes for the
@@ -14,11 +14,11 @@ jest.mock("./usePayoutAmounts");
  */
 describe("ElterngeldvariantenDescription", () => {
   beforeEach(() => {
-    jest.mocked(usePayoutAmounts).mockReturnValue([ANY_PAYOUT_AMOUNTS]);
+    vi.mocked(usePayoutAmounts).mockReturnValue([ANY_PAYOUT_AMOUNTS]);
   });
 
   it("shows no descriptions when payout amounts are still calculated", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue(undefined);
+    vi.mocked(usePayoutAmounts).mockReturnValue(undefined);
     render(<ElterngeldvariantenDescriptions />);
 
     expect(
@@ -39,7 +39,7 @@ describe("ElterngeldvariantenDescription", () => {
   });
 
   it("should display a description for each Elterngeldvariante when amounts are calculated", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue([ANY_PAYOUT_AMOUNTS]);
+    vi.mocked(usePayoutAmounts).mockReturnValue([ANY_PAYOUT_AMOUNTS]);
     render(<ElterngeldvariantenDescriptions />);
 
     expect(
@@ -102,7 +102,7 @@ describe("ElterngeldvariantenDescription", () => {
   });
 
   it("shows the names and payout amounts for each parent and variants if both apply together", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue([
+    vi.mocked(usePayoutAmounts).mockReturnValue([
       {
         name: "Jane",
         basiselterngeld: 1,
@@ -136,7 +136,7 @@ describe("ElterngeldvariantenDescription", () => {
   });
 
   it("shows no name if single applicant", () => {
-    jest.mocked(usePayoutAmounts).mockReturnValue([
+    vi.mocked(usePayoutAmounts).mockReturnValue([
       {
         name: "Jane",
         basiselterngeld: 1,

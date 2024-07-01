@@ -9,14 +9,13 @@ pre-commit:
   parallel: true
   commands:
     format:
-      run: npx prettier --ignore-unknown --write {staged_files}
+      run: npm run format {staged_files}
       stage_fixed: true
     lint:
-      glob: "*.{js,ts,jsx,tsx}"
-      run: npx eslint {staged_files}
+      glob: "*.{ts,tsx,js}" # TODO: remove with new version of ESLint and the `--no-warn-ignored` flag.
+      run: npm run lint {staged_files}
     stylelint:
-      glob: "*.scss"
-      run: npx stylelint {staged_files}
+      run: npm run stylelint {staged_files}
     type-check:
       run: npm run type-check
     audit-licenses:

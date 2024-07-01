@@ -63,7 +63,7 @@ describe("Elternteil", () => {
     expect(screen.queryByText("ElterngeldPlus | 8 Monate")).toBeVisible();
     expect(screen.queryByText("2.000 €")).toBeVisible();
 
-    expect(screen.queryByText("BonusElterngeld | 2 Monate")).toBeVisible();
+    expect(screen.queryByText("Partnerschaftbonus | 2 Monate")).toBeVisible();
     expect(screen.queryByText("500 €")).toBeVisible();
   });
 
@@ -80,7 +80,7 @@ describe("Elternteil", () => {
     ).toBeVisible();
 
     expect(
-      screen.queryByText(/BonusElterngeld.*zusätzliches Einkommen/),
+      screen.queryByText(/Partnerschaftbonus.*zusätzliches Einkommen/),
     ).not.toBeInTheDocument();
   });
 });

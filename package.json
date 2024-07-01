@@ -14,9 +14,9 @@
     "format": "prettier --ignore-unknown --write ./",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test -- --watchAll=false",
     "type-check": "tsc",
-    "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
-    "lint-fix": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx}\"",
-    "stylelint": "stylelint \"./src/**/*.scss\"",
+    "lint": "eslint --max-warnings=0 ./",
+    "lint-fix": "eslint --fix ./",
+    "stylelint": "stylelint ./",
     "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "eslintConfig": {

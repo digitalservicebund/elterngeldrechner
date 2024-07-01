@@ -8,25 +8,31 @@ We want to distribute the following functionality in this package:
 3. EGR-Freemarker-Macro (?)
 
 ## Collaborating
+
 ### We want to share our code
+
 Therefor we will review the code we want to merge.\
 Every Merge Request has at least one different person as Reviewer.\
-The Reviewer will **NOT** merge, but review the changes, understand the changes and summarize the changes into one single comment *below* the Merge Request.\
+The Reviewer will **NOT** merge, but review the changes, understand the changes and summarize the changes into one single comment _below_ the Merge Request.\
 We can do this review on a pair-programming base, but will document all discussed findings.
 
 Only Maintainer are allowed to merge, but every Developer is allowed to review!
 
 ### Our common language is english
+
 Therefor our code-documentation will be in english.\
 Exception are allowed on technical domain to keep consistence for the domain.
 
 ## Committing
+
 ### We want to document our changes
+
 Therefor we want to commit our changes in a clean format:
 
 ```bash
 [ISSUE-ID] what this commit does
 ```
+
 For example:
 
 ```bash
@@ -38,13 +44,17 @@ Sometimes, we have changes, that are not issue related. In these cases, we docum
 ```bash
 [no issue] what this commit does
 ```
+
 For example:
+
 ```bash
 [no issue] updates vulnarable dependency after npm audit fix
 ```
 
 ### We want to keep our changes easy to understand
+
 In a commit we therefore want to keep two things as small as possible:
+
 1.  the number of changed files
 2.  the amount of changes in a file
 
@@ -54,7 +64,9 @@ So keep your commits small, but effective!
 A good indicator, that you did everything nicely, is when you have more commits than changes on your merge request!
 
 ## Developing
+
 ### We want to keep our code clean
+
 Therefor we do not disable linter rules. Linter rules are configured to keep all code contributed to this repository readable and maintainable.\
 If you really need to disable a rule, ask for permission to do so. Document whom you talked to.\
 Still, we don't want to use `stylelint-disable` or `eslint-disable`, because we want to avoid disabling rules for following files. Instead rather use `stylelint-disable-line` or `eslint-disable-next-line`.
@@ -66,13 +78,14 @@ Still, we don't want to use `stylelint-disable` or `eslint-disable`, because we 
 ```
 
 ```js
- //...
-    /* eslint-disable-next-line no-regex-spaces */ // granted by lheisinger
-    const re = /test   content/;
- //...
+//...
+/* eslint-disable-next-line no-regex-spaces */ // granted by lheisinger
+const re = /test   content/;
+//...
 ```
 
 #### Javascript
+
 We want to use `data-js-`-attributes as selector for our javascript components, when they are necessary.\
 We place configurations for a javascript component into this `data-js-`-attribute as a JSON-String.\
 We don't want to shorten our variable names. The configured minifier does this for us.
@@ -87,9 +100,10 @@ const myComponentConfiguration = $myComponent.data();
 ```
 
 #### Scss
+
 We want to use sass modules for our components.\
 We want to use `#{nsp("block")}` as prefix for our BEM organized css classes.\
-We want to use  this pattern for variable naming: `[component-block][__component-element|--modfier][--state]--[shortend-css-attribute]--(viewport)`\
+We want to use this pattern for variable naming: `[component-block][__component-element|--modfier][--state]--[shortend-css-attribute]--(viewport)`\
 We want to use the `Mobile-First`-Concept to style our components.\
 
 ```scss
@@ -112,16 +126,16 @@ $my-component__heading--hover--fs: egr.$heading--fs;
 .#{$nsp}my-component {
   font-size: px-to-rem($my-component--fs);
   // probably better: px-to-rem($ed-my-component--fs--sm)
-  
+
   &--small {
     font-size: px-to-rem($my-component--small--fs);
   }
 
   &__heading {
     font-size: px-to-rem($my-component__heading--fs);
-    
+
     &:hover {
-        font-size: px-to-rem($my-component__heading--hover--fs);
+      font-size: px-to-rem($my-component__heading--hover--fs);
     }
 
     @include media-breakpoint-up(lg) {
@@ -132,11 +146,12 @@ $my-component__heading--hover--fs: egr.$heading--fs;
 ```
 
 ### We want our components to be easy to customize
+
 Therefor we use the [`!default` parameter](https://sass-lang.com/documentation/variables#default-values) for variable definitions in our components `settings.scss`. This way the settings can easily be overridden by theme configurations in `src/applications/{theme}/settings.scss`.\
 Also we provide customizable variables through `data-js-`-attributes for javascript components.
 
-
 ### We want to document our components
+
 There for we add new components with the following structure:
 
 ```bash
@@ -150,13 +165,15 @@ my-new-component
 |- index.ts (*) forwarding for the React Component and types
 |- Readme.md (*)
 ```
+
 Files marked with `(*)` are optional.\
 Now you probably want to know what a README-file contains?
 
 ```md
 # My New Component
-What is this component for? 
-Why did we implemented it? 
+
+What is this component for?
+Why did we implemented it?
 What should it be used for?
 
 # Usage
@@ -166,24 +183,25 @@ Add best use case example here. Also add the output, which is expected to be ren
 # Params
 
 **MyNewComponent**
-|AttributeName|Default|Description        |
+|AttributeName|Default|Description |
 |-------------|:-----:|-------------------|
-|myAttribute  | *     | Modifies something|
+|myAttribute | \* | Modifies something|
 
 `*` marks required Parameters.
 ```
+
 ## Commitment
 
-[x] I, *apetrakow*, have read, understood and commit myself to these rules.
+[x] I, _apetrakow_, have read, understood and commit myself to these rules.
 
-[x] I, *slooschen*, have read, understood and commit myself to these rules.
+[x] I, _slooschen_, have read, understood and commit myself to these rules.
 
-[x] I, *kroth*, have read, understood and commit myself to these rules.
+[x] I, _kroth_, have read, understood and commit myself to these rules.
 
-[x] I, *nmeyer*, have read, understood and commit myself to these rules.
+[x] I, _nmeyer_, have read, understood and commit myself to these rules.
 
-[x] I, *mflohr*, have read, understood and commit myself to these rules.
+[x] I, _mflohr_, have read, understood and commit myself to these rules.
 
-[x] I, *twestphal*, have read, understood and commit myself to these rules.
+[x] I, _twestphal_, have read, understood and commit myself to these rules.
 
-[] I, *user*, have read, understood and commit myself to these rules.
+[] I, _user_, have read, understood and commit myself to these rules.

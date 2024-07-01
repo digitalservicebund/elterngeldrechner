@@ -1,7 +1,6 @@
 {
   "name": "@egr/egr-app",
   "version": "1.1.2",
-  "homepage": ".",
   "type": "module",
   "files": [
     "dist/*",

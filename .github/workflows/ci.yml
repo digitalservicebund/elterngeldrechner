@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: lint and test
-        run: source .env.test && npm run test-all
+        run: npm run test-all
 
   build:
     runs-on: ubuntu-latest

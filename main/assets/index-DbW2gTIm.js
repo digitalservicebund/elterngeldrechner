@@ -1,4 +1,4 @@
-const __vite__fileDeps=["assets/AllgemeineAngabenPage-j2_9zHKS.js","assets/Monatsplaner-nokPzFHG.js","assets/egr-configuration-CQt2ffdT.js","assets/Split-CaS9lp_z.js","assets/ButtonGroup-C-QMXmQO.js","assets/NachwuchsPage-ByUDLxG7.js","assets/ErwerbstaetigkeitPage-CB2sLASB.js","assets/EinkommenPage-B2YjSp0S.js","assets/RechnerPlanerPage-jHWUVCjq.js","assets/ZusammenfassungUndDatenPage-DIj7DDpj.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-DcOce29k.js","./Monatsplaner-BSDIXEPZ.js","./egr-configuration-BJOPx-MH.js","./Split-CD58Or6y.js","./ButtonGroup-B1DqUh8r.js","./NachwuchsPage-C1uIHrWO.js","./ErwerbstaetigkeitPage-BZXnyVBE.js","./EinkommenPage-bfzclPdk.js","./RechnerPlanerPage-B4vG4ui7.js","./ZusammenfassungUndDatenPage-fvXKN4kw.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -7389,26 +7389,34 @@ function createDispatchHook(context = ReactReduxContext) {
 var useDispatch = /* @__PURE__ */ createDispatchHook();
 initializeUseSelector(withSelectorExports.useSyncExternalStoreWithSelector);
 const scriptRel = "modulepreload";
-const assetsURL = function(dep) {
-  return "/" + dep;
+const assetsURL = function(dep, importerUrl) {
+  return new URL(dep, importerUrl).href;
 };
 const seen = {};
 const __vitePreload = function preload(baseModule, deps, importerUrl) {
   let promise = Promise.resolve();
   if (deps && deps.length > 0) {
-    document.getElementsByTagName("link");
+    const links = document.getElementsByTagName("link");
     const cspNonceMeta = document.querySelector(
       "meta[property=csp-nonce]"
     );
     const cspNonce = (cspNonceMeta == null ? void 0 : cspNonceMeta.nonce) || (cspNonceMeta == null ? void 0 : cspNonceMeta.getAttribute("nonce"));
     promise = Promise.all(
       deps.map((dep) => {
-        dep = assetsURL(dep);
+        dep = assetsURL(dep, importerUrl);
         if (dep in seen) return;
         seen[dep] = true;
         const isCss = dep.endsWith(".css");
         const cssSelector = isCss ? '[rel="stylesheet"]' : "";
-        if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) {
+        const isBaseRelative = !!importerUrl;
+        if (isBaseRelative) {
+          for (let i = links.length - 1; i >= 0; i--) {
+            const link2 = links[i];
+            if (link2.href === dep && (!isCss || link2.rel === "stylesheet")) {
+              return;
+            }
+          }
+        } else if (document.querySelector(`link[href="${dep}"]${cssSelector}`)) {
           return;
         }
         const link = document.createElement("link");
@@ -8844,7 +8852,6 @@ var classnames = { exports: {} };
 var classnamesExports = classnames.exports;
 const classNames = /* @__PURE__ */ getDefaultExportFromCjs(classnamesExports);
 function Button({
-  id: id2,
   className,
   buttonStyle = "primary",
   label,
@@ -8859,7 +8866,6 @@ function Button({
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "button",
     {
-      id: id2,
       className: classNames(
         nsp("button"),
         buttonStyle === "primary" && nsp("button--primary"),
@@ -23464,18 +23470,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-j2_9zHKS.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-DcOce29k.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-ByUDLxG7.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-C1uIHrWO.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-CB2sLASB.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-BZXnyVBE.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-B2YjSp0S.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-bfzclPdk.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-jHWUVCjq.js"), true ? __vite__mapDeps([8,1,2]) : void 0)
+  () => __vitePreload(() => import("./RechnerPlanerPage-B4vG4ui7.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-DIj7DDpj.js"), true ? __vite__mapDeps([9,2]) : void 0)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-fvXKN4kw.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -24110,7 +24116,7 @@ function addTagManagerScript(sourceUrl) {
   const firstScript = document.getElementsByTagName("script")[0];
   (_a = firstScript.parentNode) == null ? void 0 : _a.insertBefore(tagManagerScript, firstScript);
 }
-var define_import_meta_env_default = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", BASE_URL: "/", MODE: "production", DEV: false, PROD: true, SSR: false };
+var define_import_meta_env_default = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", BASE_URL: "./", MODE: "production", DEV: false, PROD: true, SSR: false };
 async function setupUserTracking() {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
   const isConfigured = !!tagMangerSourceUrl;

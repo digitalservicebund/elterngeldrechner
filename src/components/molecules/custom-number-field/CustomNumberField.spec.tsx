@@ -13,7 +13,7 @@ interface Props {
   readonly max?: number;
 }
 
-describe.only("Custom Number Field", () => {
+describe("Custom Number Field", () => {
   const onSubmit = vi.fn();
 
   function TestComponent({ allowedDecimalPlaces, max }: Props) {

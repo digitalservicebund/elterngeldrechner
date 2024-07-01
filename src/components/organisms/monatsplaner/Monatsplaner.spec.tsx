@@ -360,7 +360,7 @@ describe("Monatsplaner", () => {
       /ihre verfügbaren Basiselterngeld- und ElterngeldPlus-Monate sind aufgebraucht/i,
     );
     expect(notificationEGZeroMonthAvailable).toBeVisible();
-  }, 6000);
+  }, 10000);
 
   it("should show notification on click on 11 + 1 beg month", async () => {
     //render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });

@@ -119,4 +119,14 @@ describe("Zusammenfassung und Daten Page", () => {
     expect(kirchensteuer).not.toBeVisible();
     expect(kirchensteuer.getAttribute("value")).toBe("0");
   });
+
+  it("should show the user feedback section", () => {
+    render(<ZusammenfassungUndDatenPage />);
+
+    const feedbackSection = screen.queryByLabelText(
+      "War der Elterngeldrechner mit Planer für Sie hilfreich?",
+    );
+
+    expect(feedbackSection).toBeVisible();
+  });
 });

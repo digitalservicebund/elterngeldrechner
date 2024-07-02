@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserFeedbackSection } from "@/components/molecules/UserFeedbackSection";
 import { DatenInAntragUebernehmenButton } from "@/components/organisms/DatenInAntragUebernehmenButton";
 import { Button, PrintButton } from "@/components/atoms";
 import {
@@ -57,6 +58,8 @@ function ZusammenfassungUndDatenPage() {
           <DatenInAntragUebernehmenButton />
         </section>
       </div>
+
+      <UserFeedbackSection className="mt-40" />
     </Page>
   );
 }

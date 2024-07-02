@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-BhqyfC4B.js","./Monatsplaner-AgU1Vahl.js","./egr-configuration-7kzuoSFw.js","./Split-hgRpjT0G.js","./ButtonGroup-R9BYbdRk.js","./NachwuchsPage-Bc6e98Ia.js","./ErwerbstaetigkeitPage-DrSSpqYA.js","./EinkommenPage-DiKLxgTn.js","./RechnerPlanerPage-DCCX6xzE.js","./ZusammenfassungUndDatenPage-CgHZpPST.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-DFfVKPSu.js","./Monatsplaner-BQhzQM6u.js","./egr-configuration-DK9ALD-3.js","./Split-CzXq8C7P.js","./ButtonGroup-CXSnni0N.js","./NachwuchsPage-qJFIpIY6.js","./ErwerbstaetigkeitPage-ByzzRsiQ.js","./EinkommenPage-C8mupfT1.js","./RechnerPlanerPage-BBOjHt7H.js","./ZusammenfassungUndDatenPage-CTTOvXP3.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -23472,18 +23472,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-BhqyfC4B.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-DFfVKPSu.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-Bc6e98Ia.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-qJFIpIY6.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-DrSSpqYA.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-ByzzRsiQ.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-DiKLxgTn.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-C8mupfT1.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-DCCX6xzE.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-BBOjHt7H.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-CgHZpPST.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-CTTOvXP3.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -23902,7 +23902,8 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
       ET2: "Salomé Loreley Zoe"
     },
     alleinerziehend: null,
-    mutterschaftssleistungen: "NO"
+    mutterschaftssleistungen: YesNo.NO,
+    mutterschaftssleistungenWer: null
   },
   stepNachwuchs: {
     anzahlKuenftigerKinder: 1,
@@ -23912,31 +23913,39 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
         geburtsdatum: "24.10.2019",
         istBehindert: false
       }
-    ]
+    ],
+    mutterschaftssleistungen: YesNo.NO
   },
   stepErwerbstaetigkeit: {
     ET1: {
-      vorGeburt: "YES",
+      vorGeburt: YesNo.YES,
       isNichtSelbststaendig: true,
       isSelbststaendig: true,
-      sozialVersicherungsPflichtig: "YES",
-      monatlichesBrutto: "MehrAlsMiniJob"
+      sozialVersicherungsPflichtig: YesNo.YES,
+      monatlichesBrutto: "MehrAlsMiniJob",
+      mehrereTaetigkeiten: YesNo.NO
     },
     ET2: {
-      vorGeburt: "YES",
+      vorGeburt: YesNo.YES,
       isNichtSelbststaendig: true,
       isSelbststaendig: false,
-      sozialVersicherungsPflichtig: "YES",
+      sozialVersicherungsPflichtig: YesNo.YES,
       monatlichesBrutto: "MehrAlsMiniJob",
-      mehrereTaetigkeiten: "NO"
+      mehrereTaetigkeiten: YesNo.NO
     }
   },
   stepEinkommen: {
-    limitEinkommenUeberschritten: "NO",
+    antragstellende: "FuerBeide",
+    limitEinkommenUeberschritten: YesNo.NO,
     ET1: {
+      istErwerbstaetig: YesNo.YES,
+      hasMischEinkommen: YesNo.NO,
+      istSelbststaendig: false,
+      istNichtSelbststaendig: true,
       bruttoEinkommenNichtSelbstaendig: {
         type: "average",
         average: null,
+        perYear: null,
         perMonth: [
           null,
           null,
@@ -23954,10 +23963,11 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
       },
       steuerKlasse: SteuerKlasse.SKL3,
       splittingFaktor: null,
-      kinderFreiBetrag: "1",
+      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {
         type: "average",
         average: null,
+        perYear: null,
         perMonth: [
           null,
           null,
@@ -23974,13 +23984,13 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
         ]
       },
       rentenVersicherung: null,
-      zahlenSieKirchenSteuer: "YES",
-      kassenArt: "GESETZLICH_PFLICHTVERSICHERT",
+      zahlenSieKirchenSteuer: YesNo.YES,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       taetigkeitenNichtSelbstaendigUndSelbstaendig: [
         {
           artTaetigkeit: "NichtSelbststaendig",
           bruttoEinkommenDurchschnitt: 1e3,
-          isMinijob: "YES",
+          isMinijob: YesNo.YES,
           zeitraum: [
             { from: "1", to: "3" },
             { from: "6", to: "9" }
@@ -23995,7 +24005,7 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
         {
           artTaetigkeit: "Selbststaendig",
           bruttoEinkommenDurchschnitt: 2e3,
-          isMinijob: "NO",
+          isMinijob: YesNo.NO,
           zeitraum: [
             { from: "1", to: "5" },
             { from: "10", to: "12" }
@@ -24010,9 +24020,14 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
       ]
     },
     ET2: {
+      istErwerbstaetig: YesNo.YES,
+      hasMischEinkommen: YesNo.NO,
+      istSelbststaendig: false,
+      istNichtSelbststaendig: true,
       bruttoEinkommenNichtSelbstaendig: {
         type: "monthly",
         average: null,
+        perYear: null,
         perMonth: [
           800,
           900,
@@ -24028,12 +24043,13 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
           2500
         ]
       },
-      steuerKlasse: "1",
+      steuerKlasse: SteuerKlasse.SKL1,
       splittingFaktor: null,
-      kinderFreiBetrag: "1",
+      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {
         type: "average",
         average: null,
+        perYear: null,
         perMonth: [
           null,
           null,
@@ -24050,8 +24066,8 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
         ]
       },
       rentenVersicherung: null,
-      zahlenSieKirchenSteuer: "NO",
-      kassenArt: "GESETZLICH_PFLICHTVERSICHERT",
+      zahlenSieKirchenSteuer: YesNo.NO,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       taetigkeitenNichtSelbstaendigUndSelbstaendig: []
     }
   }

@@ -1,5 +1,5 @@
-import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$5, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BDf4gIZW.js";
-import { _ as _default$4, E as EgrConst } from "./egr-configuration-7kzuoSFw.js";
+import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$5, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BfUewW2j.js";
+import { _ as _default$4, E as EgrConst } from "./egr-configuration-DK9ALD-3.js";
 function PrintButton() {
   const handlePrint = () => {
     window.print();
@@ -61,7 +61,7 @@ function UserFeedbackSection({ className }) {
         className
       ),
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { id: labelIdentifier, className: "basis-full", children: "War der Elterngeldrechner mit Planer für Sie hilfreich?" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { id: labelIdentifier, className: "basis-full text-base", children: "War der Elterngeldrechner mit Planer für Sie hilfreich?" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           Button,
           {
@@ -69,7 +69,7 @@ function UserFeedbackSection({ className }) {
             label: "Ja",
             iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {}),
             buttonStyle: "secondary",
-            className: "bg-primary-light font-bold hover:bg-primary focus:bg-primary"
+            className: "bg-primary-light hover:bg-primary focus:bg-primary"
           }
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -79,7 +79,7 @@ function UserFeedbackSection({ className }) {
             label: "Nein",
             iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
             buttonStyle: "secondary",
-            className: "bg-primary-light font-bold hover:bg-primary focus:bg-primary"
+            className: "bg-primary-light hover:bg-primary focus:bg-primary"
           }
         )
       ]

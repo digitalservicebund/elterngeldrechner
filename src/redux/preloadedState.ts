@@ -1,14 +1,25 @@
-import { SteuerKlasse } from "@/globals/js/calculations/model";
+import type { Antragstellende } from "./stepAllgemeineAngabenSlice";
+import type {
+  Erwerbstaetigkeiten,
+  MonatlichesBrutto,
+} from "./stepErwerbstaetigkeitSlice";
+import {
+  KassenArt,
+  KinderFreiBetrag,
+  SteuerKlasse,
+  YesNo,
+} from "@/globals/js/calculations/model";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {
-    antragstellende: "FuerBeide",
+    antragstellende: "FuerBeide" as Antragstellende,
     pseudonym: {
       ET1: "Jasper Darwin Artus",
       ET2: "Salomé Loreley Zoe",
     },
     alleinerziehend: null,
-    mutterschaftssleistungen: "NO",
+    mutterschaftssleistungen: YesNo.NO,
+    mutterschaftssleistungenWer: null,
   },
   stepNachwuchs: {
     anzahlKuenftigerKinder: 1,
@@ -19,30 +30,38 @@ export const preloadedState = {
         istBehindert: false,
       },
     ],
+    mutterschaftssleistungen: YesNo.NO,
   },
   stepErwerbstaetigkeit: {
     ET1: {
-      vorGeburt: "YES",
+      vorGeburt: YesNo.YES,
       isNichtSelbststaendig: true,
       isSelbststaendig: true,
-      sozialVersicherungsPflichtig: "YES",
-      monatlichesBrutto: "MehrAlsMiniJob",
+      sozialVersicherungsPflichtig: YesNo.YES,
+      monatlichesBrutto: "MehrAlsMiniJob" as MonatlichesBrutto,
+      mehrereTaetigkeiten: YesNo.NO,
     },
     ET2: {
-      vorGeburt: "YES",
+      vorGeburt: YesNo.YES,
       isNichtSelbststaendig: true,
       isSelbststaendig: false,
-      sozialVersicherungsPflichtig: "YES",
-      monatlichesBrutto: "MehrAlsMiniJob",
-      mehrereTaetigkeiten: "NO",
+      sozialVersicherungsPflichtig: YesNo.YES,
+      monatlichesBrutto: "MehrAlsMiniJob" as MonatlichesBrutto,
+      mehrereTaetigkeiten: YesNo.NO,
     },
   },
   stepEinkommen: {
-    limitEinkommenUeberschritten: "NO",
+    antragstellende: "FuerBeide" as Antragstellende,
+    limitEinkommenUeberschritten: YesNo.NO,
     ET1: {
+      istErwerbstaetig: YesNo.YES,
+      hasMischEinkommen: YesNo.NO,
+      istSelbststaendig: false,
+      istNichtSelbststaendig: true,
       bruttoEinkommenNichtSelbstaendig: {
-        type: "average",
+        type: "average" as const,
         average: null,
+        perYear: null,
         perMonth: [
           null,
           null,
@@ -60,10 +79,11 @@ export const preloadedState = {
       },
       steuerKlasse: SteuerKlasse.SKL3,
       splittingFaktor: null,
-      kinderFreiBetrag: "1",
+      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {
-        type: "average",
+        type: "average" as const,
         average: null,
+        perYear: null,
         perMonth: [
           null,
           null,
@@ -80,13 +100,13 @@ export const preloadedState = {
         ],
       },
       rentenVersicherung: null,
-      zahlenSieKirchenSteuer: "YES",
-      kassenArt: "GESETZLICH_PFLICHTVERSICHERT",
+      zahlenSieKirchenSteuer: YesNo.YES,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       taetigkeitenNichtSelbstaendigUndSelbstaendig: [
         {
-          artTaetigkeit: "NichtSelbststaendig",
+          artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 1000,
-          isMinijob: "YES",
+          isMinijob: YesNo.YES,
           zeitraum: [
             { from: "1", to: "3" },
             { from: "6", to: "9" },
@@ -99,9 +119,9 @@ export const preloadedState = {
           },
         },
         {
-          artTaetigkeit: "Selbststaendig",
+          artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
           bruttoEinkommenDurchschnitt: 2000,
-          isMinijob: "NO",
+          isMinijob: YesNo.NO,
           zeitraum: [
             { from: "1", to: "5" },
             { from: "10", to: "12" },
@@ -116,19 +136,25 @@ export const preloadedState = {
       ],
     },
     ET2: {
+      istErwerbstaetig: YesNo.YES,
+      hasMischEinkommen: YesNo.NO,
+      istSelbststaendig: false,
+      istNichtSelbststaendig: true,
       bruttoEinkommenNichtSelbstaendig: {
-        type: "monthly",
+        type: "monthly" as const,
         average: null,
+        perYear: null,
         perMonth: [
           800, 900, 1000, 800, 2000, 1200, 1500, 1300, 1000, 1800, 1600, 2500,
         ],
       },
-      steuerKlasse: "1",
+      steuerKlasse: SteuerKlasse.SKL1,
       splittingFaktor: null,
-      kinderFreiBetrag: "1",
+      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {
-        type: "average",
+        type: "average" as const,
         average: null,
+        perYear: null,
         perMonth: [
           null,
           null,
@@ -145,8 +171,8 @@ export const preloadedState = {
         ],
       },
       rentenVersicherung: null,
-      zahlenSieKirchenSteuer: "NO",
-      kassenArt: "GESETZLICH_PFLICHTVERSICHERT",
+      zahlenSieKirchenSteuer: YesNo.NO,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       taetigkeitenNichtSelbstaendigUndSelbstaendig: [],
     },
   },

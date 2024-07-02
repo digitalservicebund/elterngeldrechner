@@ -1,11 +1,13 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+import containerQueriesPlugin from "@tailwindcss/container-queries";
+
+export default {
   content: ["./src/**/*.tsx"],
   important: "#egr-root",
   corePlugins: {
     preflight: false,
   },
-  plugins: [require("@tailwindcss/container-queries")],
+  plugins: [containerQueriesPlugin],
   theme: {
     borderRadius: {
       2: "0.125rem",
@@ -92,4 +94,4 @@ module.exports = {
       full: "100%",
     },
   },
-};
+} satisfies Config;

@@ -1,4 +1,4 @@
-tailwind.config.js
+tailwind.config.ts
 craco.config.js
 postcss.config.js
 vite.config.ts

@@ -4,6 +4,7 @@ import { FieldValues, Path } from "react-hook-form";
 import nsp from "@/globals/js/namespace";
 
 interface Props<TFieldValues extends FieldValues> {
+  readonly id?: string;
   readonly className?: string;
   readonly buttonStyle?: "primary" | "secondary" | "link";
   readonly label: string | ReactNode;
@@ -18,6 +19,7 @@ interface Props<TFieldValues extends FieldValues> {
 }
 
 export function Button<TFieldValues extends FieldValues>({
+  id,
   className,
   buttonStyle = "primary",
   label,
@@ -31,6 +33,7 @@ export function Button<TFieldValues extends FieldValues>({
 }: Props<TFieldValues>) {
   return (
     <button
+      id={id}
       className={classNames(
         nsp("button"),
         buttonStyle === "primary" && nsp("button--primary"),

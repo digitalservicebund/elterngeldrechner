@@ -24,7 +24,6 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     const workSheetsFromFile = xlsx.parse(
       `${__dirname}/resources/Testfaelle_alte_Routine3.xlsx`,
     );
-    // @ts-ignore
     this.sheet = workSheetsFromFile[0];
   }
 

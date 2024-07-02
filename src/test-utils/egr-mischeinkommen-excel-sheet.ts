@@ -20,7 +20,6 @@ export class EgrMischeinkommenExcelSheet {
     const workSheetsFromFile = xlsx.parse(
       `${__dirname}/resources/Testfaelle_2022_3.xlsx`,
     );
-    // @ts-ignore
     this.sheet = workSheetsFromFile[0];
   }
 

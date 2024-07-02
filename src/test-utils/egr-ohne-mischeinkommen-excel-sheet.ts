@@ -20,7 +20,6 @@ export class EgrOhneMischeinkommenExcelSheet {
     const workSheetsFromFile = xlsx.parse(
       `${__dirname}/resources/Testfaelle_010219.xlsx`,
     );
-    // @ts-ignore
     this.sheet = workSheetsFromFile[1];
   }
 

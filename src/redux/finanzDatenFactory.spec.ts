@@ -32,7 +32,7 @@ vi.mock("react-redux", () => ({
   useDispatch: vi.fn(),
 }));
 
-const finanzDatenOf = (data: any) => {
+const finanzDatenOf = (data: Partial<FinanzDaten>) => {
   return Object.assign(new FinanzDaten(), data);
 };
 

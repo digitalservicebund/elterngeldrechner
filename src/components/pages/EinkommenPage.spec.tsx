@@ -1,13 +1,10 @@
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
-import Big from "big.js";
 import EinkommenPage from "./EinkommenPage";
 import { render, screen, within } from "@/test-utils/test-utils";
 import {
-  ErwerbsArt,
   KassenArt,
   KinderFreiBetrag,
-  MischEkZwischenErgebnis,
   RentenArt,
   SteuerKlasse,
   YesNo,
@@ -29,8 +26,6 @@ import {
   initialStepRechnerState,
   StepRechnerElternteilState,
 } from "@/redux/stepRechnerSlice";
-import { BasisEgAlgorithmus } from "@/globals/js/calculations/basis-eg-algorithmus";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
 
 vi.mock("../../globals/js/calculations/basis-eg-algorithmus");
 
@@ -682,31 +677,7 @@ describe("Einkommen Page", () => {
       },
     };
 
-    const mockBegAlgorithmus = {
-      berechneMischNettoUndBasiselterngeld: vi.fn(),
-    };
-
     beforeEach(() => {
-      const begAlgorithmusResult: MischEkZwischenErgebnis = {
-        elterngeldbasis: new Big(1234.5),
-        netto: new Big(2467.9),
-        steuern: MathUtil.BIG_ZERO,
-        brutto: MathUtil.BIG_ZERO,
-        abgaben: MathUtil.BIG_ZERO,
-        krankenversicherungspflichtig: false,
-        rentenversicherungspflichtig: false,
-        status: ErwerbsArt.NEIN,
-      };
-
-      mockBegAlgorithmus.berechneMischNettoUndBasiselterngeld.mockClear();
-
-      mockBegAlgorithmus.berechneMischNettoUndBasiselterngeld.mockResolvedValue(
-        begAlgorithmusResult,
-      ); // mock resolved Promise return
-      vi.mocked(BasisEgAlgorithmus as any).mockImplementation(
-        () => mockBegAlgorithmus,
-      ); // mock Class BasisEgAlgorithmus with mock method berechneMischNettoUndBasiselterngeld above
-
       store = configureStore({
         reducer: reducers,
         preloadedState,

@@ -1,14 +1,11 @@
 import { within } from "@testing-library/react";
-import Big from "big.js";
 import userEvent from "@testing-library/user-event";
 import { configureStore } from "@reduxjs/toolkit";
+import Big from "big.js";
 import { Rechner } from "./Rechner";
 import { reducers, RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
-import {
-  ElternGeldSimulationErgebnis,
-  YesNo,
-} from "@/globals/js/calculations/model";
+import { YesNo } from "@/globals/js/calculations/model";
 import { render, screen } from "@/test-utils/test-utils";
 import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import {
@@ -21,39 +18,12 @@ import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
 vi.mock("../../../globals/js/calculations/egr-calculation");
 
 describe("Rechner", () => {
-  let simulationErgebnis: ElternGeldSimulationErgebnis;
-  const mockEgrSimulation = {
-    simulate: vi.fn(),
-  };
   const stepNachwuchs: StepNachwuchsState = {
     anzahlKuenftigerKinder: 1,
     wahrscheinlichesGeburtsDatum: "08.09.2022",
     geschwisterkinder: [],
     mutterschaftssleistungen: YesNo.NO,
   };
-
-  beforeEach(() => {
-    simulationErgebnis = {
-      rows: [
-        {
-          vonLebensMonat: 1,
-          bisLebensMonat: 12,
-          basisElternGeld: new Big(1001),
-          elternGeldPlus: new Big(2001),
-          nettoEinkommen: new Big(3001),
-        },
-      ],
-    };
-
-    mockEgrSimulation.simulate.mockClear();
-
-    mockEgrSimulation.simulate.mockImplementation(
-      async () => simulationErgebnis,
-    );
-    vi.mocked(EgrCalculation as any).mockImplementation(
-      () => mockEgrSimulation,
-    );
-  });
 
   it("should show the Rechner for one Elternteil", () => {
     const state: Partial<RootState> = {
@@ -102,6 +72,18 @@ describe("Rechner", () => {
   });
 
   it("should calculate and display the Elterngeld", async () => {
+    vi.spyOn(EgrCalculation.prototype, "simulate").mockResolvedValue({
+      rows: [
+        {
+          vonLebensMonat: 1,
+          bisLebensMonat: 12,
+          basisElternGeld: new Big(1001),
+          elternGeldPlus: new Big(2001),
+          nettoEinkommen: new Big(3001),
+        },
+      ],
+    });
+
     const state: Partial<RootState> = {
       stepNachwuchs,
       stepAllgemeineAngaben: {
@@ -137,7 +119,6 @@ describe("Rechner", () => {
     await userEvent.click(screen.getByText("Elterngeld berechnen"));
 
     await screen.findByLabelText("Elterngeld berechnen Ergebnis");
-    expect(mockEgrSimulation.simulate).toHaveBeenCalled();
     expect(
       store.getState().stepRechner.ET1.elterngeldResult,
     ).toEqual<ElterngeldRowsResult>({

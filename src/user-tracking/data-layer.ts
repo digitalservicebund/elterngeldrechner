@@ -16,6 +16,6 @@ export function setTrackingVariable(name: string, value?: unknown): void {
 
 declare global {
   interface Window {
-    _mtm?: Record<string, any>[];
+    _mtm?: Record<string, unknown>[];
   }
 }

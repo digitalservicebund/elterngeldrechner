@@ -218,7 +218,7 @@ const erwerbsZeitraumLebensMonatOf = (
   return erwerbsZeitraumLebensMonat;
 };
 
-const bodyForUrl = (url: any) => {
+const bodyForUrl = (url: string | URL | Request) => {
   if (typeof url !== "string") {
     return "";
   }

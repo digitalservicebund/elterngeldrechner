@@ -212,7 +212,7 @@ describe("erg-steuer-rechner", () => {
 // initialize mock
 vi.mock("../bmf-steuer-rechner");
 
-const bmfSteuerRechnerResponseOf = (lstlzz: any) => {
+const bmfSteuerRechnerResponseOf = (lstlzz: number | string) => {
   const response = new BmfSteuerRechnerResponse();
   response.LSTLZZ = Big(lstlzz);
   return response;

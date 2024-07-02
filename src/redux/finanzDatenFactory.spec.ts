@@ -1,4 +1,3 @@
-import * as reactRedux from "react-redux";
 import Big from "big.js";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import {
@@ -38,22 +37,6 @@ const finanzDatenOf = (data: any) => {
 };
 
 describe("finanzDatenFactory", () => {
-  beforeEach(() => {
-    // @ts-ignore
-    useDispatchMock.mockImplementation(() => () => {});
-    // @ts-ignore
-    useSelectorMock.mockImplementation((selector) => selector(mockStore));
-  });
-  afterEach(() => {
-    // @ts-ignore
-    useDispatchMock.mockClear();
-    // @ts-ignore
-    useSelectorMock.mockClear();
-  });
-
-  const useSelectorMock = reactRedux.useSelector;
-  const useDispatchMock = reactRedux.useDispatch;
-
   const mockStore: RootState = {
     monatsplaner: initialMonatsplanerState,
     stepAllgemeineAngaben: {

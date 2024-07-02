@@ -19,7 +19,7 @@ export function UserFeedbackSection({ className }: Props): ReactNode {
         className,
       )}
     >
-      <h4 id={labelIdentifier} className="basis-full">
+      <h4 id={labelIdentifier} className="basis-full text-base">
         War der Elterngeldrechner mit Planer für Sie hilfreich?
       </h4>
 
@@ -28,7 +28,7 @@ export function UserFeedbackSection({ className }: Props): ReactNode {
         label="Ja"
         iconBefore={<ThumpUpOffAltIcon />}
         buttonStyle="secondary"
-        className="bg-primary-light font-bold hover:bg-primary focus:bg-primary"
+        className="bg-primary-light hover:bg-primary focus:bg-primary"
       />
 
       <Button
@@ -36,7 +36,7 @@ export function UserFeedbackSection({ className }: Props): ReactNode {
         label="Nein"
         iconBefore={<ThumpDownOffAltIcon />}
         buttonStyle="secondary"
-        className="bg-primary-light font-bold hover:bg-primary focus:bg-primary"
+        className="bg-primary-light hover:bg-primary focus:bg-primary"
       />
     </aside>
   );

@@ -185,6 +185,9 @@
 #egr-root :is(.ml-0) {
   margin-left: 0;
 }
+#egr-root :is(.mt-40) {
+  margin-top: 2.5rem;
+}
 #egr-root :is(.mt-auto) {
   margin-top: auto;
 }
@@ -391,6 +394,10 @@
   --tw-bg-opacity: 1;
   background-color: rgb(244 244 244 / var(--tw-bg-opacity));
 }
+#egr-root :is(.bg-primary-light) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(228 223 237 / var(--tw-bg-opacity));
+}
 #egr-root :is(.bg-white) {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -400,6 +407,9 @@
 }
 #egr-root :is(.p-16) {
   padding: 1rem;
+}
+#egr-root :is(.p-24) {
+  padding: 1.5rem;
 }
 #egr-root :is(.p-32) {
   padding: 2rem;
@@ -511,6 +521,14 @@
 }
 #egr-root :is(.last\:pr-8:last-child) {
   padding-right: 0.5rem;
+}
+#egr-root :is(.hover\:bg-primary:hover) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(98 57 108 / var(--tw-bg-opacity));
+}
+#egr-root :is(.focus\:bg-primary:focus) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(98 57 108 / var(--tw-bg-opacity));
 }
 #egr-root :is(.group[open] .group-open\:block) {
   display: block;

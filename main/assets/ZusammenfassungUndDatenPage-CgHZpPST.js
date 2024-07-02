@@ -1,5 +1,5 @@
-import { j as jsxRuntimeExports, B as Button, Z as _default$1, a5 as useAppStore, Y as YesNo, c as classNames, Q as formatAsCurrency, r as reactExports, a6 as _default$3, H as commonjsGlobal, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-DbW2gTIm.js";
-import { _ as _default$2, E as EgrConst } from "./egr-configuration-BJOPx-MH.js";
+import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$5, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BDf4gIZW.js";
+import { _ as _default$4, E as EgrConst } from "./egr-configuration-7kzuoSFw.js";
 function PrintButton() {
   const handlePrint = () => {
     window.print();
@@ -9,8 +9,80 @@ function PrintButton() {
     {
       buttonStyle: "link",
       label: "Download der Planung",
-      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
+      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {}),
       onClick: handlePrint
+    }
+  );
+}
+var ThumbUpOffAlt = {};
+var __assign$2 = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$2 = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+        t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign$2.apply(this, arguments);
+};
+Object.defineProperty(ThumbUpOffAlt, "__esModule", { value: true });
+var jsx_runtime_1$2 = jsxRuntimeExports;
+var SvgThumbUpOffAlt = function(props) {
+  return (0, jsx_runtime_1$2.jsxs)("svg", __assign$2({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ThumbUpOffAltIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$2.jsx)("path", { d: "M0 0h24v24H0V0z", fill: "none" }), (0, jsx_runtime_1$2.jsx)("path", { d: "M13.11 5.72l-.57 2.89c-.12.59.04 1.2.42 1.66.38.46.94.73 1.54.73H20v1.08L17.43 18H9.34c-.18 0-.34-.16-.34-.34V9.82l4.11-4.1M14 2L7.59 8.41C7.21 8.79 7 9.3 7 9.83v7.83C7 18.95 8.05 20 9.34 20h8.1c.71 0 1.36-.37 1.72-.97l2.67-6.15c.11-.25.17-.52.17-.8V11c0-1.1-.9-2-2-2h-5.5l.92-4.65c.05-.22.02-.46-.08-.66-.23-.45-.52-.86-.88-1.22L14 2zM4 9H2v11h2c.55 0 1-.45 1-1v-9c0-.55-.45-1-1-1z" })] }));
+};
+var _default$2 = ThumbUpOffAlt.default = SvgThumbUpOffAlt;
+var ThumbDownOffAlt = {};
+var __assign$1 = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$1 = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+        t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign$1.apply(this, arguments);
+};
+Object.defineProperty(ThumbDownOffAlt, "__esModule", { value: true });
+var jsx_runtime_1$1 = jsxRuntimeExports;
+var SvgThumbDownOffAlt = function(props) {
+  return (0, jsx_runtime_1$1.jsxs)("svg", __assign$1({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ThumbDownOffAltIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$1.jsx)("path", { d: "M24 24H0V0h24v24z", fill: "none" }), (0, jsx_runtime_1$1.jsx)("path", { d: "M10.89 18.28l.57-2.89c.12-.59-.04-1.2-.42-1.66-.38-.46-.94-.73-1.54-.73H4v-1.08L6.57 6h8.09c.18 0 .34.16.34.34v7.84l-4.11 4.1M10 22l6.41-6.41c.38-.38.59-.89.59-1.42V6.34C17 5.05 15.95 4 14.66 4h-8.1c-.71 0-1.36.37-1.72.97l-2.67 6.15c-.11.25-.17.52-.17.8V13c0 1.1.9 2 2 2h5.5l-.92 4.65c-.05.22-.02.46.08.66.23.45.52.86.88 1.22L10 22zm10-7h2V4h-2c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1z" })] }));
+};
+var _default$1 = ThumbDownOffAlt.default = SvgThumbDownOffAlt;
+function UserFeedbackSection({ className }) {
+  const labelIdentifier = reactExports.useId();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+    "aside",
+    {
+      "aria-labelledby": labelIdentifier,
+      className: classNames(
+        "flex gap-y-16 gap-x-24 bg-primary-light flex-wrap p-24",
+        className
+      ),
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { id: labelIdentifier, className: "basis-full", children: "War der Elterngeldrechner mit Planer für Sie hilfreich?" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Button,
+          {
+            id: "feedback-button-ja-war-hilfreich",
+            label: "Ja",
+            iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {}),
+            buttonStyle: "secondary",
+            className: "bg-primary-light font-bold hover:bg-primary focus:bg-primary"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          Button,
+          {
+            id: "feedback-button-nein-war-nicht-hilfreich",
+            label: "Nein",
+            iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
+            buttonStyle: "secondary",
+            className: "bg-primary-light font-bold hover:bg-primary focus:bg-primary"
+          }
+        )
+      ]
     }
   );
 }
@@ -285,7 +357,7 @@ function ElterngeldvarianteBadge({
   variante,
   className
 }) {
-  const label = variante ? LABELS[variante] : /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {});
+  const label = variante ? LABELS[variante] : /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {});
   const variantClassName = CLASS_NAME[variante];
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "span",
@@ -361,7 +433,7 @@ function Elternteil({
   const formattedZeitraeume = zeitraeueme.map(formatZeitraum);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-8", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { className: "text-base", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {}),
       " ",
       name
     ] }),
@@ -478,7 +550,7 @@ function PlanungsdetailsTable({
     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "text-left font-bold", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { scope: "col", children: "Lebensmonate" }),
       elternteile.map(({ name }) => /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { scope: "col", abbr: name, className: "pl-32 last:pr-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {}),
         " ",
         name
       ] }, name))
@@ -727,7 +799,8 @@ function ZusammenfassungUndDatenPage() {
         ),
         /* @__PURE__ */ jsxRuntimeExports.jsx(DatenInAntragUebernehmenButton, {})
       ] })
-    ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(UserFeedbackSection, { className: "mt-40" })
   ] });
 }
 export {

@@ -4,11 +4,11 @@ import { PlanungsdetailsTable } from "./PlanungsdetailsTable";
 import { useAppSelector } from "@/redux/hooks";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
 
-export function Planungsdetails({
-  data,
-}: {
+type Props = {
   readonly data: PlanungsdatenFuerElternteil[];
-}): ReactNode {
+};
+
+export function Planungsdetails({ data }: Props): ReactNode {
   const birthdate = useAppSelector(
     stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum,
   );

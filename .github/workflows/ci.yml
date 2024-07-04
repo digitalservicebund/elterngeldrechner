@@ -32,6 +32,9 @@ jobs:
       - name: lint and test
         run: npm run test-all
 
+  e2e-test:
+    uses: ./.github/workflows/e2e-test.yml
+
   build:
     runs-on: ubuntu-latest
     outputs:

@@ -33,4 +33,5 @@ const LABEL_PER_VARIANTE: Record<Variante, string> = {
   BEG: "BasisElterngeld",
   "EG+": "ElterngeldPlus",
   PSB: "Partnerschaftbonus",
+  None: "kein Elterngeld",
 };

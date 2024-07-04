@@ -1,8 +1,8 @@
 import { produce } from "immer";
 import { usePlanungdaten } from "./usePlanungsdaten";
-import { Month, Variante } from "./types";
 import { INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 import { ElterngeldRow, ElterngeldRowsResult } from "@/redux/stepRechnerSlice";
+import type { ElterngeldType, Month } from "@/monatsplaner";
 
 describe("usePlanungsdaten", () => {
   it("provides two data set entries for each parent if no single parent", () => {
@@ -268,7 +268,7 @@ describe("usePlanungsdaten", () => {
   });
 });
 
-function months(...varianten: (Variante | "None")[]): Month[] {
+function months(...varianten: ElterngeldType[]): Month[] {
   return varianten.map((variante) => ({
     type: variante,
     isMutterschutzMonth: false,

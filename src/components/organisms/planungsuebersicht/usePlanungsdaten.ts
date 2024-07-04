@@ -1,14 +1,16 @@
 import {
   PlanungsdatenFuerElternteil,
   Zeitraum,
-  ElternteilType,
   VariantenDetails,
   DetailsOfVariante,
   Variante,
-  Month,
   Lebensmonat,
 } from "./types";
-import { ElterngeldType } from "@/monatsplaner";
+import {
+  ElterngeldType,
+  type ElternteilType,
+  type Month,
+} from "@/monatsplaner";
 import { EgrConst } from "@/globals/js/egr-configuration";
 import { createAppSelector, useAppSelector } from "@/redux/hooks";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
@@ -63,10 +65,12 @@ function combineLebensmonate(
   const resultPerMonth = flattenElterngeldResult(elterngeldResult);
 
   return months.map((month, index) => {
+    const { type: variante, isMutterschutzMonth } = month;
     const elterngeld = readElterngeld(resultPerMonth[index], month.type);
     const nettoEinkommen = resultPerMonth[index].nettoEinkommen;
     return {
-      ...month,
+      variante,
+      isMutterschutzMonth,
       elterngeld,
       nettoEinkommen,
       verfuegbaresEinkommen: elterngeld + nettoEinkommen,
@@ -76,7 +80,7 @@ function combineLebensmonate(
 
 function trimLebensmonate(lebensmonate: Lebensmonat[]): Lebensmonat[] {
   const lastRelevantIndex = lebensmonate.findLastIndex(
-    (lebensmonat) => lebensmonat.type !== "None",
+    ({ variante }) => variante !== "None",
   );
   return lebensmonate.slice(0, lastRelevantIndex + 1);
 }
@@ -132,7 +136,7 @@ function sumUpElterngeld(
 function sumUpNettoEinkommen(
   months: Month[],
   elterngeldResult: ElterngeldRowsResult,
-  filter: (Variante | "None")[] = ["BEG", "EG+", "PSB", "None"],
+  filter: Variante[] = ["BEG", "EG+", "PSB", "None"],
 ): number {
   const resultPerMonth = flattenElterngeldResult(elterngeldResult);
 

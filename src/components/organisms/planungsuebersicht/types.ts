@@ -1,7 +1,5 @@
 import { ElterngeldType } from "@/monatsplaner";
 
-export type { ElternteilType, Month } from "@/monatsplaner";
-
 export interface PlanungsdatenFuerElternteil {
   name: string;
   totalNumberOfMonths: number;
@@ -11,8 +9,11 @@ export interface PlanungsdatenFuerElternteil {
   lebensmonate: Lebensmonat[];
 }
 
-export type Variante = Exclude<ElterngeldType, "None">;
-export type VariantenDetails = Record<Variante, DetailsOfVariante>;
+export type Variante = ElterngeldType;
+export type VariantenDetails = Record<
+  Exclude<Variante, "None">,
+  DetailsOfVariante
+>;
 
 export interface DetailsOfVariante {
   numberOfMonths: number;
@@ -26,7 +27,7 @@ export interface Zeitraum {
 }
 
 export interface Lebensmonat {
-  type: ElterngeldType;
+  variante: Variante;
   isMutterschutzMonth: boolean;
   elterngeld: number;
   nettoEinkommen: number;

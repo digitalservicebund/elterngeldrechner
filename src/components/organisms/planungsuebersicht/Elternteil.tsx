@@ -1,7 +1,7 @@
 import { ReactNode, useId } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
-import { PlanungsdatenFuerElternteil, Variante } from "./types";
+import { PlanungsdatenFuerElternteil } from "./types";
 import { VariantenDetails } from "./VariantenDetails";
 import { formatAsCurrency } from "@/utils/locale-formatting";
 import { formatZeitraum } from "@/utils/formatZeitraum";
@@ -51,7 +51,7 @@ export function Elternteil({
           "border-x-0 border-y-2 border-solid border-off-white",
         )}
       >
-        {ELTERNGELD_VARIANTEN.map((variante) => (
+        {ELTERNGELD_VARIANTEN_TO_SHOW.map((variante) => (
           <li key={variante} className="flex items-start gap-24 py-8">
             <VariantenDetails variante={variante} details={details[variante]} />
           </li>
@@ -61,4 +61,4 @@ export function Elternteil({
   );
 }
 
-const ELTERNGELD_VARIANTEN: Variante[] = ["BEG", "EG+", "PSB"];
+const ELTERNGELD_VARIANTEN_TO_SHOW = ["BEG", "EG+", "PSB"] as const;

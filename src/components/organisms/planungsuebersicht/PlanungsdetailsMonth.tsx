@@ -9,24 +9,24 @@ type Props = {
 
 export function PlanungsdetailsMonth({ month }: Props) {
   const {
-    type,
+    variante,
     isMutterschutzMonth,
     elterngeld,
     nettoEinkommen,
     verfuegbaresEinkommen,
   } = month;
   const isVariant =
-    ["BEG", "EG+", "PSB"].includes(type) && !isMutterschutzMonth;
+    ["BEG", "EG+", "PSB"].includes(variante) && !isMutterschutzMonth;
 
   return (
     <div className="flex items-start gap-x-8">
-      {type === "None" ? "– kein Elterngeld –" : ""}
+      {variante === "None" ? "– kein Elterngeld –" : ""}
       {isMutterschutzMonth ? "Mutterschutz" : ""}
 
       {isVariant ? (
         <>
           <ElterngeldvarianteBadge
-            variante={type as Variante}
+            variante={variante as Variante}
             className="min-w-[7ch]"
           />
           {nettoEinkommen > 0 ? (

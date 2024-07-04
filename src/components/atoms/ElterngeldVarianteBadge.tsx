@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import AddIcon from "@digitalservicebund/icons/Add";
 import classNames from "classnames";
 import { ElterngeldType } from "@/monatsplaner";
 
@@ -12,18 +11,15 @@ export function ElterngeldvarianteBadge({
   variante,
   className,
 }: Props): ReactNode {
-  const label = variante ? LABELS[variante] : <AddIcon />;
-  const variantClassName = CLASS_NAME[variante];
-
   return (
     <span
       className={classNames(
         "px-8 pt-6 pb-10 text-center rounded font-bold flex items-center justify-center leading-[1.444]",
         className,
-        variantClassName,
+        CLASS_NAME[variante],
       )}
     >
-      {label}
+      {LABELS[variante]}
     </span>
   );
 }

@@ -58,14 +58,26 @@ export function PlanungsdetailsTable({
                 {monthLabel({ birthdate, index })}
               </div>
             </th>
-            {elternteile.map(({ lebensmonate }, i) => (
-              <td className="pl-32 align-top last:pr-8" key={`${index}${i}`}>
-                <PlanungsdetailsMonth month={lebensmonate[index]} />
-              </td>
-            ))}
+
+            {elternteile.map(({ lebensmonate }, i) => {
+              const lebensmonat = lebensmonate[index] ?? FILLER_LEBENSMONAT;
+              return (
+                <td className="pl-32 align-top last:pr-8" key={`${index}${i}`}>
+                  <PlanungsdetailsMonth {...lebensmonat} />
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>
     </table>
   );
 }
+
+const FILLER_LEBENSMONAT: Lebensmonat = {
+  variante: "None",
+  isMutterschutzMonth: false,
+  elterngeld: 0,
+  nettoEinkommen: 0,
+  verfuegbaresEinkommen: 0,
+};

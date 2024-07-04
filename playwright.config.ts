@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const APP_PORT = process.env.PORT || 3001;
-const APP_BASE_URL = process.env.BASE_URL || `http://127.0.0.1:${APP_PORT}`;
+const APP_PORT = 3001;
+const APP_BASE_URL = `http://localhost:${APP_PORT}`;
 
 export default defineConfig({
   testDir: "./tests",
@@ -21,9 +21,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `PORT=${APP_PORT} npm start`,
+    command: `npm run serve-e2e -- --port ${APP_PORT}`,
     url: APP_BASE_URL,
     reuseExistingServer: false,
-    env: { ...process.env, REACT_APP_PRELOAD_STATE: "false" },
+    env: { ...process.env, VITE_APP_PRELOAD_STATE: "false" },
   },
 });

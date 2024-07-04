@@ -14,7 +14,7 @@ const testStyles = async ({
     // https://github.com/microsoft/playwright/issues/21657
     await page.waitForTimeout(1000);
     await expect(locator).toHaveScreenshot(`${name}-${screenSize}.png`, {
-      stylePath: path.join(__dirname, "screenshot.css"),
+      stylePath: path.join(import.meta.dirname, "screenshot.css"),
     });
   }
 

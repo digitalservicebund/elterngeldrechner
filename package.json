@@ -9,6 +9,7 @@
   "scripts": {
     "start": "./setup-app-wrapper --target public --use-cache && vite",
     "build": "./setup-app-wrapper --target public --include-additional-css --include-additional-js && vite build",
+    "serve-e2e": "./setup-app-wrapper --target public && vite build && npx http-server dist",
     "test": "LANG=de-DE vitest",
     "eject": "craco eject",
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",

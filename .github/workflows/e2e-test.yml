@@ -2,9 +2,6 @@ name: E2E Test
 on:
   workflow_call:
 
-permissions:
-  packages: read
-
 jobs:
   e2e-tests:
     strategy:

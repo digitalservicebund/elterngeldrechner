@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-DFfVKPSu.js","./Monatsplaner-BQhzQM6u.js","./egr-configuration-DK9ALD-3.js","./Split-CzXq8C7P.js","./ButtonGroup-CXSnni0N.js","./NachwuchsPage-qJFIpIY6.js","./ErwerbstaetigkeitPage-ByzzRsiQ.js","./EinkommenPage-C8mupfT1.js","./RechnerPlanerPage-BBOjHt7H.js","./ZusammenfassungUndDatenPage-CTTOvXP3.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-BX17K_Ef.js","./Monatsplaner-DvoON4ZT.js","./egr-configuration-Cq-BxwIT.js","./Split-gF_SJ8U5.js","./ButtonGroup-0w3tsF7F.js","./NachwuchsPage-BNn-Idxb.js","./ErwerbstaetigkeitPage-CcWiseno.js","./EinkommenPage-DZC8eHOG.js","./RechnerPlanerPage-hgEQVy-h.js","./ZusammenfassungUndDatenPage-A9xFu37c.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -10083,25 +10083,25 @@ function isPlainObject$1(obj) {
   }
   return Object.getPrototypeOf(obj) === proto || Object.getPrototypeOf(obj) === null;
 }
-function createStore(reducer, preloadedState, enhancer) {
+function createStore(reducer, preloadedState2, enhancer) {
   if (typeof reducer !== "function") {
     throw new Error(formatProdErrorMessage$1(2));
   }
-  if (typeof preloadedState === "function" && typeof enhancer === "function" || typeof enhancer === "function" && typeof arguments[3] === "function") {
+  if (typeof preloadedState2 === "function" && typeof enhancer === "function" || typeof enhancer === "function" && typeof arguments[3] === "function") {
     throw new Error(formatProdErrorMessage$1(0));
   }
-  if (typeof preloadedState === "function" && typeof enhancer === "undefined") {
-    enhancer = preloadedState;
-    preloadedState = void 0;
+  if (typeof preloadedState2 === "function" && typeof enhancer === "undefined") {
+    enhancer = preloadedState2;
+    preloadedState2 = void 0;
   }
   if (typeof enhancer !== "undefined") {
     if (typeof enhancer !== "function") {
       throw new Error(formatProdErrorMessage$1(1));
     }
-    return enhancer(createStore)(reducer, preloadedState);
+    return enhancer(createStore)(reducer, preloadedState2);
   }
   let currentReducer = reducer;
-  let currentState = preloadedState;
+  let currentState = preloadedState2;
   let currentListeners = /* @__PURE__ */ new Map();
   let nextListeners = currentListeners;
   let listenerIdCounter = 0;
@@ -10286,8 +10286,8 @@ function compose(...funcs) {
   return funcs.reduce((a, b) => (...args) => a(b(...args)));
 }
 function applyMiddleware(...middlewares) {
-  return (createStore2) => (reducer, preloadedState) => {
-    const store2 = createStore2(reducer, preloadedState);
+  return (createStore2) => (reducer, preloadedState2) => {
+    const store2 = createStore2(reducer, preloadedState2);
     let dispatch = () => {
       throw new Error(formatProdErrorMessage$1(15));
     };
@@ -11343,7 +11343,7 @@ function configureStore(options) {
     reducer = void 0,
     middleware,
     devTools = true,
-    preloadedState = void 0,
+    preloadedState: preloadedState2 = void 0,
     enhancers = void 0
   } = options || {};
   let rootReducer;
@@ -11372,7 +11372,7 @@ function configureStore(options) {
   const getDefaultEnhancers = buildGetDefaultEnhancers(middlewareEnhancer);
   let storeEnhancers = typeof enhancers === "function" ? enhancers(getDefaultEnhancers) : getDefaultEnhancers();
   const composedEnhancer = finalCompose(...storeEnhancers);
-  return createStore(rootReducer, preloadedState, composedEnhancer);
+  return createStore(rootReducer, preloadedState2, composedEnhancer);
 }
 function executeReducerBuilderCallback(builderCallback) {
   const actionsMap = {};
@@ -23472,18 +23472,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-DFfVKPSu.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-BX17K_Ef.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-qJFIpIY6.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-BNn-Idxb.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-ByzzRsiQ.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-CcWiseno.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-C8mupfT1.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-DZC8eHOG.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-BBOjHt7H.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-hgEQVy-h.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-CTTOvXP3.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-A9xFu37c.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -23894,7 +23894,7 @@ const stepEinkommenSlice = createSlice({
 });
 const stepEinkommenActions = stepEinkommenSlice.actions;
 const stepEinkommenReducer = stepEinkommenSlice.reducer;
-({
+const preloadedState = {
   stepAllgemeineAngaben: {
     antragstellende: "FuerBeide",
     pseudonym: {
@@ -24071,7 +24071,7 @@ const stepEinkommenReducer = stepEinkommenSlice.reducer;
       taetigkeitenNichtSelbstaendigUndSelbstaendig: []
     }
   }
-});
+};
 const reducers = combineReducers({
   monatsplaner: monatsplanerReducer,
   stepAllgemeineAngaben: stepAllgemeineAngabenReducer,
@@ -24083,7 +24083,7 @@ const reducers = combineReducers({
 });
 const store = configureStore({
   reducer: reducers,
-  preloadedState: void 0
+  preloadedState
 });
 function setupCalculation() {
   Big.DP = 34;
@@ -24134,7 +24134,7 @@ function addTagManagerScript(sourceUrl) {
   const firstScript = document.getElementsByTagName("script")[0];
   (_a = firstScript.parentNode) == null ? void 0 : _a.insertBefore(tagManagerScript, firstScript);
 }
-var define_import_meta_env_default = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", BASE_URL: "./", MODE: "production", DEV: false, PROD: true, SSR: false };
+var define_import_meta_env_default = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", VITE_APP_PRELOAD_STATE: "true", BASE_URL: "./", MODE: "production", DEV: false, PROD: true, SSR: false };
 async function setupUserTracking() {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
   const isConfigured = !!tagMangerSourceUrl;

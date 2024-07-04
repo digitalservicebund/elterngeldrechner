@@ -6,6 +6,7 @@ import {
   DetailsOfVariante,
   Variante,
   Month,
+  Lebensmonat,
 } from "./types";
 import { ElterngeldType } from "@/monatsplaner";
 import { EgrConst } from "@/globals/js/egr-configuration";
@@ -48,15 +49,17 @@ function createPlanungsdatenSelector(elternteil: ElternteilType) {
         sumUpNettoEinkommen(months, elterngeldResult),
       zeitraeueme: assembleZeitraeume(months, birthdate),
       details: combineDetails(months, elterngeldResult),
-      months: trimMonths(combineMonths(months, elterngeldResult)),
+      lebensmonate: trimLebensmonate(
+        combineLebensmonate(months, elterngeldResult),
+      ),
     }),
   );
 }
 
-function combineMonths(
+function combineLebensmonate(
   months: Month[],
   elterngeldResult: ElterngeldRowsResult,
-) {
+): Lebensmonat[] {
   const resultPerMonth = flattenElterngeldResult(elterngeldResult);
 
   return months.map((month, index) => {
@@ -71,11 +74,11 @@ function combineMonths(
   });
 }
 
-function trimMonths(months: Month[]): Month[] {
-  const lastRelevantIndex = months.findLastIndex(
-    (month) => month.type !== "None",
+function trimLebensmonate(lebensmonate: Lebensmonat[]): Lebensmonat[] {
+  const lastRelevantIndex = lebensmonate.findLastIndex(
+    (lebensmonat) => lebensmonat.type !== "None",
   );
-  return months.slice(0, lastRelevantIndex + 1);
+  return lebensmonate.slice(0, lastRelevantIndex + 1);
 }
 
 function combineDetails(

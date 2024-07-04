@@ -1,19 +1,13 @@
 import GehaltIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
-import { Variante } from "./types";
+import { Variante, type Lebensmonat } from "./types";
 import { ElterngeldvarianteBadge } from "@/components/atoms/ElterngeldVarianteBadge";
 import { formatAsCurrency } from "@/utils/locale-formatting";
 
 type Props = {
-  readonly month: {
-    type: string;
-    isMutterschutzMonth?: boolean;
-    elterngeld?: number;
-    nettoEinkommen?: number;
-    verfuegbaresEinkommen?: number;
-  };
+  readonly month: Lebensmonat;
 };
 
-export function PlanungsdetailsMonth({ month = { type: "None" } }: Props) {
+export function PlanungsdetailsMonth({ month }: Props) {
   const {
     type,
     isMutterschutzMonth,
@@ -35,41 +29,28 @@ export function PlanungsdetailsMonth({ month = { type: "None" } }: Props) {
             variante={type as Variante}
             className="min-w-[7ch]"
           />
-          {typeof nettoEinkommen === "number" ? (
+          {nettoEinkommen > 0 ? (
             <div>
               <div>
-                {typeof elterngeld === "number"
-                  ? formatAsCurrency(elterngeld)
-                  : ""}{" "}
-                {nettoEinkommen ? (
-                  <span>
-                    | <GehaltIcon /> Einkommen{" "}
-                    {formatAsCurrency(nettoEinkommen)}
-                  </span>
-                ) : (
-                  ""
-                )}
+                {elterngeld > 0 && formatAsCurrency(elterngeld)}{" "}
+                <span>
+                  | <GehaltIcon /> Einkommen {formatAsCurrency(nettoEinkommen)}
+                </span>
               </div>
-              {nettoEinkommen && verfuegbaresEinkommen ? (
+              {verfuegbaresEinkommen > 0 && (
                 <div className="font-bold leading-[0.5]">
                   = <span className="sr-only">verfügbares Einkommen</span>
                   {formatAsCurrency(verfuegbaresEinkommen)}
                 </div>
-              ) : (
-                ""
               )}
             </div>
           ) : (
             <span className="font-bold">
-              {typeof elterngeld === "number"
-                ? formatAsCurrency(elterngeld)
-                : ""}
+              {elterngeld > 0 && formatAsCurrency(elterngeld)}
             </span>
           )}
         </>
-      ) : (
-        ""
-      )}
+      ) : null}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { PlanungsdetailsMonth } from "./PlanungsdetailsMonth";
+import { Lebensmonat } from "./types";
 import { formatZeitraum } from "@/utils/formatZeitraum";
 
 type Props = {
@@ -8,10 +9,7 @@ type Props = {
   readonly birthdate: Date;
   readonly elternteile: {
     name: string;
-    months: {
-      type: string;
-      isMutterschutzMonth: boolean;
-    }[];
+    lebensmonate: Lebensmonat[];
   }[];
 };
 
@@ -60,9 +58,9 @@ export function PlanungsdetailsTable({
                 {monthLabel({ birthdate, index })}
               </div>
             </th>
-            {elternteile.map(({ months }, i) => (
+            {elternteile.map(({ lebensmonate }, i) => (
               <td className="pl-32 align-top last:pr-8" key={`${index}${i}`}>
-                <PlanungsdetailsMonth month={months[index]} />
+                <PlanungsdetailsMonth month={lebensmonate[index]} />
               </td>
             ))}
           </tr>

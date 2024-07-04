@@ -14,8 +14,8 @@ export function Planungsdetails({
   );
 
   const sumMonths = data[1]
-    ? Math.max(data[0].months.length, data[1].months.length)
-    : data[0].months.length;
+    ? Math.max(data[0].lebensmonate.length, data[1].lebensmonate.length)
+    : data[0].lebensmonate.length;
 
   const elternteile = data;
 

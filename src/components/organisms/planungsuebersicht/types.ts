@@ -8,10 +8,7 @@ export interface PlanungsdatenFuerElternteil {
   geldInsgesamt: number;
   zeitraeueme: Zeitraum[];
   details: VariantenDetails;
-  months: {
-    type: ElterngeldType;
-    isMutterschutzMonth: boolean;
-  }[];
+  lebensmonate: Lebensmonat[];
 }
 
 export type Variante = Exclude<ElterngeldType, "None">;
@@ -26,4 +23,12 @@ export interface DetailsOfVariante {
 export interface Zeitraum {
   from: Date;
   to: Date;
+}
+
+export interface Lebensmonat {
+  type: ElterngeldType;
+  isMutterschutzMonth: boolean;
+  elterngeld: number;
+  nettoEinkommen: number;
+  verfuegbaresEinkommen: number;
 }

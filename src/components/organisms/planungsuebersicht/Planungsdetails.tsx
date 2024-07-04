@@ -13,33 +13,26 @@ export function Planungsdetails({
     stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum,
   );
 
-  const sumMonths = data[1]
-    ? Math.max(data[0].lebensmonate.length, data[1].lebensmonate.length)
-    : data[0].lebensmonate.length;
+  const lastMonthIndexToShow =
+    Math.max(...data.map(({ lebensmonate }) => lebensmonate.length)) - 1;
 
   const elternteile = data;
 
   return (
     <div className="@container/planungs-details">
       <div className="flex flex-col gap-y-32 @2xl/planungs-details:hidden">
-        <PlanungsdetailsTable
-          sumMonths={sumMonths}
-          birthdate={birthdate}
-          elternteile={[elternteile[0]]}
-        />
-        {elternteile[1] ? (
+        {elternteile.map((elternteil) => (
           <PlanungsdetailsTable
-            sumMonths={sumMonths}
+            key={elternteil.name}
+            lastMonthIndexToShow={lastMonthIndexToShow}
             birthdate={birthdate}
-            elternteile={[elternteile[1]]}
+            elternteile={[elternteil]}
           />
-        ) : (
-          ""
-        )}
+        ))}
       </div>
       <div className="hidden @2xl/planungs-details:block">
         <PlanungsdetailsTable
-          sumMonths={sumMonths}
+          lastMonthIndexToShow={lastMonthIndexToShow}
           birthdate={birthdate}
           elternteile={elternteile}
         />

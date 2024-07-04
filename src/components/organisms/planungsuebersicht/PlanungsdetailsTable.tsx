@@ -5,7 +5,7 @@ import { Lebensmonat } from "./types";
 import { formatZeitraum } from "@/utils/formatZeitraum";
 
 type Props = {
-  readonly sumMonths: number;
+  readonly lastMonthIndexToShow: number;
   readonly birthdate: Date;
   readonly elternteile: {
     name: string;
@@ -29,7 +29,7 @@ const monthLabel = ({
 };
 
 export function PlanungsdetailsTable({
-  sumMonths,
+  lastMonthIndexToShow,
   birthdate,
   elternteile,
 }: Props): ReactNode {
@@ -46,23 +46,27 @@ export function PlanungsdetailsTable({
         </tr>
       </thead>
       <tbody className="[&_td]:pt-10 [&_th]:pt-10">
-        {[...Array(sumMonths)].map((_, index) => (
-          <tr className="leading-[2.333]" key={index}>
+        {[...Array(lastMonthIndexToShow + 1)].map((_, monthIndex) => (
+          <tr className="leading-[2.333]" key={monthIndex}>
             <th
               scope="row"
-              abbr={`${index + 1}`}
+              abbr={`${monthIndex + 1}`}
               className="flex items-center px-8 text-left font-regular"
             >
-              <div className="min-w-[3ch] font-bold">{index + 1}</div>
+              <div className="min-w-[3ch] font-bold">{monthIndex + 1}</div>
               <div className="leading-tight">
-                {monthLabel({ birthdate, index })}
+                {monthLabel({ birthdate, index: monthIndex })}
               </div>
             </th>
 
-            {elternteile.map(({ lebensmonate }, i) => {
-              const lebensmonat = lebensmonate[index] ?? FILLER_LEBENSMONAT;
+            {elternteile.map(({ lebensmonate }, elternteilIndex) => {
+              const lebensmonat =
+                lebensmonate[monthIndex] ?? FILLER_LEBENSMONAT;
               return (
-                <td className="pl-32 align-top last:pr-8" key={`${index}${i}`}>
+                <td
+                  className="pl-32 align-top last:pr-8"
+                  key={`${monthIndex}${elternteilIndex}`}
+                >
                   <PlanungsdetailsMonth {...lebensmonat} />
                 </td>
               );

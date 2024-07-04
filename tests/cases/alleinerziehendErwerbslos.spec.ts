@@ -8,8 +8,6 @@ import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 import verifyPostRequestToElterngeldDigital from "../verifyPostRequestToElterngeldDigital";
 
-/* eslint-disable testing-library/prefer-screen-queries */
-
 test("alleinerziehend, erwerbslos", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setElternteile(1);

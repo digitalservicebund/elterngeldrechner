@@ -13,21 +13,6 @@ type Props = {
   }[];
 };
 
-const monthLabel = ({
-  birthdate,
-  index,
-}: {
-  birthdate: Date;
-  index: number;
-}) => {
-  const from = new Date(birthdate);
-  from.setMonth(from.getMonth() + index);
-  const to = new Date(from);
-  to.setMonth(to.getMonth() + 1);
-  to.setDate(to.getDate() - 1);
-  return formatZeitraum({ from, to });
-};
-
 export function PlanungsdetailsTable({
   lastMonthIndexToShow,
   birthdate,
@@ -55,7 +40,7 @@ export function PlanungsdetailsTable({
             >
               <div className="min-w-[3ch] font-bold">{monthIndex + 1}</div>
               <div className="leading-tight">
-                {monthLabel({ birthdate, index: monthIndex })}
+                {getLabelForLebensmonat(birthdate, monthIndex)}
               </div>
             </th>
 
@@ -76,6 +61,15 @@ export function PlanungsdetailsTable({
       </tbody>
     </table>
   );
+}
+
+function getLabelForLebensmonat(birthdate: Date, index: number): string {
+  const from = new Date(birthdate);
+  from.setMonth(from.getMonth() + index);
+  const to = new Date(from);
+  to.setMonth(to.getMonth() + 1);
+  to.setDate(to.getDate() - 1);
+  return formatZeitraum({ from, to });
 }
 
 const FILLER_LEBENSMONAT: Lebensmonat = {

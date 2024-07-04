@@ -256,13 +256,16 @@
 }
 #egr-root :is(.appearance-none) {
   -webkit-appearance: none;
+     -moz-appearance: none;
           appearance: none;
 }
 #egr-root :is(.break-before-page) {
-  break-before: page;
+  -moz-column-break-before: page;
+       break-before: page;
 }
 #egr-root :is(.break-inside-avoid) {
-  break-inside: avoid;
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
 }
 #egr-root :is(.grid-cols-2) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -310,10 +313,12 @@
   gap: 0.5rem;
 }
 #egr-root :is(.gap-x-24) {
-  column-gap: 1.5rem;
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
 }
 #egr-root :is(.gap-x-8) {
-  column-gap: 0.5rem;
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
 }
 #egr-root :is(.gap-y-10) {
   row-gap: 0.625rem;
@@ -860,6 +865,7 @@
 .egr-monatsplaner-month {
   width: 100%;
   -webkit-user-select: none;
+     -moz-user-select: none;
           user-select: none;
 }
 @media print {
@@ -1189,6 +1195,10 @@
 .egr-custom-input-question__input:focus {
   outline: 0.125rem solid #62396c !important;
 }
+.egr-custom-input-question__input::-moz-placeholder {
+  font-size: inherit;
+  color: #595959;
+}
 .egr-custom-input-question__input::placeholder {
   font-size: inherit;
   color: #595959;
@@ -1325,10 +1335,11 @@
 .egr-custom-select-question__control {
   position: relative;
   width: 100%;
-  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
   min-width: max-content;
 }
 .egr-custom-select-question__input {
+  -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
   background-color: #ffffff;
@@ -1342,13 +1353,17 @@
   border: 0.0625rem solid #999999;
   cursor: pointer;
   width: 100%;
-  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
   min-width: max-content;
 }
 .egr-custom-select-question__input:focus {
   outline: none;
   margin: 0.9375rem -0.0625rem -0.0625rem -0.0625rem;
   border: 0.125rem solid #62396c;
+}
+.egr-custom-select-question__input::-moz-placeholder {
+  font-size: inherit;
+  color: #595959;
 }
 .egr-custom-select-question__input::placeholder {
   font-size: inherit;
@@ -1498,7 +1513,6 @@
   }
 }
 .egr-info-dialog--monatsplanner {
-  width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin: 0 auto;
@@ -1831,7 +1845,6 @@
   }
 }
 .egr-monatsplaner__sticky-elternteil thead {
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
 }

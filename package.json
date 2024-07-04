@@ -1,6 +1,5 @@
 {
   "name": "@egr/egr-app",
-  "version": "1.1.2",
   "type": "module",
   "files": [
     "dist/*",
@@ -11,7 +10,6 @@
     "build": "./setup-app-wrapper --target public --include-additional-css --include-additional-js && vite build",
     "serve-e2e": "./setup-app-wrapper --target public && vite build && npx http-server dist",
     "test": "LANG=de-DE vitest",
-    "eject": "craco eject",
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",
     "test-e2e": "playwright test",
@@ -20,18 +18,6 @@
     "lint-fix": "f() { eslint --fix ${@:-*.{ts,tsx\\}}; }; fx",
     "stylelint": "f() { stylelint ${@:-.}; }; f",
     "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   },
   "engines": {
     "node": "20.11.1",

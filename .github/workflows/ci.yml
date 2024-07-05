@@ -62,6 +62,7 @@ jobs:
   deploy:
     needs:
       - lint-and-test
+      - e2e-test
       - build
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:

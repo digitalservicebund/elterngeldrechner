@@ -12,7 +12,7 @@ const testStyles = async ({
   async function screenshot(locator: Locator, name: string) {
     // without timeout it produces blank screenshots
     // https://github.com/microsoft/playwright/issues/21657
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(2000);
     await expect(locator).toHaveScreenshot(`${name}-${screenSize}.png`, {
       stylePath: path.join(import.meta.dirname, "screenshot.css"),
     });
@@ -120,6 +120,7 @@ const testStyles = async ({
 };
 
 test("mobile styles", async ({ page }) => {
+  test.slow();
   await page.setViewportSize({
     width: 320,
     height: 900,
@@ -128,6 +129,7 @@ test("mobile styles", async ({ page }) => {
 });
 
 test("tablet styles", async ({ page }) => {
+  test.slow();
   await page.setViewportSize({
     width: 900,
     height: 700,
@@ -136,6 +138,7 @@ test("tablet styles", async ({ page }) => {
 });
 
 test("desktop styles", async ({ page }) => {
+  test.slow();
   await page.setViewportSize({
     width: 1500,
     height: 1000,

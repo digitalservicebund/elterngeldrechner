@@ -38,15 +38,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: package.json
-          cache: npm
+      - uses: ./.github/actions/cached-checkout-install
 
       - name: build page assets
         run: |
           set -ex
-          npm ci
           npm run build
 
       - name: upload artifact

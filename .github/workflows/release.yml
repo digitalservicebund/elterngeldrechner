@@ -10,15 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: package.json
-          cache: npm
+      - uses: ./.github/actions/cached-checkout-install
 
       - name: Build egr
         env:
           VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
-        run: npm ci && npm run build
+        run: npm run build
 
       - name: Audit Licenses
         run: npm run audit-licenses

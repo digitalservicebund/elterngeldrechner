@@ -14,6 +14,12 @@ export default defineConfig({
     baseURL: APP_BASE_URL,
     trace: "on-first-retry",
   },
+  expect: {
+    toHaveScreenshot: {
+      // accounts for tiny differences in font rendering between systems
+      maxDiffPixelRatio: 0.01,
+    },
+  },
   projects: [
     {
       name: "chromium",

@@ -5,11 +5,11 @@ vi.mock("./data-layer.ts");
 
 describe("trackNutzergruppe()", () => {
   beforeEach(() => {
-    vi.useFakeTimers;
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    vi.useRealTimers;
+    vi.useRealTimers();
   });
 
   it("sets the tracking variabe 'nutzergruppe'", () => {

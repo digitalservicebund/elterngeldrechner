@@ -51,7 +51,7 @@
     &,
     &:visited {
       color: $color-primary;
-      background-color: $color-white;
+      background-color: transparent;
     }
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten

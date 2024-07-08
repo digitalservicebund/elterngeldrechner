@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { UserFeedbackSection } from "./UserFeedbackSection";
 
 describe("UserFeedbackSection", () => {
@@ -12,19 +13,39 @@ describe("UserFeedbackSection", () => {
     expect(section).toBeVisible();
   });
 
-  it("should show a 'Ja' button", () => {
+  it("should show a 'Ja' and 'Nein' button", () => {
     render(<UserFeedbackSection />);
 
-    const button = screen.queryByRole("button", { name: "Ja" });
-
-    expect(button).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Ja" })).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Nein" })).toBeVisible();
   });
 
-  it("should show a 'Nein' button", () => {
-    render(<UserFeedbackSection />);
+  it.each(["Ja", "Nein"])(
+    "should show message when user clicked %s button",
+    async (label) => {
+      render(<UserFeedbackSection />);
 
-    const button = screen.queryByRole("button", { name: "Nein" });
+      const button = screen.getByRole("button", { name: label });
+      await userEvent.click(button);
 
-    expect(button).toBeVisible();
-  });
+      expect(screen.getByText("Vielen Dank für Ihr Feedback!")).toBeVisible();
+    },
+  );
+
+  it.each(["Ja", "Nein"])(
+    "should hide the buttons when the user clicked %s button",
+    async (label) => {
+      render(<UserFeedbackSection />);
+
+      const button = screen.getByRole("button", { name: label });
+      await userEvent.click(button);
+
+      expect(
+        screen.queryByRole("button", { name: "Ja" }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: "Nein" }),
+      ).not.toBeInTheDocument();
+    },
+  );
 });

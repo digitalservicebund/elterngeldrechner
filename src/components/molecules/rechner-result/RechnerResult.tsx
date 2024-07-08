@@ -104,6 +104,7 @@ export function RechnerResult({ elternteil }: Props) {
         className={nsp("rechner-result__basiselterngeld")}
         rows={begTableRows}
         elterngeldType="Basis"
+        elternteil={elternteil}
         titleTotal="Basis + Netto-Einkommen"
         markOver14Month={isAnyBEGMonthOver14Months}
       />
@@ -116,6 +117,7 @@ export function RechnerResult({ elternteil }: Props) {
         className={nsp("rechner-result__elterngeldplus")}
         rows={egplusTableRows}
         elterngeldType="Plus"
+        elternteil={elternteil}
         titleTotal="Plus + Netto-Einkommen"
         hideLebensmonate
       />
@@ -123,6 +125,7 @@ export function RechnerResult({ elternteil }: Props) {
         className={nsp("rechner-result__elterngeldbonus")}
         rows={psbTableRows}
         elterngeldType="Bonus"
+        elternteil={elternteil}
         titleTotal="Bonus + Netto-Einkommen"
         hideLebensmonate
       />

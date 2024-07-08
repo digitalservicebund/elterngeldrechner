@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
@@ -34,6 +34,45 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   const rechnerPlanerPage = new RechnerPlanerPOM(page);
   await rechnerPlanerPage.setKeinEinkommen();
   await rechnerPlanerPage.berechnen();
+
+  expect(await rechnerPlanerPage.getErgebnis(1, 1, 14, "Basis")).toHaveText(
+    "300 €",
+  );
+  expect(
+    await rechnerPlanerPage.getErgebnis(1, 1, 14, "Basis", true),
+  ).toHaveText("300 €");
+  expect(await rechnerPlanerPage.getErgebnis(1, 15, 32, "Basis")).toHaveText(
+    "0 €1",
+  );
+  expect(
+    await rechnerPlanerPage.getErgebnis(1, 15, 32, "Basis", true),
+  ).toHaveText("0 €1");
+
+  expect(await rechnerPlanerPage.getErgebnis(1, 1, 14, "Plus")).toHaveText(
+    "150 €",
+  );
+  expect(
+    await rechnerPlanerPage.getErgebnis(1, 1, 14, "Plus", true),
+  ).toHaveText("150 €");
+  expect(await rechnerPlanerPage.getErgebnis(1, 15, 32, "Plus")).toHaveText(
+    "150 €",
+  );
+  expect(
+    await rechnerPlanerPage.getErgebnis(1, 15, 32, "Plus", true),
+  ).toHaveText("150 €");
+
+  expect(await rechnerPlanerPage.getErgebnis(1, 1, 14, "Bonus")).toHaveText(
+    "150 €",
+  );
+  expect(
+    await rechnerPlanerPage.getErgebnis(1, 1, 14, "Bonus", true),
+  ).toHaveText("150 €");
+  expect(await rechnerPlanerPage.getErgebnis(1, 15, 32, "Bonus")).toHaveText(
+    "150 €",
+  );
+  expect(
+    await rechnerPlanerPage.getErgebnis(1, 15, 32, "Bonus", true),
+  ).toHaveText("150 €");
 
   await page
     .getByRole("button", { name: "Basiselterngeld für Lebensmonat 3" })

@@ -87,6 +87,18 @@ export class RechnerPlanerPOM {
     return this;
   }
 
+  async getErgebnis(
+    elternteil: 1 | 2,
+    vonLebensMonat: number,
+    bisLebensMonat: number,
+    elterngeldType: "Basis" | "Plus" | "Bonus",
+    total?: boolean,
+  ) {
+    return this.page.getByTestId(
+      `result-${total ? "total-" : ""}ET${elternteil}-${vonLebensMonat}-${bisLebensMonat}-${elterngeldType}`,
+    );
+  }
+
   async submit() {
     await this.page
       .getByRole("button", { name: "Zur Übersicht", exact: true })

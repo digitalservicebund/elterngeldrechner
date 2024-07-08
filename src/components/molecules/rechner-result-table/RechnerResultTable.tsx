@@ -13,6 +13,7 @@ export interface RechnerResultTableRow {
 interface Props {
   readonly rows: RechnerResultTableRow[];
   readonly elterngeldType: "Basis" | "Plus" | "Bonus";
+  readonly elternteil: "ET1" | "ET2";
   readonly titleTotal: string;
   readonly markOver14Month?: boolean;
   readonly hideLebensmonate?: boolean;
@@ -35,6 +36,7 @@ export const formatMoney = (number: number, fractionDigits?: number) => {
 export function RechnerResultTable({
   rows,
   elterngeldType,
+  elternteil,
   titleTotal,
   markOver14Month,
   hideLebensmonate,
@@ -94,14 +96,20 @@ export function RechnerResultTable({
                   ? vonLebensMonat
                   : `${vonLebensMonat} - ${bisLebensMonat}`}
               </td>
-              <td className={nsp("rechner-result-table__cell--result")}>
+              <td
+                className={nsp("rechner-result-table__cell--result")}
+                data-testid={`result-${elternteil}-${vonLebensMonat}-${bisLebensMonat}-${elterngeldType}`}
+              >
                 {roundAndFormatMoney(amountElterngeld)}
                 {markOver14Month &&
                 (vonLebensMonat > 14 || bisLebensMonat > 14) ? (
                   <FootNoteNumber number={1} type="anchor" prefix="rechner" />
                 ) : null}
               </td>
-              <td className={nsp("rechner-result-table__cell--result")}>
+              <td
+                className={nsp("rechner-result-table__cell--result")}
+                data-testid={`result-total-${elternteil}-${vonLebensMonat}-${bisLebensMonat}-${elterngeldType}`}
+              >
                 {roundAndFormatMoney(amountTotal)}
                 {markOver14Month &&
                 (vonLebensMonat > 14 || bisLebensMonat > 14) ? (

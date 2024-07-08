@@ -1,5 +1,5 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, _ as _default$3, q as _default$4, R as ReactDOM, t as getGeburtstagSettings, v as getFruehchen, w as countFilledMonths, x as countBEGMonths, y as countEGPlusMonths, z as minNumberOfElterngeld, A as lastIndexOfType, C as hasContinuousMonthsOfType, e as setTrackingVariable, F as React, G as getDefaultExportFromCjs, H as commonjsGlobal, Y as YesNo, B as Button, I as Big, J as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, K as KinderFreiBetrag, L as KassenArt, M as RentenArt, b as useAppSelector, N as stepErwerbstaetigkeitElternteilSelectors, O as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, Q as formatAsCurrency, T as _default$5, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-BAApMSlQ.js";
-import { E as EgrConst, _ as _default$6 } from "./egr-configuration-Dv2mHQCo.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, _ as _default$3, q as _default$4, R as ReactDOM, t as getGeburtstagSettings, v as getFruehchen, w as countFilledMonths, x as countBEGMonths, y as countEGPlusMonths, z as minNumberOfElterngeld, A as lastIndexOfType, C as hasContinuousMonthsOfType, e as setTrackingVariable, F as React, G as getDefaultExportFromCjs, H as commonjsGlobal, Y as YesNo, B as Button, I as Big, J as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, K as KinderFreiBetrag, L as KassenArt, M as RentenArt, b as useAppSelector, N as stepErwerbstaetigkeitElternteilSelectors, O as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, Q as formatAsCurrency, T as _default$5, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-UPL2KFoo.js";
+import { E as EgrConst, _ as _default$6 } from "./egr-configuration-CONXun8K.js";
 function Description({ id, error = false, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
@@ -5990,6 +5990,7 @@ const formatMoney = (number, fractionDigits) => {
 function RechnerResultTable({
   rows,
   elterngeldType,
+  elternteil,
   titleTotal,
   markOver14Month,
   hideLebensmonate,
@@ -6038,14 +6039,28 @@ function RechnerResultTable({
                 children: vonLebensMonat === bisLebensMonat ? vonLebensMonat : `${vonLebensMonat} - ${bisLebensMonat}`
               }
             ),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: nsp("rechner-result-table__cell--result"), children: [
-              roundAndFormatMoney(amountElterngeld),
-              markOver14Month && (vonLebensMonat > 14 || bisLebensMonat > 14) ? /* @__PURE__ */ jsxRuntimeExports.jsx(FootNoteNumber, { number: 1, type: "anchor", prefix: "rechner" }) : null
-            ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("td", { className: nsp("rechner-result-table__cell--result"), children: [
-              roundAndFormatMoney(amountTotal),
-              markOver14Month && (vonLebensMonat > 14 || bisLebensMonat > 14) ? /* @__PURE__ */ jsxRuntimeExports.jsx(FootNoteNumber, { number: 1, type: "anchor", prefix: "rechner" }) : null
-            ] })
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "td",
+              {
+                className: nsp("rechner-result-table__cell--result"),
+                "data-testid": `result-${elternteil}-${vonLebensMonat}-${bisLebensMonat}-${elterngeldType}`,
+                children: [
+                  roundAndFormatMoney(amountElterngeld),
+                  markOver14Month && (vonLebensMonat > 14 || bisLebensMonat > 14) ? /* @__PURE__ */ jsxRuntimeExports.jsx(FootNoteNumber, { number: 1, type: "anchor", prefix: "rechner" }) : null
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              "td",
+              {
+                className: nsp("rechner-result-table__cell--result"),
+                "data-testid": `result-total-${elternteil}-${vonLebensMonat}-${bisLebensMonat}-${elterngeldType}`,
+                children: [
+                  roundAndFormatMoney(amountTotal),
+                  markOver14Month && (vonLebensMonat > 14 || bisLebensMonat > 14) ? /* @__PURE__ */ jsxRuntimeExports.jsx(FootNoteNumber, { number: 1, type: "anchor", prefix: "rechner" }) : null
+                ]
+              }
+            )
           ] }, vonLebensMonat)
         ) })
       ]

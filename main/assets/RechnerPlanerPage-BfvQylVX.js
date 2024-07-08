@@ -1,6 +1,6 @@
-import { j as jsxRuntimeExports, Y as YesNo, n as nsp, u as useAppDispatch, r as reactExports, s as stepRechnerActions, B as Button, m as initialBruttoEinkommenZeitraum, b as useAppSelector, _ as _default$1, h as stepAllgemeineAngabenSelectors, o as numberOfMutterschutzMonths, E as EgrBerechnungParamId, P as Page, f as formSteps } from "./index-BAApMSlQ.js";
-import { k as FootNoteNumber, u as useForm, d as useFieldArray, g as get, F as FormFieldGroup, D as Description, e as CustomCheckbox, l as CustomNumberField, Z as Zeitraum, f as _default, m as availableZeitraumOptions, R as RechnerResultTable, T as Toast, M as Monatsplaner } from "./Monatsplaner-Bc0qKWoo.js";
-import { E as EgrConst } from "./egr-configuration-Dv2mHQCo.js";
+import { j as jsxRuntimeExports, Y as YesNo, n as nsp, u as useAppDispatch, r as reactExports, s as stepRechnerActions, B as Button, m as initialBruttoEinkommenZeitraum, b as useAppSelector, _ as _default$1, h as stepAllgemeineAngabenSelectors, o as numberOfMutterschutzMonths, E as EgrBerechnungParamId, P as Page, f as formSteps } from "./index-UPL2KFoo.js";
+import { k as FootNoteNumber, u as useForm, d as useFieldArray, g as get, F as FormFieldGroup, D as Description, e as CustomCheckbox, l as CustomNumberField, Z as Zeitraum, f as _default, m as availableZeitraumOptions, R as RechnerResultTable, T as Toast, M as Monatsplaner } from "./Monatsplaner-CsBdYPCW.js";
+import { E as EgrConst } from "./egr-configuration-CONXun8K.js";
 function NotificationBEGResultWasRecalculated({
   elternteilName,
   alleinerziehend
@@ -317,6 +317,7 @@ function RechnerResult({ elternteil }) {
             className: nsp("rechner-result__basiselterngeld"),
             rows: begTableRows,
             elterngeldType: "Basis",
+            elternteil,
             titleTotal: "Basis + Netto-Einkommen",
             markOver14Month: isAnyBEGMonthOver14Months
           }
@@ -328,6 +329,7 @@ function RechnerResult({ elternteil }) {
             className: nsp("rechner-result__elterngeldplus"),
             rows: egplusTableRows,
             elterngeldType: "Plus",
+            elternteil,
             titleTotal: "Plus + Netto-Einkommen",
             hideLebensmonate: true
           }
@@ -338,6 +340,7 @@ function RechnerResult({ elternteil }) {
             className: nsp("rechner-result__elterngeldbonus"),
             rows: psbTableRows,
             elterngeldType: "Bonus",
+            elternteil,
             titleTotal: "Bonus + Netto-Einkommen",
             hideLebensmonate: true
           }

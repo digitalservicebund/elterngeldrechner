@@ -1,5 +1,5 @@
-import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$5, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BwOtfhoS.js";
-import { _ as _default$4, E as EgrConst } from "./egr-configuration-CMPTsO-Y.js";
+import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$5, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BAApMSlQ.js";
+import { _ as _default$4, E as EgrConst } from "./egr-configuration-Dv2mHQCo.js";
 function PrintButton() {
   const handlePrint = () => {
     window.print();
@@ -52,6 +52,10 @@ var SvgThumbDownOffAlt = function(props) {
 var _default$1 = ThumbDownOffAlt.default = SvgThumbDownOffAlt;
 function UserFeedbackSection({ className }) {
   const labelIdentifier = reactExports.useId();
+  const [isCompleted, setIsCompleted] = reactExports.useState(false);
+  function sendFeedback() {
+    setIsCompleted(true);
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "aside",
     {
@@ -61,27 +65,29 @@ function UserFeedbackSection({ className }) {
         className
       ),
       children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { id: labelIdentifier, className: "basis-full text-base", children: "War der Elterngeldrechner mit Planer für Sie hilfreich?" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            id: "feedback-button-ja-war-hilfreich",
-            label: "Ja",
-            iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {}),
-            buttonStyle: "secondary",
-            className: "bg-primary-light hover:bg-primary focus:bg-primary"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          Button,
-          {
-            id: "feedback-button-nein-war-nicht-hilfreich",
-            label: "Nein",
-            iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
-            buttonStyle: "secondary",
-            className: "bg-primary-light hover:bg-primary focus:bg-primary"
-          }
-        )
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { id: labelIdentifier, className: "basis-full text-base font-bold", children: isCompleted ? "Vielen Dank für Ihr Feedback!" : "War der Elterngeldrechner mit Planer für Sie hilfreich?" }),
+        !isCompleted && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              id: "feedback-button-ja-war-hilfreich",
+              label: "Ja",
+              iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {}),
+              buttonStyle: "secondary",
+              onClick: sendFeedback
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            Button,
+            {
+              id: "feedback-button-nein-war-nicht-hilfreich",
+              label: "Nein",
+              iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
+              buttonStyle: "secondary",
+              onClick: sendFeedback
+            }
+          )
+        ] })
       ]
     }
   );

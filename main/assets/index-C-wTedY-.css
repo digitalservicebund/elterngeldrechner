@@ -550,16 +550,8 @@
 #egr-root :is(.last\:pr-8:last-child) {
   padding-right: 0.5rem;
 }
-#egr-root :is(.hover\:bg-primary:hover) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(98 57 108 / var(--tw-bg-opacity));
-}
 #egr-root :is(.hover\:underline:hover) {
   text-decoration-line: underline;
-}
-#egr-root :is(.focus\:bg-primary:focus) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(98 57 108 / var(--tw-bg-opacity));
 }
 #egr-root :is(.focus\:outline-none:focus) {
   outline: 2px solid transparent;
@@ -787,7 +779,7 @@
 }
 .egr-button--secondary, .egr-button--secondary:visited {
   color: #62396c;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 @media (hover: hover) {
   .egr-button--secondary:hover {

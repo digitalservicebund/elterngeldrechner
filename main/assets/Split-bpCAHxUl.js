@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp } from "./index-UPL2KFoo.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp } from "./index-DH_olPNi.js";
 function SplitItem({ hasDivider, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",

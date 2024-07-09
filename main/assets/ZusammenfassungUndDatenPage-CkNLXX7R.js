@@ -1,5 +1,5 @@
-import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$5, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-UPL2KFoo.js";
-import { _ as _default$4, E as EgrConst } from "./egr-configuration-CONXun8K.js";
+import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$4, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-DH_olPNi.js";
+import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function PrintButton() {
   const handlePrint = () => {
     window.print();
@@ -363,17 +363,15 @@ function ElterngeldvarianteBadge({
   variante,
   className
 }) {
-  const label = variante ? LABELS[variante] : /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {});
-  const variantClassName = CLASS_NAME[variante];
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "span",
     {
       className: classNames(
         "px-8 pt-6 pb-10 text-center rounded font-bold flex items-center justify-center leading-[1.444]",
         className,
-        variantClassName
+        CLASS_NAME[variante]
       ),
-      children: label
+      children: LABELS[variante]
     }
   );
 }
@@ -410,7 +408,8 @@ function VariantenDetails({ variante, details }) {
 const LABEL_PER_VARIANTE = {
   BEG: "BasisElterngeld",
   "EG+": "ElterngeldPlus",
-  PSB: "Partnerschaftbonus"
+  PSB: "Partnerschaftbonus",
+  None: "kein Elterngeld"
 };
 function formatZeitraum(zeitraum) {
   const { from, to } = zeitraum;
@@ -439,7 +438,7 @@ function Elternteil({
   const formattedZeitraeume = zeitraeueme.map(formatZeitraum);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-8", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("h4", { className: "text-base", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {}),
       " ",
       name
     ] }),
@@ -466,12 +465,12 @@ function Elternteil({
           "divide-x-0 divide-y-2 divide-solid divide-off-white",
           "border-x-0 border-y-2 border-solid border-off-white"
         ),
-        children: ELTERNGELD_VARIANTEN.map((variante) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "flex items-start gap-24 py-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx(VariantenDetails, { variante, details: details[variante] }) }, variante))
+        children: ELTERNGELD_VARIANTEN_TO_SHOW.map((variante) => /* @__PURE__ */ jsxRuntimeExports.jsx("li", { className: "flex items-start gap-24 py-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx(VariantenDetails, { variante, details: details[variante] }) }, variante))
       }
     )
   ] });
 }
-const ELTERNGELD_VARIANTEN = ["BEG", "EG+", "PSB"];
+const ELTERNGELD_VARIANTEN_TO_SHOW = ["BEG", "EG+", "PSB"];
 function Planungsuebersicht({
   data
 }) {
@@ -495,60 +494,57 @@ var SvgBusinessCenterOutlined = function(props) {
   return (0, jsx_runtime_1.jsxs)("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "BusinessCenterOutlinedIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1.jsx)("path", { d: "M0 0h24v24H0V0z", fill: "none" }), (0, jsx_runtime_1.jsx)("path", { d: "M20 7h-4V5l-2-2h-4L8 5v2H4c-1.1 0-2 .9-2 2v5c0 .75.4 1.38 1 1.73V19c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2v-3.28c.59-.35 1-.99 1-1.72V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5zM4 9h16v5h-5v-3H9v3H4V9zm9 6h-2v-2h2v2zm6 4H5v-3h4v1h6v-1h4v3z" })] }));
 };
 var _default = BusinessCenterOutlined.default = SvgBusinessCenterOutlined;
-function PlanungsdetailsMonth({ month = { type: "None" } }) {
-  const {
-    type,
-    isMutterschutzMonth,
-    elterngeld,
-    nettoEinkommen,
-    verfuegbaresEinkommen
-  } = month;
-  const isVariant = ["BEG", "EG+", "PSB"].includes(type) && !isMutterschutzMonth;
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-x-8", children: [
-    type === "None" ? "– kein Elterngeld –" : "",
-    isMutterschutzMonth ? "Mutterschutz" : "",
-    isVariant ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        ElterngeldvarianteBadge,
-        {
-          variante: type,
-          className: "min-w-[7ch]"
-        }
-      ),
-      typeof nettoEinkommen === "number" ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          typeof elterngeld === "number" ? formatAsCurrency(elterngeld) : "",
-          " ",
-          nettoEinkommen ? /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-            "| ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx(_default, {}),
-            " Einkommen",
-            " ",
-            formatAsCurrency(nettoEinkommen)
-          ] }) : ""
-        ] }),
-        nettoEinkommen && verfuegbaresEinkommen ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "font-bold leading-[0.5]", children: [
-          "= ",
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "verfügbares Einkommen" }),
-          formatAsCurrency(verfuegbaresEinkommen)
-        ] }) : ""
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-bold", children: typeof elterngeld === "number" ? formatAsCurrency(elterngeld) : "" })
-    ] }) : ""
+function PlanungsdetailsMonth({
+  variante,
+  isMutterschutzMonth,
+  elterngeld,
+  nettoEinkommen,
+  verfuegbaresEinkommen
+}) {
+  const variantenElement = formatVarianteAsElement(
+    variante,
+    isMutterschutzMonth
+  );
+  const hasElterngeld = elterngeld > 0;
+  const hasNettoEinkommen = nettoEinkommen > 0;
+  const hasOnlyElterngeld = hasElterngeld && !hasNettoEinkommen;
+  const hasOnlyNettoEinkommen = hasNettoEinkommen && !hasElterngeld;
+  const showVerfuegbaresEinkommen = hasElterngeld && hasNettoEinkommen;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-start gap-x-8", children: [
+    variantenElement,
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col place-self-center leading-7", children: [
+      !!hasElterngeld && /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: classNames({ "font-bold": hasOnlyElterngeld }), children: formatAsCurrency(elterngeld) }),
+      !!hasNettoEinkommen && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(_default, {}),
+        " Einkommen",
+        " ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: classNames({ "font-bold": hasOnlyNettoEinkommen }),
+            children: formatAsCurrency(nettoEinkommen)
+          }
+        )
+      ] }),
+      !!showVerfuegbaresEinkommen && /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "mt-8 font-bold", children: [
+        "= ",
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "verfügbares Einkommen" }),
+        formatAsCurrency(verfuegbaresEinkommen)
+      ] })
+    ] })
   ] });
 }
-const monthLabel = ({
-  birthdate,
-  index
-}) => {
-  const from = new Date(birthdate);
-  from.setMonth(from.getMonth() + index);
-  const to = new Date(from);
-  to.setMonth(to.getMonth() + 1);
-  to.setDate(to.getDate() - 1);
-  return formatZeitraum({ from, to });
-};
+function formatVarianteAsElement(variante, isMutterschutzMonth) {
+  if (isMutterschutzMonth) {
+    return "Mutterschutz";
+  } else if (variante === "None") {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "basis-full", children: "- kein Elterngeld -" });
+  } else {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(ElterngeldvarianteBadge, { variante, className: "min-w-[7ch]" });
+  }
+}
 function PlanungsdetailsTable({
-  sumMonths,
+  lastMonthIndexToShow,
   birthdate,
   elternteile
 }) {
@@ -556,59 +552,73 @@ function PlanungsdetailsTable({
     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "text-left font-bold", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { scope: "col", children: "Lebensmonate" }),
       elternteile.map(({ name }) => /* @__PURE__ */ jsxRuntimeExports.jsxs("th", { scope: "col", abbr: name, className: "pl-32 last:pr-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {}),
         " ",
         name
       ] }, name))
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { className: "[&_td]:pt-10 [&_th]:pt-10", children: [...Array(sumMonths)].map((_, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "leading-[2.333]", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { className: "[&_td]:pt-10 [&_th]:pt-10", children: [...Array(lastMonthIndexToShow + 1)].map((_, monthIndex) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "leading-[2.333]", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs(
         "th",
         {
           scope: "row",
-          abbr: `${index + 1}`,
+          abbr: `${monthIndex + 1}`,
           className: "flex items-center px-8 text-left font-regular",
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-w-[3ch] font-bold", children: index + 1 }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "leading-tight", children: monthLabel({ birthdate, index }) })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-w-[3ch] font-bold", children: monthIndex + 1 }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "leading-tight", children: getLabelForLebensmonat(birthdate, monthIndex) })
           ]
         }
       ),
-      elternteile.map(({ months }, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "pl-32 align-top last:pr-8", children: /* @__PURE__ */ jsxRuntimeExports.jsx(PlanungsdetailsMonth, { month: months[index] }) }, `${index}${i}`))
-    ] }, index)) })
+      elternteile.map(({ lebensmonate }, elternteilIndex) => {
+        const lebensmonat = lebensmonate[monthIndex] ?? FILLER_LEBENSMONAT;
+        return /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "td",
+          {
+            className: "pl-32 align-top last:pr-8",
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(PlanungsdetailsMonth, { ...lebensmonat })
+          },
+          `${monthIndex}${elternteilIndex}`
+        );
+      })
+    ] }, monthIndex)) })
   ] });
 }
-function Planungsdetails({
-  data
-}) {
+function getLabelForLebensmonat(birthdate, index) {
+  const from = new Date(birthdate);
+  from.setMonth(from.getMonth() + index);
+  const to = new Date(from);
+  to.setMonth(to.getMonth() + 1);
+  to.setDate(to.getDate() - 1);
+  return formatZeitraum({ from, to });
+}
+const FILLER_LEBENSMONAT = {
+  variante: "None",
+  isMutterschutzMonth: false,
+  elterngeld: 0,
+  nettoEinkommen: 0,
+  verfuegbaresEinkommen: 0
+};
+function Planungsdetails({ data }) {
   const birthdate = useAppSelector(
     stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum
   );
-  const sumMonths = data[1] ? Math.max(data[0].months.length, data[1].months.length) : data[0].months.length;
+  const lastMonthIndexToShow = Math.max(...data.map(({ lebensmonate }) => lebensmonate.length)) - 1;
   const elternteile = data;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "@container/planungs-details", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-y-32 @2xl/planungs-details:hidden", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        PlanungsdetailsTable,
-        {
-          sumMonths,
-          birthdate,
-          elternteile: [elternteile[0]]
-        }
-      ),
-      elternteile[1] ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-        PlanungsdetailsTable,
-        {
-          sumMonths,
-          birthdate,
-          elternteile: [elternteile[1]]
-        }
-      ) : ""
-    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-col gap-y-32 @2xl/planungs-details:hidden", children: elternteile.map((elternteil) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      PlanungsdetailsTable,
+      {
+        lastMonthIndexToShow,
+        birthdate,
+        elternteile: [elternteil]
+      },
+      elternteil.name
+    )) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden @2xl/planungs-details:block", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       PlanungsdetailsTable,
       {
-        sumMonths,
+        lastMonthIndexToShow,
         birthdate,
         elternteile
       }
@@ -641,28 +651,32 @@ function createPlanungsdatenSelector(elternteil) {
       geldInsgesamt: sumUpElterngeld(months, elterngeldResult) + sumUpNettoEinkommen(months, elterngeldResult),
       zeitraeueme: assembleZeitraeume(months, birthdate),
       details: combineDetails(months, elterngeldResult),
-      months: trimMonths(combineMonths(months, elterngeldResult))
+      lebensmonate: trimLebensmonate(
+        combineLebensmonate(months, elterngeldResult)
+      )
     })
   );
 }
-function combineMonths(months, elterngeldResult) {
+function combineLebensmonate(months, elterngeldResult) {
   const resultPerMonth = flattenElterngeldResult(elterngeldResult);
   return months.map((month, index) => {
+    const { type: variante, isMutterschutzMonth } = month;
     const elterngeld = readElterngeld(resultPerMonth[index], month.type);
     const nettoEinkommen = resultPerMonth[index].nettoEinkommen;
     return {
-      ...month,
+      variante,
+      isMutterschutzMonth,
       elterngeld,
       nettoEinkommen,
       verfuegbaresEinkommen: elterngeld + nettoEinkommen
     };
   });
 }
-function trimMonths(months) {
-  const lastRelevantIndex = months.findLastIndex(
-    (month) => month.type !== "None"
+function trimLebensmonate(lebensmonate) {
+  const lastRelevantIndex = lebensmonate.findLastIndex(
+    ({ variante }) => variante !== "None"
   );
-  return months.slice(0, lastRelevantIndex + 1);
+  return lebensmonate.slice(0, lastRelevantIndex + 1);
 }
 function combineDetails(months, elterngeldResult) {
   return {

@@ -1,5 +1,5 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, _ as _default$3, q as _default$4, R as ReactDOM, t as getGeburtstagSettings, v as getFruehchen, w as countFilledMonths, x as countBEGMonths, y as countEGPlusMonths, z as minNumberOfElterngeld, A as lastIndexOfType, C as hasContinuousMonthsOfType, e as setTrackingVariable, F as React, G as getDefaultExportFromCjs, H as commonjsGlobal, Y as YesNo, B as Button, I as Big, J as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, K as KinderFreiBetrag, L as KassenArt, M as RentenArt, b as useAppSelector, N as stepErwerbstaetigkeitElternteilSelectors, O as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, Q as formatAsCurrency, T as _default$5, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-UPL2KFoo.js";
-import { E as EgrConst, _ as _default$6 } from "./egr-configuration-CONXun8K.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, _ as _default$4, q as _default$5, R as ReactDOM, t as getGeburtstagSettings, v as getFruehchen, w as countFilledMonths, x as countBEGMonths, y as countEGPlusMonths, z as minNumberOfElterngeld, A as lastIndexOfType, C as hasContinuousMonthsOfType, e as setTrackingVariable, F as React, G as getDefaultExportFromCjs, H as commonjsGlobal, Y as YesNo, B as Button, I as Big, J as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, K as KinderFreiBetrag, L as KassenArt, M as RentenArt, b as useAppSelector, N as stepErwerbstaetigkeitElternteilSelectors, O as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, Q as formatAsCurrency, T as _default$6, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-DH_olPNi.js";
+import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function Description({ id, error = false, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     "div",
@@ -49,7 +49,7 @@ function InfoDialog({
             type: "button",
             onClick: () => setIsModalOpen(true),
             "aria-label": "Zugehörige Information zeigen",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {})
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {})
           }
         ),
         !!isModalOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -69,7 +69,7 @@ function InfoDialog({
                   type: "button",
                   onClick: () => setIsModalOpen(false),
                   "aria-label": "Information schließen",
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {})
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {})
                 }
               ),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: info.id, className: nsp("info-dialog-box__text"), children: typeof info.text === "string" ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "whitespace-pre-line", children: info.text }) : info.text })
@@ -5932,6 +5932,24 @@ function CustomNumberField({
     }
   );
 }
+var Add = {};
+var __assign$3 = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$3 = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+        t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign$3.apply(this, arguments);
+};
+Object.defineProperty(Add, "__esModule", { value: true });
+var jsx_runtime_1$3 = jsxRuntimeExports;
+var SvgAdd = function(props) {
+  return (0, jsx_runtime_1$3.jsxs)("svg", __assign$3({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "AddIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$3.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$3.jsx)("path", { d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" })] }));
+};
+var _default$3 = Add.default = SvgAdd;
 var Remove = {};
 var __assign$2 = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign$2 = Object.assign || function(t) {
@@ -7225,7 +7243,7 @@ function ParentSummation({
   );
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$6, {}),
       " ",
       /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: name }),
       " ",
@@ -7837,7 +7855,7 @@ function Monatsplaner({ mutterSchutzMonate }) {
                     {
                       buttonStyle: "secondary",
                       label: "Alle Monate anzeigen",
-                      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$6, {}),
+                      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {}),
                       onClick: () => setLebensmonateVisibleLength(lebensmonate.length)
                     }
                   ),
@@ -7910,18 +7928,19 @@ export {
   YesNoRadio as Y,
   Zeitraum as Z,
   _default$2 as _,
-  useController as a,
-  IMaskInput as b,
-  IMask as c,
-  useFieldArray as d,
-  CustomCheckbox as e,
-  _default$1 as f,
+  _default$3 as a,
+  useController as b,
+  IMaskInput as c,
+  IMask as d,
+  useFieldArray as e,
+  CustomCheckbox as f,
   get as g,
-  useFormContext as h,
+  _default$1 as h,
   infoTexts as i,
-  FormProvider as j,
-  FootNoteNumber as k,
-  CustomNumberField as l,
-  availableZeitraumOptions as m,
+  useFormContext as j,
+  FormProvider as k,
+  FootNoteNumber as l,
+  CustomNumberField as m,
+  availableZeitraumOptions as n,
   useForm as u
 };

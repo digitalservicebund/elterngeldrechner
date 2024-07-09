@@ -188,6 +188,9 @@
 #egr-root :is(.mt-40) {
   margin-top: 2.5rem;
 }
+#egr-root :is(.mt-8) {
+  margin-top: 0.5rem;
+}
 #egr-root :is(.mt-auto) {
   margin-top: auto;
 }
@@ -352,6 +355,9 @@
   --tw-divide-opacity: 1;
   border-color: rgb(244 244 244 / var(--tw-divide-opacity));
 }
+#egr-root :is(.place-self-center) {
+  place-self: center;
+}
 #egr-root :is(.overflow-hidden) {
   overflow: hidden;
 }
@@ -493,8 +499,8 @@
 #egr-root :is(.font-regular) {
   font-weight: 400;
 }
-#egr-root :is(.leading-\[0\.5\]) {
-  line-height: 0.5;
+#egr-root :is(.leading-7) {
+  line-height: 1.75rem;
 }
 #egr-root :is(.leading-\[1\.444\]) {
   line-height: 1.444;

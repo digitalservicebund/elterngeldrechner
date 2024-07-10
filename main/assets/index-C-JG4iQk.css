@@ -215,9 +215,6 @@
 #egr-root :is(.min-h-24) {
   min-height: 1.5rem;
 }
-#egr-root :is(.min-h-40) {
-  min-height: 2.5rem;
-}
 #egr-root :is(.min-h-56) {
   min-height: 3.5rem;
 }
@@ -227,8 +224,11 @@
 #egr-root :is(.w-full) {
   width: 100%;
 }
-#egr-root :is(.min-w-40) {
-  min-width: 2.5rem;
+#egr-root :is(.min-w-24) {
+  min-width: 1.5rem;
+}
+#egr-root :is(.min-w-96) {
+  min-width: 6rem;
 }
 #egr-root :is(.min-w-\[3ch\]) {
   min-width: 3ch;
@@ -315,6 +315,10 @@
 #egr-root :is(.gap-8) {
   gap: 0.5rem;
 }
+#egr-root :is(.gap-x-20) {
+  -moz-column-gap: 1.25rem;
+       column-gap: 1.25rem;
+}
 #egr-root :is(.gap-x-24) {
   -moz-column-gap: 1.5rem;
        column-gap: 1.5rem;
@@ -322,9 +326,6 @@
 #egr-root :is(.gap-x-8) {
   -moz-column-gap: 0.5rem;
        column-gap: 0.5rem;
-}
-#egr-root :is(.gap-y-10) {
-  row-gap: 0.625rem;
 }
 #egr-root :is(.gap-y-16) {
   row-gap: 1rem;
@@ -358,9 +359,6 @@
 #egr-root :is(.place-self-center) {
   place-self: center;
 }
-#egr-root :is(.overflow-hidden) {
-  overflow: hidden;
-}
 #egr-root :is(.whitespace-pre-line) {
   white-space: pre-line;
 }
@@ -369,6 +367,9 @@
 }
 #egr-root :is(.rounded-2) {
   border-radius: 0.125rem;
+}
+#egr-root :is(.border-0) {
+  border-width: 0px;
 }
 #egr-root :is(.border-2) {
   border-width: 2px;
@@ -381,11 +382,18 @@
   border-top-width: 2px;
   border-bottom-width: 2px;
 }
+#egr-root :is(.border-b-2) {
+  border-bottom-width: 2px;
+}
 #egr-root :is(.border-solid) {
   border-style: solid;
 }
 #egr-root :is(.border-none) {
   border-style: none;
+}
+#egr-root :is(.border-black) {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 #egr-root :is(.border-grey) {
   --tw-border-opacity: 1;
@@ -432,9 +440,6 @@
 #egr-root :is(.p-24) {
   padding: 1.5rem;
 }
-#egr-root :is(.p-32) {
-  padding: 2rem;
-}
 #egr-root :is(.p-8) {
   padding: 0.5rem;
 }
@@ -460,14 +465,14 @@
 #egr-root :is(.pb-4) {
   padding-bottom: 0.25rem;
 }
-#egr-root :is(.pb-56) {
-  padding-bottom: 3.5rem;
-}
 #egr-root :is(.pl-24) {
   padding-left: 1.5rem;
 }
 #egr-root :is(.pl-32) {
   padding-left: 2rem;
+}
+#egr-root :is(.pt-4) {
+  padding-top: 0.25rem;
 }
 #egr-root :is(.pt-6) {
   padding-top: 0.375rem;
@@ -484,10 +489,6 @@
 #egr-root :is(.text-14) {
   font-size: 0.875rem;
   line-height: 1.429;
-}
-#egr-root :is(.text-24) {
-  font-size: 1.5rem;
-  line-height: 1.667;
 }
 #egr-root :is(.text-base) {
   font-size: 1.125rem;
@@ -553,6 +554,9 @@
 #egr-root :is(.\*\:grow > *) {
   flex-grow: 1;
 }
+#egr-root :is(.first\:border-t-2:first-child) {
+  border-top-width: 2px;
+}
 #egr-root :is(.last\:pr-8:last-child) {
   padding-right: 0.5rem;
 }
@@ -562,12 +566,6 @@
 #egr-root :is(.focus\:outline-none:focus) {
   outline: 2px solid transparent;
   outline-offset: 2px;
-}
-#egr-root :is(.group[open] .group-open\:block) {
-  display: block;
-}
-#egr-root :is(.group[open] .group-open\:hidden) {
-  display: none;
 }
 @container planungs-details (min-width: 42rem) {
   #egr-root :is(.\@2xl\/planungs-details\:block) {

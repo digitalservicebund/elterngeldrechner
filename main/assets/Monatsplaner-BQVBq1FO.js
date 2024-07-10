@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, _ as _default$4, q as _default$5, R as ReactDOM, t as getGeburtstagSettings, v as getFruehchen, w as countFilledMonths, x as countBEGMonths, y as countEGPlusMonths, z as minNumberOfElterngeld, A as lastIndexOfType, C as hasContinuousMonthsOfType, e as setTrackingVariable, F as React, G as getDefaultExportFromCjs, H as commonjsGlobal, Y as YesNo, B as Button, I as Big, J as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, K as KinderFreiBetrag, L as KassenArt, M as RentenArt, b as useAppSelector, N as stepErwerbstaetigkeitElternteilSelectors, O as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, Q as formatAsCurrency, T as _default$6, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-DH_olPNi.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, o as _default$4, t as _default$5, R as ReactDOM, v as getGeburtstagSettings, w as getFruehchen, x as countFilledMonths, y as countBEGMonths, z as countEGPlusMonths, A as minNumberOfElterngeld, C as lastIndexOfType, F as hasContinuousMonthsOfType, e as setTrackingVariable, G as React, H as getDefaultExportFromCjs, I as commonjsGlobal, Y as YesNo, B as Button, J as Big, K as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, L as KinderFreiBetrag, M as KassenArt, N as RentenArt, b as useAppSelector, O as stepErwerbstaetigkeitElternteilSelectors, Q as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, T as formatAsCurrency, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, _ as _default$6, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-D_q3z5hw.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function Description({ id, error = false, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -5932,7 +5932,7 @@ function CustomNumberField({
     }
   );
 }
-var Add = {};
+var Remove = {};
 var __assign$3 = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign$3 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -5944,30 +5944,12 @@ var __assign$3 = commonjsGlobal && commonjsGlobal.__assign || function() {
   };
   return __assign$3.apply(this, arguments);
 };
-Object.defineProperty(Add, "__esModule", { value: true });
-var jsx_runtime_1$3 = jsxRuntimeExports;
-var SvgAdd = function(props) {
-  return (0, jsx_runtime_1$3.jsxs)("svg", __assign$3({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "AddIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$3.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$3.jsx)("path", { d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" })] }));
-};
-var _default$3 = Add.default = SvgAdd;
-var Remove = {};
-var __assign$2 = commonjsGlobal && commonjsGlobal.__assign || function() {
-  __assign$2 = Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-        t[p] = s[p];
-    }
-    return t;
-  };
-  return __assign$2.apply(this, arguments);
-};
 Object.defineProperty(Remove, "__esModule", { value: true });
-var jsx_runtime_1$2 = jsxRuntimeExports;
+var jsx_runtime_1$3 = jsxRuntimeExports;
 var SvgRemove = function(props) {
-  return (0, jsx_runtime_1$2.jsxs)("svg", __assign$2({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "RemoveIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$2.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$2.jsx)("path", { d: "M19 13H5v-2h14v2z" })] }));
+  return (0, jsx_runtime_1$3.jsxs)("svg", __assign$3({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "RemoveIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$3.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$3.jsx)("path", { d: "M19 13H5v-2h14v2z" })] }));
 };
-var _default$2 = Remove.default = SvgRemove;
+var _default$3 = Remove.default = SvgRemove;
 const yesNoLabels = {
   [YesNo.YES]: "Ja",
   [YesNo.NO]: "Nein"
@@ -6340,8 +6322,8 @@ function PlanningContingent({ months, className }) {
   );
 }
 var Clear = {};
-var __assign$1 = commonjsGlobal && commonjsGlobal.__assign || function() {
-  __assign$1 = Object.assign || function(t) {
+var __assign$2 = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$2 = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
       s = arguments[i];
       for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
@@ -6349,14 +6331,14 @@ var __assign$1 = commonjsGlobal && commonjsGlobal.__assign || function() {
     }
     return t;
   };
-  return __assign$1.apply(this, arguments);
+  return __assign$2.apply(this, arguments);
 };
 Object.defineProperty(Clear, "__esModule", { value: true });
-var jsx_runtime_1$1 = jsxRuntimeExports;
+var jsx_runtime_1$2 = jsxRuntimeExports;
 var SvgClear = function(props) {
-  return (0, jsx_runtime_1$1.jsxs)("svg", __assign$1({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ClearIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$1.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$1.jsx)("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" })] }));
+  return (0, jsx_runtime_1$2.jsxs)("svg", __assign$2({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ClearIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$2.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$2.jsx)("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" })] }));
 };
-var _default$1 = Clear.default = SvgClear;
+var _default$2 = Clear.default = SvgClear;
 function NurErwerbstaetig({
   elternteil,
   monthsBeforeBirth
@@ -7055,7 +7037,7 @@ function Taetigkeit({
             {
               buttonStyle: "link",
               label: "Zeitraum entfernen",
-              iconAfter: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
+              iconAfter: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {}),
               onClick: () => {
                 setMonthsBeforeBirthList(
                   (monthsBeforeBirthList2) => monthsBeforeBirthList2.filter(
@@ -7211,6 +7193,24 @@ function EinkommenFormElternteil({ elternteil, elternteilName }) {
   ] });
 }
 var RestartAlt = {};
+var __assign$1 = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$1 = Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+        t[p] = s[p];
+    }
+    return t;
+  };
+  return __assign$1.apply(this, arguments);
+};
+Object.defineProperty(RestartAlt, "__esModule", { value: true });
+var jsx_runtime_1$1 = jsxRuntimeExports;
+var SvgRestartAlt = function(props) {
+  return (0, jsx_runtime_1$1.jsxs)("svg", __assign$1({ xmlns: "http://www.w3.org/2000/svg", enableBackground: "new 0 0 24 24", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "RestartAltIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$1.jsx)("g", { children: (0, jsx_runtime_1$1.jsx)("path", { d: "M0,0h24v24H0V0z", fill: "none" }) }), (0, jsx_runtime_1$1.jsx)("g", { children: (0, jsx_runtime_1$1.jsxs)("g", { children: [(0, jsx_runtime_1$1.jsx)("path", { d: "M12,5V2L8,6l4,4V7c3.31,0,6,2.69,6,6c0,2.97-2.17,5.43-5,5.91v2.02c3.95-0.49,7-3.85,7-7.93C20,8.58,16.42,5,12,5z" }), (0, jsx_runtime_1$1.jsx)("path", { d: "M6,13c0-1.65,0.67-3.15,1.76-4.24L6.34,7.34C4.9,8.79,4,10.79,4,13c0,4.08,3.05,7.44,7,7.93v-2.02 C8.17,18.43,6,15.97,6,13z" })] }) })] }));
+};
+var _default$1 = RestartAlt.default = SvgRestartAlt;
+var PermIdentity = {};
 var __assign = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign = Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -7222,12 +7222,12 @@ var __assign = commonjsGlobal && commonjsGlobal.__assign || function() {
   };
   return __assign.apply(this, arguments);
 };
-Object.defineProperty(RestartAlt, "__esModule", { value: true });
+Object.defineProperty(PermIdentity, "__esModule", { value: true });
 var jsx_runtime_1 = jsxRuntimeExports;
-var SvgRestartAlt = function(props) {
-  return (0, jsx_runtime_1.jsxs)("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", enableBackground: "new 0 0 24 24", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "RestartAltIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1.jsx)("g", { children: (0, jsx_runtime_1.jsx)("path", { d: "M0,0h24v24H0V0z", fill: "none" }) }), (0, jsx_runtime_1.jsx)("g", { children: (0, jsx_runtime_1.jsxs)("g", { children: [(0, jsx_runtime_1.jsx)("path", { d: "M12,5V2L8,6l4,4V7c3.31,0,6,2.69,6,6c0,2.97-2.17,5.43-5,5.91v2.02c3.95-0.49,7-3.85,7-7.93C20,8.58,16.42,5,12,5z" }), (0, jsx_runtime_1.jsx)("path", { d: "M6,13c0-1.65,0.67-3.15,1.76-4.24L6.34,7.34C4.9,8.79,4,10.79,4,13c0,4.08,3.05,7.44,7,7.93v-2.02 C8.17,18.43,6,15.97,6,13z" })] }) })] }));
+var SvgPermIdentity = function(props) {
+  return (0, jsx_runtime_1.jsxs)("svg", __assign({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "PermIdentityIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1.jsx)("path", { d: "M12 5.9c1.16 0 2.1.94 2.1 2.1s-.94 2.1-2.1 2.1S9.9 9.16 9.9 8s.94-2.1 2.1-2.1m0 9c2.97 0 6.1 1.46 6.1 2.1v1.1H5.9V17c0-.64 3.13-2.1 6.1-2.1M12 4C9.79 4 8 5.79 8 8s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 9c-2.67 0-8 1.34-8 4v3h16v-3c0-2.66-5.33-4-8-4z" })] }));
 };
-var _default = RestartAlt.default = SvgRestartAlt;
+var _default = PermIdentity.default = SvgPermIdentity;
 function ParentSummation({
   name,
   monthCount,
@@ -7243,7 +7243,7 @@ function ParentSummation({
   );
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$6, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(_default, {}),
       " ",
       /* @__PURE__ */ jsxRuntimeExports.jsx("strong", { children: name }),
       " ",
@@ -7855,7 +7855,7 @@ function Monatsplaner({ mutterSchutzMonate }) {
                     {
                       buttonStyle: "secondary",
                       label: "Alle Monate anzeigen",
-                      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {}),
+                      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$6, {}),
                       onClick: () => setLebensmonateVisibleLength(lebensmonate.length)
                     }
                   ),
@@ -7889,7 +7889,7 @@ function Monatsplaner({ mutterSchutzMonate }) {
         {
           buttonStyle: "link",
           label: "Planung wiederholen",
-          iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default, {}),
+          iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, {}),
           onClick: repeatPlanning
         }
       ),
@@ -7927,20 +7927,19 @@ export {
   Toast as T,
   YesNoRadio as Y,
   Zeitraum as Z,
-  _default$2 as _,
-  _default$3 as a,
-  useController as b,
-  IMaskInput as c,
-  IMask as d,
-  useFieldArray as e,
-  CustomCheckbox as f,
+  _default$3 as _,
+  useController as a,
+  IMaskInput as b,
+  IMask as c,
+  useFieldArray as d,
+  CustomCheckbox as e,
+  _default$2 as f,
   get as g,
-  _default$1 as h,
+  useFormContext as h,
   infoTexts as i,
-  useFormContext as j,
-  FormProvider as k,
-  FootNoteNumber as l,
-  CustomNumberField as m,
-  availableZeitraumOptions as n,
+  FormProvider as j,
+  FootNoteNumber as k,
+  CustomNumberField as l,
+  availableZeitraumOptions as m,
   useForm as u
 };

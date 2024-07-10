@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, B as Button, Z as _default$3, H as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, Q as formatAsCurrency, a6 as _default$4, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-DH_olPNi.js";
+import { j as jsxRuntimeExports, B as Button, Z as _default$3, I as commonjsGlobal, r as reactExports, c as classNames, a5 as useAppStore, Y as YesNo, T as formatAsCurrency, a6 as ElterngeldvarianteBadge, a7 as _default$4, b as useAppSelector, W as stepNachwuchsSelectors, U as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-D_q3z5hw.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function PrintButton() {
   const handlePrint = () => {
@@ -359,34 +359,6 @@ function DatenInAntragUebernehmenButton() {
     }
   ) });
 }
-function ElterngeldvarianteBadge({
-  variante,
-  className
-}) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    "span",
-    {
-      className: classNames(
-        "px-8 pt-6 pb-10 text-center rounded font-bold flex items-center justify-center leading-[1.444]",
-        className,
-        CLASS_NAME[variante]
-      ),
-      children: LABELS[variante]
-    }
-  );
-}
-const LABELS = {
-  BEG: "Basis",
-  "EG+": "Plus",
-  PSB: "Bonus",
-  None: "kein Elterngeld"
-};
-const CLASS_NAME = {
-  BEG: "bg-Basis text-white",
-  "EG+": "bg-Plus text-black",
-  PSB: "bg-Bonus text-black",
-  None: "bg-white text-black border-grey border-2"
-};
 function VariantenDetails({ variante, details }) {
   const label = LABEL_PER_VARIANTE[variante];
   const { elterngeld, nettoEinkommen, numberOfMonths } = details;

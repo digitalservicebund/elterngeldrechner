@@ -1,6 +1,10 @@
 import path from "node:path";
 import { test, expect, Page, Locator } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "./pom/AllgemeineAngabenPOM";
+import { NachwuchsPOM } from "./pom/NachwuchsPOM";
+import { ErwerbstaetigkeitPOM } from "./pom/ErwerbstaetigkeitPOM";
+import { EinkommenPOM } from "./pom/EinkommenPOM";
+import { VariantenPOM } from "./pom/VariantenPOM";
 
 const testStyles = async ({
   page,
@@ -117,6 +121,31 @@ const testStyles = async ({
   await allgemeineAngabenPage.submit();
 
   // TODO
+  const nachwuchsPage = new NachwuchsPOM(page);
+  await nachwuchsPage.setGeburtsdatum("02.02.2025");
+  await nachwuchsPage.setAnzahlKinder(1);
+  await nachwuchsPage.submit();
+
+  // TODO
+  const erwerbstaetigkeitPage = new ErwerbstaetigkeitPOM(page, {
+    elternteile: ["Elternteil 1", "Luke"],
+  });
+  await erwerbstaetigkeitPage.setErwerbstaetig(false, 1);
+  await erwerbstaetigkeitPage.setErwerbstaetig(false, 2);
+  await erwerbstaetigkeitPage.submit();
+
+  // TODO
+  const einkommenPage = new EinkommenPOM(page);
+  await einkommenPage.setGesamteinkommenUeberschritten(false);
+  await einkommenPage.submit();
+
+  const variantenPage = new VariantenPOM(page);
+  await expect(variantenPage.heading).toBeVisible();
+  await screenshot(page.locator("#egr-root"), "varianten-geschlossen");
+  await variantenPage.basiselterngeld.click();
+  await variantenPage.elterngeldPlus.click();
+  await variantenPage.partnerschaftsbonus.click();
+  await screenshot(page.locator("#egr-root"), "varianten-geoeffnet");
 };
 
 test("mobile styles", async ({ page }) => {

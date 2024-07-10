@@ -16,7 +16,7 @@ export function ElterngeldvariantenPage(): ReactNode {
     <Page step={formSteps.elterngeldvarianten}>
       <div className="flex flex-wrap justify-between gap-y-80">
         <section
-          className="flex basis-full flex-col gap-24"
+          className="flex basis-full flex-col gap-32"
           aria-describedby={descriptionIdentifier}
         >
           <h3>Elterngeldvarianten</h3>

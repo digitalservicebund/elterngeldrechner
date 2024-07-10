@@ -5,7 +5,7 @@ import { FurtherInformation } from "./FurtherInformation";
 
 export function ElterngeldvariantenDescriptions(): ReactNode {
   return (
-    <>
+    <div>
       <DetailsElterngeldvariante
         summaryTitle="Was ist Basiselterngeld?"
         variante="BEG"
@@ -75,110 +75,112 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </li>
         </ul>
 
-        <h5 className="text-base">
-          Beispiele für Paare und getrennt Erziehende:
-        </h5>
+        <div className="bg-off-white p-24">
+          <h5 className="text-base">
+            Beispiele für Paare und getrennt Erziehende:
+          </h5>
 
-        <p className="mb-20 p-0">
-          Elternteil 1 beantragt in den Lebensmonaten 1 bis 7 Basiselterngeld
-          und Elternteil 2 in den Lebensmonaten 7 bis 13. Im Lebensmonat 7
-          planen Sie einen Monat parallel.
-        </p>
+          <p className="mb-20 p-0">
+            Elternteil 1 beantragt in den Lebensmonaten 1 bis 7 Basiselterngeld
+            und Elternteil 2 in den Lebensmonaten 7 bis 13. Im Lebensmonat 7
+            planen Sie einen Monat parallel.
+          </p>
 
-        <div className="mb-16">
-          <Example
-            title="Elternteil 1"
-            months={[
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-            ]}
-          />
+          <div className="mb-16">
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+              ]}
+            />
+          </div>
+          <div className="mb-32">
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+              ]}
+            />
+          </div>
+
+          <p className="mb-20 p-0">
+            Elternteil 1 beantragt in den Lebensmonaten 1 bis 10
+            Basiselterngeld. Elternteil 2 beantragt in den Lebensmonaten 11 bis
+            14 Basiselterngeld. Damit haben die Eltern ihren Anspruch auf 14
+            Monate Basiselterngeld ausgeschöpft.
+          </p>
+
+          <div className="mb-16">
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                null,
+                null,
+              ]}
+            />
+          </div>
+          <div className="mb-32">
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+              ]}
+            />
+          </div>
+
+          <FurtherInformation />
         </div>
-        <div className="mb-32">
-          <Example
-            title="Elternteil 2"
-            months={[
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              null,
-            ]}
-          />
-        </div>
-
-        <p className="mb-20 p-0">
-          Elternteil 1 beantragt in den Lebensmonaten 1 bis 10 Basiselterngeld.
-          Elternteil 2 beantragt in den Lebensmonaten 11 bis 14 Basiselterngeld.
-          Damit haben die Eltern ihren Anspruch auf 14 Monate Basiselterngeld
-          ausgeschöpft.
-        </p>
-
-        <div className="mb-16">
-          <Example
-            title="Elternteil 1"
-            months={[
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              null,
-              null,
-              null,
-              null,
-            ]}
-          />
-        </div>
-        <div className="mb-32">
-          <Example
-            title="Elternteil 2"
-            months={[
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-            ]}
-          />
-        </div>
-
-        <FurtherInformation />
       </DetailsElterngeldvariante>
 
       <DetailsElterngeldvariante
@@ -217,116 +219,118 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           <li>28 Monate ElterngeldPlus können beantragt werden</li>
         </ul>
 
-        <h5 className="text-base">
-          Beispiele für Paare und getrennt Erziehende:
-        </h5>
+        <div className="bg-off-white p-24">
+          <h5 className="text-base">
+            Beispiele für Paare und getrennt Erziehende:
+          </h5>
 
-        <p className="mb-20 p-0">
-          Elternteil 1 bekommt Basiselterngeld in den ersten 4 Lebensmonaten,
-          Elternteil 2 in den Lebensmonaten 5 und 6. Beide Eltern bekommen
-          ElterngeldPlus in den Lebensmonaten 7 bis 14. Damit haben die Eltern 6
-          Monate Basiselterngeld und 16 Monate ElterngeldPlus (8 Monate
-          ElterngeldPlus pro Elternteil) verbraucht; das entspricht 14 Monaten
-          Basiselterngeld.
-        </p>
+          <p className="mb-20 p-0">
+            Elternteil 1 bekommt Basiselterngeld in den ersten 4 Lebensmonaten,
+            Elternteil 2 in den Lebensmonaten 5 und 6. Beide Eltern bekommen
+            ElterngeldPlus in den Lebensmonaten 7 bis 14. Damit haben die Eltern
+            6 Monate Basiselterngeld und 16 Monate ElterngeldPlus (8 Monate
+            ElterngeldPlus pro Elternteil) verbraucht; das entspricht 14 Monaten
+            Basiselterngeld.
+          </p>
 
-        <div className="mb-16">
-          <Example
-            title="Elternteil 1"
-            months={[
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              null,
-              null,
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-            ]}
-          />
+          <div className="mb-16">
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+              ]}
+            />
+          </div>
+          <div className="mb-32">
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+              ]}
+            />
+          </div>
+
+          <p className="mb-20 p-0">
+            Elternteil 1 bekommt Basiselterngeld in den Lebensmonaten 1 bis 6.
+            Parallel bezieht der Elternteil 2 in Lebensmonat 1 Basiselterngeld
+            und in den Lebensmonaten 2 und 3 ElterngeldPlus. In den
+            Lebensmonaten 7 bis 10 beziehen beide Elternteile ElterngeldPlus.
+            Elternteil 2 bekommt in den Lebensmonaten 11 und 12 ElterngeldPlus
+            und in Lebensmonat 13 Basiselterngeld. Damit haben die Eltern ihren
+            Anspruch auf 14 Monate Basiselterngeld ausgeschöpft.
+          </p>
+
+          <div className="mb-16">
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                null,
+                null,
+                null,
+                null,
+              ]}
+            />
+          </div>
+          <div className="mb-32">
+            <Example
+              title="Elternteil 2"
+              months={[
+                "Basis",
+                "Plus",
+                "Plus",
+                null,
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Basis",
+                null,
+              ]}
+            />
+          </div>
+
+          <FurtherInformation />
         </div>
-        <div className="mb-32">
-          <Example
-            title="Elternteil 2"
-            months={[
-              null,
-              null,
-              null,
-              null,
-              "Basis",
-              "Basis",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-            ]}
-          />
-        </div>
-
-        <p className="mb-20 p-0">
-          Elternteil 1 bekommt Basiselterngeld in den Lebensmonaten 1 bis 6.
-          Parallel bezieht der Elternteil 2 in Lebensmonat 1 Basiselterngeld und
-          in den Lebensmonaten 2 und 3 ElterngeldPlus. In den Lebensmonaten 7
-          bis 10 beziehen beide Elternteile ElterngeldPlus. Elternteil 2 bekommt
-          in den Lebensmonaten 11 und 12 ElterngeldPlus und in Lebensmonat 13
-          Basiselterngeld. Damit haben die Eltern ihren Anspruch auf 14 Monate
-          Basiselterngeld ausgeschöpft.
-        </p>
-
-        <div className="mb-16">
-          <Example
-            title="Elternteil 1"
-            months={[
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              null,
-              null,
-              null,
-              null,
-            ]}
-          />
-        </div>
-        <div className="mb-32">
-          <Example
-            title="Elternteil 2"
-            months={[
-              "Basis",
-              "Plus",
-              "Plus",
-              null,
-              null,
-              null,
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Basis",
-              null,
-            ]}
-          />
-        </div>
-
-        <FurtherInformation />
       </DetailsElterngeldvariante>
       <DetailsElterngeldvariante
         summaryTitle="Was ist Partnerschaftsbonus?"
@@ -356,115 +360,117 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           <li>Der Partnerschaftsbonus kann auch allein beantragt werden</li>
         </ul>
 
-        <h5 className="text-base">
-          Beispiele für Paare und getrennt Erziehende:
-        </h5>
+        <div className="bg-off-white p-24">
+          <h5 className="text-base">
+            Beispiele für Paare und getrennt Erziehende:
+          </h5>
 
-        <p className="mb-20 p-0">
-          Das Elternteil 1 bezieht in den ersten 6 Lebensmonaten
-          Basiselterngeld. Vom Lebensmonat 7 bis 10 bezieht der Elternteil 2
-          Basiselterngeld. Die Elternteile beziehen parallel ElterngeldPlus in
-          den Lebensmonaten 11 bis 14. In den Lebensmonaten 15 bis 18 nutzen die
-          Elternteile den Partnerschaftsbonus.
-        </p>
+          <p className="mb-20 p-0">
+            Das Elternteil 1 bezieht in den ersten 6 Lebensmonaten
+            Basiselterngeld. Vom Lebensmonat 7 bis 10 bezieht der Elternteil 2
+            Basiselterngeld. Die Elternteile beziehen parallel ElterngeldPlus in
+            den Lebensmonaten 11 bis 14. In den Lebensmonaten 15 bis 18 nutzen
+            die Elternteile den Partnerschaftsbonus.
+          </p>
 
-        <div className="mb-16">
-          <Example
-            title="Elternteil 1"
-            months={[
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              null,
-              null,
-              null,
-              null,
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Bonus",
-              "Bonus",
-              "Bonus",
-              "Bonus",
-            ]}
-          />
+          <div className="mb-16">
+            <Example
+              title="Elternteil 1"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+              ]}
+            />
+          </div>
+          <div className="mb-32">
+            <Example
+              title="Elternteil 2"
+              months={[
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+              ]}
+            />
+          </div>
+
+          <h5 className="text-base">Ein Beispiel für Alleinerziehende:</h5>
+
+          <p className="mb-20 p-0">
+            Das alleinerziehende Elternteil bezieht in den ersten 8
+            Lebensmonaten Basiselterngeld. Danach bezieht es für 2 Monate kein
+            Elterngeld. Im Lebensmonat 11 bis 16 bezieht es ElterngeldPlus, vom
+            Lebensmonat 17 bis 20 den Partnerschaftsbonus und vom Lebensmonat 21
+            bis 26 nochmals ElterngeldPlus.
+          </p>
+
+          <div className="mb-32">
+            <Example
+              title="Elternteil"
+              months={[
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                "Basis",
+                null,
+                null,
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Bonus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+                "Plus",
+              ]}
+            />
+          </div>
+
+          <FurtherInformation />
         </div>
-        <div className="mb-32">
-          <Example
-            title="Elternteil 2"
-            months={[
-              null,
-              null,
-              null,
-              null,
-              null,
-              null,
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Bonus",
-              "Bonus",
-              "Bonus",
-              "Bonus",
-            ]}
-          />
-        </div>
-
-        <h5 className="text-base">Ein Beispiel für Alleinerziehende:</h5>
-
-        <p className="mb-20 p-0">
-          Das alleinerziehende Elternteil bezieht in den ersten 8 Lebensmonaten
-          Basiselterngeld. Danach bezieht es für 2 Monate kein Elterngeld. Im
-          Lebensmonat 11 bis 16 bezieht es ElterngeldPlus, vom Lebensmonat 17
-          bis 20 den Partnerschaftsbonus und vom Lebensmonat 21 bis 26 nochmals
-          ElterngeldPlus.
-        </p>
-
-        <div className="mb-32">
-          <Example
-            title="Elternteil"
-            months={[
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              "Basis",
-              null,
-              null,
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Bonus",
-              "Bonus",
-              "Bonus",
-              "Bonus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-              "Plus",
-            ]}
-          />
-        </div>
-
-        <FurtherInformation />
       </DetailsElterngeldvariante>
-    </>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
-import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
-import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
+import AddIcon from "@digitalservicebund/icons/Add";
 import { ElterngeldType } from "@/monatsplaner";
 import { ElterngeldvarianteBadge } from "@/components/atoms/ElterngeldVarianteBadge";
 
@@ -16,20 +15,17 @@ export function DetailsElterngeldvariante({
   children,
 }: Props): ReactNode {
   return (
-    <details className="group overflow-hidden rounded bg-grey">
-      <summary className="flex justify-between list-none items-center cursor-pointer px-24 py-16">
-        <div className="flex flex-wrap gap-10">
-          <ElterngeldvarianteBadge variante={variante} />
-          <h4 className="flex flex-wrap items-center gap-x-8 text-24">
-            {summaryTitle}
-          </h4>
+    <details className="border-0 border-b-2 border-solid border-black first:border-t-2">
+      <summary className="flex cursor-pointer items-center justify-between px-24 py-16">
+        <div className="flex flex-wrap items-center gap-x-20 gap-y-8">
+          <ElterngeldvarianteBadge variante={variante} className="min-w-96" />
+          <h4 className="text-base">{summaryTitle}</h4>
         </div>
 
-        <ExpandMoreIcon className="min-h-40 min-w-40 group-open:hidden" />
-        <ExpandLessIcon className="hidden min-h-40 min-w-40 group-open:block" />
+        <AddIcon className="min-h-24 min-w-24" />
       </summary>
 
-      <div className="bg-off-white p-32 pb-56">{children}</div>
+      <div className="p-24 pt-4">{children}</div>
     </details>
   );
 }

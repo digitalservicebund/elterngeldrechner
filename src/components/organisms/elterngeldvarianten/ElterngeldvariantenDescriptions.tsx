@@ -7,10 +7,11 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
   return (
     <>
       <DetailsElterngeldvariante
-        summaryTitle="Basiselterngeld"
+        summaryTitle="Was ist Basiselterngeld?"
         summaryClassName="bg-Basis text-white"
       >
         <ul className="mb-24 list-disc pl-24">
+          <li>Für maximal 14 Monate verfügbar</li>
           <li>
             Als Basiselterngeld bekommen Sie normalerweise 65 Prozent des
             Nettoeinkommens, dass Sie vor der Geburt Ihres Kindes hatten und das
@@ -181,10 +182,12 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
       </DetailsElterngeldvariante>
 
       <DetailsElterngeldvariante
-        summaryTitle="ElterngeldPlus"
+        summaryTitle="Was ist ElterngeldPlus?"
         summaryClassName="bg-Plus text-black"
       >
         <ul className="mb-24 list-disc pl-24">
+          <li>Für maximal 28 Monate verfügbar</li>
+          <li>ElterngeldPlus kann parallel genommen werden</li>
           <li>
             Statt eines Lebensmonats Basiselterngeld können Sie 2 Lebensmonate
             ElterngeldPlus bekommen – das heißt, halb so hoch wie
@@ -326,10 +329,11 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         <FurtherInformation />
       </DetailsElterngeldvariante>
       <DetailsElterngeldvariante
-        summaryTitle="+ Partnerschaftsbonus"
+        summaryTitle="Was ist Partnerschaftsbonus?"
         summaryClassName="bg-Bonus text-black"
       >
         <ul className="mb-24 list-disc pl-24">
+          <li>Für maximal 8 Monate verfügbar</li>
           <li>
             Zusätzliche 2, 3 oder 4 Monate ElterngeldPlus – direkt aufeinander
             folgend

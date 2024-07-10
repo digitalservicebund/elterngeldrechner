@@ -12,7 +12,7 @@ describe("ElterngeldvariantenDescription", () => {
   it("shows details of Basiselterngeld when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
     const summary = screen.getByRole("heading", {
-      name: "Basiselterngeld",
+      name: "Was ist Basiselterngeld?",
     });
 
     await userEvent.click(summary);
@@ -26,7 +26,7 @@ describe("ElterngeldvariantenDescription", () => {
   it("shows details of ElterngeldPlus when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
     const summary = screen.getByRole("heading", {
-      name: "ElterngeldPlus",
+      name: "Was ist ElterngeldPlus?",
     });
 
     await userEvent.click(summary);
@@ -40,7 +40,7 @@ describe("ElterngeldvariantenDescription", () => {
   it("shows details of Partnerschaftsbonus when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
     const summary = screen.getByRole("heading", {
-      name: "+ Partnerschaftsbonus",
+      name: "Was ist Partnerschaftsbonus?",
     });
 
     await userEvent.click(summary);

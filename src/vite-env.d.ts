@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: string;
   readonly VITE_APP_CALCULATIONS_LOGGER_ENABLED: string;
   readonly VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: string;
+  readonly VITE_APP_PRELOAD_STATE: string;
 }
 
 interface ImportMeta {

@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-CH201xN6.js","./Monatsplaner-BQVBq1FO.js","./egr-configuration-Cwpx2zXF.js","./Split-DXQcgLky.js","./ButtonGroup-CrI5ozko.js","./NachwuchsPage-Dwqpi5V5.js","./ErwerbstaetigkeitPage-Dx0RzB6I.js","./EinkommenPage-BV_Ek_Yk.js","./RechnerPlanerPage-Zr7Mb02H.js","./ZusammenfassungUndDatenPage-m6i3_xnl.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-CT6_Rfzx.js","./Monatsplaner-4G9-NlYZ.js","./egr-configuration-Cwpx2zXF.js","./Split-BGMYp084.js","./ButtonGroup-B0R3sbVU.js","./NachwuchsPage-Ci_qoMyu.js","./ErwerbstaetigkeitPage-C3hgqMgj.js","./EinkommenPage-CmvZ5PVU.js","./RechnerPlanerPage-CBjxrqle.js","./ZusammenfassungUndDatenPage-OM33UCwh.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12618,18 +12618,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-CH201xN6.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-CT6_Rfzx.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-Dwqpi5V5.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-Ci_qoMyu.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-Dx0RzB6I.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-C3hgqMgj.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-BV_Ek_Yk.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-CmvZ5PVU.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-Zr7Mb02H.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-CBjxrqle.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-m6i3_xnl.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-OM33UCwh.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -24015,6 +24015,7 @@ const preloadedState = {
     }
   }
 };
+var define_import_meta_env_default$1 = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", BASE_URL: "./", MODE: "production", DEV: false, PROD: true, SSR: false };
 const reducers = combineReducers({
   monatsplaner: monatsplanerReducer,
   stepAllgemeineAngaben: stepAllgemeineAngabenReducer,
@@ -24026,7 +24027,7 @@ const reducers = combineReducers({
 });
 const store = configureStore({
   reducer: reducers,
-  preloadedState
+  preloadedState: define_import_meta_env_default$1.VITE_APP_PRELOAD_STATE === "true" ? preloadedState : void 0
 });
 function setupCalculation() {
   Big.DP = 34;
@@ -24077,7 +24078,7 @@ function addTagManagerScript(sourceUrl) {
   const firstScript = document.getElementsByTagName("script")[0];
   (_a = firstScript.parentNode) == null ? void 0 : _a.insertBefore(tagManagerScript, firstScript);
 }
-var define_import_meta_env_default = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", VITE_APP_PRELOAD_STATE: "true", BASE_URL: "./", MODE: "production", DEV: false, PROD: true, SSR: false };
+var define_import_meta_env_default = { VITE_APP_BMF_STEUER_RECHNER_DOMAIN: "", VITE_APP_BMF_STEUER_RECHNER_CODE: "2022eP", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_REMOTE: "2021,2022", VITE_APP_BMF_STEUER_RECHNER_AVAILABLE_YEARS_LIB: "2022,2023", VITE_APP_CALCULATIONS_LOGGER_ENABLED: "false", BASE_URL: "./", MODE: "production", DEV: false, PROD: true, SSR: false };
 async function setupUserTracking() {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
   const isConfigured = !!tagMangerSourceUrl;

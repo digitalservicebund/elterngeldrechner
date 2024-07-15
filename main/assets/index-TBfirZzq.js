@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-CT6_Rfzx.js","./Monatsplaner-4G9-NlYZ.js","./egr-configuration-Cwpx2zXF.js","./Split-BGMYp084.js","./ButtonGroup-B0R3sbVU.js","./NachwuchsPage-Ci_qoMyu.js","./ErwerbstaetigkeitPage-C3hgqMgj.js","./EinkommenPage-CmvZ5PVU.js","./RechnerPlanerPage-CBjxrqle.js","./ZusammenfassungUndDatenPage-OM33UCwh.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-BhCSHOeI.js","./Monatsplaner-BNk087im.js","./egr-configuration-Cwpx2zXF.js","./Split-Dlz6SfZa.js","./ButtonGroup-CH4OPXfo.js","./NachwuchsPage-CUPSWw3H.js","./ErwerbstaetigkeitPage-CHcyGo2z.js","./EinkommenPage-CEvW9kYs.js","./RechnerPlanerPage-Cs5DKrOj.js","./ZusammenfassungUndDatenPage-_TgxJO5P.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12365,9 +12365,9 @@ function ElterngeldvariantenDescriptions() {
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "mb-24 list-disc pl-24", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Für maximal 28 Monate verfügbar" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "ElterngeldPlus kann parallel genommen werden" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "ElterngeldPlus kann gleichzeitig mit dem anderen Elternteil genommen werden" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Statt eines Lebensmonats Basiselterngeld können Sie 2 Lebensmonate ElterngeldPlus bekommen – das heißt, halb so hoch wie Basiselterngeld, aber doppelter Zeitraum" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "ElterngeldPlus kann auch nach dem 14. Lebensmonat bezogen werden, ab dann darf der Elterngeldbezug nicht mehr unterbrochen werden" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Der ElterngeldPlus-Bezug darf nach dem 14. Lebensmonat nicht mehr unterbrochen werden" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Besonders lohnend, wenn Eltern nach der Geburt in Teilzeit arbeiten" })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "text-base", children: "Für Paare und getrennt Erziehende gilt:" }),
@@ -12478,9 +12478,10 @@ function ElterngeldvariantenDescriptions() {
         variante: "PSB",
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "mb-24 list-disc pl-24", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Für maximal 8 Monate verfügbar" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Zusätzliche 2, 3 oder 4 Monate ElterngeldPlus – direkt aufeinander folgend" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Für den Partnerschaftsbonus muss man 24 bis 32 Stunden pro Woche in Teilzeit arbeiten" })
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Der Partnerschaftsbonus steht Ihnen neben Basiselterngeld und ElterngeldPlus als weitere Option zur Verfügung" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "umfasst 2, 3 oder 4 zusätzliche Monate, die direkt aufeinander folgen" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "entspricht der Höhe des ElterngeldPlus" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Für den Partnerschaftsbonus müssen Sie 24 bis 32 Stunden pro Woche in Teilzeit arbeiten" })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "text-base", children: "Für Paare und getrennt Erziehende gilt:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "mb-24 list-disc pl-24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Beide Elternteile nutzen den Partnerschaftsbonus gleichzeitig" }) }),
@@ -12597,11 +12598,7 @@ function ElterngeldvariantenPage() {
         "aria-describedby": descriptionIdentifier,
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { children: "Elterngeldvarianten" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { id: descriptionIdentifier, children: [
-            "Elterngeld gibt es in 3 Varianten.",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            "Hier finden Sie eine Übersicht über die einzelnen Elterngeldvarianten. Diese können Sie im nächsten Schritt miteinander kombinieren."
-          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { id: descriptionIdentifier, children: "Elterngeld gibt es in 3 Varianten, die hier näher erklärt werden. Alle 3 Varianten können Sie im nächsten Schritt im Planer miteinander kombinieren. Paare können die Monate flexibel untereinander aufteilen. Während Sie Elterngeld bekommen ist es übrigens möglich, zusätzlich bis maximal 32 Stunden pro Woche zu arbeiten." }),
           /* @__PURE__ */ jsxRuntimeExports.jsx(ElterngeldvariantenDescriptions, {})
         ]
       }
@@ -12618,18 +12615,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-CT6_Rfzx.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-BhCSHOeI.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-Ci_qoMyu.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-CUPSWw3H.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-C3hgqMgj.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-CHcyGo2z.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-CmvZ5PVU.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-CEvW9kYs.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-CBjxrqle.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-Cs5DKrOj.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-OM33UCwh.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-_TgxJO5P.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -18834,7 +18831,7 @@ function friendlyDateTime(dateTimeish) {
   }
 }
 const numberOfLebensmonate = 32;
-const maxNumberOfPartnerschaftbonus = 4;
+const maxNumberOfPartnerschaftsbonus = 4;
 const minNumberOfElterngeld = 2;
 const maxNumberOfSimultaneousBEGMonths = 1;
 const lebensmonate = Array.from({
@@ -18935,7 +18932,7 @@ const createElternteile = (settings) => {
     }
     begAnspruch -= numberOfMutterschutzMonths2;
   }
-  let partnerschaftsbonus = maxNumberOfPartnerschaftbonus;
+  let partnerschaftsbonus = maxNumberOfPartnerschaftsbonus;
   if (getPartnerMonateSettings(settings)) {
     begAnspruch = begAnspruch + 2;
   } else {
@@ -19193,7 +19190,7 @@ const changeMonth = (elternteile, changeMonthSettings, elternteileSettings) => {
     );
   }
   const remainingMonthsEGPlus = 2 * (anspruch - begMonthsTakenByBoth) - egPlusMonthsTakenByBoth;
-  const remainingPartnerschaftsbonus = maxNumberOfPartnerschaftbonus - countPSBMonths(currentMonths);
+  const remainingPartnerschaftsbonus = maxNumberOfPartnerschaftsbonus - countPSBMonths(currentMonths);
   const changedCurrentET = {
     ...currentET,
     months: currentMonths

@@ -22,11 +22,12 @@ export function ElterngeldvariantenPage(): ReactNode {
           <h3>Elterngeldvarianten</h3>
 
           <p id={descriptionIdentifier}>
-            Elterngeld gibt es in 3 Varianten.
-            <br />
-            Hier finden Sie eine Übersicht über die einzelnen
-            Elterngeldvarianten. Diese können Sie im nächsten Schritt
-            miteinander kombinieren.
+            Elterngeld gibt es in 3 Varianten, die hier näher erklärt werden.
+            Alle 3 Varianten können Sie im nächsten Schritt im Planer
+            miteinander kombinieren. Paare können die Monate flexibel
+            untereinander aufteilen. Während Sie Elterngeld bekommen ist es
+            übrigens möglich, zusätzlich bis maximal 32 Stunden pro Woche zu
+            arbeiten.
           </p>
 
           <ElterngeldvariantenDescriptions />

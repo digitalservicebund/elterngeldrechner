@@ -8,7 +8,7 @@ import {
 import { getBEGAnspruch } from "./beg-anspruch";
 import { getNumberOfMutterschutzMonths } from "./mutterschutz-calculator";
 import {
-  maxNumberOfPartnerschaftbonus,
+  maxNumberOfPartnerschaftsbonus,
   numberOfLebensmonate,
 } from "@/monatsplaner/configuration";
 
@@ -52,7 +52,7 @@ export const createElternteile = (
     begAnspruch -= numberOfMutterschutzMonths;
   }
 
-  let partnerschaftsbonus = maxNumberOfPartnerschaftbonus;
+  let partnerschaftsbonus = maxNumberOfPartnerschaftsbonus;
 
   if (getPartnerMonateSettings(settings)) {
     begAnspruch = begAnspruch + 2;

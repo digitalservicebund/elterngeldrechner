@@ -46,7 +46,7 @@ describe("ElterngeldvariantenDescription", () => {
     await userEvent.click(summary);
 
     const details = screen.getByText(
-      /Für den Partnerschaftsbonus muss man 24 bis 32 Stunden pro Woche in Teilzeit arbeiten/,
+      /Für den Partnerschaftsbonus müssen Sie 24 bis 32 Stunden pro Woche in Teilzeit arbeiten/,
     );
     expect(details).toBeVisible();
   });

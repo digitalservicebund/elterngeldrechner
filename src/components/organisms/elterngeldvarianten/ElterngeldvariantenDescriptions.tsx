@@ -189,15 +189,18 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
       >
         <ul className="mb-24 list-disc pl-24">
           <li>Für maximal 28 Monate verfügbar</li>
-          <li>ElterngeldPlus kann parallel genommen werden</li>
+          <li>
+            ElterngeldPlus kann gleichzeitig mit dem anderen Elternteil genommen
+            werden
+          </li>
           <li>
             Statt eines Lebensmonats Basiselterngeld können Sie 2 Lebensmonate
             ElterngeldPlus bekommen – das heißt, halb so hoch wie
             Basiselterngeld, aber doppelter Zeitraum
           </li>
           <li>
-            ElterngeldPlus kann auch nach dem 14. Lebensmonat bezogen werden, ab
-            dann darf der Elterngeldbezug nicht mehr unterbrochen werden
+            Der ElterngeldPlus-Bezug darf nach dem 14. Lebensmonat nicht mehr
+            unterbrochen werden
           </li>
           <li>
             Besonders lohnend, wenn Eltern nach der Geburt in Teilzeit arbeiten
@@ -337,14 +340,18 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         variante="PSB"
       >
         <ul className="mb-24 list-disc pl-24">
-          <li>Für maximal 8 Monate verfügbar</li>
           <li>
-            Zusätzliche 2, 3 oder 4 Monate ElterngeldPlus – direkt aufeinander
-            folgend
+            Der Partnerschaftsbonus steht Ihnen neben Basiselterngeld und
+            ElterngeldPlus als weitere Option zur Verfügung
           </li>
           <li>
-            Für den Partnerschaftsbonus muss man 24 bis 32 Stunden pro Woche in
-            Teilzeit arbeiten
+            umfasst 2, 3 oder 4 zusätzliche Monate, die direkt aufeinander
+            folgen
+          </li>
+          <li>entspricht der Höhe des ElterngeldPlus</li>
+          <li>
+            Für den Partnerschaftsbonus müssen Sie 24 bis 32 Stunden pro Woche
+            in Teilzeit arbeiten
           </li>
         </ul>
 

@@ -15,7 +15,7 @@ import {
 } from "./elternteile-setting";
 import { getBEGAnspruch } from "./beg-anspruch";
 import {
-  maxNumberOfPartnerschaftbonus,
+  maxNumberOfPartnerschaftsbonus,
   maxNumberOfSimultaneousBEGMonths,
 } from "@/monatsplaner/configuration";
 import {
@@ -345,7 +345,7 @@ const changeMonth = (
   const remainingMonthsEGPlus =
     2 * (anspruch - begMonthsTakenByBoth) - egPlusMonthsTakenByBoth;
   const remainingPartnerschaftsbonus =
-    maxNumberOfPartnerschaftbonus - countPSBMonths(currentMonths);
+    maxNumberOfPartnerschaftsbonus - countPSBMonths(currentMonths);
 
   const changedCurrentET: Elternteil = {
     ...currentET,

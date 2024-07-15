@@ -32,6 +32,6 @@ export function VariantenDetails({ variante, details }: Props): ReactNode {
 const LABEL_PER_VARIANTE: Record<Variante, string> = {
   BEG: "BasisElterngeld",
   "EG+": "ElterngeldPlus",
-  PSB: "Partnerschaftbonus",
+  PSB: "Partnerschaftsbonus",
   None: "kein Elterngeld",
 };

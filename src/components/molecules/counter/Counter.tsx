@@ -47,8 +47,7 @@ export function Counter<TFieldValues extends FieldValues>({
           className={nsp("counter__button")}
           type="button"
           onClick={onDecrease}
-          aria-label="verringern"
-          aria-controls={name}
+          aria-hidden
         >
           <RemoveIcon />
         </button>
@@ -65,8 +64,7 @@ export function Counter<TFieldValues extends FieldValues>({
           className={nsp("counter__button")}
           type="button"
           onClick={onIncrease}
-          aria-label="erhöhen"
-          aria-controls={name}
+          aria-hidden
         >
           <AddIcon />
         </button>

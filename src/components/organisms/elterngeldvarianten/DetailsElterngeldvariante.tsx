@@ -18,7 +18,9 @@ export function DetailsElterngeldvariante({
     <details className="border-0 border-b-2 border-solid border-black first:border-t-2">
       <summary className="flex cursor-pointer items-center justify-between px-24 py-16">
         <div className="flex flex-wrap items-center gap-x-20 gap-y-8">
-          <ElterngeldvarianteBadge variante={variante} className="min-w-96" />
+          <span aria-hidden>
+            <ElterngeldvarianteBadge variante={variante} className="min-w-96" />
+          </span>
           <h4 className="text-base">{summaryTitle}</h4>
         </div>
 

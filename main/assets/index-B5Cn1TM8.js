@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-jBco1Vck.js","./Monatsplaner-DFyfSTbr.js","./egr-configuration-Cwpx2zXF.js","./Split-BHMMiSZ4.js","./ButtonGroup-wptImFvn.js","./NachwuchsPage-DO72CDui.js","./ErwerbstaetigkeitPage-BwvTbd6z.js","./EinkommenPage-DnngpsOx.js","./RechnerPlanerPage-BUj9ysaP.js","./ZusammenfassungUndDatenPage-BBj_T_fB.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-CsshEsPF.js","./Monatsplaner-DVEI3mQ5.js","./egr-configuration-Cwpx2zXF.js","./Split-DTI3Y5g1.js","./ButtonGroup-DJYVhO6U.js","./NachwuchsPage-DZqPxOUd.js","./ErwerbstaetigkeitPage-D1HlhYl-.js","./EinkommenPage-GvF5lWFm.js","./RechnerPlanerPage-C-znH0wr.js","./ZusammenfassungUndDatenPage-Cb6pkF6q.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12164,7 +12164,7 @@ function DetailsElterngeldvariante({
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("details", { className: "border-0 border-b-2 border-solid border-black first:border-t-2", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("summary", { className: "flex cursor-pointer items-center justify-between px-24 py-16", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-x-20 gap-y-8", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(ElterngeldvarianteBadge, { variante, className: "min-w-96" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { "aria-hidden": true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ElterngeldvarianteBadge, { variante, className: "min-w-96" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-base", children: summaryTitle })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, { className: "min-h-24 min-w-24" })
@@ -12615,18 +12615,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-jBco1Vck.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-CsshEsPF.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-DO72CDui.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-DZqPxOUd.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-BwvTbd6z.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-D1HlhYl-.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-DnngpsOx.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-GvF5lWFm.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-BUj9ysaP.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-C-znH0wr.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-BBj_T_fB.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-Cb6pkF6q.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();

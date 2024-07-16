@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, o as _default$4, t as _default$5, R as ReactDOM, v as getGeburtstagSettings, w as getFruehchen, x as countFilledMonths, y as countBEGMonths, z as countEGPlusMonths, A as minNumberOfElterngeld, C as lastIndexOfType, F as hasContinuousMonthsOfType, e as setTrackingVariable, G as React, H as getDefaultExportFromCjs, I as commonjsGlobal, Y as YesNo, B as Button, J as Big, K as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, L as KinderFreiBetrag, M as KassenArt, N as RentenArt, b as useAppSelector, O as stepErwerbstaetigkeitElternteilSelectors, Q as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, T as formatAsCurrency, U as createAppSelector, u as useAppDispatch, a as useNavigate, V as stepRechnerSelectors, W as stepNachwuchsSelectors, X as monatsplanerSelectors, _ as _default$6, Z as _default$7, f as formSteps, $ as monatsplanerActions, a0 as canNotChangeBEGDueToSimultaneousMonthRules, a1 as canNotChangeBEGDueToLimitReachedPerParent, a2 as canNotChangeEGPDueToLimitReachedPerParent, a3 as reachedLimitOfSimultaneousBEGMonths, a4 as isExceptionToSimulatenousMonthRestrictions } from "./index-B5Cn1TM8.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, t as useDetectClickOutside_1, o as _default$4, v as _default$5, R as ReactDOM, w as getGeburtstagSettings, x as getFruehchen, y as countFilledMonths, z as countBEGMonths, A as countEGPlusMonths, C as minNumberOfElterngeld, F as lastIndexOfType, G as hasContinuousMonthsOfType, e as setTrackingVariable, H as React, I as getDefaultExportFromCjs, J as commonjsGlobal, Y as YesNo, B as Button, K as Big, L as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, M as KinderFreiBetrag, N as KassenArt, O as RentenArt, b as useAppSelector, Q as stepErwerbstaetigkeitElternteilSelectors, T as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, U as formatAsCurrency, V as createAppSelector, u as useAppDispatch, a as useNavigate, W as stepRechnerSelectors, X as stepNachwuchsSelectors, Z as monatsplanerSelectors, _ as _default$6, $ as _default$7, f as formSteps, a0 as monatsplanerActions, a1 as canNotChangeBEGDueToSimultaneousMonthRules, a2 as canNotChangeBEGDueToLimitReachedPerParent, a3 as canNotChangeEGPDueToLimitReachedPerParent, a4 as reachedLimitOfSimultaneousBEGMonths, a5 as isExceptionToSimulatenousMonthRestrictions } from "./index-CpOSKPQK.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function Description({ id, error = false, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -30,6 +30,9 @@ function InfoDialog({
   isElternteilOne
 }) {
   const [isModalOpen, setIsModalOpen] = reactExports.useState(false);
+  const ref = useDetectClickOutside_1({
+    onTriggered: () => setIsModalOpen(false)
+  });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -38,6 +41,7 @@ function InfoDialog({
         isLarge && nsp("info-dialog--large"),
         isMonatsplanner && nsp("info-dialog--monatsplanner")
       ),
+      ref,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",

@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-CsshEsPF.js","./Monatsplaner-DVEI3mQ5.js","./egr-configuration-Cwpx2zXF.js","./Split-DTI3Y5g1.js","./ButtonGroup-DJYVhO6U.js","./NachwuchsPage-DZqPxOUd.js","./ErwerbstaetigkeitPage-D1HlhYl-.js","./EinkommenPage-GvF5lWFm.js","./RechnerPlanerPage-C-znH0wr.js","./ZusammenfassungUndDatenPage-Cb6pkF6q.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-iuEB_PgU.js","./Monatsplaner-DgXNSmRN.js","./egr-configuration-Cwpx2zXF.js","./Split-DZOJl1-y.js","./ButtonGroup-DJ3n6qDn.js","./NachwuchsPage-Bwr7IbpV.js","./ErwerbstaetigkeitPage-CNLlnLUO.js","./EinkommenPage-DK8uO0v3.js","./RechnerPlanerPage-GVi4ZrpK.js","./ZusammenfassungUndDatenPage-B0h-7CEf.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -88,7 +88,7 @@ function getAugmentedNamespace(n2) {
 }
 var jsxRuntime = { exports: {} };
 var reactJsxRuntime_production_min = {};
-var react = { exports: {} };
+var react$1 = { exports: {} };
 var react_production_min = {};
 /**
  * @license React
@@ -346,9 +346,9 @@ react_production_min.useTransition = function() {
 };
 react_production_min.version = "18.2.0";
 {
-  react.exports = react_production_min;
+  react$1.exports = react_production_min;
 }
-var reactExports = react.exports;
+var reactExports = react$1.exports;
 const React$1 = /* @__PURE__ */ getDefaultExportFromCjs(reactExports);
 const React$2 = /* @__PURE__ */ _mergeNamespaces({
   __proto__: null,
@@ -8891,6 +8891,58 @@ function Button({
     }
   );
 }
+var dist = {};
+Object.defineProperty(dist, "__esModule", { value: true });
+var react = reactExports;
+function useDetectClickOutside(_a) {
+  var onTriggered = _a.onTriggered, disableClick = _a.disableClick, disableTouch = _a.disableTouch, disableKeys = _a.disableKeys, allowAnyKey = _a.allowAnyKey, triggerKeys = _a.triggerKeys;
+  var ref = react.useRef(null);
+  var keyListener = react.useCallback(function(e) {
+    if (allowAnyKey) {
+      onTriggered(e);
+    } else if (triggerKeys) {
+      if (triggerKeys.includes(e.key)) {
+        onTriggered(e);
+      }
+    } else {
+      if (e.key === "Escape") {
+        onTriggered(e);
+      }
+    }
+  }, [allowAnyKey, triggerKeys, onTriggered]);
+  var clickOrTouchListener = react.useCallback(function(e) {
+    if (ref && ref.current) {
+      if (!ref.current.contains(e.target)) {
+        onTriggered === null || onTriggered === void 0 ? void 0 : onTriggered(e);
+      }
+    }
+  }, [ref.current, onTriggered]);
+  var eventsConfig = react.useMemo(function() {
+    return [
+      [disableClick, "click", clickOrTouchListener],
+      [disableTouch, "touchstart", clickOrTouchListener],
+      [disableKeys, "keyup", keyListener]
+    ];
+  }, [disableClick, disableTouch, disableKeys, clickOrTouchListener, keyListener]);
+  react.useEffect(function() {
+    eventsConfig.map(function(eventConfigItem) {
+      var isDisabled = eventConfigItem[0], eventName = eventConfigItem[1], listener = eventConfigItem[2];
+      if (!isDisabled) {
+        document.addEventListener(eventName, listener);
+      }
+    });
+    return function() {
+      eventsConfig.map(function(eventConfigItem) {
+        var isDisabled = eventConfigItem[0], eventName = eventConfigItem[1], listener = eventConfigItem[2];
+        if (!isDisabled) {
+          document.removeEventListener(eventName, listener);
+        }
+      });
+    };
+  }, [eventsConfig]);
+  return ref;
+}
+var useDetectClickOutside_1 = dist.useDetectClickOutside = useDetectClickOutside;
 var InfoOutlined = {};
 var __assign$h = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign$h = Object.assign || function(t2) {
@@ -12615,18 +12667,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-CsshEsPF.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-iuEB_PgU.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-DZqPxOUd.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-Bwr7IbpV.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-D1HlhYl-.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-CNLlnLUO.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-GvF5lWFm.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-DK8uO0v3.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-C-znH0wr.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-GVi4ZrpK.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-Cb6pkF6q.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-B0h-7CEf.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -24110,43 +24162,44 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 setupCalculation();
 export {
-  monatsplanerActions as $,
-  minNumberOfElterngeld as A,
+  _default$4 as $,
+  countEGPlusMonths as A,
   Button as B,
-  lastIndexOfType as C,
+  minNumberOfElterngeld as C,
   DateTime as D,
   EgrBerechnungParamId as E,
-  hasContinuousMonthsOfType as F,
-  React$1 as G,
-  getDefaultExportFromCjs as H,
-  commonjsGlobal as I,
-  Big as J,
-  getAutomaticallySelectedPSBMonthIndex as K,
-  KinderFreiBetrag as L,
-  KassenArt as M,
-  RentenArt as N,
-  stepErwerbstaetigkeitElternteilSelectors as O,
+  lastIndexOfType as F,
+  hasContinuousMonthsOfType as G,
+  React$1 as H,
+  getDefaultExportFromCjs as I,
+  commonjsGlobal as J,
+  Big as K,
+  getAutomaticallySelectedPSBMonthIndex as L,
+  KinderFreiBetrag as M,
+  KassenArt as N,
+  RentenArt as O,
   Page as P,
-  initialTaetigkeit as Q,
+  stepErwerbstaetigkeitElternteilSelectors as Q,
   ReactDOM as R,
   SteuerKlasse as S,
-  formatAsCurrency as T,
-  createAppSelector as U,
-  stepRechnerSelectors as V,
-  stepNachwuchsSelectors as W,
-  monatsplanerSelectors as X,
+  initialTaetigkeit as T,
+  formatAsCurrency as U,
+  createAppSelector as V,
+  stepRechnerSelectors as W,
+  stepNachwuchsSelectors as X,
   YesNo as Y,
-  _default$4 as Z,
+  monatsplanerSelectors as Z,
   _default$1 as _,
   useNavigate as a,
-  canNotChangeBEGDueToSimultaneousMonthRules as a0,
-  canNotChangeBEGDueToLimitReachedPerParent as a1,
-  canNotChangeEGPDueToLimitReachedPerParent as a2,
-  reachedLimitOfSimultaneousBEGMonths as a3,
-  isExceptionToSimulatenousMonthRestrictions as a4,
-  useAppStore as a5,
-  ElterngeldvarianteBadge as a6,
-  _default as a7,
+  monatsplanerActions as a0,
+  canNotChangeBEGDueToSimultaneousMonthRules as a1,
+  canNotChangeBEGDueToLimitReachedPerParent as a2,
+  canNotChangeEGPDueToLimitReachedPerParent as a3,
+  reachedLimitOfSimultaneousBEGMonths as a4,
+  isExceptionToSimulatenousMonthRestrictions as a5,
+  useAppStore as a6,
+  ElterngeldvarianteBadge as a7,
+  _default as a8,
   useAppSelector as b,
   classNames as c,
   stepAllgemeineAngabenActions as d,
@@ -24165,11 +24218,11 @@ export {
   numberOfMutterschutzMonths as q,
   reactExports as r,
   stepRechnerActions as s,
-  _default$5 as t,
+  useDetectClickOutside_1 as t,
   useAppDispatch as u,
-  getGeburtstagSettings as v,
-  getFruehchen as w,
-  countFilledMonths as x,
-  countBEGMonths as y,
-  countEGPlusMonths as z
+  _default$5 as v,
+  getGeburtstagSettings as w,
+  getFruehchen as x,
+  countFilledMonths as y,
+  countBEGMonths as z
 };

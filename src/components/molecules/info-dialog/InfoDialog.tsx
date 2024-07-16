@@ -1,5 +1,6 @@
 import classnames from "classnames";
 import { useState } from "react";
+import { useDetectClickOutside } from "react-detect-click-outside";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import { Info } from "./infoTexts";
@@ -19,6 +20,9 @@ export function InfoDialog({
   isElternteilOne,
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const ref = useDetectClickOutside({
+    onTriggered: () => setIsModalOpen(false),
+  });
 
   return (
     <div
@@ -27,6 +31,7 @@ export function InfoDialog({
         isLarge && nsp("info-dialog--large"),
         isMonatsplanner && nsp("info-dialog--monatsplanner"),
       )}
+      ref={ref}
     >
       <button
         className={classnames(

@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-BICPv07t.js","./Monatsplaner-D8D3n7LG.js","./egr-configuration-Cwpx2zXF.js","./Split-CujGvjwp.js","./ButtonGroup-bPOGBYj7.js","./NachwuchsPage-C-70qMwS.js","./ErwerbstaetigkeitPage-p9wXLsON.js","./EinkommenPage-BPRpFfMS.js","./RechnerPlanerPage-OuE9JfYh.js","./ZusammenfassungUndDatenPage-xSuldHtz.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-BKnIsoVp.js","./Monatsplaner-Df0_sb8k.js","./egr-configuration-Cwpx2zXF.js","./Split-BIY2JA_W.js","./ButtonGroup-Br66B8wm.js","./NachwuchsPage-CEmGvJM_.js","./ErwerbstaetigkeitPage-PYWFn4WD.js","./EinkommenPage-BJSbpLL6.js","./RechnerPlanerPage-ChlwUxdv.js","./ZusammenfassungUndDatenPage-UcvgwI73.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -8944,6 +8944,24 @@ function useDetectClickOutside(_a) {
 }
 var useDetectClickOutside_1 = dist.useDetectClickOutside = useDetectClickOutside;
 var InfoOutlined = {};
+var __assign$i = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$i = Object.assign || function(t2) {
+    for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
+      s2 = arguments[i];
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2))
+        t2[p2] = s2[p2];
+    }
+    return t2;
+  };
+  return __assign$i.apply(this, arguments);
+};
+Object.defineProperty(InfoOutlined, "__esModule", { value: true });
+var jsx_runtime_1$7 = jsxRuntimeExports;
+var SvgInfoOutlined = function(props) {
+  return (0, jsx_runtime_1$7.jsxs)("svg", __assign$i({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "InfoOutlinedIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$7.jsx)("path", { d: "M0 0h24v24H0V0z", fill: "none" }), (0, jsx_runtime_1$7.jsx)("path", { d: "M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" })] }));
+};
+var _default$7 = InfoOutlined.default = SvgInfoOutlined;
+var Close = {};
 var __assign$h = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign$h = Object.assign || function(t2) {
     for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
@@ -8955,30 +8973,12 @@ var __assign$h = commonjsGlobal && commonjsGlobal.__assign || function() {
   };
   return __assign$h.apply(this, arguments);
 };
-Object.defineProperty(InfoOutlined, "__esModule", { value: true });
-var jsx_runtime_1$6 = jsxRuntimeExports;
-var SvgInfoOutlined = function(props) {
-  return (0, jsx_runtime_1$6.jsxs)("svg", __assign$h({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "InfoOutlinedIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$6.jsx)("path", { d: "M0 0h24v24H0V0z", fill: "none" }), (0, jsx_runtime_1$6.jsx)("path", { d: "M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" })] }));
-};
-var _default$6 = InfoOutlined.default = SvgInfoOutlined;
-var Close = {};
-var __assign$g = commonjsGlobal && commonjsGlobal.__assign || function() {
-  __assign$g = Object.assign || function(t2) {
-    for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
-      s2 = arguments[i];
-      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2))
-        t2[p2] = s2[p2];
-    }
-    return t2;
-  };
-  return __assign$g.apply(this, arguments);
-};
 Object.defineProperty(Close, "__esModule", { value: true });
-var jsx_runtime_1$5 = jsxRuntimeExports;
+var jsx_runtime_1$6 = jsxRuntimeExports;
 var SvgClose = function(props) {
-  return (0, jsx_runtime_1$5.jsxs)("svg", __assign$g({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "CloseIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$5.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$5.jsx)("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" })] }));
+  return (0, jsx_runtime_1$6.jsxs)("svg", __assign$h({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "CloseIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$6.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$6.jsx)("path", { d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" })] }));
 };
-var _default$5 = Close.default = SvgClose;
+var _default$6 = Close.default = SvgClose;
 var YesNo = /* @__PURE__ */ ((YesNo2) => {
   YesNo2["YES"] = "YES";
   YesNo2["NO"] = "NO";
@@ -10067,8 +10067,8 @@ function Spinner() {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: !!show && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: nsp("spinner") }) });
 }
 var SaveAlt = {};
-var __assign$f = commonjsGlobal && commonjsGlobal.__assign || function() {
-  __assign$f = Object.assign || function(t2) {
+var __assign$g = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$g = Object.assign || function(t2) {
     for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
       s2 = arguments[i];
       for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2))
@@ -10076,14 +10076,14 @@ var __assign$f = commonjsGlobal && commonjsGlobal.__assign || function() {
     }
     return t2;
   };
-  return __assign$f.apply(this, arguments);
+  return __assign$g.apply(this, arguments);
 };
 Object.defineProperty(SaveAlt, "__esModule", { value: true });
-var jsx_runtime_1$4 = jsxRuntimeExports;
+var jsx_runtime_1$5 = jsxRuntimeExports;
 var SvgSaveAlt = function(props) {
-  return (0, jsx_runtime_1$4.jsxs)("svg", __assign$f({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "SaveAltIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$4.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$4.jsx)("path", { d: "M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" })] }));
+  return (0, jsx_runtime_1$5.jsxs)("svg", __assign$g({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "SaveAltIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$5.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$5.jsx)("path", { d: "M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z" })] }));
 };
-var _default$4 = SaveAlt.default = SvgSaveAlt;
+var _default$5 = SaveAlt.default = SvgSaveAlt;
 const formSteps = {
   allgemeinAngaben: {
     text: "Allgemeine Angaben",
@@ -12063,6 +12063,24 @@ const configurationSlice = createSlice({
 const configurationActions = configurationSlice.actions;
 const configurationReducer = configurationSlice.reducer;
 var ExpandLess = {};
+var __assign$f = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$f = Object.assign || function(t2) {
+    for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
+      s2 = arguments[i];
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2))
+        t2[p2] = s2[p2];
+    }
+    return t2;
+  };
+  return __assign$f.apply(this, arguments);
+};
+Object.defineProperty(ExpandLess, "__esModule", { value: true });
+var jsx_runtime_1$4 = jsxRuntimeExports;
+var SvgExpandLess = function(props) {
+  return (0, jsx_runtime_1$4.jsxs)("svg", __assign$f({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ExpandLessIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$4.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$4.jsx)("path", { d: "M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" })] }));
+};
+var _default$4 = ExpandLess.default = SvgExpandLess;
+var ExpandMore = {};
 var __assign$e = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign$e = Object.assign || function(t2) {
     for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
@@ -12074,30 +12092,12 @@ var __assign$e = commonjsGlobal && commonjsGlobal.__assign || function() {
   };
   return __assign$e.apply(this, arguments);
 };
-Object.defineProperty(ExpandLess, "__esModule", { value: true });
-var jsx_runtime_1$3 = jsxRuntimeExports;
-var SvgExpandLess = function(props) {
-  return (0, jsx_runtime_1$3.jsxs)("svg", __assign$e({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ExpandLessIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$3.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$3.jsx)("path", { d: "M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z" })] }));
-};
-var _default$3 = ExpandLess.default = SvgExpandLess;
-var ExpandMore = {};
-var __assign$d = commonjsGlobal && commonjsGlobal.__assign || function() {
-  __assign$d = Object.assign || function(t2) {
-    for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
-      s2 = arguments[i];
-      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2))
-        t2[p2] = s2[p2];
-    }
-    return t2;
-  };
-  return __assign$d.apply(this, arguments);
-};
 Object.defineProperty(ExpandMore, "__esModule", { value: true });
-var jsx_runtime_1$2 = jsxRuntimeExports;
+var jsx_runtime_1$3 = jsxRuntimeExports;
 var SvgExpandMore = function(props) {
-  return (0, jsx_runtime_1$2.jsxs)("svg", __assign$d({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ExpandMoreIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$2.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$2.jsx)("path", { d: "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" })] }));
+  return (0, jsx_runtime_1$3.jsxs)("svg", __assign$e({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "ExpandMoreIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$3.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$3.jsx)("path", { d: "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z" })] }));
 };
-var _default$2 = ExpandMore.default = SvgExpandMore;
+var _default$3 = ExpandMore.default = SvgExpandMore;
 function Sidebar({ currentStep }) {
   const [isOpen, setIsOpen] = reactExports.useState(false);
   const currentStepIndex = Object.values(formSteps).findIndex(
@@ -12116,7 +12116,7 @@ function Sidebar({ currentStep }) {
         className: nsp("sidebar__collapse-btn"),
         onClick: () => setIsOpen(!isOpen),
         label: buttonLabel,
-        iconAfter: isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, {})
+        iconAfter: isOpen ? /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {})
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -12163,6 +12163,24 @@ function Page({ step, children }) {
   ] });
 }
 var Add = {};
+var __assign$d = commonjsGlobal && commonjsGlobal.__assign || function() {
+  __assign$d = Object.assign || function(t2) {
+    for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
+      s2 = arguments[i];
+      for (var p2 in s2) if (Object.prototype.hasOwnProperty.call(s2, p2))
+        t2[p2] = s2[p2];
+    }
+    return t2;
+  };
+  return __assign$d.apply(this, arguments);
+};
+Object.defineProperty(Add, "__esModule", { value: true });
+var jsx_runtime_1$2 = jsxRuntimeExports;
+var SvgAdd = function(props) {
+  return (0, jsx_runtime_1$2.jsxs)("svg", __assign$d({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "AddIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$2.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$2.jsx)("path", { d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" })] }));
+};
+var _default$2 = Add.default = SvgAdd;
+var Remove = {};
 var __assign$c = commonjsGlobal && commonjsGlobal.__assign || function() {
   __assign$c = Object.assign || function(t2) {
     for (var s2, i = 1, n2 = arguments.length; i < n2; i++) {
@@ -12174,12 +12192,12 @@ var __assign$c = commonjsGlobal && commonjsGlobal.__assign || function() {
   };
   return __assign$c.apply(this, arguments);
 };
-Object.defineProperty(Add, "__esModule", { value: true });
+Object.defineProperty(Remove, "__esModule", { value: true });
 var jsx_runtime_1$1 = jsxRuntimeExports;
-var SvgAdd = function(props) {
-  return (0, jsx_runtime_1$1.jsxs)("svg", __assign$c({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "AddIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$1.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$1.jsx)("path", { d: "M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" })] }));
+var SvgRemove = function(props) {
+  return (0, jsx_runtime_1$1.jsxs)("svg", __assign$c({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "RemoveIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$1.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$1.jsx)("path", { d: "M19 13H5v-2h14v2z" })] }));
 };
-var _default$1 = Add.default = SvgAdd;
+var _default$1 = Remove.default = SvgRemove;
 function ElterngeldvarianteBadge({
   variante,
   className
@@ -12213,13 +12231,14 @@ function DetailsElterngeldvariante({
   variante,
   children
 }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("details", { className: "border-0 border-b-2 border-solid border-black first:border-t-2", children: [
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("details", { className: "group border-0 border-b-2 border-solid border-black first:border-t-2", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("summary", { className: "flex cursor-pointer items-center justify-between px-24 py-16", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap items-center gap-x-20 gap-y-8", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { "aria-hidden": true, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ElterngeldvarianteBadge, { variante, className: "min-w-96" }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("h4", { className: "text-base", children: summaryTitle })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, { className: "min-h-24 min-w-24" })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$2, { className: "min-h-24 min-w-24 group-open:hidden" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(_default$1, { className: "hidden min-h-24 min-w-24 group-open:block" })
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-24 pt-4", children })
   ] });
@@ -12667,18 +12686,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-BICPv07t.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-BKnIsoVp.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-C-70qMwS.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-CEmGvJM_.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-p9wXLsON.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-PYWFn4WD.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-BPRpFfMS.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-BJSbpLL6.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-OuE9JfYh.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-ChlwUxdv.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-xSuldHtz.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-UcvgwI73.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();
@@ -24162,67 +24181,68 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 setupCalculation();
 export {
-  _default$4 as $,
-  countEGPlusMonths as A,
+  monatsplanerSelectors as $,
+  countBEGMonths as A,
   Button as B,
-  minNumberOfElterngeld as C,
+  countEGPlusMonths as C,
   DateTime as D,
   EgrBerechnungParamId as E,
-  lastIndexOfType as F,
-  hasContinuousMonthsOfType as G,
-  React$1 as H,
-  getDefaultExportFromCjs as I,
-  commonjsGlobal as J,
+  minNumberOfElterngeld as F,
+  lastIndexOfType as G,
+  hasContinuousMonthsOfType as H,
+  React$1 as I,
+  getDefaultExportFromCjs as J,
   Big as K,
   getAutomaticallySelectedPSBMonthIndex as L,
-  KinderFreiBetrag as M,
-  KassenArt as N,
-  RentenArt as O,
+  commonjsGlobal as M,
+  KinderFreiBetrag as N,
+  KassenArt as O,
   Page as P,
-  stepErwerbstaetigkeitElternteilSelectors as Q,
+  RentenArt as Q,
   ReactDOM as R,
   SteuerKlasse as S,
-  initialTaetigkeit as T,
-  formatAsCurrency as U,
-  createAppSelector as V,
-  stepRechnerSelectors as W,
-  stepNachwuchsSelectors as X,
+  stepErwerbstaetigkeitElternteilSelectors as T,
+  initialTaetigkeit as U,
+  formatAsCurrency as V,
+  createAppSelector as W,
+  stepRechnerSelectors as X,
   YesNo as Y,
-  monatsplanerSelectors as Z,
+  stepNachwuchsSelectors as Z,
   _default$1 as _,
   useNavigate as a,
-  monatsplanerActions as a0,
-  canNotChangeBEGDueToSimultaneousMonthRules as a1,
-  canNotChangeBEGDueToLimitReachedPerParent as a2,
-  canNotChangeEGPDueToLimitReachedPerParent as a3,
-  reachedLimitOfSimultaneousBEGMonths as a4,
-  isExceptionToSimulatenousMonthRestrictions as a5,
-  useAppStore as a6,
-  ElterngeldvarianteBadge as a7,
-  _default as a8,
+  _default$5 as a0,
+  monatsplanerActions as a1,
+  canNotChangeBEGDueToSimultaneousMonthRules as a2,
+  canNotChangeBEGDueToLimitReachedPerParent as a3,
+  canNotChangeEGPDueToLimitReachedPerParent as a4,
+  reachedLimitOfSimultaneousBEGMonths as a5,
+  isExceptionToSimulatenousMonthRestrictions as a6,
+  useAppStore as a7,
+  ElterngeldvarianteBadge as a8,
+  _default as a9,
   useAppSelector as b,
   classNames as c,
   stepAllgemeineAngabenActions as d,
   setTrackingVariable as e,
   formSteps as f,
-  stepNachwuchsActions as g,
-  stepAllgemeineAngabenSelectors as h,
+  _default$2 as g,
+  stepNachwuchsActions as h,
   initialStepErwerbstaetigkeitElternteil as i,
   jsxRuntimeExports as j,
-  stepErwerbstaetigkeitActions as k,
-  stepEinkommenActions as l,
-  initialBruttoEinkommenZeitraum as m,
+  stepAllgemeineAngabenSelectors as k,
+  stepErwerbstaetigkeitActions as l,
+  stepEinkommenActions as m,
   nsp as n,
-  _default$6 as o,
+  initialBruttoEinkommenZeitraum as o,
   parseGermanDateString as p,
-  numberOfMutterschutzMonths as q,
+  _default$7 as q,
   reactExports as r,
   stepRechnerActions as s,
-  useDetectClickOutside_1 as t,
+  numberOfMutterschutzMonths as t,
   useAppDispatch as u,
-  _default$5 as v,
-  getGeburtstagSettings as w,
-  getFruehchen as x,
-  countFilledMonths as y,
-  countBEGMonths as z
+  useDetectClickOutside_1 as v,
+  _default$6 as w,
+  getGeburtstagSettings as x,
+  getFruehchen as y,
+  countFilledMonths as z
 };

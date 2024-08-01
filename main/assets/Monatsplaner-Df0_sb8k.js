@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, t as useDetectClickOutside_1, o as _default$4, v as _default$5, R as ReactDOM, w as getGeburtstagSettings, x as getFruehchen, y as countFilledMonths, z as countBEGMonths, A as countEGPlusMonths, C as minNumberOfElterngeld, F as lastIndexOfType, G as hasContinuousMonthsOfType, e as setTrackingVariable, H as React, I as getDefaultExportFromCjs, J as commonjsGlobal, Y as YesNo, B as Button, K as Big, L as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, M as KinderFreiBetrag, N as KassenArt, O as RentenArt, b as useAppSelector, Q as stepErwerbstaetigkeitElternteilSelectors, T as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, U as formatAsCurrency, V as createAppSelector, u as useAppDispatch, a as useNavigate, W as stepRechnerSelectors, X as stepNachwuchsSelectors, Z as monatsplanerSelectors, _ as _default$6, $ as _default$7, f as formSteps, a0 as monatsplanerActions, a1 as canNotChangeBEGDueToSimultaneousMonthRules, a2 as canNotChangeBEGDueToLimitReachedPerParent, a3 as canNotChangeEGPDueToLimitReachedPerParent, a4 as reachedLimitOfSimultaneousBEGMonths, a5 as isExceptionToSimulatenousMonthRestrictions } from "./index-wHl-L1Mm.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, v as useDetectClickOutside_1, q as _default$3, w as _default$4, R as ReactDOM, x as getGeburtstagSettings, y as getFruehchen, z as countFilledMonths, A as countBEGMonths, C as countEGPlusMonths, F as minNumberOfElterngeld, G as lastIndexOfType, H as hasContinuousMonthsOfType, e as setTrackingVariable, I as React, J as getDefaultExportFromCjs, Y as YesNo, B as Button, K as Big, L as getAutomaticallySelectedPSBMonthIndex, M as commonjsGlobal, S as SteuerKlasse, N as KinderFreiBetrag, O as KassenArt, Q as RentenArt, b as useAppSelector, T as stepErwerbstaetigkeitElternteilSelectors, U as initialTaetigkeit, k as stepAllgemeineAngabenSelectors, V as formatAsCurrency, W as createAppSelector, u as useAppDispatch, a as useNavigate, X as stepRechnerSelectors, Z as stepNachwuchsSelectors, $ as monatsplanerSelectors, g as _default$5, a0 as _default$6, f as formSteps, a1 as monatsplanerActions, a2 as canNotChangeBEGDueToSimultaneousMonthRules, a3 as canNotChangeBEGDueToLimitReachedPerParent, a4 as canNotChangeEGPDueToLimitReachedPerParent, a5 as reachedLimitOfSimultaneousBEGMonths, a6 as isExceptionToSimulatenousMonthRestrictions } from "./index-uiLWMgB7.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function Description({ id, error = false, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -53,7 +53,7 @@ function InfoDialog({
             type: "button",
             onClick: () => setIsModalOpen(true),
             "aria-label": "Zugehörige Information zeigen",
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {})
+            children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$3, {})
           }
         ),
         !!isModalOpen && /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -73,7 +73,7 @@ function InfoDialog({
                   type: "button",
                   onClick: () => setIsModalOpen(false),
                   "aria-label": "Information schließen",
-                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {})
+                  children: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$4, {})
                 }
               ),
               /* @__PURE__ */ jsxRuntimeExports.jsx("div", { id: info.id, className: nsp("info-dialog-box__text"), children: typeof info.text === "string" ? /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "whitespace-pre-line", children: info.text }) : info.text })
@@ -5938,24 +5938,6 @@ function CustomNumberField({
     }
   );
 }
-var Remove = {};
-var __assign$3 = commonjsGlobal && commonjsGlobal.__assign || function() {
-  __assign$3 = Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-      s = arguments[i];
-      for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-        t[p] = s[p];
-    }
-    return t;
-  };
-  return __assign$3.apply(this, arguments);
-};
-Object.defineProperty(Remove, "__esModule", { value: true });
-var jsx_runtime_1$3 = jsxRuntimeExports;
-var SvgRemove = function(props) {
-  return (0, jsx_runtime_1$3.jsxs)("svg", __assign$3({ xmlns: "http://www.w3.org/2000/svg", height: 24, viewBox: "0 0 24 24", width: 24, "data-testid": "RemoveIcon", role: "graphics-symbol img", focusable: "false", "aria-hidden": "true" }, props, { children: [(0, jsx_runtime_1$3.jsx)("path", { d: "M0 0h24v24H0z", fill: "none" }), (0, jsx_runtime_1$3.jsx)("path", { d: "M19 13H5v-2h14v2z" })] }));
-};
-var _default$3 = Remove.default = SvgRemove;
 const yesNoLabels = {
   [YesNo.YES]: "Ja",
   [YesNo.NO]: "Nein"
@@ -7861,7 +7843,7 @@ function Monatsplaner({ mutterSchutzMonate }) {
                     {
                       buttonStyle: "secondary",
                       label: "Alle Monate anzeigen",
-                      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$6, {}),
+                      iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$5, {}),
                       onClick: () => setLebensmonateVisibleLength(lebensmonate.length)
                     }
                   ),
@@ -7904,7 +7886,7 @@ function Monatsplaner({ mutterSchutzMonate }) {
         {
           buttonStyle: "link",
           label: "Download der Planung",
-          iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$7, {}),
+          iconBefore: /* @__PURE__ */ jsxRuntimeExports.jsx(_default$6, {}),
           onClick: handlePrint
         }
       )
@@ -7933,19 +7915,18 @@ export {
   Toast as T,
   YesNoRadio as Y,
   Zeitraum as Z,
-  _default$3 as _,
+  _default$2 as _,
   useController as a,
   IMaskInput as b,
   IMask as c,
   useFieldArray as d,
   CustomCheckbox as e,
-  _default$2 as f,
+  useFormContext as f,
   get as g,
-  useFormContext as h,
+  FormProvider as h,
   infoTexts as i,
-  FormProvider as j,
-  FootNoteNumber as k,
-  CustomNumberField as l,
-  availableZeitraumOptions as m,
+  FootNoteNumber as j,
+  CustomNumberField as k,
+  availableZeitraumOptions as l,
   useForm as u
 };

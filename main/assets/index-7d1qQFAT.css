@@ -567,6 +567,12 @@
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
+#egr-root :is(.group[open] .group-open\:block) {
+  display: block;
+}
+#egr-root :is(.group[open] .group-open\:hidden) {
+  display: none;
+}
 @container planungs-details (min-width: 42rem) {
   #egr-root :is(.\@2xl\/planungs-details\:block) {
     display: block;

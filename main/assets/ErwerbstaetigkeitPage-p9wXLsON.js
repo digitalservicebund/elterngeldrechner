@@ -1,7 +1,7 @@
-import { r as reactExports, j as jsxRuntimeExports, Y as YesNo, i as initialStepErwerbstaetigkeitElternteil, a as useNavigate, b as useAppSelector, h as stepAllgemeineAngabenSelectors, u as useAppDispatch, P as Page, f as formSteps, s as stepRechnerActions, k as stepErwerbstaetigkeitActions } from "./index-CpOSKPQK.js";
-import { h as useFormContext, F as FormFieldGroup, e as CustomCheckbox, i as infoTexts, Y as YesNoRadio, C as CustomRadio, u as useForm, j as FormProvider } from "./Monatsplaner-DgXNSmRN.js";
-import { S as Split, a as SplitItem } from "./Split-DZOJl1-y.js";
-import { B as ButtonGroup } from "./ButtonGroup-DJ3n6qDn.js";
+import { r as reactExports, j as jsxRuntimeExports, Y as YesNo, i as initialStepErwerbstaetigkeitElternteil, a as useNavigate, b as useAppSelector, h as stepAllgemeineAngabenSelectors, u as useAppDispatch, P as Page, f as formSteps, s as stepRechnerActions, k as stepErwerbstaetigkeitActions } from "./index-wHl-L1Mm.js";
+import { h as useFormContext, F as FormFieldGroup, e as CustomCheckbox, i as infoTexts, Y as YesNoRadio, C as CustomRadio, u as useForm, j as FormProvider } from "./Monatsplaner-D8D3n7LG.js";
+import { S as Split, a as SplitItem } from "./Split-CujGvjwp.js";
+import { B as ButtonGroup } from "./ButtonGroup-bPOGBYj7.js";
 import "./egr-configuration-Cwpx2zXF.js";
 const typeOfErwerbstaetigkeitLabels = {
   isNichtSelbststaendig: "Einkünfte aus nichtselbständiger Arbeit",
@@ -56,8 +56,8 @@ function ErwerbstaetigkeitCheckboxGroup({ elternteil }) {
   ] });
 }
 const monatlichesBruttoLabels = {
-  MiniJob: "520 Euro oder weniger",
-  MehrAlsMiniJob: "mehr als 520 Euro"
+  MiniJob: "Ja",
+  MehrAlsMiniJob: "Nein"
 };
 const monatlichesBruttoOptions = [
   {
@@ -154,7 +154,7 @@ function ErwerbstaetigkeitFormElternteil({
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             FormFieldGroup,
             {
-              description: "Wie hoch war Ihr monatliches Brutto-Einkommen?",
+              description: "Hatten Sie Einkommen aus einem Mini-Job?",
               info: infoTexts.minijobsMaxZahl,
               children: /* @__PURE__ */ jsxRuntimeExports.jsx(
                 CustomRadio,

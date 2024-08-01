@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, t as useDetectClickOutside_1, o as _default$4, v as _default$5, R as ReactDOM, w as getGeburtstagSettings, x as getFruehchen, y as countFilledMonths, z as countBEGMonths, A as countEGPlusMonths, C as minNumberOfElterngeld, F as lastIndexOfType, G as hasContinuousMonthsOfType, e as setTrackingVariable, H as React, I as getDefaultExportFromCjs, J as commonjsGlobal, Y as YesNo, B as Button, K as Big, L as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, M as KinderFreiBetrag, N as KassenArt, O as RentenArt, b as useAppSelector, Q as stepErwerbstaetigkeitElternteilSelectors, T as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, U as formatAsCurrency, V as createAppSelector, u as useAppDispatch, a as useNavigate, W as stepRechnerSelectors, X as stepNachwuchsSelectors, Z as monatsplanerSelectors, _ as _default$6, $ as _default$7, f as formSteps, a0 as monatsplanerActions, a1 as canNotChangeBEGDueToSimultaneousMonthRules, a2 as canNotChangeBEGDueToLimitReachedPerParent, a3 as canNotChangeEGPDueToLimitReachedPerParent, a4 as reachedLimitOfSimultaneousBEGMonths, a5 as isExceptionToSimulatenousMonthRestrictions } from "./index-CpOSKPQK.js";
+import { j as jsxRuntimeExports, c as classNames, n as nsp, r as reactExports, t as useDetectClickOutside_1, o as _default$4, v as _default$5, R as ReactDOM, w as getGeburtstagSettings, x as getFruehchen, y as countFilledMonths, z as countBEGMonths, A as countEGPlusMonths, C as minNumberOfElterngeld, F as lastIndexOfType, G as hasContinuousMonthsOfType, e as setTrackingVariable, H as React, I as getDefaultExportFromCjs, J as commonjsGlobal, Y as YesNo, B as Button, K as Big, L as getAutomaticallySelectedPSBMonthIndex, S as SteuerKlasse, M as KinderFreiBetrag, N as KassenArt, O as RentenArt, b as useAppSelector, Q as stepErwerbstaetigkeitElternteilSelectors, T as initialTaetigkeit, h as stepAllgemeineAngabenSelectors, U as formatAsCurrency, V as createAppSelector, u as useAppDispatch, a as useNavigate, W as stepRechnerSelectors, X as stepNachwuchsSelectors, Z as monatsplanerSelectors, _ as _default$6, $ as _default$7, f as formSteps, a0 as monatsplanerActions, a1 as canNotChangeBEGDueToSimultaneousMonthRules, a2 as canNotChangeBEGDueToLimitReachedPerParent, a3 as canNotChangeEGPDueToLimitReachedPerParent, a4 as reachedLimitOfSimultaneousBEGMonths, a5 as isExceptionToSimulatenousMonthRestrictions } from "./index-wHl-L1Mm.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function Description({ id, error = false, children }) {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -111,7 +111,9 @@ const infoTexts = {
   },
   minijobsMaxZahl: {
     id: "info-6",
-    text: "geringfügige Beschäftigung bis max. 520 Euro monatlich, vor dem 01.10.2022: bis max. 450 Euro monatlich"
+    text: `Mini-Job - geringfügige Beschäftigung bis maximal 538 Euro monatlich
+- vor dem 01.01.2024: bis maximal 520 Euro monatlich
+- vor dem 01.10.2022: bis maximal 450 Euro monatlich`
   },
   monatsplannerMutterschaftsleistungen: {
     id: "info-10",
@@ -7001,7 +7003,8 @@ function Taetigkeit({
     !selbststaendig && /* @__PURE__ */ jsxRuntimeExports.jsx(
       FormFieldGroup,
       {
-        description: "War diese Anstellung ein Minijob, mit einer maximalen Vergütung von\n          520 Euro im Monat?",
+        description: "War diese Tätigkeit ein Mini-Job?",
+        info: infoTexts.minijobsMaxZahl,
         children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           YesNoRadio,
           {
@@ -7011,8 +7014,7 @@ function Taetigkeit({
               required: "Dieses Feld ist erforderlich"
             },
             errors,
-            required: true,
-            info: infoTexts.minijobsMaxZahl
+            required: true
           }
         )
       }

@@ -30,7 +30,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
     },
   };
 
-  it("should show the relevant form blocks if user is only 'erwerbstätig' and earns more than 520 Euro monthly", () => {
+  it("should show the relevant form blocks if user is only 'erwerbstätig' and its no 'Mini-Job'", () => {
     render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
     const elternteil1Section = getElternteil1Section();
 

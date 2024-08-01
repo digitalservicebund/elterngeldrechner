@@ -173,7 +173,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     ).toHaveLength(13);
   });
 
-  it("should show 'Minijob' when choose 'Einkünfte aus nichtselbständiger Arbeit'", async () => {
+  it("should show 'Mini-Job' when choose 'Einkünfte aus nichtselbständiger Arbeit'", async () => {
     // given
     render(<EinkommenPage />, {
       preloadedState: stateFromPreviousSteps,
@@ -196,7 +196,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     // then
     expect(
       within(getTaetigkeit1OfElternteil1Section()).getByText(
-        /Anstellung ein Minijob, mit einer maximalen Vergütung von 520/,
+        "War diese Tätigkeit ein Mini-Job?",
       ),
     ).toBeInTheDocument();
   });
@@ -224,7 +224,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     // then
     expect(
       within(getTaetigkeit1OfElternteil1Section()).queryByText(
-        /Anstellung ein Minijob, mit einer maximalen Vergütung von 520/,
+        "War diese Tätigkeit ein Mini-Job?",
       ),
     ).not.toBeInTheDocument();
   });

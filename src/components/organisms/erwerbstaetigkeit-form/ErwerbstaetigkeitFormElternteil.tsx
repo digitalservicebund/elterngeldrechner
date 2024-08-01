@@ -17,9 +17,9 @@ import { YesNo } from "@/globals/js/calculations/model";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 
-const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
-  MiniJob: "520 Euro oder weniger",
-  MehrAlsMiniJob: "mehr als 520 Euro",
+export const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
+  MiniJob: "Ja",
+  MehrAlsMiniJob: "Nein",
 };
 
 const monatlichesBruttoOptions: RadioOption<MonatlichesBrutto>[] = [
@@ -121,7 +121,7 @@ function ErwerbstaetigkeitFormElternteil({
                     />
                   </FormFieldGroup>
                   <FormFieldGroup
-                    description="Wie hoch war Ihr monatliches Brutto-Einkommen?"
+                    description="Hatten Sie Einkommen aus einem Mini-Job?"
                     info={infoTexts.minijobsMaxZahl}
                   >
                     <CustomRadio

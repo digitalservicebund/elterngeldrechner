@@ -53,7 +53,7 @@ describe("Erwerbstaetigkeit Page", () => {
       ),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+      screen.getByText("Hatten Sie Einkommen aus einem Mini-Job?"),
     ).toBeInTheDocument();
   });
 
@@ -80,7 +80,7 @@ describe("Erwerbstaetigkeit Page", () => {
       ),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+      screen.queryByText("Hatten Sie Einkommen aus einem Mini-Job?"),
     ).not.toBeInTheDocument();
   });
 
@@ -98,7 +98,7 @@ describe("Erwerbstaetigkeit Page", () => {
           ),
         ).not.toBeInTheDocument();
         expect(
-          screen.queryByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+          screen.queryByText("Hatten Sie Einkommen aus einem Mini-Job?"),
         ).not.toBeInTheDocument();
       });
 
@@ -116,7 +116,7 @@ describe("Erwerbstaetigkeit Page", () => {
           ),
         ).not.toBeInTheDocument();
         expect(
-          screen.queryByText("Wie hoch war Ihr monatliches Brutto-Einkommen?"),
+          screen.queryByText("Hatten Sie Einkommen aus einem Mini-Job?"),
         ).not.toBeInTheDocument();
       });
     },
@@ -165,7 +165,9 @@ describe("Erwerbstaetigkeit Page", () => {
       await userEvent.click(
         screen.getByTestId("ET1.sozialVersicherungsPflichtig_option_0"),
       );
-      await userEvent.click(screen.getByLabelText("mehr als 520 Euro"));
+      await userEvent.click(
+        screen.getByTestId("ET1.monatlichesBrutto_option_1"),
+      );
 
       // ET2:
       await userEvent.click(screen.getByTestId("ET2.vorGeburt_option_1"));

@@ -159,8 +159,8 @@ export function Taetigkeit({
       </FormFieldGroup>
       {!selbststaendig && (
         <FormFieldGroup
-          description="War diese Anstellung ein Minijob, mit einer maximalen Vergütung von
-          520 Euro im Monat?"
+          description="War diese Tätigkeit ein Mini-Job?"
+          info={infoTexts.minijobsMaxZahl}
         >
           <YesNoRadio
             name={isMinijob}
@@ -170,7 +170,6 @@ export function Taetigkeit({
             }}
             errors={errors}
             required
-            info={infoTexts.minijobsMaxZahl}
           />
         </FormFieldGroup>
       )}

@@ -38,7 +38,9 @@ export const infoTexts: Record<string, Info> = {
 
   minijobsMaxZahl: {
     id: "info-6",
-    text: "geringfügige Beschäftigung bis max. 520 Euro monatlich, vor dem 01.10.2022: bis max. 450 Euro monatlich",
+    text: `Mini-Job - geringfügige Beschäftigung bis maximal 538 Euro monatlich
+- vor dem 01.01.2024: bis maximal 520 Euro monatlich
+- vor dem 01.10.2022: bis maximal 450 Euro monatlich`,
   },
 
   monatsplannerMutterschaftsleistungen: {

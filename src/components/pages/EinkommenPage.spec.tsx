@@ -104,11 +104,6 @@ describe("Einkommen Page", () => {
     );
 
     expect(messages).toHaveLength(2);
-    expect(
-      screen.queryByText(
-        "Da Sie unter 520 € einnehmen, wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.",
-      ),
-    ).not.toBeInTheDocument();
   });
 
   describe("Submitting the form when only 'erwerbstätig' and no minijob", () => {

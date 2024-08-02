@@ -34,15 +34,30 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             nach der Geburt weniger Einkommen als davor
           </li>
           <li>
-            zwei Einschränkungen gibt es:
-            <ul className="list-disc pl-24">
+            Folgende Beschränkung gilt: Jeder Elternteil kann maximal 12 Monate
+            Basiselterngeld bekommen
+          </li>
+          <li>
+            Gleichzeitiger Bezug von Basiselterngeld mit Ihrem Partner oder
+            Ihrer Partnerin ist nur maximal einen Monat in den ersten 12
+            Lebensmonaten Ihres Kindes möglich.
+            <br />
+            <span className="font-bold">Ausnahmen:</span> Basiselterngeld kann
+            für mehr als einen Monat gleichzeitig bezogen werden, wenn einer der
+            folgenden Sachverhalte auf Sie zutrifft:
+            <ul className="mb-32 list-disc pl-24">
               <li>
-                Jeder Elternteil kann maximal 12 Monate Basiselterngeld bekommen
+                Sie sind Eltern von besonders früh geborenen Kindern, die
+                mindestens sechs Wochen vor dem errechneten Geburtstermin
+                geboren wurden
               </li>
               <li>
-                Gleichzeitiger Bezug von Basiselterngeld mit Ihrem Partner oder
-                Ihrer Partnerin ist nur maximal einen Monat in den ersten 12
-                Lebensmonaten Ihres Kindes möglich
+                Sie sind Eltern von Zwillingen, Drillingen und weiteren
+                Mehrlingen
+              </li>
+              <li>
+                Sie haben ein neugeborenes Kind mit Behinderung oder ein
+                Geschwisterkind mit Behinderung
               </li>
             </ul>
           </li>
@@ -52,27 +67,6 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
 
         <ul className="mb-24 list-disc pl-24">
           <li>14 Monate Basiselterngeld können beantragt werden</li>
-        </ul>
-
-        <h5 className="text-base">Ausnahmen:</h5>
-
-        <p className="p-0">
-          Basiselterngeld kann für mehr als einen Monat gleichzeitig bezogen
-          werden, wenn einer der folgenden Sachverhalte auf Sie zutrifft:
-        </p>
-
-        <ul className="mb-32 list-disc pl-24">
-          <li>
-            Sie sind Eltern von besonders früh geborenen Kindern, die mindestens
-            sechs Wochen vor dem errechneten Geburtstermin geboren wurden
-          </li>
-          <li>
-            Sie sind Eltern von Zwillingen, Drillingen und weiteren Mehrlingen
-          </li>
-          <li>
-            Sie haben ein neugeborenes Kind mit Behinderung oder ein
-            Geschwisterkind mit Behinderung
-          </li>
         </ul>
 
         <div className="bg-off-white p-24">
@@ -336,7 +330,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
         </div>
       </DetailsElterngeldvariante>
       <DetailsElterngeldvariante
-        summaryTitle="Was ist Partnerschaftsbonus?"
+        summaryTitle="Was ist der Partnerschaftsbonus?"
         variante="PSB"
       >
         <ul className="mb-24 list-disc pl-24">

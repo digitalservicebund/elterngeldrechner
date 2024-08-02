@@ -3,14 +3,14 @@ import { ReactNode } from "react";
 export function FurtherInformation(): ReactNode {
   return (
     <p className="p-0">
-      Weitere Informationen finden Sie auf der{" "}
+      Weitere Informationen finden Sie im{" "}
       <a
         target="_blank"
         rel="noreferrer"
-        href="https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752"
+        href="https://familienportal.de/familienportal/familienleistungen/elterngeld/faq/was-ist-elterngeld-124628"
         className="underline"
       >
-        Webseite des Familienministeriums
+        Familienportal
       </a>
     </p>
   );

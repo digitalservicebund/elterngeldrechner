@@ -40,7 +40,7 @@ describe("ElterngeldvariantenDescription", () => {
   it("shows details of Partnerschaftsbonus when clicking on its summary", async () => {
     render(<ElterngeldvariantenDescriptions />);
     const summary = screen.getByRole("heading", {
-      name: "Was ist Partnerschaftsbonus?",
+      name: "Was ist der Partnerschaftsbonus?",
     });
 
     await userEvent.click(summary);

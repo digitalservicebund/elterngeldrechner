@@ -26,7 +26,7 @@ export class VariantenPOM {
 
     this.partnerschaftsbonus = page
       .locator("summary")
-      .filter({ hasText: "Was ist Partnerschaftsbonus?" });
+      .filter({ hasText: "Was ist der Partnerschaftsbonus?" });
   }
 
   async submit() {

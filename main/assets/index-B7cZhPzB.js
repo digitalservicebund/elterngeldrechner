@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-BKnIsoVp.js","./Monatsplaner-Df0_sb8k.js","./egr-configuration-Cwpx2zXF.js","./Split-BIY2JA_W.js","./ButtonGroup-Br66B8wm.js","./NachwuchsPage-CEmGvJM_.js","./ErwerbstaetigkeitPage-PYWFn4WD.js","./EinkommenPage-BJSbpLL6.js","./RechnerPlanerPage-ChlwUxdv.js","./ZusammenfassungUndDatenPage-UcvgwI73.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-Br2mVQmT.js","./Monatsplaner-VMXTUSwH.js","./egr-configuration-Cwpx2zXF.js","./Split-CLArm6y7.js","./ButtonGroup-DXeXCGPW.js","./NachwuchsPage-CtEjHi4p.js","./ErwerbstaetigkeitPage-C0loC_9k.js","./EinkommenPage-BVaDPZ82.js","./RechnerPlanerPage-BpkO28ES.js","./ZusammenfassungUndDatenPage-cK7oPXWc.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12283,16 +12283,16 @@ function Example({ title, months: months2 }) {
 }
 function FurtherInformation() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "p-0", children: [
-    "Weitere Informationen finden Sie auf der",
+    "Weitere Informationen finden Sie im",
     " ",
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       "a",
       {
         target: "_blank",
         rel: "noreferrer",
-        href: "https://www.bmfsfj.de/bmfsfj/themen/familie/familienleistungen/elterngeld/elterngeld-73752",
+        href: "https://familienportal.de/familienportal/familienleistungen/elterngeld/faq/was-ist-elterngeld-124628",
         className: "underline",
-        children: "Webseite des Familienministeriums"
+        children: "Familienportal"
       }
     )
   ] });
@@ -12314,23 +12314,21 @@ function ElterngeldvariantenDescriptions() {
           /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "mb-24 list-disc pl-24", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "die 14 Basiselterngeldmonate können Sie untereinander aufteilen" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Voraussetzung: mindestens einer von Ihnen hat in 2 Lebensmonaten nach der Geburt weniger Einkommen als davor" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Folgende Beschränkung gilt: Jeder Elternteil kann maximal 12 Monate Basiselterngeld bekommen" }),
             /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { children: [
-              "zwei Einschränkungen gibt es:",
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "list-disc pl-24", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Jeder Elternteil kann maximal 12 Monate Basiselterngeld bekommen" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Gleichzeitiger Bezug von Basiselterngeld mit Ihrem Partner oder Ihrer Partnerin ist nur maximal einen Monat in den ersten 12 Lebensmonaten Ihres Kindes möglich" })
+              "Gleichzeitiger Bezug von Basiselterngeld mit Ihrem Partner oder Ihrer Partnerin ist nur maximal einen Monat in den ersten 12 Lebensmonaten Ihres Kindes möglich.",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "font-bold", children: "Ausnahmen:" }),
+              " Basiselterngeld kann für mehr als einen Monat gleichzeitig bezogen werden, wenn einer der folgenden Sachverhalte auf Sie zutrifft:",
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "mb-32 list-disc pl-24", children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Sie sind Eltern von besonders früh geborenen Kindern, die mindestens sechs Wochen vor dem errechneten Geburtstermin geboren wurden" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Sie sind Eltern von Zwillingen, Drillingen und weiteren Mehrlingen" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Sie haben ein neugeborenes Kind mit Behinderung oder ein Geschwisterkind mit Behinderung" })
               ] })
             ] })
           ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "text-base", children: "Für Alleinerziehende gilt:" }),
           /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "mb-24 list-disc pl-24", children: /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "14 Monate Basiselterngeld können beantragt werden" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "text-base", children: "Ausnahmen:" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "p-0", children: "Basiselterngeld kann für mehr als einen Monat gleichzeitig bezogen werden, wenn einer der folgenden Sachverhalte auf Sie zutrifft:" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "mb-32 list-disc pl-24", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Sie sind Eltern von besonders früh geborenen Kindern, die mindestens sechs Wochen vor dem errechneten Geburtstermin geboren wurden" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Sie sind Eltern von Zwillingen, Drillingen und weiteren Mehrlingen" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("li", { children: "Sie haben ein neugeborenes Kind mit Behinderung oder ein Geschwisterkind mit Behinderung" })
-          ] }),
           /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-off-white p-24", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsx("h5", { className: "text-base", children: "Beispiele für Paare und getrennt Erziehende:" }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mb-20 p-0", children: "Elternteil 1 beantragt in den Lebensmonaten 1 bis 7 Basiselterngeld und Elternteil 2 in den Lebensmonaten 7 bis 13. Im Lebensmonat 7 planen Sie einen Monat parallel." }),
@@ -12545,7 +12543,7 @@ function ElterngeldvariantenDescriptions() {
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
       DetailsElterngeldvariante,
       {
-        summaryTitle: "Was ist Partnerschaftsbonus?",
+        summaryTitle: "Was ist der Partnerschaftsbonus?",
         variante: "PSB",
         children: [
           /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "mb-24 list-disc pl-24", children: [
@@ -12686,18 +12684,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-BKnIsoVp.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-Br2mVQmT.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-CEmGvJM_.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-CtEjHi4p.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-PYWFn4WD.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-C0loC_9k.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-BJSbpLL6.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-BVaDPZ82.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-ChlwUxdv.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-BpkO28ES.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-UcvgwI73.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-cK7oPXWc.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();

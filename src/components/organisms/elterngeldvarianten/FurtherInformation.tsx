@@ -7,7 +7,7 @@ export function FurtherInformation(): ReactNode {
       <a
         target="_blank"
         rel="noreferrer"
-        href="https://familienportal.de/familienportal/familienleistungen/elterngeld/faq/was-ist-elterngeld-124628"
+        href="https://familienportal.de/familienportal/familienleistungen/elterngeld"
         className="underline"
       >
         Familienportal

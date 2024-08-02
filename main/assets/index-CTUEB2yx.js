@@ -1,4 +1,4 @@
-const __vite__fileDeps=["./AllgemeineAngabenPage-Br2mVQmT.js","./Monatsplaner-VMXTUSwH.js","./egr-configuration-Cwpx2zXF.js","./Split-CLArm6y7.js","./ButtonGroup-DXeXCGPW.js","./NachwuchsPage-CtEjHi4p.js","./ErwerbstaetigkeitPage-C0loC_9k.js","./EinkommenPage-BVaDPZ82.js","./RechnerPlanerPage-BpkO28ES.js","./ZusammenfassungUndDatenPage-cK7oPXWc.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
+const __vite__fileDeps=["./AllgemeineAngabenPage-CeKzhTs5.js","./Monatsplaner-C6CHK4Ff.js","./egr-configuration-Cwpx2zXF.js","./Split-DmqB2bA3.js","./ButtonGroup-DwKSAumc.js","./NachwuchsPage-BkHsz27S.js","./ErwerbstaetigkeitPage-nfK1mDfR.js","./EinkommenPage-ByVCZLqM.js","./RechnerPlanerPage-C5IunHbi.js","./ZusammenfassungUndDatenPage-BajzJJ4G.js"],__vite__mapDeps=i=>i.map(i=>__vite__fileDeps[i]);
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
@@ -12290,7 +12290,7 @@ function FurtherInformation() {
       {
         target: "_blank",
         rel: "noreferrer",
-        href: "https://familienportal.de/familienportal/familienleistungen/elterngeld/faq/was-ist-elterngeld-124628",
+        href: "https://familienportal.de/familienportal/familienleistungen/elterngeld",
         className: "underline",
         children: "Familienportal"
       }
@@ -12684,18 +12684,18 @@ function ElterngeldvariantenPage() {
   ] }) });
 }
 const AllgemeineAngabenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./AllgemeineAngabenPage-Br2mVQmT.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./AllgemeineAngabenPage-CeKzhTs5.js"), true ? __vite__mapDeps([0,1,2,3,4]) : void 0, import.meta.url)
 );
-const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-CtEjHi4p.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
+const NachwuchsPage = reactExports.lazy(() => __vitePreload(() => import("./NachwuchsPage-BkHsz27S.js"), true ? __vite__mapDeps([5,1,2,4]) : void 0, import.meta.url));
 const ErwerbstaetigkeitPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-C0loC_9k.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ErwerbstaetigkeitPage-nfK1mDfR.js"), true ? __vite__mapDeps([6,1,2,3,4]) : void 0, import.meta.url)
 );
-const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-BVaDPZ82.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
+const EinkommenPage = reactExports.lazy(() => __vitePreload(() => import("./EinkommenPage-ByVCZLqM.js"), true ? __vite__mapDeps([7,1,2,3,4]) : void 0, import.meta.url));
 const RechnerPlanerPage = reactExports.lazy(
-  () => __vitePreload(() => import("./RechnerPlanerPage-BpkO28ES.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./RechnerPlanerPage-C5IunHbi.js"), true ? __vite__mapDeps([8,1,2]) : void 0, import.meta.url)
 );
 const ZusammenfassungUndDatenPage = reactExports.lazy(
-  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-cK7oPXWc.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
+  () => __vitePreload(() => import("./ZusammenfassungUndDatenPage-BajzJJ4G.js"), true ? __vite__mapDeps([9,2]) : void 0, import.meta.url)
 );
 function App({ elternGeldDigitalWizardUrl }) {
   const dispatch = useAppDispatch();

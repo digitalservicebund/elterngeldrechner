@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, B as Button, a0 as _default$3, M as commonjsGlobal, r as reactExports, c as classNames, a7 as useAppStore, Y as YesNo, V as formatAsCurrency, a8 as ElterngeldvarianteBadge, a9 as _default$4, b as useAppSelector, Z as stepNachwuchsSelectors, W as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-eonCPVmt.js";
+import { j as jsxRuntimeExports, B as Button, a0 as _default$3, M as commonjsGlobal, r as reactExports, c as classNames, a7 as useAppStore, Y as YesNo, V as formatAsCurrency, a8 as ElterngeldvarianteBadge, a9 as _default$4, b as useAppSelector, Z as stepNachwuchsSelectors, W as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BKL-2ofW.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function PrintButton() {
   const handlePrint = () => {
@@ -220,39 +220,44 @@ function DatenInAntragUebernehmenButton() {
             type: "hidden"
           }
         ),
-        isMischtaetigkeit("ET1") && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p1_vg_misch_t1",
-            defaultValue: getMischTaetigkeit("ET1", 0),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p1_vg_misch_t2",
-            defaultValue: getMischTaetigkeit("ET1", 1),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p1_vg_misch_t3",
-            defaultValue: getMischTaetigkeit("ET1", 2),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p1_misch_kirche",
-            defaultValue: getKirchensteuer("ET1"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) : null,
+        isMischtaetigkeit("ET1") ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p1_vg_misch_t1",
+              defaultValue: getMischTaetigkeit("ET1", 0),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p1_vg_misch_t2",
+              defaultValue: getMischTaetigkeit("ET1", 1),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p1_vg_misch_t3",
+              defaultValue: getMischTaetigkeit("ET1", 2),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p1_misch_kirche",
+              defaultValue: getKirchensteuer("ET1"),
+              readOnly: true,
+              type: "hidden"
+            }
+          )
+        ] }) : null,
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "input",
           {
@@ -262,39 +267,44 @@ function DatenInAntragUebernehmenButton() {
             type: "hidden"
           }
         ),
-        hasET2Mischtaetigkeit() && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_vg_misch_t1",
-            defaultValue: getMischTaetigkeit("ET2", 0),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_vg_misch_t2",
-            defaultValue: getMischTaetigkeit("ET2", 1),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_vg_misch_t3",
-            defaultValue: getMischTaetigkeit("ET2", 2),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_misch_kirche",
-            defaultValue: getKirchensteuer("ET2"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) : null,
+        hasET2Mischtaetigkeit() ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_vg_misch_t1",
+              defaultValue: getMischTaetigkeit("ET2", 0),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_vg_misch_t2",
+              defaultValue: getMischTaetigkeit("ET2", 1),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_vg_misch_t3",
+              defaultValue: getMischTaetigkeit("ET2", 2),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_misch_kirche",
+              defaultValue: getKirchensteuer("ET2"),
+              readOnly: true,
+              type: "hidden"
+            }
+          )
+        ] }) : null,
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "input",
           {
@@ -313,47 +323,53 @@ function DatenInAntragUebernehmenButton() {
             type: "hidden"
           }
         ),
-        isET2Present() && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "planungP2",
-            defaultValue: monthPlanner("ET2"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_et_vorgeburt",
-            defaultValue: getEinkommenVorgeburt("ET2"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_et_nachgeburt",
-            defaultValue: getEinkommenNachGeburt("ET2"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_vg_kirchensteuer",
-            defaultValue: getKirchensteuer("ET2"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "input",
-          {
-            name: "p2_vg_nselbst_steuerklasse",
-            defaultValue: getSteuerklasse("ET2"),
-            readOnly: true,
-            type: "hidden"
-          }
-        ) : null,
+        isET2Present() ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "planungP2",
+              defaultValue: monthPlanner("ET2"),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_et_vorgeburt",
+              defaultValue: getEinkommenVorgeburt("ET2"),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_et_nachgeburt",
+              defaultValue: getEinkommenNachGeburt("ET2"),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_vg_kirchensteuer",
+              defaultValue: getKirchensteuer("ET2"),
+              readOnly: true,
+              type: "hidden"
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              name: "p2_vg_nselbst_steuerklasse",
+              defaultValue: getSteuerklasse("ET2"),
+              readOnly: true,
+              type: "hidden"
+            }
+          )
+        ] }) : null,
         /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { label: "Daten in Elterngeldantrag übernehmen", isSubmitButton: true })
       ]
     }

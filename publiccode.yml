@@ -1,0 +1,33 @@
+publiccodeYmlVersion: "0.4"
+name: "Elterngeldrechner und Planer"
+url: https://gitlab.opencode.de/digitalservicebund/elterngeldrechner.git
+landingURL: https://gitlab.opencode.de/digitalservicebund/elterngeldrechner
+platforms:
+  - "web"
+categories:
+  - digital-citizenship
+  - educational-content
+developmentStatus: stable
+softwareType: standalone/web
+description:
+  de:
+    shortDescription: "Elterngeldrechner und Planer zur unverbindlichen Berechnung und Planung des Elterngeldbezugs."
+    longDescription: "Elterngeldrechner und Planer zur unverbindlichen Berechnung und Planung des Elterngeldbezugs. JavaScript-Widget, eingebunden in das Familienportal des BMFSFJ."
+    features:
+      - "Berechnung des voraussichtlichen Elterngelds"
+      - "Planung des Bezugszeitraums"
+      - "Übertragung von Daten in den digitalen Elterngeldantrag"
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Bundesministerium für Familie, Senioren, Frauen und Jugend
+  repoOwner: DigitalService GmbH des Bundes
+maintenance:
+  type: contract
+  contractors:
+    - name: DigitalService GmbH des Bundes
+      until: 2025-02-28
+      website: https://digitalservice.bund.de
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - "de"

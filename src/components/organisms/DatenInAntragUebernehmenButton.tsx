@@ -145,34 +145,33 @@ export function DatenInAntragUebernehmenButton() {
           readOnly
           type="hidden"
         />
-        {isMischtaetigkeit("ET1") && (
-          <input
-            name="p1_vg_misch_t1"
-            defaultValue={getMischTaetigkeit("ET1", 0)}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p1_vg_misch_t2"
-            defaultValue={getMischTaetigkeit("ET1", 1)}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p1_vg_misch_t3"
-            defaultValue={getMischTaetigkeit("ET1", 2)}
-            readOnly
-            type="hidden"
-          />
-        ) ? (
-          <input
-            name="p1_misch_kirche"
-            defaultValue={getKirchensteuer("ET1")}
-            readOnly
-            type="hidden"
-          />
+        {isMischtaetigkeit("ET1") ? (
+          <>
+            <input
+              name="p1_vg_misch_t1"
+              defaultValue={getMischTaetigkeit("ET1", 0)}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p1_vg_misch_t2"
+              defaultValue={getMischTaetigkeit("ET1", 1)}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p1_vg_misch_t3"
+              defaultValue={getMischTaetigkeit("ET1", 2)}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p1_misch_kirche"
+              defaultValue={getKirchensteuer("ET1")}
+              readOnly
+              type="hidden"
+            />
+          </>
         ) : null}
         <input
           name="p1_et_nachgeburt"
@@ -180,34 +179,33 @@ export function DatenInAntragUebernehmenButton() {
           readOnly
           type="hidden"
         />
-        {hasET2Mischtaetigkeit() && (
-          <input
-            name="p2_vg_misch_t1"
-            defaultValue={getMischTaetigkeit("ET2", 0)}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p2_vg_misch_t2"
-            defaultValue={getMischTaetigkeit("ET2", 1)}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p2_vg_misch_t3"
-            defaultValue={getMischTaetigkeit("ET2", 2)}
-            readOnly
-            type="hidden"
-          />
-        ) ? (
-          <input
-            name="p2_misch_kirche"
-            defaultValue={getKirchensteuer("ET2")}
-            readOnly
-            type="hidden"
-          />
+        {hasET2Mischtaetigkeit() ? (
+          <>
+            <input
+              name="p2_vg_misch_t1"
+              defaultValue={getMischTaetigkeit("ET2", 0)}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_vg_misch_t2"
+              defaultValue={getMischTaetigkeit("ET2", 1)}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_vg_misch_t3"
+              defaultValue={getMischTaetigkeit("ET2", 2)}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_misch_kirche"
+              defaultValue={getKirchensteuer("ET2")}
+              readOnly
+              type="hidden"
+            />
+          </>
         ) : null}
         <input
           name="p1_vg_kirchensteuer"
@@ -221,41 +219,39 @@ export function DatenInAntragUebernehmenButton() {
           readOnly
           type="hidden"
         />
-        {isET2Present() && (
-          <input
-            name="planungP2"
-            defaultValue={monthPlanner("ET2")}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p2_et_vorgeburt"
-            defaultValue={getEinkommenVorgeburt("ET2")}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p2_et_nachgeburt"
-            defaultValue={getEinkommenNachGeburt("ET2")}
-            readOnly
-            type="hidden"
-          />
-        ) && (
-          <input
-            name="p2_vg_kirchensteuer"
-            defaultValue={getKirchensteuer("ET2")}
-            readOnly
-            type="hidden"
-          />
-        ) ? (
-          <input
-            name="p2_vg_nselbst_steuerklasse"
-            defaultValue={getSteuerklasse("ET2")}
-            readOnly
-            type="hidden"
-          />
+        {isET2Present() ? (
+          <>
+            <input
+              name="planungP2"
+              defaultValue={monthPlanner("ET2")}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_et_vorgeburt"
+              defaultValue={getEinkommenVorgeburt("ET2")}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_et_nachgeburt"
+              defaultValue={getEinkommenNachGeburt("ET2")}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_vg_kirchensteuer"
+              defaultValue={getKirchensteuer("ET2")}
+              readOnly
+              type="hidden"
+            />
+            <input
+              name="p2_vg_nselbst_steuerklasse"
+              defaultValue={getSteuerklasse("ET2")}
+              readOnly
+              type="hidden"
+            />
+          </>
         ) : null}
         <Button label="Daten in Elterngeldantrag übernehmen" isSubmitButton />
       </form>

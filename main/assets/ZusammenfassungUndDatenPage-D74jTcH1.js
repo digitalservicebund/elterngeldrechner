@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, B as Button, a0 as _default$3, M as commonjsGlobal, r as reactExports, c as classNames, a7 as useAppStore, Y as YesNo, V as formatAsCurrency, a8 as ElterngeldvarianteBadge, a9 as _default$4, b as useAppSelector, Z as stepNachwuchsSelectors, W as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-CTUEB2yx.js";
+import { j as jsxRuntimeExports, B as Button, a0 as _default$3, M as commonjsGlobal, r as reactExports, c as classNames, a7 as useAppStore, Y as YesNo, V as formatAsCurrency, a8 as ElterngeldvarianteBadge, a9 as _default$4, b as useAppSelector, Z as stepNachwuchsSelectors, W as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-eonCPVmt.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function PrintButton() {
   const handlePrint = () => {
@@ -478,7 +478,7 @@ function PlanungsdetailsMonth({
     isMutterschutzMonth
   );
   const hasElterngeld = elterngeld > 0;
-  const hasNettoEinkommen = nettoEinkommen > 0;
+  const hasNettoEinkommen = nettoEinkommen > 0 && !isMutterschutzMonth;
   const hasOnlyElterngeld = hasElterngeld && !hasNettoEinkommen;
   const hasOnlyNettoEinkommen = hasNettoEinkommen && !hasElterngeld;
   const showVerfuegbaresEinkommen = hasElterngeld && hasNettoEinkommen;

@@ -41,13 +41,10 @@ jobs:
           eval $(ssh-agent)
           echo "$SSH_KEY" | sed '$ s/\n$//' | ssh-add -
 
-          # List local branches
-          git branch --all
-
-          # Push
+          # Push main branch
           git remote add destination git@$DESTINATION_HOST:$DESTINATION_REPO
-          git push destination -f --all --prune
-          git push destination -f --tags
+          git push --force --prune destination main:main
+          git push --force --tags destination
         env:
           SSH_KEY: ${{ secrets.OPENCODE_SSH_PRIVATE_KEY }}
           DESTINATION_HOST: gitlab.opencode.de

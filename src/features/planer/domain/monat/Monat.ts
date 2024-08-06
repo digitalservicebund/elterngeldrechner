@@ -1,6 +1,6 @@
-import type { Auswahloption } from "./Auswahloption";
-import type { Elterngeldbezug } from "./Elterngeldbezug";
-import { Variante } from "./Variante";
+import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
+import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
+import { Variante } from "@/features/planer/domain/Variante";
 
 export type Monat = MonatMitMutterschutz | MonatMitAuswahl;
 
@@ -9,6 +9,12 @@ interface MonatMitMutterschutz extends BasisMonat {
   gewaehlteOption: Variante.Basis;
   elterngeldbezug: null;
 }
+
+export const MONAT_MIT_MUTTERSCHUTZ: MonatMitMutterschutz = Object.freeze({
+  imMutterschutz: true,
+  gewaehlteOption: Variante.Basis,
+  elterngeldbezug: null,
+});
 
 interface MonatMitAuswahl extends BasisMonat {
   imMutterschutz: false;

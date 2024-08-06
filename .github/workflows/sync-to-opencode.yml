@@ -1,14 +1,13 @@
 name: Sync to OpenCoDE
 
-concurrency: Sync
+concurrency: sync
 
 on:
-  # push:
-  #   branches: [main]
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
-  to_opencode:
+  sync_to_opencode:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

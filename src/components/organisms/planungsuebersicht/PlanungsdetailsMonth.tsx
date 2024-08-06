@@ -20,7 +20,7 @@ export function PlanungsdetailsMonth({
   );
 
   const hasElterngeld = elterngeld > 0;
-  const hasNettoEinkommen = nettoEinkommen > 0;
+  const hasNettoEinkommen = nettoEinkommen > 0 && !isMutterschutzMonth;
   const hasOnlyElterngeld = hasElterngeld && !hasNettoEinkommen;
   const hasOnlyNettoEinkommen = hasNettoEinkommen && !hasElterngeld;
   const showVerfuegbaresEinkommen = hasElterngeld && hasNettoEinkommen;

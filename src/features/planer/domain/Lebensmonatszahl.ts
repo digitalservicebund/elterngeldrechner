@@ -4,3 +4,28 @@ export const Lebensmonatszahlen = Object.freeze([
 ] as const);
 
 export type Lebensmonatszahl = (typeof Lebensmonatszahlen)[number];
+
+export function isLebensmonatszahl(value: unknown): value is Lebensmonatszahl {
+  return (
+    typeof value === "number" &&
+    Lebensmonatszahlen.includes(value as Lebensmonatszahl)
+  );
+}
+
+if (import.meta.vitest) {
+  const { test, expect } = import.meta.vitest;
+
+  test.each(Array.from({ length: 32 }, (_, index) => index + 1))(
+    "type guard is satisfied by %s",
+    (value) => {
+      expect(isLebensmonatszahl(value)).toBe(true);
+    },
+  );
+
+  test.each([0, 33, 12345, "1", "2", "Eins", "One"])(
+    "type guard unsatisfied by %s",
+    (value) => {
+      expect(isLebensmonatszahl(value)).toBe(false);
+    },
+  );
+}

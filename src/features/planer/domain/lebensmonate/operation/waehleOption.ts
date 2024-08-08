@@ -1,6 +1,5 @@
-import { Variante } from "@/features/planer/domain/Variante";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { Elternteil } from "@/features/planer/domain/Elternteil";
+import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate";
 import {
@@ -26,67 +25,72 @@ export function waehleOption<E extends Elternteil>(
 }
 
 if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
-  it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
-    const lebensmonateVorher = {
-      1: {
-        [Elternteil.Eins]: { imMutterschutz: false as const },
-        [Elternteil.Zwei]: { imMutterschutz: false as const },
-      },
-      2: {
-        [Elternteil.Eins]: { imMutterschutz: false as const },
-        [Elternteil.Zwei]: { imMutterschutz: false as const },
-      },
-    };
+  describe("wähle Option in Lebensmonaten", async () => {
+    const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+    const { Variante } = await import("@/features/planer/domain/Variante");
 
-    const lebensmonate = waehleOption<Elternteil>(
-      lebensmonateVorher,
-      1,
-      Elternteil.Zwei,
-      Variante.Plus,
-      ANY_UNGEPLANTER_LEBENSMONAT,
-    );
+    it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
+      const lebensmonateVorher = {
+        1: {
+          [Elternteil.Eins]: { imMutterschutz: false as const },
+          [Elternteil.Zwei]: { imMutterschutz: false as const },
+        },
+        2: {
+          [Elternteil.Eins]: { imMutterschutz: false as const },
+          [Elternteil.Zwei]: { imMutterschutz: false as const },
+        },
+      };
 
-    expect(lebensmonate[1]![Elternteil.Eins].gewaehlteOption).toBeUndefined();
-    expect(lebensmonate[1]![Elternteil.Zwei].gewaehlteOption).toBe(
-      Variante.Plus,
-    );
-    expect(lebensmonate[2]![Elternteil.Eins].gewaehlteOption).toBeUndefined();
-    expect(lebensmonate[2]![Elternteil.Zwei].gewaehlteOption).toBeUndefined();
-  });
+      const lebensmonate = waehleOption<Elternteil>(
+        lebensmonateVorher,
+        1,
+        Elternteil.Zwei,
+        Variante.Plus,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
 
-  it("can set the Auswahloption for a not yet initialized Lebensmonat", () => {
-    const ungeplanterLebensmonat = {
+      expect(lebensmonate[1]![Elternteil.Eins].gewaehlteOption).toBeUndefined();
+      expect(lebensmonate[1]![Elternteil.Zwei].gewaehlteOption).toBe(
+        Variante.Plus,
+      );
+      expect(lebensmonate[2]![Elternteil.Eins].gewaehlteOption).toBeUndefined();
+      expect(lebensmonate[2]![Elternteil.Zwei].gewaehlteOption).toBeUndefined();
+    });
+
+    it("can set the Auswahloption for a not yet initialized Lebensmonat", () => {
+      const ungeplanterLebensmonat = {
+        [Elternteil.Eins]: {
+          elterngeldbezug: 10,
+          imMutterschutz: false as const,
+        },
+      };
+
+      const lebensmonate = waehleOption<Elternteil.Eins>(
+        {},
+        1,
+        Elternteil.Eins,
+        Variante.Basis,
+        ungeplanterLebensmonat,
+      );
+
+      expect(lebensmonate[1]).toBeDefined();
+      expect(lebensmonate[1]![Elternteil.Eins].gewaehlteOption).toBe(
+        Variante.Basis,
+      );
+      expect(lebensmonate[1]![Elternteil.Eins].elterngeldbezug).toBe(10);
+    });
+
+    const ANY_UNGEPLANTER_LEBENSMONAT = {
       [Elternteil.Eins]: {
-        elterngeldbezug: 10,
+        gewaehlteOption: undefined,
+        imMutterschutz: false as const,
+      },
+      [Elternteil.Zwei]: {
+        gewaehlteOption: undefined,
         imMutterschutz: false as const,
       },
     };
-
-    const lebensmonate = waehleOption<Elternteil.Eins>(
-      {},
-      1,
-      Elternteil.Eins,
-      Variante.Basis,
-      ungeplanterLebensmonat,
-    );
-
-    expect(lebensmonate[1]).toBeDefined();
-    expect(lebensmonate[1]![Elternteil.Eins].gewaehlteOption).toBe(
-      Variante.Basis,
-    );
-    expect(lebensmonate[1]![Elternteil.Eins].elterngeldbezug).toBe(10);
   });
-
-  const ANY_UNGEPLANTER_LEBENSMONAT = {
-    [Elternteil.Eins]: {
-      gewaehlteLebensmonate: undefined,
-      imMutterschutz: false as const,
-    },
-    [Elternteil.Zwei]: {
-      gewaehlteLebensmonate: undefined,
-      imMutterschutz: false as const,
-    },
-  };
 }

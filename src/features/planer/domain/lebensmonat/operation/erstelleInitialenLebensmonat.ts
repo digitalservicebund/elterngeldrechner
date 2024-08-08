@@ -119,6 +119,6 @@ if (import.meta.vitest) {
     expect(lebensmonat[Elternteil.Eins].imMutterschutz).toBe(false);
     expect(lebensmonat[Elternteil.Zwei].imMutterschutz).toBe(true);
   });
-}
 
-const ANY_LEBENSMONATS_ZAHL: Lebensmonatszahl = 1;
+  const ANY_LEBENSMONATS_ZAHL = 1;
+}

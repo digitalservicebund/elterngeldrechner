@@ -1,4 +1,3 @@
-import { Elternteil } from "@/features/planer/domain/Elternteil";
 import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
 import type {
   Ausgangslage,
@@ -8,7 +7,6 @@ import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 import { waehleOption as waehleOptionInLebensmonaten } from "@/features/planer/domain/lebensmonate";
-import { Variante } from "@/features/planer/domain/Variante";
 
 export function waehleOption<A extends Ausgangslage>(
   plan: Plan<A>,
@@ -33,55 +31,60 @@ export function waehleOption<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
-  it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
-    const ausgangslage = { anzahlElternteile: 2 as const };
-    const lebensmonate = {
-      1: {
-        [Elternteil.Eins]: { imMutterschutz: false as const },
-        [Elternteil.Zwei]: { imMutterschutz: false as const },
-      },
-      2: {
-        [Elternteil.Eins]: { imMutterschutz: false as const },
-        [Elternteil.Zwei]: { imMutterschutz: false as const },
-      },
-    };
+  describe("wähle Option für Plan", async () => {
+    const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+    const { Variante } = await import("@/features/planer/domain/Variante");
 
-    const plan = waehleOption(
-      { ausgangslage, lebensmonate },
-      1,
-      Elternteil.Zwei,
-      Variante.Plus,
-    );
+    it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
+      const ausgangslage = { anzahlElternteile: 2 as const };
+      const lebensmonate = {
+        1: {
+          [Elternteil.Eins]: { imMutterschutz: false as const },
+          [Elternteil.Zwei]: { imMutterschutz: false as const },
+        },
+        2: {
+          [Elternteil.Eins]: { imMutterschutz: false as const },
+          [Elternteil.Zwei]: { imMutterschutz: false as const },
+        },
+      };
 
-    const lebensmonatEins = plan.lebensmonate[1]!;
-    const lebensmonatZwei = plan.lebensmonate[2]!;
+      const plan = waehleOption(
+        { ausgangslage, lebensmonate },
+        1,
+        Elternteil.Zwei,
+        Variante.Plus,
+      );
 
-    expect(lebensmonatEins[Elternteil.Eins].gewaehlteOption).toBeUndefined();
-    expect(lebensmonatEins[Elternteil.Zwei].gewaehlteOption).toBe(
-      Variante.Plus,
-    );
-    expect(lebensmonatZwei[Elternteil.Eins].gewaehlteOption).toBeUndefined();
-    expect(lebensmonatZwei[Elternteil.Zwei].gewaehlteOption).toBeUndefined();
-  });
+      const lebensmonatEins = plan.lebensmonate[1]!;
+      const lebensmonatZwei = plan.lebensmonate[2]!;
 
-  it("can set the Auswahloption even for an empty plan", () => {
-    const ausgangslage = { anzahlElternteile: 1 as const };
-    const lebensmonate = {};
+      expect(lebensmonatEins[Elternteil.Eins].gewaehlteOption).toBeUndefined();
+      expect(lebensmonatEins[Elternteil.Zwei].gewaehlteOption).toBe(
+        Variante.Plus,
+      );
+      expect(lebensmonatZwei[Elternteil.Eins].gewaehlteOption).toBeUndefined();
+      expect(lebensmonatZwei[Elternteil.Zwei].gewaehlteOption).toBeUndefined();
+    });
 
-    const plan = waehleOption(
-      { ausgangslage, lebensmonate },
-      1,
-      Elternteil.Eins,
-      Variante.Basis,
-    );
+    it("can set the Auswahloption even for an empty plan", () => {
+      const ausgangslage = { anzahlElternteile: 1 as const };
+      const lebensmonate = {};
 
-    const lebensmonatEins = plan.lebensmonate[1];
+      const plan = waehleOption(
+        { ausgangslage, lebensmonate },
+        1,
+        Elternteil.Eins,
+        Variante.Basis,
+      );
 
-    expect(lebensmonatEins).toBeDefined();
-    expect(lebensmonatEins![Elternteil.Eins].gewaehlteOption).toBe(
-      Variante.Basis,
-    );
+      const lebensmonatEins = plan.lebensmonate[1];
+
+      expect(lebensmonatEins).toBeDefined();
+      expect(lebensmonatEins![Elternteil.Eins].gewaehlteOption).toBe(
+        Variante.Basis,
+      );
+    });
   });
 }

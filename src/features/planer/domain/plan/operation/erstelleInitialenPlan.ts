@@ -1,5 +1,3 @@
-import { Variante } from "@/features/planer/domain/Variante";
-import { Elternteil } from "@/features/planer/domain/Elternteil";
 import type { Ausgangslage } from "@/features/planer/domain/Ausgangslage";
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan";
@@ -12,58 +10,63 @@ export function erstelleInitialenPlan<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
-  it("maintains the original Ausgangslage for consitency in operation", () => {
-    const ausgangslage = { anzahlElternteile: 1 as const };
+  describe("erstelle initialen Plan", async () => {
+    const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+    const { Variante } = await import("@/features/planer/domain/Variante");
 
-    const plan = erstelleInitialenPlan(ausgangslage);
+    it("maintains the original Ausgangslage for consitency in operation", () => {
+      const ausgangslage = { anzahlElternteile: 1 as const };
 
-    expect(plan.ausgangslage).toBe(ausgangslage);
-  });
+      const plan = erstelleInitialenPlan(ausgangslage);
 
-  it("has an empty set of Lebensmonate if no Mutterschutz is configured", () => {
-    const ausgangslage = {
-      informationenZumMutterschutz: undefined,
-      anzahlElternteile: 1 as const,
-    };
+      expect(plan.ausgangslage).toBe(ausgangslage);
+    });
 
-    const plan = erstelleInitialenPlan(ausgangslage);
+    it("has an empty set of Lebensmonate if no Mutterschutz is configured", () => {
+      const ausgangslage = {
+        informationenZumMutterschutz: undefined,
+        anzahlElternteile: 1 as const,
+      };
 
-    expect(Object.entries(plan.lebensmonate)).toHaveLength(0);
-  });
+      const plan = erstelleInitialenPlan(ausgangslage);
 
-  it("has as many initial Lebensmonate as Monate of Mutterschutz configured", () => {
-    const ausgangslage = {
-      informationenZumMutterschutz: {
-        letzterLebensmonatMitSchutz: 3 as const,
-        empfaenger: Elternteil.Eins as const,
-      },
-      anzahlElternteile: 1 as const,
-    };
+      expect(Object.entries(plan.lebensmonate)).toHaveLength(0);
+    });
 
-    const plan = erstelleInitialenPlan(ausgangslage);
+    it("has as many initial Lebensmonate as Monate of Mutterschutz configured", () => {
+      const ausgangslage: Ausgangslage = {
+        informationenZumMutterschutz: {
+          letzterLebensmonatMitSchutz: 3,
+          empfaenger: Elternteil.Eins,
+        },
+        anzahlElternteile: 1,
+      };
 
-    expect(Object.entries(plan.lebensmonate)).toHaveLength(3);
-  });
+      const plan = erstelleInitialenPlan(ausgangslage);
 
-  it("any initial Monat for every Elternteil is either im Mutterschutz or unplanned", () => {
-    const ausgangslage = {
-      informationenZumMutterschutz: {
-        letzterLebensmonatMitSchutz: 4 as const,
-        empfaenger: Elternteil.Zwei as const,
-      },
-      anzahlElternteile: 2 as const,
-    };
+      expect(Object.entries(plan.lebensmonate)).toHaveLength(3);
+    });
 
-    const plan = erstelleInitialenPlan(ausgangslage);
+    it("any initial Monat for every Elternteil is either im Mutterschutz or unplanned", () => {
+      const ausgangslage: Ausgangslage = {
+        informationenZumMutterschutz: {
+          letzterLebensmonatMitSchutz: 4,
+          empfaenger: Elternteil.Zwei,
+        },
+        anzahlElternteile: 2,
+      };
 
-    Object.values(plan.lebensmonate)
-      .flatMap((lebensmonat) => Object.values(lebensmonat))
-      .filter((monat) => monat.gewaehlteOption !== undefined)
-      .forEach((monat) => {
-        expect(monat.imMutterschutz).toBe(true);
-        expect(monat.gewaehlteOption).toBe(Variante.Basis);
-      });
+      const plan = erstelleInitialenPlan(ausgangslage);
+
+      Object.values(plan.lebensmonate)
+        .flatMap((lebensmonat) => Object.values(lebensmonat))
+        .filter((monat) => monat.gewaehlteOption !== undefined)
+        .forEach((monat) => {
+          expect(monat.imMutterschutz).toBe(true);
+          expect(monat.gewaehlteOption).toBe(Variante.Basis);
+        });
+    });
   });
 }

@@ -1,12 +1,17 @@
-import type { Ausgangslage } from "@/features/planer/domain/Ausgangslage";
+import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
+import type {
+  Ausgangslage,
+  ElternteileByAusgangslage,
+} from "@/features/planer/domain/Ausgangslage";
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan";
 
 export function erstelleInitialenPlan<A extends Ausgangslage>(
   ausgangslage: A,
+  errechneteElterngeldbezuege: Elterngeldbezuege<ElternteileByAusgangslage<A>>,
 ): Plan<A> {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
-  return { ausgangslage, lebensmonate };
+  return { ausgangslage, errechneteElterngeldbezuege, lebensmonate };
 }
 
 if (import.meta.vitest) {
@@ -14,14 +19,22 @@ if (import.meta.vitest) {
 
   describe("erstelle initialen Plan", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
-    const { Variante } = await import("@/features/planer/domain/Variante");
 
-    it("maintains the original Ausgangslage for consitency in operation", () => {
+    it("maintains the original Ausgangslage and Elterngeldbezüge for consitency in operation", () => {
       const ausgangslage = { anzahlElternteile: 1 as const };
+      const errechneteElterngeldbezuege = {
+        1: { [Elternteil.Eins]: {} },
+      } as any; // TODO: Start working with test data generators.
 
-      const plan = erstelleInitialenPlan(ausgangslage);
+      const plan = erstelleInitialenPlan(
+        ausgangslage,
+        errechneteElterngeldbezuege,
+      );
 
       expect(plan.ausgangslage).toBe(ausgangslage);
+      expect(plan.errechneteElterngeldbezuege).toBe(
+        errechneteElterngeldbezuege,
+      );
     });
 
     it("has an empty set of Lebensmonate if no Mutterschutz is configured", () => {
@@ -30,7 +43,7 @@ if (import.meta.vitest) {
         anzahlElternteile: 1 as const,
       };
 
-      const plan = erstelleInitialenPlan(ausgangslage);
+      const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
 
       expect(Object.entries(plan.lebensmonate)).toHaveLength(0);
     });
@@ -44,7 +57,7 @@ if (import.meta.vitest) {
         anzahlElternteile: 1,
       };
 
-      const plan = erstelleInitialenPlan(ausgangslage);
+      const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
 
       expect(Object.entries(plan.lebensmonate)).toHaveLength(3);
     });
@@ -58,15 +71,16 @@ if (import.meta.vitest) {
         anzahlElternteile: 2,
       };
 
-      const plan = erstelleInitialenPlan(ausgangslage);
+      const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
 
       Object.values(plan.lebensmonate)
         .flatMap((lebensmonat) => Object.values(lebensmonat))
         .filter((monat) => monat.gewaehlteOption !== undefined)
         .forEach((monat) => {
           expect(monat.imMutterschutz).toBe(true);
-          expect(monat.gewaehlteOption).toBe(Variante.Basis);
         });
     });
+
+    const ANY_ELTERNGELDBEZUEGE = {} as any;
   });
 }

@@ -12,4 +12,6 @@ import { Variante } from "./Variante";
  */
 export const KeinElterngeld = "kein Elterngeld" as const;
 
-export type Auswahloption = Variante | typeof KeinElterngeld;
+export const Auswahloptionen = [KeinElterngeld, ...Object.values(Variante)];
+
+export type Auswahloption = (typeof Auswahloptionen)[number];

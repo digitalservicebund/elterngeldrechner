@@ -24,22 +24,14 @@ if (import.meta.vitest) {
     const { Variante } = await import("@/features/planer/domain/Variante");
 
     it("sets the gewählte Option of the correct Elternteil with matching Elterngeldbezug", () => {
+      const lebensmonatVorher = {
+        [Elternteil.Eins]: monat(undefined, undefined),
+        [Elternteil.Zwei]: monat(undefined, undefined),
+      };
+
       const elterngeldbezuege = {
         [Elternteil.Eins]: bezuege(11, 12, 13),
         [Elternteil.Zwei]: bezuege(21, 22, 23),
-      };
-
-      const lebensmonatVorher = {
-        [Elternteil.Eins]: {
-          gewaehlteOption: undefined,
-          elterngeldbezug: undefined,
-          imMutterschutz: false as const,
-        },
-        [Elternteil.Zwei]: {
-          gewaehlteOption: undefined,
-          elterngeldbezug: undefined,
-          imMutterschutz: false as const,
-        },
       };
 
       const lebensmonat = waehleOption<Elternteil>(
@@ -54,6 +46,17 @@ if (import.meta.vitest) {
       expect(lebensmonat[Elternteil.Zwei].gewaehlteOption).toBe(Variante.Plus);
       expect(lebensmonat[Elternteil.Zwei].elterngeldbezug).toBe(22);
     });
+
+    const monat = function (
+      gewaehlteOption: undefined,
+      elterngeldbezug: undefined,
+    ) {
+      return {
+        gewaehlteOption,
+        elterngeldbezug,
+        imMutterschutz: false as const,
+      };
+    };
 
     const bezuege = function (basis: number, plus: number, bonus: number) {
       return {

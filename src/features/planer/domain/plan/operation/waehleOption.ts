@@ -45,12 +45,12 @@ if (import.meta.vitest) {
       const ausgangslage = { anzahlElternteile: 2 as const };
       const lebensmonate = {
         1: {
-          [Elternteil.Eins]: { imMutterschutz: false as const },
-          [Elternteil.Zwei]: { imMutterschutz: false as const },
+          [Elternteil.Eins]: monat(undefined, undefined),
+          [Elternteil.Zwei]: monat(undefined, undefined),
         },
         2: {
-          [Elternteil.Eins]: { imMutterschutz: false as const },
-          [Elternteil.Zwei]: { imMutterschutz: false as const },
+          [Elternteil.Eins]: monat(undefined, undefined),
+          [Elternteil.Zwei]: monat(undefined, undefined),
         },
       };
 
@@ -108,6 +108,17 @@ if (import.meta.vitest) {
       );
       expect(lebensmonatEins[Elternteil.Eins].elterngeldbezug).toBeDefined();
     });
+
+    const monat = function (
+      gewaehlteOption: undefined,
+      elterngeldbezug: undefined,
+    ) {
+      return {
+        gewaehlteOption,
+        elterngeldbezug,
+        imMutterschutz: false as const,
+      };
+    };
 
     const bezuege = function (basis: number, plus: number, bonus: number) {
       return {

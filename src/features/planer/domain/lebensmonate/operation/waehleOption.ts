@@ -42,12 +42,12 @@ if (import.meta.vitest) {
     it("sets the Auswahloption and Elterngeldbezug for the correct Lebensmonat and Elternteil", () => {
       const lebensmonateVorher = {
         1: {
-          [Elternteil.Eins]: { imMutterschutz: false as const },
-          [Elternteil.Zwei]: { imMutterschutz: false as const },
+          [Elternteil.Eins]: monat(undefined, undefined),
+          [Elternteil.Zwei]: monat(undefined, undefined),
         },
         2: {
-          [Elternteil.Eins]: { imMutterschutz: false as const },
-          [Elternteil.Zwei]: { imMutterschutz: false as const },
+          [Elternteil.Eins]: monat(undefined, undefined),
+          [Elternteil.Zwei]: monat(undefined, undefined),
         },
       };
 
@@ -86,10 +86,7 @@ if (import.meta.vitest) {
 
     it("can set the Auswahloption for a not yet initialized Lebensmonat", () => {
       const ungeplanterLebensmonat = {
-        [Elternteil.Eins]: {
-          elterngeldbezug: 10,
-          imMutterschutz: false as const,
-        },
+        [Elternteil.Eins]: monat(undefined, undefined),
       };
 
       const lebensmonate = waehleOption<Elternteil.Eins>(
@@ -108,15 +105,15 @@ if (import.meta.vitest) {
       expect(lebensmonate[1]![Elternteil.Eins].elterngeldbezug).toBeDefined();
     });
 
-    const ANY_UNGEPLANTER_LEBENSMONAT = {
-      [Elternteil.Eins]: {
-        gewaehlteOption: undefined,
+    const monat = function (
+      gewaehlteOption: undefined,
+      elterngeldbezug: undefined,
+    ) {
+      return {
+        gewaehlteOption,
+        elterngeldbezug,
         imMutterschutz: false as const,
-      },
-      [Elternteil.Zwei]: {
-        gewaehlteOption: undefined,
-        imMutterschutz: false as const,
-      },
+      };
     };
 
     const bezuege = function (basis: number, plus: number, bonus: number) {
@@ -125,6 +122,11 @@ if (import.meta.vitest) {
         [Variante.Plus]: plus,
         [Variante.Bonus]: bonus,
       };
+    };
+
+    const ANY_UNGEPLANTER_LEBENSMONAT = {
+      [Elternteil.Eins]: monat(undefined, undefined),
+      [Elternteil.Zwei]: monat(undefined, undefined),
     };
 
     const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {

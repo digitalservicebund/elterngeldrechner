@@ -6,7 +6,7 @@ import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { VariantenPOM } from "../pom/VariantenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
-import verifyPostRequestToElterngeldDigital from "../verifyPostRequestToElterngeldDigital";
+// import verifyPostRequestToElterngeldDigital from "../verifyPostRequestToElterngeldDigital";
 
 test("alleinerziehend, erwerbslos", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
@@ -114,20 +114,27 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   await rechnerPlanerPage.submit();
 
   const zusammenfassungPage = new ZusammenfassungPOM(page);
+  await expect(zusammenfassungPage.heading).toBeVisible();
+  await expect(
+    page.getByRole("button", {
+      name: "Daten in Elterngeldantrag übernehmen",
+      exact: true,
+    }),
+  ).not.toBeVisible();
 
-  const expectedPostData = {
-    alleinerziehend: "1",
-    kind_geburtstag: "02.02.2025",
-    mehrlinge_anzahl: "1",
-    mutterschaftsleistung: "1",
-    p1_et_nachgeburt: "0",
-    p1_et_vorgeburt: "0",
-    p1_vg_kirchensteuer: "0",
-    p1_vg_nselbst_steuerklasse: "",
-    planungP1:
-      "1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-  };
-  await verifyPostRequestToElterngeldDigital({ page, expectedPostData });
+  // const expectedPostData = {
+  //   alleinerziehend: "1",
+  //   kind_geburtstag: "02.02.2025",
+  //   mehrlinge_anzahl: "1",
+  //   mutterschaftsleistung: "1",
+  //   p1_et_nachgeburt: "0",
+  //   p1_et_vorgeburt: "0",
+  //   p1_vg_kirchensteuer: "0",
+  //   p1_vg_nselbst_steuerklasse: "",
+  //   planungP1:
+  //     "1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+  // };
+  // await verifyPostRequestToElterngeldDigital({ page, expectedPostData });
 
-  await zusammenfassungPage.submit();
+  // await zusammenfassungPage.submit();
 });

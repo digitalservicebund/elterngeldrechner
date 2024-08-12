@@ -1,4 +1,4 @@
-import { Button } from "@/components/atoms";
+// import { Button } from "@/components/atoms";
 import { AntragstellendeSelektor } from "@/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/globals/js/calculations/model";
 import { Taetigkeit } from "@/redux/stepEinkommenSlice";
@@ -253,7 +253,7 @@ export function DatenInAntragUebernehmenButton() {
             />
           </>
         ) : null}
-        <Button label="Daten in Elterngeldantrag übernehmen" isSubmitButton />
+        {/* Hide button until data filling is fixed in Antrag <Button label="Daten in Elterngeldantrag übernehmen" isSubmitButton /> */}
       </form>
     </>
   );

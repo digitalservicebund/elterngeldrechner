@@ -1,4 +1,4 @@
-import { j as jsxRuntimeExports, B as Button, a0 as _default$3, M as commonjsGlobal, r as reactExports, c as classNames, a7 as useAppStore, Y as YesNo, V as formatAsCurrency, a8 as ElterngeldvarianteBadge, a9 as _default$4, b as useAppSelector, Z as stepNachwuchsSelectors, W as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-BKL-2ofW.js";
+import { j as jsxRuntimeExports, B as Button, a0 as _default$3, M as commonjsGlobal, r as reactExports, c as classNames, a7 as useAppStore, Y as YesNo, V as formatAsCurrency, a8 as ElterngeldvarianteBadge, a9 as _default$4, b as useAppSelector, Z as stepNachwuchsSelectors, W as createAppSelector, a as useNavigate, P as Page, f as formSteps, n as nsp } from "./index-C1rUknhs.js";
 import { E as EgrConst } from "./egr-configuration-Cwpx2zXF.js";
 function PrintButton() {
   const handlePrint = () => {
@@ -369,8 +369,7 @@ function DatenInAntragUebernehmenButton() {
               type: "hidden"
             }
           )
-        ] }) : null,
-        /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { label: "Daten in Elterngeldantrag übernehmen", isSubmitButton: true })
+        ] }) : null
       ]
     }
   ) });

@@ -139,6 +139,9 @@
   white-space: nowrap;
   border-width: 0;
 }
+#egr-root :is(.fixed) {
+  position: fixed;
+}
 #egr-root :is(.relative) {
   position: relative;
 }

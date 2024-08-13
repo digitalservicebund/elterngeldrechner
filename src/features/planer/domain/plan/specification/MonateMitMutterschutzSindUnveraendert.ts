@@ -1,11 +1,16 @@
-import type { Ausgangslage } from "@/features/planer/domain/Ausgangslage";
+import type {
+  Ausgangslage,
+  ElternteileByAusgangslage,
+} from "@/features/planer/domain/Ausgangslage";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate/operation";
 import { IstGueltigerMonatMitMutterschutz } from "@/features/planer/domain/monat/specification";
 import { Specification } from "@/features/planer/domain/common/specification";
 
-export const MonateMitMutterschutzSindUnveraendert =
-  Specification.fromPredicate<Plan>(
+export function MonateMitMutterschutzSindUnveraendert<
+  A extends Ausgangslage,
+>(): Specification<Plan<A>> {
+  return Specification.fromPredicate(
     "Im Mutterschutz wird automatisch Basiselterngeld bezogen.",
     (plan) => {
       const { informationenZumMutterschutz } = plan.ausgangslage;
@@ -22,11 +27,15 @@ export const MonateMitMutterschutzSindUnveraendert =
             ([lebensmonatszahl]) =>
               lebensmonatszahl <= letzterLebensmonatMitSchutz,
           )
-          .map(([, lebensmonat]) => lebensmonat[empfaenger])
+          .map(
+            ([, lebensmonat]) =>
+              lebensmonat[empfaenger as ElternteileByAusgangslage<A>],
+          )
           .every(IstGueltigerMonatMitMutterschutz.asPredicate);
       }
     },
   );
+}
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -50,14 +59,10 @@ if (import.meta.vitest) {
         },
       };
 
-      const plan = {
-        ausgangslage,
-        lebensmonate,
-        errechneteElterngeldbezuege: ANY_ERRECHNETE_ELTERNGELDBEZUEGE,
-      };
+      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
 
       const isSatisfied =
-        MonateMitMutterschutzSindUnveraendert.asPredicate(plan);
+        MonateMitMutterschutzSindUnveraendert().asPredicate(plan);
 
       expect(isSatisfied).toBe(true);
     });
@@ -86,14 +91,10 @@ if (import.meta.vitest) {
         },
       };
 
-      const plan = {
-        ausgangslage,
-        lebensmonate,
-        errechneteElterngeldbezuege: ANY_ERRECHNETE_ELTERNGELDBEZUEGE,
-      };
+      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
 
       const isSatisfied =
-        MonateMitMutterschutzSindUnveraendert.asPredicate(plan);
+        MonateMitMutterschutzSindUnveraendert().asPredicate(plan);
 
       expect(isSatisfied).toBe(true);
     });
@@ -118,14 +119,10 @@ if (import.meta.vitest) {
         },
       };
 
-      const plan = {
-        ausgangslage,
-        lebensmonate,
-        errechneteElterngeldbezuege: ANY_ERRECHNETE_ELTERNGELDBEZUEGE,
-      };
+      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
 
       const isSatisfied =
-        MonateMitMutterschutzSindUnveraendert.asPredicate(plan);
+        MonateMitMutterschutzSindUnveraendert().asPredicate(plan);
 
       expect(isSatisfied).toBe(false);
     });
@@ -150,18 +147,19 @@ if (import.meta.vitest) {
         },
       };
 
-      const plan = {
-        ausgangslage,
-        lebensmonate,
-        errechneteElterngeldbezuege: ANY_ERRECHNETE_ELTERNGELDBEZUEGE,
-      };
+      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
 
       const isSatisfied =
-        MonateMitMutterschutzSindUnveraendert.asPredicate(plan);
+        MonateMitMutterschutzSindUnveraendert().asPredicate(plan);
 
       expect(isSatisfied).toBe(false);
     });
   });
 
-  const ANY_ERRECHNETE_ELTERNGELDBEZUEGE = {} as any;
+  const ANY_PLAN = {
+    ausgangslage: { anzahlElternteile: 1 },
+    lebensmonate: {},
+    errechneteElterngeldbezuege: {} as any,
+    gueltigerPlan: Specification.fromPredicate("", () => true),
+  };
 }

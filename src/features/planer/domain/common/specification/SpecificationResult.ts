@@ -8,6 +8,9 @@ import type { SpecificationViolation } from "./SpecificationViolation";
  * Access to the result is given by methods that follow a functional monad
  * approach. Enforcing more involved inspection of the result. Further methods
  * will be added with further use-cases.
+ *
+ * This can be seen as a use-case optimized version of the more generic
+ * {@link Result} implementation.
  */
 export class SpecificationResult {
   private constructor(private options: SpecificationResultOptions) {}

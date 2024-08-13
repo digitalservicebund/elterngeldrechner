@@ -1,3 +1,4 @@
+import type { Specification } from "@/features/planer/domain/common/specification";
 import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate";
 import type {
@@ -11,4 +12,5 @@ export type Plan<A extends Ausgangslage = Ausgangslage> = {
     ElternteileByAusgangslage<A>
   >;
   readonly lebensmonate: Lebensmonate<ElternteileByAusgangslage<A>>;
+  readonly gueltigerPlan: Specification<Plan<A>>;
 };

@@ -32,6 +32,9 @@ if (import.meta.vitest) {
     const { Lebensmonatszahlen } = await import(
       "@/features/planer/domain/Lebensmonatszahl"
     );
+    const { Top } = await import(
+      "@/features/planer/domain/common/specification"
+    );
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
       const ausgangslage = { anzahlElternteile: 2 as const };
@@ -63,6 +66,7 @@ if (import.meta.vitest) {
           ausgangslage,
           errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
           lebensmonate,
+          gueltigerPlan: Top,
         },
         errechneteElterngeldbezuege,
       );

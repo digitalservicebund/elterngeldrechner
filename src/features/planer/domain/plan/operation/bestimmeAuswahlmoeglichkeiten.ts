@@ -1,5 +1,5 @@
 import { waehleOption } from "./waehleOption";
-import type { SpecificationViolation } from "@/features/planer/domain/common/specification/SpecificationViolation";
+import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
 import {
   Auswahloptionen,
@@ -9,7 +9,7 @@ import {
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 import type {
   Auswahlmoeglichkeit,
   Auswahlmoeglichkeiten,

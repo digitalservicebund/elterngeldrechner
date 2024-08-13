@@ -4,9 +4,9 @@ import type { Lebensmonate } from "@/features/planer/domain/lebensmonate";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 
-export type Plan<A extends Ausgangslage = Ausgangslage> = {
+export type Plan<A extends Ausgangslage> = {
   readonly ausgangslage: A;
   readonly errechneteElterngeldbezuege: Elterngeldbezuege<
     ElternteileByAusgangslage<A>

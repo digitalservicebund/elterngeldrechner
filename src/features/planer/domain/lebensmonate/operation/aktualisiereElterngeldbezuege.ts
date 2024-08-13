@@ -5,7 +5,7 @@ import {
   type Lebensmonatszahl,
 } from "@/features/planer/domain/Lebensmonatszahl";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
-import { aktualisiereElterngeldbezuege as aktualisiereElterngeldbezuegeImLebensmonat } from "@/features/planer/domain/lebensmonat/operation";
+import { aktualisiereElterngeldbezuege as aktualisiereElterngeldbezuegeImLebensmonat } from "@/features/planer/domain/lebensmonat";
 import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
 import { mapRecordEntriesWithIntegerKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";

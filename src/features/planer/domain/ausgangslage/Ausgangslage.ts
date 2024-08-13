@@ -1,5 +1,5 @@
-import type { Elternteil } from "./Elternteil";
-import type { InformationenZumMutterschutz } from "./InformationenZumMutterschutz";
+import type { Elternteil } from "@/features/planer/domain/Elternteil";
+import type { InformationenZumMutterschutz } from "@/features/planer/domain/InformationenZumMutterschutz";
 
 export type Ausgangslage =
   | AusgangslageFuerEinElternteil
@@ -20,6 +20,7 @@ interface BasisAusgangslage<E extends Elternteil> {
   readonly informationenZumMutterschutz?: InformationenZumMutterschutz<E>;
   readonly hatBehindertesGeschwisterkind?: boolean;
   readonly sindMehrlinge?: boolean;
+  readonly istAlleinerziehend?: boolean;
 }
 
 export type ElternteileByAusgangslage<A extends Ausgangslage> =

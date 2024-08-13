@@ -4,8 +4,8 @@ import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezue
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
-import { aktualisiereElterngeldbezuege } from "@/features/planer/domain/lebensmonate/operation";
+} from "@/features/planer/domain/ausgangslage";
+import { aktualisiereElterngeldbezuege } from "@/features/planer/domain/lebensmonate";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
 
 export function aktualisiereErrechneteElterngelbezuege<A extends Ausgangslage>(

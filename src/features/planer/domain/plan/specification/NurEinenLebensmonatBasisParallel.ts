@@ -2,7 +2,7 @@ import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type {
   Ausgangslage,
   AusgangslageFuerEinElternteil,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
 import { AlleElternteileHabenBasisGewaehlt } from "@/features/planer/domain/lebensmonat";
 import type { Plan } from "@/features/planer/domain/plan/Plan";

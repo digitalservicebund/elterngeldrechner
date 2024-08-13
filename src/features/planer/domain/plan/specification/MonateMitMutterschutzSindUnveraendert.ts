@@ -1,10 +1,10 @@
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
-import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate/operation";
-import { IstGueltigerMonatMitMutterschutz } from "@/features/planer/domain/monat/specification";
+import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
+import { IstGueltigerMonatMitMutterschutz } from "@/features/planer/domain/monat";
 import { Specification } from "@/features/planer/domain/common/specification";
 
 export function MonateMitMutterschutzSindUnveraendert<

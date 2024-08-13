@@ -2,7 +2,7 @@ import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezue
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import { GueltigerPlan, Plan } from "@/features/planer/domain/plan";
 

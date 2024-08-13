@@ -2,7 +2,7 @@ import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmon
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 import { Lebensmonatszahlen } from "@/features/planer/domain/Lebensmonatszahl";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 

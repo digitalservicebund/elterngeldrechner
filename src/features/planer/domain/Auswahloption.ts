@@ -1,4 +1,4 @@
-import { Variante } from "./Variante";
+import { isVariante, Variante } from "./Variante";
 
 /*
  * Represents the option to take no of the above Varianten. Besides other
@@ -15,3 +15,22 @@ export const KeinElterngeld = "kein Elterngeld" as const;
 export const Auswahloptionen = [KeinElterngeld, ...Object.values(Variante)];
 
 export type Auswahloption = (typeof Auswahloptionen)[number];
+
+export function isAuswahloption(value: unknown): value is Auswahloption {
+  return isVariante(value) || value === KeinElterngeld;
+}
+
+if (import.meta.vitest) {
+  const { test, expect } = import.meta.vitest;
+
+  test.each(Auswahloptionen)("type guard is satisfied by %s", (value) => {
+    expect(isAuswahloption(value)).toBe(true);
+  });
+
+  test.each(["None", "Basis", "Elterngeld", "nichts"])(
+    "type guard is unsatisfied by %s",
+    (value) => {
+      expect(isAuswahloption(value)).toBe(false);
+    },
+  );
+}

@@ -5,7 +5,7 @@ import { erstelleInitialenMonat } from "@/features/planer/domain/monat";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
-} from "@/features/planer/domain/Ausgangslage";
+} from "@/features/planer/domain/ausgangslage";
 
 export function erstelleInitialenLebensmonat<A extends Ausgangslage>(
   ausgangslage: A,

@@ -2,7 +2,7 @@ import type { ElterngeldbezeugeProElternteil } from "@/features/planer/domain/El
 import { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import { Elternteil } from "@/features/planer/domain/Elternteil";
 import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
-import { waehleOption as waehleOptionInMonat } from "@/features/planer/domain/monat/operation";
+import { waehleOption as waehleOptionInMonat } from "@/features/planer/domain/monat";
 
 export function waehleOption<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,

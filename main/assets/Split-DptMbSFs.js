@@ -1,0 +1,1 @@
+import{j as i,c as e,n as t}from"./index-CVEjQdf8.js";function n({hasDivider:s,children:a}){return i.jsx("div",{className:e(t("split-item"),s&&t("split-item--has-divider")),children:a})}function p({children:s}){return i.jsx("div",{className:t("split"),children:s})}export{p as S,n as a};

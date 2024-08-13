@@ -6,11 +6,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   base: "./",
   plugins: [react()],
-  build: {
-    // Content Management System of production environment does apply
-    // minification automatically. Double minification has lead to bugs.
-    minify: false,
-  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

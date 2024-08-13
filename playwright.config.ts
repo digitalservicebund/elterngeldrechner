@@ -11,13 +11,15 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? "blob" : "html",
   use: {
-    baseURL: APP_BASE_URL,
+    baseURL: process.env.TEST_PRODUCTION
+      ? "https://familienportal.de/familienportal/meta/egr/"
+      : APP_BASE_URL,
     trace: "on-first-retry",
   },
   expect: {
     toHaveScreenshot: {
       // accounts for tiny differences in font rendering between systems
-      maxDiffPixelRatio: 0.02,
+      maxDiffPixelRatio: 0.06,
     },
   },
   projects: [

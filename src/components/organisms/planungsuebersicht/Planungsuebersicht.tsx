@@ -8,7 +8,10 @@ export function Planungsuebersicht({
   readonly data: PlanungsdatenFuerElternteil[];
 }): ReactNode {
   return (
-    <div className="flex flex-wrap gap-16 *:grow">
+    <div
+      className="flex flex-wrap gap-16 *:grow"
+      data-testid="planungsuebersicht"
+    >
       {data.map((entry) => (
         <Elternteil key={entry.name} {...entry} />
       ))}

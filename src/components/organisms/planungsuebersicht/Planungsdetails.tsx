@@ -19,7 +19,7 @@ export function Planungsdetails({ data }: Props): ReactNode {
   const elternteile = data;
 
   return (
-    <div className="@container/planungs-details">
+    <div className="@container/planungs-details" data-testid="planungsdetails">
       <div className="flex flex-col gap-y-32 @2xl/planungs-details:hidden">
         {elternteile.map((elternteil) => (
           <PlanungsdetailsTable

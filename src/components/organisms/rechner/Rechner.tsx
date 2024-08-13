@@ -152,7 +152,9 @@ export function Rechner() {
           hasElternteil1BEGResultChangedDueToPrevFormSteps
         }
       />
-      <RechnerResult elternteil="ET1" />
+      <div data-testid="rechner-result-et1">
+        <RechnerResult elternteil="ET1" />
+      </div>
       {antragstellende === "FuerBeide" && (
         <>
           <RechnerForm
@@ -169,7 +171,9 @@ export function Rechner() {
               hasElternteil2BEGResultChangedDueToPrevFormSteps
             }
           />
-          <RechnerResult elternteil="ET2" />
+          <div data-testid="rechner-result-et2">
+            <RechnerResult elternteil="ET2" />
+          </div>
         </>
       )}
       <Toast

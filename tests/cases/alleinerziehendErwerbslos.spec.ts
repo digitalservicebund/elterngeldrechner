@@ -6,9 +6,12 @@ import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { VariantenPOM } from "../pom/VariantenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
+import expectScreenshot from "../expectScreenshot";
 // import verifyPostRequestToElterngeldDigital from "../verifyPostRequestToElterngeldDigital";
 
 test("alleinerziehend, erwerbslos", async ({ page }) => {
+  const screenshot = expectScreenshot({ page });
+
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setElternteile(1);
   await allgemeineAngabenPage.setAlleinerziehend(true);
@@ -115,6 +118,10 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
 
   const zusammenfassungPage = new ZusammenfassungPOM(page);
   await expect(zusammenfassungPage.heading).toBeVisible();
+
+  await screenshot("planungsuebersicht");
+  await screenshot("planungsdetails");
+
   await expect(
     page.getByRole("button", {
       name: "Daten in Elterngeldantrag übernehmen",

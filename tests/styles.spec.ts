@@ -1,10 +1,10 @@
-import path from "node:path";
-import { test, expect, Page, Locator } from "@playwright/test";
+import { test, expect, Page } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "./pom/AllgemeineAngabenPOM";
 import { NachwuchsPOM } from "./pom/NachwuchsPOM";
 import { ErwerbstaetigkeitPOM } from "./pom/ErwerbstaetigkeitPOM";
 import { EinkommenPOM } from "./pom/EinkommenPOM";
 import { VariantenPOM } from "./pom/VariantenPOM";
+import expectScreenshot from "./expectScreenshot";
 
 const testStyles = async ({
   page,
@@ -13,88 +13,81 @@ const testStyles = async ({
   page: Page;
   screenSize: string;
 }) => {
-  async function screenshot(locator: Locator, name: string) {
-    // without timeout it produces blank screenshots
-    // https://github.com/microsoft/playwright/issues/21657
-    await page.waitForTimeout(2000);
-    await expect(locator).toHaveScreenshot(`${name}-${screenSize}.png`, {
-      stylePath: path.join(import.meta.dirname, "screenshot.css"),
-    });
-  }
+  const screenshot = expectScreenshot({ page, screenSize });
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await expect(allgemeineAngabenPage.heading).toBeVisible();
-  await screenshot(allgemeineAngabenPage.heading, "allgemeine-angaben-heading");
+  await screenshot("allgemeine-angaben-heading", allgemeineAngabenPage.heading);
   await screenshot(
-    allgemeineAngabenPage.elternteile,
     "allgemeine-angaben-elternteile",
+    allgemeineAngabenPage.elternteile,
   );
   await allgemeineAngabenPage.submit();
 
   await expect(allgemeineAngabenPage.elternteileError).toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.elternteile,
     "allgemeine-angaben-elternteile-fehlermeldung",
+    allgemeineAngabenPage.elternteile,
   );
   await allgemeineAngabenPage.setElternteile(1);
   await screenshot(
-    allgemeineAngabenPage.elternteile,
     "allgemeine-angaben-elternteile-ausgewaehlt",
+    allgemeineAngabenPage.elternteile,
   );
   await expect(allgemeineAngabenPage.alleinerziehend).toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.alleinerziehend,
     "allgemeine-angaben-alleinerziehend",
+    allgemeineAngabenPage.alleinerziehend,
   );
   await expect(allgemeineAngabenPage.mutterschaftsleistungen).toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.mutterschaftsleistungen,
     "allgemeine-angaben-mutterschaftsleistung",
+    allgemeineAngabenPage.mutterschaftsleistungen,
   );
   await allgemeineAngabenPage.submit();
 
   await expect(allgemeineAngabenPage.elternteileError).not.toBeVisible();
   await expect(allgemeineAngabenPage.alleinerziehendError).toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.alleinerziehend,
     "allgemeine-angaben-alleinerziehend-fehlermeldung",
+    allgemeineAngabenPage.alleinerziehend,
   );
   await expect(
     allgemeineAngabenPage.mutterschaftsleistungenError,
   ).toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.mutterschaftsleistungen,
     "allgemeine-angaben-mutterschaftsleistung-fehlermeldung",
+    allgemeineAngabenPage.mutterschaftsleistungen,
   );
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await expect(allgemeineAngabenPage.alleinerziehendError).not.toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.alleinerziehend,
     "allgemeine-angaben-alleinerziehend-ausgewaehlt",
+    allgemeineAngabenPage.alleinerziehend,
   );
   await expect(
     allgemeineAngabenPage.mutterschaftsleistungenError,
   ).toBeVisible();
   await allgemeineAngabenPage.setMutterschaftsleistungen(true);
   await screenshot(
-    allgemeineAngabenPage.mutterschaftsleistungen,
     "allgemeine-angaben-mutterschaftsleistung-ausgewaehlt",
+    allgemeineAngabenPage.mutterschaftsleistungen,
   );
   await expect(
     allgemeineAngabenPage.mutterschaftsleistungenError,
   ).not.toBeVisible();
-  await screenshot(page.locator("#egr-root"), "allgemeine-angaben-single");
+  await screenshot("allgemeine-angaben-single", page.locator("#egr-root"));
 
   await allgemeineAngabenPage.setElternteile(2);
   await expect(allgemeineAngabenPage.nameElternteil1).toBeVisible();
   await expect(allgemeineAngabenPage.nameElternteil2).toBeVisible();
   await screenshot(
-    allgemeineAngabenPage.nameElternteil1,
     "allgemeine-angaben-name-1",
+    allgemeineAngabenPage.nameElternteil1,
   );
   await screenshot(
-    allgemeineAngabenPage.nameElternteil2,
     "allgemeine-angaben-name-2",
+    allgemeineAngabenPage.nameElternteil2,
   );
   await allgemeineAngabenPage.submit();
 
@@ -103,21 +96,21 @@ const testStyles = async ({
   ).toBeVisible();
   await allgemeineAngabenPage.setNameElternteil1("Leia");
   await screenshot(
-    allgemeineAngabenPage.nameElternteil1,
     "allgemeine-angaben-name-1-ausgefuellt",
+    allgemeineAngabenPage.nameElternteil1,
   );
   await allgemeineAngabenPage.setNameElternteil2("Luke");
   await screenshot(
-    allgemeineAngabenPage.nameElternteil2,
     "allgemeine-angaben-name-2-ausgefuellt",
+    allgemeineAngabenPage.nameElternteil2,
   );
   await screenshot(
-    allgemeineAngabenPage.mutterschaftsleistungenWer,
     "allgemeine-angaben-mutterschaftsleistungen-wer",
+    allgemeineAngabenPage.mutterschaftsleistungenWer,
   );
   await allgemeineAngabenPage.setMutterschaftsleistungenWer("Leia");
   await allgemeineAngabenPage.setNameElternteil1("");
-  await screenshot(page.locator("#egr-root"), "allgemeine-angaben-beide");
+  await screenshot("allgemeine-angaben-beide", page.locator("#egr-root"));
   await allgemeineAngabenPage.submit();
 
   // TODO
@@ -141,11 +134,11 @@ const testStyles = async ({
 
   const variantenPage = new VariantenPOM(page);
   await expect(variantenPage.heading).toBeVisible();
-  await screenshot(page.locator("#egr-root"), "varianten-geschlossen");
+  await screenshot("varianten-geschlossen", page.locator("#egr-root"));
   await variantenPage.basiselterngeld.click();
   await variantenPage.elterngeldPlus.click();
   await variantenPage.partnerschaftsbonus.click();
-  await screenshot(page.locator("#egr-root"), "varianten-geoeffnet");
+  await screenshot("varianten-geoeffnet", page.locator("#egr-root"));
 };
 
 test("mobile styles", async ({ page }) => {

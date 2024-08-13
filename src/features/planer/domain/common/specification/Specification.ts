@@ -27,6 +27,10 @@ export abstract class Specification<Instance> {
         () => false,
       );
   }
+
+  and(other: Specification<Instance>): Specification<Instance> {
+    return new AndSpecification(this, other);
+  }
 }
 
 class PredicateSpecification<Instance> extends Specification<Instance> {
@@ -42,16 +46,53 @@ class PredicateSpecification<Instance> extends Specification<Instance> {
   }
 }
 
+class AndSpecification<Instance> extends Specification<Instance> {
+  constructor(
+    private readonly left: Specification<Instance>,
+    private readonly right: Specification<Instance>,
+  ) {
+    super();
+  }
+
+  evaluate(instance: Instance): SpecificationResult {
+    return this.left.evaluate(instance).and(this.right.evaluate(instance));
+  }
+}
+
 if (import.meta.vitest) {
-  const { it, expect } = import.meta.vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
-  it("can be created from a predicate and used as predicate", () => {
-    const IsEvenNumber = Specification.fromPredicate<number>(
-      "number is not even",
-      (value) => value % 2 === 0,
-    );
+  describe("Specification", () => {
+    it("can be created from a predicate and used as predicate", () => {
+      const IsEvenNumber = Specification.fromPredicate<number>(
+        "number is not even",
+        (value) => value % 2 === 0,
+      );
 
-    expect(IsEvenNumber.asPredicate(2)).toBe(true);
-    expect(IsEvenNumber.asPredicate(3)).toBe(false);
+      expect(IsEvenNumber.asPredicate(2)).toBe(true);
+      expect(IsEvenNumber.asPredicate(3)).toBe(false);
+    });
+
+    describe("connect two specifications with 'and'", async () => {
+      const { Top, Bottom } = await import(
+        "@/features/planer/domain/common/specification"
+      );
+
+      it("evaluates to satisfied if left and right are satisfied", () => {
+        expect(Top.and(Top).asPredicate(null)).toBe(true);
+      });
+
+      it("evaluates to unsatisfied if left is satisfied, but right is unsatisfied", () => {
+        expect(Top.and(Bottom).asPredicate(null)).toBe(false);
+      });
+
+      it("evaluates to unsatisfied if left is unsatisfied, but right is satisfied", () => {
+        expect(Bottom.and(Top).asPredicate(null)).toBe(false);
+      });
+
+      it("evaluates to unsatisfied if left and right are unsatisfied", () => {
+        expect(Bottom.and(Bottom).asPredicate(null)).toBe(false);
+      });
+    });
   });
 }

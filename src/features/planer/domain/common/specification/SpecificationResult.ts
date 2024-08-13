@@ -36,6 +36,21 @@ export class SpecificationResult {
       : SpecificationResult.unsatisfied({ message: violationMessage });
   }
 
+  and(other: SpecificationResult): SpecificationResult {
+    if (this.options.isSatisfied && other.options.isSatisfied) {
+      return SpecificationResult.satisfied;
+    } else {
+      const violations = [
+        ...(this.options.violations ?? []),
+        ...(other.options.violations ?? []),
+      ];
+      return SpecificationResult.unsatisfied(
+        violations[0],
+        ...violations.splice(1),
+      );
+    }
+  }
+
   mapOrElse<Output, MapOutput extends Output, OrElseOutput extends Output>(
     onSatisfied: () => MapOutput,
     onUnsatisfied: (violations: SpecificationViolation[]) => OrElseOutput,
@@ -97,6 +112,57 @@ if (import.meta.vitest) {
       );
 
       expect(violations).toEqual([{ message: "test message" }]);
+    });
+
+    describe("connect to result with 'and'", () => {
+      it("is satisfied if lef and right are satisfied", () => {
+        const result = SpecificationResult.satisfied.and(
+          SpecificationResult.satisfied,
+        );
+
+        expect(result).toBe(SpecificationResult.satisfied);
+      });
+
+      it("is unsatisfied if left is satisfied, but right is unsatisfied", () => {
+        const result = SpecificationResult.satisfied.and(
+          SpecificationResult.unsatisfied({ message: "right unsatisfied" }),
+        );
+
+        const violations = getViolations(result);
+        expect(violations).toEqual([{ message: "right unsatisfied" }]);
+      });
+
+      it("is unsatisfied if left is unsatisfied, but right is satisfied", () => {
+        const result = SpecificationResult.unsatisfied({
+          message: "left unsatisfied",
+        }).and(SpecificationResult.satisfied);
+
+        const violations = getViolations(result);
+        expect(violations).toEqual([{ message: "left unsatisfied" }]);
+      });
+
+      it("is unsatisfied if left and right are unsatisfied", () => {
+        const result = SpecificationResult.unsatisfied({
+          message: "left unsatisfied",
+        }).and(
+          SpecificationResult.unsatisfied({ message: "right unsatisfied" }),
+        );
+
+        const violations = getViolations(result);
+        expect(violations).toEqual([
+          { message: "left unsatisfied" },
+          { message: "right unsatisfied" },
+        ]);
+      });
+
+      function getViolations(
+        result: SpecificationResult,
+      ): SpecificationViolation[] {
+        return result.mapOrElse(
+          () => [],
+          (violations) => violations,
+        );
+      }
     });
   });
 }

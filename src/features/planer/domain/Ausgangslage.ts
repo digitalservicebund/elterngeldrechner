@@ -5,7 +5,7 @@ export type Ausgangslage =
   | AusgangslageFuerEinElternteil
   | AusgangslageFuerZweiElternteile;
 
-interface AusgangslageFuerEinElternteil
+export interface AusgangslageFuerEinElternteil
   extends BasisAusgangslage<Elternteil.Eins> {
   readonly anzahlElternteile: 1;
 }
@@ -18,6 +18,8 @@ interface AusgangslageFuerZweiElternteile
 interface BasisAusgangslage<E extends Elternteil> {
   readonly anzahlElternteile: 1 | 2;
   readonly informationenZumMutterschutz?: InformationenZumMutterschutz<E>;
+  readonly hatBehindertesGeschwisterkind?: boolean;
+  readonly sindMehrlinge?: boolean;
 }
 
 export type ElternteileByAusgangslage<A extends Ausgangslage> =

@@ -4,17 +4,14 @@ import type {
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/Ausgangslage";
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
-import {
-  MonateMitMutterschutzSindUnveraendert,
-  Plan,
-} from "@/features/planer/domain/plan";
+import { GueltigerPlan, Plan } from "@/features/planer/domain/plan";
 
 export function erstelleInitialenPlan<A extends Ausgangslage>(
   ausgangslage: A,
   errechneteElterngeldbezuege: Elterngeldbezuege<ElternteileByAusgangslage<A>>,
 ): Plan<A> {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
-  const gueltigerPlan = MonateMitMutterschutzSindUnveraendert<A>();
+  const gueltigerPlan = GueltigerPlan<A>();
   return {
     ausgangslage,
     errechneteElterngeldbezuege,

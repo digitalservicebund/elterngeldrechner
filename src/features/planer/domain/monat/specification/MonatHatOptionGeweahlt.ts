@@ -1,6 +1,9 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import { Specification } from "@/features/planer/domain/common/specification";
 import type { Monat } from "@/features/planer/domain/monat/Monat";
+import { Variante } from "@/features/planer/domain/Variante";
+
+export const MonatHatBonusGewaehlt = MonatHatOptionGewaehlt(Variante.Bonus);
 
 export function MonatHatOptionGewaehlt(
   option: Auswahloption,
@@ -18,7 +21,6 @@ if (import.meta.vitest) {
     const { Auswahloptionen, KeinElterngeld } = await import(
       "@/features/planer/domain/Auswahloption"
     );
-    const { Variante } = await import("@/features/planer/domain/Variante");
 
     it.each(Auswahloptionen)(
       "is satisfied if %s is chosen and also expected",

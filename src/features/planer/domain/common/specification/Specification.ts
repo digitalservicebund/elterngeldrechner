@@ -18,6 +18,16 @@ export abstract class Specification<Instance> {
     return new PredicateSpecification(violationMessage, predicate);
   }
 
+  static forProperty<
+    Instance extends Record<Key, any>,
+    Key extends PropertyKey,
+  >(
+    key: Key,
+    specificationForProperty: Specification<Instance[Key]>,
+  ): Specification<Instance> {
+    return new PropertySpecification(key, specificationForProperty);
+  }
+
   abstract evaluate(instance: Instance): SpecificationResult;
 
   get asPredicate(): (instance: Instance) => boolean {
@@ -46,6 +56,23 @@ class PredicateSpecification<Instance> extends Specification<Instance> {
   }
 }
 
+class PropertySpecification<
+  Key extends PropertyKey,
+  Instance extends Record<Key, any>,
+> extends Specification<Instance> {
+  constructor(
+    private readonly key: Key,
+    private readonly specificationForProperty: Specification<Instance[Key]>,
+  ) {
+    super();
+  }
+
+  evaluate(instance: Instance): SpecificationResult {
+    const property = instance[this.key];
+    return this.specificationForProperty.evaluate(property);
+  }
+}
+
 class AndSpecification<Instance> extends Specification<Instance> {
   constructor(
     private readonly left: Specification<Instance>,
@@ -71,6 +98,20 @@ if (import.meta.vitest) {
 
       expect(IsEvenNumber.asPredicate(2)).toBe(true);
       expect(IsEvenNumber.asPredicate(3)).toBe(false);
+    });
+
+    it("can be created for a property of a type", () => {
+      const IsEvenNumber = Specification.fromPredicate<number>(
+        "number is not even",
+        (value) => value % 2 === 0,
+      );
+      const AgeIsEven = Specification.forProperty<{ age: number }, "age">(
+        "age",
+        IsEvenNumber,
+      );
+
+      expect(AgeIsEven.asPredicate({ age: 2 })).toBe(true);
+      expect(AgeIsEven.asPredicate({ age: 3 })).toBe(false);
     });
 
     describe("connect two specifications with 'and'", async () => {

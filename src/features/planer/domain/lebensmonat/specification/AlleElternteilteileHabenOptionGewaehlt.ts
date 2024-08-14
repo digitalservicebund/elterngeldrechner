@@ -7,6 +7,9 @@ import type { LebensmonatMitBeliebigenElternteilen } from "@/features/planer/dom
 export const AlleElternteileHabenBasisGewaehlt =
   AlleElternteileHabenOptionGewaehlt(Variante.Basis);
 
+export const AlleElternteileHabenBonusGewaehlt =
+  AlleElternteileHabenOptionGewaehlt(Variante.Bonus);
+
 export function AlleElternteileHabenOptionGewaehlt(
   option: Auswahloption,
 ): Specification<LebensmonatMitBeliebigenElternteilen> {

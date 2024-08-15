@@ -1,11 +1,9 @@
-import { produce } from "immer";
 import {
   type Ausgangslage,
   Elternteil,
 } from "@/features/planer/user-interface/service";
 import { YesNo } from "@/globals/js/calculations/model";
 import { createAppSelector } from "@/redux/hooks";
-import { INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 import type { RootState } from "@/redux";
 
 export const ausgangslageSelector = createAppSelector(
@@ -80,7 +78,11 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("Ausgangslage selector", async () => {
+    const { produce } = await import("immer");
     const { useAppSelector } = await import("@/redux/hooks");
+    const { INITIAL_STATE, renderHook } = await import(
+      "@/test-utils/test-utils"
+    );
 
     it("creates Ausgangslage for one Elternteil if Antragstellende is answered with Einen Elternteil", () => {
       const preloadedState = produce(INITIAL_STATE, (draft) => {

@@ -8,9 +8,12 @@ import {
 } from "@/features/planer/domain/Lebensmonatszahl";
 import {
   type Lebensmonate,
+  listeLebensmonateAuf,
   zaehleVerplantesKontingent,
 } from "@/features/planer/domain/lebensmonate";
 import {
+  AlleElternteileHabenBonusGewaehlt,
+  setzeLebensmonatZurueck,
   waehleOption as waehleOptionInLebensmonat,
   type Lebensmonat,
 } from "@/features/planer/domain/lebensmonat";
@@ -39,6 +42,8 @@ export function waehleOption<E extends Elternteil>(
 
   if (moechteBonusWaehlen && nochKeinBonusWurdeGewaehlt) {
     return waehleZweiLebensmonateBonus(lebensmonate, parameters);
+  } else if (!moechteBonusWaehlen) {
+    return waehleBonusAb(lebensmonate, parameters);
   } else {
     return waehleOptionDirekt(parameters, undefined, lebensmonate);
   }
@@ -60,6 +65,49 @@ function waehleZweiLebensmonateBonus<E extends Elternteil>(
     waehleBonus.bind(null, { lebensmonatszahl: ersteLebensmonatszahl }),
     waehleBonus.bind(null, { lebensmonatszahl: zweiteLebensmonatszahl }),
   )(lebensmonate);
+}
+
+function waehleBonusAb<E extends Elternteil>(
+  lebensmonate: Lebensmonate<E>,
+  parameters: BindingParameters<E>,
+): Lebensmonate<E> {
+  const lebensmonateToFix = waehleOptionDirekt(
+    parameters,
+    undefined,
+    lebensmonate,
+  );
+
+  const chunks = chunksOfLebensmonateMitFortlaufendenBonus(
+    lebensmonateToFix,
+  ).map((chunk) => chunk.map(([lebensmonatszahl]) => lebensmonatszahl));
+
+  const lebensmonatszahlenToKeepBonus = findBiggestChunk(chunks, 2);
+  const lebensmonatszahlenZumZuruecksetzen = chunks
+    .flat()
+    .filter((zahl) => !lebensmonatszahlenToKeepBonus.includes(zahl));
+
+  return compose(
+    ...lebensmonatszahlenZumZuruecksetzen.map((zahl) =>
+      (setzeLebensmonatZurueckWennDefiniert<E>).bind(null, zahl),
+    ),
+  )(lebensmonateToFix);
+}
+
+function setzeLebensmonatZurueckWennDefiniert<E extends Elternteil>(
+  lebensmonatszahl: Lebensmonatszahl,
+  lebensmonate: Lebensmonate<E>,
+): Lebensmonate<E> {
+  const lebensmonat = lebensmonate[lebensmonatszahl];
+
+  if (!lebensmonat) {
+    return lebensmonate;
+  } else {
+    const zurueckgesetzterLebensmonat = setzeLebensmonatZurueck(lebensmonat);
+    return {
+      ...lebensmonate,
+      [lebensmonatszahl]: zurueckgesetzterLebensmonat,
+    };
+  }
 }
 
 function nachfolgendeOderVorherigeLebensmonatszahl(
@@ -110,6 +158,81 @@ type BindingParameters<E extends Elternteil> = {
   ungeplanterLebensmonat: Lebensmonat<E>;
 };
 
+function chunksOfLebensmonateMitFortlaufendenBonus<E extends Elternteil>(
+  lebensmonate: Lebensmonate<E>,
+): LebensmonateEntry<E>[][] {
+  const entries = listeLebensmonateAuf(lebensmonate);
+  const isEntryWithBonus = (entry: LebensmonateEntry<E>) =>
+    AlleElternteileHabenBonusGewaehlt.asPredicate(entry[1]);
+  return chunksWithMatchingItems(entries, isEntryWithBonus);
+}
+
+type LebensmonateEntry<E extends Elternteil> = [
+  Lebensmonatszahl,
+  Lebensmonat<E>,
+];
+
+/**
+ * In a list of chunks, finds the one with the most entries.
+ * If multiple chunks share the same size, the first one is taken.
+ * All chunks are first filtered by a minimal required size. That can be used to
+ * find the biggest chunk but only if there is one with more then one entry.
+ * For an empty list of chunks, or if none fulfills the requirements of the
+ * minimum size, "the" empty chunk is returned.
+ *
+ * Examples:
+ * ```typescript
+ * findBiggestChunk([[1, 2], [3], [4, 5, 6], [7, 8]]); // [4, 5, 6]
+ * findBiggestChunk([[1, 2], [2], [3, 4]]); // [1, 2];
+ * findBiggestChunk([]); // []
+ * findBiggestChunk([1], [2, 3], 3); // []
+ * ```
+ */
+function findBiggestChunk<Item>(chunks: Item[][], minimumSize = 0): Item[] {
+  return chunks
+    .filter((chunk) => chunk.length >= minimumSize)
+    .reduce(
+      (biggestChunk, chunk) =>
+        chunk.length > biggestChunk.length ? chunk : biggestChunk,
+      [],
+    );
+}
+
+/**
+ * Chops a list of items into chunks. All items in each chunk fulfill the
+ * defined predicate. Each item in the list that does not fulfill the predicates
+ * divides two pairs of chunks. In result, each chunk contains a list of items
+ * which continuously fulfill the predicate.
+ *
+ * Examples:
+ * ```typescript
+ * chunksWithMatchingItems(
+ *   [1, 2, 3, 4, 5],
+ *   (item) => item % 2 === 0,
+ * ) // [[2], [4]]
+ *
+ * chunksWithMatchingItems(
+ *   [2, 4, 5, 7, 8, 9, 10, 12, 20],
+ *   (item) => item % 2 === 0,
+ * ) // [[2, 4], [8], [10, 12, 20]]
+ * ```
+ */
+function chunksWithMatchingItems<Item>(
+  list: Item[],
+  predicate: (item: Item) => boolean,
+): Item[][] {
+  return list
+    .reduce((chunks, item) => {
+      if (predicate(item)) {
+        const lastChunk = chunks.at(-1) ?? [];
+        return [...chunks.slice(0, -1), [...lastChunk, item]];
+      } else {
+        return [...chunks, []];
+      }
+    }, [] as Item[][])
+    .filter((chunk) => chunk.length > 0);
+}
+
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
@@ -153,16 +276,14 @@ if (import.meta.vitest) {
         ANY_UNGEPLANTER_LEBENSMONAT,
       );
 
-      expect(lebensmonate[1]![Elternteil.Eins].gewaehlteOption).toBeUndefined();
-      expect(lebensmonate[1]![Elternteil.Eins].elterngeldbezug).toBeUndefined();
-      expect(lebensmonate[1]![Elternteil.Zwei].gewaehlteOption).toBe(
-        Variante.Plus,
-      );
-      expect(lebensmonate[1]![Elternteil.Zwei].elterngeldbezug).toBe(122);
-      expect(lebensmonate[2]![Elternteil.Eins].gewaehlteOption).toBeUndefined();
-      expect(lebensmonate[2]![Elternteil.Eins].elterngeldbezug).toBeUndefined();
-      expect(lebensmonate[2]![Elternteil.Zwei].gewaehlteOption).toBeUndefined();
-      expect(lebensmonate[2]![Elternteil.Zwei].elterngeldbezug).toBeUndefined();
+      expectOption(lebensmonate, 1, Elternteil.Eins).toBeUndefined();
+      expectOption(lebensmonate, 1, Elternteil.Zwei).toBe(Variante.Plus);
+      expectOption(lebensmonate, 2, Elternteil.Eins).toBeUndefined();
+      expectOption(lebensmonate, 2, Elternteil.Zwei).toBeUndefined();
+      expectElterngeldbezug(lebensmonate, 1, Elternteil.Eins).toBeUndefined();
+      expectElterngeldbezug(lebensmonate, 1, Elternteil.Zwei).toBe(122);
+      expectElterngeldbezug(lebensmonate, 2, Elternteil.Eins).toBeUndefined();
+      expectElterngeldbezug(lebensmonate, 2, Elternteil.Zwei).toBeUndefined();
     });
 
     it("can set the Auswahloption for a not yet initialized Lebensmonat", () => {
@@ -180,10 +301,8 @@ if (import.meta.vitest) {
       );
 
       expect(lebensmonate[1]).toBeDefined();
-      expect(lebensmonate[1]?.[Elternteil.Eins].gewaehlteOption).toBe(
-        Variante.Basis,
-      );
-      expect(lebensmonate[1]?.[Elternteil.Eins].elterngeldbezug).toBeDefined();
+      expectOption(lebensmonate, 1, Elternteil.Eins).toBe(Variante.Basis);
+      expectElterngeldbezug(lebensmonate, 1, Elternteil.Eins).toBeDefined();
     });
 
     it.each([1, 2, 5, 16] as const)(
@@ -233,6 +352,84 @@ if (import.meta.vitest) {
       );
     });
 
+    it("resets all three Lebensmonate if Partnerschaftsbonus two of three is unchosen", () => {
+      const lebensmonateVorher = {
+        5: LEBENSMONAT_MIT_BONUS,
+        6: LEBENSMONAT_MIT_BONUS,
+        7: LEBENSMONAT_MIT_BONUS,
+      };
+
+      const lebensmonate = waehleOption<Elternteil>(
+        lebensmonateVorher,
+        6,
+        Elternteil.Eins,
+        Variante.Plus,
+        ANY_ELTERNGELDBEZUEGE,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
+
+      expectOption(lebensmonate, 5, Elternteil.Eins).toBeUndefined();
+      expectOption(lebensmonate, 5, Elternteil.Zwei).toBeUndefined();
+      expectOption(lebensmonate, 6, Elternteil.Eins).toBe(Variante.Plus);
+      expectOption(lebensmonate, 6, Elternteil.Zwei).toBeUndefined();
+      expectOption(lebensmonate, 7, Elternteil.Eins).toBeUndefined();
+      expectOption(lebensmonate, 7, Elternteil.Zwei).toBeUndefined();
+    });
+
+    it("resets the first and second Lebensmonat if Partnerschaftsbonus two of four is unchosen", () => {
+      const lebensmonateVorher = {
+        5: LEBENSMONAT_MIT_BONUS,
+        6: LEBENSMONAT_MIT_BONUS,
+        7: LEBENSMONAT_MIT_BONUS,
+        8: LEBENSMONAT_MIT_BONUS,
+      };
+
+      const lebensmonate = waehleOption<Elternteil>(
+        lebensmonateVorher,
+        6,
+        Elternteil.Eins,
+        Variante.Plus,
+        ANY_ELTERNGELDBEZUEGE,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
+
+      expectOption(lebensmonate, 5, Elternteil.Eins).toBeUndefined();
+      expectOption(lebensmonate, 5, Elternteil.Zwei).toBeUndefined();
+      expectOption(lebensmonate, 6, Elternteil.Eins).toBe(Variante.Plus);
+      expectOption(lebensmonate, 6, Elternteil.Zwei).toBeUndefined();
+      expectOption(lebensmonate, 7, Elternteil.Eins).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 7, Elternteil.Zwei).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 8, Elternteil.Eins).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 8, Elternteil.Zwei).toBe(Variante.Bonus);
+    });
+
+    it("resets the third and fourth Lebensmonat if Partnerschaftsbonus three of four is unchosen", () => {
+      const lebensmonateVorher = {
+        5: LEBENSMONAT_MIT_BONUS,
+        6: LEBENSMONAT_MIT_BONUS,
+        7: LEBENSMONAT_MIT_BONUS,
+        8: LEBENSMONAT_MIT_BONUS,
+      };
+
+      const lebensmonate = waehleOption<Elternteil>(
+        lebensmonateVorher,
+        7,
+        Elternteil.Eins,
+        Variante.Plus,
+        ANY_ELTERNGELDBEZUEGE,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
+
+      expectOption(lebensmonate, 5, Elternteil.Eins).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 5, Elternteil.Zwei).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 6, Elternteil.Eins).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 6, Elternteil.Zwei).toBe(Variante.Bonus);
+      expectOption(lebensmonate, 7, Elternteil.Eins).toBe(Variante.Plus);
+      expectOption(lebensmonate, 7, Elternteil.Zwei).toBeUndefined();
+      expectOption(lebensmonate, 8, Elternteil.Eins).toBeUndefined();
+      expectOption(lebensmonate, 8, Elternteil.Zwei).toBeUndefined();
+    });
+
     const monat = function (
       gewaehlteOption?: Auswahloption,
       elterngeldbezug = undefined,
@@ -257,6 +454,11 @@ if (import.meta.vitest) {
       [Elternteil.Zwei]: monat(undefined, undefined),
     };
 
+    const LEBENSMONAT_MIT_BONUS = {
+      [Elternteil.Eins]: monat(Variante.Bonus),
+      [Elternteil.Zwei]: monat(Variante.Bonus),
+    };
+
     const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
       [Elternteil.Eins]: bezuege(0, 0, 0),
       [Elternteil.Zwei]: bezuege(0, 0, 0),
@@ -268,5 +470,29 @@ if (import.meta.vitest) {
         ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
       ]),
     ) as Elterngeldbezuege<Elternteil>;
+
+    const expectOption = function <E extends Elternteil>(
+      lebensmonate: Lebensmonate<E>,
+      lebensmonatszahl: Lebensmonatszahl,
+      elternteil: E,
+    ) {
+      return expect(
+        lebensmonate[lebensmonatszahl]?.[elternteil].gewaehlteOption,
+      );
+    };
+
+    /**
+     * Tiny utility function for repeating pattern that allows for more terse
+     * expectation statements. This helps to create better readable test cases.
+     */
+    const expectElterngeldbezug = function <E extends Elternteil>(
+      lebensmonate: Lebensmonate<E>,
+      lebensmonatszahl: Lebensmonatszahl,
+      elternteil: E,
+    ) {
+      return expect(
+        lebensmonate[lebensmonatszahl]?.[elternteil].elterngeldbezug,
+      );
+    };
   });
 }

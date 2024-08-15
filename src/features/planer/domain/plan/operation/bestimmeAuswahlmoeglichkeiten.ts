@@ -70,12 +70,16 @@ if (import.meta.vitest) {
   describe("bestimmte Auswahlmöglichkeiten", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
+    const { Lebensmonatszahlen } = await import(
+      "@/features/planer/domain/Lebensmonatszahl"
+    );
     const { Specification, Top } = await import(
       "@/features/planer/domain/common/specification"
     );
 
     it("picks up the correct Elterngeldbezug for each Auswahlmöglichkeit", () => {
       const errechneteElterngeldbezuege = {
+        ...ANY_ELTERNGELDBEZUEGE,
         1: {
           [Elternteil.Eins]: bezuege(111, 112, 113),
           [Elternteil.Zwei]: bezuege(121, 122, 123),
@@ -137,14 +141,21 @@ if (import.meta.vitest) {
       };
     };
 
+    const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
+      [Elternteil.Eins]: bezuege(0, 0, 0),
+      [Elternteil.Zwei]: bezuege(0, 0, 0),
+    };
+
+    const ANY_ELTERNGELDBEZUEGE = Object.fromEntries(
+      Lebensmonatszahlen.map((lebensmonatszahl) => [
+        lebensmonatszahl,
+        ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
+      ]),
+    ) as any;
+
     const ANY_PLAN = {
       ausgangslage: { anzahlElternteile: 2 as const },
-      errechneteElterngeldbezuege: {
-        2: {
-          [Elternteil.Eins]: bezuege(0, 0, 0),
-          [Elternteil.Zwei]: bezuege(0, 0, 0),
-        },
-      } as any,
+      errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
       gueltigerPlan: Top,
     };

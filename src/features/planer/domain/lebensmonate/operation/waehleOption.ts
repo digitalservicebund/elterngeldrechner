@@ -1,12 +1,20 @@
+import { compose } from "@/features/planer/domain/common/compose";
 import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type { Lebensmonate } from "@/features/planer/domain/lebensmonate";
+import {
+  Lebensmonatszahl,
+  LetzteLebensmonatszahl,
+} from "@/features/planer/domain/Lebensmonatszahl";
+import {
+  type Lebensmonate,
+  zaehleVerplantesKontingent,
+} from "@/features/planer/domain/lebensmonate";
 import {
   waehleOption as waehleOptionInLebensmonat,
   type Lebensmonat,
 } from "@/features/planer/domain/lebensmonat";
+import { Variante } from "@/features/planer/domain/Variante";
 
 export function waehleOption<E extends Elternteil>(
   lebensmonate: Lebensmonate<E>,
@@ -16,18 +24,91 @@ export function waehleOption<E extends Elternteil>(
   elterngeldbezuege: Elterngeldbezuege<E>,
   ungeplanterLebensmonat: Lebensmonat<E>,
 ): Lebensmonate<E> {
-  const lebensmonat = lebensmonate[lebensmonatszahl] ?? ungeplanterLebensmonat;
-  const bezuege = elterngeldbezuege[lebensmonatszahl];
+  const moechteBonusWaehlen = option === Variante.Bonus;
+  const verplanteBonusLebensmonate =
+    zaehleVerplantesKontingent(lebensmonate)[Variante.Bonus];
+  const nochKeinBonusWurdeGewaehlt = verplanteBonusLebensmonate === 0;
 
+  const parameters = {
+    lebensmonatszahl,
+    elternteil,
+    option,
+    elterngeldbezuege,
+    ungeplanterLebensmonat,
+  };
+
+  if (moechteBonusWaehlen && nochKeinBonusWurdeGewaehlt) {
+    return waehleZweiLebensmonateBonus(lebensmonate, parameters);
+  } else {
+    return waehleOptionDirekt(parameters, undefined, lebensmonate);
+  }
+}
+
+function waehleZweiLebensmonateBonus<E extends Elternteil>(
+  lebensmonate: Lebensmonate<E>,
+  parameters: BindingParameters<E>,
+): Lebensmonate<E> {
+  const { lebensmonatszahl: ersteLebensmonatszahl } = parameters;
+  const zweiteLebensmonatszahl = nachfolgendeOderVorherigeLebensmonatszahl(
+    ersteLebensmonatszahl,
+  );
+
+  const bonusParameters = { ...parameters, option: Variante.Bonus };
+  const waehleBonus = (waehleOptionDirekt<E>).bind(null, bonusParameters);
+
+  return compose(
+    waehleBonus.bind(null, { lebensmonatszahl: ersteLebensmonatszahl }),
+    waehleBonus.bind(null, { lebensmonatszahl: zweiteLebensmonatszahl }),
+  )(lebensmonate);
+}
+
+function nachfolgendeOderVorherigeLebensmonatszahl(
+  lebensmonatszahl: Lebensmonatszahl,
+): Lebensmonatszahl {
+  return (
+    lebensmonatszahl === LetzteLebensmonatszahl
+      ? lebensmonatszahl - 1
+      : lebensmonatszahl + 1
+  ) as Lebensmonatszahl;
+}
+
+/**
+ * Fulfills the purpose of choosing the option straight without any further
+ * logic to do additional things (see main function).
+ * Furthermore the signature of this function is written in a way that allows to
+ * create bound/curried instances of this function that can be composed to create more
+ * advanced behaviors.
+ */
+function waehleOptionDirekt<E extends Elternteil>(
+  parameters: BindingParameters<E>,
+  overrideParameters: Partial<BindingParameters<E>> | undefined,
+  lebensmonate: Lebensmonate<E>,
+): Lebensmonate<E> {
+  const {
+    lebensmonatszahl,
+    elternteil,
+    option,
+    elterngeldbezuege,
+    ungeplanterLebensmonat,
+  } = { ...parameters, ...overrideParameters };
+
+  const lebensmonat = lebensmonate[lebensmonatszahl] ?? ungeplanterLebensmonat;
   const gewaehlterLebensmonat = waehleOptionInLebensmonat(
     lebensmonat,
     elternteil,
     option,
-    bezuege,
+    elterngeldbezuege[lebensmonatszahl],
   );
-
   return { ...lebensmonate, [lebensmonatszahl]: gewaehlterLebensmonat };
 }
+
+type BindingParameters<E extends Elternteil> = {
+  lebensmonatszahl: Lebensmonatszahl;
+  elternteil: E;
+  option: Auswahloption;
+  elterngeldbezuege: Elterngeldbezuege<E>;
+  ungeplanterLebensmonat: Lebensmonat<E>;
+};
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -35,7 +116,7 @@ if (import.meta.vitest) {
   describe("wähle Option in Lebensmonaten", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
-    const { Lebensmonatszahlen } = await import(
+    const { Lebensmonatszahlen, LetzteLebensmonatszahl } = await import(
       "@/features/planer/domain/Lebensmonatszahl"
     );
 
@@ -99,15 +180,62 @@ if (import.meta.vitest) {
       );
 
       expect(lebensmonate[1]).toBeDefined();
-      expect(lebensmonate[1]![Elternteil.Eins].gewaehlteOption).toBe(
+      expect(lebensmonate[1]?.[Elternteil.Eins].gewaehlteOption).toBe(
         Variante.Basis,
       );
-      expect(lebensmonate[1]![Elternteil.Eins].elterngeldbezug).toBeDefined();
+      expect(lebensmonate[1]?.[Elternteil.Eins].elterngeldbezug).toBeDefined();
+    });
+
+    it.each([1, 2, 5, 16] as const)(
+      "choses also the following Lebensmonat if %d is the first Partnerschaftsbonus Lebensmonat",
+      (lebensmonatszahl) => {
+        const lebensmonate = waehleOption(
+          {},
+          lebensmonatszahl,
+          Elternteil.Eins,
+          Variante.Bonus,
+          ANY_ELTERNGELDBEZUEGE,
+          ANY_UNGEPLANTER_LEBENSMONAT,
+        );
+
+        const lebensmonat = lebensmonate[lebensmonatszahl];
+        const nachfolgenderLebensmonat =
+          lebensmonate[(lebensmonatszahl + 1) as Lebensmonatszahl];
+
+        expect(lebensmonat?.[Elternteil.Eins].gewaehlteOption).toBe(
+          Variante.Bonus,
+        );
+        expect(
+          nachfolgenderLebensmonat?.[Elternteil.Eins].gewaehlteOption,
+        ).toBe(Variante.Bonus);
+      },
+    );
+
+    it("choses also the preceeding Lebensmonat if chosing Partnerschaftsbonus the first time in the last Lebensmonat", () => {
+      const lebensmonate = waehleOption(
+        {},
+        LetzteLebensmonatszahl,
+        Elternteil.Eins,
+        Variante.Bonus,
+        ANY_ELTERNGELDBEZUEGE,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
+
+      const letzterLebensmonat = lebensmonate[LetzteLebensmonatszahl];
+      const vorletzterLebensmonat =
+        lebensmonate[(LetzteLebensmonatszahl - 1) as Lebensmonatszahl];
+
+      expect(vorletzterLebensmonat?.[Elternteil.Eins].gewaehlteOption).toBe(
+        Variante.Bonus,
+      );
+      expect(letzterLebensmonat?.[Elternteil.Eins].gewaehlteOption).toBe(
+        Variante.Bonus,
+      );
     });
 
     const monat = function (
-      gewaehlteOption: undefined,
-      elterngeldbezug: undefined,
+      gewaehlteOption?: Auswahloption,
+      elterngeldbezug = undefined,
     ) {
       return {
         gewaehlteOption,

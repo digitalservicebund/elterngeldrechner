@@ -5,6 +5,9 @@ export const Lebensmonatszahlen = Object.freeze([
 
 export type Lebensmonatszahl = (typeof Lebensmonatszahlen)[number];
 
+export const LetzteLebensmonatszahl =
+  Lebensmonatszahlen[Lebensmonatszahlen.length - 1];
+
 export function isLebensmonatszahl(value: unknown): value is Lebensmonatszahl {
   return (
     typeof value === "number" &&

@@ -85,8 +85,8 @@ wget \
 mv egr.html index.html
 
 # Remove assets from live egr, will be replaced by new ones
-rm chunk* main*
-sed --in-place --expression "s#<script src=\"chunk1.*\$##" index.html
+rm index-*.js
+sed --in-place --expression "s#<script src=\"/resource/cm8_themes/familienportal/js/anton/egr-2022/new-version/index-.*\$##" index.html
 
 # Special handling of svg sprite
 sprite_path=$(grep -o "/resource/crblob/.*/sprite-svg-data.svg" index.html)

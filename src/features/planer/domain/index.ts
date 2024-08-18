@@ -14,9 +14,17 @@ export type {
   ElterngeldbezugProVariante,
 } from "./Elterngeldbezuege";
 export { Elternteil } from "./Elternteil";
-export { type Lebensmonat, erstelleInitialenLebensmonat } from "./lebensmonat";
-export { zaehleVerplantesKontingent } from "./lebensmonate";
-export { type Lebensmonatszahl, Lebensmonatszahlen } from "./Lebensmonatszahl";
+export {
+  type Lebensmonat,
+  erstelleInitialenLebensmonat,
+  listeMonateAuf,
+} from "./lebensmonat";
+export { type Lebensmonate, zaehleVerplantesKontingent } from "./lebensmonate";
+export {
+  type Lebensmonatszahl,
+  Lebensmonatszahlen,
+  LetzteLebensmonatszahl,
+} from "./Lebensmonatszahl";
 export {
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,
@@ -25,3 +33,8 @@ export {
 } from "./plan";
 export { Result } from "./common/Result";
 export { Variante } from "./Variante";
+export {
+  type VerfuegbaresKontingent,
+  listeKontingentAuf,
+} from "./verfuegbares-kontingent";
+export { type VerplantesKontingent } from "./verplantes-kontingent";

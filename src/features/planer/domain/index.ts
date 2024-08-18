@@ -3,7 +3,12 @@ export {
   bestimmeVerfuegbaresKontingent,
 } from "./ausgangslage";
 export type { Auswahlmoeglichkeiten } from "./Auswahlmoeglichkeiten";
-export { type Auswahloption, KeinElterngeld } from "./Auswahloption";
+export {
+  type Auswahloption,
+  Auswahloptionen,
+  KeinElterngeld,
+} from "./Auswahloption";
+export type { Elterngeldbezug } from "./Elterngeldbezug";
 export type {
   Elterngeldbezuege,
   ElterngeldbezugProVariante,

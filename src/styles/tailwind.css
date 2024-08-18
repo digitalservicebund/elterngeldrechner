@@ -5,3 +5,8 @@
 #egr-root summary.list-none::-webkit-details-marker {
   display: none;
 }
+
+/* Fix conflict with styling of surrounding Familienportal styling */
+#egr-root .invisible {
+  display: inherit;
+}

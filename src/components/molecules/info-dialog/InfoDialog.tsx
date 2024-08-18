@@ -11,6 +11,7 @@ interface Props {
   readonly isLarge?: boolean;
   readonly isMonatsplanner?: boolean;
   readonly isElternteilOne?: boolean;
+  readonly className?: string;
 }
 
 export function InfoDialog({
@@ -18,6 +19,7 @@ export function InfoDialog({
   isLarge,
   isMonatsplanner,
   isElternteilOne,
+  className,
 }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const ref = useDetectClickOutside({
@@ -30,6 +32,7 @@ export function InfoDialog({
         nsp("info-dialog"),
         isLarge && nsp("info-dialog--large"),
         isMonatsplanner && nsp("info-dialog--monatsplanner"),
+        className,
       )}
       ref={ref}
     >

@@ -1,25 +1,30 @@
-import { useState } from "react";
+import { useId, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import classNames from "classnames";
+import { AccessControl } from "@/components/molecules";
+import { Button } from "@/components/atoms";
 import { useAppSelector } from "@/redux/hooks";
 import { formSteps } from "@/utils/formSteps";
-import { Monatsplaner, Rechner } from "@/components/organisms";
+import { Rechner } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
-import { numberOfMutterschutzMonths } from "@/globals/js/elternteile-utils";
 import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import { Planer } from "@/features/planer";
+import { stepRechnerSelectors } from "@/redux/stepRechnerSlice";
 
 function RechnerPlanerPage() {
-  const nachwuchs = useAppSelector((state) => state.stepNachwuchs);
-  const allgemein = useAppSelector((state) => state.stepAllgemeineAngaben);
+  const sectionLabelIdentifier = useId();
+
+  const isPlanerBlocked = useAppSelector(
+    stepRechnerSelectors.isMonatsplanerOverlayVisible,
+  );
+
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
     state.stepEinkommen.limitEinkommenUeberschritten === YesNo.YES
       ? true
       : null,
-  );
-  const mutterSchutzMonate = numberOfMutterschutzMonths(
-    nachwuchs.anzahlKuenftigerKinder,
-    allgemein.mutterschaftssleistungen,
   );
   const [showModalPopup, setShowModalPopup] = useState<boolean | null>(
     isLimitEinkommenUeberschritten,
@@ -33,11 +38,39 @@ function RechnerPlanerPage() {
       ? EgrBerechnungParamId.MAX_EINKOMMEN_ALLEIN
       : EgrBerechnungParamId.MAX_EINKOMMEN_BEIDE;
 
+  const navigate = useNavigate();
+  const navigateToPreviousStep = () =>
+    navigate(formSteps.elterngeldvarianten.route);
+  const navigateToNextStep = () =>
+    navigate(formSteps.zusammenfassungUndDaten.route);
+
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      <h3 className="mb-10">Rechner und Planer</h3>
-      <Rechner />
-      <Monatsplaner mutterSchutzMonate={mutterSchutzMonate} />
+      <div className="flex flex-wrap justify-between gap-y-80">
+        <section
+          className="basis-full"
+          aria-labelledby={sectionLabelIdentifier}
+        >
+          <h3 id={sectionLabelIdentifier} className="mb-10">
+            Rechner und Planer
+          </h3>
+
+          <Rechner />
+
+          <div className="relative">
+            {!!isPlanerBlocked && <AccessControl />}
+            <Planer className={classNames({ blur: isPlanerBlocked })} />
+          </div>
+        </section>
+
+        <Button
+          buttonStyle="secondary"
+          label="Zurück"
+          onClick={navigateToPreviousStep}
+        />
+        <Button label="Zur Übersicht" onClick={navigateToNextStep} />
+      </div>
+
       {!!showModalPopup && (
         // TODO: fix text after check with ministry
         <ModalPopup

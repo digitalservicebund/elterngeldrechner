@@ -25,6 +25,7 @@ type Props<E extends Elternteil> = {
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
   readonly waehleOption: WaehleOption<E>;
   readonly setzePlanZurueck: () => void;
+  readonly className?: string;
 };
 
 export function Planer<E extends Elternteil>({
@@ -36,6 +37,7 @@ export function Planer<E extends Elternteil>({
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
   setzePlanZurueck,
+  className,
 }: Props<E>): ReactNode {
   const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);
 
@@ -50,7 +52,7 @@ export function Planer<E extends Elternteil>({
   const downloadePlan = useCallback(() => window.print(), []);
 
   return (
-    <div>
+    <div className={className}>
       <div
         className="flex flex-col divide-x-0 divide-y-2 divide-solid divide-off-white border-2 border-solid border-off-white"
         ref={elementToViewOnPlanungWiederholen}

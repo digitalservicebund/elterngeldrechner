@@ -40,6 +40,20 @@ describe("Planer", () => {
       await userEvent.click(button);
     }
   });
+
+  describe("Download der Planung", () => {
+    it("triggers the browsers in-build print function", async () => {
+      window.print = vi.fn();
+      render(<Planer {...ANY_PROPS} />);
+
+      const button = screen.getByRole("button", {
+        name: "Download der Planung",
+      });
+      await userEvent.click(button);
+
+      expect(window.print).toHaveBeenCalled();
+    });
+  });
 });
 
 const ANY_PROPS = {

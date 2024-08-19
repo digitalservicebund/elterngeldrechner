@@ -47,6 +47,8 @@ export function Planer<E extends Elternteil>({
     elementToViewOnPlanungWiederholen.current?.focus({ preventScroll: true });
   }, [setzePlanZurueck]);
 
+  const downloadePlan = useCallback(() => window.print(), []);
+
   return (
     <div>
       <div
@@ -77,6 +79,7 @@ export function Planer<E extends Elternteil>({
       <Funktionsleiste
         className="my-40"
         planungWiederholen={planungWiederholen}
+        downloadePlan={downloadePlan}
       />
     </div>
   );

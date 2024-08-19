@@ -11,8 +11,13 @@ import { zaehleVerplantesKontingent as zaehleVerplantesKontingentInMonat } from 
 
 export function zaehleVerplantesKontingent<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
+  elternteil?: E,
 ): VerplantesKontingent {
   const kontingentProMonat = listeMonateAuf(lebensmonat)
+    .filter(
+      ([elternteilOfMonat]) =>
+        elternteil === undefined || elternteil === elternteilOfMonat,
+    )
     .map(([, monat]) => monat)
     .map(zaehleVerplantesKontingentInMonat);
 
@@ -57,6 +62,21 @@ if (import.meta.vitest) {
       const kontingent = zaehleVerplantesKontingent(lebensmonat);
 
       expect(kontingent[Variante.Bonus]).toBe(1);
+    });
+
+    it("sums up only the Kontingent for the given Elternteil", () => {
+      const lebensmonat = {
+        [Elternteil.Eins]: monat(Variante.Basis),
+        [Elternteil.Zwei]: monat(Variante.Basis),
+      };
+
+      const kontingent = zaehleVerplantesKontingent(
+        lebensmonat,
+        Elternteil.Eins,
+      );
+
+      expect(kontingent[Variante.Basis]).toBe(1);
+      expect(kontingent[Variante.Plus]).toBe(2);
     });
 
     const monat = function (gewaehlteOption: Auswahloption) {

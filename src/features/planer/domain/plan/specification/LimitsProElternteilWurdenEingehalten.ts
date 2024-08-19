@@ -1,0 +1,314 @@
+import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
+import { Variante } from "@/features/planer/domain/Variante";
+import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
+import {
+  type AusgangslageFuerEinElternteil,
+  type Ausgangslage,
+  type ElternteileByAusgangslage,
+} from "@/features/planer/domain/ausgangslage";
+import {
+  Specification,
+  type SpecificationViolation,
+} from "@/features/planer/domain/common/specification";
+import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
+import {
+  listePseudonymeAuf,
+  type PseudonymeDerElternteile,
+} from "@/features/planer/domain/pseudonyme-der-elternteile";
+
+export function LimitsProElternteilWurdenEingehalten<A extends Ausgangslage>() {
+  return new LimitsProElternteilWurdenEingehaltenSpecificiation<A>();
+}
+
+class LimitsProElternteilWurdenEingehaltenSpecificiation<
+  A extends Ausgangslage,
+> extends Specification<Plan<A>> {
+  evaluate(plan: Plan<A>): SpecificationResult {
+    const istAusnahme = plan.ausgangslage.istAlleinerziehend;
+
+    if (istAusnahme) {
+      return SpecificationResult.satisfied;
+    } else {
+      const pseudonyme = plan.ausgangslage
+        .pseudonymeDerElternteile as PseudonymeDerElternteile<
+        ElternteileByAusgangslage<A>
+      >;
+
+      const violations = listePseudonymeAuf(pseudonyme).reduce(
+        (violations: SpecificationViolation[], [elternteil, pseudonym]) => {
+          const verplant = zaehleVerplantesKontingent(
+            plan.lebensmonate,
+            elternteil,
+          );
+
+          return verplant[Variante.Basis] > LIMIT_BASIS_PER_ELTERNTEIL
+            ? [...violations, composeLimitViolation(pseudonym)]
+            : violations;
+        },
+        [],
+      );
+
+      return violations.length === 0
+        ? SpecificationResult.satisfied
+        : SpecificationResult.unsatisfied(
+            violations[0],
+            ...violations.splice(1),
+          );
+    }
+  }
+}
+
+function composeLimitViolation(pseudonym: string): SpecificationViolation {
+  return {
+    message: `${pseudonym} hat das Limit pro Elternteil für diese Auswahloption erschöpft.`,
+  };
+}
+
+/**
+ * Acts as limit for Basiselterngeld and ElterngeldPlus because of the way both
+ * Varianten interact with each other in counting the Kontingent.
+ */
+const LIMIT_BASIS_PER_ELTERNTEIL = 12;
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("Limits pro Elternteil wurden eignehalten", async () => {
+    const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+    const { Variante } = await import("@/features/planer/domain/Variante");
+    const { KeinElterngeld } = await import(
+      "@/features/planer/domain/Auswahloption"
+    );
+    const { Top } = await import(
+      "@/features/planer/domain/common/specification"
+    );
+
+    it("is satisfied if nothing is planned yet", () => {
+      const plan = { ...ANY_PLAN, lebensmonate: {} };
+
+      expect(LimitsProElternteilWurdenEingehalten().asPredicate(plan)).toBe(
+        true,
+      );
+    });
+
+    it("is satisfied if each Elternteil is just at the limit for only Basiselterngeld", () => {
+      const lebensmonatMitBasisFuerBeide = {
+        [Elternteil.Eins]: monat(Variante.Basis),
+        [Elternteil.Zwei]: monat(Variante.Basis),
+      };
+
+      const lebensmonate = {
+        1: lebensmonatMitBasisFuerBeide, // 1 | 1
+        2: lebensmonatMitBasisFuerBeide, // 2 | 2
+        3: lebensmonatMitBasisFuerBeide, // 3 | 3
+        4: lebensmonatMitBasisFuerBeide, // ..
+        5: lebensmonatMitBasisFuerBeide,
+        6: lebensmonatMitBasisFuerBeide,
+        7: lebensmonatMitBasisFuerBeide,
+        8: lebensmonatMitBasisFuerBeide,
+        9: lebensmonatMitBasisFuerBeide,
+        10: lebensmonatMitBasisFuerBeide,
+        11: lebensmonatMitBasisFuerBeide,
+        12: lebensmonatMitBasisFuerBeide, // 12 | 12
+      };
+
+      const plan = { ...ANY_PLAN, lebensmonate };
+
+      expect(LimitsProElternteilWurdenEingehalten().asPredicate(plan)).toBe(
+        true,
+      );
+    });
+
+    it("is unsatisfied if an Elternteil has more than 12 Monate Basiselterngeld", () => {
+      const ausgangslage = {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+      };
+
+      const lebensmonatMitBasisFuerElternteilZwei = {
+        [Elternteil.Eins]: monat(KeinElterngeld),
+        [Elternteil.Zwei]: monat(Variante.Basis),
+      };
+
+      const lebensmonate = {
+        1: lebensmonatMitBasisFuerElternteilZwei,
+        2: lebensmonatMitBasisFuerElternteilZwei,
+        3: lebensmonatMitBasisFuerElternteilZwei,
+        4: lebensmonatMitBasisFuerElternteilZwei,
+        5: lebensmonatMitBasisFuerElternteilZwei,
+        6: lebensmonatMitBasisFuerElternteilZwei,
+        7: lebensmonatMitBasisFuerElternteilZwei,
+        8: lebensmonatMitBasisFuerElternteilZwei,
+        9: lebensmonatMitBasisFuerElternteilZwei,
+        10: lebensmonatMitBasisFuerElternteilZwei,
+        11: lebensmonatMitBasisFuerElternteilZwei,
+        12: lebensmonatMitBasisFuerElternteilZwei,
+        13: lebensmonatMitBasisFuerElternteilZwei,
+      };
+
+      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
+
+      const violationMessages = LimitsProElternteilWurdenEingehalten()
+        .evaluate(plan)
+        .mapOrElse(
+          () => [],
+          (violations) => violations.map(({ message }) => message),
+        );
+
+      expect(violationMessages).toEqual([
+        "John hat das Limit pro Elternteil für diese Auswahloption erschöpft.",
+      ]);
+    });
+
+    it("is satisfied if each Elternteil is just at the limit for Basiselterngeld and ElterngeldPlus mixed", () => {
+      const lebensmonatMitBasisFuerBeide = {
+        [Elternteil.Eins]: monat(Variante.Basis),
+        [Elternteil.Zwei]: monat(Variante.Basis),
+      };
+
+      const lebensmonatMitPlusFuerBeide = {
+        [Elternteil.Eins]: monat(Variante.Plus),
+        [Elternteil.Zwei]: monat(Variante.Plus),
+      };
+
+      const lebensmonate = {
+        1: lebensmonatMitBasisFuerBeide, // 1 | 1
+        2: lebensmonatMitPlusFuerBeide, // 1.5 | 1.5
+        3: lebensmonatMitBasisFuerBeide, // 2.5 | 2.5
+        4: lebensmonatMitPlusFuerBeide, // 3 | 3
+        5: lebensmonatMitBasisFuerBeide, // ...
+        6: lebensmonatMitPlusFuerBeide,
+        7: lebensmonatMitBasisFuerBeide,
+        8: lebensmonatMitPlusFuerBeide,
+        9: lebensmonatMitBasisFuerBeide,
+        10: lebensmonatMitPlusFuerBeide,
+        11: lebensmonatMitBasisFuerBeide,
+        12: lebensmonatMitPlusFuerBeide,
+        13: lebensmonatMitBasisFuerBeide,
+        14: lebensmonatMitPlusFuerBeide,
+        15: lebensmonatMitBasisFuerBeide,
+        16: lebensmonatMitPlusFuerBeide, // 12 | 12
+      };
+
+      const plan = { ...ANY_PLAN, lebensmonate };
+
+      expect(LimitsProElternteilWurdenEingehalten().asPredicate(plan)).toBe(
+        true,
+      );
+    });
+
+    it("is unsatisfied if an Elternteil is above the limit for Basiselterngeld and ElterngeldPlus mixed", () => {
+      const lebensmonatMitBasisFuerElternteilEins = {
+        [Elternteil.Eins]: monat(Variante.Basis),
+        [Elternteil.Zwei]: monat(KeinElterngeld),
+      };
+
+      const lebensmonatMitPlusFuerElternteilEins = {
+        [Elternteil.Eins]: monat(Variante.Plus),
+        [Elternteil.Zwei]: monat(KeinElterngeld),
+      };
+
+      const lebensmonate = {
+        1: lebensmonatMitBasisFuerElternteilEins, // 1 | 0
+        2: lebensmonatMitPlusFuerElternteilEins, // 1.5 | 0
+        3: lebensmonatMitBasisFuerElternteilEins, // 2.5 | 0
+        4: lebensmonatMitPlusFuerElternteilEins, // 3 | 0
+        5: lebensmonatMitBasisFuerElternteilEins, // ...
+        6: lebensmonatMitPlusFuerElternteilEins,
+        7: lebensmonatMitBasisFuerElternteilEins,
+        8: lebensmonatMitPlusFuerElternteilEins,
+        9: lebensmonatMitBasisFuerElternteilEins,
+        10: lebensmonatMitPlusFuerElternteilEins,
+        11: lebensmonatMitBasisFuerElternteilEins,
+        12: lebensmonatMitPlusFuerElternteilEins,
+        13: lebensmonatMitBasisFuerElternteilEins,
+        14: lebensmonatMitPlusFuerElternteilEins,
+        15: lebensmonatMitBasisFuerElternteilEins,
+        16: lebensmonatMitPlusFuerElternteilEins,
+        17: lebensmonatMitPlusFuerElternteilEins, // 12.5 | 0
+      };
+
+      const plan = { ...ANY_PLAN, lebensmonate };
+
+      const violationMessages = LimitsProElternteilWurdenEingehalten()
+        .evaluate(plan)
+        .mapOrElse(
+          () => [],
+          (violations) => violations.map(({ message }) => message),
+        );
+
+      expect(violationMessages).toEqual([
+        "Jane hat das Limit pro Elternteil für diese Auswahloption erschöpft.",
+      ]);
+    });
+
+    it("is always satisfied if being alleinerziehend", () => {
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        istAlleinerziehend: true,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_FOR_ONE_ELTERNTEIL,
+      };
+
+      const lebensmonatMitBasis = {
+        [Elternteil.Eins]: monat(Variante.Basis),
+      };
+
+      const lebensmonate = {
+        1: lebensmonatMitBasis, // 1
+        2: lebensmonatMitBasis, // 2
+        3: lebensmonatMitBasis, // ...
+        4: lebensmonatMitBasis,
+        5: lebensmonatMitBasis,
+        6: lebensmonatMitBasis,
+        7: lebensmonatMitBasis,
+        8: lebensmonatMitBasis,
+        9: lebensmonatMitBasis,
+        10: lebensmonatMitBasis,
+        11: lebensmonatMitBasis,
+        12: lebensmonatMitBasis,
+        13: lebensmonatMitBasis, // 13
+      };
+
+      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
+
+      expect(
+        LimitsProElternteilWurdenEingehalten<AusgangslageFuerEinElternteil>().asPredicate(
+          plan,
+        ),
+      ).toBe(true);
+    });
+
+    it("is satisfied if nothing is planned yet", () => {
+      const plan = { ...ANY_PLAN, lebensmonate: {} };
+
+      expect(LimitsProElternteilWurdenEingehalten().asPredicate(plan)).toBe(
+        true,
+      );
+    });
+
+    function monat(gewaehlteOption: Auswahloption) {
+      return { gewaehlteOption, imMutterschutz: false as const };
+    }
+
+    const ANY_PSEUDONYME_FOR_ONE_ELTERNTEIL = {
+      [Elternteil.Eins]: "Jane",
+    };
+
+    const ANY_PLAN = {
+      ausgangslage: {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+      },
+      errechneteElterngeldbezuege: {} as any,
+      lebensmonate: {},
+      gueltigerPlan: Top,
+    };
+  });
+}

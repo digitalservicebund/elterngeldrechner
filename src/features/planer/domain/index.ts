@@ -29,6 +29,7 @@ export {
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
+  setzePlanZurueck,
   waehleOption,
 } from "./plan";
 export {

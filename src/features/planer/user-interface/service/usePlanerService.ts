@@ -11,6 +11,7 @@ import {
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
   waehleOption,
+  setzePlanZurueck,
 } from "@/features/planer/user-interface/service";
 import { useAppSelector } from "@/redux/hooks";
 
@@ -63,6 +64,11 @@ export function usePlanerService() {
     [],
   );
 
+  const setztePlanZurueckCallback = useCallback(
+    () => setPlan((plan) => setzePlanZurueck(plan)),
+    [],
+  );
+
   useEffect(
     () =>
       setPlan((plan) =>
@@ -82,5 +88,6 @@ export function usePlanerService() {
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
     waehleOption: waehleOptionCallback,
+    setzePlanZurueck: setztePlanZurueckCallback,
   };
 }

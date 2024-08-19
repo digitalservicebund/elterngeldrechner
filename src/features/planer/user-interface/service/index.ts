@@ -20,6 +20,7 @@ export {
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
+  setzePlanZurueck,
   waehleOption,
   type PseudonymeDerElternteile,
   listePseudonymeAuf,

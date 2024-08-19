@@ -4,7 +4,6 @@
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
-    "plugin:prettier/recommended",
     "plugin:jsx-a11y/recommended",
     "plugin:tailwindcss/recommended",
     "plugin:import/recommended",

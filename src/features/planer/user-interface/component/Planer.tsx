@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
+import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import type {
   BestimmeAuswahlmoeglichkeiten,
   ErstelleUngeplantenLebensmonat,
@@ -9,11 +10,13 @@ import type {
 import {
   type Elternteil,
   type Lebensmonate,
+  type PseudonymeDerElternteile,
   type VerfuegbaresKontingent,
   type VerplantesKontingent,
 } from "@/features/planer/user-interface/service";
 
 type Props<E extends Elternteil> = {
+  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly lebensmonate: Lebensmonate<E>;
   readonly verfuegbaresKontingent: VerfuegbaresKontingent;
   readonly verplantesKontingent: VerplantesKontingent;
@@ -23,6 +26,7 @@ type Props<E extends Elternteil> = {
 };
 
 export function Planer<E extends Elternteil>({
+  pseudonymeDerElternteile,
   lebensmonate,
   verfuegbaresKontingent,
   verplantesKontingent,
@@ -32,9 +36,15 @@ export function Planer<E extends Elternteil>({
 }: Props<E>): ReactNode {
   return (
     <div className="flex flex-col divide-x-0 divide-y-2 divide-solid divide-off-white border-2 border-solid border-off-white">
+      <KopfleisteMitPseudonymen
+        className="py-10"
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
+      />
+
       <Lebensmonatsliste
         className="py-8"
         lebensmonate={lebensmonate}
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
         erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
         bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
         waehleOption={waehleOption}

@@ -74,7 +74,13 @@ if (import.meta.vitest) {
       expect(lebensmonat[Elternteil.Eins]).toBe(MONAT_MIT_MUTTERSCHUTZ);
     });
 
-    const ANY_AUSGANGSLAGE = { anzahlElternteile: 2 as const };
+    const ANY_AUSGANGSLAGE = {
+      anzahlElternteile: 2 as const,
+      pseudonymeDerElternteile: {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      },
+    };
     const ANY_LEBENSMONATSZAHL = 3;
   });
 }

@@ -21,6 +21,8 @@ export {
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
   waehleOption,
+  type PseudonymeDerElternteile,
+  listePseudonymeAuf,
   Result,
   Variante,
   type VerfuegbaresKontingent,

@@ -32,9 +32,12 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("bestimme verfügbares Kontingent", async () => {
+    const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+
     it("has 12 Monate Basiselterngeld, 24 Monate ElterngeldPlus and 4 Lebensmonate Partnerschaftbonus for only one Elternteil", () => {
       const kontingent = bestimmeVerfuegbaresKontingent({
         anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
       });
 
       expect(kontingent[Variante.Basis]).toBe(12);
@@ -45,6 +48,7 @@ if (import.meta.vitest) {
     it("has 14 Monate Basiselterngeld, 28 Monate ElterngeldPlus and 4 Lebensmonate Partnerschaftbonus if there are two Elternteile", () => {
       const kontingent = bestimmeVerfuegbaresKontingent({
         anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       });
 
       expect(kontingent[Variante.Basis]).toBe(14);
@@ -56,11 +60,21 @@ if (import.meta.vitest) {
       const kontingent = bestimmeVerfuegbaresKontingent({
         istAlleinerziehend: true,
         anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
       });
 
       expect(kontingent[Variante.Basis]).toBe(14);
       expect(kontingent[Variante.Plus]).toBe(28);
       expect(kontingent[Variante.Bonus]).toBe(4);
     });
+
+    const ANY_PSEUDONYME_ONE_ELTERNTEIL = {
+      [Elternteil.Eins]: "Jane",
+    };
+
+    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    };
   });
 }

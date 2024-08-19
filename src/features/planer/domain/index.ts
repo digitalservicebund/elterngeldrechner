@@ -31,6 +31,10 @@ export {
   erstelleInitialenPlan,
   waehleOption,
 } from "./plan";
+export {
+  type PseudonymeDerElternteile,
+  listePseudonymeAuf,
+} from "./pseudonyme-der-elternteile";
 export { Result } from "./common/Result";
 export { Variante } from "./Variante";
 export {

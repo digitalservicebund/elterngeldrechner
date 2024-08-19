@@ -1,6 +1,7 @@
 import {
   type Ausgangslage,
   Elternteil,
+  type PseudonymeDerElternteile,
 } from "@/features/planer/user-interface/service";
 import { YesNo } from "@/globals/js/calculations/model";
 import { createAppSelector } from "@/redux/hooks";
@@ -9,6 +10,7 @@ import type { RootState } from "@/redux";
 export const ausgangslageSelector = createAppSelector(
   [
     (store) => store.stepAllgemeineAngaben.antragstellende,
+    (store) => store.stepAllgemeineAngaben.pseudonym,
     (store) => store.stepAllgemeineAngaben.alleinerziehend,
     (store) => store.stepAllgemeineAngaben.mutterschaftssleistungen,
     (store) => store.stepAllgemeineAngaben.mutterschaftssleistungenWer,
@@ -17,6 +19,7 @@ export const ausgangslageSelector = createAppSelector(
   ],
   (
     antragstellende,
+    pseudonym,
     alleinerziehend,
     mutterschaftssleistungen,
     mutterschaftssleistungenWer,
@@ -43,6 +46,7 @@ export const ausgangslageSelector = createAppSelector(
 
     switch (anzahlElternteile) {
       case 1: {
+        const pseudonymeDerElternteile = { [Elternteil.Eins]: pseudonym.ET1 };
         const empfaenger = Elternteil.Eins as const;
         const informationenZumMutterschutz = hatMutterschutz
           ? { empfaenger, letzterLebensmonatMitSchutz }
@@ -51,11 +55,16 @@ export const ausgangslageSelector = createAppSelector(
         return {
           ...sharedAusganslageProperties,
           anzahlElternteile,
+          pseudonymeDerElternteile,
           informationenZumMutterschutz,
         };
       }
 
       case 2: {
+        const pseudonymeDerElternteile = {
+          [Elternteil.Eins]: pseudonym.ET1,
+          [Elternteil.Zwei]: pseudonym.ET2,
+        };
         const empfaenger =
           mutterschaftssleistungenWer === "ET1"
             ? Elternteil.Eins
@@ -67,6 +76,7 @@ export const ausgangslageSelector = createAppSelector(
         return {
           ...sharedAusganslageProperties,
           anzahlElternteile,
+          pseudonymeDerElternteile,
           informationenZumMutterschutz,
         };
       }
@@ -84,24 +94,59 @@ if (import.meta.vitest) {
       "@/test-utils/test-utils"
     );
 
-    it("creates Ausgangslage for one Elternteil if Antragstellende is answered with Einen Elternteil", () => {
-      const preloadedState = produce(INITIAL_STATE, (draft) => {
-        draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
+    describe("anzahl der Elternteile", () => {
+      it("creates Ausgangslage for one Elternteil if Antragstellende is answered with Einen Elternteil", () => {
+        const preloadedState = produce(INITIAL_STATE, (draft) => {
+          draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
+        });
+
+        const ausgangslage = executeAusgangslageSelector(preloadedState);
+
+        expect(ausgangslage.anzahlElternteile).toBe(1);
       });
 
-      const ausgangslage = executeAusgangslageSelector(preloadedState);
+      it("creates Ausgangslage for two Elternteil if Antragstellende is answered with Für Beide", () => {
+        const preloadedState = produce(INITIAL_STATE, (draft) => {
+          draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        });
 
-      expect(ausgangslage.anzahlElternteile).toBe(1);
+        const ausgangslage = executeAusgangslageSelector(preloadedState);
+
+        expect(ausgangslage.anzahlElternteile).toBe(2);
+      });
     });
 
-    it("creates Ausgangslage for two Elternteil if Antragstellende is answered with Für Beide", () => {
-      const preloadedState = produce(INITIAL_STATE, (draft) => {
-        draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+    describe("Pseudonyme der Elternteile", () => {
+      it("correctly picks the Pseudonym for one Elternteil", () => {
+        const preloadedState = produce(INITIAL_STATE, (draft) => {
+          draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
+          draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
+        });
+
+        const ausgangslage = executeAusgangslageSelector(preloadedState);
+
+        expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
+          "Jane",
+        );
       });
 
-      const ausgangslage = executeAusgangslageSelector(preloadedState);
+      it("assigns the correct Pseudonyme for two Elternteil", () => {
+        const preloadedState = produce(INITIAL_STATE, (draft) => {
+          draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
+          draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        });
 
-      expect(ausgangslage.anzahlElternteile).toBe(2);
+        const ausgangslage = executeAusgangslageSelector(preloadedState);
+
+        expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
+          "Jane",
+        );
+        expect(
+          (
+            ausgangslage.pseudonymeDerElternteile as PseudonymeDerElternteile<Elternteil>
+          )[Elternteil.Zwei],
+        ).toBe("John");
+      });
     });
 
     describe("mutterschaftssleistungen", () => {

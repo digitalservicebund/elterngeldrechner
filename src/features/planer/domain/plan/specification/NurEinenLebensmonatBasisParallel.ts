@@ -81,7 +81,10 @@ if (import.meta.vitest) {
     });
 
     it("can never be unsatisfied if it only a single Elternteil", () => {
-      const ausgangslage = { anzahlElternteile: 1 as const };
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+      };
       const lebensmonate = {
         1: { [Elternteil.Eins]: monat(Variante.Basis) },
         2: { [Elternteil.Eins]: monat(Variante.Basis) },
@@ -99,6 +102,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         hatBehindertesGeschwisterkind: true,
         anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
       const lebensmonate = LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS;
       const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
@@ -110,6 +114,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         sindMehrlinge: true,
         anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
       const lebensmonate = LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS;
       const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
@@ -117,12 +122,24 @@ if (import.meta.vitest) {
       expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(true);
     });
 
-    const monat = function (gewaehlteOption: Auswahloption) {
+    function monat(gewaehlteOption: Auswahloption) {
       return { gewaehlteOption, imMutterschutz: false as const };
+    }
+
+    const ANY_PSEUDONYME_ONE_ELTERNTEIL = {
+      [Elternteil.Eins]: "Jane",
+    };
+
+    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
     };
 
     const ANY_PLAN = {
-      ausgangslage: { anzahlElternteile: 2 as const },
+      ausgangslage: {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+      },
       lebensmonate: {},
       errechneteElterngeldbezuege: {} as any,
       gueltigerPlan: Top,

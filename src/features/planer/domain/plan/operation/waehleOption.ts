@@ -55,7 +55,11 @@ if (import.meta.vitest) {
     );
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
-      const ausgangslage = { anzahlElternteile: 2 as const };
+      const ausgangslage = {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+      };
+
       const lebensmonate = {
         1: {
           [Elternteil.Eins]: monat(undefined, undefined),
@@ -182,10 +186,18 @@ if (import.meta.vitest) {
     ) as any;
 
     const ANY_PLAN = {
-      ausgangslage: { anzahlElternteile: 1 as const },
+      ausgangslage: {
+        anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
+      },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
       gueltigerPlan: Top,
+    };
+
+    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
     };
 
     const ANY_LEBENSMONATSZAHL = 1 as const;

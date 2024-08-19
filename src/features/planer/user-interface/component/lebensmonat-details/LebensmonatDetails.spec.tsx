@@ -45,6 +45,7 @@ describe("LebensmonateDetails", () => {
         gewaehlteOption: Variante.Basis as const,
         elterngeldbezug: null,
       },
+      [Elternteil.Zwei]: { imMutterschutz: false as const },
     };
 
     render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
@@ -54,6 +55,11 @@ describe("LebensmonateDetails", () => {
   });
 
   it("shows an input fieldset to choose an Option for each Elternteil in the details body", () => {
+    const pseudonymeDerElternteile = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    };
+
     const lebensmonat = {
       [Elternteil.Eins]: ANY_MONAT,
       [Elternteil.Zwei]: ANY_MONAT,
@@ -62,6 +68,7 @@ describe("LebensmonateDetails", () => {
     render(
       <LebensmonatDetails
         {...ANY_PROPS}
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
         lebensmonatszahl={3}
         lebensmonat={lebensmonat}
       />,
@@ -70,12 +77,12 @@ describe("LebensmonateDetails", () => {
     const body = screen.getByTestId("details-body");
     expect(
       within(body).getByRole("group", {
-        name: "Auswahloptionen im Lebensmonat 3 für Elternteil 1",
+        name: "Auswahloptionen im Lebensmonat 3 für Jane",
       }),
     ).toBeInTheDocument();
     expect(
       within(body).getByRole("group", {
-        name: "Auswahloptionen im Lebensmonat 3 für Elternteil 2",
+        name: "Auswahloptionen im Lebensmonat 3 für John",
       }),
     ).toBeInTheDocument();
   });
@@ -113,9 +120,14 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
 };
 
 const ANY_PROPS = {
-  lebensmonatszahl: 1 as const,
+  lebensmonatszahl: 2 as const,
   lebensmonat: {
     [Elternteil.Eins]: { imMutterschutz: false as const },
+    [Elternteil.Zwei]: { imMutterschutz: false as const },
+  },
+  pseudonymeDerElternteile: {
+    [Elternteil.Eins]: "Jane",
+    [Elternteil.Zwei]: "John",
   },
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},

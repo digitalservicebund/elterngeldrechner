@@ -19,11 +19,13 @@ import {
   type Lebensmonatszahl,
   type Lebensmonat,
   listeMonateAuf,
+  type PseudonymeDerElternteile,
 } from "@/features/planer/user-interface/service";
 
 interface Props<E extends Elternteil> {
   readonly lebensmonatszahl: Lebensmonatszahl;
   readonly lebensmonat: Lebensmonat<E>;
+  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
   readonly className?: string;
@@ -32,6 +34,7 @@ interface Props<E extends Elternteil> {
 export function LebensmonatDetails<E extends Elternteil>({
   lebensmonatszahl,
   lebensmonat,
+  pseudonymeDerElternteile,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
   className,
@@ -105,8 +108,8 @@ export function LebensmonatDetails<E extends Elternteil>({
         {listeMonateAuf(lebensmonat)
           .sort(sortByElternteilKey)
           .map(([elternteil, monat]) => {
-            // TODO: Use name of Elternteil
-            const legend = `Auswahloptionen im Lebensmonat ${lebensmonatszahl} für ${elternteil}`;
+            const pseudonym = pseudonymeDerElternteile[elternteil];
+            const legend = `Auswahloptionen im Lebensmonat ${lebensmonatszahl} für ${pseudonym}`;
             const auswahlmoeglichkeiten =
               bestimmeAuswahlmoeglichkeiten(elternteil);
             const showDisabledHintRight = elternteil === Elternteil.Zwei;
@@ -137,7 +140,7 @@ function sortByElternteilKey(
 
 const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
   [Elternteil.Eins]: 1,
-  [Elternteil.Zwei]: 1,
+  [Elternteil.Zwei]: 2,
 };
 
 const TOGGLE_STATE_ICON_CLASS_NAME =

@@ -37,7 +37,11 @@ if (import.meta.vitest) {
     );
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
-      const ausgangslage = { anzahlElternteile: 2 as const };
+      const ausgangslage = {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME,
+      };
+
       const errechneteElterngeldbezuege = {
         ...ANY_ELTERNGELDBEZUEGE,
         1: {
@@ -110,5 +114,10 @@ if (import.meta.vitest) {
         ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
       ]),
     ) as any;
+
+    const ANY_PSEUDONYME = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    };
   });
 }

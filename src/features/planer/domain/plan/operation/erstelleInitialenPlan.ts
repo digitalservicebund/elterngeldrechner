@@ -27,7 +27,10 @@ if (import.meta.vitest) {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
 
     it("maintains the original Ausgangslage and Elterngeldbezüge for consitency in operation", () => {
-      const ausgangslage = { anzahlElternteile: 1 as const };
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+      };
       const errechneteElterngeldbezuege = {
         1: { [Elternteil.Eins]: {} },
       } as any; // TODO: Start working with test data generators.
@@ -47,6 +50,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
       };
 
       const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
@@ -61,6 +65,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Eins,
         },
         anzahlElternteile: 1,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
       };
 
       const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
@@ -75,6 +80,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
         },
         anzahlElternteile: 2,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
 
       const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
@@ -88,5 +94,13 @@ if (import.meta.vitest) {
     });
 
     const ANY_ELTERNGELDBEZUEGE = {} as any;
+    const ANY_PSEUDONYME_ONE_ELTERNTEIL = {
+      [Elternteil.Eins]: "Jane",
+    };
+
+    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    };
   });
 }

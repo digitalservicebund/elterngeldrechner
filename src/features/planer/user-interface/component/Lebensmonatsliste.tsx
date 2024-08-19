@@ -13,10 +13,12 @@ import {
   LetzteLebensmonatszahl,
   type Elternteil,
   type Lebensmonate,
+  type PseudonymeDerElternteile,
 } from "@/features/planer/user-interface/service";
 
 type Props<E extends Elternteil> = {
   readonly lebensmonate: Lebensmonate<E>;
+  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
   readonly waehleOption: WaehleOption<E>;
@@ -25,6 +27,7 @@ type Props<E extends Elternteil> = {
 
 export function Lebensmonatsliste<E extends Elternteil>({
   lebensmonate,
+  pseudonymeDerElternteile,
   erstelleUngeplantenLebensmonat,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
@@ -68,6 +71,7 @@ export function Lebensmonatsliste<E extends Elternteil>({
             aria-hidden={isHidden}
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}
+            pseudonymeDerElternteile={pseudonymeDerElternteile}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten.bind(
               null,
               lebensmonatszahl,

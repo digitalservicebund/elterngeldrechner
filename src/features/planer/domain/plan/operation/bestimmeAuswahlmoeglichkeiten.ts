@@ -154,7 +154,13 @@ if (import.meta.vitest) {
     ) as any;
 
     const ANY_PLAN = {
-      ausgangslage: { anzahlElternteile: 2 as const },
+      ausgangslage: {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+      },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
       gueltigerPlan: Top,

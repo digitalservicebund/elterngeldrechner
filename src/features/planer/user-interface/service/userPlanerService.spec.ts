@@ -188,7 +188,10 @@ async function triggerElterngeldCalculation(store: AppStore) {
 }
 
 const ANY_PLAN = {
-  ausgangslage: { anzahlElternteile: 1 as const },
+  ausgangslage: {
+    anzahlElternteile: 1 as const,
+    pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
+  },
   errechneteElterngeldbezuege: {} as any,
   lebensmonate: {},
   gueltigerPlan: Top,

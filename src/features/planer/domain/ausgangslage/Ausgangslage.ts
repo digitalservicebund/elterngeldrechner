@@ -1,3 +1,4 @@
+import type { PseudonymeDerElternteile } from "@/features/planer/domain/pseudonyme-der-elternteile";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import type { InformationenZumMutterschutz } from "@/features/planer/domain/InformationenZumMutterschutz";
 
@@ -10,13 +11,14 @@ export interface AusgangslageFuerEinElternteil
   readonly anzahlElternteile: 1;
 }
 
-interface AusgangslageFuerZweiElternteile
+export interface AusgangslageFuerZweiElternteile
   extends BasisAusgangslage<Elternteil.Eins | Elternteil.Zwei> {
   readonly anzahlElternteile: 2;
 }
 
 interface BasisAusgangslage<E extends Elternteil> {
   readonly anzahlElternteile: 1 | 2;
+  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly informationenZumMutterschutz?: InformationenZumMutterschutz<E>;
   readonly hatBehindertesGeschwisterkind?: boolean;
   readonly sindMehrlinge?: boolean;

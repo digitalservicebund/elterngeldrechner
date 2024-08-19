@@ -50,6 +50,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
 
       const lebensmonate = {
@@ -74,6 +75,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 2,
         },
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
 
       const lebensmonate = {
@@ -106,6 +108,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 2,
         },
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
 
       const lebensmonate = {
@@ -134,6 +137,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 2,
         },
+        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
       };
 
       const lebensmonate = {
@@ -154,12 +158,24 @@ if (import.meta.vitest) {
 
       expect(isSatisfied).toBe(false);
     });
-  });
 
-  const ANY_PLAN = {
-    ausgangslage: { anzahlElternteile: 1 },
-    lebensmonate: {},
-    errechneteElterngeldbezuege: {} as any,
-    gueltigerPlan: Specification.fromPredicate("", () => true),
-  };
+    const ANY_PSEUDONYME_ONE_ELTERNTEIL = {
+      [Elternteil.Eins]: "Jane",
+    };
+
+    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    };
+
+    const ANY_PLAN = {
+      ausgangslage: {
+        anzahlElternteile: 1,
+        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+      },
+      lebensmonate: {},
+      errechneteElterngeldbezuege: {} as any,
+      gueltigerPlan: Specification.fromPredicate("", () => true),
+    };
+  });
 }

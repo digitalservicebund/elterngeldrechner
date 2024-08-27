@@ -1,5 +1,5 @@
 export function formatAsCurrency(amount: number): string {
-  const rounded = Math.floor(amount);
+  const rounded = Math.round(amount);
   return rounded.toLocaleString(undefined, {
     style: "currency",
     currency: "EUR",

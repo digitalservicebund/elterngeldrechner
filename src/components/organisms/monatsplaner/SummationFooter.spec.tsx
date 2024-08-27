@@ -61,7 +61,7 @@ describe("SummationFooter", () => {
     );
 
     const firstTotalPayoutAmount = screen.queryByText("Elterngeld: 1.000 €");
-    const secondTotalPayoutAmount = screen.queryByText("Elterngeld: 900 €");
+    const secondTotalPayoutAmount = screen.queryByText("Elterngeld: 901 €");
 
     expect(firstTotalPayoutAmount).toBeVisible();
     expect(secondTotalPayoutAmount).toBeVisible();
@@ -80,7 +80,7 @@ describe("SummationFooter", () => {
       />,
     );
 
-    const firstTotalIncomeAmount = screen.queryByText("Einkommen: 1.300 €");
+    const firstTotalIncomeAmount = screen.queryByText("Einkommen: 1.301 €");
     const secondTotalIncomeAmount = screen.queryByText("Einkommen: 1.200 €");
 
     expect(firstTotalIncomeAmount).toBeVisible();
@@ -108,7 +108,7 @@ describe("SummationFooter", () => {
       />,
     );
 
-    const firstTotalSum = screen.queryByText("Summe: 2.300 €");
+    const firstTotalSum = screen.queryByText("Summe: 2.301 €");
     const secondTotalSum = screen.queryByText("Summe: 2.100 €");
 
     expect(firstTotalSum).toBeVisible();
@@ -136,7 +136,7 @@ describe("SummationFooter", () => {
       />,
     );
 
-    const finalSum = screen.queryByText("Gesamtsumme der Planung: 4.400 €");
+    const finalSum = screen.queryByText("Gesamtsumme der Planung: 4.401 €");
 
     expect(finalSum).toBeVisible();
   });

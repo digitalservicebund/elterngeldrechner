@@ -22,7 +22,7 @@ export function UserFeedbackSection({ className }: Props): ReactNode {
     <aside
       aria-labelledby={labelIdentifier}
       className={classNames(
-        "flex gap-y-16 gap-x-24 bg-primary-light flex-wrap p-24",
+        "flex flex-wrap gap-x-24 gap-y-16 bg-primary-light p-24",
         className,
       )}
     >

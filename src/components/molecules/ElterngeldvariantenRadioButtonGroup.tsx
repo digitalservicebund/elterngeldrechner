@@ -27,7 +27,7 @@ export function ElterngeldvariantenRadioButtonGroup({
           <label
             key={variante}
             className={classNames(
-              "p-8 rounded min-h-56 flex justify-center items-center hover:underline",
+              "flex min-h-56 items-center justify-center rounded p-8 hover:underline",
               { [checkedClassName]: isChecked },
               className,
             )}

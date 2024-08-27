@@ -11,5 +11,5 @@
 }
 
 .egr-elterngeld-none {
-  @apply bg-white border border-solid border-grey;
+  @apply border border-solid border-grey bg-white;
 }

@@ -54,7 +54,7 @@ export function Planer<E extends Elternteil>({
   return (
     <div className={className}>
       <div
-        className="flex flex-col divide-x-0 divide-y-2 divide-solid divide-off-white border-2 border-solid border-off-white"
+        className="mx-[-15px] flex flex-col divide-x-0 divide-y-2 divide-solid divide-off-white border-2 border-solid border-off-white sm:mx-0"
         ref={elementToViewOnPlanungWiederholen}
       >
         <KopfleisteMitPseudonymen

@@ -24,6 +24,10 @@
   line-height: inherit;
 }
 
+#egr-root button {
+  cursor: pointer;
+}
+
 #egr-root h2 {
   @apply text-40;
 }

@@ -22,7 +22,7 @@ export function KontingentUebersicht({
   return (
     <section
       className={classNames(
-        "flex gap-16 basis-160 flex-wrap grow justify-evenly",
+        "flex gap-16 basis-160 flex-wrap grow justify-evenly px-8",
         className,
       )}
       aria-label="Kontingentübersicht"

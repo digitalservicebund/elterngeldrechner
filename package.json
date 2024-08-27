@@ -15,7 +15,7 @@
     "test-e2e": "playwright test",
     "type-check": "tsc",
     "lint": "f() { eslint --max-warnings=0 ${@:-**/*.{ts,tsx\\}}; }; f",
-    "lint-fix": "f() { eslint --fix ${@:-*.{ts,tsx\\}}; }; fx",
+    "lint-fix": "f() { eslint --fix ${@:-*.{ts,tsx\\}}; }; f",
     "stylelint": "f() { stylelint ${@:-.}; }; f",
     "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },

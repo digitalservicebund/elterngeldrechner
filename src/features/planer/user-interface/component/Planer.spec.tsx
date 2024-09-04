@@ -60,6 +60,7 @@ const ANY_PROPS = {
   pseudonymeDerElternteile: {
     [Elternteil.Eins]: "Jane",
   },
+  geburtsdatumDesKindes: new Date(),
   lebensmonate: {},
   verfuegbaresKontingent: {
     [Variante.Basis]: 0,

@@ -40,6 +40,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 2 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const errechneteElterngeldbezuege = {
@@ -119,5 +120,7 @@ if (import.meta.vitest) {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };
+
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   });
 }

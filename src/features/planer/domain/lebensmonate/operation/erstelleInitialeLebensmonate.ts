@@ -35,6 +35,7 @@ if (import.meta.vitest) {
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 1,
         pseudonymeDerElternteile: ANY_PSEUDONYME,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
       expect(Object.entries(lebensmonate)).toHaveLength(0);
@@ -48,6 +49,7 @@ if (import.meta.vitest) {
         },
         anzahlElternteile: 1,
         pseudonymeDerElternteile: ANY_PSEUDONYME,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
       expect(Object.entries(lebensmonate)).toHaveLength(3);
@@ -56,5 +58,6 @@ if (import.meta.vitest) {
     });
 
     const ANY_PSEUDONYME = { [Elternteil.Eins]: "Jane" };
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   });
 }

@@ -19,6 +19,7 @@ import {
 type Props<E extends Elternteil> = {
   readonly lebensmonate: Lebensmonate<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
+  readonly geburtsdatumDesKindes: Date;
   readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
   readonly waehleOption: WaehleOption<E>;
@@ -28,6 +29,7 @@ type Props<E extends Elternteil> = {
 export function Lebensmonatsliste<E extends Elternteil>({
   lebensmonate,
   pseudonymeDerElternteile,
+  geburtsdatumDesKindes,
   erstelleUngeplantenLebensmonat,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
@@ -72,6 +74,7 @@ export function Lebensmonatsliste<E extends Elternteil>({
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}
             pseudonymeDerElternteile={pseudonymeDerElternteile}
+            geburtsdatumDesKindes={geburtsdatumDesKindes}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten.bind(
               null,
               lebensmonatszahl,

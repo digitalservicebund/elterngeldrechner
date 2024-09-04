@@ -30,6 +30,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
       const errechneteElterngeldbezuege = {
         1: { [Elternteil.Eins]: {} },
@@ -51,6 +52,7 @@ if (import.meta.vitest) {
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 1 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
@@ -66,6 +68,7 @@ if (import.meta.vitest) {
         },
         anzahlElternteile: 1,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
@@ -81,6 +84,7 @@ if (import.meta.vitest) {
         },
         anzahlElternteile: 2,
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const plan = erstelleInitialenPlan(ausgangslage, ANY_ELTERNGELDBEZUEGE);
@@ -102,5 +106,7 @@ if (import.meta.vitest) {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };
+
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   });
 }

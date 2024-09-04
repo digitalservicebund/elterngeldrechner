@@ -19,6 +19,7 @@ export interface AusgangslageFuerZweiElternteile
 interface BasisAusgangslage<E extends Elternteil> {
   readonly anzahlElternteile: 1 | 2;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
+  readonly geburtsdatumDesKindes: Date;
   readonly informationenZumMutterschutz?: InformationenZumMutterschutz<E>;
   readonly hatBehindertesGeschwisterkind?: boolean;
   readonly sindMehrlinge?: boolean;

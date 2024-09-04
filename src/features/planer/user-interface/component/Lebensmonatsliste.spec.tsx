@@ -62,6 +62,7 @@ const ANY_PROPS = {
   pseudonymeDerElternteile: {
     [Elternteil.Eins]: "Jane",
   },
+  geburtsdatumDesKindes: new Date(),
   erstelleUngeplantenLebensmonat: () => ANY_LEBENSMONAT,
   bestimmeAuswahlmoeglichkeiten: () => ({
     [Variante.Basis]: { elterngeldbezug: 0, isDisabled: false as const },

@@ -29,4 +29,6 @@ export {
   type VerfuegbaresKontingent,
   listeKontingentAuf,
   type VerplantesKontingent,
+  type Zeitraum,
+  berechneZeitraumFuerLebensmonat,
 } from "@/features/planer/domain";

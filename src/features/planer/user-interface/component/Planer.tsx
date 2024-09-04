@@ -18,6 +18,7 @@ import {
 
 type Props<E extends Elternteil> = {
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
+  readonly geburtsdatumDesKindes: Date;
   readonly lebensmonate: Lebensmonate<E>;
   readonly verfuegbaresKontingent: VerfuegbaresKontingent;
   readonly verplantesKontingent: VerplantesKontingent;
@@ -30,6 +31,7 @@ type Props<E extends Elternteil> = {
 
 export function Planer<E extends Elternteil>({
   pseudonymeDerElternteile,
+  geburtsdatumDesKindes,
   lebensmonate,
   verfuegbaresKontingent,
   verplantesKontingent,
@@ -66,6 +68,7 @@ export function Planer<E extends Elternteil>({
           className="py-8"
           lebensmonate={lebensmonate}
           pseudonymeDerElternteile={pseudonymeDerElternteile}
+          geburtsdatumDesKindes={geburtsdatumDesKindes}
           erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
           bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
           waehleOption={waehleOption}

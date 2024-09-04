@@ -6,7 +6,9 @@ import {
   GRID_TEMPLATE_CLASS_NAMES,
   PLACE_ITEM_CLASS_NAMES,
   PlACE_ITEM_MIDDLE_CLASS_NAME,
+  PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
 } from "./grid-areas";
+import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   WaehleOptionInLebensmonat,
@@ -20,12 +22,14 @@ import {
   type Lebensmonat,
   listeMonateAuf,
   type PseudonymeDerElternteile,
+  berechneZeitraumFuerLebensmonat,
 } from "@/features/planer/user-interface/service";
 
 interface Props<E extends Elternteil> {
   readonly lebensmonatszahl: Lebensmonatszahl;
   readonly lebensmonat: Lebensmonat<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
+  readonly geburtsdatumDesKindes: Date;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
   readonly className?: string;
@@ -35,12 +39,18 @@ export function LebensmonatDetails<E extends Elternteil>({
   lebensmonatszahl,
   lebensmonat,
   pseudonymeDerElternteile,
+  geburtsdatumDesKindes,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
   className,
 }: Props<E>): ReactNode {
   const anzahlElternteile = Object.keys(lebensmonat).length;
   const gridTemplateClassName = GRID_TEMPLATE_CLASS_NAMES[anzahlElternteile];
+
+  const zeitraum = berechneZeitraumFuerLebensmonat(
+    geburtsdatumDesKindes,
+    lebensmonatszahl,
+  );
 
   return (
     <details
@@ -102,9 +112,17 @@ export function LebensmonatDetails<E extends Elternteil>({
       </summary>
 
       <div
-        className={classNames("py-20 px-10", gridTemplateClassName)}
+        className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}
         data-testid="details-body"
       >
+        <ZeitraumLabel
+          className={classNames(
+            "mb-24 text-center",
+            PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
+          )}
+          zeitraum={zeitraum}
+        />
+
         {listeMonateAuf(lebensmonat)
           .sort(sortByElternteilKey)
           .map(([elternteil, monat]) => {

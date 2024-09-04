@@ -6,6 +6,7 @@ import {
 import { YesNo } from "@/globals/js/calculations/model";
 import { createAppSelector } from "@/redux/hooks";
 import type { RootState } from "@/redux";
+import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
 
 export const ausgangslageSelector = createAppSelector(
   [
@@ -14,6 +15,7 @@ export const ausgangslageSelector = createAppSelector(
     (store) => store.stepAllgemeineAngaben.alleinerziehend,
     (store) => store.stepAllgemeineAngaben.mutterschaftssleistungen,
     (store) => store.stepAllgemeineAngaben.mutterschaftssleistungenWer,
+    stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum,
     (store) => store.stepNachwuchs.anzahlKuenftigerKinder,
     (store) => store.stepNachwuchs.geschwisterkinder,
   ],
@@ -23,6 +25,7 @@ export const ausgangslageSelector = createAppSelector(
     alleinerziehend,
     mutterschaftssleistungen,
     mutterschaftssleistungenWer,
+    geburtsdatumDesKindes,
     anzahlKuenftigerKinder,
     geschwisterkinder,
   ): Ausgangslage => {
@@ -39,6 +42,7 @@ export const ausgangslageSelector = createAppSelector(
       : (2 as const);
 
     const sharedAusganslageProperties = {
+      geburtsdatumDesKindes,
       istAlleinerziehend,
       hatBehindertesGeschwisterkind,
       sindMehrlinge,
@@ -146,6 +150,20 @@ if (import.meta.vitest) {
             ausgangslage.pseudonymeDerElternteile as PseudonymeDerElternteile<Elternteil>
           )[Elternteil.Zwei],
         ).toBe("John");
+      });
+    });
+
+    describe("Geburtsdatum des Kindes", () => {
+      it("takes the parsed Geburtsdatum from the store", () => {
+        const preloadedState = produce(INITIAL_STATE, (draft) => {
+          draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "21.12.2013";
+        });
+
+        const ausgangslage = executeAusgangslageSelector(preloadedState);
+
+        expect(ausgangslage.geburtsdatumDesKindes).toEqual(
+          new Date(2013, 11, 21),
+        );
       });
     });
 

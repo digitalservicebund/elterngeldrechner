@@ -38,6 +38,7 @@ if (import.meta.vitest) {
       const kontingent = bestimmeVerfuegbaresKontingent({
         anzahlElternteile: 1 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
       expect(kontingent[Variante.Basis]).toBe(12);
@@ -49,6 +50,7 @@ if (import.meta.vitest) {
       const kontingent = bestimmeVerfuegbaresKontingent({
         anzahlElternteile: 2 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
       expect(kontingent[Variante.Basis]).toBe(14);
@@ -61,6 +63,7 @@ if (import.meta.vitest) {
         istAlleinerziehend: true,
         anzahlElternteile: 1 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
       expect(kontingent[Variante.Basis]).toBe(14);
@@ -76,5 +79,7 @@ if (import.meta.vitest) {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };
+
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   });
 }

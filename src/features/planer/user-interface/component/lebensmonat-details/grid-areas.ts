@@ -10,6 +10,9 @@ export const GRID_TEMPLATE_CLASS_NAMES: {
 
 export const PlACE_ITEM_MIDDLE_CLASS_NAME = gridClassNames.placeItemMiddle;
 
+export const PLACE_ITEM_FULL_WIDTH_CLASS_NAME =
+  gridClassNames.placeItemFullWitdh;
+
 export const PLACE_ITEM_CLASS_NAMES: Record<
   Elternteil,
   Record<AreaName, string>

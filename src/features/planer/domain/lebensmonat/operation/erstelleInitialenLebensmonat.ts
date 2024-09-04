@@ -51,6 +51,7 @@ if (import.meta.vitest) {
         {
           anzahlElternteile: 1,
           pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         ANY_LEBENSMONATS_ZAHL,
       );
@@ -63,6 +64,7 @@ if (import.meta.vitest) {
         {
           anzahlElternteile: 2,
           pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         ANY_LEBENSMONATS_ZAHL,
       );
@@ -78,6 +80,7 @@ if (import.meta.vitest) {
           informationenZumMutterschutz: undefined,
           anzahlElternteile: 2,
           pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         ANY_LEBENSMONATS_ZAHL,
       );
@@ -96,6 +99,7 @@ if (import.meta.vitest) {
             letzterLebensmonatMitSchutz: 2,
           },
           pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         1,
       );
@@ -112,6 +116,7 @@ if (import.meta.vitest) {
             letzterLebensmonatMitSchutz: 2,
           },
           pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         3,
       );
@@ -128,6 +133,7 @@ if (import.meta.vitest) {
             letzterLebensmonatMitSchutz: 2,
           },
           pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         2,
       );
@@ -146,5 +152,6 @@ if (import.meta.vitest) {
     };
   });
 
+  const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   const ANY_LEBENSMONATS_ZAHL = 1;
 }

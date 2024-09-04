@@ -160,6 +160,7 @@ if (import.meta.vitest) {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },
+        geburtsdatumDesKindes: new Date(),
       },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},

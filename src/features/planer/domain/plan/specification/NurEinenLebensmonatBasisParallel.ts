@@ -84,6 +84,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
       const lebensmonate = {
         1: { [Elternteil.Eins]: monat(Variante.Basis) },
@@ -103,6 +104,7 @@ if (import.meta.vitest) {
         hatBehindertesGeschwisterkind: true,
         anzahlElternteile: 2 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
       const lebensmonate = LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS;
       const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
@@ -115,6 +117,7 @@ if (import.meta.vitest) {
         sindMehrlinge: true,
         anzahlElternteile: 2 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
       const lebensmonate = LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS;
       const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
@@ -135,10 +138,13 @@ if (import.meta.vitest) {
       [Elternteil.Zwei]: "John",
     };
 
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
+
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 2 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       },
       lebensmonate: {},
       errechneteElterngeldbezuege: {} as any,

@@ -82,6 +82,7 @@ export function usePlanerService() {
 
   return {
     pseudonymeDerElternteile: plan.ausgangslage.pseudonymeDerElternteile,
+    geburtsdatumDesKindes: plan.ausgangslage.geburtsdatumDesKindes,
     lebensmonate: plan.lebensmonate,
     verfuegbaresKontingent: verfuegbaresKontingent.current,
     verplantesKontingent,

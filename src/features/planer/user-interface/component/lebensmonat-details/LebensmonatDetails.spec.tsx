@@ -129,6 +129,7 @@ const ANY_PROPS = {
     [Elternteil.Eins]: "Jane",
     [Elternteil.Zwei]: "John",
   },
+  geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
 };

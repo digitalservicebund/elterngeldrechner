@@ -51,6 +51,7 @@ if (import.meta.vitest) {
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 2 as const,
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const lebensmonate = {
@@ -76,6 +77,7 @@ if (import.meta.vitest) {
           letzterLebensmonatMitSchutz: 2,
         },
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const lebensmonate = {
@@ -109,6 +111,7 @@ if (import.meta.vitest) {
           letzterLebensmonatMitSchutz: 2,
         },
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const lebensmonate = {
@@ -138,6 +141,7 @@ if (import.meta.vitest) {
           letzterLebensmonatMitSchutz: 2,
         },
         pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const lebensmonate = {
@@ -168,10 +172,13 @@ if (import.meta.vitest) {
       [Elternteil.Zwei]: "John",
     };
 
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
+
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 1,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       },
       lebensmonate: {},
       errechneteElterngeldbezuege: {} as any,

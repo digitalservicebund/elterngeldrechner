@@ -127,6 +127,7 @@ if (import.meta.vitest) {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const lebensmonatMitBasisFuerElternteilZwei = {
@@ -251,6 +252,7 @@ if (import.meta.vitest) {
         anzahlElternteile: 1 as const,
         istAlleinerziehend: true,
         pseudonymeDerElternteile: ANY_PSEUDONYME_FOR_ONE_ELTERNTEIL,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
       const lebensmonatMitBasis = {
@@ -298,6 +300,8 @@ if (import.meta.vitest) {
       [Elternteil.Eins]: "Jane",
     };
 
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
+
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 2 as const,
@@ -305,6 +309,7 @@ if (import.meta.vitest) {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },
+        geburtsdatumDesKindes: new Date(),
       },
       errechneteElterngeldbezuege: {} as any,
       lebensmonate: {},

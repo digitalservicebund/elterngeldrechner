@@ -8,6 +8,7 @@ import {
   PlACE_ITEM_MIDDLE_CLASS_NAME,
   PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
 } from "./grid-areas";
+import { HinweisZumBonus } from "@/features/planer/user-interface/component/HinweisZumBonus";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
@@ -23,6 +24,7 @@ import {
   listeMonateAuf,
   type PseudonymeDerElternteile,
   berechneZeitraumFuerLebensmonat,
+  AlleElternteileHabenBonusGewaehlt,
 } from "@/features/planer/user-interface/service";
 
 interface Props<E extends Elternteil> {
@@ -51,6 +53,9 @@ export function LebensmonatDetails<E extends Elternteil>({
     geburtsdatumDesKindes,
     lebensmonatszahl,
   );
+
+  const isBonusHintVisible =
+    AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
 
   return (
     <details
@@ -145,6 +150,13 @@ export function LebensmonatDetails<E extends Elternteil>({
               />
             );
           })}
+
+        {!!isBonusHintVisible && (
+          <HinweisZumBonus
+            className={PLACE_ITEM_FULL_WIDTH_CLASS_NAME}
+            hasMultipleElternteile={anzahlElternteile > 1}
+          />
+        )}
       </div>
     </details>
   );

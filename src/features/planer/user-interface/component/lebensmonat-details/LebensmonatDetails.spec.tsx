@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { LebensmonatDetails } from "./LebensmonatDetails";
+import { HinweisZumBonus } from "@/features/planer/user-interface/component/HinweisZumBonus";
 import {
   Elternteil,
   KeinElterngeld,
@@ -108,9 +109,45 @@ describe("LebensmonateDetails", () => {
     expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledWith(Elternteil.Eins);
     expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledWith(Elternteil.Zwei);
   });
+
+  describe("hint for Bonus", () => {
+    it("shows the hint when Bonus is chosen", () => {
+      vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
+      const lebensmonat = {
+        [Elternteil.Eins]: MONAT_WITH_BONUS,
+        [Elternteil.Zwei]: MONAT_WITH_BONUS,
+      };
+      render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
+
+      expect(screen.queryByText("Test Bonus Hinweis Text")).toBeInTheDocument();
+    });
+
+    it("hides the hint when no Bonus is chosen", () => {
+      vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
+      const lebensmonat = {
+        [Elternteil.Eins]: MONAT_WITH_BASIS,
+        [Elternteil.Zwei]: MONAT_WITH_BASIS,
+      };
+      render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
+
+      expect(
+        screen.queryByText("Test Bonus Hinweis Text"),
+      ).not.toBeInTheDocument();
+    });
+  });
 });
 
 const ANY_MONAT = { imMutterschutz: false as const };
+const MONAT_WITH_BASIS = {
+  gewaehlteOption: Variante.Basis,
+  elterngeldbezug: 0,
+  imMutterschutz: false as const,
+};
+const MONAT_WITH_BONUS = {
+  gewaehlteOption: Variante.Bonus,
+  elterngeldbezug: 0,
+  imMutterschutz: false as const,
+};
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {
   [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
@@ -133,3 +170,5 @@ const ANY_PROPS = {
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
 };
+
+vi.mock("@/features/planer/user-interface/component/HinweisZumBonus");

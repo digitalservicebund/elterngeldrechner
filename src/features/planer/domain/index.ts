@@ -18,6 +18,7 @@ export {
   type Lebensmonat,
   erstelleInitialenLebensmonat,
   listeMonateAuf,
+  AlleElternteileHabenBonusGewaehlt,
 } from "./lebensmonat";
 export { type Lebensmonate, zaehleVerplantesKontingent } from "./lebensmonate";
 export {

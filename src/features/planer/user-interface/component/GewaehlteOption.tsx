@@ -23,16 +23,31 @@ export function GewaehlteOption({
   const conditionalClassName = getClassName(option);
   const icon = getIcon(option !== undefined, imMutterschutz);
 
+  /*
+   * To improve responsiveness for narrow screens only the icon should be shown
+   * if there is one, and if icon plus label do not fit next to each other.
+   * Wrapping must be avoided for a unified row layout.
+   *
+   * As there is no proper way to define with effect with intrinsic CSS styling,
+   * this rather cheap approach with a container query is chosen. The CSS unit
+   * `ch` for character width is somewhat helpful here (should mean not accurate).
+   */
+  const canHideLabelWhenTooNarrow = icon !== undefined;
+  const requiredWidth = estimateRequiredWidth(!!icon, label);
+  const labelClassName = classNames({
+    [`@[${requiredWidth}]:block hidden`]: canHideLabelWhenTooNarrow,
+  });
+
   return (
     <span
       className={classNames(
-        "p-8 min-h-56 rounded font-bold flex text-center items-center justify-center gap-4",
+        "p-8 min-h-56 rounded font-bold flex text-center items-center justify-center gap-4 @container",
         className,
         conditionalClassName,
       )}
     >
       {icon}
-      {label}
+      <span className={labelClassName}>{label}</span>
     </span>
   );
 }
@@ -88,4 +103,10 @@ function getIcon(
   } else if (!hasAuswahl) {
     return <AddIcon />;
   }
+}
+
+function estimateRequiredWidth(hasIcon: boolean, label: string): string {
+  const iconWidth = hasIcon ? 2 : 0;
+  const labelWidth = label.length;
+  return iconWidth + labelWidth + "ch";
 }

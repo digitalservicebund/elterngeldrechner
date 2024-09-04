@@ -1,12 +1,14 @@
 .grid-template-for-two-elternteile {
   display: grid;
-  grid-template-columns: 2fr 3fr minmax(3ch, 2fr) 3fr 2fr;
+  grid-template-columns:
+    minmax(0, 3fr) minmax(0, 5fr) minmax(0, 2fr) minmax(0, 5fr)
+    minmax(0, 3fr);
   grid-template-areas: "et1-outside et1-inside middle et2-inside et2-outside";
 }
 
 .grid-template-for-single-elternteil {
   display: grid;
-  grid-template-columns: "1fr 1fr 1fr";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
   grid-template-areas: "middle et1-inside et1-outside";
 }
 

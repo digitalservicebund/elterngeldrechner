@@ -45,7 +45,7 @@ export function AuswahlEingabe({
         return (
           <div
             key={option}
-            className={classNames("flex items-center gap-8", {
+            className={classNames("flex items-center justify-end gap-8", {
               "flex-row-reverse": showDisabledHintRight,
             })}
           >
@@ -61,9 +61,9 @@ export function AuswahlEingabe({
 
             <label
               className={classNames(
-                "grow p-8 rounded min-h-56 flex justify-center p-9 bg-Basis items-center col-start-2",
+                "p-9 col-start-2 flex min-h-56 max-w-[25ch] grow items-center justify-center rounded bg-Basis p-8 text-center",
                 { "!bg-grey !text-black": isDisabled },
-                { "hover:underline hover:cursor-pointer": !isDisabled },
+                { "hover:cursor-pointer hover:underline": !isDisabled },
                 { [checkedClassName]: isChecked && !isDisabled },
                 className,
               )}

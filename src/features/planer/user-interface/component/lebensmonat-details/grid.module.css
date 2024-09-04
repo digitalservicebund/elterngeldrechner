@@ -1,15 +1,18 @@
 .grid-template-for-two-elternteile {
   display: grid;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 2fr) minmax(
-      0,
-      5fr
-    ) minmax(0, 3fr);
+  max-width: 70ch;
+  margin: auto;
+  grid-template-columns:
+    minmax(0, 3fr) minmax(0, 5fr) minmax(0, 2fr) minmax(0, 5fr)
+    minmax(0, 3fr);
   grid-template-areas: "et1-outside et1-inside middle et2-inside et2-outside";
 }
 
 .grid-template-for-single-elternteil {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  max-width: 50ch;
+  margin: auto;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 3fr);
   grid-template-areas: "middle et1-inside et1-outside";
 }
 
@@ -28,6 +31,11 @@
 .place-item-et1-full {
   grid-column-start: et1-outside;
   grid-column-end: et1-inside;
+}
+
+.grid-template-for-single-elternteil > .place-item-et1-full {
+  grid-column-start: et1-inside;
+  grid-column-end: et1-outside;
 }
 
 .place-item-middle {

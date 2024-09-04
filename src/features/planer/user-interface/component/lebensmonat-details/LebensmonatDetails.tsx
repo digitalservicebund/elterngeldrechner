@@ -130,7 +130,8 @@ export function LebensmonatDetails<E extends Elternteil>({
             const legend = `Auswahloptionen im Lebensmonat ${lebensmonatszahl} für ${pseudonym}`;
             const auswahlmoeglichkeiten =
               bestimmeAuswahlmoeglichkeiten(elternteil);
-            const showDisabledHintRight = elternteil === Elternteil.Zwei;
+            const showDisabledHintRight =
+              anzahlElternteile == 1 || elternteil === Elternteil.Zwei;
 
             return (
               <AuswahlEingabe

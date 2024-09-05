@@ -157,12 +157,21 @@ describe("usePlanungsdaten", () => {
       });
 
       expect(result.current[0].zeitraeueme).toStrictEqual([
-        { from: new Date(2024, 3, 3), to: new Date(2024, 5, 2) },
-        { from: new Date(2024, 6, 3), to: new Date(2024, 7, 2) },
+        {
+          from: new Date(Date.UTC(2024, 3, 3)),
+          to: new Date(Date.UTC(2024, 5, 2)),
+        },
+        {
+          from: new Date(Date.UTC(2024, 6, 3)),
+          to: new Date(Date.UTC(2024, 7, 2)),
+        },
       ]);
 
       expect(result.current[1].zeitraeueme).toStrictEqual([
-        { from: new Date(2024, 4, 3), to: new Date(2024, 6, 2) },
+        {
+          from: new Date(Date.UTC(2024, 4, 3)),
+          to: new Date(Date.UTC(2024, 6, 2)),
+        },
       ]);
     });
   });

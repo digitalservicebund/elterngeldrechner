@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import classNames from "classnames";
 import { ElterngeldType } from "@/monatsplaner";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly inputGroupName: string;

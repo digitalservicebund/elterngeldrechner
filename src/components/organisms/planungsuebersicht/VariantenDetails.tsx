@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { DetailsOfVariante, Variante } from "./types";
 import { ElterngeldvarianteBadge } from "@/components/atoms/ElterngeldVarianteBadge";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly variante: Variante;

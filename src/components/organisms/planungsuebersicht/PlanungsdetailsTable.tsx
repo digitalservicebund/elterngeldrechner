@@ -2,7 +2,11 @@ import { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { PlanungsdetailsMonth } from "./PlanungsdetailsMonth";
 import { Lebensmonat } from "./types";
-import { formatZeitraum } from "@/utils/formatZeitraum";
+import {
+  endOfNthLebensmonat,
+  formatZeitraum,
+  startOfNthLebensmonat,
+} from "@/utils/date";
 
 type Props = {
   readonly lastMonthIndexToShow: number;
@@ -63,13 +67,11 @@ export function PlanungsdetailsTable({
   );
 }
 
-function getLabelForLebensmonat(birthdate: Date, index: number): string {
-  const from = new Date(birthdate);
-  from.setMonth(from.getMonth() + index);
-  const to = new Date(from);
-  to.setMonth(to.getMonth() + 1);
-  to.setDate(to.getDate() - 1);
-  return formatZeitraum({ from, to });
+function getLabelForLebensmonat(geburtsdatum: Date, index: number): string {
+  return formatZeitraum({
+    from: startOfNthLebensmonat(index + 1)(geburtsdatum),
+    to: endOfNthLebensmonat(index + 1)(geburtsdatum),
+  });
 }
 
 const FILLER_LEBENSMONAT: Lebensmonat = {

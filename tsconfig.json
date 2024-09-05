@@ -10,7 +10,7 @@
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "vitest/importMeta"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,

@@ -3,7 +3,7 @@ import classNames from "classnames";
 import type { ReactNode } from "react";
 import { Variante, type Lebensmonat } from "./types";
 import { ElterngeldvarianteBadge } from "@/components/atoms/ElterngeldVarianteBadge";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 interface Props extends Lebensmonat {}
 

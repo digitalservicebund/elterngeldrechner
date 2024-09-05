@@ -17,6 +17,10 @@ export default defineConfig({
     setupFiles: "src/setupTests.ts",
     restoreMocks: true,
     include: ["src/**/*.spec.*"],
+    includeSource: ["src/**/*.ts"],
     watch: false,
+  },
+  define: {
+    "import.meta.vitest": "undefined",
   },
 });

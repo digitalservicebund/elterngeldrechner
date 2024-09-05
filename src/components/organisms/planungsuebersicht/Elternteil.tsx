@@ -3,8 +3,8 @@ import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import { PlanungsdatenFuerElternteil } from "./types";
 import { VariantenDetails } from "./VariantenDetails";
-import { formatAsCurrency } from "@/utils/locale-formatting";
-import { formatZeitraum } from "@/utils/formatZeitraum";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
+import { formatZeitraum } from "@/utils/date";
 
 interface Props extends PlanungsdatenFuerElternteil {}
 

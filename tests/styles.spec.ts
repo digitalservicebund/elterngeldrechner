@@ -17,6 +17,7 @@ const testStyles = async ({
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await expect(allgemeineAngabenPage.heading).toBeVisible();
+  if (screenSize === "mobile") await page.waitForTimeout(1000); // It's just needed, I don't know why
   await screenshot("allgemeine-angaben-heading", allgemeineAngabenPage.heading);
   await screenshot(
     "allgemeine-angaben-elternteile",

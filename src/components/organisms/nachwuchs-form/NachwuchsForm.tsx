@@ -16,7 +16,7 @@ import {
 import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { trackNutzergruppe } from "@/user-tracking";
-import { parseGermanDateString } from "@/utils/locale-formatting";
+import { fromGermanDateString } from "@/utils/date";
 
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;
@@ -74,7 +74,7 @@ export function NachwuchsForm({
   const anzahlKuenftigerKinder = watch("anzahlKuenftigerKinder");
 
   const geburtsdatum = watch("wahrscheinlichesGeburtsDatum");
-  trackNutzergruppe(parseGermanDateString(geburtsdatum));
+  trackNutzergruppe(fromGermanDateString(geburtsdatum));
 
   const handleDecrease = () =>
     setValue(

@@ -1,7 +1,7 @@
 import PermIdentityIcon from "@digitalservicebund/icons/PermIdentity";
 import { ReactNode } from "react";
 import { SummationDataForParent } from "./types";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 interface Props extends SummationDataForParent {
   readonly hideSum?: boolean;

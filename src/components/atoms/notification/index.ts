@@ -1,10 +1,3 @@
-export { NotificationBEGHintMinMax } from "./NotificationBEGHintMinMax";
-export { NotificationBEGHintMin } from "./NotificationBEGHintMin";
-export { NotificationNoFurtherMonthAvailable } from "./NotificationNoFurtherMonthAvailable";
-export { NotificationPSBAutomaticallySelection } from "./NotificationPSBAutomaticallySelection";
-export { NotificationPSBNotDeselectable } from "./NotificationPSBNotDeselectable";
-export { NotificationPSBChangeOtherElternteil } from "./NotificationPSBChangeOtherElternteil";
 export { NotificationBEGResultWasRecalculated } from "./NotificationBEGResultWasRecalculated";
 export { NotificationValidationMonatsplaner } from "./NotificationValidationMonatsplaner";
 export { NotificationMaxElterngeld } from "./NotificationMaxElterngeld";
-export { NotificationBEGMax } from "./NotificationBEGMax";

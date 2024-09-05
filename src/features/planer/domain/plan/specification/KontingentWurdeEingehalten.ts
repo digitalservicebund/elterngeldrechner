@@ -42,7 +42,7 @@ function composeKontingentViolation(
   maximum: number,
 ): SpecificationViolation {
   return {
-    message: `Das Kontingent von ${maximum} ${variante} Monaten ist aufgebraucht.`,
+    message: `Ihre maximal ${maximum} verfügbaren ${variante} Monate sind aufgebraucht.`,
   };
 }
 
@@ -95,9 +95,9 @@ if (import.meta.vitest) {
       expect(violationMessages).toHaveLength(3);
       expect(violationMessages).toEqual(
         expect.arrayContaining([
-          "Das Kontingent von 2 Basiselterngeld Monaten ist aufgebraucht.",
-          "Das Kontingent von 4 ElterngeldPlus Monaten ist aufgebraucht.",
-          "Das Kontingent von 3 Partnerschaftsbonus Monaten ist aufgebraucht.",
+          "Ihre maximal 2 verfügbaren Basiselterngeld Monate sind aufgebraucht.",
+          "Ihre maximal 4 verfügbaren ElterngeldPlus Monate sind aufgebraucht.",
+          "Ihre maximal 3 verfügbaren Partnerschaftsbonus Monate sind aufgebraucht.",
         ]),
       );
     });

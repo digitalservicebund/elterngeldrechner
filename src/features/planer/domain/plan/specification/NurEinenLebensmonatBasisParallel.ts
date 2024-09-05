@@ -10,7 +10,7 @@ import { Specification } from "@/features/planer/domain/common/specification";
 
 export function NurEinLebensmonatBasisParallel<A extends Ausgangslage>() {
   return Specification.fromPredicate<Plan<A>>(
-    "Es kann maximal ein Monat parallel Basiselterngeld bezogen werden.",
+    "Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12 Lebensmonaten gleichzeitig bekommen.",
     (plan) => {
       const {
         anzahlElternteile,
@@ -26,6 +26,7 @@ export function NurEinLebensmonatBasisParallel<A extends Ausgangslage>() {
       } else {
         return (
           listeLebensmonateAuf(plan.lebensmonate)
+            .filter(([lebensmonatszahl]) => lebensmonatszahl <= 12)
             .map(([, lebensmonat]) => lebensmonat)
             .filter(AlleElternteileHabenBasisGewaehlt.asPredicate).length <= 1
         );
@@ -78,6 +79,22 @@ if (import.meta.vitest) {
       const plan = { ...ANY_PLAN, lebensmonate };
 
       expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(false);
+    });
+
+    it("is satsified if another parallel Lebensmonat is taken but after the 12th", () => {
+      const lebensmonate = {
+        1: {
+          [Elternteil.Eins]: monat(Variante.Basis),
+          [Elternteil.Zwei]: monat(Variante.Basis),
+        },
+        13: {
+          [Elternteil.Eins]: monat(Variante.Basis),
+          [Elternteil.Zwei]: monat(Variante.Basis),
+        },
+      };
+      const plan = { ...ANY_PLAN, lebensmonate };
+
+      expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(true);
     });
 
     it("can never be unsatisfied if it only a single Elternteil", () => {

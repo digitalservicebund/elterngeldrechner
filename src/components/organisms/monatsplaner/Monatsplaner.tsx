@@ -8,13 +8,10 @@ import { SummationFooter } from "./SummationFooter";
 import { useSummarizeData } from "./useSummarizeData";
 import {
   ElterngeldType,
-  Elternteile,
   ElternteilType,
-  Month,
   validateElternteile,
 } from "@/monatsplaner";
 import {
-  getAutomaticallySelectedPSBMonthIndex,
   monatsplanerActions,
   monatsplanerSelectors,
 } from "@/redux/monatsplanerSlice";
@@ -23,10 +20,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/redux/hooks";
-import {
-  Antragstellende,
-  stepAllgemeineAngabenSelectors,
-} from "@/redux/stepAllgemeineAngabenSlice";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
 import {
   ElterngeldRowsResult,
@@ -34,14 +28,7 @@ import {
 } from "@/redux/stepRechnerSlice";
 import {
   Button,
-  NotificationNoFurtherMonthAvailable,
-  NotificationPSBAutomaticallySelection,
-  NotificationPSBChangeOtherElternteil,
-  NotificationPSBNotDeselectable,
   NotificationValidationMonatsplaner,
-  NotificationBEGHintMinMax,
-  NotificationBEGHintMin,
-  NotificationBEGMax,
   Toast,
 } from "@/components/atoms";
 import {
@@ -55,12 +42,9 @@ import { EgrConst } from "@/globals/js/egr-configuration";
 import { YesNo } from "@/globals/js/calculations/model";
 import {
   canNotChangeBEGDueToSimultaneousMonthRules,
-  reachedLimitOfSimultaneousBEGMonths,
-  isExceptionToSimulatenousMonthRestrictions,
   canNotChangeBEGDueToLimitReachedPerParent,
   canNotChangeEGPDueToLimitReachedPerParent,
 } from "@/monatsplaner/elternteile/change-month";
-import { NotificationMaxSimultaneousBEGMonths } from "@/components/atoms/notification/NotificationMaxSimultaneousBEGMonths";
 
 export type ColumnType = Omit<ElterngeldType, "None">;
 
@@ -99,30 +83,6 @@ const getAmountElterngeldRow = (
       amountElterngeldPlus: resultRow.elternGeldPlus,
     };
   });
-};
-
-const begCountOf = (months: readonly Month[]) =>
-  months.filter((month) => month.type === "BEG").length;
-
-const checkForNotificationBEGHintMinMax = (
-  elternteile: Elternteile,
-  antragstellende: Antragstellende | null,
-) => {
-  const begEt1 = begCountOf(elternteile.ET1.months);
-  const begEt2 = begCountOf(elternteile.ET2.months);
-  return (
-    antragstellende === "FuerBeide" &&
-    ((begEt1 >= 11 && begEt2 <= 1) || (begEt2 >= 11 && begEt1 <= 1))
-  );
-};
-
-const checkMaxBEG = (
-  elternteile: Elternteile,
-  antragstellende: Antragstellende | null,
-) => {
-  const begEt1 = begCountOf(elternteile.ET1.months);
-  const begEt2 = begCountOf(elternteile.ET2.months);
-  return antragstellende === "FuerBeide" && (begEt1 > 12 || begEt2 > 12);
 };
 
 export function Monatsplaner({ mutterSchutzMonate }: Props) {
@@ -189,11 +149,8 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
 
   const handleNextPage = () => {
     const validation = validateElternteile(elternteile);
-    const validationMaxBEGFailed = checkMaxBEG(elternteile, antragstellende);
 
-    if (validationMaxBEGFailed) {
-      setNotificationMessages([<NotificationBEGMax key="beg-max" />]);
-    } else if (!validation.isValid) {
+    if (!validation.isValid) {
       setNotificationMessages([
         <NotificationValidationMonatsplaner
           errorCodes={validation.errorCodes}
@@ -217,56 +174,12 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
       validation &&
       !validation.isValid &&
       validation.errorCodes.includes("DoesNotHaveContinuousEGAfterBEGAnspruch");
-    const doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll =
-      validation &&
-      !validation.isValid &&
-      validation.errorCodes.includes(
-        "DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll",
-      );
-    const showNotificationBEGHintMinMax = checkForNotificationBEGHintMinMax(
-      elternteile,
-      antragstellende,
-    );
-    const validationMaxBEGFailed = checkMaxBEG(elternteile, antragstellende);
 
-    const begAndEgPlusEmpty =
-      BEGRemainingMonth === 0 && EGPlusRemainingMonth === 0;
-
-    const begEmptyOnly = BEGRemainingMonth === 0 && EGPlusRemainingMonth !== 0;
-
-    if (validationMaxBEGFailed) {
-      setNotificationMessages([<NotificationBEGMax key="beg-max" />]);
-    } else if (
-      doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll &&
-      alleinerziehend
-    ) {
-      setNotificationMessages([<NotificationBEGHintMin key="beg-hint-min" />]);
-    } else if (
-      (doesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll && !alleinerziehend) ||
-      showNotificationBEGHintMinMax
-    ) {
-      setNotificationMessages([
-        <NotificationBEGHintMinMax key="beg-hint-min-max" />,
-      ]);
-    } else if (doesNotHaveContinuousEGAfterBEGAnspruch) {
+    if (doesNotHaveContinuousEGAfterBEGAnspruch) {
       setNotificationMessages([
         <NotificationValidationMonatsplaner
           errorCodes={["DoesNotHaveContinuousEGAfterBEGAnspruch"]}
           key="validation-monatsplaner-does-not-have-continuous-eg-after-beg-anspruch"
-        />,
-      ]);
-    } else if (begAndEgPlusEmpty) {
-      setNotificationMessages([
-        <NotificationNoFurtherMonthAvailable
-          targetType="BEGAndEG+"
-          key="no-further-month-available-beg-and-egplus"
-        />,
-      ]);
-    } else if (begEmptyOnly) {
-      setNotificationMessages([
-        <NotificationNoFurtherMonthAvailable
-          targetType="BEG"
-          key="no-further-month-available-beg"
         />,
       ]);
     }
@@ -280,22 +193,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     alleinerziehend,
   ]);
 
-  useEffect(() => {
-    // TODO
-  }, []);
-
-  const {
-    highestAllowedDeselectablePSBIndex,
-    lowestAllowedDeselectablePSBIndex,
-  } = {
-    highestAllowedDeselectablePSBIndex: Math.max(
-      ...selectablePSBMonths.deselectableIndices,
-    ),
-    lowestAllowedDeselectablePSBIndex: Math.min(
-      ...selectablePSBMonths.deselectableIndices,
-    ),
-  };
-
   const handleToggleMonth = (
     elternteil: ElternteilType,
     columnType: ColumnType,
@@ -307,16 +204,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
         : columnType
     ) as ElterngeldType;
 
-    if (
-      monthIndex > lowestAllowedDeselectablePSBIndex &&
-      monthIndex < highestAllowedDeselectablePSBIndex
-    ) {
-      setNotificationMessages([
-        <NotificationPSBNotDeselectable key="psb-not-deselectable" />,
-      ]);
-      return;
-    }
-
     dispatch(
       monatsplanerActions.changeMonth({
         elternteil,
@@ -325,29 +212,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
         monthIndex,
       }),
     );
-
-    if (columnType === "PSB") {
-      const automaticallySelectedIndex = getAutomaticallySelectedPSBMonthIndex(
-        elternteile.ET1.months,
-        monthIndex,
-      );
-
-      setNotificationMessages([
-        ...(antragstellende === "FuerBeide"
-          ? [
-              <NotificationPSBChangeOtherElternteil key="psb-change-other-elternteil" />,
-            ]
-          : []),
-        ...(automaticallySelectedIndex
-          ? [
-              <NotificationPSBAutomaticallySelection
-                label={lebensmonate[automaticallySelectedIndex].labelLong}
-                key="psb-automatically-selection"
-              />,
-            ]
-          : []),
-      ]);
-    }
 
     lastToggledElterngeldTypeRef.current = {
       targetType,
@@ -365,16 +229,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     const { targetType, targetColumnType } =
       lastToggledElterngeldTypeRef.current;
     if (columnType !== targetColumnType) return;
-
-    if (
-      monthIndex > lowestAllowedDeselectablePSBIndex &&
-      monthIndex < highestAllowedDeselectablePSBIndex
-    ) {
-      setNotificationMessages([
-        <NotificationPSBNotDeselectable key="psb-not-deselectable" />,
-      ]);
-      return;
-    }
 
     dispatch(
       monatsplanerActions.changeMonth({
@@ -438,34 +292,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
 
     return !isBlockedByLimitReached;
   }
-
-  const [
-    showedNotificationForMaxSimultaneousBEGMonths,
-    setShowedNotificationForMaxSimultaneousBEGMonths,
-  ] = useState(false);
-
-  function possiblyShowNotificationForMaxSimultaneousBEGMonths() {
-    const reachedLimit = reachedLimitOfSimultaneousBEGMonths(elternteile);
-    const isException =
-      isExceptionToSimulatenousMonthRestrictions(elternteileSettings);
-
-    if (reachedLimit && !isException) {
-      if (!showedNotificationForMaxSimultaneousBEGMonths) {
-        setShowedNotificationForMaxSimultaneousBEGMonths(true);
-        setNotificationMessages([
-          <NotificationMaxSimultaneousBEGMonths key="max-simultatenous-beg-months" />,
-        ]);
-      }
-    } else {
-      setShowedNotificationForMaxSimultaneousBEGMonths(false);
-    }
-  }
-
-  useEffect(possiblyShowNotificationForMaxSimultaneousBEGMonths, [
-    elternteile,
-    elternteileSettings,
-    showedNotificationForMaxSimultaneousBEGMonths,
-  ]);
 
   const summationData = useSummarizeData();
 

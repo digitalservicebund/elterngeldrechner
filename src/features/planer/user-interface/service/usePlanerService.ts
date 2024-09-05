@@ -14,6 +14,7 @@ import {
   setzePlanZurueck,
 } from "@/features/planer/user-interface/service";
 import { useAppSelector } from "@/redux/hooks";
+import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export function usePlanerService() {
   const ausgangslage = useAppSelector(ausgangslageSelector, () => true);
@@ -59,13 +60,20 @@ export function usePlanerService() {
           zaehleVerplantesKontingent(nextPlan.lebensmonate),
         );
 
+        trackPartnerschaftlicheVerteilung(nextPlan);
+
         return nextPlan;
       }),
     [],
   );
 
   const setztePlanZurueckCallback = useCallback(
-    () => setPlan((plan) => setzePlanZurueck(plan)),
+    () =>
+      setPlan((plan) => {
+        const nextPlan = setzePlanZurueck(plan);
+        trackPartnerschaftlicheVerteilung(nextPlan);
+        return nextPlan;
+      }),
     [],
   );
 

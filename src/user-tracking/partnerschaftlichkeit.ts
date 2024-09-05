@@ -1,15 +1,21 @@
 import { setTrackingVariable } from "./data-layer";
-import { ElterngeldType } from "@/monatsplaner";
+import {
+  Elternteil,
+  KeinElterngeld,
+  Variante,
+  type Ausgangslage,
+  type Auswahloption,
+  type Lebensmonate,
+} from "@/features/planer/domain";
+import type { Plan } from "@/features/planer/domain/plan";
+import type { Monat } from "@/features/planer/domain/monat";
 
 export function trackPartnerschaftlicheVerteilung(
-  monthsET1: ElterngeldType[],
-  monthsET2: ElterngeldType[],
-  singleApplicant: boolean,
+  plan: Plan<Ausgangslage>,
 ): void {
-  if (!singleApplicant) {
+  if (plan.ausgangslage.anzahlElternteile > 1) {
     const verteilung = calculatePartnerschaftlichkeiteVerteilung(
-      monthsET1,
-      monthsET2,
+      plan.lebensmonate,
     );
     setTrackingVariable(TRACKING_VARIABLE_NAME, verteilung);
   }
@@ -25,11 +31,14 @@ export function trackPartnerschaftlicheVerteilung(
  * @returns quotient between 0 and 1 of the distribution
  */
 function calculatePartnerschaftlichkeiteVerteilung(
-  monthsET1: ElterngeldType[],
-  monthsET2: ElterngeldType[],
+  lebensmonate: Lebensmonate<Elternteil>,
 ): number | undefined {
-  const valueET1 = calculateValueOfElternteil(monthsET1);
-  const valueET2 = calculateValueOfElternteil(monthsET2);
+  const valueET1 = calculateValueOfElternteil(
+    filterMonateOfElternteil(lebensmonate, Elternteil.Eins),
+  );
+  const valueET2 = calculateValueOfElternteil(
+    filterMonateOfElternteil(lebensmonate, Elternteil.Zwei),
+  );
 
   const smallerValue = Math.min(valueET1, valueET2);
   const biggerValue = Math.max(valueET1, valueET2);
@@ -40,25 +49,39 @@ function calculatePartnerschaftlichkeiteVerteilung(
   return hasNoPartnerschaftlichkeit ? 0 : quotient;
 }
 
+function filterMonateOfElternteil<E extends Elternteil>(
+  lebensmonate: Lebensmonate<E>,
+  elternteil: E,
+): Monat[] {
+  return Object.values(lebensmonate).map(
+    (lebensmonat) => lebensmonat[elternteil],
+  );
+}
+
 /**
- * The calculated "value" for a partner is a unit less numeric value that
- * represents the sum of all the months planned for this partner. Therefore,
- * each planned month get weighted based on the chosen variant.
+ * The calculated "value" for an Elternteil is a unit less numeric value that
+ * represents the sum of all the Monate planned for this Elternteil. Therefore,
+ * each planned Monat get weighted based on the chosen Option.
  */
-function calculateValueOfElternteil(months: ElterngeldType[]): number {
-  return months
-    .map((type) => ELTERNGELD_TYPE_TO_PARTNERSCHAFTLICHKEITS_VALUE[type])
+function calculateValueOfElternteil(monate: Monat[]): number {
+  return monate
+    .map((monat) => monat.gewaehlteOption)
+    .map((option) =>
+      option !== undefined
+        ? AUSWAHLOPTION_TO_PARTNERSCHAFTLICHKEITS_VALUE[option]
+        : 0,
+    )
     .reduce((sum, value) => sum + value, 0);
 }
 
-const ELTERNGELD_TYPE_TO_PARTNERSCHAFTLICHKEITS_VALUE: Record<
-  ElterngeldType,
+const AUSWAHLOPTION_TO_PARTNERSCHAFTLICHKEITS_VALUE: Record<
+  Auswahloption,
   number
 > = {
-  BEG: 1,
-  "EG+": 0.5,
-  PSB: 0.5,
-  None: 0,
+  [Variante.Basis]: 1,
+  [Variante.Plus]: 0.5,
+  [Variante.Bonus]: 0.5,
+  [KeinElterngeld]: 0,
 };
 
 const TRACKING_VARIABLE_NAME = "partnerschaftlicheverteilung";

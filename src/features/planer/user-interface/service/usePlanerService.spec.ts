@@ -6,6 +6,7 @@ import {
   erstelleInitialenPlan,
   KeinElterngeld,
   Result,
+  setzePlanZurueck,
   Variante,
   waehleOption,
   zaehleVerplantesKontingent,
@@ -14,10 +15,12 @@ import { Top } from "@/features/planer/domain/common/specification";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 import type { AppStore } from "@/redux";
+import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 vi.mock("@/features/planer/domain/ausgangslage");
 vi.mock("@/features/planer/domain/lebensmonate");
 vi.mock("@/features/planer/domain/plan");
+vi.mock("@/user-tracking");
 
 describe("use Planer service", () => {
   beforeEach(() => {
@@ -166,6 +169,34 @@ describe("use Planer service", () => {
     await triggerElterngeldCalculation(store);
 
     expect(result.current.lebensmonate).toStrictEqual(updatedLebensmonate);
+  });
+
+  describe("tracking partnerschaftliche Verteilung", () => {
+    it("triggers tracking when chosing an Option", () => {
+      vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
+      const { result } = renderPlanerServiceHook();
+
+      act(() =>
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
+      );
+
+      expect(trackPartnerschaftlicheVerteilung).toHaveBeenCalledOnce();
+      expect(trackPartnerschaftlicheVerteilung).toHaveBeenLastCalledWith(
+        ANY_PLAN,
+      );
+    });
+
+    it("triggers tracking when resetting the Plan", () => {
+      vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
+      const { result } = renderPlanerServiceHook();
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(trackPartnerschaftlicheVerteilung).toHaveBeenCalledOnce();
+      expect(trackPartnerschaftlicheVerteilung).toHaveBeenLastCalledWith(
+        ANY_PLAN,
+      );
+    });
   });
 });
 

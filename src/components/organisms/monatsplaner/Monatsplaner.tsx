@@ -6,7 +6,6 @@ import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
 import { SummationFooter } from "./SummationFooter";
 import { useSummarizeData } from "./useSummarizeData";
-import { usePlanningContingentMonths } from "./usePlanningContingentMonths";
 import {
   ElterngeldType,
   Elternteile,
@@ -49,7 +48,6 @@ import {
   AccessControl,
   AmountElterngeldRow,
   Elternteil,
-  PlanningContingent,
 } from "@/components/molecules";
 import nsp from "@/globals/js/namespace";
 import { formSteps } from "@/utils/formSteps";
@@ -470,7 +468,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
   ]);
 
   const summationData = useSummarizeData();
-  const planningContingentMonths = usePlanningContingentMonths();
 
   const elementToViewOnRepeatPlanning = useRef<HTMLDivElement>(null);
 
@@ -514,11 +511,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
           )}
           aria-hidden={isMonatsplanerOverlayVisible}
         >
-          <PlanningContingent
-            className="print:hidden"
-            months={planningContingentMonths}
-          />
-
           <div className={nsp("monatsplaner__tables")}>
             <Elternteil
               className={nsp("monatsplaner__sticky-elternteil")}

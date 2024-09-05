@@ -175,16 +175,6 @@ describe("Monatsplaner", () => {
     expect(infoText).toBeInTheDocument();
   });
 
-  it("should show contingent header", () => {
-    render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-
-    const header = screen.queryByRole("banner", {
-      name: "Kontingent von planbaren Monaten",
-    });
-
-    expect(header).toBeVisible();
-  });
-
   it("should show summation footer", () => {
     render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
 

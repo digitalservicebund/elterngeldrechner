@@ -1,9 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
-import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
-import AddIcon from "@digitalservicebund/icons/Add";
 import classNames from "classnames";
-import { useNavigate } from "react-router-dom";
 import { SummationFooter } from "./SummationFooter";
 import { useSummarizeData } from "./useSummarizeData";
 import {
@@ -22,22 +18,10 @@ import {
 } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
-import {
-  ElterngeldRowsResult,
-  stepRechnerSelectors,
-} from "@/redux/stepRechnerSlice";
-import {
-  Button,
-  NotificationValidationMonatsplaner,
-  Toast,
-} from "@/components/atoms";
-import {
-  AccessControl,
-  AmountElterngeldRow,
-  Elternteil,
-} from "@/components/molecules";
+import { ElterngeldRowsResult } from "@/redux/stepRechnerSlice";
+import { NotificationValidationMonatsplaner, Toast } from "@/components/atoms";
+import { AmountElterngeldRow, Elternteil } from "@/components/molecules";
 import nsp from "@/globals/js/namespace";
-import { formSteps } from "@/utils/formSteps";
 import { EgrConst } from "@/globals/js/egr-configuration";
 import { YesNo } from "@/globals/js/calculations/model";
 import {
@@ -56,8 +40,6 @@ interface LastToggledElterngeldType {
   targetType: ElterngeldType;
   targetColumnType: ColumnType;
 }
-
-const initialLebensmonateVisibleLength = 18;
 
 const emptyAmountElterngeldRows = Array.from<AmountElterngeldRow>({
   length: EgrConst.lebensMonateMaxNumber,
@@ -87,13 +69,9 @@ const getAmountElterngeldRow = (
 
 export function Monatsplaner({ mutterSchutzMonate }: Props) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const partnerMonate = useAppSelector(
     (state) => state.monatsplaner.partnerMonate,
-  );
-  const isMonatsplanerOverlayVisible = useAppSelector(
-    stepRechnerSelectors.isMonatsplanerOverlayVisible,
   );
   const lebensmonate = useAppSelector(
     stepNachwuchsSelectors.getLebensmonateAfterBirth,
@@ -136,35 +114,12 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     ReactNode[] | null
   >(null);
 
-  const [lebensmonateVisibleLength, setLebensmonateVisibleLength] = useState(
-    initialLebensmonateVisibleLength,
-  );
-
   const lastToggledElterngeldTypeRef = useRef<LastToggledElterngeldType>();
 
   const {
     basiselterngeld: BEGRemainingMonth,
     elterngeldplus: EGPlusRemainingMonth,
   } = elternteile.remainingMonths;
-
-  const handleNextPage = () => {
-    const validation = validateElternteile(elternteile);
-
-    if (!validation.isValid) {
-      setNotificationMessages([
-        <NotificationValidationMonatsplaner
-          errorCodes={validation.errorCodes}
-          key="validation-monatsplaner-generic-error-codes"
-        />,
-      ]);
-    } else {
-      navigate(formSteps.zusammenfassungUndDaten.route);
-    }
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const onUnMountToast = () => setNotificationMessages(null);
 
@@ -240,8 +195,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     );
   };
 
-  const handlePageBack = () => navigate(formSteps.elterngeldvarianten.route);
-
   function isBEGMonthSelectable(
     elternteil: ElternteilType,
     monthIndex: number,
@@ -295,16 +248,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
 
   const summationData = useSummarizeData();
 
-  const elementToViewOnRepeatPlanning = useRef<HTMLDivElement>(null);
-
-  function repeatPlanning(): void {
-    dispatch(monatsplanerActions.resetMonths());
-    elementToViewOnRepeatPlanning.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-    elementToViewOnRepeatPlanning.current?.focus({ preventScroll: true });
-  }
-
   return (
     <>
       <div
@@ -314,11 +257,7 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
         )}
       >
         <div className={nsp("monatsplaner__header")}>
-          <h2
-            ref={elementToViewOnRepeatPlanning}
-            tabIndex={-1}
-            className="mb-10"
-          >
+          <h2 tabIndex={-1} className="mb-10">
             Monatsplaner
           </h2>
           <p>
@@ -330,13 +269,7 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
           </p>
         </div>
 
-        {!!isMonatsplanerOverlayVisible && <AccessControl />}
-        <div
-          className={classNames(
-            isMonatsplanerOverlayVisible && nsp("monatsplaner__blur"),
-          )}
-          aria-hidden={isMonatsplanerOverlayVisible}
-        >
+        <div>
           <div className={nsp("monatsplaner__tables")}>
             <Elternteil
               className={nsp("monatsplaner__sticky-elternteil")}
@@ -357,7 +290,7 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
               isEGPMonthSelectable={(monthIndex: number) =>
                 isEGPMonthSelectable("ET1", monthIndex)
               }
-              lebensmonate={lebensmonate.slice(0, lebensmonateVisibleLength)}
+              lebensmonate={lebensmonate}
               amounts={amountElterngeldRowsET1}
               hasMutterschutz={mutterschutzElternteil === "ET1"}
               mutterSchutzMonate={mutterSchutzMonate}
@@ -383,7 +316,7 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
                 isEGPMonthSelectable={(monthIndex: number) =>
                   isEGPMonthSelectable("ET2", monthIndex)
                 }
-                lebensmonate={lebensmonate.slice(0, lebensmonateVisibleLength)}
+                lebensmonate={lebensmonate}
                 amounts={amountElterngeldRowsET2}
                 hasMutterschutz={mutterschutzElternteil === "ET2"}
                 mutterSchutzMonate={mutterSchutzMonate}
@@ -394,17 +327,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
             )}
           </div>
           <div className={nsp("monatsplaner__footer")}>
-            {lebensmonateVisibleLength === initialLebensmonateVisibleLength && (
-              <Button
-                buttonStyle="secondary"
-                label="Alle Monate anzeigen"
-                iconBefore={<AddIcon />}
-                onClick={() =>
-                  setLebensmonateVisibleLength(lebensmonate.length)
-                }
-              />
-            )}
-
             <SummationFooter
               className="w-full bg-white p-16"
               data={summationData}
@@ -426,31 +348,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
           </div>
         </div>
       </div>
-
-      <div className="my-40 flex flex-wrap gap-32 print:hidden">
-        <Button
-          buttonStyle="link"
-          label="Planung wiederholen"
-          iconBefore={<RestartAltIcon />}
-          onClick={repeatPlanning}
-        />
-
-        <Button
-          buttonStyle="link"
-          label="Download der Planung"
-          iconBefore={<SaveAltIcon />}
-          onClick={handlePrint}
-        />
-      </div>
-
-      <section className={nsp("monatsplaner__button-group")}>
-        <Button
-          onClick={handlePageBack}
-          label="Zurück"
-          buttonStyle="secondary"
-        />
-        <Button onClick={handleNextPage} label="Zur Übersicht" />
-      </section>
     </>
   );
 }

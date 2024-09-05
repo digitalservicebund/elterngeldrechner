@@ -59,7 +59,11 @@ function RechnerPlanerPage() {
 
           <div className="relative">
             {!!isPlanerBlocked && <AccessControl />}
-            <Planer className={classNames({ blur: isPlanerBlocked })} />
+
+            <Planer
+              className={classNames({ blur: isPlanerBlocked })}
+              aria-hidden={isPlanerBlocked}
+            />
           </div>
         </section>
 

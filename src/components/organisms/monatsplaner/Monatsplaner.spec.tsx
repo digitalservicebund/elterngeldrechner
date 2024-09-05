@@ -10,11 +10,7 @@ import {
   MonatsplanerState,
 } from "@/redux/monatsplanerSlice";
 import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
-import {
-  changeMonth,
-  createElternteile,
-  validateElternteile,
-} from "@/monatsplaner";
+import { changeMonth, createElternteile } from "@/monatsplaner";
 import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
 import { YesNo } from "@/globals/js/calculations/model";
 
@@ -29,41 +25,6 @@ const getElternteil1BEGLabel = (monthIndex: number) =>
 
 const getElternteil1PSBLabel = (monthIndex: number) =>
   `Elternteil 1 Partnerschaftsbonus für Lebensmonat ${monthIndex + 1}`;
-
-const testLebensmonateLabels = [
-  "1 August",
-  "2 September",
-  "3 Oktober",
-  "4 November",
-  "5 Dezember",
-  "6 Januar",
-  "7 Februar",
-  "8 März",
-  "9 April",
-  "10 Mai",
-  "11 Juni",
-  "12 Juli",
-  "13 August",
-  "14 September",
-  "15 Oktober",
-  "16 November",
-  "17 Dezember",
-  "18 Januar",
-  "19 Februar",
-  "20 März",
-  "21 April",
-  "22 Mai",
-  "23 Juni",
-  "24 Juli",
-  "25 August",
-  "26 September",
-  "27 Oktober",
-  "28 November",
-  "29 Dezember",
-  "30 Januar",
-  "31 Februar",
-  "32 März",
-];
 
 vi.mock("../../../monatsplaner", async (importOriginal) => {
   const module = await importOriginal<typeof import("../../../monatsplaner")>();
@@ -158,20 +119,6 @@ describe("Monatsplaner", () => {
     },
   };
 
-  it("should display overlay information modal when no calculation was triggered by user", () => {
-    render(<Monatsplaner mutterSchutzMonate={2} />, {
-      preloadedState: {
-        ...preloadedState,
-        stepRechner: initialStepRechnerState,
-      },
-    });
-
-    const infoText = screen.getByText(
-      "Bevor Sie den Monatsplaner nutzen können, machen Sie bitte Angaben zu Ihrem Brutto-Einkommen während des Elterngeldbezugs",
-    );
-    expect(infoText).toBeInTheDocument();
-  });
-
   it("should show summation footer", () => {
     render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
 
@@ -192,45 +139,6 @@ describe("Monatsplaner", () => {
       "Dieses Ergebnis ist nicht rechtsverbindlich. Erst nach der Geburt Ihres Kindes kann Ihre zuständige Elterngeldstelle eine konkrete und rechtsverbindliche Berechnung Ihres Anspruchs vornehmen.",
     );
     expect(infoText).toBeInTheDocument();
-  });
-
-  describe("Lebensmonate", () => {
-    it("should display first 18 Lebensmonate in a column with number of month and month name", () => {
-      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
-
-      for (const month of testLebensmonateLabels.slice(0, 18)) {
-        expect(screen.getByLabelText(month)).toBeInTheDocument();
-      }
-    });
-
-    it("should display all Lebensmonate in a column with number of month and month name", async () => {
-      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
-
-      const expandButton = screen.getByRole("button", {
-        name: "Alle Monate anzeigen",
-      });
-
-      await userEvent.click(expandButton);
-
-      for (const month of testLebensmonateLabels) {
-        expect(screen.getByLabelText(month)).toBeInTheDocument();
-      }
-    });
-
-    it("should hide the Alle Monate anzeigen Button if it was clicked", async () => {
-      render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
-      const button = screen.getByRole("button", {
-        name: "Alle Monate anzeigen",
-      });
-
-      await userEvent.click(button);
-
-      expect(
-        screen.queryByRole("button", {
-          name: "Alle Monate anzeigen",
-        }),
-      ).not.toBeInTheDocument();
-    });
   });
 
   it("should show the Planer for both Elternteile", () => {
@@ -335,11 +243,6 @@ describe("Monatsplaner", () => {
       },
     });
 
-    const expandButton = screen.getByRole("button", {
-      name: "Alle Monate anzeigen",
-    });
-    await userEvent.click(expandButton);
-
     const BEGmonthNotThere = screen.queryByLabelText(
       "Elternteil 1 Basiselterngeld für Lebensmonat 13",
     );
@@ -370,11 +273,6 @@ describe("Monatsplaner", () => {
         },
       },
     });
-
-    const expandButton = screen.getByRole("button", {
-      name: "Alle Monate anzeigen",
-    });
-    await userEvent.click(expandButton);
 
     const EGPlusMonthNotThere = screen.queryByLabelText(
       "Elternteil 1 ElterngeldPlus für Lebensmonat 27",
@@ -577,100 +475,6 @@ describe("Monatsplaner", () => {
         ".egr-elternteil__th--partnerschaftsbonus",
       );
       expect(bonus).not.toBeNull();
-    });
-  });
-
-  describe("Submit validation Monatsplaner", () => {
-    beforeEach(() => {
-      vi.mocked(validateElternteile).mockClear();
-    });
-
-    it.each([
-      [
-        /mindestens ein Elternteil muss Elterngeld beantragen/i,
-        "HasNoSelection" as const,
-      ],
-      [
-        /reduzieren Sie auf die verfügbare Anzahl von Basiselterngeld-Monaten/i,
-        "HasTakenMoreThanTheAvailableBEGMonths" as const,
-      ],
-      [
-        /nur 1 Monat Elterngeld für ein Elternteil ist nicht zulässig/i,
-        "DoesNotHaveTheMinimumAmountOfEGMonthsOrNoneAtAll" as const,
-      ],
-      [
-        /Elterngeld muss ab dem 15. Monat durchgängig genommen werden/i,
-        "DoesNotHaveContinuousEGAfterBEGAnspruch" as const,
-      ],
-      [
-        /Basiselterngeld kann nicht nach dem 15. Monat genommen werden/i,
-        "HasTakenBEGAfterBEGAnspruch" as const,
-      ],
-    ])(
-      "should show error message %p if validation returns error code %p",
-      async (expectedText, errorCode) => {
-        render(<Monatsplaner mutterSchutzMonate={2} />, { preloadedState });
-
-        vi.mocked(validateElternteile).mockReturnValue({
-          isValid: false,
-          errorCodes: [errorCode],
-        });
-
-        const submitButton = screen.getByRole("button", {
-          name: "Zur Übersicht",
-        });
-        await userEvent.click(submitButton);
-
-        expect(screen.getByText(expectedText)).toBeInTheDocument();
-      },
-    );
-  });
-
-  describe("repeat planning", () => {
-    it("should reset the selected months when repeat planning", async () => {
-      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-      const firstBEGMonth = getElternteil1BEGLabel(4);
-      const monthButton = screen.getByLabelText(firstBEGMonth);
-      const monthCell = screen.getByTestId(firstBEGMonth);
-      const repeatButton = screen.getByText("Planung wiederholen");
-
-      expect(monthCell).not.toHaveClass(nsp("monatsplaner-month--selected"));
-
-      await userEvent.click(monthButton);
-      expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
-
-      await userEvent.click(repeatButton);
-      expect(monthCell).not.toHaveClass(nsp("monatsplaner-month--selected"));
-    });
-
-    it("should not reset 'Mutterschutz' months when repeat planning", async () => {
-      render(<Monatsplaner mutterSchutzMonate={1} />, { preloadedState });
-      const maternityProtectionMonth = getElternteil1BEGLabel(0);
-      const monthCell = screen.getByTestId(maternityProtectionMonth);
-      const repeatButton = screen.getByText("Planung wiederholen");
-
-      expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
-      await userEvent.click(repeatButton);
-      expect(monthCell).toHaveClass(nsp("monatsplaner-month--selected"));
-    });
-
-    it("triggers smooth scrolling and shifts focus when repeat planning", async () => {
-      render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-      const scrollMock = vi.fn();
-      const focusMock = vi.fn();
-      window.HTMLElement.prototype.scrollIntoView = scrollMock;
-      window.HTMLElement.prototype.focus = focusMock;
-      const repeatButton = screen.getByText("Planung wiederholen");
-
-      await userEvent.click(repeatButton);
-
-      expect(scrollMock).toHaveBeenCalled();
-      expect(scrollMock).toHaveBeenCalledWith({ behavior: "smooth" });
-      expect(focusMock).toHaveBeenCalled();
-      expect(focusMock).toHaveBeenCalledWith({ preventScroll: true });
-
-      scrollMock.mockRestore();
-      focusMock.mockRestore();
     });
   });
 

@@ -101,26 +101,50 @@ describe("AuswahlEingabe", () => {
     },
   );
 
-  it("disables disabled Auswahlmöglichkeiten with a hint that can be opened", () => {
-    const auswahlmoeglichkeiten = {
-      ...ANY_AUSWAHLMOEGLICHKEITEN,
-      [Variante.Plus]: {
-        isDisabled: true as const,
-        hintWhyDisabled: "test hint text",
-        elterngeldbezug: 0,
-      },
-    };
+  describe("disabled Auswahlmöglicheiten", () => {
+    it("marks radio button as disabled but keeps it focusable", () => {
+      const auswahlmoeglichkeiten = {
+        ...ANY_AUSWAHLMOEGLICHKEITEN,
+        [Variante.Plus]: {
+          isDisabled: true as const,
+          hintWhyDisabled: "test hint text",
+          elterngeldbezug: 0,
+        },
+      };
 
-    render(
-      <AuswahlEingabe
-        {...ANY_PROPS}
-        auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-      />,
-    );
+      render(
+        <AuswahlEingabe
+          {...ANY_PROPS}
+          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+        />,
+      );
 
-    const input = screen.queryByRole("radio", { name: /Plus/ });
+      const input = screen.getByRole("radio", { name: /Plus/ });
 
-    expect(input).toBeDisabled();
+      expect(input).not.toBeDisabled();
+      expect(input).toHaveAttribute("aria-disabled", "true");
+    });
+
+    it("does not call the callback when clicked", async () => {
+      const waehleOption = vi.fn();
+      const auswahlmoeglichkeiten = {
+        ...ANY_AUSWAHLMOEGLICHKEITEN,
+        [Variante.Plus]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+      };
+
+      render(
+        <AuswahlEingabe
+          {...ANY_PROPS}
+          waehleOption={waehleOption}
+          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+        />,
+      );
+
+      const input = screen.getByRole("radio", { name: /Plus/ });
+      await userEvent.click(input);
+
+      expect(waehleOption).not.toHaveBeenCalled();
+    });
   });
 
   test.todo("shows a clickable hint related to the disabled input");
@@ -131,6 +155,12 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
   [Variante.Plus]: { elterngeldbezug: 0, isDisabled: false as const },
   [Variante.Bonus]: { elterngeldbezug: 0, isDisabled: false as const },
   [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
+};
+
+const ANY_DISABLED_AUSWAHLMOEGLICHKEIT = {
+  isDisabled: true as const,
+  hintWhyDisabled: "",
+  elterngeldbezug: 0,
 };
 
 const ANY_PROPS = {

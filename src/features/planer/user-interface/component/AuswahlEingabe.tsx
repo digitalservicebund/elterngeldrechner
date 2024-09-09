@@ -40,7 +40,7 @@ export function AuswahlEingabe({
           RENDER_PROPERTIES[option];
         const infoIdentifier = baseInfoIndentifier + option;
         const isChecked = gewaehlteOption === option;
-        const checkThisOption = () => waehleOption(option);
+        const waehleDieseOption = () => !isDisabled && waehleOption(option);
 
         return (
           <div
@@ -74,9 +74,9 @@ export function AuswahlEingabe({
                 aria-describedby=""
                 name={legend}
                 value={option}
-                disabled={isDisabled}
+                aria-disabled={isDisabled}
                 checked={isChecked}
-                onChange={checkThisOption}
+                onChange={waehleDieseOption}
               />
               <span className="font-bold">{label}</span>
               {!!elterngeldbezug && (

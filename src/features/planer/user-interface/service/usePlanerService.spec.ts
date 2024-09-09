@@ -11,7 +11,6 @@ import {
   waehleOption,
   zaehleVerplantesKontingent,
 } from ".";
-import { Top } from "@/features/planer/domain/common/specification";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 import type { AppStore } from "@/redux";
@@ -229,7 +228,6 @@ const ANY_PLAN = {
   },
   errechneteElterngeldbezuege: {} as any,
   lebensmonate: {},
-  gueltigerPlan: Top,
 };
 
 const ANY_VERFUEGBARES_KONTINGENT = {

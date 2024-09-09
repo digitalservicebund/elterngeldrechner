@@ -1,3 +1,4 @@
+import { GueltigerPlan } from "@/features/planer/domain/plan/specification";
 import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
 import type {
@@ -35,10 +36,12 @@ export function waehleOption<A extends Ausgangslage>(
     lebensmonate: gewaehlteLebensmonate,
   };
 
-  return plan.gueltigerPlan.evaluate(gewaehlterPlan).mapOrElse(
-    () => Result.ok(gewaehlterPlan),
-    (violations) => Result.error(violations),
-  );
+  return GueltigerPlan<A>()
+    .evaluate(gewaehlterPlan)
+    .mapOrElse(
+      () => Result.ok(gewaehlterPlan),
+      (violations) => Result.error(violations),
+    );
 }
 
 if (import.meta.vitest) {
@@ -50,9 +53,15 @@ if (import.meta.vitest) {
     const { Lebensmonatszahlen } = await import(
       "@/features/planer/domain/Lebensmonatszahl"
     );
-    const { Specification, Top } = await import(
+    const { Specification } = await import(
       "@/features/planer/domain/common/specification"
     );
+
+    beforeEach(() => {
+      vi.mocked(GueltigerPlan).mockReturnValue(
+        Specification.fromPredicate("", () => true),
+      );
+    });
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
       const ausgangslage = {
@@ -88,7 +97,6 @@ if (import.meta.vitest) {
         ausgangslage,
         lebensmonate,
         errechneteElterngeldbezuege,
-        gueltigerPlan: Top,
       };
 
       const plan = waehleOption(
@@ -136,14 +144,12 @@ if (import.meta.vitest) {
     });
 
     it("forwards the violations if the resulting Plan is not gültig", () => {
-      const gueltigerPlan = Specification.fromPredicate(
-        "ungültig",
-        () => false,
+      vi.mocked(GueltigerPlan).mockReturnValue(
+        Specification.fromPredicate("ungültig", () => false),
       );
-      const plan = { ...ANY_PLAN, gueltigerPlan };
 
       const violations = waehleOption(
-        plan,
+        ANY_PLAN,
         ANY_LEBENSMONATSZAHL,
         ANY_ELTERNTEIL,
         ANY_AUSWAHLOPTION,
@@ -155,24 +161,23 @@ if (import.meta.vitest) {
       expect(violations).toEqual([{ message: "ungültig" }]);
     });
 
-    const monat = function (
-      gewaehlteOption: undefined,
-      elterngeldbezug: undefined,
-    ) {
+    vi.mock("@/features/planer/domain/plan/specification/GueltigerPlan");
+
+    function monat(gewaehlteOption: undefined, elterngeldbezug: undefined) {
       return {
         gewaehlteOption,
         elterngeldbezug,
         imMutterschutz: false as const,
       };
-    };
+    }
 
-    const bezuege = function (basis: number, plus: number, bonus: number) {
+    function bezuege(basis: number, plus: number, bonus: number) {
       return {
         [Variante.Basis]: basis,
         [Variante.Plus]: plus,
         [Variante.Bonus]: bonus,
       };
-    };
+    }
 
     const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
       [Elternteil.Eins]: bezuege(0, 0, 0),
@@ -194,7 +199,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
-      gueltigerPlan: Top,
     };
 
     const ANY_PSEUDONYME_TWO_ELTERNTEILE = {

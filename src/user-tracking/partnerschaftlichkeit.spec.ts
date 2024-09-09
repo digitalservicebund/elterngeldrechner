@@ -3,7 +3,6 @@ import { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 import {
   Elternteil,
   KeinElterngeld,
-  Top,
   Variante,
   type Auswahloption,
   type Lebensmonat,
@@ -147,7 +146,6 @@ const ANY_PLAN_WITH_ONE_ELTERNTEIL = {
   },
   errechneteElterngeldbezuege: {} as any,
   lebensmonate: {},
-  gueltigerPlan: Top,
 };
 
 const ANY_PLAN_WITH_TWO_ELTERNTEILE = {
@@ -161,5 +159,4 @@ const ANY_PLAN_WITH_TWO_ELTERNTEILE = {
   },
   errechneteElterngeldbezuege: {} as any,
   lebensmonate: {},
-  gueltigerPlan: Top,
 };

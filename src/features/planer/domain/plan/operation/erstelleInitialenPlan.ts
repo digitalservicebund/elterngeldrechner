@@ -4,19 +4,17 @@ import type {
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
-import { GueltigerPlan, Plan } from "@/features/planer/domain/plan";
+import { Plan } from "@/features/planer/domain/plan";
 
 export function erstelleInitialenPlan<A extends Ausgangslage>(
   ausgangslage: A,
   errechneteElterngeldbezuege: Elterngeldbezuege<ElternteileByAusgangslage<A>>,
 ): Plan<A> {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
-  const gueltigerPlan = GueltigerPlan<A>();
   return {
     ausgangslage,
     errechneteElterngeldbezuege,
     lebensmonate,
-    gueltigerPlan,
   };
 }
 

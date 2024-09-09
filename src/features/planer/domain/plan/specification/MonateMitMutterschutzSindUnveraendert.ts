@@ -182,7 +182,6 @@ if (import.meta.vitest) {
       },
       lebensmonate: {},
       errechneteElterngeldbezuege: {} as any,
-      gueltigerPlan: Specification.fromPredicate("", () => true),
     };
   });
 }

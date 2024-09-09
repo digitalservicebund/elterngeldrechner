@@ -73,9 +73,11 @@ if (import.meta.vitest) {
     const { Lebensmonatszahlen } = await import(
       "@/features/planer/domain/Lebensmonatszahl"
     );
-    const { Specification, Top } = await import(
-      "@/features/planer/domain/common/specification"
-    );
+    const { Result } = await import("@/features/planer/domain/common/Result");
+
+    beforeEach(() => {
+      vi.mocked(waehleOption).mockImplementation((plan) => Result.ok(plan));
+    });
 
     it("picks up the correct Elterngeldbezug for each Auswahlmöglichkeit", () => {
       const errechneteElterngeldbezuege = {
@@ -105,41 +107,36 @@ if (import.meta.vitest) {
     });
 
     it("creates a disabled Auswahlmöglichkeit including the violation as hint if the resulting Plan is ungültig for an Option", () => {
-      const ungueltigIfBasis = Specification.fromPredicate<Plan<Ausgangslage>>(
-        "Basiselterngeld kann nicht mehr ausgewählt werden.",
-        (plan) =>
-          plan.lebensmonate[2]?.[Elternteil.Zwei].gewaehlteOption !==
-          Variante.Basis,
+      vi.mocked(waehleOption).mockImplementation((plan, _, __, option) =>
+        option === Variante.Basis
+          ? Result.error([{ message: "ungültig" }])
+          : Result.ok(plan),
       );
 
-      const plan = {
-        ...ANY_PLAN,
-        gueltigerPlan: ungueltigIfBasis,
-        lebensmonate: {},
-      };
-
       const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(
-        plan,
+        ANY_PLAN,
         2,
         Elternteil.Zwei,
       );
 
       expect(auswahlmoeglichkeiten[Variante.Basis].isDisabled).toBe(true);
       expect(auswahlmoeglichkeiten[Variante.Basis].hintWhyDisabled).toBe(
-        "Basiselterngeld kann nicht mehr ausgewählt werden.",
+        "ungültig",
       );
       expect(auswahlmoeglichkeiten[Variante.Plus].isDisabled).toBe(false);
       expect(auswahlmoeglichkeiten[Variante.Bonus].isDisabled).toBe(false);
       expect(auswahlmoeglichkeiten[KeinElterngeld].isDisabled).toBe(false);
     });
 
-    const bezuege = function (basis: number, plus: number, bonus: number) {
+    vi.mock("@/features/planer/domain/plan/operation/waehleOption");
+
+    function bezuege(basis: number, plus: number, bonus: number) {
       return {
         [Variante.Basis]: basis,
         [Variante.Plus]: plus,
         [Variante.Bonus]: bonus,
       };
-    };
+    }
 
     const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
       [Elternteil.Eins]: bezuege(0, 0, 0),
@@ -164,7 +161,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
-      gueltigerPlan: Top,
     };
   });
 }

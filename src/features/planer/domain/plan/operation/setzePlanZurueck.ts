@@ -17,9 +17,6 @@ if (import.meta.vitest) {
   describe("setzte Plan zurück", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
-    const { Top } = await import(
-      "@/features/planer/domain/common/specification"
-    );
 
     it("sets the Lebensmonate back to the initial ones", () => {
       const lebensmonate = {
@@ -47,7 +44,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: {} as any,
       lebensmonate: {},
-      gueltigerPlan: Top,
     };
   });
 

@@ -41,9 +41,6 @@ if (import.meta.vitest) {
   describe("Nur ein Lebensmonat Basiselterngeld parallel", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
-    const { Top } = await import(
-      "@/features/planer/domain/common/specification"
-    );
 
     it("is satisfied if all Elternteile took only a single Lebensmonat Basiselterngeld in parallel", () => {
       const lebensmonate = {
@@ -165,7 +162,6 @@ if (import.meta.vitest) {
       },
       lebensmonate: {},
       errechneteElterngeldbezuege: {} as any,
-      gueltigerPlan: Top,
     };
 
     const LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS = {

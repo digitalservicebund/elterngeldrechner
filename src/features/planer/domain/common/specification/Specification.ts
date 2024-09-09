@@ -115,9 +115,8 @@ if (import.meta.vitest) {
     });
 
     describe("connect two specifications with 'and'", async () => {
-      const { Top, Bottom } = await import(
-        "@/features/planer/domain/common/specification"
-      );
+      const Top = Specification.fromPredicate("", () => true);
+      const Bottom = Specification.fromPredicate("", () => false);
 
       it("evaluates to satisfied if left and right are satisfied", () => {
         expect(Top.and(Top).asPredicate(null)).toBe(true);

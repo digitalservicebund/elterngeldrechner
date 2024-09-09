@@ -80,9 +80,6 @@ if (import.meta.vitest) {
     const { KeinElterngeld } = await import(
       "@/features/planer/domain/Auswahloption"
     );
-    const { Top } = await import(
-      "@/features/planer/domain/common/specification"
-    );
 
     it("is satisfied if nothing is planned yet", () => {
       const plan = { ...ANY_PLAN, lebensmonate: {} };
@@ -313,7 +310,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: {} as any,
       lebensmonate: {},
-      gueltigerPlan: Top,
     };
   });
 }

@@ -32,21 +32,21 @@ describe("partnerschaftlichkeit", () => {
     lebensmonate: Lebensmonat<Elternteil>[];
     expectedQuotient: number;
   }>([
-    // {
-    //   lebensmonate: [],
-    //   expectedQuotient: 0,
-    // },
-    // {
-    //   lebensmonate: [lebensmonat(KeinElterngeld, Variante.Basis)],
-    //   expectedQuotient: 0,
-    // },
-    // {
-    //   lebensmonate: [
-    //     lebensmonat(Variante.Plus, KeinElterngeld),
-    //     lebensmonat(Variante.Plus, undefined),
-    //   ],
-    //   expectedQuotient: 0,
-    // },
+    {
+      lebensmonate: [],
+      expectedQuotient: 0,
+    },
+    {
+      lebensmonate: [lebensmonat(KeinElterngeld, Variante.Basis)],
+      expectedQuotient: 0,
+    },
+    {
+      lebensmonate: [
+        lebensmonat(Variante.Plus, KeinElterngeld),
+        lebensmonat(Variante.Plus, undefined),
+      ],
+      expectedQuotient: 0,
+    },
     {
       lebensmonate: [lebensmonat(Variante.Basis, Variante.Basis)],
       expectedQuotient: 1,

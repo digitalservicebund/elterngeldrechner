@@ -17,24 +17,27 @@ import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 import type { AppStore } from "@/redux";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
-vi.mock("@/features/planer/domain/ausgangslage");
-vi.mock("@/features/planer/domain/lebensmonate");
-vi.mock("@/features/planer/domain/plan");
-vi.mock("@/user-tracking");
+vi.mock("@/features/planer/domain/plan/operation/erstelleInitialenPlan");
+vi.mock("@/features/planer/domain/plan/operation/waehleOption");
+vi.mock(
+  "@/features/planer/domain/plan/operation/aktualisiereElterngeldbezuege",
+);
+vi.mock("@/features/planer/domain/plan/operation/setzePlanZurueck");
+vi.mock(
+  "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent",
+);
+vi.mock(
+  "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent",
+);
+vi.mock("@/user-tracking/partnerschaftlichkeit");
 
 describe("use Planer service", () => {
   beforeEach(() => {
     vi.mocked(erstelleInitialenPlan).mockReturnValue(ANY_PLAN);
-    vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-      ANY_VERFUEGBARES_KONTINGENT,
-    );
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-      ANY_VERPLANTES_KONTINGENT,
-    );
-    vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
     vi.mocked(aktualisiereErrechneteElterngelbezuege).mockImplementation(
       (plan) => plan,
     );
+    vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
   });
 
   it("initially creates a plan", () => {

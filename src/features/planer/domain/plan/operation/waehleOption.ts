@@ -1,4 +1,4 @@
-import { GueltigerPlan } from "@/features/planer/domain/plan/specification";
+import { VorlaeufigGueltigerPlan } from "@/features/planer/domain/plan/specification";
 import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
 import type {
@@ -36,7 +36,7 @@ export function waehleOption<A extends Ausgangslage>(
     lebensmonate: gewaehlteLebensmonate,
   };
 
-  return GueltigerPlan<A>()
+  return VorlaeufigGueltigerPlan<A>()
     .evaluate(gewaehlterPlan)
     .mapOrElse(
       () => Result.ok(gewaehlterPlan),
@@ -58,7 +58,7 @@ if (import.meta.vitest) {
     );
 
     beforeEach(() => {
-      vi.mocked(GueltigerPlan).mockReturnValue(
+      vi.mocked(VorlaeufigGueltigerPlan).mockReturnValue(
         Specification.fromPredicate("", () => true),
       );
     });
@@ -144,7 +144,7 @@ if (import.meta.vitest) {
     });
 
     it("forwards the violations if the resulting Plan is not gültig", () => {
-      vi.mocked(GueltigerPlan).mockReturnValue(
+      vi.mocked(VorlaeufigGueltigerPlan).mockReturnValue(
         Specification.fromPredicate("ungültig", () => false),
       );
 
@@ -161,7 +161,9 @@ if (import.meta.vitest) {
       expect(violations).toEqual([{ message: "ungültig" }]);
     });
 
-    vi.mock("@/features/planer/domain/plan/specification/GueltigerPlan");
+    vi.mock(
+      "@/features/planer/domain/plan/specification/VorlaeufigGueltigerPlan",
+    );
 
     function monat(gewaehlteOption: undefined, elterngeldbezug: undefined) {
       return {

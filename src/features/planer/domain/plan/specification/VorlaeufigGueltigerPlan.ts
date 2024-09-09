@@ -5,7 +5,14 @@ import { MonateMitMutterschutzSindUnveraendert } from "./MonateMitMutterschutzSi
 import { NurEinLebensmonatBasisParallel } from "./NurEinenLebensmonatBasisParallel";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 
-export function GueltigerPlan<A extends Ausgangslage>() {
+/**
+ * Used for the validation while choosing Optionen in a Plan. It helps to
+ * prevent the Elternteile to create a plan with invalid combinations of Options
+ * etc.
+ * This excludes the final validation  part which can not be applied while still
+ * actively planning as it would block any Options to be chosen.
+ */
+export function VorlaeufigGueltigerPlan<A extends Ausgangslage>() {
   return MonateMitMutterschutzSindUnveraendert<A>()
     .and(NurEinLebensmonatBasisParallel<A>())
     .and(KontingentWurdeEingehalten<A>())

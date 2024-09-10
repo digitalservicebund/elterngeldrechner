@@ -65,7 +65,7 @@ export function LebensmonatDetails<E extends Elternteil>({
     >
       <summary
         className={classNames(
-          "relative py-6 hover:cursor-pointer hover:bg-off-white",
+          "relative py-6 hover:bg-off-white",
           gridTemplateClassName,
         )}
         data-testid="summary"

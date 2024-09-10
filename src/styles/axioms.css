@@ -5,3 +5,11 @@
   vertical-align: -0.3em;
   fill: currentColor;
 }
+
+#egr-root button,
+input,
+select,
+label,
+summary {
+  cursor: pointer;
+}

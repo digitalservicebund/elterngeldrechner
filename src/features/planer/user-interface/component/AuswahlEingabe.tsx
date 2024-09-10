@@ -58,6 +58,7 @@ export function AuswahlEingabe({
             <label
               className={classNames(
                 "p-9 col-start-2 flex min-h-56 max-w-[25ch] grow items-center justify-center rounded bg-Basis p-8 text-center",
+                "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
                 { "!bg-grey !text-black": isDisabled },
                 { "hover:cursor-pointer hover:underline": !isDisabled },
                 { [checkedClassName]: isChecked && !isDisabled },
@@ -66,7 +67,7 @@ export function AuswahlEingabe({
             >
               <input
                 type="radio"
-                className="appearance-none focus:outline-none"
+                className="appearance-none focus:border-none focus:outline-none"
                 aria-describedby=""
                 name={legend}
                 value={option}

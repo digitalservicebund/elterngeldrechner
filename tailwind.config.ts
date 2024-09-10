@@ -62,6 +62,11 @@ export default {
        * rather relative values and added with care.
        */
     },
+    outlineOffset: {
+      2: "0.125rem",
+      4: "0.25rem",
+      6: "0.375rem",
+    },
     spacing: {
       0: "0",
       1: "0.0625rem",

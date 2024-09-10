@@ -1,4 +1,4 @@
-import { ReactNode, useId } from "react";
+import { ReactNode } from "react";
 import classNames from "classnames";
 import { formatAsCurrency } from "@/utils/locale-formatting";
 import {
@@ -27,8 +27,6 @@ export function AuswahlEingabe({
   showDisabledHintRight,
   className,
 }: Props): ReactNode {
-  const baseInfoIndentifier = useId();
-
   return (
     <fieldset className={classNames("flex flex-col gap-10", className)}>
       <legend className="sr-only">{legend}</legend>
@@ -38,7 +36,7 @@ export function AuswahlEingabe({
           auswahlmoeglichkeiten[option];
         const { label, className, checkedClassName } =
           RENDER_PROPERTIES[option];
-        const infoIdentifier = baseInfoIndentifier + option;
+        const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
         const isChecked = gewaehlteOption === option;
         const waehleDieseOption = () => !isDisabled && waehleOption(option);
 
@@ -53,10 +51,8 @@ export function AuswahlEingabe({
               className={classNames("min-w-24", {
                 invisible: !hintWhyDisabled,
               })}
-              info={{
-                id: infoIdentifier,
-                text: hintWhyDisabled,
-              }}
+              ariaLabelForDialog={infoAriaLabel}
+              info={hintWhyDisabled}
             />
 
             <label

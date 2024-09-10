@@ -105,11 +105,7 @@ describe("AuswahlEingabe", () => {
     it("marks radio button as disabled but keeps it focusable", () => {
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
-        [Variante.Plus]: {
-          isDisabled: true as const,
-          hintWhyDisabled: "test hint text",
-          elterngeldbezug: 0,
-        },
+        [Variante.Plus]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
       };
 
       render(
@@ -145,9 +141,40 @@ describe("AuswahlEingabe", () => {
 
       expect(waehleOption).not.toHaveBeenCalled();
     });
-  });
 
-  test.todo("shows a clickable hint related to the disabled input");
+    it("povides an info dialog with information why it is disabled", async () => {
+      const auswahlmoeglichkeiten = {
+        ...ANY_AUSWAHLMOEGLICHKEITEN,
+        [Variante.Plus]: {
+          isDisabled: true as const,
+          hintWhyDisabled: "irgendein Grund wieso nicht verfügbar",
+          elterngeldbezug: 0,
+        },
+      };
+
+      render(
+        <AuswahlEingabe
+          {...ANY_PROPS}
+          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+        />,
+      );
+
+      const infoButton = screen.getByRole("button", {
+        name: "Öffne Informationen wieso ElterngeldPlus nicht verfügbar ist",
+      });
+
+      expect(infoButton).toBeVisible();
+
+      await userEvent.click(infoButton);
+
+      expect(
+        screen.queryByRole("dialog", {
+          name: "Informationen wieso ElterngeldPlus nicht verfügbar ist",
+          description: "irgendein Grund wieso nicht verfügbar",
+        }),
+      );
+    });
+  });
 });
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {

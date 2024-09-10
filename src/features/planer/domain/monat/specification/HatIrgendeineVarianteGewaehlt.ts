@@ -2,7 +2,7 @@ import { Specification } from "@/features/planer/domain/common/specification";
 import { isVariante } from "@/features/planer/domain/Variante";
 import { Monat } from "@/features/planer/domain/monat/Monat";
 
-export const HatIrgendeineOptionGewaehlt = Specification.fromPredicate<Monat>(
+export const HatIrgendeineVarianteGewaehlt = Specification.fromPredicate<Monat>(
   "Monat hat keine Option gewählt",
   (monat) => isVariante(monat.gewaehlteOption),
 );
@@ -10,7 +10,7 @@ export const HatIrgendeineOptionGewaehlt = Specification.fromPredicate<Monat>(
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("hat irgendeine Option gewählt", async () => {
+  describe("hat irgendeine Variante gewählt", async () => {
     const { Variante } = await import("@/features/planer/domain/Variante");
     const { MONAT_MIT_MUTTERSCHUTZ } = await import(
       "@/features/planer/domain/monat/Monat"
@@ -21,7 +21,7 @@ if (import.meta.vitest) {
 
     it("is always satisfied for Monat im Mutterschutz", () => {
       expect(
-        HatIrgendeineOptionGewaehlt.asPredicate(MONAT_MIT_MUTTERSCHUTZ),
+        HatIrgendeineVarianteGewaehlt.asPredicate(MONAT_MIT_MUTTERSCHUTZ),
       ).toBe(true);
     });
 
@@ -30,7 +30,7 @@ if (import.meta.vitest) {
       (gewaehlteOption) => {
         const monat = { gewaehlteOption, imMutterschutz: false as const };
 
-        expect(HatIrgendeineOptionGewaehlt.asPredicate(monat)).toBe(true);
+        expect(HatIrgendeineVarianteGewaehlt.asPredicate(monat)).toBe(true);
       },
     );
 
@@ -40,7 +40,7 @@ if (import.meta.vitest) {
         imMutterschutz: false as const,
       };
 
-      expect(HatIrgendeineOptionGewaehlt.asPredicate(monat)).toBe(false);
+      expect(HatIrgendeineVarianteGewaehlt.asPredicate(monat)).toBe(false);
     });
 
     it("is unsatisfied if Monat has no Option chosen at all", () => {
@@ -49,7 +49,7 @@ if (import.meta.vitest) {
         imMutterschutz: false as const,
       };
 
-      expect(HatIrgendeineOptionGewaehlt.asPredicate(monat)).toBe(false);
+      expect(HatIrgendeineVarianteGewaehlt.asPredicate(monat)).toBe(false);
     });
   });
 }

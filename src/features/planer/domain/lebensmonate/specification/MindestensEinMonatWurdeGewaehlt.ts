@@ -1,5 +1,5 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { HatIrgendeineOptionGewaehlt } from "@/features/planer/domain/monat";
+import { HatIrgendeineVarianteGewaehlt } from "@/features/planer/domain/monat";
 import { Specification } from "@/features/planer/domain/common/specification";
 import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 
@@ -9,7 +9,7 @@ export const MindestensEinMonatWurdeGewaehlt =
     (lebensmonate) =>
       Object.values(lebensmonate)
         .flatMap(Object.values)
-        .some(HatIrgendeineOptionGewaehlt.asPredicate),
+        .some(HatIrgendeineVarianteGewaehlt.asPredicate),
   );
 
 if (import.meta.vitest) {

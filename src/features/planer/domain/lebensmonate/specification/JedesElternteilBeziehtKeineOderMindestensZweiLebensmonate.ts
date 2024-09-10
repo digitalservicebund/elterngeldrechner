@@ -2,7 +2,7 @@ import { Variante } from "@/features/planer/domain/Variante";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import {
-  HatIrgendeineOptionGewaehlt,
+  HatIrgendeineVarianteGewaehlt,
   type Monat,
 } from "@/features/planer/domain/monat";
 import { Specification } from "@/features/planer/domain/common/specification";
@@ -26,7 +26,7 @@ export const JedesElternteilBeziehtKeineOderMindestensZweiLebensmonate =
 
       return Object.values(monateProElternteil).every(
         (monate) =>
-          monate.filter(HatIrgendeineOptionGewaehlt.asPredicate).length !== 1,
+          monate.filter(HatIrgendeineVarianteGewaehlt.asPredicate).length !== 1,
       );
     },
   );

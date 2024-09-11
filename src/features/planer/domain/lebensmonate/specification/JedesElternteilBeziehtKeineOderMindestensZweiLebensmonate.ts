@@ -132,7 +132,7 @@ if (import.meta.vitest) {
       ).toBe(true);
     });
 
-    function monat(gewaehlteOption?: Auswahloption) {
+    function monat(gewaehlteOption: Auswahloption | undefined) {
       return { gewaehlteOption, imMutterschutz: false as const };
     }
   });

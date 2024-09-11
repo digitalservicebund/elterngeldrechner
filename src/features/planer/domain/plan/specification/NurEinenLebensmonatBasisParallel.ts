@@ -41,6 +41,9 @@ if (import.meta.vitest) {
   describe("Nur ein Lebensmonat Basiselterngeld parallel", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
+    const { MONAT_MIT_MUTTERSCHUTZ } = await import(
+      "@/features/planer/domain/monat"
+    );
 
     it("is satisfied if all Elternteile took only a single Lebensmonat Basiselterngeld in parallel", () => {
       const lebensmonate = {
@@ -137,6 +140,22 @@ if (import.meta.vitest) {
       const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
 
       expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(true);
+    });
+
+    it("is unsatisfied if taken Basiselterngeld in parallel to Mutterschutz more than once", () => {
+      const lebensmonate = {
+        1: {
+          [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+          [Elternteil.Zwei]: monat(Variante.Basis),
+        },
+        2: {
+          [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+          [Elternteil.Zwei]: monat(Variante.Basis),
+        },
+      };
+      const plan = { ...ANY_PLAN, lebensmonate };
+
+      expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(false);
     });
 
     function monat(gewaehlteOption: Auswahloption) {

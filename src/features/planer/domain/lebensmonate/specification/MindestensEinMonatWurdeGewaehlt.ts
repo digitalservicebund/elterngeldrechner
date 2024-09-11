@@ -72,7 +72,7 @@ if (import.meta.vitest) {
       );
     });
 
-    function monat(gewaehlteOption?: Auswahloption) {
+    function monat(gewaehlteOption: Auswahloption | undefined) {
       return { gewaehlteOption, imMutterschutz: false as const };
     }
   });

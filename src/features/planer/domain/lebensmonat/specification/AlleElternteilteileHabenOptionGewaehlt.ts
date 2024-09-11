@@ -34,20 +34,17 @@ if (import.meta.vitest) {
     const { Auswahloptionen, KeinElterngeld } = await import(
       "@/features/planer/domain/Auswahloption"
     );
+    const { MONAT_MIT_MUTTERSCHUTZ } = await import(
+      "@/features/planer/domain/monat"
+    );
 
     it.each(Auswahloptionen)(
       "is satisfied if %s is expected and all Elternteile have it chosen",
       (option) => {
         const specification = AlleElternteileHabenOptionGewaehlt(option);
         const lebensmonat = {
-          [Elternteil.Eins]: {
-            gewaehlteOption: option,
-            imMutterschutz: false as const,
-          },
-          [Elternteil.Zwei]: {
-            gewaehlteOption: option,
-            imMutterschutz: false as const,
-          },
+          [Elternteil.Eins]: monat(option),
+          [Elternteil.Zwei]: monat(option),
         };
 
         expect(specification.asPredicate(lebensmonat)).toBe(true);
@@ -59,14 +56,8 @@ if (import.meta.vitest) {
       (option) => {
         const specification = AlleElternteileHabenOptionGewaehlt(option);
         const lebensmonat = {
-          [Elternteil.Eins]: {
-            gewaehlteOption: undefined,
-            imMutterschutz: false as const,
-          },
-          [Elternteil.Zwei]: {
-            gewaehlteOption: undefined,
-            imMutterschutz: false as const,
-          },
+          [Elternteil.Eins]: monat(undefined),
+          [Elternteil.Zwei]: monat(undefined),
         };
 
         expect(specification.asPredicate(lebensmonat)).toBe(false);
@@ -84,18 +75,26 @@ if (import.meta.vitest) {
       ({ expected, eins, zwei }) => {
         const specification = AlleElternteileHabenOptionGewaehlt(expected);
         const lebensmonat = {
-          [Elternteil.Eins]: {
-            gewaehlteOption: eins,
-            imMutterschutz: false as const,
-          },
-          [Elternteil.Zwei]: {
-            gewaehlteOption: zwei,
-            imMutterschutz: false as const,
-          },
+          [Elternteil.Eins]: monat(eins),
+          [Elternteil.Zwei]: monat(zwei),
         };
 
         expect(specification.asPredicate(lebensmonat)).toBe(false);
       },
     );
+
+    it("is satisfied if one Elternteil is im Mutterschutz and the other chose Basiselterngeld", () => {
+      const specification = AlleElternteileHabenOptionGewaehlt(Variante.Basis);
+      const lebensmonat = {
+        [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+        [Elternteil.Zwei]: monat(Variante.Basis),
+      };
+
+      expect(specification.asPredicate(lebensmonat)).toBe(true);
+    });
+
+    function monat(gewaehlteOption: Auswahloption | undefined) {
+      return { gewaehlteOption, imMutterschutz: false as const };
+    }
   });
 }

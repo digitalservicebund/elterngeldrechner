@@ -12,7 +12,7 @@ describe("Elterngeldbezugsanzeige", () => {
     render(<Elterngeldbezugsanzeige imMutterschutz />);
 
     expect(
-      screen.queryByRole("button", { name: "Zugehörige Information zeigen" }),
+      screen.queryByRole("button", { name: "Öffne zusätzliche Informationen" }),
     ).toBeVisible();
   });
 });

@@ -26,7 +26,7 @@ export function InfoDialog({
 
   const ariaLabelForOpenButton = ariaLabelForDialog
     ? `Öffne ${ariaLabelForDialog}`
-    : `Öffne zustätzliche Informationen`;
+    : `Öffne zusätzliche Informationen`;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openButtonElement = useRef<HTMLButtonElement>(null);
@@ -38,13 +38,16 @@ export function InfoDialog({
     setTimeout(() => dialogContentElement.current?.focus());
   }
 
-  function closeModal() {
+  function closeModal(restoreFocus: boolean) {
     setIsModalOpen(false);
-    openButtonElement.current?.focus();
+    restoreFocus && openButtonElement.current?.focus();
   }
 
   const ref = useDetectClickOutside({
-    onTriggered: closeModal,
+    onTriggered: () => {
+      // This gets triggered a lot due to events on the whole page.
+      isModalOpen && closeModal(false);
+    },
   });
 
   function preventTabOut(event: any) {
@@ -105,7 +108,7 @@ export function InfoDialog({
         <button
           className={nsp("info-dialog-box__button")}
           type="button"
-          onClick={closeModal}
+          onClick={() => closeModal(true)}
           aria-label="Information schließen"
           onKeyDown={preventTabOut}
         >

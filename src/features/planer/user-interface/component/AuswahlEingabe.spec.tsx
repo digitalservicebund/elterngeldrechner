@@ -10,7 +10,7 @@ describe("AuswahlEingabe", () => {
   it("renders a fieldset with given legend", () => {
     render(<AuswahlEingabe {...ANY_PROPS} legend="test legend" />);
 
-    const fieldset = screen.queryByRole("group", { name: "test legend" });
+    const fieldset = screen.queryByRole("radiogroup", { name: "test legend" });
 
     expect(fieldset).toBeVisible();
   });
@@ -30,25 +30,39 @@ describe("AuswahlEingabe", () => {
       />,
     );
 
-    const basisInput = screen.queryByRole("radio", { name: /^Basis.*10/ });
-    const plusInput = screen.queryByRole("radio", { name: /^Plus.*20/ });
-    const bonusInput = screen.queryByRole("radio", { name: /^Bonus.*30/ });
-    const keinElterngeldInput = screen.queryByRole("radio", {
-      name: /^kein Elterngeld$/,
-    });
+    expect(
+      screen.queryByRole("radio", {
+        name: "Basiselterngeld mit 10 €",
+      }),
+    ).toBeVisible();
 
-    expect(basisInput).toBeVisible();
-    expect(plusInput).toBeVisible();
-    expect(bonusInput).toBeVisible();
-    expect(keinElterngeldInput).toBeVisible();
+    expect(
+      screen.queryByRole("radio", {
+        name: "ElterngeldPlus mit 20 €",
+      }),
+    ).toBeVisible();
+
+    expect(
+      screen.getByRole("radio", {
+        name: "Partnerschaftsbonus mit 30 €",
+      }),
+    ).toBeVisible();
+
+    expect(
+      screen.queryByRole("radio", {
+        name: "kein Elterngeld",
+      }),
+    ).toBeVisible();
   });
 
   it("renders the radios in a fixed order", () => {
     render(<AuswahlEingabe {...ANY_PROPS} />);
 
-    const basisInput = screen.getByRole("radio", { name: /Basis/ });
-    const plusInput = screen.getByRole("radio", { name: /Plus/ });
-    const bonusInput = screen.getByRole("radio", { name: /Bonus/ });
+    const basisInput = screen.getByRole("radio", { name: /Basiselterngeld/ });
+    const plusInput = screen.getByRole("radio", { name: /ElterngeldPlus/ });
+    const bonusInput = screen.getByRole("radio", {
+      name: /Partnerschaftsbonus/,
+    });
     const keinElterngeldInput = screen.getByRole("radio", {
       name: /kein Elterngeld/,
     });
@@ -65,9 +79,9 @@ describe("AuswahlEingabe", () => {
   });
 
   it.each([
-    { gewaehlteOption: Variante.Basis, label: /Basis/ },
-    { gewaehlteOption: Variante.Plus, label: /Plus/ },
-    { gewaehlteOption: Variante.Bonus, label: /Bonus/ },
+    { gewaehlteOption: Variante.Basis, label: /Basiselterngeld/ },
+    { gewaehlteOption: Variante.Plus, label: /ElterngeldPlus/ },
+    { gewaehlteOption: Variante.Bonus, label: /Partnerschaftsbonus/ },
     { gewaehlteOption: KeinElterngeld, label: /kein Elterngeld/ },
   ])(
     "checks the gewählte Option $gewaehlteOption initially",
@@ -83,9 +97,9 @@ describe("AuswahlEingabe", () => {
   );
 
   it.each([
-    { label: /Basis/, option: Variante.Basis },
-    { label: /Plus/, option: Variante.Plus },
-    { label: /Bonus/, option: Variante.Bonus },
+    { label: /Basiselterngeld/, option: Variante.Basis },
+    { label: /ElterngeldPlus/, option: Variante.Plus },
+    { label: /Partnerschaftsbonus/, option: Variante.Bonus },
     { label: /kein Elterngeld/, option: KeinElterngeld },
   ])(
     "calls the callback with Option $option when checking the input for $label",
@@ -147,7 +161,7 @@ describe("AuswahlEingabe", () => {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
         [Variante.Plus]: {
           isDisabled: true as const,
-          hintWhyDisabled: "irgendein Grund wieso nicht verfügbar",
+          hintWhyDisabled: "ist nicht mehr verfügbar",
           elterngeldbezug: 0,
         },
       };
@@ -173,6 +187,32 @@ describe("AuswahlEingabe", () => {
           description: "irgendein Grund wieso nicht verfügbar",
         }),
       );
+    });
+
+    it("provides the disabled hint as description property and links to info dialog", () => {
+      const auswahlmoeglichkeiten = {
+        ...ANY_AUSWAHLMOEGLICHKEITEN,
+        [Variante.Plus]: {
+          isDisabled: true as const,
+          hintWhyDisabled: "ist nicht mehr verfügbar",
+          elterngeldbezug: 0,
+        },
+      };
+
+      render(
+        <AuswahlEingabe
+          {...ANY_PROPS}
+          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+        />,
+      );
+
+      const input = screen.queryByRole("radio", {
+        name: /ElterngeldPlus/,
+        description: "ist nicht mehr verfügbar",
+      });
+
+      expect(input).toBeVisible();
+      expect(input).toHaveAttribute("aria-details");
     });
   });
 });

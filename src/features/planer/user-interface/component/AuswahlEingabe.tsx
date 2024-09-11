@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import classNames from "classnames";
 import { formatAsCurrency } from "@/utils/locale-formatting";
 import {
@@ -7,6 +7,7 @@ import {
   type Auswahlmoeglichkeiten,
   type Auswahloption,
   Auswahloptionen,
+  type Elterngeldbezug,
 } from "@/features/planer/user-interface/service";
 import { InfoDialog } from "@/components/molecules/info-dialog";
 
@@ -27,8 +28,13 @@ export function AuswahlEingabe({
   showDisabledHintRight,
   className,
 }: Props): ReactNode {
+  const baseIdentifier = useId();
+
   return (
-    <fieldset className={classNames("flex flex-col gap-10", className)}>
+    <fieldset
+      className={classNames("flex flex-col gap-10", className)}
+      role="radiogroup"
+    >
       <legend className="sr-only">{legend}</legend>
 
       {Auswahloptionen.sort(sortByAuswahloption).map((option) => {
@@ -36,7 +42,17 @@ export function AuswahlEingabe({
           auswahlmoeglichkeiten[option];
         const { label, className, checkedClassName } =
           RENDER_PROPERTIES[option];
+
+        const infoIdentifier = `${baseIdentifier}-info-${option}`;
         const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
+
+        const inputIdentifier = `${baseIdentifier}-input-${option}`;
+        const inputDescriptionIdentifier = `${baseIdentifier}-input-description-${option}`;
+        const inputAriaLabel = composeLabelForAuswahloption(
+          option,
+          elterngeldbezug,
+        );
+
         const isChecked = gewaehlteOption === option;
         const waehleDieseOption = () => !isDisabled && waehleOption(option);
 
@@ -48,6 +64,7 @@ export function AuswahlEingabe({
             })}
           >
             <InfoDialog
+              id={infoIdentifier}
               className={classNames("min-w-24", {
                 invisible: !hintWhyDisabled,
               })}
@@ -55,36 +72,66 @@ export function AuswahlEingabe({
               info={hintWhyDisabled}
             />
 
-            <label
+            <div
               className={classNames(
-                "p-9 col-start-2 flex min-h-56 max-w-[25ch] grow items-center justify-center rounded bg-Basis p-8 text-center",
+                "col-start-2 max-w-[25ch] grow rounded",
                 "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
-                { "!bg-grey !text-black": isDisabled },
-                { "hover:cursor-pointer hover:underline": !isDisabled },
-                { [checkedClassName]: isChecked && !isDisabled },
-                className,
               )}
             >
+              <label
+                className={classNames(
+                  "flex min-h-56 items-center justify-center rounded bg-Basis p-8 text-center",
+                  { "cursor-default !bg-grey !text-black": isDisabled },
+                  { "hover:underline": !isDisabled },
+                  { [checkedClassName]: isChecked && !isDisabled },
+                  className,
+                )}
+                htmlFor={inputIdentifier}
+              >
+                <span aria-hidden>
+                  <span className="font-bold">{label}</span>
+                  {!!elterngeldbezug && (
+                    <>&nbsp;{formatAsCurrency(elterngeldbezug)}</>
+                  )}
+                </span>
+
+                <span
+                  id={inputDescriptionIdentifier}
+                  className="sr-only"
+                  aria-hidden
+                >
+                  {hintWhyDisabled}
+                </span>
+              </label>
+
               <input
+                id={inputIdentifier}
                 type="radio"
-                className="appearance-none focus:border-none focus:outline-none"
-                aria-describedby=""
+                className="absolute appearance-none opacity-0 focus:border-none focus:outline-none"
                 name={legend}
                 value={option}
-                aria-disabled={isDisabled}
                 checked={isChecked}
                 onChange={waehleDieseOption}
+                aria-disabled={isDisabled}
+                aria-label={inputAriaLabel}
+                aria-describedby={inputDescriptionIdentifier}
+                aria-details={infoIdentifier}
               />
-              <span className="font-bold">{label}</span>
-              {!!elterngeldbezug && (
-                <>&nbsp;{formatAsCurrency(elterngeldbezug)}</>
-              )}
-            </label>
+            </div>
           </div>
         );
       })}
     </fieldset>
   );
+}
+
+function composeLabelForAuswahloption(
+  option: Auswahloption,
+  elterngeldbezug: Elterngeldbezug,
+): string {
+  return elterngeldbezug
+    ? `${option} mit ${formatAsCurrency(elterngeldbezug)}`
+    : option;
 }
 
 const SHARED_CHECKED_CLASS_NAME = "ring-4";

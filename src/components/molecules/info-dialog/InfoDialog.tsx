@@ -11,6 +11,7 @@ interface Props {
   readonly isLarge?: boolean;
   readonly isMonatsplanner?: boolean;
   readonly isElternteilOne?: boolean;
+  readonly id?: string;
   readonly className?: string;
 }
 
@@ -20,6 +21,7 @@ export function InfoDialog({
   isLarge,
   isMonatsplanner,
   isElternteilOne,
+  id,
   className,
 }: Props) {
   const dialogContentIdentifier = useId();
@@ -67,6 +69,7 @@ export function InfoDialog({
       ref={ref}
     >
       <button
+        id={id}
         className={classNames(
           nsp("info-dialog__button"),
           isMonatsplanner && nsp("info-dialog__button--monatsplanner"),

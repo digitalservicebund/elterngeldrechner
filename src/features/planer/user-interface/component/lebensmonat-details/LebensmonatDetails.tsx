@@ -1,7 +1,5 @@
 import { Fragment, ReactNode, useId } from "react";
 import classNames from "classnames";
-import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
-import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import {
   GRID_TEMPLATE_CLASS_NAMES,
   PLACE_ITEM_CLASS_NAMES,
@@ -118,20 +116,6 @@ export function LebensmonatDetails<E extends Elternteil>({
               />
             </Fragment>
           ))}
-
-        <ExpandMoreIcon
-          className={classNames(
-            TOGGLE_STATE_ICON_CLASS_NAME,
-            "group-open:hidden",
-          )}
-        />
-
-        <ExpandLessIcon
-          className={classNames(
-            TOGGLE_STATE_ICON_CLASS_NAME,
-            "hidden group-open:block",
-          )}
-        />
       </summary>
 
       <div className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}>
@@ -187,7 +171,7 @@ function composeDescription<E extends Elternteil>(
   ).every(([, monat]) => monat.gewaehlteOption === undefined);
 
   return keinElternteilHatEineAuswahlGetroffen
-    ? "noch keine Auswahl getätigt"
+    ? "Noch keine Auswahl getätigt."
     : listeMonateAuf(lebensmonat)
         .map(([elternteil, monat]) =>
           composeDescriptionForAuswahl(
@@ -195,7 +179,8 @@ function composeDescription<E extends Elternteil>(
             pseudonymeDerElternteile[elternteil],
           ),
         )
-        .join(" - ");
+        .join(". ")
+        .concat(".");
 }
 
 function composeDescriptionForAuswahl(monat: Monat, pseudonym: string): string {
@@ -223,6 +208,3 @@ const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
   [Elternteil.Eins]: 1,
   [Elternteil.Zwei]: 2,
 };
-
-const TOGGLE_STATE_ICON_CLASS_NAME =
-  "min-h-24 min-w-24 absolute right-8 top-1/2 -translate-y-1/2";

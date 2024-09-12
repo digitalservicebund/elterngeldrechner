@@ -27,7 +27,7 @@ describe("LebensmonateDetails", () => {
 
       expect(
         screen.getByRole("group").querySelector("summary"),
-      ).toHaveAccessibleDescription(/^noch keine Auswahl getätigt/);
+      ).toHaveAccessibleDescription(/^Noch keine Auswahl getätigt./);
     });
 
     it("lists the Elternteile with their Pseudonym, chosen Option and elterngeldbezug if one Elternteil made a choice", () => {
@@ -51,7 +51,7 @@ describe("LebensmonateDetails", () => {
       expect(
         screen.getByRole("group").querySelector("summary"),
       ).toHaveAccessibleDescription(
-        /^Jane hat noch keine Auswahl getroffen - John bezieht ElterngeldPlus und erhält 900\u00A0€/,
+        /^Jane hat noch keine Auswahl getroffen. John bezieht ElterngeldPlus und erhält 900\u00A0€\./,
       );
     });
 
@@ -76,7 +76,7 @@ describe("LebensmonateDetails", () => {
       expect(
         screen.getByRole("group").querySelector("summary"),
       ).toHaveAccessibleDescription(
-        /^Jane bezieht kein Elterngeld - John bezieht ElterngeldPlus und erhält 900\u00A0€/,
+        /^Jane bezieht kein Elterngeld\. John bezieht ElterngeldPlus und erhält 900\u00A0€\./,
       );
     });
 
@@ -98,7 +98,7 @@ describe("LebensmonateDetails", () => {
 
       expect(
         screen.getByRole("group").querySelector("summary"),
-      ).toHaveAccessibleDescription(/^Jane ist im Mutterschutz/);
+      ).toHaveAccessibleDescription(/^Jane ist im Mutterschutz\./);
     });
 
     it("includes a reference to the Zeitraum discription of the Lebensmonat", () => {

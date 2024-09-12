@@ -8,6 +8,22 @@ type Props = {
 };
 
 export function ZeitraumLabel({ zeitraum, id, className }: Props): ReactNode {
+  const shortVisualLabel = composeShortVisualLabel(zeitraum);
+  const longReadOutLabel = composeLongReadOutLabel(zeitraum);
+
+  return (
+    <span
+      id={id}
+      className={className}
+      aria-label={longReadOutLabel}
+      data-testid="label"
+    >
+      {shortVisualLabel}
+    </span>
+  );
+}
+
+function composeShortVisualLabel(zeitraum: Zeitraum): string {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
@@ -23,11 +39,24 @@ export function ZeitraumLabel({ zeitraum, id, className }: Props): ReactNode {
     year: "numeric",
   });
 
-  const textContent = `Zeitraum: ${formattedFrom} bis ${formattedTo}`;
+  return `Zeitraum: ${formattedFrom} bis ${formattedTo}`;
+}
 
-  return (
-    <span id={id} className={className}>
-      {textContent}
-    </span>
-  );
+function composeLongReadOutLabel(zeitraum: Zeitraum): string {
+  const { from, to } = zeitraum;
+  const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
+
+  const formattedFrom = from.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "long",
+    year: isSpanningTwoYears ? "numeric" : undefined,
+  });
+
+  const formattedTo = to.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  return `Zeitraum vom ${formattedFrom} bis zum ${formattedTo}`;
 }

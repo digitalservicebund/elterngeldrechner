@@ -26,6 +26,7 @@ export {
   Lebensmonatszahlen,
   LetzteLebensmonatszahl,
 } from "./Lebensmonatszahl";
+export { type Monat } from "./monat";
 export {
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,

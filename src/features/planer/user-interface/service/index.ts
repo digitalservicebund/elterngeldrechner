@@ -18,6 +18,7 @@ export {
   type Lebensmonatszahl,
   Lebensmonatszahlen,
   LetzteLebensmonatszahl,
+  type Monat,
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,

@@ -17,7 +17,7 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
   className,
 }: Props<E>): ReactNode {
   return (
-    <div className={classNames("flex justify-evenly items-center", className)}>
+    <div className={classNames("flex items-center justify-evenly", className)}>
       {listePseudonymeAuf(pseudonymeDerElternteile)
         .sort(sortByElternteilKey)
         .map(([elternteil, pseudonym]) => (
@@ -38,5 +38,5 @@ function sortByElternteilKey(
 
 const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
   [Elternteil.Eins]: 1,
-  [Elternteil.Zwei]: 1,
+  [Elternteil.Zwei]: 2,
 };

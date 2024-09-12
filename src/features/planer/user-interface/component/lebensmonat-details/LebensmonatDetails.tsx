@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from "react";
+import { Fragment, ReactNode, useId } from "react";
 import classNames from "classnames";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
@@ -25,7 +25,9 @@ import {
   type PseudonymeDerElternteile,
   berechneZeitraumFuerLebensmonat,
   AlleElternteileHabenBonusGewaehlt,
+  type Monat,
 } from "@/features/planer/user-interface/service";
+import { formatAsCurrency } from "@/utils/locale-formatting";
 
 interface Props<E extends Elternteil> {
   readonly lebensmonatszahl: Lebensmonatszahl;
@@ -49,6 +51,7 @@ export function LebensmonatDetails<E extends Elternteil>({
   const anzahlElternteile = Object.keys(lebensmonat).length;
   const gridTemplateClassName = GRID_TEMPLATE_CLASS_NAMES[anzahlElternteile];
 
+  const zeitraumLabelIdentifier = useId();
   const zeitraum = berechneZeitraumFuerLebensmonat(
     geburtsdatumDesKindes,
     lebensmonatszahl,
@@ -57,27 +60,40 @@ export function LebensmonatDetails<E extends Elternteil>({
   const isBonusHintVisible =
     AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
 
+  const descriptionIdentifier = useId();
+  const description = composeDescription(lebensmonat, pseudonymeDerElternteile);
+
+  const labelIdentifier = useId();
+
   return (
     <details
       className={classNames("group open:bg-off-white", className)}
       name="Lebensmonate"
-      aria-label={`${lebensmonatszahl}. Lebensmonat`}
+      aria-labelledby={labelIdentifier}
     >
       <summary
         className={classNames(
-          "relative py-6 hover:bg-off-white",
+          "relative py-6 hover:bg-off-white focus:bg-off-white",
           gridTemplateClassName,
         )}
-        data-testid="summary"
+        aria-describedby={classNames(
+          descriptionIdentifier,
+          zeitraumLabelIdentifier,
+        )}
       >
+        <span id={descriptionIdentifier} className="sr-only" aria-hidden>
+          {description}
+        </span>
+
         <span
+          id={labelIdentifier}
           className={classNames(
             "self-center text-center font-bold",
             PlACE_ITEM_MIDDLE_CLASS_NAME,
           )}
+          aria-label={`${lebensmonatszahl}. Lebensmonat`}
         >
           {lebensmonatszahl}
-          <span className="sr-only">. Lebensmonat</span>
         </span>
 
         {listeMonateAuf(lebensmonat)
@@ -91,12 +107,14 @@ export function LebensmonatDetails<E extends Elternteil>({
                 )}
                 elterngeldbezug={monat.elterngeldbezug}
                 imMutterschutz={monat.imMutterschutz}
+                ariaHidden
               />
 
               <GewaehlteOption
                 className={PLACE_ITEM_CLASS_NAMES[elternteil].inside}
                 imMutterschutz={monat.imMutterschutz}
                 option={monat.gewaehlteOption}
+                ariaHidden
               />
             </Fragment>
           ))}
@@ -116,11 +134,9 @@ export function LebensmonatDetails<E extends Elternteil>({
         />
       </summary>
 
-      <div
-        className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}
-        data-testid="details-body"
-      >
+      <div className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}>
         <ZeitraumLabel
+          id={zeitraumLabelIdentifier}
           className={classNames(
             "mb-24 text-center",
             PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
@@ -132,7 +148,7 @@ export function LebensmonatDetails<E extends Elternteil>({
           .sort(sortByElternteilKey)
           .map(([elternteil, monat]) => {
             const pseudonym = pseudonymeDerElternteile[elternteil];
-            const legend = `Auswahloptionen im Lebensmonat ${lebensmonatszahl} für ${pseudonym}`;
+            const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
             const auswahlmoeglichkeiten =
               bestimmeAuswahlmoeglichkeiten(elternteil);
             const showDisabledHintRight =
@@ -160,6 +176,40 @@ export function LebensmonatDetails<E extends Elternteil>({
       </div>
     </details>
   );
+}
+
+function composeDescription<E extends Elternteil>(
+  lebensmonat: Lebensmonat<E>,
+  pseudonymeDerElternteile: PseudonymeDerElternteile<E>,
+): string {
+  const keinElternteilHatEineAuswahlGetroffen = listeMonateAuf(
+    lebensmonat,
+  ).every(([, monat]) => monat.gewaehlteOption === undefined);
+
+  return keinElternteilHatEineAuswahlGetroffen
+    ? "noch keine Auswahl getätigt"
+    : listeMonateAuf(lebensmonat)
+        .map(([elternteil, monat]) =>
+          composeDescriptionForAuswahl(
+            monat,
+            pseudonymeDerElternteile[elternteil],
+          ),
+        )
+        .join(" - ");
+}
+
+function composeDescriptionForAuswahl(monat: Monat, pseudonym: string): string {
+  if (monat.imMutterschutz) {
+    return `${pseudonym} ist im Mutterschutz`;
+  } else if (monat.gewaehlteOption) {
+    if (monat.elterngeldbezug) {
+      return `${pseudonym} bezieht ${monat.gewaehlteOption} und erhält ${formatAsCurrency(monat.elterngeldbezug)}`;
+    } else {
+      return `${pseudonym} bezieht ${monat.gewaehlteOption}`;
+    }
+  } else {
+    return `${pseudonym} hat noch keine Auswahl getroffen`;
+  }
 }
 
 function sortByElternteilKey(

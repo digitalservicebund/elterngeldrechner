@@ -3,10 +3,11 @@ import type { Zeitraum } from "@/features/planer/user-interface/service";
 
 type Props = {
   readonly zeitraum: Zeitraum;
+  readonly id?: string;
   readonly className?: string;
 };
 
-export function ZeitraumLabel({ zeitraum, className }: Props): ReactNode {
+export function ZeitraumLabel({ zeitraum, id, className }: Props): ReactNode {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
@@ -24,5 +25,9 @@ export function ZeitraumLabel({ zeitraum, className }: Props): ReactNode {
 
   const textContent = `Zeitraum: ${formattedFrom} bis ${formattedTo}`;
 
-  return <span className={className}>{textContent}</span>;
+  return (
+    <span id={id} className={className}>
+      {textContent}
+    </span>
+  );
 }

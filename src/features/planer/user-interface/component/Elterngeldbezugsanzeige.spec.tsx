@@ -12,7 +12,9 @@ describe("Elterngeldbezugsanzeige", () => {
     render(<Elterngeldbezugsanzeige imMutterschutz />);
 
     expect(
-      screen.queryByRole("button", { name: "Öffne zusätzliche Informationen" }),
+      screen.queryByRole("button", {
+        name: "Öffne Informationen zum Elterngeldbezug im Mutterschutz",
+      }),
     ).toBeVisible();
   });
 });

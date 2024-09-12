@@ -12,12 +12,14 @@ type Props = {
   readonly imMutterschutz?: boolean;
   readonly option?: Auswahloption;
   readonly className?: string;
+  readonly ariaHidden?: boolean;
 };
 
 export function GewaehlteOption({
   imMutterschutz,
   option,
   className,
+  ariaHidden,
 }: Props): ReactNode {
   const label = getLabel(imMutterschutz, option);
   const conditionalClassName = getClassName(option);
@@ -41,10 +43,11 @@ export function GewaehlteOption({
   return (
     <span
       className={classNames(
-        "p-8 min-h-56 rounded font-bold flex text-center items-center justify-center gap-4 @container",
+        "flex min-h-56 items-center justify-center gap-4 rounded p-8 text-center font-bold @container",
         className,
         conditionalClassName,
       )}
+      aria-hidden={ariaHidden}
     >
       {icon}
       <span className={labelClassName}>{label}</span>

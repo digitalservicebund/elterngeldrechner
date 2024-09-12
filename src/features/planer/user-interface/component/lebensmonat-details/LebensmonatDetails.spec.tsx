@@ -5,54 +5,124 @@ import {
   Elternteil,
   KeinElterngeld,
   Variante,
+  type Auswahloption,
 } from "@/features/planer/user-interface/service";
+import { MONAT_MIT_MUTTERSCHUTZ } from "@/features/planer/domain/monat";
 
 describe("LebensmonateDetails", () => {
-  it("shows the Lebensmonatszahl", () => {
+  it("shows a details group for the Lebensmonatszahl", () => {
     render(<LebensmonatDetails {...ANY_PROPS} lebensmonatszahl={5} />);
 
-    const textNode = screen.queryByText(/Lebensmonat$/)?.parentNode;
-
-    expect(textNode?.textContent).toBe("5. Lebensmonat");
+    expect(screen.queryByRole("group", { name: "5. Lebensmonat" }));
   });
 
-  it("shows all the information for the choise made for the Lebensmonat in the summary", () => {
+  describe("summary description", () => {
+    it("has a short discription if no Elternteil made a choice yet", () => {
+      const lebensmonat = {
+        [Elternteil.Eins]: monat(undefined),
+        [Elternteil.Zwei]: monat(undefined),
+      };
+
+      render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
+
+      expect(
+        screen.getByRole("group").querySelector("summary"),
+      ).toHaveAccessibleDescription(/^noch keine Auswahl getätigt/);
+    });
+
+    it("lists the Elternteile with their Pseudonym, chosen Option and elterngeldbezug if one Elternteil made a choice", () => {
+      const lebensmonat = {
+        [Elternteil.Eins]: monat(undefined),
+        [Elternteil.Zwei]: monat(Variante.Plus, 900),
+      };
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      };
+
+      render(
+        <LebensmonatDetails
+          {...ANY_PROPS}
+          lebensmonat={lebensmonat}
+          pseudonymeDerElternteile={pseudonymeDerElternteile}
+        />,
+      );
+
+      expect(
+        screen.getByRole("group").querySelector("summary"),
+      ).toHaveAccessibleDescription(
+        /^Jane hat noch keine Auswahl getroffen - John bezieht ElterngeldPlus und erhält 900\u00A0€/,
+      );
+    });
+
+    it("lists the Elternteile with their Pseudonym, chosen Option and elterngeldbezug if both made a choice", () => {
+      const lebensmonat = {
+        [Elternteil.Eins]: monat(KeinElterngeld, null),
+        [Elternteil.Zwei]: monat(Variante.Plus, 900),
+      };
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      };
+
+      render(
+        <LebensmonatDetails
+          {...ANY_PROPS}
+          lebensmonat={lebensmonat}
+          pseudonymeDerElternteile={pseudonymeDerElternteile}
+        />,
+      );
+
+      expect(
+        screen.getByRole("group").querySelector("summary"),
+      ).toHaveAccessibleDescription(
+        /^Jane bezieht kein Elterngeld - John bezieht ElterngeldPlus und erhält 900\u00A0€/,
+      );
+    });
+
+    it("describes if an Elternteil is im Mutterschutz", () => {
+      const lebensmonat = {
+        [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+      };
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: "Jane",
+      };
+
+      render(
+        <LebensmonatDetails
+          {...ANY_PROPS}
+          lebensmonat={lebensmonat}
+          pseudonymeDerElternteile={pseudonymeDerElternteile}
+        />,
+      );
+
+      expect(
+        screen.getByRole("group").querySelector("summary"),
+      ).toHaveAccessibleDescription(/^Jane ist im Mutterschutz/);
+    });
+
+    it("includes a reference to the Zeitraum discription of the Lebensmonat", () => {
+      render(<LebensmonatDetails {...ANY_PROPS} />);
+
+      expect(
+        screen.getByRole("group").querySelector("summary"),
+      ).toHaveAccessibleDescription(/Zeitraum/);
+    });
+  });
+
+  it("shows visual indicators in the summary for the choices of the Elternteile", () => {
     const lebensmonat = {
-      [Elternteil.Eins]: {
-        gewaehlteOption: Variante.Basis,
-        elterngeldbezug: 10,
-        imMutterschutz: false as const,
-      },
-      [Elternteil.Zwei]: {
-        gewaehlteOption: Variante.Plus,
-        elterngeldbezug: 20,
-        imMutterschutz: false as const,
-      },
+      [Elternteil.Eins]: monat(Variante.Basis, 10),
+      [Elternteil.Zwei]: monat(Variante.Plus, 20),
     };
 
     render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
 
-    const summary = screen.getByTestId("summary");
+    const summary = screen.getByRole("group").querySelector("summary")!;
     expect(within(summary).queryByText("Basis")).toBeVisible();
     expect(within(summary).queryByText("10 €")).toBeVisible();
     expect(within(summary).queryByText("Plus")).toBeVisible();
     expect(within(summary).queryByText("20 €")).toBeVisible();
-  });
-
-  it("shows information to be im Mutterschutz in a Lebensmonat", () => {
-    const lebensmonat = {
-      [Elternteil.Eins]: {
-        imMutterschutz: true as const,
-        gewaehlteOption: Variante.Basis as const,
-        elterngeldbezug: null,
-      },
-      [Elternteil.Zwei]: { imMutterschutz: false as const },
-    };
-
-    render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
-
-    const summary = screen.getByTestId("summary");
-    expect(within(summary).queryByText("Mutterschutz")).toBeVisible();
   });
 
   it("shows an input fieldset to choose an Option for each Elternteil in the details body", () => {
@@ -61,29 +131,23 @@ describe("LebensmonateDetails", () => {
       [Elternteil.Zwei]: "John",
     };
 
-    const lebensmonat = {
-      [Elternteil.Eins]: ANY_MONAT,
-      [Elternteil.Zwei]: ANY_MONAT,
-    };
-
     render(
       <LebensmonatDetails
         {...ANY_PROPS}
         pseudonymeDerElternteile={pseudonymeDerElternteile}
         lebensmonatszahl={3}
-        lebensmonat={lebensmonat}
       />,
     );
 
-    const body = screen.getByTestId("details-body");
     expect(
-      within(body).getByRole("group", {
-        name: "Auswahloptionen im Lebensmonat 3 für Jane",
+      screen.getByRole("radiogroup", {
+        name: "Auswahl von Jane für den 3. Lebensmonat",
       }),
     ).toBeInTheDocument();
+
     expect(
-      within(body).getByRole("group", {
-        name: "Auswahloptionen im Lebensmonat 3 für John",
+      screen.getByRole("radiogroup", {
+        name: "Auswahl von John für den 3. Lebensmonat",
       }),
     ).toBeInTheDocument();
   });
@@ -92,16 +156,11 @@ describe("LebensmonateDetails", () => {
     const bestimmeAuswahlmoeglichkeiten = vi
       .fn()
       .mockReturnValue(ANY_AUSWAHLMOEGLICHKEITEN);
-    const lebensmonat = {
-      [Elternteil.Eins]: ANY_MONAT,
-      [Elternteil.Zwei]: ANY_MONAT,
-    };
 
     render(
       <LebensmonatDetails
         {...ANY_PROPS}
         bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-        lebensmonat={lebensmonat}
       />,
     );
 
@@ -114,8 +173,8 @@ describe("LebensmonateDetails", () => {
     it("shows the hint when Bonus is chosen", () => {
       vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
       const lebensmonat = {
-        [Elternteil.Eins]: MONAT_WITH_BONUS,
-        [Elternteil.Zwei]: MONAT_WITH_BONUS,
+        [Elternteil.Eins]: monat(Variante.Bonus),
+        [Elternteil.Zwei]: monat(Variante.Bonus),
       };
       render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
 
@@ -125,8 +184,8 @@ describe("LebensmonateDetails", () => {
     it("hides the hint when no Bonus is chosen", () => {
       vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
       const lebensmonat = {
-        [Elternteil.Eins]: MONAT_WITH_BASIS,
-        [Elternteil.Zwei]: MONAT_WITH_BASIS,
+        [Elternteil.Eins]: monat(Variante.Basis),
+        [Elternteil.Zwei]: monat(Variante.Basis),
       };
       render(<LebensmonatDetails {...ANY_PROPS} lebensmonat={lebensmonat} />);
 
@@ -137,17 +196,12 @@ describe("LebensmonateDetails", () => {
   });
 });
 
-const ANY_MONAT = { imMutterschutz: false as const };
-const MONAT_WITH_BASIS = {
-  gewaehlteOption: Variante.Basis,
-  elterngeldbezug: 0,
-  imMutterschutz: false as const,
-};
-const MONAT_WITH_BONUS = {
-  gewaehlteOption: Variante.Bonus,
-  elterngeldbezug: 0,
-  imMutterschutz: false as const,
-};
+function monat(
+  gewaehlteOption: Auswahloption | undefined,
+  elterngeldbezug?: number | null,
+) {
+  return { gewaehlteOption, elterngeldbezug, imMutterschutz: false as const };
+}
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {
   [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },

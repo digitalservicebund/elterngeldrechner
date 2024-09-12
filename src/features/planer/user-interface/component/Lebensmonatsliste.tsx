@@ -35,7 +35,7 @@ export function Lebensmonatsliste<E extends Elternteil>({
   waehleOption,
   className,
 }: Props<E>): ReactNode {
-  const labelIdentifier = useId();
+  const headingIdentifier = useId();
 
   const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
     useState(14);
@@ -54,11 +54,11 @@ export function Lebensmonatsliste<E extends Elternteil>({
   return (
     <section
       className={classNames("flex flex-col", className)}
-      aria-labelledby={labelIdentifier}
+      aria-labelledby={headingIdentifier}
     >
-      <h3 id={labelIdentifier} className="py-8 text-center text-16 font-bold">
+      <h4 id={headingIdentifier} className="py-8 text-center text-16 font-bold">
         Lebensmonate
-      </h3>
+      </h4>
 
       {Lebensmonatszahlen.map((lebensmonatszahl) => {
         const lebensmonat =

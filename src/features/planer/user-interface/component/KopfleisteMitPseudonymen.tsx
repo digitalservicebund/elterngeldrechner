@@ -17,7 +17,10 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
   className,
 }: Props<E>): ReactNode {
   return (
-    <div className={classNames("flex items-center justify-evenly", className)}>
+    <div
+      className={classNames("flex items-center justify-evenly", className)}
+      aria-hidden
+    >
       {listePseudonymeAuf(pseudonymeDerElternteile)
         .sort(sortByElternteilKey)
         .map(([elternteil, pseudonym]) => (

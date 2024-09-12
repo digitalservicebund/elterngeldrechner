@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import SquareIcon from "@digitalservicebund/icons/SquareRounded";
 import classNames from "classnames";
 import {
@@ -19,14 +19,20 @@ export function KontingentUebersicht({
   verplantesKontingent,
   className,
 }: Props): ReactNode {
+  const headingIdentifier = useId();
+
   return (
     <section
       className={classNames(
         "flex flex-wrap justify-evenly gap-16 px-8",
         className,
       )}
-      aria-label="Kontingentübersicht"
+      aria-labelledby={headingIdentifier}
     >
+      <h4 id={headingIdentifier} className="sr-only">
+        Kontingentübersicht
+      </h4>
+
       {listeKontingentAuf(verfuegbaresKontingent).map(([option, maximum]) => {
         const nochVerfuegbar =
           maximum - Math.ceil(verplantesKontingent[option]);

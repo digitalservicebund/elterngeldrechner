@@ -8,6 +8,12 @@ import {
 } from "@/features/planer/user-interface/service";
 
 describe("Planer", () => {
+  it("shows a section", () => {
+    render(<Planer {...ANY_PROPS} />);
+
+    expect(screen.getByLabelText("Monatsplaner")).toBeVisible();
+  });
+
   describe("Planung wiederholen", () => {
     it("calls the callback to reset the Plan", async () => {
       const setzePlanZurueck = vi.fn();

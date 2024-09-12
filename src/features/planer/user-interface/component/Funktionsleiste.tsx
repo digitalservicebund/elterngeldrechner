@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
@@ -15,8 +15,17 @@ export function Funktionsleiste({
   downloadePlan,
   className,
 }: Props): ReactNode {
+  const headingIdentifier = useId();
+
   return (
-    <div className={classNames("flex flex-wrap gap-32", className)}>
+    <section
+      className={classNames("flex flex-wrap gap-32", className)}
+      aria-labelledby={headingIdentifier}
+    >
+      <h4 id={headingIdentifier} className="sr-only">
+        Funktionsleiste
+      </h4>
+
       <Button
         buttonStyle="link"
         label="Planung wiederholen"
@@ -30,6 +39,6 @@ export function Funktionsleiste({
         iconBefore={<SaveAltIcon />}
         onClick={downloadePlan}
       />
-    </div>
+    </section>
   );
 }

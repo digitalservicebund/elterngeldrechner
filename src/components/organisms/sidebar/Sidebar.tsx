@@ -30,7 +30,7 @@ export function Sidebar({ currentStep }: Props) {
   );
 
   return (
-    <div className={classNames(nsp("sidebar"))}>
+    <nav className={classNames(nsp("sidebar"))} aria-label="Fortschritt">
       <Button
         className={nsp("sidebar__collapse-btn")}
         onClick={() => setIsOpen(!isOpen)}
@@ -44,19 +44,26 @@ export function Sidebar({ currentStep }: Props) {
           isOpen && nsp("sidebar-list--open"),
         )}
       >
-        {Object.values(formSteps).map((step, index) => (
-          <li
-            key={index}
-            className={classNames(
-              nsp("sidebar-list__step"),
-              index < currentStepIndex && nsp("sidebar-list__step--done"),
-              step === currentStep && nsp("sidebar-list__step--current"),
-            )}
-          >
-            <Link to={step.route}>{step.text}</Link>
-          </li>
-        ))}
+        {Object.values(formSteps).map((step, index) => {
+          const isCurrentStep = index === currentStepIndex;
+          const ariaCurrent = isCurrentStep ? "step" : false;
+
+          return (
+            <li
+              key={index}
+              className={classNames(
+                nsp("sidebar-list__step"),
+                index < currentStepIndex && nsp("sidebar-list__step--done"),
+                step === currentStep && nsp("sidebar-list__step--current"),
+              )}
+            >
+              <Link to={step.route} aria-current={ariaCurrent}>
+                {step.text}
+              </Link>
+            </li>
+          );
+        })}
       </ol>
-    </div>
+    </nav>
   );
 }

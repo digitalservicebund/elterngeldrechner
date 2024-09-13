@@ -14,6 +14,7 @@ export type {
   ElterngeldbezugProVariante,
 } from "./Elterngeldbezuege";
 export { Elternteil } from "./Elternteil";
+export { type Gesamtsumme, type SummeFuerElternteil } from "./Gesamtsumme";
 export {
   type Lebensmonat,
   erstelleInitialenLebensmonat,
@@ -28,7 +29,9 @@ export {
 } from "./Lebensmonatszahl";
 export { type Monat } from "./monat";
 export {
+  type PlanMitBeliebigenElternteilen,
   aktualisiereErrechneteElterngelbezuege,
+  berrechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
   setzePlanZurueck,

@@ -1,6 +1,7 @@
 import { usePlanerService } from "./usePlanerService";
 import {
   aktualisiereErrechneteElterngelbezuege,
+  berrechneGesamtsumme,
   bestimmeVerfuegbaresKontingent,
   Elternteil,
   erstelleInitialenPlan,
@@ -22,6 +23,7 @@ vi.mock(
   "@/features/planer/domain/plan/operation/aktualisiereElterngeldbezuege",
 );
 vi.mock("@/features/planer/domain/plan/operation/setzePlanZurueck");
+vi.mock("@/features/planer/domain/plan/operation/berrechneGesamtsumme");
 vi.mock(
   "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent",
 );
@@ -37,6 +39,7 @@ describe("use Planer service", () => {
       (plan) => plan,
     );
     vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
+    vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
   });
 
   it("initially creates a plan", () => {
@@ -59,77 +62,147 @@ describe("use Planer service", () => {
     );
   });
 
-  it("initially determines the verplantes Kontingent", () => {
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-      ANY_VERPLANTES_KONTINGENT,
-    );
-
-    const { result } = renderPlanerServiceHook();
-
-    expect(result.current.verplantesKontingent).toStrictEqual(
-      ANY_VERPLANTES_KONTINGENT,
-    );
-  });
-
-  it("updates the verplantes Kontingent when chosing an Option", () => {
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
-      ...ANY_VERPLANTES_KONTINGENT,
-      [Variante.Basis]: 2,
-    });
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
-      ...ANY_VERPLANTES_KONTINGENT,
-      [Variante.Basis]: 1,
-    });
-
-    const { result } = renderPlanerServiceHook();
-    expect(result.current.verplantesKontingent[Variante.Basis]).toBe(2);
-
-    act(() => {
-      result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
-    });
-
-    expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
-  });
-
-  it("updates the Lebensmonate when chosing an Option", () => {
-    vi.mocked(erstelleInitialenPlan).mockReturnValue({
-      ...ANY_PLAN,
-      lebensmonate: {},
-    });
-    vi.mocked(waehleOption).mockReturnValue(
-      Result.ok({
+  describe("wähle Option", () => {
+    it("updates the Lebensmonate when chosing an Option", () => {
+      vi.mocked(erstelleInitialenPlan).mockReturnValue({
         ...ANY_PLAN,
-        lebensmonate: { 1: ANY_LEBENSMONAT },
-      }),
-    );
+        lebensmonate: {},
+      });
+      vi.mocked(waehleOption).mockReturnValue(
+        Result.ok({
+          ...ANY_PLAN,
+          lebensmonate: { 1: ANY_LEBENSMONAT },
+        }),
+      );
 
-    const { result } = renderPlanerServiceHook();
-    expect(result.current.lebensmonate[1]).toBeUndefined();
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.lebensmonate[1]).toBeUndefined();
 
-    act(() => {
-      result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      act(() => {
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      });
+
+      expect(result.current.lebensmonate[1]).toStrictEqual(ANY_LEBENSMONAT);
     });
 
-    expect(result.current.lebensmonate[1]).toStrictEqual(ANY_LEBENSMONAT);
+    it("keeps the last Plan and logs the error if choosing an Option fails", () => {
+      vi.mocked(erstelleInitialenPlan).mockReturnValue(ANY_PLAN);
+      vi.mocked(waehleOption).mockReturnValue(
+        Result.error([{ message: "invalid plan" }]),
+      );
+      vi.spyOn(global.console, "error").mockImplementation(() => {});
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+
+      act(() => {
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      });
+
+      expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+      expect(console.error).toHaveBeenCalledOnce();
+      expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
+    });
   });
 
-  it("keeps the last Plan and logs the error if choosing an Option fails", () => {
-    vi.mocked(erstelleInitialenPlan).mockReturnValue(ANY_PLAN);
-    vi.mocked(waehleOption).mockReturnValue(
-      Result.error([{ message: "invalid plan" }]),
-    );
-    vi.spyOn(global.console, "error").mockImplementation(() => {});
+  describe("verplantes Kontingent", () => {
+    it("initially determines the verplantes Kontingent", () => {
+      vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
+        ANY_VERPLANTES_KONTINGENT,
+      );
 
-    const { result } = renderPlanerServiceHook();
-    expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+      const { result } = renderPlanerServiceHook();
 
-    act(() => {
-      result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      expect(result.current.verplantesKontingent).toStrictEqual(
+        ANY_VERPLANTES_KONTINGENT,
+      );
     });
 
-    expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
-    expect(console.error).toHaveBeenCalledOnce();
-    expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
+    it("updates the verplantes Kontingent when chosing an Option", () => {
+      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
+        ...ANY_VERPLANTES_KONTINGENT,
+        [Variante.Basis]: 2,
+      });
+      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
+        ...ANY_VERPLANTES_KONTINGENT,
+        [Variante.Basis]: 1,
+      });
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(2);
+
+      act(() => {
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      });
+
+      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
+    });
+
+    it("updates the verplantes Kontingent when resetting the Plan", () => {
+      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
+        ...ANY_VERPLANTES_KONTINGENT,
+        [Variante.Basis]: 1,
+      });
+      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
+        ...ANY_VERPLANTES_KONTINGENT,
+        [Variante.Basis]: 0,
+      });
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(0);
+    });
+  });
+
+  describe("Gesamtsumme", () => {
+    it("initially determines the Gesamtsumme", () => {
+      vi.mocked(berrechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
+
+      const { result } = renderPlanerServiceHook();
+
+      expect(result.current.gesamtsumme).toStrictEqual(ANY_GESAMTSUMME);
+    });
+
+    it("updates the Gesamtsumme when chosing an Option", () => {
+      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+        ...ANY_GESAMTSUMME,
+        summe: 1,
+      });
+      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+        ...ANY_GESAMTSUMME,
+        summe: 2,
+      });
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.gesamtsumme.summe).toBe(1);
+
+      act(() => {
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      });
+
+      expect(result.current.gesamtsumme.summe).toBe(2);
+    });
+
+    it("updates the Gesamtsumme when resetting the Plan", () => {
+      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+        ...ANY_GESAMTSUMME,
+        summe: 1,
+      });
+      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+        ...ANY_GESAMTSUMME,
+        summe: 0,
+      });
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.gesamtsumme.summe).toBe(1);
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(result.current.gesamtsumme.summe).toBe(0);
+    });
   });
 
   it("updates the errechnete Elterngeldbezuege if their data changes", async () => {
@@ -246,4 +319,18 @@ const ANY_VERPLANTES_KONTINGENT = {
 const ANY_LEBENSMONAT = {
   [Elternteil.Eins]: { imMutterschutz: false as const },
   [Elternteil.Zwei]: { imMutterschutz: false as const },
+};
+
+const ANY_GESAMTSUMME = {
+  summe: 0,
+  summeProElternteil: {
+    [Elternteil.Eins]: {
+      anzahlMonateMitBezug: 0,
+      totalerElterngeldbezug: 0,
+    },
+    [Elternteil.Zwei]: {
+      anzahlMonateMitBezug: 0,
+      totalerElterngeldbezug: 0,
+    },
+  },
 };

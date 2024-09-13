@@ -3,6 +3,7 @@ import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
+import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import type {
   BestimmeAuswahlmoeglichkeiten,
   ErstelleUngeplantenLebensmonat,
@@ -10,6 +11,7 @@ import type {
 } from "@/features/planer/user-interface/service/callbackTypes";
 import {
   type Elternteil,
+  type Gesamtsumme,
   type Lebensmonate,
   type PseudonymeDerElternteile,
   type VerfuegbaresKontingent,
@@ -22,6 +24,7 @@ type Props<E extends Elternteil> = {
   readonly lebensmonate: Lebensmonate<E>;
   readonly verfuegbaresKontingent: VerfuegbaresKontingent;
   readonly verplantesKontingent: VerplantesKontingent;
+  readonly gesamtsumme: Gesamtsumme<E>;
   readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
   readonly waehleOption: WaehleOption<E>;
@@ -35,6 +38,7 @@ export function Planer<E extends Elternteil>({
   lebensmonate,
   verfuegbaresKontingent,
   verplantesKontingent,
+  gesamtsumme,
   erstelleUngeplantenLebensmonat,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
@@ -84,6 +88,12 @@ export function Planer<E extends Elternteil>({
           className="bg-off-white py-16"
           verfuegbaresKontingent={verfuegbaresKontingent}
           verplantesKontingent={verplantesKontingent}
+        />
+
+        <Gesamtsummenanzeige
+          className="border-t-2 border-solid !border-grey bg-off-white py-16"
+          pseudonymeDerElternteile={pseudonymeDerElternteile}
+          gesamtsumme={gesamtsumme}
         />
       </div>
 

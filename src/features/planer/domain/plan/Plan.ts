@@ -12,3 +12,5 @@ export type Plan<A extends Ausgangslage> = {
   >;
   readonly lebensmonate: Lebensmonate<ElternteileByAusgangslage<A>>;
 };
+
+export type PlanMitBeliebigenElternteilen = Plan<Ausgangslage>;

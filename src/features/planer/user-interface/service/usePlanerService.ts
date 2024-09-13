@@ -12,6 +12,8 @@ import {
   erstelleInitialenPlan,
   waehleOption,
   setzePlanZurueck,
+  type PlanMitBeliebigenElternteilen,
+  berrechneGesamtsumme,
 } from "@/features/planer/user-interface/service";
 import { useAppSelector } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
@@ -33,6 +35,22 @@ export function usePlanerService() {
   const [verplantesKontingent, setVerplantesKontingent] = useState(() =>
     zaehleVerplantesKontingent(plan.lebensmonate),
   );
+
+  const [gesamtsumme, setGesamtsumme] = useState(() =>
+    berrechneGesamtsumme(plan),
+  );
+
+  function onPlanChanged(nextPlan: PlanMitBeliebigenElternteilen): void {
+    trackPartnerschaftlicheVerteilung(nextPlan);
+
+    const nextVerplantesKontingent = zaehleVerplantesKontingent(
+      nextPlan.lebensmonate,
+    );
+    setVerplantesKontingent(nextVerplantesKontingent);
+
+    const nextGesamtsumme = berrechneGesamtsumme(nextPlan);
+    setGesamtsumme(nextGesamtsumme);
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const erstelleUngeplantenLebensmonatCallback = useCallback(
@@ -56,12 +74,7 @@ export function usePlanerService() {
           },
         );
 
-        setVerplantesKontingent(
-          zaehleVerplantesKontingent(nextPlan.lebensmonate),
-        );
-
-        trackPartnerschaftlicheVerteilung(nextPlan);
-
+        onPlanChanged(nextPlan);
         return nextPlan;
       }),
     [],
@@ -71,7 +84,7 @@ export function usePlanerService() {
     () =>
       setPlan((plan) => {
         const nextPlan = setzePlanZurueck(plan);
-        trackPartnerschaftlicheVerteilung(nextPlan);
+        onPlanChanged(nextPlan);
         return nextPlan;
       }),
     [],
@@ -94,6 +107,7 @@ export function usePlanerService() {
     lebensmonate: plan.lebensmonate,
     verfuegbaresKontingent: verfuegbaresKontingent.current,
     verplantesKontingent,
+    gesamtsumme,
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
     waehleOption: waehleOptionCallback,

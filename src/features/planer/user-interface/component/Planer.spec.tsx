@@ -14,6 +14,15 @@ describe("Planer", () => {
     expect(screen.getByLabelText("Monatsplaner")).toBeVisible();
   });
 
+  it("shows all relevant sections of the Planer", () => {
+    render(<Planer {...ANY_PROPS} />);
+
+    expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
+    expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
+    expect(screen.getByLabelText("Gesamtsumme")).toBeVisible();
+    expect(screen.getByLabelText("Funktionsleiste")).toBeVisible();
+  });
+
   describe("Planung wiederholen", () => {
     it("calls the callback to reset the Plan", async () => {
       const setzePlanZurueck = vi.fn();
@@ -78,6 +87,15 @@ const ANY_PROPS = {
     [Variante.Plus]: 0,
     [Variante.Bonus]: 0,
     [KeinElterngeld]: 0,
+  },
+  gesamtsumme: {
+    summe: 0,
+    summeProElternteil: {
+      [Elternteil.Eins]: {
+        anzahlMonateMitBezug: 0,
+        totalerElterngeldbezug: 0,
+      },
+    },
   },
   erstelleUngeplantenLebensmonat: () => ({
     [Elternteil.Eins]: { imMutterschutz: false as const },

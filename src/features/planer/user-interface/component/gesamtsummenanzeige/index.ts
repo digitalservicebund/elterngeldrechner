@@ -1,0 +1,1 @@
+export { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";

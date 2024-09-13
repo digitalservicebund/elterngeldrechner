@@ -119,14 +119,6 @@ describe("Monatsplaner", () => {
     },
   };
 
-  it("should show summation footer", () => {
-    render(<Monatsplaner mutterSchutzMonate={0} />, { preloadedState });
-
-    const footer = screen.queryByRole("contentinfo", { name: "Gesamtsumme" });
-
-    expect(footer).toBeVisible();
-  });
-
   it("should display info text", () => {
     render(<Monatsplaner mutterSchutzMonate={2} />, {
       preloadedState: {

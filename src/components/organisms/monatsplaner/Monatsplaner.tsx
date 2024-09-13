@@ -1,7 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
-import { SummationFooter } from "./SummationFooter";
-import { useSummarizeData } from "./useSummarizeData";
 import {
   ElterngeldType,
   ElternteilType,
@@ -246,8 +244,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
     return !isBlockedByLimitReached;
   }
 
-  const summationData = useSummarizeData();
-
   return (
     <>
       <div
@@ -327,11 +323,6 @@ export function Monatsplaner({ mutterSchutzMonate }: Props) {
             )}
           </div>
           <div className={nsp("monatsplaner__footer")}>
-            <SummationFooter
-              className="w-full bg-white p-16"
-              data={summationData}
-            />
-
             <p>
               Dieses Ergebnis ist nicht rechtsverbindlich. Erst nach der Geburt
               Ihres Kindes kann Ihre zuständige Elterngeldstelle eine konkrete

@@ -21,25 +21,13 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
       className={classNames("flex items-center justify-evenly", className)}
       aria-hidden
     >
-      {listePseudonymeAuf(pseudonymeDerElternteile)
-        .sort(sortByElternteilKey)
-        .map(([elternteil, pseudonym]) => (
+      {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
+        ([elternteil, pseudonym]) => (
           <span key={elternteil} className="basis-160 text-center font-bold">
             <PersonIcon /> {pseudonym}
           </span>
-        ))}
+        ),
+      )}
     </div>
   );
 }
-
-function sortByElternteilKey(
-  [left]: [Elternteil, any],
-  [right]: [Elternteil, any],
-): number {
-  return ELTERNTEIL_SORT_RANK[left] - ELTERNTEIL_SORT_RANK[right];
-}
-
-const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
-  [Elternteil.Eins]: 1,
-  [Elternteil.Zwei]: 2,
-};

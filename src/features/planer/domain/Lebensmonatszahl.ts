@@ -15,20 +15,42 @@ export function isLebensmonatszahl(value: unknown): value is Lebensmonatszahl {
   );
 }
 
+export function compareLebensmonatszahlen(
+  left: Lebensmonatszahl,
+  right: Lebensmonatszahl,
+): number {
+  return left - right;
+}
+
 if (import.meta.vitest) {
   const { test, expect } = import.meta.vitest;
 
-  test.each(Array.from({ length: 32 }, (_, index) => index + 1))(
-    "type guard is satisfied by %s",
-    (value) => {
-      expect(isLebensmonatszahl(value)).toBe(true);
-    },
-  );
+  describe("type guard", () => {
+    it.each(Array.from({ length: 32 }, (_, index) => index + 1))(
+      "is satisfied by %s",
+      (value) => {
+        expect(isLebensmonatszahl(value)).toBe(true);
+      },
+    );
 
-  test.each([0, 33, 12345, "1", "2", "Eins", "One"])(
-    "type guard unsatisfied by %s",
-    (value) => {
-      expect(isLebensmonatszahl(value)).toBe(false);
-    },
-  );
+    it.each([0, 33, 12345, "1", "2", "Eins", "One"])(
+      "is unsatisfied by %s",
+      (value) => {
+        expect(isLebensmonatszahl(value)).toBe(false);
+      },
+    );
+  });
+
+  describe("compare function", () => {
+    test.each<{ unsorted: Lebensmonatszahl[]; sorted: Lebensmonatszahl[] }>([
+      { unsorted: [5, 4, 3, 2, 1], sorted: [1, 2, 3, 4, 5] },
+      { unsorted: [1, 2, 3], sorted: [1, 2, 3] },
+      { unsorted: [32, 1, 17, 8, 9, 10], sorted: [1, 8, 9, 10, 17, 32] },
+    ])(
+      "used for sorting, puts the Lebensmonatszahlen in correct order ($unsorted)",
+      ({ unsorted, sorted }) => {
+        expect(unsorted.sort(compareLebensmonatszahlen)).toStrictEqual(sorted);
+      },
+    );
+  });
 }

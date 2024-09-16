@@ -33,19 +33,21 @@ export function KontingentUebersicht({
         Kontingentübersicht
       </h4>
 
-      {listeKontingentAuf(verfuegbaresKontingent).map(([option, maximum]) => {
-        const nochVerfuegbar =
-          maximum - Math.ceil(verplantesKontingent[option]);
+      {listeKontingentAuf(verfuegbaresKontingent, true).map(
+        ([option, maximum]) => {
+          const nochVerfuegbar =
+            maximum - Math.ceil(verplantesKontingent[option]);
 
-        return (
-          <div key={option} className="text-center">
-            <SquareIcon className={COLOR_CLASS_NAME[option]} />{" "}
-            <span className="font-bold">{option}</span>
-            <br />
-            {nochVerfuegbar} von {maximum} verfügbar
-          </div>
-        );
-      })}
+          return (
+            <div key={option} className="text-center">
+              <SquareIcon className={COLOR_CLASS_NAME[option]} />{" "}
+              <span className="font-bold">{option}</span>
+              <br />
+              {nochVerfuegbar} von {maximum} verfügbar
+            </div>
+          );
+        },
+      )}
     </section>
   );
 }

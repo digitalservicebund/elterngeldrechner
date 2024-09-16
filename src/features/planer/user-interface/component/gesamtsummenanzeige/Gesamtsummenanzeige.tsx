@@ -37,9 +37,8 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
         Gesamtsumme
       </h4>
 
-      {listePseudonymeAuf(pseudonymeDerElternteile)
-        .sort(sortByElternteilKey)
-        .map(([elternteil, pseudonym]) => {
+      {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
+        ([elternteil, pseudonym]) => {
           const gesamtsummeFuerElternteil =
             gesamtsumme.summeProElternteil[elternteil];
 
@@ -52,7 +51,8 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
               isPseudonymHidden={!hasMultipleElternteile}
             />
           );
-        })}
+        },
+      )}
 
       {!!hasMultipleElternteile && (
         <span className="basis-full font-bold">
@@ -66,15 +66,3 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
     </section>
   );
 }
-
-function sortByElternteilKey(
-  [left]: [Elternteil, any],
-  [right]: [Elternteil, any],
-): number {
-  return ELTERNTEIL_SORT_RANK[left] - ELTERNTEIL_SORT_RANK[right];
-}
-
-const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
-  [Elternteil.Eins]: 1,
-  [Elternteil.Zwei]: 2,
-};

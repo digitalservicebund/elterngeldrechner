@@ -17,20 +17,49 @@ export function isElternteil<E>(value: unknown): value is E {
   );
 }
 
+export function compareElternteile(
+  left: Elternteil,
+  right: Elternteil,
+): number {
+  return ELTERNTEIL_SORT_RANK[left] - ELTERNTEIL_SORT_RANK[right];
+}
+
+const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
+  [Elternteil.Eins]: 1,
+  [Elternteil.Zwei]: 2,
+};
+
 if (import.meta.vitest) {
   const { test, expect } = import.meta.vitest;
 
-  test.each(["Elternteil 1", "Elternteil 2"])(
-    "type guard is satisfied by %s",
-    (value) => {
+  describe("type guard", () => {
+    it.each(["Elternteil 1", "Elternteil 2"])("is satisfied by %s", (value) => {
       expect(isElternteil(value)).toBe(true);
-    },
-  );
+    });
 
-  test.each(["ET1", "Elternteil Eins", "Parent 1", 1])(
-    "type guard unsatisfied by %s",
-    (value) => {
-      expect(isElternteil(value)).toBe(false);
-    },
-  );
+    it.each(["ET1", "Elternteil Eins", "Parent 1", 1])(
+      "is unsatisfied by %s",
+      (value) => {
+        expect(isElternteil(value)).toBe(false);
+      },
+    );
+  });
+
+  describe("compare function", () => {
+    test.each([
+      {
+        unsorted: [Elternteil.Eins, Elternteil.Zwei],
+        sorted: [Elternteil.Eins, Elternteil.Zwei],
+      },
+      {
+        unsorted: [Elternteil.Zwei, Elternteil.Eins],
+        sorted: [Elternteil.Eins, Elternteil.Zwei],
+      },
+    ])(
+      "used for sorting, puts the Elternteile in correct order ($unsorted)",
+      ({ unsorted, sorted }) => {
+        expect(unsorted.sort(compareElternteile)).toStrictEqual(sorted);
+      },
+    );
+  });
 }

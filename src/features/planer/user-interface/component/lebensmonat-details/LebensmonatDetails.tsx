@@ -94,28 +94,26 @@ export function LebensmonatDetails<E extends Elternteil>({
           {lebensmonatszahl}
         </span>
 
-        {listeMonateAuf(lebensmonat)
-          .sort(sortByElternteilKey)
-          .map(([elternteil, monat]) => (
-            <Fragment key={elternteil}>
-              <Elterngeldbezugsanzeige
-                className={classNames(
-                  "self-center justify-self-center",
-                  PLACE_ITEM_CLASS_NAMES[elternteil].outside,
-                )}
-                elterngeldbezug={monat.elterngeldbezug}
-                imMutterschutz={monat.imMutterschutz}
-                ariaHidden
-              />
+        {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => (
+          <Fragment key={elternteil}>
+            <Elterngeldbezugsanzeige
+              className={classNames(
+                "self-center justify-self-center",
+                PLACE_ITEM_CLASS_NAMES[elternteil].outside,
+              )}
+              elterngeldbezug={monat.elterngeldbezug}
+              imMutterschutz={monat.imMutterschutz}
+              ariaHidden
+            />
 
-              <GewaehlteOption
-                className={PLACE_ITEM_CLASS_NAMES[elternteil].inside}
-                imMutterschutz={monat.imMutterschutz}
-                option={monat.gewaehlteOption}
-                ariaHidden
-              />
-            </Fragment>
-          ))}
+            <GewaehlteOption
+              className={PLACE_ITEM_CLASS_NAMES[elternteil].inside}
+              imMutterschutz={monat.imMutterschutz}
+              option={monat.gewaehlteOption}
+              ariaHidden
+            />
+          </Fragment>
+        ))}
       </summary>
 
       <div className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}>
@@ -128,28 +126,26 @@ export function LebensmonatDetails<E extends Elternteil>({
           zeitraum={zeitraum}
         />
 
-        {listeMonateAuf(lebensmonat)
-          .sort(sortByElternteilKey)
-          .map(([elternteil, monat]) => {
-            const pseudonym = pseudonymeDerElternteile[elternteil];
-            const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
-            const auswahlmoeglichkeiten =
-              bestimmeAuswahlmoeglichkeiten(elternteil);
-            const showDisabledHintRight =
-              anzahlElternteile == 1 || elternteil === Elternteil.Zwei;
+        {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
+          const pseudonym = pseudonymeDerElternteile[elternteil];
+          const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
+          const auswahlmoeglichkeiten =
+            bestimmeAuswahlmoeglichkeiten(elternteil);
+          const showDisabledHintRight =
+            anzahlElternteile == 1 || elternteil === Elternteil.Zwei;
 
-            return (
-              <AuswahlEingabe
-                key={elternteil}
-                className={PLACE_ITEM_CLASS_NAMES[elternteil].full}
-                legend={legend}
-                auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-                gewaehlteOption={monat.gewaehlteOption}
-                waehleOption={waehleOption.bind(null, elternteil)}
-                showDisabledHintRight={showDisabledHintRight}
-              />
-            );
-          })}
+          return (
+            <AuswahlEingabe
+              key={elternteil}
+              className={PLACE_ITEM_CLASS_NAMES[elternteil].full}
+              legend={legend}
+              auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+              gewaehlteOption={monat.gewaehlteOption}
+              waehleOption={waehleOption.bind(null, elternteil)}
+              showDisabledHintRight={showDisabledHintRight}
+            />
+          );
+        })}
 
         {!!isBonusHintVisible && (
           <HinweisZumBonus
@@ -196,15 +192,3 @@ function composeDescriptionForAuswahl(monat: Monat, pseudonym: string): string {
     return `${pseudonym} hat noch keine Auswahl getroffen`;
   }
 }
-
-function sortByElternteilKey(
-  [left]: [Elternteil, any],
-  [right]: [Elternteil, any],
-): number {
-  return ELTERNTEIL_SORT_RANK[left] - ELTERNTEIL_SORT_RANK[right];
-}
-
-const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
-  [Elternteil.Eins]: 1,
-  [Elternteil.Zwei]: 2,
-};

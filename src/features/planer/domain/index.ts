@@ -31,7 +31,7 @@ export { type Monat } from "./monat";
 export {
   type PlanMitBeliebigenElternteilen,
   aktualisiereErrechneteElterngelbezuege,
-  berrechneGesamtsumme,
+  berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
   setzePlanZurueck,

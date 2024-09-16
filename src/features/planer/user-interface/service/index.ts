@@ -16,7 +16,7 @@ export {
   listeMonateAuf,
   AlleElternteileHabenBonusGewaehlt,
   type Lebensmonate,
-  berrechneGesamtsumme,
+  berechneGesamtsumme,
   zaehleVerplantesKontingent,
   type Lebensmonatszahl,
   Lebensmonatszahlen,

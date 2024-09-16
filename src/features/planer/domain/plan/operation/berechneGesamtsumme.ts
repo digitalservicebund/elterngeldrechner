@@ -1,26 +1,27 @@
+import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
+import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
-import { listeMonateAuf } from "@/features/planer/domain/lebensmonat";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type {
   Gesamtsumme,
   SummeFuerElternteil,
 } from "@/features/planer/domain/Gesamtsumme";
 import { isVariante } from "@/features/planer/domain/Variante";
-import { Elternteil, isElternteil } from "@/features/planer/domain/Elternteil";
+import { isElternteil } from "@/features/planer/domain/Elternteil";
 import type { Monat } from "@/features/planer/domain/monat";
 import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
-export function berrechneGesamtsumme<A extends Ausgangslage>(
+export function berechneGesamtsumme<A extends Ausgangslage>(
   plan: Plan<A>,
 ): Gesamtsumme<ElternteileByAusgangslage<A>> {
-  const monateProElternteil = splitLebensmonateByElternteil(plan);
+  const lebensmonateProElternteil = teileLebensmonateBeiElternteileAuf(plan);
 
   const summeProElternteil = mapRecordEntriesWithStringKeys(
-    monateProElternteil,
+    lebensmonateProElternteil,
     isElternteil,
     berrechneSummeFuerElternteil,
   );
@@ -33,48 +34,14 @@ export function berrechneGesamtsumme<A extends Ausgangslage>(
   return { summe, summeProElternteil };
 }
 
-function splitLebensmonateByElternteil<A extends Ausgangslage>(
-  plan: Plan<A>,
-): Record<ElternteileByAusgangslage<A>, Monat[]> {
-  const initialValue = getEmptyObjectWithElternteileAsKeys<A, Monat>(
-    plan.ausgangslage,
-  );
-
-  return Object.values(plan.lebensmonate)
-    .flatMap(listeMonateAuf)
-    .reduce(
-      (monateProElternteil, [elternteil, monat]) => ({
-        ...monateProElternteil,
-        [elternteil]: [...(monateProElternteil[elternteil] ?? []), monat],
-      }),
-      initialValue,
-    );
-}
-
-function getEmptyObjectWithElternteileAsKeys<A extends Ausgangslage, V>(
-  ausgangslage: A,
-): Record<ElternteileByAusgangslage<A>, V[]> {
-  switch (ausgangslage.anzahlElternteile) {
-    case 1:
-      return { [Elternteil.Eins]: [] } as Record<
-        ElternteileByAusgangslage<A>,
-        V[]
-      >;
-
-    case 2:
-      return { [Elternteil.Eins]: [], [Elternteil.Zwei]: [] } as Record<
-        ElternteileByAusgangslage<A>,
-        V[]
-      >;
-  }
-}
-
-function berrechneSummeFuerElternteil(monate: Monat[]): SummeFuerElternteil {
-  const anzahlMonateMitBezug = monate
+function berrechneSummeFuerElternteil(
+  lebensmonate: Partial<Record<Lebensmonatszahl, Monat>>,
+): SummeFuerElternteil {
+  const anzahlMonateMitBezug = Object.values(lebensmonate)
     .map((monat) => monat.gewaehlteOption)
     .filter(isVariante).length;
 
-  const totalerElterngeldbezug = monate
+  const totalerElterngeldbezug = Object.values(lebensmonate)
     .map((monat) => monat.elterngeldbezug ?? 0)
     .reduce((sum, elterngeldbezug) => sum + elterngeldbezug, 0);
 
@@ -97,7 +64,7 @@ if (import.meta.vitest) {
     it("can calculate a zero Gesamtsumme when nothing is planned yet", () => {
       const plan = { ...ANY_PLAN, lebensmonate: {} };
 
-      const gesamtsumme = berrechneGesamtsumme(plan);
+      const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(gesamtsumme.summe).toBe(0);
 
@@ -132,7 +99,7 @@ if (import.meta.vitest) {
       };
       const plan = { ...ANY_PLAN, lebensmonate };
 
-      const gesamtsumme = berrechneGesamtsumme(plan);
+      const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(
         gesamtsumme.summeProElternteil[Elternteil.Eins].anzahlMonateMitBezug,
@@ -160,7 +127,7 @@ if (import.meta.vitest) {
       };
       const plan = { ...ANY_PLAN, lebensmonate };
 
-      const gesamtsumme = berrechneGesamtsumme(plan);
+      const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(
         gesamtsumme.summeProElternteil[Elternteil.Eins].totalerElterngeldbezug,
@@ -184,7 +151,7 @@ if (import.meta.vitest) {
       };
       const plan = { ...ANY_PLAN, lebensmonate };
 
-      const gesamtsumme = berrechneGesamtsumme(plan);
+      const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(gesamtsumme.summe).toBe(7);
     });
@@ -202,7 +169,7 @@ if (import.meta.vitest) {
       };
       const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
 
-      const gesamtsumme = berrechneGesamtsumme(plan);
+      const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(gesamtsumme.summe).toBe(6);
       expect(

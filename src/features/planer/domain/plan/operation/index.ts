@@ -1,5 +1,5 @@
 export * from "./aktualisiereElterngeldbezuege";
-export * from "./berrechneGesamtsumme";
+export * from "./berechneGesamtsumme";
 export * from "./bestimmeAuswahlmoeglichkeiten";
 export * from "./erstelleInitialenPlan";
 export * from "./setzePlanZurueck";

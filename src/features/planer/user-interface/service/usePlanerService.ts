@@ -13,7 +13,7 @@ import {
   waehleOption,
   setzePlanZurueck,
   type PlanMitBeliebigenElternteilen,
-  berrechneGesamtsumme,
+  berechneGesamtsumme,
 } from "@/features/planer/user-interface/service";
 import { useAppSelector } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
@@ -37,7 +37,7 @@ export function usePlanerService() {
   );
 
   const [gesamtsumme, setGesamtsumme] = useState(() =>
-    berrechneGesamtsumme(plan),
+    berechneGesamtsumme(plan),
   );
 
   function onPlanChanged(nextPlan: PlanMitBeliebigenElternteilen): void {
@@ -48,7 +48,7 @@ export function usePlanerService() {
     );
     setVerplantesKontingent(nextVerplantesKontingent);
 
-    const nextGesamtsumme = berrechneGesamtsumme(nextPlan);
+    const nextGesamtsumme = berechneGesamtsumme(nextPlan);
     setGesamtsumme(nextGesamtsumme);
   }
 

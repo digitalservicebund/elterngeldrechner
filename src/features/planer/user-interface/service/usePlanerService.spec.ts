@@ -1,7 +1,7 @@
 import { usePlanerService } from "./usePlanerService";
 import {
   aktualisiereErrechneteElterngelbezuege,
-  berrechneGesamtsumme,
+  berechneGesamtsumme,
   bestimmeVerfuegbaresKontingent,
   Elternteil,
   erstelleInitialenPlan,
@@ -23,7 +23,7 @@ vi.mock(
   "@/features/planer/domain/plan/operation/aktualisiereElterngeldbezuege",
 );
 vi.mock("@/features/planer/domain/plan/operation/setzePlanZurueck");
-vi.mock("@/features/planer/domain/plan/operation/berrechneGesamtsumme");
+vi.mock("@/features/planer/domain/plan/operation/berechneGesamtsumme");
 vi.mock(
   "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent",
 );
@@ -159,7 +159,7 @@ describe("use Planer service", () => {
 
   describe("Gesamtsumme", () => {
     it("initially determines the Gesamtsumme", () => {
-      vi.mocked(berrechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
+      vi.mocked(berechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
 
       const { result } = renderPlanerServiceHook();
 
@@ -167,11 +167,11 @@ describe("use Planer service", () => {
     });
 
     it("updates the Gesamtsumme when chosing an Option", () => {
-      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
         summe: 1,
       });
-      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
         summe: 2,
       });
@@ -187,11 +187,11 @@ describe("use Planer service", () => {
     });
 
     it("updates the Gesamtsumme when resetting the Plan", () => {
-      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
         summe: 1,
       });
-      vi.mocked(berrechneGesamtsumme).mockReturnValueOnce({
+      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
         summe: 0,
       });

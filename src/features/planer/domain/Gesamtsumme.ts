@@ -1,11 +1,11 @@
 import type { Elternteil } from "./Elternteil";
 
 export type Gesamtsumme<E extends Elternteil> = {
-  summe: number;
-  summeProElternteil: Record<E, SummeFuerElternteil>;
+  readonly summe: number;
+  readonly summeProElternteil: Record<E, SummeFuerElternteil>;
 };
 
 export type SummeFuerElternteil = {
-  anzahlMonateMitBezug: number;
-  totalerElterngeldbezug: number;
+  readonly anzahlMonateMitBezug: number;
+  readonly totalerElterngeldbezug: number;
 };

@@ -1,4 +1,4 @@
 export type Zeitraum = {
-  from: Date;
-  to: Date;
+  readonly from: Date;
+  readonly to: Date;
 };

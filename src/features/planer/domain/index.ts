@@ -13,7 +13,7 @@ export type {
   Elterngeldbezuege,
   ElterngeldbezugProVariante,
 } from "./Elterngeldbezuege";
-export { Elternteil } from "./Elternteil";
+export { Elternteil, compareElternteile } from "./Elternteil";
 export { type Gesamtsumme, type SummeFuerElternteil } from "./Gesamtsumme";
 export {
   type Lebensmonat,
@@ -49,4 +49,8 @@ export {
 } from "./verfuegbares-kontingent";
 export { type VerplantesKontingent } from "./verplantes-kontingent";
 export { type Zeitraum, berechneZeitraumFuerLebensmonat } from "./zeitraum";
-export { type Planungsuebersicht, type Bezug } from "./Zusammenfassung";
+export {
+  type Planungsuebersicht,
+  type Planungsdetails,
+  type Bezug,
+} from "./Zusammenfassung";

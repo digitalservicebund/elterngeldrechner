@@ -9,6 +9,7 @@ export {
   type Elterngeldbezuege,
   type ElterngeldbezugProVariante,
   Elternteil,
+  compareElternteile,
   type Gesamtsumme,
   type SummeFuerElternteil,
   type Lebensmonat,
@@ -39,5 +40,6 @@ export {
   type Zeitraum,
   berechneZeitraumFuerLebensmonat,
   type Planungsuebersicht,
+  type Planungsdetails,
   type Bezug,
 } from "@/features/planer/domain";

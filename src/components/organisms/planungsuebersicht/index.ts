@@ -1,1 +1,0 @@
-export { Planungsdetails } from "./Planungsdetails";

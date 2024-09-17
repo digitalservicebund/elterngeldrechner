@@ -1,29 +1,38 @@
 import type { ReactNode } from "react";
+import React from "react";
 import type { Zeitraum } from "@/features/planer/user-interface/service";
 
 type Props = {
   readonly zeitraum: Zeitraum;
+  readonly htmlElementType?: keyof React.ReactHTML;
+  readonly prefix?: string;
   readonly id?: string;
   readonly className?: string;
 };
 
-export function ZeitraumLabel({ zeitraum, id, className }: Props): ReactNode {
-  const shortVisualLabel = composeShortVisualLabel(zeitraum);
-  const longReadOutLabel = composeLongReadOutLabel(zeitraum);
+export function ZeitraumLabel({
+  zeitraum,
+  prefix,
+  htmlElementType,
+  id,
+  className,
+}: Props): ReactNode {
+  const shortVisualLabel = composeShortVisualLabel(zeitraum, prefix);
+  const longReadOutLabel = composeLongReadOutLabel(zeitraum, prefix);
 
-  return (
-    <span
-      id={id}
-      className={className}
-      aria-label={longReadOutLabel}
-      data-testid="label"
-    >
-      {shortVisualLabel}
-    </span>
+  return React.createElement(
+    htmlElementType ?? "span",
+    {
+      id,
+      className,
+      ["aria-label"]: longReadOutLabel,
+      ["data-testid"]: "label",
+    },
+    shortVisualLabel,
   );
 }
 
-function composeShortVisualLabel(zeitraum: Zeitraum): string {
+function composeShortVisualLabel(zeitraum: Zeitraum, prefix?: string): string {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
@@ -39,10 +48,11 @@ function composeShortVisualLabel(zeitraum: Zeitraum): string {
     year: "numeric",
   });
 
-  return `Zeitraum: ${formattedFrom} bis ${formattedTo}`;
+  const withoutPrefix = `${formattedFrom} bis ${formattedTo}`;
+  return prefix ? `${prefix}: ${withoutPrefix}` : withoutPrefix;
 }
 
-function composeLongReadOutLabel(zeitraum: Zeitraum): string {
+function composeLongReadOutLabel(zeitraum: Zeitraum, prefix?: string): string {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
@@ -58,5 +68,6 @@ function composeLongReadOutLabel(zeitraum: Zeitraum): string {
     year: "numeric",
   });
 
-  return `Zeitraum vom ${formattedFrom} bis zum ${formattedTo}`;
+  const withoutPrefix = `vom ${formattedFrom} bis zum ${formattedTo}`;
+  return prefix ? `${prefix} ${withoutPrefix}` : withoutPrefix;
 }

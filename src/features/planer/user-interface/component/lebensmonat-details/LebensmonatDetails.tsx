@@ -124,6 +124,7 @@ export function LebensmonatDetails<E extends Elternteil>({
             PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
           )}
           zeitraum={zeitraum}
+          prefix="Zeitraum"
         />
 
         {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {

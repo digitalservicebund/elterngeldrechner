@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserFeedbackSection } from "@/components/molecules/UserFeedbackSection";
 import { DatenInAntragUebernehmenButton } from "@/components/organisms/DatenInAntragUebernehmenButton";
@@ -8,31 +7,12 @@ import { formSteps } from "@/utils/formSteps";
 import nsp from "@/globals/js/namespace";
 
 function ZusammenfassungUndDatenPage() {
-  const descriptionIdentifier = useId();
-
   const navigate = useNavigate();
   const navigateToPreviousStep = () =>
     navigate(formSteps.rechnerUndPlaner.route);
 
   return (
     <Page step={formSteps.zusammenfassungUndDaten}>
-      <div className="mb-40 flex flex-wrap justify-between gap-y-80">
-        <section
-          className="flex basis-full flex-col gap-24"
-          aria-describedby={descriptionIdentifier}
-        >
-          <h3>Zusammenfassung</h3>
-
-          <p id={descriptionIdentifier}>
-            Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate
-          </p>
-        </section>
-
-        <section className="flex basis-full break-before-page break-inside-avoid flex-col gap-y-16">
-          <h3>Planung der Monate im Detail</h3>
-        </section>
-      </div>
-
       <div className="flex flex-col gap-y-32">
         <div>
           <PrintButton />

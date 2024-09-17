@@ -20,15 +20,21 @@ export function AbschnittMitPlanungsuebersicht<E extends Elternteil>({
   pseudonymeDerElternteile,
 }: Props<E>): ReactNode {
   const headingIdentifier = useId();
+  const descriptionIdentifier = useId();
 
   return (
     <section
       className="flex flex-wrap gap-16 *:grow"
       aria-labelledby={headingIdentifier}
+      aria-describedby={descriptionIdentifier}
     >
-      <h4 id={headingIdentifier} className="basis-full">
+      <h4 id={headingIdentifier} className="sr-only">
         Planungsübersicht
       </h4>
+
+      <p id={descriptionIdentifier} className="basis-full">
+        Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate
+      </p>
 
       {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
         ([elternteil, pseudonym]) => {

@@ -12,7 +12,7 @@ export function Variantenplakette({ variante }: Props): ReactNode {
   return (
     <span
       className={classNames(
-        "flex min-w-[7ch] items-center justify-center rounded p-8 text-center font-bold",
+        "flex min-w-[7ch] justify-center rounded p-8 font-bold",
         className,
       )}
     >

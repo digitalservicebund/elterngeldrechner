@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import { TabelleMitLebensmonaten } from "./TabelleMitLebensmonaten";
 import {
   type Elternteil,
@@ -17,11 +17,16 @@ export function AbschnittMitPlanungsdetails<E extends Elternteil>({
   pseudonymeDerElternteile,
   geburtsdatumDesKindes,
 }: Props<E>): ReactNode {
-  const elternteile = listElternteile(planungsdetails);
+  const headingIdentifier = useId();
   const elternteile = listElternteile(pseudonymeDerElternteile);
 
   return (
-    <div className="@container/planungs-details" data-testid="planungsdetails">
+    <section
+      className="@container/planungs-details"
+      aria-labelledby={headingIdentifier}
+    >
+      <h4 id={headingIdentifier}>Planung der Monate im Detail</h4>
+
       <div className="flex flex-col gap-y-32 @2xl/planungs-details:hidden">
         {elternteile.map((elternteil) => (
           <TabelleMitLebensmonaten
@@ -42,7 +47,7 @@ export function AbschnittMitPlanungsdetails<E extends Elternteil>({
           elternteileToShow={elternteile}
         />
       </div>
-    </div>
+    </section>
   );
 }
 

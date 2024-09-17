@@ -34,6 +34,7 @@ export {
   berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
+  fassePlanZusammen,
   setzePlanZurueck,
   waehleOption,
 } from "./plan";

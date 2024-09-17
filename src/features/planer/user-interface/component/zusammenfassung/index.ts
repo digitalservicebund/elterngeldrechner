@@ -1,0 +1,1 @@
+export { Zusammenfassung } from "./Zusammenfassung";

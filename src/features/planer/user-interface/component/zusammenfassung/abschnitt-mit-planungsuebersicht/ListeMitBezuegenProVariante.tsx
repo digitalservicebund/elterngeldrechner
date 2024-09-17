@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
+import { Variantenplakette } from "@/features/planer/user-interface/component/zusammenfassung/Variantenplakette";
 import {
   compareVarianten,
   Variante,
@@ -26,20 +27,11 @@ export function ListeMitBezuegenProVariante({
       aria-label={`Bezüge pro Elterngeldvariante von ${pseudonymDesElternteils}`}
     >
       {listeBezuegeAuf(bezuegeProVariante).map(([variante, bezug]) => {
-        const { shortName, className } =
-          RENDER_PROPERTIES[variante as Variante];
         const { anzahlMonate, totalerElterngeldbezug } = bezug;
 
         return (
           <li key={variante} className="flex items-start gap-24 py-8">
-            <span
-              className={classNames(
-                "flex min-w-[7ch] items-center justify-center rounded px-8 pb-10 pt-6 font-bold leading-[1.444]",
-                className,
-              )}
-            >
-              {shortName}
-            </span>
+            <Variantenplakette variante={variante} />
 
             <span>
               {variante} | {anzahlMonate} Monate
@@ -59,23 +51,3 @@ function listeBezuegeAuf(
   const unsorted = Object.entries(bezuege) as [Variante, Bezug][];
   return unsorted.sort(([left], [right]) => compareVarianten(left, right));
 }
-
-const RENDER_PROPERTIES: Record<Variante, RenderProperties> = {
-  [Variante.Basis]: {
-    shortName: "Basis",
-    className: "bg-Basis text-white",
-  },
-  [Variante.Plus]: {
-    shortName: "Plus",
-    className: "bg-Plus text-black",
-  },
-  [Variante.Bonus]: {
-    shortName: "Bonus",
-    className: "bg-Bonus text-black",
-  },
-};
-
-type RenderProperties = {
-  shortName: string;
-  className: string;
-};

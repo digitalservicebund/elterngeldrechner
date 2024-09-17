@@ -1,5 +1,13 @@
 import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
 import {
+  erstelleInitialenLebensmonat,
+  listeMonateAuf,
+} from "@/features/planer/domain/lebensmonat";
+import {
+  listeLebensmonateAuf,
+  type Lebensmonate,
+} from "@/features/planer/domain/lebensmonate";
+import {
   berechneZeitraumFuerLebensmonat,
   Zeitraum,
 } from "@/features/planer/domain/zeitraum";
@@ -10,7 +18,10 @@ import {
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import { isVariante, Variante } from "@/features/planer/domain/Variante";
 import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
-import { isElternteil } from "@/features/planer/domain/Elternteil";
+import {
+  isElternteil,
+  type Elternteil,
+} from "@/features/planer/domain/Elternteil";
 import type { Monat } from "@/features/planer/domain/monat";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 import type {
@@ -18,6 +29,7 @@ import type {
   Planungsuebersicht,
   PlanungsuebersichtFuerElternteil,
   Bezug,
+  Planungsdetails,
 } from "@/features/planer/domain/Zusammenfassung";
 import type {
   Ausgangslage,
@@ -28,7 +40,8 @@ export function fassePlanZusammen<A extends Ausgangslage>(
   plan: Plan<A>,
 ): Zusammenfassung<ElternteileByAusgangslage<A>> {
   const planungsuebersicht = erstellePlaungsuebersicht(plan);
-  return { planungsuebersicht };
+  const planungsdetails = erstellePlanungsdetails(plan);
+  return { planungsuebersicht, planungsdetails };
 }
 
 function erstellePlaungsuebersicht<A extends Ausgangslage>(
@@ -45,6 +58,32 @@ function erstellePlaungsuebersicht<A extends Ausgangslage>(
     lebensmonateProElternteil,
     isElternteil,
     erstelleUebersichtFuerElternteil.bind({ geburtsdatumDesKindes }),
+  );
+}
+
+function erstellePlanungsdetails<A extends Ausgangslage>(
+  plan: Plan<A>,
+): Planungsdetails<ElternteileByAusgangslage<A>> {
+  const geplanteLebensmonate = trimDownAndFillUpLebensmonate(plan);
+  return { geplanteLebensmonate };
+}
+
+function trimDownAndFillUpLebensmonate<A extends Ausgangslage>(
+  plan: Plan<A>,
+): Lebensmonate<ElternteileByAusgangslage<A>> {
+  const lastPlannedLebensmonat =
+    findLastLebensmonatszahlWithPlannedMonat(plan.lebensmonate) ?? 0;
+
+  return Lebensmonatszahlen.filter(
+    (lebensmonatszahl) => lebensmonatszahl <= lastPlannedLebensmonat,
+  ).reduce<Lebensmonate<ElternteileByAusgangslage<A>>>(
+    (filledLebensmonate, lebensmonatszahl) => ({
+      ...filledLebensmonate,
+      [lebensmonatszahl]:
+        plan.lebensmonate[lebensmonatszahl] ??
+        erstelleInitialenLebensmonat(plan.ausgangslage, lebensmonatszahl),
+    }),
+    {},
   );
 }
 
@@ -139,6 +178,16 @@ function fasseBezugVonVarianteZusammen(
   );
 
   return { anzahlMonate, totalerElterngeldbezug };
+}
+
+function findLastLebensmonatszahlWithPlannedMonat<E extends Elternteil>(
+  lebensmonate: Lebensmonate<E>,
+): Lebensmonatszahl | undefined {
+  return listeLebensmonateAuf(lebensmonate, true).findLast(([, lebensmonat]) =>
+    listeMonateAuf(lebensmonat).some(([, monat]) =>
+      isVariante(monat.gewaehlteOption),
+    ),
+  )?.[0];
 }
 
 if (import.meta.vitest) {
@@ -243,8 +292,8 @@ if (import.meta.vitest) {
         /*
          * FIXME:
          * It is currently not possible to mock the this without global side
-         * effects on component tests. The tests themself work fine and can be
-         * execute individually. There is an open GitHub discussion on GitHub
+         * effects on component tests.The tests themself work fine and can be
+         * execute individually.There is an open GitHub discussion on GitHub
          * for this topic.
          */
         // vi.mock(
@@ -425,6 +474,70 @@ if (import.meta.vitest) {
           expect(
             bezuegeElternteilZwei[Variante.Bonus].totalerElterngeldbezug,
           ).toBe(14);
+        });
+      });
+
+      describe("Planungsdetails", () => {
+        it("removes Lebensmonate without any chosen Option", () => {
+          const lebensmonate = {
+            1: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(undefined),
+            },
+            2: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(Variante.Plus),
+            },
+            3: {
+              [Elternteil.Eins]: monat(undefined),
+              [Elternteil.Zwei]: monat(KeinElterngeld),
+            },
+          };
+          const plan = { ...ANY_PLAN, lebensmonate };
+
+          const { planungsdetails } = fassePlanZusammen(plan);
+
+          expect(planungsdetails.geplanteLebensmonate).toStrictEqual({
+            1: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(undefined),
+            },
+            2: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(Variante.Plus),
+            },
+          });
+        });
+
+        it("fills up gaps of unplanned Lebensmonate", () => {
+          const lebensmonate = {
+            1: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(undefined),
+            },
+            3: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(Variante.Plus),
+            },
+          };
+          const plan = { ...ANY_PLAN, lebensmonate };
+
+          const { planungsdetails } = fassePlanZusammen(plan);
+
+          expect(planungsdetails.geplanteLebensmonate).toStrictEqual({
+            1: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(undefined),
+            },
+            2: {
+              [Elternteil.Eins]: { imMutterschutz: false },
+              [Elternteil.Zwei]: { imMutterschutz: false },
+            },
+            3: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(Variante.Plus),
+            },
+          });
         });
       });
     });

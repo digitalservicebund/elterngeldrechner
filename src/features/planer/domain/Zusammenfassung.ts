@@ -1,9 +1,11 @@
 import type { Variante } from "./Variante";
 import type { Elternteil } from "./Elternteil";
 import type { Zeitraum } from "./zeitraum";
+import type { Lebensmonate } from "./lebensmonate";
 
 export type Zusammenfassung<E extends Elternteil> = {
   readonly planungsuebersicht: Planungsuebersicht<E>;
+  readonly planungsdetails: Planungsdetails<E>;
 };
 
 export type Planungsuebersicht<E extends Elternteil> = Readonly<
@@ -19,4 +21,8 @@ export type PlanungsuebersichtFuerElternteil = {
 export type Bezug = {
   readonly anzahlMonate: number;
   readonly totalerElterngeldbezug: number;
+};
+
+export type Planungsdetails<E extends Elternteil> = {
+  readonly geplanteLebensmonate: Lebensmonate<E>;
 };

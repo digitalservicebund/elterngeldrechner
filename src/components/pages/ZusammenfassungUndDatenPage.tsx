@@ -3,10 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { UserFeedbackSection } from "@/components/molecules/UserFeedbackSection";
 import { DatenInAntragUebernehmenButton } from "@/components/organisms/DatenInAntragUebernehmenButton";
 import { Button, PrintButton } from "@/components/atoms";
-import {
-  Planungsuebersicht,
-  Planungsdetails,
-} from "@/components/organisms/planungsuebersicht";
+import { Planungsdetails } from "@/components/organisms/planungsuebersicht";
 import { Page } from "@/components/organisms/page";
 import { formSteps } from "@/utils/formSteps";
 import nsp from "@/globals/js/namespace";
@@ -32,8 +29,6 @@ function ZusammenfassungUndDatenPage() {
           <p id={descriptionIdentifier}>
             Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate
           </p>
-
-          <Planungsuebersicht data={data} />
         </section>
 
         <section className="flex basis-full break-before-page break-inside-avoid flex-col gap-y-16">

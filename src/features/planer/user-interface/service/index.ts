@@ -32,9 +32,12 @@ export {
   listePseudonymeAuf,
   Result,
   Variante,
+  compareVarianten,
   type VerfuegbaresKontingent,
   listeKontingentAuf,
   type VerplantesKontingent,
   type Zeitraum,
   berechneZeitraumFuerLebensmonat,
+  type Planungsuebersicht,
+  type Bezug,
 } from "@/features/planer/domain";

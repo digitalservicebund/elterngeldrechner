@@ -42,10 +42,11 @@ export {
   listePseudonymeAuf,
 } from "./pseudonyme-der-elternteile";
 export { Result } from "./common/Result";
-export { Variante } from "./Variante";
+export { Variante, compareVarianten } from "./Variante";
 export {
   type VerfuegbaresKontingent,
   listeKontingentAuf,
 } from "./verfuegbares-kontingent";
 export { type VerplantesKontingent } from "./verplantes-kontingent";
 export { type Zeitraum, berechneZeitraumFuerLebensmonat } from "./zeitraum";
+export { type Planungsuebersicht, type Bezug } from "./Zusammenfassung";

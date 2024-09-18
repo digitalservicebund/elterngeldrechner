@@ -4,47 +4,33 @@ import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
-import type {
-  BestimmeAuswahlmoeglichkeiten,
-  ErstelleUngeplantenLebensmonat,
-  WaehleOption,
-} from "@/features/planer/user-interface/service/callbackTypes";
-import {
-  type Elternteil,
-  type Gesamtsumme,
-  type Lebensmonate,
-  type PseudonymeDerElternteile,
-  type VerfuegbaresKontingent,
-  type VerplantesKontingent,
-} from "@/features/planer/user-interface/service";
+import { usePlanerService } from "@/features/planer/user-interface/service/usePlanerService";
+import { type PlanMitBeliebigenElternteilen } from "@/features/planer/user-interface/service";
 
-type Props<E extends Elternteil> = {
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly geburtsdatumDesKindes: Date;
-  readonly lebensmonate: Lebensmonate<E>;
-  readonly verfuegbaresKontingent: VerfuegbaresKontingent;
-  readonly verplantesKontingent: VerplantesKontingent;
-  readonly gesamtsumme: Gesamtsumme<E>;
-  readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<E>;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
-  readonly waehleOption: WaehleOption<E>;
-  readonly setzePlanZurueck: () => void;
+type Props = {
+  readonly initialPlan: PlanMitBeliebigenElternteilen | undefined;
+  readonly onPlanChanged: (plan: PlanMitBeliebigenElternteilen) => void;
   readonly className?: string;
 };
 
-export function Planer<E extends Elternteil>({
-  pseudonymeDerElternteile,
-  geburtsdatumDesKindes,
-  lebensmonate,
-  verfuegbaresKontingent,
-  verplantesKontingent,
-  gesamtsumme,
-  erstelleUngeplantenLebensmonat,
-  bestimmeAuswahlmoeglichkeiten,
-  waehleOption,
-  setzePlanZurueck,
+export function Planer({
+  initialPlan,
+  onPlanChanged,
   className,
-}: Props<E>): ReactNode {
+}: Props): ReactNode {
+  const {
+    pseudonymeDerElternteile,
+    geburtsdatumDesKindes,
+    lebensmonate,
+    verfuegbaresKontingent,
+    verplantesKontingent,
+    gesamtsumme,
+    erstelleUngeplantenLebensmonat,
+    bestimmeAuswahlmoeglichkeiten,
+    waehleOption,
+    setzePlanZurueck,
+  } = usePlanerService(initialPlan, onPlanChanged);
+
   const headingIdentifier = useId();
 
   const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);

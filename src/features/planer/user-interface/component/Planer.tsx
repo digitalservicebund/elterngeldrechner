@@ -10,7 +10,9 @@ import { type PlanMitBeliebigenElternteilen } from "@/features/planer/user-inter
 
 type Props = {
   readonly initialPlan: PlanMitBeliebigenElternteilen | undefined;
-  readonly onPlanChanged: (plan: PlanMitBeliebigenElternteilen) => void;
+  readonly onPlanChanged: (
+    plan: PlanMitBeliebigenElternteilen | undefined,
+  ) => void;
   readonly className?: string;
 };
 

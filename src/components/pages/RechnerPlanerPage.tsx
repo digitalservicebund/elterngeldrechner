@@ -41,16 +41,20 @@ function RechnerPlanerPage() {
 
   const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
   const plan = useRef(initialPlan);
+  const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
-  function setPlan(nextPlan: PlanMitBeliebigenElternteilen): void {
+  function setPlan(nextPlan: PlanMitBeliebigenElternteilen | undefined): void {
     plan.current = nextPlan;
+    setIstPlanGueltig(nextPlan !== undefined);
   }
 
-  function navigateToNextStep(): void {
-    navigateWithPlanState(
-      formSteps.zusammenfassungUndDaten.route,
-      plan.current,
-    );
+  function navigateToUebersicht(): void {
+    if (istPlanGueltig) {
+      navigateWithPlanState(
+        formSteps.zusammenfassungUndDaten.route,
+        plan.current,
+      );
+    }
   }
 
   const navigate = useNavigate();
@@ -87,7 +91,12 @@ function RechnerPlanerPage() {
           label="Zurück"
           onClick={navigateToPreviousStep}
         />
-        <Button label="Zur Übersicht" onClick={navigateToNextStep} />
+
+        <Button
+          label="Zur Übersicht"
+          onClick={navigateToUebersicht}
+          disabled={!istPlanGueltig}
+        />
       </div>
 
       {!!showModalPopup && (

@@ -311,6 +311,31 @@ describe("use Planer service", () => {
       expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
     });
 
+    it("triggers the callback with an undefined Plan when the chosen Plan is invalid", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+        Result.error([{ message: "ungültig" }]),
+      );
+      const onPlanChanged = vi.fn();
+      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+
+      act(() =>
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
+      );
+
+      expect(onPlanChanged).toHaveBeenCalledOnce();
+      expect(onPlanChanged).toHaveBeenLastCalledWith(undefined);
+    });
+
+    it("does not trigger callback if the initial Plan is invalid", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+        Result.error([{ message: "ungültig" }]),
+      );
+      const onPlanChanged = vi.fn();
+      renderPlanerServiceHook(undefined, onPlanChanged);
+
+      expect(onPlanChanged).not.toHaveBeenCalled();
+    });
+
     it("triggers the given callback when resetting the Plan", () => {
       vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
       const onPlanChanged = vi.fn();
@@ -403,7 +428,7 @@ describe("use Planer service", () => {
 
 function renderPlanerServiceHook(
   initialPlan: PlanMitBeliebigenElternteilen | undefined = undefined,
-  onPlanChanged?: (plan: PlanMitBeliebigenElternteilen) => void,
+  onPlanChanged?: (plan: PlanMitBeliebigenElternteilen | undefined) => void,
 ) {
   return renderHook(
     () => usePlanerService(initialPlan, onPlanChanged ?? vi.fn()),

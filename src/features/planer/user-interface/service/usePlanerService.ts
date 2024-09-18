@@ -21,7 +21,7 @@ import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export function usePlanerService(
   initialPlan: PlanMitBeliebigenElternteilen | undefined,
-  onPlanChanged: (plan: PlanMitBeliebigenElternteilen) => void,
+  onPlanChanged: (plan: PlanMitBeliebigenElternteilen | undefined) => void,
 ) {
   const store = useAppStore();
   const errechneteElterngeldbezuege = useAppSelector(
@@ -74,7 +74,8 @@ export function usePlanerService(
       ).mapOrElse(() => [], extractFehlernachrichten);
       setValidierungsfehler(nextValidierungsfehler);
 
-      onPlanChanged?.(nextPlan);
+      const istPlanGueltig = nextValidierungsfehler.length === 0;
+      istPlanGueltig ? onPlanChanged?.(nextPlan) : onPlanChanged?.(undefined);
     },
     [onPlanChanged],
   );

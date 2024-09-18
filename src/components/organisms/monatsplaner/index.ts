@@ -1,1 +1,0 @@
-export { Monatsplaner } from "./Monatsplaner";

@@ -3,10 +3,8 @@ export { Button } from "./button";
 export { LabelCounter } from "./label-counter";
 export { Description } from "./description";
 export { FootNoteNumber } from "./foot-note-number";
-export { MonatsplanerMonth } from "./monatsplaner-month";
 export {
   NotificationBEGResultWasRecalculated,
-  NotificationValidationMonatsplaner,
   NotificationMaxElterngeld,
 } from "./notification";
 export { SplitItem } from "./split-item";

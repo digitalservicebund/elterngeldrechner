@@ -13,7 +13,5 @@ export { CustomInput } from "./custom-input";
 export { Split } from "./split";
 export { ButtonGroup } from "./button-group";
 export { AccessControl } from "./access-control";
-export { Elternteil } from "./elternteil";
-export type { AmountElterngeldRow } from "./elternteil";
 export { RechnerForm } from "./rechner-form";
 export { RechnerResult } from "./rechner-result";

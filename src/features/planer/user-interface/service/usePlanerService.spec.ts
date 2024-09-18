@@ -13,6 +13,7 @@ import {
   zaehleVerplantesKontingent,
   type PlanMitBeliebigenElternteilen,
 } from ".";
+import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 import type { AppStore } from "@/redux";
@@ -25,6 +26,9 @@ vi.mock(
 );
 vi.mock("@/features/planer/domain/plan/operation/setzePlanZurueck");
 vi.mock("@/features/planer/domain/plan/operation/berechneGesamtsumme");
+vi.mock(
+  "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe",
+);
 vi.mock(
   "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent",
 );
@@ -39,7 +43,10 @@ describe("use Planer service", () => {
     vi.mocked(aktualisiereErrechneteElterngelbezuege).mockImplementation(
       (plan) => plan,
     );
-    vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
+    vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+      Result.ok(undefined),
+    );
+    vi.mocked(waehleOption).mockImplementation((plan) => Result.ok(plan));
     vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
   });
 
@@ -313,6 +320,83 @@ describe("use Planer service", () => {
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
       expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
+    });
+  });
+
+  describe("validierungsfehler", () => {
+    it("has no Fehler when validation for a gültigen Plan is satisifed", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+        Result.ok(undefined),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalled();
+      expect(result.current.validierungsfehler.length).toBe(0);
+    });
+
+    it("provides no Fehler when validation for a gültigen Plan is unsatisfied", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+        Result.error([{ message: "falsch" }, { message: "ungültig" }]),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalled();
+      expect(result.current.validierungsfehler).toStrictEqual([
+        "falsch",
+        "ungültig",
+      ]);
+    });
+
+    it("updates the Fehler when choosing an Option and the resulting Plan is invalid", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.ok(undefined),
+      );
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.error([{ message: "falsch" }]),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(result.current.validierungsfehler.length).toBe(0);
+
+      act(() =>
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
+      );
+
+      expect(result.current.validierungsfehler.length).toBe(1);
+    });
+
+    it("clears the Fehler when choosing an Option and the resulting Plan valid again", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.error([{ message: "falsch" }]),
+      );
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.ok(undefined),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(result.current.validierungsfehler.length).toBe(1);
+
+      act(() =>
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
+      );
+
+      expect(result.current.validierungsfehler.length).toBe(0);
+    });
+
+    it("updates the Fehler when resetting the Plan and the empty Plan is invalid", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.ok(undefined),
+      );
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.error([{ message: "falsch" }]),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(result.current.validierungsfehler.length).toBe(0);
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(result.current.validierungsfehler.length).toBe(1);
     });
   });
 });

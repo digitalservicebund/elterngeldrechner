@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { errechneteElterngeldbezuegeSelector } from "./errechneteElterngeldbezuegeSelector";
 import { composeAusgangslage } from "./composeAusgangslage";
 import type { WaehleOption } from "./callbackTypes";
+import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import {
   bestimmeVerfuegbaresKontingent,
   type Elternteil,
@@ -49,6 +50,13 @@ export function usePlanerService(
     berechneGesamtsumme(plan),
   );
 
+  const [validierungsfehler, setValidierungsfehler] = useState<string[]>(() =>
+    validierePlanFuerFinaleAbgabe(plan).mapOrElse(
+      () => [],
+      extractFehlernachrichten,
+    ),
+  );
+
   const updateStateAndTriggerCallbacks = useCallback(
     (nextPlan: PlanMitBeliebigenElternteilen) => {
       trackPartnerschaftlicheVerteilung(nextPlan);
@@ -60,6 +68,11 @@ export function usePlanerService(
 
       const nextGesamtsumme = berechneGesamtsumme(nextPlan);
       setGesamtsumme(nextGesamtsumme);
+
+      const nextValidierungsfehler: string[] = validierePlanFuerFinaleAbgabe(
+        nextPlan,
+      ).mapOrElse(() => [], extractFehlernachrichten);
+      setValidierungsfehler(nextValidierungsfehler);
 
       onPlanChanged?.(nextPlan);
     },
@@ -122,9 +135,14 @@ export function usePlanerService(
     verfuegbaresKontingent: verfuegbaresKontingent.current,
     verplantesKontingent,
     gesamtsumme,
+    validierungsfehler,
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
     waehleOption: waehleOptionCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
   };
+}
+
+function extractFehlernachrichten(violations: { message: string }[]): string[] {
+  return violations.map((violation) => violation.message);
 }

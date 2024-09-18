@@ -42,10 +42,14 @@ export function composeAusgangslage(state: RootState): Ausgangslage {
     sindMehrlinge,
   };
 
+  const pseudonyme = getPseudonymeFuerAlleElternteile(
+    stepAllgemeineAngaben.pseudonym,
+  );
+
   switch (anzahlElternteile) {
     case 1: {
       const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: stepAllgemeineAngaben.pseudonym.ET1,
+        [Elternteil.Eins]: pseudonyme[Elternteil.Eins],
       };
       const empfaenger = Elternteil.Eins as const;
       const informationenZumMutterschutz = hatMutterschutz
@@ -62,8 +66,8 @@ export function composeAusgangslage(state: RootState): Ausgangslage {
 
     case 2: {
       const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: stepAllgemeineAngaben.pseudonym.ET1,
-        [Elternteil.Zwei]: stepAllgemeineAngaben.pseudonym.ET2,
+        [Elternteil.Eins]: pseudonyme[Elternteil.Eins],
+        [Elternteil.Zwei]: pseudonyme[Elternteil.Zwei],
       };
       const empfaenger =
         stepAllgemeineAngaben.mutterschaftssleistungenWer === "ET1"
@@ -81,6 +85,17 @@ export function composeAusgangslage(state: RootState): Ausgangslage {
       };
     }
   }
+}
+
+function getPseudonymeFuerAlleElternteile(possiblyEmptyPseudonyme: {
+  ET1: string;
+  ET2: string;
+}): Record<Elternteil, string> {
+  const { ET1, ET2 } = possiblyEmptyPseudonyme;
+  return {
+    [Elternteil.Eins]: ET1 ? ET1 : "Elternteil 1",
+    [Elternteil.Zwei]: ET2 ? ET2 : "Elternteil 2",
+  };
 }
 
 if (import.meta.vitest) {
@@ -142,6 +157,22 @@ if (import.meta.vitest) {
             ausgangslage.pseudonymeDerElternteile as PseudonymeDerElternteile<Elternteil>
           )[Elternteil.Zwei],
         ).toBe("John");
+      });
+
+      it("uses default Pseudonyme if kept empty", () => {
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepAllgemeineAngaben.pseudonym = { ET1: "", ET2: "" };
+          draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        });
+
+        const { pseudonymeDerElternteile } = composeAusgangslage(state);
+
+        expect(pseudonymeDerElternteile[Elternteil.Eins]).toBe("Elternteil 1");
+        expect(
+          (pseudonymeDerElternteile as PseudonymeDerElternteile<Elternteil>)[
+            Elternteil.Zwei
+          ],
+        ).toBe("Elternteil 2");
       });
     });
 

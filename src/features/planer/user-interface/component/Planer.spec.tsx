@@ -88,6 +88,22 @@ describe("Planer", () => {
 
       expect(window.print).toHaveBeenCalled();
     });
+
+    it("does not work when there are some Validierungsfehler", async () => {
+      vi.mocked(usePlanerService).mockReturnValue({
+        ...ANY_SERVICE_VALUES,
+        validierungsfehler: ["fehler"],
+      });
+      window.print = vi.fn();
+      render(<Planer {...ANY_PROPS} />);
+
+      const button = screen.getByRole("button", {
+        name: "Download der Planung",
+      });
+      await userEvent.click(button);
+
+      expect(window.print).not.toHaveBeenCalled();
+    });
   });
 });
 

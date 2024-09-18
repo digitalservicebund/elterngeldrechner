@@ -45,7 +45,11 @@ export function Planer({
     elementToViewOnPlanungWiederholen.current?.focus({ preventScroll: true });
   }, [setzePlanZurueck]);
 
-  const downloadePlan = useCallback(() => window.print(), []);
+  const istPlanGueltig = validierungsfehler.length === 0;
+
+  const downloadePlan = useCallback(() => {
+    istPlanGueltig && window.print();
+  }, [istPlanGueltig]);
 
   return (
     <section className={className} aria-labelledby={headingIdentifier}>
@@ -89,6 +93,7 @@ export function Planer({
         className="my-40"
         planungWiederholen={planungWiederholen}
         downloadePlan={downloadePlan}
+        isDownloadDisabled={!istPlanGueltig}
       />
 
       <Validierungsfehlerbox validierungsfehler={validierungsfehler} />

@@ -7,12 +7,14 @@ import { Button } from "@/components/atoms";
 type Props = {
   readonly planungWiederholen: () => void;
   readonly downloadePlan: () => void;
+  readonly isDownloadDisabled?: boolean;
   readonly className?: string;
 };
 
 export function Funktionsleiste({
   planungWiederholen,
   downloadePlan,
+  isDownloadDisabled,
   className,
 }: Props): ReactNode {
   const headingIdentifier = useId();
@@ -34,6 +36,9 @@ export function Funktionsleiste({
       />
 
       <Button
+        className={classNames({
+          "text-grey-dark hover:cursor-default": isDownloadDisabled,
+        })}
         buttonStyle="link"
         label="Download der Planung"
         iconBefore={<SaveAltIcon />}

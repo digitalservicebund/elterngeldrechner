@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { AccessControl } from "@/components/molecules";
@@ -11,8 +11,9 @@ import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import { Planer } from "@/features/planer";
+import { Planer, type PlanMitBeliebigenElternteilen } from "@/features/planer";
 import { stepRechnerSelectors } from "@/redux/stepRechnerSlice";
+import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 
 function RechnerPlanerPage() {
   const sectionLabelIdentifier = useId();
@@ -38,11 +39,23 @@ function RechnerPlanerPage() {
       ? EgrBerechnungParamId.MAX_EINKOMMEN_ALLEIN
       : EgrBerechnungParamId.MAX_EINKOMMEN_BEIDE;
 
+  const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
+  const plan = useRef(initialPlan);
+
+  function setPlan(nextPlan: PlanMitBeliebigenElternteilen): void {
+    plan.current = nextPlan;
+  }
+
+  function navigateToNextStep(): void {
+    navigateWithPlanState(
+      formSteps.zusammenfassungUndDaten.route,
+      plan.current,
+    );
+  }
+
   const navigate = useNavigate();
   const navigateToPreviousStep = () =>
     navigate(formSteps.elterngeldvarianten.route);
-  const navigateToNextStep = () =>
-    navigate(formSteps.zusammenfassungUndDaten.route);
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
@@ -62,6 +75,8 @@ function RechnerPlanerPage() {
 
             <Planer
               className={classNames({ blur: isPlanerBlocked })}
+              initialPlan={plan.current}
+              onPlanChanged={setPlan}
               aria-hidden={isPlanerBlocked}
             />
           </div>

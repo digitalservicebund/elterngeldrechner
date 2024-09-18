@@ -1,13 +1,20 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Planer } from "./Planer";
+import { usePlanerService } from "@/features/planer/user-interface/service/usePlanerService";
 import {
   Elternteil,
   KeinElterngeld,
   Variante,
 } from "@/features/planer/user-interface/service";
 
+vi.mock("@/features/planer/user-interface/service/usePlanerService");
+
 describe("Planer", () => {
+  beforeEach(() => {
+    vi.mocked(usePlanerService).mockReturnValue(ANY_SERVICE_VALUES);
+  });
+
   it("shows a section", () => {
     render(<Planer {...ANY_PROPS} />);
 
@@ -23,11 +30,23 @@ describe("Planer", () => {
     expect(screen.getByLabelText("Funktionsleiste")).toBeVisible();
   });
 
+  it("forwards the given props to the service", () => {
+    const onPlanChanged = vi.fn();
+    render(<Planer initialPlan={ANY_PLAN} onPlanChanged={onPlanChanged} />);
+
+    expect(usePlanerService).toHaveBeenCalledOnce();
+    expect(usePlanerService).toHaveBeenLastCalledWith(ANY_PLAN, onPlanChanged);
+  });
+
   describe("Planung wiederholen", () => {
     it("calls the callback to reset the Plan", async () => {
       const setzePlanZurueck = vi.fn();
-      render(<Planer {...ANY_PROPS} setzePlanZurueck={setzePlanZurueck} />);
+      vi.mocked(usePlanerService).mockReturnValue({
+        ...ANY_SERVICE_VALUES,
+        setzePlanZurueck,
+      });
 
+      render(<Planer {...ANY_PROPS} />);
       await clickPlanungWiederholen();
 
       expect(setzePlanZurueck).toHaveBeenCalledOnce();
@@ -72,8 +91,27 @@ describe("Planer", () => {
 });
 
 const ANY_PROPS = {
+  initialPlan: undefined,
+  onPlanChanged: () => undefined,
+};
+
+const ANY_PLAN = {
+  ausgangslage: {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    },
+    geburtsdatumDesKindes: new Date(),
+  },
+  lebensmonate: {},
+  errechneteElterngeldbezuege: {} as any,
+};
+
+const ANY_SERVICE_VALUES = {
   pseudonymeDerElternteile: {
     [Elternteil.Eins]: "Jane",
+    [Elternteil.Zwei]: "John",
   },
   geburtsdatumDesKindes: new Date(),
   lebensmonate: {},
@@ -95,10 +133,15 @@ const ANY_PROPS = {
         anzahlMonateMitBezug: 0,
         totalerElterngeldbezug: 0,
       },
+      [Elternteil.Zwei]: {
+        anzahlMonateMitBezug: 0,
+        totalerElterngeldbezug: 0,
+      },
     },
   },
   erstelleUngeplantenLebensmonat: () => ({
     [Elternteil.Eins]: { imMutterschutz: false as const },
+    [Elternteil.Zwei]: { imMutterschutz: false as const },
   }),
   bestimmeAuswahlmoeglichkeiten: () => ({
     [Variante.Basis]: { elterngeldbezug: 0, isDisabled: false as const },

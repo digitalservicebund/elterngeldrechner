@@ -4,6 +4,7 @@ import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
+import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { usePlanerService } from "@/features/planer/user-interface/service/usePlanerService";
 import { type PlanMitBeliebigenElternteilen } from "@/features/planer/user-interface/service";
 
@@ -25,6 +26,7 @@ export function Planer({
     verfuegbaresKontingent,
     verplantesKontingent,
     gesamtsumme,
+    validierungsfehler,
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
@@ -88,6 +90,8 @@ export function Planer({
         planungWiederholen={planungWiederholen}
         downloadePlan={downloadePlan}
       />
+
+      <Validierungsfehlerbox validierungsfehler={validierungsfehler} />
     </section>
   );
 }

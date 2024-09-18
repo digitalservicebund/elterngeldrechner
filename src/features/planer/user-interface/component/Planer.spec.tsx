@@ -28,6 +28,7 @@ describe("Planer", () => {
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
     expect(screen.getByLabelText("Gesamtsumme")).toBeVisible();
     expect(screen.getByLabelText("Funktionsleiste")).toBeVisible();
+    expect(screen.getByLabelText("Validierungsfehler")).toBeVisible();
   });
 
   it("forwards the given props to the service", () => {
@@ -139,6 +140,7 @@ const ANY_SERVICE_VALUES = {
       },
     },
   },
+  validierungsfehler: [],
   erstelleUngeplantenLebensmonat: () => ({
     [Elternteil.Eins]: { imMutterschutz: false as const },
     [Elternteil.Zwei]: { imMutterschutz: false as const },

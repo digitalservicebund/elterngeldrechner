@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { errechneteElterngeldbezuegeSelector } from "./errechneteElterngeldbezuegeSelector";
-import { ausgangslageSelector } from "./ausgangslageSelector";
+import { composeAusgangslage } from "./composeAusgangslage";
 import type { WaehleOption } from "./callbackTypes";
 import {
   bestimmeVerfuegbaresKontingent,
@@ -15,21 +15,23 @@ import {
   type PlanMitBeliebigenElternteilen,
   berechneGesamtsumme,
 } from "@/features/planer/user-interface/service";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export function usePlanerService() {
-  const ausgangslage = useAppSelector(ausgangslageSelector, () => true);
+  const store = useAppStore();
   const errechneteElterngeldbezuege = useAppSelector(
     errechneteElterngeldbezuegeSelector,
   );
 
-  const [plan, setPlan] = useState(() =>
-    erstelleInitialenPlan(ausgangslage, errechneteElterngeldbezuege),
-  );
+  const [plan, setPlan] = useState(() => {
+    const state = store.getState();
+    const ausgangslage = composeAusgangslage(state);
+    return erstelleInitialenPlan(ausgangslage, errechneteElterngeldbezuege);
+  });
 
   const verfuegbaresKontingent = useRef(
-    bestimmeVerfuegbaresKontingent(ausgangslage),
+    bestimmeVerfuegbaresKontingent(plan.ausgangslage),
   );
 
   const [verplantesKontingent, setVerplantesKontingent] = useState(() =>
@@ -54,8 +56,8 @@ export function usePlanerService() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const erstelleUngeplantenLebensmonatCallback = useCallback(
-    erstelleInitialenLebensmonat.bind(null, ausgangslage),
-    [ausgangslage],
+    erstelleInitialenLebensmonat.bind(null, plan.ausgangslage),
+    [plan],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

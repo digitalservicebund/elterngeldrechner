@@ -4,117 +4,109 @@ import {
   type PseudonymeDerElternteile,
 } from "@/features/planer/user-interface/service";
 import { YesNo } from "@/globals/js/calculations/model";
-import { createAppSelector } from "@/redux/hooks";
-import type { RootState } from "@/redux";
-import { stepNachwuchsSelectors } from "@/redux/stepNachwuchsSlice";
+import { type RootState } from "@/redux";
+import { parseGermanDateString } from "@/utils/locale-formatting";
 
-export const ausgangslageSelector = createAppSelector(
-  [
-    (store) => store.stepAllgemeineAngaben.antragstellende,
-    (store) => store.stepAllgemeineAngaben.pseudonym,
-    (store) => store.stepAllgemeineAngaben.alleinerziehend,
-    (store) => store.stepAllgemeineAngaben.mutterschaftssleistungen,
-    (store) => store.stepAllgemeineAngaben.mutterschaftssleistungenWer,
-    stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum,
-    (store) => store.stepNachwuchs.anzahlKuenftigerKinder,
-    (store) => store.stepNachwuchs.geschwisterkinder,
-  ],
-  (
-    antragstellende,
-    pseudonym,
-    alleinerziehend,
-    mutterschaftssleistungen,
-    mutterschaftssleistungenWer,
-    geburtsdatumDesKindes,
-    anzahlKuenftigerKinder,
-    geschwisterkinder,
-  ): Ausgangslage => {
-    const anzahlElternteile =
-      antragstellende === "EinenElternteil" ? (1 as const) : (2 as const);
-    const istAlleinerziehend = alleinerziehend === YesNo.YES;
-    const hatBehindertesGeschwisterkind = geschwisterkinder.some(
-      (kind) => kind.istBehindert,
-    );
-    const sindMehrlinge = anzahlKuenftigerKinder > 1;
-    const hatMutterschutz = mutterschaftssleistungen === YesNo.YES;
-    const letzterLebensmonatMitSchutz = sindMehrlinge
-      ? (3 as const)
+export function composeAusgangslage(state: RootState): Ausgangslage {
+  const { stepAllgemeineAngaben, stepNachwuchs } = state;
+
+  const anzahlElternteile =
+    stepAllgemeineAngaben.antragstellende === "EinenElternteil"
+      ? (1 as const)
       : (2 as const);
 
-    const sharedAusganslageProperties = {
-      geburtsdatumDesKindes,
-      istAlleinerziehend,
-      hatBehindertesGeschwisterkind,
-      sindMehrlinge,
-    };
+  const geburtsdatumDesKindes = parseGermanDateString(
+    stepNachwuchs.wahrscheinlichesGeburtsDatum,
+  );
 
-    switch (anzahlElternteile) {
-      case 1: {
-        const pseudonymeDerElternteile = { [Elternteil.Eins]: pseudonym.ET1 };
-        const empfaenger = Elternteil.Eins as const;
-        const informationenZumMutterschutz = hatMutterschutz
-          ? { empfaenger, letzterLebensmonatMitSchutz }
-          : undefined;
+  const istAlleinerziehend =
+    stepAllgemeineAngaben.alleinerziehend === YesNo.YES;
 
-        return {
-          ...sharedAusganslageProperties,
-          anzahlElternteile,
-          pseudonymeDerElternteile,
-          informationenZumMutterschutz,
-        };
-      }
+  const hatBehindertesGeschwisterkind = stepNachwuchs.geschwisterkinder.some(
+    (kind) => kind.istBehindert,
+  );
 
-      case 2: {
-        const pseudonymeDerElternteile = {
-          [Elternteil.Eins]: pseudonym.ET1,
-          [Elternteil.Zwei]: pseudonym.ET2,
-        };
-        const empfaenger =
-          mutterschaftssleistungenWer === "ET1"
-            ? Elternteil.Eins
-            : Elternteil.Zwei;
-        const informationenZumMutterschutz = hatMutterschutz
-          ? { empfaenger, letzterLebensmonatMitSchutz }
-          : undefined;
+  const sindMehrlinge = stepNachwuchs.anzahlKuenftigerKinder > 1;
 
-        return {
-          ...sharedAusganslageProperties,
-          anzahlElternteile,
-          pseudonymeDerElternteile,
-          informationenZumMutterschutz,
-        };
-      }
+  const hatMutterschutz =
+    stepAllgemeineAngaben.mutterschaftssleistungen === YesNo.YES;
+
+  const letzterLebensmonatMitSchutz = sindMehrlinge
+    ? (3 as const)
+    : (2 as const);
+
+  const sharedAusganslageProperties = {
+    geburtsdatumDesKindes,
+    istAlleinerziehend,
+    hatBehindertesGeschwisterkind,
+    sindMehrlinge,
+  };
+
+  switch (anzahlElternteile) {
+    case 1: {
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: stepAllgemeineAngaben.pseudonym.ET1,
+      };
+      const empfaenger = Elternteil.Eins as const;
+      const informationenZumMutterschutz = hatMutterschutz
+        ? { empfaenger, letzterLebensmonatMitSchutz }
+        : undefined;
+
+      return {
+        ...sharedAusganslageProperties,
+        anzahlElternteile,
+        pseudonymeDerElternteile,
+        informationenZumMutterschutz,
+      };
     }
-  },
-);
+
+    case 2: {
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: stepAllgemeineAngaben.pseudonym.ET1,
+        [Elternteil.Zwei]: stepAllgemeineAngaben.pseudonym.ET2,
+      };
+      const empfaenger =
+        stepAllgemeineAngaben.mutterschaftssleistungenWer === "ET1"
+          ? Elternteil.Eins
+          : Elternteil.Zwei;
+      const informationenZumMutterschutz = hatMutterschutz
+        ? { empfaenger, letzterLebensmonatMitSchutz }
+        : undefined;
+
+      return {
+        ...sharedAusganslageProperties,
+        anzahlElternteile,
+        pseudonymeDerElternteile,
+        informationenZumMutterschutz,
+      };
+    }
+  }
+}
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("Ausgangslage selector", async () => {
     const { produce } = await import("immer");
-    const { useAppSelector } = await import("@/redux/hooks");
-    const { INITIAL_STATE, renderHook } = await import(
-      "@/test-utils/test-utils"
-    );
+    const { INITIAL_STATE } = await import("@/test-utils/test-utils");
 
     describe("anzahl der Elternteile", () => {
       it("creates Ausgangslage for one Elternteil if Antragstellende is answered with Einen Elternteil", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.anzahlElternteile).toBe(1);
       });
 
       it("creates Ausgangslage for two Elternteil if Antragstellende is answered with Für Beide", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.anzahlElternteile).toBe(2);
       });
@@ -122,12 +114,12 @@ if (import.meta.vitest) {
 
     describe("Pseudonyme der Elternteile", () => {
       it("correctly picks the Pseudonym for one Elternteil", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
           "Jane",
@@ -135,12 +127,12 @@ if (import.meta.vitest) {
       });
 
       it("assigns the correct Pseudonyme for two Elternteil", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
           "Jane",
@@ -155,11 +147,11 @@ if (import.meta.vitest) {
 
     describe("Geburtsdatum des Kindes", () => {
       it("takes the parsed Geburtsdatum from the store", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "21.12.2013";
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.geburtsdatumDesKindes).toEqual(
           new Date(2013, 11, 21),
@@ -169,22 +161,22 @@ if (import.meta.vitest) {
 
     describe("mutterschaftssleistungen", () => {
       it("is undefined if Mutterschaftssleistungen answered with No", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.NO;
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.informationenZumMutterschutz).toBeUndefined();
       });
 
       it("automatically sets the Empfänger to Elternteil 1 for Antragstellende Einen Elternteil and Mutterschaftssleistungen Yes", () => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
           draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.informationenZumMutterschutz).toBeDefined();
         expect(ausgangslage.informationenZumMutterschutz?.empfaenger).toBe(
@@ -198,13 +190,13 @@ if (import.meta.vitest) {
       ])(
         "sets the Empfänger to $expected for Antragstellende Für Beide and $answered was answered",
         ({ answered, expected }) => {
-          const preloadedState = produce(INITIAL_STATE, (draft) => {
+          const state = produce(INITIAL_STATE, (draft) => {
             draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
             draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
             draft.stepAllgemeineAngaben.mutterschaftssleistungenWer = answered;
           });
 
-          const ausgangslage = executeAusgangslageSelector(preloadedState);
+          const ausgangslage = composeAusgangslage(state);
 
           expect(ausgangslage.informationenZumMutterschutz).toBeDefined();
           expect(ausgangslage.informationenZumMutterschutz?.empfaenger).toBe(
@@ -220,13 +212,13 @@ if (import.meta.vitest) {
       ])(
         "sets letzten Lebensmonat mit Schutz to $letzterLebensmonatMitSchutz if Anzahl künftiger Kinder is $anzahlKuenftigerKinder",
         ({ anzahlKuenftigerKinder, letzterLebensmonatMitSchutz }) => {
-          const preloadedState = produce(INITIAL_STATE, (draft) => {
+          const state = produce(INITIAL_STATE, (draft) => {
             draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
             draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
             draft.stepNachwuchs.anzahlKuenftigerKinder = anzahlKuenftigerKinder;
           });
 
-          const ausgangslage = executeAusgangslageSelector(preloadedState);
+          const ausgangslage = composeAusgangslage(state);
 
           expect(
             ausgangslage.informationenZumMutterschutz
@@ -242,11 +234,11 @@ if (import.meta.vitest) {
     ])(
       "sets alleinerziehend flag to $expected if answered to be alleinerziehend with $answer",
       ({ answer, expected }) => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.alleinerziehend = answer;
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.istAlleinerziehend).toBe(expected);
       },
@@ -259,58 +251,45 @@ if (import.meta.vitest) {
     ])(
       "sets Mehrlinge flag to $sindMehrlinge if Anzahl künftiger Kinder is $anzahlKuenftigerKinder",
       ({ anzahlKuenftigerKinder, sindMehrlinge }) => {
-        const preloadedState = produce(INITIAL_STATE, (draft) => {
+        const state = produce(INITIAL_STATE, (draft) => {
           draft.stepNachwuchs.anzahlKuenftigerKinder = anzahlKuenftigerKinder;
         });
 
-        const ausgangslage = executeAusgangslageSelector(preloadedState);
+        const ausgangslage = composeAusgangslage(state);
 
         expect(ausgangslage.sindMehrlinge).toBe(sindMehrlinge);
       },
     );
 
     it("sets behindertes Geschwisterkind flag to false if there are no sibligs", () => {
-      const preloadedState = produce(INITIAL_STATE, (draft) => {
+      const state = produce(INITIAL_STATE, (draft) => {
         draft.stepNachwuchs.geschwisterkinder = [];
       });
 
-      const ausgangslage = executeAusgangslageSelector(preloadedState);
+      const ausgangslage = composeAusgangslage(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(false);
     });
 
     it("sets behindertes Geschwisterkind flag to false if no sibling has a Behinderung", () => {
-      const preloadedState = produce(INITIAL_STATE, (draft) => {
+      const state = produce(INITIAL_STATE, (draft) => {
         draft.stepNachwuchs.geschwisterkinder = [kind(false), kind(false)];
       });
 
-      const ausgangslage = executeAusgangslageSelector(preloadedState);
+      const ausgangslage = composeAusgangslage(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(false);
     });
 
     it("sets behindertes Geschwisterkind flag to true if any sibling has a Behinderung", () => {
-      const preloadedState = produce(INITIAL_STATE, (draft) => {
+      const state = produce(INITIAL_STATE, (draft) => {
         draft.stepNachwuchs.geschwisterkinder = [kind(true), kind(false)];
       });
 
-      const ausgangslage = executeAusgangslageSelector(preloadedState);
+      const ausgangslage = composeAusgangslage(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(true);
     });
-
-    function executeAusgangslageSelector(
-      preloadedState: RootState,
-    ): Ausgangslage {
-      const { result } = renderHook(() => useAusgangslage(), {
-        preloadedState,
-      });
-      return result.current;
-    }
-
-    function useAusgangslage() {
-      return useAppSelector(ausgangslageSelector);
-    }
 
     function kind(istBehindert: boolean) {
       return { istBehindert, geburtsdatum: new Date().toISOString() };

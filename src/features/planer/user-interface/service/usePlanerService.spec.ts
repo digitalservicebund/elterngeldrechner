@@ -11,6 +11,7 @@ import {
   Variante,
   waehleOption,
   zaehleVerplantesKontingent,
+  type PlanMitBeliebigenElternteilen,
 } from ".";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 import { stepRechnerActions } from "@/redux/stepRechnerSlice";
@@ -48,6 +49,21 @@ describe("use Planer service", () => {
     const { result } = renderPlanerServiceHook();
 
     expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+  });
+
+  it("uses the given initial Plan if available", () => {
+    const plan = ANY_PLAN;
+
+    const { result } = renderPlanerServiceHook(plan);
+
+    expect(vi.mocked(erstelleInitialenPlan)).not.toHaveBeenCalled();
+    expect(vi.mocked(bestimmeVerfuegbaresKontingent)).toHaveBeenLastCalledWith(
+      plan.ausgangslage,
+    );
+    expect(result.current.lebensmonate).toStrictEqual(plan.lebensmonate);
+    expect(result.current.pseudonymeDerElternteile).toStrictEqual(
+      plan.ausgangslage.pseudonymeDerElternteile,
+    );
   });
 
   it("initially determines the verfügbares Kontingent", () => {
@@ -273,12 +289,44 @@ describe("use Planer service", () => {
       );
     });
   });
+
+  describe("on Plan changed", () => {
+    it("triggers the given callback when chosing an Option", () => {
+      vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
+      const onPlanChanged = vi.fn();
+      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+
+      act(() =>
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
+      );
+
+      expect(onPlanChanged).toHaveBeenCalledOnce();
+      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
+    });
+
+    it("triggers the given callback when resetting the Plan", () => {
+      vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
+      const onPlanChanged = vi.fn();
+      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(onPlanChanged).toHaveBeenCalledOnce();
+      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
+    });
+  });
 });
 
-function renderPlanerServiceHook() {
-  return renderHook(() => usePlanerService(), {
-    preloadedState: INITIAL_STATE,
-  });
+function renderPlanerServiceHook(
+  initialPlan: PlanMitBeliebigenElternteilen | undefined = undefined,
+  onPlanChanged?: (plan: PlanMitBeliebigenElternteilen) => void,
+) {
+  return renderHook(
+    () => usePlanerService(initialPlan, onPlanChanged ?? vi.fn()),
+    {
+      preloadedState: INITIAL_STATE,
+    },
+  );
 }
 
 async function triggerElterngeldCalculation(store: AppStore) {

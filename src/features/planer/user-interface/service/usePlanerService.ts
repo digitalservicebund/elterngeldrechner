@@ -18,16 +18,23 @@ import {
 import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
-export function usePlanerService() {
+export function usePlanerService(
+  initialPlan: PlanMitBeliebigenElternteilen | undefined,
+  onPlanChanged: (plan: PlanMitBeliebigenElternteilen) => void,
+) {
   const store = useAppStore();
   const errechneteElterngeldbezuege = useAppSelector(
     errechneteElterngeldbezuegeSelector,
   );
 
   const [plan, setPlan] = useState(() => {
-    const state = store.getState();
-    const ausgangslage = composeAusgangslage(state);
-    return erstelleInitialenPlan(ausgangslage, errechneteElterngeldbezuege);
+    if (initialPlan != undefined) {
+      return initialPlan;
+    } else {
+      const state = store.getState();
+      const ausgangslage = composeAusgangslage(state);
+      return erstelleInitialenPlan(ausgangslage, errechneteElterngeldbezuege);
+    }
   });
 
   const verfuegbaresKontingent = useRef(
@@ -42,17 +49,22 @@ export function usePlanerService() {
     berechneGesamtsumme(plan),
   );
 
-  function onPlanChanged(nextPlan: PlanMitBeliebigenElternteilen): void {
-    trackPartnerschaftlicheVerteilung(nextPlan);
+  const updateStateAndTriggerCallbacks = useCallback(
+    (nextPlan: PlanMitBeliebigenElternteilen) => {
+      trackPartnerschaftlicheVerteilung(nextPlan);
 
-    const nextVerplantesKontingent = zaehleVerplantesKontingent(
-      nextPlan.lebensmonate,
-    );
-    setVerplantesKontingent(nextVerplantesKontingent);
+      const nextVerplantesKontingent = zaehleVerplantesKontingent(
+        nextPlan.lebensmonate,
+      );
+      setVerplantesKontingent(nextVerplantesKontingent);
 
-    const nextGesamtsumme = berechneGesamtsumme(nextPlan);
-    setGesamtsumme(nextGesamtsumme);
-  }
+      const nextGesamtsumme = berechneGesamtsumme(nextPlan);
+      setGesamtsumme(nextGesamtsumme);
+
+      onPlanChanged?.(nextPlan);
+    },
+    [onPlanChanged],
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const erstelleUngeplantenLebensmonatCallback = useCallback(
@@ -76,20 +88,20 @@ export function usePlanerService() {
           },
         );
 
-        onPlanChanged(nextPlan);
+        updateStateAndTriggerCallbacks(nextPlan);
         return nextPlan;
       }),
-    [],
+    [updateStateAndTriggerCallbacks],
   );
 
   const setztePlanZurueckCallback = useCallback(
     () =>
       setPlan((plan) => {
         const nextPlan = setzePlanZurueck(plan);
-        onPlanChanged(nextPlan);
+        updateStateAndTriggerCallbacks(nextPlan);
         return nextPlan;
       }),
-    [],
+    [updateStateAndTriggerCallbacks],
   );
 
   useEffect(

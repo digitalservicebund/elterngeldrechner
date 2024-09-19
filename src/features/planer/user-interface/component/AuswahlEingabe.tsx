@@ -1,6 +1,6 @@
 import { ReactNode, useId } from "react";
 import classNames from "classnames";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import {
   KeinElterngeld,
   Variante,

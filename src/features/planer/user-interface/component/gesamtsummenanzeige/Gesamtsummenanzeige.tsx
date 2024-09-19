@@ -7,7 +7,7 @@ import {
   type PseudonymeDerElternteile,
   listePseudonymeAuf,
 } from "@/features/planer/user-interface/service";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props<E extends Elternteil> = {
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;

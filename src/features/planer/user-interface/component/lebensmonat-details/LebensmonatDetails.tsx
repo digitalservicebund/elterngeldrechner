@@ -25,7 +25,7 @@ import {
   AlleElternteileHabenBonusGewaehlt,
   type Monat,
 } from "@/features/planer/user-interface/service";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 interface Props<E extends Elternteil> {
   readonly lebensmonatszahl: Lebensmonatszahl;

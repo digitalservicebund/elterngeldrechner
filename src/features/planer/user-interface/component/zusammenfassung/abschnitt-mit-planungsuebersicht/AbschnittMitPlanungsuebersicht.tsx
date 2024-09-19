@@ -8,7 +8,7 @@ import {
   type Planungsuebersicht,
   type PseudonymeDerElternteile,
 } from "@/features/planer/user-interface/service";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props<E extends Elternteil> = {
   readonly planungsuebersicht: Planungsuebersicht<E>;

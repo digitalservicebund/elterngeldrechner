@@ -3,7 +3,7 @@ import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { RootState } from "./index";
 import { getLebensmonate } from "@/monatsplaner";
 import { YesNo } from "@/globals/js/calculations/model";
-import { parseGermanDateString } from "@/utils/locale-formatting";
+import { fromGermanDateString } from "@/utils/date";
 
 interface Kind {
   geburtsdatum: string;
@@ -57,7 +57,7 @@ const stepNachwuchsSlice = createSlice({
 const getWahrscheinlichesGeburtsDatum = createSelector(
   (state: RootState) => state.stepNachwuchs.wahrscheinlichesGeburtsDatum,
   (wahrscheinlichesGeburtsDatum): Date =>
-    parseGermanDateString(wahrscheinlichesGeburtsDatum),
+    fromGermanDateString(wahrscheinlichesGeburtsDatum),
 );
 
 export interface LebensmonateAfterBirth {

@@ -6,7 +6,7 @@ import {
   Variante,
   type Bezug,
 } from "@/features/planer/user-interface/service";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly bezuegeProVariante: Record<Variante, Bezug>;

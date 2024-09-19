@@ -20,3 +20,8 @@ pre-commit:
       run: npm run type-check
     audit-licenses:
       run: npm run audit-licenses
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx commitlint --edit {1}

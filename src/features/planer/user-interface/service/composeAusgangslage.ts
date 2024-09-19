@@ -5,7 +5,7 @@ import {
 } from "@/features/planer/user-interface/service";
 import { YesNo } from "@/globals/js/calculations/model";
 import { type RootState } from "@/redux";
-import { parseGermanDateString } from "@/utils/locale-formatting";
+import { fromGermanDateString } from "@/utils/date/fromGermanDateString";
 
 export function composeAusgangslage(state: RootState): Ausgangslage {
   const { stepAllgemeineAngaben, stepNachwuchs } = state;
@@ -15,7 +15,7 @@ export function composeAusgangslage(state: RootState): Ausgangslage {
       ? (1 as const)
       : (2 as const);
 
-  const geburtsdatumDesKindes = parseGermanDateString(
+  const geburtsdatumDesKindes = fromGermanDateString(
     stepNachwuchs.wahrscheinlichesGeburtsDatum,
   );
 
@@ -184,9 +184,9 @@ if (import.meta.vitest) {
 
         const ausgangslage = composeAusgangslage(state);
 
-        expect(ausgangslage.geburtsdatumDesKindes).toEqual(
-          new Date(2013, 11, 21),
-        );
+        expect(
+          ausgangslage.geburtsdatumDesKindes.toISOString().slice(0, 10),
+        ).toEqual("2013-12-21");
       });
     });
 

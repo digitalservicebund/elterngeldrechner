@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import classNames from "classnames";
 import type { Elterngeldbezug } from "@/features/planer/user-interface/service";
-import { formatAsCurrency } from "@/utils/locale-formatting";
+import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import { InfoDialog } from "@/components/molecules/info-dialog";
 
 type Props = {

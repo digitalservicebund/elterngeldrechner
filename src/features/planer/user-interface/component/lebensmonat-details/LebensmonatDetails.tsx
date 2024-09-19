@@ -6,15 +6,15 @@ import {
   PlACE_ITEM_MIDDLE_CLASS_NAME,
   PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
 } from "./grid-areas";
-import { HinweisZumBonus } from "@/features/planer/user-interface/component/HinweisZumBonus";
+import { Elterngeldbezugsanzeige } from "./Elterngeldbezugsanzeige";
+import { AuswahlEingabe } from "./AuswahlEingabe";
+import { GewaehlteOption } from "./GewaehlteOption";
+import { HinweisZumBonus } from "./HinweisZumBonus";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
-import { Elterngeldbezugsanzeige } from "@/features/planer/user-interface/component/Elterngeldbezugsanzeige";
-import { GewaehlteOption } from "@/features/planer/user-interface/component/GewaehlteOption";
-import { AuswahlEingabe } from "@/features/planer/user-interface/component/AuswahlEingabe";
 import {
   Elternteil,
   type Lebensmonatszahl,

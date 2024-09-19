@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import { LebensmonatDetails } from "./LebensmonatDetails";
-import { HinweisZumBonus } from "@/features/planer/user-interface/component/HinweisZumBonus";
+import { HinweisZumBonus } from "./HinweisZumBonus";
 import {
   Elternteil,
   KeinElterngeld,

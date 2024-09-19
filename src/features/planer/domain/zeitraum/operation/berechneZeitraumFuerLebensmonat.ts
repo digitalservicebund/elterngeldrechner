@@ -5,50 +5,256 @@ export function berechneZeitraumFuerLebensmonat(
   geburtsdatumDesKindes: Date,
   lebensmonatszahl: Lebensmonatszahl,
 ): Zeitraum {
-  const from = copyAndShiftDate(geburtsdatumDesKindes, {
-    months: lebensmonatszahl - 1,
-  });
-  const to = copyAndShiftDate(from, { months: 1, days: -1 });
+  const from = startOfNthLebensmonat(lebensmonatszahl)(geburtsdatumDesKindes);
+  const to = endOfNthLebensmonat(lebensmonatszahl)(geburtsdatumDesKindes);
   return { from, to };
 }
 
-function copyAndShiftDate(
-  date: Date,
-  shiftBy: { months?: number; days?: number },
-): Date {
-  const copiedDate = new Date(date);
-  copiedDate.setMonth(copiedDate.getMonth() + (shiftBy.months ?? 0));
-  copiedDate.setDate(copiedDate.getDate() + (shiftBy.days ?? 0));
-  return copiedDate;
-}
+const startOfNthLebensmonat = (nth: number) => {
+  return (geburtsdatum: Date) => {
+    const endOfPreviousLebensmonat = endOfNthLebensmonat(nth - 1)(geburtsdatum);
+    return addDays(1)(endOfPreviousLebensmonat);
+  };
+};
+
+// reference: https://www.zbfs.bayern.de/familie/elterngeld/lebensmonatsrechner/index.php
+const endOfNthLebensmonat = (nth: number) => {
+  return (geburtsdatum: Date) => {
+    const monthsAdded = addMonths(nth)(geburtsdatum);
+
+    if (monthsAdded.getUTCDate() === geburtsdatum.getUTCDate()) {
+      return subDays(1)(monthsAdded);
+    } else {
+      return monthsAdded;
+    }
+  };
+};
+
+const addMonths = (months: number) => {
+  return (date: Date) => {
+    const d = new Date(date.valueOf());
+    const day = d.getDate();
+    // updating month without causing an overflow
+    d.setDate(1);
+    d.setUTCMonth(d.getUTCMonth() + months);
+
+    if (day > lastDayOfMonth(d)) {
+      d.setDate(lastDayOfMonth(d));
+    } else {
+      d.setDate(day);
+    }
+    return d;
+  };
+};
+
+const addDays = (days: number) => {
+  return (date: Date) => {
+    const d = new Date(date.valueOf());
+    d.setDate(d.getDate() + days);
+    return d;
+  };
+};
+
+const subDays = (days: number) => addDays(-1 * days);
+
+const lastDayOfMonth = (date: Date) => {
+  const months30 = [april, june, september, november];
+  const month = date.getMonth();
+
+  if (month === february) return isLeapYear(date) ? 29 : 28;
+  if (months30.includes(month)) return 30;
+  return 31;
+};
+
+const february = 1;
+const april = 3;
+const june = 5;
+const september = 8;
+const november = 10;
+
+const isLeapYear = (date: Date) => {
+  const year = date.getFullYear();
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+};
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("berechne Zeitraum für Lebensmonat", () => {
-    it("shifts month of the Geburtsdatum by the Lebensmonatszahl within the same year", () => {
-      const zeitraum = berechneZeitraumFuerLebensmonat(new Date(2000, 6, 3), 3);
+    describe("date utilties", () => {
+      describe("start of n-th Lebensmonat", () => {
+        it.each([
+          [2, new Date("2000-01-01"), new Date("2000-02-01")],
+          [2, new Date("2000-01-31"), new Date("2000-03-01")],
+          [2, new Date("2000-12-12"), new Date("2001-01-12")],
+        ])(
+          "endOfNthLebensmonat(%i)(%i) -> %i",
+          (nth, geburtsdatum, startOfLebensmonat) => {
+            expect(startOfNthLebensmonat(nth)(geburtsdatum)).toStrictEqual(
+              startOfLebensmonat,
+            );
+          },
+        );
+      });
 
-      expect(zeitraum.from.getMonth()).toBe(8);
-      expect(zeitraum.from.getFullYear()).toBe(2000);
-      expect(zeitraum.to.getMonth()).toBe(9);
-      expect(zeitraum.to.getFullYear()).toBe(2000);
-    });
+      describe("end of n-th Lebensmonat", () => {
+        it.each([
+          [1, "2024-02-29", "2024-03-28"],
+          [2, "2024-02-29", "2024-04-28"],
+          [3, "2024-02-29", "2024-05-28"],
+          [4, "2024-02-29", "2024-06-28"],
+          [5, "2024-02-29", "2024-07-28"],
+          [6, "2024-02-29", "2024-08-28"],
+          [7, "2024-02-29", "2024-09-28"],
+          [8, "2024-02-29", "2024-10-28"],
+          [9, "2024-02-29", "2024-11-28"],
+          [10, "2024-02-29", "2024-12-28"],
+          [11, "2024-02-29", "2025-01-28"],
+          [12, "2024-02-29", "2025-02-28"],
+          [13, "2024-02-29", "2025-03-28"],
+          [14, "2024-02-29", "2025-04-28"],
+          [15, "2024-02-29", "2025-05-28"],
+          [46, "2024-02-29", "2027-12-28"],
+          [1, "2024-01-31", "2024-02-29"],
+          [2, "2024-01-31", "2024-03-30"],
+          [3, "2024-01-31", "2024-04-30"],
+          [4, "2024-01-31", "2024-05-30"],
+          [5, "2024-01-31", "2024-06-30"],
+          [6, "2024-01-31", "2024-07-30"],
+          [7, "2024-01-31", "2024-08-30"],
+          [8, "2024-01-31", "2024-09-30"],
+          [9, "2024-01-31", "2024-10-30"],
+          [10, "2024-01-31", "2024-11-30"],
+          [11, "2024-01-31", "2024-12-30"],
+          [12, "2024-01-31", "2025-01-30"],
+          [13, "2024-01-31", "2025-02-28"],
+          [14, "2024-01-31", "2025-03-30"],
+          [15, "2024-01-31", "2025-04-30"],
+          [46, "2024-01-31", "2027-11-30"],
+        ])(
+          "endOfNthLebensmonat(%i)(%j) -> %j",
+          (nth, geburtsdatum, endOfLebensmonat) => {
+            expect(
+              toIso(endOfNthLebensmonat(nth)(new Date(geburtsdatum))),
+            ).toBe(endOfLebensmonat);
+          },
+        );
 
-    it("shifts the month of the Geburtsdatum by the Lebensmonatszahl to the next year", () => {
-      const zeitraum = berechneZeitraumFuerLebensmonat(new Date(2000, 6, 3), 6);
+        const toIso = (date: Date) => date.toISOString().slice(0, 10);
+      });
 
-      expect(zeitraum.from.getMonth()).toBe(11);
-      expect(zeitraum.from.getFullYear()).toBe(2000);
-      expect(zeitraum.to.getMonth()).toBe(0);
-      expect(zeitraum.to.getFullYear()).toBe(2001);
-    });
+      describe("add months", () => {
+        it("returns a new Date instance", () => {
+          const givenDate = new Date("2024-08-18");
+          const returnedDate = addMonths(2)(givenDate);
+          expect(returnedDate).not.toBe(givenDate);
+          expect(returnedDate.getMonth()).toEqual(9);
+          expect(givenDate.getMonth()).toEqual(7);
+        });
 
-    it("ends the Zeitraum one day earlier than a whole month", () => {
-      const zeitraum = berechneZeitraumFuerLebensmonat(new Date(2000, 6, 3), 3);
+        it("adds months", () => {
+          expect(addMonths(2)(new Date("2024-08-18"))).toStrictEqual(
+            new Date("2024-10-18"),
+          );
+          expect(addMonths(14)(new Date("2024-08-18"))).toStrictEqual(
+            new Date("2025-10-18"),
+          );
+          expect(addMonths(32)(new Date("2024-08-31"))).toStrictEqual(
+            new Date("2027-04-30"),
+          );
+          expect(addMonths(32)(new Date("2024-09-29"))).toStrictEqual(
+            new Date("2027-05-29"),
+          );
+        });
 
-      expect(zeitraum.from.getDate()).toBe(3);
-      expect(zeitraum.to.getDate()).toBe(2);
+        describe("when the resulting month has not enough days", () => {
+          it("January 30th -> February 28th", () => {
+            expect(addMonths(1)(new Date("2023-01-30"))).toStrictEqual(
+              new Date("2023-02-28"),
+            );
+          });
+          it("January 31th -> February 28th", () => {
+            expect(addMonths(1)(new Date("2023-01-31"))).toStrictEqual(
+              new Date("2023-02-28"),
+            );
+          });
+          it("January 31th -> February 29th in a leap year", () => {
+            expect(addMonths(1)(new Date("2024-01-31"))).toStrictEqual(
+              new Date("2024-02-29"),
+            );
+          });
+          it("January 31th -> April 30th", () => {
+            expect(addMonths(3)(new Date("2024-01-31"))).toStrictEqual(
+              new Date("2024-04-30"),
+            );
+          });
+        });
+      });
+
+      describe("add days", () => {
+        it("returns a new Date instance", () => {
+          const givenDate = new Date("2024-08-18");
+          const returnedDate = addDays(2)(givenDate);
+          expect(returnedDate).not.toBe(givenDate);
+          expect(returnedDate.getDate()).toEqual(20);
+          expect(givenDate.getDate()).toEqual(18);
+        });
+
+        it("adds days", () => {
+          expect(addDays(2)(new Date("2024-08-18"))).toStrictEqual(
+            new Date("2024-08-20"),
+          );
+          expect(addDays(30000)(new Date("2024-08-18"))).toStrictEqual(
+            new Date("2106-10-08"),
+          );
+        });
+      });
+
+      describe("subtract days", () => {
+        it("subtracts days", () => {
+          expect(subDays(2)(new Date("2024-08-18"))).toStrictEqual(
+            new Date("2024-08-16"),
+          );
+          expect(subDays(30000)(new Date("2024-08-18"))).toStrictEqual(
+            new Date("1942-06-30"),
+          );
+        });
+      });
+
+      describe("last day of monath", () => {
+        it("returns 28", () => {
+          expect(lastDayOfMonth(new Date("2023-02-18"))).toBe(28);
+        });
+        it("returns 29", () => {
+          expect(lastDayOfMonth(new Date("2024-02-18"))).toBe(29);
+        });
+        it("returns 30", () => {
+          expect(lastDayOfMonth(new Date("2024-09-18"))).toBe(30);
+        });
+        it("returns 31", () => {
+          expect(lastDayOfMonth(new Date("2024-08-18"))).toBe(31);
+        });
+      });
+
+      describe("is leap year", () => {
+        it.each([
+          new Date("2000-01-01"),
+          new Date("2024-01-01"),
+          new Date("2028-01-01"),
+          new Date("2032-01-01"),
+        ])("isLeap(%i) -> true", (date) => {
+          expect(isLeapYear(date)).toBe(true);
+        });
+
+        it.each([
+          new Date("2001-01-01"),
+          new Date("2023-01-01"),
+          new Date("2025-01-01"),
+          new Date("2031-01-01"),
+        ])("isLeap(%i) -> false", (date) => {
+          expect(isLeapYear(date)).toBe(false);
+        });
+      });
     });
   });
 }

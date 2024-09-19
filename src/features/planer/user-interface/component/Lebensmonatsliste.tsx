@@ -56,7 +56,7 @@ export function Lebensmonatsliste<E extends Elternteil>({
       className={classNames("flex flex-col", className)}
       aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier} className="py-8 text-center text-16 font-bold">
+      <h4 id={headingIdentifier} className="sr-only">
         Lebensmonate
       </h4>
 

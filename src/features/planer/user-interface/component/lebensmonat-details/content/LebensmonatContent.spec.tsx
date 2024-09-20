@@ -120,21 +120,30 @@ const ANY_PROPS = {
     [Elternteil.Zwei]: "John",
   },
   zeitraum: { from: new Date(), to: new Date() },
-  bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
-  waehleOption: () => {},
-  gridClassNames: {
-    template: "",
-    areas: {
-      fullWidth: "lol",
+  identifierForSummaryAriaDescription: "",
+  gridLayout: {
+    templateClassName: "",
+    areaClassNames: {
+      zeitraum: "",
+      hinweisZumBonus: "",
       [Elternteil.Eins]: {
-        auswahl: "",
+        auswahl: {
+          fieldset: "",
+          info: "",
+          input: "",
+        },
       },
       [Elternteil.Zwei]: {
-        auswahl: "",
+        auswahl: {
+          fieldset: "",
+          info: "",
+          input: "",
+        },
       },
     },
   },
-  identifierForSummaryAriaDescription: "",
+  bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
+  waehleOption: () => {},
 };
 
 vi.mock("./HinweisZumBonus");

@@ -233,5 +233,13 @@ const ANY_DISABLED_AUSWAHLMOEGLICHKEIT = {
 const ANY_PROPS = {
   legend: "",
   auswahlmoeglichkeiten: ANY_AUSWAHLMOEGLICHKEITEN,
+  gridLayout: {
+    firstRowIndex: 1,
+    areaClassNames: {
+      fieldset: "",
+      info: "",
+      input: "",
+    },
+  },
   waehleOption: () => {},
 };

@@ -1,56 +1,105 @@
+.grid-template-for-single-elternteil {
+  display: grid;
+  max-width: 45ch;
+  margin: auto;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(
+      0,
+      3fr
+    ) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
+  grid-template-areas: "left-outside left-middle left-inside middle right-inside right-middle right-outside";
+
+  .area-summary-lebensmonatszahl {
+    grid-column: left-outside;
+  }
+
+  .area-summary-et1-gewaehlte-option {
+    grid-column: left-inside / right-inside;
+  }
+
+  .area-summary-et1-elterngeldbezug {
+    grid-column: right-middle / right-outside;
+  }
+
+  .area-content-zeitraum {
+    grid-column: 1 / -1;
+  }
+
+  .area-content-et1-auswahl-fieldset {
+    grid-column: left-middle / right-outside;
+  }
+
+  .area-content-et1-auswahl-input {
+    grid-column: left-middle / right-middle;
+  }
+
+  .area-content-et1-auswahl-info {
+    grid-column: right-outside;
+  }
+
+  .area-content-hinweis-zum-bonus {
+    grid-column: 1 / -1;
+  }
+}
+
 .grid-template-for-two-elternteile {
   display: grid;
   max-width: 70ch;
   margin: auto;
-  grid-template-columns:
-    minmax(0, 3fr) minmax(0, 5fr) minmax(0, 2fr) minmax(0, 5fr)
-    minmax(0, 3fr);
-  grid-template-areas: "et1-outside et1-inside middle et2-inside et2-outside";
-}
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) minmax(0, 8fr) minmax(
+      0,
+      3fr
+    ) minmax(0, 8fr) minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-areas: "et1-outside et1-middle et1-inside middle et2-inside et2-middle et2-outside";
 
-.grid-template-for-single-elternteil {
-  display: grid;
-  max-width: 50ch;
-  margin: auto;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 3fr);
-  grid-template-areas: "middle et1-inside et1-outside";
-}
+  .area-summary-et1-elterngeldbezug {
+    grid-column: et1-outside / et1-middle;
+  }
 
-.place-item-full-witdh {
-  grid-column: 1 / -1;
-}
+  .area-summary-et1-gewaehlte-option {
+    grid-column: et1-inside;
+  }
 
-.place-item-et1-outside {
-  grid-area: et1-outside;
-}
+  .area-summary-lebensmonatszahl {
+    grid-column: middle;
+  }
 
-.place-item-et1-inside {
-  grid-area: et1-inside;
-}
+  .area-summary-et2-gewaehlte-option {
+    grid-column: et2-inside;
+  }
 
-.place-item-et1-full {
-  grid-column-start: et1-outside;
-  grid-column-end: et1-inside;
-}
+  .area-summary-et2-elterngeldbezug {
+    grid-column: et2-middle / et2-outside;
+  }
 
-.grid-template-for-single-elternteil > .place-item-et1-full {
-  grid-column-start: et1-inside;
-  grid-column-end: et1-outside;
-}
+  .area-content-zeitraum {
+    grid-column: 1 / -1;
+  }
 
-.place-item-middle {
-  grid-area: middle;
-}
+  .area-content-et1-auswahl-fieldset {
+    grid-column: et1-outside / et1-inside;
+  }
 
-.place-item-et2-inside {
-  grid-area: et2-inside;
-}
+  .area-content-et1-auswahl-info {
+    grid-column: et1-outside;
+  }
 
-.place-item-et2-outside {
-  grid-area: et2-outside;
-}
+  .area-content-et1-auswahl-input {
+    grid-column: et1-middle / et1-inside;
+  }
 
-.place-item-et2-full {
-  grid-column-start: et2-inside;
-  grid-column-end: et2-outside;
+  .area-content-et2-auswahl-fieldset {
+    grid-column: et2-inside / et2-outside;
+  }
+
+  .area-content-et2-auswahl-input {
+    grid-column: et2-inside / et2-middle;
+  }
+
+  .area-et2-auswahl-info {
+    grid-column: et2-outside;
+  }
+
+  .area-content-hinweis-zum-bonus {
+    grid-column: et1-middle / et2-middle;
+  }
 }

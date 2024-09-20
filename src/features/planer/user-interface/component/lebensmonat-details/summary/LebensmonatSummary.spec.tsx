@@ -125,10 +125,12 @@ const ANY_PROPS = {
     [Elternteil.Eins]: "Jane",
     [Elternteil.Zwei]: "John",
   },
-  gridClassNames: {
-    template: "",
-    areas: {
-      middle: "",
+  identifierForDetailsAriaLabel: "",
+  zeitraumIdentifierForAriaDescription: "",
+  gridLayout: {
+    templateClassName: "",
+    areaClassNames: {
+      lebensmonatszahl: "",
       [Elternteil.Eins]: {
         elterngeldbezug: "",
         gewaehlteOption: "",
@@ -139,6 +141,4 @@ const ANY_PROPS = {
       },
     },
   },
-  identifierForDetailsAriaLabel: "",
-  zeitraumIdentifierForAriaDescription: "",
 };

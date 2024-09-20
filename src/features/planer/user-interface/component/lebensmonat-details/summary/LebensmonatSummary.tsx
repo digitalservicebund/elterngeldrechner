@@ -16,18 +16,18 @@ type Props<E extends Elternteil> = {
   readonly lebensmonatszahl: Lebensmonatszahl;
   readonly lebensmonat: Lebensmonat<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly gridClassNames: GridClassNames<E>;
   readonly identifierForDetailsAriaLabel: string;
   readonly zeitraumIdentifierForAriaDescription: string;
+  readonly gridLayout: GridLayout<E>;
 };
 
 export function LebensmonatSummary<E extends Elternteil>({
   lebensmonatszahl,
   lebensmonat,
   pseudonymeDerElternteile,
-  gridClassNames,
   identifierForDetailsAriaLabel,
   zeitraumIdentifierForAriaDescription,
+  gridLayout,
 }: Props<E>): ReactNode {
   const descriptionIdentifier = useId();
   const description = composeDescription(lebensmonat, pseudonymeDerElternteile);
@@ -36,7 +36,7 @@ export function LebensmonatSummary<E extends Elternteil>({
     <summary
       className={classNames(
         "relative py-6 hover:bg-off-white focus:bg-off-white",
-        gridClassNames.template,
+        gridLayout.templateClassName,
       )}
       aria-describedby={classNames(
         descriptionIdentifier,
@@ -51,7 +51,7 @@ export function LebensmonatSummary<E extends Elternteil>({
         id={identifierForDetailsAriaLabel}
         className={classNames(
           "self-center text-center font-bold",
-          gridClassNames.areas.middle,
+          gridLayout.areaClassNames.lebensmonatszahl,
         )}
         aria-label={`${lebensmonatszahl}. Lebensmonat`}
       >
@@ -62,8 +62,8 @@ export function LebensmonatSummary<E extends Elternteil>({
         <Fragment key={elternteil}>
           <Elterngeldbezugsanzeige
             className={classNames(
-              "self-center justify-self-center",
-              gridClassNames.areas[elternteil].elterngeldbezug,
+              "row-start-1 self-center justify-self-center",
+              gridLayout.areaClassNames[elternteil].elterngeldbezug,
             )}
             elterngeldbezug={monat.elterngeldbezug}
             imMutterschutz={monat.imMutterschutz}
@@ -71,7 +71,10 @@ export function LebensmonatSummary<E extends Elternteil>({
           />
 
           <GewaehlteOption
-            className={gridClassNames.areas[elternteil].gewaehlteOption}
+            className={classNames(
+              "row-start-1",
+              gridLayout.areaClassNames[elternteil].gewaehlteOption,
+            )}
             imMutterschutz={monat.imMutterschutz}
             option={monat.gewaehlteOption}
             ariaHidden
@@ -117,9 +120,12 @@ function composeDescriptionForAuswahl(monat: Monat, pseudonym: string): string {
   }
 }
 
-type GridClassNames<E extends Elternteil> = {
-  template: string;
-  areas: { middle: string } & Record<E, GridAreasForElternteil>;
+type GridLayout<E extends Elternteil> = {
+  templateClassName: string;
+  areaClassNames: { lebensmonatszahl: string } & Record<
+    E,
+    GridAreasForElternteil
+  >;
 };
 
 type GridAreasForElternteil = {

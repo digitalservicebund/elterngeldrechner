@@ -11,7 +11,7 @@ export function HinweisZumBonus({
   className,
 }: Props): ReactNode {
   return (
-    <p className={classNames("mt-8 bg-white p-8 text-justify", className)}>
+    <p className={classNames("bg-white p-8 text-justify", className)}>
       {!!hasMultipleElternteile && (
         <>
           Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch

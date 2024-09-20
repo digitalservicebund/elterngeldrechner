@@ -1,4 +1,4 @@
-import { ReactNode, useId } from "react";
+import { Fragment, ReactNode, useId } from "react";
 import classNames from "classnames";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
@@ -16,29 +16,30 @@ type Props = {
   readonly legend: string;
   readonly auswahlmoeglichkeiten: Auswahlmoeglichkeiten;
   readonly gewaehlteOption?: Auswahloption;
+  readonly gridLayout: GridLayout;
   readonly waehleOption: (option: Auswahloption) => void;
-  readonly showDisabledHintRight?: boolean;
-  readonly className?: string;
 };
 
 export function AuswahlEingabe({
   legend,
   gewaehlteOption,
   auswahlmoeglichkeiten,
+  gridLayout,
   waehleOption,
-  showDisabledHintRight,
-  className,
 }: Props): ReactNode {
   const baseIdentifier = useId();
 
   return (
     <fieldset
-      className={classNames("flex flex-col gap-10", className)}
+      className={classNames(
+        "grid grid-cols-subgrid gap-y-10",
+        gridLayout.areaClassNames.fieldset,
+      )}
       role="radiogroup"
     >
       <legend className="sr-only">{legend}</legend>
 
-      {Auswahloptionen.sort(sortByAuswahloption).map((option) => {
+      {Auswahloptionen.sort(sortByAuswahloption).map((option, optionIndex) => {
         const { elterngeldbezug, isDisabled, hintWhyDisabled } =
           auswahlmoeglichkeiten[option];
 
@@ -55,27 +56,31 @@ export function AuswahlEingabe({
         const isChecked = gewaehlteOption === option;
         const waehleDieseOption = () => !isDisabled && waehleOption(option);
 
+        const gridRowStart = gridLayout.firstRowIndex + optionIndex;
+
         return (
-          <div
-            key={option}
-            className={classNames("flex items-center justify-end gap-8", {
-              "flex-row-reverse": showDisabledHintRight,
-            })}
-          >
+          <Fragment key={option}>
             <InfoDialog
               id={infoIdentifier}
-              className={classNames("min-w-24", {
-                invisible: !hintWhyDisabled,
-              })}
+              className={classNames(
+                "min-w-24 self-center justify-self-center",
+                gridLayout.areaClassNames.info,
+                {
+                  invisible: !hintWhyDisabled,
+                },
+              )}
+              style={{ gridRowStart }}
               ariaLabelForDialog={infoAriaLabel}
               info={hintWhyDisabled}
             />
 
             <div
               className={classNames(
-                "col-start-2 max-w-[25ch] grow rounded",
+                "rounded",
                 "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
+                gridLayout.areaClassNames.input,
               )}
+              style={{ gridRowStart }}
             >
               <AuswahloptionLabel
                 option={option}
@@ -101,7 +106,7 @@ export function AuswahlEingabe({
                 aria-details={infoIdentifier}
               />
             </div>
-          </div>
+          </Fragment>
         );
       })}
     </fieldset>
@@ -129,4 +134,13 @@ const AUSWAHLOPTION_SORT_RANK: Record<Auswahloption, number> = {
   [Variante.Plus]: 2,
   [Variante.Bonus]: 3,
   [KeinElterngeld]: 4,
+};
+
+type GridLayout = {
+  firstRowIndex: number;
+  areaClassNames: {
+    fieldset: string;
+    info: string;
+    input: string;
+  };
 };

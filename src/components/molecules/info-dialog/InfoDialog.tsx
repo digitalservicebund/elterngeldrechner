@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type ReactNode } from "react";
+import { CSSProperties, useId, useRef, useState, type ReactNode } from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
@@ -13,6 +13,7 @@ interface Props {
   readonly isElternteilOne?: boolean;
   readonly id?: string;
   readonly className?: string;
+  readonly style?: CSSProperties;
 }
 
 export function InfoDialog({
@@ -23,6 +24,7 @@ export function InfoDialog({
   isElternteilOne,
   id,
   className,
+  style,
 }: Props) {
   const dialogContentIdentifier = useId();
 
@@ -66,6 +68,7 @@ export function InfoDialog({
         isMonatsplanner && nsp("info-dialog--monatsplanner"),
         className,
       )}
+      style={style}
       ref={ref}
     >
       <button

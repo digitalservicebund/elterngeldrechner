@@ -22,10 +22,10 @@ type Props<E extends Elternteil> = {
   readonly lebensmonat: Lebensmonat<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly zeitraum: Zeitraum;
+  readonly identifierForSummaryAriaDescription: string;
+  readonly gridLayout: GridLayout<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
-  readonly gridClassNames: GridClassNames<E>;
-  readonly identifierForSummaryAriaDescription: string;
 };
 
 export function LebensmonatContent<E extends Elternteil>({
@@ -33,10 +33,10 @@ export function LebensmonatContent<E extends Elternteil>({
   lebensmonat,
   pseudonymeDerElternteile,
   zeitraum,
+  identifierForSummaryAriaDescription,
+  gridLayout,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
-  gridClassNames,
-  identifierForSummaryAriaDescription,
 }: Props<E>): ReactNode {
   const isBonusHintVisible =
     AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
@@ -45,14 +45,14 @@ export function LebensmonatContent<E extends Elternteil>({
 
   return (
     <div
-      className={classNames("px-10 pb-20 pt-8", gridClassNames.template)}
+      className={classNames("pb-20 pt-8", gridLayout.templateClassName)}
       data-testid="details-content"
     >
       <ZeitraumLabel
         id={identifierForSummaryAriaDescription}
         className={classNames(
           "mb-24 text-center",
-          gridClassNames.areas.fullWidth,
+          gridLayout.areaClassNames.zeitraum,
         )}
         zeitraum={zeitraum}
         prefix="Zeitraum"
@@ -62,24 +62,29 @@ export function LebensmonatContent<E extends Elternteil>({
         const pseudonym = pseudonymeDerElternteile[elternteil];
         const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
         const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
-        const showDisabledHintRight = elternteil === Elternteil.Zwei;
+        const auswahlGridLayout = {
+          firstRowIndex: 1,
+          areaClassNames: gridLayout.areaClassNames[elternteil].auswahl,
+        };
 
         return (
           <AuswahlEingabe
             key={elternteil}
-            className={gridClassNames.areas[elternteil].auswahl}
             legend={legend}
-            auswahlmoeglichkeiten={auswahlmoeglichkeiten}
             gewaehlteOption={monat.gewaehlteOption}
+            auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+            gridLayout={auswahlGridLayout}
             waehleOption={waehleOption.bind(null, elternteil)}
-            showDisabledHintRight={showDisabledHintRight}
           />
         );
       })}
 
       {!!isBonusHintVisible && (
         <HinweisZumBonus
-          className={gridClassNames.areas.fullWidth}
+          className={classNames(
+            "mt-24",
+            gridLayout.areaClassNames.hinweisZumBonus,
+          )}
           hasMultipleElternteile={hasMultipleElternteile}
         />
       )}
@@ -87,9 +92,18 @@ export function LebensmonatContent<E extends Elternteil>({
   );
 }
 
-type GridClassNames<E extends Elternteil> = {
-  template: string;
-  areas: { fullWidth: string } & Record<E, GridAreasForElternteil>;
+type GridLayout<E extends Elternteil> = {
+  templateClassName: string;
+  areaClassNames: { zeitraum: string; hinweisZumBonus: string } & Record<
+    E,
+    GridAreasForElternteil
+  >;
 };
 
-type GridAreasForElternteil = { auswahl: string };
+type GridAreasForElternteil = {
+  auswahl: {
+    fieldset: string;
+    info: string;
+    input: string;
+  };
+};

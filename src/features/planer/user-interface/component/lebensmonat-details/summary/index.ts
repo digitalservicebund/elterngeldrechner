@@ -1,0 +1,1 @@
+export { LebensmonatSummary } from "./LebensmonatSummary";

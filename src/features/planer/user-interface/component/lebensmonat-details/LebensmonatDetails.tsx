@@ -1,17 +1,13 @@
-import { Fragment, ReactNode, useId, useRef } from "react";
+import { ReactNode, useId, type RefObject } from "react";
 import classNames from "classnames";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import {
-  GRID_TEMPLATE_CLASS_NAMES,
-  PLACE_ITEM_CLASS_NAMES,
-  PlACE_ITEM_MIDDLE_CLASS_NAME,
-  PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
+  GridTemplates,
+  GridAreasForContent,
+  GridAreasForSummary,
 } from "./grid-areas";
-import { Elterngeldbezugsanzeige } from "./Elterngeldbezugsanzeige";
-import { AuswahlEingabe } from "./AuswahlEingabe";
-import { GewaehlteOption } from "./GewaehlteOption";
-import { HinweisZumBonus } from "./HinweisZumBonus";
-import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
+import { LebensmonatSummary } from "./summary";
+import { LebensmonatContent } from "./content";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   WaehleOptionInLebensmonat,
@@ -20,13 +16,9 @@ import {
   Elternteil,
   type Lebensmonatszahl,
   type Lebensmonat,
-  listeMonateAuf,
   type PseudonymeDerElternteile,
   berechneZeitraumFuerLebensmonat,
-  AlleElternteileHabenBonusGewaehlt,
-  type Monat,
 } from "@/features/planer/user-interface/service";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 interface Props<E extends Elternteil> {
   readonly lebensmonatszahl: Lebensmonatszahl;
@@ -48,7 +40,7 @@ export function LebensmonatDetails<E extends Elternteil>({
   className,
 }: Props<E>): ReactNode {
   const anzahlElternteile = Object.keys(lebensmonat).length;
-  const gridTemplateClassName = GRID_TEMPLATE_CLASS_NAMES[anzahlElternteile];
+  const gridTemplateClassName = GridTemplates[anzahlElternteile];
 
   const zeitraumLabelIdentifier = useId();
   const zeitraum = berechneZeitraumFuerLebensmonat(
@@ -56,18 +48,10 @@ export function LebensmonatDetails<E extends Elternteil>({
     lebensmonatszahl,
   );
 
-  const isBonusHintVisible =
-    AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
-
-  const descriptionIdentifier = useId();
-  const description = composeDescription(lebensmonat, pseudonymeDerElternteile);
-
-  const labelIdentifier = useId();
-
-  const detailsElement = useRef<HTMLDetailsElement>(null);
-  const bodyElement = useDetectClickOutside({
+  const detailsAriaLabelIdentifier = useId();
+  const detailsElement: RefObject<HTMLDetailsElement> = useDetectClickOutside({
     onTriggered: function closeDetails() {
-      if (detailsElement.current) {
+      if (detailsElement.current != null) {
         detailsElement.current.open = false;
       }
     },
@@ -77,134 +61,34 @@ export function LebensmonatDetails<E extends Elternteil>({
     <details
       className={classNames("group open:bg-off-white", className)}
       name="Lebensmonate"
-      aria-labelledby={labelIdentifier}
+      aria-labelledby={detailsAriaLabelIdentifier}
       ref={detailsElement}
     >
-      <summary
-        className={classNames(
-          "relative py-6 hover:bg-off-white focus:bg-off-white",
-          gridTemplateClassName,
-        )}
-        aria-describedby={classNames(
-          descriptionIdentifier,
-          zeitraumLabelIdentifier,
-        )}
-      >
-        <span id={descriptionIdentifier} className="sr-only" aria-hidden>
-          {description}
-        </span>
+      <LebensmonatSummary
+        lebensmonatszahl={lebensmonatszahl}
+        lebensmonat={lebensmonat}
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        gridClassNames={{
+          template: gridTemplateClassName,
+          areas: GridAreasForSummary,
+        }}
+        identifierForDetailsAriaLabel={detailsAriaLabelIdentifier}
+        zeitraumIdentifierForAriaDescription={zeitraumLabelIdentifier}
+      />
 
-        <span
-          id={labelIdentifier}
-          className={classNames(
-            "self-center text-center font-bold",
-            PlACE_ITEM_MIDDLE_CLASS_NAME,
-          )}
-          aria-label={`${lebensmonatszahl}. Lebensmonat`}
-        >
-          {lebensmonatszahl}
-        </span>
-
-        {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => (
-          <Fragment key={elternteil}>
-            <Elterngeldbezugsanzeige
-              className={classNames(
-                "self-center justify-self-center",
-                PLACE_ITEM_CLASS_NAMES[elternteil].outside,
-              )}
-              elterngeldbezug={monat.elterngeldbezug}
-              imMutterschutz={monat.imMutterschutz}
-              ariaHidden
-            />
-
-            <GewaehlteOption
-              className={PLACE_ITEM_CLASS_NAMES[elternteil].inside}
-              imMutterschutz={monat.imMutterschutz}
-              option={monat.gewaehlteOption}
-              ariaHidden
-            />
-          </Fragment>
-        ))}
-      </summary>
-
-      <div
-        className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}
-        ref={bodyElement}
-        data-testid="details-body"
-      >
-        <ZeitraumLabel
-          id={zeitraumLabelIdentifier}
-          className={classNames(
-            "mb-24 text-center",
-            PLACE_ITEM_FULL_WIDTH_CLASS_NAME,
-          )}
-          zeitraum={zeitraum}
-          prefix="Zeitraum"
-        />
-
-        {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
-          const pseudonym = pseudonymeDerElternteile[elternteil];
-          const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
-          const auswahlmoeglichkeiten =
-            bestimmeAuswahlmoeglichkeiten(elternteil);
-          const showDisabledHintRight =
-            anzahlElternteile == 1 || elternteil === Elternteil.Zwei;
-
-          return (
-            <AuswahlEingabe
-              key={elternteil}
-              className={PLACE_ITEM_CLASS_NAMES[elternteil].full}
-              legend={legend}
-              auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-              gewaehlteOption={monat.gewaehlteOption}
-              waehleOption={waehleOption.bind(null, elternteil)}
-              showDisabledHintRight={showDisabledHintRight}
-            />
-          );
-        })}
-
-        {!!isBonusHintVisible && (
-          <HinweisZumBonus
-            className={PLACE_ITEM_FULL_WIDTH_CLASS_NAME}
-            hasMultipleElternteile={anzahlElternteile > 1}
-          />
-        )}
-      </div>
+      <LebensmonatContent
+        lebensmonatszahl={lebensmonatszahl}
+        lebensmonat={lebensmonat}
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        zeitraum={zeitraum}
+        bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
+        waehleOption={waehleOption}
+        gridClassNames={{
+          template: gridTemplateClassName,
+          areas: GridAreasForContent,
+        }}
+        identifierForSummaryAriaDescription={zeitraumLabelIdentifier}
+      />
     </details>
   );
-}
-
-function composeDescription<E extends Elternteil>(
-  lebensmonat: Lebensmonat<E>,
-  pseudonymeDerElternteile: PseudonymeDerElternteile<E>,
-): string {
-  const keinElternteilHatEineAuswahlGetroffen = listeMonateAuf(
-    lebensmonat,
-  ).every(([, monat]) => monat.gewaehlteOption === undefined);
-
-  return keinElternteilHatEineAuswahlGetroffen
-    ? "Noch keine Auswahl getätigt."
-    : listeMonateAuf(lebensmonat)
-        .map(([elternteil, monat]) =>
-          composeDescriptionForAuswahl(
-            monat,
-            pseudonymeDerElternteile[elternteil],
-          ),
-        )
-        .join(". ")
-        .concat(".");
-}
-
-function composeDescriptionForAuswahl(monat: Monat, pseudonym: string): string {
-  if (monat.imMutterschutz) {
-    return `${pseudonym} ist im Mutterschutz`;
-  } else if (monat.gewaehlteOption) {
-    if (monat.elterngeldbezug) {
-      return `${pseudonym} bezieht ${monat.gewaehlteOption} und erhält ${formatAsCurrency(monat.elterngeldbezug)}`;
-    } else {
-      return `${pseudonym} bezieht ${monat.gewaehlteOption}`;
-    }
-  } else {
-    return `${pseudonym} hat noch keine Auswahl getroffen`;
-  }
 }

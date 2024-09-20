@@ -86,6 +86,7 @@ export function AuswahlEingabe({
                   { [checkedClassName]: isChecked && !isDisabled },
                   className,
                 )}
+                style={{ fontSize: "min(1em, 3.4cqi)" }}
                 htmlFor={inputIdentifier}
               >
                 <span aria-hidden>

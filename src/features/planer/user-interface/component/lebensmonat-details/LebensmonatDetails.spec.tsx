@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { LebensmonatDetails } from "./LebensmonatDetails";
 import { HinweisZumBonus } from "./HinweisZumBonus";
 import {
@@ -192,6 +193,33 @@ describe("LebensmonateDetails", () => {
       expect(
         screen.queryByText("Test Bonus Hinweis Text"),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("open and close", () => {
+    it("details opens and closes the details body when clicking the summary", async () => {
+      render(<LebensmonatDetails {...ANY_PROPS} />);
+
+      const summary = screen.getByRole("group").querySelector("summary")!;
+      const body = screen.getByTestId("details-body");
+
+      expect(body).not.toBeVisible();
+      await userEvent.click(summary);
+      expect(body).toBeVisible();
+      await userEvent.click(summary);
+      expect(body).not.toBeVisible();
+    });
+
+    it("closes the details body when clicking outside", async () => {
+      render(<LebensmonatDetails {...ANY_PROPS} />);
+
+      const summary = screen.getByRole("group").querySelector("summary")!;
+      const body = screen.getByTestId("details-body");
+      await userEvent.click(summary);
+
+      expect(body).toBeVisible();
+      await userEvent.click(document.body);
+      expect(body).not.toBeVisible();
     });
   });
 });

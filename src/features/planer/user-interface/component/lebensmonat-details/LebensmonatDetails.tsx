@@ -1,5 +1,6 @@
-import { Fragment, ReactNode, useId } from "react";
+import { Fragment, ReactNode, useId, useRef } from "react";
 import classNames from "classnames";
+import { useDetectClickOutside } from "react-detect-click-outside";
 import {
   GRID_TEMPLATE_CLASS_NAMES,
   PLACE_ITEM_CLASS_NAMES,
@@ -63,11 +64,21 @@ export function LebensmonatDetails<E extends Elternteil>({
 
   const labelIdentifier = useId();
 
+  const detailsElement = useRef<HTMLDetailsElement>(null);
+  const bodyElement = useDetectClickOutside({
+    onTriggered: function closeDetails() {
+      if (detailsElement.current) {
+        detailsElement.current.open = false;
+      }
+    },
+  });
+
   return (
     <details
       className={classNames("group open:bg-off-white", className)}
       name="Lebensmonate"
       aria-labelledby={labelIdentifier}
+      ref={detailsElement}
     >
       <summary
         className={classNames(
@@ -116,7 +127,11 @@ export function LebensmonatDetails<E extends Elternteil>({
         ))}
       </summary>
 
-      <div className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}>
+      <div
+        className={classNames("px-10 pb-20 pt-8", gridTemplateClassName)}
+        ref={bodyElement}
+        data-testid="details-body"
+      >
         <ZeitraumLabel
           id={zeitraumLabelIdentifier}
           className={classNames(

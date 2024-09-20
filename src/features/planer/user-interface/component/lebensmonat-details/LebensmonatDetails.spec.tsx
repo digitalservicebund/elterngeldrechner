@@ -225,4 +225,6 @@ const ANY_PROPS = {
   waehleOption: () => {},
 };
 
-vi.mock("@/features/planer/user-interface/component/HinweisZumBonus");
+vi.mock(
+  "@/features/planer/user-interface/component/lebensmonate-details/HinweisZumBonus",
+);

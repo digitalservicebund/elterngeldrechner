@@ -1,5 +1,6 @@
 import { ReactNode, useId } from "react";
 import classNames from "classnames";
+import { AuswahloptionLabel } from "./AuswahloptionLabel";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import {
   KeinElterngeld,
@@ -40,15 +41,13 @@ export function AuswahlEingabe({
       {Auswahloptionen.sort(sortByAuswahloption).map((option) => {
         const { elterngeldbezug, isDisabled, hintWhyDisabled } =
           auswahlmoeglichkeiten[option];
-        const { label, className, checkedClassName } =
-          RENDER_PROPERTIES[option];
 
         const infoIdentifier = `${baseIdentifier}-info-${option}`;
         const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
 
         const inputIdentifier = `${baseIdentifier}-input-${option}`;
         const inputDescriptionIdentifier = `${baseIdentifier}-input-description-${option}`;
-        const inputAriaLabel = composeLabelForAuswahloption(
+        const inputAriaLabel = composeAriaLabelForAuswahloption(
           option,
           elterngeldbezug,
         );
@@ -78,32 +77,15 @@ export function AuswahlEingabe({
                 "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
               )}
             >
-              <label
-                className={classNames(
-                  "flex min-h-56 items-center justify-center rounded bg-Basis p-8 text-center",
-                  { "cursor-default !bg-grey !text-black": isDisabled },
-                  { "hover:underline": !isDisabled },
-                  { [checkedClassName]: isChecked && !isDisabled },
-                  className,
-                )}
-                style={{ fontSize: "min(1em, 3.4cqi)" }}
+              <AuswahloptionLabel
+                option={option}
+                elterngeldbezug={elterngeldbezug}
+                isChecked={isChecked}
+                isDisabled={isDisabled}
+                hintWhyDisabled={hintWhyDisabled}
                 htmlFor={inputIdentifier}
-              >
-                <span aria-hidden>
-                  <span className="font-bold">{label}</span>
-                  {!!elterngeldbezug && (
-                    <>&nbsp;{formatAsCurrency(elterngeldbezug)}</>
-                  )}
-                </span>
-
-                <span
-                  id={inputDescriptionIdentifier}
-                  className="sr-only"
-                  aria-hidden
-                >
-                  {hintWhyDisabled}
-                </span>
-              </label>
+                inputDescriptionIdentifier={inputDescriptionIdentifier}
+              />
 
               <input
                 id={inputIdentifier}
@@ -126,7 +108,7 @@ export function AuswahlEingabe({
   );
 }
 
-function composeLabelForAuswahloption(
+function composeAriaLabelForAuswahloption(
   option: Auswahloption,
   elterngeldbezug: Elterngeldbezug,
 ): string {
@@ -134,39 +116,6 @@ function composeLabelForAuswahloption(
     ? `${option} mit ${formatAsCurrency(elterngeldbezug)}`
     : option;
 }
-
-const SHARED_CHECKED_CLASS_NAME = "ring-4";
-const RENDER_PROPERTIES: Record<Auswahloption, RenderProperties> = {
-  [Variante.Basis]: {
-    label: "Basis",
-    className: "bg-Basis text-white",
-    checkedClassName: classNames("ring-Plus", SHARED_CHECKED_CLASS_NAME),
-  },
-  [Variante.Plus]: {
-    label: "Plus",
-    className: "bg-Plus text-black",
-    checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
-  },
-  [Variante.Bonus]: {
-    label: "Bonus",
-    className: "bg-Bonus text-black",
-    checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
-  },
-  [KeinElterngeld]: {
-    label: "kein Elterngeld",
-    className: "bg-white text-black border-grey border-2 border-solid",
-    checkedClassName: classNames(
-      "ring-Basis border-none",
-      SHARED_CHECKED_CLASS_NAME,
-    ),
-  },
-};
-
-type RenderProperties = {
-  label: string;
-  className: string;
-  checkedClassName: string;
-};
 
 function sortByAuswahloption(
   left: Auswahloption,

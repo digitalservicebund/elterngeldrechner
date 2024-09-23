@@ -63,7 +63,6 @@ export function LebensmonatContent<E extends Elternteil>({
         const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
         const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
         const auswahlGridLayout = {
-          firstRowIndex: 1,
           areaClassNames: gridLayout.areaClassNames[elternteil].auswahl,
         };
 

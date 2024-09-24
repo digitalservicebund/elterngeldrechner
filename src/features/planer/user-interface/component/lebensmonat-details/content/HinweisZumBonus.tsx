@@ -20,8 +20,9 @@ export function HinweisZumBonus({
           <br />
         </>
       )}
-      Sie müssen mindestens 2 Partnerschaftsbonus-Monate beantragen – deshalb
-      wurde automatisch auch der folgende Monat ausgewählt.
+      Sie müssen Partnerschaftbonus für mindestens 2 Lebensmonate beantragen –
+      deshalb wurde gegebenenfalls automatisch auch der folgende Monat
+      ausgewählt.
     </p>
   );
 }

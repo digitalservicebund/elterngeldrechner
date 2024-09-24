@@ -2,11 +2,10 @@ import type { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/do
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import { Specification } from "@/features/planer/domain/common/specification";
 import { AlleElternteileHabenBonusGewaehlt } from "@/features/planer/domain/lebensmonat";
-import { Variante } from "@/features/planer/domain/Variante";
 
 export const BonusLebensmonateSindFortlaufend =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    `${Variante.Bonus} muss fortlaufend und ohne Unterbrechnung bezogen werden.`,
+    "Die Monate mit Partnerschaftsbonus müssen fortlaufend und ohne Unterbrechnung bezogen werden.",
     (lebensmonate) => {
       const lebensmonatszahlenMitBonus = Object.entries(lebensmonate)
         .filter(([, lebensmonat]) =>

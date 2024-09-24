@@ -7,10 +7,7 @@ import {
   type Ausgangslage,
   type ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
-import {
-  Specification,
-  type SpecificationViolation,
-} from "@/features/planer/domain/common/specification";
+import { Specification } from "@/features/planer/domain/common/specification";
 import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
 import {
   listePseudonymeAuf,
@@ -35,35 +32,26 @@ class LimitsProElternteilWurdenEingehaltenSpecificiation<
         ElternteileByAusgangslage<A>
       >;
 
-      const violations = listePseudonymeAuf(pseudonyme).reduce(
-        (violations: SpecificationViolation[], [elternteil, pseudonym]) => {
+      const limitExceeded = listePseudonymeAuf(pseudonyme).some(
+        ([elternteil]) => {
           const verplant = zaehleVerplantesKontingent(
             plan.lebensmonate,
             elternteil,
           );
 
-          return verplant[Variante.Basis] > LIMIT_BASIS_PER_ELTERNTEIL
-            ? [...violations, composeLimitViolation(pseudonym)]
-            : violations;
+          return verplant[Variante.Basis] > LIMIT_BASIS_PER_ELTERNTEIL;
         },
-        [],
       );
 
-      return violations.length === 0
-        ? SpecificationResult.satisfied
-        : SpecificationResult.unsatisfied(
-            violations[0],
-            ...violations.splice(1),
-          );
+      return limitExceeded
+        ? SpecificationResult.unsatisfied({ message: VIOLATION_MESSAGE })
+        : SpecificationResult.satisfied;
     }
   }
 }
 
-function composeLimitViolation(pseudonym: string): SpecificationViolation {
-  return {
-    message: `${pseudonym} hat das Limit pro Elternteil für diese Auswahloption erschöpft.`,
-  };
-}
+const VIOLATION_MESSAGE =
+  "Ein Elternteil darf nicht mehr als 12 Monate Basiselterngeld beziehen.";
 
 /**
  * Acts as limit for Basiselterngeld and ElterngeldPlus because of the way both
@@ -118,15 +106,6 @@ if (import.meta.vitest) {
     });
 
     it("is unsatisfied if an Elternteil has more than 12 Monate Basiselterngeld", () => {
-      const ausgangslage = {
-        anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
-          [Elternteil.Eins]: "Jane",
-          [Elternteil.Zwei]: "John",
-        },
-        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
-      };
-
       const lebensmonatMitBasisFuerElternteilZwei = {
         [Elternteil.Eins]: monat(KeinElterngeld),
         [Elternteil.Zwei]: monat(Variante.Basis),
@@ -148,7 +127,7 @@ if (import.meta.vitest) {
         13: lebensmonatMitBasisFuerElternteilZwei,
       };
 
-      const plan = { ...ANY_PLAN, ausgangslage, lebensmonate };
+      const plan = { ...ANY_PLAN, lebensmonate };
 
       const violationMessages = LimitsProElternteilWurdenEingehalten()
         .evaluate(plan)
@@ -158,7 +137,7 @@ if (import.meta.vitest) {
         );
 
       expect(violationMessages).toEqual([
-        "John hat das Limit pro Elternteil für diese Auswahloption erschöpft.",
+        "Ein Elternteil darf nicht mehr als 12 Monate Basiselterngeld beziehen.",
       ]);
     });
 
@@ -240,7 +219,7 @@ if (import.meta.vitest) {
         );
 
       expect(violationMessages).toEqual([
-        "Jane hat das Limit pro Elternteil für diese Auswahloption erschöpft.",
+        "Ein Elternteil darf nicht mehr als 12 Monate Basiselterngeld beziehen.",
       ]);
     });
 

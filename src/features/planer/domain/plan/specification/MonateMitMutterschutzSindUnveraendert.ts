@@ -11,7 +11,7 @@ export function MonateMitMutterschutzSindUnveraendert<
   A extends Ausgangslage,
 >(): Specification<Plan<A>> {
   return Specification.fromPredicate(
-    "Im Mutterschutz wird automatisch Basiselterngeld bezogen.",
+    "Monate im Mutterschutz gelten grundsätzlich als Monate mit Basiselterngeld",
     (plan) => {
       const { informationenZumMutterschutz } = plan.ausgangslage;
       const hatKeinMutterschutz = informationenZumMutterschutz === undefined;

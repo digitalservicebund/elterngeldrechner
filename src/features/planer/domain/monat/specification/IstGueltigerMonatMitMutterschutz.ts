@@ -4,7 +4,7 @@ import type { Monat } from "@/features/planer/domain/monat";
 
 export const IstGueltigerMonatMitMutterschutz =
   Specification.fromPredicate<Monat>(
-    "Im Mutterschutz kann nur Basiselterngeld gewählt werden.",
+    "Monate im Mutterschutz gelten grundsätzlich als Monate mit Basiselterngeld",
     (monat) => monat.imMutterschutz && monat.gewaehlteOption === Variante.Basis,
   );
 

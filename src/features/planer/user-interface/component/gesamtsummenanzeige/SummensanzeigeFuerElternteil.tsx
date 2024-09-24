@@ -7,14 +7,12 @@ import { formatAsCurrency } from "@/utils/formatAsCurrency";
 type Props = {
   readonly pseudonum: string;
   readonly summe: SummeFuerElternteil;
-  readonly isPseudonymHidden?: boolean;
   readonly className?: string;
 };
 
 export function SummenanzeigeFuerElternteil({
   pseudonum,
   summe,
-  isPseudonymHidden,
   className,
 }: Props): ReactNode {
   const { anzahlMonateMitBezug, totalerElterngeldbezug } = summe;
@@ -28,7 +26,7 @@ export function SummenanzeigeFuerElternteil({
   return (
     <div className={classNames("flex flex-col items-center", className)}>
       <span className="font-bold">
-        <PersonIcon /> {!isPseudonymHidden && pseudonum}
+        <PersonIcon /> {pseudonum}
       </span>
 
       <span>{formattedAnzahlMonateMitBezug}</span>

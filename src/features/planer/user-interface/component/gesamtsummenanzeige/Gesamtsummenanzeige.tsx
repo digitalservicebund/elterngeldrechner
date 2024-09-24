@@ -48,7 +48,6 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
               key={elternteil}
               pseudonum={pseudonym}
               summe={gesamtsummeFuerElternteil}
-              isPseudonymHidden={!hasMultipleElternteile}
             />
           );
         },

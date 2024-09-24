@@ -7,6 +7,7 @@ import {
   KeinElterngeld,
   Variante,
   type Auswahloption,
+  type Lebensmonat,
 } from "@/features/planer/user-interface/service";
 
 describe("Lebensmonat Content", () => {
@@ -17,7 +18,7 @@ describe("Lebensmonat Content", () => {
   });
 
   describe("auswahl", () => {
-    it("shows an input fieldset to choose an Option for each Elternteil in the details body", () => {
+    it("shows an input fieldset to choose an Option for each Elternteil", () => {
       const pseudonymeDerElternteile = {
         [Elternteil.Eins]: "Jane",
         [Elternteil.Zwei]: "John",
@@ -40,6 +41,30 @@ describe("Lebensmonat Content", () => {
       expect(
         screen.getByRole("radiogroup", {
           name: "Auswahl von John für den 3. Lebensmonat",
+        }),
+      ).toBeInTheDocument();
+    });
+
+    it("shows an input fieldset to choose an Option for single Elternteil", () => {
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: "",
+      };
+      const lebensmonat: Lebensmonat<Elternteil.Eins> = {
+        [Elternteil.Eins]: monat(undefined),
+      };
+
+      render(
+        <LebensmonatContent
+          {...ANY_PROPS}
+          lebensmonatszahl={3}
+          lebensmonat={lebensmonat}
+          pseudonymeDerElternteile={pseudonymeDerElternteile}
+        />,
+      );
+
+      expect(
+        screen.getByRole("radiogroup", {
+          name: "Auswahl für den 3. Lebensmonat",
         }),
       ).toBeInTheDocument();
     });

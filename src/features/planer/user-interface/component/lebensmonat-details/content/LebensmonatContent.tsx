@@ -41,7 +41,7 @@ export function LebensmonatContent<E extends Elternteil>({
   const isBonusHintVisible =
     AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
 
-  const hasMultipleElternteile = Object.keys(lebensmonat).length > 0;
+  const hasMultipleElternteile = Object.keys(lebensmonat).length > 1;
 
   return (
     <div
@@ -60,7 +60,11 @@ export function LebensmonatContent<E extends Elternteil>({
 
       {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
         const pseudonym = pseudonymeDerElternteile[elternteil];
-        const legend = `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
+        const legend = composeLegendForAuswahl(
+          lebensmonatszahl,
+          pseudonym,
+          !hasMultipleElternteile,
+        );
         const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
         const auswahlGridLayout = {
           areaClassNames: gridLayout.areaClassNames[elternteil].auswahl,
@@ -89,6 +93,16 @@ export function LebensmonatContent<E extends Elternteil>({
       )}
     </div>
   );
+}
+
+function composeLegendForAuswahl(
+  lebensmonatszahl: Lebensmonatszahl,
+  pseudonym: string,
+  isSingleElternteil: boolean,
+): string {
+  return isSingleElternteil
+    ? `Auswahl für den ${lebensmonatszahl}. Lebensmonat`
+    : `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
 }
 
 type GridLayout<E extends Elternteil> = {

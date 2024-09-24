@@ -42,14 +42,10 @@ export function composeAusgangslage(state: RootState): Ausgangslage {
     sindMehrlinge,
   };
 
-  const pseudonyme = getPseudonymeFuerAlleElternteile(
-    stepAllgemeineAngaben.pseudonym,
-  );
-
   switch (anzahlElternteile) {
     case 1: {
       const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: pseudonyme[Elternteil.Eins],
+        [Elternteil.Eins]: "",
       };
       const empfaenger = Elternteil.Eins as const;
       const informationenZumMutterschutz = hatMutterschutz
@@ -65,6 +61,9 @@ export function composeAusgangslage(state: RootState): Ausgangslage {
     }
 
     case 2: {
+      const pseudonyme = getPseudonymeFuerAlleElternteile(
+        stepAllgemeineAngaben.pseudonym,
+      );
       const pseudonymeDerElternteile = {
         [Elternteil.Eins]: pseudonyme[Elternteil.Eins],
         [Elternteil.Zwei]: pseudonyme[Elternteil.Zwei],
@@ -128,7 +127,7 @@ if (import.meta.vitest) {
     });
 
     describe("Pseudonyme der Elternteile", () => {
-      it("correctly picks the Pseudonym for one Elternteil", () => {
+      it("uses an empty Pseudonym for one Elternteil", () => {
         const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
@@ -136,9 +135,7 @@ if (import.meta.vitest) {
 
         const ausgangslage = composeAusgangslage(state);
 
-        expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
-          "Jane",
-        );
+        expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe("");
       });
 
       it("assigns the correct Pseudonyme for two Elternteil", () => {

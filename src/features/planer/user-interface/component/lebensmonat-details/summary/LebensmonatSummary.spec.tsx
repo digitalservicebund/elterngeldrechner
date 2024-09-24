@@ -35,7 +35,7 @@ describe("Lebensmonat Summary", () => {
       render(<LebensmonatSummary {...ANY_PROPS} lebensmonat={lebensmonat} />);
 
       expect(document.querySelector("summary")).toHaveAccessibleDescription(
-        /^Noch keine Auswahl getätigt./,
+        /^Noch keine Auswahl getroffen./,
       );
     });
 
@@ -85,12 +85,26 @@ describe("Lebensmonat Summary", () => {
       );
     });
 
-    it("describes if an Elternteil is im Mutterschutz", () => {
+    it("describes only a single Elternteil in direct manner without Pseudonym", () => {
       const lebensmonat: Lebensmonat<Elternteil.Eins> = {
+        [Elternteil.Eins]: monat(Variante.Basis, 800),
+      };
+
+      render(<LebensmonatSummary {...ANY_PROPS} lebensmonat={lebensmonat} />);
+
+      expect(document.querySelector("summary")).toHaveAccessibleDescription(
+        /^Sie beziehen Basiselterngeld und erhalten 800\u00A0€\./,
+      );
+    });
+
+    it("describes if an Elternteil is im Mutterschutz with respective Pseudonym", () => {
+      const lebensmonat = {
         [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+        [Elternteil.Zwei]: monat(Variante.Plus, 900),
       };
       const pseudonymeDerElternteile = {
         [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
       };
 
       render(
@@ -103,6 +117,18 @@ describe("Lebensmonat Summary", () => {
 
       expect(document.querySelector("summary")).toHaveAccessibleDescription(
         /^Jane ist im Mutterschutz\./,
+      );
+    });
+
+    it("describes if a single Elternteil is im Mutterschutz in direct manner without Pseudonym", () => {
+      const lebensmonat: Lebensmonat<Elternteil.Eins> = {
+        [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+      };
+
+      render(<LebensmonatSummary {...ANY_PROPS} lebensmonat={lebensmonat} />);
+
+      expect(document.querySelector("summary")).toHaveAccessibleDescription(
+        /^Sie sind im Mutterschutz\./,
       );
     });
   });

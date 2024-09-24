@@ -14,7 +14,7 @@ import {
   FormFieldGroup,
   SelectOption,
 } from "..";
-import type { ElternteilType } from "@/monatsplaner";
+import type { ElternteilType } from "@/globals/js/elternteil-type";
 import { useAppDispatch } from "@/redux/hooks";
 import {
   stepRechnerActions,

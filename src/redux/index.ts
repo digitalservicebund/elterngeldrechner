@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import monatsplanerReducer from "./monatsplanerSlice";
 import stepAllgemeineAngabenReducer from "./stepAllgemeineAngabenSlice";
 import stepNachwuchsReducer from "./stepNachwuchsSlice";
 import stepErwerbstaetigkeitReducer from "./stepErwerbstaetigkeitSlice";
@@ -9,7 +8,6 @@ import configurationReducer from "./configurationSlice";
 import { preloadedState } from "./preloadedState";
 
 export const reducers = combineReducers({
-  monatsplaner: monatsplanerReducer,
   stepAllgemeineAngaben: stepAllgemeineAngabenReducer,
   stepNachwuchs: stepNachwuchsReducer,
   stepErwerbstaetigkeit: stepErwerbstaetigkeitReducer,

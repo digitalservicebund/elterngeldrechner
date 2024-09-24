@@ -6,7 +6,6 @@ import {
   StepEinkommenElternteil,
   Taetigkeit,
 } from "./stepEinkommenSlice";
-import { initialMonatsplanerState } from "./monatsplanerSlice";
 import {
   BruttoEinkommenZeitraum,
   initialStepRechnerState,
@@ -38,7 +37,6 @@ const finanzDatenOf = (data: Partial<FinanzDaten>) => {
 
 describe("finanzDatenFactory", () => {
   const mockStore: RootState = {
-    monatsplaner: initialMonatsplanerState,
     stepAllgemeineAngaben: {
       antragstellende: null,
       pseudonym: {

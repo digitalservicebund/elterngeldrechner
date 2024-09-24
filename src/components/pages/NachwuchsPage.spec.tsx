@@ -8,13 +8,6 @@ import {
   initialStepNachwuchsState,
   StepNachwuchsState,
 } from "@/redux/stepNachwuchsSlice";
-import { createElternteile, Elternteile } from "@/monatsplaner";
-import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
-import { YesNo } from "@/globals/js/calculations/model";
-import { initialMonatsplanerState } from "@/redux/monatsplanerSlice";
-import { createDefaultElternteileSettings } from "@/globals/js/elternteile-utils";
-
-vi.mock("../../monatsplaner");
 
 const currentYear = new Date().getFullYear();
 
@@ -329,109 +322,5 @@ describe("Submitting the form", () => {
     expect(
       screen.getByText("Dieses Feld ist erforderlich"),
     ).toBeInTheDocument();
-  });
-
-  it("should create the Elternteile for the Monatsplaner", async () => {
-    const mockElternteile: Elternteile = {
-      ET1: { months: [{ type: "EG+" }] },
-    } as unknown as Elternteile;
-    vi.mocked(createElternteile).mockReturnValue(mockElternteile);
-    const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
-
-    const createElternteileSettings = createDefaultElternteileSettings(
-      false,
-      true,
-      isoGeburtsdatum,
-      "ET1",
-      0,
-      true,
-    );
-
-    const validState: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        mutterschaftssleistungen: YesNo.NO,
-      },
-      monatsplaner: {
-        ...initialMonatsplanerState,
-        mutterschutzElternteil: "ET1",
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        anzahlKuenftigerKinder: 1,
-        wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
-        geschwisterkinder: [
-          {
-            geburtsdatum: "",
-            istBehindert: true,
-          },
-        ],
-        mutterschaftssleistungen: YesNo.NO,
-      },
-    };
-
-    store = configureStore({
-      reducer: reducers,
-      preloadedState: validState,
-    });
-    render(<NachwuchsPage />, { store });
-
-    await userEvent.click(screen.getByText("Weiter"));
-
-    expect(store.getState().monatsplaner.elternteile).toBe(mockElternteile);
-    expect(createElternteile).toHaveBeenCalledWith(createElternteileSettings);
-  });
-
-  it("should create the Elternteile for the Monatsplaner with Mehrlinge", async () => {
-    const mockElternteile: Elternteile = {
-      ET1: { months: [{ type: "EG+" }] },
-    } as unknown as Elternteile;
-    vi.mocked(createElternteile).mockReturnValue(mockElternteile);
-    const isoGeburtsdatum = currentYear + "-12-12T00:00:00Z";
-
-    const validState: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        mutterschaftssleistungen: YesNo.YES,
-      },
-      monatsplaner: {
-        ...initialMonatsplanerState,
-        mutterschutzElternteil: "ET1",
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        anzahlKuenftigerKinder: 2,
-        wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
-        geschwisterkinder: [
-          {
-            geburtsdatum: "",
-            istBehindert: true,
-          },
-        ],
-        mutterschaftssleistungen: YesNo.YES,
-      },
-    };
-
-    store = configureStore({
-      reducer: reducers,
-      preloadedState: validState,
-    });
-
-    const createElternteileSettings = createDefaultElternteileSettings(
-      true,
-      true,
-      isoGeburtsdatum,
-      "ET1",
-      3,
-      true,
-    );
-
-    render(<NachwuchsPage />, { store });
-    await userEvent.click(screen.getByText("Weiter"));
-
-    expect(store.getState().monatsplaner.elternteile).toBe(mockElternteile);
-    expect(createElternteile).toHaveBeenCalledWith(createElternteileSettings);
   });
 });

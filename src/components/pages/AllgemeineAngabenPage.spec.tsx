@@ -107,20 +107,6 @@ describe("Allgemeine Angaben Page", () => {
         });
       });
 
-      it("alleinerziehend - to Elternteil 1", async () => {
-        render(<AllgemeineAngabenPage />, { store });
-
-        await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungen_option_0"),
-        );
-        await userEvent.click(screen.getByText("Weiter"));
-
-        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
-          "ET1",
-        );
-      });
-
       it("does not show selection which parent receives Mutterschaftsleistung if a single applicant receives Mutterschaftsleistungen", async () => {
         render(<AllgemeineAngabenPage />, { store });
 
@@ -134,54 +120,6 @@ describe("Allgemeine Angaben Page", () => {
             "Welcher Elternteil bezieht Mutterschaftsleistungen?",
           ),
         ).not.toBeInTheDocument();
-      });
-
-      it("automatically saves the first parent as Mutterschaftsleistungs receiver if a single applicant receives Mutterschaftsleistung", async () => {
-        render(<AllgemeineAngabenPage />, { store });
-
-        await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungen_option_0"),
-        );
-        await userEvent.click(screen.getByText("Weiter"));
-
-        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
-          "ET1",
-        );
-      });
-
-      it("gemeinsam erziehend - to Elternteil 1", async () => {
-        render(<AllgemeineAngabenPage />, { store });
-
-        await userEvent.click(screen.getByLabelText("Für beide"));
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungen_option_0"),
-        );
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungenWer_option_0"),
-        );
-        await userEvent.click(screen.getByText("Weiter"));
-
-        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
-          "ET1",
-        );
-      });
-
-      it("gemeinsam erziehend - to Elternteil 2", async () => {
-        render(<AllgemeineAngabenPage />, { store });
-
-        await userEvent.click(screen.getByLabelText("Für beide"));
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungen_option_0"),
-        );
-        await userEvent.click(
-          screen.getByTestId("mutterschaftssleistungenWer_option_1"),
-        );
-        await userEvent.click(screen.getByText("Weiter"));
-
-        expect(store.getState().monatsplaner.mutterschutzElternteil).toEqual(
-          "ET2",
-        );
       });
     });
 

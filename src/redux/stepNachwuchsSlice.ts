@@ -1,7 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { RootState } from "./index";
-import { getLebensmonate } from "@/monatsplaner";
 import { YesNo } from "@/globals/js/calculations/model";
 import { fromGermanDateString } from "@/utils/date";
 
@@ -66,25 +65,8 @@ export interface LebensmonateAfterBirth {
   labelLong: string;
 }
 
-const getLebensmonateAfterBirth = createSelector(
-  getWahrscheinlichesGeburtsDatum,
-  (wahrscheinlichesGeburtsDatum): LebensmonateAfterBirth[] => {
-    const lebensmonate = getLebensmonate(wahrscheinlichesGeburtsDatum);
-    return lebensmonate.map((month) => ({
-      monthIsoString: month.from,
-      labelShort: new Date(month.from).toLocaleDateString("de-DE", {
-        month: "short",
-      }),
-      labelLong: new Date(month.from).toLocaleDateString("de-DE", {
-        month: "long",
-      }),
-    }));
-  },
-);
-
 export const stepNachwuchsSelectors = {
   getWahrscheinlichesGeburtsDatum,
-  getLebensmonateAfterBirth,
 };
 export const stepNachwuchsActions = stepNachwuchsSlice.actions;
 export default stepNachwuchsSlice.reducer;

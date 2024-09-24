@@ -1,10 +1,8 @@
 import type { ReactNode } from "react";
 import { UserFeedbackSection } from "@/components/molecules/UserFeedbackSection";
-import { DatenInAntragUebernehmenButton } from "@/components/organisms/DatenInAntragUebernehmenButton";
 import { Button, PrintButton } from "@/components/atoms";
 import { Page } from "@/components/organisms/page";
 import { formSteps } from "@/utils/formSteps";
-import nsp from "@/globals/js/namespace";
 import { Zusammenfassung } from "@/features/planer";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 
@@ -28,18 +26,14 @@ function ZusammenfassungUndDatenPage(): ReactNode {
           "Es wurde noch kein Plan erstellt"
         )}
 
-        <section className={nsp("monatsplaner__button-group")}>
-          <Button
-            buttonStyle="secondary"
-            label="Zurück"
-            onClick={navigateToPreviousStep}
-          />
+        <Button
+          buttonStyle="secondary"
+          label="Zurück"
+          onClick={navigateToPreviousStep}
+        />
 
-          <DatenInAntragUebernehmenButton />
-        </section>
+        <UserFeedbackSection className="mt-40" />
       </div>
-
-      <UserFeedbackSection className="mt-40" />
     </Page>
   );
 }

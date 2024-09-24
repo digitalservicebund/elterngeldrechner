@@ -3,7 +3,7 @@ import { NurSelbstaendig } from "./NurSelbstaendig";
 import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
 import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
 import { useAppSelector } from "@/redux/hooks";
-import type { ElternteilType } from "@/monatsplaner";
+import type { ElternteilType } from "@/globals/js/elternteil-type";
 import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";

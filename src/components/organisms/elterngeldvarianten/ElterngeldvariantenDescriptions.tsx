@@ -8,7 +8,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
     <div>
       <DetailsElterngeldvariante
         summaryTitle="Was ist Basiselterngeld?"
-        variante="BEG"
+        variante="Basis"
       >
         <ul className="mb-24 list-disc pl-24">
           <li>Für maximal 14 Monate verfügbar</li>
@@ -179,7 +179,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
 
       <DetailsElterngeldvariante
         summaryTitle="Was ist ElterngeldPlus?"
-        variante="EG+"
+        variante="Plus"
       >
         <ul className="mb-24 list-disc pl-24">
           <li>Für maximal 28 Monate verfügbar</li>
@@ -331,7 +331,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
       </DetailsElterngeldvariante>
       <DetailsElterngeldvariante
         summaryTitle="Was ist der Partnerschaftsbonus?"
-        variante="PSB"
+        variante="Bonus"
       >
         <ul className="mb-24 list-disc pl-24">
           <li>

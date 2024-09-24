@@ -3,7 +3,7 @@ import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
 import { RootState } from "./index";
-import { ElternteilType } from "@/monatsplaner";
+import { ElternteilType } from "@/globals/js/elternteil-type";
 import {
   ErwerbsArt,
   PersoenlicheDaten,

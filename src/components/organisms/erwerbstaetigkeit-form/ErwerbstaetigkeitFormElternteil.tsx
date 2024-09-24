@@ -1,7 +1,7 @@
 import { useFormContext } from "react-hook-form";
 import { useEffect } from "react";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
-import type { ElternteilType } from "@/monatsplaner";
+import type { ElternteilType } from "@/globals/js/elternteil-type";
 import {
   CustomRadio,
   FormFieldGroup,

@@ -3,7 +3,6 @@ import {
   BruttoEinkommenZeitraum,
   initialStepRechnerState,
 } from "./stepRechnerSlice";
-import { initialMonatsplanerState } from "./monatsplanerSlice";
 import { initialAverageOrMonthlyStateNichtSelbstaendig } from "./stepEinkommenSlice";
 import {
   MonatlichesBrutto,
@@ -24,7 +23,6 @@ vi.mock("react-redux", () => ({
 
 describe("persoenlicheDatenFactory", () => {
   const mockStore: RootState = {
-    monatsplaner: initialMonatsplanerState,
     stepAllgemeineAngaben: {
       antragstellende: null,
       pseudonym: {

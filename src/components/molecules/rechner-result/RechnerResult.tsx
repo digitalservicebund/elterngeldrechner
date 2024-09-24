@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
-import type { ElternteilType } from "@/monatsplaner";
+import type { ElternteilType } from "@/globals/js/elternteil-type";
 import {
   RechnerResultTable,
   RechnerResultTableRow,

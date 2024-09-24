@@ -8,7 +8,7 @@ import { Zeitraum } from "./stepEinkommenSlice";
 import { persoenlicheDatenOfUi } from "./persoenlicheDatenFactory";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import type { RootState } from "./index";
-import type { ElternteilType } from "@/monatsplaner";
+import type { ElternteilType } from "@/globals/js/elternteil-type";
 import { MutterschaftsLeistung, YesNo } from "@/globals/js/calculations/model";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
 import { EgrSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";

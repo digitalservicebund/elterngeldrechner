@@ -15,7 +15,7 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { ElternteilType } from "@/monatsplaner/elternteile/elternteile-types";
+import { ElternteilType } from "@/globals/js/elternteil-type";
 
 export interface Zeitraum {
   from: string;

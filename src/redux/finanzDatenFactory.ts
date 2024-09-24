@@ -3,7 +3,7 @@ import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
 import { AverageOrMonthlyState, Taetigkeit } from "./stepEinkommenSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { RootState } from "./index";
-import { ElternteilType } from "@/monatsplaner";
+import { ElternteilType } from "@/globals/js/elternteil-type";
 import {
   Einkommen,
   ErwerbsTaetigkeit,

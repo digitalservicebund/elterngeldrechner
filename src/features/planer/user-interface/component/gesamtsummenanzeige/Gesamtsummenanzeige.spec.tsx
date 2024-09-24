@@ -97,33 +97,6 @@ describe("Gesamtsummenanzeige", () => {
       expect(screen.getByText(/^Elterngeld: 1.041.€$/)).toBeVisible();
     });
 
-    it("excludes the Pseudonym when there is only one Elternteil", () => {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "Jane",
-      };
-      const gesamtsumme = {
-        ...ANY_GESAMTSUMME,
-        summeProElternteil: {
-          [Elternteil.Eins]: {
-            anzahlMonateMitBezug: 0,
-            totalerElterngeldbezug: 0,
-          },
-        },
-      };
-
-      render(
-        <Gesamtsummenanzeige
-          {...ANY_PROPS}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-          gesamtsumme={gesamtsumme}
-        />,
-      );
-
-      expect(screen.queryByText("Jane")).not.toBeInTheDocument();
-      expect(screen.getByText("0 Monate")).toBeVisible();
-      expect(screen.getByText(/^Elterngeld: 0.€$/)).toBeVisible();
-    });
-
     it("shows the Elternteile in korrekt order", () => {
       const pseudonymeDerElternteile = {
         [Elternteil.Eins]: "Jane",

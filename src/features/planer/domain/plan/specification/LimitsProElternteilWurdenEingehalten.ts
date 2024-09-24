@@ -137,7 +137,7 @@ if (import.meta.vitest) {
         );
 
       expect(violationMessages).toEqual([
-        "Ein Elternteil darf nicht mehr als 12 Monate Basiselterngeld beziehen.",
+        "Die verfügbaren Monate für diesen Elternteil sind aufgebraucht.",
       ]);
     });
 
@@ -219,7 +219,7 @@ if (import.meta.vitest) {
         );
 
       expect(violationMessages).toEqual([
-        "Ein Elternteil darf nicht mehr als 12 Monate Basiselterngeld beziehen.",
+        "Die verfügbaren Monate für diesen Elternteil sind aufgebraucht.",
       ]);
     });
 

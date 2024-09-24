@@ -22,13 +22,13 @@ class LimitsProElternteilWurdenEingehaltenSpecificiation<
   A extends Ausgangslage,
 > extends Specification<Plan<A>> {
   evaluate(plan: Plan<A>): SpecificationResult {
-    const istAusnahme = plan.ausgangslage.istAlleinerziehend;
+    const { anzahlElternteile, pseudonymeDerElternteile } = plan.ausgangslage;
+    const istAusnahme = anzahlElternteile === 1;
 
     if (istAusnahme) {
       return SpecificationResult.satisfied;
     } else {
-      const pseudonyme = plan.ausgangslage
-        .pseudonymeDerElternteile as PseudonymeDerElternteile<
+      const pseudonyme = pseudonymeDerElternteile as PseudonymeDerElternteile<
         ElternteileByAusgangslage<A>
       >;
 
@@ -51,7 +51,7 @@ class LimitsProElternteilWurdenEingehaltenSpecificiation<
 }
 
 const VIOLATION_MESSAGE =
-  "Ein Elternteil darf nicht mehr als 12 Monate Basiselterngeld beziehen.";
+  "Die verfügbaren Monate für diesen Elternteil sind aufgebraucht.";
 
 /**
  * Acts as limit for Basiselterngeld and ElterngeldPlus because of the way both
@@ -223,10 +223,9 @@ if (import.meta.vitest) {
       ]);
     });
 
-    it("is always satisfied if being alleinerziehend", () => {
+    it("is always satisfied when ein Elternteile only", () => {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
-        istAlleinerziehend: true,
         pseudonymeDerElternteile: ANY_PSEUDONYME_FOR_ONE_ELTERNTEIL,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };

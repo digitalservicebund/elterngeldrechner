@@ -5,7 +5,7 @@ import {
 } from "@/features/planer/user-interface/service";
 import { YesNo } from "@/globals/js/calculations/model";
 import { type RootState } from "@/redux";
-import { fromGermanDateString } from "@/utils/date/fromGermanDateString";
+import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
 export function composeAusgangslage(state: RootState): Ausgangslage {
   const { stepAllgemeineAngaben, stepNachwuchs } = state;

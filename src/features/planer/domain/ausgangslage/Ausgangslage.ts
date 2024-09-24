@@ -11,7 +11,7 @@ export interface AusgangslageFuerEinElternteil
   readonly anzahlElternteile: 1;
 }
 
-export interface AusgangslageFuerZweiElternteile
+interface AusgangslageFuerZweiElternteile
   extends BasisAusgangslage<Elternteil.Eins | Elternteil.Zwei> {
   readonly anzahlElternteile: 2;
 }

@@ -17,7 +17,7 @@ import { YesNo } from "@/globals/js/calculations/model";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 
-export const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
+const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MiniJob: "Ja",
   MehrAlsMiniJob: "Nein",
 };

@@ -23,7 +23,7 @@ interface Props {
 const roundAndFormatMoney = (amount: number) =>
   formatMoney(Big(amount).round(0).toNumber(), 0);
 
-export const formatMoney = (number: number, fractionDigits?: number) => {
+const formatMoney = (number: number, fractionDigits?: number) => {
   return number.toLocaleString("de-DE", {
     style: "currency",
     currency: "EUR",

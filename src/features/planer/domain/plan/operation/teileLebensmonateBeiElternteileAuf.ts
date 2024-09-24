@@ -58,7 +58,7 @@ function getInitialValue<A extends Ausgangslage>(
   }
 }
 
-export type LebensmonateProElternteil<E extends Elternteil> = Record<
+type LebensmonateProElternteil<E extends Elternteil> = Record<
   E,
   Partial<Record<Lebensmonatszahl, Monat>>
 >;

@@ -10,7 +10,7 @@ export const AlleElternteileHabenBasisGewaehlt =
 export const AlleElternteileHabenBonusGewaehlt =
   AlleElternteileHabenOptionGewaehlt(Variante.Bonus);
 
-export function AlleElternteileHabenOptionGewaehlt(
+function AlleElternteileHabenOptionGewaehlt(
   option: Auswahloption,
 ): Specification<LebensmonatMitBeliebigenElternteilen> {
   return Specification.fromPredicate(

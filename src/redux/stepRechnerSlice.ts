@@ -91,7 +91,7 @@ const mutterschaftsLeistungOfUi = (
   return MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN;
 };
 
-export const calculateElterngeld = async (
+const calculateElterngeld = async (
   state: RootState,
   elternteil: ElternteilType,
   bruttoEinkommenZeitraum: BruttoEinkommenZeitraum[],

@@ -64,7 +64,7 @@ function setzeLebensmonatZurueckUndWaehleOption<E extends Elternteil>(
  * create bound/curried instances of this function that can be composed to
  * create more advanced behaviors.
  */
-export function waehleOptionDirekt<E extends Elternteil>(
+function waehleOptionDirekt<E extends Elternteil>(
   parameters: BindingParameters<E>,
   overrideParameters: Partial<BindingParameters<E>> | undefined,
   lebensmonat: Lebensmonat<E>,

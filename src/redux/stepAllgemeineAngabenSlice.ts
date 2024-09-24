@@ -3,7 +3,7 @@ import { RootState } from "./index";
 import { YesNo } from "@/globals/js/calculations/model";
 
 export type Antragstellende = "EinenElternteil" | "FuerBeide";
-export type AntragstellendeSelektor = "ET1" | "ET2";
+type AntragstellendeSelektor = "ET1" | "ET2";
 
 export interface StepAllgemeineAngabenState {
   antragstellende: Antragstellende | null;

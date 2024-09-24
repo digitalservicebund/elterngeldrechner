@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { RootState } from "./index";
 import { YesNo } from "@/globals/js/calculations/model";
-import { fromGermanDateString } from "@/utils/date";
+import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
 interface Kind {
   geburtsdatum: string;
@@ -58,12 +58,6 @@ const getWahrscheinlichesGeburtsDatum = createSelector(
   (wahrscheinlichesGeburtsDatum): Date =>
     fromGermanDateString(wahrscheinlichesGeburtsDatum),
 );
-
-export interface LebensmonateAfterBirth {
-  monthIsoString: string;
-  labelShort: string;
-  labelLong: string;
-}
 
 export const stepNachwuchsSelectors = {
   getWahrscheinlichesGeburtsDatum,

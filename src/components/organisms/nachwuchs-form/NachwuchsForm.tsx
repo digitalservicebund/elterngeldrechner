@@ -16,7 +16,7 @@ import {
 import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { trackNutzergruppe } from "@/user-tracking";
-import { fromGermanDateString } from "@/utils/date";
+import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;

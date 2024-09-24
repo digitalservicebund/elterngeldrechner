@@ -76,6 +76,41 @@ export class RechnerPlanerPOM {
     return this;
   }
 
+  async waehleOption(
+    lebensmonatszahl: number,
+    option: "Basis" | "Plus" | "Bonus" | "kein Elterngeld",
+    elternteil?: string,
+  ): Promise<void> {
+    await this.openLebensmonat(lebensmonatszahl);
+    const fieldsetLabel = elternteil
+      ? `Auswahl von ${elternteil} für den ${lebensmonatszahl}. Lebensmonat`
+      : `Auswahl für den ${lebensmonatszahl}. Lebensmonat`;
+
+    const fieldset = this.page.getByRole("radiogroup", {
+      name: fieldsetLabel,
+      exact: true,
+    });
+
+    // The radio button itself is hidden and can't be clicked. Though the radio
+    // button would much easier/better to address with a locator. Notice there
+    // are also the disabled hints.
+    const label = fieldset.locator("label").filter({ hasText: option }).first();
+    await label.click();
+  }
+
+  private async openLebensmonat(lebensmonatszahl: number): Promise<void> {
+    const label = `${lebensmonatszahl}. Lebensmonat`;
+    const details = this.page.getByRole("group", { name: label, exact: true });
+    const isClosed = (await details.getAttribute("open")) === null;
+    isClosed && (await details.click());
+  }
+
+  async zeigeMehrLebensmonateAn(): Promise<void> {
+    await this.page
+      .getByRole("button", { name: "mehr Monate anzeigen" })
+      .click();
+  }
+
   async berechnen(elternteil?: 1 | 2) {
     if (!elternteil && this.berechnenButton) {
       await this.berechnenButton.click();

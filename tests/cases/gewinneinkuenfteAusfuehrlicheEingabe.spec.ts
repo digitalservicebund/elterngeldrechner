@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   test.slow();
@@ -84,50 +85,27 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
     .click();
   await screenshot("rechner-result-et1");
   await screenshot("rechner-result-et2");
-  await page
-    .getByTestId("Elternteil 1 Basiselterngeld für Lebensmonat 1")
-    .getByLabel("Elternteil 1 Basiselterngeld")
-    .click();
-  await page
-    .getByTestId("Elternteil 1 Basiselterngeld für Lebensmonat 2")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 3")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 5")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 7")
-    .click();
-  await page
-    .getByTestId("Elternteil 2 Basiselterngeld für Lebensmonat 1")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 ElterngeldPlus für Lebensmonat 2")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 ElterngeldPlus für Lebensmonat 4")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 ElterngeldPlus für Lebensmonat 6")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 ElterngeldPlus für Lebensmonat 9")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 ElterngeldPlus für Lebensmonat 10")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Partnerschaftsbonus für Lebensmonat 11")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Partnerschaftsbonus für Lebensmonat 13")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Partnerschaftsbonus für Lebensmonat 14")
-    .click();
+
+  const planer = new RechnerPlanerPOM(page);
+  await planer.waehleOption(1, "Basis", "Elternteil 1");
+  await planer.waehleOption(1, "Basis", "Elternteil 2");
+  await planer.waehleOption(2, "Basis", "Elternteil 1");
+  await planer.waehleOption(2, "Plus", "Elternteil 2");
+  await planer.waehleOption(3, "Basis", "Elternteil 1");
+  await planer.waehleOption(4, "Plus", "Elternteil 2");
+  await planer.waehleOption(5, "Basis", "Elternteil 1");
+  await planer.waehleOption(6, "Plus", "Elternteil 2");
+  await planer.waehleOption(7, "Basis", "Elternteil 1");
+  await planer.waehleOption(9, "Plus", "Elternteil 2");
+  await planer.waehleOption(10, "Plus", "Elternteil 2");
+  await planer.waehleOption(11, "Bonus", "Elternteil 1");
+  await planer.waehleOption(12, "Bonus", "Elternteil 1");
+  await planer.waehleOption(13, "Bonus", "Elternteil 1");
+
   await page.getByRole("button", { name: "Zur Übersicht" }).click();
-  await screenshot("planungsuebersicht");
-  await screenshot("planungsdetails");
+  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
+  await screenshot(
+    "planungsdetails",
+    page.getByLabel("Planung der Monate im Detail"),
+  );
 });

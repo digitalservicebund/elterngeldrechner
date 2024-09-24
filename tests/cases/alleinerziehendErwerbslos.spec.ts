@@ -7,7 +7,6 @@ import { VariantenPOM } from "../pom/VariantenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 import expectScreenshot from "../expectScreenshot";
-// import verifyPostRequestToElterngeldDigital from "../verifyPostRequestToElterngeldDigital";
 
 test("alleinerziehend, erwerbslos", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
@@ -34,114 +33,69 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   const variantenPage = new VariantenPOM(page);
   await variantenPage.submit();
 
-  const rechnerPlanerPage = new RechnerPlanerPOM(page);
-  await rechnerPlanerPage.setKeinEinkommen();
-  await rechnerPlanerPage.berechnen();
+  const rechnerUndPlaner = new RechnerPlanerPOM(page);
+  await rechnerUndPlaner.setKeinEinkommen();
+  await rechnerUndPlaner.berechnen();
 
-  expect(await rechnerPlanerPage.getErgebnis(1, 1, 14, "Basis")).toHaveText(
+  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Basis")).toHaveText(
     "300 €",
   );
   expect(
-    await rechnerPlanerPage.getErgebnis(1, 1, 14, "Basis", true),
+    await rechnerUndPlaner.getErgebnis(1, 1, 14, "Basis", true),
   ).toHaveText("300 €");
-  expect(await rechnerPlanerPage.getErgebnis(1, 15, 32, "Basis")).toHaveText(
+  expect(await rechnerUndPlaner.getErgebnis(1, 15, 32, "Basis")).toHaveText(
     "0 €1",
   );
   expect(
-    await rechnerPlanerPage.getErgebnis(1, 15, 32, "Basis", true),
+    await rechnerUndPlaner.getErgebnis(1, 15, 32, "Basis", true),
   ).toHaveText("0 €1");
 
-  expect(await rechnerPlanerPage.getErgebnis(1, 1, 14, "Plus")).toHaveText(
+  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Plus")).toHaveText(
+    "150 €",
+  );
+  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Plus", true)).toHaveText(
+    "150 €",
+  );
+  expect(await rechnerUndPlaner.getErgebnis(1, 15, 32, "Plus")).toHaveText(
     "150 €",
   );
   expect(
-    await rechnerPlanerPage.getErgebnis(1, 1, 14, "Plus", true),
-  ).toHaveText("150 €");
-  expect(await rechnerPlanerPage.getErgebnis(1, 15, 32, "Plus")).toHaveText(
-    "150 €",
-  );
-  expect(
-    await rechnerPlanerPage.getErgebnis(1, 15, 32, "Plus", true),
-  ).toHaveText("150 €");
-
-  expect(await rechnerPlanerPage.getErgebnis(1, 1, 14, "Bonus")).toHaveText(
-    "150 €",
-  );
-  expect(
-    await rechnerPlanerPage.getErgebnis(1, 1, 14, "Bonus", true),
-  ).toHaveText("150 €");
-  expect(await rechnerPlanerPage.getErgebnis(1, 15, 32, "Bonus")).toHaveText(
-    "150 €",
-  );
-  expect(
-    await rechnerPlanerPage.getErgebnis(1, 15, 32, "Bonus", true),
+    await rechnerUndPlaner.getErgebnis(1, 15, 32, "Plus", true),
   ).toHaveText("150 €");
 
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 3" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 4" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 5" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 6" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 7" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 8" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 9" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 10" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 11" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 12" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 13" })
-    .click();
-  await page
-    .getByRole("button", { name: "Basiselterngeld für Lebensmonat 14" })
-    .click();
+  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Bonus")).toHaveText(
+    "150 €",
+  );
+  expect(
+    await rechnerUndPlaner.getErgebnis(1, 1, 14, "Bonus", true),
+  ).toHaveText("150 €");
+  expect(await rechnerUndPlaner.getErgebnis(1, 15, 32, "Bonus")).toHaveText(
+    "150 €",
+  );
+  expect(
+    await rechnerUndPlaner.getErgebnis(1, 15, 32, "Bonus", true),
+  ).toHaveText("150 €");
 
-  await rechnerPlanerPage.submit();
+  await rechnerUndPlaner.waehleOption(3, "Basis");
+  await rechnerUndPlaner.waehleOption(4, "Basis");
+  await rechnerUndPlaner.waehleOption(5, "Basis");
+  await rechnerUndPlaner.waehleOption(6, "Basis");
+  await rechnerUndPlaner.waehleOption(7, "Basis");
+  await rechnerUndPlaner.waehleOption(8, "Basis");
+  await rechnerUndPlaner.waehleOption(9, "Basis");
+  await rechnerUndPlaner.waehleOption(10, "Basis");
+  await rechnerUndPlaner.waehleOption(11, "Basis");
+  await rechnerUndPlaner.waehleOption(12, "Basis");
+  await rechnerUndPlaner.waehleOption(13, "Basis");
+  await rechnerUndPlaner.waehleOption(14, "Basis");
+  await rechnerUndPlaner.submit();
 
   const zusammenfassungPage = new ZusammenfassungPOM(page);
   await expect(zusammenfassungPage.heading).toBeVisible();
 
-  await screenshot("planungsuebersicht");
-  await screenshot("planungsdetails");
-
-  await expect(
-    page.getByRole("button", {
-      name: "Daten in Elterngeldantrag übernehmen",
-      exact: true,
-    }),
-  ).not.toBeVisible();
-
-  // const expectedPostData = {
-  //   alleinerziehend: "1",
-  //   kind_geburtstag: "02.02.2025",
-  //   mehrlinge_anzahl: "1",
-  //   mutterschaftsleistung: "1",
-  //   p1_et_nachgeburt: "0",
-  //   p1_et_vorgeburt: "0",
-  //   p1_vg_kirchensteuer: "0",
-  //   p1_vg_nselbst_steuerklasse: "",
-  //   planungP1:
-  //     "1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-  // };
-  // await verifyPostRequestToElterngeldDigital({ page, expectedPostData });
-
-  // await zusammenfassungPage.submit();
+  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
+  await screenshot(
+    "planungsdetails",
+    page.getByLabel("Planung der Monate im Detail"),
+  );
 });

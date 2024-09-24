@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Minijob", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
@@ -30,37 +31,23 @@ test("Minijob", async ({ page }) => {
   await page.getByText("Ich werde während des").click();
   await page.getByRole("button", { name: "Elterngeld berechnen" }).click();
   await screenshot("rechner-result-et1");
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 3")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 4")
-    .click();
-  await page
-    .getByTestId("Elternteil 1 Basiselterngeld für Lebensmonat 5")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 6")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 7")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 8")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 9")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 10")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 11")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 12")
-    .click();
+
+  const planer = new RechnerPlanerPOM(page);
+  await planer.waehleOption(3, "Basis");
+  await planer.waehleOption(4, "Basis");
+  await planer.waehleOption(5, "Basis");
+  await planer.waehleOption(6, "Basis");
+  await planer.waehleOption(7, "Basis");
+  await planer.waehleOption(8, "Basis");
+  await planer.waehleOption(9, "Basis");
+  await planer.waehleOption(10, "Basis");
+  await planer.waehleOption(11, "Basis");
+  await planer.waehleOption(12, "Basis");
+
   await page.getByRole("button", { name: "Zur Übersicht" }).click();
-  await screenshot("planungsuebersicht");
-  await screenshot("planungsdetails");
+  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
+  await screenshot(
+    "planungsdetails",
+    page.getByLabel("Planung der Monate im Detail"),
+  );
 });

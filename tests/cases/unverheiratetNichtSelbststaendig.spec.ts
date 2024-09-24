@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("unverheiratet, nicht selbstständig", async ({ page }) => {
   test.slow();
@@ -137,61 +138,30 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .click();
   await screenshot("rechner-result-et1");
   await screenshot("rechner-result-et2");
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 3")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 4")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Basiselterngeld für Lebensmonat 6")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 ElterngeldPlus für Lebensmonat 7")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 ElterngeldPlus für Lebensmonat 9")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 ElterngeldPlus für Lebensmonat 10")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Partnerschaftsbonus für Lebensmonat 13")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Partnerschaftsbonus für Lebensmonat 15")
-    .click();
-  await page
-    .getByLabel("Elternteil 1 Partnerschaftsbonus für Lebensmonat 16")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 6")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 7")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 8")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 9")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 10")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 11")
-    .click();
-  await page
-    .locator("table:nth-child(2) > tbody > tr:nth-child(12) > td:nth-child(2)")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 6")
-    .click();
-  await page
-    .getByLabel("Elternteil 2 Basiselterngeld für Lebensmonat 12")
-    .click();
+
+  const planer = new RechnerPlanerPOM(page);
+  await planer.waehleOption(3, "Basis", "Elternteil 1");
+  await planer.waehleOption(4, "Basis", "Elternteil 1");
+  await planer.waehleOption(6, "Basis", "Elternteil 1");
+  await planer.waehleOption(6, "Basis", "Elternteil 2");
+  await planer.waehleOption(7, "Plus", "Elternteil 1");
+  await planer.waehleOption(7, "Basis", "Elternteil 2");
+  await planer.waehleOption(8, "Basis", "Elternteil 2");
+  await planer.waehleOption(9, "Plus", "Elternteil 1");
+  await planer.waehleOption(9, "Basis", "Elternteil 2");
+  await planer.waehleOption(10, "Plus", "Elternteil 1");
+  await planer.waehleOption(10, "Basis", "Elternteil 2");
+  await planer.waehleOption(11, "Basis", "Elternteil 2");
+  await planer.waehleOption(12, "Basis", "Elternteil 2");
+  await planer.waehleOption(13, "Bonus", "Elternteil 1");
+  await planer.zeigeMehrLebensmonateAn();
+  await planer.waehleOption(15, "Bonus", "Elternteil 1");
+  await planer.waehleOption(16, "Bonus", "Elternteil 1");
+
   await page.getByRole("button", { name: "Zur Übersicht" }).click();
-  await screenshot("planungsuebersicht");
-  await screenshot("planungsdetails");
+  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
+  await screenshot(
+    "planungsdetails",
+    page.getByLabel("Planung der Monate im Detail"),
+  );
 });

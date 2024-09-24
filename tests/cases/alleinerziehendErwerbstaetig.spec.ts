@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("alleinerziehend, erwerbstätig", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
@@ -38,22 +39,30 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   await page.getByLabel("bis Lebensmonat").selectOption("18");
   await page.getByRole("button", { name: "Elterngeld berechnen" }).click();
   await screenshot("rechner-result-et1");
-  await page.getByLabel("Basiselterngeld für Lebensmonat 3").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 4").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 5").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 6").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 7").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 8").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 9").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 10").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 11").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 12").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 13").click();
-  await page.getByLabel("Basiselterngeld für Lebensmonat 14").click();
-  await page.getByLabel("Partnerschaftsbonus für Lebensmonat 15").click();
-  await page.getByLabel("Partnerschaftsbonus für Lebensmonat 17").click();
-  await page.getByLabel("Partnerschaftsbonus für Lebensmonat 18").click();
+
+  const planer = new RechnerPlanerPOM(page);
+  await planer.waehleOption(3, "Basis");
+  await planer.waehleOption(4, "Basis");
+  await planer.waehleOption(5, "Basis");
+  await planer.waehleOption(6, "Basis");
+  await planer.waehleOption(7, "Basis");
+  await planer.waehleOption(8, "Basis");
+  await planer.waehleOption(9, "Basis");
+  await planer.waehleOption(10, "Basis");
+  await planer.waehleOption(11, "Basis");
+  await planer.waehleOption(12, "Basis");
+  await planer.waehleOption(13, "Basis");
+  await planer.waehleOption(14, "Basis");
+  await planer.zeigeMehrLebensmonateAn();
+  await planer.waehleOption(15, "Bonus");
+  await planer.waehleOption(16, "Bonus");
+  await planer.waehleOption(17, "Bonus");
+  await planer.waehleOption(18, "Bonus");
+
   await page.getByRole("button", { name: "Zur Übersicht" }).click();
-  await screenshot("planungsuebersicht");
-  await screenshot("planungsdetails");
+  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
+  await screenshot(
+    "planungsdetails",
+    page.getByLabel("Planung der Monate im Detail"),
+  );
 });

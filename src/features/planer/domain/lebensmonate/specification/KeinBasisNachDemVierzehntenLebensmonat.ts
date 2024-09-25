@@ -7,7 +7,7 @@ import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/
 
 export const KeinBasisNachDemVierzehntenLebensmonat =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Nach dem 14. Lebensmonat kann kein Basiselterngeld mehr bezogen werden.",
+    "Nach dem 14. Lebensmonat kann kein Basiselterngeld mehr ausgewählt werden.",
     (lebensmonate) =>
       listeLebensmonateAuf(lebensmonate)
         .filter(([lebensmonatszahl]) => lebensmonatszahl > 14)

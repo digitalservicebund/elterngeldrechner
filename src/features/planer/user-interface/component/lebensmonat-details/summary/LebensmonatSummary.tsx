@@ -16,8 +16,7 @@ type Props<E extends Elternteil> = {
   readonly lebensmonatszahl: Lebensmonatszahl;
   readonly lebensmonat: Lebensmonat<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly identifierForDetailsAriaLabel: string;
-  readonly zeitraumIdentifierForAriaDescription: string;
+  readonly identifierToZeitraumLabel: string;
   readonly gridLayout: GridLayout<E>;
 };
 
@@ -25,12 +24,16 @@ export function LebensmonatSummary<E extends Elternteil>({
   lebensmonatszahl,
   lebensmonat,
   pseudonymeDerElternteile,
-  identifierForDetailsAriaLabel,
-  zeitraumIdentifierForAriaDescription,
+  identifierToZeitraumLabel,
   gridLayout,
 }: Props<E>): ReactNode {
-  const descriptionIdentifier = useId();
-  const description = composeDescription(lebensmonat, pseudonymeDerElternteile);
+  const ariaLabel = `${lebensmonatszahl}. Lebensmonat`;
+
+  const auswahlDescriptionIdentifier = useId();
+  const auswahlDescription = composeAuswahlDescription(
+    lebensmonat,
+    pseudonymeDerElternteile,
+  );
 
   return (
     <summary
@@ -38,22 +41,22 @@ export function LebensmonatSummary<E extends Elternteil>({
         "relative py-6 hover:bg-off-white focus:bg-off-white",
         gridLayout.templateClassName,
       )}
+      aria-label={ariaLabel}
       aria-describedby={classNames(
-        descriptionIdentifier,
-        zeitraumIdentifierForAriaDescription,
+        auswahlDescriptionIdentifier,
+        identifierToZeitraumLabel,
       )}
     >
-      <span id={descriptionIdentifier} className="sr-only" aria-hidden>
-        {description}
+      <span id={auswahlDescriptionIdentifier} className="sr-only" aria-hidden>
+        {auswahlDescription}
       </span>
 
       <span
-        id={identifierForDetailsAriaLabel}
         className={classNames(
           "self-center text-center font-bold",
           gridLayout.areaClassNames.lebensmonatszahl,
         )}
-        aria-label={`${lebensmonatszahl}. Lebensmonat`}
+        aria-hidden
       >
         {lebensmonatszahl}
       </span>
@@ -85,7 +88,7 @@ export function LebensmonatSummary<E extends Elternteil>({
   );
 }
 
-function composeDescription<E extends Elternteil>(
+function composeAuswahlDescription<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
   pseudonymeDerElternteile: PseudonymeDerElternteile<E>,
 ): string {

@@ -151,8 +151,7 @@ const ANY_PROPS = {
     [Elternteil.Eins]: "Jane",
     [Elternteil.Zwei]: "John",
   },
-  identifierForDetailsAriaLabel: "",
-  zeitraumIdentifierForAriaDescription: "",
+  identifierToZeitraumLabel: "",
   gridLayout: {
     templateClassName: "",
     areaClassNames: {

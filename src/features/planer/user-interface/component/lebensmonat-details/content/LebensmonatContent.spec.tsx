@@ -17,6 +17,12 @@ describe("Lebensmonat Content", () => {
     expect(screen.getByText("Zeitraum:", { exact: false })).toBeVisible();
   });
 
+  it("shows the Lebensmonatszahl", () => {
+    render(<LebensmonatContent {...ANY_PROPS} lebensmonatszahl={5} />);
+
+    expect(screen.getByText("5. Lebensmonat")).toBeVisible();
+  });
+
   describe("auswahl", () => {
     it("shows an input fieldset to choose an Option for each Elternteil", () => {
       const pseudonymeDerElternteile = {
@@ -145,11 +151,11 @@ const ANY_PROPS = {
     [Elternteil.Zwei]: "John",
   },
   zeitraum: { from: new Date(), to: new Date() },
-  identifierForSummaryAriaDescription: "",
+  zeitraumLabelIdentifier: "",
   gridLayout: {
     templateClassName: "",
     areaClassNames: {
-      zeitraum: "",
+      description: "",
       hinweisZumBonus: "",
       [Elternteil.Eins]: {
         auswahl: {

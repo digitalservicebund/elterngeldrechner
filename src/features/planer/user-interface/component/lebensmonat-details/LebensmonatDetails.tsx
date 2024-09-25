@@ -50,13 +50,14 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   const anzahlElternteile = Object.keys(lebensmonat).length;
   const gridLayoutTemplateClassName = GRID_LAYOUT_TEMPLATES[anzahlElternteile];
 
+  const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
+
   const zeitraumLabelIdentifier = useId();
   const zeitraum = berechneZeitraumFuerLebensmonat(
     geburtsdatumDesKindes,
     lebensmonatszahl,
   );
 
-  const detailsAriaLabelIdentifier = useId();
   const detailsElement: RefObject<HTMLDetailsElement> = useDetectClickOutside({
     onTriggered: function closeDetails() {
       if (detailsElement.current != null) {
@@ -77,15 +78,14 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     <details
       className={classNames("group open:bg-off-white", className)}
       name="Lebensmonate"
-      aria-labelledby={detailsAriaLabelIdentifier}
+      aria-label={detailsAriaLabel}
       ref={detailsElement}
     >
       <LebensmonatSummary
         lebensmonatszahl={lebensmonatszahl}
         lebensmonat={lebensmonat}
         pseudonymeDerElternteile={pseudonymeDerElternteile}
-        identifierForDetailsAriaLabel={detailsAriaLabelIdentifier}
-        zeitraumIdentifierForAriaDescription={zeitraumLabelIdentifier}
+        identifierToZeitraumLabel={zeitraumLabelIdentifier}
         gridLayout={{
           templateClassName: gridLayoutTemplateClassName,
           areaClassNames: GRID_LAYOUT_SUMMARY_AREA_CLASS_NAMES,
@@ -99,11 +99,11 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         zeitraum={zeitraum}
         bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
         waehleOption={waehleOption}
+        zeitraumLabelIdentifier={zeitraumLabelIdentifier}
         gridLayout={{
           templateClassName: gridLayoutTemplateClassName,
           areaClassNames: GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES,
         }}
-        identifierForSummaryAriaDescription={zeitraumLabelIdentifier}
       />
     </details>
   );
@@ -131,7 +131,7 @@ const GRID_LAYOUT_SUMMARY_AREA_CLASS_NAMES = {
 };
 
 const GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES = {
-  zeitraum: gridClassNames.areaContentZeitraum,
+  description: gridClassNames.areaContentDescription,
   hinweisZumBonus: gridClassNames.areaContentHinweisZumBonus,
   [Elternteil.Eins]: {
     auswahl: {

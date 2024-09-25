@@ -22,7 +22,7 @@ type Props<E extends Elternteil> = {
   readonly lebensmonat: Lebensmonat<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly zeitraum: Zeitraum;
-  readonly identifierForSummaryAriaDescription: string;
+  readonly zeitraumLabelIdentifier: string;
   readonly gridLayout: GridLayout<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
@@ -33,7 +33,7 @@ export function LebensmonatContent<E extends Elternteil>({
   lebensmonat,
   pseudonymeDerElternteile,
   zeitraum,
-  identifierForSummaryAriaDescription,
+  zeitraumLabelIdentifier,
   gridLayout,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
@@ -48,15 +48,21 @@ export function LebensmonatContent<E extends Elternteil>({
       className={classNames("pb-20 pt-8", gridLayout.templateClassName)}
       data-testid="details-content"
     >
-      <ZeitraumLabel
-        id={identifierForSummaryAriaDescription}
+      <div
         className={classNames(
-          "mb-24 text-center",
-          gridLayout.areaClassNames.zeitraum,
+          "mb-24 flex flex-col text-center",
+          gridLayout.areaClassNames.description,
         )}
-        zeitraum={zeitraum}
-        prefix="Zeitraum"
-      />
+        aria-hidden
+      >
+        <span>{lebensmonatszahl}. Lebensmonat</span>
+
+        <ZeitraumLabel
+          id={zeitraumLabelIdentifier}
+          zeitraum={zeitraum}
+          prefix="Zeitraum"
+        />
+      </div>
 
       {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
         const pseudonym = pseudonymeDerElternteile[elternteil];
@@ -107,7 +113,7 @@ function composeLegendForAuswahl(
 
 type GridLayout<E extends Elternteil> = {
   templateClassName: string;
-  areaClassNames: { zeitraum: string; hinweisZumBonus: string } & Record<
+  areaClassNames: { description: string; hinweisZumBonus: string } & Record<
     E,
     GridAreasForElternteil
   >;

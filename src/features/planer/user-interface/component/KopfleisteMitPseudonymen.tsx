@@ -23,7 +23,7 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
     >
       {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
         ([elternteil, pseudonym]) => (
-          <span key={elternteil} className="basis-160 text-center font-bold">
+          <span key={elternteil} className="basis-96 text-center font-bold">
             <PersonIcon /> {pseudonym}
           </span>
         ),

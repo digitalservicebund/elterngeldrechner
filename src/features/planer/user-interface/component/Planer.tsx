@@ -1,4 +1,5 @@
 import { ReactNode, useCallback, useId, useRef } from "react";
+import classNames from "classnames";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
@@ -37,6 +38,11 @@ export function Planer({
 
   const headingIdentifier = useId();
 
+  const isSingleElternteil = Object.keys(pseudonymeDerElternteile).length === 1;
+  const widthByNumberOfElternteileClassName = isSingleElternteil
+    ? "w-[45ch] max-w-[45ch]"
+    : "w-[70ch] max-w-[70ch]";
+
   const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);
 
   const planungWiederholen = useCallback(() => {
@@ -60,16 +66,26 @@ export function Planer({
       </h3>
 
       <div
-        className="mx-[-15px] flex flex-col divide-x-0 divide-y-2 divide-solid divide-off-white border-2 border-solid border-off-white sm:mx-0"
+        className={classNames(
+          "mx-[-15px] flex flex-col sm:mx-0",
+          "divide-x-0 divide-y-2 divide-solid divide-off-white",
+          "border-2 border-solid border-off-white",
+        )}
         ref={elementToViewOnPlanungWiederholen}
       >
         <KopfleisteMitPseudonymen
-          className="py-10"
+          className={classNames(
+            "self-center py-10",
+            widthByNumberOfElternteileClassName,
+          )}
           pseudonymeDerElternteile={pseudonymeDerElternteile}
         />
 
         <Lebensmonatsliste
-          className="py-8"
+          className={classNames(
+            "self-center py-8",
+            widthByNumberOfElternteileClassName,
+          )}
           lebensmonate={lebensmonate}
           pseudonymeDerElternteile={pseudonymeDerElternteile}
           geburtsdatumDesKindes={geburtsdatumDesKindes}

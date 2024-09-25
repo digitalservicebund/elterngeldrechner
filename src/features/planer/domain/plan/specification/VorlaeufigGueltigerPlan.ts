@@ -3,6 +3,7 @@ import { KontingentWurdeEingehalten } from "./KontingentWurdeEingehalten";
 import { LimitsProElternteilWurdenEingehalten } from "./LimitsProElternteilWurdenEingehalten";
 import { MonateMitMutterschutzSindUnveraendert } from "./MonateMitMutterschutzSindUnveraendert";
 import { NurEinLebensmonatBasisParallel } from "./NurEinenLebensmonatBasisParallel";
+import { KeinBasisNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate/specification/KeinBasisNachDemVierzehntenLebensmonat";
 import { FortlaufenderBezugAbDemZwoelftenLebensmonat } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 import { Specification } from "@/features/planer/domain/common/specification";
@@ -26,7 +27,9 @@ export function VorlaeufigGueltigerPlan<
     .and(
       Specification.forProperty(
         "lebensmonate",
-        FortlaufenderBezugAbDemZwoelftenLebensmonat,
+        FortlaufenderBezugAbDemZwoelftenLebensmonat.and(
+          KeinBasisNachDemVierzehntenLebensmonat,
+        ),
       ),
     );
 }

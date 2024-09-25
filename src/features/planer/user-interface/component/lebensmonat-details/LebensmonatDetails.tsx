@@ -1,4 +1,11 @@
-import { ReactNode, useId, type RefObject } from "react";
+import {
+  forwardRef,
+  ReactNode,
+  useId,
+  useImperativeHandle,
+  type ForwardedRef,
+  type RefObject,
+} from "react";
 import classNames from "classnames";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import gridClassNames from "./grid.module.css";
@@ -26,15 +33,20 @@ interface Props<E extends Elternteil> {
   readonly className?: string;
 }
 
-export function LebensmonatDetails<E extends Elternteil>({
-  lebensmonatszahl,
-  lebensmonat,
-  pseudonymeDerElternteile,
-  geburtsdatumDesKindes,
-  bestimmeAuswahlmoeglichkeiten,
-  waehleOption,
-  className,
-}: Props<E>): ReactNode {
+export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
+  E extends Elternteil,
+>(
+  {
+    lebensmonatszahl,
+    lebensmonat,
+    pseudonymeDerElternteile,
+    geburtsdatumDesKindes,
+    bestimmeAuswahlmoeglichkeiten,
+    waehleOption,
+    className,
+  }: Props<E>,
+  ref?: FocusOnlyRef,
+): ReactNode {
   const anzahlElternteile = Object.keys(lebensmonat).length;
   const gridLayoutTemplateClassName = GRID_LAYOUT_TEMPLATES[anzahlElternteile];
 
@@ -52,6 +64,14 @@ export function LebensmonatDetails<E extends Elternteil>({
       }
     },
   });
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => detailsElement.current?.querySelector("summary")?.focus(),
+    }),
+    [detailsElement],
+  );
 
   return (
     <details
@@ -87,7 +107,9 @@ export function LebensmonatDetails<E extends Elternteil>({
       />
     </details>
   );
-}
+}) as <E extends Elternteil>(
+  props: Props<E> & { ref?: FocusOnlyRef },
+) => ReactNode;
 
 const GRID_LAYOUT_TEMPLATES: {
   [numberOfElternteile: number]: string;
@@ -126,3 +148,5 @@ const GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES = {
     },
   },
 };
+
+type FocusOnlyRef = ForwardedRef<{ focus: () => void }>;

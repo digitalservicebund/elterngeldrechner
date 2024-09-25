@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import {
   Elternteil,
@@ -20,7 +21,9 @@ describe("Lebensmonatsliste", () => {
 
     Lebensmonatszahlen.forEach((lebensmonatszahl) => {
       expect(
-        screen.queryByLabelText(`${lebensmonatszahl}. Lebensmonat`),
+        screen.queryByRole("group", {
+          name: `${lebensmonatszahl}. Lebensmonat`,
+        }),
       ).toBeInTheDocument();
     });
   });
@@ -51,6 +54,19 @@ describe("Lebensmonatsliste", () => {
   // CSS here with TailwindCSS to make it work.
   test.todo("only shows the first 14 Lebensmonate initially");
   test.todo("can toggle visibility of all Lebensmonate");
+
+  it("moves the focus to the 15. Lebensmonat when showing more Monate", async () => {
+    render(<Lebensmonatsliste {...ANY_PROPS} />);
+
+    const button = screen.getByRole("button", { name: "mehr Monate anzeigen" });
+    await userEvent.click(button);
+
+    expect(
+      screen
+        .getByRole("group", { name: "15. Lebensmonat" })
+        .querySelector("summary"),
+    ).toHaveFocus();
+  });
 });
 
 const ANY_LEBENSMONAT = {

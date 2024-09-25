@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useId, useState } from "react";
+import { ReactNode, useCallback, useId, useRef, useState } from "react";
 import AddIcon from "@digitalservicebund/icons/Add";
 import RemoveIcon from "@digitalservicebund/icons/Remove";
 import classNames from "classnames";
@@ -43,12 +43,17 @@ export function Lebensmonatsliste<E extends Elternteil>({
   const isFinalLebensmonatVisible =
     lastVisibleLebensmonatszahl >= LetzteLebensmonatszahl;
 
+  const fifteenthLebensmonatElement = useRef<HTMLDetailsElement>(null);
+
   const toggleVisibilityOfFinalLebensmomate = useCallback(() => {
     setLastVisibleLebensmonatszahl((lastVisibleLebensmonatszahl) =>
       lastVisibleLebensmonatszahl < LetzteLebensmonatszahl
         ? LetzteLebensmonatszahl
         : 14,
     );
+
+    // Compensate for render delay to make element visible (non critical).
+    setTimeout(() => fifteenthLebensmonatElement.current?.focus());
   }, []);
 
   return (
@@ -65,11 +70,14 @@ export function Lebensmonatsliste<E extends Elternteil>({
           lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
         const isHidden = lebensmonatszahl > lastVisibleLebensmonatszahl;
+        const ref =
+          lebensmonatszahl === 15 ? fifteenthLebensmonatElement : undefined;
 
         return (
           <LebensmonatDetails
             key={lebensmonatszahl}
             className={classNames({ hidden: isHidden })}
+            ref={ref}
             aria-hidden={isHidden}
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}

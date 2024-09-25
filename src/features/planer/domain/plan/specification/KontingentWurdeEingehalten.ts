@@ -4,46 +4,50 @@ import {
   Ausgangslage,
   bestimmeVerfuegbaresKontingent,
 } from "@/features/planer/domain/ausgangslage";
-import {
-  Specification,
-  type SpecificationViolation,
-} from "@/features/planer/domain/common/specification";
+import { Specification } from "@/features/planer/domain/common/specification";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
-import { listeKontingentAuf } from "@/features/planer/domain/verfuegbares-kontingent";
-import type { Variante } from "@/features/planer/domain/Variante";
+import { Variante } from "@/features/planer/domain/Variante";
 
-export function KontingentWurdeEingehalten<A extends Ausgangslage>() {
-  return new KontingentWurdeEingehaltenSpecification<A>();
+export function KontingentWurdeEingehalten() {
+  return KontingentFuerBasisWurdeEingehalten()
+    .and(KontingentFuerPlusWurdeEingehalten())
+    .and(KontingentFuerBonusWurdeEingehalten());
 }
 
-class KontingentWurdeEingehaltenSpecification<
+export function KontingentFuerBasisWurdeEingehalten<A extends Ausgangslage>() {
+  return new KontingentFuerVarianteWurdeEingehalten<A>(Variante.Basis);
+}
+
+function KontingentFuerPlusWurdeEingehalten<A extends Ausgangslage>() {
+  return new KontingentFuerVarianteWurdeEingehalten<A>(Variante.Plus);
+}
+
+export function KontingentFuerBonusWurdeEingehalten<A extends Ausgangslage>() {
+  return new KontingentFuerVarianteWurdeEingehalten<A>(Variante.Bonus);
+}
+
+class KontingentFuerVarianteWurdeEingehalten<
   A extends Ausgangslage,
 > extends Specification<Plan<A>> {
-  evaluate(plan: Plan<A>): SpecificationResult {
-    const verfuegbar = bestimmeVerfuegbaresKontingent(plan.ausgangslage);
-    const verplant = zaehleVerplantesKontingent(plan.lebensmonate);
-
-    const violations = listeKontingentAuf(verfuegbar).reduce(
-      (violations: SpecificationViolation[], [variante, maximum]) =>
-        verplant[variante] > maximum
-          ? [...violations, composeKontingentViolation(variante, maximum)]
-          : violations,
-      [],
-    );
-
-    return violations.length === 0
-      ? SpecificationResult.satisfied
-      : SpecificationResult.unsatisfied(violations[0], ...violations.splice(1));
+  constructor(private readonly variante: Variante) {
+    super();
   }
-}
 
-function composeKontingentViolation(
-  variante: Variante,
-  maximum: number,
-): SpecificationViolation {
-  return {
-    message: `Ihre ${maximum} verfügbaren ${variante} Monate sind aufgebraucht.`,
-  };
+  evaluate(plan: Plan<A>): SpecificationResult {
+    const verfuegbar = bestimmeVerfuegbaresKontingent(plan.ausgangslage)[
+      this.variante
+    ];
+    const verplant = zaehleVerplantesKontingent(plan.lebensmonate)[
+      this.variante
+    ];
+    const istKontingentEingehalten = verfuegbar >= verplant;
+
+    return istKontingentEingehalten
+      ? SpecificationResult.satisfied
+      : SpecificationResult.unsatisfied({
+          message: `Ihre ${verfuegbar} verfügbaren ${this.variante} Monate sind aufgebraucht.`,
+        });
+  }
 }
 
 if (import.meta.vitest) {
@@ -55,48 +59,52 @@ if (import.meta.vitest) {
       "@/features/planer/domain/Auswahloption"
     );
 
-    it("is satisfied if verplantes Kontingent remains below verfügbares Kontingent", () => {
+    it("is satisfied if verplantes Kontingent remains below verfügbares Kontingent for defined Variante", () => {
       vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
         kontingent(2, 4, 3),
       );
       vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        kontingent(1.5, 3, 1),
+        kontingent(3, 3, 1),
+      );
+      const specification = new KontingentFuerVarianteWurdeEingehalten(
+        Variante.Plus,
       );
 
-      expect(KontingentWurdeEingehalten().asPredicate(ANY_PLAN)).toBe(true);
+      expect(specification.asPredicate(ANY_PLAN)).toBe(true);
     });
 
-    it("is satisfied if verplantes Kontingent fully used verfügbares Kontingent", () => {
+    it("is satisfied if verplantes Kontingent fully used verfügbares Kontingent for defined Variante", () => {
       vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
         kontingent(2, 4, 3),
       );
       vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        kontingent(2, 4, 3),
+        kontingent(2, 5, 1),
+      );
+      const specification = new KontingentFuerVarianteWurdeEingehalten(
+        Variante.Basis,
       );
 
-      expect(KontingentWurdeEingehalten().asPredicate(ANY_PLAN)).toBe(true);
+      expect(specification.asPredicate(ANY_PLAN)).toBe(true);
     });
 
-    it("is unsatisfied if verplantes Kontingent is above verfügbares Kontingent", () => {
+    it("is unsatisfied if verplantes Kontingent is above verfügbares Kontingent for defined Variante", () => {
       vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
         kontingent(2, 4, 3),
       );
       vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        kontingent(3, 6, 4),
+        kontingent(1, 4, 4),
+      );
+      const specification = new KontingentFuerVarianteWurdeEingehalten(
+        Variante.Bonus,
       );
 
-      const violationMessages = KontingentWurdeEingehalten()
-        .evaluate(ANY_PLAN)
-        .mapOrElse(
-          () => [],
-          (violations) => violations.map(({ message }) => message),
-        );
+      const violationMessages = specification.evaluate(ANY_PLAN).mapOrElse(
+        () => [],
+        (violations) => violations.map(({ message }) => message),
+      );
 
-      expect(violationMessages).toHaveLength(3);
-      expect(violationMessages).toEqual(
+      expect(violationMessages).toStrictEqual(
         expect.arrayContaining([
-          "Ihre 2 verfügbaren Basiselterngeld Monate sind aufgebraucht.",
-          "Ihre 4 verfügbaren ElterngeldPlus Monate sind aufgebraucht.",
           "Ihre 3 verfügbaren Partnerschaftsbonus Monate sind aufgebraucht.",
         ]),
       );

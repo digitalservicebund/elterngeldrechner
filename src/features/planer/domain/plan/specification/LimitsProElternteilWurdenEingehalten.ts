@@ -8,50 +8,37 @@ import {
   type ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
 import { Specification } from "@/features/planer/domain/common/specification";
-import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
 import {
   listePseudonymeAuf,
   type PseudonymeDerElternteile,
 } from "@/features/planer/domain/pseudonyme-der-elternteile";
 
 export function LimitsProElternteilWurdenEingehalten<A extends Ausgangslage>() {
-  return new LimitsProElternteilWurdenEingehaltenSpecificiation<A>();
-}
+  return Specification.fromPredicate<Plan<A>>(
+    "Die verfügbaren Monate für diesen Elternteil sind aufgebraucht.",
+    (plan) => {
+      const { anzahlElternteile, pseudonymeDerElternteile } = plan.ausgangslage;
+      const istAusnahme = anzahlElternteile === 1;
 
-class LimitsProElternteilWurdenEingehaltenSpecificiation<
-  A extends Ausgangslage,
-> extends Specification<Plan<A>> {
-  evaluate(plan: Plan<A>): SpecificationResult {
-    const { anzahlElternteile, pseudonymeDerElternteile } = plan.ausgangslage;
-    const istAusnahme = anzahlElternteile === 1;
+      if (istAusnahme) {
+        return true;
+      } else {
+        const pseudonyme = pseudonymeDerElternteile as PseudonymeDerElternteile<
+          ElternteileByAusgangslage<A>
+        >;
 
-    if (istAusnahme) {
-      return SpecificationResult.satisfied;
-    } else {
-      const pseudonyme = pseudonymeDerElternteile as PseudonymeDerElternteile<
-        ElternteileByAusgangslage<A>
-      >;
-
-      const limitExceeded = listePseudonymeAuf(pseudonyme).some(
-        ([elternteil]) => {
+        return listePseudonymeAuf(pseudonyme).every(([elternteil]) => {
           const verplant = zaehleVerplantesKontingent(
             plan.lebensmonate,
             elternteil,
           );
 
-          return verplant[Variante.Basis] > LIMIT_BASIS_PER_ELTERNTEIL;
-        },
-      );
-
-      return limitExceeded
-        ? SpecificationResult.unsatisfied({ message: VIOLATION_MESSAGE })
-        : SpecificationResult.satisfied;
-    }
-  }
+          return verplant[Variante.Basis] <= LIMIT_BASIS_PER_ELTERNTEIL;
+        });
+      }
+    },
+  );
 }
-
-const VIOLATION_MESSAGE =
-  "Die verfügbaren Monate für diesen Elternteil sind aufgebraucht.";
 
 /**
  * Acts as limit for Basiselterngeld and ElterngeldPlus because of the way both

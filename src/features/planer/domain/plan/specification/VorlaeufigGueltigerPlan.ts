@@ -1,5 +1,9 @@
 import { BonusIstKorrektKombiniert } from "./BonusIstKorrektKombiniert";
-import { KontingentWurdeEingehalten } from "./KontingentWurdeEingehalten";
+import {
+  KontingentFuerBasisWurdeEingehalten,
+  KontingentFuerBonusWurdeEingehalten,
+  KontingentWurdeEingehalten,
+} from "./KontingentWurdeEingehalten";
 import { LimitsProElternteilWurdenEingehalten } from "./LimitsProElternteilWurdenEingehalten";
 import { MonateMitMutterschutzSindUnveraendert } from "./MonateMitMutterschutzSindUnveraendert";
 import { NurEinLebensmonatBasisParallel } from "./NurEinenLebensmonatBasisParallel";
@@ -15,21 +19,35 @@ import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
  * etc.
  * This excludes the final validation  part which can not be applied while still
  * actively planning as it would block any Options to be chosen.
+ * It also uses preconditions to optimize the violations shown to the user and
+ * avoid "duplicates".
  */
 export function VorlaeufigGueltigerPlan<
   A extends Ausgangslage,
 >(): Specification<Plan<A>> {
   return MonateMitMutterschutzSindUnveraendert<A>()
-    .and(NurEinLebensmonatBasisParallel<A>())
-    .and(KontingentWurdeEingehalten<A>())
-    .and(LimitsProElternteilWurdenEingehalten<A>())
-    .and(BonusIstKorrektKombiniert<A>())
+    .and(KontingentWurdeEingehalten())
     .and(
-      Specification.forProperty(
+      NurEinLebensmonatBasisParallel().withPrecondition(
+        KontingentFuerBasisWurdeEingehalten(),
+      ),
+    )
+    .and(
+      LimitsProElternteilWurdenEingehalten().withPrecondition(
+        KontingentFuerBasisWurdeEingehalten(),
+      ),
+    )
+    .and(
+      BonusIstKorrektKombiniert().withPrecondition(
+        KontingentFuerBonusWurdeEingehalten(),
+      ),
+    )
+    .and(
+      Specification.forProperty<Plan<A>, "lebensmonate">(
         "lebensmonate",
         FortlaufenderBezugAbDemZwoelftenLebensmonat.and(
           KeinBasisNachDemVierzehntenLebensmonat,
         ),
-      ),
+      ).withPrecondition(KontingentFuerBasisWurdeEingehalten()),
     );
 }

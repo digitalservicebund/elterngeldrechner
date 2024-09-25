@@ -12,7 +12,7 @@ export const FortlaufenderBezugAbDemZwoelftenLebensmonat =
         )
         .map(([lebensmonatszahl]) => Number.parseInt(lebensmonatszahl)) // TODO: use enumeration method in first place
         .filter((lebensmonatszahl) => lebensmonatszahl > 12)
-        .sort();
+        .sort((left, right) => left - right);
 
       return (
         lebensmonatszahlen.length === 0 ||

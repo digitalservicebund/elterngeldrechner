@@ -12,7 +12,7 @@ export const BonusLebensmonateSindFortlaufend =
           AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat),
         )
         .map(([lebensmonatszahl]) => Number.parseInt(lebensmonatszahl)) // TODO: use safe record in first place
-        .sort();
+        .sort((first, second) => first - second);
 
       return isSequenceIncreasingByOne(lebensmonatszahlenMitBonus);
     },
@@ -100,6 +100,23 @@ if (import.meta.vitest) {
 
       expect(BonusLebensmonateSindFortlaufend.asPredicate(lebensmonate)).toBe(
         false,
+      );
+    });
+
+    it("is satisfied cross the 9. and 10. Lebensmonat with Partnerschaftsbonus (correct sorting)", () => {
+      const lebensmonate = {
+        9: {
+          [Elternteil.Eins]: monat(Variante.Bonus),
+          [Elternteil.Zwei]: monat(Variante.Bonus),
+        },
+        10: {
+          [Elternteil.Eins]: monat(Variante.Bonus),
+          [Elternteil.Zwei]: monat(Variante.Bonus),
+        },
+      };
+
+      expect(BonusLebensmonateSindFortlaufend.asPredicate(lebensmonate)).toBe(
+        true,
       );
     });
 

@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -11,7 +10,7 @@ export function HinweisZumBonus({
   className,
 }: Props): ReactNode {
   return (
-    <p className={classNames("text-justify", className)}>
+    <p className={className}>
       {!!hasMultipleElternteile && (
         <>
           Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch

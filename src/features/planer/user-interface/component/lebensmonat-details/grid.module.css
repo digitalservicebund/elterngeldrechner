@@ -34,7 +34,7 @@
   }
 
   .area-content-hinweis-zum-bonus {
-    grid-column: 1 / -1;
+    grid-column: left-middle / right-middle;
   }
 }
 

@@ -2,6 +2,10 @@ import type { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import {
+  GRID_LAYOUT_KOPFLEISTE_AREA_CLASS_NAMES,
+  GRID_LAYOUT_TEMPLATES,
+} from "./grid-styling";
+import {
   Elternteil,
   listePseudonymeAuf,
   type PseudonymeDerElternteile,
@@ -16,14 +20,23 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
   pseudonymeDerElternteile,
   className,
 }: Props<E>): ReactNode {
+  const anzahlElternteile = Object.keys(pseudonymeDerElternteile).length;
+  const gridLayoutTemplateClassName = GRID_LAYOUT_TEMPLATES[anzahlElternteile];
+
   return (
     <div
-      className={classNames("flex items-center justify-evenly", className)}
+      className={classNames("grid", gridLayoutTemplateClassName, className)}
       aria-hidden
     >
       {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
         ([elternteil, pseudonym]) => (
-          <span key={elternteil} className="basis-96 text-center font-bold">
+          <span
+            key={elternteil}
+            className={classNames(
+              "text-center font-bold",
+              GRID_LAYOUT_KOPFLEISTE_AREA_CLASS_NAMES[elternteil].pseudonym,
+            )}
+          >
             <PersonIcon /> {pseudonym}
           </span>
         ),

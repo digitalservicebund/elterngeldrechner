@@ -8,9 +8,13 @@ import {
 } from "react";
 import classNames from "classnames";
 import { useDetectClickOutside } from "react-detect-click-outside";
-import gridClassNames from "./grid.module.css";
 import { LebensmonatSummary } from "./summary";
 import { LebensmonatContent } from "./content";
+import {
+  GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES,
+  GRID_LAYOUT_SUMMARY_AREA_CLASS_NAMES,
+  GRID_LAYOUT_TEMPLATES,
+} from "@/features/planer/user-interface/component/grid-styling";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   WaehleOptionInLebensmonat,
@@ -110,43 +114,5 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
 }) as <E extends Elternteil>(
   props: Props<E> & { ref?: FocusOnlyRef },
 ) => ReactNode;
-
-const GRID_LAYOUT_TEMPLATES: {
-  [numberOfElternteile: number]: string;
-} = {
-  1: gridClassNames.gridTemplateForSingleElternteil,
-  2: gridClassNames.gridTemplateForTwoElternteile,
-};
-
-const GRID_LAYOUT_SUMMARY_AREA_CLASS_NAMES = {
-  lebensmonatszahl: gridClassNames.areaSummaryLebensmonatszahl,
-  [Elternteil.Eins]: {
-    elterngeldbezug: gridClassNames.areaSummaryEt1Elterngeldbezug,
-    gewaehlteOption: gridClassNames.areaSummaryEt1GewaehlteOption,
-  },
-  [Elternteil.Zwei]: {
-    elterngeldbezug: gridClassNames.areaSummaryEt2Elterngeldbezug,
-    gewaehlteOption: gridClassNames.areaSummaryEt2GewaehlteOption,
-  },
-};
-
-const GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES = {
-  description: gridClassNames.areaContentDescription,
-  hinweisZumBonus: gridClassNames.areaContentHinweisZumBonus,
-  [Elternteil.Eins]: {
-    auswahl: {
-      fieldset: gridClassNames.areaContentEt1AuswahlFieldset,
-      info: gridClassNames.areaContentEt1AuswahlInfo,
-      input: gridClassNames.areaContentEt1AuswahlInput,
-    },
-  },
-  [Elternteil.Zwei]: {
-    auswahl: {
-      fieldset: gridClassNames.areaContentEt2AuswahlFieldset,
-      info: gridClassNames.areaContentEt2AuswahlInfo,
-      input: gridClassNames.areaContentEt2AuswahlInput,
-    },
-  },
-};
 
 type FocusOnlyRef = ForwardedRef<{ focus: () => void }>;

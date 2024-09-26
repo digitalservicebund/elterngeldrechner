@@ -38,11 +38,6 @@ export function Planer({
 
   const headingIdentifier = useId();
 
-  const isSingleElternteil = Object.keys(pseudonymeDerElternteile).length === 1;
-  const widthByNumberOfElternteileClassName = isSingleElternteil
-    ? "w-[45ch] max-w-[45ch]"
-    : "w-[70ch] max-w-[70ch]";
-
   const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);
 
   const planungWiederholen = useCallback(() => {
@@ -74,18 +69,12 @@ export function Planer({
         ref={elementToViewOnPlanungWiederholen}
       >
         <KopfleisteMitPseudonymen
-          className={classNames(
-            "self-center py-10",
-            widthByNumberOfElternteileClassName,
-          )}
+          className="py-10"
           pseudonymeDerElternteile={pseudonymeDerElternteile}
         />
 
         <Lebensmonatsliste
-          className={classNames(
-            "self-center py-8",
-            widthByNumberOfElternteileClassName,
-          )}
+          className="py-8"
           lebensmonate={lebensmonate}
           pseudonymeDerElternteile={pseudonymeDerElternteile}
           geburtsdatumDesKindes={geburtsdatumDesKindes}

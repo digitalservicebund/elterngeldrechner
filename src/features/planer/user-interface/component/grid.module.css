@@ -1,9 +1,15 @@
 .grid-template-for-single-elternteil {
   display: grid;
+  max-width: 45ch;
+  margin: auto;
   grid-template-columns:
     minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 3fr)
     minmax(0, 1fr) minmax(0, 1fr) minmax(0, 2fr);
   grid-template-areas: "left-outside left-middle left-inside middle right-inside right-middle right-outside";
+
+  .area-kopfleiste-et1-pseudonym {
+    grid-column: left-inside / right-inside;
+  }
 
   .area-summary-lebensmonatszahl {
     grid-column: left-outside;
@@ -40,10 +46,20 @@
 
 .grid-template-for-two-elternteile {
   display: grid;
+  max-width: 70ch;
+  margin: auto;
   grid-template-columns:
     minmax(0, 2fr) minmax(0, 3fr) minmax(0, 8fr) minmax(0, 3fr)
     minmax(0, 8fr) minmax(0, 3fr) minmax(0, 2fr);
   grid-template-areas: "et1-outside et1-middle et1-inside middle et2-inside et2-middle et2-outside";
+
+  .area-kopfleiste-et1-pseudonym {
+    grid-column: et1-inside;
+  }
+
+  .area-kopfleiste-et2-pseudonym {
+    grid-column: et2-inside;
+  }
 
   .area-summary-et1-elterngeldbezug {
     grid-column: et1-outside / et1-middle;

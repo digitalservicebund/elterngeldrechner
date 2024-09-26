@@ -32,7 +32,7 @@ export function Elterngeldbezugsanzeige({
       <InfoDialog
         className={className}
         ariaLabelForDialog="Informationen zum Elterngeldbezug im Mutterschutz"
-        info="Monate im Mutterschutz gelten grundsätzlich als Monat mit Basiselterngeld."
+        info="Sie haben angegeben, dass Sie Mutterschaftsleistungen beziehen. Monate im Mutterschutz gelten grundsätzlich als Monate mit Basiselterngeld."
       />
     );
   }

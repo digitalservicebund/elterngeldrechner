@@ -35,9 +35,8 @@ export function GewaehlteOption({
    * `ch` for character width is somewhat helpful here (should mean not accurate).
    */
   const canHideLabelWhenTooNarrow = icon !== undefined;
-  const requiredWidth = estimateRequiredWidth(!!icon, label);
   const labelClassName = classNames({
-    [`@[${requiredWidth}]:block hidden`]: canHideLabelWhenTooNarrow,
+    "hidden @[12ch]:block": canHideLabelWhenTooNarrow,
   });
 
   return (
@@ -50,7 +49,7 @@ export function GewaehlteOption({
       aria-hidden={ariaHidden}
     >
       {icon}
-      <span className={labelClassName}>{label}</span>
+      <span className={classNames("-mt-4", labelClassName)}>{label}</span>
     </span>
   );
 }
@@ -106,10 +105,4 @@ function getIcon(
   } else if (!hasAuswahl) {
     return <AddIcon />;
   }
-}
-
-function estimateRequiredWidth(hasIcon: boolean, label: string): string {
-  const iconWidth = hasIcon ? 2 : 0;
-  const labelWidth = label.length;
-  return iconWidth + labelWidth + "ch";
 }

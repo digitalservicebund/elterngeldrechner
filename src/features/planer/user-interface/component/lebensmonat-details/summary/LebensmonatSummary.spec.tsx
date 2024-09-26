@@ -152,18 +152,4 @@ const ANY_PROPS = {
     [Elternteil.Zwei]: "John",
   },
   identifierToZeitraumLabel: "",
-  gridLayout: {
-    templateClassName: "",
-    areaClassNames: {
-      lebensmonatszahl: "",
-      [Elternteil.Eins]: {
-        elterngeldbezug: "",
-        gewaehlteOption: "",
-      },
-      [Elternteil.Zwei]: {
-        elterngeldbezug: "",
-        gewaehlteOption: "",
-      },
-    },
-  },
 };

@@ -1,8 +1,13 @@
-import { Fragment, ReactNode, useId } from "react";
+import { ReactNode, useId } from "react";
 import classNames from "classnames";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
+import {
+  useGridColumnPerElternteil,
+  type GridColumnDefinitionPerElternteil,
+} from "@/features/planer/user-interface/layout/grid-layout";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import {
+  Elternteil,
   KeinElterngeld,
   Variante,
   type Auswahlmoeglichkeiten,
@@ -14,27 +19,31 @@ import { InfoDialog } from "@/components/molecules/info-dialog";
 
 type Props = {
   readonly legend: string;
+  readonly elternteil: Elternteil;
   readonly auswahlmoeglichkeiten: Auswahlmoeglichkeiten;
   readonly gewaehlteOption?: Auswahloption;
-  readonly gridLayout: GridLayout;
   readonly waehleOption: (option: Auswahloption) => void;
 };
 
 export function AuswahlEingabe({
   legend,
+  elternteil,
   gewaehlteOption,
   auswahlmoeglichkeiten,
-  gridLayout,
   waehleOption,
 }: Props): ReactNode {
+  const fieldsetColumns = useGridColumnPerElternteil(
+    FIELDSET_COLUMN_DEFINITION,
+  );
+  const infoColumns = useGridColumnPerElternteil(INFO_COLUMN_DEFINITIONS);
+  const inputColumns = useGridColumnPerElternteil(INPUT_COLUMN_DEFINITIONS);
+
   const baseIdentifier = useId();
 
   return (
     <div
-      className={classNames(
-        "grid grid-cols-subgrid gap-y-10",
-        gridLayout.areaClassNames.fieldset,
-      )}
+      className="grid grid-cols-subgrid gap-y-10"
+      style={fieldsetColumns[elternteil]}
     >
       <fieldset className="contents" role="radiogroup">
         <legend className="sr-only">{legend}</legend>
@@ -58,9 +67,9 @@ export function AuswahlEingabe({
                   id={infoIdentifier}
                   className={classNames(
                     "min-w-24 self-center justify-self-center",
-                    gridLayout.areaClassNames.info,
+                    { invisible: !hintWhyDisabled },
                   )}
-                  style={{ gridRowStart }}
+                  style={{ gridRowStart, ...infoColumns[elternteil] }}
                   ariaLabelForDialog={infoAriaLabel}
                   info={hintWhyDisabled}
                 />
@@ -90,46 +99,44 @@ export function AuswahlEingabe({
             const gridRowStart = optionIndex + 1;
 
             return (
-              <Fragment key={option}>
-                <div
-                  className={classNames(
-                    "rounded",
-                    "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
-                    gridLayout.areaClassNames.input,
-                  )}
-                  style={{ gridRowStart }}
+              <div
+                key={option}
+                className={classNames(
+                  "rounded",
+                  "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
+                )}
+                style={{ gridRowStart, ...inputColumns[elternteil] }}
+              >
+                <AuswahloptionLabel
+                  option={option}
+                  elterngeldbezug={elterngeldbezug}
+                  isChecked={isChecked}
+                  isDisabled={isDisabled}
+                  htmlFor={inputIdentifier}
+                />
+
+                <input
+                  id={inputIdentifier}
+                  type="radio"
+                  className="absolute appearance-none opacity-0 focus:border-none focus:outline-none"
+                  name={legend}
+                  value={option}
+                  checked={isChecked}
+                  onChange={waehleDieseOption}
+                  aria-disabled={isDisabled}
+                  aria-label={inputAriaLabel}
+                  aria-describedby={inputDescriptionIdentifier}
+                  aria-details={infoIdentifier}
+                />
+
+                <span
+                  id={inputDescriptionIdentifier}
+                  className="sr-only"
+                  aria-hidden
                 >
-                  <AuswahloptionLabel
-                    option={option}
-                    elterngeldbezug={elterngeldbezug}
-                    isChecked={isChecked}
-                    isDisabled={isDisabled}
-                    htmlFor={inputIdentifier}
-                  />
-
-                  <input
-                    id={inputIdentifier}
-                    type="radio"
-                    className="absolute appearance-none opacity-0 focus:border-none focus:outline-none"
-                    name={legend}
-                    value={option}
-                    checked={isChecked}
-                    onChange={waehleDieseOption}
-                    aria-disabled={isDisabled}
-                    aria-label={inputAriaLabel}
-                    aria-describedby={inputDescriptionIdentifier}
-                    aria-details={infoIdentifier}
-                  />
-
-                  <span
-                    id={inputDescriptionIdentifier}
-                    className="sr-only"
-                    aria-hidden
-                  >
-                    {hintWhyDisabled}
-                  </span>
-                </div>
-              </Fragment>
+                  {hintWhyDisabled}
+                </span>
+              </div>
             );
           },
         )}
@@ -169,10 +176,32 @@ const AUSWAHLOPTION_SORT_RANK: Record<Auswahloption, number> = {
   [KeinElterngeld]: 4,
 };
 
-type GridLayout = {
-  areaClassNames: {
-    fieldset: string;
-    info: string;
-    input: string;
-  };
+const FIELDSET_COLUMN_DEFINITION: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: ["left-middle", "right-outside"],
+  },
+  2: {
+    [Elternteil.Eins]: ["et1-outside", "et1-inside"],
+    [Elternteil.Zwei]: ["et2-inside", "et2-outside"],
+  },
+};
+
+const INFO_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: "right-outside",
+  },
+  2: {
+    [Elternteil.Eins]: "et1-outside",
+    [Elternteil.Zwei]: "et2-outside",
+  },
+};
+
+const INPUT_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: ["left-middle", "right-middle"],
+  },
+  2: {
+    [Elternteil.Eins]: ["et1-middle", "et1-inside"],
+    [Elternteil.Zwei]: ["et2-inside", "et2-middle"],
+  },
 };

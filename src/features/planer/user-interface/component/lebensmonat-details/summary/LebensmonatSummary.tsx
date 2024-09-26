@@ -3,6 +3,13 @@ import classNames from "classnames";
 import { GewaehlteOption } from "./GewaehlteOption";
 import { Elterngeldbezugsanzeige } from "./Elterngeldbezugsanzeige";
 import {
+  useGridLayout,
+  useGridColumn,
+  useGridColumnPerElternteil,
+  type GridColumnDefinitionPerElternteil,
+  type GridColumnDefinition,
+} from "@/features/planer/user-interface/layout/grid-layout";
+import {
   listeMonateAuf,
   Elternteil,
   type Lebensmonat,
@@ -17,7 +24,6 @@ type Props<E extends Elternteil> = {
   readonly lebensmonat: Lebensmonat<E>;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly identifierToZeitraumLabel: string;
-  readonly gridLayout: GridLayout<E>;
 };
 
 export function LebensmonatSummary<E extends Elternteil>({
@@ -25,8 +31,18 @@ export function LebensmonatSummary<E extends Elternteil>({
   lebensmonat,
   pseudonymeDerElternteile,
   identifierToZeitraumLabel,
-  gridLayout,
 }: Props<E>): ReactNode {
+  const gridLayout = useGridLayout();
+  const lebensmonatszahlColumns = useGridColumn(
+    LEBENSMONATSZAHL_COLUMN_DEFINITION,
+  );
+  const elterngeldbezugColumns = useGridColumnPerElternteil(
+    ELTERNBGELDBEZUG_COLUMN_DEFINITIONS,
+  );
+  const gewaehlteOptionColumns = useGridColumnPerElternteil(
+    GEWAEHLTE_OPTION_COLUMN_DEFINITIONS,
+  );
+
   const ariaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
   const auswahlDescriptionIdentifier = useId();
@@ -37,10 +53,8 @@ export function LebensmonatSummary<E extends Elternteil>({
 
   return (
     <summary
-      className={classNames(
-        "relative py-6 hover:bg-off-white focus:bg-off-white",
-        gridLayout.templateClassName,
-      )}
+      className="relative py-6 hover:bg-off-white focus:bg-off-white"
+      style={gridLayout}
       aria-label={ariaLabel}
       aria-describedby={classNames(
         auswahlDescriptionIdentifier,
@@ -52,10 +66,8 @@ export function LebensmonatSummary<E extends Elternteil>({
       </span>
 
       <span
-        className={classNames(
-          "self-center text-center font-bold",
-          gridLayout.areaClassNames.lebensmonatszahl,
-        )}
+        className="self-center text-center font-bold"
+        style={lebensmonatszahlColumns}
         aria-hidden
       >
         {lebensmonatszahl}
@@ -64,20 +76,16 @@ export function LebensmonatSummary<E extends Elternteil>({
       {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => (
         <Fragment key={elternteil}>
           <Elterngeldbezugsanzeige
-            className={classNames(
-              "row-start-1 self-center justify-self-center",
-              gridLayout.areaClassNames[elternteil].elterngeldbezug,
-            )}
+            className="row-start-1 self-center justify-self-center"
+            style={elterngeldbezugColumns[elternteil]}
             elterngeldbezug={monat.elterngeldbezug}
             imMutterschutz={monat.imMutterschutz}
             ariaHidden
           />
 
           <GewaehlteOption
-            className={classNames(
-              "row-start-1",
-              gridLayout.areaClassNames[elternteil].gewaehlteOption,
-            )}
+            className="row-start-1"
+            style={gewaehlteOptionColumns[elternteil]}
             imMutterschutz={monat.imMutterschutz}
             option={monat.gewaehlteOption}
             ariaHidden
@@ -139,15 +147,27 @@ function composeDescriptionForAuswahl(
     : `${pseudonym} hat noch keine Auswahl getroffen`;
 }
 
-type GridLayout<E extends Elternteil> = {
-  templateClassName: string;
-  areaClassNames: { lebensmonatszahl: string } & Record<
-    E,
-    GridAreasForElternteil
-  >;
+const LEBENSMONATSZAHL_COLUMN_DEFINITION: GridColumnDefinition = {
+  1: "left-outside",
+  2: "middle",
 };
 
-type GridAreasForElternteil = {
-  elterngeldbezug: string;
-  gewaehlteOption: string;
+const ELTERNBGELDBEZUG_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: ["right-middle", "right-outside"],
+  },
+  2: {
+    [Elternteil.Eins]: ["et1-outside", "et1-middle"],
+    [Elternteil.Zwei]: ["et2-middle", "et2-outside"],
+  },
+};
+
+const GEWAEHLTE_OPTION_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: ["left-inside", "right-inside"],
+  },
+  2: {
+    [Elternteil.Eins]: "et1-inside",
+    [Elternteil.Zwei]: "et2-inside",
+  },
 };

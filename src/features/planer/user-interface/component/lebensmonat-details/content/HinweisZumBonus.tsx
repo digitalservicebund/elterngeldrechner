@@ -1,16 +1,18 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type Props = {
   readonly hasMultipleElternteile?: boolean;
   readonly className?: string;
+  readonly style?: CSSProperties;
 };
 
 export function HinweisZumBonus({
   hasMultipleElternteile,
   className,
+  style,
 }: Props): ReactNode {
   return (
-    <p className={className}>
+    <p className={className} style={style}>
       {!!hasMultipleElternteile && (
         <>
           Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch

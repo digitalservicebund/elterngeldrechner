@@ -10,11 +10,6 @@ import classNames from "classnames";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { LebensmonatSummary } from "./summary";
 import { LebensmonatContent } from "./content";
-import {
-  GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES,
-  GRID_LAYOUT_SUMMARY_AREA_CLASS_NAMES,
-  GRID_LAYOUT_TEMPLATES,
-} from "@/features/planer/user-interface/component/grid-styling";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   WaehleOptionInLebensmonat,
@@ -51,9 +46,6 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   }: Props<E>,
   ref?: FocusOnlyRef,
 ): ReactNode {
-  const anzahlElternteile = Object.keys(lebensmonat).length;
-  const gridLayoutTemplateClassName = GRID_LAYOUT_TEMPLATES[anzahlElternteile];
-
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
   const zeitraumLabelIdentifier = useId();
@@ -91,10 +83,6 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         lebensmonat={lebensmonat}
         pseudonymeDerElternteile={pseudonymeDerElternteile}
         identifierToZeitraumLabel={zeitraumLabelIdentifier}
-        gridLayout={{
-          templateClassName: gridLayoutTemplateClassName,
-          areaClassNames: GRID_LAYOUT_SUMMARY_AREA_CLASS_NAMES,
-        }}
       />
 
       <LebensmonatContent
@@ -105,10 +93,6 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
         waehleOption={waehleOption}
         zeitraumLabelIdentifier={zeitraumLabelIdentifier}
-        gridLayout={{
-          templateClassName: gridLayoutTemplateClassName,
-          areaClassNames: GRID_LAYOUT_CONTENT_AREA_CLASS_NAMES,
-        }}
       />
     </details>
   );

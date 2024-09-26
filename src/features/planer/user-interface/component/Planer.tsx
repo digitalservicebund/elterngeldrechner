@@ -6,6 +6,7 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
+import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
 import { usePlanerService } from "@/features/planer/user-interface/service/usePlanerService";
 import { type PlanMitBeliebigenElternteilen } from "@/features/planer/user-interface/service";
 
@@ -36,6 +37,11 @@ export function Planer({
     setzePlanZurueck,
   } = usePlanerService(initialPlan, onPlanChanged);
 
+  // FIXME: get value from service by Ausgangslage
+  const anzahlElternteile = Object.keys(pseudonymeDerElternteile).length as
+    | 1
+    | 2;
+
   const headingIdentifier = useId();
 
   const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);
@@ -62,41 +68,43 @@ export function Planer({
         Monatsplaner
       </h2>
 
-      <div
-        className={classNames(
-          "mx-[-15px] flex flex-col sm:mx-0",
-          "divide-x-0 divide-y-2 divide-solid divide-off-white",
-          "border-2 border-solid border-off-white",
-        )}
-        ref={elementToViewOnPlanungWiederholen}
-      >
-        <KopfleisteMitPseudonymen
-          className="py-10"
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-        />
+      <GridLayoutProvider anzahlElternteile={anzahlElternteile}>
+        <div
+          className={classNames(
+            "mx-[-15px] flex flex-col sm:mx-0",
+            "divide-x-0 divide-y-2 divide-solid divide-off-white",
+            "border-2 border-solid border-off-white",
+          )}
+          ref={elementToViewOnPlanungWiederholen}
+        >
+          <KopfleisteMitPseudonymen
+            className="py-10"
+            pseudonymeDerElternteile={pseudonymeDerElternteile}
+          />
 
-        <Lebensmonatsliste
-          className="py-8"
-          lebensmonate={lebensmonate}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-          geburtsdatumDesKindes={geburtsdatumDesKindes}
-          erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
-          bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-          waehleOption={waehleOption}
-        />
+          <Lebensmonatsliste
+            className="py-8"
+            lebensmonate={lebensmonate}
+            pseudonymeDerElternteile={pseudonymeDerElternteile}
+            geburtsdatumDesKindes={geburtsdatumDesKindes}
+            erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
+            bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
+            waehleOption={waehleOption}
+          />
 
-        <KontingentUebersicht
-          className="bg-off-white py-16"
-          verfuegbaresKontingent={verfuegbaresKontingent}
-          verplantesKontingent={verplantesKontingent}
-        />
+          <KontingentUebersicht
+            className="bg-off-white py-16"
+            verfuegbaresKontingent={verfuegbaresKontingent}
+            verplantesKontingent={verplantesKontingent}
+          />
 
-        <Gesamtsummenanzeige
-          className="border-t-2 border-solid !border-grey bg-off-white py-16"
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-          gesamtsumme={gesamtsumme}
-        />
-      </div>
+          <Gesamtsummenanzeige
+            className="border-t-2 border-solid !border-grey bg-off-white py-16"
+            pseudonymeDerElternteile={pseudonymeDerElternteile}
+            gesamtsumme={gesamtsumme}
+          />
+        </div>
+      </GridLayoutProvider>
 
       <Funktionsleiste
         className="my-40"

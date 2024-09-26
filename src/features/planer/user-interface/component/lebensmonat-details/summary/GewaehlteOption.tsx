@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import classNames from "classnames";
 import AddIcon from "@digitalservicebund/icons/Add";
 import LockIcon from "@digitalservicebund/icons/Lock";
@@ -12,6 +12,7 @@ type Props = {
   readonly imMutterschutz?: boolean;
   readonly option?: Auswahloption;
   readonly className?: string;
+  readonly style?: CSSProperties;
   readonly ariaHidden?: boolean;
 };
 
@@ -19,6 +20,7 @@ export function GewaehlteOption({
   imMutterschutz,
   option,
   className,
+  style,
   ariaHidden,
 }: Props): ReactNode {
   const label = getLabel(imMutterschutz, option);
@@ -46,6 +48,7 @@ export function GewaehlteOption({
         className,
         conditionalClassName,
       )}
+      style={style}
       aria-hidden={ariaHidden}
     >
       {icon}

@@ -25,7 +25,7 @@ export default defineConfig({
     setupFiles: "src/setupTests.ts",
     restoreMocks: true,
     include: ["src/**/*.spec.*"],
-    includeSource: ["src/**/*.ts"],
+    includeSource: ["src/**/*.{ts,tsx}"],
     watch: false,
   },
   define: {

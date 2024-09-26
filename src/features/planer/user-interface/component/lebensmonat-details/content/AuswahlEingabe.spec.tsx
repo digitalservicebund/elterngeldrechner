@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AuswahlEingabe } from "./AuswahlEingabe";
 import {
+  Elternteil,
   KeinElterngeld,
   Variante,
 } from "@/features/planer/user-interface/service";
@@ -262,14 +263,7 @@ const ANY_DISABLED_AUSWAHLMOEGLICHKEIT = {
 
 const ANY_PROPS = {
   legend: "",
+  elternteil: Elternteil.Eins,
   auswahlmoeglichkeiten: ANY_AUSWAHLMOEGLICHKEITEN,
-  gridLayout: {
-    firstRowIndex: 1,
-    areaClassNames: {
-      fieldset: "",
-      info: "",
-      input: "",
-    },
-  },
   waehleOption: () => {},
 };

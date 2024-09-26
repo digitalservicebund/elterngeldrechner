@@ -2,9 +2,10 @@ import type { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import {
-  GRID_LAYOUT_KOPFLEISTE_AREA_CLASS_NAMES,
-  GRID_LAYOUT_TEMPLATES,
-} from "./grid-styling";
+  useGridColumnPerElternteil,
+  useGridLayout,
+  type GridColumnDefinitionPerElternteil,
+} from "@/features/planer/user-interface/layout/grid-layout";
 import {
   Elternteil,
   listePseudonymeAuf,
@@ -20,22 +21,23 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
   pseudonymeDerElternteile,
   className,
 }: Props<E>): ReactNode {
-  const anzahlElternteile = Object.keys(pseudonymeDerElternteile).length;
-  const gridLayoutTemplateClassName = GRID_LAYOUT_TEMPLATES[anzahlElternteile];
+  const gridLayout = useGridLayout();
+  const pseudonymColumns = useGridColumnPerElternteil(
+    PSEUDONYM_COLUMN_DEFINITIONS,
+  );
 
   return (
     <div
-      className={classNames("grid", gridLayoutTemplateClassName, className)}
+      className={classNames("grid", className)}
+      style={gridLayout}
       aria-hidden
     >
       {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
         ([elternteil, pseudonym]) => (
           <span
             key={elternteil}
-            className={classNames(
-              "text-center font-bold",
-              GRID_LAYOUT_KOPFLEISTE_AREA_CLASS_NAMES[elternteil].pseudonym,
-            )}
+            className="text-center font-bold"
+            style={pseudonymColumns[elternteil]}
           >
             <PersonIcon /> {pseudonym}
           </span>
@@ -44,3 +46,13 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
     </div>
   );
 }
+
+const PSEUDONYM_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: ["left-inside", "right-inside"],
+  },
+  2: {
+    [Elternteil.Eins]: "et1-inside",
+    [Elternteil.Zwei]: "et2-inside",
+  },
+};

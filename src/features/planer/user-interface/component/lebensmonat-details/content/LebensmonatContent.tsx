@@ -1,7 +1,11 @@
 import { ReactNode } from "react";
-import classNames from "classnames";
 import { AuswahlEingabe } from "./AuswahlEingabe";
 import { HinweisZumBonus } from "./HinweisZumBonus";
+import {
+  useGridColumn,
+  useGridLayout,
+  type GridColumnDefinition,
+} from "@/features/planer/user-interface/layout/grid-layout";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   WaehleOptionInLebensmonat,
@@ -23,7 +27,6 @@ type Props<E extends Elternteil> = {
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
   readonly zeitraum: Zeitraum;
   readonly zeitraumLabelIdentifier: string;
-  readonly gridLayout: GridLayout<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
 };
@@ -34,25 +37,29 @@ export function LebensmonatContent<E extends Elternteil>({
   pseudonymeDerElternteile,
   zeitraum,
   zeitraumLabelIdentifier,
-  gridLayout,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
 }: Props<E>): ReactNode {
-  const isBonusHintVisible =
-    AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
+  const gridLayout = useGridLayout();
+  const descriptionArea = useGridColumn(DESCRIPTION_COLUMN_DEFINITION);
+  const hinweisZumBonusArea = useGridColumn(
+    HINWEIS_ZUM_BONUS_COLUMN_DEFINITION,
+  );
 
   const hasMultipleElternteile = Object.keys(lebensmonat).length > 1;
 
+  const isBonusHintVisible =
+    AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
+
   return (
     <div
-      className={classNames("pb-20 pt-8", gridLayout.templateClassName)}
+      className="pb-20 pt-8"
+      style={gridLayout}
       data-testid="details-content"
     >
       <div
-        className={classNames(
-          "mb-24 flex flex-col text-center",
-          gridLayout.areaClassNames.description,
-        )}
+        className="mb-24 flex flex-col text-center"
+        style={descriptionArea}
         aria-hidden
       >
         <span>{lebensmonatszahl}. Lebensmonat</span>
@@ -72,17 +79,14 @@ export function LebensmonatContent<E extends Elternteil>({
           !hasMultipleElternteile,
         );
         const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
-        const auswahlGridLayout = {
-          areaClassNames: gridLayout.areaClassNames[elternteil].auswahl,
-        };
 
         return (
           <AuswahlEingabe
             key={elternteil}
             legend={legend}
+            elternteil={elternteil}
             gewaehlteOption={monat.gewaehlteOption}
             auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-            gridLayout={auswahlGridLayout}
             waehleOption={waehleOption.bind(null, elternteil)}
           />
         );
@@ -90,10 +94,8 @@ export function LebensmonatContent<E extends Elternteil>({
 
       {!!isBonusHintVisible && (
         <HinweisZumBonus
-          className={classNames(
-            "mt-24",
-            gridLayout.areaClassNames.hinweisZumBonus,
-          )}
+          className="mt-24"
+          style={hinweisZumBonusArea}
           hasMultipleElternteile={hasMultipleElternteile}
         />
       )}
@@ -111,18 +113,12 @@ function composeLegendForAuswahl(
     : `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
 }
 
-type GridLayout<E extends Elternteil> = {
-  templateClassName: string;
-  areaClassNames: { description: string; hinweisZumBonus: string } & Record<
-    E,
-    GridAreasForElternteil
-  >;
+const DESCRIPTION_COLUMN_DEFINITION: GridColumnDefinition = {
+  1: ["left-outside", "right-outside"],
+  2: ["et1-outside", "et2-outside"],
 };
 
-type GridAreasForElternteil = {
-  auswahl: {
-    fieldset: string;
-    info: string;
-    input: string;
-  };
+const HINWEIS_ZUM_BONUS_COLUMN_DEFINITION: GridColumnDefinition = {
+  1: ["left-middle", "right-middle"],
+  2: ["et1-middle", "et2-middle"],
 };

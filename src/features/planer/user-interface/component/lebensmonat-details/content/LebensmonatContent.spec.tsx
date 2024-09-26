@@ -152,27 +152,6 @@ const ANY_PROPS = {
   },
   zeitraum: { from: new Date(), to: new Date() },
   zeitraumLabelIdentifier: "",
-  gridLayout: {
-    templateClassName: "",
-    areaClassNames: {
-      description: "",
-      hinweisZumBonus: "",
-      [Elternteil.Eins]: {
-        auswahl: {
-          fieldset: "",
-          info: "",
-          input: "",
-        },
-      },
-      [Elternteil.Zwei]: {
-        auswahl: {
-          fieldset: "",
-          info: "",
-          input: "",
-        },
-      },
-    },
-  },
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
 };

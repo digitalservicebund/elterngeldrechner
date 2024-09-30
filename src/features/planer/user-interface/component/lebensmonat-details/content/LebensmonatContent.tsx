@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { AuswahlEingabe } from "./AuswahlEingabe";
 import { HinweisZumBonus } from "./HinweisZumBonus";
-import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen/AbschnittMitEinkommen";
+import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen";
+import { AbschnittMitAuswahloptionen } from "./abschnitt-mit-auswahloptionen";
 import {
   useGridColumn,
   useGridLayout,
@@ -16,7 +16,6 @@ import { ZeitraumLabel } from "@/features/planer/user-interface/component/Zeitra
 import {
   AlleElternteileHabenBonusGewaehlt,
   Elternteil,
-  listeMonateAuf,
   type Lebensmonat,
   type Lebensmonatszahl,
   type PseudonymeDerElternteile,
@@ -75,26 +74,13 @@ export function LebensmonatContent<E extends Elternteil>({
         />
       </div>
 
-      {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
-        const pseudonym = pseudonymeDerElternteile[elternteil];
-        const legend = composeLegendForAuswahl(
-          lebensmonatszahl,
-          pseudonym,
-          !hasMultipleElternteile,
-        );
-        const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
-
-        return (
-          <AuswahlEingabe
-            key={elternteil}
-            legend={legend}
-            elternteil={elternteil}
-            gewaehlteOption={monat.gewaehlteOption}
-            auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-            waehleOption={waehleOption.bind(null, elternteil)}
-          />
-        );
-      })}
+      <AbschnittMitAuswahloptionen
+        lebensmonatszahl={lebensmonatszahl}
+        lebensmonat={lebensmonat}
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
+        waehleOption={waehleOption}
+      />
 
       <AbschnittMitEinkommen
         lebensmonatszahl={lebensmonatszahl}
@@ -112,16 +98,6 @@ export function LebensmonatContent<E extends Elternteil>({
       )}
     </div>
   );
-}
-
-function composeLegendForAuswahl(
-  lebensmonatszahl: Lebensmonatszahl,
-  pseudonym: string,
-  isSingleElternteil: boolean,
-): string {
-  return isSingleElternteil
-    ? `Auswahl für den ${lebensmonatszahl}. Lebensmonat`
-    : `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
 }
 
 const DESCRIPTION_COLUMN_DEFINITION: GridColumnDefinition = {

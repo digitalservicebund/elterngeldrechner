@@ -34,6 +34,7 @@ export function Planer({
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
+    gebeEinkommenAn,
     setzePlanZurueck,
   } = usePlanerService(initialPlan, onPlanChanged);
 
@@ -90,6 +91,7 @@ export function Planer({
             erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
             waehleOption={waehleOption}
+            gebeEinkommenAn={gebeEinkommenAn}
           />
 
           <KontingentUebersicht

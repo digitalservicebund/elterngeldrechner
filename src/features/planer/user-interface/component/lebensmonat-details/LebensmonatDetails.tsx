@@ -12,6 +12,7 @@ import { LebensmonatSummary } from "./summary";
 import { LebensmonatContent } from "./content";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
+  GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import {
@@ -29,6 +30,7 @@ interface Props<E extends Elternteil> {
   readonly geburtsdatumDesKindes: Date;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
+  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
   readonly className?: string;
 }
 
@@ -42,6 +44,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     geburtsdatumDesKindes,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
+    gebeEinkommenAn,
     className,
   }: Props<E>,
   ref?: FocusOnlyRef,
@@ -90,9 +93,10 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         lebensmonat={lebensmonat}
         pseudonymeDerElternteile={pseudonymeDerElternteile}
         zeitraum={zeitraum}
+        zeitraumLabelIdentifier={zeitraumLabelIdentifier}
         bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
         waehleOption={waehleOption}
-        zeitraumLabelIdentifier={zeitraumLabelIdentifier}
+        gebeEinkommenAn={gebeEinkommenAn}
       />
     </details>
   );

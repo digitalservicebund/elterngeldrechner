@@ -154,6 +154,7 @@ const ANY_PROPS = {
   zeitraumLabelIdentifier: "",
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
+  gebeEinkommenAn: () => {},
 };
 
 vi.mock(import("./HinweisZumBonus"));

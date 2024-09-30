@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
 import { HinweisZumBonus } from "./HinweisZumBonus";
+import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen/AbschnittMitEinkommen";
 import {
   useGridColumn,
   useGridLayout,
@@ -8,6 +9,7 @@ import {
 } from "@/features/planer/user-interface/layout/grid-layout";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
+  GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
@@ -29,6 +31,7 @@ type Props<E extends Elternteil> = {
   readonly zeitraumLabelIdentifier: string;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
+  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
 };
 
 export function LebensmonatContent<E extends Elternteil>({
@@ -39,6 +42,7 @@ export function LebensmonatContent<E extends Elternteil>({
   zeitraumLabelIdentifier,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
+  gebeEinkommenAn,
 }: Props<E>): ReactNode {
   const gridLayout = useGridLayout();
   const descriptionArea = useGridColumn(DESCRIPTION_COLUMN_DEFINITION);
@@ -91,6 +95,13 @@ export function LebensmonatContent<E extends Elternteil>({
           />
         );
       })}
+
+      <AbschnittMitEinkommen
+        lebensmonatszahl={lebensmonatszahl}
+        lebensmonat={lebensmonat}
+        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        gebeEinkommenAn={gebeEinkommenAn}
+      />
 
       {!!isBonusHintVisible && (
         <HinweisZumBonus

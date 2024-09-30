@@ -34,6 +34,9 @@ export type GebeEinkommenAn<E extends Elternteil> = (
   bruttoeinkommen: number,
 ) => void;
 
+export type GebeEinkommenInLebensmonatAn<E extends Elternteil> =
+  OmitFirstArgument<GebeEinkommenAn<E>>;
+
 type OmitFirstArgument<Function> = Function extends (
   firstArgument: infer _,
   ...remainingArguments: infer Arguments

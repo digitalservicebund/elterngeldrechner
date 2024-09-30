@@ -15,15 +15,14 @@ if (import.meta.vitest) {
     const { Auswahloptionen } = await import(
       "@/features/planer/domain/Auswahloption"
     );
+    const { MONAT_MIT_MUTTERSCHUTZ } = await import(
+      "@/features/planer/domain/monat"
+    );
 
     it("is satisfied if im Mutterschutz marker is true and chosen Option is Basiselterngeld", () => {
-      const monat: Monat = {
-        imMutterschutz: true,
-        gewaehlteOption: Variante.Basis,
-        elterngeldbezug: null,
-      };
-
-      const isSatisfied = IstGueltigerMonatMitMutterschutz.asPredicate(monat);
+      const isSatisfied = IstGueltigerMonatMitMutterschutz.asPredicate(
+        MONAT_MIT_MUTTERSCHUTZ,
+      );
 
       expect(isSatisfied).toBe(true);
     });

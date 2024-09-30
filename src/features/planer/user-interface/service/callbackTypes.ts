@@ -28,6 +28,12 @@ export type WaehleOptionInLebensmonat<E extends Elternteil> = OmitFirstArgument<
   WaehleOption<E>
 >;
 
+export type GebeEinkommenAn<E extends Elternteil> = (
+  lebensmonatszahl: Lebensmonatszahl,
+  elternteil: E,
+  bruttoeinkommen: number,
+) => void;
+
 type OmitFirstArgument<Function> = Function extends (
   firstArgument: infer _,
   ...remainingArguments: infer Arguments

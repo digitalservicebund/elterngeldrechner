@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { errechneteElterngeldbezuegeSelector } from "./errechneteElterngeldbezuegeSelector";
 import { composeAusgangslage } from "./composeAusgangslage";
-import type { WaehleOption } from "./callbackTypes";
+import { type GebeEinkommenAn, WaehleOption } from "./callbackTypes";
 import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import {
   bestimmeVerfuegbaresKontingent,
@@ -15,6 +15,7 @@ import {
   setzePlanZurueck,
   type PlanMitBeliebigenElternteilen,
   berechneGesamtsumme,
+  gebeEinkommenAn,
 } from "@/features/planer/user-interface/service";
 import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
@@ -115,6 +116,16 @@ export function usePlanerService(
     [updateStateAndTriggerCallbacks],
   );
 
+  const gebeEinkommenAnCallback = useCallback<GebeEinkommenAn<Elternteil>>(
+    (...argumentList) =>
+      setPlan((plan) => {
+        const nextPlan = gebeEinkommenAn(plan, ...argumentList);
+        updateStateAndTriggerCallbacks(nextPlan);
+        return nextPlan;
+      }),
+    [updateStateAndTriggerCallbacks],
+  );
+
   const setztePlanZurueckCallback = useCallback(
     () =>
       setPlan((plan) => {
@@ -147,6 +158,7 @@ export function usePlanerService(
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
     waehleOption: waehleOptionCallback,
+    gebeEinkommenAn: gebeEinkommenAnCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
   };
 }

@@ -8,6 +8,7 @@ export {
   Auswahloptionen,
   KeinElterngeld,
 } from "./Auswahloption";
+export { type Einkommen } from "./Einkommen";
 export type { Elterngeldbezug } from "./Elterngeldbezug";
 export type {
   Elterngeldbezuege,
@@ -35,6 +36,7 @@ export {
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialenPlan,
   fassePlanZusammen,
+  gebeEinkommenAn,
   setzePlanZurueck,
   waehleOption,
 } from "./plan";

@@ -12,8 +12,8 @@ import {
 describe("Lebensmonat Summary", () => {
   it("shows visual indicators in the summary for the choices of the Elternteile", () => {
     const lebensmonat = {
-      [Elternteil.Eins]: monat(Variante.Basis, 10),
-      [Elternteil.Zwei]: monat(Variante.Plus, 20),
+      [Elternteil.Eins]: monat(Variante.Basis, 10, 11),
+      [Elternteil.Zwei]: monat(Variante.Plus, 20, 21),
     };
 
     render(<LebensmonatSummary {...ANY_PROPS} lebensmonat={lebensmonat} />);
@@ -21,8 +21,10 @@ describe("Lebensmonat Summary", () => {
     const summary = document.querySelector("summary")!;
     expect(within(summary).queryByText("Basis")).toBeVisible();
     expect(within(summary).queryByText("10 €")).toBeVisible();
+    expect(within(summary).queryByText("11 €")).toBeVisible();
     expect(within(summary).queryByText("Plus")).toBeVisible();
     expect(within(summary).queryByText("20 €")).toBeVisible();
+    expect(within(summary).queryByText("21 €")).toBeVisible();
   });
 
   describe("description", () => {
@@ -137,8 +139,14 @@ describe("Lebensmonat Summary", () => {
 function monat(
   gewaehlteOption: Auswahloption | undefined,
   elterngeldbezug?: number | null,
+  bruttoeinkommen?: number | null,
 ) {
-  return { gewaehlteOption, elterngeldbezug, imMutterschutz: false as const };
+  return {
+    gewaehlteOption,
+    elterngeldbezug,
+    bruttoeinkommen,
+    imMutterschutz: false as const,
+  };
 }
 
 const ANY_PROPS = {

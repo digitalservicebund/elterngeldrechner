@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useId } from "react";
 import classNames from "classnames";
 import { GewaehlteOption } from "./GewaehlteOption";
-import { Elterngeldbezugsanzeige } from "./Elterngeldbezugsanzeige";
+import { Haushaltseinkommen } from "./Haushaltseinkommen";
 import {
   useGridLayout,
   useGridColumn,
@@ -75,10 +75,11 @@ export function LebensmonatSummary<E extends Elternteil>({
 
       {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => (
         <Fragment key={elternteil}>
-          <Elterngeldbezugsanzeige
+          <Haushaltseinkommen
             className="row-start-1 self-center justify-self-center"
             style={elterngeldbezugColumns[elternteil]}
             elterngeldbezug={monat.elterngeldbezug}
+            bruttoeinkommen={monat.bruttoeinkommen}
             imMutterschutz={monat.imMutterschutz}
             ariaHidden
           />

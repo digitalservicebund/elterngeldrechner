@@ -33,8 +33,9 @@ export function KontingentUebersicht({
         Kontingentübersicht
       </h4>
 
-      {listeKontingentAuf(verfuegbaresKontingent, true).map(
-        ([option, maximum]) => {
+      {listeKontingentAuf(verfuegbaresKontingent, true)
+        .filter(([, maximum]) => maximum > 0)
+        .map(([option, maximum]) => {
           const nochVerfuegbar =
             maximum - Math.ceil(verplantesKontingent[option]);
 
@@ -46,8 +47,7 @@ export function KontingentUebersicht({
               {nochVerfuegbar} von {maximum} verfügbar
             </div>
           );
-        },
-      )}
+        })}
     </section>
   );
 }

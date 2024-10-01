@@ -42,6 +42,29 @@ describe("KontingentUebersicht", () => {
       screen.queryByText("Partnerschaftsbonus")?.parentNode,
     ).toHaveTextContent("Partnerschaftsbonus2 von 2 verfügbar");
   });
+
+  it("does not show Kontingent for Options which are not available", () => {
+    const verfuegbaresKontingent = {
+      [Variante.Basis]: 4,
+      [Variante.Plus]: 8,
+      [Variante.Bonus]: 0,
+    };
+    const verplantesKontingent = {
+      [Variante.Basis]: 2.5,
+      [Variante.Plus]: 5,
+      [Variante.Bonus]: 0,
+      [KeinElterngeld]: 3,
+    };
+
+    render(
+      <KontingentUebersicht
+        verfuegbaresKontingent={verfuegbaresKontingent}
+        verplantesKontingent={verplantesKontingent}
+      />,
+    );
+
+    expect(screen.queryByText("Partnerschaftsbonus")).not.toBeInTheDocument();
+  });
 });
 
 const ANY_PROPS = {

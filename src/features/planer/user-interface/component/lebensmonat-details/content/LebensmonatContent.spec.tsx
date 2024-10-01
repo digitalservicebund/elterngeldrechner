@@ -7,8 +7,22 @@ import {
   Variante,
   type Auswahloption,
 } from "@/features/planer/user-interface/service";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
+
+vi.mock(import("./HinweisZumBonus"));
+vi.mock(
+  import(
+    "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat"
+  ),
+);
 
 describe("Lebensmonat Content", () => {
+  beforeEach(() => {
+    vi.mocked(useInformationenZumLebensmonat<Elternteil.Eins>).mockReturnValue(
+      ANY_INFORMATION_ZUM_LEBENSMONAT,
+    );
+  });
+
   it("shows the Zeitraum of the Lebensmonat", () => {
     render(<LebensmonatContent {...ANY_PROPS} />);
 
@@ -16,7 +30,12 @@ describe("Lebensmonat Content", () => {
   });
 
   it("shows the Lebensmonatszahl", () => {
-    render(<LebensmonatContent {...ANY_PROPS} lebensmonatszahl={5} />);
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+      ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      lebensmonatszahl: 5,
+    });
+
+    render(<LebensmonatContent {...ANY_PROPS} />);
 
     expect(screen.getByText("5. Lebensmonat")).toBeVisible();
   });
@@ -24,22 +43,30 @@ describe("Lebensmonat Content", () => {
   describe("hint for Bonus", () => {
     it("shows the hint when Bonus is chosen", () => {
       vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
-      const lebensmonat = {
-        [Elternteil.Eins]: monat(Variante.Bonus),
-        [Elternteil.Zwei]: monat(Variante.Bonus),
-      };
-      render(<LebensmonatContent {...ANY_PROPS} lebensmonat={lebensmonat} />);
+      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonat: {
+          [Elternteil.Eins]: monat(Variante.Bonus),
+          [Elternteil.Zwei]: monat(Variante.Bonus),
+        },
+      });
+
+      render(<LebensmonatContent {...ANY_PROPS} />);
 
       expect(screen.queryByText("Test Bonus Hinweis Text")).toBeInTheDocument();
     });
 
     it("hides the hint when no Bonus is chosen", () => {
       vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
-      const lebensmonat = {
-        [Elternteil.Eins]: monat(Variante.Basis),
-        [Elternteil.Zwei]: monat(Variante.Basis),
-      };
-      render(<LebensmonatContent {...ANY_PROPS} lebensmonat={lebensmonat} />);
+      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonat: {
+          [Elternteil.Eins]: monat(Variante.Basis),
+          [Elternteil.Zwei]: monat(Variante.Plus),
+        },
+      });
+
+      render(<LebensmonatContent {...ANY_PROPS} />);
 
       expect(
         screen.queryByText("Test Bonus Hinweis Text"),
@@ -55,28 +82,27 @@ function monat(
   return { gewaehlteOption, elterngeldbezug, imMutterschutz: false as const };
 }
 
-const ANY_AUSWAHLMOEGLICHKEITEN = {
-  [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
-  [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },
-  [Variante.Bonus]: { elterngeldbezug: 1, isDisabled: false as const },
-  [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
-};
-
-const ANY_PROPS = {
-  lebensmonatszahl: 2 as const,
+const ANY_INFORMATION_ZUM_LEBENSMONAT = {
+  lebensmonatszahl: 5 as const,
   lebensmonat: {
-    [Elternteil.Eins]: { imMutterschutz: false as const },
-    [Elternteil.Zwei]: { imMutterschutz: false as const },
+    [Elternteil.Eins]: monat(undefined),
+    [Elternteil.Zwei]: monat(undefined),
   },
   pseudonymeDerElternteile: {
     [Elternteil.Eins]: "Jane",
     [Elternteil.Zwei]: "John",
   },
-  zeitraum: { from: new Date(), to: new Date() },
-  zeitraumLabelIdentifier: "",
-  bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
+  geburtsdatumDesKindes: new Date(),
+  bestimmeAuswahlmoeglichkeiten: () => ({
+    [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
+    [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },
+    [Variante.Bonus]: { elterngeldbezug: 1, isDisabled: false as const },
+    [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
+  }),
   waehleOption: () => {},
   gebeEinkommenAn: () => {},
 };
 
-vi.mock(import("./HinweisZumBonus"));
+const ANY_PROPS = {
+  zeitraumLabelIdentifier: "",
+};

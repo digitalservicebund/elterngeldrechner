@@ -1,32 +1,20 @@
 import type { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
-  type Lebensmonat,
   type Lebensmonatszahl,
-  type PseudonymeDerElternteile,
-  Elternteil,
   listeMonateAuf,
 } from "@/features/planer/user-interface/service";
-import type {
-  BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
-  WaehleOptionInLebensmonat,
-} from "@/features/planer/user-interface/service/callbackTypes";
 
-type Props<E extends Elternteil> = {
-  readonly lebensmonatszahl: Lebensmonatszahl;
-  readonly lebensmonat: Lebensmonat<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
-  readonly waehleOption: WaehleOptionInLebensmonat<E>;
-};
+export function AbschnittMitAuswahloptionen(): ReactNode {
+  const {
+    lebensmonatszahl,
+    lebensmonat,
+    pseudonymeDerElternteile,
+    bestimmeAuswahlmoeglichkeiten,
+    waehleOption,
+  } = useInformationenZumLebensmonat();
 
-export function AbschnittMitAuswahloptionen<E extends Elternteil>({
-  lebensmonatszahl,
-  lebensmonat,
-  pseudonymeDerElternteile,
-  bestimmeAuswahlmoeglichkeiten,
-  waehleOption,
-}: Props<E>): ReactNode {
   const isSingleElternteil = Object.keys(lebensmonat).length === 1;
 
   return (

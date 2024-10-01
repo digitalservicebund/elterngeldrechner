@@ -10,6 +10,7 @@ import classNames from "classnames";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import { LebensmonatSummary } from "./summary";
 import { LebensmonatContent } from "./content";
+import { ProvideInformationenZumLebensmonat } from "./informationenZumLebensmonat";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   GebeEinkommenInLebensmonatAn,
@@ -20,7 +21,6 @@ import {
   type Lebensmonatszahl,
   type Lebensmonat,
   type PseudonymeDerElternteile,
-  berechneZeitraumFuerLebensmonat,
 } from "@/features/planer/user-interface/service";
 
 interface Props<E extends Elternteil> {
@@ -52,10 +52,6 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
   const zeitraumLabelIdentifier = useId();
-  const zeitraum = berechneZeitraumFuerLebensmonat(
-    geburtsdatumDesKindes,
-    lebensmonatszahl,
-  );
 
   const detailsElement: RefObject<HTMLDetailsElement> = useDetectClickOutside({
     disableTouch: true,
@@ -74,31 +70,33 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     [detailsElement],
   );
 
-  return (
-    <details
-      className={classNames("group open:bg-off-white", className)}
-      name="Lebensmonate"
-      aria-label={detailsAriaLabel}
-      ref={detailsElement}
-    >
-      <LebensmonatSummary
-        lebensmonatszahl={lebensmonatszahl}
-        lebensmonat={lebensmonat}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
-        identifierToZeitraumLabel={zeitraumLabelIdentifier}
-      />
+  const informationenZumLebensmonat = {
+    lebensmonatszahl,
+    lebensmonat,
+    pseudonymeDerElternteile,
+    geburtsdatumDesKindes,
+    bestimmeAuswahlmoeglichkeiten,
+    waehleOption,
+    gebeEinkommenAn,
+  };
 
-      <LebensmonatContent
-        lebensmonatszahl={lebensmonatszahl}
-        lebensmonat={lebensmonat}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
-        zeitraum={zeitraum}
-        zeitraumLabelIdentifier={zeitraumLabelIdentifier}
-        bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-        waehleOption={waehleOption}
-        gebeEinkommenAn={gebeEinkommenAn}
-      />
-    </details>
+  return (
+    <ProvideInformationenZumLebensmonat
+      informationen={informationenZumLebensmonat}
+    >
+      <details
+        className={classNames("group open:bg-off-white", className)}
+        name="Lebensmonate"
+        aria-label={detailsAriaLabel}
+        ref={detailsElement}
+      >
+        <LebensmonatSummary
+          identifierToZeitraumLabel={zeitraumLabelIdentifier}
+        />
+
+        <LebensmonatContent zeitraumLabelIdentifier={zeitraumLabelIdentifier} />
+      </details>
+    </ProvideInformationenZumLebensmonat>
   );
 }) as <E extends Elternteil>(
   props: Props<E> & { ref?: FocusOnlyRef },

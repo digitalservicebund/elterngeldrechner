@@ -4,13 +4,27 @@ import { AbschnittMitEinkommen } from "./AbschnittMitEinkommen";
 import {
   Auswahloptionen,
   Elternteil,
+  KeinElterngeld,
   Variante,
   type Auswahloption,
 } from "@/features/planer/domain";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
+
+vi.mock(
+  import(
+    "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat"
+  ),
+);
 
 describe("Abschnitt mit Einkommen", () => {
+  beforeEach(() => {
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue(
+      ANY_INFORMATION_ZUM_LEBENSMONAT,
+    );
+  });
+
   it('shows the initial question "heading"', () => {
-    render(<AbschnittMitEinkommen {...ANY_PROPS} />);
+    render(<AbschnittMitEinkommen />);
 
     expect(
       screen.getByText("Sie haben in diesem Monat Einkommen?"),
@@ -18,7 +32,7 @@ describe("Abschnitt mit Einkommen", () => {
   });
 
   it("includes a dialog with further information", () => {
-    render(<AbschnittMitEinkommen {...ANY_PROPS} />);
+    render(<AbschnittMitEinkommen />);
 
     expect(
       screen.getByRole("button", {
@@ -29,23 +43,20 @@ describe("Abschnitt mit Einkommen", () => {
 
   describe("inputs for Bruttoeinkommen", () => {
     it("shows an input for the Bruttoeinkommen for each Elternteil", async () => {
-      const lebensmonat = {
-        [Elternteil.Eins]: monat(),
-        [Elternteil.Zwei]: monat(),
-      };
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "Jane",
-        [Elternteil.Zwei]: "John",
-      };
-      render(
-        <AbschnittMitEinkommen
-          {...ANY_PROPS}
-          lebensmonatszahl={5}
-          lebensmonat={lebensmonat}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-        />,
-      );
+      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonatszahl: 5,
+        lebensmonat: {
+          [Elternteil.Eins]: monat(),
+          [Elternteil.Zwei]: monat(),
+        },
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+      });
 
+      render(<AbschnittMitEinkommen />);
       await toggleInputsVisibility();
 
       expect(
@@ -61,21 +72,16 @@ describe("Abschnitt mit Einkommen", () => {
     });
 
     it("shows and input fo the Bruttoeinkommen for a single Elternteil", async () => {
-      const lebensmonat = {
-        [Elternteil.Eins]: monat(),
-      };
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "",
-      };
-      render(
-        <AbschnittMitEinkommen
-          {...ANY_PROPS}
-          lebensmonatszahl={5}
-          lebensmonat={lebensmonat}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-        />,
-      );
+      vi.mocked(
+        useInformationenZumLebensmonat<Elternteil.Eins>,
+      ).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonatszahl: 5,
+        lebensmonat: { [Elternteil.Eins]: monat() },
+        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
+      });
 
+      render(<AbschnittMitEinkommen />);
       await toggleInputsVisibility();
 
       expect(
@@ -90,26 +96,28 @@ describe("Abschnitt mit Einkommen", () => {
     it.each(Auswahloptionen.filter((option) => option !== Variante.Bonus))(
       "hides initially the inputs when %s is chosen and no Bruttoeinkommen",
       (option) => {
-        const lebensmonat = {
-          [Elternteil.Eins]: monat(option, undefined),
-        };
+        vi.mocked(
+          useInformationenZumLebensmonat<Elternteil.Eins>,
+        ).mockReturnValue({
+          ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+          lebensmonat: { [Elternteil.Eins]: monat(option, undefined) },
+        });
 
-        render(
-          <AbschnittMitEinkommen {...ANY_PROPS} lebensmonat={lebensmonat} />,
-        );
+        render(<AbschnittMitEinkommen />);
 
         expectInputsNotToBeVisible();
       },
     );
 
     it("shows the inputs automatically when Bonus is chosen and no Bruttoeinkommen", () => {
-      const lebensmonat = {
-        [Elternteil.Eins]: monat(Variante.Bonus, undefined),
-      };
+      vi.mocked(
+        useInformationenZumLebensmonat<Elternteil.Eins>,
+      ).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus, undefined) },
+      });
 
-      render(
-        <AbschnittMitEinkommen {...ANY_PROPS} lebensmonat={lebensmonat} />,
-      );
+      render(<AbschnittMitEinkommen />);
 
       expectInputsToBeVisible();
     });
@@ -117,26 +125,28 @@ describe("Abschnitt mit Einkommen", () => {
     it.each(Auswahloptionen)(
       "shows the inputs automatically when %s is chosen and some Bruttoeinkommen is was already specified",
       (option) => {
-        const lebensmonat = {
-          [Elternteil.Eins]: monat(option, 1),
-        };
+        vi.mocked(
+          useInformationenZumLebensmonat<Elternteil.Eins>,
+        ).mockReturnValue({
+          ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+          lebensmonat: { [Elternteil.Eins]: monat(option, 1) },
+        });
 
-        render(
-          <AbschnittMitEinkommen {...ANY_PROPS} lebensmonat={lebensmonat} />,
-        );
+        render(<AbschnittMitEinkommen />);
 
         expectInputsToBeVisible();
       },
     );
 
     it("can not manually hide inputs again when automatically opened", async () => {
-      const lebensmonat = {
-        [Elternteil.Eins]: monat(Variante.Bonus, 1),
-      };
+      vi.mocked(
+        useInformationenZumLebensmonat<Elternteil.Eins>,
+      ).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus, 1) },
+      });
 
-      render(
-        <AbschnittMitEinkommen {...ANY_PROPS} lebensmonat={lebensmonat} />,
-      );
+      render(<AbschnittMitEinkommen />);
 
       expectInputsToBeVisible();
       await toggleInputsVisibility();
@@ -160,7 +170,7 @@ describe("Abschnitt mit Einkommen", () => {
   });
 
   it("shows an hint for the Wochenstunden when inputs are visible", async () => {
-    render(<AbschnittMitEinkommen {...ANY_PROPS} />);
+    render(<AbschnittMitEinkommen />);
 
     await toggleInputsVisibility();
 
@@ -183,13 +193,23 @@ function monat(gewaehlteOption?: Auswahloption, bruttoeinkommen?: number) {
   return { gewaehlteOption, bruttoeinkommen, imMutterschutz: false as const };
 }
 
-const ANY_PROPS = {
+const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   lebensmonatszahl: 5 as const,
   lebensmonat: {
-    [Elternteil.Eins]: monat(undefined),
+    [Elternteil.Eins]: monat(),
+    [Elternteil.Zwei]: monat(),
   },
   pseudonymeDerElternteile: {
     [Elternteil.Eins]: "Jane",
+    [Elternteil.Zwei]: "John",
   },
+  geburtsdatumDesKindes: new Date(),
+  bestimmeAuswahlmoeglichkeiten: () => ({
+    [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
+    [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },
+    [Variante.Bonus]: { elterngeldbezug: 1, isDisabled: false as const },
+    [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
+  }),
+  waehleOption: () => {},
   gebeEinkommenAn: () => {},
 };

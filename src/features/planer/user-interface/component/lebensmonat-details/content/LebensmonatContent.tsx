@@ -2,57 +2,42 @@ import { ReactNode } from "react";
 import { HinweisZumBonus } from "./HinweisZumBonus";
 import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen";
 import { AbschnittMitAuswahloptionen } from "./abschnitt-mit-auswahloptionen";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
   useGridColumn,
   useGridLayout,
   type GridColumnDefinition,
 } from "@/features/planer/user-interface/layout/grid-layout";
-import type {
-  BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
-  GebeEinkommenInLebensmonatAn,
-  WaehleOptionInLebensmonat,
-} from "@/features/planer/user-interface/service/callbackTypes";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
 import {
   AlleElternteileHabenBonusGewaehlt,
-  Elternteil,
-  type Lebensmonat,
-  type Lebensmonatszahl,
-  type PseudonymeDerElternteile,
-  type Zeitraum,
+  berechneZeitraumFuerLebensmonat,
 } from "@/features/planer/user-interface/service";
 
-type Props<E extends Elternteil> = {
-  readonly lebensmonatszahl: Lebensmonatszahl;
-  readonly lebensmonat: Lebensmonat<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly zeitraum: Zeitraum;
+type Props = {
   readonly zeitraumLabelIdentifier: string;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
-  readonly waehleOption: WaehleOptionInLebensmonat<E>;
-  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
 };
 
-export function LebensmonatContent<E extends Elternteil>({
-  lebensmonatszahl,
-  lebensmonat,
-  pseudonymeDerElternteile,
-  zeitraum,
+export function LebensmonatContent({
   zeitraumLabelIdentifier,
-  bestimmeAuswahlmoeglichkeiten,
-  waehleOption,
-  gebeEinkommenAn,
-}: Props<E>): ReactNode {
+}: Props): ReactNode {
   const gridLayout = useGridLayout();
   const descriptionArea = useGridColumn(DESCRIPTION_COLUMN_DEFINITION);
   const hinweisZumBonusArea = useGridColumn(
     HINWEIS_ZUM_BONUS_COLUMN_DEFINITION,
   );
 
-  const hasMultipleElternteile = Object.keys(lebensmonat).length > 1;
+  const { lebensmonatszahl, lebensmonat, geburtsdatumDesKindes } =
+    useInformationenZumLebensmonat();
+
+  const zeitraum = berechneZeitraumFuerLebensmonat(
+    geburtsdatumDesKindes,
+    lebensmonatszahl,
+  );
 
   const isBonusHintVisible =
     AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
+  const hasMultipleElternteile = Object.keys(lebensmonat).length > 1;
 
   return (
     <div
@@ -74,20 +59,8 @@ export function LebensmonatContent<E extends Elternteil>({
         />
       </div>
 
-      <AbschnittMitAuswahloptionen
-        lebensmonatszahl={lebensmonatszahl}
-        lebensmonat={lebensmonat}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
-        bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-        waehleOption={waehleOption}
-      />
-
-      <AbschnittMitEinkommen
-        lebensmonatszahl={lebensmonatszahl}
-        lebensmonat={lebensmonat}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
-        gebeEinkommenAn={gebeEinkommenAn}
-      />
+      <AbschnittMitAuswahloptionen />
+      <AbschnittMitEinkommen />
 
       {!!isBonusHintVisible && (
         <HinweisZumBonus

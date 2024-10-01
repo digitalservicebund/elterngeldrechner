@@ -1,27 +1,41 @@
 import { render, screen } from "@testing-library/react";
 import { AbschnittMitAuswahloptionen } from "./AbschnittMitAuswahloptionen";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
   Elternteil,
   KeinElterngeld,
   Variante,
-  type Lebensmonat,
 } from "@/features/planer/user-interface/service";
 import type { BestimmeAuswahlmoeglichkeitenFuerLebensmonat } from "@/features/planer/user-interface/service/callbackTypes";
 
-describe("Abschnitt mit Auswahloptionen", () => {
-  it("shows an input fieldset to choose an Option for each Elternteil", () => {
-    const pseudonymeDerElternteile = {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    };
+vi.mock(
+  import(
+    "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat"
+  ),
+);
 
-    render(
-      <AbschnittMitAuswahloptionen
-        {...ANY_PROPS}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
-        lebensmonatszahl={3}
-      />,
+describe("Abschnitt mit Auswahloptionen", () => {
+  beforeEach(() => {
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue(
+      ANY_INFORMATION_ZUM_LEBENSMONAT,
     );
+  });
+
+  it("shows an input fieldset to choose an Option for each Elternteil", () => {
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+      ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      lebensmonatszahl: 3 as const,
+      lebensmonat: {
+        [Elternteil.Eins]: ANY_MONAT,
+        [Elternteil.Zwei]: ANY_MONAT,
+      },
+      pseudonymeDerElternteile: {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      },
+    });
+
+    render(<AbschnittMitAuswahloptionen />);
 
     expect(
       screen.getByRole("radiogroup", {
@@ -37,21 +51,14 @@ describe("Abschnitt mit Auswahloptionen", () => {
   });
 
   it("shows an input fieldset to choose an Option for single Elternteil", () => {
-    const pseudonymeDerElternteile = {
-      [Elternteil.Eins]: "",
-    };
-    const lebensmonat: Lebensmonat<Elternteil.Eins> = {
-      [Elternteil.Eins]: ANY_MONAT,
-    };
+    vi.mocked(useInformationenZumLebensmonat<Elternteil.Eins>).mockReturnValue({
+      ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      lebensmonatszahl: 3 as const,
+      lebensmonat: { [Elternteil.Eins]: ANY_MONAT },
+      pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
+    });
 
-    render(
-      <AbschnittMitAuswahloptionen
-        {...ANY_PROPS}
-        lebensmonatszahl={3}
-        lebensmonat={lebensmonat}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
-      />,
-    );
+    render(<AbschnittMitAuswahloptionen />);
 
     expect(
       screen.getByRole("radiogroup", {
@@ -67,12 +74,12 @@ describe("Abschnitt mit Auswahloptionen", () => {
         ANY_AUSWAHLMOEGLICHKEITEN,
       ) as BestimmeAuswahlmoeglichkeitenFuerLebensmonat<Elternteil>;
 
-    render(
-      <AbschnittMitAuswahloptionen
-        {...ANY_PROPS}
-        bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-      />,
-    );
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+      ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      bestimmeAuswahlmoeglichkeiten,
+    });
+
+    render(<AbschnittMitAuswahloptionen />);
 
     expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledTimes(2);
     expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledWith(Elternteil.Eins);
@@ -89,16 +96,15 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
 
 const ANY_MONAT = { imMutterschutz: false as const };
 
-const ANY_PROPS = {
-  lebensmonatszahl: 2 as const,
-  lebensmonat: {
-    [Elternteil.Eins]: ANY_MONAT,
-    [Elternteil.Zwei]: ANY_MONAT,
-  },
+const ANY_INFORMATION_ZUM_LEBENSMONAT = {
+  lebensmonatszahl: 5 as const,
+  lebensmonat: { [Elternteil.Eins]: ANY_MONAT, [Elternteil.Zwei]: ANY_MONAT },
   pseudonymeDerElternteile: {
     [Elternteil.Eins]: "Jane",
     [Elternteil.Zwei]: "John",
   },
+  geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
+  gebeEinkommenAn: () => {},
 };

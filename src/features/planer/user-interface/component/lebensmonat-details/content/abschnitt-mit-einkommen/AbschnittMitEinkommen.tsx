@@ -1,14 +1,12 @@
 import { ReactNode, useState } from "react";
-import classNames from "classnames";
 import ToggleOnIcon from "@digitalservicebund/icons/ToggleOn";
 import ToggleOffIcon from "@digitalservicebund/icons/ToggleOff";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
-  type Lebensmonat,
   type LebensmonatMitBeliebigenElternteilen,
   type Lebensmonatszahl,
-  type PseudonymeDerElternteile,
   Elternteil,
   listeMonateAuf,
   Variante,
@@ -19,24 +17,9 @@ import {
   useGridColumn,
   useGridColumnPerElternteil,
 } from "@/features/planer/user-interface/layout/grid-layout";
-import type { GebeEinkommenInLebensmonatAn } from "@/features/planer/user-interface/service/callbackTypes";
 import { InfoDialog } from "@/components/molecules/info-dialog";
 
-type Props<E extends Elternteil> = {
-  readonly lebensmonatszahl: Lebensmonatszahl;
-  readonly lebensmonat: Lebensmonat<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
-  readonly className?: string;
-};
-
-export function AbschnittMitEinkommen<E extends Elternteil>({
-  lebensmonatszahl,
-  lebensmonat,
-  pseudonymeDerElternteile,
-  gebeEinkommenAn,
-  className,
-}: Props<E>): ReactNode {
+export function AbschnittMitEinkommen(): ReactNode {
   const headingColumn = useGridColumn(HEADING_COLUMN_DEFINITION);
   const bruttoeinkommenColumns = useGridColumnPerElternteil(
     BRUTTOEINKOMMEN_COLUMN_DEFINITIONS,
@@ -44,6 +27,13 @@ export function AbschnittMitEinkommen<E extends Elternteil>({
   const hinweisZuWochenstundenColumn = useGridColumn(
     HINWEIS_ZU_WOCHENSTUNDEN_COLUMN_DEFINITION,
   );
+
+  const {
+    lebensmonatszahl,
+    lebensmonat,
+    pseudonymeDerElternteile,
+    gebeEinkommenAn,
+  } = useInformationenZumLebensmonat();
 
   const mustInputsBeVisible = checkIfInputsMustBeVisible(lebensmonat);
   const [visibilityToggleState, setVisibilityToggleState] = useState(false);
@@ -55,7 +45,7 @@ export function AbschnittMitEinkommen<E extends Elternteil>({
   const isSingleElternteil = Object.keys(lebensmonat).length === 1;
 
   return (
-    <div className={classNames("contents", className)}>
+    <div className="contents">
       <div
         className="mb-16 mt-32 flex flex-wrap justify-center gap-6"
         style={headingColumn}
@@ -141,7 +131,7 @@ function ToggleIcon({ isOn }: { readonly isOn: boolean }) {
 }
 
 const HEADING_COLUMN_DEFINITION: GridColumnDefinition = {
-  1: ["left-outside", "right-inside"],
+  1: ["left-outside", "right-outside"],
   2: ["et1-outside", "et2-outside"],
 };
 

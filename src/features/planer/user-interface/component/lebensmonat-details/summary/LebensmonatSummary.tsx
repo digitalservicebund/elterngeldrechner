@@ -2,6 +2,7 @@ import { Fragment, ReactNode, useId } from "react";
 import classNames from "classnames";
 import { GewaehlteOption } from "./GewaehlteOption";
 import { Haushaltseinkommen } from "./Haushaltseinkommen";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
   useGridLayout,
   useGridColumn,
@@ -15,23 +16,16 @@ import {
   type Lebensmonat,
   type PseudonymeDerElternteile,
   type Monat,
-  type Lebensmonatszahl,
 } from "@/features/planer/user-interface/service";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
-type Props<E extends Elternteil> = {
-  readonly lebensmonatszahl: Lebensmonatszahl;
-  readonly lebensmonat: Lebensmonat<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
+type Props = {
   readonly identifierToZeitraumLabel: string;
 };
 
-export function LebensmonatSummary<E extends Elternteil>({
-  lebensmonatszahl,
-  lebensmonat,
-  pseudonymeDerElternteile,
+export function LebensmonatSummary({
   identifierToZeitraumLabel,
-}: Props<E>): ReactNode {
+}: Props): ReactNode {
   const gridLayout = useGridLayout();
   const lebensmonatszahlColumns = useGridColumn(
     LEBENSMONATSZAHL_COLUMN_DEFINITION,
@@ -42,6 +36,9 @@ export function LebensmonatSummary<E extends Elternteil>({
   const gewaehlteOptionColumns = useGridColumnPerElternteil(
     GEWAEHLTE_OPTION_COLUMN_DEFINITIONS,
   );
+
+  const { lebensmonatszahl, lebensmonat, pseudonymeDerElternteile } =
+    useInformationenZumLebensmonat();
 
   const ariaLabel = `${lebensmonatszahl}. Lebensmonat`;
 

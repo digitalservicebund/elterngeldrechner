@@ -16,10 +16,14 @@ export function bestimmeVerfuegbaresKontingent(
   const anzahlPlusMonate =
     anzahlBasisMonate * ANZAHL_PLUS_MONATE_PRO_BASIS_MONAT;
 
+  const anzahlBonusMonate = sindPartnermonateVerfuegbar
+    ? ANZAHL_BONUS_LEBENSMONATE
+    : 0;
+
   return {
     [Variante.Basis]: anzahlBasisMonate,
     [Variante.Plus]: anzahlPlusMonate,
-    [Variante.Bonus]: ANZAHL_BONUS_LEBENSMONATE,
+    [Variante.Bonus]: anzahlBonusMonate,
   };
 }
 
@@ -34,16 +38,17 @@ if (import.meta.vitest) {
   describe("bestimme verfügbares Kontingent", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
 
-    it("has 12 Monate Basiselterngeld, 24 Monate ElterngeldPlus and 4 Lebensmonate Partnerschaftbonus for only one Elternteil", () => {
+    it("has 12 Monate Basiselterngeld, 24 Monate ElterngeldPlus and 0 Lebensmonate Partnerschaftbonus for only one Elternteil", () => {
       const kontingent = bestimmeVerfuegbaresKontingent({
         anzahlElternteile: 1 as const,
+        istAlleinerziehend: false,
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
       expect(kontingent[Variante.Basis]).toBe(12);
       expect(kontingent[Variante.Plus]).toBe(24);
-      expect(kontingent[Variante.Bonus]).toBe(4);
+      expect(kontingent[Variante.Bonus]).toBe(0);
     });
 
     it("has 14 Monate Basiselterngeld, 28 Monate ElterngeldPlus and 4 Lebensmonate Partnerschaftbonus if there are two Elternteile", () => {

@@ -14,6 +14,7 @@ export {
   type Gesamtsumme,
   type SummeFuerElternteil,
   type Lebensmonat,
+  type LebensmonatMitBeliebigenElternteilen,
   erstelleInitialenLebensmonat,
   listeMonateAuf,
   AlleElternteileHabenBonusGewaehlt,

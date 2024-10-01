@@ -5,12 +5,14 @@ import {
 } from "@/features/planer/domain/Elternteil";
 import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { Lebensmonat } from "@/features/planer/domain/lebensmonat";
-import { setzeMonatZurueck } from "@/features/planer/domain/monat";
+import { setzeOptionZurueck as setzeOptionZurueckInMonat } from "@/features/planer/domain/monat";
 
-export function setzeLebensmonatZurueck<E extends Elternteil>(
+export function setzeOptionZurueck<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
 ): Lebensmonat<E> {
-  return mapLebensmonat(lebensmonat, (monat) => setzeMonatZurueck(monat));
+  return mapLebensmonat(lebensmonat, (monat) =>
+    setzeOptionZurueckInMonat(monat),
+  );
 }
 
 function mapLebensmonat<E extends Elternteil>(
@@ -23,7 +25,7 @@ function mapLebensmonat<E extends Elternteil>(
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("setzte Lebensmonat zurück", async () => {
+  describe("setzte Option in Lebensmonat zurück", async () => {
     const { erstelleInitialenLebensmonat } = await import(
       "./erstelleInitialenLebensmonat"
     );
@@ -39,7 +41,7 @@ if (import.meta.vitest) {
         ANY_LEBENSMONATSZAHL,
       );
 
-      const lebensmonat = setzeLebensmonatZurueck(ungeplanterLebensmonat);
+      const lebensmonat = setzeOptionZurueck(ungeplanterLebensmonat);
 
       expect(lebensmonat).toEqual(ungeplanterLebensmonat);
     });
@@ -50,7 +52,7 @@ if (import.meta.vitest) {
         ANY_LEBENSMONATSZAHL,
       );
 
-      const lebensmonat = setzeLebensmonatZurueck({
+      const lebensmonat = setzeOptionZurueck({
         [Elternteil.Eins]: {
           gewaehlteOption: Variante.Basis,
           elterngeldbezug: 10,
@@ -67,7 +69,7 @@ if (import.meta.vitest) {
     });
 
     it("respects Monate mit Mutterschutz", () => {
-      const lebensmonat = setzeLebensmonatZurueck({
+      const lebensmonat = setzeOptionZurueck({
         [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
       });
 

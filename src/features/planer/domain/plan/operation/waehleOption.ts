@@ -161,10 +161,15 @@ if (import.meta.vitest) {
       ),
     );
 
-    function monat(gewaehlteOption: undefined, elterngeldbezug: undefined) {
+    function monat(
+      gewaehlteOption: Auswahloption | undefined,
+      elterngeldbezug: undefined,
+      bruttoeinkommen?: number | undefined,
+    ) {
       return {
         gewaehlteOption,
         elterngeldbezug,
+        bruttoeinkommen,
         imMutterschutz: false as const,
       };
     }

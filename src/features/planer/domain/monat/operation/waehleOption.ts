@@ -18,6 +18,7 @@ export function waehleOption(
       option === KeinElterngeld ? null : elterngeldbezuege[option];
 
     return {
+      ...monat,
       gewaehlteOption: option,
       elterngeldbezug,
       imMutterschutz: false,
@@ -103,6 +104,20 @@ if (import.meta.vitest) {
       );
 
       expect(monat.elterngeldbezug).toBeNull();
+    });
+
+    it("keeps the Bruttoeinkommen when changing the Option", () => {
+      const monat = waehleOption(
+        {
+          gewaehlteOption: Variante.Bonus,
+          bruttoeinkommen: 100,
+          imMutterschutz: false,
+        },
+        Variante.Plus,
+        ANY_ELTERNGELDBEZUEGE,
+      );
+
+      expect(monat.bruttoeinkommen).toBe(100);
     });
   });
 

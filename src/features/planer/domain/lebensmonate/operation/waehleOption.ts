@@ -13,7 +13,7 @@ import {
 } from "@/features/planer/domain/lebensmonate";
 import {
   AlleElternteileHabenBonusGewaehlt,
-  setzeLebensmonatZurueck,
+  setzeOptionZurueck,
   waehleOption as waehleOptionInLebensmonat,
   type Lebensmonat,
 } from "@/features/planer/domain/lebensmonat";
@@ -88,12 +88,12 @@ function waehleBonusAb<E extends Elternteil>(
 
   return compose(
     ...lebensmonatszahlenZumZuruecksetzen.map((zahl) =>
-      (setzeLebensmonatZurueckWennDefiniert<E>).bind(null, zahl),
+      (setzeOptionZurueckWennDefiniert<E>).bind(null, zahl),
     ),
   )(lebensmonateToFix);
 }
 
-function setzeLebensmonatZurueckWennDefiniert<E extends Elternteil>(
+function setzeOptionZurueckWennDefiniert<E extends Elternteil>(
   lebensmonatszahl: Lebensmonatszahl,
   lebensmonate: Lebensmonate<E>,
 ): Lebensmonate<E> {
@@ -102,7 +102,7 @@ function setzeLebensmonatZurueckWennDefiniert<E extends Elternteil>(
   if (!lebensmonat) {
     return lebensmonate;
   } else {
-    const zurueckgesetzterLebensmonat = setzeLebensmonatZurueck(lebensmonat);
+    const zurueckgesetzterLebensmonat = setzeOptionZurueck(lebensmonat);
     return {
       ...lebensmonate,
       [lebensmonatszahl]: zurueckgesetzterLebensmonat,

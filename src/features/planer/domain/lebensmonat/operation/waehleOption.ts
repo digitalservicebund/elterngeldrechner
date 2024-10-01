@@ -5,7 +5,7 @@ import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import {
   type Lebensmonat,
   AlleElternteileHabenBonusGewaehlt,
-  setzeLebensmonatZurueck,
+  setzeOptionZurueck,
 } from "@/features/planer/domain/lebensmonat";
 import { waehleOption as waehleOptionInMonat } from "@/features/planer/domain/monat";
 import { Variante } from "@/features/planer/domain/Variante";
@@ -26,7 +26,7 @@ export function waehleOption<E extends Elternteil>(
   if (moechteBonusWaehlen) {
     return waehleBonusFuerAlleElternteile(lebensmonat, parameters);
   } else if (mussMonateDerAnderenElternteileZuruecksetzen) {
-    return setzeLebensmonatZurueckUndWaehleOption(lebensmonat, parameters);
+    return setzeOptionZurueckUndWaehleOption(lebensmonat, parameters);
   } else {
     return waehleOptionDirekt(parameters, undefined, lebensmonat);
   }
@@ -44,7 +44,7 @@ function waehleBonusFuerAlleElternteile<E extends Elternteil>(
   )(lebensmonat);
 }
 
-function setzeLebensmonatZurueckUndWaehleOption<E extends Elternteil>(
+function setzeOptionZurueckUndWaehleOption<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
   parameters: BindingParameters<E>,
 ): Lebensmonat<E> {
@@ -54,7 +54,7 @@ function setzeLebensmonatZurueckUndWaehleOption<E extends Elternteil>(
     undefined,
   );
 
-  return compose(setzeLebensmonatZurueck, waehleOption)(lebensmonat);
+  return compose(setzeOptionZurueck, waehleOption)(lebensmonat);
 }
 
 /**
@@ -89,7 +89,7 @@ type BindingParameters<E extends Elternteil> = {
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("wähle Option in Lebensmona", async () => {
+  describe("wähle Option in Lebensmonat", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
 
     it("sets the gewählte Option of the correct Elternteil with matching Elterngeldbezug", () => {
@@ -150,7 +150,7 @@ if (import.meta.vitest) {
       expect(lebensmonat[Elternteil.Zwei].gewaehlteOption).toBeUndefined();
     });
 
-    const monat = function (
+    function monat(
       gewaehlteOption?: Auswahloption,
       elterngeldbezug = undefined,
     ) {
@@ -159,7 +159,7 @@ if (import.meta.vitest) {
         elterngeldbezug,
         imMutterschutz: false as const,
       };
-    };
+    }
 
     const bezuege = function (basis: number, plus: number, bonus: number) {
       return {

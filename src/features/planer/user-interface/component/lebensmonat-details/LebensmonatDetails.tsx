@@ -3,8 +3,10 @@ import {
   ReactNode,
   useId,
   useImperativeHandle,
+  useState,
   type ForwardedRef,
   type RefObject,
+  type SyntheticEvent,
 } from "react";
 import classNames from "classnames";
 import { useDetectClickOutside } from "react-detect-click-outside";
@@ -70,6 +72,13 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     [detailsElement],
   );
 
+  const [isExpanded, setIsExpanded] = useState(false);
+  function toggleExpandedState(
+    event: SyntheticEvent<HTMLDetailsElement, ToggleEvent>,
+  ) {
+    setIsExpanded(event.nativeEvent.newState === "open");
+  }
+
   const informationenZumLebensmonat = {
     lebensmonatszahl,
     lebensmonat,
@@ -89,12 +98,20 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         name="Lebensmonate"
         aria-label={detailsAriaLabel}
         ref={detailsElement}
+        onToggle={toggleExpandedState}
       >
         <LebensmonatSummary
           identifierToZeitraumLabel={zeitraumLabelIdentifier}
         />
 
-        <LebensmonatContent zeitraumLabelIdentifier={zeitraumLabelIdentifier} />
+        {
+          /* Performance optimization */
+          !!isExpanded && (
+            <LebensmonatContent
+              zeitraumLabelIdentifier={zeitraumLabelIdentifier}
+            />
+          )
+        }
       </details>
     </ProvideInformationenZumLebensmonat>
   );

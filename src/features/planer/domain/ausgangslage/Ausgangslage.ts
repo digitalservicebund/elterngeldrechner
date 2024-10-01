@@ -16,6 +16,7 @@ interface AusgangslageFuerZweiElternteile
   readonly anzahlElternteile: 2;
 }
 
+// TODO: Ensure that `istAlleinerziehend` can never be set for two Elternteile.
 interface BasisAusgangslage<E extends Elternteil> {
   readonly anzahlElternteile: 1 | 2;
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;

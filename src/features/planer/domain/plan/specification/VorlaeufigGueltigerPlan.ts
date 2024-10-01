@@ -7,6 +7,7 @@ import {
 import { LimitsProElternteilWurdenEingehalten } from "./LimitsProElternteilWurdenEingehalten";
 import { MonateMitMutterschutzSindUnveraendert } from "./MonateMitMutterschutzSindUnveraendert";
 import { NurEinLebensmonatBasisParallel } from "./NurEinenLebensmonatBasisParallel";
+import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
 import { KeinBasisNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate/specification/KeinBasisNachDemVierzehntenLebensmonat";
 import { FortlaufenderBezugAbDemZwoelftenLebensmonat } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
@@ -39,7 +40,9 @@ export function VorlaeufigGueltigerPlan<
     )
     .and(
       BonusIstKorrektKombiniert().withPrecondition(
-        KontingentFuerBonusWurdeEingehalten(),
+        KontingentFuerBonusWurdeEingehalten().withPrecondition(
+          KeinBonusFuerNurEinElternteil(),
+        ),
       ),
     )
     .and(

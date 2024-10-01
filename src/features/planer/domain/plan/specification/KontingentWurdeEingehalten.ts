@@ -1,3 +1,4 @@
+import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
 import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
 import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
 import {
@@ -11,7 +12,11 @@ import { Variante } from "@/features/planer/domain/Variante";
 export function KontingentWurdeEingehalten() {
   return KontingentFuerBasisWurdeEingehalten()
     .and(KontingentFuerPlusWurdeEingehalten())
-    .and(KontingentFuerBonusWurdeEingehalten());
+    .and(
+      KontingentFuerBonusWurdeEingehalten().withPrecondition(
+        KeinBonusFuerNurEinElternteil(),
+      ),
+    );
 }
 
 export function KontingentFuerBasisWurdeEingehalten<A extends Ausgangslage>() {

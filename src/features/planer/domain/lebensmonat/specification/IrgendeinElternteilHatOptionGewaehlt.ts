@@ -7,6 +7,9 @@ import { Variante } from "@/features/planer/domain/Variante";
 export const IrgendeinElternteilHatBasisGewaehlt =
   IrgendeinElternteilHatOptionGewaehlt(Variante.Basis);
 
+export const IrgendeinElternteilHatBonusGewaehlt =
+  IrgendeinElternteilHatOptionGewaehlt(Variante.Bonus);
+
 function IrgendeinElternteilHatOptionGewaehlt(option: Auswahloption) {
   return Specification.fromPredicate<LebensmonatMitBeliebigenElternteilen>(
     `Kein Elternteil hat ${option} gewählt`,

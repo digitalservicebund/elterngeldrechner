@@ -1,6 +1,8 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { IrgendeinElternteilHatBasisGewaehlt } from "@/features/planer/domain/lebensmonat/specification/IrgendeinElternteilHatOptionGewaehlt";
-import type { LebensmonatMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonat";
+import {
+  type LebensmonatMitBeliebigenElternteilen,
+  IrgendeinElternteilHatBasisGewaehlt,
+} from "@/features/planer/domain/lebensmonat";
 import { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import { Specification } from "@/features/planer/domain/common/specification";
 import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate/Lebensmonate";

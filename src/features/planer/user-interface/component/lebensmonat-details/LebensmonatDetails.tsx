@@ -63,6 +63,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   );
 
   const detailsElement: RefObject<HTMLDetailsElement> = useDetectClickOutside({
+    disableTouch: true,
     onTriggered: function closeDetails() {
       if (detailsElement.current != null) {
         detailsElement.current.open = false;

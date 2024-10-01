@@ -38,7 +38,7 @@ export function AuswahloptionLabel({
         { [checkedClassName]: isChecked && !isDisabled },
         className,
       )}
-      style={{ fontSize: "min(1em, 3.4cqi)" }}
+      style={{ fontSize: "min(1em, 4.8cqi)" }}
       htmlFor={htmlFor}
     >
       <span aria-hidden>

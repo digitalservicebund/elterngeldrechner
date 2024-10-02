@@ -9,7 +9,7 @@ import { MonateMitMutterschutzSindUnveraendert } from "./MonateMitMutterschutzSi
 import { NurEinLebensmonatBasisParallel } from "./NurEinenLebensmonatBasisParallel";
 import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
 import { KeinBasisNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate/specification/KeinBasisNachDemVierzehntenLebensmonat";
-import { FortlaufenderBezugAbDemZwoelftenLebensmonat } from "@/features/planer/domain/lebensmonate";
+import { FortlaufenderBezugNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 import { Specification } from "@/features/planer/domain/common/specification";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
@@ -48,7 +48,7 @@ export function VorlaeufigGueltigerPlan<
     .and(
       Specification.forProperty<Plan<A>, "lebensmonate">(
         "lebensmonate",
-        FortlaufenderBezugAbDemZwoelftenLebensmonat.and(
+        FortlaufenderBezugNachDemVierzehntenLebensmonat.and(
           KeinBasisNachDemVierzehntenLebensmonat,
         ),
       ).withPrecondition(KontingentFuerBasisWurdeEingehalten()),

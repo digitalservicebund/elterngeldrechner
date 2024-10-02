@@ -2,21 +2,21 @@ import { Specification } from "@/features/planer/domain/common/specification";
 import { MindestensEinElternteilHatEineOptionGewaehlt } from "@/features/planer/domain/lebensmonat/specification/MindestensEinElternteilHatOptionGewaehlt";
 import type { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 
-export const FortlaufenderBezugAbDemZwoelftenLebensmonat =
+export const FortlaufenderBezugNachDemVierzehntenLebensmonat =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Elterngeld muss ab dem 12. Lebensmonat fortlaufend bezogen werden.",
+    "Nach dem 14. Lebensmonat muss Elterngeld fortlaufend und ohne Unterbrechung bezogen werden.",
     (lebensmonate) => {
       const lebensmonatszahlen = Object.entries(lebensmonate)
         .filter(([, lebensmonat]) =>
           MindestensEinElternteilHatEineOptionGewaehlt.asPredicate(lebensmonat),
         )
         .map(([lebensmonatszahl]) => Number.parseInt(lebensmonatszahl)) // TODO: use enumeration method in first place
-        .filter((lebensmonatszahl) => lebensmonatszahl > 12)
+        .filter((lebensmonatszahl) => lebensmonatszahl > 14)
         .sort((left, right) => left - right);
 
       return (
         lebensmonatszahlen.length === 0 ||
-        (lebensmonatszahlen[0] === 13 &&
+        (lebensmonatszahlen[0] === 15 &&
           isSequenceIncreasingByOne(lebensmonatszahlen))
       );
     },
@@ -38,7 +38,7 @@ if (import.meta.vitest) {
       "@/features/planer/domain/Auswahloption"
     );
 
-    it("is satisfied if it is not fortlaufend before the 12. Lebensmonat", () => {
+    it("is satisfied if it is not fortlaufend before the 14th Lebensmonat", () => {
       const lebensmonate = {
         1: LEBENSMONAT_MIT_BEZUG,
         2: LEBENSMONAT_OHNE_BEZUG,
@@ -46,44 +46,50 @@ if (import.meta.vitest) {
       };
 
       expect(
-        FortlaufenderBezugAbDemZwoelftenLebensmonat.asPredicate(lebensmonate),
+        FortlaufenderBezugNachDemVierzehntenLebensmonat.asPredicate(
+          lebensmonate,
+        ),
       ).toBe(true);
     });
 
-    it("is unsatisfied if a Lebensmonat is skipped after the 12th", () => {
+    it("is unsatisfied if a Lebensmonat is skipped after the 14th", () => {
       const lebensmonate = {
-        12: LEBENSMONAT_MIT_BEZUG,
-        13: LEBENSMONAT_MIT_BEZUG,
         15: LEBENSMONAT_MIT_BEZUG,
+        17: LEBENSMONAT_MIT_BEZUG,
       };
 
       expect(
-        FortlaufenderBezugAbDemZwoelftenLebensmonat.asPredicate(lebensmonate),
+        FortlaufenderBezugNachDemVierzehntenLebensmonat.asPredicate(
+          lebensmonate,
+        ),
       ).toBe(false);
     });
 
-    it("is satisfied if Bezug is fortlaufend after 12. Lebensmonat", () => {
+    it("is satisfied if Bezug is fortlaufend after the 14th Lebensmonat", () => {
       const lebensmonate = {
-        12: LEBENSMONAT_MIT_BEZUG,
-        13: LEBENSMONAT_MIT_BEZUG,
-        14: LEBENSMONAT_MIT_BEZUG,
         15: LEBENSMONAT_MIT_BEZUG,
-      };
-
-      expect(
-        FortlaufenderBezugAbDemZwoelftenLebensmonat.asPredicate(lebensmonate),
-      ).toBe(true);
-    });
-
-    it("is unsatisfied if the first Lebensmonate after the 12th are skipped", () => {
-      const lebensmonate = {
-        13: LEBENSMONAT_OHNE_BEZUG,
         16: LEBENSMONAT_MIT_BEZUG,
         17: LEBENSMONAT_MIT_BEZUG,
       };
 
       expect(
-        FortlaufenderBezugAbDemZwoelftenLebensmonat.asPredicate(lebensmonate),
+        FortlaufenderBezugNachDemVierzehntenLebensmonat.asPredicate(
+          lebensmonate,
+        ),
+      ).toBe(true);
+    });
+
+    it("is unsatisfied if any Lebensmonate after the 14th are without an Option", () => {
+      const lebensmonate = {
+        15: LEBENSMONAT_MIT_BEZUG,
+        16: LEBENSMONAT_OHNE_BEZUG,
+        17: LEBENSMONAT_MIT_BEZUG,
+      };
+
+      expect(
+        FortlaufenderBezugNachDemVierzehntenLebensmonat.asPredicate(
+          lebensmonate,
+        ),
       ).toBe(false);
     });
 
@@ -100,7 +106,7 @@ if (import.meta.vitest) {
 
     const LEBENSMONAT_MIT_BEZUG = {
       [Elternteil.Eins]: {
-        gewaehlteOption: Variante.Basis,
+        gewaehlteOption: Variante.Plus,
         imMutterschutz: false as const,
       },
       [Elternteil.Zwei]: {

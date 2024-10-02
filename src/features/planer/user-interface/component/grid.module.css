@@ -1,6 +1,6 @@
 .grid-template-for-single-elternteil {
   display: grid;
-  max-width: 45ch;
+  width: clamp(min(45ch, 100vw), 45ch, 100vw);
   margin: auto;
   grid-template-columns:
     minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 3fr)
@@ -46,7 +46,7 @@
 
 .grid-template-for-two-elternteile {
   display: grid;
-  max-width: 70ch;
+  width: clamp(min(70ch, 100vw), 70ch, 100vw);
   margin: auto;
   grid-template-columns:
     minmax(0, 2fr) minmax(0, 3fr) minmax(0, 8fr) minmax(0, 3fr)

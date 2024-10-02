@@ -26,6 +26,7 @@ export {
   LetzteLebensmonatszahl,
   type Monat,
   MONAT_MIT_MUTTERSCHUTZ,
+  type Plan,
   type PlanMitBeliebigenElternteilen,
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,

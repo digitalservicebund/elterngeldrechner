@@ -31,6 +31,7 @@ export {
 } from "./Lebensmonatszahl";
 export { type Monat, MONAT_MIT_MUTTERSCHUTZ } from "./monat";
 export {
+  type Plan,
   type PlanMitBeliebigenElternteilen,
   aktualisiereErrechneteElterngelbezuege,
   berechneGesamtsumme,

@@ -16,6 +16,9 @@ import {
   type PlanMitBeliebigenElternteilen,
   berechneGesamtsumme,
   gebeEinkommenAn,
+  type Ausgangslage,
+  type Plan,
+  type Lebensmonate,
 } from "@/features/planer/user-interface/service";
 import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
@@ -43,38 +46,20 @@ export function usePlanerService(
     bestimmeVerfuegbaresKontingent(plan.ausgangslage),
   );
 
-  const [verplantesKontingent, setVerplantesKontingent] = useState(() =>
-    zaehleVerplantesKontingent(plan.lebensmonate),
-  );
+  const { verplantesKontingent, updateVerplantesKontingent } =
+    useVerplantesKontingent(plan.lebensmonate);
 
-  const [gesamtsumme, setGesamtsumme] = useState(() =>
-    berechneGesamtsumme(plan),
-  );
+  const { gesamtsumme, updateGesamtsumme } = useGesamtsumme(plan);
 
-  const [validierungsfehler, setValidierungsfehler] = useState<string[]>(() =>
-    validierePlanFuerFinaleAbgabe(plan).mapOrElse(
-      () => [],
-      extractFehlernachrichten,
-    ),
-  );
+  const { validierungsfehler, updateValidierungsfehler } =
+    useValidierungsfehler(plan);
 
-  const updateStateAndTriggerCallbacks = useCallback(
+  const updateStatesAndTriggerCallbacks = useCallback(
     (nextPlan: PlanMitBeliebigenElternteilen) => {
       trackPartnerschaftlicheVerteilung(nextPlan);
-
-      const nextVerplantesKontingent = zaehleVerplantesKontingent(
-        nextPlan.lebensmonate,
-      );
-      setVerplantesKontingent(nextVerplantesKontingent);
-
-      const nextGesamtsumme = berechneGesamtsumme(nextPlan);
-      setGesamtsumme(nextGesamtsumme);
-
-      const nextValidierungsfehler: string[] = validierePlanFuerFinaleAbgabe(
-        nextPlan,
-      ).mapOrElse(() => [], extractFehlernachrichten);
-      setValidierungsfehler(nextValidierungsfehler);
-
+      updateVerplantesKontingent(nextPlan.lebensmonate);
+      updateGesamtsumme(nextPlan);
+      const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
       const istPlanGueltig = nextValidierungsfehler.length === 0;
 
       if (istPlanGueltig) {
@@ -83,13 +68,18 @@ export function usePlanerService(
         onPlanChanged?.(undefined);
       }
     },
-    [onPlanChanged],
+    [
+      updateVerplantesKontingent,
+      updateGesamtsumme,
+      updateValidierungsfehler,
+      onPlanChanged,
+    ],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const erstelleUngeplantenLebensmonatCallback = useCallback(
     erstelleInitialenLebensmonat.bind(null, plan.ausgangslage),
-    [plan],
+    [plan.ausgangslage],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,30 +100,30 @@ export function usePlanerService(
           },
         );
 
-        updateStateAndTriggerCallbacks(nextPlan);
+        updateStatesAndTriggerCallbacks(nextPlan);
         return nextPlan;
       }),
-    [updateStateAndTriggerCallbacks],
+    [updateStatesAndTriggerCallbacks],
   );
 
   const gebeEinkommenAnCallback = useCallback<GebeEinkommenAn<Elternteil>>(
     (...argumentList) =>
       setPlan((plan) => {
         const nextPlan = gebeEinkommenAn(plan, ...argumentList);
-        updateStateAndTriggerCallbacks(nextPlan);
+        updateStatesAndTriggerCallbacks(nextPlan);
         return nextPlan;
       }),
-    [updateStateAndTriggerCallbacks],
+    [updateStatesAndTriggerCallbacks],
   );
 
   const setztePlanZurueckCallback = useCallback(
     () =>
       setPlan((plan) => {
         const nextPlan = setzePlanZurueck(plan);
-        updateStateAndTriggerCallbacks(nextPlan);
+        updateStatesAndTriggerCallbacks(nextPlan);
         return nextPlan;
       }),
-    [updateStateAndTriggerCallbacks],
+    [updateStatesAndTriggerCallbacks],
   );
 
   useEffect(
@@ -161,6 +151,56 @@ export function usePlanerService(
     gebeEinkommenAn: gebeEinkommenAnCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
   };
+}
+
+function useVerplantesKontingent<E extends Elternteil>(
+  lebensmonate: Lebensmonate<E>,
+) {
+  const [verplantesKontingent, setVerplantesKontingent] = useState(() =>
+    zaehleVerplantesKontingent(lebensmonate),
+  );
+
+  const updateVerplantesKontingent = useCallback(
+    (lebensmonate: Lebensmonate<E>) =>
+      setVerplantesKontingent(zaehleVerplantesKontingent(lebensmonate)),
+    [],
+  );
+
+  return { verplantesKontingent, updateVerplantesKontingent };
+}
+
+function useGesamtsumme<A extends Ausgangslage>(plan: Plan<A>) {
+  const [gesamtsumme, setGesamtsumme] = useState(() =>
+    berechneGesamtsumme(plan),
+  );
+
+  const updateGesamtsumme = useCallback(
+    (plan: Plan<A>) => setGesamtsumme(berechneGesamtsumme(plan)),
+    [],
+  );
+
+  return { gesamtsumme, updateGesamtsumme };
+}
+
+function useValidierungsfehler<A extends Ausgangslage>(plan: Plan<A>) {
+  const [validierungsfehler, setValidierungsfehler] = useState<string[]>(() =>
+    validierePlanFuerFinaleAbgabe(plan).mapOrElse(
+      () => [],
+      extractFehlernachrichten,
+    ),
+  );
+
+  const updateValidierungsfehler = useCallback((plan: Plan<A>) => {
+    const nextValidierungfehler = validierePlanFuerFinaleAbgabe(plan).mapOrElse(
+      () => [],
+      extractFehlernachrichten,
+    ) satisfies string[];
+
+    setValidierungsfehler(nextValidierungfehler);
+    return nextValidierungfehler;
+  }, []);
+
+  return { validierungsfehler, updateValidierungsfehler };
 }
 
 function extractFehlernachrichten(violations: { message: string }[]): string[] {

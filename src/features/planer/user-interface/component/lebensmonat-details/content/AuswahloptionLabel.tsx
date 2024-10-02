@@ -13,9 +13,7 @@ type Props = {
   readonly elterngeldbezug: Elterngeldbezug;
   readonly isChecked?: boolean;
   readonly isDisabled?: boolean;
-  readonly hintWhyDisabled?: string;
   readonly htmlFor: string;
-  readonly inputDescriptionIdentifier: string;
 };
 
 export function AuswahloptionLabel({
@@ -23,9 +21,7 @@ export function AuswahloptionLabel({
   elterngeldbezug,
   isChecked,
   isDisabled,
-  hintWhyDisabled,
   htmlFor,
-  inputDescriptionIdentifier,
 }: Props): ReactNode {
   const { label, className, checkedClassName } = RENDER_PROPERTIES[option];
 
@@ -44,10 +40,6 @@ export function AuswahloptionLabel({
       <span aria-hidden>
         <span className="font-bold">{label}</span>
         {!!elterngeldbezug && <>&nbsp;{formatAsCurrency(elterngeldbezug)}</>}
-      </span>
-
-      <span id={inputDescriptionIdentifier} className="sr-only" aria-hidden>
-        {hintWhyDisabled}
       </span>
     </label>
   );

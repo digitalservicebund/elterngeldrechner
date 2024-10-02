@@ -17,26 +17,10 @@ describe("Auswahloption Label", () => {
 
     expect(screen.getByText("100 €"));
   });
-
-  it("puts the given identifier on the element with the hint why disabled", () => {
-    render(
-      <AuswahloptionLabel
-        {...ANY_PROPS}
-        hintWhyDisabled="test hint"
-        inputDescriptionIdentifier="test-identifier"
-      />,
-    );
-
-    expect(screen.getByText("test hint")).toHaveAttribute(
-      "id",
-      "test-identifier",
-    );
-  });
 });
 
 const ANY_PROPS = {
   option: Variante.Basis,
   elterngeldbezug: 0,
   htmlFor: "",
-  inputDescriptionIdentifier: "",
 };

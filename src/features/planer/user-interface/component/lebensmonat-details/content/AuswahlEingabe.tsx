@@ -41,12 +41,35 @@ export function AuswahlEingabe({
 
         {Auswahloptionen.sort(sortByAuswahloption).map(
           (option, optionIndex) => {
+            const { isDisabled, hintWhyDisabled } =
+              auswahlmoeglichkeiten[option];
+            const infoIdentifier = getInfoIdentifier(baseIdentifier, option);
+            const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
+            const gridRowStart = optionIndex + 1;
+
+            return (
+              isDisabled && (
+                <InfoDialog
+                  key={option}
+                  id={infoIdentifier}
+                  className={classNames(
+                    "min-w-24 self-center justify-self-center",
+                    gridLayout.areaClassNames.info,
+                  )}
+                  style={{ gridRowStart }}
+                  ariaLabelForDialog={infoAriaLabel}
+                  info={hintWhyDisabled}
+                />
+              )
+            );
+          },
+        )}
+
+        {Auswahloptionen.sort(sortByAuswahloption).map(
+          (option, optionIndex) => {
             const { elterngeldbezug, isDisabled, hintWhyDisabled } =
               auswahlmoeglichkeiten[option];
-
-            const infoIdentifier = `${baseIdentifier}-info-${option}`;
-            const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
-
+            const infoIdentifier = getInfoIdentifier(baseIdentifier, option);
             const inputIdentifier = `${baseIdentifier}-input-${option}`;
             const inputDescriptionIdentifier = `${baseIdentifier}-input-description-${option}`;
             const inputAriaLabel = composeAriaLabelForAuswahloption(
@@ -56,25 +79,10 @@ export function AuswahlEingabe({
 
             const isChecked = gewaehlteOption === option;
             const waehleDieseOption = () => !isDisabled && waehleOption(option);
-
             const gridRowStart = optionIndex + 1;
 
             return (
               <Fragment key={option}>
-                <InfoDialog
-                  id={infoIdentifier}
-                  className={classNames(
-                    "min-w-24 self-center justify-self-center",
-                    gridLayout.areaClassNames.info,
-                    {
-                      invisible: !hintWhyDisabled,
-                    },
-                  )}
-                  style={{ gridRowStart }}
-                  ariaLabelForDialog={infoAriaLabel}
-                  info={hintWhyDisabled}
-                />
-
                 <div
                   className={classNames(
                     "rounded",
@@ -88,9 +96,7 @@ export function AuswahlEingabe({
                     elterngeldbezug={elterngeldbezug}
                     isChecked={isChecked}
                     isDisabled={isDisabled}
-                    hintWhyDisabled={hintWhyDisabled}
                     htmlFor={inputIdentifier}
-                    inputDescriptionIdentifier={inputDescriptionIdentifier}
                   />
 
                   <input
@@ -106,6 +112,14 @@ export function AuswahlEingabe({
                     aria-describedby={inputDescriptionIdentifier}
                     aria-details={infoIdentifier}
                   />
+
+                  <span
+                    id={inputDescriptionIdentifier}
+                    className="sr-only"
+                    aria-hidden
+                  >
+                    {hintWhyDisabled}
+                  </span>
                 </div>
               </Fragment>
             );
@@ -114,6 +128,13 @@ export function AuswahlEingabe({
       </fieldset>
     </div>
   );
+}
+
+function getInfoIdentifier(
+  baseIdentifier: string,
+  option: Auswahloption,
+): string {
+  return baseIdentifier + "-info-" + option;
 }
 
 function composeAriaLabelForAuswahloption(

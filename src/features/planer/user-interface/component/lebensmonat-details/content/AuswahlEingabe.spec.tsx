@@ -214,6 +214,36 @@ describe("AuswahlEingabe", () => {
       expect(input).toBeVisible();
       expect(input).toHaveAttribute("aria-details");
     });
+
+    it("puts all disabled hint buttons before the first radio in the tab order", () => {
+      const auswahlmoeglichkeiten = {
+        ...ANY_AUSWAHLMOEGLICHKEITEN,
+        [Variante.Basis]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+        [Variante.Bonus]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+      };
+
+      render(
+        <AuswahlEingabe
+          {...ANY_PROPS}
+          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+        />,
+      );
+
+      const basisInfoButton = screen.getByRole("button", {
+        name: "Öffne Informationen wieso Basiselterngeld nicht verfügbar ist",
+      });
+      const plusInfoButton = screen.getByRole("button", {
+        name: "Öffne Informationen wieso Partnerschaftsbonus nicht verfügbar ist",
+      });
+      const firstRadio = screen.getAllByRole("radio")[0];
+
+      expect(basisInfoButton?.compareDocumentPosition(plusInfoButton)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+      expect(plusInfoButton?.compareDocumentPosition(firstRadio)).toBe(
+        Node.DOCUMENT_POSITION_FOLLOWING,
+      );
+    });
   });
 });
 

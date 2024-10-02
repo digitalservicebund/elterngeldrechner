@@ -124,7 +124,7 @@ describe("Gesamtsummenanzeige", () => {
 
     expect(
       screen.getByText(
-        "Hinweis: Mutterschutz wird nicht in der Summe berücksichtigt",
+        "Hinweis: Mutterschaftsleistungen werden nicht in der Summe berücksichtigt",
       ),
     ).toBeVisible();
   });

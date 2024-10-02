@@ -60,7 +60,8 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
       )}
 
       <span className="basis-full text-14">
-        Hinweis: Mutterschutz wird nicht in der Summe berücksichtigt
+        Hinweis: Mutterschaftsleistungen werden nicht in der Summe
+        berücksichtigt
       </span>
     </section>
   );

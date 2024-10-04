@@ -54,14 +54,14 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
   // Das Array wird mit Index 1-32 benutzt.
   public ende_LM: Date[] = new Array<Date>(PLANUNG_ANZAHL_MONATE + 1);
 
-  public async elterngeldPlusErgebnis(
+  public elterngeldPlusErgebnis(
     planungsergebnis: PlanungsDaten,
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
     lohnSteuerJahr: number,
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
     z: ZwischenErgebnis,
-  ): Promise<ElternGeldPlusErgebnis> {
+  ): ElternGeldPlusErgebnis {
     // Das Array wird mit Index 1-32 benutzt.
     let brutto_LM_Plus = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1);
     // Das Array wird mit Index 1-32 benutzt.
@@ -85,7 +85,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     if (!etVorGeburt) {
       ergebnis = PlusEgAlgorithmus.ohneETVorGeburt();
     } else {
-      ergebnis = await this.mitETVorGeburt(
+      ergebnis = this.mitETVorGeburt(
         planungsergebnis,
         persoenlicheDaten,
         finanzDaten,
@@ -182,14 +182,14 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     };
   }
 
-  private async mitETVorGeburt(
+  private mitETVorGeburt(
     planungsergebnis: PlanungsDaten,
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
     lohnSteuerJahr: number,
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
     z: ZwischenErgebnis,
-  ): Promise<ElternGeldPlusErgebnis> {
+  ): ElternGeldPlusErgebnis {
     const nicht_erw: YesNo = persoenlicheDaten.etNachGeburt;
     let ek_nach_plus: Big;
     let elterngeld_erw_plus: Big;
@@ -245,7 +245,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           netto_plus = brutto_plus;
         } else {
           if (greater(brutto_basis, BIG_ZERO)) {
-            steuer_sozab_basis = await this.bruttoNettoRechner.abzuege(
+            steuer_sozab_basis = this.bruttoNettoRechner.abzuege(
               brutto_basis,
               lohnSteuerJahr,
               finanzDaten,
@@ -253,7 +253,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             );
           }
           if (greater(brutto_plus, BIG_ZERO)) {
-            steuer_sozab_plus = await this.bruttoNettoRechner.abzuege(
+            steuer_sozab_plus = this.bruttoNettoRechner.abzuege(
               brutto_plus,
               lohnSteuerJahr,
               finanzDaten,

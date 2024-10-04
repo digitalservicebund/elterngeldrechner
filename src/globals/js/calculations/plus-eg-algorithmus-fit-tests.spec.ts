@@ -29,21 +29,21 @@ describeSkipOnCi("plus-eg-algorithmus", () => {
       testCaseIndex < EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT;
       testCaseIndex++
     ) {
-      it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, async () => {
+      it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, () => {
         // given
         const planungsDaten = createPlanungsDaten(sheet, testCaseIndex);
         const persoenlicheDaten = sheet.createPersoenlicheDaten(testCaseIndex);
         const finanzDaten = createFinanzDaten(sheet, testCaseIndex);
         const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
         const zwischenErgebnis =
-          await zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
+          zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
             persoenlicheDaten,
             sheet.nettoVorGeburt(testCaseIndex),
           );
 
         // when
         const algorithmus = new PlusEgAlgorithmus();
-        const ergebnis = await algorithmus.elterngeldPlusErgebnis(
+        const ergebnis = algorithmus.elterngeldPlusErgebnis(
           planungsDaten,
           persoenlicheDaten,
           finanzDaten,

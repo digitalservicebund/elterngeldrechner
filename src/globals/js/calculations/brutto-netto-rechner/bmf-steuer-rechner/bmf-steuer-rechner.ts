@@ -23,28 +23,19 @@ export const USE_REMOTE_STEUER_RECHNER = false;
  * @param lohnSteuerJahr Lohnsteuerjahr for correct version of BMF Lohn- und Einkommensteuerrechner Must be greater than 2020.
  * @param bmfSteuerRechnerParameter Parameter for BMF Lohn- und Einkommensteuerrechner.
  *
- * @return Response from BMF Lohn- und Einkommensteuerrechner as promise.
+ * @return Response from BMF Lohn- und Einkommensteuerrechner
  */
-export async function callBmfSteuerRechner(
+export function callBmfSteuerRechner(
   lohnSteuerJahr: number,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
-): Promise<BmfSteuerRechnerResponse> {
-  let response: BmfSteuerRechnerResponse;
-  if (USE_REMOTE_STEUER_RECHNER) {
-    response = await callRemoteRechner(
-      lohnSteuerJahr,
-      bmfSteuerRechnerParameter,
-    );
-  } else {
-    response = await callRechnerLib(lohnSteuerJahr, bmfSteuerRechnerParameter);
-  }
-  return response;
+): BmfSteuerRechnerResponse {
+  return callRechnerLib(lohnSteuerJahr, bmfSteuerRechnerParameter);
 }
 
-export async function callRechnerLib(
+export function callRechnerLib(
   lohnSteuerJahr: number,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
-): Promise<BmfSteuerRechnerResponse> {
+): BmfSteuerRechnerResponse {
   const lstInput = convertParameter(bmfSteuerRechnerParameter);
   const lstOutput = lst(lohnSteuerJahr, lstInput);
   return convertResponse(lstOutput);

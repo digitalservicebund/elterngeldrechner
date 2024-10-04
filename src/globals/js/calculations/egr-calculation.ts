@@ -42,12 +42,12 @@ export class EgrCalculation {
    * @param lohnSteuerJahr Das Lohnsteuerjahr für den Brutto-Netto-Rechner.
    * @param mutterschaftsLeistung Die Angaben zum Bezug von Mutterschaftsleistungen.
    */
-  async simulate(
+  simulate(
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
     lohnSteuerJahr: number,
     mutterschaftsLeistung: MutterschaftsLeistung,
-  ): Promise<ElternGeldSimulationErgebnis> {
+  ): ElternGeldSimulationErgebnis {
     const planungsDaten = new PlanungsDaten(
       persoenlicheDaten.isAlleinerziehend(),
       persoenlicheDaten.isETVorGeburt(),
@@ -58,7 +58,7 @@ export class EgrCalculation {
     planungsDaten.planung = new Array<ElternGeldArt>(
       EgrCalculation.BASIS_ELTERN_GELD_MAX_MONATE,
     ).fill(ElternGeldArt.BASIS_ELTERNGELD);
-    const basisElternGeldErgebnis = await this.calculateElternGeld(
+    const basisElternGeldErgebnis = this.calculateElternGeld(
       {
         // The current algorithms have side effects. It changes the input data, e.g. persoenlicheDaten.etVorGeburt in basis-eg-algorithmus.ts:259
         finanzDaten: finanzDatenOf(finanzDaten),
@@ -71,7 +71,7 @@ export class EgrCalculation {
     planungsDaten.planung = new Array<ElternGeldArt>(
       PLANUNG_ANZAHL_MONATE,
     ).fill(ElternGeldArt.ELTERNGELD_PLUS);
-    const elternGeldPlusErgebnis = await this.calculateElternGeld(
+    const elternGeldPlusErgebnis = this.calculateElternGeld(
       {
         // The current algorithms have side effects. It changes the input data, e.g. persoenlicheDaten.etVorGeburt in basis-eg-algorithmus.ts:259
         finanzDaten: finanzDatenOf(finanzDaten),
@@ -82,7 +82,7 @@ export class EgrCalculation {
     );
 
     // Create a list of netto for each Lebensmonat. Similar to ElternGeldAusgabe for each Lebensmonat.
-    const nettoLebensMonat = await this.nettoLebensMonatOf(
+    const nettoLebensMonat = this.nettoLebensMonatOf(
       finanzDaten,
       lohnSteuerJahr,
       persoenlicheDaten.etVorGeburt,
@@ -95,16 +95,16 @@ export class EgrCalculation {
     );
   }
 
-  async calculate(
+  calculate(
     elternTeil1: ElternGeldDaten,
     elternTeil2: ElternGeldDaten,
     lohnSteuerJahr: number,
-  ): Promise<ElternGeldErgebnis> {
-    const plusErgebnisElternTeil1 = await this.calculateElternGeld(
+  ): ElternGeldErgebnis {
+    const plusErgebnisElternTeil1 = this.calculateElternGeld(
       elternTeil1,
       lohnSteuerJahr,
     );
-    const plusErgebnisElternTeil2 = await this.calculateElternGeld(
+    const plusErgebnisElternTeil2 = this.calculateElternGeld(
       elternTeil2,
       lohnSteuerJahr,
     );
@@ -117,7 +117,7 @@ export class EgrCalculation {
   /**
    * Create a list of netto for each Lebensmonat. Similar to ElternGeldAusgabe for each Lebensmonat.
    */
-  private async nettoLebensMonatOf(
+  private nettoLebensMonatOf(
     finanzDaten: FinanzDaten,
     lohnSteuerJahr: number,
     etVorGeburt: ErwerbsArt,
@@ -128,7 +128,7 @@ export class EgrCalculation {
     // calculate netto for one month in each period and then set it for all months of the respective period
     for (const erwerbsZeitraumLebensMonat of finanzDaten.erwerbsZeitraumLebensMonatList) {
       const brutto = erwerbsZeitraumLebensMonat.bruttoProMonat.value;
-      const abzuege: Big = await this.bruttoNettoRechner.abzuege(
+      const abzuege: Big = this.bruttoNettoRechner.abzuege(
         brutto,
         lohnSteuerJahr,
         finanzDaten,
@@ -142,12 +142,12 @@ export class EgrCalculation {
     return nettoLebensMonat;
   }
 
-  private async calculateElternGeld(
+  private calculateElternGeld(
     elternGeldDaten: ElternGeldDaten,
     lohnSteuerJahr: number,
-  ): Promise<ElternGeldPlusErgebnis> {
+  ): ElternGeldPlusErgebnis {
     // Steuern berechnen wenn erwerbstätig vor Geburt
-    const zwischenErgebnisEinkommen = await this.zwischenErgebnisEinkommenOf(
+    const zwischenErgebnisEinkommen = this.zwischenErgebnisEinkommenOf(
       elternGeldDaten,
       lohnSteuerJahr,
     );
@@ -168,7 +168,7 @@ export class EgrCalculation {
       throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
     }
 
-    return await new PlusEgAlgorithmus().elterngeldPlusErgebnis(
+    return new PlusEgAlgorithmus().elterngeldPlusErgebnis(
       elternGeldDaten.planungsDaten,
       elternGeldDaten.persoenlicheDaten,
       elternGeldDaten.finanzDaten,
@@ -178,7 +178,7 @@ export class EgrCalculation {
     );
   }
 
-  private async zwischenErgebnisEinkommenOf(
+  private zwischenErgebnisEinkommenOf(
     elternGeldDaten: ElternGeldDaten,
     lohnSteuerJahr: number,
   ) {
@@ -194,14 +194,14 @@ export class EgrCalculation {
         ErwerbsArt.JA_MISCHEINKOMMEN
       ) {
         zwischenErgebnisEinkommen.mischEkZwischenErgebnis =
-          await this.basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
+          this.basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
             elternGeldDaten.persoenlicheDaten,
             elternGeldDaten.finanzDaten,
             lohnSteuerJahr,
           );
       } else {
         zwischenErgebnisEinkommen.nettoEinkommen =
-          await this.bruttoNettoRechner.nettoEinkommenZwischenErgebnis(
+          this.bruttoNettoRechner.nettoEinkommenZwischenErgebnis(
             elternGeldDaten.finanzDaten,
             elternGeldDaten.persoenlicheDaten.etVorGeburt,
             lohnSteuerJahr,

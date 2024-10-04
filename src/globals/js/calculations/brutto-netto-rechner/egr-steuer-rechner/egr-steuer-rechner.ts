@@ -60,12 +60,12 @@ export class EgrSteuerRechner {
    * @param bruttoProMonat Steuerpflichtiger durchschnittlicher Arbeitslohn pro Monat für das angegebene Jahr.
    * @param lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
    */
-  async abgabenSteuern(
+  abgabenSteuern(
     finanzDaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
     bruttoProMonat: Big,
     lohnSteuerJahr: number,
-  ): Promise<BmfAbgaben> {
+  ): BmfAbgaben {
     const parameter = new BmfSteuerRechnerParameter();
     if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
       finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
@@ -94,7 +94,7 @@ export class EgrSteuerRechner {
     parameter.RE4 = einkommenInCent.round(0, Big.roundHalfUp).toNumber();
 
     try {
-      const bmfResponse = await callBmfSteuerRechner(lohnSteuerJahr, parameter);
+      const bmfResponse = callBmfSteuerRechner(lohnSteuerJahr, parameter);
       return bmfAbgabenOf(bmfResponse);
     } catch {
       throw errorOf("BmfSteuerRechnerCallFailed");

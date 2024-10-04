@@ -91,11 +91,11 @@ const mutterschaftsLeistungOfUi = (
   return MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN;
 };
 
-const calculateElterngeld = async (
+const calculateElterngeld = (
   state: RootState,
   elternteil: ElternteilType,
   bruttoEinkommenZeitraum: BruttoEinkommenZeitraum[],
-): Promise<ElterngeldRow[]> => {
+): ElterngeldRow[] => {
   const bruttoEinkommenZeitraumSanitized = bruttoEinkommenZeitraum.filter(
     (value) => value.bruttoEinkommen !== null && value.bruttoEinkommen > 0,
   );
@@ -120,7 +120,7 @@ const calculateElterngeld = async (
   // Wir wissen noch nicht, wann der Nutzer welche Elterngeldart nehmen möchte. Um den Nutzer zu zeigen,
   // wie hoch die Beträge sind, berechnen wir für den gesamten Zeitraum Basiselterngeld und ElterngeldPlus,
   // auch wenn er beides für die gleichen Monate nicht beziehen kann.
-  const result = await new EgrCalculation().simulate(
+  const result = new EgrCalculation().simulate(
     persoenlicheDaten,
     finanzDaten,
     lohnSteuerJahr,
@@ -140,13 +140,13 @@ const calculateElterngeld = async (
 
 const calculateBEG = createAsyncThunk(
   "stepRechner/calculateBEG",
-  async (
+  (
     { elternteil, bruttoEinkommenZeitraum }: CalculateElterngeldPayload,
     thunkAPI,
   ) => {
     const state = thunkAPI.getState() as RootState;
 
-    const rows = await calculateElterngeld(
+    const rows = calculateElterngeld(
       state,
       elternteil,
       bruttoEinkommenZeitraum,
@@ -162,13 +162,13 @@ const calculateBEG = createAsyncThunk(
 
 const recalculateBEG = createAsyncThunk(
   "stepRechner/recalculateBEG",
-  async (
+  (
     { elternteil, bruttoEinkommenZeitraum }: RecalculateElterngeldPayload,
     thunkAPI,
   ) => {
     const state = thunkAPI.getState() as RootState;
 
-    const rows = await calculateElterngeld(
+    const rows = calculateElterngeld(
       state,
       elternteil,
       bruttoEinkommenZeitraum,

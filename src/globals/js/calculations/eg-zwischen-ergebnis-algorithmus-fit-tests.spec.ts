@@ -19,13 +19,13 @@ describeSkipOnCi("eg-zwischen-ergebnis-algorithmus", () => {
       testCaseIndex < EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT;
       testCaseIndex++
     ) {
-      it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, async () => {
+      it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, () => {
         // given
         const persoenlicheDaten = sheet.createPersoenlicheDaten(testCaseIndex);
 
         // when
         const zwischenErgebnis =
-          await zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
+          zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
             persoenlicheDaten,
             sheet.nettoVorGeburt(testCaseIndex),
           );

@@ -27,7 +27,7 @@ describe("egr-calculation", () => {
   });
 
   describe("should calculate EgrErgebnis", () => {
-    it("Test with 'Erwerbstaetigkeit nach Geburt'", async () => {
+    it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
       const planungsDatenElternTeil1 = createPlanungsDaten();
       planungsDatenElternTeil1.planung = new Array<ElternGeldArt>(
@@ -90,7 +90,7 @@ describe("egr-calculation", () => {
       };
 
       // when
-      const ergebnis = await egrCalculation.calculate(
+      const ergebnis = egrCalculation.calculate(
         elternGeldDatenElternTeil1,
         elternGeldDatenElternTeil2,
         2022,
@@ -120,7 +120,7 @@ describe("egr-calculation", () => {
   });
 
   describe("should simulate ElternGeld", () => {
-    it("Test with 'Erwerbstaetigkeit nach Geburt'", async () => {
+    it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
       const persoenlicheDaten = new PersoenlicheDaten(
         new Date("2023-11-25T01:02:03.000Z"),
@@ -146,7 +146,7 @@ describe("egr-calculation", () => {
       );
 
       // when
-      const ergebnis = await egrCalculation.simulate(
+      const ergebnis = egrCalculation.simulate(
         persoenlicheDaten,
         finanzDaten,
         2022,

@@ -36,12 +36,12 @@ export class BruttoNettoRechner {
    * @return {Big} Die Höhe der Abzüge.
    * @throws EgrBerechnungException
    */
-  async abzuege(
+  abzuege(
     bruttoProMonat: Big,
     lohnSteuerJahr: number,
     finanzDaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
-  ): Promise<Big> {
+  ): Big {
     let rentenversicherungspflichtig =
       finanzDaten.rentenVersicherung ===
       RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
@@ -71,7 +71,7 @@ export class BruttoNettoRechner {
     finanzDaten.steuerKlasse = steuerKlasse;
     finanzDaten.splittingFaktor = splittingFaktor;
 
-    return await this.berechneSteuernAbgaben(
+    return this.berechneSteuernAbgaben(
       finanzDaten,
       krankenversicherungspflichtig,
       rentenversicherungspflichtig,
@@ -90,11 +90,11 @@ export class BruttoNettoRechner {
    * @param lohnSteuerJahr
    * @return {NettoEinkommen}
    */
-  async nettoEinkommenZwischenErgebnis(
+  nettoEinkommenZwischenErgebnis(
     finanzdaten: FinanzDaten,
     erwerbsArtVorGeburt: ErwerbsArt,
     lohnSteuerJahr: number,
-  ): Promise<NettoEinkommen> {
+  ): NettoEinkommen {
     const netto: NettoEinkommen = new Einkommen(0);
     const status: ErwerbsArt = erwerbsArtVorGeburt;
     const brutto: Big = finanzdaten.bruttoEinkommen.value;
@@ -114,7 +114,7 @@ export class BruttoNettoRechner {
       rentenversicherungspflichtig = true;
     }
     if (status !== ErwerbsArt.JA_NICHT_SELBST_MINI) {
-      const steuerUndAbgaben: Big = await this.berechneSteuernAbgaben(
+      const steuerUndAbgaben: Big = this.berechneSteuernAbgaben(
         finanzdaten,
         krankenversicherungspflichtig,
         rentenversicherungspflichtig,
@@ -132,13 +132,13 @@ export class BruttoNettoRechner {
   /**
    * Methode errechnet Abzüge (Lohnsteuer, Kirchensteuer) vom Bruttogehalt.
    */
-  async summeSteuer(
+  summeSteuer(
     finanzdaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
     bruttoProMonat: Big,
     lohnSteuerJahr: number,
-  ): Promise<Big> {
-    const charge = await this.egrSteuerRechner.abgabenSteuern(
+  ): Big {
+    const charge = this.egrSteuerRechner.abgabenSteuern(
       finanzdaten,
       erwerbsArt,
       bruttoProMonat,
@@ -162,15 +162,15 @@ export class BruttoNettoRechner {
   /**
    * Methode errechnet Abzüge vom Bruttogehalt in Summe (Lohnsteuer, Kirchensteuer und Sozialabgaben).
    */
-  private async berechneSteuernAbgaben(
+  private berechneSteuernAbgaben(
     finanzdaten: FinanzDaten,
     krankenversicherungspflichtig: boolean,
     rentenversicherungspflichtig: boolean,
     status: ErwerbsArt,
     bruttoProMonat: Big,
     lohnSteuerJahr: number,
-  ): Promise<Big> {
-    const summeSteuer: Big = await this.summeSteuer(
+  ): Big {
+    const summeSteuer: Big = this.summeSteuer(
       finanzdaten,
       status,
       bruttoProMonat,

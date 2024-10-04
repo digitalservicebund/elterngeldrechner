@@ -42,11 +42,11 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
    *
    * @return Das Zwischenergebnis bei Mischeinkommen.
    */
-  public async berechneMischNettoUndBasiselterngeld(
+  public berechneMischNettoUndBasiselterngeld(
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
     lohnSteuerJahr: number,
-  ): Promise<MischEkZwischenErgebnis> {
+  ): MischEkZwischenErgebnis {
     let netto: Big;
     let steuern: Big = Big(0);
     let abgaben: Big = Big(0);
@@ -283,13 +283,12 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
         status,
         brutto_sv,
       );
-      const summe_steuer_abzug: Big =
-        await new BruttoNettoRechner().summeSteuer(
-          finanzDaten,
-          status,
-          brutto_steuer,
-          lohnSteuerJahr,
-        );
+      const summe_steuer_abzug: Big = new BruttoNettoRechner().summeSteuer(
+        finanzDaten,
+        status,
+        brutto_steuer,
+        lohnSteuerJahr,
+      );
       netto = brutto_elg.sub(summe_steuer_abzug).sub(summe_sozab);
       steuern = summe_steuer_abzug;
       abgaben = summe_sozab;

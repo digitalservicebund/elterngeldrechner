@@ -86,14 +86,14 @@ describeSkipOnCi("basis-eg-algorithmus", () => {
       )
       .forEach((testCaseNumber) => {
         const testCaseIndex = testCaseNumber - 1;
-        it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, async () => {
+        it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, () => {
           // given
           const persoenlicheDaten = createPersoenlicheDaten();
           const finanzDaten = createFinanzDaten(sheet, testCaseIndex);
 
           // when
           const mischEkZwischenErgebnis =
-            await basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
+            basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
               persoenlicheDaten,
               finanzDaten,
               2022,

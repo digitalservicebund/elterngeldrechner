@@ -69,15 +69,15 @@ describe("erg-steuer-rechner", () => {
   ])(
     "when FinanzDaten: %j, ErwerbsArt: %s, Brutto: %d, then expect Lohnsteuer %d",
     (finanzDaten, erwerbsArt, brutto, lstlzz) => {
-      it("should calculate Abgaben", async () => {
+      it("should calculate Abgaben", () => {
         // given
-        vi.mocked(callBmfSteuerRechner).mockResolvedValue(
+        vi.mocked(callBmfSteuerRechner).mockReturnValue(
           bmfSteuerRechnerResponseOf(lstlzz),
         );
         const finanzdaten = Object.assign(new FinanzDaten(), finanzDaten);
 
         // when
-        const steuerRechnerResponse = await egrSteuerRechner.abgabenSteuern(
+        const steuerRechnerResponse = egrSteuerRechner.abgabenSteuern(
           finanzdaten,
           erwerbsArt,
           new Big(brutto),
@@ -109,14 +109,14 @@ describe("erg-steuer-rechner", () => {
   );
 
   describe("should set Faktor Verfahren to", () => {
-    it("1 if SteuerKlasse is SKL4_FAKTOR", async () => {
+    it("1 if SteuerKlasse is SKL4_FAKTOR", () => {
       // given
-      vi.mocked(callBmfSteuerRechner).mockResolvedValue(
+      vi.mocked(callBmfSteuerRechner).mockReturnValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
       // when
-      await egrSteuerRechner.abgabenSteuern(
+      egrSteuerRechner.abgabenSteuern(
         Object.assign(new FinanzDaten(), {
           steuerKlasse: SteuerKlasse.SKL4_FAKTOR,
           splittingFaktor: null,
@@ -133,14 +133,14 @@ describe("erg-steuer-rechner", () => {
       );
     });
 
-    it("0 if SteuerKlasse is not SKL4_FAKTOR", async () => {
+    it("0 if SteuerKlasse is not SKL4_FAKTOR", () => {
       // given
-      vi.mocked(callBmfSteuerRechner).mockResolvedValue(
+      vi.mocked(callBmfSteuerRechner).mockReturnValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
       // when
-      await egrSteuerRechner.abgabenSteuern(
+      egrSteuerRechner.abgabenSteuern(
         Object.assign(new FinanzDaten(), {
           steuerKlasse: SteuerKlasse.SKL4,
           splittingFaktor: null,
@@ -159,14 +159,14 @@ describe("erg-steuer-rechner", () => {
   });
 
   describe("should set kinderFreiBetrag to", () => {
-    it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", async () => {
+    it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", () => {
       // given
-      vi.mocked(callBmfSteuerRechner).mockResolvedValue(
+      vi.mocked(callBmfSteuerRechner).mockReturnValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
       // when
-      await egrSteuerRechner.abgabenSteuern(
+      egrSteuerRechner.abgabenSteuern(
         Object.assign(new FinanzDaten(), {
           steuerKlasse: SteuerKlasse.SKL5,
           kinderFreiBetrag: KinderFreiBetrag.ZKF1,
@@ -184,14 +184,14 @@ describe("erg-steuer-rechner", () => {
     });
   });
 
-  it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", async () => {
+  it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", () => {
     // given
-    vi.mocked(callBmfSteuerRechner).mockResolvedValue(
+    vi.mocked(callBmfSteuerRechner).mockReturnValue(
       bmfSteuerRechnerResponseOf(100),
     );
 
     // when
-    await egrSteuerRechner.abgabenSteuern(
+    egrSteuerRechner.abgabenSteuern(
       Object.assign(new FinanzDaten(), {
         steuerKlasse: SteuerKlasse.SKL5,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,

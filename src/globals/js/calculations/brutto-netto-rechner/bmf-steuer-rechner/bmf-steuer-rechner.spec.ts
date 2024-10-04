@@ -51,12 +51,12 @@ describe("bmf-steuer-rechner-lib", () => {
   ])(
     "when year is %d and parameter are %j, then expect Lohnsteuer %d",
     (lohnSteuerJahr, params, lstlzz) => {
-      it("should calculate Lohnsteuer", async () => {
+      it("should calculate Lohnsteuer", () => {
         global.fetch = vi.fn(() =>
           Promise.resolve(new Response(createResponseXml(lstlzz))),
         );
 
-        const steuerRechnerResponse = await callRechnerLib(
+        const steuerRechnerResponse = callRechnerLib(
           lohnSteuerJahr,
           Object.assign(new BmfSteuerRechnerParameter(), params),
         );

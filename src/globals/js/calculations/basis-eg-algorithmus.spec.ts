@@ -17,7 +17,7 @@ describe("basis-eg-algorithmus", () => {
   const basisEgAlgorithmus = new BasisEgAlgorithmus();
 
   describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_010219.xlsx", () => {
-    it("TESTFALL NO. 1", async () => {
+    it("TESTFALL NO. 1", () => {
       // given
       global.fetch = vi.fn(() =>
         Promise.resolve(new Response(bmfSteuerRechnerResponse)),
@@ -103,7 +103,7 @@ describe("basis-eg-algorithmus", () => {
 
       // when
       const mischEkZwischenErgebnis =
-        await basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
+        basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
           persoenlicheDaten,
           finanzDaten,
           2022,

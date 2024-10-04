@@ -10,7 +10,7 @@ import {
 describe("brutto-netto-rechner", () => {
   const bruttoNettoRechner = new BruttoNettoRechner();
 
-  it("should calculate test from TestErweiterterAlgorithmus.java", async () => {
+  it("should calculate test from TestErweiterterAlgorithmus.java", () => {
     // given
     global.fetch = vi.fn(() =>
       Promise.resolve(new Response(bmfSteuerRechnerResponse)),
@@ -20,7 +20,7 @@ describe("brutto-netto-rechner", () => {
     finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
 
     // when
-    const actual = await bruttoNettoRechner.abzuege(
+    const actual = bruttoNettoRechner.abzuege(
       Big(2000),
       2022,
       finanzDaten,

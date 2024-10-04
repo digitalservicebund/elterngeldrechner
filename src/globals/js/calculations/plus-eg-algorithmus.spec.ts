@@ -85,7 +85,7 @@ describe("plus-eg-algorithmus", () => {
   });
 
   describe("should calculate ElternGeldPlusErgebnis", () => {
-    it("Test with 'Erwerbstaetigkeit nach Geburt'", async () => {
+    it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
       global.fetch = vi.fn(() =>
         Promise.resolve(new Response(bmfSteuerRechnerResponse)),
@@ -135,14 +135,14 @@ describe("plus-eg-algorithmus", () => {
 
       const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
       const zwischenErgebnis =
-        await zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
+        zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
           persoenlicheDaten,
           nettoEinkommen,
         );
 
       // when
       const algorithmus = new PlusEgAlgorithmus();
-      const ergebnis = await algorithmus.elterngeldPlusErgebnis(
+      const ergebnis = algorithmus.elterngeldPlusErgebnis(
         planungsDaten,
         persoenlicheDaten,
         finanzDaten,
@@ -168,7 +168,7 @@ describe("plus-eg-algorithmus", () => {
       expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(584.89);
     });
 
-    it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", async () => {
+    it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", () => {
       // given
       const persoenlicheDaten = new PersoenlicheDaten(
         new Date("2023-11-24T01:02:03.000Z"),
@@ -185,17 +185,16 @@ describe("plus-eg-algorithmus", () => {
       finanzDaten.mischEinkommenTaetigkeiten.push(new MischEkTaetigkeit());
       const algorithmus = new PlusEgAlgorithmus();
 
-      await expect(
-        async () =>
-          await algorithmus.elterngeldPlusErgebnis(
-            createPlanungsDaten(),
-            persoenlicheDaten,
-            finanzDaten,
-            2022,
-            null,
-            zwischenErgebnis,
-          ),
-      ).rejects.toThrow("MischEinkommenEnabledButMissingMischEinkommen");
+      expect(() =>
+        algorithmus.elterngeldPlusErgebnis(
+          createPlanungsDaten(),
+          persoenlicheDaten,
+          finanzDaten,
+          2022,
+          null,
+          zwischenErgebnis,
+        ),
+      ).toThrow("MischEinkommenEnabledButMissingMischEinkommen");
     });
   });
 });

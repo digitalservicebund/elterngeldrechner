@@ -6,20 +6,21 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
+import type { PlanChangedCallback } from "@/features/planer/user-interface/service/callbackTypes";
 import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
-import { usePlanerService } from "@/features/planer/user-interface/service/usePlanerService";
-import { type PlanMitBeliebigenElternteilen } from "@/features/planer/user-interface/service";
+import {
+  usePlanerService,
+  type InitialInformation,
+} from "@/features/planer/user-interface/service/usePlanerService";
 
 type Props = {
-  readonly initialPlan: PlanMitBeliebigenElternteilen | undefined;
-  readonly onPlanChanged: (
-    plan: PlanMitBeliebigenElternteilen | undefined,
-  ) => void;
+  readonly initialInformation: InitialInformation;
+  readonly onPlanChanged: PlanChangedCallback;
   readonly className?: string;
 };
 
 export function Planer({
-  initialPlan,
+  initialInformation,
   onPlanChanged,
   className,
 }: Props): ReactNode {
@@ -36,7 +37,7 @@ export function Planer({
     waehleOption,
     gebeEinkommenAn,
     setzePlanZurueck,
-  } = usePlanerService(initialPlan, onPlanChanged);
+  } = usePlanerService(initialInformation, onPlanChanged);
 
   // FIXME: get value from service by Ausgangslage
   const anzahlElternteile = Object.keys(pseudonymeDerElternteile).length as

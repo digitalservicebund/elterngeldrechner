@@ -4,7 +4,12 @@ import type {
   Elternteil,
   Lebensmonat,
   Lebensmonatszahl,
+  PlanMitBeliebigenElternteilen,
 } from "@/features/planer/user-interface/service";
+
+export type PlanChangedCallback = (
+  plan: PlanMitBeliebigenElternteilen | undefined,
+) => void;
 
 export type ErstelleUngeplantenLebensmonat<E extends Elternteil> = (
   lebensmonatszahl: Lebensmonatszahl,

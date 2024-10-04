@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { errechneteElterngeldbezuegeSelector } from "./errechneteElterngeldbezuegeSelector";
-import { composeAusgangslage } from "./composeAusgangslage";
-import { type GebeEinkommenAn, WaehleOption } from "./callbackTypes";
+import {
+  type GebeEinkommenAn,
+  type PlanChangedCallback,
+  WaehleOption,
+} from "./callbackTypes";
 import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import {
   bestimmeVerfuegbaresKontingent,
@@ -20,27 +23,25 @@ import {
   type Plan,
   type Lebensmonate,
 } from "@/features/planer/user-interface/service";
-import { useAppSelector, useAppStore } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export function usePlanerService(
-  initialPlan: PlanMitBeliebigenElternteilen | undefined,
-  onPlanChanged: (plan: PlanMitBeliebigenElternteilen | undefined) => void,
+  initialInformation: InitialInformation,
+  onPlanChanged: PlanChangedCallback,
 ) {
-  const store = useAppStore();
   const errechneteElterngeldbezuege = useAppSelector(
     errechneteElterngeldbezuegeSelector,
   );
 
-  const [plan, setPlan] = useState(() => {
-    if (initialPlan != undefined) {
-      return initialPlan;
-    } else {
-      const state = store.getState();
-      const ausgangslage = composeAusgangslage(state);
-      return erstelleInitialenPlan(ausgangslage, errechneteElterngeldbezuege);
-    }
-  });
+  const [plan, setPlan] = useState(
+    () =>
+      initialInformation.plan ??
+      erstelleInitialenPlan(
+        initialInformation.ausgangslage,
+        errechneteElterngeldbezuege,
+      ),
+  );
 
   const verfuegbaresKontingent = useRef(
     bestimmeVerfuegbaresKontingent(plan.ausgangslage),
@@ -55,10 +56,23 @@ export function usePlanerService(
     useValidierungsfehler(plan);
 
   const updateStatesAndTriggerCallbacks = useCallback(
-    (nextPlan: PlanMitBeliebigenElternteilen) => {
-      trackPartnerschaftlicheVerteilung(nextPlan);
-      updateVerplantesKontingent(nextPlan.lebensmonate);
+    (
+      nextPlan: PlanMitBeliebigenElternteilen,
+      options?: {
+        skipTrackPartnerschaftlicheVerteilung?: boolean;
+        skipVerplantesKontingent?: boolean;
+      },
+    ) => {
+      if (!options?.skipTrackPartnerschaftlicheVerteilung) {
+        trackPartnerschaftlicheVerteilung(nextPlan);
+      }
+
+      if (!options?.skipVerplantesKontingent) {
+        updateVerplantesKontingent(nextPlan.lebensmonate);
+      }
+
       updateGesamtsumme(nextPlan);
+
       const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
       const istPlanGueltig = nextValidierungsfehler.length === 0;
 
@@ -110,7 +124,10 @@ export function usePlanerService(
     (...argumentList) =>
       setPlan((plan) => {
         const nextPlan = gebeEinkommenAn(plan, ...argumentList);
-        updateStatesAndTriggerCallbacks(nextPlan);
+        updateStatesAndTriggerCallbacks(nextPlan, {
+          skipTrackPartnerschaftlicheVerteilung: true,
+          skipVerplantesKontingent: true,
+        });
         return nextPlan;
       }),
     [updateStatesAndTriggerCallbacks],
@@ -206,3 +223,7 @@ function useValidierungsfehler<A extends Ausgangslage>(plan: Plan<A>) {
 function extractFehlernachrichten(violations: { message: string }[]): string[] {
   return violations.map((violation) => violation.message);
 }
+
+export type InitialInformation =
+  | { ausgangslage: Ausgangslage; plan?: undefined }
+  | { ausgangslage?: undefined; plan: PlanMitBeliebigenElternteilen };

@@ -2,12 +2,12 @@ import {
   type Ausgangslage,
   Elternteil,
   type PseudonymeDerElternteile,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 import { YesNo } from "@/globals/js/calculations/model";
 import { type RootState } from "@/redux";
 import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
-export function composeAusgangslage(state: RootState): Ausgangslage {
+export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
   const { stepAllgemeineAngaben, stepNachwuchs } = state;
 
   const anzahlElternteile =
@@ -110,7 +110,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.anzahlElternteile).toBe(1);
       });
@@ -120,7 +120,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.anzahlElternteile).toBe(2);
       });
@@ -133,7 +133,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe("");
       });
@@ -144,7 +144,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
           "Jane",
@@ -162,7 +162,8 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const { pseudonymeDerElternteile } = composeAusgangslage(state);
+        const { pseudonymeDerElternteile } =
+          composeAusgangslageFuerPlaner(state);
 
         expect(pseudonymeDerElternteile[Elternteil.Eins]).toBe("Elternteil 1");
         expect(
@@ -179,7 +180,7 @@ if (import.meta.vitest) {
           draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "21.12.2013";
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(
           ausgangslage.geburtsdatumDesKindes.toISOString().slice(0, 10),
@@ -193,7 +194,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.NO;
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.informationenZumMutterschutz).toBeUndefined();
       });
@@ -204,7 +205,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.informationenZumMutterschutz).toBeDefined();
         expect(ausgangslage.informationenZumMutterschutz?.empfaenger).toBe(
@@ -224,7 +225,7 @@ if (import.meta.vitest) {
             draft.stepAllgemeineAngaben.mutterschaftssleistungenWer = answered;
           });
 
-          const ausgangslage = composeAusgangslage(state);
+          const ausgangslage = composeAusgangslageFuerPlaner(state);
 
           expect(ausgangslage.informationenZumMutterschutz).toBeDefined();
           expect(ausgangslage.informationenZumMutterschutz?.empfaenger).toBe(
@@ -246,7 +247,7 @@ if (import.meta.vitest) {
             draft.stepNachwuchs.anzahlKuenftigerKinder = anzahlKuenftigerKinder;
           });
 
-          const ausgangslage = composeAusgangslage(state);
+          const ausgangslage = composeAusgangslageFuerPlaner(state);
 
           expect(
             ausgangslage.informationenZumMutterschutz
@@ -266,7 +267,7 @@ if (import.meta.vitest) {
           draft.stepAllgemeineAngaben.alleinerziehend = answer;
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.istAlleinerziehend).toBe(expected);
       },
@@ -283,7 +284,7 @@ if (import.meta.vitest) {
           draft.stepNachwuchs.anzahlKuenftigerKinder = anzahlKuenftigerKinder;
         });
 
-        const ausgangslage = composeAusgangslage(state);
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
 
         expect(ausgangslage.sindMehrlinge).toBe(sindMehrlinge);
       },
@@ -294,7 +295,7 @@ if (import.meta.vitest) {
         draft.stepNachwuchs.geschwisterkinder = [];
       });
 
-      const ausgangslage = composeAusgangslage(state);
+      const ausgangslage = composeAusgangslageFuerPlaner(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(false);
     });
@@ -304,7 +305,7 @@ if (import.meta.vitest) {
         draft.stepNachwuchs.geschwisterkinder = [kind(false), kind(false)];
       });
 
-      const ausgangslage = composeAusgangslage(state);
+      const ausgangslage = composeAusgangslageFuerPlaner(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(false);
     });
@@ -314,7 +315,7 @@ if (import.meta.vitest) {
         draft.stepNachwuchs.geschwisterkinder = [kind(true), kind(false)];
       });
 
-      const ausgangslage = composeAusgangslage(state);
+      const ausgangslage = composeAusgangslageFuerPlaner(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(true);
     });

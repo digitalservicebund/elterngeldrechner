@@ -1,4 +1,5 @@
-import { usePlanerService } from "./usePlanerService";
+import { usePlanerService, type InitialInformation } from "./usePlanerService";
+import type { GebeEinkommenAn, WaehleOption } from "./callbackTypes";
 import {
   aktualisiereErrechneteElterngelbezuege,
   berechneGesamtsumme,
@@ -63,116 +64,63 @@ describe("use Planer service", () => {
     vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
   });
 
-  it("initially creates a plan", () => {
-    const plan = ANY_PLAN;
-    vi.mocked(erstelleInitialenPlan).mockReturnValue(plan);
-
-    const { result } = renderPlanerServiceHook();
-
-    expect(result.current.pseudonymeDerElternteile).toStrictEqual(
-      plan.ausgangslage.pseudonymeDerElternteile,
-    );
-    expect(result.current.geburtsdatumDesKindes).toStrictEqual(
-      plan.ausgangslage.geburtsdatumDesKindes,
-    );
-    expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
-  });
-
-  it("uses the given initial Plan if available", () => {
-    const plan = ANY_PLAN;
-
-    const { result } = renderPlanerServiceHook(ANY_PLAN);
-
-    expect(vi.mocked(erstelleInitialenPlan)).not.toHaveBeenCalled();
-    expect(vi.mocked(bestimmeVerfuegbaresKontingent)).toHaveBeenLastCalledWith(
-      plan.ausgangslage,
-    );
-
-    expect(result.current.pseudonymeDerElternteile).toStrictEqual(
-      plan.ausgangslage.pseudonymeDerElternteile,
-    );
-    expect(result.current.geburtsdatumDesKindes).toStrictEqual(
-      plan.ausgangslage.geburtsdatumDesKindes,
-    );
-    expect(result.current.lebensmonate).toStrictEqual(plan.lebensmonate);
-  });
-
-  it("initially determines the verfügbares Kontingent", () => {
-    vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-      ANY_VERFUEGBARES_KONTINGENT,
-    );
-
-    const { result } = renderPlanerServiceHook();
-
-    expect(result.current.verfuegbaresKontingent).toStrictEqual(
-      ANY_VERFUEGBARES_KONTINGENT,
-    );
-  });
-
-  describe("wähle Option", () => {
-    it("updates the Lebensmonate when chosing an Option", () => {
-      vi.mocked(erstelleInitialenPlan).mockReturnValue({
-        ...ANY_PLAN,
-        lebensmonate: {},
-      });
-      vi.mocked(waehleOption).mockReturnValue(
-        Result.ok({
-          ...ANY_PLAN,
-          lebensmonate: { 1: ANY_LEBENSMONAT },
-        }),
-      );
-
-      const { result } = renderPlanerServiceHook();
-      expect(result.current.lebensmonate[1]).toBeUndefined();
-
-      act(() => {
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
-      });
-
-      expect(result.current.lebensmonate[1]).toStrictEqual(ANY_LEBENSMONAT);
-    });
-
-    it("keeps the last Plan and logs the error if choosing an Option fails", () => {
+  describe("initialization", () => {
+    it("creates a new plan with given Ausgangslage if no old plan is given", () => {
       vi.mocked(erstelleInitialenPlan).mockReturnValue(ANY_PLAN);
-      vi.mocked(waehleOption).mockReturnValue(
-        Result.error([{ message: "invalid plan" }]),
-      );
-      vi.spyOn(global.console, "error").mockImplementation(() => {});
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
+        geburtsdatumDesKindes: new Date(),
+      };
 
-      const { result } = renderPlanerServiceHook();
-      expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
-
-      act(() => {
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { ausgangslage, plan: undefined },
       });
 
+      expect(erstelleInitialenPlan).toHaveBeenCalledOnce();
+      expect(erstelleInitialenPlan).toHaveBeenLastCalledWith(
+        ausgangslage,
+        expect.anything(),
+      );
+      expect(result.current.pseudonymeDerElternteile).toStrictEqual(
+        ANY_PLAN.ausgangslage.pseudonymeDerElternteile,
+      );
+      expect(result.current.geburtsdatumDesKindes).toStrictEqual(
+        ANY_PLAN.ausgangslage.geburtsdatumDesKindes,
+      );
       expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+    });
 
-      // eslint-disable-next-line no-console
-      expect(console.error).toHaveBeenCalledOnce();
+    it("uses the given old Plan instead to create a new one", () => {
+      const plan = ANY_PLAN;
 
-      // eslint-disable-next-line no-console
-      expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan, ausgangslage: undefined },
+      });
+
+      expect(erstelleInitialenPlan).not.toHaveBeenCalled();
+      expect(result.current.pseudonymeDerElternteile).toStrictEqual(
+        plan.ausgangslage.pseudonymeDerElternteile,
+      );
+      expect(result.current.geburtsdatumDesKindes).toStrictEqual(
+        plan.ausgangslage.geburtsdatumDesKindes,
+      );
+      expect(result.current.lebensmonate).toStrictEqual(plan.lebensmonate);
     });
   });
 
-  describe("gebe Einkommen an", () => {
-    it("updates the Lebensmonate when specifying an Einkommen", () => {
-      vi.mocked(erstelleInitialenPlan).mockReturnValue({
-        ...ANY_PLAN,
-        lebensmonate: {},
-      });
-      vi.mocked(gebeEinkommenAn).mockReturnValue({
-        ...ANY_PLAN,
-        lebensmonate: { 1: ANY_LEBENSMONAT },
-      });
+  describe("verfügbares Kontingent", () => {
+    it("initially determines the verfügbares Kontingent", () => {
+      vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
+        ANY_VERFUEGBARES_KONTINGENT,
+      );
 
       const { result } = renderPlanerServiceHook();
-      expect(result.current.lebensmonate[1]).toBeUndefined();
 
-      act(() => result.current.gebeEinkommenAn(1, Elternteil.Eins, 300));
-
-      expect(result.current.lebensmonate[1]).toStrictEqual(ANY_LEBENSMONAT);
+      expect(bestimmeVerfuegbaresKontingent).toHaveBeenCalledOnce();
+      expect(result.current.verfuegbaresKontingent).toStrictEqual(
+        ANY_VERFUEGBARES_KONTINGENT,
+      );
     });
   });
 
@@ -184,6 +132,7 @@ describe("use Planer service", () => {
 
       const { result } = renderPlanerServiceHook();
 
+      expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
       expect(result.current.verplantesKontingent).toStrictEqual(
         ANY_VERPLANTES_KONTINGENT,
       );
@@ -201,12 +150,21 @@ describe("use Planer service", () => {
 
       const { result } = renderPlanerServiceHook();
       expect(result.current.verplantesKontingent[Variante.Basis]).toBe(2);
+      vi.clearAllMocks();
 
-      act(() => {
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
-      });
+      waehleAnyOption(result.current.waehleOption);
 
+      expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
       expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
+    });
+
+    it("does not update the verplantes Kontingent when specifying some Bruttoeinkommen", () => {
+      const { result } = renderPlanerServiceHook();
+      vi.clearAllMocks();
+
+      gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
+
+      expect(zaehleVerplantesKontingent).not.toHaveBeenCalledOnce();
     });
 
     it("updates the verplantes Kontingent when resetting the Plan", () => {
@@ -221,9 +179,11 @@ describe("use Planer service", () => {
 
       const { result } = renderPlanerServiceHook();
       expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
+      vi.clearAllMocks();
 
       act(() => result.current.setzePlanZurueck());
 
+      expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
       expect(result.current.verplantesKontingent[Variante.Basis]).toBe(0);
     });
   });
@@ -234,6 +194,7 @@ describe("use Planer service", () => {
 
       const { result } = renderPlanerServiceHook();
 
+      expect(berechneGesamtsumme).toHaveBeenCalledOnce();
       expect(result.current.gesamtsumme).toStrictEqual(ANY_GESAMTSUMME);
     });
 
@@ -249,11 +210,11 @@ describe("use Planer service", () => {
 
       const { result } = renderPlanerServiceHook();
       expect(result.current.gesamtsumme.summe).toBe(1);
+      vi.clearAllMocks();
 
-      act(() => {
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
-      });
+      waehleAnyOption(result.current.waehleOption);
 
+      expect(berechneGesamtsumme).toHaveBeenCalledOnce();
       expect(result.current.gesamtsumme.summe).toBe(2);
     });
 
@@ -273,6 +234,170 @@ describe("use Planer service", () => {
       act(() => result.current.setzePlanZurueck());
 
       expect(result.current.gesamtsumme.summe).toBe(0);
+    });
+  });
+
+  describe("Validierungsfehler", () => {
+    it("initially has no Fehler when validation for a gültigen Plan is satisifed", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+        Result.ok(undefined),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalledOnce();
+      expect(result.current.validierungsfehler.length).toBe(0);
+    });
+
+    it("initially has Fehler when validation for a gültigen Plan is unsatisfied", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+        Result.error([{ message: "falsch" }, { message: "ungültig" }]),
+      );
+      const { result } = renderPlanerServiceHook();
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalledOnce();
+      expect(result.current.validierungsfehler).toStrictEqual([
+        "falsch",
+        "ungültig",
+      ]);
+    });
+
+    it("updates the Fehler when choosing an Option and the resulting Plan is invalid", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.ok(undefined),
+      );
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.error([{ message: "falsch" }]),
+      );
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.validierungsfehler).toStrictEqual([]);
+      vi.clearAllMocks();
+
+      waehleAnyOption(result.current.waehleOption);
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalledOnce();
+      expect(result.current.validierungsfehler).toStrictEqual(["falsch"]);
+    });
+
+    it("clears the Fehler when choosing an Option and the resulting Plan valid again", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.error([{ message: "falsch" }]),
+      );
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.ok(undefined),
+      );
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.validierungsfehler).toStrictEqual(["falsch"]);
+      vi.clearAllMocks();
+
+      waehleAnyOption(result.current.waehleOption);
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalledOnce();
+      expect(result.current.validierungsfehler).toStrictEqual([]);
+    });
+
+    // TODO: Do we need to validate on Einkommen?
+
+    it("updates the Fehler when resetting the Plan and the empty Plan is invalid", () => {
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.ok(undefined),
+      );
+      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
+        Result.error([{ message: "falsch" }]),
+      );
+
+      const { result } = renderPlanerServiceHook();
+      expect(result.current.validierungsfehler.length).toBe(0);
+      vi.clearAllMocks();
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalledOnce();
+      expect(result.current.validierungsfehler.length).toBe(1);
+    });
+  });
+
+  describe("wähle Option", () => {
+    it("updates the Lebensmonate when chosing an Option", () => {
+      const initialPlan = { ...ANY_PLAN, lebensmonate: {} };
+      const updatedPlan = { ...ANY_PLAN, lebensmonate: { 1: ANY_LEBENSMONAT } };
+      vi.mocked(waehleOption).mockReturnValue(Result.ok(updatedPlan));
+
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan: initialPlan },
+      });
+      expect(result.current.lebensmonate).toStrictEqual(
+        initialPlan.lebensmonate,
+      );
+
+      act(() => {
+        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
+      });
+
+      expect(waehleOption).toHaveBeenCalledOnce();
+      expect(waehleOption).toHaveBeenCalledWith(
+        initialPlan,
+        1,
+        Elternteil.Eins,
+        Variante.Basis,
+      );
+      expect(result.current.lebensmonate).toStrictEqual(
+        updatedPlan.lebensmonate,
+      );
+    });
+
+    it("keeps the last Lebensmonate and logs the error if choosing an Option fails", () => {
+      const initialPlan = { ...ANY_PLAN, lebensmonate: {} };
+      vi.mocked(waehleOption).mockReturnValue(
+        Result.error([{ message: "invalid plan" }]),
+      );
+      vi.spyOn(global.console, "error").mockImplementation(() => {});
+
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan: initialPlan },
+      });
+      expect(result.current.lebensmonate).toStrictEqual(
+        initialPlan.lebensmonate,
+      );
+
+      waehleAnyOption(result.current.waehleOption);
+
+      expect(result.current.lebensmonate).toStrictEqual(
+        initialPlan.lebensmonate,
+      );
+      // eslint-disable-next-line no-console
+      expect(console.error).toHaveBeenCalledOnce();
+      // eslint-disable-next-line no-console
+      expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
+    });
+  });
+
+  describe("gebe Einkommen an", () => {
+    it("updates the Lebensmonate when specifying an Einkommen", () => {
+      const initialPlan = { ...ANY_PLAN, lebensmonate: {} };
+      const updatedPlan = { ...ANY_PLAN, lebensmonate: { 1: ANY_LEBENSMONAT } };
+      vi.mocked(gebeEinkommenAn).mockReturnValue(updatedPlan);
+
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan: initialPlan },
+      });
+      expect(result.current.lebensmonate).toStrictEqual(
+        initialPlan.lebensmonate,
+      );
+
+      act(() => result.current.gebeEinkommenAn(1, Elternteil.Eins, 300));
+
+      expect(gebeEinkommenAn).toHaveBeenCalledOnce();
+      expect(gebeEinkommenAn).toHaveBeenCalledWith(
+        initialPlan,
+        1,
+        Elternteil.Eins,
+        300,
+      );
+      expect(result.current.lebensmonate).toStrictEqual(
+        updatedPlan.lebensmonate,
+      );
     });
   });
 
@@ -322,14 +447,20 @@ describe("use Planer service", () => {
       vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
       const { result } = renderPlanerServiceHook();
 
-      act(() =>
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
-      );
+      waehleAnyOption(result.current.waehleOption);
 
       expect(trackPartnerschaftlicheVerteilung).toHaveBeenCalledOnce();
       expect(trackPartnerschaftlicheVerteilung).toHaveBeenLastCalledWith(
         ANY_PLAN,
       );
+    });
+
+    it("does not trigger tracking when specifying a Bruttoeinkommen", () => {
+      const { result } = renderPlanerServiceHook();
+
+      gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
+
+      expect(trackPartnerschaftlicheVerteilung).not.toHaveBeenCalledOnce();
     });
 
     it("triggers tracking when resetting the Plan", () => {
@@ -349,11 +480,9 @@ describe("use Planer service", () => {
     it("triggers the given callback when chosing an Option", () => {
       vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
       const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+      const { result } = renderPlanerServiceHook({ onPlanChanged });
 
-      act(() =>
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
-      );
+      waehleAnyOption(result.current.waehleOption);
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
       expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
@@ -364,11 +493,9 @@ describe("use Planer service", () => {
         Result.error([{ message: "ungültig" }]),
       );
       const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+      const { result } = renderPlanerServiceHook({ onPlanChanged });
 
-      act(() =>
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
-      );
+      waehleAnyOption(result.current.waehleOption);
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
       expect(onPlanChanged).toHaveBeenLastCalledWith(undefined);
@@ -379,7 +506,7 @@ describe("use Planer service", () => {
         Result.error([{ message: "ungültig" }]),
       );
       const onPlanChanged = vi.fn();
-      renderPlanerServiceHook(undefined, onPlanChanged);
+      renderPlanerServiceHook({ onPlanChanged });
 
       expect(onPlanChanged).not.toHaveBeenCalled();
     });
@@ -387,9 +514,9 @@ describe("use Planer service", () => {
     it("triggers the given callback when specifying an Einkommen", () => {
       vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
       const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+      const { result } = renderPlanerServiceHook({ onPlanChanged });
 
-      act(() => result.current.gebeEinkommenAn(1, Elternteil.Eins, 300));
+      gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
       expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
@@ -398,7 +525,7 @@ describe("use Planer service", () => {
     it("triggers the given callback when resetting the Plan", () => {
       vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
       const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook(undefined, onPlanChanged);
+      const { result } = renderPlanerServiceHook({ onPlanChanged });
 
       act(() => result.current.setzePlanZurueck());
 
@@ -406,95 +533,28 @@ describe("use Planer service", () => {
       expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
     });
   });
-
-  describe("validierungsfehler", () => {
-    it("has no Fehler when validation for a gültigen Plan is satisifed", () => {
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
-        Result.ok(undefined),
-      );
-      const { result } = renderPlanerServiceHook();
-
-      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalled();
-      expect(result.current.validierungsfehler.length).toBe(0);
-    });
-
-    it("provides no Fehler when validation for a gültigen Plan is unsatisfied", () => {
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
-        Result.error([{ message: "falsch" }, { message: "ungültig" }]),
-      );
-      const { result } = renderPlanerServiceHook();
-
-      expect(validierePlanFuerFinaleAbgabe).toHaveBeenCalled();
-      expect(result.current.validierungsfehler).toStrictEqual([
-        "falsch",
-        "ungültig",
-      ]);
-    });
-
-    it("updates the Fehler when choosing an Option and the resulting Plan is invalid", () => {
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
-        Result.ok(undefined),
-      );
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
-        Result.error([{ message: "falsch" }]),
-      );
-      const { result } = renderPlanerServiceHook();
-
-      expect(result.current.validierungsfehler.length).toBe(0);
-
-      act(() =>
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
-      );
-
-      expect(result.current.validierungsfehler.length).toBe(1);
-    });
-
-    it("clears the Fehler when choosing an Option and the resulting Plan valid again", () => {
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
-        Result.error([{ message: "falsch" }]),
-      );
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
-        Result.ok(undefined),
-      );
-      const { result } = renderPlanerServiceHook();
-
-      expect(result.current.validierungsfehler.length).toBe(1);
-
-      act(() =>
-        result.current.waehleOption(1, Elternteil.Eins, Variante.Basis),
-      );
-
-      expect(result.current.validierungsfehler.length).toBe(0);
-    });
-
-    it("updates the Fehler when resetting the Plan and the empty Plan is invalid", () => {
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
-        Result.ok(undefined),
-      );
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValueOnce(
-        Result.error([{ message: "falsch" }]),
-      );
-      const { result } = renderPlanerServiceHook();
-
-      expect(result.current.validierungsfehler.length).toBe(0);
-
-      act(() => result.current.setzePlanZurueck());
-
-      expect(result.current.validierungsfehler.length).toBe(1);
-    });
-  });
 });
 
-function renderPlanerServiceHook(
-  initialPlan: PlanMitBeliebigenElternteilen | undefined = undefined,
-  onPlanChanged?: (plan: PlanMitBeliebigenElternteilen | undefined) => void,
-) {
-  return renderHook(
-    () => usePlanerService(initialPlan, onPlanChanged ?? vi.fn()),
-    {
-      preloadedState: INITIAL_STATE,
-    },
-  );
+function renderPlanerServiceHook(options?: {
+  initialInformation?: InitialInformation;
+  onPlanChanged?: (plan: PlanMitBeliebigenElternteilen | undefined) => void;
+}) {
+  const initialInformation = options?.initialInformation ?? {
+    ausgangslage: ANY_AUSGANGSLAGE,
+  };
+  const onPlanChanged = options?.onPlanChanged ?? (() => {});
+
+  return renderHook(() => usePlanerService(initialInformation, onPlanChanged), {
+    preloadedState: INITIAL_STATE,
+  });
+}
+
+function waehleAnyOption(callback: WaehleOption<Elternteil>) {
+  act(() => callback(1, Elternteil.Eins, Variante.Basis));
+}
+
+function gebeAnyEinkommenAn(callback: GebeEinkommenAn<Elternteil>) {
+  act(() => callback(1, Elternteil.Eins, 300));
 }
 
 async function triggerElterngeldCalculation(store: AppStore) {
@@ -509,12 +569,14 @@ async function triggerElterngeldCalculation(store: AppStore) {
   );
 }
 
+const ANY_AUSGANGSLAGE = {
+  anzahlElternteile: 1 as const,
+  pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
+  geburtsdatumDesKindes: new Date(),
+};
+
 const ANY_PLAN = {
-  ausgangslage: {
-    anzahlElternteile: 1 as const,
-    pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
-    geburtsdatumDesKindes: new Date(),
-  },
+  ausgangslage: ANY_AUSGANGSLAGE,
   errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
 };

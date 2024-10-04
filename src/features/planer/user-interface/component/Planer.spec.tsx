@@ -32,11 +32,20 @@ describe("Planer", () => {
   });
 
   it("forwards the given props to the service", () => {
-    const onPlanChanged = vi.fn();
-    render(<Planer initialPlan={ANY_PLAN} onPlanChanged={onPlanChanged} />);
+    const initialInformation = { ausgangslage: ANY_AUSGANGSLAGE };
+    const onPlanChanged = () => {};
+    render(
+      <Planer
+        initialInformation={initialInformation}
+        onPlanChanged={onPlanChanged}
+      />,
+    );
 
     expect(usePlanerService).toHaveBeenCalledOnce();
-    expect(usePlanerService).toHaveBeenLastCalledWith(ANY_PLAN, onPlanChanged);
+    expect(usePlanerService).toHaveBeenLastCalledWith(
+      initialInformation,
+      onPlanChanged,
+    );
   });
 
   describe("Planung wiederholen", () => {
@@ -107,22 +116,18 @@ describe("Planer", () => {
   });
 });
 
-const ANY_PROPS = {
-  initialPlan: undefined,
-  onPlanChanged: () => undefined,
+const ANY_AUSGANGSLAGE = {
+  anzahlElternteile: 2 as const,
+  pseudonymeDerElternteile: {
+    [Elternteil.Eins]: "Jane",
+    [Elternteil.Zwei]: "John",
+  },
+  geburtsdatumDesKindes: new Date(),
 };
 
-const ANY_PLAN = {
-  ausgangslage: {
-    anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    },
-    geburtsdatumDesKindes: new Date(),
-  },
-  lebensmonate: {},
-  errechneteElterngeldbezuege: {} as never,
+const ANY_PROPS = {
+  initialInformation: { ausgangslage: ANY_AUSGANGSLAGE },
+  onPlanChanged: () => undefined,
 };
 
 const ANY_SERVICE_VALUES = {

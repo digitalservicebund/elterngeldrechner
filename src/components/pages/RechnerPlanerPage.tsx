@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { AccessControl } from "@/components/molecules";
 import { Button } from "@/components/atoms";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { formSteps } from "@/utils/formSteps";
 import { Rechner } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
@@ -17,6 +17,7 @@ import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 
 function RechnerPlanerPage() {
   const sectionLabelIdentifier = useId();
@@ -40,7 +41,13 @@ function RechnerPlanerPage() {
   const amountLimitEinkommen =
     alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
+  const store = useAppStore();
   const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
+  const initialPlanerInformation = useRef(
+    initialPlan !== undefined
+      ? { plan: initialPlan }
+      : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
+  );
   const plan = useRef(initialPlan);
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
@@ -80,7 +87,7 @@ function RechnerPlanerPage() {
 
             <Planer
               className={classNames({ blur: isPlanerBlocked })}
-              initialPlan={plan.current}
+              initialInformation={initialPlanerInformation.current}
               onPlanChanged={setPlan}
               aria-hidden={isPlanerBlocked}
             />

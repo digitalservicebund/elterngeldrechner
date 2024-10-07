@@ -1,8 +1,10 @@
 import type {
   Auswahlmoeglichkeiten,
   Auswahloption,
+  Elterngeldbezuege,
   Elternteil,
   Lebensmonat,
+  LebensmonateMitBeliebigenElternteilen,
   Lebensmonatszahl,
   PlanMitBeliebigenElternteilen,
 } from "@/features/planer/user-interface/service";
@@ -10,6 +12,10 @@ import type {
 export type PlanChangedCallback = (
   plan: PlanMitBeliebigenElternteilen | undefined,
 ) => void;
+
+export type BerechneElterngeldbezuegeCallback = (
+  lebensmonate: LebensmonateMitBeliebigenElternteilen,
+) => Elterngeldbezuege<Elternteil>;
 
 export type ErstelleUngeplantenLebensmonat<E extends Elternteil> = (
   lebensmonatszahl: Lebensmonatszahl,

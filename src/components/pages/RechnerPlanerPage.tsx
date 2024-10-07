@@ -18,6 +18,7 @@ import {
   MAX_EINKOMMEN_BEIDE,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
+import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 
 function RechnerPlanerPage() {
   const sectionLabelIdentifier = useId();
@@ -49,6 +50,7 @@ function RechnerPlanerPage() {
       : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
   );
   const plan = useRef(initialPlan);
+  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
   function setPlan(nextPlan: PlanMitBeliebigenElternteilen | undefined): void {
@@ -89,6 +91,7 @@ function RechnerPlanerPage() {
               className={classNames({ blur: isPlanerBlocked })}
               initialInformation={initialPlanerInformation.current}
               onPlanChanged={setPlan}
+              berechneElterngeldbezuege={berechneElterngeldbezuege}
               aria-hidden={isPlanerBlocked}
             />
           </div>

@@ -1,29 +1,30 @@
 import { usePlanerService, type InitialInformation } from "./usePlanerService";
-import type { GebeEinkommenAn, WaehleOption } from "./callbackTypes";
+import type {
+  BerechneElterngeldbezuegeCallback,
+  GebeEinkommenAn,
+  PlanChangedCallback,
+  WaehleOption,
+} from "./callbackTypes";
 import {
   aktualisiereErrechneteElterngelbezuege,
   berechneGesamtsumme,
   bestimmeVerfuegbaresKontingent,
   Elternteil,
-  erstelleInitialenPlan,
+  erstelleInitialeLebensmonate,
   gebeEinkommenAn,
   KeinElterngeld,
+  Lebensmonatszahlen,
   Result,
   setzePlanZurueck,
   Variante,
   waehleOption,
   zaehleVerplantesKontingent,
-  type PlanMitBeliebigenElternteilen,
+  type Elterngeldbezuege,
 } from ".";
 import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
-import { stepRechnerActions } from "@/redux/stepRechnerSlice";
-import type { AppStore } from "@/redux";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
-vi.mock(
-  import("@/features/planer/domain/plan/operation/erstelleInitialenPlan"),
-);
 vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));
 vi.mock(
   import(
@@ -45,6 +46,11 @@ vi.mock(
 );
 vi.mock(
   import(
+    "@/features/planer/domain/lebensmonate/operation/erstelleInitialeLebensmonate"
+  ),
+);
+vi.mock(
+  import(
     "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent"
   ),
 );
@@ -52,7 +58,7 @@ vi.mock(import("@/user-tracking/partnerschaftlichkeit"));
 
 describe("use Planer service", () => {
   beforeEach(() => {
-    vi.mocked(erstelleInitialenPlan).mockReturnValue(ANY_PLAN);
+    vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
     vi.mocked(aktualisiereErrechneteElterngelbezuege).mockImplementation(
       (plan) => plan,
     );
@@ -66,10 +72,10 @@ describe("use Planer service", () => {
 
   describe("initialization", () => {
     it("creates a new plan with given Ausgangslage if no old plan is given", () => {
-      vi.mocked(erstelleInitialenPlan).mockReturnValue(ANY_PLAN);
+      vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
       const ausgangslage = {
         anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
+        pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
         geburtsdatumDesKindes: new Date(),
       };
 
@@ -77,18 +83,31 @@ describe("use Planer service", () => {
         initialInformation: { ausgangslage, plan: undefined },
       });
 
-      expect(erstelleInitialenPlan).toHaveBeenCalledOnce();
-      expect(erstelleInitialenPlan).toHaveBeenLastCalledWith(
+      expect(erstelleInitialeLebensmonate).toHaveBeenCalledOnce();
+      expect(erstelleInitialeLebensmonate).toHaveBeenLastCalledWith(
         ausgangslage,
-        expect.anything(),
       );
       expect(result.current.pseudonymeDerElternteile).toStrictEqual(
-        ANY_PLAN.ausgangslage.pseudonymeDerElternteile,
+        ausgangslage.pseudonymeDerElternteile,
       );
-      expect(result.current.geburtsdatumDesKindes).toStrictEqual(
-        ANY_PLAN.ausgangslage.geburtsdatumDesKindes,
+      expect(result.current.geburtsdatumDesKindes).toEqual(
+        ausgangslage.geburtsdatumDesKindes,
       );
-      expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+      expect(result.current.lebensmonate).toStrictEqual({});
+    });
+
+    it("trigger the calculation of the Elterngeldbezuege when a new Plan is created", () => {
+      // Rely on Object.is when using expect statements.
+      vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
+      const berrechneElterngeldbezuege = vi.fn(() => ANY_ELTERNGELDBEZUEGE);
+
+      renderPlanerServiceHook({
+        initialInformation: { ausgangslage: ANY_AUSGANGSLAGE },
+        berrechneElterngeldbezuege,
+      });
+
+      expect(berrechneElterngeldbezuege).toHaveBeenCalledOnce();
+      expect(berrechneElterngeldbezuege).toHaveBeenCalledWith({});
     });
 
     it("uses the given old Plan instead to create a new one", () => {
@@ -98,7 +117,8 @@ describe("use Planer service", () => {
         initialInformation: { plan, ausgangslage: undefined },
       });
 
-      expect(erstelleInitialenPlan).not.toHaveBeenCalled();
+      expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
+      expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
       expect(result.current.pseudonymeDerElternteile).toStrictEqual(
         plan.ausgangslage.pseudonymeDerElternteile,
       );
@@ -399,47 +419,40 @@ describe("use Planer service", () => {
         updatedPlan.lebensmonate,
       );
     });
-  });
 
-  it("updates the errechnete Elterngeldbezuege if their data changes", async () => {
-    vi.mocked(erstelleInitialenPlan).mockReturnValue({
-      ...ANY_PLAN,
-      lebensmonate: {
-        1: {
-          [Elternteil.Eins]: {
-            elterngeldbezug: 1,
-            imMutterschutz: false as const,
-          },
-          [Elternteil.Zwei]: {
-            elterngeldbezug: 2,
-            imMutterschutz: false as const,
-          },
-        },
-      },
+    it("triggers the callback to calculate Elterngeldbezüge and updates them in the Plan", () => {
+      // Rely on Object.is when using expect statements.
+      const initialPlan = { ...ANY_PLAN };
+      const planWithEinkommen = { ...ANY_PLAN };
+      vi.mocked(gebeEinkommenAn).mockReturnValue(planWithEinkommen);
+      const elterngeldbezuege = { ...ANY_ELTERNGELDBEZUEGE };
+      const berrechneElterngeldbezuege = vi.fn(() => elterngeldbezuege);
+      const planWithElterngeldbezuege = { ...ANY_PLAN };
+      vi.mocked(aktualisiereErrechneteElterngelbezuege).mockReturnValue(
+        planWithElterngeldbezuege,
+      );
+
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan: initialPlan },
+        berrechneElterngeldbezuege,
+      });
+      vi.clearAllMocks();
+
+      gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
+
+      expect(berrechneElterngeldbezuege).toHaveBeenCalledOnce();
+      expect(berrechneElterngeldbezuege).toHaveBeenCalledWith(
+        planWithEinkommen.lebensmonate,
+      );
+      expect(aktualisiereErrechneteElterngelbezuege).toHaveBeenCalledOnce();
+      expect(aktualisiereErrechneteElterngelbezuege).toHaveBeenCalledWith(
+        planWithEinkommen,
+        elterngeldbezuege,
+      );
+      expect(result.current.lebensmonate).toStrictEqual(
+        planWithElterngeldbezuege.lebensmonate,
+      );
     });
-
-    const updatedLebensmonate = {
-      1: {
-        [Elternteil.Eins]: {
-          elterngeldbezug: 2,
-          imMutterschutz: false as const,
-        },
-        [Elternteil.Zwei]: {
-          elterngeldbezug: 3,
-          imMutterschutz: false as const,
-        },
-      },
-    };
-
-    vi.mocked(aktualisiereErrechneteElterngelbezuege).mockReturnValue({
-      ...ANY_PLAN,
-      lebensmonate: updatedLebensmonate,
-    });
-
-    const { result, store } = renderPlanerServiceHook();
-    await triggerElterngeldCalculation(store);
-
-    expect(result.current.lebensmonate).toStrictEqual(updatedLebensmonate);
   });
 
   describe("tracking partnerschaftliche Verteilung", () => {
@@ -512,7 +525,7 @@ describe("use Planer service", () => {
     });
 
     it("triggers the given callback when specifying an Einkommen", () => {
-      vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
+      vi.mocked(gebeEinkommenAn).mockReturnValue(ANY_PLAN);
       const onPlanChanged = vi.fn();
       const { result } = renderPlanerServiceHook({ onPlanChanged });
 
@@ -537,16 +550,27 @@ describe("use Planer service", () => {
 
 function renderPlanerServiceHook(options?: {
   initialInformation?: InitialInformation;
-  onPlanChanged?: (plan: PlanMitBeliebigenElternteilen | undefined) => void;
+  onPlanChanged?: PlanChangedCallback;
+  berrechneElterngeldbezuege?: BerechneElterngeldbezuegeCallback;
 }) {
   const initialInformation = options?.initialInformation ?? {
     ausgangslage: ANY_AUSGANGSLAGE,
   };
   const onPlanChanged = options?.onPlanChanged ?? (() => {});
+  const berrechneElterngeldbezuege =
+    options?.berrechneElterngeldbezuege ?? (() => ANY_ELTERNGELDBEZUEGE);
 
-  return renderHook(() => usePlanerService(initialInformation, onPlanChanged), {
-    preloadedState: INITIAL_STATE,
-  });
+  return renderHook(
+    () =>
+      usePlanerService(
+        initialInformation,
+        onPlanChanged,
+        berrechneElterngeldbezuege,
+      ),
+    {
+      preloadedState: INITIAL_STATE,
+    },
+  );
 }
 
 function waehleAnyOption(callback: WaehleOption<Elternteil>) {
@@ -557,23 +581,30 @@ function gebeAnyEinkommenAn(callback: GebeEinkommenAn<Elternteil>) {
   act(() => callback(1, Elternteil.Eins, 300));
 }
 
-async function triggerElterngeldCalculation(store: AppStore) {
-  await act(() =>
-    store.dispatch(
-      stepRechnerActions.recalculateBEG({
-        elternteil: "ET1",
-        bruttoEinkommenZeitraum: [],
-        previousBEGAmount: false,
-      }),
-    ),
-  );
-}
-
 const ANY_AUSGANGSLAGE = {
   anzahlElternteile: 1 as const,
   pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
   geburtsdatumDesKindes: new Date(),
 };
+
+const ANY_ELTERNGELDBEZUG_PRO_VARIANTE = {
+  [Variante.Basis]: 0,
+  [Variante.Plus]: 0,
+  [Variante.Bonus]: 0,
+};
+
+const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
+  [Elternteil.Eins]: ANY_ELTERNGELDBEZUG_PRO_VARIANTE,
+  [Elternteil.Zwei]: ANY_ELTERNGELDBEZUG_PRO_VARIANTE,
+};
+
+const ANY_ELTERNGELDBEZUEGE = Lebensmonatszahlen.reduce(
+  (elterngeldbezuge, lebensmonatszahl) => ({
+    ...elterngeldbezuge,
+    [lebensmonatszahl]: ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
+  }),
+  {} as Elterngeldbezuege<Elternteil>,
+);
 
 const ANY_PLAN = {
   ausgangslage: ANY_AUSGANGSLAGE,

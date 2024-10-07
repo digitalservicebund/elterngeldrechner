@@ -6,7 +6,10 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
-import type { PlanChangedCallback } from "@/features/planer/user-interface/service/callbackTypes";
+import type {
+  BerechneElterngeldbezuegeCallback,
+  PlanChangedCallback,
+} from "@/features/planer/user-interface/service/callbackTypes";
 import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
 import {
   usePlanerService,
@@ -16,12 +19,14 @@ import {
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly onPlanChanged: PlanChangedCallback;
+  readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
   readonly className?: string;
 };
 
 export function Planer({
   initialInformation,
   onPlanChanged,
+  berechneElterngeldbezuege,
   className,
 }: Props): ReactNode {
   const {
@@ -37,7 +42,11 @@ export function Planer({
     waehleOption,
     gebeEinkommenAn,
     setzePlanZurueck,
-  } = usePlanerService(initialInformation, onPlanChanged);
+  } = usePlanerService(
+    initialInformation,
+    onPlanChanged,
+    berechneElterngeldbezuege,
+  );
 
   // FIXME: get value from service by Ausgangslage
   const anzahlElternteile = Object.keys(pseudonymeDerElternteile).length as

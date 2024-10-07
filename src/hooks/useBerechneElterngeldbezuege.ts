@@ -28,8 +28,9 @@ import {
   persoenlicheDatenOfUi,
 } from "@/redux/persoenlicheDatenFactory";
 import { useAppStore } from "@/redux/hooks";
+import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/user-interface/service/callbackTypes";
 
-export function useBerechneElterngeldbezuege() {
+export function useBerechneElterngeldbezuege(): BerechneElterngeldbezuegeCallback {
   const store = useAppStore();
   const parameter = useRef(createStaticCalculationParameter(store.getState()));
   // eslint-disable-next-line react-hooks/exhaustive-deps

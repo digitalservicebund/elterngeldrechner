@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { errechneteElterngeldbezuegeSelector } from "./errechneteElterngeldbezuegeSelector";
+import { useCallback, useRef, useState } from "react";
 import {
+  type BerechneElterngeldbezuegeCallback,
   type GebeEinkommenAn,
   type PlanChangedCallback,
   WaehleOption,
@@ -13,7 +13,6 @@ import {
   zaehleVerplantesKontingent,
   aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,
-  erstelleInitialenPlan,
   waehleOption,
   setzePlanZurueck,
   type PlanMitBeliebigenElternteilen,
@@ -22,24 +21,21 @@ import {
   type Ausgangslage,
   type Plan,
   type Lebensmonate,
+  erstelleInitialeLebensmonate,
 } from "@/features/planer/user-interface/service";
-import { useAppSelector } from "@/redux/hooks";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export function usePlanerService(
   initialInformation: InitialInformation,
   onPlanChanged: PlanChangedCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ) {
-  const errechneteElterngeldbezuege = useAppSelector(
-    errechneteElterngeldbezuegeSelector,
-  );
-
   const [plan, setPlan] = useState(
     () =>
       initialInformation.plan ??
       erstelleInitialenPlan(
         initialInformation.ausgangslage,
-        errechneteElterngeldbezuege,
+        berechneElterngeldbezuege,
       ),
   );
 
@@ -123,14 +119,23 @@ export function usePlanerService(
   const gebeEinkommenAnCallback = useCallback<GebeEinkommenAn<Elternteil>>(
     (...argumentList) =>
       setPlan((plan) => {
-        const nextPlan = gebeEinkommenAn(plan, ...argumentList);
-        updateStatesAndTriggerCallbacks(nextPlan, {
+        const planWithEinkommen = gebeEinkommenAn(plan, ...argumentList);
+        const elterngeldbezuege = berechneElterngeldbezuege(
+          planWithEinkommen.lebensmonate,
+        );
+        const planWithElterngeldbezuegen =
+          aktualisiereErrechneteElterngelbezuege(
+            planWithEinkommen,
+            elterngeldbezuege,
+          );
+
+        updateStatesAndTriggerCallbacks(planWithElterngeldbezuegen, {
           skipTrackPartnerschaftlicheVerteilung: true,
           skipVerplantesKontingent: true,
         });
-        return nextPlan;
+        return planWithElterngeldbezuegen;
       }),
-    [updateStatesAndTriggerCallbacks],
+    [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
   );
 
   const setztePlanZurueckCallback = useCallback(
@@ -141,17 +146,6 @@ export function usePlanerService(
         return nextPlan;
       }),
     [updateStatesAndTriggerCallbacks],
-  );
-
-  useEffect(
-    () =>
-      setPlan((plan) =>
-        aktualisiereErrechneteElterngelbezuege(
-          plan,
-          errechneteElterngeldbezuege,
-        ),
-      ),
-    [errechneteElterngeldbezuege],
   );
 
   return {
@@ -168,6 +162,15 @@ export function usePlanerService(
     gebeEinkommenAn: gebeEinkommenAnCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
   };
+}
+
+function erstelleInitialenPlan<A extends Ausgangslage>(
+  ausgangslage: A,
+  berrechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+): Plan<A> {
+  const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
+  const errechneteElterngeldbezuege = berrechneElterngeldbezuege(lebensmonate);
+  return { ausgangslage, lebensmonate, errechneteElterngeldbezuege };
 }
 
 function useVerplantesKontingent<E extends Elternteil>(

@@ -26,6 +26,7 @@ export {
 export {
   type Lebensmonate,
   type LebensmonateMitBeliebigenElternteilen,
+  erstelleInitialeLebensmonate,
   zaehleVerplantesKontingent,
 } from "./lebensmonate";
 export {
@@ -40,7 +41,6 @@ export {
   aktualisiereErrechneteElterngelbezuege,
   berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
-  erstelleInitialenPlan,
   fassePlanZusammen,
   gebeEinkommenAn,
   setzePlanZurueck,

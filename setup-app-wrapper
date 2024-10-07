@@ -22,6 +22,13 @@ set -o nounset
 set -o pipefail
 # set -o verbose
 
+# Check the version of sed
+if ! sed --version &>/dev/null; then
+  echo "You're using BSD sed in a script that requires GNU sed."
+  echo "Please Install gnu-sed via Homebrew: 'brew install gnu-sed' and alias it to 'sed'."
+  exit 1
+fi
+
 target_directory=public
 include_js=false
 include_css=false

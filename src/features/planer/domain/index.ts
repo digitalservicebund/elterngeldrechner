@@ -23,7 +23,11 @@ export {
   listeMonateAuf,
   AlleElternteileHabenBonusGewaehlt,
 } from "./lebensmonat";
-export { type Lebensmonate, zaehleVerplantesKontingent } from "./lebensmonate";
+export {
+  type Lebensmonate,
+  type LebensmonateMitBeliebigenElternteilen,
+  zaehleVerplantesKontingent,
+} from "./lebensmonate";
 export {
   type Lebensmonatszahl,
   Lebensmonatszahlen,

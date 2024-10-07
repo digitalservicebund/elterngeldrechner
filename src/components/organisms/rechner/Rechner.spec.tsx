@@ -72,7 +72,7 @@ describe("Rechner", () => {
   });
 
   it("should calculate and display the Elterngeld", async () => {
-    vi.spyOn(EgrCalculation.prototype, "simulate").mockResolvedValue({
+    vi.spyOn(EgrCalculation.prototype, "simulate").mockReturnValue({
       rows: [
         {
           vonLebensMonat: 1,

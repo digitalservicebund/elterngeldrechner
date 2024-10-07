@@ -64,13 +64,9 @@ done
 
 # Maybe there is nothing to do...
 if [ "$cache" == "true" ]; then
-  if [ -d "$target_directory" ]; then
-    directory_created=$(stat --format="%w" $target_directory | cut -c 1-10) # e.g. 2024-06-26
-    today=$(date +%F) # e.g. 2024-06-29
-    if [[ "$directory_created" == "$today" ]]; then
-      echo "App wrapper is up-to-date. Nothing to do."
-      exit 0
-    fi
+  if [ -d "$target_directory" ] && find "$target_directory" -type d -newermt "$(date +%F)" | grep -q .; then
+    echo "App wrapper is up-to-date. Nothing to do."
+    exit 0
   fi
 fi
 

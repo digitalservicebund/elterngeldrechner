@@ -6,11 +6,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useDetectClickOutside } from "react-detect-click-outside";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
+import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
 
 interface Props {
   readonly ariaLabelForDialog?: string;
@@ -57,14 +57,14 @@ export function InfoDialog({
     }
   }
 
-  const ref = useDetectClickOutside({
-    onTriggered: () => {
-      // This gets triggered a lot due to events on the whole page.
-      if (isModalOpen) {
-        closeModal(false);
-      }
+  const wrapperElement = useRef<HTMLDivElement>(null);
+  useDetectClickOutside(
+    wrapperElement,
+    // This gets triggered a lot due to events on the whole page.
+    () => {
+      if (isModalOpen) closeModal(false);
     },
-  });
+  );
 
   function preventTabOut(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === "Tab" && isModalOpen) {
@@ -81,7 +81,7 @@ export function InfoDialog({
         className,
       )}
       style={style}
-      ref={ref}
+      ref={wrapperElement}
     >
       <button
         id={id}

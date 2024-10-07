@@ -3,13 +3,12 @@ import {
   ReactNode,
   useId,
   useImperativeHandle,
+  useRef,
   useState,
   type ForwardedRef,
-  type RefObject,
   type SyntheticEvent,
 } from "react";
 import classNames from "classnames";
-import { useDetectClickOutside } from "react-detect-click-outside";
 import { LebensmonatSummary } from "./summary";
 import { LebensmonatContent } from "./content";
 import { ProvideInformationenZumLebensmonat } from "./informationenZumLebensmonat";
@@ -24,6 +23,7 @@ import {
   type Lebensmonat,
   type PseudonymeDerElternteile,
 } from "@/features/planer/user-interface/service";
+import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
 
 interface Props<E extends Elternteil> {
   readonly lebensmonatszahl: Lebensmonatszahl;
@@ -55,15 +55,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
 
   const zeitraumLabelIdentifier = useId();
 
-  const detailsElement: RefObject<HTMLDetailsElement> = useDetectClickOutside({
-    disableTouch: true,
-    onTriggered: function closeDetails() {
-      if (detailsElement.current != null) {
-        detailsElement.current.open = false;
-      }
-    },
-  });
-
+  const detailsElement = useRef<HTMLDetailsElement>(null);
   useImperativeHandle(
     ref,
     () => ({
@@ -71,6 +63,12 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     }),
     [detailsElement],
   );
+
+  useDetectClickOutside(detailsElement, () => {
+    if (detailsElement.current != null) {
+      detailsElement.current.open = false;
+    }
+  });
 
   const [isExpanded, setIsExpanded] = useState(false);
   function toggleExpandedState(

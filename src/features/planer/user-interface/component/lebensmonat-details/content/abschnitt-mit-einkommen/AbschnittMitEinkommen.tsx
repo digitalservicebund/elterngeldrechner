@@ -39,7 +39,8 @@ export function AbschnittMitEinkommen(): ReactNode {
   const [visibilityToggleState, setVisibilityToggleState] = useState(false);
   const areInputsVisible = mustInputsBeVisible || visibilityToggleState;
   function toggleVisibilityState() {
-    setVisibilityToggleState(!visibilityToggleState);
+    // Fix rendering issues, especially for "clicked-outside-events".
+    setTimeout(() => setVisibilityToggleState(!visibilityToggleState));
   }
 
   const isSingleElternteil = Object.keys(lebensmonat).length === 1;

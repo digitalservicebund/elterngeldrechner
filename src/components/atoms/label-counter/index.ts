@@ -1,1 +1,0 @@
-export { LabelCounter } from "./LabelCounter";

@@ -1,6 +1,9 @@
 import Big from "big.js";
-import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
-import { AverageOrMonthlyState, Taetigkeit } from "./stepEinkommenSlice";
+import {
+  AverageOrMonthlyState,
+  Taetigkeit,
+  Zeitraum,
+} from "./stepEinkommenSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { RootState } from "./index";
 import { ElternteilType } from "@/globals/js/elternteil-type";
@@ -171,3 +174,8 @@ export const finanzDatenOfUi = (
 
   return finanzDaten;
 };
+
+interface BruttoEinkommenZeitraum {
+  bruttoEinkommen: number | null;
+  zeitraum: Zeitraum;
+}

@@ -1,1 +1,1 @@
-export { default as YesNoRadio, yesNoLabels } from "./YesNoRadio";
+export { default as YesNoRadio } from "./YesNoRadio";

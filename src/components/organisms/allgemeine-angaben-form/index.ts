@@ -1,4 +1,1 @@
-export {
-  AllgemeineAngabenForm,
-  antragstellendeLabels,
-} from "./AllgemeineAngabenForm";
+export { AllgemeineAngabenForm } from "./AllgemeineAngabenForm";

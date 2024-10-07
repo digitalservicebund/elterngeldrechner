@@ -1,8 +1,4 @@
 import { persoenlicheDatenOfUi } from "./persoenlicheDatenFactory";
-import {
-  BruttoEinkommenZeitraum,
-  initialStepRechnerState,
-} from "./stepRechnerSlice";
 import { initialAverageOrMonthlyStateNichtSelbstaendig } from "./stepEinkommenSlice";
 import {
   MonatlichesBrutto,
@@ -102,13 +98,12 @@ describe("persoenlicheDatenFactory", () => {
       antragstellende: null,
       limitEinkommenUeberschritten: null,
     },
-    stepRechner: initialStepRechnerState,
     configuration: initialStepConfigurationState,
   };
 
   it("should create PersoenlicheDaten for ET1", () => {
     // when
-    const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1", []);
+    const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1");
 
     // then
     expect(persoenlicheDaten.wahrscheinlichesGeburtsDatum.getDate()).toBe(30);
@@ -129,46 +124,12 @@ describe("persoenlicheDatenFactory", () => {
     expect(persoenlicheDaten.etNachGeburt).toBe(YesNo.NO);
   });
 
-  it("should create PersoenlicheDaten for ET2 with ErwerbsTaetigkeitNachGeburt", () => {
-    // given
-    const bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[] = [
-      { bruttoEinkommen: 1000, zeitraum: { from: "1", to: "1" } },
-    ];
-
-    // when
-    const persoenlicheDaten = persoenlicheDatenOfUi(
-      mockStore,
-      "ET2",
-      bruttoEinkommenZeitraumList,
-    );
-
-    // then
-    expect(persoenlicheDaten.wahrscheinlichesGeburtsDatum.getDate()).toBe(30);
-    expect(persoenlicheDaten.wahrscheinlichesGeburtsDatum.getMonth()).toBe(9);
-    expect(persoenlicheDaten.wahrscheinlichesGeburtsDatum.getFullYear()).toBe(
-      2022,
-    );
-    expect(persoenlicheDaten.kinder[1].geburtsdatum?.getDate()).toBe(2);
-    expect(persoenlicheDaten.kinder[1].geburtsdatum?.getMonth()).toBe(2);
-    expect(persoenlicheDaten.kinder[1].geburtsdatum?.getFullYear()).toBe(2017);
-    expect(persoenlicheDaten.kinder[2].geburtsdatum?.getDate()).toBe(31);
-    expect(persoenlicheDaten.kinder[2].geburtsdatum?.getMonth()).toBe(4);
-    expect(persoenlicheDaten.kinder[2].geburtsdatum?.getFullYear()).toBe(2008);
-    expect(persoenlicheDaten.sindSieAlleinerziehend).toBe(YesNo.NO);
-    expect(persoenlicheDaten.anzahlKuenftigerKinder).toBe(1);
-    expect(persoenlicheDaten.getAnzahlGeschwister()).toBe(2);
-    expect(persoenlicheDaten.etVorGeburt).toBe(
-      ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
-    );
-    expect(persoenlicheDaten.etNachGeburt).toBe(YesNo.YES);
-  });
-
   it("should create PersoenlicheDaten for Alleinerziehend", () => {
     // given
     mockStore.stepAllgemeineAngaben.alleinerziehend = YesNo.YES;
 
     // when
-    const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1", []);
+    const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1");
 
     // then
     expect(persoenlicheDaten.sindSieAlleinerziehend).toBe(YesNo.YES);
@@ -291,7 +252,7 @@ describe("persoenlicheDatenFactory", () => {
         mockStore.stepErwerbstaetigkeit.ET1 = erwerbstaetigkeit;
 
         // when
-        const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1", []);
+        const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1");
 
         // then
         expect(persoenlicheDaten.etVorGeburt).toBe(expected);

@@ -1,17 +1,13 @@
-import { useId, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import classNames from "classnames";
-import { AccessControl } from "@/components/molecules";
 import { Button } from "@/components/atoms";
 import { useAppSelector, useAppStore } from "@/redux/hooks";
 import { formSteps } from "@/utils/formSteps";
-import { Rechner } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
 import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { Planer, type PlanMitBeliebigenElternteilen } from "@/features/planer";
-import { stepRechnerSelectors } from "@/redux/stepRechnerSlice";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import {
   MAX_EINKOMMEN_ALLEIN,
@@ -20,13 +16,7 @@ import {
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 
-function RechnerPlanerPage() {
-  const sectionLabelIdentifier = useId();
-
-  const isPlanerBlocked = useAppSelector(
-    stepRechnerSelectors.isMonatsplanerOverlayVisible,
-  );
-
+export default function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
     state.stepEinkommen.limitEinkommenUeberschritten === YesNo.YES
       ? true
@@ -38,7 +28,6 @@ function RechnerPlanerPage() {
   const alleinerziehend = useAppSelector(
     stepAllgemeineAngabenSelectors.getAlleinerziehend,
   );
-
   const amountLimitEinkommen =
     alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
@@ -74,28 +63,12 @@ function RechnerPlanerPage() {
   return (
     <Page step={formSteps.rechnerUndPlaner}>
       <div className="flex flex-wrap justify-between gap-y-80">
-        <section
+        <Planer
           className="basis-full"
-          aria-labelledby={sectionLabelIdentifier}
-        >
-          <h2 id={sectionLabelIdentifier} className="mb-10">
-            Rechner und Planer
-          </h2>
-
-          <Rechner />
-
-          <div className="relative">
-            {!!isPlanerBlocked && <AccessControl />}
-
-            <Planer
-              className={classNames({ blur: isPlanerBlocked })}
-              initialInformation={initialPlanerInformation.current}
-              onPlanChanged={setPlan}
-              berechneElterngeldbezuege={berechneElterngeldbezuege}
-              aria-hidden={isPlanerBlocked}
-            />
-          </div>
-        </section>
+          initialInformation={initialPlanerInformation.current}
+          onPlanChanged={setPlan}
+          berechneElterngeldbezuege={berechneElterngeldbezuege}
+        />
 
         <Button
           buttonStyle="secondary"
@@ -123,5 +96,3 @@ function RechnerPlanerPage() {
     </Page>
   );
 }
-
-export default RechnerPlanerPage;

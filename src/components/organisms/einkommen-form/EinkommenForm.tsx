@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
@@ -22,17 +21,12 @@ import {
 interface Props {
   readonly initialValues: StepEinkommenState;
   readonly onSubmit: SubmitHandler<StepEinkommenState>;
-  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
-export function EinkommenForm({
-  initialValues,
-  onSubmit,
-  handleDirtyForm,
-}: Props) {
+export function EinkommenForm({ initialValues, onSubmit }: Props) {
   const navigate = useNavigate();
   const methods = useForm({ defaultValues: initialValues });
-  const { isDirty, dirtyFields, errors } = methods.formState;
+  const { errors } = methods.formState;
 
   const antragstellende = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -48,10 +42,6 @@ export function EinkommenForm({
     alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
   const handlePageBack = () => navigate("/erwerbstaetigkeit");
-
-  useEffect(() => {
-    handleDirtyForm(isDirty, dirtyFields);
-  }, [isDirty, dirtyFields, handleDirtyForm]);
 
   return (
     <>

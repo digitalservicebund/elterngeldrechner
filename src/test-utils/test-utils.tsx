@@ -18,7 +18,6 @@ import { AriaLogProvider } from "@/components/atoms";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
 import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
-import { initialStepRechnerState } from "@/redux/stepRechnerSlice";
 import { initialStepConfigurationState } from "@/redux/configurationSlice";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 
@@ -97,6 +96,5 @@ export const INITIAL_STATE: RootState = {
   stepNachwuchs: initialStepNachwuchsState,
   stepErwerbstaetigkeit: initialStepErwerbstaetigkeitState,
   stepEinkommen: initialStepEinkommenState,
-  stepRechner: initialStepRechnerState,
   configuration: initialStepConfigurationState,
 };

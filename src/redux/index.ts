@@ -3,7 +3,6 @@ import stepAllgemeineAngabenReducer from "./stepAllgemeineAngabenSlice";
 import stepNachwuchsReducer from "./stepNachwuchsSlice";
 import stepErwerbstaetigkeitReducer from "./stepErwerbstaetigkeitSlice";
 import stepEinkommenReducer from "./stepEinkommenSlice";
-import stepRechnerReducer from "./stepRechnerSlice";
 import configurationReducer from "./configurationSlice";
 import { preloadedState } from "./preloadedState";
 
@@ -12,7 +11,6 @@ export const reducers = combineReducers({
   stepNachwuchs: stepNachwuchsReducer,
   stepErwerbstaetigkeit: stepErwerbstaetigkeitReducer,
   stepEinkommen: stepEinkommenReducer,
-  stepRechner: stepRechnerReducer,
   configuration: configurationReducer,
 });
 

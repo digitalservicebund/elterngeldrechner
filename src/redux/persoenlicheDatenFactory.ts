@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
-import { BruttoEinkommenZeitraum } from "./stepRechnerSlice";
 import { RootState } from "./index";
 import { ElternteilType } from "@/globals/js/elternteil-type";
 import {
@@ -59,7 +58,6 @@ const dateOf = (date: string): Date => {
 export const persoenlicheDatenOfUi = (
   state: RootState,
   elternteil: ElternteilType,
-  bruttoEinkommenZeitraum: BruttoEinkommenZeitraum[],
 ): PersoenlicheDaten => {
   const wahrscheinlichesGeburtsdatum =
     stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state);
@@ -74,9 +72,6 @@ export const persoenlicheDatenOfUi = (
     state,
     elternteil,
   );
-
-  persoenlicheDaten.etNachGeburt =
-    bruttoEinkommenZeitraum.length > 0 ? YesNo.YES : YesNo.NO;
 
   const kuenftigeKinder = Array.from(
     { length: state.stepNachwuchs.anzahlKuenftigerKinder },

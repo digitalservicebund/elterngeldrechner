@@ -1,5 +1,4 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useEffect } from "react";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
@@ -17,7 +16,7 @@ import { SplitItem } from "@/components/atoms";
 import { YesNo } from "@/globals/js/calculations/model";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
-export const antragstellendeLabels: { [K in Antragstellende]: string } = {
+const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",
   EinenElternteil: "Für einen Elternteil",
 };
@@ -30,18 +29,15 @@ const antragstellendeOptions: RadioOption<Antragstellende>[] = [
 interface AllgemeineAngabenFormProps {
   readonly initialValues: StepAllgemeineAngabenState;
   readonly onSubmit: SubmitHandler<StepAllgemeineAngabenState>;
-  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 export function AllgemeineAngabenForm({
   initialValues,
   onSubmit,
-  handleDirtyForm,
 }: AllgemeineAngabenFormProps) {
   const { register, handleSubmit, watch, formState } = useForm({
     defaultValues: initialValues,
   });
-  const { isDirty, dirtyFields } = formState;
 
   const antragstellendeFormValue = watch("antragstellende");
   const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
@@ -54,10 +50,6 @@ export function AllgemeineAngabenForm({
   const showMutterschaftsleistungsWerGroup =
     antragstellendeFormValue === "FuerBeide" &&
     mutterschaftssleistungenFormValue === YesNo.YES;
-
-  useEffect(() => {
-    handleDirtyForm(isDirty, dirtyFields);
-  }, [isDirty, dirtyFields, handleDirtyForm]);
 
   return (
     <>

@@ -1,7 +1,6 @@
 export { CustomCheckbox } from "./custom-checkbox";
 export { CustomRadio } from "./custom-radio";
 export { CustomSelect } from "./custom-select";
-export { FootNote } from "./foot-note";
 export { FormFieldGroup } from "./form-field-group";
 export { CustomNumberField } from "./custom-number-field";
 export { Counter } from "./counter";
@@ -12,6 +11,3 @@ export type { SelectOption } from "./custom-select";
 export { CustomInput } from "./custom-input";
 export { Split } from "./split";
 export { ButtonGroup } from "./button-group";
-export { AccessControl } from "./access-control";
-export { RechnerForm } from "./rechner-form";
-export { RechnerResult } from "./rechner-result";

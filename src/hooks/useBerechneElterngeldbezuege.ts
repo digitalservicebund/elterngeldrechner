@@ -169,7 +169,7 @@ function createStaticCalculationParameterForElternteil(
   state: RootState,
   elternteil: ElternteilType,
 ): StaticCalculationParameterForElternteil {
-  const persoenlicheDaten = persoenlicheDatenOfUi(state, elternteil, []);
+  const persoenlicheDaten = persoenlicheDatenOfUi(state, elternteil);
   const finanzdaten = finanzDatenOfUi(state, elternteil, []);
   const mutterschaftsleistung = mutterschaftsLeistungOfUi(state, elternteil);
   const lohnsteuerjahr = EgrSteuerRechner.bestLohnSteuerJahrOf(

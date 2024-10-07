@@ -1,7 +1,0 @@
-@use "foot-note-number.variables" as *;
-
-.#{nsp("foot-note-number")} {
-  position: relative;
-  top: px-to-rem(-8);
-  font-size: px-to-rem(14);
-}

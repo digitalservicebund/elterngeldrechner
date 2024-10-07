@@ -6,7 +6,7 @@ import {
 } from "@/components/molecules/custom-radio";
 import { YesNo } from "@/globals/js/calculations/model";
 
-export const yesNoLabels: { [K in YesNo]: string } = {
+const yesNoLabels: { [K in YesNo]: string } = {
   [YesNo.YES]: "Ja",
   [YesNo.NO]: "Nein",
 };

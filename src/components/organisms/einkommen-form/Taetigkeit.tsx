@@ -23,7 +23,7 @@ import {
 } from "@/components/organisms/zeitraum";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
-export const erwerbstaetigkeitLabels: {
+const erwerbstaetigkeitLabels: {
   [K in Erwerbstaetigkeiten]: string;
 } = {
   NichtSelbststaendig: "nichtselbständige Arbeit",

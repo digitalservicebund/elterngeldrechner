@@ -75,7 +75,7 @@ export function Planer({
 
   return (
     <section className={className} aria-labelledby={headingIdentifier}>
-      <h2 id={headingIdentifier} className="sr-only">
+      <h2 id={headingIdentifier} className="mb-10">
         Monatsplaner
       </h2>
 

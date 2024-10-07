@@ -14,20 +14,17 @@ import { SplitItem } from "@/components/atoms";
 interface ErwerbstaetigkeitFormProps {
   readonly initialValues: StepErwerbstaetigkeitState;
   readonly onSubmit: SubmitHandler<StepErwerbstaetigkeitState>;
-  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 export function ErwerbstaetigkeitForm({
   initialValues,
   onSubmit,
-  handleDirtyForm,
 }: ErwerbstaetigkeitFormProps) {
   const navigate = useNavigate();
   const methods = useForm({
     defaultValues: initialValues,
   });
   const { handleSubmit, reset, getValues } = methods;
-  const { isDirty, dirtyFields } = methods.formState;
 
   const antragssteller = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -38,10 +35,6 @@ export function ErwerbstaetigkeitForm({
   );
 
   const handlePageBack = () => navigate("/nachwuchs");
-
-  useEffect(() => {
-    handleDirtyForm(isDirty, dirtyFields);
-  }, [isDirty, dirtyFields, handleDirtyForm]);
 
   // reset state if ET2 is not displayed any more
   useEffect(() => {

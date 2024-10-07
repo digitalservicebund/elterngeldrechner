@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import AddIcon from "@digitalservicebund/icons/Add";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
@@ -21,7 +20,6 @@ import { fromGermanDateString } from "@/utils/fromGermanDateString";
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;
   readonly onSubmit: SubmitHandler<StepNachwuchsState>;
-  readonly handleDirtyForm: (isFormDirty: boolean, dirtyFields: object) => void;
 }
 
 const validateMonth = (date: string) => {
@@ -43,11 +41,7 @@ const validateMonth = (date: string) => {
   }
 };
 
-export function NachwuchsForm({
-  initialValues,
-  onSubmit,
-  handleDirtyForm,
-}: NachwuchsFormProps) {
+export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
   const {
     register,
     handleSubmit,
@@ -67,7 +61,6 @@ export function NachwuchsForm({
 
   const navigate = useNavigate();
   const handlePageBack = () => navigate("/allgemeine-angaben");
-  const { isDirty, dirtyFields } = formState;
 
   // Registration as a number is necessary because the addition "numberFutureChildren + 1" is added like a string and results in "21"
   register("anzahlKuenftigerKinder", { valueAsNumber: true });
@@ -94,10 +87,6 @@ export function NachwuchsForm({
       geburtsdatum: "",
       istBehindert: false,
     });
-
-  useEffect(() => {
-    handleDirtyForm(isDirty, dirtyFields);
-  }, [isDirty, dirtyFields, handleDirtyForm]);
 
   const wahrscheinlichesGeburtsDatumName =
     "wahrscheinlichesGeburtsDatum" as const;

@@ -6,10 +6,6 @@ import {
   StepEinkommenElternteil,
   Taetigkeit,
 } from "./stepEinkommenSlice";
-import {
-  BruttoEinkommenZeitraum,
-  initialStepRechnerState,
-} from "./stepRechnerSlice";
 import { Erwerbstaetigkeiten } from "./stepErwerbstaetigkeitSlice";
 import { initialStepConfigurationState } from "./configurationSlice";
 import { RootState } from "./index";
@@ -107,7 +103,6 @@ describe("finanzDatenFactory", () => {
       antragstellende: null,
       limitEinkommenUeberschritten: null,
     },
-    stepRechner: initialStepRechnerState,
     configuration: initialStepConfigurationState,
   };
 
@@ -121,7 +116,7 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with bruttoEinkommenZeitraumList", () => {
     // given
-    const bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[] = [
+    const bruttoEinkommenZeitraumList = [
       { bruttoEinkommen: 1000, zeitraum: { from: "1", to: "1" } },
     ];
 

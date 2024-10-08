@@ -32,7 +32,8 @@ export function Elterngeldbezugsanzeige({
       <InfoDialog
         className={className}
         ariaLabelForDialog="Informationen zum Elterngeldbezug im Mutterschutz"
-        info="Sie haben angegeben, dass Sie Mutterschaftsleistungen beziehen. Monate im Mutterschutz gelten grundsätzlich als Monate mit Basiselterngeld."
+        info="Sie haben angegeben, dass Sie Mutterschaftsleistungen beziehen. Monate im Mutterschutz gelten grundsätzlich als Monate mit Basiselterngeld. Sind die Mutterschaftsleistungen höher als
+        das Elterngeld, bekommen Sie nur die Mutterschaftsleistungen."
       />
     );
   }

@@ -4,7 +4,7 @@ import type { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/do
 
 export const FortlaufenderBezugNachDemVierzehntenLebensmonat =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Nach dem 14. Lebensmonat muss Elterngeld fortlaufend und ohne Unterbrechung bezogen werden.",
+    "Elterngeld muss ab dem 15. Lebensmonat fortlaufend und ohne Unterbrechung bezogen werden.",
     (lebensmonate) => {
       const lebensmonatszahlen = Object.entries(lebensmonate)
         .filter(([, lebensmonat]) =>
@@ -31,14 +31,14 @@ function isSequenceIncreasingByOne(numbers: number[]): boolean {
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("fortlaufender Bezug ab dem 12. Lebensmonat", async () => {
+  describe("fortlaufender Bezug ab dem 15. Lebensmonat", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
     const { KeinElterngeld } = await import(
       "@/features/planer/domain/Auswahloption"
     );
 
-    it("is satisfied if it is not fortlaufend before the 14th Lebensmonat", () => {
+    it("is satisfied if it is not fortlaufend before the 15th Lebensmonat", () => {
       const lebensmonate = {
         1: LEBENSMONAT_MIT_BEZUG,
         2: LEBENSMONAT_OHNE_BEZUG,

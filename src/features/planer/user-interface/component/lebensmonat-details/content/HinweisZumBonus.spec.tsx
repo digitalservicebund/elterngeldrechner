@@ -7,7 +7,7 @@ describe("Hinweis zum Bonus", () => {
 
     expect(
       screen.queryByText(
-        /Sie müssen Partnerschaftbonus für mindestens 2 Lebensmonate beantragen – deshalb wurde gegebenenfalls automatisch auch der folgende Monat ausgewählt./,
+        /Sie müssen Partnerschaftbonus für mindestens 2 Lebensmonate beantragen – deshalb wurde automatisch auch der folgende Monat ausgewählt. Sie können bis zu vier Lebensmonate Partnerschaftsbonus bekommen./,
       ),
     ).toBeVisible();
   });
@@ -27,7 +27,7 @@ describe("Hinweis zum Bonus", () => {
 
     expect(
       screen.queryByText(
-        /Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch für das andere Elternteil ausgewählt. Partnerschaftsbonus kann immer nur parallel genommen werden./,
+        /Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch für den anderen Elternteil ausgewählt. Partnerschaftsbonus kann immer nur parallel genommen werden./,
       ),
     ).not.toBeInTheDocument();
   });

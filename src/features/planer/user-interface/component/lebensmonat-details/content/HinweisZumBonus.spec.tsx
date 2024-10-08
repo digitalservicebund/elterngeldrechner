@@ -17,7 +17,7 @@ describe("Hinweis zum Bonus", () => {
 
     expect(
       screen.queryByText(
-        /Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch für das andere Elternteil ausgewählt. Partnerschaftsbonus kann immer nur parallel genommen werden./,
+        /Wenn Sie den Partnerschaftsbonus auswählen, wird er auch automatisch für den anderen Elternteil ausgewählt. Partnerschaftsbonus kann immer nur parallel genommen werden./,
       ),
     ).toBeVisible();
   });

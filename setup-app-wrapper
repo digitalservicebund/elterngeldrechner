@@ -22,11 +22,20 @@ set -o nounset
 set -o pipefail
 # set -o verbose
 
-# Check the version of sed
-if ! sed --version &>/dev/null; then
-  echo "You're using BSD sed in a script that requires GNU sed."
-  echo "Please Install gnu-sed via Homebrew: 'brew install gnu-sed' and alias it to 'sed'."
-  exit 1
+# Alias sed to gnu-sed on macOS for compatibility reasons
+if [[ "$(uname)" == "Darwin" ]]; then
+    # Check if gsed is installed
+    if command -v gsed &>/dev/null; then
+        # Create a function to use gsed instead of sed
+        sed() {
+            gsed "$@"
+        }
+        echo "Using gsed as sed."
+    else
+        echo "Error: gsed is not installed."
+        echo "Please install it using Homebrew: 'brew install gnu-sed'."
+        exit 1
+    fi
 fi
 
 target_directory=public

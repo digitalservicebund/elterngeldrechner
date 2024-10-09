@@ -21,6 +21,7 @@ type Props = {
   readonly legend: string;
   readonly elternteil: Elternteil;
   readonly auswahlmoeglichkeiten: Auswahlmoeglichkeiten;
+  readonly imMutterschutz: boolean;
   readonly gewaehlteOption?: Auswahloption;
   readonly waehleOption: (option: Auswahloption) => void;
 };
@@ -28,6 +29,7 @@ type Props = {
 export function AuswahlEingabe({
   legend,
   elternteil,
+  imMutterschutz,
   gewaehlteOption,
   auswahlmoeglichkeiten,
   waehleOption,
@@ -98,6 +100,9 @@ export function AuswahlEingabe({
             const waehleDieseOption = () => !isDisabled && waehleOption(option);
             const gridRowStart = optionIndex + 1;
 
+            const istBasisImMutterschutz =
+              option === Variante.Basis && imMutterschutz;
+
             return (
               <div
                 key={option}
@@ -109,6 +114,7 @@ export function AuswahlEingabe({
               >
                 <AuswahloptionLabel
                   option={option}
+                  istBasisImMutterschutz={istBasisImMutterschutz}
                   elterngeldbezug={elterngeldbezug}
                   isChecked={isChecked}
                   isDisabled={isDisabled}

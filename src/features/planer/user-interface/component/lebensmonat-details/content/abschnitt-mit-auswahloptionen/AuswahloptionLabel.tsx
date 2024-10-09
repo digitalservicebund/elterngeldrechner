@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
+import LockIcon from "@digitalservicebund/icons/Lock";
 import {
   KeinElterngeld,
   Variante,
@@ -10,6 +11,7 @@ import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly option: Auswahloption;
+  readonly istBasisImMutterschutz: boolean; // TODO: How to enforce relation with `option` caller friendly?
   readonly elterngeldbezug: Elterngeldbezug;
   readonly isChecked?: boolean;
   readonly isDisabled?: boolean;
@@ -18,12 +20,16 @@ type Props = {
 
 export function AuswahloptionLabel({
   option,
+  istBasisImMutterschutz,
   elterngeldbezug,
   isChecked,
   isDisabled,
   htmlFor,
 }: Props): ReactNode {
-  const { label, className, checkedClassName } = RENDER_PROPERTIES[option];
+  const { label, className, checkedClassName, icon } = getRenderProperties(
+    option,
+    istBasisImMutterschutz,
+  );
 
   return (
     <label
@@ -38,42 +44,62 @@ export function AuswahloptionLabel({
       htmlFor={htmlFor}
     >
       <span aria-hidden>
-        <span className="font-bold">{label}</span>
+        <span className="inline-flex items-center font-bold">
+          {!!icon && <>{icon}&nbsp;</>}
+          {label}
+        </span>
         {!!elterngeldbezug && <>&nbsp;{formatAsCurrency(elterngeldbezug)}</>}
       </span>
     </label>
   );
 }
 
+function getRenderProperties(
+  option: Auswahloption,
+  istBasisImMutterschutz: boolean,
+): RenderProperties {
+  switch (option) {
+    case Variante.Basis:
+      return {
+        label: istBasisImMutterschutz ? "Mutterschutz" : "Basis",
+        className: "bg-Basis text-white",
+        checkedClassName: classNames("ring-Plus", SHARED_CHECKED_CLASS_NAME),
+        icon: istBasisImMutterschutz ? (
+          <LockIcon className="text-Plus" />
+        ) : undefined,
+      };
+
+    case Variante.Plus:
+      return {
+        label: "Plus",
+        className: "bg-Plus text-black",
+        checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
+      };
+
+    case Variante.Bonus:
+      return {
+        label: "Bonus",
+        className: "bg-Bonus text-black",
+        checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
+      };
+
+    case KeinElterngeld:
+      return {
+        label: "kein Elterngeld",
+        className: "bg-white text-black border-grey border-2 border-solid",
+        checkedClassName: classNames(
+          "ring-Basis border-none",
+          SHARED_CHECKED_CLASS_NAME,
+        ),
+      };
+  }
+}
+
 const SHARED_CHECKED_CLASS_NAME = "ring-4";
-const RENDER_PROPERTIES: Record<Auswahloption, RenderProperties> = {
-  [Variante.Basis]: {
-    label: "Basis",
-    className: "bg-Basis text-white",
-    checkedClassName: classNames("ring-Plus", SHARED_CHECKED_CLASS_NAME),
-  },
-  [Variante.Plus]: {
-    label: "Plus",
-    className: "bg-Plus text-black",
-    checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
-  },
-  [Variante.Bonus]: {
-    label: "Bonus",
-    className: "bg-Bonus text-black",
-    checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
-  },
-  [KeinElterngeld]: {
-    label: "kein Elterngeld",
-    className: "bg-white text-black border-grey border-2 border-solid",
-    checkedClassName: classNames(
-      "ring-Basis border-none",
-      SHARED_CHECKED_CLASS_NAME,
-    ),
-  },
-};
 
 type RenderProperties = {
   label: string;
   className: string;
   checkedClassName: string;
+  icon?: ReactNode;
 };

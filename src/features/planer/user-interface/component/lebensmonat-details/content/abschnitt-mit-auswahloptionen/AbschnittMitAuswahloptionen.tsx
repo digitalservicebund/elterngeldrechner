@@ -33,6 +33,7 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
             key={elternteil}
             legend={legend}
             elternteil={elternteil}
+            imMutterschutz={monat.imMutterschutz}
             gewaehlteOption={monat.gewaehlteOption}
             auswahlmoeglichkeiten={auswahlmoeglichkeiten}
             waehleOption={waehleOption.bind(null, elternteil)}

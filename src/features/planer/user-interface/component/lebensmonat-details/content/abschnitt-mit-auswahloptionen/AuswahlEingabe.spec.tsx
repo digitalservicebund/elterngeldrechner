@@ -265,5 +265,6 @@ const ANY_PROPS = {
   legend: "",
   elternteil: Elternteil.Eins,
   auswahlmoeglichkeiten: ANY_AUSWAHLMOEGLICHKEITEN,
+  imMutterschutz: false,
   waehleOption: () => {},
 };

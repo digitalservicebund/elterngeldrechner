@@ -12,6 +12,20 @@ describe("Auswahloption Label", () => {
     expect(screen.getByText(text, { exact: false })).toBeVisible();
   });
 
+  it("adapts appearance for Basis Option in a Monat mit Mutterschutz", () => {
+    render(
+      <AuswahloptionLabel
+        {...ANY_PROPS}
+        option={Variante.Basis}
+        istBasisImMutterschutz
+      />,
+    );
+
+    expect(screen.getByText("Mutterschutz")).toBeVisible();
+    expect(screen.queryByTestId("LockIcon")).toBeVisible();
+    expect(screen.queryByText("Basis")).not.toBeInTheDocument();
+  });
+
   it("shows formatted Elterngeldbezug when given", () => {
     render(<AuswahloptionLabel {...ANY_PROPS} elterngeldbezug={100} />);
 
@@ -21,6 +35,7 @@ describe("Auswahloption Label", () => {
 
 const ANY_PROPS = {
   option: Variante.Basis,
+  istBasisImMutterschutz: false,
   elterngeldbezug: 0,
   htmlFor: "",
 };

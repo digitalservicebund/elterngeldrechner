@@ -3,6 +3,8 @@ import ToggleOnIcon from "@digitalservicebund/icons/ToggleOn";
 import ToggleOffIcon from "@digitalservicebund/icons/ToggleOff";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
+import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
+import { HinweisZuWochenstunden } from "./HinweisZuWochenstunden";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
   type LebensmonatMitBeliebigenElternteilen,
@@ -44,6 +46,9 @@ export function AbschnittMitEinkommen(): ReactNode {
   }
 
   const isSingleElternteil = Object.keys(lebensmonat).length === 1;
+  const istLebensmonatMitMutterschutz = Object.values(lebensmonat).some(
+    (monat) => monat.imMutterschutz,
+  );
 
   return (
     <div className="contents">
@@ -72,27 +77,43 @@ export function AbschnittMitEinkommen(): ReactNode {
       {!!areInputsVisible && (
         <>
           {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
-            const ariaLabel = composeAriaLabelForBruttoeinkommen(
-              pseudonymeDerElternteile[elternteil],
-              lebensmonatszahl,
-              isSingleElternteil,
-            );
+            if (monat.imMutterschutz) {
+              return (
+                <HinweisZumMutterschutz
+                  key={elternteil}
+                  style={bruttoeinkommenColumns[elternteil]}
+                />
+              );
+            } else {
+              const ariaLabel = composeAriaLabelForBruttoeinkommen(
+                pseudonymeDerElternteile[elternteil],
+                lebensmonatszahl,
+                isSingleElternteil,
+              );
 
-            return (
-              <BruttoeinkommenInput
-                style={bruttoeinkommenColumns[elternteil]}
-                key={elternteil}
-                bruttoeinkommen={monat.bruttoeinkommen}
-                ariaLabel={ariaLabel}
-                gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
-              />
-            );
+              return (
+                <div
+                  key={elternteil}
+                  style={bruttoeinkommenColumns[elternteil]}
+                >
+                  <BruttoeinkommenInput
+                    key={elternteil}
+                    bruttoeinkommen={monat.bruttoeinkommen}
+                    ariaLabel={ariaLabel}
+                    gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
+                  />
+
+                  {!!istLebensmonatMitMutterschutz && (
+                    <HinweisZuWochenstunden />
+                  )}
+                </div>
+              );
+            }
           })}
 
-          <p style={hinweisZuWochenstundenColumn}>
-            *Sie dürfen in diesem Monat nur maximal 32 Stunden pro Woche
-            arbeiten
-          </p>
+          {!istLebensmonatMitMutterschutz && (
+            <HinweisZuWochenstunden style={hinweisZuWochenstundenColumn} />
+          )}
         </>
       )}
     </div>
@@ -124,10 +145,11 @@ function checkIfInputsMustBeVisible(
 }
 
 function ToggleIcon({ isOn }: { readonly isOn: boolean }) {
+  const className = "size-40 pt-2";
   return isOn ? (
-    <ToggleOnIcon className="size-40 pt-2" />
+    <ToggleOnIcon className={className} />
   ) : (
-    <ToggleOffIcon className="size-40 pt-2" />
+    <ToggleOffIcon className={className} />
   );
 }
 

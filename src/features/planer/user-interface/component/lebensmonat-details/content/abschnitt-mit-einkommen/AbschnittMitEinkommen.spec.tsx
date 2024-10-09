@@ -5,6 +5,7 @@ import {
   Auswahloptionen,
   Elternteil,
   KeinElterngeld,
+  MONAT_MIT_MUTTERSCHUTZ,
   Variante,
   type Auswahloption,
 } from "@/features/planer/domain";
@@ -63,7 +64,44 @@ describe("Abschnitt mit Einkommen", () => {
         screen.getByRole("textbox", {
           name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
         }),
-      );
+      ).toBeVisible();
+
+      expect(
+        screen.getByRole("textbox", {
+          name: "Bruttoeinkommen von John im 5. Lebensmonat",
+        }),
+      ).toBeVisible();
+    });
+
+    it("shows some text instead of input for Elternteil with Monat im Mutterschutz", async () => {
+      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        lebensmonatszahl: 5,
+        lebensmonat: {
+          [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
+          [Elternteil.Zwei]: monat(),
+        },
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+      });
+
+      render(<AbschnittMitEinkommen />);
+      await toggleInputsVisibility();
+
+      expect(
+        screen.queryByRole("textbox", {
+          name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
+        }),
+      ).not.toBeInTheDocument();
+
+      expect(
+        screen.getByText(
+          "Nach der Geburt haben Mütter in der Regel Anspruch auf acht Wochen Mutterschutz. Während dieser Zeit dürfen sie nicht arbeiten. Sie können in dieser Zeit kein Einkommen angeben.",
+        ),
+      ).toBeVisible();
+
       expect(
         screen.getByRole("textbox", {
           name: "Bruttoeinkommen von John im 5. Lebensmonat",
@@ -88,7 +126,7 @@ describe("Abschnitt mit Einkommen", () => {
         screen.getByRole("textbox", {
           name: "Bruttoeinkommen im 5. Lebensmonat",
         }),
-      );
+      ).toBeVisible();
     });
   });
 

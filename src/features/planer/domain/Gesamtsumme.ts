@@ -8,4 +8,5 @@ export type Gesamtsumme<E extends Elternteil> = {
 export type SummeFuerElternteil = {
   readonly anzahlMonateMitBezug: number;
   readonly totalerElterngeldbezug: number;
+  readonly totalesBruttoeinkommen: number;
 };

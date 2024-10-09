@@ -73,10 +73,12 @@ describe("Gesamtsummenanzeige", () => {
           [Elternteil.Eins]: {
             anzahlMonateMitBezug: 8,
             totalerElterngeldbezug: 6000,
+            totalesBruttoeinkommen: 0,
           },
           [Elternteil.Zwei]: {
             anzahlMonateMitBezug: 1,
             totalerElterngeldbezug: 1041,
+            totalesBruttoeinkommen: 0,
           },
         },
       };
@@ -135,6 +137,7 @@ const ANY_NAME = "Jane";
 const ANY_SUMME_FUER_ELTERNTEIL = {
   anzahlMonateMitBezug: 0,
   totalerElterngeldbezug: 0,
+  totalesBruttoeinkommen: 0,
 };
 
 const ANY_GESAMTSUMME = {

@@ -158,10 +158,12 @@ const ANY_SERVICE_VALUES = {
       [Elternteil.Eins]: {
         anzahlMonateMitBezug: 0,
         totalerElterngeldbezug: 0,
+        totalesBruttoeinkommen: 0,
       },
       [Elternteil.Zwei]: {
         anzahlMonateMitBezug: 0,
         totalerElterngeldbezug: 0,
+        totalesBruttoeinkommen: 0,
       },
     },
   },

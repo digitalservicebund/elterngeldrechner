@@ -23,7 +23,6 @@ import {
   type Lebensmonate,
   erstelleInitialeLebensmonate,
 } from "@/features/planer/user-interface/service";
-import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export function usePlanerService(
   initialInformation: InitialInformation,
@@ -55,14 +54,9 @@ export function usePlanerService(
     (
       nextPlan: PlanMitBeliebigenElternteilen,
       options?: {
-        skipTrackPartnerschaftlicheVerteilung?: boolean;
         skipVerplantesKontingent?: boolean;
       },
     ) => {
-      if (!options?.skipTrackPartnerschaftlicheVerteilung) {
-        trackPartnerschaftlicheVerteilung(nextPlan);
-      }
-
       if (!options?.skipVerplantesKontingent) {
         updateVerplantesKontingent(nextPlan.lebensmonate);
       }
@@ -130,7 +124,6 @@ export function usePlanerService(
           );
 
         updateStatesAndTriggerCallbacks(planWithElterngeldbezuegen, {
-          skipTrackPartnerschaftlicheVerteilung: true,
           skipVerplantesKontingent: true,
         });
         return planWithElterngeldbezuegen;

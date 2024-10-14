@@ -1,18 +1,11 @@
 import { setTrackingVariable } from "./data-layer";
 import { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
-import {
-  Elternteil,
-  KeinElterngeld,
-  Variante,
-  type Auswahloption,
-  type Lebensmonat,
-} from "@/features/planer/domain";
 
 vi.mock(import("./data-layer"));
 
 describe("partnerschaftlichkeit", () => {
   it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {
-    trackPartnerschaftlicheVerteilung(ANY_PLAN_WITH_TWO_ELTERNTEILE);
+    trackPartnerschaftlicheVerteilung([[], []]);
 
     expect(setTrackingVariable).toHaveBeenCalledTimes(1);
     expect(setTrackingVariable).toHaveBeenLastCalledWith(
@@ -22,97 +15,82 @@ describe("partnerschaftlichkeit", () => {
   });
 
   it("should not track anything if there is only one Elternteil", () => {
-    trackPartnerschaftlicheVerteilung(ANY_PLAN_WITH_ONE_ELTERNTEIL);
+    trackPartnerschaftlicheVerteilung([[]]);
 
     expect(setTrackingVariable).not.toHaveBeenCalled();
   });
 
-  it.each<{
-    lebensmonate: Lebensmonat<Elternteil>[];
-    expectedQuotient: number;
-  }>([
+  it.each([
     {
-      lebensmonate: [],
+      auswahlProMonatProElternteil: [[], []],
       expectedQuotient: 0,
     },
     {
-      lebensmonate: [lebensmonat(KeinElterngeld, Variante.Basis)],
+      auswahlProMonatProElternteil: [[null], ["Basis"]],
       expectedQuotient: 0,
     },
     {
-      lebensmonate: [
-        lebensmonat(Variante.Plus, KeinElterngeld),
-        lebensmonat(Variante.Plus, undefined),
+      auswahlProMonatProElternteil: [
+        ["Plus", "Plus"],
+        [null, null],
       ],
       expectedQuotient: 0,
     },
     {
-      lebensmonate: [lebensmonat(Variante.Basis, Variante.Basis)],
+      auswahlProMonatProElternteil: [["Basis"], ["Basis"]],
       expectedQuotient: 1,
     },
     {
-      lebensmonate: [lebensmonat(Variante.Plus, Variante.Plus)],
+      auswahlProMonatProElternteil: [["Plus"], ["Plus"]],
       expectedQuotient: 1,
     },
     {
-      lebensmonate: [lebensmonat(Variante.Basis, Variante.Plus)],
+      auswahlProMonatProElternteil: [["Basis"], ["Plus"]],
       expectedQuotient: 0.5,
     },
     {
-      lebensmonate: [lebensmonat(Variante.Plus, Variante.Basis)],
+      auswahlProMonatProElternteil: [["Plus"], ["Basis"]],
       expectedQuotient: 0.5,
     },
     {
-      lebensmonate: [
-        lebensmonat(Variante.Basis, Variante.Plus),
-        lebensmonat(KeinElterngeld, Variante.Plus),
+      auswahlProMonatProElternteil: [
+        ["Basis", null],
+        ["Plus", "Plus"],
       ],
       expectedQuotient: 1,
     },
     {
-      lebensmonate: [
-        lebensmonat(Variante.Basis, Variante.Plus),
-        lebensmonat(Variante.Plus, Variante.Plus),
-        lebensmonat(Variante.Plus, Variante.Plus),
+      auswahlProMonatProElternteil: [
+        ["Basis", "Plus", "Plus"],
+        ["Plus", "Plus", "Plus"],
       ],
       expectedQuotient: 0.75,
     },
     {
-      lebensmonate: [
-        lebensmonat(Variante.Basis, KeinElterngeld),
-        lebensmonat(Variante.Bonus, Variante.Bonus),
-        lebensmonat(Variante.Bonus, Variante.Bonus),
-        lebensmonat(Variante.Bonus, Variante.Bonus),
+      auswahlProMonatProElternteil: [
+        ["Basis", "Bonus", "Bonus", "Bonus"],
+        [null, "Bonus", "Bonus", "Bonus"],
       ],
       expectedQuotient: 0.6,
     },
     {
-      lebensmonate: Array(12).fill(lebensmonat(Variante.Basis, KeinElterngeld)),
+      auswahlProMonatProElternteil: [
+        Array(12).fill("Basis"),
+        Array(12).fill(null),
+      ],
       expectedQuotient: 0,
     },
     {
-      lebensmonate: [
-        ...Array(12).fill(lebensmonat(Variante.Basis, KeinElterngeld)),
-        lebensmonat(KeinElterngeld, Variante.Basis),
-        lebensmonat(KeinElterngeld, Variante.Basis),
+      auswahlProMonatProElternteil: [
+        [...Array(12).fill("Basis"), null, null],
+        [...Array(12).fill(null), "Basis", "Basis"],
       ],
       expectedQuotient: 2 / 12,
     },
   ])(
-    "should calculate the correct quotient (%#)",
-    ({ lebensmonate, expectedQuotient }) => {
-      const plan = {
-        ...ANY_PLAN_WITH_TWO_ELTERNTEILE,
-        lebensmonate: lebensmonate.reduce(
-          (lebensmonate, lebensmonat, index) => ({
-            ...lebensmonate,
-            [index]: lebensmonat,
-          }),
-          {},
-        ),
-      };
-
-      trackPartnerschaftlicheVerteilung(plan);
+    "should calculate the correct quotient (case #%#)",
+    ({ auswahlProMonatProElternteil, expectedQuotient }) => {
+      trackPartnerschaftlicheVerteilung(auswahlProMonatProElternteil);
 
       expect(setTrackingVariable).toHaveBeenCalledWith(
         expect.anything(),
@@ -121,42 +99,3 @@ describe("partnerschaftlichkeit", () => {
     },
   );
 });
-
-function lebensmonat(
-  gewaehlteOptionElternteilEins?: Auswahloption,
-  gewaehlteOptionElternteilZwei?: Auswahloption,
-): Lebensmonat<Elternteil> {
-  return {
-    [Elternteil.Eins]: {
-      gewaehlteOption: gewaehlteOptionElternteilEins,
-      imMutterschutz: false as const,
-    },
-    [Elternteil.Zwei]: {
-      gewaehlteOption: gewaehlteOptionElternteilZwei,
-      imMutterschutz: false as const,
-    },
-  };
-}
-
-const ANY_PLAN_WITH_ONE_ELTERNTEIL = {
-  ausgangslage: {
-    anzahlElternteile: 1 as const,
-    pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
-    geburtsdatumDesKindes: new Date(),
-  },
-  errechneteElterngeldbezuege: {} as never,
-  lebensmonate: {},
-};
-
-const ANY_PLAN_WITH_TWO_ELTERNTEILE = {
-  ausgangslage: {
-    anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    },
-    geburtsdatumDesKindes: new Date(),
-  },
-  errechneteElterngeldbezuege: {} as never,
-  lebensmonate: {},
-};

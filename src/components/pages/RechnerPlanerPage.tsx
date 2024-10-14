@@ -7,14 +7,20 @@ import { Page } from "@/components/organisms/page";
 import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
-import { Planer, type PlanMitBeliebigenElternteilen } from "@/features/planer";
-import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import {
+  Planer,
+  type PlanMitBeliebigenElternteilen,
+  Variante,
+  type Elternteil,
+} from "@/features/planer";
+import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
+import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 export default function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
@@ -44,7 +50,9 @@ export default function RechnerPlanerPage() {
 
   function setPlan(nextPlan: PlanMitBeliebigenElternteilen | undefined): void {
     plan.current = nextPlan;
+    const istPlanGueltig = nextPlan != undefined;
     setIstPlanGueltig(nextPlan !== undefined);
+    if (istPlanGueltig) trackPartnerschaftlicheVerteilungForPlan(nextPlan);
   }
 
   function navigateToUebersicht(): void {
@@ -84,7 +92,6 @@ export default function RechnerPlanerPage() {
       </div>
 
       {!!showModalPopup && (
-        // TODO: fix text after check with ministry
         <ModalPopup
           text={`Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Falls noch nicht feststeht, ob Sie die Grenze von ${amountLimitEinkommen.toLocaleString()} Euro überschreiten, können Sie trotzdem einen Antrag stellen.`}
           buttonLabel="Dialog schließen"
@@ -95,4 +102,32 @@ export default function RechnerPlanerPage() {
       )}
     </Page>
   );
+}
+
+function trackPartnerschaftlicheVerteilungForPlan(
+  plan: PlanMitBeliebigenElternteilen,
+): void {
+  const elternteile = Object.keys(
+    plan.ausgangslage.pseudonymeDerElternteile,
+  ) as Elternteil[];
+
+  const auswahlProMonatProElternteil = elternteile.map((elternteil) =>
+    Object.values(plan.lebensmonate)
+      .map((lebensmonat) => lebensmonat[elternteil])
+      .map((monat) => monat.gewaehlteOption)
+      .map((option) => {
+        switch (option) {
+          case Variante.Basis:
+            return "Basis";
+          case Variante.Plus:
+            return "Plus";
+          case Variante.Bonus:
+            return "Bonus";
+          default:
+            return null;
+        }
+      }),
+  );
+
+  trackPartnerschaftlicheVerteilung(auswahlProMonatProElternteil);
 }

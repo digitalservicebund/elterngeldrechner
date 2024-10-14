@@ -23,7 +23,6 @@ import {
 } from ".";
 import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
-import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
 vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));
 vi.mock(
@@ -54,7 +53,6 @@ vi.mock(
     "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent"
   ),
 );
-vi.mock(import("@/user-tracking/partnerschaftlichkeit"));
 
 describe("use Planer service", () => {
   beforeEach(() => {
@@ -451,40 +449,6 @@ describe("use Planer service", () => {
       );
       expect(result.current.lebensmonate).toStrictEqual(
         planWithElterngeldbezuege.lebensmonate,
-      );
-    });
-  });
-
-  describe("tracking partnerschaftliche Verteilung", () => {
-    it("triggers tracking when chosing an Option", () => {
-      vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
-      const { result } = renderPlanerServiceHook();
-
-      waehleAnyOption(result.current.waehleOption);
-
-      expect(trackPartnerschaftlicheVerteilung).toHaveBeenCalledOnce();
-      expect(trackPartnerschaftlicheVerteilung).toHaveBeenLastCalledWith(
-        ANY_PLAN,
-      );
-    });
-
-    it("does not trigger tracking when specifying a Bruttoeinkommen", () => {
-      const { result } = renderPlanerServiceHook();
-
-      gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
-
-      expect(trackPartnerschaftlicheVerteilung).not.toHaveBeenCalledOnce();
-    });
-
-    it("triggers tracking when resetting the Plan", () => {
-      vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
-      const { result } = renderPlanerServiceHook();
-
-      act(() => result.current.setzePlanZurueck());
-
-      expect(trackPartnerschaftlicheVerteilung).toHaveBeenCalledOnce();
-      expect(trackPartnerschaftlicheVerteilung).toHaveBeenLastCalledWith(
-        ANY_PLAN,
       );
     });
   });

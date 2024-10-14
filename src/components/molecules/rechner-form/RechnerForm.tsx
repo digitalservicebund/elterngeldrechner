@@ -156,21 +156,22 @@ export function RechnerForm({
     setAddButtonDisabled(restFrom.length === 0);
   };
 
-  const optionsKeinEinkommen: RegisterOptions = useMemo(
-    () => ({
-      validate: {
-        requireKeinEinkommenOrEinkommen: (keinEinkommen) => {
-          const einkommenList = getValues(name);
-          if (keinEinkommen) {
-            return true;
-          }
-          if (einkommenList.length > 0) {
-            return true;
-          }
-          return 'Bitte geben Sie ihr Einkommen während des Elterngeldbezugs an oder wählen sie "kein Einkommen beziehen"';
+  const optionsKeinEinkommen = useMemo(
+    () =>
+      ({
+        validate: {
+          requireKeinEinkommenOrEinkommen: (keinEinkommen) => {
+            const einkommenList = getValues(name);
+            if (keinEinkommen) {
+              return true;
+            }
+            if (einkommenList.length > 0) {
+              return true;
+            }
+            return 'Bitte geben Sie ihr Einkommen während des Elterngeldbezugs an oder wählen sie "kein Einkommen beziehen"';
+          },
         },
-      },
-    }),
+      }) satisfies RegisterOptions,
     [getValues, name],
   );
 

@@ -47,11 +47,13 @@ export function CustomNumberField<
   ariaDescribedByIfNoError,
   info,
 }: CustomNumberFieldProps<TFieldValues, TName>) {
-  const registerOptions: RegisterOptions = useMemo(() => {
-    return {
-      required: "Dieses Feld ist erforderlich",
-    };
-  }, []);
+  const registerOptions = useMemo(
+    () =>
+      ({
+        required: "Dieses Feld ist erforderlich",
+      }) satisfies RegisterOptions,
+    [],
+  );
 
   const {
     field: { onChange, onBlur, value, ref },

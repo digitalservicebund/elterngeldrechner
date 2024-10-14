@@ -36,9 +36,7 @@ const languageOptions = [
         node: true,
       },
       parserOptions: {
-        projectService: {
-          allowDefaultProject: ["eslint.config.js", "postcss.config.js"],
-        },
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
     },

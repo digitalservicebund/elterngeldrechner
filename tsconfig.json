@@ -19,6 +19,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "tests", "playwright.config.ts"],
+  "include": ["src", "tests", "playwright.config.ts", "commitlint.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

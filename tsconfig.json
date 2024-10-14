@@ -17,16 +17,8 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "allowJs": true
+    }
   },
-  "include": [
-    "src",
-    "tests",
-    "playwright.config.ts",
-    "commitlint.config.ts",
-    "postcss.config.js",
-    "eslint.config.js"
-  ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "tests"],
+  "references": [{ "path": "./tsconfig.vite.json" }]
 }

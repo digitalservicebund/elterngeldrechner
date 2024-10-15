@@ -16,7 +16,7 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
+import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 const averageFromAverageOrMonthly = (
   averageOrMonthly: AverageOrMonthlyState,
@@ -56,7 +56,7 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
       }
 
       mischEinkommenTaetigkeiten.bruttoEinkommenDurchschnitt = Big(
-        taetigkeit.bruttoEinkommenDurchschnitt ?? MathUtil.BIG_ZERO,
+        taetigkeit.bruttoEinkommenDurchschnitt ?? BIG_ZERO,
       );
       mischEinkommenTaetigkeiten.rentenVersicherungsPflichtig = taetigkeit
         .versicherungen.hasRentenversicherung

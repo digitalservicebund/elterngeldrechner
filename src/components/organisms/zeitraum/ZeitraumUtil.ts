@@ -1,6 +1,6 @@
 import { SelectOption } from "@/components/molecules";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
-import { ZeitraumValue } from "@/globals/js/ZeitraumValue";
+import { zeitraumValueOf, ZeitraumValueType } from "@/globals/js/ZeitraumValue";
 
 // Bildet ein "von"/"bis" Zeitraum ab.
 export interface ZeitraumData {
@@ -26,11 +26,10 @@ export type ZeitraumOptionType = {
 export const availableZeitraumOptions = (
   currentZeitraumList: ZeitraumData[],
   initialZeitraumOptions: ZeitraumOptionType,
-  zeitraumValueType: ZeitraumValue.Type,
+  zeitraumValueType: ZeitraumValueType,
   lastZeitraumValue?: ZeitraumData,
 ): ZeitraumOptionType => {
-  const valueOf = (date: string) =>
-    ZeitraumValue.valueOf(date, zeitraumValueType);
+  const valueOf = (date: string) => zeitraumValueOf(date, zeitraumValueType);
 
   const zeitraumOptions = {
     from: cloneOptionsList(initialZeitraumOptions.from),

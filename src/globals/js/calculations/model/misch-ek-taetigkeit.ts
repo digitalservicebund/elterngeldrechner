@@ -1,6 +1,6 @@
 import Big from "big.js";
 import { YesNo } from "./yes-no";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
+import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 /**
  * Enthält die Daten zu einer Tätigkeit bei Mischeinkommen.
@@ -15,8 +15,8 @@ const ANZAHL_MONATE_PRO_JAHR: number = 12;
 
 export class MischEkTaetigkeit {
   erwerbsTaetigkeit: ErwerbsTaetigkeit = ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
-  bruttoEinkommenDurchschnitt: Big = MathUtil.BIG_ZERO;
-  bruttoEinkommenDurchschnittMidi: Big = MathUtil.BIG_ZERO;
+  bruttoEinkommenDurchschnitt: Big = BIG_ZERO;
+  bruttoEinkommenDurchschnittMidi: Big = BIG_ZERO;
   bemessungsZeitraumMonate: boolean[] = [];
   rentenVersicherungsPflichtig: YesNo = YesNo.YES;
   krankenVersicherungsPflichtig: YesNo = YesNo.YES;

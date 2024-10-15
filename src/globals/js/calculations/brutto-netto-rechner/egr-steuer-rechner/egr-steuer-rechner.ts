@@ -2,7 +2,6 @@ import Big from "big.js";
 import { BmfAbgaben } from "./bmf-abgaben";
 import { bmfAbgabenOf } from "./bmf-abgaben-factory";
 import {
-  EgrBerechnungParamId,
   ErwerbsArt,
   FinanzDaten,
   KinderFreiBetrag,
@@ -11,16 +10,18 @@ import {
   steuerklasseToNumber,
   YesNo,
 } from "@/globals/js/calculations/model";
-import {
-  BmfSteuerRechner,
-  BmfSteuerRechnerParameter,
-} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
+import { BmfSteuerRechnerParameter } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
-import { Logger } from "@/globals/js/calculations/common/logger";
 import {
   bmfSteuerRechnerAvailableYearsLib,
   bmfSteuerRechnerAvailableYearsRemote,
 } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-configuration";
+import { log } from "@/globals/js/calculations/common/logger";
+import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import {
+  callBmfSteuerRechner,
+  USE_REMOTE_STEUER_RECHNER,
+} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner";
 
 /**
  * EGR-Steuerrechner. Wrapper for BMF Lohn- und Einkommensteuerrechner with EGR data model.
@@ -30,7 +31,7 @@ export class EgrSteuerRechner {
     const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
     const jahrVorDerGeburt = geburtsDatumJahr - 1;
 
-    const availableYears = BmfSteuerRechner.USE_REMOTE_STEUER_RECHNER
+    const availableYears = USE_REMOTE_STEUER_RECHNER
       ? bmfSteuerRechnerAvailableYearsRemote
       : bmfSteuerRechnerAvailableYearsLib;
     if (availableYears.includes(jahrVorDerGeburt)) {
@@ -89,20 +90,15 @@ export class EgrSteuerRechner {
 
     let einkommenInCent: Big = bruttoProMonat.mul(Big(100));
     if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
-      einkommenInCent = einkommenInCent.add(
-        EgrBerechnungParamId.PAUSCH.mul(Big(100)),
-      );
+      einkommenInCent = einkommenInCent.add(PAUSCH.mul(Big(100)));
     }
     parameter.RE4 = einkommenInCent.round(0, Big.roundHalfUp).toNumber();
 
     try {
-      const bmfResponse = await BmfSteuerRechner.call(
-        lohnSteuerJahr,
-        parameter,
-      );
+      const bmfResponse = await callBmfSteuerRechner(lohnSteuerJahr, parameter);
       return bmfAbgabenOf(bmfResponse);
     } catch (e) {
-      Logger.log(e);
+      log(e);
       throw errorOf("BmfSteuerRechnerCallFailed");
     }
   }

@@ -8,7 +8,7 @@ import {
 } from "./model";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
-import { MathUtil } from "./common/math-util";
+import { BIG_ZERO } from "./common/math-util";
 import { describeSkipOnCi } from "@/setupTests";
 import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
@@ -120,12 +120,12 @@ const createFinanzDaten = (
 
 const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
   return {
-    elterngeldbasis: MathUtil.BIG_ZERO,
+    elterngeldbasis: BIG_ZERO,
     krankenversicherungspflichtig: false,
-    netto: MathUtil.BIG_ZERO,
-    brutto: MathUtil.BIG_ZERO,
-    steuern: MathUtil.BIG_ZERO,
-    abgaben: MathUtil.BIG_ZERO,
+    netto: BIG_ZERO,
+    brutto: BIG_ZERO,
+    steuern: BIG_ZERO,
+    abgaben: BIG_ZERO,
     rentenversicherungspflichtig: false,
     status: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
   };

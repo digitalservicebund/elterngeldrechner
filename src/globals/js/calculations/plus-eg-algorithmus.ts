@@ -1,7 +1,6 @@
 import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import {
-  EgrBerechnungParamId,
   ElternGeldArt,
   ElternGeldAusgabe,
   ElternGeldKategorie,
@@ -20,11 +19,29 @@ import {
   zaehleMonateErwerbsTaetigkeit,
   ZwischenErgebnis,
 } from "./model";
-import { MathUtil } from "./common/math-util";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { DateUtil } from "./common/date-util";
-import { ElternGeldBruttoRechner } from "./eg-brutto-rechner";
 import { errorOf } from "./calculation-error-code";
+import {
+  BIG_ZERO,
+  fMax,
+  fMin,
+  greater,
+  isEqual,
+  round,
+} from "@/globals/js/calculations/common/math-util";
+import { bruttoEGPlusNeu } from "@/globals/js/calculations/eg-brutto-rechner";
+import {
+  minusDays,
+  plusMonths,
+  setDayOfMonth,
+} from "@/globals/js/calculations/common/date-util";
+import {
+  BETRAG_MEHRLINGSZUSCHLAG,
+  MIN_GESCHWISTERBONUS,
+  MINDESTSATZ,
+  PAUSCH,
+  RATE_BONUS,
+} from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 export class PlusEgAlgorithmus extends AbstractAlgorithmus {
   private bruttoNettoRechner = new BruttoNettoRechner();
@@ -49,21 +66,21 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     let brutto_LM_Plus = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1);
     // Das Array wird mit Index 1-32 benutzt.
     let brutto_LM_Basis = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1);
-    brutto_LM_Plus.fill(MathUtil.BIG_ZERO);
-    brutto_LM_Basis.fill(MathUtil.BIG_ZERO);
+    brutto_LM_Plus.fill(BIG_ZERO);
+    brutto_LM_Basis.fill(BIG_ZERO);
     const etVorGeburt: boolean =
       persoenlicheDaten.etVorGeburt !== ErwerbsArt.NEIN;
     const eg_verlauf: ElternGeldArt[] = planungsergebnis.planung;
     let ergebnis: ElternGeldPlusErgebnis;
     const finanzDatenBerechnet: FinanzDatenBerechnet = {
-      bruttoEinkommenDurch: MathUtil.BIG_ZERO,
-      bruttoEinkommenPlusDurch: MathUtil.BIG_ZERO,
+      bruttoEinkommenDurch: BIG_ZERO,
+      bruttoEinkommenPlusDurch: BIG_ZERO,
       bruttoLMBasis: [],
       bruttoLMPlus: [],
       lmMitETBasis: 0,
       lmMitETPlus: 0,
-      summeBruttoBasis: MathUtil.BIG_ZERO,
-      summeBruttoPlus: MathUtil.BIG_ZERO,
+      summeBruttoBasis: BIG_ZERO,
+      summeBruttoPlus: BIG_ZERO,
     };
     if (!etVorGeburt) {
       ergebnis = PlusEgAlgorithmus.ohneETVorGeburt();
@@ -100,7 +117,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       // Das Array wird mit Index 1-32 benutzt.
       finanzDatenBerechnet.bruttoLMPlus = new Array<Big>(
         PLANUNG_ANZAHL_MONATE + 1,
-      ).fill(MathUtil.BIG_ZERO);
+      ).fill(BIG_ZERO);
     }
     const verlauf: ElternGeldKategorie[] = this.determineElternGeldKategorie(
       finanzDatenBerechnet,
@@ -133,7 +150,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
       ek_vor = mischEkZwischenErgebnis.netto;
       if (mischEkZwischenErgebnis.status !== ErwerbsArt.JA_SELBSTSTAENDIG) {
-        ek_vor = ek_vor.add(EgrBerechnungParamId.PAUSCH);
+        ek_vor = ek_vor.add(PAUSCH);
       }
     }
     return ek_vor;
@@ -144,24 +161,24 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       anfangEGPeriode: [],
       elternGeldAusgabe: [],
       endeEGPeriode: [],
-      ersatzRate: MathUtil.BIG_ZERO,
+      ersatzRate: BIG_ZERO,
       etVorGeburt: false,
-      geschwisterBonus: MathUtil.BIG_ZERO,
+      geschwisterBonus: BIG_ZERO,
       geschwisterBonusDeadLine: null,
       hasPartnerBonusError: false,
-      mehrlingsZulage: MathUtil.BIG_ZERO,
-      nettoNachGeburtDurch: MathUtil.BIG_ZERO,
+      mehrlingsZulage: BIG_ZERO,
+      nettoNachGeburtDurch: BIG_ZERO,
 
-      elternGeldBasis: EgrBerechnungParamId.MINDESTSATZ,
-      elternGeldKeineEtPlus: EgrBerechnungParamId.MINDESTSATZ.div(Big(2)),
+      elternGeldBasis: MINDESTSATZ,
+      elternGeldKeineEtPlus: MINDESTSATZ.div(Big(2)),
       message:
         "Sie erhalten 300 Euro Elterngeld sowie evtl. Geschwisterbonus und/oder Mehrlingszuschlag",
-      bruttoBasis: MathUtil.BIG_ZERO,
-      nettoBasis: MathUtil.BIG_ZERO,
-      elternGeldErwBasis: MathUtil.BIG_ZERO,
-      bruttoPlus: MathUtil.BIG_ZERO,
-      nettoPlus: MathUtil.BIG_ZERO,
-      elternGeldEtPlus: MathUtil.BIG_ZERO,
+      bruttoBasis: BIG_ZERO,
+      nettoBasis: BIG_ZERO,
+      elternGeldErwBasis: BIG_ZERO,
+      bruttoPlus: BIG_ZERO,
+      nettoPlus: BIG_ZERO,
+      elternGeldEtPlus: BIG_ZERO,
     };
   }
 
@@ -176,17 +193,17 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     const nicht_erw: YesNo = persoenlicheDaten.etNachGeburt;
     let ek_nach_plus: Big;
     let elterngeld_erw_plus: Big;
-    let brutto_basis: Big = MathUtil.BIG_ZERO;
-    let netto_basis: Big = MathUtil.BIG_ZERO;
-    let elterngeld_erw_basis: Big = MathUtil.BIG_ZERO;
-    let brutto_plus: Big = MathUtil.BIG_ZERO;
-    let netto_plus: Big = MathUtil.BIG_ZERO;
-    let elterngeld_et_plus: Big = MathUtil.BIG_ZERO;
-    let elterngeld_keine_et_plus: Big = MathUtil.BIG_ZERO;
+    let brutto_basis: Big = BIG_ZERO;
+    let netto_basis: Big = BIG_ZERO;
+    let elterngeld_erw_basis: Big = BIG_ZERO;
+    let brutto_plus: Big = BIG_ZERO;
+    let netto_plus: Big = BIG_ZERO;
+    let elterngeld_et_plus: Big = BIG_ZERO;
+    let elterngeld_keine_et_plus: Big = BIG_ZERO;
     let elternGeldPerioden: ElternGeldPerioden = { anfang: [], ende: [] };
     if (nicht_erw === YesNo.YES) {
       // es liegt Erwerbstätigkeit nach der Geburt vor
-      const pausch: Big = EgrBerechnungParamId.PAUSCH;
+      const pausch: Big = PAUSCH;
       // if (finanzDaten.erwerbsZeitraumLeistungsMonatList == null) {
       //   finanzDaten.erwerbsZeitraumLeistungsMonatList = [];
       // }
@@ -202,12 +219,12 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           finanzDaten,
           planungsergebnis,
         );
-        let summe_brutto_basis: Big = MathUtil.BIG_ZERO;
-        let summe_brutto_plus: Big = MathUtil.BIG_ZERO;
+        let summe_brutto_basis: Big = BIG_ZERO;
+        let summe_brutto_plus: Big = BIG_ZERO;
         this.fillLebensMonateList(geburt);
         persoenlicheDaten.anfangLM = this.anfang_LM;
         persoenlicheDaten.endeLM = this.ende_LM;
-        const finanzDatenBerechnet = ElternGeldBruttoRechner.bruttoEGPlusNeu(
+        const finanzDatenBerechnet = bruttoEGPlusNeu(
           planungsergebnis,
           finanzDaten,
         );
@@ -219,15 +236,15 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           finanzDaten.bruttoLeistungsMonateWithPlanung(false, planungsergebnis);
         const brutto_LM_Plus: Big[] = /* toArray */ bruttoLMPlus.slice(0);
         const brutto_LM_Basis: Big[] = /* toArray */ bruttoLMBasis.slice(0);
-        let steuer_sozab_basis: Big = MathUtil.BIG_ZERO;
-        let steuer_sozab_plus: Big = MathUtil.BIG_ZERO;
+        let steuer_sozab_basis: Big = BIG_ZERO;
+        let steuer_sozab_plus: Big = BIG_ZERO;
         brutto_basis = finanzDatenBerechnet.bruttoEinkommenDurch;
         brutto_plus = finanzDatenBerechnet.bruttoEinkommenPlusDurch;
         if (persoenlicheDaten.etVorGeburt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
           netto_basis = brutto_basis;
           netto_plus = brutto_plus;
         } else {
-          if (MathUtil.greater(brutto_basis, MathUtil.BIG_ZERO)) {
+          if (greater(brutto_basis, BIG_ZERO)) {
             steuer_sozab_basis = await this.bruttoNettoRechner.abzuege(
               brutto_basis,
               lohnSteuerJahr,
@@ -235,7 +252,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
               persoenlicheDaten.etVorGeburt,
             );
           }
-          if (MathUtil.greater(brutto_plus, MathUtil.BIG_ZERO)) {
+          if (greater(brutto_plus, BIG_ZERO)) {
             steuer_sozab_plus = await this.bruttoNettoRechner.abzuege(
               brutto_plus,
               lohnSteuerJahr,
@@ -250,34 +267,25 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           ek_vor,
           mischEkZwischenErgebnis,
         );
-        if (MathUtil.greater(brutto_basis, MathUtil.BIG_ZERO)) {
+        if (greater(brutto_basis, BIG_ZERO)) {
           switch (persoenlicheDaten.etVorGeburt) {
             case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_MINI:
-              ek_vor = MathUtil.fMax(
-                MathUtil.round(ek_vor.sub(EgrBerechnungParamId.PAUSCH)),
-                MathUtil.BIG_ZERO,
-              );
-              summe_brutto_basis = MathUtil.BIG_ZERO;
+              ek_vor = fMax(round(ek_vor.sub(PAUSCH)), BIG_ZERO);
+              summe_brutto_basis = BIG_ZERO;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
                 if (
-                  !MathUtil.isEqual(brutto_LM_Basis[i], MathUtil.BIG_ZERO) &&
+                  !isEqual(brutto_LM_Basis[i], BIG_ZERO) &&
                   planungsergebnis.get(i) === ElternGeldArt.BASIS_ELTERNGELD
                 ) {
                   summe_brutto_basis = summe_brutto_basis.add(
-                    MathUtil.round(
-                      MathUtil.fMax(
-                        brutto_LM_Basis[i].sub(pausch),
-                        MathUtil.BIG_ZERO,
-                      ),
-                      2,
-                    ),
+                    round(fMax(brutto_LM_Basis[i].sub(pausch), BIG_ZERO), 2),
                   );
                 }
               }
               if (lm_mit_et_basis > 0) {
-                brutto_basis = MathUtil.round(
+                brutto_basis = round(
                   summe_brutto_basis.div(Big(lm_mit_et_basis)),
                   2,
                 );
@@ -285,17 +293,14 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
               break;
             default:
           }
-          netto_basis = MathUtil.fMax(
-            brutto_basis.sub(steuer_sozab_basis),
-            MathUtil.BIG_ZERO,
-          );
+          netto_basis = fMax(brutto_basis.sub(steuer_sozab_basis), BIG_ZERO);
           const ek_nach_basis: Big = netto_basis;
-          elterngeld_erw_basis = MathUtil.round(
+          elterngeld_erw_basis = round(
             this.elterngeld_et(ek_vor, ek_nach_basis),
             2,
           );
         }
-        if (MathUtil.greater(brutto_plus, MathUtil.BIG_ZERO)) {
+        if (greater(brutto_plus, BIG_ZERO)) {
           let status: ErwerbsArt;
           if (finanzDaten.isMischeinkommen()) {
             if (mischEkZwischenErgebnis === null) {
@@ -315,31 +320,22 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             case ErwerbsArt.JA_NICHT_SELBST_MINI:
             case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
-              ek_vor = MathUtil.fMax(
-                ek_vor.sub(EgrBerechnungParamId.PAUSCH),
-                MathUtil.BIG_ZERO,
-              );
-              summe_brutto_plus = MathUtil.BIG_ZERO;
+              ek_vor = fMax(ek_vor.sub(PAUSCH), BIG_ZERO);
+              summe_brutto_plus = BIG_ZERO;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
                 if (
-                  !MathUtil.isEqual(brutto_LM_Plus[i], MathUtil.BIG_ZERO) &&
+                  !isEqual(brutto_LM_Plus[i], BIG_ZERO) &&
                   (planungsergebnis.get(i) === ElternGeldArt.ELTERNGELD_PLUS ||
                     planungsergebnis.get(i) ===
                       ElternGeldArt.PARTNERSCHAFTS_BONUS)
                 ) {
                   summe_brutto_plus = summe_brutto_plus.add(
-                    MathUtil.round(
-                      MathUtil.fMax(
-                        brutto_LM_Plus[i].sub(pausch),
-                        MathUtil.BIG_ZERO,
-                      ),
-                      2,
-                    ),
+                    round(fMax(brutto_LM_Plus[i].sub(pausch), BIG_ZERO), 2),
                   );
                 }
               }
               if (lm_mit_et_plus > 0) {
-                brutto_plus = MathUtil.round(
+                brutto_plus = round(
                   summe_brutto_plus.div(Big(lm_mit_et_plus)),
                   2,
                 );
@@ -348,12 +344,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             default:
           }
         }
-        netto_plus = MathUtil.fMax(
-          brutto_plus.sub(steuer_sozab_plus),
-          MathUtil.BIG_ZERO,
-        );
+        netto_plus = fMax(brutto_plus.sub(steuer_sozab_plus), BIG_ZERO);
         ek_nach_plus = netto_plus;
-        elterngeld_erw_plus = MathUtil.round(
+        elterngeld_erw_plus = round(
           this.elterngeldplus_et(ek_vor, ek_nach_plus),
           2,
         );
@@ -365,48 +358,45 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           elterngeld_keine_et_plus = mischEkZwischenErgebnis.elterngeldbasis;
         }
         elterngeld_keine_et_plus = elterngeld_keine_et_plus.div(Big(2));
-        elterngeld_et_plus = MathUtil.fMin(
+        elterngeld_et_plus = fMin(
           elterngeld_keine_et_plus,
           elterngeld_erw_plus,
         );
       }
     } else {
       // Sollten keine Perioden angegeben sein, so berechne nichts
-      netto_plus = MathUtil.BIG_ZERO;
-      elterngeld_keine_et_plus = MathUtil.BIG_ZERO;
-      elterngeld_et_plus = MathUtil.BIG_ZERO;
+      netto_plus = BIG_ZERO;
+      elterngeld_keine_et_plus = BIG_ZERO;
+      elterngeld_et_plus = BIG_ZERO;
     }
     return {
       anfangEGPeriode: elternGeldPerioden.anfang,
       endeEGPeriode: elternGeldPerioden.ende,
-      elternGeldErwBasis: MathUtil.round(elterngeld_erw_basis, 2),
-      bruttoBasis: MathUtil.round(brutto_basis, 2),
-      nettoBasis: MathUtil.round(netto_basis, 2),
-      bruttoPlus: MathUtil.round(brutto_plus, 2),
-      nettoPlus: MathUtil.round(netto_plus, 2),
-      elternGeldEtPlus: MathUtil.round(elterngeld_et_plus, 2),
-      elternGeldKeineEtPlus: MathUtil.round(elterngeld_keine_et_plus, 2),
+      elternGeldErwBasis: round(elterngeld_erw_basis, 2),
+      bruttoBasis: round(brutto_basis, 2),
+      nettoBasis: round(netto_basis, 2),
+      bruttoPlus: round(brutto_plus, 2),
+      nettoPlus: round(netto_plus, 2),
+      elternGeldEtPlus: round(elterngeld_et_plus, 2),
+      elternGeldKeineEtPlus: round(elterngeld_keine_et_plus, 2),
       elternGeldAusgabe: [],
-      elternGeldBasis: MathUtil.BIG_ZERO,
-      ersatzRate: MathUtil.BIG_ZERO,
+      elternGeldBasis: BIG_ZERO,
+      ersatzRate: BIG_ZERO,
       etVorGeburt: false,
-      geschwisterBonus: MathUtil.BIG_ZERO,
+      geschwisterBonus: BIG_ZERO,
       geschwisterBonusDeadLine: null,
       hasPartnerBonusError: false,
-      mehrlingsZulage: MathUtil.BIG_ZERO,
+      mehrlingsZulage: BIG_ZERO,
       message: "",
-      nettoNachGeburtDurch: MathUtil.BIG_ZERO,
+      nettoNachGeburtDurch: BIG_ZERO,
     };
   }
 
   public fillLebensMonateList(geburt: Date) {
     // Die Arrays anfang_LM und ende_LM werden mit Index 1-32 benutzt.
     for (let i: number = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-      const anfang: Date = DateUtil.plusMonths(geburt, i);
-      const ende: Date = DateUtil.minusDays(
-        DateUtil.plusMonths(geburt, i + 1),
-        1,
-      );
+      const anfang: Date = plusMonths(geburt, i);
+      const ende: Date = minusDays(plusMonths(geburt, i + 1), 1);
       this.anfang_LM[i + 1] = anfang;
       this.ende_LM[i + 1] = ende;
       if (
@@ -415,15 +405,12 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         anfang.getDay() < 5
       ) {
         // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 1, 1).getTime());
-        this.anfang_LM[i + 1] = DateUtil.setDayOfMonth(
-          DateUtil.plusMonths(geburt, i + 1),
-          1,
-        );
+        this.anfang_LM[i + 1] = setDayOfMonth(plusMonths(geburt, i + 1), 1);
       }
       if (geburt.getDay() > 28 && ende.getMonth() === 2 && ende.getDay() < 5) {
         // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 2, 0).getTime());
-        this.anfang_LM[i + 1] = DateUtil.minusDays(
-          DateUtil.setDayOfMonth(DateUtil.plusMonths(geburt, i + 2), 1),
+        this.anfang_LM[i + 1] = minusDays(
+          setDayOfMonth(plusMonths(geburt, i + 2), 1),
           1,
         );
       }
@@ -467,21 +454,21 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.ELTERNGELD_PLUS &&
-          MathUtil.isEqual(brutto_LM_Plus_pb[i], MathUtil.BIG_ZERO)
+          isEqual(brutto_LM_Plus_pb[i], BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          MathUtil.isEqual(brutto_LM_Plus_pb[i], MathUtil.BIG_ZERO)
+          isEqual(brutto_LM_Plus_pb[i], BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          MathUtil.isEqual(brutto_LM_Plus[i], MathUtil.BIG_ZERO)
+          isEqual(brutto_LM_Plus[i], BIG_ZERO)
         ) {
           this.partnerbonus = YesNo.YES;
           break;
@@ -494,41 +481,41 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.BASIS_ELTERNGELD &&
-          MathUtil.isEqual(brutto_LM_Basis[i], MathUtil.BIG_ZERO)
+          isEqual(brutto_LM_Basis[i], BIG_ZERO)
         ) {
           verlauf[i - 1] = ElternGeldKategorie.BASIS_ELTERN_GELD;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.BASIS_ELTERNGELD &&
-          MathUtil.greater(brutto_LM_Basis[i], MathUtil.BIG_ZERO)
+          greater(brutto_LM_Basis[i], BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.BASIS_ELTERN_GELD_MIT_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.ELTERNGELD_PLUS &&
-          MathUtil.isEqual(brutto_LM_Plus[i], MathUtil.BIG_ZERO)
+          isEqual(brutto_LM_Plus[i], BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          MathUtil.isEqual(brutto_LM_Plus[i], MathUtil.BIG_ZERO)
+          isEqual(brutto_LM_Plus[i], BIG_ZERO)
         ) {
           this.partnerbonus = YesNo.YES;
           break;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.ELTERNGELD_PLUS &&
-          MathUtil.greater(brutto_LM_Plus[i], MathUtil.BIG_ZERO)
+          greater(brutto_LM_Plus[i], BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          MathUtil.greater(brutto_LM_Plus[i], MathUtil.BIG_ZERO)
+          greater(brutto_LM_Plus[i], BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT;
@@ -570,13 +557,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
       if (ende_geschwisterbonus != null && ende_geschwisterbonus >= geburt) {
         for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.anfang_LM[i] = DateUtil.plusMonths(geburt, i - 1);
+          this.anfang_LM[i] = plusMonths(geburt, i - 1);
         }
         for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.ende_LM[i] = DateUtil.minusDays(
-            DateUtil.plusMonths(geburt, i),
-            1,
-          );
+          this.ende_LM[i] = minusDays(plusMonths(geburt, i), 1);
         }
       }
       for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
@@ -598,12 +582,11 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       basiselterngeld = misch.elterngeldbasis;
     }
     const basiselterngeld_erw: Big = ergebnis.elternGeldErwBasis;
-    const elterngeldplus: Big = MathUtil.round(basiselterngeld.div(Big(2)), 2);
+    const elterngeldplus: Big = round(basiselterngeld.div(Big(2)), 2);
     const elterngeldplus_erw: Big = ergebnis.elternGeldEtPlus;
-    const betrag_mehrlingszuschlag: Big =
-      EgrBerechnungParamId.BETRAG_MEHRLINGSZUSCHLAG;
-    const min_geschwisterbonus: Big = EgrBerechnungParamId.MIN_GESCHWISTERBONUS;
-    const rate_bonus: Big = EgrBerechnungParamId.RATE_BONUS;
+    const betrag_mehrlingszuschlag: Big = BETRAG_MEHRLINGSZUSCHLAG;
+    const min_geschwisterbonus: Big = MIN_GESCHWISTERBONUS;
+    const rate_bonus: Big = RATE_BONUS;
     let mehrling: number = 0;
     if (persoenlicheDaten.anzahlKuenftigerKinder > 0) {
       mehrling = persoenlicheDaten.anzahlKuenftigerKinder - 1;
@@ -612,9 +595,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       const ausgabe: ElternGeldAusgabe = {
         lebensMonat: i,
         elterngeldArt: planungsergebnis.get(i),
-        elternGeld: MathUtil.BIG_ZERO,
-        geschwisterBonus: MathUtil.BIG_ZERO,
-        mehrlingsZulage: MathUtil.BIG_ZERO,
+        elternGeld: BIG_ZERO,
+        geschwisterBonus: BIG_ZERO,
+        mehrlingsZulage: BIG_ZERO,
         mutterschaftsLeistungMonat: false,
       };
       if (
@@ -624,20 +607,19 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       } else if (this.partnerbonus === YesNo.YES) {
         // es ist schon alles auf 0 gesetzt
       } else {
-        let geschwisterbonus: Big = MathUtil.BIG_ZERO;
-        let mehrlingszuschlag: Big = MathUtil.BIG_ZERO;
-        let elterngeld: Big = MathUtil.BIG_ZERO;
+        let geschwisterbonus: Big = BIG_ZERO;
+        let mehrlingszuschlag: Big = BIG_ZERO;
+        let elterngeld: Big = BIG_ZERO;
         if (verlauf[i - 1] === ElternGeldKategorie.KEIN_ELTERN_GELD) {
-          geschwisterbonus = MathUtil.BIG_ZERO;
-          mehrlingszuschlag = MathUtil.BIG_ZERO;
-          elterngeld = MathUtil.BIG_ZERO;
+          geschwisterbonus = BIG_ZERO;
+          mehrlingszuschlag = BIG_ZERO;
+          elterngeld = BIG_ZERO;
         }
         if (verlauf[i - 1] === ElternGeldKategorie.BASIS_ELTERN_GELD) {
-          geschwisterbonus = MathUtil.round(
-            MathUtil.fMax(
-              min_geschwisterbonus,
-              basiselterngeld.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1])),
+          geschwisterbonus = round(
+            fMax(min_geschwisterbonus, basiselterngeld.mul(rate_bonus)).mul(
+              Big(geschw[i - 1]),
+            ),
             2,
           );
           mehrlingszuschlag = betrag_mehrlingszuschlag.mul(Big(mehrling));
@@ -650,11 +632,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           ElternGeldKategorie.BASIS_ELTERN_GELD_MIT_ERWERBS_TAETIGKEIT
         ) {
           mehrlingszuschlag = betrag_mehrlingszuschlag.mul(Big(mehrling));
-          geschwisterbonus = MathUtil.round(
-            MathUtil.fMax(
-              min_geschwisterbonus,
-              basiselterngeld_erw.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1])),
+          geschwisterbonus = round(
+            fMax(min_geschwisterbonus, basiselterngeld_erw.mul(rate_bonus)).mul(
+              Big(geschw[i - 1]),
+            ),
             2,
           );
           elterngeld = basiselterngeld_erw
@@ -668,8 +649,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           mehrlingszuschlag = betrag_mehrlingszuschlag
             .mul(Big(mehrling))
             .div(Big(2));
-          geschwisterbonus = MathUtil.round(
-            MathUtil.fMax(
+          geschwisterbonus = round(
+            fMax(
               min_geschwisterbonus.div(Big(2)),
               elterngeldplus.mul(rate_bonus),
             ).mul(Big(geschw[i - 1])),
@@ -686,8 +667,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           mehrlingszuschlag = betrag_mehrlingszuschlag
             .mul(Big(mehrling))
             .div(Big(2));
-          geschwisterbonus = MathUtil.round(
-            MathUtil.fMax(
+          geschwisterbonus = round(
+            fMax(
               min_geschwisterbonus.div(Big(2)),
               elterngeldplus_erw.mul(rate_bonus),
             ).mul(Big(geschw[i - 1])),
@@ -697,22 +678,22 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             .add(geschwisterbonus)
             .add(mehrlingszuschlag);
         }
-        ausgabe.elternGeld = MathUtil.round(elterngeld);
-        ausgabe.mehrlingsZulage = MathUtil.round(mehrlingszuschlag);
-        ausgabe.geschwisterBonus = MathUtil.round(geschwisterbonus);
+        ausgabe.elternGeld = round(elterngeld);
+        ausgabe.mehrlingsZulage = round(mehrlingszuschlag);
+        ausgabe.geschwisterBonus = round(geschwisterbonus);
       }
       ausgabeLebensmonate.push(ausgabe);
     }
 
     if (ergebnis.ersatzRate == null) {
-      ergebnis.ersatzRate = MathUtil.round(z.ersatzRate);
+      ergebnis.ersatzRate = round(z.ersatzRate);
     }
-    ergebnis.elternGeldBasis = MathUtil.round(basiselterngeld);
-    ergebnis.elternGeldErwBasis = MathUtil.round(basiselterngeld_erw);
-    ergebnis.elternGeldKeineEtPlus = MathUtil.round(elterngeldplus);
-    ergebnis.elternGeldEtPlus = MathUtil.round(elterngeldplus_erw);
-    ergebnis.mehrlingsZulage = MathUtil.round(z.mehrlingsZulage);
-    ergebnis.geschwisterBonus = MathUtil.round(z.geschwisterBonus);
+    ergebnis.elternGeldBasis = round(basiselterngeld);
+    ergebnis.elternGeldErwBasis = round(basiselterngeld_erw);
+    ergebnis.elternGeldKeineEtPlus = round(elterngeldplus);
+    ergebnis.elternGeldEtPlus = round(elterngeldplus_erw);
+    ergebnis.mehrlingsZulage = round(z.mehrlingsZulage);
+    ergebnis.geschwisterBonus = round(z.geschwisterBonus);
     if (
       !persoenlicheDaten.etVorGeburt ||
       persoenlicheDaten.etVorGeburt === ErwerbsArt.NEIN
@@ -745,13 +726,13 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       // TODO TW message entfernen
       ergebnis.message =
         "Während des Bezugs des Partnerschaftsbonus muss Erwerbstätigkeit vorliegen.";
-      ergebnis.bruttoBasis = MathUtil.BIG_ZERO;
-      ergebnis.nettoBasis = MathUtil.BIG_ZERO;
-      ergebnis.elternGeldErwBasis = MathUtil.BIG_ZERO;
-      ergebnis.bruttoPlus = MathUtil.BIG_ZERO;
-      ergebnis.nettoPlus = MathUtil.BIG_ZERO;
-      ergebnis.elternGeldEtPlus = MathUtil.BIG_ZERO;
-      ergebnis.elternGeldKeineEtPlus = MathUtil.BIG_ZERO;
+      ergebnis.bruttoBasis = BIG_ZERO;
+      ergebnis.nettoBasis = BIG_ZERO;
+      ergebnis.elternGeldErwBasis = BIG_ZERO;
+      ergebnis.bruttoPlus = BIG_ZERO;
+      ergebnis.nettoPlus = BIG_ZERO;
+      ergebnis.elternGeldEtPlus = BIG_ZERO;
+      ergebnis.elternGeldKeineEtPlus = BIG_ZERO;
     }
     return ergebnis;
   }

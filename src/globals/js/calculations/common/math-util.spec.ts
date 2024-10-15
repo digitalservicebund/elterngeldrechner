@@ -1,48 +1,48 @@
 import Big from "big.js";
-import { MathUtil } from "./math-util";
+import { floor, fMax, fMin, round } from "./math-util";
 
 describe("math-util", () => {
   describe("round half up with precision 2:", () => {
     it("0.444", () => {
-      expect(MathUtil.round(Big(0.444)).toString()).toBe("0.44");
+      expect(round(Big(0.444)).toString()).toBe("0.44");
     });
 
     it("0.555", () => {
-      expect(MathUtil.round(Big(0.555)).toString()).toBe("0.56");
+      expect(round(Big(0.555)).toString()).toBe("0.56");
     });
   });
 
   describe("round half up", () => {
     it("0.4444 with precision 3", () => {
-      expect(MathUtil.round(Big(0.4444), 3).toString()).toBe("0.444");
+      expect(round(Big(0.4444), 3).toString()).toBe("0.444");
     });
 
     it("0.4444 with precision 2", () => {
-      expect(MathUtil.round(Big(0.4444), 2).toString()).toBe("0.44");
+      expect(round(Big(0.4444), 2).toString()).toBe("0.44");
     });
 
     it("0.4444 with precision 1", () => {
-      expect(MathUtil.round(Big(0.4444), 1).toString()).toBe("0.4");
+      expect(round(Big(0.4444), 1).toString()).toBe("0.4");
     });
 
     it("0.4444 with precision 0", () => {
-      expect(MathUtil.round(Big(0.4444), 0).toString()).toBe("0");
+      expect(round(Big(0.4444), 0).toString()).toBe("0");
     });
 
     it("0.5555 with precision 3", () => {
-      expect(MathUtil.round(Big(0.5555), 3).toString()).toBe("0.556");
+      expect(round(Big(0.5555), 3).toString()).toBe("0.556");
     });
 
     it("0.5555 with precision 2", () => {
-      expect(MathUtil.round(Big(0.5555), 2).toString()).toBe("0.56");
+      expect(round(Big(0.5555), 2).toString()).toBe("0.56");
     });
 
     it("0.5555 with precision 1", () => {
-      expect(MathUtil.round(Big(0.5555), 1).toString()).toBe("0.6");
+      expect(round(Big(0.5555), 1).toString()).toBe("0.6");
     });
 
     it("0.5555 with precision 0", () => {
-      expect(MathUtil.round(Big(0.5555), 0).toString()).toBe("1");
+      expect(round(Big(0.5555), 0).toString()).toBe("1");
     });
   });
   describe.each([
@@ -62,7 +62,7 @@ describe("math-util", () => {
   ])("floor(%d) == %d", (input, output) => {
     it("should round with floor", () => {
       // when
-      const actual = MathUtil.floor(Big(input));
+      const actual = floor(Big(input));
 
       // then
       expect(actual.toString()).toBe(Big(output).toString());
@@ -79,7 +79,7 @@ describe("math-util", () => {
   ])("minimum of %d and %d is %d", (inputA, inputB, output) => {
     it("should determine minimum", () => {
       // when
-      const actual = MathUtil.fMin(Big(inputA), Big(inputB));
+      const actual = fMin(Big(inputA), Big(inputB));
 
       // then
       expect(actual.toString()).toBe(Big(output).toString());
@@ -87,7 +87,7 @@ describe("math-util", () => {
 
     it("should determine minimum with reversed arguments", () => {
       // when
-      const actual = MathUtil.fMin(Big(inputB), Big(inputA));
+      const actual = fMin(Big(inputB), Big(inputA));
 
       // then
       expect(actual.toString()).toBe(Big(output).toString());
@@ -104,7 +104,7 @@ describe("math-util", () => {
   ])("maximum of %d and %d is %d", (inputA, inputB, output) => {
     it("should determine maximum", () => {
       // when
-      const actual = MathUtil.fMax(Big(inputA), Big(inputB));
+      const actual = fMax(Big(inputA), Big(inputB));
 
       // then
       expect(actual.toString()).toBe(Big(output).toString());
@@ -112,7 +112,7 @@ describe("math-util", () => {
 
     it("should determine maximum with reversed arguments", () => {
       // when
-      const actual = MathUtil.fMax(Big(inputB), Big(inputA));
+      const actual = fMax(Big(inputB), Big(inputA));
 
       // then
       expect(actual.toString()).toBe(Big(output).toString());

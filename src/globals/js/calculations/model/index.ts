@@ -3,7 +3,6 @@ export {
   ErwerbsTaetigkeit,
   MischEkTaetigkeit,
 } from "./misch-ek-taetigkeit";
-export { EgrBerechnungParamId } from "./egr-berechnung-param-id";
 export { Einkommen } from "./einkommen";
 export type { NettoEinkommen } from "./einkommen-types";
 export { ElternGeldArt } from "./eltern-geld-art";

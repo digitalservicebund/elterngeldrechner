@@ -1,12 +1,12 @@
 import { LST } from "@bmfin/steuerrechner";
 import { LST_INPUT } from "@bmfin/steuerrechner/build/types/input";
 import { bmfSteuerRechnerUrlOf } from "./bmf-steuer-rechner-configuration";
-import { BmfSteuerRechnerResponseParser } from "./bmf-steuer-rechner-response-parser";
 import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 import { BmfSteuerRechnerResponse } from "./bmf-steuer-rechner-response";
-import { BmfSteuerRechnerResponseConverter } from "./bmf-steuer-rechner-response-converter";
-import { BmfSteuerRechnerParameterConverter } from "./bmf-steuer-rechner-parameter-converter";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
+import { convert as convertParameter } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-parameter-converter";
+import { convert as convertResponse } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-response-converter";
+import { parse as parseResponse } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-response-parser";
 
 /**
  * Namespace for function to call the BMF Lohn- und Einkommensteuerrechner.
@@ -15,46 +15,39 @@ import { errorOf } from "@/globals/js/calculations/calculation-error-code";
  * - https://www.bmf-steuerrechner.de/interface/einganginterface.xhtml
  * - https://issues.init.de/secure/attachment/708773/708773_2021-11-05-PAP-2022-anlage-1.pdf
  */
-export namespace BmfSteuerRechner {
-  export const USE_REMOTE_STEUER_RECHNER = false;
+export const USE_REMOTE_STEUER_RECHNER = false;
 
-  /**
-   * Calls the BMF Lohn- und Einkommensteuerrechner.
-   *
-   * @param lohnSteuerJahr Lohnsteuerjahr for correct version of BMF Lohn- und Einkommensteuerrechner Must be greater than 2020.
-   * @param bmfSteuerRechnerParameter Parameter for BMF Lohn- und Einkommensteuerrechner.
-   *
-   * @return Response from BMF Lohn- und Einkommensteuerrechner as promise.
-   */
-  export async function call(
-    lohnSteuerJahr: number,
-    bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
-  ): Promise<BmfSteuerRechnerResponse> {
-    let response: BmfSteuerRechnerResponse;
-    if (USE_REMOTE_STEUER_RECHNER) {
-      response = await callRemoteRechner(
-        lohnSteuerJahr,
-        bmfSteuerRechnerParameter,
-      );
-    } else {
-      response = await callRechnerLib(
-        lohnSteuerJahr,
-        bmfSteuerRechnerParameter,
-      );
-    }
-    return response;
+/**
+ * Calls the BMF Lohn- und Einkommensteuerrechner.
+ *
+ * @param lohnSteuerJahr Lohnsteuerjahr for correct version of BMF Lohn- und Einkommensteuerrechner Must be greater than 2020.
+ * @param bmfSteuerRechnerParameter Parameter for BMF Lohn- und Einkommensteuerrechner.
+ *
+ * @return Response from BMF Lohn- und Einkommensteuerrechner as promise.
+ */
+export async function callBmfSteuerRechner(
+  lohnSteuerJahr: number,
+  bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
+): Promise<BmfSteuerRechnerResponse> {
+  let response: BmfSteuerRechnerResponse;
+  if (USE_REMOTE_STEUER_RECHNER) {
+    response = await callRemoteRechner(
+      lohnSteuerJahr,
+      bmfSteuerRechnerParameter,
+    );
+  } else {
+    response = await callRechnerLib(lohnSteuerJahr, bmfSteuerRechnerParameter);
   }
+  return response;
 }
 
 export async function callRechnerLib(
   lohnSteuerJahr: number,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ): Promise<BmfSteuerRechnerResponse> {
-  const lstInput = BmfSteuerRechnerParameterConverter.convert(
-    bmfSteuerRechnerParameter,
-  );
+  const lstInput = convertParameter(bmfSteuerRechnerParameter);
   const lstOutput = lst(lohnSteuerJahr, lstInput);
-  return BmfSteuerRechnerResponseConverter.convert(lstOutput);
+  return convertResponse(lstOutput);
 }
 
 function lst(lohnSteuerJahr: number, lstInput: LST_INPUT) {
@@ -71,7 +64,7 @@ export async function callRemoteRechner(
 ) {
   const url = bmfSteuerRechnerUrlOf(lohnSteuerJahr, bmfSteuerRechnerParameter);
   const xml = await queryBmfSteuerRechner(url);
-  return BmfSteuerRechnerResponseParser.parse(xml);
+  return parseResponse(xml);
 }
 
 const queryBmfSteuerRechner = (url: string): Promise<string> => {

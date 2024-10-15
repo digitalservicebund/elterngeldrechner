@@ -2,7 +2,6 @@ import Big from "big.js";
 import { DateTime } from "luxon";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import {
-  EgrBerechnungParamId,
   Einkommen,
   ErwerbsArt,
   Kind,
@@ -10,8 +9,23 @@ import {
   PersoenlicheDaten,
   ZwischenErgebnis,
 } from "./model";
-import { MathUtil } from "./common/math-util";
-import { DateUtil } from "./common/date-util";
+import {
+  BIG_ZERO,
+  fMax,
+  round,
+} from "@/globals/js/calculations/common/math-util";
+import {
+  BETRAG_MEHRLINGSZUSCHLAG,
+  MIN_GESCHWISTERBONUS,
+  PAUSCH,
+  RATE_BONUS,
+} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import {
+  dateWithoutTimeOf,
+  daysBetween,
+  plusDays,
+  plusYears,
+} from "@/globals/js/calculations/common/date-util";
 
 /**
  * Algorithmus zur Berechnung des Zwischenergebnisses des Elterngeldrechners.
@@ -43,29 +57,28 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       ErwerbsArt.NEIN !== persoenlicheDaten.etVorGeburt
         ? nettoEinkommen
         : new Einkommen(0);
-    let ek_vor_copy: Big = MathUtil.BIG_ZERO;
+    let ek_vor_copy: Big = BIG_ZERO;
     ek_vor_copy = ek_vor_copy.add(ek_vor.value);
     const status_et: ErwerbsArt = persoenlicheDaten.etVorGeburt;
     let mehrlingszuschlag: Big;
     let ende_bonus_u2_final: Date;
     let ende_bonus_u14_final: Date;
     let ende_bonus_u6_final: Date;
-    const pausch: Big = EgrBerechnungParamId.PAUSCH;
+    const pausch: Big = PAUSCH;
     let elterngeldbasis: Big;
     let ersatzrate_ausgabe: Big;
-    const betrag_Mehrlingszuschlag: Big =
-      EgrBerechnungParamId.BETRAG_MEHRLINGSZUSCHLAG;
+    const betrag_Mehrlingszuschlag: Big = BETRAG_MEHRLINGSZUSCHLAG;
     let geschwisterbonus: Big;
-    const rate_bonus: Big = EgrBerechnungParamId.RATE_BONUS;
-    const min_geschwisterbonus: Big = EgrBerechnungParamId.MIN_GESCHWISTERBONUS;
+    const rate_bonus: Big = RATE_BONUS;
+    const min_geschwisterbonus: Big = MIN_GESCHWISTERBONUS;
     if (ind_geschw) {
-      ende_bonus_u2_final = DateUtil.dateWithoutTimeOf(
+      ende_bonus_u2_final = dateWithoutTimeOf(
         this.ende_bonus_u2(geburt, geschw),
       );
-      ende_bonus_u14_final = DateUtil.dateWithoutTimeOf(
+      ende_bonus_u14_final = dateWithoutTimeOf(
         this.ende_bonus_u14(geburt, geschw),
       );
-      ende_bonus_u6_final = DateUtil.dateWithoutTimeOf(
+      ende_bonus_u6_final = dateWithoutTimeOf(
         this.ende_bonus_u6(geburt, geschw),
       );
       if (
@@ -98,26 +111,26 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       status_et === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ||
       status_et === ErwerbsArt.JA_NICHT_SELBST_MINI
     ) {
-      ek_vor_copy = MathUtil.fMax(ek_vor_copy.sub(pausch), MathUtil.BIG_ZERO);
+      ek_vor_copy = fMax(ek_vor_copy.sub(pausch), BIG_ZERO);
     }
     elterngeldbasis = this.elterngeld_keine_et(ek_vor_copy);
     ersatzrate_ausgabe = this.ersatzrate_eg(ek_vor_copy);
     if (no_kinder > 1) {
       mehrlingszuschlag = betrag_Mehrlingszuschlag.mul(Big(no_kinder - 1));
     } else {
-      mehrlingszuschlag = MathUtil.BIG_ZERO;
+      mehrlingszuschlag = BIG_ZERO;
     }
     if (ende !== undefined && ende > geburt) {
-      geschwisterbonus = MathUtil.fMax(
+      geschwisterbonus = fMax(
         elterngeldbasis.mul(rate_bonus),
         min_geschwisterbonus,
       );
     } else {
-      geschwisterbonus = MathUtil.BIG_ZERO;
+      geschwisterbonus = BIG_ZERO;
     }
-    elterngeldbasis = MathUtil.round(elterngeldbasis);
-    ersatzrate_ausgabe = MathUtil.round(ersatzrate_ausgabe);
-    geschwisterbonus = MathUtil.round(geschwisterbonus, 3);
+    elterngeldbasis = round(elterngeldbasis);
+    ersatzrate_ausgabe = round(ersatzrate_ausgabe);
+    geschwisterbonus = round(geschwisterbonus, 3);
 
     return {
       elternGeld: elterngeldbasis,
@@ -201,19 +214,13 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   ): Date {
     let zeit_bis_ende_bonus_days: number = -1;
     if (geburtstag_geschw !== undefined) {
-      const bonus_geb_geschw_jung = DateUtil.plusYears(
-        geburtstag_geschw,
-        bonusYears,
-      );
+      const bonus_geb_geschw_jung = plusYears(geburtstag_geschw, bonusYears);
       if (bonus_geb_geschw_jung >= geburt) {
-        zeit_bis_ende_bonus_days = DateUtil.daysBetween(
-          geburt,
-          bonus_geb_geschw_jung,
-        );
+        zeit_bis_ende_bonus_days = daysBetween(geburt, bonus_geb_geschw_jung);
       }
     }
 
-    let ende_bonus = DateUtil.plusDays(geburt, zeit_bis_ende_bonus_days);
+    let ende_bonus = plusDays(geburt, zeit_bis_ende_bonus_days);
 
     if (ende_bonus >= geburt) {
       // Ende LM berechnen

@@ -1,7 +1,15 @@
 import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
+import { log } from "@/globals/js/calculations/common/logger";
 import {
-  EgrBerechnungParamId,
+  F_FAKTOR,
+  GRENZE_MIDI_MAX,
+  GRENZE_MINI_MIDI,
+  SATZ_ALV_BEEG,
+  SATZ_KVPV_BEEG,
+  SATZ_RV_BEEG,
+} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import {
   Einkommen,
   ErwerbsArt,
   FinanzDaten,
@@ -10,8 +18,11 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
-import { Logger } from "@/globals/js/calculations/common/logger";
+import {
+  BIG_100,
+  BIG_ZERO,
+  round,
+} from "@/globals/js/calculations/common/math-util";
 
 export class BruttoNettoRechner {
   private egrSteuerRechner = new EgrSteuerRechner();
@@ -139,16 +150,16 @@ export class BruttoNettoRechner {
       kirchensteuersatz,
       charge.bk,
     );
-    kirchenlohnsteuer = MathUtil.round(kirchenlohnsteuer);
+    kirchenlohnsteuer = round(kirchenlohnsteuer);
     let summeSteuer: Big = charge.lstlzz.add(charge.solzlzz);
-    if (bruttoProMonat.lte(EgrBerechnungParamId.GRENZE_MINI_MIDI)) {
-      kirchenlohnsteuer = MathUtil.BIG_ZERO;
-      summeSteuer = MathUtil.BIG_ZERO;
+    if (bruttoProMonat.lte(GRENZE_MINI_MIDI)) {
+      kirchenlohnsteuer = BIG_ZERO;
+      summeSteuer = BIG_ZERO;
     }
 
-    Logger.log(`Lohnsteuer: ${charge.lstlzz}`);
-    Logger.log(`SoliZuschlag: ${charge.solzlzz}`);
-    Logger.log(`Kirchensteuer: ${kirchenlohnsteuer}`);
+    log(`Lohnsteuer: ${charge.lstlzz}`);
+    log(`SoliZuschlag: ${charge.solzlzz}`);
+    log(`Kirchensteuer: ${kirchenlohnsteuer}`);
 
     return summeSteuer.add(kirchenlohnsteuer);
   }
@@ -176,8 +187,8 @@ export class BruttoNettoRechner {
       status,
       bruttoProMonat,
     );
-    summe_sozab = MathUtil.round(summe_sozab);
-    Logger.log(`Summe Sozialabgaben: ${summe_sozab}`);
+    summe_sozab = round(summe_sozab);
+    log(`Summe Sozialabgaben: ${summe_sozab}`);
     return summeSteuer.add(summe_sozab);
   }
 
@@ -190,17 +201,17 @@ export class BruttoNettoRechner {
     status_sub: ErwerbsArt,
     brutto_sub: Big,
   ): Big {
-    let abgaben_kvpv: Big = MathUtil.BIG_ZERO;
-    let abgaben_rv: Big = MathUtil.BIG_ZERO;
-    let abgaben_alv: Big = MathUtil.BIG_ZERO;
-    let abgaben_gleitzone: Big = MathUtil.BIG_ZERO;
+    let abgaben_kvpv: Big = BIG_ZERO;
+    let abgaben_rv: Big = BIG_ZERO;
+    let abgaben_alv: Big = BIG_ZERO;
+    let abgaben_gleitzone: Big = BIG_ZERO;
     const brutto_rech_sub: Big = brutto_sub;
-    const satz_kvpv_beeg: Big = EgrBerechnungParamId.SATZ_KVPV_BEEG;
-    const satz_rv_beeg: Big = EgrBerechnungParamId.SATZ_RV_BEEG;
-    const satz_alv_beeg: Big = EgrBerechnungParamId.SATZ_ALV_BEEG;
-    const f_faktor: Big = EgrBerechnungParamId.F_FAKTOR;
-    const grenze_mini_midi = EgrBerechnungParamId.GRENZE_MINI_MIDI;
-    const grenze_midi_max = EgrBerechnungParamId.GRENZE_MIDI_MAX;
+    const satz_kvpv_beeg: Big = SATZ_KVPV_BEEG;
+    const satz_rv_beeg: Big = SATZ_RV_BEEG;
+    const satz_alv_beeg: Big = SATZ_ALV_BEEG;
+    const f_faktor: Big = F_FAKTOR;
+    const grenze_mini_midi = GRENZE_MINI_MIDI;
+    const grenze_midi_max = GRENZE_MIDI_MAX;
     if (
       brutto_rech_sub.gt(grenze_midi_max) ||
       brutto_rech_sub.lte(grenze_mini_midi)
@@ -219,7 +230,7 @@ export class BruttoNettoRechner {
       brutto_rech_sub.gt(grenze_mini_midi) &&
       brutto_rech_sub.lte(grenze_midi_max)
     ) {
-      let beitragsatz: Big = MathUtil.BIG_ZERO;
+      let beitragsatz: Big = BIG_ZERO;
       const tmp: Big = f_faktor.mul(grenze_mini_midi);
       const bd850_450: Big = grenze_midi_max.sub(grenze_mini_midi);
       const bd850: Big = grenze_midi_max;
@@ -244,15 +255,15 @@ export class BruttoNettoRechner {
         beitragsatz = beitragsatz.add(satz_alv_beeg);
       }
       abgaben_gleitzone = beitragsatz.mul(bemessungsentgelt);
-      abgaben_kvpv = MathUtil.round(abgaben_kvpv);
-      abgaben_rv = MathUtil.round(abgaben_rv);
-      abgaben_alv = MathUtil.round(abgaben_alv);
-      abgaben_gleitzone = MathUtil.round(abgaben_gleitzone);
+      abgaben_kvpv = round(abgaben_kvpv);
+      abgaben_rv = round(abgaben_rv);
+      abgaben_alv = round(abgaben_alv);
+      abgaben_gleitzone = round(abgaben_gleitzone);
     }
-    Logger.log(`KV: ${abgaben_kvpv}`);
-    Logger.log(`RV: ${abgaben_rv}`);
-    Logger.log(`ALV: ${abgaben_alv}`);
-    Logger.log(`Gleitzone: ${abgaben_gleitzone}`);
+    log(`KV: ${abgaben_kvpv}`);
+    log(`RV: ${abgaben_rv}`);
+    log(`ALV: ${abgaben_alv}`);
+    log(`Gleitzone: ${abgaben_gleitzone}`);
 
     return abgaben_kvpv.add(abgaben_rv).add(abgaben_alv).add(abgaben_gleitzone);
   }
@@ -294,13 +305,13 @@ export class BruttoNettoRechner {
     status_sub: ErwerbsArt,
     brutto_sub: Big,
   ): Big {
-    let abgaben_kvpv: Big = MathUtil.BIG_ZERO;
-    let abgaben_rv: Big = MathUtil.BIG_ZERO;
-    let abgaben_alv: Big = MathUtil.BIG_ZERO;
+    let abgaben_kvpv: Big = BIG_ZERO;
+    let abgaben_rv: Big = BIG_ZERO;
+    let abgaben_alv: Big = BIG_ZERO;
     const brutto_rech_sub: Big = brutto_sub;
-    const satz_kvpv_beeg: Big = EgrBerechnungParamId.SATZ_KVPV_BEEG;
-    const satz_rv_beeg: Big = EgrBerechnungParamId.SATZ_RV_BEEG;
-    const satz_alv_beeg: Big = EgrBerechnungParamId.SATZ_ALV_BEEG;
+    const satz_kvpv_beeg: Big = SATZ_KVPV_BEEG;
+    const satz_rv_beeg: Big = SATZ_RV_BEEG;
+    const satz_alv_beeg: Big = SATZ_ALV_BEEG;
     if (krankenversicherungspflichtig_sub) {
       abgaben_kvpv = brutto_rech_sub.mul(satz_kvpv_beeg);
     }
@@ -310,16 +321,16 @@ export class BruttoNettoRechner {
     if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
       abgaben_alv = brutto_rech_sub.mul(satz_alv_beeg);
     }
-    abgaben_kvpv = MathUtil.round(abgaben_kvpv);
-    abgaben_rv = MathUtil.round(abgaben_rv);
-    abgaben_alv = MathUtil.round(abgaben_alv);
-    Logger.log(`KV: ${abgaben_kvpv}`);
-    Logger.log(`RV: ${abgaben_rv}`);
-    Logger.log(`ALV: ${abgaben_alv}`);
-    return MathUtil.round(abgaben_kvpv.add(abgaben_rv).add(abgaben_alv));
+    abgaben_kvpv = round(abgaben_kvpv);
+    abgaben_rv = round(abgaben_rv);
+    abgaben_alv = round(abgaben_alv);
+    log(`KV: ${abgaben_kvpv}`);
+    log(`RV: ${abgaben_rv}`);
+    log(`ALV: ${abgaben_alv}`);
+    return round(abgaben_kvpv.add(abgaben_rv).add(abgaben_alv));
   }
 
   private static calculateChurchTaxes(kirchensteuersatz: number, bk: Big): Big {
-    return bk.div(MathUtil.BIG_100).mul(Big(kirchensteuersatz));
+    return bk.div(BIG_100).mul(Big(kirchensteuersatz));
   }
 }

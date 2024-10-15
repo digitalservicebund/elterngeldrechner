@@ -1,46 +1,44 @@
 import { DateTime } from "luxon";
 
-export namespace DateUtil {
-  /**
-   * Returns a new date without time.
-   *
-   * @param date Date with or without time.
-   * @return A new date without time, created from incoming date.
-   */
-  export function dateWithoutTimeOf(date: Date) {
-    return DateTime.fromJSDate(date)
-      .set({ hour: 0 })
-      .set({ minute: 0 })
-      .set({ second: 0 })
-      .set({ millisecond: 0 })
-      .toJSDate();
-  }
+/**
+ * Returns a new date without time.
+ *
+ * @param date Date with or without time.
+ * @return A new date without time, created from incoming date.
+ */
+export function dateWithoutTimeOf(date: Date) {
+  return DateTime.fromJSDate(date)
+    .set({ hour: 0 })
+    .set({ minute: 0 })
+    .set({ second: 0 })
+    .set({ millisecond: 0 })
+    .toJSDate();
+}
 
-  export function plusDays(date: Date, days: number) {
-    return DateTime.fromJSDate(date).plus({ days: days }).toJSDate();
-  }
+export function plusDays(date: Date, days: number) {
+  return DateTime.fromJSDate(date).plus({ days: days }).toJSDate();
+}
 
-  export function minusDays(date: Date, days: number) {
-    return DateTime.fromJSDate(date).minus({ days: days }).toJSDate();
-  }
+export function minusDays(date: Date, days: number) {
+  return DateTime.fromJSDate(date).minus({ days: days }).toJSDate();
+}
 
-  export function plusMonths(date: Date, months: number) {
-    return DateTime.fromJSDate(date).plus({ months: months }).toJSDate();
-  }
+export function plusMonths(date: Date, months: number) {
+  return DateTime.fromJSDate(date).plus({ months: months }).toJSDate();
+}
 
-  export function plusYears(date: Date, years: number) {
-    return DateTime.fromJSDate(date).plus({ years: years }).toJSDate();
-  }
+export function plusYears(date: Date, years: number) {
+  return DateTime.fromJSDate(date).plus({ years: years }).toJSDate();
+}
 
-  export function daysBetween(date1: Date, date2: Date) {
-    return utcDateWithoutTimeOf(date2)
-      .diff(utcDateWithoutTimeOf(date1))
-      .as("days");
-  }
+export function daysBetween(date1: Date, date2: Date) {
+  return utcDateWithoutTimeOf(date2)
+    .diff(utcDateWithoutTimeOf(date1))
+    .as("days");
+}
 
-  export function setDayOfMonth(date: Date, dayOfMonth: number) {
-    return DateTime.fromJSDate(date).set({ day: dayOfMonth }).toJSDate();
-  }
+export function setDayOfMonth(date: Date, dayOfMonth: number) {
+  return DateTime.fromJSDate(date).set({ day: dayOfMonth }).toJSDate();
 }
 
 /**

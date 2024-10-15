@@ -24,8 +24,8 @@ import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner"
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { errorOf } from "./calculation-error-code";
-import { ErgebnisUtils } from "./ergebnis-utils";
-import { MathUtil } from "./common/math-util";
+import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
+import { elternGeldSimulationErgebnisOf } from "@/globals/js/calculations/ergebnis-utils";
 
 export class EgrCalculation {
   private static readonly BASIS_ELTERN_GELD_MAX_MONATE = 14;
@@ -88,7 +88,7 @@ export class EgrCalculation {
       persoenlicheDaten.etVorGeburt,
     );
 
-    return ErgebnisUtils.elternGeldSimulationErgebnisOf(
+    return elternGeldSimulationErgebnisOf(
       basisElternGeldErgebnis.elternGeldAusgabe,
       elternGeldPlusErgebnis.elternGeldAusgabe,
       nettoLebensMonat,
@@ -123,7 +123,7 @@ export class EgrCalculation {
     etVorGeburt: ErwerbsArt,
   ) {
     const nettoLebensMonat: Big[] = new Array<Big>(PLANUNG_ANZAHL_MONATE).fill(
-      MathUtil.BIG_ZERO,
+      BIG_ZERO,
     );
     // calculate netto for one month in each period and then set it for all months of the respective period
     for (const erwerbsZeitraumLebensMonat of finanzDaten.erwerbsZeitraumLebensMonatList) {

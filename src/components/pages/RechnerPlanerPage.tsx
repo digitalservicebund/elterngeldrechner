@@ -10,10 +10,13 @@ import { Page } from "@/components/organisms/page";
 import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
-import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 import { Planer, type PlanMitBeliebigenElternteilen } from "@/features/planer";
 import { stepRechnerSelectors } from "@/redux/stepRechnerSlice";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
+import {
+  MAX_EINKOMMEN_ALLEIN,
+  MAX_EINKOMMEN_BEIDE,
+} from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 function RechnerPlanerPage() {
   const sectionLabelIdentifier = useId();
@@ -35,9 +38,7 @@ function RechnerPlanerPage() {
   );
 
   const amountLimitEinkommen =
-    alleinerziehend === YesNo.YES
-      ? EgrBerechnungParamId.MAX_EINKOMMEN_ALLEIN
-      : EgrBerechnungParamId.MAX_EINKOMMEN_BEIDE;
+    alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
   const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
   const plan = useRef(initialPlan);

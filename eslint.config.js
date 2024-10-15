@@ -19,7 +19,6 @@ import prettierPluginRecommendedConfig from "eslint-plugin-prettier/recommended"
 // TODO: Enable and fix disabled rules after migration
 const temporarilyDisabledRules = {
   "@typescript-eslint/no-explicit-any": "off",
-  "@typescript-eslint/no-namespace": "off",
 };
 
 const eslintConfig = [js.configs.recommended];

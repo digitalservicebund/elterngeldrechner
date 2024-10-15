@@ -1,13 +1,13 @@
 import xlsx from "node-xlsx";
 import Big from "big.js";
-import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 import {
   ErwerbsTaetigkeit,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
+import { erwerbsArtOf } from "@/test-utils/fit-excel-sheet-util";
+import { BIG_ZERO, round } from "@/globals/js/calculations/common/math-util";
 
 type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];
@@ -27,7 +27,7 @@ export class EgrMischeinkommenExcelSheet {
     const einkommen =
       this.sheet.data[rowOfEinkommen(taetigkeit)][columnOf(testCaseIndex)];
     if (einkommen === undefined) {
-      return MathUtil.BIG_ZERO;
+      return BIG_ZERO;
     }
     return Big(einkommen as number);
   }
@@ -168,40 +168,40 @@ export class EgrMischeinkommenExcelSheet {
   ergebnisBrutto(testCaseIndex: number) {
     const netto = this.sheet.data[BRUTTO_OFFSET][columnOf(testCaseIndex)];
     if (netto === undefined) {
-      return MathUtil.BIG_ZERO;
+      return BIG_ZERO;
     }
-    return MathUtil.round(Big(netto as number));
+    return round(Big(netto as number));
   }
 
   ergebnisSteuern(testCaseIndex: number) {
     const netto = this.sheet.data[STEUERN_OFFSET][columnOf(testCaseIndex)];
     if (netto === undefined) {
-      return MathUtil.BIG_ZERO;
+      return BIG_ZERO;
     }
-    return MathUtil.round(Big(netto as number));
+    return round(Big(netto as number));
   }
 
   ergebnisAbgaben(testCaseIndex: number) {
     const netto = this.sheet.data[ABGABEN_OFFSET][columnOf(testCaseIndex)];
     if (netto === undefined) {
-      return MathUtil.BIG_ZERO;
+      return BIG_ZERO;
     }
-    return MathUtil.round(Big(netto as number));
+    return round(Big(netto as number));
   }
 
   ergebnisNetto(testCaseIndex: number) {
     const netto = this.sheet.data[NETTO_OFFSET][columnOf(testCaseIndex)];
     if (netto === undefined) {
-      return MathUtil.BIG_ZERO;
+      return BIG_ZERO;
     }
-    return MathUtil.round(Big(netto as number));
+    return round(Big(netto as number));
   }
 
   ergebnisBasisElternGeld(testCaseIndex: number) {
     const basisElternGeld =
       this.sheet.data[BASIS_ELTERN_GELD_OFFSET][columnOf(testCaseIndex)];
     if (basisElternGeld === undefined) {
-      return MathUtil.BIG_ZERO;
+      return BIG_ZERO;
     }
     return Big(basisElternGeld as number);
   }
@@ -220,7 +220,7 @@ export class EgrMischeinkommenExcelSheet {
     const ergebnisStatus = this.sheet.data[STATUS_OFFSET][
       columnOf(testCaseIndex)
     ] as number;
-    return FitExcelSheetUtil.erwerbsArtOf(ergebnisStatus);
+    return erwerbsArtOf(ergebnisStatus);
   }
 }
 

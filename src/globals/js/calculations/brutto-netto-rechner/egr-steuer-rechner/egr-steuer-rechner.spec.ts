@@ -1,8 +1,8 @@
 import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import {
-  BmfSteuerRechner,
   BmfSteuerRechnerResponse,
+  callBmfSteuerRechner,
 } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 import {
   ErwerbsArt,
@@ -71,7 +71,7 @@ describe("erg-steuer-rechner", () => {
     (finanzDaten, erwerbsArt, brutto, lstlzz) => {
       it("should calculate Abgaben", async () => {
         // given
-        vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
+        vi.mocked(callBmfSteuerRechner).mockResolvedValue(
           bmfSteuerRechnerResponseOf(lstlzz),
         );
         const finanzdaten = Object.assign(new FinanzDaten(), finanzDaten);
@@ -89,7 +89,7 @@ describe("erg-steuer-rechner", () => {
           lstlzz,
         );
 
-        expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+        expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
           expect.anything(),
           expect.objectContaining({
             AF: 0,
@@ -111,7 +111,7 @@ describe("erg-steuer-rechner", () => {
   describe("should set Faktor Verfahren to", () => {
     it("1 if SteuerKlasse is SKL4_FAKTOR", async () => {
       // given
-      vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
+      vi.mocked(callBmfSteuerRechner).mockResolvedValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
@@ -127,7 +127,7 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+      expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({ AF: 1, F: 1.0 }),
       );
@@ -135,7 +135,7 @@ describe("erg-steuer-rechner", () => {
 
     it("0 if SteuerKlasse is not SKL4_FAKTOR", async () => {
       // given
-      vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
+      vi.mocked(callBmfSteuerRechner).mockResolvedValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
@@ -151,7 +151,7 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+      expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({ AF: 0, F: 1 }),
       );
@@ -161,7 +161,7 @@ describe("erg-steuer-rechner", () => {
   describe("should set kinderFreiBetrag to", () => {
     it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", async () => {
       // given
-      vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
+      vi.mocked(callBmfSteuerRechner).mockResolvedValue(
         bmfSteuerRechnerResponseOf(100),
       );
 
@@ -177,7 +177,7 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+      expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({ ZKF: 1 }),
       );
@@ -186,7 +186,7 @@ describe("erg-steuer-rechner", () => {
 
   it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", async () => {
     // given
-    vi.mocked(BmfSteuerRechner.call).mockResolvedValue(
+    vi.mocked(callBmfSteuerRechner).mockResolvedValue(
       bmfSteuerRechnerResponseOf(100),
     );
 
@@ -202,7 +202,7 @@ describe("erg-steuer-rechner", () => {
     );
 
     // then
-    expect(BmfSteuerRechner.call).toHaveBeenLastCalledWith(
+    expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
       expect.anything(),
       expect.objectContaining({ ZKF: 0 }),
     );
@@ -210,7 +210,11 @@ describe("erg-steuer-rechner", () => {
 });
 
 // initialize mock
-vi.mock("../bmf-steuer-rechner");
+vi.mock(
+  import(
+    "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner"
+  ),
+);
 
 const bmfSteuerRechnerResponseOf = (lstlzz: number | string) => {
   const response = new BmfSteuerRechnerResponse();

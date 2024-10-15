@@ -1,4 +1,12 @@
-import { DateUtil } from "./date-util";
+import {
+  dateWithoutTimeOf,
+  daysBetween,
+  minusDays,
+  plusDays,
+  plusMonths,
+  plusYears,
+  setDayOfMonth,
+} from "@/globals/js/calculations/common/date-util";
 
 describe("date-util", () => {
   describe.each([
@@ -11,7 +19,7 @@ describe("date-util", () => {
     (dateWithTime: string, dateWithoutTime: string) => {
       it("should remove time from date", () => {
         // when
-        const actual = DateUtil.dateWithoutTimeOf(new Date(dateWithTime));
+        const actual = dateWithoutTimeOf(new Date(dateWithTime));
 
         // then
         expect(actual.toISOString()).toBe(
@@ -31,7 +39,7 @@ describe("date-util", () => {
     (dateSummand: string, daySummand: number, sum: string) => {
       it("should add days to date", () => {
         // when
-        const actual = DateUtil.plusDays(new Date(dateSummand), daySummand);
+        const actual = plusDays(new Date(dateSummand), daySummand);
 
         // then
         expect(actual.toISOString()).toBe(new Date(sum).toISOString());
@@ -49,7 +57,7 @@ describe("date-util", () => {
     (date: string, day: number, dateResult: string) => {
       it("should subtract days from date", () => {
         // when
-        const actual = DateUtil.minusDays(new Date(date), day);
+        const actual = minusDays(new Date(date), day);
 
         // then
         expect(actual.toISOString()).toBe(new Date(dateResult).toISOString());
@@ -67,7 +75,7 @@ describe("date-util", () => {
     (dateSummand: string, daySummand: number, sum: string) => {
       it("should add months to date", () => {
         // when
-        const actual = DateUtil.plusMonths(new Date(dateSummand), daySummand);
+        const actual = plusMonths(new Date(dateSummand), daySummand);
 
         // then
         expect(actual.toISOString()).toBe(new Date(sum).toISOString());
@@ -85,7 +93,7 @@ describe("date-util", () => {
     (dateSummand: string, daySummand: number, sum: string) => {
       it("should add years to date", () => {
         // when
-        const actual = DateUtil.plusYears(new Date(dateSummand), daySummand);
+        const actual = plusYears(new Date(dateSummand), daySummand);
 
         // then
         expect(actual.toISOString()).toBe(new Date(sum).toISOString());
@@ -103,7 +111,7 @@ describe("date-util", () => {
     (date1: string, date2: string, days: number) => {
       it("should calculate difference between dates", () => {
         // when
-        const actual = DateUtil.daysBetween(new Date(date1), new Date(date2));
+        const actual = daysBetween(new Date(date1), new Date(date2));
 
         // then
         expect(actual).toBe(days);
@@ -121,7 +129,7 @@ describe("date-util", () => {
     (date: string, dayOfMonth: number, dateResult: string) => {
       it("should set day of month", () => {
         // when
-        const actual = DateUtil.setDayOfMonth(new Date(date), dayOfMonth);
+        const actual = setDayOfMonth(new Date(date), dayOfMonth);
 
         // then
         expect(actual.toISOString()).toBe(new Date(dateResult).toISOString());

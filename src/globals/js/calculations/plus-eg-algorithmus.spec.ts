@@ -18,7 +18,7 @@ import {
 } from "./model";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
-import { MathUtil } from "./common/math-util";
+import { BIG_ZERO } from "./common/math-util";
 
 describe("plus-eg-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
@@ -174,11 +174,11 @@ describe("plus-eg-algorithmus", () => {
         new Date("2023-11-24T01:02:03.000Z"),
       );
       const zwischenErgebnis: ZwischenErgebnis = {
-        elternGeld: MathUtil.BIG_ZERO,
-        ersatzRate: MathUtil.BIG_ZERO,
-        geschwisterBonus: MathUtil.BIG_ZERO,
-        mehrlingsZulage: MathUtil.BIG_ZERO,
-        nettoVorGeburt: MathUtil.BIG_ZERO,
+        elternGeld: BIG_ZERO,
+        ersatzRate: BIG_ZERO,
+        geschwisterBonus: BIG_ZERO,
+        mehrlingsZulage: BIG_ZERO,
+        nettoVorGeburt: BIG_ZERO,
         zeitraumGeschwisterBonus: null,
       };
       const finanzDaten = new FinanzDaten();
@@ -210,12 +210,12 @@ const createPlanungsDaten = () =>
 
 const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
   return {
-    elterngeldbasis: MathUtil.BIG_ZERO,
+    elterngeldbasis: BIG_ZERO,
     krankenversicherungspflichtig: false,
-    netto: MathUtil.BIG_ZERO,
-    brutto: MathUtil.BIG_ZERO,
-    steuern: MathUtil.BIG_ZERO,
-    abgaben: MathUtil.BIG_ZERO,
+    netto: BIG_ZERO,
+    brutto: BIG_ZERO,
+    steuern: BIG_ZERO,
+    abgaben: BIG_ZERO,
     rentenversicherungspflichtig: false,
     status: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
   };

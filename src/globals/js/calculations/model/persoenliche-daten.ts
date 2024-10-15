@@ -4,7 +4,7 @@
 import { Kind } from "./kind";
 import { YesNo } from "./yes-no";
 import { ErwerbsArt } from "./erwerbs-art";
-import { KindUtil } from "@/globals/js/calculations/common/kind-util";
+import { excludesFutureChildren } from "@/globals/js/calculations/common/kind-util";
 
 export class PersoenlicheDaten {
   anzahlKuenftigerKinder: number;
@@ -50,7 +50,7 @@ export class PersoenlicheDaten {
   }
 
   getAnzahlGeschwister(): number {
-    return KindUtil.excludesFutureChildren(this.kinder).length;
+    return excludesFutureChildren(this.kinder).length;
   }
 }
 

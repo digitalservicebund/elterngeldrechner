@@ -5,58 +5,55 @@ import {
   ElternGeldSimulationErgebnisRow,
   PLANUNG_ANZAHL_MONATE,
 } from "./model";
-import { MathUtil } from "./common/math-util";
-import BIG_ZERO = MathUtil.BIG_ZERO;
+import { BIG_ZERO, isEqual } from "@/globals/js/calculations/common/math-util";
 
-export namespace ErgebnisUtils {
-  export function elternGeldSimulationErgebnisOf(
-    basisElternGeld: ElternGeldAusgabe[],
-    elternGeldPlus: ElternGeldAusgabe[],
-    nettoLebensMonat: Big[],
-  ): ElternGeldSimulationErgebnis {
-    if (basisElternGeld.length + elternGeldPlus.length === 0) {
-      return {
-        rows: [],
-      };
-    }
-
-    const rows: ElternGeldSimulationErgebnisRow[] = [];
-    let previousRow: ElternGeldSimulationErgebnisRow | null = null;
-    let previous = new ElternGeldAmount();
-
-    for (let i = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-      const lebensMonat = i + 1;
-
-      const current = new ElternGeldAmount();
-      if (i < basisElternGeld.length) {
-        current.basisElternGeld = basisElternGeld[i].elternGeld;
-      }
-      if (i < elternGeldPlus.length) {
-        current.elterngeldPlus = elternGeldPlus[i].elternGeld;
-      }
-      if (i < nettoLebensMonat.length) {
-        current.nettoEinkommen = nettoLebensMonat[i];
-      }
-
-      if (i === 0 || (current.isNotEquals(previous) && current.greaterZero())) {
-        previous = current;
-        previousRow = {
-          vonLebensMonat: lebensMonat,
-          bisLebensMonat: lebensMonat,
-          basisElternGeld: current.basisElternGeld,
-          elternGeldPlus: current.elterngeldPlus,
-          nettoEinkommen: current.nettoEinkommen,
-        };
-        rows.push(previousRow);
-      } else if (i > 0 && previousRow && current.isEquals(previous)) {
-        previousRow.bisLebensMonat = lebensMonat;
-      }
-    }
-
+export function elternGeldSimulationErgebnisOf(
+  basisElternGeld: ElternGeldAusgabe[],
+  elternGeldPlus: ElternGeldAusgabe[],
+  nettoLebensMonat: Big[],
+): ElternGeldSimulationErgebnis {
+  if (basisElternGeld.length + elternGeldPlus.length === 0) {
     return {
-      rows,
+      rows: [],
     };
   }
+
+  const rows: ElternGeldSimulationErgebnisRow[] = [];
+  let previousRow: ElternGeldSimulationErgebnisRow | null = null;
+  let previous = new ElternGeldAmount();
+
+  for (let i = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
+    const lebensMonat = i + 1;
+
+    const current = new ElternGeldAmount();
+    if (i < basisElternGeld.length) {
+      current.basisElternGeld = basisElternGeld[i].elternGeld;
+    }
+    if (i < elternGeldPlus.length) {
+      current.elterngeldPlus = elternGeldPlus[i].elternGeld;
+    }
+    if (i < nettoLebensMonat.length) {
+      current.nettoEinkommen = nettoLebensMonat[i];
+    }
+
+    if (i === 0 || (current.isNotEquals(previous) && current.greaterZero())) {
+      previous = current;
+      previousRow = {
+        vonLebensMonat: lebensMonat,
+        bisLebensMonat: lebensMonat,
+        basisElternGeld: current.basisElternGeld,
+        elternGeldPlus: current.elterngeldPlus,
+        nettoEinkommen: current.nettoEinkommen,
+      };
+      rows.push(previousRow);
+    } else if (i > 0 && previousRow && current.isEquals(previous)) {
+      previousRow.bisLebensMonat = lebensMonat;
+    }
+  }
+
+  return {
+    rows,
+  };
 }
 
 class ElternGeldAmount {
@@ -68,9 +65,9 @@ class ElternGeldAmount {
 
   isEquals(other: ElternGeldAmount) {
     return (
-      MathUtil.isEqual(this.basisElternGeld, other.basisElternGeld) &&
-      MathUtil.isEqual(this.elterngeldPlus, other.elterngeldPlus) &&
-      MathUtil.isEqual(this.nettoEinkommen, other.nettoEinkommen)
+      isEqual(this.basisElternGeld, other.basisElternGeld) &&
+      isEqual(this.elterngeldPlus, other.elterngeldPlus) &&
+      isEqual(this.nettoEinkommen, other.nettoEinkommen)
     );
   }
 

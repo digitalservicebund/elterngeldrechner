@@ -1,13 +1,13 @@
 import Big from "big.js";
 import { ElternGeldArt, ElternGeldAusgabe } from "./model";
-import { ErgebnisUtils } from "./ergebnis-utils";
-import { MathUtil } from "./common/math-util";
+import { elternGeldSimulationErgebnisOf } from "@/globals/js/calculations/ergebnis-utils";
+import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 describe("ergebnis-utils", () => {
   describe("should convert simulation result to result table for:", () => {
     it("empty ergebnis", () => {
       // when
-      const table = ErgebnisUtils.elternGeldSimulationErgebnisOf([], [], []);
+      const table = elternGeldSimulationErgebnisOf([], [], []);
 
       // then
       expect(table).not.toBeUndefined();
@@ -21,11 +21,7 @@ describe("ergebnis-utils", () => {
       ];
 
       // when
-      const table = ErgebnisUtils.elternGeldSimulationErgebnisOf(
-        basisElternGeld,
-        [],
-        [],
-      );
+      const table = elternGeldSimulationErgebnisOf(basisElternGeld, [], []);
 
       // then
       expect(table).not.toBeUndefined();
@@ -45,11 +41,7 @@ describe("ergebnis-utils", () => {
       ];
 
       // when
-      const table = ErgebnisUtils.elternGeldSimulationErgebnisOf(
-        [],
-        elternGeldPlus,
-        [],
-      );
+      const table = elternGeldSimulationErgebnisOf([], elternGeldPlus, []);
 
       // then
       expect(table).not.toBeUndefined();
@@ -73,11 +65,7 @@ describe("ergebnis-utils", () => {
       ];
 
       // when
-      const table = ErgebnisUtils.elternGeldSimulationErgebnisOf(
-        [],
-        elternGeldPlus,
-        [],
-      );
+      const table = elternGeldSimulationErgebnisOf([], elternGeldPlus, []);
 
       // then
       expect(table).not.toBeUndefined();
@@ -123,7 +111,7 @@ describe("ergebnis-utils", () => {
         elterngeldAusgabeOf(11, ElternGeldArt.KEIN_BEZUG),
       ];
       // when
-      const table = ErgebnisUtils.elternGeldSimulationErgebnisOf(
+      const table = elternGeldSimulationErgebnisOf(
         basisElternGeld,
         elternGeldPlus,
         [],
@@ -205,18 +193,18 @@ describe("ergebnis-utils", () => {
       ];
       const nettoLebensMonat = [
         new Big(200),
-        MathUtil.BIG_ZERO,
+        BIG_ZERO,
         new Big(500),
-        MathUtil.BIG_ZERO,
-        MathUtil.BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
         new Big(750),
-        MathUtil.BIG_ZERO,
-        MathUtil.BIG_ZERO,
-        MathUtil.BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
+        BIG_ZERO,
       ];
 
       // when
-      const table = ErgebnisUtils.elternGeldSimulationErgebnisOf(
+      const table = elternGeldSimulationErgebnisOf(
         basisElternGeld,
         elternGeldPlus,
         nettoLebensMonat,

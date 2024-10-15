@@ -14,7 +14,10 @@ import {
 import { SplitItem } from "@/components/atoms";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { YesNo } from "@/globals/js/calculations/model";
-import { EgrBerechnungParamId } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import {
+  MAX_EINKOMMEN_ALLEIN,
+  MAX_EINKOMMEN_BEIDE,
+} from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 interface Props {
   readonly initialValues: StepEinkommenState;
@@ -42,9 +45,7 @@ export function EinkommenForm({
   );
 
   const amountLimitEinkommen =
-    alleinerziehend === YesNo.YES
-      ? EgrBerechnungParamId.MAX_EINKOMMEN_ALLEIN
-      : EgrBerechnungParamId.MAX_EINKOMMEN_BEIDE;
+    alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
   const handlePageBack = () => navigate("/erwerbstaetigkeit");
 

@@ -1,6 +1,5 @@
 import xlsx from "node-xlsx";
 import Big from "big.js";
-import { FitExcelSheetUtil } from "./fit-excel-sheet-util";
 import {
   Einkommen,
   ElternGeldArt,
@@ -14,7 +13,12 @@ import {
   steuerklasseOfNumber,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
+import { round } from "@/globals/js/calculations/common/math-util";
+import {
+  dateFromExcelSerial,
+  elterngeldArtOf,
+  erwerbsArtOf,
+} from "@/test-utils/fit-excel-sheet-util";
 
 export class EgrAlteTestfaelleRoutine3ExcelSheet {
   static TEST_CASE_COUNT = 60;
@@ -45,12 +49,12 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     if (geburtsDatum === undefined) {
       throw new Error(`geburtsDatum ${geburtsDatum} undefined`);
     }
-    return FitExcelSheetUtil.dateFromExcelSerial(geburtsDatum);
+    return dateFromExcelSerial(geburtsDatum);
   }
 
   erwerbsArt(testCaseIndex: number) {
     const status = this.numberOf(testCaseIndex, STATUS_OFFSET);
-    return FitExcelSheetUtil.erwerbsArtOf(status);
+    return erwerbsArtOf(status);
   }
 
   kirchenSteuer(testCaseIndex: number) {
@@ -112,7 +116,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
         testCaseIndex,
         ELTERNGELD_ART_OFFSET + i,
       );
-      result.push(FitExcelSheetUtil.elterngeldArtOf(elterngeldArt));
+      result.push(elterngeldArtOf(elterngeldArt));
     }
     return result;
   }
@@ -195,7 +199,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
         `zeitraumGeschwisterBonus ${zeitraumGeschwisterBonus} undefined`,
       );
     }
-    return FitExcelSheetUtil.dateFromExcelSerial(zeitraumGeschwisterBonus);
+    return dateFromExcelSerial(zeitraumGeschwisterBonus);
   }
 
   ergebnisBruttoBasisImBezugsZeitraumDurchschnitt(testCaseIndex: number) {
@@ -262,7 +266,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
   }
 
   round(value: number): number {
-    return MathUtil.round(new Big(value)).toNumber();
+    return round(new Big(value)).toNumber();
   }
 
   numberOf(testCaseIndex: number, rowIndex: number) {

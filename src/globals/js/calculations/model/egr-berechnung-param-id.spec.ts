@@ -1,9 +1,7 @@
-import { EgrBerechnungParamId } from "./egr-berechnung-param-id";
+import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 describe("egr-berechnung-param-id", () => {
   it("pausch has correct precision", () => {
-    expect(EgrBerechnungParamId.PAUSCH.toString()).toBe(
-      "83.33333333333333333333333333333333",
-    );
+    expect(PAUSCH.toString()).toBe("83.33333333333333333333333333333333");
   });
 });

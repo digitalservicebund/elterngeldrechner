@@ -1,5 +1,5 @@
-import { BmfSteuerRechnerResponseParser } from "./bmf-steuer-rechner-response-parser";
 import { BmfSteuerRechnerResponse } from "./bmf-steuer-rechner-response";
+import { parse as parseResponse } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-response-parser";
 
 describe("bmf-steuer-rechner-response-parser", () => {
   const expectAllValuesToBeZero = (actual: BmfSteuerRechnerResponse) => {
@@ -17,7 +17,7 @@ describe("bmf-steuer-rechner-response-parser", () => {
   };
 
   it("should parse empty string", () => {
-    const actual = BmfSteuerRechnerResponseParser.parse("");
+    const actual = parseResponse("");
     expectAllValuesToBeZero(actual);
   });
 
@@ -61,7 +61,7 @@ describe("bmf-steuer-rechner-response-parser", () => {
     </ausgaben>
 </lohnsteuer>`;
 
-    const actual = BmfSteuerRechnerResponseParser.parse(xml);
+    const actual = parseResponse(xml);
     expectAllValuesToBeZero(actual);
   });
 
@@ -105,7 +105,7 @@ describe("bmf-steuer-rechner-response-parser", () => {
     </ausgaben>
 </lohnsteuer>`;
 
-    const actual = BmfSteuerRechnerResponseParser.parse(xml);
+    const actual = parseResponse(xml);
     expect(actual.BK.toNumber()).toBe(0.0123);
     expect(actual.BKS.toNumber()).toBe(0.0223);
     expect(actual.BKV.toNumber()).toBe(0.0323);

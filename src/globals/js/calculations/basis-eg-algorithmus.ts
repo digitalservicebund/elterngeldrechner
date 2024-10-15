@@ -1,7 +1,6 @@
 import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import {
-  EgrBerechnungParamId,
   ErwerbsArt,
   ErwerbsTaetigkeit,
   FinanzDaten,
@@ -12,9 +11,22 @@ import {
   SteuerKlasse,
   YesNo,
 } from "./model";
-import { MathUtil } from "./common/math-util";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { Logger } from "./common/logger";
+import {
+  BIG_ONE,
+  BIG_ZERO,
+  greater,
+  isEqual,
+  lessOrEqual,
+  round,
+} from "@/globals/js/calculations/common/math-util";
+import { log } from "@/globals/js/calculations/common/logger";
+import {
+  F_FAKTOR,
+  GRENZE_MIDI_MAX,
+  GRENZE_MINI_MIDI,
+  PAUSCH,
+} from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 const ANZAHL_MONATE_PRO_JAHR: number = 12;
 
@@ -41,29 +53,22 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     let abgaben: Big = Big(0);
     finanzDaten.mischEinkommenTaetigkeiten.forEach((mischEkTaetigkeit) => {
       if (
-        MathUtil.greater(
+        greater(
           mischEkTaetigkeit.bruttoEinkommenDurchschnitt,
-          EgrBerechnungParamId.GRENZE_MINI_MIDI,
+          GRENZE_MINI_MIDI,
         ) &&
-        MathUtil.lessOrEqual(
+        lessOrEqual(
           mischEkTaetigkeit.bruttoEinkommenDurchschnitt,
-          EgrBerechnungParamId.GRENZE_MIDI_MAX,
+          GRENZE_MIDI_MAX,
         ) &&
         mischEkTaetigkeit.erwerbsTaetigkeit ===
           ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG
       ) {
-        const midiRange: Big = EgrBerechnungParamId.GRENZE_MIDI_MAX.sub(
-          EgrBerechnungParamId.GRENZE_MINI_MIDI,
-        );
-        const overMini: Big = mischEkTaetigkeit.bruttoEinkommenDurchschnitt.sub(
-          EgrBerechnungParamId.GRENZE_MINI_MIDI,
-        );
-        const faktoredMin: Big = EgrBerechnungParamId.F_FAKTOR.mul(
-          EgrBerechnungParamId.GRENZE_MINI_MIDI,
-        );
-        const faktoredMidi: Big = EgrBerechnungParamId.GRENZE_MIDI_MAX.sub(
-          faktoredMin,
-        )
+        const midiRange: Big = GRENZE_MIDI_MAX.sub(GRENZE_MINI_MIDI);
+        const overMini: Big =
+          mischEkTaetigkeit.bruttoEinkommenDurchschnitt.sub(GRENZE_MINI_MIDI);
+        const faktoredMin: Big = F_FAKTOR.mul(GRENZE_MINI_MIDI);
+        const faktoredMidi: Big = GRENZE_MIDI_MAX.sub(faktoredMin)
           .div(midiRange)
           .mul(overMini);
         mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi =
@@ -100,10 +105,10 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
         letzter_Betrachtungsmonat = i;
       }
     }
-    let summe_EK_SS: Big = MathUtil.BIG_ZERO;
-    let summe_EK_NS: Big = MathUtil.BIG_ZERO;
-    let summe_EK_NS_SV: Big = MathUtil.BIG_ZERO;
-    let summe_EK_GNS: Big = MathUtil.BIG_ZERO;
+    let summe_EK_SS: Big = BIG_ZERO;
+    let summe_EK_NS: Big = BIG_ZERO;
+    let summe_EK_NS_SV: Big = BIG_ZERO;
+    let summe_EK_GNS: Big = BIG_ZERO;
     const array = finanzDaten.mischEinkommenTaetigkeiten;
     for (let index = 0; index < array.length; index++) {
       const mischEkTaetigkeit = array[index];
@@ -123,17 +128,11 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
         case ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG:
           summe_EK_NS = summe_EK_NS.add(bruttoGesamt);
           if (
-            MathUtil.isEqual(
-              mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi,
-              MathUtil.BIG_ZERO,
-            )
+            isEqual(mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi, BIG_ZERO)
           ) {
             summe_EK_NS_SV = summe_EK_NS_SV.add(bruttoGesamt);
           } else if (
-            MathUtil.greater(
-              mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi,
-              MathUtil.BIG_ZERO,
-            )
+            greater(mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi, BIG_ZERO)
           ) {
             summe_EK_NS_SV = summe_EK_NS_SV.add(
               mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi.mul(
@@ -148,19 +147,19 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       }
     }
 
-    const brutto_elg: Big = MathUtil.round(
+    const brutto_elg: Big = round(
       summe_EK_SS
         .add(summe_EK_NS)
         .add(summe_EK_GNS)
-        .sub(Big(zaehler_Pauschmonate).mul(EgrBerechnungParamId.PAUSCH))
+        .sub(Big(zaehler_Pauschmonate).mul(PAUSCH))
         .div(ANZAHL_MONATE_PRO_JAHR),
       2,
     );
-    const brutto_steuer: Big = MathUtil.round(
+    const brutto_steuer: Big = round(
       summe_EK_SS.add(summe_EK_NS).div(ANZAHL_MONATE_PRO_JAHR),
       2,
     );
-    const brutto_sv: Big = MathUtil.round(
+    const brutto_sv: Big = round(
       summe_EK_SS.add(summe_EK_NS_SV).div(ANZAHL_MONATE_PRO_JAHR),
       2,
     );
@@ -196,46 +195,46 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       }
     }
     const betrachtungsmonate_grenze: Big = Big(betrachtungsmonate).div(Big(2));
-    let anzahl_monate_rv: Big = MathUtil.BIG_ZERO;
-    let anzahl_monate_kv: Big = MathUtil.BIG_ZERO;
-    let anzahl_monate_av: Big = MathUtil.BIG_ZERO;
+    let anzahl_monate_rv: Big = BIG_ZERO;
+    let anzahl_monate_kv: Big = BIG_ZERO;
+    let anzahl_monate_av: Big = BIG_ZERO;
     for (let i: number = 0; i < ANZAHL_MONATE_PRO_JAHR; i++) {
       if (betrachtungszeitraumRV[i]) {
-        anzahl_monate_rv = anzahl_monate_rv.add(MathUtil.BIG_ONE);
+        anzahl_monate_rv = anzahl_monate_rv.add(BIG_ONE);
       }
       if (betrachtungszeitraumKV[i]) {
-        anzahl_monate_kv = anzahl_monate_kv.add(MathUtil.BIG_ONE);
+        anzahl_monate_kv = anzahl_monate_kv.add(BIG_ONE);
       }
       if (betrachtungszeitraumAV[i]) {
-        anzahl_monate_av = anzahl_monate_av.add(MathUtil.BIG_ONE);
+        anzahl_monate_av = anzahl_monate_av.add(BIG_ONE);
       }
     }
     let rentenversicherungspflichtig: number = 0;
     let krankenversicherungspflichtig: number = 0;
     let arbeitslosenversicherungspflichtig: number = 0;
-    if (MathUtil.greater(anzahl_monate_rv, betrachtungsmonate_grenze)) {
+    if (greater(anzahl_monate_rv, betrachtungsmonate_grenze)) {
       rentenversicherungspflichtig = 1;
     }
     if (
-      MathUtil.isEqual(anzahl_monate_rv, betrachtungsmonate_grenze) &&
+      isEqual(anzahl_monate_rv, betrachtungsmonate_grenze) &&
       betrachtungszeitraumRV[letzter_Betrachtungsmonat]
     ) {
       rentenversicherungspflichtig = 1;
     }
-    if (MathUtil.greater(anzahl_monate_kv, betrachtungsmonate_grenze)) {
+    if (greater(anzahl_monate_kv, betrachtungsmonate_grenze)) {
       krankenversicherungspflichtig = 1;
     }
     if (
-      MathUtil.isEqual(anzahl_monate_kv, betrachtungsmonate_grenze) &&
+      isEqual(anzahl_monate_kv, betrachtungsmonate_grenze) &&
       betrachtungszeitraumKV[letzter_Betrachtungsmonat]
     ) {
       krankenversicherungspflichtig = 1;
     }
-    if (MathUtil.greater(anzahl_monate_av, betrachtungsmonate_grenze)) {
+    if (greater(anzahl_monate_av, betrachtungsmonate_grenze)) {
       arbeitslosenversicherungspflichtig = 1;
     }
     if (
-      MathUtil.isEqual(anzahl_monate_av, betrachtungsmonate_grenze) &&
+      isEqual(anzahl_monate_av, betrachtungsmonate_grenze) &&
       betrachtungszeitraumAV[letzter_Betrachtungsmonat]
     ) {
       arbeitslosenversicherungspflichtig = 1;
@@ -249,11 +248,11 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     ) {
       status = ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI;
     }
-    if (MathUtil.greater(summe_EK_SS, summe_EK_NS.add(summe_EK_GNS))) {
+    if (greater(summe_EK_SS, summe_EK_NS.add(summe_EK_GNS))) {
       status = ErwerbsArt.JA_SELBSTSTAENDIG;
     }
     if (
-      MathUtil.lessOrEqual(brutto_elg, EgrBerechnungParamId.GRENZE_MINI_MIDI) &&
+      lessOrEqual(brutto_elg, GRENZE_MINI_MIDI) &&
       status !== ErwerbsArt.JA_SELBSTSTAENDIG
     ) {
       status = ErwerbsArt.JA_NICHT_SELBST_MINI;
@@ -279,7 +278,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR) {
         finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
       }
-      Logger.log(
+      log(
         `Berechne Summe der Sozialabgaben mit: kv=${krankenversicherungspflichtig}, rv=${rentenversicherungspflichtig}, status=${status}, brutto_sv=${brutto_sv}`,
       );
       const summe_sozab: Big = new BruttoNettoRechner().summe_svb_misch(
@@ -298,15 +297,12 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       netto = brutto_elg.sub(summe_steuer_abzug).sub(summe_sozab);
       steuern = summe_steuer_abzug;
       abgaben = summe_sozab;
-      Logger.log(
+      log(
         `Netto (${netto}) berechnet aus Brutto ${brutto_elg} und Abgaben SV=${summe_sozab}, Steuer=${summe_steuer_abzug}`,
       );
     }
     const ek_vor: Big = netto;
-    const elterngeldbasis: Big = MathUtil.round(
-      this.elterngeld_keine_et(ek_vor),
-      2,
-    );
+    const elterngeldbasis: Big = round(this.elterngeld_keine_et(ek_vor), 2);
     return {
       krankenversicherungspflichtig: krankenversicherungspflichtig === 1,
       rentenversicherungspflichtig: rentenversicherungspflichtig === 1,

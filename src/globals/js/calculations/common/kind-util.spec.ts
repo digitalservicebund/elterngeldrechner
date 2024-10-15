@@ -1,4 +1,7 @@
-import { KindUtil } from "./kind-util";
+import {
+  findLastBornChild,
+  findSecondLastBornChild,
+} from "@/globals/js/calculations/common/kind-util";
 
 describe("kind-util", () => {
   describe.each([
@@ -32,7 +35,7 @@ describe("kind-util", () => {
         });
 
         // when
-        const actual = KindUtil.findLastBornChild(kindList);
+        const actual = findLastBornChild(kindList);
 
         // then
         expect(actual?.geburtsdatum?.toISOString()).toBe(
@@ -76,7 +79,7 @@ describe("kind-util", () => {
         });
 
         // when
-        const actual = KindUtil.findSecondLastBornChild(kindList);
+        const actual = findSecondLastBornChild(kindList);
 
         // then
         expect(actual?.geburtsdatum?.toISOString()).toBe(

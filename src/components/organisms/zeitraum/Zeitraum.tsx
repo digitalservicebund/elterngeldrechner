@@ -16,7 +16,7 @@ import { CustomSelect, SelectOption } from "@/components/molecules";
 import { Description } from "@/components/atoms";
 import nsp from "@/globals/js/namespace";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
-import { ZeitraumValue } from "@/globals/js/ZeitraumValue";
+import { zeitraumValueOf, ZeitraumValueType } from "@/globals/js/ZeitraumValue";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly register: UseFormRegister<TFieldValues>;
@@ -28,7 +28,7 @@ interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly optionsTo?: SelectOption[];
   readonly className?: string;
   readonly suffix?: string;
-  readonly type?: ZeitraumValue.Type;
+  readonly type?: ZeitraumValueType;
   readonly disabled?: boolean;
   readonly required?: boolean;
   readonly onChange?: (v: { from: string; to: string }) => void | undefined;
@@ -57,7 +57,7 @@ export function Zeitraum<TFieldValues extends FieldValues>({
   const toLabel = `bis${suffix}`;
 
   const valueOf = useCallback(
-    (value: string) => ZeitraumValue.valueOf(value, type),
+    (value: string) => zeitraumValueOf(value, type),
     [type],
   );
 

@@ -1,7 +1,6 @@
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
   createMischEkTaetigkeitOf,
-  EgrBerechnungParamId,
   Einkommen,
   ErwerbsArt,
   FinanzDaten,
@@ -16,6 +15,7 @@ import {
 } from "@/test-utils/egr-mischeinkommen-excel-sheet";
 import { describeSkipOnCi } from "@/setupTests";
 import { toListWithTolerance } from "@/test-utils/test-utils";
+import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 /**
  * Runs FIT tests for BasisEgAlgorithmus.
@@ -108,11 +108,7 @@ describeSkipOnCi("basis-eg-algorithmus", () => {
           ).toContain(sheet.ergebnisBrutto(testCaseIndex).toNumber());
 
           // Die FIT Tests haben bei Minijobs die falschen Steuern und Abgaben
-          if (
-            mischEkZwischenErgebnis.brutto.gt(
-              EgrBerechnungParamId.GRENZE_MINI_MIDI,
-            )
-          ) {
+          if (mischEkZwischenErgebnis.brutto.gt(GRENZE_MINI_MIDI)) {
             expect(
               toListWithTolerance(mischEkZwischenErgebnis.abgaben.toNumber()),
             ).toContain(sheet.ergebnisAbgaben(testCaseIndex).toNumber());

@@ -10,7 +10,7 @@ import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { Einkommen } from "./einkommen";
-import { MathUtil } from "@/globals/js/calculations/common/math-util";
+import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
 
 /**
  * Angaben zum Einkommen für die Berechnung des Elterngeldes.
@@ -39,9 +39,7 @@ export class FinanzDaten {
 
   bruttoLeistungsMonate(): Big[] {
     // Im FIT Algorithmus sind die indizes immer Monats-basiert, d.h. der Index 0 bleibt leer.
-    const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(
-      MathUtil.BIG_ZERO,
-    );
+    const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
 
     for (
       let index = 0;
@@ -55,7 +53,7 @@ export class FinanzDaten {
         lm++
       ) {
         const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
-        if (MathUtil.greater(bruttoProMonat, MathUtil.BIG_ZERO)) {
+        if (greater(bruttoProMonat, BIG_ZERO)) {
           bruttoLM[lm] = bruttoProMonat;
         }
       }
@@ -67,9 +65,7 @@ export class FinanzDaten {
     isPlus: boolean,
     planungsdaten: PlanungsDaten,
   ): Big[] {
-    const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(
-      MathUtil.BIG_ZERO,
-    );
+    const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
 
     for (
       let index = 0;
@@ -84,7 +80,7 @@ export class FinanzDaten {
       ) {
         // TODO simplify after java code migration and with new tests for this case
         const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
-        if (MathUtil.greater(bruttoProMonat, MathUtil.BIG_ZERO)) {
+        if (greater(bruttoProMonat, BIG_ZERO)) {
           const elterngeldArt: ElternGeldArt = planungsdaten.planung[lm - 1];
           if (isPlus) {
             if (

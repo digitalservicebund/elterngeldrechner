@@ -20,7 +20,6 @@ import prettierPluginRecommendedConfig from "eslint-plugin-prettier/recommended"
 const temporarilyDisabledRules = {
   "@typescript-eslint/no-explicit-any": "off",
   "@typescript-eslint/no-namespace": "off",
-  "@typescript-eslint/no-unused-expressions": "off",
 };
 
 const eslintConfig = [js.configs.recommended];

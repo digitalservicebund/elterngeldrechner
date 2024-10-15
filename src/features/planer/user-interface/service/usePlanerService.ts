@@ -75,7 +75,12 @@ export function usePlanerService(
       setValidierungsfehler(nextValidierungsfehler);
 
       const istPlanGueltig = nextValidierungsfehler.length === 0;
-      istPlanGueltig ? onPlanChanged?.(nextPlan) : onPlanChanged?.(undefined);
+
+      if (istPlanGueltig) {
+        onPlanChanged?.(nextPlan);
+      } else {
+        onPlanChanged?.(undefined);
+      }
     },
     [onPlanChanged],
   );

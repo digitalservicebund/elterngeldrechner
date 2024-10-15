@@ -28,9 +28,11 @@ export class EinkommenPOM {
   }
 
   async setGesamteinkommenUeberschritten(value: boolean) {
-    value
-      ? await this.gesamteinkommenUeberschrittenJa.click()
-      : await this.gesamteinkommenUeberschrittenNein.click();
+    if (value) {
+      await this.gesamteinkommenUeberschrittenJa.click();
+    } else {
+      await this.gesamteinkommenUeberschrittenNein.click();
+    }
     return this;
   }
 

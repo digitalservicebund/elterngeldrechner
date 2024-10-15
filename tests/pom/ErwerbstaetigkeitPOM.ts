@@ -48,25 +48,31 @@ export class ErwerbstaetigkeitPOM {
 
   async setErwerbstaetig(value: boolean, elternteil?: 1 | 2) {
     if (!elternteil && this.erwerbstaetigJa && this.erwerbstaetigNein) {
-      value
-        ? await this.erwerbstaetigJa.click()
-        : await this.erwerbstaetigNein.click();
+      if (value) {
+        await this.erwerbstaetigJa.click();
+      } else {
+        await this.erwerbstaetigNein.click();
+      }
     } else if (
       elternteil === 1 &&
       this.elternteil1ErwerbstaetigJa &&
       this.elternteil1ErwerbstaetigNein
     ) {
-      value
-        ? await this.elternteil1ErwerbstaetigJa.click()
-        : await this.elternteil1ErwerbstaetigNein.click();
+      if (value) {
+        await this.elternteil1ErwerbstaetigJa.click();
+      } else {
+        await this.elternteil1ErwerbstaetigNein.click();
+      }
     } else if (
       elternteil === 2 &&
       this.elternteil2ErwerbstaetigJa &&
       this.elternteil2ErwerbstaetigNein
     ) {
-      value
-        ? await this.elternteil2ErwerbstaetigJa.click()
-        : await this.elternteil2ErwerbstaetigNein.click();
+      if (value) {
+        await this.elternteil2ErwerbstaetigJa.click();
+      } else {
+        await this.elternteil2ErwerbstaetigNein.click();
+      }
     }
     return this;
   }

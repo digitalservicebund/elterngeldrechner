@@ -102,7 +102,10 @@ export class RechnerPlanerPOM {
     const label = `${lebensmonatszahl}. Lebensmonat`;
     const details = this.page.getByRole("group", { name: label, exact: true });
     const isClosed = (await details.getAttribute("open")) === null;
-    isClosed && (await details.click());
+
+    if (isClosed) {
+      await details.click();
+    }
   }
 
   async zeigeMehrLebensmonateAn(): Promise<void> {

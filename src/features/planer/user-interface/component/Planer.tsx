@@ -51,7 +51,9 @@ export function Planer({
   const istPlanGueltig = validierungsfehler.length === 0;
 
   const downloadePlan = useCallback(() => {
-    istPlanGueltig && window.print();
+    if (istPlanGueltig) {
+      window.print();
+    }
   }, [istPlanGueltig]);
 
   return (

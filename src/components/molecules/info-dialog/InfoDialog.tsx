@@ -44,13 +44,18 @@ export function InfoDialog({
 
   function closeModal(restoreFocus: boolean) {
     setIsModalOpen(false);
-    restoreFocus && openButtonElement.current?.focus();
+
+    if (restoreFocus) {
+      openButtonElement.current?.focus();
+    }
   }
 
   const ref = useDetectClickOutside({
     onTriggered: () => {
       // This gets triggered a lot due to events on the whole page.
-      isModalOpen && closeModal(false);
+      if (isModalOpen) {
+        closeModal(false);
+      }
     },
   });
 

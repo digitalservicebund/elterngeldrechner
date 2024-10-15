@@ -72,9 +72,11 @@ export class AllgemeineAngabenPOM {
   }
 
   async setElternteile(value: 1 | 2) {
-    value === 1
-      ? await this.elternteileFuerEinen.click()
-      : await this.elternteileFuerBeide.click();
+    if (value === 1) {
+      await this.elternteileFuerEinen.click();
+    } else {
+      await this.elternteileFuerBeide.click();
+    }
     return this;
   }
 
@@ -89,16 +91,20 @@ export class AllgemeineAngabenPOM {
   }
 
   async setAlleinerziehend(value: boolean) {
-    value
-      ? await this.alleinerziehendJa.click()
-      : await this.alleinerziehendNein.click();
+    if (value) {
+      await this.alleinerziehendJa.click();
+    } else {
+      await this.alleinerziehendNein.click();
+    }
     return this;
   }
 
   async setMutterschaftsleistungen(value: boolean) {
-    value
-      ? await this.mutterschaftsleistungenJa.click()
-      : await this.mutterschaftsleistungenNein.click();
+    if (value) {
+      await this.mutterschaftsleistungenJa.click();
+    } else {
+      await this.mutterschaftsleistungenNein.click();
+    }
     return this;
   }
 

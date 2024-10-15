@@ -21,7 +21,6 @@ const temporarilyDisabledRules = {
   "@typescript-eslint/no-explicit-any": "off",
   "@typescript-eslint/no-namespace": "off",
   "@typescript-eslint/no-unused-expressions": "off",
-  "prefer-const": "off",
 };
 
 const eslintConfig = [js.configs.recommended];

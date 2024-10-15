@@ -224,11 +224,12 @@ export class BruttoNettoRechner {
       const bd850_450: Big = grenze_midi_max.sub(grenze_mini_midi);
       const bd850: Big = grenze_midi_max;
       const bd450: Big = grenze_mini_midi;
-      let x: Big;
+      const x = bd850.div(bd850_450);
+
       let y: Big;
-      x = bd850.div(bd850_450);
       y = bd450.mul(f_faktor);
       y = y.div(bd850_450);
+
       const tmp2: Big = x.sub(y);
       const tmp3: Big = brutto_rech_sub.sub(grenze_mini_midi);
       let bemessungsentgelt: Big = tmp2.mul(tmp3);

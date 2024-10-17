@@ -1,6 +1,5 @@
 import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
-import { log } from "@/globals/js/calculations/common/logger";
 import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
@@ -157,10 +156,6 @@ export class BruttoNettoRechner {
       summeSteuer = BIG_ZERO;
     }
 
-    log(`Lohnsteuer: ${charge.lstlzz}`);
-    log(`SoliZuschlag: ${charge.solzlzz}`);
-    log(`Kirchensteuer: ${kirchenlohnsteuer}`);
-
     return summeSteuer.add(kirchenlohnsteuer);
   }
 
@@ -188,7 +183,6 @@ export class BruttoNettoRechner {
       bruttoProMonat,
     );
     summe_sozab = round(summe_sozab);
-    log(`Summe Sozialabgaben: ${summe_sozab}`);
     return summeSteuer.add(summe_sozab);
   }
 
@@ -260,10 +254,6 @@ export class BruttoNettoRechner {
       abgaben_alv = round(abgaben_alv);
       abgaben_gleitzone = round(abgaben_gleitzone);
     }
-    log(`KV: ${abgaben_kvpv}`);
-    log(`RV: ${abgaben_rv}`);
-    log(`ALV: ${abgaben_alv}`);
-    log(`Gleitzone: ${abgaben_gleitzone}`);
 
     return abgaben_kvpv.add(abgaben_rv).add(abgaben_alv).add(abgaben_gleitzone);
   }
@@ -324,9 +314,6 @@ export class BruttoNettoRechner {
     abgaben_kvpv = round(abgaben_kvpv);
     abgaben_rv = round(abgaben_rv);
     abgaben_alv = round(abgaben_alv);
-    log(`KV: ${abgaben_kvpv}`);
-    log(`RV: ${abgaben_rv}`);
-    log(`ALV: ${abgaben_alv}`);
     return round(abgaben_kvpv.add(abgaben_rv).add(abgaben_alv));
   }
 

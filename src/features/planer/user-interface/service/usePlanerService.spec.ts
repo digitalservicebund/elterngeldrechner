@@ -123,7 +123,11 @@ describe("use Planer service", () => {
       });
 
       expect(result.current.lebensmonate).toStrictEqual(ANY_PLAN.lebensmonate);
+
+      // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledOnce();
+
+      // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
     });
   });

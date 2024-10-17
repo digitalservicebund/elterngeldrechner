@@ -21,7 +21,10 @@ const temporarilyDisabledRules = {
   "@typescript-eslint/no-explicit-any": "off",
 };
 
-const eslintConfig = [js.configs.recommended];
+const eslintConfig = [
+  js.configs.recommended,
+  { rules: { "no-console": "error" } },
+];
 
 const languageOptions = [
   {

@@ -20,7 +20,6 @@ import {
   lessOrEqual,
   round,
 } from "@/globals/js/calculations/common/math-util";
-import { log } from "@/globals/js/calculations/common/logger";
 import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
@@ -278,9 +277,6 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR) {
         finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
       }
-      log(
-        `Berechne Summe der Sozialabgaben mit: kv=${krankenversicherungspflichtig}, rv=${rentenversicherungspflichtig}, status=${status}, brutto_sv=${brutto_sv}`,
-      );
       const summe_sozab: Big = new BruttoNettoRechner().summe_svb_misch(
         krankenversicherungspflichtig > 0,
         rentenversicherungspflichtig > 0,
@@ -297,9 +293,6 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       netto = brutto_elg.sub(summe_steuer_abzug).sub(summe_sozab);
       steuern = summe_steuer_abzug;
       abgaben = summe_sozab;
-      log(
-        `Netto (${netto}) berechnet aus Brutto ${brutto_elg} und Abgaben SV=${summe_sozab}, Steuer=${summe_steuer_abzug}`,
-      );
     }
     const ek_vor: Big = netto;
     const elterngeldbasis: Big = round(this.elterngeld_keine_et(ek_vor), 2);

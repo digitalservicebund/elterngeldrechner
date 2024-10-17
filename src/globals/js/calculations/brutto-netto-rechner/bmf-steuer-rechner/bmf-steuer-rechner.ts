@@ -67,13 +67,12 @@ export async function callRemoteRechner(
   return parseResponse(xml);
 }
 
-const queryBmfSteuerRechner = (url: string): Promise<string> => {
-  return fetch(url)
-    .then(function (response: Response) {
-      return response.text();
-    })
-    .catch(function (reason) {
-      console.error(reason);
-      throw errorOf("BmfSteuerRechnerCallFailed");
-    });
+const queryBmfSteuerRechner = async (url: string): Promise<string> => {
+  try {
+    const response = await fetch(url);
+
+    return await response.text();
+  } catch {
+    throw errorOf("BmfSteuerRechnerCallFailed");
+  }
 };

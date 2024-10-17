@@ -102,7 +102,9 @@ export function usePlanerService(
       setPlan((plan) => {
         const nextPlan = waehleOption(plan, ...argumentList).unwrapOrElse(
           (error) => {
+            // eslint-disable-next-line no-console
             console.error(error);
+
             return plan;
           },
         );

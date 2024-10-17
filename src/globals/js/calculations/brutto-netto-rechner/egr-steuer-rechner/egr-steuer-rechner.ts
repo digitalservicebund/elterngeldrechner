@@ -16,7 +16,6 @@ import {
   bmfSteuerRechnerAvailableYearsLib,
   bmfSteuerRechnerAvailableYearsRemote,
 } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-configuration";
-import { log } from "@/globals/js/calculations/common/logger";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 import {
   callBmfSteuerRechner,
@@ -97,8 +96,7 @@ export class EgrSteuerRechner {
     try {
       const bmfResponse = await callBmfSteuerRechner(lohnSteuerJahr, parameter);
       return bmfAbgabenOf(bmfResponse);
-    } catch (e) {
-      log(e);
+    } catch {
       throw errorOf("BmfSteuerRechnerCallFailed");
     }
   }

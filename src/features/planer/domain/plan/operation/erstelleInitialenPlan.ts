@@ -30,9 +30,13 @@ if (import.meta.vitest) {
         pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
-      const errechneteElterngeldbezuege = {
+
+      // TODO: Start working with test data generators
+      // All these parts are tagged with: related to test-generators
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errechneteElterngeldbezuege: any = {
         1: { [Elternteil.Eins]: {} },
-      } as any; // TODO: Start working with test data generators.
+      };
 
       const plan = erstelleInitialenPlan(
         ausgangslage,
@@ -95,7 +99,7 @@ if (import.meta.vitest) {
         });
     });
 
-    const ANY_ELTERNGELDBEZUEGE = {} as any;
+    const ANY_ELTERNGELDBEZUEGE = {} as never;
     const ANY_PSEUDONYME_ONE_ELTERNTEIL = {
       [Elternteil.Eins]: "Jane",
     };

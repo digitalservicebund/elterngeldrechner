@@ -42,7 +42,7 @@ if (import.meta.vitest) {
         pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
         geburtsdatumDesKindes: new Date(),
       },
-      errechneteElterngeldbezuege: {} as any,
+      errechneteElterngeldbezuege: {} as never,
       lebensmonate: {},
     };
   });

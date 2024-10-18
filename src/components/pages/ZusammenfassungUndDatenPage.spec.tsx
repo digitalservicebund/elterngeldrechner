@@ -76,5 +76,5 @@ const ANY_PLAN = {
     geburtsdatumDesKindes: new Date(),
   },
   lebensmonate: {},
-  errechneteElterngeldbezuege: {} as any,
+  errechneteElterngeldbezuege: {} as never,
 };

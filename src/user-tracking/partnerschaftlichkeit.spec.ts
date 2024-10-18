@@ -144,7 +144,7 @@ const ANY_PLAN_WITH_ONE_ELTERNTEIL = {
     pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
     geburtsdatumDesKindes: new Date(),
   },
-  errechneteElterngeldbezuege: {} as any,
+  errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
 };
 
@@ -157,6 +157,6 @@ const ANY_PLAN_WITH_TWO_ELTERNTEILE = {
     },
     geburtsdatumDesKindes: new Date(),
   },
-  errechneteElterngeldbezuege: {} as any,
+  errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
 };

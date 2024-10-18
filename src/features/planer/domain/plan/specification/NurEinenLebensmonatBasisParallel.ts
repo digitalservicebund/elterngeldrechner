@@ -180,7 +180,7 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       },
       lebensmonate: {},
-      errechneteElterngeldbezuege: {} as any,
+      errechneteElterngeldbezuege: {} as never,
     };
 
     const LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS = {

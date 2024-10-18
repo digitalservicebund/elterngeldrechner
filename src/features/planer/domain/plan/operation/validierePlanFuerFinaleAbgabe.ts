@@ -48,6 +48,6 @@ if (import.meta.vitest) {
       import("@/features/planer/domain/plan/specification/FinalGueltigerPlan"),
     );
 
-    const ANY_PLAN = {} as any; // TODO: Get test data factories!
+    const ANY_PLAN = {} as never; // TODO: Get test data factories!
   });
 }

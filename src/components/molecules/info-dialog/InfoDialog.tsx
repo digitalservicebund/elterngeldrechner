@@ -1,4 +1,11 @@
-import { CSSProperties, useId, useRef, useState, type ReactNode } from "react";
+import {
+  KeyboardEvent,
+  CSSProperties,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useDetectClickOutside } from "react-detect-click-outside";
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
@@ -59,7 +66,7 @@ export function InfoDialog({
     },
   });
 
-  function preventTabOut(event: any) {
+  function preventTabOut(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === "Tab" && isModalOpen) {
       event.preventDefault();
     }

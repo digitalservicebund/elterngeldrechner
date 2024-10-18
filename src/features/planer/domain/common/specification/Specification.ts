@@ -21,7 +21,7 @@ export abstract class Specification<Instance> {
 
   /** See {@link PropertySpecification} */
   static forProperty<
-    Instance extends Record<Key, any>,
+    Instance extends Record<Key, unknown>,
     Key extends PropertyKey,
   >(
     key: Key,
@@ -91,7 +91,8 @@ class PredicateSpecification<Instance> extends Specification<Instance> {
  */
 class PropertySpecification<
   Key extends PropertyKey,
-  Instance extends Record<Key, any>,
+  Instance extends Record<Key, ValueType>,
+  ValueType,
 > extends Specification<Instance> {
   /**
    * @param key of the property to validate for

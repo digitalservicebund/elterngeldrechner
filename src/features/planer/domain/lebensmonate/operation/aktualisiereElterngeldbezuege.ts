@@ -6,7 +6,7 @@ import {
 } from "@/features/planer/domain/Lebensmonatszahl";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import { aktualisiereElterngeldbezuege as aktualisiereElterngeldbezuegeImLebensmonat } from "@/features/planer/domain/lebensmonat";
-import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
+import { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
 import { mapRecordEntriesWithIntegerKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
@@ -59,7 +59,9 @@ if (import.meta.vitest) {
         },
       };
 
-      const elterngeldbezuege = {
+      // related to test-generators
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const elterngeldbezuege: any = {
         1: {
           [Elternteil.Eins]: bezuege(111, 112, 113),
           [Elternteil.Zwei]: bezuege(121, 122, 123),
@@ -68,7 +70,7 @@ if (import.meta.vitest) {
           [Elternteil.Eins]: bezuege(211, 212, 213),
           [Elternteil.Zwei]: bezuege(221, 222, 223),
         },
-      } as any;
+      };
 
       const lebensmonate = aktualisiereElterngeldbezuege(
         lebensmonateVorher,

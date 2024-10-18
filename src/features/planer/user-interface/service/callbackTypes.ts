@@ -29,7 +29,7 @@ export type WaehleOptionInLebensmonat<E extends Elternteil> = OmitFirstArgument<
 >;
 
 type OmitFirstArgument<Function> = Function extends (
-  firstArgument: any,
+  firstArgument: infer _,
   ...remainingArguments: infer Arguments
 ) => infer ReturnType
   ? (...argumentList: Arguments) => ReturnType

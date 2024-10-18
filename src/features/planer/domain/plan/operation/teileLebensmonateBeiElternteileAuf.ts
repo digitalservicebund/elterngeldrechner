@@ -125,6 +125,8 @@ if (import.meta.vitest) {
       });
     });
 
+    // related to test-generators
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ANY_ERRECHNETE_ELTERNGELDBEZUEGE = {} as any;
 
     function monat(

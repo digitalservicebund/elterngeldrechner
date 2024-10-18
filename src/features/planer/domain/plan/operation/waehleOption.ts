@@ -188,12 +188,14 @@ if (import.meta.vitest) {
       [Elternteil.Zwei]: bezuege(0, 0, 0),
     };
 
-    const ANY_ELTERNGELDBEZUEGE = Object.fromEntries(
+    // related to test-generators
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ANY_ELTERNGELDBEZUEGE: any = Object.fromEntries(
       Lebensmonatszahlen.map((lebensmonatszahl) => [
         lebensmonatszahl,
         ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
       ]),
-    ) as any;
+    );
 
     const ANY_PLAN = {
       ausgangslage: {

@@ -18,11 +18,6 @@ import prettierPluginRecommendedConfig from "eslint-plugin-prettier/recommended"
 
 import customRulesPlugin from "./eslint-rules/custom-rules-plugin.js";
 
-// TODO: Enable and fix disabled rules after migration
-const temporarilyDisabledRules = {
-  "@typescript-eslint/no-explicit-any": "off",
-};
-
 const eslintConfig = [
   js.configs.recommended,
   { rules: { "no-console": "error" } },
@@ -51,12 +46,7 @@ const ignoredFilesConfig = [
   },
 ];
 
-const typescriptConfig = [
-  ...tsEslintConfigs.recommended,
-  {
-    rules: temporarilyDisabledRules,
-  },
-];
+const typescriptConfig = tsEslintConfigs.recommended;
 
 const customRulesConfig = [
   {

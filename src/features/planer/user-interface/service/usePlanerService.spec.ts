@@ -470,7 +470,7 @@ const ANY_PLAN = {
     pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
     geburtsdatumDesKindes: new Date(),
   },
-  errechneteElterngeldbezuege: {} as any,
+  errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
 };
 

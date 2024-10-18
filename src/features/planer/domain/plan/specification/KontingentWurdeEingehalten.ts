@@ -124,7 +124,7 @@ if (import.meta.vitest) {
       };
     };
 
-    const ANY_PLAN = {} as any;
+    const ANY_PLAN = {} as never;
 
     vi.mock(
       import(

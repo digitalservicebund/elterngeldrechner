@@ -128,7 +128,7 @@ if (import.meta.vitest) {
       expect(auswahlmoeglichkeiten[KeinElterngeld].isDisabled).toBe(false);
     });
 
-    vi.mock("@/features/planer/domain/plan/operation/waehleOption");
+    vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));
 
     function bezuege(basis: number, plus: number, bonus: number) {
       return {

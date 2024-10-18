@@ -4,7 +4,7 @@ import { Elternteil } from "@/features/planer/domain";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { render, screen } from "@/test-utils/test-utils";
 
-vi.mock("@/hooks/useNavigateWithPlan");
+vi.mock(import("@/hooks/useNavigateWithPlan"));
 
 describe("Zusammenfassung und Daten Page", () => {
   beforeEach(() => {

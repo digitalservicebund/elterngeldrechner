@@ -8,7 +8,7 @@ import {
   type Lebensmonat,
 } from "@/features/planer/domain";
 
-vi.mock("./data-layer.ts");
+vi.mock(import("./data-layer"));
 
 describe("partnerschaftlichkeit", () => {
   it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {

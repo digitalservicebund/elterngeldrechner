@@ -27,7 +27,7 @@ import {
   StepRechnerElternteilState,
 } from "@/redux/stepRechnerSlice";
 
-vi.mock("../../globals/js/calculations/basis-eg-algorithmus");
+vi.mock(import("@/globals/js/calculations/basis-eg-algorithmus"));
 
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

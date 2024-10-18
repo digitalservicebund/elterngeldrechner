@@ -1,7 +1,7 @@
 import { setTrackingVariable } from "./data-layer";
 import { trackNutzergruppe } from "./nutzergruppe";
 
-vi.mock("./data-layer.ts");
+vi.mock(import("./data-layer"));
 
 describe("trackNutzergruppe()", () => {
   beforeEach(() => {

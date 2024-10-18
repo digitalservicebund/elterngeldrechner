@@ -19,23 +19,33 @@ import { stepRechnerActions } from "@/redux/stepRechnerSlice";
 import type { AppStore } from "@/redux";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 
-vi.mock("@/features/planer/domain/plan/operation/erstelleInitialenPlan");
-vi.mock("@/features/planer/domain/plan/operation/waehleOption");
 vi.mock(
-  "@/features/planer/domain/plan/operation/aktualisiereElterngeldbezuege",
+  import("@/features/planer/domain/plan/operation/erstelleInitialenPlan"),
 );
-vi.mock("@/features/planer/domain/plan/operation/setzePlanZurueck");
-vi.mock("@/features/planer/domain/plan/operation/berechneGesamtsumme");
+vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));
 vi.mock(
-  "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe",
+  import(
+    "@/features/planer/domain/plan/operation/aktualisiereElterngeldbezuege"
+  ),
+);
+vi.mock(import("@/features/planer/domain/plan/operation/setzePlanZurueck"));
+vi.mock(import("@/features/planer/domain/plan/operation/berechneGesamtsumme"));
+vi.mock(
+  import(
+    "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe"
+  ),
 );
 vi.mock(
-  "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent",
+  import(
+    "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent"
+  ),
 );
 vi.mock(
-  "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent",
+  import(
+    "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent"
+  ),
 );
-vi.mock("@/user-tracking/partnerschaftlichkeit");
+vi.mock(import("@/user-tracking/partnerschaftlichkeit"));
 
 describe("use Planer service", () => {
   beforeEach(() => {

@@ -162,7 +162,9 @@ if (import.meta.vitest) {
     });
 
     vi.mock(
-      "@/features/planer/domain/plan/specification/VorlaeufigGueltigerPlan",
+      import(
+        "@/features/planer/domain/plan/specification/VorlaeufigGueltigerPlan"
+      ),
     );
 
     function monat(gewaehlteOption: undefined, elterngeldbezug: undefined) {

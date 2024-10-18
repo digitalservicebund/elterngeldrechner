@@ -8,7 +8,7 @@ import {
   Variante,
 } from "@/features/planer/user-interface/service";
 
-vi.mock("@/features/planer/user-interface/service/usePlanerService");
+vi.mock(import("@/features/planer/user-interface/service/usePlanerService"));
 
 describe("Planer", () => {
   beforeEach(() => {

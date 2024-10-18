@@ -177,4 +177,4 @@ const ANY_PROPS = {
   waehleOption: () => {},
 };
 
-vi.mock("./HinweisZumBonus");
+vi.mock(import("./HinweisZumBonus"));

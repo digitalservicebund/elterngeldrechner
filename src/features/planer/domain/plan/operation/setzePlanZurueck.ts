@@ -48,6 +48,8 @@ if (import.meta.vitest) {
   });
 
   vi.mock(
-    "@/features/planer/domain/lebensmonate/operation/erstelleInitialeLebensmonate",
+    import(
+      "@/features/planer/domain/lebensmonate/operation/erstelleInitialeLebensmonate"
+    ),
   );
 }

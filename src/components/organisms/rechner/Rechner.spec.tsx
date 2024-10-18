@@ -15,7 +15,7 @@ import {
 } from "@/redux/stepRechnerSlice";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
 
-vi.mock("../../../globals/js/calculations/egr-calculation");
+vi.mock(import("@/globals/js/calculations/egr-calculation"));
 
 describe("Rechner", () => {
   const stepNachwuchs: StepNachwuchsState = {

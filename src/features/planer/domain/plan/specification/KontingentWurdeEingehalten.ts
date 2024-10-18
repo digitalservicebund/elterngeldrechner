@@ -127,10 +127,14 @@ if (import.meta.vitest) {
     const ANY_PLAN = {} as any;
 
     vi.mock(
-      "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent",
+      import(
+        "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent"
+      ),
     );
     vi.mock(
-      "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent",
+      import(
+        "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent"
+      ),
     );
   });
 }

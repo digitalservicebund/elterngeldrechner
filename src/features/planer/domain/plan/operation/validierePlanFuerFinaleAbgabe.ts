@@ -44,7 +44,9 @@ if (import.meta.vitest) {
       expect(error).toEqual([{ message: "ungültig" }]);
     });
 
-    vi.mock("@/features/planer/domain/plan/specification/FinalGueltigerPlan");
+    vi.mock(
+      import("@/features/planer/domain/plan/specification/FinalGueltigerPlan"),
+    );
 
     const ANY_PLAN = {} as any; // TODO: Get test data factories!
   });

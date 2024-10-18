@@ -58,7 +58,7 @@
     "jsdom": "^24.1.0",
     "lefthook": "^1.6.7",
     "license-checker": "^25.0.1",
-    "node-xlsx": "^0.23.0",
+    "node-xlsx": "^0.24.0",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.6",

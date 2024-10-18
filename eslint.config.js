@@ -42,7 +42,7 @@ const languageOptions = [
 
 const ignoredFilesConfig = [
   {
-    ignores: ["public", "dist"],
+    ignores: ["public", "dist", "*.yml"],
   },
 ];
 

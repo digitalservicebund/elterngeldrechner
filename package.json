@@ -14,8 +14,8 @@
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",
     "test-e2e": "playwright test",
     "type-check": "tsc",
-    "lint": "f() { eslint --max-warnings=0 ${@:-**/*.{ts,tsx\\}}; }; f",
-    "lint-fix": "f() { eslint --fix ${@:-*.{ts,tsx\\}}; }; f",
+    "lint": "f() { eslint --no-warn-ignored --max-warnings=0 ${@:-**/*.{ts,tsx\\}}; }; f",
+    "lint-fix": "f() { eslint --no-warn-ignored --fix ${@:-*.{ts,tsx\\}}; }; f",
     "stylelint": "f() { stylelint ${@:-.}; }; f",
     "audit-licenses": "license-checker --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },

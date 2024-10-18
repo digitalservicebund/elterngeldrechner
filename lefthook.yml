@@ -12,7 +12,6 @@ pre-commit:
       run: npm run format {staged_files}
       stage_fixed: true
     lint:
-      glob: "*.{ts,tsx,js}" # TODO: remove with new version of ESLint and the `--no-warn-ignored` flag.
       run: npm run lint {staged_files}
     stylelint:
       run: npm run stylelint {staged_files}

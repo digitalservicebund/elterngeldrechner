@@ -16,6 +16,8 @@ import importPathsPlugin from "eslint-plugin-no-relative-import-paths";
 
 import prettierPluginRecommendedConfig from "eslint-plugin-prettier/recommended";
 
+import customRulesPlugin from "./eslint-rules/custom-rules-plugin.js";
+
 // TODO: Enable and fix disabled rules after migration
 const temporarilyDisabledRules = {
   "@typescript-eslint/no-explicit-any": "off",
@@ -56,6 +58,17 @@ const typescriptConfig = [
   },
 ];
 
+const customRulesConfig = [
+  {
+    plugins: {
+      customRules: customRulesPlugin,
+    },
+    rules: {
+      "customRules/vi-import": "error",
+    },
+  },
+];
+
 const accessibilityConfig = [accessibilityPlugin["flatConfigs"].recommended];
 
 const tailwindConfig = [
@@ -77,7 +90,7 @@ const importConfig = [
     },
     settings: {
       "import/resolver": {
-        typescript: true,
+        typescript: { alwaysTryTypes: true },
         node: true,
       },
     },
@@ -171,5 +184,6 @@ export default defineConfig(
   ...importConfig,
   ...vitestConfig,
   ...noRelativeImportPathsConfig,
+  ...customRulesConfig,
   ...prettierConfig,
 );

@@ -13,6 +13,7 @@
     "playwright.config.ts",
     "commitlint.config.ts",
     "postcss.config.js",
-    "eslint.config.js"
+    "eslint.config.js",
+    "eslint-rules"
   ]
 }

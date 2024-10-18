@@ -4,3 +4,4 @@ export * from "./FortlaufenderBezugNachDemVierzehntenLebensmonat";
 export * from "./JedesElternteilBeziehtKeineOderMindestensZweiLebensmonate";
 export * from "./KeineOderMindestensZweiLebensmonateBonus";
 export * from "./MindestensEinMonatWurdeGewaehlt";
+export * from "./MonateMitBonusHabenBruttoeinkommen";

@@ -3,6 +3,7 @@ import { Specification } from "@/features/planer/domain/common/specification";
 import {
   JedesElternteilBeziehtKeineOderMindestensZweiLebensmonate,
   MindestensEinMonatWurdeGewaehlt,
+  MonateMitBonusHabenBruttoeinkommen,
 } from "@/features/planer/domain/lebensmonate";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 
@@ -11,6 +12,6 @@ export function MinimaleAuswahlErfuellt<A extends Ausgangslage>() {
     "lebensmonate",
     MindestensEinMonatWurdeGewaehlt.and(
       JedesElternteilBeziehtKeineOderMindestensZweiLebensmonate,
-    ),
+    ).and(MonateMitBonusHabenBruttoeinkommen),
   );
 }

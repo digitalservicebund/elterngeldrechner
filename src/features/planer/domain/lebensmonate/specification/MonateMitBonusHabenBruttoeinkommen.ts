@@ -8,7 +8,7 @@ import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/
 
 export const MonateMitBonusHabenBruttoeinkommen =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Bitte beachten Sie: Aktuell ist die Planung nicht vollständig. In Monaten mit Partnerschaftbonus muss in Teilzeit gearbeitet werden. Bitte geben sie ein Einkommen für diese Monate an.",
+    "Bitte beachten Sie: Die Planung ist derzeit noch nicht vollständig. In Monaten, in denen der Partnerschaftsbonus ausgewählt wird, ist eine Teilzeitbeschäftigung erforderlich. Tragen Sie daher bitte das vorraussichtliche Einkommen für diese Monate ein.",
     (lebensmonate) =>
       Object.values(lebensmonate)
         .flatMap((lebensmonat) => Object.values(lebensmonat))

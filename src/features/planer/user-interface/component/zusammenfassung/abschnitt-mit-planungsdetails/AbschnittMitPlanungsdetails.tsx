@@ -25,7 +25,7 @@ export function AbschnittMitPlanungsdetails<E extends Elternteil>({
       className="@container/planungs-details"
       aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier}>Planung der Monate im Detail</h4>
+      <h3 id={headingIdentifier}>Planung der Monate im Detail</h3>
 
       <div className="flex flex-col gap-y-32 @2xl/planungs-details:hidden">
         {elternteile.map((elternteil) => (

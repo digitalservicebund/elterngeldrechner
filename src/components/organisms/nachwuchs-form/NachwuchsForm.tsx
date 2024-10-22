@@ -127,6 +127,8 @@ export function NachwuchsForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} name="Ihr Nachwuchs" noValidate>
+      <h2>Ihr Nachwuchs</h2>
+
       <FormFieldGroup headline="Kinder">
         <CustomDate
           control={control}
@@ -174,11 +176,7 @@ export function NachwuchsForm({
         <ul className={nsp("nachwuchs-form__geschwisterkinder")}>
           {fields.map((field, index) => {
             return (
-              <li
-                key={field.id}
-                role="region"
-                aria-label={`${index + 1}. Geschwisterkind`}
-              >
+              <li key={field.id} aria-label={`${index + 1}. Geschwisterkind`}>
                 {index > 0 && <h3 className="mb-10">Geschwisterkind</h3>}
                 <CustomDate
                   control={control}

@@ -98,7 +98,7 @@ export function RechnerResult({ elternteil }: Props) {
   return (
     <section
       className={nsp("rechner-result")}
-      aria-label="Elterngeld berechnen Ergebnis"
+      aria-label={`Elterngeld berechnen Ergebnis ${elternteil}`}
     >
       <RechnerResultTable
         className={nsp("rechner-result__basiselterngeld")}

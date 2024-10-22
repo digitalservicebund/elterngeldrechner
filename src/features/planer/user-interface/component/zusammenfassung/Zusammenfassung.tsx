@@ -18,7 +18,7 @@ export function Zusammenfassung({ plan }: Props): ReactNode {
 
   return (
     <section aria-labelledby={headingIdentifier}>
-      <h3 id={headingIdentifier}>Zusammenfassung</h3>
+      <h2 id={headingIdentifier}>Zusammenfassung</h2>
 
       <div className="flex flex-col gap-y-80">
         <AbschnittMitPlanungsuebersicht

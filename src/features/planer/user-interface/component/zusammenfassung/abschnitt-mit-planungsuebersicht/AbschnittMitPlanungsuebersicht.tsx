@@ -28,9 +28,9 @@ export function AbschnittMitPlanungsuebersicht<E extends Elternteil>({
       aria-labelledby={headingIdentifier}
       aria-describedby={descriptionIdentifier}
     >
-      <h4 id={headingIdentifier} className="sr-only">
+      <h3 id={headingIdentifier} className="sr-only">
         Planungsübersicht
-      </h4>
+      </h3>
 
       <p id={descriptionIdentifier} className="basis-full">
         Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate

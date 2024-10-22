@@ -33,9 +33,9 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
       )}
       aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier} className="sr-only">
+      <h3 id={headingIdentifier} className="sr-only">
         Gesamtsumme
-      </h4>
+      </h3>
 
       {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
         ([elternteil, pseudonym]) => {

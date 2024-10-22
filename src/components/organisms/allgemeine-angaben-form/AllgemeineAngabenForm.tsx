@@ -62,7 +62,7 @@ export function AllgemeineAngabenForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <h3 className="mb-10">Allgemeine Angaben</h3>
+        <h2 className="mb-10">Allgemeine Angaben</h2>
         <FormFieldGroup
           headline="Eltern"
           description="Für wen planen Sie Elterngeld?"

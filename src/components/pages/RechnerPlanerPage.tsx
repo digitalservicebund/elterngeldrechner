@@ -69,9 +69,9 @@ function RechnerPlanerPage() {
           className="basis-full"
           aria-labelledby={sectionLabelIdentifier}
         >
-          <h3 id={sectionLabelIdentifier} className="mb-10">
+          <h2 id={sectionLabelIdentifier} className="mb-10">
             Rechner und Planer
-          </h3>
+          </h2>
 
           <Rechner />
 

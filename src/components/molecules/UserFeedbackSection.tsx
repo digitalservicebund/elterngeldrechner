@@ -26,11 +26,11 @@ export function UserFeedbackSection({ className }: Props): ReactNode {
         className,
       )}
     >
-      <h4 id={labelIdentifier} className="basis-full text-base font-bold">
+      <h2 id={labelIdentifier} className="basis-full text-base font-bold">
         {isCompleted
           ? "Vielen Dank für Ihr Feedback!"
           : "War der Elterngeldrechner mit Planer für Sie hilfreich?"}
-      </h4>
+      </h2>
 
       {!isCompleted && (
         <>

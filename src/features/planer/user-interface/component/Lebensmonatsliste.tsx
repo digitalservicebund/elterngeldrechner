@@ -61,9 +61,9 @@ export function Lebensmonatsliste<E extends Elternteil>({
       className={classNames("flex flex-col", className)}
       aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier} className="sr-only">
+      <h3 id={headingIdentifier} className="sr-only">
         Lebensmonate
-      </h4>
+      </h3>
 
       {Lebensmonatszahlen.map((lebensmonatszahl) => {
         const lebensmonat =

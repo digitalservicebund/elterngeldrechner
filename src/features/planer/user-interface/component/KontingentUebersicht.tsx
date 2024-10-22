@@ -29,9 +29,9 @@ export function KontingentUebersicht({
       )}
       aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier} className="sr-only">
+      <h3 id={headingIdentifier} className="sr-only">
         Kontingentübersicht
-      </h4>
+      </h3>
 
       {listeKontingentAuf(verfuegbaresKontingent, true)
         .filter(([, maximum]) => maximum > 0)

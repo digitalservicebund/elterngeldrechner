@@ -1,0 +1,97 @@
+import { test, type Page, type TestInfo, expect } from "@playwright/test";
+import { AxeBuilder } from "@axe-core/playwright";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
+import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
+import { EinkommenPOM } from "../pom/EinkommenPOM";
+import { VariantenPOM } from "../pom/VariantenPOM";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
+
+/**
+ * This test case intends to exercise the application in a way that it touches
+ * as many aspects as possible to test it for accessibility.
+ *
+ * It is the current intention to keep this in a dedicated test. So only this
+ * test case fails if accessibility is not sufficient. It is a first "good
+ * enough" solution to integrate better with accessibility testing. In future,
+ * solutions will be developed which should help to safely test for
+ * accessibility in all parts of the application without missing anything.
+ * Because it will be very hard to maintain such a test case. Especially when
+ * user decisions are mutually exclusive.
+ */
+test("basic accessibility run", async ({ page }, testInfo) => {
+  test.slow();
+
+  const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.goto();
+  await allgemeineAngabenPage.setElternteile(2);
+  await allgemeineAngabenPage.setNameElternteil1("Jane");
+  await allgemeineAngabenPage.setNameElternteil2("John");
+  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Jane");
+  await expectPageToBeAccessible(page, testInfo);
+  await allgemeineAngabenPage.submit();
+
+  const nachwuchsPage = new NachwuchsPOM(page);
+  await nachwuchsPage.setGeburtsdatum("01.01.2024");
+  await nachwuchsPage.setAnzahlKinder(2);
+  await nachwuchsPage.addGeschwisterkind(0, "01.01.2023", true);
+  await nachwuchsPage.addGeschwisterkind(1, "01.01.2022", false);
+  await expectPageToBeAccessible(page, testInfo);
+  await nachwuchsPage.submit();
+
+  const erwerbstaetigkeitPage = new ErwerbstaetigkeitPOM(page, {
+    elternteile: ["Jane", "John"],
+  });
+  await erwerbstaetigkeitPage.setErwerbstaetig(false, 1);
+  await erwerbstaetigkeitPage.setErwerbstaetig(false, 2);
+  // TODO: Extend POM to "see" more UI elements.
+  await expectPageToBeAccessible(page, testInfo);
+  await erwerbstaetigkeitPage.submit();
+
+  const einkommenPage = new EinkommenPOM(page);
+  await einkommenPage.setGesamteinkommenUeberschritten(false);
+  // TODO: Extend POM to "see" more UI elements.
+  await einkommenPage.submit();
+  await expectPageToBeAccessible(page, testInfo);
+
+  const variantenPage = new VariantenPOM(page);
+  await expectPageToBeAccessible(page, testInfo);
+  await variantenPage.submit();
+
+  const rechnerUndPlaner = new RechnerPlanerPOM(page, {
+    elternteile: ["Jane", "John"],
+  });
+  await rechnerUndPlaner.setKeinEinkommen(1);
+  await rechnerUndPlaner.berechnen(1);
+  await rechnerUndPlaner.setKeinEinkommen(2);
+  await rechnerUndPlaner.berechnen(2);
+  await rechnerUndPlaner.zeigeMehrLebensmonateAn();
+  await rechnerUndPlaner.waehleOption(1, "Plus", "John");
+  await expectPageToBeAccessible(page, testInfo, ["nested-interactive"]); // FIXME: fix ignored rule
+  await rechnerUndPlaner.waehleOption(4, "Bonus", "Jane");
+  await expectPageToBeAccessible(page, testInfo, ["nested-interactive"]); // FIXME: fix ignored rule
+  await rechnerUndPlaner.submit();
+
+  await expectPageToBeAccessible(page, testInfo);
+});
+
+async function expectPageToBeAccessible(
+  page: Page,
+  testInfo: TestInfo,
+  ruleNamesToDisable: string[] = [],
+): Promise<void> {
+  const { violations } = await new AxeBuilder({ page })
+    .disableRules(ruleNamesToDisable)
+    .include("#egr-root") // Ignore document around application (is not under test).
+    .analyze();
+
+  if (violations.length > 0) {
+    testInfo.attach("accessibility violations", {
+      contentType: "application/json",
+      body: JSON.stringify(violations),
+    });
+  }
+
+  expect(violations, "should have no accessibility violations").toHaveLength(0);
+}

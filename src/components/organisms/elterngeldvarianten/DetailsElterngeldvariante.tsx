@@ -30,7 +30,7 @@ export function DetailsElterngeldvariante({
             {variante}
           </span>
 
-          <h4 className="text-base">{summaryTitle}</h4>
+          <h3 className="text-base">{summaryTitle}</h3>
         </div>
 
         <OpenIcon className="min-h-24 min-w-24 group-open:hidden" />

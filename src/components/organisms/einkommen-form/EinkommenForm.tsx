@@ -55,7 +55,7 @@ export function EinkommenForm({
 
   return (
     <>
-      <h3 className="mb-10">Ihr Einkommen</h3>
+      <h2 className="mb-10">Ihr Einkommen</h2>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
           <FormFieldGroup

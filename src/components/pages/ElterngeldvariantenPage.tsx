@@ -19,7 +19,7 @@ export function ElterngeldvariantenPage(): ReactNode {
           className="flex basis-full flex-col gap-32"
           aria-describedby={descriptionIdentifier}
         >
-          <h3>Elterngeldvarianten</h3>
+          <h2>Elterngeldvarianten</h2>
 
           <p id={descriptionIdentifier}>
             Elterngeld gibt es in 3 Varianten, die hier näher erklärt werden.

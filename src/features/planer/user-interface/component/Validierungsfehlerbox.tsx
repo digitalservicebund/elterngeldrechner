@@ -20,13 +20,13 @@ export function Validierungsfehlerbox({
       )}
       aria-labelledby={headingIdentifier}
     >
-      <h4
+      <h3
         id={headingIdentifier}
         className="text-base"
         aria-label="Validierungsfehler"
       >
         Bitte beachten Sie:
-      </h4>
+      </h3>
 
       <ul
         className="list-inside list-disc"

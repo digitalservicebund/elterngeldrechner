@@ -118,7 +118,7 @@ describe("Rechner", () => {
 
     await userEvent.click(screen.getByText("Elterngeld berechnen"));
 
-    await screen.findByLabelText("Elterngeld berechnen Ergebnis");
+    await screen.findByLabelText("Elterngeld berechnen Ergebnis ET1");
     expect(
       store.getState().stepRechner.ET1.elterngeldResult,
     ).toEqual<ElterngeldRowsResult>({

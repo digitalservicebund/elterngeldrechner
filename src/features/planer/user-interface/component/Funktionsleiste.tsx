@@ -24,9 +24,9 @@ export function Funktionsleiste({
       className={classNames("flex flex-wrap gap-32", className)}
       aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier} className="sr-only">
+      <h3 id={headingIdentifier} className="sr-only">
         Funktionsleiste
-      </h4>
+      </h3>
 
       <Button
         buttonStyle="link"
@@ -43,6 +43,7 @@ export function Funktionsleiste({
         label="Download der Planung"
         iconBefore={<SaveAltIcon />}
         onClick={downloadePlan}
+        disabled={isDownloadDisabled}
       />
     </section>
   );

@@ -43,7 +43,11 @@ export function AuswahlEingabe({
           (option, optionIndex) => {
             const { isDisabled, hintWhyDisabled } =
               auswahlmoeglichkeiten[option];
-            const infoIdentifier = getInfoIdentifier(baseIdentifier, option);
+            const infoIdentifier = getInfoIdentifier(
+              baseIdentifier,
+              option,
+              isDisabled,
+            );
             const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
             const gridRowStart = optionIndex + 1;
 
@@ -69,7 +73,11 @@ export function AuswahlEingabe({
           (option, optionIndex) => {
             const { elterngeldbezug, isDisabled, hintWhyDisabled } =
               auswahlmoeglichkeiten[option];
-            const infoIdentifier = getInfoIdentifier(baseIdentifier, option);
+            const infoIdentifier = getInfoIdentifier(
+              baseIdentifier,
+              option,
+              isDisabled,
+            );
             const inputIdentifier = `${baseIdentifier}-input-${option}`;
             const inputDescriptionIdentifier = `${baseIdentifier}-input-description-${option}`;
             const inputAriaLabel = composeAriaLabelForAuswahloption(
@@ -133,8 +141,9 @@ export function AuswahlEingabe({
 function getInfoIdentifier(
   baseIdentifier: string,
   option: Auswahloption,
-): string {
-  return baseIdentifier + "-info-" + option;
+  isDisabled: boolean,
+): string | undefined {
+  return isDisabled ? `${baseIdentifier}-info-${option}` : undefined;
 }
 
 function composeAriaLabelForAuswahloption(

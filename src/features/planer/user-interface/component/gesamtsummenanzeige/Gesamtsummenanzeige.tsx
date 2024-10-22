@@ -1,6 +1,6 @@
 import { ReactNode, useId } from "react";
 import classNames from "classnames";
-import { SummenanzeigeFuerElternteil } from "./SummensanzeigeFuerElternteil";
+import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
 import {
   Elternteil,
   type Gesamtsumme,
@@ -8,6 +8,7 @@ import {
   listePseudonymeAuf,
 } from "@/features/planer/user-interface/service";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
+import { EinkommenFuerElternteil } from "@/features/planer/user-interface/component/gesamtsummenanzeige/EinkommenFuerElternteil";
 
 type Props<E extends Elternteil> = {
   readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
@@ -25,6 +26,12 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
   const hasMultipleElternteile =
     Object.keys(pseudonymeDerElternteile).length > 1;
 
+  const gesamtsummeElterngeld = `Gesamtsumme Elterngeld: ${formatAsCurrency(gesamtsumme.elterngeldbezug)} (netto)`;
+  const beideHabenEinkommen =
+    (gesamtsumme.proElternteil[Elternteil.Eins as E]?.bruttoeinkommen ?? 0) +
+      (gesamtsumme.proElternteil[Elternteil.Zwei as E]?.bruttoeinkommen ?? 0) >
+    0;
+
   return (
     <section
       className={classNames(
@@ -39,25 +46,39 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
 
       {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
         ([elternteil, pseudonym]) => {
-          const gesamtsummeFuerElternteil =
-            gesamtsumme.summeProElternteil[elternteil];
+          const summeFuerElternteil = gesamtsumme.proElternteil[elternteil];
 
           return (
-            <SummenanzeigeFuerElternteil
-              className="basis-[30ch]"
+            <ElterngeldFuerElternteil
+              className="basis-[40ch]"
               key={elternteil}
               pseudonum={pseudonym}
-              summe={gesamtsummeFuerElternteil}
+              summe={summeFuerElternteil}
             />
           );
         },
       )}
 
       {!!hasMultipleElternteile && (
-        <span className="basis-full font-bold">
-          Gesamtsumme der Planung: {formatAsCurrency(gesamtsumme.summe)}
-        </span>
+        <span className="basis-full font-bold">{gesamtsummeElterngeld}</span>
       )}
+
+      {beideHabenEinkommen
+        ? listePseudonymeAuf(pseudonymeDerElternteile, true).map(
+            ([elternteil, pseudonym]) => {
+              const summeFuerElternteil = gesamtsumme.proElternteil[elternteil];
+
+              return (
+                <EinkommenFuerElternteil
+                  className="basis-[40ch]"
+                  key={elternteil}
+                  pseudonum={pseudonym}
+                  summe={summeFuerElternteil}
+                />
+              );
+            },
+          )
+        : null}
 
       <span className="basis-full text-14">
         Hinweis: Mutterschaftsleistungen werden nicht in der Summe

@@ -70,7 +70,7 @@ export function AbschnittMitEinkommen(): ReactNode {
           aria-expanded={areInputsVisible}
         >
           <ToggleIcon isOn={areInputsVisible} />
-          Bruttoeinkommen hinzufügen
+          Brutto-Einkommen hinzufügen
         </button>
       </div>
 

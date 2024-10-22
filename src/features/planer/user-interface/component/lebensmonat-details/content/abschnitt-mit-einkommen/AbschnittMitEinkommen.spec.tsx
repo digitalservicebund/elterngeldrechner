@@ -221,7 +221,7 @@ describe("Abschnitt mit Einkommen", () => {
 
   async function toggleInputsVisibility(): Promise<void> {
     const toggle = screen.getByRole("button", {
-      name: "Bruttoeinkommen hinzufügen",
+      name: "Brutto-Einkommen hinzufügen",
     });
     await userEvent.click(toggle);
   }

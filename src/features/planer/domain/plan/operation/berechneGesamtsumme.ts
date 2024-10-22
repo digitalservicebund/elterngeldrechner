@@ -20,19 +20,18 @@ export function berechneGesamtsumme<A extends Ausgangslage>(
 ): Gesamtsumme<ElternteileByAusgangslage<A>> {
   const lebensmonateProElternteil = teileLebensmonateBeiElternteileAuf(plan);
 
-  const summeProElternteil = mapRecordEntriesWithStringKeys(
+  const proElternteil = mapRecordEntriesWithStringKeys(
     lebensmonateProElternteil,
     isElternteil,
     berrechneSummeFuerElternteil,
   );
 
-  const summe = Object.values(summeProElternteil).reduce(
-    (summe, { totalerElterngeldbezug, totalesBruttoeinkommen }) =>
-      summe + totalerElterngeldbezug + totalesBruttoeinkommen,
+  const elterngeld = Object.values(proElternteil).reduce(
+    (summe, { elterngeldbezug }) => summe + elterngeldbezug,
     0,
   );
 
-  return { summe, summeProElternteil };
+  return { elterngeldbezug: elterngeld, proElternteil };
 }
 
 function berrechneSummeFuerElternteil(
@@ -42,18 +41,18 @@ function berrechneSummeFuerElternteil(
     .map((monat) => monat.gewaehlteOption)
     .filter(isVariante).length;
 
-  const totalerElterngeldbezug = Object.values(lebensmonate)
+  const elterngeldbezug = Object.values(lebensmonate)
     .map((monat) => monat.elterngeldbezug ?? 0)
     .reduce((sum, elterngeldbezug) => sum + elterngeldbezug, 0);
 
-  const totalesBruttoeinkommen = Object.values(lebensmonate)
+  const bruttoeinkommen = Object.values(lebensmonate)
     .map((monat) => monat.bruttoeinkommen ?? 0)
     .reduce((sum, bruttoeinkommen) => sum + bruttoeinkommen, 0);
 
   return {
     anzahlMonateMitBezug,
-    totalerElterngeldbezug,
-    totalesBruttoeinkommen,
+    elterngeldbezug,
+    bruttoeinkommen,
   };
 }
 
@@ -72,15 +71,13 @@ if (import.meta.vitest) {
 
       const gesamtsumme = berechneGesamtsumme(plan);
 
-      expect(gesamtsumme.summe).toBe(0);
+      expect(gesamtsumme.elterngeldbezug).toBe(0);
 
-      expect(
-        Object.keys(gesamtsumme.summeProElternteil).length,
-      ).toBeGreaterThan(0);
+      expect(Object.keys(gesamtsumme.proElternteil).length).toBeGreaterThan(0);
 
-      Object.values(gesamtsumme.summeProElternteil).forEach((summe) => {
+      Object.values(gesamtsumme.proElternteil).forEach((summe) => {
         expect(summe.anzahlMonateMitBezug).toBe(0);
-        expect(summe.totalerElterngeldbezug).toBe(0);
+        expect(summe.elterngeldbezug).toBe(0);
       });
     });
 
@@ -108,11 +105,11 @@ if (import.meta.vitest) {
       const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(
-        gesamtsumme.summeProElternteil[Elternteil.Eins].anzahlMonateMitBezug,
+        gesamtsumme.proElternteil[Elternteil.Eins].anzahlMonateMitBezug,
       ).toBe(2);
 
       expect(
-        gesamtsumme.summeProElternteil[Elternteil.Zwei].anzahlMonateMitBezug,
+        gesamtsumme.proElternteil[Elternteil.Zwei].anzahlMonateMitBezug,
       ).toBe(4);
     });
 
@@ -135,13 +132,13 @@ if (import.meta.vitest) {
 
       const gesamtsumme = berechneGesamtsumme(plan);
 
-      expect(
-        gesamtsumme.summeProElternteil[Elternteil.Eins].totalerElterngeldbezug,
-      ).toBe(6);
+      expect(gesamtsumme.proElternteil[Elternteil.Eins].elterngeldbezug).toBe(
+        6,
+      );
 
-      expect(
-        gesamtsumme.summeProElternteil[Elternteil.Zwei].totalerElterngeldbezug,
-      ).toBe(8);
+      expect(gesamtsumme.proElternteil[Elternteil.Zwei].elterngeldbezug).toBe(
+        8,
+      );
     });
 
     it("sums up all Bruttoeinkommen of all Monate per Elternteil", () => {
@@ -163,16 +160,16 @@ if (import.meta.vitest) {
 
       const gesamtsumme = berechneGesamtsumme(plan);
 
-      expect(
-        gesamtsumme.summeProElternteil[Elternteil.Eins].totalesBruttoeinkommen,
-      ).toBe(6);
+      expect(gesamtsumme.proElternteil[Elternteil.Eins].bruttoeinkommen).toBe(
+        6,
+      );
 
-      expect(
-        gesamtsumme.summeProElternteil[Elternteil.Zwei].totalesBruttoeinkommen,
-      ).toBe(10);
+      expect(gesamtsumme.proElternteil[Elternteil.Zwei].bruttoeinkommen).toBe(
+        10,
+      );
     });
 
-    it("sums up the Elterngeldbezüge and Bruttoeinkommen of all Elternteile for the overall sum", () => {
+    it("sums up the Elterngeldbezüge (but the Bruttoeinkommen) of all Elternteile for the overall sum", () => {
       const lebensmonate = {
         2: {
           [Elternteil.Eins]: monat(Variante.Basis, 1, 2),
@@ -187,7 +184,7 @@ if (import.meta.vitest) {
 
       const gesamtsumme = berechneGesamtsumme(plan);
 
-      expect(gesamtsumme.summe).toBe(23);
+      expect(gesamtsumme.elterngeldbezug).toBe(11);
     });
 
     it("just works for single Elternteile too", () => {
@@ -205,16 +202,16 @@ if (import.meta.vitest) {
 
       const gesamtsumme = berechneGesamtsumme(plan);
 
-      expect(gesamtsumme.summe).toBe(16);
+      expect(gesamtsumme.elterngeldbezug).toBe(6);
       expect(
-        gesamtsumme.summeProElternteil[Elternteil.Eins].anzahlMonateMitBezug,
+        gesamtsumme.proElternteil[Elternteil.Eins].anzahlMonateMitBezug,
       ).toBe(3);
-      expect(
-        gesamtsumme.summeProElternteil[Elternteil.Eins].totalerElterngeldbezug,
-      ).toBe(6);
-      expect(
-        gesamtsumme.summeProElternteil[Elternteil.Eins].totalesBruttoeinkommen,
-      ).toBe(10);
+      expect(gesamtsumme.proElternteil[Elternteil.Eins].elterngeldbezug).toBe(
+        6,
+      );
+      expect(gesamtsumme.proElternteil[Elternteil.Eins].bruttoeinkommen).toBe(
+        10,
+      );
     });
 
     function monat(

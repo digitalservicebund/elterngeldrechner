@@ -16,8 +16,8 @@ describe("Gesamtsummenanzeige", () => {
         [Elternteil.Zwei]: ANY_NAME,
       };
       const gesamtsumme = {
-        summe: 7041,
-        summeProElternteil: {
+        elterngeldbezug: 7041,
+        proElternteil: {
           [Elternteil.Eins]: ANY_SUMME_FUER_ELTERNTEIL,
           [Elternteil.Zwei]: ANY_SUMME_FUER_ELTERNTEIL,
         },
@@ -32,7 +32,7 @@ describe("Gesamtsummenanzeige", () => {
       );
 
       expect(
-        screen.getByText(/^Gesamtsumme der Planung: 7.041.€$/),
+        screen.getByText("Gesamtsumme Elterngeld: 7.041 € (netto)"),
       ).toBeVisible();
     });
 
@@ -41,8 +41,8 @@ describe("Gesamtsummenanzeige", () => {
         [Elternteil.Eins]: ANY_NAME,
       };
       const gesamtsumme = {
-        summe: 7041,
-        summeProElternteil: {
+        elterngeldbezug: 7041,
+        proElternteil: {
           [Elternteil.Eins]: ANY_SUMME_FUER_ELTERNTEIL,
         },
       };
@@ -69,16 +69,16 @@ describe("Gesamtsummenanzeige", () => {
       };
       const gesamtsumme = {
         ...ANY_GESAMTSUMME,
-        summeProElternteil: {
+        proElternteil: {
           [Elternteil.Eins]: {
             anzahlMonateMitBezug: 8,
-            totalerElterngeldbezug: 6000,
-            totalesBruttoeinkommen: 0,
+            elterngeldbezug: 6000,
+            bruttoeinkommen: 0,
           },
           [Elternteil.Zwei]: {
             anzahlMonateMitBezug: 1,
-            totalerElterngeldbezug: 1041,
-            totalesBruttoeinkommen: 0,
+            elterngeldbezug: 1041,
+            bruttoeinkommen: 0,
           },
         },
       };
@@ -91,12 +91,10 @@ describe("Gesamtsummenanzeige", () => {
         />,
       );
 
-      expect(screen.getByText("Jane")).toBeVisible();
-      expect(screen.getByText("8 Monate")).toBeVisible();
-      expect(screen.getByText(/^Elterngeld: 6.000.€$/)).toBeVisible();
-      expect(screen.getByText("John")).toBeVisible();
-      expect(screen.getByText("1 Monat")).toBeVisible();
-      expect(screen.getByText(/^Elterngeld: 1.041.€$/)).toBeVisible();
+      expect(screen.getByText("Jane: Elterngeld")).toBeVisible();
+      expect(screen.getByText("6.000 € (netto) in 8 Monaten")).toBeVisible();
+      expect(screen.getByText("John: Elterngeld")).toBeVisible();
+      expect(screen.getByText("1.041 € (netto) in 1 Monat")).toBeVisible();
     });
 
     it("shows the Elternteile in korrekt order", () => {
@@ -112,8 +110,13 @@ describe("Gesamtsummenanzeige", () => {
         />,
       );
 
-      const elternteilEins = screen.getByText("Jane");
-      const elternteilZwei = screen.getByText("John");
+      const elternteilEins = screen.getByText((content) =>
+        content.includes("Jane"),
+      );
+
+      const elternteilZwei = screen.getByText((content) =>
+        content.includes("John"),
+      );
 
       expect(elternteilEins.compareDocumentPosition(elternteilZwei)).toBe(
         Node.DOCUMENT_POSITION_FOLLOWING,
@@ -136,13 +139,13 @@ const ANY_NAME = "Jane";
 
 const ANY_SUMME_FUER_ELTERNTEIL = {
   anzahlMonateMitBezug: 0,
-  totalerElterngeldbezug: 0,
-  totalesBruttoeinkommen: 0,
+  elterngeldbezug: 0,
+  bruttoeinkommen: 0,
 };
 
 const ANY_GESAMTSUMME = {
-  summe: 0,
-  summeProElternteil: {
+  elterngeldbezug: 0,
+  proElternteil: {
     [Elternteil.Eins]: ANY_SUMME_FUER_ELTERNTEIL,
     [Elternteil.Zwei]: ANY_SUMME_FUER_ELTERNTEIL,
   },

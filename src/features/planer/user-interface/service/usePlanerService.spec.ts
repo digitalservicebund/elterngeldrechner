@@ -219,39 +219,39 @@ describe("use Planer service", () => {
     it("updates the Gesamtsumme when chosing an Option", () => {
       vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
-        summe: 1,
+        elterngeldbezug: 1,
       });
       vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
-        summe: 2,
+        elterngeldbezug: 2,
       });
 
       const { result } = renderPlanerServiceHook();
-      expect(result.current.gesamtsumme.summe).toBe(1);
+      expect(result.current.gesamtsumme.elterngeldbezug).toBe(1);
       vi.clearAllMocks();
 
       waehleAnyOption(result.current.waehleOption);
 
       expect(berechneGesamtsumme).toHaveBeenCalledOnce();
-      expect(result.current.gesamtsumme.summe).toBe(2);
+      expect(result.current.gesamtsumme.elterngeldbezug).toBe(2);
     });
 
     it("updates the Gesamtsumme when resetting the Plan", () => {
       vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
-        summe: 1,
+        elterngeldbezug: 1,
       });
       vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
         ...ANY_GESAMTSUMME,
-        summe: 0,
+        elterngeldbezug: 0,
       });
 
       const { result } = renderPlanerServiceHook();
-      expect(result.current.gesamtsumme.summe).toBe(1);
+      expect(result.current.gesamtsumme.elterngeldbezug).toBe(1);
 
       act(() => result.current.setzePlanZurueck());
 
-      expect(result.current.gesamtsumme.summe).toBe(0);
+      expect(result.current.gesamtsumme.elterngeldbezug).toBe(0);
     });
   });
 
@@ -595,17 +595,17 @@ const ANY_LEBENSMONAT = {
 };
 
 const ANY_GESAMTSUMME = {
-  summe: 0,
-  summeProElternteil: {
+  elterngeldbezug: 0,
+  proElternteil: {
     [Elternteil.Eins]: {
       anzahlMonateMitBezug: 0,
-      totalerElterngeldbezug: 0,
-      totalesBruttoeinkommen: 0,
+      elterngeldbezug: 0,
+      bruttoeinkommen: 0,
     },
     [Elternteil.Zwei]: {
       anzahlMonateMitBezug: 0,
-      totalerElterngeldbezug: 0,
-      totalesBruttoeinkommen: 0,
+      elterngeldbezug: 0,
+      bruttoeinkommen: 0,
     },
   },
 };

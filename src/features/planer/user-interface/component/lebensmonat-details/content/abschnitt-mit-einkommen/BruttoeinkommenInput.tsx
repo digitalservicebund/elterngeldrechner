@@ -39,7 +39,7 @@ export function BruttoeinkommenInput({
   return (
     <div className="flex flex-col gap-4" style={style}>
       <label htmlFor={inputIdentifier}>
-        <BusinessCenterIcon /> Einkommen in €
+        <BusinessCenterIcon /> Einkommen in € (brutto)
       </label>
 
       <input

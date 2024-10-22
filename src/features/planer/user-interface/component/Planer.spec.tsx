@@ -153,17 +153,17 @@ const ANY_SERVICE_VALUES = {
     [KeinElterngeld]: 0,
   },
   gesamtsumme: {
-    summe: 0,
-    summeProElternteil: {
+    elterngeldbezug: 0,
+    proElternteil: {
       [Elternteil.Eins]: {
         anzahlMonateMitBezug: 0,
-        totalerElterngeldbezug: 0,
-        totalesBruttoeinkommen: 0,
+        elterngeldbezug: 0,
+        bruttoeinkommen: 0,
       },
       [Elternteil.Zwei]: {
         anzahlMonateMitBezug: 0,
-        totalerElterngeldbezug: 0,
-        totalesBruttoeinkommen: 0,
+        elterngeldbezug: 0,
+        bruttoeinkommen: 0,
       },
     },
   },

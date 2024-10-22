@@ -1,4 +1,5 @@
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
+import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
 import type { ReactNode } from "react";
 import classNames from "classnames";
 import type { SummeFuerElternteil } from "@/features/planer/user-interface/service";
@@ -10,29 +11,26 @@ type Props = {
   readonly className?: string;
 };
 
-export function SummenanzeigeFuerElternteil({
+export function EinkommenFuerElternteil({
   pseudonum,
   summe,
   className,
 }: Props): ReactNode {
-  const { anzahlMonateMitBezug, totalerElterngeldbezug } = summe;
-
-  const formattedAnzahlMonateMitBezug = `${anzahlMonateMitBezug} Monat${anzahlMonateMitBezug == 1 ? "" : "e"}`;
-
-  const formattedTotaleElterngeldbezuege = formatAsCurrency(
-    totalerElterngeldbezug,
-  );
+  const einkommen =
+    summe.bruttoeinkommen > 0 ? (
+      <span>{formatAsCurrency(summe.bruttoeinkommen)} (brutto)</span>
+    ) : (
+      "-"
+    );
 
   return (
     <div className={classNames("flex flex-col items-center", className)}>
       <span className="font-bold">
-        <PersonIcon /> {pseudonum}
+        <PersonIcon /> {pseudonum}: Einkommen
       </span>
 
-      <span>{formattedAnzahlMonateMitBezug}</span>
-
-      <span className="mt-auto">
-        Elterngeld: {formattedTotaleElterngeldbezuege}
+      <span>
+        <BusinessCenterOutlined className="mr-4" /> {einkommen}
       </span>
     </div>
   );

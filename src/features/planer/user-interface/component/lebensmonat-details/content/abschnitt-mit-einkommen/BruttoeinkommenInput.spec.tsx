@@ -9,7 +9,7 @@ describe("Buttoeinkommen Input", () => {
     expect(
       screen.getByRole("textbox", { name: "test aria label" }),
     ).toBeVisible();
-    expect(screen.getByLabelText("Einkommen in €")).toBeVisible();
+    expect(screen.getByLabelText("Einkommen in € (brutto)")).toBeVisible();
   });
 
   it("uses the given Bruttoeinkommen as input value", () => {

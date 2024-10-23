@@ -36,13 +36,13 @@ function composeShortVisualLabel(zeitraum: Zeitraum, prefix?: string): string {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
-  const formattedFrom = from.toLocaleDateString(undefined, {
+  const formattedFrom = from.toLocaleDateString("de-DE", {
     day: "2-digit",
     month: "2-digit",
     year: isSpanningTwoYears ? "numeric" : undefined,
   });
 
-  const formattedTo = to.toLocaleDateString(undefined, {
+  const formattedTo = to.toLocaleDateString("de-DE", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -56,13 +56,13 @@ function composeLongReadOutLabel(zeitraum: Zeitraum, prefix?: string): string {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
-  const formattedFrom = from.toLocaleDateString(undefined, {
+  const formattedFrom = from.toLocaleDateString("de-DE", {
     day: "numeric",
     month: "long",
     year: isSpanningTwoYears ? "numeric" : undefined,
   });
 
-  const formattedTo = to.toLocaleDateString(undefined, {
+  const formattedTo = to.toLocaleDateString("de-DE", {
     day: "numeric",
     month: "long",
     year: "numeric",

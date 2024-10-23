@@ -35,11 +35,11 @@ describe("Abschnitt mit Planungsübersicht", () => {
 
     expect(screen.queryByText("Jane")).toBeVisible();
     expect(screen.queryByText("15 Monate Elterngeld"));
-    expect(screen.queryByText("5.019€"));
+    expect(screen.queryByText("5.019 €"));
 
     expect(screen.queryByText("John")).toBeVisible();
     expect(screen.queryByText("8 Monate Elterngeld"));
-    expect(screen.queryByText("2.407€"));
+    expect(screen.queryByText("2.407 €"));
   });
 
   it("shows a list with the Zeiträume for each Elternteil in correct order", () => {

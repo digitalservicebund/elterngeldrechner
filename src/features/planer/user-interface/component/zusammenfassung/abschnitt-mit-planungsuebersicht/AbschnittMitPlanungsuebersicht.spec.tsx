@@ -17,11 +17,11 @@ describe("Abschnitt mit Planungsübersicht", () => {
     const planungsuebersicht = {
       [Elternteil.Eins]: {
         ...ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
-        gesamtbezug: { anzahlMonate: 15, totalerElterngeldbezug: 5019 },
+        gesamtbezug: { anzahlMonate: 15, elterngeld: 5019, bruttoeinkommen: 0 },
       },
       [Elternteil.Zwei]: {
         ...ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
-        gesamtbezug: { anzahlMonate: 8, totalerElterngeldbezug: 2407 },
+        gesamtbezug: { anzahlMonate: 8, elterngeld: 2407, bruttoeinkommen: 0 },
       },
     };
 
@@ -35,11 +35,11 @@ describe("Abschnitt mit Planungsübersicht", () => {
 
     expect(screen.queryByText("Jane")).toBeVisible();
     expect(screen.queryByText("15 Monate Elterngeld"));
-    expect(screen.queryByText("5.019 €"));
+    expect(screen.queryByText("5.019€"));
 
     expect(screen.queryByText("John")).toBeVisible();
     expect(screen.queryByText("8 Monate Elterngeld"));
-    expect(screen.queryByText("2.407 €"));
+    expect(screen.queryByText("2.407€"));
   });
 
   it("shows a list with the Zeiträume for each Elternteil in correct order", () => {
@@ -97,7 +97,7 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 });
 
-const ANY_BEZUG = { anzahlMonate: 0, totalerElterngeldbezug: 0 };
+const ANY_BEZUG = { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 };
 
 const ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL = {
   gesamtbezug: ANY_BEZUG,

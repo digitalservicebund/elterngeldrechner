@@ -53,8 +53,7 @@ export function AbschnittMitPlanungsuebersicht<E extends Elternteil>({
               <span>
                 {gesamtbezug.anzahlMonate} Monate Elterngeld |{" "}
                 <span className="font-bold">
-                  insgesamt{" "}
-                  {formatAsCurrency(gesamtbezug.totalerElterngeldbezug)}
+                  insgesamt {formatAsCurrency(gesamtbezug.elterngeld)}
                 </span>
               </span>
 

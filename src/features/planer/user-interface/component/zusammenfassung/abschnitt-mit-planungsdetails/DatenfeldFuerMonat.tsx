@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
 import { Variantenplakette } from "@/features/planer/user-interface/component/zusammenfassung/Variantenplakette";
 import {
   KeinElterngeld,
@@ -17,12 +18,27 @@ export function DatenfeldFuerMonat({ monat }: Props): ReactNode {
     monat.imMutterschutz,
   );
 
+  const optionalesElterngeld = monat.elterngeldbezug ? (
+    <span>
+      Elterngeld <strong>{formatAsCurrency(monat.elterngeldbezug)}</strong>
+      &nbsp;(netto)
+    </span>
+  ) : null;
+
+  const optionalesEinkommen = monat.bruttoeinkommen ? (
+    <span>
+      <BusinessCenterOutlined className="mr-4" />
+      Einkommen {formatAsCurrency(monat.bruttoeinkommen)}&nbsp;(brutto)
+    </span>
+  ) : null;
+
   return (
     <div className="flex flex-wrap items-start gap-x-8">
       {formattedAuswahl}
 
       <div className="flex flex-col place-self-center leading-7">
-        {!!monat.elterngeldbezug && formatAsCurrency(monat.elterngeldbezug)}
+        {optionalesElterngeld}
+        {optionalesEinkommen}
       </div>
     </div>
   );

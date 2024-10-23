@@ -108,11 +108,17 @@ function berrechneGesamtbezug(monate: Monat[]): Bezug {
     .map((monat) => monat.gewaehlteOption)
     .filter(isVariante).length;
 
-  const totalerElterngeldbezug = monate
-    .map((monat) => monat.elterngeldbezug ?? 0)
-    .reduce((sum, elterngeldbezug) => sum + elterngeldbezug, 0);
+  const elterngeld = summiereFeldAllerMonate(
+    monate,
+    (monat) => monat.elterngeldbezug ?? 0,
+  );
 
-  return { anzahlMonate, totalerElterngeldbezug };
+  const bruttoeinkommen = summiereFeldAllerMonate(
+    monate,
+    (monat) => monat.bruttoeinkommen ?? 0,
+  );
+
+  return { anzahlMonate, elterngeld, bruttoeinkommen };
 }
 
 function bestimmeZeitraeumeMitDurchgaengigenBezug(
@@ -172,12 +178,18 @@ function fasseBezugVonVarianteZusammen(
   );
 
   const anzahlMonate = monateMitVariante.length;
-  const totalerElterngeldbezug = monateMitVariante.reduce(
-    (sum, monat) => sum + (monat.elterngeldbezug ?? 0),
-    0,
+
+  const elterngeld = summiereFeldAllerMonate(
+    monateMitVariante,
+    (monat) => monat.elterngeldbezug ?? 0,
   );
 
-  return { anzahlMonate, totalerElterngeldbezug };
+  const bruttoeinkommen = summiereFeldAllerMonate(
+    monateMitVariante,
+    (monat) => monat.bruttoeinkommen ?? 0,
+  );
+
+  return { anzahlMonate, elterngeld, bruttoeinkommen };
 }
 
 function findLastLebensmonatszahlWithPlannedMonat<E extends Elternteil>(
@@ -189,6 +201,15 @@ function findLastLebensmonatszahlWithPlannedMonat<E extends Elternteil>(
     ),
   )?.[0];
 }
+
+const summiereFeldAllerMonate = (
+  monate: Monat[],
+  field: (monat: Monat) => number,
+): number => {
+  return monate
+    .map((monat) => field(monat) ?? 0)
+    .reduce((sum, fieldValue) => sum + fieldValue, 0);
+};
 
 if (import.meta.vitest) {
   const { describe, it, expect, vi } = import.meta.vitest;
@@ -209,21 +230,45 @@ if (import.meta.vitest) {
 
         expect(planungsuebersicht).toStrictEqual({
           [Elternteil.Eins]: {
-            gesamtbezug: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
+            gesamtbezug: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
             zeitraeumeMitDurchgaenigenBezug: [],
             bezuegeProVariante: {
-              [Variante.Basis]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
-              [Variante.Plus]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
-              [Variante.Bonus]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
+              [Variante.Basis]: {
+                anzahlMonate: 0,
+                elterngeld: 0,
+                bruttoeinkommen: 0,
+              },
+              [Variante.Plus]: {
+                anzahlMonate: 0,
+                elterngeld: 0,
+                bruttoeinkommen: 0,
+              },
+              [Variante.Bonus]: {
+                anzahlMonate: 0,
+                elterngeld: 0,
+                bruttoeinkommen: 0,
+              },
             },
           },
           [Elternteil.Zwei]: {
-            gesamtbezug: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
+            gesamtbezug: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
             zeitraeumeMitDurchgaenigenBezug: [],
             bezuegeProVariante: {
-              [Variante.Basis]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
-              [Variante.Plus]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
-              [Variante.Bonus]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
+              [Variante.Basis]: {
+                anzahlMonate: 0,
+                elterngeld: 0,
+                bruttoeinkommen: 0,
+              },
+              [Variante.Plus]: {
+                anzahlMonate: 0,
+                elterngeld: 0,
+                bruttoeinkommen: 0,
+              },
+              [Variante.Bonus]: {
+                anzahlMonate: 0,
+                elterngeld: 0,
+                bruttoeinkommen: 0,
+              },
             },
           },
         });
@@ -277,13 +322,11 @@ if (import.meta.vitest) {
           const { planungsuebersicht } = fassePlanZusammen(plan);
 
           expect(
-            planungsuebersicht[Elternteil.Eins].gesamtbezug
-              .totalerElterngeldbezug,
+            planungsuebersicht[Elternteil.Eins].gesamtbezug.elterngeld,
           ).toBe(3);
 
           expect(
-            planungsuebersicht[Elternteil.Zwei].gesamtbezug
-              .totalerElterngeldbezug,
+            planungsuebersicht[Elternteil.Zwei].gesamtbezug.elterngeld,
           ).toBe(7);
         });
       });
@@ -455,25 +498,13 @@ if (import.meta.vitest) {
           const bezuegeElternteilZwei =
             planungsuebersicht[Elternteil.Zwei].bezuegeProVariante;
 
-          expect(
-            bezuegeElternteilEins[Variante.Basis].totalerElterngeldbezug,
-          ).toBe(3);
-          expect(
-            bezuegeElternteilEins[Variante.Plus].totalerElterngeldbezug,
-          ).toBe(0);
-          expect(
-            bezuegeElternteilEins[Variante.Bonus].totalerElterngeldbezug,
-          ).toBe(12);
+          expect(bezuegeElternteilEins[Variante.Basis].elterngeld).toBe(3);
+          expect(bezuegeElternteilEins[Variante.Plus].elterngeld).toBe(0);
+          expect(bezuegeElternteilEins[Variante.Bonus].elterngeld).toBe(12);
 
-          expect(
-            bezuegeElternteilZwei[Variante.Basis].totalerElterngeldbezug,
-          ).toBe(4);
-          expect(
-            bezuegeElternteilZwei[Variante.Plus].totalerElterngeldbezug,
-          ).toBe(3);
-          expect(
-            bezuegeElternteilZwei[Variante.Bonus].totalerElterngeldbezug,
-          ).toBe(14);
+          expect(bezuegeElternteilZwei[Variante.Basis].elterngeld).toBe(4);
+          expect(bezuegeElternteilZwei[Variante.Plus].elterngeld).toBe(3);
+          expect(bezuegeElternteilZwei[Variante.Bonus].elterngeld).toBe(14);
         });
       });
 

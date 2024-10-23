@@ -19,11 +19,23 @@ describe("Liste mit Bezügen pro Variante", () => {
     expect(within(list).queryAllByRole("listitem").length).toBe(3);
   });
 
-  it("shows the Anzahl an Monaten and the total Elterngeldbezug per Variante", () => {
+  it("shows the Anzahl an Monaten and the Elterngeldbezug per Variante", () => {
     const bezuegeProVariante = {
-      [Variante.Basis]: { anzahlMonate: 1, totalerElterngeldbezug: 2 },
-      [Variante.Plus]: { anzahlMonate: 3, totalerElterngeldbezug: 4 },
-      [Variante.Bonus]: { anzahlMonate: 5, totalerElterngeldbezug: 6 },
+      [Variante.Basis]: {
+        anzahlMonate: 1,
+        elterngeld: 2,
+        bruttoeinkommen: 0,
+      },
+      [Variante.Plus]: {
+        anzahlMonate: 3,
+        elterngeld: 4,
+        bruttoeinkommen: 0,
+      },
+      [Variante.Bonus]: {
+        anzahlMonate: 5,
+        elterngeld: 6,
+        bruttoeinkommen: 0,
+      },
     };
 
     render(
@@ -34,21 +46,21 @@ describe("Liste mit Bezügen pro Variante", () => {
     );
 
     expect(screen.queryByText("Basiselterngeld | 1 Monate")).toBeVisible();
-    expect(screen.queryByText("2 €")).toBeVisible();
+    expect(screen.queryByText("2 € (netto)")).toBeVisible();
 
     expect(screen.queryByText("ElterngeldPlus | 3 Monate")).toBeVisible();
-    expect(screen.queryByText("4 €")).toBeVisible();
+    expect(screen.queryByText("4 € (netto)")).toBeVisible();
 
     expect(screen.queryByText("Partnerschaftsbonus | 5 Monate")).toBeVisible();
-    expect(screen.queryByText("6 €")).toBeVisible();
+    expect(screen.queryByText("6 € (netto)")).toBeVisible();
   });
 });
 
 const ANY_PROPS = {
   bezuegeProVariante: {
-    [Variante.Basis]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
-    [Variante.Plus]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
-    [Variante.Bonus]: { anzahlMonate: 0, totalerElterngeldbezug: 0 },
+    [Variante.Basis]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
+    [Variante.Plus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
+    [Variante.Bonus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
   },
   pseudonymDesElternteils: "Jane",
 };

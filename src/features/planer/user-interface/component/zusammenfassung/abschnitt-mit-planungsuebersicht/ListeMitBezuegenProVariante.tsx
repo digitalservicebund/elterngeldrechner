@@ -27,7 +27,21 @@ export function ListeMitBezuegenProVariante({
       aria-label={`Bezüge pro Elterngeldvariante von ${pseudonymDesElternteils}`}
     >
       {listeBezuegeAuf(bezuegeProVariante).map(([variante, bezug]) => {
-        const { anzahlMonate, totalerElterngeldbezug } = bezug;
+        const { anzahlMonate, elterngeld, bruttoeinkommen } = bezug;
+
+        const optionalesElterngeld =
+          elterngeld > 0 ? (
+            <span>
+              <strong>{formatAsCurrency(elterngeld)}</strong> (netto)
+            </span>
+          ) : null;
+
+        const optionalesEinkommen =
+          bruttoeinkommen > 0 ? (
+            <span>
+              &nbsp;+ Einkommen {formatAsCurrency(bruttoeinkommen)} (brutto)
+            </span>
+          ) : null;
 
         return (
           <li key={variante} className="flex items-start gap-24 py-8">
@@ -36,7 +50,8 @@ export function ListeMitBezuegenProVariante({
             <span>
               {variante} | {anzahlMonate} Monate
               <br />
-              <strong>{formatAsCurrency(totalerElterngeldbezug)}</strong>
+              {optionalesElterngeld}
+              {optionalesEinkommen}
             </span>
           </li>
         );

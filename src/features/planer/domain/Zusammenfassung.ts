@@ -20,7 +20,8 @@ export type PlanungsuebersichtFuerElternteil = {
 
 export type Bezug = {
   readonly anzahlMonate: number;
-  readonly totalerElterngeldbezug: number;
+  readonly elterngeld: number;
+  readonly bruttoeinkommen: number;
 };
 
 export type Planungsdetails<E extends Elternteil> = {

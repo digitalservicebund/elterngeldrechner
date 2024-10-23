@@ -79,6 +79,23 @@ export function Planer({
         Monatsplaner
       </h2>
 
+      <p>
+        Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden Monat
+        flexibel planen. Sie können verschiedene Elterngeldvarianten kombinieren
+        und ausprobieren, welche Sie in jedem Monat erhalten möchten. Zusätzlich
+        können Sie angeben, ob und wie viel Einkommen sie pro Monat haben. So
+        erhalten Sie einen umfassenden Überblick über Ihr voraussichtliches
+        Haushaltseinkommen während der gesamten Elternzeit.
+      </p>
+
+      <div className="my-20 bg-primary-light p-16">
+        <p>
+          <b>Bitte beachten Sie:</b> Beträge zum Elterngeld werden in{" "}
+          <b>netto</b> angezeigt. Einkommen wird in <b>brutto</b> abgefragt und
+          angegeben.
+        </p>
+      </div>
+
       <GridLayoutProvider anzahlElternteile={anzahlElternteile}>
         <div
           className={classNames(

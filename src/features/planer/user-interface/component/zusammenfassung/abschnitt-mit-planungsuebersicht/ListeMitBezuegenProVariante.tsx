@@ -44,7 +44,7 @@ export function ListeMitBezuegenProVariante({
           ) : null;
 
         return (
-          <li key={variante} className="flex items-start gap-24 py-8">
+          <li key={variante} className="flex items-center gap-24 py-8">
             <Variantenplakette variante={variante} />
 
             <span>

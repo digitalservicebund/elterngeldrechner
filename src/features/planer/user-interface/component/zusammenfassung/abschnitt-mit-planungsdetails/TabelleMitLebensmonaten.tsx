@@ -56,7 +56,7 @@ export function TabelleMitLebensmonaten<E extends Elternteil>({
             );
 
             return (
-              <tr className="leading-[2.333]" key={lebensmonatszahl}>
+              <tr key={lebensmonatszahl}>
                 <th
                   scope="row"
                   abbr={`${lebensmonatszahl}`}

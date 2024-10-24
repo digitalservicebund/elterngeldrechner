@@ -24,7 +24,7 @@ export function AbschnittMitPlanungsuebersicht<E extends Elternteil>({
 
   return (
     <section
-      className="flex flex-wrap gap-16 *:grow"
+      className="flex flex-wrap gap-32 *:grow"
       aria-labelledby={headingIdentifier}
       aria-describedby={descriptionIdentifier}
     >

@@ -88,7 +88,7 @@ export function Planer({
         Haushaltseinkommen während der gesamten Elternzeit.
       </p>
 
-      <div className="my-20 bg-primary-light p-16">
+      <div className="mb-[64px] mt-20 bg-primary-light p-16 px-20">
         <p>
           <b>Bitte beachten Sie:</b> Beträge zum Elterngeld werden in{" "}
           <b>netto</b> angezeigt. Einkommen wird in <b>brutto</b> abgefragt und

@@ -32,7 +32,7 @@ export function ListeMitBezuegenProVariante({
         const optionalesElterngeld =
           elterngeld > 0 ? (
             <span>
-              <strong>{formatAsCurrency(elterngeld)}</strong> (netto)
+              <b>{formatAsCurrency(elterngeld)}</b> (netto)
             </span>
           ) : null;
 

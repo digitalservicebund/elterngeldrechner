@@ -46,13 +46,19 @@ describe("Liste mit Bezügen pro Variante", () => {
     );
 
     expect(screen.queryByText("Basiselterngeld | 1 Monate")).toBeVisible();
-    expect(screen.queryByText("2 € (netto)")).toBeVisible();
+    expect(screen.getByText("2 €")?.parentNode).toHaveTextContent(
+      "2 € (netto)",
+    );
 
     expect(screen.queryByText("ElterngeldPlus | 3 Monate")).toBeVisible();
-    expect(screen.queryByText("4 € (netto)")).toBeVisible();
+    expect(screen.getByText("4 €")?.parentNode).toHaveTextContent(
+      "4 € (netto)",
+    );
 
     expect(screen.queryByText("Partnerschaftsbonus | 5 Monate")).toBeVisible();
-    expect(screen.queryByText("6 € (netto)")).toBeVisible();
+    expect(screen.getByText("6 €")?.parentNode).toHaveTextContent(
+      "6 € (netto)",
+    );
   });
 });
 

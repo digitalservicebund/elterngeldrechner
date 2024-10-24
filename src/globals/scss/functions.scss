@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "src/globals/scss/variables" as *;
+@use "@/globals/scss/variables" as *;
 
 @function px-to-rem($pixel) {
   @return math.div($pixel, 16) * 1rem;

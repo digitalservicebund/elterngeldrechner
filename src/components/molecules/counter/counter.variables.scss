@@ -1,5 +1,5 @@
-@forward "src/globals/scss/index";
-@use "src/globals/scss/index" as egr;
+@forward "@/globals/scss/index";
+@use "@/globals/scss/index" as egr;
 
 $counter--border: 1px solid egr.$color-grey-dark !default;
 $counter--padding: egr.px-to-rem(egr.$spacer-s) egr.px-to-rem(egr.$spacer) !default;

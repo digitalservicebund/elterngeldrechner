@@ -1,5 +1,5 @@
-@forward "src/globals/scss";
-@use "src/globals/scss" as egr;
+@forward "@/globals/scss";
+@use "@/globals/scss" as egr;
 
 $form-field-group-spacing: egr.px-to-rem(egr.$spacer-xl) !default;
 $form-field-group-headline-spacing: egr.px-to-rem(egr.$spacer) !default;

@@ -1,5 +1,5 @@
 @use "toast.variables" as *;
-@use "src/globals/scss" as egr;
+@use "@/globals/scss" as egr;
 
 ##{nsp("toast")} {
   position: relative;

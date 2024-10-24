@@ -17,7 +17,7 @@ export function ElterngeldFuerElternteil({
 }: Props): ReactNode {
   const { anzahlMonateMitBezug, elterngeldbezug } = summe;
 
-  const formattedAnzahlMonateMitBezug = `${anzahlMonateMitBezug} Monat${anzahlMonateMitBezug == 1 ? "" : "en"}`;
+  const formattedAnzahlMonateMitBezug = `${anzahlMonateMitBezug} Monat${anzahlMonateMitBezug == 1 ? "" : "e"}`;
 
   const formattedElterngeldbezuege = formatAsCurrency(elterngeldbezug);
 
@@ -28,7 +28,7 @@ export function ElterngeldFuerElternteil({
       </span>
 
       <span>
-        {formattedElterngeldbezuege} (netto) in {formattedAnzahlMonateMitBezug}
+        {formattedElterngeldbezuege} (netto) für {formattedAnzahlMonateMitBezug}
       </span>
     </div>
   );

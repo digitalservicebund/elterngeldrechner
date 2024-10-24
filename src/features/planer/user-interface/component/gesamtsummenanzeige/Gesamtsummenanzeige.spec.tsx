@@ -92,9 +92,9 @@ describe("Gesamtsummenanzeige", () => {
       );
 
       expect(screen.getByText("Jane: Elterngeld")).toBeVisible();
-      expect(screen.getByText("6.000 € (netto) in 8 Monaten")).toBeVisible();
+      expect(screen.getByText("6.000 € (netto) für 8 Monate")).toBeVisible();
       expect(screen.getByText("John: Elterngeld")).toBeVisible();
-      expect(screen.getByText("1.041 € (netto) in 1 Monat")).toBeVisible();
+      expect(screen.getByText("1.041 € (netto) für 1 Monat")).toBeVisible();
     });
 
     it("shows the Elternteile in korrekt order", () => {

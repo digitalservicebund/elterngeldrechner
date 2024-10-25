@@ -62,13 +62,13 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.getByRole("textbox", {
-          name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
+          name: "Brutto-Einkommen von Jane im 5. Lebensmonat",
         }),
       ).toBeVisible();
 
       expect(
         screen.getByRole("textbox", {
-          name: "Bruttoeinkommen von John im 5. Lebensmonat",
+          name: "Brutto-Einkommen von John im 5. Lebensmonat",
         }),
       ).toBeVisible();
     });
@@ -92,7 +92,7 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.queryByRole("textbox", {
-          name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
+          name: "Brutto-Einkommen von Jane im 5. Lebensmonat",
         }),
       ).not.toBeInTheDocument();
 
@@ -104,7 +104,7 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.getByRole("textbox", {
-          name: "Bruttoeinkommen von John im 5. Lebensmonat",
+          name: "Brutto-Einkommen von John im 5. Lebensmonat",
         }),
       );
     });
@@ -124,7 +124,7 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.getByRole("textbox", {
-          name: "Bruttoeinkommen im 5. Lebensmonat",
+          name: "Brutto-Einkommen im 5. Lebensmonat",
         }),
       ).toBeVisible();
     });
@@ -193,7 +193,7 @@ describe("Abschnitt mit Einkommen", () => {
 
     function expectInputsToBeVisible() {
       const inputs = screen.getAllByRole("textbox", {
-        name: /Bruttoeinkommen/,
+        name: /Brutto-Einkommen/,
       });
 
       inputs.forEach((input) => expect(input).toBeVisible());
@@ -201,7 +201,7 @@ describe("Abschnitt mit Einkommen", () => {
 
     function expectInputsNotToBeVisible() {
       const inputs = screen.queryAllByRole("textbox", {
-        name: /Bruttoeinkommen/,
+        name: /Brutto-Einkommen/,
       });
       inputs.forEach((input) => expect(input).not.toBeVisible());
     }

@@ -28,9 +28,6 @@ test("Minijob", async ({ page }) => {
   await page.getByLabel("Wie viel haben Sie in den 12").fill("510 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
-  await page.getByText("Ich werde während des").click();
-  await page.getByRole("button", { name: "Elterngeld berechnen" }).click();
-  await screenshot("rechner-result-et1");
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(3, "Basis");

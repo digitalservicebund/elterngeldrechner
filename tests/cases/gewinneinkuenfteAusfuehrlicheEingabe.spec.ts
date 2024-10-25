@@ -64,27 +64,6 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByLabel("12. Monat").fill("3000 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
-  await page
-    .getByLabel("Elternteil 1", { exact: true })
-    .getByText("Ich werde während des")
-    .click();
-  await page
-    .getByLabel("Elternteil 1", { exact: true })
-    .getByRole("button", { name: "Elterngeld berechnen" })
-    .click();
-  await page
-    .getByLabel("Elternteil 2", { exact: true })
-    .getByRole("button", { name: "Einkommen hinzufügen" })
-    .click();
-  await page.getByLabel("Ihr monatliches").fill("2100 Euro");
-  await page.getByLabel("von Lebensmonat").selectOption("1");
-  await page.getByLabel("bis Lebensmonat").selectOption("32");
-  await page
-    .getByLabel("Elternteil 2", { exact: true })
-    .getByRole("button", { name: "Elterngeld berechnen" })
-    .click();
-  await screenshot("rechner-result-et1");
-  await screenshot("rechner-result-et2");
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(1, "Basis", "Elternteil 1");
@@ -98,9 +77,6 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await planer.waehleOption(7, "Basis", "Elternteil 1");
   await planer.waehleOption(9, "Plus", "Elternteil 2");
   await planer.waehleOption(10, "Plus", "Elternteil 2");
-  await planer.waehleOption(11, "Bonus", "Elternteil 1");
-  await planer.waehleOption(12, "Bonus", "Elternteil 1");
-  await planer.waehleOption(13, "Bonus", "Elternteil 1");
 
   await page.getByRole("button", { name: "Zur Übersicht" }).click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));

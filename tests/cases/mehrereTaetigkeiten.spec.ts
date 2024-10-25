@@ -75,9 +75,6 @@ test("mehrere Tätigkeiten", async ({ page }) => {
     .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
-  await page.getByText("Ich werde während des").click();
-  await page.getByRole("button", { name: "Elterngeld berechnen" }).click();
-  await screenshot("rechner-result-et1");
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(4, "Basis");

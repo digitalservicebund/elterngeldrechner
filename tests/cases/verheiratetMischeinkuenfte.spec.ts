@@ -82,40 +82,30 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByTestId("egr-anspruch").getByText("Nein").click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
-  await page
-    .getByLabel("Elternteil 1", { exact: true })
-    .getByRole("button", { name: "Einkommen hinzufügen" })
-    .click();
-  await page.getByLabel("Ihr monatliches").fill("6500 Euro");
-  await page.getByLabel("von Lebensmonat").selectOption("2");
-  await page.getByLabel("bis Lebensmonat").selectOption("12");
-  await page
-    .getByLabel("Elternteil 1", { exact: true })
-    .getByRole("button", { name: "Elterngeld berechnen" })
-    .click();
-  await page
-    .getByLabel("Elternteil 2", { exact: true })
-    .getByText("Ich werde während des")
-    .click();
-  await page
-    .getByLabel("Elternteil 2", { exact: true })
-    .getByRole("button", { name: "Elterngeld berechnen" })
-    .click();
-  await screenshot("rechner-result-et1");
-  await screenshot("rechner-result-et2");
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(1, "Basis", "Elternteil 1");
+  await planer.gebeEinkommenAn(2, 6500, "Elternteil 1");
   await planer.waehleOption(3, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(3, 6500, "Elternteil 1");
   await planer.waehleOption(4, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(4, 6500, "Elternteil 1");
   await planer.waehleOption(5, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(5, 6500, "Elternteil 1");
   await planer.waehleOption(6, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(6, 6500, "Elternteil 1");
   await planer.waehleOption(7, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(7, 6500, "Elternteil 1");
   await planer.waehleOption(8, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(8, 6500, "Elternteil 1");
   await planer.waehleOption(9, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(9, 6500, "Elternteil 1");
   await planer.waehleOption(10, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(10, 6500, "Elternteil 1");
   await planer.waehleOption(11, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(11, 6500, "Elternteil 1");
   await planer.waehleOption(12, "Basis", "Elternteil 2");
+  await planer.gebeEinkommenAn(12, 6500, "Elternteil 1");
   await planer.waehleOption(13, "Basis", "Elternteil 1");
 
   await page.getByRole("button", { name: "Zur Übersicht" }).click();

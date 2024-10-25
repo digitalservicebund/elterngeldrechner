@@ -126,8 +126,8 @@ function composeAriaLabelForBruttoeinkommen(
   isSingleElternteil: boolean,
 ): string {
   return isSingleElternteil
-    ? `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`
-    : `Bruttoeinkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`;
+    ? `Brutto-Einkommen im ${lebensmonatszahl}. Lebensmonat`
+    : `Brutto-Einkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`;
 }
 
 function checkIfInputsMustBeVisible(

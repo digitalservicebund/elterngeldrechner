@@ -62,15 +62,15 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {
     elternteile: ["Jane", "John"],
   });
-  await rechnerUndPlaner.setKeinEinkommen(1);
-  await rechnerUndPlaner.berechnen(1);
-  await rechnerUndPlaner.setKeinEinkommen(2);
-  await rechnerUndPlaner.berechnen(2);
   await rechnerUndPlaner.zeigeMehrLebensmonateAn();
   await rechnerUndPlaner.waehleOption(1, "Plus", "John");
   await expectPageToBeAccessible(page, testInfo, ["nested-interactive"]); // FIXME: fix ignored rule
   await rechnerUndPlaner.waehleOption(4, "Bonus", "Jane");
+  await rechnerUndPlaner.gebeEinkommenAn(4, 1500, "Jane");
+  await rechnerUndPlaner.gebeEinkommenAn(4, 1500, "John");
   await expectPageToBeAccessible(page, testInfo, ["nested-interactive"]); // FIXME: fix ignored rule
+  await rechnerUndPlaner.gebeEinkommenAn(5, 1500, "Jane");
+  await rechnerUndPlaner.gebeEinkommenAn(5, 1500, "John");
   await rechnerUndPlaner.submit();
 
   await expectPageToBeAccessible(page, testInfo);

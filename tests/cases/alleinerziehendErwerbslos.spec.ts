@@ -34,50 +34,7 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   await variantenPage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
-  await rechnerUndPlaner.setKeinEinkommen();
-  await rechnerUndPlaner.berechnen();
 
-  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Basis")).toHaveText(
-    "300 €",
-  );
-  expect(
-    await rechnerUndPlaner.getErgebnis(1, 1, 14, "Basis", true),
-  ).toHaveText("300 €");
-  expect(await rechnerUndPlaner.getErgebnis(1, 15, 32, "Basis")).toHaveText(
-    "0 €1",
-  );
-  expect(
-    await rechnerUndPlaner.getErgebnis(1, 15, 32, "Basis", true),
-  ).toHaveText("0 €1");
-
-  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Plus")).toHaveText(
-    "150 €",
-  );
-  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Plus", true)).toHaveText(
-    "150 €",
-  );
-  expect(await rechnerUndPlaner.getErgebnis(1, 15, 32, "Plus")).toHaveText(
-    "150 €",
-  );
-  expect(
-    await rechnerUndPlaner.getErgebnis(1, 15, 32, "Plus", true),
-  ).toHaveText("150 €");
-
-  expect(await rechnerUndPlaner.getErgebnis(1, 1, 14, "Bonus")).toHaveText(
-    "150 €",
-  );
-  expect(
-    await rechnerUndPlaner.getErgebnis(1, 1, 14, "Bonus", true),
-  ).toHaveText("150 €");
-  expect(await rechnerUndPlaner.getErgebnis(1, 15, 32, "Bonus")).toHaveText(
-    "150 €",
-  );
-  expect(
-    await rechnerUndPlaner.getErgebnis(1, 15, 32, "Bonus", true),
-  ).toHaveText("150 €");
-
-  await rechnerUndPlaner.waehleOption(3, "Basis");
-  await rechnerUndPlaner.waehleOption(4, "Basis");
   await rechnerUndPlaner.waehleOption(5, "Basis");
   await rechnerUndPlaner.waehleOption(6, "Basis");
   await rechnerUndPlaner.waehleOption(7, "Basis");

@@ -33,12 +33,6 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   await page.getByText("gesetzlich pflichtversichert", { exact: true }).click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
-  await page.getByRole("button", { name: "Einkommen hinzufügen" }).click();
-  await page.getByLabel("Ihr monatliches").fill("1000 Euro");
-  await page.getByLabel("von Lebensmonat").selectOption("13");
-  await page.getByLabel("bis Lebensmonat").selectOption("18");
-  await page.getByRole("button", { name: "Elterngeld berechnen" }).click();
-  await screenshot("rechner-result-et1");
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(3, "Basis");
@@ -52,12 +46,18 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   await planer.waehleOption(11, "Basis");
   await planer.waehleOption(12, "Basis");
   await planer.waehleOption(13, "Basis");
+  await planer.gebeEinkommenAn(13, 1000);
   await planer.waehleOption(14, "Basis");
+  await planer.gebeEinkommenAn(14, 1000);
   await planer.zeigeMehrLebensmonateAn();
   await planer.waehleOption(15, "Bonus");
+  await planer.gebeEinkommenAn(15, 1000);
   await planer.waehleOption(16, "Bonus");
+  await planer.gebeEinkommenAn(16, 1000);
   await planer.waehleOption(17, "Bonus");
+  await planer.gebeEinkommenAn(17, 1000);
   await planer.waehleOption(18, "Bonus");
+  await planer.gebeEinkommenAn(18, 1000);
 
   await page.getByRole("button", { name: "Zur Übersicht" }).click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));

@@ -82,6 +82,7 @@ async function expectPageToBeAccessible(
   ruleNamesToDisable: string[] = [],
 ): Promise<void> {
   const { violations } = await new AxeBuilder({ page })
+    .options({ resultTypes: ["violations"] })
     .disableRules(ruleNamesToDisable)
     .include("#egr-root") // Ignore document around application (is not under test).
     .analyze();

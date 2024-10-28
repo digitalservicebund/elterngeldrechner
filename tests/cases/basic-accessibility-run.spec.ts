@@ -88,7 +88,7 @@ async function expectPageToBeAccessible(
     .analyze();
 
   if (violations.length > 0) {
-    testInfo.attach("accessibility violations", {
+    await testInfo.attach("accessibility violations", {
       contentType: "application/json",
       body: JSON.stringify(violations),
     });

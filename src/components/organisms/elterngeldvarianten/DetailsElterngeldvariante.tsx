@@ -18,7 +18,7 @@ export function DetailsElterngeldvariante({
 
   return (
     <details className="group border-0 border-b-2 border-solid border-black first:border-t-2">
-      <summary className="flex items-center justify-between px-24 py-16">
+      <summary className="flex list-none items-center justify-between px-24 py-16">
         <div className="flex flex-wrap items-center gap-x-20 gap-y-8">
           <span
             className={classNames(

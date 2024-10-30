@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { AriaMessage } from "@/components/atoms";
 import { FormStep } from "@/utils/formSteps";
 import { Sidebar } from "@/components/organisms/sidebar";
+import { Alert } from "@/components/molecules/alert";
 import nsp from "@/globals/js/namespace";
 
 interface PageProps {
@@ -19,6 +20,50 @@ export function Page({ step, children }: PageProps) {
     });
   }, []);
 
+  const alert = {
+    "/allgemeine-angaben": {
+      headline: "Gesetzesänderung",
+      text: (
+        <p>
+          Für Geburten ab dem 01.04.2025 gibt es neue Regeln für das Elterngeld,
+          die die Einkommensgrenze betreffen.
+          <br />
+          <br />
+          Details finden Sie auf der{" "}
+          <a
+            href="https://familienportal.de/familienportal/meta/aktuelles/aktuelle-meldungen/neue-regelungen-beim-elterngeld-237908"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Seite des Familienportals
+          </a>
+          .
+        </p>
+      ),
+    },
+    "/einkommen": {
+      headline: "Gesetzesänderung",
+      text: (
+        <p>
+          Für Geburten ab dem 01.04.2025 gilt:
+          <br />
+          Die Einkommensgrenze für Elterngeld liegt bei 175.000 Euro brutto.
+          <br />
+          <br />
+          Details finden Sie auf der{" "}
+          <a
+            href="https://familienportal.de/familienportal/meta/aktuelles/aktuelle-meldungen/neue-regelungen-beim-elterngeld-237908"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Seite des Familienportals
+          </a>
+          .
+        </p>
+      ),
+    },
+  }[step.route];
+
   return (
     <div className={nsp("page")}>
       <div className={nsp("page__sidebar")}>
@@ -29,6 +74,11 @@ export function Page({ step, children }: PageProps) {
         className={classNames(nsp("page__content"), "relative")}
         id={step.text}
       >
+        {alert ? (
+          <div style={{ marginBottom: "2rem" }}>
+            <Alert headline={alert.headline}>{alert.text}</Alert>
+          </div>
+        ) : null}
         {children}
       </div>
     </div>

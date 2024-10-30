@@ -71,10 +71,17 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   });
 
   const [isExpanded, setIsExpanded] = useState(false);
-  function toggleExpandedState(
+  function onToggleListener(
     event: SyntheticEvent<HTMLDetailsElement, ToggleEvent>,
   ) {
-    setIsExpanded(event.nativeEvent.newState === "open");
+    const isExpanded = event.nativeEvent.newState === "open";
+
+    setIsExpanded(isExpanded);
+
+    detailsElement.current?.scrollIntoView({
+      block: "nearest",
+      behavior: "instant",
+    });
   }
 
   const informationenZumLebensmonat = {
@@ -96,7 +103,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         name="Lebensmonate"
         aria-label={detailsAriaLabel}
         ref={detailsElement}
-        onToggle={toggleExpandedState}
+        onToggle={onToggleListener}
       >
         <LebensmonatSummary
           identifierToZeitraumLabel={zeitraumLabelIdentifier}

@@ -10,6 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? "blob" : "html",
+  snapshotPathTemplate: "{testDir}/snapshots/{testFilePath}/{arg}{ext}",
   use: {
     baseURL: process.env.TEST_PRODUCTION
       ? "https://familienportal.de/familienportal/meta/egr/"

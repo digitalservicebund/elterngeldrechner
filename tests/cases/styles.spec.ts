@@ -1,10 +1,10 @@
 import { test, expect, Page } from "@playwright/test";
-import { AllgemeineAngabenPOM } from "./pom/AllgemeineAngabenPOM";
-import { NachwuchsPOM } from "./pom/NachwuchsPOM";
-import { ErwerbstaetigkeitPOM } from "./pom/ErwerbstaetigkeitPOM";
-import { EinkommenPOM } from "./pom/EinkommenPOM";
-import { VariantenPOM } from "./pom/VariantenPOM";
-import expectScreenshot from "./expectScreenshot";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
+import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
+import { EinkommenPOM } from "../pom/EinkommenPOM";
+import { VariantenPOM } from "../pom/VariantenPOM";
+import expectScreenshot from "../expectScreenshot";
 
 const testStyles = async ({
   page,

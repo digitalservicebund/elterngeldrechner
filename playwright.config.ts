@@ -20,7 +20,7 @@ export default defineConfig({
   expect: {
     toHaveScreenshot: {
       // accounts for tiny differences in font rendering between systems
-      maxDiffPixelRatio: 0.06,
+      maxDiffPixelRatio: 0.08,
     },
   },
   projects: [

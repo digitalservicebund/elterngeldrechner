@@ -25,8 +25,8 @@ export function Page({ step, children }: PageProps) {
       headline: "Gesetzesänderung",
       text: (
         <p>
-          Für Geburten ab dem 01.04.2025 gibt es neue Regeln für das Elterngeld,
-          die die Einkommensgrenze betreffen.
+          Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
+          und Alleinerziehende bei 175.000 Euro.
           <br />
           <br />
           Details finden Sie auf der{" "}
@@ -45,9 +45,8 @@ export function Page({ step, children }: PageProps) {
       headline: "Gesetzesänderung",
       text: (
         <p>
-          Für Geburten ab dem 01.04.2025 gilt:
-          <br />
-          Die Einkommensgrenze für Elterngeld liegt bei 175.000 Euro brutto.
+          Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
+          und Alleinerziehende bei 175.000 Euro.
           <br />
           <br />
           Details finden Sie auf der{" "}

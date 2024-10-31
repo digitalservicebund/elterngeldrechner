@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import classNames from "classnames";
 import { AriaMessage } from "@/components/atoms";
-import { FormStep } from "@/utils/formSteps";
+import { FormStep, formSteps } from "@/utils/formSteps";
 import { Sidebar } from "@/components/organisms/sidebar";
 import { Alert } from "@/components/molecules/alert";
 import nsp from "@/globals/js/namespace";
@@ -20,44 +20,48 @@ export function Page({ step, children }: PageProps) {
     });
   }, []);
 
-  const alert = {
-    "/allgemeine-angaben": {
-      headline: "Gesetzesänderung",
-      text: (
-        <p>
-          Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
-          und Alleinerziehende bei 175.000 Euro.
-        </p>
-      ),
-    },
-    "/einkommen": {
-      headline: "Gesetzesänderung",
-      text: (
-        <p>
-          Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
-          und Alleinerziehende bei 175.000 Euro.
-        </p>
-      ),
-    },
-  }[step.route];
+  const alert = ALERTS[step.route];
 
   return (
     <div className={nsp("page")}>
       <div className={nsp("page__sidebar")}>
         <Sidebar currentStep={step} />
       </div>
+
       <AriaMessage>{step.text}</AriaMessage>
+
       <div
-        className={classNames(nsp("page__content"), "relative")}
         id={step.text}
+        className={classNames(nsp("page__content"), "relative")}
       >
-        {alert ? (
-          <div style={{ marginBottom: "2rem" }}>
-            <Alert headline={alert.headline}>{alert.text}</Alert>
-          </div>
-        ) : null}
+        {!!alert && (
+          <Alert headline={alert.headline} className="mb-32">
+            {alert.text}
+          </Alert>
+        )}
         {children}
       </div>
     </div>
   );
 }
+
+const ALERTS = {
+  [formSteps.allgemeinAngaben.route]: {
+    headline: "Gesetzesänderung",
+    text: (
+      <p>
+        Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
+        und Alleinerziehende bei 175.000 Euro.
+      </p>
+    ),
+  },
+  [formSteps.einkommen.route]: {
+    headline: "Gesetzesänderung",
+    text: (
+      <p>
+        Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
+        und Alleinerziehende bei 175.000 Euro.
+      </p>
+    ),
+  },
+};

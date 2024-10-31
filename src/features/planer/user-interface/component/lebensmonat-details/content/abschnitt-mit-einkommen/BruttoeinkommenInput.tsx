@@ -57,6 +57,7 @@ export function BruttoeinkommenInput({
         value={bruttoeinkommen ?? ""}
         inputMode="numeric"
         pattern="[0-9]*"
+        autoComplete="off"
         list={datalistIdentifier}
         onKeyDown={filterNonNumbericInput}
         onChange={gebeBruttoeinkommenAn}

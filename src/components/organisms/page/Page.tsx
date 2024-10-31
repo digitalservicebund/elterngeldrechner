@@ -27,17 +27,6 @@ export function Page({ step, children }: PageProps) {
         <p>
           Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
           und Alleinerziehende bei 175.000 Euro.
-          <br />
-          <br />
-          Details finden Sie auf der{" "}
-          <a
-            href="https://familienportal.de/familienportal/meta/aktuelles/aktuelle-meldungen/neue-regelungen-beim-elterngeld-237908"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Seite des Familienportals
-          </a>
-          .
         </p>
       ),
     },
@@ -47,17 +36,6 @@ export function Page({ step, children }: PageProps) {
         <p>
           Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
           und Alleinerziehende bei 175.000 Euro.
-          <br />
-          <br />
-          Details finden Sie auf der{" "}
-          <a
-            href="https://familienportal.de/familienportal/meta/aktuelles/aktuelle-meldungen/neue-regelungen-beim-elterngeld-237908"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Seite des Familienportals
-          </a>
-          .
         </p>
       ),
     },

@@ -1,5 +1,6 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import classNames from "classnames";
+import { ScrollRestoration } from "react-router-dom";
 import { AriaMessage } from "@/components/atoms";
 import { FormStep, formSteps } from "@/utils/formSteps";
 import { Sidebar } from "@/components/organisms/sidebar";
@@ -12,18 +13,12 @@ interface PageProps {
 }
 
 export function Page({ step, children }: PageProps) {
-  // scroll to top on page navigation
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  }, []);
-
   const alert = ALERTS[step.route];
 
   return (
     <div className={nsp("page")}>
+      <ScrollRestoration />
+
       <div className={nsp("page__sidebar")}>
         <Sidebar currentStep={step} />
       </div>

@@ -12,7 +12,11 @@ import {
 import { configureStore, Store } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import Big from "big.js";
-import { MemoryRouter } from "react-router-dom";
+import {
+  createMemoryRouter,
+  RouterProvider,
+  type RouteObject,
+} from "react-router-dom";
 import { AppStore, reducers, RootState } from "@/redux";
 import { AriaLogProvider } from "@/components/atoms";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
@@ -32,12 +36,18 @@ interface TestWrapperProps {
 }
 
 function TestWrapper({ store, children }: TestWrapperProps) {
+  const routes: RouteObject[] = [
+    { path: "/", element: <div>{children}</div> },
+    { path: "*", element: "404" },
+  ];
+  const router = createMemoryRouter(routes, { initialEntries: ["/"] });
+
   return (
-    <MemoryRouter>
-      <AriaLogProvider>
-        <Provider store={store}>{children}</Provider>
-      </AriaLogProvider>
-    </MemoryRouter>
+    <AriaLogProvider>
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
+    </AriaLogProvider>
   );
 }
 

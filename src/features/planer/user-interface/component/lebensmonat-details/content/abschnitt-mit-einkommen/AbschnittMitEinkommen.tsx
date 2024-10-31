@@ -71,7 +71,7 @@ export function AbschnittMitEinkommen(): ReactNode {
           aria-expanded={areInputsVisible}
         >
           <ToggleIcon isOn={areInputsVisible} />
-          Brutto-Einkommen hinzufügen
+          Bruttoeinkommen hinzufügen
         </button>
       </div>
 
@@ -130,8 +130,8 @@ function composeAriaLabelForBruttoeinkommen(
   isSingleElternteil: boolean,
 ): string {
   return isSingleElternteil
-    ? `Brutto-Einkommen im ${lebensmonatszahl}. Lebensmonat`
-    : `Brutto-Einkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`;
+    ? `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`
+    : `Bruttoeinkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`;
 }
 
 function checkIfInputsMustBeVisible(

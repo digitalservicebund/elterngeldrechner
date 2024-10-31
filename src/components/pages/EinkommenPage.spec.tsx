@@ -168,7 +168,7 @@ describe("Einkommen Page", () => {
       render(<EinkommenPage />, { store });
       const elternteil1Section = getElternteil1Section();
 
-      // Field Brutto-Einkommen Durchschnitt
+      // Field Bruttoeinkommen Durchschnitt
       const bruttoEinkommenAverageField = within(
         elternteil1Section,
       ).getByLabelText(/monatlich brutto verdient/);
@@ -177,7 +177,7 @@ describe("Einkommen Page", () => {
         String(einkommenAverage),
       );
 
-      // Field Brutto-Einkommen per month
+      // Field Bruttoeinkommen per month
       const einkommenErwerbstaetigSection = within(
         elternteil1Section,
       ).getByLabelText("Einkünfte aus nichtselbständiger Arbeit");
@@ -515,7 +515,7 @@ describe("Einkommen Page", () => {
 
       await userEvent.type(
         within(taetigkeit1Section).getByLabelText(
-          "Durchschnittliches Brutto-Einkommen",
+          "Durchschnittliches Bruttoeinkommen",
         ),
         String(einkommenAverage),
       );

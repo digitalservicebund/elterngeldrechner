@@ -24,7 +24,7 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("1");
   await page.getByLabel("Elternteil").getByText("Ja").click();
   await page.getByRole("button", { name: "eine Tätigkeit hinzufügen" }).click();
-  await page.getByLabel("Durchschnittliches Brutto-").fill("1350 Euro");
+  await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("1350 Euro");
   await page.getByLabel("Tätigkeit").getByText("Nein").click();
   await page
     .locator(
@@ -44,7 +44,7 @@ test("mehrere Tätigkeiten", async ({ page }) => {
     .click();
   await page
     .getByLabel("2. Tätigkeit")
-    .getByLabel("Durchschnittliches Brutto-")
+    .getByLabel("Durchschnittliches Bruttoeinkommen")
     .fill("538 Euro");
   await page.getByLabel("2. Tätigkeit").getByText("Ja").click();
   await page

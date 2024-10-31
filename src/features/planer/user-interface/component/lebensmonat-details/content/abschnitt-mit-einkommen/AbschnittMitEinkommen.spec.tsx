@@ -62,13 +62,13 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.getByRole("combobox", {
-          name: "Brutto-Einkommen von Jane im 5. Lebensmonat",
+          name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
         }),
       ).toBeVisible();
 
       expect(
         screen.getByRole("combobox", {
-          name: "Brutto-Einkommen von John im 5. Lebensmonat",
+          name: "Bruttoeinkommen von John im 5. Lebensmonat",
         }),
       ).toBeVisible();
     });
@@ -92,7 +92,7 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.queryByRole("combobox", {
-          name: "Brutto-Einkommen von Jane im 5. Lebensmonat",
+          name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
         }),
       ).not.toBeInTheDocument();
 
@@ -104,7 +104,7 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.getByRole("combobox", {
-          name: "Brutto-Einkommen von John im 5. Lebensmonat",
+          name: "Bruttoeinkommen von John im 5. Lebensmonat",
         }),
       );
     });
@@ -124,7 +124,7 @@ describe("Abschnitt mit Einkommen", () => {
 
       expect(
         screen.getByRole("combobox", {
-          name: "Brutto-Einkommen im 5. Lebensmonat",
+          name: "Bruttoeinkommen im 5. Lebensmonat",
         }),
       ).toBeVisible();
     });
@@ -216,7 +216,7 @@ describe("Abschnitt mit Einkommen", () => {
 
     function expectInputsToBeVisible() {
       const inputs = screen.getAllByRole("combobox", {
-        name: /Brutto-Einkommen/,
+        name: /Bruttoeinkommen/,
       });
 
       inputs.forEach((input) => expect(input).toBeVisible());
@@ -224,7 +224,7 @@ describe("Abschnitt mit Einkommen", () => {
 
     function expectInputsNotToBeVisible() {
       const inputs = screen.queryAllByRole("combobox", {
-        name: /Brutto-Einkommen/,
+        name: /Bruttoeinkommen/,
       });
       inputs.forEach((input) => expect(input).not.toBeVisible());
     }
@@ -244,7 +244,7 @@ describe("Abschnitt mit Einkommen", () => {
 
   async function toggleInputsVisibility(): Promise<void> {
     const toggle = screen.getByRole("button", {
-      name: "Brutto-Einkommen hinzufügen",
+      name: "Bruttoeinkommen hinzufügen",
     });
     await userEvent.click(toggle);
   }

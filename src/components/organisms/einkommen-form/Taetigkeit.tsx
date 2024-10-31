@@ -121,7 +121,7 @@ export function Taetigkeit({
   const selbststaendig = artTaetigkeit === "Selbststaendig";
   const einkommenLabel = selbststaendig
     ? "Durchschnittlicher monatlicher Gewinn"
-    : "Durchschnittliches Brutto-Einkommen";
+    : "Durchschnittliches Bruttoeinkommen";
 
   return (
     <FormFieldGroup headline={`${taetigkeitsIndex + 1}. Tätigkeit`}>

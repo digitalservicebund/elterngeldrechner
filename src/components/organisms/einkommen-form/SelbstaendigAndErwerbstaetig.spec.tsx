@@ -255,13 +255,13 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       stepEinkommen: stateEinkommenValid,
     };
 
-    it("should require the Durchschnittliches Brutto-Einkommen", async () => {
+    it("should require the Durchschnittliches Bruttoeinkommen", async () => {
       render(<EinkommenPage />, { preloadedState: validFormState });
       const taetigkeit1Section = getTaetigkeit1OfElternteil1Section();
 
       await userEvent.clear(
         within(taetigkeit1Section).getByLabelText(
-          "Durchschnittliches Brutto-Einkommen",
+          "Durchschnittliches Bruttoeinkommen",
         ),
       );
       await userEvent.click(screen.getByText("Weiter"));

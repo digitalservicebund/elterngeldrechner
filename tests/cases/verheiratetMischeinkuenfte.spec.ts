@@ -36,8 +36,8 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("3");
   await page.getByLabel("Kirchensteuer").getByText("Ja").click();
   await page.getByRole("button", { name: "eine Tätigkeit hinzufügen" }).click();
-  await page.getByLabel("Durchschnittliches Brutto-").click();
-  await page.getByLabel("Durchschnittliches Brutto-").fill("4500 Euro");
+  await page.getByLabel("Durchschnittliches Bruttoeinkommen").click();
+  await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("4500 Euro");
   await page
     .locator(
       '[id="ET1\\.taetigkeitenNichtSelbstaendigUndSelbstaendig\\.0\\.zeitraum\\.0\\.from"]',

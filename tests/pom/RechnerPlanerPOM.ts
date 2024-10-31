@@ -48,8 +48,8 @@ export class RechnerPlanerPOM {
     await this.expandAbschnittMitEinkommen();
 
     const label = elternteil
-      ? `Brutto-Einkommen von ${elternteil} im ${lebensmonatszahl}. Lebensmonat`
-      : `Brutto-Einkommen im ${lebensmonatszahl}. Lebensmonat`;
+      ? `Bruttoeinkommen von ${elternteil} im ${lebensmonatszahl}. Lebensmonat`
+      : `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`;
     const input = this.page.getByRole("combobox", { name: label });
     input.fill(bruttoeinkommen.toString());
   }
@@ -66,7 +66,7 @@ export class RechnerPlanerPOM {
 
   private async expandAbschnittMitEinkommen(): Promise<void> {
     const button = this.page.getByRole("button", {
-      name: "Brutto-Einkommen hinzufügen",
+      name: "Bruttoeinkommen hinzufügen",
     });
 
     const isExpanded = JSON.parse(

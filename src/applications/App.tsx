@@ -1,4 +1,8 @@
-import { MemoryRouter, Route, Routes, Navigate } from "react-router-dom";
+import {
+  createMemoryRouter,
+  type RouteObject,
+  RouterProvider,
+} from "react-router-dom";
 import { AriaLogProvider } from "@/components/atoms";
 import AllgemeineAngabenPage from "@/components/pages/AllgemeineAngabenPage";
 import NachwuchsPage from "@/components/pages/NachwuchsPage";
@@ -29,38 +33,44 @@ export function App({ elternGeldDigitalWizardUrl }: Props) {
     }),
   );
 
+  const router = createMemoryRouter(ROUTES, {
+    initialEntries: [formSteps.allgemeinAngaben.route],
+  });
+
   return (
-    <MemoryRouter>
-      <AriaLogProvider>
-        <Routes>
-          <Route
-            index
-            element={<Navigate to={formSteps.allgemeinAngaben.route} replace />}
-          />
-          <Route
-            path={formSteps.allgemeinAngaben.route}
-            element={<AllgemeineAngabenPage />}
-          />
-          <Route path={formSteps.nachwuchs.route} element={<NachwuchsPage />} />
-          <Route
-            path={formSteps.erwerbstaetigkeit.route}
-            element={<ErwerbstaetigkeitPage />}
-          />
-          <Route path={formSteps.einkommen.route} element={<EinkommenPage />} />
-          <Route
-            path={formSteps.elterngeldvarianten.route}
-            element={<ElterngeldvariantenPage />}
-          />
-          <Route
-            path={formSteps.rechnerUndPlaner.route}
-            element={<RechnerPlanerPage />}
-          />
-          <Route
-            path={formSteps.zusammenfassungUndDaten.route}
-            element={<ZusammenfassungUndDatenPage />}
-          />
-        </Routes>
-      </AriaLogProvider>
-    </MemoryRouter>
+    <AriaLogProvider>
+      <RouterProvider router={router} />
+    </AriaLogProvider>
   );
 }
+
+const ROUTES: RouteObject[] = [
+  {
+    path: formSteps.allgemeinAngaben.route,
+    element: <AllgemeineAngabenPage />,
+  },
+  {
+    path: formSteps.nachwuchs.route,
+    element: <NachwuchsPage />,
+  },
+  {
+    path: formSteps.erwerbstaetigkeit.route,
+    element: <ErwerbstaetigkeitPage />,
+  },
+  {
+    path: formSteps.einkommen.route,
+    element: <EinkommenPage />,
+  },
+  {
+    path: formSteps.elterngeldvarianten.route,
+    element: <ElterngeldvariantenPage />,
+  },
+  {
+    path: formSteps.rechnerUndPlaner.route,
+    element: <RechnerPlanerPage />,
+  },
+  {
+    path: formSteps.zusammenfassungUndDaten.route,
+    element: <ZusammenfassungUndDatenPage />,
+  },
+];

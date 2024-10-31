@@ -39,6 +39,15 @@ export type WaehleOptionInLebensmonat<E extends Elternteil> = OmitFirstArgument<
   WaehleOption<E>
 >;
 
+export type ErstelleVorschlaegeFuerAngabeDesEinkommens<E extends Elternteil> = (
+  Lebensmonatszahl: Lebensmonatszahl,
+  elternteil: E,
+) => number[];
+
+export type ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<
+  E extends Elternteil,
+> = OmitFirstArgument<ErstelleVorschlaegeFuerAngabeDesEinkommens<E>>;
+
 export type GebeEinkommenAn<E extends Elternteil> = (
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: E,

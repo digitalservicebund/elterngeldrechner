@@ -21,6 +21,7 @@ import {
   zaehleVerplantesKontingent,
   type Elterngeldbezuege,
 } from ".";
+import { erstelleVorschlaegeFuerAngabeDesEinkommens } from "@/features/planer/domain";
 import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 
@@ -46,6 +47,11 @@ vi.mock(
 vi.mock(
   import(
     "@/features/planer/domain/lebensmonate/operation/erstelleInitialeLebensmonate"
+  ),
+);
+vi.mock(
+  import(
+    "@/features/planer/domain/lebensmonate/operation/erstelleVorschlaegeFuerAngabeDesEinkommens"
   ),
 );
 vi.mock(
@@ -388,6 +394,33 @@ describe("use Planer service", () => {
       expect(console.error).toHaveBeenCalledOnce();
       // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
+    });
+  });
+
+  describe("erstelle Vorschläge für Angabe des Einkommens", () => {
+    it("uses the current Lebensmonate to determine the Vorschläge", async () => {
+      const initialPlan = { ...ANY_PLAN, lebensmonate: { 1: ANY_LEBENSMONAT } };
+      vi.mocked(erstelleVorschlaegeFuerAngabeDesEinkommens).mockReturnValue([
+        100,
+      ]);
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan: initialPlan },
+      });
+
+      const vorschlaege = await act(() =>
+        result.current.erstelleVorschlaegeFuerAngabeDesEinkommens(
+          7,
+          Elternteil.Zwei,
+        ),
+      );
+
+      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).toHaveBeenCalledOnce();
+      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).toHaveBeenCalledWith(
+        { 1: ANY_LEBENSMONAT },
+        7,
+        Elternteil.Zwei,
+      );
+      expect(vorschlaege).toStrictEqual([100]);
     });
   });
 

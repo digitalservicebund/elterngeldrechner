@@ -7,7 +7,7 @@ describe("Buttoeinkommen Input", () => {
     render(<BruttoeinkommenInput {...ANY_PROPS} ariaLabel="test aria label" />);
 
     expect(
-      screen.getByRole("textbox", { name: "test aria label" }),
+      screen.getByRole("combobox", { name: "test aria label" }),
     ).toBeVisible();
     expect(screen.getByLabelText("Einkommen in € (brutto)")).toBeVisible();
   });
@@ -15,7 +15,18 @@ describe("Buttoeinkommen Input", () => {
   it("uses the given Bruttoeinkommen as input value", () => {
     render(<BruttoeinkommenInput {...ANY_PROPS} bruttoeinkommen={251} />);
 
-    expect(screen.getByRole("textbox")).toHaveValue("251");
+    expect(screen.getByRole("combobox")).toHaveValue("251");
+  });
+
+  it("uses the given Vorschläge as input suggestions", async () => {
+    render(<BruttoeinkommenInput {...ANY_PROPS} vorschlaege={[70, 53]} />);
+
+    expect(
+      screen.getByRole("option", { name: "70", hidden: true }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("option", { name: "53", hidden: true }),
+    ).toBeInTheDocument();
   });
 
   it("triggers the callback when typing numbers", async () => {
@@ -24,7 +35,7 @@ describe("Buttoeinkommen Input", () => {
       <BruttoeinkommenInput {...ANY_PROPS} gebeEinkommenAn={gebeEinkommenAn} />,
     );
 
-    const input = screen.getByRole("textbox");
+    const input = screen.getByRole("combobox");
     await userEvent.type(input, "2");
 
     expect(gebeEinkommenAn).toHaveBeenCalledOnce();
@@ -37,7 +48,7 @@ describe("Buttoeinkommen Input", () => {
       <BruttoeinkommenInput {...ANY_PROPS} gebeEinkommenAn={gebeEinkommenAn} />,
     );
 
-    const input = screen.getByRole("textbox");
+    const input = screen.getByRole("combobox");
     await userEvent.type(input, "a!}.-");
 
     expect(gebeEinkommenAn).not.toHaveBeenCalledOnce();
@@ -45,6 +56,8 @@ describe("Buttoeinkommen Input", () => {
 });
 
 const ANY_PROPS = {
+  bruttoeinkommen: undefined,
+  vorschlaege: [],
   ariaLabel: "",
   gebeEinkommenAn: () => {},
 };

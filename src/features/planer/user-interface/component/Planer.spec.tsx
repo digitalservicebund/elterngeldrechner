@@ -179,6 +179,7 @@ const ANY_SERVICE_VALUES = {
     [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
   }),
   waehleOption: () => {},
+  erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
   setzePlanZurueck: () => {},
 };

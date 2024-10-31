@@ -94,5 +94,6 @@ const ANY_PROPS = {
   geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
+  erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
 };

@@ -5,6 +5,7 @@ import {
   type PlanChangedCallback,
   WaehleOption,
 } from "./callbackTypes";
+import { erstelleVorschlaegeFuerAngabeDesEinkommens } from "@/features/planer/domain";
 import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import {
   bestimmeVerfuegbaresKontingent,
@@ -110,6 +111,12 @@ export function usePlanerService(
     [updateStatesAndTriggerCallbacks],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const erstelleVorschlaegeFuerAngabeDesEinkommensCallback = useCallback(
+    erstelleVorschlaegeFuerAngabeDesEinkommens.bind(null, plan.lebensmonate),
+    [plan.lebensmonate],
+  );
+
   const gebeEinkommenAnCallback = useCallback<GebeEinkommenAn<Elternteil>>(
     (...argumentList) =>
       setPlan((plan) => {
@@ -152,6 +159,8 @@ export function usePlanerService(
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
     waehleOption: waehleOptionCallback,
+    erstelleVorschlaegeFuerAngabeDesEinkommens:
+      erstelleVorschlaegeFuerAngabeDesEinkommensCallback,
     gebeEinkommenAn: gebeEinkommenAnCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
   };

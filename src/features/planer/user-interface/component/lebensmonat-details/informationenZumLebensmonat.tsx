@@ -1,6 +1,7 @@
 import { createContext, useContext, type ReactNode } from "react";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
+  ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat,
   GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
@@ -53,5 +54,6 @@ type InformationenZumLebensmonat<E extends Elternteil> = {
   geburtsdatumDesKindes: Date;
   bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   waehleOption: WaehleOptionInLebensmonat<E>;
+  erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<E>;
   gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
 };

@@ -87,5 +87,6 @@ const ANY_PROPS = {
     [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
   }),
   waehleOption: () => {},
+  erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
 };

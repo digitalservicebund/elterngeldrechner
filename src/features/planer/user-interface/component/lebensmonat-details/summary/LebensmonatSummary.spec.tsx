@@ -182,6 +182,7 @@ const ANY_INFORMATION_ZUM_LEBENSMONAT = {
     [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
   }),
   waehleOption: () => {},
+  erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
 };
 

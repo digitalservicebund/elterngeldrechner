@@ -27,6 +27,7 @@ export {
   type Lebensmonate,
   type LebensmonateMitBeliebigenElternteilen,
   erstelleInitialeLebensmonate,
+  erstelleVorschlaegeFuerAngabeDesEinkommens,
   zaehleVerplantesKontingent,
 } from "./lebensmonate";
 export {

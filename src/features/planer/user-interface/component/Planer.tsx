@@ -40,6 +40,7 @@ export function Planer({
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
+    erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
     setzePlanZurueck,
   } = usePlanerService(
@@ -118,6 +119,9 @@ export function Planer({
             erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
             waehleOption={waehleOption}
+            erstelleVorschlaegeFuerAngabeDesEinkommens={
+              erstelleVorschlaegeFuerAngabeDesEinkommens
+            }
             gebeEinkommenAn={gebeEinkommenAn}
           />
 

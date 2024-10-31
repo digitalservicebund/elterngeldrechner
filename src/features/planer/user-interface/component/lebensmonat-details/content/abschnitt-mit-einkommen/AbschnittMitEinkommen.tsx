@@ -34,6 +34,7 @@ export function AbschnittMitEinkommen(): ReactNode {
     lebensmonatszahl,
     lebensmonat,
     pseudonymeDerElternteile,
+    erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
   } = useInformationenZumLebensmonat();
 
@@ -85,6 +86,8 @@ export function AbschnittMitEinkommen(): ReactNode {
                 />
               );
             } else {
+              const vorschlaege =
+                erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
               const ariaLabel = composeAriaLabelForBruttoeinkommen(
                 pseudonymeDerElternteile[elternteil],
                 lebensmonatszahl,
@@ -99,6 +102,7 @@ export function AbschnittMitEinkommen(): ReactNode {
                   <BruttoeinkommenInput
                     key={elternteil}
                     bruttoeinkommen={monat.bruttoeinkommen}
+                    vorschlaege={vorschlaege}
                     ariaLabel={ariaLabel}
                     gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
                   />

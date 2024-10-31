@@ -14,6 +14,7 @@ import { LebensmonatContent } from "./content";
 import { ProvideInformationenZumLebensmonat } from "./informationenZumLebensmonat";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
+  ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat,
   GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
@@ -32,6 +33,7 @@ interface Props<E extends Elternteil> {
   readonly geburtsdatumDesKindes: Date;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
   readonly waehleOption: WaehleOptionInLebensmonat<E>;
+  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<E>;
   readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
   readonly className?: string;
 }
@@ -46,6 +48,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     geburtsdatumDesKindes,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
+    erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
     className,
   }: Props<E>,
@@ -91,6 +94,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     geburtsdatumDesKindes,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
+    erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
   };
 

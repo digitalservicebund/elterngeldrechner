@@ -8,6 +8,7 @@ import type {
   BestimmeAuswahlmoeglichkeiten,
   WaehleOption,
   GebeEinkommenAn,
+  ErstelleVorschlaegeFuerAngabeDesEinkommens,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import {
   Lebensmonatszahlen,
@@ -24,6 +25,7 @@ type Props<E extends Elternteil> = {
   readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<E>;
   readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
   readonly waehleOption: WaehleOption<E>;
+  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<E>;
   readonly gebeEinkommenAn: GebeEinkommenAn<E>;
   readonly className?: string;
 };
@@ -35,6 +37,7 @@ export function Lebensmonatsliste<E extends Elternteil>({
   erstelleUngeplantenLebensmonat,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
+  erstelleVorschlaegeFuerAngabeDesEinkommens,
   gebeEinkommenAn,
   className,
 }: Props<E>): ReactNode {
@@ -87,6 +90,10 @@ export function Lebensmonatsliste<E extends Elternteil>({
             pseudonymeDerElternteile={pseudonymeDerElternteile}
             geburtsdatumDesKindes={geburtsdatumDesKindes}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten.bind(
+              null,
+              lebensmonatszahl,
+            )}
+            erstelleVorschlaegeFuerAngabeDesEinkommens={erstelleVorschlaegeFuerAngabeDesEinkommens.bind(
               null,
               lebensmonatszahl,
             )}

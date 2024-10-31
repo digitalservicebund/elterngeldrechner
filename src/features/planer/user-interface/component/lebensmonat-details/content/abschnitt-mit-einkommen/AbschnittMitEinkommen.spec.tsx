@@ -61,13 +61,13 @@ describe("Abschnitt mit Einkommen", () => {
       await toggleInputsVisibility();
 
       expect(
-        screen.getByRole("textbox", {
+        screen.getByRole("combobox", {
           name: "Brutto-Einkommen von Jane im 5. Lebensmonat",
         }),
       ).toBeVisible();
 
       expect(
-        screen.getByRole("textbox", {
+        screen.getByRole("combobox", {
           name: "Brutto-Einkommen von John im 5. Lebensmonat",
         }),
       ).toBeVisible();
@@ -91,7 +91,7 @@ describe("Abschnitt mit Einkommen", () => {
       await toggleInputsVisibility();
 
       expect(
-        screen.queryByRole("textbox", {
+        screen.queryByRole("combobox", {
           name: "Brutto-Einkommen von Jane im 5. Lebensmonat",
         }),
       ).not.toBeInTheDocument();
@@ -103,7 +103,7 @@ describe("Abschnitt mit Einkommen", () => {
       ).toBeVisible();
 
       expect(
-        screen.getByRole("textbox", {
+        screen.getByRole("combobox", {
           name: "Brutto-Einkommen von John im 5. Lebensmonat",
         }),
       );
@@ -123,10 +123,33 @@ describe("Abschnitt mit Einkommen", () => {
       await toggleInputsVisibility();
 
       expect(
-        screen.getByRole("textbox", {
+        screen.getByRole("combobox", {
           name: "Brutto-Einkommen im 5. Lebensmonat",
         }),
       ).toBeVisible();
+    });
+
+    it("uses the provided callback to determine the Vorschläge for the Einkommen per Elternteil", async () => {
+      const erstelleVorschlaegeFuerAngabeDesEinkommens = vi.fn(() => []);
+      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        erstelleVorschlaegeFuerAngabeDesEinkommens,
+      });
+
+      render(<AbschnittMitEinkommen />);
+      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).not.toHaveBeenCalled();
+
+      await toggleInputsVisibility();
+
+      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).toHaveBeenCalledTimes(
+        2,
+      );
+      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).toHaveBeenCalledWith(
+        Elternteil.Eins,
+      );
+      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).toHaveBeenCalledWith(
+        Elternteil.Zwei,
+      );
     });
   });
 
@@ -192,7 +215,7 @@ describe("Abschnitt mit Einkommen", () => {
     });
 
     function expectInputsToBeVisible() {
-      const inputs = screen.getAllByRole("textbox", {
+      const inputs = screen.getAllByRole("combobox", {
         name: /Brutto-Einkommen/,
       });
 
@@ -200,7 +223,7 @@ describe("Abschnitt mit Einkommen", () => {
     }
 
     function expectInputsNotToBeVisible() {
-      const inputs = screen.queryAllByRole("textbox", {
+      const inputs = screen.queryAllByRole("combobox", {
         name: /Brutto-Einkommen/,
       });
       inputs.forEach((input) => expect(input).not.toBeVisible());
@@ -249,5 +272,6 @@ const ANY_INFORMATION_ZUM_LEBENSMONAT = {
     [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
   }),
   waehleOption: () => {},
+  erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
 };

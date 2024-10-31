@@ -106,5 +106,6 @@ const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
+  erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
 };

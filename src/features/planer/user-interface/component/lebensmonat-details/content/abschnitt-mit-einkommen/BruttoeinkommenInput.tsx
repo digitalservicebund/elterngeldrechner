@@ -10,7 +10,8 @@ import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined
 import type { Einkommen } from "@/features/planer/user-interface/service";
 
 type Props = {
-  readonly bruttoeinkommen?: Einkommen;
+  readonly bruttoeinkommen: Einkommen | undefined;
+  readonly vorschlaege: number[];
   readonly ariaLabel: string;
   readonly gebeEinkommenAn: (bruttoeinkommen: number) => void;
   readonly style?: CSSProperties;
@@ -18,6 +19,7 @@ type Props = {
 
 export function BruttoeinkommenInput({
   bruttoeinkommen,
+  vorschlaege,
   ariaLabel,
   gebeEinkommenAn,
   style,
@@ -36,6 +38,8 @@ export function BruttoeinkommenInput({
     gebeEinkommenAn(bruttoeinkommen);
   }
 
+  const datalistIdentifier = useId();
+
   return (
     <div className="flex flex-col gap-4" style={style}>
       <label htmlFor={inputIdentifier}>
@@ -53,9 +57,18 @@ export function BruttoeinkommenInput({
         value={bruttoeinkommen ?? ""}
         inputMode="numeric"
         pattern="[0-9]*"
+        list={datalistIdentifier}
         onKeyDown={filterNonNumbericInput}
         onChange={gebeBruttoeinkommenAn}
       />
+
+      <datalist id={datalistIdentifier}>
+        {vorschlaege.map((value) => (
+          <option key={value} value={value}>
+            {value}
+          </option>
+        ))}
+      </datalist>
     </div>
   );
 }

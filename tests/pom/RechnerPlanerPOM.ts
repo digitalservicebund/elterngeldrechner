@@ -50,7 +50,7 @@ export class RechnerPlanerPOM {
     const label = elternteil
       ? `Brutto-Einkommen von ${elternteil} im ${lebensmonatszahl}. Lebensmonat`
       : `Brutto-Einkommen im ${lebensmonatszahl}. Lebensmonat`;
-    const input = this.page.getByRole("textbox", { name: label });
+    const input = this.page.getByRole("combobox", { name: label });
     input.fill(bruttoeinkommen.toString());
   }
 

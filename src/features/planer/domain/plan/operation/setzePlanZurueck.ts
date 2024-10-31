@@ -1,4 +1,3 @@
-import { vi } from "vitest";
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 import type { Plan } from "@/features/planer/domain/plan/Plan";

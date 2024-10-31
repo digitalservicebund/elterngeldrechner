@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { UserFeedbackSection } from "./UserFeedbackSection";
 

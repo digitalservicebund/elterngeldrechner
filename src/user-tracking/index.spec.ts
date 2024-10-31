@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as tagManagerModule from "./tag-manager";
 import { setupTagManager } from "./tag-manager";
 import * as dataLayerModule from "./data-layer";
@@ -13,7 +12,9 @@ describe("user tracking", () => {
 
   const originalCookies = document.cookie;
 
-  afterEach(() => (document.cookie = originalCookies));
+  afterEach(() => {
+    document.cookie = originalCookies;
+  });
 
   describe("check conditions for tracking", () => {
     beforeEach(() => {

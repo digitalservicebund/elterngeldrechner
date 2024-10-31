@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import { screen } from "@testing-library/react";
 import { ElterngeldvariantenPage } from "./ElterngeldvariantenPage";
 import { render } from "@/test-utils/test-utils";

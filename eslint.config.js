@@ -13,11 +13,10 @@ import vitestPlugin from "@vitest/eslint-plugin";
 
 import importPlugin from "eslint-plugin-import";
 import importPathsPlugin from "eslint-plugin-no-relative-import-paths";
-import unusedImportsPlugin from "eslint-plugin-unused-imports";
 
 import prettierPluginRecommendedConfig from "eslint-plugin-prettier/recommended";
 
-import egrRulesPlugin from "./eslint-rules/egr-plugin.js";
+import customRulesPlugin from "./eslint-rules/custom-rules-plugin.js";
 
 const eslintConfig = [
   js.configs.recommended,
@@ -52,10 +51,10 @@ const typescriptConfig = tsEslintConfigs.recommended;
 const customRulesConfig = [
   {
     plugins: {
-      "egr-rules": egrRulesPlugin,
+      customRules: customRulesPlugin,
     },
     rules: {
-      "egr-rules/vi-mock-imports": "error",
+      "customRules/vi-import": "error",
     },
   },
 ];
@@ -70,27 +69,6 @@ const tailwindConfig = [
 ];
 
 const prettierConfig = [prettierPluginRecommendedConfig];
-
-const unusedImportsConfig = [
-  {
-    plugins: {
-      "unused-imports": unusedImportsPlugin,
-    },
-    rules: {
-      "@typescript-eslint/no-unused-vars": "off",
-      "unused-imports/no-unused-imports": "error",
-      "unused-imports/no-unused-vars": [
-        "warn",
-        {
-          vars: "all",
-          varsIgnorePattern: "^_",
-          args: "after-used",
-          argsIgnorePattern: "^_",
-        },
-      ],
-    },
-  },
-];
 
 const importConfig = [
   importPlugin.flatConfigs.recommended,
@@ -195,7 +173,6 @@ export default defineConfig(
   ...tailwindConfig,
   ...importConfig,
   ...vitestConfig,
-  ...unusedImportsConfig,
   ...noRelativeImportPathsConfig,
   ...customRulesConfig,
   ...prettierConfig,

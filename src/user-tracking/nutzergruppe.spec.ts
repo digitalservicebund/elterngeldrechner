@@ -1,4 +1,3 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { setTrackingVariable } from "./data-layer";
 import { trackNutzergruppe } from "./nutzergruppe";
 

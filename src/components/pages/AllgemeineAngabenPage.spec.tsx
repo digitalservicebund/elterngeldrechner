@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import { configureStore, Store } from "@reduxjs/toolkit";
-import { beforeEach, describe, expect, it } from "vitest";
 import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
 import { render, screen } from "@/test-utils/test-utils";
 import { reducers, RootState } from "@/redux";

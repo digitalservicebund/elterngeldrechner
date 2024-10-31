@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from "vitest";
 import { setTrackingVariable } from "./data-layer";
 import { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 

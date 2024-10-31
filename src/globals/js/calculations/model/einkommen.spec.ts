@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import { Einkommen } from "./einkommen";
 
 describe("einkommen-types", () => {

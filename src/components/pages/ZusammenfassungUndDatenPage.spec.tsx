@@ -1,5 +1,4 @@
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
 import { Elternteil } from "@/features/planer/domain";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";

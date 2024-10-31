@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LebensmonatContent } from "./LebensmonatContent";
 import { HinweisZumBonus } from "./HinweisZumBonus";
 import {

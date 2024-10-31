@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Elternteil } from "@/features/planer/user-interface/service";
 

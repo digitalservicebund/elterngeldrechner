@@ -23,7 +23,7 @@ export function compareLebensmonatszahlen(
 }
 
 if (import.meta.vitest) {
-  const { test, expect, describe, it } = import.meta.vitest;
+  const { test, expect } = import.meta.vitest;
 
   describe("type guard", () => {
     it.each(Array.from({ length: 32 }, (_, index) => index + 1))(

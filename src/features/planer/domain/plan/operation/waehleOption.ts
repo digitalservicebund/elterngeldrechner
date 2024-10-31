@@ -1,4 +1,3 @@
-import { vi } from "vitest";
 import { VorlaeufigGueltigerPlan } from "@/features/planer/domain/plan/specification";
 import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
@@ -46,7 +45,7 @@ export function waehleOption<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect, beforeEach } = import.meta.vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
   describe("wähle Option für Plan", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

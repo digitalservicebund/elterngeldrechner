@@ -1,5 +1,4 @@
 import Big from "big.js";
-import { vi } from "vitest";
 import { useCallback, useRef } from "react";
 import {
   Elternteil,
@@ -197,7 +196,7 @@ type StaticCalculationParameterForElternteil = {
 };
 
 if (import.meta.vitest) {
-  const { describe, it, expect, beforeEach } = import.meta.vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/test-utils/test-utils");

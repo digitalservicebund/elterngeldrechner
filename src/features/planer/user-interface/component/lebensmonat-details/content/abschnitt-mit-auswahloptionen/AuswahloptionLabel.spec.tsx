@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
 import { Variante } from "@/features/planer/user-interface/service";
 

@@ -1,4 +1,3 @@
-import { vi } from "vitest";
 import { FinalGueltigerPlan } from "@/features/planer/domain/plan/specification";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 import { Result } from "@/features/planer/domain/common/Result";

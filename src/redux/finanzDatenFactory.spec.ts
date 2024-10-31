@@ -1,4 +1,3 @@
-import { describe, expect, it, vi } from "vitest";
 import Big from "big.js";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import {

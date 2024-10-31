@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import { EgrMischeinkommenExcelSheet } from "./egr-mischeinkommen-excel-sheet";
 import {
   ErwerbsArt,

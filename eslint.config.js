@@ -14,7 +14,7 @@ import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
 import importPathsPlugin from "eslint-plugin-no-relative-import-paths";
 
-import prettierPluginRecommendedConfig from "eslint-plugin-prettier/recommended";
+import eslintConfigPrettier from "eslint-config-prettier";
 
 import customRulesPlugin from "./eslint-rules/custom-rules-plugin.js";
 
@@ -22,6 +22,8 @@ const eslintConfig = [
   js.configs.recommended,
   { rules: { "no-console": "error" } },
 ];
+
+const eslintPrettierConfig = [eslintConfigPrettier];
 
 const languageOptions = [
   {
@@ -67,8 +69,6 @@ const tailwindConfig = [
   // Enable when no BEM is used anymore.
   { rules: { "tailwindcss/no-custom-classname": "off" } },
 ];
-
-const prettierConfig = [prettierPluginRecommendedConfig];
 
 const importConfig = [
   importPlugin.flatConfigs.recommended,
@@ -175,5 +175,5 @@ export default defineConfig(
   ...vitestConfig,
   ...noRelativeImportPathsConfig,
   ...customRulesConfig,
-  ...prettierConfig,
+  ...eslintPrettierConfig,
 );

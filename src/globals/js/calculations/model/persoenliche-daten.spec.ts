@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { PersoenlicheDaten } from "./persoenliche-daten";
 import { ErwerbsArt } from "./erwerbs-art";
 import { YesNo } from "./yes-no";

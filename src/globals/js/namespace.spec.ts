@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import nsp from "./namespace";
 import PROJECT_NAMESPACE from "@/projectNamespace";
 

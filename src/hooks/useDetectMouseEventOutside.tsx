@@ -25,7 +25,7 @@ export function useDetectClickOutside(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("detect click outside hook", async () => {
     const { useRef } = await import("react");

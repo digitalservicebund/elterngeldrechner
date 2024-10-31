@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { waehleOption } from "./waehleOption";
 import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
@@ -65,7 +66,7 @@ function formatViolationsAsHint(violations: SpecificationViolation[]): string {
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, beforeEach } = import.meta.vitest;
 
   describe("bestimmte Auswahlmöglichkeiten", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

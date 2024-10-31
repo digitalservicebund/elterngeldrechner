@@ -1,7 +1,7 @@
 import { ESLintUtils } from "@typescript-eslint/utils";
 
-const noViMockWithString = ESLintUtils.RuleCreator.withoutDocs({
-  name: "no-vi-mock-with-string",
+const rule = ESLintUtils.RuleCreator.withoutDocs({
+  name: "vi-mock-imports",
   meta: {
     type: "problem",
     messages: {
@@ -49,4 +49,4 @@ const noViMockWithString = ESLintUtils.RuleCreator.withoutDocs({
   },
 });
 
-export default noViMockWithString;
+export default rule;

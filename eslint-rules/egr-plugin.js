@@ -5,8 +5,15 @@
 // things simple for now and write the rule in javaScript. If we accumulate
 // more rules over time, we may want to reconsider this decision.
 
-import viImportRule from "./vi-import-rule.js";
+import viMockImportsRule from "./vi-mock-imports.js";
 
-const plugin = { rules: { "vi-import": viImportRule } };
+const plugin = {
+  meta: {
+    name: "egr-rules",
+  },
+  rules: {
+    "vi-mock-imports": viMockImportsRule,
+  },
+};
 
 export default plugin;

@@ -30,7 +30,7 @@ const ELTERNTEIL_SORT_RANK: Record<Elternteil, number> = {
 };
 
 if (import.meta.vitest) {
-  const { test, expect } = import.meta.vitest;
+  const { test, expect, describe, it } = import.meta.vitest;
 
   describe("type guard", () => {
     it.each(["Elternteil 1", "Elternteil 2"])("is satisfied by %s", (value) => {

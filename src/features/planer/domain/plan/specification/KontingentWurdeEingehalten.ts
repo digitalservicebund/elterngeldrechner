@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
 import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
 import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";

@@ -1,4 +1,5 @@
 import { render, screen, within } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { Variante } from "@/features/planer/domain";
 

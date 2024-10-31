@@ -22,7 +22,7 @@ const VARIANTE_SORT_RANKING: Record<Variante, number> = {
 };
 
 if (import.meta.vitest) {
-  const { test, expect } = import.meta.vitest;
+  const { test, expect, describe, it } = import.meta.vitest;
 
   describe("type guard", () => {
     it.each(["Basiselterngeld", "ElterngeldPlus", "Partnerschaftsbonus"])(

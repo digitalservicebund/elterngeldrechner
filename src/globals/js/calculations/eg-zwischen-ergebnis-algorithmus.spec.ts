@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { DateTime } from "luxon";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { Kind } from "./model";

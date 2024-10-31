@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 
 describe("misch-ek-taetigkeit", () => {

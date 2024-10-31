@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 
 describe("erwerbs-zeitraum-lebens-monat", () => {

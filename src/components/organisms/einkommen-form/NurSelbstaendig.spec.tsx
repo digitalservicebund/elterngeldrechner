@@ -1,4 +1,5 @@
 import userEvent from "@testing-library/user-event";
+import { describe, expect, it } from "vitest";
 import { render, screen, within } from "@/test-utils/test-utils";
 import { RootState } from "@/redux";
 import EinkommenPage from "@/components/pages/EinkommenPage";

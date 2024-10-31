@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useForm } from "react-hook-form";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomNumberField } from "./CustomNumberField";
 import { Button } from "@/components/atoms";
 
@@ -37,9 +38,7 @@ describe("Custom Number Field", () => {
     );
   }
 
-  beforeEach(() => {
-    onSubmit.mockClear();
-  });
+  beforeEach(() => onSubmit.mockClear());
 
   it("should not allow an empty field", async () => {
     render(<TestComponent />);

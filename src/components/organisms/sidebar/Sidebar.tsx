@@ -50,7 +50,7 @@ export function Sidebar({ currentStep }: Props) {
 
           return (
             <li
-              key={index}
+              key={step.route}
               className={classNames(
                 nsp("sidebar-list__step"),
                 index < currentStepIndex && nsp("sidebar-list__step--done"),

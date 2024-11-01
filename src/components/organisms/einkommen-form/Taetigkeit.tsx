@@ -89,6 +89,14 @@ export function Taetigkeit({
       to: cloneOptionsList(monthsBeforeBirth),
     }),
   );
+
+  function entferneZeitraum(index: number): void {
+    setMonthsBeforeBirthList((months) => {
+      months.splice(index, 1);
+      return months;
+    });
+  }
+
   const availableMonthsBeforeBirth = (
     lastZeitraumValue?: ZeitraumData,
   ): ZeitraumOptionType =>
@@ -198,11 +206,7 @@ export function Taetigkeit({
                   label="Zeitraum entfernen"
                   iconAfter={<ClearIcon />}
                   onClick={() => {
-                    setMonthsBeforeBirthList((monthsBeforeBirthList) =>
-                      monthsBeforeBirthList.filter(
-                        (month, indexMonth) => indexMonth !== zeitraumIndex,
-                      ),
-                    );
+                    entferneZeitraum(zeitraumIndex);
                     remove(zeitraumIndex);
                     setAddButtonDisabled(false);
                   }}

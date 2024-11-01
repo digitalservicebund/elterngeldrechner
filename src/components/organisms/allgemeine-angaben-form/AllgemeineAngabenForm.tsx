@@ -52,97 +52,94 @@ export function AllgemeineAngabenForm({
     mutterschaftssleistungenFormValue === YesNo.YES;
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <h2 className="mb-10">Allgemeine Angaben</h2>
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <h2 className="mb-10">Allgemeine Angaben</h2>
+      <FormFieldGroup
+        headline="Eltern"
+        description="Für wen planen Sie Elterngeld?"
+      >
+        <CustomRadio
+          register={register}
+          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+          name="antragstellende"
+          errors={formState.errors}
+          options={antragstellendeOptions}
+          required
+        />
+      </FormFieldGroup>
+
+      {antragstellendeFormValue === "FuerBeide" ? (
         <FormFieldGroup
-          headline="Eltern"
-          description="Für wen planen Sie Elterngeld?"
+          headline="Ihre Namen (optional)"
+          description="Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden Schritten verzichten zu können, können Sie hier Ihre Namen oder ein Pseudonym angeben, welches wir dann verwenden werden."
         >
-          <CustomRadio
+          <Split>
+            <SplitItem>
+              <CustomInput
+                register={register}
+                name="pseudonym.ET1"
+                label="Name für Elternteil 1"
+              />
+            </SplitItem>
+            <SplitItem>
+              <CustomInput
+                register={register}
+                name="pseudonym.ET2"
+                label="Name für Elternteil 2"
+              />
+            </SplitItem>
+          </Split>
+        </FormFieldGroup>
+      ) : null}
+
+      {antragstellendeFormValue === "EinenElternteil" ? (
+        <FormFieldGroup
+          headline="Alleinerziehendenstatus"
+          description="Sind Sie alleinerziehend?"
+          info={infoTexts.alleinerziehend}
+        >
+          <YesNoRadio
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-            name="antragstellende"
+            name="alleinerziehend"
             errors={formState.errors}
-            options={antragstellendeOptions}
             required
           />
         </FormFieldGroup>
+      ) : null}
 
-        {antragstellendeFormValue === "FuerBeide" ? (
+      {antragstellendeFormValue !== null ? (
+        <>
           <FormFieldGroup
-            headline="Ihre Namen (optional)"
-            description="Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden Schritten verzichten zu können, können Sie hier Ihre Namen oder ein Pseudonym angeben, welches wir dann verwenden werden."
-          >
-            <Split>
-              <SplitItem>
-                <CustomInput
-                  register={register}
-                  name="pseudonym.ET1"
-                  label="Name für Elternteil 1"
-                />
-              </SplitItem>
-              <SplitItem>
-                <CustomInput
-                  register={register}
-                  name="pseudonym.ET2"
-                  label="Name für Elternteil 2"
-                />
-              </SplitItem>
-            </Split>
-          </FormFieldGroup>
-        ) : null}
-
-        {antragstellendeFormValue === "EinenElternteil" ? (
-          <FormFieldGroup
-            headline="Alleinerziehendenstatus"
-            description="Sind Sie alleinerziehend?"
-            info={infoTexts.alleinerziehend}
+            headline="Mutterschaftsleistungen"
+            description="Beziehen Sie Mutterschaftsleistungen?"
+            info={infoTexts.mutterschaftsleistungen}
           >
             <YesNoRadio
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="alleinerziehend"
+              name="mutterschaftssleistungen"
               errors={formState.errors}
               required
             />
           </FormFieldGroup>
-        ) : null}
-        <>
-          {antragstellendeFormValue !== null ? (
-            <>
-              <FormFieldGroup
-                headline="Mutterschaftsleistungen"
-                description="Beziehen Sie Mutterschaftsleistungen?"
-                info={infoTexts.mutterschaftsleistungen}
-              >
-                <YesNoRadio
-                  register={register}
-                  registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-                  name="mutterschaftssleistungen"
-                  errors={formState.errors}
-                  required
-                />
-              </FormFieldGroup>
-              {!!showMutterschaftsleistungsWerGroup && (
-                <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
-                  <CustomRadio
-                    register={register}
-                    registerOptions={{
-                      required: "Dieses Feld ist erforderlich",
-                    }}
-                    name="mutterschaftssleistungenWer"
-                    options={mutteschaftsleistungenOptions}
-                    errors={formState.errors}
-                    required
-                  />
-                </FormFieldGroup>
-              )}
-            </>
-          ) : null}
+          {!!showMutterschaftsleistungsWerGroup && (
+            <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
+              <CustomRadio
+                register={register}
+                registerOptions={{
+                  required: "Dieses Feld ist erforderlich",
+                }}
+                name="mutterschaftssleistungenWer"
+                options={mutteschaftsleistungenOptions}
+                errors={formState.errors}
+                required
+              />
+            </FormFieldGroup>
+          )}
         </>
-        <ButtonGroup isStepOne />
-      </form>
-    </>
+      ) : null}
+      <ButtonGroup isStepOne />
+    </form>
   );
 }

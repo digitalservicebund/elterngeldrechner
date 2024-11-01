@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useMemo } from "react";
+import { useId, useMemo } from "react";
 import {
   FieldPath,
   FieldValues,
@@ -62,6 +62,12 @@ export function CustomNumberField<
 
   const mask = suffix ? `num ${suffix}` : "num";
 
+  const errorIdentifier = useId();
+  const hasError = error !== undefined;
+  const descriptionIdentifier = hasError
+    ? errorIdentifier
+    : ariaDescribedByIfNoError;
+
   return (
     <div
       className={classNames(
@@ -107,17 +113,11 @@ export function CustomNumberField<
           id={name}
           placeholder={placeholder}
           aria-invalid={!!error}
-          aria-describedby={
-            error
-              ? `${name}-error`
-              : ariaDescribedByIfNoError
-                ? ariaDescribedByIfNoError
-                : undefined
-          }
+          aria-describedby={descriptionIdentifier}
           required={required}
         />
         {!!error && (
-          <Description id={`${name}-error`} error>
+          <Description id={errorIdentifier} error>
             {error.message}
           </Description>
         )}

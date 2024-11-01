@@ -39,7 +39,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   } else {
     const error: FieldError | undefined = get(errors, name);
     if (error) {
-      hasError = !!error;
+      hasError = true;
       errorMessage = error.message || "";
     }
   }

@@ -105,7 +105,6 @@ export function InfoDialog({
           isElternteilOne && nsp("info-dialog-box--monatsplanner-et-one"),
           { hidden: !isModalOpen },
         )}
-        role="dialog"
         aria-hidden={!isModalOpen}
         aria-label={ariaLabelForDialog}
         aria-describedby={dialogContentIdentifier}

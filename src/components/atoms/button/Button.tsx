@@ -14,7 +14,6 @@ interface Props<TFieldValues extends FieldValues> {
   readonly disabled?: boolean;
   readonly ariaLabel?: string;
   readonly ariaControls?: Path<TFieldValues>;
-  readonly ariaHidden?: boolean;
   readonly isSubmitButton?: boolean;
 }
 

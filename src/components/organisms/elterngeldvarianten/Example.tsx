@@ -30,7 +30,7 @@ export function Example({ title, months }: Props): ReactNode {
       </div>
       <div className="flex flex-wrap gap-8">
         {months.map((month, index) => (
-          <div key={index} className={monthClassName(month)}>
+          <div key={`${index}-${month}`} className={monthClassName(month)}>
             {index + 1}
           </div>
         ))}

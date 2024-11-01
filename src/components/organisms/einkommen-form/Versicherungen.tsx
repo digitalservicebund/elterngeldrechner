@@ -12,9 +12,9 @@ import {
 } from "@/redux/stepEinkommenSlice";
 import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
 
-type VersicherungenProps = {
+type VersicherungenProps = Readonly<{
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;
-};
+}>;
 
 const typeOfVersicherungenLabels: {
   [K in keyof TypeOfVersicherungen]: string;

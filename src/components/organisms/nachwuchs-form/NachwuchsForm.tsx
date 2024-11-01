@@ -88,8 +88,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
       istBehindert: false,
     });
 
-  const wahrscheinlichesGeburtsDatumName =
-    "wahrscheinlichesGeburtsDatum" as const;
+  const wahrscheinlichesGeburtsDatumName = "wahrscheinlichesGeburtsDatum";
   const wahrscheinlichesGeburtsDatum = getValues(
     wahrscheinlichesGeburtsDatumName,
   );

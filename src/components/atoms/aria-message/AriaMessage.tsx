@@ -6,9 +6,12 @@ interface AriaMessageProps {
 }
 
 export function AriaMessage({ children: message }: AriaMessageProps) {
-  const { addMessage } = useAriaLog();
+  const { addMessage, removeMessage } = useAriaLog();
 
-  useEffect(() => addMessage(message), [addMessage, message]);
+  useEffect(() => {
+    addMessage(message);
+    return () => removeMessage(message);
+  }, [message, addMessage, removeMessage]);
 
   return null;
 }

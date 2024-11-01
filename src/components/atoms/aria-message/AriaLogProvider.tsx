@@ -8,10 +8,9 @@ import {
 } from "react";
 import nsp from "@/globals/js/namespace";
 
-type RemoveMessageFn = () => void;
-
 interface IAriaLogContext {
-  addMessage: (message: string) => RemoveMessageFn;
+  addMessage: (message: string) => void;
+  removeMessage: (message: string) => void;
 }
 
 const AriaLogContext = createContext<IAriaLogContext | undefined>(undefined);
@@ -28,16 +27,23 @@ type Props = {
 export function AriaLogProvider({ children }: Props) {
   const [messages, setMessages] = useState<string[]>([]);
 
-  const addMessage = useCallback((message: string) => {
-    setMessages((existing) => [message, ...existing]);
+  const addMessage = useCallback(
+    (message: string) => setMessages((existing) => [message, ...existing]),
+    [],
+  );
 
-    return () =>
+  const removeMessage = useCallback(
+    (message: string) =>
       setMessages((existing) =>
         existing.filter((otherMessage) => otherMessage !== message),
-      );
-  }, []);
+      ),
+    [],
+  );
 
-  const context = useMemo(() => ({ addMessage }), [addMessage]);
+  const context = useMemo(
+    () => ({ addMessage, removeMessage }),
+    [addMessage, removeMessage],
+  );
 
   return (
     <AriaLogContext.Provider value={context}>

@@ -151,7 +151,7 @@ const sumBruttoEinkommen = (
       payload[elternteil].bruttoEinkommenNichtSelbstaendig.perMonth?.reduce(
         (a, b) => a! + b!,
         0,
-      ) || 0
+      ) ?? 0
     );
   }
   return 0;
@@ -161,7 +161,7 @@ const sumGewinnEinkommen = (
   payload: StepEinkommenState,
   elternteil: ElternteilType,
 ): number => {
-  const sumGewinnPerYear = payload[elternteil].gewinnSelbstaendig.perYear || 0;
+  const sumGewinnPerYear = payload[elternteil].gewinnSelbstaendig.perYear ?? 0;
   return sumGewinnPerYear;
 };
 

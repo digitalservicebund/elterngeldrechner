@@ -13,8 +13,8 @@ type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];
 
 export class EgrMischeinkommenExcelSheet {
-  static TEST_CASE_COUNT = 100;
-  private sheet: { name: string; data: unknown[][] };
+  static readonly TEST_CASE_COUNT = 100;
+  private readonly sheet: { name: string; data: unknown[][] };
 
   constructor() {
     const workSheetsFromFile = xlsx.parse(

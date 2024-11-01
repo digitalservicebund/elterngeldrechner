@@ -19,11 +19,13 @@ function mapDateToNutzergruppe(birthdate: Date): Nutzergruppe {
   const wasWithinLastThreeMonths =
     dayThreeMonthsAgo <= birthdate && birthdate <= today;
 
-  return isInFuture
-    ? Nutzergruppe.WERDENDE_ELTERN
-    : wasWithinLastThreeMonths
+  if (isInFuture) {
+    return Nutzergruppe.WERDENDE_ELTERN;
+  } else {
+    return wasWithinLastThreeMonths
       ? Nutzergruppe.JUNGE_ELTERN
       : Nutzergruppe.NACHBEANTRAGENDE_ELTERN;
+  }
 }
 
 const TRACKING_VARIABLE_NAME = "nutzergruppe";

@@ -73,10 +73,7 @@ function transformLebensmonateForFinanzdaten(
   return Object.entries(lebensmonate)
     .map(([lebensmonatszahl, lebensmonat]) => {
       const bruttoeinkommen = lebensmonat[elternteil]?.bruttoeinkommen ?? 0;
-      return [
-        Number.parseInt(lebensmonatszahl),
-        bruttoeinkommen !== null ? bruttoeinkommen : 0,
-      ];
+      return [Number.parseInt(lebensmonatszahl), bruttoeinkommen || 0];
     })
     .filter(([, bruttoeinkommen]) => bruttoeinkommen > 0)
     .map(([lebensmonatszahl, bruttoeinkommen]) => {

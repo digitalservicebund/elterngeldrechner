@@ -92,8 +92,8 @@ function getPseudonymeFuerAlleElternteile(possiblyEmptyPseudonyme: {
 }): Record<Elternteil, string> {
   const { ET1, ET2 } = possiblyEmptyPseudonyme;
   return {
-    [Elternteil.Eins]: ET1 ? ET1 : "Elternteil 1",
-    [Elternteil.Zwei]: ET2 ? ET2 : "Elternteil 2",
+    [Elternteil.Eins]: ET1 || "Elternteil 1",
+    [Elternteil.Zwei]: ET2 || "Elternteil 2",
   };
 }
 

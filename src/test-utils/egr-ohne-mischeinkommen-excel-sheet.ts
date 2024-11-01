@@ -17,8 +17,8 @@ import {
 } from "@/test-utils/fit-excel-sheet-util";
 
 export class EgrOhneMischeinkommenExcelSheet {
-  static TEST_CASE_COUNT = 60;
-  private sheet: { name: string; data: unknown[][] };
+  static readonly TEST_CASE_COUNT = 60;
+  private readonly sheet: { name: string; data: unknown[][] };
 
   constructor() {
     const workSheetsFromFile = xlsx.parse(

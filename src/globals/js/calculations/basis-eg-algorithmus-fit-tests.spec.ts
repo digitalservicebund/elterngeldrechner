@@ -58,7 +58,7 @@ describeSkipOnCi("basis-eg-algorithmus", () => {
       Array<number>(EgrMischeinkommenExcelSheet.TEST_CASE_COUNT).keys(),
     ).map((testCaseIndex) => ++testCaseIndex);
 
-    // TODO Die folgenden Testfallnummern schlagen noch fehl. Die Ursache muss noch ermittelt werden.
+    // Die folgenden Testfallnummern schlagen noch fehl. Die Ursache muss noch ermittelt werden.
     // Bei den Abgaben konnte noch nicht ermittelt werden, ob es am FIT liegt oder an unserer Implementierung.
     const failedAbgaben: Array<number> = [
       15, 18, 32, 35, 36, 40, 44, 47, 51, 60, 61, 65, 72, 79, 81, 82, 87, 88,

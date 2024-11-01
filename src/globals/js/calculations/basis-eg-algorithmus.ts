@@ -83,8 +83,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       let tmpBetrachtungsmonateFlag: boolean = false;
 
       const array = finanzDaten.mischEinkommenTaetigkeiten;
-      for (let index = 0; index < array.length; index++) {
-        const mischEkTaetigkeit = array[index];
+      for (const mischEkTaetigkeit of array) {
         if (mischEkTaetigkeit.bemessungsZeitraumMonate[i]) {
           tmpBetrachtungsmonateFlag = true;
         }
@@ -109,9 +108,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     let summe_EK_NS_SV: Big = BIG_ZERO;
     let summe_EK_GNS: Big = BIG_ZERO;
     const array = finanzDaten.mischEinkommenTaetigkeiten;
-    for (let index = 0; index < array.length; index++) {
-      const mischEkTaetigkeit = array[index];
-
+    for (const mischEkTaetigkeit of array) {
       const bruttoGesamt: Big =
         mischEkTaetigkeit.bruttoEinkommenDurchschnitt.mul(
           new Big(mischEkTaetigkeit.getAnzahlBemessungsZeitraumMonate()),
@@ -171,9 +168,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       betrachtungszeitraumAV.push(false);
       {
         const array = finanzDaten.mischEinkommenTaetigkeiten;
-        for (let index = 0; index < array.length; index++) {
-          const mischEkTaetigkeit = array[index];
-
+        for (const mischEkTaetigkeit of array) {
           if (
             mischEkTaetigkeit.bemessungsZeitraumMonate[i] &&
             mischEkTaetigkeit.erwerbsTaetigkeit !== ErwerbsTaetigkeit.MINIJOB

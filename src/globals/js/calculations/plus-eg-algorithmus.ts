@@ -44,7 +44,7 @@ import {
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 export class PlusEgAlgorithmus extends AbstractAlgorithmus {
-  private bruttoNettoRechner = new BruttoNettoRechner();
+  private readonly bruttoNettoRechner = new BruttoNettoRechner();
 
   private pb_von: Date | null = null;
   private pb_bis: Date | null = null;

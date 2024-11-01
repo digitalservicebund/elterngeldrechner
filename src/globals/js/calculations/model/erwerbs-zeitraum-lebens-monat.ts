@@ -9,7 +9,7 @@ export class ErwerbsZeitraumLebensMonat {
   vonLebensMonat: number = 0;
   bisLebensMonat: number = 0;
   bruttoProMonat: BruttoEinkommen = new Einkommen(0);
-  // TODO TW prüfen, ob die Felder noch benötigt werden.
+  // TW prüfen, ob die Felder noch benötigt werden.
   // nettoProMonat: NettoEinkommen = new Einkommen(0);
   // endeEGPeriode: number | null = null;
   // anfangEGPeriode: number | null = null;
@@ -78,8 +78,7 @@ export function zaehleMonateErwerbsTaetigkeit(
   ) {
     return 0;
   }
-  for (let index = 0; index < erwerbsZeitraeume.length; index++) {
-    const curr = erwerbsZeitraeume[index];
+  for (const curr of erwerbsZeitraeume) {
     anzahlMonate += curr.getAnzahlMonate();
   }
   return anzahlMonate;

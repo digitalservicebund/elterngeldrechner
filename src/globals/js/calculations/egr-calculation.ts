@@ -29,9 +29,10 @@ import { elternGeldSimulationErgebnisOf } from "@/globals/js/calculations/ergebn
 
 export class EgrCalculation {
   private static readonly BASIS_ELTERN_GELD_MAX_MONATE = 14;
-  private bruttoNettoRechner = new BruttoNettoRechner();
-  private basisEgAlgorithmus = new BasisEgAlgorithmus();
-  private zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
+  private readonly bruttoNettoRechner = new BruttoNettoRechner();
+  private readonly basisEgAlgorithmus = new BasisEgAlgorithmus();
+  private readonly zwischenErgebnisAlgorithmus =
+    new EgZwischenErgebnisAlgorithmus();
 
   /**
    * Aus den angegebenen Daten wird sowohl das Basiselterngeld als auch das ElterngeldPlus errechnet.

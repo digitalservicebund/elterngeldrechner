@@ -24,7 +24,7 @@ import {
 } from "@/globals/js/calculations/common/math-util";
 
 export class BruttoNettoRechner {
-  private egrSteuerRechner = new EgrSteuerRechner();
+  private readonly egrSteuerRechner = new EgrSteuerRechner();
 
   /**
    * Methode zum Ermitteln der Abzüge anhand des durchschnittlichen monatlichen Bruttogehaltes
@@ -206,10 +206,12 @@ export class BruttoNettoRechner {
     const f_faktor: Big = F_FAKTOR;
     const grenze_mini_midi = GRENZE_MINI_MIDI;
     const grenze_midi_max = GRENZE_MIDI_MAX;
-    if (
+
+    const isNoMidi =
       brutto_rech_sub.gt(grenze_midi_max) ||
-      brutto_rech_sub.lte(grenze_mini_midi)
-    ) {
+      brutto_rech_sub.lte(grenze_mini_midi);
+
+    if (isNoMidi) {
       if (krankenversicherungspflichtig_sub) {
         abgaben_kvpv = brutto_rech_sub.mul(satz_kvpv_beeg);
       }

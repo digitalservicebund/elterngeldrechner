@@ -41,12 +41,7 @@ export class FinanzDaten {
     // Im FIT Algorithmus sind die indizes immer Monats-basiert, d.h. der Index 0 bleibt leer.
     const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
 
-    for (
-      let index = 0;
-      index < this.erwerbsZeitraumLebensMonatList.length;
-      index++
-    ) {
-      const erwerbszeitraum = this.erwerbsZeitraumLebensMonatList[index];
+    for (const erwerbszeitraum of this.erwerbsZeitraumLebensMonatList) {
       for (
         let lm: number = erwerbszeitraum.vonLebensMonat;
         lm <= erwerbszeitraum.bisLebensMonat;
@@ -67,18 +62,13 @@ export class FinanzDaten {
   ): Big[] {
     const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
 
-    for (
-      let index = 0;
-      index < this.erwerbsZeitraumLebensMonatList.length;
-      index++
-    ) {
-      const erwerbszeitraum = this.erwerbsZeitraumLebensMonatList[index];
+    for (const erwerbszeitraum of this.erwerbsZeitraumLebensMonatList) {
       for (
         let lm: number = erwerbszeitraum.vonLebensMonat;
         lm <= erwerbszeitraum.bisLebensMonat;
         lm++
       ) {
-        // TODO simplify after java code migration and with new tests for this case
+        // simplify after java code migration and with new tests for this case
         const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
         if (greater(bruttoProMonat, BIG_ZERO)) {
           const elterngeldArt: ElternGeldArt = planungsdaten.planung[lm - 1];
@@ -89,10 +79,8 @@ export class FinanzDaten {
             ) {
               bruttoLM[lm] = bruttoProMonat;
             }
-          } else {
-            if (elterngeldArt === ElternGeldArt.BASIS_ELTERNGELD) {
-              bruttoLM[lm] = bruttoProMonat;
-            }
+          } else if (elterngeldArt === ElternGeldArt.BASIS_ELTERNGELD) {
+            bruttoLM[lm] = bruttoProMonat;
           }
         }
       }

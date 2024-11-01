@@ -77,7 +77,7 @@ export const GRENZE_MINI_MIDI = Big(520); // ab 01.10.2022 (vorher 450)
 /**
  * Grenze_Midijob_Max
  */
-export const GRENZE_MIDI_MAX = Big(1300); // vorher 850 // TODO: 2000 since 01.01.2023 ?
+export const GRENZE_MIDI_MAX = Big(1300); // vorher 850 // 2000 since 01.01.2023 ?
 
 /**
  * Wir benötigen den pauschbetrag pro Monat, deshalb wird in dieser Methode diese errechnet....
@@ -92,7 +92,7 @@ export const GRENZE_MIDI_MAX = Big(1300); // vorher 850 // TODO: 2000 since 01.0
  */
 export const PAUSCH = Big(1000)
   .div(Big(12))
-  .prec(Big.DP, Big.RM as RoundingMode); // TODO: 1230 - when to change ?
+  .prec(Big.DP, Big.RM as RoundingMode); // 1230 - when to change ?
 /**
  * Max Einkommensgrenze Bezug Elterngeld Alleinerziehende
  */

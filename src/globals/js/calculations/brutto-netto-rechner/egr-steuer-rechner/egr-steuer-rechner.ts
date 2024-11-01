@@ -81,7 +81,7 @@ export class EgrSteuerRechner {
       parameter.F = 1.0;
     }
     const steuerklasseNumber = steuerklasseToNumber(finanzDaten.steuerKlasse);
-    parameter.STKL = steuerklasseNumber === undefined ? 1 : steuerklasseNumber;
+    parameter.STKL = steuerklasseNumber ?? 1;
     parameter.ZKF = kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag);
     parameter.R = finanzDaten.zahlenSieKirchenSteuer === YesNo.NO ? 0 : 1;
     parameter.KRV = erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0;

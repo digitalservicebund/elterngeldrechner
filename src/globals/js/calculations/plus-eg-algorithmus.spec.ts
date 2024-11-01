@@ -24,7 +24,7 @@ describe("plus-eg-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
 
   describe("should fill LebensMonate list", () => {
-    describe.each([
+    test.each([
       [
         "2023-01-01",
         [
@@ -59,27 +59,25 @@ describe("plus-eg-algorithmus", () => {
         ],
       ],
     ])("if geburt of child is %p", (geburtIsoDate: string, expectedLmList) => {
-      it("create LebensMonateList", () => {
-        // given
-        const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
+      // given
+      const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
 
-        // when
-        const plusEgAlgorithmus = new PlusEgAlgorithmus();
-        plusEgAlgorithmus.fillLebensMonateList(geburt);
+      // when
+      const plusEgAlgorithmus = new PlusEgAlgorithmus();
+      plusEgAlgorithmus.fillLebensMonateList(geburt);
 
-        // then
-        expect(plusEgAlgorithmus.anfang_LM[0]).toBeUndefined();
-        expect(plusEgAlgorithmus.ende_LM[0]).toBeUndefined();
+      // then
+      expect(plusEgAlgorithmus.anfang_LM[0]).toBeUndefined();
+      expect(plusEgAlgorithmus.ende_LM[0]).toBeUndefined();
 
-        expectedLmList.forEach((expectedLm) => {
-          const anfangLM = plusEgAlgorithmus.anfang_LM[expectedLm.lm];
-          const endeLM = plusEgAlgorithmus.ende_LM[expectedLm.lm];
-          expect(anfangLM).not.toBeUndefined();
-          expect(DateTime.fromJSDate(anfangLM).toISODate()).toBe(
-            expectedLm.anfang,
-          );
-          expect(DateTime.fromJSDate(endeLM).toISODate()).toBe(expectedLm.ende);
-        });
+      expectedLmList.forEach((expectedLm) => {
+        const anfangLM = plusEgAlgorithmus.anfang_LM[expectedLm.lm];
+        const endeLM = plusEgAlgorithmus.ende_LM[expectedLm.lm];
+        expect(anfangLM).not.toBeUndefined();
+        expect(DateTime.fromJSDate(anfangLM).toISODate()).toBe(
+          expectedLm.anfang,
+        );
+        expect(DateTime.fromJSDate(endeLM).toISODate()).toBe(expectedLm.ende);
       });
     });
   });

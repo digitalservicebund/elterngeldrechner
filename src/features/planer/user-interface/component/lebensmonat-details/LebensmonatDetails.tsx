@@ -77,14 +77,19 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   function onToggleListener(
     event: SyntheticEvent<HTMLDetailsElement, ToggleEvent>,
   ) {
-    const isExpanded = event.nativeEvent.newState === "open";
+    const isExpandedNext = isExpandedFromToggleEvent(
+      event.nativeEvent,
+      isExpanded,
+    );
 
-    setIsExpanded(isExpanded);
+    setIsExpanded(isExpandedNext);
 
-    detailsElement.current?.scrollIntoView({
-      block: "nearest",
-      behavior: "instant",
-    });
+    if (isExpandedNext) {
+      detailsElement.current?.scrollIntoView({
+        block: "nearest",
+        behavior: "instant",
+      });
+    }
   }
 
   const informationenZumLebensmonat = {
@@ -129,3 +134,24 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
 ) => ReactNode;
 
 type FocusOnlyRef = ForwardedRef<{ focus: () => void }>;
+
+/**
+ * Determines if a component that emitted a {@link ToggleEvent} is in an
+ * expanded state or not.
+ *
+ * This method fixes the access to the {@link ToggleEvent.prototype.newState}
+ * property, which is used to determine the state. Certain web-browsers seam not
+ * to support these kind of events fully yet.
+ * As fallback, the last known expanded state is just toggled. It is expected
+ * that some internal state backs this parameter and keeps it synced. Toggle
+ * events by the same components are expected to always switch between expanded
+ * and not expanded (or rather `"open"` and `"close"`).
+ */
+function isExpandedFromToggleEvent(
+  event: ToggleEvent,
+  isExpandedNow: boolean,
+): boolean {
+  const { newState } = event;
+  const eventSupportsState = typeof newState === "string";
+  return eventSupportsState ? newState === "open" : !isExpandedNow;
+}

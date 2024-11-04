@@ -1,4 +1,4 @@
-import { CSSProperties, RefObject, useEffect, useState } from "react";
+import { CSSProperties, RefObject, useLayoutEffect, useState } from "react";
 
 export function useMarginPositioning(
   isOpen: boolean,
@@ -6,7 +6,7 @@ export function useMarginPositioning(
 ) {
   const toolTipWidth = 400;
 
-  const tooltipPosition = {
+  const position = {
     rightSide: {
       width: `${toolTipWidth}px`,
       marginLeft: `42px`,
@@ -19,22 +19,18 @@ export function useMarginPositioning(
     },
   };
 
-  const [positionStyle, setPositionStyle] = useState<CSSProperties | null>(
-    null,
+  const [positionStyle, setPositionStyle] = useState<CSSProperties>(
+    position.leftSide,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isOpen && buttonRef.current) {
       const buttonRect = buttonRef.current.getBoundingClientRect();
       const isLeftSideLackingSpace = buttonRect.left - toolTipWidth < 0;
 
       setPositionStyle(
-        isLeftSideLackingSpace
-          ? tooltipPosition.rightSide
-          : tooltipPosition.leftSide,
+        isLeftSideLackingSpace ? position.rightSide : position.leftSide,
       );
-    } else {
-      setPositionStyle(null);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,8 +41,7 @@ export function useMarginPositioning(
   };
 
   const tooltip = {
-    // do not display until first calculation in useEffect
-    style: positionStyle || { display: "none" },
+    style: positionStyle,
     className: [],
   };
 

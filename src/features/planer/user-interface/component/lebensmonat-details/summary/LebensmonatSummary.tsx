@@ -50,7 +50,7 @@ export function LebensmonatSummary({
 
   return (
     <summary
-      className="relative list-none py-6 hover:bg-off-white focus:bg-off-white"
+      className="list-none py-6 hover:bg-off-white focus:bg-off-white"
       style={gridLayout}
       aria-label={ariaLabel}
       aria-describedby={classNames(

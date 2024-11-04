@@ -14,6 +14,7 @@ import "@/styles/tailwind.css";
 import "@/styles/axioms.css";
 import "@/styles/themes.css";
 import "@/styles/typo.css";
+import "@/styles/anchor.css";
 import "./index.scss";
 import { formSteps } from "@/utils/formSteps";
 import { useAppDispatch } from "@/redux/hooks";

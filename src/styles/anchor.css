@@ -1,0 +1,11 @@
+.anchor-top-top {
+  top: anchor(top);
+}
+
+.anchor-right-left {
+  right: anchor(left);
+}
+
+.anchor-flip-inline {
+  position-try-fallbacks: flip-inline;
+}

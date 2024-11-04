@@ -11,6 +11,8 @@ import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
 import nsp from "@/globals/js/namespace";
 import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
+import { useAnchorPositioning } from "@/components/molecules/info-dialog/positioning/anchor";
+import { useMarginPositioning } from "@/components/molecules/info-dialog/positioning/margin";
 
 interface Props {
   readonly ariaLabelForDialog?: string;
@@ -72,6 +74,19 @@ export function InfoDialog({
     }
   }
 
+  // Prefer modern CSS anchoring for simplicity, with a fallback to manual
+  // positioning if anchoring is unsupported. The goal is to remove
+  // marginPosition once anchor positioning is supported across all major
+  // browsers. Reference: https://caniuse.com/css-anchor-positioning
+  const isAnchoringSupported = "anchorName" in document.documentElement.style;
+
+  const marginPosition = useMarginPositioning(isModalOpen, openButtonElement);
+  const anchorPosition = useAnchorPositioning();
+
+  const { button, tooltip } = isAnchoringSupported
+    ? anchorPosition
+    : marginPosition;
+
   return (
     <div
       className={classNames(
@@ -89,6 +104,7 @@ export function InfoDialog({
           nsp("info-dialog__button"),
           isMonatsplanner && nsp("info-dialog__button--monatsplanner"),
         )}
+        style={button.style}
         type="button"
         ref={openButtonElement}
         onClick={openModal}
@@ -104,7 +120,9 @@ export function InfoDialog({
           nsp("info-dialog-box"),
           isElternteilOne && nsp("info-dialog-box--monatsplanner-et-one"),
           { hidden: !isModalOpen },
+          ...tooltip.className,
         )}
+        style={tooltip.style}
         aria-hidden={!isModalOpen}
         aria-label={ariaLabelForDialog}
         aria-describedby={dialogContentIdentifier}

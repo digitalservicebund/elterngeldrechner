@@ -17,13 +17,11 @@
     flex-direction: column;
     position: absolute;
     z-index: 100;
-    width: px-to-rem(410);
     padding: px-to-rem(10) px-to-rem(50) px-to-rem(10) px-to-rem(20);
-    margin-top: px-to-rem(1);
-    margin-left: px-to-rem(-390);
     color: $color-text;
     background-color: $info-dialog--background-color;
     box-shadow: 0 0 px-to-rem(10) rgba(0, 0, 0, 0.3);
+    border-radius: px-to-rem(4);
 
     &__button {
       @include info-dialog-button;
@@ -42,9 +40,10 @@
       right: 0;
       bottom: 0;
       left: 0;
-      width: auto;
-      margin-left: 0;
       overflow: auto;
+
+      width: auto !important;
+      margin: 0 !important;
 
       &__button {
         top: px-to-rem(5);

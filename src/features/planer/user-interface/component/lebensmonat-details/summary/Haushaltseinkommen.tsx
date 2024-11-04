@@ -30,7 +30,7 @@ export function Haushaltseinkommen({
         className={className}
         style={style}
         ariaLabelForDialog="Informationen zum Elterngeldbezug im Mutterschutz"
-        info="Sie haben angegeben, dass Sie Mutterschaftsleistungen beziehen. Monate im Mutterschutz gelten grundsätzlich als Monate mit Basiselterngeld. Sind die Mutterschaftsleistungen höher als
+        info="Sie haben angegeben, dass Sie Mutterschaftsleistungen beziehen. Monate mit Mutterschaftsleistungen gelten als Monate mit Basiselterngeld. Sind die Mutterschaftsleistungen höher als
         das Elterngeld, bekommen Sie nur die Mutterschaftsleistungen."
       />
     );

@@ -10,7 +10,7 @@ import { Specification } from "@/features/planer/domain/common/specification";
 
 export function NurEinLebensmonatBasisParallel<A extends Ausgangslage>() {
   return Specification.fromPredicate<Plan<A>>(
-    "Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12 Lebensmonaten gleichzeitig bekommen.",
+    "Basiselterngeld können Sie nur für einen Lebensmonat in den ersten 12 Lebensmonaten gleichzeitig bekommen. Diese Einschränkung gilt nicht für besonders früh geborene Kinder und Neugeborene mit Behinderung.",
     (plan) => {
       const {
         anzahlElternteile,

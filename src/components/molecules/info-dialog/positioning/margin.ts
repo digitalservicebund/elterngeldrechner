@@ -36,7 +36,9 @@ export function useMarginPositioning(
     } else {
       setPositionStyle(null);
     }
-  }, [isOpen, buttonRef, tooltipPosition.leftSide, tooltipPosition.rightSide]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   const button = {
     style: {},

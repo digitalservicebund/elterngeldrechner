@@ -29,12 +29,9 @@ export function ListeMitBezuegenProVariante({
       {listeBezuegeAuf(bezuegeProVariante).map(([variante, bezug]) => {
         const { anzahlMonate, elterngeld, bruttoeinkommen } = bezug;
 
-        const optionalesElterngeld =
-          elterngeld > 0 ? (
-            <span>
-              <b>{formatAsCurrency(elterngeld)}</b> (netto)
-            </span>
-          ) : null;
+        const optionalesElterngeld = elterngeld > 0 && (
+          <b>{formatAsCurrency(elterngeld)}</b>
+        );
 
         const optionalesEinkommen =
           bruttoeinkommen > 0 ? (

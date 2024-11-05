@@ -31,9 +31,7 @@ describe("Gesamtsummenanzeige", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Gesamtsumme Elterngeld: 7.041 € (netto)"),
-      ).toBeVisible();
+      expect(screen.getByText("Gesamtsumme Elterngeld: 7.041 €")).toBeVisible();
     });
 
     it("hides it if there is only one Elternteil", () => {
@@ -92,9 +90,9 @@ describe("Gesamtsummenanzeige", () => {
       );
 
       expect(screen.getByText("Jane: Elterngeld")).toBeVisible();
-      expect(screen.getByText("6.000 € (netto) für 8 Monate")).toBeVisible();
+      expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
       expect(screen.getByText("John: Elterngeld")).toBeVisible();
-      expect(screen.getByText("1.041 € (netto) für 1 Monat")).toBeVisible();
+      expect(screen.getByText("1.041 € für 1 Monat")).toBeVisible();
     });
 
     it("shows the Elternteile in korrekt order", () => {
@@ -124,12 +122,12 @@ describe("Gesamtsummenanzeige", () => {
     });
   });
 
-  it("shows a hint in regards of Mutterschutz", () => {
+  it("shows a hint in regards of Mutterschutz and monetary values", () => {
     render(<Gesamtsummenanzeige {...ANY_PROPS} />);
 
     expect(
       screen.getByText(
-        "Hinweis: Mutterschaftsleistungen werden nicht in der Summe berücksichtigt",
+        /^Hinweis: Mutterschaftsleistungen werden nicht in der Summe berücksichtigt\..*Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern entrichtet werden\.$/,
       ),
     ).toBeVisible();
   });

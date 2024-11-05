@@ -26,7 +26,7 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
   const hasMultipleElternteile =
     Object.keys(pseudonymeDerElternteile).length > 1;
 
-  const gesamtsummeElterngeld = `Gesamtsumme Elterngeld: ${formatAsCurrency(gesamtsumme.elterngeldbezug)} (netto)`;
+  const gesamtsummeElterngeld = `Gesamtsumme Elterngeld: ${formatAsCurrency(gesamtsumme.elterngeldbezug)}`;
   const beideHabenEinkommen =
     (gesamtsumme.proElternteil[Elternteil.Eins as E]?.bruttoeinkommen ?? 0) +
       (gesamtsumme.proElternteil[Elternteil.Zwei as E]?.bruttoeinkommen ?? 0) >
@@ -82,7 +82,11 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
 
       <span className="basis-full text-14">
         Hinweis: Mutterschaftsleistungen werden nicht in der Summe
-        berücksichtigt
+        berücksichtigt.
+        <br />
+        Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas
+        abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern
+        entrichtet werden.
       </span>
     </section>
   );

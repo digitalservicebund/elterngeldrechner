@@ -18,19 +18,18 @@ export function DatenfeldFuerMonat({ monat }: Props): ReactNode {
     monat.imMutterschutz,
   );
 
-  const optionalesElterngeld = monat.elterngeldbezug ? (
+  const optionalesElterngeld = monat.elterngeldbezug && (
     <span>
-      Elterngeld <strong>{formatAsCurrency(monat.elterngeldbezug)}</strong>
-      &nbsp;(netto)
+      Elterngeld <b>{formatAsCurrency(monat.elterngeldbezug)}</b>
     </span>
-  ) : null;
+  );
 
-  const optionalesEinkommen = monat.bruttoeinkommen ? (
+  const optionalesEinkommen = monat.bruttoeinkommen && (
     <span>
       <BusinessCenterOutlined className="mr-4" />
       Einkommen {formatAsCurrency(monat.bruttoeinkommen)}&nbsp;(brutto)
     </span>
-  ) : null;
+  );
 
   return (
     <div className="flex flex-wrap items-start gap-x-8">

@@ -28,7 +28,7 @@ export function ElterngeldFuerElternteil({
       </span>
 
       <span>
-        {formattedElterngeldbezuege} (netto) für {formattedAnzahlMonateMitBezug}
+        {formattedElterngeldbezuege} für {formattedAnzahlMonateMitBezug}
       </span>
     </div>
   );

@@ -55,6 +55,7 @@ export function Planer({
     | 2;
 
   const headingIdentifier = useId();
+  const descriptionIdentifier = useId();
 
   const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);
 
@@ -75,27 +76,29 @@ export function Planer({
   }, [istPlanGueltig]);
 
   return (
-    <section className={className} aria-labelledby={headingIdentifier}>
+    <section
+      className={className}
+      aria-labelledby={headingIdentifier}
+      aria-describedby={descriptionIdentifier}
+    >
       <h2 id={headingIdentifier} className="mb-10">
         Monatsplaner
       </h2>
 
-      <p>
+      <p id={descriptionIdentifier}>
         Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden Monat
-        flexibel planen. Sie können verschiedene Elterngeldvarianten kombinieren
-        und ausprobieren, welche Sie in jedem Monat erhalten möchten. Zusätzlich
-        können Sie angeben, ob und wie viel Einkommen sie pro Monat haben. So
-        erhalten Sie einen umfassenden Überblick über Ihr voraussichtliches
-        Haushaltseinkommen während der gesamten Elternzeit.
+        einzeln planen. Sie können ausprobieren, welche Variante in jedem Monat
+        am besten passt, und die Elterngeldvarianten kombinieren. Wenn Sie
+        Einkommen haben, können Sie es pro Monat angeben. Mit den Angaben
+        bekommen Sie einen Überblick über Ihr voraussichtliches
+        Haushaltseinkommen, während Sie Elterngeld beziehen.
       </p>
 
-      <div className="mb-[64px] mt-20 bg-primary-light p-16 px-20">
-        <p>
-          <b>Bitte beachten Sie:</b> Beträge zum Elterngeld werden in{" "}
-          <b>netto</b> angezeigt. Einkommen wird in <b>brutto</b> abgefragt und
-          angegeben.
-        </p>
-      </div>
+      <p className="mb-[64px] mt-20 bg-primary-light p-16 px-20">
+        <b>Bitte beachten Sie:</b> Sie bekommen Elterngeld in der Höhe, die
+        angegeben ist, ohne dass etwas abgezogen wird. Auf das angezeigte
+        Einkommen müssen noch Steuern entrichtet werden.
+      </p>
 
       <GridLayoutProvider anzahlElternteile={anzahlElternteile}>
         <div

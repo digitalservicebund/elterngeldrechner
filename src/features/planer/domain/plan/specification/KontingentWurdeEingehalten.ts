@@ -50,7 +50,7 @@ class KontingentFuerVarianteWurdeEingehalten<
     return istKontingentEingehalten
       ? SpecificationResult.satisfied
       : SpecificationResult.unsatisfied({
-          message: `Ihre ${verfuegbar} verfügbaren ${this.variante} Monate sind aufgebraucht.`,
+          message: `Ihre verfügbaren ${this.variante} Monate sind aufgebraucht.`,
         });
   }
 }
@@ -110,7 +110,7 @@ if (import.meta.vitest) {
 
       expect(violationMessages).toStrictEqual(
         expect.arrayContaining([
-          "Ihre 3 verfügbaren Partnerschaftsbonus Monate sind aufgebraucht.",
+          "Ihre verfügbaren Partnerschaftsbonus Monate sind aufgebraucht.",
         ]),
       );
     });

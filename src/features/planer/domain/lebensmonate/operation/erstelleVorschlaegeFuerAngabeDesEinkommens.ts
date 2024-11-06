@@ -152,10 +152,12 @@ if (import.meta.vitest) {
     }
 
     function expectToStrictEqualIgnoringOrder(
-      left: unknown[],
-      right: unknown[],
+      left: number[],
+      right: number[],
     ): void {
-      expect(left.sort()).toStrictEqual(right.sort());
+      const sortFunc = (a: number, b: number) => a - b;
+
+      expect(left.sort(sortFunc)).toStrictEqual(right.sort(sortFunc));
     }
   });
 }

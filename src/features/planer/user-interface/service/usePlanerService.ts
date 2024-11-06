@@ -24,6 +24,7 @@ import {
   type Lebensmonate,
   erstelleInitialeLebensmonate,
 } from "@/features/planer/user-interface/service";
+import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
 export function usePlanerService(
   initialInformation: InitialInformation,
@@ -53,7 +54,7 @@ export function usePlanerService(
 
   const updateStatesAndTriggerCallbacks = useCallback(
     (
-      nextPlan: PlanMitBeliebigenElternteilen,
+      nextPlan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics,
       options?: {
         skipVerplantesKontingent?: boolean;
       },
@@ -133,6 +134,7 @@ export function usePlanerService(
         updateStatesAndTriggerCallbacks(planWithElterngeldbezuegen, {
           skipVerplantesKontingent: true,
         });
+
         return planWithElterngeldbezuegen;
       }),
     [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
@@ -169,10 +171,17 @@ export function usePlanerService(
 function erstelleInitialenPlan<A extends Ausgangslage>(
   ausgangslage: A,
   berrechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-): Plan<A> {
+): Plan<A> & MatomoTrackingMetrics {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
   const errechneteElterngeldbezuege = berrechneElterngeldbezuege(lebensmonate);
-  return { ausgangslage, lebensmonate, errechneteElterngeldbezuege };
+
+  return {
+    ausgangslage,
+    lebensmonate,
+    errechneteElterngeldbezuege,
+    changes: 0,
+    resets: 0,
+  };
 }
 
 function useVerplantesKontingent<E extends Elternteil>(
@@ -231,4 +240,7 @@ function extractFehlernachrichten(violations: { message: string }[]): string[] {
 
 export type InitialInformation =
   | { ausgangslage: Ausgangslage; plan?: undefined }
-  | { ausgangslage?: undefined; plan: PlanMitBeliebigenElternteilen };
+  | {
+      ausgangslage?: undefined;
+      plan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics;
+    };

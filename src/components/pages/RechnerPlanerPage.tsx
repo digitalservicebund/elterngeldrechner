@@ -21,6 +21,9 @@ import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
+import useDebounce from "@/hooks/useDebounce";
+import { trackPlanung } from "@/user-tracking/planung";
+import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
 export default function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
@@ -48,11 +51,26 @@ export default function RechnerPlanerPage() {
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
-  function setPlan(nextPlan: PlanMitBeliebigenElternteilen | undefined): void {
+  const debouncedTrackPlanung = useDebounce(
+    (nextPlan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics) =>
+      trackPlanung(nextPlan),
+    1000,
+  );
+
+  function setPlan(
+    nextPlan:
+      | (PlanMitBeliebigenElternteilen & MatomoTrackingMetrics)
+      | undefined,
+  ): void {
     plan.current = nextPlan;
     const istPlanGueltig = nextPlan != undefined;
     setIstPlanGueltig(nextPlan !== undefined);
-    if (istPlanGueltig) trackPartnerschaftlicheVerteilungForPlan(nextPlan);
+
+    if (istPlanGueltig) {
+      trackPartnerschaftlicheVerteilungForPlan(nextPlan);
+
+      debouncedTrackPlanung(nextPlan);
+    }
   }
 
   function navigateToUebersicht(): void {

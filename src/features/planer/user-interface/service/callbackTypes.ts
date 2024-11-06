@@ -8,9 +8,10 @@ import type {
   Lebensmonatszahl,
   PlanMitBeliebigenElternteilen,
 } from "@/features/planer/user-interface/service";
+import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
 export type PlanChangedCallback = (
-  plan: PlanMitBeliebigenElternteilen | undefined,
+  plan: (PlanMitBeliebigenElternteilen & MatomoTrackingMetrics) | undefined,
 ) => void;
 
 export type BerechneElterngeldbezuegeCallback = (

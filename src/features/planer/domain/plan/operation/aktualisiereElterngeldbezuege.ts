@@ -1,5 +1,8 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
+import type {
+  MatomoTrackingMetrics,
+  Plan,
+} from "@/features/planer/domain/plan/Plan";
 import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
 import type {
   Ausgangslage,
@@ -9,9 +12,9 @@ import { aktualisiereElterngeldbezuege } from "@/features/planer/domain/lebensmo
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
 
 export function aktualisiereErrechneteElterngelbezuege<A extends Ausgangslage>(
-  plan: Plan<A>,
+  plan: Plan<A> & MatomoTrackingMetrics,
   errechneteElterngeldbezuege: Elterngeldbezuege<ElternteileByAusgangslage<A>>,
-): Plan<A> {
+): Plan<A> & MatomoTrackingMetrics {
   const lebensmonate = aktualisiereElterngeldbezuege(
     plan.lebensmonate,
     errechneteElterngeldbezuege,
@@ -68,6 +71,8 @@ if (import.meta.vitest) {
           ausgangslage,
           errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
           lebensmonate,
+          changes: 0,
+          resets: 0,
         },
         errechneteElterngeldbezuege,
       );

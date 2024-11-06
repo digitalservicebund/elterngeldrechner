@@ -344,8 +344,14 @@ describe("use Planer service", () => {
 
   describe("wähle Option", () => {
     it("updates the Lebensmonate when chosing an Option", () => {
-      const initialPlan = { ...ANY_PLAN, lebensmonate: {} };
-      const updatedPlan = { ...ANY_PLAN, lebensmonate: { 1: ANY_LEBENSMONAT } };
+      const initialPlan = { ...ANY_PLAN, lebensmonate: {}, changes: 0 };
+
+      const updatedPlan = {
+        ...ANY_PLAN,
+        lebensmonate: { 1: ANY_LEBENSMONAT },
+        changes: 1,
+      };
+
       vi.mocked(waehleOption).mockReturnValue(Result.ok(updatedPlan));
 
       const { result } = renderPlanerServiceHook({
@@ -607,6 +613,8 @@ const ANY_PLAN = {
   ausgangslage: ANY_AUSGANGSLAGE,
   errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
+  changes: 0,
+  resets: 0,
 };
 
 const ANY_VERFUEGBARES_KONTINGENT = {

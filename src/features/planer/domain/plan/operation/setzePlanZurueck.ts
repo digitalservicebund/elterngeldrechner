@@ -1,12 +1,16 @@
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
+import type {
+  MatomoTrackingMetrics,
+  Plan,
+} from "@/features/planer/domain/plan/Plan";
 
 export function setzePlanZurueck<A extends Ausgangslage>(
-  plan: Plan<A>,
-): Plan<A> {
+  plan: Plan<A> & MatomoTrackingMetrics,
+): Plan<A> & MatomoTrackingMetrics {
   return {
     ...plan,
+    resets: plan.resets + 1,
     lebensmonate: erstelleInitialeLebensmonate(plan.ausgangslage),
   };
 }
@@ -28,7 +32,7 @@ if (import.meta.vitest) {
         },
       };
 
-      const planVorher = { ...ANY_PLAN, lebensmonate };
+      const planVorher = { ...ANY_PLAN, lebensmonate, changes: 1, resets: 0 };
       vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
 
       const plan = setzePlanZurueck(planVorher);

@@ -13,4 +13,12 @@ export type Plan<A extends Ausgangslage> = {
   readonly lebensmonate: Lebensmonate<ElternteileByAusgangslage<A>>;
 };
 
+// This type is for tracking metrcs during the planning process of planning the
+// elterngeld. It is separated from the primary business types to avoid
+// affecting unrelated code.
+export type MatomoTrackingMetrics = {
+  readonly changes: number;
+  readonly resets: number;
+};
+
 export type PlanMitBeliebigenElternteilen = Plan<Ausgangslage>;

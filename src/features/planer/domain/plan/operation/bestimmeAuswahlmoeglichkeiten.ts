@@ -15,10 +15,13 @@ import type {
   Auswahlmoeglichkeiten,
 } from "@/features/planer/domain/Auswahlmoeglichkeiten";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
+import type {
+  MatomoTrackingMetrics,
+  Plan,
+} from "@/features/planer/domain/plan/Plan";
 
 export function bestimmeAuswahlmoeglichkeiten<A extends Ausgangslage>(
-  plan: Plan<A>,
+  plan: Plan<A> & MatomoTrackingMetrics,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
 ): Auswahlmoeglichkeiten {
@@ -44,7 +47,7 @@ export function bestimmeAuswahlmoeglichkeiten<A extends Ausgangslage>(
 }
 
 function createAuswahlmoeglichkeit<A extends Ausgangslage>(
-  plan: Plan<A>,
+  plan: Plan<A> & MatomoTrackingMetrics,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
   option: Auswahloption,
@@ -165,6 +168,8 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
+      changes: 0,
+      resets: 0,
     };
   });
 }

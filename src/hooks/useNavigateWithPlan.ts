@@ -1,6 +1,7 @@
 import { useLocation, useNavigate, type To } from "react-router-dom";
 import { useCallback } from "react";
 import type { PlanMitBeliebigenElternteilen } from "@/features/planer";
+import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
 export function useNavigateWithPlan() {
   const location = useLocation();
@@ -17,4 +18,6 @@ export function useNavigateWithPlan() {
   return { plan, navigateWithPlanState };
 }
 
-type StateWithOptionalPlan = null | { plan?: PlanMitBeliebigenElternteilen };
+type StateWithOptionalPlan = null | {
+  plan?: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics;
+};

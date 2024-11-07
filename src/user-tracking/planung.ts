@@ -1,6 +1,9 @@
 import {
+  Elternteil,
   KeinElterngeld,
+  Monat,
   PlanMitBeliebigenElternteilen,
+  Variante,
 } from "@/features/planer/domain";
 
 import { setTrackingVariable } from "@/user-tracking/data-layer";
@@ -9,45 +12,130 @@ import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 export function trackPlanung(
   plan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics,
 ) {
-  trackCountOfResets(plan);
-  trackCountOfChanges(plan);
-  trackCountOfPlannedMonths(plan);
-  trackCountOfPlannedMonthsWithIncome(plan);
+  setTrackingVariable("wiederholungen-des-plans", plan.resets);
+  setTrackingVariable("aenderungen-am-plan", plan.changes);
+
+  setTrackingVariable("geplante-monate", countPlannedMonths(plan));
+
+  setTrackingVariable(
+    "geplante-monate-mit-einkommen",
+    countPlannedMonthsWithIncome(plan),
+  );
 }
 
-function trackCountOfPlannedMonths(plan: PlanMitBeliebigenElternteilen) {
-  const sum = Object.values(plan.lebensmonate)
-    .map(
-      (it) =>
-        Object.values(it).filter(
-          (monat) =>
-            monat.gewaehlteOption && monat.gewaehlteOption !== KeinElterngeld,
-        ).length,
-    )
-    .reduce((partialSum, a) => partialSum + a, 0);
-
-  setTrackingVariable("geplante-monate", sum);
+function countPlannedMonths(plan: PlanMitBeliebigenElternteilen) {
+  return countMatchingMonate(plan, (monat) => {
+    return !!(
+      monat.gewaehlteOption && monat.gewaehlteOption !== KeinElterngeld
+    );
+  });
 }
 
-function trackCountOfPlannedMonthsWithIncome(
+function countPlannedMonthsWithIncome(plan: PlanMitBeliebigenElternteilen) {
+  return countMatchingMonate(plan, (monat) => {
+    return !!(
+      monat.bruttoeinkommen &&
+      monat.bruttoeinkommen > 0 &&
+      monat.gewaehlteOption &&
+      monat.gewaehlteOption !== KeinElterngeld
+    );
+  });
+}
+
+function countMatchingMonate(
   plan: PlanMitBeliebigenElternteilen,
+  predicate: (monat: Monat) => boolean,
 ) {
-  const length = Object.values(plan.lebensmonate).filter((it) =>
-    Object.values(it).some(
-      (monat) =>
-        (monat.bruttoeinkommen || 0) > 0 &&
-        monat.gewaehlteOption &&
-        monat.gewaehlteOption !== KeinElterngeld,
-    ),
-  ).length;
-
-  setTrackingVariable("geplante-monate-mit-einkommen", length);
+  return Object.values(plan.lebensmonate)
+    .map((it) => Object.values(it).filter(predicate).length)
+    .reduce((partialSum, a) => partialSum + a, 0);
 }
 
-function trackCountOfChanges(metrics: MatomoTrackingMetrics) {
-  setTrackingVariable("aenderungen-am-plan", metrics.changes);
-}
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
 
-function trackCountOfResets(metrics: MatomoTrackingMetrics) {
-  setTrackingVariable("wiederholungen-des-plans", metrics.resets);
+  describe("tracking of the planung", () => {
+    it("counts planned month per month and elternteil", () => {
+      const plan = {
+        ausgangslage: {
+          anzahlElternteile: 2 as const,
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "Joe",
+          },
+          geburtsdatumDesKindes: new Date(),
+        },
+        errechneteElterngeldbezuege: {} as never,
+        lebensmonate: {
+          1: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+          },
+          2: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+        changes: 0,
+        resets: 0,
+      };
+
+      expect(countPlannedMonths(plan)).toEqual(4);
+    });
+
+    it("counts month with income per month and elternteil", () => {
+      const plan = {
+        ausgangslage: {
+          anzahlElternteile: 2 as const,
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "Joe",
+          },
+          geburtsdatumDesKindes: new Date(),
+        },
+        errechneteElterngeldbezuege: {} as never,
+        lebensmonate: {
+          1: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+              bruttoeinkommen: 2000,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+              bruttoeinkommen: 2000,
+            },
+          },
+          2: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+              bruttoeinkommen: 2000,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+        changes: 0,
+        resets: 0,
+      };
+
+      expect(countPlannedMonthsWithIncome(plan)).toEqual(3);
+    });
+  });
 }

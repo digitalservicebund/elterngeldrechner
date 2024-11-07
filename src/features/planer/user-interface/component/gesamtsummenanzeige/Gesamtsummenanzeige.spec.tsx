@@ -127,7 +127,7 @@ describe("Gesamtsummenanzeige", () => {
 
     expect(
       screen.getByText(
-        /^Hinweis: Mutterschaftsleistungen werden nicht in der Summe berücksichtigt\..*Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern entrichtet werden\.$/,
+        "Hinweis: Mutterschaftsleistungen werden nicht in der Summe berücksichtigt.",
       ),
     ).toBeVisible();
   });

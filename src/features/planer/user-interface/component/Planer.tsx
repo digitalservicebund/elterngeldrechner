@@ -15,6 +15,7 @@ import {
   usePlanerService,
   type InitialInformation,
 } from "@/features/planer/user-interface/service/usePlanerService";
+import { Alert } from "@/components/molecules/alert";
 
 type Props = {
   readonly initialInformation: InitialInformation;
@@ -94,11 +95,11 @@ export function Planer({
         Haushaltseinkommen, während Sie Elterngeld beziehen.
       </p>
 
-      <p className="mb-[64px] mt-20 bg-primary-light p-16 px-20">
-        <b>Bitte beachten Sie:</b> Sie bekommen Elterngeld in der Höhe, die
-        angegeben ist, ohne dass etwas abgezogen wird. Auf das angezeigte
-        Einkommen müssen noch Steuern entrichtet werden.
-      </p>
+      <Alert headline="Bitte beachten Sie" className="my-32">
+        Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas
+        abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern
+        entrichtet werden.
+      </Alert>
 
       <GridLayoutProvider anzahlElternteile={anzahlElternteile}>
         <div

@@ -83,10 +83,6 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
       <span className="basis-full text-14">
         Hinweis: Mutterschaftsleistungen werden nicht in der Summe
         berücksichtigt.
-        <br />
-        Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas
-        abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern
-        entrichtet werden.
       </span>
     </section>
   );

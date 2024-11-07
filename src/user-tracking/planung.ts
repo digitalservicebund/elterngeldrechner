@@ -12,7 +12,6 @@ import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 export function trackPlanung(
   plan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics,
 ) {
-  setTrackingVariable("wiederholungen-des-plans", plan.resets);
   setTrackingVariable("aenderungen-am-plan", plan.changes);
 
   setTrackingVariable("geplante-monate", countPlannedMonths(plan));
@@ -86,7 +85,6 @@ if (import.meta.vitest) {
           },
         },
         changes: 0,
-        resets: 0,
       };
 
       expect(countPlannedMonths(plan)).toEqual(2);
@@ -129,7 +127,6 @@ if (import.meta.vitest) {
           },
         },
         changes: 0,
-        resets: 0,
       };
 
       expect(countPlannedMonthsWithIncome(plan)).toEqual(2);
@@ -179,7 +176,6 @@ if (import.meta.vitest) {
           },
         },
         changes: 0,
-        resets: 0,
       };
 
       expect(countPlannedMonths(plan)).toEqual(3);

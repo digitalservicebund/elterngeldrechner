@@ -614,7 +614,6 @@ const ANY_PLAN = {
   errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
   changes: 0,
-  resets: 0,
 };
 
 const ANY_VERFUEGBARES_KONTINGENT = {

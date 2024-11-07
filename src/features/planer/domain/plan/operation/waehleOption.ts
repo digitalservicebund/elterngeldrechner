@@ -96,7 +96,6 @@ if (import.meta.vitest) {
         lebensmonate,
         errechneteElterngeldbezuege,
         changes: 0,
-        resets: 0,
       };
 
       const plan = waehleOption(
@@ -126,7 +125,6 @@ if (import.meta.vitest) {
         ...ANY_PLAN,
         lebensmonate: {},
         changes: 0,
-        resets: 0,
       };
 
       const plan = waehleOption(
@@ -216,7 +214,6 @@ if (import.meta.vitest) {
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
       changes: 0,
-      resets: 0,
     };
 
     const ANY_LEBENSMONATSZAHL = 1 as const;

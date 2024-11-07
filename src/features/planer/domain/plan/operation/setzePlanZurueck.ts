@@ -10,7 +10,7 @@ export function setzePlanZurueck<A extends Ausgangslage>(
 ): Plan<A> & MatomoTrackingMetrics {
   return {
     ...plan,
-    resets: plan.resets + 1,
+    changes: 0,
     lebensmonate: erstelleInitialeLebensmonate(plan.ausgangslage),
   };
 }
@@ -32,7 +32,7 @@ if (import.meta.vitest) {
         },
       };
 
-      const planVorher = { ...ANY_PLAN, lebensmonate, changes: 1, resets: 0 };
+      const planVorher = { ...ANY_PLAN, lebensmonate, changes: 1 };
       vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
 
       const plan = setzePlanZurueck(planVorher);

@@ -72,7 +72,6 @@ if (import.meta.vitest) {
           errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
           lebensmonate,
           changes: 0,
-          resets: 0,
         },
         errechneteElterngeldbezuege,
       );

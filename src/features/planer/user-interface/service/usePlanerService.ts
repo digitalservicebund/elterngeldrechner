@@ -180,7 +180,6 @@ function erstelleInitialenPlan<A extends Ausgangslage>(
     lebensmonate,
     errechneteElterngeldbezuege,
     changes: 0,
-    resets: 0,
   };
 }
 

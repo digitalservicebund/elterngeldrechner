@@ -82,7 +82,6 @@ if (import.meta.vitest) {
       errechneteElterngeldbezuege: {} as never,
       lebensmonate: {},
       changes: 0,
-      resets: 0,
     };
   });
 }

@@ -18,7 +18,6 @@ export type Plan<A extends Ausgangslage> = {
 // affecting unrelated code.
 export type MatomoTrackingMetrics = {
   readonly changes: number;
-  readonly resets: number;
 };
 
 export type PlanMitBeliebigenElternteilen = Plan<Ausgangslage>;

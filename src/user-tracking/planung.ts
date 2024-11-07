@@ -9,17 +9,27 @@ import {
 import { setTrackingVariable } from "@/user-tracking/data-layer";
 import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
+enum Variables {
+  Changes = "aenderung-am-plan",
+  PlannedMonths = "geplante-monate",
+  PlannedMonthsWithIncome = "geplante-monate-mit-einkommen",
+}
+
 export function trackPlanung(
   plan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics,
 ) {
-  setTrackingVariable("aenderungen-am-plan", plan.changes);
+  setTrackingVariable(Variables.Changes, plan.changes);
 
-  setTrackingVariable("geplante-monate", countPlannedMonths(plan));
+  setTrackingVariable(Variables.PlannedMonths, countPlannedMonths(plan));
 
   setTrackingVariable(
-    "geplante-monate-mit-einkommen",
+    Variables.PlannedMonthsWithIncome,
     countPlannedMonthsWithIncome(plan),
   );
+}
+
+export function resetTrackingPlanung() {
+  Object.values(Variables).forEach((key) => setTrackingVariable(key, null));
 }
 
 function countPlannedMonths(plan: PlanMitBeliebigenElternteilen) {

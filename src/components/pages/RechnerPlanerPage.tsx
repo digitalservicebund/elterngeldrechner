@@ -22,7 +22,7 @@ import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPl
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 import useDebounce from "@/hooks/useDebounce";
-import { trackPlanung } from "@/user-tracking/planung";
+import { resetTrackingPlanung, trackPlanung } from "@/user-tracking/planung";
 import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
 export default function RechnerPlanerPage() {
@@ -70,6 +70,8 @@ export default function RechnerPlanerPage() {
       trackPartnerschaftlicheVerteilungForPlan(nextPlan);
 
       debouncedTrackPlanung(nextPlan);
+    } else {
+      resetTrackingPlanung();
     }
   }
 

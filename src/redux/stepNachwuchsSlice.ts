@@ -17,7 +17,7 @@ export interface StepNachwuchsState {
 }
 
 export const initialStepNachwuchsState: StepNachwuchsState = {
-  anzahlKuenftigerKinder: 0,
+  anzahlKuenftigerKinder: 1,
   wahrscheinlichesGeburtsDatum: "",
   geschwisterkinder: [],
   mutterschaftssleistungen: YesNo.NO,

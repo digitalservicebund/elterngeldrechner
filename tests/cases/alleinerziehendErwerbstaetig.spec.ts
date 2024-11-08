@@ -16,7 +16,6 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
     .filter({ hasText: /^TT\.MM\.JJJJ$/ })
     .click();
   await page.getByPlaceholder("__.__.___").fill("08.12.2024");
-  await page.getByLabel("erhöhen").click();
   await page.getByLabel("Älteres Geschwisterkind").click();
   await page.getByLabel("Wann wurde das").fill("05.03.2022");
   await page.getByRole("button", { name: "Weiter", exact: true }).click();

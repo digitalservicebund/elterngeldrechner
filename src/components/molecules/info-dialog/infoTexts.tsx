@@ -60,6 +60,10 @@ export const infoTexts: Record<string, string | ReactNode> = {
         Für die vorliegende Berechnung werden diese zusätzlichen Monate nicht
         berücksichtigt.
       </p>
+      <p>
+        Diese Fälle bilden wir mit dem Elterngeldrechner mit Planer nicht ab.
+        Wenden Sie sich bei Fragen bitte an Ihre Elterngeldstelle.
+      </p>
     </>
   ),
 

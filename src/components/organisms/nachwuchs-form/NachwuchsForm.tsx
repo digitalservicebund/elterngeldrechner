@@ -117,7 +117,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} name="Ihr Nachwuchs" noValidate>
       <h2>Ihr Nachwuchs</h2>
 
-      <FormFieldGroup headline="Kinder">
+      <FormFieldGroup>
         <CustomDate
           control={control}
           rules={{
@@ -131,7 +131,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
             },
           }}
           name={wahrscheinlichesGeburtsDatumName}
-          label="Wann wird Ihr Kind voraussichtlich geboren?"
+          label="Wann wird oder wurde Ihr Kind voraussichtlich geboren?"
           required
           info={infoTexts.kindGeburtsdatum}
         />
@@ -149,7 +149,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
             required: "Dieses Feld ist erforderlich",
           }}
           name="anzahlKuenftigerKinder"
-          label="Wie viele Kinder erwarten Sie (z.B. Zwillinge)?"
+          label="Wie viele Kinder werden oder wurden geboren?"
           errors={formState.errors}
           onIncrease={handleIncrease}
           onDecrease={handleDecrease}
@@ -157,9 +157,18 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
         />
       </FormFieldGroup>
       <FormFieldGroup
-        headline="Ältere Geschwisterkinder (falls vorhanden)"
-        description="Wenn es kein Geschwisterkind gibt, können Sie diesen Schritt einfach
-          überspringen."
+        headline="Gibt es ältere Geschwister?"
+        description="Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben, können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den Geschwisterbonus."
+        info={
+          <ul className="list-inside list-disc">
+            Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
+            <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
+            <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
+            <li>
+              mindestens ein weiteres Kind mit Behinderung unter 14 Jahren lebt.
+            </li>
+          </ul>
+        }
       >
         <ul className={nsp("nachwuchs-form__geschwisterkinder")}>
           {fields.map((field, index) => {

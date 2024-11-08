@@ -16,7 +16,6 @@ test("Minijob", async ({ page }) => {
     .filter({ hasText: /^TT\.MM\.JJJJ$/ })
     .click();
   await page.getByPlaceholder("__.__.___").fill("05.03.2025");
-  await page.getByLabel("erhöhen").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByText("Ja", { exact: true }).click();
   await page.getByText("Einkünfte aus nichtselbstä").click();

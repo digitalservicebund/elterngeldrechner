@@ -16,21 +16,23 @@ describe("Nachwuchs Page", () => {
     render(<NachwuchsPage />);
 
     const numberField = screen.getByLabelText(
-      "Wie viele Kinder erwarten Sie (z.B. Zwillinge)?",
+      "Wie viele Kinder werden oder wurden geboren?",
     );
 
-    await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
     expect(numberField).toHaveValue(1);
 
+    await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+    expect(numberField).toHaveValue(2);
+
     await userEvent.click(screen.getByRole("button", { name: "verringern" }));
-    expect(numberField).toHaveValue(0);
+    expect(numberField).toHaveValue(1);
   });
 
   it("should not increase beyond 8 expected children", async () => {
     render(<NachwuchsPage />);
 
     const numberField = screen.getByLabelText(
-      "Wie viele Kinder erwarten Sie (z.B. Zwillinge)?",
+      "Wie viele Kinder werden oder wurden geboren?",
     );
 
     for (let i = 0; i < 20; i++) {
@@ -43,7 +45,7 @@ describe("Nachwuchs Page", () => {
     render(<NachwuchsPage />);
 
     const numberField = screen.getByLabelText(
-      "Wie viele Kinder erwarten Sie (z.B. Zwillinge)?",
+      "Wie viele Kinder werden oder wurden geboren?",
     );
 
     for (let i = 0; i < 20; i++) {
@@ -56,7 +58,7 @@ describe("Nachwuchs Page", () => {
     render(<NachwuchsPage />);
 
     const dateField = screen.getByLabelText(
-      "Wann wird Ihr Kind voraussichtlich geboren?",
+      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
     );
 
     await userEvent.type(dateField, "a12.12lasd!2022");
@@ -74,7 +76,7 @@ describe("Nachwuchs Page", () => {
     await userEvent.click(addButton);
 
     const dateField = screen.getByLabelText(
-      "Wann wird Ihr Kind voraussichtlich geboren?",
+      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
     );
 
     expect(dateField).toBeInTheDocument();
@@ -125,7 +127,7 @@ describe("Submitting the form", () => {
     render(<NachwuchsPage />, { store });
     const expectedState: StepNachwuchsState = {
       ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
+      anzahlKuenftigerKinder: 3,
       wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
       geschwisterkinder: [
         {
@@ -140,7 +142,7 @@ describe("Submitting the form", () => {
     }
 
     const dateField = screen.getByLabelText(
-      "Wann wird Ihr Kind voraussichtlich geboren?",
+      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
     );
     await userEvent.type(dateField, "a12.12lasd!" + currentYear);
 

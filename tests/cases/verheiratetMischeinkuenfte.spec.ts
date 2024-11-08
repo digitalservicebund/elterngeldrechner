@@ -14,7 +14,6 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("20.11.2024");
-  await page.getByLabel("erhöhen").click();
   await page.getByLabel("Älteres Geschwisterkind").click();
   await page.getByLabel("Wann wurde das").fill("04.02.2020");
   await page.getByLabel("Weiteres Geschwisterkind").click();

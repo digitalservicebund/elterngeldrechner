@@ -22,7 +22,6 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .filter({ hasText: /^TT\.MM\.JJJJ$/ })
     .click();
   await page.getByPlaceholder("__.__.___").fill("10.12.2024");
-  await page.getByLabel("erhöhen").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByLabel("Elternteil 1").getByText("Ja").click();
   await page.getByLabel("Elternteil 2").getByText("Ja").click();

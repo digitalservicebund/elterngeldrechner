@@ -46,8 +46,10 @@ describe("Planer", () => {
     expect(usePlanerService).toHaveBeenCalledOnce();
     expect(usePlanerService).toHaveBeenLastCalledWith(
       initialInformation,
-      onPlanChanged,
       berechneElterngeldbezuege,
+      onPlanChanged,
+      undefined,
+      undefined,
     );
   });
 

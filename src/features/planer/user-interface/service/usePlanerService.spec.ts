@@ -344,12 +344,11 @@ describe("use Planer service", () => {
 
   describe("wähle Option", () => {
     it("updates the Lebensmonate when chosing an Option", () => {
-      const initialPlan = { ...ANY_PLAN, lebensmonate: {}, changes: 0 };
+      const initialPlan = { ...ANY_PLAN, lebensmonate: {} };
 
       const updatedPlan = {
         ...ANY_PLAN,
         lebensmonate: { 1: ANY_LEBENSMONAT },
-        changes: 1,
       };
 
       vi.mocked(waehleOption).mockReturnValue(Result.ok(updatedPlan));
@@ -567,8 +566,8 @@ function renderPlanerServiceHook(options?: {
     () =>
       usePlanerService(
         initialInformation,
-        onPlanChanged,
         berrechneElterngeldbezuege,
+        onPlanChanged,
       ),
     {
       preloadedState: INITIAL_STATE,
@@ -613,7 +612,6 @@ const ANY_PLAN = {
   ausgangslage: ANY_AUSGANGSLAGE,
   errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
-  changes: 0,
 };
 
 const ANY_VERFUEGBARES_KONTINGENT = {

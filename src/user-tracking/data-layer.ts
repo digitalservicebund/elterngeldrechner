@@ -14,6 +14,17 @@ export function setTrackingVariable(name: string, value?: unknown): void {
   }
 }
 
+export function getTrackingVariable<T>(name: string): T | null {
+  if (window._mtm) {
+    const lastElement = window._mtm?.findLast((it) => it[name] !== undefined);
+    const lastElementsProperty = lastElement?.[name];
+
+    return lastElementsProperty ? (lastElementsProperty as T) : null;
+  } else {
+    return null;
+  }
+}
+
 declare global {
   interface Window {
     _mtm?: Record<string, unknown>[];

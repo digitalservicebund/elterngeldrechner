@@ -2,7 +2,9 @@ import { useCallback, useRef, useState } from "react";
 import {
   type BerechneElterngeldbezuegeCallback,
   type GebeEinkommenAn,
+  OptionSelectedCallback,
   type PlanChangedCallback,
+  PlanResettedCallback,
   WaehleOption,
 } from "./callbackTypes";
 import { erstelleVorschlaegeFuerAngabeDesEinkommens } from "@/features/planer/domain";
@@ -24,12 +26,13 @@ import {
   type Lebensmonate,
   erstelleInitialeLebensmonate,
 } from "@/features/planer/user-interface/service";
-import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
 
 export function usePlanerService(
   initialInformation: InitialInformation,
-  onPlanChanged: PlanChangedCallback,
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  onPlanChanged: PlanChangedCallback,
+  onOptionSelected?: OptionSelectedCallback,
+  onPlanResetted?: PlanResettedCallback,
 ) {
   const [plan, setPlan] = useState(
     () =>
@@ -54,7 +57,7 @@ export function usePlanerService(
 
   const updateStatesAndTriggerCallbacks = useCallback(
     (
-      nextPlan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics,
+      nextPlan: PlanMitBeliebigenElternteilen,
       options?: {
         skipVerplantesKontingent?: boolean;
       },
@@ -95,7 +98,7 @@ export function usePlanerService(
   );
 
   const waehleOptionCallback = useCallback<WaehleOption<Elternteil>>(
-    (...argumentList) =>
+    (...argumentList) => {
       setPlan((plan) => {
         const nextPlan = waehleOption(plan, ...argumentList).unwrapOrElse(
           (error) => {
@@ -107,9 +110,13 @@ export function usePlanerService(
         );
 
         updateStatesAndTriggerCallbacks(nextPlan);
+
         return nextPlan;
-      }),
-    [updateStatesAndTriggerCallbacks],
+      });
+
+      onOptionSelected?.();
+    },
+    [onOptionSelected, updateStatesAndTriggerCallbacks],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -144,10 +151,14 @@ export function usePlanerService(
     () =>
       setPlan((plan) => {
         const nextPlan = setzePlanZurueck(plan);
+
         updateStatesAndTriggerCallbacks(nextPlan);
+
+        onPlanResetted?.();
+
         return nextPlan;
       }),
-    [updateStatesAndTriggerCallbacks],
+    [onPlanResetted, updateStatesAndTriggerCallbacks],
   );
 
   return {
@@ -171,7 +182,7 @@ export function usePlanerService(
 function erstelleInitialenPlan<A extends Ausgangslage>(
   ausgangslage: A,
   berrechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-): Plan<A> & MatomoTrackingMetrics {
+): Plan<A> {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
   const errechneteElterngeldbezuege = berrechneElterngeldbezuege(lebensmonate);
 
@@ -179,7 +190,6 @@ function erstelleInitialenPlan<A extends Ausgangslage>(
     ausgangslage,
     lebensmonate,
     errechneteElterngeldbezuege,
-    changes: 0,
   };
 }
 
@@ -241,5 +251,5 @@ export type InitialInformation =
   | { ausgangslage: Ausgangslage; plan?: undefined }
   | {
       ausgangslage?: undefined;
-      plan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics;
+      plan: PlanMitBeliebigenElternteilen;
     };

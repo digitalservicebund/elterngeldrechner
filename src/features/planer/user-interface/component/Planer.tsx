@@ -6,9 +6,11 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
-import type {
+import {
   BerechneElterngeldbezuegeCallback,
+  OptionSelectedCallback,
   PlanChangedCallback,
+  PlanResettedCallback,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
 import {
@@ -19,15 +21,19 @@ import { Alert } from "@/components/molecules/alert";
 
 type Props = {
   readonly initialInformation: InitialInformation;
-  readonly onPlanChanged: PlanChangedCallback;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
+  readonly onPlanChanged: PlanChangedCallback;
+  readonly onOptionSelected?: OptionSelectedCallback;
+  readonly onPlanResetted?: PlanResettedCallback;
   readonly className?: string;
 };
 
 export function Planer({
   initialInformation,
-  onPlanChanged,
   berechneElterngeldbezuege,
+  onPlanChanged,
+  onOptionSelected,
+  onPlanResetted,
   className,
 }: Props): ReactNode {
   const {
@@ -46,8 +52,10 @@ export function Planer({
     setzePlanZurueck,
   } = usePlanerService(
     initialInformation,
-    onPlanChanged,
     berechneElterngeldbezuege,
+    onPlanChanged,
+    onOptionSelected,
+    onPlanResetted,
   );
 
   // FIXME: get value from service by Ausgangslage

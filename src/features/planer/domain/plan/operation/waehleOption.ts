@@ -7,19 +7,16 @@ import type {
 } from "@/features/planer/domain/ausgangslage";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type {
-  MatomoTrackingMetrics,
-  Plan,
-} from "@/features/planer/domain/plan/Plan";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
 import { waehleOption as waehleOptionInLebensmonaten } from "@/features/planer/domain/lebensmonate";
 import { Result } from "@/features/planer/domain/common/Result";
 
 export function waehleOption<A extends Ausgangslage>(
-  plan: Plan<A> & MatomoTrackingMetrics,
+  plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
   option: Auswahloption,
-): Result<Plan<A> & MatomoTrackingMetrics, SpecificationViolation[]> {
+): Result<Plan<A>, SpecificationViolation[]> {
   const ungeplanterLebensmonat = erstelleInitialenLebensmonat(
     plan.ausgangslage,
     lebensmonatszahl,
@@ -34,9 +31,8 @@ export function waehleOption<A extends Ausgangslage>(
     ungeplanterLebensmonat,
   );
 
-  const gewaehlterPlan: Plan<A> & MatomoTrackingMetrics = {
+  const gewaehlterPlan: Plan<A> = {
     ...plan,
-    changes: plan.changes + 1,
     lebensmonate: gewaehlteLebensmonate,
   };
 
@@ -95,7 +91,6 @@ if (import.meta.vitest) {
         ...ANY_PLAN,
         lebensmonate,
         errechneteElterngeldbezuege,
-        changes: 0,
       };
 
       const plan = waehleOption(
@@ -124,7 +119,6 @@ if (import.meta.vitest) {
       const planVorher = {
         ...ANY_PLAN,
         lebensmonate: {},
-        changes: 0,
       };
 
       const plan = waehleOption(
@@ -213,7 +207,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
-      changes: 0,
     };
 
     const ANY_LEBENSMONATSZAHL = 1 as const;

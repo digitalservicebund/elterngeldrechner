@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/atoms";
 import { useAppSelector, useAppStore } from "@/redux/hooks";
@@ -21,9 +21,12 @@ import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
-import useDebounce from "@/hooks/useDebounce";
-import { resetTrackingPlanung, trackPlanung } from "@/user-tracking/planung";
-import { MatomoTrackingMetrics } from "@/features/planer/domain/plan";
+import {
+  resetTrackingPlanung,
+  trackChanges,
+  trackPlannedMonths,
+  trackPlannedMonthsWithIncome,
+} from "@/user-tracking/planung";
 
 export default function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
@@ -51,27 +54,15 @@ export default function RechnerPlanerPage() {
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
-  const debouncedTrackPlanung = useDebounce(
-    (nextPlan: PlanMitBeliebigenElternteilen & MatomoTrackingMetrics) =>
-      trackPlanung(nextPlan),
-    1000,
-  );
-
-  function setPlan(
-    nextPlan:
-      | (PlanMitBeliebigenElternteilen & MatomoTrackingMetrics)
-      | undefined,
-  ): void {
+  function setPlan(nextPlan: PlanMitBeliebigenElternteilen | undefined): void {
     plan.current = nextPlan;
     const istPlanGueltig = nextPlan != undefined;
     setIstPlanGueltig(nextPlan !== undefined);
 
     if (istPlanGueltig) {
       trackPartnerschaftlicheVerteilungForPlan(nextPlan);
-
-      debouncedTrackPlanung(nextPlan);
-    } else {
-      resetTrackingPlanung();
+      trackPlannedMonthsWithIncome(nextPlan);
+      trackPlannedMonths(nextPlan);
     }
   }
 
@@ -88,14 +79,18 @@ export default function RechnerPlanerPage() {
   const navigateToPreviousStep = () =>
     navigate(formSteps.elterngeldvarianten.route);
 
+  useEffect(resetTrackingPlanung, []);
+
   return (
     <Page step={formSteps.rechnerUndPlaner}>
       <div className="flex flex-wrap justify-between gap-y-80">
         <Planer
           className="basis-full"
           initialInformation={initialPlanerInformation.current}
-          onPlanChanged={setPlan}
           berechneElterngeldbezuege={berechneElterngeldbezuege}
+          onPlanChanged={setPlan}
+          onOptionSelected={trackChanges}
+          onPlanResetted={resetTrackingPlanung}
         />
 
         <Button

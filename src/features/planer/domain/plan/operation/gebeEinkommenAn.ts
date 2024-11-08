@@ -4,18 +4,15 @@ import type {
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type {
-  MatomoTrackingMetrics,
-  Plan,
-} from "@/features/planer/domain/plan";
+import type { Plan } from "@/features/planer/domain/plan";
 import { gebeEinkommenAn as gebeEinkommenInLebensmonatenAn } from "@/features/planer/domain/lebensmonate";
 
 export function gebeEinkommenAn<A extends Ausgangslage>(
-  plan: Plan<A> & MatomoTrackingMetrics,
+  plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
   bruttoeinkommen: number,
-): Plan<A> & MatomoTrackingMetrics {
+): Plan<A> {
   const ungeplanterLebensmonat = erstelleInitialenLebensmonat(
     plan.ausgangslage,
     lebensmonatszahl,
@@ -81,7 +78,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: {} as never,
       lebensmonate: {},
-      changes: 0,
     };
   });
 }

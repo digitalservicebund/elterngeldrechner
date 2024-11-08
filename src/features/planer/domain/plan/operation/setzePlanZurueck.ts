@@ -1,16 +1,12 @@
 import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
-import type {
-  MatomoTrackingMetrics,
-  Plan,
-} from "@/features/planer/domain/plan/Plan";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function setzePlanZurueck<A extends Ausgangslage>(
-  plan: Plan<A> & MatomoTrackingMetrics,
-): Plan<A> & MatomoTrackingMetrics {
+  plan: Plan<A>,
+): Plan<A> {
   return {
     ...plan,
-    changes: 0,
     lebensmonate: erstelleInitialeLebensmonate(plan.ausgangslage),
   };
 }

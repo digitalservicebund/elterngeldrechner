@@ -6,7 +6,7 @@ import {
 } from "@/user-tracking/data-layer";
 
 enum Variables {
-  Changes = "aenderung-am-plan",
+  Changes = "aenderungen-am-plan",
   PlannedMonths = "geplante-monate",
   PlannedMonthsWithIncome = "geplante-monate-mit-einkommen",
 }

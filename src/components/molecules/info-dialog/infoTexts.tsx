@@ -62,7 +62,16 @@ export const infoTexts: Record<string, string | ReactNode> = {
       </p>
       <p>
         Diese Fälle bilden wir mit dem Elterngeldrechner mit Planer nicht ab.
-        Wenden Sie sich bei Fragen bitte an Ihre Elterngeldstelle.
+        Wenden Sie sich bei Fragen bitte an{" "}
+        <a
+          href="https://familienportal.de/familienportal/125008!zip-search?state=H4sIAAAAAAAA_1WOuw7CMAxFfwV5zgBrNlToXKRuqEPUuBApJMV2eFX9d9LC0G6-D-vcAawRLCneQIfkvZp1HZdqSmt8ybqxdBLj_mnIHnICujOecTaPDwyyMntvXCidF6RTQnLIoM-Ngs60KPkeRgVXJ1whVeaS_3ZbBffcfIMGUPBxfREt_gRHyhOA20i4scgtzNQJWMTAQpklf_T4BeexQ4PqAAAA&service=99041006&zipCodeCityQuery"
+          target="_blank"
+          rel="noreferrer"
+          className="underline"
+        >
+          Ihre Elterngeldstelle
+        </a>
+        .
       </p>
     </>
   ),

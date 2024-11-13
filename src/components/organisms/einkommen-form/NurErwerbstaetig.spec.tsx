@@ -35,7 +35,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
     const elternteil1Section = getElternteil1Section();
 
     const bruttoEinkommen = within(elternteil1Section).getByText(
-      /^wie viel haben Sie in den 12 Kalendermonaten vor der Geburt ihres Kindes monatlich brutto verdient/i,
+      /^wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres Kindes monatlich brutto verdient/i,
     );
 
     expect(bruttoEinkommen).toBeInTheDocument();
@@ -144,7 +144,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
 
       const inputField = screen.getByLabelText(
-        /^wie viel haben Sie in den 12 Kalendermonaten vor der Geburt ihres Kindes monatlich brutto verdient/i,
+        /^wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres Kindes monatlich brutto verdient/i,
       );
       await userEvent.clear(inputField);
       await userEvent.click(nextPageBtn);

@@ -1,0 +1,29 @@
+name: Metrics Synchronization
+
+on:
+  push:
+    branches:
+      - "feature/metrics"
+
+jobs:
+  run-metrics:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js (LTS)
+        uses: actions/setup-node@v3
+        with:
+          node-version: "lts"
+
+      - name: Run metrics script
+        run: npx tsx metrics/index.ts
+        env:
+          EGR_METRICS_MATOMO_AUTHENTICATION_TOKEN: ${{ secrets.EGR_METRICS_MATOMO_AUTHENTICATION_TOKEN }}
+          EGR_METRICS_MATOMO_DOMAIN: ${{ secrets.EGR_METRICS_MATOMO_DOMAIN }}
+          EGR_METRICS_NOCO_DOMAIN: ${{ secrets.EGR_METRICS_NOCO_DOMAIN }}
+          EGR_METRICS_NOCO_PORT: ${{ secrets.EGR_METRICS_NOCO_PORT }}
+          EGR_METRICS_NOCO_PROJECT_ID: ${{ secrets.EGR_METRICS_NOCO_PROJECT_ID }}
+          EGR_METRICS_NOCO_AUTHENTICATION_TOKEN: ${{ secrets.EGR_METRICS_NOCO_AUTHENTICATION_TOKEN }}

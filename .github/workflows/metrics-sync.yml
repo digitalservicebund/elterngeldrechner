@@ -17,8 +17,8 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Run metrics script
-        run: npx tsx metrics/index.ts
+      - name: Run metrics sync script
+        run: npx tsx metrics-sync/index.ts
         env:
           EGR_METRICS_MATOMO_AUTHENTICATION_TOKEN: ${{ secrets.EGR_METRICS_MATOMO_AUTHENTICATION_TOKEN }}
           EGR_METRICS_MATOMO_DOMAIN: ${{ secrets.EGR_METRICS_MATOMO_DOMAIN }}

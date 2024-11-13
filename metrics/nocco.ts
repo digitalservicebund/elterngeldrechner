@@ -1,4 +1,6 @@
-export async function createTableRecord(object: NocoSchema) {
+import { ElterngeldTableSchema } from "./nocco-schema";
+
+export async function createTableRecord(object: ElterngeldTableSchema) {
   const url = `https://${process.env.EGR_METRICS_NOCO_DOMAIN}:${process.env.EGR_METRICS_NOCO_PORT}/api/v2/tables/${process.env.EGR_METRICS_NOCO_PROJECT_ID}/records`;
 
   if (process.env.EGR_METRICS_DRY_RUN) {
@@ -15,5 +17,3 @@ export async function createTableRecord(object: NocoSchema) {
     });
   }
 }
-
-type NocoSchema = { Datum: string; Partnerschaftlichkeit: number };

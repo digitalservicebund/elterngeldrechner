@@ -1,4 +1,4 @@
-name: Metrics Synchronization
+name: Metrics (Matomo to Metabase) Synchronization
 
 on:
   schedule:

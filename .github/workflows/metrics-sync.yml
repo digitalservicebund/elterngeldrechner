@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js (LTS)
         uses: actions/setup-node@v3
         with:
-          node-version: "lts"
+          node-version: lts/*
 
       - name: Run metrics script
         run: npx tsx metrics/index.ts

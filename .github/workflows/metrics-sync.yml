@@ -1,9 +1,8 @@
 name: Metrics Synchronization
 
 on:
-  push:
-    branches:
-      - "feature/metrics"
+  schedule:
+    - cron: "55 23 * * *"
 
 jobs:
   run-metrics:

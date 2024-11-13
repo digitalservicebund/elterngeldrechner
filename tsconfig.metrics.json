@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["metrics"]
+}

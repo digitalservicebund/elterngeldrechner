@@ -1,8 +1,8 @@
 import { ElterngeldTableSchema } from "./nocco-schema";
 
-import config from "./env";
-
 export async function createTableRecord(object: ElterngeldTableSchema) {
+  const { config } = await import("./env");
+
   const url = `https://${config.noco.domain}:${config.noco.port}/api/v2/tables/${config.noco.projectId}/records`;
 
   return fetch(url, {

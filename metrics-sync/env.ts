@@ -1,4 +1,12 @@
-export default {
+function getEnvironmentVariable(key: string) {
+  if (process.env[key]) {
+    return process.env[key];
+  } else {
+    throw new Error(`Missing '${key}' environment variable`);
+  }
+}
+
+const config = {
   noco: {
     domain: getEnvironmentVariable("EGR_METRICS_SYNC_NOCO_DOMAIN"),
     port: getEnvironmentVariable("EGR_METRICS_SYNC_NOCO_PORT"),
@@ -15,10 +23,4 @@ export default {
   },
 };
 
-function getEnvironmentVariable(key: string) {
-  if (process.env[key]) {
-    return process.env[key];
-  } else {
-    throw new Error(`Missing '${key}' environment variable`);
-  }
-}
+export { config };

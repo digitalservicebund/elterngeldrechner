@@ -8,10 +8,13 @@
   },
   "scripts": {
     "sync": "tsx index.ts",
-    "sync:local": "tsx --env-file=.env.local index.ts"
+    "sync:local": "tsx --env-file=.env.local index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "devDependencies": {
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
   }
 }

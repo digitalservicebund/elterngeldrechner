@@ -1,6 +1,9 @@
-import { fetchMetadataInformation, fetchEventsInformation } from "./matomo";
-import { createTableRecord } from "./nocco";
-import { ElterngeldTableSchema } from "./nocco-schema";
+import {
+  fetchMetadataInformation,
+  fetchEventsInformation,
+} from "./matomo/matomo";
+import { createTableRecord } from "./noco/noco";
+import { ElterngeldTableSchema } from "./noco/noco-db-schema";
 
 const formattedDate = new Date().toISOString().split("T")[0];
 

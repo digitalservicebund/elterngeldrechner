@@ -8,5 +8,5 @@
     "allowSyntheticDefaultImports": true,
     "types": ["vitest/globals", "vitest/importMeta"]
   },
-  "include": ["*.ts"]
+  "include": ["**/*.ts"]
 }

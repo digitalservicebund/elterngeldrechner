@@ -1,4 +1,4 @@
-import { Action, Subtable } from "./matomo-api";
+import { Action, Subtable } from "./matomo-api-schema";
 
 export type FieldInActionOptions<T> = {
   actions: Action[];
@@ -34,7 +34,7 @@ export function getFieldInSubtable<T>(options: FieldInSubtableOptions<T>) {
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  vi.mock(import("./env"));
+  vi.mock(import("../env"));
 
   describe("getFieldInActions", async () => {
     it("returns the value for a given label and accessor", () => {

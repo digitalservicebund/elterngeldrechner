@@ -2,8 +2,12 @@ import {
   EventModuleResponse,
   MetadataModuleResponse,
   Method,
-} from "./matomo-api";
-import { getFieldInActions, getFieldInSubtable } from "./matomo-api-helper";
+} from "./matomo-api-schema";
+
+import {
+  getFieldInActions,
+  getFieldInSubtable,
+} from "./matomo-field-accessors";
 
 export async function fetchEventsInformation(date: string) {
   const response = await fetchMatomoEndpoint("Events.getAction", date);
@@ -42,7 +46,7 @@ export async function fetchMetadataInformation(date: string) {
 }
 
 async function fetchMatomoEndpoint(method: Method, date: string) {
-  const { config } = await import("./env");
+  const { config } = await import("../env");
 
   const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=${method}&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
 

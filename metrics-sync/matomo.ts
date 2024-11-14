@@ -1,5 +1,3 @@
-import { vi } from "vitest";
-
 import { TagManagerResponse } from "./matomo-api";
 
 export async function fetchTagManagerData(date: Date) {
@@ -9,7 +7,7 @@ export async function fetchTagManagerData(date: Date) {
 
   const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${formattedDate},${formattedDate}&method=Events.getCategory&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
 
-  const response = await fetch(url).then((it) => it.json());
+  const response = await fetch(url);
 
   const data: TagManagerResponse = await response.json();
 

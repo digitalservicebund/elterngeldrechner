@@ -3,14 +3,31 @@ import {
   MetadataModuleResponse,
   Method,
 } from "./matomo-api";
+import { getFieldInActions, getFieldInSubtable } from "./matomo-api-helper";
 
 export async function fetchEventsInformation(date: string) {
   const response = await fetchMatomoEndpoint("Events.getAction", date);
-
   const data: EventModuleResponse = await response.json();
+  const actions = data[date];
 
   return {
-    partnerschaftlichkeit: getPartnerschaftlichkeit(data, date),
+    partnerschaftlichkeit: getFieldInActions({
+      actions: actions,
+      actionLabel: "Partnerschaftlichkeit",
+      accessor: (a) => a.avg_event_value * 100,
+    }),
+    hilfreichesFeedback: getFieldInSubtable({
+      actions: actions,
+      actionLabel: "Feedback",
+      subtableLabel: "Hilfreich",
+      accessor: (a) => a.nb_uniq_visitors,
+    }),
+    nichtHilfreichesFeedback: getFieldInSubtable({
+      actions: actions,
+      actionLabel: "Feedback",
+      subtableLabel: "Nicht hilfreich",
+      accessor: (a) => a.nb_uniq_visitors,
+    }),
   };
 }
 
@@ -38,98 +55,4 @@ async function fetchMatomoEndpoint(method: Method, date: string) {
   }
 
   return response;
-}
-
-function getPartnerschaftlichkeit(data: EventModuleResponse, date: string) {
-  return (
-    (data[date] || [])
-      .filter((entry) => entry.label === "Partnerschaftlichkeit")
-      .map((entry) => entry.avg_event_value)[0] * 100 || null
-  );
-}
-
-if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
-
-  vi.mock(import("./env"));
-
-  describe("getPartnerschaftlichkeit", async () => {
-    it("returns a number between 0 and 100 instead of 0 and 1", () => {
-      const response = {
-        "2024-11-12": [
-          {
-            label: "Partnerschaftlichkeit",
-            nb_uniq_visitors: 236,
-            nb_visits: "223",
-            nb_events: "377",
-            nb_events_with_value: "250",
-            sum_event_value: 13.25,
-            min_event_value: 0,
-            max_event_value: 1,
-            avg_event_value: 0.05,
-            idsubdatatable: 5,
-            segment: "eventAction==Partnerschaftlichkeit",
-            subtable: [
-              {
-                label: "Verteilung",
-                nb_uniq_visitors: 236,
-                nb_visits: "223",
-                nb_events: "377",
-                nb_events_with_value: "250",
-                sum_event_value: 13.25,
-                min_event_value: 0,
-                max_event_value: 1,
-                avg_event_value: 0.05,
-              },
-            ],
-          },
-        ],
-      };
-
-      expect(getPartnerschaftlichkeit(response, "2024-11-12")).toBe(5);
-    });
-
-    it("returns null if data for day is absent", () => {
-      const response = {
-        "2024-11-12": [
-          {
-            label: "Partnerschaftlichkeit",
-            nb_uniq_visitors: 236,
-            nb_visits: "223",
-            nb_events: "377",
-            nb_events_with_value: "250",
-            sum_event_value: 13.25,
-            min_event_value: 0,
-            max_event_value: 1,
-            avg_event_value: 0.05,
-            idsubdatatable: 5,
-            segment: "eventAction==Partnerschaftlichkeit",
-            subtable: [
-              {
-                label: "Verteilung",
-                nb_uniq_visitors: 236,
-                nb_visits: "223",
-                nb_events: "377",
-                nb_events_with_value: "250",
-                sum_event_value: 13.25,
-                min_event_value: 0,
-                max_event_value: 1,
-                avg_event_value: 0.05,
-              },
-            ],
-          },
-        ],
-      };
-
-      expect(getPartnerschaftlichkeit(response, "2024-11-13")).toBe(null);
-    });
-
-    it("returns null if segment is missing", () => {
-      const response = {
-        "2024-11-12": [],
-      };
-
-      expect(getPartnerschaftlichkeit(response, "2024-11-12")).toBe(null);
-    });
-  });
 }

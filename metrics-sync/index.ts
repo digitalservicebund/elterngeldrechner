@@ -9,7 +9,11 @@ const eventsInformation = await fetchEventsInformation(formattedDate);
 
 const record: ElterngeldTableSchema = {
   Datum: formattedDate,
+
   Partnerschaftlichkeit: eventsInformation.partnerschaftlichkeit,
+  AnzahlFeedbackHilfreich: eventsInformation.hilfreichesFeedback,
+  AnzahlFeedbackNichtHilfreich: eventsInformation.nichtHilfreichesFeedback,
+
   EindeutigeBesucherinnen: metadataInformation.uniqueVisitors,
 };
 

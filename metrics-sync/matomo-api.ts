@@ -1,4 +1,4 @@
-type Subtable = {
+export type Subtable = {
   label: string;
   nb_uniq_visitors: number;
   nb_visits: number | string;
@@ -10,7 +10,7 @@ type Subtable = {
   avg_event_value: number;
 };
 
-type Action = {
+export type Action = {
   label: string;
   nb_uniq_visitors: number;
   nb_visits: string | number;

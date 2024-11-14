@@ -1,6 +1,19 @@
-import { fetchTagManagerData } from "./matomo";
+import {
+  fetchAnalyticsInformation,
+  fetchTagManagerInformation,
+} from "./matomo";
 import { createTableRecord } from "./nocco";
+import { ElterngeldTableSchema } from "./nocco-schema";
 
-const tagManagerData = await fetchTagManagerData(new Date());
+const formattedDate = new Date().toISOString().split("T")[0];
 
-await createTableRecord(tagManagerData);
+const analyticsInformation = await fetchAnalyticsInformation(formattedDate);
+const tagManagerInformation = await fetchTagManagerInformation(formattedDate);
+
+const record: ElterngeldTableSchema = {
+  Datum: formattedDate,
+  Partnerschaftlichkeit: tagManagerInformation.partnerschaftlichkeit,
+  EindeutigeBesucherinnen: analyticsInformation.uniqueVisitors,
+};
+
+await createTableRecord(record);

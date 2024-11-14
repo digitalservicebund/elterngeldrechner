@@ -1,19 +1,30 @@
-import { TagManagerResponse } from "./matomo-api";
+import { TagManagerResponse, AnalyticsData } from "./matomo-api";
 
-export async function fetchTagManagerData(date: Date) {
+export async function fetchTagManagerInformation(date: string) {
   const { config } = await import("./env");
 
-  const formattedDate = date.toISOString().split("T")[0];
-
-  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${formattedDate},${formattedDate}&method=Events.getCategory&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
+  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=Events.getCategory&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
 
   const response = await fetch(url);
 
   const data: TagManagerResponse = await response.json();
 
   return {
-    Datum: formattedDate,
-    Partnerschaftlichkeit: getPartnerschaftlichkeit(data, formattedDate),
+    partnerschaftlichkeit: getPartnerschaftlichkeit(data, date),
+  };
+}
+
+export async function fetchAnalyticsInformation(date: string) {
+  const { config } = await import("./env");
+
+  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=API.get&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
+
+  const response = await fetch(url);
+
+  const data: AnalyticsData = await response.json();
+
+  return {
+    uniqueVisitors: data[date].nb_uniq_visitors,
   };
 }
 

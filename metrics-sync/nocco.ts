@@ -5,7 +5,7 @@ export async function createTableRecord(object: ElterngeldTableSchema) {
 
   const url = `https://${config.noco.domain}:${config.noco.port}/api/v2/tables/${config.noco.projectId}/records`;
 
-  return fetch(url, {
+  const response = await fetch(url, {
     body: JSON.stringify(object),
     method: "POST",
     headers: {
@@ -13,4 +13,10 @@ export async function createTableRecord(object: ElterngeldTableSchema) {
       "Content-Type": "application/json",
     },
   });
+
+  if (!response.ok) {
+    throw Error(
+      `Request to NocoDB failed. Code: ${response.status} Error ${response.statusText}`,
+    );
+  }
 }

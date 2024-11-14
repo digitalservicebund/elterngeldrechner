@@ -1,11 +1,9 @@
 import { TagManagerResponse, AnalyticsData } from "./matomo-api";
 
+type Method = "API.get" | "Events.getCategory";
+
 export async function fetchTagManagerInformation(date: string) {
-  const { config } = await import("./env");
-
-  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=Events.getCategory&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
-
-  const response = await fetch(url);
+  const response = await fetchMatomoEndpoint("Events.getCategory", date);
 
   const data: TagManagerResponse = await response.json();
 
@@ -15,17 +13,29 @@ export async function fetchTagManagerInformation(date: string) {
 }
 
 export async function fetchAnalyticsInformation(date: string) {
-  const { config } = await import("./env");
-
-  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=API.get&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
-
-  const response = await fetch(url);
+  const response = await fetchMatomoEndpoint("API.get", date);
 
   const data: AnalyticsData = await response.json();
 
   return {
     uniqueVisitors: data[date].nb_uniq_visitors,
   };
+}
+
+async function fetchMatomoEndpoint(method: Method, date: string) {
+  const { config } = await import("./env");
+
+  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=${method}&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw Error(
+      `Request to Matomo failed. Code: ${response.status} Error ${response.statusText}`,
+    );
+  }
+
+  return response;
 }
 
 function getPartnerschaftlichkeit(data: TagManagerResponse, date: string) {

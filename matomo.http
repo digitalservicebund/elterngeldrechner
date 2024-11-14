@@ -1,5 +1,0 @@
-### Visit Information
-GET https://analytics.init.de/index.php?module=API&format=JSON&idSite={{siteId}}&period=day&date=2024-10-13,2024-11-11&method=API.get&filter_limit=100&format_metrics=1&expanded=1&segment=pageUrl%3D%3Dhttps%25253A%25252F%25252Ffamilienportal.de%25252Ffamilienportal%25252Fmeta%25252Fegr&token_auth={{authToken}}&force_api_session=1
-
-### Custom Events
-GET https://analytics.init.de/index.php?module=API&format=JSON&idSite={{siteId}}&period=day&date=2024-11-12,2024-11-12&method=Events.getCategory&filter_limit=100&format_metrics=1&expanded=1&segment=pageUrl%3D%3Dhttps%25253A%25252F%25252Ffamilienportal.de%25252Ffamilienportal%25252Fmeta%25252Fegr&token_auth={{authToken}}&force_api_session=1

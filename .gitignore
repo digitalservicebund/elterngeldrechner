@@ -37,3 +37,7 @@ yarn-error.log*
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# idea api file and config
+*.http
+*.env.json

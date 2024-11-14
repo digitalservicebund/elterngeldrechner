@@ -22,6 +22,6 @@
   "include": ["src", "tests"],
   "references": [
     { "path": "./tsconfig.vite.json" },
-    { "path": "./tsconfig.metrics-sync.json" }
+    { "path": "./metrics-sync/tsconfig.json" }
   ]
 }

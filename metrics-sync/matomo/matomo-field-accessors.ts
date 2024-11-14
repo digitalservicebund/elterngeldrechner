@@ -34,8 +34,6 @@ export function getFieldInSubtable<T>(options: FieldInSubtableOptions<T>) {
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  vi.mock(import("../env"));
-
   describe("getFieldInActions", async () => {
     it("returns the value for a given label and accessor", () => {
       const response = {

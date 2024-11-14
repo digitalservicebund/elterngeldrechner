@@ -1,21 +1,23 @@
-import { TagManagerResponse, AnalyticsData } from "./matomo-api";
+import {
+  EventModuleResponse,
+  MetadataModuleResponse,
+  Method,
+} from "./matomo-api";
 
-type Method = "API.get" | "Events.getCategory";
+export async function fetchEventsInformation(date: string) {
+  const response = await fetchMatomoEndpoint("Events.getAction", date);
 
-export async function fetchTagManagerInformation(date: string) {
-  const response = await fetchMatomoEndpoint("Events.getCategory", date);
-
-  const data: TagManagerResponse = await response.json();
+  const data: EventModuleResponse = await response.json();
 
   return {
     partnerschaftlichkeit: getPartnerschaftlichkeit(data, date),
   };
 }
 
-export async function fetchAnalyticsInformation(date: string) {
+export async function fetchMetadataInformation(date: string) {
   const response = await fetchMatomoEndpoint("API.get", date);
 
-  const data: AnalyticsData = await response.json();
+  const data: MetadataModuleResponse = await response.json();
 
   return {
     uniqueVisitors: data[date].nb_uniq_visitors,
@@ -38,10 +40,9 @@ async function fetchMatomoEndpoint(method: Method, date: string) {
   return response;
 }
 
-function getPartnerschaftlichkeit(data: TagManagerResponse, date: string) {
+function getPartnerschaftlichkeit(data: EventModuleResponse, date: string) {
   return (
     (data[date] || [])
-      .flatMap((entry) => entry.subtable)
       .filter((entry) => entry.label === "Partnerschaftlichkeit")
       .map((entry) => entry.avg_event_value)[0] * 100 || null
   );
@@ -57,20 +58,20 @@ if (import.meta.vitest) {
       const response = {
         "2024-11-12": [
           {
-            label: "Elterngeldrechner mit Planer",
-            nb_uniq_visitors: 27576,
-            nb_visits: 23135,
-            nb_events: 28261,
-            nb_events_with_value: 250,
+            label: "Partnerschaftlichkeit",
+            nb_uniq_visitors: 236,
+            nb_visits: "223",
+            nb_events: "377",
+            nb_events_with_value: "250",
             sum_event_value: 13.25,
             min_event_value: 0,
             max_event_value: 1,
             avg_event_value: 0.05,
-            idsubdatatable: 1,
-            segment: "eventCategory==Elterngeldrechner+mit+Planer",
+            idsubdatatable: 5,
+            segment: "eventAction==Partnerschaftlichkeit",
             subtable: [
               {
-                label: "Partnerschaftlichkeit",
+                label: "Verteilung",
                 nb_uniq_visitors: 236,
                 nb_visits: "223",
                 nb_events: "377",
@@ -92,20 +93,20 @@ if (import.meta.vitest) {
       const response = {
         "2024-11-12": [
           {
-            label: "Elterngeldrechner mit Planer",
-            nb_uniq_visitors: 27576,
-            nb_visits: 23135,
-            nb_events: 28261,
-            nb_events_with_value: 250,
+            label: "Partnerschaftlichkeit",
+            nb_uniq_visitors: 236,
+            nb_visits: "223",
+            nb_events: "377",
+            nb_events_with_value: "250",
             sum_event_value: 13.25,
             min_event_value: 0,
             max_event_value: 1,
             avg_event_value: 0.05,
-            idsubdatatable: 1,
-            segment: "eventCategory==Elterngeldrechner+mit+Planer",
+            idsubdatatable: 5,
+            segment: "eventAction==Partnerschaftlichkeit",
             subtable: [
               {
-                label: "Partnerschaftlichkeit",
+                label: "Verteilung",
                 nb_uniq_visitors: 236,
                 nb_visits: "223",
                 nb_events: "377",
@@ -125,22 +126,7 @@ if (import.meta.vitest) {
 
     it("returns null if segment is missing", () => {
       const response = {
-        "2024-11-12": [
-          {
-            label: "Elterngeldrechner mit Planer",
-            nb_uniq_visitors: 27576,
-            nb_visits: 23135,
-            nb_events: 28261,
-            nb_events_with_value: 250,
-            sum_event_value: 13.25,
-            min_event_value: 0,
-            max_event_value: 1,
-            avg_event_value: 0.05,
-            idsubdatatable: 1,
-            segment: "eventCategory==Elterngeldrechner+mit+Planer",
-            subtable: [],
-          },
-        ],
+        "2024-11-12": [],
       };
 
       expect(getPartnerschaftlichkeit(response, "2024-11-12")).toBe(null);

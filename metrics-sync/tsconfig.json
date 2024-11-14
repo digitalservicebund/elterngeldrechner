@@ -6,7 +6,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "types": ["vitest/importMeta"]
+    "types": ["vitest/globals", "vitest/importMeta"]
   },
   "include": ["*.ts"]
 }

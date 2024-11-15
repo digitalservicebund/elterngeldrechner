@@ -18,7 +18,7 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 
 const eventActions = await matomo.fetchEventActions(date);
 
-const schnellrechnerTableRequest = noco.createSchnellrechnerTableRecord({
+await noco.createSchnellrechnerTableRecord({
   Datum: date,
   EindeutigeBesucherinnen: getFieldInActions({
     actions: eventActions,
@@ -28,7 +28,7 @@ const schnellrechnerTableRequest = noco.createSchnellrechnerTableRecord({
   }),
 });
 
-const planerTableRequest = noco.createPlanerTableRecord({
+await noco.createPlanerTableRecord({
   Datum: date,
 
   Partnerschaftlichkeit: getFieldInActions({
@@ -61,19 +61,15 @@ const planerTableRequest = noco.createPlanerTableRecord({
   }),
 });
 
-const funnelTableRequests = eventActions
-  .filter((entry) => entry.label === "Fortschritt - Funnel")
-  .flatMap((entry) => entry.subtable)
-  .map((entry, index) =>
-    noco.createFunnelTableRecord({
-      Datum: date,
-      Step: index + 1,
-      Value: entry.nb_uniq_visitors,
-    }),
-  );
-
-await Promise.all([
-  planerTableRequest,
-  schnellrechnerTableRequest,
-  ...funnelTableRequests,
-]);
+await Promise.all(
+  eventActions
+    .filter((entry) => entry.label === "Fortschritt - Funnel")
+    .flatMap((entry) => entry.subtable)
+    .map((entry, index) =>
+      noco.createFunnelTableRecord({
+        Datum: date,
+        Step: index + 1,
+        Value: entry.nb_uniq_visitors,
+      }),
+    ),
+);

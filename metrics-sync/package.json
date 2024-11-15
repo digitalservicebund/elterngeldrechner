@@ -3,8 +3,8 @@
   "description": "Ensures that matomo metrics are accurately reflected in metabase via nocodb.",
   "type": "module",
   "engines": {
-    "node": "20.11.1",
-    "npm": "10.2.4"
+    "node": "22.11.0",
+    "npm": "10.9.0"
   },
   "scripts": {
     "sync": "tsx index.ts",

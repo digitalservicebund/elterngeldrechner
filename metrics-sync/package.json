@@ -2,10 +2,6 @@
   "name": "metrics-sync",
   "description": "Ensures that matomo metrics are accurately reflected in metabase via nocodb.",
   "type": "module",
-  "engines": {
-    "node": "22.11.0",
-    "npm": "10.9.0"
-  },
   "scripts": {
     "sync": "tsx index.ts",
     "sync:local": "tsx --env-file=.env.local index.ts",

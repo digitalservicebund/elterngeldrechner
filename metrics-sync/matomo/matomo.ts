@@ -18,7 +18,7 @@ export async function fetchEventsInformation(date: string) {
     partnerschaftlichkeit: getFieldInActions({
       actions: actions,
       actionLabel: "Partnerschaftlichkeit",
-      accessor: (a) => a.avg_event_value * 100,
+      accessor: (a) => Math.round(a.avg_event_value * 100),
     }),
     hilfreichesFeedback: getFieldInSubtable({
       actions: actions,

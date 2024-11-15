@@ -1,10 +1,10 @@
-import {
-  fetchMetadataInformation,
-  fetchEventsInformation,
-} from "./matomo/matomo";
+import matomo from "./matomo/matomo-api";
+import noco from "./noco/noco-api";
 
-import { createTableRecord } from "./noco/noco";
-import { ElterngeldTableSchema } from "./noco/noco-db-schema";
+import {
+  getFieldInActions,
+  getFieldInSubtable,
+} from "./matomo/matomo-field-accessors";
 
 const date = process.argv.slice(2)[0];
 
@@ -16,17 +16,34 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
   throw new Error(`Expected date to be in format YYYY-MM-DD but was ${date}`);
 }
 
-const metadataInformation = await fetchMetadataInformation(date);
-const eventsInformation = await fetchEventsInformation(date);
+const metadata = await matomo.fetchMetadata(date);
+const eventActions = await matomo.fetchEventActions(date);
 
-const record: ElterngeldTableSchema = {
+const record = {
   Datum: date,
 
-  Partnerschaftlichkeit: eventsInformation.partnerschaftlichkeit,
-  AnzahlFeedbackHilfreich: eventsInformation.hilfreichesFeedback,
-  AnzahlFeedbackNichtHilfreich: eventsInformation.nichtHilfreichesFeedback,
+  Partnerschaftlichkeit: getFieldInActions({
+    actions: eventActions,
+    actionLabel: "Partnerschaftlichkeit",
+    accessor: (a) => Math.round(a.avg_event_value * 100),
+    default: 0,
+  }),
+  AnzahlFeedbackHilfreich: getFieldInSubtable({
+    actions: eventActions,
+    actionLabel: "Feedback",
+    subtableLabel: "Hilfreich",
+    accessor: (a) => a.nb_uniq_visitors,
+    default: 0,
+  }),
+  AnzahlFeedbackNichtHilfreich: getFieldInSubtable({
+    actions: eventActions,
+    actionLabel: "Feedback",
+    subtableLabel: "Nicht hilfreich",
+    accessor: (a) => a.nb_uniq_visitors,
+    default: 0,
+  }),
 
-  EindeutigeBesucherinnen: metadataInformation.uniqueVisitors,
+  EindeutigeBesucherinnen: metadata.nb_uniq_visitors,
 };
 
-await createTableRecord(record);
+await noco.createTableRecord(record);

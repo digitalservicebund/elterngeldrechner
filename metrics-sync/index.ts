@@ -16,7 +16,6 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
   throw new Error(`Expected date to be in format YYYY-MM-DD but was ${date}`);
 }
 
-const metadata = await matomo.fetchMetadata(date);
 const eventActions = await matomo.fetchEventActions(date);
 
 const elterngeldTableRequest = noco.createElterngeldTableRecord({
@@ -43,7 +42,13 @@ const elterngeldTableRequest = noco.createElterngeldTableRecord({
     default: 0,
   }),
 
-  EindeutigeBesucherinnen: metadata.nb_uniq_visitors,
+  EindeutigeBesucherinnen: getFieldInSubtable({
+    actions: eventActions,
+    actionLabel: "Fortschritt - Funnel",
+    subtableLabel: "Allgemeine Angaben",
+    accessor: (a) => a.nb_uniq_visitors,
+    default: 0,
+  }),
 });
 
 const elterngeldFunnelTableRequests = eventActions

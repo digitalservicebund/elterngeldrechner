@@ -30,7 +30,6 @@ await noco.createSchnellrechnerTableRecord({
 
 await noco.createPlanerTableRecord({
   Datum: date,
-
   Partnerschaftlichkeit: getFieldInActions({
     actions: eventActions,
     actionLabel: "Partnerschaftlichkeit",
@@ -51,7 +50,6 @@ await noco.createPlanerTableRecord({
     accessor: (a) => a.nb_uniq_visitors,
     default: 0,
   }),
-
   EindeutigeBesucherinnen: getFieldInSubtable({
     actions: eventActions,
     actionLabel: "Fortschritt - Funnel",
@@ -60,6 +58,42 @@ await noco.createPlanerTableRecord({
     default: 0,
   }),
 });
+
+await Promise.all([
+  noco.createNutzendenTableRecord({
+    Datum: date,
+    Gruppe: "werdende Eltern",
+    Anzahl: getFieldInSubtable({
+      actions: eventActions,
+      actionLabel: "Nutzergruppe",
+      subtableLabel: "werdende Eltern",
+      accessor: (a) => a.nb_uniq_visitors,
+      default: 0,
+    }),
+  }),
+  noco.createNutzendenTableRecord({
+    Datum: date,
+    Gruppe: "junge Eltern",
+    Anzahl: getFieldInSubtable({
+      actions: eventActions,
+      actionLabel: "Nutzergruppe",
+      subtableLabel: "junge Eltern",
+      accessor: (a) => a.nb_uniq_visitors,
+      default: 0,
+    }),
+  }),
+  noco.createNutzendenTableRecord({
+    Datum: date,
+    Gruppe: "nachbeantragende Eltern",
+    Anzahl: getFieldInSubtable({
+      actions: eventActions,
+      actionLabel: "Nutzergruppe",
+      subtableLabel: "nachbeantragende Eltern",
+      accessor: (a) => a.nb_uniq_visitors,
+      default: 0,
+    }),
+  }),
+]);
 
 await Promise.all(
   eventActions

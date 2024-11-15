@@ -1,12 +1,17 @@
 async function createSchnellrechnerTableRecord(object: unknown) {
   await createTableRecord("mcu0qwhvztdgteu", object);
 }
+
 async function createPlanerTableRecord(object: unknown) {
   await createTableRecord("me0csf0c2app6z7", object);
 }
 
 async function createFunnelTableRecord(object: unknown) {
   await createTableRecord("mxmu0a3adzlifsh", object);
+}
+
+async function createNutzendenTableRecord(object: unknown) {
+  await createTableRecord("m43bup57rwa5oeb", object);
 }
 
 async function createTableRecord(tableId: string, object: unknown) {
@@ -32,6 +37,7 @@ async function createTableRecord(tableId: string, object: unknown) {
 
 export default {
   createSchnellrechnerTableRecord,
+  createNutzendenTableRecord,
   createPlanerTableRecord,
   createFunnelTableRecord,
 };

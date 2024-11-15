@@ -19,7 +19,7 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 const metadata = await matomo.fetchMetadata(date);
 const eventActions = await matomo.fetchEventActions(date);
 
-const record = {
+const elterngeldTableRequest = noco.createElterngeldTableRecord({
   Datum: date,
 
   Partnerschaftlichkeit: getFieldInActions({
@@ -44,6 +44,17 @@ const record = {
   }),
 
   EindeutigeBesucherinnen: metadata.nb_uniq_visitors,
-};
+});
 
-await noco.createTableRecord(record);
+const elterngeldFunnelTableRequests = eventActions
+  .filter((entry) => entry.label === "Fortschritt - Funnel")
+  .flatMap((entry) => entry.subtable)
+  .map((entry, index) =>
+    noco.createElterngeldFunnelTableRecord({
+      Datum: date,
+      Step: index + 1,
+      Value: entry.nb_uniq_visitors,
+    }),
+  );
+
+await Promise.all([elterngeldTableRequest, ...elterngeldFunnelTableRequests]);

@@ -10,7 +10,6 @@ const config = {
   noco: {
     domain: getEnvironmentVariable("EGR_METRICS_SYNC_NOCO_DOMAIN"),
     port: getEnvironmentVariable("EGR_METRICS_SYNC_NOCO_PORT"),
-    projectId: getEnvironmentVariable("EGR_METRICS_SYNC_NOCO_PROJECT_ID"),
     authenticationToken: getEnvironmentVariable(
       "EGR_METRICS_SYNC_NOCO_AUTHENTICATION_TOKEN",
     ),

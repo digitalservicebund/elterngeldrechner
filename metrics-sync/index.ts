@@ -18,7 +18,17 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 
 const eventActions = await matomo.fetchEventActions(date);
 
-const elterngeldTableRequest = noco.createElterngeldTableRecord({
+const schnellrechnerTableRequest = noco.createSchnellrechnerTableRecord({
+  Datum: date,
+  EindeutigeBesucherinnen: getFieldInActions({
+    actions: eventActions,
+    actionLabel: "Click Schnellberechnung",
+    accessor: (a) => a.nb_uniq_visitors,
+    default: 0,
+  }),
+});
+
+const planerTableRequest = noco.createPlanerTableRecord({
   Datum: date,
 
   Partnerschaftlichkeit: getFieldInActions({
@@ -51,15 +61,19 @@ const elterngeldTableRequest = noco.createElterngeldTableRecord({
   }),
 });
 
-const elterngeldFunnelTableRequests = eventActions
+const funnelTableRequests = eventActions
   .filter((entry) => entry.label === "Fortschritt - Funnel")
   .flatMap((entry) => entry.subtable)
   .map((entry, index) =>
-    noco.createElterngeldFunnelTableRecord({
+    noco.createFunnelTableRecord({
       Datum: date,
       Step: index + 1,
       Value: entry.nb_uniq_visitors,
     }),
   );
 
-await Promise.all([elterngeldTableRequest, ...elterngeldFunnelTableRequests]);
+await Promise.all([
+  planerTableRequest,
+  schnellrechnerTableRequest,
+  ...funnelTableRequests,
+]);

@@ -4,13 +4,14 @@ export type FieldInActionOptions<T> = {
   actions: Action[];
   actionLabel: string;
   accessor: (action: Action) => T;
+  default: null | 0;
 };
 
 export function getFieldInActions<T>(options: FieldInActionOptions<T>) {
   return (
     options.actions
       .filter((entry) => entry.label === options.actionLabel)
-      .map(options.accessor)[0] || null
+      .map(options.accessor)[0] || options.default
   );
 }
 
@@ -19,6 +20,7 @@ export type FieldInSubtableOptions<T> = {
   actionLabel: string;
   subtableLabel: string;
   accessor: (action: Subtable) => T;
+  default: null | 0;
 };
 
 export function getFieldInSubtable<T>(options: FieldInSubtableOptions<T>) {
@@ -27,7 +29,7 @@ export function getFieldInSubtable<T>(options: FieldInSubtableOptions<T>) {
       .filter((entry) => entry.label === options.actionLabel)
       .flatMap((entry) => entry.subtable)
       .filter((entry) => entry.label == options.subtableLabel)
-      .map(options.accessor)[0] || null
+      .map(options.accessor)[0] || options.default
   );
 }
 
@@ -71,12 +73,13 @@ if (import.meta.vitest) {
         actions: response["2024-11-12"],
         actionLabel: "Partnerschaftlichkeit",
         accessor: (a) => a.avg_event_value * 100,
+        default: 0,
       });
 
       expect(value).toBe(5);
     });
 
-    it("returns null if segment is missing", () => {
+    it("returns default (null) if segment is missing", () => {
       const response = {
         "2024-11-12": [],
       };
@@ -85,9 +88,25 @@ if (import.meta.vitest) {
         actions: response["2024-11-12"],
         actionLabel: "Partnerschaftlichkeit",
         accessor: (a) => a.avg_event_value * 100,
+        default: null,
       });
 
       expect(value).toBe(null);
+    });
+
+    it("returns default (zero) if segment is missing", () => {
+      const response = {
+        "2024-11-12": [],
+      };
+
+      const value = getFieldInActions({
+        actions: response["2024-11-12"],
+        actionLabel: "Partnerschaftlichkeit",
+        accessor: (a) => a.avg_event_value * 100,
+        default: 0,
+      });
+
+      expect(value).toBe(0);
     });
   });
 
@@ -140,6 +159,7 @@ if (import.meta.vitest) {
         actionLabel: "Feedback",
         subtableLabel: "Hilfreich",
         accessor: (a) => a.nb_uniq_visitors,
+        default: 0,
       });
 
       expect(value).toBe(4);
@@ -150,13 +170,31 @@ if (import.meta.vitest) {
         "2024-11-12": [],
       };
 
-      const value = getFieldInActions({
+      const value = getFieldInSubtable({
         actions: response["2024-11-12"],
-        actionLabel: "Partnerschaftlichkeit",
-        accessor: (a) => a.avg_event_value * 100,
+        actionLabel: "Feedback",
+        subtableLabel: "Hilfreich",
+        accessor: (a) => a.nb_uniq_visitors,
+        default: null,
       });
 
       expect(value).toBe(null);
+    });
+
+    it("returns default (zero) if segment is missing", () => {
+      const response = {
+        "2024-11-12": [],
+      };
+
+      const value = getFieldInSubtable({
+        actions: response["2024-11-12"],
+        actionLabel: "Feedback",
+        subtableLabel: "Hilfreich",
+        accessor: (a) => a.nb_uniq_visitors,
+        default: 0,
+      });
+
+      expect(value).toBe(0);
     });
   });
 }

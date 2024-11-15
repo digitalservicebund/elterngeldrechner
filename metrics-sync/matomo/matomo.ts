@@ -19,18 +19,21 @@ export async function fetchEventsInformation(date: string) {
       actions: actions,
       actionLabel: "Partnerschaftlichkeit",
       accessor: (a) => Math.round(a.avg_event_value * 100),
+      default: 0,
     }),
     hilfreichesFeedback: getFieldInSubtable({
       actions: actions,
       actionLabel: "Feedback",
       subtableLabel: "Hilfreich",
       accessor: (a) => a.nb_uniq_visitors,
+      default: 0,
     }),
     nichtHilfreichesFeedback: getFieldInSubtable({
       actions: actions,
       actionLabel: "Feedback",
       subtableLabel: "Nicht hilfreich",
       accessor: (a) => a.nb_uniq_visitors,
+      default: 0,
     }),
   };
 }

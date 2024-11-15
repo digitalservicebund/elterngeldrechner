@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Run metrics sync script
-        run: npm run sync
+        run: npm run sync -- $(date +'%Y-%m-%d')
         env:
           EGR_METRICS_SYNC_MATOMO_AUTHENTICATION_TOKEN: ${{ secrets.EGR_METRICS_SYNC_MATOMO_AUTHENTICATION_TOKEN }}
           EGR_METRICS_SYNC_MATOMO_DOMAIN: ${{ secrets.EGR_METRICS_SYNC_MATOMO_DOMAIN }}

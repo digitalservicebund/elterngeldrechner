@@ -1,13 +1,7 @@
-import { Action, Metadata, Method } from "./matomo-api-schema";
+import { Action, Method } from "./matomo-api-schema";
 
 async function fetchEventActions(date: string): Promise<Action[]> {
   return fetchMatomoEndpoint("Events.getAction", date)
-    .then((it) => it.json())
-    .then((it) => it[date]);
-}
-
-async function fetchMetadata(date: string): Promise<Metadata> {
-  return fetchMatomoEndpoint("API.get", date)
     .then((it) => it.json())
     .then((it) => it[date]);
 }
@@ -28,4 +22,4 @@ async function fetchMatomoEndpoint(method: Method, date: string) {
   return response;
 }
 
-export default { fetchMetadata, fetchEventActions };
+export default { fetchEventActions };

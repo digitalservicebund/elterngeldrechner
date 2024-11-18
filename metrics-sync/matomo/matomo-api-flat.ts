@@ -1,7 +1,7 @@
 import { Action, Subtable } from "./matomo-api-schema";
 
-export type Flattened<Type, P extends string> = {
-  [K in keyof Type as `${P}_${string & K}`]: string;
+export type Flattened<T, P extends string> = {
+  [K in keyof T as `${P}_${string & K}`]: string;
 };
 
 export type FlatStructure<Action, Subtable> = Flattened<Action, "action"> &

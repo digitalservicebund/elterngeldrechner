@@ -27,7 +27,6 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
     "@commitlint/config-conventional": "^19.4.1",
-    "@digitalservicebund/icons": "^1.1.1",
     "@playwright/test": "^1.44.1",
     "@tailwindcss/container-queries": "^0.1.1",
     "@testing-library/jest-dom": "^6.6.3",
@@ -76,6 +75,7 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
+    "@digitalservicebund/icons": "^1.1.1",
     "@bmfin/steuerrechner": "^1.1.1",
     "@reduxjs/toolkit": "^2.2.1",
     "big.js": "^6.2.1",

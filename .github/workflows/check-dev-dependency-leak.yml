@@ -1,0 +1,21 @@
+name: Detect devDependencies in production build
+
+on: push
+
+jobs:
+  check-leaked-dev-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/cached-checkout-install
+
+      - name: Install native dependencies
+        run: sudo apt-get install -y jq
+
+      - name: Setup app wrapper
+        run: ./scripts/setup-app-wrapper.sh
+
+      - name: Run the leaked dependency check script
+        run: ./scripts/find-leaked-dependencies.sh

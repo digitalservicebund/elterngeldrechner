@@ -8,14 +8,14 @@
 # Examples:
 #
 # Create and populate /public folder needed to run the app locally
-# $ ./setup-app-wrapper --target public
+# $ ./scripts/setup-app-wrapper.sh --target public
 #
 # Add additional js/css
-# $ ./setup-app-wrapper --target public \
+# $ ./scripts/setup-app-wrapper.sh --target public \
 #     --include-additional-js --include-additional-css
 #
 # Keep existing wrapper when it was created today (caching)
-# $ ./setup-app-wrapper --target public --use-cache
+# $ ./scripts/setup-app-wrapper.sh --target public --use-cache
 
 set -o errexit
 set -o nounset

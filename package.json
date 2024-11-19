@@ -6,9 +6,9 @@
     "src/*"
   ],
   "scripts": {
-    "start": "./setup-app-wrapper --target public --use-cache && vite",
-    "build": "./setup-app-wrapper --target public --include-additional-css --include-additional-js && vite build",
-    "serve-e2e": "./setup-app-wrapper --target public && vite build && http-server dist",
+    "start": "scripts/setup-app-wrapper.sh --target public --use-cache && vite",
+    "build": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build",
+    "serve-e2e": "scripts/setup-app-wrapper.sh --target public && vite build && http-server dist",
     "test": "LC_ALL=de-DE.utf8 vitest",
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",

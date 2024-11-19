@@ -4,7 +4,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { renderHook, type RenderHookResult } from "@testing-library/react";
+import { type RenderHookResult } from "@testing-library/react";
 import { Elternteil } from "@/features/planer/user-interface/service";
 
 export function GridLayoutProvider(props: {
@@ -171,8 +171,8 @@ if (import.meta.vitest) {
 
   describe("grid layout", () => {
     describe("layout hook", () => {
-      it("provides a styling that defines a layout with grid template definition", () => {
-        const { result } = renderHookWithGridLayoutContext(
+      it("provides a styling that defines a layout with grid template definition", async () => {
+        const { result } = await renderHookWithGridLayoutContext(
           () => useGridLayout(),
           1,
         );
@@ -188,13 +188,13 @@ if (import.meta.vitest) {
     });
 
     describe("grid column hook", () => {
-      it("selects the definition based on context and parses it as CSS", () => {
+      it("selects the definition based on context and parses it as CSS", async () => {
         const columnDefinition: GridColumnDefinition = {
           1: "left-outside",
           2: ["middle", "et1-inside"],
         };
 
-        const { result } = renderHookWithGridLayoutContext(
+        const { result } = await renderHookWithGridLayoutContext(
           () => useGridColumn(columnDefinition),
           2,
         );
@@ -206,7 +206,7 @@ if (import.meta.vitest) {
     });
 
     describe("grid column per Elternteil hook", () => {
-      it("selects the definition based on context and parses it as CSS", () => {
+      it("selects the definition based on context and parses it as CSS", async () => {
         const columnDefinition: GridColumnDefinitionPerElternteil = {
           1: {
             [Elternteil.Eins]: "left-outside",
@@ -217,7 +217,7 @@ if (import.meta.vitest) {
           },
         };
 
-        const { result } = renderHookWithGridLayoutContext(
+        const { result } = await renderHookWithGridLayoutContext(
           () => useGridColumnPerElternteil(columnDefinition),
           1,
         );
@@ -229,10 +229,12 @@ if (import.meta.vitest) {
       });
     });
 
-    function renderHookWithGridLayoutContext<Props, Result>(
+    async function renderHookWithGridLayoutContext<Props, Result>(
       render: (props: Props) => Result,
       anzahlElternteile: AnzahlElternteile,
-    ): RenderHookResult<Result, Props> {
+    ): Promise<RenderHookResult<Result, Props>> {
+      const { renderHook } = await import("@testing-library/react");
+
       return renderHook(render, {
         wrapper: ({ children }) => (
           <GridLayoutProvider anzahlElternteile={anzahlElternteile}>

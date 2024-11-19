@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import { type RefObject, useCallback, useEffect } from "react";
 
 export function useDetectClickOutside(
@@ -28,6 +27,7 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("detect click outside hook", async () => {
+    const { render } = await import("@testing-library/react");
     const { useRef } = await import("react");
     const { userEvent } = await import("@testing-library/user-event");
 

@@ -17,8 +17,6 @@ const eventActions = await matomo.fetchEventActions(date);
 
 const flatElements = flatten(eventActions);
 
-const requests = flatElements.map((element) =>
-  noco.createTableRecord({ Datum: date, ...element }),
-);
+const rows = flatElements.map((element) => ({ Datum: date, ...element }));
 
-await Promise.all(requests);
+await noco.createTableRecord(rows);

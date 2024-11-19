@@ -1,7 +1,15 @@
-async function createTableRecord(object: unknown) {
+async function createElterngeldrechnerRecord(object: unknown) {
+  await createTableRecord("mgrckhcpehp9sih", object);
+}
+
+async function createFamilienportalRecord(object: unknown) {
+  await createTableRecord("mwp01ckwe69i1fg", object);
+}
+
+async function createTableRecord(tableId: string, object: unknown) {
   const { config } = await import("../env");
 
-  const url = `https://${config.noco.domain}:${config.noco.port}/api/v2/tables/mgrckhcpehp9sih/records`;
+  const url = `https://${config.noco.domain}:${config.noco.port}/api/v2/tables/${tableId}/records`;
 
   const response = await fetch(url, {
     body: JSON.stringify(object),
@@ -19,4 +27,4 @@ async function createTableRecord(object: unknown) {
   }
 }
 
-export default { createTableRecord };
+export default { createElterngeldrechnerRecord, createFamilienportalRecord };

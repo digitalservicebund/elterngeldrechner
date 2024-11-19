@@ -13,10 +13,10 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
   throw new Error(`Expected date to be in format YYYY-MM-DD but was ${date}`);
 }
 
+const metadata = await matomo.fetchFamilienportalMetadata(date);
+await noco.createFamilienportalRecord({ Datum: date, ...metadata });
+
 const eventActions = await matomo.fetchEventActions(date);
-
 const flatElements = flatten(eventActions);
-
 const rows = flatElements.map((element) => ({ Datum: date, ...element }));
-
-await noco.createTableRecord(rows);
+await noco.createElterngeldrechnerRecord(rows);

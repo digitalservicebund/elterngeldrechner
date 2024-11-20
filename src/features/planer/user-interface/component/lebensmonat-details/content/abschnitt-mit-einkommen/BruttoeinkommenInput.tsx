@@ -29,7 +29,8 @@ export function BruttoeinkommenInput({
   function filterNonNumbericInput(event: KeyboardEvent<HTMLInputElement>) {
     const isNumber = event.key.match(/[0-9]/) != null;
     const isSpecialKey = SPECIAL_INPUT_KEYS.includes(event.key);
-    const shouldFilter = !isNumber && !isSpecialKey;
+    const isModifierActive = event.ctrlKey || event.metaKey || event.altKey;
+    const shouldFilter = !isNumber && !isSpecialKey && !isModifierActive;
     if (shouldFilter) event.preventDefault();
   }
 

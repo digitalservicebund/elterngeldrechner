@@ -1,8 +1,8 @@
-async function createElterngeldrechnerRecord(object: unknown) {
+async function createElterngeldrechnerEventRecord(object: unknown) {
   await createTableRecord("mgrckhcpehp9sih", object);
 }
 
-async function createFamilienportalRecord(object: unknown) {
+async function createElterngeldrechnerMetadataRecord(object: unknown) {
   await createTableRecord("mwp01ckwe69i1fg", object);
 }
 
@@ -27,4 +27,7 @@ async function createTableRecord(tableId: string, object: unknown) {
   }
 }
 
-export default { createElterngeldrechnerRecord, createFamilienportalRecord };
+export default {
+  createElterngeldrechnerEventRecord,
+  createElterngeldrechnerMetadataRecord,
+};

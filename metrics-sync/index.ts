@@ -14,9 +14,9 @@ if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
 }
 
 const metadata = await matomo.fetchFamilienportalMetadata(date);
-await noco.createFamilienportalRecord({ Datum: date, ...metadata });
+await noco.createElterngeldrechnerMetadataRecord({ Datum: date, ...metadata });
 
 const eventActions = await matomo.fetchEventActions(date);
 const flatElements = flatten(eventActions);
 const rows = flatElements.map((element) => ({ Datum: date, ...element }));
-await noco.createElterngeldrechnerRecord(rows);
+await noco.createElterngeldrechnerEventRecord(rows);

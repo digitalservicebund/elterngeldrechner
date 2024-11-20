@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/cached-checkout-install
+      - uses: ./.github/actions/cached-node-install
 
       - name: Build egr
         env:

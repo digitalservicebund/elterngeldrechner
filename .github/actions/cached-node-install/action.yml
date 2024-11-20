@@ -1,5 +1,5 @@
-name: "Cached Checkout & Install"
-description: "Checks out repository, downloads node, caches node_modules and installs project"
+name: "Cached Node Install"
+description: "Downloads node, installs project and caches node_modules."
 runs:
   using: "composite"
   steps:

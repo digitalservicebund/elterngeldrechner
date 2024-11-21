@@ -54,16 +54,20 @@ export default function RechnerPlanerPage() {
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
-  function setPlan(nextPlan: PlanMitBeliebigenElternteilen | undefined): void {
+  function setPlan(
+    nextPlan: PlanMitBeliebigenElternteilen,
+    istPlanGueltig: boolean,
+  ): void {
     plan.current = nextPlan;
-    const istPlanGueltig = nextPlan != undefined;
-    setIstPlanGueltig(nextPlan !== undefined);
+
+    setIstPlanGueltig(istPlanGueltig);
 
     if (istPlanGueltig) {
       trackPartnerschaftlicheVerteilungForPlan(nextPlan);
-      trackPlannedMonthsWithIncome(nextPlan);
-      trackPlannedMonths(nextPlan);
     }
+
+    trackPlannedMonthsWithIncome(nextPlan);
+    trackPlannedMonths(nextPlan);
   }
 
   function navigateToUebersicht(): void {

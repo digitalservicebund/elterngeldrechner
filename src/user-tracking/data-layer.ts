@@ -16,13 +16,20 @@ export function setTrackingVariable(name: string, value?: unknown): void {
 
 export function getTrackingVariable<T>(name: string): T | null {
   if (window._mtm) {
-    const lastElement = window._mtm?.findLast((it) => it[name] !== undefined);
-    const lastElementsProperty = lastElement?.[name];
-
-    return lastElementsProperty ? (lastElementsProperty as T) : null;
+    return getTrackingVariableFrom(window._mtm, name);
   } else {
     return null;
   }
+}
+
+export function getTrackingVariableFrom<T>(
+  dataLayer: Record<string, unknown>[],
+  name: string,
+): T | null {
+  const lastElement = dataLayer.findLast((it) => it[name] !== undefined);
+  const lastElementsProperty = lastElement?.[name];
+
+  return lastElementsProperty ? (lastElementsProperty as T) : null;
 }
 
 declare global {

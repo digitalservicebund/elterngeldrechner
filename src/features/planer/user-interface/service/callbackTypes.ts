@@ -10,7 +10,8 @@ import type {
 } from "@/features/planer/user-interface/service";
 
 export type PlanChangedCallback = (
-  plan: PlanMitBeliebigenElternteilen | undefined,
+  plan: PlanMitBeliebigenElternteilen,
+  isPlanGueltig: boolean,
 ) => void;
 
 export type OptionSelectedCallback = () => void;

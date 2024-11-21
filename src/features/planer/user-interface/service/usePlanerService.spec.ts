@@ -500,20 +500,22 @@ describe("use Planer service", () => {
       waehleAnyOption(result.current.waehleOption);
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
+      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, true);
     });
 
     it("triggers the callback with an undefined Plan when the chosen Plan is invalid", () => {
+      vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
       vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
         Result.error([{ message: "ungültig" }]),
       );
-      const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook({ onPlanChanged });
 
+      const onPlanChanged = vi.fn();
+
+      const { result } = renderPlanerServiceHook({ onPlanChanged });
       waehleAnyOption(result.current.waehleOption);
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(undefined);
+      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, false);
     });
 
     it("does not trigger callback if the initial Plan is invalid", () => {
@@ -534,7 +536,7 @@ describe("use Planer service", () => {
       gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
+      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, true);
     });
 
     it("triggers the given callback when resetting the Plan", () => {
@@ -545,7 +547,7 @@ describe("use Planer service", () => {
       act(() => result.current.setzePlanZurueck());
 
       expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN);
+      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, true);
     });
   });
 });

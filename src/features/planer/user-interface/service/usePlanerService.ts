@@ -69,13 +69,8 @@ export function usePlanerService(
       updateGesamtsumme(nextPlan);
 
       const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
-      const istPlanGueltig = nextValidierungsfehler.length === 0;
 
-      if (istPlanGueltig) {
-        onPlanChanged?.(nextPlan);
-      } else {
-        onPlanChanged?.(undefined);
-      }
+      onPlanChanged?.(nextPlan, nextValidierungsfehler.length === 0);
     },
     [
       updateVerplantesKontingent,

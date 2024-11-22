@@ -16,7 +16,7 @@ import importPathsPlugin from "eslint-plugin-no-relative-import-paths";
 
 import eslintConfigPrettier from "eslint-config-prettier";
 
-import customRulesPlugin from "./eslint-rules/custom-rules-plugin.js";
+import customRulesPlugin from "./eslint-plugin/index.js";
 
 const eslintConfig = [
   js.configs.recommended,
@@ -57,6 +57,24 @@ const customRulesConfig = [
     },
     rules: {
       "customRules/vi-import": "error",
+    },
+  },
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/setupTests.ts", "src/test-utils/*", "**/*.spec.{ts,tsx}"],
+    plugins: {
+      customRules: customRulesPlugin,
+    },
+    rules: {
+      "customRules/leaking-dev-dependencies": "error",
+    },
+  },
+  {
+    files: ["eslint-plugin/**/*.js"],
+    languageOptions: {
+      globals: {
+        process: true,
+      },
     },
   },
 ];

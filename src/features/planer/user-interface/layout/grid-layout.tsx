@@ -4,7 +4,7 @@ import {
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { type RenderHookResult } from "@testing-library/react";
+import type { RenderHookResult } from "@testing-library/react";
 import { Elternteil } from "@/features/planer/user-interface/service";
 
 export function GridLayoutProvider(props: {

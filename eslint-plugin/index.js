@@ -5,8 +5,14 @@
 // things simple for now and write the rule in javaScript. If we accumulate
 // more rules over time, we may want to reconsider this decision.
 
-import viImportRule from "./vi-import-rule.js";
+import viImportRule from "./rules/vi-import.js";
+import leakingDevDependenciesRule from "./rules/leaking-dev-dependencies.js";
 
-const plugin = { rules: { "vi-import": viImportRule } };
+const plugin = {
+  rules: {
+    "vi-import": viImportRule,
+    "leaking-dev-dependencies": leakingDevDependenciesRule,
+  },
+};
 
 export default plugin;

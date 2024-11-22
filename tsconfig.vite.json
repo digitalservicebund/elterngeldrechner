@@ -14,6 +14,6 @@
     "commitlint.config.ts",
     "postcss.config.js",
     "eslint.config.js",
-    "eslint-rules"
+    "eslint-plugin/**/*.js"
   ]
 }

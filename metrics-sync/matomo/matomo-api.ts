@@ -1,23 +1,37 @@
-import { Action, Metadata, Method } from "./matomo-api-schema";
+import { Action, PageStatistic, Method } from "./matomo-api-schema";
 
 async function fetchEventActions(date: string): Promise<Action[]> {
-  return fetchMatomoEndpoint("Events.getAction", date)
+  return fetchMatomoEndpoint("Events.getAction", date, date, true)
     .then((it) => it.json())
     .then((it) => it[date]);
 }
 
-async function fetchFamilienportalMetadata(date: string): Promise<Metadata> {
-  return fetchMatomoEndpoint("API.get", date)
+async function fetchPageStatistics(date: string): Promise<PageStatistic> {
+  return fetchMatomoEndpoint("Actions.getPageTitles", date, date, false)
     .then((it) => it.json())
-    .then((it) => it[date]);
+    .then((it) => it[date])
+    .then((it) => it.filter(isPlanerSegment))
+    .then((it) => it[0]);
 }
 
-async function fetchMatomoEndpoint(method: Method, date: string) {
+function isPlanerSegment(it: PageStatistic) {
+  const planer = `pageTitle==Elterngeldrechner%2Bmit%2BPlaner%2B%257C%2BFamilienportal%2Bdes%2BBundes`;
+
+  return it.segment == planer;
+}
+
+async function fetchMatomoEndpoint(
+  method: Method,
+  startDate: string,
+  endDate: string,
+  useSegmentFilter: boolean,
+) {
   const { config } = await import("../env");
 
-  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${date},${date}&method=${method}&filter_limit=100&format_metrics=1&expanded=1&segment=pageUrl%3D%3Dhttps%25253A%25252F%25252Ffamilienportal.de%25252Ffamilienportal%25252Fmeta%25252Fegr&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
+  const segmentFilter = `&segment=pageUrl%3D%3Dhttps%25253A%25252F%25252Ffamilienportal.de%25252Ffamilienportal%25252Fmeta%25252Fegr`;
+  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${startDate},${endDate}&method=${method}&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
 
-  const response = await fetch(url);
+  const response = await fetch(useSegmentFilter ? url + segmentFilter : url);
 
   if (!response.ok) {
     throw Error(
@@ -30,5 +44,5 @@ async function fetchMatomoEndpoint(method: Method, date: string) {
 
 export default {
   fetchEventActions,
-  fetchFamilienportalMetadata,
+  fetchPageStatistics,
 };

@@ -39,7 +39,6 @@ const averageFromAverageOrMonthly = (
     case "yearly":
       return (averageOrMonthly.perYear ?? 0) / 12;
   }
-  throw new Error("Unknown AverageOrMonthlyState Type.");
 };
 
 const ANZAHL_MONATE_PRO_JAHR = 12;

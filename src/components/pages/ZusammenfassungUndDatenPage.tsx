@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
+import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import { UserFeedbackSection } from "@/components/molecules/UserFeedbackSection";
-import { Button, PrintButton } from "@/components/atoms";
+import { Button } from "@/components/atoms";
 import { Page } from "@/components/organisms/page";
 import { formSteps } from "@/utils/formSteps";
 import { Zusammenfassung } from "@/features/planer";
@@ -14,13 +15,23 @@ function ZusammenfassungUndDatenPage(): ReactNode {
     navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
   }
 
+  function print(): void {
+    window.print();
+  }
+
   return (
     <Page step={formSteps.zusammenfassungUndDaten}>
       <div className="flex flex-col items-start gap-y-32">
         {hasPlan ? (
           <>
             <Zusammenfassung plan={plan} />
-            <PrintButton />
+
+            <Button
+              buttonStyle="link"
+              label="Download der Planung"
+              iconBefore={<SaveAltIcon />}
+              onClick={print}
+            />
           </>
         ) : (
           "Es wurde noch kein Plan erstellt"

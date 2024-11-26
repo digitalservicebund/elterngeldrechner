@@ -10,4 +10,4 @@ export { CustomInput } from "./custom-input";
 export { Split } from "./split";
 export { ButtonGroup } from "./button-group";
 
-export * from "./CustomRadio";
+export * from "./CustomRadioGroup";

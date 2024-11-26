@@ -1,10 +1,10 @@
 import { useFormContext } from "react-hook-form";
 import type { ElternteilType } from "@/globals/js/elternteil-type";
 import {
-  CustomRadio,
+  CustomRadioGroup,
   CustomSelect,
   FormFieldGroup,
-  CustomRadioOption,
+  CustomRadioGroupOption,
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
@@ -52,7 +52,7 @@ const kassenArtLabels: { [K in KassenArt]: string } = {
     "nicht gesetzlich pflichtversichert",
 };
 
-const kassenArtOptions: CustomRadioOption<KassenArt>[] = [
+const kassenArtOptions: CustomRadioGroupOption<KassenArt>[] = [
   {
     value: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
     label: kassenArtLabels.GESETZLICH_PFLICHTVERSICHERT,
@@ -69,7 +69,7 @@ const rentenVersicherungLabels: { [K in RentenArt]: string } = {
     "keine gesetzliche Rentenversicherung",
 };
 
-const rentenVersicherungOptions: CustomRadioOption<RentenArt>[] = [
+const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
   {
     value: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
     label: rentenVersicherungLabels.GESETZLICHE_RENTEN_VERSICHERUNG,
@@ -154,7 +154,7 @@ export function SteuerUndVersicherung({
           headline="Krankenversicherung"
           description="Wie sind Sie krankenversichert?"
         >
-          <CustomRadio
+          <CustomRadioGroup
             register={register}
             registerOptions={{
               required: "Dieses Feld ist erforderlich",
@@ -171,7 +171,7 @@ export function SteuerUndVersicherung({
           headline="Rentenversicherung"
           description="Wie sind Sie rentenversichert?"
         >
-          <CustomRadio
+          <CustomRadioGroup
             register={register}
             registerOptions={{
               required: "Dieses Feld ist erforderlich",

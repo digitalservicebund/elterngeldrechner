@@ -3,9 +3,9 @@ import { useEffect } from "react";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
 import type { ElternteilType } from "@/globals/js/elternteil-type";
 import {
-  CustomRadio,
+  CustomRadioGroup,
   FormFieldGroup,
-  CustomRadioOption,
+  CustomRadioGroupOption,
   YesNoRadio,
 } from "@/components/molecules";
 import {
@@ -22,7 +22,7 @@ const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MehrAlsMiniJob: "Nein",
 };
 
-const monatlichesBruttoOptions: CustomRadioOption<MonatlichesBrutto>[] = [
+const monatlichesBruttoOptions: CustomRadioGroupOption<MonatlichesBrutto>[] = [
   {
     value: "MiniJob",
     label: monatlichesBruttoLabels.MiniJob,
@@ -124,7 +124,7 @@ function ErwerbstaetigkeitFormElternteil({
                     description="Hatten Sie Einkommen aus einem Mini-Job?"
                     info={infoTexts.minijobsMaxZahl}
                   >
-                    <CustomRadio
+                    <CustomRadioGroup
                       register={register}
                       registerOptions={{
                         required: "Dieses Feld ist erforderlich",

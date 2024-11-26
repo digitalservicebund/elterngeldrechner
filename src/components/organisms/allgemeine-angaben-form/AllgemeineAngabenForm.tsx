@@ -6,9 +6,9 @@ import {
 import {
   ButtonGroup,
   CustomInput,
-  CustomRadio,
+  CustomRadioGroup,
   FormFieldGroup,
-  CustomRadioOption,
+  CustomRadioGroupOption,
   Split,
   YesNoRadio,
 } from "@/components/molecules";
@@ -21,7 +21,7 @@ const antragstellendeLabels: { [K in Antragstellende]: string } = {
   EinenElternteil: "Für einen Elternteil",
 };
 
-const antragstellendeOptions: CustomRadioOption<Antragstellende>[] = [
+const antragstellendeOptions: CustomRadioGroupOption<Antragstellende>[] = [
   { value: "FuerBeide", label: antragstellendeLabels.FuerBeide },
   { value: "EinenElternteil", label: antragstellendeLabels.EinenElternteil },
 ];
@@ -42,7 +42,7 @@ export function AllgemeineAngabenForm({
   const antragstellendeFormValue = watch("antragstellende");
   const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
 
-  const mutteschaftsleistungenOptions: CustomRadioOption[] = [
+  const mutteschaftsleistungenOptions: CustomRadioGroupOption[] = [
     { value: "ET1", label: watch("pseudonym.ET1") || "Elternteil 1" },
     { value: "ET2", label: watch("pseudonym.ET2") || "Elternteil 2" },
   ];
@@ -58,7 +58,7 @@ export function AllgemeineAngabenForm({
         headline="Eltern"
         description="Für wen planen Sie Elterngeld?"
       >
-        <CustomRadio
+        <CustomRadioGroup
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="antragstellende"
@@ -125,7 +125,7 @@ export function AllgemeineAngabenForm({
           </FormFieldGroup>
           {!!showMutterschaftsleistungsWerGroup && (
             <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
-              <CustomRadio
+              <CustomRadioGroup
                 register={register}
                 registerOptions={{
                   required: "Dieses Feld ist erforderlich",

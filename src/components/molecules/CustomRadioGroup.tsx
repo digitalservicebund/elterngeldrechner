@@ -11,30 +11,32 @@ import classNames from "classnames";
 import { useId } from "react";
 import { Description } from "@/components/atoms";
 
-type RadioValue = string | number;
+type RadioGroupValue = string | number;
 
-export interface CustomRadioOption<TValue extends RadioValue = RadioValue> {
-  value: TValue;
+export interface CustomRadioGroupOption<
+  V extends RadioGroupValue = RadioGroupValue,
+> {
+  value: V;
   label: string;
 }
 
-export interface CustomRadioProps<TFieldValues extends FieldValues> {
+export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
-  readonly options: CustomRadioOption[];
+  readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
 }
 
-export function CustomRadio<TFieldValues extends FieldValues>({
+export function CustomRadioGroup<TFieldValues extends FieldValues>({
   register,
   registerOptions,
   name,
   options,
   errors,
   required,
-}: CustomRadioProps<TFieldValues>) {
+}: CustomRadioGroupProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
 
   const descriptionId = useId();

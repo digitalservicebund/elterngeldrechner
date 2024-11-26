@@ -1,56 +1,40 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
+import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 
 test("unverheiratet, nicht selbstständig", async ({ page }) => {
   test.slow();
   const screenshot = expectScreenshot({ page });
 
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setElternteile(2);
+  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Elternteil 1");
+  await allgemeineAngabenPage.submit();
+
+  const nachwuchsPage = new NachwuchsPOM(page);
+  await nachwuchsPage.setGeburtsdatum("10.12.2024");
+  await nachwuchsPage.submit();
+
+  const erwerbstaetigkeitPage = new ErwerbstaetigkeitPOM(page, {
+    elternteile: ["Elternteil 1", "Elternteil 2"],
+  });
+  await erwerbstaetigkeitPage.setErwerbstaetig(true, 1);
+  await erwerbstaetigkeitPage.setErwerbstaetig(true, 2);
+  await erwerbstaetigkeitPage.submit();
+
   // codegen
-  await page.goto("./");
-  await page.getByText("Für beide").click();
-  await page
-    .locator("div")
-    .filter({ hasText: /^JaNein$/ })
-    .first()
-    .click();
-  await page.getByText("Ja", { exact: true }).click();
-  await page.getByText("Elternteil 1", { exact: true }).click();
-  await page.getByRole("button", { name: "Weiter" }).click();
-  await page
-    .locator("div")
-    .filter({ hasText: /^TT\.MM\.JJJJ$/ })
-    .click();
-  await page.getByPlaceholder("__.__.___").fill("10.12.2024");
-  await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByLabel("Elternteil 1").getByText("Ja").click();
-  await page.getByLabel("Elternteil 2").getByText("Ja").click();
   await page.getByText("Einkünfte aus nichtselbstä").first().click();
   await page.getByText("Einkünfte aus nichtselbstä").nth(1).click();
-  await page
-    .locator(
-      "section:nth-child(4) > .egr-custom-radio > .egr-custom-radio__options > div > .egr-custom-radio__label",
-    )
-    .first()
-    .click();
-  await page
-    .locator(
-      "div:nth-child(2) > section:nth-child(4) > .egr-custom-radio > .egr-custom-radio__options > div > .egr-custom-radio__label",
-    )
-    .first()
-    .click();
-  await page
-    .locator(
-      "section:nth-child(5) > .egr-custom-radio > .egr-custom-radio__options > div:nth-child(2) > .egr-custom-radio__label",
-    )
-    .first()
-    .click();
-  await page
-    .locator(
-      "div:nth-child(2) > section:nth-child(5) > .egr-custom-radio > .egr-custom-radio__options > div:nth-child(2) > .egr-custom-radio__label",
-    )
-    .click();
+  await page.getByTestId("ET1.sozialVersicherungsPflichtig_option_0").click();
+  await page.getByTestId("ET2.sozialVersicherungsPflichtig_option_0").click();
+  await page.getByTestId("ET1.monatlichesBrutto_option_1").click();
+  await page.getByTestId("ET2.monatlichesBrutto_option_1").click();
   await page.getByRole("button", { name: "Weiter" }).click();
+
   await page.getByTestId("egr-anspruch").getByText("Nein").click();
   await page
     .getByLabel("Elternteil 1")

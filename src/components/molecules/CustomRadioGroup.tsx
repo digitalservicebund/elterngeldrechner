@@ -38,25 +38,25 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   required,
 }: CustomRadioGroupProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
-
-  const descriptionId = useId();
+  const hasError = error !== undefined;
+  const errorIdentifier = useId();
 
   return (
     <fieldset
       role="radiogroup"
-      className="flex flex-col gap-10"
-      aria-describedby={error ? descriptionId : undefined}
+      className="flex flex-col gap-16"
+      aria-describedby={hasError ? errorIdentifier : undefined}
     >
       {options.map((option, i) => (
         <label
           key={option.label}
-          className={classNames("flex content-center gap-8", {
-            "text-danger": error,
+          className={classNames("flex content-center gap-16", {
+            "text-danger": hasError,
           })}
         >
           <input
             {...register(name, registerOptions)}
-            className={getInputClassName(!!error)}
+            className={getInputClassName(hasError)}
             type="radio"
             data-testid={name + "_option_" + i}
             value={option.value}
@@ -66,8 +66,8 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         </label>
       ))}
 
-      {!!error && (
-        <Description id={descriptionId} error>
+      {!!hasError && (
+        <Description id={errorIdentifier} error>
           {error.message}
         </Description>
       )}

@@ -40,7 +40,11 @@ export function CustomRadio<TFieldValues extends FieldValues>({
   const descriptionId = useId();
 
   return (
-    <div role="radiogroup" className="flex flex-col gap-10">
+    <fieldset
+      role="radiogroup"
+      className="flex flex-col gap-10"
+      aria-describedby={error ? descriptionId : undefined}
+    >
       {options.map((option, i) => (
         <label
           key={option.label}
@@ -54,7 +58,6 @@ export function CustomRadio<TFieldValues extends FieldValues>({
             type="radio"
             data-testid={name + "_option_" + i}
             value={option.value}
-            aria-describedby={error ? descriptionId : undefined}
             required={required}
           />
           {option.label}
@@ -66,7 +69,7 @@ export function CustomRadio<TFieldValues extends FieldValues>({
           {error.message}
         </Description>
       )}
-    </div>
+    </fieldset>
   );
 }
 

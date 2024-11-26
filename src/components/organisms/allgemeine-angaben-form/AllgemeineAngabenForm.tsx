@@ -8,7 +8,7 @@ import {
   CustomInput,
   CustomRadio,
   FormFieldGroup,
-  RadioOption,
+  CustomRadioOption,
   Split,
   YesNoRadio,
 } from "@/components/molecules";
@@ -21,7 +21,7 @@ const antragstellendeLabels: { [K in Antragstellende]: string } = {
   EinenElternteil: "Für einen Elternteil",
 };
 
-const antragstellendeOptions: RadioOption<Antragstellende>[] = [
+const antragstellendeOptions: CustomRadioOption<Antragstellende>[] = [
   { value: "FuerBeide", label: antragstellendeLabels.FuerBeide },
   { value: "EinenElternteil", label: antragstellendeLabels.EinenElternteil },
 ];
@@ -42,7 +42,7 @@ export function AllgemeineAngabenForm({
   const antragstellendeFormValue = watch("antragstellende");
   const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
 
-  const mutteschaftsleistungenOptions: RadioOption[] = [
+  const mutteschaftsleistungenOptions: CustomRadioOption[] = [
     { value: "ET1", label: watch("pseudonym.ET1") || "Elternteil 1" },
     { value: "ET2", label: watch("pseudonym.ET2") || "Elternteil 2" },
   ];

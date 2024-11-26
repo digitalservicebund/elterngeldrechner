@@ -5,7 +5,7 @@ import type { ElternteilType } from "@/globals/js/elternteil-type";
 import {
   CustomRadio,
   FormFieldGroup,
-  RadioOption,
+  CustomRadioOption,
   YesNoRadio,
 } from "@/components/molecules";
 import {
@@ -22,7 +22,7 @@ const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MehrAlsMiniJob: "Nein",
 };
 
-const monatlichesBruttoOptions: RadioOption<MonatlichesBrutto>[] = [
+const monatlichesBruttoOptions: CustomRadioOption<MonatlichesBrutto>[] = [
   {
     value: "MiniJob",
     label: monatlichesBruttoLabels.MiniJob,

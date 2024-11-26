@@ -2,8 +2,8 @@ import { FieldValues } from "react-hook-form";
 import {
   CustomRadio,
   CustomRadioProps,
-  RadioOption,
-} from "@/components/molecules/custom-radio";
+  CustomRadioOption,
+} from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
 
 const yesNoLabels: { [K in YesNo]: string } = {
@@ -11,7 +11,7 @@ const yesNoLabels: { [K in YesNo]: string } = {
   [YesNo.NO]: "Nein",
 };
 
-const booleanOptions: RadioOption<YesNo>[] = [
+const booleanOptions: CustomRadioOption<YesNo>[] = [
   { value: YesNo.YES, label: yesNoLabels.YES },
   { value: YesNo.NO, label: yesNoLabels.NO },
 ];

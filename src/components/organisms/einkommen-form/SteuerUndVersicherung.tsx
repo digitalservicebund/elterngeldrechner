@@ -4,7 +4,7 @@ import {
   CustomRadio,
   CustomSelect,
   FormFieldGroup,
-  RadioOption,
+  CustomRadioOption,
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
@@ -52,7 +52,7 @@ const kassenArtLabels: { [K in KassenArt]: string } = {
     "nicht gesetzlich pflichtversichert",
 };
 
-const kassenArtOptions: RadioOption<KassenArt>[] = [
+const kassenArtOptions: CustomRadioOption<KassenArt>[] = [
   {
     value: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
     label: kassenArtLabels.GESETZLICH_PFLICHTVERSICHERT,
@@ -69,7 +69,7 @@ const rentenVersicherungLabels: { [K in RentenArt]: string } = {
     "keine gesetzliche Rentenversicherung",
 };
 
-const rentenVersicherungOptions: RadioOption<RentenArt>[] = [
+const rentenVersicherungOptions: CustomRadioOption<RentenArt>[] = [
   {
     value: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
     label: rentenVersicherungLabels.GESETZLICHE_RENTEN_VERSICHERUNG,

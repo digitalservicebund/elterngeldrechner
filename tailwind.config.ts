@@ -10,6 +10,7 @@ export default {
   plugins: [containerQueriesPlugin],
   theme: {
     borderRadius: {
+      full: "50%",
       2: "0.125rem",
       DEFAULT: "0.25rem",
     },

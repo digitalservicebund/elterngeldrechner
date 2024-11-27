@@ -5,6 +5,7 @@ import {
   Elternteil,
   KeinElterngeld,
   Lebensmonatszahlen,
+  type Lebensmonatszahl,
   LetzteLebensmonatszahl,
   Variante,
 } from "@/features/planer/user-interface/service";
@@ -16,16 +17,34 @@ describe("Lebensmonatsliste", () => {
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
   });
 
-  it("renders a list of all Lebensmonate", () => {
+  it("renders a list of the first 14 Lebensmonate initially", () => {
     render(<Lebensmonatsliste {...ANY_PROPS} />);
 
-    Lebensmonatszahlen.forEach((lebensmonatszahl) => {
-      expect(
-        screen.queryByRole("group", {
-          name: `${lebensmonatszahl}. Lebensmonat`,
-        }),
-      ).toBeInTheDocument();
-    });
+    Lebensmonatszahlen.filter(
+      (lebensmonatszahl) => lebensmonatszahl <= 14,
+    ).forEach(expectLebensmonatToBeVisible);
+  });
+
+  it("can toggle visibility of remaining Lebensmonate", async () => {
+    render(<Lebensmonatsliste {...ANY_PROPS} />);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "mehr Monate anzeigen" }),
+    );
+
+    Lebensmonatszahlen.forEach(expectLebensmonatToBeVisible);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "weniger Monate anzeigen" }),
+    );
+
+    Lebensmonatszahlen.filter(
+      (lebensmonatszahl) => lebensmonatszahl <= 14,
+    ).forEach(expectLebensmonatToBeVisible);
+
+    Lebensmonatszahlen.filter(
+      (lebensmonatszahl) => lebensmonatszahl > 14,
+    ).forEach(expectLebensmonatNotToBeVisible);
   });
 
   it("uses the callback to create unplanned Lebensmonate for missing Lebensmonate", () => {
@@ -49,12 +68,6 @@ describe("Lebensmonatsliste", () => {
     expect(erstelleUngeplantenLebensmonat).toHaveBeenCalledWith(2);
   });
 
-  // TODO: The `.toBeVisible()` does not work here because the utility CSS class
-  // `hidden` on the parent node is not picked up. We need to inject the actual
-  // CSS here with TailwindCSS to make it work.
-  test.todo("only shows the first 14 Lebensmonate initially");
-  test.todo("can toggle visibility of all Lebensmonate");
-
   it("moves the focus to the 15. Lebensmonat when showing more Monate", async () => {
     render(<Lebensmonatsliste {...ANY_PROPS} />);
 
@@ -68,6 +81,18 @@ describe("Lebensmonatsliste", () => {
     ).toHaveFocus();
   });
 });
+
+function expectLebensmonatToBeVisible(lebensmonatszahl: Lebensmonatszahl) {
+  expect(
+    screen.getByRole("group", { name: `${lebensmonatszahl}. Lebensmonat` }),
+  ).toBeInTheDocument();
+}
+
+function expectLebensmonatNotToBeVisible(lebensmonatszahl: Lebensmonatszahl) {
+  expect(
+    screen.queryByRole("group", { name: `${lebensmonatszahl}. Lebensmonat` }),
+  ).not.toBeInTheDocument();
+}
 
 const ANY_LEBENSMONAT = {
   [Elternteil.Eins]: { imMutterschutz: false as const },

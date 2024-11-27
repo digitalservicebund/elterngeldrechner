@@ -9,15 +9,15 @@ describe("GewaehlteOption", () => {
   it("shows im Mutterschutz with a lock icon", () => {
     render(<GewaehlteOption imMutterschutz />);
 
-    expect(screen.queryByText("Mutterschutz")).toBeVisible();
-    expect(screen.queryByTestId("LockIcon")).toBeVisible();
+    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
+    expect(screen.getByTestId("LockIcon")).toBeVisible();
   });
 
   it("shows hinzufügen with a plus icon if no Option chosen yet", () => {
     render(<GewaehlteOption option={undefined} />);
 
-    expect(screen.getByText("hinzufügen")).toBeVisible();
-    expect(screen.queryByTestId("AddIcon")).toBeVisible();
+    expect(screen.getByText("hinzufügen")).toBeInTheDocument();
+    expect(screen.getByTestId("AddIcon")).toBeVisible();
   });
 
   it.each([

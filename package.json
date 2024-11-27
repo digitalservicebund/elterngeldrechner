@@ -55,7 +55,6 @@
     "http-server": "^14.1.1",
     "immer": "^10.1.1",
     "jest-fail-on-console": "^3.3.0",
-    "jsdom": "^24.1.0",
     "lefthook": "^1.6.7",
     "license-checker": "^25.0.1",
     "node-xlsx": "^0.24.0",

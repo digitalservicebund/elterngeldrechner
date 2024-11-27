@@ -27,6 +27,7 @@ export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
+  readonly horizontal?: boolean;
 }
 
 export function CustomRadioGroup<TFieldValues extends FieldValues>({
@@ -36,15 +37,21 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   options,
   errors,
   required,
+  horizontal = false,
 }: CustomRadioGroupProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
   const hasError = error !== undefined;
   const errorIdentifier = useId();
+  const vertical = !horizontal;
 
   return (
     <fieldset
       role="radiogroup"
-      className="flex flex-col gap-16"
+      className={classNames("flex gap-10", {
+        "flex-col": vertical,
+        "justify-center": horizontal,
+        "gap-24": horizontal,
+      })}
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
       {options.map((option, i) => (
@@ -52,6 +59,8 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
           key={option.label}
           className={classNames("flex content-center gap-16", {
             "text-danger": hasError,
+            "items-center": horizontal,
+            "flex-col": horizontal,
           })}
         >
           <input

@@ -91,7 +91,7 @@ function expectLebensmonatToBeVisible(lebensmonatszahl: Lebensmonatszahl) {
 function expectLebensmonatNotToBeVisible(lebensmonatszahl: Lebensmonatszahl) {
   expect(
     screen.queryByRole("group", { name: `${lebensmonatszahl}. Lebensmonat` }),
-  ).not.toBeInTheDocument();
+  ).not.toBeVisible();
 }
 
 const ANY_LEBENSMONAT = {

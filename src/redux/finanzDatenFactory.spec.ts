@@ -21,6 +21,7 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
+import { initialFeedbackState } from "@/redux/feedbackSlice";
 
 vi.mock("react-redux", () => ({
   useSelector: vi.fn(),
@@ -104,6 +105,7 @@ describe("finanzDatenFactory", () => {
       limitEinkommenUeberschritten: null,
     },
     configuration: initialStepConfigurationState,
+    feedback: initialFeedbackState,
   };
 
   it("should create FinanzDaten for ET1 without bruttoEinkommenZeitraumList", () => {

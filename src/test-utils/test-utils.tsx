@@ -24,6 +24,7 @@ import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeit
 import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { initialStepConfigurationState } from "@/redux/configurationSlice";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { initialFeedbackState } from "@/redux/feedbackSlice";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
@@ -107,4 +108,5 @@ export const INITIAL_STATE: RootState = {
   stepErwerbstaetigkeit: initialStepErwerbstaetigkeitState,
   stepEinkommen: initialStepEinkommenState,
   configuration: initialStepConfigurationState,
+  feedback: initialFeedbackState,
 };

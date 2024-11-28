@@ -4,6 +4,7 @@ import stepNachwuchsReducer from "./stepNachwuchsSlice";
 import stepErwerbstaetigkeitReducer from "./stepErwerbstaetigkeitSlice";
 import stepEinkommenReducer from "./stepEinkommenSlice";
 import configurationReducer from "./configurationSlice";
+import feedbackReducer from "./feedbackSlice";
 import { preloadedState } from "./preloadedState";
 
 export const reducers = combineReducers({
@@ -12,6 +13,7 @@ export const reducers = combineReducers({
   stepErwerbstaetigkeit: stepErwerbstaetigkeitReducer,
   stepEinkommen: stepEinkommenReducer,
   configuration: configurationReducer,
+  feedback: feedbackReducer,
 });
 
 const store = configureStore({

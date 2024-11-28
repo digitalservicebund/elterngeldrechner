@@ -11,6 +11,7 @@ import {
   KinderFreiBetrag,
   YesNo,
 } from "@/globals/js/calculations/model";
+import { initialFeedbackState } from "@/redux/feedbackSlice";
 
 vi.mock("react-redux", () => ({
   useSelector: vi.fn(),
@@ -99,6 +100,7 @@ describe("persoenlicheDatenFactory", () => {
       limitEinkommenUeberschritten: null,
     },
     configuration: initialStepConfigurationState,
+    feedback: initialFeedbackState,
   };
 
   it("should create PersoenlicheDaten for ET1", () => {

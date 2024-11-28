@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/atoms";
-import { useAppSelector, useAppStore } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
 import { formSteps } from "@/utils/formSteps";
 import { Page } from "@/components/organisms/page";
 import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
@@ -22,11 +22,19 @@ import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPl
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
 import {
-  resetTrackingPlanung,
   trackChanges,
   trackPlannedMonths,
   trackPlannedMonthsWithIncome,
+  resetTrackingPlanung,
 } from "@/user-tracking/planung";
+import {
+  getTrackedEase,
+  getTrackedObstacle,
+  trackEase,
+  trackObstacle,
+} from "@/user-tracking/feedback";
+import { FeedbackForm } from "@/components/organisms/feedback-form/FeedbackForm";
+import { feedbackActions, feedbackSelectors } from "@/redux/feedbackSlice";
 
 export default function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
@@ -54,10 +62,17 @@ export default function RechnerPlanerPage() {
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
+  const dispatch = useAppDispatch();
+  const submitted = useAppSelector(feedbackSelectors.selectSubmitted);
+  const [hasChanges, setHasChanges] = useState(!!initialPlan);
+  const rememberSubmit = useRef(false);
+
   function setPlan(
     nextPlan: PlanMitBeliebigenElternteilen,
     istPlanGueltig: boolean,
   ): void {
+    setHasChanges(true);
+
     plan.current = nextPlan;
 
     setIstPlanGueltig(istPlanGueltig);
@@ -70,8 +85,22 @@ export default function RechnerPlanerPage() {
     trackPlannedMonths(nextPlan);
   }
 
+  const navigate = useNavigate();
+
+  const navigateToPreviousStep = () => {
+    if (rememberSubmit.current) {
+      dispatch(feedbackActions.submit());
+    }
+
+    navigate(formSteps.elterngeldvarianten.route);
+  };
+
   function navigateToUebersicht(): void {
     if (istPlanGueltig) {
+      if (rememberSubmit.current) {
+        dispatch(feedbackActions.submit());
+      }
+
       navigateWithPlanState(
         formSteps.zusammenfassungUndDaten.route,
         plan.current,
@@ -79,9 +108,11 @@ export default function RechnerPlanerPage() {
     }
   }
 
-  const navigate = useNavigate();
-  const navigateToPreviousStep = () =>
-    navigate(formSteps.elterngeldvarianten.route);
+  const showFeedbackForm = istPlanGueltig && hasChanges && !submitted;
+  const defaultFeedbackValues = {
+    obstacle: getTrackedObstacle(),
+    ease: getTrackedEase(),
+  };
 
   useEffect(resetTrackingPlanung, []);
 
@@ -95,7 +126,17 @@ export default function RechnerPlanerPage() {
           onPlanChanged={setPlan}
           onOptionSelected={trackChanges}
           onPlanResetted={resetTrackingPlanung}
-        />
+        >
+          {showFeedbackForm ? (
+            <FeedbackForm
+              className="basis-full"
+              defaultValues={defaultFeedbackValues}
+              onChangeEase={trackEase}
+              onChangeObstacle={trackObstacle}
+              onSubmit={() => (rememberSubmit.current = true)}
+            />
+          ) : null}
+        </Planer>
 
         <Button
           buttonStyle="secondary"
@@ -113,10 +154,8 @@ export default function RechnerPlanerPage() {
       {!!showModalPopup && (
         <ModalPopup
           text={`Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Falls noch nicht feststeht, ob Sie die Grenze von ${amountLimitEinkommen.toLocaleString()} Euro überschreiten, können Sie trotzdem einen Antrag stellen.`}
+          onClick={() => setShowModalPopup(false)}
           buttonLabel="Dialog schließen"
-          onClick={() => {
-            setShowModalPopup(false);
-          }}
         />
       )}
     </Page>

@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
-import { UserFeedbackSection } from "@/components/molecules/UserFeedbackSection";
 import { Button } from "@/components/atoms";
 import { Page } from "@/components/organisms/page";
 import { formSteps } from "@/utils/formSteps";
@@ -42,8 +41,6 @@ function ZusammenfassungUndDatenPage(): ReactNode {
           label="Zurück"
           onClick={navigateToPreviousStep}
         />
-
-        <UserFeedbackSection className="mt-40" />
       </div>
     </Page>
   );

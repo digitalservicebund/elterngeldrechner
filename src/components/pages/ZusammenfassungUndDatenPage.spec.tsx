@@ -55,16 +55,6 @@ describe("Zusammenfassung und Daten Page", () => {
       ANY_PLAN,
     );
   });
-
-  it("should show the user feedback section", () => {
-    render(<ZusammenfassungUndDatenPage />);
-
-    expect(
-      screen.getByLabelText(
-        "War der Elterngeldrechner mit Planer für Sie hilfreich?",
-      ),
-    ).toBeVisible();
-  });
 });
 
 const ANY_PLAN = {

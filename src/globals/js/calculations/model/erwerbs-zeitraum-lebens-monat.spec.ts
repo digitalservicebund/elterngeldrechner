@@ -1,3 +1,4 @@
+import { Einkommen } from "./einkommen";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 
 describe("erwerbs-zeitraum-lebens-monat", () => {
@@ -11,11 +12,11 @@ describe("erwerbs-zeitraum-lebens-monat", () => {
     (vonLebensMonat, bisLebensMonat, anzahlMonate) => {
       it("should create Zeitraum", () => {
         // given
-        const erwerbsZeitraumLebensMonat = new ErwerbsZeitraumLebensMonat();
-
-        // when
-        erwerbsZeitraumLebensMonat.vonLebensMonat = vonLebensMonat;
-        erwerbsZeitraumLebensMonat.bisLebensMonat = bisLebensMonat;
+        const erwerbsZeitraumLebensMonat = new ErwerbsZeitraumLebensMonat(
+          vonLebensMonat,
+          bisLebensMonat,
+          new Einkommen(0),
+        );
 
         // then
         expect(erwerbsZeitraumLebensMonat.getAnzahlMonate()).toBe(anzahlMonate);
@@ -33,11 +34,11 @@ describe("erwerbs-zeitraum-lebens-monat", () => {
     (vonLebensMonat, bisLebensMonat, lebensMonateList) => {
       it("should create Zeitraum", () => {
         // given
-        const erwerbsZeitraumLebensMonat = new ErwerbsZeitraumLebensMonat();
-
-        // when
-        erwerbsZeitraumLebensMonat.vonLebensMonat = vonLebensMonat;
-        erwerbsZeitraumLebensMonat.bisLebensMonat = bisLebensMonat;
+        const erwerbsZeitraumLebensMonat = new ErwerbsZeitraumLebensMonat(
+          vonLebensMonat,
+          bisLebensMonat,
+          new Einkommen(0),
+        );
 
         // then
         expect(erwerbsZeitraumLebensMonat.getLebensMonateList()).toStrictEqual(

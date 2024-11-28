@@ -140,10 +140,11 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
         testCaseIndex,
         lebensMonat,
       );
-      const erwerbszeitraumLM = new ErwerbsZeitraumLebensMonat();
-      erwerbszeitraumLM.vonLebensMonat = lebensMonat;
-      erwerbszeitraumLM.bisLebensMonat = lebensMonat;
-      erwerbszeitraumLM.bruttoProMonat = new Einkommen(lebensmonatBrutto);
+      const erwerbszeitraumLM = new ErwerbsZeitraumLebensMonat(
+        lebensMonat,
+        lebensMonat,
+        new Einkommen(lebensmonatBrutto),
+      );
       erwerbszeitraeumeLM.push(erwerbszeitraumLM);
     }
     return erwerbszeitraeumeLM;

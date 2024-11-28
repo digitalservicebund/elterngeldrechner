@@ -63,13 +63,13 @@ describe("egr-calculation", () => {
       finanzDatenElternTeil1.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
       finanzDatenElternTeil1.erwerbsZeitraumLebensMonatList = [];
       finanzDatenElternTeil1.erwerbsZeitraumLebensMonatList.push(
-        erwerbsZeitraumLebensMonatOf(1, 2, 100),
+        new ErwerbsZeitraumLebensMonat(1, 2, new Einkommen(100)),
       );
       finanzDatenElternTeil1.erwerbsZeitraumLebensMonatList.push(
-        erwerbsZeitraumLebensMonatOf(3, 4, 1000),
+        new ErwerbsZeitraumLebensMonat(3, 4, new Einkommen(1000)),
       );
       finanzDatenElternTeil1.erwerbsZeitraumLebensMonatList.push(
-        erwerbsZeitraumLebensMonatOf(5, 6, 5000),
+        new ErwerbsZeitraumLebensMonat(5, 6, new Einkommen(5000)),
       );
 
       const finanzDatenElternTeil2 = new FinanzDaten();
@@ -136,13 +136,13 @@ describe("egr-calculation", () => {
       finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
       finanzDaten.erwerbsZeitraumLebensMonatList = [];
       finanzDaten.erwerbsZeitraumLebensMonatList.push(
-        erwerbsZeitraumLebensMonatOf(1, 2, 100),
+        new ErwerbsZeitraumLebensMonat(1, 2, new Einkommen(100)),
       );
       finanzDaten.erwerbsZeitraumLebensMonatList.push(
-        erwerbsZeitraumLebensMonatOf(3, 4, 1000),
+        new ErwerbsZeitraumLebensMonat(3, 4, new Einkommen(1000)),
       );
       finanzDaten.erwerbsZeitraumLebensMonatList.push(
-        erwerbsZeitraumLebensMonatOf(5, 6, 5000),
+        new ErwerbsZeitraumLebensMonat(5, 6, new Einkommen(5000)),
       );
 
       // when
@@ -205,18 +205,6 @@ const createPlanungsDaten = () =>
     false,
     MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
   );
-
-const erwerbsZeitraumLebensMonatOf = (
-  vonLebensMonat: number,
-  bisLebensMonat: number,
-  einkommen: number,
-) => {
-  const erwerbsZeitraumLebensMonat = new ErwerbsZeitraumLebensMonat();
-  erwerbsZeitraumLebensMonat.vonLebensMonat = vonLebensMonat;
-  erwerbsZeitraumLebensMonat.bisLebensMonat = bisLebensMonat;
-  erwerbsZeitraumLebensMonat.bruttoProMonat = new Einkommen(einkommen);
-  return erwerbsZeitraumLebensMonat;
-};
 
 const bodyForUrl = (url: string | URL | Request) => {
   if (typeof url !== "string") {

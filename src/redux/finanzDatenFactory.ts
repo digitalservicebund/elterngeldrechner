@@ -94,20 +94,14 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
 const erwerbsZeitraumLebensMonatListOf = (
   bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[],
 ) =>
-  bruttoEinkommenZeitraumList.map((bruttoEinkommenZeitraum) => {
-    const erwerbsZeitraumLebensMonat = new ErwerbsZeitraumLebensMonat();
-    erwerbsZeitraumLebensMonat.vonLebensMonat = Number.parseInt(
-      bruttoEinkommenZeitraum.zeitraum.from,
-    );
-    erwerbsZeitraumLebensMonat.bisLebensMonat = Number.parseInt(
-      bruttoEinkommenZeitraum.zeitraum.to,
-    );
-
-    const bruttoEinkommen = bruttoEinkommenZeitraum.bruttoEinkommen ?? 0;
-    erwerbsZeitraumLebensMonat.bruttoProMonat = new Einkommen(bruttoEinkommen);
-
-    return erwerbsZeitraumLebensMonat;
-  });
+  bruttoEinkommenZeitraumList.map(
+    (bruttoEinkommenZeitraum) =>
+      new ErwerbsZeitraumLebensMonat(
+        Number.parseInt(bruttoEinkommenZeitraum.zeitraum.from),
+        Number.parseInt(bruttoEinkommenZeitraum.zeitraum.to),
+        new Einkommen(bruttoEinkommenZeitraum.bruttoEinkommen ?? 0),
+      ),
+  );
 
 export const finanzDatenOfUi = (
   state: RootState,

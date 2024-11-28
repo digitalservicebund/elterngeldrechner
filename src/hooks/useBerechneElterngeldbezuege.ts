@@ -100,13 +100,14 @@ function transformLebensmonateForFinanzdaten(
       return [Number.parseInt(lebensmonatszahl), bruttoeinkommen || 0];
     })
     .filter(([, bruttoeinkommen]) => bruttoeinkommen > 0)
-    .map(([lebensmonatszahl, bruttoeinkommen]) => {
-      const monat = new ErwerbsZeitraumLebensMonat();
-      monat.vonLebensMonat = lebensmonatszahl;
-      monat.bisLebensMonat = lebensmonatszahl;
-      monat.bruttoProMonat = new Einkommen(bruttoeinkommen);
-      return monat;
-    });
+    .map(
+      ([lebensmonatszahl, bruttoeinkommen]) =>
+        new ErwerbsZeitraumLebensMonat(
+          lebensmonatszahl,
+          lebensmonatszahl,
+          new Einkommen(bruttoeinkommen),
+        ),
+    );
 }
 
 function combineErrechneteErgbebnisse(
@@ -407,26 +408,14 @@ if (import.meta.vitest) {
 
       expect(observeredErwerbsZeitraumLebensMonatListen).toStrictEqual([
         [
-          erwerbsZeitraumLebensmonat(2, 2, 212),
-          erwerbsZeitraumLebensmonat(5, 5, 312),
+          new ErwerbsZeitraumLebensMonat(2, 2, new Einkommen(212)),
+          new ErwerbsZeitraumLebensMonat(5, 5, new Einkommen(312)),
         ],
         [
-          erwerbsZeitraumLebensmonat(1, 1, 122),
-          erwerbsZeitraumLebensmonat(2, 2, 222),
+          new ErwerbsZeitraumLebensMonat(1, 1, new Einkommen(122)),
+          new ErwerbsZeitraumLebensMonat(2, 2, new Einkommen(222)),
         ],
       ]);
     });
-
-    function erwerbsZeitraumLebensmonat(
-      vonLebensMonat: number,
-      bisLebensMonat: number,
-      bruttoProMonat: number,
-    ): ErwerbsZeitraumLebensMonat {
-      const instance = new ErwerbsZeitraumLebensMonat();
-      instance.vonLebensMonat = vonLebensMonat;
-      instance.bisLebensMonat = bisLebensMonat;
-      instance.bruttoProMonat = new Einkommen(bruttoProMonat);
-      return instance;
-    }
   });
 }

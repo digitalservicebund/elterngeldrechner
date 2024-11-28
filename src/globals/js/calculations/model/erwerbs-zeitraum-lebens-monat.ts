@@ -1,4 +1,3 @@
-import { Einkommen } from "./einkommen";
 import { BruttoEinkommen } from "./einkommen-types";
 import { PLANUNG_ANZAHL_MONATE } from "./planungs-daten";
 
@@ -6,9 +5,12 @@ import { PLANUNG_ANZAHL_MONATE } from "./planungs-daten";
  * Erwerbszeitraum für Einkommen NACH der Geburt.
  */
 export class ErwerbsZeitraumLebensMonat {
-  vonLebensMonat: number = 0;
-  bisLebensMonat: number = 0;
-  bruttoProMonat: BruttoEinkommen = new Einkommen(0);
+  constructor(
+    public vonLebensMonat: number,
+    public bisLebensMonat: number,
+    public bruttoProMonat: BruttoEinkommen,
+  ) {}
+
   // TW prüfen, ob die Felder noch benötigt werden.
   // nettoProMonat: NettoEinkommen = new Einkommen(0);
   // endeEGPeriode: number | null = null;

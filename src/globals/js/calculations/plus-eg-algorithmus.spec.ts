@@ -107,20 +107,14 @@ describe("plus-eg-algorithmus", () => {
       finanzDaten.steuerKlasse = SteuerKlasse.SKL1;
       finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
       finanzDaten.erwerbsZeitraumLebensMonatList = [];
-      const et1 = new ErwerbsZeitraumLebensMonat();
-      et1.vonLebensMonat = 1;
-      et1.bisLebensMonat = 2;
-      et1.bruttoProMonat = new Einkommen(100);
+
+      const et1 = new ErwerbsZeitraumLebensMonat(1, 2, new Einkommen(100));
       finanzDaten.erwerbsZeitraumLebensMonatList.push(et1);
-      const et2 = new ErwerbsZeitraumLebensMonat();
-      et2.vonLebensMonat = 3;
-      et2.bisLebensMonat = 4;
-      et2.bruttoProMonat = new Einkommen(1000);
+
+      const et2 = new ErwerbsZeitraumLebensMonat(3, 4, new Einkommen(1000));
       finanzDaten.erwerbsZeitraumLebensMonatList.push(et2);
-      const et3 = new ErwerbsZeitraumLebensMonat();
-      et3.vonLebensMonat = 5;
-      et3.bisLebensMonat = 6;
-      et3.bruttoProMonat = new Einkommen(5000);
+
+      const et3 = new ErwerbsZeitraumLebensMonat(5, 6, new Einkommen(5000));
       finanzDaten.erwerbsZeitraumLebensMonatList.push(et3);
 
       // Wird sonst mit dem Brutto-Netto-Rechner ermittelt:

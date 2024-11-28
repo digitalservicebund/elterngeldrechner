@@ -1,7 +1,2 @@
 @tailwind base;
 @tailwind utilities;
-
-/* Fix conflict with styling of surrounding Familienportal styling */
-#egr-root .invisible {
-  display: inherit;
-}

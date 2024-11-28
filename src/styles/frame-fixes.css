@@ -1,0 +1,24 @@
+/*
+Apply styling "fixes" to the application that are necessary due to the surrounding frame
+of the Familienportal. All styling here would not be applied if running standalone or in a
+different frame. Therefore, they are grouped here for their shared purpose and for proper
+maintenance.
+*/
+
+@media print {
+  #egr-root {
+    @apply font-sans;
+  }
+}
+
+@media only screen and (min-width: 640px) {
+  #egr-root {
+    /* Make space for the "contact flap". */
+    @apply mr-56;
+  }
+}
+
+/* The `invisible` class is a utility class of the TailwindCSS Framework */
+#egr-root .invisible {
+  display: inherit;
+}

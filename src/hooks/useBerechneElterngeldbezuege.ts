@@ -16,7 +16,7 @@ import {
   type MutterschaftsLeistung,
   type ElternGeldSimulationErgebnis,
   type ElternGeldSimulationErgebnisRow,
-  type FinanzDaten,
+  FinanzDaten,
   type PersoenlicheDaten,
   YesNo,
 } from "@/globals/js/calculations/model";
@@ -44,26 +44,50 @@ function calculateElterngeldbezuege(
   parameter: StaticCalculationParameter,
   lebensmonate: LebensmonateMitBeliebigenElternteilen,
 ) {
-  const calculator = new EgrCalculation();
-  const ergebnisse = Object.values(Elternteil).map((elternteil) => {
-    const monateMitErwerbstaetigkeit = transformLebensmonateForFinanzdaten(
+  const ergebnisse = Object.values(Elternteil).map((elternteil) =>
+    calculateElterngeldbezuegeForElternteil(
       lebensmonate,
       elternteil,
-    );
-    const parameterForElternteil = parameter[elternteil];
-    parameterForElternteil.persoenlicheDaten.etNachGeburt =
-      monateMitErwerbstaetigkeit.length > 0 ? YesNo.YES : YesNo.NO;
-    parameterForElternteil.finanzdaten.erwerbsZeitraumLebensMonatList =
-      monateMitErwerbstaetigkeit;
-    return calculator.simulate(
-      parameterForElternteil.persoenlicheDaten,
-      parameterForElternteil.finanzdaten,
-      parameterForElternteil.lohnsteuerjahr,
-      parameterForElternteil.mutterschaftsleistung,
-    );
-  });
+      parameter[elternteil],
+    ),
+  );
 
   return combineErrechneteErgbebnisse(ergebnisse[0], ergebnisse[1]);
+}
+
+function calculateElterngeldbezuegeForElternteil(
+  lebensmonate: LebensmonateMitBeliebigenElternteilen,
+  elternteil: Elternteil,
+  parameter: StaticCalculationParameterForElternteil,
+): ElternGeldSimulationErgebnis {
+  const {
+    persoenlicheDaten,
+    finanzdaten,
+    lohnsteuerjahr,
+    mutterschaftsleistung,
+  } = parameter;
+
+  const monateMitErwerbstaetigkeit = transformLebensmonateForFinanzdaten(
+    lebensmonate,
+    elternteil,
+  );
+
+  /*
+   * Attention:
+   * Parameters are not cloned but the same memory is manipulated on every
+   * calculation. This is effective as this algorithm runs over and over again.
+   * Though, you need to be mindful about this. For example in testing.
+   */
+  persoenlicheDaten.etNachGeburt =
+    monateMitErwerbstaetigkeit.length > 0 ? YesNo.YES : YesNo.NO;
+  finanzdaten.erwerbsZeitraumLebensMonatList = monateMitErwerbstaetigkeit;
+
+  return new EgrCalculation().simulate(
+    persoenlicheDaten,
+    finanzdaten,
+    lohnsteuerjahr,
+    mutterschaftsleistung,
+  );
 }
 
 function transformLebensmonateForFinanzdaten(
@@ -199,9 +223,6 @@ if (import.meta.vitest) {
     const { renderHook } = await import("@/test-utils/test-utils");
     const { PersoenlicheDaten, FinanzDaten, MutterschaftsLeistung } =
       await import("@/globals/js/calculations/model");
-    const EgrCalculationModule = await import(
-      "@/globals/js/calculations/egr-calculation"
-    );
     const { KeinElterngeld } = await import("@/features/planer/domain");
 
     vi.mock(import("@/redux/persoenlicheDatenFactory"));
@@ -246,10 +267,9 @@ if (import.meta.vitest) {
         mutterschaftsleistung,
       );
 
-      const simulate = vi.fn().mockReturnValue({ rows: [] });
-      vi.spyOn(EgrCalculationModule, "EgrCalculation").mockImplementation(
-        () => ({ simulate }) as never,
-      );
+      const simulate = vi
+        .spyOn(EgrCalculation.prototype, "simulate")
+        .mockReturnValue({ rows: [] });
 
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
 
@@ -264,10 +284,7 @@ if (import.meta.vitest) {
     });
 
     it("reads the correct values for each Lebensmonat, Elternteil and Variante if calculation was successful", () => {
-      const simulate = vi.fn();
-      vi.spyOn(EgrCalculationModule, "EgrCalculation").mockImplementation(
-        () => ({ simulate }) as never,
-      );
+      const simulate = vi.spyOn(EgrCalculation.prototype, "simulate");
 
       // Fragile: relies on specific order of the Elternteile the simulation is called for.
       simulate.mockReturnValueOnce({
@@ -324,9 +341,21 @@ if (import.meta.vitest) {
       const initialFinanzdaten = new FinanzDaten();
       vi.mocked(finanzDatenOfUi).mockReturnValue(initialFinanzdaten);
 
-      const simulate = vi.fn().mockReturnValue({ rows: [] });
-      vi.spyOn(EgrCalculationModule, "EgrCalculation").mockImplementation(
-        () => ({ simulate }) as never,
+      /*
+       * Important:
+       * The implementation implicitly uses shared object memory. Thereby, it is
+       * not possible to observe call (parameters) via the {@link MockInstance}.
+       * Therefore, a custom observation implementation is necessary.
+       */
+      const observeredErwerbsZeitraumLebensMonatListen: ErwerbsZeitraumLebensMonat[][] =
+        [];
+      vi.spyOn(EgrCalculation.prototype, "simulate").mockImplementation(
+        (_, finanzdaten) => {
+          observeredErwerbsZeitraumLebensMonatListen.push(
+            finanzdaten.erwerbsZeitraumLebensMonatList,
+          );
+          return { rows: [] };
+        },
       );
 
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
@@ -376,46 +405,28 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(simulate).toHaveBeenNthCalledWith(
-        1,
-        expect.anything(),
-        finanzdatenWithErwerbsZeitraumLebensMonatList(initialFinanzdaten, [
-          { vonLebensMonat: 2, bisLebensMonat: 2, bruttoProMonat: 212 },
-          { vonLebensMonat: 5, bisLebensMonat: 5, bruttoProMonat: 312 },
-        ]),
-        expect.anything(),
-        expect.anything(),
-      );
-
-      expect(simulate).toHaveBeenCalledWith(
-        expect.anything(),
-        finanzdatenWithErwerbsZeitraumLebensMonatList(initialFinanzdaten, [
-          { vonLebensMonat: 1, bisLebensMonat: 1, bruttoProMonat: 122 },
-          { vonLebensMonat: 2, bisLebensMonat: 2, bruttoProMonat: 222 },
-        ]),
-        expect.anything(),
-        expect.anything(),
-      );
+      expect(observeredErwerbsZeitraumLebensMonatListen).toStrictEqual([
+        [
+          erwerbsZeitraumLebensmonat(2, 2, 212),
+          erwerbsZeitraumLebensmonat(5, 5, 312),
+        ],
+        [
+          erwerbsZeitraumLebensmonat(1, 1, 122),
+          erwerbsZeitraumLebensmonat(2, 2, 222),
+        ],
+      ]);
     });
-    function finanzdatenWithErwerbsZeitraumLebensMonatList(
-      finanzdaten: FinanzDaten,
-      rawZeitraumLebensMonatList: {
-        vonLebensMonat: number;
-        bisLebensMonat: number;
-        bruttoProMonat: number;
-      }[],
-    ): FinanzDaten {
-      finanzdaten.erwerbsZeitraumLebensMonatList =
-        rawZeitraumLebensMonatList.map(
-          ({ vonLebensMonat, bisLebensMonat, bruttoProMonat }) => {
-            const monat = new ErwerbsZeitraumLebensMonat();
-            monat.vonLebensMonat = vonLebensMonat;
-            monat.bisLebensMonat = bisLebensMonat;
-            monat.bruttoProMonat = new Einkommen(bruttoProMonat);
-            return monat;
-          },
-        );
-      return finanzdaten;
+
+    function erwerbsZeitraumLebensmonat(
+      vonLebensMonat: number,
+      bisLebensMonat: number,
+      bruttoProMonat: number,
+    ): ErwerbsZeitraumLebensMonat {
+      const instance = new ErwerbsZeitraumLebensMonat();
+      instance.vonLebensMonat = vonLebensMonat;
+      instance.bisLebensMonat = bisLebensMonat;
+      instance.bruttoProMonat = new Einkommen(bruttoProMonat);
+      return instance;
     }
   });
 }

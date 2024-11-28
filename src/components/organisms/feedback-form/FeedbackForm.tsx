@@ -59,6 +59,7 @@ export function FeedbackForm({
             register={form.register}
             errors={form.formState.errors}
             registerOptions={{ onChange: handleEaseChange }}
+            disabled={form.formState.isSubmitted}
             horizontal
           />
         </div>
@@ -76,6 +77,7 @@ export function FeedbackForm({
             options={obstacleOptions}
             errors={form.formState.errors}
             registerOptions={{ onChange: handleObstacleChange }}
+            disabled={form.formState.isSubmitted}
           />
           <Button
             disabled={disabledSubmit}

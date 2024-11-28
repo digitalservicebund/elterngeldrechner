@@ -29,6 +29,7 @@ export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
   readonly horizontal?: boolean;
+  readonly disabled?: boolean;
 }
 
 export function CustomRadioGroup<TFieldValues extends FieldValues>({
@@ -39,6 +40,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   errors,
   required,
   horizontal = false,
+  disabled = false,
 }: CustomRadioGroupProps<TFieldValues>) {
   const error: FieldError | undefined = get(errors, name);
   const hasError = error !== undefined;
@@ -58,19 +60,16 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
       {options.map((option, i) => (
         <label
           key={option.label}
-          className={classNames("flex content-center gap-16", {
-            "text-danger": hasError,
-            "items-center": horizontal,
-            "flex-col": horizontal,
-          })}
+          className={getLabelClassName(hasError, horizontal, disabled)}
         >
           <input
             {...register(name, registerOptions)}
-            className={getInputClassName(hasError)}
+            className={getInputClassName(hasError, disabled)}
             type="radio"
             data-testid={name + "_option_" + i}
             value={option.value}
             required={required}
+            disabled={disabled}
           />
           {option.label}
 
@@ -87,14 +86,28 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   );
 }
 
-function getInputClassName(hasError: boolean): string {
+function getInputClassName(hasError: boolean, disabled: boolean): string {
   return classNames(
     "relative size-32 rounded-full border border-solid border-primary bg-white",
     "before:size-16 before:rounded-full before:content-['']",
     "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
     "checked:before:bg-primary",
-    "hover:border-2 hover:border-primary",
-    "focus:border-2 focus:border-primary",
+    { "hover:border-2 hover:border-primary": !disabled },
+    { "focus:border-2 focus:border-primary": !disabled },
     { "!border-danger !checked:before:bg-danger": hasError },
+    { "cursor-default": disabled },
   );
+}
+
+function getLabelClassName(
+  hasError: boolean,
+  horizontal: boolean,
+  disabled: boolean,
+) {
+  return classNames("flex content-center gap-16", {
+    "text-danger": hasError,
+    "items-center": horizontal,
+    "flex-col": horizontal,
+    "cursor-default": disabled,
+  });
 }

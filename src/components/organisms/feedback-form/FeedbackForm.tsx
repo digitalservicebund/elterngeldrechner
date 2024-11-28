@@ -14,37 +14,6 @@ type Props = {
   readonly onSubmit: () => void;
 };
 
-const obstacles = [
-  "Informationen verstehen",
-  "Informationen finden",
-  "Angaben machen",
-  "Planer bedienen",
-] as const;
-
-type Obstacle = (typeof obstacles)[number];
-type Ease = 1 | 2 | 3 | 4 | 5;
-
-type State = { obstacle?: Obstacle; ease?: Ease };
-export type DefaultState = { obstacle?: string; ease?: number };
-
-const obstacleOptions: CustomRadioGroupOption<Obstacle>[] = obstacles.map(
-  (label) => ({ value: label, label }),
-);
-
-function descriptionContainer(text: string) {
-  return (
-    <span className="text-sm text-gray-600 absolute mt-[80px]">{text}</span>
-  );
-}
-
-const easeOptions: CustomRadioGroupOption<number>[] = [
-  { value: 1, label: "1", description: descriptionContainer("sehr einfach") },
-  { value: 2, label: "2" },
-  { value: 3, label: "3" },
-  { value: 4, label: "4" },
-  { value: 5, label: "5", description: descriptionContainer("sehr schwer") },
-];
-
 export function FeedbackForm({
   className,
   defaultValues,
@@ -128,3 +97,35 @@ export function FeedbackForm({
     </form>
   );
 }
+
+type State = { obstacle?: Obstacle; ease?: Ease };
+export type DefaultState = { obstacle?: string; ease?: number };
+
+type Obstacle = (typeof obstacles)[number];
+
+const obstacles = [
+  "Informationen verstehen",
+  "Informationen finden",
+  "Angaben machen",
+  "Planer bedienen",
+] as const;
+
+const obstacleOptions: CustomRadioGroupOption<Obstacle>[] = obstacles.map(
+  (label) => ({ value: label, label: label }),
+);
+
+const easeOptions: CustomRadioGroupOption<number>[] = [
+  { value: 1, label: "1", description: descriptionContainer("sehr einfach") },
+  { value: 2, label: "2" },
+  { value: 3, label: "3" },
+  { value: 4, label: "4" },
+  { value: 5, label: "5", description: descriptionContainer("sehr schwer") },
+];
+
+function descriptionContainer(text: string) {
+  return (
+    <span className="text-sm text-gray-600 absolute mt-[80px]">{text}</span>
+  );
+}
+
+type Ease = 1 | 2 | 3 | 4 | 5;

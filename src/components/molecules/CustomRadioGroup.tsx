@@ -8,7 +8,7 @@ import {
   FieldError,
 } from "react-hook-form";
 import classNames from "classnames";
-import { useId } from "react";
+import { ReactNode, useId } from "react";
 import { Description } from "@/components/atoms";
 
 type RadioGroupValue = string | number;
@@ -18,6 +18,7 @@ export interface CustomRadioGroupOption<
 > {
   value: V;
   label: string;
+  description?: ReactNode;
 }
 
 export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
@@ -42,6 +43,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   const error: FieldError | undefined = get(errors, name);
   const hasError = error !== undefined;
   const errorIdentifier = useId();
+
   const vertical = !horizontal;
 
   return (
@@ -49,8 +51,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
       role="radiogroup"
       className={classNames("flex gap-10", {
         "flex-col": vertical,
-        "justify-center": horizontal,
-        "gap-24": horizontal,
+        "justify-around": horizontal,
       })}
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
@@ -72,6 +73,8 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
             required={required}
           />
           {option.label}
+
+          {option.description ? option.description : null}
         </label>
       ))}
 

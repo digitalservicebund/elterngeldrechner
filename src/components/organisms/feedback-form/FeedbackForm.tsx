@@ -52,7 +52,7 @@ export function FeedbackForm({
           Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
         </strong>
 
-        <div className="mx-16 mb-20 mt-16 max-w-[450px]">
+        <div className="mx-16 mb-20 mt-16 max-w-[380px]">
           <CustomRadioGroup
             name={"ease" as Path<State>}
             options={easeOptions}

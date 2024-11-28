@@ -31,9 +31,19 @@ const obstacleOptions: CustomRadioGroupOption<Obstacle>[] = obstacles.map(
   (label) => ({ value: label, label }),
 );
 
-const easeOptions: CustomRadioGroupOption<number>[] = [1, 2, 3, 4, 5].map(
-  (value) => ({ value, label: String(value) }),
-);
+function descriptionContainer(text: string) {
+  return (
+    <span className="text-sm text-gray-600 absolute mt-[80px]">{text}</span>
+  );
+}
+
+const easeOptions: CustomRadioGroupOption<number>[] = [
+  { value: 1, label: "1", description: descriptionContainer("sehr einfach") },
+  { value: 2, label: "2" },
+  { value: 3, label: "3" },
+  { value: 4, label: "4" },
+  { value: 5, label: "5", description: descriptionContainer("sehr schwer") },
+];
 
 export function FeedbackForm({
   className,
@@ -72,8 +82,8 @@ export function FeedbackForm({
         <strong className="block pb-16">
           Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
         </strong>
-        <div className="flex justify-center gap-32 pt-20">
-          <span>sehr schwer</span>
+
+        <div className="mx-16 mb-20 mt-16 max-w-[450px]">
           <CustomRadioGroup
             name={"ease" as Path<State>}
             options={easeOptions}
@@ -82,7 +92,6 @@ export function FeedbackForm({
             registerOptions={{ onChange: handleEaseChange }}
             horizontal
           />
-          <span>sehr einfach</span>
         </div>
       </div>
 
@@ -91,6 +100,7 @@ export function FeedbackForm({
           <strong className="block pb-16">
             Was war die größte Schwierigkeit?
           </strong>
+
           <CustomRadioGroup
             name={"obstacle" as Path<State>}
             register={form.register}

@@ -7,6 +7,7 @@ import {
   type Elterngeldbezuege,
   type ElterngeldbezugProVariante,
   type LebensmonateMitBeliebigenElternteilen,
+  type Monat,
 } from "@/features/planer/domain";
 import { EgrSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
@@ -29,6 +30,7 @@ import {
 } from "@/redux/persoenlicheDatenFactory";
 import { useAppStore } from "@/redux/hooks";
 import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/user-interface/service/callbackTypes";
+import { isVariante } from "@/features/planer/domain/Variante";
 
 export function useBerechneElterngeldbezuege(): BerechneElterngeldbezuegeCallback {
   const store = useAppStore();
@@ -95,19 +97,33 @@ function transformLebensmonateForFinanzdaten(
   elternteil: Elternteil,
 ): ErwerbsZeitraumLebensMonat[] {
   return Object.entries(lebensmonate)
-    .map(([lebensmonatszahl, lebensmonat]) => {
-      const bruttoeinkommen = lebensmonat[elternteil]?.bruttoeinkommen ?? 0;
-      return [Number.parseInt(lebensmonatszahl), bruttoeinkommen || 0];
-    })
-    .filter(([, bruttoeinkommen]) => bruttoeinkommen > 0)
+    .map(([lebensmonatszahl, lebensmonat]): [number, Monat | undefined] => [
+      Number.parseInt(lebensmonatszahl),
+      lebensmonat[elternteil],
+    ])
+    .filter(isEntryWithDefinedMonthValue)
+    .filter(isEntryWithRelevantEinkommen)
     .map(
-      ([lebensmonatszahl, bruttoeinkommen]) =>
+      ([lebensmonatszahl, monat]) =>
         new ErwerbsZeitraumLebensMonat(
           lebensmonatszahl,
           lebensmonatszahl,
-          new Einkommen(bruttoeinkommen),
+          new Einkommen(monat.bruttoeinkommen),
         ),
     );
+}
+
+function isEntryWithDefinedMonthValue<Key>(
+  entry: [Key, Monat | undefined],
+): entry is [Key, Monat] {
+  return entry[1] !== undefined;
+}
+
+function isEntryWithRelevantEinkommen<Key>(
+  entry: [Key, Monat],
+): entry is [Key, Monat & { bruttoeinkommen: number }] {
+  const monat = entry[1];
+  return isVariante(monat.gewaehlteOption) && !!monat.bruttoeinkommen;
 }
 
 function combineErrechneteErgbebnisse(
@@ -338,26 +354,9 @@ if (import.meta.vitest) {
       expect(elterngeldbezuege[2][Elternteil.Zwei][Variante.Bonus]).toBe(22);
     });
 
-    it("transforms the given Lebensmonate to income data attached to the finanzdaten", () => {
-      const initialFinanzdaten = new FinanzDaten();
-      vi.mocked(finanzDatenOfUi).mockReturnValue(initialFinanzdaten);
-
-      /*
-       * Important:
-       * The implementation implicitly uses shared object memory. Thereby, it is
-       * not possible to observe call (parameters) via the {@link MockInstance}.
-       * Therefore, a custom observation implementation is necessary.
-       */
-      const observeredErwerbsZeitraumLebensMonatListen: ErwerbsZeitraumLebensMonat[][] =
-        [];
-      vi.spyOn(EgrCalculation.prototype, "simulate").mockImplementation(
-        (_, finanzdaten) => {
-          observeredErwerbsZeitraumLebensMonatListen.push(
-            finanzdaten.erwerbsZeitraumLebensMonatList,
-          );
-          return { rows: [] };
-        },
-      );
+    it("skips Monate without Einkommen when transforming Lebensmonate for the Finanzdaten", () => {
+      const observeredErwerbsZeitraumLebensMonatListen =
+        spyOnSimulateAndObserveErwerbsZeitraumLebensMonatListen();
 
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
 
@@ -365,9 +364,9 @@ if (import.meta.vitest) {
         1: {
           [Elternteil.Eins]: {
             gewaehlteOption: Variante.Basis,
-            elterngeldbezug: null,
+            elterngeldbezug: 111,
             bruttoeinkommen: null,
-            imMutterschutz: true,
+            imMutterschutz: false,
           },
           [Elternteil.Zwei]: {
             gewaehlteOption: Variante.Plus,
@@ -380,42 +379,111 @@ if (import.meta.vitest) {
           [Elternteil.Eins]: {
             gewaehlteOption: Variante.Bonus,
             elterngeldbezug: 211,
-            bruttoeinkommen: 212,
+            bruttoeinkommen: undefined,
             imMutterschutz: false,
           },
           [Elternteil.Zwei]: {
             gewaehlteOption: Variante.Bonus,
             elterngeldbezug: 221,
-            bruttoeinkommen: 222,
+            bruttoeinkommen: 0,
             imMutterschutz: false,
           },
         },
         5: {
           [Elternteil.Eins]: {
-            gewaehlteOption: undefined,
-            elterngeldbezug: undefined,
-            bruttoeinkommen: 312,
+            gewaehlteOption: Variante.Plus,
+            elterngeldbezug: 511,
+            bruttoeinkommen: 512,
             imMutterschutz: false,
           },
           [Elternteil.Zwei]: {
-            gewaehlteOption: KeinElterngeld,
-            elterngeldbezug: undefined,
-            bruttoeinkommen: undefined,
+            gewaehlteOption: Variante.Basis,
+            elterngeldbezug: 521,
+            bruttoeinkommen: 522,
             imMutterschutz: false,
           },
         },
       });
 
       expect(observeredErwerbsZeitraumLebensMonatListen).toStrictEqual([
-        [
-          new ErwerbsZeitraumLebensMonat(2, 2, new Einkommen(212)),
-          new ErwerbsZeitraumLebensMonat(5, 5, new Einkommen(312)),
-        ],
+        [new ErwerbsZeitraumLebensMonat(5, 5, new Einkommen(512))],
         [
           new ErwerbsZeitraumLebensMonat(1, 1, new Einkommen(122)),
-          new ErwerbsZeitraumLebensMonat(2, 2, new Einkommen(222)),
+          new ErwerbsZeitraumLebensMonat(5, 5, new Einkommen(522)),
         ],
       ]);
     });
+
+    it("skips Monate without a Variante chosen when transforming the Finanzdaten", () => {
+      const observeredErwerbsZeitraumLebensMonatListen =
+        spyOnSimulateAndObserveErwerbsZeitraumLebensMonatListen();
+
+      const { result } = renderHook(() => useBerechneElterngeldbezuege());
+
+      result.current({
+        1: {
+          [Elternteil.Eins]: {
+            gewaehlteOption: Variante.Basis,
+            elterngeldbezug: 111,
+            bruttoeinkommen: null,
+            imMutterschutz: false,
+          },
+          [Elternteil.Zwei]: {
+            gewaehlteOption: KeinElterngeld,
+            elterngeldbezug: 121,
+            bruttoeinkommen: 122,
+            imMutterschutz: false,
+          },
+        },
+        5: {
+          [Elternteil.Eins]: {
+            gewaehlteOption: KeinElterngeld,
+            elterngeldbezug: 511,
+            bruttoeinkommen: 512,
+            imMutterschutz: false,
+          },
+          [Elternteil.Zwei]: {
+            gewaehlteOption: Variante.Plus,
+            elterngeldbezug: 521,
+            bruttoeinkommen: 522,
+            imMutterschutz: false,
+          },
+        },
+      });
+
+      expect(observeredErwerbsZeitraumLebensMonatListen).toStrictEqual([
+        [],
+        [new ErwerbsZeitraumLebensMonat(5, 5, new Einkommen(522))],
+      ]);
+    });
+
+    /**
+     * Spy on the {@link EgrCalculation.prototype.simulate} method and capture
+     * the {@link FinanzDaten.prototype.erwerbsZeitraumLebensMonatList} it was
+     * called with.
+     *
+     * This is a special "implementation" to overcome some limitations. The
+     * tested code implicitly uses shared memory objects. Thereby, it is not
+     * possible to observe call (parameters) via the {@link MockInstance}. As
+     * these data structures can't be properly cloned, only some properties are
+     * captured, navigating around this issue.
+     *
+     * @returns list that continuously captures the observed parameters
+     */
+    function spyOnSimulateAndObserveErwerbsZeitraumLebensMonatListen(): ErwerbsZeitraumLebensMonat[][] {
+      const observeredErwerbsZeitraumLebensMonatListen: ErwerbsZeitraumLebensMonat[][] =
+        [];
+
+      vi.spyOn(EgrCalculation.prototype, "simulate").mockImplementation(
+        (_, finanzdaten) => {
+          observeredErwerbsZeitraumLebensMonatListen.push(
+            finanzdaten.erwerbsZeitraumLebensMonatList,
+          );
+          return { rows: [] };
+        },
+      );
+
+      return observeredErwerbsZeitraumLebensMonatListen;
+    }
   });
 }

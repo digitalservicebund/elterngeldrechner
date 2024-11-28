@@ -9,7 +9,6 @@ import {
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { ButtonGroup, Split } from "@/components/molecules";
-import { SplitItem } from "@/components/atoms";
 
 interface ErwerbstaetigkeitFormProps {
   readonly initialValues: StepErwerbstaetigkeitState;
@@ -55,21 +54,18 @@ export function ErwerbstaetigkeitForm({
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Split>
-            <SplitItem>
+            <ErwerbstaetigkeitFormElternteil
+              elternteil="ET1"
+              elternteilName={ET1}
+              antragssteller={antragssteller}
+            />
+
+            {antragssteller === "FuerBeide" && (
               <ErwerbstaetigkeitFormElternteil
-                elternteil="ET1"
-                elternteilName={ET1}
+                elternteil="ET2"
+                elternteilName={ET2}
                 antragssteller={antragssteller}
               />
-            </SplitItem>
-            {antragssteller === "FuerBeide" && (
-              <SplitItem hasDivider>
-                <ErwerbstaetigkeitFormElternteil
-                  elternteil="ET2"
-                  elternteilName={ET2}
-                  antragssteller={antragssteller}
-                />
-              </SplitItem>
             )}
           </Split>
           <ButtonGroup onClickBackButton={handlePageBack} />

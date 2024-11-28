@@ -10,7 +10,6 @@ import {
   FormFieldGroup,
   YesNoRadio,
 } from "@/components/molecules";
-import { SplitItem } from "@/components/atoms";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { YesNo } from "@/globals/js/calculations/model";
 import {
@@ -61,17 +60,12 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
               required
             />
           </FormFieldGroup>
+
           <Split>
-            <SplitItem>
-              <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
-            </SplitItem>
+            <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
+
             {antragstellende === "FuerBeide" && (
-              <SplitItem hasDivider>
-                <EinkommenFormElternteil
-                  elternteil="ET2"
-                  elternteilName={ET2}
-                />
-              </SplitItem>
+              <EinkommenFormElternteil elternteil="ET2" elternteilName={ET2} />
             )}
           </Split>
           <ButtonGroup onClickBackButton={handlePageBack} />

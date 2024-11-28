@@ -80,7 +80,7 @@ function ErwerbstaetigkeitFormElternteil({
   }, [elternteil, reset, wasErwerbstaetig, getValues]);
 
   return (
-    <>
+    <section>
       <FormFieldGroup
         headline={antragssteller === "FuerBeide" ? elternteilName : ""}
         description="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes erwerbstätig?"
@@ -141,7 +141,7 @@ function ErwerbstaetigkeitFormElternteil({
           )}
         </>
       )}
-    </>
+    </section>
   );
 }
 

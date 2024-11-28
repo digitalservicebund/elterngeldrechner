@@ -12,7 +12,6 @@ import {
   Split,
   YesNoRadio,
 } from "@/components/molecules";
-import { SplitItem } from "@/components/atoms";
 import { YesNo } from "@/globals/js/calculations/model";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
@@ -68,29 +67,26 @@ export function AllgemeineAngabenForm({
         />
       </FormFieldGroup>
 
-      {antragstellendeFormValue === "FuerBeide" ? (
+      {antragstellendeFormValue === "FuerBeide" && (
         <FormFieldGroup
           headline="Ihre Namen (optional)"
           description="Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden Schritten verzichten zu können, können Sie hier Ihre Namen oder ein Pseudonym angeben, welches wir dann verwenden werden."
         >
           <Split>
-            <SplitItem>
-              <CustomInput
-                register={register}
-                name="pseudonym.ET1"
-                label="Name für Elternteil 1"
-              />
-            </SplitItem>
-            <SplitItem>
-              <CustomInput
-                register={register}
-                name="pseudonym.ET2"
-                label="Name für Elternteil 2"
-              />
-            </SplitItem>
+            <CustomInput
+              register={register}
+              name="pseudonym.ET1"
+              label="Name für Elternteil 1"
+            />
+
+            <CustomInput
+              register={register}
+              name="pseudonym.ET2"
+              label="Name für Elternteil 2"
+            />
           </Split>
         </FormFieldGroup>
-      ) : null}
+      )}
 
       {antragstellendeFormValue === "EinenElternteil" ? (
         <FormFieldGroup

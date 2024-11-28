@@ -7,7 +7,7 @@ export { CustomDate } from "./custom-date";
 export { YesNoRadio } from "./yes-no-radio";
 export type { SelectOption } from "./custom-select";
 export { CustomInput } from "./custom-input";
-export { Split } from "./split";
+export { Split } from "./Split";
 export { ButtonGroup } from "./button-group";
 
 export * from "./CustomRadioGroup";

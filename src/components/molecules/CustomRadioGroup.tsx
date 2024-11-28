@@ -51,7 +51,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   return (
     <fieldset
       role="radiogroup"
-      className={classNames("flex gap-10", {
+      className={classNames("flex gap-16", {
         "flex-col": vertical,
         "justify-around": horizontal,
       })}

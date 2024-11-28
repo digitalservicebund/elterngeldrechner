@@ -24,11 +24,6 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.getByLabel("Elternteil 1").getByText("Ja").click();
   await page.getByLabel("Elternteil 2").getByText("Nein").click();
-  await page
-    .locator("div")
-    .filter({ hasText: /^Einkünfte aus nichtselbständiger Arbeit$/ })
-    .nth(0)
-    .click();
   await page.getByText("Gewinneinkünfte").click();
   await page.getByText("Einkünfte aus nichtselbstä").click();
   await page.getByRole("button", { name: "Weiter" }).click();

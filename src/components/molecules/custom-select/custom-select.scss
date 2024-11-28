@@ -61,10 +61,6 @@
       &--error {
         border-color: $color-danger;
       }
-
-      @media only screen and (max-width: $breakpoint-tablet) {
-        font-size: px-to-rem(16);
-      }
     }
 
     &__option {

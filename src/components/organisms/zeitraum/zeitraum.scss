@@ -13,8 +13,4 @@
       flex: 1;
     }
   }
-
-  @media (min-width: $breakpoint-desktop) {
-    margin-bottom: px-to-rem($spacer-l);
-  }
 }

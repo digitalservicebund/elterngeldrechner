@@ -14,30 +14,12 @@
   @apply text-40;
 }
 
-@media only screen and (max-width: 481px) {
-  #egr-root h2 {
-    @apply text-28 font-regular;
-  }
-}
-
 #egr-root h3 {
   @apply text-28 font-regular;
 }
 
-@media only screen and (max-width: 481px) {
-  #egr-root h3 {
-    @apply text-24 font-bold;
-  }
-}
-
 #egr-root h4 {
   @apply text-24;
-}
-
-@media only screen and (max-width: 481px) {
-  #egr-root h4 {
-    @apply text-base;
-  }
 }
 
 #egr-root h5 {

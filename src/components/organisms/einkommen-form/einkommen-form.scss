@@ -13,10 +13,6 @@
     gap: px-to-rem($spacer);
     margin: px-to-rem($spacer) 0;
 
-    @media (min-width: $breakpoint-desktop) {
-      gap: px-to-rem($spacer-xl) px-to-rem($spacer);
-    }
-
     legend {
       margin-bottom: px-to-rem(27);
     }

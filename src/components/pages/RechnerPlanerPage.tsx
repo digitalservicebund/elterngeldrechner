@@ -108,7 +108,7 @@ export default function RechnerPlanerPage() {
     }
   }
 
-  const showFeedbackForm = istPlanGueltig && hasChanges && !submitted;
+  const showFeedbackForm = hasChanges && !submitted;
   const defaultFeedbackValues = {
     obstacle: getTrackedObstacle(),
     ease: getTrackedEase(),

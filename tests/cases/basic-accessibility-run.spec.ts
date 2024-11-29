@@ -94,5 +94,7 @@ async function expectPageToBeAccessible(
     });
   }
 
-  expect(violations, "should have no accessibility violations").toHaveLength(0);
+  expect
+    .soft(violations, "should have no accessibility violations")
+    .toHaveLength(0);
 }

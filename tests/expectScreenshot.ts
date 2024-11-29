@@ -14,11 +14,10 @@ export default function expectScreenshot(opts: Opts) {
     // without timeout it produces blank screenshots
     // https://github.com/microsoft/playwright/issues/21657
     await page.waitForTimeout(2000);
-    await expect(locator).toHaveScreenshot(
-      `${name}${screenSize ? `-${screenSize}` : ""}.png`,
-      {
+    await expect
+      .soft(locator)
+      .toHaveScreenshot(`${name}${screenSize ? `-${screenSize}` : ""}.png`, {
         stylePath: path.join(import.meta.dirname, "screenshot.css"),
-      },
-    );
+      });
   };
 }

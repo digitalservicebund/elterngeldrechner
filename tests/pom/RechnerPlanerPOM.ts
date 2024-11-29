@@ -12,7 +12,7 @@ export class RechnerPlanerPOM {
     this.opts = opts;
 
     this.heading = page.getByRole("heading", {
-      name: "Rechner und Planer",
+      name: "Monatsplaner",
       exact: true,
     });
   }

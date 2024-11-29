@@ -91,7 +91,7 @@ export function FeedbackForm({
 
       {form.formState.isSubmitted ? (
         <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-          <strong>
+          <strong data-testid="feedback-appreciation">
             Vielen Dank! Ihr Feedback hilft uns, den Elterngeldrechner für alle
             Nutzenden zu verbessern!
           </strong>

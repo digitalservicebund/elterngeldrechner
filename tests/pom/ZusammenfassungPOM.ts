@@ -25,4 +25,10 @@ export class ZusammenfassungPOM {
       })
       .click();
   }
+
+  async back() {
+    await this.page
+      .getByRole("button", { name: "Zurück", exact: true })
+      .click();
+  }
 }

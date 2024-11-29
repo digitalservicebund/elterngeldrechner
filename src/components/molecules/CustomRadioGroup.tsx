@@ -18,7 +18,7 @@ export interface CustomRadioGroupOption<
 > {
   value: V;
   label: string;
-  description?: ReactNode;
+  description?: (id: string) => ReactNode;
 }
 
 export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
@@ -46,6 +46,8 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   const hasError = error !== undefined;
   const errorIdentifier = useId();
 
+  const baseId = useId();
+
   const vertical = !horizontal;
 
   return (
@@ -57,25 +59,30 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
       })}
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
-      {options.map((option, i) => (
-        <label
-          key={option.label}
-          className={getLabelClassName(hasError, horizontal, disabled)}
-        >
-          <input
-            {...register(name, registerOptions)}
-            className={getInputClassName(hasError, disabled)}
-            type="radio"
-            data-testid={name + "_option_" + i}
-            value={option.value}
-            required={required}
-            disabled={disabled}
-          />
-          {option.label}
+      {options.map((option, i) => {
+        const descriptionId = `${baseId}-${option.label}`;
 
-          {option.description ? option.description : null}
-        </label>
-      ))}
+        return (
+          <label
+            key={option.label}
+            className={getLabelClassName(hasError, horizontal, disabled)}
+          >
+            <input
+              {...register(name, registerOptions)}
+              aria-describedby={descriptionId}
+              className={getInputClassName(hasError, disabled)}
+              type="radio"
+              data-testid={name + "_option_" + i}
+              value={option.value}
+              required={required}
+              disabled={disabled}
+            />
+            {option.label}
+
+            {!!option.description && option.description(descriptionId)}
+          </label>
+        );
+      })}
 
       {!!hasError && (
         <Description id={errorIdentifier} error>

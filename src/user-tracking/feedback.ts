@@ -9,7 +9,7 @@ enum Variables {
 }
 
 export function getTrackedEase() {
-  return getTrackingVariable<1 | 2 | 3 | 4 | 5>(Variables.Ease) || undefined;
+  return getTrackingVariable<number>(Variables.Ease) || undefined;
 }
 
 export function getTrackedObstacle() {

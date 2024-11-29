@@ -20,7 +20,10 @@ import {
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
-import { trackPartnerschaftlicheVerteilung } from "@/user-tracking";
+import {
+  isTrackingAllowedByUser,
+  trackPartnerschaftlicheVerteilung,
+} from "@/user-tracking";
 import {
   trackChanges,
   trackPlannedMonths,
@@ -67,6 +70,14 @@ export default function RechnerPlanerPage() {
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
   const rememberSubmit = useRef(false);
 
+  const [trackingConsent, setTrackingConsent] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      setTrackingConsent(await isTrackingAllowedByUser());
+    })();
+  }, []);
+
   function setPlan(
     nextPlan: PlanMitBeliebigenElternteilen,
     istPlanGueltig: boolean,
@@ -108,11 +119,7 @@ export default function RechnerPlanerPage() {
     }
   }
 
-  const showFeedbackForm = hasChanges && !submitted;
-  const defaultFeedbackValues = {
-    obstacle: getTrackedObstacle(),
-    ease: getTrackedEase(),
-  };
+  const showFeedbackForm = hasChanges && !submitted && trackingConsent;
 
   useEffect(resetTrackingPlanung, []);
 
@@ -127,15 +134,16 @@ export default function RechnerPlanerPage() {
           onOptionSelected={trackChanges}
           onPlanResetted={resetTrackingPlanung}
         >
-          {showFeedbackForm ? (
+          {!!showFeedbackForm && (
             <FeedbackForm
               className="basis-full"
-              defaultValues={defaultFeedbackValues}
+              ease={getTrackedEase()}
+              obstacle={getTrackedObstacle()}
               onChangeEase={trackEase}
               onChangeObstacle={trackObstacle}
               onSubmit={() => (rememberSubmit.current = true)}
             />
-          ) : null}
+          )}
         </Planer>
 
         <Button

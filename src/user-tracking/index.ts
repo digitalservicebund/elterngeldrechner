@@ -30,3 +30,5 @@ async function isTrackingAllowedByUser(): Promise<boolean> {
 
 const ALLOW_TRACKING_COOKIE_NAME = "cookie-allow-tracking"; // set by cookie banner of the Familienportal
 const COOKIE_POLLING_INTERVAL = 500;
+
+export { isTrackingAllowedByUser };

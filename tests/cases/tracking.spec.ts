@@ -7,6 +7,7 @@ import { VariantenPOM } from "../pom/VariantenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 import { FeedbackPOM } from "../pom/FeedbackPOM";
+import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 
 import {
   establishDataLayer,
@@ -24,7 +25,8 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.goto();
   await allgemeineAngabenPage.setElternteile(1);
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschaftsleistungen(true);
@@ -119,8 +121,12 @@ test("feedback in der planung", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
+  await page.goto("./");
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
-  await allgemeineAngabenPage.goto();
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");
@@ -176,8 +182,12 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
+  await page.goto("./");
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
-  await allgemeineAngabenPage.goto();
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");
@@ -230,4 +240,52 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
 
   expect(await rechnerUndPlaner.heading.isVisible()).toBeTruthy();
   expect(await feedbackForm.appreciation.isVisible()).toBeFalsy();
+});
+
+test("feedback wird nicht ohne consent angezeigt", async ({ page }) => {
+  test.slow();
+
+  await page.addInitScript(establishDataLayer);
+
+  await page.goto("./");
+
+  const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.setElternteile(2);
+  await allgemeineAngabenPage.setNameElternteil1("Jane");
+  await allgemeineAngabenPage.setNameElternteil2("John");
+  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Jane");
+  await allgemeineAngabenPage.submit();
+
+  const nachwuchsPage = new NachwuchsPOM(page);
+  await nachwuchsPage.setGeburtsdatum("02.02.2025");
+  await nachwuchsPage.setAnzahlKinder(1);
+  await nachwuchsPage.submit();
+
+  const erwerbstaetigkeitPage = new ErwerbstaetigkeitPOM(page, {
+    elternteile: ["Jane", "John"],
+  });
+  await erwerbstaetigkeitPage.setErwerbstaetig(false, 1);
+  await erwerbstaetigkeitPage.setErwerbstaetig(false, 2);
+  await erwerbstaetigkeitPage.submit();
+
+  const einkommenPage = new EinkommenPOM(page);
+  await einkommenPage.setGesamteinkommenUeberschritten(false);
+  await einkommenPage.submit();
+
+  const variantenPage = new VariantenPOM(page);
+  await variantenPage.submit();
+
+  const rechnerUndPlaner = new RechnerPlanerPOM(page, {
+    elternteile: ["Jane", "John"],
+  });
+
+  await rechnerUndPlaner.zeigeMehrLebensmonateAn();
+  await rechnerUndPlaner.waehleOption(1, "Plus", "John");
+  await rechnerUndPlaner.waehleOption(2, "Plus", "John");
+  await rechnerUndPlaner.waehleOption(3, "Basis", "Jane");
+  await rechnerUndPlaner.waehleOption(3, "Basis", "John");
+
+  const feedbackForm = new FeedbackPOM(page);
+  expect(await feedbackForm.easeQuestion.isVisible()).toBeFalsy();
 });

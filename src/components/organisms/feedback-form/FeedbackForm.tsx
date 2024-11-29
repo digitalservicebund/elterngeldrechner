@@ -8,7 +8,8 @@ import { Button } from "@/components/atoms";
 
 type Props = {
   readonly className?: string;
-  readonly defaultValues: DefaultState;
+  readonly ease?: number;
+  readonly obstacle?: string;
   readonly onChangeEase: (ease: Ease) => void;
   readonly onChangeObstacle: (obstacle: Obstacle) => void;
   readonly onSubmit: () => void;
@@ -16,16 +17,14 @@ type Props = {
 
 export function FeedbackForm({
   className,
-  defaultValues,
+  obstacle,
+  ease,
   onChangeEase,
   onChangeObstacle,
   onSubmit,
 }: Props) {
   const form = useForm<State>({
-    defaultValues: {
-      ease: defaultValues.ease as Ease,
-      obstacle: defaultValues.obstacle as Obstacle,
-    },
+    defaultValues: { ease: ease as Ease, obstacle: obstacle as Obstacle },
   });
 
   const easeValue = form.watch("ease");
@@ -42,15 +41,17 @@ export function FeedbackForm({
     onChangeObstacle(form.getValues("obstacle")!);
   }
 
+  const easeFormTransformerFunc = (it: Ease) => String(it);
+
   return (
     <form
       className={classNames(className, "flex flex-col gap-8")}
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-        <strong className="block pb-16">
+        <b className="block pb-16" data-testid="ease-feedback-question">
           Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
-        </strong>
+        </b>
 
         <div className="mx-16 mb-20 mt-16 max-w-[380px]">
           <CustomRadioGroup
@@ -58,18 +59,19 @@ export function FeedbackForm({
             options={easeOptions}
             register={form.register}
             errors={form.formState.errors}
-            registerOptions={{ onChange: handleEaseChange }}
+            registerOptions={{
+              onChange: handleEaseChange,
+              setValueAs: easeFormTransformerFunc,
+            }}
             disabled={form.formState.isSubmitted}
             horizontal
           />
         </div>
       </div>
 
-      {easeValue ? (
+      {!!easeValue && easeValue > 0 && (
         <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-          <strong className="block pb-16">
-            Was war die größte Schwierigkeit?
-          </strong>
+          <b className="block pb-16">Was war die größte Schwierigkeit?</b>
 
           <CustomRadioGroup
             name={"obstacle" as Path<State>}
@@ -79,6 +81,7 @@ export function FeedbackForm({
             registerOptions={{ onChange: handleObstacleChange }}
             disabled={form.formState.isSubmitted}
           />
+
           <Button
             id="feedback-submit-button"
             disabled={disabledSubmit}
@@ -87,22 +90,21 @@ export function FeedbackForm({
             isSubmitButton
           />
         </div>
-      ) : null}
+      )}
 
-      {form.formState.isSubmitted ? (
+      {!!form.formState.isSubmitted && (
         <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-          <strong data-testid="feedback-appreciation">
+          <b data-testid="feedback-appreciation">
             Vielen Dank! Ihr Feedback hilft uns, den Elterngeldrechner für alle
             Nutzenden zu verbessern!
-          </strong>
+          </b>
         </div>
-      ) : null}
+      )}
     </form>
   );
 }
 
 type State = { obstacle?: Obstacle; ease?: Ease };
-export type DefaultState = { obstacle?: string; ease?: number };
 
 type Obstacle = (typeof obstacles)[number];
 
@@ -126,9 +128,13 @@ const easeOptions: CustomRadioGroupOption<number>[] = [
 ];
 
 function descriptionContainer(text: string) {
-  return (
-    <span className="text-sm text-gray-600 absolute mt-[80px]">{text}</span>
-  );
+  return function accessibleDescriptionContainer(id: string) {
+    return (
+      <span className="absolute mt-80" id={id}>
+        {text}
+      </span>
+    );
+  };
 }
 
 type Ease = 1 | 2 | 3 | 4 | 5;

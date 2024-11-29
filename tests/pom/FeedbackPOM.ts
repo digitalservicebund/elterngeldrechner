@@ -4,11 +4,13 @@ export class FeedbackPOM {
   readonly page: Page;
 
   readonly appreciation: Locator;
+  readonly easeQuestion: Locator;
 
   constructor(page: Page) {
     this.page = page;
 
     this.appreciation = page.getByTestId("feedback-appreciation");
+    this.easeQuestion = this.page.getByTestId("ease-feedback-question");
   }
 
   async waehleEase(ease: 1 | 2 | 3 | 4 | 5) {

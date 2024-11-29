@@ -67,5 +67,4 @@ const ANY_PLAN = {
   },
   lebensmonate: {},
   errechneteElterngeldbezuege: {} as never,
-  changes: 0,
 };

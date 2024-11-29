@@ -165,7 +165,6 @@ if (import.meta.vitest) {
       },
       errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
       lebensmonate: {},
-      changes: 0,
     };
   });
 }

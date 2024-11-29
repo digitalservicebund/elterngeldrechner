@@ -45,7 +45,6 @@ describe("tracking of the planung", async () => {
           },
         },
       },
-      changes: 0,
     };
 
     trackPlannedMonths(plan);
@@ -89,7 +88,6 @@ describe("tracking of the planung", async () => {
           },
         },
       },
-      changes: 0,
     };
 
     trackPlannedMonthsWithIncome(plan);
@@ -143,7 +141,6 @@ describe("tracking of the planung", async () => {
           },
         },
       },
-      changes: 0,
     };
 
     trackPlannedMonths(plan);

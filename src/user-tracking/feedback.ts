@@ -17,7 +17,7 @@ export function getTrackedObstacle() {
 }
 
 export function trackEase(ease: 1 | 2 | 3 | 4 | 5) {
-  setTrackingVariable(Variables.Ease, ease);
+  setTrackingVariable(Variables.Ease, Number(ease));
 }
 
 export function trackObstacle(obstacle: string) {

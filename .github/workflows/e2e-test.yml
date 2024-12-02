@@ -16,25 +16,14 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      - name: Get Playwright version
-        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages[''].devDependencies['@playwright/test'])")" >> $GITHUB_ENV
-
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ env.PLAYWRIGHT_VERSION }}
-
-      - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+      - uses: ./.github/actions/cached-playwright-setup
 
       - name: Run Playwright e2e tests
         run: npm run test-e2e -- --shard ${{ matrix.shard }}/2
         env:
-          BASE_URL: http://127.0.0.1:300${{ matrix.shard }}
-          PORT: 300${{ matrix.shard }}
+          PLAYWRIGHT_REPORTER: blob
+          PLAYWRIGHT_URL: http://127.0.0.1
+          PLAYWRIGHT_PORT: 300${{ matrix.shard }}
 
       - name: Upload Playwright blob report
         if: always()

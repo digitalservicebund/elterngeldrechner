@@ -1,6 +1,6 @@
 import { waehleOption } from "./waehleOption";
 import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
-import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
+import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain/Elterngeldbezug";
 import {
   Auswahloptionen,
   KeinElterngeld,
@@ -18,40 +18,45 @@ import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function bestimmeAuswahlmoeglichkeiten<A extends Ausgangslage>(
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
 ): Auswahlmoeglichkeiten {
-  const elterngeldbezuege =
-    plan.errechneteElterngeldbezuege[lebensmonatszahl][elternteil];
-
   return Object.fromEntries(
-    Auswahloptionen.map((option) => {
-      const elterngeldbezug =
-        option === KeinElterngeld ? null : elterngeldbezuege[option];
-
-      const auswahlmoeglichkeit = createAuswahlmoeglichkeit(
+    Auswahloptionen.map((option) => [
+      option,
+      createAuswahlmoeglichkeit(
+        berechneElterngeldbezuege,
         plan,
         lebensmonatszahl,
         elternteil,
         option,
-        elterngeldbezug,
-      );
-
-      return [option, auswahlmoeglichkeit];
-    }),
+      ),
+    ]),
   ) as Auswahlmoeglichkeiten;
 }
 
 function createAuswahlmoeglichkeit<A extends Ausgangslage>(
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
   option: Auswahloption,
-  elterngeldbezug: Elterngeldbezug,
 ): Auswahlmoeglichkeit {
-  return waehleOption(plan, lebensmonatszahl, elternteil, option).mapOrElse(
-    () => ({ isDisabled: false as const, elterngeldbezug }),
+  return waehleOption(
+    berechneElterngeldbezuege,
+    plan,
+    lebensmonatszahl,
+    elternteil,
+    option,
+  ).mapOrElse(
+    (hypothenticalPlan) => ({
+      isDisabled: false as const,
+      elterngeldbezug:
+        hypothenticalPlan.lebensmonate[lebensmonatszahl]?.[elternteil]
+          .elterngeldbezug ?? null,
+    }),
     (violations) => ({
       isDisabled: true as const,
       hintWhyDisabled: formatViolationsAsHint(violations),
@@ -70,52 +75,21 @@ if (import.meta.vitest) {
   describe("bestimmte Auswahlmöglichkeiten", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
-    const { Lebensmonatszahlen } = await import(
-      "@/features/planer/domain/Lebensmonatszahl"
-    );
     const { Result } = await import("@/features/planer/domain/common/Result");
 
     beforeEach(() => {
-      vi.mocked(waehleOption).mockImplementation((plan) => Result.ok(plan));
-    });
-
-    it("picks up the correct Elterngeldbezug for each Auswahlmöglichkeit", () => {
-      // related to test-generators
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const errechneteElterngeldbezuege: any = {
-        ...ANY_ELTERNGELDBEZUEGE,
-        1: {
-          [Elternteil.Eins]: bezuege(111, 112, 113),
-          [Elternteil.Zwei]: bezuege(121, 122, 123),
-        },
-        2: {
-          [Elternteil.Eins]: bezuege(211, 212, 213),
-          [Elternteil.Zwei]: bezuege(221, 222, 223),
-        },
-      };
-
-      const plan = { ...ANY_PLAN, errechneteElterngeldbezuege };
-
-      const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(
-        plan,
-        2,
-        Elternteil.Zwei,
-      );
-
-      expect(auswahlmoeglichkeiten[Variante.Basis].elterngeldbezug).toBe(221);
-      expect(auswahlmoeglichkeiten[Variante.Plus].elterngeldbezug).toBe(222);
-      expect(auswahlmoeglichkeiten[Variante.Bonus].elterngeldbezug).toBe(223);
-      expect(auswahlmoeglichkeiten[KeinElterngeld].elterngeldbezug).toBeNull();
+      vi.mocked(waehleOption).mockImplementation((_, plan) => Result.ok(plan));
     });
 
     it("creates a disabled Auswahlmöglichkeit including the violation as hint if the resulting Plan is ungültig for an Option", () => {
-      vi.mocked(waehleOption).mockImplementation((plan, _, __, option) =>
+      vi.mocked(waehleOption).mockImplementation((_, plan, __, ___, option) =>
         option === Variante.Basis
           ? Result.error([{ message: "ungültig" }])
           : Result.ok(plan),
       );
 
       const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(
+        ANY_BERECHNE_ELTERNGELDBEZUEGE,
         ANY_PLAN,
         2,
         Elternteil.Zwei,
@@ -130,41 +104,65 @@ if (import.meta.vitest) {
       expect(auswahlmoeglichkeiten[KeinElterngeld].isDisabled).toBe(false);
     });
 
+    it("forwards the callback to calculate the Elterngeldbezuege and afterwards picks up the value from the hypothentical Plan", () => {
+      vi.mocked(waehleOption).mockReturnValue(
+        Result.ok({
+          ausgangslage: ANY_AUSGANGSLAGE,
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: monat(11),
+              [Elternteil.Zwei]: monat(12),
+            },
+            3: {
+              [Elternteil.Eins]: monat(21),
+              [Elternteil.Zwei]: monat(22),
+            },
+          },
+        }),
+      );
+
+      const berechneElterngeldbezuege = () => ({});
+
+      const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(
+        berechneElterngeldbezuege,
+        ANY_PLAN,
+        3,
+        Elternteil.Zwei,
+      );
+
+      expect(waehleOption).toHaveBeenCalledWith(
+        berechneElterngeldbezuege,
+        expect.anything(),
+        3,
+        Elternteil.Zwei,
+        expect.anything(),
+      );
+      expect(auswahlmoeglichkeiten[Variante.Basis].elterngeldbezug).toBe(22);
+    });
+
     vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));
 
-    function bezuege(basis: number, plus: number, bonus: number) {
+    function monat(elterngeldbezug: number) {
       return {
-        [Variante.Basis]: basis,
-        [Variante.Plus]: plus,
-        [Variante.Bonus]: bonus,
+        elterngeldbezug,
+        imMutterschutz: false as const,
       };
     }
 
-    const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
-      [Elternteil.Eins]: bezuege(0, 0, 0),
-      [Elternteil.Zwei]: bezuege(0, 0, 0),
+    const ANY_AUSGANGSLAGE = {
+      anzahlElternteile: 2 as const,
+      pseudonymeDerElternteile: {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      },
+      geburtsdatumDesKindes: new Date(),
     };
-
-    // related to test-generators
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ANY_ELTERNGELDBEZUEGE: any = Object.fromEntries(
-      Lebensmonatszahlen.map((lebensmonatszahl) => [
-        lebensmonatszahl,
-        ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
-      ]),
-    );
 
     const ANY_PLAN = {
-      ausgangslage: {
-        anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
-          [Elternteil.Eins]: "Jane",
-          [Elternteil.Zwei]: "John",
-        },
-        geburtsdatumDesKindes: new Date(),
-      },
-      errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
+      ausgangslage: ANY_AUSGANGSLAGE,
       lebensmonate: {},
     };
+
+    const ANY_BERECHNE_ELTERNGELDBEZUEGE = () => ({});
   });
 }

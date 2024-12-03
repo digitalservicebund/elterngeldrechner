@@ -1,3 +1,6 @@
+import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
+import { aktualisiereElterngeldbezuege } from "./aktualisiereElterngeldbezuege";
+import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain/Elterngeldbezug";
 import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
 import type {
   Ausgangslage,
@@ -8,6 +11,7 @@ import type { Plan } from "@/features/planer/domain/plan";
 import { gebeEinkommenAn as gebeEinkommenInLebensmonatenAn } from "@/features/planer/domain/lebensmonate";
 
 export function gebeEinkommenAn<A extends Ausgangslage>(
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
@@ -18,7 +22,7 @@ export function gebeEinkommenAn<A extends Ausgangslage>(
     lebensmonatszahl,
   );
 
-  const lebensmonate = gebeEinkommenInLebensmonatenAn(
+  const lebensmonateMitNeuemEinkommen = gebeEinkommenInLebensmonatenAn(
     plan.lebensmonate,
     lebensmonatszahl,
     elternteil,
@@ -26,7 +30,26 @@ export function gebeEinkommenAn<A extends Ausgangslage>(
     ungeplanterLebensmonat,
   );
 
-  return { ...plan, lebensmonate };
+  const planMitNeuemEinkommen = {
+    ...plan,
+    lebensmonate: lebensmonateMitNeuemEinkommen,
+  };
+
+  return berechneUndAktualisiereElterngeldbezuege(
+    berechneElterngeldbezuege,
+    planMitNeuemEinkommen,
+    elternteil,
+  );
+}
+
+function berechneUndAktualisiereElterngeldbezuege<A extends Ausgangslage>(
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  plan: Plan<A>,
+  elternteil: ElternteileByAusgangslage<A>,
+): Plan<A> {
+  const monate = teileLebensmonateBeiElternteileAuf(plan)[elternteil];
+  const elterngeldbezuege = berechneElterngeldbezuege(elternteil, monate);
+  return aktualisiereElterngeldbezuege(plan, elternteil, elterngeldbezuege);
 }
 
 if (import.meta.vitest) {
@@ -34,6 +57,7 @@ if (import.meta.vitest) {
 
   describe("gebe Einkommen in Plan an", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+    const { Variante } = await import("@/features/planer/domain/Variante");
 
     it("sets the Bruttoeinkommen for the correct Lebensmonat and Elternteil", () => {
       const lebensmonate = {
@@ -46,10 +70,15 @@ if (import.meta.vitest) {
           [Elternteil.Zwei]: monat(30),
         },
       };
-
       const planVorher = { ...ANY_PLAN, lebensmonate };
 
-      const plan = gebeEinkommenAn(planVorher, 2, Elternteil.Eins, 317);
+      const plan = gebeEinkommenAn(
+        ANY_BERECHNE_ELTERNGELDBEZUEGE,
+        planVorher,
+        2,
+        Elternteil.Eins,
+        317,
+      );
 
       expect(plan.lebensmonate).toStrictEqual({
         1: {
@@ -63,21 +92,77 @@ if (import.meta.vitest) {
       });
     });
 
-    function monat(bruttoeinkommen: number | undefined) {
+    it("updates the Elterngeldbezüge of the Elternteil using the given callback", () => {
+      const lebensmonate = {
+        1: {
+          [Elternteil.Eins]: monat(111, 112),
+          [Elternteil.Zwei]: monat(121, 122),
+        },
+        3: {
+          [Elternteil.Eins]: monat(311, 312),
+          [Elternteil.Zwei]: monat(321, 322),
+        },
+      };
+      const planVorher = { ...ANY_PLAN, lebensmonate };
+
+      const berechneElterngeldbezuege = vi
+        .fn()
+        .mockReturnValue({ 1: 1000, 2: 2000, 3: 3000 });
+
+      const plan = gebeEinkommenAn(
+        berechneElterngeldbezuege,
+        planVorher,
+        1,
+        Elternteil.Zwei,
+        999,
+      );
+
+      expect(berechneElterngeldbezuege).toHaveBeenCalledOnce();
+      expect(berechneElterngeldbezuege).toHaveBeenLastCalledWith(
+        Elternteil.Zwei,
+        {
+          1: monat(999, 122),
+          3: monat(321, 322),
+        },
+      );
+
+      expect(plan.lebensmonate).toStrictEqual({
+        1: {
+          [Elternteil.Eins]: monat(111, 112),
+          [Elternteil.Zwei]: monat(999, 1000),
+        },
+        3: {
+          [Elternteil.Eins]: monat(311, 312),
+          [Elternteil.Zwei]: monat(321, 3000),
+        },
+      });
+    });
+
+    function monat(
+      bruttoeinkommen: number | undefined,
+      elterngeldbezug?: number,
+    ) {
       return {
         bruttoeinkommen,
+        elterngeldbezug,
+        gewaehlteOption: Variante.Basis,
         imMutterschutz: false as const,
       };
     }
 
     const ANY_PLAN = {
       ausgangslage: {
-        anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
         geburtsdatumDesKindes: new Date(),
       },
       errechneteElterngeldbezuege: {} as never,
       lebensmonate: {},
     };
+
+    const ANY_BERECHNE_ELTERNGELDBEZUEGE = () => ({});
   });
 }

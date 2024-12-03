@@ -6,8 +6,8 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Funktionsleiste } from "./Funktionsleiste";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
+import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/user-interface/service";
 import {
-  BerechneElterngeldbezuegeCallback,
   OptionSelectedCallback,
   PlanChangedCallback,
   PlanResettedCallback,

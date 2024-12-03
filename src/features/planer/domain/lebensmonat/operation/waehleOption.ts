@@ -1,5 +1,4 @@
 import { compose } from "@/features/planer/domain/common/compose";
-import type { ElterngeldbezeugeProElternteil } from "@/features/planer/domain/Elterngeldbezuege";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import {
@@ -14,9 +13,8 @@ export function waehleOption<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
   elternteil: E,
   option: Auswahloption,
-  elterngeldbezuege: ElterngeldbezeugeProElternteil<E>,
 ): Lebensmonat<E> {
-  const parameters = { elternteil, option, elterngeldbezuege };
+  const parameters = { elternteil, option };
   const moechteBonusWaehlen = option === Variante.Bonus;
   const bonusIstAusgewaehlt =
     AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
@@ -69,21 +67,16 @@ function waehleOptionDirekt<E extends Elternteil>(
   overrideParameters: Partial<BindingParameters<E>> | undefined,
   lebensmonat: Lebensmonat<E>,
 ): Lebensmonat<E> {
-  const { elternteil, option, elterngeldbezuege } = {
-    ...parameters,
-    ...overrideParameters,
-  };
+  const { elternteil, option } = { ...parameters, ...overrideParameters };
 
   const monat = lebensmonat[elternteil];
-  const elterngeldbezug = elterngeldbezuege[elternteil];
-  const gewaehlterMonat = waehleOptionInMonat(monat, option, elterngeldbezug);
+  const gewaehlterMonat = waehleOptionInMonat(monat, option);
   return { ...lebensmonat, [elternteil]: gewaehlterMonat };
 }
 
 type BindingParameters<E extends Elternteil> = {
   elternteil: E;
   option: Auswahloption;
-  elterngeldbezuege: ElterngeldbezeugeProElternteil<E>;
 };
 
 if (import.meta.vitest) {
@@ -92,28 +85,20 @@ if (import.meta.vitest) {
   describe("wähle Option in Lebensmonat", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
 
-    it("sets the gewählte Option of the correct Elternteil with matching Elterngeldbezug", () => {
+    it("sets the gewählte Option of the correct Elternteil", () => {
       const lebensmonatVorher = {
-        [Elternteil.Eins]: monat(undefined, undefined),
-        [Elternteil.Zwei]: monat(undefined, undefined),
-      };
-
-      const elterngeldbezuege = {
-        [Elternteil.Eins]: bezuege(11, 12, 13),
-        [Elternteil.Zwei]: bezuege(21, 22, 23),
+        [Elternteil.Eins]: monat(undefined),
+        [Elternteil.Zwei]: monat(undefined),
       };
 
       const lebensmonat = waehleOption<Elternteil>(
         lebensmonatVorher,
         Elternteil.Zwei,
         Variante.Plus,
-        elterngeldbezuege,
       );
 
       expect(lebensmonat[Elternteil.Eins].gewaehlteOption).toBeUndefined();
-      expect(lebensmonat[Elternteil.Eins].elterngeldbezug).toBeUndefined();
       expect(lebensmonat[Elternteil.Zwei].gewaehlteOption).toBe(Variante.Plus);
-      expect(lebensmonat[Elternteil.Zwei].elterngeldbezug).toBe(22);
     });
 
     it("also chooses Partnerschaftsbonus for the other Elternteile automatically", () => {
@@ -126,7 +111,6 @@ if (import.meta.vitest) {
         lebensmonatVorher,
         Elternteil.Eins,
         Variante.Bonus,
-        ANY_ELTERNGELDBEZUEGE,
       );
 
       expect(lebensmonat[Elternteil.Eins].gewaehlteOption).toBe(Variante.Bonus);
@@ -143,35 +127,14 @@ if (import.meta.vitest) {
         lebensmonatVorher,
         Elternteil.Eins,
         Variante.Basis,
-        ANY_ELTERNGELDBEZUEGE,
       );
 
       expect(lebensmonat[Elternteil.Eins].gewaehlteOption).toBe(Variante.Basis);
       expect(lebensmonat[Elternteil.Zwei].gewaehlteOption).toBeUndefined();
     });
 
-    function monat(
-      gewaehlteOption?: Auswahloption,
-      elterngeldbezug = undefined,
-    ) {
-      return {
-        gewaehlteOption,
-        elterngeldbezug,
-        imMutterschutz: false as const,
-      };
+    function monat(gewaehlteOption?: Auswahloption) {
+      return { gewaehlteOption, imMutterschutz: false as const };
     }
-
-    const bezuege = function (basis: number, plus: number, bonus: number) {
-      return {
-        [Variante.Basis]: basis,
-        [Variante.Plus]: plus,
-        [Variante.Bonus]: bonus,
-      };
-    };
-
-    const ANY_ELTERNGELDBEZUEGE = {
-      [Elternteil.Eins]: bezuege(0, 0, 0),
-      [Elternteil.Zwei]: bezuege(0, 0, 0),
-    };
   });
 }

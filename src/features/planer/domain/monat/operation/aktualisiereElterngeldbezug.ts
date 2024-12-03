@@ -1,10 +1,10 @@
+import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
 import type { Monat } from "@/features/planer/domain/monat/Monat";
 import { KeinElterngeld } from "@/features/planer/domain/Auswahloption";
-import type { ElterngeldbezugProVariante } from "@/features/planer/domain/Elterngeldbezuege";
 
 export function aktualisiereElterngeldbezug(
   monat: Monat,
-  elterngeldbezuege: ElterngeldbezugProVariante,
+  elterngeldbezug: Elterngeldbezug | undefined,
 ): Monat {
   const { imMutterschutz, gewaehlteOption } = monat;
   const hatKeinElterngeldbezug =
@@ -15,7 +15,6 @@ export function aktualisiereElterngeldbezug(
   if (hatKeinElterngeldbezug) {
     return monat;
   } else {
-    const elterngeldbezug = elterngeldbezuege[gewaehlteOption];
     return { ...monat, elterngeldbezug };
   }
 }
@@ -32,10 +31,7 @@ if (import.meta.vitest) {
     it("should leave Monat mit Mutterschutz untouched", () => {
       const monat = MONAT_MIT_MUTTERSCHUTZ;
 
-      const aktualisierterMonat = aktualisiereElterngeldbezug(
-        monat,
-        ANY_ELTERNGELDBEZUEGE,
-      );
+      const aktualisierterMonat = aktualisiereElterngeldbezug(monat, 100);
 
       expect(aktualisierterMonat).toBe(monat);
     });
@@ -47,10 +43,7 @@ if (import.meta.vitest) {
         elterngeldbezug: undefined,
       };
 
-      const aktualisierterMonat = aktualisiereElterngeldbezug(
-        monat,
-        ANY_ELTERNGELDBEZUEGE,
-      );
+      const aktualisierterMonat = aktualisiereElterngeldbezug(monat, 100);
 
       expect(aktualisierterMonat).toBe(monat);
     });
@@ -62,46 +55,36 @@ if (import.meta.vitest) {
         elterngeldbezug: null,
       };
 
-      const aktualisierterMonat = aktualisiereElterngeldbezug(
-        monat,
-        ANY_ELTERNGELDBEZUEGE,
-      );
+      const aktualisierterMonat = aktualisiereElterngeldbezug(monat, 100);
 
       expect(aktualisierterMonat).toBe(monat);
     });
 
-    it.each([
-      { variante: Variante.Basis, elterngeldbezug: 10 },
-      { variante: Variante.Plus, elterngeldbezug: 20 },
-      { variante: Variante.Bonus, elterngeldbezug: 30 },
-    ])(
-      "updates the Elterngeldbezug of $elterngeldbezug for chosen Variante $variante correctly",
-      ({ variante, elterngeldbezug }) => {
+    it.each(Object.values(Variante))(
+      "updates the Elterngeldbezug for chosen Variante $variante correctly",
+      (variante) => {
         const monatVorher = {
           gewaehlteOption: variante,
           imMutterschutz: false as const,
           elterngeldbezug: 0,
         };
 
-        const elterngeldbezuege = {
-          ...ANY_ELTERNGELDBEZUEGE,
-          [variante]: elterngeldbezug,
-        };
+        const monat = aktualisiereElterngeldbezug(monatVorher, 100);
 
-        const monat = aktualisiereElterngeldbezug(
-          monatVorher,
-          elterngeldbezuege,
-        );
-
-        expect(monat.elterngeldbezug).toEqual(elterngeldbezug);
+        expect(monat.elterngeldbezug).toEqual(100);
       },
     );
 
-    const ANY_ELTERNGELDBEZUEGE = {
-      [Variante.Basis]: 0,
-      [Variante.Plus]: 0,
-      [Variante.Bonus]: 0,
-      [KeinElterngeld]: 0,
-    };
+    it("can unset the Elterngeldbezug", () => {
+      const monat = {
+        gewaehlteOption: Variante.Basis,
+        imMutterschutz: false as const,
+        elterngeldbezug: 100,
+      };
+
+      const aktualisierterMonat = aktualisiereElterngeldbezug(monat, undefined);
+
+      expect(aktualisierterMonat.elterngeldbezug).toBeUndefined();
+    });
   });
 }

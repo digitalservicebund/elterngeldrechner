@@ -10,10 +10,7 @@ export {
 } from "./Auswahloption";
 export { type Einkommen } from "./Einkommen";
 export type { Elterngeldbezug } from "./Elterngeldbezug";
-export type {
-  Elterngeldbezuege,
-  ElterngeldbezugProVariante,
-} from "./Elterngeldbezuege";
+export type { BerechneElterngeldbezuegeCallback } from "./Elterngeldbezug";
 export { Elternteil, compareElternteile } from "./Elternteil";
 export { type Gesamtsumme, type SummeFuerElternteil } from "./Gesamtsumme";
 export {
@@ -39,7 +36,6 @@ export { type Monat, MONAT_MIT_MUTTERSCHUTZ } from "./monat";
 export {
   type Plan,
   type PlanMitBeliebigenElternteilen,
-  aktualisiereErrechneteElterngelbezuege,
   berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   fassePlanZusammen,

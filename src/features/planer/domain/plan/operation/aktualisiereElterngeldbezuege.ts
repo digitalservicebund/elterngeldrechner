@@ -1,23 +1,28 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
-import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
+import type {
+  Elterngeldbezug,
+  ElterngeldbezuegeFuerElternteil,
+} from "@/features/planer/domain/Elterngeldbezug";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
-import { aktualisiereElterngeldbezuege } from "@/features/planer/domain/lebensmonate";
-import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
+import { aktualisiereElterngeldbezuege as aktualisiereElterngeldbezuegeInLebensmonaten } from "@/features/planer/domain/lebensmonate";
 
-export function aktualisiereErrechneteElterngelbezuege<A extends Ausgangslage>(
+export function aktualisiereElterngeldbezuege<A extends Ausgangslage>(
   plan: Plan<A>,
-  errechneteElterngeldbezuege: Elterngeldbezuege<ElternteileByAusgangslage<A>>,
+  elternteil: ElternteileByAusgangslage<A>,
+  elterngeldbezuege: ElterngeldbezuegeFuerElternteil,
 ): Plan<A> {
-  const lebensmonate = aktualisiereElterngeldbezuege(
-    plan.lebensmonate,
-    errechneteElterngeldbezuege,
-  );
-
-  return { ...plan, errechneteElterngeldbezuege, lebensmonate };
+  return {
+    ...plan,
+    lebensmonate: aktualisiereElterngeldbezuegeInLebensmonaten(
+      plan.lebensmonate,
+      elternteil,
+      elterngeldbezuege,
+    ),
+  };
 }
 
 if (import.meta.vitest) {
@@ -26,12 +31,6 @@ if (import.meta.vitest) {
   describe("wähle Option für Plan", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
-    const { KeinElterngeld } = await import(
-      "@/features/planer/domain/Auswahloption"
-    );
-    const { Lebensmonatszahlen } = await import(
-      "@/features/planer/domain/Lebensmonatszahl"
-    );
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
       const ausgangslage = {
@@ -40,45 +39,36 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
-      const errechneteElterngeldbezuege = {
-        ...ANY_ELTERNGELDBEZUEGE,
-        1: {
-          [Elternteil.Eins]: bezuege(111, 112, 113),
-          [Elternteil.Zwei]: bezuege(121, 122, 123),
-        },
-        2: {
-          [Elternteil.Eins]: bezuege(211, 212, 213),
-          [Elternteil.Zwei]: bezuege(221, 222, 223),
-        },
-      };
-
       const lebensmonate = {
         1: {
-          [Elternteil.Eins]: monat(Variante.Basis, 10),
-          [Elternteil.Zwei]: monat(Variante.Plus, 20),
+          [Elternteil.Eins]: monat(Variante.Basis, 11),
+          [Elternteil.Zwei]: monat(Variante.Plus, 12),
         },
-        2: {
-          [Elternteil.Eins]: monat(Variante.Bonus, 30),
-          [Elternteil.Zwei]: monat(KeinElterngeld, null),
+        3: {
+          [Elternteil.Eins]: monat(Variante.Bonus, 31),
+          [Elternteil.Zwei]: monat(Variante.Bonus, 32),
         },
       };
 
-      const plan = aktualisiereErrechneteElterngelbezuege(
-        {
-          ausgangslage,
-          errechneteElterngeldbezuege: ANY_ELTERNGELDBEZUEGE,
-          lebensmonate,
-        },
-        errechneteElterngeldbezuege,
+      const planVorher = { ausgangslage, lebensmonate };
+      const elterngeldbezuege = { 1: 100, 2: 200, 3: 300 };
+
+      const plan = aktualisiereElterngeldbezuege(
+        planVorher,
+        Elternteil.Zwei,
+        elterngeldbezuege,
       );
 
-      const lebensmonatEins = plan.lebensmonate[1]!;
-      const lebensmonatZwei = plan.lebensmonate[2]!;
-
-      expect(lebensmonatEins[Elternteil.Eins].elterngeldbezug).toBe(111);
-      expect(lebensmonatEins[Elternteil.Zwei].elterngeldbezug).toBe(122);
-      expect(lebensmonatZwei[Elternteil.Eins].elterngeldbezug).toBe(213);
-      expect(lebensmonatZwei[Elternteil.Zwei].elterngeldbezug).toBeNull();
+      expect(plan.lebensmonate).toStrictEqual({
+        1: {
+          [Elternteil.Eins]: monat(Variante.Basis, 11),
+          [Elternteil.Zwei]: monat(Variante.Plus, 100),
+        },
+        3: {
+          [Elternteil.Eins]: monat(Variante.Bonus, 31),
+          [Elternteil.Zwei]: monat(Variante.Bonus, 300),
+        },
+      });
     });
 
     const monat = function (
@@ -91,28 +81,6 @@ if (import.meta.vitest) {
         imMutterschutz: false as const,
       };
     };
-
-    const bezuege = function (basis: number, plus: number, bonus: number) {
-      return {
-        [Variante.Basis]: basis,
-        [Variante.Plus]: plus,
-        [Variante.Bonus]: bonus,
-      };
-    };
-
-    const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
-      [Elternteil.Eins]: bezuege(0, 0, 0),
-      [Elternteil.Zwei]: bezuege(0, 0, 0),
-    };
-
-    // related to test-generators
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ANY_ELTERNGELDBEZUEGE: any = Object.fromEntries(
-      Lebensmonatszahlen.map((lebensmonatszahl) => [
-        lebensmonatszahl,
-        ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
-      ]),
-    );
 
     const ANY_PSEUDONYME = {
       [Elternteil.Eins]: "Jane",

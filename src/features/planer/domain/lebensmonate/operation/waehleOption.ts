@@ -1,5 +1,4 @@
 import { compose } from "@/features/planer/domain/common/compose";
-import type { Elterngeldbezuege } from "@/features/planer/domain/Elterngeldbezuege";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import {
@@ -24,7 +23,6 @@ export function waehleOption<E extends Elternteil>(
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: E,
   option: Auswahloption,
-  elterngeldbezuege: Elterngeldbezuege<E>,
   ungeplanterLebensmonat: Lebensmonat<E>,
 ): Lebensmonate<E> {
   const moechteBonusWaehlen = option === Variante.Bonus;
@@ -36,7 +34,6 @@ export function waehleOption<E extends Elternteil>(
     lebensmonatszahl,
     elternteil,
     option,
-    elterngeldbezuege,
     ungeplanterLebensmonat,
   };
 
@@ -132,20 +129,16 @@ function waehleOptionDirekt<E extends Elternteil>(
   overrideParameters: Partial<BindingParameters<E>> | undefined,
   lebensmonate: Lebensmonate<E>,
 ): Lebensmonate<E> {
-  const {
-    lebensmonatszahl,
-    elternteil,
-    option,
-    elterngeldbezuege,
-    ungeplanterLebensmonat,
-  } = { ...parameters, ...overrideParameters };
+  const { lebensmonatszahl, elternteil, option, ungeplanterLebensmonat } = {
+    ...parameters,
+    ...overrideParameters,
+  };
 
   const lebensmonat = lebensmonate[lebensmonatszahl] ?? ungeplanterLebensmonat;
   const gewaehlterLebensmonat = waehleOptionInLebensmonat(
     lebensmonat,
     elternteil,
     option,
-    elterngeldbezuege[lebensmonatszahl],
   );
   return { ...lebensmonate, [lebensmonatszahl]: gewaehlterLebensmonat };
 }
@@ -154,7 +147,6 @@ type BindingParameters<E extends Elternteil> = {
   lebensmonatszahl: Lebensmonatszahl;
   elternteil: E;
   option: Auswahloption;
-  elterngeldbezuege: Elterngeldbezuege<E>;
   ungeplanterLebensmonat: Lebensmonat<E>;
 };
 
@@ -239,31 +231,19 @@ if (import.meta.vitest) {
   describe("wähle Option in Lebensmonaten", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");
     const { Variante } = await import("@/features/planer/domain/Variante");
-    const { Lebensmonatszahlen, LetzteLebensmonatszahl } = await import(
+    const { LetzteLebensmonatszahl } = await import(
       "@/features/planer/domain/Lebensmonatszahl"
     );
 
-    it("sets the Auswahloption and Elterngeldbezug for the correct Lebensmonat and Elternteil", () => {
+    it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
       const lebensmonateVorher = {
         1: {
-          [Elternteil.Eins]: monat(undefined, undefined),
-          [Elternteil.Zwei]: monat(undefined, undefined),
+          [Elternteil.Eins]: monat(undefined),
+          [Elternteil.Zwei]: monat(undefined),
         },
         2: {
-          [Elternteil.Eins]: monat(undefined, undefined),
-          [Elternteil.Zwei]: monat(undefined, undefined),
-        },
-      };
-
-      const elterngeldbezuege = {
-        ...ANY_ELTERNGELDBEZUEGE,
-        1: {
-          [Elternteil.Eins]: bezuege(111, 112, 113),
-          [Elternteil.Zwei]: bezuege(121, 122, 123),
-        },
-        2: {
-          [Elternteil.Eins]: bezuege(211, 212, 213),
-          [Elternteil.Zwei]: bezuege(221, 222, 223),
+          [Elternteil.Eins]: monat(undefined),
+          [Elternteil.Zwei]: monat(undefined),
         },
       };
 
@@ -272,7 +252,6 @@ if (import.meta.vitest) {
         1,
         Elternteil.Zwei,
         Variante.Plus,
-        elterngeldbezuege,
         ANY_UNGEPLANTER_LEBENSMONAT,
       );
 
@@ -280,15 +259,11 @@ if (import.meta.vitest) {
       expectOption(lebensmonate, 1, Elternteil.Zwei).toBe(Variante.Plus);
       expectOption(lebensmonate, 2, Elternteil.Eins).toBeUndefined();
       expectOption(lebensmonate, 2, Elternteil.Zwei).toBeUndefined();
-      expectElterngeldbezug(lebensmonate, 1, Elternteil.Eins).toBeUndefined();
-      expectElterngeldbezug(lebensmonate, 1, Elternteil.Zwei).toBe(122);
-      expectElterngeldbezug(lebensmonate, 2, Elternteil.Eins).toBeUndefined();
-      expectElterngeldbezug(lebensmonate, 2, Elternteil.Zwei).toBeUndefined();
     });
 
     it("can set the Auswahloption for a not yet initialized Lebensmonat", () => {
       const ungeplanterLebensmonat = {
-        [Elternteil.Eins]: monat(undefined, undefined),
+        [Elternteil.Eins]: monat(undefined),
       };
 
       const lebensmonate = waehleOption<Elternteil.Eins>(
@@ -296,13 +271,11 @@ if (import.meta.vitest) {
         1,
         Elternteil.Eins,
         Variante.Basis,
-        ANY_ELTERNGELDBEZUEGE,
         ungeplanterLebensmonat,
       );
 
       expect(lebensmonate[1]).toBeDefined();
       expectOption(lebensmonate, 1, Elternteil.Eins).toBe(Variante.Basis);
-      expectElterngeldbezug(lebensmonate, 1, Elternteil.Eins).toBeDefined();
     });
 
     it.each([1, 2, 5, 16] as const)(
@@ -313,7 +286,6 @@ if (import.meta.vitest) {
           lebensmonatszahl,
           Elternteil.Eins,
           Variante.Bonus,
-          ANY_ELTERNGELDBEZUEGE,
           ANY_UNGEPLANTER_LEBENSMONAT,
         );
 
@@ -336,7 +308,6 @@ if (import.meta.vitest) {
         LetzteLebensmonatszahl,
         Elternteil.Eins,
         Variante.Bonus,
-        ANY_ELTERNGELDBEZUEGE,
         ANY_UNGEPLANTER_LEBENSMONAT,
       );
 
@@ -364,7 +335,6 @@ if (import.meta.vitest) {
         6,
         Elternteil.Eins,
         Variante.Plus,
-        ANY_ELTERNGELDBEZUEGE,
         ANY_UNGEPLANTER_LEBENSMONAT,
       );
 
@@ -389,7 +359,6 @@ if (import.meta.vitest) {
         6,
         Elternteil.Eins,
         Variante.Plus,
-        ANY_ELTERNGELDBEZUEGE,
         ANY_UNGEPLANTER_LEBENSMONAT,
       );
 
@@ -416,7 +385,6 @@ if (import.meta.vitest) {
         7,
         Elternteil.Eins,
         Variante.Plus,
-        ANY_ELTERNGELDBEZUEGE,
         ANY_UNGEPLANTER_LEBENSMONAT,
       );
 
@@ -430,28 +398,13 @@ if (import.meta.vitest) {
       expectOption(lebensmonate, 8, Elternteil.Zwei).toBeUndefined();
     });
 
-    const monat = function (
-      gewaehlteOption?: Auswahloption,
-      elterngeldbezug = undefined,
-    ) {
-      return {
-        gewaehlteOption,
-        elterngeldbezug,
-        imMutterschutz: false as const,
-      };
-    };
-
-    const bezuege = function (basis: number, plus: number, bonus: number) {
-      return {
-        [Variante.Basis]: basis,
-        [Variante.Plus]: plus,
-        [Variante.Bonus]: bonus,
-      };
-    };
+    function monat(gewaehlteOption?: Auswahloption) {
+      return { gewaehlteOption, imMutterschutz: false as const };
+    }
 
     const ANY_UNGEPLANTER_LEBENSMONAT = {
-      [Elternteil.Eins]: monat(undefined, undefined),
-      [Elternteil.Zwei]: monat(undefined, undefined),
+      [Elternteil.Eins]: monat(undefined),
+      [Elternteil.Zwei]: monat(undefined),
     };
 
     const LEBENSMONAT_MIT_BONUS = {
@@ -459,19 +412,7 @@ if (import.meta.vitest) {
       [Elternteil.Zwei]: monat(Variante.Bonus),
     };
 
-    const ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL = {
-      [Elternteil.Eins]: bezuege(0, 0, 0),
-      [Elternteil.Zwei]: bezuege(0, 0, 0),
-    };
-
-    const ANY_ELTERNGELDBEZUEGE = Object.fromEntries(
-      Lebensmonatszahlen.map((lebensmonatszahl) => [
-        lebensmonatszahl,
-        ANY_ELTERNGELDBEZUEGE_PRO_ELTERNTEIL,
-      ]),
-    ) as Elterngeldbezuege<Elternteil>;
-
-    const expectOption = function <E extends Elternteil>(
+    function expectOption<E extends Elternteil>(
       lebensmonate: Lebensmonate<E>,
       lebensmonatszahl: Lebensmonatszahl,
       elternteil: E,
@@ -479,20 +420,6 @@ if (import.meta.vitest) {
       return expect(
         lebensmonate[lebensmonatszahl]?.[elternteil].gewaehlteOption,
       );
-    };
-
-    /**
-     * Tiny utility function for repeating pattern that allows for more terse
-     * expectation statements. This helps to create better readable test cases.
-     */
-    const expectElterngeldbezug = function <E extends Elternteil>(
-      lebensmonate: Lebensmonate<E>,
-      lebensmonatszahl: Lebensmonatszahl,
-      elternteil: E,
-    ) {
-      return expect(
-        lebensmonate[lebensmonatszahl]?.[elternteil].elterngeldbezug,
-      );
-    };
+    }
   });
 }

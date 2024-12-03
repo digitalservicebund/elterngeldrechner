@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 import {
-  type BerechneElterngeldbezuegeCallback,
   type GebeEinkommenAn,
   OptionSelectedCallback,
   type PlanChangedCallback,
@@ -12,9 +11,9 @@ import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/ope
 import {
   bestimmeVerfuegbaresKontingent,
   type Elternteil,
+  type BerechneElterngeldbezuegeCallback,
   erstelleInitialenLebensmonat,
   zaehleVerplantesKontingent,
-  aktualisiereErrechneteElterngelbezuege,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
   setzePlanZurueck,
@@ -37,10 +36,7 @@ export function usePlanerService(
   const [plan, setPlan] = useState(
     () =>
       initialInformation.plan ??
-      erstelleInitialenPlan(
-        initialInformation.ausgangslage,
-        berechneElterngeldbezuege,
-      ),
+      erstelleInitialenPlan(initialInformation.ausgangslage),
   );
 
   const verfuegbaresKontingent = useRef(
@@ -88,30 +84,34 @@ export function usePlanerService(
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const bestimmeAuswahlmoeglichkeitenCallback = useCallback(
-    bestimmeAuswahlmoeglichkeiten.bind(null, plan),
-    [plan],
+    bestimmeAuswahlmoeglichkeiten.bind(null, berechneElterngeldbezuege, plan),
+    [berechneElterngeldbezuege, plan],
   );
 
   const waehleOptionCallback = useCallback<WaehleOption<Elternteil>>(
     (...argumentList) => {
       setPlan((plan) => {
-        const nextPlan = waehleOption(plan, ...argumentList).unwrapOrElse(
-          (error) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-
-            return plan;
-          },
-        );
+        const nextPlan = waehleOption(
+          berechneElterngeldbezuege,
+          plan,
+          ...argumentList,
+        ).unwrapOrElse((error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          return plan;
+        });
 
         updateStatesAndTriggerCallbacks(nextPlan);
-
         return nextPlan;
       });
 
       onOptionSelected?.();
     },
-    [onOptionSelected, updateStatesAndTriggerCallbacks],
+    [
+      berechneElterngeldbezuege,
+      onOptionSelected,
+      updateStatesAndTriggerCallbacks,
+    ],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,21 +123,17 @@ export function usePlanerService(
   const gebeEinkommenAnCallback = useCallback<GebeEinkommenAn<Elternteil>>(
     (...argumentList) =>
       setPlan((plan) => {
-        const planWithEinkommen = gebeEinkommenAn(plan, ...argumentList);
-        const elterngeldbezuege = berechneElterngeldbezuege(
-          planWithEinkommen.lebensmonate,
+        const planWithEinkommen = gebeEinkommenAn(
+          berechneElterngeldbezuege,
+          plan,
+          ...argumentList,
         );
-        const planWithElterngeldbezuegen =
-          aktualisiereErrechneteElterngelbezuege(
-            planWithEinkommen,
-            elterngeldbezuege,
-          );
 
-        updateStatesAndTriggerCallbacks(planWithElterngeldbezuegen, {
+        updateStatesAndTriggerCallbacks(planWithEinkommen, {
           skipVerplantesKontingent: true,
         });
 
-        return planWithElterngeldbezuegen;
+        return planWithEinkommen;
       }),
     [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
   );
@@ -176,16 +172,9 @@ export function usePlanerService(
 
 function erstelleInitialenPlan<A extends Ausgangslage>(
   ausgangslage: A,
-  berrechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ): Plan<A> {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
-  const errechneteElterngeldbezuege = berrechneElterngeldbezuege(lebensmonate);
-
-  return {
-    ausgangslage,
-    lebensmonate,
-    errechneteElterngeldbezuege,
-  };
+  return { ausgangslage, lebensmonate };
 }
 
 function useVerplantesKontingent<E extends Elternteil>(

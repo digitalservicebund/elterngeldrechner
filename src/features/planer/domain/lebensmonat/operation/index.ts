@@ -1,4 +1,4 @@
-export * from "./aktualisiereElterngeldbezuege";
+export * from "./aktualisiereElterngeldbezug";
 export * from "./erstelleInitialenLebensmonat";
 export * from "./listeMonateAuf";
 export * from "./setzeOptionZurueck";

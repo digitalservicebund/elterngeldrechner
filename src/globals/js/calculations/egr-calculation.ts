@@ -143,7 +143,7 @@ export class EgrCalculation {
     return nettoLebensMonat;
   }
 
-  private calculateElternGeld(
+  public calculateElternGeld(
     elternGeldDaten: ElternGeldDaten,
     lohnSteuerJahr: number,
   ): ElternGeldPlusErgebnis {

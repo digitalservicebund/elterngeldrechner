@@ -163,7 +163,7 @@ describe("AuswahlEingabe", () => {
         [Variante.Plus]: {
           isDisabled: true as const,
           hintWhyDisabled: "ist nicht mehr verfügbar",
-          elterngeldbezug: 0,
+          elterngeldbezug: null,
         },
       };
 
@@ -195,7 +195,7 @@ describe("AuswahlEingabe", () => {
         [Variante.Plus]: {
           isDisabled: true as const,
           hintWhyDisabled: "ist nicht mehr verfügbar",
-          elterngeldbezug: 0,
+          elterngeldbezug: null,
         },
       };
 
@@ -257,7 +257,7 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
 const ANY_DISABLED_AUSWAHLMOEGLICHKEIT = {
   isDisabled: true as const,
   hintWhyDisabled: "test hint",
-  elterngeldbezug: 0,
+  elterngeldbezug: null,
 };
 
 const ANY_PROPS = {

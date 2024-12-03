@@ -55,7 +55,7 @@ function createAuswahlmoeglichkeit<A extends Ausgangslage>(
     (violations) => ({
       isDisabled: true as const,
       hintWhyDisabled: formatViolationsAsHint(violations),
-      elterngeldbezug,
+      elterngeldbezug: null,
     }),
   );
 }

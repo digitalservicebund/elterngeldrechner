@@ -10,7 +10,7 @@ export type Auswahlmoeglichkeiten = Readonly<
 
 export type Auswahlmoeglichkeit<E extends Elterngeldbezug = Elterngeldbezug> =
   | EnabledAuswahlmoeglichkeit<E>
-  | DisabledAuswahlmoeglichkeit<E>;
+  | DisabledAuswahlmoeglichkeit;
 
 interface EnabledAuswahlmoeglichkeit<E extends Elterngeldbezug>
   extends BasisAuswahlmoeglichkeit<E> {
@@ -18,8 +18,7 @@ interface EnabledAuswahlmoeglichkeit<E extends Elterngeldbezug>
   hintWhyDisabled?: undefined;
 }
 
-interface DisabledAuswahlmoeglichkeit<E extends Elterngeldbezug>
-  extends BasisAuswahlmoeglichkeit<E> {
+interface DisabledAuswahlmoeglichkeit extends BasisAuswahlmoeglichkeit<null> {
   isDisabled: true;
   hintWhyDisabled: string;
 }

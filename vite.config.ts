@@ -1,27 +1,12 @@
 /// <reference types="vitest" />
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig, PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
+import { OutputAsset, OutputChunk } from "rollup";
 
 export default defineConfig({
   base: "./",
-  plugins: [
-    react(),
-    {
-      name: "append-to-code",
-      enforce: "post",
-      generateBundle(_, bundle) {
-        const version = process.env.EGR_BUILD_VERSION_HASH || "dev";
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        Object.entries(bundle).forEach(([_, file]) => {
-          if (file.type === "chunk" && file.fileName.endsWith(".js")) {
-            file.code += `window.__BUILD_VERSION_HASH__ = '${version}';`;
-          }
-        });
-      },
-    },
-  ],
+  plugins: [react(), includeReleaseVersionInBundlePlugin()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -49,3 +34,24 @@ export default defineConfig({
     "import.meta.vitest": "undefined",
   },
 });
+
+function includeReleaseVersionInBundlePlugin(): PluginOption {
+  return {
+    name: "include-release-version-in-bundle",
+    enforce: "post",
+    generateBundle(_, bundle) {
+      const version = process.env.EGR_BUILD_VERSION_HASH || "dev";
+
+      function isJavascript(f: OutputChunk | OutputAsset): f is OutputChunk {
+        return f.type === "chunk" && f.fileName.endsWith(".js");
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      Object.entries(bundle).forEach(([_, file]) => {
+        if (isJavascript(file)) {
+          file.code += `window.__BUILD_VERSION_HASH__ = '${version}';`;
+        }
+      });
+    },
+  };
+}

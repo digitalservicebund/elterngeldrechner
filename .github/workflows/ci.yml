@@ -17,7 +17,7 @@ defaults:
 
 jobs:
   lint-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -30,7 +30,7 @@ jobs:
     uses: ./.github/workflows/e2e-test.yml
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       artifact_name: assets
     steps:
@@ -61,7 +61,7 @@ jobs:
     secrets: inherit
 
   generate-sbom:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -76,7 +76,7 @@ jobs:
           name: SBOM
 
   audit-licenses:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 

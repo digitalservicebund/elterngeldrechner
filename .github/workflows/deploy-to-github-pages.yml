@@ -32,7 +32,7 @@ defaults:
 jobs:
   build:
     if: "${{ inputs.artifact_name == '' }}"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       artifact_name: assets
     steps:
@@ -54,7 +54,7 @@ jobs:
   publish:
     needs: build
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
       GITHUB_PAGES_BRANCH_NAME: gh-pages # Configuration value of repository.

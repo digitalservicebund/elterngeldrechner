@@ -5,7 +5,23 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   base: "./",
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: "append-to-code",
+      enforce: "post",
+      generateBundle(_, bundle) {
+        const version = process.env.EGR_BUILD_VERSION_HASH || "dev";
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Object.entries(bundle).forEach(([_, file]) => {
+          if (file.type === "chunk" && file.fileName.endsWith(".js")) {
+            file.code += `window.__BUILD_VERSION_HASH__ = '${version}';`;
+          }
+        });
+      },
+    },
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

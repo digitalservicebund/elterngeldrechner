@@ -13,9 +13,10 @@ jobs:
       - uses: ./.github/actions/cached-node-install
 
       - name: Build egr
+        run: npm run build
         env:
           VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
-        run: npm run build
+          EGR_BUILD_VERSION_HASH: ${{ github.sha }}
 
       - name: Audit Licenses
         run: npm run audit-licenses

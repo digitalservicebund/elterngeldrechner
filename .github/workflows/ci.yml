@@ -40,6 +40,8 @@ jobs:
 
       - name: build assets
         run: npm run build
+        env:
+          EGR_BUILD_VERSION_HASH: ${{ github.sha }}
 
       - name: upload artifact
         uses: actions/upload-artifact@v4

@@ -1,0 +1,11 @@
+{
+  "name": "playwright-action",
+  "version": "1.0.0",
+  "description": "Reusable Playwright Action to fetch version hash",
+  "main": "index.js",
+  "type": "module",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@playwright/test": "^1.49.0"
+  }
+}

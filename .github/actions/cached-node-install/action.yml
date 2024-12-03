@@ -1,13 +1,21 @@
 name: "Cached Node Install"
-description: "Downloads node, installs project and caches node_modules."
+description: "Downloads Node.js, installs project, and caches node_modules."
+
+inputs:
+  directory:
+    description: "The directory containing the Node.js project"
+    required: false
+    default: "./"
+
 runs:
   using: "composite"
   steps:
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version-file: package.json
+        node-version-file: ${{ inputs.directory }}/package.json
         cache: npm
+
     - name: Cache node modules
       id: cache-npm
       uses: actions/cache@v4
@@ -15,15 +23,20 @@ runs:
         cache-name: cache-node-modules
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles(format('{0}/package-lock.json', inputs.directory)) }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
           ${{ runner.os }}-build-
           ${{ runner.os }}-
+
     - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
       name: List the state of node modules
       continue-on-error: true
       run: npm list
       shell: bash
-    - run: npm ci
+      working-directory: ${{ inputs.directory }}
+
+    - name: Install dependencies
+      run: npm ci
       shell: bash
+      working-directory: ${{ inputs.directory }}

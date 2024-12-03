@@ -1,11 +1,19 @@
 name: "Playwright Setup"
-description: "Sets up playwright and browsers"
+description: "Sets up Playwright and browsers"
+
+inputs:
+  directory:
+    description: "The directory containing the package-lock.json file"
+    required: false
+    default: "./"
+
 runs:
   using: "composite"
   steps:
     - name: Get Playwright version
+      working-directory: ${{ inputs.directory }}
       run: |
-        PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages[''].devDependencies['@playwright/test'])")
+        PLAYWRIGHT_VERSION=$(npm ls --json --depth=0 | jq -r '.dependencies["@playwright/test"].version')
         echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
       shell: bash
 
@@ -17,6 +25,7 @@ runs:
         key: playwright-${{ env.PLAYWRIGHT_VERSION }}
 
     - name: Install Playwright browsers
+      working-directory: ${{ inputs.directory }}
       if: steps.playwright-cache.outputs.cache-hit != 'true'
       run: npx playwright install --with-deps chromium
       shell: bash

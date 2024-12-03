@@ -13,22 +13,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Git checkout latest release
-        run: git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+      - uses: ./.github/actions/fetch-version-hash
+        id: fetch-version-hash
+        with:
+          url: ${{ vars.PRODUCTION_URL }}
+
+      - name: Git checkout deployed release
+        run: git checkout ${{ steps.fetch-version-hash.outputs.version-hash }}
 
       - name: Restore .github directory
         run: git checkout $GITHUB_SHA -- .github playwright.config.ts
 
-      - uses: ./.github/actions/cached-playwright-setup
-
       - uses: ./.github/actions/cached-node-install
+
+      - uses: ./.github/actions/cached-playwright-setup
 
       - name: Run Playwright e2e tests
         run: npm run test-e2e
         env:
           PLAYWRIGHT_REPORTER: html
           PLAYWRIGHT_SKIP_SERVER: true
-          PLAYWRIGHT_URL: "https://familienportal.de/familienportal/meta/egr/"
+          PLAYWRIGHT_URL: ${{ vars.PRODUCTION_URL }}
           PLAYWRIGHT_PORT: 80
 
       - name: Upload playwright report

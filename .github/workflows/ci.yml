@@ -53,6 +53,7 @@ jobs:
       - lint-and-test
       - e2e-test
       - build
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:
       path: main

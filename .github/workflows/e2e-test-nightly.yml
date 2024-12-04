@@ -24,7 +24,7 @@ jobs:
         run: git checkout ${{ steps.fetch-version-hash.outputs.version-hash }}
 
       - name: Restore .github directory
-        run: git checkout $GITHUB_SHA -- .github playwright.config.ts
+        run: git checkout ${{ github.sha }} -- .github playwright.config.ts
 
       - uses: ./.github/actions/cached-node-install
 

@@ -23,7 +23,7 @@ jobs:
       - name: Git checkout deployed release
         run: git checkout ${{ steps.fetch-version-hash.outputs.version-hash }}
 
-      - name: Restore .github directory
+      - name: Restore the .github directory to enable modifications to actions
         run: git checkout ${{ github.sha }} -- .github playwright.config.ts
 
       - uses: ./.github/actions/cached-node-install

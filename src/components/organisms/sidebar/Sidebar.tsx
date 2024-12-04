@@ -32,7 +32,7 @@ export function Sidebar({ currentStep }: Props) {
   return (
     <nav className={classNames(nsp("sidebar"))} aria-label="Fortschritt">
       <Button
-        className={nsp("sidebar__collapse-btn")}
+        className={classNames(nsp("sidebar__collapse-btn"), "text-nowrap")}
         onClick={() => setIsOpen(!isOpen)}
         label={buttonLabel}
         iconAfter={isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}

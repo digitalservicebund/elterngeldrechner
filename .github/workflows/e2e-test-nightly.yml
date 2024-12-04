@@ -1,6 +1,8 @@
 name: Nightly E2E Test
 
-on: push
+on:
+  schedule:
+    - cron: "0 5 * * *" # 6 AM Berlin time (during standard time, not daylight saving time)
 
 jobs:
   e2e-tests:

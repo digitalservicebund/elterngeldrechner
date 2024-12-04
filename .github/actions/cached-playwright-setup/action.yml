@@ -3,7 +3,7 @@ description: "Sets up Playwright and browsers"
 
 inputs:
   directory:
-    description: "The directory containing the package-lock.json file"
+    description: "The directory containing the node project with the playwright dependency."
     required: false
     default: "./"
 

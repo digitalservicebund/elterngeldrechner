@@ -19,6 +19,9 @@ pre-commit:
       run: npm run type-check
     audit-licenses:
       run: npm run audit-licenses
+    github-actions-lint:
+      glob: ".github/workflows/*"
+      run: actionlint {staged_files}
 
 commit-msg:
   commands:

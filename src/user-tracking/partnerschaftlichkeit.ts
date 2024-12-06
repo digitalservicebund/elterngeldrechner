@@ -63,5 +63,5 @@ const VARIANTE_TO_PARTNERSCHAFTLICHKEITS_VALUE: Record<Variante, number> = {
 
 const TRACKING_VARIABLE_NAME = "partnerschaftlicheverteilung";
 
-type Auswahl = Variante | null;
+export type Auswahl = Variante | null;
 type Variante = "Basis" | "Plus" | "Bonus";

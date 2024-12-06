@@ -53,19 +53,19 @@ export class NachwuchsPOM {
     return this;
   }
 
-  async getGeschwisterkindGeburtsdatum(index: number) {
+  getGeschwisterkindGeburtsdatum(index: number) {
     return this.page
       .getByLabel(`${index + 1}. Geschwisterkind`)
       .getByLabel("Wann wurde das Geschwisterkind geboren?");
   }
 
-  async getGeschwisterkindHasBehinderung(index: number) {
+  getGeschwisterkindHasBehinderung(index: number) {
     return this.page
       .getByLabel(`${index + 1}. Geschwisterkind`)
       .getByText("Das Geschwisterkind hat eine Behinderung");
   }
 
-  async getGeschwisterkindEntfernen(index: number) {
+  getGeschwisterkindEntfernen(index: number) {
     return this.page
       .getByLabel(`${index + 1}. Geschwisterkind`)
       .getByRole("button", { name: "Geschwisterkind entfernen" });
@@ -82,17 +82,17 @@ export class NachwuchsPOM {
       await this.weiteresGeschwisterkindHinzufuegen.click();
     }
 
-    await (await this.getGeschwisterkindGeburtsdatum(index)).fill(geburtsdatum);
+    await this.getGeschwisterkindGeburtsdatum(index).fill(geburtsdatum);
 
     if (hasBehinderung) {
-      await (await this.getGeschwisterkindHasBehinderung(index)).click();
+      await this.getGeschwisterkindHasBehinderung(index).click();
     }
 
     return this;
   }
 
   async removeGeschwisterkind(index: number) {
-    await (await this.getGeschwisterkindEntfernen(index)).click();
+    await this.getGeschwisterkindEntfernen(index).click();
     return this;
   }
 

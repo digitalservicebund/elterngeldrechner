@@ -24,7 +24,7 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   const cookieBanner = new CookieBannerPOM(page);
   await cookieBanner.consent();
 
-  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page);
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setElternteile(1);
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschaftsleistungen(true);

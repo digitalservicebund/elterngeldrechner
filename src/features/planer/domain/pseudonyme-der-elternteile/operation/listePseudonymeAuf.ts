@@ -10,10 +10,7 @@ export function listePseudonymeAuf<E extends Elternteil>(
   pseudonyme: PseudonymeDerElternteile<E>,
   sortByElternteil = false,
 ): [E, string][] {
-  const unsorted = getRecordEntriesWithStringKeys(pseudonyme, isElternteil) as [
-    E,
-    string,
-  ][];
+  const unsorted = getRecordEntriesWithStringKeys(pseudonyme, isElternteil);
 
   return sortByElternteil
     ? unsorted.sort(([left], [right]) => compareElternteile(left, right))

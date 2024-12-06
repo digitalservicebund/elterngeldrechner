@@ -29,7 +29,7 @@ export function CustomInput<TFieldValues extends FieldValues>({
   placeholder,
   info,
 }: CustomInputProps<TFieldValues>) {
-  const error: FieldError | undefined = get(errors, name);
+  const error = get(errors, name) as FieldError | undefined;
 
   return (
     <div

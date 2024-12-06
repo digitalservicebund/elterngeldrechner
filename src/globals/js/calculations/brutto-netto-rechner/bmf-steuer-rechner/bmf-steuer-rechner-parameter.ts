@@ -108,7 +108,5 @@ export class BmfSteuerRechnerParameter {
 export function urlSearchParamsOf(
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ) {
-  return new URLSearchParams(
-    JSON.parse(JSON.stringify(bmfSteuerRechnerParameter)),
-  );
+  return new URLSearchParams(Object.entries(bmfSteuerRechnerParameter));
 }

@@ -37,7 +37,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   if (typeof errors === "boolean") {
     hasError = errors;
   } else {
-    const error: FieldError | undefined = get(errors, name);
+    const error = get(errors, name) as FieldError | undefined;
     if (error) {
       hasError = true;
       errorMessage = error.message || "";

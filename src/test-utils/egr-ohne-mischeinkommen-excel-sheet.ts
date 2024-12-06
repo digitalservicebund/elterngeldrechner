@@ -30,7 +30,7 @@ export class EgrOhneMischeinkommenExcelSheet {
   geburtsDatum(testCaseIndex: number) {
     const geburtsDatum = this.numberOf(testCaseIndex, GEBURTS_DATUM_OFFSET);
     if (geburtsDatum === undefined) {
-      throw new Error(`geburtsDatum ${geburtsDatum} undefined`);
+      throw new Error(`geburtsDatum undefined`);
     }
     return dateFromExcelSerial(geburtsDatum);
   }

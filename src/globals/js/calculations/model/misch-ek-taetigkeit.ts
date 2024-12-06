@@ -23,9 +23,9 @@ export class MischEkTaetigkeit {
   arbeitslosenVersicherungsPflichtig: YesNo = YesNo.YES;
 
   constructor(falseOrTrue: boolean = false) {
-    this.bemessungsZeitraumMonate = new Array(ANZAHL_MONATE_PRO_JAHR).fill(
-      falseOrTrue,
-    );
+    this.bemessungsZeitraumMonate = new Array<boolean>(
+      ANZAHL_MONATE_PRO_JAHR,
+    ).fill(falseOrTrue);
   }
 
   getAnzahlBemessungsZeitraumMonate(): number {

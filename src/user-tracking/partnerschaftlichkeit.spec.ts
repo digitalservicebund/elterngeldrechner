@@ -1,5 +1,8 @@
 import { setTrackingVariable } from "./data-layer";
-import { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
+import {
+  trackPartnerschaftlicheVerteilung,
+  type Auswahl,
+} from "./partnerschaftlichkeit";
 
 vi.mock(import("./data-layer"));
 
@@ -20,7 +23,10 @@ describe("partnerschaftlichkeit", () => {
     expect(setTrackingVariable).not.toHaveBeenCalled();
   });
 
-  it.each([
+  it.each<{
+    auswahlProMonatProElternteil: [Auswahl[], Auswahl[]];
+    expectedQuotient: number;
+  }>([
     {
       auswahlProMonatProElternteil: [[], []],
       expectedQuotient: 0,
@@ -75,15 +81,15 @@ describe("partnerschaftlichkeit", () => {
     },
     {
       auswahlProMonatProElternteil: [
-        Array(12).fill("Basis"),
-        Array(12).fill(null),
+        Array<"Basis">(12).fill("Basis"),
+        Array<null>(12).fill(null),
       ],
       expectedQuotient: 0,
     },
     {
       auswahlProMonatProElternteil: [
-        [...Array(12).fill("Basis"), null, null],
-        [...Array(12).fill(null), "Basis", "Basis"],
+        [...Array<"Basis">(12).fill("Basis"), null, null],
+        [...Array<null>(12).fill(null), "Basis", "Basis"],
       ],
       expectedQuotient: 2 / 12,
     },

@@ -182,9 +182,9 @@ const sumMischEinkommen = (
               .toObject().months! + 1
           );
         })
-        .reduce((a, b) => a! + b!, 0);
+        .reduce((a, b) => a + b, 0);
 
-      return einkommen * numOfMonths!;
+      return einkommen * numOfMonths;
     })
     .reduce((a, b) => a + b, 0);
   return mischEinkommen;

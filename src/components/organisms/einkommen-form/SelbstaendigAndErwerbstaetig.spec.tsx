@@ -52,7 +52,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     expect(within(ET1).getByText("2. Tätigkeit")).toBeInTheDocument();
   });
 
-  it("should not show form block 'Tätigkeiten' if user is only 'erwerbstätig'", async () => {
+  it("should not show form block 'Tätigkeiten' if user is only 'erwerbstätig'", () => {
     const stateOnlyErwerbstaetig: Partial<RootState> = {
       ...stateFromPreviousSteps,
       stepErwerbstaetigkeit: {

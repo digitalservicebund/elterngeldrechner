@@ -38,7 +38,7 @@ export function Versicherungen({
     getValues,
   } = useFormContext<StepEinkommenState>();
 
-  const versicherungenError: FieldError | undefined = get(errors, noneName);
+  const versicherungenError = get(errors, noneName) as FieldError | undefined;
 
   const handleChangeNoneVersicherung = (
     event: ChangeEvent<HTMLInputElement>,

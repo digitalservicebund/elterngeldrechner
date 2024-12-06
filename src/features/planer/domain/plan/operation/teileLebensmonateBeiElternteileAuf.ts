@@ -76,7 +76,6 @@ if (import.meta.vitest) {
     it("creates an empty mapping if nothing was planned yet", () => {
       const plan = {
         ausgangslage: AUSGANGSLAGE_MIT_ZWEI_ELTERNTEILE,
-        errechneteElterngeldbezuege: ANY_ERRECHNETE_ELTERNGELDBEZUEGE,
         lebensmonate: {},
       };
 
@@ -105,7 +104,6 @@ if (import.meta.vitest) {
 
       const plan = {
         ausgangslage: AUSGANGSLAGE_MIT_ZWEI_ELTERNTEILE,
-        errechneteElterngeldbezuege: ANY_ERRECHNETE_ELTERNGELDBEZUEGE,
         lebensmonate,
       };
 
@@ -124,10 +122,6 @@ if (import.meta.vitest) {
         5: monat(KeinElterngeld, null),
       });
     });
-
-    // related to test-generators
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ANY_ERRECHNETE_ELTERNGELDBEZUEGE = {} as any;
 
     function monat(
       gewaehlteOption: Auswahloption | undefined,

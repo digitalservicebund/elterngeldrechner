@@ -3,13 +3,13 @@ import { Action, PageStatistic, Method } from "./matomo-api-schema";
 async function fetchEventActions(date: string): Promise<Action[]> {
   return fetchMatomoEndpoint("Events.getAction", date, date, true)
     .then((it) => it.json())
-    .then((it) => it[date]);
+    .then((it: Record<string, Action[]>) => it[date]);
 }
 
 async function fetchPageStatistics(date: string): Promise<PageStatistic> {
   return fetchMatomoEndpoint("Actions.getPageTitles", date, date, false)
     .then((it) => it.json())
-    .then((it) => it[date])
+    .then((it: Record<string, PageStatistic[]>) => it[date])
     .then((it) => it.filter(isPlanerSegment))
     .then((it) => it[0]);
 }

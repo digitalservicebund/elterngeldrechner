@@ -10,9 +10,13 @@ import { isVariante, Variante } from "./Variante";
  * enumeration for a single value in terms of refactoring. But `Symbol`s can not
  * be iterated in TypeScript.
  */
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 export const KeinElterngeld = "kein Elterngeld" as const;
 
-export const Auswahloptionen = [KeinElterngeld, ...Object.values(Variante)];
+export const Auswahloptionen = [KeinElterngeld, ...Object.values(Variante)] as (
+  | Variante
+  | typeof KeinElterngeld
+)[];
 
 export type Auswahloption = (typeof Auswahloptionen)[number];
 

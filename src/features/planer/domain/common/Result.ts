@@ -14,11 +14,11 @@
 export class Result<Value, Error> {
   private constructor(private options: ResultOptions<Value, Error>) {}
 
-  static ok<Value>(value: Value): Result<Value, never> {
+  static ok<Value>(this: void, value: Value): Result<Value, never> {
     return new Result({ isOk: true, value });
   }
 
-  static error<Error>(error: Error): Result<never, Error> {
+  static error<Error>(this: void, error: Error): Result<never, Error> {
     return new Result({ isOk: false, error });
   }
 
@@ -64,7 +64,7 @@ if (import.meta.vitest) {
 
     const followUpValue: string = result.mapOrElse(
       (value) => `Was ok: ${value}`,
-      (error) => `Was error: ${error}`,
+      () => `Was error`,
     );
 
     expect(followUpValue).toBe("Was ok: 0");

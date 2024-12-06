@@ -178,11 +178,11 @@ if (import.meta.vitest) {
         );
 
         expect(result.current).toStrictEqual({
-          display: expect.any(String),
-          maxWidth: expect.any(String),
-          margin: expect.any(String),
-          gridTemplateColumns: expect.any(String),
-          gridTemplateAreas: expect.any(String),
+          display: expect.any(String) as string,
+          maxWidth: expect.any(String) as string,
+          margin: expect.any(String) as string,
+          gridTemplateColumns: expect.any(String) as string,
+          gridTemplateAreas: expect.any(String) as string,
         });
       });
     });

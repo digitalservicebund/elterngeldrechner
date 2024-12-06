@@ -49,7 +49,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   info,
   ...aria
 }: CustomSelectProps<TFieldValues>) {
-  const error: FieldError | undefined = get(errors, name);
+  const error = get(errors, name) as FieldError | undefined;
 
   return (
     <div

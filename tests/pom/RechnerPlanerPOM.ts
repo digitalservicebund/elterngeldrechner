@@ -51,7 +51,7 @@ export class RechnerPlanerPOM {
       ? `Bruttoeinkommen von ${elternteil} im ${lebensmonatszahl}. Lebensmonat`
       : `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`;
     const input = this.page.getByRole("combobox", { name: label });
-    input.fill(bruttoeinkommen.toString());
+    await input.fill(bruttoeinkommen.toString());
   }
 
   private async openLebensmonat(lebensmonatszahl: number): Promise<void> {
@@ -71,7 +71,7 @@ export class RechnerPlanerPOM {
 
     const isExpanded = JSON.parse(
       (await button.getAttribute("aria-expanded")) ?? "false",
-    );
+    ) as boolean;
 
     if (!isExpanded) await button.click();
   }

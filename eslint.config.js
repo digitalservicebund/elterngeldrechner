@@ -48,7 +48,21 @@ const ignoredFilesConfig = [
   },
 ];
 
-const typescriptConfig = tsEslintConfigs.recommended;
+const typescriptConfig = [
+  ...tsEslintConfigs.recommendedTypeChecked,
+  {
+    rules: {
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        {
+          checksVoidReturn: {
+            attributes: false, // Fix issues in JSX with `handleSubmit` of react-hook-form.
+          },
+        },
+      ],
+    },
+  },
+];
 
 const customRulesConfig = [
   {

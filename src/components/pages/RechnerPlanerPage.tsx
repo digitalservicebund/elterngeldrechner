@@ -73,7 +73,7 @@ export default function RechnerPlanerPage() {
   const [trackingConsent, setTrackingConsent] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    void (async () => {
       setTrackingConsent(await isTrackingAllowedByUser());
     })();
   }, []);

@@ -204,7 +204,7 @@ if (import.meta.vitest) {
       expect(AgeIsEven.asPredicate({ age: 3 })).toBe(false);
     });
 
-    describe("connect two specifications with 'and'", async () => {
+    describe("connect two specifications with 'and'", () => {
       it("evaluates to satisfied if left and right are satisfied", () => {
         expect(Top.and(Top).asPredicate(null)).toBe(true);
       });

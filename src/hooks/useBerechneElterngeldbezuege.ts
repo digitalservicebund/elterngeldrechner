@@ -259,7 +259,7 @@ if (import.meta.vitest) {
         {
           persoenlicheDaten,
           finanzDaten,
-          planungsDaten: expect.any(PlanungsDaten),
+          planungsDaten: expect.any(PlanungsDaten) as PlanungsDaten,
         },
         expect.any(Number),
       );
@@ -290,7 +290,7 @@ if (import.meta.vitest) {
         ElternGeldArt.KEIN_BEZUG,
         ElternGeldArt.ELTERNGELD_PLUS,
         ElternGeldArt.KEIN_BEZUG,
-        ...Array(26).fill(ElternGeldArt.KEIN_BEZUG),
+        ...Array<ElternGeldArt>(26).fill(ElternGeldArt.KEIN_BEZUG),
       ]);
     });
 

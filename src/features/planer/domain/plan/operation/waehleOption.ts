@@ -202,7 +202,7 @@ if (import.meta.vitest) {
     function monat(
       gewaehlteOption: Auswahloption | undefined,
       elterngeldbezug?: number,
-      bruttoeinkommen?: number | undefined,
+      bruttoeinkommen?: number,
     ) {
       return {
         gewaehlteOption,
@@ -224,7 +224,7 @@ if (import.meta.vitest) {
       lebensmonate: {},
     };
 
-    const ANY_LEBENSMONATSZAHL = 1 as const;
+    const ANY_LEBENSMONATSZAHL = 1;
     const ANY_ELTERNTEIL = Elternteil.Eins;
     const ANY_AUSWAHLOPTION = Variante.Basis;
     const ANY_BERECHNE_ELTERNGELDBEZUEGE = () => ({});

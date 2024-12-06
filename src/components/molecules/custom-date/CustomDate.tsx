@@ -82,7 +82,7 @@ export function CustomDate<
               maxLength: 4,
             },
           }}
-          onAccept={(value) => onChange(value as string)}
+          onAccept={(value) => onChange(value)}
           onBlur={onBlur}
           placeholder="__.__.___"
           aria-placeholder="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"

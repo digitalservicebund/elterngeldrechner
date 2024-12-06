@@ -103,7 +103,7 @@ export function CustomNumberField<
             if (!value) {
               onChange(null);
             } else {
-              onChange(+(value as string));
+              onChange(+value);
             }
           }}
           onBlur={onBlur}

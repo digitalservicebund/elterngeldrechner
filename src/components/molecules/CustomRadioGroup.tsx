@@ -42,7 +42,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   horizontal = false,
   disabled = false,
 }: CustomRadioGroupProps<TFieldValues>) {
-  const error: FieldError | undefined = get(errors, name);
+  const error = get(errors, name) as FieldError | undefined;
   const hasError = error !== undefined;
   const errorIdentifier = useId();
 

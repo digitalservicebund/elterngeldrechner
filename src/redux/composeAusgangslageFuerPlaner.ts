@@ -47,9 +47,8 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
       const pseudonymeDerElternteile = {
         [Elternteil.Eins]: "",
       };
-      const empfaenger = Elternteil.Eins as const;
       const informationenZumMutterschutz = hatMutterschutz
-        ? { empfaenger, letzterLebensmonatMitSchutz }
+        ? { empfaenger: Elternteil.Eins as const, letzterLebensmonatMitSchutz }
         : undefined;
 
       return {

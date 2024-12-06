@@ -18,7 +18,7 @@ describe("Buttoeinkommen Input", () => {
     expect(screen.getByRole("combobox")).toHaveValue("251");
   });
 
-  it("uses the given Vorschläge as input suggestions", async () => {
+  it("uses the given Vorschläge as input suggestions", () => {
     render(<BruttoeinkommenInput {...ANY_PROPS} vorschlaege={[70, 53]} />);
 
     expect(

@@ -35,7 +35,7 @@ export function Counter<TFieldValues extends FieldValues>({
   onDecrease,
   required,
 }: Props<TFieldValues>) {
-  const error: FieldError | undefined = get(errors, name);
+  const error = get(errors, name) as FieldError | undefined;
 
   return (
     <div className={classNames(nsp("counter"), error && nsp("counter--error"))}>

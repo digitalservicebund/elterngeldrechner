@@ -1,4 +1,10 @@
-import { AriaAttributes, useCallback, useMemo, useState } from "react";
+import {
+  AriaAttributes,
+  useCallback,
+  useMemo,
+  useState,
+  type ChangeEvent,
+} from "react";
 import {
   FieldError,
   FieldErrors,
@@ -158,7 +164,8 @@ export function Zeitraum<TFieldValues extends FieldValues>({
 
   const zeitraumToRegisterOptions: RegisterOptions<TFieldValues> = useMemo(
     () => ({
-      onChange: (event) => onChangeTo(event.target.value),
+      onChange: (event: ChangeEvent<HTMLInputElement>) =>
+        onChangeTo(event.target.value),
       validate: {
         requireFromAndTo: (toValue) => {
           const hasToValue = toValue !== "";
@@ -197,12 +204,13 @@ export function Zeitraum<TFieldValues extends FieldValues>({
   const zeitraumFromRegisterOptions: RegisterOptions<TFieldValues> = useMemo(
     () => ({
       deps: [toName],
-      onChange: (event) => onChangeFrom(event.target.value),
+      onChange: (event: ChangeEvent<HTMLInputElement>) =>
+        onChangeFrom(event.target.value),
     }),
     [onChangeFrom, toName],
   );
 
-  const error: FieldError | undefined = get(errors, toName);
+  const error = get(errors, toName) as FieldError | undefined;
 
   const [toValue, setToValue] = useState<string>("");
   const [fromValue, setFromValue] = useState<string>("");

@@ -47,7 +47,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
   geburtsDatum(testCaseIndex: number) {
     const geburtsDatum = this.numberOf(testCaseIndex, GEBURTS_DATUM_OFFSET);
     if (geburtsDatum === undefined) {
-      throw new Error(`geburtsDatum ${geburtsDatum} undefined`);
+      throw new Error(`geburtsDatum undefined`);
     }
     return dateFromExcelSerial(geburtsDatum);
   }
@@ -196,9 +196,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
       ZWISCHEN_ERGEBNIS_ZEITRAUM_GESCHWISTER_BONUS,
     );
     if (zeitraumGeschwisterBonus === undefined) {
-      throw new Error(
-        `zeitraumGeschwisterBonus ${zeitraumGeschwisterBonus} undefined`,
-      );
+      throw new Error(`zeitraumGeschwisterBonus undefined`);
     }
     return dateFromExcelSerial(zeitraumGeschwisterBonus);
   }

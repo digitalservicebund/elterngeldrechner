@@ -38,12 +38,10 @@ if (import.meta.vitest) {
     it.each(Auswahloptionen.filter((option) => option !== Variante.Basis))(
       "is unsatisfied if im Mutterschutz marker is true but %s is chosen",
       (option) => {
-        // related to test-generators
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const monat: any = {
+        const monat = {
           imMutterschutz: true as const,
           gewaehlteOption: option,
-        };
+        } as never;
 
         const isSatisfied = IstGueltigerMonatMitMutterschutz.asPredicate(monat);
 

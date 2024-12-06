@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     </StrictMode>,
   );
 
-  setupUserTracking();
+  void setupUserTracking();
 });
 
 setupCalculation();

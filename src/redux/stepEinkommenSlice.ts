@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DateTime } from "luxon";
 import {
   Erwerbstaetigkeiten,
   stepErwerbstaetigkeitActions,
@@ -15,7 +14,6 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { ElternteilType } from "@/globals/js/elternteil-type";
 
 export interface Zeitraum {
   from: string;
@@ -130,109 +128,11 @@ export const initialStepEinkommenState: StepEinkommenState = {
 
 type SubmitStepPayload = StepEinkommenState;
 
-interface Einkommen {
-  ET1: number;
-  ET2: number;
-}
-
-const sumBruttoEinkommen = (
-  payload: StepEinkommenState,
-  elternteil: ElternteilType,
-): number => {
-  const incomeInputType =
-    payload[elternteil].bruttoEinkommenNichtSelbstaendig.type;
-  if (incomeInputType === "average") {
-    return (
-      payload[elternteil].bruttoEinkommenNichtSelbstaendig.average! * 12 || 0
-    );
-  }
-  if (incomeInputType === "monthly") {
-    return (
-      payload[elternteil].bruttoEinkommenNichtSelbstaendig.perMonth?.reduce(
-        (a, b) => a! + b!,
-        0,
-      ) ?? 0
-    );
-  }
-  return 0;
-};
-
-const sumGewinnEinkommen = (
-  payload: StepEinkommenState,
-  elternteil: ElternteilType,
-): number => {
-  const sumGewinnPerYear = payload[elternteil].gewinnSelbstaendig.perYear ?? 0;
-  return sumGewinnPerYear;
-};
-
-const sumMischEinkommen = (
-  payload: StepEinkommenState,
-  elternteil: ElternteilType,
-): number => {
-  const mischEinkommen = payload[
-    elternteil
-  ].taetigkeitenNichtSelbstaendigUndSelbstaendig
-    .map((period) => {
-      const einkommen = period.bruttoEinkommenDurchschnitt!;
-      const numOfMonths = period.zeitraum
-        .map((zeitraum) => {
-          return (
-            DateTime.fromISO(zeitraum.to)
-              .diff(DateTime.fromISO(zeitraum.from), "months")
-              .toObject().months! + 1
-          );
-        })
-        .reduce((a, b) => a + b, 0);
-
-      return einkommen * numOfMonths;
-    })
-    .reduce((a, b) => a + b, 0);
-  return mischEinkommen;
-};
-
 const stepEinkommenSlice = createSlice({
   name: "stepEinkommen",
   initialState: initialStepEinkommenState,
   reducers: {
-    submitStep: (_, { payload }: PayloadAction<SubmitStepPayload>) => {
-      const einkommen: Einkommen = {
-        ET1: 0,
-        ET2: 0,
-      };
-      const mischEinkommen: Einkommen = {
-        ET1: 0,
-        ET2: 0,
-      };
-      const totalEinkommen: Einkommen = {
-        ET1: 0,
-        ET2: 0,
-      };
-      const elternteile: Array<ElternteilType> = ["ET1", "ET2"];
-      elternteile.forEach(function (elternteil) {
-        if (
-          payload[elternteil] &&
-          payload[elternteil].istErwerbstaetig === YesNo.YES
-        ) {
-          if (_[elternteil].istNichtSelbststaendig) {
-            einkommen[elternteil] = sumBruttoEinkommen(payload, elternteil);
-          }
-          if (_[elternteil].istSelbststaendig) {
-            einkommen[elternteil] = sumGewinnEinkommen(payload, elternteil);
-          }
-          if (_[elternteil].hasMischEinkommen) {
-            mischEinkommen[elternteil] = sumMischEinkommen(payload, elternteil);
-          }
-          totalEinkommen[elternteil] =
-            _[elternteil].hasMischEinkommen === YesNo.YES
-              ? mischEinkommen[elternteil]
-              : einkommen[elternteil];
-        }
-      });
-      return {
-        ..._,
-        ...payload,
-      };
-    },
+    submitStep: (_, { payload }: PayloadAction<SubmitStepPayload>) => payload,
   },
   extraReducers: (builder) => {
     builder.addCase(

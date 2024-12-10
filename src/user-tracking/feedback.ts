@@ -21,6 +21,5 @@ export function trackEase(ease: 1 | 2 | 3 | 4 | 5) {
 }
 
 export function trackObstacle(obstacle: string) {
-  const eventIdentifier = obstacle.toLowerCase().replace(" ", "-");
-  setTrackingVariable(`${Variables.Obstacle}-${eventIdentifier}`, 1);
+  setTrackingVariable(Variables.Obstacle, obstacle);
 }

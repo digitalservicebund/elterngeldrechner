@@ -7,5 +7,9 @@
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@playwright/test": "^1.49.0"
+  },
+  "engines": {
+    "node": "20.11.1",
+    "npm": "10.2.4"
   }
 }

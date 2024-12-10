@@ -3,6 +3,7 @@ name: Nightly E2E Test
 on:
   schedule:
     - cron: "0 5 * * *" # 6 AM Berlin time (during standard time, not daylight saving time)
+  workflow_dispatch: # Enables manual triggering of the workflow
 
 jobs:
   e2e-tests:

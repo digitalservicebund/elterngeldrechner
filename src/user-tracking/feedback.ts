@@ -20,7 +20,12 @@ export function trackEase(ease: 1 | 2 | 3 | 4 | 5) {
   setTrackingVariable(Variables.Ease, Number(ease));
 }
 
-export function trackObstacle(obstacle: string) {
-  const eventIdentifier = obstacle.toLowerCase().replace(" ", "-");
-  setTrackingVariable(`${Variables.Obstacle}-${eventIdentifier}`, 1);
+export function trackObstacle(active: string, inactive: string[]) {
+  const transform = (event: string) => event.toLowerCase().replace(" ", "-");
+
+  setTrackingVariable(`${Variables.Obstacle}-${transform(active)}`, 1);
+
+  inactive.forEach((inactiveValue) => {
+    setTrackingVariable(`${Variables.Obstacle}-${transform(inactiveValue)}`, 0);
+  });
 }

@@ -29,7 +29,7 @@ export function getTrackingVariableFrom<T>(
   const lastElement = dataLayer.findLast((it) => it[name] !== undefined);
   const lastElementsProperty = lastElement?.[name];
 
-  return lastElementsProperty ? (lastElementsProperty as T) : null;
+  return lastElementsProperty != null ? (lastElementsProperty as T) : null;
 }
 
 declare global {

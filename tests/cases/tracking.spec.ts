@@ -139,8 +139,11 @@ test("feedback in der planung", async ({ page }) => {
   );
 
   expect(
-    await getTrackingVariable(page, "customer-effort-score-obstacle"),
-  ).toEqual("Angaben machen");
+    await getTrackingVariable(
+      page,
+      "customer-effort-score-obstacle-angaben-machen",
+    ),
+  ).toEqual(1);
 });
 
 test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {

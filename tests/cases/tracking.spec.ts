@@ -146,39 +146,6 @@ test("feedback in der planung", async ({ page }) => {
   ).toEqual(1);
 });
 
-test("feedback in der planung resettet die enum werte", async ({ page }) => {
-  test.slow();
-
-  await page.addInitScript(establishDataLayer);
-
-  await page.goto("./");
-
-  const cookieBanner = new CookieBannerPOM(page);
-  await cookieBanner.consent();
-
-  await fastForwardToPlaner(page);
-
-  const feedbackForm = new FeedbackPOM(page);
-  await feedbackForm.waehleEase(2);
-  await feedbackForm.waehleObstacle("Angaben machen");
-  await feedbackForm.waehleObstacle("Planer bedienen");
-  await feedbackForm.submit();
-
-  expect(
-    await getTrackingVariable(
-      page,
-      "customer-effort-score-obstacle-angaben-machen",
-    ),
-  ).toEqual(0);
-
-  expect(
-    await getTrackingVariable(
-      page,
-      "customer-effort-score-obstacle-planer-bedienen",
-    ),
-  ).toEqual(1);
-});
-
 test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
   test.slow();
 

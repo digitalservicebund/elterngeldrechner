@@ -11,7 +11,7 @@ type Props = {
   readonly ease?: number;
   readonly obstacle?: string;
   readonly onChangeEase: (ease: Ease) => void;
-  readonly onChangeObstacle: (active: string, inactive: string[]) => void;
+  readonly onChangeObstacle: (obstacle: Obstacle) => void;
   readonly onSubmit: () => void;
 };
 
@@ -38,10 +38,7 @@ export function FeedbackForm({
   }
 
   function handleObstacleChange() {
-    const active = form.getValues("obstacle")!;
-    const inactives = obstacles.filter((it) => it !== active);
-
-    onChangeObstacle(active, inactives);
+    onChangeObstacle(form.getValues("obstacle")!);
   }
 
   const easeFormTransformerFunc = (it: Ease) => String(it);

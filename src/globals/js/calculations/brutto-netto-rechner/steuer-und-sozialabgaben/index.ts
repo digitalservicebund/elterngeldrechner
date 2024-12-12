@@ -1,4 +1,5 @@
 import {
+  PAP_2022,
   PAP_2023,
   type Ausgangsparameter,
   type Eingangsparameter,
@@ -16,10 +17,11 @@ export function berechneSteuerUndSozialabgaben(
 }
 
 const ABLAUFPLAENE = {
+  2022: PAP_2022,
   2023: PAP_2023,
 } satisfies Record<
   Lohnsteuerjahr,
   { new (eingangsparameter: Eingangsparameter): Programmablaufplan }
 >;
 
-export type Lohnsteuerjahr = 2023;
+export type Lohnsteuerjahr = 2022 | 2023;

@@ -758,8 +758,7 @@ describe("finanzDatenFactory", () => {
   );
 
   describe.each([
-    [null, SteuerKlasse.SKL_UNBEKANNT],
-    [SteuerKlasse.SKL_UNBEKANNT, SteuerKlasse.SKL_UNBEKANNT],
+    [null, SteuerKlasse.SKL1],
     [SteuerKlasse.SKL1, SteuerKlasse.SKL1],
     [SteuerKlasse.SKL2, SteuerKlasse.SKL2],
     [SteuerKlasse.SKL3, SteuerKlasse.SKL3],
@@ -949,7 +948,7 @@ describe("finanzDatenFactory", () => {
         bruttoEinkommen: new Einkommen(0),
         zahlenSieKirchenSteuer: YesNo.NO,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        steuerKlasse: SteuerKlasse.SKL_UNBEKANNT,
+        steuerKlasse: SteuerKlasse.SKL1,
         kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
         rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
         splittingFaktor: 1.0,

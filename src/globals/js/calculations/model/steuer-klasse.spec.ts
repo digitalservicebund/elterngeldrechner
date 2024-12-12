@@ -6,11 +6,6 @@ import {
 
 describe("steuer-klasse", () => {
   describe("should return correct number, when SteuerKlasse is", () => {
-    it("SKL_UNBEKANNT", () => {
-      const actual = steuerklasseToNumber(SteuerKlasse.SKL_UNBEKANNT);
-      expect(actual).toBe(undefined);
-    });
-
     it("SKL1", () => {
       const actual = steuerklasseToNumber(SteuerKlasse.SKL1);
       expect(actual).toBe(1);
@@ -76,11 +71,6 @@ describe("steuer-klasse", () => {
     it("SKL6", () => {
       const actual = steuerklasseOfNumber(6);
       expect(actual).toBe(SteuerKlasse.SKL6);
-    });
-
-    it("unknown", () => {
-      const actual = steuerklasseOfNumber(7);
-      expect(actual).toBe(SteuerKlasse.SKL_UNBEKANNT);
     });
   });
 });

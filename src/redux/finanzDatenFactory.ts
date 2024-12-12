@@ -144,7 +144,7 @@ export const finanzDatenOfUi = (
   finanzDaten.kinderFreiBetrag =
     state.stepEinkommen[elternteil].kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
   finanzDaten.steuerKlasse =
-    state.stepEinkommen[elternteil].steuerKlasse ?? SteuerKlasse.SKL_UNBEKANNT;
+    state.stepEinkommen[elternteil].steuerKlasse ?? SteuerKlasse.SKL1;
   finanzDaten.kassenArt =
     state.stepEinkommen[elternteil].kassenArt ??
     KassenArt.GESETZLICH_PFLICHTVERSICHERT;

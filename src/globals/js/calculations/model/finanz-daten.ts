@@ -19,7 +19,7 @@ export class FinanzDaten {
   bruttoEinkommen: BruttoEinkommen = new Einkommen(0);
   zahlenSieKirchenSteuer: YesNo = YesNo.NO;
   kinderFreiBetrag: KinderFreiBetrag = KinderFreiBetrag.ZKF0;
-  steuerKlasse: SteuerKlasse = SteuerKlasse.SKL_UNBEKANNT;
+  steuerKlasse: SteuerKlasse = SteuerKlasse.SKL1;
   kassenArt: KassenArt = KassenArt.GESETZLICH_PFLICHTVERSICHERT;
   rentenVersicherung: RentenArt = RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
   splittingFaktor: number = 1.0;

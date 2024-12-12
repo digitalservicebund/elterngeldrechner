@@ -1,5 +1,4 @@
 export enum SteuerKlasse {
-  SKL_UNBEKANNT = "UNBEKANNT",
   SKL1 = "1",
   SKL2 = "2",
   SKL3 = "3",
@@ -16,9 +15,7 @@ export enum SteuerKlasse {
  *
  * @return Steuerklasse as number. Returns undefined, if Steuerklasse is SKL_UNBEKANNT.
  */
-export function steuerklasseToNumber(
-  steuerKlasse: SteuerKlasse,
-): number | undefined {
+export function steuerklasseToNumber(steuerKlasse: SteuerKlasse) {
   switch (steuerKlasse) {
     case SteuerKlasse.SKL1:
       return 1;
@@ -33,8 +30,6 @@ export function steuerklasseToNumber(
       return 5;
     case SteuerKlasse.SKL6:
       return 6;
-    default:
-      return undefined;
   }
 }
 
@@ -60,6 +55,6 @@ export function steuerklasseOfNumber(steuerKlasse: number) {
     case 6:
       return SteuerKlasse.SKL6;
     default:
-      return SteuerKlasse.SKL_UNBEKANNT;
+      throw new Error(`Unknown Steuerklasse: '${steuerKlasse}'`);
   }
 }

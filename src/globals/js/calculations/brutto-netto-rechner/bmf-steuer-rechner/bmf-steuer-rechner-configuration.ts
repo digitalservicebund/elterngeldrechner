@@ -2,6 +2,7 @@ import {
   BmfSteuerRechnerParameter,
   urlSearchParamsOf,
 } from "./bmf-steuer-rechner-parameter";
+import type { Lohnsteuerjahr } from "@/globals/js/calculations/model";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 
 export const bmfSteuerRechnerAvailableYearsRemote =
@@ -24,7 +25,7 @@ export const bmfSteuerRechnerAvailableYearsLib =
  * @see https://www.bmf-steuerrechner.de/interface/einganginterface.xhtml
  */
 export function bmfSteuerRechnerUrlOf(
-  lohnSteuerJahr: number,
+  lohnSteuerJahr: Lohnsteuerjahr,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ): string {
   if (!bmfSteuerRechnerAvailableYearsRemote.includes(lohnSteuerJahr)) {

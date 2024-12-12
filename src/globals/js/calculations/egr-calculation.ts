@@ -18,6 +18,7 @@ import {
   YesNo,
   ZwischenErgebnis,
   Einkommen,
+  type Lohnsteuerjahr,
 } from "./model";
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
@@ -46,7 +47,7 @@ export class EgrCalculation {
   simulate(
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
     mutterschaftsLeistung: MutterschaftsLeistung,
   ): ElternGeldSimulationErgebnis {
     const planungsDaten = new PlanungsDaten(
@@ -99,7 +100,7 @@ export class EgrCalculation {
   calculate(
     elternTeil1: ElternGeldDaten,
     elternTeil2: ElternGeldDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): ElternGeldErgebnis {
     const plusErgebnisElternTeil1 = this.calculateElternGeld(
       elternTeil1,
@@ -120,7 +121,7 @@ export class EgrCalculation {
    */
   private nettoLebensMonatOf(
     finanzDaten: FinanzDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
     etVorGeburt: ErwerbsArt,
   ) {
     const nettoLebensMonat: Big[] = new Array<Big>(PLANUNG_ANZAHL_MONATE).fill(
@@ -145,7 +146,7 @@ export class EgrCalculation {
 
   public calculateElternGeld(
     elternGeldDaten: ElternGeldDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): ElternGeldPlusErgebnis {
     // Steuern berechnen wenn erwerbstätig vor Geburt
     const zwischenErgebnisEinkommen = this.zwischenErgebnisEinkommenOf(
@@ -181,7 +182,7 @@ export class EgrCalculation {
 
   private zwischenErgebnisEinkommenOf(
     elternGeldDaten: ElternGeldDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ) {
     EgrCalculation.korrigiereErwerbsart(elternGeldDaten);
 

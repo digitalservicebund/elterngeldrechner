@@ -3,6 +3,7 @@ import { LST_INPUT } from "@bmfin/steuerrechner/build/types/input";
 import { bmfSteuerRechnerUrlOf } from "./bmf-steuer-rechner-configuration";
 import { BmfSteuerRechnerParameter } from "./bmf-steuer-rechner-parameter";
 import { BmfSteuerRechnerResponse } from "./bmf-steuer-rechner-response";
+import type { Lohnsteuerjahr } from "@/globals/js/calculations/model";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { convert as convertParameter } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-parameter-converter";
 import { convert as convertResponse } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-response-converter";
@@ -26,14 +27,14 @@ export const USE_REMOTE_STEUER_RECHNER = false;
  * @return Response from BMF Lohn- und Einkommensteuerrechner
  */
 export function callBmfSteuerRechner(
-  lohnSteuerJahr: number,
+  lohnSteuerJahr: Lohnsteuerjahr,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ): BmfSteuerRechnerResponse {
   return callRechnerLib(lohnSteuerJahr, bmfSteuerRechnerParameter);
 }
 
 export function callRechnerLib(
-  lohnSteuerJahr: number,
+  lohnSteuerJahr: Lohnsteuerjahr,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ): BmfSteuerRechnerResponse {
   const lstInput = convertParameter(bmfSteuerRechnerParameter);
@@ -41,7 +42,7 @@ export function callRechnerLib(
   return convertResponse(lstOutput);
 }
 
-function lst(lohnSteuerJahr: number, lstInput: LST_INPUT) {
+function lst(lohnSteuerJahr: Lohnsteuerjahr, lstInput: LST_INPUT) {
   if (lohnSteuerJahr === 2022) {
     return LST("2022.1", lstInput);
   }
@@ -50,7 +51,7 @@ function lst(lohnSteuerJahr: number, lstInput: LST_INPUT) {
 }
 
 export async function callRemoteRechner(
-  lohnSteuerJahr: number,
+  lohnSteuerJahr: Lohnsteuerjahr,
   bmfSteuerRechnerParameter: BmfSteuerRechnerParameter,
 ) {
   const url = bmfSteuerRechnerUrlOf(lohnSteuerJahr, bmfSteuerRechnerParameter);

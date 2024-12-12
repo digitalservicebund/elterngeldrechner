@@ -22,6 +22,7 @@ import {
   ElternGeldArt,
   type ElternGeldPlusErgebnis,
   type ElternGeldDaten,
+  type Lohnsteuerjahr,
 } from "@/globals/js/calculations/model";
 import type { ElternteilType } from "@/globals/js/elternteil-type";
 import type { RootState } from "@/redux";
@@ -77,7 +78,7 @@ function berechneElterngeldbezuege(
 function buildParameterForCalculation(
   staticParameter: StaticCalculationParameterForElternteil,
   monate: GeplanteMonate,
-): { elterngelddaten: ElternGeldDaten; lohnsteuerjahr: number } {
+): { elterngelddaten: ElternGeldDaten; lohnsteuerjahr: Lohnsteuerjahr } {
   const { persoenlicheDaten, finanzdaten, lohnsteuerjahr } = staticParameter;
 
   const monateMitErwerbstaetigkeit = transformMonateForFinanzdaten(monate);
@@ -201,7 +202,7 @@ type StaticCalculationParameter = Record<
 type StaticCalculationParameterForElternteil = {
   persoenlicheDaten: PersoenlicheDaten;
   finanzdaten: FinanzDaten;
-  lohnsteuerjahr: number;
+  lohnsteuerjahr: Lohnsteuerjahr;
 };
 
 type GeplanteMonate = Parameters<BerechneElterngeldbezuegeCallback>[1];

@@ -81,7 +81,7 @@ describe("erg-steuer-rechner", () => {
           finanzdaten,
           erwerbsArt,
           new Big(brutto),
-          2020,
+          2022,
         );
 
         // then
@@ -123,7 +123,7 @@ describe("erg-steuer-rechner", () => {
         }),
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         new Big(1),
-        2020,
+        2022,
       );
 
       // then
@@ -147,7 +147,7 @@ describe("erg-steuer-rechner", () => {
         }),
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         new Big(1),
-        2020,
+        2022,
       );
 
       // then
@@ -173,7 +173,7 @@ describe("erg-steuer-rechner", () => {
         }),
         ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
         new Big(1),
-        2020,
+        2022,
       );
 
       // then
@@ -198,7 +198,7 @@ describe("erg-steuer-rechner", () => {
       }),
       ErwerbsArt.JA_NICHT_SELBST_MINI,
       new Big(1),
-      2020,
+      2022,
     );
 
     // then

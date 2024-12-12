@@ -18,6 +18,7 @@ import {
   YesNo,
   zaehleMonateErwerbsTaetigkeit,
   ZwischenErgebnis,
+  type Lohnsteuerjahr,
 } from "./model";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
 import { errorOf } from "./calculation-error-code";
@@ -58,7 +59,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     planungsergebnis: PlanungsDaten,
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
     z: ZwischenErgebnis,
   ): ElternGeldPlusErgebnis {
@@ -186,7 +187,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     planungsergebnis: PlanungsDaten,
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
     z: ZwischenErgebnis,
   ): ElternGeldPlusErgebnis {

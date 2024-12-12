@@ -10,6 +10,7 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
+  type Lohnsteuerjahr,
 } from "./model";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
 import {
@@ -38,14 +39,14 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
    *
    * @param {PersoenlicheDaten} persoenlicheDaten Persönliche Angaben für die Berechnung des Elterngeldes.
    * @param {FinanzDaten} finanzDaten Angaben zum Einkommen.
-   * @param {number} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
+   * @param {Lohnsteuerjahr} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
    *
    * @return Das Zwischenergebnis bei Mischeinkommen.
    */
   public berechneMischNettoUndBasiselterngeld(
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): MischEkZwischenErgebnis {
     let netto: Big;
     let steuern: Big = Big(0);

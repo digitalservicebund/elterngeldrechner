@@ -17,16 +17,6 @@ describe("bmf-steuer-rechner-configuration", () => {
   });
 
   describe("should create correct path, when Lohnsteuerjahr is", () => {
-    it("2021", () => {
-      const actual = bmfSteuerRechnerUrlOf(
-        2021,
-        new BmfSteuerRechnerParameter(),
-      );
-      expect(
-        actual.substring(actual.indexOf("/interface"), actual.indexOf("?")),
-      ).toBe("/interface/2021Version1.xhtml");
-    });
-
     it("2022", () => {
       const actual = bmfSteuerRechnerUrlOf(
         2022,
@@ -83,13 +73,13 @@ describe("bmf-steuer-rechner-configuration", () => {
 
     it("2020", () => {
       expect(() =>
-        bmfSteuerRechnerUrlOf(2020, new BmfSteuerRechnerParameter()),
+        bmfSteuerRechnerUrlOf(2020 as never, new BmfSteuerRechnerParameter()),
       ).toThrow("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
     });
 
     it("2019", () => {
       expect(() =>
-        bmfSteuerRechnerUrlOf(2019, new BmfSteuerRechnerParameter()),
+        bmfSteuerRechnerUrlOf(2019 as never, new BmfSteuerRechnerParameter()),
       ).toThrow("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
     });
   });

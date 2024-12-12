@@ -5,6 +5,7 @@ import {
   type Eingangsparameter,
   type Programmablaufplan,
 } from "./programmablaufplan";
+import type { Lohnsteuerjahr } from "@/globals/js/calculations/model";
 
 export { type Eingangsparameter, Ausgangsparameter };
 
@@ -23,5 +24,3 @@ const ABLAUFPLAENE = {
   Lohnsteuerjahr,
   { new (eingangsparameter: Eingangsparameter): Programmablaufplan }
 >;
-
-export type Lohnsteuerjahr = 2022 | 2023;

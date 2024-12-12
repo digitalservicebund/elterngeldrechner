@@ -9,40 +9,40 @@ import {
   SteuerKlasse,
   steuerklasseToNumber,
   YesNo,
+  UnterstuetzteLohnsteuerjahre,
+  type Lohnsteuerjahr,
 } from "@/globals/js/calculations/model";
 import { BmfSteuerRechnerParameter } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
-import {
-  bmfSteuerRechnerAvailableYearsLib,
-  bmfSteuerRechnerAvailableYearsRemote,
-} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner-configuration";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import {
-  callBmfSteuerRechner,
-  USE_REMOTE_STEUER_RECHNER,
-} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner";
+import { callBmfSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner";
 
 /**
  * EGR-Steuerrechner. Wrapper for BMF Lohn- und Einkommensteuerrechner with EGR data model.
  */
 export class EgrSteuerRechner {
-  static bestLohnSteuerJahrOf(wahrscheinlichesGeburtsDatum: Date): number {
+  static bestLohnSteuerJahrOf(
+    wahrscheinlichesGeburtsDatum: Date,
+  ): Lohnsteuerjahr {
     const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
     const jahrVorDerGeburt = geburtsDatumJahr - 1;
 
-    const availableYears = USE_REMOTE_STEUER_RECHNER
-      ? bmfSteuerRechnerAvailableYearsRemote
-      : bmfSteuerRechnerAvailableYearsLib;
-    if (availableYears.includes(jahrVorDerGeburt)) {
-      return jahrVorDerGeburt;
+    if (
+      UnterstuetzteLohnsteuerjahre.includes(jahrVorDerGeburt as Lohnsteuerjahr)
+    ) {
+      return jahrVorDerGeburt as Lohnsteuerjahr;
     }
 
-    const minAvailableYear = Math.min(...availableYears);
+    const minAvailableYear = Math.min(
+      ...UnterstuetzteLohnsteuerjahre,
+    ) as Lohnsteuerjahr;
     if (jahrVorDerGeburt < minAvailableYear) {
       return minAvailableYear;
     }
 
-    const maxAvailableYear = Math.max(...availableYears);
+    const maxAvailableYear = Math.max(
+      ...UnterstuetzteLohnsteuerjahre,
+    ) as Lohnsteuerjahr;
     if (jahrVorDerGeburt > maxAvailableYear) {
       return maxAvailableYear;
     }
@@ -64,7 +64,7 @@ export class EgrSteuerRechner {
     finanzDaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
     bruttoProMonat: Big,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): BmfAbgaben {
     const parameter = new BmfSteuerRechnerParameter();
     if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {

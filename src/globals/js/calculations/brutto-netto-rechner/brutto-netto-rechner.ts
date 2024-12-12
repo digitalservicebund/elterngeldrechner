@@ -16,6 +16,7 @@ import {
   NettoEinkommen,
   RentenArt,
   SteuerKlasse,
+  type Lohnsteuerjahr,
 } from "@/globals/js/calculations/model";
 import {
   BIG_100,
@@ -30,7 +31,7 @@ export class BruttoNettoRechner {
    * Methode zum Ermitteln der Abzüge anhand des durchschnittlichen monatlichen Bruttogehaltes
    *
    * @param {Big} bruttoProMonat Steuerpflichtiger durchschnittlicher Arbeitslohn pro Monat für das angegebene Jahr.
-   * @param {number} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
+   * @param {Lohnsteuerjahr} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
    * @param {FinanzDaten} finanzDaten Angaben zum Einkommen.
    * @param {ErwerbsArt} erwerbsArt Art des Einkommens (selbstständig, angestellt, ...)
    * @return {Big} Die Höhe der Abzüge.
@@ -38,7 +39,7 @@ export class BruttoNettoRechner {
    */
   abzuege(
     bruttoProMonat: Big,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
     finanzDaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
   ): Big {
@@ -93,7 +94,7 @@ export class BruttoNettoRechner {
   nettoEinkommenZwischenErgebnis(
     finanzdaten: FinanzDaten,
     erwerbsArtVorGeburt: ErwerbsArt,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): NettoEinkommen {
     const netto: NettoEinkommen = new Einkommen(0);
     const status: ErwerbsArt = erwerbsArtVorGeburt;
@@ -136,7 +137,7 @@ export class BruttoNettoRechner {
     finanzdaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
     bruttoProMonat: Big,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): Big {
     const charge = this.egrSteuerRechner.abgabenSteuern(
       finanzdaten,
@@ -168,7 +169,7 @@ export class BruttoNettoRechner {
     rentenversicherungspflichtig: boolean,
     status: ErwerbsArt,
     bruttoProMonat: Big,
-    lohnSteuerJahr: number,
+    lohnSteuerJahr: Lohnsteuerjahr,
   ): Big {
     const summeSteuer: Big = this.summeSteuer(
       finanzdaten,

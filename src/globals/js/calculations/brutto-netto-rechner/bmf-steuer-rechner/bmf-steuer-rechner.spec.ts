@@ -26,25 +26,33 @@ describe("bmf-steuer-rechner-remote", () => {
 
 describe("bmf-steuer-rechner-lib", () => {
   describe.each([
-    [2022, { LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "0.00"],
-    [2023, { LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 }, "0.00"],
     [
-      2022,
+      2022 as const,
+      { LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
+      "0.00",
+    ],
+    [
+      2023 as const,
+      { LZZ: 2, RE4: 8333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
+      "0.00",
+    ],
+    [
+      2022 as const,
       { LZZ: 2, RE4: 533333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
       "1065.50",
     ],
     [
-      2023,
+      2023 as const,
       { LZZ: 2, RE4: 533333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
       "989.08",
     ],
     [
-      2022,
+      2022 as const,
       { LZZ: 2, RE4: 208333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
       "172.50",
     ],
     [
-      2023,
+      2023 as const,
       { LZZ: 2, RE4: 208333, STKL: 4, KVZ: 0.9, F: 1.0, ZKF: 1 },
       "145.33",
     ],

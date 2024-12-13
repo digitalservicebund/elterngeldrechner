@@ -102,10 +102,10 @@ describe("egr-calculation", () => {
       expect(ergebnis.elternTeil1.nettoBasis.toNumber()).toBe(0);
       expect(ergebnis.elternTeil1.elternGeldErwBasis.toNumber()).toBe(0);
       expect(ergebnis.elternTeil1.bruttoPlus.toNumber()).toBe(1950);
-      expect(ergebnis.elternTeil1.nettoPlus.toNumber()).toBe(1361.17);
-      expect(ergebnis.elternTeil1.elternGeldEtPlus.toNumber()).toBe(281.29);
+      expect(ergebnis.elternTeil1.nettoPlus.toNumber()).toBe(1356.84);
+      expect(ergebnis.elternTeil1.elternGeldEtPlus.toNumber()).toBe(281.01);
       expect(ergebnis.elternTeil1.elternGeldKeineEtPlus.toNumber()).toBe(
-        583.03,
+        581.48,
       );
       expect(ergebnis.elternTeil2.bruttoBasis.toNumber()).toBe(0);
       expect(ergebnis.elternTeil2.nettoBasis.toNumber()).toBe(0);
@@ -114,7 +114,7 @@ describe("egr-calculation", () => {
       expect(ergebnis.elternTeil2.nettoPlus.toNumber()).toBe(0);
       expect(ergebnis.elternTeil2.elternGeldEtPlus.toNumber()).toBe(0);
       expect(ergebnis.elternTeil2.elternGeldKeineEtPlus.toNumber()).toBe(
-        454.87,
+        453.46,
       );
     });
   });
@@ -168,31 +168,31 @@ describe("egr-calculation", () => {
       expect(ergebnis.rows[0].vonLebensMonat).toBe(1);
       expect(ergebnis.rows[0].bisLebensMonat).toBe(2);
       expect(ergebnis.rows[0].basisElternGeld.toNumber()).toBe(300);
-      expect(ergebnis.rows[0].elternGeldPlus.toNumber()).toBe(281.29);
+      expect(ergebnis.rows[0].elternGeldPlus.toNumber()).toBe(281.01);
       expect(ergebnis.rows[0].nettoEinkommen.toNumber()).toBe(79);
 
       expect(ergebnis.rows[1].vonLebensMonat).toBe(3);
       expect(ergebnis.rows[1].bisLebensMonat).toBe(4);
       expect(ergebnis.rows[1].basisElternGeld.toNumber()).toBe(300);
-      expect(ergebnis.rows[1].elternGeldPlus.toNumber()).toBe(281.29);
+      expect(ergebnis.rows[1].elternGeldPlus.toNumber()).toBe(281.01);
       expect(ergebnis.rows[1].nettoEinkommen.toNumber()).toBe(800.46);
 
       expect(ergebnis.rows[2].vonLebensMonat).toBe(5);
       expect(ergebnis.rows[2].bisLebensMonat).toBe(6);
       expect(ergebnis.rows[2].basisElternGeld.toNumber()).toBe(300);
-      expect(ergebnis.rows[2].elternGeldPlus.toNumber()).toBe(281.29);
-      expect(ergebnis.rows[2].nettoEinkommen.toNumber()).toBe(3002.84);
+      expect(ergebnis.rows[2].elternGeldPlus.toNumber()).toBe(281.01);
+      expect(ergebnis.rows[2].nettoEinkommen.toNumber()).toBe(2996.5);
 
       expect(ergebnis.rows[3].vonLebensMonat).toBe(7);
       expect(ergebnis.rows[3].bisLebensMonat).toBe(14);
-      expect(ergebnis.rows[3].basisElternGeld.toNumber()).toBe(1166.05);
-      expect(ergebnis.rows[3].elternGeldPlus.toNumber()).toBe(583.03);
+      expect(ergebnis.rows[3].basisElternGeld.toNumber()).toBe(1162.96);
+      expect(ergebnis.rows[3].elternGeldPlus.toNumber()).toBe(581.48);
       expect(ergebnis.rows[3].nettoEinkommen.toNumber()).toBe(0);
 
       expect(ergebnis.rows[4].vonLebensMonat).toBe(15);
       expect(ergebnis.rows[4].bisLebensMonat).toBe(PLANUNG_ANZAHL_MONATE);
       expect(ergebnis.rows[4].basisElternGeld.toNumber()).toBe(0);
-      expect(ergebnis.rows[4].elternGeldPlus.toNumber()).toBe(583.03);
+      expect(ergebnis.rows[4].elternGeldPlus.toNumber()).toBe(581.48);
       expect(ergebnis.rows[4].nettoEinkommen.toNumber()).toBe(0);
     });
   });

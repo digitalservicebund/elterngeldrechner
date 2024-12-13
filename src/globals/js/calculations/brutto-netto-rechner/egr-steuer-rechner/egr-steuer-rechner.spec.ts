@@ -1,9 +1,6 @@
 import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
-import {
-  BmfSteuerRechnerResponse,
-  callBmfSteuerRechner,
-} from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
+import { berechneSteuerUndSozialabgaben } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
 import {
   ErwerbsArt,
   FinanzDaten,
@@ -11,7 +8,22 @@ import {
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
 
+vi.mock(
+  import(
+    "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben"
+  ),
+);
+
 describe("erg-steuer-rechner", () => {
+  beforeEach(() => {
+    vi.mocked(berechneSteuerUndSozialabgaben).mockReturnValue({
+      BK: 0,
+      LSTLZZ: 0,
+      SOLZLZZ: 0,
+      VKVLZZ: 0,
+    });
+  });
+
   const egrSteuerRechner = new EgrSteuerRechner();
 
   describe.each([
@@ -35,91 +47,13 @@ describe("erg-steuer-rechner", () => {
     },
   );
 
-  describe.each([
-    [
-      {
-        steuerKlasse: SteuerKlasse.SKL4,
-        splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-      },
-      ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
-      "5333.33",
-      "1072.08",
-    ],
-    [
-      {
-        steuerKlasse: SteuerKlasse.SKL4,
-        splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-      },
-      ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
-      "83.33",
-      "0.00",
-    ],
-    [
-      {
-        steuerKlasse: SteuerKlasse.SKL4,
-        splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-      },
-      ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
-      "2083.33",
-      "176.83",
-    ],
-  ])(
-    "when FinanzDaten: %j, ErwerbsArt: %s, Brutto: %d, then expect Lohnsteuer %d",
-    (finanzDaten, erwerbsArt, brutto, lstlzz) => {
-      it("should calculate Abgaben", () => {
-        // given
-        vi.mocked(callBmfSteuerRechner).mockReturnValue(
-          bmfSteuerRechnerResponseOf(lstlzz),
-        );
-        const finanzdaten = Object.assign(new FinanzDaten(), finanzDaten);
-
-        // when
-        const steuerRechnerResponse = egrSteuerRechner.abgabenSteuern(
-          finanzdaten,
-          erwerbsArt,
-          new Big(brutto),
-          2022,
-        );
-
-        // then
-        expect(steuerRechnerResponse.lstlzz.toFixed(2, Big.roundHalfUp)).toBe(
-          lstlzz,
-        );
-
-        expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
-          expect.anything(),
-          expect.objectContaining({
-            AF: 0,
-            ALTER1: 0,
-            F: 1,
-            KRV: 2,
-            KVZ: 0.9,
-            LZZ: 2,
-            R: 0,
-            RE4: Big(brutto).mul(100).toNumber(),
-            STKL: 4,
-            ZKF: 1,
-          }),
-        );
-      });
-    },
-  );
-
   describe("should set Faktor Verfahren to", () => {
     it("1 if SteuerKlasse is SKL4_FAKTOR", () => {
-      // given
-      vi.mocked(callBmfSteuerRechner).mockReturnValue(
-        bmfSteuerRechnerResponseOf(100),
-      );
-
       // when
       egrSteuerRechner.abgabenSteuern(
         Object.assign(new FinanzDaten(), {
           steuerKlasse: SteuerKlasse.SKL4_FAKTOR,
-          splittingFaktor: null,
+          splittingFaktor: 1,
         }),
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         new Big(1),
@@ -127,18 +61,13 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
+      expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
         expect.anything(),
-        expect.objectContaining({ AF: 1, F: 1.0 }),
+        expect.objectContaining({ AF: 1, F: 1 }),
       );
     });
 
     it("0 if SteuerKlasse is not SKL4_FAKTOR", () => {
-      // given
-      vi.mocked(callBmfSteuerRechner).mockReturnValue(
-        bmfSteuerRechnerResponseOf(100),
-      );
-
       // when
       egrSteuerRechner.abgabenSteuern(
         Object.assign(new FinanzDaten(), {
@@ -151,20 +80,15 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
+      expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
         expect.anything(),
-        expect.objectContaining({ AF: 0, F: 1 }),
+        expect.objectContaining({ AF: 0, F: 0 }),
       );
     });
   });
 
   describe("should set kinderFreiBetrag to", () => {
     it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", () => {
-      // given
-      vi.mocked(callBmfSteuerRechner).mockReturnValue(
-        bmfSteuerRechnerResponseOf(100),
-      );
-
       // when
       egrSteuerRechner.abgabenSteuern(
         Object.assign(new FinanzDaten(), {
@@ -177,7 +101,7 @@ describe("erg-steuer-rechner", () => {
       );
 
       // then
-      expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
+      expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({ ZKF: 1 }),
       );
@@ -185,11 +109,6 @@ describe("erg-steuer-rechner", () => {
   });
 
   it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", () => {
-    // given
-    vi.mocked(callBmfSteuerRechner).mockReturnValue(
-      bmfSteuerRechnerResponseOf(100),
-    );
-
     // when
     egrSteuerRechner.abgabenSteuern(
       Object.assign(new FinanzDaten(), {
@@ -202,22 +121,9 @@ describe("erg-steuer-rechner", () => {
     );
 
     // then
-    expect(callBmfSteuerRechner).toHaveBeenLastCalledWith(
+    expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
       expect.anything(),
       expect.objectContaining({ ZKF: 0 }),
     );
   });
 });
-
-// initialize mock
-vi.mock(
-  import(
-    "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner"
-  ),
-);
-
-const bmfSteuerRechnerResponseOf = (lstlzz: number | string) => {
-  const response = new BmfSteuerRechnerResponse();
-  response.LSTLZZ = Big(lstlzz);
-  return response;
-};

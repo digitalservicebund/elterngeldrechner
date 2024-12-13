@@ -1,6 +1,8 @@
 import Big from "big.js";
-import { BmfAbgaben } from "./bmf-abgaben";
-import { bmfAbgabenOf } from "./bmf-abgaben-factory";
+import {
+  berechneSteuerUndSozialabgaben,
+  type Eingangsparameter,
+} from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
 import {
   ErwerbsArt,
   FinanzDaten,
@@ -12,10 +14,8 @@ import {
   UnterstuetzteLohnsteuerjahre,
   type Lohnsteuerjahr,
 } from "@/globals/js/calculations/model";
-import { BmfSteuerRechnerParameter } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner";
 import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import { callBmfSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/bmf-steuer-rechner/bmf-steuer-rechner";
 
 /**
  * EGR-Steuerrechner. Wrapper for BMF Lohn- und Einkommensteuerrechner with EGR data model.
@@ -65,39 +65,47 @@ export class EgrSteuerRechner {
     erwerbsArt: ErwerbsArt,
     bruttoProMonat: Big,
     lohnSteuerJahr: Lohnsteuerjahr,
-  ): BmfAbgaben {
-    const parameter = new BmfSteuerRechnerParameter();
+  ): { bk: Big; lstlzz: Big; solzlzz: Big } {
     if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
       finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
     }
-    // Zusatzbeitrag ist laut Herrn Klos jetzt immer 0,9
-    parameter.KVZ = 0.9;
-    parameter.ALTER1 = 0;
-    if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR) {
-      parameter.AF = 1;
-      parameter.F = finanzDaten.splittingFaktor ?? 1.0;
-    } else {
-      parameter.AF = 0;
-      parameter.F = 1.0;
-    }
-    const steuerklasseNumber = steuerklasseToNumber(finanzDaten.steuerKlasse);
-    parameter.STKL = steuerklasseNumber ?? 1;
-    parameter.ZKF = kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag);
-    parameter.R = finanzDaten.zahlenSieKirchenSteuer === YesNo.NO ? 0 : 1;
-    parameter.KRV = erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0;
-    parameter.LZZ = 2;
 
     let einkommenInCent: Big = bruttoProMonat.mul(Big(100));
     if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
       einkommenInCent = einkommenInCent.add(PAUSCH.mul(Big(100)));
     }
-    parameter.RE4 = einkommenInCent.round(0, Big.roundHalfUp).toNumber();
 
-    try {
-      const bmfResponse = callBmfSteuerRechner(lohnSteuerJahr, parameter);
-      return bmfAbgabenOf(bmfResponse);
-    } catch {
-      throw errorOf("BmfSteuerRechnerCallFailed");
-    }
+    const eingangsparameter: Eingangsparameter = {
+      AF: finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR ? 1 : 0,
+      F:
+        finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR
+          ? finanzDaten.splittingFaktor
+          : 0,
+      KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
+      KVZ: 0.9, // TODO: verify this
+      LZZ: 2,
+      LZZFREIB: 0,
+      LZZHINZU: 0,
+      PKPV: 0,
+      PKV: 0,
+      PVS: 0,
+      PVZ: 0,
+      R: finanzDaten.zahlenSieKirchenSteuer === YesNo.YES ? 1 : 0,
+      RE4: einkommenInCent.toNumber(),
+      STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
+      VBEZ: 0,
+      ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
+    };
+
+    const { BK, LSTLZZ, SOLZLZZ } = berechneSteuerUndSozialabgaben(
+      lohnSteuerJahr,
+      eingangsparameter,
+    );
+
+    return {
+      bk: Big(BK / 100),
+      lstlzz: Big(LSTLZZ / 100),
+      solzlzz: Big(SOLZLZZ / 100),
+    };
   }
 }

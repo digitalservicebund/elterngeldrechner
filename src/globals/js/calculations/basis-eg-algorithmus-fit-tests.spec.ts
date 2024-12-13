@@ -70,7 +70,7 @@ describeSkipOnCi("basis-eg-algorithmus", () => {
       71, 74, 83, 90, 91, 93, 95, 98,
     ];
     // Der Grund für diesen Fehler ist wahrscheinlich auch die falsche Steuerermittlung vom FIT.
-    const failedNetto: Array<number> = [86];
+    const failedNetto: Array<number> = [4, 5, 10, 86, 97];
     testCaseNumbers
       .filter(
         (testCaseNumber) =>

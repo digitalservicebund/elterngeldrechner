@@ -1,7 +1,6 @@
 type CalculationErrorCode =
   | "MischEinkommenEnabledButMissingMischEinkommen"
-  | "BmfSteuerRechnerCallFailed"
-  | "BmfSteuerRechnerNotImplementedForLohnsteuerjahr";
+  | "NichtUnterstuetztesLohnsteuerjahr";
 
 export function errorOf(calculationErrorCode: CalculationErrorCode) {
   return new Error(calculationErrorCode);

@@ -36,7 +36,7 @@ import {
   trackEase,
   trackObstacle,
 } from "@/user-tracking/feedback";
-import { FeedbackForm } from "@/components/organisms/feedback-form/FeedbackForm";
+import { FeedbackForm } from "@/components/organisms/feedback-form";
 import { feedbackActions, feedbackSelectors } from "@/redux/feedbackSlice";
 
 export default function RechnerPlanerPage() {

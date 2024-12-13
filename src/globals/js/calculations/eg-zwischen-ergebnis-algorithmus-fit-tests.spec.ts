@@ -1,15 +1,11 @@
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
-import { describeSkipOnCi } from "@/setupTests";
 import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
 
 /**
  * Runs FIT tests for EgZwischenErgebnisAlgorithmus.
- *
- * Test should be skipped on ci server. Reason: We can't call the BMF Steuerrechner,
- * because external calls are forbidden on CI environment.
  */
-describeSkipOnCi("eg-zwischen-ergebnis-algorithmus", () => {
+describe("eg-zwischen-ergebnis-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
 

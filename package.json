@@ -74,7 +74,6 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
-    "@bmfin/steuerrechner": "^1.1.1",
     "@digitalservicebund/icons": "^1.1.1",
     "@reduxjs/toolkit": "^2.2.1",
     "big.js": "^6.2.1",

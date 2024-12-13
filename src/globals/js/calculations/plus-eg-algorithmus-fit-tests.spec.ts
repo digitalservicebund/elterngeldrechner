@@ -9,17 +9,13 @@ import {
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { BIG_ZERO } from "./common/math-util";
-import { describeSkipOnCi } from "@/setupTests";
 import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
 
 /**
  * Runs FIT tests for PlusEgAlgorithmus.
- *
- * Test should be skipped on ci server. Reason: We can't call the BMF Steuerrechner,
- * because external calls are forbidden on CI environment.
  */
-describeSkipOnCi("plus-eg-algorithmus", () => {
+describe("plus-eg-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
 

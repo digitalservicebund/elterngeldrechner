@@ -13,17 +13,13 @@ import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,
 } from "@/test-utils/egr-mischeinkommen-excel-sheet";
-import { describeSkipOnCi } from "@/setupTests";
 import { toListWithTolerance } from "@/test-utils/test-utils";
 import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 /**
  * Runs FIT tests for BasisEgAlgorithmus.
- *
- * Test should be skipped on ci server. Reason: We can't call the BMF Steuerrechner,
- * because external calls are forbidden on CI environment.
  */
-describeSkipOnCi("basis-eg-algorithmus", () => {
+describe("basis-eg-algorithmus", () => {
   const basisEgAlgorithmus = new BasisEgAlgorithmus();
   const sheet = new EgrMischeinkommenExcelSheet();
   // Für eine Ausgabe, die in das Excel kopiert werden kann.

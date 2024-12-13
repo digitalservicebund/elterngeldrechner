@@ -7,7 +7,7 @@ import {
 } from "./programmablaufplan";
 import type { Lohnsteuerjahr } from "@/globals/js/calculations/model";
 
-export { type Eingangsparameter, Ausgangsparameter };
+export { type Eingangsparameter };
 
 export function berechneSteuerUndSozialabgaben(
   lohnsteuerjahr: Lohnsteuerjahr,

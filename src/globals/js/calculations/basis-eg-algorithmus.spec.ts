@@ -19,9 +19,6 @@ describe("basis-eg-algorithmus", () => {
   describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_010219.xlsx", () => {
     it("TESTFALL NO. 1", () => {
       // given
-      global.fetch = vi.fn(() =>
-        Promise.resolve(new Response(bmfSteuerRechnerResponse)),
-      );
       const persoenlicheDaten = new PersoenlicheDaten(
         new Date("2022-01-01T10:37:00.000Z"),
       );
@@ -118,43 +115,3 @@ describe("basis-eg-algorithmus", () => {
     });
   });
 });
-
-const bmfSteuerRechnerResponse = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<lohnsteuer jahr="2022">
-    <information>Die Berechnung ist nach den PAP 2022 erfolgt. Die Berechnung dient lediglich der Qualitätssicherung. Die Externe Schnittstelle des Lohn- und Einkommensteuerrechner ist also nur für die Überprüfung ihrer Rechnung bestimmt und nicht dazu bestimmt, die Berechnung über ihn abzuwickeln.</information>
-    <eingaben>
-        <eingabe name="ALTER1" value="0" status="ok"/>
-        <eingabe name="PKV" value="0" status="ok"/>
-        <eingabe name="RE4" value="105650" status="ok"/>
-        <eingabe name="ZKF" value="1" status="ok"/>
-        <eingabe name="AF" value="0" status="ok"/>
-        <eingabe name="R" value="0" status="ok"/>
-        <eingabe name="F" value="1.0" status="ok"/>
-        <eingabe name="PVZ" value="0" status="ok"/>
-        <eingabe name="PVS" value="0" status="ok"/>
-        <eingabe name="KRV" value="0" status="ok"/>
-        <eingabe name="LZZ" value="2" status="ok"/>
-        <eingabe name="KVZ" value="0.9" status="ok"/>
-        <eingabe name="STKL" value="4" status="ok"/>
-    </eingaben>
-    <ausgaben>
-        <ausgabe name="BK" value="0" type="STANDARD"/>
-        <ausgabe name="BKS" value="0" type="STANDARD"/>
-        <ausgabe name="BKV" value="0" type="STANDARD"/>
-        <ausgabe name="LSTLZZ" value="0" type="STANDARD"/>
-        <ausgabe name="SOLZLZZ" value="0" type="STANDARD"/>
-        <ausgabe name="SOLZS" value="0" type="STANDARD"/>
-        <ausgabe name="SOLZV" value="0" type="STANDARD"/>
-        <ausgabe name="STS" value="0" type="STANDARD"/>
-        <ausgabe name="STV" value="0" type="STANDARD"/>
-        <ausgabe name="VKVLZZ" value="0" type="STANDARD"/>
-        <ausgabe name="VKVSONST" value="0" type="STANDARD"/>
-        <ausgabe name="VFRB" value="100000" type="DBA"/>
-        <ausgabe name="VFRBS1" value="0" type="DBA"/>
-        <ausgabe name="VFRBS2" value="0" type="DBA"/>
-        <ausgabe name="WVFRB" value="0" type="DBA"/>
-        <ausgabe name="WVFRBO" value="0" type="DBA"/>
-        <ausgabe name="WVFRBM" value="0" type="DBA"/>
-    </ausgaben>
-</lohnsteuer>
-`;

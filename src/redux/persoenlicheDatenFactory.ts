@@ -5,7 +5,6 @@ import { RootState } from "./index";
 import { ElternteilType } from "@/globals/js/elternteil-type";
 import {
   ErwerbsArt,
-  MutterschaftsLeistung,
   PersoenlicheDaten,
   YesNo,
 } from "@/globals/js/calculations/model";
@@ -91,21 +90,4 @@ export const persoenlicheDatenOfUi = (
   persoenlicheDaten.kinder = [...kuenftigeKinder, ...geschwisterKinder];
 
   return persoenlicheDaten;
-};
-
-// Just parking during refactor.
-export const mutterschaftsLeistungOfUi = (
-  state: RootState,
-  elternteil: ElternteilType,
-) => {
-  if (
-    state.stepAllgemeineAngaben.mutterschaftssleistungen === YesNo.YES &&
-    state.stepAllgemeineAngaben.mutterschaftssleistungenWer === elternteil
-  ) {
-    return state.stepNachwuchs.anzahlKuenftigerKinder > 1
-      ? MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_12_WOCHEN
-      : MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_8_WOCHEN;
-  }
-
-  return MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN;
 };

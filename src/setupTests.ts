@@ -1,6 +1,5 @@
 import "@testing-library/jest-dom/vitest";
 import failOnConsole from "jest-fail-on-console";
-import { describe } from "vitest";
 import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 import "@/styles/index.css";
 
@@ -23,12 +22,3 @@ failOnConsole({
   shouldFailOnLog: true,
   shouldFailOnWarn: true,
 });
-
-/**
- * Some test should be skipped on ci server.
- *
- * For example: We can't call the BMF Steuerrechner,
- * because external calls are forbidden on CI environment.
- */
-export const describeSkipOnCi =
-  import.meta.env.CI === "true" ? describe.skip : describe;

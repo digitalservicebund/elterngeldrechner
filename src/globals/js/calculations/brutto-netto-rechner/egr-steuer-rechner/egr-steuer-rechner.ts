@@ -18,7 +18,7 @@ import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 /**
- * EGR-Steuerrechner. Wrapper for BMF Lohn- und Einkommensteuerrechner with EGR data model.
+ * EGR-Steuerrechner
  */
 export class EgrSteuerRechner {
   static bestLohnSteuerJahrOf(
@@ -47,11 +47,11 @@ export class EgrSteuerRechner {
       return maxAvailableYear;
     }
 
-    throw errorOf("BmfSteuerRechnerNotImplementedForLohnsteuerjahr");
+    throw errorOf("NichtUnterstuetztesLohnsteuerjahr");
   }
 
   /**
-   * Ermittlung der Abgaben unter Nutzung der Schnittstelle des Brutto-Netto-Rechners des BMF.
+   * Ermittlung der Abgaben
    *
    * Source: de.init.anton.plugins.egr.service.BruttoNettoRechner.abgabenSteuern(...)
    *

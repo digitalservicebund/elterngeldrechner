@@ -7,13 +7,13 @@ export function InfoZumEinkommen(): ReactNode {
         Wenn Sie Elterngeld bekommen, dürfen Sie zusätzlich bis zu 32 Stunden
         pro Woche arbeiten – unabhängig von der Elterngeldvariante.
         <br />
-        Beachten Sie folgendes:
+        Beachten Sie Folgendes:
       </p>
 
       <ul className="ml-16 list-inside list-disc">
         <li>Ihr Einkommen beeinflusst die Höhe Ihres Elterngeldes</li>
         <li>
-          Von dem Bruttoeinkommen, dass Sie eingeben werden in pauschaler Form
+          Von dem Bruttoeinkommen, das Sie eingeben, werden in pauschaler Form
           Steuern und Sozialabgaben abgezogen
         </li>
       </ul>

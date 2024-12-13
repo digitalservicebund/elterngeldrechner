@@ -1,3 +1,4 @@
+import Big from "big.js";
 import {
   Einkommen,
   ElternGeldArt,
@@ -6,6 +7,7 @@ import {
   ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   KinderFreiBetrag,
+  MischEkTaetigkeit,
   MutterschaftsLeistung,
   PersoenlicheDaten,
   PLANUNG_ANZAHL_MONATE,
@@ -177,6 +179,33 @@ describe("egr-calculation", () => {
       expect(ergebnis.rows[4].elternGeldPlus.toNumber()).toBe(581.48);
       expect(ergebnis.rows[4].nettoEinkommen.toNumber()).toBe(0);
     });
+  });
+
+  it("should always calculate the same result for the same inputs with Mischeinkommen", () => {
+    const persoenlicheDaten = new PersoenlicheDaten(new Date());
+    persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_MISCHEINKOMMEN;
+
+    const taetigkeit = new MischEkTaetigkeit(true);
+    taetigkeit.bruttoEinkommenDurchschnitt = Big(4000);
+
+    const finanzDaten = new FinanzDaten();
+    finanzDaten.mischEinkommenTaetigkeiten = [taetigkeit];
+
+    const planungsDaten = new PlanungsDaten(
+      false,
+      false,
+      false,
+      MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+    );
+    planungsDaten.planung = [ElternGeldArt.BASIS_ELTERNGELD];
+
+    const calculate = () =>
+      new EgrCalculation().calculateElternGeld(
+        { persoenlicheDaten, finanzDaten, planungsDaten },
+        2023,
+      );
+
+    expect(calculate()).toStrictEqual(calculate());
   });
 });
 

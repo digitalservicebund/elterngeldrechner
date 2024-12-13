@@ -253,3 +253,15 @@ export class PlanungsDaten {
     return planungList;
   }
 }
+
+export function planungsDatenOf(source: PlanungsDaten) {
+  const copy = new PlanungsDaten(
+    source.alleinerziehend,
+    source.erwerbsStatus,
+    source.partnerBonus,
+    source.mutterschaftsLeistung,
+  );
+  copy.planung = source.planung;
+  Object.assign(copy, source);
+  return copy;
+}

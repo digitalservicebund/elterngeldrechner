@@ -25,6 +25,7 @@ import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner"
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { errorOf } from "./calculation-error-code";
+import { planungsDatenOf } from "./model/planungs-daten";
 import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 import { elternGeldSimulationErgebnisOf } from "@/globals/js/calculations/ergebnis-utils";
 
@@ -148,32 +149,38 @@ export class EgrCalculation {
     elternGeldDaten: ElternGeldDaten,
     lohnSteuerJahr: Lohnsteuerjahr,
   ): ElternGeldPlusErgebnis {
+    const clonedElterngeldDaten = {
+      persoenlicheDaten: persoenlicheDatenOf(elternGeldDaten.persoenlicheDaten),
+      finanzDaten: finanzDatenOf(elternGeldDaten.finanzDaten),
+      planungsDaten: planungsDatenOf(elternGeldDaten.planungsDaten),
+    };
+
     // Steuern berechnen wenn erwerbstätig vor Geburt
     const zwischenErgebnisEinkommen = this.zwischenErgebnisEinkommenOf(
-      elternGeldDaten,
+      clonedElterngeldDaten,
       lohnSteuerJahr,
     );
 
     const zwischenErgebnis: ZwischenErgebnis =
       this.zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
-        elternGeldDaten.persoenlicheDaten,
+        clonedElterngeldDaten.persoenlicheDaten,
         zwischenErgebnisEinkommen.nettoEinkommen,
       );
 
-    if (elternGeldDaten.persoenlicheDaten.etNachGeburt !== YesNo.YES) {
-      elternGeldDaten.finanzDaten.erwerbsZeitraumLebensMonatList = [];
+    if (clonedElterngeldDaten.persoenlicheDaten.etNachGeburt !== YesNo.YES) {
+      clonedElterngeldDaten.finanzDaten.erwerbsZeitraumLebensMonatList = [];
     }
     if (
-      elternGeldDaten.finanzDaten.isMischeinkommen() &&
+      clonedElterngeldDaten.finanzDaten.isMischeinkommen() &&
       zwischenErgebnisEinkommen.mischEkZwischenErgebnis === null
     ) {
       throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
     }
 
     return new PlusEgAlgorithmus().elterngeldPlusErgebnis(
-      elternGeldDaten.planungsDaten,
-      elternGeldDaten.persoenlicheDaten,
-      elternGeldDaten.finanzDaten,
+      clonedElterngeldDaten.planungsDaten,
+      clonedElterngeldDaten.persoenlicheDaten,
+      clonedElterngeldDaten.finanzDaten,
       lohnSteuerJahr,
       zwischenErgebnisEinkommen.mischEkZwischenErgebnis,
       zwischenErgebnis,

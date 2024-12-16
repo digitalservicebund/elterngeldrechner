@@ -35,7 +35,6 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         istAlleinerziehend: false,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
         geburtsdatumDesKindes: new Date(),
       };
       const lebensmonate = {};
@@ -48,7 +47,6 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         istAlleinerziehend: false,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
         geburtsdatumDesKindes: new Date(),
       };
       const lebensmonate = {
@@ -70,7 +68,6 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         istAlleinerziehend: false,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
         geburtsdatumDesKindes: new Date(),
       };
       const lebensmonate = {
@@ -89,7 +86,6 @@ if (import.meta.vitest) {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         istAlleinerziehend: true,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
         geburtsdatumDesKindes: new Date(),
       };
       const lebensmonate = {
@@ -131,9 +127,6 @@ if (import.meta.vitest) {
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: {
-          [Elternteil.Eins]: "Jane",
-        },
         geburtsdatumDesKindes: new Date(),
       },
       lebensmonate: {},

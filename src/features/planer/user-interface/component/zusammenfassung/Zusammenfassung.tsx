@@ -12,8 +12,6 @@ type Props = {
 
 export function Zusammenfassung({ plan }: Props): ReactNode {
   const headingIdentifier = useId();
-
-  const { pseudonymeDerElternteile, geburtsdatumDesKindes } = plan.ausgangslage;
   const { planungsuebersicht, planungsdetails } = fassePlanZusammen(plan);
 
   return (
@@ -23,13 +21,12 @@ export function Zusammenfassung({ plan }: Props): ReactNode {
       <div className="flex flex-col gap-y-80">
         <AbschnittMitPlanungsuebersicht
           planungsuebersicht={planungsuebersicht}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
+          ausgangslage={plan.ausgangslage}
         />
 
         <AbschnittMitPlanungsdetails
           planungsdetails={planungsdetails}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-          geburtsdatumDesKindes={geburtsdatumDesKindes}
+          ausgangslage={plan.ausgangslage}
         />
       </div>
     </section>

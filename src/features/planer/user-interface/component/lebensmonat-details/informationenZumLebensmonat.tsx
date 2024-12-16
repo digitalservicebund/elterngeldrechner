@@ -6,16 +6,16 @@ import type {
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import type {
-  Elternteil,
   Lebensmonat,
   Lebensmonatszahl,
-  PseudonymeDerElternteile,
-} from "@/features/planer/user-interface/service";
+  ElternteileByAusgangslage,
+  Ausgangslage,
+} from "@/features/planer/domain";
 
 export function ProvideInformationenZumLebensmonat<
-  E extends Elternteil,
+  A extends Ausgangslage,
 >(props: {
-  readonly informationen: InformationenZumLebensmonat<E>;
+  readonly informationen: InformationenZumLebensmonat<A>;
   readonly children?: ReactNode;
 }): ReactNode {
   const { informationen, children } = props;
@@ -27,8 +27,8 @@ export function ProvideInformationenZumLebensmonat<
 }
 
 export function useInformationenZumLebensmonat<
-  E extends Elternteil,
->(): InformationenZumLebensmonat<E> {
+  A extends Ausgangslage,
+>(): InformationenZumLebensmonat<A> {
   return useContext(LebensmonatContext);
 }
 
@@ -47,13 +47,16 @@ const LebensmonatContext = createContext<InformationenZumLebensmonat<any>>(
   undefined!,
 );
 
-type InformationenZumLebensmonat<E extends Elternteil> = {
+type InformationenZumLebensmonat<A extends Ausgangslage> = {
+  ausgangslage: A;
   lebensmonatszahl: Lebensmonatszahl;
-  lebensmonat: Lebensmonat<E>;
-  pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  geburtsdatumDesKindes: Date;
-  bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
-  waehleOption: WaehleOptionInLebensmonat<E>;
-  erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<E>;
-  gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
+  lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
+  bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<
+    ElternteileByAusgangslage<A>
+  >;
+  waehleOption: WaehleOptionInLebensmonat<ElternteileByAusgangslage<A>>;
+  erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<
+    ElternteileByAusgangslage<A>
+  >;
+  gebeEinkommenAn: GebeEinkommenInLebensmonatAn<ElternteileByAusgangslage<A>>;
 };

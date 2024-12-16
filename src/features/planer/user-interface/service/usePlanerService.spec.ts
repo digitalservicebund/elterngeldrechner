@@ -78,8 +78,11 @@ describe("use Planer service", () => {
     it("creates a new plan with given Ausgangslage if no old plan is given", () => {
       vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
       const ausgangslage = {
-        anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
         geburtsdatumDesKindes: new Date(),
       };
 
@@ -91,12 +94,7 @@ describe("use Planer service", () => {
       expect(erstelleInitialeLebensmonate).toHaveBeenLastCalledWith(
         ausgangslage,
       );
-      expect(result.current.pseudonymeDerElternteile).toStrictEqual(
-        ausgangslage.pseudonymeDerElternteile,
-      );
-      expect(result.current.geburtsdatumDesKindes).toEqual(
-        ausgangslage.geburtsdatumDesKindes,
-      );
+      expect(result.current.ausgangslage).toStrictEqual(ausgangslage);
       expect(result.current.lebensmonate).toStrictEqual({});
     });
 
@@ -109,12 +107,7 @@ describe("use Planer service", () => {
 
       expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
       expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
-      expect(result.current.pseudonymeDerElternteile).toStrictEqual(
-        plan.ausgangslage.pseudonymeDerElternteile,
-      );
-      expect(result.current.geburtsdatumDesKindes).toStrictEqual(
-        plan.ausgangslage.geburtsdatumDesKindes,
-      );
+      expect(result.current.ausgangslage).toStrictEqual(plan.ausgangslage);
       expect(result.current.lebensmonate).toStrictEqual(plan.lebensmonate);
     });
   });
@@ -585,7 +578,6 @@ function gebeAnyEinkommenAn(callback: GebeEinkommenAn<Elternteil>) {
 
 const ANY_AUSGANGSLAGE = {
   anzahlElternteile: 1 as const,
-  pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
   geburtsdatumDesKindes: new Date(),
 };
 

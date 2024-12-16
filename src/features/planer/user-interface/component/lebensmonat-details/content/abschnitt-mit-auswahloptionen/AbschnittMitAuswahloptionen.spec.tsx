@@ -7,6 +7,7 @@ import {
   Variante,
 } from "@/features/planer/user-interface/service";
 import type { BestimmeAuswahlmoeglichkeitenFuerLebensmonat } from "@/features/planer/user-interface/service/callbackTypes";
+import { AusgangslageFuerEinElternteil } from "@/features/planer/domain/ausgangslage";
 
 vi.mock(
   import(
@@ -24,14 +25,18 @@ describe("Abschnitt mit Auswahloptionen", () => {
   it("shows an input fieldset to choose an Option for each Elternteil", () => {
     vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
       ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      ausgangslage: {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+      },
       lebensmonatszahl: 3 as const,
       lebensmonat: {
         [Elternteil.Eins]: ANY_MONAT,
         [Elternteil.Zwei]: ANY_MONAT,
-      },
-      pseudonymeDerElternteile: {
-        [Elternteil.Eins]: "Jane",
-        [Elternteil.Zwei]: "John",
       },
     });
 
@@ -51,11 +56,16 @@ describe("Abschnitt mit Auswahloptionen", () => {
   });
 
   it("shows an input fieldset to choose an Option for single Elternteil", () => {
-    vi.mocked(useInformationenZumLebensmonat<Elternteil.Eins>).mockReturnValue({
+    vi.mocked(
+      useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
+    ).mockReturnValue({
       ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      ausgangslage: {
+        anzahlElternteile: 1 as const,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+      },
       lebensmonatszahl: 3 as const,
       lebensmonat: { [Elternteil.Eins]: ANY_MONAT },
-      pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
     });
 
     render(<AbschnittMitAuswahloptionen />);
@@ -87,6 +97,8 @@ describe("Abschnitt mit Auswahloptionen", () => {
   });
 });
 
+const ANY_GEBURTSDATUM_DES_KINDES = new Date();
+
 const ANY_AUSWAHLMOEGLICHKEITEN = {
   [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
   [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },
@@ -97,13 +109,16 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
 const ANY_MONAT = { imMutterschutz: false as const };
 
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
+  ausgangslage: {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    },
+    geburtsdatumDesKindes: new Date(),
+  },
   lebensmonatszahl: 5 as const,
   lebensmonat: { [Elternteil.Eins]: ANY_MONAT, [Elternteil.Zwei]: ANY_MONAT },
-  pseudonymeDerElternteile: {
-    [Elternteil.Eins]: "Jane",
-    [Elternteil.Zwei]: "John",
-  },
-  geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],

@@ -27,11 +27,11 @@ export function LebensmonatContent({
     HINWEIS_ZUM_BONUS_COLUMN_DEFINITION,
   );
 
-  const { lebensmonatszahl, lebensmonat, geburtsdatumDesKindes } =
+  const { ausgangslage, lebensmonatszahl, lebensmonat } =
     useInformationenZumLebensmonat();
 
   const zeitraum = berechneZeitraumFuerLebensmonat(
-    geburtsdatumDesKindes,
+    ausgangslage.geburtsdatumDesKindes,
     lebensmonatszahl,
   );
 

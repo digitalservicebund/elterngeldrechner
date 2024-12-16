@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
-import { Elternteil } from "@/features/planer/domain";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { render, screen } from "@/test-utils/test-utils";
 
@@ -60,9 +59,6 @@ describe("Zusammenfassung und Daten Page", () => {
 const ANY_PLAN = {
   ausgangslage: {
     anzahlElternteile: 1 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: "Jane",
-    },
     geburtsdatumDesKindes: new Date(),
   },
   lebensmonate: {},

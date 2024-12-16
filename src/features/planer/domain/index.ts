@@ -1,6 +1,8 @@
 export {
   type Ausgangslage,
+  type ElternteileByAusgangslage,
   bestimmeVerfuegbaresKontingent,
+  listeElternteileFuerAusgangslageAuf,
 } from "./ausgangslage";
 export type { Auswahlmoeglichkeiten } from "./Auswahlmoeglichkeiten";
 export {
@@ -43,10 +45,6 @@ export {
   setzePlanZurueck,
   waehleOption,
 } from "./plan";
-export {
-  type PseudonymeDerElternteile,
-  listePseudonymeAuf,
-} from "./pseudonyme-der-elternteile";
 export { Result } from "./common/Result";
 export { Variante, compareVarianten } from "./Variante";
 export {

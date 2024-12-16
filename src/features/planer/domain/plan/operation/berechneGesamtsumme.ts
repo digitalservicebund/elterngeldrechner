@@ -190,7 +190,6 @@ if (import.meta.vitest) {
     it("just works for single Elternteile too", () => {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
         geburtsdatumDesKindes: new Date(),
       };
       const lebensmonate = {

@@ -1,8 +1,4 @@
-import {
-  type Ausgangslage,
-  Elternteil,
-  type PseudonymeDerElternteile,
-} from "@/features/planer/domain";
+import { type Ausgangslage, Elternteil } from "@/features/planer/domain";
 import { YesNo } from "@/globals/js/calculations/model";
 import { type RootState } from "@/redux";
 import { fromGermanDateString } from "@/utils/fromGermanDateString";
@@ -44,9 +40,6 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
 
   switch (anzahlElternteile) {
     case 1: {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "",
-      };
       const informationenZumMutterschutz = hatMutterschutz
         ? { empfaenger: Elternteil.Eins as const, letzterLebensmonatMitSchutz }
         : undefined;
@@ -54,7 +47,6 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
       return {
         ...sharedAusganslageProperties,
         anzahlElternteile,
-        pseudonymeDerElternteile,
         informationenZumMutterschutz,
       };
     }
@@ -126,33 +118,17 @@ if (import.meta.vitest) {
     });
 
     describe("Pseudonyme der Elternteile", () => {
-      it("uses an empty Pseudonym for one Elternteil", () => {
-        const state = produce(INITIAL_STATE, (draft) => {
-          draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
-          draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
-        });
-
-        const ausgangslage = composeAusgangslageFuerPlaner(state);
-
-        expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe("");
-      });
-
       it("assigns the correct Pseudonyme for two Elternteil", () => {
         const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const ausgangslage = composeAusgangslageFuerPlaner(state);
+        const { pseudonymeDerElternteile } =
+          composeAusgangslageFuerPlaner(state);
 
-        expect(ausgangslage.pseudonymeDerElternteile[Elternteil.Eins]).toBe(
-          "Jane",
-        );
-        expect(
-          (
-            ausgangslage.pseudonymeDerElternteile as PseudonymeDerElternteile<Elternteil>
-          )[Elternteil.Zwei],
-        ).toBe("John");
+        expect(pseudonymeDerElternteile?.[Elternteil.Eins]).toBe("Jane");
+        expect(pseudonymeDerElternteile?.[Elternteil.Zwei]).toBe("John");
       });
 
       it("uses default Pseudonyme if kept empty", () => {
@@ -164,12 +140,12 @@ if (import.meta.vitest) {
         const { pseudonymeDerElternteile } =
           composeAusgangslageFuerPlaner(state);
 
-        expect(pseudonymeDerElternteile[Elternteil.Eins]).toBe("Elternteil 1");
-        expect(
-          (pseudonymeDerElternteile as PseudonymeDerElternteile<Elternteil>)[
-            Elternteil.Zwei
-          ],
-        ).toBe("Elternteil 2");
+        expect(pseudonymeDerElternteile?.[Elternteil.Eins]).toBe(
+          "Elternteil 1",
+        );
+        expect(pseudonymeDerElternteile?.[Elternteil.Zwei]).toBe(
+          "Elternteil 2",
+        );
       });
     });
 

@@ -1,9 +1,24 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { Variante } from "@/features/planer/domain";
 
 describe("Liste mit Bezügen pro Variante", () => {
-  it("shows a list with entries for each Variante", () => {
+  it("shows a list", () => {
+    render(
+      <ListeMitBezuegenProVariante
+        {...ANY_PROPS}
+        pseudonymDesElternteils={undefined}
+      />,
+    );
+
+    expect(
+      screen.getByRole("list", {
+        name: "Bezüge pro Elterngeldvariante",
+      }),
+    ).toBeVisible();
+  });
+
+  it("shows a list using the Pseudonym", () => {
     render(
       <ListeMitBezuegenProVariante
         {...ANY_PROPS}
@@ -11,12 +26,17 @@ describe("Liste mit Bezügen pro Variante", () => {
       />,
     );
 
-    const list = screen.getByRole("list", {
-      name: "Bezüge pro Elterngeldvariante von Jane",
-    });
+    expect(
+      screen.getByRole("list", {
+        name: "Bezüge pro Elterngeldvariante von Jane",
+      }),
+    ).toBeVisible();
+  });
 
-    expect(list).toBeVisible();
-    expect(within(list).queryAllByRole("listitem").length).toBe(3);
+  it("shows a list entry for each Variante", () => {
+    render(<ListeMitBezuegenProVariante {...ANY_PROPS} />);
+
+    expect(screen.queryAllByRole("listitem").length).toBe(3);
   });
 
   it("shows the Anzahl an Monaten and the Elterngeldbezug per Variante", () => {
@@ -62,5 +82,5 @@ const ANY_PROPS = {
     [Variante.Plus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
     [Variante.Bonus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
   },
-  pseudonymDesElternteils: "Jane",
+  pseudonymDesElternteils: undefined,
 };

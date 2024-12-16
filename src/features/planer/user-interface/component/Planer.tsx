@@ -39,8 +39,7 @@ export function Planer({
   children,
 }: Props): ReactNode {
   const {
-    pseudonymeDerElternteile,
-    geburtsdatumDesKindes,
+    ausgangslage,
     lebensmonate,
     verfuegbaresKontingent,
     verplantesKontingent,
@@ -59,11 +58,6 @@ export function Planer({
     onOptionSelected,
     onPlanResetted,
   );
-
-  // FIXME: get value from service by Ausgangslage
-  const anzahlElternteile = Object.keys(pseudonymeDerElternteile).length as
-    | 1
-    | 2;
 
   const headingIdentifier = useId();
   const descriptionIdentifier = useId();
@@ -111,7 +105,7 @@ export function Planer({
         entrichtet werden.
       </Alert>
 
-      <GridLayoutProvider anzahlElternteile={anzahlElternteile}>
+      <GridLayoutProvider anzahlElternteile={ausgangslage.anzahlElternteile}>
         <div
           className={classNames(
             "mx-[-15px] flex flex-col sm:mx-0",
@@ -122,14 +116,13 @@ export function Planer({
         >
           <KopfleisteMitPseudonymen
             className="py-10"
-            pseudonymeDerElternteile={pseudonymeDerElternteile}
+            ausgangslage={ausgangslage}
           />
 
           <Lebensmonatsliste
             className="py-8"
+            ausgangslage={ausgangslage}
             lebensmonate={lebensmonate}
-            pseudonymeDerElternteile={pseudonymeDerElternteile}
-            geburtsdatumDesKindes={geburtsdatumDesKindes}
             erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
             waehleOption={waehleOption}
@@ -147,7 +140,7 @@ export function Planer({
 
           <Gesamtsummenanzeige
             className="border-t-2 border-solid !border-grey bg-off-white py-16"
-            pseudonymeDerElternteile={pseudonymeDerElternteile}
+            ausgangslage={ausgangslage}
             gesamtsumme={gesamtsumme}
           />
         </div>

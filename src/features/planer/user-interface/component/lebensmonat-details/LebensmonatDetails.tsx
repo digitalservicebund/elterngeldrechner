@@ -18,40 +18,46 @@ import type {
   GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
-import {
-  Elternteil,
-  type Lebensmonatszahl,
-  type Lebensmonat,
-  type PseudonymeDerElternteile,
-} from "@/features/planer/user-interface/service";
 import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
+import type {
+  ElternteileByAusgangslage,
+  Ausgangslage,
+  Lebensmonatszahl,
+  Lebensmonat,
+} from "@/features/planer/domain";
 
-interface Props<E extends Elternteil> {
+interface Props<A extends Ausgangslage> {
+  readonly ausgangslage: A;
   readonly lebensmonatszahl: Lebensmonatszahl;
-  readonly lebensmonat: Lebensmonat<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly geburtsdatumDesKindes: Date;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<E>;
-  readonly waehleOption: WaehleOptionInLebensmonat<E>;
-  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<E>;
-  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<E>;
+  readonly lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
+  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<
+    ElternteileByAusgangslage<A>
+  >;
+  readonly waehleOption: WaehleOptionInLebensmonat<
+    ElternteileByAusgangslage<A>
+  >;
+  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<
+    ElternteileByAusgangslage<A>
+  >;
+  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<
+    ElternteileByAusgangslage<A>
+  >;
   readonly className?: string;
 }
 
 export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
-  E extends Elternteil,
+  A extends Ausgangslage,
 >(
   {
+    ausgangslage,
     lebensmonatszahl,
     lebensmonat,
-    pseudonymeDerElternteile,
-    geburtsdatumDesKindes,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
     className,
-  }: Props<E>,
+  }: Props<A>,
   ref?: FocusOnlyRef,
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
@@ -93,10 +99,9 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   }
 
   const informationenZumLebensmonat = {
+    ausgangslage,
     lebensmonatszahl,
     lebensmonat,
-    pseudonymeDerElternteile,
-    geburtsdatumDesKindes,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
@@ -129,8 +134,8 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
       </details>
     </ProvideInformationenZumLebensmonat>
   );
-}) as <E extends Elternteil>(
-  props: Props<E> & { ref?: FocusOnlyRef },
+}) as <A extends Ausgangslage>(
+  props: Props<A> & { ref?: FocusOnlyRef },
 ) => ReactNode;
 
 type FocusOnlyRef = ForwardedRef<{ focus: () => void }>;

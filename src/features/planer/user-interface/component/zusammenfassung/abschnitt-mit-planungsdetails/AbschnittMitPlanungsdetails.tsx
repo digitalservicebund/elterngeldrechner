@@ -1,24 +1,23 @@
 import { ReactNode, useId } from "react";
 import { TabelleMitLebensmonaten } from "./TabelleMitLebensmonaten";
+import { type Planungsdetails } from "@/features/planer/user-interface/service";
 import {
-  type Elternteil,
-  type Planungsdetails,
-  type PseudonymeDerElternteile,
-} from "@/features/planer/user-interface/service";
+  type Ausgangslage,
+  type ElternteileByAusgangslage,
+  listeElternteileFuerAusgangslageAuf,
+} from "@/features/planer/domain";
 
-type Props<E extends Elternteil> = {
-  readonly planungsdetails: Planungsdetails<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly geburtsdatumDesKindes: Date;
+type Props<A extends Ausgangslage> = {
+  readonly ausgangslage: A;
+  readonly planungsdetails: Planungsdetails<ElternteileByAusgangslage<A>>;
 };
 
-export function AbschnittMitPlanungsdetails<E extends Elternteil>({
+export function AbschnittMitPlanungsdetails<A extends Ausgangslage>({
   planungsdetails,
-  pseudonymeDerElternteile,
-  geburtsdatumDesKindes,
-}: Props<E>): ReactNode {
+  ausgangslage,
+}: Props<A>): ReactNode {
   const headingIdentifier = useId();
-  const elternteile = listElternteile(pseudonymeDerElternteile);
+  const elternteile = listeElternteileFuerAusgangslageAuf(ausgangslage);
 
   return (
     <section
@@ -31,9 +30,8 @@ export function AbschnittMitPlanungsdetails<E extends Elternteil>({
         {elternteile.map((elternteil) => (
           <TabelleMitLebensmonaten
             key={elternteil}
+            ausgangslage={ausgangslage}
             lebensmonate={planungsdetails.geplanteLebensmonate}
-            pseudonymeDerElternteile={pseudonymeDerElternteile}
-            geburtsdatumDesKindes={geburtsdatumDesKindes}
             elternteileToShow={[elternteil]}
           />
         ))}
@@ -41,18 +39,11 @@ export function AbschnittMitPlanungsdetails<E extends Elternteil>({
 
       <div className="hidden @2xl/planungs-details:block">
         <TabelleMitLebensmonaten
+          ausgangslage={ausgangslage}
           lebensmonate={planungsdetails.geplanteLebensmonate}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
-          geburtsdatumDesKindes={geburtsdatumDesKindes}
           elternteileToShow={elternteile}
         />
       </div>
     </section>
   );
-}
-
-function listElternteile<E extends Elternteil>(
-  pseudonymeDerElternteile: PseudonymeDerElternteile<E>,
-): E[] {
-  return Object.keys(pseudonymeDerElternteile) as E[];
 }

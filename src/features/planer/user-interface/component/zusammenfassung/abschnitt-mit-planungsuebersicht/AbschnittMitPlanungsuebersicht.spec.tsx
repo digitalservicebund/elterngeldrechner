@@ -10,10 +10,6 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 
   it("shows the Pseudonym and the Gesamtbezug for each Elternteil", () => {
-    const pseudonymeDerElternteile = {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    };
     const planungsuebersicht = {
       [Elternteil.Eins]: {
         ...ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
@@ -29,7 +25,7 @@ describe("Abschnitt mit Planungsübersicht", () => {
       <AbschnittMitPlanungsuebersicht
         {...ANY_PROPS}
         planungsuebersicht={planungsuebersicht}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        ausgangslage={ausgangslage("Jane", "John")}
       />,
     );
 
@@ -43,15 +39,10 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 
   it("shows a list with the Zeiträume for each Elternteil in correct order", () => {
-    const pseudonymeDerElternteile = {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    };
-
     render(
       <AbschnittMitPlanungsuebersicht
         {...ANY_PROPS}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        ausgangslage={ausgangslage("Jane", "John")}
       />,
     );
 
@@ -70,15 +61,10 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 
   it("shows a list with the Bezügen per Elterngeldvariante for each Elternteil in correct order", () => {
-    const pseudonymeDerElternteile = {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    };
-
     render(
       <AbschnittMitPlanungsuebersicht
         {...ANY_PROPS}
-        pseudonymeDerElternteile={pseudonymeDerElternteile}
+        ausgangslage={ausgangslage("Jane", "John")}
       />,
     );
 
@@ -97,6 +83,17 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 });
 
+function ausgangslage(pseudonymEins: string, pseudonymZwei: string) {
+  return {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: pseudonymEins,
+      [Elternteil.Zwei]: pseudonymZwei,
+    },
+    geburtsdatumDesKindes: new Date(),
+  };
+}
+
 const ANY_BEZUG = { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 };
 
 const ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL = {
@@ -114,8 +111,5 @@ const ANY_PROPS = {
     [Elternteil.Eins]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
     [Elternteil.Zwei]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
   },
-  pseudonymeDerElternteile: {
-    [Elternteil.Eins]: "Jane",
-    [Elternteil.Zwei]: "John",
-  },
+  ausgangslage: ausgangslage("Jane", "John"),
 };

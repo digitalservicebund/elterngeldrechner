@@ -7,20 +7,20 @@ import {
   type GridColumnDefinitionPerElternteil,
 } from "@/features/planer/user-interface/layout/grid-layout";
 import {
+  type Ausgangslage,
   Elternteil,
-  listePseudonymeAuf,
-  type PseudonymeDerElternteile,
-} from "@/features/planer/user-interface/service";
+  listeElternteileFuerAusgangslageAuf,
+} from "@/features/planer/domain";
 
-type Props<E extends Elternteil> = {
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
+type Props = {
+  readonly ausgangslage: Ausgangslage;
   readonly className?: string;
 };
 
-export function KopfleisteMitPseudonymen<E extends Elternteil>({
-  pseudonymeDerElternteile,
+export function KopfleisteMitPseudonymen({
+  ausgangslage,
   className,
-}: Props<E>): ReactNode {
+}: Props): ReactNode {
   const gridLayout = useGridLayout();
   const pseudonymColumns = useGridColumnPerElternteil(
     PSEUDONYM_COLUMN_DEFINITIONS,
@@ -32,17 +32,15 @@ export function KopfleisteMitPseudonymen<E extends Elternteil>({
       style={gridLayout}
       aria-hidden
     >
-      {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
-        ([elternteil, pseudonym]) => (
-          <span
-            key={elternteil}
-            className="text-center font-bold"
-            style={pseudonymColumns[elternteil]}
-          >
-            <PersonIcon /> {pseudonym}
-          </span>
-        ),
-      )}
+      {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => (
+        <span
+          key={elternteil}
+          className="text-center font-bold"
+          style={pseudonymColumns[elternteil]}
+        >
+          <PersonIcon /> {ausgangslage.pseudonymeDerElternteile?.[elternteil]}
+        </span>
+      ))}
     </div>
   );
 }

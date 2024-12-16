@@ -1,31 +1,24 @@
 import type { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
-import {
-  type Lebensmonatszahl,
-  listeMonateAuf,
-} from "@/features/planer/user-interface/service";
+import { type Lebensmonatszahl } from "@/features/planer/user-interface/service";
+import { listeElternteileFuerAusgangslageAuf } from "@/features/planer/domain";
 
 export function AbschnittMitAuswahloptionen(): ReactNode {
   const {
+    ausgangslage,
     lebensmonatszahl,
     lebensmonat,
-    pseudonymeDerElternteile,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
   } = useInformationenZumLebensmonat();
 
-  const isSingleElternteil = Object.keys(lebensmonat).length === 1;
-
   return (
     <>
-      {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
-        const pseudonym = pseudonymeDerElternteile[elternteil];
-        const legend = composeLegendForAuswahl(
-          lebensmonatszahl,
-          pseudonym,
-          isSingleElternteil,
-        );
+      {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => {
+        const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
+        const legend = composeLegendForAuswahl(lebensmonatszahl, pseudonym);
+        const { imMutterschutz, gewaehlteOption } = lebensmonat[elternteil];
         const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
 
         return (
@@ -33,8 +26,8 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
             key={elternteil}
             legend={legend}
             elternteil={elternteil}
-            imMutterschutz={monat.imMutterschutz}
-            gewaehlteOption={monat.gewaehlteOption}
+            imMutterschutz={imMutterschutz}
+            gewaehlteOption={gewaehlteOption}
             auswahlmoeglichkeiten={auswahlmoeglichkeiten}
             waehleOption={waehleOption.bind(null, elternteil)}
           />
@@ -46,10 +39,9 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
 
 function composeLegendForAuswahl(
   lebensmonatszahl: Lebensmonatszahl,
-  pseudonym: string,
-  isSingleElternteil: boolean,
+  pseudonym: string | undefined,
 ): string {
-  return isSingleElternteil
-    ? `Auswahl für den ${lebensmonatszahl}. Lebensmonat`
-    : `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`;
+  return pseudonym
+    ? `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`
+    : `Auswahl für den ${lebensmonatszahl}. Lebensmonat`;
 }

@@ -4,18 +4,19 @@ import type { Zeitraum } from "@/features/planer/user-interface/service";
 
 type Props = {
   readonly zeitraeume: Zeitraum[];
-  readonly pseudonymDesElternteils: string;
+  readonly pseudonymDesElternteils: string | undefined;
 };
 
 export function ListeMitZeitraeumen({
   zeitraeume,
   pseudonymDesElternteils,
 }: Props): ReactNode {
+  const ariaLabel =
+    "Zeiträume mit Elterngeldbezug" +
+    (pseudonymDesElternteils ? ` von ${pseudonymDesElternteils}` : "");
+
   return (
-    <ul
-      className="list-none"
-      aria-label={`Zeiträume mit Elterngeldbezug von ${pseudonymDesElternteils}`}
-    >
+    <ul className="list-none" aria-label={ariaLabel}>
       {zeitraeume.map((zeitraum, index) => (
         <ZeitraumLabel key={index} zeitraum={zeitraum} htmlElementType="li" />
       ))}

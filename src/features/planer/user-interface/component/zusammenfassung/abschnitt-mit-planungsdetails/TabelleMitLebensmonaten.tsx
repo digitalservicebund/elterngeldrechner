@@ -2,28 +2,27 @@ import { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { DatenfeldFuerMonat } from "./DatenfeldFuerMonat";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
+import {} from "@/features/planer/user-interface/service";
+import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
 import {
   berechneZeitraumFuerLebensmonat,
   compareElternteile,
-  type Elternteil,
-  type PseudonymeDerElternteile,
+  type Ausgangslage,
+  type ElternteileByAusgangslage,
   type Lebensmonate,
-} from "@/features/planer/user-interface/service";
-import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
+} from "@/features/planer/domain";
 
-type Props<E extends Elternteil> = {
-  readonly lebensmonate: Lebensmonate<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly elternteileToShow: E[];
-  readonly geburtsdatumDesKindes: Date;
+type Props<A extends Ausgangslage> = {
+  readonly ausgangslage: A;
+  readonly lebensmonate: Lebensmonate<ElternteileByAusgangslage<A>>;
+  readonly elternteileToShow: ElternteileByAusgangslage<A>[];
 };
 
-export function TabelleMitLebensmonaten<E extends Elternteil>({
+export function TabelleMitLebensmonaten<A extends Ausgangslage>({
+  ausgangslage,
   lebensmonate,
-  pseudonymeDerElternteile,
   elternteileToShow,
-  geburtsdatumDesKindes,
-}: Props<E>): ReactNode {
+}: Props<A>): ReactNode {
   return (
     <table className="w-full border-collapse [&_td]:pb-16 [&_th]:pb-16 [&_tr]:border-0 [&_tr]:border-b-2 [&_tr]:border-solid [&_tr]:border-grey-light">
       <thead>
@@ -31,7 +30,8 @@ export function TabelleMitLebensmonaten<E extends Elternteil>({
           <th scope="col">Lebensmonate</th>
 
           {elternteileToShow.sort(compareElternteile).map((elternteil) => {
-            const pseudonym = pseudonymeDerElternteile[elternteil];
+            const pseudonym =
+              ausgangslage.pseudonymeDerElternteile?.[elternteil];
 
             return (
               <th
@@ -51,7 +51,7 @@ export function TabelleMitLebensmonaten<E extends Elternteil>({
         {listeLebensmonateAuf(lebensmonate, true).map(
           ([lebensmonatszahl, lebensmonat]) => {
             const zeitraum = berechneZeitraumFuerLebensmonat(
-              geburtsdatumDesKindes,
+              ausgangslage.geburtsdatumDesKindes,
               lebensmonatszahl,
             );
 

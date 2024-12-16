@@ -1,70 +1,72 @@
 import {
-  listeMonateAuf,
+  listeElternteileFuerAusgangslageAuf,
   Variante,
-  type Elternteil,
+  type Ausgangslage,
+  type ElternteileByAusgangslage,
   type Lebensmonat,
   type Monat,
-  type PseudonymeDerElternteile,
 } from "@/features/planer/domain";
 
-export function beschreibeLebensmonat<E extends Elternteil>(
-  lebensmonat: Lebensmonat<E>,
-  pseudonymeDerElternteile: PseudonymeDerElternteile<E>,
+export function beschreibeLebensmonat<A extends Ausgangslage>(
+  ausgangslage: A,
+  lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>,
 ): string {
-  const istEinElternteil = Object.keys(lebensmonat).length === 1;
-
-  const beschreibungProElternteil = listeMonateAuf(lebensmonat, true).map(
-    ([elternteil, monat]) => {
-      const pseudonym = pseudonymeDerElternteile[elternteil];
-      return beschreibeElternteil(istEinElternteil, pseudonym, monat);
-    },
+  const beschreibungProElternteil = listeElternteileFuerAusgangslageAuf(
+    ausgangslage,
+  ).map((elternteil) =>
+    beschreibeElternteil(ausgangslage, elternteil, lebensmonat[elternteil]),
   );
 
   return verknuepfteSaetze(...beschreibungProElternteil);
 }
 
-function beschreibeElternteil(
-  istEinElternteil: boolean,
-  pseudonym: string,
+function beschreibeElternteil<A extends Ausgangslage>(
+  ausgangslage: A,
+  elternteil: ElternteileByAusgangslage<A>,
   monat: Monat,
 ): string {
   return verknuepfteSaetze(
-    beschreibeOptionsauswahl(istEinElternteil, pseudonym, monat),
-    beschreibeEinkommen(istEinElternteil, pseudonym, monat),
+    beschreibeOptionsauswahl(ausgangslage, elternteil, monat),
+    beschreibeEinkommen(ausgangslage, elternteil, monat),
   );
 }
 
-function beschreibeOptionsauswahl(
-  istEinElternteil: boolean,
-  pseudonym: string,
+function beschreibeOptionsauswahl<A extends Ausgangslage>(
+  ausgangslage: A,
+  elternteil: ElternteileByAusgangslage<A>,
   monat: Monat,
 ): string {
+  const istEinElternteil = ausgangslage.anzahlElternteile === 1;
   return setzeSatzAusBausteinenZusammen(
-    formuliereAnrede(istEinElternteil, pseudonym),
+    formuliereAnrede(ausgangslage, elternteil),
     beschreibeMutterschutz(istEinElternteil, monat),
     beschreibeGewaehlteOption(istEinElternteil, monat),
     beschreibeElterngeldbezug(istEinElternteil, monat),
   );
 }
 
-function beschreibeEinkommen(
-  istEinElternteil: boolean,
-  pseudonym: string,
+function beschreibeEinkommen<A extends Ausgangslage>(
+  ausgangslage: A,
+  elternteil: ElternteileByAusgangslage<A>,
   monat: Monat,
 ): string | undefined {
   if (monat.bruttoeinkommen) {
+    const istEinElternteil = ausgangslage.anzahlElternteile === 1;
+
     return setzeSatzAusBausteinenZusammen(
-      formuliereAnrede(istEinElternteil, pseudonym),
+      formuliereAnrede(ausgangslage, elternteil),
       beschreibeBruttoeinkommen(istEinElternteil, monat),
     );
   }
 }
 
-function formuliereAnrede(
-  istEinElternteil: boolean,
-  pseudonym: string,
+function formuliereAnrede<A extends Ausgangslage>(
+  ausgangslage: A,
+  elternteil: ElternteileByAusgangslage<A>,
 ): string {
-  return istEinElternteil ? "Sie" : pseudonym;
+  return ausgangslage.anzahlElternteile === 1
+    ? "Sie"
+    : ausgangslage.pseudonymeDerElternteile[elternteil];
 }
 
 function beschreibeMutterschutz(
@@ -141,6 +143,15 @@ if (import.meta.vitest) {
       await import("@/features/planer/domain");
 
     it("combines the Beschreibung for two Elternteile", () => {
+      const ausgangslage = {
+        anzahlElternteile: 2 as const,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+      };
+
       const lebensmonat = {
         [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
         [Elternteil.Zwei]: {
@@ -150,15 +161,8 @@ if (import.meta.vitest) {
           imMutterschutz: false as const,
         },
       };
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "Jane",
-        [Elternteil.Zwei]: "John",
-      };
 
-      const beschreibung = beschreibeLebensmonat(
-        lebensmonat,
-        pseudonymeDerElternteile,
-      );
+      const beschreibung = beschreibeLebensmonat(ausgangslage, lebensmonat);
 
       expect(beschreibung).toBe(
         "Jane ist im Mutterschutz. John wählt ElterngeldPlus und bekommt 1234 Euro Elterngeld. John hat ein Bruttoeinkommen von 5678 Euro.",
@@ -166,6 +170,11 @@ if (import.meta.vitest) {
     });
 
     it("provides a Beschreibung for a single Elternteil", () => {
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+      };
+
       const lebensmonat = {
         [Elternteil.Eins]: {
           gewaehlteOption: Variante.Basis,
@@ -175,14 +184,7 @@ if (import.meta.vitest) {
         },
       };
 
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "Jane",
-      };
-
-      const beschreibung = beschreibeLebensmonat(
-        lebensmonat,
-        pseudonymeDerElternteile,
-      );
+      const beschreibung = beschreibeLebensmonat(ausgangslage, lebensmonat);
 
       expect(beschreibung).toBe(
         "Sie wählen Basiselterngeld und bekommen 1234 Euro Elterngeld. Sie haben ein Bruttoeinkommen von 5678 Euro.",
@@ -320,10 +322,26 @@ if (import.meta.vitest) {
             "Jane hat keine Auswahl getroffen. Jane hat ein Bruttoeinkommen von 5678 Euro.",
         },
       ])("$beschreibung", ({ istEinElternteil, monat, beschreibung }) => {
-        expect(beschreibeElternteil(istEinElternteil, pseudonym, monat)).toBe(
+        const ausgangslage = istEinElternteil
+          ? {
+              anzahlElternteile: 1 as const,
+              geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+            }
+          : {
+              anzahlElternteile: 2 as const,
+              pseudonymeDerElternteile: {
+                [Elternteil.Eins]: pseudonym,
+                [Elternteil.Zwei]: "Elternteil 2",
+              },
+              geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+            };
+
+        expect(beschreibeElternteil(ausgangslage, Elternteil.Eins, monat)).toBe(
           beschreibung,
         );
       });
     });
+
+    const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   });
 }

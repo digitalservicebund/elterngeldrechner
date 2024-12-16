@@ -11,12 +11,7 @@ import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import {
-  Planer,
-  type PlanMitBeliebigenElternteilen,
-  Variante,
-  type Elternteil,
-} from "@/features/planer";
+import { Planer, type PlanMitBeliebigenElternteilen } from "@/features/planer";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
@@ -38,6 +33,10 @@ import {
 } from "@/user-tracking/feedback";
 import { FeedbackForm } from "@/components/organisms/feedback-form";
 import { feedbackActions, feedbackSelectors } from "@/redux/feedbackSlice";
+import {
+  listeElternteileFuerAusgangslageAuf,
+  Variante,
+} from "@/features/planer/domain";
 
 export default function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
@@ -173,9 +172,7 @@ export default function RechnerPlanerPage() {
 function trackPartnerschaftlicheVerteilungForPlan(
   plan: PlanMitBeliebigenElternteilen,
 ): void {
-  const elternteile = Object.keys(
-    plan.ausgangslage.pseudonymeDerElternteile,
-  ) as Elternteil[];
+  const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);
 
   const auswahlProMonatProElternteil = elternteile.map((elternteil) =>
     Object.values(plan.lebensmonate)

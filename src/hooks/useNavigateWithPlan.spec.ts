@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
-import { Elternteil } from "@/features/planer/domain";
 
 vi.mock("react-router-dom");
 
@@ -71,9 +70,6 @@ const ANY_LOCATION = {
 const ANY_PLAN = {
   ausgangslage: {
     anzahlElternteile: 1 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: "Jane",
-    },
     geburtsdatumDesKindes: new Date(),
   },
   lebensmonate: {},

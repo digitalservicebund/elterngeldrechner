@@ -5,36 +5,29 @@ import type { Plan } from "@/features/planer/domain/plan/Plan";
 import {
   type AusgangslageFuerEinElternteil,
   type Ausgangslage,
-  type ElternteileByAusgangslage,
+  listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain/ausgangslage";
 import { Specification } from "@/features/planer/domain/common/specification";
-import {
-  listePseudonymeAuf,
-  type PseudonymeDerElternteile,
-} from "@/features/planer/domain/pseudonyme-der-elternteile";
 
 export function LimitsProElternteilWurdenEingehalten<A extends Ausgangslage>() {
   return Specification.fromPredicate<Plan<A>>(
     "Die verfügbaren Monate für diesen Elternteil sind aufgebraucht.",
     (plan) => {
-      const { anzahlElternteile, pseudonymeDerElternteile } = plan.ausgangslage;
-      const istAusnahme = anzahlElternteile === 1;
+      const istAusnahme = plan.ausgangslage.anzahlElternteile === 1;
 
       if (istAusnahme) {
         return true;
       } else {
-        const pseudonyme = pseudonymeDerElternteile as PseudonymeDerElternteile<
-          ElternteileByAusgangslage<A>
-        >;
+        return listeElternteileFuerAusgangslageAuf(plan.ausgangslage).every(
+          (elternteil) => {
+            const verplant = zaehleVerplantesKontingent(
+              plan.lebensmonate,
+              elternteil,
+            );
 
-        return listePseudonymeAuf(pseudonyme).every(([elternteil]) => {
-          const verplant = zaehleVerplantesKontingent(
-            plan.lebensmonate,
-            elternteil,
-          );
-
-          return verplant[Variante.Basis] <= LIMIT_BASIS_PER_ELTERNTEIL;
-        });
+            return verplant[Variante.Basis] <= LIMIT_BASIS_PER_ELTERNTEIL;
+          },
+        );
       }
     },
   );
@@ -213,7 +206,6 @@ if (import.meta.vitest) {
     it("is always satisfied when ein Elternteile only", () => {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_FOR_ONE_ELTERNTEIL,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
@@ -257,10 +249,6 @@ if (import.meta.vitest) {
     function monat(gewaehlteOption: Auswahloption) {
       return { gewaehlteOption, imMutterschutz: false as const };
     }
-
-    const ANY_PSEUDONYME_FOR_ONE_ELTERNTEIL = {
-      [Elternteil.Eins]: "Jane",
-    };
 
     const ANY_GEBURTSDATUM_DES_KINDES = new Date();
 

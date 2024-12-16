@@ -586,9 +586,6 @@ if (import.meta.vitest) {
 
     const ANY_AUSGANGSAGE = {
       anzahlElternteile: 1 as const,
-      pseudonymeDerElternteile: {
-        [Elternteil.Eins]: "Jane",
-      },
       geburtsdatumDesKindes: new Date(),
     };
 

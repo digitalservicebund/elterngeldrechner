@@ -11,10 +11,6 @@ describe("Gesamtsummenanzeige", () => {
 
   describe("final Summe", () => {
     it("shows it when there are more than one Elternteil", () => {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: ANY_NAME,
-        [Elternteil.Zwei]: ANY_NAME,
-      };
       const gesamtsumme = {
         elterngeldbezug: 7041,
         proElternteil: {
@@ -26,8 +22,8 @@ describe("Gesamtsummenanzeige", () => {
       render(
         <Gesamtsummenanzeige
           {...ANY_PROPS}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
           gesamtsumme={gesamtsumme}
+          ausgangslage={ausgangslageFuerZweiElternteile()}
         />,
       );
 
@@ -35,9 +31,6 @@ describe("Gesamtsummenanzeige", () => {
     });
 
     it("hides it if there is only one Elternteil", () => {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: ANY_NAME,
-      };
       const gesamtsumme = {
         elterngeldbezug: 7041,
         proElternteil: {
@@ -48,8 +41,8 @@ describe("Gesamtsummenanzeige", () => {
       render(
         <Gesamtsummenanzeige
           {...ANY_PROPS}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
           gesamtsumme={gesamtsumme}
+          ausgangslage={ausgangslageFuerEinElternteil()}
         />,
       );
 
@@ -60,17 +53,14 @@ describe("Gesamtsummenanzeige", () => {
   });
 
   describe("Summe für jedes Elternteil", () => {
-    it("shows the Elterngeld and number of Monate", () => {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "",
-      };
+    it("shows the Elterngeld, Bruttoeinkommen and Monate for a single Elternteil", () => {
       const gesamtsumme = {
         ...ANY_GESAMTSUMME,
         proElternteil: {
           [Elternteil.Eins]: {
             anzahlMonateMitBezug: 8,
             elterngeldbezug: 6000,
-            bruttoeinkommen: 0,
+            bruttoeinkommen: 2000,
           },
         },
       };
@@ -78,32 +68,30 @@ describe("Gesamtsummenanzeige", () => {
       render(
         <Gesamtsummenanzeige
           {...ANY_PROPS}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
           gesamtsumme={gesamtsumme}
+          ausgangslage={ausgangslageFuerEinElternteil()}
         />,
       );
 
       expect(screen.getByText("Elterngeld")).toBeVisible();
       expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
+      expect(screen.getByText("Einkommen")).toBeVisible();
+      expect(screen.getByText("2.000 € (brutto)")).toBeVisible();
     });
 
     it("includes the Pseudonym when more than one Elternteil", () => {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "Jane",
-        [Elternteil.Zwei]: "John",
-      };
       const gesamtsumme = {
         ...ANY_GESAMTSUMME,
         proElternteil: {
           [Elternteil.Eins]: {
             anzahlMonateMitBezug: 8,
             elterngeldbezug: 6000,
-            bruttoeinkommen: 0,
+            bruttoeinkommen: 2000,
           },
           [Elternteil.Zwei]: {
             anzahlMonateMitBezug: 1,
             elterngeldbezug: 1041,
-            bruttoeinkommen: 0,
+            bruttoeinkommen: 8000,
           },
         },
       };
@@ -111,8 +99,8 @@ describe("Gesamtsummenanzeige", () => {
       render(
         <Gesamtsummenanzeige
           {...ANY_PROPS}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
           gesamtsumme={gesamtsumme}
+          ausgangslage={ausgangslageFuerZweiElternteile("Jane", "John")}
         />,
       );
 
@@ -120,18 +108,17 @@ describe("Gesamtsummenanzeige", () => {
       expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
       expect(screen.getByText("John: Elterngeld")).toBeVisible();
       expect(screen.getByText("1.041 € für 1 Monat")).toBeVisible();
+      expect(screen.getByText("Jane: Einkommen")).toBeVisible();
+      expect(screen.getByText("2.000 € (brutto)")).toBeVisible();
+      expect(screen.getByText("John: Einkommen")).toBeVisible();
+      expect(screen.getByText("8.000 € (brutto)")).toBeVisible();
     });
 
     it("shows the Elternteile in korrekt order", () => {
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: "Jane",
-        [Elternteil.Zwei]: "John",
-      };
-
       render(
         <Gesamtsummenanzeige
           {...ANY_PROPS}
-          pseudonymeDerElternteile={pseudonymeDerElternteile}
+          ausgangslage={ausgangslageFuerZweiElternteile("Jane", "John")}
         />,
       );
 
@@ -162,6 +149,27 @@ describe("Gesamtsummenanzeige", () => {
 
 const ANY_NAME = "Jane";
 
+function ausgangslageFuerEinElternteil() {
+  return {
+    anzahlElternteile: 1 as const,
+    geburtsdatumDesKindes: new Date(),
+  };
+}
+
+function ausgangslageFuerZweiElternteile(
+  pseudonymEins: string = ANY_NAME,
+  pseudonymZwei: string = ANY_NAME,
+) {
+  return {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: pseudonymEins,
+      [Elternteil.Zwei]: pseudonymZwei,
+    },
+    geburtsdatumDesKindes: new Date(),
+  };
+}
+
 const ANY_SUMME_FUER_ELTERNTEIL = {
   anzahlMonateMitBezug: 0,
   elterngeldbezug: 0,
@@ -177,9 +185,6 @@ const ANY_GESAMTSUMME = {
 };
 
 const ANY_PROPS = {
-  pseudonymeDerElternteile: {
-    [Elternteil.Eins]: ANY_NAME,
-    [Elternteil.Zwei]: ANY_NAME,
-  },
   gesamtsumme: ANY_GESAMTSUMME,
+  ausgangslage: ausgangslageFuerZweiElternteile(),
 };

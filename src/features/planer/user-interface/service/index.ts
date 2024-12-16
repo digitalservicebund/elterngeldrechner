@@ -34,8 +34,6 @@ export {
   gebeEinkommenAn,
   setzePlanZurueck,
   waehleOption,
-  type PseudonymeDerElternteile,
-  listePseudonymeAuf,
   Result,
   Variante,
   compareVarianten,

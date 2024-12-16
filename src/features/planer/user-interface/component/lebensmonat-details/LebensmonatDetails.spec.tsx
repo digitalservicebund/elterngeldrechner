@@ -82,16 +82,19 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
 };
 
 const ANY_PROPS = {
+  ausgangslage: {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    },
+    geburtsdatumDesKindes: new Date(),
+  },
   lebensmonatszahl: 2 as const,
   lebensmonat: {
     [Elternteil.Eins]: { imMutterschutz: false as const },
     [Elternteil.Zwei]: { imMutterschutz: false as const },
   },
-  pseudonymeDerElternteile: {
-    [Elternteil.Eins]: "Jane",
-    [Elternteil.Zwei]: "John",
-  },
-  geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ANY_AUSWAHLMOEGLICHKEITEN,
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],

@@ -39,7 +39,6 @@ if (import.meta.vitest) {
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 1 as const,
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "Jane" },
         geburtsdatumDesKindes: new Date(),
       },
       errechneteElterngeldbezuege: {} as never,

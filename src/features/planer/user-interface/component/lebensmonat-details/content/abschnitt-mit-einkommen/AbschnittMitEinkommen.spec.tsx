@@ -10,6 +10,7 @@ import {
   type Auswahloption,
 } from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
+import type { AusgangslageFuerEinElternteil } from "@/features/planer/domain/ausgangslage";
 
 vi.mock(
   import(
@@ -46,14 +47,18 @@ describe("Abschnitt mit Einkommen", () => {
     it("shows an input for the Bruttoeinkommen for each Elternteil", async () => {
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        ausgangslage: {
+          anzahlElternteile: 2 as const,
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+        },
         lebensmonatszahl: 5,
         lebensmonat: {
           [Elternteil.Eins]: monat(),
           [Elternteil.Zwei]: monat(),
-        },
-        pseudonymeDerElternteile: {
-          [Elternteil.Eins]: "Jane",
-          [Elternteil.Zwei]: "John",
         },
       });
 
@@ -76,14 +81,18 @@ describe("Abschnitt mit Einkommen", () => {
     it("shows some text instead of input for Elternteil with Monat im Mutterschutz", async () => {
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        ausgangslage: {
+          anzahlElternteile: 2 as const,
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+        },
         lebensmonatszahl: 5,
         lebensmonat: {
           [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
           [Elternteil.Zwei]: monat(),
-        },
-        pseudonymeDerElternteile: {
-          [Elternteil.Eins]: "Jane",
-          [Elternteil.Zwei]: "John",
         },
       });
 
@@ -111,12 +120,15 @@ describe("Abschnitt mit Einkommen", () => {
 
     it("shows and input fo the Bruttoeinkommen for a single Elternteil", async () => {
       vi.mocked(
-        useInformationenZumLebensmonat<Elternteil.Eins>,
+        useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
       ).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        ausgangslage: {
+          anzahlElternteile: 1 as const,
+          geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+        },
         lebensmonatszahl: 5,
         lebensmonat: { [Elternteil.Eins]: monat() },
-        pseudonymeDerElternteile: { [Elternteil.Eins]: "" },
       });
 
       render(<AbschnittMitEinkommen />);
@@ -158,9 +170,10 @@ describe("Abschnitt mit Einkommen", () => {
       "hides initially the inputs when %s is chosen and no Bruttoeinkommen",
       (option) => {
         vi.mocked(
-          useInformationenZumLebensmonat<Elternteil.Eins>,
+          useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
         ).mockReturnValue({
           ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+          ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
           lebensmonat: { [Elternteil.Eins]: monat(option, undefined) },
         });
 
@@ -172,9 +185,10 @@ describe("Abschnitt mit Einkommen", () => {
 
     it("shows the inputs automatically when Bonus is chosen and no Bruttoeinkommen", () => {
       vi.mocked(
-        useInformationenZumLebensmonat<Elternteil.Eins>,
+        useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
       ).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
         lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus, undefined) },
       });
 
@@ -187,9 +201,10 @@ describe("Abschnitt mit Einkommen", () => {
       "shows the inputs automatically when %s is chosen and some Bruttoeinkommen is was already specified",
       (option) => {
         vi.mocked(
-          useInformationenZumLebensmonat<Elternteil.Eins>,
+          useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
         ).mockReturnValue({
           ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+          ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
           lebensmonat: { [Elternteil.Eins]: monat(option, 1) },
         });
 
@@ -201,9 +216,10 @@ describe("Abschnitt mit Einkommen", () => {
 
     it("can not manually hide inputs again when automatically opened", async () => {
       vi.mocked(
-        useInformationenZumLebensmonat<Elternteil.Eins>,
+        useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
       ).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+        ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
         lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus, 1) },
       });
 
@@ -254,17 +270,27 @@ function monat(gewaehlteOption?: Auswahloption, bruttoeinkommen?: number) {
   return { gewaehlteOption, bruttoeinkommen, imMutterschutz: false as const };
 }
 
+const ANY_GEBURTSDATUM_DES_KINDES = new Date();
+
+const ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL = {
+  anzahlElternteile: 1 as const,
+  geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+};
+
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
+  ausgangslage: {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    },
+    geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
+  },
   lebensmonatszahl: 5 as const,
   lebensmonat: {
     [Elternteil.Eins]: monat(),
     [Elternteil.Zwei]: monat(),
   },
-  pseudonymeDerElternteile: {
-    [Elternteil.Eins]: "Jane",
-    [Elternteil.Zwei]: "John",
-  },
-  geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ({
     [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
     [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },

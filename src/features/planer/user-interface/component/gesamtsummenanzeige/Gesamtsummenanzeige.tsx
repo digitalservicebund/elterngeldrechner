@@ -1,36 +1,33 @@
 import { ReactNode, useId } from "react";
 import classNames from "classnames";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
-import {
-  Elternteil,
-  type Gesamtsumme,
-  type PseudonymeDerElternteile,
-  listePseudonymeAuf,
-} from "@/features/planer/user-interface/service";
+import { type Gesamtsumme } from "@/features/planer/user-interface/service";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import { EinkommenFuerElternteil } from "@/features/planer/user-interface/component/gesamtsummenanzeige/EinkommenFuerElternteil";
+import {
+  listeElternteileFuerAusgangslageAuf,
+  type Ausgangslage,
+  type ElternteileByAusgangslage,
+} from "@/features/planer/domain";
 
-type Props<E extends Elternteil> = {
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly gesamtsumme: Gesamtsumme<E>;
+type Props<A extends Ausgangslage> = {
+  readonly gesamtsumme: Gesamtsumme<ElternteileByAusgangslage<A>>;
+  readonly ausgangslage: A;
   readonly className?: string;
 };
 
-export function Gesamtsummenanzeige<E extends Elternteil>({
-  pseudonymeDerElternteile,
+export function Gesamtsummenanzeige<A extends Ausgangslage>({
   gesamtsumme,
+  ausgangslage,
   className,
-}: Props<E>): ReactNode {
+}: Props<A>): ReactNode {
   const headingIdentifier = useId();
-
-  const hasMultipleElternteile =
-    Object.keys(pseudonymeDerElternteile).length > 1;
-
+  const hasMultipleElternteile = ausgangslage.anzahlElternteile > 1;
   const gesamtsummeElterngeld = `Gesamtsumme Elterngeld: ${formatAsCurrency(gesamtsumme.elterngeldbezug)}`;
-  const beideHabenEinkommen =
-    (gesamtsumme.proElternteil[Elternteil.Eins as E]?.bruttoeinkommen ?? 0) +
-      (gesamtsumme.proElternteil[Elternteil.Zwei as E]?.bruttoeinkommen ?? 0) >
-    0;
+
+  const jemandHatEinkommen = listeElternteileFuerAusgangslageAuf(ausgangslage)
+    .map((elternteil) => gesamtsumme.proElternteil[elternteil].bruttoeinkommen)
+    .reduce((sum, bruttoeinkommen) => sum + (bruttoeinkommen ?? 0), 0);
 
   return (
     <section
@@ -44,40 +41,28 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
         Gesamtsumme
       </h3>
 
-      {listePseudonymeAuf(pseudonymeDerElternteile, true).map(
-        ([elternteil, pseudonym]) => {
-          const summeFuerElternteil = gesamtsumme.proElternteil[elternteil];
-
-          return (
-            <ElterngeldFuerElternteil
-              className="basis-[40ch]"
-              key={elternteil}
-              pseudonym={pseudonym}
-              summe={summeFuerElternteil}
-            />
-          );
-        },
-      )}
+      {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => (
+        <ElterngeldFuerElternteil
+          className="basis-[40ch]"
+          key={elternteil}
+          pseudonym={ausgangslage.pseudonymeDerElternteile?.[elternteil]}
+          summe={gesamtsumme.proElternteil[elternteil]}
+        />
+      ))}
 
       {!!hasMultipleElternteile && (
         <span className="basis-full font-bold">{gesamtsummeElterngeld}</span>
       )}
 
-      {!!beideHabenEinkommen &&
-        listePseudonymeAuf(pseudonymeDerElternteile, true).map(
-          ([elternteil, pseudonym]) => {
-            const summeFuerElternteil = gesamtsumme.proElternteil[elternteil];
-
-            return (
-              <EinkommenFuerElternteil
-                className="basis-[40ch]"
-                key={elternteil}
-                pseudonym={pseudonym}
-                summe={summeFuerElternteil}
-              />
-            );
-          },
-        )}
+      {!!jemandHatEinkommen &&
+        listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => (
+          <EinkommenFuerElternteil
+            className="basis-[40ch]"
+            key={elternteil}
+            pseudonym={ausgangslage.pseudonymeDerElternteile?.[elternteil]}
+            summe={gesamtsumme.proElternteil[elternteil]}
+          />
+        ))}
 
       <span className="basis-full text-14">
         Hinweis: Mutterschaftsleistungen werden nicht in der Summe

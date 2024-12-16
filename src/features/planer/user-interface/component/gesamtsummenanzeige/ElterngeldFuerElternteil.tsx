@@ -5,7 +5,7 @@ import type { SummeFuerElternteil } from "@/features/planer/user-interface/servi
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
-  readonly pseudonym: string;
+  readonly pseudonym: string | undefined;
   readonly summe: SummeFuerElternteil;
   readonly className?: string;
 };

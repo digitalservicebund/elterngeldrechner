@@ -12,9 +12,9 @@ import {
   type GridColumnDefinition,
 } from "@/features/planer/user-interface/layout/grid-layout";
 import {
-  listeMonateAuf,
   Elternteil,
-} from "@/features/planer/user-interface/service";
+  listeElternteileFuerAusgangslageAuf,
+} from "@/features/planer/domain";
 
 type Props = {
   readonly identifierToZeitraumLabel: string;
@@ -34,16 +34,13 @@ export function LebensmonatSummary({
     GEWAEHLTE_OPTION_COLUMN_DEFINITIONS,
   );
 
-  const { lebensmonatszahl, lebensmonat, pseudonymeDerElternteile } =
+  const { ausgangslage, lebensmonatszahl, lebensmonat } =
     useInformationenZumLebensmonat();
 
   const ariaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
   const auswahlDescriptionIdentifier = useId();
-  const auswahlDescription = beschreibeLebensmonat(
-    lebensmonat,
-    pseudonymeDerElternteile,
-  );
+  const auswahlDescription = beschreibeLebensmonat(ausgangslage, lebensmonat);
 
   return (
     <summary
@@ -67,26 +64,35 @@ export function LebensmonatSummary({
         {lebensmonatszahl}
       </span>
 
-      {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => (
-        <Fragment key={elternteil}>
-          <Haushaltseinkommen
-            className="row-start-1 self-center justify-self-center"
-            style={elterngeldbezugColumns[elternteil]}
-            elterngeldbezug={monat.elterngeldbezug}
-            bruttoeinkommen={monat.bruttoeinkommen}
-            imMutterschutz={monat.imMutterschutz}
-            ariaHidden
-          />
+      {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => {
+        const {
+          gewaehlteOption,
+          elterngeldbezug,
+          bruttoeinkommen,
+          imMutterschutz,
+        } = lebensmonat[elternteil];
 
-          <GewaehlteOption
-            className="row-start-1"
-            style={gewaehlteOptionColumns[elternteil]}
-            imMutterschutz={monat.imMutterschutz}
-            option={monat.gewaehlteOption}
-            ariaHidden
-          />
-        </Fragment>
-      ))}
+        return (
+          <Fragment key={elternteil}>
+            <Haushaltseinkommen
+              className="row-start-1 self-center justify-self-center"
+              style={elterngeldbezugColumns[elternteil]}
+              elterngeldbezug={elterngeldbezug}
+              bruttoeinkommen={bruttoeinkommen}
+              imMutterschutz={imMutterschutz}
+              ariaHidden
+            />
+
+            <GewaehlteOption
+              className="row-start-1"
+              style={gewaehlteOptionColumns[elternteil]}
+              imMutterschutz={imMutterschutz}
+              option={gewaehlteOption}
+              ariaHidden
+            />
+          </Fragment>
+        );
+      })}
     </summary>
   );
 }

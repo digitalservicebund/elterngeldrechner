@@ -163,10 +163,6 @@ if (import.meta.vitest) {
       expect(isSatisfied).toBe(false);
     });
 
-    const ANY_PSEUDONYME_ONE_ELTERNTEIL = {
-      [Elternteil.Eins]: "Jane",
-    };
-
     const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
@@ -177,7 +173,6 @@ if (import.meta.vitest) {
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 1,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_ONE_ELTERNTEIL,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       },
       lebensmonate: {},

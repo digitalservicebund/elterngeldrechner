@@ -7,19 +7,20 @@ import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
 import { HinweisZuWochenstunden } from "./HinweisZuWochenstunden";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
-  type LebensmonatMitBeliebigenElternteilen,
-  type Lebensmonatszahl,
-  Elternteil,
-  listeMonateAuf,
-  Variante,
-} from "@/features/planer/user-interface/service";
-import {
   type GridColumnDefinition,
   type GridColumnDefinitionPerElternteil,
   useGridColumn,
   useGridColumnPerElternteil,
 } from "@/features/planer/user-interface/layout/grid-layout";
 import { InfoDialog } from "@/components/molecules/info-dialog";
+import {
+  type LebensmonatMitBeliebigenElternteilen,
+  type Lebensmonatszahl,
+  Elternteil,
+  Variante,
+  listeElternteileFuerAusgangslageAuf,
+  listeMonateAuf,
+} from "@/features/planer/domain";
 
 export function AbschnittMitEinkommen(): ReactNode {
   const headingColumn = useGridColumn(HEADING_COLUMN_DEFINITION);
@@ -31,9 +32,9 @@ export function AbschnittMitEinkommen(): ReactNode {
   );
 
   const {
+    ausgangslage,
     lebensmonatszahl,
     lebensmonat,
-    pseudonymeDerElternteile,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
   } = useInformationenZumLebensmonat();
@@ -46,9 +47,8 @@ export function AbschnittMitEinkommen(): ReactNode {
     setTimeout(() => setVisibilityToggleState(!visibilityToggleState));
   }
 
-  const isSingleElternteil = Object.keys(lebensmonat).length === 1;
-  const istLebensmonatMitMutterschutz = Object.values(lebensmonat).some(
-    (monat) => monat.imMutterschutz,
+  const istLebensmonatMitMutterschutz = listeMonateAuf(lebensmonat).some(
+    ([, monat]) => monat.imMutterschutz,
   );
 
   return (
@@ -77,43 +77,47 @@ export function AbschnittMitEinkommen(): ReactNode {
 
       {!!areInputsVisible && (
         <>
-          {listeMonateAuf(lebensmonat, true).map(([elternteil, monat]) => {
-            if (monat.imMutterschutz) {
-              return (
-                <HinweisZumMutterschutz
-                  key={elternteil}
-                  style={bruttoeinkommenColumns[elternteil]}
-                />
-              );
-            } else {
-              const vorschlaege =
-                erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
-              const ariaLabel = composeAriaLabelForBruttoeinkommen(
-                pseudonymeDerElternteile[elternteil],
-                lebensmonatszahl,
-                isSingleElternteil,
-              );
+          {listeElternteileFuerAusgangslageAuf(ausgangslage).map(
+            (elternteil) => {
+              const { imMutterschutz, bruttoeinkommen } =
+                lebensmonat[elternteil];
 
-              return (
-                <div
-                  key={elternteil}
-                  style={bruttoeinkommenColumns[elternteil]}
-                >
-                  <BruttoeinkommenInput
+              if (imMutterschutz) {
+                return (
+                  <HinweisZumMutterschutz
                     key={elternteil}
-                    bruttoeinkommen={monat.bruttoeinkommen}
-                    vorschlaege={vorschlaege}
-                    ariaLabel={ariaLabel}
-                    gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
+                    style={bruttoeinkommenColumns[elternteil]}
                   />
+                );
+              } else {
+                const vorschlaege =
+                  erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
+                const ariaLabel = composeAriaLabelForBruttoeinkommen(
+                  ausgangslage.pseudonymeDerElternteile?.[elternteil],
+                  lebensmonatszahl,
+                );
 
-                  {!!istLebensmonatMitMutterschutz && (
-                    <HinweisZuWochenstunden />
-                  )}
-                </div>
-              );
-            }
-          })}
+                return (
+                  <div
+                    key={elternteil}
+                    style={bruttoeinkommenColumns[elternteil]}
+                  >
+                    <BruttoeinkommenInput
+                      key={elternteil}
+                      bruttoeinkommen={bruttoeinkommen}
+                      vorschlaege={vorschlaege}
+                      ariaLabel={ariaLabel}
+                      gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
+                    />
+
+                    {!!istLebensmonatMitMutterschutz && (
+                      <HinweisZuWochenstunden />
+                    )}
+                  </div>
+                );
+              }
+            },
+          )}
 
           {!istLebensmonatMitMutterschutz && (
             <HinweisZuWochenstunden style={hinweisZuWochenstundenColumn} />
@@ -125,13 +129,12 @@ export function AbschnittMitEinkommen(): ReactNode {
 }
 
 function composeAriaLabelForBruttoeinkommen(
-  pseudonym: string,
+  pseudonym: string | undefined,
   lebensmonatszahl: Lebensmonatszahl,
-  isSingleElternteil: boolean,
 ): string {
-  return isSingleElternteil
-    ? `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`
-    : `Bruttoeinkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`;
+  return pseudonym
+    ? `Bruttoeinkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`
+    : `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`;
 }
 
 function checkIfInputsMustBeVisible(

@@ -10,13 +10,17 @@ import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly bezuegeProVariante: Record<Variante, Bezug>;
-  readonly pseudonymDesElternteils: string;
+  readonly pseudonymDesElternteils: string | undefined;
 };
 
 export function ListeMitBezuegenProVariante({
   bezuegeProVariante,
   pseudonymDesElternteils,
 }: Props): ReactNode {
+  const ariaLabel =
+    "Bezüge pro Elterngeldvariante" +
+    (pseudonymDesElternteils ? ` von ${pseudonymDesElternteils}` : "");
+
   return (
     <ul
       className={classNames(
@@ -24,7 +28,7 @@ export function ListeMitBezuegenProVariante({
         "divide-x-0 divide-y-2 divide-solid divide-off-white",
         "border-x-0 border-y-2 border-solid border-off-white",
       )}
-      aria-label={`Bezüge pro Elterngeldvariante von ${pseudonymDesElternteils}`}
+      aria-label={ariaLabel}
     >
       {listeBezuegeAuf(bezuegeProVariante).map(([variante, bezug]) => {
         const { anzahlMonate, elterngeld, bruttoeinkommen } = bezug;

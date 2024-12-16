@@ -34,7 +34,6 @@ if (import.meta.vitest) {
       const lebensmonate = erstelleInitialeLebensmonate({
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 1,
-        pseudonymeDerElternteile: ANY_PSEUDONYME,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
@@ -48,7 +47,6 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Eins,
         },
         anzahlElternteile: 1,
-        pseudonymeDerElternteile: ANY_PSEUDONYME,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       });
 
@@ -57,7 +55,6 @@ if (import.meta.vitest) {
       expect(Object.keys(lebensmonate).sort()).toEqual(["1", "2", "3"].sort());
     });
 
-    const ANY_PSEUDONYME = { [Elternteil.Eins]: "Jane" };
     const ANY_GEBURTSDATUM_DES_KINDES = new Date();
   });
 }

@@ -18,7 +18,7 @@ vi.mock(
 
 describe("Lebensmonat Content", () => {
   beforeEach(() => {
-    vi.mocked(useInformationenZumLebensmonat<Elternteil.Eins>).mockReturnValue(
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue(
       ANY_INFORMATION_ZUM_LEBENSMONAT,
     );
   });
@@ -83,16 +83,19 @@ function monat(
 }
 
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
+  ausgangslage: {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    },
+    geburtsdatumDesKindes: new Date(),
+  },
   lebensmonatszahl: 5 as const,
   lebensmonat: {
     [Elternteil.Eins]: monat(undefined),
     [Elternteil.Zwei]: monat(undefined),
   },
-  pseudonymeDerElternteile: {
-    [Elternteil.Eins]: "Jane",
-    [Elternteil.Zwei]: "John",
-  },
-  geburtsdatumDesKindes: new Date(),
   bestimmeAuswahlmoeglichkeiten: () => ({
     [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
     [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },

@@ -11,36 +11,40 @@ import type {
   ErstelleVorschlaegeFuerAngabeDesEinkommens,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import {
+  type Ausgangslage,
+  type ElternteileByAusgangslage,
   Lebensmonatszahlen,
   LetzteLebensmonatszahl,
-  type Elternteil,
   type Lebensmonate,
-  type PseudonymeDerElternteile,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 
-type Props<E extends Elternteil> = {
-  readonly lebensmonate: Lebensmonate<E>;
-  readonly pseudonymeDerElternteile: PseudonymeDerElternteile<E>;
-  readonly geburtsdatumDesKindes: Date;
-  readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<E>;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<E>;
-  readonly waehleOption: WaehleOption<E>;
-  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<E>;
-  readonly gebeEinkommenAn: GebeEinkommenAn<E>;
+type Props<A extends Ausgangslage> = {
+  readonly ausgangslage: A;
+  readonly lebensmonate: Lebensmonate<ElternteileByAusgangslage<A>>;
+  readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<
+    ElternteileByAusgangslage<A>
+  >;
+  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<
+    ElternteileByAusgangslage<A>
+  >;
+  readonly waehleOption: WaehleOption<ElternteileByAusgangslage<A>>;
+  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<
+    ElternteileByAusgangslage<A>
+  >;
+  readonly gebeEinkommenAn: GebeEinkommenAn<ElternteileByAusgangslage<A>>;
   readonly className?: string;
 };
 
-export function Lebensmonatsliste<E extends Elternteil>({
+export function Lebensmonatsliste<A extends Ausgangslage>({
+  ausgangslage,
   lebensmonate,
-  pseudonymeDerElternteile,
-  geburtsdatumDesKindes,
   erstelleUngeplantenLebensmonat,
   bestimmeAuswahlmoeglichkeiten,
   waehleOption,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
   gebeEinkommenAn,
   className,
-}: Props<E>): ReactNode {
+}: Props<A>): ReactNode {
   const headingIdentifier = useId();
 
   const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
@@ -85,10 +89,9 @@ export function Lebensmonatsliste<E extends Elternteil>({
             className={classNames({ hidden: isHidden })}
             ref={ref}
             aria-hidden={isHidden}
+            ausgangslage={ausgangslage}
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}
-            pseudonymeDerElternteile={pseudonymeDerElternteile}
-            geburtsdatumDesKindes={geburtsdatumDesKindes}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten.bind(
               null,
               lebensmonatszahl,

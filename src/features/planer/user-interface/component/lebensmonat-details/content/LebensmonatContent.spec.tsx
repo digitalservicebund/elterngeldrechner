@@ -6,7 +6,7 @@ import {
   KeinElterngeld,
   Variante,
   type Auswahloption,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 
 vi.mock(import("./HinweisZumBonus"));

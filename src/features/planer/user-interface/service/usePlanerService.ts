@@ -6,8 +6,6 @@ import {
   PlanResettedCallback,
   WaehleOption,
 } from "./callbackTypes";
-import { erstelleVorschlaegeFuerAngabeDesEinkommens } from "@/features/planer/domain";
-import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import {
   bestimmeVerfuegbaresKontingent,
   type Elternteil,
@@ -24,7 +22,9 @@ import {
   type Plan,
   type Lebensmonate,
   erstelleInitialeLebensmonate,
-} from "@/features/planer/user-interface/service";
+  validierePlanFuerFinaleAbgabe,
+  erstelleVorschlaegeFuerAngabeDesEinkommens,
+} from "@/features/planer/domain";
 
 export function usePlanerService(
   initialInformation: InitialInformation,

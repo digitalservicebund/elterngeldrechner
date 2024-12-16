@@ -14,7 +14,7 @@ import {
   type Auswahloption,
   Auswahloptionen,
   type Elterngeldbezug,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 import { InfoDialog } from "@/components/molecules/info-dialog";
 
 type Props = {

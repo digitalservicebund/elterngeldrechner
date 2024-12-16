@@ -1,11 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { LebensmonatDetails } from "./LebensmonatDetails";
-import {
-  Elternteil,
-  KeinElterngeld,
-  Variante,
-} from "@/features/planer/user-interface/service";
+import { Elternteil, KeinElterngeld, Variante } from "@/features/planer/domain";
 
 describe("LebensmonateDetails", () => {
   it("shows a details group for the Lebensmonatszahl", () => {

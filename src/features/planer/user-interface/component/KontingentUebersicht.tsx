@@ -6,7 +6,7 @@ import {
   Variante,
   type VerfuegbaresKontingent,
   type VerplantesKontingent,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 
 type Props = {
   readonly verfuegbaresKontingent: VerfuegbaresKontingent;

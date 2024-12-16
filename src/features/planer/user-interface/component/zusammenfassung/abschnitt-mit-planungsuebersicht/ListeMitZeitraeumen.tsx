@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
-import type { Zeitraum } from "@/features/planer/user-interface/service";
+import type { Zeitraum } from "@/features/planer/domain";
 
 type Props = {
   readonly zeitraeume: Zeitraum[];

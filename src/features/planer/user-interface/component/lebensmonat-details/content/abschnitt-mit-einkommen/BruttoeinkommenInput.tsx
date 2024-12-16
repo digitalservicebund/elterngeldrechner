@@ -7,7 +7,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
-import type { Einkommen } from "@/features/planer/user-interface/service";
+import type { Einkommen } from "@/features/planer/domain";
 
 type Props = {
   readonly bruttoeinkommen: Einkommen | undefined;

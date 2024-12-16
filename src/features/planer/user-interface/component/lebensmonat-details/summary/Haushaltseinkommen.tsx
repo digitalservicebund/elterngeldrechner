@@ -1,10 +1,7 @@
 import { ReactNode, type CSSProperties } from "react";
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import classNames from "classnames";
-import type {
-  Einkommen,
-  Elterngeldbezug,
-} from "@/features/planer/user-interface/service";
+import type { Einkommen, Elterngeldbezug } from "@/features/planer/domain";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import { InfoDialog } from "@/components/molecules/info-dialog";
 

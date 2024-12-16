@@ -4,4 +4,5 @@ export * from "./bestimmeAuswahlmoeglichkeiten";
 export * from "./fassePlanZusammen";
 export * from "./gebeEinkommenAn";
 export * from "./setzePlanZurueck";
+export * from "./validierePlanFuerFinaleAbgabe";
 export * from "./waehleOption";

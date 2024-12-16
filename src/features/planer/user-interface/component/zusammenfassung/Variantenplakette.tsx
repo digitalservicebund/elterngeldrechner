@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import classNames from "classnames";
-import { Variante } from "@/features/planer/user-interface/service";
+import { Variante } from "@/features/planer/domain";
 
 type Props = {
   readonly variante: Variante;

@@ -16,13 +16,11 @@ import {
   Variante,
   waehleOption,
   zaehleVerplantesKontingent,
-} from ".";
-import {
   bestimmeAuswahlmoeglichkeiten,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
+  validierePlanFuerFinaleAbgabe,
   type BerechneElterngeldbezuegeCallback,
 } from "@/features/planer/domain";
-import { validierePlanFuerFinaleAbgabe } from "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe";
 import { act, INITIAL_STATE, renderHook } from "@/test-utils/test-utils";
 
 vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));

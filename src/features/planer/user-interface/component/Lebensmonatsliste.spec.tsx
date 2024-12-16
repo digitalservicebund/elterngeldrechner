@@ -8,7 +8,7 @@ import {
   type Lebensmonatszahl,
   LetzteLebensmonatszahl,
   Variante,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 
 describe("Lebensmonatsliste", () => {
   it("shows a section for Lebensmonate", () => {

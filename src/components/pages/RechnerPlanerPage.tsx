@@ -11,7 +11,8 @@ import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import { Planer, type PlanMitBeliebigenElternteilen } from "@/features/planer";
+import type { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
+import { Planer } from "@/features/planer/user-interface";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";

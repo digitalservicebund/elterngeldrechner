@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
-import { Elternteil } from "@/features/planer/user-interface/service";
+import { Elternteil } from "@/features/planer/domain";
 
 describe("Kopfleiste mit Pseudonymen", () => {
   it("shows the Pseudonym for each Elternteil", () => {

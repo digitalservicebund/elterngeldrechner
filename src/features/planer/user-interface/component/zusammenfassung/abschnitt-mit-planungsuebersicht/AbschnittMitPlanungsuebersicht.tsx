@@ -2,12 +2,12 @@ import { ReactNode, useId } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
-import { type Planungsuebersicht } from "@/features/planer/user-interface/service";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import {
   listeElternteileFuerAusgangslageAuf,
   type Ausgangslage,
   type ElternteileByAusgangslage,
+  type Planungsuebersicht,
 } from "@/features/planer/domain";
 
 type Props<A extends Ausgangslage> = {

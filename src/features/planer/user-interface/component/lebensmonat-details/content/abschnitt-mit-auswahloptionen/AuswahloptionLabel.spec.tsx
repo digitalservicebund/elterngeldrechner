@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
-import { Variante } from "@/features/planer/user-interface/service";
+import { Variante } from "@/features/planer/domain";
 
 describe("Auswahloption Label", () => {
   it.each([

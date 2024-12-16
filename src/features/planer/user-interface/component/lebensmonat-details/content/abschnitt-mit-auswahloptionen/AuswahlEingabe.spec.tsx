@@ -1,11 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AuswahlEingabe } from "./AuswahlEingabe";
-import {
-  Elternteil,
-  KeinElterngeld,
-  Variante,
-} from "@/features/planer/user-interface/service";
+import { Elternteil, KeinElterngeld, Variante } from "@/features/planer/domain";
 
 describe("AuswahlEingabe", () => {
   it("renders a fieldset with given legend", () => {

@@ -6,7 +6,7 @@ import {
   KeinElterngeld,
   Variante,
   type Auswahloption,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 
 type Props = {
   readonly imMutterschutz?: boolean;

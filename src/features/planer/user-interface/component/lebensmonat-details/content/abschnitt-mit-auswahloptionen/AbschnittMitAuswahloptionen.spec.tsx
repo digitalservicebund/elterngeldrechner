@@ -5,9 +5,9 @@ import {
   Elternteil,
   KeinElterngeld,
   Variante,
-} from "@/features/planer/user-interface/service";
-import type { BestimmeAuswahlmoeglichkeitenFuerLebensmonat } from "@/features/planer/user-interface/service/callbackTypes";
-import { AusgangslageFuerEinElternteil } from "@/features/planer/domain/ausgangslage";
+  type AusgangslageFuerEinElternteil,
+} from "@/features/planer/domain";
+import type { BestimmeAuswahlmoeglichkeitenFuerLebensmonat } from "@/features/planer/user-interface/service";
 
 vi.mock(
   import(

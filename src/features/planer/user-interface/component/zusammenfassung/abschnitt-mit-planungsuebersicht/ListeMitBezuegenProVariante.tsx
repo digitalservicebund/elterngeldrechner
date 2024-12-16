@@ -5,7 +5,7 @@ import {
   compareVarianten,
   Variante,
   type Bezug,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {

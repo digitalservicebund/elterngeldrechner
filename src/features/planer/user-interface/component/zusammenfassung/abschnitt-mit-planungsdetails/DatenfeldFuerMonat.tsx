@@ -3,9 +3,9 @@ import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutl
 import { Variantenplakette } from "@/features/planer/user-interface/component/zusammenfassung/Variantenplakette";
 import {
   KeinElterngeld,
-  Auswahloption,
+  type Auswahloption,
   type Monat,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {

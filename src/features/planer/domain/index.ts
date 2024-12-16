@@ -1,5 +1,6 @@
 export {
   type Ausgangslage,
+  type AusgangslageFuerEinElternteil,
   type ElternteileByAusgangslage,
   bestimmeVerfuegbaresKontingent,
   listeElternteileFuerAusgangslageAuf,
@@ -11,7 +12,10 @@ export {
   KeinElterngeld,
 } from "./Auswahloption";
 export { type Einkommen } from "./Einkommen";
-export type { Elterngeldbezug } from "./Elterngeldbezug";
+export type {
+  Elterngeldbezug,
+  ElterngeldbezuegeFuerElternteil,
+} from "./Elterngeldbezug";
 export type { BerechneElterngeldbezuegeCallback } from "./Elterngeldbezug";
 export { Elternteil, compareElternteile } from "./Elternteil";
 export { type Gesamtsumme, type SummeFuerElternteil } from "./Gesamtsumme";
@@ -26,6 +30,7 @@ export {
   type Lebensmonate,
   type LebensmonateMitBeliebigenElternteilen,
   erstelleInitialeLebensmonate,
+  listeLebensmonateAuf,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
   zaehleVerplantesKontingent,
 } from "./lebensmonate";
@@ -44,9 +49,10 @@ export {
   gebeEinkommenAn,
   setzePlanZurueck,
   waehleOption,
+  validierePlanFuerFinaleAbgabe,
 } from "./plan";
 export { Result } from "./common/Result";
-export { Variante, compareVarianten } from "./Variante";
+export { Variante, isVariante, compareVarianten } from "./Variante";
 export {
   type VerfuegbaresKontingent,
   listeKontingentAuf,

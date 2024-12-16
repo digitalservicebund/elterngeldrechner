@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
-import { Elternteil } from "@/features/planer/user-interface/service";
+import { Elternteil } from "@/features/planer/domain";
 
 describe("Gesamtsummenanzeige", () => {
   it("shows a section for the Gesamtsumme", () => {

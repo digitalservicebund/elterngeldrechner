@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { AbschnittMitPlanungsuebersicht } from "./AbschnittMitPlanungsuebersicht";
-import { Elternteil, Variante } from "@/features/planer/user-interface/service";
+import { Elternteil, Variante } from "@/features/planer/domain";
 
 describe("Abschnitt mit Planungsübersicht", () => {
   it("shows a section for the Planungsübersicht", () => {

@@ -8,9 +8,9 @@ import {
   MONAT_MIT_MUTTERSCHUTZ,
   Variante,
   type Auswahloption,
+  AusgangslageFuerEinElternteil,
 } from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
-import type { AusgangslageFuerEinElternteil } from "@/features/planer/domain/ausgangslage";
 
 vi.mock(
   import(

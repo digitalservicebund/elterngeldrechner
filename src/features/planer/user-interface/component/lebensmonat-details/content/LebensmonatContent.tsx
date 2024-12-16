@@ -12,7 +12,7 @@ import { ZeitraumLabel } from "@/features/planer/user-interface/component/Zeitra
 import {
   AlleElternteileHabenBonusGewaehlt,
   berechneZeitraumFuerLebensmonat,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 
 type Props = {
   readonly zeitraumLabelIdentifier: string;

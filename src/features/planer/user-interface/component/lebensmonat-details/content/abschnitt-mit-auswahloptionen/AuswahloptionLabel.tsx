@@ -6,7 +6,7 @@ import {
   Variante,
   type Auswahloption,
   type Elterngeldbezug,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {

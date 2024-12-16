@@ -1,12 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Planer } from "./Planer";
-import { usePlanerService } from "@/features/planer/user-interface/service/usePlanerService";
-import {
-  Elternteil,
-  KeinElterngeld,
-  Variante,
-} from "@/features/planer/user-interface/service";
+import { usePlanerService } from "@/features/planer/user-interface/service";
+import { Elternteil, KeinElterngeld, Variante } from "@/features/planer/domain";
 
 vi.mock(import("@/features/planer/user-interface/service/usePlanerService"));
 

@@ -1,6 +1,5 @@
 import { setTrackingVariable } from "./data-layer";
-import { Variante } from "@/features/planer";
-import { KeinElterngeld } from "@/features/planer/domain";
+import { Variante, KeinElterngeld } from "@/features/planer/domain";
 
 import {
   trackPlannedMonths,

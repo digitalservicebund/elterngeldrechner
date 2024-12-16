@@ -1,9 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { KontingentUebersicht } from "./KontingentUebersicht";
-import {
-  KeinElterngeld,
-  Variante,
-} from "@/features/planer/user-interface/service";
+import { KeinElterngeld, Variante } from "@/features/planer/domain";
 
 describe("KontingentUebersicht", () => {
   it("shows a section with label", () => {

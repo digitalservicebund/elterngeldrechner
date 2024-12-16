@@ -2,11 +2,10 @@ import { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { DatenfeldFuerMonat } from "./DatenfeldFuerMonat";
 import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
-import {} from "@/features/planer/user-interface/service";
-import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
 import {
   berechneZeitraumFuerLebensmonat,
   compareElternteile,
+  listeLebensmonateAuf,
   type Ausgangslage,
   type ElternteileByAusgangslage,
   type Lebensmonate,

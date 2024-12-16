@@ -5,7 +5,7 @@ import type {
   Lebensmonat,
   Lebensmonatszahl,
   PlanMitBeliebigenElternteilen,
-} from "@/features/planer/user-interface/service";
+} from "@/features/planer/domain";
 
 export type PlanChangedCallback = (
   plan: PlanMitBeliebigenElternteilen,

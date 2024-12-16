@@ -3,7 +3,7 @@ import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import { Button } from "@/components/atoms";
 import { Page } from "@/components/organisms/page";
 import { formSteps } from "@/utils/formSteps";
-import { Zusammenfassung } from "@/features/planer";
+import { Zusammenfassung } from "@/features/planer/user-interface";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 
 function ZusammenfassungUndDatenPage(): ReactNode {

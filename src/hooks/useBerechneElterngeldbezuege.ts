@@ -8,6 +8,8 @@ import {
   type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
   type Monat,
+  type ElterngeldbezuegeFuerElternteil,
+  isVariante,
 } from "@/features/planer/domain";
 import { EgrSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
@@ -29,8 +31,6 @@ import type { RootState } from "@/redux";
 import { finanzDatenOfUi } from "@/redux/finanzDatenFactory";
 import { persoenlicheDatenOfUi } from "@/redux/persoenlicheDatenFactory";
 import { useAppStore } from "@/redux/hooks";
-import { isVariante } from "@/features/planer/domain/Variante";
-import type { ElterngeldbezuegeFuerElternteil } from "@/features/planer/domain/Elterngeldbezug";
 
 export function useBerechneElterngeldbezuege(): BerechneElterngeldbezuegeCallback {
   const store = useAppStore();

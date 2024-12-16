@@ -1,9 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { GewaehlteOption } from "./GewaehlteOption";
-import {
-  KeinElterngeld,
-  Variante,
-} from "@/features/planer/user-interface/service";
+import { KeinElterngeld, Variante } from "@/features/planer/domain";
 
 describe("GewaehlteOption", () => {
   it("shows im Mutterschutz with a lock icon", () => {

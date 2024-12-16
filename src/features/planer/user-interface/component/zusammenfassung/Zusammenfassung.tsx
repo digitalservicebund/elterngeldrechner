@@ -3,8 +3,8 @@ import { AbschnittMitPlanungsuebersicht } from "./abschnitt-mit-planungsuebersic
 import { AbschnittMitPlanungsdetails } from "./abschnitt-mit-planungsdetails";
 import {
   fassePlanZusammen,
-  PlanMitBeliebigenElternteilen,
-} from "@/features/planer/user-interface/service";
+  type PlanMitBeliebigenElternteilen,
+} from "@/features/planer/domain";
 
 type Props = {
   readonly plan: PlanMitBeliebigenElternteilen;

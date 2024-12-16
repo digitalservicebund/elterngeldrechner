@@ -5,7 +5,7 @@ import {
   type ReactNode,
 } from "react";
 import type { RenderHookResult } from "@testing-library/react";
-import { Elternteil } from "@/features/planer/user-interface/service";
+import { Elternteil } from "@/features/planer/domain";
 
 export function GridLayoutProvider(props: {
   readonly anzahlElternteile: AnzahlElternteile;

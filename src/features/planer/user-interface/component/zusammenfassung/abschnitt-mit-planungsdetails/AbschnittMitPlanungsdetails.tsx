@@ -1,9 +1,9 @@
 import { ReactNode, useId } from "react";
 import { TabelleMitLebensmonaten } from "./TabelleMitLebensmonaten";
-import { type Planungsdetails } from "@/features/planer/user-interface/service";
 import {
   type Ausgangslage,
   type ElternteileByAusgangslage,
+  type Planungsdetails,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 

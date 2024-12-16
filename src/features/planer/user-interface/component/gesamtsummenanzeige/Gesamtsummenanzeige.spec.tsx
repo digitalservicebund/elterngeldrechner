@@ -60,6 +60,33 @@ describe("Gesamtsummenanzeige", () => {
   });
 
   describe("Summe für jedes Elternteil", () => {
+    it("shows the Elterngeld and number of Monate", () => {
+      const pseudonymeDerElternteile = {
+        [Elternteil.Eins]: "",
+      };
+      const gesamtsumme = {
+        ...ANY_GESAMTSUMME,
+        proElternteil: {
+          [Elternteil.Eins]: {
+            anzahlMonateMitBezug: 8,
+            elterngeldbezug: 6000,
+            bruttoeinkommen: 0,
+          },
+        },
+      };
+
+      render(
+        <Gesamtsummenanzeige
+          {...ANY_PROPS}
+          pseudonymeDerElternteile={pseudonymeDerElternteile}
+          gesamtsumme={gesamtsumme}
+        />,
+      );
+
+      expect(screen.getByText("Elterngeld")).toBeVisible();
+      expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
+    });
+
     it("includes the Pseudonym when more than one Elternteil", () => {
       const pseudonymeDerElternteile = {
         [Elternteil.Eins]: "Jane",

@@ -6,13 +6,13 @@ import type { SummeFuerElternteil } from "@/features/planer/user-interface/servi
 import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
-  readonly pseudonum: string;
+  readonly pseudonym: string;
   readonly summe: SummeFuerElternteil;
   readonly className?: string;
 };
 
 export function EinkommenFuerElternteil({
-  pseudonum,
+  pseudonym,
   summe,
   className,
 }: Props): ReactNode {
@@ -26,7 +26,12 @@ export function EinkommenFuerElternteil({
   return (
     <div className={classNames("flex flex-col items-center", className)}>
       <span className="font-bold">
-        <PersonIcon /> {pseudonum}: Einkommen
+        {!!pseudonym && (
+          <>
+            <PersonIcon /> {pseudonym}:{" "}
+          </>
+        )}
+        Einkommen
       </span>
 
       <span>

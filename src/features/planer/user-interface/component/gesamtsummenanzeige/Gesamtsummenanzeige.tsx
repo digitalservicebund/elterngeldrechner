@@ -52,7 +52,7 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
             <ElterngeldFuerElternteil
               className="basis-[40ch]"
               key={elternteil}
-              pseudonum={pseudonym}
+              pseudonym={pseudonym}
               summe={summeFuerElternteil}
             />
           );
@@ -63,22 +63,21 @@ export function Gesamtsummenanzeige<E extends Elternteil>({
         <span className="basis-full font-bold">{gesamtsummeElterngeld}</span>
       )}
 
-      {beideHabenEinkommen
-        ? listePseudonymeAuf(pseudonymeDerElternteile, true).map(
-            ([elternteil, pseudonym]) => {
-              const summeFuerElternteil = gesamtsumme.proElternteil[elternteil];
+      {!!beideHabenEinkommen &&
+        listePseudonymeAuf(pseudonymeDerElternteile, true).map(
+          ([elternteil, pseudonym]) => {
+            const summeFuerElternteil = gesamtsumme.proElternteil[elternteil];
 
-              return (
-                <EinkommenFuerElternteil
-                  className="basis-[40ch]"
-                  key={elternteil}
-                  pseudonum={pseudonym}
-                  summe={summeFuerElternteil}
-                />
-              );
-            },
-          )
-        : null}
+            return (
+              <EinkommenFuerElternteil
+                className="basis-[40ch]"
+                key={elternteil}
+                pseudonym={pseudonym}
+                summe={summeFuerElternteil}
+              />
+            );
+          },
+        )}
 
       <span className="basis-full text-14">
         Hinweis: Mutterschaftsleistungen werden nicht in der Summe

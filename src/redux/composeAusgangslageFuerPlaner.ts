@@ -33,7 +33,6 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
 
   const sharedAusganslageProperties = {
     geburtsdatumDesKindes,
-    istAlleinerziehend,
     hatBehindertesGeschwisterkind,
     sindMehrlinge,
   };
@@ -48,6 +47,7 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
         ...sharedAusganslageProperties,
         anzahlElternteile,
         informationenZumMutterschutz,
+        istAlleinerziehend,
       };
     }
 
@@ -72,6 +72,7 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
         anzahlElternteile,
         pseudonymeDerElternteile,
         informationenZumMutterschutz,
+        istAlleinerziehend: false,
       };
     }
   }
@@ -239,6 +240,7 @@ if (import.meta.vitest) {
       "sets alleinerziehend flag to $expected if answered to be alleinerziehend with $answer",
       ({ answer, expected }) => {
         const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
           draft.stepAllgemeineAngaben.alleinerziehend = answer;
         });
 
@@ -247,6 +249,17 @@ if (import.meta.vitest) {
         expect(ausgangslage.istAlleinerziehend).toBe(expected);
       },
     );
+
+    it("sets alleinerziehend always to false for two Elternteile", () => {
+      const state = produce(INITIAL_STATE, (draft) => {
+        draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        draft.stepAllgemeineAngaben.alleinerziehend = YesNo.YES;
+      });
+
+      const ausgangslage = composeAusgangslageFuerPlaner(state);
+
+      expect(ausgangslage.istAlleinerziehend).toBe(false);
+    });
 
     it.each([
       { anzahlKuenftigerKinder: 1, sindMehrlinge: false },

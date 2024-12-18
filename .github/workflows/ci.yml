@@ -23,6 +23,8 @@ jobs:
       - uses: ./.github/actions/cached-node-install
 
       - name: lint and test
+        env:
+          ALLOW_EXTREMELY_SLOW_TESTS: true
         run: npm run test-all
 
   e2e-test:

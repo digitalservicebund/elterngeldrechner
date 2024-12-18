@@ -96,59 +96,72 @@ import {
  *
  * The number of runs (`numRuns`) MIGHT be adapted during actual refactoring
  * work to shorten the feedback cycles. In the end, a refactoring MUST be
- * verified using the original configuration to gain enough confidence (i.e.
- * 1.000.000 runs, which take about )
+ * verified using at least the original configuration to gain enough confidence
+ * (i.e. 100.000 runs, which takes about 7 minutes). More runs might be used to
+ * gain further confidence depending on the refactoring.
+ * The number of runs is reduced for the continuous integration pipeline, just
+ * because of the test duration
+ * To run the tests, the environment variable `ALLOW_EXTREMELY_SLOW_TESTS` must
+ * be set to `true`. This is a current workaround for the shortcomings of the
+ * test runner to provide more suitable alternatives.
  */
-describe.only("tests to verify properties during refactoring", () => {
-  it("calculates the same result the original/legacy implementation", () => {
-    assertProperty(
-      property(
-        arbitraryPersoenlicheDatenRaw(),
-        arbitraryFinanzdatenRaw(),
-        arbitraryPlanungsdatenRaw(),
-        arbitraryLohnsteuerjahr(),
-        (
-          persoenlicheDatenRaw,
-          finanzdatenRaw,
-          planungsdatenRaw,
-          lohnsteuerjahr,
-        ) => {
-          const result = new EgrCalculation().calculateElternGeld(
-            {
-              persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
-              finanzDaten: finanzDatenFrom(finanzdatenRaw),
-              planungsDaten: planungsDatenFrom(planungsdatenRaw),
-            },
+describe("tests to verify properties during refactoring", () => {
+  it.runIf(extremelySlowTestsAreAllowed())(
+    "calculates the same result the original/legacy implementation",
+    () => {
+      assertProperty(
+        property(
+          arbitraryPersoenlicheDatenRaw(),
+          arbitraryFinanzdatenRaw(),
+          arbitraryPlanungsdatenRaw(),
+          arbitraryLohnsteuerjahr(),
+          (
+            persoenlicheDatenRaw,
+            finanzdatenRaw,
+            planungsdatenRaw,
             lohnsteuerjahr,
-          );
-
-          const originalResult =
-            new OriginalEgrCalculation().calculateElternGeld(
+          ) => {
+            const result = new EgrCalculation().calculateElternGeld(
               {
                 persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
-                finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
+                finanzDaten: finanzDatenFrom(finanzdatenRaw),
                 planungsDaten: planungsDatenFrom(planungsdatenRaw),
               },
               lohnsteuerjahr,
             );
 
-          return assert.deepStrictEqual(
-            transformAllBigsToNumbersRecursively(result),
-            transformAllBigsToNumbersRecursively(originalResult),
-          );
+            const originalResult =
+              new OriginalEgrCalculation().calculateElternGeld(
+                {
+                  persoenlicheDaten:
+                    persoenlicheDatenFrom(persoenlicheDatenRaw),
+                  finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
+                  planungsDaten: planungsDatenFrom(planungsdatenRaw),
+                },
+                lohnsteuerjahr,
+              );
+
+            return assert.deepStrictEqual(
+              transformAllBigsToNumbersRecursively(result),
+              transformAllBigsToNumbersRecursively(originalResult),
+            );
+          },
+        ),
+        {
+          numRuns: runsInContinuousIntegrationPipeline() ? 30000 : 100000,
+          endOnFailure: true,
         },
-      ),
-      { numRuns: 1000000, endOnFailure: true },
-    );
-  });
+      );
+    },
+  );
 });
 
 /**
  * Unfortunately, without "neutralizing" Big numbers, the assertion that two
  * data points that include instances of Big will always fail. This is happens,
  * because the original calculation has its own Big dependency bundled.
- * Anyhow, it is also useful to neutralize the usage of Big for refactoring
- * purposes. So the first case might become obsolete.
+ * Anyhow, it is also useful to neutralize the usage of Big numbers for
+ * refactoring purposes. So the first case might become obsolete.
  */
 function transformAllBigsToNumbersRecursively(data: unknown): unknown {
   if (data instanceof Big || data instanceof OriginalBig) {
@@ -464,4 +477,12 @@ function arbitraryErwerbstaetigkeit(): Arbitrary<ErwerbsTaetigkeit> {
 
 function arbitraryBruttoeinkommen(): Arbitrary<number> {
   return arbitraryInteger({ min: 0, max: 30000 });
+}
+
+function extremelySlowTestsAreAllowed(): boolean {
+  return import.meta.env.ALLOW_EXTREMELY_SLOW_TESTS === "true";
+}
+
+function runsInContinuousIntegrationPipeline(): boolean {
+  return import.meta.env.CI === "true";
 }

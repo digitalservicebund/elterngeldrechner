@@ -235,7 +235,7 @@ if (import.meta.vitest) {
       expect(finanzDatenOfUi).not.toHaveBeenCalled();
     });
 
-    it("uses the initially created static calculation parameters for the simulation calls", () => {
+    it("uses the initially created static calculation parameters for the calculation calls", () => {
       const persoenlicheDaten = new PersoenlicheDaten(new Date());
       vi.mocked(persoenlicheDatenOfUi).mockReturnValue(persoenlicheDaten);
 
@@ -355,7 +355,7 @@ if (import.meta.vitest) {
     }
 
     /**
-     * Spy on the {@link EgrCalculation.prototype.simulate} method and capture
+     * Spy on the {@link EgrCalculation.prototype.calculateElternGeld} method and capture
      * the {@link FinanzDaten.prototype.erwerbsZeitraumLebensMonatList} it was
      * called with.
      *

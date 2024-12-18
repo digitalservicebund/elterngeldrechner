@@ -7,15 +7,12 @@ export { Einkommen } from "./einkommen";
 export type { NettoEinkommen } from "./einkommen-types";
 export { ElternGeldArt } from "./eltern-geld-art";
 export type { ElternGeldDaten } from "./eltern-geld-daten";
-export type { ElternGeldErgebnis } from "./eltern-geld-ergebnis";
 export { ElternGeldKategorie } from "./eltern-geld-kategorie";
 export type { ElternGeldPerioden } from "./eltern-geld-perioden";
 export type {
   ElternGeldPlusErgebnis,
   ElternGeldAusgabe,
 } from "./eltern-geld-plus-ergebnis";
-export type { ElternGeldSimulationErgebnis } from "./eltern-geld-simulation-ergebnis";
-export type { ElternGeldSimulationErgebnisRow } from "./eltern-geld-simulation-ergebnis-row";
 export { ErwerbsArt } from "./erwerbs-art";
 export { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 export { FinanzDaten, finanzDatenOf } from "./finanz-daten";

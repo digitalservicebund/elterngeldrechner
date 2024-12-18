@@ -144,8 +144,8 @@ describe("tests to verify properties during refactoring", () => {
               );
 
             return assert.deepStrictEqual(
-              transformAllBigsToNumbersRecursively(result),
-              transformAllBigsToNumbersRecursively(originalResult),
+              transformDataRecursively(result, [convertBigsToNumbers]),
+              transformDataRecursively(originalResult, [convertBigsToNumbers]),
             );
           },
         ),
@@ -158,6 +158,31 @@ describe("tests to verify properties during refactoring", () => {
   );
 });
 
+function transformDataRecursively(
+  data: unknown,
+  transformers: DataTransformer[],
+): unknown {
+  const transformedData = transformers.reduce(
+    (transformedData, transformer) => transformer(transformedData),
+    data,
+  );
+
+  if (typeof transformedData === "object" && transformedData !== null) {
+    return Object.fromEntries(
+      Object.entries(transformedData).map(([key, value]) => [
+        key,
+        transformDataRecursively(value, transformers),
+      ]),
+    );
+  } else if (Array.isArray(transformedData)) {
+    return transformedData.map((entry) =>
+      transformDataRecursively(entry, transformers),
+    );
+  } else {
+    return transformedData;
+  }
+}
+
 /**
  * Unfortunately, without "neutralizing" Big numbers, the assertion that two
  * data points that include instances of Big will always fail. This is happens,
@@ -165,22 +190,15 @@ describe("tests to verify properties during refactoring", () => {
  * Anyhow, it is also useful to neutralize the usage of Big numbers for
  * refactoring purposes. So the first case might become obsolete.
  */
-function transformAllBigsToNumbersRecursively(data: unknown): unknown {
+function convertBigsToNumbers(data: unknown): unknown {
   if (data instanceof Big || data instanceof OriginalBig) {
     return data.toNumber();
-  } else if (typeof data === "object" && data !== null) {
-    return Object.fromEntries(
-      Object.entries(data).map(([key, value]) => [
-        key,
-        transformAllBigsToNumbersRecursively(value),
-      ]),
-    );
-  } else if (Array.isArray(data)) {
-    return data.map(transformAllBigsToNumbersRecursively);
   } else {
     return data;
   }
 }
+
+type DataTransformer = (data: unknown) => unknown;
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   const persoenlicheDaten = new PersoenlicheDaten(

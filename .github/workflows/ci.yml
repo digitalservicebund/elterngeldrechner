@@ -84,3 +84,11 @@ jobs:
 
       - name: Audit Licenses
         run: npm run audit-licenses
+
+  verify-original-rechner-remains-untouched:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git diff-tree --name-only -r ${{ github.sha }} \
+            | grep 'original-rechner/src' && exit 1 || exit 0

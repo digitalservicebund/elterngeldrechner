@@ -35,7 +35,6 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     const persoenlicheDaten = new PersoenlicheDaten(
       new Date("2022-01-01T10:37:00.000Z"),
     );
-    persoenlicheDaten.sindSieAlleinerziehend = YesNo.YES;
     persoenlicheDaten.anzahlKuenftigerKinder = 1;
     persoenlicheDaten.wahrscheinlichesGeburtsDatum =
       this.geburtsDatum(testCaseIndex);

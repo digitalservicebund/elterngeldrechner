@@ -51,12 +51,7 @@ export class EgrCalculation {
     lohnSteuerJahr: Lohnsteuerjahr,
     mutterschaftsLeistung: MutterschaftsLeistung,
   ): ElternGeldSimulationErgebnis {
-    const planungsDaten = new PlanungsDaten(
-      persoenlicheDaten.isAlleinerziehend(),
-      persoenlicheDaten.isETVorGeburt(),
-      false,
-      mutterschaftsLeistung,
-    );
+    const planungsDaten = new PlanungsDaten(mutterschaftsLeistung);
 
     planungsDaten.planung = new Array<ElternGeldArt>(
       EgrCalculation.BASIS_ELTERN_GELD_MAX_MONATE,

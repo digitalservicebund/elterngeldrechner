@@ -9,7 +9,6 @@ import { excludesFutureChildren } from "@/globals/js/calculations/common/kind-ut
 export class PersoenlicheDaten {
   anzahlKuenftigerKinder: number;
   wahrscheinlichesGeburtsDatum: Date;
-  sindSieAlleinerziehend: YesNo;
   etVorGeburt: ErwerbsArt;
   etNachGeburt: YesNo;
   anfangLM: Date[];
@@ -18,7 +17,6 @@ export class PersoenlicheDaten {
 
   constructor(wahrscheinlichesGeburtsDatum: Date) {
     this.wahrscheinlichesGeburtsDatum = wahrscheinlichesGeburtsDatum;
-    this.sindSieAlleinerziehend = YesNo.NO;
     this.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
     this.etNachGeburt = YesNo.NO;
     this.anfangLM = [];
@@ -39,10 +37,6 @@ export class PersoenlicheDaten {
 
   isETVorGeburt(): boolean {
     return this.etVorGeburt !== ErwerbsArt.NEIN;
-  }
-
-  isAlleinerziehend(): boolean {
-    return this.sindSieAlleinerziehend === YesNo.YES;
   }
 
   isGeschwisterVorhanden() {

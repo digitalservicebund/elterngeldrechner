@@ -23,12 +23,16 @@ describe("egr-calculation", () => {
   describe("should calculate EgrErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
-      const planungsDatenElternTeil1 = createPlanungsDaten();
+      const planungsDatenElternTeil1 = new PlanungsDaten(
+        MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+      );
       planungsDatenElternTeil1.planung = new Array<ElternGeldArt>(
         PLANUNG_ANZAHL_MONATE,
       ).fill(ElternGeldArt.ELTERNGELD_PLUS);
 
-      const planungsDatenElternTeil2 = createPlanungsDaten();
+      const planungsDatenElternTeil2 = new PlanungsDaten(
+        MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+      );
       planungsDatenElternTeil2.planung = new Array<ElternGeldArt>(
         PLANUNG_ANZAHL_MONATE,
       ).fill(ElternGeldArt.BASIS_ELTERNGELD);
@@ -36,7 +40,6 @@ describe("egr-calculation", () => {
       const persoenlicheDatenElternTeil1 = new PersoenlicheDaten(
         new Date("2023-11-25T01:02:03.000Z"),
       );
-      persoenlicheDatenElternTeil1.sindSieAlleinerziehend = YesNo.NO;
       persoenlicheDatenElternTeil1.anzahlKuenftigerKinder = 1;
       persoenlicheDatenElternTeil1.etVorGeburt =
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
@@ -45,7 +48,6 @@ describe("egr-calculation", () => {
       const persoenlicheDatenElternTeil2 = new PersoenlicheDaten(
         new Date("2023-11-25T01:02:03.000Z"),
       );
-      persoenlicheDatenElternTeil2.sindSieAlleinerziehend = YesNo.NO;
       persoenlicheDatenElternTeil2.anzahlKuenftigerKinder = 1;
       persoenlicheDatenElternTeil2.etVorGeburt =
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
@@ -119,7 +121,6 @@ describe("egr-calculation", () => {
       const persoenlicheDaten = new PersoenlicheDaten(
         new Date("2023-11-25T01:02:03.000Z"),
       );
-      persoenlicheDaten.sindSieAlleinerziehend = YesNo.NO;
       persoenlicheDaten.anzahlKuenftigerKinder = 1;
       persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
       persoenlicheDaten.etNachGeburt = YesNo.YES;
@@ -192,9 +193,6 @@ describe("egr-calculation", () => {
     finanzDaten.mischEinkommenTaetigkeiten = [taetigkeit];
 
     const planungsDaten = new PlanungsDaten(
-      false,
-      false,
-      false,
       MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
     );
     planungsDaten.planung = [ElternGeldArt.BASIS_ELTERNGELD];
@@ -208,11 +206,3 @@ describe("egr-calculation", () => {
     expect(calculate()).toStrictEqual(calculate());
   });
 });
-
-const createPlanungsDaten = () =>
-  new PlanungsDaten(
-    true,
-    true,
-    false,
-    MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
-  );

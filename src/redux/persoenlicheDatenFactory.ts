@@ -64,8 +64,6 @@ export const persoenlicheDatenOfUi = (
 
   persoenlicheDaten.anzahlKuenftigerKinder =
     state.stepNachwuchs.anzahlKuenftigerKinder;
-  persoenlicheDaten.sindSieAlleinerziehend =
-    state.stepAllgemeineAngaben.alleinerziehend ?? YesNo.NO;
 
   persoenlicheDaten.etVorGeburt = erwerbsTaetigkeitVorGeburtOf(
     state,

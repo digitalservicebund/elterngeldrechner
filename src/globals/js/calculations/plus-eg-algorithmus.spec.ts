@@ -85,7 +85,9 @@ describe("plus-eg-algorithmus", () => {
   describe("should calculate ElternGeldPlusErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
-      const planungsDaten = createPlanungsDaten();
+      const planungsDaten = new PlanungsDaten(
+        MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+      );
       planungsDaten.planung = new Array<ElternGeldArt>(
         PLANUNG_ANZAHL_MONATE,
       ).fill(ElternGeldArt.ELTERNGELD_PLUS);
@@ -93,7 +95,6 @@ describe("plus-eg-algorithmus", () => {
       const persoenlicheDaten = new PersoenlicheDaten(
         new Date("2023-11-24T01:02:03.000Z"),
       );
-      persoenlicheDaten.sindSieAlleinerziehend = YesNo.YES;
       persoenlicheDaten.anzahlKuenftigerKinder = 1;
       persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
       persoenlicheDaten.etNachGeburt = YesNo.YES;
@@ -175,7 +176,7 @@ describe("plus-eg-algorithmus", () => {
 
       expect(() =>
         algorithmus.elterngeldPlusErgebnis(
-          createPlanungsDaten(),
+          new PlanungsDaten(MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN),
           persoenlicheDaten,
           finanzDaten,
           2022,
@@ -186,14 +187,6 @@ describe("plus-eg-algorithmus", () => {
     });
   });
 });
-
-const createPlanungsDaten = () =>
-  new PlanungsDaten(
-    true,
-    true,
-    false,
-    MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
-  );
 
 const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
   return {

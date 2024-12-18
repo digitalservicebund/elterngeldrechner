@@ -119,7 +119,6 @@ describe("persoenlicheDatenFactory", () => {
     expect(persoenlicheDaten.kinder[2].geburtsdatum?.getDate()).toBe(31);
     expect(persoenlicheDaten.kinder[2].geburtsdatum?.getMonth()).toBe(4);
     expect(persoenlicheDaten.kinder[2].geburtsdatum?.getFullYear()).toBe(2008);
-    expect(persoenlicheDaten.sindSieAlleinerziehend).toBe(YesNo.NO);
     expect(persoenlicheDaten.anzahlKuenftigerKinder).toBe(1);
     expect(persoenlicheDaten.getAnzahlGeschwister()).toBe(2);
     expect(persoenlicheDaten.etVorGeburt).toBe(ErwerbsArt.NEIN);
@@ -134,7 +133,6 @@ describe("persoenlicheDatenFactory", () => {
     const persoenlicheDaten = persoenlicheDatenOfUi(mockStore, "ET1");
 
     // then
-    expect(persoenlicheDaten.sindSieAlleinerziehend).toBe(YesNo.YES);
     expect(persoenlicheDaten.anzahlKuenftigerKinder).toBe(1);
 
     mockStore.stepAllgemeineAngaben.alleinerziehend = YesNo.NO;

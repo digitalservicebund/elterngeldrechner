@@ -140,7 +140,6 @@ const createPersoenlicheDaten = () => {
     new Date("2022-01-01T10:37:00.000Z"),
   );
   persoenlicheDaten.anzahlKuenftigerKinder = 1;
-  persoenlicheDaten.sindSieAlleinerziehend = YesNo.NO;
   persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
   persoenlicheDaten.etNachGeburt = YesNo.NO;
   return persoenlicheDaten;

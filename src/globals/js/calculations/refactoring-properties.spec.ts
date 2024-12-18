@@ -37,7 +37,9 @@ import {
 } from "./model";
 import {
   EgrCalculation as OriginalEgrCalculation,
+  PersoenlicheDaten as OriginalPersoenlicheDaten,
   FinanzDaten as OriginalFinanzDaten,
+  PlanungsDaten as OriginalPlanungsDaten,
   ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
   Big as OriginalBig,
 } from "original-rechner";
@@ -134,9 +136,9 @@ describe("tests to verify properties during refactoring", () => {
               new OriginalEgrCalculation().calculateElternGeld(
                 {
                   persoenlicheDaten:
-                    persoenlicheDatenFrom(persoenlicheDatenRaw),
+                    originalPersoenlicheDatenFrom(persoenlicheDatenRaw),
                   finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
-                  planungsDaten: planungsDatenFrom(planungsdatenRaw),
+                  planungsDaten: originalPlanungsDatenFrom(planungsdatenRaw),
                 },
                 lohnsteuerjahr,
               );
@@ -185,6 +187,19 @@ function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
     data.wahrscheinlichesGeburtsdatum,
   );
   persoenlicheDaten.anzahlKuenftigerKinder = data.anzahlKuenftigerKinder;
+  persoenlicheDaten.etVorGeburt = data.erwerbsartVorDerGeburt;
+  persoenlicheDaten.etNachGeburt = yesNoFrom(data.erwerbstaetigNachDerGeburt);
+  persoenlicheDaten.kinder.push(...data.kinder.map(kindFrom));
+  return persoenlicheDaten;
+}
+
+function originalPersoenlicheDatenFrom(
+  data: PersoenlicheDatenRaw,
+): OriginalPersoenlicheDaten {
+  const persoenlicheDaten = new OriginalPersoenlicheDaten(
+    data.wahrscheinlichesGeburtsdatum,
+  );
+  persoenlicheDaten.anzahlKuenftigerKinder = data.anzahlKuenftigerKinder;
   persoenlicheDaten.sindSieAlleinerziehend = yesNoFrom(
     data.sindSieAlleinerziehend,
   );
@@ -192,6 +207,23 @@ function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   persoenlicheDaten.etNachGeburt = yesNoFrom(data.erwerbstaetigNachDerGeburt);
   persoenlicheDaten.kinder.push(...data.kinder.map(kindFrom));
   return persoenlicheDaten;
+}
+
+function finanzDatenFrom(data: FinanzdatenRaw): FinanzDaten {
+  const finanzdaten = new FinanzDaten();
+  finanzdaten.bruttoEinkommen = new Einkommen(data.bruttoeinkommen);
+  finanzdaten.zahlenSieKirchenSteuer = yesNoFrom(data.zahlenSieKirchensteuer);
+  finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
+  finanzdaten.steuerKlasse = data.steuerklasse;
+  finanzdaten.kassenArt = data.kassenart;
+  finanzdaten.rentenVersicherung = data.rentenversicherung;
+  finanzdaten.splittingFaktor = data.splittingfaktor;
+  finanzdaten.mischEinkommenTaetigkeiten = data.mischEinkommenTaetigkeiten.map(
+    mischEkTaetigkeitFrom,
+  );
+  finanzdaten.erwerbsZeitraumLebensMonatList =
+    data.erwerbsZeitraumLebensmonatList.map(erwerbsZeitraumLebensMonatFrom);
+  return finanzdaten;
 }
 
 function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
@@ -213,23 +245,6 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   return finanzdaten;
 }
 
-function finanzDatenFrom(data: FinanzdatenRaw): FinanzDaten {
-  const finanzdaten = new FinanzDaten();
-  finanzdaten.bruttoEinkommen = new Einkommen(data.bruttoeinkommen);
-  finanzdaten.zahlenSieKirchenSteuer = yesNoFrom(data.zahlenSieKirchensteuer);
-  finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
-  finanzdaten.steuerKlasse = data.steuerklasse;
-  finanzdaten.kassenArt = data.kassenart;
-  finanzdaten.rentenVersicherung = data.rentenversicherung;
-  finanzdaten.splittingFaktor = data.splittingfaktor;
-  finanzdaten.mischEinkommenTaetigkeiten = data.mischEinkommenTaetigkeiten.map(
-    mischEkTaetigkeitFrom,
-  );
-  finanzdaten.erwerbsZeitraumLebensMonatList =
-    data.erwerbsZeitraumLebensmonatList.map(erwerbsZeitraumLebensMonatFrom);
-  return finanzdaten;
-}
-
 function kindFrom(data: KindRaw, index: number): Kind {
   return {
     nummer: index + 2,
@@ -239,7 +254,15 @@ function kindFrom(data: KindRaw, index: number): Kind {
 }
 
 function planungsDatenFrom(data: PlanungsdatenRaw): PlanungsDaten {
-  const planungsdaten = new PlanungsDaten(
+  const planungsdaten = new PlanungsDaten(data.mutterschaftsleistungen);
+  planungsdaten.planung = data.planung;
+  return planungsdaten;
+}
+
+function originalPlanungsDatenFrom(
+  data: PlanungsdatenRaw,
+): OriginalPlanungsDaten {
+  const planungsdaten = new OriginalPlanungsDaten(
     data.alleinerziehend,
     data.erwerbsstatus,
     data.partnerbonus,

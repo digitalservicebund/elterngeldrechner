@@ -24,11 +24,19 @@ export function NurEinLebensmonatBasisParallel<A extends Ausgangslage>() {
       if (canNotBeApplied || istAusnahme) {
         return true;
       } else {
+        const lebensmonatszahlenMitParallelbezug = listeLebensmonateAuf(
+          plan.lebensmonate,
+        )
+          .filter(([, lebensmonat]) =>
+            AlleElternteileHabenBasisGewaehlt.asPredicate(lebensmonat),
+          )
+          .map(([lebensmonatszahl]) => lebensmonatszahl);
+
         return (
-          listeLebensmonateAuf(plan.lebensmonate)
-            .filter(([lebensmonatszahl]) => lebensmonatszahl <= 12)
-            .map(([, lebensmonat]) => lebensmonat)
-            .filter(AlleElternteileHabenBasisGewaehlt.asPredicate).length <= 1
+          lebensmonatszahlenMitParallelbezug.length <= 1 &&
+          lebensmonatszahlenMitParallelbezug.every(
+            (lebensmonatszahl) => lebensmonatszahl <= 12,
+          )
         );
       }
     },
@@ -45,17 +53,17 @@ if (import.meta.vitest) {
       "@/features/planer/domain/monat"
     );
 
-    it("is satisfied if all Elternteile took only a single Lebensmonat Basiselterngeld in parallel", () => {
+    it("is satisfied if all Elternteile took only a single Lebensmonat Basiselterngeld in parallel within the first 12th", () => {
       const lebensmonate = {
         1: {
           [Elternteil.Eins]: monat(Variante.Plus),
           [Elternteil.Zwei]: monat(Variante.Basis),
         },
-        2: {
+        12: {
           [Elternteil.Eins]: monat(Variante.Basis),
           [Elternteil.Zwei]: monat(Variante.Basis),
         },
-        3: {
+        13: {
           [Elternteil.Eins]: monat(Variante.Plus),
           [Elternteil.Zwei]: monat(Variante.Plus),
         },
@@ -81,12 +89,8 @@ if (import.meta.vitest) {
       expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(false);
     });
 
-    it("is satsified if another parallel Lebensmonat is taken but after the 12th", () => {
+    it("is not satsified if Elternteile took a parallel Lebensmonat Basiselterngeld after the 12th", () => {
       const lebensmonate = {
-        1: {
-          [Elternteil.Eins]: monat(Variante.Basis),
-          [Elternteil.Zwei]: monat(Variante.Basis),
-        },
         13: {
           [Elternteil.Eins]: monat(Variante.Basis),
           [Elternteil.Zwei]: monat(Variante.Basis),
@@ -94,10 +98,10 @@ if (import.meta.vitest) {
       };
       const plan = { ...ANY_PLAN, lebensmonate };
 
-      expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(true);
+      expect(NurEinLebensmonatBasisParallel().asPredicate(plan)).toBe(false);
     });
 
-    it("can never be unsatisfied if it only a single Elternteil", () => {
+    it("can never be unsatisfied if there is only a single Elternteil", () => {
       const ausgangslage = {
         anzahlElternteile: 1 as const,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,

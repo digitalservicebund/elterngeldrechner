@@ -11,16 +11,12 @@ export class PersoenlicheDaten {
   wahrscheinlichesGeburtsDatum: Date;
   etVorGeburt: ErwerbsArt;
   etNachGeburt: YesNo;
-  anfangLM: Date[];
-  endeLM: Date[];
   kinder: Kind[];
 
   constructor(wahrscheinlichesGeburtsDatum: Date) {
     this.wahrscheinlichesGeburtsDatum = wahrscheinlichesGeburtsDatum;
     this.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
     this.etNachGeburt = YesNo.NO;
-    this.anfangLM = [];
-    this.endeLM = [];
     this.anzahlKuenftigerKinder = 1;
     this.kinder = [
       {

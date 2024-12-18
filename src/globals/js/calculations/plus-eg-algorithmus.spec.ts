@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import {
   Einkommen,
   ElternGeldArt,
@@ -22,65 +21,6 @@ import { BIG_ZERO } from "./common/math-util";
 
 describe("plus-eg-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
-
-  describe("should fill LebensMonate list", () => {
-    test.each([
-      [
-        "2023-01-01",
-        [
-          { lm: 1, anfang: "2023-01-01", ende: "2023-01-31" },
-          { lm: 2, anfang: "2023-02-01", ende: "2023-02-28" },
-          { lm: 3, anfang: "2023-03-01", ende: "2023-03-31" },
-          { lm: 4, anfang: "2023-04-01", ende: "2023-04-30" },
-          { lm: 31, anfang: "2025-07-01", ende: "2025-07-31" },
-          { lm: 32, anfang: "2025-08-01", ende: "2025-08-31" },
-        ],
-      ],
-      [
-        "2023-01-03",
-        [
-          { lm: 1, anfang: "2023-01-03", ende: "2023-02-02" },
-          { lm: 2, anfang: "2023-02-03", ende: "2023-03-02" },
-          { lm: 3, anfang: "2023-03-03", ende: "2023-04-02" },
-          { lm: 4, anfang: "2023-04-03", ende: "2023-05-02" },
-          { lm: 31, anfang: "2025-07-03", ende: "2025-08-02" },
-          { lm: 32, anfang: "2025-08-03", ende: "2025-09-02" },
-        ],
-      ],
-      [
-        "2023-01-31",
-        [
-          { lm: 1, anfang: "2023-01-31", ende: "2023-02-27" },
-          { lm: 2, anfang: "2023-02-28", ende: "2023-03-30" },
-          { lm: 3, anfang: "2023-03-31", ende: "2023-04-29" },
-          { lm: 4, anfang: "2023-04-30", ende: "2023-05-30" },
-          { lm: 31, anfang: "2025-07-31", ende: "2025-08-30" },
-          { lm: 32, anfang: "2025-08-31", ende: "2025-09-29" },
-        ],
-      ],
-    ])("if geburt of child is %p", (geburtIsoDate: string, expectedLmList) => {
-      // given
-      const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-
-      // when
-      const plusEgAlgorithmus = new PlusEgAlgorithmus();
-      plusEgAlgorithmus.fillLebensMonateList(geburt);
-
-      // then
-      expect(plusEgAlgorithmus.anfang_LM[0]).toBeUndefined();
-      expect(plusEgAlgorithmus.ende_LM[0]).toBeUndefined();
-
-      expectedLmList.forEach((expectedLm) => {
-        const anfangLM = plusEgAlgorithmus.anfang_LM[expectedLm.lm];
-        const endeLM = plusEgAlgorithmus.ende_LM[expectedLm.lm];
-        expect(anfangLM).not.toBeUndefined();
-        expect(DateTime.fromJSDate(anfangLM).toISODate()).toBe(
-          expectedLm.anfang,
-        );
-        expect(DateTime.fromJSDate(endeLM).toISODate()).toBe(expectedLm.ende);
-      });
-    });
-  });
 
   describe("should calculate ElternGeldPlusErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {

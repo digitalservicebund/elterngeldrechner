@@ -25,8 +25,6 @@ describe("persoenliche-daten", () => {
     expect(persoenlicheDaten.isETVorGeburt()).toBe(true);
     expect(persoenlicheDaten.etNachGeburt).toBe(YesNo.NO);
     expect(persoenlicheDaten.isETNachGeburt()).toBe(false);
-    expect(persoenlicheDaten.anfangLM.length).toBe(0);
-    expect(persoenlicheDaten.endeLM.length).toBe(0);
   });
 
   // birthdate of "" will be set to undefined in kind-util - means future child

@@ -216,15 +216,11 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         finanzDaten.erwerbsZeitraumLebensMonatList,
       );
       if (anzahl_monate != null && anzahl_monate !== 0) {
-        elternGeldPerioden = PlusEgAlgorithmus.determineEGPerioden(
-          finanzDaten,
-          planungsergebnis,
-        );
+        elternGeldPerioden =
+          PlusEgAlgorithmus.determineEGPerioden(planungsergebnis);
         let summe_brutto_basis: Big = BIG_ZERO;
         let summe_brutto_plus: Big = BIG_ZERO;
         this.fillLebensMonateList(geburt);
-        persoenlicheDaten.anfangLM = this.anfang_LM;
-        persoenlicheDaten.endeLM = this.ende_LM;
         const finanzDatenBerechnet = bruttoEGPlusNeu(
           planungsergebnis,
           finanzDaten,
@@ -742,12 +738,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
    * Methode zum Ermitteln der Elterngeldperioden (ausgedrückt in Lebensmonaten des Kindes) - abhängig von dem
    * Ergebnis der Elterngeldplanung
    *
-   * @param {FinanzDaten} finanzDaten
    * @param {PlanungsDaten} planungsDaten
    * @return {ElternGeldPerioden}
    */
   private static determineEGPerioden(
-    finanzDaten: FinanzDaten,
     planungsDaten: PlanungsDaten,
   ): ElternGeldPerioden {
     const anfang_eg_per: number[] = [];

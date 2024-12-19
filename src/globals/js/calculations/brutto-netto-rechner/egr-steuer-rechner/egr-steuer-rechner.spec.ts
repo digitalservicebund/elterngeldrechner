@@ -33,7 +33,8 @@ describe("erg-steuer-rechner", () => {
     ["2016-02-24T03:24:00", 2022],
     ["2023-02-24T03:24:00", 2022],
     ["2024-02-24T03:24:00", 2023],
-    ["2025-02-24T03:24:00", 2023],
+    ["2025-02-24T03:24:00", 2024],
+    ["2026-02-24T03:24:00", 2024],
   ])(
     "when wahrscheinlichesGeburtsDatum is %s then expect Lohnsteuerjahr %d",
     (wahrscheinlichesGeburtsDatum, lohnSteuerJahr) => {

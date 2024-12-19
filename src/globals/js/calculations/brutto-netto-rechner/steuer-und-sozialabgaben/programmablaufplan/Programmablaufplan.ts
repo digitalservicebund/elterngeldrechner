@@ -11,13 +11,16 @@
  * the interface needs to rethink the (possible extension of this) design chosen
  * here. So it is important to double check the data types and their
  * documentation before each extension carefully.
+ * Simple cases are added or removed parameters. In the first case, the
+ * interface can be simply added. In the latter case they remain in the
+ * interface. The respective program will either use or ignore them. Hints in
+ * documentation are helpful.
  *
- * The terminology is chosen from the general concept of flowcharts
- * (German: Programmablaufplan). Extended by terms used in the original
- * flowcharts that are implemented (e.g. "Eingangsparameter"). The language is
- * kept German thoroughly as this is the original language of the domain with
- * its flowcharts and related documentation. Notice that the flowcharts follow
- * the ISO 5807.
+ * The terminology is chosen from the general concept of flowcharts (German:
+ * Programmablaufplan). Extended by terms used in the original flowcharts that
+ * are implemented (e.g. "Eingangsparameter"). The language is kept German
+ * thoroughly as this is the original language of the domain with its flowcharts
+ * and related documentation. Notice that the flowcharts follow the ISO 5807.
  *
  * The usage of record types for the input and output data was chosen solely for
  * better interface usage. The names, coming from the specification(s), are not
@@ -88,10 +91,10 @@ export type Eingangsparameter = {
 
   /**
    * Kassenindividueller Zusatzbeitragssatz bei einem gesetzlich
-   * krankenversicherten Arbeitnehmer in Prozent (bspw. 1,30 für
-   * 1,30 %) mit 2 Dezimalstellen. Es ist der volle Zusatzbeitragssatz
+   * krankenversicherten Arbeitnehmer in Prozent (bspw. 1,70 für
+   * 1,70 %) mit 2 Dezimalstellen. Es ist der volle Zusatzbeitragssatz
    * anzugeben. Die Aufteilung in Arbeitnehmer- und Arbeitgeberanteil
-   * erfolgt im Programmablauf.
+   * erfolgt im Programmablauf
    */
   KVZ: number;
 
@@ -136,6 +139,20 @@ export type Eingangsparameter = {
    * Arbeitgeberzuschuss
    */
   PKV: 0 | 1 | 2;
+
+  /**
+   * Seit 2024:
+   *
+   * Zahl der beim Arbeitnehmer zu berücksichtigenden
+   * Beitragsabschläge in der sozialen Pflegeversicherung bei mehr als
+   * einem Kind
+   * 0 = kein Abschlag
+   * 1 = Beitragsabschlag für das 2. Kind
+   * 2 = Beitragsabschläge für das 2. und 3. Kind
+   * 3 = Beitragsabschläge für 2. bis 4. Kinder
+   * 4 = Beitragsabschläge für 2. bis 5. oder mehr Kinder
+   */
+  PVA: 0 | 1 | 2 | 3 | 4;
 
   /**
    * 1, wenn bei der sozialen Pflegeversicherung die Besonderheiten

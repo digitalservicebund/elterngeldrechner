@@ -30,10 +30,8 @@ import {
   PlanungsDaten,
   RentenArt,
   SteuerKlasse,
-  UnterstuetzteLohnsteuerjahre,
   YesNo,
   type Kind,
-  type Lohnsteuerjahr,
 } from "./model";
 import {
   EgrCalculation as OriginalEgrCalculation,
@@ -41,6 +39,8 @@ import {
   FinanzDaten as OriginalFinanzDaten,
   PlanungsDaten as OriginalPlanungsDaten,
   ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
+  type Lohnsteuerjahr as OriginalLohnsteuerjahr,
+  UnterstuetzteLohnsteuerjahre as OriginalUnterstuetzteLohnsteuerjahre,
   Big as OriginalBig,
 } from "original-rechner";
 
@@ -340,8 +340,16 @@ function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
   return arbitraryRecord({
     anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
     wahrscheinlichesGeburtsdatum: arbitraryDate({
-      min: new Date(Math.min(...UnterstuetzteLohnsteuerjahre) - 1, 0, 1),
-      max: new Date(Math.max(...UnterstuetzteLohnsteuerjahre) - 1, 11, 31),
+      min: new Date(
+        Math.min(...OriginalUnterstuetzteLohnsteuerjahre) - 1,
+        0,
+        1,
+      ),
+      max: new Date(
+        Math.max(...OriginalUnterstuetzteLohnsteuerjahre) - 1,
+        11,
+        31,
+      ),
     }),
     sindSieAlleinerziehend: arbitraryBoolean(),
     erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
@@ -411,8 +419,8 @@ type PlanungsdatenRaw = {
   planung: ElternGeldArt[];
 };
 
-function arbitraryLohnsteuerjahr(): Arbitrary<Lohnsteuerjahr> {
-  return arbitraryConstantFrom(...UnterstuetzteLohnsteuerjahre);
+function arbitraryLohnsteuerjahr(): Arbitrary<OriginalLohnsteuerjahr> {
+  return arbitraryConstantFrom(...OriginalUnterstuetzteLohnsteuerjahre);
 }
 
 function arbitraryMischEkTaetigkeitRaw(): Arbitrary<MischEkTaetigkeitRaw> {
@@ -468,8 +476,16 @@ type ErwerbsZeitraumLebensMonatRaw = {
 function arbitraryKind(): Arbitrary<KindRaw> {
   return arbitraryRecord({
     geburtsdatum: arbitraryDate({
-      min: new Date(Math.min(...UnterstuetzteLohnsteuerjahre) - 20, 0, 1),
-      max: new Date(Math.max(...UnterstuetzteLohnsteuerjahre) - 1, 11, 31),
+      min: new Date(
+        Math.min(...OriginalUnterstuetzteLohnsteuerjahre) - 20,
+        0,
+        1,
+      ),
+      max: new Date(
+        Math.max(...OriginalUnterstuetzteLohnsteuerjahre) - 1,
+        11,
+        31,
+      ),
     }),
     istBehindert: arbitraryBoolean(),
   });

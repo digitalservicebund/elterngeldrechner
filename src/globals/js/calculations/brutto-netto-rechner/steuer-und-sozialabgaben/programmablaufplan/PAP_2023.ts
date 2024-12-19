@@ -88,9 +88,10 @@ import { Programmablaufplan } from "./Programmablaufplan";
  * Steps to create a new program are:
  * - The whole last (the year before) implementation MUST be copied.
  * - This documentation here MUST be copied too. Though, it MAY get updated.
- * - Documentation MUST NOT be updated for "old" implementations backwards.
  * - The code MUST be carefully compared with the flowchart to make necessary
  *   adjustments. This works best by viewing both documents next to each other.
+ *   Notice that the specification includes (partially) black bars on the left
+ *   to indicate changes to the last version.
  * - New internal data fields MUST be added. Obsolete ones SHOULD be removed.
  * - Any code documentation and comments MUST be checked against the
  *   specification.
@@ -1240,6 +1241,7 @@ if (import.meta.vitest) {
           LZZHINZU: 0,
           PKPV: 0,
           PKV: 0,
+          PVA: 0,
           PVS: 0,
           PVZ: steuerklasse === 2 ? 0 : 1,
           R: 0,
@@ -1521,6 +1523,7 @@ if (import.meta.vitest) {
           LZZHINZU: 0,
           PKPV: 0,
           PKV: 1,
+          PVA: 0,
           PVS: 0,
           PVZ: steuerklasse === 2 ? 0 : 1,
           R: 0,

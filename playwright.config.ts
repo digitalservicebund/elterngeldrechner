@@ -19,7 +19,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.PLAYWRIGHT_REPORTER || "html",
-  testIgnore: process.env.PLAYWRIGHT_TEST_IGNORE || null,
+  testIgnore: process.env.PLAYWRIGHT_TEST_IGNORE || undefined,
   snapshotPathTemplate: "{testDir}/snapshots/{testFileName}/{arg}{ext}",
   use: {
     baseURL: APP_BASE_URL + ":" + APP_PORT,

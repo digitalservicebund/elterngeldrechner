@@ -1,6 +1,0 @@
-@use "sass:math";
-@use "@/globals/scss/variables" as *;
-
-@function nsp($classname, $namespace: $nsp) {
-  @return $namespace + "-" + $classname;
-}

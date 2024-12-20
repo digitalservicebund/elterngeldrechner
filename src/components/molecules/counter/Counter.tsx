@@ -12,7 +12,6 @@ import classNames from "classnames";
 import AddIcon from "@digitalservicebund/icons/Add";
 import RemoveIcon from "@digitalservicebund/icons/Remove";
 import { Description } from "@/components/atoms";
-import nsp from "@/globals/js/namespace";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;
@@ -38,13 +37,13 @@ export function Counter<TFieldValues extends FieldValues>({
   const error = get(errors, name) as FieldError | undefined;
 
   return (
-    <div className={classNames(nsp("counter"), error && nsp("counter--error"))}>
-      <label className={nsp("counter__label")} htmlFor={name}>
+    <div className={classNames("egr-counter", error && "egr-counter--error")}>
+      <label className="egr-counter__label" htmlFor={name}>
         {label}
       </label>
-      <div className={nsp("counter__controls")}>
+      <div className="egr-counter__controls">
         <button
-          className={nsp("counter__button")}
+          className="egr-counter__button"
           type="button"
           onClick={onDecrease}
           aria-label="verringern"
@@ -54,7 +53,7 @@ export function Counter<TFieldValues extends FieldValues>({
         </button>
         <input
           {...register(name, registerOptions)}
-          className={nsp("counter__input")}
+          className="egr-counter__input"
           type="number"
           id={name}
           aria-describedby={error ? `${name}-error` : undefined}
@@ -62,7 +61,7 @@ export function Counter<TFieldValues extends FieldValues>({
           required={required}
         />
         <button
-          className={nsp("counter__button")}
+          className="egr-counter__button"
           type="button"
           onClick={onIncrease}
           aria-label="erhöhen"

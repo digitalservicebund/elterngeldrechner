@@ -8,7 +8,6 @@ import {
   Path,
   get,
 } from "react-hook-form";
-import nsp from "@/globals/js/namespace";
 import { Description } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
@@ -54,21 +53,21 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   return (
     <div
       className={classNames(
-        nsp("custom-select"),
-        autoWidth && nsp("custom-select--auto-width"),
+        "egr-custom-select",
+        autoWidth && "egr-custom-select--auto-width",
       )}
     >
-      <div className={nsp("custom-select-question")}>
-        <label className={nsp("custom-select-question__label")} htmlFor={name}>
+      <div className="egr-custom-select-question">
+        <label className="egr-custom-select-question__label" htmlFor={name}>
           {label}
         </label>
 
-        <div className={nsp("custom-select-question__control")}>
+        <div className="egr-custom-select-question__control">
           <select
             {...register(name, registerOptions)}
             className={classNames(
-              nsp("custom-select-question__input"),
-              error && nsp("custom-select-question__input--error"),
+              "egr-custom-select-question__input",
+              error && "egr-custom-select-question__input--error",
             )}
             id={name}
             disabled={disabled}
@@ -78,7 +77,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
             {...aria}
           >
             <option
-              className={nsp("custom-select-question__option")}
+              className="egr-custom-select-question__option"
               value=""
               disabled={required}
               hidden={required}
@@ -89,7 +88,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
             {options.map((option) => (
               <option
                 key={option.value}
-                className={nsp("custom-select-question__option")}
+                className="egr-custom-select-question__option"
                 value={option.value}
                 hidden={option.hidden}
               >

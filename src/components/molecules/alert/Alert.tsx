@@ -1,6 +1,5 @@
 import Icon from "@digitalservicebund/icons/NotificationsNone";
 import classNames from "classnames";
-import nsp from "@/globals/js/namespace";
 
 interface AlertProps {
   readonly headline: string;
@@ -10,9 +9,9 @@ interface AlertProps {
 
 export function Alert({ headline, children, className }: AlertProps) {
   return (
-    <div className={classNames(nsp("alert"), className)}>
-      <strong className={`${nsp("alert")}__title`}>
-        <Icon className={`${nsp("alert")}__icon`} />
+    <div className={classNames("egr-alert", className)}>
+      <strong className="egr-alert__title">
+        <Icon className="egr-alert__icon" />
         {headline}
       </strong>
       {children}

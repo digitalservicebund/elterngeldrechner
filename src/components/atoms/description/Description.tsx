@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import classNames from "classnames";
-import nsp from "@/globals/js/namespace";
 
 interface Props {
   readonly id?: string;
@@ -11,7 +10,7 @@ interface Props {
 export function Description({ id, error = false, children }: Props) {
   return (
     <div
-      className={classNames(nsp("info-text"), error && nsp("info-text--error"))}
+      className={classNames("egr-info-text", error && "egr-info-text--error")}
       id={id}
     >
       {children}

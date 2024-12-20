@@ -1,11 +1,9 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("custom-select")} {
+.egr-custom-select {
   display: flex;
   justify-content: space-between;
   width: 100%;
 
-  &--auto-width &-question__control {
+  &--auto-width {
     width: auto;
   }
 

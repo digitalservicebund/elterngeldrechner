@@ -1,6 +1,4 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("einkommen-form")} {
+.egr-einkommen-form {
   &__ausfuerliche-eingabe-text-et1,
   &__ausfuerliche-eingabe-text-et2 {
     @apply my-16 text-16;

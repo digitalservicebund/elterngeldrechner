@@ -9,7 +9,6 @@ import {
 } from "react-hook-form";
 import classNames from "classnames";
 import { MouseEvent } from "react";
-import nsp from "@/globals/js/namespace";
 import { Description } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
@@ -51,14 +50,14 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   };
 
   return (
-    <div className={nsp("custom-checkbox")}>
+    <div className="egr-custom-checkbox">
       <div>
         <input
           {...register(name, registerOptions)}
           type="checkbox"
           className={classNames(
-            nsp("custom-checkbox__input"),
-            hasError && nsp("custom-checkbox__input--error"),
+            "egr-custom-checkbox__input",
+            hasError && "egr-custom-checkbox__input--error",
           )}
           id={name}
           onClick={onClick}
@@ -71,8 +70,8 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
         />
         <label
           className={classNames(
-            nsp("custom-checkbox__label"),
-            hasError && nsp("custom-checkbox__label--error"),
+            "egr-custom-checkbox__label",
+            hasError && "egr-custom-checkbox__label--error",
           )}
           htmlFor={name}
         >

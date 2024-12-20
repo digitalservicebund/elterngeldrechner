@@ -20,7 +20,6 @@ import {
 import classNames from "classnames";
 import { CustomSelect, SelectOption } from "@/components/molecules";
 import { Description } from "@/components/atoms";
-import nsp from "@/globals/js/namespace";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
 import { zeitraumValueOf, ZeitraumValueType } from "@/globals/js/ZeitraumValue";
 
@@ -216,8 +215,8 @@ export function Zeitraum<TFieldValues extends FieldValues>({
   const [fromValue, setFromValue] = useState<string>("");
 
   return (
-    <section className={classNames(nsp("zeitraum"), className)}>
-      <div className={nsp("zeitraum__controls")}>
+    <section className={classNames("egr-zeitraum", className)}>
+      <div className="egr-zeitraum__controls">
         <CustomSelect
           register={register}
           registerOptions={zeitraumFromRegisterOptions}

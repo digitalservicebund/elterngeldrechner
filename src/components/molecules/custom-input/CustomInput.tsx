@@ -7,7 +7,6 @@ import {
   get,
   UseFormRegister,
 } from "react-hook-form";
-import nsp from "@/globals/js/namespace";
 import { Description } from "@/components/atoms";
 import { InfoDialog } from "@/components/molecules/info-dialog/InfoDialog";
 import { Info } from "@/components/molecules/info-dialog/infoTexts";
@@ -34,16 +33,16 @@ export function CustomInput<TFieldValues extends FieldValues>({
   return (
     <div
       className={classNames(
-        nsp("custom-input"),
-        error && nsp("custom-input--error"),
+        "egr-custom-input",
+        error && "egr-custom-input--error",
       )}
     >
-      <div className={nsp("custom-input-question")}>
-        <label className={nsp("custom-input-question__label")} htmlFor={name}>
+      <div className="egr-custom-input-question">
+        <label className="egr-custom-input-question__label" htmlFor={name}>
           {label}
         </label>
         <input
-          className={nsp("custom-input-question__input")}
+          className="egr-custom-input-question__input"
           {...register(name)}
           type="text"
           id={name}

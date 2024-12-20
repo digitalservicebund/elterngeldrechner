@@ -1,6 +1,4 @@
-@use "description.variables" as *;
-
-.#{nsp("info-text")} {
+.egr-info-text {
   @apply mt-8 text-14;
 
   &--error {

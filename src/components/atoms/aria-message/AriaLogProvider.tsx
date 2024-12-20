@@ -6,7 +6,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import nsp from "@/globals/js/namespace";
 
 interface IAriaLogContext {
   addMessage: (message: string) => void;
@@ -47,7 +46,7 @@ export function AriaLogProvider({ children }: Props) {
 
   return (
     <AriaLogContext.Provider value={context}>
-      <div role="log" className={nsp("aria-log")}>
+      <div role="log" className="egr-aria-log">
         {messages.map((message) => (
           <p key={message}>{message}</p>
         ))}

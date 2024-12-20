@@ -7,7 +7,6 @@ import {
   FormFieldGroup,
   SelectOption,
 } from "@/components/molecules";
-import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurErwerbstaetigProps {
@@ -45,9 +44,7 @@ export function NurErwerbstaetig({
       )}
       {averageOrMonthlyNichtSelbstaendig === "average" && (
         <p
-          className={nsp(
-            `einkommen-form__ausfuerliche-eingabe-text-${elternteil.toLowerCase()}`,
-          )}
+          className={`egr-einkommen-form__ausfuerliche-eingabe-text-${elternteil.toLowerCase()}`}
         >
           Wenn das Einkommen zwischen den Monaten sehr schwankte, klicken Sie
           bitte auf „ausführliche Eingabe“ und geben die Monate einzeln ein.
@@ -66,7 +63,7 @@ export function NurErwerbstaetig({
       {averageOrMonthlyNichtSelbstaendig === "monthly" && (
         <fieldset
           name="Einkommen pro Monat"
-          className={nsp("einkommen-form__per-month")}
+          className="egr-einkommen-form__per-month"
         >
           <legend className="mb-10">
             Geben Sie an, wie viel Sie in den 12 Monaten vor der Geburt Ihres

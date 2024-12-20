@@ -1,6 +1,4 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("modal-popup")} {
+.egr-modal-popup {
   position: fixed;
   z-index: 100;
   top: 0;

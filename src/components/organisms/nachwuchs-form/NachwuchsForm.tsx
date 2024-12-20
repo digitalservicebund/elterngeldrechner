@@ -12,7 +12,6 @@ import {
   FormFieldGroup,
   ButtonGroup,
 } from "@/components/molecules";
-import nsp from "@/globals/js/namespace";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { trackNutzergruppe } from "@/user-tracking";
 import { fromGermanDateString } from "@/utils/fromGermanDateString";
@@ -170,7 +169,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
           </ul>
         }
       >
-        <ul className={nsp("nachwuchs-form__geschwisterkinder")}>
+        <ul className="egr-nachwuchs-form__geschwisterkinder">
           {fields.map((field, index) => {
             return (
               <li key={field.id} aria-label={`${index + 1}. Geschwisterkind`}>
@@ -196,7 +195,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
                 <Button
                   onClick={() => remove(index)}
                   iconAfter={<ClearIcon />}
-                  className={nsp("nachwuchs-form__geschwisterkinder-delete")}
+                  className="egr-nachwuchs-form__geschwisterkinder-delete"
                   buttonStyle="link"
                   label="Geschwisterkind entfernen"
                 />

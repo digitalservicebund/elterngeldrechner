@@ -1,7 +1,6 @@
 import { MouseEvent } from "react";
 import classNames from "classnames";
 import { Button } from "@/components/atoms";
-import nsp from "@/globals/js/namespace";
 
 interface Props {
   readonly onClickBackButton?: (event: MouseEvent) => void;
@@ -21,8 +20,8 @@ export function ButtonGroup({
   return (
     <section
       className={classNames(
-        nsp("button-group"),
-        isStepOne && nsp("button-group--step-one"),
+        "egr-button-group",
+        isStepOne && "egr-button-group--step-one",
       )}
     >
       {!isStepOne && (

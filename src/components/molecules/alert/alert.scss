@@ -1,6 +1,4 @@
-@use "alert.variables" as *;
-
-.#{nsp("alert")} {
+.egr-alert {
   @apply gap-4 rounded bg-primary-light px-40 py-24;
   display: flex;
   flex-direction: column;

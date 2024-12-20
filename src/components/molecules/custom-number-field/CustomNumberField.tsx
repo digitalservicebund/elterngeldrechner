@@ -8,7 +8,6 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import nsp from "@/globals/js/namespace";
 import { Description } from "@/components/atoms";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
@@ -70,18 +69,18 @@ export function CustomNumberField<
   return (
     <div
       className={classNames(
-        nsp("custom-input"),
-        error && nsp("custom-input--error"),
+        "egr-custom-input",
+        error && "egr-custom-input--error",
         className,
       )}
     >
-      <div className={nsp("custom-input-question")}>
-        <label className={nsp("custom-input-question__label")} htmlFor={name}>
+      <div className="egr-custom-input-question">
+        <label className="egr-custom-input-question__label" htmlFor={name}>
           {label}
         </label>
 
         <IMaskInput
-          className={nsp("custom-input-question__input")}
+          className="egr-custom-input-question__input"
           inputRef={ref}
           mask={mask}
           unmask

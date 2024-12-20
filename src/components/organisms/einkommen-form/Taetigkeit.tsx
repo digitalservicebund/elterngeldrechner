@@ -13,7 +13,6 @@ import {
 import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Button } from "@/components/atoms";
-import nsp from "@/globals/js/namespace";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
 import {
   availableZeitraumOptions,
@@ -184,7 +183,7 @@ export function Taetigkeit({
       <FormFieldGroup description="In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?">
         {zeitraumFields.map((field, zeitraumIndex) => {
           return (
-            <div key={field.id} className={nsp("einkommen-form__zeitraum")}>
+            <div key={field.id} className="egr-einkommen-form__zeitraum">
               <Zeitraum
                 disabled={zeitraumIndex + 1 !== zeitraumFields.length}
                 register={register}
@@ -215,7 +214,7 @@ export function Taetigkeit({
             </div>
           );
         })}
-        <div className={nsp("einkommen-form__taetigkeit-buttons")}>
+        <div className="egr-einkommen-form__taetigkeit-buttons">
           <Button
             buttonStyle="secondary"
             disabled={addButtonDisabled}

@@ -1,6 +1,4 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("counter")} {
+.egr-counter {
   &__controls {
     @apply mt-16 gap-16;
     display: flex;

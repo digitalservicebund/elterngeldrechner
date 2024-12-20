@@ -1,7 +1,5 @@
-@use "aria-message.variables" as *;
-
 // Make the aria-message-log only available to screen readers
-.#{nsp("aria-log")} {
+.egr-aria-log {
   position: absolute;
   width: 1px;
   height: 1px;

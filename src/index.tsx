@@ -4,12 +4,11 @@ import { Provider } from "react-redux";
 import { App } from "./applications/App";
 import store from "./redux";
 
-import nsp from "./globals/js/namespace";
 import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 import { setupUserTracking } from "./user-tracking";
 
 document.addEventListener("DOMContentLoaded", function () {
-  const rootDiv = document.getElementById(nsp("root"));
+  const rootDiv = document.getElementById("egr-root");
   if (!rootDiv) return;
 
   const elternGeldDigitalWizardUrl = rootDiv.dataset.elternGeldDigitalWizardUrl;
@@ -19,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <Provider store={store}>
         <App elternGeldDigitalWizardUrl={elternGeldDigitalWizardUrl} />
       </Provider>
-      <div id={nsp("toast")} />
+      <div id="egr-toast" />
     </StrictMode>,
   );
 

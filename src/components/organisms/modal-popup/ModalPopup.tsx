@@ -1,4 +1,3 @@
-import nsp from "@/globals/js/namespace";
 import { Button } from "@/components/atoms";
 
 interface Props {
@@ -9,11 +8,11 @@ interface Props {
 
 export default function ModalPupup({ text, buttonLabel, onClick }: Props) {
   return (
-    <div className={nsp("modal-popup")}>
-      <div className={nsp("modal-popup__info")}>
+    <div className="egr-modal-popup">
+      <div className="egr-modal-popup__info">
         <p>{text}</p>
         <Button
-          className={nsp("modal-popup__btn")}
+          className="egr-modal-popup__btn"
           onClick={onClick}
           label={buttonLabel}
           buttonStyle="primary"

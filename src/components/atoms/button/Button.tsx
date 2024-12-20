@@ -1,7 +1,6 @@
 import { MouseEvent, ReactNode } from "react";
 import classNames from "classnames";
 import { FieldValues, Path } from "react-hook-form";
-import nsp from "@/globals/js/namespace";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly id?: string;
@@ -34,11 +33,11 @@ export function Button<TFieldValues extends FieldValues>({
     <button
       id={id}
       className={classNames(
-        nsp("button"),
-        buttonStyle === "primary" && nsp("button--primary"),
-        buttonStyle === "secondary" && nsp("button--secondary"),
-        buttonStyle === "link" && nsp("button--link"),
-        disabled && nsp("button--disabled"),
+        "egr-button",
+        buttonStyle === "primary" && "egr-button--primary",
+        buttonStyle === "secondary" && "egr-button--secondary",
+        buttonStyle === "link" && "egr-button--link",
+        disabled && "egr-button--disabled",
         className,
       )}
       type={isSubmitButton ? "submit" : "button"}

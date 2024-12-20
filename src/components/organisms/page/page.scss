@@ -1,6 +1,4 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("page")} {
+.egr-page {
   display: grid;
   grid-template:
     "sidebar"

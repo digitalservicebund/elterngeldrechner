@@ -6,7 +6,6 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import { IMask, IMaskInput } from "react-imask";
-import nsp from "@/globals/js/namespace";
 import { Description } from "@/components/atoms";
 import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
@@ -36,22 +35,22 @@ export function CustomDate<
   } = useController({ control, rules, name });
 
   return (
-    <div className={nsp("custom-date")}>
-      <div className={nsp("custom-date__label")}>
+    <div className="egr-custom-date">
+      <div className="egr-custom-date__label">
         <label htmlFor={name}>{label}</label>
         {!!info && <InfoDialog info={info} />}
       </div>
       <div
         className={classNames(
-          nsp("custom-date__field"),
-          error && nsp("custom-date__field--error"),
+          "egr-custom-date__field",
+          error && "egr-custom-date__field--error",
         )}
       >
-        <span className={nsp("custom-date__placeholder")} aria-hidden>
+        <span className="egr-custom-date__placeholder" aria-hidden>
           TT.MM.JJJJ
         </span>
         <IMaskInput
-          className={nsp("custom-date__input")}
+          className="egr-custom-date__input"
           name={name}
           id={name}
           inputRef={ref}

@@ -1,6 +1,4 @@
-@use "button-group.variables" as *;
-
-.#{nsp("button-group")} {
+.egr-button-group {
   @apply mt-56;
   display: flex;
   align-items: flex-end;

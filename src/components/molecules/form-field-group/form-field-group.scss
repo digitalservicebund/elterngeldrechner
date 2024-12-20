@@ -1,6 +1,4 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("form-field-group")} {
+.egr-form-field-group {
   @apply mb-32;
 
   &-description {

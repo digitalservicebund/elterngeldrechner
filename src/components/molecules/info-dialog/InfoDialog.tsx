@@ -9,7 +9,6 @@ import {
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
-import nsp from "@/globals/js/namespace";
 import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
 import { useAnchorPositioning } from "@/components/molecules/info-dialog/positioning/anchor";
 import { useMarginPositioning } from "@/components/molecules/info-dialog/positioning/margin";
@@ -88,8 +87,8 @@ export function InfoDialog({
   return (
     <div
       className={classNames(
-        nsp("info-dialog"),
-        isMonatsplanner && nsp("info-dialog--monatsplanner"),
+        "egr-info-dialog",
+        isMonatsplanner && "egr-info-dialog--monatsplanner",
         className,
       )}
       style={style}
@@ -98,8 +97,8 @@ export function InfoDialog({
       <button
         id={id}
         className={classNames(
-          nsp("info-dialog__button"),
-          isMonatsplanner && nsp("info-dialog__button--monatsplanner"),
+          "egr-info-dialog__button",
+          isMonatsplanner && "egr-info-dialog__button--monatsplanner",
         )}
         style={button.style}
         type="button"
@@ -114,8 +113,8 @@ export function InfoDialog({
 
       <div
         className={classNames(
-          nsp("info-dialog-box"),
-          isElternteilOne && nsp("info-dialog-box--monatsplanner-et-one"),
+          "egr-info-dialog-box",
+          isElternteilOne && "egr-info-dialog-box--monatsplanner-et-one",
           { hidden: !isModalOpen },
           ...tooltip.className,
         )}
@@ -126,7 +125,7 @@ export function InfoDialog({
       >
         <div
           id={dialogContentIdentifier}
-          className={nsp("info-dialog-box__text")}
+          className="egr-info-dialog-box__text"
           tabIndex={-1}
           ref={dialogContentElement}
         >
@@ -138,7 +137,7 @@ export function InfoDialog({
         </div>
 
         <button
-          className={nsp("info-dialog-box__button")}
+          className="egr-info-dialog-box__button"
           type="button"
           onClick={() => closeModal(true)}
           aria-label="Information schließen"

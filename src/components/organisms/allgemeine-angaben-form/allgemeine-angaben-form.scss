@@ -1,9 +1,7 @@
-@use "@/globals/scss" as *;
-
-.#{nsp("allgemeine-angaben-form-elternteil1")} {
+.egr-allgemeine-angaben-form-elternteil1 {
   @apply mr-32;
-}
 
-.#{nsp("allgemeine-angaben-form-elternteil-label")} {
-  @apply mr-16;
+  &-label {
+    @apply mr-16;
+  }
 }

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
-import nsp from "@/globals/js/namespace";
 import { FormStep, formSteps } from "@/utils/formSteps";
 import { Button } from "@/components/atoms";
 
@@ -30,9 +29,9 @@ export function Sidebar({ currentStep }: Props) {
   );
 
   return (
-    <nav className={classNames(nsp("sidebar"))} aria-label="Fortschritt">
+    <nav className="egr-sidebar" aria-label="Fortschritt">
       <Button
-        className={classNames(nsp("sidebar__collapse-btn"), "text-nowrap")}
+        className="egr-sidebar__collapse-btn text-nowrap"
         onClick={() => setIsOpen(!isOpen)}
         label={buttonLabel}
         iconAfter={isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -40,8 +39,8 @@ export function Sidebar({ currentStep }: Props) {
 
       <ol
         className={classNames(
-          nsp("sidebar-list"),
-          isOpen && nsp("sidebar-list--open"),
+          "egr-sidebar-list",
+          isOpen && "egr-sidebar-list--open",
         )}
       >
         {Object.values(formSteps).map((step, index) => {
@@ -52,9 +51,9 @@ export function Sidebar({ currentStep }: Props) {
             <li
               key={step.route}
               className={classNames(
-                nsp("sidebar-list__step"),
-                index < currentStepIndex && nsp("sidebar-list__step--done"),
-                step === currentStep && nsp("sidebar-list__step--current"),
+                "egr-sidebar-list__step",
+                index < currentStepIndex && "egr-sidebar-list__step--done",
+                step === currentStep && "egr-sidebar-list__step--current",
               )}
             >
               <Link to={step.route} aria-current={ariaCurrent}>

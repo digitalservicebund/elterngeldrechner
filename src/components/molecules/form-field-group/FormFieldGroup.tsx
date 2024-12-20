@@ -1,5 +1,4 @@
 import React, { AriaAttributes } from "react";
-import nsp from "@/globals/js/namespace";
 import { InfoDialog, Info } from "@/components/molecules/info-dialog";
 
 interface FormFieldGroupProps extends AriaAttributes {
@@ -20,13 +19,13 @@ export function FormFieldGroup({
     <section
       aria-label={headline}
       aria-roledescription={description}
-      className={nsp("form-field-group")}
+      className="egr-form-field-group"
       {...aria}
     >
       {!!headline && <h3 className="mb-10">{headline}</h3>}
       {!!description && (
-        <div className={nsp("form-field-group-description")}>
-          <p className={nsp("form-field-group-description__text")}>
+        <div className="egr-form-field-group-description">
+          <p className="egr-form-field-group-description__text">
             {description}
           </p>
           {!!info && <InfoDialog info={info} />}

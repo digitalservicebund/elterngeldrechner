@@ -65,7 +65,7 @@ export function AbschnittMitEinkommen(): ReactNode {
         />
 
         <button
-          className="flex basis-full items-center justify-center gap-6 border-none bg-[transparent] text-black"
+          className="flex basis-full items-center justify-center gap-6 border-none bg-transparent text-black"
           type="button"
           onClick={toggleVisibilityState}
           aria-expanded={areInputsVisible}

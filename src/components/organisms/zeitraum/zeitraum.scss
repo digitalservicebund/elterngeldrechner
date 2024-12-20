@@ -1,6 +1,4 @@
-@use "zeitraum.variables" as *;
-
-.#{nsp("zeitraum")} {
+.egr-zeitraum {
   @apply mb-16;
 
   &__controls {

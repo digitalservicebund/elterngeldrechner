@@ -1,7 +1,4 @@
-@use "@/globals/scss" as *;
-@use "sass:math" as math;
-
-.#{nsp("custom-checkbox")} {
+.egr-custom-checkbox {
   @apply p-8 pl-0;
   display: flex;
   justify-content: space-between;

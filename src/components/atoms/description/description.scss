@@ -1,9 +1,7 @@
 @use "description.variables" as *;
 
 .#{nsp("info-text")} {
-  font-size: px-to-rem(14);
-  line-height: px-to-rem(18);
-  margin-top: px-to-rem($spacer-s);
+  @apply mt-8 text-14;
 
   &--error {
     color: $color-danger;

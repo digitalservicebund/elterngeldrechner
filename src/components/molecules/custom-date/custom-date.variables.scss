@@ -4,9 +4,6 @@
 $custom-date-label-text-color: egr.$color-text !default;
 
 $custom-date-border: 1px solid egr.$color-grey-dark !default;
-$custom-date-padding: egr.px-to-rem(egr.$spacer-s) egr.px-to-rem(egr.$spacer) !default;
-
-$custom-date-margin: egr.px-to-rem(egr.$spacer-s) !default;
 
 $custom-date--error-color: egr.$color-danger !default;
 $custom-date--valid-color: egr.$color-success !default;

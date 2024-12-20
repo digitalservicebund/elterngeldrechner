@@ -1,7 +1,7 @@
-@use "form-field-group.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("form-field-group")} {
-  margin-bottom: $form-field-group-spacing;
+  @apply mb-32;
 
   &-description {
     display: flex;
@@ -9,7 +9,7 @@
     justify-content: space-between;
 
     &__text {
-      margin-bottom: $form-field-group-description-spacing;
+      @apply mb-16;
     }
   }
 }

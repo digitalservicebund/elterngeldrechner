@@ -1,13 +1,13 @@
 @use "zeitraum.variables" as *;
 
 .#{nsp("zeitraum")} {
-  margin-bottom: px-to-rem($spacer);
+  @apply mb-16;
 
   &__controls {
+    @apply gap-16;
     display: flex;
     flex-flow: row wrap;
     width: 100%;
-    gap: px-to-rem($spacer);
 
     > * {
       flex: 1;

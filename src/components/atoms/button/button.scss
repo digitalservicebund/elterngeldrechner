@@ -3,11 +3,8 @@
 .#{nsp("button")} {
   &,
   &:visited {
-    font-size: px-to-rem(20);
+    @apply border border-solid border-primary px-16 px-24 py-16 text-20;
     color: $color-white;
-    line-height: px-to-rem(24);
-    padding: $button--padding;
-    border: $button--primary--border;
     transition: all 0.3s;
   }
 
@@ -105,7 +102,7 @@
 
   &__input {
     &:focus {
-      outline: px-to-rem(2) solid $color-primary;
+      @apply outline outline-2 !outline-primary;
     }
   }
 

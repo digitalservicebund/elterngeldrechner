@@ -2,13 +2,9 @@
 @use "@/globals/scss/index" as egr;
 
 $counter--border: 1px solid egr.$color-grey-dark !default;
-$counter--padding: egr.px-to-rem(egr.$spacer-s) egr.px-to-rem(egr.$spacer) !default;
-$counter--margin: egr.px-to-rem(egr.$spacer) !default;
 $counter--error-color: egr.$color-danger !default;
 
 $counter__label-text-color: egr.$color-text !default;
-$counter__control--gap: egr.px-to-rem(egr.$spacer) !default;
 
-$counter__button--size: egr.px-to-rem(32) !default;
 $counter__button--color: egr.$color-primary !default;
 $counter__button--background-color: egr.$color-primary-light !default;

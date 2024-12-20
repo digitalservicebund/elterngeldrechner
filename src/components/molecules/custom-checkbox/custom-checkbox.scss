@@ -2,7 +2,7 @@
 @use "sass:math" as math;
 
 .#{nsp("custom-checkbox")} {
-  padding: $custom-checkbox--inner-space;
+  @apply p-8 pl-0;
   display: flex;
   justify-content: space-between;
 
@@ -12,7 +12,7 @@
 
     &:focus {
       + label::before {
-        border: px-to-rem(2) solid $color-primary;
+        @apply outline outline-2 outline-primary;
       }
     }
 
@@ -20,6 +20,7 @@
       + label::before {
         border-color: $custom-checkbox__input--active--border-color;
       }
+
       + label::after {
         background: $custom-checkbox__input--fill-color;
       }
@@ -39,29 +40,22 @@
   }
 
   &__label {
+    @apply pl-40;
     position: relative;
-    padding-left: $custom-checkbox--size + $custom-checkbox--label-spacing;
-    line-height: $custom-checkbox--size;
 
     &::before {
+      @apply size-32 border border-solid border-primary;
       content: "";
       position: absolute;
       top: 0;
       left: 0;
-      border: $custom-checkbox--border-size solid
-        $custom-checkbox__input--border-color;
-      width: $custom-checkbox--size;
-      height: $custom-checkbox--size;
       background-color: $custom-checkbox--background-color;
     }
 
     &::after {
+      @apply left-8 top-8 size-16;
       content: "";
       position: absolute;
-      top: math.div($custom-checkbox--size - $custom-checkbox--fill-size, 2);
-      left: math.div($custom-checkbox--size - $custom-checkbox--fill-size, 2);
-      width: $custom-checkbox--fill-size;
-      height: $custom-checkbox--fill-size;
     }
 
     &--error {

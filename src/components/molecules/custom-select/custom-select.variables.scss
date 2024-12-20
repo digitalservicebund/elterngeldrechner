@@ -2,12 +2,3 @@
 @use "@/globals/scss" as egr;
 
 $custom-select-label-text-color: egr.$color-text !default;
-
-$custom-select-border: egr.px-to-rem(1) solid egr.$color-grey-dark !default;
-
-$custom-select-input-padding: egr.px-to-rem(egr.$spacer-s) egr.px-to-rem(50)
-  egr.px-to-rem(egr.$spacer-s) egr.px-to-rem(egr.$spacer) !default;
-$custom-select-option-padding: egr.px-to-rem(egr.$spacer-s)
-  egr.px-to-rem(egr.$spacer) !default;
-
-$custom-select-margin: egr.px-to-rem(egr.$spacer) !default;

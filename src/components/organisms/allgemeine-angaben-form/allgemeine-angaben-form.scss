@@ -1,9 +1,9 @@
-@use "allgemeine-angaben-form.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("allgemeine-angaben-form-elternteil1")} {
-  margin-right: $allgemeine-angaben-form-elternteil1-spacing;
+  @apply mr-32;
 }
 
 .#{nsp("allgemeine-angaben-form-elternteil-label")} {
-  margin-right: $allgemeine-angaben-form-elternteil1-label-spacing;
+  @apply mr-16;
 }

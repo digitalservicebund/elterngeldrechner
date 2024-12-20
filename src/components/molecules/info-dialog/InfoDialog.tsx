@@ -17,7 +17,6 @@ import { useMarginPositioning } from "@/components/molecules/info-dialog/positio
 interface Props {
   readonly ariaLabelForDialog?: string;
   readonly info: string | ReactNode;
-  readonly isLarge?: boolean;
   readonly isMonatsplanner?: boolean;
   readonly isElternteilOne?: boolean;
   readonly id?: string;
@@ -28,7 +27,6 @@ interface Props {
 export function InfoDialog({
   ariaLabelForDialog,
   info,
-  isLarge,
   isMonatsplanner,
   isElternteilOne,
   id,
@@ -91,7 +89,6 @@ export function InfoDialog({
     <div
       className={classNames(
         nsp("info-dialog"),
-        isLarge && nsp("info-dialog--large"),
         isMonatsplanner && nsp("info-dialog--monatsplanner"),
         className,
       )}

@@ -42,7 +42,6 @@ export function CustomNumberField<
   suffix,
   className,
   placeholder,
-  stretch = false,
   required,
   ariaDescribedByIfNoError,
   info,
@@ -72,7 +71,6 @@ export function CustomNumberField<
     <div
       className={classNames(
         nsp("custom-input"),
-        !stretch && nsp("custom-input--small"),
         error && nsp("custom-input--error"),
         className,
       )}

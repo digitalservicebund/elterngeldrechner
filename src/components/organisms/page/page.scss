@@ -1,22 +1,22 @@
-@use "page.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("page")} {
   display: grid;
   grid-template:
     "sidebar"
     "title"
-    "content" / minmax(auto, px-to-rem(1030));
+    "content" / minmax(auto, 64rem);
 
   @media (min-width: $breakpoint-desktop-xxl) {
     grid-template:
       "- title"
-      "sidebar content" / max-content minmax(auto, px-to-rem(1030));
+      "sidebar content" / max-content minmax(auto, 64rem);
   }
 
   &__sidebar {
+    @apply mr-56;
     position: relative;
     grid-area: sidebar;
-    margin: $page-sidebar-spacing;
 
     @media (max-width: $breakpoint-desktop-xxl) {
       margin: 0;
@@ -28,17 +28,17 @@
   }
 
   &__title {
+    @apply mb-40 mt-112;
     grid-area: title;
-    margin: $page-title-spacing;
-    margin-top: px-to-rem(100);
+
     @media print {
       display: none;
     }
   }
 
   &__subtitle {
+    @apply mb-32;
     grid-area: subtitle;
-    margin: $page-subtitle-spacing;
   }
 
   &__content {

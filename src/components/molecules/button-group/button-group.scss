@@ -1,10 +1,10 @@
 @use "button-group.variables" as *;
 
 .#{nsp("button-group")} {
+  @apply mt-56;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-top: px-to-rem($spacer-3xl);
 
   &--step-one {
     justify-content: end;

@@ -13,12 +13,11 @@
     }
 
     &__input {
-      padding: $custom-input-padding;
-      margin-top: $custom-input-margin;
+      @apply mt-16 px-16 py-8;
       border: $custom-input-border;
 
       &:focus {
-        outline: px-to-rem(2) solid $color-primary !important;
+        @apply outline outline-2 !outline-primary;
       }
 
       &::placeholder {
@@ -26,11 +25,6 @@
         color: $color-text-light;
       }
     }
-  }
-
-  &--small &__input,
-  &--small &-question__input {
-    max-width: px-to-rem(184);
   }
 
   &--error &__input {

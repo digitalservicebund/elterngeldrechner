@@ -1,4 +1,4 @@
-﻿@use "modal-popup.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("modal-popup")} {
   position: fixed;
@@ -13,18 +13,16 @@
   justify-content: center;
 
   &__info {
+    @apply bottom-10 mx-20 p-32;
     position: fixed;
-    bottom: px-to-rem(10);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: px-to-rem($spacer-xl);
     background-color: $color-primary-light;
-    box-shadow: 0 0 px-to-rem(8) $color-text;
-    margin: 0 px-to-rem(20);
+    box-shadow: 0 0 0.5rem $color-text;
   }
 
   &__btn {
-    margin: px-to-rem(10);
+    @apply m-10;
   }
 }

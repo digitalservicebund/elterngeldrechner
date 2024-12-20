@@ -1,10 +1,6 @@
 @use "sass:math";
 @use "@/globals/scss/variables" as *;
 
-@function px-to-rem($pixel) {
-  @return math.div($pixel, 16) * 1rem;
-}
-
 @function nsp($classname, $namespace: $nsp) {
   @return $namespace + "-" + $classname;
 }

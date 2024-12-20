@@ -1,12 +1,6 @@
 @forward "@/globals/scss";
 @use "@/globals/scss" as egr;
 
-$custom-checkbox--size: egr.px-to-rem(30) !default;
-$custom-checkbox--border-size: egr.px-to-rem(1) !default;
-$custom-checkbox--fill-size: egr.px-to-rem(16) !default;
-$custom-checkbox--label-spacing: egr.px-to-rem(egr.$spacer) !default;
-$custom-checkbox--inner-space: egr.px-to-rem(egr.$spacer-s)
-  egr.px-to-rem(egr.$spacer-s) egr.px-to-rem(egr.$spacer-s) 0 !default;
 $custom-checkbox--background-color: egr.$color-white !default;
 $custom-checkbox--color: egr.$color-primary !default;
 $custom-checkbox--error--color: egr.$color-danger !default;

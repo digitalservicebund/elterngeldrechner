@@ -2,32 +2,32 @@
 
 .#{nsp("counter")} {
   &__controls {
+    @apply mt-16 gap-16;
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: $counter__control--gap;
-    margin-top: $counter--margin;
   }
 
   &__button {
+    @apply size-32;
     border: none;
     color: $counter__button--color;
     background: $counter__button--background-color;
-    width: $counter__button--size;
-    height: $counter__button--size;
     border-radius: 50%;
     padding: 0;
   }
 
   &__input {
+    @apply px-16 py-8;
     font-family: inherit;
     box-sizing: content-box;
     width: 1ch;
-    padding: $counter--padding;
     border: $counter--border;
 
     /* Hide the spinbuttons of the number field */
-    -moz-appearance: textfield; /* Firefox */
+    -moz-appearance: textfield;
+
+    /* Firefox */
     /* Chrome, Safari, Edge, Opera */
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
@@ -36,7 +36,7 @@
     }
 
     &:focus {
-      outline: px-to-rem(2) solid $color-primary;
+      @apply outline outline-2 !outline-primary;
     }
   }
 

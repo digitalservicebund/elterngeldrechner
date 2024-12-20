@@ -7,11 +7,11 @@
     padding: 0;
 
     & li {
-      margin-bottom: px-to-rem($spacer-xl);
+      @apply mb-32;
     }
 
     &-delete {
-      margin-top: px-to-rem($spacer);
+      @apply mt-16;
     }
   }
 }

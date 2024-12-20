@@ -1,4 +1,4 @@
-﻿@use "info-dialog.variables" as *;
+@use "info-dialog.variables" as *;
 
 .#{nsp("info-dialog")} {
   width: auto;
@@ -13,25 +13,20 @@
   }
 
   &-box {
+    @apply rounded py-10 pl-20 pr-56;
     display: flex;
     flex-direction: column;
     position: absolute;
     z-index: 100;
-    padding: px-to-rem(10) px-to-rem(50) px-to-rem(10) px-to-rem(20);
     color: $color-text;
     background-color: $info-dialog--background-color;
-    box-shadow: 0 0 px-to-rem(10) rgba(0, 0, 0, 0.3);
-    border-radius: px-to-rem(4);
+    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.3);
 
     &__button {
+      @apply right-4;
       @include info-dialog-button;
       position: absolute;
       align-self: end;
-      right: px-to-rem(5);
-    }
-
-    &__text {
-      font-size: px-to-rem(18) !important;
     }
 
     @media (max-width: $breakpoint-tablet) {
@@ -46,22 +41,21 @@
       margin: 0 !important;
 
       &__button {
-        top: px-to-rem(5);
+        @apply top-4;
       }
     }
 
     &--monatsplanner-et-one {
-      margin-left: px-to-rem(20);
-      margin-top: px-to-rem(-7);
+      @apply -mt-6 ml-20;
 
       button {
+        @apply left-4;
         top: 0;
         right: auto;
-        left: px-to-rem(5);
       }
 
       p {
-        margin-left: px-to-rem(30);
+        @apply ml-32;
       }
 
       // add cutomized breakpoint when dialog shown for ET1 (right to the info button instead of left)
@@ -75,9 +69,8 @@
         margin-left: 0;
 
         button {
-          top: px-to-rem(5);
+          @apply right-4 top-4;
           left: auto;
-          right: px-to-rem(5);
         }
 
         p {
@@ -88,15 +81,7 @@
   }
 
   @media (max-width: $breakpoint-desktop) {
-    right: px-to-rem(32);
-  }
-
-  // fit large div as possible for smaller screens
-  &--large &-box {
-    @media (min-width: 730px) {
-      width: px-to-rem(650);
-      margin-left: px-to-rem(-640);
-    }
+    @apply right-32;
   }
 
   &--monatsplanner {

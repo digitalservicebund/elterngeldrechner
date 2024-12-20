@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import failOnConsole from "jest-fail-on-console";
-import { setupCalculation } from "./globals/js/calculations/setup-calculation";
+import { setupCalculation } from "@/globals/js/calculations/setup-calculation";
 import "@/styles/index.css";
 
 setupCalculation();

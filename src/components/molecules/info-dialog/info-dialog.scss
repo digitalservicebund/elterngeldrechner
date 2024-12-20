@@ -1,30 +1,27 @@
-@use "info-dialog.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("info-dialog")} {
   width: auto;
   height: auto;
 
   &__button {
-    @include info-dialog-button;
+    @apply border-none bg-transparent text-primary;
 
     &--monatsplanner {
-      color: $color-white;
+      @apply text-white;
     }
   }
 
   &-box {
-    @apply rounded py-10 pl-20 pr-56;
+    @apply rounded bg-primary-light py-10 pl-20 pr-56;
     display: flex;
     flex-direction: column;
     position: absolute;
     z-index: 100;
-    color: $color-text;
-    background-color: $info-dialog--background-color;
     box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.3);
 
     &__button {
-      @apply right-4;
-      @include info-dialog-button;
+      @apply right-4 border-none bg-transparent text-primary;
       position: absolute;
       align-self: end;
     }

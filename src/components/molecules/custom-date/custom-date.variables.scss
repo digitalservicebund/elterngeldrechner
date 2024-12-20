@@ -1,9 +1,0 @@
-@forward "@/globals/scss";
-@use "@/globals/scss" as egr;
-
-$custom-date-label-text-color: egr.$color-text !default;
-
-$custom-date-border: 1px solid egr.$color-grey-dark !default;
-
-$custom-date--error-color: egr.$color-danger !default;
-$custom-date--valid-color: egr.$color-success !default;

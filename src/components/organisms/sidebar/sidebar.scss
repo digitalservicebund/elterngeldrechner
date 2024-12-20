@@ -6,7 +6,6 @@
   counter-reset: item;
   margin: 0;
   padding: 0;
-  color: $sidebar-list__step--color;
 
   @media (max-width: $breakpoint-desktop-xxl) {
     @apply mb-40;
@@ -18,19 +17,17 @@
     padding: 0;
 
     @media (max-width: $breakpoint-desktop-xxl) {
-      @apply p-8;
+      @apply bg-primary p-8;
       opacity: 0;
       position: absolute;
       height: 0;
       width: 100%;
-      background-color: $sidebar-tablet--background-color;
       overflow: hidden;
     }
 
     &--open {
-      @apply top-56 min-h-[25rem] border-0 border-b-2 border-solid border-white px-24 py-16 text-16;
+      @apply top-56 min-h-[25rem] border-0 border-b-2 border-solid border-white bg-primary-light px-24 py-16 text-16;
       opacity: 1;
-      background-color: $sidebar--background-color;
       transition:
         opacity 0.5s,
         height 0.5s,
@@ -68,18 +65,16 @@
         cursor: pointer;
 
         &:before {
-          color: $sidebar-list__step--done--color;
-          background: $sidebar-list__step--done--background-color;
-          border-color: $sidebar-list__step--done--background-color;
+          @apply border-primary bg-primary text-white;
         }
       }
 
       &--current {
         &:before {
-          background: $sidebar-list__step--current--background-color;
+          @apply bg-primary-light;
 
           @media (max-width: $breakpoint-tablet) {
-            background: $color-white;
+            @apply bg-white;
           }
         }
       }
@@ -90,18 +85,16 @@
     display: none;
 
     @media (max-width: $breakpoint-desktop-xxl) {
+      @apply bg-primary-light text-black;
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       border: 0;
-      background-color: $color-primary-light;
-      color: $color-text;
 
       &:focus,
       &:hover {
-        background-color: $color-primary-light;
-        color: $color-text;
+        @apply bg-primary-light text-black;
       }
     }
 

@@ -13,13 +13,11 @@
   justify-content: center;
 
   &__info {
-    @apply bottom-10 mx-20 p-32;
+    @apply bottom-10 mx-20 bg-primary-light p-32 shadow;
     position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $color-primary-light;
-    box-shadow: 0 0 0.5rem $color-text;
   }
 
   &__btn {

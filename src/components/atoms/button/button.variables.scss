@@ -1,8 +1,0 @@
-@forward "@/globals/scss";
-@use "@/globals/scss" as egr;
-
-$button__label--color: egr.$color-text !default;
-$button--outline-color: egr.$color-primary !default;
-
-$button--error--color: egr.$color-danger !default;
-$button--valid--color: egr.$color-success !default;

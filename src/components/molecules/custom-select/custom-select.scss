@@ -1,4 +1,4 @@
-@use "custom-select.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("custom-select")} {
   display: flex;
@@ -14,10 +14,6 @@
     flex-direction: column;
     align-items: flex-start;
 
-    &__label {
-      color: $custom-select-label-text-color;
-    }
-
     &__control {
       position: relative;
       width: 100%;
@@ -25,11 +21,10 @@
     }
 
     &__input {
-      @apply mt-16 border border-solid border-grey-dark !px-16 py-8 pr-56;
+      @apply mt-16 border border-solid border-grey-dark bg-white !px-16 py-8 pr-56;
       -moz-appearance: none;
       -webkit-appearance: none;
       appearance: none;
-      background-color: $color-white;
       background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='22' viewBox='0 0 24 24' width='22' xmlns='http://www.w3.org/2000/svg'><path d='M12 2.29289L18.3536 8.64645L17.6464 9.35355L12 3.70711L6.35355 9.35355L5.64645 8.64645L12 2.29289Z'/><path d='M12 21.7071L5.64645 15.3536L6.35355 14.6464L12 20.2929L17.6464 14.6464L18.3536 15.3536L12 21.7071Z'/></svg>");
       background-repeat: no-repeat;
       background-position-x: calc(100% - 0.6875rem);
@@ -43,8 +38,8 @@
       }
 
       &::placeholder {
+        @apply text-text-light;
         font-size: inherit;
-        color: $color-text-light;
       }
 
       &:disabled {
@@ -52,17 +47,15 @@
       }
 
       &--error {
-        border-color: $color-danger;
+        @apply border-danger;
       }
     }
 
     &__option {
-      @apply px-16 py-8;
-      background-color: $color-white;
+      @apply px-16 py-8 text-white;
 
       &:first-of-type {
-        @apply p-40;
-        color: $color-text-light;
+        @apply p-40 text-text-light;
       }
 
       &:checked {

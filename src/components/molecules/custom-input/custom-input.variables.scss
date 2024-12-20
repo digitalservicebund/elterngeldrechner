@@ -1,9 +1,0 @@
-@forward "@/globals/scss";
-@use "@/globals/scss" as egr;
-
-$custom-input-label-text-color: egr.$color-text !default;
-
-$custom-input-border: 1px solid egr.$color-grey-dark !default;
-
-$custom-input--error-color: egr.$color-danger !default;
-$custom-input--valid-color: egr.$color-success !default;

@@ -4,6 +4,6 @@
   @apply mt-8 text-14;
 
   &--error {
-    color: $color-danger;
+    @apply text-danger;
   }
 }

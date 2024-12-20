@@ -1,4 +1,4 @@
-@use "counter.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("counter")} {
   &__controls {
@@ -9,20 +9,17 @@
   }
 
   &__button {
-    @apply size-32;
+    @apply size-32 bg-primary-light text-primary;
     border: none;
-    color: $counter__button--color;
-    background: $counter__button--background-color;
     border-radius: 50%;
     padding: 0;
   }
 
   &__input {
-    @apply px-16 py-8;
+    @apply border border-solid border-grey-dark px-16 py-8;
     font-family: inherit;
     box-sizing: content-box;
     width: 1ch;
-    border: $counter--border;
 
     /* Hide the spinbuttons of the number field */
     -moz-appearance: textfield;
@@ -41,10 +38,10 @@
   }
 
   &--error &__input {
-    border-color: $counter--error-color;
+    @apply border-danger;
   }
 
   &--error &__label {
-    color: $counter--error-color;
+    @apply text-danger;
   }
 }

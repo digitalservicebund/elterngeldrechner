@@ -1,4 +1,4 @@
-@use "custom-checkbox.variables" as *;
+@use "@/globals/scss" as *;
 @use "sass:math" as math;
 
 .#{nsp("custom-checkbox")} {
@@ -18,22 +18,22 @@
 
     &:checked {
       + label::before {
-        border-color: $custom-checkbox__input--active--border-color;
+        @apply border-primary;
       }
 
       + label::after {
-        background: $custom-checkbox__input--fill-color;
+        @apply bg-primary;
       }
     }
 
     &--error {
       + label::before {
-        border-color: $custom-checkbox__input--error--fill-color;
+        @apply border-danger;
       }
 
       &:checked {
         + label::after {
-          background: $custom-checkbox__input--error--fill-color;
+          @apply bg-danger;
         }
       }
     }
@@ -44,12 +44,11 @@
     position: relative;
 
     &::before {
-      @apply size-32 border border-solid border-primary;
+      @apply size-32 border border-solid border-primary bg-white;
       content: "";
       position: absolute;
       top: 0;
       left: 0;
-      background-color: $custom-checkbox--background-color;
     }
 
     &::after {
@@ -59,7 +58,7 @@
     }
 
     &--error {
-      color: $custom-checkbox--error--color;
+      @apply text-danger;
     }
   }
 }

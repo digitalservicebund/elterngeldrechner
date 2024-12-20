@@ -1,4 +1,4 @@
-@use "custom-input.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("custom-input")} {
   display: flex;
@@ -8,30 +8,25 @@
     display: flex;
     flex-direction: column;
 
-    &__label {
-      color: $custom-input-label-text-color;
-    }
-
     &__input {
-      @apply mt-16 px-16 py-8;
-      border: $custom-input-border;
+      @apply mt-16 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8;
 
       &:focus {
         @apply outline outline-2 !outline-primary;
       }
 
       &::placeholder {
+        @apply text-text-light;
         font-size: inherit;
-        color: $color-text-light;
       }
     }
   }
 
   &--error &__input {
-    outline-color: $custom-input--error-color;
+    @apply border-danger;
   }
 
   &--valid &__input {
-    outline-color: $custom-input--valid-color;
+    @apply border-success;
   }
 }

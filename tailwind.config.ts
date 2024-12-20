@@ -15,6 +15,7 @@ export default {
       DEFAULT: "0.25rem",
     },
     colors: {
+      transparent: "transparent",
       /* Functional */
       black: "#000000",
       primary: "#62396C",

@@ -1,11 +1,9 @@
 @use "alert.variables" as *;
 
 .#{nsp("alert")} {
-  @apply gap-4 rounded px-40 py-24;
+  @apply gap-4 rounded bg-primary-light px-40 py-24;
   display: flex;
   flex-direction: column;
-  background-color: #e5dfee;
-  background-color: $color-primary-light;
 
   &__title {
     @apply gap-4;

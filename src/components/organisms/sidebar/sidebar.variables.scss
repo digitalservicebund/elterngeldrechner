@@ -1,15 +1,4 @@
 @forward "@/globals/scss";
 @use "@/globals/scss" as egr;
 
-$sidebar--background-color: egr.$color-primary-light;
-
-$sidebar-list__step--color: egr.$color-text !default;
-
-$sidebar-list__step--current--background-color: egr.$color-primary-light !default;
 $sidebar-list__step--current--font-weight: 600;
-
-$sidebar-list__step--done--background-color: egr.$color-primary !default;
-$sidebar-list__step--done--color: egr.$color-white !default;
-
-// tablet view variables
-$sidebar-tablet--background-color: egr.$color-primary;

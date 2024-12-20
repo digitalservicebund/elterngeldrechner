@@ -1,10 +1,9 @@
-@use "button.variables" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("button")} {
   &,
   &:visited {
-    @apply border border-solid border-primary px-16 px-24 py-16 text-20;
-    color: $color-white;
+    @apply border border-solid border-primary px-16 px-24 py-16 text-20 text-white;
     transition: all 0.3s;
   }
 
@@ -12,58 +11,52 @@
   // nach dem Klick der :hover Style angewendet wurde
   @media (hover: hover) {
     &:hover {
-      background-color: $color-white;
+      @apply text-white;
     }
   }
 
   &:active,
   &:focus {
-    outline: 2px solid $button--outline-color;
-    outline-offset: 2px;
+    @apply outline outline-2 outline-offset-2 outline-primary;
   }
 
   &--primary {
     &,
     &:visited {
-      background-color: $color-primary;
+      @apply bg-primary;
     }
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
     // nach dem Klick der :hover Style angewendet wurde
     @media (hover: hover) {
       &:hover {
-        color: $color-primary;
-        background-color: $color-white;
+        @apply bg-white text-primary;
       }
     }
 
     &:active,
     &:focus {
-      color: $color-primary;
-      background-color: $color-white;
+      @apply bg-white text-primary;
     }
   }
 
   &--secondary {
     &,
     &:visited {
-      color: $color-primary;
-      background-color: transparent;
+      @apply bg-transparent text-primary;
     }
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
     // nach dem Klick der :hover Style angewendet wurde
     @media (hover: hover) {
       &:hover {
-        color: $color-white;
-        background-color: $color-primary;
+        @apply bg-primary text-white;
       }
     }
 
     &:active,
     &:focus {
-      color: $color-white;
-      background-color: $color-primary;
+      @apply bg-primary text-white;
     }
   }
 
@@ -72,9 +65,8 @@
 
     &,
     &:visited {
+      @apply bg-transparent text-primary;
       border: none;
-      color: $color-primary;
-      background-color: transparent;
 
       span {
         text-decoration: underline;
@@ -85,7 +77,7 @@
     // nach dem Klick der :hover Style angewendet wurde
     @media (hover: hover) {
       &:hover {
-        background-color: transparent;
+        @apply bg-transparent;
       }
     }
 
@@ -107,10 +99,10 @@
   }
 
   &--error &__input {
-    border-color: $button--error--color;
+    @apply border-danger;
   }
 
   &--valid &__input {
-    border-color: $button--valid--color;
+    @apply border-success;
   }
 }

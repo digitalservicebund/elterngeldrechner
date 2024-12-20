@@ -1,4 +1,4 @@
-@use "./custom-date.variables.scss" as *;
+@use "@/globals/scss" as *;
 
 .#{nsp("custom-date")} {
   display: flex;
@@ -9,25 +9,23 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    color: $custom-date-label-text-color;
   }
 
   &__field {
-    @apply mb-16 max-w-[20rem] px-16 py-8;
+    @apply mb-16 max-w-[20rem] border border-solid border-grey-dark px-16 py-8;
     display: flex;
     flex-direction: column;
-    border: $custom-date-border;
 
     &:focus-within {
       @apply outline outline-2 outline-primary;
     }
 
     &--error {
-      border-color: $custom-date--error-color;
+      @apply border-danger;
     }
 
     &--valid {
-      border-color: $custom-date--valid-color;
+      @apply border-success;
     }
   }
 
@@ -41,7 +39,6 @@
   }
 
   &__placeholder {
-    @apply text-14;
-    color: $color-text-light;
+    @apply text-14 text-text-light;
   }
 }

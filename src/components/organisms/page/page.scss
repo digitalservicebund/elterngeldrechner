@@ -7,7 +7,7 @@
     "title"
     "content" / minmax(auto, 64rem);
 
-  @media (min-width: $breakpoint-desktop-xxl) {
+  @media (min-width: 1170px) {
     grid-template:
       "- title"
       "sidebar content" / max-content minmax(auto, 64rem);
@@ -18,7 +18,7 @@
     position: relative;
     grid-area: sidebar;
 
-    @media (max-width: $breakpoint-desktop-xxl) {
+    @media (max-width: 1170px) {
       margin: 0;
     }
 

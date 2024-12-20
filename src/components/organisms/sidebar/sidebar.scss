@@ -7,7 +7,7 @@
   margin: 0;
   padding: 0;
 
-  @media (max-width: $breakpoint-desktop-xxl) {
+  @media (max-width: 1170px) {
     @apply mb-40;
   }
 
@@ -16,7 +16,7 @@
     margin: 0;
     padding: 0;
 
-    @media (max-width: $breakpoint-desktop-xxl) {
+    @media (max-width: 1170px) {
       @apply bg-primary p-8;
       opacity: 0;
       position: absolute;
@@ -73,7 +73,7 @@
         &:before {
           @apply bg-primary-light;
 
-          @media (max-width: $breakpoint-tablet) {
+          @media (max-width: 481px) {
             @apply bg-white;
           }
         }
@@ -84,7 +84,7 @@
   &__collapse-btn {
     display: none;
 
-    @media (max-width: $breakpoint-desktop-xxl) {
+    @media (max-width: 1170px) {
       @apply bg-primary-light text-black;
       display: flex;
       justify-content: space-between;

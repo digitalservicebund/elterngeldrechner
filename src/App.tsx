@@ -11,7 +11,7 @@ import EinkommenPage from "@/components/pages/EinkommenPage";
 import RechnerPlanerPage from "@/components/pages/RechnerPlanerPage";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
 import "@/styles/index.css";
-import "./index.scss";
+import "@/styles/index.scss";
 import { formSteps } from "@/utils/formSteps";
 import { useAppDispatch } from "@/redux/hooks";
 import { configurationActions } from "@/redux/configurationSlice";

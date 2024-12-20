@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { RootState } from "./index";
-import { ElternteilType } from "@/globals/js/elternteil-type";
+import { ElternteilType } from "@/redux/elternteil-type";
 import {
   ErwerbsArt,
   PersoenlicheDaten,

@@ -1,6 +1,6 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Taetigkeit } from "./Taetigkeit";
-import type { ElternteilType } from "@/globals/js/elternteil-type";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   StepEinkommenState,
   initialTaetigkeit,

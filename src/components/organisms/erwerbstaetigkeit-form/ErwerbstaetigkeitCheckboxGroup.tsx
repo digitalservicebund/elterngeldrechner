@@ -5,7 +5,7 @@ import {
   StepErwerbstaetigkeitState,
   TypeOfErwerbstaetigkeit,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import { ElternteilType } from "@/globals/js/elternteil-type";
+import { ElternteilType } from "@/redux/elternteil-type";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface Props {

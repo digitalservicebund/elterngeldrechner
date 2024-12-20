@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import type { ElternteilType } from "@/globals/js/elternteil-type";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Button } from "@/components/atoms";
 import {

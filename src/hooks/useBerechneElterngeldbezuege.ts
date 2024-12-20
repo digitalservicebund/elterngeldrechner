@@ -26,7 +26,7 @@ import {
   type ElternGeldDaten,
   type Lohnsteuerjahr,
 } from "@/globals/js/calculations/model";
-import type { ElternteilType } from "@/globals/js/elternteil-type";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import type { RootState } from "@/redux";
 import { finanzDatenOfUi } from "@/redux/finanzDatenFactory";
 import { persoenlicheDatenOfUi } from "@/redux/persoenlicheDatenFactory";

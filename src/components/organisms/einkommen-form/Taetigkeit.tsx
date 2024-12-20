@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { Versicherungen } from "./Versicherungen";
-import type { ElternteilType } from "@/globals/js/elternteil-type";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   CustomNumberField,
   CustomSelect,

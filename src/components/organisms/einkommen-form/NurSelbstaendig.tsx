@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import type { ElternteilType } from "@/globals/js/elternteil-type";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import { CustomNumberField, FormFieldGroup } from "@/components/molecules";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { infoTexts } from "@/components/molecules/info-dialog";

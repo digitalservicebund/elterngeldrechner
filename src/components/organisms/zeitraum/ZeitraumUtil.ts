@@ -1,6 +1,5 @@
 import { SelectOption } from "@/components/molecules";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
-import { zeitraumValueOf, ZeitraumValueType } from "@/globals/js/ZeitraumValue";
 
 // Bildet ein "von"/"bis" Zeitraum ab.
 export interface ZeitraumData {
@@ -13,6 +12,8 @@ export type ZeitraumOptionType = {
   from: SelectOption<string>[];
   to: SelectOption<string>[];
 };
+
+export type ZeitraumValueType = "Date" | "Integer";
 
 /**
  * Zeiträume können in mehreren Zeilen angezeigt werden. Wenn sich die Zeiträume in den einzelnen Zeilen nicht
@@ -79,3 +80,24 @@ export const availableZeitraumOptions = (
   });
   return zeitraumOptions;
 };
+
+export const zeitraumValueOf = (
+  value: string,
+  type: ZeitraumValueType,
+): number => {
+  if (isDateType(type)) {
+    return new Date(value).getTime();
+  } else if (isIntegerType(type)) {
+    return Number.parseInt(value);
+  }
+
+  throw new Error("Unknown ZeitraumValueType");
+};
+
+function isDateType(type: ZeitraumValueType): type is "Date" {
+  return type === "Date";
+}
+
+function isIntegerType(type: ZeitraumValueType): type is "Integer" {
+  return type === "Integer";
+}

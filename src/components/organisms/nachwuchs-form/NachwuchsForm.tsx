@@ -13,8 +13,6 @@ import {
   ButtonGroup,
 } from "@/components/molecules";
 import { infoTexts } from "@/components/molecules/info-dialog";
-import { trackNutzergruppe } from "@/user-tracking";
-import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;
@@ -64,9 +62,6 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
   // Registration as a number is necessary because the addition "numberFutureChildren + 1" is added like a string and results in "21"
   register("anzahlKuenftigerKinder", { valueAsNumber: true });
   const anzahlKuenftigerKinder = watch("anzahlKuenftigerKinder");
-
-  const geburtsdatum = watch("wahrscheinlichesGeburtsDatum");
-  trackNutzergruppe(fromGermanDateString(geburtsdatum));
 
   const handleDecrease = () =>
     setValue(

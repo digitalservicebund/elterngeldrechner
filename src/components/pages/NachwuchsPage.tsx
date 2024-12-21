@@ -2,11 +2,13 @@ import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepNachwuchsActions,
+  parseGermanDateString,
   StepNachwuchsState,
 } from "@/redux/stepNachwuchsSlice";
 import { NachwuchsForm } from "@/components/organisms";
 import { formSteps } from "@/utils/formSteps";
 import { Page } from "@/components/organisms/page";
+import { trackNutzergruppe } from "@/user-tracking";
 
 function NachwuchsPage() {
   const dispatch = useAppDispatch();
@@ -16,6 +18,9 @@ function NachwuchsPage() {
 
   const handleSubmit = (values: StepNachwuchsState) => {
     dispatch(stepNachwuchsActions.submitStep(values));
+    trackNutzergruppe(
+      parseGermanDateString(values.wahrscheinlichesGeburtsDatum),
+    );
     navigate(formSteps.erwerbstaetigkeit.route);
   };
 

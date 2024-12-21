@@ -1,7 +1,7 @@
+import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { type Ausgangslage, Elternteil } from "@/features/planer/domain";
 import { YesNo } from "@/globals/js/calculations/model";
 import { type RootState } from "@/redux";
-import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
 export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
   const { stepAllgemeineAngaben, stepNachwuchs } = state;
@@ -11,9 +11,8 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
       ? (1 as const)
       : (2 as const);
 
-  const geburtsdatumDesKindes = fromGermanDateString(
-    stepNachwuchs.wahrscheinlichesGeburtsDatum,
-  );
+  const geburtsdatumDesKindes =
+    stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state);
 
   const istAlleinerziehend =
     stepAllgemeineAngaben.alleinerziehend === YesNo.YES;

@@ -2,7 +2,6 @@ import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
 import { RootState } from "./index";
 import { YesNo } from "@/globals/js/calculations/model";
-import { fromGermanDateString } from "@/utils/fromGermanDateString";
 
 interface Kind {
   geburtsdatum: string;
@@ -55,12 +54,23 @@ const stepNachwuchsSlice = createSlice({
 
 const getWahrscheinlichesGeburtsDatum = createSelector(
   (state: RootState) => state.stepNachwuchs.wahrscheinlichesGeburtsDatum,
-  (wahrscheinlichesGeburtsDatum): Date =>
-    fromGermanDateString(wahrscheinlichesGeburtsDatum),
+  parseGermanDateString,
 );
 
 export const stepNachwuchsSelectors = {
   getWahrscheinlichesGeburtsDatum,
 };
 export const stepNachwuchsActions = stepNachwuchsSlice.actions;
+
 export default stepNachwuchsSlice.reducer;
+
+export function parseGermanDateString(germanDateString: string): Date {
+  const [day, month, year] = germanDateString.split(".");
+  return new Date(
+    Date.UTC(
+      Number.parseInt(year),
+      Number.parseInt(month) - 1,
+      Number.parseInt(day),
+    ),
+  );
+}

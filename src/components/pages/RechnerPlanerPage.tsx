@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { formSteps } from "./formSteps";
 import { Button } from "@/components/atoms";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
-import { formSteps } from "@/utils/formSteps";
 import { Page } from "@/components/organisms/page";
 import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";

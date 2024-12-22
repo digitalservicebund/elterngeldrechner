@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { formSteps } from "./formSteps";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepEinkommenActions,
   StepEinkommenState,
 } from "@/redux/stepEinkommenSlice";
-import { formSteps } from "@/utils/formSteps";
 import { EinkommenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
 

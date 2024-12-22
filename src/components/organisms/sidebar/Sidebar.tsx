@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
-import { FormStep, formSteps } from "@/utils/formSteps";
+import { FormStep, formSteps } from "@/components/pages/formSteps";
 import { Button } from "@/components/atoms";
 
 interface Props {

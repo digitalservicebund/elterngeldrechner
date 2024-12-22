@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { formSteps } from "./formSteps";
 import { AllgemeineAngabenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -6,7 +7,6 @@ import {
   stepAllgemeineAngabenActions,
   StepAllgemeineAngabenState,
 } from "@/redux/stepAllgemeineAngabenSlice";
-import { formSteps } from "@/utils/formSteps";
 
 function AllgemeineAngabenPage() {
   const dispatch = useAppDispatch();

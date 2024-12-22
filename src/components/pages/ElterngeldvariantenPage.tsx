@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ReactNode, useId } from "react";
-import { formSteps } from "@/utils/formSteps";
+import { formSteps } from "./formSteps";
 import { Page } from "@/components/organisms/page";
 import { Button } from "@/components/atoms";
 import { ElterngeldvariantenDescriptions } from "@/components/organisms/elterngeldvarianten";

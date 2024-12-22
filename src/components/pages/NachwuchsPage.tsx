@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { formSteps } from "./formSteps";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   stepNachwuchsActions,
@@ -6,7 +7,6 @@ import {
   StepNachwuchsState,
 } from "@/redux/stepNachwuchsSlice";
 import { NachwuchsForm } from "@/components/organisms";
-import { formSteps } from "@/utils/formSteps";
 import { Page } from "@/components/organisms/page";
 import { trackNutzergruppe } from "@/user-tracking";
 

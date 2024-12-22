@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
+import { formSteps } from "./formSteps";
 import { Button } from "@/components/atoms";
 import { Page } from "@/components/organisms/page";
-import { formSteps } from "@/utils/formSteps";
 import { Zusammenfassung } from "@/features/planer/user-interface";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 

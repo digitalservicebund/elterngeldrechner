@@ -12,7 +12,7 @@ import RechnerPlanerPage from "@/components/pages/RechnerPlanerPage";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
 import "@/styles/index.css";
 import "@/styles/index.scss";
-import { formSteps } from "@/utils/formSteps";
+import { formSteps } from "@/components/pages/formSteps";
 import { useAppDispatch } from "@/redux/hooks";
 import { configurationActions } from "@/redux/configurationSlice";
 import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenPage";

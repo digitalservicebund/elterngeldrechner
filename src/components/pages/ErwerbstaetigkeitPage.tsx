@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { formSteps } from "./formSteps";
 import { Page } from "@/components/organisms/page";
 import { ErwerbstaetigkeitForm } from "@/components/organisms";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -6,7 +7,6 @@ import {
   stepErwerbstaetigkeitActions,
   StepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import { formSteps } from "@/utils/formSteps";
 
 function ErwerbstaetigkeitPage() {
   const dispatch = useAppDispatch();

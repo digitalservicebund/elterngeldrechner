@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { ScrollRestoration } from "react-router-dom";
 import { AriaMessage } from "@/components/atoms";
-import { FormStep, formSteps } from "@/utils/formSteps";
+import { FormStep, formSteps } from "@/components/pages/formSteps";
 import { Sidebar } from "@/components/organisms/sidebar";
 import { Alert } from "@/components/molecules/alert";
 

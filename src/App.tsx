@@ -8,7 +8,7 @@ import AllgemeineAngabenPage from "@/components/pages/AllgemeineAngabenPage";
 import NachwuchsPage from "@/components/pages/NachwuchsPage";
 import ErwerbstaetigkeitPage from "@/components/pages/ErwerbstaetigkeitPage";
 import EinkommenPage from "@/components/pages/EinkommenPage";
-import RechnerPlanerPage from "@/components/pages/RechnerPlanerPage";
+import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
 import "@/styles/index.css";
 import "@/styles/index.scss";

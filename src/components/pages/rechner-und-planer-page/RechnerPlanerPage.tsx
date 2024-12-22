@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "./formSteps";
+import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
+import { formSteps } from "@/components/pages/formSteps";
 import { Button } from "@/components/atoms";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
 import { Page } from "@/components/organisms/page";
@@ -15,7 +16,6 @@ import type { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
 import { Planer } from "@/features/planer/user-interface";
 import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
-import { useBerechneElterngeldbezuege } from "@/hooks/useBerechneElterngeldbezuege";
 import {
   isTrackingAllowedByUser,
   trackPartnerschaftlicheVerteilung,
@@ -39,7 +39,7 @@ import {
   Variante,
 } from "@/features/planer/domain";
 
-export default function RechnerPlanerPage() {
+export function RechnerPlanerPage() {
   const isLimitEinkommenUeberschritten = useAppSelector((state) =>
     state.stepEinkommen.limitEinkommenUeberschritten === YesNo.YES
       ? true

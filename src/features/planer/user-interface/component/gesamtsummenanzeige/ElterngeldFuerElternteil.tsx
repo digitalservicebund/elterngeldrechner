@@ -1,8 +1,8 @@
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
 import classNames from "classnames";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import type { SummeFuerElternteil } from "@/features/planer/domain";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly pseudonym: string | undefined;
@@ -19,8 +19,6 @@ export function ElterngeldFuerElternteil({
 
   const formattedAnzahlMonateMitBezug = `${anzahlMonateMitBezug} Monat${anzahlMonateMitBezug == 1 ? "" : "e"}`;
 
-  const formattedElterngeldbezuege = formatAsCurrency(elterngeldbezug);
-
   return (
     <div className={classNames("flex flex-col items-center", className)}>
       <span className="font-bold">
@@ -33,7 +31,8 @@ export function ElterngeldFuerElternteil({
       </span>
 
       <span>
-        {formattedElterngeldbezuege} für {formattedAnzahlMonateMitBezug}
+        <Geldbetrag betrag={elterngeldbezug} /> für{" "}
+        {formattedAnzahlMonateMitBezug}
       </span>
     </div>
   );

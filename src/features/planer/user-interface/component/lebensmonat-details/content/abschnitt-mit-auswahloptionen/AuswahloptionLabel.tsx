@@ -1,13 +1,13 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
 import LockIcon from "@digitalservicebund/icons/Lock";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import {
   KeinElterngeld,
   Variante,
   type Auswahloption,
   type Elterngeldbezug,
 } from "@/features/planer/domain";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly option: Auswahloption;
@@ -48,7 +48,13 @@ export function AuswahloptionLabel({
           {!!icon && <>{icon}&nbsp;</>}
           {label}
         </span>
-        {!!elterngeldbezug && <>&nbsp;{formatAsCurrency(elterngeldbezug)}</>}
+
+        {!!elterngeldbezug && (
+          <>
+            &nbsp;
+            <Geldbetrag betrag={elterngeldbezug} />
+          </>
+        )}
       </span>
     </label>
   );

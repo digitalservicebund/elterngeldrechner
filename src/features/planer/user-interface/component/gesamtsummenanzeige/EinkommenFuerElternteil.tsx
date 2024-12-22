@@ -2,8 +2,8 @@ import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
 import type { ReactNode } from "react";
 import classNames from "classnames";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import type { SummeFuerElternteil } from "@/features/planer/domain";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly pseudonym: string | undefined;
@@ -16,13 +16,6 @@ export function EinkommenFuerElternteil({
   summe,
   className,
 }: Props): ReactNode {
-  const einkommen =
-    summe.bruttoeinkommen > 0 ? (
-      <span>{formatAsCurrency(summe.bruttoeinkommen)} (brutto)</span>
-    ) : (
-      "-"
-    );
-
   return (
     <div className={classNames("flex flex-col items-center", className)}>
       <span className="font-bold">
@@ -35,7 +28,16 @@ export function EinkommenFuerElternteil({
       </span>
 
       <span>
-        <BusinessCenterOutlined className="mr-4" /> {einkommen}
+        <BusinessCenterOutlined className="mr-4" />
+
+        {summe.bruttoeinkommen > 0 ? (
+          <span>
+            <Geldbetrag betrag={summe.bruttoeinkommen} />
+            &nbsp;(brutto)
+          </span>
+        ) : (
+          "-"
+        )}
       </span>
     </div>
   );

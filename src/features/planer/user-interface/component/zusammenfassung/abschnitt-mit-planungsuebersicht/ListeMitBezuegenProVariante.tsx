@@ -1,12 +1,12 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import { Variantenplakette } from "@/features/planer/user-interface/component/zusammenfassung/Variantenplakette";
 import {
   compareVarianten,
   Variante,
   type Bezug,
 } from "@/features/planer/domain";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly bezuegeProVariante: Record<Variante, Bezug>;
@@ -34,15 +34,15 @@ export function ListeMitBezuegenProVariante({
         const { anzahlMonate, elterngeld, bruttoeinkommen } = bezug;
 
         const optionalesElterngeld = elterngeld > 0 && (
-          <b>{formatAsCurrency(elterngeld)}</b>
+          <Geldbetrag className="font-bold" betrag={elterngeld} />
         );
 
-        const optionalesEinkommen =
-          bruttoeinkommen > 0 ? (
-            <span>
-              &nbsp;+ Einkommen {formatAsCurrency(bruttoeinkommen)} (brutto)
-            </span>
-          ) : null;
+        const optionalesEinkommen = bruttoeinkommen > 0 && (
+          <span>
+            &nbsp;+ Einkommen <Geldbetrag betrag={bruttoeinkommen} />
+            &nbsp;(brutto)
+          </span>
+        );
 
         return (
           <li key={variante} className="flex items-center gap-24 py-8">

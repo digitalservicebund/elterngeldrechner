@@ -1,8 +1,8 @@
 import { ReactNode, type CSSProperties } from "react";
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import classNames from "classnames";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import type { Einkommen, Elterngeldbezug } from "@/features/planer/domain";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import { InfoDialog } from "@/components/molecules/info-dialog";
 
 type Props = {
@@ -39,12 +39,14 @@ export function Haushaltseinkommen({
         aria-hidden={ariaHidden}
       >
         {!!elterngeldbezug && (
-          <span className="font-bold">{formatAsCurrency(elterngeldbezug)}</span>
+          <Geldbetrag className="font-bold" betrag={elterngeldbezug} />
         )}
 
         {!!bruttoeinkommen && (
           <span>
-            <BusinessCenterIcon /> {formatAsCurrency(bruttoeinkommen)}
+            <BusinessCenterIcon />
+            &nbsp;
+            <Geldbetrag betrag={bruttoeinkommen} />
           </span>
         )}
       </div>

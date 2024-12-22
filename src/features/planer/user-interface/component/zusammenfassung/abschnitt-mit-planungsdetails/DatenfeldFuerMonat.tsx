@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import { Variantenplakette } from "@/features/planer/user-interface/component/zusammenfassung/Variantenplakette";
 import {
   KeinElterngeld,
   type Auswahloption,
   type Monat,
 } from "@/features/planer/domain";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 
 type Props = {
   readonly monat: Monat;
@@ -20,14 +20,16 @@ export function DatenfeldFuerMonat({ monat }: Props): ReactNode {
 
   const optionalesElterngeld = monat.elterngeldbezug && (
     <span>
-      Elterngeld <b>{formatAsCurrency(monat.elterngeldbezug)}</b>
+      Elterngeld{" "}
+      <Geldbetrag className="font-bold" betrag={monat.elterngeldbezug} />
     </span>
   );
 
   const optionalesEinkommen = monat.bruttoeinkommen && (
     <span>
       <BusinessCenterOutlined className="mr-4" />
-      Einkommen {formatAsCurrency(monat.bruttoeinkommen)}&nbsp;(brutto)
+      Einkommen <Geldbetrag betrag={monat.bruttoeinkommen} />
+      &nbsp;(brutto)
     </span>
   );
 

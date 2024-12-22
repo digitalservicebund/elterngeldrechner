@@ -2,13 +2,13 @@ import { ReactNode, useId } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import {
   listeElternteileFuerAusgangslageAuf,
   type Ausgangslage,
   type ElternteileByAusgangslage,
   type Planungsuebersicht,
 } from "@/features/planer/domain";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 
 type Props<A extends Ausgangslage> = {
   readonly ausgangslage: A;
@@ -53,7 +53,7 @@ export function AbschnittMitPlanungsuebersicht<A extends Ausgangslage>({
             <span>
               {gesamtbezug.anzahlMonate} Monate Elterngeld |{" "}
               <span className="font-bold">
-                insgesamt {formatAsCurrency(gesamtbezug.elterngeld)}
+                insgesamt <Geldbetrag betrag={gesamtbezug.elterngeld} />
               </span>
             </span>
 

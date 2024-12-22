@@ -1,7 +1,7 @@
 import { ReactNode, useId } from "react";
 import classNames from "classnames";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import { EinkommenFuerElternteil } from "@/features/planer/user-interface/component/gesamtsummenanzeige/EinkommenFuerElternteil";
 import {
   listeElternteileFuerAusgangslageAuf,
@@ -23,8 +23,6 @@ export function Gesamtsummenanzeige<A extends Ausgangslage>({
 }: Props<A>): ReactNode {
   const headingIdentifier = useId();
   const hasMultipleElternteile = ausgangslage.anzahlElternteile > 1;
-  const gesamtsummeElterngeld = `Gesamtsumme Elterngeld: ${formatAsCurrency(gesamtsumme.elterngeldbezug)}`;
-
   const jemandHatEinkommen = listeElternteileFuerAusgangslageAuf(ausgangslage)
     .map((elternteil) => gesamtsumme.proElternteil[elternteil].bruttoeinkommen)
     .reduce((sum, bruttoeinkommen) => sum + (bruttoeinkommen ?? 0), 0);
@@ -51,7 +49,10 @@ export function Gesamtsummenanzeige<A extends Ausgangslage>({
       ))}
 
       {!!hasMultipleElternteile && (
-        <span className="basis-full font-bold">{gesamtsummeElterngeld}</span>
+        <span className="basis-full font-bold">
+          Gesamtsumme Elterngeld:{" "}
+          <Geldbetrag betrag={gesamtsumme.elterngeldbezug} />
+        </span>
       )}
 
       {!!jemandHatEinkommen &&

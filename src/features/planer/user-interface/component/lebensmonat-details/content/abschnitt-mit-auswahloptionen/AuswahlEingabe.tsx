@@ -5,7 +5,6 @@ import {
   useGridColumnPerElternteil,
   type GridColumnDefinitionPerElternteil,
 } from "@/features/planer/user-interface/layout/grid-layout";
-import { formatAsCurrency } from "@/utils/formatAsCurrency";
 import {
   Elternteil,
   KeinElterngeld,
@@ -164,8 +163,17 @@ function composeAriaLabelForAuswahloption(
   elterngeldbezug: Elterngeldbezug,
 ): string {
   return elterngeldbezug
-    ? `${option} mit ${formatAsCurrency(elterngeldbezug)}`
+    ? `${option} mit ${formattiereGeldbetragMitWaehrung(elterngeldbezug)}`
     : option;
+}
+
+function formattiereGeldbetragMitWaehrung(betrag: number): string {
+  return Math.round(betrag).toLocaleString("de-DE", {
+    style: "currency",
+    currency: "EUR",
+    currencyDisplay: "symbol",
+    maximumFractionDigits: 0,
+  });
 }
 
 function sortByAuswahloption(

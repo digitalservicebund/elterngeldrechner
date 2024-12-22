@@ -88,7 +88,7 @@ export class EgrSteuerRechner {
       LZZHINZU: 0,
       PKPV: 0,
       PKV: 0,
-      PVA: 0, // TODO: Figure out if Geschwister can be used here.
+      PVA: 0, // Fix nach Richtlinien zum BEEG. Geschwister können nicht betrachtet werden.
       PVS: 0,
       PVZ: 0,
       R: finanzDaten.zahlenSieKirchenSteuer === YesNo.YES ? 1 : 0,

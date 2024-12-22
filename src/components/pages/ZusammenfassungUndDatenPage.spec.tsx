@@ -1,9 +1,9 @@
 import userEvent from "@testing-library/user-event";
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
-import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
+import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { render, screen } from "@/test-utils/test-utils";
 
-vi.mock(import("@/hooks/useNavigateWithPlan"));
+vi.mock(import("@/components/pages/useNavigateWithPlan"));
 
 describe("Zusammenfassung und Daten Page", () => {
   beforeEach(() => {

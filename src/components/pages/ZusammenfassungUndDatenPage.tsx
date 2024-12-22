@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import { formSteps } from "./formSteps";
+import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/components/atoms";
 import { Page } from "@/components/organisms/page";
 import { Zusammenfassung } from "@/features/planer/user-interface";
-import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
 
 function ZusammenfassungUndDatenPage(): ReactNode {
   const { plan, navigateWithPlanState } = useNavigateWithPlan();

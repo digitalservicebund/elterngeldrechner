@@ -14,7 +14,7 @@ import {
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 import type { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
 import { Planer } from "@/features/planer/user-interface";
-import { useNavigateWithPlan } from "@/hooks/useNavigateWithPlan";
+import { useNavigateWithPlan } from "@/components/pages/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
 import {
   isTrackingAllowedByUser,

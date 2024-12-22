@@ -91,10 +91,9 @@ export type Eingangsparameter = {
 
   /**
    * Kassenindividueller Zusatzbeitragssatz bei einem gesetzlich
-   * krankenversicherten Arbeitnehmer in Prozent (bspw. 1,70 für
-   * 1,70 %) mit 2 Dezimalstellen. Es ist der volle Zusatzbeitragssatz
-   * anzugeben. Die Aufteilung in Arbeitnehmer- und Arbeitgeberanteil
-   * erfolgt im Programmablauf
+   * krankenversicherten Arbeitnehmer in Prozent mit 2 Dezimalstellen. Es ist
+   * der volle Zusatzbeitragssatz anzugeben. Die Aufteilung in Arbeitnehmer- und
+   * Arbeitgeberanteil erfolgt im Programmablauf
    */
   KVZ: number;
 

@@ -19,6 +19,7 @@ export function berechneSteuerUndSozialabgaben(
 }
 
 const ABLAUFPLAENE = {
+  2021: PAP_2022,
   2022: PAP_2022,
   2023: PAP_2023,
   2024: PAP_2024,

@@ -25,7 +25,6 @@ type Props = {
   readonly onPlanChanged: PlanChangedCallback;
   readonly onOptionSelected?: OptionSelectedCallback;
   readonly onPlanResetted?: PlanResettedCallback;
-  readonly children?: ReactNode;
   readonly className?: string;
 };
 
@@ -36,7 +35,6 @@ export function Planer({
   onOptionSelected,
   onPlanResetted,
   className,
-  children,
 }: Props): ReactNode {
   const {
     ausgangslage,
@@ -145,8 +143,6 @@ export function Planer({
           />
         </div>
       </GridLayoutProvider>
-
-      <div className="my-32">{children}</div>
 
       <Funktionsleiste
         className="my-40"

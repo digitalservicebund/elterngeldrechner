@@ -133,18 +133,18 @@ export function RechnerPlanerPage() {
           onPlanChanged={setPlan}
           onOptionSelected={trackChanges}
           onPlanResetted={resetTrackingPlanung}
-        >
-          {!!showFeedbackForm && (
-            <FeedbackForm
-              className="basis-full"
-              ease={getTrackedEase()}
-              obstacle={getTrackedObstacle()}
-              onChangeEase={trackEase}
-              onChangeObstacle={trackObstacle}
-              onSubmit={() => (rememberSubmit.current = true)}
-            />
-          )}
-        </Planer>
+        />
+
+        {!!showFeedbackForm && (
+          <FeedbackForm
+            className="basis-full"
+            ease={getTrackedEase()}
+            obstacle={getTrackedObstacle()}
+            onChangeEase={trackEase}
+            onChangeObstacle={trackObstacle}
+            onSubmit={() => (rememberSubmit.current = true)}
+          />
+        )}
 
         <Button
           buttonStyle="secondary"

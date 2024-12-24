@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
+import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tracking-geplante-monate-des-partners-der-mutter";
 import { formSteps } from "@/components/pages/formSteps";
 import { Button } from "@/components/atoms";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
@@ -94,6 +95,7 @@ export function RechnerPlanerPage() {
 
     trackPlannedMonthsWithIncome(nextPlan);
     trackPlannedMonths(nextPlan);
+    evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
   }
 
   const navigate = useNavigate();

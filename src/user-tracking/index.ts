@@ -3,6 +3,7 @@ import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
 
 export { setTrackingVariable } from "./data-layer";
+export { trackAnzahlGeplanterMonateDesPartnersDerMutter } from "./anzahl-geplanter-monate-des-partners-der-mutter";
 export { trackNutzergruppe } from "./nutzergruppe";
 export { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 

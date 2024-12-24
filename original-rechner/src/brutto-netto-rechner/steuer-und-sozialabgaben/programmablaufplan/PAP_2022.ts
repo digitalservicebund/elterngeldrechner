@@ -88,9 +88,10 @@ import { Programmablaufplan } from "./Programmablaufplan";
  * Steps to create a new program are:
  * - The whole last (the year before) implementation MUST be copied.
  * - This documentation here MUST be copied too. Though, it MAY get updated.
- * - Documentation MUST NOT be updated for "old" implementations backwards.
  * - The code MUST be carefully compared with the flowchart to make necessary
  *   adjustments. This works best by viewing both documents next to each other.
+ *   Notice that the specification includes (partially) black bars on the left
+ *   to indicate changes to the last version.
  * - New internal data fields MUST be added. Obsolete ones SHOULD be removed.
  * - Any code documentation and comments MUST be checked against the
  *   specification.
@@ -827,7 +828,7 @@ export class PAP_2022 extends Programmablaufplan {
       this.VSP3 = this.ZRE4VP * (this.KVSATZAN + this.PVSATZAN);
     }
 
-    this.VSP = this.VSP3 + this.VSP1;
+    this.VSP = aufDenEuroAufrunden(this.VSP3 + this.VSP1);
   }
 
   /**

@@ -23,7 +23,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </li>
         </ul>
 
-        <h5 className="text-base">Für Paare und getrennt Erziehende gilt:</h5>
+        <h4 className="text-base">Für Paare und getrennt Erziehende gilt:</h4>
 
         <ul className="mb-24 list-disc pl-24">
           <li>
@@ -63,16 +63,16 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </li>
         </ul>
 
-        <h5 className="text-base">Für Alleinerziehende gilt:</h5>
+        <h4 className="text-base">Für Alleinerziehende gilt:</h4>
 
         <ul className="mb-24 list-disc pl-24">
           <li>14 Monate Basiselterngeld können beantragt werden</li>
         </ul>
 
         <div className="bg-off-white p-24">
-          <h5 className="text-base">
+          <h4 className="text-base">
             Beispiele für Paare und getrennt Erziehende:
-          </h5>
+          </h4>
 
           <p className="mb-20 p-0">
             Elternteil 1 beantragt in den Lebensmonaten 1 bis 7 Basiselterngeld
@@ -201,7 +201,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </li>
         </ul>
 
-        <h5 className="text-base">Für Paare und getrennt Erziehende gilt:</h5>
+        <h4 className="text-base">Für Paare und getrennt Erziehende gilt:</h4>
 
         <ul className="mb-24 list-disc pl-24">
           <li>
@@ -210,16 +210,16 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </li>
         </ul>
 
-        <h5 className="text-base">Für Alleinerziehende gilt:</h5>
+        <h4 className="text-base">Für Alleinerziehende gilt:</h4>
 
         <ul className="mb-32 list-disc pl-24">
           <li>28 Monate ElterngeldPlus können beantragt werden</li>
         </ul>
 
         <div className="bg-off-white p-24">
-          <h5 className="text-base">
+          <h4 className="text-base">
             Beispiele für Paare und getrennt Erziehende:
-          </h5>
+          </h4>
 
           <p className="mb-20 p-0">
             Elternteil 1 bekommt Basiselterngeld in den ersten 4 Lebensmonaten,
@@ -349,22 +349,22 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
           </li>
         </ul>
 
-        <h5 className="text-base">Für Paare und getrennt Erziehende gilt:</h5>
+        <h4 className="text-base">Für Paare und getrennt Erziehende gilt:</h4>
 
         <ul className="mb-24 list-disc pl-24">
           <li>Beide Elternteile nutzen den Partnerschaftsbonus gleichzeitig</li>
         </ul>
 
-        <h5 className="text-base">Für Alleinerziehende gilt:</h5>
+        <h4 className="text-base">Für Alleinerziehende gilt:</h4>
 
         <ul className="mb-32 list-disc pl-24">
           <li>Der Partnerschaftsbonus kann auch allein beantragt werden</li>
         </ul>
 
         <div className="bg-off-white p-24">
-          <h5 className="text-base">
+          <h4 className="text-base">
             Beispiele für Paare und getrennt Erziehende:
-          </h5>
+          </h4>
 
           <p className="mb-20 p-0">
             Das Elternteil 1 bezieht in den ersten 6 Lebensmonaten
@@ -425,7 +425,7 @@ export function ElterngeldvariantenDescriptions(): ReactNode {
             />
           </div>
 
-          <h5 className="text-base">Ein Beispiel für Alleinerziehende:</h5>
+          <h4 className="text-base">Ein Beispiel für Alleinerziehende:</h4>
 
           <p className="mb-20 p-0">
             Das alleinerziehende Elternteil bezieht in den ersten 8

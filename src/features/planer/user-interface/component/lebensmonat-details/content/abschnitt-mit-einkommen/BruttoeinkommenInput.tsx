@@ -13,6 +13,7 @@ type Props = {
   readonly bruttoeinkommen: Einkommen | undefined;
   readonly vorschlaege: number[];
   readonly ariaLabel: string;
+  readonly ariaDescribedBy?: string;
   readonly gebeEinkommenAn: (bruttoeinkommen: number) => void;
   readonly style?: CSSProperties;
 };
@@ -21,6 +22,7 @@ export function BruttoeinkommenInput({
   bruttoeinkommen,
   vorschlaege,
   ariaLabel,
+  ariaDescribedBy,
   gebeEinkommenAn,
   style,
 }: Props): ReactNode {
@@ -55,6 +57,7 @@ export function BruttoeinkommenInput({
           "border-2 border-solid border-Basis",
         )}
         aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
         value={bruttoeinkommen ?? ""}
         inputMode="numeric"
         pattern="[0-9]*"

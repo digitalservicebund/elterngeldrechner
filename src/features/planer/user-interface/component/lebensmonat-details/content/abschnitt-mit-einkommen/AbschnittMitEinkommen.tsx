@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useId, useState } from "react";
 import ToggleOnIcon from "@digitalservicebund/icons/ToggleOn";
 import ToggleOffIcon from "@digitalservicebund/icons/ToggleOff";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
@@ -50,6 +50,8 @@ export function AbschnittMitEinkommen(): ReactNode {
   const istLebensmonatMitMutterschutz = listeMonateAuf(lebensmonat).some(
     ([, monat]) => monat.imMutterschutz,
   );
+
+  const hinweisZuWochenstundenIdentifier = useId();
 
   return (
     <div className="contents">
@@ -107,11 +109,14 @@ export function AbschnittMitEinkommen(): ReactNode {
                       bruttoeinkommen={bruttoeinkommen}
                       vorschlaege={vorschlaege}
                       ariaLabel={ariaLabel}
+                      ariaDescribedBy={hinweisZuWochenstundenIdentifier}
                       gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
                     />
 
                     {!!istLebensmonatMitMutterschutz && (
-                      <HinweisZuWochenstunden />
+                      <HinweisZuWochenstunden
+                        id={hinweisZuWochenstundenIdentifier}
+                      />
                     )}
                   </div>
                 );
@@ -120,7 +125,10 @@ export function AbschnittMitEinkommen(): ReactNode {
           )}
 
           {!istLebensmonatMitMutterschutz && (
-            <HinweisZuWochenstunden style={hinweisZuWochenstundenColumn} />
+            <HinweisZuWochenstunden
+              id={hinweisZuWochenstundenIdentifier}
+              style={hinweisZuWochenstundenColumn}
+            />
           )}
         </>
       )}

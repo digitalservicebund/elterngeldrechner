@@ -180,8 +180,10 @@ export function Taetigkeit({
           />
         </FormFieldGroup>
       )}
-      <fieldset>
-        <legend>In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?</legend>
+      <fieldset className="mb-32">
+        <legend className="mb-16">
+          In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?
+        </legend>
 
         <ul>
           {zeitraumFields.map((field, zeitraumIndex) => (

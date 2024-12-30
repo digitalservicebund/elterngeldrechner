@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
-import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
+import { CustomCheckbox } from "@/components/molecules";
 import {
   StepErwerbstaetigkeitState,
   TypeOfErwerbstaetigkeit,
@@ -44,7 +44,9 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
   );
 
   return (
-    <FormFieldGroup description="Ich hatte in diesem Zeitraum…">
+    <fieldset className="mb-32">
+      <legend className="mb-16">Ich hatte in diesem Zeitraum…</legend>
+
       <CustomCheckbox
         register={register}
         registerOptions={{
@@ -55,6 +57,7 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
         errors={!!errors[elternteil]?.isSelbststaendig}
         info={infoTexts.erwerbstaetigkeitNichtSelbststaendig}
       />
+
       <CustomCheckbox
         register={register}
         registerOptions={hasSelbststaendigRegisterOptions}
@@ -63,6 +66,6 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
         errors={errors}
         info={infoTexts.erwerbstaetigkeitGewinneinkuenfte}
       />
-    </FormFieldGroup>
+    </fieldset>
   );
 }

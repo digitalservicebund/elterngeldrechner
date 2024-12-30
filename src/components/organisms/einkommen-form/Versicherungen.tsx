@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo } from "react";
+import { ChangeEvent, useId, useMemo } from "react";
 import {
   FieldError,
   Path,
@@ -10,7 +10,7 @@ import {
   StepEinkommenState,
   TypeOfVersicherungen,
 } from "@/redux/stepEinkommenSlice";
-import { CustomCheckbox, FormFieldGroup } from "@/components/molecules";
+import { CustomCheckbox } from "@/components/molecules";
 
 type VersicherungenProps = Readonly<{
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;
@@ -38,7 +38,9 @@ export function Versicherungen({
     getValues,
   } = useFormContext<StepEinkommenState>();
 
-  const versicherungenError = get(errors, noneName) as FieldError | undefined;
+  const error = get(errors, noneName) as FieldError | undefined;
+  const hasError = error !== undefined;
+  const errorIdentifier = useId();
 
   const handleChangeNoneVersicherung = (
     event: ChangeEvent<HTMLInputElement>,
@@ -63,12 +65,14 @@ export function Versicherungen({
     );
 
   return (
-    <FormFieldGroup
-      description="Ich war während der Ausübung dieser Tätigkeit"
-      aria-describedby={
-        versicherungenError ? "versicherungen-checkbox-group-error" : undefined
-      }
+    <fieldset
+      className="mb-32"
+      aria-describedby={hasError ? errorIdentifier : undefined}
     >
+      <legend className="mb-16">
+        Ich war während der Ausübung dieser Tätigkeit
+      </legend>
+
       <CustomCheckbox
         register={register}
         registerOptions={versicherungenRegisterOptions}
@@ -112,11 +116,8 @@ export function Versicherungen({
           onChange: handleChangeNoneVersicherung,
         }}
       />
-      {versicherungenError ? (
-        <span id="versicherungen-checkbox-group-error">
-          {versicherungenError.message}
-        </span>
-      ) : null}
-    </FormFieldGroup>
+
+      {!!hasError && <span id={errorIdentifier}>{error.message}</span>}
+    </fieldset>
   );
 }

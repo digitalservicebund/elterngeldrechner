@@ -181,9 +181,9 @@ export function Taetigkeit({
         </FormFieldGroup>
       )}
       <FormFieldGroup description="In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?">
-        {zeitraumFields.map((field, zeitraumIndex) => {
-          return (
-            <div key={field.id} className="egr-einkommen-form__zeitraum">
+        <ul>
+          {zeitraumFields.map((field, zeitraumIndex) => (
+            <li key={field.id} className="egr-einkommen-form__zeitraum">
               <Zeitraum
                 disabled={zeitraumIndex + 1 !== zeitraumFields.length}
                 register={register}
@@ -199,6 +199,7 @@ export function Taetigkeit({
                 errors={errors}
                 type="Integer"
               />
+
               {zeitraumFields.length > 1 && (
                 <Button
                   buttonStyle="link"
@@ -211,9 +212,10 @@ export function Taetigkeit({
                   }}
                 />
               )}
-            </div>
-          );
-        })}
+            </li>
+          ))}
+        </ul>
+
         <div className="egr-einkommen-form__taetigkeit-buttons">
           <Button
             buttonStyle="secondary"

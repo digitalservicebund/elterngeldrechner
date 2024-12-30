@@ -25,6 +25,7 @@ import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSel
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly register: UseFormRegister<TFieldValues>;
+  readonly listingIndex: number;
   readonly name: Path<TFieldValues>;
   readonly getValues: UseFormGetValues<TFieldValues>;
   readonly setValue: UseFormSetValue<TFieldValues>;
@@ -41,6 +42,7 @@ interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
 
 export function Zeitraum<TFieldValues extends FieldValues>({
   register,
+  listingIndex,
   name,
   getValues,
   setValue,
@@ -215,7 +217,9 @@ export function Zeitraum<TFieldValues extends FieldValues>({
   const [fromValue, setFromValue] = useState<string>("");
 
   return (
-    <section className={classNames("egr-zeitraum", className)}>
+    <fieldset className={classNames("egr-zeitraum", className)}>
+      <legend>{listingIndex}. Zeitraum</legend>
+
       <div className="egr-zeitraum__controls">
         <CustomSelect
           register={register}
@@ -252,6 +256,6 @@ export function Zeitraum<TFieldValues extends FieldValues>({
           {error.message}
         </Description>
       )}
-    </section>
+    </fieldset>
   );
 }

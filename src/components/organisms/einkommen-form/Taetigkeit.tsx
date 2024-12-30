@@ -180,17 +180,19 @@ export function Taetigkeit({
           />
         </FormFieldGroup>
       )}
-      <FormFieldGroup description="In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?">
+      <fieldset>
+        <legend>In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?</legend>
+
         <ul>
           {zeitraumFields.map((field, zeitraumIndex) => (
             <li key={field.id} className="egr-einkommen-form__zeitraum">
               <Zeitraum
+                listingIndex={zeitraumIndex + 1}
                 disabled={zeitraumIndex + 1 !== zeitraumFields.length}
                 register={register}
                 setValue={setValue}
                 getValues={getValues}
                 name={`${zeitraum}.${zeitraumIndex}`}
-                aria-label={`${zeitraumIndex + 1}. Zeitraum`}
                 options={monthsBeforeBirthList[zeitraumIndex].from}
                 optionsTo={monthsBeforeBirthList[zeitraumIndex].to}
                 onChange={(zeitraum) =>
@@ -236,7 +238,8 @@ export function Taetigkeit({
             label="weiteren Zeitraum hinzufügen"
           />
         </div>
-      </FormFieldGroup>
+      </fieldset>
+
       <Versicherungen
         hasRentenversicherungName={`${versicherungen}.hasRentenversicherung`}
         hasKrankenversicherungName={`${versicherungen}.hasKrankenversicherung`}

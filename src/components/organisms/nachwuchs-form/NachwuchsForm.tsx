@@ -108,6 +108,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
   };
 
   const geschwisterHeadingIdentifier = useId();
+  const geschwisterKindHeadingBaseIdentifier = useId();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} name="Ihr Nachwuchs" noValidate>
@@ -181,9 +182,15 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
 
         <ul className="egr-nachwuchs-form__geschwisterkinder">
           {fields.map((field, index) => {
+            const headingIdentifier =
+              geschwisterKindHeadingBaseIdentifier + field.id;
+
             return (
-              <li key={field.id} aria-label={`${index + 1}. Geschwisterkind`}>
-                {index > 0 && <h3 className="mb-10">Geschwisterkind</h3>}
+              <li key={field.id} aria-labelledby={headingIdentifier}>
+                <h4 id={headingIdentifier} className="mb-10 font-regular">
+                  {index + 1}. Geschwisterkind
+                </h4>
+
                 <CustomDate
                   control={control}
                   rules={{

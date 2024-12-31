@@ -114,6 +114,14 @@ describe("Einkommen Page", () => {
     };
 
     const stateFromPreviousSteps: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        pseudonym: {
+          ET1: "Elternteil 1",
+          ET2: "Elternteil 2",
+        },
+      },
       stepNachwuchs: {
         ...initialStepNachwuchsState,
         wahrscheinlichesGeburtsDatum: "08.08.2022",
@@ -241,6 +249,14 @@ describe("Einkommen Page", () => {
     };
 
     const stateFromPreviousSteps: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        pseudonym: {
+          ET1: "Elternteil 1",
+          ET2: "Elternteil 2",
+        },
+      },
       stepNachwuchs: {
         ...initialStepNachwuchsState,
         wahrscheinlichesGeburtsDatum: "08.08.2022",
@@ -296,8 +312,12 @@ describe("Einkommen Page", () => {
       const elternteil1Section = getElternteil1Section();
 
       // Field Einkommensgrenze
-      const elterngeldAnspruch = screen.getByTestId("egr-anspruch");
-      await userEvent.click(within(elterngeldAnspruch).getByLabelText("Nein"));
+      const elterngeldAnspruch = screen.getByRole("radiogroup", {
+        name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+      });
+      await userEvent.click(
+        within(elterngeldAnspruch).getByRole("radio", { name: "Nein" }),
+      );
 
       const einkommenAusSelbstaendigkeit =
         within(elternteil1Section).getByLabelText("Gewinneinkünfte");
@@ -419,6 +439,14 @@ describe("Einkommen Page", () => {
     };
 
     const stateFromPreviousSteps: Partial<RootState> = {
+      stepAllgemeineAngaben: {
+        ...initialStepAllgemeineAngabenState,
+        antragstellende: "FuerBeide",
+        pseudonym: {
+          ET1: "Elternteil 1",
+          ET2: "Elternteil 2",
+        },
+      },
       stepNachwuchs: {
         ...initialStepNachwuchsState,
         wahrscheinlichesGeburtsDatum: "08.08.2022",
@@ -472,8 +500,12 @@ describe("Einkommen Page", () => {
       };
       render(<EinkommenPage />, { store });
       // Field Einkommensgrenze
-      const elterngeldAnspruch = screen.getByTestId("egr-anspruch");
-      await userEvent.click(within(elterngeldAnspruch).getByLabelText("Nein"));
+      const elterngeldAnspruch = screen.getByRole("radiogroup", {
+        name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+      });
+      await userEvent.click(
+        within(elterngeldAnspruch).getByRole("radio", { name: "Nein" }),
+      );
 
       const elternteil1Section = getElternteil1Section();
       //

@@ -1,6 +1,5 @@
 export { CustomCheckbox } from "./custom-checkbox";
 export { CustomSelect } from "./custom-select";
-export { FormFieldGroup } from "./form-field-group";
 export { CustomNumberField } from "./custom-number-field";
 export { Counter } from "./counter";
 export { CustomDate } from "./custom-date";

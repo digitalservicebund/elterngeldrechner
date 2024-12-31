@@ -1,6 +1,7 @@
 import { useFormContext } from "react-hook-form";
+import { useId } from "react";
 import type { ElternteilType } from "@/redux/elternteil-type";
-import { CustomNumberField, FormFieldGroup } from "@/components/molecules";
+import { CustomNumberField } from "@/components/molecules";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
@@ -13,8 +14,14 @@ export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {
 
   setValue(`${elternteil}.gewinnSelbstaendig.type`, "yearly");
 
+  const headingIdentifier = useId();
+
   return (
-    <FormFieldGroup headline="Gewinneinkünfte">
+    <section aria-labelledby={headingIdentifier}>
+      <h3 id={headingIdentifier} className="mb-10">
+        Gewinneinkünfte
+      </h3>
+
       <CustomNumberField
         control={control}
         name={`${elternteil}.gewinnSelbstaendig.perYear`}
@@ -24,6 +31,6 @@ export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {
         required
         info={infoTexts.einkommenGewinneinkuenfte}
       />
-    </FormFieldGroup>
+    </section>
   );
 }

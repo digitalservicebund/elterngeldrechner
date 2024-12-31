@@ -3,16 +3,16 @@ import AddIcon from "@digitalservicebund/icons/Add";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
+import { useId } from "react";
 import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import { Button } from "@/components/atoms";
 import {
   CustomCheckbox,
   CustomDate,
   Counter,
-  FormFieldGroup,
   ButtonGroup,
 } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;
@@ -107,63 +107,78 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
     }
   };
 
+  const geschwisterHeadingIdentifier = useId();
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} name="Ihr Nachwuchs" noValidate>
       <h2>Ihr Nachwuchs</h2>
 
-      <FormFieldGroup>
-        <CustomDate
-          control={control}
-          rules={{
-            required: "Dieses Feld ist erforderlich",
-            pattern: {
-              value: /^\d{2}\.\d{2}\.\d{4}$/,
-              message: "Bitte das Feld vollständig ausfüllen oder leer lassen",
-            },
-            validate: {
-              validateMonth,
-            },
-          }}
-          name={wahrscheinlichesGeburtsDatumName}
-          label="Wann wird oder wurde Ihr Kind voraussichtlich geboren?"
-          required
-          info={infoTexts.kindGeburtsdatum}
-        />
-        <Counter
-          register={register}
-          registerOptions={{
-            max: {
-              value: 8,
-              message: "Es können nicht mehr als 8 Kinder angegeben werden",
-            },
-            min: {
-              value: 1,
-              message: "Es muss mindestens ein Kind angegeben werden",
-            },
-            required: "Dieses Feld ist erforderlich",
-          }}
-          name="anzahlKuenftigerKinder"
-          label="Wie viele Kinder werden oder wurden geboren?"
-          errors={formState.errors}
-          onIncrease={handleIncrease}
-          onDecrease={handleDecrease}
-          required
-        />
-      </FormFieldGroup>
-      <FormFieldGroup
-        headline="Gibt es ältere Geschwister?"
-        description="Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben, können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den Geschwisterbonus."
-        info={
-          <ul className="list-inside list-disc">
-            Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
-            <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
-            <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
-            <li>
-              mindestens ein weiteres Kind mit Behinderung unter 14 Jahren lebt.
-            </li>
-          </ul>
-        }
+      <CustomDate
+        control={control}
+        rules={{
+          required: "Dieses Feld ist erforderlich",
+          pattern: {
+            value: /^\d{2}\.\d{2}\.\d{4}$/,
+            message: "Bitte das Feld vollständig ausfüllen oder leer lassen",
+          },
+          validate: {
+            validateMonth,
+          },
+        }}
+        name={wahrscheinlichesGeburtsDatumName}
+        label="Wann wird oder wurde Ihr Kind voraussichtlich geboren?"
+        required
+        info={infoTexts.kindGeburtsdatum}
+      />
+
+      <Counter
+        register={register}
+        registerOptions={{
+          max: {
+            value: 8,
+            message: "Es können nicht mehr als 8 Kinder angegeben werden",
+          },
+          min: {
+            value: 1,
+            message: "Es muss mindestens ein Kind angegeben werden",
+          },
+          required: "Dieses Feld ist erforderlich",
+        }}
+        name="anzahlKuenftigerKinder"
+        label="Wie viele Kinder werden oder wurden geboren?"
+        errors={formState.errors}
+        onIncrease={handleIncrease}
+        onDecrease={handleDecrease}
+        required
+      />
+
+      <section
+        className="mt-32"
+        aria-describedby={geschwisterHeadingIdentifier}
       >
+        <h3 id={geschwisterHeadingIdentifier} className="mb-10">
+          Gibt es ältere Geschwister?
+        </h3>
+
+        <div className="mb-10 flex justify-between">
+          Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben,
+          können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den
+          Geschwisterbonus.
+          <InfoDialog
+            info={
+              <ul className="list-inside list-disc">
+                Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
+                <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
+                <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
+                <li>
+                  mindestens ein weiteres Kind mit Behinderung unter 14 Jahren
+                  lebt.
+                </li>
+              </ul>
+            }
+          />
+        </div>
+
         <ul className="egr-nachwuchs-form__geschwisterkinder">
           {fields.map((field, index) => {
             return (
@@ -182,15 +197,17 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
                   name={`geschwisterkinder.${index}.geburtsdatum`}
                   label="Wann wurde das Geschwisterkind geboren?"
                 />
+
                 <CustomCheckbox
                   register={register}
                   name={`geschwisterkinder.${index}.istBehindert`}
                   label="Das Geschwisterkind hat eine Behinderung"
                 />
+
                 <Button
+                  className="mt-16"
                   onClick={() => remove(index)}
                   iconAfter={<ClearIcon />}
-                  className="egr-nachwuchs-form__geschwisterkinder-delete"
                   buttonStyle="link"
                   label="Geschwisterkind entfernen"
                 />
@@ -198,6 +215,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
             );
           })}
         </ul>
+
         <Button
           onClick={handleAppendGeschwisterkind}
           iconBefore={<AddIcon />}
@@ -209,7 +227,8 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
             !fields.length ? "Älteres" : "Weiteres"
           } Geschwisterkind hinzufügen`}
         />
-      </FormFieldGroup>
+      </section>
+
       <ButtonGroup onClickBackButton={handlePageBack} />
     </form>
   );

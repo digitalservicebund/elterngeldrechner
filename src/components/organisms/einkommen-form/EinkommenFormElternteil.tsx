@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
 import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
@@ -64,11 +65,17 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
     stepAllgemeineAngabenSelectors.getAntragssteller,
   );
 
+  const heading = elternteilName;
+  const hasHeading = antragssteller === "FuerBeide";
+  const headingIdentifier = useId();
+
   return (
-    <section aria-label={elternteilName}>
-      {antragssteller === "FuerBeide" && (
-        <h2 className="mb-10">{elternteilName}</h2>
-      )}
+    <section
+      className="flex flex-col gap-32"
+      aria-labelledby={hasHeading ? headingIdentifier : undefined}
+    >
+      {!!hasHeading && <h2 id={headingIdentifier}>{heading}</h2>}
+
       {!isErwerbstaetigVorGeburt && (
         <p>
           Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird

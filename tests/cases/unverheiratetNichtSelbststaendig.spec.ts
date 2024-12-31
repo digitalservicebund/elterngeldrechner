@@ -35,7 +35,12 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   await page.getByTestId("ET2.monatlichesBrutto_option_1").click();
   await page.getByRole("button", { name: "Weiter" }).click();
 
-  await page.getByTestId("egr-anspruch").getByText("Nein").click();
+  await page
+    .getByRole("radiogroup", {
+      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+    })
+    .getByRole("radio", { name: "Nein" })
+    .click();
   await page
     .getByLabel("Elternteil 1")
     .getByLabel("Wie viel haben Sie in den 12")

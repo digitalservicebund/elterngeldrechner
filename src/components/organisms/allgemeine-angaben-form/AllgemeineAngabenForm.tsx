@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useId } from "react";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
@@ -7,13 +8,12 @@ import {
   ButtonGroup,
   CustomInput,
   CustomRadioGroup,
-  FormFieldGroup,
   CustomRadioGroupOption,
   Split,
   YesNoRadio,
 } from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 
 const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",
@@ -50,14 +50,26 @@ export function AllgemeineAngabenForm({
     antragstellendeFormValue === "FuerBeide" &&
     mutterschaftssleistungenFormValue === YesNo.YES;
 
+  const elternHeadingIdentifier = useId();
+  const namenHeadingIdentifier = useId();
+  const alleinerziehendHeadindIdentifier = useId();
+  const mutterschaftsleistungenHeadingIdentifier = useId();
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form
+      className="flex flex-col gap-32"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
+    >
       <h2 className="mb-10">Allgemeine Angaben</h2>
-      <FormFieldGroup
-        headline="Eltern"
-        description="Für wen planen Sie Elterngeld?"
-      >
+
+      <section className="-mt-32" aria-labelledby={elternHeadingIdentifier}>
+        <h3 id={elternHeadingIdentifier} className="mb-10">
+          Eltern
+        </h3>
+
         <CustomRadioGroup
+          legend="Für wen planen Sie Elterngeld?"
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="antragstellende"
@@ -65,13 +77,20 @@ export function AllgemeineAngabenForm({
           options={antragstellendeOptions}
           required
         />
-      </FormFieldGroup>
+      </section>
 
       {antragstellendeFormValue === "FuerBeide" && (
-        <FormFieldGroup
-          headline="Ihre Namen (optional)"
-          description="Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden Schritten verzichten zu können, können Sie hier Ihre Namen oder ein Pseudonym angeben, welches wir dann verwenden werden."
-        >
+        <section aria-labelledby={namenHeadingIdentifier}>
+          <h3 id={namenHeadingIdentifier} className="mb-10">
+            Ihre Namen (optional)
+          </h3>
+
+          <p>
+            Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden
+            Schritten verzichten zu können, können Sie hier Ihre Namen oder ein
+            Pseudonym angeben, welches wir dann verwenden werden.
+          </p>
+
           <Split>
             <CustomInput
               register={register}
@@ -85,56 +104,68 @@ export function AllgemeineAngabenForm({
               label="Name für Elternteil 2"
             />
           </Split>
-        </FormFieldGroup>
+        </section>
       )}
 
-      {antragstellendeFormValue === "EinenElternteil" ? (
-        <FormFieldGroup
-          headline="Alleinerziehendenstatus"
-          description="Sind Sie alleinerziehend?"
-          info={infoTexts.alleinerziehend}
-        >
+      {antragstellendeFormValue === "EinenElternteil" && (
+        <section aria-labelledby={alleinerziehendHeadindIdentifier}>
+          <h3 id={alleinerziehendHeadindIdentifier} className="mb-10">
+            Alleinerziehendenstatus
+          </h3>
+
           <YesNoRadio
+            legend={
+              <div className="flex items-center justify-between">
+                <span>Sind Sie alleinerziehend?</span>
+                <InfoDialog info={infoTexts.alleinerziehend} />
+              </div>
+            }
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="alleinerziehend"
             errors={formState.errors}
             required
           />
-        </FormFieldGroup>
-      ) : null}
+        </section>
+      )}
 
-      {antragstellendeFormValue !== null ? (
-        <>
-          <FormFieldGroup
-            headline="Mutterschaftsleistungen"
-            description="Beziehen Sie Mutterschaftsleistungen?"
-            info={infoTexts.mutterschaftsleistungen}
-          >
-            <YesNoRadio
+      {antragstellendeFormValue !== null && (
+        <section aria-labelledby={mutterschaftsleistungenHeadingIdentifier}>
+          <h3 id={mutterschaftsleistungenHeadingIdentifier} className="mb-10">
+            Mutterschaftsleistungen
+          </h3>
+
+          <YesNoRadio
+            legend={
+              <div className="flex items-center justify-between">
+                <span>Beziehen Sie Mutterschaftsleistungen?</span>
+                <InfoDialog info={infoTexts.mutterschaftsleistungen} />
+              </div>
+            }
+            register={register}
+            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+            name="mutterschaftssleistungen"
+            errors={formState.errors}
+            required
+          />
+
+          {!!showMutterschaftsleistungsWerGroup && (
+            <CustomRadioGroup
+              className="mt-32"
+              legend="Welcher Elternteil bezieht Mutterschaftsleistungen?"
               register={register}
-              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="mutterschaftssleistungen"
+              registerOptions={{
+                required: "Dieses Feld ist erforderlich",
+              }}
+              name="mutterschaftssleistungenWer"
+              options={mutteschaftsleistungenOptions}
               errors={formState.errors}
               required
             />
-          </FormFieldGroup>
-          {!!showMutterschaftsleistungsWerGroup && (
-            <FormFieldGroup description="Welcher Elternteil bezieht Mutterschaftsleistungen?">
-              <CustomRadioGroup
-                register={register}
-                registerOptions={{
-                  required: "Dieses Feld ist erforderlich",
-                }}
-                name="mutterschaftssleistungenWer"
-                options={mutteschaftsleistungenOptions}
-                errors={formState.errors}
-                required
-              />
-            </FormFieldGroup>
           )}
-        </>
-      ) : null}
+        </section>
+      )}
+
       <ButtonGroup isStepOne />
     </form>
   );

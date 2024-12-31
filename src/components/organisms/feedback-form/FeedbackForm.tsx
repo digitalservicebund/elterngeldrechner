@@ -48,32 +48,29 @@ export function FeedbackForm({
       className={classNames(className, "flex flex-col gap-8")}
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-        <b className="block pb-16" data-testid="ease-feedback-question">
-          Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
-        </b>
-
-        <div className="mx-16 mb-20 mt-16 max-w-[380px]">
-          <CustomRadioGroup
-            name={"ease" as Path<State>}
-            options={easeOptions}
-            register={form.register}
-            errors={form.formState.errors}
-            registerOptions={{
-              onChange: handleEaseChange,
-              setValueAs: easeFormTransformerFunc,
-            }}
-            disabled={form.formState.isSubmitted}
-            horizontal
-          />
-        </div>
+      <div className="mb-20 mt-16 rounded bg-primary-light px-24 py-32">
+        <CustomRadioGroup
+          className="mx-16 mb-20 mt-16 max-w-[29rem]"
+          legend={
+            <b>Wie einfach war es für Sie den Elterngeldrechner zu nutzen?</b>
+          }
+          name={"ease" as Path<State>}
+          options={easeOptions}
+          register={form.register}
+          errors={form.formState.errors}
+          registerOptions={{
+            onChange: handleEaseChange,
+            setValueAs: easeFormTransformerFunc,
+          }}
+          disabled={form.formState.isSubmitted}
+          horizontal
+        />
       </div>
 
       {!!easeValue && easeValue > 0 && (
-        <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-          <b className="block pb-16">Was war die größte Schwierigkeit?</b>
-
+        <div className="rounded bg-primary-light px-24 py-32">
           <CustomRadioGroup
+            legend={<b>Was Was war die größte Schwierigkeit?</b>}
             name={"obstacle" as Path<State>}
             register={form.register}
             options={obstacleOptions}
@@ -93,8 +90,8 @@ export function FeedbackForm({
       )}
 
       {!!form.formState.isSubmitted && (
-        <div className="rounded-[0.375rem] bg-primary-light px-24 py-32">
-          <b data-testid="feedback-appreciation">
+        <div className="rounded bg-primary-light px-24 py-32">
+          <b>
             Vielen Dank! Ihr Feedback hilft uns, den Elterngeldrechner für alle
             Nutzenden zu verbessern!
           </b>

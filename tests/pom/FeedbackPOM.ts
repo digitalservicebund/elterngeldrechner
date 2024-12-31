@@ -9,8 +9,12 @@ export class FeedbackPOM {
   constructor(page: Page) {
     this.page = page;
 
-    this.appreciation = page.getByTestId("feedback-appreciation");
-    this.easeQuestion = this.page.getByTestId("ease-feedback-question");
+    this.appreciation = page.getByText(
+      "Vielen Dank! Ihr Feedback hilft uns, den Elterngeldrechner für alle Nutzenden zu verbessern!",
+    );
+    this.easeQuestion = this.page.getByRole("group", {
+      name: "Wie einfach war es für Sie den Elterngeldrechner zu nutzen?",
+    });
   }
 
   async waehleEase(ease: 1 | 2 | 3 | 4 | 5) {

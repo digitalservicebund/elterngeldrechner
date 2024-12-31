@@ -25,22 +25,26 @@ export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
+  readonly legend: string | ReactNode;
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
   readonly horizontal?: boolean;
   readonly disabled?: boolean;
+  readonly className?: string;
 }
 
 export function CustomRadioGroup<TFieldValues extends FieldValues>({
   register,
   registerOptions,
   name,
+  legend,
   options,
   errors,
   required,
   horizontal = false,
   disabled = false,
+  className,
 }: CustomRadioGroupProps<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
   const hasError = error !== undefined;
@@ -53,12 +57,18 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   return (
     <fieldset
       role="radiogroup"
-      className={classNames("flex gap-16", {
-        "flex-col": vertical,
-        "justify-around": horizontal,
-      })}
+      className={classNames(
+        "flex gap-16",
+        {
+          "flex-col": vertical,
+          "justify-around": horizontal,
+        },
+        className,
+      )}
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
+      <legend className="mb-16 w-full py-4">{legend}</legend>
+
       {options.map((option, i) => {
         const descriptionId = `${baseId}-${option.label}`;
 

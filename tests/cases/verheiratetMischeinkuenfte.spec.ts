@@ -73,7 +73,12 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
     .getByText("keines der Genannten")
     .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
-  await page.getByTestId("egr-anspruch").getByText("Nein").click();
+  await page
+    .getByRole("radiogroup", {
+      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+    })
+    .getByRole("radio", { name: "Nein" })
+    .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 

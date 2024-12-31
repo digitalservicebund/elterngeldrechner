@@ -20,9 +20,17 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await page.getByText("Einkünfte aus nichtselbstä").click();
   await page.getByText("Ja").nth(2).click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByTestId("egr-anspruch").getByText("Nein").click();
+  await page
+    .getByRole("radiogroup", {
+      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+    })
+    .getByRole("radio", { name: "Nein" })
+    .click();
   await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("1");
-  await page.getByLabel("Elternteil").getByText("Ja").click();
+  await page
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Ja" })
+    .click();
   await page.getByRole("button", { name: "eine Tätigkeit hinzufügen" }).click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("1350 Euro");
   await page.getByLabel("Tätigkeit").getByText("Nein").click();

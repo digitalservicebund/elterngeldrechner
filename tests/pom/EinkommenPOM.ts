@@ -16,15 +16,14 @@ export class EinkommenPOM {
       exact: true,
     });
 
-    const einkommenLimit = 200000;
-
-    this.gesamteinkommenUeberschritten = page.locator("section").filter({
-      hasText: `Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${einkommenLimit.toLocaleString()} Euro?`,
+    this.gesamteinkommenUeberschritten = page.getByRole("radiogroup", {
+      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
     });
+
     this.gesamteinkommenUeberschrittenJa =
-      this.gesamteinkommenUeberschritten.getByText("Ja");
+      this.gesamteinkommenUeberschritten.getByRole("radio", { name: "Ja" });
     this.gesamteinkommenUeberschrittenNein =
-      this.gesamteinkommenUeberschritten.getByText("Nein");
+      this.gesamteinkommenUeberschritten.getByRole("radio", { name: "Nein" });
   }
 
   async setGesamteinkommenUeberschritten(value: boolean) {

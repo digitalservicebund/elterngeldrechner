@@ -24,11 +24,19 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   await page.getByText("Ja").nth(3).click();
   await page.getByText("Nein").nth(4).click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByTestId("egr-anspruch").getByText("Nein").click();
+  await page
+    .getByRole("radiogroup", {
+      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+    })
+    .getByRole("radio", { name: "Nein" })
+    .click();
   await page.getByLabel("Wie viel haben Sie in den 12").click();
   await page.getByLabel("Wie viel haben Sie in den 12").fill("2500 Euro");
   await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("2");
-  await page.getByLabel("Elternteil").getByText("Nein").click();
+  await page
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Ja" })
+    .click();
   await page.getByText("gesetzlich pflichtversichert", { exact: true }).click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();

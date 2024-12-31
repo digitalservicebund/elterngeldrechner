@@ -218,7 +218,7 @@ export function Zeitraum<TFieldValues extends FieldValues>({
 
   return (
     <fieldset className={classNames("egr-zeitraum", className)}>
-      <legend>{listingIndex}. Zeitraum</legend>
+      <legend className="sr-only">{listingIndex}. Zeitraum</legend>
 
       <div className="egr-zeitraum__controls">
         <CustomSelect

@@ -17,11 +17,20 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
 
   const stateFromPreviousSteps: Partial<RootState> = {
+    stepAllgemeineAngaben: {
+      ...initialStepAllgemeineAngabenState,
+      antragstellende: "FuerBeide",
+      pseudonym: {
+        ET1: "Elternteil 1",
+        ET2: "Elternteil 2",
+      },
+    },
     stepNachwuchs: {
       ...initialStepNachwuchsState,
       wahrscheinlichesGeburtsDatum: "08.08.2022",

@@ -9,7 +9,7 @@
   // nach dem Klick der :hover Style angewendet wurde
   @media (hover: hover) {
     &:hover {
-      @apply text-white;
+      @apply bg-white;
     }
   }
 

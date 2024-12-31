@@ -4,13 +4,8 @@ import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
-import {
-  ButtonGroup,
-  Split,
-  FormFieldGroup,
-  YesNoRadio,
-} from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { ButtonGroup, Split, YesNoRadio } from "@/components/molecules";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 import { YesNo } from "@/globals/js/calculations/model";
 import {
   MAX_EINKOMMEN_ALLEIN,
@@ -47,19 +42,23 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
       <h2 className="mb-10">Ihr Einkommen</h2>
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-          <FormFieldGroup
-            data-testid="egr-anspruch"
-            description={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${amountLimitEinkommen.toLocaleString()} Euro?`}
-            info={infoTexts.einkommenLimitÜberschritten}
-          >
-            <YesNoRadio
-              register={methods.register}
-              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="limitEinkommenUeberschritten"
-              errors={errors}
-              required
-            />
-          </FormFieldGroup>
+          <YesNoRadio
+            className="mb-32"
+            legend={
+              <div className="flex items-center justify-between">
+                <span>
+                  Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen
+                  von mehr als {amountLimitEinkommen.toLocaleString()} Euro?
+                </span>
+                <InfoDialog info={infoTexts.limitEinkommenUeberschritten} />
+              </div>
+            }
+            register={methods.register}
+            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+            name="limitEinkommenUeberschritten"
+            errors={errors}
+            required
+          />
 
           <Split>
             <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
@@ -68,6 +67,7 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
               <EinkommenFormElternteil elternteil="ET2" elternteilName={ET2} />
             )}
           </Split>
+
           <ButtonGroup onClickBackButton={handlePageBack} />
         </form>
       </FormProvider>

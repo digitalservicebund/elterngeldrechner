@@ -1,9 +1,9 @@
 import { useFormContext } from "react-hook-form";
+import { useId } from "react";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   CustomRadioGroup,
   CustomSelect,
-  FormFieldGroup,
   CustomRadioGroupOption,
   SelectOption,
   YesNoRadio,
@@ -99,10 +99,20 @@ export function SteuerUndVersicherung({
     ),
   );
 
+  const steuerklasseHeadingIdentifier = useId();
+  const kinderfreibetraegeHeadingIdentifier = useId();
+  const kirchensteuerHeadingIdentifier = useId();
+  const krankenversicherungHeadingIdentifier = useId();
+  const rentenversicherungHeadingIdentifier = useId();
+
   return (
     <>
       {!isOnlySelbstaendig && (
-        <FormFieldGroup headline="Steuerklasse">
+        <section aria-labelledby={steuerklasseHeadingIdentifier}>
+          <h3 id={steuerklasseHeadingIdentifier} className="mb-10">
+            Steuerklasse
+          </h3>
+
           <CustomSelect
             autoWidth
             register={register}
@@ -116,10 +126,14 @@ export function SteuerUndVersicherung({
             required
             info={infoTexts.einkommenSteuerklasse}
           />
-        </FormFieldGroup>
+        </section>
       )}
       {!isOnlySelbstaendig && numberOfGeschwisterKinder > 0 && (
-        <FormFieldGroup headline="Kinderfreibeträge">
+        <section aria-labelledby={kinderfreibetraegeHeadingIdentifier}>
+          <h3 id={kinderfreibetraegeHeadingIdentifier} className="mb-10">
+            Kinderfreibeträge
+          </h3>
+
           <CustomSelect
             autoWidth
             register={register}
@@ -133,13 +147,16 @@ export function SteuerUndVersicherung({
             options={kinderFreiBetragOptions}
             required
           />
-        </FormFieldGroup>
+        </section>
       )}
-      <FormFieldGroup
-        headline="Kirchensteuer"
-        description="Sind Sie kirchensteuerpflichtig?"
-      >
+
+      <section aria-labelledby={kirchensteuerHeadingIdentifier}>
+        <h3 id={kirchensteuerHeadingIdentifier} className="mb-10">
+          Kirchensteuer
+        </h3>
+
         <YesNoRadio
+          legend="Sind Sie kirchensteuerpflichtig?"
           register={register}
           registerOptions={{
             required: "Dieses Feld ist erforderlich",
@@ -148,13 +165,16 @@ export function SteuerUndVersicherung({
           errors={errors}
           required
         />
-      </FormFieldGroup>
+      </section>
+
       {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
-        <FormFieldGroup
-          headline="Krankenversicherung"
-          description="Wie sind Sie krankenversichert?"
-        >
+        <section aria-labelledby={krankenversicherungHeadingIdentifier}>
+          <h3 id={krankenversicherungHeadingIdentifier} className="mb-10">
+            Krankenversicherung
+          </h3>
+
           <CustomRadioGroup
+            legend="Wie sind Sie krankenversichert?"
             register={register}
             registerOptions={{
               required: "Dieses Feld ist erforderlich",
@@ -164,14 +184,16 @@ export function SteuerUndVersicherung({
             errors={errors}
             required
           />
-        </FormFieldGroup>
+        </section>
       )}
       {!!isOnlySelbstaendig && (
-        <FormFieldGroup
-          headline="Rentenversicherung"
-          description="Wie sind Sie rentenversichert?"
-        >
+        <section aria-labelledby={rentenversicherungHeadingIdentifier}>
+          <h3 id={rentenversicherungHeadingIdentifier} className="mb-10">
+            Rentenversicherung
+          </h3>
+
           <CustomRadioGroup
+            legend="Wie sind Sie rentenversichert?"
             register={register}
             registerOptions={{
               required: "Dieses Feld ist erforderlich",
@@ -181,7 +203,7 @@ export function SteuerUndVersicherung({
             errors={errors}
             required
           />
-        </FormFieldGroup>
+        </section>
       )}
     </>
   );

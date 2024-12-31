@@ -1,12 +1,9 @@
 import { useFormContext } from "react-hook-form";
+import { useId } from "react";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Button } from "@/components/atoms";
-import {
-  CustomNumberField,
-  FormFieldGroup,
-  SelectOption,
-} from "@/components/molecules";
+import { CustomNumberField, SelectOption } from "@/components/molecules";
 import { infoTexts } from "@/components/molecules/info-dialog";
 
 interface NurErwerbstaetigProps {
@@ -30,8 +27,14 @@ export function NurErwerbstaetig({
       averageOrMonthlyNichtSelbstaendig === "average" ? "monthly" : "average",
     );
 
+  const headingIdentifier = useId();
+
   return (
-    <FormFieldGroup headline="Einkünfte aus nichtselbständiger Arbeit">
+    <section aria-labelledby={headingIdentifier}>
+      <h3 id={headingIdentifier} className="mb-10">
+        Einkünfte aus nichtselbständiger Arbeit
+      </h3>
+
       {averageOrMonthlyNichtSelbstaendig === "average" && (
         <CustomNumberField
           control={control}
@@ -106,6 +109,6 @@ export function NurErwerbstaetig({
           </ol>
         </fieldset>
       )}
-    </FormFieldGroup>
+    </section>
   );
 }

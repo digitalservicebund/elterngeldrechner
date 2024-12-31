@@ -1,10 +1,9 @@
 import { useFormContext } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   CustomRadioGroup,
-  FormFieldGroup,
   CustomRadioGroupOption,
   YesNoRadio,
 } from "@/components/molecules";
@@ -14,7 +13,7 @@ import {
   initialStepErwerbstaetigkeitElternteil,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/globals/js/calculations/model";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 
 const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
@@ -79,62 +78,69 @@ function ErwerbstaetigkeitFormElternteil({
     }
   }, [elternteil, reset, wasErwerbstaetig, getValues]);
 
+  const heading = elternteilName;
+  const hasHeading = antragssteller === "FuerBeide";
+  const headingIdentifier = useId();
+
   return (
-    <section>
-      <FormFieldGroup
-        headline={antragssteller === "FuerBeide" ? elternteilName : ""}
-        description="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes erwerbstätig?"
-      >
-        <YesNoRadio
-          register={register}
-          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-          name={`${elternteil}.vorGeburt`}
-          errors={errors}
-          required
-        />
-      </FormFieldGroup>
+    <section
+      className="flex flex-col gap-32"
+      aria-labelledby={hasHeading ? headingIdentifier : undefined}
+    >
+      {!!hasHeading && <h3 id={headingIdentifier}>{heading}</h3>}
+
+      <YesNoRadio
+        legend="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes erwerbstätig?"
+        register={register}
+        registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+        name={`${elternteil}.vorGeburt`}
+        errors={errors}
+        required
+      />
+
       {wasErwerbstaetig === YesNo.YES && (
         <>
           <ErwerbstaetigkeitCheckboxGroup elternteil={elternteil} />
           {!!isNichtSelbststaendig && !isSelbststaendig && (
             <>
-              <FormFieldGroup description="Bestand Ihre nichtselbständige Arbeit aus mehreren Tätigkeiten?">
-                <YesNoRadio
-                  register={register}
-                  registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-                  name={`${elternteil}.mehrereTaetigkeiten`}
-                  errors={errors}
-                  required
-                />
-              </FormFieldGroup>
+              <YesNoRadio
+                legend="Bestand Ihre nichtselbständige Arbeit aus mehreren Tätigkeiten?"
+                register={register}
+                registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+                name={`${elternteil}.mehrereTaetigkeiten`}
+                errors={errors}
+                required
+              />
+
               {mehrereTaetigkeiten === YesNo.NO && (
                 <>
-                  <FormFieldGroup description="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?">
-                    <YesNoRadio
-                      register={register}
-                      registerOptions={{
-                        required: "Dieses Feld ist erforderlich",
-                      }}
-                      name={`${elternteil}.sozialVersicherungsPflichtig`}
-                      errors={errors}
-                      required
-                    />
-                  </FormFieldGroup>
-                  <FormFieldGroup
-                    description="Hatten Sie Einkommen aus einem Mini-Job?"
-                    info={infoTexts.minijobsMaxZahl}
-                  >
-                    <CustomRadioGroup
-                      register={register}
-                      registerOptions={{
-                        required: "Dieses Feld ist erforderlich",
-                      }}
-                      name={`${elternteil}.monatlichesBrutto`}
-                      errors={errors}
-                      options={monatlichesBruttoOptions}
-                      required
-                    />
-                  </FormFieldGroup>
+                  <YesNoRadio
+                    legend="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?"
+                    register={register}
+                    registerOptions={{
+                      required: "Dieses Feld ist erforderlich",
+                    }}
+                    name={`${elternteil}.sozialVersicherungsPflichtig`}
+                    errors={errors}
+                    required
+                  />
+
+                  <CustomRadioGroup
+                    legend={
+                      <div className="flex items-center justify-between">
+                        <span>Hatten Sie Einkommen aus einem Mini-Job?</span>
+                        <InfoDialog info={infoTexts.minijobsMaxZahl} />
+                      </div>
+                    }
+                    register={register}
+                    registerOptions={{
+                      required: "Dieses Feld ist erforderlich",
+                    }}
+                    name={`${elternteil}.monatlichesBrutto`}
+                    errors={errors}
+                    options={monatlichesBruttoOptions}
+                    required
+                  />
                 </>
               )}
             </>

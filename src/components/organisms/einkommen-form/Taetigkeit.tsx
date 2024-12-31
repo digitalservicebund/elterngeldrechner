@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { Versicherungen } from "./Versicherungen";
@@ -6,7 +6,6 @@ import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   CustomNumberField,
   CustomSelect,
-  FormFieldGroup,
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
@@ -20,7 +19,7 @@ import {
   ZeitraumData,
   ZeitraumOptionType,
 } from "@/components/organisms/zeitraum";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 
 const erwerbstaetigkeitLabels: {
   [K in Erwerbstaetigkeiten]: string;
@@ -130,56 +129,61 @@ export function Taetigkeit({
     ? "Durchschnittlicher monatlicher Gewinn"
     : "Durchschnittliches Bruttoeinkommen";
 
+  const headingIdentifier = useId();
+
   return (
-    <FormFieldGroup headline={`${taetigkeitsIndex + 1}. Tätigkeit`}>
-      <FormFieldGroup>
-        {!!isSelbststaendig && (
-          <CustomSelect
-            autoWidth
-            register={register}
-            name={artTaetigkeitName}
-            label="Art der Tätigkeit"
-            options={erwerbstaetigkeitOptions}
-            registerOptions={{
-              required: "Dieses Feld ist erforderlich",
-            }}
-            errors={errors}
-            required
-            info={
-              infoTexts.erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte
-            }
-          />
-        )}
-      </FormFieldGroup>
-      <FormFieldGroup>
-        <CustomNumberField
-          control={control}
-          name={bruttoEinkommenDurchschnitt}
-          label={einkommenLabel}
-          suffix="Euro"
-          info={
-            selbststaendig
-              ? infoTexts.einkommenGewinneinkuenfte
-              : infoTexts.einkommenNichtSelbststaendig
-          }
+    <section
+      className="flex flex-col gap-32"
+      aria-labelledby={headingIdentifier}
+    >
+      <h3 id={headingIdentifier}>{taetigkeitsIndex + 1}. Tätigkeit</h3>
+
+      {!!isSelbststaendig && (
+        <CustomSelect
+          autoWidth
+          register={register}
+          name={artTaetigkeitName}
+          label="Art der Tätigkeit"
+          options={erwerbstaetigkeitOptions}
+          registerOptions={{
+            required: "Dieses Feld ist erforderlich",
+          }}
+          errors={errors}
+          required
+          info={infoTexts.erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte}
         />
-      </FormFieldGroup>
-      {!selbststaendig && (
-        <FormFieldGroup
-          description="War diese Tätigkeit ein Mini-Job?"
-          info={infoTexts.minijobsMaxZahl}
-        >
-          <YesNoRadio
-            name={isMinijob}
-            register={register}
-            registerOptions={{
-              required: "Dieses Feld ist erforderlich",
-            }}
-            errors={errors}
-            required
-          />
-        </FormFieldGroup>
       )}
+
+      <CustomNumberField
+        control={control}
+        name={bruttoEinkommenDurchschnitt}
+        label={einkommenLabel}
+        suffix="Euro"
+        info={
+          selbststaendig
+            ? infoTexts.einkommenGewinneinkuenfte
+            : infoTexts.einkommenNichtSelbststaendig
+        }
+      />
+
+      {!selbststaendig && (
+        <YesNoRadio
+          legend={
+            <div className="flex items-center justify-between">
+              <span>War diese Tätigkeit ein Mini-Job?</span>
+              <InfoDialog info={infoTexts.minijobsMaxZahl} />
+            </div>
+          }
+          name={isMinijob}
+          register={register}
+          registerOptions={{
+            required: "Dieses Feld ist erforderlich",
+          }}
+          errors={errors}
+          required
+        />
+      )}
+
       <fieldset className="mb-32">
         <legend className="mb-16">
           In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?
@@ -248,11 +252,12 @@ export function Taetigkeit({
         hasArbeitslosenversicherungName={`${versicherungen}.hasArbeitslosenversicherung`}
         noneName={`${versicherungen}.none`}
       />
+
       <Button
         buttonStyle="secondary"
         onClick={onRemove}
         label="Tätigkeit löschen"
       />
-    </FormFieldGroup>
+    </section>
   );
 }

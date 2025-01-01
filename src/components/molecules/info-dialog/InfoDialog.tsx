@@ -9,7 +9,7 @@ import {
 import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
-import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
+import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import { useAnchorPositioning } from "@/components/molecules/info-dialog/positioning/anchor";
 import { useMarginPositioning } from "@/components/molecules/info-dialog/positioning/margin";
 
@@ -57,7 +57,7 @@ export function InfoDialog({
   }
 
   const wrapperElement = useRef<HTMLDivElement>(null);
-  useDetectClickOutside(
+  useOnClickOutside(
     wrapperElement,
     // This gets triggered a lot due to events on the whole page.
     () => {

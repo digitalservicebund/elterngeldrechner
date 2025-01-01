@@ -1,6 +1,6 @@
 import { type RefObject, useCallback, useEffect } from "react";
 
-export function useDetectClickOutside(
+export function useOnClickOutside(
   element: RefObject<HTMLElement>,
   onClickOutside: () => void,
 ) {
@@ -61,7 +61,7 @@ if (import.meta.vitest) {
     function WrapperWithHook(props: { readonly onClickOutside: () => void }) {
       const { onClickOutside } = props;
       const element = useRef<HTMLDivElement>(null);
-      useDetectClickOutside(element, onClickOutside);
+      useOnClickOutside(element, onClickOutside);
 
       return (
         <>

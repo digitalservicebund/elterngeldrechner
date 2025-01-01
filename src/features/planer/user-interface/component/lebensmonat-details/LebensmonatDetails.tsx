@@ -18,7 +18,7 @@ import type {
   GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
-import { useDetectClickOutside } from "@/hooks/useDetectMouseEventOutside";
+import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import type {
   ElternteileByAusgangslage,
   Ausgangslage,
@@ -73,7 +73,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     [detailsElement],
   );
 
-  useDetectClickOutside(detailsElement, () => {
+  useOnClickOutside(detailsElement, () => {
     if (detailsElement.current != null) {
       detailsElement.current.open = false;
     }

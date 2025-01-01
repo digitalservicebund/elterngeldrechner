@@ -15,6 +15,7 @@
 
     @media (max-width: 1170px) {
       @apply bg-primary p-8;
+      visibility: hidden;
       opacity: 0;
       position: absolute;
       height: 0;
@@ -24,6 +25,7 @@
 
     &--open {
       @apply top-56 min-h-[25rem] border-0 border-b-2 border-solid border-white bg-primary-light px-24 py-16 text-16;
+      visibility: visible;
       opacity: 1;
       transition:
         opacity 0.5s,

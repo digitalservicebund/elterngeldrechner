@@ -35,6 +35,8 @@ export function Sidebar({ currentStep }: Props) {
         onClick={() => setIsOpen(!isOpen)}
         label={buttonLabel}
         iconAfter={isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        aria-expanded={isOpen}
+        aria-haspopup
       />
 
       <ol
@@ -42,6 +44,7 @@ export function Sidebar({ currentStep }: Props) {
           "egr-sidebar-list",
           isOpen && "egr-sidebar-list--open",
         )}
+        aria-hidden={!isOpen}
       >
         {Object.values(formSteps).map((step, index) => {
           const isCurrentStep = index === currentStepIndex;

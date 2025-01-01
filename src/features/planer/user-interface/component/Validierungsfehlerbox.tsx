@@ -18,6 +18,7 @@ export function Validierungsfehlerbox({
         "border-0 border-l-4 border-solid border-tertiary bg-tertiary-light",
         { "sr-only": !hasFehler },
       )}
+      aria-live="polite"
       aria-labelledby={headingIdentifier}
     >
       <h3

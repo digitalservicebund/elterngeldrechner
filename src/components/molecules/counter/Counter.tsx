@@ -46,8 +46,9 @@ export function Counter<TFieldValues extends FieldValues>({
           className="egr-counter__button"
           type="button"
           onClick={onDecrease}
-          aria-label="verringern"
-          aria-controls={name}
+          data-testid="verringern"
+          tabIndex={-1}
+          aria-hidden
         >
           <RemoveIcon />
         </button>
@@ -64,8 +65,9 @@ export function Counter<TFieldValues extends FieldValues>({
           className="egr-counter__button"
           type="button"
           onClick={onIncrease}
-          aria-label="erhöhen"
-          aria-controls={name}
+          data-testid="erhöhen"
+          tabIndex={-1}
+          aria-hidden
         >
           <AddIcon />
         </button>

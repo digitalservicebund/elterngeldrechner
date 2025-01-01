@@ -13,7 +13,9 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("06.01.2025");
-  await page.getByLabel("erhöhen").click();
+  await page
+    .getByLabel("Wie viele Kinder werden oder wurden geboren?")
+    .fill("2");
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByLabel("Elternteil 1").getByText("Ja").click();
   await page.getByLabel("Elternteil 2").getByText("Ja").click();

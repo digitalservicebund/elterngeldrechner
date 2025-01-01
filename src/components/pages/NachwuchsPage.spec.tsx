@@ -21,10 +21,10 @@ describe("Nachwuchs Page", () => {
 
     expect(numberField).toHaveValue(1);
 
-    await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+    await userEvent.click(screen.getByTestId("erhöhen"));
     expect(numberField).toHaveValue(2);
 
-    await userEvent.click(screen.getByRole("button", { name: "verringern" }));
+    await userEvent.click(screen.getByTestId("verringern"));
     expect(numberField).toHaveValue(1);
   });
 
@@ -36,7 +36,7 @@ describe("Nachwuchs Page", () => {
     );
 
     for (let i = 0; i < 20; i++) {
-      await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+      await userEvent.click(screen.getByTestId("erhöhen"));
     }
     expect(numberField).toHaveValue(8);
   });
@@ -49,7 +49,7 @@ describe("Nachwuchs Page", () => {
     );
 
     for (let i = 0; i < 20; i++) {
-      await userEvent.click(screen.getByRole("button", { name: "verringern" }));
+      await userEvent.click(screen.getByTestId("verringern"));
     }
     expect(numberField).toHaveValue(0);
   });
@@ -138,7 +138,7 @@ describe("Submitting the form", () => {
     };
 
     for (let i = 0; i < 2; i++) {
-      await userEvent.click(screen.getByRole("button", { name: "erhöhen" }));
+      await userEvent.click(screen.getByTestId("erhöhen"));
     }
 
     const dateField = screen.getByLabelText(

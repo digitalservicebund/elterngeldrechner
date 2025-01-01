@@ -6,8 +6,6 @@ export class NachwuchsPOM {
   readonly heading: Locator;
   readonly geburtsdatum: Locator;
   readonly anzahlKinder: Locator;
-  readonly anzahlKinderDecrease: Locator;
-  readonly anzahlKinderIncrease: Locator;
 
   readonly erstesGeschwisterkindHinzufuegen: Locator;
   readonly weiteresGeschwisterkindHinzufuegen: Locator;
@@ -22,8 +20,6 @@ export class NachwuchsPOM {
     this.anzahlKinder = page.getByLabel(
       "Wie viele Kinder werden oder wurden geboren?",
     );
-    this.anzahlKinderDecrease = page.getByLabel("verringern");
-    this.anzahlKinderIncrease = page.getByLabel("erhöhen");
 
     this.erstesGeschwisterkindHinzufuegen = page.getByLabel(
       "Älteres Geschwisterkind hinzufügen",
@@ -40,16 +36,6 @@ export class NachwuchsPOM {
 
   async setAnzahlKinder(value: number) {
     await this.anzahlKinder.fill(value.toString());
-    return this;
-  }
-
-  async decreaseAnzahlKinder() {
-    await this.anzahlKinderDecrease.click();
-    return this;
-  }
-
-  async increaseAnzahlKinder() {
-    await this.anzahlKinderIncrease.click();
     return this;
   }
 

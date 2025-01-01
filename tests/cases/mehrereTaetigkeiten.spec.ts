@@ -14,7 +14,9 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("18.11.2024");
-  await page.getByLabel("erhöhen").dblclick();
+  await page
+    .getByLabel("Wie viele Kinder werden oder wurden geboren?")
+    .fill("3");
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByText("Ja", { exact: true }).click();
   await page.getByText("Einkünfte aus nichtselbstä").click();

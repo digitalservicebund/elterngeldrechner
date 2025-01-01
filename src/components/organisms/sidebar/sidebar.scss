@@ -37,7 +37,6 @@
 
     &__step {
       counter-increment: item;
-      pointer-events: none;
       position: relative;
 
       &:not(:last-child) {
@@ -60,9 +59,6 @@
       }
 
       &--done {
-        pointer-events: all;
-        cursor: pointer;
-
         &:before {
           @apply border-primary bg-primary text-white;
         }

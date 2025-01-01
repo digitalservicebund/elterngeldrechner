@@ -48,6 +48,7 @@ export function Sidebar({ currentStep }: Props) {
         {Object.values(formSteps).map((step, index) => {
           const isCurrentStep = index === currentStepIndex;
           const ariaCurrent = isCurrentStep ? "step" : false;
+          const isNavigatable = index <= currentStepIndex;
 
           return (
             <li
@@ -58,9 +59,13 @@ export function Sidebar({ currentStep }: Props) {
                 step === currentStep && "egr-sidebar-list__step--current",
               )}
             >
-              <Link to={step.route} aria-current={ariaCurrent}>
-                {step.text}
-              </Link>
+              {isNavigatable ? (
+                <Link to={step.route} aria-current={ariaCurrent}>
+                  {step.text}
+                </Link>
+              ) : (
+                <span aria-current={ariaCurrent}>{step.text}</span>
+              )}
             </li>
           );
         })}

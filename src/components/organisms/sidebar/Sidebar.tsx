@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { FormStep, formSteps } from "@/components/pages/formSteps";
 import { Button } from "@/components/atoms";
+import { useOnFocusMovedOut } from "@/hooks/useOnFocusMovedOut";
 
 interface Props {
   readonly currentStep: FormStep;
@@ -13,12 +14,15 @@ interface Props {
 export function Sidebar({ currentStep }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const navigationElement = useRef<HTMLElement>(null);
+  const closeMenu = useCallback(() => setIsOpen(false), []);
+  useOnFocusMovedOut(navigationElement, closeMenu);
+
   const currentStepIndex = Object.values(formSteps).findIndex(
     (step) => step === currentStep,
   );
 
   const stepsTotal = Object.entries(formSteps).length;
-
   const stepLabel = `${currentStepIndex + 1}/${stepsTotal}`;
 
   const buttonLabel = (
@@ -29,7 +33,11 @@ export function Sidebar({ currentStep }: Props) {
   );
 
   return (
-    <nav className="egr-sidebar" aria-label="Fortschritt">
+    <nav
+      ref={navigationElement}
+      className="egr-sidebar"
+      aria-label="Fortschritt"
+    >
       <Button
         className="egr-sidebar__collapse-btn text-nowrap"
         onClick={() => setIsOpen(!isOpen)}

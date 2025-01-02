@@ -20,6 +20,7 @@ export function SelbstaendigAndErwerbstaetig({
   isSelbststaendig,
   monthsBeforeBirth,
 }: SelbstaendigAndErwerbstaetigProps) {
+  const taetigkeitHinzfuegenButtonElement = useRef<HTMLButtonElement>(null);
   const letztesTaetigkeitsElement = useRef<HTMLElement>(null);
 
   const { control } = useFormContext<StepEinkommenState>();
@@ -31,10 +32,15 @@ export function SelbstaendigAndErwerbstaetig({
     control,
   });
 
-  function fuegeTaetigkeitHinzu() {
+  function fuegeTaetigkeitHinzu(): void {
     taetigkeitenFields.append(initialTaetigkeit);
     // Compensate for render delay adding new element for Taetigkeit (non critical).
     setTimeout(() => letztesTaetigkeitsElement.current?.focus());
+  }
+
+  function entferneTaetigkeit(index: number): void {
+    taetigkeitenFields.remove(index);
+    taetigkeitHinzfuegenButtonElement.current?.focus();
   }
 
   return (
@@ -51,12 +57,13 @@ export function SelbstaendigAndErwerbstaetig({
             taetigkeitsIndex={index}
             isSelbststaendig={isSelbststaendig}
             monthsBeforeBirth={monthsBeforeBirth}
-            onRemove={() => taetigkeitenFields.remove(index)}
+            onRemove={() => entferneTaetigkeit(index)}
           />
         );
       })}
 
       <Button
+        ref={taetigkeitHinzfuegenButtonElement}
         buttonStyle="primary"
         onClick={fuegeTaetigkeitHinzu}
         label={

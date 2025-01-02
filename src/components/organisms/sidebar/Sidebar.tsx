@@ -4,7 +4,6 @@ import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { FormStep, formSteps } from "@/components/pages/formSteps";
-import { Button } from "@/components/atoms";
 import { useOnFocusMovedOut } from "@/hooks/useOnFocusMovedOut";
 
 interface Props {
@@ -13,6 +12,7 @@ interface Props {
 
 export function Sidebar({ currentStep }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const toggleMenu = useCallback(() => setIsOpen((isOpen) => !isOpen), []);
 
   const navigationElement = useRef<HTMLElement>(null);
   const closeMenu = useCallback(() => setIsOpen(false), []);
@@ -21,16 +21,9 @@ export function Sidebar({ currentStep }: Props) {
   const currentStepIndex = Object.values(formSteps).findIndex(
     (step) => step === currentStep,
   );
-
-  const stepsTotal = Object.entries(formSteps).length;
-  const stepLabel = `${currentStepIndex + 1}/${stepsTotal}`;
-
-  const buttonLabel = (
-    <>
-      <strong>{stepLabel}</strong>
-      {currentStep.text}
-    </>
-  );
+  const currentStepNumber = currentStepIndex + 1;
+  const totalStepCount = Object.entries(formSteps).length;
+  const toggleButtonAriaLabel = `Schritt ${currentStepNumber} von ${totalStepCount}: ${currentStep.text}`;
 
   return (
     <nav
@@ -38,14 +31,22 @@ export function Sidebar({ currentStep }: Props) {
       className="egr-sidebar"
       aria-label="Fortschritt"
     >
-      <Button
-        className="egr-sidebar__collapse-btn text-nowrap"
-        onClick={() => setIsOpen(!isOpen)}
-        label={buttonLabel}
-        iconAfter={isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      <button
+        className="egr-sidebar__collapse-btn text-nowrap px-24 py-16"
+        type="button"
+        onClick={toggleMenu}
+        aria-label={toggleButtonAriaLabel}
         aria-expanded={isOpen}
-        aria-haspopup
-      />
+      >
+        <span>
+          <strong>
+            {currentStepNumber}/{totalStepCount}
+          </strong>
+          {currentStep.text}
+        </span>
+
+        {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+      </button>
 
       <ol
         className={classNames(

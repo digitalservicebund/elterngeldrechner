@@ -311,28 +311,6 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
         ).toBeInTheDocument();
       });
 
-      it("should require the from- and to-Field", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
-
-        const zeitraum1Section = getTaetigkeit1OfElternteil1Section();
-
-        await userEvent.selectOptions(
-          within(zeitraum1Section).getByLabelText("von"),
-          "",
-        );
-        await userEvent.selectOptions(
-          within(zeitraum1Section).getByLabelText("bis"),
-          "",
-        );
-        await userEvent.click(screen.getByText("Weiter"));
-
-        expect(
-          within(zeitraum1Section).getByText(
-            "Feld 'von' und 'bis' sind erforderlich",
-          ),
-        ).toBeInTheDocument();
-      });
-
       it("should require to-Month to be after from-Month", async () => {
         render(<EinkommenPage />, { preloadedState: validFormState });
 

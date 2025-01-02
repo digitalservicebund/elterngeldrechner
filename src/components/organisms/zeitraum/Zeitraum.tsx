@@ -6,10 +6,8 @@ import {
   type ChangeEvent,
 } from "react";
 import {
-  FieldError,
   FieldErrors,
   FieldValues,
-  get,
   Path,
   PathValue,
   RegisterOptions,
@@ -20,7 +18,6 @@ import {
 import classNames from "classnames";
 import { zeitraumValueOf, type ZeitraumValueType } from "./ZeitraumUtil";
 import { CustomSelect, SelectOption } from "@/components/molecules";
-import { Description } from "@/components/atoms";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
@@ -81,7 +78,9 @@ export function Zeitraum<TFieldValues extends FieldValues>({
 
   // "from" select box has been changed
   const onChangeFrom = useCallback(
-    (fromValue: string) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const fromValue = event.target.value;
+
       // recalculates hidden options for "to" field
       setToOptions((toOptions) => {
         // If original "to" options (allToOptions) are hidden, then they are dates from other rows.
@@ -153,7 +152,9 @@ export function Zeitraum<TFieldValues extends FieldValues>({
 
   // "to" select box has been changed
   const onChangeTo = useCallback(
-    (toValue: string) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const toValue = event.target.value;
+
       // calls the outside "onChange" function
       if (onChange) {
         onChange({ from: getValues(fromName), to: toValue });
@@ -163,55 +164,37 @@ export function Zeitraum<TFieldValues extends FieldValues>({
     [fromName, getValues, onChange],
   );
 
+  const valuesMakeUpValidZeitraum = useCallback(() => {
+    const fromValue = getValues(fromName);
+    const toValue = getValues(toName);
+
+    if (toValue === "" || fromValue === "") {
+      return true;
+    }
+
+    const fromTime = valueOf(fromValue);
+    const toTime = valueOf(toValue as string);
+
+    return fromTime <= toTime || "Zeitraum 'bis' muss nach 'von' liegen";
+  }, [fromName, toName, getValues, valueOf]);
+
   const zeitraumToRegisterOptions: RegisterOptions<TFieldValues> = useMemo(
     () => ({
-      onChange: (event: ChangeEvent<HTMLInputElement>) =>
-        onChangeTo(event.target.value),
-      validate: {
-        requireFromAndTo: (toValue) => {
-          const hasToValue = toValue !== "";
-          const hasFromValue = getValues(fromName) !== "";
-
-          if (hasToValue && hasFromValue) {
-            return true;
-          }
-          if (!hasFromValue && !hasToValue) {
-            return "Feld 'von' und 'bis' sind erforderlich";
-          }
-          if (!hasFromValue) {
-            return "Feld 'von' ist erforderlich";
-          }
-          if (!hasToValue) {
-            return "Feld 'bis' ist erforderlich";
-          }
-        },
-        fromIsBeforeTo: (toValue) => {
-          const fromValue = getValues(fromName);
-
-          if (toValue === "" || fromValue === "") {
-            return true;
-          }
-
-          const fromTime = valueOf(fromValue);
-          const toTime = valueOf(toValue as string);
-
-          return fromTime <= toTime || "Zeitraum 'bis' muss nach 'von' liegen";
-        },
-      },
+      onChange: onChangeTo,
+      required: "Feld 'bis' ist erforderlich",
     }),
-    [onChangeTo, getValues, fromName, valueOf],
+    [onChangeTo],
   );
 
   const zeitraumFromRegisterOptions: RegisterOptions<TFieldValues> = useMemo(
     () => ({
       deps: [toName],
-      onChange: (event: ChangeEvent<HTMLInputElement>) =>
-        onChangeFrom(event.target.value),
+      onChange: onChangeFrom,
+      validate: { valuesMakeUpValidZeitraum },
+      required: "Feld 'von' ist erforderlich",
     }),
-    [onChangeFrom, toName],
+    [toName, onChangeFrom, valuesMakeUpValidZeitraum],
   );
-
-  const error = get(errors, toName) as FieldError | undefined;
 
   const [toValue, setToValue] = useState<string>("");
   const [fromValue, setFromValue] = useState<string>("");
@@ -226,10 +209,9 @@ export function Zeitraum<TFieldValues extends FieldValues>({
           registerOptions={zeitraumFromRegisterOptions}
           name={fromName}
           label={fromLabel}
+          errors={errors}
           options={options}
           disabled={disabled}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${name}-error` : undefined}
           required={required}
           {...aria}
         />
@@ -239,9 +221,8 @@ export function Zeitraum<TFieldValues extends FieldValues>({
           name={toName}
           label={toLabel}
           options={toOptions}
+          errors={errors}
           disabled={disabled}
-          aria-invalid={!!error}
-          aria-describedby={error ? `${name}-error` : undefined}
           required={required}
           {...aria}
         />
@@ -251,11 +232,6 @@ export function Zeitraum<TFieldValues extends FieldValues>({
             : ""}
         </p>
       </div>
-      {!!error && (
-        <Description id={`${toName}-error`} error>
-          {error.message}
-        </Description>
-      )}
     </fieldset>
   );
 }

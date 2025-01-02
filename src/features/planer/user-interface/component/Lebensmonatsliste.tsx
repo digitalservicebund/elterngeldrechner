@@ -1,4 +1,12 @@
-import { ReactNode, useCallback, useId, useRef, useState } from "react";
+import {
+  forwardRef,
+  ReactNode,
+  useCallback,
+  useId,
+  useRef,
+  useState,
+  type ForwardedRef,
+} from "react";
 import AddIcon from "@digitalservicebund/icons/Add";
 import RemoveIcon from "@digitalservicebund/icons/Remove";
 import classNames from "classnames";
@@ -35,16 +43,21 @@ type Props<A extends Ausgangslage> = {
   readonly className?: string;
 };
 
-export function Lebensmonatsliste<A extends Ausgangslage>({
-  ausgangslage,
-  lebensmonate,
-  erstelleUngeplantenLebensmonat,
-  bestimmeAuswahlmoeglichkeiten,
-  waehleOption,
-  erstelleVorschlaegeFuerAngabeDesEinkommens,
-  gebeEinkommenAn,
-  className,
-}: Props<A>): ReactNode {
+export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
+  A extends Ausgangslage,
+>(
+  {
+    ausgangslage,
+    lebensmonate,
+    erstelleUngeplantenLebensmonat,
+    bestimmeAuswahlmoeglichkeiten,
+    waehleOption,
+    erstelleVorschlaegeFuerAngabeDesEinkommens,
+    gebeEinkommenAn,
+    className,
+  }: Props<A>,
+  ref?: ForwardedRef<HTMLElement>,
+): ReactNode {
   const headingIdentifier = useId();
 
   const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
@@ -68,8 +81,10 @@ export function Lebensmonatsliste<A extends Ausgangslage>({
 
   return (
     <section
+      ref={ref}
       className={classNames("flex flex-col", className)}
       aria-labelledby={headingIdentifier}
+      tabIndex={-1}
     >
       <h3 id={headingIdentifier} className="sr-only">
         Lebensmonate
@@ -128,4 +143,6 @@ export function Lebensmonatsliste<A extends Ausgangslage>({
       </button>
     </section>
   );
-}
+}) as <A extends Ausgangslage>(
+  props: Props<A> & { ref?: ForwardedRef<HTMLElement> },
+) => ReactNode;

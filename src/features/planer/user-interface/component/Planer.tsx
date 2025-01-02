@@ -60,14 +60,17 @@ export function Planer({
   const headingIdentifier = useId();
   const descriptionIdentifier = useId();
 
-  const elementToViewOnPlanungWiederholen = useRef<HTMLDivElement>(null);
+  const lebensmonatslistenElement = useRef<HTMLElement>(null);
 
   const planungWiederholen = useCallback(() => {
     setzePlanZurueck();
-    elementToViewOnPlanungWiederholen.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-    elementToViewOnPlanungWiederholen.current?.focus({ preventScroll: true });
+    // Compensate for rendering delay after reset call.
+    setTimeout(() =>
+      lebensmonatslistenElement.current?.scrollIntoView({
+        behavior: "smooth",
+      }),
+    );
+    lebensmonatslistenElement.current?.focus({ preventScroll: true });
   }, [setzePlanZurueck]);
 
   const istPlanGueltig = validierungsfehler.length === 0;
@@ -110,7 +113,6 @@ export function Planer({
             "divide-x-0 divide-y-2 divide-solid divide-off-white",
             "border-2 border-solid border-off-white",
           )}
-          ref={elementToViewOnPlanungWiederholen}
         >
           <KopfleisteMitPseudonymen
             className="py-10"
@@ -118,6 +120,7 @@ export function Planer({
           />
 
           <Lebensmonatsliste
+            ref={lebensmonatslistenElement}
             className="py-8"
             ausgangslage={ausgangslage}
             lebensmonate={lebensmonate}

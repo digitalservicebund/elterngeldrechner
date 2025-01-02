@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode } from "react";
+import { MouseEvent, ReactNode, forwardRef, type ForwardedRef } from "react";
 import classNames from "classnames";
 import { FieldValues, Path } from "react-hook-form";
 
@@ -16,22 +16,28 @@ interface Props<TFieldValues extends FieldValues> {
   readonly isSubmitButton?: boolean;
 }
 
-export function Button<TFieldValues extends FieldValues>({
-  id,
-  className,
-  buttonStyle = "primary",
-  label,
-  iconBefore,
-  iconAfter,
-  onClick,
-  disabled = false,
-  ariaLabel,
-  ariaControls,
-  isSubmitButton = false,
-}: Props<TFieldValues>) {
+export const Button = forwardRef(function Button<
+  TFieldValues extends FieldValues,
+>(
+  {
+    id,
+    className,
+    buttonStyle = "primary",
+    label,
+    iconBefore,
+    iconAfter,
+    onClick,
+    disabled = false,
+    ariaLabel,
+    ariaControls,
+    isSubmitButton = false,
+  }: Props<TFieldValues>,
+  ref?: ForwardedRef<HTMLButtonElement>,
+) {
   return (
     <button
       id={id}
+      ref={ref}
       className={classNames(
         "egr-button",
         buttonStyle === "primary" && "egr-button--primary",
@@ -55,4 +61,4 @@ export function Button<TFieldValues extends FieldValues>({
       {!!iconAfter && iconAfter}
     </button>
   );
-}
+});

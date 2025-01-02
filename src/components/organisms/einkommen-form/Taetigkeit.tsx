@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { Versicherungen } from "./Versicherungen";
@@ -87,6 +87,12 @@ export function Taetigkeit({
       to: cloneOptionsList(monthsBeforeBirth),
     }),
   );
+
+  const zeitraumHinzufuegenButtonElement = useRef<HTMLButtonElement>(null);
+
+  function focusZeitraumHinzufuegenButton() {
+    zeitraumHinzufuegenButtonElement.current?.focus();
+  }
 
   function entferneZeitraum(index: number): void {
     setMonthsBeforeBirthList((months) => {
@@ -217,6 +223,7 @@ export function Taetigkeit({
                     entferneZeitraum(zeitraumIndex);
                     remove(zeitraumIndex);
                     setAddButtonDisabled(false);
+                    focusZeitraumHinzufuegenButton();
                   }}
                 />
               )}
@@ -226,6 +233,7 @@ export function Taetigkeit({
 
         <div className="egr-einkommen-form__taetigkeit-buttons">
           <Button
+            ref={zeitraumHinzufuegenButtonElement}
             buttonStyle="secondary"
             disabled={addButtonDisabled}
             onClick={() => {

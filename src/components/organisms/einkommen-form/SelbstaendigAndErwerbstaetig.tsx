@@ -1,4 +1,5 @@
 import { useFieldArray, useFormContext } from "react-hook-form";
+import { useRef } from "react";
 import { Taetigkeit } from "./Taetigkeit";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import {
@@ -19,6 +20,8 @@ export function SelbstaendigAndErwerbstaetig({
   isSelbststaendig,
   monthsBeforeBirth,
 }: SelbstaendigAndErwerbstaetigProps) {
+  const letztesTaetigkeitsElement = useRef<HTMLElement>(null);
+
   const { control } = useFormContext<StepEinkommenState>();
 
   const name =
@@ -28,21 +31,34 @@ export function SelbstaendigAndErwerbstaetig({
     control,
   });
 
+  function fuegeTaetigkeitHinzu() {
+    taetigkeitenFields.append(initialTaetigkeit);
+    // Compensate for render delay adding new element for Taetigkeit (non critical).
+    setTimeout(() => letztesTaetigkeitsElement.current?.focus());
+  }
+
   return (
     <>
-      {taetigkeitenFields.fields.map((field, index) => (
-        <Taetigkeit
-          key={field.id}
-          elternteil={elternteil}
-          taetigkeitsIndex={index}
-          isSelbststaendig={isSelbststaendig}
-          monthsBeforeBirth={monthsBeforeBirth}
-          onRemove={() => taetigkeitenFields.remove(index)}
-        />
-      ))}
+      {taetigkeitenFields.fields.map((field, index) => {
+        const isLastTaetigkeit = index === taetigkeitenFields.fields.length - 1;
+        const ref = isLastTaetigkeit ? letztesTaetigkeitsElement : undefined;
+
+        return (
+          <Taetigkeit
+            key={field.id}
+            ref={ref}
+            elternteil={elternteil}
+            taetigkeitsIndex={index}
+            isSelbststaendig={isSelbststaendig}
+            monthsBeforeBirth={monthsBeforeBirth}
+            onRemove={() => taetigkeitenFields.remove(index)}
+          />
+        );
+      })}
+
       <Button
         buttonStyle="primary"
-        onClick={() => taetigkeitenFields.append(initialTaetigkeit)}
+        onClick={fuegeTaetigkeitHinzu}
         label={
           taetigkeitenFields.fields.length
             ? "weitere Tätigkeit hinzufügen"

@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useId, useRef, useState, forwardRef, type ForwardedRef } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { Versicherungen } from "./Versicherungen";
@@ -44,13 +44,16 @@ interface TaetigkeitsFormProps {
   readonly onRemove: () => void;
 }
 
-export function Taetigkeit({
-  elternteil,
-  taetigkeitsIndex,
-  isSelbststaendig,
-  monthsBeforeBirth,
-  onRemove,
-}: TaetigkeitsFormProps) {
+export const Taetigkeit = forwardRef(function Taetigkeit(
+  {
+    elternteil,
+    taetigkeitsIndex,
+    isSelbststaendig,
+    monthsBeforeBirth,
+    onRemove,
+  }: TaetigkeitsFormProps,
+  ref?: ForwardedRef<HTMLElement>,
+) {
   const name =
     `${elternteil}.taetigkeitenNichtSelbstaendigUndSelbstaendig` as const;
 
@@ -146,8 +149,10 @@ export function Taetigkeit({
 
   return (
     <section
+      ref={ref}
       className="flex flex-col gap-32"
       aria-labelledby={headingIdentifier}
+      tabIndex={-1}
     >
       <h3 id={headingIdentifier}>{taetigkeitsIndex + 1}. Tätigkeit</h3>
 
@@ -289,4 +294,4 @@ export function Taetigkeit({
       />
     </section>
   );
-}
+});

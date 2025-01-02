@@ -94,6 +94,13 @@ export function Taetigkeit({
     zeitraumHinzufuegenButtonElement.current?.focus();
   }
 
+  const letztesZeitraumListenElement = useRef<HTMLLIElement>(null);
+
+  function focusLetztesZeitraumListenElement() {
+    // Compensate for render delay to possibly create new element (non critical).
+    setTimeout(() => letztesZeitraumListenElement.current?.focus());
+  }
+
   function entferneZeitraum(index: number): void {
     setMonthsBeforeBirthList((months) => {
       months.splice(index, 1);
@@ -196,39 +203,51 @@ export function Taetigkeit({
         </legend>
 
         <ul>
-          {zeitraumFields.map((field, zeitraumIndex) => (
-            <li key={field.id} className="egr-einkommen-form__zeitraum">
-              <Zeitraum
-                listingIndex={zeitraumIndex + 1}
-                disabled={zeitraumIndex + 1 !== zeitraumFields.length}
-                register={register}
-                setValue={setValue}
-                getValues={getValues}
-                name={`${zeitraum}.${zeitraumIndex}`}
-                options={monthsBeforeBirthList[zeitraumIndex].from}
-                optionsTo={monthsBeforeBirthList[zeitraumIndex].to}
-                onChange={(zeitraum) =>
-                  onChangeZeitraum(zeitraumIndex, zeitraum)
-                }
-                errors={errors}
-                type="Integer"
-              />
+          {zeitraumFields.map((field, zeitraumIndex) => {
+            const isLastZeitraum = zeitraumIndex === zeitraumFields.length - 1;
+            const ref = isLastZeitraum
+              ? letztesZeitraumListenElement
+              : undefined;
 
-              {zeitraumFields.length > 1 && (
-                <Button
-                  buttonStyle="link"
-                  label="Zeitraum entfernen"
-                  iconAfter={<ClearIcon />}
-                  onClick={() => {
-                    entferneZeitraum(zeitraumIndex);
-                    remove(zeitraumIndex);
-                    setAddButtonDisabled(false);
-                    focusZeitraumHinzufuegenButton();
-                  }}
+            return (
+              <li
+                key={field.id}
+                tabIndex={-1}
+                ref={ref}
+                className="egr-einkommen-form__zeitraum"
+              >
+                <Zeitraum
+                  listingIndex={zeitraumIndex + 1}
+                  disabled={zeitraumIndex + 1 !== zeitraumFields.length}
+                  register={register}
+                  setValue={setValue}
+                  getValues={getValues}
+                  name={`${zeitraum}.${zeitraumIndex}`}
+                  options={monthsBeforeBirthList[zeitraumIndex].from}
+                  optionsTo={monthsBeforeBirthList[zeitraumIndex].to}
+                  onChange={(zeitraum) =>
+                    onChangeZeitraum(zeitraumIndex, zeitraum)
+                  }
+                  errors={errors}
+                  type="Integer"
                 />
-              )}
-            </li>
-          ))}
+
+                {zeitraumFields.length > 1 && (
+                  <Button
+                    buttonStyle="link"
+                    label="Zeitraum entfernen"
+                    iconAfter={<ClearIcon />}
+                    onClick={() => {
+                      entferneZeitraum(zeitraumIndex);
+                      remove(zeitraumIndex);
+                      setAddButtonDisabled(false);
+                      focusZeitraumHinzufuegenButton();
+                    }}
+                  />
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         <div className="egr-einkommen-form__taetigkeit-buttons">
@@ -248,6 +267,8 @@ export function Taetigkeit({
                 (availableMonth: SelectOption) => !availableMonth.hidden,
               ).length;
               setAddButtonDisabled(availableMonthsSize === 1);
+
+              focusLetztesZeitraumListenElement();
             }}
             label="weiteren Zeitraum hinzufügen"
           />

@@ -6,7 +6,6 @@ import { formSteps } from "@/components/pages/formSteps";
 import { Button } from "@/components/atoms";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
 import { Page } from "@/components/organisms/page";
-import ModalPopup from "@/components/organisms/modal-popup/ModalPopup";
 import { YesNo } from "@/globals/js/calculations/model";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -41,21 +40,30 @@ import {
 } from "@/features/planer/domain";
 
 export function RechnerPlanerPage() {
-  const isLimitEinkommenUeberschritten = useAppSelector((state) =>
-    state.stepEinkommen.limitEinkommenUeberschritten === YesNo.YES
-      ? true
-      : null,
-  );
-  const [showModalPopup, setShowModalPopup] = useState<boolean | null>(
-    isLimitEinkommenUeberschritten,
-  );
+  const store = useAppStore();
+  const mainElement = useRef<HTMLDivElement>(null);
+  const dialogElement = useRef<HTMLDialogElement>(null);
+
+  function openDialogWhenEinkommenLimitUebeschritten() {
+    const isEinkommenLimitUeberschritten =
+      store.getState().stepEinkommen.limitEinkommenUeberschritten === YesNo.YES;
+
+    if (isEinkommenLimitUeberschritten) dialogElement.current?.showModal();
+  }
+
+  function closeDialog() {
+    dialogElement.current?.close();
+    mainElement.current?.focus();
+  }
+
+  useEffect(openDialogWhenEinkommenLimitUebeschritten, [store]);
+
   const alleinerziehend = useAppSelector(
     stepAllgemeineAngabenSelectors.getAlleinerziehend,
   );
   const amountLimitEinkommen =
     alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
-  const store = useAppStore();
   const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
   const initialPlanerInformation = useRef(
     initialPlan !== undefined
@@ -127,7 +135,11 @@ export function RechnerPlanerPage() {
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      <div className="flex flex-wrap justify-between gap-y-80">
+      <div
+        ref={mainElement}
+        className="flex flex-wrap justify-between gap-y-80"
+        tabIndex={-1}
+      >
         <Planer
           className="basis-full"
           initialInformation={initialPlanerInformation.current}
@@ -161,13 +173,19 @@ export function RechnerPlanerPage() {
         />
       </div>
 
-      {!!showModalPopup && (
-        <ModalPopup
-          text={`Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Falls noch nicht feststeht, ob Sie die Grenze von ${amountLimitEinkommen.toLocaleString()} Euro überschreiten, können Sie trotzdem einen Antrag stellen.`}
-          onClick={() => setShowModalPopup(false)}
-          buttonLabel="Dialog schließen"
-        />
-      )}
+      <dialog
+        ref={dialogElement}
+        className="flex-col items-center gap-10 bg-primary-light open:flex"
+      >
+        <p>
+          Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld
+          bekommen. Falls noch nicht feststeht, ob Sie die Grenze von{" "}
+          {amountLimitEinkommen.toLocaleString()} Euro überschreiten, können Sie
+          trotzdem einen Antrag stellen.
+        </p>
+
+        <Button label="Dialog schließen" onClick={closeDialog} />
+      </dialog>
     </Page>
   );
 }

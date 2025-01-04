@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
@@ -23,6 +23,8 @@ export function Sidebar({ currentStep }: Props) {
   );
   const currentStepNumber = currentStepIndex + 1;
   const totalStepCount = Object.entries(formSteps).length;
+
+  const toggleButtonIdentifier = useId();
   const toggleButtonAriaLabel = `Schritt ${currentStepNumber} von ${totalStepCount}: ${currentStep.text}`;
 
   return (
@@ -32,6 +34,7 @@ export function Sidebar({ currentStep }: Props) {
       aria-label="Fortschritt"
     >
       <button
+        id={toggleButtonIdentifier}
         className="egr-sidebar__collapse-btn text-nowrap px-24 py-16"
         type="button"
         onClick={toggleMenu}
@@ -53,6 +56,7 @@ export function Sidebar({ currentStep }: Props) {
           "egr-sidebar-list",
           isOpen && "egr-sidebar-list--open",
         )}
+        aria-controls={toggleButtonIdentifier}
       >
         {Object.values(formSteps).map((step, index) => {
           const isCurrentStep = index === currentStepIndex;

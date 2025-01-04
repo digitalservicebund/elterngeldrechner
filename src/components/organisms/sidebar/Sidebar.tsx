@@ -1,5 +1,5 @@
 import { useCallback, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
@@ -26,6 +26,8 @@ export function Sidebar({ currentStep }: Props) {
 
   const toggleButtonIdentifier = useId();
   const toggleButtonAriaLabel = `Schritt ${currentStepNumber} von ${totalStepCount}: ${currentStep.text}`;
+
+  const navigate = useNavigate();
 
   return (
     <nav
@@ -59,6 +61,7 @@ export function Sidebar({ currentStep }: Props) {
         aria-controls={toggleButtonIdentifier}
       >
         {Object.values(formSteps).map((step, index) => {
+          const navigateToStep = () => navigate(step.route);
           const isCurrentStep = index === currentStepIndex;
           const ariaCurrent = isCurrentStep ? "step" : false;
           const isNavigatable = index <= currentStepIndex;
@@ -72,13 +75,15 @@ export function Sidebar({ currentStep }: Props) {
                 step === currentStep && "egr-sidebar-list__step--current",
               )}
             >
-              {isNavigatable ? (
-                <Link to={step.route} aria-current={ariaCurrent}>
-                  {step.text}
-                </Link>
-              ) : (
-                <span aria-current={ariaCurrent}>{step.text}</span>
-              )}
+              <button
+                className="appearance-none border-none bg-transparent text-16 text-black"
+                type="button"
+                onClick={navigateToStep}
+                aria-current={ariaCurrent}
+                disabled={!isNavigatable}
+              >
+                {step.text}
+              </button>
             </li>
           );
         })}

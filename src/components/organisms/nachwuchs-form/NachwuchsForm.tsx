@@ -120,7 +120,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
           required: "Dieses Feld ist erforderlich",
           pattern: {
             value: /^\d{2}\.\d{2}\.\d{4}$/,
-            message: "Bitte das Feld vollständig ausfüllen oder leer lassen",
+            message: "Bitte das Feld vollständig ausfüllen",
           },
           validate: {
             validateMonth,
@@ -196,8 +196,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
                   rules={{
                     pattern: {
                       value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message:
-                        "Bitte das Feld vollständig ausfüllen oder leer lassen",
+                      message: "Bitte das Feld vollständig ausfüllen",
                     },
                     validate: geburtValidation,
                   }}

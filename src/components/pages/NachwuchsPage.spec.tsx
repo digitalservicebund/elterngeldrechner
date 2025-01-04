@@ -271,7 +271,7 @@ describe("Submitting the form", () => {
     await userEvent.click(screen.getByText("Weiter"));
 
     const errorMessage = screen.getByText(
-      "Bitte das Feld vollständig ausfüllen oder leer lassen",
+      "Bitte das Feld vollständig ausfüllen",
     );
     expect(errorMessage).toBeInTheDocument();
   });

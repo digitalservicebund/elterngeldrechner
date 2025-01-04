@@ -6,6 +6,7 @@ import {
   UseControllerProps,
 } from "react-hook-form";
 import { IMask, IMaskInput } from "react-imask";
+import { useId } from "react";
 import { Description } from "@/components/atoms";
 import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
@@ -34,6 +35,18 @@ export function CustomDate<
     fieldState: { error },
   } = useController({ control, rules, name });
 
+  const hasError = error !== undefined;
+  const errorIdentifier = useId();
+
+  const dateFormatHintIdentifier = useId();
+
+  const ariaDescribedBy = [
+    dateFormatHintIdentifier,
+    hasError ? errorIdentifier : undefined,
+  ]
+    .filter((identifier) => !!identifier)
+    .join(" ");
+
   return (
     <div className="egr-custom-date">
       <div className="egr-custom-date__label">
@@ -46,9 +59,14 @@ export function CustomDate<
           error && "egr-custom-date__field--error",
         )}
       >
-        <span className="egr-custom-date__placeholder" aria-hidden>
+        <span
+          id={dateFormatHintIdentifier}
+          className="egr-custom-date__placeholder"
+          aria-label="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
+        >
           TT.MM.JJJJ
         </span>
+
         <IMaskInput
           className="egr-custom-date__input"
           name={name}
@@ -84,14 +102,14 @@ export function CustomDate<
           onAccept={(value) => onChange(value)}
           onBlur={onBlur}
           placeholder="__.__.___"
-          aria-placeholder="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
-          aria-invalid={!!error}
-          aria-describedby={error ? `${name}-error` : undefined}
+          aria-invalid={hasError}
+          aria-describedby={ariaDescribedBy}
           required={required}
         />
       </div>
-      {!!error && (
-        <Description id={`${name}-error`} error>
+
+      {!!hasError && (
+        <Description id={errorIdentifier} error>
           {error.message}
         </Description>
       )}

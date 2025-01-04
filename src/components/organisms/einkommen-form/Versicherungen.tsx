@@ -1,29 +1,15 @@
-import { ChangeEvent, useId, useMemo } from "react";
-import {
-  FieldError,
-  Path,
-  get,
-  useFormContext,
-  RegisterOptions,
-} from "react-hook-form";
+import { ChangeEvent, useId } from "react";
+import { FieldError, Path, get, useFormContext } from "react-hook-form";
 import {
   StepEinkommenState,
   TypeOfVersicherungen,
 } from "@/redux/stepEinkommenSlice";
 import { CustomCheckbox } from "@/components/molecules";
+import { Description } from "@/components/atoms";
 
 type VersicherungenProps = Readonly<{
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;
 }>;
-
-const typeOfVersicherungenLabels: {
-  [K in keyof TypeOfVersicherungen]: string;
-} = {
-  hasRentenversicherung: "rentenversicherungspflichtig",
-  hasKrankenversicherung: "krankenversicherungspflichtig",
-  hasArbeitslosenversicherung: "arbeitslosenversicherungspflichtig",
-  none: "keines der Genannten",
-};
 
 export function Versicherungen({
   hasRentenversicherungName,
@@ -38,31 +24,43 @@ export function Versicherungen({
     getValues,
   } = useFormContext<StepEinkommenState>();
 
-  const error = get(errors, noneName) as FieldError | undefined;
+  function unselectAllVersicherungenOptionsIfSelectingNoneOption(
+    event: ChangeEvent<HTMLInputElement>,
+  ): void {
+    if (event.target.checked) {
+      setValue(hasRentenversicherungName, false);
+      setValue(hasKrankenversicherungName, false);
+      setValue(hasArbeitslosenversicherungName, false);
+    }
+  }
+
+  function unselectNoneOptionIfSelectingAnyVersicherungOption(
+    event: ChangeEvent<HTMLInputElement>,
+  ): void {
+    if (event.target.checked) {
+      setValue(noneName, false);
+    }
+  }
+
+  function isAnyVersicherungsOptionSelectedOrNoneOption(): true | string {
+    const isNoneOptionSelected = getValues(noneName);
+    const isAnyVersicherungsOptionSelected = [
+      hasRentenversicherungName,
+      hasKrankenversicherungName,
+      hasArbeitslosenversicherungName,
+    ].some((fieldName) => getValues(fieldName));
+
+    const isSelectionValid =
+      isNoneOptionSelected !== isAnyVersicherungsOptionSelected; // XOR
+
+    return isSelectionValid || "Mindestens eine Option muss gewählt werden";
+  }
+
+  const error = get(errors, hasRentenversicherungName) as
+    | FieldError
+    | undefined; // Depends on which fields has the validation.
   const hasError = error !== undefined;
   const errorIdentifier = useId();
-
-  const handleChangeNoneVersicherung = (
-    event: ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (!event.target.checked) return;
-
-    setValue(hasRentenversicherungName, false);
-    setValue(hasKrankenversicherungName, false);
-    setValue(hasArbeitslosenversicherungName, false);
-  };
-
-  const versicherungenRegisterOptions: RegisterOptions<StepEinkommenState> =
-    useMemo(
-      () => ({
-        onChange: (event: ChangeEvent<HTMLInputElement>) => {
-          if (!event.target.checked) return;
-          setValue(noneName, false);
-        },
-        deps: [noneName],
-      }),
-      [noneName, setValue],
-    );
 
   return (
     <fieldset
@@ -75,49 +73,58 @@ export function Versicherungen({
 
       <CustomCheckbox
         register={register}
-        registerOptions={versicherungenRegisterOptions}
+        registerOptions={{
+          onChange: unselectNoneOptionIfSelectingAnyVersicherungOption,
+          validate: { isAnyVersicherungsOptionSelectedOrNoneOption },
+          deps: [
+            hasKrankenversicherungName,
+            hasArbeitslosenversicherungName,
+            noneName,
+          ],
+        }}
         name={hasRentenversicherungName}
-        label={typeOfVersicherungenLabels.hasRentenversicherung}
+        label="rentenversicherungspflichtig"
+        errors={hasError}
       />
+
       <CustomCheckbox
         register={register}
-        registerOptions={versicherungenRegisterOptions}
+        registerOptions={{
+          onChange: unselectNoneOptionIfSelectingAnyVersicherungOption,
+          deps: [hasRentenversicherungName],
+        }}
         name={hasKrankenversicherungName}
-        label={typeOfVersicherungenLabels.hasKrankenversicherung}
+        label="krankenversicherungspflichtig"
+        errors={hasError}
       />
+
       <CustomCheckbox
         register={register}
-        registerOptions={versicherungenRegisterOptions}
+        registerOptions={{
+          onChange: unselectNoneOptionIfSelectingAnyVersicherungOption,
+          deps: [hasRentenversicherungName],
+        }}
         name={hasArbeitslosenversicherungName}
-        label={typeOfVersicherungenLabels.hasArbeitslosenversicherung}
+        label="arbeitslosenversicherungspflichtig"
+        errors={hasError}
       />
+
       <CustomCheckbox
         register={register}
         name={noneName}
-        label={typeOfVersicherungenLabels.none}
+        label="keines der Genannten"
         registerOptions={{
-          validate: {
-            validVersicherungOrNone: (value) => {
-              if (value === true) {
-                return true;
-              }
-              const hasOtherSelection = [
-                hasRentenversicherungName,
-                hasKrankenversicherungName,
-                hasArbeitslosenversicherungName,
-              ].some((fieldName) => getValues(fieldName) === true);
-
-              return (
-                hasOtherSelection ||
-                "Mindestens eine Option muss gewählt werden"
-              );
-            },
-          },
-          onChange: handleChangeNoneVersicherung,
+          onChange: unselectAllVersicherungenOptionsIfSelectingNoneOption,
+          deps: [hasRentenversicherungName],
         }}
+        errors={hasError}
       />
 
-      {!!hasError && <span id={errorIdentifier}>{error.message}</span>}
+      {!!hasError && (
+        <Description id={errorIdentifier} error>
+          {error.message}
+        </Description>
+      )}
     </fieldset>
   );
 }

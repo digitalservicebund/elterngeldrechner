@@ -1,10 +1,10 @@
 import { useId } from "react";
-import { get, useFormContext, type FieldError } from "react-hook-form";
-import { CustomCheckbox } from "@/components/molecules";
-import { StepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
-import { ElternteilType } from "@/redux/elternteil-type";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { type FieldError, get, useFormContext } from "react-hook-form";
 import { Description } from "@/components/atoms";
+import { CustomCheckbox } from "@/components/molecules";
+import { infoTexts } from "@/components/molecules/info-dialog";
+import { ElternteilType } from "@/redux/elternteil-type";
+import { StepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
 
 interface Props {
   readonly elternteil: ElternteilType;

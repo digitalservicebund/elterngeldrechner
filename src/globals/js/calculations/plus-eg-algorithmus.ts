@@ -1,5 +1,7 @@
 import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
+import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
+import { errorOf } from "./calculation-error-code";
 import {
   ElternGeldArt,
   ElternGeldAusgabe,
@@ -9,19 +11,22 @@ import {
   ErwerbsArt,
   FinanzDaten,
   FinanzDatenBerechnet,
+  type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
-  mutterschaftsLeistungInMonaten,
-  PersoenlicheDaten,
   PLANUNG_ANZAHL_MONATE,
+  PersoenlicheDaten,
   PlanungsDaten,
   YesNo,
-  zaehleMonateErwerbsTaetigkeit,
   ZwischenErgebnis,
-  type Lohnsteuerjahr,
+  mutterschaftsLeistungInMonaten,
+  zaehleMonateErwerbsTaetigkeit,
 } from "./model";
-import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { errorOf } from "./calculation-error-code";
+import {
+  minusDays,
+  plusMonths,
+  setDayOfMonth,
+} from "@/globals/js/calculations/common/date-util";
 import {
   BIG_ZERO,
   fMax,
@@ -32,14 +37,9 @@ import {
 } from "@/globals/js/calculations/common/math-util";
 import { bruttoEGPlusNeu } from "@/globals/js/calculations/eg-brutto-rechner";
 import {
-  minusDays,
-  plusMonths,
-  setDayOfMonth,
-} from "@/globals/js/calculations/common/date-util";
-import {
   BETRAG_MEHRLINGSZUSCHLAG,
-  MIN_GESCHWISTERBONUS,
   MINDESTSATZ,
+  MIN_GESCHWISTERBONUS,
   PAUSCH,
   RATE_BONUS,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";

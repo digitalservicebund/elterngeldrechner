@@ -1,17 +1,17 @@
+import CloseIcon from "@digitalservicebund/icons/Close";
+import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
+import classNames from "classnames";
 import {
-  KeyboardEvent,
   CSSProperties,
+  KeyboardEvent,
+  type ReactNode,
   useId,
   useRef,
   useState,
-  type ReactNode,
 } from "react";
-import InfoOutlinedIcon from "@digitalservicebund/icons/InfoOutlined";
-import CloseIcon from "@digitalservicebund/icons/Close";
-import classNames from "classnames";
-import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import { useAnchorPositioning } from "@/components/molecules/info-dialog/positioning/anchor";
 import { useMarginPositioning } from "@/components/molecules/info-dialog/positioning/margin";
+import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 
 interface Props {
   readonly ariaLabelForDialog?: string;

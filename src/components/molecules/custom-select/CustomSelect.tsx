@@ -1,15 +1,15 @@
 import classNames from "classnames";
 import {
-  UseFormRegister,
-  RegisterOptions,
+  FieldError,
   FieldErrors,
   FieldValues,
-  FieldError,
   Path,
+  RegisterOptions,
+  UseFormRegister,
   get,
 } from "react-hook-form";
 import { Description } from "@/components/atoms";
-import { InfoDialog, Info } from "@/components/molecules/info-dialog";
+import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 export interface SelectOption<TValue extends string = string> {
   value: TValue;

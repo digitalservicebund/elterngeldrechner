@@ -3,12 +3,12 @@ import {
   Einkommen,
   ElternGeldArt,
   KassenArt,
-  kinderFreiBetragOfNumber,
   NettoEinkommen,
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
-  steuerklasseOfNumber,
   YesNo,
+  kinderFreiBetragOfNumber,
+  steuerklasseOfNumber,
 } from "@/globals/js/calculations/model";
 import {
   dateFromExcelSerial,

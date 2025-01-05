@@ -2,12 +2,12 @@ import { listeMonateAuf } from "./listeMonateAuf";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import { Variante } from "@/features/planer/domain/Variante";
+import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import { zaehleVerplantesKontingent as zaehleVerplantesKontingentInMonat } from "@/features/planer/domain/monat";
 import {
   VerplantesKontingent,
   addiere,
 } from "@/features/planer/domain/verplantes-kontingent";
-import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
-import { zaehleVerplantesKontingent as zaehleVerplantesKontingentInMonat } from "@/features/planer/domain/monat";
 
 export function zaehleVerplantesKontingent<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,

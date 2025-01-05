@@ -1,7 +1,7 @@
 export {
-  createMischEkTaetigkeitOf,
   ErwerbsTaetigkeit,
   MischEkTaetigkeit,
+  createMischEkTaetigkeitOf,
 } from "./misch-ek-taetigkeit";
 export { Einkommen } from "./einkommen";
 export type { NettoEinkommen } from "./einkommen-types";
@@ -10,8 +10,8 @@ export type { ElternGeldDaten } from "./eltern-geld-daten";
 export { ElternGeldKategorie } from "./eltern-geld-kategorie";
 export type { ElternGeldPerioden } from "./eltern-geld-perioden";
 export type {
-  ElternGeldPlusErgebnis,
   ElternGeldAusgabe,
+  ElternGeldPlusErgebnis,
 } from "./eltern-geld-plus-ergebnis";
 export { ErwerbsArt } from "./erwerbs-art";
 export { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";

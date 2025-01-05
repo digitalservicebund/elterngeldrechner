@@ -1,43 +1,43 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tracking-geplante-monate-des-partners-der-mutter";
-import { formSteps } from "@/components/pages/formSteps";
+import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/components/atoms";
-import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
+import { FeedbackForm } from "@/components/organisms/feedback-form";
 import { Page } from "@/components/organisms/page";
+import { formSteps } from "@/components/pages/formSteps";
+import { useNavigateWithPlan } from "@/components/pages/useNavigateWithPlan";
+import type { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
+import {
+  Variante,
+  listeElternteileFuerAusgangslageAuf,
+} from "@/features/planer/domain";
+import { Planer } from "@/features/planer/user-interface";
 import { YesNo } from "@/globals/js/calculations/model";
-import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import type { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
-import { Planer } from "@/features/planer/user-interface";
-import { useNavigateWithPlan } from "@/components/pages/useNavigateWithPlan";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";
+import { feedbackActions, feedbackSelectors } from "@/redux/feedbackSlice";
+import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   isTrackingAllowedByUser,
   trackPartnerschaftlicheVerteilung,
 } from "@/user-tracking";
-import {
-  trackChanges,
-  trackPlannedMonths,
-  trackPlannedMonthsWithIncome,
-  resetTrackingPlanung,
-} from "@/user-tracking/planung";
 import {
   getTrackedEase,
   getTrackedObstacle,
   trackEase,
   trackObstacle,
 } from "@/user-tracking/feedback";
-import { FeedbackForm } from "@/components/organisms/feedback-form";
-import { feedbackActions, feedbackSelectors } from "@/redux/feedbackSlice";
 import {
-  listeElternteileFuerAusgangslageAuf,
-  Variante,
-} from "@/features/planer/domain";
+  resetTrackingPlanung,
+  trackChanges,
+  trackPlannedMonths,
+  trackPlannedMonthsWithIncome,
+} from "@/user-tracking/planung";
 
 export function RechnerPlanerPage() {
   const store = useAppStore();

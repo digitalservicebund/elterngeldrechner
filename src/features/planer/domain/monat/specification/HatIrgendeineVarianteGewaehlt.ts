@@ -1,5 +1,5 @@
-import { Specification } from "@/features/planer/domain/common/specification";
 import { isVariante } from "@/features/planer/domain/Variante";
+import { Specification } from "@/features/planer/domain/common/specification";
 import { Monat } from "@/features/planer/domain/monat/Monat";
 
 export const HatIrgendeineVarianteGewaehlt = Specification.fromPredicate<Monat>(

@@ -1,20 +1,18 @@
+import js from "@eslint/js";
+
+import vitestPlugin from "@vitest/eslint-plugin";
+import eslintConfigPrettier from "eslint-config-prettier";
+import importPlugin from "eslint-plugin-import";
+import accessibilityPlugin from "eslint-plugin-jsx-a11y";
+import importPathsPlugin from "eslint-plugin-no-relative-import-paths";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import tailwindPlugin from "eslint-plugin-tailwindcss";
+
 import {
   config as defineConfig,
   configs as tsEslintConfigs,
 } from "typescript-eslint";
-
-import js from "@eslint/js";
-
-import reactPlugin from "eslint-plugin-react";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
-import accessibilityPlugin from "eslint-plugin-jsx-a11y";
-import tailwindPlugin from "eslint-plugin-tailwindcss";
-import vitestPlugin from "@vitest/eslint-plugin";
-
-import importPlugin from "eslint-plugin-import";
-import importPathsPlugin from "eslint-plugin-no-relative-import-paths";
-
-import eslintConfigPrettier from "eslint-config-prettier";
 
 import customRulesPlugin from "./eslint-plugin/index.js";
 
@@ -108,7 +106,16 @@ const importConfig = [
     rules: {
       "import/first": "error",
       "import/newline-after-import": "error",
-      "import/order": "error",
+      "import/order": [
+        "error",
+        {
+          named: true,
+          alphabetize: {
+            order: "asc",
+            orderImportKind: "asc",
+          },
+        },
+      ],
     },
     settings: {
       "import/resolver": {

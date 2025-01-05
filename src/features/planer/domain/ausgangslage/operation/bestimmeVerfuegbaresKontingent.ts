@@ -1,5 +1,5 @@
-import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 import { Variante } from "@/features/planer/domain/Variante";
+import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 import type { VerfuegbaresKontingent } from "@/features/planer/domain/verfuegbares-kontingent/VerfuegbaresKontingent";
 
 export function bestimmeVerfuegbaresKontingent(

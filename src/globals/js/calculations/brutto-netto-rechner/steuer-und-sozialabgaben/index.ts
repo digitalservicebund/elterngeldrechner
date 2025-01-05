@@ -1,9 +1,9 @@
 import {
+  type Ausgangsparameter,
+  type Eingangsparameter,
   PAP_2022,
   PAP_2023,
   PAP_2024,
-  type Ausgangsparameter,
-  type Eingangsparameter,
   type Programmablaufplan,
 } from "./programmablaufplan";
 import type { Lohnsteuerjahr } from "@/globals/js/calculations/model";

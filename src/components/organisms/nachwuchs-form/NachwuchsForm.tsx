@@ -1,18 +1,18 @@
-import ClearIcon from "@digitalservicebund/icons/Clear";
 import AddIcon from "@digitalservicebund/icons/Add";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import ClearIcon from "@digitalservicebund/icons/Clear";
 import { DateTime } from "luxon";
 import { useId } from "react";
-import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/atoms";
 import {
+  ButtonGroup,
+  Counter,
   CustomCheckbox,
   CustomDate,
-  Counter,
-  ButtonGroup,
 } from "@/components/molecules";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 
 interface NachwuchsFormProps {
   readonly initialValues: StepNachwuchsState;

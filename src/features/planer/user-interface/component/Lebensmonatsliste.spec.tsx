@@ -4,8 +4,8 @@ import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import {
   Elternteil,
   KeinElterngeld,
-  Lebensmonatszahlen,
   type Lebensmonatszahl,
+  Lebensmonatszahlen,
   LetzteLebensmonatszahl,
   Variante,
 } from "@/features/planer/domain";

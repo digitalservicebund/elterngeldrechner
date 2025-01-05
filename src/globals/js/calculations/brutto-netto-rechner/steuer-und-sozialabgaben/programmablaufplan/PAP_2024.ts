@@ -1,9 +1,9 @@
-import {
-  aufDenEuroAufrunden,
-  aufDenEuroAbrunden,
-  aufDenCentAbrunden,
-} from "./auf-und-abrunden";
 import { Programmablaufplan } from "./Programmablaufplan";
+import {
+  aufDenCentAbrunden,
+  aufDenEuroAbrunden,
+  aufDenEuroAufrunden,
+} from "./auf-und-abrunden";
 
 /*
  * !!! READ CAREFULLY !!!

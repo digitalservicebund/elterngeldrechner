@@ -1,11 +1,11 @@
-import { ReactNode, useId } from "react";
 import SquareIcon from "@digitalservicebund/icons/SquareRounded";
 import classNames from "classnames";
+import { ReactNode, useId } from "react";
 import {
-  listeKontingentAuf,
   Variante,
   type VerfuegbaresKontingent,
   type VerplantesKontingent,
+  listeKontingentAuf,
 } from "@/features/planer/domain";
 
 type Props = {

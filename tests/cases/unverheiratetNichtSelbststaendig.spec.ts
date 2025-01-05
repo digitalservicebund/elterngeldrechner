@@ -1,9 +1,9 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
-import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
-import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("unverheiratet, nicht selbstständig", async ({ page }) => {
   test.slow();

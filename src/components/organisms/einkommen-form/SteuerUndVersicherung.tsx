@@ -1,22 +1,22 @@
-import { useFormContext } from "react-hook-form";
 import { useId } from "react";
-import type { ElternteilType } from "@/redux/elternteil-type";
+import { useFormContext } from "react-hook-form";
 import {
   CustomRadioGroup,
-  CustomSelect,
   CustomRadioGroupOption,
+  CustomSelect,
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
-import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import { useAppSelector } from "@/redux/hooks";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 
 interface SteuerUndVersicherungProps {

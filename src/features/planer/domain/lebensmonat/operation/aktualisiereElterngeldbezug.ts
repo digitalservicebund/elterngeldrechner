@@ -1,8 +1,8 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { type Elternteil } from "@/features/planer/domain/Elternteil";
-import { aktualisiereElterngeldbezug as aktualisiereElterngeldbezugImMonat } from "@/features/planer/domain/monat";
-import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
+import { type Elternteil } from "@/features/planer/domain/Elternteil";
+import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import { aktualisiereElterngeldbezug as aktualisiereElterngeldbezugImMonat } from "@/features/planer/domain/monat";
 
 export function aktualisiereElterngeldbezug<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,

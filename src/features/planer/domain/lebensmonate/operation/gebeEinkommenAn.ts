@@ -1,6 +1,6 @@
-import type { Lebensmonat } from "@/features/planer/domain/lebensmonat";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
+import type { Lebensmonat } from "@/features/planer/domain/lebensmonat";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate";
 import { gebeEinkommenAn as gebeEinkommenFuerMonatAn } from "@/features/planer/domain/monat";
 

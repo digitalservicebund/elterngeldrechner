@@ -1,9 +1,9 @@
-import { ReactNode, type CSSProperties } from "react";
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import classNames from "classnames";
-import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
-import type { Einkommen, Elterngeldbezug } from "@/features/planer/domain";
+import { type CSSProperties, ReactNode } from "react";
 import { InfoDialog } from "@/components/molecules/info-dialog";
+import type { Einkommen, Elterngeldbezug } from "@/features/planer/domain";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 
 type Props = {
   readonly elterngeldbezug?: Elterngeldbezug;

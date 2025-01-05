@@ -2,10 +2,10 @@ import { render, within } from "@testing-library/react";
 import { LebensmonatSummary } from "./LebensmonatSummary";
 import { beschreibeLebensmonat } from "./beschreibeLebensmonat";
 import {
+  type Auswahloption,
   Elternteil,
   KeinElterngeld,
   Variante,
-  type Auswahloption,
 } from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 

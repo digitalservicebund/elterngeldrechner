@@ -1,12 +1,12 @@
-import { Variante } from "@/features/planer/domain/Variante";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
+import { Variante } from "@/features/planer/domain/Variante";
+import { Specification } from "@/features/planer/domain/common/specification";
+import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 import {
   HatIrgendeineVarianteGewaehlt,
   type Monat,
 } from "@/features/planer/domain/monat";
-import { Specification } from "@/features/planer/domain/common/specification";
-import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 
 export const JedesElternteilBeziehtKeineOderMindestensZweiLebensmonate =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(

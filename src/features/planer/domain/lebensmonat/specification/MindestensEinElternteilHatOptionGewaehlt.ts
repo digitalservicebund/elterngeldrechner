@@ -1,7 +1,7 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import { Specification } from "@/features/planer/domain/common/specification";
-import { HatIrgendeineVarianteGewaehlt } from "@/features/planer/domain/monat";
 import { LebensmonatMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import { HatIrgendeineVarianteGewaehlt } from "@/features/planer/domain/monat";
 
 export const MindestensEinElternteilHatEineOptionGewaehlt =
   Specification.fromPredicate<LebensmonatMitBeliebigenElternteilen>(

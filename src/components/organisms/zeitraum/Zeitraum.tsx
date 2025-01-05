@@ -1,9 +1,10 @@
+import classNames from "classnames";
 import {
   AriaAttributes,
+  type ChangeEvent,
   useCallback,
   useMemo,
   useState,
-  type ChangeEvent,
 } from "react";
 import {
   FieldErrors,
@@ -15,8 +16,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import classNames from "classnames";
-import { zeitraumValueOf, type ZeitraumValueType } from "./ZeitraumUtil";
+import { type ZeitraumValueType, zeitraumValueOf } from "./ZeitraumUtil";
 import { CustomSelect, SelectOption } from "@/components/molecules";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
 

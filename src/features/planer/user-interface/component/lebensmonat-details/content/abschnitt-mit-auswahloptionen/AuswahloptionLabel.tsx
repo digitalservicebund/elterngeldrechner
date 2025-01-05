@@ -1,13 +1,13 @@
+import LockIcon from "@digitalservicebund/icons/Lock";
 import classNames from "classnames";
 import { ReactNode } from "react";
-import LockIcon from "@digitalservicebund/icons/Lock";
-import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import {
-  KeinElterngeld,
-  Variante,
   type Auswahloption,
   type Elterngeldbezug,
+  KeinElterngeld,
+  Variante,
 } from "@/features/planer/domain";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 
 type Props = {
   readonly option: Auswahloption;

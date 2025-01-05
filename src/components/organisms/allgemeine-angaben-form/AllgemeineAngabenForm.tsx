@@ -1,9 +1,5 @@
-import { SubmitHandler, useForm } from "react-hook-form";
 import { useId } from "react";
-import {
-  Antragstellende,
-  StepAllgemeineAngabenState,
-} from "@/redux/stepAllgemeineAngabenSlice";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   ButtonGroup,
   CustomInput,
@@ -12,8 +8,12 @@ import {
   Split,
   YesNoRadio,
 } from "@/components/molecules";
-import { YesNo } from "@/globals/js/calculations/model";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { YesNo } from "@/globals/js/calculations/model";
+import {
+  Antragstellende,
+  StepAllgemeineAngabenState,
+} from "@/redux/stepAllgemeineAngabenSlice";
 
 const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",

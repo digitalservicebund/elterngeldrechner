@@ -1,13 +1,13 @@
-import { useFieldArray, useFormContext } from "react-hook-form";
 import { useRef } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import { Taetigkeit } from "./Taetigkeit";
+import { Button } from "@/components/atoms";
+import { SelectOption } from "@/components/molecules";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   StepEinkommenState,
   initialTaetigkeit,
 } from "@/redux/stepEinkommenSlice";
-import { Button } from "@/components/atoms";
-import { SelectOption } from "@/components/molecules";
 
 interface SelbstaendigAndErwerbstaetigProps {
   readonly elternteil: ElternteilType;

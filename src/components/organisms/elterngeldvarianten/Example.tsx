@@ -1,6 +1,6 @@
+import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import { ReactNode } from "react";
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 
 type Month = "Basis" | "Plus" | "Bonus" | null;
 

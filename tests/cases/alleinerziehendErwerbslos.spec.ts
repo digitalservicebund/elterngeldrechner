@@ -1,12 +1,12 @@
-import { test, expect } from "@playwright/test";
-import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
-import { NachwuchsPOM } from "../pom/NachwuchsPOM";
-import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
-import { EinkommenPOM } from "../pom/EinkommenPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
-import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
+import { expect, test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { EinkommenPOM } from "../pom/EinkommenPOM";
+import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
+import { VariantenPOM } from "../pom/VariantenPOM";
+import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 
 test("alleinerziehend, erwerbslos", async ({ page }) => {
   const screenshot = expectScreenshot({ page });

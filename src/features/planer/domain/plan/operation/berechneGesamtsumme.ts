@@ -1,18 +1,18 @@
 import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type {
-  Ausgangslage,
-  ElternteileByAusgangslage,
-} from "@/features/planer/domain/ausgangslage";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
+import { isElternteil } from "@/features/planer/domain/Elternteil";
 import type {
   Gesamtsumme,
   SummeFuerElternteil,
 } from "@/features/planer/domain/Gesamtsumme";
+import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import { isVariante } from "@/features/planer/domain/Variante";
-import { isElternteil } from "@/features/planer/domain/Elternteil";
-import type { Monat } from "@/features/planer/domain/monat";
+import type {
+  Ausgangslage,
+  ElternteileByAusgangslage,
+} from "@/features/planer/domain/ausgangslage";
 import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
+import type { Monat } from "@/features/planer/domain/monat";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function berechneGesamtsumme<A extends Ausgangslage>(

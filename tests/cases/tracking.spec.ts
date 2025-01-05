@@ -1,13 +1,13 @@
-import { expect, Page, test } from "@playwright/test";
+import { Page, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
-import { NachwuchsPOM } from "../pom/NachwuchsPOM";
-import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
-import { EinkommenPOM } from "../pom/EinkommenPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
-import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
-import { FeedbackPOM } from "../pom/FeedbackPOM";
 import { CookieBannerPOM } from "../pom/CookieBannerPOM";
+import { EinkommenPOM } from "../pom/EinkommenPOM";
+import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
+import { FeedbackPOM } from "../pom/FeedbackPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
+import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
+import { VariantenPOM } from "../pom/VariantenPOM";
+import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 
 import {
   establishDataLayer,

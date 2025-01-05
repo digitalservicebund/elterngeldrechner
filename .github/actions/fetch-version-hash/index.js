@@ -1,5 +1,5 @@
-import { chromium } from "@playwright/test";
 import * as core from "@actions/core";
+import { chromium } from "@playwright/test";
 
 async function run() {
   try {

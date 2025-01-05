@@ -1,7 +1,6 @@
 import Big from "big.js";
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
-  createMischEkTaetigkeitOf,
   Einkommen,
   ErwerbsArt,
   ErwerbsTaetigkeit,
@@ -11,6 +10,7 @@ import {
   PersoenlicheDaten,
   SteuerKlasse,
   YesNo,
+  createMischEkTaetigkeitOf,
 } from "./model";
 
 describe("basis-eg-algorithmus", () => {

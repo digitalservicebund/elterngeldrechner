@@ -2,13 +2,13 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { AbschnittMitEinkommen } from "./AbschnittMitEinkommen";
 import {
+  AusgangslageFuerEinElternteil,
+  type Auswahloption,
   Auswahloptionen,
   Elternteil,
   KeinElterngeld,
   MONAT_MIT_MUTTERSCHUTZ,
   Variante,
-  type Auswahloption,
-  AusgangslageFuerEinElternteil,
 } from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 

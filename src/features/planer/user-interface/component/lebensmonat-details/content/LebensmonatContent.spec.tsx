@@ -1,11 +1,11 @@
 import { render, screen } from "@testing-library/react";
-import { LebensmonatContent } from "./LebensmonatContent";
 import { HinweisZumBonus } from "./HinweisZumBonus";
+import { LebensmonatContent } from "./LebensmonatContent";
 import {
+  type Auswahloption,
   Elternteil,
   KeinElterngeld,
   Variante,
-  type Auswahloption,
 } from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 

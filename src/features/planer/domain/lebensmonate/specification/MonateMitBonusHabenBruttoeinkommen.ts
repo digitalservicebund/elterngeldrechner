@@ -1,10 +1,10 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
+import { Specification } from "@/features/planer/domain/common/specification";
+import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate";
 import {
   MonatHatBonusGewaehlt,
   MonatHatBruttoeinkommen,
 } from "@/features/planer/domain/monat";
-import { Specification } from "@/features/planer/domain/common/specification";
-import { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate";
 
 export const MonateMitBonusHabenBruttoeinkommen =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(

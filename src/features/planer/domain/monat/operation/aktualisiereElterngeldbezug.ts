@@ -1,6 +1,6 @@
+import { KeinElterngeld } from "@/features/planer/domain/Auswahloption";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
 import type { Monat } from "@/features/planer/domain/monat/Monat";
-import { KeinElterngeld } from "@/features/planer/domain/Auswahloption";
 
 export function aktualisiereElterngeldbezug(
   monat: Monat,

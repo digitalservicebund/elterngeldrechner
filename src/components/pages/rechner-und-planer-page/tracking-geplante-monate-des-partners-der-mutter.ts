@@ -1,11 +1,11 @@
 import {
   type Ausgangslage,
-  Elternteil,
-  type Lebensmonate,
-  isVariante,
-  type ElternteileByAusgangslage,
-  type Plan,
   type Auswahloption,
+  Elternteil,
+  type ElternteileByAusgangslage,
+  type Lebensmonate,
+  type Plan,
+  isVariante,
 } from "@/features/planer/domain";
 import { trackAnzahlGeplanterMonateDesPartnersDerMutter } from "@/user-tracking";
 

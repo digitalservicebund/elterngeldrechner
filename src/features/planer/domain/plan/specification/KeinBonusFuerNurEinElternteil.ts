@@ -1,10 +1,10 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { IrgendeinElternteilHatBonusGewaehlt } from "@/features/planer/domain/lebensmonat";
 import {
-  type AusgangslageFuerEinElternteil,
   Ausgangslage,
+  type AusgangslageFuerEinElternteil,
 } from "@/features/planer/domain/ausgangslage";
 import { Specification } from "@/features/planer/domain/common/specification";
+import { IrgendeinElternteilHatBonusGewaehlt } from "@/features/planer/domain/lebensmonat";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function KeinBonusFuerNurEinElternteil<A extends Ausgangslage>() {

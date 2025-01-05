@@ -1,4 +1,4 @@
-import { isVariante, Variante } from "./Variante";
+import { Variante, isVariante } from "./Variante";
 
 /*
  * Represents the option to take no of the above Varianten. Besides other

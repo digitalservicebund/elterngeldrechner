@@ -1,20 +1,20 @@
-import { ReactNode, useId } from "react";
 import classNames from "classnames";
+import { ReactNode, useId } from "react";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
+import { InfoDialog } from "@/components/molecules/info-dialog";
 import {
-  useGridColumnPerElternteil,
-  type GridColumnDefinitionPerElternteil,
-} from "@/features/planer/user-interface/layout/grid-layout";
-import {
-  Elternteil,
-  KeinElterngeld,
-  Variante,
   type Auswahlmoeglichkeiten,
   type Auswahloption,
   Auswahloptionen,
   type Elterngeldbezug,
+  Elternteil,
+  KeinElterngeld,
+  Variante,
 } from "@/features/planer/domain";
-import { InfoDialog } from "@/components/molecules/info-dialog";
+import {
+  type GridColumnDefinitionPerElternteil,
+  useGridColumnPerElternteil,
+} from "@/features/planer/user-interface/layout/grid-layout";
 
 type Props = {
   readonly legend: string;

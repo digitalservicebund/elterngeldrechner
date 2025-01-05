@@ -1,17 +1,23 @@
+import classNames from "classnames";
 import {
-  forwardRef,
+  type ForwardedRef,
   ReactNode,
+  type SyntheticEvent,
+  forwardRef,
   useId,
   useImperativeHandle,
   useRef,
   useState,
-  type ForwardedRef,
-  type SyntheticEvent,
 } from "react";
-import classNames from "classnames";
-import { LebensmonatSummary } from "./summary";
 import { LebensmonatContent } from "./content";
 import { ProvideInformationenZumLebensmonat } from "./informationenZumLebensmonat";
+import { LebensmonatSummary } from "./summary";
+import type {
+  Ausgangslage,
+  ElternteileByAusgangslage,
+  Lebensmonat,
+  Lebensmonatszahl,
+} from "@/features/planer/domain";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat,
@@ -19,12 +25,6 @@ import type {
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
-import type {
-  ElternteileByAusgangslage,
-  Ausgangslage,
-  Lebensmonatszahl,
-  Lebensmonat,
-} from "@/features/planer/domain";
 
 interface Props<A extends Ausgangslage> {
   readonly ausgangslage: A;

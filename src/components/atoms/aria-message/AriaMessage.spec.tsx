@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
-import { AriaMessage } from "./AriaMessage";
 import { AriaLogProvider } from "./AriaLogProvider";
+import { AriaMessage } from "./AriaMessage";
 
 describe("Aria Message", () => {
   it("should put every message into the log to let the screen reader read the messages", () => {

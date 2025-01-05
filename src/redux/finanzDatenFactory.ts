@@ -6,7 +6,7 @@ import {
 } from "./stepEinkommenSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { RootState } from "./index";
-import { ElternteilType } from "@/redux/elternteil-type";
+import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,
   ErwerbsTaetigkeit,
@@ -19,7 +19,7 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
+import { ElternteilType } from "@/redux/elternteil-type";
 
 const averageFromAverageOrMonthly = (
   averageOrMonthly: AverageOrMonthlyState,

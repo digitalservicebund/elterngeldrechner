@@ -1,12 +1,12 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
+import {
+  type Bezug,
+  Variante,
+  compareVarianten,
+} from "@/features/planer/domain";
 import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import { Variantenplakette } from "@/features/planer/user-interface/component/zusammenfassung/Variantenplakette";
-import {
-  compareVarianten,
-  Variante,
-  type Bezug,
-} from "@/features/planer/domain";
 
 type Props = {
   readonly bezuegeProVariante: Record<Variante, Bezug>;

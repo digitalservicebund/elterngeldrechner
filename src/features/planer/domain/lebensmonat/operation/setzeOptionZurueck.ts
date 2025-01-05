@@ -1,10 +1,10 @@
-import type { Monat } from "@/features/planer/domain/monat";
 import {
-  isElternteil,
   type Elternteil,
+  isElternteil,
 } from "@/features/planer/domain/Elternteil";
 import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { Lebensmonat } from "@/features/planer/domain/lebensmonat";
+import type { Monat } from "@/features/planer/domain/monat";
 import { setzeOptionZurueck as setzeOptionZurueckInMonat } from "@/features/planer/domain/monat";
 
 export function setzeOptionZurueck<E extends Elternteil>(

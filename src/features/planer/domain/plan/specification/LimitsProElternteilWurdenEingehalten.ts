@@ -1,13 +1,13 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import { Variante } from "@/features/planer/domain/Variante";
-import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
 import {
-  type AusgangslageFuerEinElternteil,
   type Ausgangslage,
+  type AusgangslageFuerEinElternteil,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain/ausgangslage";
 import { Specification } from "@/features/planer/domain/common/specification";
+import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function LimitsProElternteilWurdenEingehalten<A extends Ausgangslage>() {
   return Specification.fromPredicate<Plan<A>>(

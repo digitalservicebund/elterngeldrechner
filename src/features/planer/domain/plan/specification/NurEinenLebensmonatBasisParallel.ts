@@ -3,10 +3,10 @@ import type {
   Ausgangslage,
   AusgangslageFuerEinElternteil,
 } from "@/features/planer/domain/ausgangslage";
-import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
-import { AlleElternteileHabenBasisGewaehlt } from "@/features/planer/domain/lebensmonat";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
 import { Specification } from "@/features/planer/domain/common/specification";
+import { AlleElternteileHabenBasisGewaehlt } from "@/features/planer/domain/lebensmonat";
+import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function NurEinLebensmonatBasisParallel<A extends Ausgangslage>() {
   return Specification.fromPredicate<Plan<A>>(

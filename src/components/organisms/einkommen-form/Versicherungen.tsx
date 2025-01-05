@@ -1,11 +1,11 @@
 import { ChangeEvent, useId } from "react";
 import { FieldError, Path, get, useFormContext } from "react-hook-form";
+import { Description } from "@/components/atoms";
+import { CustomCheckbox } from "@/components/molecules";
 import {
   StepEinkommenState,
   TypeOfVersicherungen,
 } from "@/redux/stepEinkommenSlice";
-import { CustomCheckbox } from "@/components/molecules";
-import { Description } from "@/components/atoms";
 
 type VersicherungenProps = Readonly<{
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;

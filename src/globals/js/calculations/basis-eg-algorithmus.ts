@@ -1,18 +1,18 @@
 import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
+import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
 import {
   ErwerbsArt,
   ErwerbsTaetigkeit,
   FinanzDaten,
   KassenArt,
+  type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   PersoenlicheDaten,
   RentenArt,
   SteuerKlasse,
   YesNo,
-  type Lohnsteuerjahr,
 } from "./model";
-import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
 import {
   BIG_ONE,
   BIG_ZERO,

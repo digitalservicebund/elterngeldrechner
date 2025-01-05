@@ -1,3 +1,5 @@
+import { BIG_ZERO } from "./common/math-util";
+import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
   ElternGeldArt,
@@ -8,16 +10,14 @@ import {
   MischEkTaetigkeit,
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
-  PersoenlicheDaten,
   PLANUNG_ANZAHL_MONATE,
+  PersoenlicheDaten,
   PlanungsDaten,
   SteuerKlasse,
   YesNo,
   ZwischenErgebnis,
 } from "./model";
-import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
-import { BIG_ZERO } from "./common/math-util";
 
 describe("plus-eg-algorithmus", () => {
   const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();

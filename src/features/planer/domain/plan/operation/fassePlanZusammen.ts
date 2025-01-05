@@ -1,40 +1,40 @@
 import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
+import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import {
-  erstelleInitialenLebensmonat,
-  listeMonateAuf,
-} from "@/features/planer/domain/lebensmonat";
-import {
-  listeLebensmonateAuf,
-  type Lebensmonate,
-} from "@/features/planer/domain/lebensmonate";
-import {
-  berechneZeitraumFuerLebensmonat,
-  Zeitraum,
-} from "@/features/planer/domain/zeitraum";
+  type Elternteil,
+  isElternteil,
+} from "@/features/planer/domain/Elternteil";
 import {
   Lebensmonatszahl,
   Lebensmonatszahlen,
 } from "@/features/planer/domain/Lebensmonatszahl";
-import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { isVariante, Variante } from "@/features/planer/domain/Variante";
-import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
-import {
-  isElternteil,
-  type Elternteil,
-} from "@/features/planer/domain/Elternteil";
-import type { Monat } from "@/features/planer/domain/monat";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
+import { Variante, isVariante } from "@/features/planer/domain/Variante";
 import type {
-  Zusammenfassung,
-  Planungsuebersicht,
-  PlanungsuebersichtFuerElternteil,
   Bezug,
   Planungsdetails,
+  Planungsuebersicht,
+  PlanungsuebersichtFuerElternteil,
+  Zusammenfassung,
 } from "@/features/planer/domain/Zusammenfassung";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
+import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
+import {
+  erstelleInitialenLebensmonat,
+  listeMonateAuf,
+} from "@/features/planer/domain/lebensmonat";
+import {
+  type Lebensmonate,
+  listeLebensmonateAuf,
+} from "@/features/planer/domain/lebensmonate";
+import type { Monat } from "@/features/planer/domain/monat";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
+import {
+  Zeitraum,
+  berechneZeitraumFuerLebensmonat,
+} from "@/features/planer/domain/zeitraum";
 
 export function fassePlanZusammen<A extends Ausgangslage>(
   plan: Plan<A>,

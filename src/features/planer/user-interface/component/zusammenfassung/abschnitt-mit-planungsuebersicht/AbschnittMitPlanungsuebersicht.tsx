@@ -1,12 +1,12 @@
-import { ReactNode, useId } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
+import { ReactNode, useId } from "react";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
 import {
-  listeElternteileFuerAusgangslageAuf,
   type Ausgangslage,
   type ElternteileByAusgangslage,
   type Planungsuebersicht,
+  listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 

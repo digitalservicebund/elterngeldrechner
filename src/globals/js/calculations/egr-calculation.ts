@@ -1,22 +1,22 @@
+import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
+import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
+import { errorOf } from "./calculation-error-code";
+import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import {
+  Einkommen,
   ElternGeldDaten,
   ElternGeldPlusErgebnis,
   ErwerbsArt,
-  finanzDatenOf,
+  type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   NettoEinkommen,
-  persoenlicheDatenOf,
   YesNo,
   ZwischenErgebnis,
-  Einkommen,
-  type Lohnsteuerjahr,
+  finanzDatenOf,
+  persoenlicheDatenOf,
 } from "./model";
-import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
-import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
-import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
-import { errorOf } from "./calculation-error-code";
 import { planungsDatenOf } from "./model/planungs-daten";
+import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 
 export class EgrCalculation {
   private readonly bruttoNettoRechner = new BruttoNettoRechner();

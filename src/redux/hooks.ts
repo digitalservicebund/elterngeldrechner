@@ -4,7 +4,7 @@ import {
   useSelector,
   useStore,
 } from "react-redux";
-import type { RootState, AppDispatch, AppStore } from "./index";
+import type { AppDispatch, AppStore, RootState } from "./index";
 
 // Use typed dispatch and selectors throughout your app instead of plain any-typed `useDispatch` and `useSelector`
 export const useAppDispatch = () => useDispatch<AppDispatch>();

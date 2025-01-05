@@ -1,14 +1,14 @@
-import { ReactNode, useId } from "react";
 import classNames from "classnames";
+import { ReactNode, useId } from "react";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
-import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
-import { EinkommenFuerElternteil } from "@/features/planer/user-interface/component/gesamtsummenanzeige/EinkommenFuerElternteil";
 import {
-  listeElternteileFuerAusgangslageAuf,
   type Ausgangslage,
   type ElternteileByAusgangslage,
   type Gesamtsumme,
+  listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
+import { EinkommenFuerElternteil } from "@/features/planer/user-interface/component/gesamtsummenanzeige/EinkommenFuerElternteil";
 
 type Props<A extends Ausgangslage> = {
   readonly gesamtsumme: Gesamtsumme<ElternteileByAusgangslage<A>>;

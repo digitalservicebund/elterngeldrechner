@@ -1,12 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import {
+  Antragstellende,
+  stepAllgemeineAngabenActions,
+} from "./stepAllgemeineAngabenSlice";
 import {
   Erwerbstaetigkeiten,
   stepErwerbstaetigkeitActions,
 } from "./stepErwerbstaetigkeitSlice";
-import {
-  stepAllgemeineAngabenActions,
-  Antragstellende,
-} from "./stepAllgemeineAngabenSlice";
 import {
   KassenArt,
   KinderFreiBetrag,

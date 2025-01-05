@@ -1,13 +1,13 @@
 import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
-import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
-import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
+import { Variante } from "@/features/planer/domain/Variante";
 import {
   Ausgangslage,
   bestimmeVerfuegbaresKontingent,
 } from "@/features/planer/domain/ausgangslage";
 import { Specification } from "@/features/planer/domain/common/specification";
+import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
+import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
-import { Variante } from "@/features/planer/domain/Variante";
 
 export function KontingentWurdeEingehalten() {
   return KontingentFuerBasisWurdeEingehalten()

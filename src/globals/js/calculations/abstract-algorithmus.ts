@@ -7,9 +7,9 @@ import {
 import {
   BIG_ONE,
   BIG_ZERO,
-  floor,
   fMax,
   fMin,
+  floor,
 } from "@/globals/js/calculations/common/math-util";
 import {
   ERSATZRATE1,
@@ -17,8 +17,8 @@ import {
   GRENZE1,
   GRENZE2,
   GRENZE3,
-  HOECHST_ET,
   HOECHSTSATZ,
+  HOECHST_ET,
   MINDESTSATZ,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 

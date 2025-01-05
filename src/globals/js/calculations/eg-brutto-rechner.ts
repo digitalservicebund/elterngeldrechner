@@ -1,4 +1,5 @@
 import Big from "big.js";
+import { BIG_ZERO, greater, isEqual, round } from "./common/math-util";
 import {
   ElternGeldArt,
   FinanzDaten,
@@ -6,7 +7,6 @@ import {
   PLANUNG_ANZAHL_MONATE,
   PlanungsDaten,
 } from "./model";
-import { BIG_ZERO, greater, isEqual, round } from "./common/math-util";
 
 /**
  * Methode zum Verteilen des Bruttoeinkommens (basierend auf Kalendermonaten) auf Lebensmonate des Kindes.

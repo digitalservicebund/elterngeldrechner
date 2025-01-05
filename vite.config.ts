@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
 import path from "path";
-import { defineConfig, PluginOption } from "vite";
 import react from "@vitejs/plugin-react";
 import { OutputAsset, OutputChunk } from "rollup";
+import { PluginOption, defineConfig } from "vite";
 
 export default defineConfig({
   base: "./",

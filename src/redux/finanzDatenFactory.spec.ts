@@ -1,16 +1,15 @@
 import Big from "big.js";
+import { initialStepConfigurationState } from "./configurationSlice";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import {
   AverageOrMonthlyState,
-  initialAverageOrMonthlyStateNichtSelbstaendig,
   StepEinkommenElternteil,
   Taetigkeit,
+  initialAverageOrMonthlyStateNichtSelbstaendig,
 } from "./stepEinkommenSlice";
 import { Erwerbstaetigkeiten } from "./stepErwerbstaetigkeitSlice";
-import { initialStepConfigurationState } from "./configurationSlice";
 import { RootState } from "./index";
 import {
-  createMischEkTaetigkeitOf,
   Einkommen,
   ErwerbsTaetigkeit,
   FinanzDaten,
@@ -20,6 +19,7 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
+  createMischEkTaetigkeitOf,
 } from "@/globals/js/calculations/model";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
 

@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
 import containerQueriesPlugin from "@tailwindcss/container-queries";
+import type { Config } from "tailwindcss";
 
 export default {
   content: ["./src/**/*.tsx"],

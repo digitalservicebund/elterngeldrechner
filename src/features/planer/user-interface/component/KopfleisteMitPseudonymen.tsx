@@ -1,16 +1,16 @@
-import type { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
-import {
-  useGridColumnPerElternteil,
-  useGridLayout,
-  type GridColumnDefinitionPerElternteil,
-} from "@/features/planer/user-interface/layout/grid-layout";
+import type { ReactNode } from "react";
 import {
   type Ausgangslage,
   Elternteil,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
+import {
+  type GridColumnDefinitionPerElternteil,
+  useGridColumnPerElternteil,
+  useGridLayout,
+} from "@/features/planer/user-interface/layout/grid-layout";
 
 type Props = {
   readonly ausgangslage: Ausgangslage;

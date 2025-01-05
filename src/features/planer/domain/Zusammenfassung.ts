@@ -1,7 +1,7 @@
-import type { Variante } from "./Variante";
 import type { Elternteil } from "./Elternteil";
-import type { Zeitraum } from "./zeitraum";
+import type { Variante } from "./Variante";
 import type { Lebensmonate } from "./lebensmonate";
+import type { Zeitraum } from "./zeitraum";
 
 export type Zusammenfassung<E extends Elternteil> = {
   readonly planungsuebersicht: Planungsuebersicht<E>;

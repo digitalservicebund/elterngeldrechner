@@ -1,6 +1,6 @@
-import type { PseudonymeDerElternteile } from "@/features/planer/domain/PseudonymeDerElternteile";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
 import type { InformationenZumMutterschutz } from "@/features/planer/domain/InformationenZumMutterschutz";
+import type { PseudonymeDerElternteile } from "@/features/planer/domain/PseudonymeDerElternteile";
 
 export type Ausgangslage =
   | AusgangslageFuerEinElternteil

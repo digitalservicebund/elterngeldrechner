@@ -1,7 +1,7 @@
 export type {
+  Ausgangsparameter,
   Eingangsparameter,
   Programmablaufplan,
-  Ausgangsparameter,
 } from "./Programmablaufplan";
 export { PAP_2021 } from "./PAP_2021";
 export { PAP_2022 } from "./PAP_2022";

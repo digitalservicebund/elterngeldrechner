@@ -1,23 +1,23 @@
-import { ReactNode, useCallback, useId, useRef } from "react";
 import classNames from "classnames";
-import { KontingentUebersicht } from "./KontingentUebersicht";
-import { Lebensmonatsliste } from "./Lebensmonatsliste";
-import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
+import { ReactNode, useCallback, useId, useRef } from "react";
 import { Funktionsleiste } from "./Funktionsleiste";
-import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
+import { KontingentUebersicht } from "./KontingentUebersicht";
+import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
+import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
+import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
+import { Alert } from "@/components/molecules/alert";
 import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain";
+import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
 import {
   OptionSelectedCallback,
   PlanChangedCallback,
   PlanResettedCallback,
 } from "@/features/planer/user-interface/service/callbackTypes";
-import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
 import {
-  usePlanerService,
   type InitialInformation,
+  usePlanerService,
 } from "@/features/planer/user-interface/service/usePlanerService";
-import { Alert } from "@/components/molecules/alert";
 
 type Props = {
   readonly initialInformation: InitialInformation;

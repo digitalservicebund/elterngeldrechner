@@ -4,12 +4,12 @@ import {
   FieldPath,
   FieldValues,
   RegisterOptions,
-  useController,
   UseControllerProps,
+  useController,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 import { Description } from "@/components/atoms";
-import { InfoDialog, Info } from "@/components/molecules/info-dialog";
+import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 interface CustomNumberFieldProps<
   TFieldValues extends FieldValues,

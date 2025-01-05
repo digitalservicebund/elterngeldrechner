@@ -1,13 +1,13 @@
 import { DateTime } from "luxon";
-import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
+import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { RootState } from "./index";
-import { ElternteilType } from "@/redux/elternteil-type";
 import {
   ErwerbsArt,
   PersoenlicheDaten,
   YesNo,
 } from "@/globals/js/calculations/model";
+import { ElternteilType } from "@/redux/elternteil-type";
 
 const erwerbsTaetigkeitVorGeburtOf = (
   state: RootState,

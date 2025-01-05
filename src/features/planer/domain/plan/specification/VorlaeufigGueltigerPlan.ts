@@ -1,4 +1,5 @@
 import { BonusIstKorrektKombiniert } from "./BonusIstKorrektKombiniert";
+import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
 import {
   KontingentFuerBasisWurdeEingehalten,
   KontingentFuerBonusWurdeEingehalten,
@@ -7,12 +8,11 @@ import {
 import { LimitsProElternteilWurdenEingehalten } from "./LimitsProElternteilWurdenEingehalten";
 import { MonateMitMutterschutzSindUnveraendert } from "./MonateMitMutterschutzSindUnveraendert";
 import { NurEinLebensmonatBasisParallel } from "./NurEinenLebensmonatBasisParallel";
-import { KeinBonusFuerNurEinElternteil } from "./KeinBonusFuerNurEinElternteil";
-import { KeinBasisNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate/specification/KeinBasisNachDemVierzehntenLebensmonat";
-import { FortlaufenderBezugNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
-import { Specification } from "@/features/planer/domain/common/specification";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
+import { Specification } from "@/features/planer/domain/common/specification";
+import { FortlaufenderBezugNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate";
+import { KeinBasisNachDemVierzehntenLebensmonat } from "@/features/planer/domain/lebensmonate/specification/KeinBasisNachDemVierzehntenLebensmonat";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 /**
  * Used for the validation while choosing Optionen in a Plan. It helps to

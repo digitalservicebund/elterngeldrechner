@@ -1,12 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import { AbschnittMitAuswahloptionen } from "./AbschnittMitAuswahloptionen";
-import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
+  type AusgangslageFuerEinElternteil,
   Elternteil,
   KeinElterngeld,
   Variante,
-  type AusgangslageFuerEinElternteil,
 } from "@/features/planer/domain";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import type { BestimmeAuswahlmoeglichkeitenFuerLebensmonat } from "@/features/planer/user-interface/service";
 
 vi.mock(

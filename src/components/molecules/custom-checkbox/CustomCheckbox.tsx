@@ -1,16 +1,16 @@
+import classNames from "classnames";
+import { MouseEvent } from "react";
 import {
+  FieldError,
   FieldErrors,
   FieldValues,
   Path,
+  RegisterOptions,
   UseFormRegister,
   get,
-  FieldError,
-  RegisterOptions,
 } from "react-hook-form";
-import classNames from "classnames";
-import { MouseEvent } from "react";
 import { Description } from "@/components/atoms";
-import { InfoDialog, Info } from "@/components/molecules/info-dialog";
+import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;

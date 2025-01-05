@@ -1,4 +1,4 @@
-import { UserConfig, RuleConfigSeverity } from "@commitlint/types";
+import { RuleConfigSeverity, UserConfig } from "@commitlint/types";
 
 export default {
   extends: "@commitlint/config-conventional",

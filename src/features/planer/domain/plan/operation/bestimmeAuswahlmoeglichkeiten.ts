@@ -1,20 +1,20 @@
 import { waehleOption } from "./waehleOption";
-import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
-import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain/Elterngeldbezug";
-import {
-  Auswahloptionen,
-  KeinElterngeld,
-  type Auswahloption,
-} from "@/features/planer/domain/Auswahloption";
-import type {
-  Ausgangslage,
-  ElternteileByAusgangslage,
-} from "@/features/planer/domain/ausgangslage";
 import type {
   Auswahlmoeglichkeit,
   Auswahlmoeglichkeiten,
 } from "@/features/planer/domain/Auswahlmoeglichkeiten";
+import {
+  type Auswahloption,
+  Auswahloptionen,
+  KeinElterngeld,
+} from "@/features/planer/domain/Auswahloption";
+import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain/Elterngeldbezug";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
+import type {
+  Ausgangslage,
+  ElternteileByAusgangslage,
+} from "@/features/planer/domain/ausgangslage";
+import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function bestimmeAuswahlmoeglichkeiten<A extends Ausgangslage>(

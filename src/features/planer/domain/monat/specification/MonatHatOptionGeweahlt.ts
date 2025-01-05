@@ -1,7 +1,7 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
+import { Variante } from "@/features/planer/domain/Variante";
 import { Specification } from "@/features/planer/domain/common/specification";
 import type { Monat } from "@/features/planer/domain/monat/Monat";
-import { Variante } from "@/features/planer/domain/Variante";
 
 export const MonatHatBonusGewaehlt = MonatHatOptionGewaehlt(Variante.Bonus);
 

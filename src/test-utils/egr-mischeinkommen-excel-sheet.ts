@@ -1,13 +1,13 @@
-import xlsx from "node-xlsx";
 import Big from "big.js";
+import xlsx from "node-xlsx";
+import { BIG_ZERO, round } from "@/globals/js/calculations/common/math-util";
 import {
   ErwerbsTaetigkeit,
+  YesNo,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
-  YesNo,
 } from "@/globals/js/calculations/model";
 import { erwerbsArtOf } from "@/test-utils/fit-excel-sheet-util";
-import { BIG_ZERO, round } from "@/globals/js/calculations/common/math-util";
 
 type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];

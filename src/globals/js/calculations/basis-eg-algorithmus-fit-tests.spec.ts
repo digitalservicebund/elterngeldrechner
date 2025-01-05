@@ -1,6 +1,5 @@
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
-  createMischEkTaetigkeitOf,
   Einkommen,
   ErwerbsArt,
   FinanzDaten,
@@ -8,13 +7,14 @@ import {
   MischEkTaetigkeit,
   PersoenlicheDaten,
   YesNo,
+  createMischEkTaetigkeitOf,
 } from "./model";
+import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,
 } from "@/test-utils/egr-mischeinkommen-excel-sheet";
 import { toListWithTolerance } from "@/test-utils/test-utils";
-import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 /**
  * Runs FIT tests for BasisEgAlgorithmus.

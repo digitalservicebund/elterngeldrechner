@@ -1,14 +1,14 @@
-import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
 import { aktualisiereElterngeldbezuege } from "./aktualisiereElterngeldbezuege";
+import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
 import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain/Elterngeldbezug";
-import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
+import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type { Plan } from "@/features/planer/domain/plan";
+import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
 import { gebeEinkommenAn as gebeEinkommenInLebensmonatenAn } from "@/features/planer/domain/lebensmonate";
+import type { Plan } from "@/features/planer/domain/plan";
 
 export function gebeEinkommenAn<A extends Ausgangslage>(
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,

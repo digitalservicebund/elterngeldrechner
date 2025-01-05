@@ -1,16 +1,15 @@
-import {
-  FieldError,
-  FieldValues,
-  UseFormRegister,
-  RegisterOptions,
-  Path,
-  get,
-  FieldErrors,
-} from "react-hook-form";
-
-import classNames from "classnames";
 import AddIcon from "@digitalservicebund/icons/Add";
 import RemoveIcon from "@digitalservicebund/icons/Remove";
+import classNames from "classnames";
+import {
+  FieldError,
+  FieldErrors,
+  FieldValues,
+  Path,
+  RegisterOptions,
+  UseFormRegister,
+  get,
+} from "react-hook-form";
 import { Description } from "@/components/atoms";
 
 interface Props<TFieldValues extends FieldValues> {

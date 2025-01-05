@@ -1,5 +1,5 @@
-import { PersoenlicheDaten } from "./persoenliche-daten";
 import { ErwerbsArt } from "./erwerbs-art";
+import { PersoenlicheDaten } from "./persoenliche-daten";
 import { YesNo } from "./yes-no";
 
 describe("persoenliche-daten", () => {

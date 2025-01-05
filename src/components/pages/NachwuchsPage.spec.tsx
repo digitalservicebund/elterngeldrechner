@@ -1,13 +1,13 @@
+import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
-import { configureStore, Store } from "@reduxjs/toolkit";
 import { DateTime } from "luxon";
 import NachwuchsPage from "./NachwuchsPage";
-import { render, screen } from "@/test-utils/test-utils";
-import { reducers, RootState } from "@/redux";
+import { RootState, reducers } from "@/redux";
 import {
-  initialStepNachwuchsState,
   StepNachwuchsState,
+  initialStepNachwuchsState,
 } from "@/redux/stepNachwuchsSlice";
+import { render, screen } from "@/test-utils/test-utils";
 
 const currentYear = new Date().getFullYear();
 

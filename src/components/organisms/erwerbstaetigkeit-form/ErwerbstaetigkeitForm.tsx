@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
+import { ButtonGroup, Split } from "@/components/molecules";
+import { useAppSelector } from "@/redux/hooks";
+import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
-import { useAppSelector } from "@/redux/hooks";
-import { ButtonGroup, Split } from "@/components/molecules";
 
 interface ErwerbstaetigkeitFormProps {
   readonly initialValues: StepErwerbstaetigkeitState;

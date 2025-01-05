@@ -1,19 +1,19 @@
 import assert from "assert";
-import { describe, it } from "vitest";
+import Big from "big.js";
 import {
-  assert as assertProperty,
-  property,
-  boolean as arbitraryBoolean,
-  date as arbitraryDate,
-  constantFrom as arbitraryConstantFrom,
+  type Arbitrary,
   array as arbitraryArray,
+  assert as assertProperty,
+  boolean as arbitraryBoolean,
+  constant as arbitraryConstant,
+  constantFrom as arbitraryConstantFrom,
+  date as arbitraryDate,
   integer as arbitraryInteger,
+  property,
   record as arbitraryRecord,
   tuple as arbitraryTuple,
-  constant as arbitraryConstant,
-  type Arbitrary,
 } from "fast-check";
-import Big from "big.js";
+import { describe, it } from "vitest";
 import { EgrCalculation } from "./egr-calculation";
 import {
   Einkommen,
@@ -23,6 +23,7 @@ import {
   ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   KassenArt,
+  type Kind,
   KinderFreiBetrag,
   MischEkTaetigkeit,
   MutterschaftsLeistung,
@@ -31,17 +32,16 @@ import {
   RentenArt,
   SteuerKlasse,
   YesNo,
-  type Kind,
 } from "./model";
 import {
-  EgrCalculation as OriginalEgrCalculation,
-  PersoenlicheDaten as OriginalPersoenlicheDaten,
-  FinanzDaten as OriginalFinanzDaten,
-  PlanungsDaten as OriginalPlanungsDaten,
-  ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
-  type Lohnsteuerjahr as OriginalLohnsteuerjahr,
-  UnterstuetzteLohnsteuerjahre as OriginalUnterstuetzteLohnsteuerjahre,
   Big as OriginalBig,
+  EgrCalculation as OriginalEgrCalculation,
+  ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
+  FinanzDaten as OriginalFinanzDaten,
+  type Lohnsteuerjahr as OriginalLohnsteuerjahr,
+  PersoenlicheDaten as OriginalPersoenlicheDaten,
+  PlanungsDaten as OriginalPlanungsDaten,
+  UnterstuetzteLohnsteuerjahre as OriginalUnterstuetzteLohnsteuerjahre,
 } from "original-rechner";
 
 /**

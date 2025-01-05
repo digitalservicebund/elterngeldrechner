@@ -1,18 +1,18 @@
 import { aktualisiereElterngeldbezuege } from "./aktualisiereElterngeldbezuege";
 import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
+import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain/Elterngeldbezug";
-import { VorlaeufigGueltigerPlan } from "@/features/planer/domain/plan/specification";
-import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
-import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
+import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
-import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
-import { waehleOption as waehleOptionInLebensmonaten } from "@/features/planer/domain/lebensmonate";
 import { Result } from "@/features/planer/domain/common/Result";
+import type { SpecificationViolation } from "@/features/planer/domain/common/specification";
+import { erstelleInitialenLebensmonat } from "@/features/planer/domain/lebensmonat";
+import { waehleOption as waehleOptionInLebensmonaten } from "@/features/planer/domain/lebensmonate";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
+import { VorlaeufigGueltigerPlan } from "@/features/planer/domain/plan/specification";
 
 export function waehleOption<A extends Ausgangslage>(
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,

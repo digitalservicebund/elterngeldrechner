@@ -1,10 +1,10 @@
+import { KeinElterngeld } from "@/features/planer/domain/Auswahloption";
 import { Variante } from "@/features/planer/domain/Variante";
+import type { Monat } from "@/features/planer/domain/monat/Monat";
 import {
   LEERES_VERPLANTES_KONTINGENT,
   VerplantesKontingent,
 } from "@/features/planer/domain/verplantes-kontingent";
-import type { Monat } from "@/features/planer/domain/monat/Monat";
-import { KeinElterngeld } from "@/features/planer/domain/Auswahloption";
 
 export function zaehleVerplantesKontingent(monat: Monat): VerplantesKontingent {
   const { gewaehlteOption } = monat;

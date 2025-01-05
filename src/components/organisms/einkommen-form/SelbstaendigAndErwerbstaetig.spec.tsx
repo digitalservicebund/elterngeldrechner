@@ -1,19 +1,19 @@
 import userEvent from "@testing-library/user-event";
-import { RootState } from "@/redux";
-import { render, screen, within } from "@/test-utils/test-utils";
 import EinkommenPage from "@/components/pages/EinkommenPage";
+import { YesNo } from "@/globals/js/calculations/model";
+import { RootState } from "@/redux";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
-  initialStepErwerbstaetigkeitState,
-  StepErwerbstaetigkeitState,
-} from "@/redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
-import {
-  initialStepEinkommenState,
   StepEinkommenState,
   Taetigkeit,
+  initialStepEinkommenState,
 } from "@/redux/stepEinkommenSlice";
-import { YesNo } from "@/globals/js/calculations/model";
-import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import {
+  StepErwerbstaetigkeitState,
+  initialStepErwerbstaetigkeitState,
+} from "@/redux/stepErwerbstaetigkeitSlice";
+import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { render, screen, within } from "@/test-utils/test-utils";
 
 describe("Einkommens Page only with block Selbständige And Erwerbstätige", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

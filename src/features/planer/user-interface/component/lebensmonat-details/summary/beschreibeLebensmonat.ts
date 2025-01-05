@@ -1,10 +1,10 @@
 import {
-  listeElternteileFuerAusgangslageAuf,
-  Variante,
   type Ausgangslage,
   type ElternteileByAusgangslage,
   type Lebensmonat,
   type Monat,
+  Variante,
+  listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 
 export function beschreibeLebensmonat<A extends Ausgangslage>(

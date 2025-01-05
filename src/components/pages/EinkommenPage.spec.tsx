@@ -1,7 +1,6 @@
+import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
-import { configureStore, Store } from "@reduxjs/toolkit";
 import EinkommenPage from "./EinkommenPage";
-import { render, screen, within } from "@/test-utils/test-utils";
 import {
   KassenArt,
   KinderFreiBetrag,
@@ -9,18 +8,19 @@ import {
   SteuerKlasse,
   YesNo,
 } from "@/globals/js/calculations/model";
-import { reducers, RootState } from "@/redux";
+import { RootState, reducers } from "@/redux";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
-  initialStepErwerbstaetigkeitState,
+  StepEinkommenState,
+  initialStepEinkommenState,
+} from "@/redux/stepEinkommenSlice";
+import {
   StepErwerbstaetigkeitElternteil,
   StepErwerbstaetigkeitState,
+  initialStepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
-import {
-  initialStepEinkommenState,
-  StepEinkommenState,
-} from "@/redux/stepEinkommenSlice";
-import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { render, screen, within } from "@/test-utils/test-utils";
 
 vi.mock(import("@/globals/js/calculations/basis-eg-algorithmus"));
 

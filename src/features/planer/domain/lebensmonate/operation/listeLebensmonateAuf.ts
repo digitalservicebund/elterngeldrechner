@@ -1,13 +1,13 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
-import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
-import { getRecordEntriesWithIntegerKeys } from "@/features/planer/domain/common/type-safe-records";
 import {
+  type Lebensmonatszahl,
   compareLebensmonatszahlen,
   isLebensmonatszahl,
-  type Lebensmonatszahl,
 } from "@/features/planer/domain/Lebensmonatszahl";
+import { getRecordEntriesWithIntegerKeys } from "@/features/planer/domain/common/type-safe-records";
+import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 
 export function listeLebensmonateAuf<E extends Elternteil>(
   lebensmonate: Lebensmonate<E>,

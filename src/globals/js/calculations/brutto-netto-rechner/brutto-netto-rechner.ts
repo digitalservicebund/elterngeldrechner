@@ -1,6 +1,21 @@
 import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import {
+  BIG_100,
+  BIG_ZERO,
+  round,
+} from "@/globals/js/calculations/common/math-util";
+import {
+  Einkommen,
+  ErwerbsArt,
+  FinanzDaten,
+  KassenArt,
+  type Lohnsteuerjahr,
+  NettoEinkommen,
+  RentenArt,
+  SteuerKlasse,
+} from "@/globals/js/calculations/model";
+import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
   GRENZE_MINI_MIDI,
@@ -8,21 +23,6 @@ import {
   SATZ_KVPV_BEEG,
   SATZ_RV_BEEG,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import {
-  Einkommen,
-  ErwerbsArt,
-  FinanzDaten,
-  KassenArt,
-  NettoEinkommen,
-  RentenArt,
-  SteuerKlasse,
-  type Lohnsteuerjahr,
-} from "@/globals/js/calculations/model";
-import {
-  BIG_100,
-  BIG_ZERO,
-  round,
-} from "@/globals/js/calculations/common/math-util";
 
 export class BruttoNettoRechner {
   private readonly egrSteuerRechner = new EgrSteuerRechner();

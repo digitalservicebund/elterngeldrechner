@@ -1,4 +1,4 @@
-import { Action, PageStatistic, Method } from "./matomo-api-schema";
+import { Action, Method, PageStatistic } from "./matomo-api-schema";
 
 async function fetchEventActions(date: string): Promise<Action[]> {
   return fetchMatomoEndpoint("Events.getAction", date, date, true)

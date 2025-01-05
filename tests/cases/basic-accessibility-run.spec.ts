@@ -1,11 +1,11 @@
-import { test, type Page, type TestInfo, expect } from "@playwright/test";
 import { AxeBuilder } from "@axe-core/playwright";
+import { type Page, type TestInfo, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
-import { NachwuchsPOM } from "../pom/NachwuchsPOM";
-import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
+import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
+import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
+import { VariantenPOM } from "../pom/VariantenPOM";
 
 /**
  * This test case intends to exercise the application in a way that it touches

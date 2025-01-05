@@ -1,9 +1,9 @@
 import { ReactNode, useId } from "react";
-import { AbschnittMitPlanungsuebersicht } from "./abschnitt-mit-planungsuebersicht";
 import { AbschnittMitPlanungsdetails } from "./abschnitt-mit-planungsdetails";
+import { AbschnittMitPlanungsuebersicht } from "./abschnitt-mit-planungsuebersicht";
 import {
-  fassePlanZusammen,
   type PlanMitBeliebigenElternteilen,
+  fassePlanZusammen,
 } from "@/features/planer/domain";
 
 type Props = {

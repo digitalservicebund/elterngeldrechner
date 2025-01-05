@@ -1,14 +1,14 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
 import type {
-  Elterngeldbezug,
   ElterngeldbezuegeFuerElternteil,
+  Elterngeldbezug,
 } from "@/features/planer/domain/Elterngeldbezug";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
 import { aktualisiereElterngeldbezuege as aktualisiereElterngeldbezuegeInLebensmonaten } from "@/features/planer/domain/lebensmonate";
+import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function aktualisiereElterngeldbezuege<A extends Ausgangslage>(
   plan: Plan<A>,

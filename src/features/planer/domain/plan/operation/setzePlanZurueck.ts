@@ -1,5 +1,5 @@
-import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
+import { erstelleInitialeLebensmonate } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
 export function setzePlanZurueck<A extends Ausgangslage>(

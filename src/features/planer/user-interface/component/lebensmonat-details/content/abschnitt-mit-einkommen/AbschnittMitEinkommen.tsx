@@ -1,10 +1,19 @@
-import { ReactNode, useId, useState } from "react";
-import ToggleOnIcon from "@digitalservicebund/icons/ToggleOn";
 import ToggleOffIcon from "@digitalservicebund/icons/ToggleOff";
+import ToggleOnIcon from "@digitalservicebund/icons/ToggleOn";
+import { ReactNode, useId, useState } from "react";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
-import { InfoZumEinkommen } from "./InfoZumEinkommen";
-import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
 import { HinweisZuWochenstunden } from "./HinweisZuWochenstunden";
+import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
+import { InfoZumEinkommen } from "./InfoZumEinkommen";
+import { InfoDialog } from "@/components/molecules/info-dialog";
+import {
+  Elternteil,
+  type LebensmonatMitBeliebigenElternteilen,
+  type Lebensmonatszahl,
+  Variante,
+  listeElternteileFuerAusgangslageAuf,
+  listeMonateAuf,
+} from "@/features/planer/domain";
 import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
   type GridColumnDefinition,
@@ -12,15 +21,6 @@ import {
   useGridColumn,
   useGridColumnPerElternteil,
 } from "@/features/planer/user-interface/layout/grid-layout";
-import { InfoDialog } from "@/components/molecules/info-dialog";
-import {
-  type LebensmonatMitBeliebigenElternteilen,
-  type Lebensmonatszahl,
-  Elternteil,
-  Variante,
-  listeElternteileFuerAusgangslageAuf,
-  listeMonateAuf,
-} from "@/features/planer/domain";
 
 export function AbschnittMitEinkommen(): ReactNode {
   const headingColumn = useGridColumn(HEADING_COLUMN_DEFINITION);

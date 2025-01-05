@@ -1,15 +1,15 @@
-import { ReactNode } from "react";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
+import { ReactNode } from "react";
 import { DatenfeldFuerMonat } from "./DatenfeldFuerMonat";
-import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
 import {
-  berechneZeitraumFuerLebensmonat,
-  compareElternteile,
-  listeLebensmonateAuf,
   type Ausgangslage,
   type ElternteileByAusgangslage,
   type Lebensmonate,
+  berechneZeitraumFuerLebensmonat,
+  compareElternteile,
+  listeLebensmonateAuf,
 } from "@/features/planer/domain";
+import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
 
 type Props<A extends Ausgangslage> = {
   readonly ausgangslage: A;

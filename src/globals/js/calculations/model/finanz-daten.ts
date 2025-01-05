@@ -1,15 +1,15 @@
 import Big from "big.js";
+import { Einkommen } from "./einkommen";
 import { BruttoEinkommen } from "./einkommen-types";
+import { ElternGeldArt } from "./eltern-geld-art";
+import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 import { KassenArt } from "./kassen-art";
 import { KinderFreiBetrag } from "./kinder-frei-betrag";
-import { SteuerKlasse } from "./steuer-klasse";
-import { RentenArt } from "./renten-art";
-import { YesNo } from "./yes-no";
 import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
-import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
-import { ElternGeldArt } from "./eltern-geld-art";
-import { Einkommen } from "./einkommen";
+import { RentenArt } from "./renten-art";
+import { SteuerKlasse } from "./steuer-klasse";
+import { YesNo } from "./yes-no";
 import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
 
 /**

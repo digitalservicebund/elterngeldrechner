@@ -1,9 +1,9 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
-import type { ReactNode } from "react";
+import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
-import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
+import type { ReactNode } from "react";
 import type { SummeFuerElternteil } from "@/features/planer/domain";
+import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 
 type Props = {
   readonly pseudonym: string | undefined;

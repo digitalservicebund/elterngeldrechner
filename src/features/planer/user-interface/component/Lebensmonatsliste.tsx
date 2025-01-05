@@ -1,30 +1,30 @@
+import AddIcon from "@digitalservicebund/icons/Add";
+import RemoveIcon from "@digitalservicebund/icons/Remove";
+import classNames from "classnames";
 import {
-  forwardRef,
+  type ForwardedRef,
   ReactNode,
+  forwardRef,
   useCallback,
   useId,
   useRef,
   useState,
-  type ForwardedRef,
 } from "react";
-import AddIcon from "@digitalservicebund/icons/Add";
-import RemoveIcon from "@digitalservicebund/icons/Remove";
-import classNames from "classnames";
 import { LebensmonatDetails } from "./lebensmonat-details";
-import type {
-  ErstelleUngeplantenLebensmonat,
-  BestimmeAuswahlmoeglichkeiten,
-  WaehleOption,
-  GebeEinkommenAn,
-  ErstelleVorschlaegeFuerAngabeDesEinkommens,
-} from "@/features/planer/user-interface/service/callbackTypes";
 import {
   type Ausgangslage,
   type ElternteileByAusgangslage,
+  type Lebensmonate,
   Lebensmonatszahlen,
   LetzteLebensmonatszahl,
-  type Lebensmonate,
 } from "@/features/planer/domain";
+import type {
+  BestimmeAuswahlmoeglichkeiten,
+  ErstelleUngeplantenLebensmonat,
+  ErstelleVorschlaegeFuerAngabeDesEinkommens,
+  GebeEinkommenAn,
+  WaehleOption,
+} from "@/features/planer/user-interface/service/callbackTypes";
 
 type Props<A extends Ausgangslage> = {
   readonly ausgangslage: A;

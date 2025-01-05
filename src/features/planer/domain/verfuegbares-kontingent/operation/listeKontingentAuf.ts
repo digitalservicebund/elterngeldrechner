@@ -1,9 +1,9 @@
-import { getRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import {
+  Variante,
   compareVarianten,
   isVariante,
-  Variante,
 } from "@/features/planer/domain/Variante";
+import { getRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { VerfuegbaresKontingent } from "@/features/planer/domain/verfuegbares-kontingent/VerfuegbaresKontingent";
 
 export function listeKontingentAuf(

@@ -1,13 +1,13 @@
-import { compose } from "@/features/planer/domain/common/compose";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
+import { Variante } from "@/features/planer/domain/Variante";
+import { compose } from "@/features/planer/domain/common/compose";
 import {
-  type Lebensmonat,
   AlleElternteileHabenBonusGewaehlt,
+  type Lebensmonat,
   setzeOptionZurueck,
 } from "@/features/planer/domain/lebensmonat";
 import { waehleOption as waehleOptionInMonat } from "@/features/planer/domain/monat";
-import { Variante } from "@/features/planer/domain/Variante";
 
 export function waehleOption<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,

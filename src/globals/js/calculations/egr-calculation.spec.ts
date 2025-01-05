@@ -1,4 +1,5 @@
 import Big from "big.js";
+import { EgrCalculation } from "./egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
@@ -8,13 +9,12 @@ import {
   KinderFreiBetrag,
   MischEkTaetigkeit,
   MutterschaftsLeistung,
-  PersoenlicheDaten,
   PLANUNG_ANZAHL_MONATE,
+  PersoenlicheDaten,
   PlanungsDaten,
   SteuerKlasse,
   YesNo,
 } from "./model";
-import { EgrCalculation } from "./egr-calculation";
 
 describe("egr-calculation", () => {
   const egrCalculation = new EgrCalculation();

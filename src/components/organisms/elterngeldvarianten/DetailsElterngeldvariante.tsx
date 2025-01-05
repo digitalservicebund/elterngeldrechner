@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
 import OpenIcon from "@digitalservicebund/icons/Add";
 import CloseIcon from "@digitalservicebund/icons/Remove";
 import classNames from "classnames";
+import { ReactNode } from "react";
 
 type Props = {
   readonly summaryTitle: string;

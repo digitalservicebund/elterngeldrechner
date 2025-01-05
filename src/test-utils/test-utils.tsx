@@ -2,29 +2,29 @@
 // See https://redux.js.org/usage/writing-tests#components
 // and https://stackoverflow.com/questions/61451631/react-testing-library-setup-for-redux-router-and-dynamic-modules-using-typescri
 
-import { ReactElement, ReactNode } from "react";
+import { Store, configureStore } from "@reduxjs/toolkit";
 import {
-  render,
-  renderHook,
   RenderHookResult,
   RenderOptions,
+  render,
+  renderHook,
 } from "@testing-library/react";
-import { configureStore, Store } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
 import Big from "big.js";
+import { ReactElement, ReactNode } from "react";
+import { Provider } from "react-redux";
 import {
-  createMemoryRouter,
-  RouterProvider,
   type RouteObject,
+  RouterProvider,
+  createMemoryRouter,
 } from "react-router-dom";
-import { AppStore, reducers, RootState } from "@/redux";
 import { AriaLogProvider } from "@/components/atoms";
-import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
-import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
-import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { AppStore, RootState, reducers } from "@/redux";
 import { initialStepConfigurationState } from "@/redux/configurationSlice";
-import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { initialStepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { initialStepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
+import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
@@ -89,7 +89,7 @@ function renderHookWithRedux<Result, Props>(
 export * from "@testing-library/react";
 
 // override render method
-export { renderWithRedux as render, renderHookWithRedux as renderHook };
+export { renderHookWithRedux as renderHook, renderWithRedux as render };
 
 export const toListWithTolerance = (n: number) => {
   const num = Big(n);

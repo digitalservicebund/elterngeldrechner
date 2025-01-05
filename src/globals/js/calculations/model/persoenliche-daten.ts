@@ -1,9 +1,9 @@
 /**
  * Persönliche Angaben für die Berechnung des Elterngeldes.
  */
+import { ErwerbsArt } from "./erwerbs-art";
 import { Kind } from "./kind";
 import { YesNo } from "./yes-no";
-import { ErwerbsArt } from "./erwerbs-art";
 import { excludesFutureChildren } from "@/globals/js/calculations/common/kind-util";
 
 export class PersoenlicheDaten {

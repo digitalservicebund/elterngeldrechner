@@ -1,16 +1,16 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { type ReactNode, createContext, useContext } from "react";
+import type {
+  Ausgangslage,
+  ElternteileByAusgangslage,
+  Lebensmonat,
+  Lebensmonatszahl,
+} from "@/features/planer/domain";
 import type {
   BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
   ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat,
   GebeEinkommenInLebensmonatAn,
   WaehleOptionInLebensmonat,
 } from "@/features/planer/user-interface/service/callbackTypes";
-import type {
-  Lebensmonat,
-  Lebensmonatszahl,
-  ElternteileByAusgangslage,
-  Ausgangslage,
-} from "@/features/planer/domain";
 
 export function ProvideInformationenZumLebensmonat<
   A extends Ausgangslage,

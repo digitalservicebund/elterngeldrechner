@@ -1,20 +1,20 @@
 import Big from "big.js";
 import {
-  berechneSteuerUndSozialabgaben,
   type Eingangsparameter,
+  berechneSteuerUndSozialabgaben,
 } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
+import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import {
   ErwerbsArt,
   FinanzDaten,
   KinderFreiBetrag,
-  kinderFreiBetragToNumber,
-  SteuerKlasse,
-  steuerklasseToNumber,
-  YesNo,
-  UnterstuetzteLohnsteuerjahre,
   type Lohnsteuerjahr,
+  SteuerKlasse,
+  UnterstuetzteLohnsteuerjahre,
+  YesNo,
+  kinderFreiBetragToNumber,
+  steuerklasseToNumber,
 } from "@/globals/js/calculations/model";
-import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 /**

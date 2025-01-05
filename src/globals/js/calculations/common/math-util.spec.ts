@@ -1,5 +1,5 @@
 import Big from "big.js";
-import { floor, fMax, fMin, round } from "./math-util";
+import { fMax, fMin, floor, round } from "./math-util";
 
 describe("math-util", () => {
   describe("round half up with precision 2:", () => {

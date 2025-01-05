@@ -1,8 +1,8 @@
-import { FinalGueltigerPlan } from "@/features/planer/domain/plan/specification";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 import { Result } from "@/features/planer/domain/common/Result";
 import { SpecificationViolation } from "@/features/planer/domain/common/specification";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
+import { FinalGueltigerPlan } from "@/features/planer/domain/plan/specification";
 
 export function validierePlanFuerFinaleAbgabe<A extends Ausgangslage>(
   plan: Plan<A>,

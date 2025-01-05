@@ -1,20 +1,20 @@
-import { Fragment, ReactNode, useId } from "react";
 import classNames from "classnames";
+import { Fragment, ReactNode, useId } from "react";
 import { GewaehlteOption } from "./GewaehlteOption";
 import { Haushaltseinkommen } from "./Haushaltseinkommen";
 import { beschreibeLebensmonat } from "./beschreibeLebensmonat";
-import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
-import {
-  useGridLayout,
-  useGridColumn,
-  useGridColumnPerElternteil,
-  type GridColumnDefinitionPerElternteil,
-  type GridColumnDefinition,
-} from "@/features/planer/user-interface/layout/grid-layout";
 import {
   Elternteil,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
+import {
+  type GridColumnDefinition,
+  type GridColumnDefinitionPerElternteil,
+  useGridColumn,
+  useGridColumnPerElternteil,
+  useGridLayout,
+} from "@/features/planer/user-interface/layout/grid-layout";
 
 type Props = {
   readonly identifierToZeitraumLabel: string;

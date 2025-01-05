@@ -1,21 +1,21 @@
 import {
-  createMemoryRouter,
   type RouteObject,
   RouterProvider,
+  createMemoryRouter,
 } from "react-router-dom";
 import { AriaLogProvider } from "@/components/atoms";
 import AllgemeineAngabenPage from "@/components/pages/AllgemeineAngabenPage";
-import NachwuchsPage from "@/components/pages/NachwuchsPage";
-import ErwerbstaetigkeitPage from "@/components/pages/ErwerbstaetigkeitPage";
 import EinkommenPage from "@/components/pages/EinkommenPage";
-import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
+import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenPage";
+import ErwerbstaetigkeitPage from "@/components/pages/ErwerbstaetigkeitPage";
+import NachwuchsPage from "@/components/pages/NachwuchsPage";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
+import { formSteps } from "@/components/pages/formSteps";
+import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
 import "@/styles/index.css";
 import "@/styles/index.scss";
-import { formSteps } from "@/components/pages/formSteps";
-import { useAppDispatch } from "@/redux/hooks";
 import { configurationActions } from "@/redux/configurationSlice";
-import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenPage";
+import { useAppDispatch } from "@/redux/hooks";
 
 interface Props {
   readonly elternGeldDigitalWizardUrl: string | undefined;

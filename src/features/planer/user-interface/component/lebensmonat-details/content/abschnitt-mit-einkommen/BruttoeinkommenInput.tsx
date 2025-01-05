@@ -1,12 +1,12 @@
+import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import classNames from "classnames";
 import {
-  ReactNode,
-  useId,
   type CSSProperties,
   type ChangeEvent,
   type KeyboardEvent,
+  ReactNode,
+  useId,
 } from "react";
-import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import type { Einkommen } from "@/features/planer/domain";
 
 type Props = {

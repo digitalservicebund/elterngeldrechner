@@ -4,8 +4,8 @@ import {
   FieldErrors,
   FieldPath,
   FieldValues,
-  get,
   UseFormRegister,
+  get,
 } from "react-hook-form";
 import { Description } from "@/components/atoms";
 import { InfoDialog } from "@/components/molecules/info-dialog/InfoDialog";

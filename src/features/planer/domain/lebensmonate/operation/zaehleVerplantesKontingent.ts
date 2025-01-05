@@ -1,8 +1,8 @@
 import { listeLebensmonateAuf } from "./listeLebensmonateAuf";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
-import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 import { zaehleVerplantesKontingent as zaehleVerplantesKontingentImLebensmonat } from "@/features/planer/domain/lebensmonat";
+import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 import {
   VerplantesKontingent,
   addiere,

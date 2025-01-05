@@ -4,8 +4,8 @@ import { AllgemeineAngabenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
-  stepAllgemeineAngabenActions,
   StepAllgemeineAngabenState,
+  stepAllgemeineAngabenActions,
 } from "@/redux/stepAllgemeineAngabenSlice";
 
 function AllgemeineAngabenPage() {

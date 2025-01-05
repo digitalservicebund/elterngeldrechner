@@ -1,18 +1,18 @@
 import { ReactNode } from "react";
 import { HinweisZumBonus } from "./HinweisZumBonus";
-import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen";
 import { AbschnittMitAuswahloptionen } from "./abschnitt-mit-auswahloptionen";
-import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
-import {
-  useGridColumn,
-  useGridLayout,
-  type GridColumnDefinition,
-} from "@/features/planer/user-interface/layout/grid-layout";
-import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
+import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen";
 import {
   AlleElternteileHabenBonusGewaehlt,
   berechneZeitraumFuerLebensmonat,
 } from "@/features/planer/domain";
+import { ZeitraumLabel } from "@/features/planer/user-interface/component/ZeitraumLabel";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
+import {
+  type GridColumnDefinition,
+  useGridColumn,
+  useGridLayout,
+} from "@/features/planer/user-interface/layout/grid-layout";
 
 type Props = {
   readonly zeitraumLabelIdentifier: string;

@@ -1,9 +1,9 @@
 import type { Elternteil } from "@/features/planer/domain/Elternteil";
+import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type {
   Lebensmonat,
   LebensmonatMitBeliebigenElternteilen,
 } from "@/features/planer/domain/lebensmonat";
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 
 export type Lebensmonate<E extends Elternteil> = Readonly<
   Partial<Record<Lebensmonatszahl, Lebensmonat<E>>>

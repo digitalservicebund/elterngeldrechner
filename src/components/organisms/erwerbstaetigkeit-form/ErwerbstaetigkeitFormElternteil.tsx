@@ -1,20 +1,20 @@
-import { useFormContext } from "react-hook-form";
 import { useEffect, useId } from "react";
+import { useFormContext } from "react-hook-form";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
-import type { ElternteilType } from "@/redux/elternteil-type";
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
   YesNoRadio,
 } from "@/components/molecules";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { YesNo } from "@/globals/js/calculations/model";
+import type { ElternteilType } from "@/redux/elternteil-type";
+import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
 } from "@/redux/stepErwerbstaetigkeitSlice";
-import { YesNo } from "@/globals/js/calculations/model";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
-import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 
 const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MiniJob: "Ja",

@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {
-  stepEinkommenActions,
-  StepEinkommenState,
-} from "@/redux/stepEinkommenSlice";
 import { EinkommenForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  StepEinkommenState,
+  stepEinkommenActions,
+} from "@/redux/stepEinkommenSlice";
 
 function EinkommenPage() {
   const dispatch = useAppDispatch();

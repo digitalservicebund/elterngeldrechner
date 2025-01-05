@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {
-  stepNachwuchsActions,
-  parseGermanDateString,
-  StepNachwuchsState,
-} from "@/redux/stepNachwuchsSlice";
 import { NachwuchsForm } from "@/components/organisms";
 import { Page } from "@/components/organisms/page";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import {
+  StepNachwuchsState,
+  parseGermanDateString,
+  stepNachwuchsActions,
+} from "@/redux/stepNachwuchsSlice";
 import { trackNutzergruppe } from "@/user-tracking";
 
 function NachwuchsPage() {

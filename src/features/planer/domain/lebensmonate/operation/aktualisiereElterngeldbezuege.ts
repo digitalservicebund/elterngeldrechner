@@ -1,16 +1,16 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
-import {
-  isLebensmonatszahl,
-  type Lebensmonatszahl,
-} from "@/features/planer/domain/Lebensmonatszahl";
-import type { Elternteil } from "@/features/planer/domain/Elternteil";
-import { aktualisiereElterngeldbezug as aktualisiereElterngeldbezugImLebensmonat } from "@/features/planer/domain/lebensmonat";
 import type {
-  Elterngeldbezug,
   ElterngeldbezuegeFuerElternteil,
+  Elterngeldbezug,
 } from "@/features/planer/domain/Elterngeldbezug";
+import type { Elternteil } from "@/features/planer/domain/Elternteil";
+import {
+  type Lebensmonatszahl,
+  isLebensmonatszahl,
+} from "@/features/planer/domain/Lebensmonatszahl";
 import { mapRecordEntriesWithIntegerKeys } from "@/features/planer/domain/common/type-safe-records";
+import { aktualisiereElterngeldbezug as aktualisiereElterngeldbezugImLebensmonat } from "@/features/planer/domain/lebensmonat";
+import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
 import type { Lebensmonate } from "@/features/planer/domain/lebensmonate/Lebensmonate";
 
 export function aktualisiereElterngeldbezuege<E extends Elternteil>(

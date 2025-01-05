@@ -1,7 +1,6 @@
 import matomo from "./matomo/matomo-api";
-import noco from "./noco/noco-api";
-
 import flatten from "./matomo/matomo-api-flat";
+import noco from "./noco/noco-api";
 
 const date = process.argv.slice(2)[0];
 

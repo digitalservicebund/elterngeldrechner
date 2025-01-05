@@ -1,11 +1,11 @@
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
 import { Elternteil } from "@/features/planer/domain/Elternteil";
-import { erstelleInitialenMonat } from "@/features/planer/domain/monat";
+import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
+import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import { erstelleInitialenMonat } from "@/features/planer/domain/monat";
 
 export function erstelleInitialenLebensmonat<A extends Ausgangslage>(
   ausgangslage: A,

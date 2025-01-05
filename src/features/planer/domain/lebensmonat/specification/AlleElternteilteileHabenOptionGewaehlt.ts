@@ -1,8 +1,8 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { MonatHatOptionGewaehlt } from "@/features/planer/domain/monat";
 import { Variante } from "@/features/planer/domain/Variante";
 import { Specification } from "@/features/planer/domain/common/specification";
 import type { LebensmonatMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import { MonatHatOptionGewaehlt } from "@/features/planer/domain/monat";
 
 export const AlleElternteileHabenBasisGewaehlt =
   AlleElternteileHabenOptionGewaehlt(Variante.Basis);

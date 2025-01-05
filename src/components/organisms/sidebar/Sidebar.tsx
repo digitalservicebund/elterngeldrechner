@@ -1,8 +1,8 @@
-import { useCallback, useId, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import classNames from "classnames";
 import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
+import classNames from "classnames";
+import { useCallback, useId, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FormStep, formSteps } from "@/components/pages/formSteps";
 import { useOnFocusMovedOut } from "@/hooks/useOnFocusMovedOut";
 

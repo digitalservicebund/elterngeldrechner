@@ -1,5 +1,5 @@
 import path from "node:path";
-import { expect, Locator, Page } from "@playwright/test";
+import { Locator, Page, expect } from "@playwright/test";
 
 type Opts = {
   page: Page;

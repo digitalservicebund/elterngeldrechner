@@ -1,10 +1,10 @@
+import { initialStepConfigurationState } from "./configurationSlice";
 import { persoenlicheDatenOfUi } from "./persoenlicheDatenFactory";
 import { initialAverageOrMonthlyStateNichtSelbstaendig } from "./stepEinkommenSlice";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitElternteil,
 } from "./stepErwerbstaetigkeitSlice";
-import { initialStepConfigurationState } from "./configurationSlice";
 import { RootState } from "./index";
 import {
   ErwerbsArt,

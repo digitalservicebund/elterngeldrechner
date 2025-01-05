@@ -1,7 +1,7 @@
-import * as tagManagerModule from "./tag-manager";
-import { setupTagManager } from "./tag-manager";
 import * as dataLayerModule from "./data-layer";
 import { establishDataLayer } from "./data-layer";
+import * as tagManagerModule from "./tag-manager";
+import { setupTagManager } from "./tag-manager";
 import { setupUserTracking } from "./index";
 
 describe("user tracking", () => {

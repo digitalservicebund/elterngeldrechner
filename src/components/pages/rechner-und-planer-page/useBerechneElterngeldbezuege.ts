@@ -1,36 +1,36 @@
 import Big from "big.js";
 import { useCallback, useRef } from "react";
 import {
+  type Auswahloption,
+  type BerechneElterngeldbezuegeCallback,
+  type ElterngeldbezuegeFuerElternteil,
   Elternteil,
   KeinElterngeld,
   Lebensmonatszahlen,
-  Variante,
-  type Auswahloption,
-  type BerechneElterngeldbezuegeCallback,
   type Monat,
-  type ElterngeldbezuegeFuerElternteil,
+  Variante,
   isVariante,
 } from "@/features/planer/domain";
 import { EgrSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
 import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
 import {
   Einkommen,
+  ElternGeldArt,
+  type ElternGeldDaten,
+  type ElternGeldPlusErgebnis,
   ErwerbsZeitraumLebensMonat,
   FinanzDaten,
-  PlanungsDaten,
-  type PersoenlicheDaten,
-  YesNo,
-  MutterschaftsLeistung,
-  ElternGeldArt,
-  type ElternGeldPlusErgebnis,
-  type ElternGeldDaten,
   type Lohnsteuerjahr,
+  MutterschaftsLeistung,
+  type PersoenlicheDaten,
+  PlanungsDaten,
+  YesNo,
 } from "@/globals/js/calculations/model";
-import type { ElternteilType } from "@/redux/elternteil-type";
 import type { RootState } from "@/redux";
+import type { ElternteilType } from "@/redux/elternteil-type";
 import { finanzDatenOfUi } from "@/redux/finanzDatenFactory";
-import { persoenlicheDatenOfUi } from "@/redux/persoenlicheDatenFactory";
 import { useAppStore } from "@/redux/hooks";
+import { persoenlicheDatenOfUi } from "@/redux/persoenlicheDatenFactory";
 
 export function useBerechneElterngeldbezuege(): BerechneElterngeldbezuegeCallback {
   const store = useAppStore();

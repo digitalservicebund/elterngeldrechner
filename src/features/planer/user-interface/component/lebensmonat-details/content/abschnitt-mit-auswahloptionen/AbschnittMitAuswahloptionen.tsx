@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
-import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 import {
-  listeElternteileFuerAusgangslageAuf,
   type Lebensmonatszahl,
+  listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
+import { useInformationenZumLebensmonat } from "@/features/planer/user-interface/component/lebensmonat-details/informationenZumLebensmonat";
 
 export function AbschnittMitAuswahloptionen(): ReactNode {
   const {

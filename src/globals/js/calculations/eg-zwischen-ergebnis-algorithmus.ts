@@ -10,6 +10,12 @@ import {
   ZwischenErgebnis,
 } from "./model";
 import {
+  dateWithoutTimeOf,
+  daysBetween,
+  plusDays,
+  plusYears,
+} from "@/globals/js/calculations/common/date-util";
+import {
   BIG_ZERO,
   fMax,
   round,
@@ -20,12 +26,6 @@ import {
   PAUSCH,
   RATE_BONUS,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
-import {
-  dateWithoutTimeOf,
-  daysBetween,
-  plusDays,
-  plusYears,
-} from "@/globals/js/calculations/common/date-util";
 
 /**
  * Algorithmus zur Berechnung des Zwischenergebnisses des Elterngeldrechners.

@@ -1,5 +1,5 @@
-import { VorlaeufigGueltigerPlan } from "./VorlaeufigGueltigerPlan";
 import { MinimaleAuswahlErfuellt } from "./MinimaleAuswahlErfuellt";
+import { VorlaeufigGueltigerPlan } from "./VorlaeufigGueltigerPlan";
 import type { Ausgangslage } from "@/features/planer/domain/ausgangslage";
 
 export function FinalGueltigerPlan<A extends Ausgangslage>() {

@@ -1,13 +1,13 @@
 import { useId } from "react";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
-import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
 import { SelbstaendigAndErwerbstaetig } from "./SelbstaendigAndErwerbstaetig";
-import { useAppSelector } from "@/redux/hooks";
-import type { ElternteilType } from "@/redux/elternteil-type";
-import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
+import { SteuerUndVersicherung } from "./SteuerUndVersicherung";
 import { YesNo } from "@/globals/js/calculations/model";
+import type { ElternteilType } from "@/redux/elternteil-type";
+import { useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
+import { stepErwerbstaetigkeitElternteilSelectors } from "@/redux/stepErwerbstaetigkeitSlice";
 
 const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
   label: `${index + 1}. Monat`,

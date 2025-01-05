@@ -1,25 +1,25 @@
-import { useId, useRef, useState, forwardRef, type ForwardedRef } from "react";
-import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import ClearIcon from "@digitalservicebund/icons/Clear";
+import { type ForwardedRef, forwardRef, useId, useRef, useState } from "react";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Versicherungen } from "./Versicherungen";
-import type { ElternteilType } from "@/redux/elternteil-type";
+import { Button } from "@/components/atoms";
 import {
   CustomNumberField,
   CustomSelect,
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
-import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";
-import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
-import { Button } from "@/components/atoms";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
+import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
 import {
-  availableZeitraumOptions,
   Zeitraum,
   ZeitraumData,
   ZeitraumOptionType,
+  availableZeitraumOptions,
 } from "@/components/organisms/zeitraum";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import type { ElternteilType } from "@/redux/elternteil-type";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";
 
 const erwerbstaetigkeitLabels: {
   [K in Erwerbstaetigkeiten]: string;

@@ -1,19 +1,19 @@
 import userEvent from "@testing-library/user-event";
-import { render, screen, within } from "@/test-utils/test-utils";
-import { RootState } from "@/redux";
 import EinkommenPage from "@/components/pages/EinkommenPage";
+import { RentenArt, YesNo } from "@/globals/js/calculations/model";
+import { RootState } from "@/redux";
+import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
-  initialStepErwerbstaetigkeitState,
+  StepEinkommenState,
+  initialStepEinkommenState,
+} from "@/redux/stepEinkommenSlice";
+import {
   StepErwerbstaetigkeitElternteil,
   StepErwerbstaetigkeitState,
+  initialStepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
-import {
-  initialStepEinkommenState,
-  StepEinkommenState,
-} from "@/redux/stepEinkommenSlice";
-import { RentenArt, YesNo } from "@/globals/js/calculations/model";
-import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
+import { render, screen, within } from "@/test-utils/test-utils";
 
 const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
   ...initialStepErwerbstaetigkeitState.ET1,

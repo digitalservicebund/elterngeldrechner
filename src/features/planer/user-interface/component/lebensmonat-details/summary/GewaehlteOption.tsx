@@ -1,11 +1,11 @@
-import type { CSSProperties, ReactNode } from "react";
-import classNames from "classnames";
 import AddIcon from "@digitalservicebund/icons/Add";
 import LockIcon from "@digitalservicebund/icons/Lock";
+import classNames from "classnames";
+import type { CSSProperties, ReactNode } from "react";
 import {
+  type Auswahloption,
   KeinElterngeld,
   Variante,
-  type Auswahloption,
 } from "@/features/planer/domain";
 
 type Props = {

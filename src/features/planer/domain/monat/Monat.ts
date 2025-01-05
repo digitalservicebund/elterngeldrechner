@@ -1,5 +1,5 @@
-import type { Einkommen } from "@/features/planer/domain/Einkommen";
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
+import type { Einkommen } from "@/features/planer/domain/Einkommen";
 import type { Elterngeldbezug } from "@/features/planer/domain/Elterngeldbezug";
 import { Variante } from "@/features/planer/domain/Variante";
 

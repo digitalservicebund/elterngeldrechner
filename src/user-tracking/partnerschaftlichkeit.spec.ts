@@ -1,7 +1,7 @@
 import { setTrackingVariable } from "./data-layer";
 import {
-  trackPartnerschaftlicheVerteilung,
   type Auswahl,
+  trackPartnerschaftlicheVerteilung,
 } from "./partnerschaftlichkeit";
 
 vi.mock(import("./data-layer"));

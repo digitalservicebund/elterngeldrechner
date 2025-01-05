@@ -1,4 +1,4 @@
-import { useCallback, useEffect, type RefObject } from "react";
+import { type RefObject, useCallback, useEffect } from "react";
 
 export function useOnFocusMovedOut(
   element: RefObject<HTMLElement>,

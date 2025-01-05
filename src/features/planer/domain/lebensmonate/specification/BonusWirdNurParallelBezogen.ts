@@ -1,7 +1,7 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate";
 import { Specification } from "@/features/planer/domain/common/specification";
 import { WennBonusDannAlle } from "@/features/planer/domain/lebensmonat";
+import type { LebensmonateMitBeliebigenElternteilen } from "@/features/planer/domain/lebensmonate";
 
 export const BonusWirdNurParallelBezogen =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(

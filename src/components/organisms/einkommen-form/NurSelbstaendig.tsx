@@ -1,9 +1,9 @@
-import { useFormContext } from "react-hook-form";
 import { useId } from "react";
-import type { ElternteilType } from "@/redux/elternteil-type";
+import { useFormContext } from "react-hook-form";
 import { CustomNumberField } from "@/components/molecules";
-import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { infoTexts } from "@/components/molecules/info-dialog";
+import type { ElternteilType } from "@/redux/elternteil-type";
+import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 
 interface NurSelbstaendigProps {
   readonly elternteil: ElternteilType;

@@ -1,8 +1,8 @@
 import { FieldValues } from "react-hook-form";
 import {
   CustomRadioGroup,
-  CustomRadioGroupProps,
   CustomRadioGroupOption,
+  CustomRadioGroupProps,
 } from "@/components/molecules";
 import { YesNo } from "@/globals/js/calculations/model";
 

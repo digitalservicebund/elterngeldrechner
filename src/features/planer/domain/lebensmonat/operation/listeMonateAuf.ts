@@ -1,12 +1,12 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import type { Monat } from "@/features/planer/domain/monat";
-import { getRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import {
-  compareElternteile,
   type Elternteil,
+  compareElternteile,
   isElternteil,
 } from "@/features/planer/domain/Elternteil";
+import { getRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import type { Lebensmonat } from "@/features/planer/domain/lebensmonat/Lebensmonat";
+import type { Monat } from "@/features/planer/domain/monat";
 
 export function listeMonateAuf<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,

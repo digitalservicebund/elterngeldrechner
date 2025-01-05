@@ -74,7 +74,7 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
       className="flex flex-col gap-32"
       aria-labelledby={hasHeading ? headingIdentifier : undefined}
     >
-      {!!hasHeading && <h2 id={headingIdentifier}>{heading}</h2>}
+      {!!hasHeading && <h3 id={headingIdentifier}>{heading}</h3>}
 
       {!isErwerbstaetigVorGeburt && (
         <p>

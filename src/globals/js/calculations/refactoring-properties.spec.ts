@@ -207,7 +207,7 @@ function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   persoenlicheDaten.anzahlKuenftigerKinder = data.anzahlKuenftigerKinder;
   persoenlicheDaten.etVorGeburt = data.erwerbsartVorDerGeburt;
   persoenlicheDaten.etNachGeburt = yesNoFrom(data.erwerbstaetigNachDerGeburt);
-  persoenlicheDaten.kinder.push(...data.kinder.map(kindFrom));
+  persoenlicheDaten.geschwister = data.kinder.map(kindFrom);
   return persoenlicheDaten;
 }
 
@@ -223,7 +223,7 @@ function originalPersoenlicheDatenFrom(
   );
   persoenlicheDaten.etVorGeburt = data.erwerbsartVorDerGeburt;
   persoenlicheDaten.etNachGeburt = yesNoFrom(data.erwerbstaetigNachDerGeburt);
-  persoenlicheDaten.kinder.push(...data.kinder.map(kindFrom));
+  persoenlicheDaten.kinder.push(...data.kinder.map(originalKindFrom));
   return persoenlicheDaten;
 }
 
@@ -264,6 +264,14 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
 }
 
 function kindFrom(data: KindRaw, index: number): Kind {
+  return {
+    nummer: index + 1,
+    geburtsdatum: data.geburtsdatum,
+    istBehindert: data.istBehindert,
+  };
+}
+
+function originalKindFrom(data: KindRaw, index: number): Kind {
   return {
     nummer: index + 2,
     geburtsdatum: data.geburtsdatum,

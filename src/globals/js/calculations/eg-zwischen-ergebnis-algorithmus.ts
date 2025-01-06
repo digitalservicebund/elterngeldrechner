@@ -49,7 +49,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       throw new Error("wahrscheinlichesGeburtsDatum is undefined");
     }
     const geburt: Date = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
-    const geschw: Kind[] = persoenlicheDaten.kinder;
+    const geschw: Kind[] = persoenlicheDaten.geschwister;
     let ende: Date | undefined = undefined;
     const ind_geschw: boolean = persoenlicheDaten.isGeschwisterVorhanden();
     const no_kinder: number = persoenlicheDaten.anzahlKuenftigerKinder;

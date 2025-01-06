@@ -70,22 +70,13 @@ export const persoenlicheDatenOfUi = (
     elternteil,
   );
 
-  const kuenftigeKinder = Array.from(
-    { length: state.stepNachwuchs.anzahlKuenftigerKinder },
-    (_, index) => ({
-      nummer: index + 1,
-      geburtsdatum: undefined,
-      istBehindert: false,
-    }),
-  );
-  const geschwisterKinder = state.stepNachwuchs.geschwisterkinder.map(
+  persoenlicheDaten.geschwister = state.stepNachwuchs.geschwisterkinder.map(
     (kind, index) => ({
       nummer: index + 1 + state.stepNachwuchs.anzahlKuenftigerKinder,
       geburtsdatum: dateOf(kind.geburtsdatum),
       istBehindert: kind.istBehindert,
     }),
   );
-  persoenlicheDaten.kinder = [...kuenftigeKinder, ...geschwisterKinder];
 
   return persoenlicheDaten;
 };

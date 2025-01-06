@@ -113,12 +113,16 @@ describe("persoenlicheDatenFactory", () => {
     expect(persoenlicheDaten.wahrscheinlichesGeburtsDatum.getFullYear()).toBe(
       2022,
     );
-    expect(persoenlicheDaten.kinder[1].geburtsdatum?.getDate()).toBe(2);
-    expect(persoenlicheDaten.kinder[1].geburtsdatum?.getMonth()).toBe(2);
-    expect(persoenlicheDaten.kinder[1].geburtsdatum?.getFullYear()).toBe(2017);
-    expect(persoenlicheDaten.kinder[2].geburtsdatum?.getDate()).toBe(31);
-    expect(persoenlicheDaten.kinder[2].geburtsdatum?.getMonth()).toBe(4);
-    expect(persoenlicheDaten.kinder[2].geburtsdatum?.getFullYear()).toBe(2008);
+    expect(persoenlicheDaten.geschwister[0].geburtsdatum?.getDate()).toBe(2);
+    expect(persoenlicheDaten.geschwister[0].geburtsdatum?.getMonth()).toBe(2);
+    expect(persoenlicheDaten.geschwister[0].geburtsdatum?.getFullYear()).toBe(
+      2017,
+    );
+    expect(persoenlicheDaten.geschwister[1].geburtsdatum?.getDate()).toBe(31);
+    expect(persoenlicheDaten.geschwister[1].geburtsdatum?.getMonth()).toBe(4);
+    expect(persoenlicheDaten.geschwister[1].geburtsdatum?.getFullYear()).toBe(
+      2008,
+    );
     expect(persoenlicheDaten.anzahlKuenftigerKinder).toBe(1);
     expect(persoenlicheDaten.getAnzahlGeschwister()).toBe(2);
     expect(persoenlicheDaten.etVorGeburt).toBe(ErwerbsArt.NEIN);

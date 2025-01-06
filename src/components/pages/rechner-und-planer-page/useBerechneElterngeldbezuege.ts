@@ -206,7 +206,7 @@ if (import.meta.vitest) {
 
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/test-utils/test-utils");
-    const { PersoenlicheDaten, FinanzDaten } = await import(
+    const { FinanzDaten, ErwerbsArt } = await import(
       "@/globals/js/calculations/model"
     );
     const { KeinElterngeld } = await import("@/features/planer/domain");
@@ -215,9 +215,7 @@ if (import.meta.vitest) {
     vi.mock(import("@/redux/finanzDatenFactory"));
 
     beforeEach(() => {
-      vi.mocked(persoenlicheDatenOfUi).mockReturnValue(
-        new PersoenlicheDaten(new Date()),
-      );
+      vi.mocked(persoenlicheDatenOfUi).mockReturnValue(ANY_PERSOENLICHE_DATEN);
       vi.mocked(finanzDatenOfUi).mockReturnValue(new FinanzDaten());
     });
 
@@ -236,7 +234,7 @@ if (import.meta.vitest) {
     });
 
     it("uses the initially created static calculation parameters for the calculation calls", () => {
-      const persoenlicheDaten = new PersoenlicheDaten(new Date());
+      const persoenlicheDaten = ANY_PERSOENLICHE_DATEN;
       vi.mocked(persoenlicheDatenOfUi).mockReturnValue(persoenlicheDaten);
 
       const finanzDaten = new FinanzDaten();
@@ -342,6 +340,13 @@ if (import.meta.vitest) {
 
     const ANY_ELTERNTEIL = Elternteil.Eins;
     const ANY_MONATE = {};
+    const ANY_PERSOENLICHE_DATEN = {
+      anzahlKuenftigerKinder: 1,
+      wahrscheinlichesGeburtsDatum: new Date(),
+      etVorGeburt: ErwerbsArt.NEIN,
+      etNachGeburt: YesNo.NO,
+      geschwister: [],
+    };
 
     function monat(
       gewaehlteOption?: Auswahloption,

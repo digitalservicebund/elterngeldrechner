@@ -58,25 +58,16 @@ export const persoenlicheDatenOfUi = (
   state: RootState,
   elternteil: ElternteilType,
 ): PersoenlicheDaten => {
-  const wahrscheinlichesGeburtsdatum =
-    stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state);
-  const persoenlicheDaten = new PersoenlicheDaten(wahrscheinlichesGeburtsdatum);
-
-  persoenlicheDaten.anzahlKuenftigerKinder =
-    state.stepNachwuchs.anzahlKuenftigerKinder;
-
-  persoenlicheDaten.etVorGeburt = erwerbsTaetigkeitVorGeburtOf(
-    state,
-    elternteil,
-  );
-
-  persoenlicheDaten.geschwister = state.stepNachwuchs.geschwisterkinder.map(
-    (kind, index) => ({
+  return {
+    wahrscheinlichesGeburtsDatum:
+      stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state),
+    anzahlKuenftigerKinder: state.stepNachwuchs.anzahlKuenftigerKinder,
+    etVorGeburt: erwerbsTaetigkeitVorGeburtOf(state, elternteil),
+    etNachGeburt: YesNo.NO,
+    geschwister: state.stepNachwuchs.geschwisterkinder.map((kind, index) => ({
       nummer: index + 1 + state.stepNachwuchs.anzahlKuenftigerKinder,
       geburtsdatum: dateOf(kind.geburtsdatum),
       istBehindert: kind.istBehindert,
-    }),
-  );
-
-  return persoenlicheDaten;
+    })),
+  };
 };

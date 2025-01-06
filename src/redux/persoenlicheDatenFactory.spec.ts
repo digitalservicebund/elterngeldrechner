@@ -124,7 +124,7 @@ describe("persoenlicheDatenFactory", () => {
       2008,
     );
     expect(persoenlicheDaten.anzahlKuenftigerKinder).toBe(1);
-    expect(persoenlicheDaten.getAnzahlGeschwister()).toBe(2);
+    expect(persoenlicheDaten.geschwister).toHaveLength(2);
     expect(persoenlicheDaten.etVorGeburt).toBe(ErwerbsArt.NEIN);
     expect(persoenlicheDaten.etNachGeburt).toBe(YesNo.NO);
   });

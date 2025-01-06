@@ -135,14 +135,14 @@ describe("basis-eg-algorithmus", () => {
   });
 });
 
-const createPersoenlicheDaten = () => {
-  const persoenlicheDaten = new PersoenlicheDaten(
-    new Date("2022-01-01T10:37:00.000Z"),
-  );
-  persoenlicheDaten.anzahlKuenftigerKinder = 1;
-  persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
-  persoenlicheDaten.etNachGeburt = YesNo.NO;
-  return persoenlicheDaten;
+const createPersoenlicheDaten = (): PersoenlicheDaten => {
+  return {
+    wahrscheinlichesGeburtsDatum: new Date("2022-01-01T10:37:00.000Z"),
+    anzahlKuenftigerKinder: 1,
+    etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+    etNachGeburt: YesNo.NO,
+    geschwister: [],
+  };
 };
 
 const createFinanzDaten = (

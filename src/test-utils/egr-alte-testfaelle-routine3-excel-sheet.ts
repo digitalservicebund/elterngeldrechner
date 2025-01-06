@@ -8,7 +8,7 @@ import {
   KassenArt,
   NettoEinkommen,
   PLANUNG_ANZAHL_MONATE,
-  PersoenlicheDaten,
+  type PersoenlicheDaten,
   RentenArt,
   YesNo,
   kinderFreiBetragOfNumber,
@@ -31,16 +31,14 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     this.sheet = workSheetsFromFile[0];
   }
 
-  createPersoenlicheDaten(testCaseIndex: number) {
-    const persoenlicheDaten = new PersoenlicheDaten(
-      new Date("2022-01-01T10:37:00.000Z"),
-    );
-    persoenlicheDaten.anzahlKuenftigerKinder = 1;
-    persoenlicheDaten.wahrscheinlichesGeburtsDatum =
-      this.geburtsDatum(testCaseIndex);
-    persoenlicheDaten.etVorGeburt = this.erwerbsArt(testCaseIndex);
-    persoenlicheDaten.etNachGeburt = YesNo.YES;
-    return persoenlicheDaten;
+  createPersoenlicheDaten(testCaseIndex: number): PersoenlicheDaten {
+    return {
+      anzahlKuenftigerKinder: 1,
+      wahrscheinlichesGeburtsDatum: this.geburtsDatum(testCaseIndex),
+      etVorGeburt: this.erwerbsArt(testCaseIndex),
+      etNachGeburt: YesNo.YES,
+      geschwister: [],
+    };
   }
 
   geburtsDatum(testCaseIndex: number) {

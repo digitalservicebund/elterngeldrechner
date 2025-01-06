@@ -7,7 +7,6 @@ import {
   FinanzDaten,
   KassenArt,
   KinderFreiBetrag,
-  PersoenlicheDaten,
   SteuerKlasse,
   YesNo,
   createMischEkTaetigkeitOf,
@@ -19,12 +18,14 @@ describe("basis-eg-algorithmus", () => {
   describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_010219.xlsx", () => {
     it("TESTFALL NO. 1", () => {
       // given
-      const persoenlicheDaten = new PersoenlicheDaten(
-        new Date("2022-01-01T10:37:00.000Z"),
-      );
-      persoenlicheDaten.anzahlKuenftigerKinder = 1;
-      persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
-      persoenlicheDaten.etNachGeburt = YesNo.NO;
+      const persoenlicheDaten = {
+        wahrscheinlichesGeburtsDatum: new Date("2022-01-01T10:37:00.000Z"),
+        anzahlKuenftigerKinder: 1,
+        etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+        etNachGeburt: YesNo.NO,
+        geschwister: [],
+      };
+
       const finanzDaten = new FinanzDaten();
       finanzDaten.zahlenSieKirchenSteuer = YesNo.NO;
       finanzDaten.bruttoEinkommen = new Einkommen(0);

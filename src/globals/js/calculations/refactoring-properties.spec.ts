@@ -201,14 +201,13 @@ function convertBigsToNumbers(data: unknown): unknown {
 type DataTransformer = (data: unknown) => unknown;
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
-  const persoenlicheDaten = new PersoenlicheDaten(
-    data.wahrscheinlichesGeburtsdatum,
-  );
-  persoenlicheDaten.anzahlKuenftigerKinder = data.anzahlKuenftigerKinder;
-  persoenlicheDaten.etVorGeburt = data.erwerbsartVorDerGeburt;
-  persoenlicheDaten.etNachGeburt = yesNoFrom(data.erwerbstaetigNachDerGeburt);
-  persoenlicheDaten.geschwister = data.kinder.map(kindFrom);
-  return persoenlicheDaten;
+  return {
+    wahrscheinlichesGeburtsDatum: data.wahrscheinlichesGeburtsdatum,
+    anzahlKuenftigerKinder: data.anzahlKuenftigerKinder,
+    etVorGeburt: data.erwerbsartVorDerGeburt,
+    etNachGeburt: yesNoFrom(data.erwerbstaetigNachDerGeburt),
+    geschwister: data.kinder.map(kindFrom),
+  };
 }
 
 function originalPersoenlicheDatenFrom(

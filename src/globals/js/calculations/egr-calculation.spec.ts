@@ -29,12 +29,13 @@ describe("egr-calculation", () => {
         PLANUNG_ANZAHL_MONATE,
       ).fill(ElternGeldArt.ELTERNGELD_PLUS);
 
-      const persoenlicheDaten = new PersoenlicheDaten(
-        new Date("2023-11-25T01:02:03.000Z"),
-      );
-      persoenlicheDaten.anzahlKuenftigerKinder = 1;
-      persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
-      persoenlicheDaten.etNachGeburt = YesNo.YES;
+      const persoenlicheDaten = {
+        wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
+        anzahlKuenftigerKinder: 1,
+        etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+        etNachGeburt: YesNo.YES,
+        geschwister: [],
+      };
 
       const finanzDaten = new FinanzDaten();
       finanzDaten.bruttoEinkommen = new Einkommen(2800);
@@ -76,12 +77,13 @@ describe("egr-calculation", () => {
         PLANUNG_ANZAHL_MONATE,
       ).fill(ElternGeldArt.BASIS_ELTERNGELD);
 
-      const persoenlicheDaten = new PersoenlicheDaten(
-        new Date("2023-11-25T01:02:03.000Z"),
-      );
-      persoenlicheDaten.anzahlKuenftigerKinder = 1;
-      persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
-      persoenlicheDaten.etNachGeburt = YesNo.NO;
+      const persoenlicheDaten = {
+        wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
+        anzahlKuenftigerKinder: 1,
+        etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+        etNachGeburt: YesNo.NO,
+        geschwister: [],
+      };
 
       const finanzDaten = new FinanzDaten();
       finanzDaten.bruttoEinkommen = new Einkommen(2100);
@@ -107,8 +109,13 @@ describe("egr-calculation", () => {
   });
 
   it("should always calculate the same result for the same inputs with Mischeinkommen", () => {
-    const persoenlicheDaten = new PersoenlicheDaten(new Date());
-    persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_MISCHEINKOMMEN;
+    const persoenlicheDaten = {
+      wahrscheinlichesGeburtsDatum: new Date(),
+      anzahlKuenftigerKinder: 1,
+      etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
+      etNachGeburt: YesNo.NO,
+      geschwister: [],
+    };
 
     const taetigkeit = new MischEkTaetigkeit(true);
     taetigkeit.bruttoEinkommenDurchschnitt = Big(4000);

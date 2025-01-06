@@ -32,12 +32,13 @@ describe("plus-eg-algorithmus", () => {
         PLANUNG_ANZAHL_MONATE,
       ).fill(ElternGeldArt.ELTERNGELD_PLUS);
 
-      const persoenlicheDaten = new PersoenlicheDaten(
-        new Date("2023-11-24T01:02:03.000Z"),
-      );
-      persoenlicheDaten.anzahlKuenftigerKinder = 1;
-      persoenlicheDaten.etVorGeburt = ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
-      persoenlicheDaten.etNachGeburt = YesNo.YES;
+      const persoenlicheDaten = {
+        wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
+        anzahlKuenftigerKinder: 1,
+        etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+        etNachGeburt: YesNo.YES,
+        geschwister: [],
+      };
 
       const finanzDaten = new FinanzDaten();
       finanzDaten.bruttoEinkommen = new Einkommen(2800);
@@ -99,9 +100,14 @@ describe("plus-eg-algorithmus", () => {
 
     it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", () => {
       // given
-      const persoenlicheDaten = new PersoenlicheDaten(
-        new Date("2023-11-24T01:02:03.000Z"),
-      );
+      const persoenlicheDaten = {
+        wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
+        anzahlKuenftigerKinder: 1,
+        etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+        etNachGeburt: YesNo.YES,
+        geschwister: [],
+      };
+
       const zwischenErgebnis: ZwischenErgebnis = {
         elternGeld: BIG_ZERO,
         ersatzRate: BIG_ZERO,

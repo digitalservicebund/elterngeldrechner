@@ -29,7 +29,7 @@ export class EgrCalculation {
     lohnSteuerJahr: Lohnsteuerjahr,
   ): ElternGeldPlusErgebnis {
     const clonedElterngeldDaten = {
-      persoenlicheDaten: persoenlicheDatenOf(elternGeldDaten.persoenlicheDaten),
+      persoenlicheDaten: structuredClone(elternGeldDaten.persoenlicheDaten),
       finanzDaten: finanzDatenOf(elternGeldDaten.finanzDaten),
       planungsDaten: planungsDatenOf(elternGeldDaten.planungsDaten),
     };

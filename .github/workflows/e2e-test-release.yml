@@ -1,0 +1,103 @@
+name: E2E Test Release
+
+# This action ensures that a new release is verified promptly. The objective is to confirm that the release is free
+# of errors and to notify us when our changes are live, as the deployment is managed by a third party.
+
+# This action skips the `styles.spec.ts` tests as they are currently unstable. The primary goal of this pipeline is
+# to ensure that the production system functions correctly overall, rather than verifying pixel-perfect styling. In
+# order to maintain confidence in the pipeline, we’ve decided to temporarily exclude certain tests, prioritizing
+# trust in the pipeline over styling precision for now.
+
+on:
+  schedule:
+    - cron: "1 6-18 * * *" # Run every hour between 7 AM and 7 PM (Berlin time)
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch current production release version
+        id: fetch-production-version
+        uses: ./.github/actions/fetch-version-hash
+        with:
+          url: ${{ vars.PRODUCTION_URL }}
+
+      - name: Restore cache for tested version
+        id: cache-tested-version
+        uses: actions/cache/restore@v4
+        with:
+          key: tested-version-${{ steps.fetch-production-version.outputs.version-hash }}
+          path: /tmp/tested-version-${{ steps.fetch-production-version.outputs.version-hash }}
+
+      - name: Git checkout deployed release
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+        run: git checkout ${{ steps.fetch-production-version.outputs.version-hash }}
+
+      - name: Restore the .github directory to enable modifications to actions
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+        run: git checkout ${{ github.sha }} -- .github playwright.config.ts
+
+      - uses: ./.github/actions/cached-node-install
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+
+      - uses: ./.github/actions/cached-playwright-setup
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+
+      - name: Run Playwright e2e tests
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+        run: npm run test-e2e
+        env:
+          PLAYWRIGHT_REPORTER: html
+          PLAYWRIGHT_SKIP_SERVER: true
+          PLAYWRIGHT_URL: ${{ vars.PRODUCTION_URL }}
+          PLAYWRIGHT_PORT: 80
+          PLAYWRIGHT_TEST_IGNORE: "tests/cases/styles.spec.ts"
+
+      - name: Create empty cache directory
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+        run: mkdir -p /tmp/tested-version-${{ steps.fetch-production-version.outputs.version-hash }}
+
+      - name: Update cache with tested version
+        if: steps.cache-tested-version.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          key: tested-version-${{ steps.fetch-production-version.outputs.version-hash }}
+          path: /tmp/tested-version-${{ steps.fetch-production-version.outputs.version-hash }}
+
+      - name: Upload Playwright report
+        if: always() && steps.cache-tested-version.outputs.cache-hit != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 1
+
+      - name: Get tag for the release
+        if: success() && steps.cache-tested-version.outputs.cache-hit != 'true'
+        id: get-tag
+        run: |
+          TAG=$(git describe --tags --exact-match ${{ steps.fetch-production-version.outputs.version-hash }})
+          echo "tag=$TAG" >> $GITHUB_ENV
+
+      - name: Send release message to slack
+        uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0
+        if: success() && steps.cache-tested-version.outputs.cache-hit != 'true'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        with:
+          payload: |
+            { "text": "Successfully tested the ${{ env.tag }} release. :rocket:" }
+
+      - name: Send failure to Slack
+        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        if: failure() && steps.cache-tested-version.outputs.cache-hit != 'true'
+        with:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

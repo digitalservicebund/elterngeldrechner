@@ -51,7 +51,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     const geburt: Date = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
     const geschw: Kind[] = persoenlicheDaten.geschwister;
     let ende: Date | undefined = undefined;
-    const ind_geschw: boolean = persoenlicheDaten.isGeschwisterVorhanden();
+    const ind_geschw: boolean = persoenlicheDaten.geschwister.length > 0;
     const no_kinder: number = persoenlicheDaten.anzahlKuenftigerKinder;
     const ek_vor: NettoEinkommen =
       ErwerbsArt.NEIN !== persoenlicheDaten.etVorGeburt

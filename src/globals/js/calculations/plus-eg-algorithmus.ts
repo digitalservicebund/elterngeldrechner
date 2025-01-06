@@ -549,7 +549,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     }
     const ende_geschwisterbonus: Date | null = z.zeitraumGeschwisterBonus;
     const geschw = new Array<number>(PLANUNG_ANZAHL_MONATE).fill(0);
-    if (persoenlicheDaten.isGeschwisterVorhanden()) {
+    const isGeschwisterVorhanden = persoenlicheDaten.geschwister.length > 0;
+
+    if (isGeschwisterVorhanden) {
       // es sind Geschwister vorhanden
       const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
       if (ende_geschwisterbonus != null && ende_geschwisterbonus >= geburt) {

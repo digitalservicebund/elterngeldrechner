@@ -18,22 +18,6 @@ export class PersoenlicheDaten {
     this.etNachGeburt = YesNo.NO;
     this.anzahlKuenftigerKinder = 1;
   }
-
-  isETNachGeburt(): boolean {
-    return this.etNachGeburt === YesNo.YES;
-  }
-
-  isETVorGeburt(): boolean {
-    return this.etVorGeburt !== ErwerbsArt.NEIN;
-  }
-
-  isGeschwisterVorhanden() {
-    return this.getAnzahlGeschwister() > 0;
-  }
-
-  getAnzahlGeschwister(): number {
-    return this.geschwister.length;
-  }
 }
 
 export function persoenlicheDatenOf(source: PersoenlicheDaten) {

@@ -13,7 +13,6 @@ import {
   YesNo,
   ZwischenErgebnis,
   finanzDatenOf,
-  persoenlicheDatenOf,
 } from "./model";
 import { planungsDatenOf } from "./model/planungs-daten";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";

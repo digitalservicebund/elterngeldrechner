@@ -10,7 +10,6 @@ import {
   MischEkTaetigkeit,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
-  PersoenlicheDaten,
   PlanungsDaten,
   SteuerKlasse,
   YesNo,

@@ -1,6 +1,6 @@
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
+import { YesNo } from "./yes-no";
 import { type Ausgangslage, Elternteil } from "@/features/planer/domain";
-import { YesNo } from "@/globals/js/calculations/model";
 import { type RootState } from "@/redux";
 
 export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {

@@ -6,7 +6,6 @@ import {
   KassenArt,
   MischEkTaetigkeit,
   PersoenlicheDaten,
-  YesNo,
   createMischEkTaetigkeitOf,
 } from "./model";
 import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
@@ -140,7 +139,6 @@ const createPersoenlicheDaten = (): PersoenlicheDaten => {
     wahrscheinlichesGeburtsDatum: new Date("2022-01-01T10:37:00.000Z"),
     anzahlKuenftigerKinder: 1,
     etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-    etNachGeburt: YesNo.NO,
     geschwister: [],
   };
 };
@@ -156,7 +154,7 @@ const createFinanzDaten = (
   finanzDaten.steuerKlasse = sheet.steuerKlasse(testCaseIndex);
   finanzDaten.splittingFaktor = sheet.splittingFaktor(testCaseIndex);
   finanzDaten.kinderFreiBetrag = sheet.kinderFreiBetrag(testCaseIndex);
-  finanzDaten.zahlenSieKirchenSteuer =
+  finanzDaten.istKirchensteuerpflichtig =
     sheet.zahlenSieKirchenSteuer(testCaseIndex);
 
   finanzDaten.mischEinkommenTaetigkeiten = mischEinkommenTaetigkeiten(

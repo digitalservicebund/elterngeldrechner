@@ -8,7 +8,6 @@ import {
   KassenArt,
   KinderFreiBetrag,
   SteuerKlasse,
-  YesNo,
   createMischEkTaetigkeitOf,
 } from "./model";
 
@@ -22,12 +21,12 @@ describe("basis-eg-algorithmus", () => {
         wahrscheinlichesGeburtsDatum: new Date("2022-01-01T10:37:00.000Z"),
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        etNachGeburt: YesNo.NO,
+        hasEtNachGeburt: false,
         geschwister: [],
       };
 
       const finanzDaten = new FinanzDaten();
-      finanzDaten.zahlenSieKirchenSteuer = YesNo.NO;
+      finanzDaten.istKirchensteuerpflichtig = false;
       finanzDaten.bruttoEinkommen = new Einkommen(0);
       finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
       finanzDaten.steuerKlasse = SteuerKlasse.SKL5;
@@ -50,9 +49,9 @@ describe("basis-eg-algorithmus", () => {
             true,
             false,
           ],
-          YesNo.NO,
-          YesNo.YES,
-          YesNo.NO,
+          false,
+          true,
+          false,
         ),
         createMischEkTaetigkeitOf(
           ErwerbsTaetigkeit.SELBSTSTAENDIG,
@@ -71,9 +70,9 @@ describe("basis-eg-algorithmus", () => {
             false,
             false,
           ],
-          YesNo.NO,
-          YesNo.NO,
-          YesNo.NO,
+          false,
+          false,
+          false,
         ),
         createMischEkTaetigkeitOf(
           ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
@@ -92,9 +91,9 @@ describe("basis-eg-algorithmus", () => {
             true,
             true,
           ],
-          YesNo.NO,
-          YesNo.NO,
-          YesNo.YES,
+          false,
+          false,
+          true,
         ),
       ];
 

@@ -11,7 +11,6 @@ import {
   type Lohnsteuerjahr,
   SteuerKlasse,
   UnterstuetzteLohnsteuerjahre,
-  YesNo,
   kinderFreiBetragToNumber,
   steuerklasseToNumber,
 } from "@/globals/js/calculations/model";
@@ -91,7 +90,7 @@ export class EgrSteuerRechner {
       PVA: 0, // Fix nach Richtlinien zum BEEG. Geschwister können nicht betrachtet werden.
       PVS: 0,
       PVZ: 0,
-      R: finanzDaten.zahlenSieKirchenSteuer === YesNo.YES ? 1 : 0,
+      R: finanzDaten.istKirchensteuerpflichtig ? 1 : 0,
       RE4: einkommenInCent.toNumber(),
       STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
       VBEZ: 0,

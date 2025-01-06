@@ -3,11 +3,11 @@ import type {
   Erwerbstaetigkeiten,
   MonatlichesBrutto,
 } from "./stepErwerbstaetigkeitSlice";
+import { YesNo } from "./yes-no";
 import {
   KassenArt,
   KinderFreiBetrag,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 
 export const preloadedState = {

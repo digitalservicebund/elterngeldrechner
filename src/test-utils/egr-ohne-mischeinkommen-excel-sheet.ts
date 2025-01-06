@@ -6,7 +6,6 @@ import {
   NettoEinkommen,
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
-  YesNo,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
 } from "@/globals/js/calculations/model";
@@ -40,9 +39,9 @@ export class EgrOhneMischeinkommenExcelSheet {
     return erwerbsArtOf(status);
   }
 
-  kirchenSteuer(testCaseIndex: number) {
+  kirchenSteuer(testCaseIndex: number): boolean {
     const kirchenSteuer = this.stringOf(testCaseIndex, KIRCHEN_STEUER_OFFSET);
-    return kirchenSteuer === "zahlt Kirchensteuer" ? YesNo.YES : YesNo.NO;
+    return kirchenSteuer === "zahlt Kirchensteuer";
   }
 
   steuerKlasse(testCaseIndex: number) {

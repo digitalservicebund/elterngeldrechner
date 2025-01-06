@@ -4,7 +4,6 @@ import {
   ErwerbsTaetigkeit,
   KinderFreiBetrag,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 
 describe("egr-mischeinkommen-excel-sheet", () => {
@@ -83,33 +82,33 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     });
 
     it("should read rentenVersicherungsPflichtig", () => {
-      expect(sheet.rentenVersicherungsPflichtig(0, 0)).toBe(YesNo.NO);
-      expect(sheet.rentenVersicherungsPflichtig(1, 0)).toBe(YesNo.NO);
-      expect(sheet.rentenVersicherungsPflichtig(2, 0)).toBe(YesNo.NO);
-      expect(sheet.rentenVersicherungsPflichtig(0, 1)).toBe(YesNo.NO);
-      expect(sheet.rentenVersicherungsPflichtig(1, 1)).toBe(YesNo.NO);
-      expect(sheet.rentenVersicherungsPflichtig(2, 1)).toBe(YesNo.NO);
-      expect(sheet.rentenVersicherungsPflichtig(0, 8)).toBe(YesNo.YES);
-      expect(sheet.rentenVersicherungsPflichtig(1, 8)).toBe(YesNo.YES);
-      expect(sheet.rentenVersicherungsPflichtig(2, 8)).toBe(YesNo.YES);
+      expect(sheet.rentenVersicherungsPflichtig(0, 0)).toBe(false);
+      expect(sheet.rentenVersicherungsPflichtig(1, 0)).toBe(false);
+      expect(sheet.rentenVersicherungsPflichtig(2, 0)).toBe(false);
+      expect(sheet.rentenVersicherungsPflichtig(0, 1)).toBe(false);
+      expect(sheet.rentenVersicherungsPflichtig(1, 1)).toBe(false);
+      expect(sheet.rentenVersicherungsPflichtig(2, 1)).toBe(false);
+      expect(sheet.rentenVersicherungsPflichtig(0, 8)).toBe(true);
+      expect(sheet.rentenVersicherungsPflichtig(1, 8)).toBe(true);
+      expect(sheet.rentenVersicherungsPflichtig(2, 8)).toBe(true);
     });
 
     it("should read krankenVersicherungsPflichtig", () => {
-      expect(sheet.krankenVersicherungsPflichtig(0, 0)).toBe(YesNo.YES);
-      expect(sheet.krankenVersicherungsPflichtig(1, 0)).toBe(YesNo.NO);
-      expect(sheet.krankenVersicherungsPflichtig(2, 0)).toBe(YesNo.NO);
-      expect(sheet.krankenVersicherungsPflichtig(0, 1)).toBe(YesNo.NO);
-      expect(sheet.krankenVersicherungsPflichtig(1, 1)).toBe(YesNo.NO);
-      expect(sheet.krankenVersicherungsPflichtig(2, 1)).toBe(YesNo.YES);
+      expect(sheet.krankenVersicherungsPflichtig(0, 0)).toBe(true);
+      expect(sheet.krankenVersicherungsPflichtig(1, 0)).toBe(false);
+      expect(sheet.krankenVersicherungsPflichtig(2, 0)).toBe(false);
+      expect(sheet.krankenVersicherungsPflichtig(0, 1)).toBe(false);
+      expect(sheet.krankenVersicherungsPflichtig(1, 1)).toBe(false);
+      expect(sheet.krankenVersicherungsPflichtig(2, 1)).toBe(true);
     });
 
     it("should read arbeitslosenVersicherungsPflichtig", () => {
-      expect(sheet.arbeitslosenVersicherungsPflichtig(0, 0)).toBe(YesNo.NO);
-      expect(sheet.arbeitslosenVersicherungsPflichtig(1, 0)).toBe(YesNo.NO);
-      expect(sheet.arbeitslosenVersicherungsPflichtig(2, 0)).toBe(YesNo.YES);
-      expect(sheet.arbeitslosenVersicherungsPflichtig(0, 1)).toBe(YesNo.NO);
-      expect(sheet.arbeitslosenVersicherungsPflichtig(1, 1)).toBe(YesNo.YES);
-      expect(sheet.arbeitslosenVersicherungsPflichtig(2, 1)).toBe(YesNo.YES);
+      expect(sheet.arbeitslosenVersicherungsPflichtig(0, 0)).toBe(false);
+      expect(sheet.arbeitslosenVersicherungsPflichtig(1, 0)).toBe(false);
+      expect(sheet.arbeitslosenVersicherungsPflichtig(2, 0)).toBe(true);
+      expect(sheet.arbeitslosenVersicherungsPflichtig(0, 1)).toBe(false);
+      expect(sheet.arbeitslosenVersicherungsPflichtig(1, 1)).toBe(true);
+      expect(sheet.arbeitslosenVersicherungsPflichtig(2, 1)).toBe(true);
     });
 
     it("should read steuerKlasse", () => {
@@ -127,8 +126,8 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     });
 
     it("should read zahlenSieKirchenSteuer", () => {
-      expect(sheet.zahlenSieKirchenSteuer(0)).toBe(YesNo.NO);
-      expect(sheet.zahlenSieKirchenSteuer(1)).toBe(YesNo.YES);
+      expect(sheet.zahlenSieKirchenSteuer(0)).toBe(false);
+      expect(sheet.zahlenSieKirchenSteuer(1)).toBe(true);
     });
 
     it("should read netto", () => {

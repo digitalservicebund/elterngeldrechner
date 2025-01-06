@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { YesNo } from "@/globals/js/calculations/model";
+import { YesNo } from "./yes-no";
 
 export type Erwerbstaetigkeiten = "NichtSelbststaendig" | "Selbststaendig";
 

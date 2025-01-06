@@ -13,7 +13,6 @@ import {
   PLANUNG_ANZAHL_MONATE,
   PlanungsDaten,
   SteuerKlasse,
-  YesNo,
   ZwischenErgebnis,
 } from "./model";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
@@ -35,7 +34,7 @@ describe("plus-eg-algorithmus", () => {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        etNachGeburt: YesNo.YES,
+        hasEtNachGeburt: true,
         geschwister: [],
       };
 
@@ -103,7 +102,7 @@ describe("plus-eg-algorithmus", () => {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        etNachGeburt: YesNo.YES,
+        hasEtNachGeburt: true,
         geschwister: [],
       };
 

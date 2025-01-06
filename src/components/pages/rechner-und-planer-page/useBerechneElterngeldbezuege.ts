@@ -24,7 +24,6 @@ import {
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   PlanungsDaten,
-  YesNo,
 } from "@/globals/js/calculations/model";
 import type { RootState } from "@/redux";
 import type { ElternteilType } from "@/redux/elternteil-type";
@@ -90,8 +89,7 @@ function buildParameterForCalculation(
    * calculation. This is effective as this algorithm runs over and over again.
    * Though, you need to be mindful about this. For example in testing.
    */
-  persoenlicheDaten.etNachGeburt =
-    monateMitErwerbstaetigkeit.length > 0 ? YesNo.YES : YesNo.NO;
+  persoenlicheDaten.hasEtNachGeburt = monateMitErwerbstaetigkeit.length > 0;
   finanzdaten.erwerbsZeitraumLebensMonatList = monateMitErwerbstaetigkeit;
 
   const elterngelddaten = {
@@ -344,7 +342,6 @@ if (import.meta.vitest) {
       anzahlKuenftigerKinder: 1,
       wahrscheinlichesGeburtsDatum: new Date(),
       etVorGeburt: ErwerbsArt.NEIN,
-      etNachGeburt: YesNo.NO,
       geschwister: [],
     };
 

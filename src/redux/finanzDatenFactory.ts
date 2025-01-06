@@ -5,6 +5,7 @@ import {
   Zeitraum,
 } from "./stepEinkommenSlice";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
+import { YesNo } from "./yes-no";
 import { RootState } from "./index";
 import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 import {
@@ -17,7 +18,6 @@ import {
   MischEkTaetigkeit,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 import { ElternteilType } from "@/redux/elternteil-type";
 
@@ -60,18 +60,12 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
       mischEinkommenTaetigkeiten.bruttoEinkommenDurchschnitt = Big(
         taetigkeit.bruttoEinkommenDurchschnitt ?? BIG_ZERO,
       );
-      mischEinkommenTaetigkeiten.rentenVersicherungsPflichtig = taetigkeit
-        .versicherungen.hasRentenversicherung
-        ? YesNo.YES
-        : YesNo.NO;
-      mischEinkommenTaetigkeiten.krankenVersicherungsPflichtig = taetigkeit
-        .versicherungen.hasKrankenversicherung
-        ? YesNo.YES
-        : YesNo.NO;
-      mischEinkommenTaetigkeiten.arbeitslosenVersicherungsPflichtig = taetigkeit
-        .versicherungen.hasArbeitslosenversicherung
-        ? YesNo.YES
-        : YesNo.NO;
+      mischEinkommenTaetigkeiten.istRentenVersicherungsPflichtig =
+        taetigkeit.versicherungen.hasRentenversicherung;
+      mischEinkommenTaetigkeiten.istKrankenVersicherungsPflichtig =
+        taetigkeit.versicherungen.hasKrankenversicherung;
+      mischEinkommenTaetigkeiten.istArbeitslosenVersicherungsPflichtig =
+        taetigkeit.versicherungen.hasArbeitslosenversicherung;
 
       mischEinkommenTaetigkeiten.bemessungsZeitraumMonate = Array.from(
         { length: ANZAHL_MONATE_PRO_JAHR },
@@ -139,8 +133,10 @@ export const finanzDatenOfUi = (
   }
 
   finanzDaten.bruttoEinkommen = new Einkommen(bruttoEinkommenBeforeBirth);
-  finanzDaten.zahlenSieKirchenSteuer =
-    state.stepEinkommen[elternteil].zahlenSieKirchenSteuer ?? YesNo.NO;
+  finanzDaten.istKirchensteuerpflichtig =
+    state.stepEinkommen[elternteil].zahlenSieKirchenSteuer === YesNo.YES
+      ? true
+      : false;
   finanzDaten.kinderFreiBetrag =
     state.stepEinkommen[elternteil].kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
   finanzDaten.steuerKlasse =

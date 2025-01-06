@@ -12,7 +12,6 @@ import {
   PLANUNG_ANZAHL_MONATE,
   PlanungsDaten,
   SteuerKlasse,
-  YesNo,
 } from "./model";
 
 describe("egr-calculation", () => {
@@ -32,7 +31,7 @@ describe("egr-calculation", () => {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        etNachGeburt: YesNo.YES,
+        hasEtNachGeburt: true,
         geschwister: [],
       };
 
@@ -80,7 +79,7 @@ describe("egr-calculation", () => {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        etNachGeburt: YesNo.NO,
+        hasEtNachGeburt: false,
         geschwister: [],
       };
 
@@ -112,7 +111,7 @@ describe("egr-calculation", () => {
       wahrscheinlichesGeburtsDatum: new Date(),
       anzahlKuenftigerKinder: 1,
       etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
-      etNachGeburt: YesNo.NO,
+      hasEtNachGeburt: false,
       geschwister: [],
     };
 

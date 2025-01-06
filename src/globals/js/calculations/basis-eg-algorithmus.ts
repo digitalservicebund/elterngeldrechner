@@ -11,7 +11,6 @@ import {
   PersoenlicheDaten,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "./model";
 import {
   BIG_ONE,
@@ -174,15 +173,13 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
             mischEkTaetigkeit.bemessungsZeitraumMonate[i] &&
             mischEkTaetigkeit.erwerbsTaetigkeit !== ErwerbsTaetigkeit.MINIJOB
           ) {
-            if (mischEkTaetigkeit.rentenVersicherungsPflichtig === YesNo.YES) {
+            if (mischEkTaetigkeit.istRentenVersicherungsPflichtig) {
               betrachtungszeitraumRV[i] = true;
             }
-            if (mischEkTaetigkeit.krankenVersicherungsPflichtig === YesNo.YES) {
+            if (mischEkTaetigkeit.istKrankenVersicherungsPflichtig) {
               betrachtungszeitraumKV[i] = true;
             }
-            if (
-              mischEkTaetigkeit.arbeitslosenVersicherungsPflichtig === YesNo.YES
-            ) {
+            if (mischEkTaetigkeit.istArbeitslosenVersicherungsPflichtig) {
               betrachtungszeitraumAV[i] = true;
             }
           }

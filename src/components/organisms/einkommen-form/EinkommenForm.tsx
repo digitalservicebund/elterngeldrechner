@@ -3,7 +3,6 @@ import { useNavigate } from "react-router";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
 import { ButtonGroup, Split, YesNoRadio } from "@/components/molecules";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
-import { YesNo } from "@/globals/js/calculations/model";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
@@ -11,6 +10,7 @@ import {
 import { useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
+import { YesNo } from "@/redux/yes-no";
 
 interface Props {
   readonly initialValues: StepEinkommenState;

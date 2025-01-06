@@ -6,7 +6,6 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 import { RootState, reducers } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
@@ -20,6 +19,7 @@ import {
   initialStepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { YesNo } from "@/redux/yes-no";
 import { render, screen, within } from "@/test-utils/test-utils";
 
 vi.mock(import("@/globals/js/calculations/basis-eg-algorithmus"));

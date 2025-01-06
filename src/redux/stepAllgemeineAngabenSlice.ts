@@ -1,6 +1,6 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
+import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import { YesNo } from "@/globals/js/calculations/model";
 
 export type Antragstellende = "EinenElternteil" | "FuerBeide";
 type AntragstellendeSelektor = "ET1" | "ET2";

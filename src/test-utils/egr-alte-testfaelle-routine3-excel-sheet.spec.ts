@@ -7,7 +7,6 @@ import {
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 
 describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
@@ -31,8 +30,8 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
     });
 
     it("should read kirchenSteuer", () => {
-      expect(sheet.kirchenSteuer(0)).toBe(YesNo.NO);
-      expect(sheet.kirchenSteuer(1)).toBe(YesNo.YES);
+      expect(sheet.kirchenSteuer(0)).toBe(false);
+      expect(sheet.kirchenSteuer(1)).toBe(true);
     });
 
     it("should read steuerKlasse", () => {

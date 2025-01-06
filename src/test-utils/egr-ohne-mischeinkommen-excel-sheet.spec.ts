@@ -6,7 +6,6 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 
 describe("egr-mischeinkommen-excel-sheet", () => {
@@ -30,8 +29,8 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     });
 
     it("should read kirchenSteuer", () => {
-      expect(sheet.kirchenSteuer(0)).toBe(YesNo.NO);
-      expect(sheet.kirchenSteuer(3)).toBe(YesNo.YES);
+      expect(sheet.kirchenSteuer(0)).toBe(false);
+      expect(sheet.kirchenSteuer(3)).toBe(true);
     });
 
     it("should read steuerKlasse", () => {

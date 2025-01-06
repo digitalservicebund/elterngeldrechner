@@ -13,7 +13,6 @@ import {
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 import { Planer } from "@/features/planer/user-interface";
-import { YesNo } from "@/globals/js/calculations/model";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
@@ -22,6 +21,7 @@ import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPl
 import { feedbackActions, feedbackSelectors } from "@/redux/feedbackSlice";
 import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
+import { YesNo } from "@/redux/yes-no";
 import {
   isTrackingAllowedByUser,
   trackPartnerschaftlicheVerteilung,

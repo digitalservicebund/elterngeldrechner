@@ -5,12 +5,9 @@ import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitElternteil,
 } from "./stepErwerbstaetigkeitSlice";
+import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import {
-  ErwerbsArt,
-  KinderFreiBetrag,
-  YesNo,
-} from "@/globals/js/calculations/model";
+import { ErwerbsArt, KinderFreiBetrag } from "@/globals/js/calculations/model";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
 
 vi.mock("react-redux", () => ({
@@ -126,7 +123,7 @@ describe("persoenlicheDatenFactory", () => {
     expect(persoenlicheDaten.anzahlKuenftigerKinder).toBe(1);
     expect(persoenlicheDaten.geschwister).toHaveLength(2);
     expect(persoenlicheDaten.etVorGeburt).toBe(ErwerbsArt.NEIN);
-    expect(persoenlicheDaten.etNachGeburt).toBe(YesNo.NO);
+    expect(persoenlicheDaten.hasEtNachGeburt).toBeUndefined();
   });
 
   it("should create PersoenlicheDaten for Alleinerziehend", () => {

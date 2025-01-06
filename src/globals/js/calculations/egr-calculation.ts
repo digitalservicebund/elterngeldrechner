@@ -10,7 +10,6 @@ import {
   type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   NettoEinkommen,
-  YesNo,
   ZwischenErgebnis,
   finanzDatenOf,
 } from "./model";
@@ -45,7 +44,7 @@ export class EgrCalculation {
         zwischenErgebnisEinkommen.nettoEinkommen,
       );
 
-    if (clonedElterngeldDaten.persoenlicheDaten.etNachGeburt !== YesNo.YES) {
+    if (!clonedElterngeldDaten.persoenlicheDaten.hasEtNachGeburt) {
       clonedElterngeldDaten.finanzDaten.erwerbsZeitraumLebensMonatList = [];
     }
     if (

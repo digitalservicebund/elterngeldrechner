@@ -17,7 +17,6 @@ import {
   PLANUNG_ANZAHL_MONATE,
   PersoenlicheDaten,
   PlanungsDaten,
-  YesNo,
   ZwischenErgebnis,
   mutterschaftsLeistungInMonaten,
   zaehleMonateErwerbsTaetigkeit,
@@ -49,7 +48,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
   private pb_von: Date | null = null;
   private pb_bis: Date | null = null;
-  private partnerbonus: YesNo = YesNo.NO;
+  private hatPartnerbonus?: boolean;
   // Das Array wird mit Index 1-32 benutzt.
   public anfang_LM: Date[] = new Array<Date>(PLANUNG_ANZAHL_MONATE + 1);
   // Das Array wird mit Index 1-32 benutzt.
@@ -95,7 +94,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         z,
       );
     }
-    this.partnerbonus = YesNo.NO;
+    this.hatPartnerbonus = false;
     //let listBruttoLMBasis: Array<Big> = finanzDatenBerechnet.bruttoLMBasis;
     //let listBruttoLMPlus: Array<Big> = finanzDatenBerechnet.bruttoLMPlus;
     const listBruttoLMPlus = finanzDaten.bruttoLeistungsMonateWithPlanung(
@@ -191,7 +190,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
     z: ZwischenErgebnis,
   ): ElternGeldPlusErgebnis {
-    const nicht_erw: YesNo = persoenlicheDaten.etNachGeburt;
+    const nicht_erw = persoenlicheDaten.hasEtNachGeburt;
     let ek_nach_plus: Big;
     let elterngeld_erw_plus: Big;
     let brutto_basis: Big = BIG_ZERO;
@@ -202,7 +201,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     let elterngeld_et_plus: Big = BIG_ZERO;
     let elterngeld_keine_et_plus: Big = BIG_ZERO;
     let elternGeldPerioden: ElternGeldPerioden = { anfang: [], ende: [] };
-    if (nicht_erw === YesNo.YES) {
+    if (nicht_erw) {
       // es liegt Erwerbstätigkeit nach der Geburt vor
       const pausch: Big = PAUSCH;
       // if (finanzDaten.erwerbsZeitraumLeistungsMonatList == null) {
@@ -423,7 +422,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
   ): ElternGeldKategorie[] {
     const verlauf = new Array<ElternGeldKategorie>(PLANUNG_ANZAHL_MONATE);
 
-    this.partnerbonus = YesNo.NO;
+    this.hatPartnerbonus = false;
     let pbMonatVon: number = 0;
     let pbMonatBis: number = 0;
     let counter: number = 0;
@@ -467,7 +466,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
           isEqual(brutto_LM_Plus[i], BIG_ZERO)
         ) {
-          this.partnerbonus = YesNo.YES;
+          this.hatPartnerbonus = true;
           break;
         }
       }
@@ -500,7 +499,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
           isEqual(brutto_LM_Plus[i], BIG_ZERO)
         ) {
-          this.partnerbonus = YesNo.YES;
+          this.hatPartnerbonus = true;
           break;
         }
         if (
@@ -519,11 +518,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         }
       }
     }
-    if (
-      pbMonatVon !== 0 &&
-      pbMonatBis !== 0 &&
-      this.partnerbonus === YesNo.YES
-    ) {
+    if (pbMonatVon !== 0 && pbMonatBis !== 0 && this.hatPartnerbonus) {
       if (
         this.anfang_LM[pbMonatVon - 1] != null &&
         this.ende_LM[pbMonatBis - 1] != null
@@ -603,7 +598,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         PlusEgAlgorithmus.isMutterschaftsLeistungImMonat(i, planungsergebnis)
       ) {
         ausgabe.mutterschaftsLeistungMonat = true;
-      } else if (this.partnerbonus === YesNo.YES) {
+      } else if (this.hatPartnerbonus) {
         // es ist schon alles auf 0 gesetzt
       } else {
         let geschwisterbonus: Big = BIG_ZERO;
@@ -720,7 +715,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     ergebnis: ElternGeldPlusErgebnis,
   ): ElternGeldPlusErgebnis {
     ergebnis.hasPartnerBonusError = false;
-    if (this.partnerbonus === YesNo.YES) {
+    if (this.hatPartnerbonus) {
       ergebnis.hasPartnerBonusError = true;
       // TODO TW message entfernen
       ergebnis.message =

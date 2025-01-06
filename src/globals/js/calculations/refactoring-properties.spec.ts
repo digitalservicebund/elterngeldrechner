@@ -31,7 +31,6 @@ import {
   PlanungsDaten,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "./model";
 import {
   Big as OriginalBig,
@@ -40,9 +39,11 @@ import {
   FinanzDaten as OriginalFinanzDaten,
   type Kind as OriginalKind,
   type Lohnsteuerjahr as OriginalLohnsteuerjahr,
+  MischEkTaetigkeit as OriginalMischEkTaetigkeit,
   PersoenlicheDaten as OriginalPersoenlicheDaten,
   PlanungsDaten as OriginalPlanungsDaten,
   UnterstuetzteLohnsteuerjahre as OriginalUnterstuetzteLohnsteuerjahre,
+  YesNo,
 } from "original-rechner";
 
 /**
@@ -206,7 +207,7 @@ function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
     wahrscheinlichesGeburtsDatum: data.wahrscheinlichesGeburtsdatum,
     anzahlKuenftigerKinder: data.anzahlKuenftigerKinder,
     etVorGeburt: data.erwerbsartVorDerGeburt,
-    etNachGeburt: yesNoFrom(data.erwerbstaetigNachDerGeburt),
+    hasEtNachGeburt: data.erwerbstaetigNachDerGeburt,
     geschwister: data.kinder.map(kindFrom),
   };
 }
@@ -230,7 +231,7 @@ function originalPersoenlicheDatenFrom(
 function finanzDatenFrom(data: FinanzdatenRaw): FinanzDaten {
   const finanzdaten = new FinanzDaten();
   finanzdaten.bruttoEinkommen = new Einkommen(data.bruttoeinkommen);
-  finanzdaten.zahlenSieKirchenSteuer = yesNoFrom(data.zahlenSieKirchensteuer);
+  finanzdaten.istKirchensteuerpflichtig = data.zahlenSieKirchensteuer;
   finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
   finanzdaten.steuerKlasse = data.steuerklasse;
   finanzdaten.kassenArt = data.kassenart;
@@ -254,7 +255,7 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   finanzdaten.rentenVersicherung = data.rentenversicherung;
   finanzdaten.splittingFaktor = data.splittingfaktor;
   finanzdaten.mischEinkommenTaetigkeiten = data.mischEinkommenTaetigkeiten.map(
-    mischEkTaetigkeitFrom,
+    originalMischEkTaetigkeitFrom,
   );
   finanzdaten.erwerbsZeitraumLebensMonatList =
     data.erwerbsZeitraumLebensmonatList.map(
@@ -299,6 +300,27 @@ function originalPlanungsDatenFrom(
 
 function mischEkTaetigkeitFrom(data: MischEkTaetigkeitRaw): MischEkTaetigkeit {
   const taetigkeit = new MischEkTaetigkeit(false);
+  taetigkeit.erwerbsTaetigkeit = data.erwerbstaetigkeit;
+  taetigkeit.bruttoEinkommenDurchschnitt = Big(
+    data.bruttoeinkommenDurchschnitt,
+  );
+  taetigkeit.bruttoEinkommenDurchschnittMidi = Big(
+    data.bruttoeinkommenDurchschnittMidi,
+  );
+  taetigkeit.bemessungsZeitraumMonate = data.bemessungszeitraumMonate;
+  taetigkeit.istRentenVersicherungsPflichtig =
+    data.rentenversicherungspflichtig;
+  taetigkeit.istKrankenVersicherungsPflichtig =
+    data.krankenversicherungspflichtig;
+  taetigkeit.istArbeitslosenVersicherungsPflichtig =
+    data.arbeitslosenversicherungspflichtig;
+  return taetigkeit;
+}
+
+function originalMischEkTaetigkeitFrom(
+  data: MischEkTaetigkeitRaw,
+): OriginalMischEkTaetigkeit {
+  const taetigkeit = new OriginalMischEkTaetigkeit(false);
   taetigkeit.erwerbsTaetigkeit = data.erwerbstaetigkeit;
   taetigkeit.bruttoEinkommenDurchschnitt = Big(
     data.bruttoeinkommenDurchschnitt,

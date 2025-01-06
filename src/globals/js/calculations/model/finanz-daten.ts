@@ -9,7 +9,6 @@ import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
 import { RentenArt } from "./renten-art";
 import { SteuerKlasse } from "./steuer-klasse";
-import { YesNo } from "./yes-no";
 import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
 
 /**
@@ -17,7 +16,7 @@ import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
  */
 export class FinanzDaten {
   bruttoEinkommen: BruttoEinkommen = new Einkommen(0);
-  zahlenSieKirchenSteuer: YesNo = YesNo.NO;
+  istKirchensteuerpflichtig?: boolean;
   kinderFreiBetrag: KinderFreiBetrag = KinderFreiBetrag.ZKF0;
   steuerKlasse: SteuerKlasse = SteuerKlasse.SKL1;
   kassenArt: KassenArt = KassenArt.GESETZLICH_PFLICHTVERSICHERT;

@@ -7,12 +7,12 @@ import {
   Erwerbstaetigkeiten,
   stepErwerbstaetigkeitActions,
 } from "./stepErwerbstaetigkeitSlice";
+import { YesNo } from "./yes-no";
 import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 
 export interface Zeitraum {

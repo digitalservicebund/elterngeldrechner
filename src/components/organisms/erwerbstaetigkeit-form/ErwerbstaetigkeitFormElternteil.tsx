@@ -7,7 +7,6 @@ import {
   YesNoRadio,
 } from "@/components/molecules";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
-import { YesNo } from "@/globals/js/calculations/model";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -15,6 +14,7 @@ import {
   StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
 } from "@/redux/stepErwerbstaetigkeitSlice";
+import { YesNo } from "@/redux/yes-no";
 
 const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
   MiniJob: "Ja",

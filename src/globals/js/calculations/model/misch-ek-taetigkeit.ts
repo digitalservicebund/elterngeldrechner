@@ -1,5 +1,4 @@
 import Big from "big.js";
-import { YesNo } from "./yes-no";
 import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 /**
@@ -18,9 +17,9 @@ export class MischEkTaetigkeit {
   bruttoEinkommenDurchschnitt: Big = BIG_ZERO;
   bruttoEinkommenDurchschnittMidi: Big = BIG_ZERO;
   bemessungsZeitraumMonate: boolean[] = [];
-  rentenVersicherungsPflichtig: YesNo = YesNo.YES;
-  krankenVersicherungsPflichtig: YesNo = YesNo.YES;
-  arbeitslosenVersicherungsPflichtig: YesNo = YesNo.YES;
+  istRentenVersicherungsPflichtig: boolean = true;
+  istKrankenVersicherungsPflichtig: boolean = true;
+  istArbeitslosenVersicherungsPflichtig: boolean = true;
 
   constructor(falseOrTrue: boolean = false) {
     this.bemessungsZeitraumMonate = new Array<boolean>(
@@ -37,16 +36,17 @@ export const createMischEkTaetigkeitOf = (
   erwerbsTaetigkeit: ErwerbsTaetigkeit,
   bruttoEinkommenDurchschnitt: Big,
   bemessungsZeitraumMonate: boolean[],
-  rentenVersicherungsPflichtig: YesNo,
-  krankenVersicherungsPflichtig: YesNo,
-  arbeitslosenVersicherungsPflichtig: YesNo,
+  istRentenVersicherungsPflichtig: boolean,
+  istKrankenVersicherungsPflichtig: boolean,
+  istArbeitslosenVersicherungsPflichtig: boolean,
 ) => {
   const m = new MischEkTaetigkeit(false);
   m.erwerbsTaetigkeit = erwerbsTaetigkeit;
   m.bruttoEinkommenDurchschnitt = bruttoEinkommenDurchschnitt;
   m.bemessungsZeitraumMonate = bemessungsZeitraumMonate;
-  m.rentenVersicherungsPflichtig = rentenVersicherungsPflichtig;
-  m.krankenVersicherungsPflichtig = krankenVersicherungsPflichtig;
-  m.arbeitslosenVersicherungsPflichtig = arbeitslosenVersicherungsPflichtig;
+  m.istRentenVersicherungsPflichtig = istRentenVersicherungsPflichtig;
+  m.istKrankenVersicherungsPflichtig = istKrankenVersicherungsPflichtig;
+  m.istArbeitslosenVersicherungsPflichtig =
+    istArbeitslosenVersicherungsPflichtig;
   return m;
 };

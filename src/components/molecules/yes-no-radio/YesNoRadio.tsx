@@ -4,7 +4,7 @@ import {
   CustomRadioGroupOption,
   CustomRadioGroupProps,
 } from "@/components/molecules";
-import { YesNo } from "@/globals/js/calculations/model";
+import { YesNo } from "@/redux/yes-no";
 
 const yesNoLabels: { [K in YesNo]: string } = {
   [YesNo.YES]: "Ja",

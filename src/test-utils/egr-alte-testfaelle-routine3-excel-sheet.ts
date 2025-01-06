@@ -10,7 +10,6 @@ import {
   PLANUNG_ANZAHL_MONATE,
   type PersoenlicheDaten,
   RentenArt,
-  YesNo,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
 } from "@/globals/js/calculations/model";
@@ -36,7 +35,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
       anzahlKuenftigerKinder: 1,
       wahrscheinlichesGeburtsDatum: this.geburtsDatum(testCaseIndex),
       etVorGeburt: this.erwerbsArt(testCaseIndex),
-      etNachGeburt: YesNo.YES,
+      hasEtNachGeburt: true,
       geschwister: [],
     };
   }
@@ -54,9 +53,9 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     return erwerbsArtOf(status);
   }
 
-  kirchenSteuer(testCaseIndex: number) {
+  kirchenSteuer(testCaseIndex: number): boolean {
     const kirchenSteuer = this.stringOf(testCaseIndex, KIRCHEN_STEUER_OFFSET);
-    return kirchenSteuer === "zahlt Kirchensteuer" ? YesNo.YES : YesNo.NO;
+    return kirchenSteuer === "zahlt Kirchensteuer";
   }
 
   steuerKlasse(testCaseIndex: number) {

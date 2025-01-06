@@ -1,7 +1,7 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
+import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import { YesNo } from "@/globals/js/calculations/model";
 
 interface Kind {
   geburtsdatum: string;

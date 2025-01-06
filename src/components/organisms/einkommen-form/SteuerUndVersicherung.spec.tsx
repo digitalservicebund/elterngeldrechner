@@ -4,7 +4,6 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-  YesNo,
 } from "@/globals/js/calculations/model";
 import { RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
@@ -17,6 +16,7 @@ import {
   StepNachwuchsState,
   initialStepNachwuchsState,
 } from "@/redux/stepNachwuchsSlice";
+import { YesNo } from "@/redux/yes-no";
 import { render, screen, within } from "@/test-utils/test-utils";
 
 describe("Steuer und Versicherung", () => {

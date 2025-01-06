@@ -41,6 +41,5 @@ export {
   steuerklasseOfNumber,
   steuerklasseToNumber,
 } from "./steuer-klasse";
-export { YesNo } from "./yes-no";
 export type { ZwischenErgebnis } from "./zwischen-ergebnis";
 export { zaehleMonateErwerbsTaetigkeit } from "./erwerbs-zeitraum-lebens-monat";

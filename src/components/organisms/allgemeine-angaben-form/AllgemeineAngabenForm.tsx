@@ -9,11 +9,11 @@ import {
   YesNoRadio,
 } from "@/components/molecules";
 import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
-import { YesNo } from "@/globals/js/calculations/model";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
 } from "@/redux/stepAllgemeineAngabenSlice";
+import { YesNo } from "@/redux/yes-no";
 
 const antragstellendeLabels: { [K in Antragstellende]: string } = {
   FuerBeide: "Für beide",

@@ -1,12 +1,12 @@
 import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
 import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
-import { YesNo } from "@/globals/js/calculations/model";
 import { RootState, reducers } from "@/redux";
 import {
   StepAllgemeineAngabenState,
   initialStepAllgemeineAngabenState,
 } from "@/redux/stepAllgemeineAngabenSlice";
+import { YesNo } from "@/redux/yes-no";
 import { render, screen } from "@/test-utils/test-utils";
 
 describe("Allgemeine Angaben Page", () => {

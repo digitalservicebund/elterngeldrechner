@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import EinkommenPage from "@/components/pages/EinkommenPage";
-import { RentenArt, YesNo } from "@/globals/js/calculations/model";
+import { RentenArt } from "@/globals/js/calculations/model";
 import { RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -13,6 +13,7 @@ import {
   initialStepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { YesNo } from "@/redux/yes-no";
 import { render, screen, within } from "@/test-utils/test-utils";
 
 const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {

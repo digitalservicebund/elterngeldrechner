@@ -3,7 +3,6 @@ import xlsx from "node-xlsx";
 import { BIG_ZERO, round } from "@/globals/js/calculations/common/math-util";
 import {
   ErwerbsTaetigkeit,
-  YesNo,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
 } from "@/globals/js/calculations/model";
@@ -75,8 +74,11 @@ export class EgrMischeinkommenExcelSheet {
     );
   }
 
-  rentenVersicherungsPflichtig(taetigkeit: Taetigkeit, testCaseIndex: number) {
-    return convertJaNeinToYesNoUndefined(
+  rentenVersicherungsPflichtig(
+    taetigkeit: Taetigkeit,
+    testCaseIndex: number,
+  ): boolean | undefined {
+    return convertJaNeinToBooleanUndefined(
       this.rentenVersicherungsPflichtigString(taetigkeit, testCaseIndex),
     );
   }
@@ -90,8 +92,11 @@ export class EgrMischeinkommenExcelSheet {
     ] as string;
   }
 
-  krankenVersicherungsPflichtig(taetigkeit: Taetigkeit, testCaseIndex: number) {
-    return convertJaNeinToYesNoUndefined(
+  krankenVersicherungsPflichtig(
+    taetigkeit: Taetigkeit,
+    testCaseIndex: number,
+  ): boolean | undefined {
+    return convertJaNeinToBooleanUndefined(
       this.krankenVersicherungsPflichtigString(taetigkeit, testCaseIndex),
     );
   }
@@ -108,8 +113,8 @@ export class EgrMischeinkommenExcelSheet {
   arbeitslosenVersicherungsPflichtig(
     taetigkeit: Taetigkeit,
     testCaseIndex: number,
-  ) {
-    return convertJaNeinToYesNoUndefined(
+  ): boolean | undefined {
+    return convertJaNeinToBooleanUndefined(
       this.arbeitslosenVersicherungsPflichtigString(taetigkeit, testCaseIndex),
     );
   }
@@ -129,14 +134,12 @@ export class EgrMischeinkommenExcelSheet {
     ] as string;
   }
 
-  zahlenSieKirchenSteuer(testCaseIndex: number) {
+  zahlenSieKirchenSteuer(testCaseIndex: number): boolean {
     const zahlenSieKirchenSteuer =
       this.sheet.data[ZAHLEN_SIE_KIRCHEN_STEUER_OFFSET][
         columnOf(testCaseIndex)
       ];
-    return zahlenSieKirchenSteuer === "zahlt Kirchensteuer"
-      ? YesNo.YES
-      : YesNo.NO;
+    return zahlenSieKirchenSteuer === "zahlt Kirchensteuer";
   }
 
   steuerKlasse(testCaseIndex: number) {
@@ -296,12 +299,12 @@ function columnOf(testCaseIndex: number) {
   return testCaseIndex + TEST_DATA_COLUMN_OFFSET;
 }
 
-function convertJaNeinToYesNoUndefined(jaNein: string) {
+function convertJaNeinToBooleanUndefined(jaNein: string): boolean | undefined {
   switch (jaNein) {
     case "Nein":
-      return YesNo.NO;
+      return false;
     case "Ja":
-      return YesNo.YES;
+      return true;
   }
   return undefined;
 }

@@ -1,6 +1,5 @@
 import userEvent from "@testing-library/user-event";
 import EinkommenPage from "@/components/pages/EinkommenPage";
-import { YesNo } from "@/globals/js/calculations/model";
 import { RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -13,6 +12,7 @@ import {
   initialStepErwerbstaetigkeitState,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
+import { YesNo } from "@/redux/yes-no";
 import { render, screen, within } from "@/test-utils/test-utils";
 
 describe("Einkommens Page only with block Selbständige And Erwerbstätige", () => {

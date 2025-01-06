@@ -1,12 +1,9 @@
 import { DateTime } from "luxon";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
+import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import {
-  ErwerbsArt,
-  PersoenlicheDaten,
-  YesNo,
-} from "@/globals/js/calculations/model";
+import { ErwerbsArt, PersoenlicheDaten } from "@/globals/js/calculations/model";
 import { ElternteilType } from "@/redux/elternteil-type";
 
 const erwerbsTaetigkeitVorGeburtOf = (
@@ -63,7 +60,6 @@ export const persoenlicheDatenOfUi = (
       stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state),
     anzahlKuenftigerKinder: state.stepNachwuchs.anzahlKuenftigerKinder,
     etVorGeburt: erwerbsTaetigkeitVorGeburtOf(state, elternteil),
-    etNachGeburt: YesNo.NO,
     geschwister: state.stepNachwuchs.geschwisterkinder.map((kind, index) => ({
       nummer: index + 1 + state.stepNachwuchs.anzahlKuenftigerKinder,
       geburtsdatum: dateOf(kind.geburtsdatum),

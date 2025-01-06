@@ -35,13 +35,13 @@ const addMonths = (months: number) => {
     const d = new Date(date.valueOf());
     const day = d.getDate();
     // updating month without causing an overflow
-    d.setDate(1);
+    d.setUTCDate(1);
     d.setUTCMonth(d.getUTCMonth() + months);
 
     if (day > lastDayOfMonth(d)) {
-      d.setDate(lastDayOfMonth(d));
+      d.setUTCDate(lastDayOfMonth(d));
     } else {
-      d.setDate(day);
+      d.setUTCDate(day);
     }
     return d;
   };
@@ -50,7 +50,7 @@ const addMonths = (months: number) => {
 const addDays = (days: number) => {
   return (date: Date) => {
     const d = new Date(date.valueOf());
-    d.setDate(d.getDate() + days);
+    d.setUTCDate(d.getUTCDate() + days);
     return d;
   };
 };
@@ -59,7 +59,7 @@ const subDays = (days: number) => addDays(-1 * days);
 
 const lastDayOfMonth = (date: Date) => {
   const months30 = [april, june, september, november];
-  const month = date.getMonth();
+  const month = date.getUTCMonth();
 
   if (month === february) return isLeapYear(date) ? 29 : 28;
   if (months30.includes(month)) return 30;
@@ -73,7 +73,7 @@ const september = 8;
 const november = 10;
 
 const isLeapYear = (date: Date) => {
-  const year = date.getFullYear();
+  const year = date.getUTCFullYear();
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
 
@@ -87,6 +87,38 @@ if (import.meta.vitest) {
           [2, new Date("2000-01-01"), new Date("2000-02-01")],
           [2, new Date("2000-01-31"), new Date("2000-03-01")],
           [2, new Date("2000-12-12"), new Date("2001-01-12")],
+
+          [2, new Date("2020-10-20"), new Date("2020-11-20")],
+          [2, new Date("2021-10-20"), new Date("2021-11-20")],
+          [2, new Date("2022-10-20"), new Date("2022-11-20")],
+          [2, new Date("2023-10-20"), new Date("2023-11-20")],
+          [2, new Date("2024-10-20"), new Date("2024-11-20")],
+          [2, new Date("2025-10-20"), new Date("2025-11-20")],
+          [2, new Date("2026-10-20"), new Date("2026-11-20")],
+          [2, new Date("2027-10-20"), new Date("2027-11-20")],
+          [2, new Date("2028-10-20"), new Date("2028-11-20")],
+          [2, new Date("2029-10-20"), new Date("2029-11-20")],
+
+          [2, new Date("2020-10-29"), new Date("2020-11-29")],
+          [2, new Date("2020-10-28"), new Date("2020-11-28")],
+          [2, new Date("2021-10-29"), new Date("2021-11-29")],
+          [2, new Date("2021-10-28"), new Date("2021-11-28")],
+          [2, new Date("2022-10-29"), new Date("2022-11-29")],
+          [2, new Date("2022-10-28"), new Date("2022-11-28")],
+          [2, new Date("2023-10-29"), new Date("2023-11-29")],
+          [2, new Date("2023-10-28"), new Date("2023-11-28")],
+          [2, new Date("2024-10-29"), new Date("2024-11-29")],
+          [2, new Date("2024-10-28"), new Date("2024-11-28")],
+          [2, new Date("2025-10-29"), new Date("2025-11-29")],
+          [2, new Date("2025-10-28"), new Date("2025-11-28")],
+          [2, new Date("2026-10-29"), new Date("2026-11-29")],
+          [2, new Date("2026-10-28"), new Date("2026-11-28")],
+          [2, new Date("2027-10-29"), new Date("2027-11-29")],
+          [2, new Date("2027-10-28"), new Date("2027-11-28")],
+          [2, new Date("2028-10-29"), new Date("2028-11-29")],
+          [2, new Date("2028-10-28"), new Date("2028-11-28")],
+          [2, new Date("2029-10-29"), new Date("2029-11-29")],
+          [2, new Date("2029-10-28"), new Date("2029-11-28")],
         ])(
           "endOfNthLebensmonat(%i)(%i) -> %i",
           (nth, geburtsdatum, startOfLebensmonat) => {

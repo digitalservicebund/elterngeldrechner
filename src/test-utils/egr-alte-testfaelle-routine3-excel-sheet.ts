@@ -36,7 +36,6 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
       wahrscheinlichesGeburtsDatum: this.geburtsDatum(testCaseIndex),
       etVorGeburt: this.erwerbsArt(testCaseIndex),
       hasEtNachGeburt: true,
-      geschwister: [],
     };
   }
 

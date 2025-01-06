@@ -49,9 +49,9 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       throw new Error("wahrscheinlichesGeburtsDatum is undefined");
     }
     const geburt: Date = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
-    const geschw: Kind[] = persoenlicheDaten.geschwister;
+    const geschw: Kind[] = persoenlicheDaten.geschwister ?? [];
     let ende: Date | undefined = undefined;
-    const ind_geschw: boolean = persoenlicheDaten.geschwister.length > 0;
+    const ind_geschw: boolean = geschw.length > 0;
     const no_kinder: number = persoenlicheDaten.anzahlKuenftigerKinder;
     const ek_vor: NettoEinkommen =
       ErwerbsArt.NEIN !== persoenlicheDaten.etVorGeburt

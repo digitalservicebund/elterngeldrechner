@@ -32,7 +32,6 @@ describe("egr-calculation", () => {
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         hasEtNachGeburt: true,
-        geschwister: [],
       };
 
       const finanzDaten = new FinanzDaten();
@@ -80,7 +79,6 @@ describe("egr-calculation", () => {
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         hasEtNachGeburt: false,
-        geschwister: [],
       };
 
       const finanzDaten = new FinanzDaten();
@@ -111,8 +109,6 @@ describe("egr-calculation", () => {
       wahrscheinlichesGeburtsDatum: new Date(),
       anzahlKuenftigerKinder: 1,
       etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
-      hasEtNachGeburt: false,
-      geschwister: [],
     };
 
     const taetigkeit = new MischEkTaetigkeit(true);

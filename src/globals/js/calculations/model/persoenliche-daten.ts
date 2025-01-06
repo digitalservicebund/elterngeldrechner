@@ -7,5 +7,5 @@ export type PersoenlicheDaten = {
   readonly anzahlKuenftigerKinder: number;
   etVorGeburt: ErwerbsArt;
   hasEtNachGeburt?: boolean;
-  readonly geschwister: Kind[];
+  readonly geschwister?: Kind[];
 };

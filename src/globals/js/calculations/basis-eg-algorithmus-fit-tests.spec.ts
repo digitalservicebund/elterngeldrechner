@@ -139,7 +139,6 @@ const createPersoenlicheDaten = (): PersoenlicheDaten => {
     wahrscheinlichesGeburtsDatum: new Date("2022-01-01T10:37:00.000Z"),
     anzahlKuenftigerKinder: 1,
     etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-    geschwister: [],
   };
 };
 

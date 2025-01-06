@@ -35,7 +35,6 @@ describe("plus-eg-algorithmus", () => {
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         hasEtNachGeburt: true,
-        geschwister: [],
       };
 
       const finanzDaten = new FinanzDaten();
@@ -103,7 +102,6 @@ describe("plus-eg-algorithmus", () => {
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         hasEtNachGeburt: true,
-        geschwister: [],
       };
 
       const zwischenErgebnis: ZwischenErgebnis = {

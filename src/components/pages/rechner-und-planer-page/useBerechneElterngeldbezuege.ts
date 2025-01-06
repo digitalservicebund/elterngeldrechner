@@ -342,7 +342,6 @@ if (import.meta.vitest) {
       anzahlKuenftigerKinder: 1,
       wahrscheinlichesGeburtsDatum: new Date(),
       etVorGeburt: ErwerbsArt.NEIN,
-      geschwister: [],
     };
 
     function monat(

@@ -2,10 +2,11 @@ import { ErwerbsArt } from "./erwerbs-art";
 import { Kind } from "./kind";
 import { YesNo } from "./yes-no";
 
+// TODO: mark fully readonly
 export type PersoenlicheDaten = {
   readonly wahrscheinlichesGeburtsDatum: Date;
   readonly anzahlKuenftigerKinder: number;
-  /* TODO: readonly */ etVorGeburt: ErwerbsArt;
-  /* TODO: readonly */ etNachGeburt: YesNo;
+  etVorGeburt: ErwerbsArt;
+  etNachGeburt: YesNo;
   readonly geschwister: Kind[];
 };

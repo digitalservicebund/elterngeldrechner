@@ -156,7 +156,6 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
         geschw_b.push(act);
       } else {
         geschw_b.push({
-          nummer: act.nummer,
           geburtsdatum: new Date(1899, 11, 31),
           istBehindert: act.istBehindert,
         });

@@ -38,6 +38,7 @@ import {
   EgrCalculation as OriginalEgrCalculation,
   ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
   FinanzDaten as OriginalFinanzDaten,
+  type Kind as OriginalKind,
   type Lohnsteuerjahr as OriginalLohnsteuerjahr,
   PersoenlicheDaten as OriginalPersoenlicheDaten,
   PlanungsDaten as OriginalPlanungsDaten,
@@ -262,15 +263,14 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   return finanzdaten;
 }
 
-function kindFrom(data: KindRaw, index: number): Kind {
+function kindFrom(data: KindRaw): Kind {
   return {
-    nummer: index + 1,
     geburtsdatum: data.geburtsdatum,
     istBehindert: data.istBehindert,
   };
 }
 
-function originalKindFrom(data: KindRaw, index: number): Kind {
+function originalKindFrom(data: KindRaw, index: number): OriginalKind {
   return {
     nummer: index + 2,
     geburtsdatum: data.geburtsdatum,

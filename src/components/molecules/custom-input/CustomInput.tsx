@@ -7,7 +7,6 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/components/atoms";
 import { InfoDialog } from "@/components/molecules/info-dialog/InfoDialog";
 import { Info } from "@/components/molecules/info-dialog/infoTexts";
 
@@ -51,9 +50,9 @@ export function CustomInput<TFieldValues extends FieldValues>({
           aria-invalid={!!error}
         />
         {!!error && (
-          <Description id={`${name}-error`} error>
+          <p className="mt-8 text-14 text-danger" id={`${name}-error`}>
             {error.message}
-          </Description>
+          </p>
         )}
       </div>
 

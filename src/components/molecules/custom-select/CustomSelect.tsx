@@ -8,7 +8,6 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/components/atoms";
 import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 export interface SelectOption<TValue extends string = string> {
@@ -98,9 +97,9 @@ export function CustomSelect<TFieldValues extends FieldValues>({
           </select>
         </div>
         {!!error && (
-          <Description id={`${name}-error`} error>
+          <p className="mt-8 text-14 text-danger" id={`${name}-error`}>
             {error.message}
-          </Description>
+          </p>
         )}
       </div>
 

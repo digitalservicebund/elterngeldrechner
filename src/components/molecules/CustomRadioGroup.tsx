@@ -9,7 +9,6 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/components/atoms";
 
 type RadioGroupValue = string | number;
 
@@ -95,9 +94,9 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
       })}
 
       {!!hasError && (
-        <Description id={errorIdentifier} error>
+        <p className="mt-8 text-14 text-danger" id={`${name}-error`}>
           {error.message}
-        </Description>
+        </p>
       )}
     </fieldset>
   );

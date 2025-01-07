@@ -1,6 +1,5 @@
 import { ChangeEvent, useId } from "react";
 import { FieldError, Path, get, useFormContext } from "react-hook-form";
-import { Description } from "@/components/atoms";
 import { CustomCheckbox } from "@/components/molecules";
 import {
   StepEinkommenState,
@@ -121,9 +120,9 @@ export function Versicherungen({
       />
 
       {!!hasError && (
-        <Description id={errorIdentifier} error>
+        <p className="mt-8 text-14 text-danger" id={errorIdentifier}>
           {error.message}
-        </Description>
+        </p>
       )}
     </fieldset>
   );

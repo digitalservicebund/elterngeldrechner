@@ -9,7 +9,6 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/components/atoms";
 import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 interface Props<TFieldValues extends FieldValues> {
@@ -78,9 +77,9 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
           {label}
         </label>
         {!!errorMessage && (
-          <Description id={`${name}-error`} error>
+          <p className="mt-8 text-14 text-danger" id={`${name}-error`}>
             {errorMessage}
-          </Description>
+          </p>
         )}
       </div>
 

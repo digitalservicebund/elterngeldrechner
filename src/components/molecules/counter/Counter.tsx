@@ -10,7 +10,6 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/components/atoms";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;
@@ -72,9 +71,9 @@ export function Counter<TFieldValues extends FieldValues>({
         </button>
       </div>
       {!!error && (
-        <Description id={`${name}-error`} error>
+        <p className="mt-8 text-14 text-danger" id={`${name}-error`}>
           {error.message}
-        </Description>
+        </p>
       )}
     </div>
   );

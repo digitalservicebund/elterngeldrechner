@@ -97,6 +97,7 @@ jobs:
             { "text": "Successfully tested the ${{ env.tag }} release. :rocket:" }
 
       - name: Restore cache for failure notification
+        if: failure() && steps.cache-tested-version.outputs.cache-hit != 'true'
         id: cache-failure-notification
         uses: actions/cache/restore@v4
         with:

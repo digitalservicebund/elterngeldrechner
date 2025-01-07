@@ -50,9 +50,9 @@ export function CustomInput<TFieldValues extends FieldValues>({
           aria-invalid={!!error}
         />
         {!!error && (
-          <p className="mt-4 text-14 text-danger" id={`${name}-error`}>
+          <div className="mt-8 text-14 text-danger" id={`${name}-error`}>
             {error.message}
-          </p>
+          </div>
         )}
       </div>
 

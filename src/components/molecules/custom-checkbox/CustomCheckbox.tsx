@@ -77,9 +77,9 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
           {label}
         </label>
         {!!errorMessage && (
-          <p className="mt-4 text-14 text-danger" id={`${name}-error`}>
+          <div className="mt-8 text-14 text-danger" id={`${name}-error`}>
             {errorMessage}
-          </p>
+          </div>
         )}
       </div>
 

@@ -97,7 +97,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
           </select>
         </div>
         {!!error && (
-          <p className="mt-4 text-14 text-danger" id={`${name}-error`}>
+          <p className="mt-8 text-14 text-danger" id={`${name}-error`}>
             {error.message}
           </p>
         )}

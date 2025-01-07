@@ -76,7 +76,7 @@
     "vitest": "^2.0.0"
   },
   "dependencies": {
-    "@digitalservicebund/icons": "^1.1.1",
+    "@digitalservicebund/icons": "^2.0.1",
     "@reduxjs/toolkit": "^2.2.1",
     "big.js": "^6.2.1",
     "classnames": "^2.5.1",

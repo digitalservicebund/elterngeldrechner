@@ -10,7 +10,7 @@ name: E2E Test Release
 
 on:
   schedule:
-    - cron: "1 6-18 * * *" # Run every hour between 7 AM and 7 PM (Berlin time)
+    - cron: "0 6-18 * * *" # Run every hour between 7 AM and 7 PM (Berlin time)
 
 jobs:
   e2e-tests:

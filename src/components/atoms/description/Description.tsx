@@ -9,10 +9,7 @@ interface Props {
 
 export function Description({ id, error = false, children }: Props) {
   return (
-    <div
-      className={classNames("egr-info-text", error && "egr-info-text--error")}
-      id={id}
-    >
+    <div className={classNames("mt-8 text-14", error && "text-danger")} id={id}>
       {children}
     </div>
   );

@@ -113,9 +113,9 @@ export function CustomNumberField<
           required={required}
         />
         {!!error && (
-          <div className="mt-8 text-14 text-danger" id={errorIdentifier}>
+          <p className="mt-4 text-14 text-danger" id={errorIdentifier}>
             {error.message}
-          </div>
+          </p>
         )}
       </div>
 

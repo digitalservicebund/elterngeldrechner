@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { type FieldError, get, useFormContext } from "react-hook-form";
+import { Description } from "@/components/atoms";
 import { CustomCheckbox } from "@/components/molecules";
 import { infoTexts } from "@/components/molecules/info-dialog";
 import { ElternteilType } from "@/redux/elternteil-type";
@@ -61,9 +62,9 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
       />
 
       {!!hasError && (
-        <p className="mt-8 text-14 text-danger" id={errorIdentifier}>
+        <Description id={errorIdentifier} error>
           {error.message}
-        </p>
+        </Description>
       )}
     </fieldset>
   );

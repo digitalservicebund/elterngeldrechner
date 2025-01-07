@@ -8,6 +8,7 @@ import {
   useController,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
+import { Description } from "@/components/atoms";
 import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 interface CustomNumberFieldProps<
@@ -113,9 +114,9 @@ export function CustomNumberField<
           required={required}
         />
         {!!error && (
-          <p className="mt-8 text-14 text-danger" id={errorIdentifier}>
+          <Description id={errorIdentifier} error>
             {error.message}
-          </p>
+          </Description>
         )}
       </div>
 

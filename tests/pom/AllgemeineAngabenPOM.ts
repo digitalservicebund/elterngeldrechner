@@ -56,9 +56,12 @@ export class AllgemeineAngabenPOM {
       "Dieses Feld ist erforderlich",
     );
 
-    this.mutterschaftsleistungenWer = page.locator("section").filter({
-      hasText: "Welcher Elternteil bezieht Mutterschaftsleistungen?",
-    });
+    this.mutterschaftsleistungenWer = page
+      .getByLabel("Mutterschaftsleistungen")
+      .getByRole("radiogroup", {
+        name: "Welcher Elternteil bezieht Mutterschaftsleistungen?",
+      });
+
     this.mutterschaftsleistungenWerError =
       this.mutterschaftsleistungenWer.getByText("Dieses Feld ist erforderlich");
 

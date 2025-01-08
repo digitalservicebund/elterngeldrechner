@@ -1,4 +1,4 @@
-import { ReactNode, useId } from "react";
+import { ReactNode } from "react";
 import { AbschnittMitPlanungsdetails } from "./abschnitt-mit-planungsdetails";
 import { AbschnittMitPlanungsuebersicht } from "./abschnitt-mit-planungsuebersicht";
 import {
@@ -11,24 +11,19 @@ type Props = {
 };
 
 export function Zusammenfassung({ plan }: Props): ReactNode {
-  const headingIdentifier = useId();
   const { planungsuebersicht, planungsdetails } = fassePlanZusammen(plan);
 
   return (
-    <section aria-labelledby={headingIdentifier}>
-      <h2 id={headingIdentifier}>Zusammenfassung</h2>
+    <div className="flex flex-col gap-y-80">
+      <AbschnittMitPlanungsuebersicht
+        planungsuebersicht={planungsuebersicht}
+        ausgangslage={plan.ausgangslage}
+      />
 
-      <div className="flex flex-col gap-y-80">
-        <AbschnittMitPlanungsuebersicht
-          planungsuebersicht={planungsuebersicht}
-          ausgangslage={plan.ausgangslage}
-        />
-
-        <AbschnittMitPlanungsdetails
-          planungsdetails={planungsdetails}
-          ausgangslage={plan.ausgangslage}
-        />
-      </div>
-    </section>
+      <AbschnittMitPlanungsdetails
+        planungsdetails={planungsdetails}
+        ausgangslage={plan.ausgangslage}
+      />
+    </div>
   );
 }

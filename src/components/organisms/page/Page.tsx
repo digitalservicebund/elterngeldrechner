@@ -1,6 +1,5 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router-dom";
-import { AriaMessage } from "@/components/atoms";
 import { Alert } from "@/components/molecules/alert";
 import { Sidebar } from "@/components/organisms/sidebar";
 import { FormStep, formSteps } from "@/components/pages/formSteps";
@@ -13,6 +12,11 @@ interface PageProps {
 export function Page({ step, children }: PageProps) {
   const alert = ALERTS[step.route];
 
+  const sectionElement = useRef<HTMLElement>(null);
+  useEffect(() => sectionElement.current?.focus(), []);
+
+  const headingIdentifier = useId();
+
   return (
     <div className="egr-page">
       <ScrollRestoration />
@@ -21,16 +25,25 @@ export function Page({ step, children }: PageProps) {
         <Sidebar currentStep={step} />
       </div>
 
-      <AriaMessage>{step.text}</AriaMessage>
-
-      <div id={step.text} className="egr-page__content relative">
+      <section
+        id={step.heading} /* used for tracking */
+        ref={sectionElement}
+        className="egr-page__content relative focus:outline-none"
+        aria-labelledby={headingIdentifier}
+        tabIndex={-1}
+      >
         {!!alert && (
           <Alert headline={alert.headline} className="mb-32">
             {alert.text}
           </Alert>
         )}
+
+        <h2 id={headingIdentifier} className="mb-10">
+          {step.heading}
+        </h2>
+
         {children}
-      </div>
+      </section>
     </div>
   );
 }

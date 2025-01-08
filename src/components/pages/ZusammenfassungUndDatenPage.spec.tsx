@@ -32,7 +32,6 @@ describe("Zusammenfassung und Daten Page", () => {
 
     render(<ZusammenfassungUndDatenPage />);
 
-    expect(screen.queryByLabelText("Zusammenfassung")).not.toBeInTheDocument();
     expect(screen.getByText("Es wurde noch kein Plan erstellt"));
   });
 

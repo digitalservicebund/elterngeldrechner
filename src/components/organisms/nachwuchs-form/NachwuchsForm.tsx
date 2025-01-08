@@ -111,9 +111,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
   const geschwisterKindHeadingBaseIdentifier = useId();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} name="Ihr Nachwuchs" noValidate>
-      <h2>Ihr Nachwuchs</h2>
-
+    <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <CustomDate
         control={control}
         rules={{

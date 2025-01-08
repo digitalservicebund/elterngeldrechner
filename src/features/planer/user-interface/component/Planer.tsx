@@ -87,9 +87,9 @@ export function Planer({
       aria-labelledby={headingIdentifier}
       aria-describedby={descriptionIdentifier}
     >
-      <h2 id={headingIdentifier} className="mb-10">
-        Monatsplaner
-      </h2>
+      <h3 id={headingIdentifier} className="sr-only">
+        Planer Anwendung
+      </h3>
 
       <p id={descriptionIdentifier}>
         Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden Monat

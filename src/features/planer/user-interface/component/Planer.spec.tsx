@@ -14,7 +14,7 @@ describe("Planer", () => {
   it("shows a section", () => {
     render(<Planer {...ANY_PROPS} />);
 
-    expect(screen.getByLabelText("Monatsplaner")).toBeVisible();
+    expect(screen.getByLabelText("Planer Anwendung")).toBeVisible();
   });
 
   it("shows all relevant sections of the Planer", () => {

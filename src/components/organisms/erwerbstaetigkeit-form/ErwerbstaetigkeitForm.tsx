@@ -46,29 +46,25 @@ export function ErwerbstaetigkeitForm({
   }, [reset, antragssteller, getValues]);
 
   return (
-    <>
-      <h2 className="mb-10">Erwerbstätigkeit</h2>
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Split>
+          <ErwerbstaetigkeitFormElternteil
+            elternteil="ET1"
+            elternteilName={ET1}
+            antragssteller={antragssteller}
+          />
 
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <Split>
+          {antragssteller === "FuerBeide" && (
             <ErwerbstaetigkeitFormElternteil
-              elternteil="ET1"
-              elternteilName={ET1}
+              elternteil="ET2"
+              elternteilName={ET2}
               antragssteller={antragssteller}
             />
-
-            {antragssteller === "FuerBeide" && (
-              <ErwerbstaetigkeitFormElternteil
-                elternteil="ET2"
-                elternteilName={ET2}
-                antragssteller={antragssteller}
-              />
-            )}
-          </Split>
-          <ButtonGroup onClickBackButton={handlePageBack} />
-        </form>
-      </FormProvider>
-    </>
+          )}
+        </Split>
+        <ButtonGroup onClickBackButton={handlePageBack} />
+      </form>
+    </FormProvider>
   );
 }

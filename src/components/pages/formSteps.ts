@@ -1,5 +1,5 @@
 export interface FormStep {
-  text: string;
+  heading: string;
   route: string;
 }
 
@@ -7,31 +7,31 @@ type FormSteps = Record<string, FormStep>;
 
 export const formSteps: FormSteps = {
   allgemeinAngaben: {
-    text: "Allgemeine Angaben",
+    heading: "Allgemeine Angaben",
     route: "/allgemeine-angaben",
   },
   nachwuchs: {
-    text: "Ihr Nachwuchs",
+    heading: "Ihr Nachwuchs",
     route: "/nachwuchs",
   },
   erwerbstaetigkeit: {
-    text: "Erwerbstätigkeit",
+    heading: "Erwerbstätigkeit",
     route: "/erwerbstaetigkeit",
   },
   einkommen: {
-    text: "Ihr Einkommen",
+    heading: "Ihr Einkommen",
     route: "/einkommen",
   },
   elterngeldvarianten: {
-    text: "Elterngeldvarianten",
+    heading: "Elterngeldvarianten",
     route: "/elterngeldvarianten",
   },
   rechnerUndPlaner: {
-    text: "Rechner und Planer",
+    heading: "Monatsplaner",
     route: "/rechner-planer",
   },
   zusammenfassungUndDaten: {
-    text: "Zusammenfassung",
+    heading: "Zusammenfassung",
     route: "/zusammenfassung-und-daten",
   },
 };

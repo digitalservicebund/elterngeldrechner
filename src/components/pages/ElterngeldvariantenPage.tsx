@@ -1,4 +1,4 @@
-import { ReactNode, useId } from "react";
+import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import { Button } from "@/components/atoms";
@@ -6,8 +6,6 @@ import { ElterngeldvariantenDescriptions } from "@/components/organisms/elternge
 import { Page } from "@/components/organisms/page";
 
 export function ElterngeldvariantenPage(): ReactNode {
-  const descriptionIdentifier = useId();
-
   const navigate = useNavigate();
   const navigateToPreviousStep = () => navigate(formSteps.einkommen.route);
   const navigateToNextStep = () => navigate(formSteps.rechnerUndPlaner.route);
@@ -15,13 +13,8 @@ export function ElterngeldvariantenPage(): ReactNode {
   return (
     <Page step={formSteps.elterngeldvarianten}>
       <div className="flex flex-wrap justify-between gap-y-80">
-        <section
-          className="flex basis-full flex-col gap-32"
-          aria-describedby={descriptionIdentifier}
-        >
-          <h2>Elterngeldvarianten</h2>
-
-          <p id={descriptionIdentifier}>
+        <div className="flex basis-full flex-col gap-32">
+          <p>
             Elterngeld gibt es in 3 Varianten, die hier näher erklärt werden.
             Alle 3 Varianten können Sie im nächsten Schritt im Planer
             miteinander kombinieren. Paare können die Monate flexibel
@@ -31,7 +24,7 @@ export function ElterngeldvariantenPage(): ReactNode {
           </p>
 
           <ElterngeldvariantenDescriptions />
-        </section>
+        </div>
 
         <Button
           buttonStyle="secondary"

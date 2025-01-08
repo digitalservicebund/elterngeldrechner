@@ -17,7 +17,6 @@ import {
   RouterProvider,
   createMemoryRouter,
 } from "react-router-dom";
-import { AriaLogProvider } from "@/components/atoms";
 import { AppStore, RootState, reducers } from "@/redux";
 import { initialStepConfigurationState } from "@/redux/configurationSlice";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
@@ -44,11 +43,9 @@ function TestWrapper({ store, children }: TestWrapperProps) {
   const router = createMemoryRouter(routes, { initialEntries: ["/"] });
 
   return (
-    <AriaLogProvider>
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
-    </AriaLogProvider>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 }
 

@@ -38,39 +38,36 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
   const handlePageBack = () => navigate("/erwerbstaetigkeit");
 
   return (
-    <>
-      <h2 className="mb-10">Ihr Einkommen</h2>
-      <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
-          <YesNoRadio
-            className="mb-32"
-            legend={
-              <div className="flex items-center justify-between">
-                <span>
-                  Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen
-                  von mehr als {amountLimitEinkommen.toLocaleString()} Euro?
-                </span>
-                <InfoDialog info={infoTexts.limitEinkommenUeberschritten} />
-              </div>
-            }
-            register={methods.register}
-            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-            name="limitEinkommenUeberschritten"
-            errors={errors}
-            required
-          />
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
+        <YesNoRadio
+          className="mb-32"
+          legend={
+            <div className="flex items-center justify-between">
+              <span>
+                Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen
+                von mehr als {amountLimitEinkommen.toLocaleString()} Euro?
+              </span>
+              <InfoDialog info={infoTexts.limitEinkommenUeberschritten} />
+            </div>
+          }
+          register={methods.register}
+          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+          name="limitEinkommenUeberschritten"
+          errors={errors}
+          required
+        />
 
-          <Split>
-            <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
+        <Split>
+          <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
 
-            {antragstellende === "FuerBeide" && (
-              <EinkommenFormElternteil elternteil="ET2" elternteilName={ET2} />
-            )}
-          </Split>
+          {antragstellende === "FuerBeide" && (
+            <EinkommenFormElternteil elternteil="ET2" elternteilName={ET2} />
+          )}
+        </Split>
 
-          <ButtonGroup onClickBackButton={handlePageBack} />
-        </form>
-      </FormProvider>
-    </>
+        <ButtonGroup onClickBackButton={handlePageBack} />
+      </form>
+    </FormProvider>
   );
 }

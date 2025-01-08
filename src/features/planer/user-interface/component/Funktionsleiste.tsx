@@ -24,9 +24,9 @@ export function Funktionsleiste({
       className={classNames("flex flex-wrap gap-32", className)}
       aria-labelledby={headingIdentifier}
     >
-      <h3 id={headingIdentifier} className="sr-only">
+      <h4 id={headingIdentifier} className="sr-only">
         Funktionsleiste
-      </h3>
+      </h4>
 
       <Button
         buttonStyle="link"

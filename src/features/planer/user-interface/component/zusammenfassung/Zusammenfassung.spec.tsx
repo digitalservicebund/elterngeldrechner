@@ -2,12 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { Zusammenfassung } from "./Zusammenfassung";
 
 describe("Zusammenfassung", () => {
-  it("shows a section for the Zusammenfassung", () => {
-    render(<Zusammenfassung {...ANY_PROPS} />);
-
-    expect(screen.getByLabelText("Zusammenfassung")).toBeVisible();
-  });
-
   it("shows a section for the Planungsübersicht", () => {
     render(<Zusammenfassung {...ANY_PROPS} />);
 

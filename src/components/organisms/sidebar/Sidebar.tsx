@@ -25,7 +25,7 @@ export function Sidebar({ currentStep }: Props) {
   const totalStepCount = Object.entries(formSteps).length;
 
   const toggleButtonIdentifier = useId();
-  const toggleButtonAriaLabel = `Schritt ${currentStepNumber} von ${totalStepCount}: ${currentStep.text}`;
+  const toggleButtonAriaLabel = `Schritt ${currentStepNumber} von ${totalStepCount}: ${currentStep.heading}`;
 
   const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ export function Sidebar({ currentStep }: Props) {
           <strong>
             {currentStepNumber}/{totalStepCount}
           </strong>
-          {currentStep.text}
+          {currentStep.heading}
         </span>
 
         {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
@@ -82,7 +82,7 @@ export function Sidebar({ currentStep }: Props) {
                 aria-current={ariaCurrent}
                 disabled={!isNavigatable}
               >
-                {step.text}
+                {step.heading}
               </button>
             </li>
           );

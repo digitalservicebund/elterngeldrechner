@@ -61,9 +61,7 @@ export function AllgemeineAngabenForm({
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <h2 className="mb-10">Allgemeine Angaben</h2>
-
-      <section className="-mt-32" aria-labelledby={elternHeadingIdentifier}>
+      <section aria-labelledby={elternHeadingIdentifier}>
         <h3 id={elternHeadingIdentifier} className="mb-10">
           Eltern
         </h3>

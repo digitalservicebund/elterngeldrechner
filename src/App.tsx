@@ -3,7 +3,6 @@ import {
   RouterProvider,
   createMemoryRouter,
 } from "react-router-dom";
-import { AriaLogProvider } from "@/components/atoms";
 import AllgemeineAngabenPage from "@/components/pages/AllgemeineAngabenPage";
 import EinkommenPage from "@/components/pages/EinkommenPage";
 import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenPage";
@@ -34,11 +33,7 @@ export function App({ elternGeldDigitalWizardUrl }: Props) {
     initialEntries: [formSteps.allgemeinAngaben.route],
   });
 
-  return (
-    <AriaLogProvider>
-      <RouterProvider router={router} />
-    </AriaLogProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 const ROUTES: RouteObject[] = [

@@ -35,9 +35,9 @@ export function Gesamtsummenanzeige<A extends Ausgangslage>({
       )}
       aria-labelledby={headingIdentifier}
     >
-      <h3 id={headingIdentifier} className="sr-only">
+      <h4 id={headingIdentifier} className="sr-only">
         Gesamtsumme
-      </h3>
+      </h4>
 
       {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => (
         <ElterngeldFuerElternteil

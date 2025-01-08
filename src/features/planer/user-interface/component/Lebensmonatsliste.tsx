@@ -86,9 +86,9 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
       aria-labelledby={headingIdentifier}
       tabIndex={-1}
     >
-      <h3 id={headingIdentifier} className="sr-only">
+      <h4 id={headingIdentifier} className="sr-only">
         Lebensmonate
-      </h3>
+      </h4>
 
       {Lebensmonatszahlen.map((lebensmonatszahl) => {
         const lebensmonat =

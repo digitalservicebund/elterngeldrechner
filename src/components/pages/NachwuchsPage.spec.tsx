@@ -298,7 +298,7 @@ describe("Submitting the form", () => {
     await userEvent.click(screen.getByText("Weiter"));
 
     const errorMessage = screen.getByText(
-      "Das Geschwisterkind muss älter als das Kind oben sein.",
+      "Wählen Sie ein anderes Datum. Geschwister müssen älter sein als das neue Kind.",
     );
     expect(errorMessage).toBeInTheDocument();
   });

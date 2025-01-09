@@ -103,7 +103,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
     if (geburtGeschwisterKind < geburtKind) {
       return true;
     } else {
-      return "Das Geschwisterkind muss älter als das Kind oben sein.";
+      return "Wählen Sie ein anderes Datum. Geschwister müssen älter sein als das neue Kind.";
     }
   };
 

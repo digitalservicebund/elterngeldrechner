@@ -19,6 +19,7 @@
     }
 
     &--error {
+      @apply mb-0;
       @apply border-danger;
     }
 

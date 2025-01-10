@@ -66,7 +66,7 @@
 
       &--current {
         &:before {
-          @apply bg-primary-light;
+          @apply border-[0.140625rem] border-primary bg-primary-light leading-[1.71875rem];
 
           @media (max-width: 481px) {
             @apply bg-white;

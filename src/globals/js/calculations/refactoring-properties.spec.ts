@@ -105,81 +105,72 @@ import {
  * act on these types. For simplicity, any other type (including the same named
  * types in the refactored code) remain as they are.
  *
- * The number of runs (`numRuns`) MIGHT be adapted during actual refactoring
- * work to shorten the feedback cycles. In the end, a refactoring MUST be
- * verified using at least the original configuration to gain enough confidence
- * (i.e. 100.000 runs, which takes about 7 minutes). More runs might be used to
- * gain further confidence depending on the refactoring.
- * The number of runs is reduced for the continuous integration pipeline, just
- * because of the test duration
- * To run the tests, the environment variable `ALLOW_EXTREMELY_SLOW_TESTS` must
- * be set to `true`. This is a current workaround for the shortcomings of the
- * test runner to provide more suitable alternatives.
+ * The number of runs (`numRuns`) SHOULD be adapted during actual refactoring
+ * work to improve the feedback significance or to shorten feedback cycles. In
+ * the end, a refactoring MUST be verified using a high number of runs to gain
+ * enough confidence (e.g. 100.000 runs, which takes about 7 minutes). The
+ * default is a sensitive value to ensure the tests can always run with the rest
+ * of the test suite. This avoids making it a special slow test case that gets
+ * sometimes skipped, opening a window for unintended breaks.
  */
 describe("tests to verify properties during refactoring", () => {
-  it.runIf(extremelySlowTestsAreAllowed())(
-    "calculates the same result the original/legacy implementation",
-    () => {
-      assertProperty(
-        property(
-          arbitraryPersoenlicheDatenRaw(),
-          arbitraryFinanzdatenRaw(),
-          arbitraryPlanungsdatenRaw(),
-          arbitraryLohnsteuerjahr(),
-          (
-            persoenlicheDatenRaw,
-            finanzdatenRaw,
-            planungsdatenRaw,
-            lohnsteuerjahr,
-          ) => {
-            const elterngelddaten = {
-              persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
-              finanzDaten: finanzDatenFrom(finanzdatenRaw),
-              planungsDaten: planungsDatenFrom(planungsdatenRaw),
-            };
+  it("calculates the same result the original/legacy implementation", () => {
+    assertProperty(
+      property(
+        arbitraryPersoenlicheDatenRaw(),
+        arbitraryFinanzdatenRaw(),
+        arbitraryPlanungsdatenRaw(),
+        arbitraryLohnsteuerjahr(),
+        (
+          persoenlicheDatenRaw,
+          finanzdatenRaw,
+          planungsdatenRaw,
+          lohnsteuerjahr,
+        ) => {
+          const elterngelddaten = {
+            persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
+            finanzDaten: finanzDatenFrom(finanzdatenRaw),
+            planungsDaten: planungsDatenFrom(planungsdatenRaw),
+          };
 
-            const result = new EgrCalculation().calculateElternGeld(
-              elterngelddaten,
+          const result = new EgrCalculation().calculateElternGeld(
+            elterngelddaten,
+            lohnsteuerjahr,
+          );
+
+          const transformedResultForComparison = transformDataRecursively(
+            result,
+            [convertBigsToNumbers, replaceNullGeschwisterbonusDeadline],
+            elterngelddaten,
+          );
+
+          const originalResult =
+            new OriginalEgrCalculation().calculateElternGeld(
+              {
+                persoenlicheDaten:
+                  originalPersoenlicheDatenFrom(persoenlicheDatenRaw),
+                finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
+                planungsDaten: originalPlanungsDatenFrom(planungsdatenRaw),
+              },
               lohnsteuerjahr,
             );
 
-            const transformedResultForComparison = transformDataRecursively(
-              result,
-              [convertBigsToNumbers, replaceNullGeschwisterbonusDeadline],
+          const transformedOriginalResultForComparison =
+            transformDataRecursively(
+              originalResult,
+              [convertBigsToNumbers],
               elterngelddaten,
             );
 
-            const originalResult =
-              new OriginalEgrCalculation().calculateElternGeld(
-                {
-                  persoenlicheDaten:
-                    originalPersoenlicheDatenFrom(persoenlicheDatenRaw),
-                  finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
-                  planungsDaten: originalPlanungsDatenFrom(planungsdatenRaw),
-                },
-                lohnsteuerjahr,
-              );
-
-            const transformedOriginalResultForComparison =
-              transformDataRecursively(
-                originalResult,
-                [convertBigsToNumbers],
-                elterngelddaten,
-              );
-
-            return assert.deepStrictEqual(
-              transformedResultForComparison,
-              transformedOriginalResultForComparison,
-            );
-          },
-        ),
-        {
-          numRuns: runsInContinuousIntegrationPipeline() ? 30000 : 100000,
-          endOnFailure: true,
+          return assert.deepStrictEqual(
+            transformedResultForComparison,
+            transformedOriginalResultForComparison,
+          );
         },
-      );
-    },
-  );
+      ),
+      { numRuns: 5000, endOnFailure: true },
+    );
+  });
 
   describe("transform data recursively", () => {
     it("provides the same output as input if no transformer given", () => {
@@ -728,12 +719,4 @@ function arbitraryAnything(): Arbitrary<unknown> {
     arbitraryArray(arbitraryPrimitive()),
     arbitraryObject(),
   );
-}
-
-function extremelySlowTestsAreAllowed(): boolean {
-  return import.meta.env.ALLOW_EXTREMELY_SLOW_TESTS === "true";
-}
-
-function runsInContinuousIntegrationPipeline(): boolean {
-  return import.meta.env.CI === "true";
 }

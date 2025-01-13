@@ -87,7 +87,7 @@ import {
  * having the lack of proper type-driven interface design.
  *
  * The output data MUST be compared in the most reliable way possible. In best
- * case it SHOULD not transform the output data at all to avoid unrefracting
+ * case it SHOULD NOT transform the output data at all to avoid unrefracting
  * issues.
  * Also the algorithm to compare the output data SHOULD be based on
  * a solid library or platform native functionality. This MIGHT be weaken if
@@ -168,7 +168,7 @@ describe("tests to verify properties during refactoring", () => {
     it("provides the same output as input if no transformer given", () => {
       assertProperty(
         property(arbitraryAnything(), (data) => {
-          const transformedData = transformDataRecursively(data, []);
+          const transformedData = transformDataRecursively(data, [], null);
 
           assert.deepStrictEqual(transformedData, data);
         }),
@@ -180,7 +180,11 @@ describe("tests to verify properties during refactoring", () => {
         property(arbitraryAnything(), (data) => {
           const identity = (data: unknown) => data;
 
-          const transformedData = transformDataRecursively(data, [identity]);
+          const transformedData = transformDataRecursively(
+            data,
+            [identity],
+            null,
+          );
 
           assert.deepStrictEqual(transformedData, data);
         }),
@@ -202,10 +206,11 @@ describe("tests to verify properties during refactoring", () => {
         e: { f: 4, g: "dolor" },
       };
 
-      const transformedData = transformDataRecursively(data, [
-        doubleNumbers,
-        replaceFooWithBar,
-      ]);
+      const transformedData = transformDataRecursively(
+        data,
+        [doubleNumbers, replaceFooWithBar],
+        null,
+      );
 
       expect(transformedData).toStrictEqual({
         a: "bar",
@@ -215,21 +220,40 @@ describe("tests to verify properties during refactoring", () => {
         e: { f: 8, g: "dolor" },
       });
     });
+
+    it("can transform data based on given context", () => {
+      const replaceFooByContext = (
+        data: unknown,
+        contextInformation: { fooReplacement: string },
+      ) => (data === "foo" ? contextInformation.fooReplacement : data);
+
+      const data = { a: "foo", b: ["foo", "baz"] };
+
+      const transformedData = transformDataRecursively(
+        data,
+        [replaceFooByContext],
+        { fooReplacement: "bar" },
+      );
+
+      expect(transformedData).toStrictEqual({ a: "bar", b: ["bar", "baz"] });
+    });
   });
 });
 
-function transformDataRecursively(
+function transformDataRecursively<ContextInformation>(
   data: unknown,
-  transformers: DataTransformer[],
+  transformers: DataTransformer<ContextInformation>[],
+  contextInformation: ContextInformation,
 ): unknown {
   const transformedData = transformers.reduce(
-    (transformedData, transformer) => transformer(transformedData),
+    (transformedData, transformer) =>
+      transformer(transformedData, contextInformation),
     data,
   );
 
   if (Array.isArray(transformedData)) {
     return transformedData.map((entry) =>
-      transformDataRecursively(entry, transformers),
+      transformDataRecursively(entry, transformers, contextInformation),
     );
   } else if (
     typeof transformedData === "object" &&
@@ -239,7 +263,7 @@ function transformDataRecursively(
     return Object.fromEntries(
       Object.entries(transformedData).map(([key, value]) => [
         key,
-        transformDataRecursively(value, transformers),
+        transformDataRecursively(value, transformers, contextInformation),
       ]),
     );
   } else {
@@ -263,6 +287,10 @@ function convertBigsToNumbers(data: unknown): unknown {
 }
 
 type DataTransformer = (data: unknown) => unknown;
+
+type DataTransformer<ContextInformation> =
+  | ((data: unknown) => unknown)
+  | ((data: unknown, contextInformation: ContextInformation) => unknown);
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   return {

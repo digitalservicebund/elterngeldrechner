@@ -1,383 +1,380 @@
-import { DateTime } from "luxon";
+import { describe, expect, it, test } from "vitest";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import { Kind } from "./model";
 
 describe("eg-zwischen-ergebnis-algorithmus", () => {
-  describe("should calculate ende bonus u2", () => {
-    describe.each([
-      ["2023-01-01", "2022-12-31"],
-      ["2023-01-02", "2023-01-01"],
-      ["2022-01-31", "2022-01-30"],
-      ["2022-03-01", "2022-02-28"],
-      ["2020-03-01", "2020-02-29"],
+  describe("should calculate ende bonus u3", () => {
+    it("ohne geschwister", () => {
+      const geschwister: Kind[] = [];
+
+      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
+        geschwister,
+      );
+
+      expect(date).toBeUndefined();
+    });
+
+    test.each([
+      [new Date("2020-02-14"), new Date("2023-02-13")],
+      [new Date("2020-02-01"), new Date("2023-01-31")],
+      [new Date("2020-01-01"), new Date("2022-12-31")],
+      [new Date("2020-03-01"), new Date("2023-02-28")],
+      [new Date("2021-03-01"), new Date("2024-02-29")],
     ])(
-      "when geburt of child is %p, then ende u2 is %p",
-      (geburtIsoDate: string, endeU2IsoDate: string) => {
-        it("ohne geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [];
+      "when geburt of sister is %s, then ende u3 is %s",
+      (geburtGeschw1: Date, endeU3: Date) => {
+        const geschwister: Kind[] = [
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: false,
+          },
+        ];
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u2(
-            geburt,
-            geschwister,
-          );
+        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
+          geschwister,
+        );
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU2IsoDate);
-        });
+        expect(date).toEqual(endeU3);
       },
     );
 
-    describe.each([
-      ["2023-01-01", "2020-01-14", "2023-01-31"],
-      ["2023-01-05", "2020-01-14", "2023-02-04"],
-      ["2023-01-01", "2020-01-03", "2023-01-31"],
-      ["2023-01-01", "2020-01-02", "2023-01-31"],
-      ["2023-01-01", "2020-01-01", "2023-01-31"],
-      ["2023-01-01", "2019-12-31", "2022-12-31"],
-      ["2023-01-01", "2019-12-30", "2022-12-31"],
-      ["2023-01-31", "2019-12-30", "2023-01-30"],
-      ["2023-01-28", "2020-01-28", "2023-02-27"],
-      ["2023-01-29", "2020-01-29", "2023-02-28"],
-      ["2023-01-30", "2020-01-30", "2023-02-28"],
-      ["2023-01-31", "2020-01-31", "2023-02-28"],
-      ["2024-01-31", "2021-01-31", "2024-02-29"],
-      ["2023-02-28", "2020-02-28", "2023-03-27"],
-      ["2024-02-29", "2021-02-28", "2024-02-28"],
-      ["2023-01-05", "2023-01-14", "2023-01-04"],
-      ["2023-01-01", "2020-12-31", "2023-12-31"],
-      ["2023-01-01", "2022-06-01", "2025-06-30"],
-      ["2023-02-01", "2022-07-01", "2025-07-31"],
-      ["2023-03-01", "2022-08-01", "2025-08-31"],
-      ["2023-01-30", "2022-01-30", "2025-02-28"],
-      ["2023-01-30", "2021-01-30", "2024-02-29"],
+    test.each([
+      [new Date("2020-02-14"), new Date("1999-02-14"), new Date("2023-02-13")],
+      [new Date("1999-02-14"), new Date("2020-02-14"), new Date("2023-02-13")],
+      [new Date("2020-02-14"), new Date("2020-02-14"), new Date("2023-02-13")],
+      [new Date("2020-02-14"), new Date("2020-02-15"), new Date("2023-02-14")],
+      [new Date("2020-02-14"), new Date("2020-03-14"), new Date("2023-03-13")],
     ])(
-      "when geburt of child is %p and sister is %p, then ende u2 is %p",
-      (
-        geburtIsoDate: string,
-        geburtGeschw1IsoDate: string,
-        endeU2IsoDate: string,
-      ) => {
-        it("mit geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-          ];
+      "when geburt of child is %s, sister is %s and brother is %s, then ende u3 is %s",
+      (geburtGeschw1: Date, geburtGeschw2: Date, endeU3: Date) => {
+        const geschwister: Kind[] = [
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: false,
+          },
+          {
+            geburtsdatum: geburtGeschw2,
+            istBehindert: false,
+          },
+        ];
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u2(
-            geburt,
-            geschwister,
-          );
+        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
+          geschwister,
+        );
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU2IsoDate);
-        });
-      },
-    );
-
-    describe.each([
-      ["2023-01-01", "2020-01-14", "2019-01-14", "2023-01-31"],
-      ["2023-01-05", "2020-01-01", "2020-01-14", "2023-02-04"],
-      ["2023-01-01", "2018-01-03", "2020-01-03", "2023-01-31"],
-      ["2024-01-31", "2020-01-31", "2021-01-31", "2024-02-29"],
-      ["2023-02-28", "2020-02-28", "1980-02-28", "2023-03-27"],
-      ["2024-02-29", "2021-02-28", "2021-02-28", "2024-02-28"],
-      ["2023-01-05", "2023-04-01", "2025-04-01", "2023-01-04"],
-    ])(
-      "when geburt of child is %p, sister is %p and brother is %p, then ende u2 is %p",
-      (
-        geburtIsoDate: string,
-        geburtGeschw1IsoDate: string,
-        geburtGeschw2IsoDate: string,
-        endeU2IsoDate: string,
-      ) => {
-        it("mit geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw2IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-          ];
-
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u2(
-            geburt,
-            geschwister,
-          );
-
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU2IsoDate);
-        });
+        expect(date).toEqual(endeU3);
       },
     );
   });
 
   describe("should calculate ende bonus u14", () => {
-    describe.each([
-      ["2023-01-01", "2022-12-31"],
-      ["2023-01-02", "2023-01-01"],
-      ["2022-01-31", "2022-01-30"],
-      ["2022-03-01", "2022-02-28"],
-      ["2020-03-01", "2020-02-29"],
+    it("ohne geschwister", () => {
+      const geschwister: Kind[] = [];
+
+      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
+        geschwister,
+      );
+
+      expect(date).toBeUndefined();
+    });
+
+    it("is undefined if there is no Geschwisterkind with Behinderung", () => {
+      const geschwister: Kind[] = [
+        { geburtsdatum: new Date(), istBehindert: false },
+        { geburtsdatum: new Date(), istBehindert: false },
+      ];
+
+      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
+        geschwister,
+      );
+
+      expect(date).toBeUndefined();
+    });
+
+    test.each([
+      [new Date("2020-02-14"), new Date("2034-02-13")],
+      [new Date("2020-02-01"), new Date("2034-01-31")],
+      [new Date("2020-01-01"), new Date("2033-12-31")],
+      [new Date("2020-03-01"), new Date("2034-02-28")],
+      [new Date("2022-03-01"), new Date("2036-02-29")],
     ])(
-      "when geburt of child is %p, then ende u14 is %p",
-      (geburtIsoDate: string, endeU14IsoDate: string) => {
-        it("ohne geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [];
+      "when geburt of sister is %s and ist behindert, then ende u14 is %s",
+      (geburtGeschw1: Date, endeU14: Date) => {
+        const geschwister: Kind[] = [
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: true,
+          },
+        ];
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-            geburt,
-            geschwister,
-          );
+        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
+          geschwister,
+        );
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU14IsoDate);
-        });
+        expect(date).toEqual(endeU14);
       },
     );
 
-    describe.each([
-      ["2023-01-01", "2009-01-14", true, "2023-01-31"],
-      ["2023-01-05", "2009-01-14", true, "2023-02-04"],
-      ["2023-01-01", "2009-01-03", true, "2023-01-31"],
-      ["2023-01-01", "2009-01-02", true, "2023-01-31"],
-      ["2023-01-01", "2009-01-01", true, "2023-01-31"],
-      ["2023-01-01", "2009-01-01", false, "2022-12-31"],
-      ["2023-01-01", "2008-12-31", true, "2022-12-31"],
-      ["2023-01-01", "2008-12-30", true, "2022-12-31"],
-      ["2023-01-31", "2008-12-30", true, "2023-01-30"],
-      ["2023-01-28", "2009-01-28", true, "2023-02-27"],
-      ["2023-01-29", "2009-01-29", true, "2023-02-28"],
-      ["2023-01-30", "2009-01-30", true, "2023-02-28"],
-      ["2023-01-31", "2009-01-31", true, "2023-02-28"],
-      ["2023-01-31", "2009-01-31", false, "2023-01-30"],
-      ["2024-01-31", "2010-01-31", true, "2024-02-29"],
-      ["2023-02-28", "2009-02-28", true, "2023-03-27"],
-      ["2024-02-29", "2010-02-28", true, "2024-02-28"],
-      ["2023-01-01", "2024-01-03", true, "2022-12-31"],
+    test.each([
+      [
+        new Date("2009-01-14"),
+        true,
+        new Date("2008-01-14"),
+        true,
+        new Date("2023-01-13"),
+      ],
+      [
+        new Date("2009-01-14"),
+        true,
+        new Date("2009-01-14"),
+        false,
+        new Date("2023-01-13"),
+      ],
+      [
+        new Date("2009-01-01"),
+        true,
+        new Date("2009-01-14"),
+        true,
+        new Date("2023-01-13"),
+      ],
+      [
+        new Date("2007-01-03"),
+        true,
+        new Date("2009-01-03"),
+        true,
+        new Date("2023-01-02"),
+      ],
+      [
+        new Date("2009-01-31"),
+        true,
+        new Date("2010-01-31"),
+        true,
+        new Date("2024-01-30"),
+      ],
+      [
+        new Date("2009-02-28"),
+        true,
+        new Date("1980-02-28"),
+        true,
+        new Date("2023-02-27"),
+      ],
+      [
+        new Date("2010-02-28"),
+        true,
+        new Date("2010-02-28"),
+        true,
+        new Date("2024-02-27"),
+      ],
     ])(
-      "when geburt of child is %p and sister is %p and istBehindert: %p, then ende u14 is %p",
+      "when geburt of sister is %s and istBehindert: %s and brother is %s and istBehindert: %s, then ende u14 is %s",
       (
-        geburtIsoDate: string,
-        geburtGeschw1IsoDate: string,
-        istBehindert: boolean,
-        endeU14IsoDate: string,
-      ) => {
-        it("mit geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: istBehindert,
-            },
-          ];
-
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-            geburt,
-            geschwister,
-          );
-
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU14IsoDate);
-        });
-      },
-    );
-
-    describe.each([
-      ["2023-01-01", "2009-01-14", true, "2008-01-14", true, "2023-01-31"],
-      ["2023-01-01", "2009-01-14", true, "2009-01-14", false, "2023-01-31"],
-      ["2023-01-01", "2009-01-14", false, "2009-01-14", false, "2022-12-31"],
-      ["2023-01-05", "2009-01-01", true, "2009-01-14", true, "2023-02-04"],
-      ["2023-01-01", "2007-01-03", true, "2009-01-03", true, "2023-01-31"],
-      ["2024-01-31", "2009-01-31", true, "2010-01-31", true, "2024-02-29"],
-      ["2023-02-28", "2009-02-28", true, "1980-02-28", true, "2023-03-27"],
-      ["2024-02-29", "2010-02-28", true, "2010-02-28", true, "2024-02-28"],
-    ])(
-      "when geburt of child is %p, sister is %p and istBehindert: %p and brother is %p and istBehindert: %p, then ende u14 is %p",
-      (
-        geburtIsoDate: string,
-        geburtGeschw1IsoDate: string,
+        geburtGeschw1: Date,
         geschw1IstBehindert: boolean,
-        geburtGeschw2IsoDate: string,
+        geburtGeschw2: Date,
         geschw2IstBehindert: boolean,
-        endeU14IsoDate: string,
+        endeU14: Date,
       ) => {
-        it("mit geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: geschw1IstBehindert,
-            },
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw2IsoDate).toJSDate(),
-              istBehindert: geschw2IstBehindert,
-            },
-          ];
+        const geschwister: Kind[] = [
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: geschw1IstBehindert,
+          },
+          {
+            geburtsdatum: geburtGeschw2,
+            istBehindert: geschw2IstBehindert,
+          },
+        ];
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-            geburt,
-            geschwister,
-          );
+        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
+          geschwister,
+        );
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU14IsoDate);
-        });
+        expect(date).toEqual(endeU14);
       },
     );
   });
 
   describe("should calculate ende bonus u6", () => {
-    describe.each([
-      ["2023-01-01", "2022-12-31"],
-      ["2023-01-02", "2023-01-01"],
-      ["2022-01-31", "2022-01-30"],
-      ["2022-03-01", "2022-02-28"],
-      ["2020-03-01", "2020-02-29"],
+    it("ohne geschwister", () => {
+      const geschwister: Kind[] = [];
+
+      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
+        geschwister,
+      );
+
+      expect(date).toBeUndefined();
+    });
+
+    test.each([
+      [new Date("2020-02-14"), new Date("2026-02-13")],
+      [new Date("2020-02-01"), new Date("2026-01-31")],
+      [new Date("2020-01-01"), new Date("2025-12-31")],
+      [new Date("2020-03-01"), new Date("2026-02-28")],
+      [new Date("2022-03-01"), new Date("2028-02-29")],
     ])(
-      "when geburt of child is %p, then ende u6 is %p",
-      (geburtIsoDate: string, endeU2IsoDate: string) => {
-        it("ohne geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [];
+      "when geburt of sister is %s, then ende u6 is %s",
+      (geburtGeschw1: Date, endeU6: Date) => {
+        const geschwister: Kind[] = [
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: false,
+          },
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: false,
+          },
+        ];
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
-            geburt,
-            geschwister,
-          );
+        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
+          geschwister,
+        );
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU2IsoDate);
-        });
+        expect(date).toEqual(endeU6);
       },
     );
 
-    describe.each([
-      ["2023-01-01", "2017-01-14", "2023-01-31"],
-      ["2023-01-05", "2017-01-14", "2023-02-04"],
-      ["2023-01-01", "2017-01-03", "2023-01-31"],
-      ["2023-01-01", "2017-01-02", "2023-01-31"],
-      ["2023-01-01", "2017-01-01", "2023-01-31"],
-      ["2023-01-01", "2016-12-31", "2022-12-31"],
-      ["2023-01-01", "2016-12-30", "2022-12-31"],
-      ["2023-01-31", "2016-12-30", "2023-01-30"],
-      ["2023-01-28", "2017-01-28", "2023-02-27"],
-      ["2023-01-29", "2017-01-29", "2023-02-28"],
-      ["2023-01-30", "2017-01-30", "2023-02-28"],
-      ["2023-01-31", "2017-01-31", "2023-02-28"],
-      ["2024-01-31", "2018-01-31", "2024-02-29"],
-      ["2023-02-28", "2017-02-28", "2023-03-27"],
-      ["2024-02-29", "1018-02-28", "2024-02-28"],
+    test.each([
+      [
+        new Date("2017-01-14"),
+        new Date("2017-01-14"),
+        new Date("2016-01-14"),
+        new Date("2023-01-13"),
+      ],
+      [
+        new Date("2017-01-01"),
+        new Date("2017-01-14"),
+        new Date("2017-01-14"),
+        new Date("2023-01-13"),
+      ],
+      [
+        new Date("2015-01-03"),
+        new Date("2017-01-03"),
+        new Date("2017-01-03"),
+        new Date("2023-01-02"),
+      ],
+      [
+        new Date("2015-01-03"),
+        new Date("2015-01-03"),
+        new Date("2017-01-03"),
+        new Date("2021-01-02"),
+      ],
+      [
+        new Date("2017-01-31"),
+        new Date("2018-01-31"),
+        new Date("2018-01-31"),
+        new Date("2024-01-30"),
+      ],
+      [
+        new Date("2017-02-28"),
+        new Date("2017-02-28"),
+        new Date("1980-02-28"),
+        new Date("2023-02-27"),
+      ],
+      [
+        new Date("2018-02-28"),
+        new Date("2018-02-28"),
+        new Date("2018-02-28"),
+        new Date("2024-02-27"),
+      ],
+      [
+        new Date("2024-01-03"),
+        new Date("2026-01-03"),
+        new Date("2027-01-03"),
+        new Date("2032-01-02"),
+      ],
     ])(
-      "when geburt of child is %p and sister is %p, then ende u6 is %p",
+      "when geburt of sisters are %s and %s and brother is %s, then ende u6 is %s",
       (
-        geburtIsoDate: string,
-        geburtGeschw1IsoDate: string,
-        endeU6IsoDate: string,
+        geburtGeschw1: Date,
+        geburtGeschw2: Date,
+        geburtGeschw3: Date,
+        endeU6: Date,
       ) => {
-        it("mit geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-          ];
+        const geschwister: Kind[] = [
+          {
+            geburtsdatum: geburtGeschw1,
+            istBehindert: false,
+          },
+          {
+            geburtsdatum: geburtGeschw2,
+            istBehindert: false,
+          },
+          {
+            geburtsdatum: geburtGeschw3,
+            istBehindert: false,
+          },
+        ];
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
-            geburt,
-            geschwister,
-          );
+        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
+          geschwister,
+        );
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU6IsoDate);
-        });
+        expect(date).toEqual(endeU6);
       },
     );
+  });
 
-    describe.each([
-      ["2023-01-01", "2017-01-14", "2017-01-14", "2016-01-14", "2023-01-31"],
-      ["2023-01-05", "2017-01-01", "2017-01-14", "2017-01-14", "2023-02-04"],
-      ["2023-01-01", "2015-01-03", "2017-01-03", "2017-01-03", "2023-01-31"],
-      ["2023-01-01", "2015-01-03", "2015-01-03", "2017-01-03", "2022-12-31"],
-      ["2024-01-31", "2017-01-31", "2018-01-31", "2018-01-31", "2024-02-29"],
-      ["2023-02-28", "2017-02-28", "2017-02-28", "1980-02-28", "2023-03-27"],
-      ["2024-02-29", "2018-02-28", "2018-02-28", "2018-02-28", "2024-02-28"],
-      ["2023-01-01", "2024-01-03", "2026-01-03", "2027-01-03", "2022-12-31"],
-    ])(
-      "when geburt of child is %p, sisters are %p and %p and brother is %p, then ende u6 is %p",
-      (
-        geburtIsoDate: string,
-        geburtGeschw1IsoDate: string,
-        geburtGeschw2IsoDate: string,
-        geburtGeschw3IsoDate: string,
-        endeU6IsoDate: string,
-      ) => {
-        it("mit geschwister", () => {
-          // given
-          const geburt = DateTime.fromISO(geburtIsoDate).toJSDate();
-          const geschwister: Kind[] = [
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw1IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw2IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-            {
-              geburtsdatum: DateTime.fromISO(geburtGeschw3IsoDate).toJSDate(),
-              istBehindert: false,
-            },
-          ];
+  describe("determine deadline for Geschwisterbonus", () => {
+    const algorithm = new EgZwischenErgebnisAlgorithmus();
 
-          // when
-          const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
-            geburt,
-            geschwister,
-          );
+    it("returns null if no Geschwister", () => {
+      const geschwister: Kind[] = [];
+      const geburtsdatum = new Date();
 
-          // then
-          expect(date).not.toBeUndefined();
-          expect(DateTime.fromJSDate(date).toISODate()).toBe(endeU6IsoDate);
-        });
-      },
-    );
+      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+        geschwister,
+        geburtsdatum,
+      );
+
+      expect(deadline).toBeNull();
+    });
+
+    it("returns null if all Geschwister are too old for any bonus", () => {
+      const geschwister = [
+        { geburtsdatum: new Date("2016-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2013-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2005-01-02"), istBehindert: true },
+      ];
+      const geburtsdatum = new Date("2020-01-01");
+
+      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+        geschwister,
+        geburtsdatum,
+      );
+
+      expect(deadline).toBeNull();
+    });
+
+    it("uses the only deadline that ends after the Geburtstag", () => {
+      const geschwister = [
+        { geburtsdatum: new Date("2016-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2015-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2005-01-02"), istBehindert: true },
+      ];
+      const geburtsdatum = new Date("2020-01-01");
+
+      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+        geschwister,
+        geburtsdatum,
+      );
+
+      expect(deadline).toEqual(new Date("2021-01-01"));
+    });
+
+    it("uses the latest deadline that lasts the longest", () => {
+      const geschwister = [
+        { geburtsdatum: new Date("2017-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2015-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2008-01-02"), istBehindert: true },
+      ];
+      const geburtsdatum = new Date("2020-01-01");
+
+      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+        geschwister,
+        geburtsdatum,
+      );
+
+      expect(deadline).toEqual(new Date("2022-01-01"));
+    });
   });
 });

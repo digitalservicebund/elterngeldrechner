@@ -32,16 +32,27 @@ npm run build
 As already stated, this code should not been touched at all. In the best case.
 Any adaption of the algorithm can have an effect on the output. Which would
 demote the property testing for refactoring (or make them actually useless).
+Anyhow, there are exceptions to actually maintain its purpose of property
+testing.
 
-Anyhow, there might be exceptions to actually maintain its purpose of property
-testing. Such an exception is for example the tax calculation. It used to be an
-external dependency doing so, but had to be replaced with a custom
-implementation. This in itself was/is already a deviation from the original.
-However, because of this you can argue that the tax calculation is not part of
-the Elterngeld algorithm itself. In fact it is known that we might have to apply
-fixes to the tax calculation. Which will let the refactoring tests fail. So it
-must be allowed to update this part of the code with a copy from the
-applications code.
+The most important exceptions are bug fixes. When a bug gets reported
+and fixed for the production code, the original code must be fixed too. This can
+be tough, as both code bases could have deviated from each other over time. It
+must be the goal to implement the most minimal fix possible in the original
+code. The production code might implement plenty more improvements around the
+bug fix.
+
+Another exception is the tax calculation. It used to be an external dependency
+doing so, but had to be replaced with a custom implementation. This in itself
+was/is already a deviation from the original. However, because of this you can
+argue that the tax calculation is not part of the Elterngeld algorithm itself.
+In fact it is known that we might have to apply fixes to the tax calculation.
+Which will let the refactoring tests fail. So it must be allowed to update this
+part of the code with a copy from the applications code.
+
+### List of Bug Fixes
+
+- the deadline for the bonus based on siblings was wrongly calculated
 
 ## Continuous Integration
 

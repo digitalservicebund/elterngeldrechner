@@ -1,5 +1,4 @@
 import Big from "big.js";
-import { DateTime } from "luxon";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import {
   Einkommen,
@@ -17,9 +16,7 @@ import {
   RATE_BONUS,
 } from "./model/egr-berechnung-param-id";
 import {
-  dateWithoutTimeOf,
-  daysBetween,
-  plusDays,
+  minusDays,
   plusYears,
 } from "./common/date-util";
 
@@ -68,15 +65,10 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     const rate_bonus: Big = RATE_BONUS;
     const min_geschwisterbonus: Big = MIN_GESCHWISTERBONUS;
     if (ind_geschw) {
-      ende_bonus_u2_final = dateWithoutTimeOf(
-        this.ende_bonus_u2(geburt, geschw),
-      );
-      ende_bonus_u14_final = dateWithoutTimeOf(
-        this.ende_bonus_u14(geburt, geschw),
-      );
-      ende_bonus_u6_final = dateWithoutTimeOf(
-        this.ende_bonus_u6(geburt, geschw),
-      );
+      ende_bonus_u2_final = this.ende_bonus_u2(geburt, geschw);
+      ende_bonus_u14_final = this.ende_bonus_u14(geburt, geschw);
+      ende_bonus_u6_final = this.ende_bonus_u6(geburt, geschw);
+
       if (
         ende_bonus_u2_final >= ende_bonus_u14_final &&
         ende_bonus_u2_final >= ende_bonus_u6_final &&
@@ -96,11 +88,11 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       ) {
         ende = ende_bonus_u14_final;
       } else {
-        ende = geburt;
+        ende = minusDays(geburt, 1);
       }
     }
     if (ende === undefined || ende < geburt) {
-      ende = geburt;
+      ende = minusDays(geburt, 1);
     }
     if (
       status_et === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI ||
@@ -116,7 +108,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     } else {
       mehrlingszuschlag = BIG_ZERO;
     }
-    if (ende !== undefined && ende > geburt) {
+    if (ende !== undefined && ende >= geburt) {
       geschwisterbonus = fMax(
         elterngeldbasis.mul(rate_bonus),
         min_geschwisterbonus,
@@ -139,9 +131,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   }
 
   public ende_bonus_u6(geburt: Date, geschw: Kind[]): Date {
-    const geschw_jung = this.fktZweitMax(
-      this.onlyGeschwisterVorGeburt(geburt, geschw),
-    );
+    const geschw_jung = this.fktZweitMax(geschw);
     return this.ende_bonus(geburt, geschw_jung, 6);
   }
 
@@ -159,9 +149,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       }
     });
     // jüngstes Kind finden (ausser Neugeborenes)
-    const geschw_jung = this.fktMax(
-      this.onlyGeschwisterVorGeburt(geburt, geschw_b),
-    );
+    const geschw_jung = this.fktMax(geschw_b);
     return this.ende_bonus(geburt, geschw_jung, 14);
   }
 
@@ -190,17 +178,8 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
    */
   public ende_bonus_u2(geburt: Date, geschw: Kind[]): Date {
     // jüngstes Kind finden (ausser Neugeborenes)
-    const geschw_jung = this.fktMax(
-      this.onlyGeschwisterVorGeburt(geburt, geschw),
-    );
-
+    const geschw_jung = this.fktMax(geschw);
     return this.ende_bonus(geburt, geschw_jung, 3);
-  }
-
-  private onlyGeschwisterVorGeburt(geburt: Date, geschw: Kind[]): Kind[] {
-    return geschw.filter((value) => {
-      return value.geburtsdatum !== undefined && value.geburtsdatum < geburt;
-    });
   }
 
   private ende_bonus(
@@ -208,32 +187,10 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     geburtstag_geschw: Date | undefined,
     bonusYears: number,
   ): Date {
-    let zeit_bis_ende_bonus_days: number = -1;
     if (geburtstag_geschw !== undefined) {
-      const bonus_geb_geschw_jung = plusYears(geburtstag_geschw, bonusYears);
-      if (bonus_geb_geschw_jung >= geburt) {
-        zeit_bis_ende_bonus_days = daysBetween(geburt, bonus_geb_geschw_jung);
-      }
+      return minusDays(plusYears(geburtstag_geschw, bonusYears), 1);
+    } else {
+      return minusDays(geburt, 1);
     }
-
-    let ende_bonus = plusDays(geburt, zeit_bis_ende_bonus_days);
-
-    if (ende_bonus >= geburt) {
-      // Ende LM berechnen
-      if (geburt.getDate() <= 28) {
-        ende_bonus = DateTime.fromJSDate(ende_bonus)
-          .set({ day: geburt.getDate() })
-          .plus({ month: 1 })
-          .minus({ day: 1 })
-          .toJSDate();
-      } else {
-        ende_bonus = DateTime.fromJSDate(ende_bonus)
-          .set({ day: geburt.getDate() })
-          .minus({ day: 1 })
-          .plus({ month: 1 })
-          .toJSDate();
-      }
-    }
-    return ende_bonus;
   }
 }

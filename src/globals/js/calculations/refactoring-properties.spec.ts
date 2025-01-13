@@ -18,11 +18,13 @@ import {
   string as arbitraryString,
   tuple as arbitraryTuple,
 } from "fast-check";
+import { DateTime } from "luxon";
 import { describe, it } from "vitest";
 import { EgrCalculation } from "./egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
+  type ElternGeldDaten,
   ErwerbsArt,
   ErwerbsTaetigkeit,
   ErwerbsZeitraumLebensMonat,
@@ -130,13 +132,21 @@ describe("tests to verify properties during refactoring", () => {
             planungsdatenRaw,
             lohnsteuerjahr,
           ) => {
+            const elterngelddaten = {
+              persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
+              finanzDaten: finanzDatenFrom(finanzdatenRaw),
+              planungsDaten: planungsDatenFrom(planungsdatenRaw),
+            };
+
             const result = new EgrCalculation().calculateElternGeld(
-              {
-                persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
-                finanzDaten: finanzDatenFrom(finanzdatenRaw),
-                planungsDaten: planungsDatenFrom(planungsdatenRaw),
-              },
+              elterngelddaten,
               lohnsteuerjahr,
+            );
+
+            const transformedResultForComparison = transformDataRecursively(
+              result,
+              [convertBigsToNumbers, replaceNullGeschwisterbonusDeadline],
+              elterngelddaten,
             );
 
             const originalResult =
@@ -150,9 +160,16 @@ describe("tests to verify properties during refactoring", () => {
                 lohnsteuerjahr,
               );
 
+            const transformedOriginalResultForComparison =
+              transformDataRecursively(
+                originalResult,
+                [convertBigsToNumbers],
+                elterngelddaten,
+              );
+
             return assert.deepStrictEqual(
-              transformDataRecursively(result, [convertBigsToNumbers]),
-              transformDataRecursively(originalResult, [convertBigsToNumbers]),
+              transformedResultForComparison,
+              transformedOriginalResultForComparison,
             );
           },
         ),
@@ -286,7 +303,43 @@ function convertBigsToNumbers(data: unknown): unknown {
   }
 }
 
-type DataTransformer = (data: unknown) => unknown;
+/**
+ * There was a bug fixed in regards of the deadline for the sibling bonus.
+ * To maintain the property testability, it was necessary to make an exception
+ * and fix the bug in the original code too. But, it has been made an effort to
+ * keep the changes to the original code minimal. In contrast to the production
+ * code. In result, there is a minor difference how a "no bonus" is communicated
+ * in the deadline. While both algorithms declare a possible `null` value, the
+ * original code always uses a `Date` that potentially causes no bonus to be
+ * applied. While the productive implementation explicitly communicates "no
+ * bonus" as `null`.
+ */
+function replaceNullGeschwisterbonusDeadline(
+  data: unknown,
+  contextInformation: ElternGeldDaten,
+): unknown {
+  const hasGeschwisterBonusDealineProperty =
+    typeof data === "object" &&
+    data !== null &&
+    "geschwisterBonusDeadLine" in data;
+
+  const hasNullDeadline =
+    hasGeschwisterBonusDealineProperty &&
+    data.geschwisterBonusDeadLine === null;
+
+  if (hasNullDeadline) {
+    const { wahrscheinlichesGeburtsDatum } =
+      contextInformation.persoenlicheDaten;
+
+    const dayBeforeBirthday = DateTime.fromJSDate(wahrscheinlichesGeburtsDatum)
+      .minus({ days: 1 })
+      .toJSDate();
+
+    data.geschwisterBonusDeadLine = dayBeforeBirthday;
+  }
+
+  return data;
+}
 
 type DataTransformer<ContextInformation> =
   | ((data: unknown) => unknown)

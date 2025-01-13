@@ -43,10 +43,12 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         expect(zwischenErgebnis.mehrlingsZulage.toNumber()).toBe(
           sheet.zwischenErgebnisMehrlingsZulage(testCaseIndex),
         );
-        expect(zwischenErgebnis.zeitraumGeschwisterBonus?.toISOString()).toBe(
-          sheet
-            .zwischenErgebnisZeitraumGeschwisterBonus(testCaseIndex)
-            .toISOString(),
+
+        expect(
+          zwischenErgebnis.zeitraumGeschwisterBonus ??
+            persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+        ).toEqual(
+          sheet.zwischenErgebnisZeitraumGeschwisterBonus(testCaseIndex),
         );
       });
     }

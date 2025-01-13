@@ -18,7 +18,7 @@ export function findLastBornChild(kindList: Kind[]): Kind | undefined {
     return kindList[0];
   }
 
-  const cleanKindList = sortByGeburtsdatumExcludesFutureChildren(kindList);
+  const cleanKindList = sortByGeburtsdatum(kindList);
   return cleanKindList[cleanKindList.length - 1];
 }
 
@@ -35,7 +35,7 @@ export function findSecondLastBornChild(kindList: Kind[]): Kind | undefined {
     return undefined;
   }
 
-  const cleanKindList = sortByGeburtsdatumExcludesFutureChildren(kindList);
+  const cleanKindList = sortByGeburtsdatum(kindList);
   return cleanKindList[cleanKindList.length - 2];
 }
 
@@ -56,6 +56,3 @@ const sortByGeburtsdatum = (kindList: Kind[]) => {
 
 export const excludesFutureChildren = (kindList: Kind[]) =>
   kindList.filter((value) => value.geburtsdatum !== undefined);
-
-const sortByGeburtsdatumExcludesFutureChildren = (kindList: Kind[]) =>
-  sortByGeburtsdatum(excludesFutureChildren(kindList));

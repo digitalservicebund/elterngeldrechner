@@ -157,9 +157,9 @@ if (import.meta.vitest) {
 
         const ausgangslage = composeAusgangslageFuerPlaner(state);
 
-        expect(
-          ausgangslage.geburtsdatumDesKindes.toISOString().slice(0, 10),
-        ).toEqual("2013-12-21");
+        expect(ausgangslage.geburtsdatumDesKindes).toEqual(
+          new Date("2013-12-21"),
+        );
       });
     });
 

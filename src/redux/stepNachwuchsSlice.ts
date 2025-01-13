@@ -66,11 +66,5 @@ export default stepNachwuchsSlice.reducer;
 
 export function parseGermanDateString(germanDateString: string): Date {
   const [day, month, year] = germanDateString.split(".");
-  return new Date(
-    Date.UTC(
-      Number.parseInt(year),
-      Number.parseInt(month) - 1,
-      Number.parseInt(day),
-    ),
-  );
+  return new Date(`${year}-${month}-${day}`);
 }

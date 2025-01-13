@@ -563,7 +563,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
         if (
           ende_geschwisterbonus != null &&
-          ende_geschwisterbonus >= this.ende_LM[i]
+          ende_geschwisterbonus >= this.anfang_LM[i]
         ) {
           geschw[i - 1] = 1;
         }

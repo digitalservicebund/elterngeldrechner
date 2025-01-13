@@ -1,52 +1,10 @@
 import {
-  dateWithoutTimeOf,
-  daysBetween,
   minusDays,
-  plusDays,
   plusMonths,
-  plusYears,
   setDayOfMonth,
 } from "@/globals/js/calculations/common/date-util";
 
 describe("date-util", () => {
-  describe.each([
-    ["1995-02-24T03:24:00", "1995-02-24T00:00:00"],
-    ["1995-02-24T00:00:00", "1995-02-24T00:00:00"],
-    ["1995-02-24T00:00:00.001", "1995-02-24T00:00:00"],
-    ["1995-02-24T23:59:59.999", "1995-02-24T00:00:00"],
-  ])(
-    "when remove time from %p results in %p",
-    (dateWithTime: string, dateWithoutTime: string) => {
-      it("should remove time from date", () => {
-        // when
-        const actual = dateWithoutTimeOf(new Date(dateWithTime));
-
-        // then
-        expect(actual.toISOString()).toBe(
-          new Date(dateWithoutTime).toISOString(),
-        );
-      });
-    },
-  );
-
-  describe.each([
-    ["1995-02-24T03:24:00", 0, "1995-02-24T03:24:00"],
-    ["1995-02-24T00:00:00", 3, "1995-02-27T00:00:00"],
-    ["1995-02-24T13:22:33.001", -3, "1995-02-21T13:22:33.001"],
-    ["2024-11-24T01:02:03", 63, "2025-01-26T01:02:03"],
-  ])(
-    "%p plus %p days result in %p",
-    (dateSummand: string, daySummand: number, sum: string) => {
-      it("should add days to date", () => {
-        // when
-        const actual = plusDays(new Date(dateSummand), daySummand);
-
-        // then
-        expect(actual.toISOString()).toBe(new Date(sum).toISOString());
-      });
-    },
-  );
-
   describe.each([
     ["1995-02-24T03:24:00", 0, "1995-02-24T03:24:00"],
     ["1995-02-24T00:00:00", 3, "1995-02-21T00:00:00"],
@@ -79,42 +37,6 @@ describe("date-util", () => {
 
         // then
         expect(actual.toISOString()).toBe(new Date(sum).toISOString());
-      });
-    },
-  );
-
-  describe.each([
-    ["1995-02-24T03:24:00", 0, "1995-02-24T03:24:00"],
-    ["1995-02-24T00:00:00", 3, "1998-02-24T00:00:00"],
-    ["1995-02-24T13:22:33.001", -3, "1992-02-24T13:22:33.001"],
-    ["2024-11-24T01:02:03", 63, "2087-11-24T01:02:03"],
-  ])(
-    "%p plus %p years result in %p",
-    (dateSummand: string, daySummand: number, sum: string) => {
-      it("should add years to date", () => {
-        // when
-        const actual = plusYears(new Date(dateSummand), daySummand);
-
-        // then
-        expect(actual.toISOString()).toBe(new Date(sum).toISOString());
-      });
-    },
-  );
-
-  describe.each([
-    ["1995-02-24T03:24:00", "1995-02-24T03:24:00", 0],
-    ["1995-02-24T00:00:00", "1995-02-27T00:00:00", 3],
-    ["1995-02-24T13:22:33.001", "1995-02-21T13:22:33.001", -3],
-    ["2024-11-24T01:02:03", "2025-01-26T01:02:03", 63],
-  ])(
-    "between %p and %p are %p days",
-    (date1: string, date2: string, days: number) => {
-      it("should calculate difference between dates", () => {
-        // when
-        const actual = daysBetween(new Date(date1), new Date(date2));
-
-        // then
-        expect(actual).toBe(days);
       });
     },
   );

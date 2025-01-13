@@ -1,9 +1,4 @@
 import Big from "big.js";
-import { Kind } from "./model";
-import {
-  findLastBornChild,
-  findSecondLastBornChild,
-} from "@/globals/js/calculations/common/kind-util";
 import {
   BIG_ONE,
   BIG_ZERO,
@@ -53,26 +48,6 @@ export abstract class AbstractAlgorithmus {
       ersatzrate_eg = fMin(ersatzrate_eg, BIG_ONE);
     }
     return ersatzrate_eg;
-  }
-
-  /**
-   * Suche das Geburtsdatum des jüngsten Kindes.
-   *
-   * @param kindList Eine Liste von {@link Kind}.
-   * @return Das {@link Date} des jüngsten Kindes oder undefined, wenn die Liste leer ist.
-   */
-  protected fktMax(kindList: Kind[]): Date | undefined {
-    return findLastBornChild(kindList)?.geburtsdatum;
-  }
-
-  /**
-   * Suche das Geburtsdatum des zweitjüngsten Kindes.
-   *
-   * @param kindList Eine Liste von {@link Kind}.
-   * @return Das {@link Date} des zweitjüngsten Kindes oder undefined, wenn die Liste leer ist oder nur ein Kind enthält.
-   */
-  protected fktZweitMax(kindList: Kind[]): Date | undefined {
-    return findSecondLastBornChild(kindList)?.geburtsdatum;
   }
 
   protected elterngeld_keine_et(ekVor: Big): Big {

@@ -550,18 +550,12 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     if (isGeschwisterVorhanden) {
       // es sind Geschwister vorhanden
       const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
-      if (ende_geschwisterbonus != null && ende_geschwisterbonus >= geburt) {
-        for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.anfang_LM[i] = plusMonths(geburt, i - 1);
-        }
-        for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.ende_LM[i] = minusDays(plusMonths(geburt, i), 1);
-        }
-      }
+      this.fillLebensMonateList(geburt);
+
       for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
         if (
           ende_geschwisterbonus != null &&
-          ende_geschwisterbonus >= this.ende_LM[i]
+          ende_geschwisterbonus >= this.anfang_LM[i]
         ) {
           geschw[i - 1] = 1;
         }

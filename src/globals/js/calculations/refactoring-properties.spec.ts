@@ -8,9 +8,14 @@ import {
   constant as arbitraryConstant,
   constantFrom as arbitraryConstantFrom,
   date as arbitraryDate,
+  double as arbitraryDouble,
+  float as arbitraryFloat,
   integer as arbitraryInteger,
+  object as arbitraryObject,
+  oneof as arbitraryOneOf,
   property,
   record as arbitraryRecord,
+  string as arbitraryString,
   tuple as arbitraryTuple,
 } from "fast-check";
 import { describe, it } from "vitest";
@@ -158,6 +163,59 @@ describe("tests to verify properties during refactoring", () => {
       );
     },
   );
+
+  describe("transform data recursively", () => {
+    it("provides the same output as input if no transformer given", () => {
+      assertProperty(
+        property(arbitraryAnything(), (data) => {
+          const transformedData = transformDataRecursively(data, []);
+
+          assert.deepStrictEqual(transformedData, data);
+        }),
+      );
+    });
+
+    it("provides the same output as input if given an identify function as transformer", () => {
+      assertProperty(
+        property(arbitraryAnything(), (data) => {
+          const identity = (data: unknown) => data;
+
+          const transformedData = transformDataRecursively(data, [identity]);
+
+          assert.deepStrictEqual(transformedData, data);
+        }),
+      );
+    });
+
+    it("applies all transformers correctly and recursively", () => {
+      const doubleNumbers = (data: unknown) =>
+        typeof data === "number" ? data * 2 : data;
+
+      const replaceFooWithBar = (data: unknown) =>
+        data === "foo" ? "bar" : data;
+
+      const data = {
+        a: "foo",
+        b: "baz",
+        c: 1,
+        d: ["foo", "baz", undefined, 2, null, { lorem: ["ipsum", 3] }],
+        e: { f: 4, g: "dolor" },
+      };
+
+      const transformedData = transformDataRecursively(data, [
+        doubleNumbers,
+        replaceFooWithBar,
+      ]);
+
+      expect(transformedData).toStrictEqual({
+        a: "bar",
+        b: "baz",
+        c: 2,
+        d: ["bar", "baz", undefined, 4, null, { lorem: ["ipsum", 6] }],
+        e: { f: 8, g: "dolor" },
+      });
+    });
+  });
 });
 
 function transformDataRecursively(
@@ -169,16 +227,20 @@ function transformDataRecursively(
     data,
   );
 
-  if (typeof transformedData === "object" && transformedData !== null) {
+  if (Array.isArray(transformedData)) {
+    return transformedData.map((entry) =>
+      transformDataRecursively(entry, transformers),
+    );
+  } else if (
+    typeof transformedData === "object" &&
+    transformedData !== null &&
+    Object.keys(transformedData).length > 0
+  ) {
     return Object.fromEntries(
       Object.entries(transformedData).map(([key, value]) => [
         key,
         transformDataRecursively(value, transformers),
       ]),
-    );
-  } else if (Array.isArray(transformedData)) {
-    return transformedData.map((entry) =>
-      transformDataRecursively(entry, transformers),
     );
   } else {
     return transformedData;
@@ -563,6 +625,28 @@ function arbitraryErwerbstaetigkeit(): Arbitrary<ErwerbsTaetigkeit> {
 
 function arbitraryBruttoeinkommen(): Arbitrary<number> {
   return arbitraryInteger({ min: 0, max: 30000 });
+}
+
+function arbitraryPrimitive(): Arbitrary<
+  undefined | null | boolean | number | string | Date
+> {
+  return arbitraryOneOf(
+    arbitraryConstantFrom(undefined, null),
+    arbitraryBoolean(),
+    arbitraryInteger(),
+    arbitraryFloat(),
+    arbitraryDouble(),
+    arbitraryString(),
+    arbitraryDate(),
+  );
+}
+
+function arbitraryAnything(): Arbitrary<unknown> {
+  return arbitraryOneOf(
+    arbitraryPrimitive(),
+    arbitraryArray(arbitraryPrimitive()),
+    arbitraryObject(),
+  );
 }
 
 function extremelySlowTestsAreAllowed(): boolean {

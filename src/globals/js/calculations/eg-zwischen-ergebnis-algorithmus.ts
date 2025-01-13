@@ -122,7 +122,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   public ende_bonus_u6(geschwister: Kind[]): Date | undefined {
     const zweitjuengstesGeschwisterkind = findSecondLastBornChild(geschwister);
 
-    return zweitjuengstesGeschwisterkind?.geburtsdatum
+    return zweitjuengstesGeschwisterkind
       ? this.ende_bonus(zweitjuengstesGeschwisterkind.geburtsdatum, 6)
       : undefined;
   }
@@ -136,7 +136,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       geschwisterMitBehinderung,
     );
 
-    return juengstesGeschwisterkindMitBehinderung?.geburtsdatum
+    return juengstesGeschwisterkindMitBehinderung
       ? this.ende_bonus(juengstesGeschwisterkindMitBehinderung.geburtsdatum, 14)
       : undefined;
   }
@@ -144,7 +144,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   public ende_bonus_u3(geschwister: Kind[]): Date | undefined {
     const juengstesGeschwisterkind = findLastBornChild(geschwister);
 
-    return juengstesGeschwisterkind?.geburtsdatum
+    return juengstesGeschwisterkind
       ? this.ende_bonus(juengstesGeschwisterkind.geburtsdatum, 3)
       : undefined;
   }

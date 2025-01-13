@@ -60,8 +60,7 @@ export const persoenlicheDatenOfUi = (
       stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state),
     anzahlKuenftigerKinder: state.stepNachwuchs.anzahlKuenftigerKinder,
     etVorGeburt: erwerbsTaetigkeitVorGeburtOf(state, elternteil),
-    geschwister: state.stepNachwuchs.geschwisterkinder.map((kind, index) => ({
-      nummer: index + 1 + state.stepNachwuchs.anzahlKuenftigerKinder,
+    geschwister: state.stepNachwuchs.geschwisterkinder.map((kind) => ({
       geburtsdatum: dateOf(kind.geburtsdatum),
       istBehindert: kind.istBehindert,
     })),

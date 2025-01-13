@@ -1,4 +1,4 @@
 export type Kind = {
-  geburtsdatum: Date | undefined;
-  istBehindert: boolean;
+  geburtsdatum: Date;
+  istBehindert?: boolean;
 };

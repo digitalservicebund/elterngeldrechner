@@ -23,12 +23,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
     ])(
       "when geburt of sister is %s, then ende u3 is %s",
       (geburtGeschw1: Date, endeU3: Date) => {
-        const geschwister: Kind[] = [
-          {
-            geburtsdatum: geburtGeschw1,
-            istBehindert: false,
-          },
-        ];
+        const geschwister: Kind[] = [{ geburtsdatum: geburtGeschw1 }];
 
         const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
           geschwister,
@@ -48,14 +43,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       "when geburt of child is %s, sister is %s and brother is %s, then ende u3 is %s",
       (geburtGeschw1: Date, geburtGeschw2: Date, endeU3: Date) => {
         const geschwister: Kind[] = [
-          {
-            geburtsdatum: geburtGeschw1,
-            istBehindert: false,
-          },
-          {
-            geburtsdatum: geburtGeschw2,
-            istBehindert: false,
-          },
+          { geburtsdatum: geburtGeschw1 },
+          { geburtsdatum: geburtGeschw2 },
         ];
 
         const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
@@ -215,14 +204,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       "when geburt of sister is %s, then ende u6 is %s",
       (geburtGeschw1: Date, endeU6: Date) => {
         const geschwister: Kind[] = [
-          {
-            geburtsdatum: geburtGeschw1,
-            istBehindert: false,
-          },
-          {
-            geburtsdatum: geburtGeschw1,
-            istBehindert: false,
-          },
+          { geburtsdatum: geburtGeschw1 },
+          { geburtsdatum: geburtGeschw1 },
         ];
 
         const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
@@ -291,18 +274,9 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         endeU6: Date,
       ) => {
         const geschwister: Kind[] = [
-          {
-            geburtsdatum: geburtGeschw1,
-            istBehindert: false,
-          },
-          {
-            geburtsdatum: geburtGeschw2,
-            istBehindert: false,
-          },
-          {
-            geburtsdatum: geburtGeschw3,
-            istBehindert: false,
-          },
+          { geburtsdatum: geburtGeschw1 },
+          { geburtsdatum: geburtGeschw2 },
+          { geburtsdatum: geburtGeschw3 },
         ];
 
         const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
@@ -331,8 +305,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
 
     it("returns null if all Geschwister are too old for any bonus", () => {
       const geschwister = [
-        { geburtsdatum: new Date("2016-01-02"), istBehindert: false },
-        { geburtsdatum: new Date("2013-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2016-01-02") },
+        { geburtsdatum: new Date("2013-01-02") },
         { geburtsdatum: new Date("2005-01-02"), istBehindert: true },
       ];
       const geburtsdatum = new Date("2020-01-01");
@@ -347,8 +321,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
 
     it("uses the only deadline that ends after the Geburtstag", () => {
       const geschwister = [
-        { geburtsdatum: new Date("2016-01-02"), istBehindert: false },
-        { geburtsdatum: new Date("2015-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2016-01-02") },
+        { geburtsdatum: new Date("2015-01-02") },
         { geburtsdatum: new Date("2005-01-02"), istBehindert: true },
       ];
       const geburtsdatum = new Date("2020-01-01");
@@ -363,8 +337,8 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
 
     it("uses the latest deadline that lasts the longest", () => {
       const geschwister = [
-        { geburtsdatum: new Date("2017-01-02"), istBehindert: false },
-        { geburtsdatum: new Date("2015-01-02"), istBehindert: false },
+        { geburtsdatum: new Date("2017-01-02") },
+        { geburtsdatum: new Date("2015-01-02") },
         { geburtsdatum: new Date("2008-01-02"), istBehindert: true },
       ];
       const geburtsdatum = new Date("2020-01-01");

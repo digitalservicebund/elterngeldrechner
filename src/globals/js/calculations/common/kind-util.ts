@@ -41,15 +41,6 @@ export function findSecondLastBornChild(kindList: Kind[]): Kind | undefined {
 
 const sortByGeburtsdatum = (kindList: Kind[]) => {
   return kindList.sort((a, b) => {
-    if (a.geburtsdatum === undefined) {
-      if (b.geburtsdatum === undefined) {
-        return 0;
-      }
-      return -1;
-    }
-    if (b.geburtsdatum === undefined) {
-      return 1;
-    }
     return a.geburtsdatum?.valueOf() - b.geburtsdatum?.valueOf();
   });
 };

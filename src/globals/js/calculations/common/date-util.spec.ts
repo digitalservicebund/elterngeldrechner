@@ -11,7 +11,7 @@ describe("date-util", () => {
     ["1995-02-24T13:22:33.001", -3, "1995-02-27T13:22:33.001"],
     ["2024-02-24T01:02:03", 63, "2023-12-23T01:02:03"],
   ])(
-    "%p minus %p days result in %p",
+    "%s minus %s days result in %s",
     (date: string, day: number, dateResult: string) => {
       it("should subtract days from date", () => {
         // when
@@ -29,7 +29,7 @@ describe("date-util", () => {
     ["1995-02-24T13:22:33.001", -1, "1995-01-24T13:22:33.001"],
     ["2024-11-24T01:02:03", 63, "2030-02-24T01:02:03"],
   ])(
-    "%p plus %p months result in %p",
+    "%s plus %s months result in %s",
     (dateSummand: string, daySummand: number, sum: string) => {
       it("should add months to date", () => {
         // when
@@ -47,7 +47,7 @@ describe("date-util", () => {
     ["1995-02-24T13:22:33.001", -3, "1995-01-28T13:22:33.001"],
     ["2024-02-24T01:02:03", 0, "2024-01-31T01:02:03"],
   ])(
-    "%p set day %p of month result in %p",
+    "%s set day %s of month result in %s",
     (date: string, dayOfMonth: number, dateResult: string) => {
       it("should set day of month", () => {
         // when

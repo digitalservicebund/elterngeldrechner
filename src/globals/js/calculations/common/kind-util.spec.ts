@@ -21,7 +21,7 @@ describe("kind-util", () => {
       "2006-09-08T10:37:00",
     ],
   ])(
-    "in %p found %p",
+    "in %s found %s",
     (birthdayList: string[], birthday: string | undefined) => {
       it("should find last born child", () => {
         // given
@@ -59,7 +59,7 @@ describe("kind-util", () => {
       "1995-02-24T03:24:00",
     ],
   ])(
-    "in %p found %p",
+    "in %s found %s",
     (birthdayList: string[], birthday: string | undefined) => {
       it("should find second born child", () => {
         // given

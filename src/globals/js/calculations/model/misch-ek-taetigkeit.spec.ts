@@ -2,7 +2,7 @@ import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 
 describe("misch-ek-taetigkeit", () => {
   describe.each([[true], [false]])(
-    "when create MischEkTaetigkeit with %p, then expect all bemessungsZeitraumMonate are set",
+    "when create MischEkTaetigkeit with %s, then expect all bemessungsZeitraumMonate are set",
     (falseOrTrue) => {
       it("should create Zeitraum", () => {
         // when
@@ -74,7 +74,7 @@ describe("misch-ek-taetigkeit", () => {
       0,
     ],
   ])(
-    "when create MischEkTaetigkeit with %p, then expect all bemessungsZeitraumMonate are %d",
+    "when create MischEkTaetigkeit with %s, then expect all bemessungsZeitraumMonate are %d",
     (bemessungsZeitraumMonateList, anzahlBemessungsZeitraumMonate) => {
       it("should create Zeitraum", () => {
         // when

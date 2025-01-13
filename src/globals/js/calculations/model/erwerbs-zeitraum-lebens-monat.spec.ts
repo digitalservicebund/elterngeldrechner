@@ -8,7 +8,7 @@ describe("erwerbs-zeitraum-lebens-monat", () => {
     [1, 6, 6],
     [4, 6, 3],
   ])(
-    "when vonLebensMonat %p and bisLebensMonat %p, then expect anzahlMonate are %p",
+    "when vonLebensMonat %s and bisLebensMonat %s, then expect anzahlMonate are %s",
     (vonLebensMonat, bisLebensMonat, anzahlMonate) => {
       it("should create Zeitraum", () => {
         // given
@@ -30,7 +30,7 @@ describe("erwerbs-zeitraum-lebens-monat", () => {
     [1, 6, [1, 2, 3, 4, 5, 6]],
     [4, 6, [4, 5, 6]],
   ])(
-    "when vonLebensMonat %p and bisLebensMonat %p, then expect lebensMonateList are %p",
+    "when vonLebensMonat %s and bisLebensMonat %s, then expect lebensMonateList are %s",
     (vonLebensMonat, bisLebensMonat, lebensMonateList) => {
       it("should create Zeitraum", () => {
         // given

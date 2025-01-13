@@ -349,7 +349,7 @@ describe("finanzDatenFactory", () => {
       20000,
     ],
   ])(
-    "%p",
+    "%s",
     (
       message: string,
       gewinnSelbstaendig: AverageOrMonthlyState,
@@ -449,7 +449,7 @@ describe("finanzDatenFactory", () => {
       250,
     ],
   ])(
-    "%p",
+    "%s",
     (
       message: string,
       bruttoEinkommenNichtSelbstaendig: AverageOrMonthlyState,
@@ -716,7 +716,7 @@ describe("finanzDatenFactory", () => {
       ],
     ],
   ])(
-    "%p",
+    "%s",
     (
       message: string,
       taetigkeitList: Taetigkeit[],
@@ -767,7 +767,7 @@ describe("finanzDatenFactory", () => {
     [SteuerKlasse.SKL5, SteuerKlasse.SKL5],
     [SteuerKlasse.SKL6, SteuerKlasse.SKL6],
   ])(
-    "when einkommen SteuerKlasse is %p, then finanzDaten Steuerklasse are %p",
+    "when einkommen SteuerKlasse is %s, then finanzDaten Steuerklasse are %s",
     (
       einkommenSteuerKlasse: SteuerKlasse | null,
       finanzDatenSteuerklasse: SteuerKlasse,
@@ -805,7 +805,7 @@ describe("finanzDatenFactory", () => {
     [KinderFreiBetrag.ZKF4_5, KinderFreiBetrag.ZKF4_5],
     [KinderFreiBetrag.ZKF5, KinderFreiBetrag.ZKF5],
   ])(
-    "when einkommen KinderFreiBetrag is %p, then finanzDaten KinderFreiBetrag are %p",
+    "when einkommen KinderFreiBetrag is %s, then finanzDaten KinderFreiBetrag are %s",
     (
       einkommenKinderFreiBetrag: KinderFreiBetrag | null,
       finanzDatenKinderFreiBetrag: KinderFreiBetrag,
@@ -841,7 +841,7 @@ describe("finanzDatenFactory", () => {
       RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
     ],
   ])(
-    "when einkommen RentenArt is %p, then finanzDaten RentenArt are %p",
+    "when einkommen RentenArt is %s, then finanzDaten RentenArt are %s",
     (einkommenRentenArt: RentenArt | null, finanzDatenRentenArt: RentenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
@@ -873,7 +873,7 @@ describe("finanzDatenFactory", () => {
       KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
     ],
   ])(
-    "when einkommen KassenArt is %p, then finanzDaten KassenArt are %p",
+    "when einkommen KassenArt is %s, then finanzDaten KassenArt are %s",
     (einkommenKassenArt: KassenArt | null, finanzDatenKassenArt: KassenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
@@ -900,7 +900,7 @@ describe("finanzDatenFactory", () => {
     [2, 2],
     [1.5, 1.5],
   ])(
-    "when einkommen splittingFaktor is %p, then finanzDaten splittingFaktor are %p",
+    "when einkommen splittingFaktor is %s, then finanzDaten splittingFaktor are %s",
     (
       einkommenSplittingFaktor: number | null,
       finanzSplittingFaktor: number,
@@ -957,7 +957,7 @@ describe("finanzDatenFactory", () => {
       }),
     ],
   ])(
-    "%p",
+    "%s",
     (
       message: string,
       einkommen: StepEinkommenElternteil,

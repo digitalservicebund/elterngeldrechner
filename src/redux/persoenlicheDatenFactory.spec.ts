@@ -240,7 +240,7 @@ describe("persoenlicheDatenFactory", () => {
       ErwerbsArt.JA_MISCHEINKOMMEN,
     ],
   ])(
-    "when ui stepErwerbstaetigkeit is %p, then PersoenlicheDaten.etVorGeburt are %p",
+    "when ui stepErwerbstaetigkeit is %s, then PersoenlicheDaten.etVorGeburt are %s",
     (
       erwerbstaetigkeit: StepErwerbstaetigkeitElternteil,
       expected: ErwerbsArt,

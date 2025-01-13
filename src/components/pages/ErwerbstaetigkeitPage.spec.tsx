@@ -85,7 +85,7 @@ describe("Erwerbstaetigkeit Page", () => {
   });
 
   describe.each([["Gewinneinkünfte"]])(
-    "when Elternteil has %p",
+    "when Elternteil has %s",
     (selbststaendigLabeltext: string) => {
       it("should not expand the form options", async () => {
         render(<ErwerbstaetigkeitPage />);

@@ -1,6 +1,3 @@
-# Use the official Node.js 20 base image for development containers
-FROM mcr.microsoft.com/devcontainers/base:alpine
+FROM node:20.11.1
 
-# Use the pinned node version
-ARG EXTRA_NODE_VERSION=20.11.1
-RUN su node -c "source /usr/local/share/nvm/nvm.sh && nvm install ${EXTRA_NODE_VERSION}"
+RUN npm install -g npm@10.2.4

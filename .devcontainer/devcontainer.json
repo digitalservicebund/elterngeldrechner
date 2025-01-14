@@ -1,0 +1,5 @@
+{
+  "name": "Node.js 20.11.1 with Playwright",
+  "build": { "dockerfile": "Dockerfile" },
+  "postCreateCommand": "npm install && npx playwright install --with-deps chromium"
+}

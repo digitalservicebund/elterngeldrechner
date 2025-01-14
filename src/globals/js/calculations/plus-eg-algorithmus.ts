@@ -270,7 +270,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
                 if (
                   !isEqual(bruttoInLebensmonatenMitBasis, BIG_ZERO) &&
-                  planungsergebnis.get(i) === ElternGeldArt.BASIS_ELTERNGELD
+                  planungsergebnis.planung[i - 1] ===
+                    ElternGeldArt.BASIS_ELTERNGELD
                 ) {
                   summe_brutto_basis = summe_brutto_basis.add(
                     round(
@@ -324,8 +325,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
                 if (
                   !isEqual(bruttoInLebensmonatenMitPlus, BIG_ZERO) &&
-                  (planungsergebnis.get(i) === ElternGeldArt.ELTERNGELD_PLUS ||
-                    planungsergebnis.get(i) ===
+                  (planungsergebnis.planung[i - 1] ===
+                    ElternGeldArt.ELTERNGELD_PLUS ||
+                    planungsergebnis.planung[i - 1] ===
                       ElternGeldArt.PARTNERSCHAFTS_BONUS)
                 ) {
                   summe_brutto_plus = summe_brutto_plus.add(
@@ -588,7 +590,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
       const ausgabe: ElternGeldAusgabe = {
         lebensMonat: i,
-        elterngeldArt: planungsergebnis.get(i) ?? ElternGeldArt.KEIN_BEZUG,
+        elterngeldArt:
+          planungsergebnis.planung[i - 1] ?? ElternGeldArt.KEIN_BEZUG,
         elternGeld: BIG_ZERO,
         geschwisterBonus: BIG_ZERO,
         mehrlingsZulage: BIG_ZERO,

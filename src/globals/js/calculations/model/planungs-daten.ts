@@ -21,17 +21,6 @@ export class PlanungsDaten {
   constructor(mutterschaftsLeistung: MutterschaftsLeistung) {
     this.mutterschaftsLeistung = mutterschaftsLeistung;
   }
-
-  /**
-   * Gibt die Elterngeldart für einen anhand des Index spezifizierten Monats zurück.
-   *
-   * @param {number} lebensMonat Lebensmonat des Kindes (nicht Index!!!)
-   * @return {ElternGeldArt} ElterngeldArt des abgefragten Monats
-   */
-  public get(lebensMonat: number): ElternGeldArt | undefined {
-    const index: number = lebensMonat - 1;
-    return this.planung[index];
-  }
 }
 
 export function planungsDatenOf(source: PlanungsDaten) {

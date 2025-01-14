@@ -96,8 +96,8 @@ const createPlanungsDaten = (
 ) => {
   const planungsDaten = new PlanungsDaten(
     MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+    sheet.lebensmonateElterngeldArt(testCaseIndex),
   );
-  planungsDaten.planung = sheet.lebensmonateElterngeldArt(testCaseIndex);
   return planungsDaten;
 };
 

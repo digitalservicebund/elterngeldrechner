@@ -456,9 +456,7 @@ function originalKindFrom(data: KindRaw, index: number): OriginalKind {
 }
 
 function planungsDatenFrom(data: PlanungsdatenRaw): PlanungsDaten {
-  const planungsdaten = new PlanungsDaten(data.mutterschaftsleistungen);
-  planungsdaten.planung = data.planung;
-  return planungsdaten;
+  return new PlanungsDaten(data.mutterschaftsleistungen, data.planung);
 }
 
 function originalPlanungsDatenFrom(

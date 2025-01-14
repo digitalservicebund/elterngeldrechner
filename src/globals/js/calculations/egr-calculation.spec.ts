@@ -20,12 +20,14 @@ describe("egr-calculation", () => {
   describe("should calculate EgrErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
+      const planung = new Array<ElternGeldArt>(PLANUNG_ANZAHL_MONATE).fill(
+        ElternGeldArt.ELTERNGELD_PLUS,
+      );
+
       const planungsDaten = new PlanungsDaten(
         MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+        planung,
       );
-      planungsDaten.planung = new Array<ElternGeldArt>(
-        PLANUNG_ANZAHL_MONATE,
-      ).fill(ElternGeldArt.ELTERNGELD_PLUS);
 
       const persoenlicheDaten = {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
@@ -67,12 +69,14 @@ describe("egr-calculation", () => {
 
     it("Test with 'Erwerbstaetigkeit nach Geburt' 2", () => {
       // given
+      const planung = new Array<ElternGeldArt>(PLANUNG_ANZAHL_MONATE).fill(
+        ElternGeldArt.BASIS_ELTERNGELD,
+      );
+
       const planungsDaten = new PlanungsDaten(
         MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+        planung,
       );
-      planungsDaten.planung = new Array<ElternGeldArt>(
-        PLANUNG_ANZAHL_MONATE,
-      ).fill(ElternGeldArt.BASIS_ELTERNGELD);
 
       const persoenlicheDaten = {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
@@ -119,8 +123,8 @@ describe("egr-calculation", () => {
 
     const planungsDaten = new PlanungsDaten(
       MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+      [ElternGeldArt.BASIS_ELTERNGELD],
     );
-    planungsDaten.planung = [ElternGeldArt.BASIS_ELTERNGELD];
 
     const calculate = () =>
       new EgrCalculation().calculateElternGeld(

@@ -121,13 +121,12 @@ function transformMonateToPlanungsdaten(monate: GeplanteMonate): PlanungsDaten {
   // Constructor arguments don't matter and will become removed.
   const anyMutterschaftsleistung =
     MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN;
-  const planungsdaten = new PlanungsDaten(anyMutterschaftsleistung);
 
-  planungsdaten.planung = Lebensmonatszahlen.map((lebensmonatszahl) =>
+  const planung = Lebensmonatszahlen.map((lebensmonatszahl) =>
     elterngeldartFrom(monate[lebensmonatszahl]?.gewaehlteOption),
   );
 
-  return planungsdaten;
+  return new PlanungsDaten(anyMutterschaftsleistung, planung);
 }
 
 function elterngeldbezuegeFrom(

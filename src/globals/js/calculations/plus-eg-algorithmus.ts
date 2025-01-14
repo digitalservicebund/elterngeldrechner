@@ -6,7 +6,6 @@ import {
   ElternGeldArt,
   ElternGeldAusgabe,
   ElternGeldKategorie,
-  ElternGeldPerioden,
   ElternGeldPlusErgebnis,
   ErwerbsArt,
   FinanzDaten,
@@ -158,9 +157,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
   private static ohneETVorGeburt(): ElternGeldPlusErgebnis {
     return {
-      anfangEGPeriode: [],
       elternGeldAusgabe: [],
-      endeEGPeriode: [],
       ersatzRate: BIG_ZERO,
       etVorGeburt: false,
       geschwisterBonus: BIG_ZERO,
@@ -200,7 +197,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     let netto_plus: Big = BIG_ZERO;
     let elterngeld_et_plus: Big = BIG_ZERO;
     let elterngeld_keine_et_plus: Big = BIG_ZERO;
-    let elternGeldPerioden: ElternGeldPerioden = { anfang: [], ende: [] };
     if (nicht_erw) {
       // es liegt Erwerbstätigkeit nach der Geburt vor
       const pausch: Big = PAUSCH;
@@ -215,8 +211,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         finanzDaten.erwerbsZeitraumLebensMonatList,
       );
       if (anzahl_monate != null && anzahl_monate !== 0) {
-        elternGeldPerioden =
-          PlusEgAlgorithmus.determineEGPerioden(planungsergebnis);
         let summe_brutto_basis: Big = BIG_ZERO;
         let summe_brutto_plus: Big = BIG_ZERO;
         this.fillLebensMonateList(geburt);
@@ -366,8 +360,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       elterngeld_et_plus = BIG_ZERO;
     }
     return {
-      anfangEGPeriode: elternGeldPerioden.anfang,
-      endeEGPeriode: elternGeldPerioden.ende,
       elternGeldErwBasis: round(elterngeld_erw_basis, 2),
       bruttoBasis: round(brutto_basis, 2),
       nettoBasis: round(netto_basis, 2),
@@ -583,7 +575,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
       const ausgabe: ElternGeldAusgabe = {
         lebensMonat: i,
-        elterngeldArt: planungsergebnis.get(i),
+        elterngeldArt: planungsergebnis.get(i) ?? ElternGeldArt.KEIN_BEZUG,
         elternGeld: BIG_ZERO,
         geschwisterBonus: BIG_ZERO,
         mehrlingsZulage: BIG_ZERO,
@@ -724,42 +716,5 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       ergebnis.elternGeldKeineEtPlus = BIG_ZERO;
     }
     return ergebnis;
-  }
-
-  /**
-   * Methode zum Ermitteln der Elterngeldperioden (ausgedrückt in Lebensmonaten des Kindes) - abhängig von dem
-   * Ergebnis der Elterngeldplanung
-   *
-   * @param {PlanungsDaten} planungsDaten
-   * @return {ElternGeldPerioden}
-   */
-  private static determineEGPerioden(
-    planungsDaten: PlanungsDaten,
-  ): ElternGeldPerioden {
-    const anfang_eg_per: number[] = [];
-    const ende_eg_per: number[] = [];
-    let start: boolean = true;
-    for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-      if (planungsDaten.get(i) !== ElternGeldArt.KEIN_BEZUG) {
-        if (start) {
-          anfang_eg_per.push(i);
-          start = false;
-        }
-        if (anfang_eg_per.length === ende_eg_per.length) {
-          ende_eg_per[anfang_eg_per.length - 1] = i;
-        } else {
-          ende_eg_per.push(i);
-        }
-      } else {
-        start = true;
-      }
-    }
-    if (ende_eg_per.length === anfang_eg_per.length - 1) {
-      ende_eg_per.push(PLANUNG_ANZAHL_MONATE);
-    }
-    return {
-      anfang: anfang_eg_per,
-      ende: ende_eg_per,
-    };
   }
 }

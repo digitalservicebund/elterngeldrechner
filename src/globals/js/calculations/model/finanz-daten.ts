@@ -100,8 +100,6 @@ export interface FinanzDatenBerechnet {
   //etEnde: Array<DateTime>;
   bruttoLMBasis: Big[];
   bruttoLMPlus: Big[];
-  //anfangEGPeriode: Array<number>;
-  //endeEGPeriode: Array<number>;
   lmMitETPlus: number;
   lmMitETBasis: number;
   summeBruttoBasis: Big;

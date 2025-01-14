@@ -8,7 +8,6 @@ export type { NettoEinkommen } from "./einkommen-types";
 export { ElternGeldArt } from "./eltern-geld-art";
 export type { ElternGeldDaten } from "./eltern-geld-daten";
 export { ElternGeldKategorie } from "./eltern-geld-kategorie";
-export type { ElternGeldPerioden } from "./eltern-geld-perioden";
 export type {
   ElternGeldAusgabe,
   ElternGeldPlusErgebnis,

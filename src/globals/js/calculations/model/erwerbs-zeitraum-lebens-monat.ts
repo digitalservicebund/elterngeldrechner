@@ -13,8 +13,6 @@ export class ErwerbsZeitraumLebensMonat {
 
   // TW prüfen, ob die Felder noch benötigt werden.
   // nettoProMonat: NettoEinkommen = new Einkommen(0);
-  // endeEGPeriode: number | null = null;
-  // anfangEGPeriode: number | null = null;
 
   getAnzahlMonate(): number {
     if (

@@ -19,8 +19,6 @@ export interface ElternGeldPlusErgebnis {
   nettoPlus: Big;
   elternGeldEtPlus: Big;
   elternGeldKeineEtPlus: Big;
-  anfangEGPeriode: number[];
-  endeEGPeriode: number[];
   message: string;
   hasPartnerBonusError: boolean;
   etVorGeburt: boolean;

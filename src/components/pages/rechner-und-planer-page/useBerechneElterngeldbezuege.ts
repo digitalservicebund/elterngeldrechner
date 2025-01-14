@@ -416,8 +416,6 @@ if (import.meta.vitest) {
         nettoPlus: zero,
         elternGeldEtPlus: zero,
         elternGeldKeineEtPlus: zero,
-        anfangEGPeriode: [],
-        endeEGPeriode: [],
         message: "",
         hasPartnerBonusError: false,
         etVorGeburt: false,

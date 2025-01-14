@@ -158,7 +158,11 @@ describe("tests to verify properties during refactoring", () => {
           const transformedOriginalResultForComparison =
             transformDataRecursively(
               originalResult,
-              [convertBigsToNumbers],
+              [
+                convertBigsToNumbers,
+                mapUndefinedElterngeldartToKeinBezug,
+                deleteElterngeldperioden,
+              ],
               elterngelddaten,
             );
 
@@ -327,6 +331,44 @@ function replaceNullGeschwisterbonusDeadline(
       .toJSDate();
 
     data.geschwisterBonusDeadLine = dayBeforeBirthday;
+  }
+
+  return data;
+}
+
+/**
+ * Covers a flaw of the original calculation that unsafely accesses array
+ * indexes. Thereby it plays out undefined values where the type system
+ * theoretically does not allow it. This was fixed and works now different for
+ * the production code. Therefore it must be transformed.
+ */
+function mapUndefinedElterngeldartToKeinBezug(data: unknown): unknown {
+  const hasElterngeldartProperty =
+    typeof data === "object" && data !== null && "elterngeldArt" in data;
+
+  if (hasElterngeldartProperty) {
+    data.elterngeldArt ??= ElternGeldArt.KEIN_BEZUG;
+  }
+
+  return data;
+}
+
+/**
+ * As a follow up issue of {@link mapUndefinedElterngeldartToKeinBezug}, the
+ * calculated periods of Elterngeld where calculated wrong too. There is no
+ * simple fix to resolve this. However, as this data is not used anymore, it was
+ * removed in production code. So it gets removed here for the original result.
+ */
+function deleteElterngeldperioden(data: unknown): unknown {
+  const hasElterngeldperiodenProperties =
+    typeof data === "object" &&
+    data !== null &&
+    "anfangEGPeriode" in data &&
+    "endeEGPeriode" in data;
+
+  if (hasElterngeldperiodenProperties) {
+    delete data.anfangEGPeriode;
+    delete data.endeEGPeriode;
   }
 
   return data;

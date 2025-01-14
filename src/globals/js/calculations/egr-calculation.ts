@@ -46,8 +46,9 @@ export class EgrCalculation {
     if (!clonedElterngeldDaten.persoenlicheDaten.hasEtNachGeburt) {
       clonedElterngeldDaten.finanzDaten.erwerbsZeitraumLebensMonatList = [];
     }
+
     if (
-      clonedElterngeldDaten.finanzDaten.isMischeinkommen() &&
+      clonedElterngeldDaten.finanzDaten.mischEinkommenTaetigkeiten.length > 0 &&
       zwischenErgebnisEinkommen.mischEkZwischenErgebnis === null
     ) {
       throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");

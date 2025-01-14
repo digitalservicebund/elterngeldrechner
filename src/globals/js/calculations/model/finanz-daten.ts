@@ -24,70 +24,6 @@ export class FinanzDaten {
   splittingFaktor: number = 1.0;
   mischEinkommenTaetigkeiten: MischEkTaetigkeit[] = [];
   erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[] = [];
-
-  /**
-   * Zeigt an ob Daten für Mischeinkünfte vorliegen.
-   * Wichtig: wenn keine Mischeinkommen berechnet werden soll, dann dürfen auch keine Werte da sein. Es reicht nicht,
-   * die {@link PersoenlicheDaten#etVorGeburt} auf einen Wert anders als {@link ErwerbsArt#JA_MISCHEINKOMMEN} zu setzen
-   *
-   * @return true, wenn Daten für Mischeinkommen vorhanden sind.
-   */
-  isMischeinkommen() {
-    return this.mischEinkommenTaetigkeiten.length > 0;
-  }
-
-  bruttoLeistungsMonate(): Big[] {
-    // Im FIT Algorithmus sind die indizes immer Monats-basiert, d.h. der Index 0 bleibt leer.
-    const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
-
-    for (const erwerbszeitraum of this.erwerbsZeitraumLebensMonatList) {
-      for (
-        let lm: number = erwerbszeitraum.vonLebensMonat;
-        lm <= erwerbszeitraum.bisLebensMonat;
-        lm++
-      ) {
-        const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
-        if (greater(bruttoProMonat, BIG_ZERO)) {
-          bruttoLM[lm] = bruttoProMonat;
-        }
-      }
-    }
-    return bruttoLM;
-  }
-
-  bruttoLeistungsMonateWithPlanung(
-    isPlus: boolean,
-    planungsdaten: PlanungsDaten,
-  ): Big[] {
-    const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
-
-    for (const erwerbszeitraum of this.erwerbsZeitraumLebensMonatList) {
-      for (
-        let lm: number = erwerbszeitraum.vonLebensMonat;
-        lm <= erwerbszeitraum.bisLebensMonat;
-        lm++
-      ) {
-        // simplify after java code migration and with new tests for this case
-        const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
-        if (greater(bruttoProMonat, BIG_ZERO)) {
-          const elterngeldArt =
-            planungsdaten.planung[lm - 1] ?? ElternGeldArt.KEIN_BEZUG;
-
-          if (isPlus) {
-            if (
-              elterngeldArt === ElternGeldArt.PARTNERSCHAFTS_BONUS ||
-              elterngeldArt === ElternGeldArt.ELTERNGELD_PLUS
-            ) {
-              bruttoLM[lm] = bruttoProMonat;
-            }
-          } else if (elterngeldArt === ElternGeldArt.BASIS_ELTERNGELD) {
-            bruttoLM[lm] = bruttoProMonat;
-          }
-        }
-      }
-    }
-    return bruttoLM;
-  }
 }
 
 /**
@@ -106,6 +42,41 @@ export interface FinanzDatenBerechnet {
   lmMitETBasis: number;
   summeBruttoBasis: Big;
   summeBruttoPlus: Big;
+}
+
+export function bruttoLeistungsMonateWithPlanung(
+  erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[],
+  isPlus: boolean,
+  planungsdaten: PlanungsDaten,
+): Big[] {
+  const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
+
+  for (const erwerbszeitraum of erwerbsZeitraumLebensMonatList) {
+    for (
+      let lm: number = erwerbszeitraum.vonLebensMonat;
+      lm <= erwerbszeitraum.bisLebensMonat;
+      lm++
+    ) {
+      // simplify after java code migration and with new tests for this case
+      const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
+      if (greater(bruttoProMonat, BIG_ZERO)) {
+        const elterngeldArt =
+          planungsdaten.planung[lm - 1] ?? ElternGeldArt.KEIN_BEZUG;
+
+        if (isPlus) {
+          if (
+            elterngeldArt === ElternGeldArt.PARTNERSCHAFTS_BONUS ||
+            elterngeldArt === ElternGeldArt.ELTERNGELD_PLUS
+          ) {
+            bruttoLM[lm] = bruttoProMonat;
+          }
+        } else if (elterngeldArt === ElternGeldArt.BASIS_ELTERNGELD) {
+          bruttoLM[lm] = bruttoProMonat;
+        }
+      }
+    }
+  }
+  return bruttoLM;
 }
 
 export function finanzDatenOf(source: FinanzDaten) {

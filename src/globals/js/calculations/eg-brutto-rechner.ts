@@ -2,10 +2,12 @@ import Big from "big.js";
 import { BIG_ZERO, greater, isEqual, round } from "./common/math-util";
 import {
   ElternGeldArt,
+  type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   FinanzDatenBerechnet,
   PLANUNG_ANZAHL_MONATE,
   PlanungsDaten,
+  bruttoLeistungsMonateWithPlanung,
 } from "./model";
 
 /**
@@ -23,12 +25,17 @@ export function bruttoEGPlusNeu(
   planungsergebnis: PlanungsDaten,
   finanzDaten: FinanzDaten,
 ): FinanzDatenBerechnet {
-  const bruttoLM: Big[] = finanzDaten.bruttoLeistungsMonate();
-  const brutto_LM_Plus: Big[] = finanzDaten.bruttoLeistungsMonateWithPlanung(
+  const { erwerbsZeitraumLebensMonatList } = finanzDaten;
+  const bruttoLM: Big[] = getBruttoLeistungsMonate(
+    erwerbsZeitraumLebensMonatList,
+  );
+  const brutto_LM_Plus: Big[] = bruttoLeistungsMonateWithPlanung(
+    erwerbsZeitraumLebensMonatList,
     true,
     planungsergebnis,
   );
-  const brutto_LM_Basis: Big[] = finanzDaten.bruttoLeistungsMonateWithPlanung(
+  const brutto_LM_Basis: Big[] = bruttoLeistungsMonateWithPlanung(
+    erwerbsZeitraumLebensMonatList,
     false,
     planungsergebnis,
   );
@@ -91,4 +98,25 @@ export function bruttoEGPlusNeu(
     lmMitETBasis: lm_mit_et_basis,
     lmMitETPlus: lm_mit_et_plus,
   };
+}
+
+function getBruttoLeistungsMonate(
+  erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[],
+): Big[] {
+  // Im FIT Algorithmus sind die indizes immer Monats-basiert, d.h. der Index 0 bleibt leer.
+  const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
+
+  for (const erwerbszeitraum of erwerbsZeitraumLebensMonatList) {
+    for (
+      let lm: number = erwerbszeitraum.vonLebensMonat;
+      lm <= erwerbszeitraum.bisLebensMonat;
+      lm++
+    ) {
+      const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
+      if (greater(bruttoProMonat, BIG_ZERO)) {
+        bruttoLM[lm] = bruttoProMonat;
+      }
+    }
+  }
+  return bruttoLM;
 }

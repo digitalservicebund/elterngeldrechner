@@ -14,7 +14,11 @@ export type {
 } from "./eltern-geld-plus-ergebnis";
 export { ErwerbsArt } from "./erwerbs-art";
 export { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
-export { FinanzDaten, finanzDatenOf } from "./finanz-daten";
+export {
+  FinanzDaten,
+  bruttoLeistungsMonateWithPlanung,
+  finanzDatenOf,
+} from "./finanz-daten";
 export type { FinanzDatenBerechnet } from "./finanz-daten";
 export { KassenArt } from "./kassen-art";
 export type { Kind } from "./kind";

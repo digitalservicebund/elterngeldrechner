@@ -17,6 +17,7 @@ import {
   PersoenlicheDaten,
   PlanungsDaten,
   ZwischenErgebnis,
+  bruttoLeistungsMonateWithPlanung,
   mutterschaftsLeistungInMonaten,
   zaehleMonateErwerbsTaetigkeit,
 } from "./model";
@@ -96,11 +97,13 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     this.hatPartnerbonus = false;
     //let listBruttoLMBasis: Array<Big> = finanzDatenBerechnet.bruttoLMBasis;
     //let listBruttoLMPlus: Array<Big> = finanzDatenBerechnet.bruttoLMPlus;
-    const listBruttoLMPlus = finanzDaten.bruttoLeistungsMonateWithPlanung(
+    const listBruttoLMPlus = bruttoLeistungsMonateWithPlanung(
+      finanzDaten.erwerbsZeitraumLebensMonatList,
       true,
       planungsergebnis,
     );
-    const listBruttoLMBasis = finanzDaten.bruttoLeistungsMonateWithPlanung(
+    const listBruttoLMBasis = bruttoLeistungsMonateWithPlanung(
+      finanzDaten.erwerbsZeitraumLebensMonatList,
       false,
       planungsergebnis,
     );
@@ -142,7 +145,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     ek_vor: Big,
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
   ) {
-    if (finanzDaten.isMischeinkommen()) {
+    const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
+
+    if (isMischeinkommen) {
       if (mischEkZwischenErgebnis === null) {
         throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
       }
@@ -187,6 +192,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
     z: ZwischenErgebnis,
   ): ElternGeldPlusErgebnis {
+    const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
+
     const nicht_erw = persoenlicheDaten.hasEtNachGeburt;
     let ek_nach_plus: Big;
     let elterngeld_erw_plus: Big;
@@ -220,10 +227,16 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         );
         const lm_mit_et_basis: number = finanzDatenBerechnet.lmMitETBasis;
         const lm_mit_et_plus: number = finanzDatenBerechnet.lmMitETPlus;
-        const bruttoLMPlus: Array<Big> =
-          finanzDaten.bruttoLeistungsMonateWithPlanung(true, planungsergebnis);
-        const bruttoLMBasis: Array<Big> =
-          finanzDaten.bruttoLeistungsMonateWithPlanung(false, planungsergebnis);
+        const bruttoLMPlus: Array<Big> = bruttoLeistungsMonateWithPlanung(
+          finanzDaten.erwerbsZeitraumLebensMonatList,
+          true,
+          planungsergebnis,
+        );
+        const bruttoLMBasis: Array<Big> = bruttoLeistungsMonateWithPlanung(
+          finanzDaten.erwerbsZeitraumLebensMonatList,
+          false,
+          planungsergebnis,
+        );
         const brutto_LM_Plus: Big[] = /* toArray */ bruttoLMPlus.slice(0);
         const brutto_LM_Basis: Big[] = /* toArray */ bruttoLMBasis.slice(0);
         let steuer_sozab_basis: Big = BIG_ZERO;
@@ -299,7 +312,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         }
         if (greater(brutto_plus, BIG_ZERO)) {
           let status: ErwerbsArt;
-          if (finanzDaten.isMischeinkommen()) {
+          if (isMischeinkommen) {
             if (mischEkZwischenErgebnis === null) {
               throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
             }
@@ -355,7 +368,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           2,
         );
         elterngeld_keine_et_plus = z.elternGeld;
-        if (finanzDaten.isMischeinkommen()) {
+        if (isMischeinkommen) {
           if (mischEkZwischenErgebnis === null) {
             throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
           }
@@ -571,7 +584,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     ergebnis.geschwisterBonusDeadLine = ende_geschwisterbonus;
     const ausgabeLebensmonate: ElternGeldAusgabe[] = [];
     let basiselterngeld: Big = z.elternGeld;
-    if (finanzDaten.isMischeinkommen()) {
+    const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
+
+    if (isMischeinkommen) {
       if (misch === null) {
         throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
       }

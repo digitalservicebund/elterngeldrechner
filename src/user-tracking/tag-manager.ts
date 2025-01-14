@@ -17,6 +17,6 @@ function addTagManagerScript(sourceUrl: string): void {
   tagManagerScript.src = sourceUrl;
 
   // We can assume that there is any script, else we would not run here.
-  const firstScript = document.getElementsByTagName("script")[0];
+  const firstScript = document.getElementsByTagName("script")[0]!;
   firstScript.parentNode?.insertBefore(tagManagerScript, firstScript);
 }

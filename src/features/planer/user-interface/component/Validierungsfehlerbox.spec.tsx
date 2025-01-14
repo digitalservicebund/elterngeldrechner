@@ -17,7 +17,8 @@ describe("Validierungsfehlerbox", () => {
     });
     const items = within(list).getAllByRole("listitem");
 
-    expect(within(items[0]).queryByText("erster Fehler")).toBeVisible();
-    expect(within(items[1]).queryByText("noch was falsch")).toBeVisible();
+    expect(items.length).toBe(2);
+    expect(within(items[0]!).queryByText("erster Fehler")).toBeVisible();
+    expect(within(items[1]!).queryByText("noch was falsch")).toBeVisible();
   });
 });

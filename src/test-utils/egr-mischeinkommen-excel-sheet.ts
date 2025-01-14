@@ -19,12 +19,12 @@ export class EgrMischeinkommenExcelSheet {
     const workSheetsFromFile = xlsx.parse(
       `${__dirname}/resources/Testfaelle_2022_3.xlsx`,
     );
-    this.sheet = workSheetsFromFile[0];
+    this.sheet = workSheetsFromFile[0]!;
   }
 
   einkommen(taetigkeit: Taetigkeit, testCaseIndex: number) {
     const einkommen =
-      this.sheet.data[rowOfEinkommen(taetigkeit)][columnOf(testCaseIndex)];
+      this.sheet.data[rowOfEinkommen(taetigkeit)]?.[columnOf(testCaseIndex)];
     if (einkommen === undefined) {
       return BIG_ZERO;
     }
@@ -47,7 +47,7 @@ export class EgrMischeinkommenExcelSheet {
     taetigkeit: Taetigkeit,
     testCaseIndex: number,
   ) {
-    return this.sheet.data[rowOfErwerbsTaetigkeit(taetigkeit)][
+    return this.sheet.data[rowOfErwerbsTaetigkeit(taetigkeit)]?.[
       columnOf(testCaseIndex)
     ] as string;
   }
@@ -68,7 +68,7 @@ export class EgrMischeinkommenExcelSheet {
     monatIndex: number,
   ) {
     return (
-      this.sheet.data[rowOfBemessungsZeitraumMonate(taetigkeit, monatIndex)][
+      this.sheet.data[rowOfBemessungsZeitraumMonate(taetigkeit, monatIndex)]?.[
         columnOf(testCaseIndex)
       ] === "x"
     );
@@ -87,7 +87,7 @@ export class EgrMischeinkommenExcelSheet {
     taetigkeit: Taetigkeit,
     testCaseIndex: number,
   ) {
-    return this.sheet.data[rowOfRentenVersicherungsPflichtig(taetigkeit)][
+    return this.sheet.data[rowOfRentenVersicherungsPflichtig(taetigkeit)]?.[
       columnOf(testCaseIndex)
     ] as string;
   }
@@ -105,7 +105,7 @@ export class EgrMischeinkommenExcelSheet {
     taetigkeit: Taetigkeit,
     testCaseIndex: number,
   ) {
-    return this.sheet.data[rowOfKrankenVersicherungsPflichtig(taetigkeit)][
+    return this.sheet.data[rowOfKrankenVersicherungsPflichtig(taetigkeit)]?.[
       columnOf(testCaseIndex)
     ] as string;
   }
@@ -123,40 +123,40 @@ export class EgrMischeinkommenExcelSheet {
     taetigkeit: Taetigkeit,
     testCaseIndex: number,
   ) {
-    return this.sheet.data[rowOfArbeitslosenVersicherungsPflichtig(taetigkeit)][
-      columnOf(testCaseIndex)
-    ] as string;
+    return this.sheet.data[
+      rowOfArbeitslosenVersicherungsPflichtig(taetigkeit)
+    ]?.[columnOf(testCaseIndex)] as string;
   }
 
   testFallNummer(testCaseIndex: number) {
-    return this.sheet.data[TEST_FALL_NUMMER_OFFSET][
+    return this.sheet.data[TEST_FALL_NUMMER_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as string;
   }
 
   zahlenSieKirchenSteuer(testCaseIndex: number): boolean {
     const zahlenSieKirchenSteuer =
-      this.sheet.data[ZAHLEN_SIE_KIRCHEN_STEUER_OFFSET][
+      this.sheet.data[ZAHLEN_SIE_KIRCHEN_STEUER_OFFSET]?.[
         columnOf(testCaseIndex)
       ];
     return zahlenSieKirchenSteuer === "zahlt Kirchensteuer";
   }
 
   steuerKlasse(testCaseIndex: number) {
-    const steuerKlasse = this.sheet.data[STEUER_KLASSE_OFFSET][
+    const steuerKlasse = this.sheet.data[STEUER_KLASSE_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as number;
     return steuerklasseOfNumber(steuerKlasse);
   }
 
   splittingFaktor(testCaseIndex: number) {
-    return this.sheet.data[SPLITTING_FAKTOR_OFFSET][
+    return this.sheet.data[SPLITTING_FAKTOR_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as number;
   }
 
   kinderFreiBetrag(testCaseIndex: number) {
-    const kinderFreiBetragNumber = this.sheet.data[KINDER_FREI_BETRAG_OFFSET][
+    const kinderFreiBetragNumber = this.sheet.data[KINDER_FREI_BETRAG_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as number;
     const kinderFreiBetrag = kinderFreiBetragOfNumber(kinderFreiBetragNumber);
@@ -169,7 +169,7 @@ export class EgrMischeinkommenExcelSheet {
   }
 
   ergebnisBrutto(testCaseIndex: number) {
-    const netto = this.sheet.data[BRUTTO_OFFSET][columnOf(testCaseIndex)];
+    const netto = this.sheet.data[BRUTTO_OFFSET]?.[columnOf(testCaseIndex)];
     if (netto === undefined) {
       return BIG_ZERO;
     }
@@ -177,7 +177,7 @@ export class EgrMischeinkommenExcelSheet {
   }
 
   ergebnisSteuern(testCaseIndex: number) {
-    const netto = this.sheet.data[STEUERN_OFFSET][columnOf(testCaseIndex)];
+    const netto = this.sheet.data[STEUERN_OFFSET]?.[columnOf(testCaseIndex)];
     if (netto === undefined) {
       return BIG_ZERO;
     }
@@ -185,7 +185,7 @@ export class EgrMischeinkommenExcelSheet {
   }
 
   ergebnisAbgaben(testCaseIndex: number) {
-    const netto = this.sheet.data[ABGABEN_OFFSET][columnOf(testCaseIndex)];
+    const netto = this.sheet.data[ABGABEN_OFFSET]?.[columnOf(testCaseIndex)];
     if (netto === undefined) {
       return BIG_ZERO;
     }
@@ -193,7 +193,7 @@ export class EgrMischeinkommenExcelSheet {
   }
 
   ergebnisNetto(testCaseIndex: number) {
-    const netto = this.sheet.data[NETTO_OFFSET][columnOf(testCaseIndex)];
+    const netto = this.sheet.data[NETTO_OFFSET]?.[columnOf(testCaseIndex)];
     if (netto === undefined) {
       return BIG_ZERO;
     }
@@ -202,7 +202,7 @@ export class EgrMischeinkommenExcelSheet {
 
   ergebnisBasisElternGeld(testCaseIndex: number) {
     const basisElternGeld =
-      this.sheet.data[BASIS_ELTERN_GELD_OFFSET][columnOf(testCaseIndex)];
+      this.sheet.data[BASIS_ELTERN_GELD_OFFSET]?.[columnOf(testCaseIndex)];
     if (basisElternGeld === undefined) {
       return BIG_ZERO;
     }
@@ -210,17 +210,17 @@ export class EgrMischeinkommenExcelSheet {
   }
 
   ergebnisKrankenVersicherung(testCaseIndex: number) {
-    const kv = this.sheet.data[KV_OFFSET][columnOf(testCaseIndex)];
+    const kv = this.sheet.data[KV_OFFSET]?.[columnOf(testCaseIndex)];
     return kv === "Krankenversicherungspflichtig GKV";
   }
 
   ergebnisRentenVersicherung(testCaseIndex: number) {
-    const rv = this.sheet.data[RV_OFFSET][columnOf(testCaseIndex)];
+    const rv = this.sheet.data[RV_OFFSET]?.[columnOf(testCaseIndex)];
     return rv === "Rentenversicherungspflichtig in der GRV";
   }
 
   ergebnisErwerbsArt(testCaseIndex: number) {
-    const ergebnisStatus = this.sheet.data[STATUS_OFFSET][
+    const ergebnisStatus = this.sheet.data[STATUS_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as number;
     return erwerbsArtOf(ergebnisStatus);

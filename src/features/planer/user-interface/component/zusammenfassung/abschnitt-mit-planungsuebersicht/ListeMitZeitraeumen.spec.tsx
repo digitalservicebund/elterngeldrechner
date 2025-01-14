@@ -40,8 +40,8 @@ describe("Liste mit Zeiträumen", () => {
     const listItems = screen.queryAllByRole("listitem");
 
     expect(listItems.length).toBe(2);
-    expect(within(listItems[0]).queryByText("07.04. bis 06.08.2013"));
-    expect(within(listItems[0]).queryByText("07.11. bis 06.02.2014"));
+    expect(within(listItems[0]!).queryByText("07.04. bis 06.08.2013"));
+    expect(within(listItems[0]!).queryByText("07.11. bis 06.02.2014"));
   });
 });
 

@@ -3,7 +3,7 @@ export interface FormStep {
   route: string;
 }
 
-type FormSteps = Record<string, FormStep>;
+type FormSteps = Record<Step, FormStep>;
 
 export const formSteps: FormSteps = {
   allgemeinAngaben: {
@@ -34,4 +34,14 @@ export const formSteps: FormSteps = {
     heading: "Zusammenfassung",
     route: "/zusammenfassung-und-daten",
   },
-};
+} as const;
+
+enum Step {
+  ALLGEMEINE_ANGABEN = "allgemeinAngaben",
+  NACHWUCHS = "nachwuchs",
+  ERWERBSTAETIGKEIT = "erwerbstaetigkeit",
+  EINKOMMEN = "einkommen",
+  ELTERNGELDVARIANTEN = "elterngeldvarianten",
+  RECHNER_UND_PLANER = "rechnerUndPlaner",
+  ZUSAMMENFASSUNG_UND_DATEN = "zusammenfassungUndDaten",
+}

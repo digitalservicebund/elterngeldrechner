@@ -228,8 +228,8 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
                   setValue={setValue}
                   getValues={getValues}
                   name={`${zeitraum}.${zeitraumIndex}`}
-                  options={monthsBeforeBirthList[zeitraumIndex].from}
-                  optionsTo={monthsBeforeBirthList[zeitraumIndex].to}
+                  options={monthsBeforeBirthList[zeitraumIndex]?.from ?? []}
+                  optionsTo={monthsBeforeBirthList[zeitraumIndex]?.to ?? []}
                   onChange={(zeitraum) =>
                     onChangeZeitraum(zeitraumIndex, zeitraum)
                   }

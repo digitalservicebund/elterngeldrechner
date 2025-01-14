@@ -23,9 +23,10 @@ export const FortlaufenderBezugNachDemVierzehntenLebensmonat =
   );
 
 function isSequenceIncreasingByOne(numbers: number[]): boolean {
-  return numbers.every(
-    (entry, index) => index === 0 || entry === numbers[index - 1] + 1,
-  );
+  return numbers.every((entry, index) => {
+    const predecessor = numbers[index - 1];
+    return predecessor === undefined || entry === predecessor + 1;
+  });
 }
 
 if (import.meta.vitest) {
@@ -92,6 +93,19 @@ if (import.meta.vitest) {
         ),
       ).toBe(false);
     });
+
+    test.each([
+      { numbers: [], satisfied: true },
+      { numbers: [1, 2], satisfied: true },
+      { numbers: [1, 3], satisfied: false },
+      { numbers: [3, 4, 5, 6], satisfied: true },
+      { numbers: [3, 5, 6], satisfied: false },
+    ])(
+      "the list of $numbers is a sequence increasing by one: $satisfied",
+      ({ numbers, satisfied }) => {
+        expect(isSequenceIncreasingByOne(numbers)).toBe(satisfied);
+      },
+    );
 
     const LEBENSMONAT_OHNE_BEZUG = {
       [Elternteil.Eins]: {

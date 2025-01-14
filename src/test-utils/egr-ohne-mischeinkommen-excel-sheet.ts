@@ -23,7 +23,7 @@ export class EgrOhneMischeinkommenExcelSheet {
     const workSheetsFromFile = xlsx.parse(
       `${__dirname}/resources/Testfaelle_010219.xlsx`,
     );
-    this.sheet = workSheetsFromFile[1];
+    this.sheet = workSheetsFromFile[1]!;
   }
 
   geburtsDatum(testCaseIndex: number) {
@@ -124,7 +124,7 @@ export class EgrOhneMischeinkommenExcelSheet {
   }
 
   valueOf(testCaseIndex: number, rowIndex: number) {
-    return this.sheet.data[rowIndex][columnOf(testCaseIndex)];
+    return this.sheet.data[rowIndex]?.[columnOf(testCaseIndex)];
   }
 }
 

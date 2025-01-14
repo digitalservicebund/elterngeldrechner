@@ -265,12 +265,18 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
               ek_vor = fMax(round(ek_vor.sub(PAUSCH)), BIG_ZERO);
               summe_brutto_basis = BIG_ZERO;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
+                const bruttoInLebensmonatenMitBasis =
+                  brutto_LM_Basis[i] ?? BIG_ZERO;
+
                 if (
-                  !isEqual(brutto_LM_Basis[i], BIG_ZERO) &&
+                  !isEqual(bruttoInLebensmonatenMitBasis, BIG_ZERO) &&
                   planungsergebnis.get(i) === ElternGeldArt.BASIS_ELTERNGELD
                 ) {
                   summe_brutto_basis = summe_brutto_basis.add(
-                    round(fMax(brutto_LM_Basis[i].sub(pausch), BIG_ZERO), 2),
+                    round(
+                      fMax(bruttoInLebensmonatenMitBasis.sub(pausch), BIG_ZERO),
+                      2,
+                    ),
                   );
                 }
               }
@@ -313,14 +319,20 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
               ek_vor = fMax(ek_vor.sub(PAUSCH), BIG_ZERO);
               summe_brutto_plus = BIG_ZERO;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
+                const bruttoInLebensmonatenMitPlus =
+                  brutto_LM_Plus[i] ?? BIG_ZERO;
+
                 if (
-                  !isEqual(brutto_LM_Plus[i], BIG_ZERO) &&
+                  !isEqual(bruttoInLebensmonatenMitPlus, BIG_ZERO) &&
                   (planungsergebnis.get(i) === ElternGeldArt.ELTERNGELD_PLUS ||
                     planungsergebnis.get(i) ===
                       ElternGeldArt.PARTNERSCHAFTS_BONUS)
                 ) {
                   summe_brutto_plus = summe_brutto_plus.add(
-                    round(fMax(brutto_LM_Plus[i].sub(pausch), BIG_ZERO), 2),
+                    round(
+                      fMax(bruttoInLebensmonatenMitPlus.sub(pausch), BIG_ZERO),
+                      2,
+                    ),
                   );
                 }
               }
@@ -440,23 +452,24 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         if (eg_verlauf[i - 1] === ElternGeldArt.BASIS_ELTERNGELD) {
           verlauf[i - 1] = ElternGeldKategorie.BASIS_ELTERN_GELD;
         }
+
         if (
           eg_verlauf[i - 1] === ElternGeldArt.ELTERNGELD_PLUS &&
-          isEqual(brutto_LM_Plus_pb[i], BIG_ZERO)
+          isEqual(brutto_LM_Plus_pb[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          isEqual(brutto_LM_Plus_pb[i], BIG_ZERO)
+          isEqual(brutto_LM_Plus_pb[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          isEqual(brutto_LM_Plus[i], BIG_ZERO)
+          isEqual(brutto_LM_Plus[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           this.hatPartnerbonus = true;
           break;
@@ -469,41 +482,41 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.BASIS_ELTERNGELD &&
-          isEqual(brutto_LM_Basis[i], BIG_ZERO)
+          isEqual(brutto_LM_Basis[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] = ElternGeldKategorie.BASIS_ELTERN_GELD;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.BASIS_ELTERNGELD &&
-          greater(brutto_LM_Basis[i], BIG_ZERO)
+          greater(brutto_LM_Basis[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.BASIS_ELTERN_GELD_MIT_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.ELTERNGELD_PLUS &&
-          isEqual(brutto_LM_Plus[i], BIG_ZERO)
+          isEqual(brutto_LM_Plus[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          isEqual(brutto_LM_Plus[i], BIG_ZERO)
+          isEqual(brutto_LM_Plus[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           this.hatPartnerbonus = true;
           break;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.ELTERNGELD_PLUS &&
-          greater(brutto_LM_Plus[i], BIG_ZERO)
+          greater(brutto_LM_Plus[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT;
         }
         if (
           eg_verlauf[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS &&
-          greater(brutto_LM_Plus[i], BIG_ZERO)
+          greater(brutto_LM_Plus[i] ?? BIG_ZERO, BIG_ZERO)
         ) {
           verlauf[i - 1] =
             ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT;
@@ -515,8 +528,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         this.anfang_LM[pbMonatVon - 1] != null &&
         this.ende_LM[pbMonatBis - 1] != null
       ) {
-        this.pb_von = this.anfang_LM[pbMonatVon - 1];
-        this.pb_bis = this.ende_LM[pbMonatBis - 1];
+        this.pb_von = this.anfang_LM[pbMonatVon - 1] ?? null;
+        this.pb_bis = this.ende_LM[pbMonatBis - 1] ?? null;
       }
     }
     return verlauf;
@@ -547,7 +560,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
         if (
           ende_geschwisterbonus != null &&
-          ende_geschwisterbonus >= this.anfang_LM[i]
+          ende_geschwisterbonus >= (this.anfang_LM[i] ?? 0)
         ) {
           geschw[i - 1] = 1;
         }
@@ -599,7 +612,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         if (verlauf[i - 1] === ElternGeldKategorie.BASIS_ELTERN_GELD) {
           geschwisterbonus = round(
             fMax(min_geschwisterbonus, basiselterngeld.mul(rate_bonus)).mul(
-              Big(geschw[i - 1]),
+              Big(geschw[i - 1] ?? 0),
             ),
             2,
           );
@@ -615,7 +628,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           mehrlingszuschlag = betrag_mehrlingszuschlag.mul(Big(mehrling));
           geschwisterbonus = round(
             fMax(min_geschwisterbonus, basiselterngeld_erw.mul(rate_bonus)).mul(
-              Big(geschw[i - 1]),
+              Big(geschw[i - 1] ?? 0),
             ),
             2,
           );
@@ -634,7 +647,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             fMax(
               min_geschwisterbonus.div(Big(2)),
               elterngeldplus.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1])),
+            ).mul(Big(geschw[i - 1] ?? 0)),
             2,
           );
           elterngeld = elterngeldplus
@@ -652,7 +665,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             fMax(
               min_geschwisterbonus.div(Big(2)),
               elterngeldplus_erw.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1])),
+            ).mul(Big(geschw[i - 1] ?? 0)),
             2,
           );
           elterngeld = elterngeldplus_erw

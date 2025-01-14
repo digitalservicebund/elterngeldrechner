@@ -231,7 +231,7 @@ describe("AuswahlEingabe", () => {
       const plusInfoButton = screen.getByRole("button", {
         name: "Öffne Informationen wieso Partnerschaftsbonus nicht verfügbar ist",
       });
-      const firstRadio = screen.getAllByRole("radio")[0];
+      const firstRadio = screen.getAllByRole("radio")[0]!;
 
       expect(basisInfoButton?.compareDocumentPosition(plusInfoButton)).toBe(
         Node.DOCUMENT_POSITION_FOLLOWING,

@@ -169,9 +169,9 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     await userEvent.click(button);
 
     const einkommenElternteil1TaetigkeitenVon =
-      within(elternteil1Section).getAllByLabelText("von")[1];
+      within(elternteil1Section).getAllByLabelText("von")[1]!;
     const einkommenElternteil1TaetigkeitenBis =
-      within(elternteil1Section).getAllByLabelText("bis")[1];
+      within(elternteil1Section).getAllByLabelText("bis")[1]!;
 
     expect(
       within(einkommenElternteil1TaetigkeitenVon).queryAllByRole("option"),

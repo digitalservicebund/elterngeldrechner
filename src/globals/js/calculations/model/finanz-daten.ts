@@ -70,7 +70,9 @@ export class FinanzDaten {
         // simplify after java code migration and with new tests for this case
         const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
         if (greater(bruttoProMonat, BIG_ZERO)) {
-          const elterngeldArt: ElternGeldArt = planungsdaten.planung[lm - 1];
+          const elterngeldArt =
+            planungsdaten.planung[lm - 1] ?? ElternGeldArt.KEIN_BEZUG;
+
           if (isPlus) {
             if (
               elterngeldArt === ElternGeldArt.PARTNERSCHAFTS_BONUS ||

@@ -39,9 +39,11 @@ export function bruttoEGPlusNeu(
   let brutto_basis: Big = BIG_ZERO;
   let brutto_plus: Big = BIG_ZERO;
   for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
+    const brutto = bruttoLM[i] ?? BIG_ZERO;
+
     if (
       planungsergebnis.get(i) === ElternGeldArt.KEIN_BEZUG &&
-      greater(bruttoLM[i], BIG_ZERO)
+      greater(brutto, BIG_ZERO)
     ) {
       // Logger.log("Es wurde Einkommen in Monaten ohne Bezug angegeben!");
       // Keine Fehlermeldung in GUI, da auch
@@ -49,20 +51,28 @@ export function bruttoEGPlusNeu(
       // Kalendermonaten, die keine Rollte
       // spielte
     }
+
+    const bruttoInLebensmonatenMitBasis = brutto_LM_Basis[i] ?? BIG_ZERO;
+
     if (
-      !isEqual(brutto_LM_Basis[i], BIG_ZERO) &&
+      !isEqual(bruttoInLebensmonatenMitBasis, BIG_ZERO) &&
       planungsergebnis.get(i) === ElternGeldArt.BASIS_ELTERNGELD
     ) {
       lm_mit_et_basis = lm_mit_et_basis + 1;
-      summe_brutto_basis = summe_brutto_basis.add(brutto_LM_Basis[i]);
+      summe_brutto_basis = summe_brutto_basis.add(
+        bruttoInLebensmonatenMitBasis,
+      );
     }
+
+    const bruttoInLebensmonatenMitPlus = brutto_LM_Plus[i] ?? BIG_ZERO;
+
     if (
-      (!isEqual(brutto_LM_Plus[i], BIG_ZERO) &&
+      (!isEqual(bruttoInLebensmonatenMitPlus, BIG_ZERO) &&
         planungsergebnis.get(i) === ElternGeldArt.ELTERNGELD_PLUS) ||
       planungsergebnis.get(i) === ElternGeldArt.PARTNERSCHAFTS_BONUS
     ) {
       lm_mit_et_plus = lm_mit_et_plus + 1;
-      summe_brutto_plus = summe_brutto_plus.add(brutto_LM_Plus[i]);
+      summe_brutto_plus = summe_brutto_plus.add(bruttoInLebensmonatenMitPlus);
     }
   }
   if (lm_mit_et_basis > 0) {

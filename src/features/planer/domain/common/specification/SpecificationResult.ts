@@ -45,7 +45,7 @@ export class SpecificationResult {
         ...(other.options.violations ?? []),
       ];
       return SpecificationResult.unsatisfied(
-        violations[0],
+        violations[0]!, // TODO: Use proper type-diven design here.
         ...violations.splice(1),
       );
     }

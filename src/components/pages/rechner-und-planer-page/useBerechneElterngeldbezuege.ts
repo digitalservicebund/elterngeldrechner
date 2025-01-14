@@ -273,7 +273,7 @@ if (import.meta.vitest) {
 
       expect(calculateElternGeld).toHaveBeenCalledOnce();
       expect(
-        calculateElternGeld.mock.calls[0][0].planungsDaten.planung,
+        calculateElternGeld.mock.calls[0]?.[0].planungsDaten.planung,
       ).toStrictEqual([
         ElternGeldArt.ELTERNGELD_PLUS,
         ElternGeldArt.BASIS_ELTERNGELD,

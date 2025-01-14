@@ -131,14 +131,14 @@ describe("finanzDatenFactory", () => {
 
     // then
     expect(finanzDaten.erwerbsZeitraumLebensMonatList.length).toBe(1);
-    expect(finanzDaten.erwerbsZeitraumLebensMonatList[0].vonLebensMonat).toBe(
+    expect(finanzDaten.erwerbsZeitraumLebensMonatList[0]?.vonLebensMonat).toBe(
       1,
     );
-    expect(finanzDaten.erwerbsZeitraumLebensMonatList[0].bisLebensMonat).toBe(
+    expect(finanzDaten.erwerbsZeitraumLebensMonatList[0]?.bisLebensMonat).toBe(
       1,
     );
     expect(
-      finanzDaten.erwerbsZeitraumLebensMonatList[0].bruttoProMonat.value.toNumber(),
+      finanzDaten.erwerbsZeitraumLebensMonatList[0]?.bruttoProMonat.value.toNumber(),
     ).toBe(1000);
   });
 

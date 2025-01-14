@@ -113,12 +113,12 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
       const actual = sheet.erwerbsZeitraumLebensMonatList(0);
       expect(actual.length).toBe(PLANUNG_ANZAHL_MONATE);
       for (let i = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-        expect(actual[i].vonLebensMonat).toBe(i + 1);
-        expect(actual[i].bisLebensMonat).toBe(i + 1);
+        expect(actual[i]?.vonLebensMonat).toBe(i + 1);
+        expect(actual[i]?.bisLebensMonat).toBe(i + 1);
       }
-      expect(actual[0].bruttoProMonat.value.toNumber()).toBe(1353);
-      expect(actual[2].bruttoProMonat.value.toNumber()).toBe(728);
-      expect(actual[31].bruttoProMonat.value.toNumber()).toBe(0);
+      expect(actual[0]?.bruttoProMonat.value.toNumber()).toBe(1353);
+      expect(actual[2]?.bruttoProMonat.value.toNumber()).toBe(728);
+      expect(actual[31]?.bruttoProMonat.value.toNumber()).toBe(0);
     });
 
     it("should read testFallNummer", () => {

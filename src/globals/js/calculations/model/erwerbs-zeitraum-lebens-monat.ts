@@ -74,7 +74,7 @@ export function zaehleMonateErwerbsTaetigkeit(
   if (
     erwerbsZeitraeume == null ||
     erwerbsZeitraeume.length === 0 ||
-    erwerbsZeitraeume[0].vonLebensMonat == null
+    erwerbsZeitraeume[0]?.vonLebensMonat == null
   ) {
     return 0;
   }

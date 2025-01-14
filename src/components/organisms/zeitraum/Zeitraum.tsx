@@ -103,7 +103,7 @@ export function Zeitraum<TFieldValues extends FieldValues>({
 
         // recalculate hidden "to" options
         toOptions.forEach((toOption, index) => {
-          const toOptionCanBeShown = !allToOptions[index].hidden;
+          const toOptionCanBeShown = !(allToOptions[index]?.hidden ?? false);
           const toOptionIsRealValue = toOption.value !== "";
           if (toOptionCanBeShown && toOptionIsRealValue) {
             const beforeNextHiddenToValue =

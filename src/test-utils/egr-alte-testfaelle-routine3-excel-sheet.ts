@@ -27,7 +27,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     const workSheetsFromFile = xlsx.parse(
       `${__dirname}/resources/Testfaelle_alte_Routine3.xlsx`,
     );
-    this.sheet = workSheetsFromFile[0];
+    this.sheet = workSheetsFromFile[0]!;
   }
 
   createPersoenlicheDaten(testCaseIndex: number): PersoenlicheDaten {
@@ -272,7 +272,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
   }
 
   valueOf(testCaseIndex: number, rowIndex: number) {
-    return this.sheet.data[rowIndex][columnOf(testCaseIndex)];
+    return this.sheet.data[rowIndex]?.[columnOf(testCaseIndex)];
   }
 }
 

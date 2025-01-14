@@ -32,8 +32,27 @@ function getCookies(): Record<string, string | undefined> {
   return document.cookie
     .split(";")
     .map((rawKeyValuePair) => rawKeyValuePair.split("="))
+    .filter((pair) => isTuple(pair, isString))
     .reduce(
       (cookieMap, [name, value]) => ({ ...cookieMap, [name.trim()]: value }),
       {},
     );
+}
+
+type Tuple<T> = [T, T];
+
+function isTuple<T>(
+  value: unknown,
+  genericTypeGuard: (value: unknown) => value is T,
+): value is Tuple<T> {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    genericTypeGuard(value[0]) &&
+    genericTypeGuard(value[1])
+  );
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
 }

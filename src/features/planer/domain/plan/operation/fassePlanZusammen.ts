@@ -7,6 +7,7 @@ import {
 import {
   Lebensmonatszahl,
   Lebensmonatszahlen,
+  isLebensmonatszahl,
 } from "@/features/planer/domain/Lebensmonatszahl";
 import { Variante, isVariante } from "@/features/planer/domain/Variante";
 import type {
@@ -133,7 +134,7 @@ function bestimmeZeitraeumeMitDurchgaengigenBezug(
         );
 
         if (hatBezugImLebensmonat) {
-          const lastGroup = groups[groups.length - 1];
+          const lastGroup = groups[groups.length - 1] ?? [];
           lastGroup.push(lebensmonatszahl);
         } else {
           groups.push([]);
@@ -145,10 +146,9 @@ function bestimmeZeitraeumeMitDurchgaengigenBezug(
     ).filter((group) => group.length > 0);
 
   const zeitraeumeByLebensmonatszahlen =
-    groupsOfLebensmonatszahlenMitDurchgaengigenBezug.map((group) => ({
-      from: group[0],
-      to: group[group.length - 1],
-    }));
+    groupsOfLebensmonatszahlenMitDurchgaengigenBezug
+      .map((group) => ({ from: group[0], to: group[group.length - 1] }))
+      .filter(isZeitraumByLebensmonatszahlen);
 
   return zeitraeumeByLebensmonatszahlen.map((zeitraum) => ({
     from: berechneZeitraumFuerLebensmonat(geburtsdatumDesKindes, zeitraum.from)
@@ -210,6 +210,24 @@ const summiereFeldAllerMonate = (
     .map((monat) => field(monat) ?? 0)
     .reduce((sum, fieldValue) => sum + fieldValue, 0);
 };
+
+type ZeitraumByLebensmonatszahlen = {
+  from: Lebensmonatszahl;
+  to: Lebensmonatszahl;
+};
+
+function isZeitraumByLebensmonatszahlen(
+  value: unknown,
+): value is ZeitraumByLebensmonatszahlen {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "from" in value &&
+    isLebensmonatszahl(value.from) &&
+    "to" in value &&
+    isLebensmonatszahl(value.to)
+  );
+}
 
 if (import.meta.vitest) {
   const { describe, it, expect, vi } = import.meta.vitest;

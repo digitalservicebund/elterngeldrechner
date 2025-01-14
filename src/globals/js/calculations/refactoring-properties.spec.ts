@@ -456,7 +456,10 @@ function originalKindFrom(data: KindRaw, index: number): OriginalKind {
 }
 
 function planungsDatenFrom(data: PlanungsdatenRaw): PlanungsDaten {
-  return new PlanungsDaten(data.mutterschaftsleistungen, data.planung);
+  return {
+    mutterschaftsLeistung: data.mutterschaftsleistungen,
+    planung: data.planung,
+  };
 }
 
 function originalPlanungsDatenFrom(

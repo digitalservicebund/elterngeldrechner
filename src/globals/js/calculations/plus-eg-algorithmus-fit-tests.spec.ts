@@ -6,7 +6,6 @@ import {
   FinanzDaten,
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
-  PlanungsDaten,
 } from "./model";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
@@ -94,11 +93,10 @@ const createPlanungsDaten = (
   sheet: EgrAlteTestfaelleRoutine3ExcelSheet,
   testCaseIndex: number,
 ) => {
-  const planungsDaten = new PlanungsDaten(
-    MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
-    sheet.lebensmonateElterngeldArt(testCaseIndex),
-  );
-  return planungsDaten;
+  return {
+    mutterschaftsLeistung: MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+    planung: sheet.lebensmonateElterngeldArt(testCaseIndex),
+  };
 };
 
 const createFinanzDaten = (

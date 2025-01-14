@@ -23,7 +23,7 @@ import {
   type Lohnsteuerjahr,
   MutterschaftsLeistung,
   type PersoenlicheDaten,
-  PlanungsDaten,
+  type PlanungsDaten,
 } from "@/globals/js/calculations/model";
 import type { RootState } from "@/redux";
 import type { ElternteilType } from "@/redux/elternteil-type";
@@ -118,15 +118,12 @@ function transformMonateForFinanzdaten(
 }
 
 function transformMonateToPlanungsdaten(monate: GeplanteMonate): PlanungsDaten {
-  // Constructor arguments don't matter and will become removed.
-  const anyMutterschaftsleistung =
-    MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN;
-
-  const planung = Lebensmonatszahlen.map((lebensmonatszahl) =>
-    elterngeldartFrom(monate[lebensmonatszahl]?.gewaehlteOption),
-  );
-
-  return new PlanungsDaten(anyMutterschaftsleistung, planung);
+  return {
+    mutterschaftsLeistung: MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN, // Does not matter.
+    planung: Lebensmonatszahlen.map((lebensmonatszahl) =>
+      elterngeldartFrom(monate[lebensmonatszahl]?.gewaehlteOption),
+    ),
+  };
 }
 
 function elterngeldbezuegeFrom(
@@ -249,7 +246,7 @@ if (import.meta.vitest) {
         {
           persoenlicheDaten,
           finanzDaten,
-          planungsDaten: expect.any(PlanungsDaten) as PlanungsDaten,
+          planungsDaten: expect.anything() as PlanungsDaten,
         },
         expect.any(Number),
       );

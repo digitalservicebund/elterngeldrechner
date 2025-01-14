@@ -33,7 +33,7 @@ export {
   mutterschaftsLeistungInMonaten,
 } from "./mutterschafts-leistung";
 export { type PersoenlicheDaten } from "./persoenliche-daten";
-export { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
+export { PLANUNG_ANZAHL_MONATE, type PlanungsDaten } from "./planungs-daten";
 export { RentenArt } from "./renten-art";
 export {
   SteuerKlasse,

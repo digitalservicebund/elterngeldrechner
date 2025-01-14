@@ -13,7 +13,6 @@ import {
   ZwischenErgebnis,
   finanzDatenOf,
 } from "./model";
-import { planungsDatenOf } from "./model/planungs-daten";
 import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
 
 export class EgrCalculation {
@@ -29,7 +28,7 @@ export class EgrCalculation {
     const clonedElterngeldDaten = {
       persoenlicheDaten: structuredClone(elternGeldDaten.persoenlicheDaten),
       finanzDaten: finanzDatenOf(elternGeldDaten.finanzDaten),
-      planungsDaten: planungsDatenOf(elternGeldDaten.planungsDaten),
+      planungsDaten: elternGeldDaten.planungsDaten,
     };
 
     // Steuern berechnen wenn erwerbstätig vor Geburt

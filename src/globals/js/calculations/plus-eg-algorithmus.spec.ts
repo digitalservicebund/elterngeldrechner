@@ -11,7 +11,6 @@ import {
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
-  PlanungsDaten,
   SteuerKlasse,
   ZwischenErgebnis,
 } from "./model";
@@ -23,14 +22,13 @@ describe("plus-eg-algorithmus", () => {
   describe("should calculate ElternGeldPlusErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
-      const planung = new Array<ElternGeldArt>(PLANUNG_ANZAHL_MONATE).fill(
-        ElternGeldArt.ELTERNGELD_PLUS,
-      );
-
-      const planungsDaten = new PlanungsDaten(
-        MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
-        planung,
-      );
+      const planungsDaten = {
+        mutterschaftsLeistung:
+          MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+        planung: new Array<ElternGeldArt>(PLANUNG_ANZAHL_MONATE).fill(
+          ElternGeldArt.ELTERNGELD_PLUS,
+        ),
+      };
 
       const persoenlicheDaten = {
         wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
@@ -120,10 +118,11 @@ describe("plus-eg-algorithmus", () => {
 
       expect(() =>
         algorithmus.elterngeldPlusErgebnis(
-          new PlanungsDaten(
-            MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
-            [],
-          ),
+          {
+            mutterschaftsLeistung:
+              MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+            planung: [],
+          },
           persoenlicheDaten,
           finanzDaten,
           2022,

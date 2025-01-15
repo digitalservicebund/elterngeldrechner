@@ -81,6 +81,13 @@ async function expectPageToBeAccessible(
   testInfo: TestInfo,
   ruleNamesToDisable: string[] = [],
 ): Promise<void> {
+  // Disable motion during accessibility tests to ensure consistent results.
+  // Without this, axe might capture a button mid-transition, resulting in
+  // a temporary low contrast that could fail the contrast checks.
+  await page.addStyleTag({
+    content: "* { transition: none !important; }",
+  });
+
   const { violations } = await new AxeBuilder({ page })
     .options({ resultTypes: ["violations"] })
     .disableRules(ruleNamesToDisable)

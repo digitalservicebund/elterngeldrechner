@@ -1,9 +1,11 @@
 import Big from "big.js";
 import { BruttoNettoRechner } from "./brutto-netto-rechner";
 import {
+  Einkommen,
   ErwerbsArt,
-  FinanzDaten,
+  KassenArt,
   KinderFreiBetrag,
+  RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
 
@@ -12,9 +14,16 @@ describe("brutto-netto-rechner", () => {
 
   it("should calculate test from TestErweiterterAlgorithmus.java", () => {
     // given
-    const finanzDaten = new FinanzDaten();
-    finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
-    finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
+    const finanzDaten = {
+      bruttoEinkommen: new Einkommen(0),
+      steuerKlasse: SteuerKlasse.SKL4,
+      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+      rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+      splittingFaktor: 1.0,
+      mischEinkommenTaetigkeiten: [],
+      erwerbsZeitraumLebensMonatList: [],
+    };
 
     // when
     const actual = bruttoNettoRechner.abzuege(

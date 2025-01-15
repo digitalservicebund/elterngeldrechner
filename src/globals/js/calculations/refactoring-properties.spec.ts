@@ -405,20 +405,21 @@ function originalPersoenlicheDatenFrom(
 }
 
 function finanzDatenFrom(data: FinanzdatenRaw): FinanzDaten {
-  const finanzdaten = new FinanzDaten();
-  finanzdaten.bruttoEinkommen = new Einkommen(data.bruttoeinkommen);
-  finanzdaten.istKirchensteuerpflichtig = data.zahlenSieKirchensteuer;
-  finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
-  finanzdaten.steuerKlasse = data.steuerklasse;
-  finanzdaten.kassenArt = data.kassenart;
-  finanzdaten.rentenVersicherung = data.rentenversicherung;
-  finanzdaten.splittingFaktor = data.splittingfaktor;
-  finanzdaten.mischEinkommenTaetigkeiten = data.mischEinkommenTaetigkeiten.map(
-    mischEkTaetigkeitFrom,
-  );
-  finanzdaten.erwerbsZeitraumLebensMonatList =
-    data.erwerbsZeitraumLebensmonatList.map(erwerbsZeitraumLebensMonatFrom);
-  return finanzdaten;
+  return {
+    bruttoEinkommen: new Einkommen(data.bruttoeinkommen),
+    istKirchensteuerpflichtig: data.zahlenSieKirchensteuer,
+    kinderFreiBetrag: data.kinderfreibetrag,
+    steuerKlasse: data.steuerklasse,
+    kassenArt: data.kassenart,
+    rentenVersicherung: data.rentenversicherung,
+    splittingFaktor: data.splittingfaktor,
+    mischEinkommenTaetigkeiten: data.mischEinkommenTaetigkeiten.map(
+      mischEkTaetigkeitFrom,
+    ),
+    erwerbsZeitraumLebensMonatList: data.erwerbsZeitraumLebensmonatList.map(
+      erwerbsZeitraumLebensMonatFrom,
+    ),
+  };
 }
 
 function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {

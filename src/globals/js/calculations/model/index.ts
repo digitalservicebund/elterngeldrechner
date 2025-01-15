@@ -15,7 +15,7 @@ export type {
 export { ErwerbsArt } from "./erwerbs-art";
 export { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 export {
-  FinanzDaten,
+  type FinanzDaten,
   bruttoLeistungsMonateWithPlanung,
   finanzDatenOf,
 } from "./finanz-daten";

@@ -4,9 +4,9 @@ import {
   Einkommen,
   ErwerbsArt,
   ErwerbsTaetigkeit,
-  FinanzDaten,
   KassenArt,
   KinderFreiBetrag,
+  RentenArt,
   SteuerKlasse,
   createMischEkTaetigkeitOf,
 } from "./model";
@@ -25,77 +25,81 @@ describe("basis-eg-algorithmus", () => {
         geschwister: [],
       };
 
-      const finanzDaten = new FinanzDaten();
-      finanzDaten.istKirchensteuerpflichtig = false;
-      finanzDaten.bruttoEinkommen = new Einkommen(0);
-      finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
-      finanzDaten.steuerKlasse = SteuerKlasse.SKL5;
-      finanzDaten.kassenArt = KassenArt.GESETZLICH_PFLICHTVERSICHERT;
-      finanzDaten.mischEinkommenTaetigkeiten = [
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          Big(2015.0),
-          [
+      const finanzDaten = {
+        istKirchensteuerpflichtig: false,
+        bruttoEinkommen: new Einkommen(0),
+        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        steuerKlasse: SteuerKlasse.SKL5,
+        kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+        rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+        splittingFaktor: 1.0,
+        erwerbsZeitraumLebensMonatList: [],
+        mischEinkommenTaetigkeiten: [
+          createMischEkTaetigkeitOf(
+            ErwerbsTaetigkeit.SELBSTSTAENDIG,
+            Big(2015.0),
+            [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+            ],
+            false,
+            true,
+            false,
+          ),
+          createMischEkTaetigkeitOf(
+            ErwerbsTaetigkeit.SELBSTSTAENDIG,
+            Big(2343.0),
+            [
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true,
+              true,
+              false,
+              false,
+              false,
+            ],
             false,
             false,
             false,
-            false,
-            false,
-            false,
-            false,
-            false,
+          ),
+          createMischEkTaetigkeitOf(
+            ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+            Big(553.0),
+            [
+              false,
+              false,
+              false,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+            ],
             false,
             false,
             true,
-            false,
-          ],
-          false,
-          true,
-          false,
-        ),
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          Big(2343.0),
-          [
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            true,
-            true,
-            false,
-            false,
-            false,
-          ],
-          false,
-          false,
-          false,
-        ),
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-          Big(553.0),
-          [
-            false,
-            false,
-            false,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-          ],
-          false,
-          false,
-          true,
-        ),
-      ];
+          ),
+        ],
+      };
 
       // when
       const mischEkZwischenErgebnis =

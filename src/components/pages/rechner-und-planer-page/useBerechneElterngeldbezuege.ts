@@ -200,9 +200,8 @@ if (import.meta.vitest) {
 
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/test-utils/test-utils");
-    const { FinanzDaten, ErwerbsArt } = await import(
-      "@/globals/js/calculations/model"
-    );
+    const { ErwerbsArt, KassenArt, SteuerKlasse, RentenArt, KinderFreiBetrag } =
+      await import("@/globals/js/calculations/model");
     const { KeinElterngeld } = await import("@/features/planer/domain");
 
     vi.mock(import("@/redux/persoenlicheDatenFactory"));
@@ -210,7 +209,7 @@ if (import.meta.vitest) {
 
     beforeEach(() => {
       vi.mocked(persoenlicheDatenOfUi).mockReturnValue(ANY_PERSOENLICHE_DATEN);
-      vi.mocked(finanzDatenOfUi).mockReturnValue(new FinanzDaten());
+      vi.mocked(finanzDatenOfUi).mockReturnValue(ANY_FINANZDATEN);
     });
 
     it("calls the methods to create the static calculation parameter only once initially", () => {
@@ -231,7 +230,7 @@ if (import.meta.vitest) {
       const persoenlicheDaten = ANY_PERSOENLICHE_DATEN;
       vi.mocked(persoenlicheDatenOfUi).mockReturnValue(persoenlicheDaten);
 
-      const finanzDaten = new FinanzDaten();
+      const finanzDaten = ANY_FINANZDATEN;
       vi.mocked(finanzDatenOfUi).mockReturnValue(finanzDaten);
 
       const calculateElternGeld = vi.spyOn(
@@ -338,6 +337,17 @@ if (import.meta.vitest) {
       anzahlKuenftigerKinder: 1,
       wahrscheinlichesGeburtsDatum: new Date(),
       etVorGeburt: ErwerbsArt.NEIN,
+    };
+
+    const ANY_FINANZDATEN = {
+      bruttoEinkommen: new Einkommen(0),
+      steuerKlasse: SteuerKlasse.SKL1,
+      kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+      rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+      splittingFaktor: 1.0,
+      mischEinkommenTaetigkeiten: [],
+      erwerbsZeitraumLebensMonatList: [],
     };
 
     function monat(

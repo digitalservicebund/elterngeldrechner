@@ -1,5 +1,4 @@
 import Big from "big.js";
-import { Einkommen } from "./einkommen";
 import { BruttoEinkommen } from "./einkommen-types";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
@@ -11,20 +10,18 @@ import { RentenArt } from "./renten-art";
 import { SteuerKlasse } from "./steuer-klasse";
 import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
 
-/**
- * Angaben zum Einkommen für die Berechnung des Elterngeldes.
- */
-export class FinanzDaten {
-  bruttoEinkommen: BruttoEinkommen = new Einkommen(0);
-  istKirchensteuerpflichtig?: boolean;
-  kinderFreiBetrag: KinderFreiBetrag = KinderFreiBetrag.ZKF0;
-  steuerKlasse: SteuerKlasse = SteuerKlasse.SKL1;
-  kassenArt: KassenArt = KassenArt.GESETZLICH_PFLICHTVERSICHERT;
-  rentenVersicherung: RentenArt = RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
-  splittingFaktor: number = 1.0;
-  mischEinkommenTaetigkeiten: MischEkTaetigkeit[] = [];
-  erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[] = [];
-}
+// TODO: mark fully readonly
+export type FinanzDaten = {
+  readonly bruttoEinkommen: BruttoEinkommen;
+  readonly istKirchensteuerpflichtig?: boolean;
+  kinderFreiBetrag: KinderFreiBetrag;
+  steuerKlasse: SteuerKlasse;
+  kassenArt: KassenArt;
+  rentenVersicherung: RentenArt;
+  splittingFaktor: number;
+  mischEinkommenTaetigkeiten: MischEkTaetigkeit[];
+  erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[];
+};
 
 /**
  * Angaben zum Einkommen für die Berechnung des Elterngeldes.
@@ -80,7 +77,7 @@ export function bruttoLeistungsMonateWithPlanung(
 }
 
 export function finanzDatenOf(source: FinanzDaten) {
-  const copy = new FinanzDaten();
+  const copy = { ...source };
   Object.assign(copy, source);
   return copy;
 }

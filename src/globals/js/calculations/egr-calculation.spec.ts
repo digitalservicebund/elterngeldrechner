@@ -5,11 +5,12 @@ import {
   ElternGeldArt,
   ErwerbsArt,
   ErwerbsZeitraumLebensMonat,
-  FinanzDaten,
+  KassenArt,
   KinderFreiBetrag,
   MischEkTaetigkeit,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
+  RentenArt,
   SteuerKlasse,
 } from "./model";
 
@@ -34,20 +35,17 @@ describe("egr-calculation", () => {
         hasEtNachGeburt: true,
       };
 
-      const finanzDaten = new FinanzDaten();
-      finanzDaten.bruttoEinkommen = new Einkommen(2800);
-      finanzDaten.steuerKlasse = SteuerKlasse.SKL1;
-      finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
-      finanzDaten.erwerbsZeitraumLebensMonatList = [];
-      finanzDaten.erwerbsZeitraumLebensMonatList.push(
-        new ErwerbsZeitraumLebensMonat(1, 2, new Einkommen(100)),
-      );
-      finanzDaten.erwerbsZeitraumLebensMonatList.push(
-        new ErwerbsZeitraumLebensMonat(3, 4, new Einkommen(1000)),
-      );
-      finanzDaten.erwerbsZeitraumLebensMonatList.push(
-        new ErwerbsZeitraumLebensMonat(5, 6, new Einkommen(5000)),
-      );
+      const finanzDaten = {
+        ...ANY_FINANZDATEN,
+        bruttoEinkommen: new Einkommen(2800),
+        steuerKlasse: SteuerKlasse.SKL1,
+        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        erwerbsZeitraumLebensMonatList: [
+          new ErwerbsZeitraumLebensMonat(1, 2, new Einkommen(100)),
+          new ErwerbsZeitraumLebensMonat(3, 4, new Einkommen(1000)),
+          new ErwerbsZeitraumLebensMonat(5, 6, new Einkommen(5000)),
+        ],
+      };
 
       // when
       const ergebnis = egrCalculation.calculateElternGeld(
@@ -82,11 +80,13 @@ describe("egr-calculation", () => {
         hasEtNachGeburt: false,
       };
 
-      const finanzDaten = new FinanzDaten();
-      finanzDaten.bruttoEinkommen = new Einkommen(2100);
-      finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
-      finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
-      finanzDaten.erwerbsZeitraumLebensMonatList = [];
+      const finanzDaten = {
+        ...ANY_FINANZDATEN,
+        bruttoEinkommen: new Einkommen(2100),
+        steuerKlasse: SteuerKlasse.SKL4,
+        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        erwerbsZeitraumLebensMonatList: [],
+      };
 
       // when
       const ergebnis = egrCalculation.calculateElternGeld(
@@ -115,8 +115,10 @@ describe("egr-calculation", () => {
     const taetigkeit = new MischEkTaetigkeit(true);
     taetigkeit.bruttoEinkommenDurchschnitt = Big(4000);
 
-    const finanzDaten = new FinanzDaten();
-    finanzDaten.mischEinkommenTaetigkeiten = [taetigkeit];
+    const finanzDaten = {
+      ...ANY_FINANZDATEN,
+      mischEinkommenTaetigkeiten: [taetigkeit],
+    };
 
     const planungsDaten = {
       mutterschaftsLeistung: MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
@@ -132,3 +134,14 @@ describe("egr-calculation", () => {
     expect(calculate()).toStrictEqual(calculate());
   });
 });
+
+const ANY_FINANZDATEN = {
+  bruttoEinkommen: new Einkommen(0),
+  steuerKlasse: SteuerKlasse.SKL1,
+  kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+  kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+  rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+  splittingFaktor: 1.0,
+  mischEinkommenTaetigkeiten: [],
+  erwerbsZeitraumLebensMonatList: [],
+};

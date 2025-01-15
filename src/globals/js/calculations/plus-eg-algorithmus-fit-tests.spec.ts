@@ -102,19 +102,19 @@ const createPlanungsDaten = (
 const createFinanzDaten = (
   sheet: EgrAlteTestfaelleRoutine3ExcelSheet,
   testCaseIndex: number,
-) => {
-  const finanzDaten = new FinanzDaten();
-  finanzDaten.bruttoEinkommen = new Einkommen(0);
-  finanzDaten.istKirchensteuerpflichtig = sheet.kirchenSteuer(testCaseIndex);
-  finanzDaten.steuerKlasse = sheet.steuerKlasse(testCaseIndex);
-  finanzDaten.splittingFaktor = sheet.splittingFaktor(testCaseIndex);
-  finanzDaten.kinderFreiBetrag = sheet.kinderFreiBetrag(testCaseIndex);
-  finanzDaten.kassenArt = sheet.krankenVersicherung(testCaseIndex);
-  finanzDaten.rentenVersicherung = sheet.rentenVersicherung(testCaseIndex);
-  finanzDaten.erwerbsZeitraumLebensMonatList =
-    sheet.erwerbsZeitraumLebensMonatList(testCaseIndex);
-
-  return finanzDaten;
+): FinanzDaten => {
+  return {
+    bruttoEinkommen: new Einkommen(0),
+    istKirchensteuerpflichtig: sheet.kirchenSteuer(testCaseIndex),
+    steuerKlasse: sheet.steuerKlasse(testCaseIndex),
+    splittingFaktor: sheet.splittingFaktor(testCaseIndex),
+    kinderFreiBetrag: sheet.kinderFreiBetrag(testCaseIndex),
+    kassenArt: sheet.krankenVersicherung(testCaseIndex),
+    rentenVersicherung: sheet.rentenVersicherung(testCaseIndex),
+    erwerbsZeitraumLebensMonatList:
+      sheet.erwerbsZeitraumLebensMonatList(testCaseIndex),
+    mischEinkommenTaetigkeiten: [],
+  };
 };
 
 const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {

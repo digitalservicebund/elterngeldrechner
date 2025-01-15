@@ -28,10 +28,6 @@ vi.mock("react-redux", () => ({
   useDispatch: vi.fn(),
 }));
 
-const finanzDatenOf = (data: Partial<FinanzDaten>) => {
-  return Object.assign(new FinanzDaten(), data);
-};
-
 describe("finanzDatenFactory", () => {
   const mockStore: RootState = {
     stepAllgemeineAngaben: {
@@ -944,7 +940,7 @@ describe("finanzDatenFactory", () => {
         istSelbststaendig: null,
         istNichtSelbststaendig: null,
       },
-      finanzDatenOf({
+      {
         bruttoEinkommen: new Einkommen(0),
         istKirchensteuerpflichtig: false,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
@@ -954,7 +950,7 @@ describe("finanzDatenFactory", () => {
         splittingFaktor: 1.0,
         mischEinkommenTaetigkeiten: [],
         erwerbsZeitraumLebensMonatList: [],
-      }),
+      },
     ],
   ])(
     "%s",

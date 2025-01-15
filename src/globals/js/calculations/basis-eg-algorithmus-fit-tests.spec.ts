@@ -6,6 +6,7 @@ import {
   KassenArt,
   MischEkTaetigkeit,
   PersoenlicheDaten,
+  RentenArt,
   createMischEkTaetigkeitOf,
 } from "./model";
 import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
@@ -145,22 +146,21 @@ const createPersoenlicheDaten = (): PersoenlicheDaten => {
 const createFinanzDaten = (
   sheet: EgrMischeinkommenExcelSheet,
   testCaseIndex: number,
-) => {
-  const finanzDaten = new FinanzDaten();
-  finanzDaten.bruttoEinkommen = new Einkommen(0);
-  finanzDaten.kassenArt = KassenArt.GESETZLICH_PFLICHTVERSICHERT;
-
-  finanzDaten.steuerKlasse = sheet.steuerKlasse(testCaseIndex);
-  finanzDaten.splittingFaktor = sheet.splittingFaktor(testCaseIndex);
-  finanzDaten.kinderFreiBetrag = sheet.kinderFreiBetrag(testCaseIndex);
-  finanzDaten.istKirchensteuerpflichtig =
-    sheet.zahlenSieKirchenSteuer(testCaseIndex);
-
-  finanzDaten.mischEinkommenTaetigkeiten = mischEinkommenTaetigkeiten(
-    sheet,
-    testCaseIndex,
-  );
-  return finanzDaten;
+): FinanzDaten => {
+  return {
+    bruttoEinkommen: new Einkommen(0),
+    kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+    steuerKlasse: sheet.steuerKlasse(testCaseIndex),
+    splittingFaktor: sheet.splittingFaktor(testCaseIndex),
+    kinderFreiBetrag: sheet.kinderFreiBetrag(testCaseIndex),
+    rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+    istKirchensteuerpflichtig: sheet.zahlenSieKirchenSteuer(testCaseIndex),
+    mischEinkommenTaetigkeiten: mischEinkommenTaetigkeiten(
+      sheet,
+      testCaseIndex,
+    ),
+    erwerbsZeitraumLebensMonatList: [],
+  };
 };
 
 const mischEinkommenTaetigkeiten = (

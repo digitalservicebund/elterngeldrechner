@@ -102,8 +102,6 @@ export const finanzDatenOfUi = (
   elternteil: ElternteilType,
   bruttoEinkommenZeitraumSanitized: BruttoEinkommenZeitraum[],
 ): FinanzDaten => {
-  const finanzDaten = new FinanzDaten();
-
   const stateErwerbsTaetigkeit = state.stepErwerbstaetigkeit[elternteil];
   const isOnlySelbstaendig =
     stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
@@ -132,36 +130,47 @@ export const finanzDatenOfUi = (
     );
   }
 
-  finanzDaten.bruttoEinkommen = new Einkommen(bruttoEinkommenBeforeBirth);
-  finanzDaten.istKirchensteuerpflichtig =
+  const bruttoEinkommen = new Einkommen(bruttoEinkommenBeforeBirth);
+  const istKirchensteuerpflichtig =
     state.stepEinkommen[elternteil].zahlenSieKirchenSteuer === YesNo.YES
       ? true
       : false;
-  finanzDaten.kinderFreiBetrag =
+  const kinderFreiBetrag =
     state.stepEinkommen[elternteil].kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
-  finanzDaten.steuerKlasse =
+  const steuerKlasse =
     state.stepEinkommen[elternteil].steuerKlasse ?? SteuerKlasse.SKL1;
-  finanzDaten.kassenArt =
+  const kassenArt =
     state.stepEinkommen[elternteil].kassenArt ??
     KassenArt.GESETZLICH_PFLICHTVERSICHERT;
-  finanzDaten.rentenVersicherung =
+  const rentenVersicherung =
     state.stepEinkommen[elternteil].rentenVersicherung ??
     RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
-  finanzDaten.splittingFaktor =
+  const splittingFaktor =
     state.stepEinkommen[elternteil].splittingFaktor ?? 1.0;
 
-  if (isSelbstaendigAndErwerbstaetig || mehrereEinkommen) {
-    finanzDaten.mischEinkommenTaetigkeiten = mischEinkommenTaetigkeitenOf(
-      state.stepEinkommen[elternteil]
-        .taetigkeitenNichtSelbstaendigUndSelbstaendig,
-    );
-  }
+  const mischEinkommenTaetigkeiten =
+    isSelbstaendigAndErwerbstaetig || mehrereEinkommen
+      ? mischEinkommenTaetigkeitenOf(
+          state.stepEinkommen[elternteil]
+            .taetigkeitenNichtSelbstaendigUndSelbstaendig,
+        )
+      : [];
 
-  finanzDaten.erwerbsZeitraumLebensMonatList = erwerbsZeitraumLebensMonatListOf(
+  const erwerbsZeitraumLebensMonatList = erwerbsZeitraumLebensMonatListOf(
     bruttoEinkommenZeitraumSanitized,
   );
 
-  return finanzDaten;
+  return {
+    bruttoEinkommen,
+    istKirchensteuerpflichtig,
+    kinderFreiBetrag,
+    steuerKlasse,
+    kassenArt,
+    rentenVersicherung,
+    splittingFaktor,
+    mischEinkommenTaetigkeiten,
+    erwerbsZeitraumLebensMonatList,
+  };
 };
 
 interface BruttoEinkommenZeitraum {

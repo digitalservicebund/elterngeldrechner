@@ -2,9 +2,11 @@ import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import { berechneSteuerUndSozialabgaben } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
 import {
+  Einkommen,
   ErwerbsArt,
-  FinanzDaten,
+  KassenArt,
   KinderFreiBetrag,
+  RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
 
@@ -52,10 +54,11 @@ describe("erg-steuer-rechner", () => {
     it("1 if SteuerKlasse is SKL4_FAKTOR", () => {
       // when
       egrSteuerRechner.abgabenSteuern(
-        Object.assign(new FinanzDaten(), {
+        {
+          ...ANY_FINANZDATEN,
           steuerKlasse: SteuerKlasse.SKL4_FAKTOR,
           splittingFaktor: 1,
-        }),
+        },
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         new Big(1),
         2022,
@@ -71,10 +74,11 @@ describe("erg-steuer-rechner", () => {
     it("0 if SteuerKlasse is not SKL4_FAKTOR", () => {
       // when
       egrSteuerRechner.abgabenSteuern(
-        Object.assign(new FinanzDaten(), {
+        {
+          ...ANY_FINANZDATEN,
           steuerKlasse: SteuerKlasse.SKL4,
-          splittingFaktor: null,
-        }),
+          splittingFaktor: 0,
+        },
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
         new Big(1),
         2022,
@@ -92,10 +96,11 @@ describe("erg-steuer-rechner", () => {
     it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", () => {
       // when
       egrSteuerRechner.abgabenSteuern(
-        Object.assign(new FinanzDaten(), {
+        {
+          ...ANY_FINANZDATEN,
           steuerKlasse: SteuerKlasse.SKL5,
           kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        }),
+        },
         ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
         new Big(1),
         2022,
@@ -112,10 +117,11 @@ describe("erg-steuer-rechner", () => {
   it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", () => {
     // when
     egrSteuerRechner.abgabenSteuern(
-      Object.assign(new FinanzDaten(), {
+      {
+        ...ANY_FINANZDATEN,
         steuerKlasse: SteuerKlasse.SKL5,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-      }),
+      },
       ErwerbsArt.JA_NICHT_SELBST_MINI,
       new Big(1),
       2022,
@@ -128,3 +134,14 @@ describe("erg-steuer-rechner", () => {
     );
   });
 });
+
+const ANY_FINANZDATEN = {
+  bruttoEinkommen: new Einkommen(0),
+  steuerKlasse: SteuerKlasse.SKL1,
+  kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+  kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+  rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+  splittingFaktor: 1.0,
+  mischEinkommenTaetigkeiten: [],
+  erwerbsZeitraumLebensMonatList: [],
+};

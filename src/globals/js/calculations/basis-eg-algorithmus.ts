@@ -109,15 +109,21 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     let summe_EK_GNS: Big = BIG_ZERO;
     const array = finanzDaten.mischEinkommenTaetigkeiten;
     for (const mischEkTaetigkeit of array) {
+      const anzahlBemessungszeitraumMonate =
+        mischEkTaetigkeit.bemessungsZeitraumMonate.filter(
+          (value) => value,
+        ).length;
+
       const bruttoGesamt: Big =
         mischEkTaetigkeit.bruttoEinkommenDurchschnitt.mul(
-          new Big(mischEkTaetigkeit.getAnzahlBemessungsZeitraumMonate()),
+          new Big(anzahlBemessungszeitraumMonate),
         );
+
       switch (mischEkTaetigkeit.erwerbsTaetigkeit) {
         case ErwerbsTaetigkeit.SELBSTSTAENDIG:
           summe_EK_SS = summe_EK_SS.add(
             mischEkTaetigkeit.bruttoEinkommenDurchschnitt.mul(
-              new Big(mischEkTaetigkeit.getAnzahlBemessungsZeitraumMonate()),
+              new Big(anzahlBemessungszeitraumMonate),
             ),
           );
           break;
@@ -132,7 +138,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
           ) {
             summe_EK_NS_SV = summe_EK_NS_SV.add(
               mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi.mul(
-                new Big(mischEkTaetigkeit.getAnzahlBemessungsZeitraumMonate()),
+                new Big(anzahlBemessungszeitraumMonate),
               ),
             );
           }

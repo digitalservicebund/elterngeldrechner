@@ -83,7 +83,9 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
 
       return mischEinkommenTaetigkeiten;
     })
-    .filter((value) => value.getAnzahlBemessungsZeitraumMonate() > 0);
+    .filter((taetigkeit) =>
+      taetigkeit.bemessungsZeitraumMonate.some((value) => value),
+    );
 
 const erwerbsZeitraumLebensMonatListOf = (
   bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[],

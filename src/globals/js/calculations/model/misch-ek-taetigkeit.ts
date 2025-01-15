@@ -26,10 +26,6 @@ export class MischEkTaetigkeit {
       ANZAHL_MONATE_PRO_JAHR,
     ).fill(falseOrTrue);
   }
-
-  getAnzahlBemessungsZeitraumMonate(): number {
-    return this.bemessungsZeitraumMonate.filter((value) => value).length;
-  }
 }
 
 export const createMischEkTaetigkeitOf = (

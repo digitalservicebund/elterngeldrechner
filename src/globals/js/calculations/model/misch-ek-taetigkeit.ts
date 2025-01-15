@@ -10,8 +10,6 @@ export enum ErwerbsTaetigkeit {
   MINIJOB = "MINIJOB",
 }
 
-const ANZAHL_MONATE_PRO_JAHR: number = 12;
-
 export class MischEkTaetigkeit {
   erwerbsTaetigkeit: ErwerbsTaetigkeit = ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
   bruttoEinkommenDurchschnitt: Big = BIG_ZERO;
@@ -20,12 +18,6 @@ export class MischEkTaetigkeit {
   istRentenVersicherungsPflichtig: boolean = true;
   istKrankenVersicherungsPflichtig: boolean = true;
   istArbeitslosenVersicherungsPflichtig: boolean = true;
-
-  constructor(falseOrTrue: boolean = false) {
-    this.bemessungsZeitraumMonate = new Array<boolean>(
-      ANZAHL_MONATE_PRO_JAHR,
-    ).fill(falseOrTrue);
-  }
 }
 
 export const createMischEkTaetigkeitOf = (
@@ -36,7 +28,7 @@ export const createMischEkTaetigkeitOf = (
   istKrankenVersicherungsPflichtig: boolean,
   istArbeitslosenVersicherungsPflichtig: boolean,
 ) => {
-  const m = new MischEkTaetigkeit(false);
+  const m = new MischEkTaetigkeit();
   m.erwerbsTaetigkeit = erwerbsTaetigkeit;
   m.bruttoEinkommenDurchschnitt = bruttoEinkommenDurchschnitt;
   m.bemessungsZeitraumMonate = bemessungsZeitraumMonate;

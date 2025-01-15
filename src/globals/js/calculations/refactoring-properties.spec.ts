@@ -477,7 +477,7 @@ function originalPlanungsDatenFrom(
 }
 
 function mischEkTaetigkeitFrom(data: MischEkTaetigkeitRaw): MischEkTaetigkeit {
-  const taetigkeit = new MischEkTaetigkeit(false);
+  const taetigkeit = new MischEkTaetigkeit();
   taetigkeit.erwerbsTaetigkeit = data.erwerbstaetigkeit;
   taetigkeit.bruttoEinkommenDurchschnitt = Big(
     data.bruttoeinkommenDurchschnitt,

@@ -112,8 +112,9 @@ describe("egr-calculation", () => {
       etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
     };
 
-    const taetigkeit = new MischEkTaetigkeit(true);
+    const taetigkeit = new MischEkTaetigkeit();
     taetigkeit.bruttoEinkommenDurchschnitt = Big(4000);
+    taetigkeit.bemessungsZeitraumMonate = Array<boolean>(12).fill(true);
 
     const finanzDaten = {
       ...ANY_FINANZDATEN,

@@ -35,11 +35,11 @@ export function TabelleMitLebensmonaten<A extends Ausgangslage>({
             return (
               <th
                 scope="col"
-                abbr={pseudonym}
+                abbr={pseudonym || "Ihre Planung"}
                 className="pl-32 last:pr-8"
                 key={elternteil}
               >
-                <PersonIcon /> {pseudonym}
+                <PersonIcon /> {pseudonym || "Ihre Planung"}
               </th>
             );
           })}

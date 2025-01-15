@@ -47,7 +47,7 @@ export function AbschnittMitPlanungsuebersicht<A extends Ausgangslage>({
         return (
           <div key={elternteil} className="flex flex-col gap-8">
             <h4 className="text-base">
-              <PersonIcon /> {pseudonym}
+              <PersonIcon /> {pseudonym || "Ihre Planung"}
             </h4>
 
             <span>

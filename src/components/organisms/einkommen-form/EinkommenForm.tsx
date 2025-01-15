@@ -48,7 +48,7 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
                 Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen
                 von mehr als {amountLimitEinkommen.toLocaleString()} Euro?
               </span>
-              <InfoDialog info={infoTexts.limitEinkommenUeberschritten} />
+              <InfoDialog info={infoTexts.einkommenLimitUeberschritten} />
             </div>
           }
           register={methods.register}

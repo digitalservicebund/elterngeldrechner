@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export type Info = string | ReactNode;
 
-export const infoTexts: Record<string, string | ReactNode> = {
+export const infoTexts = {
   erwerbstaetigkeitNichtSelbststaendig:
     "z.B. Lohn, Gehalt (auch aus einem Minijob)",
 
@@ -79,7 +79,7 @@ export const infoTexts: Record<string, string | ReactNode> = {
   alleinerziehend:
     "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.",
 
-  einkommenLimitÜberschritten:
+  einkommenLimitUeberschritten:
     "Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 200.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen.",
 
   mutterschaftsleistungen: (

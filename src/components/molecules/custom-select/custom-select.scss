@@ -50,7 +50,7 @@
     }
 
     &__option {
-      @apply px-16 py-8 text-white;
+      @apply bg-white px-16 py-8;
 
       &:first-of-type {
         @apply p-40 text-text-light;

@@ -477,22 +477,16 @@ function originalPlanungsDatenFrom(
 }
 
 function mischEkTaetigkeitFrom(data: MischEkTaetigkeitRaw): MischEkTaetigkeit {
-  const taetigkeit = new MischEkTaetigkeit();
-  taetigkeit.erwerbsTaetigkeit = data.erwerbstaetigkeit;
-  taetigkeit.bruttoEinkommenDurchschnitt = Big(
-    data.bruttoeinkommenDurchschnitt,
-  );
-  taetigkeit.bruttoEinkommenDurchschnittMidi = Big(
-    data.bruttoeinkommenDurchschnittMidi,
-  );
-  taetigkeit.bemessungsZeitraumMonate = data.bemessungszeitraumMonate;
-  taetigkeit.istRentenVersicherungsPflichtig =
-    data.rentenversicherungspflichtig;
-  taetigkeit.istKrankenVersicherungsPflichtig =
-    data.krankenversicherungspflichtig;
-  taetigkeit.istArbeitslosenVersicherungsPflichtig =
-    data.arbeitslosenversicherungspflichtig;
-  return taetigkeit;
+  return {
+    erwerbsTaetigkeit: data.erwerbstaetigkeit,
+    bruttoEinkommenDurchschnitt: Big(data.bruttoeinkommenDurchschnitt),
+    bruttoEinkommenDurchschnittMidi: Big(data.bruttoeinkommenDurchschnittMidi),
+    bemessungsZeitraumMonate: data.bemessungszeitraumMonate,
+    istRentenVersicherungsPflichtig: data.rentenversicherungspflichtig,
+    istKrankenVersicherungsPflichtig: data.krankenversicherungspflichtig,
+    istArbeitslosenVersicherungsPflichtig:
+      data.arbeitslosenversicherungspflichtig,
+  };
 }
 
 function originalMischEkTaetigkeitFrom(

@@ -4,11 +4,11 @@ import {
   Einkommen,
   ErwerbsArt,
   ErwerbsTaetigkeit,
+  type FinanzDaten,
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-  createMischEkTaetigkeitOf,
 } from "./model";
 
 describe("basis-eg-algorithmus", () => {
@@ -25,7 +25,7 @@ describe("basis-eg-algorithmus", () => {
         geschwister: [],
       };
 
-      const finanzDaten = {
+      const finanzDaten: FinanzDaten = {
         istKirchensteuerpflichtig: false,
         bruttoEinkommen: new Einkommen(0),
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
@@ -35,10 +35,11 @@ describe("basis-eg-algorithmus", () => {
         splittingFaktor: 1.0,
         erwerbsZeitraumLebensMonatList: [],
         mischEinkommenTaetigkeiten: [
-          createMischEkTaetigkeitOf(
-            ErwerbsTaetigkeit.SELBSTSTAENDIG,
-            Big(2015.0),
-            [
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
+            bruttoEinkommenDurchschnitt: Big(2015.0),
+            bruttoEinkommenDurchschnittMidi: Big(0),
+            bemessungsZeitraumMonate: [
               false,
               false,
               false,
@@ -52,14 +53,15 @@ describe("basis-eg-algorithmus", () => {
               true,
               false,
             ],
-            false,
-            true,
-            false,
-          ),
-          createMischEkTaetigkeitOf(
-            ErwerbsTaetigkeit.SELBSTSTAENDIG,
-            Big(2343.0),
-            [
+            istRentenVersicherungsPflichtig: false,
+            istKrankenVersicherungsPflichtig: true,
+            istArbeitslosenVersicherungsPflichtig: false,
+          },
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
+            bruttoEinkommenDurchschnitt: Big(2343.0),
+            bruttoEinkommenDurchschnittMidi: Big(0),
+            bemessungsZeitraumMonate: [
               false,
               false,
               false,
@@ -73,14 +75,15 @@ describe("basis-eg-algorithmus", () => {
               false,
               false,
             ],
-            false,
-            false,
-            false,
-          ),
-          createMischEkTaetigkeitOf(
-            ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-            Big(553.0),
-            [
+            istRentenVersicherungsPflichtig: false,
+            istKrankenVersicherungsPflichtig: false,
+            istArbeitslosenVersicherungsPflichtig: false,
+          },
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+            bruttoEinkommenDurchschnitt: Big(553.0),
+            bruttoEinkommenDurchschnittMidi: Big(0),
+            bemessungsZeitraumMonate: [
               false,
               false,
               false,
@@ -94,10 +97,10 @@ describe("basis-eg-algorithmus", () => {
               true,
               true,
             ],
-            false,
-            false,
-            true,
-          ),
+            istRentenVersicherungsPflichtig: false,
+            istKrankenVersicherungsPflichtig: false,
+            istArbeitslosenVersicherungsPflichtig: true,
+          },
         ],
       };
 

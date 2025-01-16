@@ -1,5 +1,4 @@
 import Big from "big.js";
-import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 /**
  * Enthält die Daten zu einer Tätigkeit bei Mischeinkommen.
@@ -10,31 +9,13 @@ export enum ErwerbsTaetigkeit {
   MINIJOB = "MINIJOB",
 }
 
-export class MischEkTaetigkeit {
-  erwerbsTaetigkeit: ErwerbsTaetigkeit = ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
-  bruttoEinkommenDurchschnitt: Big = BIG_ZERO;
-  bruttoEinkommenDurchschnittMidi: Big = BIG_ZERO;
-  bemessungsZeitraumMonate: boolean[] = [];
-  istRentenVersicherungsPflichtig?: boolean;
-  istKrankenVersicherungsPflichtig?: boolean;
-  istArbeitslosenVersicherungsPflichtig?: boolean;
-}
-
-export const createMischEkTaetigkeitOf = (
-  erwerbsTaetigkeit: ErwerbsTaetigkeit,
-  bruttoEinkommenDurchschnitt: Big,
-  bemessungsZeitraumMonate: boolean[],
-  istRentenVersicherungsPflichtig?: boolean,
-  istKrankenVersicherungsPflichtig?: boolean,
-  istArbeitslosenVersicherungsPflichtig?: boolean,
-) => {
-  const m = new MischEkTaetigkeit();
-  m.erwerbsTaetigkeit = erwerbsTaetigkeit;
-  m.bruttoEinkommenDurchschnitt = bruttoEinkommenDurchschnitt;
-  m.bemessungsZeitraumMonate = bemessungsZeitraumMonate;
-  m.istRentenVersicherungsPflichtig = istRentenVersicherungsPflichtig;
-  m.istKrankenVersicherungsPflichtig = istKrankenVersicherungsPflichtig;
-  m.istArbeitslosenVersicherungsPflichtig =
-    istArbeitslosenVersicherungsPflichtig;
-  return m;
+// TODO: mark fully readonly
+export type MischEkTaetigkeit = {
+  readonly erwerbsTaetigkeit: ErwerbsTaetigkeit;
+  readonly bruttoEinkommenDurchschnitt: Big;
+  bruttoEinkommenDurchschnittMidi: Big;
+  readonly bemessungsZeitraumMonate: boolean[];
+  readonly istRentenVersicherungsPflichtig?: boolean;
+  readonly istKrankenVersicherungsPflichtig?: boolean;
+  readonly istArbeitslosenVersicherungsPflichtig?: boolean;
 };

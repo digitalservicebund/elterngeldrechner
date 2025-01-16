@@ -1,13 +1,14 @@
+import Big from "big.js";
 import { BIG_ZERO } from "./common/math-util";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
   ElternGeldArt,
   ErwerbsArt,
+  ErwerbsTaetigkeit,
   ErwerbsZeitraumLebensMonat,
   KassenArt,
   KinderFreiBetrag,
-  MischEkTaetigkeit,
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
@@ -113,7 +114,7 @@ describe("plus-eg-algorithmus", () => {
 
       const finanzDaten = {
         ...ANY_FINANZDATEN,
-        mischEinkommenTaetigkeiten: [new MischEkTaetigkeit()],
+        mischEinkommenTaetigkeiten: [ANY_MISCHEINKOMMEN_TAETIGKEIT],
       };
 
       const algorithmus = new PlusEgAlgorithmus();
@@ -158,4 +159,11 @@ const ANY_FINANZDATEN = {
   splittingFaktor: 1.0,
   mischEinkommenTaetigkeiten: [],
   erwerbsZeitraumLebensMonatList: [],
+};
+
+const ANY_MISCHEINKOMMEN_TAETIGKEIT = {
+  erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+  bruttoEinkommenDurchschnitt: Big(1000),
+  bruttoEinkommenDurchschnittMidi: Big(0),
+  bemessungsZeitraumMonate: [],
 };

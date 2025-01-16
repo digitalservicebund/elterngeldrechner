@@ -1,7 +1,6 @@
 export {
   ErwerbsTaetigkeit,
-  MischEkTaetigkeit,
-  createMischEkTaetigkeitOf,
+  type MischEkTaetigkeit,
 } from "./misch-ek-taetigkeit";
 export { Einkommen } from "./einkommen";
 export type { NettoEinkommen } from "./einkommen-types";

@@ -15,7 +15,6 @@ import {
   FinanzDaten,
   KassenArt,
   KinderFreiBetrag,
-  MischEkTaetigkeit,
   RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
@@ -46,28 +45,25 @@ const ANZAHL_MONATE_PRO_JAHR = 12;
 const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
   taetigkeiten
     .map((taetigkeit) => {
-      const mischEinkommenTaetigkeiten = new MischEkTaetigkeit();
+      const isSelbststaendig = taetigkeit.artTaetigkeit === "Selbststaendig";
+      const isMinijob = taetigkeit.isMinijob === YesNo.YES;
+      const erwerbsTaetigkeit = isSelbststaendig
+        ? ErwerbsTaetigkeit.SELBSTSTAENDIG
+        : isMinijob
+          ? ErwerbsTaetigkeit.MINIJOB
+          : ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
 
-      if (taetigkeit.artTaetigkeit === "Selbststaendig") {
-        mischEinkommenTaetigkeiten.erwerbsTaetigkeit =
-          ErwerbsTaetigkeit.SELBSTSTAENDIG;
-      }
-      if (taetigkeit.isMinijob === YesNo.YES) {
-        mischEinkommenTaetigkeiten.erwerbsTaetigkeit =
-          ErwerbsTaetigkeit.MINIJOB;
-      }
-
-      mischEinkommenTaetigkeiten.bruttoEinkommenDurchschnitt = Big(
-        taetigkeit.bruttoEinkommenDurchschnitt ?? BIG_ZERO,
+      const bruttoEinkommenDurchschnitt = Big(
+        taetigkeit.bruttoEinkommenDurchschnitt ?? 0,
       );
-      mischEinkommenTaetigkeiten.istRentenVersicherungsPflichtig =
-        taetigkeit.versicherungen.hasRentenversicherung;
-      mischEinkommenTaetigkeiten.istKrankenVersicherungsPflichtig =
-        taetigkeit.versicherungen.hasKrankenversicherung;
-      mischEinkommenTaetigkeiten.istArbeitslosenVersicherungsPflichtig =
-        taetigkeit.versicherungen.hasArbeitslosenversicherung;
 
-      mischEinkommenTaetigkeiten.bemessungsZeitraumMonate = Array.from(
+      const {
+        hasRentenversicherung: istRentenVersicherungsPflichtig,
+        hasKrankenversicherung: istKrankenVersicherungsPflichtig,
+        hasArbeitslosenversicherung: istArbeitslosenVersicherungsPflichtig,
+      } = taetigkeit.versicherungen;
+
+      const bemessungsZeitraumMonate = Array.from(
         { length: ANZAHL_MONATE_PRO_JAHR },
         (_, monthIndex) => {
           const taetigkeitHasZeitraumIncludingThisMonth =
@@ -81,7 +77,15 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
         },
       );
 
-      return mischEinkommenTaetigkeiten;
+      return {
+        erwerbsTaetigkeit,
+        bruttoEinkommenDurchschnitt,
+        bruttoEinkommenDurchschnittMidi: BIG_ZERO,
+        bemessungsZeitraumMonate,
+        istRentenVersicherungsPflichtig,
+        istKrankenVersicherungsPflichtig,
+        istArbeitslosenVersicherungsPflichtig,
+      };
     })
     .filter((taetigkeit) =>
       taetigkeit.bemessungsZeitraumMonate.some((value) => value),

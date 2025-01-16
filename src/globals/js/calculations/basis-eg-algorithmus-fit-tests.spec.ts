@@ -1,3 +1,4 @@
+import Big from "big.js";
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
   Einkommen,
@@ -7,7 +8,6 @@ import {
   MischEkTaetigkeit,
   PersoenlicheDaten,
   RentenArt,
-  createMischEkTaetigkeitOf,
 } from "./model";
 import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 import {
@@ -166,37 +166,40 @@ const createFinanzDaten = (
 const mischEinkommenTaetigkeiten = (
   sheet: EgrMischeinkommenExcelSheet,
   testCaseIndex: number,
-) => {
+): MischEkTaetigkeit[] => {
   return TAETIGKEITEN.map((taetigkeit) => {
     const erwerbsTaetigkeit = sheet.erwerbsTaetigkeit(
       taetigkeit,
       testCaseIndex,
     );
-    const rentenVersicherungsPflichtig = sheet.rentenVersicherungsPflichtig(
+    const istRentenVersicherungsPflichtig = sheet.rentenVersicherungsPflichtig(
       taetigkeit,
       testCaseIndex,
     );
-    const krankenVersicherungsPflichtig = sheet.krankenVersicherungsPflichtig(
-      taetigkeit,
-      testCaseIndex,
-    );
-    const arbeitslosenVersicherungsPflichtig =
+    const istKrankenVersicherungsPflichtig =
+      sheet.krankenVersicherungsPflichtig(taetigkeit, testCaseIndex);
+    const istArbeitslosenVersicherungsPflichtig =
       sheet.arbeitslosenVersicherungsPflichtig(taetigkeit, testCaseIndex);
     if (
       erwerbsTaetigkeit === undefined ||
-      rentenVersicherungsPflichtig === undefined ||
-      krankenVersicherungsPflichtig === undefined ||
-      arbeitslosenVersicherungsPflichtig === undefined
+      istRentenVersicherungsPflichtig === undefined ||
+      istKrankenVersicherungsPflichtig === undefined ||
+      istArbeitslosenVersicherungsPflichtig === undefined
     ) {
       return undefined;
     }
-    return createMischEkTaetigkeitOf(
+
+    return {
       erwerbsTaetigkeit,
-      sheet.einkommen(taetigkeit, testCaseIndex),
-      sheet.bemessungsZeitraumMonate(taetigkeit, testCaseIndex),
-      rentenVersicherungsPflichtig,
-      krankenVersicherungsPflichtig,
-      arbeitslosenVersicherungsPflichtig,
-    );
-  }).filter((item): item is MischEkTaetigkeit => !!item);
+      bruttoEinkommenDurchschnitt: sheet.einkommen(taetigkeit, testCaseIndex),
+      bruttoEinkommenDurchschnittMidi: Big(0),
+      bemessungsZeitraumMonate: sheet.bemessungsZeitraumMonate(
+        taetigkeit,
+        testCaseIndex,
+      ),
+      istRentenVersicherungsPflichtig,
+      istKrankenVersicherungsPflichtig,
+      istArbeitslosenVersicherungsPflichtig,
+    };
+  }).filter((item) => item !== undefined);
 };

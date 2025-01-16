@@ -7,12 +7,12 @@ import {
   ErwerbsZeitraumLebensMonat,
   KassenArt,
   KinderFreiBetrag,
-  MischEkTaetigkeit,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
   SteuerKlasse,
 } from "./model";
+import { ErwerbsTaetigkeit } from "original-rechner";
 
 describe("egr-calculation", () => {
   const egrCalculation = new EgrCalculation();
@@ -112,13 +112,9 @@ describe("egr-calculation", () => {
       etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
     };
 
-    const taetigkeit = new MischEkTaetigkeit();
-    taetigkeit.bruttoEinkommenDurchschnitt = Big(4000);
-    taetigkeit.bemessungsZeitraumMonate = Array<boolean>(12).fill(true);
-
     const finanzDaten = {
       ...ANY_FINANZDATEN,
-      mischEinkommenTaetigkeiten: [taetigkeit],
+      mischEinkommenTaetigkeiten: [ANY_MISCHEINKOMMEN_TAETIGKEIT],
     };
 
     const planungsDaten = {
@@ -145,4 +141,11 @@ const ANY_FINANZDATEN = {
   splittingFaktor: 1.0,
   mischEinkommenTaetigkeiten: [],
   erwerbsZeitraumLebensMonatList: [],
+};
+
+const ANY_MISCHEINKOMMEN_TAETIGKEIT = {
+  erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+  bruttoEinkommenDurchschnitt: Big(1000),
+  bruttoEinkommenDurchschnittMidi: Big(0),
+  bemessungsZeitraumMonate: [],
 };

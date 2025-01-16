@@ -18,7 +18,6 @@ import {
   MischEkTaetigkeit,
   RentenArt,
   SteuerKlasse,
-  createMischEkTaetigkeitOf,
 } from "@/globals/js/calculations/model";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
 import { YesNo } from "original-rechner";
@@ -516,10 +515,11 @@ describe("finanzDatenFactory", () => {
         },
       ],
       [
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-          Big(1000),
-          [
+        {
+          erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+          bruttoEinkommenDurchschnitt: Big(1000),
+          bruttoEinkommenDurchschnittMidi: Big(0),
+          bemessungsZeitraumMonate: [
             true,
             false,
             false,
@@ -533,10 +533,10 @@ describe("finanzDatenFactory", () => {
             false,
             false,
           ],
-          true,
-          true,
-          true,
-        ),
+          istRentenVersicherungsPflichtig: true,
+          istKrankenVersicherungsPflichtig: true,
+          istArbeitslosenVersicherungsPflichtig: true,
+        },
       ],
     ],
     [
@@ -604,10 +604,11 @@ describe("finanzDatenFactory", () => {
         },
       ],
       [
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-          Big(1000),
-          [
+        {
+          erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+          bruttoEinkommenDurchschnitt: Big(1000),
+          bruttoEinkommenDurchschnittMidi: Big(0),
+          bemessungsZeitraumMonate: [
             true,
             false,
             false,
@@ -621,14 +622,15 @@ describe("finanzDatenFactory", () => {
             false,
             false,
           ],
-          true,
-          true,
-          true,
-        ),
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.MINIJOB,
-          Big(300),
-          [
+          istRentenVersicherungsPflichtig: true,
+          istKrankenVersicherungsPflichtig: true,
+          istArbeitslosenVersicherungsPflichtig: true,
+        },
+        {
+          erwerbsTaetigkeit: ErwerbsTaetigkeit.MINIJOB,
+          bruttoEinkommenDurchschnitt: Big(300),
+          bruttoEinkommenDurchschnittMidi: Big(0),
+          bemessungsZeitraumMonate: [
             true,
             false,
             false,
@@ -642,14 +644,15 @@ describe("finanzDatenFactory", () => {
             false,
             false,
           ],
-          false,
-          true,
-          false,
-        ),
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          Big(500),
-          [
+          istRentenVersicherungsPflichtig: false,
+          istKrankenVersicherungsPflichtig: true,
+          istArbeitslosenVersicherungsPflichtig: false,
+        },
+        {
+          erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
+          bruttoEinkommenDurchschnitt: Big(500),
+          bruttoEinkommenDurchschnittMidi: Big(0),
+          bemessungsZeitraumMonate: [
             false,
             false,
             true,
@@ -663,14 +666,15 @@ describe("finanzDatenFactory", () => {
             false,
             false,
           ],
-          false,
-          true,
-          false,
-        ),
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          Big(1100),
-          [
+          istRentenVersicherungsPflichtig: false,
+          istKrankenVersicherungsPflichtig: true,
+          istArbeitslosenVersicherungsPflichtig: false,
+        },
+        {
+          erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
+          bruttoEinkommenDurchschnitt: Big(1100),
+          bruttoEinkommenDurchschnittMidi: Big(0),
+          bemessungsZeitraumMonate: [
             false,
             true,
             true,
@@ -684,14 +688,15 @@ describe("finanzDatenFactory", () => {
             false,
             false,
           ],
-          true,
-          true,
-          false,
-        ),
-        createMischEkTaetigkeitOf(
-          ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          Big(600),
-          [
+          istRentenVersicherungsPflichtig: true,
+          istKrankenVersicherungsPflichtig: true,
+          istArbeitslosenVersicherungsPflichtig: false,
+        },
+        {
+          erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
+          bruttoEinkommenDurchschnitt: Big(600),
+          bruttoEinkommenDurchschnittMidi: Big(0),
+          bemessungsZeitraumMonate: [
             false,
             true,
             true,
@@ -705,10 +710,10 @@ describe("finanzDatenFactory", () => {
             false,
             false,
           ],
-          true,
-          true,
-          false,
-        ),
+          istRentenVersicherungsPflichtig: true,
+          istKrankenVersicherungsPflichtig: true,
+          istArbeitslosenVersicherungsPflichtig: false,
+        },
       ],
     ],
   ])(

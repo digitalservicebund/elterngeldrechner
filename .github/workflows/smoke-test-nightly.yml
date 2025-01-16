@@ -1,20 +1,14 @@
-name: Nightly E2E Test
-
-# This action skips the `styles.spec.ts` tests as they are currently unstable. The primary goal of this pipeline is
-# to ensure that the production system functions correctly overall, rather than verifying pixel-perfect styling. In
-# order to maintain confidence in the pipeline, we’ve decided to temporarily exclude certain tests, prioritizing
-# trust in the pipeline over styling precision for now.
+name: Smoke Test Nightly
 
 on:
   schedule:
     - cron: "0 5 * * *" # 6 AM Berlin time (during standard time, not daylight saving time)
-  workflow_dispatch: # Enables manual triggering of the workflow
 
 jobs:
-  e2e-tests:
+  smoke-test:
     runs-on: ubuntu-latest
 
-    timeout-minutes: 30
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -36,14 +30,13 @@ jobs:
 
       - uses: ./.github/actions/cached-playwright-setup
 
-      - name: Run Playwright e2e tests
-        run: npm run test-e2e
+      - name: Run playwright smoke test
+        run: npm run test-e2e -- tests/cases/smokeTest.spec.ts
         env:
           PLAYWRIGHT_REPORTER: html
           PLAYWRIGHT_SKIP_SERVER: true
           PLAYWRIGHT_URL: ${{ vars.PRODUCTION_URL }}
           PLAYWRIGHT_PORT: 80
-          PLAYWRIGHT_TEST_IGNORE: "tests/cases/styles.spec.ts"
 
       - name: Upload playwright report
         if: always()

@@ -24,6 +24,7 @@ jobs:
           PLAYWRIGHT_REPORTER: blob
           PLAYWRIGHT_URL: http://127.0.0.1
           PLAYWRIGHT_PORT: 300${{ matrix.shard }}
+          PLAYWRIGHT_TEST_IGNORE: "tests/cases/smokeTest.spec.ts"
 
       - name: Upload Playwright blob report
         if: always()

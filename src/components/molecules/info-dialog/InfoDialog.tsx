@@ -5,7 +5,6 @@ import {
   CSSProperties,
   KeyboardEvent,
   type ReactNode,
-  useId,
   useRef,
   useState,
 } from "react";
@@ -32,11 +31,8 @@ export function InfoDialog({
   className,
   style,
 }: Props) {
-  const dialogContentIdentifier = useId();
-
-  const ariaLabelForOpenButton = ariaLabelForDialog
-    ? `Öffne ${ariaLabelForDialog}`
-    : `Öffne zusätzliche Informationen`;
+  ariaLabelForDialog ??= "zusätzliche Informationen";
+  const ariaLabelForOpenButton = `Öffne ${ariaLabelForDialog}`;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openButtonElement = useRef<HTMLButtonElement>(null);
@@ -105,7 +101,6 @@ export function InfoDialog({
         ref={openButtonElement}
         onClick={openModal}
         aria-haspopup="dialog"
-        aria-expanded={isModalOpen}
         aria-label={ariaLabelForOpenButton}
       >
         <InfoOutlinedIcon />
@@ -119,12 +114,12 @@ export function InfoDialog({
           ...tooltip.className,
         )}
         style={tooltip.style}
+        role="dialog"
+        aria-modal
         aria-hidden={!isModalOpen}
         aria-label={ariaLabelForDialog}
-        aria-describedby={dialogContentIdentifier}
       >
         <div
-          id={dialogContentIdentifier}
           className="egr-info-dialog-box__text"
           tabIndex={-1}
           ref={dialogContentElement}

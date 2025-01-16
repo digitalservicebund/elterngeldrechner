@@ -96,7 +96,7 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await planer.waehleOption(10, "Basis");
   await planer.waehleOption(12, "Basis");
 
-  await page.getByRole("button", { name: "Zur Übersicht" }).click();
+  await page.getByRole("button", { name: "Zur Zusammenfassung" }).click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",

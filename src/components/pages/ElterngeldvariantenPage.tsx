@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import { Button } from "@/components/atoms";
+import { ButtonGroup } from "@/components/molecules";
 import { ElterngeldvariantenDescriptions } from "@/components/organisms/elterngeldvarianten";
 import { Page } from "@/components/organisms/page";
 
@@ -12,28 +13,21 @@ export function ElterngeldvariantenPage(): ReactNode {
 
   return (
     <Page step={formSteps.elterngeldvarianten}>
-      <div className="flex flex-wrap justify-between gap-y-80">
-        <div className="flex basis-full flex-col gap-32">
-          <p>
-            Elterngeld gibt es in 3 Varianten, die hier näher erklärt werden.
-            Alle 3 Varianten können Sie im nächsten Schritt im Planer
-            miteinander kombinieren. Paare können die Monate flexibel
-            untereinander aufteilen. Während Sie Elterngeld bekommen ist es
-            übrigens möglich, zusätzlich bis maximal 32 Stunden pro Woche zu
-            arbeiten.
-          </p>
+      <div className="flex basis-full flex-col gap-32">
+        <p>
+          Elterngeld gibt es in 3 Varianten, die hier näher erklärt werden. Alle
+          3 Varianten können Sie im nächsten Schritt im Planer miteinander
+          kombinieren. Paare können die Monate flexibel untereinander aufteilen.
+          Während Sie Elterngeld bekommen ist es übrigens möglich, zusätzlich
+          bis maximal 32 Stunden pro Woche zu arbeiten.
+        </p>
 
-          <ElterngeldvariantenDescriptions />
-        </div>
-
-        <Button
-          buttonStyle="secondary"
-          label="Zurück"
-          onClick={navigateToPreviousStep}
-        />
-
-        <Button label="Zum Monatsplaner" onClick={navigateToNextStep} />
+        <ElterngeldvariantenDescriptions />
       </div>
+
+      <ButtonGroup onClickBackButton={navigateToPreviousStep}>
+        <Button label="Zum Monatsplaner" onClick={navigateToNextStep} />
+      </ButtonGroup>
     </Page>
   );
 }

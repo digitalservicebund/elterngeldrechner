@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { formSteps } from "./formSteps";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/components/atoms";
+import { ButtonGroup } from "@/components/molecules";
 import { Page } from "@/components/organisms/page";
 import { Zusammenfassung } from "@/features/planer/user-interface";
 
@@ -20,28 +21,26 @@ function ZusammenfassungUndDatenPage(): ReactNode {
 
   return (
     <Page step={formSteps.zusammenfassungUndDaten}>
-      <div className="flex flex-col items-start gap-y-32">
-        {hasPlan ? (
-          <>
-            <Zusammenfassung plan={plan} />
+      {hasPlan ? (
+        <>
+          <Zusammenfassung plan={plan} />
 
+          <div className="mt-32">
             <Button
               buttonStyle="link"
               label="Download der Planung"
               iconBefore={<SaveAltIcon />}
               onClick={print}
             />
-          </>
-        ) : (
-          "Es wurde noch kein Plan erstellt"
-        )}
+          </div>
+        </>
+      ) : (
+        "Es wurde noch kein Plan erstellt"
+      )}
 
-        <Button
-          buttonStyle="secondary"
-          label="Zurück"
-          onClick={navigateToPreviousStep}
-        />
-      </div>
+      <ButtonGroup onClickBackButton={navigateToPreviousStep}>
+        <span>{/* Send data to ElterngeldDigital */}</span>
+      </ButtonGroup>
     </Page>
   );
 }

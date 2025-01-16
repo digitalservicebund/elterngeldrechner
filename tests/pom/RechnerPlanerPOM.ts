@@ -84,7 +84,7 @@ export class RechnerPlanerPOM {
 
   async submit() {
     await this.page
-      .getByRole("button", { name: "Zur Übersicht", exact: true })
+      .getByRole("button", { name: "Zur Zusammenfassung", exact: true })
       .click();
   }
 }

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tracking-geplante-monate-des-partners-der-mutter";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/components/atoms";
+import { ButtonGroup } from "@/components/molecules";
 import { FeedbackForm } from "@/components/organisms/feedback-form";
 import { Page } from "@/components/organisms/page";
 import { formSteps } from "@/components/pages/formSteps";
@@ -159,19 +160,15 @@ export function RechnerPlanerPage() {
             onSubmit={() => (rememberSubmit.current = true)}
           />
         )}
+      </div>
 
+      <ButtonGroup onClickBackButton={navigateToPreviousStep}>
         <Button
-          buttonStyle="secondary"
-          label="Zurück"
-          onClick={navigateToPreviousStep}
-        />
-
-        <Button
-          label="Zur Übersicht"
+          label="Zur Zusammenfassung"
           onClick={navigateToUebersicht}
           disabled={!istPlanGueltig}
         />
-      </div>
+      </ButtonGroup>
 
       <dialog
         ref={dialogElement}

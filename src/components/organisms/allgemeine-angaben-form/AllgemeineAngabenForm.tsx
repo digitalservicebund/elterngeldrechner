@@ -164,7 +164,7 @@ export function AllgemeineAngabenForm({
         </section>
       )}
 
-      <ButtonGroup isStepOne />
+      <ButtonGroup />
     </form>
   );
 }

@@ -107,7 +107,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await planer.gebeEinkommenAn(12, 6500, "Elternteil 1");
   await planer.waehleOption(13, "Basis", "Elternteil 1");
 
-  await page.getByRole("button", { name: "Zur Übersicht" }).click();
+  await page.getByRole("button", { name: "Zur Zusammenfassung" }).click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",

@@ -121,7 +121,7 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   await planer.gebeEinkommenAn(18, 1500, "Elternteil 1");
   await planer.gebeEinkommenAn(18, 1600, "Elternteil 2");
 
-  await page.getByRole("button", { name: "Zur Übersicht" }).click();
+  await page.getByRole("button", { name: "Zur Zusammenfassung" }).click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",

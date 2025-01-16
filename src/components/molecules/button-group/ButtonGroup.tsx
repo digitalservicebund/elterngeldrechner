@@ -1,38 +1,31 @@
 import classNames from "classnames";
-import { MouseEvent } from "react";
+import { MouseEvent, ReactNode } from "react";
 import { Button } from "@/components/atoms";
 
 interface Props {
   readonly onClickBackButton?: (event: MouseEvent) => void;
-  readonly onClickResetForm?: (event: MouseEvent) => void;
-  readonly isStepOne?: boolean;
+  readonly children?: ReactNode;
 }
 
-export function ButtonGroup({
-  onClickBackButton,
-  onClickResetForm,
-  isStepOne = false,
-}: Props) {
-  const secondButtonAttributes = onClickResetForm
-    ? { onClick: onClickResetForm, label: "Neu starten" }
-    : { isSubmitButton: true, label: "Weiter" };
-
+export function ButtonGroup({ onClickBackButton, children }: Props) {
   return (
     <section
       className={classNames(
-        "egr-button-group",
-        isStepOne && "egr-button-group--step-one",
+        "mt-56 flex items-end justify-between gap-16 print:hidden",
+        !onClickBackButton && "justify-end",
       )}
     >
-      {!isStepOne && (
+      {onClickBackButton ? (
         <Button
           onClick={onClickBackButton}
           label="Zurück"
           buttonStyle="secondary"
         />
+      ) : (
+        ""
       )}
 
-      <Button {...secondButtonAttributes} />
+      {children || <Button isSubmitButton label="Weiter" />}
     </section>
   );
 }

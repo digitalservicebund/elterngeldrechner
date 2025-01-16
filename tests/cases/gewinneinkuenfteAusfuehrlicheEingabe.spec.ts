@@ -85,7 +85,7 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await planer.waehleOption(9, "Plus", "Elternteil 2");
   await planer.waehleOption(10, "Plus", "Elternteil 2");
 
-  await page.getByRole("button", { name: "Zur Übersicht" }).click();
+  await page.getByRole("button", { name: "Zur Zusammenfassung" }).click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",

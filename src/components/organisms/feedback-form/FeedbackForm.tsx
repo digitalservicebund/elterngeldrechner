@@ -70,7 +70,7 @@ export function FeedbackForm({
       {!!easeValue && easeValue > 0 && (
         <div className="rounded bg-primary-light px-24 py-32">
           <CustomRadioGroup
-            legend={<b>Was Was war die größte Schwierigkeit?</b>}
+            legend={<b>Was war die größte Schwierigkeit?</b>}
             name={"obstacle" as Path<State>}
             register={form.register}
             options={obstacleOptions}

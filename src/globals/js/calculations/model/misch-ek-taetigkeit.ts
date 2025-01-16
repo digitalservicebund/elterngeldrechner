@@ -15,18 +15,18 @@ export class MischEkTaetigkeit {
   bruttoEinkommenDurchschnitt: Big = BIG_ZERO;
   bruttoEinkommenDurchschnittMidi: Big = BIG_ZERO;
   bemessungsZeitraumMonate: boolean[] = [];
-  istRentenVersicherungsPflichtig: boolean = true;
-  istKrankenVersicherungsPflichtig: boolean = true;
-  istArbeitslosenVersicherungsPflichtig: boolean = true;
+  istRentenVersicherungsPflichtig?: boolean;
+  istKrankenVersicherungsPflichtig?: boolean;
+  istArbeitslosenVersicherungsPflichtig?: boolean;
 }
 
 export const createMischEkTaetigkeitOf = (
   erwerbsTaetigkeit: ErwerbsTaetigkeit,
   bruttoEinkommenDurchschnitt: Big,
   bemessungsZeitraumMonate: boolean[],
-  istRentenVersicherungsPflichtig: boolean,
-  istKrankenVersicherungsPflichtig: boolean,
-  istArbeitslosenVersicherungsPflichtig: boolean,
+  istRentenVersicherungsPflichtig?: boolean,
+  istKrankenVersicherungsPflichtig?: boolean,
+  istArbeitslosenVersicherungsPflichtig?: boolean,
 ) => {
   const m = new MischEkTaetigkeit();
   m.erwerbsTaetigkeit = erwerbsTaetigkeit;

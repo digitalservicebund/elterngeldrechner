@@ -87,6 +87,30 @@ jobs:
           payload: |
             { "text": "Successfully tested the ${{ env.tag }} release. :rocket:" }
 
+      - name: Create metabase release event
+        if: success() && steps.cache-tested-version.outputs.cache-hit != 'true'
+        env:
+          METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}
+          METABASE_DOMAIN: ${{ secrets.EGR_METABASE_DOMAIN }}
+        run: |
+          # Get the current timestamp in the required format (ISO 8601 with timezone)
+          TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%S.000+00:00")
+
+          curl -X POST "https://${METABASE_DOMAIN}/api/timeline-event/" \
+            -H "x-api-key: $METABASE_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "name": "Release",
+                  "description": null,
+                  "timestamp": "'"$TIMESTAMP"'",
+                  "timeline_id": 1,
+                  "icon": "cloud",
+                  "timezone": "Europe/Berlin",
+                  "time_matters": false,
+                  "archived": false,
+                  "source": "collections"
+                }'
+
       - name: Restore cache for failure notification
         if: failure() && steps.cache-tested-version.outputs.cache-hit != 'true'
         id: cache-failure-notification

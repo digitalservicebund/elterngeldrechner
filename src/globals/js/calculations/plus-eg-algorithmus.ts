@@ -8,6 +8,7 @@ import {
   ElternGeldKategorie,
   ElternGeldPlusErgebnis,
   ErwerbsArt,
+  type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   FinanzDatenBerechnet,
   type Lohnsteuerjahr,
@@ -19,7 +20,6 @@ import {
   ZwischenErgebnis,
   bruttoLeistungsMonateWithPlanung,
   mutterschaftsLeistungInMonaten,
-  zaehleMonateErwerbsTaetigkeit,
 } from "./model";
 import {
   minusDays,
@@ -748,4 +748,37 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     }
     return ergebnis;
   }
+}
+
+function zaehleMonateErwerbsTaetigkeit(
+  erwerbsZeitraeume: ErwerbsZeitraumLebensMonat[],
+): number {
+  return erwerbsZeitraeume.reduce(
+    (anzahlMonate, { vonLebensMonat, bisLebensMonat }) =>
+      anzahlMonate + Math.max(bisLebensMonat - vonLebensMonat + 1, 0),
+    0,
+  );
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("ElterngeldPlus Algorithmus", async () => {
+    const { Einkommen, ErwerbsZeitraumLebensMonat } = await import("./model");
+
+    it("correctly counts the number of Monate for list of Erwerbstätigkeiten", () => {
+      const taetigkeiten = [
+        new ErwerbsZeitraumLebensMonat(1, 1, ANY_EINKOMMEN),
+        new ErwerbsZeitraumLebensMonat(1, 2, ANY_EINKOMMEN),
+        new ErwerbsZeitraumLebensMonat(2, 5, ANY_EINKOMMEN),
+        new ErwerbsZeitraumLebensMonat(5, 2, ANY_EINKOMMEN),
+      ];
+
+      const anzahlMonate = zaehleMonateErwerbsTaetigkeit(taetigkeiten);
+
+      expect(anzahlMonate).toBe(7);
+    });
+
+    const ANY_EINKOMMEN = new Einkommen(0);
+  });
 }

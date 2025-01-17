@@ -253,7 +253,7 @@ describe("Abschnitt mit Einkommen", () => {
 
     expect(
       screen.getByText(
-        "*Sie dürfen in diesem Monat nur maximal 32 Stunden pro Woche arbeiten",
+        "Sie dürfen in diesem Monat nur maximal 32 Stunden pro Woche arbeiten",
       ),
     );
   });

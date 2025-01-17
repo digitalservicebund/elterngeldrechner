@@ -86,13 +86,13 @@ describe("Planer", () => {
     }
   });
 
-  describe("Download der Planung", () => {
+  describe("Drucken der Planung", () => {
     it("triggers the browsers in-build print function", async () => {
       window.print = vi.fn();
       render(<Planer {...ANY_PROPS} />);
 
       const button = screen.getByRole("button", {
-        name: "Download der Planung",
+        name: "Drucken der Planung",
       });
       await userEvent.click(button);
 
@@ -108,7 +108,7 @@ describe("Planer", () => {
       render(<Planer {...ANY_PROPS} />);
 
       const button = screen.getByRole("button", {
-        name: "Download der Planung",
+        name: "Drucken der Planung",
       });
       await userEvent.click(button);
 

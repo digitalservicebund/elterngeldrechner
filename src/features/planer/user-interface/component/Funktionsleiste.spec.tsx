@@ -23,16 +23,6 @@ describe("Funktionsleiste", () => {
 
     expect(planungWiederholen).toHaveBeenCalledOnce();
   });
-
-  it("calls the correct callback when clicking Download der Planung", async () => {
-    const downloadePlan = vi.fn();
-    render(<Funktionsleiste {...ANY_PROPS} downloadePlan={downloadePlan} />);
-
-    const button = screen.getByRole("button", { name: "Download der Planung" });
-    await userEvent.click(button);
-
-    expect(downloadePlan).toHaveBeenCalledOnce();
-  });
 });
 
 const ANY_PROPS = {

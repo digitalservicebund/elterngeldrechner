@@ -1,19 +1,17 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
-import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import { Button } from "@/components/atoms";
+import { PrintButton } from "@/components/molecules";
 
 type Props = {
   readonly planungWiederholen: () => void;
-  readonly downloadePlan: () => void;
   readonly isDownloadDisabled?: boolean;
   readonly className?: string;
 };
 
 export function Funktionsleiste({
   planungWiederholen,
-  downloadePlan,
   isDownloadDisabled,
   className,
 }: Props): ReactNode {
@@ -21,30 +19,23 @@ export function Funktionsleiste({
 
   return (
     <section
-      className={classNames("flex flex-wrap gap-32", className)}
+      className={classNames("flex flex-col gap-32 print:hidden", className)}
       aria-labelledby={headingIdentifier}
     >
       <h4 id={headingIdentifier} className="sr-only">
         Funktionsleiste
       </h4>
 
-      <Button
-        buttonStyle="link"
-        label="Planung wiederholen"
-        iconBefore={<RestartAltIcon />}
-        onClick={planungWiederholen}
-      />
+      <div>
+        <Button
+          buttonStyle="link"
+          label="Planung wiederholen"
+          iconBefore={<RestartAltIcon />}
+          onClick={planungWiederholen}
+        />
+      </div>
 
-      <Button
-        className={classNames({
-          "text-grey-dark hover:cursor-default": isDownloadDisabled,
-        })}
-        buttonStyle="link"
-        label="Download der Planung"
-        iconBefore={<SaveAltIcon />}
-        onClick={downloadePlan}
-        disabled={isDownloadDisabled}
-      />
+      <PrintButton disabled={isDownloadDisabled} />
     </section>
   );
 }

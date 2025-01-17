@@ -75,12 +75,6 @@ export function Planer({
 
   const istPlanGueltig = validierungsfehler.length === 0;
 
-  const downloadePlan = useCallback(() => {
-    if (istPlanGueltig) {
-      window.print();
-    }
-  }, [istPlanGueltig]);
-
   return (
     <section
       className={className}
@@ -150,7 +144,6 @@ export function Planer({
       <Funktionsleiste
         className="my-40"
         planungWiederholen={planungWiederholen}
-        downloadePlan={downloadePlan}
         isDownloadDisabled={!istPlanGueltig}
       />
 

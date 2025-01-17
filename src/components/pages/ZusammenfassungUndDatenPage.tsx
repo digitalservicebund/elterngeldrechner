@@ -1,9 +1,7 @@
-import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import type { ReactNode } from "react";
 import { formSteps } from "./formSteps";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
-import { Button } from "@/components/atoms";
-import { ButtonGroup } from "@/components/molecules";
+import { ButtonGroup, PrintButton } from "@/components/molecules";
 import { Page } from "@/components/organisms/page";
 import { Zusammenfassung } from "@/features/planer/user-interface";
 
@@ -15,10 +13,6 @@ function ZusammenfassungUndDatenPage(): ReactNode {
     navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
   }
 
-  function print(): void {
-    window.print();
-  }
-
   return (
     <Page step={formSteps.zusammenfassungUndDaten}>
       {hasPlan ? (
@@ -26,12 +20,7 @@ function ZusammenfassungUndDatenPage(): ReactNode {
           <Zusammenfassung plan={plan} />
 
           <div className="mt-32">
-            <Button
-              buttonStyle="link"
-              label="Download der Planung"
-              iconBefore={<SaveAltIcon />}
-              onClick={print}
-            />
+            <PrintButton />
           </div>
         </>
       ) : (

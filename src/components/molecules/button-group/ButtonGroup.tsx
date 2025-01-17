@@ -12,7 +12,7 @@ export function ButtonGroup({ onClickBackButton, children }: Props) {
     <section
       className={classNames(
         "mt-56 flex items-end justify-between gap-16 print:hidden",
-        !onClickBackButton && "justify-end",
+        !onClickBackButton && "!justify-end",
       )}
     >
       {onClickBackButton ? (

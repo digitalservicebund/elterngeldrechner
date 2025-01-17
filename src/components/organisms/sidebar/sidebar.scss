@@ -50,11 +50,8 @@
       }
 
       &::before {
-        @apply mr-16 size-32 border border-solid border-grey-dark leading-[2rem];
-        display: inline-block;
+        @apply mr-16 inline-flex size-32 items-center justify-center rounded-full border border-solid border-grey-dark;
         content: counter(item);
-        text-align: center;
-        border-radius: 50%;
         font-family: Arial, Helvetica, sans-serif;
       }
 
@@ -66,7 +63,7 @@
 
       &--current {
         &:before {
-          @apply border-[0.140625rem] border-primary bg-primary-light leading-[1.71875rem];
+          @apply border-2 border-primary bg-primary-light;
 
           @media (max-width: 481px) {
             @apply bg-white;

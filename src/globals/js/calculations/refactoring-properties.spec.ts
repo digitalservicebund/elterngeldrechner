@@ -27,7 +27,7 @@ import {
   type ElternGeldDaten,
   ErwerbsArt,
   ErwerbsTaetigkeit,
-  ErwerbsZeitraumLebensMonat,
+  type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   KassenArt,
   type Kind,
@@ -526,11 +526,11 @@ function originalErwerbsZeitraumLebensMonatFrom(
 function erwerbsZeitraumLebensMonatFrom(
   data: ErwerbsZeitraumLebensMonatRaw,
 ): ErwerbsZeitraumLebensMonat {
-  return new ErwerbsZeitraumLebensMonat(
-    data.vonLebensmonat,
-    data.bisLebensmonat,
-    new Einkommen(data.bruttoProMonat),
-  );
+  return {
+    vonLebensMonat: data.vonLebensmonat,
+    bisLebensMonat: data.bisLebensmonat,
+    bruttoProMonat: new Einkommen(data.bruttoProMonat),
+  };
 }
 
 function yesNoFrom(value: boolean): YesNo {

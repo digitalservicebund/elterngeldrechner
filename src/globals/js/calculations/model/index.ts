@@ -12,7 +12,7 @@ export type {
   ElternGeldPlusErgebnis,
 } from "./eltern-geld-plus-ergebnis";
 export { ErwerbsArt } from "./erwerbs-art";
-export { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
+export type { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 export {
   type FinanzDaten,
   bruttoLeistungsMonateWithPlanung,

@@ -11,7 +11,7 @@ import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,
   ErwerbsTaetigkeit,
-  ErwerbsZeitraumLebensMonat,
+  type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   KassenArt,
   KinderFreiBetrag,
@@ -93,15 +93,12 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
 
 const erwerbsZeitraumLebensMonatListOf = (
   bruttoEinkommenZeitraumList: BruttoEinkommenZeitraum[],
-) =>
-  bruttoEinkommenZeitraumList.map(
-    (bruttoEinkommenZeitraum) =>
-      new ErwerbsZeitraumLebensMonat(
-        Number.parseInt(bruttoEinkommenZeitraum.zeitraum.from),
-        Number.parseInt(bruttoEinkommenZeitraum.zeitraum.to),
-        new Einkommen(bruttoEinkommenZeitraum.bruttoEinkommen ?? 0),
-      ),
-  );
+): ErwerbsZeitraumLebensMonat[] =>
+  bruttoEinkommenZeitraumList.map((bruttoEinkommenZeitraum) => ({
+    vonLebensMonat: Number.parseInt(bruttoEinkommenZeitraum.zeitraum.from),
+    bisLebensMonat: Number.parseInt(bruttoEinkommenZeitraum.zeitraum.to),
+    bruttoProMonat: new Einkommen(bruttoEinkommenZeitraum.bruttoEinkommen ?? 0),
+  }));
 
 export const finanzDatenOfUi = (
   state: RootState,

@@ -4,7 +4,6 @@ import {
   Einkommen,
   ElternGeldArt,
   ErwerbsArt,
-  ErwerbsZeitraumLebensMonat,
   KassenArt,
   KinderFreiBetrag,
   MutterschaftsLeistung,
@@ -41,9 +40,21 @@ describe("egr-calculation", () => {
         steuerKlasse: SteuerKlasse.SKL1,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
         erwerbsZeitraumLebensMonatList: [
-          new ErwerbsZeitraumLebensMonat(1, 2, new Einkommen(100)),
-          new ErwerbsZeitraumLebensMonat(3, 4, new Einkommen(1000)),
-          new ErwerbsZeitraumLebensMonat(5, 6, new Einkommen(5000)),
+          {
+            vonLebensMonat: 1,
+            bisLebensMonat: 2,
+            bruttoProMonat: new Einkommen(100),
+          },
+          {
+            vonLebensMonat: 3,
+            bisLebensMonat: 4,
+            bruttoProMonat: new Einkommen(1000),
+          },
+          {
+            vonLebensMonat: 5,
+            bisLebensMonat: 6,
+            bruttoProMonat: new Einkommen(5000),
+          },
         ],
       };
 

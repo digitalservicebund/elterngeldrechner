@@ -4,7 +4,7 @@ import { round } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,
   ElternGeldArt,
-  ErwerbsZeitraumLebensMonat,
+  type ErwerbsZeitraumLebensMonat,
   KassenArt,
   NettoEinkommen,
   PLANUNG_ANZAHL_MONATE,
@@ -135,11 +135,12 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
         testCaseIndex,
         lebensMonat,
       );
-      const erwerbszeitraumLM = new ErwerbsZeitraumLebensMonat(
-        lebensMonat,
-        lebensMonat,
-        new Einkommen(lebensmonatBrutto),
-      );
+      const erwerbszeitraumLM = {
+        vonLebensMonat: lebensMonat,
+        bisLebensMonat: lebensMonat,
+        bruttoProMonat: new Einkommen(lebensmonatBrutto),
+      };
+
       erwerbszeitraeumeLM.push(erwerbszeitraumLM);
     }
     return erwerbszeitraeumeLM;

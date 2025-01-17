@@ -764,14 +764,14 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("ElterngeldPlus Algorithmus", async () => {
-    const { Einkommen, ErwerbsZeitraumLebensMonat } = await import("./model");
+    const { Einkommen } = await import("./model");
 
     it("correctly counts the number of Monate for list of Erwerbstätigkeiten", () => {
       const taetigkeiten = [
-        new ErwerbsZeitraumLebensMonat(1, 1, ANY_EINKOMMEN),
-        new ErwerbsZeitraumLebensMonat(1, 2, ANY_EINKOMMEN),
-        new ErwerbsZeitraumLebensMonat(2, 5, ANY_EINKOMMEN),
-        new ErwerbsZeitraumLebensMonat(5, 2, ANY_EINKOMMEN),
+        { vonLebensMonat: 1, bisLebensMonat: 1, bruttoProMonat: ANY_EINKOMMEN },
+        { vonLebensMonat: 1, bisLebensMonat: 2, bruttoProMonat: ANY_EINKOMMEN },
+        { vonLebensMonat: 2, bisLebensMonat: 5, bruttoProMonat: ANY_EINKOMMEN },
+        { vonLebensMonat: 5, bisLebensMonat: 2, bruttoProMonat: ANY_EINKOMMEN },
       ];
 
       const anzahlMonate = zaehleMonateErwerbsTaetigkeit(taetigkeiten);

@@ -18,7 +18,7 @@ import {
   ElternGeldArt,
   type ElternGeldDaten,
   type ElternGeldPlusErgebnis,
-  ErwerbsZeitraumLebensMonat,
+  type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   type Lohnsteuerjahr,
   MutterschaftsLeistung,
@@ -107,14 +107,11 @@ function transformMonateForFinanzdaten(
   return Object.entries(monate)
     .filter(isEntryWithDefinedMonthValue)
     .filter(isEntryWithRelevantEinkommen)
-    .map(
-      ([lebensmonatszahl, monat]) =>
-        new ErwerbsZeitraumLebensMonat(
-          Number.parseInt(lebensmonatszahl),
-          Number.parseInt(lebensmonatszahl),
-          new Einkommen(monat.bruttoeinkommen),
-        ),
-    );
+    .map(([lebensmonatszahl, monat]) => ({
+      vonLebensMonat: Number.parseInt(lebensmonatszahl),
+      bisLebensMonat: Number.parseInt(lebensmonatszahl),
+      bruttoProMonat: new Einkommen(monat.bruttoeinkommen),
+    }));
 }
 
 function transformMonateToPlanungsdaten(monate: GeplanteMonate): PlanungsDaten {
@@ -305,8 +302,16 @@ if (import.meta.vitest) {
 
       expect(observeredErwerbsZeitraumLebensMonatListen).toStrictEqual([
         [
-          new ErwerbsZeitraumLebensMonat(2, 2, new Einkommen(200)),
-          new ErwerbsZeitraumLebensMonat(5, 5, new Einkommen(500)),
+          {
+            vonLebensMonat: 2,
+            bisLebensMonat: 2,
+            bruttoProMonat: new Einkommen(200),
+          },
+          {
+            vonLebensMonat: 5,
+            bisLebensMonat: 5,
+            bruttoProMonat: new Einkommen(500),
+          },
         ],
       ]);
     });
@@ -325,8 +330,16 @@ if (import.meta.vitest) {
 
       expect(observeredErwerbsZeitraumLebensMonatListen).toStrictEqual([
         [
-          new ErwerbsZeitraumLebensMonat(1, 1, new Einkommen(100)),
-          new ErwerbsZeitraumLebensMonat(8, 8, new Einkommen(800)),
+          {
+            vonLebensMonat: 1,
+            bisLebensMonat: 1,
+            bruttoProMonat: new Einkommen(100),
+          },
+          {
+            vonLebensMonat: 8,
+            bisLebensMonat: 8,
+            bruttoProMonat: new Einkommen(800),
+          },
         ],
       ]);
     });

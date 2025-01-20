@@ -6,7 +6,6 @@ type Props = {
   readonly zeitraum: Zeitraum;
   readonly htmlElementType?: keyof React.ReactHTML;
   readonly prefix?: string;
-  readonly id?: string;
   readonly className?: string;
 };
 
@@ -14,25 +13,19 @@ export function ZeitraumLabel({
   zeitraum,
   prefix,
   htmlElementType,
-  id,
   className,
 }: Props): ReactNode {
-  const shortVisualLabel = composeShortVisualLabel(zeitraum, prefix);
-  const longReadOutLabel = composeLongReadOutLabel(zeitraum, prefix);
-
   return React.createElement(
     htmlElementType ?? "span",
     {
-      id,
       className,
-      ["aria-label"]: longReadOutLabel,
       ["data-testid"]: "label",
     },
-    shortVisualLabel,
+    composeLabel(zeitraum, prefix),
   );
 }
 
-function composeShortVisualLabel(zeitraum: Zeitraum, prefix?: string): string {
+function composeLabel(zeitraum: Zeitraum, prefix?: string): string {
   const { from, to } = zeitraum;
   const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
 
@@ -50,24 +43,4 @@ function composeShortVisualLabel(zeitraum: Zeitraum, prefix?: string): string {
 
   const withoutPrefix = `${formattedFrom} bis ${formattedTo}`;
   return prefix ? `${prefix}: ${withoutPrefix}` : withoutPrefix;
-}
-
-function composeLongReadOutLabel(zeitraum: Zeitraum, prefix?: string): string {
-  const { from, to } = zeitraum;
-  const isSpanningTwoYears = from.getFullYear() < to.getFullYear();
-
-  const formattedFrom = from.toLocaleDateString("de-DE", {
-    day: "numeric",
-    month: "long",
-    year: isSpanningTwoYears ? "numeric" : undefined,
-  });
-
-  const formattedTo = to.toLocaleDateString("de-DE", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const withoutPrefix = `vom ${formattedFrom} bis zum ${formattedTo}`;
-  return prefix ? `${prefix} ${withoutPrefix}` : withoutPrefix;
 }

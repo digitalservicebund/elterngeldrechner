@@ -24,7 +24,7 @@ describe("Lebensmonat Content", () => {
   });
 
   it("shows the Zeitraum of the Lebensmonat", () => {
-    render(<LebensmonatContent {...ANY_PROPS} />);
+    render(<LebensmonatContent />);
 
     expect(screen.getByText("Zeitraum:", { exact: false })).toBeVisible();
   });
@@ -35,7 +35,7 @@ describe("Lebensmonat Content", () => {
       lebensmonatszahl: 5,
     });
 
-    render(<LebensmonatContent {...ANY_PROPS} />);
+    render(<LebensmonatContent />);
 
     expect(screen.getByText("5. Lebensmonat")).toBeVisible();
   });
@@ -51,7 +51,7 @@ describe("Lebensmonat Content", () => {
         },
       });
 
-      render(<LebensmonatContent {...ANY_PROPS} />);
+      render(<LebensmonatContent />);
 
       expect(screen.queryByText("Test Bonus Hinweis Text")).toBeInTheDocument();
     });
@@ -66,7 +66,7 @@ describe("Lebensmonat Content", () => {
         },
       });
 
-      render(<LebensmonatContent {...ANY_PROPS} />);
+      render(<LebensmonatContent />);
 
       expect(
         screen.queryByText("Test Bonus Hinweis Text"),
@@ -105,8 +105,4 @@ const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
-};
-
-const ANY_PROPS = {
-  zeitraumLabelIdentifier: "",
 };

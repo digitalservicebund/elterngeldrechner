@@ -1,8 +1,10 @@
-import classNames from "classnames";
 import { Fragment, ReactNode, useId } from "react";
 import { GewaehlteOption } from "./GewaehlteOption";
 import { Haushaltseinkommen } from "./Haushaltseinkommen";
-import { beschreibeLebensmonat } from "./beschreibeLebensmonat";
+import {
+  beschreibePlanungImLebensmonat,
+  beschreibeZeitraumDesLebensmonats,
+} from "./beschreibeLebensmonat";
 import {
   Elternteil,
   listeElternteileFuerAusgangslageAuf,
@@ -16,13 +18,7 @@ import {
   useGridLayout,
 } from "@/features/planer/user-interface/layout/grid-layout";
 
-type Props = {
-  readonly identifierToZeitraumLabel: string;
-};
-
-export function LebensmonatSummary({
-  identifierToZeitraumLabel,
-}: Props): ReactNode {
+export function LebensmonatSummary(): ReactNode {
   const gridLayout = useGridLayout();
   const lebensmonatszahlColumns = useGridColumn(
     LEBENSMONATSZAHL_COLUMN_DEFINITION,
@@ -39,21 +35,25 @@ export function LebensmonatSummary({
 
   const ariaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
-  const auswahlDescriptionIdentifier = useId();
-  const auswahlDescription = beschreibeLebensmonat(ausgangslage, lebensmonat);
+  const descriptionIdentifier = useId();
+  const auswahlDescription = beschreibePlanungImLebensmonat(
+    ausgangslage,
+    lebensmonat,
+  );
+  const zeitraumDescription = beschreibeZeitraumDesLebensmonats(
+    ausgangslage,
+    lebensmonatszahl,
+  );
 
   return (
     <summary
       className="list-none py-6 hover:bg-off-white focus:bg-off-white"
       style={gridLayout}
       aria-label={ariaLabel}
-      aria-describedby={classNames(
-        auswahlDescriptionIdentifier,
-        identifierToZeitraumLabel,
-      )}
+      aria-describedby={descriptionIdentifier}
     >
-      <span id={auswahlDescriptionIdentifier} className="sr-only" aria-hidden>
-        {auswahlDescription}
+      <span id={descriptionIdentifier} className="sr-only" aria-hidden>
+        {auswahlDescription} {zeitraumDescription}
       </span>
 
       <span

@@ -14,13 +14,7 @@ import {
   useGridLayout,
 } from "@/features/planer/user-interface/layout/grid-layout";
 
-type Props = {
-  readonly zeitraumLabelIdentifier: string;
-};
-
-export function LebensmonatContent({
-  zeitraumLabelIdentifier,
-}: Props): ReactNode {
+export function LebensmonatContent(): ReactNode {
   const gridLayout = useGridLayout();
   const descriptionArea = useGridColumn(DESCRIPTION_COLUMN_DEFINITION);
   const hinweisZumBonusArea = useGridColumn(
@@ -45,18 +39,9 @@ export function LebensmonatContent({
       style={gridLayout}
       data-testid="details-content"
     >
-      <div
-        className="mb-24 flex flex-col text-center"
-        style={descriptionArea}
-        aria-hidden
-      >
+      <div className="mb-24 flex flex-col text-center" style={descriptionArea}>
         <span>{lebensmonatszahl}. Lebensmonat</span>
-
-        <ZeitraumLabel
-          id={zeitraumLabelIdentifier}
-          zeitraum={zeitraum}
-          prefix="Zeitraum"
-        />
+        <ZeitraumLabel zeitraum={zeitraum} prefix="Zeitraum" />
       </div>
 
       <AbschnittMitAuswahloptionen />

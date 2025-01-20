@@ -4,7 +4,6 @@ import {
   ReactNode,
   type SyntheticEvent,
   forwardRef,
-  useId,
   useImperativeHandle,
   useRef,
   useState,
@@ -62,8 +61,6 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
-  const zeitraumLabelIdentifier = useId();
-
   const detailsElement = useRef<HTMLDetailsElement>(null);
   useImperativeHandle(
     ref,
@@ -119,17 +116,11 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         ref={detailsElement}
         onToggle={onToggleListener}
       >
-        <LebensmonatSummary
-          identifierToZeitraumLabel={zeitraumLabelIdentifier}
-        />
+        <LebensmonatSummary />
 
         {
           /* Performance optimization */
-          !!isExpanded && (
-            <LebensmonatContent
-              zeitraumLabelIdentifier={zeitraumLabelIdentifier}
-            />
-          )
+          !!isExpanded && <LebensmonatContent />
         }
       </details>
     </ProvideInformationenZumLebensmonat>

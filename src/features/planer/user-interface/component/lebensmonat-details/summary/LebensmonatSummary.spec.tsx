@@ -1,6 +1,9 @@
 import { render, within } from "@testing-library/react";
 import { LebensmonatSummary } from "./LebensmonatSummary";
-import { beschreibeLebensmonat } from "./beschreibeLebensmonat";
+import {
+  beschreibePlanungImLebensmonat,
+  beschreibeZeitraumDesLebensmonats,
+} from "./beschreibeLebensmonat";
 import {
   type Auswahloption,
   Elternteil,
@@ -33,7 +36,7 @@ describe("Lebensmonat Summary", () => {
       },
     });
 
-    render(<LebensmonatSummary {...ANY_PROPS} />);
+    render(<LebensmonatSummary />);
 
     const summary = document.querySelector("summary")!;
     expect(within(summary).queryByText("Basis")).toBeVisible();
@@ -44,15 +47,18 @@ describe("Lebensmonat Summary", () => {
     expect(within(summary).queryByText("21 €")).toBeVisible();
   });
 
-  it("uses the computed Beschreibung of the Lebensmonat as accessibility description", () => {
-    vi.mocked(beschreibeLebensmonat).mockReturnValue(
+  it("uses the computed Beschreibungen of the Lebensmonat as accessibility description", () => {
+    vi.mocked(beschreibePlanungImLebensmonat).mockReturnValue(
       "Ausführliche Beschreibung des Lebensmonats.",
     );
+    vi.mocked(beschreibeZeitraumDesLebensmonats).mockReturnValue(
+      "Von Datum A bis zum Datum B.",
+    );
 
-    render(<LebensmonatSummary {...ANY_PROPS} />);
+    render(<LebensmonatSummary />);
 
     expect(document.querySelector("summary")).toHaveAccessibleDescription(
-      /^Ausführliche Beschreibung des Lebensmonats./,
+      "Ausführliche Beschreibung des Lebensmonats. Von Datum A bis zum Datum B.",
     );
   });
 });
@@ -93,8 +99,4 @@ const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
-};
-
-const ANY_PROPS = {
-  identifierToZeitraumLabel: "",
 };

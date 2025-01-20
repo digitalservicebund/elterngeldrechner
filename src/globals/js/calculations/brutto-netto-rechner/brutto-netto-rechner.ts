@@ -11,7 +11,6 @@ import {
   FinanzDaten,
   KassenArt,
   type Lohnsteuerjahr,
-  NettoEinkommen,
   RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
@@ -89,14 +88,14 @@ export class BruttoNettoRechner {
    * @param {FinanzDaten} finanzdaten
    * @param erwerbsArtVorGeburt
    * @param lohnSteuerJahr
-   * @return {NettoEinkommen}
+   * @return {Einkommen}
    */
   nettoEinkommenZwischenErgebnis(
     finanzdaten: FinanzDaten,
     erwerbsArtVorGeburt: ErwerbsArt,
     lohnSteuerJahr: Lohnsteuerjahr,
-  ): NettoEinkommen {
-    const netto: NettoEinkommen = new Einkommen(0);
+  ): Einkommen {
+    const netto: Einkommen = new Einkommen(0);
     const status: ErwerbsArt = erwerbsArtVorGeburt;
     const brutto: Big = finanzdaten.bruttoEinkommen.value;
     const art_rv: RentenArt = finanzdaten.rentenVersicherung;

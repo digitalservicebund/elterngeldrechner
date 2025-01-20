@@ -6,7 +6,6 @@ import {
   ElternGeldArt,
   type ErwerbsZeitraumLebensMonat,
   KassenArt,
-  NettoEinkommen,
   PLANUNG_ANZAHL_MONATE,
   type PersoenlicheDaten,
   RentenArt,
@@ -116,7 +115,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     return result;
   }
 
-  nettoVorGeburt(testCaseIndex: number): NettoEinkommen {
+  nettoVorGeburt(testCaseIndex: number): Einkommen {
     const nettoVorGeburt = this.numberOf(
       testCaseIndex,
       NETTO_VOR_GEBURT_OFFSET,

@@ -9,7 +9,6 @@ import {
   ErwerbsArt,
   type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
-  NettoEinkommen,
   ZwischenErgebnis,
   finanzDatenOf,
 } from "./model";
@@ -111,5 +110,5 @@ export class EgrCalculation {
 
 interface ZwischenErgebnisEinkommen {
   mischEkZwischenErgebnis: MischEkZwischenErgebnis | null;
-  nettoEinkommen: NettoEinkommen;
+  nettoEinkommen: Einkommen;
 }

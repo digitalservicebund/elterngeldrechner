@@ -3,7 +3,6 @@ export {
   type MischEkTaetigkeit,
 } from "./misch-ek-taetigkeit";
 export { Einkommen } from "./einkommen";
-export type { NettoEinkommen } from "./einkommen-types";
 export { ElternGeldArt } from "./eltern-geld-art";
 export type { ElternGeldDaten } from "./eltern-geld-daten";
 export { ElternGeldKategorie } from "./eltern-geld-kategorie";

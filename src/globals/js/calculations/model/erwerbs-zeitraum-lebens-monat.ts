@@ -1,4 +1,4 @@
-import { BruttoEinkommen } from "./einkommen-types";
+import { Einkommen } from "./einkommen";
 
 /**
  * Erwerbszeitraum für Einkommen NACH der Geburt.
@@ -6,5 +6,5 @@ import { BruttoEinkommen } from "./einkommen-types";
 export type ErwerbsZeitraumLebensMonat = Readonly<{
   vonLebensMonat: number;
   bisLebensMonat: number;
-  bruttoProMonat: BruttoEinkommen;
+  bruttoProMonat: Einkommen;
 }>;

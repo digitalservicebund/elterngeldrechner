@@ -1,5 +1,5 @@
 import Big from "big.js";
-import { BruttoEinkommen } from "./einkommen-types";
+import { Einkommen } from "./einkommen";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 import { KassenArt } from "./kassen-art";
@@ -12,7 +12,7 @@ import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
 
 // TODO: mark fully readonly
 export type FinanzDaten = {
-  readonly bruttoEinkommen: BruttoEinkommen;
+  readonly bruttoEinkommen: Einkommen;
   readonly istKirchensteuerpflichtig?: boolean;
   kinderFreiBetrag: KinderFreiBetrag;
   steuerKlasse: SteuerKlasse;

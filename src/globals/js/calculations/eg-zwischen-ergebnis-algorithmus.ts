@@ -6,7 +6,6 @@ import {
   Einkommen,
   ErwerbsArt,
   Kind,
-  NettoEinkommen,
   PersoenlicheDaten,
   ZwischenErgebnis,
 } from "./model";
@@ -33,12 +32,12 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
    * Berechnet das Zwischenergebnis des Elterngeldrechners.
    *
    * @param {PersoenlicheDaten} persoenlicheDaten Die persönlichen Daten eines Elternteils.
-   * @param {NettoEinkommen} nettoEinkommen Nettoeinkommen vor der Geburt.
+   * @param {Einkommen} nettoEinkommen Nettoeinkommen vor der Geburt.
    * @return {ZwischenErgebnis} Das Zwischenergebnis des Elterngeldrechners.
    */
   public elterngeldZwischenergebnis(
     persoenlicheDaten: PersoenlicheDaten,
-    nettoEinkommen: NettoEinkommen,
+    nettoEinkommen: Einkommen,
   ): ZwischenErgebnis {
     if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
       throw new Error("wahrscheinlichesGeburtsDatum is undefined");
@@ -46,7 +45,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     const geburt: Date = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
     const geschwister = persoenlicheDaten.geschwister ?? [];
     const no_kinder: number = persoenlicheDaten.anzahlKuenftigerKinder;
-    const ek_vor: NettoEinkommen =
+    const ek_vor: Einkommen =
       ErwerbsArt.NEIN !== persoenlicheDaten.etVorGeburt
         ? nettoEinkommen
         : new Einkommen(0);

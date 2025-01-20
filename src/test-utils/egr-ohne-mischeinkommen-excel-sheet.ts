@@ -3,7 +3,6 @@ import {
   Einkommen,
   ElternGeldArt,
   KassenArt,
-  NettoEinkommen,
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
   kinderFreiBetragOfNumber,
@@ -103,7 +102,7 @@ export class EgrOhneMischeinkommenExcelSheet {
     return result;
   }
 
-  nettoVorGeburt(testCaseIndex: number): NettoEinkommen {
+  nettoVorGeburt(testCaseIndex: number): Einkommen {
     const nettoVorGeburt = this.numberOf(
       testCaseIndex,
       NETTO_VOR_GEBURT_OFFSET,

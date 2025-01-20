@@ -1,7 +1,6 @@
 import Big from "big.js";
 import { DateTime } from "luxon";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
-import { findLastBornChild, findSecondLastBornChild } from "./common/kind-util";
 import {
   Einkommen,
   ErwerbsArt,
@@ -119,7 +118,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   }
 
   public ende_bonus_u6(geschwister: Kind[]): Date | undefined {
-    const zweitjuengstesGeschwisterkind = findSecondLastBornChild(geschwister);
+    const zweitjuengstesGeschwisterkind = findNthLastBornChild(geschwister, 2);
 
     return zweitjuengstesGeschwisterkind
       ? this.ende_bonus(zweitjuengstesGeschwisterkind.geburtsdatum, 6)
@@ -131,8 +130,9 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       (kind) => kind.istBehindert,
     );
 
-    const juengstesGeschwisterkindMitBehinderung = findLastBornChild(
+    const juengstesGeschwisterkindMitBehinderung = findNthLastBornChild(
       geschwisterMitBehinderung,
+      1,
     );
 
     return juengstesGeschwisterkindMitBehinderung
@@ -141,7 +141,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   }
 
   public ende_bonus_u3(geschwister: Kind[]): Date | undefined {
-    const juengstesGeschwisterkind = findLastBornChild(geschwister);
+    const juengstesGeschwisterkind = findNthLastBornChild(geschwister, 1);
 
     return juengstesGeschwisterkind
       ? this.ende_bonus(juengstesGeschwisterkind.geburtsdatum, 3)
@@ -165,6 +165,82 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
   }
 }
 
+/**
+ * @param kinder
+ * @param nth starting from number `1` (for readability purpose), `0` will
+ * always result in `undefined`
+ * @return nth last born child, `undefined` if there are "not enough" `kinder`
+ */
+function findNthLastBornChild(kinder: Kind[], nth: number): Kind | undefined {
+  return kinder.toSorted(compareKinderByLatestGeburtsdatum)[nth - 1];
+}
+
 function compareDateByLatestOrder(left: Date, right: Date): number {
   return right.getTime() - left.getTime();
+}
+
+function compareKinderByLatestGeburtsdatum(left: Kind, right: Kind): number {
+  return right.geburtsdatum.getTime() - left.geburtsdatum.getTime();
+}
+
+if (import.meta.vitest) {
+  const { describe, test, expect } = import.meta.vitest;
+
+  describe("Elterngeld-Zwischenergebnis-Algorithmus", () => {
+    test.each<{ kinder: Kind[]; nth: number; nthLastBorn: Kind | undefined }>([
+      {
+        kinder: [],
+        nth: 1,
+        nthLastBorn: undefined,
+      },
+      {
+        kinder: [{ geburtsdatum: new Date(2021, 1, 1) }],
+        nth: 1,
+        nthLastBorn: { geburtsdatum: new Date(2021, 1, 1) },
+      },
+      {
+        kinder: [{ geburtsdatum: new Date(2021, 1, 1) }],
+        nth: 2,
+        nthLastBorn: undefined,
+      },
+      {
+        kinder: [{ geburtsdatum: new Date(2021, 1, 1) }],
+        nth: 0,
+        nthLastBorn: undefined,
+      },
+      {
+        kinder: [
+          { geburtsdatum: new Date(2021, 1, 1), istBehindert: false },
+          { geburtsdatum: new Date(2021, 1, 2), istBehindert: true },
+        ],
+        nth: 1,
+        nthLastBorn: { geburtsdatum: new Date(2021, 1, 2), istBehindert: true },
+      },
+      {
+        kinder: [
+          { geburtsdatum: new Date(2021, 1, 1), istBehindert: false },
+          { geburtsdatum: new Date(2021, 1, 2), istBehindert: true },
+        ],
+        nth: 2,
+        nthLastBorn: {
+          geburtsdatum: new Date(2021, 1, 1),
+          istBehindert: false,
+        },
+      },
+      {
+        kinder: [
+          { geburtsdatum: new Date(2021, 1, 1), istBehindert: false },
+          { geburtsdatum: new Date(2020, 1, 1), istBehindert: true },
+          { geburtsdatum: new Date(2021, 1, 2), istBehindert: false },
+        ],
+        nth: 3,
+        nthLastBorn: { geburtsdatum: new Date(2020, 1, 1), istBehindert: true },
+      },
+    ])(
+      "find nth last born child - case: #%#",
+      ({ kinder, nth, nthLastBorn }) => {
+        expect(findNthLastBornChild(kinder, nth)).toStrictEqual(nthLastBorn);
+      },
+    );
+  });
 }

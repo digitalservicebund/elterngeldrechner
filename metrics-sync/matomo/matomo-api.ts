@@ -1,13 +1,13 @@
 import { Action, Method, PageStatistic } from "./matomo-api-schema";
 
 async function fetchEventActions(date: string): Promise<Action[]> {
-  return fetchMatomoEndpoint("Events.getAction", date, date, true)
+  return fetchMatomoEndpoint("Events.getAction", date, date)
     .then((it) => it.json())
     .then((it: Record<string, Action[]>) => it[date]);
 }
 
 async function fetchPageStatistics(date: string): Promise<PageStatistic> {
-  return fetchMatomoEndpoint("Actions.getPageTitles", date, date, false)
+  return fetchMatomoEndpoint("Actions.getPageTitles", date, date)
     .then((it) => it.json())
     .then((it: Record<string, PageStatistic[]>) => it[date])
     .then((it) => it.filter(isPlanerSegment))
@@ -24,14 +24,12 @@ async function fetchMatomoEndpoint(
   method: Method,
   startDate: string,
   endDate: string,
-  useSegmentFilter: boolean,
 ) {
   const { config } = await import("../env");
 
-  const segmentFilter = `&segment=pageUrl%3D%3Dhttps%25253A%25252F%25252Ffamilienportal.de%25252Ffamilienportal%25252Fmeta%25252Fegr`;
-  const url = `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${startDate},${endDate}&method=${method}&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`;
-
-  const response = await fetch(useSegmentFilter ? url + segmentFilter : url);
+  const response = await fetch(
+    `https://${config.matomo.domain}/index.php?module=API&format=JSON&idSite=86&period=day&date=${startDate},${endDate}&method=${method}&filter_limit=100&format_metrics=1&expanded=1&token_auth=${config.matomo.authenticationToken}&force_api_session=1`,
+  );
 
   if (!response.ok) {
     throw Error(

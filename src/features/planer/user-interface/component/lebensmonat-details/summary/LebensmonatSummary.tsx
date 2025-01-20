@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useId } from "react";
+import { type AriaAttributes, Fragment, ReactNode, useId } from "react";
 import { GewaehlteOption } from "./GewaehlteOption";
 import { Haushaltseinkommen } from "./Haushaltseinkommen";
 import {
@@ -51,6 +51,7 @@ export function LebensmonatSummary(): ReactNode {
       style={gridLayout}
       aria-label={ariaLabel}
       aria-describedby={descriptionIdentifier}
+      {...ATTRIBUTES_TO_FIX_SCREEN_READER}
     >
       <span id={descriptionIdentifier} className="sr-only" aria-hidden>
         {auswahlDescription} {zeitraumDescription}
@@ -120,4 +121,19 @@ const GEWAEHLTE_OPTION_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
     [Elternteil.Eins]: "et1-inside",
     [Elternteil.Zwei]: "et2-inside",
   },
+};
+
+/**
+ * There is an issue using screen reader with certain web-browsers (Firefox is
+ * known to have issues while writing this.). When the Plan changes, the
+ * description for the respective Lebensmonate updates. This also applies for
+ * the accessible description. But it won't always be picked up by screen
+ * readers. Instead, the initial state will be read.
+ *
+ * This is rather a hack than a proper fix. It tricks the web-browser to
+ * properly pick up the changes and communicate it to the screen reader.
+ */
+const ATTRIBUTES_TO_FIX_SCREEN_READER: AriaAttributes = {
+  ["aria-live"]: "polite", // force web-browser to be attentive to changes
+  ["aria-busy"]: true, // suppress automatic announcements on changes
 };

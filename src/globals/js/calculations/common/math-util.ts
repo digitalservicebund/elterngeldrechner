@@ -63,14 +63,3 @@ export function isEqual(a: Big, b: Big) {
 export function greater(a: Big, b: Big) {
   return a.gt(b);
 }
-
-/**
- * Returns true if the value of a is less than or equal to the value of b, otherwise returns false.
- *
- * It's a wrapper function for existing egr code.
- *
- * @throws `NaN` if b is invalid.
- */
-export function lessOrEqual(a: Big, b: Big) {
-  return a.lte(b);
-}

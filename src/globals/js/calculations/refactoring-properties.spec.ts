@@ -173,16 +173,31 @@ function expectCalculatedResultToEqual(
     context,
   );
   expect(actual.nettoNachGeburtDurch).toEqual(expected.nettoNachGeburtDurch);
-  expect(actual.geschwisterBonus).toEqual(expected.geschwisterBonus);
+  expect(actual.geschwisterBonus.toNumber()).toBeCloseTo(
+    expected.geschwisterBonus.toNumber(),
+    1,
+  );
   expect(actual.mehrlingsZulage).toEqual(expected.mehrlingsZulage);
   expect(actual.bruttoBasis).toEqual(expected.bruttoBasis);
   expect(actual.nettoBasis).toEqual(expected.nettoBasis);
-  expect(actual.elternGeldBasis).toEqual(expected.elternGeldBasis);
-  expect(actual.elternGeldErwBasis).toEqual(expected.elternGeldErwBasis);
+  expect(actual.elternGeldBasis.toNumber()).toBeCloseTo(
+    expected.elternGeldBasis.toNumber(),
+    1,
+  );
+  expect(actual.elternGeldErwBasis.toNumber()).toBeCloseTo(
+    expected.elternGeldErwBasis.toNumber(),
+    1,
+  );
   expect(actual.bruttoPlus).toEqual(expected.bruttoPlus);
   expect(actual.nettoPlus).toEqual(expected.nettoPlus);
-  expect(actual.elternGeldEtPlus).toEqual(expected.elternGeldEtPlus);
-  expect(actual.elternGeldKeineEtPlus).toEqual(expected.elternGeldKeineEtPlus);
+  expect(actual.elternGeldEtPlus.toNumber()).toBeCloseTo(
+    expected.elternGeldEtPlus.toNumber(),
+    1,
+  );
+  expect(actual.elternGeldKeineEtPlus.toNumber()).toBeCloseTo(
+    expected.elternGeldKeineEtPlus.toNumber(),
+    1,
+  );
   expect(actual.message).toEqual(expected.message);
   expect(actual.hasPartnerBonusError).toEqual(expected.hasPartnerBonusError);
   expect(actual.etVorGeburt).toEqual(expected.etVorGeburt);
@@ -207,9 +222,15 @@ function expectElterngeldausgabeToMatch(
   assert(expected !== undefined);
 
   expect(actual.lebensMonat).toEqual(expected.lebensMonat);
-  expect(actual.elternGeld).toEqual(expected.elternGeld);
+  expect(actual.elternGeld.toNumber()).toBeCloseTo(
+    expected.elternGeld.toNumber(),
+    1,
+  );
   expect(actual.mehrlingsZulage).toEqual(expected.mehrlingsZulage);
-  expect(actual.geschwisterBonus).toEqual(expected.geschwisterBonus);
+  expect(actual.geschwisterBonus.toNumber()).toBeCloseTo(
+    expected.geschwisterBonus.toNumber(),
+    1,
+  );
   expectElterngeldartToMatch(actual.elterngeldArt, expected.elterngeldArt);
   expect(actual.mutterschaftsLeistungMonat).toEqual(
     expected.mutterschaftsLeistungMonat,

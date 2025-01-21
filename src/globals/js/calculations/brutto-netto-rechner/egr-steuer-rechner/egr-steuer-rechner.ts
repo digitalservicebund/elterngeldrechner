@@ -71,7 +71,7 @@ export class EgrSteuerRechner {
 
     let einkommenInCent: Big = bruttoProMonat.mul(Big(100));
     if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
-      einkommenInCent = einkommenInCent.add(PAUSCH.mul(Big(100)));
+      einkommenInCent = einkommenInCent.add(PAUSCH * 100);
     }
 
     const eingangsparameter: Eingangsparameter = {

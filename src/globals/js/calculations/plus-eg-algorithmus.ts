@@ -171,8 +171,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       mehrlingsZulage: BIG_ZERO,
       nettoNachGeburtDurch: BIG_ZERO,
 
-      elternGeldBasis: MINDESTSATZ,
-      elternGeldKeineEtPlus: MINDESTSATZ.div(Big(2)),
+      elternGeldBasis: Big(MINDESTSATZ),
+      elternGeldKeineEtPlus: Big(MINDESTSATZ / 2),
       message:
         "Sie erhalten 300 Euro Elterngeld sowie evtl. Geschwisterbonus und/oder Mehrlingszuschlag",
       bruttoBasis: BIG_ZERO,
@@ -206,7 +206,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     let elterngeld_keine_et_plus: Big = BIG_ZERO;
     if (nicht_erw) {
       // es liegt Erwerbstätigkeit nach der Geburt vor
-      const pausch: Big = PAUSCH;
+      const pausch = PAUSCH;
       // if (finanzDaten.erwerbsZeitraumLeistungsMonatList == null) {
       //   finanzDaten.erwerbsZeitraumLeistungsMonatList = [];
       // }
@@ -595,9 +595,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     const basiselterngeld_erw: Big = ergebnis.elternGeldErwBasis;
     const elterngeldplus: Big = round(basiselterngeld.div(Big(2)), 2);
     const elterngeldplus_erw: Big = ergebnis.elternGeldEtPlus;
-    const betrag_mehrlingszuschlag: Big = BETRAG_MEHRLINGSZUSCHLAG;
-    const min_geschwisterbonus: Big = MIN_GESCHWISTERBONUS;
-    const rate_bonus: Big = RATE_BONUS;
+    const betrag_mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
+    const min_geschwisterbonus = MIN_GESCHWISTERBONUS;
+    const rate_bonus = RATE_BONUS;
     let mehrling: number = 0;
     if (persoenlicheDaten.anzahlKuenftigerKinder > 0) {
       mehrling = persoenlicheDaten.anzahlKuenftigerKinder - 1;
@@ -620,21 +620,22 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         // es ist schon alles auf 0 gesetzt
       } else {
         let geschwisterbonus: Big = BIG_ZERO;
-        let mehrlingszuschlag: Big = BIG_ZERO;
+        let mehrlingszuschlag = 0;
         let elterngeld: Big = BIG_ZERO;
         if (verlauf[i - 1] === ElternGeldKategorie.KEIN_ELTERN_GELD) {
           geschwisterbonus = BIG_ZERO;
-          mehrlingszuschlag = BIG_ZERO;
+          mehrlingszuschlag = 0;
           elterngeld = BIG_ZERO;
         }
         if (verlauf[i - 1] === ElternGeldKategorie.BASIS_ELTERN_GELD) {
           geschwisterbonus = round(
-            fMax(min_geschwisterbonus, basiselterngeld.mul(rate_bonus)).mul(
-              Big(geschw[i - 1] ?? 0),
-            ),
+            fMax(
+              Big(min_geschwisterbonus),
+              basiselterngeld.mul(rate_bonus),
+            ).mul(Big(geschw[i - 1] ?? 0)),
             2,
           );
-          mehrlingszuschlag = betrag_mehrlingszuschlag.mul(Big(mehrling));
+          mehrlingszuschlag = betrag_mehrlingszuschlag * mehrling;
           elterngeld = basiselterngeld
             .add(geschwisterbonus)
             .add(mehrlingszuschlag);
@@ -643,11 +644,12 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           verlauf[i - 1] ===
           ElternGeldKategorie.BASIS_ELTERN_GELD_MIT_ERWERBS_TAETIGKEIT
         ) {
-          mehrlingszuschlag = betrag_mehrlingszuschlag.mul(Big(mehrling));
+          mehrlingszuschlag = betrag_mehrlingszuschlag * mehrling;
           geschwisterbonus = round(
-            fMax(min_geschwisterbonus, basiselterngeld_erw.mul(rate_bonus)).mul(
-              Big(geschw[i - 1] ?? 0),
-            ),
+            fMax(
+              Big(min_geschwisterbonus),
+              basiselterngeld_erw.mul(rate_bonus),
+            ).mul(Big(geschw[i - 1] ?? 0)),
             2,
           );
           elterngeld = basiselterngeld_erw
@@ -658,12 +660,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           verlauf[i - 1] ===
           ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT
         ) {
-          mehrlingszuschlag = betrag_mehrlingszuschlag
-            .mul(Big(mehrling))
-            .div(Big(2));
+          mehrlingszuschlag = (mehrling * betrag_mehrlingszuschlag) / 2;
           geschwisterbonus = round(
             fMax(
-              min_geschwisterbonus.div(Big(2)),
+              Big(min_geschwisterbonus / 2),
               elterngeldplus.mul(rate_bonus),
             ).mul(Big(geschw[i - 1] ?? 0)),
             2,
@@ -676,12 +676,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           verlauf[i - 1] ===
           ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT
         ) {
-          mehrlingszuschlag = betrag_mehrlingszuschlag
-            .mul(Big(mehrling))
-            .div(Big(2));
+          mehrlingszuschlag = (betrag_mehrlingszuschlag * mehrling) / 2;
           geschwisterbonus = round(
             fMax(
-              min_geschwisterbonus.div(Big(2)),
+              Big(min_geschwisterbonus / 2),
               elterngeldplus_erw.mul(rate_bonus),
             ).mul(Big(geschw[i - 1] ?? 0)),
             2,
@@ -691,7 +689,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             .add(mehrlingszuschlag);
         }
         ausgabe.elternGeld = round(elterngeld);
-        ausgabe.mehrlingsZulage = round(mehrlingszuschlag);
+        ausgabe.mehrlingsZulage = round(Big(mehrlingszuschlag));
         ausgabe.geschwisterBonus = round(geschwisterbonus);
       }
       ausgabeLebensmonate.push(ausgabe);

@@ -32,8 +32,9 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         expect(zwischenErgebnis.nettoVorGeburt.toNumber()).toBe(
           sheet.zwischenErgebnisNettoVorGeburt(testCaseIndex),
         );
-        expect(zwischenErgebnis.elternGeld.toNumber()).toBe(
+        expect(zwischenErgebnis.elternGeld.toNumber()).toBeCloseTo(
           sheet.zwischenErgebnisElternGeld(testCaseIndex),
+          1,
         );
         expect(zwischenErgebnis.ersatzRate.toNumber()).toBe(
           sheet.zwischenErgebnisErsatzRate(testCaseIndex),

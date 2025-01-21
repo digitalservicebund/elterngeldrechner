@@ -200,10 +200,10 @@ export class BruttoNettoRechner {
     let abgaben_alv: Big = BIG_ZERO;
     let abgaben_gleitzone: Big = BIG_ZERO;
     const brutto_rech_sub: Big = brutto_sub;
-    const satz_kvpv_beeg: Big = SATZ_KVPV_BEEG;
-    const satz_rv_beeg: Big = SATZ_RV_BEEG;
-    const satz_alv_beeg: Big = SATZ_ALV_BEEG;
-    const f_faktor: Big = F_FAKTOR;
+    const satz_kvpv_beeg = SATZ_KVPV_BEEG;
+    const satz_rv_beeg = SATZ_RV_BEEG;
+    const satz_alv_beeg = SATZ_ALV_BEEG;
+    const f_faktor = F_FAKTOR;
     const grenze_mini_midi = GRENZE_MINI_MIDI;
     const grenze_midi_max = GRENZE_MIDI_MAX;
 
@@ -227,20 +227,20 @@ export class BruttoNettoRechner {
       brutto_rech_sub.lte(grenze_midi_max)
     ) {
       let beitragsatz: Big = BIG_ZERO;
-      const tmp: Big = f_faktor.mul(grenze_mini_midi);
-      const bd850_450: Big = grenze_midi_max.sub(grenze_mini_midi);
-      const bd850: Big = grenze_midi_max;
-      const bd450: Big = grenze_mini_midi;
-      const x = bd850.div(bd850_450);
+      const tmp = grenze_mini_midi * f_faktor;
+      const bd850_450 = grenze_midi_max - grenze_mini_midi;
+      const bd850 = grenze_midi_max;
+      const bd450 = grenze_mini_midi;
+      const x = bd850 / bd850_450;
 
-      let y: Big;
-      y = bd450.mul(f_faktor);
-      y = y.div(bd850_450);
+      let y: number;
+      y = bd450 * f_faktor;
+      y = y / bd850_450;
 
-      const tmp2: Big = x.sub(y);
-      const tmp3: Big = brutto_rech_sub.sub(grenze_mini_midi);
-      let bemessungsentgelt: Big = tmp2.mul(tmp3);
-      bemessungsentgelt = bemessungsentgelt.add(tmp);
+      const tmp2 = x - y;
+      const tmp3 = brutto_rech_sub.toNumber() - grenze_mini_midi;
+      let bemessungsentgelt = tmp2 * tmp3;
+      bemessungsentgelt = bemessungsentgelt + tmp;
       if (krankenversicherungspflichtig_sub) {
         beitragsatz = beitragsatz.add(satz_kvpv_beeg);
       }
@@ -301,9 +301,9 @@ export class BruttoNettoRechner {
     let abgaben_rv: Big = BIG_ZERO;
     let abgaben_alv: Big = BIG_ZERO;
     const brutto_rech_sub: Big = brutto_sub;
-    const satz_kvpv_beeg: Big = SATZ_KVPV_BEEG;
-    const satz_rv_beeg: Big = SATZ_RV_BEEG;
-    const satz_alv_beeg: Big = SATZ_ALV_BEEG;
+    const satz_kvpv_beeg = SATZ_KVPV_BEEG;
+    const satz_rv_beeg = SATZ_RV_BEEG;
+    const satz_alv_beeg = SATZ_ALV_BEEG;
     if (krankenversicherungspflichtig_sub) {
       abgaben_kvpv = brutto_rech_sub.mul(satz_kvpv_beeg);
     }

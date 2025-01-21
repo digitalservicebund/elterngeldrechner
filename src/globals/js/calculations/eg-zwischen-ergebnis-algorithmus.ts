@@ -51,14 +51,14 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     let ek_vor_copy: Big = BIG_ZERO;
     ek_vor_copy = ek_vor_copy.add(ek_vor.value);
     const status_et: ErwerbsArt = persoenlicheDaten.etVorGeburt;
-    let mehrlingszuschlag: Big;
-    const pausch: Big = PAUSCH;
+    let mehrlingszuschlag: number;
+    const pausch = PAUSCH;
     let elterngeldbasis: Big;
     let ersatzrate_ausgabe: Big;
-    const betrag_Mehrlingszuschlag: Big = BETRAG_MEHRLINGSZUSCHLAG;
+    const betrag_Mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
     let geschwisterbonus: Big;
-    const rate_bonus: Big = RATE_BONUS;
-    const min_geschwisterbonus: Big = MIN_GESCHWISTERBONUS;
+    const rate_bonus = RATE_BONUS;
+    const min_geschwisterbonus = MIN_GESCHWISTERBONUS;
 
     const zeitraumGeschwisterBonus = this.determineDeadlineForGeschwisterbonus(
       geschwister,
@@ -75,14 +75,14 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     elterngeldbasis = this.elterngeld_keine_et(ek_vor_copy);
     ersatzrate_ausgabe = this.ersatzrate_eg(ek_vor_copy);
     if (no_kinder > 1) {
-      mehrlingszuschlag = betrag_Mehrlingszuschlag.mul(Big(no_kinder - 1));
+      mehrlingszuschlag = betrag_Mehrlingszuschlag * (no_kinder - 1);
     } else {
-      mehrlingszuschlag = BIG_ZERO;
+      mehrlingszuschlag = 0;
     }
     if (zeitraumGeschwisterBonus !== null) {
       geschwisterbonus = fMax(
         elterngeldbasis.mul(rate_bonus),
-        min_geschwisterbonus,
+        Big(min_geschwisterbonus),
       );
     } else {
       geschwisterbonus = BIG_ZERO;
@@ -95,7 +95,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       elternGeld: elterngeldbasis,
       ersatzRate: ersatzrate_ausgabe,
       geschwisterBonus: geschwisterbonus,
-      mehrlingsZulage: mehrlingszuschlag,
+      mehrlingsZulage: Big(mehrlingszuschlag),
       zeitraumGeschwisterBonus,
       nettoVorGeburt: nettoEinkommen.value,
     };

@@ -17,7 +17,6 @@ import {
   BIG_ZERO,
   greater,
   isEqual,
-  lessOrEqual,
   round,
 } from "@/globals/js/calculations/common/math-util";
 import {
@@ -51,27 +50,22 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     let steuern: Big = Big(0);
     let abgaben: Big = Big(0);
     finanzDaten.mischEinkommenTaetigkeiten.forEach((mischEkTaetigkeit) => {
+      const { bruttoEinkommenDurchschnitt } = mischEkTaetigkeit;
       if (
-        greater(
-          mischEkTaetigkeit.bruttoEinkommenDurchschnitt,
-          GRENZE_MINI_MIDI,
-        ) &&
-        lessOrEqual(
-          mischEkTaetigkeit.bruttoEinkommenDurchschnitt,
-          GRENZE_MIDI_MAX,
-        ) &&
+        bruttoEinkommenDurchschnitt.toNumber() > GRENZE_MINI_MIDI &&
+        bruttoEinkommenDurchschnitt.toNumber() <= GRENZE_MIDI_MAX &&
         mischEkTaetigkeit.erwerbsTaetigkeit ===
           ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG
       ) {
-        const midiRange: Big = GRENZE_MIDI_MAX.sub(GRENZE_MINI_MIDI);
-        const overMini: Big =
-          mischEkTaetigkeit.bruttoEinkommenDurchschnitt.sub(GRENZE_MINI_MIDI);
-        const faktoredMin: Big = F_FAKTOR.mul(GRENZE_MINI_MIDI);
-        const faktoredMidi: Big = GRENZE_MIDI_MAX.sub(faktoredMin)
-          .div(midiRange)
-          .mul(overMini);
-        mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi =
-          faktoredMin.add(faktoredMidi);
+        const midiRange = GRENZE_MIDI_MAX - GRENZE_MINI_MIDI;
+        const overMini =
+          bruttoEinkommenDurchschnitt.toNumber() - GRENZE_MINI_MIDI;
+        const faktoredMin = GRENZE_MINI_MIDI * F_FAKTOR;
+        const faktoredMidi =
+          ((GRENZE_MIDI_MAX - faktoredMin) / midiRange) * overMini;
+        mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi = Big(
+          faktoredMin + faktoredMidi,
+        );
       }
     });
 
@@ -153,7 +147,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       summe_EK_SS
         .add(summe_EK_NS)
         .add(summe_EK_GNS)
-        .sub(Big(zaehler_Pauschmonate).mul(PAUSCH))
+        .sub(zaehler_Pauschmonate * PAUSCH)
         .div(ANZAHL_MONATE_PRO_JAHR),
       2,
     );
@@ -250,7 +244,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       status = ErwerbsArt.JA_SELBSTSTAENDIG;
     }
     if (
-      lessOrEqual(brutto_elg, GRENZE_MINI_MIDI) &&
+      brutto_elg.toNumber() <= GRENZE_MINI_MIDI &&
       status !== ErwerbsArt.JA_SELBSTSTAENDIG
     ) {
       status = ErwerbsArt.JA_NICHT_SELBST_MINI;

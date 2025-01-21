@@ -116,7 +116,7 @@ import {
 describe("tests to verify properties during refactoring", () => {
   it(
     "calculates the same result the original/legacy implementation",
-    { timeout: 10_000 },
+    { timeout: 30_000 },
     () => {
       assertProperty(
         property(

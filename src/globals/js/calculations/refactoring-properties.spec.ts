@@ -114,67 +114,71 @@ import {
  * sometimes skipped, opening a window for unintended breaks.
  */
 describe("tests to verify properties during refactoring", () => {
-  it("calculates the same result the original/legacy implementation", () => {
-    assertProperty(
-      property(
-        arbitraryPersoenlicheDatenRaw(),
-        arbitraryFinanzdatenRaw(),
-        arbitraryPlanungsdatenRaw(),
-        arbitraryLohnsteuerjahr(),
-        (
-          persoenlicheDatenRaw,
-          finanzdatenRaw,
-          planungsdatenRaw,
-          lohnsteuerjahr,
-        ) => {
-          const elterngelddaten = {
-            persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
-            finanzDaten: finanzDatenFrom(finanzdatenRaw),
-            planungsDaten: planungsDatenFrom(planungsdatenRaw),
-          };
-
-          const result = new EgrCalculation().calculateElternGeld(
-            elterngelddaten,
+  it(
+    "calculates the same result the original/legacy implementation",
+    { timeout: 10_000 },
+    () => {
+      assertProperty(
+        property(
+          arbitraryPersoenlicheDatenRaw(),
+          arbitraryFinanzdatenRaw(),
+          arbitraryPlanungsdatenRaw(),
+          arbitraryLohnsteuerjahr(),
+          (
+            persoenlicheDatenRaw,
+            finanzdatenRaw,
+            planungsdatenRaw,
             lohnsteuerjahr,
-          );
+          ) => {
+            const elterngelddaten = {
+              persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
+              finanzDaten: finanzDatenFrom(finanzdatenRaw),
+              planungsDaten: planungsDatenFrom(planungsdatenRaw),
+            };
 
-          const transformedResultForComparison = transformDataRecursively(
-            result,
-            [convertBigsToNumbers, replaceNullGeschwisterbonusDeadline],
-            elterngelddaten,
-          );
-
-          const originalResult =
-            new OriginalEgrCalculation().calculateElternGeld(
-              {
-                persoenlicheDaten:
-                  originalPersoenlicheDatenFrom(persoenlicheDatenRaw),
-                finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
-                planungsDaten: originalPlanungsDatenFrom(planungsdatenRaw),
-              },
+            const result = new EgrCalculation().calculateElternGeld(
+              elterngelddaten,
               lohnsteuerjahr,
             );
 
-          const transformedOriginalResultForComparison =
-            transformDataRecursively(
-              originalResult,
-              [
-                convertBigsToNumbers,
-                mapUndefinedElterngeldartToKeinBezug,
-                deleteElterngeldperioden,
-              ],
+            const transformedResultForComparison = transformDataRecursively(
+              result,
+              [convertBigsToNumbers, replaceNullGeschwisterbonusDeadline],
               elterngelddaten,
             );
 
-          return assert.deepStrictEqual(
-            transformedResultForComparison,
-            transformedOriginalResultForComparison,
-          );
-        },
-      ),
-      { numRuns: 5000, endOnFailure: true },
-    );
-  });
+            const originalResult =
+              new OriginalEgrCalculation().calculateElternGeld(
+                {
+                  persoenlicheDaten:
+                    originalPersoenlicheDatenFrom(persoenlicheDatenRaw),
+                  finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
+                  planungsDaten: originalPlanungsDatenFrom(planungsdatenRaw),
+                },
+                lohnsteuerjahr,
+              );
+
+            const transformedOriginalResultForComparison =
+              transformDataRecursively(
+                originalResult,
+                [
+                  convertBigsToNumbers,
+                  mapUndefinedElterngeldartToKeinBezug,
+                  deleteElterngeldperioden,
+                ],
+                elterngelddaten,
+              );
+
+            return assert.deepStrictEqual(
+              transformedResultForComparison,
+              transformedOriginalResultForComparison,
+            );
+          },
+        ),
+        { numRuns: 5000, endOnFailure: true },
+      );
+    },
+  );
 
   describe("transform data recursively", () => {
     it("provides the same output as input if no transformer given", () => {

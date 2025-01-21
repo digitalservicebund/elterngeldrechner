@@ -12,7 +12,7 @@ export function setzePlanZurueck<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("setzte Plan zurück", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

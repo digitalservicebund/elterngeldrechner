@@ -65,7 +65,7 @@ function berechneUndAktualisiereElterngeldbezuege<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
   describe("wähle Option für Plan", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

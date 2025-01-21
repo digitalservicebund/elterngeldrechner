@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { KeinElterngeld, Variante } from "@/features/planer/domain";
 

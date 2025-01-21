@@ -19,7 +19,7 @@ import {
   tuple as arbitraryTuple,
 } from "fast-check";
 import { DateTime } from "luxon";
-import { describe, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { EgrCalculation } from "./egr-calculation";
 import {
   Einkommen,

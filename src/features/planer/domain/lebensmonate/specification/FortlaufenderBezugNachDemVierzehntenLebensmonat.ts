@@ -30,7 +30,7 @@ function isSequenceIncreasingByOne(numbers: number[]): boolean {
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, test } = import.meta.vitest;
 
   describe("fortlaufender Bezug ab dem 15. Lebensmonat", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

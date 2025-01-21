@@ -25,7 +25,7 @@ export function useOnFocusMovedOut(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("detect click outside hook", async () => {
     const { render } = await import("@testing-library/react");

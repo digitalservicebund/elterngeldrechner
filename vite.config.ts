@@ -21,7 +21,6 @@ export default defineConfig({
     },
   },
   test: {
-    globals: true,
     environment: "jsdom",
     setupFiles: "src/test-utils/setupTests.ts",
     restoreMocks: true,

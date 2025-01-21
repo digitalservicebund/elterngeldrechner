@@ -1,4 +1,4 @@
-import { beforeAll } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import {
   establishDataLayer,
   getTrackingVariable,

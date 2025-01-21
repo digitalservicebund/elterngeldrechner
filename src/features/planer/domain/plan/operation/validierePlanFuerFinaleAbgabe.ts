@@ -13,7 +13,7 @@ export function validierePlanFuerFinaleAbgabe<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("validiere Plan für finale Abgabe", async () => {
     const { Specification } = await import(

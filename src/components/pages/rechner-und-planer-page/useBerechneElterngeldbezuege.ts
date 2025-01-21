@@ -193,7 +193,7 @@ type StaticCalculationParameterForElternteil = {
 type GeplanteMonate = Parameters<BerechneElterngeldbezuegeCallback>[1];
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/test-utils/test-utils");

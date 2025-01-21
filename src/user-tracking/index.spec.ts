@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as dataLayerModule from "./data-layer";
 import { establishDataLayer } from "./data-layer";
 import * as tagManagerModule from "./tag-manager";

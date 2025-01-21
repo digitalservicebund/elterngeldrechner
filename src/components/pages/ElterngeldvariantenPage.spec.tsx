@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { ElterngeldvariantenPage } from "./ElterngeldvariantenPage";
 import { render } from "@/test-utils/test-utils";
 

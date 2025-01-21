@@ -56,7 +56,7 @@ class KontingentFuerVarianteWurdeEingehalten<
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("Kontingent wurde eingehalten", async () => {
     const { Variante } = await import("@/features/planer/domain/Variante");

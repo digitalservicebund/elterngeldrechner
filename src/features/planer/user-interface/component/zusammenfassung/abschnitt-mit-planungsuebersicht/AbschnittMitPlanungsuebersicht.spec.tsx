@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { AbschnittMitPlanungsuebersicht } from "./AbschnittMitPlanungsuebersicht";
 import { Elternteil, Variante } from "@/features/planer/domain";
 

@@ -1,4 +1,5 @@
 import { render, within } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LebensmonatSummary } from "./LebensmonatSummary";
 import {
   beschreibePlanungImLebensmonat,

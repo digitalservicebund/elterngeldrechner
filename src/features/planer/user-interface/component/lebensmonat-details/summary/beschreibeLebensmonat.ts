@@ -164,7 +164,7 @@ function verknuepfteSaetze(...saetze: (string | undefined)[]): string {
 }
 
 if (import.meta.vitest) {
-  const { describe, test, expect } = import.meta.vitest;
+  const { describe, test, expect, it, vi, beforeEach } = import.meta.vitest;
 
   describe("beschreibe Lebensmonat", async () => {
     const { Elternteil, Variante, KeinElterngeld, MONAT_MIT_MUTTERSCHUTZ } =

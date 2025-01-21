@@ -70,7 +70,7 @@ function formatViolationsAsHint(violations: SpecificationViolation[]): string {
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
   describe("bestimmte Auswahlmöglichkeiten", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

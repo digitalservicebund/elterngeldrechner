@@ -230,7 +230,7 @@ function isZeitraumByLebensmonatszahlen(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect, vi } = import.meta.vitest;
+  const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
   describe("fasse Plan zusammen", async () => {
     const { Elternteil } = await import("@/features/planer/domain/Elternteil");

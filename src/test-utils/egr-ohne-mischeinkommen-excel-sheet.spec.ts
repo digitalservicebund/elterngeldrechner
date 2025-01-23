@@ -86,8 +86,8 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     });
 
     it("should read nettoVorGeburt", () => {
-      expect(sheet.nettoVorGeburt(0).value.toNumber()).toBe(409.5);
-      expect(sheet.nettoVorGeburt(1).value.toNumber()).toBe(2534.48);
+      expect(sheet.nettoVorGeburt(0).value).toBe(409.5);
+      expect(sheet.nettoVorGeburt(1).value).toBe(2534.48);
     });
 
     it("should read testFallNummer", () => {
@@ -105,17 +105,16 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT - 1
   }`, () => {
     expect(
-      sheet
-        .nettoVorGeburt(EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT - 1)
-        .value.toNumber(),
+      sheet.nettoVorGeburt(EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT - 1)
+        .value,
     ).toBe(408.59);
   });
 
   it(`should not read einkommen from column ${EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT}`, () => {
-    expect(() =>
-      sheet
-        .nettoVorGeburt(EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT)
-        .value.toNumber(),
+    expect(
+      () =>
+        sheet.nettoVorGeburt(EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT)
+          .value,
     ).toThrow("testCaseIndex out of bound");
   });
 });

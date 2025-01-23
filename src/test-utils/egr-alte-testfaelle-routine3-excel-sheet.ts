@@ -146,11 +146,9 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
   }
 
   lebensmonatBrutto(testCaseIndex: number, lebensMonat: number) {
-    return new Big(
-      this.numberOf(
-        testCaseIndex,
-        LEBENSMONAT_1_BRUTTO_OFFSET + lebensMonat - 1,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      LEBENSMONAT_1_BRUTTO_OFFSET + lebensMonat - 1,
     );
   }
 

@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { describe, expect, it } from "vitest";
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
@@ -38,8 +37,8 @@ describe("basis-eg-algorithmus", () => {
         mischEinkommenTaetigkeiten: [
           {
             erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
-            bruttoEinkommenDurchschnitt: Big(2015.0),
-            bruttoEinkommenDurchschnittMidi: Big(0),
+            bruttoEinkommenDurchschnitt: 2015.0,
+            bruttoEinkommenDurchschnittMidi: 0,
             bemessungsZeitraumMonate: [
               false,
               false,
@@ -60,8 +59,8 @@ describe("basis-eg-algorithmus", () => {
           },
           {
             erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
-            bruttoEinkommenDurchschnitt: Big(2343.0),
-            bruttoEinkommenDurchschnittMidi: Big(0),
+            bruttoEinkommenDurchschnitt: 2343.0,
+            bruttoEinkommenDurchschnittMidi: 0,
             bemessungsZeitraumMonate: [
               false,
               false,
@@ -82,8 +81,8 @@ describe("basis-eg-algorithmus", () => {
           },
           {
             erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-            bruttoEinkommenDurchschnitt: Big(553.0),
-            bruttoEinkommenDurchschnittMidi: Big(0),
+            bruttoEinkommenDurchschnitt: 553.0,
+            bruttoEinkommenDurchschnittMidi: 0,
             bemessungsZeitraumMonate: [
               false,
               false,

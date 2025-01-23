@@ -1,5 +1,3 @@
-import Big from "big.js";
-
 /**
  * Enthält die Daten zu einer Tätigkeit bei Mischeinkommen.
  */
@@ -12,8 +10,8 @@ export enum ErwerbsTaetigkeit {
 // TODO: mark fully readonly
 export type MischEkTaetigkeit = {
   readonly erwerbsTaetigkeit: ErwerbsTaetigkeit;
-  readonly bruttoEinkommenDurchschnitt: Big;
-  bruttoEinkommenDurchschnittMidi: Big;
+  readonly bruttoEinkommenDurchschnitt: number;
+  bruttoEinkommenDurchschnittMidi: number;
   readonly bemessungsZeitraumMonate: boolean[];
   readonly istRentenVersicherungsPflichtig?: boolean;
   readonly istKrankenVersicherungsPflichtig?: boolean;

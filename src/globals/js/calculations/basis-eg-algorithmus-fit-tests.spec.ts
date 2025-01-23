@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { describe, expect, it } from "vitest";
 import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
 import {
@@ -117,15 +116,12 @@ describe("basis-eg-algorithmus", () => {
           }
 
           expect(mischEkZwischenErgebnis.netto.toNumber()).toBeCloseTo(
-            sheet.ergebnisNetto(testCaseIndex).toNumber(),
+            sheet.ergebnisNetto(testCaseIndex),
             1,
           );
           expect(
             mischEkZwischenErgebnis.elterngeldbasis.toNumber(),
-          ).toBeCloseTo(
-            sheet.ergebnisBasisElternGeld(testCaseIndex).toNumber(),
-            1,
-          );
+          ).toBeCloseTo(sheet.ergebnisBasisElternGeld(testCaseIndex), 1);
           expect(mischEkZwischenErgebnis.status).toBe(
             sheet.ergebnisErwerbsArt(testCaseIndex),
           );
@@ -197,7 +193,7 @@ const mischEinkommenTaetigkeiten = (
     return {
       erwerbsTaetigkeit,
       bruttoEinkommenDurchschnitt: sheet.einkommen(taetigkeit, testCaseIndex),
-      bruttoEinkommenDurchschnittMidi: Big(0),
+      bruttoEinkommenDurchschnittMidi: 0,
       bemessungsZeitraumMonate: sheet.bemessungsZeitraumMonate(
         taetigkeit,
         testCaseIndex,

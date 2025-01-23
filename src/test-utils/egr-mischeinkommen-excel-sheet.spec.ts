@@ -12,12 +12,12 @@ describe("egr-mischeinkommen-excel-sheet", () => {
 
   describe("from Testfaelle_2022_3.xlsx", () => {
     it("should read einkommen", () => {
-      expect(sheet.einkommen(0, 0).toNumber()).toBe(2015);
-      expect(sheet.einkommen(1, 0).toNumber()).toBe(2343);
-      expect(sheet.einkommen(2, 0).toNumber()).toBe(553);
-      expect(sheet.einkommen(0, 1).toNumber()).toBe(2387);
-      expect(sheet.einkommen(1, 1).toNumber()).toBe(311);
-      expect(sheet.einkommen(2, 1).toNumber()).toBe(327);
+      expect(sheet.einkommen(0, 0)).toBe(2015);
+      expect(sheet.einkommen(1, 0)).toBe(2343);
+      expect(sheet.einkommen(2, 0)).toBe(553);
+      expect(sheet.einkommen(0, 1)).toBe(2387);
+      expect(sheet.einkommen(1, 1)).toBe(311);
+      expect(sheet.einkommen(2, 1)).toBe(327);
     });
 
     it("should read erwerbsTaetigkeit", () => {
@@ -132,13 +132,13 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     });
 
     it("should read netto", () => {
-      expect(sheet.ergebnisNetto(0).toNumber()).toBe(910.67);
-      expect(sheet.ergebnisNetto(1).toNumber()).toBe(1684.54);
+      expect(sheet.ergebnisNetto(0)).toBe(910.67);
+      expect(sheet.ergebnisNetto(1)).toBe(1684.54);
     });
 
     it("should read basisElternGeld", () => {
-      expect(sheet.ergebnisBasisElternGeld(0).toNumber()).toBe(650.22);
-      expect(sheet.ergebnisBasisElternGeld(1).toNumber()).toBe(1094.95);
+      expect(sheet.ergebnisBasisElternGeld(0)).toBe(650.22);
+      expect(sheet.ergebnisBasisElternGeld(1)).toBe(1094.95);
     });
 
     it("should read krankenVersicherung", () => {
@@ -172,17 +172,13 @@ describe("egr-mischeinkommen-excel-sheet", () => {
 
   it("should read einkommen from last column 99", () => {
     expect(
-      sheet
-        .einkommen(0, EgrMischeinkommenExcelSheet.TEST_CASE_COUNT - 1)
-        .toNumber(),
+      sheet.einkommen(0, EgrMischeinkommenExcelSheet.TEST_CASE_COUNT - 1),
     ).toBe(1662);
   });
 
   it("should not read einkommen from column 100", () => {
     expect(() =>
-      sheet
-        .einkommen(0, EgrMischeinkommenExcelSheet.TEST_CASE_COUNT)
-        .toNumber(),
+      sheet.einkommen(0, EgrMischeinkommenExcelSheet.TEST_CASE_COUNT),
     ).toThrow("testCaseIndex out of bound");
   });
 });

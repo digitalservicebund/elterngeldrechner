@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { describe, expect, it, vi } from "vitest";
 import { initialStepConfigurationState } from "./configurationSlice";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
@@ -134,7 +133,7 @@ describe("finanzDatenFactory", () => {
       1,
     );
     expect(
-      finanzDaten.erwerbsZeitraumLebensMonatList[0]?.bruttoProMonat.value.toNumber(),
+      finanzDaten.erwerbsZeitraumLebensMonatList[0]?.bruttoProMonat.value,
     ).toBe(1000);
   });
 
@@ -155,7 +154,7 @@ describe("finanzDatenFactory", () => {
     const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
     // then
-    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(1000);
+    expect(finanzDaten.bruttoEinkommen.value).toBe(1000);
 
     // cleanup
     mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
@@ -180,7 +179,7 @@ describe("finanzDatenFactory", () => {
     const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
     // then
-    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(1000);
+    expect(finanzDaten.bruttoEinkommen.value).toBe(1000);
 
     // cleanup
     mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
@@ -205,7 +204,7 @@ describe("finanzDatenFactory", () => {
     const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
     // then
-    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(6000);
+    expect(finanzDaten.bruttoEinkommen.value).toBe(6000);
 
     // cleanup
     mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
@@ -231,7 +230,7 @@ describe("finanzDatenFactory", () => {
     const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
     // then
-    expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(0);
+    expect(finanzDaten.bruttoEinkommen.value).toBe(0);
 
     // cleanup
     mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
@@ -367,7 +366,7 @@ describe("finanzDatenFactory", () => {
         const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
         // then
-        expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(
+        expect(finanzDaten.bruttoEinkommen.value).toBe(
           finanzDatenBruttoEinkommen,
         );
 
@@ -468,7 +467,7 @@ describe("finanzDatenFactory", () => {
         const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
         // then
-        expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(
+        expect(finanzDaten.bruttoEinkommen.value).toBe(
           finanzDatenBruttoEinkommen,
         );
 
@@ -518,8 +517,8 @@ describe("finanzDatenFactory", () => {
       [
         {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-          bruttoEinkommenDurchschnitt: Big(1000),
-          bruttoEinkommenDurchschnittMidi: Big(0),
+          bruttoEinkommenDurchschnitt: 1000,
+          bruttoEinkommenDurchschnittMidi: 0,
           bemessungsZeitraumMonate: [
             true,
             false,
@@ -607,8 +606,8 @@ describe("finanzDatenFactory", () => {
       [
         {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-          bruttoEinkommenDurchschnitt: Big(1000),
-          bruttoEinkommenDurchschnittMidi: Big(0),
+          bruttoEinkommenDurchschnitt: 1000,
+          bruttoEinkommenDurchschnittMidi: 0,
           bemessungsZeitraumMonate: [
             true,
             false,
@@ -629,8 +628,8 @@ describe("finanzDatenFactory", () => {
         },
         {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.MINIJOB,
-          bruttoEinkommenDurchschnitt: Big(300),
-          bruttoEinkommenDurchschnittMidi: Big(0),
+          bruttoEinkommenDurchschnitt: 300,
+          bruttoEinkommenDurchschnittMidi: 0,
           bemessungsZeitraumMonate: [
             true,
             false,
@@ -651,8 +650,8 @@ describe("finanzDatenFactory", () => {
         },
         {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          bruttoEinkommenDurchschnitt: Big(500),
-          bruttoEinkommenDurchschnittMidi: Big(0),
+          bruttoEinkommenDurchschnitt: 500,
+          bruttoEinkommenDurchschnittMidi: 0,
           bemessungsZeitraumMonate: [
             false,
             false,
@@ -673,8 +672,8 @@ describe("finanzDatenFactory", () => {
         },
         {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          bruttoEinkommenDurchschnitt: Big(1100),
-          bruttoEinkommenDurchschnittMidi: Big(0),
+          bruttoEinkommenDurchschnitt: 1100,
+          bruttoEinkommenDurchschnittMidi: 0,
           bemessungsZeitraumMonate: [
             false,
             true,
@@ -695,8 +694,8 @@ describe("finanzDatenFactory", () => {
         },
         {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
-          bruttoEinkommenDurchschnitt: Big(600),
-          bruttoEinkommenDurchschnittMidi: Big(0),
+          bruttoEinkommenDurchschnitt: 600,
+          bruttoEinkommenDurchschnittMidi: 0,
           bemessungsZeitraumMonate: [
             false,
             true,
@@ -747,7 +746,7 @@ describe("finanzDatenFactory", () => {
         const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
         // then
-        expect(finanzDaten.bruttoEinkommen.value.toNumber()).toBe(0);
+        expect(finanzDaten.bruttoEinkommen.value).toBe(0);
         expect(finanzDaten.mischEinkommenTaetigkeiten).toStrictEqual(
           mischEkTaetigkeitList,
         );

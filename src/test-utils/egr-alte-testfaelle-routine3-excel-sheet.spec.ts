@@ -93,21 +93,17 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
     });
 
     it("should read nettoVorGeburt", () => {
-      expect(sheet.nettoVorGeburt(0).value.toNumber()).toBe(1456.69);
-      expect(sheet.nettoVorGeburt(1).value.toNumber()).toBe(239);
+      expect(sheet.nettoVorGeburt(0).value).toBe(1456.69);
+      expect(sheet.nettoVorGeburt(1).value).toBe(239);
     });
 
     it("should read lebensmonatBrutto", () => {
-      expect(sheet.lebensmonatBrutto(0, 1).toNumber()).toBe(1353);
-      expect(sheet.lebensmonatBrutto(0, 3).toNumber()).toBe(728);
-      expect(sheet.lebensmonatBrutto(0, PLANUNG_ANZAHL_MONATE).toNumber()).toBe(
-        0,
-      );
-      expect(sheet.lebensmonatBrutto(1, 1).toNumber()).toBe(0);
-      expect(sheet.lebensmonatBrutto(1, 3).toNumber()).toBe(1317);
-      expect(sheet.lebensmonatBrutto(1, PLANUNG_ANZAHL_MONATE).toNumber()).toBe(
-        0,
-      );
+      expect(sheet.lebensmonatBrutto(0, 1)).toBe(1353);
+      expect(sheet.lebensmonatBrutto(0, 3)).toBe(728);
+      expect(sheet.lebensmonatBrutto(0, PLANUNG_ANZAHL_MONATE)).toBe(0);
+      expect(sheet.lebensmonatBrutto(1, 1)).toBe(0);
+      expect(sheet.lebensmonatBrutto(1, 3)).toBe(1317);
+      expect(sheet.lebensmonatBrutto(1, PLANUNG_ANZAHL_MONATE)).toBe(0);
     });
 
     it("should read erwerbsZeitraumLebensMonatList", () => {
@@ -117,9 +113,9 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
         expect(actual[i]?.vonLebensMonat).toBe(i + 1);
         expect(actual[i]?.bisLebensMonat).toBe(i + 1);
       }
-      expect(actual[0]?.bruttoProMonat.value.toNumber()).toBe(1353);
-      expect(actual[2]?.bruttoProMonat.value.toNumber()).toBe(728);
-      expect(actual[31]?.bruttoProMonat.value.toNumber()).toBe(0);
+      expect(actual[0]?.bruttoProMonat.value).toBe(1353);
+      expect(actual[2]?.bruttoProMonat.value).toBe(728);
+      expect(actual[31]?.bruttoProMonat.value).toBe(0);
     });
 
     it("should read testFallNummer", () => {
@@ -235,17 +231,18 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
     EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT - 1
   }`, () => {
     expect(
-      sheet
-        .nettoVorGeburt(EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT - 1)
-        .value.toNumber(),
+      sheet.nettoVorGeburt(
+        EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT - 1,
+      ).value,
     ).toBe(450);
   });
 
   it(`should not read nettoVorGeburt from column ${EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT}`, () => {
-    expect(() =>
-      sheet
-        .nettoVorGeburt(EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT)
-        .value.toNumber(),
+    expect(
+      () =>
+        sheet.nettoVorGeburt(
+          EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT,
+        ).value,
     ).toThrow("testCaseIndex out of bound");
   });
 });

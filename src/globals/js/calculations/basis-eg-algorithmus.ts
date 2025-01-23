@@ -52,20 +52,18 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     finanzDaten.mischEinkommenTaetigkeiten.forEach((mischEkTaetigkeit) => {
       const { bruttoEinkommenDurchschnitt } = mischEkTaetigkeit;
       if (
-        bruttoEinkommenDurchschnitt.toNumber() > GRENZE_MINI_MIDI &&
-        bruttoEinkommenDurchschnitt.toNumber() <= GRENZE_MIDI_MAX &&
+        bruttoEinkommenDurchschnitt > GRENZE_MINI_MIDI &&
+        bruttoEinkommenDurchschnitt <= GRENZE_MIDI_MAX &&
         mischEkTaetigkeit.erwerbsTaetigkeit ===
           ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG
       ) {
         const midiRange = GRENZE_MIDI_MAX - GRENZE_MINI_MIDI;
-        const overMini =
-          bruttoEinkommenDurchschnitt.toNumber() - GRENZE_MINI_MIDI;
+        const overMini = bruttoEinkommenDurchschnitt - GRENZE_MINI_MIDI;
         const faktoredMin = GRENZE_MINI_MIDI * F_FAKTOR;
         const faktoredMidi =
           ((GRENZE_MIDI_MAX - faktoredMin) / midiRange) * overMini;
-        mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi = Big(
-          faktoredMin + faktoredMidi,
-        );
+        mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi =
+          faktoredMin + faktoredMidi;
       }
     });
 
@@ -108,32 +106,23 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
           (value) => value,
         ).length;
 
-      const bruttoGesamt: Big =
-        mischEkTaetigkeit.bruttoEinkommenDurchschnitt.mul(
-          new Big(anzahlBemessungszeitraumMonate),
-        );
+      const { bruttoEinkommenDurchschnitt, bruttoEinkommenDurchschnittMidi } =
+        mischEkTaetigkeit;
+
+      const bruttoGesamt =
+        bruttoEinkommenDurchschnitt * anzahlBemessungszeitraumMonate;
 
       switch (mischEkTaetigkeit.erwerbsTaetigkeit) {
         case ErwerbsTaetigkeit.SELBSTSTAENDIG:
-          summe_EK_SS = summe_EK_SS.add(
-            mischEkTaetigkeit.bruttoEinkommenDurchschnitt.mul(
-              new Big(anzahlBemessungszeitraumMonate),
-            ),
-          );
+          summe_EK_SS = summe_EK_SS.add(bruttoGesamt);
           break;
         case ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG:
           summe_EK_NS = summe_EK_NS.add(bruttoGesamt);
-          if (
-            isEqual(mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi, BIG_ZERO)
-          ) {
+          if (bruttoEinkommenDurchschnittMidi === 0) {
             summe_EK_NS_SV = summe_EK_NS_SV.add(bruttoGesamt);
-          } else if (
-            greater(mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi, BIG_ZERO)
-          ) {
+          } else if (bruttoEinkommenDurchschnittMidi > 0) {
             summe_EK_NS_SV = summe_EK_NS_SV.add(
-              mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi.mul(
-                new Big(anzahlBemessungszeitraumMonate),
-              ),
+              bruttoEinkommenDurchschnittMidi * anzahlBemessungszeitraumMonate,
             );
           }
           break;
@@ -287,7 +276,10 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       abgaben = summe_sozab;
     }
     const ek_vor: Big = netto;
-    const elterngeldbasis: Big = round(this.elterngeld_keine_et(ek_vor), 2);
+    const elterngeldbasis: Big = round(
+      Big(this.elterngeld_keine_et(ek_vor.toNumber())),
+      2,
+    );
     return {
       krankenversicherungspflichtig: krankenversicherungspflichtig === 1,
       rentenversicherungspflichtig: rentenversicherungspflichtig === 1,

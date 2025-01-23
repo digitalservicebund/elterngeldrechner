@@ -97,7 +97,7 @@ export class BruttoNettoRechner {
   ): Einkommen {
     const netto: Einkommen = new Einkommen(0);
     const status: ErwerbsArt = erwerbsArtVorGeburt;
-    const brutto: Big = finanzdaten.bruttoEinkommen.value;
+    const brutto = finanzdaten.bruttoEinkommen.value;
     const art_rv: RentenArt = finanzdaten.rentenVersicherung;
     const art_kv: KassenArt = finanzdaten.kassenArt;
     let rentenversicherungspflichtig: boolean;
@@ -119,10 +119,10 @@ export class BruttoNettoRechner {
         krankenversicherungspflichtig,
         rentenversicherungspflichtig,
         status,
-        brutto,
+        Big(brutto),
         lohnSteuerJahr,
       );
-      netto.value = brutto.sub(steuerUndAbgaben);
+      netto.value = brutto - steuerUndAbgaben.toNumber();
     } else {
       netto.value = brutto;
     }

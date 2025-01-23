@@ -112,9 +112,9 @@ function getBruttoLeistungsMonate(
       lm <= erwerbszeitraum.bisLebensMonat;
       lm++
     ) {
-      const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
-      if (greater(bruttoProMonat, BIG_ZERO)) {
-        bruttoLM[lm] = bruttoProMonat;
+      const bruttoProMonat = erwerbszeitraum.bruttoProMonat.value;
+      if (bruttoProMonat > 0) {
+        bruttoLM[lm] = Big(bruttoProMonat);
       }
     }
   }

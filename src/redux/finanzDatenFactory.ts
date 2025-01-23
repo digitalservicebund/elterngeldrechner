@@ -1,4 +1,3 @@
-import Big from "big.js";
 import {
   AverageOrMonthlyState,
   Taetigkeit,
@@ -7,7 +6,6 @@ import {
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,
   ErwerbsTaetigkeit,
@@ -53,9 +51,8 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
           ? ErwerbsTaetigkeit.MINIJOB
           : ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
 
-      const bruttoEinkommenDurchschnitt = Big(
-        taetigkeit.bruttoEinkommenDurchschnitt ?? 0,
-      );
+      const bruttoEinkommenDurchschnitt =
+        taetigkeit.bruttoEinkommenDurchschnitt ?? 0;
 
       const {
         hasRentenversicherung: istRentenVersicherungsPflichtig,
@@ -80,7 +77,7 @@ const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
       return {
         erwerbsTaetigkeit,
         bruttoEinkommenDurchschnitt,
-        bruttoEinkommenDurchschnittMidi: BIG_ZERO,
+        bruttoEinkommenDurchschnittMidi: 0,
         bemessungsZeitraumMonate,
         istRentenVersicherungsPflichtig,
         istKrankenVersicherungsPflichtig,

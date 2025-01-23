@@ -22,13 +22,12 @@ export class EgrMischeinkommenExcelSheet {
     this.sheet = workSheetsFromFile[0]!;
   }
 
-  einkommen(taetigkeit: Taetigkeit, testCaseIndex: number) {
-    const einkommen =
-      this.sheet.data[rowOfEinkommen(taetigkeit)]?.[columnOf(testCaseIndex)];
-    if (einkommen === undefined) {
-      return BIG_ZERO;
-    }
-    return Big(einkommen as number);
+  einkommen(taetigkeit: Taetigkeit, testCaseIndex: number): number {
+    return (
+      (this.sheet.data[rowOfEinkommen(taetigkeit)]?.[
+        columnOf(testCaseIndex)
+      ] as number) ?? 0
+    );
   }
 
   erwerbsTaetigkeit(taetigkeit: Taetigkeit, testCaseIndex: number) {
@@ -192,21 +191,18 @@ export class EgrMischeinkommenExcelSheet {
     return round(Big(netto as number));
   }
 
-  ergebnisNetto(testCaseIndex: number) {
-    const netto = this.sheet.data[NETTO_OFFSET]?.[columnOf(testCaseIndex)];
-    if (netto === undefined) {
-      return BIG_ZERO;
-    }
-    return round(Big(netto as number));
+  ergebnisNetto(testCaseIndex: number): number {
+    return (
+      (this.sheet.data[NETTO_OFFSET]?.[columnOf(testCaseIndex)] as number) ?? 0
+    );
   }
 
-  ergebnisBasisElternGeld(testCaseIndex: number) {
-    const basisElternGeld =
-      this.sheet.data[BASIS_ELTERN_GELD_OFFSET]?.[columnOf(testCaseIndex)];
-    if (basisElternGeld === undefined) {
-      return BIG_ZERO;
-    }
-    return Big(basisElternGeld as number);
+  ergebnisBasisElternGeld(testCaseIndex: number): number {
+    return (
+      (this.sheet.data[BASIS_ELTERN_GELD_OFFSET]?.[
+        columnOf(testCaseIndex)
+      ] as number) ?? 0
+    );
   }
 
   ergebnisKrankenVersicherung(testCaseIndex: number) {

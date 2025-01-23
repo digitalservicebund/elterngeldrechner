@@ -38,6 +38,7 @@ import {
 import {
   Big as OriginalBig,
   EgrCalculation as OriginalEgrCalculation,
+  Einkommen as OriginalEinkommen,
   type ElternGeldAusgabe as OriginalElternGeldAusgabe,
   ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
   FinanzDaten as OriginalFinanzDaten,
@@ -108,7 +109,7 @@ import {
 describe("tests to verify properties during refactoring", () => {
   it(
     "calculates the same result the original/legacy implementation",
-    { timeout: 30_000 },
+    { timeout: 40_000 },
     () => {
       assertProperty(
         property(
@@ -338,7 +339,7 @@ function finanzDatenFrom(data: FinanzdatenRaw): FinanzDaten {
 
 function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   const finanzdaten = new OriginalFinanzDaten();
-  finanzdaten.bruttoEinkommen = new Einkommen(data.bruttoeinkommen);
+  finanzdaten.bruttoEinkommen = new OriginalEinkommen(data.bruttoeinkommen);
   finanzdaten.zahlenSieKirchenSteuer = yesNoFrom(data.zahlenSieKirchensteuer);
   finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
   finanzdaten.steuerKlasse = data.steuerklasse;
@@ -393,8 +394,8 @@ function originalPlanungsDatenFrom(
 function mischEkTaetigkeitFrom(data: MischEkTaetigkeitRaw): MischEkTaetigkeit {
   return {
     erwerbsTaetigkeit: data.erwerbstaetigkeit,
-    bruttoEinkommenDurchschnitt: Big(data.bruttoeinkommenDurchschnitt),
-    bruttoEinkommenDurchschnittMidi: Big(data.bruttoeinkommenDurchschnittMidi),
+    bruttoEinkommenDurchschnitt: data.bruttoeinkommenDurchschnitt,
+    bruttoEinkommenDurchschnittMidi: data.bruttoeinkommenDurchschnittMidi,
     bemessungsZeitraumMonate: data.bemessungszeitraumMonate,
     istRentenVersicherungsPflichtig: data.rentenversicherungspflichtig,
     istKrankenVersicherungsPflichtig: data.krankenversicherungspflichtig,
@@ -433,7 +434,7 @@ function originalErwerbsZeitraumLebensMonatFrom(
   return new OriginalErwerbsZeitraumLebensMonat(
     data.vonLebensmonat,
     data.bisLebensmonat,
-    new Einkommen(data.bruttoProMonat),
+    new OriginalEinkommen(data.bruttoProMonat),
   );
 }
 

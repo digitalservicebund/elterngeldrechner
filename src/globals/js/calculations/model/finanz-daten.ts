@@ -8,7 +8,7 @@ import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
 import { RentenArt } from "./renten-art";
 import { SteuerKlasse } from "./steuer-klasse";
-import { BIG_ZERO, greater } from "@/globals/js/calculations/common/math-util";
+import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 // TODO: mark fully readonly
 export type FinanzDaten = {
@@ -55,8 +55,8 @@ export function bruttoLeistungsMonateWithPlanung(
       lm++
     ) {
       // simplify after java code migration and with new tests for this case
-      const bruttoProMonat: Big = erwerbszeitraum.bruttoProMonat.value;
-      if (greater(bruttoProMonat, BIG_ZERO)) {
+      const bruttoProMonat = erwerbszeitraum.bruttoProMonat.value;
+      if (bruttoProMonat > 0) {
         const elterngeldArt =
           planungsdaten.planung[lm - 1] ?? ElternGeldArt.KEIN_BEZUG;
 
@@ -65,10 +65,10 @@ export function bruttoLeistungsMonateWithPlanung(
             elterngeldArt === ElternGeldArt.PARTNERSCHAFTS_BONUS ||
             elterngeldArt === ElternGeldArt.ELTERNGELD_PLUS
           ) {
-            bruttoLM[lm] = bruttoProMonat;
+            bruttoLM[lm] = Big(bruttoProMonat);
           }
         } else if (elterngeldArt === ElternGeldArt.BASIS_ELTERNGELD) {
-          bruttoLM[lm] = bruttoProMonat;
+          bruttoLM[lm] = Big(bruttoProMonat);
         }
       }
     }

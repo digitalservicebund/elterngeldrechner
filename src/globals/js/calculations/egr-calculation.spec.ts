@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { describe, expect, it } from "vitest";
 import { EgrCalculation } from "./egr-calculation";
 import {
@@ -157,7 +156,7 @@ const ANY_FINANZDATEN = {
 
 const ANY_MISCHEINKOMMEN_TAETIGKEIT = {
   erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
-  bruttoEinkommenDurchschnitt: Big(1000),
-  bruttoEinkommenDurchschnittMidi: Big(0),
+  bruttoEinkommenDurchschnitt: 1000,
+  bruttoEinkommenDurchschnittMidi: 0,
   bemessungsZeitraumMonate: [],
 };

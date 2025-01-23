@@ -9,7 +9,6 @@ import {
   render,
   renderHook,
 } from "@testing-library/react";
-import Big from "big.js";
 import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import {
@@ -87,17 +86,6 @@ export * from "@testing-library/react";
 
 // override render method
 export { renderHookWithRedux as renderHook, renderWithRedux as render };
-
-export const toListWithTolerance = (n: number) => {
-  const num = Big(n);
-  return [
-    n,
-    num.plus(0.01).toNumber(),
-    num.plus(0.02).toNumber(),
-    num.minus(0.01).toNumber(),
-    num.minus(0.02).toNumber(),
-  ];
-};
 
 export const INITIAL_STATE: RootState = {
   stepAllgemeineAngaben: initialStepAllgemeineAngabenState,

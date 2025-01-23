@@ -15,7 +15,6 @@ import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,
 } from "@/test-utils/egr-mischeinkommen-excel-sheet";
-import { toListWithTolerance } from "@/test-utils/test-utils";
 
 /**
  * Runs FIT tests for BasisEgAlgorithmus.
@@ -23,6 +22,7 @@ import { toListWithTolerance } from "@/test-utils/test-utils";
 describe("basis-eg-algorithmus", () => {
   const basisEgAlgorithmus = new BasisEgAlgorithmus();
   const sheet = new EgrMischeinkommenExcelSheet();
+
   // Für eine Ausgabe, die in das Excel kopiert werden kann.
   // const mischEkZwischenErgebnisList: MischEkZwischenErgebnis[] = [];
 
@@ -100,28 +100,32 @@ describe("basis-eg-algorithmus", () => {
 
           // then
           expect(mischEkZwischenErgebnis).not.toBeUndefined();
-          expect(
-            toListWithTolerance(mischEkZwischenErgebnis.brutto.toNumber()),
-          ).toContain(sheet.ergebnisBrutto(testCaseIndex).toNumber());
+          expect(mischEkZwischenErgebnis.brutto.toNumber()).toBeCloseTo(
+            sheet.ergebnisBrutto(testCaseIndex).toNumber(),
+            1,
+          );
 
           // Die FIT Tests haben bei Minijobs die falschen Steuern und Abgaben
           if (mischEkZwischenErgebnis.brutto.gt(GRENZE_MINI_MIDI)) {
-            expect(
-              toListWithTolerance(mischEkZwischenErgebnis.abgaben.toNumber()),
-            ).toContain(sheet.ergebnisAbgaben(testCaseIndex).toNumber());
-            expect(
-              toListWithTolerance(mischEkZwischenErgebnis.steuern.toNumber()),
-            ).toContain(sheet.ergebnisSteuern(testCaseIndex).toNumber());
+            expect(mischEkZwischenErgebnis.abgaben.toNumber()).toBeCloseTo(
+              sheet.ergebnisAbgaben(testCaseIndex).toNumber(),
+              1,
+            );
+            expect(mischEkZwischenErgebnis.steuern.toNumber()).toEqual(
+              sheet.ergebnisSteuern(testCaseIndex).toNumber(),
+            );
           }
 
+          expect(mischEkZwischenErgebnis.netto.toNumber()).toBeCloseTo(
+            sheet.ergebnisNetto(testCaseIndex).toNumber(),
+            1,
+          );
           expect(
-            toListWithTolerance(mischEkZwischenErgebnis.netto.toNumber()),
-          ).toContain(sheet.ergebnisNetto(testCaseIndex).toNumber());
-          expect(
-            toListWithTolerance(
-              mischEkZwischenErgebnis.elterngeldbasis.toNumber(),
-            ),
-          ).toContain(sheet.ergebnisBasisElternGeld(testCaseIndex).toNumber());
+            mischEkZwischenErgebnis.elterngeldbasis.toNumber(),
+          ).toBeCloseTo(
+            sheet.ergebnisBasisElternGeld(testCaseIndex).toNumber(),
+            1,
+          );
           expect(mischEkZwischenErgebnis.status).toBe(
             sheet.ergebnisErwerbsArt(testCaseIndex),
           );

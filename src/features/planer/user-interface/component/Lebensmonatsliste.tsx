@@ -5,7 +5,6 @@ import {
   type ForwardedRef,
   ReactNode,
   forwardRef,
-  useCallback,
   useId,
   useRef,
   useState,
@@ -16,8 +15,8 @@ import {
   type ElternteileByAusgangslage,
   type Lebensmonate,
   Lebensmonatszahlen,
-  LetzteLebensmonatszahl,
 } from "@/features/planer/domain";
+import { findeLetztenVerplantenLebensmonatOrDefault } from "@/features/planer/domain/lebensmonate/operation/findeLetztenVerplantenLebensmonatOrDefault";
 import type {
   BestimmeAuswahlmoeglichkeiten,
   ErstelleUngeplantenLebensmonat,
@@ -60,24 +59,29 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
 ): ReactNode {
   const headingIdentifier = useId();
 
+  const findeLetztenVerplantenLebensmonat =
+    findeLetztenVerplantenLebensmonatOrDefault.bind(null, lebensmonate, 14);
+
   const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
     useState(14);
 
-  const isFinalLebensmonatVisible =
-    lastVisibleLebensmonatszahl >= LetzteLebensmonatszahl;
+  const lebensmonatElements = useRef(new Map<number, { focus: () => void }>());
 
-  const fifteenthLebensmonatElement = useRef<HTMLDetailsElement>(null);
+  const canCollapse =
+    lastVisibleLebensmonatszahl >= findeLetztenVerplantenLebensmonat() + 2;
 
-  const toggleVisibilityOfFinalLebensmomate = useCallback(() => {
-    setLastVisibleLebensmonatszahl((lastVisibleLebensmonatszahl) =>
-      lastVisibleLebensmonatszahl < LetzteLebensmonatszahl
-        ? LetzteLebensmonatszahl
-        : 14,
-    );
+  const collapse = () =>
+    setLastVisibleLebensmonatszahl(findeLetztenVerplantenLebensmonat());
 
-    // Compensate for render delay to make element visible (non critical).
-    setTimeout(() => fifteenthLebensmonatElement.current?.focus());
-  }, []);
+  const expand = () => {
+    setLastVisibleLebensmonatszahl(findeLetztenVerplantenLebensmonat() + 2);
+
+    const focusIndex = findeLetztenVerplantenLebensmonat() + 1;
+    const elementToFocus = lebensmonatElements.current.get(focusIndex);
+    if (elementToFocus) {
+      setTimeout(() => elementToFocus.focus());
+    }
+  };
 
   return (
     <section
@@ -95,14 +99,18 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
           lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
         const isHidden = lebensmonatszahl > lastVisibleLebensmonatszahl;
-        const ref =
-          lebensmonatszahl === 15 ? fifteenthLebensmonatElement : undefined;
 
         return (
           <LebensmonatDetails
             key={lebensmonatszahl}
             className={classNames({ hidden: isHidden })}
-            ref={ref}
+            ref={(el) => {
+              if (el) {
+                lebensmonatElements.current.set(lebensmonatszahl, el);
+              } else {
+                lebensmonatElements.current.delete(lebensmonatszahl);
+              }
+            }}
             aria-hidden={isHidden}
             ausgangslage={ausgangslage}
             lebensmonatszahl={lebensmonatszahl}
@@ -126,9 +134,9 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
         className={classNames(
           "border-none bg-white py-10 font-bold text-primary",
         )}
-        onClick={toggleVisibilityOfFinalLebensmomate}
+        onClick={canCollapse ? collapse : expand}
       >
-        {isFinalLebensmonatVisible ? (
+        {canCollapse ? (
           <>
             <RemoveIcon /> weniger Monate anzeigen
           </>

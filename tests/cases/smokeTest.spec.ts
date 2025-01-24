@@ -68,6 +68,7 @@ test("smoke test", async ({ page }) => {
   await planer.gebeEinkommenAn(15, 1000);
   await planer.waehleOption(16, "Bonus");
   await planer.gebeEinkommenAn(16, 1000);
+  await planer.zeigeMehrLebensmonateAn();
   await planer.waehleOption(17, "Bonus");
   await planer.gebeEinkommenAn(17, 1000);
   await planer.waehleOption(18, "Bonus");

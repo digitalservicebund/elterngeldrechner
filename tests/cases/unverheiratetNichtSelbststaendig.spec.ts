@@ -116,6 +116,7 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   await planer.waehleOption(16, "Bonus", "Elternteil 1");
   await planer.gebeEinkommenAn(16, 1500, "Elternteil 1");
   await planer.gebeEinkommenAn(16, 1600, "Elternteil 2");
+  await planer.zeigeMehrLebensmonateAn();
   await planer.gebeEinkommenAn(17, 1500, "Elternteil 1");
   await planer.gebeEinkommenAn(17, 1600, "Elternteil 2");
   await planer.gebeEinkommenAn(18, 1500, "Elternteil 1");

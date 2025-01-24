@@ -124,10 +124,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
       <button
         type="button"
         className={classNames(
-          "border-none bg-white py-10 font-bold text-primary hover:cursor-s-resize",
-          isFinalLebensmonatVisible
-            ? "hover:cursor-n-resize"
-            : "hover:cursor-s-resize",
+          "border-none bg-white py-10 font-bold text-primary",
         )}
         onClick={toggleVisibilityOfFinalLebensmomate}
       >

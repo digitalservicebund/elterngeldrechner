@@ -47,9 +47,9 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     finanzDaten: FinanzDaten,
     lohnSteuerJahr: Lohnsteuerjahr,
   ): MischEkZwischenErgebnis {
-    let netto: Big;
-    let steuern: Big = Big(0);
-    let abgaben: Big = Big(0);
+    let netto = 0;
+    let steuern = 0;
+    let abgaben = 0;
     finanzDaten.mischEinkommenTaetigkeiten.forEach((mischEkTaetigkeit) => {
       const { bruttoEinkommenDurchschnitt } = mischEkTaetigkeit;
       if (
@@ -133,14 +133,14 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       }
     }
 
-    const brutto_elg: Big = round(
+    const brutto_elg = round(
       summe_EK_SS
         .add(summe_EK_NS)
         .add(summe_EK_GNS)
         .sub(zaehler_Pauschmonate * PAUSCH)
         .div(ANZAHL_MONATE_PRO_JAHR),
       2,
-    );
+    ).toNumber();
     const brutto_steuer: Big = round(
       summe_EK_SS.add(summe_EK_NS).div(ANZAHL_MONATE_PRO_JAHR),
       2,
@@ -234,7 +234,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       status = ErwerbsArt.JA_SELBSTSTAENDIG;
     }
     if (
-      brutto_elg.toNumber() <= GRENZE_MINI_MIDI &&
+      brutto_elg <= GRENZE_MINI_MIDI &&
       status !== ErwerbsArt.JA_SELBSTSTAENDIG
     ) {
       status = ErwerbsArt.JA_NICHT_SELBST_MINI;
@@ -260,26 +260,23 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR) {
         finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
       }
-      const summe_sozab: Big = new BruttoNettoRechner().summe_svb_misch(
-        krankenversicherungspflichtig > 0,
-        rentenversicherungspflichtig > 0,
-        status,
-        brutto_sv,
-      );
-      const summe_steuer_abzug: Big = new BruttoNettoRechner().summeSteuer(
-        finanzDaten,
-        status,
-        brutto_steuer,
-        lohnSteuerJahr,
-      );
-      netto = brutto_elg.sub(summe_steuer_abzug).sub(summe_sozab);
+      const summe_sozab = new BruttoNettoRechner()
+        .summe_svb_misch(
+          krankenversicherungspflichtig > 0,
+          rentenversicherungspflichtig > 0,
+          status,
+          brutto_sv,
+        )
+        .toNumber();
+      const summe_steuer_abzug = new BruttoNettoRechner()
+        .summeSteuer(finanzDaten, status, brutto_steuer, lohnSteuerJahr)
+        .toNumber();
+      netto = brutto_elg - summe_steuer_abzug - summe_sozab;
       steuern = summe_steuer_abzug;
       abgaben = summe_sozab;
     }
-    const ek_vor: Big = netto;
-    const elterngeldbasis = aufDenCentRunden(
-      this.elterngeld_keine_et(ek_vor.toNumber()),
-    );
+    const ek_vor = netto;
+    const elterngeldbasis = aufDenCentRunden(this.elterngeld_keine_et(ek_vor));
     return {
       krankenversicherungspflichtig: krankenversicherungspflichtig === 1,
       rentenversicherungspflichtig: rentenversicherungspflichtig === 1,
@@ -287,7 +284,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       brutto: brutto_elg,
       steuern: steuern,
       abgaben: abgaben,
-      elterngeldbasis: Big(elterngeldbasis),
+      elterngeldbasis: elterngeldbasis,
       status: status,
     };
   }

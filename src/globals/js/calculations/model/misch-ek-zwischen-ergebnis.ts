@@ -1,15 +1,14 @@
 /**
  * Datencontainer für das Zwischenergebnis bei Mischeinkommen.
  */
-import Big from "big.js";
 import { ErwerbsArt } from "./erwerbs-art";
 
 export interface MischEkZwischenErgebnis {
-  netto: Big;
-  brutto: Big;
-  steuern: Big;
-  abgaben: Big;
-  elterngeldbasis: Big;
+  netto: number;
+  brutto: number;
+  steuern: number;
+  abgaben: number;
+  elterngeldbasis: number;
   status: ErwerbsArt;
   rentenversicherungspflichtig: boolean;
   krankenversicherungspflichtig: boolean;

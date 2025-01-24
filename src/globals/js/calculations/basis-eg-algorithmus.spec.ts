@@ -113,8 +113,8 @@ describe("basis-eg-algorithmus", () => {
         );
 
       // then
-      expect(mischEkZwischenErgebnis.netto.toNumber()).toBe(910.67);
-      expect(mischEkZwischenErgebnis.elterngeldbasis.toNumber()).toBe(650.22);
+      expect(mischEkZwischenErgebnis.netto).toBe(910.67);
+      expect(mischEkZwischenErgebnis.elterngeldbasis).toBe(650.22);
       expect(mischEkZwischenErgebnis.status).toBe(ErwerbsArt.JA_SELBSTSTAENDIG);
       expect(mischEkZwischenErgebnis.rentenversicherungspflichtig).toBe(false);
       expect(mischEkZwischenErgebnis.krankenversicherungspflichtig).toBe(false);

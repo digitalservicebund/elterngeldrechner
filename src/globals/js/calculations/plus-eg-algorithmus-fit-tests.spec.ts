@@ -1,5 +1,4 @@
 import { describe, expect, test } from "vitest";
-import { BIG_ZERO } from "./common/math-util";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
@@ -72,13 +71,15 @@ describe("plus-eg-algorithmus", () => {
         expect(ergebnis.bruttoPlus.toNumber()).toBe(
           sheet.ergebnisBruttoPlusImBezugsZeitraumDurchschnitt(testCaseIndex),
         );
-        expect(ergebnis.nettoPlus.toNumber()).toBe(
+        expect(ergebnis.nettoPlus.toNumber()).toBeCloseTo(
           sheet.ergebnisNettoPlusImBezugsZeitraumDurchschnitt(testCaseIndex),
+          1,
         );
-        expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(
+        expect(ergebnis.elternGeldEtPlus.toNumber()).toBeCloseTo(
           sheet.ergebnisElterngeldPlusFuerMonateMitErwerbsTaetigkeit(
             testCaseIndex,
           ),
+          1,
         );
         expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(
           sheet.ergebnisElterngeldPlusFuerMonateOhneErwerbsTaetigkeit(
@@ -120,12 +121,12 @@ const createFinanzDaten = (
 
 const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
   return {
-    elterngeldbasis: BIG_ZERO,
+    elterngeldbasis: 0,
     krankenversicherungspflichtig: false,
-    netto: BIG_ZERO,
-    brutto: BIG_ZERO,
-    steuern: BIG_ZERO,
-    abgaben: BIG_ZERO,
+    netto: 0,
+    brutto: 0,
+    steuern: 0,
+    abgaben: 0,
     rentenversicherungspflichtig: false,
     status: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
   };

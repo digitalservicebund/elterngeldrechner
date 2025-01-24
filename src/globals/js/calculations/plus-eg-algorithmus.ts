@@ -1,6 +1,7 @@
 import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
+import { aufDenCentAbrunden } from "./brutto-netto-rechner/steuer-und-sozialabgaben/programmablaufplan/auf-und-abrunden";
 import { errorOf } from "./calculation-error-code";
 import {
   ElternGeldArt,
@@ -30,7 +31,6 @@ import {
   BIG_ZERO,
   aufDenCentRunden,
   fMax,
-  fMin,
   greater,
   isEqual,
   round,
@@ -143,9 +143,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
   private static getEKVor(
     finanzDaten: FinanzDaten,
-    ek_vor: Big,
+    ek_vor: number,
     mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
-  ) {
+  ): number {
     const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
 
     if (isMischeinkommen) {
@@ -155,7 +155,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
       ek_vor = mischEkZwischenErgebnis.netto;
       if (mischEkZwischenErgebnis.status !== ErwerbsArt.JA_SELBSTSTAENDIG) {
-        ek_vor = ek_vor.add(PAUSCH);
+        ek_vor = ek_vor + PAUSCH;
       }
     }
     return ek_vor;
@@ -197,14 +197,14 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
     const nicht_erw = persoenlicheDaten.hasEtNachGeburt;
     let ek_nach_plus: Big;
-    let elterngeld_erw_plus: Big;
+    let elterngeld_erw_plus: number;
     let brutto_basis: Big = BIG_ZERO;
     let netto_basis: Big = BIG_ZERO;
-    let elterngeld_erw_basis: Big = BIG_ZERO;
+    let elterngeld_erw_basis = 0;
     let brutto_plus: Big = BIG_ZERO;
     let netto_plus: Big = BIG_ZERO;
-    let elterngeld_et_plus: Big = BIG_ZERO;
-    let elterngeld_keine_et_plus: Big = BIG_ZERO;
+    let elterngeld_et_plus = 0;
+    let elterngeld_keine_et_plus = 0;
     if (nicht_erw) {
       // es liegt Erwerbstätigkeit nach der Geburt vor
       const pausch = PAUSCH;
@@ -265,7 +265,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             );
           }
         }
-        let ek_vor: Big = Big(z.nettoVorGeburt);
+        let ek_vor = z.nettoVorGeburt;
         ek_vor = PlusEgAlgorithmus.getEKVor(
           finanzDaten,
           ek_vor,
@@ -276,7 +276,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_MINI:
-              ek_vor = fMax(round(ek_vor.sub(PAUSCH)), BIG_ZERO);
+              ek_vor = Math.max(aufDenCentRunden(ek_vor - PAUSCH), 0);
               summe_brutto_basis = BIG_ZERO;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
                 const bruttoInLebensmonatenMitBasis =
@@ -306,9 +306,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           }
           netto_basis = fMax(brutto_basis.sub(steuer_sozab_basis), BIG_ZERO);
           const ek_nach_basis: Big = netto_basis;
-          elterngeld_erw_basis = round(
+          elterngeld_erw_basis = aufDenCentRunden(
             this.elterngeld_et(ek_vor, ek_nach_basis),
-            2,
           );
         }
         if (greater(brutto_plus, BIG_ZERO)) {
@@ -321,7 +320,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           } else {
             status = persoenlicheDaten.etVorGeburt;
           }
-          ek_vor = Big(z.nettoVorGeburt);
+          ek_vor = z.nettoVorGeburt;
           ek_vor = PlusEgAlgorithmus.getEKVor(
             finanzDaten,
             ek_vor,
@@ -331,7 +330,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             case ErwerbsArt.JA_NICHT_SELBST_MINI:
             case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
-              ek_vor = fMax(ek_vor.sub(PAUSCH), BIG_ZERO);
+              ek_vor = Math.max(ek_vor - PAUSCH, 0);
               summe_brutto_plus = BIG_ZERO;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
                 const bruttoInLebensmonatenMitPlus =
@@ -364,19 +363,18 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         }
         netto_plus = fMax(brutto_plus.sub(steuer_sozab_plus), BIG_ZERO);
         ek_nach_plus = netto_plus;
-        elterngeld_erw_plus = round(
+        elterngeld_erw_plus = aufDenCentAbrunden(
           this.elterngeldplus_et(ek_vor, ek_nach_plus),
-          2,
         );
-        elterngeld_keine_et_plus = Big(z.elternGeld);
+        elterngeld_keine_et_plus = z.elternGeld;
         if (isMischeinkommen) {
           if (mischEkZwischenErgebnis === null) {
             throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
           }
           elterngeld_keine_et_plus = mischEkZwischenErgebnis.elterngeldbasis;
         }
-        elterngeld_keine_et_plus = elterngeld_keine_et_plus.div(Big(2));
-        elterngeld_et_plus = fMin(
+        elterngeld_keine_et_plus = elterngeld_keine_et_plus / 2;
+        elterngeld_et_plus = Math.min(
           elterngeld_keine_et_plus,
           elterngeld_erw_plus,
         );
@@ -384,17 +382,17 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     } else {
       // Sollten keine Perioden angegeben sein, so berechne nichts
       netto_plus = BIG_ZERO;
-      elterngeld_keine_et_plus = BIG_ZERO;
-      elterngeld_et_plus = BIG_ZERO;
+      elterngeld_keine_et_plus = 0;
+      elterngeld_et_plus = 0;
     }
     return {
-      elternGeldErwBasis: round(elterngeld_erw_basis, 2),
+      elternGeldErwBasis: Big(aufDenCentRunden(elterngeld_erw_basis)),
       bruttoBasis: round(brutto_basis, 2),
       nettoBasis: round(netto_basis, 2),
       bruttoPlus: round(brutto_plus, 2),
       nettoPlus: round(netto_plus, 2),
-      elternGeldEtPlus: round(elterngeld_et_plus, 2),
-      elternGeldKeineEtPlus: round(elterngeld_keine_et_plus, 2),
+      elternGeldEtPlus: Big(aufDenCentRunden(elterngeld_et_plus)),
+      elternGeldKeineEtPlus: Big(aufDenCentRunden(elterngeld_keine_et_plus)),
       elternGeldAusgabe: [],
       elternGeldBasis: BIG_ZERO,
       ersatzRate: BIG_ZERO,
@@ -591,7 +589,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       if (misch === null) {
         throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
       }
-      basiselterngeld = misch.elterngeldbasis.toNumber();
+      basiselterngeld = misch.elterngeldbasis;
     }
     const basiselterngeld_erw = ergebnis.elternGeldErwBasis.toNumber();
     const elterngeldplus = aufDenCentRunden(basiselterngeld / 2);

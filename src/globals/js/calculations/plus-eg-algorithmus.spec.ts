@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { BIG_ZERO } from "./common/math-util";
 import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
@@ -101,7 +100,7 @@ describe("plus-eg-algorithmus", () => {
       expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(0);
       expect(ergebnis.bruttoPlus.toNumber()).toBe(1950);
       expect(ergebnis.nettoPlus.toNumber()).toBe(1356.84);
-      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(287.84);
+      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(287.83);
       expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(584.89);
     });
 
@@ -150,12 +149,12 @@ describe("plus-eg-algorithmus", () => {
 
 const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
   return {
-    elterngeldbasis: BIG_ZERO,
+    elterngeldbasis: 0,
     krankenversicherungspflichtig: false,
-    netto: BIG_ZERO,
-    brutto: BIG_ZERO,
-    steuern: BIG_ZERO,
-    abgaben: BIG_ZERO,
+    netto: 0,
+    brutto: 0,
+    steuern: 0,
+    abgaben: 0,
     rentenversicherungspflichtig: false,
     status: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
   };

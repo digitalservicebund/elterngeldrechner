@@ -8,7 +8,11 @@ import {
   PersoenlicheDaten,
   ZwischenErgebnis,
 } from "./model";
-import { BIG_ZERO, round } from "@/globals/js/calculations/common/math-util";
+import {
+  BIG_ZERO,
+  aufDenCentRunden,
+  round,
+} from "@/globals/js/calculations/common/math-util";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MIN_GESCHWISTERBONUS,
@@ -49,7 +53,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     const status_et: ErwerbsArt = persoenlicheDaten.etVorGeburt;
     let mehrlingszuschlag: number;
     const pausch = PAUSCH;
-    let elterngeldbasis;
+    let elterngeldbasis: number;
     let ersatzrate_ausgabe;
     const betrag_Mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
     let geschwisterbonus;
@@ -83,17 +87,17 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     } else {
       geschwisterbonus = BIG_ZERO;
     }
-    elterngeldbasis = round(Big(elterngeldbasis));
-    ersatzrate_ausgabe = round(Big(ersatzrate_ausgabe));
-    geschwisterbonus = round(Big(geschwisterbonus), 3);
+    elterngeldbasis = aufDenCentRunden(elterngeldbasis);
+    ersatzrate_ausgabe = aufDenCentRunden(ersatzrate_ausgabe);
+    geschwisterbonus = round(Big(geschwisterbonus), 3).toNumber();
 
     return {
       elternGeld: elterngeldbasis,
       ersatzRate: ersatzrate_ausgabe,
       geschwisterBonus: geschwisterbonus,
-      mehrlingsZulage: Big(mehrlingszuschlag),
+      mehrlingsZulage: mehrlingszuschlag,
       zeitraumGeschwisterBonus,
-      nettoVorGeburt: Big(nettoEinkommen.value),
+      nettoVorGeburt: nettoEinkommen.value,
     };
   }
 

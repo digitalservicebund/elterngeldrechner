@@ -15,6 +15,7 @@ import {
 import {
   BIG_ONE,
   BIG_ZERO,
+  aufDenCentRunden,
   greater,
   isEqual,
   round,
@@ -276,9 +277,8 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       abgaben = summe_sozab;
     }
     const ek_vor: Big = netto;
-    const elterngeldbasis: Big = round(
-      Big(this.elterngeld_keine_et(ek_vor.toNumber())),
-      2,
+    const elterngeldbasis = aufDenCentRunden(
+      this.elterngeld_keine_et(ek_vor.toNumber()),
     );
     return {
       krankenversicherungspflichtig: krankenversicherungspflichtig === 1,
@@ -287,7 +287,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       brutto: brutto_elg,
       steuern: steuern,
       abgaben: abgaben,
-      elterngeldbasis: elterngeldbasis,
+      elterngeldbasis: Big(elterngeldbasis),
       status: status,
     };
   }

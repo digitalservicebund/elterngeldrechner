@@ -1,6 +1,6 @@
 import Big from "big.js";
 import { describe, expect, it } from "vitest";
-import { fMax, fMin, floor, round } from "./math-util";
+import { aufDenCentRunden, fMax, fMin, floor, round } from "./math-util";
 
 describe("math-util", () => {
   describe("round half up with precision 2:", () => {
@@ -46,6 +46,22 @@ describe("math-util", () => {
       expect(round(Big(0.5555), 0).toString()).toBe("1");
     });
   });
+
+  it.each([
+    [1.0, 1.0],
+    [1.5, 1.5],
+    [1.011, 1.01],
+    [1.015, 1.02],
+    [1.016, 1.02],
+    [1.298, 1.3],
+    [2.997, 3.0],
+  ])(
+    "correctly rounds input of %d on the cent digit to %d",
+    (input, output) => {
+      expect(aufDenCentRunden(input)).toBe(output);
+    },
+  );
+
   describe.each([
     [-1.6, -2.0],
     [-1.4, -2.0],

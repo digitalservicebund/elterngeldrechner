@@ -1,6 +1,4 @@
-import Big from "big.js";
 import xlsx from "node-xlsx";
-import { round } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,
   ElternGeldArt,
@@ -195,70 +193,52 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
   }
 
   ergebnisBruttoBasisImBezugsZeitraumDurchschnitt(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_BRUTTO_BASIS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_BRUTTO_BASIS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
     );
   }
 
   ergebnisNettoBasisImBezugsZeitraumDurchschnitt(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_NETTO_BASIS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_NETTO_BASIS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
     );
   }
 
   ergebnisElterngeldBasisFuerMonateMitErwerbsTaetigkeit(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_ELTERNGELD_BASIS_FUER_MONATE_MIT_ERWERBS_TAETIGKEIT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_ELTERNGELD_BASIS_FUER_MONATE_MIT_ERWERBS_TAETIGKEIT_OFFSET,
     );
   }
 
   ergebnisBruttoPlusImBezugsZeitraumDurchschnitt(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_BRUTTO_PLUS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_BRUTTO_PLUS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
     );
   }
 
   ergebnisNettoPlusImBezugsZeitraumDurchschnitt(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_NETTO_PLUS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_NETTO_PLUS_IM_BEZUGS_ZEITRAUM_DURCHSCHNITT_OFFSET,
     );
   }
 
   ergebnisElterngeldPlusFuerMonateMitErwerbsTaetigkeit(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_ELTERNGELD_PLUS_FUER_MONATE_MIT_ERWERBS_TAETIGKEIT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_ELTERNGELD_PLUS_FUER_MONATE_MIT_ERWERBS_TAETIGKEIT_OFFSET,
     );
   }
 
   ergebnisElterngeldPlusFuerMonateOhneErwerbsTaetigkeit(testCaseIndex: number) {
-    return this.round(
-      this.numberOf(
-        testCaseIndex,
-        ERGEBNIS_ELTERNGELD_PLUS_FUER_MONATE_OHNE_ERWERBS_TAETIGKEIT_OFFSET,
-      ),
+    return this.numberOf(
+      testCaseIndex,
+      ERGEBNIS_ELTERNGELD_PLUS_FUER_MONATE_OHNE_ERWERBS_TAETIGKEIT_OFFSET,
     );
-  }
-
-  round(value: number): number {
-    return round(new Big(value)).toNumber();
   }
 
   numberOf(testCaseIndex: number, rowIndex: number) {

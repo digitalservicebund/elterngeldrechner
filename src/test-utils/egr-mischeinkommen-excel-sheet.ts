@@ -1,6 +1,4 @@
-import Big from "big.js";
 import xlsx from "node-xlsx";
-import { BIG_ZERO, round } from "@/globals/js/calculations/common/math-util";
 import {
   ErwerbsTaetigkeit,
   kinderFreiBetragOfNumber,
@@ -167,28 +165,24 @@ export class EgrMischeinkommenExcelSheet {
     return kinderFreiBetrag;
   }
 
-  ergebnisBrutto(testCaseIndex: number) {
-    const netto = this.sheet.data[BRUTTO_OFFSET]?.[columnOf(testCaseIndex)];
-    if (netto === undefined) {
-      return BIG_ZERO;
-    }
-    return round(Big(netto as number));
+  ergebnisBrutto(testCaseIndex: number): number {
+    return (
+      (this.sheet.data[BRUTTO_OFFSET]?.[columnOf(testCaseIndex)] as number) ?? 0
+    );
   }
 
-  ergebnisSteuern(testCaseIndex: number) {
-    const netto = this.sheet.data[STEUERN_OFFSET]?.[columnOf(testCaseIndex)];
-    if (netto === undefined) {
-      return BIG_ZERO;
-    }
-    return round(Big(netto as number));
+  ergebnisSteuern(testCaseIndex: number): number {
+    return (
+      (this.sheet.data[STEUERN_OFFSET]?.[columnOf(testCaseIndex)] as number) ??
+      0
+    );
   }
 
-  ergebnisAbgaben(testCaseIndex: number) {
-    const netto = this.sheet.data[ABGABEN_OFFSET]?.[columnOf(testCaseIndex)];
-    if (netto === undefined) {
-      return BIG_ZERO;
-    }
-    return round(Big(netto as number));
+  ergebnisAbgaben(testCaseIndex: number): number {
+    return (
+      (this.sheet.data[ABGABEN_OFFSET]?.[columnOf(testCaseIndex)] as number) ??
+      0
+    );
   }
 
   ergebnisNetto(testCaseIndex: number): number {

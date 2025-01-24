@@ -100,18 +100,18 @@ describe("basis-eg-algorithmus", () => {
           // then
           expect(mischEkZwischenErgebnis).not.toBeUndefined();
           expect(mischEkZwischenErgebnis.brutto.toNumber()).toBeCloseTo(
-            sheet.ergebnisBrutto(testCaseIndex).toNumber(),
+            sheet.ergebnisBrutto(testCaseIndex),
             1,
           );
 
           // Die FIT Tests haben bei Minijobs die falschen Steuern und Abgaben
           if (mischEkZwischenErgebnis.brutto.gt(GRENZE_MINI_MIDI)) {
             expect(mischEkZwischenErgebnis.abgaben.toNumber()).toBeCloseTo(
-              sheet.ergebnisAbgaben(testCaseIndex).toNumber(),
+              sheet.ergebnisAbgaben(testCaseIndex),
               1,
             );
             expect(mischEkZwischenErgebnis.steuern.toNumber()).toEqual(
-              sheet.ergebnisSteuern(testCaseIndex).toNumber(),
+              sheet.ergebnisSteuern(testCaseIndex),
             );
           }
 

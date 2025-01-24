@@ -29,20 +29,20 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
 
         // then
         expect(zwischenErgebnis).not.toBeUndefined();
-        expect(zwischenErgebnis.nettoVorGeburt.toNumber()).toBe(
+        expect(zwischenErgebnis.nettoVorGeburt).toBe(
           sheet.zwischenErgebnisNettoVorGeburt(testCaseIndex),
         );
-        expect(zwischenErgebnis.elternGeld.toNumber()).toBeCloseTo(
+        expect(zwischenErgebnis.elternGeld).toBeCloseTo(
           sheet.zwischenErgebnisElternGeld(testCaseIndex),
           1,
         );
-        expect(zwischenErgebnis.ersatzRate.toNumber()).toBe(
+        expect(zwischenErgebnis.ersatzRate).toBe(
           sheet.zwischenErgebnisErsatzRate(testCaseIndex),
         );
-        expect(zwischenErgebnis.geschwisterBonus.toNumber()).toBe(
+        expect(zwischenErgebnis.geschwisterBonus).toBe(
           sheet.zwischenErgebnisGeschwisterBonus(testCaseIndex),
         );
-        expect(zwischenErgebnis.mehrlingsZulage.toNumber()).toBe(
+        expect(zwischenErgebnis.mehrlingsZulage).toBe(
           sheet.zwischenErgebnisMehrlingsZulage(testCaseIndex),
         );
 

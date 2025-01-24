@@ -28,6 +28,7 @@ import {
 } from "@/globals/js/calculations/common/date-util";
 import {
   BIG_ZERO,
+  aufDenCentRunden,
   fMax,
   fMin,
   greater,
@@ -264,7 +265,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             );
           }
         }
-        let ek_vor: Big = z.nettoVorGeburt;
+        let ek_vor: Big = Big(z.nettoVorGeburt);
         ek_vor = PlusEgAlgorithmus.getEKVor(
           finanzDaten,
           ek_vor,
@@ -320,7 +321,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           } else {
             status = persoenlicheDaten.etVorGeburt;
           }
-          ek_vor = z.nettoVorGeburt;
+          ek_vor = Big(z.nettoVorGeburt);
           ek_vor = PlusEgAlgorithmus.getEKVor(
             finanzDaten,
             ek_vor,
@@ -367,7 +368,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           this.elterngeldplus_et(ek_vor, ek_nach_plus),
           2,
         );
-        elterngeld_keine_et_plus = z.elternGeld;
+        elterngeld_keine_et_plus = Big(z.elternGeld);
         if (isMischeinkommen) {
           if (mischEkZwischenErgebnis === null) {
             throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
@@ -583,18 +584,18 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     }
     ergebnis.geschwisterBonusDeadLine = ende_geschwisterbonus;
     const ausgabeLebensmonate: ElternGeldAusgabe[] = [];
-    let basiselterngeld: Big = z.elternGeld;
+    let basiselterngeld = z.elternGeld;
     const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
 
     if (isMischeinkommen) {
       if (misch === null) {
         throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
       }
-      basiselterngeld = misch.elterngeldbasis;
+      basiselterngeld = misch.elterngeldbasis.toNumber();
     }
-    const basiselterngeld_erw: Big = ergebnis.elternGeldErwBasis;
-    const elterngeldplus: Big = round(basiselterngeld.div(Big(2)), 2);
-    const elterngeldplus_erw: Big = ergebnis.elternGeldEtPlus;
+    const basiselterngeld_erw = ergebnis.elternGeldErwBasis.toNumber();
+    const elterngeldplus = aufDenCentRunden(basiselterngeld / 2);
+    const elterngeldplus_erw = ergebnis.elternGeldEtPlus.toNumber();
     const betrag_mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
     const min_geschwisterbonus = MIN_GESCHWISTERBONUS;
     const rate_bonus = RATE_BONUS;
@@ -619,91 +620,75 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       } else if (this.hatPartnerbonus) {
         // es ist schon alles auf 0 gesetzt
       } else {
-        let geschwisterbonus: Big = BIG_ZERO;
+        let geschwisterbonus = 0;
         let mehrlingszuschlag = 0;
-        let elterngeld: Big = BIG_ZERO;
+        let elterngeld = 0;
         if (verlauf[i - 1] === ElternGeldKategorie.KEIN_ELTERN_GELD) {
-          geschwisterbonus = BIG_ZERO;
+          geschwisterbonus = 0;
           mehrlingszuschlag = 0;
-          elterngeld = BIG_ZERO;
+          elterngeld = 0;
         }
         if (verlauf[i - 1] === ElternGeldKategorie.BASIS_ELTERN_GELD) {
-          geschwisterbonus = round(
-            fMax(
-              Big(min_geschwisterbonus),
-              basiselterngeld.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1] ?? 0)),
-            2,
+          geschwisterbonus = aufDenCentRunden(
+            Math.max(min_geschwisterbonus, basiselterngeld * rate_bonus) *
+              (geschw[i - 1] ?? 0),
           );
           mehrlingszuschlag = betrag_mehrlingszuschlag * mehrling;
-          elterngeld = basiselterngeld
-            .add(geschwisterbonus)
-            .add(mehrlingszuschlag);
+          elterngeld = basiselterngeld + geschwisterbonus + mehrlingszuschlag;
         }
         if (
           verlauf[i - 1] ===
           ElternGeldKategorie.BASIS_ELTERN_GELD_MIT_ERWERBS_TAETIGKEIT
         ) {
           mehrlingszuschlag = betrag_mehrlingszuschlag * mehrling;
-          geschwisterbonus = round(
-            fMax(
-              Big(min_geschwisterbonus),
-              basiselterngeld_erw.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1] ?? 0)),
-            2,
+          geschwisterbonus = aufDenCentRunden(
+            Math.max(min_geschwisterbonus, basiselterngeld_erw * rate_bonus) *
+              (geschw[i - 1] ?? 0),
           );
-          elterngeld = basiselterngeld_erw
-            .add(geschwisterbonus)
-            .add(mehrlingszuschlag);
+          elterngeld =
+            basiselterngeld_erw + geschwisterbonus + mehrlingszuschlag;
         }
         if (
           verlauf[i - 1] ===
           ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT
         ) {
           mehrlingszuschlag = (mehrling * betrag_mehrlingszuschlag) / 2;
-          geschwisterbonus = round(
-            fMax(
-              Big(min_geschwisterbonus / 2),
-              elterngeldplus.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1] ?? 0)),
-            2,
+          geschwisterbonus = aufDenCentRunden(
+            Math.max(min_geschwisterbonus / 2, elterngeldplus * rate_bonus) *
+              (geschw[i - 1] ?? 0),
           );
-          elterngeld = elterngeldplus
-            .add(geschwisterbonus)
-            .add(mehrlingszuschlag);
+          elterngeld = elterngeldplus + geschwisterbonus + mehrlingszuschlag;
         }
         if (
           verlauf[i - 1] ===
           ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT
         ) {
           mehrlingszuschlag = (betrag_mehrlingszuschlag * mehrling) / 2;
-          geschwisterbonus = round(
-            fMax(
-              Big(min_geschwisterbonus / 2),
-              elterngeldplus_erw.mul(rate_bonus),
-            ).mul(Big(geschw[i - 1] ?? 0)),
-            2,
+          geschwisterbonus = aufDenCentRunden(
+            Math.max(
+              min_geschwisterbonus / 2,
+              elterngeldplus_erw * rate_bonus,
+            ) * (geschw[i - 1] ?? 0),
           );
-          elterngeld = elterngeldplus_erw
-            .add(geschwisterbonus)
-            .add(mehrlingszuschlag);
+          elterngeld =
+            elterngeldplus_erw + geschwisterbonus + mehrlingszuschlag;
         }
-        ausgabe.elternGeld = round(elterngeld);
-        ausgabe.mehrlingsZulage = round(Big(mehrlingszuschlag));
-        ausgabe.geschwisterBonus = round(geschwisterbonus);
+        ausgabe.elternGeld = Big(aufDenCentRunden(elterngeld));
+        ausgabe.mehrlingsZulage = Big(aufDenCentRunden(mehrlingszuschlag));
+        ausgabe.geschwisterBonus = Big(aufDenCentRunden(geschwisterbonus));
       }
       ausgabeLebensmonate.push(ausgabe);
     }
 
     if (ergebnis.ersatzRate == null) {
-      ergebnis.ersatzRate = round(z.ersatzRate);
+      ergebnis.ersatzRate = Big(aufDenCentRunden(z.ersatzRate));
     }
-    ergebnis.elternGeldBasis = round(basiselterngeld);
-    ergebnis.elternGeldErwBasis = round(basiselterngeld_erw);
-    ergebnis.elternGeldKeineEtPlus = round(elterngeldplus);
-    ergebnis.elternGeldEtPlus = round(elterngeldplus_erw);
-    ergebnis.mehrlingsZulage = round(z.mehrlingsZulage);
-    ergebnis.geschwisterBonus = round(z.geschwisterBonus);
+    ergebnis.elternGeldBasis = Big(aufDenCentRunden(basiselterngeld));
+    ergebnis.elternGeldErwBasis = Big(aufDenCentRunden(basiselterngeld_erw));
+    ergebnis.elternGeldKeineEtPlus = Big(aufDenCentRunden(elterngeldplus));
+    ergebnis.elternGeldEtPlus = Big(aufDenCentRunden(elterngeldplus_erw));
+    ergebnis.mehrlingsZulage = Big(aufDenCentRunden(z.mehrlingsZulage));
+    ergebnis.geschwisterBonus = Big(aufDenCentRunden(z.geschwisterBonus));
     if (
       !persoenlicheDaten.etVorGeburt ||
       persoenlicheDaten.etVorGeburt === ErwerbsArt.NEIN

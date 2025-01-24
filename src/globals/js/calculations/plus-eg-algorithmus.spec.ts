@@ -115,11 +115,11 @@ describe("plus-eg-algorithmus", () => {
       };
 
       const zwischenErgebnis: ZwischenErgebnis = {
-        elternGeld: BIG_ZERO,
-        ersatzRate: BIG_ZERO,
-        geschwisterBonus: BIG_ZERO,
-        mehrlingsZulage: BIG_ZERO,
-        nettoVorGeburt: BIG_ZERO,
+        elternGeld: 0,
+        ersatzRate: 0,
+        geschwisterBonus: 0,
+        mehrlingsZulage: 0,
+        nettoVorGeburt: 0,
         zeitraumGeschwisterBonus: null,
       };
 

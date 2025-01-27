@@ -4,6 +4,7 @@ export {
   Einkommen,
   type ElternGeldAusgabe,
   ElternGeldArt,
+  type ElternGeldPlusErgebnis,
   ErwerbsArt,
   ErwerbsTaetigkeit,
   ErwerbsZeitraumLebensMonat,

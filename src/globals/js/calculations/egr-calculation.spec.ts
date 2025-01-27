@@ -65,13 +65,13 @@ describe("egr-calculation", () => {
       );
 
       // then
-      expect(ergebnis.bruttoBasis.toNumber()).toBe(0);
-      expect(ergebnis.nettoBasis.toNumber()).toBe(0);
-      expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(0);
-      expect(ergebnis.bruttoPlus.toNumber()).toBe(1950);
-      expect(ergebnis.nettoPlus.toNumber()).toBe(1356.84);
-      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(281.01);
-      expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(581.48);
+      expect(ergebnis.bruttoBasis).toBe(0);
+      expect(ergebnis.nettoBasis).toBe(0);
+      expect(ergebnis.elternGeldErwBasis).toBe(0);
+      expect(ergebnis.bruttoPlus).toBe(1950);
+      expect(ergebnis.nettoPlus).toBe(1356.84);
+      expect(ergebnis.elternGeldEtPlus).toBe(281.01);
+      expect(ergebnis.elternGeldKeineEtPlus).toBe(581.48);
     });
 
     it("Test with 'Erwerbstaetigkeit nach Geburt' 2", () => {
@@ -106,13 +106,13 @@ describe("egr-calculation", () => {
       );
 
       // then
-      expect(ergebnis.bruttoBasis.toNumber()).toBe(0);
-      expect(ergebnis.nettoBasis.toNumber()).toBe(0);
-      expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(0);
-      expect(ergebnis.bruttoPlus.toNumber()).toBe(0);
-      expect(ergebnis.nettoPlus.toNumber()).toBe(0);
-      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(0);
-      expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(453.46);
+      expect(ergebnis.bruttoBasis).toBe(0);
+      expect(ergebnis.nettoBasis).toBe(0);
+      expect(ergebnis.elternGeldErwBasis).toBe(0);
+      expect(ergebnis.bruttoPlus).toBe(0);
+      expect(ergebnis.nettoPlus).toBe(0);
+      expect(ergebnis.elternGeldEtPlus).toBe(0);
+      expect(ergebnis.elternGeldKeineEtPlus).toBe(453.46);
     });
   });
 

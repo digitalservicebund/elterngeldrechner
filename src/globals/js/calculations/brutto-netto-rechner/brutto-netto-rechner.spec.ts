@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { describe, expect, it } from "vitest";
 import { BruttoNettoRechner } from "./brutto-netto-rechner";
 import {
@@ -28,13 +27,13 @@ describe("brutto-netto-rechner", () => {
 
     // when
     const actual = bruttoNettoRechner.abzuege(
-      Big(2000),
+      2000,
       2022,
       finanzDaten,
       ErwerbsArt.JA_SELBSTSTAENDIG,
     );
 
     // then
-    expect(actual.toNumber()).toBe(556.83);
+    expect(actual).toBe(556.83);
   });
 });

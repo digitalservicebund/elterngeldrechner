@@ -1,6 +1,6 @@
 import Big from "big.js";
 import { describe, expect, it } from "vitest";
-import { aufDenCentRunden, fMax, fMin, floor, round } from "./math-util";
+import { aufDenCentRunden, fMin, floor, round } from "./math-util";
 
 describe("math-util", () => {
   describe("round half up with precision 2:", () => {
@@ -105,31 +105,6 @@ describe("math-util", () => {
     it("should determine minimum with reversed arguments", () => {
       // when
       const actual = fMin(Big(inputB), Big(inputA));
-
-      // then
-      expect(actual.toString()).toBe(Big(output).toString());
-    });
-  });
-
-  describe.each([
-    [-1.6, -2, -1.6],
-    [-1.6, -1.600001, -1.6],
-    [-1.6, -1.6, -1.6],
-    [-1.6, 0, 0],
-    [1.6, 0, 1.6],
-    [1.6, 100, 100],
-  ])("maximum of %d and %d is %d", (inputA, inputB, output) => {
-    it("should determine maximum", () => {
-      // when
-      const actual = fMax(Big(inputA), Big(inputB));
-
-      // then
-      expect(actual.toString()).toBe(Big(output).toString());
-    });
-
-    it("should determine maximum with reversed arguments", () => {
-      // when
-      const actual = fMax(Big(inputB), Big(inputA));
 
       // then
       expect(actual.toString()).toBe(Big(output).toString());

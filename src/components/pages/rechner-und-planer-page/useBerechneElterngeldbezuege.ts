@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { useCallback, useRef } from "react";
 import {
   type Auswahloption,
@@ -129,7 +128,7 @@ function elterngeldbezuegeFrom(
   return ergebnis.elternGeldAusgabe.reduce(
     (elterngeldbezuege, ausgabe) => ({
       ...elterngeldbezuege,
-      [ausgabe.lebensMonat]: ausgabe.elternGeld.toNumber(),
+      [ausgabe.lebensMonat]: ausgabe.elternGeld,
     }),
     {},
   );
@@ -407,14 +406,12 @@ if (import.meta.vitest) {
     function calculationResult(
       elterngeldbezugProMonatsIndex: number[],
     ): ElternGeldPlusErgebnis {
-      const zero = Big(0);
-
       const elternGeldAusgabe = elterngeldbezugProMonatsIndex.map(
         (elterngeldbezug, monthIndex) => ({
           lebensMonat: monthIndex + 1,
-          elternGeld: Big(elterngeldbezug),
-          mehrlingsZulage: zero,
-          geschwisterBonus: zero,
+          elternGeld: elterngeldbezug,
+          mehrlingsZulage: 0,
+          geschwisterBonus: 0,
           elterngeldArt: ElternGeldArt.KEIN_BEZUG,
           mutterschaftsLeistungMonat: false,
         }),
@@ -422,19 +419,19 @@ if (import.meta.vitest) {
 
       return {
         elternGeldAusgabe,
-        ersatzRate: zero,
+        ersatzRate: 0,
         geschwisterBonusDeadLine: null,
-        nettoNachGeburtDurch: zero,
-        geschwisterBonus: zero,
-        mehrlingsZulage: zero,
-        bruttoBasis: zero,
-        nettoBasis: zero,
-        elternGeldBasis: zero,
-        elternGeldErwBasis: zero,
-        bruttoPlus: zero,
-        nettoPlus: zero,
-        elternGeldEtPlus: zero,
-        elternGeldKeineEtPlus: zero,
+        nettoNachGeburtDurch: 0,
+        geschwisterBonus: 0,
+        mehrlingsZulage: 0,
+        bruttoBasis: 0,
+        nettoBasis: 0,
+        elternGeldBasis: 0,
+        elternGeldErwBasis: 0,
+        bruttoPlus: 0,
+        nettoPlus: 0,
+        elternGeldEtPlus: 0,
+        elternGeldKeineEtPlus: 0,
         message: "",
         hasPartnerBonusError: false,
         etVorGeburt: false,

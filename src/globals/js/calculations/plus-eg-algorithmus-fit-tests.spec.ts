@@ -57,31 +57,31 @@ describe("plus-eg-algorithmus", () => {
 
         // then
         expect(ergebnis).not.toBeUndefined();
-        expect(ergebnis.bruttoBasis.toNumber()).toBe(
+        expect(ergebnis.bruttoBasis).toBe(
           sheet.ergebnisBruttoBasisImBezugsZeitraumDurchschnitt(testCaseIndex),
         );
-        expect(ergebnis.nettoBasis.toNumber()).toBe(
+        expect(ergebnis.nettoBasis).toBe(
           sheet.ergebnisNettoBasisImBezugsZeitraumDurchschnitt(testCaseIndex),
         );
-        expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(
+        expect(ergebnis.elternGeldErwBasis).toBe(
           sheet.ergebnisElterngeldBasisFuerMonateMitErwerbsTaetigkeit(
             testCaseIndex,
           ),
         );
-        expect(ergebnis.bruttoPlus.toNumber()).toBe(
+        expect(ergebnis.bruttoPlus).toBe(
           sheet.ergebnisBruttoPlusImBezugsZeitraumDurchschnitt(testCaseIndex),
         );
-        expect(ergebnis.nettoPlus.toNumber()).toBeCloseTo(
+        expect(ergebnis.nettoPlus).toBeCloseTo(
           sheet.ergebnisNettoPlusImBezugsZeitraumDurchschnitt(testCaseIndex),
           1,
         );
-        expect(ergebnis.elternGeldEtPlus.toNumber()).toBeCloseTo(
+        expect(ergebnis.elternGeldEtPlus).toBeCloseTo(
           sheet.ergebnisElterngeldPlusFuerMonateMitErwerbsTaetigkeit(
             testCaseIndex,
           ),
           1,
         );
-        expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(
+        expect(ergebnis.elternGeldKeineEtPlus).toBe(
           sheet.ergebnisElterngeldPlusFuerMonateOhneErwerbsTaetigkeit(
             testCaseIndex,
           ),

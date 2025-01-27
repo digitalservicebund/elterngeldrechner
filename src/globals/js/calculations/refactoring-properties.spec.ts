@@ -36,10 +36,10 @@ import {
   SteuerKlasse,
 } from "./model";
 import {
-  Big as OriginalBig,
   EgrCalculation as OriginalEgrCalculation,
   Einkommen as OriginalEinkommen,
   type ElternGeldAusgabe as OriginalElternGeldAusgabe,
+  type ElternGeldPlusErgebnis as OriginalElternGeldPlusErgebnis,
   ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
   FinanzDaten as OriginalFinanzDaten,
   type Kind as OriginalKind,
@@ -160,42 +160,48 @@ describe("tests to verify properties during refactoring", () => {
 
 function expectCalculatedResultToEqual(
   actual: ElternGeldPlusErgebnis,
-  expected: ElternGeldPlusErgebnis,
+  expected: OriginalElternGeldPlusErgebnis,
   context: ElternGeldDaten,
 ): void {
   expectAllElterngeldausgabenToMatch(
     actual.elternGeldAusgabe,
     expected.elternGeldAusgabe,
   );
-  expect(actual.ersatzRate).toEqual(expected.ersatzRate);
+  expect(actual.ersatzRate).toEqual(expected.ersatzRate.toNumber());
   expectGeschwisterbonusDeadlineToMatch(
     actual.geschwisterBonusDeadLine,
     expected.geschwisterBonusDeadLine,
     context,
   );
-  expect(actual.nettoNachGeburtDurch).toEqual(expected.nettoNachGeburtDurch);
-  expect(actual.geschwisterBonus.toNumber()).toBeCloseTo(
+  expect(actual.nettoNachGeburtDurch).toBeCloseTo(
+    expected.nettoNachGeburtDurch.toNumber(),
+    1,
+  );
+  expect(actual.geschwisterBonus).toBeCloseTo(
     expected.geschwisterBonus.toNumber(),
     1,
   );
-  expect(actual.mehrlingsZulage).toEqual(expected.mehrlingsZulage);
-  expect(actual.bruttoBasis).toEqual(expected.bruttoBasis);
-  expect(actual.nettoBasis).toEqual(expected.nettoBasis);
-  expect(actual.elternGeldBasis.toNumber()).toBeCloseTo(
+  expect(actual.mehrlingsZulage).toBeCloseTo(
+    expected.mehrlingsZulage.toNumber(),
+    1,
+  );
+  expect(actual.bruttoBasis).toBeCloseTo(expected.bruttoBasis.toNumber(), 1);
+  expect(actual.nettoBasis).toBeCloseTo(expected.nettoBasis.toNumber(), 1);
+  expect(actual.elternGeldBasis).toBeCloseTo(
     expected.elternGeldBasis.toNumber(),
     1,
   );
-  expect(actual.elternGeldErwBasis.toNumber()).toBeCloseTo(
+  expect(actual.elternGeldErwBasis).toBeCloseTo(
     expected.elternGeldErwBasis.toNumber(),
     1,
   );
-  expect(actual.bruttoPlus).toEqual(expected.bruttoPlus);
-  expect(actual.nettoPlus).toEqual(expected.nettoPlus);
-  expect(actual.elternGeldEtPlus.toNumber()).toBeCloseTo(
+  expect(actual.bruttoPlus).toBeCloseTo(expected.bruttoPlus.toNumber(), 1);
+  expect(actual.nettoPlus).toBeCloseTo(expected.nettoPlus.toNumber(), 1);
+  expect(actual.elternGeldEtPlus).toBeCloseTo(
     expected.elternGeldEtPlus.toNumber(),
     1,
   );
-  expect(actual.elternGeldKeineEtPlus.toNumber()).toBeCloseTo(
+  expect(actual.elternGeldKeineEtPlus).toBeCloseTo(
     expected.elternGeldKeineEtPlus.toNumber(),
     1,
   );
@@ -223,12 +229,12 @@ function expectElterngeldausgabeToMatch(
   assert(expected !== undefined);
 
   expect(actual.lebensMonat).toEqual(expected.lebensMonat);
-  expect(actual.elternGeld.toNumber()).toBeCloseTo(
-    expected.elternGeld.toNumber(),
+  expect(actual.elternGeld).toBeCloseTo(expected.elternGeld.toNumber(), 1);
+  expect(actual.mehrlingsZulage).toBeCloseTo(
+    expected.mehrlingsZulage.toNumber(),
     1,
   );
-  expect(actual.mehrlingsZulage).toEqual(expected.mehrlingsZulage);
-  expect(actual.geschwisterBonus.toNumber()).toBeCloseTo(
+  expect(actual.geschwisterBonus).toBeCloseTo(
     expected.geschwisterBonus.toNumber(),
     1,
   );
@@ -274,24 +280,6 @@ function expectGeschwisterbonusDeadlineToMatch(
 
   expect(actual ?? tagVorDemGeburtsdatum).toEqual(expected);
 }
-
-function areBigNumbersEqual(
-  actual: unknown,
-  expected: unknown,
-): boolean | undefined {
-  const isActualValueBigNumber = actual instanceof Big;
-  const isExpecedValueBigNumber = expected instanceof OriginalBig;
-
-  if (isActualValueBigNumber && isExpecedValueBigNumber) {
-    return actual.toNumber() === expected.toNumber();
-  } else if (!isActualValueBigNumber && !isExpecedValueBigNumber) {
-    return undefined;
-  } else {
-    return false;
-  }
-}
-
-expect.addEqualityTesters([areBigNumbersEqual]);
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   return {

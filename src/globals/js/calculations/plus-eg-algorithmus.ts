@@ -1,7 +1,6 @@
 import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { aufDenCentAbrunden } from "./brutto-netto-rechner/steuer-und-sozialabgaben/programmablaufplan/auf-und-abrunden";
 import { errorOf } from "./calculation-error-code";
 import {
   ElternGeldArt,
@@ -30,10 +29,8 @@ import {
 import {
   BIG_ZERO,
   aufDenCentRunden,
-  fMax,
   greater,
   isEqual,
-  round,
 } from "@/globals/js/calculations/common/math-util";
 import { bruttoEGPlusNeu } from "@/globals/js/calculations/eg-brutto-rechner";
 import {
@@ -164,24 +161,24 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
   private static ohneETVorGeburt(): ElternGeldPlusErgebnis {
     return {
       elternGeldAusgabe: [],
-      ersatzRate: BIG_ZERO,
+      ersatzRate: 0,
       etVorGeburt: false,
-      geschwisterBonus: BIG_ZERO,
+      geschwisterBonus: 0,
       geschwisterBonusDeadLine: null,
       hasPartnerBonusError: false,
-      mehrlingsZulage: BIG_ZERO,
-      nettoNachGeburtDurch: BIG_ZERO,
+      mehrlingsZulage: 0,
+      nettoNachGeburtDurch: 0,
 
-      elternGeldBasis: Big(MINDESTSATZ),
-      elternGeldKeineEtPlus: Big(MINDESTSATZ / 2),
+      elternGeldBasis: MINDESTSATZ,
+      elternGeldKeineEtPlus: MINDESTSATZ / 2,
       message:
         "Sie erhalten 300 Euro Elterngeld sowie evtl. Geschwisterbonus und/oder Mehrlingszuschlag",
-      bruttoBasis: BIG_ZERO,
-      nettoBasis: BIG_ZERO,
-      elternGeldErwBasis: BIG_ZERO,
-      bruttoPlus: BIG_ZERO,
-      nettoPlus: BIG_ZERO,
-      elternGeldEtPlus: BIG_ZERO,
+      bruttoBasis: 0,
+      nettoBasis: 0,
+      elternGeldErwBasis: 0,
+      bruttoPlus: 0,
+      nettoPlus: 0,
+      elternGeldEtPlus: 0,
     };
   }
 
@@ -196,13 +193,13 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
 
     const nicht_erw = persoenlicheDaten.hasEtNachGeburt;
-    let ek_nach_plus: Big;
+    let ek_nach_plus;
     let elterngeld_erw_plus: number;
-    let brutto_basis: Big = BIG_ZERO;
-    let netto_basis: Big = BIG_ZERO;
+    let brutto_basis = 0;
+    let netto_basis = 0;
     let elterngeld_erw_basis = 0;
-    let brutto_plus: Big = BIG_ZERO;
-    let netto_plus: Big = BIG_ZERO;
+    let brutto_plus = 0;
+    let netto_plus = 0;
     let elterngeld_et_plus = 0;
     let elterngeld_keine_et_plus = 0;
     if (nicht_erw) {
@@ -219,8 +216,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         finanzDaten.erwerbsZeitraumLebensMonatList,
       );
       if (anzahl_monate != null && anzahl_monate !== 0) {
-        let summe_brutto_basis: Big = BIG_ZERO;
-        let summe_brutto_plus: Big = BIG_ZERO;
+        let summe_brutto_basis = 0;
+        let summe_brutto_plus = 0;
         this.fillLebensMonateList(geburt);
         const finanzDatenBerechnet = bruttoEGPlusNeu(
           planungsergebnis,
@@ -240,15 +237,15 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         );
         const brutto_LM_Plus: Big[] = /* toArray */ bruttoLMPlus.slice(0);
         const brutto_LM_Basis: Big[] = /* toArray */ bruttoLMBasis.slice(0);
-        let steuer_sozab_basis: Big = BIG_ZERO;
-        let steuer_sozab_plus: Big = BIG_ZERO;
-        brutto_basis = finanzDatenBerechnet.bruttoEinkommenDurch;
-        brutto_plus = finanzDatenBerechnet.bruttoEinkommenPlusDurch;
+        let steuer_sozab_basis = 0;
+        let steuer_sozab_plus = 0;
+        brutto_basis = finanzDatenBerechnet.bruttoEinkommenDurch.toNumber();
+        brutto_plus = finanzDatenBerechnet.bruttoEinkommenPlusDurch.toNumber();
         if (persoenlicheDaten.etVorGeburt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
           netto_basis = brutto_basis;
           netto_plus = brutto_plus;
         } else {
-          if (greater(brutto_basis, BIG_ZERO)) {
+          if (brutto_basis > 0) {
             steuer_sozab_basis = this.bruttoNettoRechner.abzuege(
               brutto_basis,
               lohnSteuerJahr,
@@ -256,7 +253,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
               persoenlicheDaten.etVorGeburt,
             );
           }
-          if (greater(brutto_plus, BIG_ZERO)) {
+          if (brutto_plus > 0) {
             steuer_sozab_plus = this.bruttoNettoRechner.abzuege(
               brutto_plus,
               lohnSteuerJahr,
@@ -271,46 +268,44 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           ek_vor,
           mischEkZwischenErgebnis,
         );
-        if (greater(brutto_basis, BIG_ZERO)) {
+        if (brutto_basis > 0) {
           switch (persoenlicheDaten.etVorGeburt) {
             case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_MINI:
               ek_vor = Math.max(aufDenCentRunden(ek_vor - PAUSCH), 0);
-              summe_brutto_basis = BIG_ZERO;
+              summe_brutto_basis = 0;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
                 const bruttoInLebensmonatenMitBasis =
-                  brutto_LM_Basis[i] ?? BIG_ZERO;
+                  brutto_LM_Basis[i]?.toNumber() ?? 0;
 
                 if (
-                  !isEqual(bruttoInLebensmonatenMitBasis, BIG_ZERO) &&
+                  bruttoInLebensmonatenMitBasis !== 0 &&
                   planungsergebnis.planung[i - 1] ===
                     ElternGeldArt.BASIS_ELTERNGELD
                 ) {
-                  summe_brutto_basis = summe_brutto_basis.add(
-                    round(
-                      fMax(bruttoInLebensmonatenMitBasis.sub(pausch), BIG_ZERO),
-                      2,
-                    ),
-                  );
+                  summe_brutto_basis =
+                    summe_brutto_basis +
+                    aufDenCentRunden(
+                      Math.max(bruttoInLebensmonatenMitBasis - pausch, 0),
+                    );
                 }
               }
               if (lm_mit_et_basis > 0) {
-                brutto_basis = round(
-                  summe_brutto_basis.div(Big(lm_mit_et_basis)),
-                  2,
+                brutto_basis = aufDenCentRunden(
+                  summe_brutto_basis / lm_mit_et_basis,
                 );
               }
               break;
             default:
           }
-          netto_basis = fMax(brutto_basis.sub(steuer_sozab_basis), BIG_ZERO);
-          const ek_nach_basis: Big = netto_basis;
+          netto_basis = Math.max(brutto_basis - steuer_sozab_basis, 0);
+          const ek_nach_basis = netto_basis;
           elterngeld_erw_basis = aufDenCentRunden(
-            this.elterngeld_et(ek_vor, ek_nach_basis),
+            this.elterngeld_et(ek_vor, Big(ek_nach_basis)),
           );
         }
-        if (greater(brutto_plus, BIG_ZERO)) {
+        if (brutto_plus > 0) {
           let status: ErwerbsArt;
           if (isMischeinkommen) {
             if (mischEkZwischenErgebnis === null) {
@@ -331,40 +326,38 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
             case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
             case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
               ek_vor = Math.max(ek_vor - PAUSCH, 0);
-              summe_brutto_plus = BIG_ZERO;
+              summe_brutto_plus = 0;
               for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
                 const bruttoInLebensmonatenMitPlus =
-                  brutto_LM_Plus[i] ?? BIG_ZERO;
+                  brutto_LM_Plus[i]?.toNumber() ?? 0;
 
                 if (
-                  !isEqual(bruttoInLebensmonatenMitPlus, BIG_ZERO) &&
+                  bruttoInLebensmonatenMitPlus !== 0 &&
                   (planungsergebnis.planung[i - 1] ===
                     ElternGeldArt.ELTERNGELD_PLUS ||
                     planungsergebnis.planung[i - 1] ===
                       ElternGeldArt.PARTNERSCHAFTS_BONUS)
                 ) {
-                  summe_brutto_plus = summe_brutto_plus.add(
-                    round(
-                      fMax(bruttoInLebensmonatenMitPlus.sub(pausch), BIG_ZERO),
-                      2,
-                    ),
-                  );
+                  summe_brutto_plus =
+                    summe_brutto_plus +
+                    aufDenCentRunden(
+                      Math.max(bruttoInLebensmonatenMitPlus - pausch, 0),
+                    );
                 }
               }
               if (lm_mit_et_plus > 0) {
-                brutto_plus = round(
-                  summe_brutto_plus.div(Big(lm_mit_et_plus)),
-                  2,
+                brutto_plus = aufDenCentRunden(
+                  summe_brutto_plus / lm_mit_et_plus,
                 );
               }
               break;
             default:
           }
         }
-        netto_plus = fMax(brutto_plus.sub(steuer_sozab_plus), BIG_ZERO);
+        netto_plus = Math.max(brutto_plus - steuer_sozab_plus, 0);
         ek_nach_plus = netto_plus;
-        elterngeld_erw_plus = aufDenCentAbrunden(
-          this.elterngeldplus_et(ek_vor, ek_nach_plus),
+        elterngeld_erw_plus = aufDenCentRunden(
+          this.elterngeldplus_et(ek_vor, Big(ek_nach_plus)),
         );
         elterngeld_keine_et_plus = z.elternGeld;
         if (isMischeinkommen) {
@@ -381,28 +374,28 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       }
     } else {
       // Sollten keine Perioden angegeben sein, so berechne nichts
-      netto_plus = BIG_ZERO;
+      netto_plus = 0;
       elterngeld_keine_et_plus = 0;
       elterngeld_et_plus = 0;
     }
     return {
-      elternGeldErwBasis: Big(aufDenCentRunden(elterngeld_erw_basis)),
-      bruttoBasis: round(brutto_basis, 2),
-      nettoBasis: round(netto_basis, 2),
-      bruttoPlus: round(brutto_plus, 2),
-      nettoPlus: round(netto_plus, 2),
-      elternGeldEtPlus: Big(aufDenCentRunden(elterngeld_et_plus)),
-      elternGeldKeineEtPlus: Big(aufDenCentRunden(elterngeld_keine_et_plus)),
+      elternGeldErwBasis: aufDenCentRunden(elterngeld_erw_basis),
+      bruttoBasis: aufDenCentRunden(brutto_basis),
+      nettoBasis: aufDenCentRunden(netto_basis),
+      bruttoPlus: aufDenCentRunden(brutto_plus),
+      nettoPlus: aufDenCentRunden(netto_plus),
+      elternGeldEtPlus: aufDenCentRunden(elterngeld_et_plus),
+      elternGeldKeineEtPlus: aufDenCentRunden(elterngeld_keine_et_plus),
       elternGeldAusgabe: [],
-      elternGeldBasis: BIG_ZERO,
-      ersatzRate: BIG_ZERO,
+      elternGeldBasis: 0,
+      ersatzRate: 0,
       etVorGeburt: false,
-      geschwisterBonus: BIG_ZERO,
+      geschwisterBonus: 0,
       geschwisterBonusDeadLine: null,
       hasPartnerBonusError: false,
-      mehrlingsZulage: BIG_ZERO,
+      mehrlingsZulage: 0,
       message: "",
-      nettoNachGeburtDurch: BIG_ZERO,
+      nettoNachGeburtDurch: 0,
     };
   }
 
@@ -591,9 +584,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       }
       basiselterngeld = misch.elterngeldbasis;
     }
-    const basiselterngeld_erw = ergebnis.elternGeldErwBasis.toNumber();
+    const basiselterngeld_erw = ergebnis.elternGeldErwBasis;
     const elterngeldplus = aufDenCentRunden(basiselterngeld / 2);
-    const elterngeldplus_erw = ergebnis.elternGeldEtPlus.toNumber();
+    const elterngeldplus_erw = ergebnis.elternGeldEtPlus;
     const betrag_mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
     const min_geschwisterbonus = MIN_GESCHWISTERBONUS;
     const rate_bonus = RATE_BONUS;
@@ -606,9 +599,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         lebensMonat: i,
         elterngeldArt:
           planungsergebnis.planung[i - 1] ?? ElternGeldArt.KEIN_BEZUG,
-        elternGeld: BIG_ZERO,
-        geschwisterBonus: BIG_ZERO,
-        mehrlingsZulage: BIG_ZERO,
+        elternGeld: 0,
+        geschwisterBonus: 0,
+        mehrlingsZulage: 0,
         mutterschaftsLeistungMonat: false,
       };
       if (
@@ -671,22 +664,22 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           elterngeld =
             elterngeldplus_erw + geschwisterbonus + mehrlingszuschlag;
         }
-        ausgabe.elternGeld = Big(aufDenCentRunden(elterngeld));
-        ausgabe.mehrlingsZulage = Big(aufDenCentRunden(mehrlingszuschlag));
-        ausgabe.geschwisterBonus = Big(aufDenCentRunden(geschwisterbonus));
+        ausgabe.elternGeld = aufDenCentRunden(elterngeld);
+        ausgabe.mehrlingsZulage = aufDenCentRunden(mehrlingszuschlag);
+        ausgabe.geschwisterBonus = aufDenCentRunden(geschwisterbonus);
       }
       ausgabeLebensmonate.push(ausgabe);
     }
 
     if (ergebnis.ersatzRate == null) {
-      ergebnis.ersatzRate = Big(aufDenCentRunden(z.ersatzRate));
+      ergebnis.ersatzRate = aufDenCentRunden(z.ersatzRate);
     }
-    ergebnis.elternGeldBasis = Big(aufDenCentRunden(basiselterngeld));
-    ergebnis.elternGeldErwBasis = Big(aufDenCentRunden(basiselterngeld_erw));
-    ergebnis.elternGeldKeineEtPlus = Big(aufDenCentRunden(elterngeldplus));
-    ergebnis.elternGeldEtPlus = Big(aufDenCentRunden(elterngeldplus_erw));
-    ergebnis.mehrlingsZulage = Big(aufDenCentRunden(z.mehrlingsZulage));
-    ergebnis.geschwisterBonus = Big(aufDenCentRunden(z.geschwisterBonus));
+    ergebnis.elternGeldBasis = aufDenCentRunden(basiselterngeld);
+    ergebnis.elternGeldErwBasis = aufDenCentRunden(basiselterngeld_erw);
+    ergebnis.elternGeldKeineEtPlus = aufDenCentRunden(elterngeldplus);
+    ergebnis.elternGeldEtPlus = aufDenCentRunden(elterngeldplus_erw);
+    ergebnis.mehrlingsZulage = aufDenCentRunden(z.mehrlingsZulage);
+    ergebnis.geschwisterBonus = aufDenCentRunden(z.geschwisterBonus);
     if (
       !persoenlicheDaten.etVorGeburt ||
       persoenlicheDaten.etVorGeburt === ErwerbsArt.NEIN
@@ -719,13 +712,13 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       // TODO TW message entfernen
       ergebnis.message =
         "Während des Bezugs des Partnerschaftsbonus muss Erwerbstätigkeit vorliegen.";
-      ergebnis.bruttoBasis = BIG_ZERO;
-      ergebnis.nettoBasis = BIG_ZERO;
-      ergebnis.elternGeldErwBasis = BIG_ZERO;
-      ergebnis.bruttoPlus = BIG_ZERO;
-      ergebnis.nettoPlus = BIG_ZERO;
-      ergebnis.elternGeldEtPlus = BIG_ZERO;
-      ergebnis.elternGeldKeineEtPlus = BIG_ZERO;
+      ergebnis.bruttoBasis = 0;
+      ergebnis.nettoBasis = 0;
+      ergebnis.elternGeldErwBasis = 0;
+      ergebnis.bruttoPlus = 0;
+      ergebnis.nettoPlus = 0;
+      ergebnis.elternGeldEtPlus = 0;
+      ergebnis.elternGeldKeineEtPlus = 0;
     }
     return ergebnis;
   }

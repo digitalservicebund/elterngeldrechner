@@ -1,4 +1,3 @@
-import Big from "big.js";
 import {
   type Eingangsparameter,
   berechneSteuerUndSozialabgaben,
@@ -62,16 +61,16 @@ export class EgrSteuerRechner {
   abgabenSteuern(
     finanzDaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,
-    bruttoProMonat: Big,
+    bruttoProMonat: number,
     lohnSteuerJahr: Lohnsteuerjahr,
-  ): { bk: Big; lstlzz: Big; solzlzz: Big } {
+  ): { bk: number; lstlzz: number; solzlzz: number } {
     if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
       finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
     }
 
-    let einkommenInCent: Big = bruttoProMonat.mul(Big(100));
+    let einkommenInCent = bruttoProMonat * 100;
     if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
-      einkommenInCent = einkommenInCent.add(PAUSCH * 100);
+      einkommenInCent = einkommenInCent + PAUSCH * 100;
     }
 
     const eingangsparameter: Eingangsparameter = {
@@ -91,7 +90,7 @@ export class EgrSteuerRechner {
       PVS: 0,
       PVZ: 0,
       R: finanzDaten.istKirchensteuerpflichtig ? 1 : 0,
-      RE4: einkommenInCent.toNumber(),
+      RE4: einkommenInCent,
       STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
       VBEZ: 0,
       ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
@@ -103,9 +102,9 @@ export class EgrSteuerRechner {
     );
 
     return {
-      bk: Big(BK / 100),
-      lstlzz: Big(LSTLZZ / 100),
-      solzlzz: Big(SOLZLZZ / 100),
+      bk: BK / 100,
+      lstlzz: LSTLZZ / 100,
+      solzlzz: SOLZLZZ / 100,
     };
   }
 }

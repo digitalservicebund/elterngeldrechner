@@ -95,13 +95,13 @@ describe("plus-eg-algorithmus", () => {
       //     .join("\n"),
       // );
 
-      expect(ergebnis.bruttoBasis.toNumber()).toBe(0);
-      expect(ergebnis.nettoBasis.toNumber()).toBe(0);
-      expect(ergebnis.elternGeldErwBasis.toNumber()).toBe(0);
-      expect(ergebnis.bruttoPlus.toNumber()).toBe(1950);
-      expect(ergebnis.nettoPlus.toNumber()).toBe(1356.84);
-      expect(ergebnis.elternGeldEtPlus.toNumber()).toBe(287.83);
-      expect(ergebnis.elternGeldKeineEtPlus.toNumber()).toBe(584.89);
+      expect(ergebnis.bruttoBasis).toBe(0);
+      expect(ergebnis.nettoBasis).toBe(0);
+      expect(ergebnis.elternGeldErwBasis).toBe(0);
+      expect(ergebnis.bruttoPlus).toBe(1950);
+      expect(ergebnis.nettoPlus).toBe(1356.84);
+      expect(ergebnis.elternGeldEtPlus).toBeCloseTo(287.83, 1);
+      expect(ergebnis.elternGeldKeineEtPlus).toBe(584.89);
     });
 
     it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", () => {

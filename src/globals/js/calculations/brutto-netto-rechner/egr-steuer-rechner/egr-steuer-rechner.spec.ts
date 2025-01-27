@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
 import { berechneSteuerUndSozialabgaben } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
@@ -61,7 +60,7 @@ describe("erg-steuer-rechner", () => {
           splittingFaktor: 1,
         },
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        new Big(1),
+        1,
         2022,
       );
 
@@ -81,7 +80,7 @@ describe("erg-steuer-rechner", () => {
           splittingFaktor: 0,
         },
         ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
-        new Big(1),
+        1,
         2022,
       );
 
@@ -103,7 +102,7 @@ describe("erg-steuer-rechner", () => {
           kinderFreiBetrag: KinderFreiBetrag.ZKF1,
         },
         ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
-        new Big(1),
+        1,
         2022,
       );
 
@@ -124,7 +123,7 @@ describe("erg-steuer-rechner", () => {
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       },
       ErwerbsArt.JA_NICHT_SELBST_MINI,
-      new Big(1),
+      1,
       2022,
     );
 

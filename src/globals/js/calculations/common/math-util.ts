@@ -2,7 +2,6 @@ import Big from "big.js";
 
 export const BIG_ZERO: Big = Big(0);
 export const BIG_ONE: Big = Big(1);
-export const BIG_100: Big = Big(100);
 
 export function round(value: Big, scale: number = 2): Big {
   return value.round(scale, Big.roundHalfUp);
@@ -37,17 +36,6 @@ export function floor(b: Big): Big {
  */
 export function fMin(a: Big, b: Big): Big {
   return a.lte(b) ? a : b;
-}
-
-/**
- * Analog der Funktion Max() aus dem VB-Code. Ermittelt das Maximum der Argumente.
- *
- * @param a beliebiges {@link Big}
- * @param b beliebiges {@link Big}
- * @return das größere {@link Big}
- */
-export function fMax(a: Big, b: Big): Big {
-  return a.gte(b) ? a : b;
 }
 
 /**

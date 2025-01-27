@@ -141,9 +141,8 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
         .div(ANZAHL_MONATE_PRO_JAHR),
       2,
     ).toNumber();
-    const brutto_steuer: Big = round(
-      summe_EK_SS.add(summe_EK_NS).div(ANZAHL_MONATE_PRO_JAHR),
-      2,
+    const brutto_steuer = aufDenCentRunden(
+      summe_EK_SS.add(summe_EK_NS).div(ANZAHL_MONATE_PRO_JAHR).toNumber(),
     );
     const brutto_sv: Big = round(
       summe_EK_SS.add(summe_EK_NS_SV).div(ANZAHL_MONATE_PRO_JAHR),
@@ -268,9 +267,12 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
           brutto_sv,
         )
         .toNumber();
-      const summe_steuer_abzug = new BruttoNettoRechner()
-        .summeSteuer(finanzDaten, status, brutto_steuer, lohnSteuerJahr)
-        .toNumber();
+      const summe_steuer_abzug = new BruttoNettoRechner().summeSteuer(
+        finanzDaten,
+        status,
+        brutto_steuer,
+        lohnSteuerJahr,
+      );
       netto = brutto_elg - summe_steuer_abzug - summe_sozab;
       steuern = summe_steuer_abzug;
       abgaben = summe_sozab;

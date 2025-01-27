@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { ElternGeldArt } from "./eltern-geld-art";
 
 /**
@@ -6,19 +5,19 @@ import { ElternGeldArt } from "./eltern-geld-art";
  */
 export interface ElternGeldPlusErgebnis {
   elternGeldAusgabe: ElternGeldAusgabe[];
-  ersatzRate: Big;
+  ersatzRate: number;
   geschwisterBonusDeadLine: Date | null;
-  nettoNachGeburtDurch: Big;
-  geschwisterBonus: Big;
-  mehrlingsZulage: Big;
-  bruttoBasis: Big;
-  nettoBasis: Big;
-  elternGeldBasis: Big;
-  elternGeldErwBasis: Big;
-  bruttoPlus: Big;
-  nettoPlus: Big;
-  elternGeldEtPlus: Big;
-  elternGeldKeineEtPlus: Big;
+  nettoNachGeburtDurch: number;
+  geschwisterBonus: number;
+  mehrlingsZulage: number;
+  bruttoBasis: number;
+  nettoBasis: number;
+  elternGeldBasis: number;
+  elternGeldErwBasis: number;
+  bruttoPlus: number;
+  nettoPlus: number;
+  elternGeldEtPlus: number;
+  elternGeldKeineEtPlus: number;
   message: string;
   hasPartnerBonusError: boolean;
   etVorGeburt: boolean;
@@ -26,9 +25,9 @@ export interface ElternGeldPlusErgebnis {
 
 export interface ElternGeldAusgabe {
   lebensMonat: number;
-  elternGeld: Big;
-  mehrlingsZulage: Big;
-  geschwisterBonus: Big;
+  elternGeld: number;
+  mehrlingsZulage: number;
+  geschwisterBonus: number;
   elterngeldArt: ElternGeldArt;
   mutterschaftsLeistungMonat: boolean;
 }

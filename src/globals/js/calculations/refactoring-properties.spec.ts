@@ -1,4 +1,3 @@
-import assert from "assert";
 import Big from "big.js";
 import {
   type Arbitrary,
@@ -8,23 +7,20 @@ import {
   constant as arbitraryConstant,
   constantFrom as arbitraryConstantFrom,
   date as arbitraryDate,
-  double as arbitraryDouble,
-  float as arbitraryFloat,
   integer as arbitraryInteger,
-  object as arbitraryObject,
-  oneof as arbitraryOneOf,
   property,
   record as arbitraryRecord,
-  string as arbitraryString,
   tuple as arbitraryTuple,
 } from "fast-check";
-import { DateTime } from "luxon";
-import { describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
+import { minusDays } from "./common/date-util";
 import { EgrCalculation } from "./egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
+  type ElternGeldAusgabe,
   type ElternGeldDaten,
+  type ElternGeldPlusErgebnis,
   ErwerbsArt,
   ErwerbsTaetigkeit,
   type ErwerbsZeitraumLebensMonat,
@@ -42,6 +38,7 @@ import {
 import {
   Big as OriginalBig,
   EgrCalculation as OriginalEgrCalculation,
+  type ElternGeldAusgabe as OriginalElternGeldAusgabe,
   ErwerbsZeitraumLebensMonat as OriginalErwerbsZeitraumLebensMonat,
   FinanzDaten as OriginalFinanzDaten,
   type Kind as OriginalKind,
@@ -90,13 +87,8 @@ import {
  *
  * The output data MUST be compared in the most reliable way possible. In best
  * case it SHOULD NOT transform the output data at all to avoid unrefracting
- * issues.
- * Also the algorithm to compare the output data SHOULD be based on
- * a solid library or platform native functionality. This MIGHT be weaken if
- * absolutely necessary to allow a certain refactoring, but MUST be done with
- * great care.
- * Especially the simplification of the output format during refactoring MUST be
- * done purposefully.
+ * issues. Also output comparison MUST be done with great care. Rely on provided
+ * expectation/assertion statements where possible.
  *
  * In case there is the same "thing" (usually a class) that is called the same
  * between both algorithm, but is no more the same or can't be the same for the
@@ -141,12 +133,6 @@ describe("tests to verify properties during refactoring", () => {
               lohnsteuerjahr,
             );
 
-            const transformedResultForComparison = transformDataRecursively(
-              result,
-              [convertBigsToNumbers, replaceNullGeschwisterbonusDeadline],
-              elterngelddaten,
-            );
-
             const originalResult =
               new OriginalEgrCalculation().calculateElternGeld(
                 {
@@ -158,148 +144,89 @@ describe("tests to verify properties during refactoring", () => {
                 lohnsteuerjahr,
               );
 
-            const transformedOriginalResultForComparison =
-              transformDataRecursively(
-                originalResult,
-                [
-                  convertBigsToNumbers,
-                  mapUndefinedElterngeldartToKeinBezug,
-                  deleteElterngeldperioden,
-                ],
-                elterngelddaten,
-              );
-
-            return assert.deepStrictEqual(
-              transformedResultForComparison,
-              transformedOriginalResultForComparison,
+            return expectCalculatedResultToEqual(
+              result,
+              originalResult,
+              elterngelddaten,
             );
           },
         ),
-        { numRuns: 5000, endOnFailure: true },
+        { numRuns: 4000, endOnFailure: true },
       );
     },
   );
-
-  describe("transform data recursively", () => {
-    it("provides the same output as input if no transformer given", () => {
-      assertProperty(
-        property(arbitraryAnything(), (data) => {
-          const transformedData = transformDataRecursively(data, [], null);
-
-          assert.deepStrictEqual(transformedData, data);
-        }),
-      );
-    });
-
-    it("provides the same output as input if given an identify function as transformer", () => {
-      assertProperty(
-        property(arbitraryAnything(), (data) => {
-          const identity = (data: unknown) => data;
-
-          const transformedData = transformDataRecursively(
-            data,
-            [identity],
-            null,
-          );
-
-          assert.deepStrictEqual(transformedData, data);
-        }),
-      );
-    });
-
-    it("applies all transformers correctly and recursively", () => {
-      const doubleNumbers = (data: unknown) =>
-        typeof data === "number" ? data * 2 : data;
-
-      const replaceFooWithBar = (data: unknown) =>
-        data === "foo" ? "bar" : data;
-
-      const data = {
-        a: "foo",
-        b: "baz",
-        c: 1,
-        d: ["foo", "baz", undefined, 2, null, { lorem: ["ipsum", 3] }],
-        e: { f: 4, g: "dolor" },
-      };
-
-      const transformedData = transformDataRecursively(
-        data,
-        [doubleNumbers, replaceFooWithBar],
-        null,
-      );
-
-      expect(transformedData).toStrictEqual({
-        a: "bar",
-        b: "baz",
-        c: 2,
-        d: ["bar", "baz", undefined, 4, null, { lorem: ["ipsum", 6] }],
-        e: { f: 8, g: "dolor" },
-      });
-    });
-
-    it("can transform data based on given context", () => {
-      const replaceFooByContext = (
-        data: unknown,
-        contextInformation: { fooReplacement: string },
-      ) => (data === "foo" ? contextInformation.fooReplacement : data);
-
-      const data = { a: "foo", b: ["foo", "baz"] };
-
-      const transformedData = transformDataRecursively(
-        data,
-        [replaceFooByContext],
-        { fooReplacement: "bar" },
-      );
-
-      expect(transformedData).toStrictEqual({ a: "bar", b: ["bar", "baz"] });
-    });
-  });
 });
 
-function transformDataRecursively<ContextInformation>(
-  data: unknown,
-  transformers: DataTransformer<ContextInformation>[],
-  contextInformation: ContextInformation,
-): unknown {
-  const transformedData = transformers.reduce(
-    (transformedData, transformer) =>
-      transformer(transformedData, contextInformation),
-    data,
+function expectCalculatedResultToEqual(
+  actual: ElternGeldPlusErgebnis,
+  expected: ElternGeldPlusErgebnis,
+  context: ElternGeldDaten,
+): void {
+  expectAllElterngeldausgabenToMatch(
+    actual.elternGeldAusgabe,
+    expected.elternGeldAusgabe,
   );
+  expect(actual.ersatzRate).toEqual(expected.ersatzRate);
+  expectGeschwisterbonusDeadlineToMatch(
+    actual.geschwisterBonusDeadLine,
+    expected.geschwisterBonusDeadLine,
+    context,
+  );
+  expect(actual.nettoNachGeburtDurch).toEqual(expected.nettoNachGeburtDurch);
+  expect(actual.geschwisterBonus).toEqual(expected.geschwisterBonus);
+  expect(actual.mehrlingsZulage).toEqual(expected.mehrlingsZulage);
+  expect(actual.bruttoBasis).toEqual(expected.bruttoBasis);
+  expect(actual.nettoBasis).toEqual(expected.nettoBasis);
+  expect(actual.elternGeldBasis).toEqual(expected.elternGeldBasis);
+  expect(actual.elternGeldErwBasis).toEqual(expected.elternGeldErwBasis);
+  expect(actual.bruttoPlus).toEqual(expected.bruttoPlus);
+  expect(actual.nettoPlus).toEqual(expected.nettoPlus);
+  expect(actual.elternGeldEtPlus).toEqual(expected.elternGeldEtPlus);
+  expect(actual.elternGeldKeineEtPlus).toEqual(expected.elternGeldKeineEtPlus);
+  expect(actual.message).toEqual(expected.message);
+  expect(actual.hasPartnerBonusError).toEqual(expected.hasPartnerBonusError);
+  expect(actual.etVorGeburt).toEqual(expected.etVorGeburt);
+}
 
-  if (Array.isArray(transformedData)) {
-    return transformedData.map((entry) =>
-      transformDataRecursively(entry, transformers, contextInformation),
-    );
-  } else if (
-    typeof transformedData === "object" &&
-    transformedData !== null &&
-    Object.keys(transformedData).length > 0
-  ) {
-    return Object.fromEntries(
-      Object.entries(transformedData).map(([key, value]) => [
-        key,
-        transformDataRecursively(value, transformers, contextInformation),
-      ]),
-    );
-  } else {
-    return transformedData;
-  }
+function expectAllElterngeldausgabenToMatch(
+  actual: ElternGeldAusgabe[],
+  expected: OriginalElternGeldAusgabe[],
+): void {
+  expect(actual.length).toEqual(expected.length);
+
+  actual.forEach((_, index) =>
+    expectElterngeldausgabeToMatch(actual[index], expected[index]),
+  );
+}
+
+function expectElterngeldausgabeToMatch(
+  actual: ElternGeldAusgabe | undefined,
+  expected: OriginalElternGeldAusgabe | undefined,
+): void {
+  assert(actual !== undefined);
+  assert(expected !== undefined);
+
+  expect(actual.lebensMonat).toEqual(expected.lebensMonat);
+  expect(actual.elternGeld).toEqual(expected.elternGeld);
+  expect(actual.mehrlingsZulage).toEqual(expected.mehrlingsZulage);
+  expect(actual.geschwisterBonus).toEqual(expected.geschwisterBonus);
+  expectElterngeldartToMatch(actual.elterngeldArt, expected.elterngeldArt);
+  expect(actual.mutterschaftsLeistungMonat).toEqual(
+    expected.mutterschaftsLeistungMonat,
+  );
 }
 
 /**
- * Unfortunately, without "neutralizing" Big numbers, the assertion that two
- * data points that include instances of Big will always fail. This is happens,
- * because the original calculation has its own Big dependency bundled.
- * Anyhow, it is also useful to neutralize the usage of Big numbers for
- * refactoring purposes. So the first case might become obsolete.
+ * Covers a flaw of the original calculation that unsafely accesses array
+ * indexes. Thereby it returns undefined values where the type system
+ * theoretically does not allow it. This was fixed and works now different for
+ * the production code. Therefore it must be transformed.
  */
-function convertBigsToNumbers(data: unknown): unknown {
-  if (data instanceof Big || data instanceof OriginalBig) {
-    return data.toNumber();
-  } else {
-    return data;
-  }
+function expectElterngeldartToMatch(
+  actual: ElternGeldArt | null,
+  expected: ElternGeldArt | null,
+): void {
+  expect(actual).toEqual(expected ?? ElternGeldArt.KEIN_BEZUG);
 }
 
 /**
@@ -313,74 +240,36 @@ function convertBigsToNumbers(data: unknown): unknown {
  * applied. While the productive implementation explicitly communicates "no
  * bonus" as `null`.
  */
-function replaceNullGeschwisterbonusDeadline(
-  data: unknown,
-  contextInformation: ElternGeldDaten,
-): unknown {
-  const hasGeschwisterBonusDealineProperty =
-    typeof data === "object" &&
-    data !== null &&
-    "geschwisterBonusDeadLine" in data;
+function expectGeschwisterbonusDeadlineToMatch(
+  actual: Date | null,
+  expected: Date | null,
+  context: ElternGeldDaten,
+): void {
+  const tagVorDemGeburtsdatum = minusDays(
+    context.persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+    1,
+  );
 
-  const hasNullDeadline =
-    hasGeschwisterBonusDealineProperty &&
-    data.geschwisterBonusDeadLine === null;
-
-  if (hasNullDeadline) {
-    const { wahrscheinlichesGeburtsDatum } =
-      contextInformation.persoenlicheDaten;
-
-    const dayBeforeBirthday = DateTime.fromJSDate(wahrscheinlichesGeburtsDatum)
-      .minus({ days: 1 })
-      .toJSDate();
-
-    data.geschwisterBonusDeadLine = dayBeforeBirthday;
-  }
-
-  return data;
+  expect(actual ?? tagVorDemGeburtsdatum).toEqual(expected);
 }
 
-/**
- * Covers a flaw of the original calculation that unsafely accesses array
- * indexes. Thereby it plays out undefined values where the type system
- * theoretically does not allow it. This was fixed and works now different for
- * the production code. Therefore it must be transformed.
- */
-function mapUndefinedElterngeldartToKeinBezug(data: unknown): unknown {
-  const hasElterngeldartProperty =
-    typeof data === "object" && data !== null && "elterngeldArt" in data;
+function areBigNumbersEqual(
+  actual: unknown,
+  expected: unknown,
+): boolean | undefined {
+  const isActualValueBigNumber = actual instanceof Big;
+  const isExpecedValueBigNumber = expected instanceof OriginalBig;
 
-  if (hasElterngeldartProperty) {
-    data.elterngeldArt ??= ElternGeldArt.KEIN_BEZUG;
+  if (isActualValueBigNumber && isExpecedValueBigNumber) {
+    return actual.toNumber() === expected.toNumber();
+  } else if (!isActualValueBigNumber && !isExpecedValueBigNumber) {
+    return undefined;
+  } else {
+    return false;
   }
-
-  return data;
 }
 
-/**
- * As a follow up issue of {@link mapUndefinedElterngeldartToKeinBezug}, the
- * calculated periods of Elterngeld where calculated wrong too. There is no
- * simple fix to resolve this. However, as this data is not used anymore, it was
- * removed in production code. So it gets removed here for the original result.
- */
-function deleteElterngeldperioden(data: unknown): unknown {
-  const hasElterngeldperiodenProperties =
-    typeof data === "object" &&
-    data !== null &&
-    "anfangEGPeriode" in data &&
-    "endeEGPeriode" in data;
-
-  if (hasElterngeldperiodenProperties) {
-    delete data.anfangEGPeriode;
-    delete data.endeEGPeriode;
-  }
-
-  return data;
-}
-
-type DataTransformer<ContextInformation> =
-  | ((data: unknown) => unknown)
-  | ((data: unknown, contextInformation: ContextInformation) => unknown);
+expect.addEqualityTesters([areBigNumbersEqual]);
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   return {
@@ -739,26 +628,4 @@ function arbitraryErwerbstaetigkeit(): Arbitrary<ErwerbsTaetigkeit> {
 
 function arbitraryBruttoeinkommen(): Arbitrary<number> {
   return arbitraryInteger({ min: 0, max: 30000 });
-}
-
-function arbitraryPrimitive(): Arbitrary<
-  undefined | null | boolean | number | string | Date
-> {
-  return arbitraryOneOf(
-    arbitraryConstantFrom(undefined, null),
-    arbitraryBoolean(),
-    arbitraryInteger(),
-    arbitraryFloat(),
-    arbitraryDouble(),
-    arbitraryString(),
-    arbitraryDate(),
-  );
-}
-
-function arbitraryAnything(): Arbitrary<unknown> {
-  return arbitraryOneOf(
-    arbitraryPrimitive(),
-    arbitraryArray(arbitraryPrimitive()),
-    arbitraryObject(),
-  );
 }

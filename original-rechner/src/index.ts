@@ -2,6 +2,7 @@ export { EgrCalculation } from "./egr-calculation";
 
 export {
   Einkommen,
+  type ElternGeldAusgabe,
   ElternGeldArt,
   ErwerbsArt,
   ErwerbsTaetigkeit,

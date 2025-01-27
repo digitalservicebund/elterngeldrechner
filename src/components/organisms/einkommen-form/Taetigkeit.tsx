@@ -10,7 +10,7 @@ import {
   YesNoRadio,
 } from "@/components/molecules";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   Zeitraum,
   ZeitraumData,
@@ -186,12 +186,8 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
 
       {!selbststaendig && (
         <YesNoRadio
-          legend={
-            <div className="flex items-center justify-between">
-              <span>War diese Tätigkeit ein Mini-Job?</span>
-              <InfoDialog info={infoTexts.minijobsMaxZahl} />
-            </div>
-          }
+          legend="War diese Tätigkeit ein Mini-Job?"
+          info={infoTexts.minijobsMaxZahl}
           name={isMinijob}
           register={register}
           registerOptions={{

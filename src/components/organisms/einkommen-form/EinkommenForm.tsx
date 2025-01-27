@@ -2,7 +2,7 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
 import { ButtonGroup, Split, YesNoRadio } from "@/components/molecules";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
@@ -42,15 +42,8 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
       <form onSubmit={methods.handleSubmit(onSubmit)} noValidate>
         <YesNoRadio
           className="mb-32"
-          legend={
-            <div className="flex items-center justify-between">
-              <span>
-                Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen
-                von mehr als {amountLimitEinkommen.toLocaleString()} Euro?
-              </span>
-              <InfoDialog info={infoTexts.einkommenLimitUeberschritten} />
-            </div>
-          }
+          legend={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${amountLimitEinkommen.toLocaleString()} Euro?`}
+          info={infoTexts.einkommenLimitUeberschritten}
           register={methods.register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="limitEinkommenUeberschritten"

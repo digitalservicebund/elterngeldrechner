@@ -6,7 +6,7 @@ import {
   CustomRadioGroupOption,
   YesNoRadio,
 } from "@/components/molecules";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { infoTexts } from "@/components/molecules/info-dialog";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -126,12 +126,8 @@ function ErwerbstaetigkeitFormElternteil({
                   />
 
                   <CustomRadioGroup
-                    legend={
-                      <div className="flex items-center justify-between">
-                        <span>Hatten Sie Einkommen aus einem Mini-Job?</span>
-                        <InfoDialog info={infoTexts.minijobsMaxZahl} />
-                      </div>
-                    }
+                    legend="Hatten Sie Einkommen aus einem Mini-Job?"
+                    info={infoTexts.minijobsMaxZahl}
                     register={register}
                     registerOptions={{
                       required: "Dieses Feld ist erforderlich",

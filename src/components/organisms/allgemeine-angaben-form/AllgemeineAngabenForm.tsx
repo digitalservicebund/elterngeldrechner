@@ -8,7 +8,7 @@ import {
   Split,
   YesNoRadio,
 } from "@/components/molecules";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
@@ -112,12 +112,8 @@ export function AllgemeineAngabenForm({
           </h3>
 
           <YesNoRadio
-            legend={
-              <div className="flex items-center justify-between">
-                <span>Sind Sie alleinerziehend?</span>
-                <InfoDialog info={infoTexts.alleinerziehend} />
-              </div>
-            }
+            legend="Sind Sie alleinerziehend?"
+            info={infoTexts.alleinerziehend}
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="alleinerziehend"
@@ -134,12 +130,8 @@ export function AllgemeineAngabenForm({
           </h3>
 
           <YesNoRadio
-            legend={
-              <div className="flex items-center justify-between">
-                <span>Beziehen Sie Mutterschaftsleistungen?</span>
-                <InfoDialog info={infoTexts.mutterschaftsleistungen} />
-              </div>
-            }
+            legend="Beziehen Sie Mutterschaftsleistungen?"
+            info={infoTexts.mutterschaftsleistungen}
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="mutterschaftssleistungen"

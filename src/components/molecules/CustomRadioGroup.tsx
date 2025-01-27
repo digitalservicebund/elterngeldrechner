@@ -10,6 +10,7 @@ import {
   get,
 } from "react-hook-form";
 import { Description } from "@/components/atoms";
+import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 type RadioGroupValue = string | number;
 
@@ -26,6 +27,7 @@ export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
   readonly legend: string | ReactNode;
+  readonly info?: Info;
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
@@ -39,6 +41,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   registerOptions,
   name,
   legend,
+  info,
   options,
   errors,
   required,
@@ -55,51 +58,58 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   const vertical = !horizontal;
 
   return (
-    <fieldset
-      role="radiogroup"
-      className={classNames(
-        "flex gap-16",
-        {
-          "flex-col": vertical,
-          "justify-around": horizontal,
-        },
-        className,
-      )}
-      aria-describedby={hasError ? errorIdentifier : undefined}
-    >
-      <legend className="mb-16 w-full py-4">{legend}</legend>
+    <div className="relative">
+      <fieldset
+        role="radiogroup"
+        className={classNames(
+          "flex gap-16",
+          {
+            "flex-col": vertical,
+            "justify-around": horizontal,
+          },
+          className,
+        )}
+        aria-describedby={hasError ? errorIdentifier : undefined}
+      >
+        <legend className="mb-16 w-full py-4 pr-40">{legend}</legend>
+        {!!info && (
+          <div className="absolute right-0 top-4">
+            <InfoDialog info={info} />
+          </div>
+        )}
 
-      {options.map((option, i) => {
-        const descriptionId = `${baseId}-${option.label}`;
+        {options.map((option, i) => {
+          const descriptionId = `${baseId}-${option.label}`;
 
-        return (
-          <label
-            key={option.label}
-            className={getLabelClassName(hasError, horizontal, disabled)}
-          >
-            <input
-              {...register(name, registerOptions)}
-              aria-describedby={descriptionId}
-              className={getInputClassName(hasError, disabled)}
-              type="radio"
-              data-testid={name + "_option_" + i}
-              value={option.value}
-              required={required}
-              disabled={disabled}
-            />
-            {option.label}
+          return (
+            <label
+              key={option.label}
+              className={getLabelClassName(hasError, horizontal, disabled)}
+            >
+              <input
+                {...register(name, registerOptions)}
+                aria-describedby={descriptionId}
+                className={getInputClassName(hasError, disabled)}
+                type="radio"
+                data-testid={name + "_option_" + i}
+                value={option.value}
+                required={required}
+                disabled={disabled}
+              />
+              {option.label}
 
-            {!!option.description && option.description(descriptionId)}
-          </label>
-        );
-      })}
+              {!!option.description && option.description(descriptionId)}
+            </label>
+          );
+        })}
 
-      {!!hasError && (
-        <Description id={errorIdentifier} error>
-          {error.message}
-        </Description>
-      )}
-    </fieldset>
+        {!!hasError && (
+          <Description id={errorIdentifier} error>
+            {error.message}
+          </Description>
+        )}
+      </fieldset>
+    </div>
   );
 }
 

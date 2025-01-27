@@ -170,10 +170,6 @@ function expectCalculatedResultToEqual(
     expected.geschwisterBonusDeadLine,
     context,
   );
-  expect(actual.nettoNachGeburtDurch).toBeCloseTo(
-    expected.nettoNachGeburtDurch.toNumber(),
-    1,
-  );
   expect(actual.geschwisterBonus).toBeCloseTo(
     expected.geschwisterBonus.toNumber(),
     1,

@@ -147,8 +147,6 @@ function ohneETVorGeburt(): ElternGeldPlusErgebnis {
     geschwisterBonusDeadLine: null,
     hasPartnerBonusError: false,
     mehrlingsZulage: 0,
-    nettoNachGeburtDurch: 0,
-
     elternGeldBasis: MINDESTSATZ,
     elternGeldKeineEtPlus: MINDESTSATZ / 2,
     bruttoBasis: 0,
@@ -355,7 +353,6 @@ function mitETVorGeburt(
     geschwisterBonusDeadLine: null,
     hasPartnerBonusError: false,
     mehrlingsZulage: 0,
-    nettoNachGeburtDurch: 0,
   };
 }
 

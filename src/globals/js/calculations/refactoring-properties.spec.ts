@@ -13,7 +13,7 @@ import {
 } from "fast-check";
 import { assert, describe, expect, it } from "vitest";
 import { minusDays } from "./common/date-util";
-import { EgrCalculation } from "./egr-calculation";
+import { calculateElternGeld } from "./egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
@@ -129,10 +129,7 @@ describe("tests to verify properties during refactoring", () => {
               planungsDaten: planungsDatenFrom(planungsdatenRaw),
             };
 
-            const result = new EgrCalculation().calculateElternGeld(
-              elterngelddaten,
-              lohnsteuerjahr,
-            );
+            const result = calculateElternGeld(elterngelddaten, lohnsteuerjahr);
 
             const originalResult =
               new OriginalEgrCalculation().calculateElternGeld(

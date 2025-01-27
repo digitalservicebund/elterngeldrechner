@@ -10,8 +10,8 @@ import {
   Variante,
   isVariante,
 } from "@/features/planer/domain";
-import { EgrSteuerRechner } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
-import { EgrCalculation } from "@/globals/js/calculations/egr-calculation";
+import { bestLohnSteuerJahrOf } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner/egr-steuer-rechner";
+import { calculateElternGeld } from "@/globals/js/calculations/egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
@@ -65,10 +65,7 @@ function berechneElterngeldbezuege(
     monate,
   );
 
-  const ergebnis = new EgrCalculation().calculateElternGeld(
-    elterngelddaten,
-    lohnsteuerjahr,
-  );
+  const ergebnis = calculateElternGeld(elterngelddaten, lohnsteuerjahr);
 
   return elterngeldbezuegeFrom(ergebnis);
 }
@@ -168,7 +165,7 @@ function createStaticCalculationParameterForElternteil(
 ): StaticCalculationParameterForElternteil {
   const persoenlicheDaten = persoenlicheDatenOfUi(state, elternteil);
   const finanzdaten = finanzDatenOfUi(state, elternteil, []);
-  const lohnsteuerjahr = EgrSteuerRechner.bestLohnSteuerJahrOf(
+  const lohnsteuerjahr = bestLohnSteuerJahrOf(
     persoenlicheDaten.wahrscheinlichesGeburtsDatum,
   );
   return {
@@ -202,10 +199,12 @@ if (import.meta.vitest) {
 
     vi.mock(import("@/redux/persoenlicheDatenFactory"));
     vi.mock(import("@/redux/finanzDatenFactory"));
+    vi.mock(import("@/globals/js/calculations/egr-calculation"));
 
     beforeEach(() => {
       vi.mocked(persoenlicheDatenOfUi).mockReturnValue(ANY_PERSOENLICHE_DATEN);
       vi.mocked(finanzDatenOfUi).mockReturnValue(ANY_FINANZDATEN);
+      vi.mocked(calculateElternGeld).mockReturnValue(ANY_CALCULATION_RESULT);
     });
 
     it("calls the methods to create the static calculation parameter only once initially", () => {
@@ -229,11 +228,6 @@ if (import.meta.vitest) {
       const finanzDaten = ANY_FINANZDATEN;
       vi.mocked(finanzDatenOfUi).mockReturnValue(finanzDaten);
 
-      const calculateElternGeld = vi.spyOn(
-        EgrCalculation.prototype,
-        "calculateElternGeld",
-      );
-
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
       result.current(ANY_ELTERNTEIL, {});
 
@@ -248,11 +242,6 @@ if (import.meta.vitest) {
     });
 
     it("transforms the chosen Variante of the geplante Monate for the calculation", () => {
-      const calculateElternGeld = vi.spyOn(
-        EgrCalculation.prototype,
-        "calculateElternGeld",
-      );
-
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
       result.current(ANY_ELTERNTEIL, {
         1: monat(Variante.Plus),
@@ -264,7 +253,7 @@ if (import.meta.vitest) {
 
       expect(calculateElternGeld).toHaveBeenCalledOnce();
       expect(
-        calculateElternGeld.mock.calls[0]?.[0].planungsDaten.planung,
+        vi.mocked(calculateElternGeld).mock.calls[0]?.[0].planungsDaten.planung,
       ).toStrictEqual([
         ElternGeldArt.ELTERNGELD_PLUS,
         ElternGeldArt.BASIS_ELTERNGELD,
@@ -277,7 +266,7 @@ if (import.meta.vitest) {
     });
 
     it("reads the correct values for each Lebensmonat if calculation was successful", () => {
-      vi.spyOn(EgrCalculation.prototype, "calculateElternGeld").mockReturnValue(
+      vi.mocked(calculateElternGeld).mockReturnValue(
         calculationResult([100, 200]),
       );
 
@@ -374,9 +363,8 @@ if (import.meta.vitest) {
     }
 
     /**
-     * Spy on the {@link EgrCalculation.prototype.calculateElternGeld} method and capture
-     * the {@link FinanzDaten.prototype.erwerbsZeitraumLebensMonatList} it was
-     * called with.
+     * Spy on the {@link calculateElternGeld} function and capture the
+     * erwerbsZeitraumLebensMonatList it was called with.
      *
      * This is a special "implementation" to overcome some limitations. The
      * tested code implicitly uses shared memory objects. Thereby, it is not
@@ -390,10 +378,7 @@ if (import.meta.vitest) {
       const observeredErwerbsZeitraumLebensMonatListen: ErwerbsZeitraumLebensMonat[][] =
         [];
 
-      vi.spyOn(
-        EgrCalculation.prototype,
-        "calculateElternGeld",
-      ).mockImplementation((daten) => {
+      vi.mocked(calculateElternGeld).mockImplementation((daten) => {
         observeredErwerbsZeitraumLebensMonatListen.push(
           daten.finanzDaten.erwerbsZeitraumLebensMonatList,
         );
@@ -403,37 +388,40 @@ if (import.meta.vitest) {
       return observeredErwerbsZeitraumLebensMonatListen;
     }
 
+    const ANY_CALCULATION_RESULT = {
+      elternGeldAusgabe: [],
+      ersatzRate: 0,
+      geschwisterBonusDeadLine: null,
+      nettoNachGeburtDurch: 0,
+      geschwisterBonus: 0,
+      mehrlingsZulage: 0,
+      bruttoBasis: 0,
+      nettoBasis: 0,
+      elternGeldBasis: 0,
+      elternGeldErwBasis: 0,
+      bruttoPlus: 0,
+      nettoPlus: 0,
+      elternGeldEtPlus: 0,
+      elternGeldKeineEtPlus: 0,
+      hasPartnerBonusError: false,
+      etVorGeburt: false,
+    };
+
     function calculationResult(
       elterngeldbezugProMonatsIndex: number[],
     ): ElternGeldPlusErgebnis {
-      const elternGeldAusgabe = elterngeldbezugProMonatsIndex.map(
-        (elterngeldbezug, monthIndex) => ({
-          lebensMonat: monthIndex + 1,
-          elternGeld: elterngeldbezug,
-          mehrlingsZulage: 0,
-          geschwisterBonus: 0,
-          elterngeldArt: ElternGeldArt.KEIN_BEZUG,
-          mutterschaftsLeistungMonat: false,
-        }),
-      );
-
       return {
-        elternGeldAusgabe,
-        ersatzRate: 0,
-        geschwisterBonusDeadLine: null,
-        nettoNachGeburtDurch: 0,
-        geschwisterBonus: 0,
-        mehrlingsZulage: 0,
-        bruttoBasis: 0,
-        nettoBasis: 0,
-        elternGeldBasis: 0,
-        elternGeldErwBasis: 0,
-        bruttoPlus: 0,
-        nettoPlus: 0,
-        elternGeldEtPlus: 0,
-        elternGeldKeineEtPlus: 0,
-        hasPartnerBonusError: false,
-        etVorGeburt: false,
+        ...ANY_CALCULATION_RESULT,
+        elternGeldAusgabe: elterngeldbezugProMonatsIndex.map(
+          (elterngeldbezug, monthIndex) => ({
+            lebensMonat: monthIndex + 1,
+            elternGeld: elterngeldbezug,
+            mehrlingsZulage: 0,
+            geschwisterBonus: 0,
+            elterngeldArt: ElternGeldArt.KEIN_BEZUG,
+            mutterschaftsLeistungMonat: false,
+          }),
+        ),
       };
     }
   });

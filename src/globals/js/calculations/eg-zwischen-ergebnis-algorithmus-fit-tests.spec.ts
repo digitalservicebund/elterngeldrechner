@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
+import { elterngeldZwischenergebnis } from "./eg-zwischen-ergebnis-algorithmus";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
 import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
 
 describe("eg-zwischen-ergebnis-algorithmus", () => {
-  const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
 
   describe("should calculate ZwischenErgebnis for test cases from Testfaelle_alte_Routine3.xlsx", () => {
@@ -18,11 +17,10 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         const persoenlicheDaten = sheet.createPersoenlicheDaten(testCaseIndex);
 
         // when
-        const zwischenErgebnis =
-          zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
-            persoenlicheDaten,
-            sheet.nettoVorGeburt(testCaseIndex),
-          );
+        const zwischenErgebnis = elterngeldZwischenergebnis(
+          persoenlicheDaten,
+          sheet.nettoVorGeburt(testCaseIndex),
+        );
 
         // then
         expect(zwischenErgebnis).not.toBeUndefined();

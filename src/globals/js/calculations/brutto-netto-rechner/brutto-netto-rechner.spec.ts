@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BruttoNettoRechner } from "./brutto-netto-rechner";
+import { abzuege } from "./brutto-netto-rechner";
 import {
   Einkommen,
   ErwerbsArt,
@@ -10,8 +10,6 @@ import {
 } from "@/globals/js/calculations/model";
 
 describe("brutto-netto-rechner", () => {
-  const bruttoNettoRechner = new BruttoNettoRechner();
-
   it("should calculate test from TestErweiterterAlgorithmus.java", () => {
     // given
     const finanzDaten = {
@@ -26,7 +24,7 @@ describe("brutto-netto-rechner", () => {
     };
 
     // when
-    const actual = bruttoNettoRechner.abzuege(
+    const actual = abzuege(
       2000,
       2022,
       finanzDaten,

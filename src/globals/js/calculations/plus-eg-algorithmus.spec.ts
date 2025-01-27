@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
+import { elterngeldZwischenergebnis } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
   ElternGeldArt,
@@ -14,11 +14,9 @@ import {
   SteuerKlasse,
   ZwischenErgebnis,
 } from "./model";
-import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
+import { elterngeldPlusErgebnis } from "./plus-eg-algorithmus";
 
 describe("plus-eg-algorithmus", () => {
-  const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
-
   describe("should calculate ElternGeldPlusErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
@@ -64,15 +62,13 @@ describe("plus-eg-algorithmus", () => {
       const nettoEinkommen = new Einkommen(1883);
 
       const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
-      const zwischenErgebnis =
-        zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
-          persoenlicheDaten,
-          nettoEinkommen,
-        );
+      const zwischenErgebnis = elterngeldZwischenergebnis(
+        persoenlicheDaten,
+        nettoEinkommen,
+      );
 
       // when
-      const algorithmus = new PlusEgAlgorithmus();
-      const ergebnis = algorithmus.elterngeldPlusErgebnis(
+      const ergebnis = elterngeldPlusErgebnis(
         planungsDaten,
         persoenlicheDaten,
         finanzDaten,
@@ -115,10 +111,8 @@ describe("plus-eg-algorithmus", () => {
         mischEinkommenTaetigkeiten: [ANY_MISCHEINKOMMEN_TAETIGKEIT],
       };
 
-      const algorithmus = new PlusEgAlgorithmus();
-
       expect(() =>
-        algorithmus.elterngeldPlusErgebnis(
+        elterngeldPlusErgebnis(
           {
             mutterschaftsLeistung:
               MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,

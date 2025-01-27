@@ -15,83 +15,81 @@ import {
 } from "@/globals/js/calculations/model";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
-export class EgrSteuerRechner {
-  static bestLohnSteuerJahrOf(
-    wahrscheinlichesGeburtsDatum: Date,
-  ): Lohnsteuerjahr {
-    const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
-    const jahrVorDerGeburt = geburtsDatumJahr - 1;
+export function bestLohnSteuerJahrOf(
+  wahrscheinlichesGeburtsDatum: Date,
+): Lohnsteuerjahr {
+  const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
+  const jahrVorDerGeburt = geburtsDatumJahr - 1;
 
-    if (
-      UnterstuetzteLohnsteuerjahre.includes(jahrVorDerGeburt as Lohnsteuerjahr)
-    ) {
-      return jahrVorDerGeburt as Lohnsteuerjahr;
-    }
-
-    const minAvailableYear = Math.min(
-      ...UnterstuetzteLohnsteuerjahre,
-    ) as Lohnsteuerjahr;
-    if (jahrVorDerGeburt < minAvailableYear) {
-      return minAvailableYear;
-    }
-
-    const maxAvailableYear = Math.max(
-      ...UnterstuetzteLohnsteuerjahre,
-    ) as Lohnsteuerjahr;
-    if (jahrVorDerGeburt > maxAvailableYear) {
-      return maxAvailableYear;
-    }
-
-    throw errorOf("NichtUnterstuetztesLohnsteuerjahr");
+  if (
+    UnterstuetzteLohnsteuerjahre.includes(jahrVorDerGeburt as Lohnsteuerjahr)
+  ) {
+    return jahrVorDerGeburt as Lohnsteuerjahr;
   }
 
-  abgabenSteuern(
-    finanzDaten: FinanzDaten,
-    erwerbsArt: ErwerbsArt,
-    bruttoProMonat: number,
-    lohnSteuerJahr: Lohnsteuerjahr,
-  ): { bk: number; lstlzz: number; solzlzz: number } {
-    if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
-      finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
-    }
-
-    let einkommenInCent = bruttoProMonat * 100;
-    if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
-      einkommenInCent = einkommenInCent + PAUSCH * 100;
-    }
-
-    const eingangsparameter: Eingangsparameter = {
-      AF: finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR ? 1 : 0,
-      F:
-        finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR
-          ? finanzDaten.splittingFaktor
-          : 0,
-      KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
-      KVZ: 0.9, // TODO: verify this
-      LZZ: 2,
-      LZZFREIB: 0,
-      LZZHINZU: 0,
-      PKPV: 0,
-      PKV: 0,
-      PVA: 0, // Fix nach Richtlinien zum BEEG. Geschwister können nicht betrachtet werden.
-      PVS: 0,
-      PVZ: 0,
-      R: finanzDaten.istKirchensteuerpflichtig ? 1 : 0,
-      RE4: einkommenInCent,
-      STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
-      VBEZ: 0,
-      ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
-    };
-
-    const { BK, LSTLZZ, SOLZLZZ } = berechneSteuerUndSozialabgaben(
-      lohnSteuerJahr,
-      eingangsparameter,
-    );
-
-    return {
-      bk: BK / 100,
-      lstlzz: LSTLZZ / 100,
-      solzlzz: SOLZLZZ / 100,
-    };
+  const minAvailableYear = Math.min(
+    ...UnterstuetzteLohnsteuerjahre,
+  ) as Lohnsteuerjahr;
+  if (jahrVorDerGeburt < minAvailableYear) {
+    return minAvailableYear;
   }
+
+  const maxAvailableYear = Math.max(
+    ...UnterstuetzteLohnsteuerjahre,
+  ) as Lohnsteuerjahr;
+  if (jahrVorDerGeburt > maxAvailableYear) {
+    return maxAvailableYear;
+  }
+
+  throw errorOf("NichtUnterstuetztesLohnsteuerjahr");
+}
+
+export function abgabenSteuern(
+  finanzDaten: FinanzDaten,
+  erwerbsArt: ErwerbsArt,
+  bruttoProMonat: number,
+  lohnSteuerJahr: Lohnsteuerjahr,
+): { bk: number; lstlzz: number; solzlzz: number } {
+  if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
+    finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
+  }
+
+  let einkommenInCent = bruttoProMonat * 100;
+  if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
+    einkommenInCent = einkommenInCent + PAUSCH * 100;
+  }
+
+  const eingangsparameter: Eingangsparameter = {
+    AF: finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR ? 1 : 0,
+    F:
+      finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR
+        ? finanzDaten.splittingFaktor
+        : 0,
+    KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
+    KVZ: 0.9, // TODO: verify this
+    LZZ: 2,
+    LZZFREIB: 0,
+    LZZHINZU: 0,
+    PKPV: 0,
+    PKV: 0,
+    PVA: 0, // Fix nach Richtlinien zum BEEG. Geschwister können nicht betrachtet werden.
+    PVS: 0,
+    PVZ: 0,
+    R: finanzDaten.istKirchensteuerpflichtig ? 1 : 0,
+    RE4: einkommenInCent,
+    STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
+    VBEZ: 0,
+    ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
+  };
+
+  const { BK, LSTLZZ, SOLZLZZ } = berechneSteuerUndSozialabgaben(
+    lohnSteuerJahr,
+    eingangsparameter,
+  );
+
+  return {
+    bk: BK / 100,
+    lstlzz: LSTLZZ / 100,
+    solzlzz: SOLZLZZ / 100,
+  };
 }

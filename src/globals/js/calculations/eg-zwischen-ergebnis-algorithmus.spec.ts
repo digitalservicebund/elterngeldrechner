@@ -1,5 +1,10 @@
 import { describe, expect, it, test } from "vitest";
-import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
+import {
+  determineDeadlineForGeschwisterbonus,
+  ende_bonus_u14,
+  ende_bonus_u3,
+  ende_bonus_u6,
+} from "./eg-zwischen-ergebnis-algorithmus";
 import { Kind } from "./model";
 
 describe("eg-zwischen-ergebnis-algorithmus", () => {
@@ -7,9 +12,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
     it("ohne geschwister", () => {
       const geschwister: Kind[] = [];
 
-      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
-        geschwister,
-      );
+      const date = ende_bonus_u3(geschwister);
 
       expect(date).toBeUndefined();
     });
@@ -25,9 +28,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       (geburtGeschw1: Date, endeU3: Date) => {
         const geschwister: Kind[] = [{ geburtsdatum: geburtGeschw1 }];
 
-        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
-          geschwister,
-        );
+        const date = ende_bonus_u3(geschwister);
 
         expect(date).toEqual(endeU3);
       },
@@ -47,9 +48,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
           { geburtsdatum: geburtGeschw2 },
         ];
 
-        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u3(
-          geschwister,
-        );
+        const date = ende_bonus_u3(geschwister);
 
         expect(date).toEqual(endeU3);
       },
@@ -60,9 +59,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
     it("ohne geschwister", () => {
       const geschwister: Kind[] = [];
 
-      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-        geschwister,
-      );
+      const date = ende_bonus_u14(geschwister);
 
       expect(date).toBeUndefined();
     });
@@ -73,9 +70,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         { geburtsdatum: new Date(), istBehindert: false },
       ];
 
-      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-        geschwister,
-      );
+      const date = ende_bonus_u14(geschwister);
 
       expect(date).toBeUndefined();
     });
@@ -96,9 +91,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
           },
         ];
 
-        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-          geschwister,
-        );
+        const date = ende_bonus_u14(geschwister);
 
         expect(date).toEqual(endeU14);
       },
@@ -174,9 +167,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
           },
         ];
 
-        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u14(
-          geschwister,
-        );
+        const date = ende_bonus_u14(geschwister);
 
         expect(date).toEqual(endeU14);
       },
@@ -187,9 +178,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
     it("ohne geschwister", () => {
       const geschwister: Kind[] = [];
 
-      const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
-        geschwister,
-      );
+      const date = ende_bonus_u6(geschwister);
 
       expect(date).toBeUndefined();
     });
@@ -208,9 +197,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
           { geburtsdatum: geburtGeschw1 },
         ];
 
-        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
-          geschwister,
-        );
+        const date = ende_bonus_u6(geschwister);
 
         expect(date).toEqual(endeU6);
       },
@@ -279,9 +266,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
           { geburtsdatum: geburtGeschw3 },
         ];
 
-        const date = new EgZwischenErgebnisAlgorithmus().ende_bonus_u6(
-          geschwister,
-        );
+        const date = ende_bonus_u6(geschwister);
 
         expect(date).toEqual(endeU6);
       },
@@ -289,13 +274,11 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
   });
 
   describe("determine deadline for Geschwisterbonus", () => {
-    const algorithm = new EgZwischenErgebnisAlgorithmus();
-
     it("returns null if no Geschwister", () => {
       const geschwister: Kind[] = [];
       const geburtsdatum = new Date();
 
-      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+      const deadline = determineDeadlineForGeschwisterbonus(
         geschwister,
         geburtsdatum,
       );
@@ -311,7 +294,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ];
       const geburtsdatum = new Date("2020-01-01");
 
-      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+      const deadline = determineDeadlineForGeschwisterbonus(
         geschwister,
         geburtsdatum,
       );
@@ -327,7 +310,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ];
       const geburtsdatum = new Date("2020-01-01");
 
-      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+      const deadline = determineDeadlineForGeschwisterbonus(
         geschwister,
         geburtsdatum,
       );
@@ -343,7 +326,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
       ];
       const geburtsdatum = new Date("2020-01-01");
 
-      const deadline = algorithm.determineDeadlineForGeschwisterbonus(
+      const deadline = determineDeadlineForGeschwisterbonus(
         geschwister,
         geburtsdatum,
       );

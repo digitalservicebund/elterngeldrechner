@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EgrCalculation } from "./egr-calculation";
+import { calculateElternGeld } from "./egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
@@ -14,8 +14,6 @@ import {
 import { ErwerbsTaetigkeit } from "original-rechner";
 
 describe("egr-calculation", () => {
-  const egrCalculation = new EgrCalculation();
-
   describe("should calculate EgrErgebnis", () => {
     it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
       // given
@@ -59,7 +57,7 @@ describe("egr-calculation", () => {
       };
 
       // when
-      const ergebnis = egrCalculation.calculateElternGeld(
+      const ergebnis = calculateElternGeld(
         { finanzDaten, persoenlicheDaten, planungsDaten },
         2022,
       );
@@ -100,7 +98,7 @@ describe("egr-calculation", () => {
       };
 
       // when
-      const ergebnis = egrCalculation.calculateElternGeld(
+      const ergebnis = calculateElternGeld(
         { finanzDaten, persoenlicheDaten, planungsDaten },
         2022,
       );
@@ -134,7 +132,7 @@ describe("egr-calculation", () => {
     };
 
     const calculate = () =>
-      new EgrCalculation().calculateElternGeld(
+      calculateElternGeld(
         { persoenlicheDaten, finanzDaten, planungsDaten },
         2023,
       );

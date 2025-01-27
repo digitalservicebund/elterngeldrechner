@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { BasisEgAlgorithmus } from "./basis-eg-algorithmus";
+import { berechneMischNettoUndBasiselterngeld } from "./basis-eg-algorithmus";
 import {
   Einkommen,
   ErwerbsArt,
@@ -16,7 +16,6 @@ import {
 } from "@/test-utils/egr-mischeinkommen-excel-sheet";
 
 describe("basis-eg-algorithmus", () => {
-  const basisEgAlgorithmus = new BasisEgAlgorithmus();
   const sheet = new EgrMischeinkommenExcelSheet();
 
   describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_2022_3.xlsx", () => {
@@ -58,12 +57,11 @@ describe("basis-eg-algorithmus", () => {
           const finanzDaten = createFinanzDaten(sheet, testCaseIndex);
 
           // when
-          const mischEkZwischenErgebnis =
-            basisEgAlgorithmus.berechneMischNettoUndBasiselterngeld(
-              persoenlicheDaten,
-              finanzDaten,
-              2022,
-            );
+          const mischEkZwischenErgebnis = berechneMischNettoUndBasiselterngeld(
+            persoenlicheDaten,
+            finanzDaten,
+            2022,
+          );
 
           // then
           expect(mischEkZwischenErgebnis).not.toBeUndefined();

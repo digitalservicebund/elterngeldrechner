@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { EgZwischenErgebnisAlgorithmus } from "./eg-zwischen-ergebnis-algorithmus";
+import { elterngeldZwischenergebnis } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
   ErwerbsArt,
@@ -7,12 +7,11 @@ import {
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
 } from "./model";
-import { PlusEgAlgorithmus } from "./plus-eg-algorithmus";
+import { elterngeldPlusErgebnis } from "./plus-eg-algorithmus";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "@/test-utils/egr-alte-testfaelle-routine3-excel-sheet";
 import { EgrOhneMischeinkommenExcelSheet } from "@/test-utils/egr-ohne-mischeinkommen-excel-sheet";
 
 describe("plus-eg-algorithmus", () => {
-  const zwischenErgebnisAlgorithmus = new EgZwischenErgebnisAlgorithmus();
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
 
   describe("should calculate ElternGeldPlusErgebnis for test cases from Testfaelle_alte_Routine3.xlsx", () => {
@@ -35,15 +34,13 @@ describe("plus-eg-algorithmus", () => {
         const persoenlicheDaten = sheet.createPersoenlicheDaten(testCaseIndex);
         const finanzDaten = createFinanzDaten(sheet, testCaseIndex);
         const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
-        const zwischenErgebnis =
-          zwischenErgebnisAlgorithmus.elterngeldZwischenergebnis(
-            persoenlicheDaten,
-            sheet.nettoVorGeburt(testCaseIndex),
-          );
+        const zwischenErgebnis = elterngeldZwischenergebnis(
+          persoenlicheDaten,
+          sheet.nettoVorGeburt(testCaseIndex),
+        );
 
         // when
-        const algorithmus = new PlusEgAlgorithmus();
-        const ergebnis = algorithmus.elterngeldPlusErgebnis(
+        const ergebnis = elterngeldPlusErgebnis(
           planungsDaten,
           persoenlicheDaten,
           finanzDaten,

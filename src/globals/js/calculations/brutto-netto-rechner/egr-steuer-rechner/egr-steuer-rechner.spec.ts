@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EgrSteuerRechner } from "./egr-steuer-rechner";
+import { abgabenSteuern, bestLohnSteuerJahrOf } from "./egr-steuer-rechner";
 import { berechneSteuerUndSozialabgaben } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
 import {
   Einkommen,
@@ -26,8 +26,6 @@ describe("erg-steuer-rechner", () => {
     });
   });
 
-  const egrSteuerRechner = new EgrSteuerRechner();
-
   describe.each([
     ["2022-02-24T03:24:00", 2021],
     ["2021-02-24T03:24:00", 2021],
@@ -42,9 +40,7 @@ describe("erg-steuer-rechner", () => {
     (wahrscheinlichesGeburtsDatum, lohnSteuerJahr) => {
       it("should calculate Abgaben", () => {
         expect(
-          EgrSteuerRechner.bestLohnSteuerJahrOf(
-            new Date(wahrscheinlichesGeburtsDatum),
-          ),
+          bestLohnSteuerJahrOf(new Date(wahrscheinlichesGeburtsDatum)),
         ).toBe(lohnSteuerJahr);
       });
     },
@@ -53,7 +49,7 @@ describe("erg-steuer-rechner", () => {
   describe("should set Faktor Verfahren to", () => {
     it("1 if SteuerKlasse is SKL4_FAKTOR", () => {
       // when
-      egrSteuerRechner.abgabenSteuern(
+      abgabenSteuern(
         {
           ...ANY_FINANZDATEN,
           steuerKlasse: SteuerKlasse.SKL4_FAKTOR,
@@ -73,7 +69,7 @@ describe("erg-steuer-rechner", () => {
 
     it("0 if SteuerKlasse is not SKL4_FAKTOR", () => {
       // when
-      egrSteuerRechner.abgabenSteuern(
+      abgabenSteuern(
         {
           ...ANY_FINANZDATEN,
           steuerKlasse: SteuerKlasse.SKL4,
@@ -95,7 +91,7 @@ describe("erg-steuer-rechner", () => {
   describe("should set kinderFreiBetrag to", () => {
     it("1 if ErwerbsArt is not JA_NICHT_SELBST_MINI", () => {
       // when
-      egrSteuerRechner.abgabenSteuern(
+      abgabenSteuern(
         {
           ...ANY_FINANZDATEN,
           steuerKlasse: SteuerKlasse.SKL5,
@@ -116,7 +112,7 @@ describe("erg-steuer-rechner", () => {
 
   it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", () => {
     // when
-    egrSteuerRechner.abgabenSteuern(
+    abgabenSteuern(
       {
         ...ANY_FINANZDATEN,
         steuerKlasse: SteuerKlasse.SKL5,

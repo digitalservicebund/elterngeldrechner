@@ -1,5 +1,5 @@
 export function useAnchorPositioning() {
-  const anchorIdentifier = `--dialog-button-${crypto.randomUUID()}`;
+  const anchorIdentifier = `--dialog-button-${Math.floor(Math.random() * 1000000)}`;
 
   const button = {
     style: { anchorName: anchorIdentifier },

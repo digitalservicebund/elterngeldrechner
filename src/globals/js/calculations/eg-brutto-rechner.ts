@@ -1,5 +1,5 @@
 import Big from "big.js";
-import { BIG_ZERO, greater, isEqual, round } from "./common/math-util";
+import { BIG_ZERO, aufDenCentRunden, greater } from "./common/math-util";
 import {
   ElternGeldArt,
   type ErwerbsZeitraumLebensMonat,
@@ -29,22 +29,22 @@ export function bruttoEGPlusNeu(
   const bruttoLM: Big[] = getBruttoLeistungsMonate(
     erwerbsZeitraumLebensMonatList,
   );
-  const brutto_LM_Plus: Big[] = bruttoLeistungsMonateWithPlanung(
+  const brutto_LM_Plus = bruttoLeistungsMonateWithPlanung(
     erwerbsZeitraumLebensMonatList,
     true,
     planungsergebnis,
   );
-  const brutto_LM_Basis: Big[] = bruttoLeistungsMonateWithPlanung(
+  const brutto_LM_Basis = bruttoLeistungsMonateWithPlanung(
     erwerbsZeitraumLebensMonatList,
     false,
     planungsergebnis,
   );
   let lm_mit_et_basis: number = 0;
   let lm_mit_et_plus: number = 0;
-  let summe_brutto_basis: Big = BIG_ZERO;
-  let summe_brutto_plus: Big = BIG_ZERO;
-  let brutto_basis: Big = BIG_ZERO;
-  let brutto_plus: Big = BIG_ZERO;
+  let summe_brutto_basis = 0;
+  let summe_brutto_plus = 0;
+  let brutto_basis = 0;
+  let brutto_plus = 0;
   for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
     const brutto = bruttoLM[i] ?? BIG_ZERO;
 
@@ -59,34 +59,32 @@ export function bruttoEGPlusNeu(
       // spielte
     }
 
-    const bruttoInLebensmonatenMitBasis = brutto_LM_Basis[i] ?? BIG_ZERO;
+    const bruttoInLebensmonatenMitBasis = brutto_LM_Basis[i] ?? 0;
 
     if (
-      !isEqual(bruttoInLebensmonatenMitBasis, BIG_ZERO) &&
+      bruttoInLebensmonatenMitBasis !== 0 &&
       planungsergebnis.planung[i - 1] === ElternGeldArt.BASIS_ELTERNGELD
     ) {
       lm_mit_et_basis = lm_mit_et_basis + 1;
-      summe_brutto_basis = summe_brutto_basis.add(
-        bruttoInLebensmonatenMitBasis,
-      );
+      summe_brutto_basis = summe_brutto_basis + bruttoInLebensmonatenMitBasis;
     }
 
-    const bruttoInLebensmonatenMitPlus = brutto_LM_Plus[i] ?? BIG_ZERO;
+    const bruttoInLebensmonatenMitPlus = brutto_LM_Plus[i] ?? 0;
 
     if (
-      (!isEqual(bruttoInLebensmonatenMitPlus, BIG_ZERO) &&
+      (bruttoInLebensmonatenMitPlus !== 0 &&
         planungsergebnis.planung[i - 1] === ElternGeldArt.ELTERNGELD_PLUS) ||
       planungsergebnis.planung[i - 1] === ElternGeldArt.PARTNERSCHAFTS_BONUS
     ) {
       lm_mit_et_plus = lm_mit_et_plus + 1;
-      summe_brutto_plus = summe_brutto_plus.add(bruttoInLebensmonatenMitPlus);
+      summe_brutto_plus = summe_brutto_plus + bruttoInLebensmonatenMitPlus;
     }
   }
   if (lm_mit_et_basis > 0) {
-    brutto_basis = round(summe_brutto_basis.div(lm_mit_et_basis));
+    brutto_basis = aufDenCentRunden(summe_brutto_basis / lm_mit_et_basis);
   }
   if (lm_mit_et_plus > 0) {
-    brutto_plus = round(summe_brutto_plus.div(lm_mit_et_plus));
+    brutto_plus = aufDenCentRunden(summe_brutto_plus / lm_mit_et_plus);
   }
   return {
     summeBruttoBasis: summe_brutto_basis,

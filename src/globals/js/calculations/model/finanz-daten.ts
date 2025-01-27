@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { Einkommen } from "./einkommen";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
@@ -8,7 +7,6 @@ import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
 import { RentenArt } from "./renten-art";
 import { SteuerKlasse } from "./steuer-klasse";
-import { BIG_ZERO } from "@/globals/js/calculations/common/math-util";
 
 // TODO: mark fully readonly
 export type FinanzDaten = {
@@ -28,25 +26,25 @@ export type FinanzDaten = {
  * Die Felder stammen aus der Java-Klasse FinanzDaten.
  */
 export interface FinanzDatenBerechnet {
-  bruttoEinkommenDurch: Big;
-  bruttoEinkommenPlusDurch: Big;
+  bruttoEinkommenDurch: number;
+  bruttoEinkommenPlusDurch: number;
   //nettoEinkommenDurch: de.init.anton.plugins.egr.beans.NettoEinkommen;
   //etAnfang: Array<DateTime>;
   //etEnde: Array<DateTime>;
-  bruttoLMBasis: Big[];
-  bruttoLMPlus: Big[];
+  bruttoLMBasis: number[];
+  bruttoLMPlus: number[];
   lmMitETPlus: number;
   lmMitETBasis: number;
-  summeBruttoBasis: Big;
-  summeBruttoPlus: Big;
+  summeBruttoBasis: number;
+  summeBruttoPlus: number;
 }
 
 export function bruttoLeistungsMonateWithPlanung(
   erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[],
   isPlus: boolean,
   planungsdaten: PlanungsDaten,
-): Big[] {
-  const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
+): number[] {
+  const bruttoLM = new Array<number>(PLANUNG_ANZAHL_MONATE + 1).fill(0);
 
   for (const erwerbszeitraum of erwerbsZeitraumLebensMonatList) {
     for (
@@ -65,10 +63,10 @@ export function bruttoLeistungsMonateWithPlanung(
             elterngeldArt === ElternGeldArt.PARTNERSCHAFTS_BONUS ||
             elterngeldArt === ElternGeldArt.ELTERNGELD_PLUS
           ) {
-            bruttoLM[lm] = Big(bruttoProMonat);
+            bruttoLM[lm] = bruttoProMonat;
           }
         } else if (elterngeldArt === ElternGeldArt.BASIS_ELTERNGELD) {
-          bruttoLM[lm] = Big(bruttoProMonat);
+          bruttoLM[lm] = bruttoProMonat;
         }
       }
     }

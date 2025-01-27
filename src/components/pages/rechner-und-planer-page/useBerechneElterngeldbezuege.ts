@@ -432,7 +432,6 @@ if (import.meta.vitest) {
         nettoPlus: 0,
         elternGeldEtPlus: 0,
         elternGeldKeineEtPlus: 0,
-        message: "",
         hasPartnerBonusError: false,
         etVorGeburt: false,
       };

@@ -171,8 +171,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
 
       elternGeldBasis: MINDESTSATZ,
       elternGeldKeineEtPlus: MINDESTSATZ / 2,
-      message:
-        "Sie erhalten 300 Euro Elterngeld sowie evtl. Geschwisterbonus und/oder Mehrlingszuschlag",
       bruttoBasis: 0,
       nettoBasis: 0,
       elternGeldErwBasis: 0,
@@ -394,7 +392,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       geschwisterBonusDeadLine: null,
       hasPartnerBonusError: false,
       mehrlingsZulage: 0,
-      message: "",
       nettoNachGeburtDurch: 0,
     };
   }
@@ -709,9 +706,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     ergebnis.hasPartnerBonusError = false;
     if (this.hatPartnerbonus) {
       ergebnis.hasPartnerBonusError = true;
-      // TODO TW message entfernen
-      ergebnis.message =
-        "Während des Bezugs des Partnerschaftsbonus muss Erwerbstätigkeit vorliegen.";
       ergebnis.bruttoBasis = 0;
       ergebnis.nettoBasis = 0;
       ergebnis.elternGeldErwBasis = 0;

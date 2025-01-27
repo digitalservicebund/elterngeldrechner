@@ -205,7 +205,6 @@ function expectCalculatedResultToEqual(
     expected.elternGeldKeineEtPlus.toNumber(),
     1,
   );
-  expect(actual.message).toEqual(expected.message);
   expect(actual.hasPartnerBonusError).toEqual(expected.hasPartnerBonusError);
   expect(actual.etVorGeburt).toEqual(expected.etVorGeburt);
 }

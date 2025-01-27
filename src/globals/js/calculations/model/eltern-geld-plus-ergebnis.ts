@@ -18,7 +18,6 @@ export interface ElternGeldPlusErgebnis {
   nettoPlus: number;
   elternGeldEtPlus: number;
   elternGeldKeineEtPlus: number;
-  message: string;
   hasPartnerBonusError: boolean;
   etVorGeburt: boolean;
 }

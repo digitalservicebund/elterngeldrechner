@@ -1,6 +1,3 @@
-/**
- * Datencontainer für das Zwischenergebnis bei Mischeinkommen.
- */
 import { ErwerbsArt } from "./erwerbs-art";
 
 export interface MischEkZwischenErgebnis {

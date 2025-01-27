@@ -30,7 +30,6 @@ export class EgrCalculation {
       planungsDaten: elternGeldDaten.planungsDaten,
     };
 
-    // Steuern berechnen wenn erwerbstätig vor Geburt
     const zwischenErgebnisEinkommen = this.zwischenErgebnisEinkommenOf(
       clonedElterngeldDaten,
       lohnSteuerJahr,

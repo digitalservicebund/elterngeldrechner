@@ -14,8 +14,6 @@ import {
  * Unterschieden wird danach, ob im Lebensmonat Basiselterngeld oder Elterngeld Plus bezogen wird. Dies ist notwendig da
  * für beide Fälle ein durchschnittliches Bruttoeinkommen zu berechnen ist.
  *
- * Source: de.init.anton.plugins.egr.service.BruttoNettoRechner#bruttoEGPlusNeu
- *
  * @param {PlanungsDaten} planungsergebnis
  * @param {FinanzDaten} finanzDaten
  * @return {FinanzDatenBerechnet}

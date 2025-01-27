@@ -22,13 +22,6 @@ import {
  * des Basiselterngelds, sowie der Mehrlingszulage bzw. des Geschwisterbonus.
  */
 export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
-  /**
-   * Berechnet das Zwischenergebnis des Elterngeldrechners.
-   *
-   * @param {PersoenlicheDaten} persoenlicheDaten Die persönlichen Daten eines Elternteils.
-   * @param {Einkommen} nettoEinkommen Nettoeinkommen vor der Geburt.
-   * @return {ZwischenErgebnis} Das Zwischenergebnis des Elterngeldrechners.
-   */
   public elterngeldZwischenergebnis(
     persoenlicheDaten: PersoenlicheDaten,
     nettoEinkommen: Einkommen,

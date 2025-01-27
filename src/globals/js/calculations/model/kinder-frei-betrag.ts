@@ -12,26 +12,12 @@ export enum KinderFreiBetrag {
   ZKF5 = "5",
 }
 
-/**
- * Returns number of Kinderfreibetrag enum.
- *
- * @param kinderFreiBetrag Kinderfreibetrag as enum.
- *
- * @return kinderFreiBetrag Kinderfreibetrag as number.
- */
 export function kinderFreiBetragToNumber(
   kinderFreiBetrag: KinderFreiBetrag,
 ): number {
   return Number.parseFloat(kinderFreiBetrag.valueOf().replace(",", "."));
 }
 
-/**
- * Returns enum of Kinderfreibetrag number.
- *
- * @param kinderFreiBetrag Kinderfreibetrag as number.
- *
- * @return kinderFreiBetrag Kinderfreibetrag as enum.
- */
 export function kinderFreiBetragOfNumber(kinderFreiBetrag: number) {
   switch (kinderFreiBetrag) {
     case 0:

@@ -21,16 +21,9 @@ export type FinanzDaten = {
   erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[];
 };
 
-/**
- * Angaben zum Einkommen für die Berechnung des Elterngeldes.
- * Die Felder stammen aus der Java-Klasse FinanzDaten.
- */
 export interface FinanzDatenBerechnet {
   bruttoEinkommenDurch: number;
   bruttoEinkommenPlusDurch: number;
-  //nettoEinkommenDurch: de.init.anton.plugins.egr.beans.NettoEinkommen;
-  //etAnfang: Array<DateTime>;
-  //etEnde: Array<DateTime>;
   bruttoLMBasis: number[];
   bruttoLMPlus: number[];
   lmMitETPlus: number;

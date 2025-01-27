@@ -87,8 +87,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       );
     }
     this.hatPartnerbonus = false;
-    //let listBruttoLMBasis: Array<Big> = finanzDatenBerechnet.bruttoLMBasis;
-    //let listBruttoLMPlus: Array<Big> = finanzDatenBerechnet.bruttoLMPlus;
     const listBruttoLMPlus = bruttoLeistungsMonateWithPlanung(
       finanzDaten.erwerbsZeitraumLebensMonatList,
       true,
@@ -195,11 +193,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     let elterngeld_et_plus = 0;
     let elterngeld_keine_et_plus = 0;
     if (nicht_erw) {
-      // es liegt Erwerbstätigkeit nach der Geburt vor
       const pausch = PAUSCH;
-      // if (finanzDaten.erwerbsZeitraumLeistungsMonatList == null) {
-      //   finanzDaten.erwerbsZeitraumLeistungsMonatList = [];
-      // }
       if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
         throw new Error("wahrscheinlichesGeburtsDatum === undefined");
       }
@@ -227,8 +221,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           false,
           planungsergebnis,
         );
-        const brutto_LM_Plus = /* toArray */ bruttoLMPlus.slice(0);
-        const brutto_LM_Basis = /* toArray */ bruttoLMBasis.slice(0);
+        const brutto_LM_Plus = bruttoLMPlus.slice(0);
+        const brutto_LM_Basis = bruttoLMBasis.slice(0);
         let steuer_sozab_basis = 0;
         let steuer_sozab_plus = 0;
         brutto_basis = finanzDatenBerechnet.bruttoEinkommenDurch;
@@ -363,7 +357,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         );
       }
     } else {
-      // Sollten keine Perioden angegeben sein, so berechne nichts
       netto_plus = 0;
       elterngeld_keine_et_plus = 0;
       elterngeld_et_plus = 0;
@@ -400,11 +393,9 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         anfang.getMonth() === 2 &&
         anfang.getDay() < 5
       ) {
-        // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 1, 1).getTime());
         this.anfang_LM[i + 1] = setDayOfMonth(plusMonths(geburt, i + 1), 1);
       }
       if (geburt.getDay() > 28 && ende.getMonth() === 2 && ende.getDay() < 5) {
-        // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 2, 0).getTime());
         this.anfang_LM[i + 1] = minusDays(
           setDayOfMonth(plusMonths(geburt, i + 2), 1),
           1,
@@ -549,7 +540,6 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       (persoenlicheDaten.geschwister ?? []).length > 0;
 
     if (isGeschwisterVorhanden) {
-      // es sind Geschwister vorhanden
       const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
       this.fillLebensMonateList(geburt);
 

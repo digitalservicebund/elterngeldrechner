@@ -9,9 +9,6 @@ import {
   MINDESTSATZ,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
-/**
- * Source: de.init.anton.plugins.egr.service.AbstractAlgorithmus
- */
 export abstract class AbstractAlgorithmus {
   protected ersatzrate_eg(ek_vor_copy: number): number {
     const ek_vor = ek_vor_copy;

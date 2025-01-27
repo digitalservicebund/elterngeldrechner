@@ -61,12 +61,6 @@ describe("plus-eg-algorithmus", () => {
         ],
       };
 
-      // Wird sonst mit dem Brutto-Netto-Rechner ermittelt:
-      // await new BruttoNettoRechner().nettoeinkommenZwischenErgebnis(
-      //   finanzDaten,
-      //   persoenlicheDaten.etVorGeburt,
-      //   2022,
-      // );
       const nettoEinkommen = new Einkommen(1883);
 
       const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
@@ -89,12 +83,6 @@ describe("plus-eg-algorithmus", () => {
 
       // then
       expect(ergebnis).not.toBeUndefined();
-      // console.log(
-      //   ergebnis.elternGeldAusgabe
-      //     .map((value) => `${value.lebensMonat}: ${value.elternGeld}`)
-      //     .join("\n"),
-      // );
-
       expect(ergebnis.bruttoBasis).toBe(0);
       expect(ergebnis.nettoBasis).toBe(0);
       expect(ergebnis.elternGeldErwBasis).toBe(0);

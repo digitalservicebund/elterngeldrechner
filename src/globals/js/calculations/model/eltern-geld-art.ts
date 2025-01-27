@@ -1,6 +1,3 @@
-/**
- * Enumeration von ElterngeldArten
- */
 export enum ElternGeldArt {
   KEIN_BEZUG = "KEIN_BEZUG",
   BASIS_ELTERNGELD = "BASIS_ELTERNGELD",

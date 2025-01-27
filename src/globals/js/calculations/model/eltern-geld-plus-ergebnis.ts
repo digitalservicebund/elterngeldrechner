@@ -1,8 +1,5 @@
 import { ElternGeldArt } from "./eltern-geld-art";
 
-/**
- * Ergebnis der Elterngeld-Plus-Ermittlung.
- */
 export interface ElternGeldPlusErgebnis {
   elternGeldAusgabe: ElternGeldAusgabe[];
   ersatzRate: number;

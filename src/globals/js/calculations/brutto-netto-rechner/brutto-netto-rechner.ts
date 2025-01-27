@@ -21,16 +21,6 @@ import {
 export class BruttoNettoRechner {
   private readonly egrSteuerRechner = new EgrSteuerRechner();
 
-  /**
-   * Methode zum Ermitteln der Abzüge anhand des durchschnittlichen monatlichen Bruttogehaltes
-   *
-   * @param {number} bruttoProMonat Steuerpflichtiger durchschnittlicher Arbeitslohn pro Monat für das angegebene Jahr.
-   * @param {Lohnsteuerjahr} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
-   * @param {FinanzDaten} finanzDaten Angaben zum Einkommen.
-   * @param {ErwerbsArt} erwerbsArt Art des Einkommens (selbstständig, angestellt, ...)
-   * @return {number} Die Höhe der Abzüge.
-   * @throws EgrBerechnungException
-   */
   abzuege(
     bruttoProMonat: number,
     lohnSteuerJahr: Lohnsteuerjahr,
@@ -79,11 +69,6 @@ export class BruttoNettoRechner {
   /**
    * Methode zum Ermitteln des Zwischenergebnisses, wurde aus VB übernommen. Variablen haben identische Namen wie in
    * VB. Soll auch so bleiben.
-   *
-   * @param {FinanzDaten} finanzdaten
-   * @param erwerbsArtVorGeburt
-   * @param lohnSteuerJahr
-   * @return {Einkommen}
    */
   nettoEinkommenZwischenErgebnis(
     finanzdaten: FinanzDaten,
@@ -254,37 +239,6 @@ export class BruttoNettoRechner {
     return abgaben_kvpv + abgaben_rv + abgaben_alv + abgaben_gleitzone;
   }
 
-  /**
-   * Ermittlung der Sozialversicherungsabgaben in Summe für Mischeinkünfte
-   *
-   * //@formatter:off
-   * Public Function summe_svb_misch(grenze_rv_sub, krankenversicherungspflichtig_sub, rentenversicherungspflichtig_sub, status_sub, brutto_sub)
-   *
-   * 'Berechnung Sozialabgaben
-   *
-   * abgaben_kvpv = 0
-   * abgaben_rv = 0
-   * abgaben_alv = 0
-   * abgaben_gleitzone = 0
-   * brutto_rech_sub = brutto_sub
-   *
-   * If krankenversicherungspflichtig_sub = 1 Then abgaben_kvpv = brutto_rech_sub * satz_kvpv_beeg
-   * If rentenversicherungspflichtig_sub = 1 Then abgaben_rv = brutto_rech_sub * satz_rv_beeg
-   * If status_sub = 2 Then abgaben_alv = brutto_rech_sub * satz_alv_beeg
-   *
-   * abgaben_kvpv = Round(abgaben_kvpv, 2)
-   * abgaben_rv = Round(abgaben_rv, 2)
-   * abgaben_alv = Round(abgaben_alv, 2)
-   * summe_svb_misch = Round(abgaben_kvpv + abgaben_rv + abgaben_alv, 2)
-   * End Function
-   * //@formatter:on
-   *
-   * @param {boolean} krankenversicherungspflichtig_sub
-   * @param {boolean} rentenversicherungspflichtig_sub
-   * @param {ErwerbsArt} status_sub
-   * @param {number} brutto_sub
-   * @return {number}
-   */
   summe_svb_misch(
     krankenversicherungspflichtig_sub: boolean,
     rentenversicherungspflichtig_sub: boolean,

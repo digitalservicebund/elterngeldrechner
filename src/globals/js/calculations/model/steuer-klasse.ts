@@ -8,13 +8,6 @@ export enum SteuerKlasse {
   SKL6 = "6",
 }
 
-/**
- * Returns number of Steuerklasse enum.
- *
- * @param steuerKlasse Steuerklasse as enum.
- *
- * @return Steuerklasse as number. Returns undefined, if Steuerklasse is SKL_UNBEKANNT.
- */
 export function steuerklasseToNumber(steuerKlasse: SteuerKlasse) {
   switch (steuerKlasse) {
     case SteuerKlasse.SKL1:
@@ -33,13 +26,6 @@ export function steuerklasseToNumber(steuerKlasse: SteuerKlasse) {
   }
 }
 
-/**
- * Returns Steuerklasse enum of number.
- *
- * @param steuerKlasse Steuerklasse as number.
- *
- * @return steuerKlasse Steuerklasse as enum. Returns SKL_UNBEKANNT, if Steuerklasse is unknown.
- */
 export function steuerklasseOfNumber(steuerKlasse: number) {
   switch (steuerKlasse) {
     case 1:

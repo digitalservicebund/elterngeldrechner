@@ -1,6 +1,3 @@
-/**
- * Enthält die Daten zu einer Tätigkeit bei Mischeinkommen.
- */
 export enum ErwerbsTaetigkeit {
   SELBSTSTAENDIG = "SELBSTSTAENDIG",
   NICHT_SELBSTSTAENDIG = "NICHT_SELBSTSTAENDIG",

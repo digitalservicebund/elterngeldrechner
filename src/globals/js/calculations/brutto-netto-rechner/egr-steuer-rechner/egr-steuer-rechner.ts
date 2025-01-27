@@ -15,9 +15,6 @@ import {
 } from "@/globals/js/calculations/model";
 import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
-/**
- * EGR-Steuerrechner
- */
 export class EgrSteuerRechner {
   static bestLohnSteuerJahrOf(
     wahrscheinlichesGeburtsDatum: Date,
@@ -48,16 +45,6 @@ export class EgrSteuerRechner {
     throw errorOf("NichtUnterstuetztesLohnsteuerjahr");
   }
 
-  /**
-   * Ermittlung der Abgaben
-   *
-   * Source: de.init.anton.plugins.egr.service.BruttoNettoRechner.abgabenSteuern(...)
-   *
-   * @param {FinanzDaten} finanzDaten Angaben zum Einkommen.
-   * @param {ErwerbsArt} erwerbsArt Art des Einkommens (selbstständig, angestellt, ...)
-   * @param bruttoProMonat Steuerpflichtiger durchschnittlicher Arbeitslohn pro Monat für das angegebene Jahr.
-   * @param lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
-   */
   abgabenSteuern(
     finanzDaten: FinanzDaten,
     erwerbsArt: ErwerbsArt,

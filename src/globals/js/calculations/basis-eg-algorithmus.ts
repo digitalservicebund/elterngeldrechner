@@ -21,19 +21,7 @@ import {
 
 const ANZAHL_MONATE_PRO_JAHR: number = 12;
 
-/**
- * Bildet die Berechnung von Netto und Basiselterngeld ab.
- */
 export class BasisEgAlgorithmus extends AbstractAlgorithmus {
-  /**
-   * Bildet die Berechnung von Netto und Basiselterngeld für Mischeinkommen ab.
-   *
-   * @param {PersoenlicheDaten} persoenlicheDaten Persönliche Angaben für die Berechnung des Elterngeldes.
-   * @param {FinanzDaten} finanzDaten Angaben zum Einkommen.
-   * @param {Lohnsteuerjahr} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
-   *
-   * @return Das Zwischenergebnis bei Mischeinkommen.
-   */
   public berechneMischNettoUndBasiselterngeld(
     persoenlicheDaten: PersoenlicheDaten,
     finanzDaten: FinanzDaten,

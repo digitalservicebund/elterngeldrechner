@@ -15,40 +15,10 @@ import {
   TAETIGKEITEN,
 } from "@/test-utils/egr-mischeinkommen-excel-sheet";
 
-/**
- * Runs FIT tests for BasisEgAlgorithmus.
- */
 describe("basis-eg-algorithmus", () => {
   const basisEgAlgorithmus = new BasisEgAlgorithmus();
   const sheet = new EgrMischeinkommenExcelSheet();
 
-  // Für eine Ausgabe, die in das Excel kopiert werden kann.
-  // const mischEkZwischenErgebnisList: MischEkZwischenErgebnis[] = [];
-
-  // Der Code erzeugt eine Ausgabe auf der Kommandozeile. Diese Ausgabe kann dann in die Excel Datei kopiert werden.
-  // Damit ist es einfacher, die Differenz zu den FIT Daten zu ermitteln. Dient dann auch der Kommunikation mit dem FIT.
-  // const format = (v: Big) => v.toString().replace(".", ",");
-  //
-  // afterAll(() => {
-  //   console.log(
-  //     "Brutto||" +
-  //       mischEkZwischenErgebnisList.map((m) => format(m.brutto)).join("|"),
-  //   );
-  //   console.log(
-  //     "Steuern||" +
-  //       mischEkZwischenErgebnisList.map((m) => format(m.steuern)).join("|"),
-  //   );
-  //   console.log(
-  //     "Abgaben||" +
-  //       mischEkZwischenErgebnisList.map((m) => format(m.abgaben)).join("|"),
-  //   );
-  //   console.log(
-  //     `Netto||${mischEkZwischenErgebnisList
-  //       .map((m) => format(m.netto))
-  //       .join("|")}`,
-  //   );
-  // });
-  //
   describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_2022_3.xlsx", () => {
     const testCaseNumbers: Array<number> = Array.from(
       Array<number>(EgrMischeinkommenExcelSheet.TEST_CASE_COUNT).keys(),
@@ -94,8 +64,6 @@ describe("basis-eg-algorithmus", () => {
               finanzDaten,
               2022,
             );
-          // Für eine Ausgabe, die in das Excel kopiert werden kann.
-          // mischEkZwischenErgebnisList.push(mischEkZwischenErgebnis);
 
           // then
           expect(mischEkZwischenErgebnis).not.toBeUndefined();

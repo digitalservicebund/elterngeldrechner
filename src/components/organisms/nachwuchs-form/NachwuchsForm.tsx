@@ -21,20 +21,17 @@ interface NachwuchsFormProps {
 
 const validateMonth = (date: string) => {
   const [inputDay, inputMonth, inputYear] = date.split(".");
-  const inputDate = DateTime.fromISO(`${inputYear}-${inputMonth}-${inputDay}`)
-    .startOf("month")
-    .toMillis();
-
-  const maxMonthAgo = 32;
-  const dateMaxMonthAgo = DateTime.now()
-    .minus({ month: maxMonthAgo })
-    .startOf("month")
-    .toMillis();
+  const year = Number.parseInt(inputYear ?? "0");
+  const inputDate = new Date(`${year}-${inputMonth}-${inputDay}`);
+  const now = new Date(Date.now());
+  const dateMaxMonthAgo = new Date(
+    now.setUTCFullYear(now.getUTCFullYear() - 3),
+  );
 
   if (inputDate >= dateMaxMonthAgo) {
     return true;
   } else {
-    return `Elterngeld wird maximal für ${maxMonthAgo} Lebensmonate rückwirkend gezahlt.`;
+    return `Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.`;
   }
 };
 

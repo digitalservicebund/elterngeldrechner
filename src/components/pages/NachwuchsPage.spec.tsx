@@ -1,14 +1,13 @@
 import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
-import { DateTime } from "luxon";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import NachwuchsPage from "./NachwuchsPage";
 import { RootState, reducers } from "@/redux";
 import {
   StepNachwuchsState,
   initialStepNachwuchsState,
 } from "@/redux/stepNachwuchsSlice";
-import { render, screen } from "@/test-utils/test-utils";
+import { act, render, screen } from "@/test-utils/test-utils";
 
 const currentYear = new Date().getFullYear();
 
@@ -167,63 +166,75 @@ describe("Submitting the form", () => {
     expect(store.getState().stepNachwuchs).toEqual(expectedState);
   });
 
-  it("should accept expected birth of child that is 32 months before current date", async () => {
-    const dateMoreThan3MonthAgoInHarmonyWithBEEG = DateTime.now()
-      .minus({ month: 32 })
-      .startOf("month")
-      .toFormat("dd.MM.yyyy");
+  describe("warning for too old birthdate", () => {
+    const userEventsForFakeTime = userEvent.setup({ delay: null });
 
-    const validFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
-      wahrscheinlichesGeburtsDatum: dateMoreThan3MonthAgoInHarmonyWithBEEG,
-      geschwisterkinder: [
-        {
-          geburtsdatum: "",
-          istBehindert: true,
-        },
-      ],
-    };
-
-    render(<NachwuchsPage />, {
-      preloadedState: { stepNachwuchs: validFormState },
+    beforeEach(() => {
+      vi.stubGlobal("jest", {
+        advanceTimersByTime: vi.advanceTimersByTime.bind(vi),
+      });
+      vi.useFakeTimers();
     });
-    await userEvent.click(screen.getByText("Weiter"));
-    expect(
-      screen.queryByText(
-        "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
-      ),
-    ).not.toBeInTheDocument();
-  });
 
-  it("should not accept expected birth of child that is more than 32 months before current date", async () => {
-    const dateMoreThan3MonthAgoInHarmonyWithBEEG = DateTime.now()
-      .minus({ month: 32 })
-      .startOf("month")
-      .minus({ day: 1 })
-      .toFormat("dd.MM.yyyy");
-
-    const validFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
-      wahrscheinlichesGeburtsDatum: dateMoreThan3MonthAgoInHarmonyWithBEEG,
-      geschwisterkinder: [
-        {
-          geburtsdatum: "",
-          istBehindert: true,
-        },
-      ],
-    };
-
-    render(<NachwuchsPage />, {
-      preloadedState: { stepNachwuchs: validFormState },
+    afterEach(() => {
+      vi.useRealTimers();
     });
-    await userEvent.click(screen.getByText("Weiter"));
-    expect(
-      screen.getByText(
-        "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
-      ),
-    ).toBeInTheDocument();
+
+    it("should accept expected birth of child that is 32 months before current date", async () => {
+      vi.setSystemTime(new Date("2023-01-02"));
+
+      const validFormState: StepNachwuchsState = {
+        ...initialStepNachwuchsState,
+        anzahlKuenftigerKinder: 2,
+        wahrscheinlichesGeburtsDatum: "02.01.2020",
+        geschwisterkinder: [
+          {
+            geburtsdatum: "",
+            istBehindert: true,
+          },
+        ],
+      };
+
+      render(<NachwuchsPage />, {
+        preloadedState: { stepNachwuchs: validFormState },
+      });
+
+      await act(() => userEventsForFakeTime.click(screen.getByText("Weiter")));
+
+      expect(
+        screen.queryByText(
+          "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
+        ),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should not accept expected birth of child that is more than 32 months before current date", async () => {
+      vi.setSystemTime(new Date("2023-01-02"));
+
+      const validFormState: StepNachwuchsState = {
+        ...initialStepNachwuchsState,
+        anzahlKuenftigerKinder: 2,
+        wahrscheinlichesGeburtsDatum: "01.01.2020",
+        geschwisterkinder: [
+          {
+            geburtsdatum: "",
+            istBehindert: true,
+          },
+        ],
+      };
+
+      render(<NachwuchsPage />, {
+        preloadedState: { stepNachwuchs: validFormState },
+      });
+
+      await act(() => userEventsForFakeTime.click(screen.getByText("Weiter")));
+
+      expect(
+        screen.getByText(
+          "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
+        ),
+      ).toBeInTheDocument();
+    });
   });
 
   it("should go to the next step but filters empty Geschwisterkinder", async () => {

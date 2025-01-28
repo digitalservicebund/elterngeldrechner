@@ -8,6 +8,6 @@ export type { SelectOption } from "./custom-select";
 export { CustomInput } from "./custom-input";
 export { Split } from "./Split";
 export { ButtonGroup } from "./button-group";
-export { PrintButton } from "./print-button";
 
 export * from "./CustomRadioGroup";
+export * from "./PrintButton";

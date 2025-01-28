@@ -73,8 +73,6 @@ export function Planer({
     lebensmonatslistenElement.current?.focus({ preventScroll: true });
   }, [setzePlanZurueck]);
 
-  const istPlanGueltig = validierungsfehler.length === 0;
-
   return (
     <section
       className={className}
@@ -144,7 +142,6 @@ export function Planer({
       <Funktionsleiste
         className="my-40"
         planungWiederholen={planungWiederholen}
-        isDownloadDisabled={!istPlanGueltig}
       />
 
       <Validierungsfehlerbox validierungsfehler={validierungsfehler} />

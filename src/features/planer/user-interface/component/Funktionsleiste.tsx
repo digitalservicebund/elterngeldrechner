@@ -6,13 +6,11 @@ import { PrintButton } from "@/components/molecules";
 
 type Props = {
   readonly planungWiederholen: () => void;
-  readonly isDownloadDisabled?: boolean;
   readonly className?: string;
 };
 
 export function Funktionsleiste({
   planungWiederholen,
-  isDownloadDisabled,
   className,
 }: Props): ReactNode {
   const headingIdentifier = useId();
@@ -35,7 +33,7 @@ export function Funktionsleiste({
         />
       </div>
 
-      <PrintButton disabled={isDownloadDisabled} />
+      <PrintButton />
     </section>
   );
 }

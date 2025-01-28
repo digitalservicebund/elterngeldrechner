@@ -11,7 +11,7 @@ type Props = {
   readonly ease?: number;
   readonly obstacle?: string;
   readonly onChangeEase: (ease: Ease) => void;
-  readonly onChangeObstacle: (obstacle: Obstacle) => void;
+  readonly onChangeObstacle: (obstacle: Obstacle | null) => void;
   readonly onSubmit: () => void;
 };
 
@@ -27,14 +27,32 @@ export function FeedbackForm({
     defaultValues: { ease: ease as Ease, obstacle: obstacle as Obstacle },
   });
 
+  // Minimum ease value required to prompt for the biggest obstacle
+  const lowerEaseBoundary = 2;
+
   const easeValue = form.watch("ease");
   const obstacleValue = form.watch("obstacle");
 
-  const formCompleted = easeValue && obstacleValue;
-  const disabledSubmit = !formCompleted || form.formState.isSubmitted;
+  const isDifficultExperience = (easeValue: number) =>
+    easeValue > lowerEaseBoundary;
+  const isEasyExperience = (easeValue: number) =>
+    easeValue <= lowerEaseBoundary;
+
+  const easyExperience = easeValue && isEasyExperience(easeValue);
+  const difficultExperience = easeValue && isDifficultExperience(easeValue);
+
+  const showSubmit = easyExperience || (difficultExperience && obstacleValue);
+
+  const disabledSubmit = !showSubmit || form.formState.isSubmitted;
 
   function handleEaseChange() {
     onChangeEase(form.getValues("ease")!);
+
+    if (isEasyExperience(form.getValues("ease")!)) {
+      if (form.getValues("obstacle")) {
+        onChangeObstacle(null);
+      }
+    }
   }
 
   function handleObstacleChange() {
@@ -42,6 +60,16 @@ export function FeedbackForm({
   }
 
   const easeFormTransformerFunc = (it: Ease) => String(it);
+
+  const submitButton = (
+    <Button
+      id="feedback-submit-button"
+      disabled={disabledSubmit}
+      label="Feedback senden"
+      className="mt-40"
+      isSubmitButton
+    />
+  );
 
   return (
     <form
@@ -65,9 +93,11 @@ export function FeedbackForm({
           disabled={form.formState.isSubmitted}
           horizontal
         />
+
+        {!!easyExperience && submitButton}
       </div>
 
-      {!!easeValue && easeValue > 0 && (
+      {!!difficultExperience && (
         <div className="rounded bg-primary-light px-24 py-32">
           <CustomRadioGroup
             legend={<b>Was war die größte Schwierigkeit?</b>}
@@ -79,13 +109,7 @@ export function FeedbackForm({
             disabled={form.formState.isSubmitted}
           />
 
-          <Button
-            id="feedback-submit-button"
-            disabled={disabledSubmit}
-            label="Feedback senden"
-            className="mt-40"
-            isSubmitButton
-          />
+          {submitButton}
         </div>
       )}
 

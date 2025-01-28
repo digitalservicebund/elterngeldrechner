@@ -20,6 +20,6 @@ export function trackEase(ease: 1 | 2 | 3 | 4 | 5) {
   setTrackingVariable(Variables.Ease, Number(ease));
 }
 
-export function trackObstacle(obstacle: string) {
+export function trackObstacle(obstacle: string | null) {
   setTrackingVariable(Variables.Obstacle, obstacle);
 }

@@ -117,7 +117,30 @@ test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
   expect(await getTrackingVariable(page, "aenderungen-am-plan")).toEqual(3);
 });
 
-test("feedback in der planung", async ({ page }) => {
+test("feedback in der planung bei schwieriger benutzung", async ({ page }) => {
+  test.slow();
+
+  await page.addInitScript(establishDataLayer);
+
+  await page.goto("./");
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
+  await fastForwardToPlaner(page);
+
+  const feedbackForm = new FeedbackPOM(page);
+  await feedbackForm.waehleEase(3);
+  await feedbackForm.waehleObstacle("Angaben machen");
+  await feedbackForm.submit();
+
+  expect(await getEaseTrackingVariable(page)()).toEqual(3);
+  expect(await getObstacleTrackingVariable(page)()).toEqual("Angaben machen");
+
+  expect(await feedbackForm.appreciation.isVisible()).toBeTruthy();
+});
+
+test("feedback in der planung bei leichter benutzung", async ({ page }) => {
   test.slow();
 
   await page.addInitScript(establishDataLayer);
@@ -131,16 +154,35 @@ test("feedback in der planung", async ({ page }) => {
 
   const feedbackForm = new FeedbackPOM(page);
   await feedbackForm.waehleEase(2);
-  await feedbackForm.waehleObstacle("Angaben machen");
   await feedbackForm.submit();
 
-  expect(await getTrackingVariable(page, "customer-effort-score-ease")).toEqual(
-    2,
-  );
+  expect(await getEaseTrackingVariable(page)()).toEqual(2);
 
-  expect(
-    await getTrackingVariable(page, "customer-effort-score-obstacle"),
-  ).toEqual("Angaben machen");
+  expect(await feedbackForm.appreciation.isVisible()).toBeTruthy();
+});
+
+test("reset obstacle after changing to easy use", async ({ page }) => {
+  test.slow();
+
+  await page.addInitScript(establishDataLayer);
+
+  await page.goto("./");
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
+  await fastForwardToPlaner(page);
+
+  const feedbackForm = new FeedbackPOM(page);
+  await feedbackForm.waehleEase(3);
+  await feedbackForm.waehleObstacle("Angaben machen");
+  await feedbackForm.waehleEase(2);
+  await feedbackForm.submit();
+
+  expect(await getEaseTrackingVariable(page)()).toEqual(2);
+  expect(await getObstacleTrackingVariable(page)()).toEqual(null);
+
+  expect(await feedbackForm.appreciation.isVisible()).toBeTruthy();
 });
 
 test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
@@ -156,7 +198,7 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
   const rechnerUndPlaner = await fastForwardToPlaner(page);
 
   const feedbackForm = new FeedbackPOM(page);
-  await feedbackForm.waehleEase(2);
+  await feedbackForm.waehleEase(3);
   await feedbackForm.waehleObstacle("Angaben machen");
   await feedbackForm.submit();
 
@@ -183,8 +225,17 @@ test("feedback wird nicht ohne consent angezeigt", async ({ page }) => {
   await fastForwardToPlaner(page);
 
   const feedbackForm = new FeedbackPOM(page);
+
   expect(await feedbackForm.easeQuestion.isVisible()).toBeFalsy();
 });
+
+const getEaseTrackingVariable = (page: Page) => () => {
+  return getTrackingVariable(page, "customer-effort-score-ease");
+};
+
+const getObstacleTrackingVariable = (page: Page) => () => {
+  return getTrackingVariable(page, "customer-effort-score-obstacle");
+};
 
 async function getTrackingVariable(page: Page, name: string) {
   const dataLayer = await page.evaluate(() => window._mtm!);

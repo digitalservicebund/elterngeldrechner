@@ -45,7 +45,7 @@ export function FeedbackForm({
 
   return (
     <form
-      className={classNames(className, "flex flex-col gap-8")}
+      className={classNames(className, "flex flex-col gap-8 print:hidden")}
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <div className="mb-20 mt-16 rounded bg-primary-light px-24 py-32">

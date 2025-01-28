@@ -168,6 +168,11 @@ const stepEinkommenSlice = createSlice({
                 hasMischEinkommen: hasMischEinkommenET1,
                 istSelbststaendig: istSelbststaendigET1,
                 istNichtSelbststaendig: istNichtSelbststaendigET1,
+                taetigkeitenNichtSelbstaendigUndSelbstaendig:
+                  payload.ET1.isNichtSelbststaendig &&
+                  payload.ET1.isSelbststaendig
+                    ? [initialTaetigkeit]
+                    : [],
               }
             : {
                 ...resetStepEinkommenElternteil,
@@ -180,6 +185,11 @@ const stepEinkommenSlice = createSlice({
                 hasMischEinkommen: hasMischEinkommenET2,
                 istSelbststaendig: istSelbststaendigET2,
                 istNichtSelbststaendig: istNichtSelbststaendigET2,
+                taetigkeitenNichtSelbstaendigUndSelbstaendig:
+                  payload.ET2.isNichtSelbststaendig &&
+                  payload.ET2.isSelbststaendig
+                    ? [initialTaetigkeit]
+                    : [],
               }
             : {
                 ...resetStepEinkommenElternteil,

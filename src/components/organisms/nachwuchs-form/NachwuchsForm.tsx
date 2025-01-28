@@ -1,6 +1,5 @@
 import AddIcon from "@digitalservicebund/icons/Add";
 import ClearIcon from "@digitalservicebund/icons/Clear";
-import { DateTime } from "luxon";
 import { useId } from "react";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -84,9 +83,9 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
     wahrscheinlichesGeburtsDatumName,
   );
 
-  const dateOf = (germanDate: string): DateTime => {
+  const dateOf = (germanDate: string): Date => {
     const [day, month, year] = germanDate.split(".");
-    return DateTime.fromISO(`${year}-${month}-${day}`);
+    return new Date(`${year}-${month}-${day}`);
   };
 
   const geburtValidation = (date: string) => {

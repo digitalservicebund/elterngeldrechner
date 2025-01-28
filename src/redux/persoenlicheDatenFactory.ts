@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { YesNo } from "./yes-no";
@@ -47,8 +46,7 @@ const erwerbsTaetigkeitVorGeburtOf = (
 
 const dateOf = (date: string): Date => {
   const [day, month, year] = date.split(".");
-  const dateTime = DateTime.fromISO(`${year}-${month}-${day}`);
-  return dateTime.toJSDate();
+  return new Date(`${year}-${month}-${day}`);
 };
 
 export const persoenlicheDatenOfUi = (

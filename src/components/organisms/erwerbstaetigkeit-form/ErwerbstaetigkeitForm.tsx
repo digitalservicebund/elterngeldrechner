@@ -33,6 +33,10 @@ export function ErwerbstaetigkeitForm({
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
 
+  useEffect(() => {
+    reset(initialValues);
+  }, [initialValues, reset]);
+
   const handlePageBack = () => navigate("/nachwuchs");
 
   // reset state if ET2 is not displayed any more

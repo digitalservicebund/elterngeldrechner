@@ -76,7 +76,7 @@ export function FeedbackForm({
       className={classNames(className, "flex flex-col gap-8 print:hidden")}
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <div className="mb-20 mt-16 rounded bg-primary-light px-24 py-32">
+      <div className="rounded bg-primary-light px-24 py-32">
         <CustomRadioGroup
           className="mx-16 mb-20 mt-16 max-w-[29rem]"
           legend={
@@ -151,7 +151,7 @@ const easeOptions: CustomRadioGroupOption<number>[] = [
 function descriptionContainer(text: string) {
   return function accessibleDescriptionContainer(id: string) {
     return (
-      <span className="absolute mt-80" id={id}>
+      <span className="absolute mt-80 whitespace-nowrap" id={id}>
         {text}
       </span>
     );

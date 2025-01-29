@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
 import { errorOf } from "./calculation-error-code";
@@ -294,7 +293,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
           netto_basis = Math.max(brutto_basis - steuer_sozab_basis, 0);
           const ek_nach_basis = netto_basis;
           elterngeld_erw_basis = aufDenCentRunden(
-            this.elterngeld_et(ek_vor, Big(ek_nach_basis)),
+            this.elterngeld_et(ek_vor, ek_nach_basis),
           );
         }
         if (brutto_plus > 0) {
@@ -348,7 +347,7 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         netto_plus = Math.max(brutto_plus - steuer_sozab_plus, 0);
         ek_nach_plus = netto_plus;
         elterngeld_erw_plus = aufDenCentRunden(
-          this.elterngeldplus_et(ek_vor, Big(ek_nach_plus)),
+          this.elterngeldplus_et(ek_vor, ek_nach_plus),
         );
         elterngeld_keine_et_plus = z.elternGeld;
         if (isMischeinkommen) {

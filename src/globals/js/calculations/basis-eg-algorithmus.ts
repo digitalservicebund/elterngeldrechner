@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import { BruttoNettoRechner } from "./brutto-netto-rechner/brutto-netto-rechner";
 import {
@@ -12,14 +11,7 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "./model";
-import {
-  BIG_ONE,
-  BIG_ZERO,
-  aufDenCentRunden,
-  greater,
-  isEqual,
-  round,
-} from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
@@ -96,10 +88,10 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
         letzter_Betrachtungsmonat = i;
       }
     }
-    let summe_EK_SS: Big = BIG_ZERO;
-    let summe_EK_NS: Big = BIG_ZERO;
-    let summe_EK_NS_SV: Big = BIG_ZERO;
-    let summe_EK_GNS: Big = BIG_ZERO;
+    let summe_EK_SS = 0;
+    let summe_EK_NS = 0;
+    let summe_EK_NS_SV = 0;
+    let summe_EK_GNS = 0;
     const array = finanzDaten.mischEinkommenTaetigkeiten;
     for (const mischEkTaetigkeit of array) {
       const anzahlBemessungszeitraumMonate =
@@ -115,38 +107,35 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
 
       switch (mischEkTaetigkeit.erwerbsTaetigkeit) {
         case ErwerbsTaetigkeit.SELBSTSTAENDIG:
-          summe_EK_SS = summe_EK_SS.add(bruttoGesamt);
+          summe_EK_SS += bruttoGesamt;
           break;
         case ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG:
-          summe_EK_NS = summe_EK_NS.add(bruttoGesamt);
+          summe_EK_NS += bruttoGesamt;
           if (bruttoEinkommenDurchschnittMidi === 0) {
-            summe_EK_NS_SV = summe_EK_NS_SV.add(bruttoGesamt);
+            summe_EK_NS_SV += +bruttoGesamt;
           } else if (bruttoEinkommenDurchschnittMidi > 0) {
-            summe_EK_NS_SV = summe_EK_NS_SV.add(
-              bruttoEinkommenDurchschnittMidi * anzahlBemessungszeitraumMonate,
-            );
+            summe_EK_NS_SV +=
+              bruttoEinkommenDurchschnittMidi * anzahlBemessungszeitraumMonate;
           }
           break;
         case ErwerbsTaetigkeit.MINIJOB:
-          summe_EK_GNS = summe_EK_GNS.add(bruttoGesamt);
+          summe_EK_GNS += +bruttoGesamt;
           break;
       }
     }
 
-    const brutto_elg = round(
-      summe_EK_SS
-        .add(summe_EK_NS)
-        .add(summe_EK_GNS)
-        .sub(zaehler_Pauschmonate * PAUSCH)
-        .div(ANZAHL_MONATE_PRO_JAHR),
-      2,
-    ).toNumber();
-    const brutto_steuer = aufDenCentRunden(
-      summe_EK_SS.add(summe_EK_NS).div(ANZAHL_MONATE_PRO_JAHR).toNumber(),
+    const brutto_elg = aufDenCentRunden(
+      (summe_EK_SS +
+        summe_EK_NS +
+        summe_EK_GNS -
+        zaehler_Pauschmonate * PAUSCH) /
+        ANZAHL_MONATE_PRO_JAHR,
     );
-    const brutto_sv: Big = round(
-      summe_EK_SS.add(summe_EK_NS_SV).div(ANZAHL_MONATE_PRO_JAHR),
-      2,
+    const brutto_steuer = aufDenCentRunden(
+      (summe_EK_SS + summe_EK_NS) / ANZAHL_MONATE_PRO_JAHR,
+    );
+    const brutto_sv = aufDenCentRunden(
+      (summe_EK_SS + summe_EK_NS_SV) / ANZAHL_MONATE_PRO_JAHR,
     );
     const betrachtungszeitraumRV: boolean[] = [];
     const betrachtungszeitraumKV: boolean[] = [];
@@ -175,47 +164,47 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
         }
       }
     }
-    const betrachtungsmonate_grenze: Big = Big(betrachtungsmonate).div(Big(2));
-    let anzahl_monate_rv: Big = BIG_ZERO;
-    let anzahl_monate_kv: Big = BIG_ZERO;
-    let anzahl_monate_av: Big = BIG_ZERO;
+    const betrachtungsmonate_grenze = betrachtungsmonate / 2;
+    let anzahl_monate_rv = 0;
+    let anzahl_monate_kv = 0;
+    let anzahl_monate_av = 0;
     for (let i: number = 0; i < ANZAHL_MONATE_PRO_JAHR; i++) {
       if (betrachtungszeitraumRV[i]) {
-        anzahl_monate_rv = anzahl_monate_rv.add(BIG_ONE);
+        anzahl_monate_rv += 1;
       }
       if (betrachtungszeitraumKV[i]) {
-        anzahl_monate_kv = anzahl_monate_kv.add(BIG_ONE);
+        anzahl_monate_kv += 1;
       }
       if (betrachtungszeitraumAV[i]) {
-        anzahl_monate_av = anzahl_monate_av.add(BIG_ONE);
+        anzahl_monate_av += 1;
       }
     }
     let rentenversicherungspflichtig: number = 0;
     let krankenversicherungspflichtig: number = 0;
     let arbeitslosenversicherungspflichtig: number = 0;
-    if (greater(anzahl_monate_rv, betrachtungsmonate_grenze)) {
+    if (anzahl_monate_rv > betrachtungsmonate_grenze) {
       rentenversicherungspflichtig = 1;
     }
     if (
-      isEqual(anzahl_monate_rv, betrachtungsmonate_grenze) &&
+      anzahl_monate_rv === betrachtungsmonate_grenze &&
       betrachtungszeitraumRV[letzter_Betrachtungsmonat]
     ) {
       rentenversicherungspflichtig = 1;
     }
-    if (greater(anzahl_monate_kv, betrachtungsmonate_grenze)) {
+    if (anzahl_monate_kv > betrachtungsmonate_grenze) {
       krankenversicherungspflichtig = 1;
     }
     if (
-      isEqual(anzahl_monate_kv, betrachtungsmonate_grenze) &&
+      anzahl_monate_kv === betrachtungsmonate_grenze &&
       betrachtungszeitraumKV[letzter_Betrachtungsmonat]
     ) {
       krankenversicherungspflichtig = 1;
     }
-    if (greater(anzahl_monate_av, betrachtungsmonate_grenze)) {
+    if (anzahl_monate_av > betrachtungsmonate_grenze) {
       arbeitslosenversicherungspflichtig = 1;
     }
     if (
-      isEqual(anzahl_monate_av, betrachtungsmonate_grenze) &&
+      anzahl_monate_av === betrachtungsmonate_grenze &&
       betrachtungszeitraumAV[letzter_Betrachtungsmonat]
     ) {
       arbeitslosenversicherungspflichtig = 1;
@@ -229,7 +218,7 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
     ) {
       status = ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI;
     }
-    if (greater(summe_EK_SS, summe_EK_NS.add(summe_EK_GNS))) {
+    if (summe_EK_SS > summe_EK_NS + summe_EK_GNS) {
       status = ErwerbsArt.JA_SELBSTSTAENDIG;
     }
     if (
@@ -259,14 +248,12 @@ export class BasisEgAlgorithmus extends AbstractAlgorithmus {
       if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR) {
         finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
       }
-      const summe_sozab = new BruttoNettoRechner()
-        .summe_svb_misch(
-          krankenversicherungspflichtig > 0,
-          rentenversicherungspflichtig > 0,
-          status,
-          brutto_sv,
-        )
-        .toNumber();
+      const summe_sozab = new BruttoNettoRechner().summe_svb_misch(
+        krankenversicherungspflichtig > 0,
+        rentenversicherungspflichtig > 0,
+        status,
+        brutto_sv,
+      );
       const summe_steuer_abzug = new BruttoNettoRechner().summeSteuer(
         finanzDaten,
         status,

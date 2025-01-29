@@ -16,6 +16,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@types/big.js": "^6.2.2",
     "big.js": "^6.2.2",
     "luxon": "^3.5.0"
   },

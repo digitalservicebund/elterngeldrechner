@@ -2,7 +2,6 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from "./App";
-import { setupCalculation } from "./globals/js/calculations/setup-calculation";
 import store from "./redux";
 
 import { setupUserTracking } from "./user-tracking";
@@ -24,5 +23,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
   void setupUserTracking();
 });
-
-setupCalculation();

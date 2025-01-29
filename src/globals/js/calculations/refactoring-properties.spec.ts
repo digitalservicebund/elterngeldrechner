@@ -1,4 +1,3 @@
-import Big from "big.js";
 import {
   type Arbitrary,
   array as arbitraryArray,
@@ -36,6 +35,7 @@ import {
   SteuerKlasse,
 } from "./model";
 import {
+  Big,
   EgrCalculation as OriginalEgrCalculation,
   Einkommen as OriginalEinkommen,
   type ElternGeldAusgabe as OriginalElternGeldAusgabe,

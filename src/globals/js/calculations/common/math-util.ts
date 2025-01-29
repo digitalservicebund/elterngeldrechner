@@ -1,61 +1,7 @@
-import Big from "big.js";
-
-export const BIG_ZERO: Big = Big(0);
-export const BIG_ONE: Big = Big(1);
-
-export function round(value: Big, scale: number = 2): Big {
-  return value.round(scale, Big.roundHalfUp);
-}
-
 export function aufDenCentRunden(value: number): number {
   const valueInCents = shiftNumberByDecimalsPrecisely(value, 2);
   const roundedValueInCents = Math.round(valueInCents);
   return shiftNumberByDecimalsPrecisely(roundedValueInCents, -2);
-}
-
-/**
- * Äquivalent zu {@link Math#floor(double)} in Java nur für {@link Big}
- *
- * @param b beliebiges {@link Big}
- * @return skaliertes {@link Big}
- */
-export function floor(b: Big): Big {
-  if (b.lt(BIG_ZERO)) {
-    return b.round(0, Big.roundUp);
-  } else {
-    return b.round(0, Big.roundDown);
-  }
-}
-
-/**
- * Analog der Funktion Min() aus dem VB-Code. Ermittelt das Minimum der Argumente.
- *
- * @param a beliebiges {@link Big}
- * @param b beliebiges {@link Big}
- * @return das kleinere {@link Big}
- */
-export function fMin(a: Big, b: Big): Big {
-  return a.lte(b) ? a : b;
-}
-
-/**
- * Returns true if the value of a equals the value of b, otherwise returns false.
- *
- * It's a wrapper function for existing egr code.
- */
-export function isEqual(a: Big, b: Big) {
-  return a.eq(b);
-}
-
-/**
- * Returns true if the value of a is greater than the value of b, otherwise returns false.
- *
- * It's a wrapper function for existing egr code.
- *
- * @throws `NaN` if b is invalid.
- */
-export function greater(a: Big, b: Big) {
-  return a.gt(b);
 }
 
 /**
@@ -120,6 +66,21 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("math utilities", () => {
+    it.each([
+      [1.0, 1.0],
+      [1.5, 1.5],
+      [1.011, 1.01],
+      [1.015, 1.02],
+      [1.016, 1.02],
+      [1.298, 1.3],
+      [2.997, 3.0],
+    ])(
+      "correctly rounds input of %d on the cent digit to %d",
+      (input, output) => {
+        expect(aufDenCentRunden(input)).toBe(output);
+      },
+    );
+
     describe("shift number by decimals precisely", () => {
       it.each([
         { value: 0, decimals: 7, shiftedValue: 0 },

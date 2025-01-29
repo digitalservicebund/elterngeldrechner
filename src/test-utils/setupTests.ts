@@ -1,10 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
-import { setupCalculation } from "@/globals/js/calculations/setup-calculation";
 import "@/styles/index.css";
-
-setupCalculation();
 
 window.scrollTo = vi.fn(() => undefined);
 window.HTMLElement.prototype.scrollIntoView = vi.fn();

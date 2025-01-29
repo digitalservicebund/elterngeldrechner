@@ -1,5 +1,3 @@
-import Big from "big.js";
-import { floor } from "@/globals/js/calculations/common/math-util";
 import {
   ERSATZRATE1,
   ERSATZRATE2,
@@ -29,14 +27,14 @@ export abstract class AbstractAlgorithmus {
     if (ek_vor > grenze2 && ek_vor <= grenze1) {
       let y = ek_vor - grenze2;
       y = y / 2;
-      y = floor(Big(y)).toNumber();
+      y = Math.floor(y);
       y = y * 0.001;
       ersatzrate_eg = ersatzrate1 - y;
     }
     if (ek_vor < grenze3) {
       let y = grenze3 - ek_vor;
       y = y / 2;
-      y = floor(Big(y)).toNumber();
+      y = Math.floor(y);
       y = y * 0.001;
       ersatzrate_eg = ersatzrate1 + y;
       ersatzrate_eg = Math.min(ersatzrate_eg, 1);
@@ -51,13 +49,11 @@ export abstract class AbstractAlgorithmus {
       elterngeld_keine_et = Math.min(ERSATZRATE2 * ekVor, HOECHSTSATZ);
     }
     if (ekVor > GRENZE2 && ekVor <= GRENZE1) {
-      ersatzrate =
-        ERSATZRATE1 - floor(Big((ekVor - GRENZE2) / 2)).toNumber() * 0.001;
+      ersatzrate = ERSATZRATE1 - Math.floor((ekVor - GRENZE2) / 2) * 0.001;
       elterngeld_keine_et = ekVor * ersatzrate;
     }
     if (ekVor < GRENZE3) {
-      ersatzrate =
-        ERSATZRATE1 + floor(Big((GRENZE3 - ekVor) / 2)).toNumber() * 0.001;
+      ersatzrate = ERSATZRATE1 + Math.floor((GRENZE3 - ekVor) / 2) * 0.001;
       ersatzrate = Math.min(ersatzrate, 1);
       elterngeld_keine_et = ekVor * ersatzrate;
     }
@@ -65,50 +61,38 @@ export abstract class AbstractAlgorithmus {
     return elterngeld_keine_et;
   }
 
-  protected elterngeld_et(ekVor: number, ekNach: Big): number {
+  protected elterngeld_et(ekVor: number, ekNach: number): number {
     let ersatzrate = 0;
-    const ek_diff = Math.max(
-      Math.min(ekVor, HOECHST_ET) - ekNach.toNumber(),
-      0,
-    );
+    const ek_diff = Math.max(Math.min(ekVor, HOECHST_ET) - ekNach, 0);
     let elterngeld_et = ek_diff * ERSATZRATE1;
     if (ekVor > GRENZE1) {
       elterngeld_et = Math.min(ERSATZRATE2 * ek_diff, HOECHSTSATZ);
     }
     if (ekVor > GRENZE2 && ekVor <= GRENZE1) {
-      ersatzrate =
-        ERSATZRATE1 - floor(Big((ekVor - GRENZE2) / 2)).toNumber() * 0.001;
+      ersatzrate = ERSATZRATE1 - Math.floor((ekVor - GRENZE2) / 2) * 0.001;
       elterngeld_et = ek_diff * ersatzrate;
     }
     if (ekVor < GRENZE3) {
-      ersatzrate =
-        ERSATZRATE1 +
-        floor(Big(GRENZE3).sub(ekVor).div(Big(2))).toNumber() * 0.001;
+      ersatzrate = ERSATZRATE1 + Math.floor((GRENZE3 - ekVor) / 2) * 0.001;
       ersatzrate = Math.min(ersatzrate, 1);
       elterngeld_et = ek_diff * ersatzrate;
     }
     return Math.max(elterngeld_et, MINDESTSATZ);
   }
 
-  protected elterngeldplus_et(ekVor: number, ekNach: Big): number {
+  protected elterngeldplus_et(ekVor: number, ekNach: number): number {
     let ersatzrate = 0;
-    const ek_diff = Math.max(
-      Math.min(ekVor, HOECHST_ET) - ekNach.toNumber(),
-      0,
-    );
+    const ek_diff = Math.max(Math.min(ekVor, HOECHST_ET) - ekNach, 0);
     let elterngeldplus_et = ek_diff * ERSATZRATE1;
     if (ekVor > GRENZE1) {
       elterngeldplus_et = Math.min(ERSATZRATE2 * ek_diff, HOECHSTSATZ);
     }
     if (ekVor > GRENZE2 && ekVor <= GRENZE1) {
-      ersatzrate =
-        ERSATZRATE1 - floor(Big((ekVor - GRENZE2) / 2)).toNumber() * 0.001;
+      ersatzrate = ERSATZRATE1 - Math.floor((ekVor - GRENZE2) / 2) * 0.001;
       elterngeldplus_et = ek_diff * ersatzrate;
     }
     if (ekVor < GRENZE3) {
-      ersatzrate =
-        ERSATZRATE1 +
-        floor(Big(GRENZE3).sub(ekVor).div(Big(2))).toNumber() * 0.001;
+      ersatzrate = ERSATZRATE1 + Math.floor((GRENZE3 - ekVor) / 2) * 0.001;
       ersatzrate = Math.min(ersatzrate, 1);
       elterngeldplus_et = ek_diff * ersatzrate;
     }

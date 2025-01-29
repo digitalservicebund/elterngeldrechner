@@ -1,5 +1,4 @@
-import Big from "big.js";
-import { BIG_ZERO, aufDenCentRunden, greater } from "./common/math-util";
+import { aufDenCentRunden } from "./common/math-util";
 import {
   ElternGeldArt,
   type ErwerbsZeitraumLebensMonat,
@@ -26,9 +25,7 @@ export function bruttoEGPlusNeu(
   finanzDaten: FinanzDaten,
 ): FinanzDatenBerechnet {
   const { erwerbsZeitraumLebensMonatList } = finanzDaten;
-  const bruttoLM: Big[] = getBruttoLeistungsMonate(
-    erwerbsZeitraumLebensMonatList,
-  );
+  const bruttoLM = getBruttoLeistungsMonate(erwerbsZeitraumLebensMonatList);
   const brutto_LM_Plus = bruttoLeistungsMonateWithPlanung(
     erwerbsZeitraumLebensMonatList,
     true,
@@ -46,11 +43,11 @@ export function bruttoEGPlusNeu(
   let brutto_basis = 0;
   let brutto_plus = 0;
   for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-    const brutto = bruttoLM[i] ?? BIG_ZERO;
+    const brutto = bruttoLM[i] ?? 0;
 
     if (
       planungsergebnis.planung[i - 1] === ElternGeldArt.KEIN_BEZUG &&
-      greater(brutto, BIG_ZERO)
+      brutto > 0
     ) {
       // Logger.log("Es wurde Einkommen in Monaten ohne Bezug angegeben!");
       // Keine Fehlermeldung in GUI, da auch
@@ -100,9 +97,9 @@ export function bruttoEGPlusNeu(
 
 function getBruttoLeistungsMonate(
   erwerbsZeitraumLebensMonatList: ErwerbsZeitraumLebensMonat[],
-): Big[] {
+): number[] {
   // Im FIT Algorithmus sind die indizes immer Monats-basiert, d.h. der Index 0 bleibt leer.
-  const bruttoLM = new Array<Big>(PLANUNG_ANZAHL_MONATE + 1).fill(BIG_ZERO);
+  const bruttoLM = new Array<number>(PLANUNG_ANZAHL_MONATE + 1).fill(0);
 
   for (const erwerbszeitraum of erwerbsZeitraumLebensMonatList) {
     for (
@@ -112,7 +109,7 @@ function getBruttoLeistungsMonate(
     ) {
       const bruttoProMonat = erwerbszeitraum.bruttoProMonat.value;
       if (bruttoProMonat > 0) {
-        bruttoLM[lm] = Big(bruttoProMonat);
+        bruttoLM[lm] = bruttoProMonat;
       }
     }
   }

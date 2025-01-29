@@ -1,4 +1,3 @@
-import Big from "big.js";
 import { DateTime } from "luxon";
 import { AbstractAlgorithmus } from "./abstract-algorithmus";
 import {
@@ -8,11 +7,7 @@ import {
   PersoenlicheDaten,
   ZwischenErgebnis,
 } from "./model";
-import {
-  BIG_ZERO,
-  aufDenCentRunden,
-  round,
-} from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MIN_GESCHWISTERBONUS,
@@ -56,7 +51,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     let elterngeldbasis: number;
     let ersatzrate_ausgabe;
     const betrag_Mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
-    let geschwisterbonus;
+    let geschwisterbonus: number;
     const rate_bonus = RATE_BONUS;
     const min_geschwisterbonus = MIN_GESCHWISTERBONUS;
 
@@ -85,11 +80,11 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
         min_geschwisterbonus,
       );
     } else {
-      geschwisterbonus = BIG_ZERO;
+      geschwisterbonus = 0;
     }
     elterngeldbasis = aufDenCentRunden(elterngeldbasis);
     ersatzrate_ausgabe = aufDenCentRunden(ersatzrate_ausgabe);
-    geschwisterbonus = round(Big(geschwisterbonus), 3).toNumber();
+    geschwisterbonus = aufDenCentRunden(geschwisterbonus);
 
     return {
       elternGeld: elterngeldbasis,

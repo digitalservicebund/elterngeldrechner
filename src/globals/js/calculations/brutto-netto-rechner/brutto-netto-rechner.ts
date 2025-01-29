@@ -1,10 +1,5 @@
-import Big from "big.js";
 import { EgrSteuerRechner } from "./egr-steuer-rechner";
-import {
-  BIG_ZERO,
-  aufDenCentRunden,
-  round,
-} from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,
   ErwerbsArt,
@@ -29,11 +24,11 @@ export class BruttoNettoRechner {
   /**
    * Methode zum Ermitteln der Abzüge anhand des durchschnittlichen monatlichen Bruttogehaltes
    *
-   * @param {Big} bruttoProMonat Steuerpflichtiger durchschnittlicher Arbeitslohn pro Monat für das angegebene Jahr.
+   * @param {number} bruttoProMonat Steuerpflichtiger durchschnittlicher Arbeitslohn pro Monat für das angegebene Jahr.
    * @param {Lohnsteuerjahr} lohnSteuerJahr Das Lohnsteuerjahr des angegebenen steuerpflichtigen Arbeitslohns.
    * @param {FinanzDaten} finanzDaten Angaben zum Einkommen.
    * @param {ErwerbsArt} erwerbsArt Art des Einkommens (selbstständig, angestellt, ...)
-   * @return {Big} Die Höhe der Abzüge.
+   * @return {number} Die Höhe der Abzüge.
    * @throws EgrBerechnungException
    */
   abzuege(
@@ -287,35 +282,35 @@ export class BruttoNettoRechner {
    * @param {boolean} krankenversicherungspflichtig_sub
    * @param {boolean} rentenversicherungspflichtig_sub
    * @param {ErwerbsArt} status_sub
-   * @param {Big} brutto_sub
-   * @return {Big}
+   * @param {number} brutto_sub
+   * @return {number}
    */
   summe_svb_misch(
     krankenversicherungspflichtig_sub: boolean,
     rentenversicherungspflichtig_sub: boolean,
     status_sub: ErwerbsArt,
-    brutto_sub: Big,
-  ): Big {
-    let abgaben_kvpv: Big = BIG_ZERO;
-    let abgaben_rv: Big = BIG_ZERO;
-    let abgaben_alv: Big = BIG_ZERO;
-    const brutto_rech_sub: Big = brutto_sub;
+    brutto_sub: number,
+  ): number {
+    let abgaben_kvpv = 0;
+    let abgaben_rv = 0;
+    let abgaben_alv = 0;
+    const brutto_rech_sub = brutto_sub;
     const satz_kvpv_beeg = SATZ_KVPV_BEEG;
     const satz_rv_beeg = SATZ_RV_BEEG;
     const satz_alv_beeg = SATZ_ALV_BEEG;
     if (krankenversicherungspflichtig_sub) {
-      abgaben_kvpv = brutto_rech_sub.mul(satz_kvpv_beeg);
+      abgaben_kvpv = brutto_rech_sub * satz_kvpv_beeg;
     }
     if (rentenversicherungspflichtig_sub) {
-      abgaben_rv = brutto_rech_sub.mul(satz_rv_beeg);
+      abgaben_rv = brutto_rech_sub * satz_rv_beeg;
     }
     if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-      abgaben_alv = brutto_rech_sub.mul(satz_alv_beeg);
+      abgaben_alv = brutto_rech_sub * satz_alv_beeg;
     }
-    abgaben_kvpv = round(abgaben_kvpv);
-    abgaben_rv = round(abgaben_rv);
-    abgaben_alv = round(abgaben_alv);
-    return round(abgaben_kvpv.add(abgaben_rv).add(abgaben_alv));
+    abgaben_kvpv = aufDenCentRunden(abgaben_kvpv);
+    abgaben_rv = aufDenCentRunden(abgaben_rv);
+    abgaben_alv = aufDenCentRunden(abgaben_alv);
+    return aufDenCentRunden(abgaben_kvpv + abgaben_rv + abgaben_alv);
   }
 
   private static calculateChurchTaxes(

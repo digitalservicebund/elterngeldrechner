@@ -264,3 +264,39 @@ export function summe_svb_misch(
 function calculateChurchTaxes(kirchensteuersatz: number, bk: number): number {
   return (bk / 100) * kirchensteuersatz;
 }
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("brutto-netto-rechner", async () => {
+    const { abzuege } = await import("./brutto-netto-rechner");
+    const { KinderFreiBetrag } = await import(
+      "@/globals/js/calculations/model"
+    );
+
+    it("should calculate test from TestErweiterterAlgorithmus.java", () => {
+      // given
+      const finanzDaten = {
+        bruttoEinkommen: new Einkommen(0),
+        steuerKlasse: SteuerKlasse.SKL4,
+        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+        rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+        splittingFaktor: 1.0,
+        mischEinkommenTaetigkeiten: [],
+        erwerbsZeitraumLebensMonatList: [],
+      };
+
+      // when
+      const actual = abzuege(
+        2000,
+        2022,
+        finanzDaten,
+        ErwerbsArt.JA_SELBSTSTAENDIG,
+      );
+
+      // then
+      expect(actual).toBe(556.83);
+    });
+  });
+}

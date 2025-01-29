@@ -665,7 +665,131 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("ElterngeldPlus Algorithmus", async () => {
-    const { Einkommen } = await import("./model");
+    const {
+      Einkommen,
+      ErwerbsTaetigkeit,
+      KassenArt,
+      KinderFreiBetrag,
+      RentenArt,
+      SteuerKlasse,
+    } = await import("./model");
+
+    const { elterngeldZwischenergebnis } = await import(
+      "./eg-zwischen-ergebnis-algorithmus"
+    );
+
+    describe("plus-eg-algorithmus", () => {
+      describe("should calculate ElternGeldPlusErgebnis", () => {
+        it("Test with 'Erwerbstaetigkeit nach Geburt'", () => {
+          // given
+          const planungsDaten = {
+            mutterschaftsLeistung:
+              MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+            planung: new Array<ElternGeldArt>(PLANUNG_ANZAHL_MONATE).fill(
+              ElternGeldArt.ELTERNGELD_PLUS,
+            ),
+          };
+
+          const persoenlicheDaten = {
+            wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
+            anzahlKuenftigerKinder: 1,
+            etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+            hasEtNachGeburt: true,
+          };
+
+          const finanzDaten = {
+            ...ANY_FINANZDATEN,
+            bruttoEinkommen: new Einkommen(2800),
+            steuerKlasse: SteuerKlasse.SKL1,
+            kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+            erwerbsZeitraumLebensMonatList: [
+              {
+                vonLebensMonat: 1,
+                bisLebensMonat: 2,
+                bruttoProMonat: new Einkommen(100),
+              },
+              {
+                vonLebensMonat: 3,
+                bisLebensMonat: 4,
+                bruttoProMonat: new Einkommen(1000),
+              },
+              {
+                vonLebensMonat: 5,
+                bisLebensMonat: 6,
+                bruttoProMonat: new Einkommen(5000),
+              },
+            ],
+          };
+
+          const nettoEinkommen = new Einkommen(1883);
+
+          const mischEkZwischenErgebnis = createMischEkZwischenErgebnis();
+          const zwischenErgebnis = elterngeldZwischenergebnis(
+            persoenlicheDaten,
+            nettoEinkommen,
+          );
+
+          // when
+          const ergebnis = elterngeldPlusErgebnis(
+            planungsDaten,
+            persoenlicheDaten,
+            finanzDaten,
+            2022,
+            mischEkZwischenErgebnis,
+            zwischenErgebnis,
+          );
+
+          // then
+          expect(ergebnis).not.toBeUndefined();
+          expect(ergebnis.bruttoBasis).toBe(0);
+          expect(ergebnis.nettoBasis).toBe(0);
+          expect(ergebnis.elternGeldErwBasis).toBe(0);
+          expect(ergebnis.bruttoPlus).toBe(1950);
+          expect(ergebnis.nettoPlus).toBe(1356.84);
+          expect(ergebnis.elternGeldEtPlus).toBeCloseTo(287.83, 1);
+          expect(ergebnis.elternGeldKeineEtPlus).toBe(584.89);
+        });
+
+        it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", () => {
+          // given
+          const persoenlicheDaten = {
+            wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
+            anzahlKuenftigerKinder: 1,
+            etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+            hasEtNachGeburt: true,
+          };
+
+          const zwischenErgebnis: ZwischenErgebnis = {
+            elternGeld: 0,
+            ersatzRate: 0,
+            geschwisterBonus: 0,
+            mehrlingsZulage: 0,
+            nettoVorGeburt: 0,
+            zeitraumGeschwisterBonus: null,
+          };
+
+          const finanzDaten = {
+            ...ANY_FINANZDATEN,
+            mischEinkommenTaetigkeiten: [ANY_MISCHEINKOMMEN_TAETIGKEIT],
+          };
+
+          expect(() =>
+            elterngeldPlusErgebnis(
+              {
+                mutterschaftsLeistung:
+                  MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+                planung: [],
+              },
+              persoenlicheDaten,
+              finanzDaten,
+              2022,
+              null,
+              zwischenErgebnis,
+            ),
+          ).toThrow("MischEinkommenEnabledButMissingMischEinkommen");
+        });
+      });
+    });
 
     it("correctly counts the number of Monate for list of Erwerbstätigkeiten", () => {
       const taetigkeiten = [
@@ -680,6 +804,37 @@ if (import.meta.vitest) {
       expect(anzahlMonate).toBe(7);
     });
 
+    const createMischEkZwischenErgebnis = (): MischEkZwischenErgebnis => {
+      return {
+        elterngeldbasis: 0,
+        krankenversicherungspflichtig: false,
+        netto: 0,
+        brutto: 0,
+        steuern: 0,
+        abgaben: 0,
+        rentenversicherungspflichtig: false,
+        status: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+      };
+    };
+
     const ANY_EINKOMMEN = new Einkommen(0);
+
+    const ANY_FINANZDATEN = {
+      bruttoEinkommen: new Einkommen(0),
+      steuerKlasse: SteuerKlasse.SKL1,
+      kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+      rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+      splittingFaktor: 1.0,
+      mischEinkommenTaetigkeiten: [],
+      erwerbsZeitraumLebensMonatList: [],
+    };
+
+    const ANY_MISCHEINKOMMEN_TAETIGKEIT = {
+      erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+      bruttoEinkommenDurchschnitt: 1000,
+      bruttoEinkommenDurchschnittMidi: 0,
+      bemessungsZeitraumMonate: [],
+    };
   });
 }

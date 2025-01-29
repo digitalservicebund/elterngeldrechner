@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router-dom";
 import { Alert } from "@/components/molecules/alert";
 import { Sidebar } from "@/components/organisms/sidebar";
-import { FormStep, formSteps } from "@/components/pages/formSteps";
+import { FormStep, StepRoute, formSteps } from "@/components/pages/formSteps";
 
 interface PageProps {
   readonly step: FormStep;
@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 export function Page({ step, children }: PageProps) {
-  const alert = ALERTS[step.route];
+  const alert = ALERTS[step.route as StepRoute];
 
   const sectionElement = useRef<HTMLElement>(null);
   useEffect(() => sectionElement.current?.focus(), []);
@@ -48,7 +48,7 @@ export function Page({ step, children }: PageProps) {
   );
 }
 
-const ALERTS = {
+const ALERTS: Partial<Record<StepRoute, Alert>> = {
   [formSteps.allgemeinAngaben.route]: {
     headline: "Gesetzesänderung",
     text: (
@@ -68,3 +68,5 @@ const ALERTS = {
     ),
   },
 };
+
+type Alert = { headline: string; text: ReactNode };

@@ -3,9 +3,9 @@ export interface FormStep {
   route: string;
 }
 
-type FormSteps = Record<Step, FormStep>;
+export type StepRoute = (typeof formSteps)[keyof typeof formSteps]["route"];
 
-export const formSteps: FormSteps = {
+export const formSteps = {
   allgemeinAngaben: {
     heading: "Allgemeine Angaben",
     route: "/allgemeine-angaben",
@@ -35,13 +35,3 @@ export const formSteps: FormSteps = {
     route: "/zusammenfassung-und-daten",
   },
 } as const;
-
-enum Step {
-  ALLGEMEINE_ANGABEN = "allgemeinAngaben",
-  NACHWUCHS = "nachwuchs",
-  ERWERBSTAETIGKEIT = "erwerbstaetigkeit",
-  EINKOMMEN = "einkommen",
-  ELTERNGELDVARIANTEN = "elterngeldvarianten",
-  RECHNER_UND_PLANER = "rechnerUndPlaner",
-  ZUSAMMENFASSUNG_UND_DATEN = "zusammenfassungUndDaten",
-}

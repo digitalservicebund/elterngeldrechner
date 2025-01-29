@@ -10,7 +10,7 @@ import {
   Variante,
   isVariante,
 } from "@/features/planer/domain";
-import { bestLohnSteuerJahrOf } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner/egr-steuer-rechner";
+import { bestLohnSteuerJahrOf } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
 import { calculateElternGeld } from "@/globals/js/calculations/egr-calculation";
 import {
   Einkommen,

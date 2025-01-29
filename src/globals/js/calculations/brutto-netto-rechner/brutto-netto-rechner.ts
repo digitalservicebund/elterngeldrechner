@@ -1,4 +1,4 @@
-import { abgabenSteuern } from "./egr-steuer-rechner/egr-steuer-rechner";
+import { abgabenSteuern } from "./egr-steuer-rechner";
 import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import {
   Einkommen,

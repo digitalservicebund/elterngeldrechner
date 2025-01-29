@@ -1,6 +1,7 @@
 import {
   type Ausgangsparameter,
   type Eingangsparameter,
+  PAP_2021,
   PAP_2022,
   PAP_2023,
   PAP_2024,
@@ -19,7 +20,7 @@ export function berechneSteuerUndSozialabgaben(
 }
 
 const ABLAUFPLAENE = {
-  2021: PAP_2022,
+  2021: PAP_2021,
   2022: PAP_2022,
   2023: PAP_2023,
   2024: PAP_2024,

@@ -5,7 +5,6 @@ import {
   bestimmeVerfuegbaresKontingent,
 } from "@/features/planer/domain/ausgangslage";
 import { Specification } from "@/features/planer/domain/common/specification";
-import { SpecificationResult } from "@/features/planer/domain/common/specification/SpecificationResult";
 import { zaehleVerplantesKontingent } from "@/features/planer/domain/lebensmonate";
 import type { Plan } from "@/features/planer/domain/plan/Plan";
 
@@ -20,39 +19,30 @@ export function KontingentWurdeEingehalten() {
 }
 
 export function KontingentFuerBasisWurdeEingehalten<A extends Ausgangslage>() {
-  return new KontingentFuerVarianteWurdeEingehalten<A>(Variante.Basis);
+  return KontingentFuerVarianteWurdeEingehalten<A>(Variante.Basis);
 }
 
 function KontingentFuerPlusWurdeEingehalten<A extends Ausgangslage>() {
-  return new KontingentFuerVarianteWurdeEingehalten<A>(Variante.Plus);
+  return KontingentFuerVarianteWurdeEingehalten<A>(Variante.Plus);
 }
 
 export function KontingentFuerBonusWurdeEingehalten<A extends Ausgangslage>() {
-  return new KontingentFuerVarianteWurdeEingehalten<A>(Variante.Bonus);
+  return KontingentFuerVarianteWurdeEingehalten<A>(Variante.Bonus);
 }
 
-class KontingentFuerVarianteWurdeEingehalten<
-  A extends Ausgangslage,
-> extends Specification<Plan<A>> {
-  constructor(private readonly variante: Variante) {
-    super();
-  }
-
-  evaluate(plan: Plan<A>): SpecificationResult {
-    const verfuegbar = bestimmeVerfuegbaresKontingent(plan.ausgangslage)[
-      this.variante
-    ];
-    const verplant = zaehleVerplantesKontingent(plan.lebensmonate)[
-      this.variante
-    ];
-    const istKontingentEingehalten = verfuegbar >= verplant;
-
-    return istKontingentEingehalten
-      ? SpecificationResult.satisfied
-      : SpecificationResult.unsatisfied({
-          message: `Ihre verfügbaren ${this.variante} Monate sind aufgebraucht.`,
-        });
-  }
+function KontingentFuerVarianteWurdeEingehalten<A extends Ausgangslage>(
+  variante: Variante,
+) {
+  return Specification.fromPredicate(
+    `Ihre verfügbaren ${variante} Monate sind aufgebraucht.`,
+    (plan: Plan<A>) => {
+      const verfuegbar = bestimmeVerfuegbaresKontingent(plan.ausgangslage)[
+        variante
+      ];
+      const verplant = zaehleVerplantesKontingent(plan.lebensmonate)[variante];
+      return verfuegbar >= verplant;
+    },
+  );
 }
 
 if (import.meta.vitest) {
@@ -71,7 +61,7 @@ if (import.meta.vitest) {
       vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
         kontingent(3, 3, 1),
       );
-      const specification = new KontingentFuerVarianteWurdeEingehalten(
+      const specification = KontingentFuerVarianteWurdeEingehalten(
         Variante.Plus,
       );
 
@@ -85,7 +75,7 @@ if (import.meta.vitest) {
       vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
         kontingent(2, 5, 1),
       );
-      const specification = new KontingentFuerVarianteWurdeEingehalten(
+      const specification = KontingentFuerVarianteWurdeEingehalten(
         Variante.Basis,
       );
 
@@ -99,7 +89,7 @@ if (import.meta.vitest) {
       vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
         kontingent(1, 4, 4),
       );
-      const specification = new KontingentFuerVarianteWurdeEingehalten(
+      const specification = KontingentFuerVarianteWurdeEingehalten(
         Variante.Bonus,
       );
 

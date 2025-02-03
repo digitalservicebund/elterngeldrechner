@@ -12,6 +12,7 @@ const erwerbsTaetigkeitVorGeburtOf = (
   const erwerbsTaetigkeit = state.stepErwerbstaetigkeit[elternteil];
 
   if (
+    erwerbsTaetigkeit == null ||
     erwerbsTaetigkeit.vorGeburt === null ||
     erwerbsTaetigkeit.vorGeburt === YesNo.NO
   ) {

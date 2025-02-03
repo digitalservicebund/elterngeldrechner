@@ -29,6 +29,8 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   // codegen
   await page.getByText("Einkünfte aus nichtselbstä").first().click();
   await page.getByText("Einkünfte aus nichtselbstä").nth(1).click();
+  await page.getByTestId("ET1.mehrereTaetigkeiten_option_1").check();
+  await page.getByTestId("ET2.mehrereTaetigkeiten_option_1").check();
   await page.getByTestId("ET1.sozialVersicherungsPflichtig_option_0").click();
   await page.getByTestId("ET2.sozialVersicherungsPflichtig_option_0").click();
   await page.getByTestId("ET1.monatlichesBrutto_option_1").click();

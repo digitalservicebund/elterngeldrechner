@@ -28,6 +28,7 @@ test("smoke test", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.getByText("Ja", { exact: true }).click();
   await page.getByText("Einkünfte aus nichtselbstä").click();
+  await page.getByText("Nein").nth(2).click();
   await page.getByText("Ja").nth(3).click();
   await page.getByText("Nein").nth(4).click();
   await page.getByRole("button", { name: "Weiter" }).click();

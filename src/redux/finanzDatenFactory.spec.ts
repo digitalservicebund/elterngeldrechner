@@ -139,12 +139,12 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with einkommen vor geburt - kein minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2! };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
     // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-    mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+    mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = true;
+    mockStore.stepEinkommen.ET2!.bruttoEinkommenNichtSelbstaendig = {
       type: "average",
       average: 1000,
       perYear: null,
@@ -163,13 +163,13 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with average einkommen vor geburt - minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2! };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
     // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-    mockStore.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
-    mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+    mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = true;
+    mockStore.stepErwerbstaetigkeit.ET2!.monatlichesBrutto = "MiniJob";
+    mockStore.stepEinkommen.ET2!.bruttoEinkommenNichtSelbstaendig = {
       type: "average",
       average: 1000,
       perYear: null,
@@ -188,13 +188,13 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with monthly einkommen vor geburt - minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2! };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
     // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-    mockStore.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
-    mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+    mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = true;
+    mockStore.stepErwerbstaetigkeit.ET2!.monatlichesBrutto = "MiniJob";
+    mockStore.stepEinkommen.ET2!.bruttoEinkommenNichtSelbstaendig = {
       type: "monthly",
       average: null,
       perYear: null,
@@ -213,14 +213,14 @@ describe("finanzDatenFactory", () => {
 
   it("should create FinanzDaten for ET2 with yearly gewinn vor geburt - minijob", () => {
     // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2! };
+    const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
     // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
-    mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-    mockStore.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
-    mockStore.stepEinkommen.ET2.gewinnSelbstaendig = {
+    mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = false;
+    mockStore.stepErwerbstaetigkeit.ET2!.isSelbststaendig = true;
+    mockStore.stepErwerbstaetigkeit.ET2!.monatlichesBrutto = "MiniJob";
+    mockStore.stepEinkommen.ET2!.gewinnSelbstaendig = {
       type: "yearly",
       average: null,
       perYear: 12000,
@@ -353,14 +353,14 @@ describe("finanzDatenFactory", () => {
       it("should create FinanzDaten for ET2 with gewinnSelbstaendig", () => {
         // setup
         const erwerbsTaetigkeitSave = {
-          ...mockStore.stepErwerbstaetigkeit.ET2,
+          ...mockStore.stepErwerbstaetigkeit.ET2!,
         };
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
         // given
-        mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
-        mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-        mockStore.stepEinkommen.ET2.gewinnSelbstaendig = gewinnSelbstaendig;
+        mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = false;
+        mockStore.stepErwerbstaetigkeit.ET2!.isSelbststaendig = true;
+        mockStore.stepEinkommen.ET2!.gewinnSelbstaendig = gewinnSelbstaendig;
 
         // when
         const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
@@ -453,14 +453,14 @@ describe("finanzDatenFactory", () => {
       it("should create FinanzDaten for ET2 with bruttoEinkommenNichtSelbstaendig", () => {
         // setup
         const erwerbsTaetigkeitSave = {
-          ...mockStore.stepErwerbstaetigkeit.ET2,
+          ...mockStore.stepErwerbstaetigkeit.ET2!,
         };
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
         // given
-        mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-        mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = false;
-        mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig =
+        mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = true;
+        mockStore.stepErwerbstaetigkeit.ET2!.isSelbststaendig = false;
+        mockStore.stepEinkommen.ET2!.bruttoEinkommenNichtSelbstaendig =
           bruttoEinkommenNichtSelbstaendig;
 
         // when
@@ -726,20 +726,20 @@ describe("finanzDatenFactory", () => {
       it("should create FinanzDaten for ET2 with Mischeinkommen", () => {
         // setup
         const erwerbsTaetigkeitSave = {
-          ...mockStore.stepErwerbstaetigkeit.ET2,
+          ...mockStore.stepErwerbstaetigkeit.ET2!,
         };
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET2! };
 
         // given
-        mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-        mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-        mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+        mockStore.stepErwerbstaetigkeit.ET2!.isNichtSelbststaendig = true;
+        mockStore.stepErwerbstaetigkeit.ET2!.isSelbststaendig = true;
+        mockStore.stepEinkommen.ET2!.bruttoEinkommenNichtSelbstaendig = {
           type: "average",
           average: 10,
           perYear: null,
           perMonth: [],
         };
-        mockStore.stepEinkommen.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig =
+        mockStore.stepEinkommen.ET2!.taetigkeitenNichtSelbstaendigUndSelbstaendig =
           taetigkeitList;
 
         // when
@@ -775,7 +775,7 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET1 };
 
         // given
         mockStore.stepEinkommen.ET1.steuerKlasse = einkommenSteuerKlasse;
@@ -813,7 +813,7 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET1 };
 
         // given
         mockStore.stepEinkommen.ET1.kinderFreiBetrag =
@@ -846,7 +846,7 @@ describe("finanzDatenFactory", () => {
     (einkommenRentenArt: RentenArt | null, finanzDatenRentenArt: RentenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET1 };
 
         // given
         mockStore.stepEinkommen.ET1.rentenVersicherung = einkommenRentenArt;
@@ -878,7 +878,7 @@ describe("finanzDatenFactory", () => {
     (einkommenKassenArt: KassenArt | null, finanzDatenKassenArt: KassenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET1 };
 
         // given
         mockStore.stepEinkommen.ET1.kassenArt = einkommenKassenArt;
@@ -908,7 +908,7 @@ describe("finanzDatenFactory", () => {
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const einkommenSave = { ...mockStore.stepEinkommen.ET1 };
 
         // given
         mockStore.stepEinkommen.ET1.splittingFaktor = einkommenSplittingFaktor;

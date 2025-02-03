@@ -6,30 +6,25 @@ export type Erwerbstaetigkeiten = "NichtSelbststaendig" | "Selbststaendig";
 export type MonatlichesBrutto = "MiniJob" | "MehrAlsMiniJob";
 
 export interface TypeOfErwerbstaetigkeit {
-  isNichtSelbststaendig: boolean;
-  isSelbststaendig: boolean;
+  isNichtSelbststaendig?: boolean;
+  isSelbststaendig?: boolean;
 }
 
 export interface StepErwerbstaetigkeitElternteil
   extends TypeOfErwerbstaetigkeit {
-  mehrereTaetigkeiten: YesNo;
+  mehrereTaetigkeiten?: YesNo;
   vorGeburt: YesNo | null;
-  sozialVersicherungsPflichtig: YesNo | null;
-  monatlichesBrutto: MonatlichesBrutto | null;
+  sozialVersicherungsPflichtig?: YesNo | null;
+  monatlichesBrutto?: MonatlichesBrutto | null;
 }
 
 export const initialStepErwerbstaetigkeitElternteil: StepErwerbstaetigkeitElternteil =
   {
     vorGeburt: null,
-    isNichtSelbststaendig: false,
-    isSelbststaendig: false,
-    mehrereTaetigkeiten: YesNo.NO,
-    sozialVersicherungsPflichtig: null,
-    monatlichesBrutto: null,
   };
 export interface StepErwerbstaetigkeitState {
   ET1: StepErwerbstaetigkeitElternteil;
-  ET2: StepErwerbstaetigkeitElternteil;
+  ET2?: StepErwerbstaetigkeitElternteil;
 }
 
 export const initialStepErwerbstaetigkeitState: StepErwerbstaetigkeitState = {

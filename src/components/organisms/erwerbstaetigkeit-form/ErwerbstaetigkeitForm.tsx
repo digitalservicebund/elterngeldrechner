@@ -1,14 +1,10 @@
-import { useEffect } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
 import { ButtonGroup, Split } from "@/components/molecules";
 import { useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
-import {
-  StepErwerbstaetigkeitState,
-  initialStepErwerbstaetigkeitElternteil,
-} from "@/redux/stepErwerbstaetigkeitSlice";
+import { StepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
 
 interface ErwerbstaetigkeitFormProps {
   readonly initialValues: StepErwerbstaetigkeitState;
@@ -22,8 +18,9 @@ export function ErwerbstaetigkeitForm({
   const navigate = useNavigate();
   const methods = useForm({
     defaultValues: initialValues,
+    shouldUnregister: true,
   });
-  const { handleSubmit, reset, getValues } = methods;
+  const { handleSubmit } = methods;
 
   const antragssteller = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -34,16 +31,6 @@ export function ErwerbstaetigkeitForm({
   );
 
   const handlePageBack = () => navigate("/nachwuchs");
-
-  // reset state if ET2 is not displayed any more
-  useEffect(() => {
-    if (antragssteller !== "FuerBeide") {
-      reset({
-        ...getValues(),
-        ET2: initialStepErwerbstaetigkeitElternteil,
-      });
-    }
-  }, [reset, antragssteller, getValues]);
 
   return (
     <FormProvider {...methods}>

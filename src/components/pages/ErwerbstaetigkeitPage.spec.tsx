@@ -141,13 +141,13 @@ describe("Erwerbstaetigkeit Page", () => {
         ET1: {
           ...initialStepErwerbstaetigkeitState.ET1,
           vorGeburt: YesNo.YES,
+          isSelbststaendig: false,
           isNichtSelbststaendig: true,
           mehrereTaetigkeiten: YesNo.NO,
           sozialVersicherungsPflichtig: YesNo.YES,
           monatlichesBrutto: "MehrAlsMiniJob",
         },
         ET2: {
-          ...initialStepErwerbstaetigkeitState.ET2,
           vorGeburt: YesNo.NO,
         },
       };
@@ -189,13 +189,11 @@ describe("Erwerbstaetigkeit Page", () => {
         ET1: {
           ...initialStepErwerbstaetigkeitState.ET1,
           vorGeburt: YesNo.YES,
+          isSelbststaendig: false,
           isNichtSelbststaendig: true,
           mehrereTaetigkeiten: YesNo.YES,
-          sozialVersicherungsPflichtig: null,
-          monatlichesBrutto: null,
         },
         ET2: {
-          ...initialStepErwerbstaetigkeitState.ET2,
           vorGeburt: YesNo.NO,
         },
       };

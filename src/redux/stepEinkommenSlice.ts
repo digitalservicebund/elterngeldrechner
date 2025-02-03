@@ -114,7 +114,7 @@ const resetStepEinkommenElternteil: StepEinkommenElternteil = {
 
 export interface StepEinkommenState {
   ET1: StepEinkommenElternteil;
-  ET2: StepEinkommenElternteil;
+  ET2?: StepEinkommenElternteil;
   antragstellende: Antragstellende | null;
   limitEinkommenUeberschritten: YesNo | null;
 }
@@ -138,71 +138,55 @@ const stepEinkommenSlice = createSlice({
     builder.addCase(
       stepErwerbstaetigkeitActions.submitStep,
       (state, { payload }) => {
-        const istErwerbstaetigET1: YesNo | null = payload.ET1.vorGeburt;
-        const istErwerbstaetigET2: YesNo | null = payload.ET2.vorGeburt;
-        const hasMischEinkommenET1: YesNo =
-          payload.ET1.isNichtSelbststaendig && payload.ET1.isSelbststaendig
-            ? YesNo.YES
-            : YesNo.NO;
-        const hasMischEinkommenET2: YesNo =
-          payload.ET2.isNichtSelbststaendig && payload.ET2.isSelbststaendig
-            ? YesNo.YES
-            : YesNo.NO;
-        const istNichtSelbststaendigET1 =
-          payload.ET1.isNichtSelbststaendig === true &&
-          payload.ET1.isSelbststaendig === false;
-        const istNichtSelbststaendigET2 =
-          payload.ET2.isNichtSelbststaendig === true &&
-          payload.ET2.isSelbststaendig === false;
-        const istSelbststaendigET1 =
-          payload.ET1.isNichtSelbststaendig === false &&
-          payload.ET1.isSelbststaendig === true;
-        const istSelbststaendigET2 =
-          payload.ET2.isNichtSelbststaendig === false &&
-          payload.ET2.isSelbststaendig === true;
-        const et1 =
-          istErwerbstaetigET1 === YesNo.YES
+        state.ET1 =
+          payload.ET1.vorGeburt === YesNo.YES
             ? {
                 ...state.ET1,
-                istErwerbstaetig: istErwerbstaetigET1,
-                hasMischEinkommen: hasMischEinkommenET1,
-                istSelbststaendig: istSelbststaendigET1,
-                istNichtSelbststaendig: istNichtSelbststaendigET1,
+                istErwerbstaetig: payload.ET1.vorGeburt,
+                hasMischEinkommen:
+                  payload.ET1.isNichtSelbststaendig &&
+                  payload.ET1.isSelbststaendig
+                    ? YesNo.YES
+                    : YesNo.NO,
+                istSelbststaendig:
+                  payload.ET1.isNichtSelbststaendig === false &&
+                  payload.ET1.isSelbststaendig === true,
+                istNichtSelbststaendig:
+                  payload.ET1.isNichtSelbststaendig === true &&
+                  payload.ET1.isSelbststaendig === false,
                 taetigkeitenNichtSelbstaendigUndSelbstaendig:
                   payload.ET1.isNichtSelbststaendig &&
                   payload.ET1.isSelbststaendig
                     ? [initialTaetigkeit]
                     : [],
               }
-            : {
-                ...resetStepEinkommenElternteil,
-              };
-        const et2 =
-          istErwerbstaetigET2 === YesNo.YES
-            ? {
-                ...state.ET2,
-                istErwerbstaetig: istErwerbstaetigET2,
-                hasMischEinkommen: hasMischEinkommenET2,
-                istSelbststaendig: istSelbststaendigET2,
-                istNichtSelbststaendig: istNichtSelbststaendigET2,
-                taetigkeitenNichtSelbstaendigUndSelbstaendig:
-                  payload.ET2.isNichtSelbststaendig &&
-                  payload.ET2.isSelbststaendig
-                    ? [initialTaetigkeit]
-                    : [],
-              }
-            : {
-                ...resetStepEinkommenElternteil,
-              };
-        return {
-          ...state,
-          ET1: {
-            ...et1,
-          },
-          ET2: {
-            ...et2,
-          },
-        };
+            : { ...resetStepEinkommenElternteil };
+
+        if (payload.ET2) {
+          state.ET2 =
+            payload.ET2.vorGeburt === YesNo.YES
+              ? {
+                  ...state.ET2!,
+                  istErwerbstaetig: payload.ET2.vorGeburt,
+                  hasMischEinkommen:
+                    payload.ET2.isNichtSelbststaendig &&
+                    payload.ET2.isSelbststaendig
+                      ? YesNo.YES
+                      : YesNo.NO,
+                  istSelbststaendig:
+                    payload.ET2.isNichtSelbststaendig === false &&
+                    payload.ET2.isSelbststaendig === true,
+                  istNichtSelbststaendig:
+                    payload.ET2.isNichtSelbststaendig === true &&
+                    payload.ET2.isSelbststaendig === false,
+                  taetigkeitenNichtSelbstaendigUndSelbstaendig:
+                    payload.ET2.isNichtSelbststaendig &&
+                    payload.ET2.isSelbststaendig
+                      ? [initialTaetigkeit]
+                      : [],
+                }
+              : { ...resetStepEinkommenElternteil };
+        }
       },
     );
     builder.addCase(

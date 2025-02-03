@@ -1,4 +1,4 @@
-import { useEffect, useId } from "react";
+import { useId } from "react";
 import { useFormContext } from "react-hook-form";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
 import {
@@ -12,7 +12,6 @@ import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 import {
   MonatlichesBrutto,
   StepErwerbstaetigkeitState,
-  initialStepErwerbstaetigkeitElternteil,
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/redux/yes-no";
 
@@ -47,36 +46,11 @@ function ErwerbstaetigkeitFormElternteil({
     register,
     formState: { errors },
     watch,
-    reset,
-    getValues,
   } = useFormContext<StepErwerbstaetigkeitState>();
   const wasErwerbstaetig = watch(`${elternteil}.vorGeburt`);
   const isNichtSelbststaendig = watch(`${elternteil}.isNichtSelbststaendig`);
   const isSelbststaendig = watch(`${elternteil}.isSelbststaendig`);
   const mehrereTaetigkeiten = watch(`${elternteil}.mehrereTaetigkeiten`);
-
-  useEffect(() => {
-    if (wasErwerbstaetig === YesNo.NO) {
-      if (elternteil === "ET1") {
-        reset({
-          ...getValues(),
-          ET1: {
-            ...initialStepErwerbstaetigkeitElternteil,
-            vorGeburt: YesNo.NO,
-          },
-        });
-      }
-      if (elternteil === "ET2") {
-        reset({
-          ...getValues(),
-          ET2: {
-            ...initialStepErwerbstaetigkeitElternteil,
-            vorGeburt: YesNo.NO,
-          },
-        });
-      }
-    }
-  }, [elternteil, reset, wasErwerbstaetig, getValues]);
 
   const heading = elternteilName;
   const hasHeading = antragssteller === "FuerBeide";

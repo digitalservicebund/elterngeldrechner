@@ -95,7 +95,7 @@ export function SteuerUndVersicherung({
 
   const isOnlySelbstaendig = useAppSelector((state) =>
     stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
-      state.stepErwerbstaetigkeit[elternteil],
+      state.stepErwerbstaetigkeit[elternteil]!,
     ),
   );
 

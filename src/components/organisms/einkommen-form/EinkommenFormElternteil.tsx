@@ -20,40 +20,39 @@ interface Props {
 }
 
 export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
-  const isErwerbstaetigVorGeburt = useAppSelector((state) =>
+  const stepErwaerbstaetigkeitForElternteil = useAppSelector(
+    (state) => state.stepErwerbstaetigkeit[elternteil],
+  )!;
+
+  if (!stepErwaerbstaetigkeitForElternteil) {
+    throw new Error("Required data of step erwaerbstaetigkeit is missing.");
+  }
+
+  const isErwerbstaetigVorGeburt =
     stepErwerbstaetigkeitElternteilSelectors.isErwerbstaetigVorGeburt(
-      state.stepErwerbstaetigkeit[elternteil],
-    ),
-  );
-  const isOnlyErwerbstaetig = useAppSelector((state) =>
+      stepErwaerbstaetigkeitForElternteil,
+    );
+  const isOnlyErwerbstaetig =
     stepErwerbstaetigkeitElternteilSelectors.isOnlyErwerbstaetig(
-      state.stepErwerbstaetigkeit[elternteil],
-    ),
-  );
-  const erwerbstaetigkeit = useAppSelector(
-    (state) => state.stepErwerbstaetigkeit,
-  );
+      stepErwaerbstaetigkeitForElternteil,
+    );
 
-  const isSelbststaendig = erwerbstaetigkeit[elternteil].isSelbststaendig;
+  const isSelbststaendig = stepErwaerbstaetigkeitForElternteil.isSelbststaendig;
   const isMehrereTaetigkeiten =
-    erwerbstaetigkeit[elternteil].mehrereTaetigkeiten === YesNo.YES;
+    stepErwaerbstaetigkeitForElternteil.mehrereTaetigkeiten === YesNo.YES;
 
-  const isSelbstaendigAndErwerbstaetig = useAppSelector((state) =>
+  const isSelbstaendigAndErwerbstaetig =
     stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
-      state.stepErwerbstaetigkeit[elternteil],
-    ),
-  );
-  const isOnlySelbstaendig = useAppSelector((state) =>
+      stepErwaerbstaetigkeitForElternteil,
+    );
+  const isOnlySelbstaendig =
     stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
-      state.stepErwerbstaetigkeit[elternteil],
-    ),
-  );
+      stepErwaerbstaetigkeitForElternteil,
+    );
 
-  const hasMiniJob = useAppSelector(
-    (state) =>
-      isErwerbstaetigVorGeburt &&
-      state.stepErwerbstaetigkeit[elternteil].monatlichesBrutto === "MiniJob",
-  );
+  const hasMiniJob =
+    isErwerbstaetigVorGeburt &&
+    stepErwaerbstaetigkeitForElternteil.monatlichesBrutto === "MiniJob";
 
   const isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten =
     isSelbstaendigAndErwerbstaetig || isMehrereTaetigkeiten;
@@ -107,7 +106,7 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
           {!!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
             <SelbstaendigAndErwerbstaetig
               elternteil={elternteil}
-              isSelbststaendig={isSelbststaendig}
+              isSelbststaendig={isSelbststaendig!}
               monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
             />
           )}

@@ -21,6 +21,7 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByLabel("Elternteil 2").getByText("Ja").click();
   await page.getByText("Gewinneinkünfte").first().click();
   await page.getByText("Einkünfte aus nichtselbstä").nth(1).click();
+  await page.getByText("Nein", { exact: true }).nth(2).click();
   await page.getByText("Ja", { exact: true }).nth(3).click();
   await page.getByText("Nein", { exact: true }).nth(4).click();
   await page.getByRole("button", { name: "Weiter" }).click();

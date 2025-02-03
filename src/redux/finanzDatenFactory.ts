@@ -103,20 +103,35 @@ export const finanzDatenOfUi = (
   bruttoEinkommenZeitraumSanitized: BruttoEinkommenZeitraum[],
 ): FinanzDaten => {
   const stateErwerbsTaetigkeit = state.stepErwerbstaetigkeit[elternteil];
+
   const isOnlySelbstaendig =
-    stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
-      stateErwerbsTaetigkeit,
-    );
+    stateErwerbsTaetigkeit != null
+      ? stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
+          stateErwerbsTaetigkeit,
+        )
+      : false;
+
   const isSelbstaendigAndErwerbstaetig =
-    stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
-      stateErwerbsTaetigkeit,
-    );
+    stateErwerbsTaetigkeit != null
+      ? stepErwerbstaetigkeitElternteilSelectors.isSelbstaendigAndErwerbstaetig(
+          stateErwerbsTaetigkeit,
+        )
+      : false;
+
   const mehrereEinkommen =
-    stateErwerbsTaetigkeit.mehrereTaetigkeiten === YesNo.YES;
-  const isMiniJob = stateErwerbsTaetigkeit.monatlichesBrutto === "MiniJob";
+    stateErwerbsTaetigkeit != null
+      ? stateErwerbsTaetigkeit.mehrereTaetigkeiten === YesNo.YES
+      : false;
+
+  const isMiniJob =
+    stateErwerbsTaetigkeit != null
+      ? stateErwerbsTaetigkeit.monatlichesBrutto === "MiniJob"
+      : false;
 
   let bruttoEinkommenBeforeBirth = 0;
   if (
+    state.stepEinkommen[elternteil] != null &&
+    stateErwerbsTaetigkeit != null &&
     stateErwerbsTaetigkeit.isNichtSelbststaendig &&
     !isSelbstaendigAndErwerbstaetig
   ) {
@@ -124,7 +139,7 @@ export const finanzDatenOfUi = (
       state.stepEinkommen[elternteil].bruttoEinkommenNichtSelbstaendig,
     );
   }
-  if (isOnlySelbstaendig && !isMiniJob) {
+  if (state.stepEinkommen[elternteil] && isOnlySelbstaendig && !isMiniJob) {
     bruttoEinkommenBeforeBirth = averageFromAverageOrMonthly(
       state.stepEinkommen[elternteil].gewinnSelbstaendig,
     );
@@ -132,24 +147,27 @@ export const finanzDatenOfUi = (
 
   const bruttoEinkommen = new Einkommen(bruttoEinkommenBeforeBirth);
   const istKirchensteuerpflichtig =
-    state.stepEinkommen[elternteil].zahlenSieKirchenSteuer === YesNo.YES
-      ? true
+    state.stepEinkommen[elternteil] != null
+      ? state.stepEinkommen[elternteil].zahlenSieKirchenSteuer === YesNo.YES
+        ? true
+        : false
       : false;
   const kinderFreiBetrag =
-    state.stepEinkommen[elternteil].kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
+    state.stepEinkommen[elternteil]?.kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
   const steuerKlasse =
-    state.stepEinkommen[elternteil].steuerKlasse ?? SteuerKlasse.SKL1;
+    state.stepEinkommen[elternteil]?.steuerKlasse ?? SteuerKlasse.SKL1;
   const kassenArt =
-    state.stepEinkommen[elternteil].kassenArt ??
+    state.stepEinkommen[elternteil]?.kassenArt ??
     KassenArt.GESETZLICH_PFLICHTVERSICHERT;
   const rentenVersicherung =
-    state.stepEinkommen[elternteil].rentenVersicherung ??
+    state.stepEinkommen[elternteil]?.rentenVersicherung ??
     RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
   const splittingFaktor =
-    state.stepEinkommen[elternteil].splittingFaktor ?? 1.0;
+    state.stepEinkommen[elternteil]?.splittingFaktor ?? 1.0;
 
   const mischEinkommenTaetigkeiten =
-    isSelbstaendigAndErwerbstaetig || mehrereEinkommen
+    state.stepEinkommen[elternteil] != null &&
+    (isSelbstaendigAndErwerbstaetig || mehrereEinkommen)
       ? mischEinkommenTaetigkeitenOf(
           state.stepEinkommen[elternteil]
             .taetigkeitenNichtSelbstaendigUndSelbstaendig,

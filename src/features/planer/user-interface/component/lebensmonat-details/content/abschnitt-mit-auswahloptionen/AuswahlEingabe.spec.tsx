@@ -15,10 +15,13 @@ describe("AuswahlEingabe", () => {
 
   it("renders a radio per Auswahlmöglichkeit including its Elterngeldbezug in the label", () => {
     const auswahlmoeglichkeiten = {
-      [Variante.Basis]: { elterngeldbezug: 10, isDisabled: false as const },
-      [Variante.Plus]: { elterngeldbezug: 20, isDisabled: false as const },
-      [Variante.Bonus]: { elterngeldbezug: 30, isDisabled: false as const },
-      [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
+      [Variante.Basis]: { elterngeldbezug: 10, istAuswaehlbar: true as const },
+      [Variante.Plus]: { elterngeldbezug: 20, istAuswaehlbar: true as const },
+      [Variante.Bonus]: { elterngeldbezug: 30, istAuswaehlbar: true as const },
+      [KeinElterngeld]: {
+        elterngeldbezug: null,
+        istAuswaehlbar: true as const,
+      },
     };
 
     render(
@@ -117,7 +120,7 @@ describe("AuswahlEingabe", () => {
     it("marks radio button as disabled but keeps it focusable", () => {
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
-        [Variante.Plus]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+        [Variante.Plus]: ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT,
       };
 
       render(
@@ -137,7 +140,7 @@ describe("AuswahlEingabe", () => {
       const waehleOption = vi.fn();
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
-        [Variante.Plus]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+        [Variante.Plus]: ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT,
       };
 
       render(
@@ -158,8 +161,8 @@ describe("AuswahlEingabe", () => {
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
         [Variante.Plus]: {
-          isDisabled: true as const,
-          hintWhyDisabled: "ist nicht mehr verfügbar",
+          istAuswaehlbar: false as const,
+          grundWiesoNichtAuswaehlbar: "ist nicht mehr verfügbar",
           elterngeldbezug: null,
         },
       };
@@ -190,8 +193,8 @@ describe("AuswahlEingabe", () => {
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
         [Variante.Plus]: {
-          isDisabled: true as const,
-          hintWhyDisabled: "ist nicht mehr verfügbar",
+          istAuswaehlbar: false as const,
+          grundWiesoNichtAuswaehlbar: "ist nicht mehr verfügbar",
           elterngeldbezug: null,
         },
       };
@@ -215,8 +218,8 @@ describe("AuswahlEingabe", () => {
     it("puts all disabled hint buttons before the first radio in the tab order", () => {
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
-        [Variante.Basis]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
-        [Variante.Bonus]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+        [Variante.Basis]: ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT,
+        [Variante.Bonus]: ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT,
       };
 
       render(
@@ -245,15 +248,15 @@ describe("AuswahlEingabe", () => {
 });
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {
-  [Variante.Basis]: { elterngeldbezug: 0, isDisabled: false as const },
-  [Variante.Plus]: { elterngeldbezug: 0, isDisabled: false as const },
-  [Variante.Bonus]: { elterngeldbezug: 0, isDisabled: false as const },
-  [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
+  [Variante.Basis]: { elterngeldbezug: 0, istAuswaehlbar: true as const },
+  [Variante.Plus]: { elterngeldbezug: 0, istAuswaehlbar: true as const },
+  [Variante.Bonus]: { elterngeldbezug: 0, istAuswaehlbar: true as const },
+  [KeinElterngeld]: { elterngeldbezug: null, istAuswaehlbar: true as const },
 };
 
-const ANY_DISABLED_AUSWAHLMOEGLICHKEIT = {
-  isDisabled: true as const,
-  hintWhyDisabled: "test hint",
+const ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT = {
+  istAuswaehlbar: false as const,
+  grundWiesoNichtAuswaehlbar: "test hint",
   elterngeldbezug: null,
 };
 

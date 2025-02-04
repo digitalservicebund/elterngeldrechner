@@ -72,10 +72,10 @@ class ToggleEvent extends Event {
 }
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {
-  [Variante.Basis]: { elterngeldbezug: 1, isDisabled: false as const },
-  [Variante.Plus]: { elterngeldbezug: 1, isDisabled: false as const },
-  [Variante.Bonus]: { elterngeldbezug: 1, isDisabled: false as const },
-  [KeinElterngeld]: { elterngeldbezug: null, isDisabled: false as const },
+  [Variante.Basis]: { elterngeldbezug: 1, istAuswaehlbar: true as const },
+  [Variante.Plus]: { elterngeldbezug: 1, istAuswaehlbar: true as const },
+  [Variante.Bonus]: { elterngeldbezug: 1, istAuswaehlbar: true as const },
+  [KeinElterngeld]: { elterngeldbezug: null, istAuswaehlbar: true as const },
 };
 
 const ANY_PROPS = {

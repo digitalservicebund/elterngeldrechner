@@ -51,28 +51,29 @@ export function AuswahlEingabe({
 
         {Auswahloptionen.sort(sortByAuswahloption).map(
           (option, optionIndex) => {
-            const { isDisabled, hintWhyDisabled } =
+            const { istAuswaehlbar, grundWiesoNichtAuswaehlbar } =
               auswahlmoeglichkeiten[option];
+
             const infoIdentifier = getInfoIdentifier(
               baseIdentifier,
               option,
-              isDisabled,
+              istAuswaehlbar,
             );
             const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
             const gridRowStart = optionIndex + 1;
 
             return (
-              isDisabled && (
+              !istAuswaehlbar && (
                 <InfoDialog
                   key={option}
                   id={infoIdentifier}
                   className={classNames(
                     "min-w-24 self-center justify-self-center",
-                    { invisible: !hintWhyDisabled },
+                    { invisible: !grundWiesoNichtAuswaehlbar },
                   )}
                   style={{ gridRowStart, ...infoColumns[elternteil] }}
                   ariaLabelForDialog={infoAriaLabel}
-                  info={hintWhyDisabled}
+                  info={grundWiesoNichtAuswaehlbar}
                 />
               )
             );
@@ -81,13 +82,18 @@ export function AuswahlEingabe({
 
         {Auswahloptionen.sort(sortByAuswahloption).map(
           (option, optionIndex) => {
-            const { elterngeldbezug, isDisabled, hintWhyDisabled } =
-              auswahlmoeglichkeiten[option];
+            const {
+              elterngeldbezug,
+              istAuswaehlbar,
+              grundWiesoNichtAuswaehlbar,
+            } = auswahlmoeglichkeiten[option];
+
             const infoIdentifier = getInfoIdentifier(
               baseIdentifier,
               option,
-              isDisabled,
+              istAuswaehlbar,
             );
+
             const inputIdentifier = `${baseIdentifier}-input-${option}`;
             const inputDescriptionIdentifier = `${baseIdentifier}-input-description-${option}`;
             const inputAriaLabel = composeAriaLabelForAuswahloption(
@@ -95,8 +101,9 @@ export function AuswahlEingabe({
               elterngeldbezug,
             );
 
-            const isChecked = gewaehlteOption === option;
-            const waehleDieseOption = () => !isDisabled && waehleOption(option);
+            const istAusgewaehlt = gewaehlteOption === option;
+            const waehleDieseOption = () =>
+              istAuswaehlbar && waehleOption(option);
             const gridRowStart = optionIndex + 1;
 
             const istBasisImMutterschutz =
@@ -115,8 +122,8 @@ export function AuswahlEingabe({
                   option={option}
                   istBasisImMutterschutz={istBasisImMutterschutz}
                   elterngeldbezug={elterngeldbezug}
-                  isChecked={isChecked}
-                  isDisabled={isDisabled}
+                  istAusgewaehlt={istAusgewaehlt}
+                  istAuswaehlbar={istAuswaehlbar}
                   htmlFor={inputIdentifier}
                 />
 
@@ -126,9 +133,9 @@ export function AuswahlEingabe({
                   className="absolute appearance-none opacity-0 focus:border-none focus:outline-none"
                   name={legend}
                   value={option}
-                  checked={isChecked}
+                  checked={istAusgewaehlt}
                   onChange={waehleDieseOption}
-                  aria-disabled={isDisabled}
+                  aria-disabled={!istAuswaehlbar}
                   aria-label={inputAriaLabel}
                   aria-describedby={inputDescriptionIdentifier}
                   aria-details={infoIdentifier}
@@ -139,7 +146,7 @@ export function AuswahlEingabe({
                   className="sr-only"
                   aria-hidden
                 >
-                  {hintWhyDisabled}
+                  {grundWiesoNichtAuswaehlbar}
                 </span>
               </div>
             );
@@ -153,9 +160,9 @@ export function AuswahlEingabe({
 function getInfoIdentifier(
   baseIdentifier: string,
   option: Auswahloption,
-  isDisabled: boolean,
+  istAuswaehlbar: boolean,
 ): string | undefined {
-  return isDisabled ? `${baseIdentifier}-info-${option}` : undefined;
+  return istAuswaehlbar ? undefined : `${baseIdentifier}-info-${option}`;
 }
 
 function composeAriaLabelForAuswahloption(

@@ -52,14 +52,14 @@ function createAuswahlmoeglichkeit<A extends Ausgangslage>(
     option,
   ).mapOrElse(
     (hypothenticalPlan) => ({
-      isDisabled: false as const,
+      istAuswaehlbar: true as const,
       elterngeldbezug:
         hypothenticalPlan.lebensmonate[lebensmonatszahl]?.[elternteil]
           .elterngeldbezug ?? null,
     }),
     (violations) => ({
-      isDisabled: true as const,
-      hintWhyDisabled: formatViolationsAsHint(violations),
+      istAuswaehlbar: false as const,
+      grundWiesoNichtAuswaehlbar: formatViolationsAsHint(violations),
       elterngeldbezug: null,
     }),
   );
@@ -95,13 +95,13 @@ if (import.meta.vitest) {
         Elternteil.Zwei,
       );
 
-      expect(auswahlmoeglichkeiten[Variante.Basis].isDisabled).toBe(true);
-      expect(auswahlmoeglichkeiten[Variante.Basis].hintWhyDisabled).toBe(
-        "ungültig",
-      );
-      expect(auswahlmoeglichkeiten[Variante.Plus].isDisabled).toBe(false);
-      expect(auswahlmoeglichkeiten[Variante.Bonus].isDisabled).toBe(false);
-      expect(auswahlmoeglichkeiten[KeinElterngeld].isDisabled).toBe(false);
+      expect(auswahlmoeglichkeiten[Variante.Basis].istAuswaehlbar).toBe(false);
+      expect(
+        auswahlmoeglichkeiten[Variante.Basis].grundWiesoNichtAuswaehlbar,
+      ).toBe("ungültig");
+      expect(auswahlmoeglichkeiten[Variante.Plus].istAuswaehlbar).toBe(true);
+      expect(auswahlmoeglichkeiten[Variante.Bonus].istAuswaehlbar).toBe(true);
+      expect(auswahlmoeglichkeiten[KeinElterngeld].istAuswaehlbar).toBe(true);
     });
 
     it("forwards the callback to calculate the Elterngeldbezuege and afterwards picks up the value from the hypothentical Plan", () => {

@@ -9,22 +9,23 @@ export type Auswahlmoeglichkeiten = Readonly<
 >;
 
 export type Auswahlmoeglichkeit<E extends Elterngeldbezug = Elterngeldbezug> =
-  | EnabledAuswahlmoeglichkeit<E>
-  | DisabledAuswahlmoeglichkeit;
+  | WaehlbareAuswahlmoeglichkeit<E>
+  | NichtWaehlbareAuswahlmoeglichkeit;
 
-interface EnabledAuswahlmoeglichkeit<E extends Elterngeldbezug>
+interface WaehlbareAuswahlmoeglichkeit<E extends Elterngeldbezug>
   extends BasisAuswahlmoeglichkeit<E> {
-  isDisabled: false;
-  hintWhyDisabled?: undefined;
+  istAuswaehlbar: true;
+  grundWiesoNichtAuswaehlbar?: undefined;
 }
 
-interface DisabledAuswahlmoeglichkeit extends BasisAuswahlmoeglichkeit<null> {
-  isDisabled: true;
-  hintWhyDisabled: string;
+interface NichtWaehlbareAuswahlmoeglichkeit
+  extends BasisAuswahlmoeglichkeit<null> {
+  istAuswaehlbar: false;
+  grundWiesoNichtAuswaehlbar: string;
 }
 
 interface BasisAuswahlmoeglichkeit<E extends Elterngeldbezug> {
   readonly elterngeldbezug: E;
-  readonly isDisabled: boolean;
-  readonly hintWhyDisabled?: string;
+  readonly istAuswaehlbar: boolean;
+  readonly grundWiesoNichtAuswaehlbar?: string;
 }

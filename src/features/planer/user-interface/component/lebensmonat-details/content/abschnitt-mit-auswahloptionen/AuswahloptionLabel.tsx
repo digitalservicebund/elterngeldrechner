@@ -13,8 +13,8 @@ type Props = {
   readonly option: Auswahloption;
   readonly istBasisImMutterschutz: boolean; // TODO: How to enforce relation with `option` caller friendly?
   readonly elterngeldbezug: Elterngeldbezug;
-  readonly isChecked?: boolean;
-  readonly isDisabled?: boolean;
+  readonly istAusgewaehlt?: boolean;
+  readonly istAuswaehlbar?: boolean;
   readonly htmlFor: string;
 };
 
@@ -22,8 +22,8 @@ export function AuswahloptionLabel({
   option,
   istBasisImMutterschutz,
   elterngeldbezug,
-  isChecked,
-  isDisabled,
+  istAusgewaehlt,
+  istAuswaehlbar,
   htmlFor,
 }: Props): ReactNode {
   const { label, className, checkedClassName, icon } = getRenderProperties(
@@ -35,9 +35,9 @@ export function AuswahloptionLabel({
     <label
       className={classNames(
         "flex min-h-56 items-center justify-center rounded bg-Basis p-8 text-center",
-        { "cursor-default !bg-grey !text-black": isDisabled },
-        { "hover:underline": !isDisabled },
-        { [checkedClassName]: isChecked && !isDisabled },
+        { "cursor-default !bg-grey !text-black": !istAuswaehlbar },
+        { "hover:underline": istAuswaehlbar },
+        { [checkedClassName]: istAusgewaehlt && istAuswaehlbar },
         className,
       )}
       style={{ fontSize: "min(1em, 4.8cqi)" }}

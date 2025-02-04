@@ -47,9 +47,9 @@ function ErwerbstaetigkeitFormElternteil({
     register,
     formState: { errors },
     watch,
-    reset,
-    getValues,
+    setValue,
   } = useFormContext<StepErwerbstaetigkeitState>();
+
   const wasErwerbstaetig = watch(`${elternteil}.vorGeburt`);
   const isNichtSelbststaendig = watch(`${elternteil}.isNichtSelbststaendig`);
   const isSelbststaendig = watch(`${elternteil}.isSelbststaendig`);
@@ -57,26 +57,12 @@ function ErwerbstaetigkeitFormElternteil({
 
   useEffect(() => {
     if (wasErwerbstaetig === YesNo.NO) {
-      if (elternteil === "ET1") {
-        reset({
-          ...getValues(),
-          ET1: {
-            ...initialStepErwerbstaetigkeitElternteil,
-            vorGeburt: YesNo.NO,
-          },
-        });
-      }
-      if (elternteil === "ET2") {
-        reset({
-          ...getValues(),
-          ET2: {
-            ...initialStepErwerbstaetigkeitElternteil,
-            vorGeburt: YesNo.NO,
-          },
-        });
-      }
+      setValue(`${elternteil}`, {
+        ...initialStepErwerbstaetigkeitElternteil,
+        vorGeburt: YesNo.NO,
+      });
     }
-  }, [elternteil, reset, wasErwerbstaetig, getValues]);
+  }, [elternteil, wasErwerbstaetig, setValue]);
 
   const heading = elternteilName;
   const hasHeading = antragssteller === "FuerBeide";

@@ -23,7 +23,7 @@ export function ErwerbstaetigkeitForm({
   const methods = useForm({
     defaultValues: initialValues,
   });
-  const { handleSubmit, reset, getValues } = methods;
+  const { handleSubmit, setValue } = methods;
 
   const antragssteller = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -35,15 +35,12 @@ export function ErwerbstaetigkeitForm({
 
   const handlePageBack = () => navigate("/nachwuchs");
 
-  // reset state if ET2 is not displayed any more
+  // reset state if ET2 is not displayed anymore
   useEffect(() => {
     if (antragssteller !== "FuerBeide") {
-      reset({
-        ...getValues(),
-        ET2: initialStepErwerbstaetigkeitElternteil,
-      });
+      setValue("ET2", initialStepErwerbstaetigkeitElternteil);
     }
-  }, [reset, antragssteller, getValues]);
+  }, [antragssteller, setValue]);
 
   return (
     <FormProvider {...methods}>

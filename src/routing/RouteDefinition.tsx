@@ -10,6 +10,23 @@ import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
 import { RootState } from "@/redux";
 import RouteGuard from "@/routing/RouteGuard";
 
+// Every page in our application, except for the first one, expects certain redux state
+// slices to be present. Prior to introducing real routes, users could not navigate
+// directly to a specific page, so missing state was never an issue. However, with
+// direct navigation now possible, users may skip required steps, making state validation
+// necessary.
+
+// Step validation is implemented in precondition functions, which are evaluated
+// within the guard. This approach has the benefit of consolidating all
+// preconditions in one place, making them easy to implement. The alternative
+// would be to implement the state check within each page component, which we
+// ruled out because it can be easily overlooked when adding new pages, it would
+// make the pages harder to test and in the specific case of the planner, it
+// would require disabling the rules-of-hooks linting rule.
+
+// The downside of this approach is that it tightly couples the router to the redux state,
+// creating a dependency that could make future changes or state management more complex.
+
 const internalRouteDefinition = [
   {
     element: <AllgemeineAngabenPage />,

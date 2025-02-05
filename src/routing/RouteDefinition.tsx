@@ -1,11 +1,11 @@
-import { Navigate, RouteObject } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import AllgemeineAngabenPage from "@/components/pages/AllgemeineAngabenPage";
 import EinkommenPage from "@/components/pages/EinkommenPage";
 import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenPage";
 import ErwerbstaetigkeitPage from "@/components/pages/ErwerbstaetigkeitPage";
 import NachwuchsPage from "@/components/pages/NachwuchsPage";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
-import { formSteps } from "@/components/pages/formSteps";
+import { StepRoute, formSteps } from "@/components/pages/formSteps";
 import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
 import { RootState } from "@/redux";
 import RouteGuard from "@/routing/RouteGuard";
@@ -18,7 +18,6 @@ const internalRouteDefinition = [
   {
     element: <NachwuchsPage />,
     path: formSteps.nachwuchs.route,
-    fallback: formSteps.allgemeinAngaben.route,
     precondition: (state: RootState) => {
       return state.stepAllgemeineAngaben.mutterschaftssleistungen != null;
     },
@@ -26,7 +25,6 @@ const internalRouteDefinition = [
   {
     element: <ErwerbstaetigkeitPage />,
     path: formSteps.erwerbstaetigkeit.route,
-    fallback: formSteps.nachwuchs.route,
     precondition: (state: RootState) => {
       return !!state.stepNachwuchs.wahrscheinlichesGeburtsDatum;
     },
@@ -34,7 +32,6 @@ const internalRouteDefinition = [
   {
     element: <EinkommenPage />,
     path: formSteps.einkommen.route,
-    fallback: formSteps.erwerbstaetigkeit.route,
     precondition: (state: RootState) => {
       return state.stepErwerbstaetigkeit.ET1.vorGeburt != null;
     },
@@ -42,7 +39,6 @@ const internalRouteDefinition = [
   {
     element: <ElterngeldvariantenPage />,
     path: formSteps.elterngeldvarianten.route,
-    fallback: formSteps.einkommen.route,
     precondition: (state: RootState) => {
       return state.stepEinkommen.limitEinkommenUeberschritten != null;
     },
@@ -50,7 +46,6 @@ const internalRouteDefinition = [
   {
     element: <RechnerPlanerPage />,
     path: formSteps.rechnerUndPlaner.route,
-    fallback: formSteps.einkommen.route,
     precondition: (state: RootState) => {
       return state.stepEinkommen.limitEinkommenUeberschritten != null;
     },
@@ -65,12 +60,18 @@ const internalRouteDefinition = [
   },
 ];
 
-const routeDefinition: RouteObject[] = internalRouteDefinition.map((route) => {
-  if (route.precondition && route.fallback) {
+const isStepRoute = (path: string): path is StepRoute => {
+  return Object.values(formSteps).some((step) => step.route === path);
+};
+
+const routeDefinition = internalRouteDefinition.map((route, index, array) => {
+  const fallback = array[index - 1]?.path;
+
+  if (route.precondition && fallback && isStepRoute(fallback)) {
     return {
       path: route.path,
       element: (
-        <RouteGuard fallback={route.fallback} precondition={route.precondition}>
+        <RouteGuard fallback={fallback} precondition={route.precondition}>
           {route.element}
         </RouteGuard>
       ),

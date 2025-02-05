@@ -1,0 +1,41 @@
+version: "3"
+
+# Steps to set up tracking after spinning up the containers:
+# 1. Export the tag manager configuration from the production instance.
+# 2. Import it into your local instance.
+# 3. Adjust the matomo configuration variable to match your local setup.
+# 4. Replace the matomo script sections in your local `index.html`.
+
+services:
+  db:
+    image: mariadb:10.11
+    command: --max-allowed-packet=64MB
+    restart: always
+    volumes:
+      - db:/var/lib/mysql:Z
+    environment:
+      - MARIADB_RANDOM_ROOT_PASSWORD=1
+      - MARIADB_PASSWORD=database-password
+      - MARIADB_DATABASE=matomo
+      - MARIADB_USER=matomo
+      - MARIADB_AUTO_UPGRADE=1
+      - MARIADB_INITDB_SKIP_TZINFO=1
+
+  matomo:
+    image: matomo
+    restart: always
+    volumes:
+      - matomo:/var/www/html:z
+    environment:
+      - MATOMO_DATABASE_HOST=db
+      - MATOMO_DATABASE_ADAPTER=mysql
+      - MATOMO_DATABASE_TABLES_PREFIX=matomo_
+      - MATOMO_DATABASE_USERNAME=matomo
+      - MATOMO_DATABASE_PASSWORD=database-password
+      - MATOMO_DATABASE_DBNAME=matomo
+    ports:
+      - 8080:80
+
+volumes:
+  db:
+  matomo:

@@ -5,10 +5,17 @@ import { ElterngeldvariantenPage } from "@/components/pages/ElterngeldvariantenP
 import ErwerbstaetigkeitPage from "@/components/pages/ErwerbstaetigkeitPage";
 import NachwuchsPage from "@/components/pages/NachwuchsPage";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
-import { StepRoute, formSteps } from "@/components/pages/formSteps";
+import { formSteps } from "@/components/pages/formSteps";
 import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
+import { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
 import { RootState } from "@/redux";
 import RouteGuard from "@/routing/RouteGuard";
+import {
+  InternalGuardedRoute,
+  InternalRoute,
+  InternalRouteDefinition,
+  InternalStepRoute,
+} from "@/routing/internalRoutes";
 
 // Every page in our application, except for the first one, expects certain redux state
 // slices to be present. Prior to introducing real routes, users could not navigate
@@ -27,7 +34,7 @@ import RouteGuard from "@/routing/RouteGuard";
 // The downside of this approach is that it tightly couples the router to the redux state,
 // creating a dependency that could make future changes or state management more complex.
 
-const internalRouteDefinition = [
+const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <AllgemeineAngabenPage />,
     path: formSteps.allgemeinAngaben.route,
@@ -70,6 +77,9 @@ const internalRouteDefinition = [
   {
     element: <ZusammenfassungUndDatenPage />,
     path: formSteps.zusammenfassungUndDaten.route,
+    precondition: (_: RootState, plan?: PlanMitBeliebigenElternteilen) => {
+      return plan != null;
+    },
   },
   {
     element: <Navigate to={formSteps.allgemeinAngaben.route} replace />,
@@ -77,18 +87,18 @@ const internalRouteDefinition = [
   },
 ];
 
-const isStepRoute = (path: string): path is StepRoute => {
-  return Object.values(formSteps).some((step) => step.route === path);
-};
+function isGuardedRoute(route: InternalRoute): route is InternalGuardedRoute {
+  return "precondition" in route;
+}
 
 const routeDefinition = internalRouteDefinition.map((route, index, array) => {
-  const fallback = array[index - 1]?.path;
+  if (isGuardedRoute(route)) {
+    const fallback = array[index - 1] as InternalStepRoute;
 
-  if (route.precondition && fallback && isStepRoute(fallback)) {
     return {
       path: route.path,
       element: (
-        <RouteGuard fallback={fallback} precondition={route.precondition}>
+        <RouteGuard fallback={fallback.path} precondition={route.precondition}>
           {route.element}
         </RouteGuard>
       ),

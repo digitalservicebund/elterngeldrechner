@@ -1,4 +1,5 @@
-import { DateTime } from "luxon";
+import { utc } from "@date-fns/utc";
+import { addDays, parseISO } from "date-fns";
 import { ElternGeldArt, ErwerbsArt } from "@/globals/js/calculations/model";
 
 export const erwerbsArtOf = (statusErwerbsArt: number) => {
@@ -17,9 +18,7 @@ export const erwerbsArtOf = (statusErwerbsArt: number) => {
 };
 
 export function dateFromExcelSerial(excelSerialDate: number) {
-  return DateTime.fromISO("1900-01-01", { zone: "utc" })
-    .plus({ days: excelSerialDate - 2 })
-    .toJSDate();
+  return addDays(parseISO("1900-01-01", { in: utc }), excelSerialDate - 2);
 }
 
 export function elterngeldArtOf(elterngeldArt: string) {

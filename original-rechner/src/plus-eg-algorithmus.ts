@@ -31,7 +31,7 @@ import {
   round,
 } from "./common/math-util";
 import { bruttoEGPlusNeu } from "./eg-brutto-rechner";
-import { minusDays, plusMonths, setDayOfMonth } from "./common/date-util";
+import { subDays, addMonths, setDate } from "date-fns";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MIN_GESCHWISTERBONUS,
@@ -392,8 +392,8 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
   public fillLebensMonateList(geburt: Date) {
     // Die Arrays anfang_LM und ende_LM werden mit Index 1-32 benutzt.
     for (let i: number = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-      const anfang: Date = plusMonths(geburt, i);
-      const ende: Date = minusDays(plusMonths(geburt, i + 1), 1);
+      const anfang: Date = addMonths(geburt, i);
+      const ende: Date = subDays(addMonths(geburt, i + 1), 1);
       this.anfang_LM[i + 1] = anfang;
       this.ende_LM[i + 1] = ende;
       if (
@@ -402,12 +402,12 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         anfang.getDay() < 5
       ) {
         // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 1, 1).getTime());
-        this.anfang_LM[i + 1] = setDayOfMonth(plusMonths(geburt, i + 1), 1);
+        this.anfang_LM[i + 1] = setDate(addMonths(geburt, i + 1), 1);
       }
       if (geburt.getDay() > 28 && ende.getMonth() === 2 && ende.getDay() < 5) {
         // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 2, 0).getTime());
-        this.anfang_LM[i + 1] = minusDays(
-          setDayOfMonth(plusMonths(geburt, i + 2), 1),
+        this.anfang_LM[i + 1] = subDays(
+          setDate(addMonths(geburt, i + 2), 1),
           1,
         );
       }
@@ -554,10 +554,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
       const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
       if (ende_geschwisterbonus != null && ende_geschwisterbonus >= geburt) {
         for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.anfang_LM[i] = plusMonths(geburt, i - 1);
+          this.anfang_LM[i] = addMonths(geburt, i - 1);
         }
         for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.ende_LM[i] = minusDays(plusMonths(geburt, i), 1);
+          this.ende_LM[i] = subDays(addMonths(geburt, i), 1);
         }
       }
       for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {

@@ -15,10 +15,7 @@ import {
   PAUSCH,
   RATE_BONUS,
 } from "./model/egr-berechnung-param-id";
-import {
-  minusDays,
-  plusYears,
-} from "./common/date-util";
+import { addYears, subDays } from "date-fns";
 
 /**
  * Algorithmus zur Berechnung des Zwischenergebnisses des Elterngeldrechners.
@@ -88,11 +85,11 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       ) {
         ende = ende_bonus_u14_final;
       } else {
-        ende = minusDays(geburt, 1);
+        ende = subDays(geburt, 1);
       }
     }
     if (ende === undefined || ende < geburt) {
-      ende = minusDays(geburt, 1);
+      ende = subDays(geburt, 1);
     }
     if (
       status_et === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI ||
@@ -188,9 +185,9 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     bonusYears: number,
   ): Date {
     if (geburtstag_geschw !== undefined) {
-      return minusDays(plusYears(geburtstag_geschw, bonusYears), 1);
+      return subDays(addYears(geburtstag_geschw, bonusYears), 1);
     } else {
-      return minusDays(geburt, 1);
+      return subDays(geburt, 1);
     }
   }
 }

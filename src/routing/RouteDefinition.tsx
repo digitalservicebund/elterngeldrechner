@@ -34,6 +34,9 @@ import {
 // The downside of this approach is that it tightly couples the router to the redux state,
 // creating a dependency that could make future changes or state management more complex.
 
+// Please keep in mind that these urls are used as triggers for funnel tracking
+// in matomo and changes must also be reflected in the tag manager.
+
 const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <AllgemeineAngabenPage />,

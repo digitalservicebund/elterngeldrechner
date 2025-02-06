@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { addYears, subDays } from "date-fns";
 import { elterngeld_keine_et, ersatzrate_eg } from "./abstract-algorithmus";
 import {
   Einkommen,
@@ -139,10 +139,10 @@ function ende_bonus(
   geburtstagDesGeschwisterkinds: Date,
   maximalesAlterInJahren: number,
 ): Date {
-  return DateTime.fromJSDate(geburtstagDesGeschwisterkinds)
-    .plus({ years: maximalesAlterInJahren })
-    .minus({ days: 1 })
-    .toJSDate();
+  return subDays(
+    addYears(geburtstagDesGeschwisterkinds, maximalesAlterInJahren),
+    1,
+  );
 }
 
 /**

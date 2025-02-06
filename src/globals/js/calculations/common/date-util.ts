@@ -1,15 +1,15 @@
-import { DateTime } from "luxon";
+import { addMonths, setDate, subDays } from "date-fns";
 
 export function minusDays(date: Date, days: number) {
-  return DateTime.fromJSDate(date).minus({ days: days }).toJSDate();
+  return subDays(date, days);
 }
 
 export function plusMonths(date: Date, months: number) {
-  return DateTime.fromJSDate(date).plus({ months: months }).toJSDate();
+  return addMonths(date, months);
 }
 
 export function setDayOfMonth(date: Date, dayOfMonth: number) {
-  return DateTime.fromJSDate(date).set({ day: dayOfMonth }).toJSDate();
+  return setDate(date, dayOfMonth);
 }
 
 if (import.meta.vitest) {

@@ -2,8 +2,9 @@ version: "3"
 
 # Steps to set up tracking after spinning up the containers:
 # 1. Export the tag manager configuration from the production instance.
-# 2. Import it into your local instance.
-# 3. Adjust the matomo configuration variable to match your local setup.
+# 2. Create a new tag manager and import the backup json under the versions tab.
+# 3. Adjust the url (localhost) and idSite (1) in the matomo configuration variable.
+# 4. Create a new version of the tag manager and publish a release.
 # 4. Replace the matomo script sections in your local `index.html`.
 
 services:

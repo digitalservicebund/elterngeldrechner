@@ -18,7 +18,6 @@ export type {
 } from "./Elterngeldbezug";
 export type { BerechneElterngeldbezuegeCallback } from "./Elterngeldbezug";
 export { Elternteil, compareElternteile } from "./Elternteil";
-export { type Gesamtsumme, type SummeFuerElternteil } from "./Gesamtsumme";
 export {
   AlleElternteileHabenBonusGewaehlt,
   type Lebensmonat,
@@ -38,16 +37,18 @@ export {
   type Lebensmonatszahl,
   Lebensmonatszahlen,
   LetzteLebensmonatszahl,
+  compareLebensmonatszahlen,
+  isLebensmonatszahl,
 } from "./Lebensmonatszahl";
 export { MONAT_MIT_MUTTERSCHUTZ, type Monat } from "./monat";
 export {
   type Plan,
   type PlanMitBeliebigenElternteilen,
-  berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
-  fassePlanZusammen,
   gebeEinkommenAn,
+  mapLebensmonateProElternteil,
   setzePlanZurueck,
+  teileLebensmonateBeiElternteileAuf,
   validierePlanFuerFinaleAbgabe,
   waehleOption,
 } from "./plan";
@@ -59,8 +60,3 @@ export {
 } from "./verfuegbares-kontingent";
 export { type VerplantesKontingent } from "./verplantes-kontingent";
 export { type Zeitraum, berechneZeitraumFuerLebensmonat } from "./zeitraum";
-export {
-  type Bezug,
-  type Planungsdetails,
-  type Planungsuebersicht,
-} from "./Zusammenfassung";

@@ -118,15 +118,17 @@ const ANY_PROPS = {
 };
 
 const ANY_SERVICE_VALUES = {
-  ausgangslage: {
-    anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
+  plan: {
+    ausgangslage: {
+      anzahlElternteile: 2 as const,
+      pseudonymeDerElternteile: {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      },
+      geburtsdatumDesKindes: new Date(),
     },
-    geburtsdatumDesKindes: new Date(),
+    lebensmonate: {},
   },
-  lebensmonate: {},
   verfuegbaresKontingent: {
     [Variante.Basis]: 0,
     [Variante.Plus]: 0,

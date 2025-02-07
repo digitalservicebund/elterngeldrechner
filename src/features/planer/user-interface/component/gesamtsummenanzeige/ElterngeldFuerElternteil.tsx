@@ -1,7 +1,7 @@
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import type { SummeFuerElternteil } from "@/features/planer/domain";
+import type { SummeFuerElternteil } from "./berechneGesamtsumme";
 import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 
 type Props = {

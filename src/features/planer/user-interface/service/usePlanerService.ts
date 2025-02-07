@@ -13,7 +13,6 @@ import {
   type Lebensmonate,
   type Plan,
   type PlanMitBeliebigenElternteilen,
-  berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   bestimmeVerfuegbaresKontingent,
   erstelleInitialeLebensmonate,
@@ -46,8 +45,6 @@ export function usePlanerService(
   const { verplantesKontingent, updateVerplantesKontingent } =
     useVerplantesKontingent(plan.lebensmonate);
 
-  const { gesamtsumme, updateGesamtsumme } = useGesamtsumme(plan);
-
   const { validierungsfehler, updateValidierungsfehler } =
     useValidierungsfehler(plan);
 
@@ -62,18 +59,11 @@ export function usePlanerService(
         updateVerplantesKontingent(nextPlan.lebensmonate);
       }
 
-      updateGesamtsumme(nextPlan);
-
       const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
 
       onPlanChanged?.(nextPlan, nextValidierungsfehler.length === 0);
     },
-    [
-      updateVerplantesKontingent,
-      updateGesamtsumme,
-      updateValidierungsfehler,
-      onPlanChanged,
-    ],
+    [updateVerplantesKontingent, updateValidierungsfehler, onPlanChanged],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -153,11 +143,9 @@ export function usePlanerService(
   );
 
   return {
-    ausgangslage: plan.ausgangslage,
-    lebensmonate: plan.lebensmonate,
+    plan,
     verfuegbaresKontingent: verfuegbaresKontingent.current,
     verplantesKontingent,
-    gesamtsumme,
     validierungsfehler,
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
@@ -190,19 +178,6 @@ function useVerplantesKontingent<E extends Elternteil>(
   );
 
   return { verplantesKontingent, updateVerplantesKontingent };
-}
-
-function useGesamtsumme<A extends Ausgangslage>(plan: Plan<A>) {
-  const [gesamtsumme, setGesamtsumme] = useState(() =>
-    berechneGesamtsumme(plan),
-  );
-
-  const updateGesamtsumme = useCallback(
-    (plan: Plan<A>) => setGesamtsumme(berechneGesamtsumme(plan)),
-    [],
-  );
-
-  return { gesamtsumme, updateGesamtsumme };
 }
 
 function useValidierungsfehler<A extends Ausgangslage>(plan: Plan<A>) {

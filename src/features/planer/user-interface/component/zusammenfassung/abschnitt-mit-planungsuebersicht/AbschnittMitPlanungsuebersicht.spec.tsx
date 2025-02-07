@@ -1,9 +1,18 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AbschnittMitPlanungsuebersicht } from "./AbschnittMitPlanungsuebersicht";
+import { erstellePlanungsuebersicht } from "./erstellePlanungsuebersicht";
 import { Elternteil, Variante } from "@/features/planer/domain";
 
+vi.mock(import("./erstellePlanungsuebersicht"));
+
 describe("Abschnitt mit Planungsübersicht", () => {
+  beforeEach(() => {
+    vi.mocked(erstellePlanungsuebersicht).mockReturnValue(
+      ANY_PLANUNGSUEBERSICHT,
+    );
+  });
+
   it("shows a section for the Planungsübersicht", () => {
     render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} />);
 
@@ -11,7 +20,7 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 
   it("shows the Pseudonym and the Gesamtbezug for each Elternteil", () => {
-    const planungsuebersicht = {
+    vi.mocked(erstellePlanungsuebersicht).mockReturnValue({
       [Elternteil.Eins]: {
         ...ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
         gesamtbezug: { anzahlMonate: 15, elterngeld: 5019, bruttoeinkommen: 0 },
@@ -20,15 +29,11 @@ describe("Abschnitt mit Planungsübersicht", () => {
         ...ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
         gesamtbezug: { anzahlMonate: 8, elterngeld: 2407, bruttoeinkommen: 0 },
       },
-    };
+    });
 
-    render(
-      <AbschnittMitPlanungsuebersicht
-        {...ANY_PROPS}
-        planungsuebersicht={planungsuebersicht}
-        ausgangslage={ausgangslage("Jane", "John")}
-      />,
-    );
+    const plan = { ...ANY_PLAN, ausgangslage: ausgangslage("Jane", "John") };
+
+    render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} plan={plan} />);
 
     expect(screen.queryByText("Jane")).toBeVisible();
     expect(screen.queryByText("15 Monate Elterngeld"));
@@ -40,12 +45,9 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 
   it("shows a list with the Zeiträume for each Elternteil in correct order", () => {
-    render(
-      <AbschnittMitPlanungsuebersicht
-        {...ANY_PROPS}
-        ausgangslage={ausgangslage("Jane", "John")}
-      />,
-    );
+    const plan = { ...ANY_PLAN, ausgangslage: ausgangslage("Jane", "John") };
+
+    render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} plan={plan} />);
 
     const listJane = screen.getByRole("list", {
       name: "Zeiträume mit Elterngeldbezug von Jane",
@@ -62,12 +64,9 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 
   it("shows a list with the Bezügen per Elterngeldvariante for each Elternteil in correct order", () => {
-    render(
-      <AbschnittMitPlanungsuebersicht
-        {...ANY_PROPS}
-        ausgangslage={ausgangslage("Jane", "John")}
-      />,
-    );
+    const plan = { ...ANY_PLAN, ausgangslage: ausgangslage("Jane", "John") };
+
+    render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} plan={plan} />);
 
     const listJane = screen.getByRole("list", {
       name: "Bezüge pro Elterngeldvariante von Jane",
@@ -107,10 +106,16 @@ const ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL = {
   },
 };
 
-const ANY_PROPS = {
-  planungsuebersicht: {
-    [Elternteil.Eins]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
-    [Elternteil.Zwei]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
-  },
+const ANY_PLANUNGSUEBERSICHT = {
+  [Elternteil.Eins]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
+  [Elternteil.Zwei]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
+};
+
+const ANY_PLAN = {
   ausgangslage: ausgangslage("Jane", "John"),
+  lebensmonate: {},
+};
+
+const ANY_PROPS = {
+  plan: ANY_PLAN,
 };

@@ -11,7 +11,6 @@ import {
   KeinElterngeld,
   Result,
   Variante,
-  berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   bestimmeVerfuegbaresKontingent,
   erstelleInitialeLebensmonate,
@@ -26,7 +25,6 @@ import { INITIAL_STATE, act, renderHook } from "@/test-utils/test-utils";
 
 vi.mock(import("@/features/planer/domain/plan/operation/waehleOption"));
 vi.mock(import("@/features/planer/domain/plan/operation/setzePlanZurueck"));
-vi.mock(import("@/features/planer/domain/plan/operation/berechneGesamtsumme"));
 vi.mock(
   import(
     "@/features/planer/domain/plan/operation/validierePlanFuerFinaleAbgabe"
@@ -93,8 +91,8 @@ describe("use Planer service", () => {
       expect(erstelleInitialeLebensmonate).toHaveBeenLastCalledWith(
         ausgangslage,
       );
-      expect(result.current.ausgangslage).toStrictEqual(ausgangslage);
-      expect(result.current.lebensmonate).toStrictEqual({});
+      expect(result.current.plan.ausgangslage).toStrictEqual(ausgangslage);
+      expect(result.current.plan.lebensmonate).toStrictEqual({});
     });
 
     it("uses the given old Plan instead to create a new one", () => {
@@ -106,8 +104,7 @@ describe("use Planer service", () => {
 
       expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
       expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
-      expect(result.current.ausgangslage).toStrictEqual(plan.ausgangslage);
-      expect(result.current.lebensmonate).toStrictEqual(plan.lebensmonate);
+      expect(result.current.plan).toStrictEqual(plan);
     });
   });
 
@@ -187,55 +184,6 @@ describe("use Planer service", () => {
 
       expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
       expect(result.current.verplantesKontingent[Variante.Basis]).toBe(0);
-    });
-  });
-
-  describe("Gesamtsumme", () => {
-    it("initially determines the Gesamtsumme", () => {
-      vi.mocked(berechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
-
-      const { result } = renderPlanerServiceHook();
-
-      expect(berechneGesamtsumme).toHaveBeenCalledOnce();
-      expect(result.current.gesamtsumme).toStrictEqual(ANY_GESAMTSUMME);
-    });
-
-    it("updates the Gesamtsumme when chosing an Option", () => {
-      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
-        ...ANY_GESAMTSUMME,
-        elterngeldbezug: 1,
-      });
-      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
-        ...ANY_GESAMTSUMME,
-        elterngeldbezug: 2,
-      });
-
-      const { result } = renderPlanerServiceHook();
-      expect(result.current.gesamtsumme.elterngeldbezug).toBe(1);
-      vi.clearAllMocks();
-
-      waehleAnyOption(result.current.waehleOption);
-
-      expect(berechneGesamtsumme).toHaveBeenCalledOnce();
-      expect(result.current.gesamtsumme.elterngeldbezug).toBe(2);
-    });
-
-    it("updates the Gesamtsumme when resetting the Plan", () => {
-      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
-        ...ANY_GESAMTSUMME,
-        elterngeldbezug: 1,
-      });
-      vi.mocked(berechneGesamtsumme).mockReturnValueOnce({
-        ...ANY_GESAMTSUMME,
-        elterngeldbezug: 0,
-      });
-
-      const { result } = renderPlanerServiceHook();
-      expect(result.current.gesamtsumme.elterngeldbezug).toBe(1);
-
-      act(() => result.current.setzePlanZurueck());
-
-      expect(result.current.gesamtsumme.elterngeldbezug).toBe(0);
     });
   });
 
@@ -356,14 +304,14 @@ describe("use Planer service", () => {
       const { result } = renderPlanerServiceHook({
         initialInformation: { plan: initialPlan },
       });
-      expect(result.current.lebensmonate).toStrictEqual(
+      expect(result.current.plan.lebensmonate).toStrictEqual(
         initialPlan.lebensmonate,
       );
 
       act(() => {
         result.current.waehleOption(1, Elternteil.Eins, Variante.Basis);
       });
-      expect(result.current.lebensmonate).toStrictEqual(
+      expect(result.current.plan.lebensmonate).toStrictEqual(
         updatedPlan.lebensmonate,
       );
     });
@@ -399,13 +347,13 @@ describe("use Planer service", () => {
       const { result } = renderPlanerServiceHook({
         initialInformation: { plan: initialPlan },
       });
-      expect(result.current.lebensmonate).toStrictEqual(
+      expect(result.current.plan.lebensmonate).toStrictEqual(
         initialPlan.lebensmonate,
       );
 
       waehleAnyOption(result.current.waehleOption);
 
-      expect(result.current.lebensmonate).toStrictEqual(
+      expect(result.current.plan.lebensmonate).toStrictEqual(
         initialPlan.lebensmonate,
       );
       // eslint-disable-next-line no-console
@@ -451,12 +399,12 @@ describe("use Planer service", () => {
       const { result } = renderPlanerServiceHook({
         initialInformation: { plan: initialPlan },
       });
-      expect(result.current.lebensmonate).toStrictEqual(
+      expect(result.current.plan.lebensmonate).toStrictEqual(
         initialPlan.lebensmonate,
       );
 
       act(() => result.current.gebeEinkommenAn(1, Elternteil.Eins, 300));
-      expect(result.current.lebensmonate).toStrictEqual(
+      expect(result.current.plan.lebensmonate).toStrictEqual(
         updatedPlan.lebensmonate,
       );
     });
@@ -602,22 +550,6 @@ const ANY_VERPLANTES_KONTINGENT = {
 const ANY_LEBENSMONAT = {
   [Elternteil.Eins]: { imMutterschutz: false as const },
   [Elternteil.Zwei]: { imMutterschutz: false as const },
-};
-
-const ANY_GESAMTSUMME = {
-  elterngeldbezug: 0,
-  proElternteil: {
-    [Elternteil.Eins]: {
-      anzahlMonateMitBezug: 0,
-      elterngeldbezug: 0,
-      bruttoeinkommen: 0,
-    },
-    [Elternteil.Zwei]: {
-      anzahlMonateMitBezug: 0,
-      elterngeldbezug: 0,
-      bruttoeinkommen: 0,
-    },
-  },
 };
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {

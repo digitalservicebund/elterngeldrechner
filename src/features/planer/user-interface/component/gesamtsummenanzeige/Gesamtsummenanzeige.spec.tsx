@@ -1,9 +1,19 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
-import { Elternteil } from "@/features/planer/domain";
+import { berechneGesamtsumme } from "./berechneGesamtsumme";
+import {
+  type AusgangslageFuerEinElternteil,
+  Elternteil,
+} from "@/features/planer/domain";
+
+vi.mock(import("./berechneGesamtsumme"));
 
 describe("Gesamtsummenanzeige", () => {
+  beforeEach(() => {
+    vi.mocked(berechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
+  });
+
   it("shows a section for the Gesamtsumme", () => {
     render(<Gesamtsummenanzeige {...ANY_PROPS} />);
 
@@ -12,40 +22,40 @@ describe("Gesamtsummenanzeige", () => {
 
   describe("final Summe", () => {
     it("shows it when there are more than one Elternteil", () => {
-      const gesamtsumme = {
+      vi.mocked(berechneGesamtsumme).mockReturnValue({
         elterngeldbezug: 7041,
         proElternteil: {
           [Elternteil.Eins]: ANY_SUMME_FUER_ELTERNTEIL,
           [Elternteil.Zwei]: ANY_SUMME_FUER_ELTERNTEIL,
         },
+      });
+
+      const plan = {
+        ...ANY_PLAN,
+        ausgangslage: ausgangslageFuerZweiElternteile(),
       };
 
-      render(
-        <Gesamtsummenanzeige
-          {...ANY_PROPS}
-          gesamtsumme={gesamtsumme}
-          ausgangslage={ausgangslageFuerZweiElternteile()}
-        />,
-      );
+      render(<Gesamtsummenanzeige {...ANY_PROPS} plan={plan} />);
 
       expect(screen.getByText("Gesamtsumme Elterngeld: 7.041 €")).toBeVisible();
     });
 
     it("hides it if there is only one Elternteil", () => {
-      const gesamtsumme = {
+      vi.mocked(
+        berechneGesamtsumme<AusgangslageFuerEinElternteil>,
+      ).mockReturnValue({
         elterngeldbezug: 7041,
         proElternteil: {
           [Elternteil.Eins]: ANY_SUMME_FUER_ELTERNTEIL,
         },
+      });
+
+      const plan = {
+        ...ANY_PLAN,
+        ausgangslage: ausgangslageFuerEinElternteil(),
       };
 
-      render(
-        <Gesamtsummenanzeige
-          {...ANY_PROPS}
-          gesamtsumme={gesamtsumme}
-          ausgangslage={ausgangslageFuerEinElternteil()}
-        />,
-      );
+      render(<Gesamtsummenanzeige {...ANY_PROPS} plan={plan} />);
 
       expect(
         screen.queryByText(/^Gesamtsumme der Planung: 7.041.€$/),
@@ -55,7 +65,9 @@ describe("Gesamtsummenanzeige", () => {
 
   describe("Summe für jedes Elternteil", () => {
     it("shows the Elterngeld, Bruttoeinkommen and Monate for a single Elternteil", () => {
-      const gesamtsumme = {
+      vi.mocked(
+        berechneGesamtsumme<AusgangslageFuerEinElternteil>,
+      ).mockReturnValue({
         ...ANY_GESAMTSUMME,
         proElternteil: {
           [Elternteil.Eins]: {
@@ -64,15 +76,14 @@ describe("Gesamtsummenanzeige", () => {
             bruttoeinkommen: 2000,
           },
         },
+      });
+
+      const plan = {
+        ...ANY_PLAN,
+        ausgangslage: ausgangslageFuerEinElternteil(),
       };
 
-      render(
-        <Gesamtsummenanzeige
-          {...ANY_PROPS}
-          gesamtsumme={gesamtsumme}
-          ausgangslage={ausgangslageFuerEinElternteil()}
-        />,
-      );
+      render(<Gesamtsummenanzeige {...ANY_PROPS} plan={plan} />);
 
       expect(screen.getByText("Elterngeld")).toBeVisible();
       expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
@@ -81,7 +92,7 @@ describe("Gesamtsummenanzeige", () => {
     });
 
     it("includes the Pseudonym when more than one Elternteil", () => {
-      const gesamtsumme = {
+      vi.mocked(berechneGesamtsumme).mockReturnValue({
         ...ANY_GESAMTSUMME,
         proElternteil: {
           [Elternteil.Eins]: {
@@ -95,15 +106,14 @@ describe("Gesamtsummenanzeige", () => {
             bruttoeinkommen: 8000,
           },
         },
+      });
+
+      const plan = {
+        ...ANY_PLAN,
+        ausgangslage: ausgangslageFuerZweiElternteile("Jane", "John"),
       };
 
-      render(
-        <Gesamtsummenanzeige
-          {...ANY_PROPS}
-          gesamtsumme={gesamtsumme}
-          ausgangslage={ausgangslageFuerZweiElternteile("Jane", "John")}
-        />,
-      );
+      render(<Gesamtsummenanzeige {...ANY_PROPS} plan={plan} />);
 
       expect(screen.getByText("Jane: Elterngeld")).toBeVisible();
       expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
@@ -116,12 +126,12 @@ describe("Gesamtsummenanzeige", () => {
     });
 
     it("shows the Elternteile in korrekt order", () => {
-      render(
-        <Gesamtsummenanzeige
-          {...ANY_PROPS}
-          ausgangslage={ausgangslageFuerZweiElternteile("Jane", "John")}
-        />,
-      );
+      const plan = {
+        ...ANY_PLAN,
+        ausgangslage: ausgangslageFuerZweiElternteile("Jane", "John"),
+      };
+
+      render(<Gesamtsummenanzeige {...ANY_PROPS} plan={plan} />);
 
       const elternteilEins = screen.getByText((content) =>
         content.includes("Jane"),
@@ -185,7 +195,9 @@ const ANY_GESAMTSUMME = {
   },
 };
 
-const ANY_PROPS = {
-  gesamtsumme: ANY_GESAMTSUMME,
-  ausgangslage: ausgangslageFuerZweiElternteile(),
+const ANY_PLAN = {
+  ausgangslage: ausgangslageFuerEinElternteil(),
+  lebensmonate: {},
 };
+
+const ANY_PROPS = { plan: ANY_PLAN };

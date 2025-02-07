@@ -37,11 +37,9 @@ export function Planer({
   className,
 }: Props): ReactNode {
   const {
-    ausgangslage,
-    lebensmonate,
+    plan,
     verfuegbaresKontingent,
     verplantesKontingent,
-    gesamtsumme,
     validierungsfehler,
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
@@ -56,7 +54,6 @@ export function Planer({
     onOptionSelected,
     onPlanResetted,
   );
-
   const headingIdentifier = useId();
   const descriptionIdentifier = useId();
 
@@ -98,7 +95,9 @@ export function Planer({
         entrichtet werden.
       </Alert>
 
-      <GridLayoutProvider anzahlElternteile={ausgangslage.anzahlElternteile}>
+      <GridLayoutProvider
+        anzahlElternteile={plan.ausgangslage.anzahlElternteile}
+      >
         <div
           className={classNames(
             "mx-[-15px] flex flex-col sm:mx-0",
@@ -108,14 +107,13 @@ export function Planer({
         >
           <KopfleisteMitPseudonymen
             className="py-10"
-            ausgangslage={ausgangslage}
+            ausgangslage={plan.ausgangslage}
           />
 
           <Lebensmonatsliste
             ref={lebensmonatslistenElement}
             className="py-8"
-            ausgangslage={ausgangslage}
-            lebensmonate={lebensmonate}
+            plan={plan}
             erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
             waehleOption={waehleOption}
@@ -133,8 +131,7 @@ export function Planer({
 
           <Gesamtsummenanzeige
             className="border-t-2 border-solid !border-grey bg-off-white py-16"
-            ausgangslage={ausgangslage}
-            gesamtsumme={gesamtsumme}
+            plan={plan}
           />
         </div>
       </GridLayoutProvider>

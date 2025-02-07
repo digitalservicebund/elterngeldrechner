@@ -1,23 +1,19 @@
 import { ReactNode, useId } from "react";
 import { TabelleMitLebensmonaten } from "./TabelleMitLebensmonaten";
+import { erstellePlanungsdetails } from "./erstellePlanungsdetails";
 import {
-  type Ausgangslage,
-  type ElternteileByAusgangslage,
-  type Planungsdetails,
+  type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 
-type Props<A extends Ausgangslage> = {
-  readonly ausgangslage: A;
-  readonly planungsdetails: Planungsdetails<ElternteileByAusgangslage<A>>;
+type Props = {
+  readonly plan: PlanMitBeliebigenElternteilen;
 };
 
-export function AbschnittMitPlanungsdetails<A extends Ausgangslage>({
-  planungsdetails,
-  ausgangslage,
-}: Props<A>): ReactNode {
+export function AbschnittMitPlanungsdetails({ plan }: Props): ReactNode {
   const headingIdentifier = useId();
-  const elternteile = listeElternteileFuerAusgangslageAuf(ausgangslage);
+  const planungsdetails = erstellePlanungsdetails(plan);
+  const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);
 
   return (
     <section
@@ -30,7 +26,7 @@ export function AbschnittMitPlanungsdetails<A extends Ausgangslage>({
         {elternteile.map((elternteil) => (
           <TabelleMitLebensmonaten
             key={elternteil}
-            ausgangslage={ausgangslage}
+            ausgangslage={plan.ausgangslage}
             lebensmonate={planungsdetails.geplanteLebensmonate}
             elternteileToShow={[elternteil]}
           />
@@ -39,7 +35,7 @@ export function AbschnittMitPlanungsdetails<A extends Ausgangslage>({
 
       <div className="hidden @2xl/planungs-details:block">
         <TabelleMitLebensmonaten
-          ausgangslage={ausgangslage}
+          ausgangslage={plan.ausgangslage}
           lebensmonate={planungsdetails.geplanteLebensmonate}
           elternteileToShow={elternteile}
         />

@@ -1,29 +1,26 @@
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
+import { berechneGesamtsumme } from "./berechneGesamtsumme";
 import {
-  type Ausgangslage,
-  type ElternteileByAusgangslage,
-  type Gesamtsumme,
+  type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 import { EinkommenFuerElternteil } from "@/features/planer/user-interface/component/gesamtsummenanzeige/EinkommenFuerElternteil";
 
-type Props<A extends Ausgangslage> = {
-  readonly gesamtsumme: Gesamtsumme<ElternteileByAusgangslage<A>>;
-  readonly ausgangslage: A;
+type Props = {
+  readonly plan: PlanMitBeliebigenElternteilen;
   readonly className?: string;
 };
 
-export function Gesamtsummenanzeige<A extends Ausgangslage>({
-  gesamtsumme,
-  ausgangslage,
-  className,
-}: Props<A>): ReactNode {
+export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
   const headingIdentifier = useId();
-  const hasMultipleElternteile = ausgangslage.anzahlElternteile > 1;
-  const jemandHatEinkommen = listeElternteileFuerAusgangslageAuf(ausgangslage)
+  const gesamtsumme = berechneGesamtsumme(plan);
+  const hasMultipleElternteile = plan.ausgangslage.anzahlElternteile > 1;
+  const jemandHatEinkommen = listeElternteileFuerAusgangslageAuf(
+    plan.ausgangslage,
+  )
     .map((elternteil) => gesamtsumme.proElternteil[elternteil].bruttoeinkommen)
     .reduce((sum, bruttoeinkommen) => sum + (bruttoeinkommen ?? 0), 0);
 
@@ -39,14 +36,16 @@ export function Gesamtsummenanzeige<A extends Ausgangslage>({
         Gesamtsumme
       </h4>
 
-      {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => (
-        <ElterngeldFuerElternteil
-          className="basis-[40ch]"
-          key={elternteil}
-          pseudonym={ausgangslage.pseudonymeDerElternteile?.[elternteil]}
-          summe={gesamtsumme.proElternteil[elternteil]}
-        />
-      ))}
+      {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
+        (elternteil) => (
+          <ElterngeldFuerElternteil
+            className="basis-[40ch]"
+            key={elternteil}
+            pseudonym={plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]}
+            summe={gesamtsumme.proElternteil[elternteil]}
+          />
+        ),
+      )}
 
       {!!hasMultipleElternteile && (
         <span className="basis-full font-bold">
@@ -56,14 +55,18 @@ export function Gesamtsummenanzeige<A extends Ausgangslage>({
       )}
 
       {!!jemandHatEinkommen &&
-        listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => (
-          <EinkommenFuerElternteil
-            className="basis-[40ch]"
-            key={elternteil}
-            pseudonym={ausgangslage.pseudonymeDerElternteile?.[elternteil]}
-            summe={gesamtsumme.proElternteil[elternteil]}
-          />
-        ))}
+        listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
+          (elternteil) => (
+            <EinkommenFuerElternteil
+              className="basis-[40ch]"
+              key={elternteil}
+              pseudonym={
+                plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
+              }
+              summe={gesamtsumme.proElternteil[elternteil]}
+            />
+          ),
+        )}
 
       <span className="basis-full text-14">
         Hinweis: Mutterschaftsleistungen werden nicht in der Summe

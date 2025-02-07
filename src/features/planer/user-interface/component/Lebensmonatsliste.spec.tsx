@@ -49,7 +49,7 @@ describe("Lebensmonatsliste", () => {
   });
 
   it("uses the callback to create unplanned Lebensmonate for missing Lebensmonate", () => {
-    const lebensmonate = { 1: ANY_LEBENSMONAT };
+    const plan = { ...ANY_PLAN, lebensmonate: { 1: ANY_LEBENSMONAT } };
     const erstelleUngeplantenLebensmonat = vi
       .fn()
       .mockReturnValue(ANY_LEBENSMONAT);
@@ -57,7 +57,7 @@ describe("Lebensmonatsliste", () => {
     render(
       <Lebensmonatsliste
         {...ANY_PROPS}
-        lebensmonate={lebensmonate}
+        plan={plan}
         erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
       />,
     );
@@ -99,12 +99,16 @@ const ANY_LEBENSMONAT = {
   [Elternteil.Eins]: { imMutterschutz: false as const },
 };
 
-const ANY_PROPS = {
+const ANY_PLAN = {
   ausgangslage: {
     anzahlElternteile: 1 as const,
     geburtsdatumDesKindes: new Date(),
   },
   lebensmonate: {},
+};
+
+const ANY_PROPS = {
+  plan: ANY_PLAN,
   erstelleUngeplantenLebensmonat: () => ANY_LEBENSMONAT,
   bestimmeAuswahlmoeglichkeiten: () => ({
     [Variante.Basis]: { elterngeldbezug: 0, istAuswaehlbar: true as const },

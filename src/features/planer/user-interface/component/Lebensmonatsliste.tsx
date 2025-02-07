@@ -13,8 +13,8 @@ import { LebensmonatDetails } from "./lebensmonat-details";
 import {
   type Ausgangslage,
   type ElternteileByAusgangslage,
-  type Lebensmonate,
   Lebensmonatszahlen,
+  type Plan,
 } from "@/features/planer/domain";
 import { findeLetztenVerplantenLebensmonatOrDefault } from "@/features/planer/domain/lebensmonate/operation/findeLetztenVerplantenLebensmonatOrDefault";
 import type {
@@ -26,8 +26,7 @@ import type {
 } from "@/features/planer/user-interface/service/callbackTypes";
 
 type Props<A extends Ausgangslage> = {
-  readonly ausgangslage: A;
-  readonly lebensmonate: Lebensmonate<ElternteileByAusgangslage<A>>;
+  readonly plan: Plan<A>;
   readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<
     ElternteileByAusgangslage<A>
   >;
@@ -46,8 +45,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   A extends Ausgangslage,
 >(
   {
-    ausgangslage,
-    lebensmonate,
+    plan,
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
@@ -60,7 +58,11 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   const headingIdentifier = useId();
 
   const findeLetztenVerplantenLebensmonat =
-    findeLetztenVerplantenLebensmonatOrDefault.bind(null, lebensmonate, 14);
+    findeLetztenVerplantenLebensmonatOrDefault.bind(
+      null,
+      plan.lebensmonate,
+      14,
+    );
 
   const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
     useState(14);
@@ -96,7 +98,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
 
       {Lebensmonatszahlen.map((lebensmonatszahl) => {
         const lebensmonat =
-          lebensmonate[lebensmonatszahl] ??
+          plan.lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
         const isHidden = lebensmonatszahl > lastVisibleLebensmonatszahl;
 
@@ -112,7 +114,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
               }
             }}
             aria-hidden={isHidden}
-            ausgangslage={ausgangslage}
+            ausgangslage={plan.ausgangslage}
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}
             bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten.bind(

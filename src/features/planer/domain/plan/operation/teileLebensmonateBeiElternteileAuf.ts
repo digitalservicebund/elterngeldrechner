@@ -1,10 +1,11 @@
 import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { Elternteil } from "@/features/planer/domain/Elternteil";
+import { Elternteil, isElternteil } from "@/features/planer/domain/Elternteil";
 import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
 import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/features/planer/domain/ausgangslage";
+import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
 import { listeMonateAuf } from "@/features/planer/domain/lebensmonat";
 import { listeLebensmonateAuf } from "@/features/planer/domain/lebensmonate";
 import type { Monat } from "@/features/planer/domain/monat";
@@ -56,6 +57,13 @@ function getInitialValue<A extends Ausgangslage>(
         [Elternteil.Zwei]: {},
       } as LebensmonateProElternteil<ElternteileByAusgangslage<A>>;
   }
+}
+
+export function mapLebensmonateProElternteil<E extends Elternteil, Value>(
+  lebensmonate: LebensmonateProElternteil<E>,
+  transform: (value: Partial<Record<Lebensmonatszahl, Monat>>, key: E) => Value,
+): Record<E, Value> {
+  return mapRecordEntriesWithStringKeys(lebensmonate, isElternteil, transform);
 }
 
 type LebensmonateProElternteil<E extends Elternteil> = Record<

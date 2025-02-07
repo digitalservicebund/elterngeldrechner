@@ -2,25 +2,21 @@ import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { ReactNode, useId } from "react";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
+import { erstellePlanungsuebersicht } from "./erstellePlanungsuebersicht";
 import {
-  type Ausgangslage,
-  type ElternteileByAusgangslage,
-  type Planungsuebersicht,
+  type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,
 } from "@/features/planer/domain";
 import { Geldbetrag } from "@/features/planer/user-interface/component/Geldbetrag";
 
-type Props<A extends Ausgangslage> = {
-  readonly ausgangslage: A;
-  readonly planungsuebersicht: Planungsuebersicht<ElternteileByAusgangslage<A>>;
+type Props = {
+  readonly plan: PlanMitBeliebigenElternteilen;
 };
 
-export function AbschnittMitPlanungsuebersicht<A extends Ausgangslage>({
-  ausgangslage,
-  planungsuebersicht,
-}: Props<A>): ReactNode {
+export function AbschnittMitPlanungsuebersicht({ plan }: Props): ReactNode {
   const headingIdentifier = useId();
   const descriptionIdentifier = useId();
+  const planungsuebersicht = erstellePlanungsuebersicht(plan);
 
   return (
     <section
@@ -36,43 +32,47 @@ export function AbschnittMitPlanungsuebersicht<A extends Ausgangslage>({
         Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate
       </p>
 
-      {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => {
-        const {
-          zeitraeumeMitDurchgaenigenBezug,
-          gesamtbezug,
-          bezuegeProVariante,
-        } = planungsuebersicht[elternteil];
-        const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
+      {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
+        (elternteil) => {
+          const {
+            zeitraeumeMitDurchgaenigenBezug,
+            gesamtbezug,
+            bezuegeProVariante,
+          } = planungsuebersicht[elternteil];
 
-        return (
-          <div key={elternteil} className="flex flex-col gap-8">
-            <h4 className="text-base">
-              <PersonIcon /> {pseudonym || "Ihre Planung"}
-            </h4>
+          const pseudonym =
+            plan.ausgangslage.pseudonymeDerElternteile?.[elternteil];
 
-            <span>
-              {gesamtbezug.anzahlMonate} Monate Elterngeld |{" "}
-              <span className="font-bold">
-                insgesamt <Geldbetrag betrag={gesamtbezug.elterngeld} />
+          return (
+            <div key={elternteil} className="flex flex-col gap-8">
+              <h4 className="text-base">
+                <PersonIcon /> {pseudonym || "Ihre Planung"}
+              </h4>
+
+              <span>
+                {gesamtbezug.anzahlMonate} Monate Elterngeld |{" "}
+                <span className="font-bold">
+                  insgesamt <Geldbetrag betrag={gesamtbezug.elterngeld} />
+                </span>
               </span>
-            </span>
 
-            <div className="mb-auto">
-              <span className="text-basis">Elterngeld im Zeitraum:</span>
+              <div className="mb-auto">
+                <span className="text-basis">Elterngeld im Zeitraum:</span>
 
-              <ListeMitZeitraeumen
-                zeitraeume={zeitraeumeMitDurchgaenigenBezug}
+                <ListeMitZeitraeumen
+                  zeitraeume={zeitraeumeMitDurchgaenigenBezug}
+                  pseudonymDesElternteils={pseudonym}
+                />
+              </div>
+
+              <ListeMitBezuegenProVariante
+                bezuegeProVariante={bezuegeProVariante}
                 pseudonymDesElternteils={pseudonym}
               />
             </div>
-
-            <ListeMitBezuegenProVariante
-              bezuegeProVariante={bezuegeProVariante}
-              pseudonymDesElternteils={pseudonym}
-            />
-          </div>
-        );
-      })}
+          );
+        },
+      )}
     </section>
   );
 }

@@ -1,37 +1,34 @@
-import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
-import type { Auswahloption } from "@/features/planer/domain/Auswahloption";
-import { isElternteil } from "@/features/planer/domain/Elternteil";
-import type {
-  Gesamtsumme,
-  SummeFuerElternteil,
-} from "@/features/planer/domain/Gesamtsumme";
-import type { Lebensmonatszahl } from "@/features/planer/domain/Lebensmonatszahl";
-import { isVariante } from "@/features/planer/domain/Variante";
-import type {
-  Ausgangslage,
-  ElternteileByAusgangslage,
-} from "@/features/planer/domain/ausgangslage";
-import { mapRecordEntriesWithStringKeys } from "@/features/planer/domain/common/type-safe-records";
-import type { Monat } from "@/features/planer/domain/monat";
-import type { Plan } from "@/features/planer/domain/plan/Plan";
+import {
+  type Ausgangslage,
+  type Auswahloption,
+  type Elternteil,
+  type ElternteileByAusgangslage,
+  type Lebensmonatszahl,
+  type Monat,
+  type Plan,
+  isVariante,
+  mapLebensmonateProElternteil,
+  teileLebensmonateBeiElternteileAuf,
+} from "@/features/planer/domain";
 
 export function berechneGesamtsumme<A extends Ausgangslage>(
   plan: Plan<A>,
 ): Gesamtsumme<ElternteileByAusgangslage<A>> {
   const lebensmonateProElternteil = teileLebensmonateBeiElternteileAuf(plan);
 
-  const proElternteil = mapRecordEntriesWithStringKeys(
+  const proElternteil = mapLebensmonateProElternteil(
     lebensmonateProElternteil,
-    isElternteil,
     berrechneSummeFuerElternteil,
   );
 
-  const elterngeld = Object.values(proElternteil).reduce(
-    (summe, { elterngeldbezug }) => summe + elterngeldbezug,
+  const elterngeldbezug = Object.values<SummeFuerElternteil>(
+    proElternteil,
+  ).reduce(
+    (summe, summeFuerElternteil) => summe + summeFuerElternteil.elterngeldbezug,
     0,
   );
 
-  return { elterngeldbezug: elterngeld, proElternteil };
+  return { elterngeldbezug, proElternteil };
 }
 
 function berrechneSummeFuerElternteil(
@@ -55,6 +52,17 @@ function berrechneSummeFuerElternteil(
     bruttoeinkommen,
   };
 }
+
+type Gesamtsumme<E extends Elternteil> = {
+  readonly elterngeldbezug: number;
+  readonly proElternteil: Record<E, SummeFuerElternteil>;
+};
+
+export type SummeFuerElternteil = {
+  readonly anzahlMonateMitBezug: number;
+  readonly elterngeldbezug: number;
+  readonly bruttoeinkommen: number;
+};
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

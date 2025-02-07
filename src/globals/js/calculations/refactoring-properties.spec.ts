@@ -1,3 +1,4 @@
+import { subDays } from "date-fns";
 import {
   type Arbitrary,
   array as arbitraryArray,
@@ -12,7 +13,6 @@ import {
   tuple as arbitraryTuple,
 } from "fast-check";
 import { assert, describe, expect, it } from "vitest";
-import { minusDays } from "./common/date-util";
 import { calculateElternGeld } from "./egr-calculation";
 import {
   Einkommen,
@@ -265,7 +265,7 @@ function expectGeschwisterbonusDeadlineToMatch(
   expected: Date | null,
   context: ElternGeldDaten,
 ): void {
-  const tagVorDemGeburtsdatum = minusDays(
+  const tagVorDemGeburtsdatum = subDays(
     context.persoenlicheDaten.wahrscheinlichesGeburtsDatum,
     1,
   );

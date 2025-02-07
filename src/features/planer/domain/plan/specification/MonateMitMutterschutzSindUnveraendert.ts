@@ -176,7 +176,6 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       },
       lebensmonate: {},
-      errechneteElterngeldbezuege: {} as never,
     };
   });
 }

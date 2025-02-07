@@ -439,7 +439,6 @@ const ANY_AUSGANGSLAGE = {
 
 const ANY_PLAN = {
   ausgangslage: ANY_AUSGANGSLAGE,
-  errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
 };
 

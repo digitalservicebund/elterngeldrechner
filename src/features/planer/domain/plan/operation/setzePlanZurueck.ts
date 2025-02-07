@@ -41,7 +41,6 @@ if (import.meta.vitest) {
         anzahlElternteile: 1 as const,
         geburtsdatumDesKindes: new Date(),
       },
-      errechneteElterngeldbezuege: {} as never,
       lebensmonate: {},
     };
   });

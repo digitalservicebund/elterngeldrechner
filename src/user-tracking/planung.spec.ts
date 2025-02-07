@@ -22,7 +22,6 @@ describe("tracking of the planung", async () => {
         },
         geburtsdatumDesKindes: new Date(),
       },
-      errechneteElterngeldbezuege: {} as never,
       lebensmonate: {
         1: {
           [Elternteil.Eins]: {
@@ -62,7 +61,6 @@ describe("tracking of the planung", async () => {
         },
         geburtsdatumDesKindes: new Date(),
       },
-      errechneteElterngeldbezuege: {} as never,
       lebensmonate: {
         1: {
           [Elternteil.Eins]: {
@@ -108,7 +106,6 @@ describe("tracking of the planung", async () => {
         },
         geburtsdatumDesKindes: new Date(),
       },
-      errechneteElterngeldbezuege: {} as never,
       lebensmonate: {
         1: {
           [Elternteil.Eins]: {

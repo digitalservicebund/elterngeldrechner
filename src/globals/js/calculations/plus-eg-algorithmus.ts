@@ -1,3 +1,4 @@
+import { addMonths, setDate, subDays } from "date-fns";
 import { elterngeld_et, elterngeldplus_et } from "./abstract-algorithmus";
 import { abzuege } from "./brutto-netto-rechner/brutto-netto-rechner";
 import { errorOf } from "./calculation-error-code";
@@ -20,11 +21,6 @@ import {
   bruttoLeistungsMonateWithPlanung,
   mutterschaftsLeistungInMonaten,
 } from "./model";
-import {
-  minusDays,
-  plusMonths,
-  setDayOfMonth,
-} from "@/globals/js/calculations/common/date-util";
 import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import { bruttoEGPlusNeu } from "@/globals/js/calculations/eg-brutto-rechner";
 import {
@@ -361,21 +357,18 @@ function fillLebensMonateList(geburt: Date): Date[] {
   const anfang_LM: Date[] = [];
 
   for (let i: number = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-    const anfang: Date = plusMonths(geburt, i);
-    const ende: Date = minusDays(plusMonths(geburt, i + 1), 1);
+    const anfang: Date = addMonths(geburt, i);
+    const ende: Date = subDays(addMonths(geburt, i + 1), 1);
     anfang_LM[i + 1] = anfang;
     if (
       geburt.getDay() > 28 &&
       anfang.getMonth() === 2 &&
       anfang.getDay() < 5
     ) {
-      anfang_LM[i + 1] = setDayOfMonth(plusMonths(geburt, i + 1), 1);
+      anfang_LM[i + 1] = setDate(addMonths(geburt, i + 1), 1);
     }
     if (geburt.getDay() > 28 && ende.getMonth() === 2 && ende.getDay() < 5) {
-      anfang_LM[i + 1] = minusDays(
-        setDayOfMonth(plusMonths(geburt, i + 2), 1),
-        1,
-      );
+      anfang_LM[i + 1] = subDays(setDate(addMonths(geburt, i + 2), 1), 1);
     }
   }
 

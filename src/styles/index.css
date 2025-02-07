@@ -4,4 +4,4 @@
 @import url("tailwind.css");
 @import url("themes.css");
 @import url("typo.css");
-@import url("webkit.css");
+@import url("browser-specifics.css");

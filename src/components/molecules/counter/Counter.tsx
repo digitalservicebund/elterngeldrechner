@@ -53,7 +53,7 @@ export function Counter<TFieldValues extends FieldValues>({
         </button>
         <input
           {...register(name, registerOptions)}
-          className="egr-counter__input"
+          className="egr-counter__input no-spinner"
           type="number"
           id={name}
           aria-describedby={error ? `${name}-error` : undefined}

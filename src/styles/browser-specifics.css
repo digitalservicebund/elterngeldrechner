@@ -1,0 +1,13 @@
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}

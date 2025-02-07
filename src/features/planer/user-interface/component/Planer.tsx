@@ -38,8 +38,6 @@ export function Planer({
 }: Props): ReactNode {
   const {
     plan,
-    verfuegbaresKontingent,
-    verplantesKontingent,
     validierungsfehler,
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
@@ -123,11 +121,7 @@ export function Planer({
             gebeEinkommenAn={gebeEinkommenAn}
           />
 
-          <KontingentUebersicht
-            className="bg-off-white py-16"
-            verfuegbaresKontingent={verfuegbaresKontingent}
-            verplantesKontingent={verplantesKontingent}
-          />
+          <KontingentUebersicht className="bg-off-white py-16" plan={plan} />
 
           <Gesamtsummenanzeige
             className="border-t-2 border-solid !border-grey bg-off-white py-16"

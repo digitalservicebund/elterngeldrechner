@@ -12,14 +12,12 @@ import {
   Result,
   Variante,
   bestimmeAuswahlmoeglichkeiten,
-  bestimmeVerfuegbaresKontingent,
   erstelleInitialeLebensmonate,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
   gebeEinkommenAn,
   setzePlanZurueck,
   validierePlanFuerFinaleAbgabe,
   waehleOption,
-  zaehleVerplantesKontingent,
 } from "@/features/planer/domain";
 import { INITIAL_STATE, act, renderHook } from "@/test-utils/test-utils";
 
@@ -38,22 +36,12 @@ vi.mock(
 );
 vi.mock(
   import(
-    "@/features/planer/domain/ausgangslage/operation/bestimmeVerfuegbaresKontingent"
-  ),
-);
-vi.mock(
-  import(
     "@/features/planer/domain/lebensmonate/operation/erstelleInitialeLebensmonate"
   ),
 );
 vi.mock(
   import(
     "@/features/planer/domain/lebensmonate/operation/erstelleVorschlaegeFuerAngabeDesEinkommens"
-  ),
-);
-vi.mock(
-  import(
-    "@/features/planer/domain/lebensmonate/operation/zaehleVerplantesKontingent"
   ),
 );
 
@@ -105,85 +93,6 @@ describe("use Planer service", () => {
       expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
       expect(erstelleInitialeLebensmonate).not.toHaveBeenCalled();
       expect(result.current.plan).toStrictEqual(plan);
-    });
-  });
-
-  describe("verfügbares Kontingent", () => {
-    it("initially determines the verfügbares Kontingent", () => {
-      vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-        ANY_VERFUEGBARES_KONTINGENT,
-      );
-
-      const { result } = renderPlanerServiceHook();
-
-      expect(bestimmeVerfuegbaresKontingent).toHaveBeenCalledOnce();
-      expect(result.current.verfuegbaresKontingent).toStrictEqual(
-        ANY_VERFUEGBARES_KONTINGENT,
-      );
-    });
-  });
-
-  describe("verplantes Kontingent", () => {
-    it("initially determines the verplantes Kontingent", () => {
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        ANY_VERPLANTES_KONTINGENT,
-      );
-
-      const { result } = renderPlanerServiceHook();
-
-      expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
-      expect(result.current.verplantesKontingent).toStrictEqual(
-        ANY_VERPLANTES_KONTINGENT,
-      );
-    });
-
-    it("updates the verplantes Kontingent when chosing an Option", () => {
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
-        ...ANY_VERPLANTES_KONTINGENT,
-        [Variante.Basis]: 2,
-      });
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
-        ...ANY_VERPLANTES_KONTINGENT,
-        [Variante.Basis]: 1,
-      });
-
-      const { result } = renderPlanerServiceHook();
-      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(2);
-      vi.clearAllMocks();
-
-      waehleAnyOption(result.current.waehleOption);
-
-      expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
-      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
-    });
-
-    it("does not update the verplantes Kontingent when specifying some Bruttoeinkommen", () => {
-      const { result } = renderPlanerServiceHook();
-      vi.clearAllMocks();
-
-      gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
-
-      expect(zaehleVerplantesKontingent).not.toHaveBeenCalledOnce();
-    });
-
-    it("updates the verplantes Kontingent when resetting the Plan", () => {
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
-        ...ANY_VERPLANTES_KONTINGENT,
-        [Variante.Basis]: 1,
-      });
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValueOnce({
-        ...ANY_VERPLANTES_KONTINGENT,
-        [Variante.Basis]: 0,
-      });
-
-      const { result } = renderPlanerServiceHook();
-      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(1);
-      vi.clearAllMocks();
-
-      act(() => result.current.setzePlanZurueck());
-
-      expect(zaehleVerplantesKontingent).toHaveBeenCalledOnce();
-      expect(result.current.verplantesKontingent[Variante.Basis]).toBe(0);
     });
   });
 
@@ -532,19 +441,6 @@ const ANY_PLAN = {
   ausgangslage: ANY_AUSGANGSLAGE,
   errechneteElterngeldbezuege: {} as never,
   lebensmonate: {},
-};
-
-const ANY_VERFUEGBARES_KONTINGENT = {
-  [Variante.Basis]: 0,
-  [Variante.Plus]: 0,
-  [Variante.Bonus]: 0,
-};
-
-const ANY_VERPLANTES_KONTINGENT = {
-  [Variante.Basis]: 0,
-  [Variante.Plus]: 0,
-  [Variante.Bonus]: 0,
-  [KeinElterngeld]: 0,
 };
 
 const ANY_LEBENSMONAT = {

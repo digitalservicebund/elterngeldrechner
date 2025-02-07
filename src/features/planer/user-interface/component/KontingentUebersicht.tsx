@@ -1,25 +1,31 @@
 import SquareIcon from "@digitalservicebund/icons/SquareRounded";
 import classNames from "classnames";
-import { ReactNode, useId } from "react";
+import { ReactNode, useId, useMemo } from "react";
 import {
+  type PlanMitBeliebigenElternteilen,
   Variante,
-  type VerfuegbaresKontingent,
-  type VerplantesKontingent,
+  bestimmeVerfuegbaresKontingent,
   listeKontingentAuf,
+  zaehleVerplantesKontingent,
 } from "@/features/planer/domain";
 
 type Props = {
-  readonly verfuegbaresKontingent: VerfuegbaresKontingent;
-  readonly verplantesKontingent: VerplantesKontingent;
+  readonly plan: PlanMitBeliebigenElternteilen;
   readonly className?: string;
 };
 
-export function KontingentUebersicht({
-  verfuegbaresKontingent,
-  verplantesKontingent,
-  className,
-}: Props): ReactNode {
+export function KontingentUebersicht({ plan, className }: Props): ReactNode {
   const headingIdentifier = useId();
+
+  const verfuegbaresKontingent = useMemo(
+    () => bestimmeVerfuegbaresKontingent(plan.ausgangslage),
+    [plan.ausgangslage],
+  );
+
+  const verplantesKontingent = useMemo(
+    () => zaehleVerplantesKontingent(plan.lebensmonate),
+    [plan.lebensmonate],
+  );
 
   return (
     <section

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   type GebeEinkommenAn,
   OptionSelectedCallback,
@@ -10,11 +10,9 @@ import {
   type Ausgangslage,
   type BerechneElterngeldbezuegeCallback,
   type Elternteil,
-  type Lebensmonate,
   type Plan,
   type PlanMitBeliebigenElternteilen,
   bestimmeAuswahlmoeglichkeiten,
-  bestimmeVerfuegbaresKontingent,
   erstelleInitialeLebensmonate,
   erstelleInitialenLebensmonat,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
@@ -22,7 +20,6 @@ import {
   setzePlanZurueck,
   validierePlanFuerFinaleAbgabe,
   waehleOption,
-  zaehleVerplantesKontingent,
 } from "@/features/planer/domain";
 
 export function usePlanerService(
@@ -38,32 +35,15 @@ export function usePlanerService(
       erstelleInitialenPlan(initialInformation.ausgangslage),
   );
 
-  const verfuegbaresKontingent = useRef(
-    bestimmeVerfuegbaresKontingent(plan.ausgangslage),
-  );
-
-  const { verplantesKontingent, updateVerplantesKontingent } =
-    useVerplantesKontingent(plan.lebensmonate);
-
   const { validierungsfehler, updateValidierungsfehler } =
     useValidierungsfehler(plan);
 
   const updateStatesAndTriggerCallbacks = useCallback(
-    (
-      nextPlan: PlanMitBeliebigenElternteilen,
-      options?: {
-        skipVerplantesKontingent?: boolean;
-      },
-    ) => {
-      if (!options?.skipVerplantesKontingent) {
-        updateVerplantesKontingent(nextPlan.lebensmonate);
-      }
-
+    (nextPlan: PlanMitBeliebigenElternteilen) => {
       const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
-
       onPlanChanged?.(nextPlan, nextValidierungsfehler.length === 0);
     },
-    [updateVerplantesKontingent, updateValidierungsfehler, onPlanChanged],
+    [updateValidierungsfehler, onPlanChanged],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,10 +99,7 @@ export function usePlanerService(
           ...argumentList,
         );
 
-        updateStatesAndTriggerCallbacks(planWithEinkommen, {
-          skipVerplantesKontingent: true,
-        });
-
+        updateStatesAndTriggerCallbacks(planWithEinkommen);
         return planWithEinkommen;
       }),
     [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
@@ -132,11 +109,8 @@ export function usePlanerService(
     () =>
       setPlan((plan) => {
         const nextPlan = setzePlanZurueck(plan);
-
         updateStatesAndTriggerCallbacks(nextPlan);
-
         onPlanResetted?.();
-
         return nextPlan;
       }),
     [onPlanResetted, updateStatesAndTriggerCallbacks],
@@ -144,8 +118,6 @@ export function usePlanerService(
 
   return {
     plan,
-    verfuegbaresKontingent: verfuegbaresKontingent.current,
-    verplantesKontingent,
     validierungsfehler,
     erstelleUngeplantenLebensmonat: erstelleUngeplantenLebensmonatCallback,
     bestimmeAuswahlmoeglichkeiten: bestimmeAuswahlmoeglichkeitenCallback,
@@ -162,22 +134,6 @@ function erstelleInitialenPlan<A extends Ausgangslage>(
 ): Plan<A> {
   const lebensmonate = erstelleInitialeLebensmonate(ausgangslage);
   return { ausgangslage, lebensmonate };
-}
-
-function useVerplantesKontingent<E extends Elternteil>(
-  lebensmonate: Lebensmonate<E>,
-) {
-  const [verplantesKontingent, setVerplantesKontingent] = useState(() =>
-    zaehleVerplantesKontingent(lebensmonate),
-  );
-
-  const updateVerplantesKontingent = useCallback(
-    (lebensmonate: Lebensmonate<E>) =>
-      setVerplantesKontingent(zaehleVerplantesKontingent(lebensmonate)),
-    [],
-  );
-
-  return { verplantesKontingent, updateVerplantesKontingent };
 }
 
 function useValidierungsfehler<A extends Ausgangslage>(plan: Plan<A>) {

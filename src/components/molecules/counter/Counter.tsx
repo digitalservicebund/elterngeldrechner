@@ -37,12 +37,15 @@ export function Counter<TFieldValues extends FieldValues>({
 
   return (
     <div className={classNames("egr-counter", error && "egr-counter--error")}>
-      <label className="egr-counter__label" htmlFor={name}>
+      <label
+        className={classNames(error ? "text-danger" : null)}
+        htmlFor={name}
+      >
         {label}
       </label>
-      <div className="egr-counter__controls">
+      <div className="mt-16 flex flex-row items-center gap-16">
         <button
-          className="egr-counter__button"
+          className="size-32 rounded-full border-none bg-primary-light p-0 text-primary"
           type="button"
           onClick={onDecrease}
           data-testid="verringern"
@@ -53,7 +56,10 @@ export function Counter<TFieldValues extends FieldValues>({
         </button>
         <input
           {...register(name, registerOptions)}
-          className="egr-counter__input no-spinner"
+          className={classNames(
+            "no-spinner box-content w-[1ch] border border-solid border-grey-dark px-16 py-8 focus:outline focus:outline-2 focus:!outline-primary",
+            error ? "border-danger" : null,
+          )}
           type="number"
           id={name}
           aria-describedby={error ? `${name}-error` : undefined}
@@ -61,7 +67,7 @@ export function Counter<TFieldValues extends FieldValues>({
           required={required}
         />
         <button
-          className="egr-counter__button"
+          className="size-32 rounded-full border-none bg-primary-light p-0 text-primary"
           type="button"
           onClick={onIncrease}
           data-testid="erhöhen"

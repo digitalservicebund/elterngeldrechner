@@ -1,34 +1,14 @@
 .egr-counter {
   &__controls {
-    @apply mt-16 gap-16;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    @apply mt-16 flex flex-row items-center gap-16;
   }
 
   &__button {
-    @apply size-32 bg-primary-light text-primary;
-    border: none;
-    border-radius: 50%;
-    padding: 0;
+    @apply size-32 rounded-full border-none bg-primary-light p-0 text-primary;
   }
 
   &__input {
-    @apply border border-solid border-grey-dark px-16 py-8;
-    font-family: inherit;
-    box-sizing: content-box;
-    width: 1ch;
-
-    /* Hide the spinbuttons of the number field */
-    -moz-appearance: textfield;
-
-    /* Firefox */
-    /* Chrome, Safari, Edge, Opera */
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+    @apply box-content w-[1ch] border border-solid border-grey-dark px-16 py-8;
 
     &:focus {
       @apply outline outline-2 !outline-primary;

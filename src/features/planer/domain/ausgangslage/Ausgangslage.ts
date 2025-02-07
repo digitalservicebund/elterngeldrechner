@@ -19,6 +19,7 @@ type BasisAusgangslage<E extends Elternteil> = {
   readonly hatBehindertesGeschwisterkind?: boolean;
   readonly sindMehrlinge?: boolean;
   readonly istAlleinerziehend?: [E] extends [Elternteil.Eins] ? boolean : false;
+  readonly mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum?: boolean;
 } & ([E] extends [Elternteil.Eins]
   ? { pseudonymeDerElternteile?: PseudonymeDerElternteile<E> }
   : { pseudonymeDerElternteile: PseudonymeDerElternteile<E> });

@@ -4,7 +4,7 @@ import { type Ausgangslage, Elternteil } from "@/features/planer/domain";
 import { type RootState } from "@/redux";
 
 export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
-  const { stepAllgemeineAngaben, stepNachwuchs } = state;
+  const { stepAllgemeineAngaben, stepNachwuchs, stepErwerbstaetigkeit } = state;
 
   const anzahlElternteile =
     stepAllgemeineAngaben.antragstellende === "EinenElternteil"
@@ -14,8 +14,9 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
   const geburtsdatumDesKindes =
     stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state);
 
-  const istAlleinerziehend =
-    stepAllgemeineAngaben.alleinerziehend === YesNo.YES;
+  const istAlleinerziehend = yesNoToBoolean(
+    stepAllgemeineAngaben.alleinerziehend,
+  );
 
   const hatBehindertesGeschwisterkind = stepNachwuchs.geschwisterkinder.some(
     (kind) => kind.istBehindert,
@@ -23,17 +24,23 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
 
   const sindMehrlinge = stepNachwuchs.anzahlKuenftigerKinder > 1;
 
-  const hatMutterschutz =
-    stepAllgemeineAngaben.mutterschaftssleistungen === YesNo.YES;
+  const hatMutterschutz = yesNoToBoolean(
+    stepAllgemeineAngaben.mutterschaftssleistungen,
+  );
 
   const letzterLebensmonatMitSchutz = sindMehrlinge
     ? (3 as const)
     : (2 as const);
 
+  const mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum =
+    yesNoToBoolean(stepErwerbstaetigkeit.ET1.vorGeburt) ||
+    yesNoToBoolean(stepErwerbstaetigkeit.ET2.vorGeburt);
+
   const sharedAusganslageProperties = {
     geburtsdatumDesKindes,
     hatBehindertesGeschwisterkind,
     sindMehrlinge,
+    mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
   };
 
   switch (anzahlElternteile) {
@@ -86,6 +93,16 @@ function getPseudonymeFuerAlleElternteile(possiblyEmptyPseudonyme: {
     [Elternteil.Eins]: ET1 || "Elternteil 1",
     [Elternteil.Zwei]: ET2 || "Elternteil 2",
   };
+}
+
+function yesNoToBoolean(value: YesNo | null): boolean {
+  switch (value) {
+    case YesNo.YES:
+      return true;
+    case YesNo.NO:
+    case null:
+      return false;
+  }
 }
 
 if (import.meta.vitest) {
@@ -305,6 +322,38 @@ if (import.meta.vitest) {
       const ausgangslage = composeAusgangslageFuerPlaner(state);
 
       expect(ausgangslage.hatBehindertesGeschwisterkind).toBe(true);
+    });
+
+    describe("mindestens ein Elternteil war erwerbstätig im Bemessungszeitraum property", () => {
+      it("sets it to false both Elternteile answered no", () => {
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.NO;
+          draft.stepErwerbstaetigkeit.ET2.vorGeburt = YesNo.NO;
+        });
+
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toBe(false);
+      });
+
+      it.each([
+        { ET1: YesNo.YES, ET2: YesNo.NO },
+        { ET1: YesNo.NO, ET2: YesNo.YES },
+        { ET1: YesNo.YES, ET2: YesNo.YES },
+      ])("sets it to true if any Elternteil answered yes", ({ ET1, ET2 }) => {
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepErwerbstaetigkeit.ET1.vorGeburt = ET1;
+          draft.stepErwerbstaetigkeit.ET2.vorGeburt = ET2;
+        });
+
+        const ausgangslage = composeAusgangslageFuerPlaner(state);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toBe(true);
+      });
     });
 
     function kind(istBehindert: boolean) {

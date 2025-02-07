@@ -35,12 +35,12 @@ export function DatenfeldFuerMonat({ monat }: Props): ReactNode {
 
   return (
     <div className="flex flex-wrap items-start gap-x-8">
-      {formattedAuswahl}
-
-      <div className="flex flex-col place-self-center leading-7">
+      <div className="flex items-center gap-x-8">
+        {formattedAuswahl}
         {optionalesElterngeld}
-        {optionalesEinkommen}
       </div>
+
+      <div className="w-full">{optionalesEinkommen}</div>
     </div>
   );
 }

@@ -1,18 +1,12 @@
 .egr-custom-date {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 
   &__label {
-    @apply mb-16;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+    @apply mb-16 flex w-full justify-between;
   }
 
   &__field {
-    @apply mb-16 max-w-[20rem] border border-solid border-grey-dark px-16 py-8;
-    display: flex;
-    flex-direction: column;
+    @apply mb-16 flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8;
 
     &:focus-within {
       @apply outline outline-2 outline-primary;
@@ -29,11 +23,10 @@
   }
 
   &__input {
-    font-family: inherit;
-    border: none;
+    @apply border-none;
 
     &:focus {
-      outline: none;
+      @apply outline-none;
     }
   }
 

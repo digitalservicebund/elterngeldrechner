@@ -17,7 +17,7 @@ export function AbschnittMitPlanungsdetails({ plan }: Props): ReactNode {
 
   return (
     <section
-      className="@container/planungs-details"
+      className="@container/planungs-details print:break-inside-avoid"
       aria-labelledby={headingIdentifier}
     >
       <h3 id={headingIdentifier}>Planung der Monate im Detail</h3>

@@ -28,7 +28,7 @@ export function AbschnittMitPlanungsuebersicht({ plan }: Props): ReactNode {
         Planungsübersicht
       </h3>
 
-      <p id={descriptionIdentifier} className="basis-full">
+      <p id={descriptionIdentifier} className="basis-full print:hidden">
         Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate
       </p>
 

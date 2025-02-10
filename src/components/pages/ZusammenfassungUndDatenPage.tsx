@@ -19,7 +19,7 @@ function ZusammenfassungUndDatenPage(): ReactNode {
         <>
           <Zusammenfassung plan={plan} />
 
-          <div className="mt-32">
+          <div className="mt-32 print:hidden">
             <PrintButton />
           </div>
         </>

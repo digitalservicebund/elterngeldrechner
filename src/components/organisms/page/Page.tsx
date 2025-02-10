@@ -38,7 +38,7 @@ export function Page({ step, children }: PageProps) {
           </Alert>
         )}
 
-        <h2 id={headingIdentifier} className="mb-10">
+        <h2 id={headingIdentifier} className="mb-10 print:m-0">
           {step.heading}
         </h2>
 

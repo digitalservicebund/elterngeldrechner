@@ -23,7 +23,7 @@ export function TabelleMitLebensmonaten<A extends Ausgangslage>({
   elternteileToShow,
 }: Props<A>): ReactNode {
   return (
-    <table className="w-full border-collapse [&_td]:pb-16 [&_th]:pb-16 [&_tr]:border-0 [&_tr]:border-b-2 [&_tr]:border-solid [&_tr]:border-grey-light">
+    <table className="w-full border-collapse [&_td]:pb-16 print:[&_td]:pb-4 [&_th]:pb-16 [&_tr]:border-0 [&_tr]:border-b-2 [&_tr]:border-solid [&_tr]:border-grey-light">
       <thead>
         <tr className="text-left font-bold">
           <th scope="col">Lebensmonate</th>
@@ -46,7 +46,7 @@ export function TabelleMitLebensmonaten<A extends Ausgangslage>({
         </tr>
       </thead>
 
-      <tbody className="[&_td]:pt-10 [&_th]:pt-10">
+      <tbody className="[&_td]:pt-10 print:[&_td]:pt-4 [&_th]:pt-10">
         {listeLebensmonateAuf(lebensmonate, true).map(
           ([lebensmonatszahl, lebensmonat]) => {
             const zeitraum = berechneZeitraumFuerLebensmonat(

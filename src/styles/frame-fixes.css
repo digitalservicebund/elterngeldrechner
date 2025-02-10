@@ -7,12 +7,28 @@ maintenance.
 
 @media print {
   #egr-root {
-    @apply font-sans;
+    @apply mb-0 font-sans;
   }
 
   .contact-flap,
+  .skipnav,
+  .cookie-banner,
+  .page-title,
   .header {
     @apply hidden;
+  }
+
+  .main {
+    @apply pt-0;
+  }
+
+  .topics-page .topics-page__main.topics-page__main--egr {
+    @apply pl-0 pr-0;
+    min-height: auto;
+  }
+
+  html {
+    height: auto;
   }
 }
 

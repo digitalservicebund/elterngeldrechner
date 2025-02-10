@@ -45,15 +45,5 @@
 
   @media print {
     display: block;
-
-    table {
-      page-break-inside: avoid;
-      page-break-after: always;
-    }
-
-    thead {
-      position: static;
-      display: table-row-group;
-    }
   }
 }

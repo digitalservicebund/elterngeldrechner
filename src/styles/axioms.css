@@ -18,3 +18,9 @@ label,
 summary {
   cursor: pointer;
 }
+
+@media print {
+  @page {
+    size: A3;
+  }
+}

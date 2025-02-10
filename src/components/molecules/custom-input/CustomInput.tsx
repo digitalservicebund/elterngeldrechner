@@ -16,7 +16,6 @@ interface CustomInputProps<TFieldValues extends FieldValues> {
   readonly name: FieldPath<TFieldValues>;
   readonly label: string;
   readonly errors?: FieldErrors<TFieldValues>;
-  readonly placeholder?: string;
   readonly info?: Info;
 }
 
@@ -25,28 +24,21 @@ export function CustomInput<TFieldValues extends FieldValues>({
   name,
   label,
   errors,
-  placeholder,
   info,
 }: CustomInputProps<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
 
   return (
-    <div
-      className={classNames(
-        "egr-custom-input",
-        error && "egr-custom-input--error",
-      )}
-    >
-      <div className="egr-custom-input-question">
+    <div className={classNames("flex flex-col", error && "border-danger")}>
+      <div className="flex flex-col">
         <label className="egr-custom-input-question__label" htmlFor={name}>
           {label}
         </label>
         <input
-          className="egr-custom-input-question__input"
+          className="mt-16 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
           {...register(name)}
           type="text"
           id={name}
-          placeholder={placeholder}
           aria-describedby={error ? `${name}-error` : undefined}
           aria-invalid={!!error}
         />

@@ -68,6 +68,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
             className={classNames(
               "egr-custom-select-question__input",
               error && "egr-custom-select-question__input--error",
+              "focus:!outline focus:!outline-2 focus:!outline-primary",
             )}
             id={name}
             disabled={disabled}

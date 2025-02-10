@@ -30,10 +30,6 @@
       -moz-padding-start: 0.4375rem; // Firefox generates small padding per default, this should reset it
       min-width: max-content;
 
-      &:focus {
-        @apply outline outline-2 outline-primary;
-      }
-
       &::placeholder {
         @apply text-text-light;
         font-size: inherit;

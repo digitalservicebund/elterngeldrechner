@@ -23,8 +23,4 @@
   &--error &__input {
     @apply border-danger;
   }
-
-  &--valid &__input {
-    @apply border-success;
-  }
 }

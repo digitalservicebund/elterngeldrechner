@@ -48,27 +48,28 @@ export function CustomDate<
     .join(" ");
 
   return (
-    <div className="egr-custom-date">
-      <div className="egr-custom-date__label">
+    <div className="flex flex-col">
+      <div className="mb-16 flex w-full justify-between">
         <label htmlFor={name}>{label}</label>
         {!!info && <InfoDialog info={info} />}
       </div>
       <div
         className={classNames(
-          "egr-custom-date__field",
-          error && "egr-custom-date__field--error",
+          "mb-16 flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",
+          "focus-within:outline focus-within:outline-2 focus-within:outline-primary",
+          error && "mb-0 border-danger",
         )}
       >
         <span
           id={dateFormatHintIdentifier}
-          className="egr-custom-date__placeholder"
+          className="text-14 text-text-light"
           aria-label="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
         >
           TT.MM.JJJJ
         </span>
 
         <IMaskInput
-          className="egr-custom-date__input"
+          className="border-none focus:outline-none"
           name={name}
           id={name}
           inputRef={ref}

@@ -22,7 +22,7 @@ export function AbschnittMitPlanungsdetails({ plan }: Props): ReactNode {
     >
       <h3 id={headingIdentifier}>Planung der Monate im Detail</h3>
 
-      <div className="flex flex-col gap-y-32 @2xl/planungs-details:hidden">
+      <div className="flex flex-col gap-y-32 @2xl/planungs-details:hidden print:hidden">
         {elternteile.map((elternteil) => (
           <TabelleMitLebensmonaten
             key={elternteil}
@@ -33,7 +33,7 @@ export function AbschnittMitPlanungsdetails({ plan }: Props): ReactNode {
         ))}
       </div>
 
-      <div className="hidden @2xl/planungs-details:block">
+      <div className="hidden @2xl/planungs-details:block print:block">
         <TabelleMitLebensmonaten
           ausgangslage={plan.ausgangslage}
           lebensmonate={planungsdetails.geplanteLebensmonate}

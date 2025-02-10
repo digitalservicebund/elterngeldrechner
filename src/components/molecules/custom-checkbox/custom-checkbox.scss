@@ -1,11 +1,8 @@
 .egr-custom-checkbox {
-  @apply p-8 pl-0;
-  display: flex;
-  justify-content: space-between;
+  @apply flex justify-between p-8 pl-0;
 
   &__input {
-    opacity: 0;
-    position: absolute;
+    @apply absolute opacity-0;
 
     &:focus {
       + label::before {
@@ -37,21 +34,14 @@
   }
 
   &__label {
-    @apply pl-40;
-    position: relative;
+    @apply relative pl-40;
 
     &::before {
-      @apply size-32 border border-solid border-primary bg-white;
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
+      @apply absolute left-0 top-0 size-32 border border-solid border-primary bg-white content-[""];
     }
 
     &::after {
-      @apply left-8 top-8 size-16;
-      content: "";
-      position: absolute;
+      @apply absolute left-8 top-8 size-16 content-[""];
     }
 
     &--error {

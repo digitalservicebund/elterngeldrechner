@@ -28,7 +28,6 @@
       background-position-x: calc(100% - 0.6875rem);
       background-position-y: 0.6875rem;
       -moz-padding-start: 0.4375rem; // Firefox generates small padding per default, this should reset it
-      width: 100%;
       min-width: max-content;
 
       &:focus {

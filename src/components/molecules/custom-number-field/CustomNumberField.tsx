@@ -69,18 +69,16 @@ export function CustomNumberField<
   return (
     <div
       className={classNames(
-        "egr-custom-input",
-        error && "egr-custom-input--error",
+        "flex justify-between",
+        error && "border-danger",
         className,
       )}
     >
-      <div className="egr-custom-input-question">
-        <label className="egr-custom-input-question__label" htmlFor={name}>
-          {label}
-        </label>
+      <div className="flex flex-col">
+        <label htmlFor={name}>{label}</label>
 
         <IMaskInput
-          className="egr-custom-input-question__input"
+          className="mt-16 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
           inputRef={ref}
           mask={mask}
           unmask

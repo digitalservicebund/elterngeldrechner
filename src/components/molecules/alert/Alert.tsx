@@ -11,7 +11,7 @@ export function Alert({ headline, children, className }: AlertProps) {
   return (
     <div
       className={classNames(
-        "d-flex flex-column gap-4 rounded bg-primary-light px-40 py-24",
+        "flex flex-col gap-4 rounded bg-primary-light px-40 py-24",
         className,
       )}
     >

@@ -174,13 +174,17 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
           />
         </div>
 
-        <ul className="egr-nachwuchs-form__geschwisterkinder">
+        <ul className="m-0 list-none p-0">
           {fields.map((field, index) => {
             const headingIdentifier =
               geschwisterKindHeadingBaseIdentifier + field.id;
 
             return (
-              <li key={field.id} aria-labelledby={headingIdentifier}>
+              <li
+                key={field.id}
+                aria-labelledby={headingIdentifier}
+                className="mb-32"
+              >
                 <h4 id={headingIdentifier} className="mb-10 font-regular">
                   {index + 1}. Geschwisterkind
                 </h4>

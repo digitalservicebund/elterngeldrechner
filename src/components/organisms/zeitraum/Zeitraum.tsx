@@ -200,10 +200,10 @@ export function Zeitraum<TFieldValues extends FieldValues>({
   const [fromValue, setFromValue] = useState<string>("");
 
   return (
-    <fieldset className={classNames("egr-zeitraum", className)}>
+    <fieldset className={classNames("mb-16", className)}>
       <legend className="sr-only">{listingIndex}. Zeitraum</legend>
 
-      <div className="egr-zeitraum__controls">
+      <div className="flex w-full flex-wrap gap-16">
         <CustomSelect
           register={register}
           registerOptions={zeitraumFromRegisterOptions}
@@ -213,6 +213,7 @@ export function Zeitraum<TFieldValues extends FieldValues>({
           options={options}
           disabled={disabled}
           required={required}
+          className="flex-1"
           {...aria}
         />
         <CustomSelect
@@ -224,6 +225,7 @@ export function Zeitraum<TFieldValues extends FieldValues>({
           errors={errors}
           disabled={disabled}
           required={required}
+          className="flex-1"
           {...aria}
         />
         <p id={name} className="sr-only">

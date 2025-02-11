@@ -33,6 +33,7 @@ interface CustomSelectProps<TFieldValues extends FieldValues> {
   readonly required?: boolean;
   readonly disabled?: boolean;
   readonly info?: Info;
+  readonly className?: string;
 }
 
 export function CustomSelect<TFieldValues extends FieldValues>({
@@ -46,6 +47,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   required,
   disabled,
   info,
+  className,
   ...aria
 }: CustomSelectProps<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
@@ -62,6 +64,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
       className={classNames(
         "flex w-full justify-between",
         autoWidth && "w-auto",
+        className,
       )}
     >
       <div className="flex flex-col items-start">

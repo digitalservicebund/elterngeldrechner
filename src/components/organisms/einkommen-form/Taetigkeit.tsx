@@ -211,12 +211,7 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
               : undefined;
 
             return (
-              <li
-                key={field.id}
-                tabIndex={-1}
-                ref={ref}
-                className="egr-einkommen-form__zeitraum"
-              >
+              <li key={field.id} tabIndex={-1} ref={ref} className="mb-40">
                 <Zeitraum
                   listingIndex={zeitraumIndex + 1}
                   disabled={zeitraumIndex + 1 !== zeitraumFields.length}
@@ -251,7 +246,7 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
           })}
         </ul>
 
-        <div className="egr-einkommen-form__taetigkeit-buttons">
+        <div className="flex flex-col gap-16">
           <Button
             ref={zeitraumHinzufuegenButtonElement}
             buttonStyle="secondary"

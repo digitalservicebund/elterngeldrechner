@@ -46,9 +46,7 @@ export function NurErwerbstaetig({
         />
       )}
       {averageOrMonthlyNichtSelbstaendig === "average" && (
-        <p
-          className={`egr-einkommen-form__ausfuerliche-eingabe-text-${elternteil.toLowerCase()}`}
-        >
+        <p className="my-16 text-16">
           Wenn das Einkommen zwischen den Monaten sehr schwankte, klicken Sie
           bitte auf „ausführliche Eingabe“ und geben die Monate einzeln ein.
         </p>
@@ -66,14 +64,14 @@ export function NurErwerbstaetig({
       {averageOrMonthlyNichtSelbstaendig === "monthly" && (
         <fieldset
           name="Einkommen pro Monat"
-          className="egr-einkommen-form__per-month"
+          className="my-16 flex flex-wrap gap-16"
         >
           <legend className="mb-10">
             Geben Sie an, wie viel Sie in den 12 Monaten vor der Geburt Ihres
             Kindes monatlich verdient haben.
             <br />
             Ausgenommen sind:
-            <ul>
+            <ul className="list-disc pl-16">
               <li>Monate in denen Sie im Mutterschutz waren</li>
               <li>
                 Monate in denen Sie Elterngeld für ein älteres Kind in dessen

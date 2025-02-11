@@ -20,7 +20,15 @@ summary {
 }
 
 @media print {
+  /* fit more content on an A4 page */
   @page {
     size: A3;
+  }
+
+  /* keep background colors even when users deactivate printing backgrounds */
+  .bg-Basis,
+  .bg-Plus,
+  .bg-Bonus {
+    print-color-adjust: exact;
   }
 }

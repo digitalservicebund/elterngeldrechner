@@ -1,6 +1,5 @@
 import { berechneMischNettoUndBasiselterngeld } from "./basis-eg-algorithmus";
 import { nettoEinkommenZwischenErgebnis } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { errorOf } from "./calculation-error-code";
 import { elterngeldZwischenergebnis } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
@@ -42,7 +41,7 @@ export function calculateElternGeld(
     clonedElterngeldDaten.finanzDaten.mischEinkommenTaetigkeiten.length > 0 &&
     zwischenErgebnisEinkommen.mischEkZwischenErgebnis === null
   ) {
-    throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+    throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
   }
 
   return elterngeldPlusErgebnis(

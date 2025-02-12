@@ -2,7 +2,6 @@ import {
   type Eingangsparameter,
   berechneSteuerUndSozialabgaben,
 } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
-import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import {
   ErwerbsArt,
   FinanzDaten,
@@ -16,32 +15,16 @@ import {
 import { bestimmeWerbekostenpauschale } from "@/globals/js/calculations/werbekostenpauschale";
 
 export function bestLohnSteuerJahrOf(
-  wahrscheinlichesGeburtsDatum: Date,
+  geburtsdatumDesKindes: Date,
 ): Lohnsteuerjahr {
-  const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
-  const jahrVorDerGeburt = geburtsDatumJahr - 1;
+  const jahrVorDerGeburt = geburtsdatumDesKindes.getFullYear() - 1;
+  const aeltestesLohnsteuerjahr = UnterstuetzteLohnsteuerjahre.toSorted()[0]!;
 
-  if (
-    UnterstuetzteLohnsteuerjahre.includes(jahrVorDerGeburt as Lohnsteuerjahr)
-  ) {
-    return jahrVorDerGeburt as Lohnsteuerjahr;
-  }
-
-  const minAvailableYear = Math.min(
-    ...UnterstuetzteLohnsteuerjahre,
-  ) as Lohnsteuerjahr;
-  if (jahrVorDerGeburt < minAvailableYear) {
-    return minAvailableYear;
-  }
-
-  const maxAvailableYear = Math.max(
-    ...UnterstuetzteLohnsteuerjahre,
-  ) as Lohnsteuerjahr;
-  if (jahrVorDerGeburt > maxAvailableYear) {
-    return maxAvailableYear;
-  }
-
-  throw errorOf("NichtUnterstuetztesLohnsteuerjahr");
+  return (
+    UnterstuetzteLohnsteuerjahre.toSorted().findLast(
+      (lohnsteuerjahr) => lohnsteuerjahr <= jahrVorDerGeburt,
+    ) ?? aeltestesLohnsteuerjahr
+  );
 }
 
 export function abgabenSteuern(

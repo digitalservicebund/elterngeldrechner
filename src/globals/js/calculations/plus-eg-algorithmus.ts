@@ -125,7 +125,7 @@ function getEKVor(
 
   if (isMischeinkommen) {
     if (mischEkZwischenErgebnis === null) {
-      throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+      throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
     }
 
     ek_vor = mischEkZwischenErgebnis.netto;
@@ -287,7 +287,7 @@ function mitETVorGeburt(
         let status: ErwerbsArt;
         if (isMischeinkommen) {
           if (mischEkZwischenErgebnis === null) {
-            throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+            throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
           }
           status = mischEkZwischenErgebnis.status;
         } else {
@@ -343,7 +343,7 @@ function mitETVorGeburt(
       elterngeld_keine_et_plus = z.elternGeld;
       if (isMischeinkommen) {
         if (mischEkZwischenErgebnis === null) {
-          throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+          throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
         }
         elterngeld_keine_et_plus = mischEkZwischenErgebnis.elterngeldbasis;
       }
@@ -534,7 +534,7 @@ function createElterngeldAusgabe(
 
   if (isMischeinkommen) {
     if (misch === null) {
-      throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+      throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
     }
     basiselterngeld = misch.elterngeldbasis;
   }

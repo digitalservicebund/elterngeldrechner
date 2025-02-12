@@ -1,0 +1,16 @@
+.page-grid-container {
+  display: grid;
+  grid-template: "sidebar" "content" / minmax(auto, 64rem);
+
+  @media (min-width: 1170px) {
+    grid-template: "sidebar content" / max-content minmax(auto, 64rem);
+  }
+}
+
+.page-grid-sidebar {
+  grid-area: sidebar;
+}
+
+.page-grid-content {
+  grid-area: content;
+}

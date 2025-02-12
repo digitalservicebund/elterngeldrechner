@@ -17,18 +17,20 @@ export function Page({ step, children }: PageProps) {
 
   const headingIdentifier = useId();
 
+  // TODO: Breakpoint Edge Case
+
   return (
-    <div className="egr-page">
+    <div className="page-grid-container print:block">
       <ScrollRestoration />
 
-      <div className="egr-page__sidebar">
+      <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
         <Sidebar currentStep={step} />
       </div>
 
       <section
         id={step.heading} /* used for tracking */
         ref={sectionElement}
-        className="egr-page__content relative focus:outline-none"
+        className="page-grid-content relative focus:outline-none"
         aria-labelledby={headingIdentifier}
         tabIndex={-1}
       >

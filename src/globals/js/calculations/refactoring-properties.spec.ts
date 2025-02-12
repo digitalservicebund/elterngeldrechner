@@ -47,7 +47,6 @@ import {
   MischEkTaetigkeit as OriginalMischEkTaetigkeit,
   PersoenlicheDaten as OriginalPersoenlicheDaten,
   PlanungsDaten as OriginalPlanungsDaten,
-  UnterstuetzteLohnsteuerjahre as OriginalUnterstuetzteLohnsteuerjahre,
   YesNo,
 } from "original-rechner";
 
@@ -77,9 +76,9 @@ import {
  * satisfy the original codes interface. The refactoring CAN always easily
  * ignore/remove any input data securely. Anyhow, mutating the input schema MUST
  * be done with great care, following the rules of trivial composition above.
- * There MUST be no logic that tries to resolve cross input data relationships.
- * Such relationships are a flaw of the original algorithm and should not be
- * compensated for, introducing security holes into this test.
+ * In best case there SHOULD be no logic that tries to resolve cross input data
+ * relationships. Such relationships are a flaw of the original algorithm and
+ * should not be compensated for, introducing security holes into this test.
  * The input data SHOULD be as dump and arbitrary as possible. Though, it might
  * make sense to limit certain arbitrary factors to the range or realistic data
  * (e.g. 10.000.000 expected children). This helps to keep the number of
@@ -116,20 +115,14 @@ describe("tests to verify properties during refactoring", () => {
           arbitraryPersoenlicheDatenRaw(),
           arbitraryFinanzdatenRaw(),
           arbitraryPlanungsdatenRaw(),
-          arbitraryLohnsteuerjahr(),
-          (
-            persoenlicheDatenRaw,
-            finanzdatenRaw,
-            planungsdatenRaw,
-            lohnsteuerjahr,
-          ) => {
+          (persoenlicheDatenRaw, finanzdatenRaw, planungsdatenRaw) => {
             const elterngelddaten = {
               persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
               finanzDaten: finanzDatenFrom(finanzdatenRaw),
               planungsDaten: planungsDatenFrom(planungsdatenRaw),
             };
 
-            const result = calculateElternGeld(elterngelddaten, lohnsteuerjahr);
+            const result = calculateElternGeld(elterngelddaten);
 
             const originalResult =
               new OriginalEgrCalculation().calculateElternGeld(
@@ -139,7 +132,7 @@ describe("tests to verify properties during refactoring", () => {
                   finanzDaten: originalFinanzDatenFrom(finanzdatenRaw),
                   planungsDaten: originalPlanungsDatenFrom(planungsdatenRaw),
                 },
-                lohnsteuerjahr,
+                originalLohnsteuerjahrFrom(persoenlicheDatenRaw),
               );
 
             return expectCalculatedResultToEqual(
@@ -428,6 +421,22 @@ function erwerbsZeitraumLebensMonatFrom(
   };
 }
 
+/**
+ * The production algorithm determines the Lohnsteuerjahr based on the data of
+ * birth of the child. In the original-rechner these can derive from each other
+ * leading to incorrect results. Therefore this function compensates for it.
+ *
+ * **IMPORTANT:**
+ * The {@link arbitraryPersoenlicheDatenRaw} takes the supported Lohnsteuerjahre
+ * into account when generating arbitrary dates of birth.
+ */
+function originalLohnsteuerjahrFrom(
+  data: PersoenlicheDatenRaw,
+): OriginalLohnsteuerjahr {
+  return (data.wahrscheinlichesGeburtsdatum.getFullYear() -
+    1) as OriginalLohnsteuerjahr;
+}
+
 function yesNoFrom(value: boolean): YesNo {
   return value ? YesNo.YES : YesNo.NO;
 }
@@ -436,16 +445,8 @@ function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
   return arbitraryRecord({
     anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
     wahrscheinlichesGeburtsdatum: arbitraryDate({
-      min: new Date(
-        Math.min(...OriginalUnterstuetzteLohnsteuerjahre) - 1,
-        0,
-        1,
-      ),
-      max: new Date(
-        Math.max(...OriginalUnterstuetzteLohnsteuerjahre) - 1,
-        11,
-        31,
-      ),
+      min: new Date("2023-01-01"),
+      max: new Date("2024-12-31"),
     }),
     sindSieAlleinerziehend: arbitraryBoolean(),
     erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
@@ -515,10 +516,6 @@ type PlanungsdatenRaw = {
   planung: ElternGeldArt[];
 };
 
-function arbitraryLohnsteuerjahr(): Arbitrary<OriginalLohnsteuerjahr> {
-  return arbitraryConstantFrom(...OriginalUnterstuetzteLohnsteuerjahre);
-}
-
 function arbitraryMischEkTaetigkeitRaw(): Arbitrary<MischEkTaetigkeitRaw> {
   return arbitraryRecord({
     erwerbstaetigkeit: arbitraryErwerbstaetigkeit(),
@@ -572,16 +569,8 @@ type ErwerbsZeitraumLebensMonatRaw = {
 function arbitraryKind(): Arbitrary<KindRaw> {
   return arbitraryRecord({
     geburtsdatum: arbitraryDate({
-      min: new Date(
-        Math.min(...OriginalUnterstuetzteLohnsteuerjahre) - 20,
-        0,
-        1,
-      ),
-      max: new Date(
-        Math.max(...OriginalUnterstuetzteLohnsteuerjahre) - 1,
-        11,
-        31,
-      ),
+      min: new Date("2000-01-01"),
+      max: new Date("2022-12-31"),
     }),
     istBehindert: arbitraryBoolean(),
   });

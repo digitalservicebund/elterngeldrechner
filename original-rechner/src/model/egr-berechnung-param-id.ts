@@ -90,7 +90,7 @@ export const GRENZE_MIDI_MAX = Big(1300); // vorher 850 // 2000 since 01.01.2023
  *
  * @see setupCalculation()
  */
-export const PAUSCH = Big(1000)
+export const PAUSCH = Big(1200)
   .div(Big(12))
   .prec(Big.DP, Big.RM as RoundingMode); // 1230 - when to change ?
 /**

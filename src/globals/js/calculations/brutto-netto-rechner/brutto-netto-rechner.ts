@@ -5,7 +5,6 @@ import {
   ErwerbsArt,
   FinanzDaten,
   KassenArt,
-  type Lohnsteuerjahr,
   RentenArt,
   SteuerKlasse,
 } from "@/globals/js/calculations/model";
@@ -20,7 +19,6 @@ import {
 
 export function abzuege(
   bruttoProMonat: number,
-  lohnSteuerJahr: Lohnsteuerjahr,
   finanzDaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
   geburtsdatumDesKindes: Date,
@@ -60,7 +58,6 @@ export function abzuege(
     rentenversicherungspflichtig,
     erwerbsArt,
     bruttoProMonat,
-    lohnSteuerJahr,
     geburtsdatumDesKindes,
   );
 }
@@ -72,7 +69,6 @@ export function abzuege(
 export function nettoEinkommenZwischenErgebnis(
   finanzdaten: FinanzDaten,
   erwerbsArtVorGeburt: ErwerbsArt,
-  lohnSteuerJahr: Lohnsteuerjahr,
   geburtsdatumDesKindes: Date,
 ): Einkommen {
   const netto: Einkommen = new Einkommen(0);
@@ -100,7 +96,6 @@ export function nettoEinkommenZwischenErgebnis(
       rentenversicherungspflichtig,
       status,
       brutto,
-      lohnSteuerJahr,
       geburtsdatumDesKindes,
     );
     netto.value = brutto - steuerUndAbgaben;
@@ -117,14 +112,12 @@ export function summeSteuer(
   finanzdaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
   bruttoProMonat: number,
-  lohnSteuerJahr: Lohnsteuerjahr,
   geburtsdatumDesKindes: Date,
 ): number {
   const charge = abgabenSteuern(
     finanzdaten,
     erwerbsArt,
     bruttoProMonat,
-    lohnSteuerJahr,
     geburtsdatumDesKindes,
   );
   const kirchensteuersatz: number = 8;
@@ -148,14 +141,12 @@ function berechneSteuernAbgaben(
   rentenversicherungspflichtig: boolean,
   status: ErwerbsArt,
   bruttoProMonat: number,
-  lohnSteuerJahr: Lohnsteuerjahr,
   geburtsdatumDesKindes: Date,
 ): number {
   const summeAnSteuern = summeSteuer(
     finanzdaten,
     status,
     bruttoProMonat,
-    lohnSteuerJahr,
     geburtsdatumDesKindes,
   );
   let summe_sozab = summer_svb(
@@ -298,14 +289,13 @@ if (import.meta.vitest) {
       // when
       const actual = abzuege(
         2000,
-        2022,
         finanzDaten,
         ErwerbsArt.JA_SELBSTSTAENDIG,
         new Date("2020-01-01"),
       );
 
       // then
-      expect(actual).toBe(556.83);
+      expect(actual).toBe(563.75);
     });
   });
 }

@@ -7,7 +7,6 @@ import {
   PAP_2024,
   type Programmablaufplan,
 } from "./programmablaufplan";
-import type { Lohnsteuerjahr } from "@/globals/js/calculations/model";
 
 export { type Eingangsparameter };
 
@@ -28,3 +27,6 @@ const ABLAUFPLAENE = {
   Lohnsteuerjahr,
   { new (eingangsparameter: Eingangsparameter): Programmablaufplan }
 >;
+
+export const UnterstuetzteLohnsteuerjahre = [2021, 2022, 2023, 2024] as const;
+export type Lohnsteuerjahr = (typeof UnterstuetzteLohnsteuerjahre)[number];

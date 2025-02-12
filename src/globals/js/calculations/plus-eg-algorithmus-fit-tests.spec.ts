@@ -44,7 +44,6 @@ describe("plus-eg-algorithmus", () => {
           planungsDaten,
           persoenlicheDaten,
           finanzDaten,
-          2022,
           mischEkZwischenErgebnis,
           zwischenErgebnis,
         );

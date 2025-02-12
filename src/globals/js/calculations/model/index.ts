@@ -25,10 +25,6 @@ export {
   kinderFreiBetragOfNumber,
   kinderFreiBetragToNumber,
 } from "./kinder-frei-betrag";
-export {
-  type Lohnsteuerjahr,
-  UnterstuetzteLohnsteuerjahre,
-} from "./lohnsteuerjahr";
 export type { MischEkZwischenErgebnis } from "./misch-ek-zwischen-ergebnis";
 export {
   MutterschaftsLeistung,

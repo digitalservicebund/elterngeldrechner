@@ -13,7 +13,7 @@
     margin: 0;
     padding: 0;
 
-    @media (max-width: 1170px) {
+    @media (max-width: 1169px) {
       @apply bg-primary p-8;
       visibility: hidden;
       opacity: 0;
@@ -76,7 +76,7 @@
   &__collapse-btn {
     display: none;
 
-    @media (max-width: 1170px) {
+    @media (max-width: 1169px) {
       @apply bg-primary-light text-black;
       display: flex;
       justify-content: space-between;

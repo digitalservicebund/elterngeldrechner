@@ -13,7 +13,7 @@ import {
   kinderFreiBetragToNumber,
   steuerklasseToNumber,
 } from "@/globals/js/calculations/model";
-import { PAUSCH } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import { bestimmeWerbekostenpauschale } from "@/globals/js/calculations/werbekostenpauschale";
 
 export function bestLohnSteuerJahrOf(
   wahrscheinlichesGeburtsDatum: Date,
@@ -49,6 +49,7 @@ export function abgabenSteuern(
   erwerbsArt: ErwerbsArt,
   bruttoProMonat: number,
   lohnSteuerJahr: Lohnsteuerjahr,
+  geburtsdatumDesKindes: Date,
 ): { bk: number; lstlzz: number; solzlzz: number } {
   if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
     finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
@@ -56,7 +57,10 @@ export function abgabenSteuern(
 
   let einkommenInCent = bruttoProMonat * 100;
   if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
-    einkommenInCent = einkommenInCent + PAUSCH * 100;
+    const werbekostenpauschale = bestimmeWerbekostenpauschale(
+      geburtsdatumDesKindes,
+    );
+    einkommenInCent = einkommenInCent + werbekostenpauschale * 100;
   }
 
   const eingangsparameter: Eingangsparameter = {
@@ -142,6 +146,7 @@ if (import.meta.vitest) {
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           1,
           2022,
+          ANY_DATE,
         );
 
         // then
@@ -162,6 +167,7 @@ if (import.meta.vitest) {
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           1,
           2022,
+          ANY_DATE,
         );
 
         // then
@@ -184,6 +190,7 @@ if (import.meta.vitest) {
           ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
           1,
           2022,
+          ANY_DATE,
         );
 
         // then
@@ -205,6 +212,7 @@ if (import.meta.vitest) {
         ErwerbsArt.JA_NICHT_SELBST_MINI,
         1,
         2022,
+        ANY_DATE,
       );
 
       // then
@@ -224,5 +232,7 @@ if (import.meta.vitest) {
       mischEinkommenTaetigkeiten: [],
       erwerbsZeitraumLebensMonatList: [],
     };
+
+    const ANY_DATE = new Date();
   });
 }

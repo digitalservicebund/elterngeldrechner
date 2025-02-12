@@ -21,13 +21,13 @@ import {
   bruttoLeistungsMonateWithPlanung,
   mutterschaftsLeistungInMonaten,
 } from "./model";
+import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import { bruttoEGPlusNeu } from "@/globals/js/calculations/eg-brutto-rechner";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MINDESTSATZ,
   MIN_GESCHWISTERBONUS,
-  PAUSCH,
   RATE_BONUS,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
@@ -114,10 +114,12 @@ export function elterngeldPlusErgebnis(
     hatPartnerbonus,
   );
 }
+
 function getEKVor(
   finanzDaten: FinanzDaten,
   ek_vor: number,
   mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
+  werbekostenpauschale: number,
 ): number {
   const isMischeinkommen = finanzDaten.mischEinkommenTaetigkeiten.length > 0;
 
@@ -128,7 +130,7 @@ function getEKVor(
 
     ek_vor = mischEkZwischenErgebnis.netto;
     if (mischEkZwischenErgebnis.status !== ErwerbsArt.JA_SELBSTSTAENDIG) {
-      ek_vor = ek_vor + PAUSCH;
+      ek_vor = ek_vor + werbekostenpauschale;
     }
   }
   return ek_vor;
@@ -175,7 +177,9 @@ function mitETVorGeburt(
   let elterngeld_et_plus = 0;
   let elterngeld_keine_et_plus = 0;
   if (nicht_erw) {
-    const pausch = PAUSCH;
+    const werbekostenpauschale = bestimmeWerbekostenpauschale(
+      persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+    );
     if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
       throw new Error("wahrscheinlichesGeburtsDatum === undefined");
     }
@@ -217,6 +221,7 @@ function mitETVorGeburt(
             lohnSteuerJahr,
             finanzDaten,
             persoenlicheDaten.etVorGeburt,
+            persoenlicheDaten.wahrscheinlichesGeburtsDatum,
           );
         }
         if (brutto_plus > 0) {
@@ -225,17 +230,26 @@ function mitETVorGeburt(
             lohnSteuerJahr,
             finanzDaten,
             persoenlicheDaten.etVorGeburt,
+            persoenlicheDaten.wahrscheinlichesGeburtsDatum,
           );
         }
       }
       let ek_vor = z.nettoVorGeburt;
-      ek_vor = getEKVor(finanzDaten, ek_vor, mischEkZwischenErgebnis);
+      ek_vor = getEKVor(
+        finanzDaten,
+        ek_vor,
+        mischEkZwischenErgebnis,
+        werbekostenpauschale,
+      );
       if (brutto_basis > 0) {
         switch (persoenlicheDaten.etVorGeburt) {
           case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
           case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
           case ErwerbsArt.JA_NICHT_SELBST_MINI:
-            ek_vor = Math.max(aufDenCentRunden(ek_vor - PAUSCH), 0);
+            ek_vor = Math.max(
+              aufDenCentRunden(ek_vor - werbekostenpauschale),
+              0,
+            );
             summe_brutto_basis = 0;
             for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
               const bruttoInLebensmonatenMitBasis = brutto_LM_Basis[i] ?? 0;
@@ -248,7 +262,10 @@ function mitETVorGeburt(
                 summe_brutto_basis =
                   summe_brutto_basis +
                   aufDenCentRunden(
-                    Math.max(bruttoInLebensmonatenMitBasis - pausch, 0),
+                    Math.max(
+                      bruttoInLebensmonatenMitBasis - werbekostenpauschale,
+                      0,
+                    ),
                   );
               }
             }
@@ -277,12 +294,17 @@ function mitETVorGeburt(
           status = persoenlicheDaten.etVorGeburt;
         }
         ek_vor = z.nettoVorGeburt;
-        ek_vor = getEKVor(finanzDaten, ek_vor, mischEkZwischenErgebnis);
+        ek_vor = getEKVor(
+          finanzDaten,
+          ek_vor,
+          mischEkZwischenErgebnis,
+          werbekostenpauschale,
+        );
         switch (status) {
           case ErwerbsArt.JA_NICHT_SELBST_MINI:
           case ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI:
           case ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI:
-            ek_vor = Math.max(ek_vor - PAUSCH, 0);
+            ek_vor = Math.max(ek_vor - werbekostenpauschale, 0);
             summe_brutto_plus = 0;
             for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
               const bruttoInLebensmonatenMitPlus = brutto_LM_Plus[i] ?? 0;
@@ -297,7 +319,10 @@ function mitETVorGeburt(
                 summe_brutto_plus =
                   summe_brutto_plus +
                   aufDenCentRunden(
-                    Math.max(bruttoInLebensmonatenMitPlus - pausch, 0),
+                    Math.max(
+                      bruttoInLebensmonatenMitPlus - werbekostenpauschale,
+                      0,
+                    ),
                   );
               }
             }
@@ -684,7 +709,7 @@ if (import.meta.vitest) {
           };
 
           const persoenlicheDaten = {
-            wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
+            wahrscheinlichesGeburtsDatum: new Date("2022-11-24"),
             anzahlKuenftigerKinder: 1,
             etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
             hasEtNachGeburt: true,

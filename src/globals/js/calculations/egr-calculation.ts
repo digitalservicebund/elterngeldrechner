@@ -26,6 +26,7 @@ export function calculateElternGeld(
   const zwischenErgebnisEinkommen = zwischenErgebnisEinkommenOf(
     clonedElterngeldDaten,
     lohnSteuerJahr,
+    clonedElterngeldDaten.persoenlicheDaten.wahrscheinlichesGeburtsDatum,
   );
 
   const zwischenErgebnis = elterngeldZwischenergebnis(
@@ -57,6 +58,7 @@ export function calculateElternGeld(
 function zwischenErgebnisEinkommenOf(
   elternGeldDaten: ElternGeldDaten,
   lohnSteuerJahr: Lohnsteuerjahr,
+  geburtsdatumDesKindes: Date,
 ) {
   korrigiereErwerbsart(elternGeldDaten);
 
@@ -80,6 +82,7 @@ function zwischenErgebnisEinkommenOf(
         elternGeldDaten.finanzDaten,
         elternGeldDaten.persoenlicheDaten.etVorGeburt,
         lohnSteuerJahr,
+        geburtsdatumDesKindes,
       );
     }
   }
@@ -129,7 +132,7 @@ if (import.meta.vitest) {
         };
 
         const persoenlicheDaten = {
-          wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
+          wahrscheinlichesGeburtsDatum: new Date("2022-11-25"),
           anzahlKuenftigerKinder: 1,
           etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           hasEtNachGeburt: true,
@@ -186,7 +189,7 @@ if (import.meta.vitest) {
         };
 
         const persoenlicheDaten = {
-          wahrscheinlichesGeburtsDatum: new Date("2023-11-25T01:02:03.000Z"),
+          wahrscheinlichesGeburtsDatum: new Date("2022-11-25"),
           anzahlKuenftigerKinder: 1,
           etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           hasEtNachGeburt: false,

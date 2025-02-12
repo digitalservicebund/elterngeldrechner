@@ -15,6 +15,5 @@ export const GRENZE3 = 1000;
 export const HOECHST_ET = 2770;
 export const GRENZE_MINI_MIDI = 520;
 export const GRENZE_MIDI_MAX = 1300;
-export const PAUSCH = 1000 / 12;
 export const MAX_EINKOMMEN_ALLEIN = 200_000;
 export const MAX_EINKOMMEN_BEIDE = 200_000;

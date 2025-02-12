@@ -23,6 +23,7 @@ export function abzuege(
   lohnSteuerJahr: Lohnsteuerjahr,
   finanzDaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
+  geburtsdatumDesKindes: Date,
 ): number {
   let rentenversicherungspflichtig =
     finanzDaten.rentenVersicherung ===
@@ -60,6 +61,7 @@ export function abzuege(
     erwerbsArt,
     bruttoProMonat,
     lohnSteuerJahr,
+    geburtsdatumDesKindes,
   );
 }
 
@@ -71,6 +73,7 @@ export function nettoEinkommenZwischenErgebnis(
   finanzdaten: FinanzDaten,
   erwerbsArtVorGeburt: ErwerbsArt,
   lohnSteuerJahr: Lohnsteuerjahr,
+  geburtsdatumDesKindes: Date,
 ): Einkommen {
   const netto: Einkommen = new Einkommen(0);
   const status: ErwerbsArt = erwerbsArtVorGeburt;
@@ -98,6 +101,7 @@ export function nettoEinkommenZwischenErgebnis(
       status,
       brutto,
       lohnSteuerJahr,
+      geburtsdatumDesKindes,
     );
     netto.value = brutto - steuerUndAbgaben;
   } else {
@@ -114,12 +118,14 @@ export function summeSteuer(
   erwerbsArt: ErwerbsArt,
   bruttoProMonat: number,
   lohnSteuerJahr: Lohnsteuerjahr,
+  geburtsdatumDesKindes: Date,
 ): number {
   const charge = abgabenSteuern(
     finanzdaten,
     erwerbsArt,
     bruttoProMonat,
     lohnSteuerJahr,
+    geburtsdatumDesKindes,
   );
   const kirchensteuersatz: number = 8;
   let kirchenlohnsteuer = calculateChurchTaxes(kirchensteuersatz, charge.bk);
@@ -143,12 +149,14 @@ function berechneSteuernAbgaben(
   status: ErwerbsArt,
   bruttoProMonat: number,
   lohnSteuerJahr: Lohnsteuerjahr,
+  geburtsdatumDesKindes: Date,
 ): number {
   const summeAnSteuern = summeSteuer(
     finanzdaten,
     status,
     bruttoProMonat,
     lohnSteuerJahr,
+    geburtsdatumDesKindes,
   );
   let summe_sozab = summer_svb(
     krankenversicherungspflichtig,
@@ -293,6 +301,7 @@ if (import.meta.vitest) {
         2022,
         finanzDaten,
         ErwerbsArt.JA_SELBSTSTAENDIG,
+        new Date("2020-01-01"),
       );
 
       // then

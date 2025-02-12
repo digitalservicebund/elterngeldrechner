@@ -14,12 +14,12 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "./model";
+import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
   GRENZE_MINI_MIDI,
-  PAUSCH,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
 const ANZAHL_MONATE_PRO_JAHR: number = 12;
@@ -114,8 +114,14 @@ export function berechneMischNettoUndBasiselterngeld(
     }
   }
 
+  const werbekostenpauschale = bestimmeWerbekostenpauschale(
+    persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+  );
   const brutto_elg = aufDenCentRunden(
-    (summe_EK_SS + summe_EK_NS + summe_EK_GNS - zaehler_Pauschmonate * PAUSCH) /
+    (summe_EK_SS +
+      summe_EK_NS +
+      summe_EK_GNS -
+      zaehler_Pauschmonate * werbekostenpauschale) /
       ANZAHL_MONATE_PRO_JAHR,
   );
   const brutto_steuer = aufDenCentRunden(
@@ -245,6 +251,7 @@ export function berechneMischNettoUndBasiselterngeld(
       status,
       brutto_steuer,
       lohnSteuerJahr,
+      persoenlicheDaten.wahrscheinlichesGeburtsDatum,
     );
     netto = brutto_elg - summe_steuer_abzug - summe_sozab;
     steuern = summe_steuer_abzug;

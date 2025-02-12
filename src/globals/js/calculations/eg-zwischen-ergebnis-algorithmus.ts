@@ -7,11 +7,11 @@ import {
   PersoenlicheDaten,
   ZwischenErgebnis,
 } from "./model";
+import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MIN_GESCHWISTERBONUS,
-  PAUSCH,
   RATE_BONUS,
 } from "@/globals/js/calculations/model/egr-berechnung-param-id";
 
@@ -33,7 +33,6 @@ export function elterngeldZwischenergebnis(
   ek_vor_copy = ek_vor_copy + ek_vor.value;
   const status_et: ErwerbsArt = persoenlicheDaten.etVorGeburt;
   let mehrlingszuschlag: number;
-  const pausch = PAUSCH;
   let elterngeldbasis: number;
   let ersatzrate_ausgabe;
   const betrag_Mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
@@ -51,7 +50,10 @@ export function elterngeldZwischenergebnis(
     status_et === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ||
     status_et === ErwerbsArt.JA_NICHT_SELBST_MINI
   ) {
-    ek_vor_copy = Math.max(ek_vor_copy - pausch, 0);
+    const werbekostenpauschale = bestimmeWerbekostenpauschale(
+      persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+    );
+    ek_vor_copy = Math.max(ek_vor_copy - werbekostenpauschale, 0);
   }
   elterngeldbasis = elterngeld_keine_et(ek_vor_copy);
   ersatzrate_ausgabe = ersatzrate_eg(ek_vor_copy);

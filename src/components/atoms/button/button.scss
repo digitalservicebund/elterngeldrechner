@@ -49,13 +49,10 @@
   }
 
   &--link {
-    padding: 0;
-
-    @apply bg-transparent text-primary;
-    border: none;
+    @apply border-none bg-transparent p-0 text-primary;
 
     span {
-      text-decoration: underline;
+      @apply underline;
     }
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
@@ -68,13 +65,12 @@
 
     &:active,
     &:focus {
-      outline: none;
+      @apply outline-none;
     }
   }
 
   &--disabled {
-    opacity: 0.5;
-    pointer-events: none;
+    @apply pointer-events-none opacity-50;
   }
 
   &__input {

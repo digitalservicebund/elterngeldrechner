@@ -15,10 +15,7 @@
   }
 
   &--primary {
-    &,
-    &:visited {
-      @apply bg-primary;
-    }
+    @apply bg-primary;
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
     // nach dem Klick der :hover Style angewendet wurde
@@ -35,10 +32,7 @@
   }
 
   &--secondary {
-    &,
-    &:visited {
-      @apply bg-transparent text-primary;
-    }
+    @apply bg-transparent text-primary;
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
     // nach dem Klick der :hover Style angewendet wurde
@@ -57,14 +51,11 @@
   &--link {
     padding: 0;
 
-    &,
-    &:visited {
-      @apply bg-transparent text-primary;
-      border: none;
+    @apply bg-transparent text-primary;
+    border: none;
 
-      span {
-        text-decoration: underline;
-      }
+    span {
+      text-decoration: underline;
     }
 
     // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten

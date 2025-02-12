@@ -17,8 +17,6 @@ export function Page({ step, children }: PageProps) {
 
   const headingIdentifier = useId();
 
-  // TODO: Breakpoint Edge Case
-
   return (
     <div className="page-grid-container print:block">
       <ScrollRestoration />

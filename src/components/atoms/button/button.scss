@@ -1,9 +1,5 @@
 .egr-button {
-  &,
-  &:visited {
-    @apply border border-solid border-primary px-16 px-24 py-16 text-20 text-white;
-    transition: all 0.3s;
-  }
+  @apply border border-solid border-primary px-24 py-16 text-20 text-white transition-all duration-300;
 
   // Die Einschränkung ist notwendig, da sonst bei mobilen Geräten
   // nach dem Klick der :hover Style angewendet wurde

@@ -29,7 +29,7 @@ export function AbschnittMitPlanungsuebersicht({ plan }: Props): ReactNode {
       </h3>
 
       <p id={descriptionIdentifier} className="basis-full print:hidden">
-        Hier finden sie eine Übersicht Ihrer Planung der Elterngeldmonate
+        Hier finden sie eine Zusammenfassung Ihrer Planung der Elterngeldmonate
       </p>
 
       {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(

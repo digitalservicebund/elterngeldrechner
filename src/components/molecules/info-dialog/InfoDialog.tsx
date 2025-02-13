@@ -15,7 +15,6 @@ import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 interface Props {
   readonly ariaLabelForDialog?: string;
   readonly info: string | ReactNode;
-  readonly isMonatsplanner?: boolean;
   readonly isElternteilOne?: boolean;
   readonly id?: string;
   readonly className?: string;
@@ -25,7 +24,6 @@ interface Props {
 export function InfoDialog({
   ariaLabelForDialog,
   info,
-  isMonatsplanner,
   isElternteilOne,
   id,
   className,
@@ -82,20 +80,13 @@ export function InfoDialog({
 
   return (
     <div
-      className={classNames(
-        "egr-info-dialog",
-        isMonatsplanner && "egr-info-dialog--monatsplanner",
-        className,
-      )}
+      className={classNames("egr-info-dialog", className)}
       style={style}
       ref={wrapperElement}
     >
       <button
         id={id}
-        className={classNames(
-          "egr-info-dialog__button",
-          isMonatsplanner && "egr-info-dialog__button--monatsplanner",
-        )}
+        className="egr-info-dialog__button"
         style={button.style}
         type="button"
         ref={openButtonElement}

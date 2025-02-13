@@ -4,10 +4,6 @@
 
   &__button {
     @apply border-none bg-transparent text-primary;
-
-    &--monatsplanner {
-      @apply text-white;
-    }
   }
 
   &-box {
@@ -78,10 +74,5 @@
 
   @media (max-width: 961px) {
     @apply right-32;
-  }
-
-  &--monatsplanner {
-    width: fit-content;
-    margin: 0 auto;
   }
 }

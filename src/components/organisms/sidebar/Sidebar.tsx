@@ -76,7 +76,10 @@ export function Sidebar({ currentStep }: Props) {
               )}
             >
               <button
-                className="appearance-none border-none bg-transparent text-16 text-black"
+                className={classNames(
+                  "appearance-none border-none bg-transparent text-16 text-black",
+                  { "cursor-default": !isNavigatable },
+                )}
                 type="button"
                 onClick={navigateToStep}
                 aria-current={ariaCurrent}

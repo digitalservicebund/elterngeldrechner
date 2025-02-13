@@ -15,7 +15,6 @@ import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 interface Props {
   readonly ariaLabelForDialog?: string;
   readonly info: string | ReactNode;
-  readonly isElternteilOne?: boolean;
   readonly id?: string;
   readonly className?: string;
   readonly style?: CSSProperties;
@@ -24,7 +23,6 @@ interface Props {
 export function InfoDialog({
   ariaLabelForDialog,
   info,
-  isElternteilOne,
   id,
   className,
   style,
@@ -100,7 +98,6 @@ export function InfoDialog({
       <div
         className={classNames(
           "egr-info-dialog-box",
-          isElternteilOne && "egr-info-dialog-box--monatsplanner-et-one",
           { hidden: !isModalOpen },
           ...tooltip.className,
         )}

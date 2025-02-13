@@ -26,40 +26,6 @@
         @apply top-4;
       }
     }
-
-    &--monatsplanner-et-one {
-      @apply -mt-6 ml-20;
-
-      button {
-        @apply left-4;
-        top: 0;
-        right: auto;
-      }
-
-      p {
-        @apply ml-32;
-      }
-
-      // add cutomized breakpoint when dialog shown for ET1 (right to the info button instead of left)
-      @media (max-width: 640px) {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: auto;
-        margin-left: 0;
-
-        button {
-          @apply right-4 top-4;
-          left: auto;
-        }
-
-        p {
-          margin-left: 0;
-        }
-      }
-    }
   }
 
   @media (max-width: 961px) {

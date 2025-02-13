@@ -11,16 +11,7 @@
     }
 
     @media (max-width: 481px) {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 99;
-      overflow: auto;
-
-      width: auto !important;
-      margin: 0 !important;
+      @apply fixed inset-0 z-[99] !w-full overflow-auto;
 
       &__button {
         @apply top-4;

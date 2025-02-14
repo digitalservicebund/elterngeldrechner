@@ -8,7 +8,6 @@ import {
   ErwerbsTaetigkeit,
   FinanzDaten,
   KassenArt,
-  type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   PersoenlicheDaten,
   RentenArt,
@@ -27,7 +26,6 @@ const ANZAHL_MONATE_PRO_JAHR: number = 12;
 export function berechneMischNettoUndBasiselterngeld(
   persoenlicheDaten: PersoenlicheDaten,
   finanzDaten: FinanzDaten,
-  lohnSteuerJahr: Lohnsteuerjahr,
 ): MischEkZwischenErgebnis {
   let netto = 0;
   let steuern = 0;
@@ -250,7 +248,6 @@ export function berechneMischNettoUndBasiselterngeld(
       finanzDaten,
       status,
       brutto_steuer,
-      lohnSteuerJahr,
       persoenlicheDaten.wahrscheinlichesGeburtsDatum,
     );
     netto = brutto_elg - summe_steuer_abzug - summe_sozab;
@@ -281,7 +278,7 @@ if (import.meta.vitest) {
       it("TESTFALL NO. 1", () => {
         // given
         const persoenlicheDaten = {
-          wahrscheinlichesGeburtsDatum: new Date("2022-01-01T10:37:00.000Z"),
+          wahrscheinlichesGeburtsDatum: new Date("2023-01-01"),
           anzahlKuenftigerKinder: 1,
           etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           hasEtNachGeburt: false,
@@ -371,12 +368,11 @@ if (import.meta.vitest) {
         const mischEkZwischenErgebnis = berechneMischNettoUndBasiselterngeld(
           persoenlicheDaten,
           finanzDaten,
-          2022,
         );
 
         // then
-        expect(mischEkZwischenErgebnis.netto).toBe(910.67);
-        expect(mischEkZwischenErgebnis.elterngeldbasis).toBe(650.22);
+        expect(mischEkZwischenErgebnis.netto).toBe(898.17);
+        expect(mischEkZwischenErgebnis.elterngeldbasis).toBe(646.68);
         expect(mischEkZwischenErgebnis.status).toBe(
           ErwerbsArt.JA_SELBSTSTAENDIG,
         );

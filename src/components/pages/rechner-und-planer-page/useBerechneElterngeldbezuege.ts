@@ -10,7 +10,6 @@ import {
   Variante,
   isVariante,
 } from "@/features/planer/domain";
-import { bestLohnSteuerJahrOf } from "@/globals/js/calculations/brutto-netto-rechner/egr-steuer-rechner";
 import { calculateElternGeld } from "@/globals/js/calculations/egr-calculation";
 import {
   Einkommen,
@@ -19,7 +18,6 @@ import {
   type ElternGeldPlusErgebnis,
   type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
-  type Lohnsteuerjahr,
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   type PlanungsDaten,
@@ -60,21 +58,20 @@ function berechneElterngeldbezuege(
   elternteil: Elternteil,
   monate: GeplanteMonate,
 ): ElterngeldbezuegeFuerElternteil {
-  const { elterngelddaten, lohnsteuerjahr } = buildParameterForCalculation(
+  const elterngelddaten = buildParameterForCalculation(
     staticParameter[elternteil],
     monate,
   );
 
-  const ergebnis = calculateElternGeld(elterngelddaten, lohnsteuerjahr);
-
+  const ergebnis = calculateElternGeld(elterngelddaten);
   return elterngeldbezuegeFrom(ergebnis);
 }
 
 function buildParameterForCalculation(
   staticParameter: StaticCalculationParameterForElternteil,
   monate: GeplanteMonate,
-): { elterngelddaten: ElternGeldDaten; lohnsteuerjahr: Lohnsteuerjahr } {
-  const { persoenlicheDaten, finanzdaten, lohnsteuerjahr } = staticParameter;
+): ElternGeldDaten {
+  const { persoenlicheDaten, finanzdaten } = staticParameter;
 
   const monateMitErwerbstaetigkeit = transformMonateForFinanzdaten(monate);
   const planungsdaten = transformMonateToPlanungsdaten(monate);
@@ -88,13 +85,11 @@ function buildParameterForCalculation(
   persoenlicheDaten.hasEtNachGeburt = monateMitErwerbstaetigkeit.length > 0;
   finanzdaten.erwerbsZeitraumLebensMonatList = monateMitErwerbstaetigkeit;
 
-  const elterngelddaten = {
+  return {
     persoenlicheDaten,
     finanzDaten: finanzdaten,
     planungsDaten: planungsdaten,
   };
-
-  return { elterngelddaten, lohnsteuerjahr };
 }
 
 function transformMonateForFinanzdaten(
@@ -165,13 +160,9 @@ function createStaticCalculationParameterForElternteil(
 ): StaticCalculationParameterForElternteil {
   const persoenlicheDaten = persoenlicheDatenOfUi(state, elternteil);
   const finanzdaten = finanzDatenOfUi(state, elternteil, []);
-  const lohnsteuerjahr = bestLohnSteuerJahrOf(
-    persoenlicheDaten.wahrscheinlichesGeburtsDatum,
-  );
   return {
     persoenlicheDaten,
     finanzdaten,
-    lohnsteuerjahr,
   };
 }
 
@@ -183,7 +174,6 @@ type StaticCalculationParameter = Record<
 type StaticCalculationParameterForElternteil = {
   persoenlicheDaten: PersoenlicheDaten;
   finanzdaten: FinanzDaten;
-  lohnsteuerjahr: Lohnsteuerjahr;
 };
 
 type GeplanteMonate = Parameters<BerechneElterngeldbezuegeCallback>[1];
@@ -231,14 +221,11 @@ if (import.meta.vitest) {
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
       result.current(ANY_ELTERNTEIL, {});
 
-      expect(calculateElternGeld).toHaveBeenCalledWith(
-        {
-          persoenlicheDaten,
-          finanzDaten,
-          planungsDaten: expect.anything() as PlanungsDaten,
-        },
-        expect.any(Number),
-      );
+      expect(calculateElternGeld).toHaveBeenCalledWith({
+        persoenlicheDaten,
+        finanzDaten,
+        planungsDaten: expect.anything() as PlanungsDaten,
+      });
     });
 
     it("transforms the chosen Variante of the geplante Monate for the calculation", () => {

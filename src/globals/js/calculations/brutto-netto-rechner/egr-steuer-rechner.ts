@@ -1,54 +1,23 @@
 import {
   type Eingangsparameter,
+  type Lohnsteuerjahr,
+  UnterstuetzteLohnsteuerjahre,
   berechneSteuerUndSozialabgaben,
 } from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
-import { errorOf } from "@/globals/js/calculations/calculation-error-code";
 import {
   ErwerbsArt,
   FinanzDaten,
   KinderFreiBetrag,
-  type Lohnsteuerjahr,
   SteuerKlasse,
-  UnterstuetzteLohnsteuerjahre,
   kinderFreiBetragToNumber,
   steuerklasseToNumber,
 } from "@/globals/js/calculations/model";
 import { bestimmeWerbekostenpauschale } from "@/globals/js/calculations/werbekostenpauschale";
 
-export function bestLohnSteuerJahrOf(
-  wahrscheinlichesGeburtsDatum: Date,
-): Lohnsteuerjahr {
-  const geburtsDatumJahr = wahrscheinlichesGeburtsDatum.getFullYear();
-  const jahrVorDerGeburt = geburtsDatumJahr - 1;
-
-  if (
-    UnterstuetzteLohnsteuerjahre.includes(jahrVorDerGeburt as Lohnsteuerjahr)
-  ) {
-    return jahrVorDerGeburt as Lohnsteuerjahr;
-  }
-
-  const minAvailableYear = Math.min(
-    ...UnterstuetzteLohnsteuerjahre,
-  ) as Lohnsteuerjahr;
-  if (jahrVorDerGeburt < minAvailableYear) {
-    return minAvailableYear;
-  }
-
-  const maxAvailableYear = Math.max(
-    ...UnterstuetzteLohnsteuerjahre,
-  ) as Lohnsteuerjahr;
-  if (jahrVorDerGeburt > maxAvailableYear) {
-    return maxAvailableYear;
-  }
-
-  throw errorOf("NichtUnterstuetztesLohnsteuerjahr");
-}
-
 export function abgabenSteuern(
   finanzDaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
   bruttoProMonat: number,
-  lohnSteuerJahr: Lohnsteuerjahr,
   geburtsdatumDesKindes: Date,
 ): { bk: number; lstlzz: number; solzlzz: number } {
   if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
@@ -86,8 +55,12 @@ export function abgabenSteuern(
     ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
   };
 
+  const lohnsteuerjahr = ermittelRelevantesLohnsteuerjahr(
+    geburtsdatumDesKindes,
+  );
+
   const { BK, LSTLZZ, SOLZLZZ } = berechneSteuerUndSozialabgaben(
-    lohnSteuerJahr,
+    lohnsteuerjahr,
     eingangsparameter,
   );
 
@@ -96,6 +69,19 @@ export function abgabenSteuern(
     lstlzz: LSTLZZ / 100,
     solzlzz: SOLZLZZ / 100,
   };
+}
+
+export function ermittelRelevantesLohnsteuerjahr(
+  geburtsdatumDesKindes: Date,
+): Lohnsteuerjahr {
+  const jahrVorDerGeburt = geburtsdatumDesKindes.getFullYear() - 1;
+  const aeltestesLohnsteuerjahr = UnterstuetzteLohnsteuerjahre.toSorted()[0]!;
+
+  return (
+    UnterstuetzteLohnsteuerjahre.toSorted().findLast(
+      (lohnsteuerjahr) => lohnsteuerjahr <= jahrVorDerGeburt,
+    ) ?? aeltestesLohnsteuerjahr
+  );
 }
 
 if (import.meta.vitest) {
@@ -128,7 +114,9 @@ if (import.meta.vitest) {
       (wahrscheinlichesGeburtsDatum, lohnSteuerJahr) => {
         it("should calculate Abgaben", () => {
           expect(
-            bestLohnSteuerJahrOf(new Date(wahrscheinlichesGeburtsDatum)),
+            ermittelRelevantesLohnsteuerjahr(
+              new Date(wahrscheinlichesGeburtsDatum),
+            ),
           ).toBe(lohnSteuerJahr);
         });
       },
@@ -145,7 +133,6 @@ if (import.meta.vitest) {
           },
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           1,
-          2022,
           ANY_DATE,
         );
 
@@ -166,7 +153,6 @@ if (import.meta.vitest) {
           },
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           1,
-          2022,
           ANY_DATE,
         );
 
@@ -189,7 +175,6 @@ if (import.meta.vitest) {
           },
           ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
           1,
-          2022,
           ANY_DATE,
         );
 
@@ -211,7 +196,6 @@ if (import.meta.vitest) {
         },
         ErwerbsArt.JA_NICHT_SELBST_MINI,
         1,
-        2022,
         ANY_DATE,
       );
 

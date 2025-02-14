@@ -1,13 +1,11 @@
 import { berechneMischNettoUndBasiselterngeld } from "./basis-eg-algorithmus";
 import { nettoEinkommenZwischenErgebnis } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { errorOf } from "./calculation-error-code";
 import { elterngeldZwischenergebnis } from "./eg-zwischen-ergebnis-algorithmus";
 import {
   Einkommen,
   ElternGeldDaten,
   ElternGeldPlusErgebnis,
   ErwerbsArt,
-  type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   finanzDatenOf,
 } from "./model";
@@ -15,7 +13,6 @@ import { elterngeldPlusErgebnis } from "./plus-eg-algorithmus";
 
 export function calculateElternGeld(
   elternGeldDaten: ElternGeldDaten,
-  lohnSteuerJahr: Lohnsteuerjahr,
 ): ElternGeldPlusErgebnis {
   const clonedElterngeldDaten = {
     persoenlicheDaten: structuredClone(elternGeldDaten.persoenlicheDaten),
@@ -25,7 +22,6 @@ export function calculateElternGeld(
 
   const zwischenErgebnisEinkommen = zwischenErgebnisEinkommenOf(
     clonedElterngeldDaten,
-    lohnSteuerJahr,
     clonedElterngeldDaten.persoenlicheDaten.wahrscheinlichesGeburtsDatum,
   );
 
@@ -42,14 +38,13 @@ export function calculateElternGeld(
     clonedElterngeldDaten.finanzDaten.mischEinkommenTaetigkeiten.length > 0 &&
     zwischenErgebnisEinkommen.mischEkZwischenErgebnis === null
   ) {
-    throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+    throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
   }
 
   return elterngeldPlusErgebnis(
     clonedElterngeldDaten.planungsDaten,
     clonedElterngeldDaten.persoenlicheDaten,
     clonedElterngeldDaten.finanzDaten,
-    lohnSteuerJahr,
     zwischenErgebnisEinkommen.mischEkZwischenErgebnis,
     zwischenErgebnis,
   );
@@ -57,7 +52,6 @@ export function calculateElternGeld(
 
 function zwischenErgebnisEinkommenOf(
   elternGeldDaten: ElternGeldDaten,
-  lohnSteuerJahr: Lohnsteuerjahr,
   geburtsdatumDesKindes: Date,
 ) {
   korrigiereErwerbsart(elternGeldDaten);
@@ -75,13 +69,11 @@ function zwischenErgebnisEinkommenOf(
         berechneMischNettoUndBasiselterngeld(
           elternGeldDaten.persoenlicheDaten,
           elternGeldDaten.finanzDaten,
-          lohnSteuerJahr,
         );
     } else {
       zwischenErgebnisEinkommen.nettoEinkommen = nettoEinkommenZwischenErgebnis(
         elternGeldDaten.finanzDaten,
         elternGeldDaten.persoenlicheDaten.etVorGeburt,
-        lohnSteuerJahr,
         geburtsdatumDesKindes,
       );
     }
@@ -163,19 +155,20 @@ if (import.meta.vitest) {
         };
 
         // when
-        const ergebnis = calculateElternGeld(
-          { finanzDaten, persoenlicheDaten, planungsDaten },
-          2022,
-        );
+        const ergebnis = calculateElternGeld({
+          finanzDaten,
+          persoenlicheDaten,
+          planungsDaten,
+        });
 
         // then
         expect(ergebnis.bruttoBasis).toBe(0);
         expect(ergebnis.nettoBasis).toBe(0);
         expect(ergebnis.elternGeldErwBasis).toBe(0);
         expect(ergebnis.bruttoPlus).toBe(1950);
-        expect(ergebnis.nettoPlus).toBe(1356.84);
-        expect(ergebnis.elternGeldEtPlus).toBe(281.01);
-        expect(ergebnis.elternGeldKeineEtPlus).toBe(581.48);
+        expect(ergebnis.nettoPlus).toBe(1350.09);
+        expect(ergebnis.elternGeldEtPlus).toBe(279.82);
+        expect(ergebnis.elternGeldKeineEtPlus).toBe(578.69);
       });
 
       it("Test with 'Erwerbstaetigkeit nach Geburt' 2", () => {
@@ -204,10 +197,11 @@ if (import.meta.vitest) {
         };
 
         // when
-        const ergebnis = calculateElternGeld(
-          { finanzDaten, persoenlicheDaten, planungsDaten },
-          2022,
-        );
+        const ergebnis = calculateElternGeld({
+          finanzDaten,
+          persoenlicheDaten,
+          planungsDaten,
+        });
 
         // then
         expect(ergebnis.bruttoBasis).toBe(0);
@@ -216,7 +210,7 @@ if (import.meta.vitest) {
         expect(ergebnis.bruttoPlus).toBe(0);
         expect(ergebnis.nettoPlus).toBe(0);
         expect(ergebnis.elternGeldEtPlus).toBe(0);
-        expect(ergebnis.elternGeldKeineEtPlus).toBe(453.46);
+        expect(ergebnis.elternGeldKeineEtPlus).toBe(451.21);
       });
     });
 
@@ -239,10 +233,7 @@ if (import.meta.vitest) {
       };
 
       const calculate = () =>
-        calculateElternGeld(
-          { persoenlicheDaten, finanzDaten, planungsDaten },
-          2023,
-        );
+        calculateElternGeld({ persoenlicheDaten, finanzDaten, planungsDaten });
 
       expect(calculate()).toStrictEqual(calculate());
     });

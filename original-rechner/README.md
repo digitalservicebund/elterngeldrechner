@@ -53,6 +53,7 @@ part of the code with a copy from the applications code.
 ### List of Bug Fixes
 
 - the deadline for the bonus based on siblings was wrongly calculated
+- separation of date of birth and tax year in combination with an obsolete Werbekostenpauschale
 
 ## Continuous Integration
 

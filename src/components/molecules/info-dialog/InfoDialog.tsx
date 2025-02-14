@@ -15,8 +15,6 @@ import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 interface Props {
   readonly ariaLabelForDialog?: string;
   readonly info: string | ReactNode;
-  readonly isMonatsplanner?: boolean;
-  readonly isElternteilOne?: boolean;
   readonly id?: string;
   readonly className?: string;
   readonly style?: CSSProperties;
@@ -25,8 +23,6 @@ interface Props {
 export function InfoDialog({
   ariaLabelForDialog,
   info,
-  isMonatsplanner,
-  isElternteilOne,
   id,
   className,
   style,
@@ -81,21 +77,10 @@ export function InfoDialog({
     : marginPosition;
 
   return (
-    <div
-      className={classNames(
-        "egr-info-dialog",
-        isMonatsplanner && "egr-info-dialog--monatsplanner",
-        className,
-      )}
-      style={style}
-      ref={wrapperElement}
-    >
+    <div className={className} style={style} ref={wrapperElement}>
       <button
         id={id}
-        className={classNames(
-          "egr-info-dialog__button",
-          isMonatsplanner && "egr-info-dialog__button--monatsplanner",
-        )}
+        className="border-none bg-transparent text-primary"
         style={button.style}
         type="button"
         ref={openButtonElement}
@@ -109,7 +94,8 @@ export function InfoDialog({
       <div
         className={classNames(
           "egr-info-dialog-box",
-          isElternteilOne && "egr-info-dialog-box--monatsplanner-et-one",
+          "absolute z-[100] flex flex-col rounded bg-primary-light py-10 pl-20 pr-56 shadow-lg",
+          "[@media(max-width:481px)]:fixed [@media(max-width:481px)]:inset-0 [@media(max-width:481px)]:z-[99] [@media(max-width:481px)]:!m-0 [@media(max-width:481px)]:!w-full [@media(max-width:481px)]:overflow-auto",
           { hidden: !isModalOpen },
           ...tooltip.className,
         )}
@@ -132,7 +118,7 @@ export function InfoDialog({
         </div>
 
         <button
-          className="egr-info-dialog-box__button"
+          className="media-max-[481px]:top-4 absolute right-4 border-none bg-transparent text-primary"
           type="button"
           onClick={() => closeModal(true)}
           aria-label="Information schließen"

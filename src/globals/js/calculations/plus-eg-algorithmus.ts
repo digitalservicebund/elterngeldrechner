@@ -1,7 +1,6 @@
 import { addMonths, setDate, subDays } from "date-fns";
 import { elterngeld_et, elterngeldplus_et } from "./abstract-algorithmus";
 import { abzuege } from "./brutto-netto-rechner/brutto-netto-rechner";
-import { errorOf } from "./calculation-error-code";
 import {
   ElternGeldArt,
   ElternGeldAusgabe,
@@ -11,7 +10,6 @@ import {
   type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   FinanzDatenBerechnet,
-  type Lohnsteuerjahr,
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
@@ -35,7 +33,6 @@ export function elterngeldPlusErgebnis(
   planungsergebnis: PlanungsDaten,
   persoenlicheDaten: PersoenlicheDaten,
   finanzDaten: FinanzDaten,
-  lohnSteuerJahr: Lohnsteuerjahr,
   mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
   z: ZwischenErgebnis,
 ): ElternGeldPlusErgebnis {
@@ -66,7 +63,6 @@ export function elterngeldPlusErgebnis(
       planungsergebnis,
       persoenlicheDaten,
       finanzDaten,
-      lohnSteuerJahr,
       mischEkZwischenErgebnis,
       z,
     );
@@ -125,7 +121,7 @@ function getEKVor(
 
   if (isMischeinkommen) {
     if (mischEkZwischenErgebnis === null) {
-      throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+      throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
     }
 
     ek_vor = mischEkZwischenErgebnis.netto;
@@ -160,7 +156,6 @@ function mitETVorGeburt(
   planungsergebnis: PlanungsDaten,
   persoenlicheDaten: PersoenlicheDaten,
   finanzDaten: FinanzDaten,
-  lohnSteuerJahr: Lohnsteuerjahr,
   mischEkZwischenErgebnis: MischEkZwischenErgebnis | null,
   z: ZwischenErgebnis,
 ): ElternGeldPlusErgebnis {
@@ -218,7 +213,6 @@ function mitETVorGeburt(
         if (brutto_basis > 0) {
           steuer_sozab_basis = abzuege(
             brutto_basis,
-            lohnSteuerJahr,
             finanzDaten,
             persoenlicheDaten.etVorGeburt,
             persoenlicheDaten.wahrscheinlichesGeburtsDatum,
@@ -227,7 +221,6 @@ function mitETVorGeburt(
         if (brutto_plus > 0) {
           steuer_sozab_plus = abzuege(
             brutto_plus,
-            lohnSteuerJahr,
             finanzDaten,
             persoenlicheDaten.etVorGeburt,
             persoenlicheDaten.wahrscheinlichesGeburtsDatum,
@@ -287,7 +280,7 @@ function mitETVorGeburt(
         let status: ErwerbsArt;
         if (isMischeinkommen) {
           if (mischEkZwischenErgebnis === null) {
-            throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+            throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
           }
           status = mischEkZwischenErgebnis.status;
         } else {
@@ -343,7 +336,7 @@ function mitETVorGeburt(
       elterngeld_keine_et_plus = z.elternGeld;
       if (isMischeinkommen) {
         if (mischEkZwischenErgebnis === null) {
-          throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+          throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
         }
         elterngeld_keine_et_plus = mischEkZwischenErgebnis.elterngeldbasis;
       }
@@ -534,7 +527,7 @@ function createElterngeldAusgabe(
 
   if (isMischeinkommen) {
     if (misch === null) {
-      throw errorOf("MischEinkommenEnabledButMissingMischEinkommen");
+      throw new Error("MischEinkommenEnabledButMissingMischEinkommen");
     }
     basiselterngeld = misch.elterngeldbasis;
   }
@@ -752,7 +745,6 @@ if (import.meta.vitest) {
             planungsDaten,
             persoenlicheDaten,
             finanzDaten,
-            2022,
             mischEkZwischenErgebnis,
             zwischenErgebnis,
           );
@@ -763,8 +755,8 @@ if (import.meta.vitest) {
           expect(ergebnis.nettoBasis).toBe(0);
           expect(ergebnis.elternGeldErwBasis).toBe(0);
           expect(ergebnis.bruttoPlus).toBe(1950);
-          expect(ergebnis.nettoPlus).toBe(1356.84);
-          expect(ergebnis.elternGeldEtPlus).toBeCloseTo(287.83, 1);
+          expect(ergebnis.nettoPlus).toBe(1350.09);
+          expect(ergebnis.elternGeldEtPlus).toBeCloseTo(292.22, 1);
           expect(ergebnis.elternGeldKeineEtPlus).toBe(584.89);
         });
 
@@ -800,7 +792,6 @@ if (import.meta.vitest) {
               },
               persoenlicheDaten,
               finanzDaten,
-              2022,
               null,
               zwischenErgebnis,
             ),

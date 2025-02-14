@@ -1,52 +1,40 @@
 .egr-sidebar {
-  list-style: none;
+  @apply m-0 list-none p-0;
+
   counter-reset: item;
-  margin: 0;
-  padding: 0;
 
   @media (max-width: 1170px) {
     @apply mb-40;
   }
 
   &-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    @apply m-0 list-none p-0;
 
     @media (max-width: 1170px) {
-      @apply bg-primary p-8;
-      visibility: hidden;
-      opacity: 0;
-      position: absolute;
-      height: 0;
-      width: 100%;
-      overflow: hidden;
+      @apply invisible absolute h-[0] w-full overflow-hidden bg-primary p-8 opacity-0;
     }
 
     &--open {
       @apply top-56 min-h-[25rem] border-0 border-b-2 border-solid border-white bg-primary-light px-24 py-16 text-16;
-      visibility: visible;
-      opacity: 1;
+      @apply visible left-0 z-[1] opacity-100;
+
       transition:
         opacity 0.5s,
         height 0.5s,
         background-color 0.5s;
-      z-index: 1;
-      left: 0;
     }
 
     &__step {
+      @apply relative;
+
       counter-increment: item;
-      position: relative;
 
       &:not(:last-child) {
         @apply mb-24;
       }
 
       &:not(:last-child)::after {
-        @apply -bottom-24 left-16 min-h-24 min-w-1 bg-grey-dark;
-        position: absolute;
-        content: "";
+        @apply absolute -bottom-24 left-16 min-h-24 min-w-1 bg-grey-dark content-[''];
       }
 
       &::before {
@@ -74,15 +62,10 @@
   }
 
   &__collapse-btn {
-    display: none;
+    @apply hidden;
 
     @media (max-width: 1170px) {
-      @apply bg-primary-light text-black;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      border: 0;
+      @apply flex w-full items-center justify-between border-none bg-primary-light text-black;
 
       &:focus,
       &:hover {

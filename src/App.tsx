@@ -1,5 +1,4 @@
 import "@/styles/index.css";
-import "@/styles/index.scss";
 
 import { configurationActions } from "@/redux/configurationSlice";
 import { useAppDispatch } from "@/redux/hooks";

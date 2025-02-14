@@ -1,22 +1,7 @@
 {
-  "plugins": ["stylelint-scss", "stylelint-selector-bem-pattern"],
+  "ignoreFiles": ["!**/*.css"],
+  "extends": ["stylelint-config-recommended"],
   "rules": {
-    "plugin/selector-bem-pattern": {
-      "preset": "bem",
-      "presetOptions": {
-        "namespace": "#\\{\\$nsp\\}"
-      }
-    },
-    "scss/at-rule-no-unknown": [
-      true,
-      {
-        "ignoreAtRules": ["tailwind", "apply"]
-      }
-    ]
-  },
-  "extends": [
-    "stylelint-config-recommended",
-    "stylelint-config-recommended-scss"
-  ],
-  "ignoreFiles": ["!**/*.scss"]
+    "at-rule-no-unknown": [true, { "ignoreAtRules": ["tailwind"] }]
+  }
 }

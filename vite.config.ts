@@ -24,7 +24,6 @@ export default defineConfig({
     include: ["src/**/*.spec.*"],
     includeSource: ["src/**/*.{ts,tsx}"],
     watch: false,
-    css: true,
   },
   define: {
     "import.meta.vitest": "undefined",

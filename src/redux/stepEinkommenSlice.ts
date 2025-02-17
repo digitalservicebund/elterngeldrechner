@@ -160,6 +160,16 @@ const stepEinkommenSlice = createSlice({
         const istSelbststaendigET2 =
           payload.ET2.isNichtSelbststaendig === false &&
           payload.ET2.isSelbststaendig === true;
+
+        const taetigkeitenNichtSelbstaendigUndSelbstaendigET1 =
+          state.ET1.taetigkeitenNichtSelbstaendigUndSelbstaendig.length > 0
+            ? state.ET1.taetigkeitenNichtSelbstaendigUndSelbstaendig
+            : (payload.ET1.isNichtSelbststaendig &&
+                  payload.ET1.isSelbststaendig) ||
+                payload.ET1.mehrereTaetigkeiten
+              ? [initialTaetigkeit]
+              : [];
+
         const et1 =
           istErwerbstaetigET1 === YesNo.YES
             ? {
@@ -169,14 +179,21 @@ const stepEinkommenSlice = createSlice({
                 istSelbststaendig: istSelbststaendigET1,
                 istNichtSelbststaendig: istNichtSelbststaendigET1,
                 taetigkeitenNichtSelbstaendigUndSelbstaendig:
-                  payload.ET1.isNichtSelbststaendig &&
-                  payload.ET1.isSelbststaendig
-                    ? [initialTaetigkeit]
-                    : [],
+                  taetigkeitenNichtSelbstaendigUndSelbstaendigET1,
               }
             : {
                 ...resetStepEinkommenElternteil,
               };
+
+        const taetigkeitenNichtSelbstaendigUndSelbstaendigET2 =
+          state.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig.length > 0
+            ? state.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig
+            : (payload.ET2.isNichtSelbststaendig &&
+                  payload.ET2.isSelbststaendig) ||
+                payload.ET2.mehrereTaetigkeiten
+              ? [initialTaetigkeit]
+              : [];
+
         const et2 =
           istErwerbstaetigET2 === YesNo.YES
             ? {
@@ -186,14 +203,12 @@ const stepEinkommenSlice = createSlice({
                 istSelbststaendig: istSelbststaendigET2,
                 istNichtSelbststaendig: istNichtSelbststaendigET2,
                 taetigkeitenNichtSelbstaendigUndSelbstaendig:
-                  payload.ET2.isNichtSelbststaendig &&
-                  payload.ET2.isSelbststaendig
-                    ? [initialTaetigkeit]
-                    : [],
+                  taetigkeitenNichtSelbstaendigUndSelbstaendigET2,
               }
             : {
                 ...resetStepEinkommenElternteil,
               };
+
         return {
           ...state,
           ET1: {

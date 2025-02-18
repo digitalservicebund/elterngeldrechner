@@ -1,3 +1,7 @@
+/**
+ * Ab dem fünten Mill wird der Cent aufgerundet, sonst abgerunden ("round half
+ * up", Kaufmännisches Runden). Siehe Richtlinien zum BEEG 2.0.3.3.1
+ */
 export function aufDenCentRunden(value: number): number {
   const valueInCents = shiftNumberByDecimalsPrecisely(value, 2);
   const roundedValueInCents = Math.round(valueInCents);

@@ -53,8 +53,9 @@ function findeFuerGeburtsdatumAnzuwendendenBetrag(
  *   14.02.2025      08.11.2024      01.01.2024      31.12.2019 |      <-
  *   |      <-       |      <-       | 500€            704€            381€
  *   99€
- *
- * **Implementation details:**
+ */
+/*
+ * Implementation details:
  * It is not possible to express the time constraint between the entries using
  * a plain type. Therefore it must be implemented as constructed type to parse
  * and validate the data to ensure the invariant.

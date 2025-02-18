@@ -20,17 +20,13 @@ export function abgabenSteuern(
   bruttoProMonat: number,
   geburtsdatumDesKindes: Date,
 ): { bk: number; lstlzz: number; solzlzz: number } {
-  if (erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MINI) {
-    finanzDaten.kinderFreiBetrag = KinderFreiBetrag.ZKF0;
-  }
+  const istSelbststaendig = erwerbsArt === ErwerbsArt.JA_SELBSTSTAENDIG;
 
-  let einkommenInCent = bruttoProMonat * 100;
-  if (ErwerbsArt.JA_SELBSTSTAENDIG === erwerbsArt) {
-    const werbekostenpauschale = bestimmeWerbekostenpauschale(
-      geburtsdatumDesKindes,
-    );
-    einkommenInCent = einkommenInCent + werbekostenpauschale * 100;
-  }
+  const steuerpflichtigesEinkommen =
+    bruttoProMonat +
+    (istSelbststaendig
+      ? bestimmeWerbekostenpauschale(geburtsdatumDesKindes)
+      : 0);
 
   const eingangsparameter: Eingangsparameter = {
     AF: finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR ? 1 : 0,
@@ -49,7 +45,7 @@ export function abgabenSteuern(
     PVS: 0,
     PVZ: 0,
     R: finanzDaten.istKirchensteuerpflichtig ? 1 : 0,
-    RE4: einkommenInCent,
+    RE4: steuerpflichtigesEinkommen * 100,
     STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
     VBEZ: 0,
     ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
@@ -184,26 +180,6 @@ if (import.meta.vitest) {
           expect.objectContaining({ ZKF: 1 }),
         );
       });
-    });
-
-    it("0 if ErwerbsArt is JA_NICHT_SELBST_MINI", () => {
-      // when
-      abgabenSteuern(
-        {
-          ...ANY_FINANZDATEN,
-          steuerKlasse: SteuerKlasse.SKL5,
-          kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        },
-        ErwerbsArt.JA_NICHT_SELBST_MINI,
-        1,
-        ANY_DATE,
-      );
-
-      // then
-      expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
-        expect.anything(),
-        expect.objectContaining({ ZKF: 0 }),
-      );
     });
 
     const ANY_FINANZDATEN = {

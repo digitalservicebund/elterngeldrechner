@@ -142,7 +142,10 @@ describe("tests to verify properties during refactoring", () => {
             );
           },
         ),
-        { numRuns: 4000, endOnFailure: true },
+        {
+          numRuns: 4000,
+          endOnFailure: true, // Shrinking does usually not help here.
+        },
       );
     },
   );

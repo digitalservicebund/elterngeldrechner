@@ -1,6 +1,9 @@
 import { addMonths, setDate, subDays } from "date-fns";
-import { elterngeld_et, elterngeldplus_et } from "./abstract-algorithmus";
 import { abzuege } from "./brutto-netto-rechner/brutto-netto-rechner";
+import {
+  berechneBasiselterngeld,
+  berechneElterngeldPlus,
+} from "./einkommensersatzleistung";
 import {
   ElternGeldArt,
   ElternGeldAusgabe,
@@ -272,9 +275,7 @@ function mitETVorGeburt(
         }
         netto_basis = Math.max(brutto_basis - steuer_sozab_basis, 0);
         const ek_nach_basis = netto_basis;
-        elterngeld_erw_basis = aufDenCentRunden(
-          elterngeld_et(ek_vor, ek_nach_basis),
-        );
+        elterngeld_erw_basis = berechneBasiselterngeld(ek_vor, ek_nach_basis);
       }
       if (brutto_plus > 0) {
         let status: ErwerbsArt;
@@ -330,9 +331,7 @@ function mitETVorGeburt(
       }
       netto_plus = Math.max(brutto_plus - steuer_sozab_plus, 0);
       ek_nach_plus = netto_plus;
-      elterngeld_erw_plus = aufDenCentRunden(
-        elterngeldplus_et(ek_vor, ek_nach_plus),
-      );
+      elterngeld_erw_plus = berechneElterngeldPlus(ek_vor, ek_nach_plus);
       elterngeld_keine_et_plus = z.elternGeld;
       if (isMischeinkommen) {
         if (mischEkZwischenErgebnis === null) {

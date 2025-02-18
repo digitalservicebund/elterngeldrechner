@@ -1,8 +1,8 @@
-import { elterngeld_keine_et } from "./abstract-algorithmus";
 import {
   summeSteuer,
   summe_svb_misch,
 } from "./brutto-netto-rechner/brutto-netto-rechner";
+import { berechneBasiselterngeld } from "./einkommensersatzleistung";
 import {
   ErwerbsArt,
   ErwerbsTaetigkeit,
@@ -255,7 +255,7 @@ export function berechneMischNettoUndBasiselterngeld(
     abgaben = summe_sozab;
   }
   const ek_vor = netto;
-  const elterngeldbasis = aufDenCentRunden(elterngeld_keine_et(ek_vor));
+  const elterngeldbasis = berechneBasiselterngeld(ek_vor);
   return {
     krankenversicherungspflichtig: krankenversicherungspflichtig === 1,
     rentenversicherungspflichtig: rentenversicherungspflichtig === 1,

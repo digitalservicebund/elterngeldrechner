@@ -1,5 +1,6 @@
 import { addYears, subDays } from "date-fns";
-import { elterngeld_keine_et, ersatzrate_eg } from "./abstract-algorithmus";
+import { berechneBasiselterngeld } from "./einkommensersatzleistung";
+import { bestimmeErsatzrate } from "./ersatzrate";
 import {
   Einkommen,
   ErwerbsArt,
@@ -55,8 +56,8 @@ export function elterngeldZwischenergebnis(
     );
     ek_vor_copy = Math.max(ek_vor_copy - werbekostenpauschale, 0);
   }
-  elterngeldbasis = elterngeld_keine_et(ek_vor_copy);
-  ersatzrate_ausgabe = ersatzrate_eg(ek_vor_copy);
+  elterngeldbasis = berechneBasiselterngeld(ek_vor_copy);
+  ersatzrate_ausgabe = bestimmeErsatzrate(ek_vor_copy);
   if (no_kinder > 1) {
     mehrlingszuschlag = betrag_Mehrlingszuschlag * (no_kinder - 1);
   } else {

@@ -564,7 +564,7 @@ if (import.meta.vitest) {
           ),
         ));
 
-      it("ist nie höher als Basiselterngeld ohne Einkommen im Bezugszeitraum", () =>
+      it("ist nie höher als die Hälfte des Basiselterngeld ohne Einkommen im Bezugszeitraum", () =>
         assert(
           property(
             arbitraryNettoeinkommen(),
@@ -573,15 +573,17 @@ if (import.meta.vitest) {
               elterngeldnettoImBemessungszeitraum,
               elterngeldnettoImBezugszeitraum,
             ) => {
+              const halbesBasiselterngeld = aufDenCentRunden(
+                berechneBasiselterngeld(elterngeldnettoImBemessungszeitraum) /
+                  2,
+              );
+
               expect(
                 berechneElterngeldPlus(
                   elterngeldnettoImBemessungszeitraum,
                   elterngeldnettoImBezugszeitraum,
                 ),
-              ).toBeLessThanOrEqual(
-                berechneBasiselterngeld(elterngeldnettoImBemessungszeitraum) /
-                  2,
-              );
+              ).toBeLessThanOrEqual(halbesBasiselterngeld);
             },
           ),
         ));

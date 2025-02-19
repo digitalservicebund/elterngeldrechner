@@ -8,7 +8,8 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
 
   // codegen
   await page.goto("./");
-  await page.getByText("Für beide").click();
+  await page.getByText("Gemeinsam Erziehende").click();
+  await page.getByText("Für zwei Elternteile").click();
   await page.getByText("Nein").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();

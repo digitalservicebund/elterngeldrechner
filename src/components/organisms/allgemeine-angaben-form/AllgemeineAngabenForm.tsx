@@ -16,7 +16,7 @@ import {
 import { YesNo } from "@/redux/yes-no";
 
 const antragstellendeLabels: { [K in Antragstellende]: string } = {
-  FuerBeide: "Für beide",
+  FuerBeide: "Für zwei Elternteile",
   EinenElternteil: "Für einen Elternteil",
 };
 
@@ -34,16 +34,22 @@ export function AllgemeineAngabenForm({
   initialValues,
   onSubmit,
 }: AllgemeineAngabenFormProps) {
-  const { register, handleSubmit, watch, formState } = useForm({
+  const { register, handleSubmit, watch, formState, setValue } = useForm({
     defaultValues: initialValues,
   });
 
   const antragstellendeFormValue = watch("antragstellende");
+  const alleinerziehendenFormValue = watch("alleinerziehend");
   const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
 
   const mutteschaftsleistungenOptions: CustomRadioGroupOption[] = [
     { value: "ET1", label: watch("pseudonym.ET1") || "Elternteil 1" },
     { value: "ET2", label: watch("pseudonym.ET2") || "Elternteil 2" },
+  ];
+
+  const alleinerziehendenOptions: CustomRadioGroupOption<YesNo>[] = [
+    { value: YesNo.YES, label: "Alleinerziehende Person" },
+    { value: YesNo.NO, label: "Gemeinsam Erziehende" },
   ];
 
   const showMutterschaftsleistungsWerGroup =
@@ -55,27 +61,59 @@ export function AllgemeineAngabenForm({
   const alleinerziehendHeadindIdentifier = useId();
   const mutterschaftsleistungenHeadingIdentifier = useId();
 
+  const initializeAntragstellendeIfAlleinerziehend = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if ((event.target.value as YesNo) === YesNo.YES) {
+      setValue("antragstellende", "EinenElternteil");
+    }
+  };
+
   return (
     <form
       className="flex flex-col gap-32"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <section aria-labelledby={elternHeadingIdentifier}>
-        <h3 id={elternHeadingIdentifier} className="mb-10">
-          Eltern
+      <section aria-labelledby={alleinerziehendHeadindIdentifier}>
+        <h3 id={alleinerziehendHeadindIdentifier} className="mb-10">
+          Alleinerziehendenstatus
         </h3>
 
         <CustomRadioGroup
-          legend="Für wen planen Sie Elterngeld?"
+          legend="Sind Sie alleinerziehend oder erziehen Sie das Kind mit jemandem zusammen?"
+          info={infoTexts.alleinerziehend}
           register={register}
-          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-          name="antragstellende"
+          registerOptions={{
+            required: "Dieses Feld ist erforderlich",
+            onChange: initializeAntragstellendeIfAlleinerziehend,
+          }}
+          name="alleinerziehend"
           errors={formState.errors}
-          options={antragstellendeOptions}
+          options={alleinerziehendenOptions}
           required
         />
       </section>
+
+      {alleinerziehendenFormValue === YesNo.NO && (
+        <section aria-labelledby={elternHeadingIdentifier}>
+          <h3 id={elternHeadingIdentifier} className="mb-10">
+            Eltern
+          </h3>
+
+          <CustomRadioGroup
+            legend="Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?"
+            register={register}
+            registerOptions={{
+              required: "Dieses Feld ist erforderlich",
+            }}
+            name="antragstellende"
+            errors={formState.errors}
+            options={antragstellendeOptions}
+            required
+          />
+        </section>
+      )}
 
       {antragstellendeFormValue === "FuerBeide" && (
         <section aria-labelledby={namenHeadingIdentifier}>
@@ -105,25 +143,9 @@ export function AllgemeineAngabenForm({
         </section>
       )}
 
-      {antragstellendeFormValue === "EinenElternteil" && (
-        <section aria-labelledby={alleinerziehendHeadindIdentifier}>
-          <h3 id={alleinerziehendHeadindIdentifier} className="mb-10">
-            Alleinerziehendenstatus
-          </h3>
-
-          <YesNoRadio
-            legend="Sind Sie alleinerziehend?"
-            info={infoTexts.alleinerziehend}
-            register={register}
-            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-            name="alleinerziehend"
-            errors={formState.errors}
-            required
-          />
-        </section>
-      )}
-
-      {antragstellendeFormValue !== null && (
+      {((alleinerziehendenFormValue === YesNo.NO &&
+        antragstellendeFormValue !== null) ||
+        alleinerziehendenFormValue === YesNo.YES) && (
         <section aria-labelledby={mutterschaftsleistungenHeadingIdentifier}>
           <h3 id={mutterschaftsleistungenHeadingIdentifier} className="mb-10">
             Mutterschaftsleistungen

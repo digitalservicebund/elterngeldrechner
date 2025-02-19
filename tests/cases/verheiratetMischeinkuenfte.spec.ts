@@ -8,7 +8,8 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
 
   // codegen
   await page.goto("./");
-  await page.getByText("Für beide").click();
+  await page.getByText("Gemeinsam Erziehende").click();
+  await page.getByText("Für zwei Elternteile").click();
   await page.getByText("Ja", { exact: true }).click();
   await page.getByText("Elternteil 2", { exact: true }).click();
   await page.getByRole("button", { name: "Weiter" }).click();

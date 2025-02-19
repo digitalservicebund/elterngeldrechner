@@ -14,8 +14,12 @@ test("smoke test", async ({ page }) => {
   test.slow();
 
   await page.goto("./");
-  await page.getByText("Für einen Elternteil").click();
-  await page.getByLabel("Alleinerziehendenstatus").getByText("Ja").click();
+
+  await page
+    .getByLabel("Alleinerziehendenstatus")
+    .getByText("Alleinerziehende Person")
+    .click();
+
   await page.getByLabel("Mutterschaftsleistungen").getByText("Ja").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page

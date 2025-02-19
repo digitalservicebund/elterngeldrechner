@@ -68,7 +68,7 @@
     "typescript": "<=5.6.0",
     "typescript-eslint": "^8.8.1",
     "vite": "^5.4.12",
-    "vitest": "^3.0.2"
+    "vitest": "^3.0.5"
   },
   "dependencies": {
     "@date-fns/utc": "^2.1.0",

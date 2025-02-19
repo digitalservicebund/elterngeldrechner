@@ -65,3 +65,137 @@ function flatten(actions: Action[]): FlatStructure<Action, Subtable>[] {
 }
 
 export default flatten;
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("flatten", () => {
+    it("flattens an action and its subtables", () => {
+      const action: Action = {
+        label: "Fortschritt - Funnel",
+        nb_uniq_visitors: 22589,
+        nb_visits: 18772,
+        nb_events: 22595,
+        nb_events_with_value: 0,
+        sum_event_value: 0,
+        min_event_value: 0,
+        max_event_value: 0,
+        avg_event_value: 0,
+        idsubdatatable: 1,
+        segment: "eventAction==Fortschritt+-+Funnel",
+        subtable: [
+          {
+            label: "Allgemeine Angaben",
+            nb_uniq_visitors: 5103,
+            nb_visits: "3993",
+            nb_events: "5104",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+          {
+            label: "Ihr Nachwuchs",
+            nb_uniq_visitors: 3749,
+            nb_visits: "3130",
+            nb_events: "3749",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+          {
+            label: "Erwerbstätigkeit",
+            nb_uniq_visitors: 3558,
+            nb_visits: "2987",
+            nb_events: "3559",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+          {
+            label: "Ihr Einkommen",
+            nb_uniq_visitors: 3508,
+            nb_visits: "2957",
+            nb_events: "3510",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+          {
+            label: "Elterngeldvarianten",
+            nb_uniq_visitors: 3275,
+            nb_visits: "2781",
+            nb_events: "3276",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+          {
+            label: "Rechner und Planer",
+            nb_uniq_visitors: 3106,
+            nb_visits: "2647",
+            nb_events: "3107",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+          {
+            label: "Zusammenfassung",
+            nb_uniq_visitors: 290,
+            nb_visits: "277",
+            nb_events: "290",
+            nb_events_with_value: "0",
+            sum_event_value: 0,
+            min_event_value: 0,
+            max_event_value: 0,
+            avg_event_value: 0,
+          },
+        ],
+      };
+
+      const flatActions = flatten([action]);
+
+      expect(flatActions.length).toEqual(action.subtable.length);
+
+      expect(flatActions[0].action_label).toEqual("Fortschritt - Funnel");
+      expect(flatActions[0].subtable_label).toEqual("Allgemeine Angaben");
+
+      expect(flatActions[6].action_label).toEqual("Fortschritt - Funnel");
+      expect(flatActions[6].subtable_label).toEqual("Zusammenfassung");
+    });
+
+    it("flattens an action without subtables into an element with undefined subtable fields", () => {
+      const action: Action = {
+        label: "Click Schnellberechnung",
+        nb_uniq_visitors: 288,
+        nb_visits: "203",
+        nb_events: "337",
+        nb_events_with_value: "0",
+        sum_event_value: 0,
+        min_event_value: 0,
+        max_event_value: 0,
+        avg_event_value: 0,
+        segment: "eventAction==Click+Schnellberechnung",
+      };
+
+      const flatActions = flatten([action]);
+
+      expect(flatActions.length).toEqual(1);
+
+      expect(flatActions[0].action_label).toEqual("Click Schnellberechnung");
+
+      expect(flatActions[0].subtable_label).toBeUndefined();
+    });
+  });
+}

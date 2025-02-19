@@ -20,9 +20,9 @@ export type Action = {
   min_event_value: number;
   max_event_value: number;
   avg_event_value: number;
-  idsubdatatable: number;
+  idsubdatatable?: number;
   segment: string;
-  subtable: Subtable[] | null;
+  subtable?: Subtable[];
 };
 
 export type EventModuleMethod = "Events.getAction";

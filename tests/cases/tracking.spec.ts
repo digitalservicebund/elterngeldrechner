@@ -25,8 +25,8 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   await cookieBanner.consent();
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(1);
-  await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschaftsleistungen(true);
   await allgemeineAngabenPage.submit();
 
@@ -75,6 +75,7 @@ test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
   await cookieBanner.consent();
 
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");
@@ -255,6 +256,7 @@ async function fastForwardToPlaner(page: Page) {
 
 async function fastForwardAllgemeineAngaben(page: Page) {
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");

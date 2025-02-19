@@ -34,14 +34,7 @@ const stepAllgemeineAngabenSlice = createSlice({
   initialState: initialStepAllgemeineAngabenState,
   reducers: {
     submitStep: (_, action: PayloadAction<SubmitStepPayload>) => {
-      const alleinerziehend =
-        action.payload.antragstellende === "FuerBeide"
-          ? null
-          : action.payload.alleinerziehend;
-      return {
-        ...action.payload,
-        alleinerziehend,
-      };
+      return action.payload;
     },
   },
 });

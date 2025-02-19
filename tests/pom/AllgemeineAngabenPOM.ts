@@ -31,19 +31,25 @@ export class AllgemeineAngabenPOM {
 
     this.heading = page.getByRole("heading", { name: "Allgemeine Angaben" });
 
-    this.elternteile = page.getByLabel("Eltern", { exact: true });
-    this.elternteileFuerBeide = this.elternteile.getByText("Für beide");
-    this.elternteileFuerEinen = this.elternteile.getByText(
-      "Für einen Elternteil",
+    this.alleinerziehend = page.getByLabel("Alleinerziehendenstatus");
+    this.alleinerziehendJa = this.alleinerziehend.getByText(
+      "Alleinerziehende Person",
     );
-    this.elternteileError = this.elternteile.getByText(
+    this.alleinerziehendNein = this.alleinerziehend.getByText(
+      "Gemeinsam Erziehende",
+    );
+    this.alleinerziehendError = this.alleinerziehend.getByText(
       "Dieses Feld ist erforderlich",
     );
 
-    this.alleinerziehend = page.getByLabel("Alleinerziehendenstatus");
-    this.alleinerziehendJa = this.alleinerziehend.getByText("Ja");
-    this.alleinerziehendNein = this.alleinerziehend.getByText("Nein");
-    this.alleinerziehendError = this.alleinerziehend.getByText(
+    this.elternteile = page.getByLabel("Eltern", { exact: true });
+    this.elternteileFuerBeide = this.elternteile.getByLabel(
+      "Für zwei Elternteile",
+    );
+    this.elternteileFuerEinen = this.elternteile.getByLabel(
+      "Für einen Elternteil",
+    );
+    this.elternteileError = this.elternteile.getByText(
       "Dieses Feld ist erforderlich",
     );
 

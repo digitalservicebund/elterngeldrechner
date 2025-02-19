@@ -12,7 +12,6 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
-  await allgemeineAngabenPage.setElternteile(1);
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschaftsleistungen(true);
   await allgemeineAngabenPage.submit();

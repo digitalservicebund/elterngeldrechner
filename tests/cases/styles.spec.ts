@@ -18,100 +18,128 @@ const testStyles = async ({
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await expect(allgemeineAngabenPage.heading).toBeVisible();
   if (screenSize === "mobile") await page.waitForTimeout(1000); // It's just needed, I don't know why
-  await screenshot("allgemeine-angaben-heading", allgemeineAngabenPage.heading);
-  await screenshot(
-    "allgemeine-angaben-elternteile",
-    allgemeineAngabenPage.elternteile,
-  );
-  await allgemeineAngabenPage.submit();
 
-  await expect(allgemeineAngabenPage.elternteileError).toBeVisible();
-  await screenshot(
-    "allgemeine-angaben-elternteile-fehlermeldung",
-    allgemeineAngabenPage.elternteile,
-  );
-  await allgemeineAngabenPage.setElternteile(1);
-  await screenshot(
-    "allgemeine-angaben-elternteile-ausgewaehlt",
-    allgemeineAngabenPage.elternteile,
-  );
+  await screenshot("allgemeine-angaben-heading", allgemeineAngabenPage.heading);
+
   await expect(allgemeineAngabenPage.alleinerziehend).toBeVisible();
+
   await screenshot(
     "allgemeine-angaben-alleinerziehend",
     allgemeineAngabenPage.alleinerziehend,
   );
-  await expect(allgemeineAngabenPage.mutterschaftsleistungen).toBeVisible();
-  await screenshot(
-    "allgemeine-angaben-mutterschaftsleistung",
-    allgemeineAngabenPage.mutterschaftsleistungen,
-  );
+
   await allgemeineAngabenPage.submit();
 
-  await expect(allgemeineAngabenPage.elternteileError).not.toBeVisible();
   await expect(allgemeineAngabenPage.alleinerziehendError).toBeVisible();
   await screenshot(
     "allgemeine-angaben-alleinerziehend-fehlermeldung",
     allgemeineAngabenPage.alleinerziehend,
   );
-  await expect(
-    allgemeineAngabenPage.mutterschaftsleistungenError,
-  ).toBeVisible();
+
+  await allgemeineAngabenPage.setAlleinerziehend(false);
+
   await screenshot(
-    "allgemeine-angaben-mutterschaftsleistung-fehlermeldung",
-    allgemeineAngabenPage.mutterschaftsleistungen,
+    "allgemeine-angaben-elternteile",
+    allgemeineAngabenPage.elternteile,
   );
+
+  await allgemeineAngabenPage.submit();
+
+  await expect(allgemeineAngabenPage.elternteileError).toBeVisible();
+
+  await screenshot(
+    "allgemeine-angaben-elternteile-fehlermeldung",
+    allgemeineAngabenPage.elternteile,
+  );
+
   await allgemeineAngabenPage.setAlleinerziehend(true);
+
   await expect(allgemeineAngabenPage.alleinerziehendError).not.toBeVisible();
+
   await screenshot(
     "allgemeine-angaben-alleinerziehend-ausgewaehlt",
     allgemeineAngabenPage.alleinerziehend,
   );
+
+  await expect(allgemeineAngabenPage.alleinerziehendError).not.toBeVisible();
+
+  await expect(allgemeineAngabenPage.mutterschaftsleistungen).toBeVisible();
+
+  await allgemeineAngabenPage.submit();
+
   await expect(
     allgemeineAngabenPage.mutterschaftsleistungenError,
   ).toBeVisible();
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+
   await screenshot(
-    "allgemeine-angaben-mutterschaftsleistung-ausgewaehlt",
+    "allgemeine-angaben-mutterschaftsleistung-fehlermeldung",
     allgemeineAngabenPage.mutterschaftsleistungen,
   );
+
+  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+
   await expect(
     allgemeineAngabenPage.mutterschaftsleistungenError,
   ).not.toBeVisible();
+
+  await screenshot(
+    "allgemeine-angaben-mutterschaftsleistung",
+    allgemeineAngabenPage.mutterschaftsleistungen,
+  );
+
   await screenshot("allgemeine-angaben-single", page.locator("#egr-root"));
 
+  await allgemeineAngabenPage.setAlleinerziehend(false);
+
   await allgemeineAngabenPage.setElternteile(2);
+
+  await screenshot(
+    "allgemeine-angaben-elternteile-ausgewaehlt",
+    allgemeineAngabenPage.elternteile,
+  );
+
   await expect(allgemeineAngabenPage.nameElternteil1).toBeVisible();
+
   await expect(allgemeineAngabenPage.nameElternteil2).toBeVisible();
+
   await screenshot(
     "allgemeine-angaben-name-1",
     allgemeineAngabenPage.nameElternteil1,
   );
+
   await screenshot(
     "allgemeine-angaben-name-2",
     allgemeineAngabenPage.nameElternteil2,
   );
-  await allgemeineAngabenPage.submit();
 
-  await expect(
-    allgemeineAngabenPage.mutterschaftsleistungenWerError,
-  ).toBeVisible();
   await allgemeineAngabenPage.setNameElternteil1("Leia");
   await screenshot(
     "allgemeine-angaben-name-1-ausgefuellt",
     allgemeineAngabenPage.nameElternteil1,
   );
+
   await allgemeineAngabenPage.setNameElternteil2("Luke");
   await screenshot(
     "allgemeine-angaben-name-2-ausgefuellt",
     allgemeineAngabenPage.nameElternteil2,
   );
+
+  await allgemeineAngabenPage.submit();
+
   await screenshot(
     "allgemeine-angaben-mutterschaftsleistungen-wer",
     allgemeineAngabenPage.mutterschaftsleistungenWer,
   );
+
+  await expect(
+    allgemeineAngabenPage.mutterschaftsleistungenWerError,
+  ).toBeVisible();
+
   await allgemeineAngabenPage.setMutterschaftsleistungenWer("Leia");
   await allgemeineAngabenPage.setNameElternteil1("");
+
   await screenshot("allgemeine-angaben-beide", page.locator("#egr-root"));
+
   await allgemeineAngabenPage.submit();
 
   // TODO

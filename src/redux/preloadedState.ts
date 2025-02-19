@@ -17,7 +17,7 @@ export const preloadedState = {
       ET1: "Jasper Darwin Artus",
       ET2: "Salomé Loreley Zoe",
     },
-    alleinerziehend: null,
+    alleinerziehend: YesNo.NO,
     mutterschaftssleistungen: YesNo.NO,
     mutterschaftssleistungenWer: null,
   },

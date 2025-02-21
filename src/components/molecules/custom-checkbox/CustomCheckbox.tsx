@@ -20,6 +20,7 @@ interface Props<TFieldValues extends FieldValues> {
   readonly errors?: FieldErrors<TFieldValues> | boolean;
   readonly onChange?: (newValue: boolean) => void;
   readonly info?: Info;
+  readonly className?: string;
 }
 
 export function CustomCheckbox<TFieldValues extends FieldValues>({
@@ -30,6 +31,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   errors,
   onChange,
   info,
+  className,
 }: Props<TFieldValues>) {
   let hasError = false;
   let errorMessage = "";
@@ -69,7 +71,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   const allCheckboxClasses = Object.values(checkboxClasses).join(" ");
 
   return (
-    <div className="flex justify-between p-8 pl-0">
+    <div className={classNames(className, "flex justify-between p-8 pl-0")}>
       <div>
         <input
           {...register(name, registerOptions)}

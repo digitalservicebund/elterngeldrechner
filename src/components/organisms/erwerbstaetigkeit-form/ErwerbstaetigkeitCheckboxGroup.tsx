@@ -2,7 +2,7 @@ import { useId } from "react";
 import { type FieldError, get, useFormContext } from "react-hook-form";
 import { Description } from "@/components/atoms";
 import { CustomCheckbox } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
+import { InfoText } from "@/components/molecules/InfoText";
 import { ElternteilType } from "@/redux/elternteil-type";
 import { StepErwerbstaetigkeitState } from "@/redux/stepErwerbstaetigkeitSlice";
 
@@ -49,7 +49,12 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
         name={isNichtSelbstaendigFieldName}
         label="Einkünfte aus nichtselbständiger Arbeit"
         errors={hasError}
-        info={infoTexts.erwerbstaetigkeitNichtSelbststaendig}
+      />
+
+      <InfoText
+        className="pt-8"
+        question="Was bedeutet das?"
+        answer="Zum Beispiel Lohn, Gehalt (auch aus einem Minijob)"
       />
 
       <CustomCheckbox
@@ -58,7 +63,13 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
         name={isSelbstaendigFieldName}
         label="Gewinneinkünfte"
         errors={hasError}
-        info={infoTexts.erwerbstaetigkeitGewinneinkuenfte}
+        className="pt-16"
+      />
+
+      <InfoText
+        className="pt-8"
+        question="Was bedeutet das?"
+        answer="Einkünfte aus einem Gewerbebetrieb (auch zum Beispiel aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch zum Beispiel aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft"
       />
 
       {!!hasError && (

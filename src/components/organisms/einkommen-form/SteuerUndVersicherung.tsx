@@ -53,7 +53,11 @@ const kassenArtOptions: CustomRadioGroupOption<KassenArt>[] = [
   },
   {
     value: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
-    label: "nicht gesetzlich pflichtversichert",
+    label: "privat pflichtversichert",
+  },
+  {
+    value: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
+    label: "freiwillig gesetzlich versichert",
   },
 ];
 

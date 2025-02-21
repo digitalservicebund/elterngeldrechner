@@ -8,6 +8,9 @@
   margin: 0;
 }
 
-details summary::-webkit-details-marker {
+/* Hide <summary> / <details> arrow on safari using tailwind list-none class */
+/* Related: https://github.com/tailwindlabs/tailwindcss/issues/924 */
+details > summary.list-none::-webkit-details-marker,
+details > summary.list-none::marker {
   display: none;
 }

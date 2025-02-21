@@ -39,7 +39,12 @@ export function NurErwerbstaetig({
         <CustomNumberField
           control={control}
           name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.average`}
-          label="Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres Kindes monatlich brutto verdient?"
+          label={
+            <>
+              Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres
+              Kindes <strong>monatlich</strong> brutto verdient?
+            </>
+          }
           suffix="Euro"
           required
           info={infoTexts.einkommenNichtSelbststaendig}

@@ -21,19 +21,9 @@ import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";
 
-const erwerbstaetigkeitLabels: {
-  [K in Erwerbstaetigkeiten]: string;
-} = {
-  NichtSelbststaendig: "nichtselbständige Arbeit",
-  Selbststaendig: "Gewinneinkünfte",
-};
-
 const erwerbstaetigkeitOptions: SelectOption<Erwerbstaetigkeiten | "">[] = [
-  {
-    value: "NichtSelbststaendig",
-    label: erwerbstaetigkeitLabels.NichtSelbststaendig,
-  },
-  { value: "Selbststaendig", label: erwerbstaetigkeitLabels.Selbststaendig },
+  { value: "NichtSelbststaendig", label: "nichtselbständige Arbeit" },
+  { value: "Selbststaendig", label: "Gewinneinkünfte" },
 ];
 
 interface TaetigkeitsFormProps {

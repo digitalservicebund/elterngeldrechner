@@ -16,19 +16,14 @@ import {
 } from "@/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/redux/yes-no";
 
-const monatlichesBruttoLabels: { [K in MonatlichesBrutto]: string } = {
-  MiniJob: "Ja",
-  MehrAlsMiniJob: "Nein",
-};
-
 const monatlichesBruttoOptions: CustomRadioGroupOption<MonatlichesBrutto>[] = [
   {
     value: "MiniJob",
-    label: monatlichesBruttoLabels.MiniJob,
+    label: "Ja",
   },
   {
     value: "MehrAlsMiniJob",
-    label: monatlichesBruttoLabels.MehrAlsMiniJob,
+    label: "Nein",
   },
 ];
 

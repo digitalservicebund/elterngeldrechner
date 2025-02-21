@@ -46,37 +46,25 @@ const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
   { value: KinderFreiBetrag.ZKF5, label: "5,0" },
 ];
 
-const kassenArtLabels: { [K in KassenArt]: string } = {
-  [KassenArt.GESETZLICH_PFLICHTVERSICHERT]: "gesetzlich pflichtversichert",
-  [KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT]:
-    "nicht gesetzlich pflichtversichert",
-};
-
 const kassenArtOptions: CustomRadioGroupOption<KassenArt>[] = [
   {
     value: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-    label: kassenArtLabels.GESETZLICH_PFLICHTVERSICHERT,
+    label: "gesetzlich pflichtversichert",
   },
   {
     value: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
-    label: kassenArtLabels.NICHT_GESETZLICH_PFLICHTVERSICHERT,
+    label: "nicht gesetzlich pflichtversichert",
   },
 ];
-
-const rentenVersicherungLabels: { [K in RentenArt]: string } = {
-  [RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG]: "gesetzliche Rentenversicherung",
-  [RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG]:
-    "keine gesetzliche Rentenversicherung",
-};
 
 const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
   {
     value: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-    label: rentenVersicherungLabels.GESETZLICHE_RENTEN_VERSICHERUNG,
+    label: "gesetzliche Rentenversicherung",
   },
   {
     value: RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
-    label: rentenVersicherungLabels.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
+    label: "keine gesetzliche Rentenversicherung",
   },
 ];
 

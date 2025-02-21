@@ -15,14 +15,9 @@ import {
 } from "@/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/redux/yes-no";
 
-const antragstellendeLabels: { [K in Antragstellende]: string } = {
-  FuerBeide: "Für zwei Elternteile",
-  EinenElternteil: "Für einen Elternteil",
-};
-
 const antragstellendeOptions: CustomRadioGroupOption<Antragstellende>[] = [
-  { value: "FuerBeide", label: antragstellendeLabels.FuerBeide },
-  { value: "EinenElternteil", label: antragstellendeLabels.EinenElternteil },
+  { value: "FuerBeide", label: "Für zwei Elternteile" },
+  { value: "EinenElternteil", label: "Für einen Elternteil" },
 ];
 
 interface AllgemeineAngabenFormProps {

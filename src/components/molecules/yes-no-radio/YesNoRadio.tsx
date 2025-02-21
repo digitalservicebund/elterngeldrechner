@@ -6,14 +6,9 @@ import {
 } from "@/components/molecules";
 import { YesNo } from "@/redux/yes-no";
 
-const yesNoLabels: { [K in YesNo]: string } = {
-  [YesNo.YES]: "Ja",
-  [YesNo.NO]: "Nein",
-};
-
 const booleanOptions: CustomRadioGroupOption<YesNo>[] = [
-  { value: YesNo.YES, label: yesNoLabels.YES },
-  { value: YesNo.NO, label: yesNoLabels.NO },
+  { value: YesNo.YES, label: "Ja" },
+  { value: YesNo.NO, label: "Nein" },
 ];
 
 function YesNoRadio<TFieldValues extends FieldValues>(

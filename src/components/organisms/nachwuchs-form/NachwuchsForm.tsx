@@ -3,6 +3,7 @@ import ClearIcon from "@digitalservicebund/icons/Clear";
 import { useId } from "react";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { NachwuchsFormInfoText } from "./NachwuchsFormInfoText";
 import { Button } from "@/components/atoms";
 import {
   ButtonGroup,
@@ -10,7 +11,7 @@ import {
   CustomCheckbox,
   CustomDate,
 } from "@/components/molecules";
-import { InfoDialog, infoTexts } from "@/components/molecules/info-dialog";
+import { InfoDialog } from "@/components/molecules/info-dialog";
 import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 
 interface NachwuchsFormProps {
@@ -123,7 +124,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
         name={wahrscheinlichesGeburtsDatumName}
         label="Wann wird oder wurde Ihr Kind voraussichtlich geboren?"
         required
-        info={infoTexts.kindGeburtsdatum}
+        info={<NachwuchsFormInfoText />}
       />
 
       <Counter

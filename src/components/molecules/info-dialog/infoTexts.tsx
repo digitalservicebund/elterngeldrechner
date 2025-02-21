@@ -3,12 +3,6 @@ import { ReactNode } from "react";
 export type Info = string | ReactNode;
 
 export const infoTexts = {
-  erwerbstaetigkeitNichtSelbststaendig:
-    "z.B. Lohn, Gehalt (auch aus einem Minijob)",
-
-  erwerbstaetigkeitGewinneinkuenfte:
-    "Einkünfte aus einem Gewerbebetrieb (auch z.B. aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch z.B. aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft",
-
   erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte:
     "Einkünfte aus nichtselbständiger Arbeit: z.B. Lohn Gehalt (auch aus einem Minijob) oder Gewinneinkünfte: Einkünfte aus einem Gewerbebetrieb (auch z.B. aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch z.B. aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft",
 

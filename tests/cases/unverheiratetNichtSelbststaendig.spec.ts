@@ -44,19 +44,19 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .click();
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Wie viel haben Sie in den 12")
+    .getByLabel("Monatliches Einkommen in Brutto")
     .click();
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Wie viel haben Sie in den 12")
+    .getByLabel("Monatliches Einkommen in Brutto")
     .fill("2300 Euro");
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Wie viel haben Sie in den 12")
+    .getByLabel("Monatliches Einkommen in Brutto")
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Wie viel haben Sie in den 12")
+    .getByLabel("Monatliches Einkommen in Brutto")
     .fill("3000 Euro");
   await page
     .getByLabel("Elternteil 1")

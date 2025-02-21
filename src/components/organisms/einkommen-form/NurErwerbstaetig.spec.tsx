@@ -45,7 +45,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
     const elternteil1Section = getElternteil1Section();
 
     const bruttoEinkommen = within(elternteil1Section).getByText(
-      /Ihres Kindes\s*(.*?)\s*brutto verdient\?/,
+      "Monatliches Einkommen in Brutto",
     );
 
     expect(bruttoEinkommen).toBeInTheDocument();
@@ -154,7 +154,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
 
       const inputField = screen.getByLabelText(
-        /^wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres Kindes monatlich brutto verdient/i,
+        /^Monatliches Einkommen in Brutto/i,
       );
       await userEvent.clear(inputField);
       await userEvent.click(nextPageBtn);

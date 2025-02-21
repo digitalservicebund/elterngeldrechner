@@ -23,8 +23,8 @@ test("Minijob", async ({ page }) => {
   await page.getByText("Ja").nth(4).click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByText("Nein").click();
-  await page.getByLabel("Wie viel haben Sie in den 12").click();
-  await page.getByLabel("Wie viel haben Sie in den 12").fill("510 Euro");
+  await page.getByLabel("Monatliches Einkommen in Brutto").click();
+  await page.getByLabel("Monatliches Einkommen in Brutto").fill("510 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 

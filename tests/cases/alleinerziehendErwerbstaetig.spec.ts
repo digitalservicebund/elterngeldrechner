@@ -34,8 +34,8 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
     })
     .getByRole("radio", { name: "Nein" })
     .click();
-  await page.getByLabel("Wie viel haben Sie in den 12").click();
-  await page.getByLabel("Wie viel haben Sie in den 12").fill("2500 Euro");
+  await page.getByLabel("Monatliches Einkommen in Brutto").click();
+  await page.getByLabel("Monatliches Einkommen in Brutto").fill("2500 Euro");
   await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("2");
   await page
     .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })

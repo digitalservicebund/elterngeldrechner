@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ReactNode, useId, useMemo } from "react";
+import { useId, useMemo } from "react";
 import {
   FieldPath,
   FieldValues,
@@ -15,7 +15,7 @@ interface CustomNumberFieldProps<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 > extends UseControllerProps<TFieldValues, TName> {
-  readonly label: ReactNode;
+  readonly label: string;
   readonly allowedDecimalPlaces?: 1 | 2;
   readonly suffix?: string;
   readonly min?: number;

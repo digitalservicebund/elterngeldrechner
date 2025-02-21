@@ -36,19 +36,20 @@ export function NurErwerbstaetig({
       </h3>
 
       {averageOrMonthlyNichtSelbstaendig === "average" && (
-        <CustomNumberField
-          control={control}
-          name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.average`}
-          label={
-            <>
-              Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres
-              Kindes <strong>monatlich</strong> brutto verdient?
-            </>
-          }
-          suffix="Euro"
-          required
-          info={infoTexts.einkommenNichtSelbststaendig}
-        />
+        <div>
+          <p className="mb-8">
+            Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres
+            Kindes <strong>monatlich</strong> brutto verdient?
+          </p>
+          <CustomNumberField
+            control={control}
+            name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.average`}
+            label="Monatliches Einkommen in Brutto"
+            suffix="Euro"
+            required
+            info={infoTexts.einkommenNichtSelbststaendig}
+          />
+        </div>
       )}
       {averageOrMonthlyNichtSelbstaendig === "average" && (
         <p className="my-16 text-16">

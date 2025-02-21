@@ -180,7 +180,7 @@ describe("Einkommen Page", () => {
       // Field Bruttoeinkommen Durchschnitt
       const bruttoEinkommenAverageField = within(
         elternteil1Section,
-      ).getByLabelText(/monatlich brutto verdient/);
+      ).getByLabelText("Monatliches Einkommen in Brutto");
       await userEvent.type(
         bruttoEinkommenAverageField,
         String(einkommenAverage),

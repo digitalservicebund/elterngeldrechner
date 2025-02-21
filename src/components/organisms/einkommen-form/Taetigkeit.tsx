@@ -10,7 +10,6 @@ import {
   YesNoRadio,
 } from "@/components/molecules";
 import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
-import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   Zeitraum,
   ZeitraumData,
@@ -33,6 +32,27 @@ interface TaetigkeitsFormProps {
   readonly monthsBeforeBirth: SelectOption[];
   readonly onRemove: () => void;
 }
+
+const infoTexts = {
+  erwerbstaetigkeitNichtSelbststaendig:
+    "z.B. Lohn, Gehalt (auch aus einem Minijob)",
+
+  erwerbstaetigkeitNichtSelbststaendigGewinneinkuenfte:
+    "Einkünfte aus nichtselbständiger Arbeit: z.B. Lohn Gehalt (auch aus einem Minijob) oder Gewinneinkünfte: Einkünfte aus einem Gewerbebetrieb (auch z.B. aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch z.B. aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft",
+
+  einkommenNichtSelbststaendig:
+    "Als Einkommen werden alle Einkünfte aus Ihrer nicht-selbständigen Tätigkeit im Bemessungszeitraum berücksichtigt. Nicht berücksichtigt werden sonstige Bezüge, z.B. Abfindungen, Leistungsprämien, Provisionen, 13. Monatsgehälter. Steuerfreie Einnahmen werden ebenfalls nicht berücksichtigt, z.B. Trinkgelder, steuerfreie Zuschläge, Krankengeld, Kurzarbeitergeld, ALG II",
+
+  einkommenGewinneinkuenfte:
+    "Dies ergibt sich aus Ihrem letzten oder vorletzten Steuerbescheid oder Sie können schätzen",
+
+  einkommenSteuerklasse:
+    "Das Faktorverfahren in der Steuerklassenkombination IV/IV wird in der vorliegenden Berechnung nicht berücksichtigt. Der Standardwert 1,0 ist festgelegt. Sollte Ihr Faktor kleiner als 1,0 sein, wirkt sich dies entsprechend auf die Höhe des Elterngeldes aus. Sie erhalten dann mehr Elterngeld (im unteren zweistelligen Bereich)",
+
+  minijobsMaxZahl: `Mini-Job - geringfügige Beschäftigung bis maximal 538 Euro monatlich
+    - vor dem 01.01.2024: bis maximal 520 Euro monatlich
+    - vor dem 01.10.2022: bis maximal 450 Euro monatlich`,
+};
 
 export const Taetigkeit = forwardRef(function Taetigkeit(
   {

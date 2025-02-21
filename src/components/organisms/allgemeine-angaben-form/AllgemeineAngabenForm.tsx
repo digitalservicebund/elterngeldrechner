@@ -8,7 +8,6 @@ import {
   Split,
   YesNoRadio,
 } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   Antragstellende,
   StepAllgemeineAngabenState,
@@ -24,6 +23,27 @@ interface AllgemeineAngabenFormProps {
   readonly initialValues: StepAllgemeineAngabenState;
   readonly onSubmit: SubmitHandler<StepAllgemeineAngabenState>;
 }
+
+const alleinerziehendInfoText =
+  "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.";
+
+const mutterschaftsleistungenInfo = (
+  <>
+    <p>
+      Während des Mutterschutzes erhalten Sie Mutterschaftsleistungen, zum
+      Beispiel:
+    </p>
+    <ul className="list-disc pl-24">
+      <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
+      <li>der Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+      <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
+    </ul>
+    <p>
+      Diese werden – wenn ein Anspruch darauf besteht – normalerweise in den
+      ersten acht Wochen nach der Geburt gezahlt.
+    </p>
+  </>
+);
 
 export function AllgemeineAngabenForm({
   initialValues,
@@ -77,7 +97,7 @@ export function AllgemeineAngabenForm({
 
         <CustomRadioGroup
           legend="Sind Sie alleinerziehend oder erziehen Sie das Kind mit jemandem zusammen?"
-          info={infoTexts.alleinerziehend}
+          info={alleinerziehendInfoText}
           register={register}
           registerOptions={{
             required: "Dieses Feld ist erforderlich",
@@ -148,7 +168,7 @@ export function AllgemeineAngabenForm({
 
           <YesNoRadio
             legend="Beziehen Sie Mutterschaftsleistungen?"
-            info={infoTexts.mutterschaftsleistungen}
+            info={mutterschaftsleistungenInfo}
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="mutterschaftssleistungen"

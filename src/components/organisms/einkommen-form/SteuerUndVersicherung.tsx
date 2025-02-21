@@ -7,7 +7,6 @@ import {
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
 import {
   KassenArt,
   KinderFreiBetrag,
@@ -72,6 +71,9 @@ const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
   },
 ];
 
+const einkommenSteuerklasseInfo =
+  "Das Faktorverfahren in der Steuerklassenkombination IV/IV wird in der vorliegenden Berechnung nicht berücksichtigt. Der Standardwert 1,0 ist festgelegt. Sollte Ihr Faktor kleiner als 1,0 sein, wirkt sich dies entsprechend auf die Höhe des Elterngeldes aus. Sie erhalten dann mehr Elterngeld (im unteren zweistelligen Bereich)";
+
 export function SteuerUndVersicherung({
   elternteil,
   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
@@ -96,7 +98,6 @@ export function SteuerUndVersicherung({
   const kirchensteuerHeadingIdentifier = useId();
   const krankenversicherungHeadingIdentifier = useId();
   const rentenversicherungHeadingIdentifier = useId();
-
   return (
     <>
       {!isOnlySelbstaendig && (
@@ -116,7 +117,7 @@ export function SteuerUndVersicherung({
             errors={errors}
             options={steuerKlasseOptions}
             required
-            info={infoTexts.einkommenSteuerklasse}
+            info={einkommenSteuerklasseInfo}
           />
         </section>
       )}

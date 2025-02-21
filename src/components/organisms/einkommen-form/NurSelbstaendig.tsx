@@ -1,7 +1,6 @@
 import { useId } from "react";
 import { useFormContext } from "react-hook-form";
 import { CustomNumberField } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 
@@ -29,7 +28,7 @@ export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {
         suffix="Euro"
         max={999999}
         required
-        info={infoTexts.einkommenGewinneinkuenfte}
+        info="Dies ergibt sich aus Ihrem letzten oder vorletzten Steuerbescheid oder Sie können schätzen"
       />
     </section>
   );

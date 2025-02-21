@@ -2,7 +2,6 @@ import { useId } from "react";
 import { useFormContext } from "react-hook-form";
 import { Button } from "@/components/atoms";
 import { CustomNumberField, SelectOption } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 
@@ -10,6 +9,9 @@ interface NurErwerbstaetigProps {
   readonly elternteil: ElternteilType;
   readonly monthsBeforeBirth: SelectOption[];
 }
+
+const einkommenNichtSelbststaendigInfoText =
+  "Als Einkommen werden alle Einkünfte aus Ihrer nicht-selbständigen Tätigkeit im Bemessungszeitraum berücksichtigt. Nicht berücksichtigt werden sonstige Bezüge, z.B. Abfindungen, Leistungsprämien, Provisionen, 13. Monatsgehälter. Steuerfreie Einnahmen werden ebenfalls nicht berücksichtigt, z.B. Trinkgelder, steuerfreie Zuschläge, Krankengeld, Kurzarbeitergeld, ALG II";
 
 export function NurErwerbstaetig({
   elternteil,
@@ -47,7 +49,7 @@ export function NurErwerbstaetig({
             label="Monatliches Einkommen in Brutto"
             suffix="Euro"
             required
-            info={infoTexts.einkommenNichtSelbststaendig}
+            info={einkommenNichtSelbststaendigInfoText}
           />
         </div>
       )}

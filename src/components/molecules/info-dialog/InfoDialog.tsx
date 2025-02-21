@@ -12,9 +12,11 @@ import { useAnchorPositioning } from "@/components/molecules/info-dialog/positio
 import { useMarginPositioning } from "@/components/molecules/info-dialog/positioning/margin";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 
+export type Info = string | ReactNode;
+
 interface Props {
   readonly ariaLabelForDialog?: string;
-  readonly info: string | ReactNode;
+  readonly info: Info;
   readonly id?: string;
   readonly className?: string;
   readonly style?: CSSProperties;

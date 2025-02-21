@@ -6,7 +6,6 @@ import {
   CustomRadioGroupOption,
   YesNoRadio,
 } from "@/components/molecules";
-import { infoTexts } from "@/components/molecules/info-dialog";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { Antragstellende } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -26,6 +25,10 @@ const monatlichesBruttoOptions: CustomRadioGroupOption<MonatlichesBrutto>[] = [
     label: "Nein",
   },
 ];
+
+const miniJobMaxZahlInfoText = `Mini-Job - geringfügige Beschäftigung bis maximal 538 Euro monatlich
+- vor dem 01.01.2024: bis maximal 520 Euro monatlich
+- vor dem 01.10.2022: bis maximal 450 Euro monatlich`;
 
 interface ErwerbstaetikeitFormElternteilProps {
   readonly elternteil: ElternteilType;
@@ -108,7 +111,7 @@ function ErwerbstaetigkeitFormElternteil({
 
                   <CustomRadioGroup
                     legend="Hatten Sie Einkommen aus einem Mini-Job?"
-                    info={infoTexts.minijobsMaxZahl}
+                    info={miniJobMaxZahlInfoText}
                     register={register}
                     registerOptions={{
                       required: "Dieses Feld ist erforderlich",

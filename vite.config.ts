@@ -24,6 +24,11 @@ export default defineConfig({
     include: ["src/**/*.spec.*"],
     includeSource: ["src/**/*.{ts,tsx}"],
     watch: false,
+    resolveSnapshotPath: snapshotPathNextToTestFile,
+    snapshotFormat: {
+      indent: 0,
+      min: true,
+    },
   },
   define: {
     "import.meta.vitest": "undefined",
@@ -49,4 +54,27 @@ function includeReleaseVersionInBundlePlugin(): PluginOption {
       });
     },
   };
+}
+
+/**
+ * Creates a file path for the snapshot to locate it directly next to the
+ * related test file in the file-system.
+ *
+ * It avoids to just extend the test file path with the snapshot extension to
+ * prevent issues during executing a single test file using a filter. For
+ * example if the test file path would be `/some/path/test.spec.ts` and the
+ * snapshot file path `/some/path/test.spec.ts.snap` (as the official
+ * documentation "recommends"), running Vitest with the test file path as filter
+ * will also try to run the snapshot file, which fails.
+ */
+function snapshotPathNextToTestFile(
+  testPath: string,
+  snapshotExtension: string,
+): string {
+  const testPathWithoutFileExtension = path.join(
+    path.parse(testPath).dir,
+    path.parse(testPath).name,
+  );
+
+  return testPathWithoutFileExtension + snapshotExtension;
 }

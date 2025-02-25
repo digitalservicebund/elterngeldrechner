@@ -21,7 +21,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "src/test-utils/setupTests.ts",
     restoreMocks: true,
-    include: ["src/**/*.spec.*"],
+    include: ["src/**/*.spec.{ts,tsx}"],
     includeSource: ["src/**/*.{ts,tsx}"],
     watch: false,
     resolveSnapshotPath: snapshotPathNextToTestFile,

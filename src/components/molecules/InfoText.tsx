@@ -15,7 +15,7 @@ export function InfoText({
     <details className={className}>
       <summary className="text-primary underline">{question}</summary>
 
-      <p className="border-0 border-l-4 border-solid border-[#B1B4B6] pl-[12px]">
+      <p className="border-0 border-l-4 border-solid border-grey pl-[12px]">
         {answer}
       </p>
     </details>

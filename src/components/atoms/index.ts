@@ -1,2 +1,2 @@
-export { Button } from "./button";
-export { Description } from "./description";
+export { Button } from "./Button";
+export { Description } from "./Description";

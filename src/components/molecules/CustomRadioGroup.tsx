@@ -90,6 +90,7 @@ export function CustomRadioGroup<
               className={getLabelClassName(hasError, horizontal, disabled)}
             >
               <RadioInput
+                name={baseId}
                 value={option.value}
                 isChecked={isChecked}
                 isRequired={isRequired}

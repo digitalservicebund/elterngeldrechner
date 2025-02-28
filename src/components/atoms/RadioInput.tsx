@@ -7,6 +7,7 @@ import {
 } from "react";
 
 type Props = {
+  readonly name?: string;
   readonly value?: string | number;
   readonly isChecked?: boolean;
   readonly isRequired?: boolean;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export function RadioInput({
+  name,
   value,
   isChecked = false,
   isRequired = false,
@@ -37,6 +39,7 @@ export function RadioInput({
     <input
       className={inputClassName}
       type="radio"
+      name={name}
       value={value}
       checked={isChecked}
       required={isRequired}

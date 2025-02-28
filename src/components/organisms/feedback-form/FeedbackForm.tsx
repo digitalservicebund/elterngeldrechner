@@ -59,8 +59,6 @@ export function FeedbackForm({
     onChangeObstacle(form.getValues("obstacle")!);
   }
 
-  const easeFormTransformerFunc = (it: Ease) => String(it);
-
   const submitButton = (
     <Button
       id="feedback-submit-button"
@@ -84,12 +82,8 @@ export function FeedbackForm({
           }
           name={"ease" as Path<State>}
           options={easeOptions}
-          register={form.register}
-          errors={form.formState.errors}
-          registerOptions={{
-            onChange: handleEaseChange,
-            setValueAs: easeFormTransformerFunc,
-          }}
+          control={form.control}
+          rules={{ onChange: handleEaseChange }}
           disabled={form.formState.isSubmitted}
           horizontal
         />
@@ -102,10 +96,9 @@ export function FeedbackForm({
           <CustomRadioGroup
             legend={<b>Was war die größte Schwierigkeit?</b>}
             name={"obstacle" as Path<State>}
-            register={form.register}
+            control={form.control}
             options={obstacleOptions}
-            errors={form.formState.errors}
-            registerOptions={{ onChange: handleObstacleChange }}
+            rules={{ onChange: handleObstacleChange }}
             disabled={form.formState.isSubmitted}
           />
 

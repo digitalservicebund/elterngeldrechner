@@ -199,12 +199,8 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
           legend="War diese Tätigkeit ein Mini-Job?"
           info={infoTexts.minijobsMaxZahl}
           name={isMinijob}
-          register={register}
-          registerOptions={{
-            required: "Dieses Feld ist erforderlich",
-          }}
-          errors={errors}
-          required
+          control={control}
+          rules={{ required: "Dieses Feld ist erforderlich" }}
         />
       )}
 

@@ -1,59 +1,60 @@
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import {
-  FieldError,
-  FieldErrors,
+  type FieldPath,
   FieldValues,
-  Path,
-  RegisterOptions,
-  UseFormRegister,
-  get,
+  type UseControllerProps,
+  useController,
 } from "react-hook-form";
-import { Description } from "@/components/atoms";
+import { Description, RadioInput } from "@/components/atoms";
 import { Info, InfoDialog } from "@/components/molecules/info-dialog";
 
 type RadioGroupValue = string | number;
 
 export interface CustomRadioGroupOption<
-  V extends RadioGroupValue = RadioGroupValue,
+  Value extends RadioGroupValue = RadioGroupValue,
 > {
-  value: V;
+  value: Value;
   label: string;
   description?: (id: string) => ReactNode;
 }
 
-export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
-  readonly register: UseFormRegister<TFieldValues>;
-  readonly registerOptions?: RegisterOptions<TFieldValues>;
-  readonly name: Path<TFieldValues>;
+export interface CustomRadioGroupProps<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>,
+> extends UseControllerProps<TFieldValues, TName> {
   readonly legend: string | ReactNode;
   readonly info?: Info;
   readonly options: CustomRadioGroupOption[];
-  readonly errors?: FieldErrors<TFieldValues>;
-  readonly required?: boolean;
   readonly horizontal?: boolean;
   readonly disabled?: boolean;
   readonly className?: string;
 }
 
-export function CustomRadioGroup<TFieldValues extends FieldValues>({
-  register,
-  registerOptions,
+export function CustomRadioGroup<
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues>,
+>({
+  control,
   name,
+  rules,
   legend,
   info,
   options,
-  errors,
-  required,
   horizontal = false,
   disabled = false,
   className,
-}: CustomRadioGroupProps<TFieldValues>) {
-  const error = get(errors, name) as FieldError | undefined;
+}: CustomRadioGroupProps<TFieldValues, TName>) {
+  const {
+    field: { onChange, value },
+    fieldState: { error },
+  } = useController({ control, name, rules });
+
   const hasError = error !== undefined;
   const errorIdentifier = useId();
 
   const baseId = useId();
+  const isRequired = !!rules?.required;
 
   const vertical = !horizontal;
 
@@ -78,27 +79,33 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
           </div>
         )}
 
-        {options.map((option, i) => {
-          const descriptionId = `${baseId}-${option.label}`;
+        {options.map((option, index) => {
+          const isChecked = option.value === value;
+          const hasDescription = !!option.description;
+          const descriptionIdentifier = `${baseId}-${option.label}`;
 
           return (
             <label
               key={option.label}
               className={getLabelClassName(hasError, horizontal, disabled)}
             >
-              <input
-                {...register(name, registerOptions)}
-                aria-describedby={descriptionId}
-                className={getInputClassName(hasError, disabled)}
-                type="radio"
-                data-testid={name + "_option_" + i}
+              <RadioInput
                 value={option.value}
-                required={required}
-                disabled={disabled}
+                isChecked={isChecked}
+                isRequired={isRequired}
+                isDisabled={disabled}
+                isInvalid={hasError}
+                ariaDescribedBy={
+                  hasDescription ? descriptionIdentifier : undefined
+                }
+                dataTestId={`${name}_option_${index}`}
+                onChange={onChange}
+                /* data-testid */
               />
               {option.label}
 
-              {!!option.description && option.description(descriptionId)}
+              {!!option.description &&
+                option.description(descriptionIdentifier)}
             </label>
           );
         })}
@@ -110,19 +117,6 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
       </fieldset>
     </div>
-  );
-}
-
-function getInputClassName(hasError: boolean, disabled: boolean): string {
-  return classNames(
-    "relative size-32 rounded-full border border-solid border-primary bg-white",
-    "before:size-16 before:rounded-full before:content-['']",
-    "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
-    "checked:before:bg-primary",
-    { "hover:border-2 hover:border-primary": !disabled },
-    { "focus:border-2 focus:border-primary": !disabled },
-    { "!border-danger !checked:before:bg-danger": hasError },
-    { "cursor-default": disabled },
   );
 }
 

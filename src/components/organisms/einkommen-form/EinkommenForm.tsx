@@ -22,7 +22,6 @@ const einkommenLimitUeberschrittenInfoText =
 export function EinkommenForm({ initialValues, onSubmit }: Props) {
   const navigate = useNavigate();
   const methods = useForm({ defaultValues: initialValues });
-  const { errors } = methods.formState;
 
   const antragstellende = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -46,11 +45,9 @@ export function EinkommenForm({ initialValues, onSubmit }: Props) {
           className="mb-32"
           legend={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${amountLimitEinkommen.toLocaleString()} Euro?`}
           info={einkommenLimitUeberschrittenInfoText}
-          register={methods.register}
-          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+          control={methods.control}
+          rules={{ required: "Dieses Feld ist erforderlich" }}
           name="limitEinkommenUeberschritten"
-          errors={errors}
-          required
         />
 
         <Split>

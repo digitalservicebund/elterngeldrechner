@@ -33,9 +33,11 @@ import {
 
 describe("characterization tests", () => {
   test("calculate Elterngeld", { timeout: MORE_THAN_ENOUGH_TIME }, () => {
-    const elterngelddaten = getSaticSampleElterngelddaten(ENOUGH_SAMPLES);
-    const results = elterngelddaten.map(calculateElternGeld);
-    expect(results).toMatchSnapshot();
+    // Use loop to avoid a huge array that might cause out of memory issues
+    for (let _ = 0; _ < ENOUGH_SAMPLES; _++) {
+      const elterngelddaten = getSaticSampleOfElterngelddaten();
+      expect(calculateElternGeld(elterngelddaten)).toMatchSnapshot();
+    }
   });
 });
 
@@ -46,13 +48,8 @@ describe("characterization tests", () => {
  * classes. To avoid the complexity, the data gets sampled on every test run.
  * This has disadvantages like a longer test execution time and more computation
  * resources usage.
- *
- * The parameter for the number of samples is used to shift the responsibility
- * to the caller to encourage proper syncing with the test case run timeout.
  */
-function getSaticSampleElterngelddaten(
-  numberOfSamples: number,
-): ElternGeldDaten[] {
+function getSaticSampleOfElterngelddaten(): ElternGeldDaten {
   return sample(
     arbitraryRecord({
       persoenlicheDaten: arbitraryPersoenlicheDaten(),
@@ -61,9 +58,9 @@ function getSaticSampleElterngelddaten(
     }),
     {
       seed: STATIC_SEED,
-      numRuns: numberOfSamples,
+      numRuns: 1,
     },
-  );
+  )[0]!;
 }
 
 /**

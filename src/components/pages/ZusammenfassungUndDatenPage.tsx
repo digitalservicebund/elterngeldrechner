@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { formSteps } from "./formSteps";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { ButtonGroup, PrintButton } from "@/components/molecules";
-import { Page } from "@/components/organisms/page";
+import { Page } from "@/components/organisms";
 import { Zusammenfassung } from "@/features/planer/user-interface";
 
 function ZusammenfassungUndDatenPage(): ReactNode {

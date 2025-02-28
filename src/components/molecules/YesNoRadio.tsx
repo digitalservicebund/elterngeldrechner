@@ -3,7 +3,7 @@ import {
   CustomRadioGroup,
   CustomRadioGroupOption,
   CustomRadioGroupProps,
-} from "@/components/molecules";
+} from "./CustomRadioGroup";
 import { YesNo } from "@/redux/yes-no";
 
 const booleanOptions: CustomRadioGroupOption<YesNo>[] = [

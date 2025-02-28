@@ -6,7 +6,7 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
-import { Alert } from "@/components/molecules/alert";
+import { Alert } from "@/components/molecules";
 import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain";
 import { Zusammenfassung } from "@/features/planer/user-interface";
 import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";

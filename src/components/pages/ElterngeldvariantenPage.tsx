@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import { Button } from "@/components/atoms";
 import { ButtonGroup } from "@/components/molecules";
-import { ElterngeldvariantenDescriptions } from "@/components/organisms/elterngeldvarianten";
-import { Page } from "@/components/organisms/page";
+import { ElterngeldvariantenDescriptions, Page } from "@/components/organisms";
 
 export function ElterngeldvariantenPage(): ReactNode {
   const navigate = useNavigate();

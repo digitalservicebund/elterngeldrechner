@@ -10,8 +10,8 @@ import {
   Counter,
   CustomCheckbox,
   CustomDate,
+  InfoDialog,
 } from "@/components/molecules";
-import { InfoDialog } from "@/components/molecules/info-dialog";
 import { StepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 
 interface NachwuchsFormProps {

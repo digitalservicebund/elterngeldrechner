@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 import { IMask, IMaskInput } from "react-imask";
 import { Description } from "@/components/atoms";
-import { Info, InfoDialog } from "@/components/molecules/info-dialog";
+import { type Info, InfoDialog } from "@/components/molecules";
 
 interface CustomDateProps<
   TFieldValues extends FieldValues,

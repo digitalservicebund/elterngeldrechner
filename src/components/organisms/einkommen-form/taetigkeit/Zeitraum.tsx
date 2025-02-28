@@ -17,8 +17,11 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { type ZeitraumValueType, zeitraumValueOf } from "./ZeitraumUtil";
-import { CustomSelect, SelectOption } from "@/components/molecules";
-import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
+import {
+  CustomSelect,
+  SelectOption,
+  cloneOptionsList,
+} from "@/components/molecules";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly register: UseFormRegister<TFieldValues>;

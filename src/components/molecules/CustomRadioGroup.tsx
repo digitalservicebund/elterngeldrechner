@@ -7,7 +7,7 @@ import {
   useController,
 } from "react-hook-form";
 import { Description, RadioInput } from "@/components/atoms";
-import { Info, InfoDialog } from "@/components/molecules/info-dialog";
+import { type Info, InfoDialog } from "@/components/molecules";
 
 type RadioGroupValue = string | number;
 

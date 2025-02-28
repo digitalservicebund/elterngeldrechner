@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
-import { EinkommenForm } from "@/components/organisms";
-import { Page } from "@/components/organisms/page";
+import { EinkommenForm, Page } from "@/components/organisms";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   StepEinkommenState,

@@ -8,10 +8,7 @@ import {
   get,
 } from "react-hook-form";
 import { Description } from "@/components/atoms";
-import {
-  Info,
-  InfoDialog,
-} from "@/components/molecules/info-dialog/InfoDialog";
+import { type Info, InfoDialog } from "@/components/molecules";
 
 interface CustomInputProps<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;

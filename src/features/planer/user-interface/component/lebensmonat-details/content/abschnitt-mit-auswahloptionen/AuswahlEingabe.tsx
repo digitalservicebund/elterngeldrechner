@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
-import { InfoDialog } from "@/components/molecules/info-dialog";
+import { InfoDialog } from "@/components/molecules";
 import {
   type Auswahlmoeglichkeiten,
   type Auswahloption,

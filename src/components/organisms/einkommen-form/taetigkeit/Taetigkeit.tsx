@@ -2,20 +2,20 @@ import ClearIcon from "@digitalservicebund/icons/Clear";
 import { type ForwardedRef, forwardRef, useId, useRef, useState } from "react";
 import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { Versicherungen } from "./Versicherungen";
+import { Zeitraum } from "./Zeitraum";
+import {
+  type ZeitraumData,
+  type ZeitraumOptionType,
+  availableZeitraumOptions,
+} from "./ZeitraumUtil";
 import { Button } from "@/components/atoms";
 import {
   CustomNumberField,
   CustomSelect,
   SelectOption,
   YesNoRadio,
+  cloneOptionsList,
 } from "@/components/molecules";
-import { cloneOptionsList } from "@/components/molecules/custom-select/CustomSelect";
-import {
-  Zeitraum,
-  ZeitraumData,
-  ZeitraumOptionType,
-  availableZeitraumOptions,
-} from "@/components/organisms/zeitraum";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 import { Erwerbstaetigkeiten } from "@/redux/stepErwerbstaetigkeitSlice";

@@ -5,7 +5,7 @@ import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
 import { HinweisZuWochenstunden } from "./HinweisZuWochenstunden";
 import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
-import { InfoDialog } from "@/components/molecules/info-dialog";
+import { InfoDialog } from "@/components/molecules";
 import {
   Elternteil,
   type LebensmonatMitBeliebigenElternteilen,

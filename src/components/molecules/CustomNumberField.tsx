@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
 import { Description } from "@/components/atoms";
-import { Info, InfoDialog } from "@/components/molecules/info-dialog";
+import { type Info, InfoDialog } from "@/components/molecules";
 
 interface CustomNumberFieldProps<
   TFieldValues extends FieldValues,

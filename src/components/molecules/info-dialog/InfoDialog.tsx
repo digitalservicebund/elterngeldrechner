@@ -8,8 +8,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { useAnchorPositioning } from "@/components/molecules/info-dialog/positioning/anchor";
-import { useMarginPositioning } from "@/components/molecules/info-dialog/positioning/margin";
+import { useAnchorPositioning } from "./positioning/anchor";
+import { useMarginPositioning } from "./positioning/margin";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 
 export type Info = string | ReactNode;

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Taetigkeit } from "./Taetigkeit";
+import { Taetigkeit } from "./taetigkeit";
 import { Button } from "@/components/atoms";
 import { SelectOption } from "@/components/molecules";
 import type { ElternteilType } from "@/redux/elternteil-type";

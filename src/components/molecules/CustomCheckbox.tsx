@@ -10,7 +10,7 @@ import {
   get,
 } from "react-hook-form";
 import { Description } from "@/components/atoms";
-import { Info, InfoDialog } from "@/components/molecules/info-dialog";
+import { type Info, InfoDialog } from "@/components/molecules";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;

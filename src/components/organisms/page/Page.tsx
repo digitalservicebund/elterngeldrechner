@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router-dom";
-import { Alert } from "@/components/molecules/alert";
-import { Sidebar } from "@/components/organisms/sidebar";
+import { Sidebar } from "./Sidebar";
+import { Alert } from "@/components/molecules";
 import { FormStep, StepRoute, formSteps } from "@/components/pages/formSteps";
 
 interface PageProps {

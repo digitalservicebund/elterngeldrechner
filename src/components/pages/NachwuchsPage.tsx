@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
-import { NachwuchsForm } from "@/components/organisms";
-import { Page } from "@/components/organisms/page";
+import { NachwuchsForm, Page } from "@/components/organisms";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   StepNachwuchsState,

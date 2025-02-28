@@ -1,1 +1,0 @@
-export { AllgemeineAngabenForm } from "./AllgemeineAngabenForm";

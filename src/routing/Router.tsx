@@ -12,6 +12,9 @@ export default function Router() {
   //
   // Source: commons-*.js
   // Error: Uncaught Error: Syntax error, unrecognized expression
+  //
+  // https://github.com/remix-run/react-router/pull/11310
+  // https://v5.reactrouter.com/web/api/HashRouter/hashtype-string
 
   const router = createHashRouter(routeDefinition);
 

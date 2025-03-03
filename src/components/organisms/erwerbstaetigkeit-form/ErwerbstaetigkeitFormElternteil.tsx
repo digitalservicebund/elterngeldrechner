@@ -41,8 +41,12 @@ function ErwerbstaetigkeitFormElternteil({
   elternteilName,
   antragssteller,
 }: ErwerbstaetikeitFormElternteilProps) {
-  const { control, watch, setValue } =
-    useFormContext<StepErwerbstaetigkeitState>();
+  const {
+    register,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useFormContext<StepErwerbstaetigkeitState>();
 
   const wasErwerbstaetig = watch(`${elternteil}.vorGeburt`);
   const isNichtSelbststaendig = watch(`${elternteil}.isNichtSelbststaendig`);
@@ -71,9 +75,11 @@ function ErwerbstaetigkeitFormElternteil({
 
       <YesNoRadio
         legend="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes erwerbstätig?"
-        control={control}
-        rules={{ required: "Dieses Feld ist erforderlich" }}
+        register={register}
+        registerOptions={{ required: "Dieses Feld ist erforderlich" }}
         name={`${elternteil}.vorGeburt`}
+        errors={errors}
+        required
       />
 
       {wasErwerbstaetig === YesNo.YES && (
@@ -83,27 +89,37 @@ function ErwerbstaetigkeitFormElternteil({
             <>
               <YesNoRadio
                 legend="Bestand Ihre nichtselbständige Arbeit aus mehreren Tätigkeiten?"
-                control={control}
-                rules={{ required: "Dieses Feld ist erforderlich" }}
+                register={register}
+                registerOptions={{ required: "Dieses Feld ist erforderlich" }}
                 name={`${elternteil}.mehrereTaetigkeiten`}
+                errors={errors}
+                required
               />
 
               {mehrereTaetigkeiten === YesNo.NO && (
                 <>
                   <YesNoRadio
                     legend="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?"
-                    control={control}
-                    rules={{ required: "Dieses Feld ist erforderlich" }}
+                    register={register}
+                    registerOptions={{
+                      required: "Dieses Feld ist erforderlich",
+                    }}
                     name={`${elternteil}.sozialVersicherungsPflichtig`}
+                    errors={errors}
+                    required
                   />
 
                   <CustomRadioGroup
                     legend="Hatten Sie Einkommen aus einem Mini-Job?"
                     info={miniJobMaxZahlInfoText}
-                    control={control}
-                    rules={{ required: "Dieses Feld ist erforderlich" }}
+                    register={register}
+                    registerOptions={{
+                      required: "Dieses Feld ist erforderlich",
+                    }}
                     name={`${elternteil}.monatlichesBrutto`}
                     options={monatlichesBruttoOptions}
+                    errors={errors}
+                    required
                   />
                 </>
               )}

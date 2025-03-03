@@ -82,8 +82,8 @@ export function FeedbackForm({
           }
           name={"ease" as Path<State>}
           options={easeOptions}
-          control={form.control}
-          rules={{ onChange: handleEaseChange }}
+          register={form.register}
+          registerOptions={{ onChange: handleEaseChange }}
           disabled={form.formState.isSubmitted}
           horizontal
         />
@@ -96,9 +96,9 @@ export function FeedbackForm({
           <CustomRadioGroup
             legend={<b>Was war die größte Schwierigkeit?</b>}
             name={"obstacle" as Path<State>}
-            control={form.control}
+            register={form.register}
             options={obstacleOptions}
-            rules={{ onChange: handleObstacleChange }}
+            registerOptions={{ onChange: handleObstacleChange }}
             disabled={form.formState.isSubmitted}
           />
 

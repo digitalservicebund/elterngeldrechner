@@ -1,4 +1,4 @@
-import { type FieldPath, FieldValues } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
@@ -11,11 +11,8 @@ const booleanOptions: CustomRadioGroupOption<YesNo>[] = [
   { value: YesNo.NO, label: "Nein" },
 ];
 
-export function YesNoRadio<
-  TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
->(
-  props: Readonly<Omit<CustomRadioGroupProps<TFieldValues, TName>, "options">>,
+export function YesNoRadio<TFieldValues extends FieldValues>(
+  props: Readonly<Omit<CustomRadioGroupProps<TFieldValues>, "options">>,
 ) {
   return <CustomRadioGroup {...props} options={booleanOptions} />;
 }

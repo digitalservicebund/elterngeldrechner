@@ -80,7 +80,6 @@ export function SteuerUndVersicherung({
 }: SteuerUndVersicherungProps) {
   const {
     register,
-    control,
     formState: { errors },
   } = useFormContext<StepEinkommenState>();
 
@@ -151,9 +150,11 @@ export function SteuerUndVersicherung({
 
         <YesNoRadio
           legend="Sind Sie kirchensteuerpflichtig?"
-          control={control}
-          rules={{ required: "Dieses Feld ist erforderlich" }}
+          register={register}
+          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name={`${elternteil}.zahlenSieKirchenSteuer`}
+          errors={errors}
+          required
         />
       </section>
 
@@ -165,10 +166,12 @@ export function SteuerUndVersicherung({
 
           <CustomRadioGroup
             legend="Wie sind Sie krankenversichert?"
-            control={control}
-            rules={{ required: "Dieses Feld ist erforderlich" }}
+            register={register}
+            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name={`${elternteil}.kassenArt`}
             options={kassenArtOptions}
+            errors={errors}
+            required
           />
         </section>
       )}
@@ -180,10 +183,12 @@ export function SteuerUndVersicherung({
 
           <CustomRadioGroup
             legend="Wie sind Sie rentenversichert?"
-            control={control}
-            rules={{ required: "Dieses Feld ist erforderlich" }}
+            register={register}
+            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name={`${elternteil}.rentenVersicherung`}
             options={rentenVersicherungOptions}
+            errors={errors}
+            required
           />
         </section>
       )}

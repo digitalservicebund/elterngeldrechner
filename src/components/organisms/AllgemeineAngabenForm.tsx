@@ -49,7 +49,7 @@ export function AllgemeineAngabenForm({
   initialValues,
   onSubmit,
 }: AllgemeineAngabenFormProps) {
-  const { register, control, handleSubmit, watch, setValue } = useForm({
+  const { register, handleSubmit, watch, formState, setValue } = useForm({
     defaultValues: initialValues,
   });
 
@@ -98,13 +98,15 @@ export function AllgemeineAngabenForm({
         <CustomRadioGroup
           legend="Sind Sie alleinerziehend oder erziehen Sie das Kind mit jemandem zusammen?"
           info={alleinerziehendInfoText}
-          control={control}
-          rules={{
+          register={register}
+          registerOptions={{
             required: "Dieses Feld ist erforderlich",
             onChange: initializeAntragstellendeIfAlleinerziehend,
           }}
           name="alleinerziehend"
+          errors={formState.errors}
           options={alleinerziehendenOptions}
+          required
         />
       </section>
 
@@ -116,10 +118,12 @@ export function AllgemeineAngabenForm({
 
           <CustomRadioGroup
             legend="Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?"
-            control={control}
-            rules={{ required: "Dieses Feld ist erforderlich" }}
+            register={register}
+            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="antragstellende"
+            errors={formState.errors}
             options={antragstellendeOptions}
+            required
           />
         </section>
       )}
@@ -163,19 +167,23 @@ export function AllgemeineAngabenForm({
           <YesNoRadio
             legend="Beziehen Sie Mutterschaftsleistungen?"
             info={mutterschaftsleistungenInfo}
-            control={control}
-            rules={{ required: "Dieses Feld ist erforderlich" }}
+            register={register}
+            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="mutterschaftssleistungen"
+            errors={formState.errors}
+            required
           />
 
           {!!showMutterschaftsleistungsWerGroup && (
             <CustomRadioGroup
               className="mt-32"
               legend="Welcher Elternteil bezieht Mutterschaftsleistungen?"
-              control={control}
-              rules={{ required: "Dieses Feld ist erforderlich" }}
+              register={register}
+              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name="mutterschaftssleistungenWer"
+              errors={formState.errors}
               options={mutteschaftsleistungenOptions}
+              required
             />
           )}
         </section>

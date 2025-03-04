@@ -37,8 +37,9 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
     .getByText("Nein", { exact: true })
     .click();
   await page.getByLabel("Elternteil 2").getByText("Ja").click();
-  await page.getByLabel("Wie hoch war Ihr Gewinn im").click();
-  await page.getByLabel("Wie hoch war Ihr Gewinn im").fill("3.1200 Euro");
+  await page
+    .getByLabel("Gewinn im letzten Kalenderjahr in Brutto")
+    .fill("3.1200 Euro");
   await page
     .getByLabel("Elternteil 1")
     .getByText("freiwillig gesetzlich versichert")

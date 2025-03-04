@@ -3,10 +3,7 @@ import {
   Antragstellende,
   stepAllgemeineAngabenActions,
 } from "./stepAllgemeineAngabenSlice";
-import {
-  Erwerbstaetigkeiten,
-  stepErwerbstaetigkeitActions,
-} from "./stepErwerbstaetigkeitSlice";
+import { stepErwerbstaetigkeitActions } from "./stepErwerbstaetigkeitSlice";
 import { YesNo } from "./yes-no";
 import {
   KassenArt,
@@ -26,13 +23,19 @@ export interface TypeOfVersicherungen {
   none: boolean;
 }
 
-export interface Taetigkeit {
-  artTaetigkeit: Erwerbstaetigkeiten | null;
-  bruttoEinkommenDurchschnitt: number | null;
-  isMinijob: YesNo | null;
-  zeitraum: Zeitraum[];
-  versicherungen: TypeOfVersicherungen;
-}
+export type Taetigkeit =
+  | {
+      artTaetigkeit: "NichtSelbststaendig";
+      bruttoEinkommenDurchschnitt: number | null;
+      isMinijob: YesNo | null;
+      zeitraum: Zeitraum[];
+      versicherungen: TypeOfVersicherungen;
+    }
+  | {
+      artTaetigkeit: "Selbststaendig";
+      gewinneinkuenfte: number | null;
+      versicherungen: TypeOfVersicherungen;
+    };
 
 export interface AverageOrMonthlyState {
   type: "average" | "monthly" | "yearly";

@@ -34,7 +34,10 @@ test("mehrere Tätigkeiten", async ({ page }) => {
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("1350 Euro");
-  await page.getByLabel("Tätigkeit").getByText("Nein").click();
+  await page
+    .getByRole("radiogroup", { name: "War diese Tätigkeit ein Mini-Job?" })
+    .getByRole("radio", { name: "Nein" })
+    .click();
   await page
     .locator(
       '[id="ET1\\.taetigkeitenNichtSelbstaendigUndSelbstaendig\\.0\\.zeitraum\\.0\\.from"]',

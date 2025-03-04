@@ -7,7 +7,6 @@ import {
   Taetigkeit,
   initialAverageOrMonthlyStateNichtSelbstaendig,
 } from "./stepEinkommenSlice";
-import { Erwerbstaetigkeiten } from "./stepErwerbstaetigkeitSlice";
 import { RootState } from "./index";
 import {
   Einkommen,
@@ -478,31 +477,13 @@ describe("finanzDatenFactory", () => {
     },
   );
 
-  describe.each([
+  describe.each<[string, Taetigkeit[], MischEkTaetigkeit[]]>([
     ["map empty Mischeinkommen list", [], []],
-    [
-      "map list with empty Mischeinkommen",
-      [
-        {
-          artTaetigkeit: null,
-          bruttoEinkommenDurchschnitt: null,
-          isMinijob: null,
-          zeitraum: [],
-          versicherungen: {
-            hasRentenversicherung: false,
-            hasKrankenversicherung: false,
-            hasArbeitslosenversicherung: false,
-            none: true,
-          },
-        },
-      ],
-      [],
-    ],
     [
       "map list with one Mischeinkommen",
       [
         {
-          artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
+          artTaetigkeit: "NichtSelbststaendig",
           bruttoEinkommenDurchschnitt: 1000,
           isMinijob: YesNo.NO,
           zeitraum: [{ from: "1", to: "1" }],
@@ -543,7 +524,7 @@ describe("finanzDatenFactory", () => {
       "map list with 5 Mischeinkommen - contains all kinds of Taetigkeit",
       [
         {
-          artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
+          artTaetigkeit: "NichtSelbststaendig",
           bruttoEinkommenDurchschnitt: 1000,
           isMinijob: YesNo.NO,
           zeitraum: [{ from: "1", to: "1" }],
@@ -555,7 +536,7 @@ describe("finanzDatenFactory", () => {
           },
         },
         {
-          artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
+          artTaetigkeit: "NichtSelbststaendig",
           bruttoEinkommenDurchschnitt: 300,
           isMinijob: YesNo.YES,
           zeitraum: [{ from: "1", to: "1" }],
@@ -567,10 +548,8 @@ describe("finanzDatenFactory", () => {
           },
         },
         {
-          artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
-          bruttoEinkommenDurchschnitt: 500,
-          isMinijob: YesNo.NO,
-          zeitraum: [{ from: "3", to: "5" }],
+          artTaetigkeit: "Selbststaendig",
+          gewinneinkuenfte: 6000,
           versicherungen: {
             hasRentenversicherung: false,
             hasKrankenversicherung: true,
@@ -579,10 +558,8 @@ describe("finanzDatenFactory", () => {
           },
         },
         {
-          artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
-          bruttoEinkommenDurchschnitt: 1100,
-          isMinijob: YesNo.NO,
-          zeitraum: [{ from: "2", to: "5" }],
+          artTaetigkeit: "Selbststaendig",
+          gewinneinkuenfte: 13200,
           versicherungen: {
             hasRentenversicherung: true,
             hasKrankenversicherung: true,
@@ -591,10 +568,8 @@ describe("finanzDatenFactory", () => {
           },
         },
         {
-          artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
-          bruttoEinkommenDurchschnitt: 600,
-          isMinijob: YesNo.NO,
-          zeitraum: [{ from: "2", to: "5" }],
+          artTaetigkeit: "Selbststaendig",
+          gewinneinkuenfte: 7200,
           versicherungen: {
             hasRentenversicherung: true,
             hasKrankenversicherung: true,
@@ -652,20 +627,7 @@ describe("finanzDatenFactory", () => {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
           bruttoEinkommenDurchschnitt: 500,
           bruttoEinkommenDurchschnittMidi: 0,
-          bemessungsZeitraumMonate: [
-            false,
-            false,
-            true,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-          ],
+          bemessungsZeitraumMonate: Array<true>(12).fill(true),
           istRentenVersicherungsPflichtig: false,
           istKrankenVersicherungsPflichtig: true,
           istArbeitslosenVersicherungsPflichtig: false,
@@ -674,20 +636,7 @@ describe("finanzDatenFactory", () => {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
           bruttoEinkommenDurchschnitt: 1100,
           bruttoEinkommenDurchschnittMidi: 0,
-          bemessungsZeitraumMonate: [
-            false,
-            true,
-            true,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-          ],
+          bemessungsZeitraumMonate: Array<true>(12).fill(true),
           istRentenVersicherungsPflichtig: true,
           istKrankenVersicherungsPflichtig: true,
           istArbeitslosenVersicherungsPflichtig: false,
@@ -696,67 +645,47 @@ describe("finanzDatenFactory", () => {
           erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
           bruttoEinkommenDurchschnitt: 600,
           bruttoEinkommenDurchschnittMidi: 0,
-          bemessungsZeitraumMonate: [
-            false,
-            true,
-            true,
-            true,
-            true,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-          ],
+          bemessungsZeitraumMonate: Array<true>(12).fill(true),
           istRentenVersicherungsPflichtig: true,
           istKrankenVersicherungsPflichtig: true,
           istArbeitslosenVersicherungsPflichtig: false,
         },
       ],
     ],
-  ])(
-    "%s",
-    (
-      message: string,
-      taetigkeitList: Taetigkeit[],
-      mischEkTaetigkeitList: MischEkTaetigkeit[],
-    ) => {
-      it("should create FinanzDaten for ET2 with Mischeinkommen", () => {
-        // setup
-        const erwerbsTaetigkeitSave = {
-          ...mockStore.stepErwerbstaetigkeit.ET2,
-        };
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+  ])("%s", (message, taetigkeitList, mischEkTaetigkeitList) => {
+    it("should create FinanzDaten for ET2 with Mischeinkommen", () => {
+      // setup
+      const erwerbsTaetigkeitSave = {
+        ...mockStore.stepErwerbstaetigkeit.ET2,
+      };
+      const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
 
-        // given
-        mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-        mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-        mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
-          type: "average",
-          average: 10,
-          perYear: null,
-          perMonth: [],
-        };
-        mockStore.stepEinkommen.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig =
-          taetigkeitList;
+      // given
+      mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+      mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
+      mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+        type: "average",
+        average: 10,
+        perYear: null,
+        perMonth: [],
+      };
+      mockStore.stepEinkommen.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig =
+        taetigkeitList;
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
+      // when
+      const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
 
-        // then
-        expect(finanzDaten.bruttoEinkommen.value).toBe(0);
-        expect(finanzDaten.mischEinkommenTaetigkeiten).toStrictEqual(
-          mischEkTaetigkeitList,
-        );
+      // then
+      expect(finanzDaten.bruttoEinkommen.value).toBe(0);
+      expect(finanzDaten.mischEinkommenTaetigkeiten).toStrictEqual(
+        mischEkTaetigkeitList,
+      );
 
-        // cleanup
-        mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-        mockStore.stepEinkommen.ET2 = einkommenSave;
-      });
-    },
-  );
+      // cleanup
+      mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
+      mockStore.stepEinkommen.ET2 = einkommenSave;
+    });
+  });
 
   describe.each([
     [null, SteuerKlasse.SKL1],

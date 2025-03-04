@@ -64,18 +64,9 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
     .getByLabel("2. Tätigkeit")
     .getByLabel("Art der Tätigkeit")
     .selectOption("Selbststaendig");
-  await page.getByLabel("Durchschnittlicher").click();
-  await page.getByLabel("Durchschnittlicher").fill("2000 Euro");
   await page
-    .locator(
-      '[id="ET1\\.taetigkeitenNichtSelbstaendigUndSelbstaendig\\.1\\.zeitraum\\.0\\.from"]',
-    )
-    .selectOption("6");
-  await page
-    .locator(
-      '[id="ET1\\.taetigkeitenNichtSelbstaendigUndSelbstaendig\\.1\\.zeitraum\\.0\\.to"]',
-    )
-    .selectOption("12");
+    .getByLabel("Gewinn im letzten Kalenderjahr in Brutto")
+    .fill("24000 Euro");
   await page
     .getByLabel("2. Tätigkeit")
     .getByText("keines der Genannten")

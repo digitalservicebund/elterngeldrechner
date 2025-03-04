@@ -325,7 +325,7 @@ describe("Einkommen Page", () => {
 
       const gewinnYearlyField = within(
         einkommenAusSelbstaendigkeit,
-      ).getByLabelText(/Gewinn im Kalenderjahr vor der Geburt/);
+      ).getByLabelText(/Gewinn im letzten Kalenderjahr in Brutto/);
 
       await userEvent.type(gewinnYearlyField, String(einkommenYearly));
 

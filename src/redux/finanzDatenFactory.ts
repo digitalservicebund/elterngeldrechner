@@ -43,46 +43,56 @@ const ANZAHL_MONATE_PRO_JAHR = 12;
 const mischEinkommenTaetigkeitenOf = (taetigkeiten: Taetigkeit[]) =>
   taetigkeiten
     .map((taetigkeit) => {
-      const isSelbststaendig = taetigkeit.artTaetigkeit === "Selbststaendig";
-      const isMinijob = taetigkeit.isMinijob === YesNo.YES;
-      const erwerbsTaetigkeit = isSelbststaendig
-        ? ErwerbsTaetigkeit.SELBSTSTAENDIG
-        : isMinijob
-          ? ErwerbsTaetigkeit.MINIJOB
-          : ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
-
-      const bruttoEinkommenDurchschnitt =
-        taetigkeit.bruttoEinkommenDurchschnitt ?? 0;
-
       const {
         hasRentenversicherung: istRentenVersicherungsPflichtig,
         hasKrankenversicherung: istKrankenVersicherungsPflichtig,
         hasArbeitslosenversicherung: istArbeitslosenVersicherungsPflichtig,
       } = taetigkeit.versicherungen;
+      switch (taetigkeit.artTaetigkeit) {
+        case "NichtSelbststaendig": {
+          const erwerbsTaetigkeit =
+            taetigkeit.isMinijob === YesNo.YES
+              ? ErwerbsTaetigkeit.MINIJOB
+              : ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
 
-      const bemessungsZeitraumMonate = Array.from(
-        { length: ANZAHL_MONATE_PRO_JAHR },
-        (_, monthIndex) => {
-          const taetigkeitHasZeitraumIncludingThisMonth =
-            taetigkeit.zeitraum.some(({ from, to }) => {
-              const indexStart = Number.parseInt(from) - 1;
-              const indexEnd = Number.parseInt(to) - 1;
-              return monthIndex >= indexStart && monthIndex <= indexEnd;
-            });
+          const bemessungsZeitraumMonate = Array.from(
+            { length: ANZAHL_MONATE_PRO_JAHR },
+            (_, monthIndex) => {
+              const taetigkeitHasZeitraumIncludingThisMonth =
+                taetigkeit.zeitraum.some(({ from, to }) => {
+                  const indexStart = Number.parseInt(from) - 1;
+                  const indexEnd = Number.parseInt(to) - 1;
+                  return monthIndex >= indexStart && monthIndex <= indexEnd;
+                });
 
-          return taetigkeitHasZeitraumIncludingThisMonth;
-        },
-      );
+              return taetigkeitHasZeitraumIncludingThisMonth;
+            },
+          );
 
-      return {
-        erwerbsTaetigkeit,
-        bruttoEinkommenDurchschnitt,
-        bruttoEinkommenDurchschnittMidi: 0,
-        bemessungsZeitraumMonate,
-        istRentenVersicherungsPflichtig,
-        istKrankenVersicherungsPflichtig,
-        istArbeitslosenVersicherungsPflichtig,
-      };
+          return {
+            erwerbsTaetigkeit,
+            bruttoEinkommenDurchschnitt:
+              taetigkeit.bruttoEinkommenDurchschnitt ?? 0,
+            bruttoEinkommenDurchschnittMidi: 0,
+            bemessungsZeitraumMonate,
+            istRentenVersicherungsPflichtig,
+            istKrankenVersicherungsPflichtig,
+            istArbeitslosenVersicherungsPflichtig,
+          };
+        }
+
+        case "Selbststaendig":
+          return {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
+            bruttoEinkommenDurchschnitt:
+              (taetigkeit.gewinneinkuenfte ?? 0) / 12,
+            bruttoEinkommenDurchschnittMidi: 0,
+            bemessungsZeitraumMonate: Array(12).fill(true),
+            istRentenVersicherungsPflichtig,
+            istKrankenVersicherungsPflichtig,
+            istArbeitslosenVersicherungsPflichtig,
+          };
+      }
     })
     .filter((taetigkeit) =>
       taetigkeit.bemessungsZeitraumMonate.some((value) => value),

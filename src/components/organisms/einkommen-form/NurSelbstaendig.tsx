@@ -1,6 +1,6 @@
 import { useId } from "react";
 import { useFormContext } from "react-hook-form";
-import { CustomNumberField } from "@/components/molecules";
+import { EingabeFuerGewinneinkuenfte } from "./EingabeFuerGewinneinkuenfte";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";
 
@@ -21,14 +21,9 @@ export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {
         Gewinneinkünfte
       </h3>
 
-      <CustomNumberField
-        control={control}
-        name={`${elternteil}.gewinnSelbstaendig.perYear`}
-        label="Wie hoch war Ihr Gewinn im Kalenderjahr vor der Geburt Ihres Kindes?"
-        suffix="Euro"
-        max={999999}
-        required
-        info="Dies ergibt sich aus Ihrem letzten oder vorletzten Steuerbescheid oder Sie können schätzen"
+      <EingabeFuerGewinneinkuenfte
+        formControl={control}
+        formFieldName={`${elternteil}.gewinnSelbstaendig.perYear`}
       />
     </section>
   );

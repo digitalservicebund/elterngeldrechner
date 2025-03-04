@@ -139,7 +139,7 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
 
         const gewinnField = within(
           einkommenAusSelbstaendigkeitSection,
-        ).getByLabelText(/Gewinn im Kalenderjahr vor der Geburt/);
+        ).getByLabelText(/Gewinn im letzten Kalenderjahr in Brutto/);
 
         await userEvent.clear(gewinnField);
         await userEvent.click(screen.getByText("Weiter"));

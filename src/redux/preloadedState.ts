@@ -1,8 +1,5 @@
 import type { Antragstellende } from "./stepAllgemeineAngabenSlice";
-import type {
-  Erwerbstaetigkeiten,
-  MonatlichesBrutto,
-} from "./stepErwerbstaetigkeitSlice";
+import type { MonatlichesBrutto } from "./stepErwerbstaetigkeitSlice";
 import { YesNo } from "./yes-no";
 import {
   KassenArt,
@@ -104,7 +101,7 @@ export const preloadedState = {
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       taetigkeitenNichtSelbstaendigUndSelbstaendig: [
         {
-          artTaetigkeit: "NichtSelbststaendig" as Erwerbstaetigkeiten,
+          artTaetigkeit: "NichtSelbststaendig" as const,
           bruttoEinkommenDurchschnitt: 1000,
           isMinijob: YesNo.YES,
           zeitraum: [
@@ -119,13 +116,8 @@ export const preloadedState = {
           },
         },
         {
-          artTaetigkeit: "Selbststaendig" as Erwerbstaetigkeiten,
-          bruttoEinkommenDurchschnitt: 2000,
-          isMinijob: YesNo.NO,
-          zeitraum: [
-            { from: "1", to: "5" },
-            { from: "10", to: "12" },
-          ],
+          artTaetigkeit: "Selbststaendig" as const,
+          gewinneinkuenfte: 24000,
           versicherungen: {
             hasRentenversicherung: true,
             hasArbeitslosenversicherung: false,

@@ -8,7 +8,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
 
   // codegen
   await page.goto("./");
-  await page.getByText("Gemeinsam Erziehende").click();
+  await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
   await page.getByText("Für zwei Elternteile").click();
   await page
     .getByText("Ja, ein Elternteil ist oder wird im Mutterschutz sein", {

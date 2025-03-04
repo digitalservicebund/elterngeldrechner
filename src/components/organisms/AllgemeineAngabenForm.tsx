@@ -15,8 +15,8 @@ import {
 import { YesNo } from "@/redux/yes-no";
 
 const antragstellendeOptions: CustomRadioGroupOption<Antragstellende>[] = [
-  { value: "FuerBeide", label: "Für zwei Elternteile" },
   { value: "EinenElternteil", label: "Für einen Elternteil" },
+  { value: "FuerBeide", label: "Für zwei Elternteile" },
 ];
 
 interface AllgemeineAngabenFormProps {
@@ -33,7 +33,7 @@ const mutterschaftsleistungenInfo = (
       Während des Mutterschutzes erhalten Sie Mutterschaftsleistungen, zum
       Beispiel:
     </p>
-    <ul className="list-disc pl-24">
+    <ul className="list-inside list-disc">
       <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
       <li>der Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
       <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
@@ -60,8 +60,8 @@ export function AllgemeineAngabenForm({
   const pseudonymeFormValue = watch("pseudonym");
 
   const alleinerziehendenOptions: CustomRadioGroupOption<YesNo>[] = [
-    { value: YesNo.YES, label: "Alleinerziehende Person" },
-    { value: YesNo.NO, label: "Gemeinsam Erziehende" },
+    { value: YesNo.YES, label: "Ja" },
+    { value: YesNo.NO, label: "Nein" },
   ];
 
   const showMutterschaftsleistungsWerGroup =
@@ -93,8 +93,7 @@ export function AllgemeineAngabenForm({
         </h3>
 
         <CustomRadioGroup
-          legend="Sind Sie alleinerziehend oder erziehen Sie das Kind mit jemandem zusammen?"
-          info={alleinerziehendInfoText}
+          legend="Sind Sie alleinerziehend?"
           register={register}
           registerOptions={{
             required: "Dieses Feld ist erforderlich",
@@ -104,6 +103,12 @@ export function AllgemeineAngabenForm({
           errors={formState.errors}
           options={alleinerziehendenOptions}
           required
+          slotBetweenLegendAndOptions={
+            <InfoText
+              question="Was bedeutet alleinerziehend?"
+              answer={alleinerziehendInfoText}
+            />
+          }
         />
       </section>
 

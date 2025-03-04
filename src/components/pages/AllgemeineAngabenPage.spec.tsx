@@ -20,7 +20,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should display the Antragstellenden part of the form after the Alleinerziehendenstatus", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Gemeinsam Erziehende"));
+    await userEvent.click(screen.getByLabelText("Nein"));
 
     expect(screen.getByText("Eltern")).toBeInTheDocument();
   });
@@ -28,7 +28,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should display the optional naming part of the form after the Antragstellenden part", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Gemeinsam Erziehende"));
+    await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
@@ -38,7 +38,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should ask for Mutterschaftssleistungen if Gemeinsam Erziehende", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Gemeinsam Erziehende"));
+    await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
@@ -48,7 +48,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should ask for Mutterschaftssleistungen if Alleinerziehend", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Alleinerziehende Person"));
+    await userEvent.click(screen.getByLabelText("Ja"));
 
     expect(screen.getByText("Mutterschaftsleistungen")).toBeInTheDocument();
   });
@@ -56,7 +56,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should ask to whom Mutterschaftsleistungen belongs if Gemeinsam Erziehende", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Gemeinsam Erziehende"));
+    await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
@@ -74,7 +74,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should not ask to whom Mutterschaftsleistungen belongs if Alleinerziehend", async () => {
     render(<AllgemeineAngabenPage />);
 
-    await userEvent.click(screen.getByLabelText("Alleinerziehende Person"));
+    await userEvent.click(screen.getByLabelText("Ja"));
 
     await userEvent.click(
       screen.getByTestId("mutterschaftssleistungen_option_0"),
@@ -103,7 +103,7 @@ describe("Allgemeine Angaben Page", () => {
         mutterschaftssleistungen: YesNo.YES,
       };
 
-      await userEvent.click(screen.getByLabelText("Alleinerziehende Person"));
+      await userEvent.click(screen.getByLabelText("Ja"));
 
       await userEvent.click(
         screen.getByTestId("mutterschaftssleistungen_option_0"),
@@ -128,7 +128,7 @@ describe("Allgemeine Angaben Page", () => {
         },
       };
 
-      await userEvent.click(screen.getByLabelText("Gemeinsam Erziehende"));
+      await userEvent.click(screen.getByLabelText("Nein"));
 
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
@@ -177,7 +177,7 @@ describe("Allgemeine Angaben Page", () => {
         mutterschaftssleistungen: YesNo.NO,
       };
 
-      await userEvent.click(screen.getByLabelText("Gemeinsam Erziehende"));
+      await userEvent.click(screen.getByLabelText("Nein"));
 
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 

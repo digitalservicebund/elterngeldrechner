@@ -8,9 +8,11 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
 
   // codegen
   await page.goto("./");
-  await page.getByText("Gemeinsam Erziehende").click();
+  await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
   await page.getByText("Für zwei Elternteile").click();
-  await page.getByText("Nein").click();
+  await page
+    .getByText("Nein, kein Elternteil ist oder wird im Mutterschutz sein")
+    .click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("06.01.2025");

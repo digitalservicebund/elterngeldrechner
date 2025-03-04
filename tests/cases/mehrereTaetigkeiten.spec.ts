@@ -8,7 +8,7 @@ test("mehrere Tätigkeiten", async ({ page }) => {
 
   // codegen
   await page.goto("./");
-  await page.getByText("Gemeinsam Erziehende").click();
+  await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
   await page.getByLabel("Für einen Elternteil").click();
   await page.getByLabel("Mutterschaftsleistungen").getByText("Ja").click();
   await page.getByRole("button", { name: "Weiter" }).click();

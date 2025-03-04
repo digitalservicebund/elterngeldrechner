@@ -80,7 +80,9 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
           </div>
         )}
 
-        {slotBetweenLegendAndOptions}
+        {slotBetweenLegendAndOptions ? (
+          <div className="mb-16">{slotBetweenLegendAndOptions}</div>
+        ) : null}
 
         {options.map((option, i) => {
           const descriptionId = `${baseId}-${option.label}`;

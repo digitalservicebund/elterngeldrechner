@@ -8,10 +8,7 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   // codegen
   await page.goto("./");
 
-  await page
-    .getByLabel("Alleinerziehendenstatus")
-    .getByText("Alleinerziehende Person")
-    .click();
+  await page.getByLabel("Alleinerziehendenstatus").getByText("Ja").click();
 
   await page.getByLabel("Mutterschaftsleistungen").getByText("Ja").click();
   await page.getByRole("button", { name: "Weiter" }).click();

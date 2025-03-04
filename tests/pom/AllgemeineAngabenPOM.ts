@@ -24,7 +24,7 @@ export class AllgemeineAngabenPOM {
     this.heading = page.getByRole("heading", { name: "Allgemeine Angaben" });
 
     this.alleinerziehend = page.getByRole("radiogroup", {
-      name: "Sind Sie alleinerziehend oder erziehen Sie das Kind mit jemandem zusammen?",
+      name: "Sind Sie alleinerziehend?",
     });
 
     this.alleinerziehendError = this.alleinerziehend.getByText(
@@ -63,7 +63,7 @@ export class AllgemeineAngabenPOM {
   }
 
   async setAlleinerziehend(value: boolean) {
-    const label = value ? "Alleinerziehende Person" : "Gemeinsam Erziehende";
+    const label = value ? "Ja" : "Nein";
     await this.alleinerziehend.getByRole("radio", { name: label }).click();
     return this;
   }

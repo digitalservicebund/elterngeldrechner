@@ -65,7 +65,9 @@ describe("Allgemeine Angaben Page", () => {
     );
 
     expect(
-      screen.getByText("Welcher Elternteil bezieht Mutterschaftsleistungen?"),
+      screen.getByText(
+        "Welcher Elternteil ist oder wird im Mutterschutz sein?",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -79,7 +81,9 @@ describe("Allgemeine Angaben Page", () => {
     );
 
     expect(
-      screen.queryByText("Welcher Elternteil bezieht Mutterschaftsleistungen?"),
+      screen.queryByText(
+        "Welcher Elternteil ist oder wird im Mutterschutz sein?",
+      ),
     ).not.toBeInTheDocument();
   });
 

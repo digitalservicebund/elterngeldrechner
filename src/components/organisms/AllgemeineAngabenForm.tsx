@@ -5,8 +5,8 @@ import {
   CustomInput,
   CustomRadioGroup,
   CustomRadioGroupOption,
+  InfoText,
   Split,
-  YesNoRadio,
 } from "@/components/molecules";
 import {
   Antragstellende,
@@ -57,10 +57,7 @@ export function AllgemeineAngabenForm({
   const alleinerziehendenFormValue = watch("alleinerziehend");
   const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
 
-  const mutteschaftsleistungenOptions: CustomRadioGroupOption[] = [
-    { value: "ET1", label: watch("pseudonym.ET1") || "Elternteil 1" },
-    { value: "ET2", label: watch("pseudonym.ET2") || "Elternteil 2" },
-  ];
+  const pseudonymeFormValue = watch("pseudonym");
 
   const alleinerziehendenOptions: CustomRadioGroupOption<YesNo>[] = [
     { value: YesNo.YES, label: "Alleinerziehende Person" },
@@ -164,26 +161,82 @@ export function AllgemeineAngabenForm({
             Mutterschaftsleistungen
           </h3>
 
-          <YesNoRadio
-            legend="Beziehen Sie Mutterschaftsleistungen?"
+          <CustomRadioGroup
+            legend="Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?"
             info={mutterschaftsleistungenInfo}
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="mutterschaftssleistungen"
             errors={formState.errors}
             required
+            options={[
+              {
+                label: "Ja, ein Elternteil ist oder wird im Mutterschutz sein",
+                value: YesNo.YES,
+              },
+              {
+                label:
+                  "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
+                value: YesNo.NO,
+              },
+              { label: "Ich weiß es noch nicht", value: YesNo.NO },
+            ]}
+            slotBetweenLegendAndOptions={
+              <InfoText
+                question="Was ist Mutterschutz?"
+                answer={
+                  <>
+                    <p>
+                      Während des Mutterschutzes erhalten Sie
+                      Mutterschaftsleistungen, zum Beispiel:
+                    </p>
+
+                    <ul className="list-inside list-disc">
+                      <li>
+                        das Mutterschaftsgeld der gesetzlichen Krankenkassen
+                      </li>
+                      <li>der Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+                      <li>
+                        die Bezüge für Beamtinnen während des Mutterschutzes
+                      </li>
+                    </ul>
+
+                    <p>
+                      Diese werden – wenn ein Anspruch darauf besteht –
+                      normalerweise in den ersten acht Wochen nach der Geburt
+                      gezahlt.
+                    </p>
+                  </>
+                }
+              />
+            }
           />
 
           {!!showMutterschaftsleistungsWerGroup && (
             <CustomRadioGroup
               className="mt-32"
-              legend="Welcher Elternteil bezieht Mutterschaftsleistungen?"
+              legend="Welcher Elternteil ist oder wird im Mutterschutz sein?"
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name="mutterschaftssleistungenWer"
               errors={formState.errors}
-              options={mutteschaftsleistungenOptions}
               required
+              options={[
+                {
+                  label: `${pseudonymeFormValue.ET1 || "Elternteil 1"} ist oder wird im Mutterschutz sein`,
+                  value: "ET1",
+                },
+                {
+                  label: `${pseudonymeFormValue.ET2 || "Elternteil 2"} ist oder wird im Mutterschutz sein`,
+                  value: "ET2",
+                },
+              ]}
+              slotBetweenLegendAndOptions={
+                <InfoText
+                  question="Warum fragen wir das?"
+                  answer="Wir fragen das, damit wir wissen, wer im Mutterschutz ist oder sein wird."
+                />
+              }
             />
           )}
         </section>

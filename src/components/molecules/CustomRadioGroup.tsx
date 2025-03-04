@@ -28,6 +28,7 @@ export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly name: Path<TFieldValues>;
   readonly legend: string | ReactNode;
   readonly info?: Info;
+  readonly slotBetweenLegendAndOptions?: ReactNode;
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
@@ -42,6 +43,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   name,
   legend,
   info,
+  slotBetweenLegendAndOptions,
   options,
   errors,
   required,
@@ -77,6 +79,8 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
             <InfoDialog info={info} />
           </div>
         )}
+
+        {slotBetweenLegendAndOptions}
 
         {options.map((option, i) => {
           const descriptionId = `${baseId}-${option.label}`;
@@ -115,7 +119,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
 
 function getInputClassName(hasError: boolean, disabled: boolean): string {
   return classNames(
-    "relative size-32 rounded-full border border-solid border-primary bg-white",
+    "relative size-32 min-w-32 rounded-full border border-solid border-primary bg-white",
     "before:size-16 before:rounded-full before:content-['']",
     "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
     "checked:before:bg-primary",

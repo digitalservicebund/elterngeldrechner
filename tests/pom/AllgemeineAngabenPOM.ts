@@ -2,77 +2,59 @@ import { Locator, Page } from "@playwright/test";
 
 export class AllgemeineAngabenPOM {
   readonly page: Page;
-
   readonly heading: Locator;
 
-  readonly elternteile: Locator;
-  readonly elternteileFuerBeide: Locator;
-  readonly elternteileFuerEinen: Locator;
-  readonly elternteileError: Locator;
-
   readonly alleinerziehend: Locator;
-  readonly alleinerziehendJa: Locator;
-  readonly alleinerziehendNein: Locator;
   readonly alleinerziehendError: Locator;
 
+  readonly elternteile: Locator;
+  readonly elternteileError: Locator;
+
+  readonly pseudonyme: Locator;
+
   readonly mutterschaftsleistungen: Locator;
-  readonly mutterschaftsleistungenJa: Locator;
-  readonly mutterschaftsleistungenNein: Locator;
   readonly mutterschaftsleistungenError: Locator;
 
   readonly mutterschaftsleistungenWer: Locator;
   readonly mutterschaftsleistungenWerError: Locator;
-
-  readonly nameElternteil1: Locator;
-  readonly nameElternteil2: Locator;
 
   constructor(page: Page) {
     this.page = page;
 
     this.heading = page.getByRole("heading", { name: "Allgemeine Angaben" });
 
-    this.alleinerziehend = page.getByLabel("Alleinerziehendenstatus");
-    this.alleinerziehendJa = this.alleinerziehend.getByText(
-      "Alleinerziehende Person",
-    );
-    this.alleinerziehendNein = this.alleinerziehend.getByText(
-      "Gemeinsam Erziehende",
-    );
+    this.alleinerziehend = page.getByRole("radiogroup", {
+      name: "Sind Sie alleinerziehend oder erziehen Sie das Kind mit jemandem zusammen?",
+    });
+
     this.alleinerziehendError = this.alleinerziehend.getByText(
       "Dieses Feld ist erforderlich",
     );
 
-    this.elternteile = page.getByLabel("Eltern", { exact: true });
-    this.elternteileFuerBeide = this.elternteile.getByLabel(
-      "Für zwei Elternteile",
-    );
-    this.elternteileFuerEinen = this.elternteile.getByLabel(
-      "Für einen Elternteil",
-    );
+    this.elternteile = page.getByRole("radiogroup", {
+      name: "Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?",
+    });
+
     this.elternteileError = this.elternteile.getByText(
       "Dieses Feld ist erforderlich",
     );
 
-    this.mutterschaftsleistungen = page.getByLabel("Mutterschaftsleistungen");
-    this.mutterschaftsleistungenJa =
-      this.mutterschaftsleistungen.getByText("Ja");
-    this.mutterschaftsleistungenNein =
-      this.mutterschaftsleistungen.getByText("Nein");
+    this.pseudonyme = page.getByLabel("Ihre Namen (optional)");
+
+    this.mutterschaftsleistungen = page.getByRole("radiogroup", {
+      name: "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
+    });
+
     this.mutterschaftsleistungenError = this.mutterschaftsleistungen.getByText(
       "Dieses Feld ist erforderlich",
     );
 
-    this.mutterschaftsleistungenWer = page
-      .getByLabel("Mutterschaftsleistungen")
-      .getByRole("radiogroup", {
-        name: "Welcher Elternteil bezieht Mutterschaftsleistungen?",
-      });
+    this.mutterschaftsleistungenWer = page.getByRole("radiogroup", {
+      name: "Welcher Elternteil ist oder wird im Mutterschutz sein?",
+    });
 
     this.mutterschaftsleistungenWerError =
       this.mutterschaftsleistungenWer.getByText("Dieses Feld ist erforderlich");
-
-    this.nameElternteil1 = page.getByLabel("Name für Elternteil 1");
-    this.nameElternteil2 = page.getByLabel("Name für Elternteil 2");
   }
 
   async goto() {
@@ -80,47 +62,64 @@ export class AllgemeineAngabenPOM {
     return this;
   }
 
-  async setElternteile(value: 1 | 2) {
-    if (value === 1) {
-      await this.elternteileFuerEinen.click();
-    } else {
-      await this.elternteileFuerBeide.click();
+  async setAlleinerziehend(value: boolean) {
+    const label = value ? "Alleinerziehende Person" : "Gemeinsam Erziehende";
+    await this.alleinerziehend.getByRole("radio", { name: label }).click();
+    return this;
+  }
+
+  async setElternteile(anzahl: 1 | 2) {
+    let label: string;
+
+    switch (anzahl) {
+      case 1:
+        label = "Für einen Elternteil";
+        break;
+
+      case 2:
+        label = "Für zwei Elternteile";
+        break;
     }
+
+    await this.elternteile.getByRole("radio", { name: label }).click();
     return this;
   }
 
   async setNameElternteil1(value: string) {
-    await this.nameElternteil1.fill(value);
+    await this.pseudonyme
+      .getByRole("textbox", { name: "Name für Elternteil 1" })
+      .fill(value);
+
     return this;
   }
 
   async setNameElternteil2(value: string) {
-    await this.nameElternteil2.fill(value);
-    return this;
-  }
+    await this.pseudonyme
+      .getByRole("textbox", { name: "Name für Elternteil 2" })
+      .fill(value);
 
-  async setAlleinerziehend(value: boolean) {
-    if (value) {
-      await this.alleinerziehendJa.click();
-    } else {
-      await this.alleinerziehendNein.click();
-    }
     return this;
   }
 
   async setMutterschaftsleistungen(value: boolean) {
-    if (value) {
-      await this.mutterschaftsleistungenJa.click();
-    } else {
-      await this.mutterschaftsleistungenNein.click();
-    }
+    const label = value
+      ? "Ja, ein Elternteil ist oder wird im Mutterschutz sein"
+      : "Nein, kein Elternteil ist oder wird im Mutterschutz sein";
+
+    await this.mutterschaftsleistungen
+      .getByRole("radio", { name: label })
+      .click();
+
     return this;
   }
 
-  async setMutterschaftsleistungenWer(value: string) {
+  async setMutterschaftsleistungenWer(name: string) {
+    const label = `${name} ist oder wird im Mutterschutz sein`;
+
     await this.mutterschaftsleistungenWer
-      .getByText(value, { exact: true })
+      .getByRole("radio", { name: label })
       .click();
+
     return this;
   }
 

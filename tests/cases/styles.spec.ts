@@ -98,30 +98,19 @@ const testStyles = async ({
     allgemeineAngabenPage.elternteile,
   );
 
-  await expect(allgemeineAngabenPage.nameElternteil1).toBeVisible();
-
-  await expect(allgemeineAngabenPage.nameElternteil2).toBeVisible();
+  await expect(allgemeineAngabenPage.pseudonyme).toBeVisible();
 
   await screenshot(
-    "allgemeine-angaben-name-1",
-    allgemeineAngabenPage.nameElternteil1,
-  );
-
-  await screenshot(
-    "allgemeine-angaben-name-2",
-    allgemeineAngabenPage.nameElternteil2,
+    "allgemeine-angaben-pseudonyme",
+    allgemeineAngabenPage.pseudonyme,
   );
 
   await allgemeineAngabenPage.setNameElternteil1("Leia");
-  await screenshot(
-    "allgemeine-angaben-name-1-ausgefuellt",
-    allgemeineAngabenPage.nameElternteil1,
-  );
-
   await allgemeineAngabenPage.setNameElternteil2("Luke");
+
   await screenshot(
-    "allgemeine-angaben-name-2-ausgefuellt",
-    allgemeineAngabenPage.nameElternteil2,
+    "allgemeine-angaben-pseudonyme-ausgefuellt",
+    allgemeineAngabenPage.pseudonyme,
   );
 
   await allgemeineAngabenPage.submit();

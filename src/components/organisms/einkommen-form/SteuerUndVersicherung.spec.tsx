@@ -67,7 +67,7 @@ describe("Steuer und Versicherung", () => {
       /^sind Sie kirchensteuerpflichtig/i,
     );
     const krankenversicherung = within(elternteil1Section).getByText(
-      /^wie sind Sie krankenversichert/i,
+      /^Sind Sie gesetzlich pflichtversichert/i,
     );
 
     expect(steuerklasse).toBeInTheDocument();
@@ -262,7 +262,7 @@ describe("Steuer und Versicherung", () => {
 
       const inputKrankenversicherung = within(
         krankenversicherungSection,
-      ).getByLabelText("gesetzlich pflichtversichert");
+      ).getByLabelText("Ja");
       await userEvent.click(inputKrankenversicherung);
       const error2 = within(krankenversicherungSection).queryByText(
         "Dieses Feld ist erforderlich",

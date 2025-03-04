@@ -227,9 +227,7 @@ describe("Einkommen Page", () => {
         elternteil1Section,
       ).getByLabelText("Krankenversicherung");
       await userEvent.click(
-        within(krankenversicherungSection).getByLabelText(
-          /^gesetzlich pflichtversichert/,
-        ),
+        within(krankenversicherungSection).getByLabelText(/^Ja/),
       );
 
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
@@ -339,9 +337,7 @@ describe("Einkommen Page", () => {
         elternteil1Section,
       ).getByLabelText("Krankenversicherung");
       await userEvent.click(
-        within(krankenversicherungSection).getByLabelText(
-          /^gesetzlich pflichtversichert/,
-        ),
+        within(krankenversicherungSection).getByLabelText(/^Ja/),
       );
 
       // Field Rentenversicherung

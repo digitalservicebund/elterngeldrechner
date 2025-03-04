@@ -4,6 +4,7 @@ import {
   CustomRadioGroup,
   CustomRadioGroupOption,
   CustomSelect,
+  InfoText,
   SelectOption,
   YesNoRadio,
 } from "@/components/molecules";
@@ -48,11 +49,11 @@ const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
 const kassenArtOptions: CustomRadioGroupOption<KassenArt>[] = [
   {
     value: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-    label: "gesetzlich pflichtversichert",
+    label: "Ja",
   },
   {
     value: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
-    label: "nicht gesetzlich pflichtversichert",
+    label: "Nein",
   },
 ];
 
@@ -161,13 +162,30 @@ export function SteuerUndVersicherung({
           </h3>
 
           <CustomRadioGroup
-            legend="Wie sind Sie krankenversichert?"
+            legend="Sind Sie gesetzlich pflichtversichert?"
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name={`${elternteil}.kassenArt`}
             options={kassenArtOptions}
             errors={errors}
             required
+          />
+
+          <InfoText
+            className="pt-8"
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p>Sie wählen „Nein“, wenn Sie</p>
+                <ul className="list-inside list-disc">
+                  <li>freiwillig gesetzlich versichert,</li>
+                  <li>familienversichert,</li>
+                  <li>privat versichert,</li>
+                  <li>in der freien Heilfürsorge oder</li>
+                  <li>nicht (in Deutschland) krankenversichert sind.</li>
+                </ul>
+              </>
+            }
           />
         </section>
       )}

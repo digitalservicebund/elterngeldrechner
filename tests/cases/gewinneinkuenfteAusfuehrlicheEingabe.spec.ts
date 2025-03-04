@@ -34,17 +34,23 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("4");
   await page
     .getByLabel("Elternteil 1")
+    .getByLabel("Kirchensteuer")
     .getByText("Nein", { exact: true })
     .click();
-  await page.getByLabel("Elternteil 2").getByText("Ja").click();
+  await page
+    .getByLabel("Elternteil 2")
+    .getByLabel("Kirchensteuer")
+    .getByText("Ja")
+    .click();
   await page
     .getByLabel("Gewinn im letzten Kalenderjahr in Brutto")
     .fill("3.1200 Euro");
-  await page.getByLabel("Elternteil 1").getByText("nicht gesetzlich").click();
+  await page.getByTestId("ET1.kassenArt_option_1").check(); // Nein
   await page.getByText("keine gesetzliche").click();
   await page
     .getByLabel("Elternteil 2")
-    .getByText("gesetzlich pflichtversichert", { exact: true })
+    .getByLabel("Krankenversicherung")
+    .getByText("Ja", { exact: true })
     .click();
   await page.getByRole("button", { name: "Zur ausführlichen Eingabe" }).click();
   await page.getByLabel("1. Monat", { exact: true }).click();

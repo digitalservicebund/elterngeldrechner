@@ -41,7 +41,10 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
     .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Ja" })
     .click();
-  await page.getByText("gesetzlich pflichtversichert", { exact: true }).click();
+  await page
+    .getByRole("radiogroup", { name: "Sind Sie gesetzlich pflichtversichert?" })
+    .getByRole("radio", { name: "Ja" })
+    .click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 

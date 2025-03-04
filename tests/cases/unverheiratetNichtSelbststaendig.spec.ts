@@ -66,15 +66,25 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .getByLabel("Elternteil 2")
     .getByLabel("Welche Steuerklasse haben Sie")
     .selectOption("1");
-  await page.getByLabel("Elternteil 2").getByText("Nein").click();
-  await page.getByLabel("Elternteil 1").getByText("Nein").click();
   await page
     .getByLabel("Elternteil 1")
-    .getByText("gesetzlich pflichtversichert", { exact: true })
+    .getByLabel("Kirchensteuer")
+    .getByText("Nein")
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByText("gesetzlich pflichtversichert", { exact: true })
+    .getByLabel("Kirchensteuer")
+    .getByText("Nein")
+    .click();
+  await page
+    .getByLabel("Elternteil 1")
+    .getByLabel("Krankenversicherung")
+    .getByText("Ja", { exact: true })
+    .click();
+  await page
+    .getByLabel("Elternteil 2")
+    .getByLabel("Krankenversicherung")
+    .getByText("Ja", { exact: true })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByRole("button", { name: "Zum Monatsplaner" }).click();

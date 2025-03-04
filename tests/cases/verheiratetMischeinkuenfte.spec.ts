@@ -36,7 +36,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByText("Gewinneinkünfte").click();
   await page.getByText("Einkünfte aus nichtselbstä").click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("3");
+  await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("3");
   await page.getByLabel("Kirchensteuer").getByText("Ja").click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("4500 Euro");

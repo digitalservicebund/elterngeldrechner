@@ -69,7 +69,7 @@ const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
 ];
 
 const einkommenSteuerklasseInfo =
-  "Das Faktorverfahren in der Steuerklassenkombination IV/IV wird in der vorliegenden Berechnung nicht berücksichtigt. Der Standardwert 1,0 ist festgelegt. Sollte Ihr Faktor kleiner als 1,0 sein, wirkt sich dies entsprechend auf die Höhe des Elterngeldes aus. Sie erhalten dann mehr Elterngeld (im unteren zweistelligen Bereich)";
+  "Wenn Sie die Steuerklasse in den letzten 12 Monaten gewechselt haben: Nehmen Sie die Steuerklasse, die Sie am längsten hatten. Wenn Sie beide gleich lang hatten: Nehmen Sie die aktuellste.";
 
 export function SteuerUndVersicherung({
   elternteil,
@@ -110,11 +110,17 @@ export function SteuerUndVersicherung({
               required: "Eine Option muss ausgewählt sein",
             }}
             name={`${elternteil}.steuerKlasse`}
-            label="Welche Steuerklasse haben Sie?"
+            label="Welche Steuerklasse hatten Sie in den letzten 12 Monaten?"
             errors={errors}
             options={steuerKlasseOptions}
             required
-            info={einkommenSteuerklasseInfo}
+            slotBetweenLabelAndSelect={
+              <InfoText
+                className="pt-8"
+                question="Ich habe die Steuerklasse gewechselt"
+                answer={einkommenSteuerklasseInfo}
+              />
+            }
           />
         </section>
       )}

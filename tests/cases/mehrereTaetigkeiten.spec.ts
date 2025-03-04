@@ -28,7 +28,7 @@ test("mehrere Tätigkeiten", async ({ page }) => {
     })
     .getByRole("radio", { name: "Nein" })
     .click();
-  await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("1");
+  await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("1");
   await page
     .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Ja" })

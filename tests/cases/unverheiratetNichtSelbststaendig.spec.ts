@@ -60,11 +60,11 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .fill("3000 Euro");
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Welche Steuerklasse haben Sie")
+    .getByLabel("Welche Steuerklasse hatten Sie")
     .selectOption("1");
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Welche Steuerklasse haben Sie")
+    .getByLabel("Welche Steuerklasse hatten Sie")
     .selectOption("1");
   await page
     .getByLabel("Elternteil 1")

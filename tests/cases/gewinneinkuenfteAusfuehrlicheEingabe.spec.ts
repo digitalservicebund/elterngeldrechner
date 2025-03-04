@@ -33,7 +33,7 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
     })
     .getByRole("radio", { name: "Nein" })
     .click();
-  await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("4");
+  await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("4");
   await page
     .getByLabel("Elternteil 1")
     .getByLabel("Kirchensteuer")

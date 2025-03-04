@@ -151,7 +151,7 @@ describe("Steuer und Versicherung", () => {
       const elternteil1Section = getElternteil1Section();
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
       const inputField = within(elternteil1Section).getByLabelText(
-        "Welche Steuerklasse haben Sie?",
+        "Welche Steuerklasse hatten Sie in den letzten 12 Monaten?",
       );
 
       await userEvent.click(nextPageBtn);

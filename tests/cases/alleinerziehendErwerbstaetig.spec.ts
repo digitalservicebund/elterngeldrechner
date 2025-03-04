@@ -33,7 +33,7 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
     .click();
   await page.getByLabel("Monatliches Einkommen in Brutto").click();
   await page.getByLabel("Monatliches Einkommen in Brutto").fill("2500 Euro");
-  await page.getByLabel("Welche Steuerklasse haben Sie").selectOption("2");
+  await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("2");
   await page
     .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Ja" })

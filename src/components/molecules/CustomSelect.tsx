@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { ReactNode } from "react";
 import {
   FieldError,
   FieldErrors,
@@ -33,6 +34,7 @@ interface CustomSelectProps<TFieldValues extends FieldValues> {
   readonly required?: boolean;
   readonly disabled?: boolean;
   readonly info?: Info;
+  readonly slotBetweenLabelAndSelect?: ReactNode;
   readonly className?: string;
 }
 
@@ -47,6 +49,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   required,
   disabled,
   info,
+  slotBetweenLabelAndSelect,
   className,
   ...aria
 }: CustomSelectProps<TFieldValues>) {
@@ -69,6 +72,10 @@ export function CustomSelect<TFieldValues extends FieldValues>({
     >
       <div className="flex flex-col items-start">
         <label htmlFor={name}>{label}</label>
+
+        {slotBetweenLabelAndSelect ? (
+          <div className="mb-16">{slotBetweenLabelAndSelect}</div>
+        ) : null}
 
         <div className="relative w-full min-w-max">
           <select

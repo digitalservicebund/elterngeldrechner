@@ -15,7 +15,7 @@ export class NachwuchsPOM {
 
     this.heading = page.getByRole("heading", { name: "Kinder", exact: true });
     this.geburtsdatum = page.getByLabel(
-      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
+      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
     );
     this.anzahlKinder = page.getByLabel(
       "Wie viele Kinder werden oder wurden geboren?",

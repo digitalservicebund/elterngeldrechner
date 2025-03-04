@@ -122,7 +122,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
           },
         }}
         name={wahrscheinlichesGeburtsDatumName}
-        label="Wann wird oder wurde Ihr Kind voraussichtlich geboren?"
+        label="Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?"
         required
         info={<NachwuchsFormInfoText />}
       />

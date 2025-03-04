@@ -58,7 +58,7 @@ describe("Nachwuchs Page", () => {
     render(<NachwuchsPage />);
 
     const dateField = screen.getByLabelText(
-      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
+      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
     );
 
     await userEvent.type(dateField, "a12.12lasd!2022");
@@ -76,7 +76,7 @@ describe("Nachwuchs Page", () => {
     await userEvent.click(addButton);
 
     const dateField = screen.getByLabelText(
-      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
+      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
     );
 
     expect(dateField).toBeInTheDocument();
@@ -142,7 +142,7 @@ describe("Submitting the form", () => {
     }
 
     const dateField = screen.getByLabelText(
-      "Wann wird oder wurde Ihr Kind voraussichtlich geboren?",
+      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
     );
     await userEvent.type(dateField, "a12.12lasd!" + currentYear);
 

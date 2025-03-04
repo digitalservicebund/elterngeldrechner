@@ -42,7 +42,7 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
-    expect(screen.getByText("Mutterschaftsleistungen")).toBeInTheDocument();
+    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
   });
 
   it("should ask for Mutterschaftssleistungen if Alleinerziehend", async () => {
@@ -50,7 +50,7 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Ja"));
 
-    expect(screen.getByText("Mutterschaftsleistungen")).toBeInTheDocument();
+    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
   });
 
   it("should ask to whom Mutterschaftsleistungen belongs if Gemeinsam Erziehende", async () => {

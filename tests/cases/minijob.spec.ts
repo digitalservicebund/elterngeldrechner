@@ -9,7 +9,7 @@ test("Minijob", async ({ page }) => {
   await page.goto("./");
   await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
   await page.getByLabel("Für einen Elternteil").click();
-  await page.getByLabel("Mutterschaftsleistungen").getByText("Ja").click();
+  await page.getByLabel("Mutterschutz").getByText("Ja").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page
     .locator("div")

@@ -10,7 +10,7 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
 
   await page.getByLabel("Alleinerziehendenstatus").getByText("Ja").click();
 
-  await page.getByLabel("Mutterschaftsleistungen").getByText("Ja").click();
+  await page.getByLabel("Mutterschutz").getByText("Ja").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page
     .locator("div")

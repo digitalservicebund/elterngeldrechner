@@ -10,7 +10,7 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await page.goto("./");
   await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
   await page.getByLabel("Für einen Elternteil").click();
-  await page.getByLabel("Mutterschaftsleistungen").getByText("Ja").click();
+  await page.getByLabel("Mutterschutz").getByText("Ja").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("18.11.2024");

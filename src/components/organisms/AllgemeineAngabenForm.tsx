@@ -27,24 +27,6 @@ interface AllgemeineAngabenFormProps {
 const alleinerziehendInfoText =
   "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.";
 
-const mutterschaftsleistungenInfo = (
-  <>
-    <p>
-      Während des Mutterschutzes erhalten Sie Mutterschaftsleistungen, zum
-      Beispiel:
-    </p>
-    <ul className="list-inside list-disc">
-      <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
-      <li>der Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
-      <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
-    </ul>
-    <p>
-      Diese werden – wenn ein Anspruch darauf besteht – normalerweise in den
-      ersten acht Wochen nach der Geburt gezahlt.
-    </p>
-  </>
-);
-
 export function AllgemeineAngabenForm({
   initialValues,
   onSubmit,
@@ -163,12 +145,11 @@ export function AllgemeineAngabenForm({
         alleinerziehendenFormValue === YesNo.YES) && (
         <section aria-labelledby={mutterschaftsleistungenHeadingIdentifier}>
           <h3 id={mutterschaftsleistungenHeadingIdentifier} className="mb-10">
-            Mutterschaftsleistungen
+            Mutterschutz
           </h3>
 
           <CustomRadioGroup
             legend="Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?"
-            info={mutterschaftsleistungenInfo}
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="mutterschaftssleistungen"

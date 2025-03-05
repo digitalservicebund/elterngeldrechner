@@ -181,7 +181,7 @@ export function AllgemeineAngabenForm({
                       <li>
                         das Mutterschaftsgeld der gesetzlichen Krankenkassen
                       </li>
-                      <li>der Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+                      <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
                       <li>
                         die Bezüge für Beamtinnen während des Mutterschutzes
                       </li>

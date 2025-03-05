@@ -69,7 +69,7 @@ const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
 ];
 
 const einkommenSteuerklasseInfo =
-  "Wenn Sie die Steuerklasse in den letzten 12 Monaten gewechselt haben: Nehmen Sie die Steuerklasse, die Sie am längsten hatten. Wenn Sie beide gleich lang hatten: Nehmen Sie die aktuellste.";
+  "Wenn Sie die Steuerklasse in den letzten 12 Monaten vor der Geburt Ihres Kindes gewechselt haben: Nehmen Sie die Steuerklasse, die Sie am längsten hatten. Wenn Sie beide gleich lang hatten: Nehmen Sie die aktuellere.";
 
 export function SteuerUndVersicherung({
   elternteil,

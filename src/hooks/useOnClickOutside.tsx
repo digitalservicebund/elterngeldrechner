@@ -19,7 +19,7 @@ export function useOnClickOutside(
     if (element.current != null) {
       document.addEventListener("click", checkIfClickedOutside);
       return () => document.removeEventListener("click", checkIfClickedOutside);
-    }
+    } else return undefined;
   }, [element, checkIfClickedOutside]);
 }
 

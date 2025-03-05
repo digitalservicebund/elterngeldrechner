@@ -81,7 +81,7 @@ export function NichtSelbstaendig({
   ): ZeitraumOptionType =>
     availableZeitraumOptions(
       monthsBeforeBirthList
-        .map((v, index) => getValues(`${baseFieldPath}.zeitraum.${index}`))
+        .map((_, index) => getValues(`${baseFieldPath}.zeitraum.${index}`))
         .map((v) => {
           return { from: v.from, to: v.to };
         }),
@@ -93,10 +93,7 @@ export function NichtSelbstaendig({
       lastZeitraumValue,
     );
 
-  const onChangeZeitraum = (
-    zeitraumIndex: number,
-    zeitraumValue: { from: string; to: string },
-  ) => {
+  const onChangeZeitraum = (zeitraumValue: { from: string; to: string }) => {
     const restFrom = availableMonthsBeforeBirth(zeitraumValue).from.filter(
       (value: SelectOption) => !value.hidden,
     );
@@ -147,9 +144,7 @@ export function NichtSelbstaendig({
                   name={`${baseFieldPath}.zeitraum.${zeitraumIndex}`}
                   options={monthsBeforeBirthList[zeitraumIndex]?.from ?? []}
                   optionsTo={monthsBeforeBirthList[zeitraumIndex]?.to ?? []}
-                  onChange={(zeitraum) =>
-                    onChangeZeitraum(zeitraumIndex, zeitraum)
-                  }
+                  onChange={onChangeZeitraum}
                   errors={errors}
                   type="Integer"
                 />

@@ -1,10 +1,9 @@
-import type { ReactNode } from "react";
-import React from "react";
+import { ReactHTML, type ReactNode, createElement } from "react";
 import type { Zeitraum } from "@/features/planer/domain";
 
 type Props = {
   readonly zeitraum: Zeitraum;
-  readonly htmlElementType?: keyof React.ReactHTML;
+  readonly htmlElementType?: keyof ReactHTML;
   readonly prefix?: string;
   readonly className?: string;
 };
@@ -15,7 +14,7 @@ export function ZeitraumLabel({
   htmlElementType,
   className,
 }: Props): ReactNode {
-  return React.createElement(
+  return createElement(
     htmlElementType ?? "span",
     {
       className,

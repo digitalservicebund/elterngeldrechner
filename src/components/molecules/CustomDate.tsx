@@ -100,7 +100,7 @@ export function CustomDate<
               maxLength: 4,
             },
           }}
-          onAccept={(value) => onChange(value)}
+          onAccept={onChange}
           onBlur={onBlur}
           placeholder="__.__.___"
           aria-invalid={hasError}

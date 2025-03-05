@@ -107,5 +107,5 @@ function getIcon(
     return <LockIcon className="text-Plus" />;
   } else if (!hasAuswahl) {
     return <AddIcon />;
-  }
+  } else return undefined;
 }

@@ -345,7 +345,7 @@ describe("finanzDatenFactory", () => {
   ])(
     "%s",
     (
-      message: string,
+      _: string,
       gewinnSelbstaendig: AverageOrMonthlyState,
       finanzDatenBruttoEinkommen: number,
     ) => {
@@ -445,7 +445,7 @@ describe("finanzDatenFactory", () => {
   ])(
     "%s",
     (
-      message: string,
+      _: string,
       bruttoEinkommenNichtSelbstaendig: AverageOrMonthlyState,
       finanzDatenBruttoEinkommen: number,
     ) => {
@@ -652,7 +652,7 @@ describe("finanzDatenFactory", () => {
         },
       ],
     ],
-  ])("%s", (message, taetigkeitList, mischEkTaetigkeitList) => {
+  ])("%s", (_, taetigkeitList, mischEkTaetigkeitList) => {
     it("should create FinanzDaten for ET2 with Mischeinkommen", () => {
       // setup
       const erwerbsTaetigkeitSave = {
@@ -888,11 +888,7 @@ describe("finanzDatenFactory", () => {
     ],
   ])(
     "%s",
-    (
-      message: string,
-      einkommen: StepEinkommenElternteil,
-      expected: FinanzDaten,
-    ) => {
+    (_: string, einkommen: StepEinkommenElternteil, expected: FinanzDaten) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         // setup
         const einkommenSave = mockStore.stepEinkommen.ET1;

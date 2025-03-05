@@ -20,7 +20,7 @@ export function useOnFocusMovedOut(
       document.addEventListener("focusout", checkIfFocusHasMovedOut);
       return () =>
         document.removeEventListener("focusout", checkIfFocusHasMovedOut);
-    }
+    } else return undefined;
   }, [element, checkIfFocusHasMovedOut]);
 }
 

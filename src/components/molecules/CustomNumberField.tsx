@@ -94,7 +94,7 @@ export function CustomNumberField<
           lazy={false}
           autofix
           value={value === null ? "" : String(value)}
-          onAccept={(value) => {
+          onAccept={(value: string) => {
             if (!value) {
               onChange(null);
             } else {

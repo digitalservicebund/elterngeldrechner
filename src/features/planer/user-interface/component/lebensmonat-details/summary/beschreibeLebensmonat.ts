@@ -85,7 +85,7 @@ function beschreibeEinkommen<A extends Ausgangslage>(
       formuliereAnrede(ausgangslage, elternteil),
       beschreibeBruttoeinkommen(istEinElternteil, monat),
     );
-  }
+  } else return undefined;
 }
 
 function formuliereAnrede<A extends Ausgangslage>(
@@ -104,7 +104,7 @@ function beschreibeMutterschutz(
   if (monat.imMutterschutz) {
     const verb = istEinElternteil ? "sind" : "ist";
     return `${verb} im Mutterschutz`;
-  }
+  } else return undefined;
 }
 
 function beschreibeGewaehlteOption(
@@ -122,7 +122,7 @@ function beschreibeGewaehlteOption(
   } else if (!imMutterschutz && !istEineOptionGewaehlt) {
     const verb = istEinElternteil ? "haben" : "hat";
     return `${verb} keine Auswahl getroffen`;
-  }
+  } else return undefined;
 }
 
 function beschreibeElterngeldbezug(
@@ -134,7 +134,7 @@ function beschreibeElterngeldbezug(
   if (elterngeldbezug) {
     const verb = istEinElternteil ? "bekommen" : "bekommt";
     return `und ${verb} ${elterngeldbezug} Euro Elterngeld`;
-  }
+  } else return undefined;
 }
 
 function beschreibeBruttoeinkommen(
@@ -146,7 +146,7 @@ function beschreibeBruttoeinkommen(
   if (bruttoeinkommen) {
     const verb = istEinElternteil ? "haben" : "hat";
     return `${verb} ein Bruttoeinkommen von ${bruttoeinkommen} Euro`;
-  }
+  } else return undefined;
 }
 
 function setzeSatzAusBausteinenZusammen(

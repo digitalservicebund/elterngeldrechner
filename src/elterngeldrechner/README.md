@@ -13,6 +13,13 @@ provides a detailed list of _Bezüge_ for each _Lebensmonat_.
 
 ## Technical Details
 
+As the real-world domain is a German one, the implementation makes heavy use of
+the German language. Low level or pure technical parts are using English. The
+same concept goes for documentation where clean code needs some.
+It is obligatory to acquire domain knowledge before interacting with the domain.
+Though, the tests often use behavior-driven-design language to describe the
+tested behavior.
+
 The code within this package has a long history. It origins in an implementation
 as macros within an Excel spreadsheet using Visual Basic for Applications as
 programming language. During the course of the development, the macros have been

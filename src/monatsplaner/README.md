@@ -13,11 +13,15 @@ _Elternteil_.
 ## Technical Details
 
 The implementation orientate itself on a Domain-Driven-Design approach in
-a functional style. In the context of the latter, and without any integration
-for domain services or external layers, all data models are immutable. In
-result, the domain consists solely of object values without any entities. This
-functional style plays nicely with the functional reactive programming of the
-currently only application using it.
+a functional style. This functional style plays nicely with the functional
+reactive programming of the currently only application using it.
+Without any integration for domain services or external layers, all data models
+are immutable. In result, the domain consists solely of object values without
+any entities. Anyhow, the _Plan_ acts as aggregation root. It gets created from
+and is tightly coupled to an _Ausgangslage_. The _Plan_ than spans across the
+_Lebensmonate_ where each _Elternteil_ makes their choice per _Monat_. This main
+structure gets supplemented with many additional object values, representing
+important aspects of the domain.
 
 As the real-world domain is a German one, the implementation makes heavy use of
 the German language. Low level or pure technical parts are using English. The

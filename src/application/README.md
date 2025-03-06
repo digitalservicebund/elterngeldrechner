@@ -8,6 +8,9 @@ calculate exact payout amounts. It also has an interactive application part that
 helps to plan the _Elternzeit_ and help to understand the possible options based
 on the individual situation.
 
+The user interface is only available in German language yet. There is no
+internationalization in place. This has no technical reasons.
+
 ## Technical Details
 
 The implementation is based on ReactJS. The application is sliced into its

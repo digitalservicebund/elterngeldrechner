@@ -14,7 +14,7 @@ import {
 } from "@/application/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen, within } from "@/test-utils/test-utils";
+import { render, screen, within } from "@/application/test-utils";
 
 describe("Einkommens Page only with block Selbständige And Erwerbstätige", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

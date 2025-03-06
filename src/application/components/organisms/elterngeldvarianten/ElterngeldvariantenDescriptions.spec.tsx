@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import { ElterngeldvariantenDescriptions } from "./ElterngeldvariantenDescriptions";
-import { render } from "@/test-utils/test-utils";
+import { render } from "@/application/test-utils";
 
 /*
  * Notice that the current implicit ARIA roles and attributes for the

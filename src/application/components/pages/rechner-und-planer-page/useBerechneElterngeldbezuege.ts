@@ -182,7 +182,7 @@ if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
   describe("errechnete Elterngeldbezüge selector", async () => {
-    const { renderHook } = await import("@/test-utils/test-utils");
+    const { renderHook } = await import("@/application/test-utils");
     const { ErwerbsArt, KassenArt, SteuerKlasse, RentenArt, KinderFreiBetrag } =
       await import("@/elterngeldrechner/model");
     const { KeinElterngeld } = await import("@/monatsplaner");

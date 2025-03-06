@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ElterngeldvariantenPage } from "./ElterngeldvariantenPage";
-import { render } from "@/test-utils/test-utils";
+import { render } from "@/application/test-utils";
 
 describe("ElterngeldvariantenPage", () => {
   it("shows a section that explains the different parental allowance variants", () => {

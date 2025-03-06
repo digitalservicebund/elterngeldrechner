@@ -7,7 +7,7 @@ import {
   StepNachwuchsState,
   initialStepNachwuchsState,
 } from "@/application/redux/stepNachwuchsSlice";
-import { act, render, screen } from "@/test-utils/test-utils";
+import { act, render, screen } from "@/application/test-utils";
 
 const currentYear = new Date().getFullYear();
 

@@ -27,7 +27,6 @@ yarn-error.log*
 .vscode
 .history
 .idea/
-/src/test-utils/resources/~$*.xlsx
 
 /tmp_preview
 /public

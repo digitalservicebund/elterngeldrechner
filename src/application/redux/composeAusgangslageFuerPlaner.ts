@@ -110,7 +110,7 @@ if (import.meta.vitest) {
 
   describe("Ausgangslage selector", async () => {
     const { produce } = await import("immer");
-    const { INITIAL_STATE } = await import("@/test-utils/test-utils");
+    const { INITIAL_STATE } = await import("@/application/test-utils");
 
     describe("anzahl der Elternteile", () => {
       it("creates Ausgangslage for one Elternteil if Antragstellende is answered with Einen Elternteil", () => {

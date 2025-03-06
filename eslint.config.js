@@ -73,7 +73,12 @@ const customRulesConfig = [
   },
   {
     files: ["src/**/*.{ts,tsx}"],
-    ignores: ["src/test-utils/*", "**/*.spec.{ts,tsx}"],
+    ignores: [
+      "**/*.spec.{ts,tsx}",
+      "**/setupTests.ts",
+      "src/application/test-utils.tsx",
+      "src/elterngeldrechner/test-utils/**/*",
+    ],
     plugins: {
       customRules: customRulesPlugin,
     },

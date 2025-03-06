@@ -14,8 +14,8 @@ import {
 } from "@/application/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
+import { render, screen, within } from "@/application/test-utils";
 import { RentenArt } from "@/elterngeldrechner/model";
-import { render, screen, within } from "@/test-utils/test-utils";
 
 const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
   ...initialStepErwerbstaetigkeitState.ET1,

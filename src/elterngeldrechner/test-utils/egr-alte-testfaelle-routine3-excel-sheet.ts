@@ -1,5 +1,10 @@
 import xlsx from "node-xlsx";
 import {
+  dateFromExcelSerial,
+  elterngeldArtOf,
+  erwerbsArtOf,
+} from "./fit-excel-sheet-util";
+import {
   Einkommen,
   ElternGeldArt,
   type ErwerbsZeitraumLebensMonat,
@@ -10,11 +15,6 @@ import {
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
 } from "@/elterngeldrechner/model";
-import {
-  dateFromExcelSerial,
-  elterngeldArtOf,
-  erwerbsArtOf,
-} from "@/test-utils/fit-excel-sheet-util";
 
 export class EgrAlteTestfaelleRoutine3ExcelSheet {
   static readonly TEST_CASE_COUNT = 60;

@@ -9,7 +9,7 @@ import {
   initialStepErwerbstaetigkeitState,
 } from "@/application/redux/stepErwerbstaetigkeitSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen } from "@/test-utils/test-utils";
+import { render, screen } from "@/application/test-utils";
 
 describe("Erwerbstaetigkeit Page", () => {
   it("should show the pseudonym for Elternteil 1 and 2", () => {

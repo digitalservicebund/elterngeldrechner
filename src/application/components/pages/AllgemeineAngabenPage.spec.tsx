@@ -8,7 +8,7 @@ import {
   initialStepAllgemeineAngabenState,
 } from "@/application/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen } from "@/test-utils/test-utils";
+import { render, screen } from "@/application/test-utils";
 
 describe("Allgemeine Angaben Page", () => {
   it("should display the Alleinerziehendenstatus part of the form right away", () => {

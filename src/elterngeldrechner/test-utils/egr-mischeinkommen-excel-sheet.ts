@@ -1,10 +1,10 @@
 import xlsx from "node-xlsx";
+import { erwerbsArtOf } from "./fit-excel-sheet-util";
 import {
   ErwerbsTaetigkeit,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
 } from "@/elterngeldrechner/model";
-import { erwerbsArtOf } from "@/test-utils/fit-excel-sheet-util";
 
 type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];

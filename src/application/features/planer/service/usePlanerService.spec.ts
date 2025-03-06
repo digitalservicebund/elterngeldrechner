@@ -5,6 +5,7 @@ import {
   type InitialInformation,
   usePlanerService,
 } from "./usePlanerService";
+import { INITIAL_STATE, act, renderHook } from "@/application/test-utils";
 import {
   type BerechneElterngeldbezuegeCallback,
   Elternteil,
@@ -19,7 +20,6 @@ import {
   validierePlanFuerFinaleAbgabe,
   waehleOption,
 } from "@/monatsplaner";
-import { INITIAL_STATE, act, renderHook } from "@/test-utils/test-utils";
 
 vi.mock(import("@/monatsplaner/plan/operation/waehleOption"));
 vi.mock(import("@/monatsplaner/plan/operation/setzePlanZurueck"));

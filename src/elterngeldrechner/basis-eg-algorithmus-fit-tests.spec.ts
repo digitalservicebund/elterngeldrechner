@@ -9,11 +9,11 @@ import {
   PersoenlicheDaten,
   RentenArt,
 } from "./model";
-import { GRENZE_MINI_MIDI } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,
-} from "@/test-utils/egr-mischeinkommen-excel-sheet";
+} from "./test-utils/egr-mischeinkommen-excel-sheet";
+import { GRENZE_MINI_MIDI } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 describe("basis-eg-algorithmus", () => {
   const sheet = new EgrMischeinkommenExcelSheet();

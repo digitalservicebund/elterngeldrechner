@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import ZusammenfassungUndDatenPage from "./ZusammenfassungUndDatenPage";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
-import { render, screen } from "@/test-utils/test-utils";
+import { render, screen } from "@/application/test-utils";
 
 vi.mock(import("@/application/components/pages/useNavigateWithPlan"));
 

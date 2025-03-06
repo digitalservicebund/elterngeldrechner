@@ -15,13 +15,13 @@ import {
 } from "@/application/redux/stepErwerbstaetigkeitSlice";
 import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
+import { render, screen, within } from "@/application/test-utils";
 import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
 } from "@/elterngeldrechner/model";
-import { render, screen, within } from "@/test-utils/test-utils";
 
 vi.mock(import("@/elterngeldrechner/basis-eg-algorithmus"));
 

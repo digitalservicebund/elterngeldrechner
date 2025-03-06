@@ -1,10 +1,4 @@
 import {
-  type Eingangsparameter,
-  type Lohnsteuerjahr,
-  UnterstuetzteLohnsteuerjahre,
-  berechneSteuerUndSozialabgaben,
-} from "@/elterngeldrechner/brutto-netto-rechner/steuer-und-sozialabgaben";
-import {
   ErwerbsArt,
   FinanzDaten,
   KinderFreiBetrag,
@@ -13,6 +7,12 @@ import {
   steuerklasseToNumber,
 } from "@/elterngeldrechner/model";
 import { bestimmeWerbekostenpauschale } from "@/elterngeldrechner/werbekostenpauschale";
+import {
+  type Eingangsparameter,
+  type Lohnsteuerjahr,
+  UnterstuetzteLohnsteuerjahre,
+  berechneLohnsteuer,
+} from "@/lohnsteuerrechner";
 
 export function abgabenSteuern(
   finanzDaten: FinanzDaten,
@@ -55,7 +55,7 @@ export function abgabenSteuern(
     geburtsdatumDesKindes,
   );
 
-  const { BK, LSTLZZ, SOLZLZZ } = berechneSteuerUndSozialabgaben(
+  const { BK, LSTLZZ, SOLZLZZ } = berechneLohnsteuer(
     lohnsteuerjahr,
     eingangsparameter,
   );
@@ -89,11 +89,11 @@ if (import.meta.vitest) {
     );
 
     const steuerUndSozialabgabenModule = await import(
-      "@/elterngeldrechner/brutto-netto-rechner/steuer-und-sozialabgaben"
+      "@/lohnsteuerrechner/berechneLohnsteuer"
     );
 
     beforeEach(() => {
-      vi.spyOn(steuerUndSozialabgabenModule, "berechneSteuerUndSozialabgaben");
+      vi.spyOn(steuerUndSozialabgabenModule, "berechneLohnsteuer");
     });
 
     describe.each([
@@ -133,7 +133,7 @@ if (import.meta.vitest) {
         );
 
         // then
-        expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
+        expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
           expect.anything(),
           expect.objectContaining({ AF: 1, F: 1 }),
         );
@@ -153,7 +153,7 @@ if (import.meta.vitest) {
         );
 
         // then
-        expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
+        expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
           expect.anything(),
           expect.objectContaining({ AF: 0, F: 0 }),
         );
@@ -175,7 +175,7 @@ if (import.meta.vitest) {
         );
 
         // then
-        expect(berechneSteuerUndSozialabgaben).toHaveBeenLastCalledWith(
+        expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
           expect.anything(),
           expect.objectContaining({ ZKF: 1 }),
         );

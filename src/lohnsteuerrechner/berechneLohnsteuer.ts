@@ -1,3 +1,4 @@
+import { type Lohnsteuerjahr } from "./Lohnsteuerjahr";
 import {
   type Ausgangsparameter,
   type Eingangsparameter,
@@ -8,9 +9,7 @@ import {
   type Programmablaufplan,
 } from "./programmablaufplan";
 
-export { type Eingangsparameter };
-
-export function berechneSteuerUndSozialabgaben(
+export function berechneLohnsteuer(
   lohnsteuerjahr: Lohnsteuerjahr,
   eingangsparameter: Eingangsparameter,
 ): Ausgangsparameter {
@@ -27,6 +26,3 @@ const ABLAUFPLAENE = {
   Lohnsteuerjahr,
   { new (eingangsparameter: Eingangsparameter): Programmablaufplan }
 >;
-
-export const UnterstuetzteLohnsteuerjahre = [2021, 2022, 2023, 2024] as const;
-export type Lohnsteuerjahr = (typeof UnterstuetzteLohnsteuerjahre)[number];

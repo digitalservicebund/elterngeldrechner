@@ -1,8 +1,8 @@
 import { utc } from "@date-fns/utc";
 import { addDays, addMonths, subDays } from "date-fns";
 
-import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
-import type { Zeitraum } from "@/monatsplaner/zeitraum/Zeitraum";
+import type { Lebensmonatszahl } from "./Lebensmonatszahl";
+import type { Zeitraum } from "./Zeitraum";
 
 export function berechneZeitraumFuerLebensmonat(
   geburtsdatumDesKindes: Date,

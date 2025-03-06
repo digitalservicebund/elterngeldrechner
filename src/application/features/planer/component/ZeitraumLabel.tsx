@@ -1,5 +1,5 @@
 import { ReactHTML, type ReactNode, createElement } from "react";
-import type { Zeitraum } from "@/monatsplaner";
+import type { Zeitraum } from "@/lebensmonatrechner";
 
 type Props = {
   readonly zeitraum: Zeitraum;

@@ -1,3 +1,4 @@
+import { berechneZeitraumFuerLebensmonat } from "@/lebensmonatrechner";
 import {
   type Ausgangslage,
   type ElternteileByAusgangslage,
@@ -5,7 +6,6 @@ import {
   type Lebensmonatszahl,
   type Monat,
   Variante,
-  berechneZeitraumFuerLebensmonat,
   listeElternteileFuerAusgangslageAuf,
 } from "@/monatsplaner";
 
@@ -379,11 +379,7 @@ if (import.meta.vitest) {
     });
 
     describe("beschreibe Zeitraum des Lebensmonats", () => {
-      vi.mock(
-        import(
-          "@/monatsplaner/zeitraum/operation/berechneZeitraumFuerLebensmonat"
-        ),
-      );
+      vi.mock(import("@/lebensmonatrechner/berechneZeitraumFuerLebensmonat"));
 
       beforeEach(() => {
         vi.mocked(berechneZeitraumFuerLebensmonat).mockReturnValue({

@@ -9,10 +9,8 @@ import {
   useGridColumn,
   useGridLayout,
 } from "@/application/features/planer/layout/grid-layout";
-import {
-  AlleElternteileHabenBonusGewaehlt,
-  berechneZeitraumFuerLebensmonat,
-} from "@/monatsplaner";
+import { berechneZeitraumFuerLebensmonat } from "@/lebensmonatrechner";
+import { AlleElternteileHabenBonusGewaehlt } from "@/monatsplaner";
 
 export function LebensmonatContent(): ReactNode {
   const gridLayout = useGridLayout();

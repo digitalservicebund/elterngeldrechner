@@ -59,4 +59,3 @@ export {
   listeKontingentAuf,
 } from "./verfuegbares-kontingent";
 export { type VerplantesKontingent } from "./verplantes-kontingent";
-export { type Zeitraum, berechneZeitraumFuerLebensmonat } from "./zeitraum";

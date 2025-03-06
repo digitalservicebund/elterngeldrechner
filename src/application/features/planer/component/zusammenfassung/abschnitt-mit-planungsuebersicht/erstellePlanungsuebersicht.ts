@@ -1,4 +1,8 @@
 import {
+  type Zeitraum,
+  berechneZeitraumFuerLebensmonat,
+} from "@/lebensmonatrechner";
+import {
   type Ausgangslage,
   type Auswahloption,
   type Elternteil,
@@ -8,8 +12,6 @@ import {
   type Monat,
   type Plan,
   Variante,
-  type Zeitraum,
-  berechneZeitraumFuerLebensmonat,
   isLebensmonatszahl,
   isVariante,
   mapLebensmonateProElternteil,
@@ -301,7 +303,7 @@ if (import.meta.vitest) {
        * for this topic.
        */
       // vi.mock(
-      //   "@/monatsplaner/zeitraum/operation/berechneZeitraumFuerLebensmonat",
+      //   "@/lebensmonatrechner/berechneZeitraumFuerLebensmonat",
       // );
 
       beforeEach(() => {

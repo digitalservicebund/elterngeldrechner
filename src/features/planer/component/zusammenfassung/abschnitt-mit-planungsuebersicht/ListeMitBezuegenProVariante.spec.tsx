@@ -1,0 +1,87 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
+import { Variante } from "@/monatsplaner";
+
+describe("Liste mit Bezügen pro Variante", () => {
+  it("shows a list", () => {
+    render(
+      <ListeMitBezuegenProVariante
+        {...ANY_PROPS}
+        pseudonymDesElternteils={undefined}
+      />,
+    );
+
+    expect(
+      screen.getByRole("list", {
+        name: "Bezüge pro Elterngeldvariante",
+      }),
+    ).toBeVisible();
+  });
+
+  it("shows a list using the Pseudonym", () => {
+    render(
+      <ListeMitBezuegenProVariante
+        {...ANY_PROPS}
+        pseudonymDesElternteils="Jane"
+      />,
+    );
+
+    expect(
+      screen.getByRole("list", {
+        name: "Bezüge pro Elterngeldvariante von Jane",
+      }),
+    ).toBeVisible();
+  });
+
+  it("shows a list entry for each Variante", () => {
+    render(<ListeMitBezuegenProVariante {...ANY_PROPS} />);
+
+    expect(screen.queryAllByRole("listitem").length).toBe(3);
+  });
+
+  it("shows the Anzahl an Monaten and the Elterngeldbezug per Variante", () => {
+    const bezuegeProVariante = {
+      [Variante.Basis]: {
+        anzahlMonate: 1,
+        elterngeld: 2,
+        bruttoeinkommen: 0,
+      },
+      [Variante.Plus]: {
+        anzahlMonate: 3,
+        elterngeld: 4,
+        bruttoeinkommen: 0,
+      },
+      [Variante.Bonus]: {
+        anzahlMonate: 5,
+        elterngeld: 6,
+        bruttoeinkommen: 0,
+      },
+    };
+
+    render(
+      <ListeMitBezuegenProVariante
+        {...ANY_PROPS}
+        bezuegeProVariante={bezuegeProVariante}
+      />,
+    );
+
+    expect(screen.queryByText("Basiselterngeld | 1 Monate")).toBeVisible();
+    expect(screen.getByText("2 €")).toBeVisible();
+
+    expect(screen.queryByText("ElterngeldPlus | 3 Monate")).toBeVisible();
+    expect(screen.getByText("4 €")).toBeVisible();
+
+    expect(screen.queryByText("Partnerschaftsbonus | 5 Monate")).toBeVisible();
+    expect(screen.getByText("6 €")).toBeVisible();
+  });
+});
+
+const ANY_PROPS = {
+  bezuegeProVariante: {
+    [Variante.Basis]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
+    [Variante.Plus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
+    [Variante.Bonus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
+  },
+  pseudonymDesElternteils: undefined,
+};

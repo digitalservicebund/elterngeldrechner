@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { setTrackingVariable } from "./data-layer";
-import { KeinElterngeld, Variante } from "@/features/planer/domain";
+import { KeinElterngeld, Variante } from "@/monatsplaner";
 
 import {
   trackPlannedMonths,
@@ -10,7 +10,7 @@ import {
 vi.mock(import("./data-layer"));
 
 describe("tracking of the planung", async () => {
-  const { Elternteil } = await import("@/features/planer/domain/Elternteil");
+  const { Elternteil } = await import("@/monatsplaner/Elternteil");
 
   it("counts planned month per lebensmonate and elternteil", () => {
     const plan = {

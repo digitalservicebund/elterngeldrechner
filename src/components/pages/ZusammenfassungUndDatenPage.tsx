@@ -3,7 +3,7 @@ import { formSteps } from "./formSteps";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { ButtonGroup, PrintButton } from "@/components/molecules";
 import { Page } from "@/components/organisms";
-import { Zusammenfassung } from "@/features/planer/user-interface";
+import { Zusammenfassung } from "@/features/planer";
 
 function ZusammenfassungUndDatenPage(): ReactNode {
   const { plan, navigateWithPlanState } = useNavigateWithPlan();

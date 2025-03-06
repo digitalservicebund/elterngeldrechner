@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { type To, useLocation, useNavigate } from "react-router-dom";
-import type { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
+import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function useNavigateWithPlan() {
   const location = useLocation();

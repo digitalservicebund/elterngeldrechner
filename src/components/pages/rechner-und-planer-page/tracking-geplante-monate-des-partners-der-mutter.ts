@@ -6,7 +6,7 @@ import {
   type Lebensmonate,
   type Plan,
   isVariante,
-} from "@/features/planer/domain";
+} from "@/monatsplaner";
 import { trackAnzahlGeplanterMonateDesPartnersDerMutter } from "@/user-tracking";
 
 export function evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter<
@@ -57,9 +57,7 @@ if (import.meta.vitest) {
   const { vi, describe, it, expect } = import.meta.vitest;
 
   describe("tracking geplante Monate des Partners der Mutter for Rechner-Planer page", async () => {
-    const { Variante, KeinElterngeld } = await import(
-      "@/features/planer/domain"
-    );
+    const { Variante, KeinElterngeld } = await import("@/monatsplaner");
 
     vi.mock(
       import("@/user-tracking/anzahl-geplanter-monate-des-partners-der-mutter"),

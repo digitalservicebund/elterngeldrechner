@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { StepRoute } from "@/components/pages/formSteps";
 import { useNavigateWithPlan } from "@/components/pages/useNavigateWithPlan";
-import { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
+import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 import { RootState } from "@/redux";
 import { useAppStore } from "@/redux/hooks";
 

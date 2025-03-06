@@ -1,15 +1,4 @@
 import { useCallback, useRef } from "react";
-import {
-  type Auswahloption,
-  type BerechneElterngeldbezuegeCallback,
-  type ElterngeldbezuegeFuerElternteil,
-  Elternteil,
-  KeinElterngeld,
-  Lebensmonatszahlen,
-  type Monat,
-  Variante,
-  isVariante,
-} from "@/features/planer/domain";
 import { calculateElternGeld } from "@/globals/js/calculations/egr-calculation";
 import {
   Einkommen,
@@ -22,6 +11,17 @@ import {
   type PersoenlicheDaten,
   type PlanungsDaten,
 } from "@/globals/js/calculations/model";
+import {
+  type Auswahloption,
+  type BerechneElterngeldbezuegeCallback,
+  type ElterngeldbezuegeFuerElternteil,
+  Elternteil,
+  KeinElterngeld,
+  Lebensmonatszahlen,
+  type Monat,
+  Variante,
+  isVariante,
+} from "@/monatsplaner";
 import type { RootState } from "@/redux";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { finanzDatenOfUi } from "@/redux/finanzDatenFactory";
@@ -185,7 +185,7 @@ if (import.meta.vitest) {
     const { renderHook } = await import("@/test-utils/test-utils");
     const { ErwerbsArt, KassenArt, SteuerKlasse, RentenArt, KinderFreiBetrag } =
       await import("@/globals/js/calculations/model");
-    const { KeinElterngeld } = await import("@/features/planer/domain");
+    const { KeinElterngeld } = await import("@/monatsplaner");
 
     vi.mock(import("@/redux/persoenlicheDatenFactory"));
     vi.mock(import("@/redux/finanzDatenFactory"));

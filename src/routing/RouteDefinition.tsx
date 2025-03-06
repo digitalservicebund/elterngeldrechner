@@ -7,7 +7,7 @@ import NachwuchsPage from "@/components/pages/NachwuchsPage";
 import ZusammenfassungUndDatenPage from "@/components/pages/ZusammenfassungUndDatenPage";
 import { formSteps } from "@/components/pages/formSteps";
 import { RechnerPlanerPage } from "@/components/pages/rechner-und-planer-page";
-import { PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
+import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 import { RootState } from "@/redux";
 import RouteGuard from "@/routing/RouteGuard";
 import {

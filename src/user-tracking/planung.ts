@@ -1,4 +1,4 @@
-import { Monat, PlanMitBeliebigenElternteilen } from "@/features/planer/domain";
+import { Monat, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 import {
   getTrackingVariable,

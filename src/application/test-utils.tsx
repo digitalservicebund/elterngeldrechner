@@ -16,9 +16,9 @@ import {
   RouterProvider,
   createMemoryRouter,
 } from "react-router-dom";
+import { feedbackSlice } from "@/application/features/user-feedback";
 import { AppStore, RootState, reducers } from "@/application/redux";
 import { initialStepConfigurationState } from "@/application/redux/configurationSlice";
-import { initialFeedbackState } from "@/application/redux/feedbackSlice";
 import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
 import { initialStepEinkommenState } from "@/application/redux/stepEinkommenSlice";
 import { initialStepErwerbstaetigkeitState } from "@/application/redux/stepErwerbstaetigkeitSlice";
@@ -93,5 +93,5 @@ export const INITIAL_STATE: RootState = {
   stepErwerbstaetigkeit: initialStepErwerbstaetigkeitState,
   stepEinkommen: initialStepEinkommenState,
   configuration: initialStepConfigurationState,
-  feedback: initialFeedbackState,
+  feedback: feedbackSlice.getInitialState(),
 };

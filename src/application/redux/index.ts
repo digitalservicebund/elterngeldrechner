@@ -1,11 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import configurationReducer from "./configurationSlice";
-import feedbackReducer from "./feedbackSlice";
 import { preloadedState } from "./preloadedState";
 import stepAllgemeineAngabenReducer from "./stepAllgemeineAngabenSlice";
 import stepEinkommenReducer from "./stepEinkommenSlice";
 import stepErwerbstaetigkeitReducer from "./stepErwerbstaetigkeitSlice";
 import stepNachwuchsReducer from "./stepNachwuchsSlice";
+import { feedbackSlice } from "@/application/features/user-feedback";
 
 export const reducers = combineReducers({
   stepAllgemeineAngaben: stepAllgemeineAngabenReducer,
@@ -13,7 +13,7 @@ export const reducers = combineReducers({
   stepErwerbstaetigkeit: stepErwerbstaetigkeitReducer,
   stepEinkommen: stepEinkommenReducer,
   configuration: configurationReducer,
-  feedback: feedbackReducer,
+  feedback: feedbackSlice.reducer,
 });
 
 const store = configureStore({

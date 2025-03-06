@@ -4,20 +4,16 @@ import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tra
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/application/components/atoms";
 import { ButtonGroup } from "@/application/components/molecules";
-import { FeedbackForm, Page } from "@/application/components/organisms";
+import { Page } from "@/application/components/organisms";
 import { formSteps } from "@/application/components/pages/formSteps";
 import { useNavigateWithPlan } from "@/application/components/pages/useNavigateWithPlan";
 import { Planer } from "@/application/features/planer";
+import {
+  UserFeedbackForm,
+  useUserFeedback,
+} from "@/application/features/user-feedback";
 import { composeAusgangslageFuerPlaner } from "@/application/redux/composeAusgangslageFuerPlaner";
-import {
-  feedbackActions,
-  feedbackSelectors,
-} from "@/application/redux/feedbackSlice";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useAppStore,
-} from "@/application/redux/hooks";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/application/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/application/redux/yes-no";
 import {
@@ -79,8 +75,7 @@ export function RechnerPlanerPage() {
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
 
-  const dispatch = useAppDispatch();
-  const submitted = useAppSelector(feedbackSelectors.selectSubmitted);
+  const { isFeebackSubmitted, submitFeedback } = useUserFeedback();
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
   const rememberSubmit = useRef(false);
 
@@ -114,18 +109,13 @@ export function RechnerPlanerPage() {
   const navigate = useNavigate();
 
   const navigateToPreviousStep = () => {
-    if (rememberSubmit.current) {
-      dispatch(feedbackActions.submit());
-    }
-
+    if (rememberSubmit.current) submitFeedback();
     navigate(formSteps.elterngeldvarianten.route);
   };
 
   function navigateToUebersicht(): void {
     if (istPlanGueltig) {
-      if (rememberSubmit.current) {
-        dispatch(feedbackActions.submit());
-      }
+      if (rememberSubmit.current) submitFeedback();
 
       navigateWithPlanState(
         formSteps.zusammenfassungUndDaten.route,
@@ -134,7 +124,7 @@ export function RechnerPlanerPage() {
     }
   }
 
-  const showFeedbackForm = hasChanges && !submitted && trackingConsent;
+  const showFeedbackForm = hasChanges && !isFeebackSubmitted && trackingConsent;
 
   useEffect(resetTrackingPlanung, []);
 
@@ -158,7 +148,7 @@ export function RechnerPlanerPage() {
         />
 
         {!!showFeedbackForm && (
-          <FeedbackForm
+          <UserFeedbackForm
             className="basis-full"
             ease={getTrackedEase()}
             obstacle={getTrackedObstacle()}

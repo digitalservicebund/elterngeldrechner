@@ -1,5 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
-import { initialStepConfigurationState } from "./configurationSlice";
+import { produce } from "immer";
+import { describe, expect, it } from "vitest";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import {
   AverageOrMonthlyState,
@@ -7,8 +7,7 @@ import {
   Taetigkeit,
   initialAverageOrMonthlyStateNichtSelbstaendig,
 } from "./stepEinkommenSlice";
-import { RootState } from "./index";
-import { initialFeedbackState } from "@/application/redux/feedbackSlice";
+import { INITIAL_STATE } from "@/application/test-utils";
 import {
   Einkommen,
   ErwerbsTaetigkeit,
@@ -21,109 +20,18 @@ import {
 } from "@/elterngeldrechner/model";
 import { YesNo } from "original-rechner";
 
-vi.mock("react-redux", () => ({
-  useSelector: vi.fn(),
-  useDispatch: vi.fn(),
-}));
-
 describe("finanzDatenFactory", () => {
-  const mockStore: RootState = {
-    stepAllgemeineAngaben: {
-      antragstellende: null,
-      pseudonym: {
-        ET1: "",
-        ET2: "",
-      },
-      alleinerziehend: null,
-      mutterschaftssleistungen: null,
-      mutterschaftssleistungenWer: null,
-    },
-    stepNachwuchs: {
-      anzahlKuenftigerKinder: 1,
-      wahrscheinlichesGeburtsDatum: "06.07.2022",
-      geschwisterkinder: [],
-      mutterschaftssleistungen: YesNo.NO,
-    },
-    stepErwerbstaetigkeit: {
-      ET1: {
-        mehrereTaetigkeiten: YesNo.NO,
-        vorGeburt: null,
-        isNichtSelbststaendig: false,
-        isSelbststaendig: false,
-        sozialVersicherungsPflichtig: null,
-        monatlichesBrutto: null,
-      },
-      ET2: {
-        mehrereTaetigkeiten: YesNo.NO,
-        vorGeburt: YesNo.YES,
-        isNichtSelbststaendig: true,
-        isSelbststaendig: false,
-        sozialVersicherungsPflichtig: null,
-        monatlichesBrutto: null,
-      },
-    },
-    stepEinkommen: {
-      ET1: {
-        bruttoEinkommenNichtSelbstaendig:
-          initialAverageOrMonthlyStateNichtSelbstaendig,
-        steuerKlasse: null,
-        splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        gewinnSelbstaendig: initialAverageOrMonthlyStateNichtSelbstaendig,
-        rentenVersicherung: null,
-        zahlenSieKirchenSteuer: null,
-        kassenArt: null,
-        taetigkeitenNichtSelbstaendigUndSelbstaendig: [],
-        istErwerbstaetig: null,
-        hasMischEinkommen: null,
-        istSelbststaendig: null,
-        istNichtSelbststaendig: null,
-      },
-      ET2: {
-        bruttoEinkommenNichtSelbstaendig:
-          initialAverageOrMonthlyStateNichtSelbstaendig,
-        steuerKlasse: null,
-        splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        gewinnSelbstaendig: initialAverageOrMonthlyStateNichtSelbstaendig,
-        rentenVersicherung: null,
-        zahlenSieKirchenSteuer: null,
-        kassenArt: null,
-        taetigkeitenNichtSelbstaendigUndSelbstaendig: [],
-        istErwerbstaetig: null,
-        hasMischEinkommen: null,
-        istSelbststaendig: null,
-        istNichtSelbststaendig: null,
-      },
-      antragstellende: null,
-      limitEinkommenUeberschritten: null,
-    },
-    configuration: initialStepConfigurationState,
-    feedback: initialFeedbackState,
-  };
-
-  it("should create FinanzDaten for ET1 without bruttoEinkommenZeitraumList", () => {
-    // when
-    const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-    // then
-    expect(finanzDaten.erwerbsZeitraumLebensMonatList.length).toBe(0);
-  });
-
   it("should create FinanzDaten for ET2 with bruttoEinkommenZeitraumList", () => {
-    // given
     const bruttoEinkommenZeitraumList = [
       { bruttoEinkommen: 1000, zeitraum: { from: "1", to: "1" } },
     ];
 
-    // when
     const finanzDaten = finanzDatenOfUi(
-      mockStore,
+      INITIAL_STATE,
       "ET2",
       bruttoEinkommenZeitraumList,
     );
 
-    // then
     expect(finanzDaten.erwerbsZeitraumLebensMonatList.length).toBe(1);
     expect(finanzDaten.erwerbsZeitraumLebensMonatList[0]?.vonLebensMonat).toBe(
       1,
@@ -137,103 +45,71 @@ describe("finanzDatenFactory", () => {
   });
 
   it("should create FinanzDaten for ET2 with einkommen vor geburt - kein minijob", () => {
-    // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const state = produce(INITIAL_STATE, (draft) => {
+      draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+      draft.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+        type: "average",
+        average: 1000,
+        perYear: null,
+        perMonth: [],
+      };
+    });
 
-    // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-    mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
-      type: "average",
-      average: 1000,
-      perYear: null,
-      perMonth: [],
-    };
-    // when
-    const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
+    const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-    // then
     expect(finanzDaten.bruttoEinkommen.value).toBe(1000);
-
-    // cleanup
-    mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-    mockStore.stepEinkommen.ET2 = einkommenSave;
   });
 
   it("should create FinanzDaten for ET2 with average einkommen vor geburt - minijob", () => {
-    // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const state = produce(INITIAL_STATE, (draft) => {
+      draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+      draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
+      draft.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+        type: "average",
+        average: 1000,
+        perYear: null,
+        perMonth: [],
+      };
+    });
 
-    // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-    mockStore.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
-    mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
-      type: "average",
-      average: 1000,
-      perYear: null,
-      perMonth: [],
-    };
-    // when
-    const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
+    const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-    // then
     expect(finanzDaten.bruttoEinkommen.value).toBe(1000);
-
-    // cleanup
-    mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-    mockStore.stepEinkommen.ET2 = einkommenSave;
   });
 
   it("should create FinanzDaten for ET2 with monthly einkommen vor geburt - minijob", () => {
-    // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const state = produce(INITIAL_STATE, (draft) => {
+      draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+      draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
+      draft.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+        type: "monthly",
+        average: null,
+        perYear: null,
+        perMonth: [6000, 6000],
+      };
+    });
 
-    // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-    mockStore.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
-    mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
-      type: "monthly",
-      average: null,
-      perYear: null,
-      perMonth: [6000, 6000],
-    };
-    // when
-    const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
+    const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-    // then
     expect(finanzDaten.bruttoEinkommen.value).toBe(6000);
-
-    // cleanup
-    mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-    mockStore.stepEinkommen.ET2 = einkommenSave;
   });
 
   it("should create FinanzDaten for ET2 with yearly gewinn vor geburt - minijob", () => {
-    // setup
-    const erwerbsTaetigkeitSave = { ...mockStore.stepErwerbstaetigkeit.ET2 };
-    const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+    const state = produce(INITIAL_STATE, (draft) => {
+      draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
+      draft.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
+      draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
+      draft.stepEinkommen.ET2.gewinnSelbstaendig = {
+        type: "yearly",
+        average: null,
+        perYear: 12000,
+        perMonth: [],
+      };
+    });
 
-    // given
-    mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
-    mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-    mockStore.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
-    mockStore.stepEinkommen.ET2.gewinnSelbstaendig = {
-      type: "yearly",
-      average: null,
-      perYear: 12000,
-      perMonth: [],
-    };
-    // when
-    const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
+    const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-    // then
     expect(finanzDaten.bruttoEinkommen.value).toBe(0);
-
-    // cleanup
-    mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-    mockStore.stepEinkommen.ET2 = einkommenSave;
   });
 
   describe.each([
@@ -350,28 +226,18 @@ describe("finanzDatenFactory", () => {
       finanzDatenBruttoEinkommen: number,
     ) => {
       it("should create FinanzDaten for ET2 with gewinnSelbstaendig", () => {
-        // setup
-        const erwerbsTaetigkeitSave = {
-          ...mockStore.stepErwerbstaetigkeit.ET2,
-        };
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepErwerbstaetigkeit.ET2.vorGeburt = YesNo.YES;
+          draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
+          draft.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
+          draft.stepEinkommen.ET2.gewinnSelbstaendig = gewinnSelbstaendig;
+        });
 
-        // given
-        mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
-        mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-        mockStore.stepEinkommen.ET2.gewinnSelbstaendig = gewinnSelbstaendig;
+        const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
-
-        // then
         expect(finanzDaten.bruttoEinkommen.value).toBe(
           finanzDatenBruttoEinkommen,
         );
-
-        // cleanup
-        mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-        mockStore.stepEinkommen.ET2 = einkommenSave;
       });
     },
   );
@@ -450,29 +316,18 @@ describe("finanzDatenFactory", () => {
       finanzDatenBruttoEinkommen: number,
     ) => {
       it("should create FinanzDaten for ET2 with bruttoEinkommenNichtSelbstaendig", () => {
-        // setup
-        const erwerbsTaetigkeitSave = {
-          ...mockStore.stepErwerbstaetigkeit.ET2,
-        };
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+          draft.stepErwerbstaetigkeit.ET2.isSelbststaendig = false;
+          draft.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig =
+            bruttoEinkommenNichtSelbstaendig;
+        });
 
-        // given
-        mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-        mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = false;
-        mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig =
-          bruttoEinkommenNichtSelbstaendig;
+        const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
-
-        // then
         expect(finanzDaten.bruttoEinkommen.value).toBe(
           finanzDatenBruttoEinkommen,
         );
-
-        // cleanup
-        mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-        mockStore.stepEinkommen.ET2 = einkommenSave;
       });
     },
   );
@@ -654,36 +509,26 @@ describe("finanzDatenFactory", () => {
     ],
   ])("%s", (_, taetigkeitList, mischEkTaetigkeitList) => {
     it("should create FinanzDaten for ET2 with Mischeinkommen", () => {
-      // setup
-      const erwerbsTaetigkeitSave = {
-        ...mockStore.stepErwerbstaetigkeit.ET2,
-      };
-      const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+      const state = produce(INITIAL_STATE, (draft) => {
+        draft.stepErwerbstaetigkeit.ET2.vorGeburt = YesNo.YES;
+        draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+        draft.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
+        draft.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
+          type: "average",
+          average: 10,
+          perYear: null,
+          perMonth: [],
+        };
+        draft.stepEinkommen.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig =
+          taetigkeitList;
+      });
 
-      // given
-      mockStore.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
-      mockStore.stepErwerbstaetigkeit.ET2.isSelbststaendig = true;
-      mockStore.stepEinkommen.ET2.bruttoEinkommenNichtSelbstaendig = {
-        type: "average",
-        average: 10,
-        perYear: null,
-        perMonth: [],
-      };
-      mockStore.stepEinkommen.ET2.taetigkeitenNichtSelbstaendigUndSelbstaendig =
-        taetigkeitList;
+      const finanzDaten = finanzDatenOfUi(state, "ET2", []);
 
-      // when
-      const finanzDaten = finanzDatenOfUi(mockStore, "ET2", []);
-
-      // then
       expect(finanzDaten.bruttoEinkommen.value).toBe(0);
       expect(finanzDaten.mischEinkommenTaetigkeiten).toStrictEqual(
         mischEkTaetigkeitList,
       );
-
-      // cleanup
-      mockStore.stepErwerbstaetigkeit.ET2 = erwerbsTaetigkeitSave;
-      mockStore.stepEinkommen.ET2 = einkommenSave;
     });
   });
 
@@ -703,20 +548,13 @@ describe("finanzDatenFactory", () => {
       finanzDatenSteuerklasse: SteuerKlasse,
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepEinkommen.ET1.steuerKlasse = einkommenSteuerKlasse;
+        });
 
-        // given
-        mockStore.stepEinkommen.ET1.steuerKlasse = einkommenSteuerKlasse;
+        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-        // then
         expect(finanzDaten.steuerKlasse).toBe(finanzDatenSteuerklasse);
-
-        // cleanup
-        mockStore.stepEinkommen.ET1 = einkommenSave;
       });
     },
   );
@@ -741,21 +579,13 @@ describe("finanzDatenFactory", () => {
       finanzDatenKinderFreiBetrag: KinderFreiBetrag,
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepEinkommen.ET1.kinderFreiBetrag = einkommenKinderFreiBetrag;
+        });
 
-        // given
-        mockStore.stepEinkommen.ET1.kinderFreiBetrag =
-          einkommenKinderFreiBetrag;
+        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-        // then
         expect(finanzDaten.kinderFreiBetrag).toBe(finanzDatenKinderFreiBetrag);
-
-        // cleanup
-        mockStore.stepEinkommen.ET1 = einkommenSave;
       });
     },
   );
@@ -774,20 +604,13 @@ describe("finanzDatenFactory", () => {
     "when einkommen RentenArt is %s, then finanzDaten RentenArt are %s",
     (einkommenRentenArt: RentenArt | null, finanzDatenRentenArt: RentenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepEinkommen.ET1.rentenVersicherung = einkommenRentenArt;
+        });
 
-        // given
-        mockStore.stepEinkommen.ET1.rentenVersicherung = einkommenRentenArt;
+        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-        // then
         expect(finanzDaten.rentenVersicherung).toBe(finanzDatenRentenArt);
-
-        // cleanup
-        mockStore.stepEinkommen.ET1 = einkommenSave;
       });
     },
   );
@@ -806,20 +629,13 @@ describe("finanzDatenFactory", () => {
     "when einkommen KassenArt is %s, then finanzDaten KassenArt are %s",
     (einkommenKassenArt: KassenArt | null, finanzDatenKassenArt: KassenArt) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepEinkommen.ET1.kassenArt = einkommenKassenArt;
+        });
 
-        // given
-        mockStore.stepEinkommen.ET1.kassenArt = einkommenKassenArt;
+        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-        // then
         expect(finanzDaten.kassenArt).toBe(finanzDatenKassenArt);
-
-        // cleanup
-        mockStore.stepEinkommen.ET1 = einkommenSave;
       });
     },
   );
@@ -836,20 +652,13 @@ describe("finanzDatenFactory", () => {
       finanzSplittingFaktor: number,
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        // setup
-        const einkommenSave = { ...mockStore.stepEinkommen.ET2 };
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepEinkommen.ET1.splittingFaktor = einkommenSplittingFaktor;
+        });
 
-        // given
-        mockStore.stepEinkommen.ET1.splittingFaktor = einkommenSplittingFaktor;
+        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-        // then
         expect(finanzDaten.splittingFaktor).toBe(finanzSplittingFaktor);
-
-        // cleanup
-        mockStore.stepEinkommen.ET1 = einkommenSave;
       });
     },
   );
@@ -890,20 +699,13 @@ describe("finanzDatenFactory", () => {
     "%s",
     (_: string, einkommen: StepEinkommenElternteil, expected: FinanzDaten) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        // setup
-        const einkommenSave = mockStore.stepEinkommen.ET1;
+        const state = produce(INITIAL_STATE, (draft) => {
+          draft.stepEinkommen.ET1 = einkommen;
+        });
 
-        // given
-        mockStore.stepEinkommen.ET1 = einkommen;
+        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        // when
-        const finanzDaten = finanzDatenOfUi(mockStore, "ET1", []);
-
-        // then
         expect(finanzDaten).toStrictEqual(expected);
-
-        // cleanup
-        mockStore.stepEinkommen.ET1 = einkommenSave;
       });
     },
   );

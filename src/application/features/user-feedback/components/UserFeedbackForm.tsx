@@ -15,7 +15,7 @@ type Props = {
   readonly onSubmit: () => void;
 };
 
-export function FeedbackForm({
+export function UserFeedbackForm({
   className,
   obstacle,
   ease,
@@ -42,7 +42,6 @@ export function FeedbackForm({
   const difficultExperience = easeValue && isDifficultExperience(easeValue);
 
   const showSubmit = easyExperience || (difficultExperience && obstacleValue);
-
   const disabledSubmit = !showSubmit || form.formState.isSubmitted;
 
   function handleEaseChange() {

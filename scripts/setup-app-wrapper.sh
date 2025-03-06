@@ -164,5 +164,5 @@ EOV
 sed --in-place --expression "s#</head>#<link rel=\"stylesheet\" href=\"include.css\"></head>#" index.html
 fi
 
-sed --in-place "s#\(</head>\)#<script type='module' src='src/index.tsx'></script>\\n\1#" index.html
+sed --in-place "s#\(</head>\)#<script type='module' src='src/application/index.tsx'></script>\\n\1#" index.html
 mv index.html ..

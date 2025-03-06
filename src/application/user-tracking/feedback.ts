@@ -1,0 +1,25 @@
+import {
+  getTrackingVariable,
+  setTrackingVariable,
+} from "@/application/user-tracking/data-layer";
+
+enum Variables {
+  Ease = "customer-effort-score-ease",
+  Obstacle = "customer-effort-score-obstacle",
+}
+
+export function getTrackedEase() {
+  return getTrackingVariable<number>(Variables.Ease) || undefined;
+}
+
+export function getTrackedObstacle() {
+  return getTrackingVariable<string>(Variables.Obstacle) || undefined;
+}
+
+export function trackEase(ease: 1 | 2 | 3 | 4 | 5) {
+  setTrackingVariable(Variables.Ease, Number(ease));
+}
+
+export function trackObstacle(obstacle: string | null) {
+  setTrackingVariable(Variables.Obstacle, obstacle);
+}

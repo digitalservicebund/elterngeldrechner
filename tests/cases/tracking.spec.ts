@@ -12,7 +12,7 @@ import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 import {
   establishDataLayer,
   getTrackingVariableFrom,
-} from "@/user-tracking/data-layer";
+} from "@/application/user-tracking/data-layer";
 
 test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   test.slow();

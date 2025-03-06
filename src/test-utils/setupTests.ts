@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
-import "@/styles/index.css";
+import "@/application/styles/index.css";
 
 window.scrollTo = vi.fn(() => undefined);
 window.HTMLElement.prototype.scrollIntoView = vi.fn();

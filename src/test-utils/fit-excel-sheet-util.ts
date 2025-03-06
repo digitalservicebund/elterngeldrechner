@@ -1,6 +1,6 @@
 import { utc } from "@date-fns/utc";
 import { addDays, parseISO } from "date-fns";
-import { ElternGeldArt, ErwerbsArt } from "@/globals/js/calculations/model";
+import { ElternGeldArt, ErwerbsArt } from "@/elterngeldrechner/model";
 
 export const erwerbsArtOf = (statusErwerbsArt: number) => {
   switch (statusErwerbsArt) {

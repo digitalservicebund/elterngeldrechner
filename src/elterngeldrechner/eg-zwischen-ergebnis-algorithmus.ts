@@ -9,12 +9,12 @@ import {
   ZwischenErgebnis,
 } from "./model";
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
-import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MIN_GESCHWISTERBONUS,
   RATE_BONUS,
-} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 export function elterngeldZwischenergebnis(
   persoenlicheDaten: PersoenlicheDaten,

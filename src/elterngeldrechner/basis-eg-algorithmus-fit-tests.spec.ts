@@ -9,7 +9,7 @@ import {
   PersoenlicheDaten,
   RentenArt,
 } from "./model";
-import { GRENZE_MINI_MIDI } from "@/globals/js/calculations/model/egr-berechnung-param-id";
+import { GRENZE_MINI_MIDI } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,

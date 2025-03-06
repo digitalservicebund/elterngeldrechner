@@ -1,6 +1,6 @@
 # Monatsplaner
 
-This "package" contains the domain logic to plan the months for parental leave.
+This "package" contains the domain logic to plan the months for _Elternzeit_.
 
 To apply for _Elterngeld_, it is mandatory to create a _Plan_. For such
 a _Plan_, each _Elternteil_ can choose for each _Lebensmonat_ a _Variante_ of
@@ -15,7 +15,9 @@ _Elternteil_.
 The implementation orientate itself on a Domain-Driven-Design approach in
 a functional style. In the context of the latter, and without any integration
 for domain services or external layers, all data models are immutable. In
-result, the domain consists solely of object values without any entities.
+result, the domain consists solely of object values without any entities. This
+functional style plays nicely with the functional reactive programming of the
+currently only application using it.
 
 As the real-world domain is a German one, the implementation makes heavy use of
 the German language. Low level or pure technical parts are using English. The
@@ -59,3 +61,8 @@ and keep short and easily maintainable import statements.
 There is no direct dependency on a calculator for _Elterngeld_ on purpose.
 Having dependency inversion/injection allows for higher independence and
 maintainability.
+
+Moreover, the domain tries to use strong type-driven-development where possible.
+For example it makes strong use of generics for how many _Elternteile_ are
+involved. Unfortunately, there are some limitations of programming languages. In
+consequence some code is more verbose or type-insecure than it could be.

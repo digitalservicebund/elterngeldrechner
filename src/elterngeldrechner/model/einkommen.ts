@@ -1,4 +1,4 @@
-import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 
 /**
  * Einkommen with correct precision fraction 2.

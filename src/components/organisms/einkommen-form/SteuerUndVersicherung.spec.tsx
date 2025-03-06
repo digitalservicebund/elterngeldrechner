@@ -5,7 +5,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import { RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {

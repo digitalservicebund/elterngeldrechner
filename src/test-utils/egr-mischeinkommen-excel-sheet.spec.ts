@@ -5,7 +5,7 @@ import {
   ErwerbsTaetigkeit,
   KinderFreiBetrag,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 
 describe("egr-mischeinkommen-excel-sheet", () => {
   const sheet = new EgrMischeinkommenExcelSheet();

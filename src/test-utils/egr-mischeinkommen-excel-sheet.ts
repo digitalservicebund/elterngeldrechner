@@ -3,7 +3,7 @@ import {
   ErwerbsTaetigkeit,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import { erwerbsArtOf } from "@/test-utils/fit-excel-sheet-util";
 
 type Taetigkeit = 0 | 1 | 2;

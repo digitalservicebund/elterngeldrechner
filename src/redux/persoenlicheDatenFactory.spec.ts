@@ -8,7 +8,7 @@ import {
 } from "./stepErwerbstaetigkeitSlice";
 import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import { ErwerbsArt, KinderFreiBetrag } from "@/globals/js/calculations/model";
+import { ErwerbsArt, KinderFreiBetrag } from "@/elterngeldrechner/model";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
 
 vi.mock("react-redux", () => ({

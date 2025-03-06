@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react";
-import { calculateElternGeld } from "@/globals/js/calculations/egr-calculation";
+import { calculateElternGeld } from "@/elterngeldrechner/egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
@@ -10,7 +10,7 @@ import {
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   type PlanungsDaten,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import {
   type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
@@ -184,12 +184,12 @@ if (import.meta.vitest) {
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/test-utils/test-utils");
     const { ErwerbsArt, KassenArt, SteuerKlasse, RentenArt, KinderFreiBetrag } =
-      await import("@/globals/js/calculations/model");
+      await import("@/elterngeldrechner/model");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
     vi.mock(import("@/redux/persoenlicheDatenFactory"));
     vi.mock(import("@/redux/finanzDatenFactory"));
-    vi.mock(import("@/globals/js/calculations/egr-calculation"));
+    vi.mock(import("@/elterngeldrechner/egr-calculation"));
 
     beforeEach(() => {
       vi.mocked(persoenlicheDatenOfUi).mockReturnValue(ANY_PERSOENLICHE_DATEN);

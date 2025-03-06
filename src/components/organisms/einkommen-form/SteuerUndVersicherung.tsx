@@ -13,7 +13,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import type { ElternteilType } from "@/redux/elternteil-type";
 import { useAppSelector } from "@/redux/hooks";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";

@@ -5,7 +5,7 @@ import { ButtonGroup, Split, YesNoRadio } from "@/components/molecules";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
-} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/elterngeldrechner/model/egr-berechnung-param-id";
 import { useAppSelector } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { StepEinkommenState } from "@/redux/stepEinkommenSlice";

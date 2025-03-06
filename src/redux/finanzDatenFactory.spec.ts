@@ -17,7 +17,7 @@ import {
   MischEkTaetigkeit,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import { initialFeedbackState } from "@/redux/feedbackSlice";
 import { YesNo } from "original-rechner";
 

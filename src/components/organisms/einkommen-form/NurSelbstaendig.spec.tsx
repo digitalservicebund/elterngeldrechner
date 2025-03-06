@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import EinkommenPage from "@/components/pages/EinkommenPage";
-import { RentenArt } from "@/globals/js/calculations/model";
+import { RentenArt } from "@/elterngeldrechner/model";
 import { RootState } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {

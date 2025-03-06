@@ -5,7 +5,7 @@ import {
   KassenArt,
   KinderFreiBetrag,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {

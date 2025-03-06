@@ -7,7 +7,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import { RootState, reducers } from "@/redux";
 import { initialStepAllgemeineAngabenState } from "@/redux/stepAllgemeineAngabenSlice";
 import {
@@ -23,7 +23,7 @@ import { initialStepNachwuchsState } from "@/redux/stepNachwuchsSlice";
 import { YesNo } from "@/redux/yes-no";
 import { render, screen, within } from "@/test-utils/test-utils";
 
-vi.mock(import("@/globals/js/calculations/basis-eg-algorithmus"));
+vi.mock(import("@/elterngeldrechner/basis-eg-algorithmus"));
 
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

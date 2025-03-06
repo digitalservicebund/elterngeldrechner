@@ -7,7 +7,7 @@ import {
   RentenArt,
   kinderFreiBetragOfNumber,
   steuerklasseOfNumber,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import {
   dateFromExcelSerial,
   elterngeldArtOf,

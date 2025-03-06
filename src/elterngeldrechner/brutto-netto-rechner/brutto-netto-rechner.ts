@@ -1,5 +1,5 @@
 import { abgabenSteuern } from "./egr-steuer-rechner";
-import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 import {
   Einkommen,
   ErwerbsArt,
@@ -7,7 +7,7 @@ import {
   KassenArt,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
@@ -15,7 +15,7 @@ import {
   SATZ_ALV_BEEG,
   SATZ_KVPV_BEEG,
   SATZ_RV_BEEG,
-} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 export function abzuege(
   bruttoProMonat: number,
@@ -269,9 +269,7 @@ if (import.meta.vitest) {
 
   describe("brutto-netto-rechner", async () => {
     const { abzuege } = await import("./brutto-netto-rechner");
-    const { KinderFreiBetrag } = await import(
-      "@/globals/js/calculations/model"
-    );
+    const { KinderFreiBetrag } = await import("@/elterngeldrechner/model");
 
     it("should calculate test from TestErweiterterAlgorithmus.java", () => {
       // given

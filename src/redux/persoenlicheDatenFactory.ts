@@ -2,7 +2,7 @@ import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkei
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { YesNo } from "./yes-no";
 import { RootState } from "./index";
-import { ErwerbsArt, PersoenlicheDaten } from "@/globals/js/calculations/model";
+import { ErwerbsArt, PersoenlicheDaten } from "@/elterngeldrechner/model";
 import { ElternteilType } from "@/redux/elternteil-type";
 
 const erwerbsTaetigkeitVorGeburtOf = (

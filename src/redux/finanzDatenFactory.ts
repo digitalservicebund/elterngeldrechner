@@ -15,7 +15,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 import { ElternteilType } from "@/redux/elternteil-type";
 
 const averageFromAverageOrMonthly = (

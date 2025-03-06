@@ -3,7 +3,7 @@ import {
   type Lohnsteuerjahr,
   UnterstuetzteLohnsteuerjahre,
   berechneSteuerUndSozialabgaben,
-} from "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben";
+} from "@/elterngeldrechner/brutto-netto-rechner/steuer-und-sozialabgaben";
 import {
   ErwerbsArt,
   FinanzDaten,
@@ -11,8 +11,8 @@ import {
   SteuerKlasse,
   kinderFreiBetragToNumber,
   steuerklasseToNumber,
-} from "@/globals/js/calculations/model";
-import { bestimmeWerbekostenpauschale } from "@/globals/js/calculations/werbekostenpauschale";
+} from "@/elterngeldrechner/model";
+import { bestimmeWerbekostenpauschale } from "@/elterngeldrechner/werbekostenpauschale";
 
 export function abgabenSteuern(
   finanzDaten: FinanzDaten,
@@ -85,11 +85,11 @@ if (import.meta.vitest) {
 
   describe("erg-steuer-rechner", async () => {
     const { Einkommen, KassenArt, RentenArt } = await import(
-      "@/globals/js/calculations/model"
+      "@/elterngeldrechner/model"
     );
 
     const steuerUndSozialabgabenModule = await import(
-      "@/globals/js/calculations/brutto-netto-rechner/steuer-und-sozialabgaben"
+      "@/elterngeldrechner/brutto-netto-rechner/steuer-und-sozialabgaben"
     );
 
     beforeEach(() => {

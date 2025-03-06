@@ -14,12 +14,12 @@ import {
   SteuerKlasse,
 } from "./model";
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
-import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
+import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
   GRENZE_MINI_MIDI,
-} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 const ANZAHL_MONATE_PRO_JAHR: number = 12;
 

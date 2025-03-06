@@ -7,11 +7,11 @@ import { ButtonGroup } from "@/components/molecules";
 import { FeedbackForm, Page } from "@/components/organisms";
 import { formSteps } from "@/components/pages/formSteps";
 import { useNavigateWithPlan } from "@/components/pages/useNavigateWithPlan";
-import { Planer } from "@/features/planer";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
-} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/elterngeldrechner/model/egr-berechnung-param-id";
+import { Planer } from "@/features/planer";
 import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 import { Variante, listeElternteileFuerAusgangslageAuf } from "@/monatsplaner";
 import { composeAusgangslageFuerPlaner } from "@/redux/composeAusgangslageFuerPlaner";

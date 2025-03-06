@@ -8,7 +8,7 @@ import {
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 
 describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();

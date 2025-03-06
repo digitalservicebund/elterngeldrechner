@@ -23,14 +23,14 @@ import {
   mutterschaftsLeistungInMonaten,
 } from "./model";
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
-import { aufDenCentRunden } from "@/globals/js/calculations/common/math-util";
-import { bruttoEGPlusNeu } from "@/globals/js/calculations/eg-brutto-rechner";
+import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
+import { bruttoEGPlusNeu } from "@/elterngeldrechner/eg-brutto-rechner";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
   MINDESTSATZ,
   MIN_GESCHWISTERBONUS,
   RATE_BONUS,
-} from "@/globals/js/calculations/model/egr-berechnung-param-id";
+} from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 export function elterngeldPlusErgebnis(
   planungsergebnis: PlanungsDaten,

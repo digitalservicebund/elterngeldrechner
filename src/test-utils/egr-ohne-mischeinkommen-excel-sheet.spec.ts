@@ -7,7 +7,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/globals/js/calculations/model";
+} from "@/elterngeldrechner/model";
 
 describe("egr-mischeinkommen-excel-sheet", () => {
   const sheet = new EgrOhneMischeinkommenExcelSheet();

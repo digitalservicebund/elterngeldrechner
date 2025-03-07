@@ -16,13 +16,15 @@ import {
   RouterProvider,
   createMemoryRouter,
 } from "react-router-dom";
+import {
+  stepAllgemeineAngabenSlice,
+  stepEinkommenSlice,
+  stepErwerbstaetigkeitSlice,
+  stepNachwuchsSlice,
+} from "@/application/features/abfrageteil/state";
 import { feedbackSlice } from "@/application/features/user-feedback";
 import { AppStore, RootState, reducers } from "@/application/redux";
 import { configurationSlice } from "@/application/redux/configurationSlice";
-import { stepAllgemeineAngabenSlice } from "@/application/redux/stepAllgemeineAngabenSlice";
-import { stepEinkommenSlice } from "@/application/redux/stepEinkommenSlice";
-import { stepErwerbstaetigkeitSlice } from "@/application/redux/stepErwerbstaetigkeitSlice";
-import { stepNachwuchsSlice } from "@/application/redux/stepNachwuchsSlice";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;

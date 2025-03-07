@@ -1,9 +1,11 @@
 import { useCallback, useRef } from "react";
+import {
+  type ElternteilType,
+  finanzDatenOfUi,
+  persoenlicheDatenOfUi,
+} from "@/application/features/abfrageteil/state";
 import type { RootState } from "@/application/redux";
-import type { ElternteilType } from "@/application/redux/elternteil-type";
-import { finanzDatenOfUi } from "@/application/redux/finanzDatenFactory";
 import { useAppStore } from "@/application/redux/hooks";
-import { persoenlicheDatenOfUi } from "@/application/redux/persoenlicheDatenFactory";
 import { calculateElternGeld } from "@/elterngeldrechner/egr-calculation";
 import {
   Einkommen,
@@ -187,8 +189,14 @@ if (import.meta.vitest) {
       await import("@/elterngeldrechner/model");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
-    vi.mock(import("@/application/redux/persoenlicheDatenFactory"));
-    vi.mock(import("@/application/redux/finanzDatenFactory"));
+    vi.mock(
+      import(
+        "@/application/features/abfrageteil/state/persoenlicheDatenFactory"
+      ),
+    );
+    vi.mock(
+      import("@/application/features/abfrageteil/state/finanzDatenFactory"),
+    );
     vi.mock(import("@/elterngeldrechner/egr-calculation"));
 
     beforeEach(() => {

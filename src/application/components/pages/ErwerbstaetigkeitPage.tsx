@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router";
 import { formSteps } from "./formSteps";
-import {
-  ErwerbstaetigkeitForm,
-  Page,
-} from "@/application/components/organisms";
-import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
+import { Page } from "@/application/components/organisms";
+import { ErwerbstaetigkeitForm } from "@/application/features/abfrageteil";
 import {
   StepErwerbstaetigkeitState,
   stepErwerbstaetigkeitSlice,
-} from "@/application/redux/stepErwerbstaetigkeitSlice";
+} from "@/application/features/abfrageteil/state";
+import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 
 function ErwerbstaetigkeitPage() {
   const dispatch = useAppDispatch();

@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
 import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
-import { YesNo } from "@/application/redux/yes-no";
+import { YesNo } from "@/application/features/abfrageteil/state";
 import { INITIAL_STATE, render, screen } from "@/application/test-utils";
 
 describe("Allgemeine Angaben Page", () => {

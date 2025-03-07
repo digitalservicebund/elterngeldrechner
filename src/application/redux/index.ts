@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { configurationSlice } from "./configurationSlice";
 import { preloadedState } from "./preloadedState";
-import { stepAllgemeineAngabenSlice } from "./stepAllgemeineAngabenSlice";
-import { stepEinkommenSlice } from "./stepEinkommenSlice";
-import { stepErwerbstaetigkeitSlice } from "./stepErwerbstaetigkeitSlice";
-import { stepNachwuchsSlice } from "./stepNachwuchsSlice";
+import {
+  stepAllgemeineAngabenSlice,
+  stepEinkommenSlice,
+  stepErwerbstaetigkeitSlice,
+  stepNachwuchsSlice,
+} from "@/application/features/abfrageteil/state";
 import { feedbackSlice } from "@/application/features/user-feedback";
 
 export const reducers = combineReducers({

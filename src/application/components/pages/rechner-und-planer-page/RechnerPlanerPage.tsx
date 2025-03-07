@@ -7,15 +7,17 @@ import { ButtonGroup } from "@/application/components/molecules";
 import { Page } from "@/application/components/organisms";
 import { formSteps } from "@/application/components/pages/formSteps";
 import { useNavigateWithPlan } from "@/application/components/pages/useNavigateWithPlan";
+import {
+  YesNo,
+  composeAusgangslageFuerPlaner,
+  stepAllgemeineAngabenSelectors,
+} from "@/application/features/abfrageteil/state";
 import { Planer } from "@/application/features/planer";
 import {
   UserFeedbackForm,
   useUserFeedback,
 } from "@/application/features/user-feedback";
-import { composeAusgangslageFuerPlaner } from "@/application/redux/composeAusgangslageFuerPlaner";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { stepAllgemeineAngabenSelectors } from "@/application/redux/stepAllgemeineAngabenSlice";
-import { YesNo } from "@/application/redux/yes-no";
 import {
   countUpAnzahlGeoeffneterLebensmonateImPlaner,
   isTrackingAllowedByUser,

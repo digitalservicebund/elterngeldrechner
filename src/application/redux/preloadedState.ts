@@ -1,6 +1,8 @@
-import type { Antragstellende } from "./stepAllgemeineAngabenSlice";
-import type { MonatlichesBrutto } from "./stepErwerbstaetigkeitSlice";
-import { YesNo } from "./yes-no";
+import {
+  type Antragstellende,
+  type MonatlichesBrutto,
+  YesNo,
+} from "@/application/features/abfrageteil/state";
 import {
   KassenArt,
   KinderFreiBetrag,

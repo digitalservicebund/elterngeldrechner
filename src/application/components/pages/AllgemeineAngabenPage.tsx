@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router";
 import { formSteps } from "./formSteps";
-import {
-  AllgemeineAngabenForm,
-  Page,
-} from "@/application/components/organisms";
-import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
+import { Page } from "@/application/components/organisms";
+import { AllgemeineAngabenForm } from "@/application/features/abfrageteil";
 import {
   StepAllgemeineAngabenState,
   stepAllgemeineAngabenSlice,
-} from "@/application/redux/stepAllgemeineAngabenSlice";
+} from "@/application/features/abfrageteil/state";
+import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 
 function AllgemeineAngabenPage() {
   const dispatch = useAppDispatch();

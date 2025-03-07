@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
 import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
-import { YesNo } from "@/application/redux/yes-no";
+import { YesNo } from "@/application/features/abfrageteil/state";
 import { INITIAL_STATE, render } from "@/application/test-utils";
 
 describe("Erwerbstaetigkeit Page", () => {

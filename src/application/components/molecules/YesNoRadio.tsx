@@ -4,7 +4,7 @@ import {
   CustomRadioGroupOption,
   CustomRadioGroupProps,
 } from "./CustomRadioGroup";
-import { YesNo } from "@/application/redux/yes-no";
+import { YesNo } from "@/application/features/abfrageteil/state";
 
 const booleanOptions: CustomRadioGroupOption<YesNo>[] = [
   { value: YesNo.YES, label: "Ja" },

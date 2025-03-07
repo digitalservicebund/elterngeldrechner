@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 import {
   StepNachwuchsState,
   parseGermanDateString,
-  stepNachwuchsActions,
+  stepNachwuchsSlice,
 } from "@/application/redux/stepNachwuchsSlice";
 import { trackNutzergruppe } from "@/application/user-tracking";
 
@@ -16,7 +16,7 @@ function NachwuchsPage() {
   const initialValues = useAppSelector((state) => state.stepNachwuchs);
 
   const handleSubmit = (values: StepNachwuchsState) => {
-    dispatch(stepNachwuchsActions.submitStep(values));
+    dispatch(stepNachwuchsSlice.actions.submitStep(values));
     trackNutzergruppe(
       parseGermanDateString(values.wahrscheinlichesGeburtsDatum),
     );

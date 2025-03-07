@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 import {
   StepErwerbstaetigkeitState,
-  stepErwerbstaetigkeitActions,
+  stepErwerbstaetigkeitSlice,
 } from "@/application/redux/stepErwerbstaetigkeitSlice";
 
 function ErwerbstaetigkeitPage() {
@@ -17,7 +17,7 @@ function ErwerbstaetigkeitPage() {
   const initialValues = useAppSelector((state) => state.stepErwerbstaetigkeit);
 
   const handleSubmit = (values: StepErwerbstaetigkeitState) => {
-    dispatch(stepErwerbstaetigkeitActions.submitStep(values));
+    dispatch(stepErwerbstaetigkeitSlice.actions.submitStep(values));
     navigate(formSteps.einkommen.route);
   };
 

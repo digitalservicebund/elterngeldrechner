@@ -1,6 +1,6 @@
 import "@/application/styles/index.css";
 
-import { configurationActions } from "@/application/redux/configurationSlice";
+import { configurationSlice } from "@/application/redux/configurationSlice";
 import { useAppDispatch } from "@/application/redux/hooks";
 import Router from "@/application/routing/Router";
 
@@ -12,7 +12,7 @@ export function App({ elternGeldDigitalWizardUrl }: Props) {
   const dispatch = useAppDispatch();
 
   dispatch(
-    configurationActions.configure({
+    configurationSlice.actions.configure({
       elternGeldDigitalWizardUrl: elternGeldDigitalWizardUrl,
     }),
   );

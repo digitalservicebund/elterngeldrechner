@@ -1,44 +1,30 @@
 import userEvent from "@testing-library/user-event";
+import { produce } from "immer";
 import { describe, expect, it } from "vitest";
 import EinkommenPage from "@/application/components/pages/EinkommenPage";
-import { RootState } from "@/application/redux";
-import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
-import {
-  StepEinkommenState,
-  initialStepEinkommenState,
-} from "@/application/redux/stepEinkommenSlice";
-import { initialStepErwerbstaetigkeitState } from "@/application/redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen, within } from "@/application/test-utils";
+import {
+  INITIAL_STATE,
+  render,
+  screen,
+  within,
+} from "@/application/test-utils";
 
 describe("Einkommens Page only with block Erwerbstätigkeit", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
 
-  const stateFromPreviousSteps: Partial<RootState> = {
-    stepAllgemeineAngaben: {
-      ...initialStepAllgemeineAngabenState,
-      antragstellende: "FuerBeide",
-      pseudonym: {
-        ET1: "Elternteil 1",
-        ET2: "Elternteil 2",
-      },
-    },
-    stepNachwuchs: {
-      ...initialStepNachwuchsState,
-      wahrscheinlichesGeburtsDatum: "08.08.2022",
-    },
-    stepErwerbstaetigkeit: {
-      ...initialStepErwerbstaetigkeitState,
-      ET1: {
-        ...initialStepErwerbstaetigkeitState.ET1,
-        vorGeburt: YesNo.YES,
-        isNichtSelbststaendig: true,
-        isSelbststaendig: false,
-        monatlichesBrutto: "MehrAlsMiniJob",
-      },
-    },
-  };
+  const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
+    draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+    draft.stepAllgemeineAngaben.pseudonym = {
+      ET1: "Elternteil 1",
+      ET2: "Elternteil 2",
+    };
+    draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+    draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+    draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+    draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
+    draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MehrAlsMiniJob";
+  });
 
   it("should show the relevant form blocks if user is only 'erwerbstätig' and its no 'Mini-Job'", () => {
     render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
@@ -120,11 +106,10 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
   });
 
   describe("Validation of form", () => {
-    const validStepEinkommenState: StepEinkommenState = {
-      ...initialStepEinkommenState,
-      ET1: {
-        ...initialStepEinkommenState.ET1,
-        bruttoEinkommenNichtSelbstaendig: {
+    const validFormStateNurErwerbstaetig = produce(
+      stateFromPreviousSteps,
+      (draft) => {
+        draft.stepEinkommen.ET1.bruttoEinkommenNichtSelbstaendig = {
           type: "average",
           average: 1000,
           perYear: null,
@@ -132,14 +117,9 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
             1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,
             1000,
           ],
-        },
+        };
       },
-    };
-
-    const validFormStateNurErwerbstaetig: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepEinkommen: validStepEinkommenState,
-    };
+    );
 
     it("should require the Brutto Einkommen", async () => {
       render(<EinkommenPage />, {

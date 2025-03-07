@@ -1,14 +1,9 @@
-import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import { produce } from "immer";
+import { describe, expect, it } from "vitest";
 import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
-import { RootState, reducers } from "@/application/redux";
-import {
-  StepAllgemeineAngabenState,
-  initialStepAllgemeineAngabenState,
-} from "@/application/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen } from "@/application/test-utils";
+import { INITIAL_STATE, render, screen } from "@/application/test-utils";
 
 describe("Allgemeine Angaben Page", () => {
   it("should display the Alleinerziehendenstatus part of the form right away", () => {
@@ -88,36 +83,44 @@ describe("Allgemeine Angaben Page", () => {
   });
 
   describe("Submitting the form", () => {
-    let store: Store<RootState>;
-
-    beforeEach(() => {
-      store = configureStore({ reducer: reducers });
-    });
-
     it("should persist the step", async () => {
-      render(<AllgemeineAngabenPage />, { store });
-      const expectedState: StepAllgemeineAngabenState = {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "EinenElternteil",
-        alleinerziehend: YesNo.YES,
-        mutterschaftssleistungen: YesNo.YES,
-      };
+      const { store } = render(<AllgemeineAngabenPage />);
 
       await userEvent.click(screen.getByLabelText("Ja"));
-
       await userEvent.click(
         screen.getByTestId("mutterschaftssleistungen_option_0"),
       );
-
       await userEvent.click(screen.getByText("Weiter"));
 
-      expect(store.getState().stepAllgemeineAngaben).toEqual(expectedState);
+      expect(store.getState().stepAllgemeineAngaben).toMatchObject({
+        antragstellende: "EinenElternteil",
+        alleinerziehend: YesNo.YES,
+        mutterschaftssleistungen: YesNo.YES,
+      });
     });
 
     it("should persist the pseudonym", async () => {
-      render(<AllgemeineAngabenPage />, { store });
-      const expectedState: StepAllgemeineAngabenState = {
-        ...initialStepAllgemeineAngabenState,
+      const { store } = render(<AllgemeineAngabenPage />);
+
+      await userEvent.click(screen.getByLabelText("Nein"));
+      await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
+      await userEvent.type(
+        screen.getByLabelText("Name für Elternteil 1"),
+        "Finn",
+      );
+      await userEvent.type(
+        screen.getByLabelText("Name für Elternteil 2"),
+        "Fiona",
+      );
+      await userEvent.click(
+        screen.getByTestId("mutterschaftssleistungen_option_0"),
+      );
+      await userEvent.click(
+        screen.getByTestId("mutterschaftssleistungenWer_option_0"),
+      );
+      await userEvent.click(screen.getByText("Weiter"));
+
+      expect(store.getState().stepAllgemeineAngaben).toMatchObject({
         alleinerziehend: YesNo.NO,
         antragstellende: "FuerBeide",
         mutterschaftssleistungen: YesNo.YES,
@@ -126,81 +129,39 @@ describe("Allgemeine Angaben Page", () => {
           ET1: "Finn",
           ET2: "Fiona",
         },
-      };
-
-      await userEvent.click(screen.getByLabelText("Nein"));
-
-      await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
-
-      await userEvent.type(
-        screen.getByLabelText("Name für Elternteil 1"),
-        expectedState.pseudonym.ET1,
-      );
-
-      await userEvent.type(
-        screen.getByLabelText("Name für Elternteil 2"),
-        expectedState.pseudonym.ET2,
-      );
-
-      await userEvent.click(
-        screen.getByTestId("mutterschaftssleistungen_option_0"),
-      );
-
-      await userEvent.click(
-        screen.getByTestId("mutterschaftssleistungenWer_option_0"),
-      );
-
-      await userEvent.click(screen.getByText("Weiter"));
-
-      expect(store.getState().stepAllgemeineAngaben).toEqual(expectedState);
+      });
     });
 
     it("should reset alleinerziehend if Antragstellende für beide", async () => {
-      const preloadedState: StepAllgemeineAngabenState = {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "EinenElternteil",
-        alleinerziehend: YesNo.YES,
-      };
-
-      store = configureStore({
-        reducer: reducers,
-        preloadedState: {
-          stepAllgemeineAngaben: preloadedState,
-        },
+      const preloadedState = produce(INITIAL_STATE, (draft) => {
+        draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
+        draft.stepAllgemeineAngaben.alleinerziehend = YesNo.YES;
       });
 
-      render(<AllgemeineAngabenPage />, { store });
-      const expectedState: StepAllgemeineAngabenState = {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        alleinerziehend: YesNo.NO,
-        mutterschaftssleistungen: YesNo.NO,
-      };
+      const { store } = render(<AllgemeineAngabenPage />, { preloadedState });
 
       await userEvent.click(screen.getByLabelText("Nein"));
-
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
-
       await userEvent.click(
         screen.getByTestId("mutterschaftssleistungen_option_1"),
       );
-
       await userEvent.click(screen.getByText("Weiter"));
 
-      expect(store.getState().stepAllgemeineAngaben).toEqual(expectedState);
+      expect(store.getState().stepAllgemeineAngaben).toMatchObject({
+        antragstellende: "FuerBeide",
+        alleinerziehend: YesNo.NO,
+        mutterschaftssleistungen: YesNo.NO,
+      });
     });
 
     it("should show a validation error if some information is missing", async () => {
-      const invalidFormState: StepAllgemeineAngabenState = {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "EinenElternteil",
-        alleinerziehend: null,
-        mutterschaftssleistungen: YesNo.YES,
-      };
-
-      render(<AllgemeineAngabenPage />, {
-        preloadedState: { stepAllgemeineAngaben: invalidFormState },
+      const invalidFormState = produce(INITIAL_STATE, (draft) => {
+        draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
+        draft.stepAllgemeineAngaben.alleinerziehend = null;
+        draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
       });
+
+      render(<AllgemeineAngabenPage />, { preloadedState: invalidFormState });
 
       await userEvent.click(screen.getByText("Weiter"));
 

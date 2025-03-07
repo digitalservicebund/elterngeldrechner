@@ -1,5 +1,5 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
-import { stepAllgemeineAngabenActions } from "./stepAllgemeineAngabenSlice";
+import { stepAllgemeineAngabenSlice } from "./stepAllgemeineAngabenSlice";
 import { YesNo } from "./yes-no";
 import { RootState } from "./index";
 
@@ -15,20 +15,18 @@ export interface StepNachwuchsState {
   mutterschaftssleistungen: YesNo | null; // from step Allgemeine Angaben set by extraReducers to make code testable
 }
 
-export const initialStepNachwuchsState: StepNachwuchsState = {
+const initialState: StepNachwuchsState = {
   anzahlKuenftigerKinder: 1,
   wahrscheinlichesGeburtsDatum: "",
   geschwisterkinder: [],
   mutterschaftssleistungen: YesNo.NO,
 };
 
-type StepNachwuchsPayload = StepNachwuchsState;
-
-const stepNachwuchsSlice = createSlice({
+export const stepNachwuchsSlice = createSlice({
   name: "stepNachwuchs",
-  initialState: initialStepNachwuchsState,
+  initialState,
   reducers: {
-    submitStep: (_, { payload }: PayloadAction<StepNachwuchsPayload>) => {
+    submitStep: (_, { payload }: PayloadAction<StepNachwuchsState>) => {
       const filteredEmptyGeschwisterkinder = payload.geschwisterkinder.filter(
         (value) => value.geburtsdatum !== "",
       );
@@ -40,7 +38,7 @@ const stepNachwuchsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(
-      stepAllgemeineAngabenActions.submitStep,
+      stepAllgemeineAngabenSlice.actions.submitStep,
       (state, { payload }) => {
         if (payload.mutterschaftssleistungen === YesNo.YES) {
           state.mutterschaftssleistungen = YesNo.YES;
@@ -60,9 +58,6 @@ const getWahrscheinlichesGeburtsDatum = createSelector(
 export const stepNachwuchsSelectors = {
   getWahrscheinlichesGeburtsDatum,
 };
-export const stepNachwuchsActions = stepNachwuchsSlice.actions;
-
-export default stepNachwuchsSlice.reducer;
 
 export function parseGermanDateString(germanDateString: string): Date {
   const [day, month, year] = germanDateString.split(".");

@@ -4,21 +4,10 @@ interface ConfigurationState {
   elternGeldDigitalWizardUrl: string | undefined;
 }
 
-export const initialStepConfigurationState: ConfigurationState = {
-  elternGeldDigitalWizardUrl: "",
-};
-
-type ConfigurePayload = ConfigurationState;
-
-const configurationSlice = createSlice({
+export const configurationSlice = createSlice({
   name: "configuration",
-  initialState: initialStepConfigurationState,
+  initialState: { elternGeldDigitalWizardUrl: "" } as ConfigurationState,
   reducers: {
-    configure: (_, action: PayloadAction<ConfigurePayload>) => {
-      return action.payload;
-    },
+    configure: (_, { payload }: PayloadAction<ConfigurationState>) => payload,
   },
 });
-
-export const configurationActions = configurationSlice.actions;
-export default configurationSlice.reducer;

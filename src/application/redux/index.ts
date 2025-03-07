@@ -1,18 +1,18 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import configurationReducer from "./configurationSlice";
+import { configurationSlice } from "./configurationSlice";
 import { preloadedState } from "./preloadedState";
-import stepAllgemeineAngabenReducer from "./stepAllgemeineAngabenSlice";
-import stepEinkommenReducer from "./stepEinkommenSlice";
-import stepErwerbstaetigkeitReducer from "./stepErwerbstaetigkeitSlice";
-import stepNachwuchsReducer from "./stepNachwuchsSlice";
+import { stepAllgemeineAngabenSlice } from "./stepAllgemeineAngabenSlice";
+import { stepEinkommenSlice } from "./stepEinkommenSlice";
+import { stepErwerbstaetigkeitSlice } from "./stepErwerbstaetigkeitSlice";
+import { stepNachwuchsSlice } from "./stepNachwuchsSlice";
 import { feedbackSlice } from "@/application/features/user-feedback";
 
 export const reducers = combineReducers({
-  stepAllgemeineAngaben: stepAllgemeineAngabenReducer,
-  stepNachwuchs: stepNachwuchsReducer,
-  stepErwerbstaetigkeit: stepErwerbstaetigkeitReducer,
-  stepEinkommen: stepEinkommenReducer,
-  configuration: configurationReducer,
+  stepAllgemeineAngaben: stepAllgemeineAngabenSlice.reducer,
+  stepNachwuchs: stepNachwuchsSlice.reducer,
+  stepErwerbstaetigkeit: stepErwerbstaetigkeitSlice.reducer,
+  stepEinkommen: stepEinkommenSlice.reducer,
+  configuration: configurationSlice.reducer,
   feedback: feedbackSlice.reducer,
 });
 

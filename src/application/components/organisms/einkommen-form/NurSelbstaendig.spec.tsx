@@ -1,45 +1,25 @@
 import userEvent from "@testing-library/user-event";
+import { produce } from "immer";
 import { describe, expect, it } from "vitest";
 import EinkommenPage from "@/application/components/pages/EinkommenPage";
-import { RootState } from "@/application/redux";
-import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
-import {
-  StepEinkommenState,
-  initialStepEinkommenState,
-} from "@/application/redux/stepEinkommenSlice";
-import {
-  StepErwerbstaetigkeitElternteil,
-  StepErwerbstaetigkeitState,
-  initialStepErwerbstaetigkeitState,
-} from "@/application/redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen, within } from "@/application/test-utils";
+import {
+  INITIAL_STATE,
+  render,
+  screen,
+  within,
+} from "@/application/test-utils";
 import { RentenArt } from "@/elterngeldrechner/model";
 
-const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
-  ...initialStepErwerbstaetigkeitState.ET1,
-  monatlichesBrutto: "MehrAlsMiniJob",
-};
-
-const stateFromPreviousSteps: Partial<RootState> = {
-  stepAllgemeineAngaben: {
-    ...initialStepAllgemeineAngabenState,
-    antragstellende: "FuerBeide",
-    pseudonym: {
-      ET1: "Elternteil 1",
-      ET2: "Elternteil 2",
-    },
-  },
-  stepNachwuchs: {
-    ...initialStepNachwuchsState,
-    wahrscheinlichesGeburtsDatum: "08.08.2022",
-  },
-  stepErwerbstaetigkeit: {
-    ...initialStepErwerbstaetigkeitState,
-    ET1: elternteil1Erwerbstaetigkeit,
-  },
-};
+const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
+  draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+  draft.stepAllgemeineAngaben.pseudonym = {
+    ET1: "Elternteil 1",
+    ET2: "Elternteil 2",
+  };
+  draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+  draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MehrAlsMiniJob";
+});
 
 describe("Einkommens Page only with block Nur Selbständig", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
@@ -50,16 +30,9 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
     within(getElternteil1Section()).getByLabelText("Rentenversicherung");
 
   it("should not show Einkommen aus Selbstständigkeit if the user does have nicht-selbständige Tätigkeit", () => {
-    const state: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepErwerbstaetigkeit: {
-        ...(stateFromPreviousSteps.stepErwerbstaetigkeit as StepErwerbstaetigkeitState),
-        ET1: {
-          ...elternteil1Erwerbstaetigkeit,
-          isNichtSelbststaendig: true,
-        },
-      },
-    };
+    const state = produce(stateFromPreviousSteps, (draft) => {
+      draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+    });
 
     render(<EinkommenPage />, { preloadedState: state });
 
@@ -69,17 +42,10 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
   });
 
   it("should not show Einkommen aus Selbstständigkeit if the user does not have selbständige Tätigkeit", () => {
-    const state: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepErwerbstaetigkeit: {
-        ...(stateFromPreviousSteps.stepErwerbstaetigkeit as StepErwerbstaetigkeitState),
-        ET1: {
-          ...elternteil1Erwerbstaetigkeit,
-          isNichtSelbststaendig: false,
-          isSelbststaendig: false,
-        },
-      },
-    };
+    const state = produce(stateFromPreviousSteps, (draft) => {
+      draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = false;
+      draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
+    });
 
     render(<EinkommenPage />, { preloadedState: state });
 
@@ -89,18 +55,14 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
   });
 
   describe("has only selbständige Tätigkeit", () => {
-    const stateWithOnlySelbstaendig: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepErwerbstaetigkeit: {
-        ...(stateFromPreviousSteps.stepErwerbstaetigkeit as StepErwerbstaetigkeitState),
-        ET1: {
-          ...elternteil1Erwerbstaetigkeit,
-          vorGeburt: YesNo.YES,
-          isNichtSelbststaendig: false,
-          isSelbststaendig: true,
-        },
+    const stateWithOnlySelbstaendig = produce(
+      stateFromPreviousSteps,
+      (draft) => {
+        draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+        draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = false;
+        draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = true;
       },
-    };
+    );
 
     it("should show Einkommen aus Selbstständigkeit", () => {
       render(<EinkommenPage />, {
@@ -113,27 +75,23 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
     });
 
     describe("Validation of form", () => {
-      const validStateEinkommen: StepEinkommenState = {
-        ...initialStepEinkommenState,
-        ET1: {
-          ...initialStepEinkommenState.ET1,
-          gewinnSelbstaendig: {
+      const validStateEinkommen = produce(
+        stateWithOnlySelbstaendig,
+        (draft) => {
+          draft.stepEinkommen.ET1.gewinnSelbstaendig = {
             type: "yearly",
             average: null,
             perYear: 12000,
             perMonth: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
-          },
-          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+          };
+          draft.stepEinkommen.ET1.rentenVersicherung =
+            RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
         },
-      };
+      );
 
       it("should require the Gewinn selbständige Tätigkeit", async () => {
-        render(<EinkommenPage />, {
-          preloadedState: {
-            ...stateWithOnlySelbstaendig,
-            stepEinkommen: validStateEinkommen,
-          },
-        });
+        render(<EinkommenPage />, { preloadedState: validStateEinkommen });
+
         const einkommenAusSelbstaendigkeitSection =
           getEinkommenAusSelbstaendigkeitElternteil1Section();
 
@@ -152,19 +110,11 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
       });
 
       it("should require the Rentenversicherung", async () => {
-        const invalidState: StepEinkommenState = {
-          ...validStateEinkommen,
-          ET1: {
-            ...validStateEinkommen.ET1,
-            rentenVersicherung: null,
-          },
-        };
-        render(<EinkommenPage />, {
-          preloadedState: {
-            ...stateWithOnlySelbstaendig,
-            stepEinkommen: invalidState,
-          },
+        const invalidState = produce(stateWithOnlySelbstaendig, (draft) => {
+          draft.stepEinkommen.ET1.rentenVersicherung = null;
         });
+
+        render(<EinkommenPage />, { preloadedState: invalidState });
 
         const rentenversicherungSection =
           getRentenversicherungElternteil1Section();

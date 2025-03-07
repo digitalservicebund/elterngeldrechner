@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
   Antragstellende,
-  stepAllgemeineAngabenActions,
+  stepAllgemeineAngabenSlice,
 } from "./stepAllgemeineAngabenSlice";
-import { stepErwerbstaetigkeitActions } from "./stepErwerbstaetigkeitSlice";
+import { stepErwerbstaetigkeitSlice } from "./stepErwerbstaetigkeitSlice";
 import { YesNo } from "./yes-no";
 import {
   KassenArt,
@@ -16,6 +16,7 @@ export interface Zeitraum {
   from: string;
   to: string;
 }
+
 export interface TypeOfVersicherungen {
   hasRentenversicherung: boolean;
   hasKrankenversicherung: boolean;
@@ -122,24 +123,23 @@ export interface StepEinkommenState {
   limitEinkommenUeberschritten: YesNo | null;
 }
 
-export const initialStepEinkommenState: StepEinkommenState = {
+const initialState: StepEinkommenState = {
   ET1: initialStepEinkommenElternteil,
   ET2: initialStepEinkommenElternteil,
   antragstellende: null,
   limitEinkommenUeberschritten: null,
 };
 
-type SubmitStepPayload = StepEinkommenState;
-
-const stepEinkommenSlice = createSlice({
+export const stepEinkommenSlice = createSlice({
   name: "stepEinkommen",
-  initialState: initialStepEinkommenState,
+  initialState,
   reducers: {
-    submitStep: (_, { payload }: PayloadAction<SubmitStepPayload>) => payload,
+    submitStep: (_, action: PayloadAction<StepEinkommenState>) =>
+      action.payload,
   },
   extraReducers: (builder) => {
     builder.addCase(
-      stepErwerbstaetigkeitActions.submitStep,
+      stepErwerbstaetigkeitSlice.actions.submitStep,
       (state, { payload }) => {
         const istErwerbstaetigET1: YesNo | null = payload.ET1.vorGeburt;
         const istErwerbstaetigET2: YesNo | null = payload.ET2.vorGeburt;
@@ -224,13 +224,10 @@ const stepEinkommenSlice = createSlice({
       },
     );
     builder.addCase(
-      stepAllgemeineAngabenActions.submitStep,
+      stepAllgemeineAngabenSlice.actions.submitStep,
       (state, { payload }) => {
         state.antragstellende = payload.antragstellende;
       },
     );
   },
 });
-
-export const stepEinkommenActions = stepEinkommenSlice.actions;
-export default stepEinkommenSlice.reducer;

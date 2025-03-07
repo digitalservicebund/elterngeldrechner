@@ -16,7 +16,7 @@ export interface StepAllgemeineAngabenState {
   mutterschaftssleistungenWer: AntragstellendeSelektor | null;
 }
 
-export const initialStepAllgemeineAngabenState: StepAllgemeineAngabenState = {
+const initialState: StepAllgemeineAngabenState = {
   antragstellende: null,
   pseudonym: {
     ET1: "",
@@ -27,15 +27,12 @@ export const initialStepAllgemeineAngabenState: StepAllgemeineAngabenState = {
   mutterschaftssleistungenWer: null,
 };
 
-type SubmitStepPayload = StepAllgemeineAngabenState;
-
-const stepAllgemeineAngabenSlice = createSlice({
+export const stepAllgemeineAngabenSlice = createSlice({
   name: "stepAllgemeineAngaben",
-  initialState: initialStepAllgemeineAngabenState,
+  initialState,
   reducers: {
-    submitStep: (_, action: PayloadAction<SubmitStepPayload>) => {
-      return action.payload;
-    },
+    submitStep: (_, action: PayloadAction<StepAllgemeineAngabenState>) =>
+      action.payload,
   },
 });
 
@@ -56,8 +53,6 @@ const getElternteilNames = createSelector(
 const getAlleinerziehend = (state: RootState) =>
   state.stepAllgemeineAngaben.alleinerziehend;
 
-export const stepAllgemeineAngabenActions = stepAllgemeineAngabenSlice.actions;
-export default stepAllgemeineAngabenSlice.reducer;
 export const stepAllgemeineAngabenSelectors = {
   getAntragssteller,
   getElternteilNames,

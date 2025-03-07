@@ -1,13 +1,8 @@
-import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
+import { produce } from "immer";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import NachwuchsPage from "./NachwuchsPage";
-import { RootState, reducers } from "@/application/redux";
-import {
-  StepNachwuchsState,
-  initialStepNachwuchsState,
-} from "@/application/redux/stepNachwuchsSlice";
-import { act, render, screen } from "@/application/test-utils";
+import { INITIAL_STATE, act, render, screen } from "@/application/test-utils";
 
 const currentYear = new Date().getFullYear();
 
@@ -117,25 +112,8 @@ describe("Nachwuchs Page", () => {
 });
 
 describe("Submitting the form", () => {
-  let store: Store<RootState>;
-
-  beforeEach(() => {
-    store = configureStore({ reducer: reducers });
-  });
-
   it("should persist the step", async () => {
-    render(<NachwuchsPage />, { store });
-    const expectedState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 3,
-      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
-      geschwisterkinder: [
-        {
-          geburtsdatum: "01.03.1985",
-          istBehindert: true,
-        },
-      ],
-    };
+    const { store } = render(<NachwuchsPage />);
 
     for (let i = 0; i < 2; i++) {
       await userEvent.click(screen.getByTestId("erhöhen"));
@@ -163,7 +141,16 @@ describe("Submitting the form", () => {
 
     await userEvent.click(screen.getByText("Weiter"));
 
-    expect(store.getState().stepNachwuchs).toEqual(expectedState);
+    expect(store.getState().stepNachwuchs).toMatchObject({
+      anzahlKuenftigerKinder: 3,
+      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
+      geschwisterkinder: [
+        {
+          geburtsdatum: "01.03.1985",
+          istBehindert: true,
+        },
+      ],
+    });
   });
 
   describe("warning for too old birthdate", () => {
@@ -183,21 +170,18 @@ describe("Submitting the form", () => {
     it("should accept expected birth of child that is 32 months before current date", async () => {
       vi.setSystemTime(new Date("2023-01-02"));
 
-      const validFormState: StepNachwuchsState = {
-        ...initialStepNachwuchsState,
-        anzahlKuenftigerKinder: 2,
-        wahrscheinlichesGeburtsDatum: "02.01.2020",
-        geschwisterkinder: [
+      const validFormState = produce(INITIAL_STATE, (draft) => {
+        draft.stepNachwuchs.anzahlKuenftigerKinder = 2;
+        draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "02.01.2020";
+        draft.stepNachwuchs.geschwisterkinder = [
           {
             geburtsdatum: "",
             istBehindert: true,
           },
-        ],
-      };
-
-      render(<NachwuchsPage />, {
-        preloadedState: { stepNachwuchs: validFormState },
+        ];
       });
+
+      render(<NachwuchsPage />, { preloadedState: validFormState });
 
       await act(() => userEventsForFakeTime.click(screen.getByText("Weiter")));
 
@@ -211,21 +195,18 @@ describe("Submitting the form", () => {
     it("should not accept expected birth of child that is more than 32 months before current date", async () => {
       vi.setSystemTime(new Date("2023-01-02"));
 
-      const validFormState: StepNachwuchsState = {
-        ...initialStepNachwuchsState,
-        anzahlKuenftigerKinder: 2,
-        wahrscheinlichesGeburtsDatum: "01.01.2020",
-        geschwisterkinder: [
+      const validFormState = produce(INITIAL_STATE, (draft) => {
+        draft.stepNachwuchs.anzahlKuenftigerKinder = 2;
+        draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "01.01.2020";
+        draft.stepNachwuchs.geschwisterkinder = [
           {
             geburtsdatum: "",
             istBehindert: true,
           },
-        ],
-      };
-
-      render(<NachwuchsPage />, {
-        preloadedState: { stepNachwuchs: validFormState },
+        ];
       });
+
+      render(<NachwuchsPage />, { preloadedState: validFormState });
 
       await act(() => userEventsForFakeTime.click(screen.getByText("Weiter")));
 
@@ -238,48 +219,40 @@ describe("Submitting the form", () => {
   });
 
   it("should go to the next step but filters empty Geschwisterkinder", async () => {
-    const validFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
-      wahrscheinlichesGeburtsDatum: "12.12." + currentYear,
-      geschwisterkinder: [
+    const validFormState = produce(INITIAL_STATE, (draft) => {
+      draft.stepNachwuchs.anzahlKuenftigerKinder = 2;
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "12.12." + currentYear;
+      draft.stepNachwuchs.geschwisterkinder = [
         {
           geburtsdatum: "",
           istBehindert: true,
         },
-      ],
-    };
-
-    store = configureStore({
-      reducer: reducers,
-      preloadedState: { stepNachwuchs: validFormState },
+      ];
     });
 
-    render(<NachwuchsPage />, { store });
+    const { store } = render(<NachwuchsPage />, {
+      preloadedState: validFormState,
+    });
+
     await userEvent.click(screen.getByText("Weiter"));
 
     expect(store.getState().stepNachwuchs.geschwisterkinder).toHaveLength(0);
   });
 
   it("should show validation error if birthdate of Geschwisterkinder is not filled completely", async () => {
-    const invalidFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
-      wahrscheinlichesGeburtsDatum: "12.12.2022",
-      geschwisterkinder: [
+    const invalidFormState = produce(INITIAL_STATE, (draft) => {
+      draft.stepNachwuchs.anzahlKuenftigerKinder = 2;
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "12.12.2022";
+      draft.stepNachwuchs.geschwisterkinder = [
         {
           geburtsdatum: "12.05.20",
           istBehindert: false,
         },
-      ],
-    };
-
-    store = configureStore({
-      reducer: reducers,
-      preloadedState: { stepNachwuchs: invalidFormState },
+      ];
     });
 
-    render(<NachwuchsPage />, { store });
+    render(<NachwuchsPage />, { preloadedState: invalidFormState });
+
     await userEvent.click(screen.getByText("Weiter"));
 
     const errorMessage = screen.getByText(
@@ -289,24 +262,18 @@ describe("Submitting the form", () => {
   });
 
   it("should show validation error if birthdate of Geschwisterkinder is after birthdate of Kind", async () => {
-    const invalidFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 2,
-      wahrscheinlichesGeburtsDatum: "12.12.2022",
-      geschwisterkinder: [
+    const invalidFormState = produce(INITIAL_STATE, (draft) => {
+      draft.stepNachwuchs.anzahlKuenftigerKinder = 2;
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "12.12.2022";
+      draft.stepNachwuchs.geschwisterkinder = [
         {
           geburtsdatum: "13.12.2022",
           istBehindert: false,
         },
-      ],
-    };
-
-    store = configureStore({
-      reducer: reducers,
-      preloadedState: { stepNachwuchs: invalidFormState },
+      ];
     });
 
-    render(<NachwuchsPage />, { store });
+    render(<NachwuchsPage />, { preloadedState: invalidFormState });
     await userEvent.click(screen.getByText("Weiter"));
 
     const errorMessage = screen.getByText(
@@ -316,20 +283,18 @@ describe("Submitting the form", () => {
   });
 
   it("should show a validation error if some information is missing", async () => {
-    const invalidFormState: StepNachwuchsState = {
-      ...initialStepNachwuchsState,
-      anzahlKuenftigerKinder: 1,
-      wahrscheinlichesGeburtsDatum: "",
-      geschwisterkinder: [
+    const invalidFormState = produce(INITIAL_STATE, (draft) => {
+      draft.stepNachwuchs.anzahlKuenftigerKinder = 1;
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "";
+      draft.stepNachwuchs.geschwisterkinder = [
         {
           geburtsdatum: "01.03.1985",
           istBehindert: true,
         },
-      ],
-    };
-    render(<NachwuchsPage />, {
-      preloadedState: { stepNachwuchs: invalidFormState },
+      ];
     });
+
+    render(<NachwuchsPage />, { preloadedState: invalidFormState });
 
     await userEvent.click(screen.getByText("Weiter"));
 

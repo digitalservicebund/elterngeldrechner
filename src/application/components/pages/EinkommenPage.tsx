@@ -4,7 +4,7 @@ import { EinkommenForm, Page } from "@/application/components/organisms";
 import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 import {
   StepEinkommenState,
-  stepEinkommenActions,
+  stepEinkommenSlice,
 } from "@/application/redux/stepEinkommenSlice";
 
 function EinkommenPage() {
@@ -14,7 +14,7 @@ function EinkommenPage() {
   const initialValues = useAppSelector((state) => state.stepEinkommen);
 
   const handleSubmit = (values: StepEinkommenState) => {
-    dispatch(stepEinkommenActions.submitStep(values));
+    dispatch(stepEinkommenSlice.actions.submitStep(values));
     navigate(formSteps.elterngeldvarianten.route);
   };
 

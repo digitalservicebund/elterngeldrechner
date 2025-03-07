@@ -1,19 +1,14 @@
 import userEvent from "@testing-library/user-event";
+import { produce } from "immer";
 import { describe, expect, it } from "vitest";
 import EinkommenPage from "@/application/components/pages/EinkommenPage";
-import { RootState } from "@/application/redux";
-import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
-import {
-  StepEinkommenState,
-  initialStepEinkommenState,
-} from "@/application/redux/stepEinkommenSlice";
-import { initialStepErwerbstaetigkeitState } from "@/application/redux/stepErwerbstaetigkeitSlice";
-import {
-  StepNachwuchsState,
-  initialStepNachwuchsState,
-} from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen, within } from "@/application/test-utils";
+import {
+  INITIAL_STATE,
+  render,
+  screen,
+  within,
+} from "@/application/test-utils";
 import {
   KinderFreiBetrag,
   RentenArt,
@@ -23,36 +18,24 @@ import {
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
 
-  const stateFromPreviousSteps: Partial<RootState> = {
-    stepAllgemeineAngaben: {
-      ...initialStepAllgemeineAngabenState,
-      antragstellende: "FuerBeide",
-      pseudonym: {
-        ET1: "Elternteil 1",
-        ET2: "Elternteil 2",
+  const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
+    draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+    draft.stepAllgemeineAngaben.pseudonym = {
+      ET1: "Elternteil 1",
+      ET2: "Elternteil 2",
+    };
+    draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+    draft.stepNachwuchs.geschwisterkinder = [
+      {
+        geburtsdatum: "12.06.2016",
+        istBehindert: false,
       },
-    },
-    stepNachwuchs: {
-      ...initialStepNachwuchsState,
-      wahrscheinlichesGeburtsDatum: "08.08.2022",
-      geschwisterkinder: [
-        {
-          geburtsdatum: "12.06.2016",
-          istBehindert: false,
-        },
-      ],
-    },
-    stepErwerbstaetigkeit: {
-      ...initialStepErwerbstaetigkeitState,
-      ET1: {
-        ...initialStepErwerbstaetigkeitState.ET1,
-        vorGeburt: YesNo.YES,
-        isNichtSelbststaendig: true,
-        isSelbststaendig: false,
-        monatlichesBrutto: "MehrAlsMiniJob",
-      },
-    },
-  };
+    ];
+    draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+    draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+    draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
+    draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MehrAlsMiniJob";
+  });
 
   it("should show the relevant form blocks if user is only 'erwerbstätig' and its no 'Mini-Job'", () => {
     render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
@@ -76,13 +59,12 @@ describe("Steuer und Versicherung", () => {
     expect(krankenversicherung).toBeInTheDocument();
   });
   describe("Kinderfreibeträge", () => {
-    const stateWithNoGeschwisterKind: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepNachwuchs: {
-        ...(stateFromPreviousSteps.stepNachwuchs as StepNachwuchsState),
-        geschwisterkinder: [],
+    const stateWithNoGeschwisterKind = produce(
+      stateFromPreviousSteps,
+      (draft) => {
+        draft.stepNachwuchs.geschwisterkinder = [];
       },
-    };
+    );
 
     it("should show Kinderfreibeitrag if there is at least one Geschwisterkind", () => {
       render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
@@ -117,32 +99,23 @@ describe("Steuer und Versicherung", () => {
   });
 
   describe("Validation of form", () => {
-    const validStepEinkommenState: StepEinkommenState = {
-      ...initialStepEinkommenState,
-      ET1: {
-        ...initialStepEinkommenState.ET1,
-        steuerKlasse: SteuerKlasse.SKL1,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+    const validFormStateNurErwerbstaetig = produce(
+      stateFromPreviousSteps,
+      (draft) => {
+        draft.stepEinkommen.ET1.steuerKlasse = SteuerKlasse.SKL1;
+        draft.stepEinkommen.ET1.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
+        draft.stepEinkommen.ET1.rentenVersicherung =
+          RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
       },
-    };
-
-    const validFormStateNurErwerbstaetig: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepEinkommen: validStepEinkommenState,
-    };
+    );
 
     it("should only accept if a Steuerklasse is selected", async () => {
-      const formStateWithoutSteuerklasse = {
-        ...validFormStateNurErwerbstaetig,
-        stepEinkommen: {
-          ...validStepEinkommenState,
-          ET1: {
-            ...validStepEinkommenState.ET1,
-            steuerKlasse: null,
-          },
+      const formStateWithoutSteuerklasse = produce(
+        validFormStateNurErwerbstaetig,
+        (draft) => {
+          draft.stepEinkommen.ET1.steuerKlasse = null;
         },
-      };
+      );
 
       render(<EinkommenPage />, {
         preloadedState: formStateWithoutSteuerklasse,
@@ -168,16 +141,13 @@ describe("Steuer und Versicherung", () => {
     });
 
     it("should only accept if Kinderfreibeträge is selected", async () => {
-      const formStateWithoutKinderfreibetraege = {
-        ...validFormStateNurErwerbstaetig,
-        stepEinkommen: {
-          ...validStepEinkommenState,
-          ET1: {
-            ...validStepEinkommenState.ET1,
-            kinderFreiBetrag: null,
-          },
+      const formStateWithoutKinderfreibetraege = produce(
+        validFormStateNurErwerbstaetig,
+        (draft) => {
+          draft.stepEinkommen.ET1.kinderFreiBetrag = null;
         },
-      };
+      );
+
       render(<EinkommenPage />, {
         preloadedState: formStateWithoutKinderfreibetraege,
       });
@@ -201,18 +171,15 @@ describe("Steuer und Versicherung", () => {
     });
 
     it("should only accept if Kirchensteuer is selected", async () => {
-      render(<EinkommenPage />, {
-        preloadedState: {
-          ...validFormStateNurErwerbstaetig,
-          stepEinkommen: {
-            ...validStepEinkommenState,
-            ET1: {
-              ...validStepEinkommenState.ET1,
-              zahlenSieKirchenSteuer: null,
-            },
-          },
+      const preloadedState = produce(
+        validFormStateNurErwerbstaetig,
+        (draft) => {
+          draft.stepEinkommen.ET1.zahlenSieKirchenSteuer = null;
         },
-      });
+      );
+
+      render(<EinkommenPage />, { preloadedState });
+
       const elternteil1Section = getElternteil1Section();
 
       const kirchensteuerSection =
@@ -235,18 +202,15 @@ describe("Steuer und Versicherung", () => {
     });
 
     it("should only accept if Krankenversicherung is selected", async () => {
-      render(<EinkommenPage />, {
-        preloadedState: {
-          ...validFormStateNurErwerbstaetig,
-          stepEinkommen: {
-            ...validStepEinkommenState,
-            ET1: {
-              ...validStepEinkommenState.ET1,
-              kassenArt: null,
-            },
-          },
+      const preloadedState = produce(
+        validFormStateNurErwerbstaetig,
+        (draft) => {
+          draft.stepEinkommen.ET1.kassenArt = null;
         },
-      });
+      );
+
+      render(<EinkommenPage />, { preloadedState });
+
       const elternteil1Section = getElternteil1Section();
 
       const krankenversicherungSection = within(

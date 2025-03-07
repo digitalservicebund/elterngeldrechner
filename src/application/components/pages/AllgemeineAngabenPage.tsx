@@ -7,7 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 import {
   StepAllgemeineAngabenState,
-  stepAllgemeineAngabenActions,
+  stepAllgemeineAngabenSlice,
 } from "@/application/redux/stepAllgemeineAngabenSlice";
 
 function AllgemeineAngabenPage() {
@@ -17,7 +17,7 @@ function AllgemeineAngabenPage() {
   const initialValues = useAppSelector((state) => state.stepAllgemeineAngaben);
 
   const handleSubmit = (values: StepAllgemeineAngabenState) => {
-    dispatch(stepAllgemeineAngabenActions.submitStep(values));
+    dispatch(stepAllgemeineAngabenSlice.actions.submitStep(values));
     navigate(formSteps.nachwuchs.route);
   };
 

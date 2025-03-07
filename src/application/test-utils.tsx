@@ -18,15 +18,14 @@ import {
 } from "react-router-dom";
 import { feedbackSlice } from "@/application/features/user-feedback";
 import { AppStore, RootState, reducers } from "@/application/redux";
-import { initialStepConfigurationState } from "@/application/redux/configurationSlice";
-import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
-import { initialStepEinkommenState } from "@/application/redux/stepEinkommenSlice";
-import { initialStepErwerbstaetigkeitState } from "@/application/redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
+import { configurationSlice } from "@/application/redux/configurationSlice";
+import { stepAllgemeineAngabenSlice } from "@/application/redux/stepAllgemeineAngabenSlice";
+import { stepEinkommenSlice } from "@/application/redux/stepEinkommenSlice";
+import { stepErwerbstaetigkeitSlice } from "@/application/redux/stepErwerbstaetigkeitSlice";
+import { stepNachwuchsSlice } from "@/application/redux/stepNachwuchsSlice";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
-  store?: Store;
 }
 
 interface TestWrapperProps {
@@ -50,27 +49,22 @@ function TestWrapper({ store, children }: TestWrapperProps) {
 
 const renderWithRedux = (
   ui: ReactElement,
-  {
-    preloadedState,
-    store = configureStore({ reducer: reducers, preloadedState }),
-    ...renderOptions
-  }: RenderOptionsWithRedux = {},
+  { preloadedState, ...renderOptions }: RenderOptionsWithRedux = {},
 ) => {
+  const store = configureStore({ reducer: reducers, preloadedState });
   function Wrapper({ children }: { readonly children?: ReactNode }) {
     return <TestWrapper store={store}>{children}</TestWrapper>;
   }
 
-  return render(ui, { wrapper: Wrapper, ...renderOptions });
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 };
 
 function renderHookWithRedux<Result, Props>(
   render: (props: Props) => Result,
-  {
-    preloadedState,
-    store = configureStore({ reducer: reducers, preloadedState }),
-    ...renderOptions
-  }: RenderOptionsWithRedux = {},
+  { preloadedState, ...renderOptions }: RenderOptionsWithRedux = {},
 ): RenderHookResult<Result, Props> & { store: AppStore } {
+  const store = configureStore({ reducer: reducers, preloadedState });
+
   function Wrapper({ children }: { readonly children?: ReactNode }) {
     return <TestWrapper store={store}>{children}</TestWrapper>;
   }
@@ -88,10 +82,10 @@ export * from "@testing-library/react";
 export { renderHookWithRedux as renderHook, renderWithRedux as render };
 
 export const INITIAL_STATE: RootState = {
-  stepAllgemeineAngaben: initialStepAllgemeineAngabenState,
-  stepNachwuchs: initialStepNachwuchsState,
-  stepErwerbstaetigkeit: initialStepErwerbstaetigkeitState,
-  stepEinkommen: initialStepEinkommenState,
-  configuration: initialStepConfigurationState,
+  stepAllgemeineAngaben: stepAllgemeineAngabenSlice.getInitialState(),
+  stepNachwuchs: stepNachwuchsSlice.getInitialState(),
+  stepErwerbstaetigkeit: stepErwerbstaetigkeitSlice.getInitialState(),
+  stepEinkommen: stepEinkommenSlice.getInitialState(),
+  configuration: configurationSlice.getInitialState(),
   feedback: feedbackSlice.getInitialState(),
 };

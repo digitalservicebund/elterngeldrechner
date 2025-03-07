@@ -1,21 +1,14 @@
-import { Store, configureStore } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { produce } from "immer";
+import { describe, expect, it, vi } from "vitest";
 import EinkommenPage from "./EinkommenPage";
-import { RootState, reducers } from "@/application/redux";
-import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
-import {
-  StepEinkommenState,
-  initialStepEinkommenState,
-} from "@/application/redux/stepEinkommenSlice";
-import {
-  StepErwerbstaetigkeitElternteil,
-  StepErwerbstaetigkeitState,
-  initialStepErwerbstaetigkeitState,
-} from "@/application/redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen, within } from "@/application/test-utils";
+import {
+  INITIAL_STATE,
+  render,
+  screen,
+  within,
+} from "@/application/test-utils";
 import {
   KassenArt,
   KinderFreiBetrag,
@@ -32,31 +25,17 @@ describe("Einkommen Page", () => {
     const ET1 = "Finn";
     const ET2 = "Fiona";
 
-    const elternteilStepErwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
-      ...initialStepErwerbstaetigkeitState.ET1,
-      isNichtSelbststaendig: true,
-      isSelbststaendig: false,
-      monatlichesBrutto: "MehrAlsMiniJob",
-    };
-
-    const preloadedState: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        pseudonym: {
-          ET1,
-          ET2,
-        },
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        wahrscheinlichesGeburtsDatum: "08.08.2022",
-      },
-      stepErwerbstaetigkeit: {
-        ET1: elternteilStepErwerbstaetigkeit,
-        ET2: elternteilStepErwerbstaetigkeit,
-      },
-    };
+    const preloadedState = produce(INITIAL_STATE, (draft) => {
+      draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+      draft.stepAllgemeineAngaben.pseudonym = { ET1, ET2 };
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+      draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+      draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
+      draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MehrAlsMiniJob";
+      draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = true;
+      draft.stepErwerbstaetigkeit.ET2.isSelbststaendig = false;
+      draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MehrAlsMiniJob";
+    });
 
     render(<EinkommenPage />, { preloadedState });
 
@@ -68,30 +47,15 @@ describe("Einkommen Page", () => {
     const ET1 = "Finn";
     const ET2 = "Fiona";
 
-    const elternteilStepErwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
-      ...initialStepErwerbstaetigkeitState.ET1,
-      isNichtSelbststaendig: false,
-      monatlichesBrutto: "MiniJob",
-    };
-
-    const preloadedState: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        pseudonym: {
-          ET1,
-          ET2,
-        },
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        wahrscheinlichesGeburtsDatum: "08.08.2022",
-      },
-      stepErwerbstaetigkeit: {
-        ET1: elternteilStepErwerbstaetigkeit,
-        ET2: elternteilStepErwerbstaetigkeit,
-      },
-    };
+    const preloadedState = produce(INITIAL_STATE, (draft) => {
+      draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+      draft.stepAllgemeineAngaben.pseudonym = { ET1, ET2 };
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+      draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = false;
+      draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MiniJob";
+      draft.stepErwerbstaetigkeit.ET2.isNichtSelbststaendig = false;
+      draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
+    });
 
     render(<EinkommenPage />, { preloadedState });
 
@@ -103,88 +67,37 @@ describe("Einkommen Page", () => {
   });
 
   describe("Submitting the form when only 'erwerbstätig' and no minijob", () => {
-    let store: Store<RootState>;
-    const einkommenAverage = 1000;
-
-    const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
-      ...initialStepErwerbstaetigkeitState.ET1,
-      vorGeburt: YesNo.YES,
-      isNichtSelbststaendig: true,
-      isSelbststaendig: false,
-      monatlichesBrutto: "MehrAlsMiniJob",
-    };
-
-    const stateFromPreviousSteps: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        pseudonym: {
+    it("should transfer all input fields into the store after clicking to next page", async () => {
+      const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
+        draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        draft.stepAllgemeineAngaben.pseudonym = {
           ET1: "Elternteil 1",
           ET2: "Elternteil 2",
-        },
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        wahrscheinlichesGeburtsDatum: "08.08.2022",
-        geschwisterkinder: [
+        };
+        draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+        draft.stepNachwuchs.geschwisterkinder = [
           {
             geburtsdatum: "12.06.2016",
             istBehindert: false,
           },
-        ],
-      },
-      stepErwerbstaetigkeit: {
-        ...initialStepErwerbstaetigkeitState,
-        ET1: {
-          ...elternteil1Erwerbstaetigkeit,
-        },
-      },
-      stepEinkommen: {
-        ...initialStepEinkommenState,
-        limitEinkommenUeberschritten: YesNo.NO,
-      },
-    };
+        ];
+        draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+        draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+        draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
+        draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MehrAlsMiniJob";
+        draft.stepEinkommen.limitEinkommenUeberschritten = YesNo.NO;
+      });
 
-    const expectedState: StepEinkommenState = {
-      ...initialStepEinkommenState,
-      limitEinkommenUeberschritten: YesNo.NO,
-      ET1: {
-        ...initialStepEinkommenState.ET1,
-        bruttoEinkommenNichtSelbstaendig: {
-          type: "monthly",
-          average: einkommenAverage,
-          perYear: null,
-          perMonth: Array.from<number>({
-            length: 12,
-          }).fill(einkommenAverage),
-        },
-        steuerKlasse: SteuerKlasse.SKL4,
-        splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF4,
-        zahlenSieKirchenSteuer: YesNo.YES,
-        kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-      },
-    };
-
-    beforeEach(() => {
-      store = configureStore({
-        reducer: reducers,
+      const { store } = render(<EinkommenPage />, {
         preloadedState: stateFromPreviousSteps,
       });
-    });
-
-    it("should transfer all input fields into the store after clicking to next page", async () => {
-      render(<EinkommenPage />, { store });
       const elternteil1Section = getElternteil1Section();
 
       // Field Bruttoeinkommen Durchschnitt
       const bruttoEinkommenAverageField = within(
         elternteil1Section,
       ).getByLabelText("Monatliches Einkommen in Brutto");
-      await userEvent.type(
-        bruttoEinkommenAverageField,
-        String(einkommenAverage),
-      );
+      await userEvent.type(bruttoEinkommenAverageField, "1000");
 
       // Field Bruttoeinkommen per month
       const einkommenErwerbstaetigSection = within(
@@ -199,7 +112,7 @@ describe("Einkommen Page", () => {
           within(einkommenErwerbstaetigSection).getByLabelText(
             `${monthIndex}. Monat`,
           ),
-          String(einkommenAverage),
+          "1000",
         );
       }
 
@@ -232,82 +145,49 @@ describe("Einkommen Page", () => {
 
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
-      expect(store.getState().stepEinkommen).toEqual(expectedState);
+      expect(store.getState().stepEinkommen).toMatchObject({
+        ET1: {
+          bruttoEinkommenNichtSelbstaendig: {
+            type: "monthly",
+            average: 1000,
+            perYear: null,
+            perMonth: Array.from<number>({
+              length: 12,
+            }).fill(1000),
+          },
+          steuerKlasse: SteuerKlasse.SKL4,
+          splittingFaktor: null,
+          kinderFreiBetrag: KinderFreiBetrag.ZKF4,
+          zahlenSieKirchenSteuer: YesNo.YES,
+          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+        },
+      });
     });
   });
 
   describe("Submitting the form for 'selbständig'", () => {
-    let store: Store<RootState>;
-    const einkommenYearly = 12000;
-    const elternteil1Erwerbstaetigkeit: StepErwerbstaetigkeitElternteil = {
-      ...initialStepErwerbstaetigkeitState.ET1,
-      vorGeburt: YesNo.YES,
-      isNichtSelbststaendig: false,
-      isSelbststaendig: true,
-      monatlichesBrutto: "MehrAlsMiniJob",
-    };
-
-    const stateFromPreviousSteps: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        pseudonym: {
+    it("should transfer all input fields into the store after clicking to next page", async () => {
+      const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
+        draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        draft.stepAllgemeineAngaben.pseudonym = {
           ET1: "Elternteil 1",
           ET2: "Elternteil 2",
-        },
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        wahrscheinlichesGeburtsDatum: "08.08.2022",
-      },
-      stepErwerbstaetigkeit: {
-        ...initialStepErwerbstaetigkeitState,
-        ET1: elternteil1Erwerbstaetigkeit,
-      },
-      stepEinkommen: {
-        ...initialStepEinkommenState,
-        ET1: {
-          ...initialStepEinkommenState.ET1,
-          istErwerbstaetig: YesNo.YES,
-          hasMischEinkommen: YesNo.NO,
-          istNichtSelbststaendig: false,
-          istSelbststaendig: true,
-        },
-        antragstellende: "EinenElternteil",
-      },
-    };
+        };
+        draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+        draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+        draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = false;
+        draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = true;
+        draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MehrAlsMiniJob";
+        draft.stepEinkommen.ET1.istErwerbstaetig = YesNo.YES;
+        draft.stepEinkommen.ET1.hasMischEinkommen = YesNo.NO;
+        draft.stepEinkommen.ET1.istNichtSelbststaendig = false;
+        draft.stepEinkommen.ET1.istSelbststaendig = true;
+        draft.stepEinkommen.antragstellende = "EinenElternteil";
+      });
 
-    beforeEach(() => {
-      store = configureStore({
-        reducer: reducers,
+      const { store } = render(<EinkommenPage />, {
         preloadedState: stateFromPreviousSteps,
       });
-    });
-
-    it("should transfer all input fields into the store after clicking to next page", async () => {
-      const expectedState: StepEinkommenState = {
-        ...initialStepEinkommenState,
-        limitEinkommenUeberschritten: YesNo.NO,
-        ET1: {
-          ...initialStepEinkommenState.ET1,
-          gewinnSelbstaendig: {
-            type: "yearly",
-            average: null,
-            perYear: einkommenYearly,
-            perMonth: [],
-          },
-          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-          zahlenSieKirchenSteuer: YesNo.YES,
-          istErwerbstaetig: YesNo.YES,
-          hasMischEinkommen: YesNo.NO,
-          istNichtSelbststaendig: false,
-          istSelbststaendig: true,
-        },
-        antragstellende: "EinenElternteil",
-      };
-
-      render(<EinkommenPage />, { store });
       const elternteil1Section = getElternteil1Section();
 
       // Field Einkommensgrenze
@@ -325,7 +205,7 @@ describe("Einkommen Page", () => {
         einkommenAusSelbstaendigkeit,
       ).getByLabelText(/Gewinn im letzten Kalenderjahr in Brutto/);
 
-      await userEvent.type(gewinnYearlyField, String(einkommenYearly));
+      await userEvent.type(gewinnYearlyField, "12000");
 
       // Field Kirchensteuer
       const kirchensteuerSection =
@@ -351,151 +231,49 @@ describe("Einkommen Page", () => {
 
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
-      expect(store.getState().stepEinkommen).toEqual(expectedState);
+      expect(store.getState().stepEinkommen).toMatchObject({
+        limitEinkommenUeberschritten: YesNo.NO,
+        ET1: {
+          gewinnSelbstaendig: {
+            type: "yearly",
+            average: null,
+            perYear: 12000,
+            perMonth: [],
+          },
+          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+          zahlenSieKirchenSteuer: YesNo.YES,
+          istErwerbstaetig: YesNo.YES,
+          hasMischEinkommen: YesNo.NO,
+          istNichtSelbststaendig: false,
+          istSelbststaendig: true,
+        },
+      });
     });
-
-    // TEST DISABLED: limitEinkommenUeberschritten will be set by form input directly - doesn't make sense any more
-    // it("shoud have limitEinkommenUeberschritten = true in store on income above 250000 Euro considering one elternteil", async () => {
-    //   const expectedState: StepEinkommenState = {
-    //     ...initialStepEinkommenState,
-    //     ET1: {
-    //       ...initialStepEinkommenState.ET1,
-    //       gewinnSelbstaendig: {
-    //         type: "yearly",
-    //         average: null,
-    //         perYear: 250001,
-    //         perMonth: [],
-    //       },
-    //       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-    //       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-    //       zahlenSieKirchenSteuer: YesNo.YES,
-    //       istErwerbstaetig: YesNo.YES,
-    //       hasMischEinkommen: YesNo.NO,
-    //       istNichtSelbststaendig: false,
-    //       istSelbststaendig: true,
-    //     },
-    //     antragstellende: "FuerMichSelbst",
-    //     limitEinkommenUeberschritten: YesNo.YES,
-    //   };
-    //   render(<EinkommenPage />, { store });
-    //   const elternteil1Section = getElternteil1Section();
-
-    //   const einkommenAusSelbstaendigkeit =
-    //     within(elternteil1Section).getByLabelText("Gewinneinkünfte");
-
-    //   const gewinnYearlyField = within(
-    //     einkommenAusSelbstaendigkeit,
-    //   ).getByLabelText(/Gewinn im Kalenderjahr vor der Geburt/);
-
-    //   await userEvent.type(gewinnYearlyField, String(250001));
-
-    //   // Field Kirchensteuer
-    //   const kirchensteuerSection =
-    //     within(elternteil1Section).getByLabelText("Kirchensteuer");
-    //   await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
-
-    //   // Field Krankenversicherung
-    //   const krankenversicherungSection = within(
-    //     elternteil1Section,
-    //   ).getByLabelText("Krankenversicherung");
-    //   await userEvent.click(
-    //     within(krankenversicherungSection).getByLabelText(
-    //       /^gesetzlich pflichtversichert/,
-    //     ),
-    //   );
-
-    //   // Field Rentenversicherung
-    //   const rentenversicherung =
-    //     within(elternteil1Section).getByLabelText("Rentenversicherung");
-    //   await userEvent.click(
-    //     within(rentenversicherung).getByLabelText(
-    //       "gesetzliche Rentenversicherung",
-    //     ),
-    //   );
-
-    //   await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
-
-    //   expect(store.getState().stepEinkommen).toEqual(expectedState);
-    //   expect(store.getState().stepEinkommen.limitEinkommenUeberschritten).toBe(
-    //     true,
-    //   );
-    // });
   });
 
   describe("Submitting the form for 'selbständig' and 'erwerbstätig'", () => {
-    let store: Store<RootState>;
-    const einkommenAverage = 1000;
-    const stepErwerbstaetigkeitState: StepErwerbstaetigkeitState = {
-      ...initialStepErwerbstaetigkeitState,
-      ET1: {
-        ...initialStepErwerbstaetigkeitState.ET1,
-        vorGeburt: YesNo.YES,
-        isNichtSelbststaendig: true,
-        isSelbststaendig: true,
-      },
-    };
-
-    const stateFromPreviousSteps: Partial<RootState> = {
-      stepAllgemeineAngaben: {
-        ...initialStepAllgemeineAngabenState,
-        antragstellende: "FuerBeide",
-        pseudonym: {
+    it("should transfer all input fields into the store after clicking to next page", async () => {
+      const preloadedState = produce(INITIAL_STATE, (draft) => {
+        draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+        draft.stepAllgemeineAngaben.pseudonym = {
           ET1: "Elternteil 1",
           ET2: "Elternteil 2",
-        },
-      },
-      stepNachwuchs: {
-        ...initialStepNachwuchsState,
-        wahrscheinlichesGeburtsDatum: "08.08.2022",
-        geschwisterkinder: [
+        };
+        draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+        draft.stepNachwuchs.geschwisterkinder = [
           {
             geburtsdatum: "12.06.2016",
             istBehindert: false,
           },
-        ],
-      },
-      stepErwerbstaetigkeit: stepErwerbstaetigkeitState,
-    };
-
-    beforeEach(() => {
-      store = configureStore({
-        reducer: reducers,
-        preloadedState: stateFromPreviousSteps,
+        ];
+        draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+        draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+        draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = true;
       });
-    });
 
-    it("should transfer all input fields into the store after clicking to next page", async () => {
-      const expectedState: StepEinkommenState = {
-        ...initialStepEinkommenState,
-        limitEinkommenUeberschritten: YesNo.NO,
-        ET1: {
-          ...initialStepEinkommenState.ET1,
-          zahlenSieKirchenSteuer: YesNo.YES,
-          kassenArt: null,
-          kinderFreiBetrag: KinderFreiBetrag.ZKF4,
-          steuerKlasse: SteuerKlasse.SKL4,
-          taetigkeitenNichtSelbstaendigUndSelbstaendig: [
-            {
-              artTaetigkeit: "NichtSelbststaendig",
-              isMinijob: YesNo.NO,
-              bruttoEinkommenDurchschnitt: 1000,
-              versicherungen: {
-                hasArbeitslosenversicherung: false,
-                hasKrankenversicherung: true,
-                hasRentenversicherung: true,
-                none: false,
-              },
-              zeitraum: [
-                {
-                  from: "10",
-                  to: "12",
-                },
-              ],
-            },
-          ],
-        },
-      };
-      render(<EinkommenPage />, { store });
+      const { store } = render(<EinkommenPage />, { preloadedState });
+
       // Field Einkommensgrenze
       const elterngeldAnspruch = screen.getByRole("radiogroup", {
         name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
@@ -546,7 +324,7 @@ describe("Einkommen Page", () => {
         within(taetigkeit1Section).getByLabelText(
           "Durchschnittliches Bruttoeinkommen",
         ),
-        String(einkommenAverage),
+        "1000",
       );
 
       await userEvent.click(within(taetigkeit1Section).getByLabelText("Nein"));
@@ -571,7 +349,33 @@ describe("Einkommen Page", () => {
       );
       await userEvent.click(screen.getByRole("button", { name: "Weiter" }));
 
-      expect(store.getState().stepEinkommen).toEqual(expectedState);
+      expect(store.getState().stepEinkommen).toMatchObject({
+        ET1: {
+          zahlenSieKirchenSteuer: YesNo.YES,
+          kassenArt: null,
+          kinderFreiBetrag: KinderFreiBetrag.ZKF4,
+          steuerKlasse: SteuerKlasse.SKL4,
+          taetigkeitenNichtSelbstaendigUndSelbstaendig: [
+            {
+              artTaetigkeit: "NichtSelbststaendig",
+              isMinijob: YesNo.NO,
+              bruttoEinkommenDurchschnitt: 1000,
+              versicherungen: {
+                hasArbeitslosenversicherung: false,
+                hasKrankenversicherung: true,
+                hasRentenversicherung: true,
+                none: false,
+              },
+              zeitraum: [
+                {
+                  from: "10",
+                  to: "12",
+                },
+              ],
+            },
+          ],
+        },
+      });
     });
   });
 });

@@ -30,20 +30,17 @@ export interface StepErwerbstaetigkeitState {
   ET2: StepErwerbstaetigkeitElternteil;
 }
 
-export const initialStepErwerbstaetigkeitState: StepErwerbstaetigkeitState = {
+const initialState: StepErwerbstaetigkeitState = {
   ET1: initialStepErwerbstaetigkeitElternteil,
   ET2: initialStepErwerbstaetigkeitElternteil,
 };
 
-type SubmitStepPayload = StepErwerbstaetigkeitState;
-
-const stepErwerbstaetigkeitSlice = createSlice({
+export const stepErwerbstaetigkeitSlice = createSlice({
   name: "stepErwerbstaetigkeit",
-  initialState: initialStepErwerbstaetigkeitState,
+  initialState,
   reducers: {
-    submitStep: (_, action: PayloadAction<SubmitStepPayload>) => {
-      return action.payload;
-    },
+    submitStep: (_, action: PayloadAction<StepErwerbstaetigkeitState>) =>
+      action.payload,
   },
 });
 
@@ -87,7 +84,6 @@ const isSelbstaendigAndErwerbstaetig = (
   );
 };
 
-export const stepErwerbstaetigkeitActions = stepErwerbstaetigkeitSlice.actions;
 export const stepErwerbstaetigkeitElternteilSelectors = {
   isErwerbstaetigVorGeburt,
   isOnlyErwerbstaetig,
@@ -95,4 +91,3 @@ export const stepErwerbstaetigkeitElternteilSelectors = {
   isSelbstaendigOrNoMiniJob,
   isSelbstaendigAndErwerbstaetig,
 };
-export default stepErwerbstaetigkeitSlice.reducer;

@@ -1,51 +1,31 @@
 import userEvent from "@testing-library/user-event";
+import { produce } from "immer";
 import { describe, expect, it } from "vitest";
 import EinkommenPage from "@/application/components/pages/EinkommenPage";
-import { RootState } from "@/application/redux";
-import { initialStepAllgemeineAngabenState } from "@/application/redux/stepAllgemeineAngabenSlice";
-import {
-  StepEinkommenState,
-  Taetigkeit,
-  initialStepEinkommenState,
-} from "@/application/redux/stepEinkommenSlice";
-import {
-  StepErwerbstaetigkeitState,
-  initialStepErwerbstaetigkeitState,
-} from "@/application/redux/stepErwerbstaetigkeitSlice";
-import { initialStepNachwuchsState } from "@/application/redux/stepNachwuchsSlice";
 import { YesNo } from "@/application/redux/yes-no";
-import { render, screen, within } from "@/application/test-utils";
+import {
+  INITIAL_STATE,
+  render,
+  screen,
+  within,
+} from "@/application/test-utils";
 
 describe("Einkommens Page only with block Selbständige And Erwerbstätige", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
   const getTaetigkeit1OfElternteil1Section = () =>
     within(getElternteil1Section()).getByLabelText("1. Tätigkeit");
 
-  const stepErwerbstaetigkeitState: StepErwerbstaetigkeitState = {
-    ...initialStepErwerbstaetigkeitState,
-    ET1: {
-      ...initialStepErwerbstaetigkeitState.ET1,
-      vorGeburt: YesNo.YES,
-      isNichtSelbststaendig: true,
-      isSelbststaendig: true,
-    },
-  };
-
-  const stateFromPreviousSteps: Partial<RootState> = {
-    stepAllgemeineAngaben: {
-      ...initialStepAllgemeineAngabenState,
-      antragstellende: "FuerBeide",
-      pseudonym: {
-        ET1: "Elternteil 1",
-        ET2: "Elternteil 2",
-      },
-    },
-    stepNachwuchs: {
-      ...initialStepNachwuchsState,
-      wahrscheinlichesGeburtsDatum: "08.08.2022",
-    },
-    stepErwerbstaetigkeit: stepErwerbstaetigkeitState,
-  };
+  const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
+    draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
+    draft.stepAllgemeineAngaben.pseudonym = {
+      ET1: "Elternteil 1",
+      ET2: "Elternteil 2",
+    };
+    draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
+    draft.stepErwerbstaetigkeit.ET1.vorGeburt = YesNo.YES;
+    draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
+    draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = true;
+  });
 
   it("should show form block 'Tätigkeiten' if user is 'erwerbstätig' AND is'selbständig'", async () => {
     render(<EinkommenPage />, {
@@ -63,16 +43,10 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   it("should not show form block 'Tätigkeiten' if user is only 'erwerbstätig'", () => {
-    const stateOnlyErwerbstaetig: Partial<RootState> = {
-      ...stateFromPreviousSteps,
-      stepErwerbstaetigkeit: {
-        ...stepErwerbstaetigkeitState,
-        ET1: {
-          ...stepErwerbstaetigkeitState.ET1,
-          isSelbststaendig: false,
-        },
-      },
-    };
+    const stateOnlyErwerbstaetig = produce(stateFromPreviousSteps, (draft) => {
+      draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
+    });
+
     render(<EinkommenPage />, {
       preloadedState: stateOnlyErwerbstaetig,
     });
@@ -240,30 +214,22 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   describe("Validation of form", () => {
-    const taetigkeit1: Taetigkeit = {
-      artTaetigkeit: "NichtSelbststaendig",
-      bruttoEinkommenDurchschnitt: 1000,
-      isMinijob: YesNo.NO,
-      versicherungen: {
-        hasArbeitslosenversicherung: true,
-        hasKrankenversicherung: true,
-        hasRentenversicherung: true,
-        none: false,
-      },
-      zeitraum: [{ from: "9", to: "12" }],
-    };
-
-    const stateEinkommenValid: StepEinkommenState = {
-      ...initialStepEinkommenState,
-      ET1: {
-        ...initialStepEinkommenState.ET1,
-        taetigkeitenNichtSelbstaendigUndSelbstaendig: [taetigkeit1],
-      },
-    };
-    const validFormState = {
-      ...stateFromPreviousSteps,
-      stepEinkommen: stateEinkommenValid,
-    };
+    const validFormState = produce(stateFromPreviousSteps, (draft) => {
+      draft.stepEinkommen.ET1.taetigkeitenNichtSelbstaendigUndSelbstaendig = [
+        {
+          artTaetigkeit: "NichtSelbststaendig",
+          bruttoEinkommenDurchschnitt: 1000,
+          isMinijob: YesNo.NO,
+          versicherungen: {
+            hasArbeitslosenversicherung: true,
+            hasKrankenversicherung: true,
+            hasRentenversicherung: true,
+            none: false,
+          },
+          zeitraum: [{ from: "9", to: "12" }],
+        },
+      ];
+    });
 
     it("should require the Durchschnittliches Bruttoeinkommen", async () => {
       render(<EinkommenPage />, { preloadedState: validFormState });

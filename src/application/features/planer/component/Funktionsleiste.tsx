@@ -1,8 +1,7 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
-import { Button } from "@/application/components/atoms";
-import { PrintButton } from "@/application/components/molecules";
+import { Button, PrintButton } from "@/application/components";
 
 type Props = {
   readonly planungWiederholen: () => void;

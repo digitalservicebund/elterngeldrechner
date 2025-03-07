@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import { EinkommenPage } from "@/application/components/pages/EinkommenPage";
+import { EinkommenForm } from "./EinkommenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   INITIAL_STATE,
@@ -34,7 +34,7 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
       draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
     });
 
-    render(<EinkommenPage />, { preloadedState: state });
+    render(<EinkommenForm />, { preloadedState: state });
 
     expect(
       within(getElternteil1Section()).queryByText("Gewinneinkünfte"),
@@ -47,7 +47,7 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
       draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
     });
 
-    render(<EinkommenPage />, { preloadedState: state });
+    render(<EinkommenForm />, { preloadedState: state });
 
     expect(
       within(getElternteil1Section()).queryByText("Gewinneinkünfte"),
@@ -65,7 +65,7 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
     );
 
     it("should show Einkommen aus Selbstständigkeit", () => {
-      render(<EinkommenPage />, {
+      render(<EinkommenForm />, {
         preloadedState: stateWithOnlySelbstaendig,
       });
 
@@ -90,7 +90,7 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
       );
 
       it("should require the Gewinn selbständige Tätigkeit", async () => {
-        render(<EinkommenPage />, { preloadedState: validStateEinkommen });
+        render(<EinkommenForm />, { preloadedState: validStateEinkommen });
 
         const einkommenAusSelbstaendigkeitSection =
           getEinkommenAusSelbstaendigkeitElternteil1Section();
@@ -114,7 +114,7 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
           draft.stepEinkommen.ET1.rentenVersicherung = null;
         });
 
-        render(<EinkommenPage />, { preloadedState: invalidState });
+        render(<EinkommenForm />, { preloadedState: invalidState });
 
         const rentenversicherungSection =
           getRentenversicherungElternteil1Section();

@@ -4,7 +4,7 @@ import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
-} from "@/application/components/molecules";
+} from "@/application/components";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import {
   type Antragstellende,

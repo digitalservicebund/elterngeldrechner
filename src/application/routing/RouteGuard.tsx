@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { StepRoute } from "@/application/components/pages/formSteps";
-import { useNavigateWithPlan } from "@/application/components/pages/useNavigateWithPlan";
+import { StepRoute } from "./formSteps";
+import { useNavigateWithPlan } from "./pages/useNavigateWithPlan";
 import { RootState } from "@/application/redux";
 import { useAppStore } from "@/application/redux/hooks";
 import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";

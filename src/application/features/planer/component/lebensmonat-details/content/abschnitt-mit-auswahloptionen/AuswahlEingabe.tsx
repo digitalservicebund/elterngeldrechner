@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
-import { InfoDialog } from "@/application/components/molecules";
+import { InfoDialog } from "@/application/components";
 import {
   type GridColumnDefinitionPerElternteil,
   useGridColumnPerElternteil,

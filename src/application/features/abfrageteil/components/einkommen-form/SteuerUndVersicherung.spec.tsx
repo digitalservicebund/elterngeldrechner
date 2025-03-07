@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import { EinkommenPage } from "@/application/components/pages/EinkommenPage";
+import { EinkommenForm } from "./EinkommenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   INITIAL_STATE,
@@ -38,7 +38,7 @@ describe("Steuer und Versicherung", () => {
   });
 
   it("should show the relevant form blocks if user is only 'erwerbstätig' and its no 'Mini-Job'", () => {
-    render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
+    render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
     const elternteil1Section = getElternteil1Section();
 
     const steuerklasse =
@@ -67,7 +67,7 @@ describe("Steuer und Versicherung", () => {
     );
 
     it("should show Kinderfreibeitrag if there is at least one Geschwisterkind", () => {
-      render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
+      render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
       const elternteil1Section = getElternteil1Section();
 
       const einkommenElternteil1KinderfreibetraegeSection =
@@ -84,7 +84,7 @@ describe("Steuer und Versicherung", () => {
     });
 
     it("should not show Kinderfreibeitrag if there is no Geschwisterkind", () => {
-      render(<EinkommenPage />, {
+      render(<EinkommenForm />, {
         preloadedState: stateWithNoGeschwisterKind,
       });
       const elternteil1Section = getElternteil1Section();
@@ -117,7 +117,7 @@ describe("Steuer und Versicherung", () => {
         },
       );
 
-      render(<EinkommenPage />, {
+      render(<EinkommenForm />, {
         preloadedState: formStateWithoutSteuerklasse,
       });
 
@@ -148,7 +148,7 @@ describe("Steuer und Versicherung", () => {
         },
       );
 
-      render(<EinkommenPage />, {
+      render(<EinkommenForm />, {
         preloadedState: formStateWithoutKinderfreibetraege,
       });
       const elternteil1Section = getElternteil1Section();
@@ -178,7 +178,7 @@ describe("Steuer und Versicherung", () => {
         },
       );
 
-      render(<EinkommenPage />, { preloadedState });
+      render(<EinkommenForm />, { preloadedState });
 
       const elternteil1Section = getElternteil1Section();
 
@@ -209,7 +209,7 @@ describe("Steuer und Versicherung", () => {
         },
       );
 
-      render(<EinkommenPage />, { preloadedState });
+      render(<EinkommenForm />, { preloadedState });
 
       const elternteil1Section = getElternteil1Section();
 

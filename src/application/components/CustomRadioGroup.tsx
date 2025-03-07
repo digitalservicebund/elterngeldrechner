@@ -9,11 +9,8 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/application/components/atoms";
-import {
-  Info,
-  InfoDialog,
-} from "@/application/components/molecules/info-dialog";
+import { Description } from "@/application/components";
+import { Info, InfoDialog } from "@/application/components/info-dialog";
 
 type RadioGroupValue = string | number;
 

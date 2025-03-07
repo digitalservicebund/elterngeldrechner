@@ -7,12 +7,12 @@ import {
   type ZeitraumOptionType,
   availableZeitraumOptions,
 } from "./ZeitraumUtil";
-import { Button } from "@/application/components/atoms";
+import { Button } from "@/application/components";
 import {
   CustomNumberField,
   type SelectOption,
   cloneOptionsList,
-} from "@/application/components/molecules";
+} from "@/application/components";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import { Versicherungen } from "@/application/features/abfrageteil/components/einkommen-form/taetigkeit/Versicherungen";
 import {

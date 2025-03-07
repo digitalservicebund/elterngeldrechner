@@ -6,7 +6,7 @@ import {
   CustomSelect,
   InfoText,
   SelectOption,
-} from "@/application/components/molecules";
+} from "@/application/components";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import {
   type ElternteilType,

@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
-import { ButtonGroup, Split } from "@/application/components/molecules";
+import { ButtonGroup, Split } from "@/application/components";
 import {
   type StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,

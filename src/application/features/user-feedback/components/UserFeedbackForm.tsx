@@ -1,10 +1,10 @@
 import classNames from "classnames";
 import { Path, useForm } from "react-hook-form";
-import { Button } from "@/application/components/atoms";
 import {
+  Button,
   CustomRadioGroup,
   CustomRadioGroupOption,
-} from "@/application/components/molecules";
+} from "@/application/components";
 
 type Props = {
   readonly className?: string;

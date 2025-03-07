@@ -9,8 +9,8 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/application/components/atoms";
-import { type Info, InfoDialog } from "@/application/components/molecules";
+import { Description } from "@/application/components";
+import { type Info, InfoDialog } from "@/application/components";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;

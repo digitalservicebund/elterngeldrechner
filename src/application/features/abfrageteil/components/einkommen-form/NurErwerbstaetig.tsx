@@ -1,10 +1,10 @@
 import { useId } from "react";
 import { useFormContext } from "react-hook-form";
-import { Button } from "@/application/components/atoms";
 import {
+  Button,
   CustomNumberField,
   SelectOption,
-} from "@/application/components/molecules";
+} from "@/application/components";
 import type {
   ElternteilType,
   StepEinkommenState,

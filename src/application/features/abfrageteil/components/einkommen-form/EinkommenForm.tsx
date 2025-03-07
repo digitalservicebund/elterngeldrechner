@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
-import { ButtonGroup, Split } from "@/application/components/molecules";
+import { ButtonGroup, Split } from "@/application/components";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import {
   type StepEinkommenState,

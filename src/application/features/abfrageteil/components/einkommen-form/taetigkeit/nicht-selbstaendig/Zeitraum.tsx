@@ -21,7 +21,7 @@ import {
   CustomSelect,
   SelectOption,
   cloneOptionsList,
-} from "@/application/components/molecules";
+} from "@/application/components";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly register: UseFormRegister<TFieldValues>;

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { MouseEvent, ReactNode } from "react";
-import { Button } from "@/application/components/atoms";
+import { Button } from "./Button";
 
 interface Props {
   readonly onClickBackButton?: (event: MouseEvent) => void;

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { formSteps } from "@/application/components/pages/formSteps";
+import { formSteps } from "./formSteps";
 import { RootState } from "@/application/redux";
 
 type InternalStepRoute = {

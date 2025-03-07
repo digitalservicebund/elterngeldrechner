@@ -1,7 +1,10 @@
 import { useId } from "react";
 import { type FieldError, get, useFormContext } from "react-hook-form";
-import { Description } from "@/application/components/atoms";
-import { CustomCheckbox, InfoText } from "@/application/components/molecules";
+import {
+  CustomCheckbox,
+  Description,
+  InfoText,
+} from "@/application/components";
 import {
   type ElternteilType,
   type StepErwerbstaetigkeitState,

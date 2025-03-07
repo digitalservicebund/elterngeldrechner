@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import { EinkommenPage } from "@/application/components/pages/EinkommenPage";
+import { EinkommenForm } from "./EinkommenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   INITIAL_STATE,
@@ -28,7 +28,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   it("should show form block 'Tätigkeiten' if user is 'erwerbstätig' AND is'selbständig'", async () => {
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
     const ET1 = getElternteil1Section();
@@ -47,7 +47,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
     });
 
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateOnlyErwerbstaetig,
     });
     const elternteil1Section = getElternteil1Section();
@@ -58,7 +58,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   it("should select the kind of the Tätigkeit", async () => {
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
     const elternteil1Section = getElternteil1Section();
@@ -83,7 +83,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   it("should remove a Tätigkeit", async () => {
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
     const elternteil1Section = getElternteil1Section();
@@ -101,7 +101,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   it("should show selection of 12 months", async () => {
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
 
@@ -128,7 +128,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
   });
 
   it("should add 'weiteren Zeitraum' when clicked on button in section Zeitraum 1. Tätigkeit", async () => {
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
 
@@ -159,7 +159,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
 
   it("should show 'Mini-Job' when choose 'Einkünfte aus nichtselbständiger Arbeit'", async () => {
     // given
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
     const elternteil1Section = getElternteil1Section();
@@ -187,7 +187,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
 
   it("should hide 'Minijob' when choose 'Gewinneinkünfte'", async () => {
     // given
-    render(<EinkommenPage />, {
+    render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
     const elternteil1Section = getElternteil1Section();
@@ -232,7 +232,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     });
 
     it("should require the Durchschnittliches Bruttoeinkommen", async () => {
-      render(<EinkommenPage />, { preloadedState: validFormState });
+      render(<EinkommenForm />, { preloadedState: validFormState });
       const taetigkeit1Section = getTaetigkeit1OfElternteil1Section();
 
       await userEvent.clear(
@@ -249,7 +249,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
 
     describe("Zeitraum", () => {
       it("should require the from-Field", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
         const zeitraum1Section = getTaetigkeit1OfElternteil1Section();
 
         await userEvent.selectOptions(
@@ -264,7 +264,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       });
 
       it("should require the to-Field", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
         const zeitraum1Section = getTaetigkeit1OfElternteil1Section();
 
         await userEvent.selectOptions(
@@ -279,7 +279,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       });
 
       it("should require to-Month to be after from-Month", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
 
         const zeitraum1Section = getTaetigkeit1OfElternteil1Section();
 
@@ -303,7 +303,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
 
     describe("Versicherungen", () => {
       it("should not show an error if at least one Versicherung was selected", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
         const taetigkeit1Section = getTaetigkeit1OfElternteil1Section();
 
         await userEvent.click(screen.getByText("Weiter"));
@@ -316,7 +316,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       });
 
       it("should show an error if no Versicherung option was selected", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
         const taetigkeit1Section = getTaetigkeit1OfElternteil1Section();
 
         await userEvent.click(
@@ -344,7 +344,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       });
 
       it("should deselect all other Versicherungen if choosing none", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
         const taetigkeit1Section = getTaetigkeit1OfElternteil1Section();
 
         await userEvent.click(
@@ -370,7 +370,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
       });
 
       it("should deselect none if selecting any other Versicherung", async () => {
-        render(<EinkommenPage />, { preloadedState: validFormState });
+        render(<EinkommenForm />, { preloadedState: validFormState });
         const taetigkeit1Section = getTaetigkeit1OfElternteil1Section();
 
         await userEvent.click(

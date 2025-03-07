@@ -1,6 +1,6 @@
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import { ReactNode } from "react";
-import { Button } from "@/application/components/atoms";
+import { Button } from "@/application/components";
 
 export function PrintButton(): ReactNode {
   return (

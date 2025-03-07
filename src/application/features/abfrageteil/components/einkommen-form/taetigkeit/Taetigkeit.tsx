@@ -2,8 +2,7 @@ import { type ForwardedRef, forwardRef, useId } from "react";
 import { type FieldPath, useFormContext } from "react-hook-form";
 import { Selbststaendig } from "./Selbstaendig";
 import { NichtSelbstaendig } from "./nicht-selbstaendig";
-import { Button } from "@/application/components/atoms";
-import { CustomSelect, SelectOption } from "@/application/components/molecules";
+import { Button, CustomSelect, SelectOption } from "@/application/components";
 import {
   type ElternteilType,
   type StepEinkommenState,

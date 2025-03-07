@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "./formSteps";
 import { Page } from "./page";
-import { Button } from "@/application/components/atoms";
-import { ButtonGroup } from "@/application/components/molecules";
+import { Button, ButtonGroup } from "@/application/components";
 import { ElterngeldvariantenDescriptions } from "@/application/features/elterngelderklaerung";
+import { formSteps } from "@/application/routing/formSteps";
 
 export function ElterngeldvariantenPage(): ReactNode {
   const navigate = useNavigate();

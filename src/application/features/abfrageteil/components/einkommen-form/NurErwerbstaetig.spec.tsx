@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import { EinkommenPage } from "@/application/components/pages/EinkommenPage";
+import { EinkommenForm } from "./EinkommenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   INITIAL_STATE,
@@ -27,7 +27,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
   });
 
   it("should show the relevant form blocks if user is only 'erwerbstätig' and its no 'Mini-Job'", () => {
-    render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
+    render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
     const elternteil1Section = getElternteil1Section();
 
     const bruttoEinkommen = within(elternteil1Section).getByText(
@@ -39,7 +39,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
 
   describe("Ausführliche Eingabe", () => {
     it("should open the 'ausführliche Eingabe' on click", async () => {
-      render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
+      render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
       const elternteil1Section = getElternteil1Section();
 
       const buttonZurAusfuerlichen = within(elternteil1Section).getByRole(
@@ -60,7 +60,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
     });
 
     it("should show 12 month before the birth", async () => {
-      render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
+      render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
       const elternteil1Section = getElternteil1Section();
 
       const buttonZurAusfuerlichen = within(elternteil1Section).getByRole(
@@ -79,7 +79,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
     });
 
     it("should hide the 12 month before the birth", async () => {
-      render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
+      render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
       const elternteil1Section = getElternteil1Section();
 
       const buttonZurAusfuerlichen = within(elternteil1Section).getByRole(
@@ -122,7 +122,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
     );
 
     it("should require the Brutto Einkommen", async () => {
-      render(<EinkommenPage />, {
+      render(<EinkommenForm />, {
         preloadedState: validFormStateNurErwerbstaetig,
       });
       const elternteil1Section = getElternteil1Section();

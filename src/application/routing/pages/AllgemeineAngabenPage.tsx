@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "./formSteps";
 import { Page } from "./page";
 import { AllgemeineAngabenForm } from "@/application/features/abfrageteil";
+import { formSteps } from "@/application/routing/formSteps";
 
 export function AllgemeineAngabenPage() {
   const navigate = useNavigate();

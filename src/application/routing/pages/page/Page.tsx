@@ -1,12 +1,12 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
-import { Alert } from "@/application/components/molecules";
+import { Alert } from "@/application/components";
 import {
   FormStep,
   StepRoute,
   formSteps,
-} from "@/application/components/pages/formSteps";
+} from "@/application/routing/formSteps";
 
 interface PageProps {
   readonly step: FormStep;

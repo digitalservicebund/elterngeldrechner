@@ -3,7 +3,7 @@ import {
   CustomRadioGroup,
   CustomRadioGroupOption,
   CustomRadioGroupProps,
-} from "@/application/components/molecules/CustomRadioGroup";
+} from "@/application/components/CustomRadioGroup";
 import { YesNo } from "@/application/features/abfrageteil/state";
 
 const booleanOptions: CustomRadioGroupOption<YesNo>[] = [

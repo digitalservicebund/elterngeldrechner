@@ -1,7 +1,4 @@
-import {
-  SelectOption,
-  cloneOptionsList,
-} from "@/application/components/molecules";
+import { SelectOption, cloneOptionsList } from "@/application/components";
 
 // Bildet ein "von"/"bis" Zeitraum ab.
 export interface ZeitraumData {

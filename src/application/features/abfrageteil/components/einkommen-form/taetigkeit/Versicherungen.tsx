@@ -1,7 +1,6 @@
 import { ChangeEvent, useId } from "react";
 import { FieldError, Path, get, useFormContext } from "react-hook-form";
-import { Description } from "@/application/components/atoms";
-import { CustomCheckbox } from "@/application/components/molecules";
+import { CustomCheckbox, Description } from "@/application/components";
 import {
   type StepEinkommenState,
   type TypeOfVersicherungen,

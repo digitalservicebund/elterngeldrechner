@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { useForm } from "react-hook-form";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomNumberField } from "./CustomNumberField";
-import { Button } from "@/application/components/atoms";
+import { Button } from "@/application/components";
 
 interface TestFormValues {
   testField: string;

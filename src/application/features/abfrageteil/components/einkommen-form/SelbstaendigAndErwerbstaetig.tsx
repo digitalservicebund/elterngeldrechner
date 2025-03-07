@@ -1,8 +1,7 @@
 import { useRef } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Taetigkeit } from "./taetigkeit";
-import { Button } from "@/application/components/atoms";
-import { SelectOption } from "@/application/components/molecules";
+import { Button, SelectOption } from "@/application/components";
 import {
   type ElternteilType,
   type StepEinkommenState,

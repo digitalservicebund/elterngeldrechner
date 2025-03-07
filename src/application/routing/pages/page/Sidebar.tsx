@@ -3,8 +3,8 @@ import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import classNames from "classnames";
 import { useCallback, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FormStep, formSteps } from "@/application/components/pages/formSteps";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
+import { FormStep, formSteps } from "@/application/routing/formSteps";
 
 interface Props {
   readonly currentStep: FormStep;

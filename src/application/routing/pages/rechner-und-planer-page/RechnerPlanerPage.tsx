@@ -2,11 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tracking-geplante-monate-des-partners-der-mutter";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
-import { Button } from "@/application/components/atoms";
-import { ButtonGroup } from "@/application/components/molecules";
-import { formSteps } from "@/application/components/pages/formSteps";
-import { Page } from "@/application/components/pages/page";
-import { useNavigateWithPlan } from "@/application/components/pages/useNavigateWithPlan";
+import { Button, ButtonGroup } from "@/application/components";
 import {
   YesNo,
   composeAusgangslageFuerPlaner,
@@ -18,6 +14,9 @@ import {
   useUserFeedback,
 } from "@/application/features/user-feedback";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { formSteps } from "@/application/routing/formSteps";
+import { Page } from "@/application/routing/pages/page";
+import { useNavigateWithPlan } from "@/application/routing/pages/useNavigateWithPlan";
 import {
   countUpAnzahlGeoeffneterLebensmonateImPlaner,
   isTrackingAllowedByUser,

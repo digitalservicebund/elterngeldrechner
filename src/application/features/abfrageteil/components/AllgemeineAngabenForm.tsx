@@ -8,7 +8,7 @@ import {
   CustomRadioGroupOption,
   InfoText,
   Split,
-} from "@/application/components/molecules";
+} from "@/application/components";
 import {
   StepAllgemeineAngabenState,
   YesNo,

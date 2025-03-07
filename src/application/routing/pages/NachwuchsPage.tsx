@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { formSteps } from "./formSteps";
 import { Page } from "./page";
 import { NachwuchsForm } from "@/application/features/abfrageteil";
 import {
   StepNachwuchsState,
   parseGermanDateString,
 } from "@/application/features/abfrageteil/state";
+import { formSteps } from "@/application/routing/formSteps";
 import { trackNutzergruppe } from "@/application/user-tracking";
 
 export function NachwuchsPage() {

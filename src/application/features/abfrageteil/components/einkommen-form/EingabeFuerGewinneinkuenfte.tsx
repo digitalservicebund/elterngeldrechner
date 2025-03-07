@@ -1,9 +1,6 @@
 import { type ReactNode, useId } from "react";
 import type { Control, FieldPath, FieldValues } from "react-hook-form";
-import {
-  CustomNumberField,
-  InfoText,
-} from "@/application/components/molecules";
+import { CustomNumberField, InfoText } from "@/application/components";
 
 type Props<
   FormFields extends FieldValues,

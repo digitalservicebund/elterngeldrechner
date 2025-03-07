@@ -4,14 +4,14 @@ import { useCallback, useId } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { NachwuchsFormInfoText } from "./NachwuchsFormInfoText";
-import { Button } from "@/application/components/atoms";
 import {
+  Button,
   ButtonGroup,
   Counter,
   CustomCheckbox,
   CustomDate,
   InfoDialog,
-} from "@/application/components/molecules";
+} from "@/application/components";
 import {
   type StepNachwuchsState,
   stepNachwuchsSlice,

@@ -6,7 +6,7 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
-import { Alert } from "@/application/components/molecules";
+import { Alert } from "@/application/components";
 import { Zusammenfassung } from "@/application/features/planer";
 import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {

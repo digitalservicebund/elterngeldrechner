@@ -6,8 +6,8 @@ import {
   CustomSelect,
   InfoText,
   SelectOption,
-  YesNoRadio,
 } from "@/application/components/molecules";
+import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import {
   type ElternteilType,
   type StepEinkommenState,

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { formSteps } from "./formSteps";
+import { Page } from "./page";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { ButtonGroup, PrintButton } from "@/application/components/molecules";
-import { Page } from "@/application/components/organisms";
 import { Zusammenfassung } from "@/application/features/planer";
 
 function ZusammenfassungUndDatenPage(): ReactNode {

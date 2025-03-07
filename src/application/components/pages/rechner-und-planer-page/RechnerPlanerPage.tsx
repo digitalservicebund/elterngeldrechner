@@ -4,8 +4,8 @@ import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tra
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/application/components/atoms";
 import { ButtonGroup } from "@/application/components/molecules";
-import { Page } from "@/application/components/organisms";
 import { formSteps } from "@/application/components/pages/formSteps";
+import { Page } from "@/application/components/pages/page";
 import { useNavigateWithPlan } from "@/application/components/pages/useNavigateWithPlan";
 import {
   YesNo,

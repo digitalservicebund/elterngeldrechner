@@ -11,9 +11,9 @@ import { Button } from "@/application/components/atoms";
 import {
   CustomNumberField,
   type SelectOption,
-  YesNoRadio,
   cloneOptionsList,
 } from "@/application/components/molecules";
+import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import { Versicherungen } from "@/application/features/abfrageteil/components/einkommen-form/taetigkeit/Versicherungen";
 import {
   type ElternteilType,

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
-import { Page } from "@/application/components/organisms";
+import { Page } from "./page";
 import { EinkommenForm } from "@/application/features/abfrageteil";
 
 export function EinkommenPage() {

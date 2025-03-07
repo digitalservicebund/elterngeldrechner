@@ -8,7 +8,6 @@ export {
 export { CustomNumberField } from "./CustomNumberField";
 export { Counter } from "./Counter";
 export { CustomDate } from "./CustomDate";
-export { YesNoRadio } from "./YesNoRadio";
 export { CustomInput } from "./CustomInput";
 export { Split } from "./Split";
 export { ButtonGroup } from "./ButtonGroup";

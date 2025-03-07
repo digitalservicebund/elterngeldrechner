@@ -1,5 +1,6 @@
 import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
+import { YesNoRadio } from "./YesNoRadio";
 import {
   ButtonGroup,
   CustomInput,
@@ -7,7 +8,6 @@ import {
   CustomRadioGroupOption,
   InfoText,
   Split,
-  YesNoRadio,
 } from "@/application/components/molecules";
 import {
   StepAllgemeineAngabenState,

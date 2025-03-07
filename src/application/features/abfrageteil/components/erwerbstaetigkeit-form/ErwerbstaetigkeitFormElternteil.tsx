@@ -4,8 +4,8 @@ import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
-  YesNoRadio,
 } from "@/application/components/molecules";
+import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import {
   type Antragstellende,
   type ElternteilType,

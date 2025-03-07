@@ -1,19 +1,19 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import AllgemeineAngabenPage from "./AllgemeineAngabenPage";
+import { AllgemeineAngabenForm } from "./AllgemeineAngabenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { INITIAL_STATE, render, screen } from "@/application/test-utils";
 
 describe("Allgemeine Angaben Page", () => {
   it("should display the Alleinerziehendenstatus part of the form right away", () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     expect(screen.getByText("Alleinerziehendenstatus")).toBeInTheDocument();
   });
 
   it("should display the Antragstellenden part of the form after the Alleinerziehendenstatus", async () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -21,7 +21,7 @@ describe("Allgemeine Angaben Page", () => {
   });
 
   it("should display the optional naming part of the form after the Antragstellenden part", async () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -31,7 +31,7 @@ describe("Allgemeine Angaben Page", () => {
   });
 
   it("should ask for Mutterschaftssleistungen if Gemeinsam Erziehende", async () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -41,7 +41,7 @@ describe("Allgemeine Angaben Page", () => {
   });
 
   it("should ask for Mutterschaftssleistungen if Alleinerziehend", async () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Ja"));
 
@@ -49,7 +49,7 @@ describe("Allgemeine Angaben Page", () => {
   });
 
   it("should ask to whom Mutterschaftsleistungen belongs if Gemeinsam Erziehende", async () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -67,7 +67,7 @@ describe("Allgemeine Angaben Page", () => {
   });
 
   it("should not ask to whom Mutterschaftsleistungen belongs if Alleinerziehend", async () => {
-    render(<AllgemeineAngabenPage />);
+    render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Ja"));
 
@@ -84,7 +84,7 @@ describe("Allgemeine Angaben Page", () => {
 
   describe("Submitting the form", () => {
     it("should persist the step", async () => {
-      const { store } = render(<AllgemeineAngabenPage />);
+      const { store } = render(<AllgemeineAngabenForm />);
 
       await userEvent.click(screen.getByLabelText("Ja"));
       await userEvent.click(
@@ -100,7 +100,7 @@ describe("Allgemeine Angaben Page", () => {
     });
 
     it("should persist the pseudonym", async () => {
-      const { store } = render(<AllgemeineAngabenPage />);
+      const { store } = render(<AllgemeineAngabenForm />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
@@ -138,7 +138,7 @@ describe("Allgemeine Angaben Page", () => {
         draft.stepAllgemeineAngaben.alleinerziehend = YesNo.YES;
       });
 
-      const { store } = render(<AllgemeineAngabenPage />, { preloadedState });
+      const { store } = render(<AllgemeineAngabenForm />, { preloadedState });
 
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
@@ -161,7 +161,7 @@ describe("Allgemeine Angaben Page", () => {
         draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
       });
 
-      render(<AllgemeineAngabenPage />, { preloadedState: invalidFormState });
+      render(<AllgemeineAngabenForm />, { preloadedState: invalidFormState });
 
       await userEvent.click(screen.getByText("Weiter"));
 

@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import { Page } from "@/application/components/organisms";
@@ -5,30 +6,27 @@ import { NachwuchsForm } from "@/application/features/abfrageteil";
 import {
   StepNachwuchsState,
   parseGermanDateString,
-  stepNachwuchsSlice,
 } from "@/application/features/abfrageteil/state";
-import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 import { trackNutzergruppe } from "@/application/user-tracking";
 
-function NachwuchsPage() {
-  const dispatch = useAppDispatch();
+export function NachwuchsPage() {
   const navigate = useNavigate();
 
-  const initialValues = useAppSelector((state) => state.stepNachwuchs);
+  const trackNutzergruppeAndNavigateToNextStep = useCallback(
+    (values: StepNachwuchsState) => {
+      const birthdate = parseGermanDateString(
+        values.wahrscheinlichesGeburtsDatum,
+      );
 
-  const handleSubmit = (values: StepNachwuchsState) => {
-    dispatch(stepNachwuchsSlice.actions.submitStep(values));
-    trackNutzergruppe(
-      parseGermanDateString(values.wahrscheinlichesGeburtsDatum),
-    );
-    navigate(formSteps.erwerbstaetigkeit.route);
-  };
+      trackNutzergruppe(birthdate);
+      navigate(formSteps.erwerbstaetigkeit.route);
+    },
+    [navigate],
+  );
 
   return (
     <Page step={formSteps.nachwuchs}>
-      <NachwuchsForm initialValues={initialValues} onSubmit={handleSubmit} />
+      <NachwuchsForm onSubmit={trackNutzergruppeAndNavigateToNextStep} />
     </Page>
   );
 }
-
-export default NachwuchsPage;

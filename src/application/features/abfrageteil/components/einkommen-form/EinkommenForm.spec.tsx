@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it, vi } from "vitest";
-import EinkommenPage from "./EinkommenPage";
+import { EinkommenForm } from "./EinkommenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   INITIAL_STATE,
@@ -37,7 +37,7 @@ describe("Einkommen Page", () => {
       draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MehrAlsMiniJob";
     });
 
-    render(<EinkommenPage />, { preloadedState });
+    render(<EinkommenForm />, { preloadedState });
 
     expect(screen.getByText(ET1)).toBeInTheDocument();
     expect(screen.getByText(ET2)).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe("Einkommen Page", () => {
       draft.stepErwerbstaetigkeit.ET2.monatlichesBrutto = "MiniJob";
     });
 
-    render(<EinkommenPage />, { preloadedState });
+    render(<EinkommenForm />, { preloadedState });
 
     const messages = screen.getAllByText(
       "Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.",
@@ -88,7 +88,7 @@ describe("Einkommen Page", () => {
         draft.stepEinkommen.limitEinkommenUeberschritten = YesNo.NO;
       });
 
-      const { store } = render(<EinkommenPage />, {
+      const { store } = render(<EinkommenForm />, {
         preloadedState: stateFromPreviousSteps,
       });
       const elternteil1Section = getElternteil1Section();
@@ -185,7 +185,7 @@ describe("Einkommen Page", () => {
         draft.stepEinkommen.antragstellende = "EinenElternteil";
       });
 
-      const { store } = render(<EinkommenPage />, {
+      const { store } = render(<EinkommenForm />, {
         preloadedState: stateFromPreviousSteps,
       });
       const elternteil1Section = getElternteil1Section();
@@ -272,7 +272,7 @@ describe("Einkommen Page", () => {
         draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = true;
       });
 
-      const { store } = render(<EinkommenPage />, { preloadedState });
+      const { store } = render(<EinkommenForm />, { preloadedState });
 
       // Field Einkommensgrenze
       const elterngeldAnspruch = screen.getByRole("radiogroup", {

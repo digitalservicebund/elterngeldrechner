@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import EinkommenPage from "@/application/components/pages/EinkommenPage";
+import { EinkommenPage } from "@/application/components/pages/EinkommenPage";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   INITIAL_STATE,

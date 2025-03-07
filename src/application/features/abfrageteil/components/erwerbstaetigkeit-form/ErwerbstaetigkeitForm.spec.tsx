@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
-import ErwerbstaetigkeitPage from "./ErwerbstaetigkeitPage";
+import { ErwerbstaetigkeitForm } from "./ErwerbstaetigkeitForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { INITIAL_STATE, render } from "@/application/test-utils";
 
@@ -16,14 +16,14 @@ describe("Erwerbstaetigkeit Page", () => {
       draft.stepAllgemeineAngaben.pseudonym = { ET1, ET2 };
     });
 
-    render(<ErwerbstaetigkeitPage />, { preloadedState });
+    render(<ErwerbstaetigkeitForm />, { preloadedState });
 
     expect(screen.getByText(ET1)).toBeInTheDocument();
     expect(screen.getByText(ET2)).toBeInTheDocument();
   });
 
   it("should expand the form options if Elternteil 1 is nicht Selbststaendig", async () => {
-    render(<ErwerbstaetigkeitPage />);
+    render(<ErwerbstaetigkeitForm />);
     await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
     await userEvent.click(
       screen.getByLabelText("Einkünfte aus nichtselbständiger Arbeit"),
@@ -49,7 +49,7 @@ describe("Erwerbstaetigkeit Page", () => {
   });
 
   it("should expand the form options if Elternteil 1 is nicht Selbststaendig and mehreren Tätigkeiten", async () => {
-    render(<ErwerbstaetigkeitPage />);
+    render(<ErwerbstaetigkeitForm />);
     await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
     await userEvent.click(
       screen.getByLabelText("Einkünfte aus nichtselbständiger Arbeit"),
@@ -79,7 +79,7 @@ describe("Erwerbstaetigkeit Page", () => {
     "when Elternteil has %s",
     (selbststaendigLabeltext: string) => {
       it("should not expand the form options", async () => {
-        render(<ErwerbstaetigkeitPage />);
+        render(<ErwerbstaetigkeitForm />);
         await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
         await userEvent.click(screen.getByLabelText(selbststaendigLabeltext));
 
@@ -94,7 +94,7 @@ describe("Erwerbstaetigkeit Page", () => {
       });
 
       it("should not expand the form options for Mischeinkommen", async () => {
-        render(<ErwerbstaetigkeitPage />);
+        render(<ErwerbstaetigkeitForm />);
         await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
         await userEvent.click(
           screen.getByLabelText("Einkünfte aus nichtselbständiger Arbeit"),
@@ -119,7 +119,7 @@ describe("Erwerbstaetigkeit Page", () => {
     });
 
     it("should persist the step", async () => {
-      const { store } = render(<ErwerbstaetigkeitPage />, { preloadedState });
+      const { store } = render(<ErwerbstaetigkeitForm />, { preloadedState });
 
       // ET1:
       await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));
@@ -156,7 +156,7 @@ describe("Erwerbstaetigkeit Page", () => {
     });
 
     it("should persist the step for mehreren Tätigkeiten", async () => {
-      const { store } = render(<ErwerbstaetigkeitPage />, { preloadedState });
+      const { store } = render(<ErwerbstaetigkeitForm />, { preloadedState });
 
       // ET1:
       await userEvent.click(screen.getByTestId("ET1.vorGeburt_option_0"));

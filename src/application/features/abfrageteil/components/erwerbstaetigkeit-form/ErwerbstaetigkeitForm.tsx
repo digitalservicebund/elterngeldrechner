@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { useCallback, useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
 import { ButtonGroup, Split } from "@/application/components/molecules";
@@ -7,23 +7,29 @@ import {
   type StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
   stepAllgemeineAngabenSelectors,
+  stepErwerbstaetigkeitSlice,
 } from "@/application/features/abfrageteil/state";
-import { useAppSelector } from "@/application/redux/hooks";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 
-interface ErwerbstaetigkeitFormProps {
-  readonly initialValues: StepErwerbstaetigkeitState;
-  readonly onSubmit: SubmitHandler<StepErwerbstaetigkeitState>;
-}
+type Props = {
+  readonly onSubmit?: () => void;
+};
 
-export function ErwerbstaetigkeitForm({
-  initialValues,
-  onSubmit,
-}: ErwerbstaetigkeitFormProps) {
-  const navigate = useNavigate();
+export function ErwerbstaetigkeitForm({ onSubmit }: Props) {
+  const store = useAppStore();
+
   const methods = useForm({
-    defaultValues: initialValues,
+    defaultValues: store.getState().stepErwerbstaetigkeit,
   });
   const { handleSubmit, setValue } = methods;
+
+  const submitErwerbstaetigkeit = useCallback(
+    (values: StepErwerbstaetigkeitState) => {
+      store.dispatch(stepErwerbstaetigkeitSlice.actions.submitStep(values));
+      onSubmit?.();
+    },
+    [store, onSubmit],
+  );
 
   const antragssteller = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -33,6 +39,7 @@ export function ErwerbstaetigkeitForm({
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
 
+  const navigate = useNavigate();
   const handlePageBack = () => navigate("/nachwuchs");
 
   // reset state if ET2 is not displayed anymore
@@ -44,7 +51,7 @@ export function ErwerbstaetigkeitForm({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(submitErwerbstaetigkeit)} noValidate>
         <Split>
           <ErwerbstaetigkeitFormElternteil
             elternteil="ET1"

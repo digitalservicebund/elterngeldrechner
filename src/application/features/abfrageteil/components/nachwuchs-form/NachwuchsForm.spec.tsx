@@ -1,14 +1,14 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import NachwuchsPage from "./NachwuchsPage";
+import { NachwuchsForm } from "./NachwuchsForm";
 import { INITIAL_STATE, act, render, screen } from "@/application/test-utils";
 
 const currentYear = new Date().getFullYear();
 
 describe("Nachwuchs Page", () => {
   it("should increase and decrease number of expected children", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const numberField = screen.getByLabelText(
       "Wie viele Kinder werden oder wurden geboren?",
@@ -24,7 +24,7 @@ describe("Nachwuchs Page", () => {
   });
 
   it("should not increase beyond 8 expected children", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const numberField = screen.getByLabelText(
       "Wie viele Kinder werden oder wurden geboren?",
@@ -37,7 +37,7 @@ describe("Nachwuchs Page", () => {
   });
 
   it("should not decrease below 0 children", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const numberField = screen.getByLabelText(
       "Wie viele Kinder werden oder wurden geboren?",
@@ -50,7 +50,7 @@ describe("Nachwuchs Page", () => {
   });
 
   it("should display the typed value for the expected birthday", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const dateField = screen.getByLabelText(
       "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
@@ -62,7 +62,7 @@ describe("Nachwuchs Page", () => {
   });
 
   it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const addButton = screen.getByRole("button", {
       name: /älteres geschwisterkind hinzufügen/i,
@@ -78,7 +78,7 @@ describe("Nachwuchs Page", () => {
   });
 
   it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button and check Behinderung-Checkbox", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const addButton = screen.getByRole("button", {
       name: /älteres geschwisterkind hinzufügen/i,
@@ -97,7 +97,7 @@ describe("Nachwuchs Page", () => {
   });
 
   it("should change the title of the add new Geschwisterkind button after the first added child", async () => {
-    render(<NachwuchsPage />);
+    render(<NachwuchsForm />);
 
     const addButton = screen.getByRole("button", {
       name: /älteres geschwisterkind hinzufügen/i,
@@ -113,7 +113,7 @@ describe("Nachwuchs Page", () => {
 
 describe("Submitting the form", () => {
   it("should persist the step", async () => {
-    const { store } = render(<NachwuchsPage />);
+    const { store } = render(<NachwuchsForm />);
 
     for (let i = 0; i < 2; i++) {
       await userEvent.click(screen.getByTestId("erhöhen"));
@@ -181,7 +181,7 @@ describe("Submitting the form", () => {
         ];
       });
 
-      render(<NachwuchsPage />, { preloadedState: validFormState });
+      render(<NachwuchsForm />, { preloadedState: validFormState });
 
       await act(() => userEventsForFakeTime.click(screen.getByText("Weiter")));
 
@@ -206,7 +206,7 @@ describe("Submitting the form", () => {
         ];
       });
 
-      render(<NachwuchsPage />, { preloadedState: validFormState });
+      render(<NachwuchsForm />, { preloadedState: validFormState });
 
       await act(() => userEventsForFakeTime.click(screen.getByText("Weiter")));
 
@@ -230,7 +230,7 @@ describe("Submitting the form", () => {
       ];
     });
 
-    const { store } = render(<NachwuchsPage />, {
+    const { store } = render(<NachwuchsForm />, {
       preloadedState: validFormState,
     });
 
@@ -251,7 +251,7 @@ describe("Submitting the form", () => {
       ];
     });
 
-    render(<NachwuchsPage />, { preloadedState: invalidFormState });
+    render(<NachwuchsForm />, { preloadedState: invalidFormState });
 
     await userEvent.click(screen.getByText("Weiter"));
 
@@ -273,7 +273,7 @@ describe("Submitting the form", () => {
       ];
     });
 
-    render(<NachwuchsPage />, { preloadedState: invalidFormState });
+    render(<NachwuchsForm />, { preloadedState: invalidFormState });
     await userEvent.click(screen.getByText("Weiter"));
 
     const errorMessage = screen.getByText(
@@ -294,7 +294,7 @@ describe("Submitting the form", () => {
       ];
     });
 
-    render(<NachwuchsPage />, { preloadedState: invalidFormState });
+    render(<NachwuchsForm />, { preloadedState: invalidFormState });
 
     await userEvent.click(screen.getByText("Weiter"));
 

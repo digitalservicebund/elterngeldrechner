@@ -1,5 +1,5 @@
-import { useId } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useCallback, useId } from "react";
+import { useForm } from "react-hook-form";
 import {
   ButtonGroup,
   CustomInput,
@@ -12,28 +12,36 @@ import {
 import {
   StepAllgemeineAngabenState,
   YesNo,
+  stepAllgemeineAngabenSlice,
 } from "@/application/features/abfrageteil/state";
+import { useAppStore } from "@/application/redux/hooks";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   { value: "EinenElternteil", label: "Für einen Elternteil" },
   { value: "FuerBeide", label: "Für zwei Elternteile" },
 ];
 
-interface AllgemeineAngabenFormProps {
-  readonly initialValues: StepAllgemeineAngabenState;
-  readonly onSubmit: SubmitHandler<StepAllgemeineAngabenState>;
-}
-
 const alleinerziehendInfoText =
   "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.";
 
-export function AllgemeineAngabenForm({
-  initialValues,
-  onSubmit,
-}: AllgemeineAngabenFormProps) {
+type Props = {
+  readonly onSubmit?: () => void;
+};
+
+export function AllgemeineAngabenForm({ onSubmit }: Props) {
+  const store = useAppStore();
+
   const { register, handleSubmit, watch, formState, setValue } = useForm({
-    defaultValues: initialValues,
+    defaultValues: store.getState().stepAllgemeineAngaben,
   });
+
+  const submitAllgemeineAngaben = useCallback(
+    (values: StepAllgemeineAngabenState) => {
+      store.dispatch(stepAllgemeineAngabenSlice.actions.submitStep(values));
+      onSubmit?.();
+    },
+    [store, onSubmit],
+  );
 
   const antragstellendeFormValue = watch("antragstellende");
   const alleinerziehendenFormValue = watch("alleinerziehend");
@@ -61,7 +69,7 @@ export function AllgemeineAngabenForm({
   return (
     <form
       className="flex flex-col gap-32"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(submitAllgemeineAngaben)}
       noValidate
     >
       <section aria-labelledby={alleinerziehendHeadindIdentifier}>

@@ -1,7 +1,7 @@
 import AddIcon from "@digitalservicebund/icons/Add";
 import ClearIcon from "@digitalservicebund/icons/Clear";
-import { useId } from "react";
-import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
+import { useCallback, useId } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { NachwuchsFormInfoText } from "./NachwuchsFormInfoText";
 import { Button } from "@/application/components/atoms";
@@ -12,12 +12,11 @@ import {
   CustomDate,
   InfoDialog,
 } from "@/application/components/molecules";
-import { type StepNachwuchsState } from "@/application/features/abfrageteil/state";
-
-interface NachwuchsFormProps {
-  readonly initialValues: StepNachwuchsState;
-  readonly onSubmit: SubmitHandler<StepNachwuchsState>;
-}
+import {
+  type StepNachwuchsState,
+  stepNachwuchsSlice,
+} from "@/application/features/abfrageteil/state";
+import { useAppStore } from "@/application/redux/hooks";
 
 const validateMonth = (date: string) => {
   const [inputDay, inputMonth, inputYear] = date.split(".");
@@ -35,7 +34,13 @@ const validateMonth = (date: string) => {
   }
 };
 
-export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
+type Props = {
+  readonly onSubmit?: (values: StepNachwuchsState) => void;
+};
+
+export function NachwuchsForm({ onSubmit }: Props) {
+  const store = useAppStore();
+
   const {
     register,
     handleSubmit,
@@ -45,8 +50,16 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
     formState,
     getValues,
   } = useForm({
-    defaultValues: initialValues,
+    defaultValues: store.getState().stepNachwuchs,
   });
+
+  const submitNachwuchs = useCallback(
+    (values: StepNachwuchsState) => {
+      store.dispatch(stepNachwuchsSlice.actions.submitStep(values));
+      onSubmit?.(values);
+    },
+    [store, onSubmit],
+  );
 
   const { fields, append, remove } = useFieldArray({
     name: "geschwisterkinder",
@@ -108,7 +121,7 @@ export function NachwuchsForm({ initialValues, onSubmit }: NachwuchsFormProps) {
   const geschwisterKindHeadingBaseIdentifier = useId();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form onSubmit={handleSubmit(submitNachwuchs)} noValidate>
       <CustomDate
         control={control}
         rules={{

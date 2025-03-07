@@ -1,29 +1,20 @@
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import { Page } from "@/application/components/organisms";
 import { EinkommenForm } from "@/application/features/abfrageteil";
-import {
-  StepEinkommenState,
-  stepEinkommenSlice,
-} from "@/application/features/abfrageteil/state";
-import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 
-function EinkommenPage() {
-  const dispatch = useAppDispatch();
+export function EinkommenPage() {
   const navigate = useNavigate();
 
-  const initialValues = useAppSelector((state) => state.stepEinkommen);
-
-  const handleSubmit = (values: StepEinkommenState) => {
-    dispatch(stepEinkommenSlice.actions.submitStep(values));
-    navigate(formSteps.elterngeldvarianten.route);
-  };
+  const navigateToNextStep = useCallback(
+    () => navigate(formSteps.elterngeldvarianten.route),
+    [navigate],
+  );
 
   return (
     <Page step={formSteps.einkommen}>
-      <EinkommenForm initialValues={initialValues} onSubmit={handleSubmit} />
+      <EinkommenForm onSubmit={navigateToNextStep} />
     </Page>
   );
 }
-
-export default EinkommenPage;

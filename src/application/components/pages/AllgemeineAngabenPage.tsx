@@ -1,32 +1,20 @@
-import { useNavigate } from "react-router";
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import { Page } from "@/application/components/organisms";
 import { AllgemeineAngabenForm } from "@/application/features/abfrageteil";
-import {
-  StepAllgemeineAngabenState,
-  stepAllgemeineAngabenSlice,
-} from "@/application/features/abfrageteil/state";
-import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
 
-function AllgemeineAngabenPage() {
-  const dispatch = useAppDispatch();
+export function AllgemeineAngabenPage() {
   const navigate = useNavigate();
 
-  const initialValues = useAppSelector((state) => state.stepAllgemeineAngaben);
-
-  const handleSubmit = (values: StepAllgemeineAngabenState) => {
-    dispatch(stepAllgemeineAngabenSlice.actions.submitStep(values));
-    navigate(formSteps.nachwuchs.route);
-  };
+  const navigateToNextStep = useCallback(
+    () => navigate(formSteps.nachwuchs.route),
+    [navigate],
+  );
 
   return (
     <Page step={formSteps.allgemeinAngaben}>
-      <AllgemeineAngabenForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-      />
+      <AllgemeineAngabenForm onSubmit={navigateToNextStep} />
     </Page>
   );
 }
-
-export default AllgemeineAngabenPage;

@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
-import AllgemeineAngabenPage from "@/application/components/pages/AllgemeineAngabenPage";
-import EinkommenPage from "@/application/components/pages/EinkommenPage";
+import { AllgemeineAngabenPage } from "@/application/components/pages/AllgemeineAngabenPage";
+import { EinkommenPage } from "@/application/components/pages/EinkommenPage";
 import { ElterngeldvariantenPage } from "@/application/components/pages/ElterngeldvariantenPage";
-import ErwerbstaetigkeitPage from "@/application/components/pages/ErwerbstaetigkeitPage";
-import NachwuchsPage from "@/application/components/pages/NachwuchsPage";
+import { ErwerbstaetigkeitPage } from "@/application/components/pages/ErwerbstaetigkeitPage";
+import { NachwuchsPage } from "@/application/components/pages/NachwuchsPage";
 import ZusammenfassungUndDatenPage from "@/application/components/pages/ZusammenfassungUndDatenPage";
 import { formSteps } from "@/application/components/pages/formSteps";
 import { RechnerPlanerPage } from "@/application/components/pages/rechner-und-planer-page";

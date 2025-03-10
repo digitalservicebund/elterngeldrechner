@@ -14,6 +14,7 @@ interface Props<TFieldValues extends FieldValues> {
   readonly ariaLabel?: string;
   readonly ariaControls?: Path<TFieldValues>;
   readonly isSubmitButton?: boolean;
+  readonly form?: string;
 }
 
 export const Button = forwardRef(function Button<
@@ -31,6 +32,7 @@ export const Button = forwardRef(function Button<
     ariaLabel,
     ariaControls,
     isSubmitButton = false,
+    form,
   }: Props<TFieldValues>,
   ref?: ForwardedRef<HTMLButtonElement>,
 ) {
@@ -63,6 +65,7 @@ export const Button = forwardRef(function Button<
       ref={ref}
       className={appliedClasses}
       type={isSubmitButton ? "submit" : "button"}
+      form={form}
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}

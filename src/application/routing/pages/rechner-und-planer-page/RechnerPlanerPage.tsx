@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tracking-geplante-monate-des-partners-der-mutter";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
-import { Button, ButtonGroup } from "@/application/components";
+import { Button } from "@/application/components";
 import {
   YesNo,
   composeAusgangslageFuerPlaner,
@@ -109,12 +109,12 @@ export function RechnerPlanerPage() {
 
   const navigate = useNavigate();
 
-  const navigateToPreviousStep = () => {
+  const navigateToElterngeldvariantenPage = () => {
     if (rememberSubmit.current) submitFeedback();
     navigate(formSteps.elterngeldvarianten.route);
   };
 
-  function navigateToUebersicht(): void {
+  function navigateToZusammenfassungUndDatenPage(): void {
     if (istPlanGueltig) {
       if (rememberSubmit.current) submitFeedback();
 
@@ -131,13 +131,8 @@ export function RechnerPlanerPage() {
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      <div
-        ref={mainElement}
-        className="flex flex-wrap justify-between gap-y-80"
-        tabIndex={-1}
-      >
+      <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
         <Planer
-          className="basis-full"
           initialInformation={initialPlanerInformation.current}
           berechneElterngeldbezuege={berechneElterngeldbezuege}
           callbacks={{
@@ -150,7 +145,6 @@ export function RechnerPlanerPage() {
 
         {!!showFeedbackForm && (
           <UserFeedbackForm
-            className="basis-full"
             ease={getTrackedEase()}
             obstacle={getTrackedObstacle()}
             onChangeEase={trackEase}
@@ -158,15 +152,21 @@ export function RechnerPlanerPage() {
             onSubmit={() => (rememberSubmit.current = true)}
           />
         )}
-      </div>
 
-      <ButtonGroup onClickBackButton={navigateToPreviousStep}>
-        <Button
-          label="Zur Zusammenfassung"
-          onClick={navigateToUebersicht}
-          disabled={!istPlanGueltig}
-        />
-      </ButtonGroup>
+        <div className="flex justify-between">
+          <Button
+            label="Zurück"
+            buttonStyle="secondary"
+            onClick={navigateToElterngeldvariantenPage}
+          />
+
+          <Button
+            label="Zur Zusammenfassung"
+            disabled={!istPlanGueltig}
+            onClick={navigateToZusammenfassungUndDatenPage}
+          />
+        </div>
+      </div>
 
       <dialog
         ref={dialogElement}

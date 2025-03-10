@@ -2,11 +2,9 @@ import AddIcon from "@digitalservicebund/icons/Add";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { useCallback, useId } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { NachwuchsFormInfoText } from "./NachwuchsFormInfoText";
 import {
   Button,
-  ButtonGroup,
   Counter,
   CustomCheckbox,
   CustomDate,
@@ -35,10 +33,12 @@ const validateMonth = (date: string) => {
 };
 
 type Props = {
+  readonly id?: string;
   readonly onSubmit?: (values: StepNachwuchsState) => void;
+  readonly hideSubmitButton?: boolean;
 };
 
-export function NachwuchsForm({ onSubmit }: Props) {
+export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
   const store = useAppStore();
 
   const {
@@ -65,9 +65,6 @@ export function NachwuchsForm({ onSubmit }: Props) {
     name: "geschwisterkinder",
     control,
   });
-
-  const navigate = useNavigate();
-  const handlePageBack = () => navigate("/allgemeine-angaben");
 
   // Registration as a number is necessary because the addition "numberFutureChildren + 1" is added like a string and results in "21"
   register("anzahlKuenftigerKinder", { valueAsNumber: true });
@@ -121,7 +118,7 @@ export function NachwuchsForm({ onSubmit }: Props) {
   const geschwisterKindHeadingBaseIdentifier = useId();
 
   return (
-    <form onSubmit={handleSubmit(submitNachwuchs)} noValidate>
+    <form id={id} onSubmit={handleSubmit(submitNachwuchs)} noValidate>
       <CustomDate
         control={control}
         rules={{
@@ -247,7 +244,7 @@ export function NachwuchsForm({ onSubmit }: Props) {
         />
       </section>
 
-      <ButtonGroup onClickBackButton={handlePageBack} />
+      {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
     </form>
   );
 }

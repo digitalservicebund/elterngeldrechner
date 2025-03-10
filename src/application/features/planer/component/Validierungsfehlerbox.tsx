@@ -3,10 +3,12 @@ import { ReactNode, useId } from "react";
 
 type Props = {
   readonly validierungsfehler: string[];
+  readonly className?: string;
 };
 
 export function Validierungsfehlerbox({
   validierungsfehler,
+  className,
 }: Props): ReactNode {
   const headingIdentifier = useId();
   const hasFehler = validierungsfehler.length > 0;
@@ -14,6 +16,7 @@ export function Validierungsfehlerbox({
   return (
     <section
       className={classNames(
+        className,
         "p-16",
         "border-0 border-l-4 border-solid border-tertiary bg-tertiary-light",
         { "sr-only": !hasFehler },

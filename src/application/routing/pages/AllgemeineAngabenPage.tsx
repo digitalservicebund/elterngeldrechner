@@ -1,20 +1,32 @@
-import { useCallback } from "react";
+import { useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { Page } from "./page";
+import { Button } from "@/application/components";
 import { AllgemeineAngabenForm } from "@/application/features/abfrageteil";
 import { formSteps } from "@/application/routing/formSteps";
 
 export function AllgemeineAngabenPage() {
-  const navigate = useNavigate();
+  const formIdentifier = useId();
 
-  const navigateToNextStep = useCallback(
-    () => navigate(formSteps.nachwuchs.route),
-    [navigate],
-  );
+  const navigate = useNavigate();
+  const navigateToNachwuchsPage = () => navigate(formSteps.nachwuchs.route);
 
   return (
     <Page step={formSteps.allgemeinAngaben}>
-      <AllgemeineAngabenForm onSubmit={navigateToNextStep} />
+      <div className="flex flex-col gap-56">
+        <AllgemeineAngabenForm
+          id={formIdentifier}
+          onSubmit={navigateToNachwuchsPage}
+          hideSubmitButton
+        />
+
+        <Button
+          className="place-self-end"
+          label="Weiter"
+          form={formIdentifier}
+          isSubmitButton
+        />
+      </div>
     </Page>
   );
 }

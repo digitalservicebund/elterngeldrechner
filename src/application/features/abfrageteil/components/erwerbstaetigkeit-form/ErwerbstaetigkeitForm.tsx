@@ -1,8 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
-import { ButtonGroup, Split } from "@/application/components";
+import { Button, Split } from "@/application/components";
 import {
   type StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,
@@ -12,10 +11,16 @@ import {
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 
 type Props = {
+  readonly id?: string;
   readonly onSubmit?: () => void;
+  readonly hideSubmitButton?: boolean;
 };
 
-export function ErwerbstaetigkeitForm({ onSubmit }: Props) {
+export function ErwerbstaetigkeitForm({
+  id,
+  onSubmit,
+  hideSubmitButton,
+}: Props) {
   const store = useAppStore();
 
   const methods = useForm({
@@ -39,9 +44,6 @@ export function ErwerbstaetigkeitForm({ onSubmit }: Props) {
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
 
-  const navigate = useNavigate();
-  const handlePageBack = () => navigate("/nachwuchs");
-
   // reset state if ET2 is not displayed anymore
   useEffect(() => {
     if (antragssteller !== "FuerBeide") {
@@ -51,7 +53,7 @@ export function ErwerbstaetigkeitForm({ onSubmit }: Props) {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(submitErwerbstaetigkeit)} noValidate>
+      <form id={id} onSubmit={handleSubmit(submitErwerbstaetigkeit)} noValidate>
         <Split>
           <ErwerbstaetigkeitFormElternteil
             elternteil="ET1"
@@ -67,7 +69,8 @@ export function ErwerbstaetigkeitForm({ onSubmit }: Props) {
             />
           )}
         </Split>
-        <ButtonGroup onClickBackButton={handlePageBack} />
+
+        {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
       </form>
     </FormProvider>
   );

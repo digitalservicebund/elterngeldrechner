@@ -133,11 +133,14 @@ export function Planer({
         </GridLayoutProvider>
 
         <Funktionsleiste
-          className="my-40"
+          className="mt-40"
           planungWiederholen={planungWiederholen}
         />
 
-        <Validierungsfehlerbox validierungsfehler={validierungsfehler} />
+        <Validierungsfehlerbox
+          className="mt-40"
+          validierungsfehler={validierungsfehler}
+        />
       </section>
     </>
   );

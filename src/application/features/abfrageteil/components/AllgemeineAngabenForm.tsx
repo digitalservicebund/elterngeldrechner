@@ -2,7 +2,7 @@ import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
 import { YesNoRadio } from "./YesNoRadio";
 import {
-  ButtonGroup,
+  Button,
   CustomInput,
   CustomRadioGroup,
   CustomRadioGroupOption,
@@ -25,10 +25,16 @@ const alleinerziehendInfoText =
   "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.";
 
 type Props = {
+  readonly id?: string;
   readonly onSubmit?: () => void;
+  readonly hideSubmitButton?: boolean;
 };
 
-export function AllgemeineAngabenForm({ onSubmit }: Props) {
+export function AllgemeineAngabenForm({
+  id,
+  onSubmit,
+  hideSubmitButton,
+}: Props) {
   const store = useAppStore();
 
   const { register, handleSubmit, watch, formState, setValue } = useForm({
@@ -68,6 +74,7 @@ export function AllgemeineAngabenForm({ onSubmit }: Props) {
 
   return (
     <form
+      id={id}
       className="flex flex-col gap-32"
       onSubmit={handleSubmit(submitAllgemeineAngaben)}
       noValidate
@@ -230,7 +237,7 @@ export function AllgemeineAngabenForm({ onSubmit }: Props) {
         </section>
       )}
 
-      <ButtonGroup />
+      {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
     </form>
   );
 }

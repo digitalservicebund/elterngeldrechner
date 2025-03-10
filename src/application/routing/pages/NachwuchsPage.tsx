@@ -1,6 +1,7 @@
-import { useCallback } from "react";
+import { useId } from "react";
 import { useNavigate } from "react-router-dom";
 import { Page } from "./page";
+import { Button } from "@/application/components";
 import { NachwuchsForm } from "@/application/features/abfrageteil";
 import {
   StepNachwuchsState,
@@ -10,23 +11,42 @@ import { formSteps } from "@/application/routing/formSteps";
 import { trackNutzergruppe } from "@/application/user-tracking";
 
 export function NachwuchsPage() {
+  const formIdentifier = useId();
+
   const navigate = useNavigate();
+  const navigateToAllgemeineAngabenPage = () =>
+    navigate(formSteps.allgemeinAngaben.route);
 
-  const trackNutzergruppeAndNavigateToNextStep = useCallback(
-    (values: StepNachwuchsState) => {
-      const birthdate = parseGermanDateString(
-        values.wahrscheinlichesGeburtsDatum,
-      );
+  const trackNutzergruppeAndNavigateToErwerbstaetigkeitPage = (
+    values: StepNachwuchsState,
+  ) => {
+    const birthdate = parseGermanDateString(
+      values.wahrscheinlichesGeburtsDatum,
+    );
 
-      trackNutzergruppe(birthdate);
-      navigate(formSteps.erwerbstaetigkeit.route);
-    },
-    [navigate],
-  );
+    trackNutzergruppe(birthdate);
+    navigate(formSteps.erwerbstaetigkeit.route);
+  };
 
   return (
     <Page step={formSteps.nachwuchs}>
-      <NachwuchsForm onSubmit={trackNutzergruppeAndNavigateToNextStep} />
+      <div className="flex flex-col gap-56">
+        <NachwuchsForm
+          id={formIdentifier}
+          onSubmit={trackNutzergruppeAndNavigateToErwerbstaetigkeitPage}
+          hideSubmitButton
+        />
+
+        <div className="flex justify-between">
+          <Button
+            label="Zurück"
+            buttonStyle="secondary"
+            onClick={navigateToAllgemeineAngabenPage}
+          />
+
+          <Button label="Weiter" form={formIdentifier} isSubmitButton />
+        </div>
+      </div>
     </Page>
   );
 }

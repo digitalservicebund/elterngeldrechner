@@ -1,8 +1,7 @@
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
-import { ButtonGroup, Split } from "@/application/components";
+import { Button, Split } from "@/application/components";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
 import {
   type StepEinkommenState,
@@ -20,10 +19,12 @@ const einkommenLimitUeberschrittenInfoText =
   "Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 200.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen.";
 
 type Props = {
+  readonly id?: string;
   readonly onSubmit?: () => void;
+  readonly hideSubmitButton?: boolean;
 };
 
-export function EinkommenForm({ onSubmit }: Props) {
+export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
   const store = useAppStore();
   const methods = useForm({ defaultValues: store.getState().stepEinkommen });
   const { errors } = methods.formState;
@@ -49,12 +50,9 @@ export function EinkommenForm({ onSubmit }: Props) {
   const amountLimitEinkommen =
     alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
-  const navigate = useNavigate();
-  const handlePageBack = () => navigate("/erwerbstaetigkeit");
-
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(submitEinkommen)} noValidate>
+      <form id={id} onSubmit={methods.handleSubmit(submitEinkommen)} noValidate>
         <YesNoRadio
           className="mb-32"
           legend={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${amountLimitEinkommen.toLocaleString()} Euro?`}
@@ -73,7 +71,7 @@ export function EinkommenForm({ onSubmit }: Props) {
           )}
         </Split>
 
-        <ButtonGroup onClickBackButton={handlePageBack} />
+        {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
       </form>
     </FormProvider>
   );

@@ -12,7 +12,6 @@ export { Counter } from "./Counter";
 export { CustomDate } from "./CustomDate";
 export { CustomInput } from "./CustomInput";
 export { Split } from "./Split";
-export { ButtonGroup } from "./ButtonGroup";
 export { type Info, InfoDialog } from "./info-dialog";
 export { InfoText } from "./InfoText";
 export {

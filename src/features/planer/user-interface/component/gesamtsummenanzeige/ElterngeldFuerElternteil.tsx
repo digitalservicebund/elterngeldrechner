@@ -22,12 +22,13 @@ export function ElterngeldFuerElternteil({
   return (
     <div className={classNames("flex flex-col items-center", className)}>
       <span className="font-bold">
-        {!!pseudonym && (
+        {pseudonym ? (
           <>
-            <PersonIcon /> {pseudonym}:{" "}
+            <PersonIcon /> {pseudonym}{" "}
           </>
+        ) : (
+          "Elterngeld"
         )}
-        Elterngeld
       </span>
 
       <span>

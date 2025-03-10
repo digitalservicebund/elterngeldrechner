@@ -115,9 +115,9 @@ describe("Gesamtsummenanzeige", () => {
 
       render(<Gesamtsummenanzeige {...ANY_PROPS} plan={plan} />);
 
-      expect(screen.getByText("Jane: Elterngeld")).toBeVisible();
+      expect(screen.getByText("Jane")).toBeVisible();
       expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
-      expect(screen.getByText("John: Elterngeld")).toBeVisible();
+      expect(screen.getByText("John")).toBeVisible();
       expect(screen.getByText("1.041 € für 1 Monat")).toBeVisible();
       expect(screen.getByText("Jane: Einkommen")).toBeVisible();
       expect(screen.getByText("2.000 € (brutto)")).toBeVisible();

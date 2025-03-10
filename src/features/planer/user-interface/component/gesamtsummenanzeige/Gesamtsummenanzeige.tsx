@@ -39,7 +39,6 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
       {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
         (elternteil) => (
           <ElterngeldFuerElternteil
-            className="basis-[40ch]"
             key={elternteil}
             pseudonym={plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]}
             summe={gesamtsumme.proElternteil[elternteil]}
@@ -58,7 +57,6 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
         listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
           (elternteil) => (
             <EinkommenFuerElternteil
-              className="basis-[40ch]"
               key={elternteil}
               pseudonym={
                 plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]

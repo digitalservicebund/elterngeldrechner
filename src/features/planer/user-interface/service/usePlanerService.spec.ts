@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type {
-  GebeEinkommenAn,
-  PlanChangedCallback,
-  WaehleOption,
-} from "./callbackTypes";
-import { type InitialInformation, usePlanerService } from "./usePlanerService";
+import type { GebeEinkommenAn, WaehleOption } from "./callbackTypes";
+import {
+  type Callbacks,
+  type InitialInformation,
+  usePlanerService,
+} from "./usePlanerService";
 import {
   type BerechneElterngeldbezuegeCallback,
   Elternteil,
@@ -270,6 +270,17 @@ describe("use Planer service", () => {
       // eslint-disable-next-line no-console
       expect(console.error).toHaveBeenCalledWith([{ message: "invalid plan" }]);
     });
+
+    it("triggers the given callback function", () => {
+      const onWaehleOption = vi.fn();
+      const { result } = renderPlanerServiceHook({
+        callbacks: { onWaehleOption },
+      });
+
+      waehleAnyOption(result.current.waehleOption);
+
+      expect(onWaehleOption).toHaveBeenCalledOnce();
+    });
   });
 
   describe("erstelle Vorschläge für Angabe des Einkommens", () => {
@@ -338,16 +349,51 @@ describe("use Planer service", () => {
     });
   });
 
+  describe("setze Plan zurück", () => {
+    it("updates the Plan state", () => {
+      vi.mocked(setzePlanZurueck).mockReturnValue({
+        ...ANY_PLAN,
+        lebensmonate: {},
+      });
+
+      const { result } = renderPlanerServiceHook({
+        initialInformation: {
+          plan: { ...ANY_PLAN, lebensmonate: { 1: ANY_LEBENSMONAT } },
+        },
+      });
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(result.current.plan).toStrictEqual({
+        ...ANY_PLAN,
+        lebensmonate: {},
+      });
+    });
+
+    it("triggers the given callback function", () => {
+      const onSetzePlanZurueck = vi.fn();
+      const { result } = renderPlanerServiceHook({
+        callbacks: { onSetzePlanZurueck },
+      });
+
+      act(() => result.current.setzePlanZurueck());
+
+      expect(onSetzePlanZurueck).toHaveBeenCalledOnce();
+    });
+  });
+
   describe("on Plan changed", () => {
     it("triggers the given callback when chosing an Option", () => {
       vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
-      const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook({ onPlanChanged });
+      const onChange = vi.fn();
+      const { result } = renderPlanerServiceHook({
+        callbacks: { onChange },
+      });
 
       waehleAnyOption(result.current.waehleOption);
 
-      expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, true);
+      expect(onChange).toHaveBeenCalledOnce();
+      expect(onChange).toHaveBeenLastCalledWith(ANY_PLAN, true);
     });
 
     it("triggers the callback with an undefined Plan when the chosen Plan is invalid", () => {
@@ -356,58 +402,64 @@ describe("use Planer service", () => {
         Result.error([{ message: "ungültig" }]),
       );
 
-      const onPlanChanged = vi.fn();
+      const onChange = vi.fn();
 
-      const { result } = renderPlanerServiceHook({ onPlanChanged });
+      const { result } = renderPlanerServiceHook({
+        callbacks: { onChange },
+      });
       waehleAnyOption(result.current.waehleOption);
 
-      expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, false);
+      expect(onChange).toHaveBeenCalledOnce();
+      expect(onChange).toHaveBeenLastCalledWith(ANY_PLAN, false);
     });
 
     it("does not trigger callback if the initial Plan is invalid", () => {
       vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
         Result.error([{ message: "ungültig" }]),
       );
-      const onPlanChanged = vi.fn();
-      renderPlanerServiceHook({ onPlanChanged });
+      const onChange = vi.fn();
+      renderPlanerServiceHook({ callbacks: { onChange } });
 
-      expect(onPlanChanged).not.toHaveBeenCalled();
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     it("triggers the given callback when specifying an Einkommen", () => {
       vi.mocked(gebeEinkommenAn).mockReturnValue(ANY_PLAN);
-      const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook({ onPlanChanged });
+      const onChange = vi.fn();
+      const { result } = renderPlanerServiceHook({
+        callbacks: { onChange },
+      });
 
       gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
 
-      expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, true);
+      expect(onChange).toHaveBeenCalledOnce();
+      expect(onChange).toHaveBeenLastCalledWith(ANY_PLAN, true);
     });
 
     it("triggers the given callback when resetting the Plan", () => {
       vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
-      const onPlanChanged = vi.fn();
-      const { result } = renderPlanerServiceHook({ onPlanChanged });
+      const onChange = vi.fn();
+      const { result } = renderPlanerServiceHook({
+        callbacks: { onChange },
+      });
 
       act(() => result.current.setzePlanZurueck());
 
-      expect(onPlanChanged).toHaveBeenCalledOnce();
-      expect(onPlanChanged).toHaveBeenLastCalledWith(ANY_PLAN, true);
+      expect(onChange).toHaveBeenCalledOnce();
+      expect(onChange).toHaveBeenLastCalledWith(ANY_PLAN, true);
     });
   });
 });
 
 function renderPlanerServiceHook(options?: {
   initialInformation?: InitialInformation;
-  onPlanChanged?: PlanChangedCallback;
   berechneElterngeldbezuege?: BerechneElterngeldbezuegeCallback;
+  callbacks?: Callbacks;
 }) {
   const initialInformation = options?.initialInformation ?? {
     ausgangslage: ANY_AUSGANGSLAGE,
   };
-  const onPlanChanged = options?.onPlanChanged ?? (() => {});
+
   const berechneElterngeldbezuege =
     options?.berechneElterngeldbezuege ?? (() => ({}));
 
@@ -416,7 +468,7 @@ function renderPlanerServiceHook(options?: {
       usePlanerService(
         initialInformation,
         berechneElterngeldbezuege,
-        onPlanChanged,
+        options?.callbacks,
       ),
     {
       preloadedState: INITIAL_STATE,

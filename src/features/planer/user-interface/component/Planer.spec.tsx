@@ -30,13 +30,13 @@ describe("Planer", () => {
 
   it("forwards the given props to the service", () => {
     const initialInformation = { ausgangslage: ANY_AUSGANGSLAGE };
-    const onPlanChanged = () => {};
+    const onChange = () => {};
     const berechneElterngeldbezuege = () => ({}) as never;
     render(
       <Planer
         initialInformation={initialInformation}
-        onPlanChanged={onPlanChanged}
         berechneElterngeldbezuege={berechneElterngeldbezuege}
+        callbacks={{ onChange }}
       />,
     );
 
@@ -44,9 +44,7 @@ describe("Planer", () => {
     expect(usePlanerService).toHaveBeenLastCalledWith(
       initialInformation,
       berechneElterngeldbezuege,
-      onPlanChanged,
-      undefined,
-      undefined,
+      { onChange },
     );
   });
 
@@ -113,7 +111,6 @@ const ANY_AUSGANGSLAGE = {
 
 const ANY_PROPS = {
   initialInformation: { ausgangslage: ANY_AUSGANGSLAGE },
-  onPlanChanged: () => {},
   berechneElterngeldbezuege: () => ({}) as never,
 };
 

@@ -1,11 +1,5 @@
 import { useCallback, useState } from "react";
-import {
-  type GebeEinkommenAn,
-  OptionSelectedCallback,
-  type PlanChangedCallback,
-  PlanResettedCallback,
-  WaehleOption,
-} from "./callbackTypes";
+import { type GebeEinkommenAn, WaehleOption } from "./callbackTypes";
 import {
   type Ausgangslage,
   type BerechneElterngeldbezuegeCallback,
@@ -25,9 +19,7 @@ import {
 export function usePlanerService(
   initialInformation: InitialInformation,
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  onPlanChanged: PlanChangedCallback,
-  onOptionSelected?: OptionSelectedCallback,
-  onPlanResetted?: PlanResettedCallback,
+  callbacks?: Callbacks,
 ) {
   const [plan, setPlan] = useState(
     () =>
@@ -41,9 +33,9 @@ export function usePlanerService(
   const updateStatesAndTriggerCallbacks = useCallback(
     (nextPlan: PlanMitBeliebigenElternteilen) => {
       const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
-      onPlanChanged?.(nextPlan, nextValidierungsfehler.length === 0);
+      callbacks?.onChange?.(nextPlan, nextValidierungsfehler.length === 0);
     },
-    [updateValidierungsfehler, onPlanChanged],
+    [updateValidierungsfehler, callbacks],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,13 +67,9 @@ export function usePlanerService(
         return nextPlan;
       });
 
-      onOptionSelected?.();
+      callbacks?.onWaehleOption?.();
     },
-    [
-      berechneElterngeldbezuege,
-      onOptionSelected,
-      updateStatesAndTriggerCallbacks,
-    ],
+    [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, callbacks],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,10 +98,10 @@ export function usePlanerService(
       setPlan((plan) => {
         const nextPlan = setzePlanZurueck(plan);
         updateStatesAndTriggerCallbacks(nextPlan);
-        onPlanResetted?.();
+        callbacks?.onSetzePlanZurueck?.();
         return nextPlan;
       }),
-    [onPlanResetted, updateStatesAndTriggerCallbacks],
+    [updateStatesAndTriggerCallbacks, callbacks],
   );
 
   return {
@@ -167,3 +155,12 @@ export type InitialInformation =
       ausgangslage?: undefined;
       plan: PlanMitBeliebigenElternteilen;
     };
+
+export type Callbacks = Partial<{
+  onChange: (
+    plan: PlanMitBeliebigenElternteilen,
+    isPlanGueltig: boolean,
+  ) => void;
+  onWaehleOption: () => void;
+  onSetzePlanZurueck: () => void;
+}>;

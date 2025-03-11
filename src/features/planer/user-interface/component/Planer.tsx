@@ -11,11 +11,7 @@ import type { BerechneElterngeldbezuegeCallback } from "@/features/planer/domain
 import { Zusammenfassung } from "@/features/planer/user-interface";
 import { GridLayoutProvider } from "@/features/planer/user-interface/layout/grid-layout";
 import {
-  OptionSelectedCallback,
-  PlanChangedCallback,
-  PlanResettedCallback,
-} from "@/features/planer/user-interface/service/callbackTypes";
-import {
+  type Callbacks as PlanerServiceCallbacks,
   type InitialInformation,
   usePlanerService,
 } from "@/features/planer/user-interface/service/usePlanerService";
@@ -23,18 +19,14 @@ import {
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
-  readonly onPlanChanged: PlanChangedCallback;
-  readonly onOptionSelected?: OptionSelectedCallback;
-  readonly onPlanResetted?: PlanResettedCallback;
+  readonly callbacks?: PlanerServiceCallbacks;
   readonly className?: string;
 };
 
 export function Planer({
   initialInformation,
   berechneElterngeldbezuege,
-  onPlanChanged,
-  onOptionSelected,
-  onPlanResetted,
+  callbacks,
   className,
 }: Props): ReactNode {
   const {
@@ -49,10 +41,9 @@ export function Planer({
   } = usePlanerService(
     initialInformation,
     berechneElterngeldbezuege,
-    onPlanChanged,
-    onOptionSelected,
-    onPlanResetted,
+    callbacks,
   );
+
   const headingIdentifier = useId();
   const descriptionIdentifier = useId();
 

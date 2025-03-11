@@ -144,9 +144,11 @@ export function RechnerPlanerPage() {
           className="basis-full"
           initialInformation={initialPlanerInformation.current}
           berechneElterngeldbezuege={berechneElterngeldbezuege}
-          onPlanChanged={setPlan}
-          onOptionSelected={trackChanges}
-          onPlanResetted={resetTrackingPlanung}
+          callbacks={{
+            onChange: setPlan,
+            onWaehleOption: trackChanges,
+            onSetzePlanZurueck: resetTrackingPlanung,
+          }}
         />
 
         {!!showFeedbackForm && (

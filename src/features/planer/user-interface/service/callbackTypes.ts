@@ -4,16 +4,7 @@ import type {
   Elternteil,
   Lebensmonat,
   Lebensmonatszahl,
-  PlanMitBeliebigenElternteilen,
 } from "@/features/planer/domain";
-
-export type PlanChangedCallback = (
-  plan: PlanMitBeliebigenElternteilen,
-  isPlanGueltig: boolean,
-) => void;
-
-export type OptionSelectedCallback = () => void;
-export type PlanResettedCallback = () => void;
 
 export type ErstelleUngeplantenLebensmonat<E extends Elternteil> = (
   lebensmonatszahl: Lebensmonatszahl,

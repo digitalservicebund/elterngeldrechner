@@ -57,18 +57,28 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     gebeEinkommenAn,
     className,
   }: Props<A>,
-  ref?: FocusOnlyRef,
+  ref?: ForwardedRef<HTMLDetailsElement | null>,
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
   const detailsElement = useRef<HTMLDetailsElement>(null);
-  useImperativeHandle(
-    ref,
-    () => ({
-      focus: () => detailsElement.current?.querySelector("summary")?.focus(),
-    }),
-    [detailsElement],
-  );
+
+  useImperativeHandle<
+    HTMLDetailsElement | null,
+    HTMLDetailsElement | null
+  >(ref, () => {
+    if (detailsElement.current === null) {
+      return null;
+    } else {
+      const focusSummary = () =>
+        detailsElement.current?.querySelector("summary")?.focus();
+
+      return {
+        ...detailsElement.current,
+        focus: focusSummary,
+      };
+    }
+  }, [detailsElement]);
 
   useOnClickOutside(detailsElement, () => {
     if (detailsElement.current != null) {
@@ -126,10 +136,8 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     </ProvideInformationenZumLebensmonat>
   );
 }) as <A extends Ausgangslage>(
-  props: Props<A> & { ref?: FocusOnlyRef },
+  props: Props<A> & { ref?: ForwardedRef<HTMLDetailsElement | null> },
 ) => ReactNode;
-
-type FocusOnlyRef = ForwardedRef<{ focus: () => void }>;
 
 /**
  * Determines if a component that emitted a {@link ToggleEvent} is in an

@@ -67,7 +67,9 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
     useState(14);
 
-  const lebensmonatElements = useRef(new Map<number, { focus: () => void }>());
+  const lebensmonatElements = useRef(
+    new Map<number, HTMLDetailsElement | null>(),
+  );
 
   const canCollapse =
     lastVisibleLebensmonatszahl >= findeLetztenVerplantenLebensmonat() + 2;
@@ -75,7 +77,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   const collapse = () =>
     setLastVisibleLebensmonatszahl(findeLetztenVerplantenLebensmonat());
 
-  const expand = () => {
+  function expand(): void {
     setLastVisibleLebensmonatszahl(findeLetztenVerplantenLebensmonat() + 2);
 
     const focusIndex = findeLetztenVerplantenLebensmonat() + 1;
@@ -83,7 +85,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     if (elementToFocus) {
       setTimeout(() => elementToFocus.focus());
     }
-  };
+  }
 
   return (
     <section

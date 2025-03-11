@@ -38,6 +38,7 @@ type Props<A extends Ausgangslage> = {
     ElternteileByAusgangslage<A>
   >;
   readonly gebeEinkommenAn: GebeEinkommenAn<ElternteileByAusgangslage<A>>;
+  readonly onOpenLebensmonat?: () => void;
   readonly className?: string;
 };
 
@@ -51,6 +52,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    onOpenLebensmonat,
     className,
   }: Props<A>,
   ref?: ForwardedRef<HTMLElement>,
@@ -84,6 +86,12 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     const elementToFocus = lebensmonatElements.current.get(focusIndex);
     if (elementToFocus) {
       setTimeout(() => elementToFocus.focus());
+    }
+  }
+
+  function triggerOnOpenLebensmonatWhenMatching(event: ToggleEvent): void {
+    if (event.newState === "open") {
+      onOpenLebensmonat?.();
     }
   }
 
@@ -129,6 +137,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
             )}
             waehleOption={waehleOption.bind(null, lebensmonatszahl)}
             gebeEinkommenAn={gebeEinkommenAn.bind(null, lebensmonatszahl)}
+            onToggle={triggerOnOpenLebensmonatWhenMatching}
           />
         );
       })}

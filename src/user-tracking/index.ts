@@ -6,6 +6,7 @@ export { setTrackingVariable } from "./data-layer";
 export { trackAnzahlGeplanterMonateDesPartnersDerMutter } from "./anzahl-geplanter-monate-des-partners-der-mutter";
 export { trackNutzergruppe } from "./nutzergruppe";
 export { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
+export { countUpAnzahlGeoeffneterLebensmonateImPlaner } from "./anzahlGeoeffneterLebensmonateImPlaner";
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();

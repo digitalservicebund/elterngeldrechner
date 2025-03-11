@@ -41,6 +41,7 @@ interface Props<A extends Ausgangslage> {
   readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<
     ElternteileByAusgangslage<A>
   >;
+  readonly onToggle?: (event: ToggleEvent) => void;
   readonly className?: string;
 }
 
@@ -55,6 +56,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    onToggle,
     className,
   }: Props<A>,
   ref?: ForwardedRef<HTMLDetailsElement | null>,
@@ -90,10 +92,8 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   function onToggleListener(
     event: SyntheticEvent<HTMLDetailsElement, ToggleEvent>,
   ) {
-    const isExpandedNext = isExpandedFromToggleEvent(
-      event.nativeEvent,
-      isExpanded,
-    );
+    const fixedEvent = fixToggleEvent(event.nativeEvent, isExpanded);
+    const isExpandedNext = fixedEvent.newState === "open";
 
     setIsExpanded(isExpandedNext);
 
@@ -103,6 +103,8 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         behavior: "instant",
       });
     }
+
+    onToggle?.(fixedEvent);
   }
 
   const informationenZumLebensmonat = {
@@ -140,22 +142,28 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
 ) => ReactNode;
 
 /**
- * Determines if a component that emitted a {@link ToggleEvent} is in an
- * expanded state or not.
- *
  * This method fixes the access to the {@link ToggleEvent.prototype.newState}
- * property, which is used to determine the state. Certain web-browsers seam not
- * to support these kind of events fully yet.
- * As fallback, the last known expanded state is just toggled. It is expected
- * that some internal state backs this parameter and keeps it synced. Toggle
- * events by the same components are expected to always switch between expanded
- * and not expanded (or rather `"open"` and `"close"`).
+ * and {@link ToggleEvent.prototype.oldState} properties. Some web-browsers do
+ * not support this kind of event fully yet.
+ *
+ * As fallback, the last known state is just toggled. It is expected that some
+ * internal state backs this parameter and keeps it synced. Toggle events by the
+ * same components are expected to always switch between expanded and not
+ * expanded (or rather `"open"` and `"close"`).
  */
-function isExpandedFromToggleEvent(
+function fixToggleEvent(
   event: ToggleEvent,
   isExpandedNow: boolean,
-): boolean {
-  const { newState } = event;
-  const eventSupportsState = typeof newState === "string";
-  return eventSupportsState ? newState === "open" : !isExpandedNow;
+): ToggleEvent {
+  const hasStateProperties =
+    typeof event.newState === "string" && typeof event.oldState === "string";
+
+  if (hasStateProperties) {
+    return event;
+  } else {
+    return new ToggleEvent(event.type, {
+      newState: isExpandedNow ? "closed" : "open",
+      oldState: isExpandedNow ? "open" : "closed",
+    });
+  }
 }

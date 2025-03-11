@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector, useAppStore } from "@/redux/hooks";
 import { stepAllgemeineAngabenSelectors } from "@/redux/stepAllgemeineAngabenSlice";
 import { YesNo } from "@/redux/yes-no";
 import {
+  countUpAnzahlGeoeffneterLebensmonateImPlaner,
   isTrackingAllowedByUser,
   trackPartnerschaftlicheVerteilung,
 } from "@/user-tracking";
@@ -148,6 +149,7 @@ export function RechnerPlanerPage() {
             onChange: setPlan,
             onWaehleOption: trackChanges,
             onSetzePlanZurueck: resetTrackingPlanung,
+            onOpenLebensmonat: countUpAnzahlGeoeffneterLebensmonateImPlaner,
           }}
         />
 

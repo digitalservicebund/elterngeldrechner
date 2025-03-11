@@ -18,3 +18,24 @@ document.body.appendChild(toastPortalTarget);
 // https://github.com/vitest-dev/vitest/issues/1430
 // https://github.com/testing-library/react-testing-library/blob/main/src/index.js
 afterEach(cleanup);
+
+/**
+ * The jsdom library does not provide an actual `ToggleEvent` implementation
+ * (yet). To make the events for certain HTML elements like `<details>` work,
+ * this adds a custom class that implements the standardized interface. Though,
+ * notice that due to this interface, the state properties are not as strongly
+ * typed as they could be (i.e. plain `string`s instead of constant unions).
+ */
+class ToggleEvent extends Event {
+  public readonly newState: string;
+  public readonly oldState: string;
+
+  constructor(type: string, eventInitDict: ToggleEventInit = {}) {
+    const { newState, oldState, ...plainEventInitDict } = eventInitDict;
+    super(type, plainEventInitDict);
+    this.newState = newState ?? "";
+    this.oldState = oldState ?? "";
+  }
+}
+
+global.ToggleEvent = ToggleEvent;

@@ -1,6 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { LebensmonatDetails } from "./LebensmonatDetails";
 import { Elternteil, KeinElterngeld, Variante } from "@/features/planer/domain";
 
@@ -18,9 +18,9 @@ describe("LebensmonateDetails", () => {
       const summary = screen.getByRole("group").querySelector("summary")!;
 
       expect(screen.queryByTestId("details-content")).not.toBeInTheDocument();
-      await clickOnElementWithToggleEvent(summary);
+      await userEvent.click(summary);
       expect(screen.getByTestId("details-content")).toBeVisible();
-      await clickOnElementWithToggleEvent(summary);
+      await userEvent.click(summary);
       expect(screen.queryByTestId("details-content")).not.toBeInTheDocument();
     });
 
@@ -29,47 +29,33 @@ describe("LebensmonateDetails", () => {
 
       const summary = screen.getByRole("group").querySelector("summary")!;
 
-      await clickOnElementWithToggleEvent(summary);
+      await userEvent.click(summary);
       expect(screen.getByTestId("details-content")).toBeVisible();
-      await clickOnElementWithToggleEvent(document.body);
+      await userEvent.click(document.body);
       expect(screen.queryByTestId("details-content")).not.toBeInTheDocument();
     });
 
-    /**
-     * This fixes JSDOM by firing ToggleEvents with an click action. After
-     * a click, the details element is checked for its open attribute to
-     * determine if it was opened or closed by the former click. Then a toggle
-     * event is fired on the details event like it would in a web-browser.
-     *
-     * Can be deleted once JSDOM has implemented support for this.
-     */
-    async function clickOnElementWithToggleEvent(
-      element: Element,
-    ): Promise<void> {
-      await userEvent.click(element);
+    it("triggers the given event handler", async () => {
+      const onToggle = vi.fn();
+      render(<LebensmonatDetails {...ANY_PROPS} onToggle={onToggle} />);
 
-      const details = screen.getByRole("group");
-      const isOpen = details.getAttribute("open") != null;
-      const event = new ToggleEvent("toggle", {
-        newState: isOpen ? "open" : "closed",
-      });
-      fireEvent(details, event);
-    }
+      const summary = screen.getByRole("group").querySelector("summary")!;
+
+      await userEvent.click(summary);
+      await userEvent.click(summary);
+
+      expect(onToggle).toHaveBeenCalledTimes(2);
+      expect(onToggle).toHaveBeenNthCalledWith(
+        1,
+        new ToggleEvent("toggle", { newState: "open", oldState: "closed" }),
+      );
+      expect(onToggle).toHaveBeenNthCalledWith(
+        2,
+        new ToggleEvent("toggle", { newState: "closed", oldState: "open" }),
+      );
+    });
   });
 });
-
-/**
- * Partial implementation of the actual ToggleEvent in web-browsers to fake
- * toggling events.
- */
-class ToggleEvent extends Event {
-  public readonly newState: "open" | "closed";
-
-  constructor(type: "toggle", init: { newState: "open" | "closed" }) {
-    super(type);
-    this.newState = init.newState;
-  }
-}
 
 const ANY_AUSWAHLMOEGLICHKEITEN = {
   [Variante.Basis]: { elterngeldbezug: 1, istAuswaehlbar: true as const },

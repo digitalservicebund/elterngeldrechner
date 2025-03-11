@@ -19,16 +19,20 @@ import {
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
-  readonly callbacks?: PlanerServiceCallbacks;
+  readonly callbacks?: PlanerServiceCallbacks & {
+    onOpenLebensmonat?: () => void;
+  };
   readonly className?: string;
 };
 
 export function Planer({
   initialInformation,
   berechneElterngeldbezuege,
-  callbacks,
+  callbacks = {},
   className,
 }: Props): ReactNode {
+  const { onOpenLebensmonat, ...planerServiceCallbacks } = callbacks;
+
   const {
     plan,
     validierungsfehler,
@@ -41,7 +45,7 @@ export function Planer({
   } = usePlanerService(
     initialInformation,
     berechneElterngeldbezuege,
-    callbacks,
+    planerServiceCallbacks,
   );
 
   const headingIdentifier = useId();
@@ -116,6 +120,7 @@ export function Planer({
                 erstelleVorschlaegeFuerAngabeDesEinkommens
               }
               gebeEinkommenAn={gebeEinkommenAn}
+              onOpenLebensmonat={onOpenLebensmonat}
             />
 
             <KontingentUebersicht className="bg-off-white py-16" plan={plan} />

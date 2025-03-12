@@ -1,4 +1,4 @@
-import { setTrackingVariable } from "./data-layer";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 
 /**
  * The Partner:in of the Mutter is the Elternteil without Mutterschaftsleistung.

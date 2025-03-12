@@ -1,7 +1,7 @@
 import {
   getTrackingVariable,
   setTrackingVariable,
-} from "@/application/user-tracking/data-layer";
+} from "@/application/user-tracking/core";
 
 enum Variables {
   Ease = "customer-effort-score-ease",

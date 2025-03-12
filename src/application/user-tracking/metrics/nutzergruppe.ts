@@ -1,4 +1,4 @@
-import { setTrackingVariable } from "./data-layer";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 
 enum Nutzergruppe {
   WERDENDE_ELTERN = "werdende Eltern",

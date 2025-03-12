@@ -19,21 +19,17 @@ import { Page } from "@/application/routing/pages/page";
 import { useNavigateWithPlan } from "@/application/routing/pages/useNavigateWithPlan";
 import {
   countUpAnzahlGeoeffneterLebensmonateImPlaner,
-  isTrackingAllowedByUser,
-  trackPartnerschaftlicheVerteilung,
-} from "@/application/user-tracking";
-import {
   getTrackedEase,
   getTrackedObstacle,
-  trackEase,
-  trackObstacle,
-} from "@/application/user-tracking/feedback";
-import {
+  isTrackingAllowedByUser,
   resetTrackingPlanung,
   trackChanges,
+  trackEase,
+  trackObstacle,
+  trackPartnerschaftlicheVerteilung,
   trackPlannedMonths,
   trackPlannedMonthsWithIncome,
-} from "@/application/user-tracking/planung";
+} from "@/application/user-tracking";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,

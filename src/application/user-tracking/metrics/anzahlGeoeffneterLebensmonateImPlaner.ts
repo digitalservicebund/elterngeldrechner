@@ -1,4 +1,7 @@
-import { getTrackingVariable, setTrackingVariable } from "./data-layer";
+import {
+  getTrackingVariable,
+  setTrackingVariable,
+} from "@/application/user-tracking/core";
 
 export function countUpAnzahlGeoeffneterLebensmonateImPlaner(): void {
   const currentCount = getTrackingVariable<number>(TRACKING_VARIABLE_NAME) ?? 0;
@@ -10,7 +13,7 @@ const TRACKING_VARIABLE_NAME = "anzahlGeoeffneterLebensmonateImPlaner";
 if (import.meta.vitest) {
   const { describe, it, expect, vi } = import.meta.vitest;
 
-  vi.mock(import("./data-layer"));
+  vi.mock(import("@/application/user-tracking/core/data-layer"));
 
   describe("count up Anzahl geöffneter Lebensmonate im Planer", () => {
     it("starts with count 1 on the first call", () => {

@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import { setTrackingVariable } from "./data-layer";
 import {
   type Auswahl,
   trackPartnerschaftlicheVerteilung,
 } from "./partnerschaftlichkeit";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 
-vi.mock(import("./data-layer"));
+vi.mock(import("@/application/user-tracking/core/data-layer"));
 
 describe("partnerschaftlichkeit", () => {
   it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {

@@ -1,4 +1,4 @@
-import { setTrackingVariable } from "./data-layer";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 
 export function trackPartnerschaftlicheVerteilung(
   auswahlProMonatProElternteil: Auswahl[][],

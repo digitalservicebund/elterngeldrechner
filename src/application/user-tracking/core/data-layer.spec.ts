@@ -3,7 +3,7 @@ import {
   establishDataLayer,
   getTrackingVariable,
   setTrackingVariable,
-} from "@/application/user-tracking/data-layer";
+} from "./data-layer";
 
 describe("getTrackingVariable", () => {
   beforeAll(() => establishDataLayer());

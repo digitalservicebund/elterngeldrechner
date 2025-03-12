@@ -1,12 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { setTrackingVariable } from "./data-layer";
-import {
-  trackPlannedMonths,
-  trackPlannedMonthsWithIncome,
-} from "@/application/user-tracking/planung";
+import { trackPlannedMonths, trackPlannedMonthsWithIncome } from "./planung";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 import { KeinElterngeld, Variante } from "@/monatsplaner";
 
-vi.mock(import("./data-layer"));
+vi.mock(import("@/application/user-tracking/core/data-layer"));
 
 describe("tracking of the planung", async () => {
   const { Elternteil } = await import("@/monatsplaner/Elternteil");

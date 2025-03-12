@@ -61,7 +61,7 @@ if (import.meta.vitest) {
 
     vi.mock(
       import(
-        "@/application/user-tracking/anzahl-geplanter-monate-des-partners-der-mutter"
+        "@/application/user-tracking/metrics/anzahl-geplanter-monate-des-partners-der-mutter"
       ),
     );
 

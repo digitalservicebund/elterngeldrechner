@@ -17,7 +17,7 @@
     "type-check": "tsc",
     "lint": "f() { eslint --no-warn-ignored --max-warnings=0 ${@:-**/*.{ts,tsx\\}}; }; f",
     "lint-fix": "f() { eslint --no-warn-ignored --fix ${@:-*.{ts,tsx\\}}; }; f",
-    "stylelint": "f() { stylelint ${@:-**/*.css}; }; f",
+    "stylelint": "f() { stylelint ${@:-.}; }; f",
     "audit-licenses": "license-checker-rseidelsohn --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "engines": {

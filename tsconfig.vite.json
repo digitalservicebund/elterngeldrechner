@@ -15,6 +15,7 @@
     "postcss.config.js",
     "eslint.config.js",
     "eslint-plugin/**/*.js",
+    "stylelint.config.js",
     ".github/actions/**/*.js"
   ]
 }

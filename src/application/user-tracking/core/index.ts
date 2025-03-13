@@ -2,4 +2,8 @@ export {
   isTrackingAllowedByUser,
   setupUserTracking,
 } from "./setup-user-tracking";
-export { getTrackingVariable, setTrackingVariable } from "./data-layer";
+export {
+  getTrackingVariable,
+  pushCustomEvent,
+  setTrackingVariable,
+} from "./data-layer";

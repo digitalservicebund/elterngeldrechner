@@ -26,6 +26,10 @@ export function getTrackingVariableFrom<T>(
   return lastElementsProperty ? (lastElementsProperty as T) : null;
 }
 
+export function pushCustomEvent(name: string): void {
+  window._mtm?.push({ event: name });
+}
+
 declare global {
   interface Window {
     _mtm?: Record<string, unknown>[];
@@ -89,11 +93,17 @@ if (import.meta.vitest) {
       });
     });
 
-    it("returns the last variable ", () => {
-      setTrackingVariable("my-var", 5);
-      setTrackingVariable("my-var", 6);
+    describe("pushCustomEvent", () => {
+      it("appends an entry to the data layer with the event keyword and the event name as value", () => {
+        window._mtm = [{ "variable-a": 1 }];
 
-      expect(getTrackingVariable("my-var")).toEqual(6);
+        pushCustomEvent("test-event");
+
+        expect(window._mtm).toStrictEqual([
+          { "variable-a": 1 },
+          { event: "test-event" },
+        ]);
+      });
     });
   });
 }

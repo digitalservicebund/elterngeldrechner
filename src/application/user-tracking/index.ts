@@ -1,2 +1,6 @@
 export * from "./metrics";
-export { isTrackingAllowedByUser, setupUserTracking } from "./core";
+export {
+  isTrackingAllowedByUser,
+  pushCustomEvent,
+  setupUserTracking,
+} from "./core";

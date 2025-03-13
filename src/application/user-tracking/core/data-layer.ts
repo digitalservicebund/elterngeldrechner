@@ -37,3 +37,27 @@ declare global {
     _mtm?: Record<string, unknown>[];
   }
 }
+
+if (import.meta.vitest) {
+  const { describe, beforeAll, it, expect } = import.meta.vitest;
+
+  describe("getTrackingVariable", () => {
+    beforeAll(() => establishDataLayer());
+
+    it("returns the last variable even if it is null", () => {
+      setTrackingVariable("my-var", 0);
+      setTrackingVariable("my-var", 5);
+      setTrackingVariable("my-var", 6);
+      setTrackingVariable("my-var", null);
+
+      expect(getTrackingVariable("my-var")).toBeNull();
+    });
+
+    it("returns the last variable ", () => {
+      setTrackingVariable("my-var", 5);
+      setTrackingVariable("my-var", 6);
+
+      expect(getTrackingVariable("my-var")).toEqual(6);
+    });
+  });
+}

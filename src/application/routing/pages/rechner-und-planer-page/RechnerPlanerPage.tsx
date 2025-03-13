@@ -18,10 +18,10 @@ import { formSteps } from "@/application/routing/formSteps";
 import { Page } from "@/application/routing/pages/page";
 import { useNavigateWithPlan } from "@/application/routing/pages/useNavigateWithPlan";
 import {
-  countUpAnzahlGeoeffneterLebensmonateImPlaner,
   getTrackedEase,
   getTrackedObstacle,
   isTrackingAllowedByUser,
+  pushCustomEvent,
   resetTrackingPlanung,
   trackChanges,
   trackEase,
@@ -103,6 +103,10 @@ export function RechnerPlanerPage() {
     evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
   }
 
+  function trackOpeningOfLebensmonat(): void {
+    pushCustomEvent("Lebensmonat-wurde-im-Planer-geöffnet");
+  }
+
   const navigate = useNavigate();
 
   const navigateToElterngeldvariantenPage = () => {
@@ -135,7 +139,7 @@ export function RechnerPlanerPage() {
             onChange: setPlan,
             onWaehleOption: trackChanges,
             onSetzePlanZurueck: resetTrackingPlanung,
-            onOpenLebensmonat: countUpAnzahlGeoeffneterLebensmonateImPlaner,
+            onOpenLebensmonat: trackOpeningOfLebensmonat,
           }}
         />
 

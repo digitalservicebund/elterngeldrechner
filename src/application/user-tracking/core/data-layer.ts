@@ -9,17 +9,11 @@ export function establishDataLayer(): void {
  * available for triggered events by tags of the tag manager.
  */
 export function setTrackingVariable(name: string, value?: unknown): void {
-  if (window._mtm) {
-    window._mtm.push({ [name]: value });
-  }
+  window._mtm?.push({ [name]: value });
 }
 
 export function getTrackingVariable<T>(name: string): T | null {
-  if (window._mtm) {
-    return getTrackingVariableFrom(window._mtm, name);
-  } else {
-    return null;
-  }
+  return window._mtm ? getTrackingVariableFrom(window._mtm, name) : null;
 }
 
 export function getTrackingVariableFrom<T>(
@@ -41,16 +35,58 @@ declare global {
 if (import.meta.vitest) {
   const { describe, beforeAll, it, expect } = import.meta.vitest;
 
-  describe("getTrackingVariable", () => {
+  describe("data layer", () => {
     beforeAll(() => establishDataLayer());
 
-    it("returns the last variable even if it is null", () => {
-      setTrackingVariable("my-var", 0);
-      setTrackingVariable("my-var", 5);
-      setTrackingVariable("my-var", 6);
-      setTrackingVariable("my-var", null);
+    describe("setTrackingVariable", () => {
+      it("appends an entry to the data layer with the variable name as key and the value", () => {
+        window._mtm = [{ "variable-a": 1 }];
 
-      expect(getTrackingVariable("my-var")).toBeNull();
+        setTrackingVariable("variable-b", 2);
+
+        expect(window._mtm).toStrictEqual([
+          { "variable-a": 1 },
+          { "variable-b": 2 },
+        ]);
+      });
+    });
+
+    describe("getTrackingVariable", () => {
+      it("gets the right variable from the data layer", () => {
+        window._mtm = [
+          { "variable-a": 1 },
+          { "variable-b": 2 },
+          { "variable-c": 3 },
+        ];
+
+        const value = getTrackingVariable("variable-b");
+
+        expect(value).toBe(2);
+      });
+
+      it("gets the last entry of the variable", () => {
+        window._mtm = [
+          { "variable-a": 1 },
+          { "variable-b": 2 },
+          { "variable-a": 3 },
+        ];
+
+        const value = getTrackingVariable("variable-a");
+
+        expect(value).toBe(3);
+      });
+
+      it("returns the last variable even if it is null", () => {
+        window._mtm = [
+          { "variable-a": 1 },
+          { "variable-b": 2 },
+          { "variable-a": null },
+        ];
+
+        const value = getTrackingVariable("variable-a");
+
+        expect(value).toBe(null);
+      });
     });
 
     it("returns the last variable ", () => {

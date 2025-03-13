@@ -60,7 +60,6 @@
     "original-rechner": "file:original-rechner",
     "postcss": "^8.5.3",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.6.6",
     "sass": "^1.72.0",
     "stylelint": "^16.2.1",
     "stylelint-config-recommended": "^14.0.0",

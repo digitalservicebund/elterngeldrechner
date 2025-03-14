@@ -103,7 +103,7 @@ export function RechnerPlanerPage() {
     trackPlannedMonthsWithIncome(nextPlan);
     trackPlannedMonths(nextPlan);
     evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
-    pushCustomEvent("Plan-wurde-verändert");
+    pushCustomEvent("Plan-wurde-geändert");
   }
 
   function handlePlanChanges(

@@ -6,7 +6,6 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
-import { Alert } from "@/application/components";
 import { Zusammenfassung } from "@/application/features/planer";
 import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {
@@ -87,12 +86,6 @@ export function Planer({
           bekommen Sie einen Überblick über Ihr voraussichtliches
           Haushaltseinkommen, während Sie Elterngeld beziehen.
         </p>
-
-        <Alert headline="Bitte beachten Sie" className="my-32">
-          Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass
-          etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern
-          entrichtet werden.
-        </Alert>
 
         <GridLayoutProvider
           anzahlElternteile={plan.ausgangslage.anzahlElternteile}

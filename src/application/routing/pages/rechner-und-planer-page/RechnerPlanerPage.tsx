@@ -84,16 +84,19 @@ export function RechnerPlanerPage() {
     })();
   }, []);
 
-  function setPlan(
+  function updateStateForChangedPlan(
     nextPlan: PlanMitBeliebigenElternteilen,
     istPlanGueltig: boolean,
   ): void {
     setHasChanges(true);
-
     plan.current = nextPlan;
-
     setIstPlanGueltig(istPlanGueltig);
+  }
 
+  function trackMetricsForChangedPlan(
+    nextPlan: PlanMitBeliebigenElternteilen,
+    istPlanGueltig: boolean,
+  ): void {
     if (istPlanGueltig) {
       trackPartnerschaftlicheVerteilungForPlan(nextPlan);
     }
@@ -101,6 +104,20 @@ export function RechnerPlanerPage() {
     trackPlannedMonthsWithIncome(nextPlan);
     trackPlannedMonths(nextPlan);
     evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
+    pushCustomEvent("Plan-wurde-verändert");
+  }
+
+  function handlePlanChanges(
+    nextPlan: PlanMitBeliebigenElternteilen,
+    istPlanGueltig: boolean,
+  ): void {
+    updateStateForChangedPlan(nextPlan, istPlanGueltig);
+    trackMetricsForChangedPlan(nextPlan, istPlanGueltig);
+  }
+
+  function trackMetricsForResetPlan(): void {
+    resetTrackingPlanung();
+    pushCustomEvent("Plan-wurde-zurückgesetzt");
   }
 
   function trackOpeningOfLebensmonat(): void {
@@ -136,9 +153,9 @@ export function RechnerPlanerPage() {
           initialInformation={initialPlanerInformation.current}
           berechneElterngeldbezuege={berechneElterngeldbezuege}
           callbacks={{
-            onChange: setPlan,
+            onChange: handlePlanChanges,
             onWaehleOption: trackChanges,
-            onSetzePlanZurueck: resetTrackingPlanung,
+            onSetzePlanZurueck: trackMetricsForResetPlan,
             onOpenLebensmonat: trackOpeningOfLebensmonat,
           }}
         />

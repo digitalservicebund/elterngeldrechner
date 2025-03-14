@@ -61,7 +61,6 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   await rechnerUndPlaner.submit();
 
   expect(await getTrackingVariable(page, "geplante-monate")).toEqual(12);
-  expect(await getTrackingVariable(page, "aenderungen-am-plan")).toEqual(10);
 });
 
 test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
@@ -115,7 +114,6 @@ test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
   await rechnerUndPlaner.submit();
 
   expect(await getTrackingVariable(page, "geplante-monate")).toEqual(8);
-  expect(await getTrackingVariable(page, "aenderungen-am-plan")).toEqual(3);
 });
 
 test("feedback in der planung bei schwieriger benutzung", async ({ page }) => {

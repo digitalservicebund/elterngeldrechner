@@ -23,7 +23,6 @@ import {
   isTrackingAllowedByUser,
   pushCustomEvent,
   resetTrackingPlanung,
-  trackChanges,
   trackEase,
   trackObstacle,
   trackPartnerschaftlicheVerteilung,
@@ -154,7 +153,6 @@ export function RechnerPlanerPage() {
           berechneElterngeldbezuege={berechneElterngeldbezuege}
           callbacks={{
             onChange: handlePlanChanges,
-            onWaehleOption: trackChanges,
             onSetzePlanZurueck: trackMetricsForResetPlan,
             onOpenLebensmonat: trackOpeningOfLebensmonat,
           }}

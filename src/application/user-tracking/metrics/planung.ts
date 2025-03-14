@@ -1,23 +1,13 @@
-import {
-  getTrackingVariable,
-  setTrackingVariable,
-} from "@/application/user-tracking/core";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 import { Monat, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 enum Variables {
-  Changes = "aenderungen-am-plan",
   PlannedMonths = "geplante-monate",
   PlannedMonthsWithIncome = "geplante-monate-mit-einkommen",
 }
 
 export function resetTrackingPlanung() {
   Object.values(Variables).forEach((key) => setTrackingVariable(key, 0));
-}
-
-export function trackChanges() {
-  const newChanges = (getTrackingVariable<number>(Variables.Changes) || 0) + 1;
-
-  setTrackingVariable(Variables.Changes, newChanges);
 }
 
 export function trackPlannedMonths(plan: PlanMitBeliebigenElternteilen) {
@@ -40,6 +30,21 @@ export function trackPlannedMonthsWithIncome(
   });
 
   setTrackingVariable(Variables.PlannedMonthsWithIncome, count);
+}
+
+/**
+ * The Partner:in of the Mutter is the Elternteil without Mutterschaftsleistung.
+ * That means this only applies if there are more than one Elternteil and if any
+ * of them receives Mutterschaftsleistungen.
+ * Geplante Monate are only those where the Partner:in receives Elterngeld.
+ */
+export function trackAnzahlGeplanterMonateDesPartnersDerMutter(
+  anzahlGeplanterMonate: number,
+): void {
+  setTrackingVariable(
+    "anzahlGeplanterMonateDesPartnersDerMutter",
+    anzahlGeplanterMonate,
+  );
 }
 
 function countMatchingMonate(

@@ -1,5 +1,3 @@
-export { trackAnzahlGeplanterMonateDesPartnersDerMutter } from "./anzahl-geplanter-monate-des-partners-der-mutter";
-export { countUpAnzahlGeoeffneterLebensmonateImPlaner } from "./anzahlGeoeffneterLebensmonateImPlaner";
 export {
   getTrackedEase,
   getTrackedObstacle,
@@ -10,7 +8,7 @@ export { trackNutzergruppe } from "./nutzergruppe";
 export { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 export {
   resetTrackingPlanung,
-  trackChanges,
+  trackAnzahlGeplanterMonateDesPartnersDerMutter,
   trackPlannedMonths,
   trackPlannedMonthsWithIncome,
 } from "./planung";

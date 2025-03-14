@@ -59,11 +59,7 @@ if (import.meta.vitest) {
   describe("tracking geplante Monate des Partners der Mutter for Rechner-Planer page", async () => {
     const { Variante, KeinElterngeld } = await import("@/monatsplaner");
 
-    vi.mock(
-      import(
-        "@/application/user-tracking/metrics/anzahl-geplanter-monate-des-partners-der-mutter"
-      ),
-    );
+    vi.mock(import("@/application/user-tracking/metrics/planung"));
 
     it("tracks nothing if given a Plan with single Elternteil, even it has Mutterschutz", () => {
       const plan = {

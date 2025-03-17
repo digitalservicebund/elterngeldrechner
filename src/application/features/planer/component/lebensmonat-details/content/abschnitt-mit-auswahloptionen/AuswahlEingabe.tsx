@@ -102,8 +102,10 @@ export function AuswahlEingabe({
             );
 
             const istAusgewaehlt = gewaehlteOption === option;
-            const waehleDieseOption = () =>
-              istAuswaehlbar && waehleOption(option);
+            const toggleDieseOption = () =>
+              istAuswaehlbar &&
+              waehleOption(istAusgewaehlt ? undefined : option);
+
             const gridRowStart = optionIndex + 1;
 
             const istBasisImMutterschutz =
@@ -134,7 +136,7 @@ export function AuswahlEingabe({
                   name={legend}
                   value={option}
                   checked={istAusgewaehlt}
-                  onChange={waehleDieseOption}
+                  onClick={toggleDieseOption}
                   aria-disabled={!istAuswaehlbar}
                   aria-label={inputAriaLabel}
                   aria-describedby={inputDescriptionIdentifier}

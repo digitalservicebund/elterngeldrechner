@@ -20,12 +20,9 @@ export function AllgemeineAngabenPage() {
           hideSubmitButton
         />
 
-        <Button
-          className="place-self-end"
-          label="Weiter"
-          form={formIdentifier}
-          isSubmitButton
-        />
+        <div>
+          <Button label="Weiter" form={formIdentifier} isSubmitButton />
+        </div>
       </div>
     </Page>
   );

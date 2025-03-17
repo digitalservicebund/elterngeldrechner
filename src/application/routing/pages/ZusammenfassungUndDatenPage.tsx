@@ -27,12 +27,13 @@ export function ZusammenfassungUndDatenPage(): ReactNode {
           "Es wurde noch kein Plan erstellt"
         )}
 
-        <Button
-          className="place-self-start"
-          label="Zurück"
-          buttonStyle="secondary"
-          onClick={navigateToRechnerUndPlanerPage}
-        />
+        <div>
+          <Button
+            label="Zurück"
+            buttonStyle="secondary"
+            onClick={navigateToRechnerUndPlanerPage}
+          />
+        </div>
       </div>
     </Page>
   );

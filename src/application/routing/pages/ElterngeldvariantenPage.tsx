@@ -27,7 +27,7 @@ export function ElterngeldvariantenPage(): ReactNode {
           <ElterngeldvariantenDescriptions />
         </div>
 
-        <div className="flex justify-between">
+        <div className="flex gap-16">
           <Button
             label="Zurück"
             buttonStyle="secondary"

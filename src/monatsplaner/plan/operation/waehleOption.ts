@@ -70,14 +70,18 @@ if (import.meta.vitest) {
   describe("wähle Option für Plan", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
+    const vorlaeufigGueltigerPlanModule = await import(
+      "@/monatsplaner/plan/specification/VorlaeufigGueltigerPlan"
+    );
     const { Specification } = await import(
       "@/monatsplaner/common/specification"
     );
 
     beforeEach(() => {
-      vi.mocked(VorlaeufigGueltigerPlan).mockReturnValue(
-        Specification.fromPredicate("", () => true),
-      );
+      vi.spyOn(
+        vorlaeufigGueltigerPlanModule,
+        "VorlaeufigGueltigerPlan",
+      ).mockReturnValue(Specification.fromPredicate("", () => true));
     });
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
@@ -129,9 +133,10 @@ if (import.meta.vitest) {
     });
 
     it("forwards the violations if the resulting Plan is not gültig", () => {
-      vi.mocked(VorlaeufigGueltigerPlan).mockReturnValue(
-        Specification.fromPredicate("ungültig", () => false),
-      );
+      vi.spyOn(
+        vorlaeufigGueltigerPlanModule,
+        "VorlaeufigGueltigerPlan",
+      ).mockReturnValue(Specification.fromPredicate("ungültig", () => false));
 
       const violations = waehleOption(
         ANY_BERECHNE_ELTERNGELDBEZUEGE,
@@ -192,10 +197,6 @@ if (import.meta.vitest) {
         },
       });
     });
-
-    vi.mock(
-      import("@/monatsplaner/plan/specification/VorlaeufigGueltigerPlan"),
-    );
 
     function monat(
       gewaehlteOption: Auswahloption | undefined,

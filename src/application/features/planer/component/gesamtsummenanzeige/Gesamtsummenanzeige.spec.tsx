@@ -11,12 +11,6 @@ describe("Gesamtsummenanzeige", () => {
     vi.mocked(berechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
   });
 
-  it("shows a section for the Gesamtsumme", () => {
-    render(<Gesamtsummenanzeige {...ANY_PROPS} />);
-
-    expect(screen.getByLabelText("Gesamtsumme")).toBeVisible();
-  });
-
   describe("final Summe", () => {
     it("shows it when there are more than one Elternteil", () => {
       vi.mocked(berechneGesamtsumme).mockReturnValue({
@@ -143,16 +137,6 @@ describe("Gesamtsummenanzeige", () => {
       );
     });
   });
-
-  it("shows a hint in regards of Mutterschutz and monetary values", () => {
-    render(<Gesamtsummenanzeige {...ANY_PROPS} />);
-
-    expect(
-      screen.getByText(
-        /Hinweis: Mutterschaftsleistungen werden nicht in der Summe berücksichtigt\..*Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern entrichtet werden./,
-      ),
-    ).toBeVisible();
-  });
 });
 
 const ANY_NAME = "Jane";
@@ -185,7 +169,7 @@ const ANY_SUMME_FUER_ELTERNTEIL = {
 };
 
 const ANY_GESAMTSUMME = {
-  elterngeldbezug: 0,
+  elterngeldbezug: 1000,
   proElternteil: {
     [Elternteil.Eins]: ANY_SUMME_FUER_ELTERNTEIL,
     [Elternteil.Zwei]: ANY_SUMME_FUER_ELTERNTEIL,

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { ReactNode, useId } from "react";
+import { ReactNode } from "react";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
 import { berechneGesamtsumme } from "./berechneGesamtsumme";
 import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
@@ -15,8 +15,8 @@ type Props = {
 };
 
 export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
-  const headingIdentifier = useId();
   const gesamtsumme = berechneGesamtsumme(plan);
+  const showGesamtsumme = gesamtsumme.elterngeldbezug > 0;
   const hasMultipleElternteile = plan.ausgangslage.anzahlElternteile > 1;
   const jemandHatEinkommen = listeElternteileFuerAusgangslageAuf(
     plan.ausgangslage,
@@ -30,23 +30,19 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
         "flex flex-wrap justify-evenly gap-y-16 text-center",
         className,
       )}
-      aria-labelledby={headingIdentifier}
     >
-      <h4 id={headingIdentifier} className="sr-only">
-        Gesamtsumme
-      </h4>
-
       {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
         (elternteil) => (
           <ElterngeldFuerElternteil
             key={elternteil}
             pseudonym={plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]}
             summe={gesamtsumme.proElternteil[elternteil]}
+            showSumme={showGesamtsumme}
           />
         ),
       )}
 
-      {!!hasMultipleElternteile && (
+      {!!hasMultipleElternteile && !!showGesamtsumme && (
         <span className="basis-full font-bold">
           Gesamtsumme Elterngeld:{" "}
           <Geldbetrag betrag={gesamtsumme.elterngeldbezug} />
@@ -65,15 +61,6 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
             />
           ),
         )}
-
-      <span className="basis-full text-14">
-        Hinweis: Mutterschaftsleistungen werden nicht in der Summe
-        berücksichtigt.
-        <br />
-        Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass etwas
-        abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern
-        entrichtet werden.
-      </span>
     </section>
   );
 }

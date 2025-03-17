@@ -7,12 +7,14 @@ import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
 type Props = {
   readonly pseudonym: string | undefined;
   readonly summe: SummeFuerElternteil;
+  readonly showSumme: boolean;
   readonly className?: string;
 };
 
 export function ElterngeldFuerElternteil({
   pseudonym,
   summe,
+  showSumme,
   className,
 }: Props): ReactNode {
   const { anzahlMonateMitBezug, elterngeldbezug } = summe;
@@ -31,10 +33,12 @@ export function ElterngeldFuerElternteil({
         )}
       </span>
 
-      <span>
-        <Geldbetrag betrag={elterngeldbezug} /> für{" "}
-        {formattedAnzahlMonateMitBezug}
-      </span>
+      {!!showSumme && (
+        <span>
+          <Geldbetrag betrag={elterngeldbezug} /> für{" "}
+          {formattedAnzahlMonateMitBezug}
+        </span>
+      )}
     </div>
   );
 }

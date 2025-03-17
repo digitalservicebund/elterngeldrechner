@@ -1,13 +1,11 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
-import { Funktionsleiste } from "./Funktionsleiste";
 import { KontingentUebersicht } from "./KontingentUebersicht";
-import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
-import { Button } from "@/application/components";
+import { Button, PrintButton } from "@/application/components";
 import { Zusammenfassung } from "@/application/features/planer";
 import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {
@@ -105,9 +103,11 @@ export function Planer({
               "border-2 border-solid border-off-white",
             )}
           >
-            <KopfleisteMitPseudonymen
-              className="py-10"
-              ausgangslage={plan.ausgangslage}
+            <KontingentUebersicht className="bg-off-white py-16" plan={plan} />
+
+            <Gesamtsummenanzeige
+              className="border-t-2 border-solid !border-grey bg-off-white py-16"
+              plan={plan}
             />
 
             <Lebensmonatsliste
@@ -124,16 +124,11 @@ export function Planer({
               onOpenLebensmonat={onOpenLebensmonat}
             />
 
-            <KontingentUebersicht className="bg-off-white py-16" plan={plan} />
-
-            <Gesamtsummenanzeige
-              className="border-t-2 border-solid !border-grey bg-off-white py-16"
-              plan={plan}
-            />
+            <div className="p-32">
+              <PrintButton />
+            </div>
           </div>
         </GridLayoutProvider>
-
-        <Funktionsleiste className="mt-40" />
 
         <Validierungsfehlerbox
           className="mt-40"

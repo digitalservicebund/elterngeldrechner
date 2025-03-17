@@ -23,8 +23,6 @@ describe("Planer", () => {
 
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
-    expect(screen.getByLabelText("Gesamtsumme")).toBeVisible();
-    expect(screen.getByLabelText("Funktionsleiste")).toBeVisible();
     expect(screen.getByLabelText("Validierungsfehler")).toBeVisible();
   });
 

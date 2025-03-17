@@ -1,17 +1,12 @@
-import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
-import { Button, PrintButton } from "@/application/components";
+import { PrintButton } from "@/application/components";
 
 type Props = {
-  readonly planungWiederholen: () => void;
   readonly className?: string;
 };
 
-export function Funktionsleiste({
-  planungWiederholen,
-  className,
-}: Props): ReactNode {
+export function Funktionsleiste({ className }: Props): ReactNode {
   const headingIdentifier = useId();
 
   return (
@@ -22,15 +17,6 @@ export function Funktionsleiste({
       <h4 id={headingIdentifier} className="sr-only">
         Funktionsleiste
       </h4>
-
-      <div>
-        <Button
-          buttonStyle="link"
-          label="Planung wiederholen"
-          iconBefore={<RestartAltIcon />}
-          onClick={planungWiederholen}
-        />
-      </div>
 
       <PrintButton />
     </section>

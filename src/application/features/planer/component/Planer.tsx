@@ -1,3 +1,4 @@
+import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
 import { Funktionsleiste } from "./Funktionsleiste";
@@ -6,6 +7,7 @@ import { KopfleisteMitPseudonymen } from "./KopfleisteMitPseudonymen";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
+import { Button } from "@/application/components";
 import { Zusammenfassung } from "@/application/features/planer";
 import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {
@@ -52,16 +54,13 @@ export function Planer({
 
   const lebensmonatslistenElement = useRef<HTMLElement>(null);
 
-  const planungWiederholen = useCallback(() => {
+  const neueLeerePlanungErstellen = useCallback(() => {
     setzePlanZurueck();
-    // Compensate for rendering delay after reset call.
-    setTimeout(() =>
-      lebensmonatslistenElement.current?.scrollIntoView({
-        behavior: "smooth",
-      }),
-    );
     lebensmonatslistenElement.current?.focus({ preventScroll: true });
   }, [setzePlanZurueck]);
+
+  const mindestensEinLebensmonatGeplant =
+    Object.keys(plan.lebensmonate).length > 0;
 
   return (
     <>
@@ -86,6 +85,15 @@ export function Planer({
           bekommen Sie einen Überblick über Ihr voraussichtliches
           Haushaltseinkommen, während Sie Elterngeld beziehen.
         </p>
+
+        <Button
+          className="my-16 print:hidden"
+          buttonStyle="link"
+          label="Neue leere Planung erstellen"
+          iconBefore={<RestartAltIcon />}
+          onClick={neueLeerePlanungErstellen}
+          disabled={!mindestensEinLebensmonatGeplant}
+        />
 
         <GridLayoutProvider
           anzahlElternteile={plan.ausgangslage.anzahlElternteile}
@@ -125,10 +133,7 @@ export function Planer({
           </div>
         </GridLayoutProvider>
 
-        <Funktionsleiste
-          className="mt-40"
-          planungWiederholen={planungWiederholen}
-        />
+        <Funktionsleiste className="mt-40" />
 
         <Validierungsfehlerbox
           className="mt-40"

@@ -48,7 +48,7 @@ describe("Planer", () => {
     );
   });
 
-  describe("Planung wiederholen", () => {
+  describe("neue leere Planung erstellen", () => {
     it("calls the callback to reset the Plan", async () => {
       const setzePlanZurueck = vi.fn();
       vi.mocked(usePlanerService).mockReturnValue({
@@ -57,29 +57,25 @@ describe("Planer", () => {
       });
 
       render(<Planer {...ANY_PROPS} />);
-      await clickPlanungWiederholen();
+      await clickNeueLeerePlanungErstellen();
 
       expect(setzePlanZurueck).toHaveBeenCalledOnce();
     });
 
-    it("triggers smooth scrolling and shifts focus", async () => {
-      const scrollIntoView = vi.fn();
+    it("shifts focus", async () => {
       const focus = vi.fn();
-      window.HTMLElement.prototype.scrollIntoView = scrollIntoView;
       window.HTMLElement.prototype.focus = focus;
       render(<Planer {...ANY_PROPS} />);
 
-      await clickPlanungWiederholen();
+      await clickNeueLeerePlanungErstellen();
 
-      expect(scrollIntoView).toHaveBeenCalled();
-      expect(scrollIntoView).toHaveBeenCalledWith({ behavior: "smooth" });
       expect(focus).toHaveBeenCalled();
       expect(focus).toHaveBeenCalledWith({ preventScroll: true });
     });
 
-    async function clickPlanungWiederholen(): Promise<void> {
+    async function clickNeueLeerePlanungErstellen(): Promise<void> {
       const button = screen.getByRole("button", {
-        name: "Planung wiederholen",
+        name: "Neue leere Planung erstellen",
       });
       await userEvent.click(button);
     }
@@ -124,7 +120,17 @@ const ANY_SERVICE_VALUES = {
       },
       geburtsdatumDesKindes: new Date(),
     },
-    lebensmonate: {},
+    lebensmonate: {
+      1: {
+        [Elternteil.Eins]: {
+          gewaehlteOption: "Basiselterngeld" as Variante,
+          imMutterschutz: false as const,
+        },
+        [Elternteil.Zwei]: {
+          imMutterschutz: false as const,
+        },
+      },
+    },
   },
   verfuegbaresKontingent: {
     [Variante.Basis]: 0,

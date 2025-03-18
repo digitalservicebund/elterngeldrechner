@@ -116,7 +116,7 @@ export function Sidebar({ currentStep }: Props) {
                 aria-current={ariaCurrent}
                 disabled={!isNavigatable}
               >
-                {step.heading}
+                {("shortName" in step && step.shortName) || step.heading}
               </button>
             </li>
           );

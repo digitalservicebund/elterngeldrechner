@@ -4,6 +4,7 @@ import { ReactNode, useCallback, useId, useRef } from "react";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
+import { Variantenplakette } from "./Variantenplakette";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Button, PrintButton } from "@/application/components";
 import { Zusammenfassung } from "@/application/features/planer";
@@ -13,7 +14,10 @@ import {
   type InitialInformation,
   usePlanerService,
 } from "@/application/features/planer/service/usePlanerService";
-import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
+import {
+  type BerechneElterngeldbezuegeCallback,
+  Variante,
+} from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
@@ -48,7 +52,6 @@ export function Planer({
   );
 
   const headingIdentifier = useId();
-  const descriptionIdentifier = useId();
 
   const lebensmonatslistenElement = useRef<HTMLElement>(null);
 
@@ -69,20 +72,51 @@ export function Planer({
       <section
         className={`${className} print:hidden`}
         aria-labelledby={headingIdentifier}
-        aria-describedby={descriptionIdentifier}
       >
         <h3 id={headingIdentifier} className="sr-only">
           Planer Anwendung
         </h3>
 
-        <p id={descriptionIdentifier}>
-          Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden Monat
-          einzeln planen. Sie können ausprobieren, welche Variante in jedem
-          Monat am besten passt, und die Elterngeldvarianten kombinieren. Wenn
-          Sie Einkommen haben, können Sie es pro Monat angeben. Mit den Angaben
-          bekommen Sie einen Überblick über Ihr voraussichtliches
-          Haushaltseinkommen, während Sie Elterngeld beziehen.
+        <p>
+          Die ersten Schritte sind geschafft! Jetzt berechnen wir Ihr Elterngeld
+          und zeigen Ihnen die nächsten Möglichkeiten.
         </p>
+        <ul className="mb-16 list-inside list-disc">
+          <li>
+            Entscheiden Sie, in welchen Lebensmonaten Sie Elterngeld bekommen
+            möchten
+          </li>
+          <li>Verteilen Sie das Elterngeld für sich</li>
+          <li>Der Planer zeigt, wie Elterngeld aufgeteilt werden kann</li>
+          <li>
+            Geben Sie optional zusätzliches Einkommen an, um eine genauere
+            Berechnung zu erhalten
+          </li>
+        </ul>
+        <p>Dieses Elterngeld gibt es:</p>
+        <div className="rounded bg-off-white p-16">
+          <ul className="mb-16 flex flex-wrap gap-x-32 gap-y-16">
+            <li className="flex items-center gap-8">
+              <span>
+                <Variantenplakette variante={Variante.Basis} />
+              </span>
+              <span className="whitespace-nowrap">= {Variante.Basis}</span>
+            </li>
+            <li className="flex items-center gap-8">
+              <Variantenplakette variante={Variante.Plus} />
+              <span className="whitespace-nowrap">= {Variante.Plus}</span>
+            </li>
+            <li className="flex items-center gap-8">
+              <Variantenplakette variante={Variante.Bonus} />
+              <span className="whitespace-nowrap">= {Variante.Bonus}</span>
+            </li>
+          </ul>
+          <Button
+            buttonStyle="link"
+            label="Weitere Informationen wie Elterngeld funktioniert"
+            onClick={() => alert("coming soon ;)")}
+          />
+        </div>
 
         <Button
           className="my-16 print:hidden"

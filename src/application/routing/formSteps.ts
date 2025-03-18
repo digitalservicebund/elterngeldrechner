@@ -1,5 +1,6 @@
 export interface FormStep {
   heading: string;
+  shortName?: string;
   route: string;
 }
 
@@ -27,7 +28,8 @@ export const formSteps = {
     route: "/elterngeldvarianten",
   },
   rechnerUndPlaner: {
-    heading: "Monatsplaner",
+    heading: "Planen Sie Ihr Elterngeld",
+    shortName: "Monatsplaner",
     route: "/rechner-planer",
   },
   zusammenfassungUndDaten: {

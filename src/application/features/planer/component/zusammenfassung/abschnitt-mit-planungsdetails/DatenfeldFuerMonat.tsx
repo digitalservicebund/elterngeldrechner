@@ -1,7 +1,7 @@
 import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
 import type { ReactNode } from "react";
 import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
-import { Variantenplakette } from "@/application/features/planer/component/zusammenfassung/Variantenplakette";
+import { Variantenplakette } from "@/application/features/planer/component/Variantenplakette";
 import { type Auswahloption, KeinElterngeld, type Monat } from "@/monatsplaner";
 
 type Props = {

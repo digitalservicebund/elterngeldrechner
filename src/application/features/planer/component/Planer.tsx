@@ -1,18 +1,21 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
+import { BeispielAuswahl } from "./BeispielAuswahl";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Variantenplakette } from "./Variantenplakette";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Button, PrintButton } from "@/application/components";
-import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {
   type Callbacks as PlanerServiceCallbacks,
   type InitialInformation,
+  useBeispieleService,
   usePlanerService,
-} from "@/application/features/planer/service/usePlanerService";
+} from "@/application/features/planer/hooks";
+import {} from "@/monatsplaner";
+import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {
   type BerechneElterngeldbezuegeCallback,
   Variante,
@@ -34,8 +37,28 @@ export function Planer({
   callbacks,
   className,
 }: Props): ReactNode {
-  const { onOpenLebensmonat, onOpenErklaerung, ...planerServiceCallbacks } =
-    callbacks || {};
+  // Intermediate "cache" to resolve mutual parameter dependency between hooks
+  const setzeBeispielauswahlZurueckCallback = useRef<() => void>();
+
+  const {
+    onOpenLebensmonat,
+    onOpenErklaerung,
+    onWaehleOption: onWaehleOptionFromProps,
+    onSetzePlanZurueck: onSetzePlanZurueckFromProps,
+    ...remaingingPlanerServiceCallbacks
+  } = callbacks ?? {};
+
+  const planerServiceCallbacks = {
+    ...remaingingPlanerServiceCallbacks,
+    onWaehleOption: fanOut(
+      onWaehleOptionFromProps,
+      setzeBeispielauswahlZurueckCallback.current,
+    ),
+    onSetzePlanZurueck: fanOut(
+      onSetzePlanZurueckFromProps,
+      setzeBeispielauswahlZurueckCallback.current,
+    ),
+  };
 
   const {
     plan,
@@ -46,11 +69,21 @@ export function Planer({
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
     setzePlanZurueck,
+    ueberschreibePlan,
   } = usePlanerService(
     initialInformation,
     berechneElterngeldbezuege,
     planerServiceCallbacks,
   );
+
+  const {
+    beschreibungenDerBeispiele,
+    waehleBeispielAus,
+    istBeispielAusgewaehlt,
+    setzeBeispielauswahlZurueck,
+  } = useBeispieleService(plan.ausgangslage, ueberschreibePlan);
+
+  setzeBeispielauswahlZurueckCallback.current = setzeBeispielauswahlZurueck;
 
   const headingIdentifier = useId();
 
@@ -67,7 +100,7 @@ export function Planer({
   return (
     <>
       <section
-        className={`${className} print:hidden`}
+        className={classNames(className, "print:hidden")}
         aria-labelledby={headingIdentifier}
       >
         <h3 id={headingIdentifier} className="sr-only">
@@ -124,6 +157,13 @@ export function Planer({
           disabled={!mindestensEinLebensmonatGeplant}
         />
 
+        <BeispielAuswahl
+          className="mb-24 mt-80"
+          beschreibungenDerBeispiele={beschreibungenDerBeispiele}
+          waehleBeispielAus={waehleBeispielAus}
+          istBeispielAusgewaehlt={istBeispielAusgewaehlt}
+        />
+
         <GridLayoutProvider
           anzahlElternteile={plan.ausgangslage.anzahlElternteile}
         >
@@ -168,4 +208,12 @@ export function Planer({
       </section>
     </>
   );
+}
+
+function fanOut<Parameters extends unknown[]>(
+  ...functions: Array<((...parameters: Parameters) => void) | undefined>
+): (...parameters: Parameters) => void {
+  return (...parameters: Parameters) => {
+    functions.forEach((fn) => fn?.(...parameters));
+  };
 }

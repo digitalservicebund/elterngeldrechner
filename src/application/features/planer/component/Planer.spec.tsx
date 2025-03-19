@@ -21,6 +21,11 @@ describe("Planer", () => {
   it("shows all relevant sections of the Planer", () => {
     render(<Planer {...ANY_PROPS} />);
 
+    expect(
+      screen.getByLabelText(
+        "Nutzen Sie ein Beispiel oder machen Sie Ihre eigene Planung:",
+      ),
+    ).toBeVisible();
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
     expect(screen.getByLabelText("Validierungsfehler")).toBeVisible();
@@ -43,7 +48,9 @@ describe("Planer", () => {
     expect(usePlanerService).toHaveBeenLastCalledWith(
       initialInformation,
       berechneElterngeldbezuege,
-      { onChange },
+      expect.objectContaining({
+        onChange,
+      }),
     );
   });
 
@@ -172,4 +179,5 @@ const ANY_SERVICE_VALUES = {
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
   setzePlanZurueck: () => {},
+  ueberschreibePlan: () => {},
 };

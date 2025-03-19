@@ -9,6 +9,7 @@ import {
   type BerechneElterngeldbezuegeCallback,
   Elternteil,
   KeinElterngeld,
+  type PlanMitBeliebigenElternteilen,
   Result,
   Variante,
   bestimmeAuswahlmoeglichkeiten,
@@ -436,6 +437,61 @@ describe("use Planer service", () => {
 
       expect(onChange).toHaveBeenCalledOnce();
       expect(onChange).toHaveBeenLastCalledWith(ANY_PLAN, true);
+    });
+  });
+
+  describe("überschreibe Plan", () => {
+    it("just overwrites the current plan", () => {
+      const { result } = renderPlanerServiceHook({
+        initialInformation: {
+          plan: {
+            ausgangslage: {
+              anzahlElternteile: 1,
+              geburtsdatumDesKindes: new Date("2024-01-01"),
+            },
+            lebensmonate: {
+              1: {
+                [Elternteil.Eins]: {
+                  gewaehlteOption: Variante.Basis,
+                  imMutterschutz: false,
+                },
+              },
+            },
+          } as PlanMitBeliebigenElternteilen,
+        },
+      });
+
+      act(() =>
+        result.current.ueberschreibePlan({
+          ausgangslage: {
+            anzahlElternteile: 1,
+            geburtsdatumDesKindes: new Date("2024-01-02"),
+          },
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Plus,
+                imMutterschutz: false,
+              },
+            },
+          },
+        } as PlanMitBeliebigenElternteilen),
+      );
+
+      expect(result.current.plan).toStrictEqual({
+        ausgangslage: {
+          anzahlElternteile: 1,
+          geburtsdatumDesKindes: new Date("2024-01-02"),
+        },
+        lebensmonate: {
+          1: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false,
+            },
+          },
+        },
+      });
     });
   });
 });

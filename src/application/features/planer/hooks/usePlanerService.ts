@@ -117,6 +117,15 @@ export function usePlanerService(
     [updateStatesAndTriggerCallbacks, callbacks],
   );
 
+  const ueberschreibePlan = useCallback(
+    (plan: PlanMitBeliebigenElternteilen) =>
+      setPlan(() => {
+        updateStatesAndTriggerCallbacks(plan);
+        return plan;
+      }),
+    [updateStatesAndTriggerCallbacks],
+  );
+
   return {
     plan,
     validierungsfehler,
@@ -127,6 +136,7 @@ export function usePlanerService(
       erstelleVorschlaegeFuerAngabeDesEinkommensCallback,
     gebeEinkommenAn: gebeEinkommenAnCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
+    ueberschreibePlan,
   };
 }
 

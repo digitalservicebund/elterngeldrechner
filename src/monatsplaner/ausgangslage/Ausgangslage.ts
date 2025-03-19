@@ -8,7 +8,7 @@ export type Ausgangslage =
 
 export type AusgangslageFuerEinElternteil = BasisAusgangslage<Elternteil.Eins>;
 
-type AusgangslageFuerZweiElternteile = BasisAusgangslage<
+export type AusgangslageFuerZweiElternteile = BasisAusgangslage<
   Elternteil.Eins | Elternteil.Zwei
 >;
 

@@ -1,7 +1,9 @@
 export {
   type Ausgangslage,
   type AusgangslageFuerEinElternteil,
+  type AusgangslageFuerZweiElternteile,
   type ElternteileByAusgangslage,
+  PartnermonateSindVerfuegbar,
   bestimmeVerfuegbaresKontingent,
   listeElternteileFuerAusgangslageAuf,
 } from "./ausgangslage";

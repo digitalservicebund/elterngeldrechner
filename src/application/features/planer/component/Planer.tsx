@@ -148,6 +148,13 @@ export function Planer({
           />
         </div>
 
+        <BeispielAuswahl
+          className="mb-24 mt-80"
+          beschreibungenDerBeispiele={beschreibungenDerBeispiele}
+          waehleBeispielAus={waehleBeispielAus}
+          istBeispielAusgewaehlt={istBeispielAusgewaehlt}
+        />
+
         <Button
           className="my-16 print:hidden"
           buttonStyle="link"
@@ -155,13 +162,6 @@ export function Planer({
           iconBefore={<RestartAltIcon />}
           onClick={neueLeerePlanungErstellen}
           disabled={!mindestensEinLebensmonatGeplant}
-        />
-
-        <BeispielAuswahl
-          className="mb-24 mt-80"
-          beschreibungenDerBeispiele={beschreibungenDerBeispiele}
-          waehleBeispielAus={waehleBeispielAus}
-          istBeispielAusgewaehlt={istBeispielAusgewaehlt}
         />
 
         <GridLayoutProvider

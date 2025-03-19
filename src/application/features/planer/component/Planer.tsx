@@ -177,7 +177,7 @@ export function Planer({
             <KontingentUebersicht className="bg-off-white py-16" plan={plan} />
 
             <Gesamtsummenanzeige
-              className="border-t-2 border-solid !border-grey bg-off-white py-16"
+              className="border-t-2 border-solid !border-white bg-off-white py-16"
               plan={plan}
             />
 

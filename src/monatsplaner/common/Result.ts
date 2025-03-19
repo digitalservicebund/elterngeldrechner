@@ -26,7 +26,11 @@ export class Result<Value, Error> {
     return this.options.isOk ? this.options.value : orElse(this.options.error);
   }
 
-  mapOrElse<Output, MapOutput extends Output, OrElseOutput extends Output>(
+  mapOrElse<
+    Output,
+    MapOutput extends Output = Output,
+    OrElseOutput extends Output = Output,
+  >(
     map: (value: Value) => MapOutput,
     orElse: (error: Error) => OrElseOutput,
   ): Output {

@@ -8,7 +8,8 @@ import {
   composeAusgangslageFuerPlaner,
   stepAllgemeineAngabenSelectors,
 } from "@/application/features/abfrageteil/state";
-import { Planer } from "@/application/features/planer";
+import { Planer, Zusammenfassung } from "@/application/features/planer";
+import { Erklaerung } from "@/application/features/planer/component/zusammenfassung/Erklaerung";
 import {
   UserFeedbackForm,
   useUserFeedback,
@@ -76,6 +77,10 @@ export function RechnerPlanerPage() {
   const rememberSubmit = useRef(false);
 
   const [trackingConsent, setTrackingConsent] = useState(false);
+
+  const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
+  const showErklaerung = () => setIsErklaerungOpen(true);
+  const hideErklaerung = () => setIsErklaerungOpen(false);
 
   useEffect(() => {
     void (async () => {
@@ -147,49 +152,61 @@ export function RechnerPlanerPage() {
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
-        <Planer
-          initialInformation={initialPlanerInformation.current}
-          berechneElterngeldbezuege={berechneElterngeldbezuege}
-          callbacks={{
-            onChange: handlePlanChanges,
-            onSetzePlanZurueck: trackMetricsForResetPlan,
-            onOpenLebensmonat: trackOpeningOfLebensmonat,
-          }}
-        />
-
-        {!!showFeedbackForm && (
-          <UserFeedbackForm
-            ease={getTrackedEase()}
-            obstacle={getTrackedObstacle()}
-            onChangeEase={trackEase}
-            onChangeObstacle={trackObstacle}
-            onSubmit={() => (rememberSubmit.current = true)}
-          />
-        )}
-
-        <div className="flex gap-16">
-          <Button
-            label="Zurück"
-            buttonStyle="secondary"
-            onClick={navigateToElterngeldvariantenPage}
-          />
-
-          <Button
-            label="Zur Zusammenfassung"
-            disabled={!istPlanGueltig}
-            onClick={navigateToZusammenfassungUndDatenPage}
-          />
+      {!!plan.current && (
+        <div className="hidden print:block">
+          <Zusammenfassung plan={plan.current} />
         </div>
+      )}
+      <div className="print:hidden">
+        {isErklaerungOpen ? (
+          <Erklaerung onClose={hideErklaerung} />
+        ) : (
+          <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
+            <Planer
+              initialInformation={initialPlanerInformation.current}
+              berechneElterngeldbezuege={berechneElterngeldbezuege}
+              callbacks={{
+                onChange: handlePlanChanges,
+                onSetzePlanZurueck: trackMetricsForResetPlan,
+                onOpenLebensmonat: trackOpeningOfLebensmonat,
+                onOpenErklaerung: showErklaerung,
+              }}
+            />
 
-        <span className="basis-full text-14">
-          Hinweis: Mutterschaftsleistungen werden nicht in der Summe
-          berücksichtigt.
-          <br />
-          Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass
-          etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch Steuern
-          entrichtet werden.
-        </span>
+            {!!showFeedbackForm && (
+              <UserFeedbackForm
+                ease={getTrackedEase()}
+                obstacle={getTrackedObstacle()}
+                onChangeEase={trackEase}
+                onChangeObstacle={trackObstacle}
+                onSubmit={() => (rememberSubmit.current = true)}
+              />
+            )}
+
+            <div className="flex gap-16">
+              <Button
+                label="Zurück"
+                buttonStyle="secondary"
+                onClick={navigateToElterngeldvariantenPage}
+              />
+
+              <Button
+                label="Zur Zusammenfassung"
+                disabled={!istPlanGueltig}
+                onClick={navigateToZusammenfassungUndDatenPage}
+              />
+            </div>
+
+            <span className="basis-full text-14">
+              Hinweis: Mutterschaftsleistungen werden nicht in der Summe
+              berücksichtigt.
+              <br />
+              Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass
+              etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch
+              Steuern entrichtet werden.
+            </span>
+          </div>
+        )}
       </div>
 
       <dialog

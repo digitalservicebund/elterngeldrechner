@@ -7,7 +7,6 @@ import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Variantenplakette } from "./Variantenplakette";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Button, PrintButton } from "@/application/components";
-import { Zusammenfassung } from "@/application/features/planer";
 import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
 import {
   type Callbacks as PlanerServiceCallbacks,
@@ -24,6 +23,7 @@ type Props = {
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
   readonly callbacks?: PlanerServiceCallbacks & {
     onOpenLebensmonat?: () => void;
+    onOpenErklaerung: () => void;
   };
   readonly className?: string;
 };
@@ -31,10 +31,11 @@ type Props = {
 export function Planer({
   initialInformation,
   berechneElterngeldbezuege,
-  callbacks = {},
+  callbacks,
   className,
 }: Props): ReactNode {
-  const { onOpenLebensmonat, ...planerServiceCallbacks } = callbacks;
+  const { onOpenLebensmonat, onOpenErklaerung, ...planerServiceCallbacks } =
+    callbacks || {};
 
   const {
     plan,
@@ -65,10 +66,6 @@ export function Planer({
 
   return (
     <>
-      <div className="hidden w-full print:block">
-        <Zusammenfassung plan={plan} />
-      </div>
-
       <section
         className={`${className} print:hidden`}
         aria-labelledby={headingIdentifier}
@@ -114,7 +111,7 @@ export function Planer({
           <Button
             buttonStyle="link"
             label="Weitere Informationen wie Elterngeld funktioniert"
-            onClick={() => alert("coming soon ;)")}
+            onClick={onOpenErklaerung}
           />
         </div>
 

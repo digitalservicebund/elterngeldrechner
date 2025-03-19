@@ -29,12 +29,13 @@ describe("Planer", () => {
   it("forwards the given props to the service", () => {
     const initialInformation = { ausgangslage: ANY_AUSGANGSLAGE };
     const onChange = () => {};
+    const onOpenErklaerung = () => {};
     const berechneElterngeldbezuege = () => ({}) as never;
     render(
       <Planer
         initialInformation={initialInformation}
         berechneElterngeldbezuege={berechneElterngeldbezuege}
-        callbacks={{ onChange }}
+        callbacks={{ onChange, onOpenErklaerung }}
       />,
     );
 

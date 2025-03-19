@@ -10,16 +10,13 @@ import {
   useState,
 } from "react";
 import { LebensmonatDetails } from "./lebensmonat-details";
-import type {
-  BestimmeAuswahlmoeglichkeiten,
-  ErstelleUngeplantenLebensmonat,
-  ErstelleVorschlaegeFuerAngabeDesEinkommens,
-  GebeEinkommenAn,
-  WaehleOption,
-} from "@/application/features/planer/service/callbackTypes";
 import {
   type Ausgangslage,
+  type Auswahlmoeglichkeiten,
+  type Auswahloption,
   type ElternteileByAusgangslage,
+  type Lebensmonat,
+  type Lebensmonatszahl,
   Lebensmonatszahlen,
   type Plan,
 } from "@/monatsplaner";
@@ -27,17 +24,33 @@ import { findeLetztenVerplantenLebensmonatOrDefault } from "@/monatsplaner/leben
 
 type Props<A extends Ausgangslage> = {
   readonly plan: Plan<A>;
-  readonly erstelleUngeplantenLebensmonat: ErstelleUngeplantenLebensmonat<
-    ElternteileByAusgangslage<A>
-  >;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<
-    ElternteileByAusgangslage<A>
-  >;
-  readonly waehleOption: WaehleOption<ElternteileByAusgangslage<A>>;
-  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<
-    ElternteileByAusgangslage<A>
-  >;
-  readonly gebeEinkommenAn: GebeEinkommenAn<ElternteileByAusgangslage<A>>;
+
+  readonly erstelleUngeplantenLebensmonat: (
+    lebensmonatszahl: Lebensmonatszahl,
+  ) => Lebensmonat<ElternteileByAusgangslage<A>>;
+
+  readonly bestimmeAuswahlmoeglichkeiten: (
+    lebensmonatszahl: Lebensmonatszahl,
+    elternteil: ElternteileByAusgangslage<A>,
+  ) => Auswahlmoeglichkeiten;
+
+  readonly waehleOption: (
+    lebensmonatszahl: Lebensmonatszahl,
+    elternteil: ElternteileByAusgangslage<A>,
+    option: Auswahloption,
+  ) => void;
+
+  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: (
+    lebensmonatszahl: Lebensmonatszahl,
+    elternteil: ElternteileByAusgangslage<A>,
+  ) => number[];
+
+  readonly gebeEinkommenAn: (
+    lebensmonatszahl: Lebensmonatszahl,
+    elternteil: ElternteileByAusgangslage<A>,
+    bruttoeinkommen: number,
+  ) => void;
+
   readonly onOpenLebensmonat?: () => void;
   readonly className?: string;
 };

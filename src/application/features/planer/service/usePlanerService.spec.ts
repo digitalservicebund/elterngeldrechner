@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { GebeEinkommenAn, WaehleOption } from "./callbackTypes";
 import {
   type Callbacks,
   type InitialInformation,
@@ -466,11 +465,15 @@ function renderPlanerServiceHook(options?: {
   );
 }
 
-function waehleAnyOption(callback: WaehleOption<Elternteil>) {
+function waehleAnyOption(
+  callback: ReturnType<typeof usePlanerService>["waehleOption"],
+) {
   act(() => callback(1, Elternteil.Eins, Variante.Basis));
 }
 
-function gebeAnyEinkommenAn(callback: GebeEinkommenAn<Elternteil>) {
+function gebeAnyEinkommenAn(
+  callback: ReturnType<typeof usePlanerService>["gebeEinkommenAn"],
+) {
   act(() => callback(1, Elternteil.Eins, 300));
 }
 

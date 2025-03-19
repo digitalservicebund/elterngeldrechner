@@ -9,14 +9,14 @@ import {
   useState,
 } from "react";
 import { LebensmonatContent } from "./content";
-import { ProvideInformationenZumLebensmonat } from "./informationenZumLebensmonat";
+import {
+  type BestimmeAuswahlmoeglichkeiten,
+  type ErstelleVorschlaegeFuerAngabeDesEinkommens,
+  type GebeEinkommenAn,
+  ProvideInformationenZumLebensmonat,
+  type WaehleOption,
+} from "./informationenZumLebensmonat";
 import { LebensmonatSummary } from "./summary";
-import type {
-  BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
-  ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat,
-  GebeEinkommenInLebensmonatAn,
-  WaehleOptionInLebensmonat,
-} from "@/application/features/planer/service/callbackTypes";
 import { useOnClickOutside } from "@/application/hooks/useOnClickOutside";
 import type {
   Ausgangslage,
@@ -29,18 +29,10 @@ interface Props<A extends Ausgangslage> {
   readonly ausgangslage: A;
   readonly lebensmonatszahl: Lebensmonatszahl;
   readonly lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
-  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<
-    ElternteileByAusgangslage<A>
-  >;
-  readonly waehleOption: WaehleOptionInLebensmonat<
-    ElternteileByAusgangslage<A>
-  >;
-  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<
-    ElternteileByAusgangslage<A>
-  >;
-  readonly gebeEinkommenAn: GebeEinkommenInLebensmonatAn<
-    ElternteileByAusgangslage<A>
-  >;
+  readonly bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<A>;
+  readonly waehleOption: WaehleOption<A>;
+  readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<A>;
+  readonly gebeEinkommenAn: GebeEinkommenAn<A>;
   readonly onToggle?: (event: ToggleEvent) => void;
   readonly className?: string;
 }

@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AbschnittMitAuswahloptionen } from "./AbschnittMitAuswahloptionen";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonat-details/informationenZumLebensmonat";
-import type { BestimmeAuswahlmoeglichkeitenFuerLebensmonat } from "@/application/features/planer/service";
 import {
   type AusgangslageFuerEinElternteil,
   Elternteil,
@@ -81,9 +80,7 @@ describe("Abschnitt mit Auswahloptionen", () => {
   it("uses the provided callback to determine the Auswahlmöglichkeiten per Elternteil", () => {
     const bestimmeAuswahlmoeglichkeiten = vi
       .fn()
-      .mockReturnValue(
-        ANY_AUSWAHLMOEGLICHKEITEN,
-      ) as BestimmeAuswahlmoeglichkeitenFuerLebensmonat<Elternteil>;
+      .mockReturnValue(ANY_AUSWAHLMOEGLICHKEITEN);
 
     vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
       ...ANY_INFORMATION_ZUM_LEBENSMONAT,

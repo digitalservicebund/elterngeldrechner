@@ -1,12 +1,8 @@
 import { type ReactNode, createContext, useContext } from "react";
 import type {
-  BestimmeAuswahlmoeglichkeitenFuerLebensmonat,
-  ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat,
-  GebeEinkommenInLebensmonatAn,
-  WaehleOptionInLebensmonat,
-} from "@/application/features/planer/service/callbackTypes";
-import type {
   Ausgangslage,
+  Auswahlmoeglichkeiten,
+  Auswahloption,
   ElternteileByAusgangslage,
   Lebensmonat,
   Lebensmonatszahl,
@@ -51,12 +47,25 @@ type InformationenZumLebensmonat<A extends Ausgangslage> = {
   ausgangslage: A;
   lebensmonatszahl: Lebensmonatszahl;
   lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
-  bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeitenFuerLebensmonat<
-    ElternteileByAusgangslage<A>
-  >;
-  waehleOption: WaehleOptionInLebensmonat<ElternteileByAusgangslage<A>>;
-  erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommensFuerLebensmonat<
-    ElternteileByAusgangslage<A>
-  >;
-  gebeEinkommenAn: GebeEinkommenInLebensmonatAn<ElternteileByAusgangslage<A>>;
+  bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<A>;
+  waehleOption: WaehleOption<A>;
+  erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<A>;
+  gebeEinkommenAn: GebeEinkommenAn<A>;
 };
+
+export type BestimmeAuswahlmoeglichkeiten<A extends Ausgangslage> = (
+  elternteil: ElternteileByAusgangslage<A>,
+) => Auswahlmoeglichkeiten;
+
+export type WaehleOption<A extends Ausgangslage> = (
+  elternteil: ElternteileByAusgangslage<A>,
+  option: Auswahloption,
+) => void;
+
+export type ErstelleVorschlaegeFuerAngabeDesEinkommens<A extends Ausgangslage> =
+  (elternteil: ElternteileByAusgangslage<A>) => number[];
+
+export type GebeEinkommenAn<A extends Ausgangslage> = (
+  elternteil: ElternteileByAusgangslage<A>,
+  bruttoeinkommen: number,
+) => void;

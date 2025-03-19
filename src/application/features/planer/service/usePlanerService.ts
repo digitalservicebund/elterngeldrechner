@@ -1,9 +1,10 @@
 import { useCallback, useState } from "react";
-import { type GebeEinkommenAn, WaehleOption } from "./callbackTypes";
 import {
   type Ausgangslage,
+  type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
   type Elternteil,
+  type Lebensmonatszahl,
   type Plan,
   type PlanMitBeliebigenElternteilen,
   bestimmeAuswahlmoeglichkeiten,
@@ -50,13 +51,19 @@ export function usePlanerService(
     [berechneElterngeldbezuege, plan],
   );
 
-  const waehleOptionCallback = useCallback<WaehleOption<Elternteil>>(
-    (...argumentList) => {
+  const waehleOptionCallback = useCallback(
+    (
+      lebensmonatszahl: Lebensmonatszahl,
+      elternteil: Elternteil,
+      option: Auswahloption,
+    ): void => {
       setPlan((plan) => {
         const nextPlan = waehleOption(
           berechneElterngeldbezuege,
           plan,
-          ...argumentList,
+          lebensmonatszahl,
+          elternteil,
+          option,
         ).unwrapOrElse((error) => {
           // eslint-disable-next-line no-console
           console.error(error);
@@ -78,13 +85,19 @@ export function usePlanerService(
     [plan.lebensmonate],
   );
 
-  const gebeEinkommenAnCallback = useCallback<GebeEinkommenAn<Elternteil>>(
-    (...argumentList) =>
+  const gebeEinkommenAnCallback = useCallback(
+    (
+      lebensmonatszahl: Lebensmonatszahl,
+      elternteil: Elternteil,
+      bruttoeinkommen: number,
+    ): void =>
       setPlan((plan) => {
         const planWithEinkommen = gebeEinkommenAn(
           berechneElterngeldbezuege,
           plan,
-          ...argumentList,
+          lebensmonatszahl,
+          elternteil,
+          bruttoeinkommen,
         );
 
         updateStatesAndTriggerCallbacks(planWithEinkommen);

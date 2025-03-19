@@ -46,7 +46,6 @@ function includeReleaseVersionInBundlePlugin(): PluginOption {
         return f.type === "chunk" && f.fileName.endsWith(".js");
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Object.entries(bundle).forEach(([_, file]) => {
         if (isJavascript(file)) {
           file.code += `window.__BUILD_VERSION_HASH__ = '${version}';`;

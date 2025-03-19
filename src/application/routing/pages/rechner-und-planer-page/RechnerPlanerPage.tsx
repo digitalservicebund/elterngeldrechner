@@ -197,14 +197,14 @@ export function RechnerPlanerPage() {
               />
             </div>
 
-            <span className="basis-full text-14">
+            <p className="mb-40 max-w-[70ch] text-16">
               Hinweis: Mutterschaftsleistungen werden nicht in der Summe
               berücksichtigt.
               <br />
               Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass
               etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch
               Steuern entrichtet werden.
-            </span>
+            </p>
           </div>
         )}
       </div>

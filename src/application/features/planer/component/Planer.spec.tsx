@@ -2,10 +2,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
-import { usePlanerService } from "@/application/features/planer/service";
+import { usePlanerService } from "@/application/features/planer/hooks";
 import { Elternteil, KeinElterngeld, Variante } from "@/monatsplaner";
 
-vi.mock(import("@/application/features/planer/service/usePlanerService"));
+vi.mock(import("@/application/features/planer/hooks/usePlanerService"));
 
 describe("Planer", () => {
   beforeEach(() => {

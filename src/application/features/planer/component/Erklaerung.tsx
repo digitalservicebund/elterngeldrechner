@@ -1,4 +1,5 @@
 import CloseIcon from "@digitalservicebund/icons/Close";
+import EastIcon from "@digitalservicebund/icons/East";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { ReactNode } from "react";
 import { Example } from "./Example";
@@ -106,12 +107,12 @@ const content = [
     headline: "Wie viel Elterngeld bekommen Sie?",
     content: (
       <div>
-        <p>
+        <p className="mb-24">
           Wie viel Elterngeld Sie bekommen, hängt vor allem von Ihrem Einkommen
           ab und davon, welches Elterngeld Sie wählen.
         </p>
-        <h4>Basiselterngeld:</h4>
-        <ul className="list-inside list-disc">
+        <h4 className="!text-base">Basiselterngeld:</h4>
+        <ul className="mb-24 list-disc pl-24">
           <li>
             Sie bekommen normalerweise 65 Prozent vom Netto-Einkommen, das Sie
             vor der Geburt hatten.
@@ -121,21 +122,39 @@ const content = [
             1800 Euro im Lebensmonat.
           </li>
         </ul>
-        <h4>ElterngeldPlus:</h4>
-        <ul className="list-inside list-disc">
+        <h4 className="!text-base">ElterngeldPlus:</h4>
+        <ul className="mb-24 list-disc pl-24">
           <li>ElterngeldPlus ist halb so hoch wie das Basiselterngeld.</li>
           <li>
             Das heißt, Sie bekommen mindestens 150 Euro und höchstens 900 Euro
             im Lebensmonat.
           </li>
         </ul>
-        <h4>
+        <h4 className="!text-base">
           Elterngeld pro Lebensmonat, wenn Sie in den Lebensmonaten kein
           Einkommen haben
         </h4>
 
-        <p className="flex h-[400px] items-center justify-center bg-grey">
-          TODO Tabelle
+        <p className="mb-16">
+          1600 Euro Netto-Einkommen vor der Geburt
+          <br />
+          <EastIcon />
+          <span className="sr-only">ergibt</span> 1040 Euro Basiselterngeld
+          (65%) oder 520 Euro ElterngeldPlus
+        </p>
+        <p className="mb-16">
+          2000 Euro Netto-Einkommen vor der Geburt
+          <br />
+          <EastIcon />
+          <span className="sr-only">ergibt</span> 1300 Euro Basiselterngeld
+          (65%) oder 650 Euro ElterngeldPlus
+        </p>
+        <p className="mb-32">
+          2400 Euro Netto-Einkommen vor der Geburt
+          <br />
+          <EastIcon />
+          <span className="sr-only">ergibt</span> 1560 Euro Basiselterngeld
+          (65%) oder 780 Euro ElterngeldPlus
         </p>
 
         <p>
@@ -155,17 +174,17 @@ const content = [
     headline: "Wie lange bekommen Sie Elterngeld?",
     content: (
       <div>
-        <p>
+        <p className="mb-24">
           Basiselterngeld und ElterngeldPlus können Sie für unterschiedlich
           lange Zeiträume bekommen. In diesen Zeiträumen können Sie auswählen,
           wann Sie es nehmen. Sie können es auch unterbrechen.
         </p>
-        <h4>Basiselterngeld:</h4>
-        <ul className="list-inside list-disc">
+        <h4 className="!text-base">Basiselterngeld:</h4>
+        <ul className="mb-24 list-disc pl-24">
           <li>Sie können es bis zum 14. Lebensmonat nehmen.</li>
         </ul>
-        <h4>ElterngeldPlus:</h4>
-        <ul className="list-inside list-disc">
+        <h4 className="!text-base">ElterngeldPlus:</h4>
+        <ul className="list-disc pl-24">
           <li>Sie können es bis zum 32. Lebensmonat nehmen.</li>
           <li>
             Ab dem 15. Lebensmonat müssen Sie es ohne Unterbrechung nehmen. Sie
@@ -180,15 +199,15 @@ const content = [
     headline: "Wann lohnt sich welches Elterngeld für Sie?",
     content: (
       <div>
-        <h4>Basiselterngeld:</h4>
+        <h4 className="mt-16 !text-base">Basiselterngeld:</h4>
         <p>Es lohnt sich, wenn</p>
-        <ul className="list-inside list-disc">
+        <ul className="mb-24 list-disc pl-24">
           <li>Sie eine Zeit lang nicht arbeiten.</li>
           <li>Sie die größte finanzielle Unterstützung brauchen.</li>
         </ul>
-        <h4>ElterngeldPlus:</h4>
+        <h4 className="!text-base">ElterngeldPlus:</h4>
         <p>Es lohnt sich, wenn</p>
-        <ul className="list-inside list-disc">
+        <ul className="list-disc pl-24">
           <li>
             Sie nach der Geburt nicht mehr als 32 Stunden in der Woche arbeiten.
           </li>
@@ -202,9 +221,9 @@ const content = [
     headline: "Wie teilen Sie Elterngeld auf?",
     content: (
       <div>
-        <h4>Basiselterngeld:</h4>
+        <h4 className="mt-16 !text-base">Basiselterngeld:</h4>
         <p>Wenn Sie gemeinsam ein Kind erziehen:</p>
-        <ul className="list-inside list-disc">
+        <ul className="mb-16 list-disc pl-24">
           <li>Sie können bis zu 14 Lebensmonate Basiselterngeld aufteilen.</li>
           <li>
             Ein Elternteil kann maximal 12 Lebensmonate Basiselterngeld
@@ -219,18 +238,18 @@ const content = [
             gleichzeitig Basiselterngeld nehmen.
           </li>
         </ul>
-        <p>
+        <p className="mb-16">
           Wenn Sie alleinerziehend sind, können Sie bis zu 14 Lebensmonate
           Basiselterngeld bekommen.
         </p>
 
-        <div className="bg-off-white p-24">
+        <div className="mb-32 bg-off-white p-24">
           <p>
             <strong>
               Beispiele für die Aufteilung von 14 Lebensmonaten Basiselterngeld:
             </strong>
           </p>
-          <ul className="mb-24 list-inside list-disc">
+          <ul className="mb-24 list-disc pl-24">
             <li>
               Elternteil 1 nimmt in den Lebensmonaten 1 bis 7 Basiselterngeld.
             </li>
@@ -281,12 +300,16 @@ const content = [
               ]}
             />
           </div>
-          <Legende showBasis showKeinElterngeld />
+          <Legende
+            showBasis
+            showKeinElterngeld
+            className="bg-[rgba(214,214,214,0.4)]"
+          />
         </div>
 
-        <h4>ElterngeldPlus:</h4>
+        <h4 className="!text-base">ElterngeldPlus:</h4>
         <p>Wenn Sie Ihr Kind gemeinsam oder allein erziehen:</p>
-        <ul className="list-inside list-disc">
+        <ul className="mb-16 list-disc pl-24">
           <li>
             Sie können jeden Lebensmonat Basiselterngeld in 2 Lebensmonate
             ElterngeldPlus tauschen. Das gilt nicht für die Lebensmonate, die
@@ -294,7 +317,7 @@ const content = [
           </li>
           <li>Sie können dann doppelt so lange ElterngeldPlus bekommen.</li>
         </ul>
-        <p>
+        <p className="mb-16">
           Elternteile können im selben Lebensmonat unterschiedliches Elterngeld
           bekommen.
         </p>
@@ -306,7 +329,7 @@ const content = [
               ElterngeldPlus:
             </strong>
           </p>
-          <ul className="mb-24 list-inside list-disc">
+          <ul className="mb-24 list-disc pl-24">
             <li>
               Elternteil 1 nimmt Basiselterngeld in den Lebensmonaten 1 bis 6.
             </li>
@@ -365,7 +388,12 @@ const content = [
               ]}
             />
           </div>
-          <Legende showBasis showPlus showKeinElterngeld />
+          <Legende
+            showBasis
+            showPlus
+            showKeinElterngeld
+            className="bg-[rgba(214,214,214,0.4)]"
+          />
         </div>
       </div>
     ),
@@ -384,7 +412,7 @@ const content = [
           Sie können ihn bekommen, wenn Ihre Arbeitszeit nach der Geburt
           durchschnittlich
         </p>
-        <ul className="list-inside list-disc">
+        <ul className="mb-16 list-disc pl-24">
           <li>nicht weniger als 24 Stunden in der Woche.</li>
           <li>und nicht mehr als 32 Stunden in der Woche ist.</li>
         </ul>
@@ -396,7 +424,7 @@ const content = [
           Sie können den Partnerschaftsbonus für mindestens 2 und höchstens 4
           Lebensmonate nehmen. Sie sollen ihn nicht unterbrechen.
         </p>
-        <p>
+        <p className="mb-16">
           Sie können den Partnerschaftsbonus bis zum 32. Lebensmonat bekommen.
         </p>
 
@@ -407,7 +435,7 @@ const content = [
               Partnerschaftsbonus:
             </strong>
           </p>
-          <ul className="mb-24 list-inside list-disc">
+          <ul className="mb-24 list-disc pl-24">
             <li>
               Elternteil 1 nimmt in den ersten 6 Lebensmonaten Basiselterngeld.
             </li>
@@ -473,7 +501,13 @@ const content = [
               ]}
             />
           </div>
-          <Legende showBasis showPlus showBonus showKeinElterngeld />
+          <Legende
+            showBasis
+            showPlus
+            showBonus
+            showKeinElterngeld
+            className="bg-[rgba(214,214,214,0.4)]"
+          />
         </div>
       </div>
     ),

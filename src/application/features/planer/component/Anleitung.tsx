@@ -20,7 +20,7 @@ export function Anleitung({ onOpenErklaerung }: Props): ReactNode {
         und zeigen Ihnen die nächsten Möglichkeiten.
       </p>
 
-      <ul className="mb-16 list-inside list-disc">
+      <ul className="mb-16 list-disc pl-24">
         <li>
           Entscheiden Sie, in welchen Lebensmonaten Sie Elterngeld bekommen
           möchten
@@ -39,6 +39,7 @@ export function Anleitung({ onOpenErklaerung }: Props): ReactNode {
           buttonStyle="link"
           label="Weitere Informationen wie Elterngeld funktioniert"
           onClick={onOpenErklaerung}
+          className="text-left !text-base"
         />
       </Legende>
     </section>

@@ -43,16 +43,16 @@ function erstelleBeispieleFuerAlleinPlanende(
       identifier: crypto.randomUUID(),
       titel: "Ungeteilte Zeit fürs Kind",
       beschreibung:
-        "Basiselterngeld um sich ganz auf das Kind zu konzentrieren. Für eine wertvolle Zeit.",
+        "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 12 },
       ]),
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Länger Elterngeld erhalten",
+      titel: "Beruf und Familie vereinen",
       beschreibung:
-        "Nach einem Jahr wieder in den Beruf einsteigen und Kita-Start begleiten.",
+        "Für einen leichteren Übergang, während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 10 },
         { lebensmonat: plus, anzahl: 4 },
@@ -60,7 +60,7 @@ function erstelleBeispieleFuerAlleinPlanende(
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Maximales Elterngeld",
+      titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Mehr finanzielle Sicherheit bei halben Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
@@ -89,7 +89,7 @@ function erstelleBeispieleFuerAlleinerziehende(
       identifier: crypto.randomUUID(),
       titel: "Ungeteilte Zeit fürs Kind",
       beschreibung:
-        "Basiselterngeld um sich ganz auf das Kind zu konzentrieren. Für eine wertvolle Zeit.",
+        "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 },
         { lebensmonat: bonus, anzahl: 4 },
@@ -97,9 +97,9 @@ function erstelleBeispieleFuerAlleinerziehende(
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Länger Elterngeld erhalten",
+      titel: "Beruf und Familie vereinen",
       beschreibung:
-        "Nach einem Jahr wieder in den Beruf einsteigen und Kita-Start begleiten.",
+        "Für einen leichteren Übergang, während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 12 : 10 },
         { lebensmonat: plus, anzahl: 4 },
@@ -108,7 +108,7 @@ function erstelleBeispieleFuerAlleinerziehende(
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Maximales Elterngeld",
+      titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Mehr finanzielle Sicherheit, während des Wiedereinstieg in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
@@ -152,8 +152,8 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
 
   const nurPartnerInPlus = lebensmonatFuerMutterMitPartnerIn(
     ausgangslage,
-    MONAT_MIT_PLUS,
     UNGEPLANTER_MONAT,
+    MONAT_MIT_PLUS,
   );
 
   const beidePlus = lebensmonatFuerMutterMitPartnerIn(
@@ -171,9 +171,9 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
   return [
     {
       identifier: crypto.randomUUID(),
-      titel: "Gleichberechtigte Aufteilung",
+      titel: "Partnerschaftliche Aufteilung",
       beschreibung:
-        "Für Eltern, die sich partnerschaftlich bei der Betreuung und Erziehung abwechseln möchten.",
+        "Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         {
           lebensmonat: nurMutterBasis,
@@ -188,9 +188,9 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Maximales Elterngeld",
+      titel: "Länger Elterngeld  erhalten",
       beschreibung:
-        "Mehr Familienzeit und flexible Arbeitsgestaltung, unabhängig von der finanziellen Situation.",
+        "Lohnt sich, wenn Sie in Teilzeit arbeiten möchten. Für mehr Zeit mit der Familie ",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: nurMutterBasis, anzahl: 2 },
         { lebensmonat: nurMutterPlus, anzahl: 5 },
@@ -204,9 +204,9 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Elternzeit mit Unterstützung des Partners",
+      titel: "Unterstützung im ersten Monat",
       beschreibung:
-        "Perfekt für Eltern, die den ersten Monat gemeinsam erleben und den Kita-Start begleiten möchten.",
+        "Gemeinsam starten. Nach dem ersten Lebensjahr den Partnerschaftsbonus nutzen.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: beideBasis, anzahl: 1 },
         {

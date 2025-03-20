@@ -162,7 +162,9 @@ export type GridColumnDefinitionPerElternteil = {
  * ["left", "right"] // -> grid-column: left / right;
  * ```
  */
-type GridColumn<ColumnNames extends string> = ColumnNames | ColumnNames[];
+type GridColumn<ColumnNames extends string> =
+  | ColumnNames
+  | [ColumnNames, ColumnNames];
 
 type AnzahlElternteile = 1 | 2;
 

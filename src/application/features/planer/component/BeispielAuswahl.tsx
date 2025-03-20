@@ -23,12 +23,12 @@ export function BeispielAuswahl({
 
   return (
     <section className={className} aria-labelledby={headingIdentifier}>
-      <h4 id={headingIdentifier} className="mb-24">
+      <h4 id={headingIdentifier} className="mb-16">
         Nutzen Sie ein Beispiel oder machen Sie Ihre eigene Planung:
       </h4>
 
       <div
-        className="grid gap-x-24 gap-y-16"
+        className="grid gap-x-24"
         style={{
           gridTemplateColumns: "repeat(auto-fill, minmax(25ch, 1fr)",
           gridTemplateRows: "repeat(3, min-content)",
@@ -59,16 +59,16 @@ export function BeispielAuswahl({
                 )}
                 aria-describedby={headingIdentifier}
               >
-                <div className="flex items-center justify-center bg-off-white px-8 py-10">
+                <div className="flex items-center justify-center bg-off-white px-8 py-6">
                   <h5
                     id={headingIdentifier}
-                    className="text-center text-base font-regular"
+                    className="text-center text-base font-regular leading-6"
                   >
                     {titel}
                   </h5>
                 </div>
 
-                <p className="px-16 text-text-light">{beschreibung}</p>
+                <p className="m-16 p-0 text-text-light">{beschreibung}</p>
 
                 <button
                   className={classNames(

@@ -107,7 +107,7 @@ export function Planer({
         <Anleitung onOpenErklaerung={onOpenErklaerung} />
 
         <BeispielAuswahl
-          className="mb-24 mt-80"
+          className="mt-56"
           beschreibungenDerBeispiele={beschreibungenDerBeispiele}
           waehleBeispielAus={waehleBeispielAus}
           istBeispielAusgewaehlt={istBeispielAusgewaehlt}
@@ -132,10 +132,10 @@ export function Planer({
               "border-2 border-solid border-off-white",
             )}
           >
-            <KontingentUebersicht className="bg-off-white py-16" plan={plan} />
+            <KontingentUebersicht className="bg-off-white py-10" plan={plan} />
 
             <Gesamtsummenanzeige
-              className="border-t-2 border-solid !border-white bg-off-white py-16"
+              className="border-t-2 border-solid !border-white bg-off-white py-10"
               plan={plan}
             />
 

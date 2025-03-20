@@ -1,5 +1,4 @@
 import { aktualisiereElterngeldbezuege } from "./aktualisiereElterngeldbezuege";
-import { teileLebensmonateBeiElternteileAuf } from "./teileLebensmonateBeiElternteileAuf";
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngeldbezug";
 import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
@@ -44,7 +43,7 @@ export function waehleOption<A extends Ausgangslage>(
     .mapOrElse(
       () =>
         Result.ok(
-          berechneUndAktualisiereElterngeldbezuege(
+          aktualisiereElterngeldbezuege(
             berechneElterngeldbezuege,
             gewaehlterPlan,
             elternteil,
@@ -52,16 +51,6 @@ export function waehleOption<A extends Ausgangslage>(
         ),
       (violations) => Result.error(violations),
     );
-}
-
-function berechneUndAktualisiereElterngeldbezuege<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  plan: Plan<A>,
-  elternteil: ElternteileByAusgangslage<A>,
-): Plan<A> {
-  const monate = teileLebensmonateBeiElternteileAuf(plan)[elternteil];
-  const elterngeldbezuege = berechneElterngeldbezuege(elternteil, monate);
-  return aktualisiereElterngeldbezuege(plan, elternteil, elterngeldbezuege);
 }
 
 if (import.meta.vitest) {

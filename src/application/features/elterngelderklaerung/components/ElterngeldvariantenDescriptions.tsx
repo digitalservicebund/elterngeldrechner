@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { DetailsElterngeldvariante } from "./DetailsElterngeldvariante";
-import { Example } from "./Example";
 import { FurtherInformation } from "./FurtherInformation";
+import { Example } from "@/application/features/planer/component/Example";
 
 export function ElterngeldvariantenDescriptions(): ReactNode {
   return (

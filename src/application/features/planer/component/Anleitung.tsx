@@ -1,7 +1,6 @@
 import { type ReactNode, useId } from "react";
-import { Variantenplakette } from "./Variantenplakette";
+import { Legende } from "./Legende";
 import { Button } from "@/application/components";
-import { Variante } from "@/monatsplaner";
 
 type Props = {
   readonly onOpenErklaerung: () => void;
@@ -35,32 +34,13 @@ export function Anleitung({ onOpenErklaerung }: Props): ReactNode {
       </ul>
 
       <p>Dieses Elterngeld gibt es:</p>
-      <div className="rounded bg-off-white p-16">
-        <ul className="mb-16 flex flex-wrap gap-x-32 gap-y-16">
-          <li className="flex items-center gap-8">
-            <span>
-              <Variantenplakette variante={Variante.Basis} />
-            </span>
-            <span className="whitespace-nowrap">= {Variante.Basis}</span>
-          </li>
-
-          <li className="flex items-center gap-8">
-            <Variantenplakette variante={Variante.Plus} />
-            <span className="whitespace-nowrap">= {Variante.Plus}</span>
-          </li>
-
-          <li className="flex items-center gap-8">
-            <Variantenplakette variante={Variante.Bonus} />
-            <span className="whitespace-nowrap">= {Variante.Bonus}</span>
-          </li>
-        </ul>
-
+      <Legende showBasis showPlus showBonus>
         <Button
           buttonStyle="link"
           label="Weitere Informationen wie Elterngeld funktioniert"
           onClick={onOpenErklaerung}
         />
-      </div>
+      </Legende>
     </section>
   );
 }

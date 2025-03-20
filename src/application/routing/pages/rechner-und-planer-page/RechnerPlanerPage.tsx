@@ -9,7 +9,7 @@ import {
   stepAllgemeineAngabenSelectors,
 } from "@/application/features/abfrageteil/state";
 import { Planer, Zusammenfassung } from "@/application/features/planer";
-import { Erklaerung } from "@/application/features/planer/component/zusammenfassung/Erklaerung";
+import { Erklaerung } from "@/application/features/planer/component/Erklaerung";
 import {
   UserFeedbackForm,
   useUserFeedback,
@@ -80,7 +80,10 @@ export function RechnerPlanerPage() {
 
   const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
   const showErklaerung = () => setIsErklaerungOpen(true);
-  const hideErklaerung = () => setIsErklaerungOpen(false);
+  const hideErklaerung = () => {
+    setIsErklaerungOpen(false);
+    window.scrollTo(0, 0);
+  };
 
   useEffect(() => {
     void (async () => {

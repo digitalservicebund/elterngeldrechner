@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Variante } from "@/monatsplaner";
 
 type Props = {
-  readonly variante: Variante;
+  readonly variante: Variante | "Kein Elterngeld";
 };
 
 export function Variantenplakette({ variante }: Props): ReactNode {
@@ -21,7 +21,10 @@ export function Variantenplakette({ variante }: Props): ReactNode {
   );
 }
 
-const RENDER_PROPERTIES: Record<Variante, RenderProperties> = {
+const RENDER_PROPERTIES: Record<
+  Variante | "Kein Elterngeld",
+  RenderProperties
+> = {
   [Variante.Basis]: {
     shortName: "Basis",
     className: "bg-Basis text-white",
@@ -33,6 +36,10 @@ const RENDER_PROPERTIES: Record<Variante, RenderProperties> = {
   [Variante.Bonus]: {
     shortName: "Bonus",
     className: "bg-Bonus text-black",
+  },
+  "Kein Elterngeld": {
+    shortName: "Kein Elterngeld",
+    className: "bg-white text-black",
   },
 };
 

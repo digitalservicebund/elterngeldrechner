@@ -59,7 +59,7 @@ export type BestimmeAuswahlmoeglichkeiten<A extends Ausgangslage> = (
 
 export type WaehleOption<A extends Ausgangslage> = (
   elternteil: ElternteileByAusgangslage<A>,
-  option: Auswahloption,
+  option: Auswahloption | undefined,
 ) => void;
 
 export type ErstelleVorschlaegeFuerAngabeDesEinkommens<A extends Ausgangslage> =

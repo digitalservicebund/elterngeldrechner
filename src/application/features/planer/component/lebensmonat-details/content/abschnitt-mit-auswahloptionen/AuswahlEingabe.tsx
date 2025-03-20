@@ -22,7 +22,7 @@ type Props = {
   readonly auswahlmoeglichkeiten: Auswahlmoeglichkeiten;
   readonly imMutterschutz: boolean;
   readonly gewaehlteOption?: Auswahloption;
-  readonly waehleOption: (option: Auswahloption) => void;
+  readonly waehleOption: (option: Auswahloption | undefined) => void;
 };
 
 export function AuswahlEingabe({
@@ -104,6 +104,10 @@ export function AuswahlEingabe({
             const istAusgewaehlt = gewaehlteOption === option;
             const waehleDieseOption = () =>
               istAuswaehlbar && waehleOption(option);
+
+            const setzeAuswahlZurueckWennBereitsAusgewaehlt = () =>
+              istAusgewaehlt && waehleOption(undefined);
+
             const gridRowStart = optionIndex + 1;
 
             const istBasisImMutterschutz =
@@ -135,6 +139,7 @@ export function AuswahlEingabe({
                   value={option}
                   checked={istAusgewaehlt}
                   onChange={waehleDieseOption}
+                  onClick={setzeAuswahlZurueckWennBereitsAusgewaehlt}
                   aria-disabled={!istAuswaehlbar}
                   aria-label={inputAriaLabel}
                   aria-describedby={inputDescriptionIdentifier}

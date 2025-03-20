@@ -37,7 +37,7 @@ type Props<A extends Ausgangslage> = {
   readonly waehleOption: (
     lebensmonatszahl: Lebensmonatszahl,
     elternteil: ElternteileByAusgangslage<A>,
-    option: Auswahloption,
+    option: Auswahloption | undefined,
   ) => void;
 
   readonly erstelleVorschlaegeFuerAngabeDesEinkommens: (

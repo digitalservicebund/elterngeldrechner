@@ -2,7 +2,10 @@ import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import { Variante } from "@/monatsplaner/Variante";
 import type { Monat } from "@/monatsplaner/monat/Monat";
 
-export function waehleOption(monat: Monat, option: Auswahloption): Monat {
+export function waehleOption(
+  monat: Monat,
+  option: Auswahloption | undefined,
+): Monat {
   if (monat.gewaehlteOption === option) {
     return monat;
   } else {
@@ -85,6 +88,24 @@ if (import.meta.vitest) {
       );
 
       expect(monat.bruttoeinkommen).toBe(100);
+    });
+
+    it("allows to reset any chosen Option completely", () => {
+      const monat = waehleOption(
+        {
+          gewaehlteOption: Variante.Plus,
+          bruttoeinkommen: 100,
+          imMutterschutz: false,
+        },
+        undefined,
+      );
+
+      expect(monat).toStrictEqual({
+        gewaehlteOption: undefined,
+        bruttoeinkommen: 100,
+        imMutterschutz: false,
+        elterngeldbezug: undefined,
+      });
     });
   });
 }

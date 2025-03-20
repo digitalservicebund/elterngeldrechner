@@ -12,7 +12,7 @@ import { waehleOption as waehleOptionInMonat } from "@/monatsplaner/monat";
 export function waehleOption<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
   elternteil: E,
-  option: Auswahloption,
+  option: Auswahloption | undefined,
 ): Lebensmonat<E> {
   const parameters = { elternteil, option };
   const moechteBonusWaehlen = option === Variante.Bonus;
@@ -76,7 +76,7 @@ function waehleOptionDirekt<E extends Elternteil>(
 
 type BindingParameters<E extends Elternteil> = {
   elternteil: E;
-  option: Auswahloption;
+  option: Auswahloption | undefined;
 };
 
 if (import.meta.vitest) {
@@ -131,6 +131,22 @@ if (import.meta.vitest) {
 
       expect(lebensmonat[Elternteil.Eins].gewaehlteOption).toBe(Variante.Basis);
       expect(lebensmonat[Elternteil.Zwei].gewaehlteOption).toBeUndefined();
+    });
+
+    it("allows to reset a chosen Option for one Elternteil", () => {
+      const lebensmonatVorher = {
+        [Elternteil.Eins]: monat(Variante.Basis),
+        [Elternteil.Zwei]: monat(Variante.Plus),
+      };
+
+      const lebensmonat = waehleOption<Elternteil>(
+        lebensmonatVorher,
+        Elternteil.Eins,
+        undefined,
+      );
+
+      expect(lebensmonat[Elternteil.Eins].gewaehlteOption).toBeUndefined();
+      expect(lebensmonat[Elternteil.Zwei].gewaehlteOption).toBe(Variante.Plus);
     });
 
     function monat(gewaehlteOption?: Auswahloption) {

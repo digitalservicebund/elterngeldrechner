@@ -19,7 +19,7 @@ export function waehleOption<A extends Ausgangslage>(
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
-  option: Auswahloption,
+  option: Auswahloption | undefined,
 ): Result<Plan<A>, SpecificationViolation[]> {
   const ungeplanterLebensmonat = erstelleInitialenLebensmonat(
     plan.ausgangslage,

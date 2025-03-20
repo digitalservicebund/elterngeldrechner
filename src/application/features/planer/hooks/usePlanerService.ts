@@ -56,7 +56,7 @@ export function usePlanerService(
     (
       lebensmonatszahl: Lebensmonatszahl,
       elternteil: Elternteil,
-      option: Auswahloption,
+      option: Auswahloption | undefined,
     ): void => {
       setPlan((plan) => {
         const nextPlan = waehleOption(

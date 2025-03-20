@@ -22,7 +22,7 @@ export function waehleOption<E extends Elternteil>(
   lebensmonate: Lebensmonate<E>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: E,
-  option: Auswahloption,
+  option: Auswahloption | undefined,
   ungeplanterLebensmonat: Lebensmonat<E>,
 ): Lebensmonate<E> {
   const moechteBonusWaehlen = option === Variante.Bonus;
@@ -146,7 +146,7 @@ function waehleOptionDirekt<E extends Elternteil>(
 type BindingParameters<E extends Elternteil> = {
   lebensmonatszahl: Lebensmonatszahl;
   elternteil: E;
-  option: Auswahloption;
+  option: Auswahloption | undefined;
   ungeplanterLebensmonat: Lebensmonat<E>;
 };
 
@@ -396,6 +396,26 @@ if (import.meta.vitest) {
       expectOption(lebensmonate, 7, Elternteil.Zwei).toBeUndefined();
       expectOption(lebensmonate, 8, Elternteil.Eins).toBeUndefined();
       expectOption(lebensmonate, 8, Elternteil.Zwei).toBeUndefined();
+    });
+
+    it("allows to reset a chosen Option", () => {
+      const lebensmonateVorher = {
+        5: {
+          [Elternteil.Eins]: monat(Variante.Basis),
+          [Elternteil.Zwei]: monat(Variante.Plus),
+        },
+      };
+
+      const lebensmonate = waehleOption<Elternteil>(
+        lebensmonateVorher,
+        5,
+        Elternteil.Zwei,
+        undefined,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
+
+      expectOption(lebensmonate, 5, Elternteil.Eins).toBe(Variante.Basis);
+      expectOption(lebensmonate, 5, Elternteil.Zwei).toBeUndefined();
     });
 
     function monat(gewaehlteOption?: Auswahloption) {

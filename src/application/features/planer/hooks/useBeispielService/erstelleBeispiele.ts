@@ -32,6 +32,9 @@ export function erstelleBeispiele<A extends Ausgangslage>(
 function erstelleBeispieleFuerAlleinPlanende(
   ausgangslage: AusgangslageFuerEinElternteil,
 ): Beispiel<AusgangslageFuerEinElternteil>[] {
+  const anzahlMonateMitMutterschutz =
+    ausgangslage.informationenZumMutterschutz?.letzterLebensmonatMitSchutz ?? 0;
+
   const basis = { [Elternteil.Eins]: MONAT_MIT_BASIS };
   const plus = { [Elternteil.Eins]: MONAT_MIT_PLUS };
 
@@ -62,7 +65,10 @@ function erstelleBeispieleFuerAlleinPlanende(
         "Mehr finanzielle Sicherheit bei halben Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 2 },
-        { lebensmonat: plus, anzahl: 20 },
+        {
+          lebensmonat: plus,
+          anzahl: 20 - (anzahlMonateMitMutterschutz - 2) * 2,
+        },
       ]),
     },
   ];
@@ -288,7 +294,7 @@ if (import.meta.vitest) {
       record: arbitraryRecord,
     } = await import("fast-check");
 
-    // TODO: Property test for any Ausgangslage produces correct Plan.
+    // TODO: Property test for any Ausgangslage produces correct Plan (Mutterschutz!)
     // TODO: "Property test" for unique identifiers.
     // TODO: Property test that no Titel nor Beschreibung is empty.
     // TODO: Property test that no Plan is empty or just Mutterschutz.

@@ -1,5 +1,6 @@
 import {
   type Ausgangslage,
+  type Auswahloption,
   Elternteil,
   type ElternteileByAusgangslage,
   type Lebensmonat,
@@ -8,6 +9,7 @@ import {
   type Plan,
   Variante,
   erstelleInitialeLebensmonate,
+  listeMonateAuf,
 } from "@/monatsplaner";
 
 /**
@@ -26,37 +28,56 @@ import {
 export function erstellePlanFuerEinBeispiel<A extends Ausgangslage>(
   ausgangslage: A,
   abschnitte: Array<{
-    lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>> | undefined;
+    lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
     anzahl: number;
   }>,
 ): Plan<A> {
+  const initialeLebensmonate = erstelleInitialeLebensmonate(ausgangslage);
   const relevantAbschnitte = abschnitte.filter(
     (abschnitt) => abschnitt.anzahl > 0,
   );
 
-  const lebensmonateByAbschnitte = Lebensmonatszahlen.reduce(
+  const lebensmonate = Lebensmonatszahlen.reduce(
     (lebensmonate, lebensmonatszahl) => {
-      const { anzahl, lebensmonat } = relevantAbschnitte.shift() ?? {
-        anzahl: 0,
-      };
+      const abschnitt = relevantAbschnitte.shift();
 
-      if (anzahl > 1)
-        relevantAbschnitte.unshift({ anzahl: anzahl - 1, lebensmonat });
+      if (abschnitt === undefined) {
+        return lebensmonate;
+      } else {
+        if (abschnitt.anzahl > 1)
+          relevantAbschnitte.unshift({
+            ...abschnitt,
+            anzahl: abschnitt.anzahl - 1,
+          });
 
-      return lebensmonat !== undefined
-        ? { ...lebensmonate, [lebensmonatszahl]: lebensmonat }
-        : lebensmonate;
+        const lebensmonat = mergeLebensmonat(
+          abschnitt.lebensmonat,
+          lebensmonate[lebensmonatszahl],
+        );
+
+        return { ...lebensmonate, [lebensmonatszahl]: lebensmonat };
+      }
     },
-    {},
+    initialeLebensmonate,
   );
 
-  return {
-    ausgangslage,
-    lebensmonate: {
-      ...lebensmonateByAbschnitte,
-      ...erstelleInitialeLebensmonate(ausgangslage),
-    },
-  };
+  return { ausgangslage, lebensmonate };
+}
+
+/**
+ * The "right" Lebensmonat has precedence for any Monats property.
+ */
+function mergeLebensmonat<E extends Elternteil>(
+  left: Lebensmonat<E>,
+  right: Lebensmonat<E> | undefined,
+): Lebensmonat<E> {
+  return listeMonateAuf(left).reduce(
+    (lebensmonat, [elternteil]) => ({
+      ...lebensmonat,
+      [elternteil]: { ...left[elternteil], ...right?.[elternteil] },
+    }),
+    left,
+  );
 }
 
 if (import.meta.vitest) {
@@ -67,7 +88,7 @@ if (import.meta.vitest) {
     it("maintains the given Ausgangslage for the created Plan", () => {
       const ausgangslage: Ausgangslage = {
         anzahlElternteile: 1,
-        geburtsdatumDesKindes: new Date(),
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM,
       };
 
       const plan = erstellePlanFuerEinBeispiel(ausgangslage, []);
@@ -77,82 +98,105 @@ if (import.meta.vitest) {
 
     it("repeats the Lebensmonat of each Abschnitt correctly", () => {
       const abschnitte = [
-        { lebensmonat: BASIS, anzahl: 2 },
-        { lebensmonat: PLUS, anzahl: 1 },
-        { lebensmonat: BONUS, anzahl: 3 },
+        {
+          lebensmonat: { [Elternteil.Eins]: monat(Variante.Basis) },
+          anzahl: 2,
+        },
+        {
+          lebensmonat: { [Elternteil.Eins]: monat(Variante.Plus) },
+          anzahl: 1,
+        },
+        {
+          lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus) },
+          anzahl: 3,
+        },
       ];
 
       const plan = erstellePlanFuerEinBeispiel(ANY_AUSGANGSLAGE, abschnitte);
 
       expect(plan.lebensmonate).toStrictEqual({
-        1: BASIS,
-        2: BASIS,
-        3: PLUS,
-        4: BONUS,
-        5: BONUS,
-        6: BONUS,
+        1: { [Elternteil.Eins]: monat(Variante.Basis) },
+        2: { [Elternteil.Eins]: monat(Variante.Basis) },
+        3: { [Elternteil.Eins]: monat(Variante.Plus) },
+        4: { [Elternteil.Eins]: monat(Variante.Bonus) },
+        5: { [Elternteil.Eins]: monat(Variante.Bonus) },
+        6: { [Elternteil.Eins]: monat(Variante.Bonus) },
       });
     });
 
-    it("overwrites Lebensmonate of Abschnitte with the initial Lebensmonate of domain based on the Ausgangslage", () => {
+    it("merges Lebensmonate of Abschnitte with the initial Lebensmonate of domain based on the Ausgangslage", () => {
       const ausgangslage: Ausgangslage = {
-        anzahlElternteile: 1,
+        anzahlElternteile: 2,
         informationenZumMutterschutz: {
-          empfaenger: Elternteil.Eins,
+          empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 1,
         },
-        geburtsdatumDesKindes: new Date(),
+        pseudonymeDerElternteile: ANY_PSEUDONYME,
+        geburtsdatumDesKindes: ANY_GEBURTSDATUM,
       };
 
-      const abschnitte = [{ lebensmonat: PLUS, anzahl: 2 }];
+      const abschnitte = [
+        {
+          lebensmonat: {
+            [Elternteil.Eins]: monat(Variante.Plus),
+            [Elternteil.Zwei]: monat(Variante.Plus),
+          },
+          anzahl: 2,
+        },
+      ];
 
       const plan = erstellePlanFuerEinBeispiel(ausgangslage, abschnitte);
 
       expect(plan.lebensmonate).toStrictEqual({
-        1: { [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ },
-        2: PLUS,
+        1: {
+          [Elternteil.Eins]: monat(Variante.Plus),
+          [Elternteil.Zwei]: MONAT_MIT_MUTTERSCHUTZ,
+        },
+        2: {
+          [Elternteil.Eins]: monat(Variante.Plus),
+          [Elternteil.Zwei]: monat(Variante.Plus),
+        },
       });
     });
 
     it("ignores Abschnitte with an Anzahl of 0", () => {
       const abschnitte = [
-        { lebensmonat: BASIS, anzahl: 1 },
-        { lebensmonat: PLUS, anzahl: 0 },
-        { lebensmonat: BONUS, anzahl: 1 },
+        {
+          lebensmonat: { [Elternteil.Eins]: monat(Variante.Basis) },
+          anzahl: 1,
+        },
+        {
+          lebensmonat: { [Elternteil.Eins]: monat(Variante.Plus) },
+          anzahl: 0,
+        },
+        {
+          lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus) },
+          anzahl: 1,
+        },
       ];
 
       const plan = erstellePlanFuerEinBeispiel(ANY_AUSGANGSLAGE, abschnitte);
 
       expect(plan.lebensmonate).toStrictEqual({
-        1: BASIS,
-        2: BONUS,
+        1: { [Elternteil.Eins]: monat(Variante.Basis) },
+        2: { [Elternteil.Eins]: monat(Variante.Bonus) },
       });
     });
 
+    function monat(gewaehlteOption: Auswahloption) {
+      return { gewaehlteOption, imMutterschutz: false as const };
+    }
+
+    const ANY_GEBURTSDATUM = new Date();
+
+    const ANY_PSEUDONYME = {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
+    };
+
     const ANY_AUSGANGSLAGE = {
       anzahlElternteile: 1 as const,
-      geburtsdatumDesKindes: new Date(),
-    };
-
-    const BASIS = {
-      [Elternteil.Eins]: {
-        gewaehlteOption: Variante.Basis,
-        imMutterschutz: false as const,
-      },
-    };
-
-    const PLUS = {
-      [Elternteil.Eins]: {
-        gewaehlteOption: Variante.Plus,
-        imMutterschutz: false as const,
-      },
-    };
-
-    const BONUS = {
-      [Elternteil.Eins]: {
-        gewaehlteOption: Variante.Bonus,
-        imMutterschutz: false as const,
-      },
+      geburtsdatumDesKindes: ANY_GEBURTSDATUM,
     };
   });
 }

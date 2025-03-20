@@ -6,12 +6,15 @@ import {
 } from "./usePlanerService";
 import { INITIAL_STATE, act, renderHook } from "@/application/test-utils";
 import {
+  type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
+  type Elterngeldbezug,
   Elternteil,
   KeinElterngeld,
   type PlanMitBeliebigenElternteilen,
   Result,
   Variante,
+  aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialeLebensmonate,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
@@ -20,6 +23,7 @@ import {
   validierePlanFuerFinaleAbgabe,
   waehleOption,
 } from "@/monatsplaner";
+import * as aktualisiereElterngeldbezuegeModule from "@/monatsplaner/plan/operation/aktualisiereElterngeldbezuege";
 
 vi.mock(import("@/monatsplaner/plan/operation/waehleOption"));
 vi.mock(import("@/monatsplaner/plan/operation/setzePlanZurueck"));
@@ -441,7 +445,20 @@ describe("use Planer service", () => {
   });
 
   describe("überschreibe Plan", () => {
-    it("just overwrites the current plan", () => {
+    it("overwrites the current plan and calculates the Bezüge", () => {
+      vi.spyOn(
+        aktualisiereElterngeldbezuegeModule,
+        "aktualisiereElterngeldbezuege",
+      ).mockReturnValue({
+        ausgangslage: {
+          anzahlElternteile: 1,
+          geburtsdatumDesKindes: new Date("2024-01-02"),
+        },
+        lebensmonate: {
+          1: { [Elternteil.Eins]: monat(Variante.Plus, 100) },
+        },
+      } as PlanMitBeliebigenElternteilen);
+
       const { result } = renderPlanerServiceHook({
         initialInformation: {
           plan: {
@@ -449,15 +466,8 @@ describe("use Planer service", () => {
               anzahlElternteile: 1,
               geburtsdatumDesKindes: new Date("2024-01-01"),
             },
-            lebensmonate: {
-              1: {
-                [Elternteil.Eins]: {
-                  gewaehlteOption: Variante.Basis,
-                  imMutterschutz: false,
-                },
-              },
-            },
-          } as PlanMitBeliebigenElternteilen,
+            lebensmonate: {},
+          },
         },
       });
 
@@ -468,28 +478,19 @@ describe("use Planer service", () => {
             geburtsdatumDesKindes: new Date("2024-01-02"),
           },
           lebensmonate: {
-            1: {
-              [Elternteil.Eins]: {
-                gewaehlteOption: Variante.Plus,
-                imMutterschutz: false,
-              },
-            },
+            1: { [Elternteil.Eins]: monat(Variante.Plus, undefined) },
           },
         } as PlanMitBeliebigenElternteilen),
       );
 
+      expect(aktualisiereElterngeldbezuege).toHaveBeenCalledOnce();
       expect(result.current.plan).toStrictEqual({
         ausgangslage: {
           anzahlElternteile: 1,
           geburtsdatumDesKindes: new Date("2024-01-02"),
         },
         lebensmonate: {
-          1: {
-            [Elternteil.Eins]: {
-              gewaehlteOption: Variante.Plus,
-              imMutterschutz: false,
-            },
-          },
+          1: { [Elternteil.Eins]: monat(Variante.Plus, 100) },
         },
       });
     });
@@ -531,6 +532,17 @@ function gebeAnyEinkommenAn(
   callback: ReturnType<typeof usePlanerService>["gebeEinkommenAn"],
 ) {
   act(() => callback(1, Elternteil.Eins, 300));
+}
+
+function monat(
+  gewaehlteOption: Auswahloption,
+  elterngeldbezug?: Elterngeldbezug,
+) {
+  return {
+    gewaehlteOption,
+    elterngeldbezug,
+    imMutterschutz: false as const,
+  };
 }
 
 const ANY_AUSGANGSLAGE = {

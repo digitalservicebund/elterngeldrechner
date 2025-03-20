@@ -7,6 +7,7 @@ import {
   type Lebensmonatszahl,
   type Plan,
   type PlanMitBeliebigenElternteilen,
+  aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
   erstelleInitialeLebensmonate,
   erstelleInitialenLebensmonat,
@@ -120,10 +121,15 @@ export function usePlanerService(
   const ueberschreibePlan = useCallback(
     (plan: PlanMitBeliebigenElternteilen) =>
       setPlan(() => {
-        updateStatesAndTriggerCallbacks(plan);
-        return plan;
+        const nextPlan = aktualisiereElterngeldbezuege(
+          berechneElterngeldbezuege,
+          plan,
+        );
+
+        updateStatesAndTriggerCallbacks(nextPlan);
+        return nextPlan;
       }),
-    [updateStatesAndTriggerCallbacks],
+    [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
   );
 
   return {

@@ -114,6 +114,7 @@ const ANY_AUSGANGSLAGE = {
 const ANY_PROPS = {
   initialInformation: { ausgangslage: ANY_AUSGANGSLAGE },
   berechneElterngeldbezuege: () => ({}) as never,
+  callbacks: { onOpenErklaerung: () => {} },
 };
 
 const ANY_SERVICE_VALUES = {

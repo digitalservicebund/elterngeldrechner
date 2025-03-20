@@ -1,11 +1,11 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
+import { Anleitung } from "./Anleitung";
 import { BeispielAuswahl } from "./BeispielAuswahl";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
-import { Variantenplakette } from "./Variantenplakette";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
 import { Button, PrintButton } from "@/application/components";
 import {
@@ -16,15 +16,12 @@ import {
 } from "@/application/features/planer/hooks";
 import {} from "@/monatsplaner";
 import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
-import {
-  type BerechneElterngeldbezuegeCallback,
-  Variante,
-} from "@/monatsplaner";
+import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
-  readonly callbacks?: PlanerServiceCallbacks & {
+  readonly callbacks: PlanerServiceCallbacks & {
     onOpenLebensmonat?: () => void;
     onOpenErklaerung: () => void;
   };
@@ -46,7 +43,7 @@ export function Planer({
     onWaehleOption: onWaehleOptionFromProps,
     onSetzePlanZurueck: onSetzePlanZurueckFromProps,
     ...remaingingPlanerServiceCallbacks
-  } = callbacks ?? {};
+  } = callbacks;
 
   const planerServiceCallbacks = {
     ...remaingingPlanerServiceCallbacks,
@@ -107,46 +104,7 @@ export function Planer({
           Planer Anwendung
         </h3>
 
-        <p>
-          Die ersten Schritte sind geschafft! Jetzt berechnen wir Ihr Elterngeld
-          und zeigen Ihnen die nächsten Möglichkeiten.
-        </p>
-        <ul className="mb-16 list-inside list-disc">
-          <li>
-            Entscheiden Sie, in welchen Lebensmonaten Sie Elterngeld bekommen
-            möchten
-          </li>
-          <li>Verteilen Sie das Elterngeld für sich</li>
-          <li>Der Planer zeigt, wie Elterngeld aufgeteilt werden kann</li>
-          <li>
-            Geben Sie optional zusätzliches Einkommen an, um eine genauere
-            Berechnung zu erhalten
-          </li>
-        </ul>
-        <p>Dieses Elterngeld gibt es:</p>
-        <div className="rounded bg-off-white p-16">
-          <ul className="mb-16 flex flex-wrap gap-x-32 gap-y-16">
-            <li className="flex items-center gap-8">
-              <span>
-                <Variantenplakette variante={Variante.Basis} />
-              </span>
-              <span className="whitespace-nowrap">= {Variante.Basis}</span>
-            </li>
-            <li className="flex items-center gap-8">
-              <Variantenplakette variante={Variante.Plus} />
-              <span className="whitespace-nowrap">= {Variante.Plus}</span>
-            </li>
-            <li className="flex items-center gap-8">
-              <Variantenplakette variante={Variante.Bonus} />
-              <span className="whitespace-nowrap">= {Variante.Bonus}</span>
-            </li>
-          </ul>
-          <Button
-            buttonStyle="link"
-            label="Weitere Informationen wie Elterngeld funktioniert"
-            onClick={onOpenErklaerung}
-          />
-        </div>
+        <Anleitung onOpenErklaerung={onOpenErklaerung} />
 
         <BeispielAuswahl
           className="mb-24 mt-80"

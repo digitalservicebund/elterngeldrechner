@@ -1,6 +1,7 @@
 import { aktualisiereElterngeldbezuege } from "./aktualisiereElterngeldbezuege";
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngeldbezug";
+import type { Elternteil } from "@/monatsplaner/Elternteil";
 import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
 import type {
   Ausgangslage,
@@ -10,7 +11,7 @@ import { Result } from "@/monatsplaner/common/Result";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
 import { erstelleInitialenLebensmonat } from "@/monatsplaner/lebensmonat";
 import { waehleOption as waehleOptionInLebensmonaten } from "@/monatsplaner/lebensmonate";
-import type { Plan } from "@/monatsplaner/plan/Plan";
+import type { Plan } from "@/monatsplaner/plan";
 import { VorlaeufigGueltigerPlan } from "@/monatsplaner/plan/specification";
 
 export function waehleOption<A extends Ausgangslage>(
@@ -46,7 +47,6 @@ export function waehleOption<A extends Ausgangslage>(
           aktualisiereElterngeldbezuege(
             berechneElterngeldbezuege,
             gewaehlterPlan,
-            elternteil,
           ),
         ),
       (violations) => Result.error(violations),
@@ -141,7 +141,14 @@ if (import.meta.vitest) {
       expect(violations).toEqual([{ message: "ungültig" }]);
     });
 
-    it("updates the Elterngeldbezüge of the Elternteil using the given callback", () => {
+    /*
+     * The calculation of the Elterngeldbezüge depends on the planned Monate and
+     * the Bruttoeinkommen. Some automation in the background when choosing an
+     * Option can adapt the Plan for all Elternteile (e.g. Partnerschaftsbonus
+     * automation). In result the Elterngeldbezüge of all Elternteile could have
+     * changed due to this.
+     */
+    it("updates the Elterngeldbezüge of all Elternteile to address automation in changed Options", () => {
       const lebensmonate = {
         1: {
           [Elternteil.Eins]: monat(Variante.Plus, 112, 114),
@@ -154,35 +161,42 @@ if (import.meta.vitest) {
       };
       const planVorher = { ...ANY_PLAN, lebensmonate };
 
-      const berechneElterngeldbezuege = vi
-        .fn()
-        .mockReturnValue({ 1: 1000, 2: 2000, 3: 3000 });
+      const berechneElterngeldbezuege = vi.fn((elternteil: Elternteil) => {
+        switch (elternteil) {
+          case Elternteil.Eins:
+            return { 1: 1120, 2: 0, 3: 3110 };
+          case Elternteil.Zwei:
+            return { 1: 1210, 2: 0, 3: 3130 };
+        }
+      });
 
       const plan = waehleOption(
         berechneElterngeldbezuege,
         planVorher,
-        1,
+        3,
         Elternteil.Zwei,
         Variante.Plus,
       ).unwrapOrElse(() => planVorher);
 
-      expect(berechneElterngeldbezuege).toHaveBeenCalledOnce();
-      expect(berechneElterngeldbezuege).toHaveBeenLastCalledWith(
-        Elternteil.Zwei,
-        {
-          1: monat(Variante.Plus, undefined, 124),
-          3: monat(undefined, undefined, 324),
-        },
-      );
+      expect(berechneElterngeldbezuege).toHaveBeenCalledTimes(2);
+      expect(berechneElterngeldbezuege).toHaveBeenCalledWith(Elternteil.Eins, {
+        1: monat(Variante.Plus, 112, 114),
+        3: monat(Variante.Basis, 311, 314),
+      });
+
+      expect(berechneElterngeldbezuege).toHaveBeenCalledWith(Elternteil.Zwei, {
+        1: monat(Variante.Basis, 121, 124),
+        3: monat(Variante.Plus, undefined, 324),
+      });
 
       expect(plan.lebensmonate).toStrictEqual({
         1: {
-          [Elternteil.Eins]: monat(Variante.Plus, 112, 114),
-          [Elternteil.Zwei]: monat(Variante.Plus, 1000, 124),
+          [Elternteil.Eins]: monat(Variante.Plus, 1120, 114),
+          [Elternteil.Zwei]: monat(Variante.Basis, 1210, 124),
         },
         3: {
-          [Elternteil.Eins]: monat(Variante.Basis, 311, 314),
-          [Elternteil.Zwei]: monat(undefined, undefined, 324),
+          [Elternteil.Eins]: monat(Variante.Basis, 3110, 314),
+          [Elternteil.Zwei]: monat(Variante.Plus, 3130, 324),
         },
       });
     });

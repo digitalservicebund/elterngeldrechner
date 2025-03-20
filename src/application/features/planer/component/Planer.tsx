@@ -141,7 +141,7 @@ export function Planer({
 
             <Lebensmonatsliste
               ref={lebensmonatslistenElement}
-              className="py-8"
+              className="py-2"
               plan={plan}
               erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
               bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}

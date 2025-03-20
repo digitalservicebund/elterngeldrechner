@@ -1,1 +1,0 @@
-export { ElterngeldvariantenDescriptions } from "./components";

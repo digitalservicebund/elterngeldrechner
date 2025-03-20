@@ -11,15 +11,14 @@ export function EinkommenPage() {
   const navigate = useNavigate();
   const navigateToErwerbstaetigkeitPage = () =>
     navigate(formSteps.erwerbstaetigkeit.route);
-  const navigateToElterngeldvariantenPage = () =>
-    navigate(formSteps.elterngeldvarianten.route);
+  const navigateToPlanerPage = () => navigate(formSteps.rechnerUndPlaner.route);
 
   return (
     <Page step={formSteps.einkommen}>
       <div className="flex flex-col gap-56">
         <EinkommenForm
           id={formIdentifier}
-          onSubmit={navigateToElterngeldvariantenPage}
+          onSubmit={navigateToPlanerPage}
           hideSubmitButton
         />
 

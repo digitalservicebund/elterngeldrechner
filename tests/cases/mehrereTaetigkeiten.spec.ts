@@ -86,7 +86,6 @@ test("mehrere Tätigkeiten", async ({ page }) => {
     .getByText("arbeitslosenversicherungspflichtig")
     .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
-  await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(4, "Basis");

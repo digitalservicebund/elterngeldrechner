@@ -79,7 +79,6 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
     .getByRole("radio", { name: "Nein" })
     .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
-  await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(1, "Basis", "Elternteil 1");

@@ -4,7 +4,6 @@ import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
 
 const testStyles = async ({
   page,
@@ -149,14 +148,6 @@ const testStyles = async ({
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
-
-  const variantenPage = new VariantenPOM(page);
-  await expect(variantenPage.heading).toBeVisible();
-  await screenshot("varianten-geschlossen", page.locator("#egr-root"));
-  await variantenPage.basiselterngeld.click();
-  await variantenPage.elterngeldPlus.click();
-  await variantenPage.partnerschaftsbonus.click();
-  await screenshot("varianten-geoeffnet", page.locator("#egr-root"));
 };
 
 test("mobile styles", async ({ page }) => {

@@ -23,10 +23,6 @@ export const formSteps = {
     heading: "Ihr Einkommen",
     route: "/einkommen",
   },
-  elterngeldvarianten: {
-    heading: "Elterngeldvarianten",
-    route: "/elterngeldvarianten",
-  },
   rechnerUndPlaner: {
     heading: "Planen Sie Ihr Elterngeld",
     shortName: "Monatsplaner",

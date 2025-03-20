@@ -3,7 +3,6 @@ import { formSteps } from "./formSteps";
 import {
   AllgemeineAngabenPage,
   EinkommenPage,
-  ElterngeldvariantenPage,
   ErwerbstaetigkeitPage,
   NachwuchsPage,
   RechnerPlanerPage,
@@ -63,13 +62,6 @@ const internalRouteDefinition: InternalRouteDefinition = [
     path: formSteps.einkommen.route,
     precondition: (state: RootState) => {
       return state.stepErwerbstaetigkeit.ET1.vorGeburt != null;
-    },
-  },
-  {
-    element: <ElterngeldvariantenPage />,
-    path: formSteps.elterngeldvarianten.route,
-    precondition: (state: RootState) => {
-      return state.stepEinkommen.limitEinkommenUeberschritten != null;
     },
   },
   {

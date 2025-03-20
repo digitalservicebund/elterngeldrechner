@@ -26,7 +26,6 @@ test("Minijob", async ({ page }) => {
   await page.getByLabel("Monatliches Einkommen in Brutto").click();
   await page.getByLabel("Monatliches Einkommen in Brutto").fill("510 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(3, "Basis");

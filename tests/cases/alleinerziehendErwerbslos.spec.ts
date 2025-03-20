@@ -5,7 +5,6 @@ import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 
 test("alleinerziehend, erwerbslos", async ({ page }) => {
@@ -28,9 +27,6 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
-
-  const variantenPage = new VariantenPOM(page);
-  await variantenPage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
 

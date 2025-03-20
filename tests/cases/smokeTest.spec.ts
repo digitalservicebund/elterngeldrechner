@@ -50,7 +50,6 @@ test("smoke test", async ({ page }) => {
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(3, "Basis");

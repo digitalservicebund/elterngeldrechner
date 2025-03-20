@@ -5,7 +5,6 @@ import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
 
 /**
  * This test case intends to exercise the application in a way that it touches
@@ -53,12 +52,8 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   // TODO: Extend POM to "see" more UI elements.
+  await expectPageToBeAccessible(page, testInfo);
   await einkommenPage.submit();
-  await expectPageToBeAccessible(page, testInfo);
-
-  const variantenPage = new VariantenPOM(page);
-  await expectPageToBeAccessible(page, testInfo);
-  await variantenPage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {
     elternteile: ["Jane", "John"],

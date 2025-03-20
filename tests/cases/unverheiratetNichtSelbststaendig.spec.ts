@@ -87,7 +87,6 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .getByText("Ja", { exact: true })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.gebeEinkommenAn(1, 3000, "Elternteil 2");

@@ -133,9 +133,9 @@ export function RechnerPlanerPage() {
 
   const navigate = useNavigate();
 
-  const navigateToElterngeldvariantenPage = () => {
+  const navigateToEinkommenPage = () => {
     if (rememberSubmit.current) submitFeedback();
-    navigate(formSteps.elterngeldvarianten.route);
+    navigate(formSteps.einkommen.route);
   };
 
   function navigateToZusammenfassungUndDatenPage(): void {
@@ -190,7 +190,7 @@ export function RechnerPlanerPage() {
               <Button
                 label="Zurück"
                 buttonStyle="secondary"
-                onClick={navigateToElterngeldvariantenPage}
+                onClick={navigateToEinkommenPage}
               />
 
               <Button

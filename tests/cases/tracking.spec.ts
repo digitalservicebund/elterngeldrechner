@@ -6,7 +6,6 @@ import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { FeedbackPOM } from "../pom/FeedbackPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { VariantenPOM } from "../pom/VariantenPOM";
 import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 
 import {
@@ -42,9 +41,6 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
-
-  const variantenPage = new VariantenPOM(page);
-  await variantenPage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
   await rechnerUndPlaner.waehleOption(3, "Basis");
@@ -97,9 +93,6 @@ test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
-
-  const variantenPage = new VariantenPOM(page);
-  await variantenPage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {
     elternteile: ["Jane", "John"],
@@ -247,7 +240,6 @@ async function fastForwardToPlaner(page: Page) {
   await fastForwardNachwuchs(page);
   await fastForwardErwerbstaetigkeit(page);
   await fastForwardEinkommen(page);
-  await fastForwardVarianten(page);
 
   return await fastForwardPlanung(page);
 }
@@ -283,11 +275,6 @@ async function fastForwardEinkommen(page: Page) {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
-}
-
-async function fastForwardVarianten(page: Page) {
-  const variantenPage = new VariantenPOM(page);
-  await variantenPage.submit();
 }
 
 async function fastForwardPlanung(page: Page) {

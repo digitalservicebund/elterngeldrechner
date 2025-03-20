@@ -80,7 +80,6 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByLabel("12. Monat").click();
   await page.getByLabel("12. Monat").fill("3000 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByRole("button", { name: "Zum Monatsplaner" }).click();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(1, "Basis", "Elternteil 1");

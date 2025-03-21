@@ -51,14 +51,24 @@ if (import.meta.vitest) {
   describe("Kontingent wurde eingehalten", async () => {
     const { Variante } = await import("@/monatsplaner/Variante");
     const { KeinElterngeld } = await import("@/monatsplaner/Auswahloption");
+    const bestimmeVerfuegbaresKontingentModule = await import(
+      "@/monatsplaner/ausgangslage/operation/bestimmeVerfuegbaresKontingent"
+    );
+    const zaehleVerplantesKontingentModule = await import(
+      "@/monatsplaner/lebensmonate/operation/zaehleVerplantesKontingent"
+    );
 
     it("is satisfied if verplantes Kontingent remains below verfügbares Kontingent for defined Variante", () => {
-      vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-        kontingent(2, 4, 3),
-      );
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        kontingent(3, 3, 1),
-      );
+      vi.spyOn(
+        bestimmeVerfuegbaresKontingentModule,
+        "bestimmeVerfuegbaresKontingent",
+      ).mockReturnValue(kontingent(2, 4, 3));
+
+      vi.spyOn(
+        zaehleVerplantesKontingentModule,
+        "zaehleVerplantesKontingent",
+      ).mockReturnValue(kontingent(3, 3, 1));
+
       const specification = KontingentFuerVarianteWurdeEingehalten(
         Variante.Plus,
       );
@@ -67,12 +77,16 @@ if (import.meta.vitest) {
     });
 
     it("is satisfied if verplantes Kontingent fully used verfügbares Kontingent for defined Variante", () => {
-      vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-        kontingent(2, 4, 3),
-      );
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        kontingent(2, 5, 1),
-      );
+      vi.spyOn(
+        bestimmeVerfuegbaresKontingentModule,
+        "bestimmeVerfuegbaresKontingent",
+      ).mockReturnValue(kontingent(2, 4, 3));
+
+      vi.spyOn(
+        zaehleVerplantesKontingentModule,
+        "zaehleVerplantesKontingent",
+      ).mockReturnValue(kontingent(2, 5, 1));
+
       const specification = KontingentFuerVarianteWurdeEingehalten(
         Variante.Basis,
       );
@@ -81,12 +95,16 @@ if (import.meta.vitest) {
     });
 
     it("is unsatisfied if verplantes Kontingent is above verfügbares Kontingent for defined Variante", () => {
-      vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-        kontingent(2, 4, 3),
-      );
-      vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-        kontingent(1, 4, 4),
-      );
+      vi.spyOn(
+        bestimmeVerfuegbaresKontingentModule,
+        "bestimmeVerfuegbaresKontingent",
+      ).mockReturnValue(kontingent(2, 4, 3));
+
+      vi.spyOn(
+        zaehleVerplantesKontingentModule,
+        "zaehleVerplantesKontingent",
+      ).mockReturnValue(kontingent(1, 4, 4));
+
       const specification = KontingentFuerVarianteWurdeEingehalten(
         Variante.Bonus,
       );
@@ -113,16 +131,5 @@ if (import.meta.vitest) {
     };
 
     const ANY_PLAN = {} as never;
-
-    vi.mock(
-      import(
-        "@/monatsplaner/lebensmonate/operation/zaehleVerplantesKontingent"
-      ),
-    );
-    vi.mock(
-      import(
-        "@/monatsplaner/ausgangslage/operation/bestimmeVerfuegbaresKontingent"
-      ),
-    );
   });
 }

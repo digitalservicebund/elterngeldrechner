@@ -5,17 +5,13 @@ import {
   KeinElterngeld,
   Variante,
   bestimmeVerfuegbaresKontingent,
-  zaehleVerplantesKontingent,
 } from "@/monatsplaner";
+import * as zaehleVerplantesKontingentModule from "@/monatsplaner/lebensmonate/operation/zaehleVerplantesKontingent";
 
 describe("KontingentUebersicht", () => {
   beforeEach(() => {
     vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
       ANY_VERFUEGBARES_KONTINGENT,
-    );
-
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValue(
-      ANY_VERPLANTES_KONTINGENT,
     );
   });
 
@@ -32,7 +28,10 @@ describe("KontingentUebersicht", () => {
       [Variante.Bonus]: 2,
     });
 
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValue({
+    vi.spyOn(
+      zaehleVerplantesKontingentModule,
+      "zaehleVerplantesKontingent",
+    ).mockReturnValue({
       [Variante.Basis]: 2.5,
       [Variante.Plus]: 5,
       [Variante.Bonus]: 0,
@@ -59,7 +58,10 @@ describe("KontingentUebersicht", () => {
       [Variante.Bonus]: 0,
     });
 
-    vi.mocked(zaehleVerplantesKontingent).mockReturnValue({
+    vi.spyOn(
+      zaehleVerplantesKontingentModule,
+      "zaehleVerplantesKontingent",
+    ).mockReturnValue({
       [Variante.Basis]: 2.5,
       [Variante.Plus]: 5,
       [Variante.Bonus]: 0,
@@ -78,21 +80,10 @@ vi.mock(
   ),
 );
 
-vi.mock(
-  import("@/monatsplaner/lebensmonate/operation/zaehleVerplantesKontingent"),
-);
-
 const ANY_VERFUEGBARES_KONTINGENT = {
   [Variante.Basis]: 0,
   [Variante.Plus]: 0,
   [Variante.Bonus]: 0,
-};
-
-const ANY_VERPLANTES_KONTINGENT = {
-  [Variante.Basis]: 0,
-  [Variante.Plus]: 0,
-  [Variante.Bonus]: 0,
-  [KeinElterngeld]: 0,
 };
 
 const ANY_PLAN = {

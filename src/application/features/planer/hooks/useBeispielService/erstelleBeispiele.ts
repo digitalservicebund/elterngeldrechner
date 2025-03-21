@@ -67,7 +67,7 @@ function erstelleBeispieleFuerAlleinPlanende(
         { lebensmonat: basis, anzahl: 2 },
         {
           lebensmonat: plus,
-          anzahl: 20 - (anzahlMonateMitMutterschutz - 2) * 2,
+          anzahl: 20 - Math.max(anzahlMonateMitMutterschutz - 2, 0) * 2,
         },
       ]),
     },

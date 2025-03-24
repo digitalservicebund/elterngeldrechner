@@ -32,6 +32,7 @@ export {
   type LebensmonateMitBeliebigenElternteilen,
   erstelleInitialeLebensmonate,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
+  findeLetztenVerplantenLebensmonat,
   listeLebensmonateAuf,
   zaehleVerplantesKontingent,
 } from "./lebensmonate";

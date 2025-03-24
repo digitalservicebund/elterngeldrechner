@@ -75,7 +75,9 @@ const testStyles = async ({
     allgemeineAngabenPage.mutterschaftsleistungen,
   );
 
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+  await allgemeineAngabenPage.setMutterschaftsleistungenFuerAlleinerziehende(
+    true,
+  );
 
   await expect(
     allgemeineAngabenPage.mutterschaftsleistungenError,

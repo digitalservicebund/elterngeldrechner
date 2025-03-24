@@ -166,12 +166,17 @@ export function AllgemeineAngabenForm({
             required
             options={[
               {
-                label: "Ja, ein Elternteil ist oder wird im Mutterschutz sein",
+                label:
+                  alleinerziehendenFormValue === YesNo.YES
+                    ? "Ja, ich bin oder werde im Mutterschutz sein"
+                    : "Ja, ein Elternteil ist oder wird im Mutterschutz sein",
                 value: YesNo.YES,
               },
               {
                 label:
-                  "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
+                  alleinerziehendenFormValue === YesNo.YES
+                    ? "Nein, ich bin nicht oder werde nicht im Mutterschutz sein"
+                    : "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
                 value: YesNo.NO,
               },
               { label: "Ich weiß es noch nicht", value: YesNo.NO },

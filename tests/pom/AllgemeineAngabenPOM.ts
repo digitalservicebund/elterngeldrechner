@@ -113,6 +113,18 @@ export class AllgemeineAngabenPOM {
     return this;
   }
 
+  async setMutterschaftsleistungenFuerAlleinerziehende(value: boolean) {
+    const label = value
+      ? "Ja, ich bin oder werde im Mutterschutz sein"
+      : "Nein, ich bin nicht oder werde nicht im Mutterschutz sein";
+
+    await this.mutterschaftsleistungen
+      .getByRole("radio", { name: label })
+      .click();
+
+    return this;
+  }
+
   async setMutterschaftsleistungenWer(name: string) {
     const label = `${name} ist oder wird im Mutterschutz sein`;
 

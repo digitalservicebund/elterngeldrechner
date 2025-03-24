@@ -6,6 +6,7 @@ import {
   ReactNode,
   forwardRef,
   useId,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -18,9 +19,10 @@ import {
   type Lebensmonat,
   type Lebensmonatszahl,
   Lebensmonatszahlen,
+  LetzteLebensmonatszahl,
   type Plan,
+  findeLetztenVerplantenLebensmonat,
 } from "@/monatsplaner";
-import { findeLetztenVerplantenLebensmonatOrDefault } from "@/monatsplaner/lebensmonate/operation/findeLetztenVerplantenLebensmonatOrDefault";
 
 type Props<A extends Ausgangslage> = {
   readonly plan: Plan<A>;
@@ -72,34 +74,35 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
 ): ReactNode {
   const headingIdentifier = useId();
 
-  const findeLetztenVerplantenLebensmonat =
-    findeLetztenVerplantenLebensmonatOrDefault.bind(
-      null,
-      plan.lebensmonate,
-      14,
-    );
-
-  const [lastVisibleLebensmonatszahl, setLastVisibleLebensmonatszahl] =
-    useState(14);
-
-  const lebensmonatElements = useRef(
-    new Map<number, HTMLDetailsElement | null>(),
+  const letzterGeplanterLebensmonat = useMemo(
+    () => findeLetztenVerplantenLebensmonat(plan.lebensmonate),
+    [plan.lebensmonate],
   );
 
-  const canCollapse =
-    lastVisibleLebensmonatszahl >= findeLetztenVerplantenLebensmonat() + 2;
+  const [
+    manuellGesetzterLetzterSichtbarerLebensmonat,
+    setManuellGesetzterLetzterSichtbarerLebensmonat,
+  ] = useState(14);
 
-  const collapse = () =>
-    setLastVisibleLebensmonatszahl(findeLetztenVerplantenLebensmonat());
+  const letzterSichtbarerLebensmonat = Math.max(
+    letzterGeplanterLebensmonat ?? 0,
+    manuellGesetzterLetzterSichtbarerLebensmonat,
+  );
 
-  function expand(): void {
-    setLastVisibleLebensmonatszahl(findeLetztenVerplantenLebensmonat() + 2);
+  const naechsterZuPlanenderLebensmonat = useRef<HTMLDetailsElement>(null);
+  const kannMehrLebensmonateAnzeigen = letzterSichtbarerLebensmonat < 32;
 
-    const focusIndex = findeLetztenVerplantenLebensmonat() + 1;
-    const elementToFocus = lebensmonatElements.current.get(focusIndex);
-    if (elementToFocus) {
-      setTimeout(() => elementToFocus.focus());
-    }
+  function zeigeMehrLebensmonateAn(): void {
+    setManuellGesetzterLetzterSichtbarerLebensmonat(
+      Math.min(letzterSichtbarerLebensmonat + 2, LetzteLebensmonatszahl),
+    );
+    naechsterZuPlanenderLebensmonat.current?.focus();
+  }
+
+  function zeigeWenigerMonateAn(): void {
+    setManuellGesetzterLetzterSichtbarerLebensmonat(
+      Math.max(letzterGeplanterLebensmonat ?? 0, 14),
+    );
   }
 
   function triggerOnOpenLebensmonatWhenMatching(event: ToggleEvent): void {
@@ -119,24 +122,24 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
         Lebensmonate
       </h4>
 
-      {Lebensmonatszahlen.map((lebensmonatszahl) => {
+      {Lebensmonatszahlen.filter(
+        (lebensmonatszahl) => lebensmonatszahl <= letzterSichtbarerLebensmonat,
+      ).map((lebensmonatszahl) => {
         const lebensmonat =
           plan.lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
-        const isHidden = lebensmonatszahl > lastVisibleLebensmonatszahl;
+
+        const istNaechsterZuPlanenderLebensmonat =
+          lebensmonatszahl === (letzterGeplanterLebensmonat ?? 0) + 1;
+
+        const reference = istNaechsterZuPlanenderLebensmonat
+          ? naechsterZuPlanenderLebensmonat
+          : undefined;
 
         return (
           <LebensmonatDetails
             key={lebensmonatszahl}
-            className={classNames({ hidden: isHidden })}
-            ref={(el) => {
-              if (el) {
-                lebensmonatElements.current.set(lebensmonatszahl, el);
-              } else {
-                lebensmonatElements.current.delete(lebensmonatszahl);
-              }
-            }}
-            aria-hidden={isHidden}
+            ref={reference}
             ausgangslage={plan.ausgangslage}
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}
@@ -160,15 +163,19 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
         className={classNames(
           "border-none bg-white py-10 font-bold text-primary",
         )}
-        onClick={canCollapse ? collapse : expand}
+        onClick={
+          kannMehrLebensmonateAnzeigen
+            ? zeigeMehrLebensmonateAn
+            : zeigeWenigerMonateAn
+        }
       >
-        {canCollapse ? (
+        {kannMehrLebensmonateAnzeigen ? (
           <>
-            <RemoveIcon /> weniger Monate anzeigen
+            <AddIcon /> mehr Monate anzeigen
           </>
         ) : (
           <>
-            <AddIcon /> mehr Monate anzeigen
+            <RemoveIcon /> weniger Monate anzeigen
           </>
         )}
       </button>

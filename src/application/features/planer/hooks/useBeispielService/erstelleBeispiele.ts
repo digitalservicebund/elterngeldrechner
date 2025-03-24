@@ -171,7 +171,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
   return [
     {
       identifier: crypto.randomUUID(),
-      titel: "Partnerschaftliche Aufteilung",
+      titel: "Partnerschaftliche Aufteilung",
       beschreibung:
         "Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
@@ -188,7 +188,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: crypto.randomUUID(),
-      titel: "Länger Elterngeld  erhalten",
+      titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Lohnt sich, wenn Sie in Teilzeit arbeiten möchten. Für mehr Zeit mit der Familie ",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [

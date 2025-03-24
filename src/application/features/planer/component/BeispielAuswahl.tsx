@@ -85,7 +85,7 @@ export function BeispielAuswahl({
                   )}
                   aria-describedby={headingIdentifier}
                 >
-                  <div className="flex items-center bg-off-white p-8 text-center">
+                  <div className="flex items-center justify-center bg-off-white p-8 text-center">
                     <h5
                       id={headingIdentifier}
                       className="text-base font-regular leading-6"

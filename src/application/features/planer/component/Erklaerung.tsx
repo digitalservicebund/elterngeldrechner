@@ -25,12 +25,6 @@ export function Erklaerung({ onClose }: Props): ReactNode {
       <div>
         <div className="flex flex-col gap-y-80">
           <div className="flex flex-col gap-y-56">
-            <p>
-              Nutzen Sie die folgenden Erklärungen und Beispiele, um Ihr
-              Elterngeld zu planen. Im nächsten Schritt entscheiden Sie, welches
-              Elterngeld für Sie passt.
-            </p>
-
             <ul className="flex flex-col gap-y-16">
               {content.map((content) => {
                 const onClick = () => {
@@ -130,9 +124,10 @@ const content = [
             im Lebensmonat.
           </li>
         </ul>
+
         <h4 className="!text-base">
-          Elterngeld pro Lebensmonat, wenn Sie in den Lebensmonaten kein
-          Einkommen haben
+          Beispiele für die Höhe von Elterngeld pro Lebensmonat, wenn Sie in den
+          Lebensmonaten kein Einkommen haben:
         </h4>
 
         <p className="mb-16">

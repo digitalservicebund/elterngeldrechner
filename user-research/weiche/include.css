@@ -1,0 +1,40 @@
+.ds-disable {
+  pointer-events: none;
+}
+
+/* remove sidebar Schnellrechner */
+#anton-egr-schnellrechner {
+  display: none;
+}
+
+/* remove sidebar links to EGD and EGR */
+.sidebar-module--related__item:nth-child(1),
+.sidebar-module--related__item:nth-child(2) {
+  display: none;
+}
+
+/* remove sidebar feedback form */
+.sidebar-module--feedback {
+  display: none;
+}
+
+/* remove sidebar Leichte Sprache */
+.sidebar-module--related:nth-last-child(2) {
+  display: none;
+}
+
+/* remove sidebar print button */
+.sidebar-module--tools {
+  display: none;
+}
+
+/* remove second paragraph in main content */
+.rte-container p:nth-child(2) {
+  display: none;
+}
+
+/* remove Weitere Infos above apricot banner */
+.more-info__module-title {
+  display: none;
+}
+

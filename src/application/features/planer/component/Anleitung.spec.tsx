@@ -16,7 +16,7 @@ describe("Anleitung", () => {
 
     await userEvent.click(
       screen.getByRole("button", {
-        name: "Weitere Informationen wie Elterngeld funktioniert",
+        name: "Hier finden Sie weitere Informationen",
       }),
     );
 

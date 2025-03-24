@@ -37,7 +37,7 @@ export function Anleitung({ onOpenErklaerung }: Props): ReactNode {
       <Legende showBasis showPlus showBonus>
         <Button
           buttonStyle="link"
-          label="Weitere Informationen wie Elterngeld funktioniert"
+          label="Hier finden Sie weitere Informationen"
           onClick={onOpenErklaerung}
           className="text-left !text-base"
         />

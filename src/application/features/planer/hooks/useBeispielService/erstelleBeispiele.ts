@@ -52,7 +52,7 @@ function erstelleBeispieleFuerAlleinPlanende(
       identifier: crypto.randomUUID(),
       titel: "Beruf und Familie vereinen",
       beschreibung:
-        "Für einen leichteren Übergang, während des Wiedereinstiegs in den Beruf.",
+        "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 10 },
         { lebensmonat: plus, anzahl: 4 },
@@ -62,7 +62,7 @@ function erstelleBeispieleFuerAlleinPlanende(
       identifier: crypto.randomUUID(),
       titel: "Länger Elterngeld erhalten",
       beschreibung:
-        "Mehr finanzielle Sicherheit bei halben Elterngeld. Lohnt sich besonders bei Teilzeit.",
+        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 2 },
         {
@@ -99,7 +99,7 @@ function erstelleBeispieleFuerAlleinerziehende(
       identifier: crypto.randomUUID(),
       titel: "Beruf und Familie vereinen",
       beschreibung:
-        "Für einen leichteren Übergang, während des Wiedereinstiegs in den Beruf.",
+        "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 12 : 10 },
         { lebensmonat: plus, anzahl: 4 },
@@ -110,7 +110,7 @@ function erstelleBeispieleFuerAlleinerziehende(
       identifier: crypto.randomUUID(),
       titel: "Länger Elterngeld erhalten",
       beschreibung:
-        "Mehr finanzielle Sicherheit, während des Wiedereinstieg in den Beruf.",
+        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 8 },
         { lebensmonat: plus, anzahl: sindPartnermonateVerfuegbar ? 12 : 8 },

@@ -4,9 +4,9 @@ import { ReactNode, useCallback, useId, useRef } from "react";
 import { Anleitung } from "./Anleitung";
 import { BeispielAuswahl } from "./BeispielAuswahl";
 import { KontingentUebersicht } from "./KontingentUebersicht";
-import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Gesamtsummenanzeige } from "./gesamtsummenanzeige";
+import { Lebensmonatsliste } from "./lebensmonatsliste";
 import { Button, PrintButton } from "@/application/components";
 import {
   type Callbacks as PlanerServiceCallbacks,

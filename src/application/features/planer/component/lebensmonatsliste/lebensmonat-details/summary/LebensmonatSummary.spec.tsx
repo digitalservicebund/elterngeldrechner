@@ -5,7 +5,7 @@ import {
   beschreibePlanungImLebensmonat,
   beschreibeZeitraumDesLebensmonats,
 } from "./beschreibeLebensmonat";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type Auswahloption,
   Elternteil,
@@ -15,7 +15,7 @@ import {
 
 vi.mock(
   import(
-    "@/application/features/planer/component/lebensmonat-details/informationenZumLebensmonat"
+    "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat"
   ),
 );
 

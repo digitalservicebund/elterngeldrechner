@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { findeLetztenVerplantenLebensmonat } from "./findeLetztenVerplantenLebensmonat";
 import { LebensmonatDetails } from "./lebensmonat-details";
 import {
   type Ausgangslage,
@@ -21,7 +22,6 @@ import {
   Lebensmonatszahlen,
   LetzteLebensmonatszahl,
   type Plan,
-  findeLetztenVerplantenLebensmonat,
 } from "@/monatsplaner";
 
 type Props<A extends Ausgangslage> = {

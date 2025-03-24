@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type Lebensmonatszahl,
   listeElternteileFuerAusgangslageAuf,

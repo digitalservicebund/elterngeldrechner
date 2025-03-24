@@ -1,0 +1,1 @@
+export { Lebensmonatsliste } from "./Lebensmonatsliste";

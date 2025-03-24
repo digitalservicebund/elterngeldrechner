@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AbschnittMitAuswahloptionen } from "./AbschnittMitAuswahloptionen";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type AusgangslageFuerEinElternteil,
   Elternteil,
@@ -11,7 +11,7 @@ import {
 
 vi.mock(
   import(
-    "@/application/features/planer/component/lebensmonat-details/informationenZumLebensmonat"
+    "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat"
   ),
 );
 

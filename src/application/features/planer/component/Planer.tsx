@@ -107,7 +107,10 @@ export function Planer({
         <Anleitung onOpenErklaerung={onOpenErklaerung} />
 
         <BeispielAuswahl
-          className="mt-56"
+          className={classNames(
+            "mt-56",
+            CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS,
+          )}
           beschreibungenDerBeispiele={beschreibungenDerBeispiele}
           waehleBeispielAus={waehleBeispielAus}
           istBeispielAusgewaehlt={istBeispielAusgewaehlt}
@@ -127,7 +130,8 @@ export function Planer({
         >
           <div
             className={classNames(
-              "mx-[-15px] flex flex-col sm:mx-0",
+              CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS,
+              "flex flex-col",
               "divide-x-0 divide-y-2 divide-solid divide-off-white",
               "border-2 border-solid border-off-white",
             )}
@@ -175,3 +179,5 @@ function fanOut<Parameters extends unknown[]>(
     functions.forEach((fn) => fn?.(...parameters));
   };
 }
+
+const CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS = "mx-[-15px] sm:mx-0";

@@ -4,6 +4,14 @@ import { describe, expect, it, vi } from "vitest";
 import { BeispielAuswahl } from "./BeispielAuswahl";
 import type { BeschreibungFuerEinBeispiel } from "@/application/features/planer/hooks";
 
+/*
+ * These tests currently heavily struggle because of how the component
+ * responses to different container sizes. Basically every element in the DOM
+ * exists twice. Always one version of them is hidden based on a CSS container
+ * query. Unfortunately we don't have a testing strategy for this yet.
+ * Therefore, the dump approach is to use the `*All*` locators and index the
+ * list of elements. This is definitely not good.
+ */
 describe("Beispiel Auswahl", () => {
   it("shows a section for Auswahl of Beispiele", () => {
     render(<BeispielAuswahl {...ANY_PROPS} />);
@@ -35,10 +43,10 @@ describe("Beispiel Auswahl", () => {
     );
 
     // TODO: Fix usage of proper regions instead if plain text.
-    expect(screen.getByText("Erster Titel")).toBeVisible();
-    expect(screen.getByText("Erste Beschreibung")).toBeVisible();
-    expect(screen.getByText("Zweiter Titel")).toBeVisible();
-    expect(screen.getByText("Zweite Beschreibung")).toBeVisible();
+    expect(screen.getAllByText("Erster Titel").at(0)).toBeVisible();
+    expect(screen.getAllByText("Erste Beschreibung").at(0)).toBeVisible();
+    expect(screen.getAllByText("Zweiter Titel").at(0)).toBeVisible();
+    expect(screen.getAllByText("Zweite Beschreibung").at(0)).toBeVisible();
   });
 
   it("shows a button for each Beispiel to select it", () => {
@@ -55,17 +63,21 @@ describe("Beispiel Auswahl", () => {
     );
 
     expect(
-      screen.getByRole("button", {
-        name: "Übernehme Beispielplan",
-        description: "Erster Titel",
-      }),
+      screen
+        .getAllByRole("button", {
+          name: "Übernehme Beispielplan",
+          description: "Erster Titel",
+        })
+        .at(0),
     ).toBeVisible();
 
     expect(
-      screen.getByRole("button", {
-        name: "Übernehme Beispielplan",
-        description: "Zweiter Titel",
-      }),
+      screen
+        .getAllByRole("button", {
+          name: "Übernehme Beispielplan",
+          description: "Zweiter Titel",
+        })
+        .at(0),
     ).toBeVisible();
   });
 });
@@ -92,10 +104,12 @@ it("calls the given callback with the identifier of the Beispiel when the button
   );
 
   await userEvent.click(
-    screen.getByRole("button", {
-      name: "Übernehme Beispielplan",
-      description: "Zweiter Titel",
-    }),
+    screen
+      .getAllByRole("button", {
+        name: "Übernehme Beispielplan",
+        description: "Zweiter Titel",
+      })
+      .at(0)!,
   );
 
   expect(waehleBeispielAus).toHaveBeenCalledOnce();
@@ -146,15 +160,19 @@ it("marks the button of a Beispiel that is selected", () => {
     />,
   );
 
-  const buttonFuerErstesBeispiel = screen.getByRole("button", {
-    name: "Übernehme Beispielplan",
-    description: "Erster Titel",
-  });
+  const buttonFuerErstesBeispiel = screen
+    .getAllByRole("button", {
+      name: "Übernehme Beispielplan",
+      description: "Erster Titel",
+    })
+    .at(0);
 
-  const buttonFuerZweitesBeispiel = screen.getByRole("button", {
-    name: "Übernehme Beispielplan",
-    description: "Zweiter Titel",
-  });
+  const buttonFuerZweitesBeispiel = screen
+    .getAllByRole("button", {
+      name: "Übernehme Beispielplan",
+      description: "Zweiter Titel",
+    })
+    .at(0);
 
   expect(buttonFuerErstesBeispiel).toHaveAttribute("aria-pressed", "false");
   expect(buttonFuerErstesBeispiel).toHaveAttribute("aria-disabled", "false");

@@ -15,7 +15,7 @@ import {
   usePlanerService,
 } from "@/application/features/planer/hooks";
 import {} from "@/monatsplaner";
-import { GridLayoutProvider } from "@/application/features/planer/layout/grid-layout";
+import { GridLayoutProvider } from "@/application/features/planer/layout";
 import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
 
 type Props = {

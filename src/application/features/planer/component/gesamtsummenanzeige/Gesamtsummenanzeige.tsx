@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
+import { EinkommenFuerElternteil } from "./EinkommenFuerElternteil";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
 import { berechneGesamtsumme } from "./berechneGesamtsumme";
-import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
-import { EinkommenFuerElternteil } from "@/application/features/planer/component/gesamtsummenanzeige/EinkommenFuerElternteil";
+import { Geldbetrag } from "@/application/features/planer/component/common";
 import {
   type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,

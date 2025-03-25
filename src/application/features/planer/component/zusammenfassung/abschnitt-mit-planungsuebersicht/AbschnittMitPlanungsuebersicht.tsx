@@ -3,7 +3,7 @@ import { ReactNode, useId } from "react";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
 import { erstellePlanungsuebersicht } from "./erstellePlanungsuebersicht";
-import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
+import { Geldbetrag } from "@/application/features/planer/component/common";
 import {
   type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,

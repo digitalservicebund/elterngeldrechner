@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Variantenplakette } from "./Variantenplakette";
+import { Variantenplakette } from "./common/Variantenplakette";
 import { Variante } from "@/monatsplaner";
 
 type Props = {

@@ -1,7 +1,7 @@
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { ReactNode } from "react";
 import { DatenfeldFuerMonat } from "./DatenfeldFuerMonat";
-import { ZeitraumLabel } from "@/application/features/planer/component/ZeitraumLabel";
+import { ZeitraumLabel } from "@/application/features/planer/component/common";
 import { berechneZeitraumFuerLebensmonat } from "@/lebensmonatrechner";
 import {
   type Ausgangslage,

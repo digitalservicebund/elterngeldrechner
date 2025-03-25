@@ -5,7 +5,7 @@ import { InfoDialog } from "@/application/components";
 import {
   type GridColumnDefinitionPerElternteil,
   useGridColumnPerElternteil,
-} from "@/application/features/planer/layout/grid-layout";
+} from "@/application/features/planer/layout";
 import {
   type Auswahlmoeglichkeiten,
   type Auswahloption,

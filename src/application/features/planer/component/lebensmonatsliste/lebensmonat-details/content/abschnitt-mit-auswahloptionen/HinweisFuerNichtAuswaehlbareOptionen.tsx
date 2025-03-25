@@ -4,7 +4,7 @@ import { InfoText } from "@/application/components";
 import {
   type GridColumnDefinition,
   useGridColumn,
-} from "@/application/features/planer/layout/grid-layout";
+} from "@/application/features/planer/layout";
 
 type Props = {
   readonly className?: string;

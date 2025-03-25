@@ -12,7 +12,7 @@ import {
   useGridColumn,
   useGridColumnPerElternteil,
   useGridLayout,
-} from "@/application/features/planer/layout/grid-layout";
+} from "@/application/features/planer/layout";
 import {
   Elternteil,
   listeElternteileFuerAusgangslageAuf,

@@ -1,7 +1,7 @@
 import LockIcon from "@digitalservicebund/icons/Lock";
 import classNames from "classnames";
 import { ReactNode } from "react";
-import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
+import { Geldbetrag } from "@/application/features/planer/component/common";
 import {
   type Auswahloption,
   type Elterngeldbezug,

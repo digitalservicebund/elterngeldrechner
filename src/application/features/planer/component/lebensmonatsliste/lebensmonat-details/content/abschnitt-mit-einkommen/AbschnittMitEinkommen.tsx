@@ -12,7 +12,7 @@ import {
   type GridColumnDefinitionPerElternteil,
   useGridColumn,
   useGridColumnPerElternteil,
-} from "@/application/features/planer/layout/grid-layout";
+} from "@/application/features/planer/layout";
 import {
   Elternteil,
   type LebensmonatMitBeliebigenElternteilen,

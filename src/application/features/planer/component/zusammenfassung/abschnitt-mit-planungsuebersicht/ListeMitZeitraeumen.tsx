@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ZeitraumLabel } from "@/application/features/planer/component/ZeitraumLabel";
+import { ZeitraumLabel } from "@/application/features/planer/component/common";
 import type { Zeitraum } from "@/lebensmonatrechner";
 
 type Props = {

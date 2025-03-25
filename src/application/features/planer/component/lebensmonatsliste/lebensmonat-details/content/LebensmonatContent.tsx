@@ -2,13 +2,13 @@ import { ReactNode } from "react";
 import { HinweisZumBonus } from "./HinweisZumBonus";
 import { AbschnittMitAuswahloptionen } from "./abschnitt-mit-auswahloptionen";
 import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen";
-import { ZeitraumLabel } from "@/application/features/planer/component/ZeitraumLabel";
+import { ZeitraumLabel } from "@/application/features/planer/component/common";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type GridColumnDefinition,
   useGridColumn,
   useGridLayout,
-} from "@/application/features/planer/layout/grid-layout";
+} from "@/application/features/planer/layout";
 import { berechneZeitraumFuerLebensmonat } from "@/lebensmonatrechner";
 import { AlleElternteileHabenBonusGewaehlt } from "@/monatsplaner";
 

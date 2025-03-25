@@ -1,8 +1,10 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
 import type { Bezug } from "./erstellePlanungsuebersicht";
-import { Geldbetrag } from "@/application/features/planer/component/Geldbetrag";
-import { Variantenplakette } from "@/application/features/planer/component/Variantenplakette";
+import {
+  Geldbetrag,
+  Variantenplakette,
+} from "@/application/features/planer/component/common";
 import { Variante, compareVarianten } from "@/monatsplaner";
 
 type Props = {

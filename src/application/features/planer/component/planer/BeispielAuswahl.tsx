@@ -55,24 +55,38 @@ export function BeispielAuswahl({
             ) : undefined;
 
             /*
-             * TRIGGER WARNING
+             * CLEAN CODE WARNING
              *
-             * The user interface design requires two different renderings based
-             * on the screen/container width. We try to avoid such designs where
-             * ever possible and rather rely on intrinsic styling. However, this
-             * currently must be an exception.
+             * The whole Planer feature has high demands of screen/window space.
+             * It's design is highly thought-out to make best use of any
+             * available space to adapt responsively to "all"
+             * screen/window/font-sizes and zoom level.
+             * This holds true for the aspect of the Beispiel selection. Here it
+             * is additionally important that the user can see enough on his
+             * screen to gasp what is happening during interactions in the
+             * overall Planer context. Like what happens when a Beispiel is
+             * selected. This is very tricky on small screens/windows.
              *
-             * There was an attempt to represent this concept properly in code
-             * and avoid duplication. Like on the surface it looks like one JSX
-             * element tree. And it was verbosely communicating what is shared
-             * styling and where does it diverge. However, it became very
-             * tedious, required tons of code and there was always an exception
-             * in the design left.
-             * In result it is much easier to copy-paste what is needed and
-             * maintain both element trees separately. From a clean code
-             * perspective this is a huge bummer. But the reality is that this
-             * code here is currently the (very) bitter sweet spot that comes
-             * with such designs.
+             * To address this problem, it was necessary to have a separate
+             * design for smaller screens. This design does not only affect the
+             * styling, but also semantics and interactions. In exact, for small
+             * windows the Beispiele should be collapsible. Though, for big
+             * windows this is be rather ineffective and should be allowed to
+             * occupy more space.
+             *
+             * Having this design for an improved user experience comes with
+             * some challenges for the implementation. After some serious
+             * attempts to produce clean code by representing the full design
+             * split in a verbose and communicative manner has failed. There are
+             * too many exceptions and the final solution suffers readability
+             * and fragile abstraction layers.
+             * In result, the best suitable solution right now is a duplicate
+             * rendering. The browser always hides away one version based on
+             * container queries in the styling. This avoids to maintain the
+             * rendering split in TypeScript too and relies on robust
+             * web-browser mechanisms solely. Anyhow, the resulting code must be
+             * maintained with care. Always being aware of the duplicated code
+             * aspect that need to be maintained.
              */
             return (
               <Fragment key={identifier}>
@@ -115,7 +129,6 @@ export function BeispielAuswahl({
                     {icon} {label}
                   </button>
                 </section>
-
                 {/* for small screens */}
                 <details
                   className={classNames(

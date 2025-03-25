@@ -89,18 +89,46 @@ describe("Abschnitt mit Auswahloptionen", () => {
 
     render(<AbschnittMitAuswahloptionen />);
 
-    expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledTimes(2);
     expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledWith(Elternteil.Eins);
     expect(bestimmeAuswahlmoeglichkeiten).toHaveBeenCalledWith(Elternteil.Zwei);
+  });
+
+  it("shows a hint when any Auswahlmöglichkeit is not selectable", () => {
+    const bestimmeAuswahlmoeglichkeiten = vi.fn().mockReturnValue({
+      ...ANY_AUSWAHLMOEGLICHKEITEN,
+      [Variante.Basis]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,
+    });
+
+    vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
+      ...ANY_INFORMATION_ZUM_LEBENSMONAT,
+      bestimmeAuswahlmoeglichkeiten,
+    });
+
+    render(<AbschnittMitAuswahloptionen />);
+
+    expect(
+      screen.getByText("Warum sind einige Auswahlmöglichkeiten grau?"),
+    ).toBeVisible();
   });
 });
 
 const ANY_GEBURTSDATUM_DES_KINDES = new Date();
 
+const ANY_ENABLED_AUSWAHLMOEGLICHKEIT = {
+  elterngeldbezug: 1,
+  istAuswaehlbar: true as const,
+};
+
+const ANY_DISABLED_AUSWAHLMOEGLICHKEIT = {
+  elterngeldbezug: 1,
+  istAuswaehlbar: false as const,
+  grundWiesoNichtAuswaehlbar: "darum",
+};
+
 const ANY_AUSWAHLMOEGLICHKEITEN = {
-  [Variante.Basis]: { elterngeldbezug: 1, istAuswaehlbar: true as const },
-  [Variante.Plus]: { elterngeldbezug: 1, istAuswaehlbar: true as const },
-  [Variante.Bonus]: { elterngeldbezug: 1, istAuswaehlbar: true as const },
+  [Variante.Basis]: ANY_ENABLED_AUSWAHLMOEGLICHKEIT,
+  [Variante.Plus]: ANY_ENABLED_AUSWAHLMOEGLICHKEIT,
+  [Variante.Bonus]: ANY_ENABLED_AUSWAHLMOEGLICHKEIT,
   [KeinElterngeld]: { elterngeldbezug: null, istAuswaehlbar: true as const },
 };
 

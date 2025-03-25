@@ -1,7 +1,12 @@
 import type { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+import { HinweisFuerNichtAuswaehlbareOptionen } from "./HinweisFuerNichtAuswaehlbareOptionen";
 import {
+  type BestimmeAuswahlmoeglichkeiten,
+  useInformationenZumLebensmonat,
+} from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+import {
+  type Ausgangslage,
   type Lebensmonatszahl,
   listeElternteileFuerAusgangslageAuf,
 } from "@/monatsplaner";
@@ -14,6 +19,12 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
   } = useInformationenZumLebensmonat();
+
+  // TODO: This is super inefficient right now.
+  const showHinweis = isAnyAuswahloptionNotSelectable(
+    ausgangslage,
+    bestimmeAuswahlmoeglichkeiten,
+  );
 
   return (
     <>
@@ -35,10 +46,24 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
           />
         );
       })}
+
+      {!!showHinweis && (
+        <HinweisFuerNichtAuswaehlbareOptionen className="mt-16" />
+      )}
     </>
   );
 }
 
+function isAnyAuswahloptionNotSelectable<A extends Ausgangslage>(
+  ausgangslage: A,
+  bestimmeAuswahlmoeglichkeiten: BestimmeAuswahlmoeglichkeiten<A>,
+): boolean {
+  return listeElternteileFuerAusgangslageAuf(ausgangslage).some((elternteil) =>
+    Object.values(bestimmeAuswahlmoeglichkeiten(elternteil)).some(
+      (auswahlmoeglichkeit) => !auswahlmoeglichkeit.istAuswaehlbar,
+    ),
+  );
+}
 function composeLegendForAuswahl(
   lebensmonatszahl: Lebensmonatszahl,
   pseudonym: string | undefined,

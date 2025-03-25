@@ -1,18 +1,24 @@
-import { ReactNode } from "react";
+import { type CSSProperties, ReactNode } from "react";
 
 export interface InfoTextProps {
   readonly question: string;
   readonly answer: ReactNode;
   readonly className?: string;
+  readonly style?: CSSProperties;
 }
 
 export function InfoText({
   question,
   answer,
   className,
+  style,
 }: InfoTextProps): ReactNode {
   return (
-    <details className={className}>
+    <details
+      className={className}
+      style={style}
+      onToggle={(event) => event.stopPropagation()} // Avoid confusion for listeners on parent <details /> elements.
+    >
       <summary className="text-primary">
         <u>{question}</u>
       </summary>

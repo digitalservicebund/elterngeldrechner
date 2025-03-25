@@ -1,6 +1,6 @@
 import { type ReactNode, useId } from "react";
-import { Legende } from "./Legende";
 import { Button } from "@/application/components";
+import { Legende } from "@/application/features/planer/component/common";
 
 type Props = {
   readonly onOpenErklaerung: () => void;

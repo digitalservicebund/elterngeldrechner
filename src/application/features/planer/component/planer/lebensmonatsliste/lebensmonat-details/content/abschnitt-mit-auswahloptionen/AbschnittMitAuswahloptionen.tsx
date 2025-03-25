@@ -4,7 +4,7 @@ import { HinweisFuerNichtAuswaehlbareOptionen } from "./HinweisFuerNichtAuswaehl
 import {
   type BestimmeAuswahlmoeglichkeiten,
   useInformationenZumLebensmonat,
-} from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+} from "@/application/features/planer/component/planer/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type Ausgangslage,
   type Lebensmonatszahl,

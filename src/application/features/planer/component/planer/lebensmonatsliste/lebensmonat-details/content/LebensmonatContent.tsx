@@ -3,7 +3,7 @@ import { HinweisZumBonus } from "./HinweisZumBonus";
 import { AbschnittMitAuswahloptionen } from "./abschnitt-mit-auswahloptionen";
 import { AbschnittMitEinkommen } from "./abschnitt-mit-einkommen";
 import { ZeitraumLabel } from "@/application/features/planer/component/common";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/planer/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type GridColumnDefinition,
   useGridColumn,

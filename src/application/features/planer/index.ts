@@ -1,2 +1,1 @@
-export { Zusammenfassung } from "./component/zusammenfassung";
-export { Planer } from "./component/Planer";
+export * from "./component";

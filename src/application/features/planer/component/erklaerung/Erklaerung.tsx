@@ -3,8 +3,8 @@ import EastIcon from "@digitalservicebund/icons/East";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { ReactNode } from "react";
 import { Example } from "./Example";
-import { Legende } from "./Legende";
 import { Button } from "@/application/components";
+import { Legende } from "@/application/features/planer/component/common";
 
 type Props = {
   readonly onClose: () => void;

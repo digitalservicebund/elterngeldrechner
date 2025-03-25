@@ -5,7 +5,7 @@ import {
   beschreibePlanungImLebensmonat,
   beschreibeZeitraumDesLebensmonats,
 } from "./beschreibeLebensmonat";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/planer/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type GridColumnDefinition,
   type GridColumnDefinitionPerElternteil,

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { HinweisZumBonus } from "./HinweisZumBonus";
 import { LebensmonatContent } from "./LebensmonatContent";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/planer/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type Auswahloption,
   Elternteil,
@@ -13,7 +13,7 @@ import {
 vi.mock(import("./HinweisZumBonus"));
 vi.mock(
   import(
-    "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat"
+    "@/application/features/planer/component/planer/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat"
   ),
 );
 

@@ -8,8 +8,11 @@ import {
   composeAusgangslageFuerPlaner,
   stepAllgemeineAngabenSelectors,
 } from "@/application/features/abfrageteil/state";
-import { Planer, Zusammenfassung } from "@/application/features/planer";
-import { Erklaerung } from "@/application/features/planer/component/Erklaerung";
+import {
+  Erklaerung,
+  Planer,
+  Zusammenfassung,
+} from "@/application/features/planer";
 import {
   UserFeedbackForm,
   useUserFeedback,

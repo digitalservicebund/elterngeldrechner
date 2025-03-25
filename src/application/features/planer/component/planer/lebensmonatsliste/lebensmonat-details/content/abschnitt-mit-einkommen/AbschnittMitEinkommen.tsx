@@ -6,7 +6,7 @@ import { HinweisZuWochenstunden } from "./HinweisZuWochenstunden";
 import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
 import { InfoDialog } from "@/application/components";
-import { useInformationenZumLebensmonat } from "@/application/features/planer/component/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
+import { useInformationenZumLebensmonat } from "@/application/features/planer/component/planer/lebensmonatsliste/lebensmonat-details/informationenZumLebensmonat";
 import {
   type GridColumnDefinition,
   type GridColumnDefinitionPerElternteil,

@@ -1,13 +1,13 @@
 import Icon from "@digitalservicebund/icons/NotificationsNone";
 import classNames from "classnames";
 
-interface AlertProps {
+type Props = {
   readonly headline: string;
   readonly children: React.ReactNode;
   readonly className?: string;
-}
+};
 
-export function Alert({ headline, children, className }: AlertProps) {
+export function Alert({ headline, children, className }: Props) {
   return (
     <div
       className={classNames(

@@ -23,7 +23,7 @@ export const cloneOptionsList = (options: SelectOption[]) =>
     return { label: o.label, value: o.value, hidden: o.hidden };
   });
 
-interface CustomSelectProps<TFieldValues extends FieldValues> {
+type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
@@ -36,7 +36,7 @@ interface CustomSelectProps<TFieldValues extends FieldValues> {
   readonly info?: Info;
   readonly slotBetweenLabelAndSelect?: ReactNode;
   readonly className?: string;
-}
+};
 
 export function CustomSelect<TFieldValues extends FieldValues>({
   register,
@@ -52,7 +52,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   slotBetweenLabelAndSelect,
   className,
   ...aria
-}: CustomSelectProps<TFieldValues>) {
+}: Props<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
 
   const customArrows = {

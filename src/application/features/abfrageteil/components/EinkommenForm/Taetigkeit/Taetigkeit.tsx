@@ -17,21 +17,16 @@ const erwerbstaetigkeitOptions: SelectOption[] = [
   { value: "Selbststaendig", label: "Gewinneinkünfte" },
 ];
 
-interface TaetigkeitsFormProps {
+type Props = {
   readonly elternteil: ElternteilType;
   readonly taetigkeitsIndex: number;
   readonly isSelbststaendig: boolean;
   readonly monthsBeforeBirth: SelectOption[];
   readonly onRemove: () => void;
-}
+};
 
 export const Taetigkeit = forwardRef(function Taetigkeit(
-  {
-    elternteil,
-    taetigkeitsIndex,
-    monthsBeforeBirth,
-    onRemove,
-  }: TaetigkeitsFormProps,
+  { elternteil, taetigkeitsIndex, monthsBeforeBirth, onRemove }: Props,
   ref?: ForwardedRef<HTMLElement>,
 ) {
   const baseFieldPath: FieldPath<StepEinkommenState> = `${elternteil}.taetigkeitenNichtSelbstaendigUndSelbstaendig.${taetigkeitsIndex}`;

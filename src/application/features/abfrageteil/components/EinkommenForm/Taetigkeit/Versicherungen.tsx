@@ -9,7 +9,7 @@ import {
   type TypeOfVersicherungen,
 } from "@/application/features/abfrageteil/state";
 
-type VersicherungenProps = Readonly<{
+type Props = Readonly<{
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;
 }>;
 
@@ -18,7 +18,7 @@ export function Versicherungen({
   hasArbeitslosenversicherungName,
   hasKrankenversicherungName,
   noneName,
-}: VersicherungenProps) {
+}: Props) {
   const {
     register,
     formState: { errors },

@@ -30,12 +30,12 @@ interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
 }
 
-interface TestWrapperProps {
+type Props = {
   readonly store: Store;
   readonly children: ReactNode;
-}
+};
 
-function TestWrapper({ store, children }: TestWrapperProps) {
+function TestWrapper({ store, children }: Props) {
   const routes: RouteObject[] = [
     { path: "/", element: <div>{children}</div> },
     { path: "*", element: "404" },

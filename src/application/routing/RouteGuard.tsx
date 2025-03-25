@@ -6,7 +6,7 @@ import { RootState } from "@/application/redux";
 import { useAppStore } from "@/application/redux/hooks";
 import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
-type RouteGuardProps = {
+type Props = {
   readonly fallback: StepRoute;
   readonly children: ReactNode;
 
@@ -16,7 +16,7 @@ type RouteGuardProps = {
   ) => boolean;
 };
 
-function RouteGuard({ precondition, fallback, children }: RouteGuardProps) {
+function RouteGuard({ precondition, fallback, children }: Props) {
   const store = useAppStore();
   const navigation = useNavigateWithPlan();
 

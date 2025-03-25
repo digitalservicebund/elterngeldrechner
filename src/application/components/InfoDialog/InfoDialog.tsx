@@ -14,13 +14,13 @@ import { useOnClickOutside } from "@/application/hooks/useOnClickOutside";
 
 export type Info = string | ReactNode;
 
-interface Props {
+type Props = {
   readonly ariaLabelForDialog?: string;
   readonly info: Info;
   readonly id?: string;
   readonly className?: string;
   readonly style?: CSSProperties;
-}
+};
 
 export function InfoDialog({
   ariaLabelForDialog,

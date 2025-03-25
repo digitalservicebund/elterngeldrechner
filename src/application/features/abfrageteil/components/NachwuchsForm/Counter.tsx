@@ -12,7 +12,7 @@ import {
 } from "react-hook-form";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
-interface Props<TFieldValues extends FieldValues> {
+type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
@@ -21,7 +21,7 @@ interface Props<TFieldValues extends FieldValues> {
   readonly onDecrease: () => void;
   readonly onIncrease: () => void;
   readonly required: boolean;
-}
+};
 
 export function Counter<TFieldValues extends FieldValues>({
   register,

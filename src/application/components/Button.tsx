@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { type ForwardedRef, MouseEvent, ReactNode, forwardRef } from "react";
 import { FieldValues, Path } from "react-hook-form";
 
-interface Props<TFieldValues extends FieldValues> {
+type Props<TFieldValues extends FieldValues> = {
   readonly id?: string;
   readonly className?: string;
   readonly buttonStyle?: "primary" | "secondary" | "link";
@@ -15,7 +15,7 @@ interface Props<TFieldValues extends FieldValues> {
   readonly ariaControls?: Path<TFieldValues>;
   readonly isSubmitButton?: boolean;
   readonly form?: string;
-}
+};
 
 export const Button = forwardRef(function Button<
   TFieldValues extends FieldValues,

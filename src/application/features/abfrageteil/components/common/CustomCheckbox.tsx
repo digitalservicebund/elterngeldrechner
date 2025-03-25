@@ -12,7 +12,7 @@ import {
 import { Description } from "./Description";
 import { type Info, InfoDialog } from "@/application/components";
 
-interface Props<TFieldValues extends FieldValues> {
+type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
@@ -21,7 +21,7 @@ interface Props<TFieldValues extends FieldValues> {
   readonly onChange?: (newValue: boolean) => void;
   readonly info?: Info;
   readonly className?: string;
-}
+};
 
 export function CustomCheckbox<TFieldValues extends FieldValues>({
   register,

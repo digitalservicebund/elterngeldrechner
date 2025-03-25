@@ -23,10 +23,10 @@ import {
   SteuerKlasse,
 } from "@/elterngeldrechner/model";
 
-interface SteuerUndVersicherungProps {
+type Props = {
   readonly elternteil: ElternteilType;
   readonly isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten: boolean;
-}
+};
 
 const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [
   { value: SteuerKlasse.SKL1, label: "1" },
@@ -78,7 +78,7 @@ const einkommenSteuerklasseInfo =
 export function SteuerUndVersicherung({
   elternteil,
   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
-}: SteuerUndVersicherungProps) {
+}: Props) {
   const {
     register,
     formState: { errors },

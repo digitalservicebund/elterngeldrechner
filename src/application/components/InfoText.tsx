@@ -1,18 +1,18 @@
 import { type CSSProperties, ReactNode } from "react";
 
-export interface InfoTextProps {
+type Props = {
   readonly question: string;
   readonly answer: ReactNode;
   readonly className?: string;
   readonly style?: CSSProperties;
-}
+};
 
 export function InfoText({
   question,
   answer,
   className,
   style,
-}: InfoTextProps): ReactNode {
+}: Props): ReactNode {
   return (
     <details
       className={className}

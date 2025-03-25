@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
 import { FormStep, formSteps } from "@/application/routing/formSteps";
 
-interface Props {
+type Props = {
   readonly currentStep: FormStep;
-}
+};
 
 export function Sidebar({ currentStep }: Props) {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
 
-interface Props {
+type Props = {
   readonly id?: string;
   readonly error?: boolean;
   readonly children: ReactNode;
-}
+};
 
 export function Description({ id, error = false, children }: Props) {
   return (

@@ -30,11 +30,11 @@ const miniJobMaxZahlInfoText = `Mini-Job - geringfügige Beschäftigung bis maxi
 - vor dem 01.01.2024: bis maximal 520 Euro monatlich
 - vor dem 01.10.2022: bis maximal 450 Euro monatlich`;
 
-interface ErwerbstaetikeitFormElternteilProps {
+type ErwerbstaetikeitFormElternteilProps = {
   readonly elternteil: ElternteilType;
   readonly elternteilName: string;
   readonly antragssteller: Antragstellende | null;
-}
+};
 
 function ErwerbstaetigkeitFormElternteil({
   elternteil,

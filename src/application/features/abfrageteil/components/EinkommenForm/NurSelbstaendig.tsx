@@ -6,11 +6,11 @@ import {
   type StepEinkommenState,
 } from "@/application/features/abfrageteil/state";
 
-interface NurSelbstaendigProps {
+type Props = {
   readonly elternteil: ElternteilType;
-}
+};
 
-export function NurSelbstaendig({ elternteil }: NurSelbstaendigProps) {
+export function NurSelbstaendig({ elternteil }: Props) {
   const { setValue, control } = useFormContext<StepEinkommenState>();
 
   setValue(`${elternteil}.gewinnSelbstaendig.type`, "yearly");

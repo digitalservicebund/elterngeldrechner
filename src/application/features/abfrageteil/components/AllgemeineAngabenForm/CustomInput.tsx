@@ -10,13 +10,13 @@ import {
 import { type Info, InfoDialog } from "@/application/components";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
-interface CustomInputProps<TFieldValues extends FieldValues> {
+type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly name: FieldPath<TFieldValues>;
   readonly label: string;
   readonly errors?: FieldErrors<TFieldValues>;
   readonly info?: Info;
-}
+};
 
 export function CustomInput<TFieldValues extends FieldValues>({
   register,
@@ -24,7 +24,7 @@ export function CustomInput<TFieldValues extends FieldValues>({
   label,
   errors,
   info,
-}: CustomInputProps<TFieldValues>) {
+}: Props<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
 
   return (

@@ -21,7 +21,7 @@ export interface CustomRadioGroupOption<
   description?: (id: string) => ReactNode;
 }
 
-export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
+type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
@@ -34,7 +34,7 @@ export interface CustomRadioGroupProps<TFieldValues extends FieldValues> {
   readonly horizontal?: boolean;
   readonly disabled?: boolean;
   readonly className?: string;
-}
+};
 
 export function CustomRadioGroup<TFieldValues extends FieldValues>({
   register,
@@ -49,7 +49,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   horizontal = false,
   disabled = false,
   className,
-}: CustomRadioGroupProps<TFieldValues>) {
+}: Props<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
   const hasError = error !== undefined;
   const errorIdentifier = useId();

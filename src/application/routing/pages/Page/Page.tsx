@@ -8,12 +8,12 @@ import {
   formSteps,
 } from "@/application/routing/formSteps";
 
-interface PageProps {
+type Props = {
   readonly step: FormStep;
   readonly children: ReactNode;
-}
+};
 
-export function Page({ step, children }: PageProps) {
+export function Page({ step, children }: Props) {
   const alert = ALERTS[step.route as StepRoute];
 
   const sectionElement = useRef<HTMLElement>(null);

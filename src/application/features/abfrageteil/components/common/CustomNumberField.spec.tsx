@@ -5,20 +5,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CustomNumberField } from "./CustomNumberField";
 import { Button } from "@/application/components";
 
-interface TestFormValues {
-  testField: string;
-}
-
-interface Props {
+type Props = {
   readonly allowedDecimalPlaces?: 1;
   readonly max?: number;
-}
+};
 
 describe("Custom Number Field", () => {
   const onSubmit = vi.fn();
 
   function TestComponent({ allowedDecimalPlaces, max }: Props) {
-    const { handleSubmit, control } = useForm<TestFormValues>();
+    const { handleSubmit, control } = useForm<{ testField: string }>();
 
     return (
       <form onSubmit={handleSubmit((value) => onSubmit(value))}>

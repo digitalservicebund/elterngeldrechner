@@ -10,26 +10,19 @@ import { IMask, IMaskInput } from "react-imask";
 import { type Info, InfoDialog } from "@/application/components";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
-interface CustomDateProps<
+type Props<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
-> extends UseControllerProps<TFieldValues, TName> {
+> = UseControllerProps<TFieldValues, TName> & {
   readonly label: string;
   readonly required?: boolean;
   readonly info?: Info;
-}
+};
 
 export function CustomDate<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
->({
-  control,
-  rules,
-  name,
-  label,
-  required,
-  info,
-}: CustomDateProps<TFieldValues, TName>) {
+>({ control, rules, name, label, required, info }: Props<TFieldValues, TName>) {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },

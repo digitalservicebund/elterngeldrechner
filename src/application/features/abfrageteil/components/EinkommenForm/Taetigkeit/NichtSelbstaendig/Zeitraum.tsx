@@ -23,7 +23,7 @@ import {
   cloneOptionsList,
 } from "@/application/features/abfrageteil/components/common";
 
-interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
+type Props<TFieldValues extends FieldValues> = AriaAttributes & {
   readonly register: UseFormRegister<TFieldValues>;
   readonly listingIndex: number;
   readonly name: Path<TFieldValues>;
@@ -38,7 +38,7 @@ interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly disabled?: boolean;
   readonly required?: boolean;
   readonly onChange?: (v: { from: string; to: string }) => void | undefined;
-}
+};
 
 export function Zeitraum<TFieldValues extends FieldValues>({
   register,

@@ -10,18 +10,15 @@ import type {
   StepEinkommenState,
 } from "@/application/features/abfrageteil/state";
 
-interface NurErwerbstaetigProps {
+type Props = {
   readonly elternteil: ElternteilType;
   readonly monthsBeforeBirth: SelectOption[];
-}
+};
 
 const einkommenNichtSelbststaendigInfoText =
   "Als Einkommen werden alle Einkünfte aus Ihrer nicht-selbständigen Tätigkeit im Bemessungszeitraum berücksichtigt. Nicht berücksichtigt werden sonstige Bezüge, z.B. Abfindungen, Leistungsprämien, Provisionen, 13. Monatsgehälter. Steuerfreie Einnahmen werden ebenfalls nicht berücksichtigt, z.B. Trinkgelder, steuerfreie Zuschläge, Krankengeld, Kurzarbeitergeld, ALG II";
 
-export function NurErwerbstaetig({
-  elternteil,
-  monthsBeforeBirth,
-}: NurErwerbstaetigProps) {
+export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
   const { control, setValue, watch } = useFormContext<StepEinkommenState>();
 
   const averageOrMonthlyNichtSelbstaendig = watch(

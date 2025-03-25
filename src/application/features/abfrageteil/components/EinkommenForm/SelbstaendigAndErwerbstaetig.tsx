@@ -9,17 +9,17 @@ import {
   initialTaetigkeit,
 } from "@/application/features/abfrageteil/state";
 
-interface SelbstaendigAndErwerbstaetigProps {
+type Props = {
   readonly elternteil: ElternteilType;
   readonly isSelbststaendig: boolean;
   readonly monthsBeforeBirth: SelectOption[];
-}
+};
 
 export function SelbstaendigAndErwerbstaetig({
   elternteil,
   isSelbststaendig,
   monthsBeforeBirth,
-}: SelbstaendigAndErwerbstaetigProps) {
+}: Props) {
   const taetigkeitHinzfuegenButtonElement = useRef<HTMLButtonElement>(null);
   const letztesTaetigkeitsElement = useRef<HTMLElement>(null);
 

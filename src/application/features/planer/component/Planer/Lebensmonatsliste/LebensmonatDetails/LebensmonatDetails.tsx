@@ -25,7 +25,7 @@ import type {
   Lebensmonatszahl,
 } from "@/monatsplaner";
 
-interface Props<A extends Ausgangslage> {
+type Props<A extends Ausgangslage> = {
   readonly ausgangslage: A;
   readonly lebensmonatszahl: Lebensmonatszahl;
   readonly lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
@@ -35,7 +35,7 @@ interface Props<A extends Ausgangslage> {
   readonly gebeEinkommenAn: GebeEinkommenAn<A>;
   readonly onToggle?: (event: ToggleEvent) => void;
   readonly className?: string;
-}
+};
 
 export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   A extends Ausgangslage,

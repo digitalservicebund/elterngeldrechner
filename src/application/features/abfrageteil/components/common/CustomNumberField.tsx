@@ -11,10 +11,10 @@ import { IMaskInput } from "react-imask";
 import { type Info, InfoDialog } from "@/application/components";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
-interface CustomNumberFieldProps<
+type Props<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
-> extends UseControllerProps<TFieldValues, TName> {
+> = UseControllerProps<TFieldValues, TName> & {
   readonly label: string;
   readonly allowedDecimalPlaces?: 1 | 2;
   readonly suffix?: string;
@@ -26,7 +26,7 @@ interface CustomNumberFieldProps<
   readonly required?: boolean;
   readonly ariaDescribedByIfNoError?: string;
   readonly info?: Info;
-}
+};
 
 export function CustomNumberField<
   TFieldValues extends FieldValues,
@@ -44,7 +44,7 @@ export function CustomNumberField<
   required,
   ariaDescribedByIfNoError,
   info,
-}: CustomNumberFieldProps<TFieldValues, TName>) {
+}: Props<TFieldValues, TName>) {
   const registerOptions = useMemo(
     () =>
       ({

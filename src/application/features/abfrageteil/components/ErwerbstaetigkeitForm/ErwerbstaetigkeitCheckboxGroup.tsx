@@ -10,9 +10,9 @@ import {
   type StepErwerbstaetigkeitState,
 } from "@/application/features/abfrageteil/state";
 
-interface Props {
+type Props = {
   readonly elternteil: ElternteilType;
-}
+};
 
 export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
   const {

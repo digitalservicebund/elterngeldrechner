@@ -4,9 +4,9 @@ import { configurationSlice } from "@/application/redux/configurationSlice";
 import { useAppDispatch } from "@/application/redux/hooks";
 import Router from "@/application/routing/Router";
 
-interface Props {
+type Props = {
   readonly elternGeldDigitalWizardUrl: string | undefined;
-}
+};
 
 export function App({ elternGeldDigitalWizardUrl }: Props) {
   const dispatch = useAppDispatch();

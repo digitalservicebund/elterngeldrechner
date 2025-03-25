@@ -16,10 +16,10 @@ const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
   value: `${index + 1}`,
 }));
 
-interface Props {
+type Props = {
   readonly elternteil: ElternteilType;
   readonly elternteilName: string;
-}
+};
 
 export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
   const isErwerbstaetigVorGeburt = useAppSelector((state) =>

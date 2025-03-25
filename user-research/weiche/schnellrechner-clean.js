@@ -176,7 +176,7 @@ var EGR = window.EGR || {};
         );
         return (
           (r.text =
-            "Wie viele Kinder erwarten Sie? (Bei einer Mehrlingsgeburt wird das Elterngeld nur f\xFCr jeweils ein Kind berechnet. Bitte beachten Sie die Hinweise unter \u201EFragen und Antworten\u201C"),
+            "Wie viele Kinder erwarten Sie? (Bei einer Mehrlingsgeburt wird das Elterngeld nur f\xFCr jeweils ein Kind berechnet."),
           (e = r),
           _possibleConstructorReturn(r, e)
         );
@@ -516,7 +516,7 @@ var EGR = window.EGR || {};
         var r = document.createElement("div");
         (EGR.Schnellrechner.Container = r), (r.id = "schnellrechnerApp");
         var n = document.createElement("p");
-        (n.className = "hinweisHeadline"), (n.textContent = "Hinweis");
+        (n.className = "hinweisHeadline"), (n.innerHTML = "<u>Hinweis:</u>");
         var o = document.createElement("p");
         (o.className = "hinweis"), (o.textContent = this.getTmpAttention());
         var a = document.createElement("div");
@@ -528,6 +528,7 @@ var EGR = window.EGR || {};
           (l.onclick = function () {
             return EGR.Schnellrechner.reset();
           });
+        EGR.Schnellrechner.resetBtn = l;
         var i = document.createElement("span");
         (i.className = "ui-button-text"),
           (i.textContent = "Zur\xFCcksetzen"),
@@ -597,6 +598,10 @@ var EGR = window.EGR || {};
         (EGR.Schnellrechner.submitBtn.style.display = "none"),
         (EGR.Schnellrechner.backBtnLabel.textContent = "Neue Berechnung");
       document.getElementById("egr-teaser").className = "";
+
+      EGR.Schnellrechner.resetBtn.className =
+        "border border-solid border-primary text-20 transition-all duration-300 bg-primary text-white px-24 py-16 [@media(hover:hover)]:hover:bg-white [@media(hover:hover)]:hover:text-primary active:focus:bg-white active:focus:text-primary";
+      document.getElementById("back-btn").classList.remove("mt-40");
     },
     elterngeld_et: function (p, d) {
       var u = 0,
@@ -652,6 +657,9 @@ var EGR = window.EGR || {};
         (this.submitBtn.style.display = "block"),
         (this.backBtnLabel.textContent = "Zur\xFCcksetzen");
       document.getElementById("egr-teaser").className = "hidden";
+      document.getElementById("back-btn").classList.add("mt-40");
+      EGR.Schnellrechner.resetBtn.className =
+        "border border-solid border-primary text-20 transition-all duration-300 bg-transparent text-primary px-24 py-16 [@media(hover:hover)]:hover:bg-primary [@media(hover:hover)]:hover:text-white active:focus:bg-primary active:focus:text-white";
     },
     init: function (e) {
       this.initRows(), e.appendChild(this.templates.form()), this.render();

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Page } from "./page";
+import { Page } from "./Page";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button, PrintButton } from "@/application/components";
 import { Zusammenfassung } from "@/application/features/planer";

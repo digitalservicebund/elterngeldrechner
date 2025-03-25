@@ -44,7 +44,7 @@ In combination, a typical directory structure of an object value called
 `MyObjectValue` looks like this:
 
 ```
-─ my-object-value
+─ MyObjectValue
   ├─ operation
   │  ├─ operation-a.ts
   │  ├─ operation-b.ts
@@ -60,7 +60,8 @@ In combination, a typical directory structure of an object value called
 ```
 
 The modules make heavily use of re-exports to disguise the internal structure
-and keep short and easily maintainable import statements.
+and keep short and easily maintainable import statements. This also helps to
+provide namespace scoping that addresses the functional style difficulties.
 
 There is no direct dependency on a calculator for _Elterngeld_ on purpose.
 Having dependency inversion/injection allows for higher independence and

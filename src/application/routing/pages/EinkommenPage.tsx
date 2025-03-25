@@ -1,6 +1,6 @@
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
-import { Page } from "./page";
+import { Page } from "./Page";
 import { Button } from "@/application/components";
 import { EinkommenForm } from "@/application/features/abfrageteil";
 import { formSteps } from "@/application/routing/formSteps";

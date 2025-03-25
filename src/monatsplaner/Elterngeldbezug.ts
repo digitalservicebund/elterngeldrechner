@@ -1,6 +1,6 @@
 import type { Elternteil } from "./Elternteil";
 import type { Lebensmonatszahl } from "./Lebensmonatszahl";
-import type { Monat } from "./monat";
+import type { Monat } from "./Monat";
 
 export type Elterngeldbezug = number | null;
 

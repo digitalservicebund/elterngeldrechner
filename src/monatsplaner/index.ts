@@ -6,7 +6,7 @@ export {
   PartnermonateSindVerfuegbar,
   bestimmeVerfuegbaresKontingent,
   listeElternteileFuerAusgangslageAuf,
-} from "./ausgangslage";
+} from "./Ausgangslage";
 export type { Auswahlmoeglichkeiten } from "./Auswahlmoeglichkeiten";
 export {
   type Auswahloption,
@@ -26,7 +26,7 @@ export {
   type LebensmonatMitBeliebigenElternteilen,
   erstelleInitialenLebensmonat,
   listeMonateAuf,
-} from "./lebensmonat";
+} from "./Lebensmonat";
 export {
   type Lebensmonate,
   type LebensmonateMitBeliebigenElternteilen,
@@ -34,7 +34,7 @@ export {
   erstelleVorschlaegeFuerAngabeDesEinkommens,
   listeLebensmonateAuf,
   zaehleVerplantesKontingent,
-} from "./lebensmonate";
+} from "./Lebensmonate";
 export {
   type Lebensmonatszahl,
   Lebensmonatszahlen,
@@ -42,7 +42,7 @@ export {
   compareLebensmonatszahlen,
   isLebensmonatszahl,
 } from "./Lebensmonatszahl";
-export { MONAT_MIT_MUTTERSCHUTZ, type Monat } from "./monat";
+export { MONAT_MIT_MUTTERSCHUTZ, type Monat } from "./Monat";
 export {
   type Plan,
   type PlanMitBeliebigenElternteilen,
@@ -54,11 +54,11 @@ export {
   teileLebensmonateBeiElternteileAuf,
   validierePlanFuerFinaleAbgabe,
   waehleOption,
-} from "./plan";
+} from "./Plan";
 export { Result } from "./common/Result";
 export { Variante, compareVarianten, isVariante } from "./Variante";
 export {
   type VerfuegbaresKontingent,
   listeKontingentAuf,
-} from "./verfuegbares-kontingent";
-export { type VerplantesKontingent } from "./verplantes-kontingent";
+} from "./VerfuegbaresKontingent";
+export { type VerplantesKontingent } from "./VerplantesKontingent";

@@ -23,19 +23,19 @@ import {
   validierePlanFuerFinaleAbgabe,
   waehleOption,
 } from "@/monatsplaner";
-import * as aktualisiereElterngeldbezuegeModule from "@/monatsplaner/plan/operation/aktualisiereElterngeldbezuege";
+import * as aktualisiereElterngeldbezuegeModule from "@/monatsplaner/Plan/operation/aktualisiereElterngeldbezuege";
 
-vi.mock(import("@/monatsplaner/plan/operation/waehleOption"));
-vi.mock(import("@/monatsplaner/plan/operation/setzePlanZurueck"));
-vi.mock(import("@/monatsplaner/plan/operation/validierePlanFuerFinaleAbgabe"));
-vi.mock(import("@/monatsplaner/plan/operation/gebeEinkommenAn"));
-vi.mock(import("@/monatsplaner/plan/operation/bestimmeAuswahlmoeglichkeiten"));
+vi.mock(import("@/monatsplaner/Plan/operation/waehleOption"));
+vi.mock(import("@/monatsplaner/Plan/operation/setzePlanZurueck"));
+vi.mock(import("@/monatsplaner/Plan/operation/validierePlanFuerFinaleAbgabe"));
+vi.mock(import("@/monatsplaner/Plan/operation/gebeEinkommenAn"));
+vi.mock(import("@/monatsplaner/Plan/operation/bestimmeAuswahlmoeglichkeiten"));
 vi.mock(
-  import("@/monatsplaner/lebensmonate/operation/erstelleInitialeLebensmonate"),
+  import("@/monatsplaner/Lebensmonate/operation/erstelleInitialeLebensmonate"),
 );
 vi.mock(
   import(
-    "@/monatsplaner/lebensmonate/operation/erstelleVorschlaegeFuerAngabeDesEinkommens"
+    "@/monatsplaner/Lebensmonate/operation/erstelleVorschlaegeFuerAngabeDesEinkommens"
   ),
 );
 

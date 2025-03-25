@@ -1,3 +1,3 @@
-export { Planer } from "./planer";
-export { Zusammenfassung } from "./zusammenfassung";
-export { Erklaerung } from "./erklaerung";
+export { Planer } from "./Planer";
+export { Zusammenfassung } from "./Zusammenfassung";
+export { Erklaerung } from "./Erklaerung";

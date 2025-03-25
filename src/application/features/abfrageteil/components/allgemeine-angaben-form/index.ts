@@ -1,0 +1,1 @@
+export { AllgemeineAngabenForm } from "./AllgemeineAngabenForm";

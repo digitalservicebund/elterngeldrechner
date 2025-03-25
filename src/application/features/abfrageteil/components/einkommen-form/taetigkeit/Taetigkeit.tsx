@@ -2,7 +2,11 @@ import { type ForwardedRef, forwardRef, useId } from "react";
 import { type FieldPath, useFormContext } from "react-hook-form";
 import { Selbststaendig } from "./Selbstaendig";
 import { NichtSelbstaendig } from "./nicht-selbstaendig";
-import { Button, CustomSelect, SelectOption } from "@/application/components";
+import { Button } from "@/application/components";
+import {
+  CustomSelect,
+  type SelectOption,
+} from "@/application/features/abfrageteil/components/common";
 import {
   type ElternteilType,
   type StepEinkommenState,

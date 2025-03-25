@@ -9,11 +9,13 @@ import {
 } from "./ZeitraumUtil";
 import { Button } from "@/application/components";
 import {
-  CustomNumberField,
   type SelectOption,
   cloneOptionsList,
-} from "@/application/components";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
+} from "@/application/features/abfrageteil/components/common";
+import {
+  CustomNumberField,
+  YesNoRadio,
+} from "@/application/features/abfrageteil/components/common";
 import { Versicherungen } from "@/application/features/abfrageteil/components/einkommen-form/taetigkeit/Versicherungen";
 import {
   type ElternteilType,

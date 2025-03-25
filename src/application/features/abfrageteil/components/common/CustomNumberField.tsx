@@ -8,8 +8,8 @@ import {
   useController,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import { Description } from "@/application/components";
 import { type Info, InfoDialog } from "@/application/components";
+import { Description } from "@/application/features/abfrageteil/components/common";
 
 interface CustomNumberFieldProps<
   TFieldValues extends FieldValues,

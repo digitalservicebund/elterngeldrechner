@@ -1,10 +1,10 @@
 import { useId } from "react";
 import { type FieldError, get, useFormContext } from "react-hook-form";
+import { InfoText } from "@/application/components";
 import {
   CustomCheckbox,
   Description,
-  InfoText,
-} from "@/application/components";
+} from "@/application/features/abfrageteil/components/common";
 import {
   type ElternteilType,
   type StepErwerbstaetigkeitState,

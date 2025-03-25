@@ -3,11 +3,13 @@ import { useFormContext } from "react-hook-form";
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
-  CustomSelect,
   InfoText,
-  SelectOption,
 } from "@/application/components";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
+import {
+  CustomSelect,
+  type SelectOption,
+  YesNoRadio,
+} from "@/application/features/abfrageteil/components/common";
 import {
   type ElternteilType,
   type StepEinkommenState,

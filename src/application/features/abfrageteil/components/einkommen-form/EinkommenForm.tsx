@@ -1,8 +1,11 @@
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
-import { Button, Split } from "@/application/components";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
+import { Button } from "@/application/components";
+import {
+  Split,
+  YesNoRadio,
+} from "@/application/features/abfrageteil/components/common";
 import {
   type StepEinkommenState,
   YesNo,

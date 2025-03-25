@@ -2,14 +2,11 @@ import AddIcon from "@digitalservicebund/icons/Add";
 import ClearIcon from "@digitalservicebund/icons/Clear";
 import { useCallback, useId } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { Counter } from "./Counter";
+import { CustomDate } from "./CustomDate";
 import { NachwuchsFormInfoText } from "./NachwuchsFormInfoText";
-import {
-  Button,
-  Counter,
-  CustomCheckbox,
-  CustomDate,
-  InfoDialog,
-} from "@/application/components";
+import { Button, InfoDialog } from "@/application/components";
+import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import {
   type StepNachwuchsState,
   stepNachwuchsSlice,

@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Taetigkeit } from "./taetigkeit";
-import { Button, SelectOption } from "@/application/components";
+import { Button } from "@/application/components";
+import { type SelectOption } from "@/application/features/abfrageteil/components/common";
 import {
   type ElternteilType,
   type StepEinkommenState,

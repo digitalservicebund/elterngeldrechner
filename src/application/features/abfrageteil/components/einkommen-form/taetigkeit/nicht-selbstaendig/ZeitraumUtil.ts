@@ -1,4 +1,7 @@
-import { SelectOption, cloneOptionsList } from "@/application/components";
+import {
+  type SelectOption,
+  cloneOptionsList,
+} from "@/application/features/abfrageteil/components/common";
 
 // Bildet ein "von"/"bis" Zeitraum ab.
 export interface ZeitraumData {

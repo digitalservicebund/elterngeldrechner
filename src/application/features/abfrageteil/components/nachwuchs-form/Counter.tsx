@@ -10,7 +10,7 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/application/components";
+import { Description } from "@/application/features/abfrageteil/components/common";
 
 interface Props<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;

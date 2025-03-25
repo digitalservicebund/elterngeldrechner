@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router-dom";
+import { Alert } from "./Alert";
 import { Sidebar } from "./Sidebar";
-import { Alert } from "@/application/components";
 import {
   FormStep,
   StepRoute,

@@ -21,7 +21,7 @@ import {
   CustomSelect,
   SelectOption,
   cloneOptionsList,
-} from "@/application/components";
+} from "@/application/features/abfrageteil/components/common";
 
 interface Props<TFieldValues extends FieldValues> extends AriaAttributes {
   readonly register: UseFormRegister<TFieldValues>;

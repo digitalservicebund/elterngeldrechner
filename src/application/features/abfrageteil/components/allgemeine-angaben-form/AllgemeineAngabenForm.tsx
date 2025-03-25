@@ -1,14 +1,16 @@
 import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
-import { YesNoRadio } from "./YesNoRadio";
+import { CustomInput } from "./CustomInput";
 import {
   Button,
-  CustomInput,
   CustomRadioGroup,
   CustomRadioGroupOption,
   InfoText,
-  Split,
 } from "@/application/components";
+import {
+  Split,
+  YesNoRadio,
+} from "@/application/features/abfrageteil/components/common";
 import {
   StepAllgemeineAngabenState,
   YesNo,

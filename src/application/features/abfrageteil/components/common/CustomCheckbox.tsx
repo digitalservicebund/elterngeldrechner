@@ -9,7 +9,7 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/application/components";
+import { Description } from "./Description";
 import { type Info, InfoDialog } from "@/application/components";
 
 interface Props<TFieldValues extends FieldValues> {

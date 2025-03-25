@@ -1,7 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import ErwerbstaetigkeitFormElternteil from "./ErwerbstaetigkeitFormElternteil";
-import { Button, Split } from "@/application/components";
+import { Button } from "@/application/components";
+import { Split } from "@/application/features/abfrageteil/components/common";
 import {
   type StepErwerbstaetigkeitState,
   initialStepErwerbstaetigkeitElternteil,

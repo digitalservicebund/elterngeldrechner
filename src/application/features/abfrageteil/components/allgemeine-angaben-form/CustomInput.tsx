@@ -7,8 +7,8 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Description } from "@/application/components";
 import { type Info, InfoDialog } from "@/application/components";
+import { Description } from "@/application/features/abfrageteil/components/common";
 
 interface CustomInputProps<TFieldValues extends FieldValues> {
   readonly register: UseFormRegister<TFieldValues>;

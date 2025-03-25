@@ -5,7 +5,7 @@ import {
   CustomRadioGroup,
   CustomRadioGroupOption,
 } from "@/application/components";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/YesNoRadio";
+import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
 import {
   type Antragstellende,
   type ElternteilType,

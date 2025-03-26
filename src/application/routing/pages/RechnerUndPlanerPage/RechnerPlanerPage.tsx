@@ -71,9 +71,10 @@ export function RechnerPlanerPage() {
       ? { plan: initialPlan }
       : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
   );
-  const plan = useRef(initialPlan);
+  const [plan, setPlan] = useState(() => initialPlan);
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
+  const hasPlan = plan !== undefined;
 
   const { isFeebackSubmitted, submitFeedback } = useUserFeedback();
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
@@ -95,11 +96,11 @@ export function RechnerPlanerPage() {
   }, []);
 
   function updateStateForChangedPlan(
-    nextPlan: PlanMitBeliebigenElternteilen,
+    plan: PlanMitBeliebigenElternteilen,
     istPlanGueltig: boolean,
   ): void {
     setHasChanges(true);
-    plan.current = nextPlan;
+    setPlan(plan);
     setIstPlanGueltig(istPlanGueltig);
   }
 
@@ -145,10 +146,7 @@ export function RechnerPlanerPage() {
     if (istPlanGueltig) {
       if (rememberSubmit.current) submitFeedback();
 
-      navigateWithPlanState(
-        formSteps.zusammenfassungUndDaten.route,
-        plan.current,
-      );
+      navigateWithPlanState(formSteps.zusammenfassungUndDaten.route, plan);
     }
   }
 
@@ -158,11 +156,10 @@ export function RechnerPlanerPage() {
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      {!!plan.current && (
-        <div className="hidden print:block">
-          <Zusammenfassung plan={plan.current} />
-        </div>
+      {!!hasPlan && (
+        <Zusammenfassung plan={plan} className="hidden print:block" />
       )}
+
       <div className="print:hidden">
         {isErklaerungOpen ? (
           <Erklaerung onClose={hideErklaerung} />

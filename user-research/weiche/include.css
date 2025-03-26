@@ -28,11 +28,6 @@
   display: none;
 }
 
-/* remove second paragraph in main content */
-.rte-container p:nth-child(2) {
-  display: none;
-}
-
 /* remove Weitere Infos above apricot banner */
 .more-info__module-title {
   display: none;

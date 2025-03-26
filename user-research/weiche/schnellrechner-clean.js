@@ -523,7 +523,7 @@ var EGR = window.EGR || {};
         a.className = "buttons";
         var l = document.createElement("button");
         l.className =
-          "border border-solid border-primary text-20 transition-all duration-300 bg-transparent text-primary px-24 py-16 [@media(hover:hover)]:hover:bg-primary [@media(hover:hover)]:hover:text-white active:focus:bg-primary active:focus:text-white";
+          "border hidden border-solid border-primary text-20 transition-all duration-300 bg-transparent text-primary px-24 py-16 [@media(hover:hover)]:hover:bg-primary [@media(hover:hover)]:hover:text-white active:focus:bg-primary active:focus:text-white";
         (l.type = "button"),
           (l.onclick = function () {
             return EGR.Schnellrechner.reset();
@@ -546,7 +546,7 @@ var EGR = window.EGR || {};
         var c = document.createElement("span");
         return (
           (c.className = "ui-button-text"),
-          (c.textContent = "Schnellberechnung"),
+          (c.textContent = "Ergebnis berechnen"),
           s.appendChild(c),
           a.appendChild(s),
           a.appendChild(l),

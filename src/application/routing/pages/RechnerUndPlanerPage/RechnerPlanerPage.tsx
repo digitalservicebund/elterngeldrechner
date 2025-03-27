@@ -6,7 +6,6 @@ import { Button } from "@/application/components";
 import {
   YesNo,
   composeAusgangslageFuerPlaner,
-  stepAllgemeineAngabenSelectors,
 } from "@/application/features/abfrageteil/state";
 import {
   Erklaerung,
@@ -17,7 +16,7 @@ import {
   UserFeedbackForm,
   useUserFeedback,
 } from "@/application/features/user-feedback";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { Page } from "@/application/routing/pages/Page";
 import { useNavigateWithPlan } from "@/application/routing/pages/useNavigateWithPlan";
@@ -34,10 +33,7 @@ import {
   trackPlannedMonthsWithIncome,
 } from "@/application/user-tracking";
 import { setTrackingVariable } from "@/application/user-tracking/core";
-import {
-  MAX_EINKOMMEN_ALLEIN,
-  MAX_EINKOMMEN_BEIDE,
-} from "@/elterngeldrechner/model/egr-berechnung-param-id";
+import { MAX_EINKOMMEN } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 import { Variante, listeElternteileFuerAusgangslageAuf } from "@/monatsplaner";
 
@@ -59,12 +55,6 @@ export function RechnerPlanerPage() {
   }
 
   useEffect(openDialogWhenEinkommenLimitUebeschritten, [store]);
-
-  const alleinerziehend = useAppSelector(
-    stepAllgemeineAngabenSelectors.getAlleinerziehend,
-  );
-  const amountLimitEinkommen =
-    alleinerziehend === YesNo.YES ? MAX_EINKOMMEN_ALLEIN : MAX_EINKOMMEN_BEIDE;
 
   const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
   const initialPlanerInformation = useRef(
@@ -238,7 +228,7 @@ export function RechnerPlanerPage() {
         <p>
           Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld
           bekommen. Falls noch nicht feststeht, ob Sie die Grenze von{" "}
-          {amountLimitEinkommen.toLocaleString()} Euro überschreiten, können Sie
+          {MAX_EINKOMMEN.toLocaleString()} Euro überschreiten, können Sie
           trotzdem einen Antrag stellen.
         </p>
 

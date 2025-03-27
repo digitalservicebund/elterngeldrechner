@@ -8,5 +8,4 @@ export const RATE_BONUS = 0.1;
 export const MINDESTSATZ = 300; // TODO: get rid off
 export const GRENZE_MINI_MIDI = 520;
 export const GRENZE_MIDI_MAX = 1300;
-export const MAX_EINKOMMEN_ALLEIN = 200_000;
-export const MAX_EINKOMMEN_BEIDE = 200_000;
+export const MAX_EINKOMMEN = 175_000;

@@ -1,12 +1,7 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router-dom";
-import { Alert } from "./Alert";
 import { Sidebar } from "./Sidebar";
-import {
-  FormStep,
-  StepRoute,
-  formSteps,
-} from "@/application/routing/formSteps";
+import { FormStep } from "@/application/routing/formSteps";
 
 type Props = {
   readonly step: FormStep;
@@ -14,8 +9,6 @@ type Props = {
 };
 
 export function Page({ step, children }: Props) {
-  const alert = ALERTS[step.route as StepRoute];
-
   const sectionElement = useRef<HTMLElement>(null);
   useEffect(() => sectionElement.current?.focus(), []);
 
@@ -36,12 +29,6 @@ export function Page({ step, children }: Props) {
         aria-labelledby={headingIdentifier}
         tabIndex={-1}
       >
-        {!!alert && (
-          <Alert headline={alert.headline} className="mb-32">
-            {alert.text}
-          </Alert>
-        )}
-
         <h2 id={headingIdentifier} className="mb-10 print:m-0">
           {step.heading}
         </h2>
@@ -51,26 +38,3 @@ export function Page({ step, children }: Props) {
     </div>
   );
 }
-
-const ALERTS: Partial<Record<StepRoute, Alert>> = {
-  [formSteps.allgemeinAngaben.route]: {
-    headline: "Gesetzesänderung",
-    text: (
-      <p>
-        Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
-        und Alleinerziehende bei 175.000 Euro.
-      </p>
-    ),
-  },
-  [formSteps.einkommen.route]: {
-    headline: "Gesetzesänderung",
-    text: (
-      <p>
-        Für Geburten ab dem 1. April 2025 liegt die Einkommensgrenze für Paare
-        und Alleinerziehende bei 175.000 Euro.
-      </p>
-    ),
-  },
-};
-
-type Alert = { headline: string; text: ReactNode };

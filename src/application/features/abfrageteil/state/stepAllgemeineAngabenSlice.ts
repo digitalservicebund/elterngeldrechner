@@ -50,11 +50,7 @@ const getElternteilNames = createSelector(
   },
 );
 
-const getAlleinerziehend = (state: RootState) =>
-  state.stepAllgemeineAngaben.alleinerziehend;
-
 export const stepAllgemeineAngabenSelectors = {
   getAntragssteller,
   getElternteilNames,
-  getAlleinerziehend,
 };

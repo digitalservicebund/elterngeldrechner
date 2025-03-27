@@ -83,11 +83,17 @@ export function RechnerPlanerPage() {
   const [trackingConsent, setTrackingConsent] = useState(false);
 
   const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
-  const showErklaerung = () => setIsErklaerungOpen(true);
-  const hideErklaerung = () => {
+
+  function showErklaerung(): void {
+    setIsErklaerungOpen(true);
+    pushCustomEvent("Erklärungen-im-Planer-wurden-geöffnet");
+  }
+
+  function hideErklaerung(): void {
     setIsErklaerungOpen(false);
     window.scrollTo(0, 0);
-  };
+    pushCustomEvent("Erklärungen-im-Planer-wurden-geschlossen");
+  }
 
   useEffect(() => {
     void (async () => {

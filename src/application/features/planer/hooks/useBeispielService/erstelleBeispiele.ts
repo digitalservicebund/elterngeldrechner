@@ -40,7 +40,7 @@ function erstelleBeispieleFuerAlleinPlanende(
 
   return [
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Allein planend - Ungeteilte Zeit fürs Kind",
       titel: "Ungeteilte Zeit fürs Kind",
       beschreibung:
         "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
@@ -49,7 +49,7 @@ function erstelleBeispieleFuerAlleinPlanende(
       ]),
     },
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Allein planend - Beruf und Familie vereinen",
       titel: "Beruf und Familie vereinen",
       beschreibung:
         "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
@@ -59,7 +59,7 @@ function erstelleBeispieleFuerAlleinPlanende(
       ]),
     },
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Allein planend - Länger Elterngeld erhalten",
       titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
@@ -86,7 +86,7 @@ function erstelleBeispieleFuerAlleinerziehende(
 
   return [
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Alleinerziehend - Ungeteilte Zeit fürs Kind",
       titel: "Ungeteilte Zeit fürs Kind",
       beschreibung:
         "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
@@ -96,7 +96,7 @@ function erstelleBeispieleFuerAlleinerziehende(
       ]),
     },
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Alleinerziehend - Beruf und Familie vereinen",
       titel: "Beruf und Familie vereinen",
       beschreibung:
         "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
@@ -107,7 +107,7 @@ function erstelleBeispieleFuerAlleinerziehende(
       ]),
     },
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Alleinerziehend - Länger Elterngeld erhalten",
       titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
@@ -170,7 +170,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
 
   return [
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
       titel: "Partnerschaftliche Aufteilung",
       beschreibung:
         "Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
@@ -187,7 +187,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       ]),
     },
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
       titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Lohnt sich, wenn Sie in Teilzeit arbeiten möchten. Für mehr Zeit mit der Familie ",
@@ -203,7 +203,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       ]),
     },
     {
-      identifier: crypto.randomUUID(),
+      identifier: "Gemeinsame Planung - Unterstützung im ersten Monat",
       titel: "Unterstützung im ersten Monat",
       beschreibung:
         "Gemeinsam starten. Nach dem ersten Lebensjahr den Partnerschaftsbonus nutzen.",

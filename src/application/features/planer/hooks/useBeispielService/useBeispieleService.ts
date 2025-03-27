@@ -9,6 +9,7 @@ import type { Ausgangslage, Plan } from "@/monatsplaner";
 export function useBeispieleService<A extends Ausgangslage>(
   ausgangslage: A,
   setzePlan: (plan: Plan<A>) => void,
+  callbacks?: Callbacks<A>,
 ) {
   const beispiele = useMemo(
     () => erstelleBeispiele(ausgangslage),
@@ -34,9 +35,10 @@ export function useBeispieleService<A extends Ausgangslage>(
       if (beispiel) {
         setzePlan(beispiel.plan);
         setIdentifierDesUebernommenenBeispiel(beispiel.identifier);
+        callbacks?.onWaehleBeispielAus?.(beispiel);
       }
     },
-    [beispiele, setzePlan],
+    [beispiele, setzePlan, callbacks],
   );
 
   const istBeispielAusgewaehlt = useCallback(
@@ -57,6 +59,10 @@ export function useBeispieleService<A extends Ausgangslage>(
     setzeBeispielauswahlZurueck,
   };
 }
+
+export type Callbacks<A extends Ausgangslage> = Partial<{
+  onWaehleBeispielAus: (beispiel: Beispiel<A>) => void;
+}>;
 
 if (import.meta.vitest) {
   const { describe, it, expect, vi } = import.meta.vitest;
@@ -132,7 +138,7 @@ if (import.meta.vitest) {
         expect(setzePlan).not.toHaveBeenCalled();
       });
 
-      it("calls the given callback with the Plan of Beispiel with matching identifier", () => {
+      it("calls the given callback to set the Plan with the Plan of Beispiel with matching identifier", () => {
         vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
           beispiel({
             identifier: "erster-identifier",
@@ -191,6 +197,59 @@ if (import.meta.vitest) {
                 imMutterschutz: false,
               },
             },
+          },
+        });
+      });
+
+      it("calls the given callback with the Beispiel", () => {
+        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+          {
+            identifier: "erster-identifier",
+            titel: "Erster Titel",
+            beschreibung: "Erste Beschreibung",
+            plan: {
+              ausgangslage: {
+                anzahlElternteile: 1 as const,
+                geburtsdatumDesKindes: new Date("2024-01-01"),
+              },
+              lebensmonate: {},
+            },
+          },
+          {
+            identifier: "zweiter-identifier",
+            titel: "Zweiter Titel",
+            beschreibung: "Zweite Beschreibung",
+            plan: {
+              ausgangslage: {
+                anzahlElternteile: 1 as const,
+                geburtsdatumDesKindes: new Date("2024-01-02"),
+              },
+              lebensmonate: {},
+            },
+          },
+        ]);
+
+        const onWaehleBeispielAus = vi.fn();
+
+        const { result } = renderHook(() =>
+          useBeispieleService(ANY_AUSGANGSLAGE, ANY_SETZE_PLAN, {
+            onWaehleBeispielAus,
+          }),
+        );
+
+        act(() => result.current.waehleBeispielAus("zweiter-identifier"));
+
+        expect(onWaehleBeispielAus).toHaveBeenCalledOnce();
+        expect(onWaehleBeispielAus).toHaveBeenCalledWith({
+          identifier: "zweiter-identifier",
+          titel: "Zweiter Titel",
+          beschreibung: "Zweite Beschreibung",
+          plan: {
+            ausgangslage: {
+              anzahlElternteile: 1 as const,
+              geburtsdatumDesKindes: new Date("2024-01-02"),
+            },
+            lebensmonate: {},
           },
         });
       });

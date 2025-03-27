@@ -9,22 +9,26 @@ import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Button, PrintButton } from "@/application/components";
 import {
-  type Callbacks as PlanerServiceCallbacks,
+  type BeispielServiceCallbacks,
   type InitialInformation,
+  type PlanerServiceCallbacks,
   useBeispieleService,
   usePlanerService,
 } from "@/application/features/planer/hooks";
-import {} from "@/monatsplaner";
 import { GridLayoutProvider } from "@/application/features/planer/layout";
-import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
+import {
+  type Ausgangslage,
+  type BerechneElterngeldbezuegeCallback,
+} from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
-  readonly callbacks: PlanerServiceCallbacks & {
-    onOpenLebensmonat?: () => void;
-    onOpenErklaerung: () => void;
-  };
+  readonly callbacks: PlanerServiceCallbacks &
+    BeispielServiceCallbacks<Ausgangslage> & {
+      onOpenLebensmonat?: () => void;
+      onOpenErklaerung: () => void;
+    };
   readonly className?: string;
 };
 
@@ -40,6 +44,7 @@ export function Planer({
   const {
     onOpenLebensmonat,
     onOpenErklaerung,
+    onWaehleBeispielAus,
     onWaehleOption: onWaehleOptionFromProps,
     onSetzePlanZurueck: onSetzePlanZurueckFromProps,
     ...remaingingPlanerServiceCallbacks
@@ -78,7 +83,9 @@ export function Planer({
     waehleBeispielAus,
     istBeispielAusgewaehlt,
     setzeBeispielauswahlZurueck,
-  } = useBeispieleService(plan.ausgangslage, ueberschreibePlan);
+  } = useBeispieleService(plan.ausgangslage, ueberschreibePlan, {
+    onWaehleBeispielAus,
+  });
 
   setzeBeispielauswahlZurueckCallback.current = setzeBeispielauswahlZurueck;
 

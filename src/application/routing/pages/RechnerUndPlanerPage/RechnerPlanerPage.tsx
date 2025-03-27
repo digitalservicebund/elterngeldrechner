@@ -33,6 +33,7 @@ import {
   trackPlannedMonths,
   trackPlannedMonthsWithIncome,
 } from "@/application/user-tracking";
+import { setTrackingVariable } from "@/application/user-tracking/core";
 import {
   MAX_EINKOMMEN_ALLEIN,
   MAX_EINKOMMEN_BEIDE,
@@ -141,6 +142,17 @@ export function RechnerPlanerPage() {
     pushCustomEvent("Lebensmonat-wurde-im-Planer-geöffnet");
   }
 
+  function trackEinBeispielWurdeAusgewaehlt(beispiel: {
+    identifier: string;
+  }): void {
+    setTrackingVariable(
+      "Identifier-des-ausgewaehlten-Beispiels-im-Planer",
+      beispiel.identifier,
+    );
+
+    pushCustomEvent("Beispiel-wurde-im-Planer-ausgewählt");
+  }
+
   const navigate = useNavigate();
 
   const navigateToEinkommenPage = () => {
@@ -179,6 +191,7 @@ export function RechnerPlanerPage() {
                 onSetzePlanZurueck: trackMetricsForResetPlan,
                 onOpenLebensmonat: trackOpeningOfLebensmonat,
                 onOpenErklaerung: showErklaerung,
+                onWaehleBeispielAus: trackEinBeispielWurdeAusgewaehlt,
               }}
             />
 

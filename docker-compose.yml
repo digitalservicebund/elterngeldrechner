@@ -1,5 +1,3 @@
-version: "3"
-
 # Steps to set up tracking after spinning up the containers:
 # 1. Export the tag manager configuration from the production instance.
 # 2. Create a new tag manager and import the backup json under the versions tab.
@@ -23,7 +21,7 @@ services:
       - MARIADB_INITDB_SKIP_TZINFO=1
 
   matomo:
-    image: matomo
+    image: matomo:5.0.3 # Version used in production
     restart: always
     volumes:
       - matomo:/var/www/html:z

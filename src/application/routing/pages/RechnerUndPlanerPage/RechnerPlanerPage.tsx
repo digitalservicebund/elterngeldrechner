@@ -112,7 +112,6 @@ export function RechnerPlanerPage() {
     trackPlannedMonthsWithIncome(nextPlan);
     trackPlannedMonths(nextPlan);
     evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
-    pushTrackingEvent("Plan-wurde-geändert");
   }
 
   function handlePlanChanges(
@@ -123,10 +122,17 @@ export function RechnerPlanerPage() {
     trackMetricsForChangedPlan(nextPlan, istPlanGueltig);
   }
 
+  function trackEineOptionWurdeGewaehlt(): void {
+    pushTrackingEvent("Option-wurde-im-Planer-gewaehlt");
+  }
+
   function trackMetricsForResetPlan(): void {
     resetTrackingPlanung();
     pushTrackingEvent("Plan-wurde-zurückgesetzt");
-    pushTrackingEvent("Plan-wurde-zurückgesetzt");
+    setTrackingVariable(
+      "Identifier-des-ausgewaehlten-Beispiels-im-Planer",
+      null,
+    );
   }
 
   function trackOpeningOfLebensmonat(): void {
@@ -179,6 +185,7 @@ export function RechnerPlanerPage() {
               berechneElterngeldbezuege={berechneElterngeldbezuege}
               callbacks={{
                 onChange: handlePlanChanges,
+                onWaehleOption: trackEineOptionWurdeGewaehlt,
                 onSetzePlanZurueck: trackMetricsForResetPlan,
                 onOpenLebensmonat: trackOpeningOfLebensmonat,
                 onOpenErklaerung: showErklaerung,

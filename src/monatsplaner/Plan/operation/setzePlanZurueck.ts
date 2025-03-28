@@ -18,7 +18,12 @@ if (import.meta.vitest) {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
     const { Variante } = await import("@/monatsplaner/Variante");
 
-    it("sets the Lebensmonate back to the initial ones", () => {
+    it("sets the Lebensmonate back to the initial ones", async () => {
+      vi.spyOn(
+        await import("@/monatsplaner/Lebensmonate"),
+        "erstelleInitialeLebensmonate",
+      ).mockReturnValue({});
+
       const lebensmonate = {
         1: {
           [Elternteil.Eins]: {
@@ -29,7 +34,6 @@ if (import.meta.vitest) {
       };
 
       const planVorher = { ...ANY_PLAN, lebensmonate, changes: 1 };
-      vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
 
       const plan = setzePlanZurueck(planVorher);
 
@@ -44,10 +48,4 @@ if (import.meta.vitest) {
       lebensmonate: {},
     };
   });
-
-  vi.mock(
-    import(
-      "@/monatsplaner/Lebensmonate/operation/erstelleInitialeLebensmonate"
-    ),
-  );
 }

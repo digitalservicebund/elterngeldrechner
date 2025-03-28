@@ -5,14 +5,13 @@ import {
   KeinElterngeld,
   Variante,
   bestimmeVerfuegbaresKontingent,
+  zaehleVerplantesKontingent,
 } from "@/monatsplaner";
-import * as zaehleVerplantesKontingentModule from "@/monatsplaner/Lebensmonate/operation/zaehleVerplantesKontingent";
 
 describe("KontingentUebersicht", () => {
-  beforeEach(() => {
-    vi.mocked(bestimmeVerfuegbaresKontingent).mockReturnValue(
-      ANY_VERFUEGBARES_KONTINGENT,
-    );
+  beforeEach(async () => {
+    vi.spyOn(await import("@/monatsplaner"), "bestimmeVerfuegbaresKontingent");
+    vi.spyOn(await import("@/monatsplaner"), "zaehleVerplantesKontingent");
   });
 
   it("shows a section with label", () => {
@@ -28,10 +27,7 @@ describe("KontingentUebersicht", () => {
       [Variante.Bonus]: 2,
     });
 
-    vi.spyOn(
-      zaehleVerplantesKontingentModule,
-      "zaehleVerplantesKontingent",
-    ).mockReturnValue({
+    vi.mocked(zaehleVerplantesKontingent).mockReturnValue({
       [Variante.Basis]: 2.5,
       [Variante.Plus]: 5,
       [Variante.Bonus]: 0,
@@ -58,10 +54,7 @@ describe("KontingentUebersicht", () => {
       [Variante.Bonus]: 0,
     });
 
-    vi.spyOn(
-      zaehleVerplantesKontingentModule,
-      "zaehleVerplantesKontingent",
-    ).mockReturnValue({
+    vi.mocked(zaehleVerplantesKontingent).mockReturnValue({
       [Variante.Basis]: 2.5,
       [Variante.Plus]: 5,
       [Variante.Bonus]: 0,
@@ -73,18 +66,6 @@ describe("KontingentUebersicht", () => {
     expect(screen.queryByText("Partnerschaftsbonus")).not.toBeInTheDocument();
   });
 });
-
-vi.mock(
-  import(
-    "@/monatsplaner/Ausgangslage/operation/bestimmeVerfuegbaresKontingent"
-  ),
-);
-
-const ANY_VERFUEGBARES_KONTINGENT = {
-  [Variante.Basis]: 0,
-  [Variante.Plus]: 0,
-  [Variante.Bonus]: 0,
-};
 
 const ANY_PLAN = {
   ausgangslage: {

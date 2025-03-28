@@ -379,10 +379,11 @@ if (import.meta.vitest) {
     });
 
     describe("beschreibe Zeitraum des Lebensmonats", () => {
-      vi.mock(import("@/lebensmonatrechner/berechneZeitraumFuerLebensmonat"));
-
-      beforeEach(() => {
-        vi.mocked(berechneZeitraumFuerLebensmonat).mockReturnValue({
+      beforeEach(async () => {
+        vi.spyOn(
+          await import("@/lebensmonatrechner"),
+          "berechneZeitraumFuerLebensmonat",
+        ).mockReturnValue({
           from: new Date(),
           to: new Date(),
         });

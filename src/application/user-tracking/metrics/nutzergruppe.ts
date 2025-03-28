@@ -34,11 +34,14 @@ if (import.meta.vitest) {
   const { describe, beforeEach, afterEach, it, expect, vi } = import.meta
     .vitest;
 
-  vi.mock(import("@/application/user-tracking/core/data-layer"));
-
   describe("trackNutzergruppe()", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       vi.useFakeTimers();
+
+      vi.spyOn(
+        await import("@/application/user-tracking/core"),
+        "setTrackingVariable",
+      );
     });
 
     afterEach(() => {

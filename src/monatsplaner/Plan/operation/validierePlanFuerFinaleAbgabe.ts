@@ -19,9 +19,12 @@ if (import.meta.vitest) {
     const { Specification } = await import(
       "@/monatsplaner/common/specification"
     );
+    const planSpecifications = await import(
+      "@/monatsplaner/Plan/specification"
+    );
 
     it("is ok with undefined value if given Plan satisfies specification", () => {
-      vi.mocked(FinalGueltigerPlan).mockReturnValue(
+      vi.spyOn(planSpecifications, "FinalGueltigerPlan").mockReturnValue(
         Specification.fromPredicate("", () => true),
       );
 
@@ -33,7 +36,7 @@ if (import.meta.vitest) {
     });
 
     it("is an error with validation violations when given Plan does not satisfies specification", () => {
-      vi.mocked(FinalGueltigerPlan).mockReturnValue(
+      vi.spyOn(planSpecifications, "FinalGueltigerPlan").mockReturnValue(
         Specification.fromPredicate("ungültig", () => false),
       );
 
@@ -43,8 +46,6 @@ if (import.meta.vitest) {
 
       expect(error).toEqual([{ message: "ungültig" }]);
     });
-
-    vi.mock(import("@/monatsplaner/Plan/specification/FinalGueltigerPlan"));
 
     const ANY_PLAN = {} as never; // TODO: Get test data factories!
   });

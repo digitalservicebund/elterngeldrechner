@@ -1,26 +1,20 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { AbschnittMitPlanungsuebersicht } from "./AbschnittMitPlanungsuebersicht";
-import { erstellePlanungsuebersicht } from "./erstellePlanungsuebersicht";
 import { Elternteil, Variante } from "@/monatsplaner";
 
-vi.mock(import("./erstellePlanungsuebersicht"));
-
 describe("Abschnitt mit Planungsübersicht", () => {
-  beforeEach(() => {
-    vi.mocked(erstellePlanungsuebersicht).mockReturnValue(
-      ANY_PLANUNGSUEBERSICHT,
-    );
-  });
-
   it("shows a section for the Planungsübersicht", () => {
     render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} />);
 
     expect(screen.getByLabelText("Planungsübersicht"));
   });
 
-  it("shows the Pseudonym and the Gesamtbezug for each Elternteil", () => {
-    vi.mocked(erstellePlanungsuebersicht).mockReturnValue({
+  it("shows the Pseudonym and the Gesamtbezug for each Elternteil", async () => {
+    vi.spyOn(
+      await import("./erstellePlanungsuebersicht"),
+      "erstellePlanungsuebersicht",
+    ).mockReturnValue({
       [Elternteil.Eins]: {
         ...ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
         gesamtbezug: { anzahlMonate: 15, elterngeld: 5019, bruttoeinkommen: 0 },
@@ -104,11 +98,6 @@ const ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL = {
     [Variante.Plus]: ANY_BEZUG,
     [Variante.Bonus]: ANY_BEZUG,
   },
-};
-
-const ANY_PLANUNGSUEBERSICHT = {
-  [Elternteil.Eins]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
-  [Elternteil.Zwei]: ANY_PLANUNGSUEBERSICHT_FUER_ELTERNTEIL,
 };
 
 const ANY_PLAN = {

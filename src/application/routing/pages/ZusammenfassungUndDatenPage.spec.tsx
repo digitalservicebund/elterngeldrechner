@@ -4,14 +4,9 @@ import { ZusammenfassungUndDatenPage } from "./ZusammenfassungUndDatenPage";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { render, screen } from "@/application/test-utils";
 
-vi.mock(import("./useNavigateWithPlan"));
-
 describe("Zusammenfassung und Daten Page", () => {
-  beforeEach(() => {
-    vi.mocked(useNavigateWithPlan).mockReturnValue({
-      plan: undefined,
-      navigateWithPlanState: () => undefined,
-    });
+  beforeEach(async () => {
+    vi.spyOn(await import("./useNavigateWithPlan"), "useNavigateWithPlan");
   });
 
   it("shows a section for the Zusammenfassung if a Plan was provided", () => {

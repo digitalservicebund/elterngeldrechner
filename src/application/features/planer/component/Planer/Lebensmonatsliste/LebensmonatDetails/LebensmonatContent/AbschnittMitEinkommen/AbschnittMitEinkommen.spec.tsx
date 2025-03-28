@@ -13,17 +13,14 @@ import {
   Variante,
 } from "@/monatsplaner";
 
-vi.mock(
-  import(
-    "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
-  ),
-);
-
 describe("Abschnitt mit Einkommen", () => {
-  beforeEach(() => {
-    vi.mocked(useInformationenZumLebensmonat).mockReturnValue(
-      ANY_INFORMATION_ZUM_LEBENSMONAT,
-    );
+  beforeEach(async () => {
+    vi.spyOn(
+      await import(
+        "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
+      ),
+      "useInformationenZumLebensmonat",
+    ).mockReturnValue(ANY_INFORMATION_ZUM_LEBENSMONAT);
   });
 
   it('shows the initial question "heading"', () => {

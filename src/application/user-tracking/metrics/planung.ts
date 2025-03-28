@@ -57,14 +57,19 @@ function countMatchingMonate(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect, vi } = import.meta.vitest;
-
-  vi.mock(import("@/application/user-tracking/core/data-layer"));
+  const { describe, beforeEach, it, expect, vi } = import.meta.vitest;
 
   describe("tracking of the planung", async () => {
     const { Elternteil, Variante, KeinElterngeld } = await import(
       "@/monatsplaner"
     );
+
+    beforeEach(async () => {
+      vi.spyOn(
+        await import("@/application/user-tracking/core"),
+        "setTrackingVariable",
+      );
+    });
 
     it("counts planned month per lebensmonate and elternteil", () => {
       const plan = {

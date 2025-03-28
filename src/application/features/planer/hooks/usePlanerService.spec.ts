@@ -23,34 +23,26 @@ import {
   validierePlanFuerFinaleAbgabe,
   waehleOption,
 } from "@/monatsplaner";
-import * as aktualisiereElterngeldbezuegeModule from "@/monatsplaner/Plan/operation/aktualisiereElterngeldbezuege";
-
-vi.mock(import("@/monatsplaner/Plan/operation/waehleOption"));
-vi.mock(import("@/monatsplaner/Plan/operation/setzePlanZurueck"));
-vi.mock(import("@/monatsplaner/Plan/operation/validierePlanFuerFinaleAbgabe"));
-vi.mock(import("@/monatsplaner/Plan/operation/gebeEinkommenAn"));
-vi.mock(import("@/monatsplaner/Plan/operation/bestimmeAuswahlmoeglichkeiten"));
-vi.mock(
-  import("@/monatsplaner/Lebensmonate/operation/erstelleInitialeLebensmonate"),
-);
-vi.mock(
-  import(
-    "@/monatsplaner/Lebensmonate/operation/erstelleVorschlaegeFuerAngabeDesEinkommens"
-  ),
-);
 
 describe("use Planer service", () => {
-  beforeEach(() => {
-    vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
-    vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
+  beforeEach(async () => {
+    const monatsplaner = await import("@/monatsplaner");
+
+    vi.spyOn(monatsplaner, "erstelleInitialeLebensmonate").mockReturnValue({});
+    vi.spyOn(monatsplaner, "validierePlanFuerFinaleAbgabe").mockReturnValue(
       Result.ok(undefined),
     );
-    vi.mocked(waehleOption).mockImplementation((_, plan) => Result.ok(plan));
-    vi.mocked(gebeEinkommenAn).mockImplementation((_, plan) => plan);
-    vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
-    vi.mocked(bestimmeAuswahlmoeglichkeiten).mockReturnValue(
+    vi.spyOn(monatsplaner, "waehleOption").mockImplementation((_, plan) =>
+      Result.ok(plan),
+    );
+    vi.spyOn(monatsplaner, "gebeEinkommenAn").mockImplementation(
+      (_, plan) => plan,
+    );
+    vi.spyOn(monatsplaner, "setzePlanZurueck").mockReturnValue(ANY_PLAN);
+    vi.spyOn(monatsplaner, "bestimmeAuswahlmoeglichkeiten").mockReturnValue(
       ANY_AUSWAHLMOEGLICHKEITEN,
     );
+    vi.spyOn(monatsplaner, "erstelleVorschlaegeFuerAngabeDesEinkommens");
   });
 
   describe("initialization", () => {
@@ -445,9 +437,9 @@ describe("use Planer service", () => {
   });
 
   describe("überschreibe Plan", () => {
-    it("overwrites the current plan and calculates the Bezüge", () => {
+    it("overwrites the current plan and calculates the Bezüge", async () => {
       vi.spyOn(
-        aktualisiereElterngeldbezuegeModule,
+        await import("@/monatsplaner"),
         "aktualisiereElterngeldbezuege",
       ).mockReturnValue({
         ausgangslage: {

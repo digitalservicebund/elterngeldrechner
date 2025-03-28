@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { produce } from "immer";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { EinkommenForm } from "./EinkommenForm";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import {
@@ -15,8 +15,6 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "@/elterngeldrechner/model";
-
-vi.mock(import("@/elterngeldrechner/basis-eg-algorithmus"));
 
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

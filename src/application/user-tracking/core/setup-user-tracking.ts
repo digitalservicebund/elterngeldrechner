@@ -33,10 +33,7 @@ if (import.meta.vitest) {
   const { describe, beforeEach, afterEach, it, expect, vi } = import.meta
     .vitest;
 
-  describe("setup user tracking", async () => {
-    const dataLayerModule = await import("./data-layer");
-    const tagManagerModule = await import("./tag-manager");
-
+  describe("setup user tracking", () => {
     beforeEach(() => {
       // Satisfy assumption for tag manager script injection (necessary?)
       document.body.innerHTML = "<script src='main.js' />";
@@ -49,9 +46,9 @@ if (import.meta.vitest) {
     });
 
     describe("check conditions for tracking", () => {
-      beforeEach(() => {
-        vi.spyOn(tagManagerModule, "setupTagManager");
-        vi.spyOn(dataLayerModule, "establishDataLayer");
+      beforeEach(async () => {
+        vi.spyOn(await import("./tag-manager"), "setupTagManager");
+        vi.spyOn(await import("./data-layer"), "establishDataLayer");
       });
 
       it("does not setup the tag manager if no source URL was configured, even user allowed tracking", async () => {

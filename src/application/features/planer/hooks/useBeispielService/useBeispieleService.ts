@@ -65,16 +65,18 @@ export type Callbacks<A extends Ausgangslage> = Partial<{
 }>;
 
 if (import.meta.vitest) {
-  const { describe, it, expect, vi } = import.meta.vitest;
+  const { describe, beforeEach, it, expect, vi } = import.meta.vitest;
 
   describe("use Beispiele Service", async () => {
     const { act, renderHook } = await import("@testing-library/react");
     const { Elternteil, Variante } = await import("@/monatsplaner");
-    const erstelleBeispieleModule = await import("./erstelleBeispiele");
+
+    beforeEach(async () => {
+      vi.spyOn(await import("./erstelleBeispiele"), "erstelleBeispiele");
+    });
 
     describe("Beschrebiung der Beispiele", () => {
       it("correctly uses the given Ausgangslage to generate Beispiele", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele");
         const ausgangslage = {
           anzahlElternteile: 1 as const,
           geburtsdatumDesKindes: new Date(),
@@ -88,7 +90,7 @@ if (import.meta.vitest) {
       });
 
       it("provides the Beschreibungen of the generated Beispiele", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           beispiel({
             identifier: "erster-identifier",
             titel: "Erster Titel",
@@ -122,7 +124,7 @@ if (import.meta.vitest) {
 
     describe("wähle Beispiel aus", () => {
       it("does not call the given callback if there is no Beispiel for the given identifier", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           beispiel({ identifier: "erster-identifier" }),
           beispiel({ identifier: "zweiter-identifier" }),
         ]);
@@ -139,7 +141,7 @@ if (import.meta.vitest) {
       });
 
       it("calls the given callback to set the Plan with the Plan of Beispiel with matching identifier", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           beispiel({
             identifier: "erster-identifier",
             plan: {
@@ -202,7 +204,7 @@ if (import.meta.vitest) {
       });
 
       it("calls the given callback with the Beispiel", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           {
             identifier: "erster-identifier",
             titel: "Erster Titel",
@@ -257,7 +259,7 @@ if (import.meta.vitest) {
 
     describe("ist Beispiel ausgewaehlt", () => {
       it("initially ther is no Beispiel ausgewaehlt", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           beispiel({ identifier: "erster-identifier" }),
           beispiel({ identifier: "zweiter-identifier" }),
         ]);
@@ -275,7 +277,7 @@ if (import.meta.vitest) {
       });
 
       it("marks the correct Beispiel as selected after a selection", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           beispiel({ identifier: "erster-identifier" }),
           beispiel({ identifier: "zweiter-identifier" }),
         ]);
@@ -295,7 +297,7 @@ if (import.meta.vitest) {
       });
 
       it("resets the selection marker when asked to", () => {
-        vi.spyOn(erstelleBeispieleModule, "erstelleBeispiele").mockReturnValue([
+        vi.mocked(erstelleBeispiele).mockReturnValue([
           beispiel({ identifier: "erster-identifier" }),
         ]);
 

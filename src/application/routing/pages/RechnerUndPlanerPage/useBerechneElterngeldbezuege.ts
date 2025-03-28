@@ -189,20 +189,21 @@ if (import.meta.vitest) {
       await import("@/elterngeldrechner/model");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
-    vi.mock(
-      import(
-        "@/application/features/abfrageteil/state/persoenlicheDatenFactory"
-      ),
-    );
-    vi.mock(
-      import("@/application/features/abfrageteil/state/finanzDatenFactory"),
-    );
-    vi.mock(import("@/elterngeldrechner/egr-calculation"));
+    beforeEach(async () => {
+      vi.spyOn(
+        await import("@/application/features/abfrageteil/state"),
+        "persoenlicheDatenOfUi",
+      ).mockReturnValue(ANY_PERSOENLICHE_DATEN);
 
-    beforeEach(() => {
-      vi.mocked(persoenlicheDatenOfUi).mockReturnValue(ANY_PERSOENLICHE_DATEN);
-      vi.mocked(finanzDatenOfUi).mockReturnValue(ANY_FINANZDATEN);
-      vi.mocked(calculateElternGeld).mockReturnValue(ANY_CALCULATION_RESULT);
+      vi.spyOn(
+        await import("@/application/features/abfrageteil/state"),
+        "finanzDatenOfUi",
+      ).mockReturnValue(ANY_FINANZDATEN);
+
+      vi.spyOn(
+        await import("@/elterngeldrechner/egr-calculation"),
+        "calculateElternGeld",
+      ).mockReturnValue(ANY_CALCULATION_RESULT);
     });
 
     it("calls the methods to create the static calculation parameter only once initially", () => {

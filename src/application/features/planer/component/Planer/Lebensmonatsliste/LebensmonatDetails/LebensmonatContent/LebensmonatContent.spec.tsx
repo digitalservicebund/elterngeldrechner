@@ -10,18 +10,14 @@ import {
   Variante,
 } from "@/monatsplaner";
 
-vi.mock(import("./HinweisZumBonus"));
-vi.mock(
-  import(
-    "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
-  ),
-);
-
 describe("Lebensmonat Content", () => {
-  beforeEach(() => {
-    vi.mocked(useInformationenZumLebensmonat).mockReturnValue(
-      ANY_INFORMATION_ZUM_LEBENSMONAT,
-    );
+  beforeEach(async () => {
+    vi.spyOn(
+      await import(
+        "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
+      ),
+      "useInformationenZumLebensmonat",
+    ).mockReturnValue(ANY_INFORMATION_ZUM_LEBENSMONAT);
   });
 
   it("shows the Zeitraum of the Lebensmonat", () => {
@@ -42,6 +38,10 @@ describe("Lebensmonat Content", () => {
   });
 
   describe("hint for Bonus", () => {
+    beforeEach(async () => {
+      vi.spyOn(await import("./HinweisZumBonus"), "HinweisZumBonus");
+    });
+
     it("shows the hint when Bonus is chosen", () => {
       vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({

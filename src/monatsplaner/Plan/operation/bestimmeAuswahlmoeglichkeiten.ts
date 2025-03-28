@@ -77,8 +77,8 @@ if (import.meta.vitest) {
     const { Variante } = await import("@/monatsplaner/Variante");
     const { Result } = await import("@/monatsplaner/common/Result");
 
-    beforeEach(() => {
-      vi.mocked(waehleOption).mockImplementation((_, plan) => Result.ok(plan));
+    beforeEach(async () => {
+      vi.spyOn(await import("./waehleOption"), "waehleOption");
     });
 
     it("creates a disabled Auswahlmöglichkeit including the violation as hint if the resulting Plan is ungültig for an Option", () => {
@@ -139,8 +139,6 @@ if (import.meta.vitest) {
       );
       expect(auswahlmoeglichkeiten[Variante.Basis].elterngeldbezug).toBe(22);
     });
-
-    vi.mock(import("@/monatsplaner/Plan/operation/waehleOption"));
 
     function monat(elterngeldbezug: number) {
       return {

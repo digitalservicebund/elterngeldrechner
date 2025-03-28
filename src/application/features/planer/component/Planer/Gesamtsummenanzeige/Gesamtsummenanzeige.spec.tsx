@@ -4,11 +4,9 @@ import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { berechneGesamtsumme } from "./berechneGesamtsumme";
 import { type AusgangslageFuerEinElternteil, Elternteil } from "@/monatsplaner";
 
-vi.mock(import("./berechneGesamtsumme"));
-
 describe("Gesamtsummenanzeige", () => {
-  beforeEach(() => {
-    vi.mocked(berechneGesamtsumme).mockReturnValue(ANY_GESAMTSUMME);
+  beforeEach(async () => {
+    vi.spyOn(await import("./berechneGesamtsumme"), "berechneGesamtsumme");
   });
 
   describe("final Summe", () => {

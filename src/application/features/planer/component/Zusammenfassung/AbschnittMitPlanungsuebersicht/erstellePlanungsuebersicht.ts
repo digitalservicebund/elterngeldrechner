@@ -294,23 +294,12 @@ if (import.meta.vitest) {
       });
     });
 
-    describe.skip("Zeiträume mit durchgängigen Bezug", () => {
-      /*
-       * FIXME:
-       * It is currently not possible to mock the this without global side
-       * effects on component tests.The tests themself work fine and can be
-       * execute individually.There is an open GitHub discussion on GitHub
-       * for this topic.
-       */
-      // vi.mock(
-      //   "@/lebensmonatrechner/berechneZeitraumFuerLebensmonat",
-      // );
-
-      beforeEach(() => {
-        vi.mocked(berechneZeitraumFuerLebensmonat).mockReturnValue({
-          from: new Date(),
-          to: new Date(),
-        });
+    describe("Zeiträume mit durchgängigen Bezug", () => {
+      beforeEach(async () => {
+        vi.spyOn(
+          await import("@/lebensmonatrechner"),
+          "berechneZeitraumFuerLebensmonat",
+        );
       });
 
       it("composes Zeiträume for consecutive Monate with a Variante chosen", () => {

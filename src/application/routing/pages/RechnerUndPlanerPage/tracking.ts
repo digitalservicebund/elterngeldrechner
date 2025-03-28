@@ -142,13 +142,18 @@ function countGeplanteMonate<E extends Elternteil>(
 }
 
 if (import.meta.vitest) {
-  const { vi, describe, it, expect } = import.meta.vitest;
+  const { vi, describe, beforeEach, it, expect } = import.meta.vitest;
 
   describe("track metrics for planer", () => {
     describe("evaluate and track Anzahl geplanter Monate des Partners der Mutter", async () => {
       const { Variante, KeinElterngeld } = await import("@/monatsplaner");
 
-      vi.mock(import("@/application/user-tracking/metrics/planung"));
+      beforeEach(async () => {
+        vi.spyOn(
+          await import("@/application/user-tracking"),
+          "trackAnzahlGeplanterMonateDesPartnersDerMutter",
+        );
+      });
 
       it("tracks nothing if given a Plan with single Elternteil, even it has Mutterschutz", () => {
         const plan = {

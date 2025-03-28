@@ -67,11 +67,16 @@ export type Auswahl = Variante | null;
 type Variante = "Basis" | "Plus" | "Bonus";
 
 if (import.meta.vitest) {
-  const { describe, it, expect, vi } = import.meta.vitest;
-
-  vi.mock(import("@/application/user-tracking/core/data-layer"));
+  const { describe, beforeEach, it, expect, vi } = import.meta.vitest;
 
   describe("partnerschaftlichkeit", () => {
+    beforeEach(async () => {
+      vi.spyOn(
+        await import("@/application/user-tracking/core"),
+        "setTrackingVariable",
+      );
+    });
+
     it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {
       trackPartnerschaftlicheVerteilung([[], []]);
 

@@ -1,10 +1,6 @@
 import { render, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { LebensmonatSummary } from "./LebensmonatSummary";
-import {
-  beschreibePlanungImLebensmonat,
-  beschreibeZeitraumDesLebensmonats,
-} from "./beschreibeLebensmonat";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat";
 import {
   type Auswahloption,
@@ -13,19 +9,14 @@ import {
   Variante,
 } from "@/monatsplaner";
 
-vi.mock(
-  import(
-    "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
-  ),
-);
-
-vi.mock(import("./beschreibeLebensmonat"));
-
 describe("Lebensmonat Summary", () => {
-  beforeEach(() => {
-    vi.mocked(useInformationenZumLebensmonat).mockReturnValue(
-      ANY_INFORMATION_ZUM_LEBENSMONAT,
-    );
+  beforeEach(async () => {
+    vi.spyOn(
+      await import(
+        "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
+      ),
+      "useInformationenZumLebensmonat",
+    ).mockReturnValue(ANY_INFORMATION_ZUM_LEBENSMONAT);
   });
 
   it("shows visual indicators in the summary for the choices of the Elternteile", () => {
@@ -48,13 +39,16 @@ describe("Lebensmonat Summary", () => {
     expect(within(summary).queryByText("21 €")).toBeVisible();
   });
 
-  it("uses the computed Beschreibungen of the Lebensmonat as accessibility description", () => {
-    vi.mocked(beschreibePlanungImLebensmonat).mockReturnValue(
-      "Ausführliche Beschreibung des Lebensmonats.",
-    );
-    vi.mocked(beschreibeZeitraumDesLebensmonats).mockReturnValue(
-      "Von Datum A bis zum Datum B.",
-    );
+  it("uses the computed Beschreibungen of the Lebensmonat as accessibility description", async () => {
+    vi.spyOn(
+      await import("./beschreibeLebensmonat"),
+      "beschreibePlanungImLebensmonat",
+    ).mockReturnValue("Ausführliche Beschreibung des Lebensmonats.");
+
+    vi.spyOn(
+      await import("./beschreibeLebensmonat"),
+      "beschreibeZeitraumDesLebensmonats",
+    ).mockReturnValue("Von Datum A bis zum Datum B.");
 
     render(<LebensmonatSummary />);
 

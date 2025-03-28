@@ -88,12 +88,8 @@ if (import.meta.vitest) {
       "@/elterngeldrechner/model"
     );
 
-    const steuerUndSozialabgabenModule = await import(
-      "@/lohnsteuerrechner/berechneLohnsteuer"
-    );
-
-    beforeEach(() => {
-      vi.spyOn(steuerUndSozialabgabenModule, "berechneLohnsteuer");
+    beforeEach(async () => {
+      vi.spyOn(await import("@/lohnsteuerrechner"), "berechneLohnsteuer");
     });
 
     describe.each([

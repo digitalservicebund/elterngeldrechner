@@ -5,11 +5,12 @@ import { Planer } from "./Planer";
 import { usePlanerService } from "@/application/features/planer/hooks";
 import { Elternteil, KeinElterngeld, Variante } from "@/monatsplaner";
 
-vi.mock(import("@/application/features/planer/hooks/usePlanerService"));
-
 describe("Planer", () => {
-  beforeEach(() => {
-    vi.mocked(usePlanerService).mockReturnValue(ANY_SERVICE_VALUES);
+  beforeEach(async () => {
+    vi.spyOn(
+      await import("@/application/features/planer/hooks"),
+      "usePlanerService",
+    ).mockReturnValue(ANY_SERVICE_VALUES);
   });
 
   it("shows a section", () => {

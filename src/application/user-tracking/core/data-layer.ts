@@ -26,7 +26,7 @@ export function getTrackingVariableFrom<T>(
   return lastElementsProperty ? (lastElementsProperty as T) : null;
 }
 
-export function pushCustomEvent(name: string): void {
+export function pushTrackingEvent(name: string): void {
   window._mtm?.push({ event: name });
 }
 
@@ -42,7 +42,7 @@ if (import.meta.vitest) {
   describe("data layer", () => {
     beforeAll(() => establishDataLayer());
 
-    describe("setTrackingVariable", () => {
+    describe("set tracking variable", () => {
       it("appends an entry to the data layer with the variable name as key and the value", () => {
         window._mtm = [{ "variable-a": 1 }];
 
@@ -55,7 +55,7 @@ if (import.meta.vitest) {
       });
     });
 
-    describe("getTrackingVariable", () => {
+    describe("get tracking variable", () => {
       it("gets the right variable from the data layer", () => {
         window._mtm = [
           { "variable-a": 1 },
@@ -93,11 +93,11 @@ if (import.meta.vitest) {
       });
     });
 
-    describe("pushCustomEvent", () => {
+    describe("push tracking event", () => {
       it("appends an entry to the data layer with the event keyword and the event name as value", () => {
         window._mtm = [{ "variable-a": 1 }];
 
-        pushCustomEvent("test-event");
+        pushTrackingEvent("test-event");
 
         expect(window._mtm).toStrictEqual([
           { "variable-a": 1 },

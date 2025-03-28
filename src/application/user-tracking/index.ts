@@ -1,6 +1,6 @@
 export * from "./metrics";
 export {
   isTrackingAllowedByUser,
-  pushCustomEvent,
+  pushTrackingEvent,
   setupUserTracking,
 } from "./core";

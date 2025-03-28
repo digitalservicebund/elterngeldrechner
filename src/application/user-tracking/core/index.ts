@@ -4,6 +4,6 @@ export {
 } from "./setup-user-tracking";
 export {
   getTrackingVariable,
-  pushCustomEvent,
+  pushTrackingEvent,
   setTrackingVariable,
 } from "./data-layer";

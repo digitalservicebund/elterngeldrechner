@@ -24,7 +24,7 @@ import {
   getTrackedEase,
   getTrackedObstacle,
   isTrackingAllowedByUser,
-  pushCustomEvent,
+  pushTrackingEvent,
   resetTrackingPlanung,
   trackEase,
   trackObstacle,
@@ -77,13 +77,13 @@ export function RechnerPlanerPage() {
 
   function showErklaerung(): void {
     setIsErklaerungOpen(true);
-    pushCustomEvent("Erklärungen-im-Planer-wurden-geöffnet");
+    pushTrackingEvent("Erklärungen-im-Planer-wurden-geöffnet");
   }
 
   function hideErklaerung(): void {
     setIsErklaerungOpen(false);
     window.scrollTo(0, 0);
-    pushCustomEvent("Erklärungen-im-Planer-wurden-geschlossen");
+    pushTrackingEvent("Erklärungen-im-Planer-wurden-geschlossen");
   }
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export function RechnerPlanerPage() {
     trackPlannedMonthsWithIncome(nextPlan);
     trackPlannedMonths(nextPlan);
     evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
-    pushCustomEvent("Plan-wurde-geändert");
+    pushTrackingEvent("Plan-wurde-geändert");
   }
 
   function handlePlanChanges(
@@ -125,11 +125,12 @@ export function RechnerPlanerPage() {
 
   function trackMetricsForResetPlan(): void {
     resetTrackingPlanung();
-    pushCustomEvent("Plan-wurde-zurückgesetzt");
+    pushTrackingEvent("Plan-wurde-zurückgesetzt");
+    pushTrackingEvent("Plan-wurde-zurückgesetzt");
   }
 
   function trackOpeningOfLebensmonat(): void {
-    pushCustomEvent("Lebensmonat-wurde-im-Planer-geöffnet");
+    pushTrackingEvent("Lebensmonat-wurde-im-Planer-geöffnet");
   }
 
   function trackEinBeispielWurdeAusgewaehlt(beispiel: {
@@ -140,7 +141,7 @@ export function RechnerPlanerPage() {
       beispiel.identifier,
     );
 
-    pushCustomEvent("Beispiel-wurde-im-Planer-ausgewählt");
+    pushTrackingEvent("Beispiel-wurde-im-Planer-ausgewählt");
   }
 
   const navigate = useNavigate();

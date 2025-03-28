@@ -34,8 +34,8 @@ import {
   trackEase,
   trackObstacle,
 } from "@/application/user-tracking";
-import { MAX_EINKOMMEN } from "@/elterngeldrechner/model/egr-berechnung-param-id";
-import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import { MAX_EINKOMMEN } from "@/elterngeldrechner";
+import { type PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function RechnerPlanerPage() {
   const dialogElement = useRef<HTMLDialogElement>(null);

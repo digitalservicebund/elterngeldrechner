@@ -16,7 +16,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/elterngeldrechner/model";
+} from "@/elterngeldrechner";
 
 const averageFromAverageOrMonthly = (
   averageOrMonthly: AverageOrMonthlyState,

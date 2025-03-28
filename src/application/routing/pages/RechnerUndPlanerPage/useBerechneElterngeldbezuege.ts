@@ -6,18 +6,18 @@ import {
 } from "@/application/features/abfrageteil/state";
 import type { RootState } from "@/application/redux";
 import { useAppStore } from "@/application/redux/hooks";
-import { calculateElternGeld } from "@/elterngeldrechner/egr-calculation";
 import {
   Einkommen,
   ElternGeldArt,
   type ElternGeldDaten,
   type ElternGeldPlusErgebnis,
   type ErwerbsZeitraumLebensMonat,
-  FinanzDaten,
+  type FinanzDaten,
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   type PlanungsDaten,
-} from "@/elterngeldrechner/model";
+  calculateElternGeld,
+} from "@/elterngeldrechner";
 import {
   type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
@@ -186,7 +186,7 @@ if (import.meta.vitest) {
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/application/test-utils");
     const { ErwerbsArt, KassenArt, SteuerKlasse, RentenArt, KinderFreiBetrag } =
-      await import("@/elterngeldrechner/model");
+      await import("@/elterngeldrechner");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
     beforeEach(async () => {
@@ -201,7 +201,7 @@ if (import.meta.vitest) {
       ).mockReturnValue(ANY_FINANZDATEN);
 
       vi.spyOn(
-        await import("@/elterngeldrechner/egr-calculation"),
+        await import("@/elterngeldrechner"),
         "calculateElternGeld",
       ).mockReturnValue(ANY_CALCULATION_RESULT);
     });

@@ -9,7 +9,7 @@ import {
   screen,
   within,
 } from "@/application/test-utils";
-import { RentenArt } from "@/elterngeldrechner/model";
+import { RentenArt } from "@/elterngeldrechner";
 
 const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
   draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";

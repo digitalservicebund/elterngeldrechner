@@ -9,11 +9,7 @@ import {
   screen,
   within,
 } from "@/application/test-utils";
-import {
-  KinderFreiBetrag,
-  RentenArt,
-  SteuerKlasse,
-} from "@/elterngeldrechner/model";
+import { KinderFreiBetrag, RentenArt, SteuerKlasse } from "@/elterngeldrechner";
 
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

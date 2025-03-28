@@ -7,7 +7,7 @@ import {
   StepErwerbstaetigkeitElternteil,
 } from "./stepErwerbstaetigkeitSlice";
 import { INITIAL_STATE } from "@/application/test-utils";
-import { ErwerbsArt } from "@/elterngeldrechner/model";
+import { ErwerbsArt } from "@/elterngeldrechner";
 
 describe("persoenlicheDatenFactory", () => {
   it("should create PersoenlicheDaten for Alleinerziehend", () => {

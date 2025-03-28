@@ -181,9 +181,9 @@ if (import.meta.vitest) {
   const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
   describe("erstelle Planungsübersicht", async () => {
-    const { Elternteil } = await import("@/monatsplaner/Elternteil");
-    const { Variante } = await import("@/monatsplaner/Variante");
-    const { KeinElterngeld } = await import("@/monatsplaner/Auswahloption");
+    const { Elternteil, Variante, KeinElterngeld } = await import(
+      "@/monatsplaner"
+    );
 
     it("can create an empty Übersicht if nothing is planned", () => {
       const lebensmonate = {};

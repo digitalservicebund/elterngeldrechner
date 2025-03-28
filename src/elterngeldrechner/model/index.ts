@@ -39,3 +39,4 @@ export {
   steuerklasseToNumber,
 } from "./steuer-klasse";
 export type { ZwischenErgebnis } from "./zwischen-ergebnis";
+export { MAX_EINKOMMEN } from "./egr-berechnung-param-id";

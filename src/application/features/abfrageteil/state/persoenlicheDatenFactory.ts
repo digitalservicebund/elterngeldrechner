@@ -3,7 +3,7 @@ import { YesNo } from "./YesNo";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { RootState } from "@/application/redux";
-import { ErwerbsArt, PersoenlicheDaten } from "@/elterngeldrechner/model";
+import { ErwerbsArt, type PersoenlicheDaten } from "@/elterngeldrechner";
 
 const erwerbsTaetigkeitVorGeburtOf = (
   state: RootState,

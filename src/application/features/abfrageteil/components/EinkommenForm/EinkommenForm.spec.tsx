@@ -14,7 +14,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/elterngeldrechner/model";
+} from "@/elterngeldrechner";
 
 describe("Einkommen Page", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");

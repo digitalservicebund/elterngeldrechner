@@ -21,7 +21,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/elterngeldrechner/model";
+} from "@/elterngeldrechner";
 
 type Props = {
   readonly elternteil: ElternteilType;

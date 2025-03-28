@@ -11,13 +11,13 @@ import { INITIAL_STATE } from "@/application/test-utils";
 import {
   Einkommen,
   ErwerbsTaetigkeit,
-  FinanzDaten,
+  type FinanzDaten,
   KassenArt,
   KinderFreiBetrag,
-  MischEkTaetigkeit,
+  type MischEkTaetigkeit,
   RentenArt,
   SteuerKlasse,
-} from "@/elterngeldrechner/model";
+} from "@/elterngeldrechner";
 import { YesNo } from "original-rechner";
 
 describe("finanzDatenFactory", () => {

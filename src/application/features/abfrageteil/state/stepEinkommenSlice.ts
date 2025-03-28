@@ -10,7 +10,7 @@ import {
   KinderFreiBetrag,
   RentenArt,
   SteuerKlasse,
-} from "@/elterngeldrechner/model";
+} from "@/elterngeldrechner";
 
 export interface Zeitraum {
   from: string;

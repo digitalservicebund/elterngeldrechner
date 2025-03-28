@@ -60,9 +60,9 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("erstelle Planungsdetails", async () => {
-    const { Elternteil } = await import("@/monatsplaner/Elternteil");
-    const { Variante } = await import("@/monatsplaner/Variante");
-    const { KeinElterngeld } = await import("@/monatsplaner/Auswahloption");
+    const { Elternteil, Variante, KeinElterngeld } = await import(
+      "@/monatsplaner"
+    );
 
     it("removes Lebensmonate without any chosen Option", () => {
       const lebensmonate = {

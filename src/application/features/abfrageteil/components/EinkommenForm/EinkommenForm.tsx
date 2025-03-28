@@ -12,7 +12,7 @@ import {
   stepEinkommenSlice,
 } from "@/application/features/abfrageteil/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { MAX_EINKOMMEN } from "@/elterngeldrechner/model/egr-berechnung-param-id";
+import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 
 const einkommenLimitUeberschrittenInfoText = `Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als ${MAX_EINKOMMEN.toLocaleString()} Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen.`;
 

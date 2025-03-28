@@ -1,6 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter } from "./tracking-geplante-monate-des-partners-der-mutter";
+import {
+  trackMetricsForDerPlanHatSichGeaendert,
+  trackMetricsForEinBeispielWurdeAusgewaehlt,
+  trackMetricsForEineOptionWurdeGewaehlt,
+  trackMetricsForErklaerungenWurdenGeoeffnet,
+  trackMetricsForErklaerungenWurdenGeschlossen,
+  trackMetricsForLebensmonatWurdeGeoeffnet,
+  trackMetricsForPlanWurdeZurueckgesetzt,
+  trackMetricsForPlanerWurdeGeoeffnet,
+} from "./tracking";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/application/components";
 import {
@@ -24,18 +33,11 @@ import {
   getTrackedEase,
   getTrackedObstacle,
   isTrackingAllowedByUser,
-  pushTrackingEvent,
-  resetTrackingPlanung,
   trackEase,
   trackObstacle,
-  trackPartnerschaftlicheVerteilung,
-  trackPlannedMonths,
-  trackPlannedMonthsWithIncome,
 } from "@/application/user-tracking";
-import { setTrackingVariable } from "@/application/user-tracking/core";
 import { MAX_EINKOMMEN } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
-import { Variante, listeElternteileFuerAusgangslageAuf } from "@/monatsplaner";
 
 export function RechnerPlanerPage() {
   const store = useAppStore();
@@ -63,34 +65,10 @@ export function RechnerPlanerPage() {
       : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
   );
   const [plan, setPlan] = useState(() => initialPlan);
-  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const [istPlanGueltig, setIstPlanGueltig] = useState(true);
-  const hasPlan = plan !== undefined;
-
-  const { isFeebackSubmitted, submitFeedback } = useUserFeedback();
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
-  const rememberSubmit = useRef(false);
-
-  const [trackingConsent, setTrackingConsent] = useState(false);
-
-  const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
-
-  function showErklaerung(): void {
-    setIsErklaerungOpen(true);
-    pushTrackingEvent("Erklärungen-im-Planer-wurden-geöffnet");
-  }
-
-  function hideErklaerung(): void {
-    setIsErklaerungOpen(false);
-    window.scrollTo(0, 0);
-    pushTrackingEvent("Erklärungen-im-Planer-wurden-geschlossen");
-  }
-
-  useEffect(() => {
-    void (async () => {
-      setTrackingConsent(await isTrackingAllowedByUser());
-    })();
-  }, []);
+  const hasPlan = plan !== undefined;
+  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
@@ -101,17 +79,28 @@ export function RechnerPlanerPage() {
     setIstPlanGueltig(istPlanGueltig);
   }
 
-  function trackMetricsForChangedPlan(
-    nextPlan: PlanMitBeliebigenElternteilen,
-    istPlanGueltig: boolean,
-  ): void {
-    if (istPlanGueltig) {
-      trackPartnerschaftlicheVerteilungForPlan(nextPlan);
-    }
+  const [trackingConsent, setTrackingConsent] = useState(false);
+  const { isFeebackSubmitted, submitFeedback } = useUserFeedback();
+  const rememberSubmit = useRef(false);
+  const showFeedbackForm = hasChanges && !isFeebackSubmitted && trackingConsent;
 
-    trackPlannedMonthsWithIncome(nextPlan);
-    trackPlannedMonths(nextPlan);
-    evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(nextPlan);
+  useEffect(() => {
+    void (async () => {
+      setTrackingConsent(await isTrackingAllowedByUser());
+    })();
+  }, []);
+
+  const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
+
+  function showErklaerung(): void {
+    setIsErklaerungOpen(true);
+    trackMetricsForErklaerungenWurdenGeoeffnet();
+  }
+
+  function hideErklaerung(): void {
+    setIsErklaerungOpen(false);
+    window.scrollTo(0, 0);
+    trackMetricsForErklaerungenWurdenGeschlossen();
   }
 
   function handlePlanChanges(
@@ -119,35 +108,7 @@ export function RechnerPlanerPage() {
     istPlanGueltig: boolean,
   ): void {
     updateStateForChangedPlan(nextPlan, istPlanGueltig);
-    trackMetricsForChangedPlan(nextPlan, istPlanGueltig);
-  }
-
-  function trackEineOptionWurdeGewaehlt(): void {
-    pushTrackingEvent("Option-wurde-im-Planer-gewaehlt");
-  }
-
-  function trackMetricsForResetPlan(): void {
-    resetTrackingPlanung();
-    pushTrackingEvent("Plan-wurde-zurückgesetzt");
-    setTrackingVariable(
-      "Identifier-des-ausgewaehlten-Beispiels-im-Planer",
-      null,
-    );
-  }
-
-  function trackOpeningOfLebensmonat(): void {
-    pushTrackingEvent("Lebensmonat-wurde-im-Planer-geöffnet");
-  }
-
-  function trackEinBeispielWurdeAusgewaehlt(beispiel: {
-    identifier: string;
-  }): void {
-    setTrackingVariable(
-      "Identifier-des-ausgewaehlten-Beispiels-im-Planer",
-      beispiel.identifier,
-    );
-
-    pushTrackingEvent("Beispiel-wurde-im-Planer-ausgewählt");
+    trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
   }
 
   const navigate = useNavigate();
@@ -165,9 +126,7 @@ export function RechnerPlanerPage() {
     }
   }
 
-  const showFeedbackForm = hasChanges && !isFeebackSubmitted && trackingConsent;
-
-  useEffect(resetTrackingPlanung, []);
+  useEffect(trackMetricsForPlanerWurdeGeoeffnet, []);
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
@@ -185,11 +144,11 @@ export function RechnerPlanerPage() {
               berechneElterngeldbezuege={berechneElterngeldbezuege}
               callbacks={{
                 onChange: handlePlanChanges,
-                onWaehleOption: trackEineOptionWurdeGewaehlt,
-                onSetzePlanZurueck: trackMetricsForResetPlan,
-                onOpenLebensmonat: trackOpeningOfLebensmonat,
+                onWaehleOption: trackMetricsForEineOptionWurdeGewaehlt,
+                onSetzePlanZurueck: trackMetricsForPlanWurdeZurueckgesetzt,
+                onOpenLebensmonat: trackMetricsForLebensmonatWurdeGeoeffnet,
                 onOpenErklaerung: showErklaerung,
-                onWaehleBeispielAus: trackEinBeispielWurdeAusgewaehlt,
+                onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
               }}
             />
 
@@ -244,30 +203,4 @@ export function RechnerPlanerPage() {
       </dialog>
     </Page>
   );
-}
-
-function trackPartnerschaftlicheVerteilungForPlan(
-  plan: PlanMitBeliebigenElternteilen,
-): void {
-  const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);
-
-  const auswahlProMonatProElternteil = elternteile.map((elternteil) =>
-    Object.values(plan.lebensmonate)
-      .map((lebensmonat) => lebensmonat[elternteil])
-      .map((monat) => monat.gewaehlteOption)
-      .map((option) => {
-        switch (option) {
-          case Variante.Basis:
-            return "Basis";
-          case Variante.Plus:
-            return "Plus";
-          case Variante.Bonus:
-            return "Bonus";
-          default:
-            return null;
-        }
-      }),
-  );
-
-  trackPartnerschaftlicheVerteilung(auswahlProMonatProElternteil);
 }

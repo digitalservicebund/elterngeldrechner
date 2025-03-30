@@ -8,10 +8,6 @@ window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
 document.body.id = "egr-root"; // Imported styles are scope to the identifier.
 
-const toastPortalTarget = document.createElement("div");
-toastPortalTarget.id = "egr-toast";
-document.body.appendChild(toastPortalTarget);
-
 // Explicitly invoke cleanup when vitest globals are disabled to ensure
 // the DOM is reset between tests. Without this, state can persist across
 // tests, leading to unexpected behavior. Related issues and discussion:

@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
       <Provider store={store}>
         <App elternGeldDigitalWizardUrl={elternGeldDigitalWizardUrl} />
       </Provider>
-      <div id="egr-toast" />
     </StrictMode>,
   );
 

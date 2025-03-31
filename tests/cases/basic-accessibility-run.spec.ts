@@ -27,8 +27,7 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
-  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Jane");
+  await allgemeineAngabenPage.setMutterschutz("Jane");
   await expectPageToBeAccessible(page, testInfo);
   await allgemeineAngabenPage.submit();
 

@@ -12,8 +12,7 @@ export interface StepAllgemeineAngabenState {
     ET2: string;
   };
   alleinerziehend: YesNo | null;
-  mutterschaftssleistungen: YesNo | null;
-  mutterschaftssleistungenWer: AntragstellendeSelektor | null;
+  mutterschutz: YesNo | AntragstellendeSelektor | null;
 }
 
 const initialState: StepAllgemeineAngabenState = {
@@ -23,8 +22,7 @@ const initialState: StepAllgemeineAngabenState = {
     ET2: "",
   },
   alleinerziehend: null,
-  mutterschaftssleistungen: null,
-  mutterschaftssleistungenWer: null,
+  mutterschutz: null,
 };
 
 export const stepAllgemeineAngabenSlice = createSlice({

@@ -12,8 +12,7 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
-  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Elternteil 1");
+  await allgemeineAngabenPage.setMutterschutz("Elternteil 1");
   await allgemeineAngabenPage.submit();
 
   const nachwuchsPage = new NachwuchsPOM(page);

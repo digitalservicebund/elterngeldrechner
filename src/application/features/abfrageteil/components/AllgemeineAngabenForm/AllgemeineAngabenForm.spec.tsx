@@ -30,7 +30,7 @@ describe("Allgemeine Angaben Page", () => {
     expect(screen.getByText("Ihre Namen (optional)")).toBeInTheDocument();
   });
 
-  it("should ask for Mutterschaftssleistungen if Gemeinsam Erziehende", async () => {
+  it("should ask for Mutterschutz if Gemeinsam Erziehende", async () => {
     render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
@@ -40,46 +40,66 @@ describe("Allgemeine Angaben Page", () => {
     expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
   });
 
-  it("should ask for Mutterschaftssleistungen if Alleinerziehend", async () => {
-    render(<AllgemeineAngabenForm />);
-
-    await userEvent.click(screen.getByLabelText("Ja"));
-
-    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
-  });
-
-  it("should ask to whom Mutterschaftsleistungen belongs if Gemeinsam Erziehende", async () => {
+  it("should show correct Mutterschutz options if Gemeinsam Erziehende", async () => {
     render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
-    await userEvent.click(
-      screen.getByTestId("mutterschaftssleistungen_option_0"),
-    );
-
+    expect(
+      screen.getByText("Ja, Elternteil 1 ist oder wird im Mutterschutz sein"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Ja, Elternteil 2 ist oder wird im Mutterschutz sein"),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Welcher Elternteil ist oder wird im Mutterschutz sein?",
+        "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
       ),
     ).toBeInTheDocument();
+    expect(screen.getByText("Ich weiß es noch nicht")).toBeInTheDocument();
   });
 
-  it("should not ask to whom Mutterschaftsleistungen belongs if Alleinerziehend", async () => {
+  it("should ask for Mutterschutz if Alleinerziehend", async () => {
     render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Ja"));
 
-    await userEvent.click(
-      screen.getByTestId("mutterschaftssleistungen_option_0"),
-    );
+    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
+  });
+
+  it("should show correct Mutterschutz options if Alleinerziehend", async () => {
+    render(<AllgemeineAngabenForm />);
+
+    await userEvent.click(screen.getByLabelText("Ja"));
 
     expect(
-      screen.queryByText(
-        "Welcher Elternteil ist oder wird im Mutterschutz sein?",
+      screen.getByText("Ja, ich bin oder werde im Mutterschutz sein"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Nein, ich bin nicht oder werde nicht im Mutterschutz sein",
       ),
-    ).not.toBeInTheDocument();
+    ).toBeInTheDocument();
+    expect(screen.getByText("Ich weiß es noch nicht")).toBeInTheDocument();
+  });
+
+  it("should show correct Mutterschutz options if Ein Elternteil", async () => {
+    render(<AllgemeineAngabenForm />);
+
+    await userEvent.click(screen.getByLabelText("Nein"));
+    await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
+
+    expect(
+      screen.getByText("Ja, ich bin oder werde im Mutterschutz sein"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Nein, ich bin nicht oder werde nicht im Mutterschutz sein",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Ich weiß es noch nicht")).toBeInTheDocument();
   });
 
   describe("Submitting the form", () => {
@@ -87,15 +107,13 @@ describe("Allgemeine Angaben Page", () => {
       const { store } = render(<AllgemeineAngabenForm />);
 
       await userEvent.click(screen.getByLabelText("Ja"));
-      await userEvent.click(
-        screen.getByTestId("mutterschaftssleistungen_option_0"),
-      );
+      await userEvent.click(screen.getByTestId("mutterschutz_option_0"));
       await userEvent.click(screen.getByText("Weiter"));
 
       expect(store.getState().stepAllgemeineAngaben).toMatchObject({
         antragstellende: "EinenElternteil",
         alleinerziehend: YesNo.YES,
-        mutterschaftssleistungen: YesNo.YES,
+        mutterschutz: "ET1",
       });
     });
 
@@ -112,19 +130,13 @@ describe("Allgemeine Angaben Page", () => {
         screen.getByLabelText("Name für Elternteil 2"),
         "Fiona",
       );
-      await userEvent.click(
-        screen.getByTestId("mutterschaftssleistungen_option_0"),
-      );
-      await userEvent.click(
-        screen.getByTestId("mutterschaftssleistungenWer_option_0"),
-      );
+      await userEvent.click(screen.getByTestId("mutterschutz_option_0"));
       await userEvent.click(screen.getByText("Weiter"));
 
       expect(store.getState().stepAllgemeineAngaben).toMatchObject({
         alleinerziehend: YesNo.NO,
         antragstellende: "FuerBeide",
-        mutterschaftssleistungen: YesNo.YES,
-        mutterschaftssleistungenWer: "ET1",
+        mutterschutz: "ET1",
         pseudonym: {
           ET1: "Finn",
           ET2: "Fiona",
@@ -142,15 +154,13 @@ describe("Allgemeine Angaben Page", () => {
 
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
-      await userEvent.click(
-        screen.getByTestId("mutterschaftssleistungen_option_1"),
-      );
+      await userEvent.click(screen.getByTestId("mutterschutz_option_2"));
       await userEvent.click(screen.getByText("Weiter"));
 
       expect(store.getState().stepAllgemeineAngaben).toMatchObject({
         antragstellende: "FuerBeide",
         alleinerziehend: YesNo.NO,
-        mutterschaftssleistungen: YesNo.NO,
+        mutterschutz: YesNo.NO,
       });
     });
 
@@ -158,7 +168,7 @@ describe("Allgemeine Angaben Page", () => {
       const invalidFormState = produce(INITIAL_STATE, (draft) => {
         draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
         draft.stepAllgemeineAngaben.alleinerziehend = null;
-        draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
+        draft.stepAllgemeineAngaben.mutterschutz = null;
       });
 
       render(<AllgemeineAngabenForm />, { preloadedState: invalidFormState });

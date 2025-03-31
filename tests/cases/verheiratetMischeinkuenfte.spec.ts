@@ -11,12 +11,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
   await page.getByText("Für zwei Elternteile").click();
   await page
-    .getByText("Ja, ein Elternteil ist oder wird im Mutterschutz sein", {
-      exact: true,
-    })
-    .click();
-  await page
-    .getByText("Elternteil 2 ist oder wird im Mutterschutz sein", {
+    .getByText("Ja, Elternteil 2 ist oder wird im Mutterschutz sein", {
       exact: true,
     })
     .click();

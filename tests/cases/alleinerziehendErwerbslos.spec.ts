@@ -12,9 +12,7 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setAlleinerziehend(true);
-  await allgemeineAngabenPage.setMutterschaftsleistungenFuerAlleinerziehende(
-    true,
-  );
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
   await allgemeineAngabenPage.submit();
 
   const nachwuchsPage = new NachwuchsPOM(page);

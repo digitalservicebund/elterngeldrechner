@@ -53,18 +53,13 @@ export function AllgemeineAngabenForm({
 
   const antragstellendeFormValue = watch("antragstellende");
   const alleinerziehendenFormValue = watch("alleinerziehend");
-  const mutterschaftssleistungenFormValue = watch("mutterschaftssleistungen");
 
-  const pseudonymeFormValue = watch("pseudonym");
-
-  const showMutterschaftsleistungsWerGroup =
-    antragstellendeFormValue === "FuerBeide" &&
-    mutterschaftssleistungenFormValue === YesNo.YES;
+  const pseudonymFormValue = watch("pseudonym");
 
   const elternHeadingIdentifier = useId();
   const namenHeadingIdentifier = useId();
   const alleinerziehendHeadindIdentifier = useId();
-  const mutterschaftsleistungenHeadingIdentifier = useId();
+  const mutterschutzHeadingIdentifier = useId();
 
   const initializeAntragstellendeIfAlleinerziehend = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -154,8 +149,8 @@ export function AllgemeineAngabenForm({
       {((alleinerziehendenFormValue === YesNo.NO &&
         antragstellendeFormValue !== null) ||
         alleinerziehendenFormValue === YesNo.YES) && (
-        <section aria-labelledby={mutterschaftsleistungenHeadingIdentifier}>
-          <h3 id={mutterschaftsleistungenHeadingIdentifier} className="mb-10">
+        <section aria-labelledby={mutterschutzHeadingIdentifier}>
+          <h3 id={mutterschutzHeadingIdentifier} className="mb-10">
             Mutterschutz
           </h3>
 
@@ -163,26 +158,41 @@ export function AllgemeineAngabenForm({
             legend="Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?"
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-            name="mutterschaftssleistungen"
+            name="mutterschutz"
             errors={formState.errors}
             required
-            options={[
-              {
-                label:
-                  alleinerziehendenFormValue === YesNo.YES
-                    ? "Ja, ich bin oder werde im Mutterschutz sein"
-                    : "Ja, ein Elternteil ist oder wird im Mutterschutz sein",
-                value: YesNo.YES,
-              },
-              {
-                label:
-                  alleinerziehendenFormValue === YesNo.YES
-                    ? "Nein, ich bin nicht oder werde nicht im Mutterschutz sein"
-                    : "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
-                value: YesNo.NO,
-              },
-              { label: "Ich weiß es noch nicht", value: YesNo.NO },
-            ]}
+            options={
+              alleinerziehendenFormValue === YesNo.YES ||
+              antragstellendeFormValue === "EinenElternteil"
+                ? [
+                    {
+                      label: "Ja, ich bin oder werde im Mutterschutz sein",
+                      value: "ET1",
+                    },
+                    {
+                      label:
+                        "Nein, ich bin nicht oder werde nicht im Mutterschutz sein",
+                      value: YesNo.NO,
+                    },
+                    { label: "Ich weiß es noch nicht", value: YesNo.NO },
+                  ]
+                : [
+                    {
+                      label: `Ja, ${pseudonymFormValue.ET1 || "Elternteil 1"} ist oder wird im Mutterschutz sein`,
+                      value: "ET1",
+                    },
+                    {
+                      label: `Ja, ${pseudonymFormValue.ET2 || "Elternteil 2"} ist oder wird im Mutterschutz sein`,
+                      value: "ET2",
+                    },
+                    {
+                      label:
+                        "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
+                      value: YesNo.NO,
+                    },
+                    { label: "Ich weiß es noch nicht", value: YesNo.NO },
+                  ]
+            }
             slotBetweenLegendAndOptions={
               <InfoText
                 question="Was ist Mutterschutz?"
@@ -213,34 +223,6 @@ export function AllgemeineAngabenForm({
               />
             }
           />
-
-          {!!showMutterschaftsleistungsWerGroup && (
-            <CustomRadioGroup
-              className="mt-32"
-              legend="Welcher Elternteil ist oder wird im Mutterschutz sein?"
-              register={register}
-              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="mutterschaftssleistungenWer"
-              errors={formState.errors}
-              required
-              options={[
-                {
-                  label: `${pseudonymeFormValue.ET1 || "Elternteil 1"} ist oder wird im Mutterschutz sein`,
-                  value: "ET1",
-                },
-                {
-                  label: `${pseudonymeFormValue.ET2 || "Elternteil 2"} ist oder wird im Mutterschutz sein`,
-                  value: "ET2",
-                },
-              ]}
-              slotBetweenLegendAndOptions={
-                <InfoText
-                  question="Warum fragen wir das?"
-                  answer="Wir fragen das, damit wir wissen, wer im Mutterschutz ist oder sein wird."
-                />
-              }
-            />
-          )}
         </section>
       )}
 

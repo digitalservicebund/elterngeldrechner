@@ -26,7 +26,7 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(1);
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
   await allgemeineAngabenPage.submit();
 
   const nachwuchsPage = new NachwuchsPOM(page);
@@ -59,7 +59,7 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   expect(await getTrackingVariable(page, "geplante-monate")).toEqual(12);
 });
 
-test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
+test("paar das mutterschutz und bonus nimmt", async ({ page }) => {
   test.slow();
 
   await page.addInitScript(establishDataLayer);
@@ -74,8 +74,7 @@ test("paar das mutterschaftsleistung und bonus nimmt", async ({ page }) => {
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
-  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Jane");
+  await allgemeineAngabenPage.setMutterschutz("Jane");
   await allgemeineAngabenPage.submit();
 
   const nachwuchsPage = new NachwuchsPOM(page);
@@ -250,8 +249,7 @@ async function fastForwardAllgemeineAngaben(page: Page) {
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
   await allgemeineAngabenPage.setNameElternteil2("John");
-  await allgemeineAngabenPage.setMutterschaftsleistungen(true);
-  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Jane");
+  await allgemeineAngabenPage.setMutterschutz("Jane");
   await allgemeineAngabenPage.submit();
 }
 

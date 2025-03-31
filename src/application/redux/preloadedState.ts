@@ -13,8 +13,7 @@ export const preloadedState = {
       ET2: "Salomé Loreley Zoe",
     },
     alleinerziehend: YesNo.NO,
-    mutterschaftssleistungen: YesNo.NO,
-    mutterschaftssleistungenWer: null,
+    mutterschutz: YesNo.NO,
   },
   stepNachwuchs: {
     anzahlKuenftigerKinder: 1,
@@ -25,7 +24,6 @@ export const preloadedState = {
         istBehindert: false,
       },
     ],
-    mutterschaftssleistungen: YesNo.NO,
   },
   stepErwerbstaetigkeit: {
     ET1: {

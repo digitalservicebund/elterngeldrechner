@@ -12,11 +12,8 @@ export class AllgemeineAngabenPOM {
 
   readonly pseudonyme: Locator;
 
-  readonly mutterschaftsleistungen: Locator;
-  readonly mutterschaftsleistungenError: Locator;
-
-  readonly mutterschaftsleistungenWer: Locator;
-  readonly mutterschaftsleistungenWerError: Locator;
+  readonly mutterschutz: Locator;
+  readonly mutterschutzError: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -41,20 +38,13 @@ export class AllgemeineAngabenPOM {
 
     this.pseudonyme = page.getByLabel("Ihre Namen (optional)");
 
-    this.mutterschaftsleistungen = page.getByRole("radiogroup", {
+    this.mutterschutz = page.getByRole("radiogroup", {
       name: "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
     });
 
-    this.mutterschaftsleistungenError = this.mutterschaftsleistungen.getByText(
+    this.mutterschutzError = this.mutterschutz.getByText(
       "Dieses Feld ist erforderlich",
     );
-
-    this.mutterschaftsleistungenWer = page.getByRole("radiogroup", {
-      name: "Welcher Elternteil ist oder wird im Mutterschutz sein?",
-    });
-
-    this.mutterschaftsleistungenWerError =
-      this.mutterschaftsleistungenWer.getByText("Dieses Feld ist erforderlich");
   }
 
   async goto() {
@@ -101,36 +91,22 @@ export class AllgemeineAngabenPOM {
     return this;
   }
 
-  async setMutterschaftsleistungen(value: boolean) {
-    const label = value
-      ? "Ja, ein Elternteil ist oder wird im Mutterschutz sein"
+  async setMutterschutz(nameOrValue: string | false) {
+    const label = nameOrValue
+      ? `Ja, ${nameOrValue} ist oder wird im Mutterschutz sein`
       : "Nein, kein Elternteil ist oder wird im Mutterschutz sein";
 
-    await this.mutterschaftsleistungen
-      .getByRole("radio", { name: label })
-      .click();
+    await this.mutterschutz.getByRole("radio", { name: label }).click();
 
     return this;
   }
 
-  async setMutterschaftsleistungenFuerAlleinerziehende(value: boolean) {
+  async setMutterschutzFuerEinePerson(value: boolean) {
     const label = value
       ? "Ja, ich bin oder werde im Mutterschutz sein"
       : "Nein, ich bin nicht oder werde nicht im Mutterschutz sein";
 
-    await this.mutterschaftsleistungen
-      .getByRole("radio", { name: label })
-      .click();
-
-    return this;
-  }
-
-  async setMutterschaftsleistungenWer(name: string) {
-    const label = `${name} ist oder wird im Mutterschutz sein`;
-
-    await this.mutterschaftsleistungenWer
-      .getByRole("radio", { name: label })
-      .click();
+    await this.mutterschutz.getByRole("radio", { name: label }).click();
 
     return this;
   }

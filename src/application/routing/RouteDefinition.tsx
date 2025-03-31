@@ -47,7 +47,7 @@ const internalRouteDefinition: InternalRouteDefinition = [
     element: <NachwuchsPage />,
     path: formSteps.nachwuchs.route,
     precondition: (state: RootState) => {
-      return state.stepAllgemeineAngaben.mutterschaftssleistungen != null;
+      return state.stepAllgemeineAngaben.mutterschutz != null;
     },
   },
   {

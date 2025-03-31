@@ -62,30 +62,24 @@ const testStyles = async ({
 
   await expect(allgemeineAngabenPage.alleinerziehendError).not.toBeVisible();
 
-  await expect(allgemeineAngabenPage.mutterschaftsleistungen).toBeVisible();
+  await expect(allgemeineAngabenPage.mutterschutz).toBeVisible();
 
   await allgemeineAngabenPage.submit();
 
-  await expect(
-    allgemeineAngabenPage.mutterschaftsleistungenError,
-  ).toBeVisible();
+  await expect(allgemeineAngabenPage.mutterschutzError).toBeVisible();
 
   await screenshot(
     "allgemeine-angaben-mutterschaftsleistung-fehlermeldung",
-    allgemeineAngabenPage.mutterschaftsleistungen,
+    allgemeineAngabenPage.mutterschutz,
   );
 
-  await allgemeineAngabenPage.setMutterschaftsleistungenFuerAlleinerziehende(
-    true,
-  );
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
 
-  await expect(
-    allgemeineAngabenPage.mutterschaftsleistungenError,
-  ).not.toBeVisible();
+  await expect(allgemeineAngabenPage.mutterschutzError).not.toBeVisible();
 
   await screenshot(
     "allgemeine-angaben-mutterschaftsleistung",
-    allgemeineAngabenPage.mutterschaftsleistungen,
+    allgemeineAngabenPage.mutterschutz,
   );
 
   await screenshot("allgemeine-angaben-single", page.locator("#egr-root"));
@@ -114,18 +108,7 @@ const testStyles = async ({
     allgemeineAngabenPage.pseudonyme,
   );
 
-  await allgemeineAngabenPage.submit();
-
-  await screenshot(
-    "allgemeine-angaben-mutterschaftsleistungen-wer",
-    allgemeineAngabenPage.mutterschaftsleistungenWer,
-  );
-
-  await expect(
-    allgemeineAngabenPage.mutterschaftsleistungenWerError,
-  ).toBeVisible();
-
-  await allgemeineAngabenPage.setMutterschaftsleistungenWer("Leia");
+  await allgemeineAngabenPage.setMutterschutz("Leia");
   await allgemeineAngabenPage.setNameElternteil1("");
 
   await screenshot("allgemeine-angaben-beide", page.locator("#egr-root"));

@@ -24,10 +24,6 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
 
   const sindMehrlinge = stepNachwuchs.anzahlKuenftigerKinder > 1;
 
-  const hatMutterschutz = yesNoToBoolean(
-    stepAllgemeineAngaben.mutterschaftssleistungen,
-  );
-
   const letzterLebensmonatMitSchutz = sindMehrlinge
     ? (3 as const)
     : (2 as const);
@@ -45,9 +41,13 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
 
   switch (anzahlElternteile) {
     case 1: {
-      const informationenZumMutterschutz = hatMutterschutz
-        ? { empfaenger: Elternteil.Eins as const, letzterLebensmonatMitSchutz }
-        : undefined;
+      const informationenZumMutterschutz =
+        stepAllgemeineAngaben.mutterschutz === "ET1"
+          ? {
+              empfaenger: Elternteil.Eins as const,
+              letzterLebensmonatMitSchutz,
+            }
+          : undefined;
 
       return {
         ...sharedAusganslageProperties,
@@ -65,11 +65,18 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
         [Elternteil.Eins]: pseudonyme[Elternteil.Eins],
         [Elternteil.Zwei]: pseudonyme[Elternteil.Zwei],
       };
-      const empfaenger =
-        stepAllgemeineAngaben.mutterschaftssleistungenWer === "ET1"
-          ? Elternteil.Eins
-          : Elternteil.Zwei;
-      const informationenZumMutterschutz = hatMutterschutz
+      let empfaenger;
+      switch (stepAllgemeineAngaben.mutterschutz) {
+        case "ET1": {
+          empfaenger = Elternteil.Eins;
+          break;
+        }
+        case "ET2": {
+          empfaenger = Elternteil.Zwei;
+          break;
+        }
+      }
+      const informationenZumMutterschutz = empfaenger
         ? { empfaenger, letzterLebensmonatMitSchutz }
         : undefined;
 
@@ -180,10 +187,10 @@ if (import.meta.vitest) {
       });
     });
 
-    describe("mutterschaftssleistungen", () => {
-      it("is undefined if Mutterschaftssleistungen answered with No", () => {
+    describe("mutterschutz", () => {
+      it("is undefined if Mutterschutz answered with No", () => {
         const state = produce(INITIAL_STATE, (draft) => {
-          draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.NO;
+          draft.stepAllgemeineAngaben.mutterschutz = YesNo.NO;
         });
 
         const ausgangslage = composeAusgangslageFuerPlaner(state);
@@ -191,10 +198,10 @@ if (import.meta.vitest) {
         expect(ausgangslage.informationenZumMutterschutz).toBeUndefined();
       });
 
-      it("automatically sets the Empfänger to Elternteil 1 for Antragstellende Einen Elternteil and Mutterschaftssleistungen Yes", () => {
+      it("automatically sets the Empfänger to Elternteil 1 for Antragstellende Einen Elternteil and Mutterschutz Yes", () => {
         const state = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
-          draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
+          draft.stepAllgemeineAngaben.mutterschutz = "ET1";
         });
 
         const ausgangslage = composeAusgangslageFuerPlaner(state);
@@ -213,8 +220,7 @@ if (import.meta.vitest) {
         ({ answered, expected }) => {
           const state = produce(INITIAL_STATE, (draft) => {
             draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-            draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
-            draft.stepAllgemeineAngaben.mutterschaftssleistungenWer = answered;
+            draft.stepAllgemeineAngaben.mutterschutz = answered;
           });
 
           const ausgangslage = composeAusgangslageFuerPlaner(state);
@@ -235,7 +241,7 @@ if (import.meta.vitest) {
         ({ anzahlKuenftigerKinder, letzterLebensmonatMitSchutz }) => {
           const state = produce(INITIAL_STATE, (draft) => {
             draft.stepAllgemeineAngaben.antragstellende = "EinenElternteil";
-            draft.stepAllgemeineAngaben.mutterschaftssleistungen = YesNo.YES;
+            draft.stepAllgemeineAngaben.mutterschutz = "ET1";
             draft.stepNachwuchs.anzahlKuenftigerKinder = anzahlKuenftigerKinder;
           });
 

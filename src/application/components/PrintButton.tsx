@@ -5,12 +5,9 @@ import { Button } from "@/application/components";
 export function PrintButton(): ReactNode {
   return (
     <div className="print:hidden">
-      <Button
-        buttonStyle="link"
-        label="Drucken der Planung"
-        iconBefore={<SaveAltIcon />}
-        onClick={window.print}
-      />
+      <Button type="button" buttonStyle="link" onClick={window.print}>
+        <SaveAltIcon /> Drucken der Planung
+      </Button>
 
       <p>
         Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau „als PDF

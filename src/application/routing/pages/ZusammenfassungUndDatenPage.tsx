@@ -29,10 +29,12 @@ export function ZusammenfassungUndDatenPage(): ReactNode {
 
         <div>
           <Button
-            label="Zurück"
+            type="button"
             buttonStyle="secondary"
             onClick={navigateToRechnerUndPlanerPage}
-          />
+          >
+            Zurück
+          </Button>
         </div>
       </div>
     </Page>

@@ -63,7 +63,7 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
           )}
         </Split>
 
-        {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
+        {!hideSubmitButton && <Button type="submit">Weiter</Button>}
       </form>
     </FormProvider>
   );

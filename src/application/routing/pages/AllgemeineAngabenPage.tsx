@@ -21,7 +21,9 @@ export function AllgemeineAngabenPage() {
         />
 
         <div>
-          <Button label="Weiter" form={formIdentifier} isSubmitButton />
+          <Button type="submit" form={formIdentifier}>
+            Weiter
+          </Button>
         </div>
       </div>
     </Page>

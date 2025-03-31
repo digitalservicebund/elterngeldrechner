@@ -25,11 +25,10 @@ describe("Custom Number Field", () => {
           allowedDecimalPlaces={allowedDecimalPlaces}
           max={max}
         />
-        <Button
-          className="btn btn-outline-primary"
-          label="Submit"
-          isSubmitButton
-        />
+
+        <Button className="btn btn-outline-primary" type="submit">
+          Submit
+        </Button>
       </form>
     );
   }

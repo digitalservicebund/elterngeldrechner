@@ -62,14 +62,14 @@ export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
         </p>
       )}
       <Button
+        type="button"
         buttonStyle="secondary"
         onClick={toggleBruttoEinkommenNichtSelbstaendigState}
-        label={
-          averageOrMonthlyNichtSelbstaendig === "average"
-            ? "Zur ausführlichen Eingabe"
-            : "Zur einfachen Eingabe"
-        }
-      />
+      >
+        {averageOrMonthlyNichtSelbstaendig === "average"
+          ? "Zur ausführlichen Eingabe"
+          : "Zur einfachen Eingabe"}
+      </Button>
 
       {averageOrMonthlyNichtSelbstaendig === "monthly" && (
         <fieldset

@@ -39,12 +39,16 @@ export function NachwuchsPage() {
 
         <div className="flex gap-16">
           <Button
-            label="Zurück"
+            type="button"
             buttonStyle="secondary"
             onClick={navigateToAllgemeineAngabenPage}
-          />
+          >
+            Zurück
+          </Button>
 
-          <Button label="Weiter" form={formIdentifier} isSubmitButton />
+          <Button type="submit" form={formIdentifier}>
+            Weiter
+          </Button>
         </div>
       </div>
     </Page>

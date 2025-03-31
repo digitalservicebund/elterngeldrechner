@@ -24,12 +24,16 @@ export function EinkommenPage() {
 
         <div className="flex gap-16">
           <Button
-            label="Zurück"
+            type="button"
             buttonStyle="secondary"
             onClick={navigateToErwerbstaetigkeitPage}
-          />
+          >
+            Zurück
+          </Button>
 
-          <Button label="Weiter" form={formIdentifier} isSubmitButton />
+          <Button type="submit" form={formIdentifier}>
+            Weiter
+          </Button>
         </div>
       </div>
     </Page>

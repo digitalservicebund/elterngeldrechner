@@ -78,11 +78,9 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
         />
       )}
 
-      <Button
-        buttonStyle="secondary"
-        onClick={onRemove}
-        label="Tätigkeit löschen"
-      />
+      <Button type="button" buttonStyle="secondary" onClick={onRemove}>
+        Tätigkeit löschen
+      </Button>
     </section>
   );
 });

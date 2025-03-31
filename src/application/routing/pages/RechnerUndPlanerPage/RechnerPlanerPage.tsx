@@ -152,16 +152,20 @@ export function RechnerPlanerPage() {
 
             <div className="flex gap-16">
               <Button
-                label="Zurück"
+                type="button"
                 buttonStyle="secondary"
                 onClick={navigateToEinkommenPage}
-              />
+              >
+                Zurück
+              </Button>
 
               <Button
-                label="Zur Zusammenfassung"
+                type="button"
                 disabled={!istPlanGueltig}
                 onClick={navigateToZusammenfassungUndDatenPage}
-              />
+              >
+                Zur Zusammenfassung
+              </Button>
             </div>
 
             <p className="mb-40 max-w-[70ch] text-16">
@@ -187,7 +191,9 @@ export function RechnerPlanerPage() {
           trotzdem einen Antrag stellen.
         </p>
 
-        <Button label="Dialog schließen" onClick={closeDialog} />
+        <Button type="button" onClick={closeDialog}>
+          Dialog schließen
+        </Button>
       </dialog>
     </Page>
   );

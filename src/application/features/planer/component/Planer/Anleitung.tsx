@@ -36,11 +36,13 @@ export function Anleitung({ onOpenErklaerung }: Props): ReactNode {
       <p>Dieses Elterngeld gibt es:</p>
       <Legende showBasis showPlus showBonus>
         <Button
-          buttonStyle="link"
-          label="Hier finden Sie weitere Informationen"
-          onClick={onOpenErklaerung}
           className="text-left !text-base"
-        />
+          type="button"
+          buttonStyle="link"
+          onClick={onOpenErklaerung}
+        >
+          Hier finden Sie weitere Informationen
+        </Button>
       </Legende>
     </section>
   );

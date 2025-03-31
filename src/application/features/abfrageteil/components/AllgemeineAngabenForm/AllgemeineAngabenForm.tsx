@@ -244,7 +244,7 @@ export function AllgemeineAngabenForm({
         </section>
       )}
 
-      {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
+      {!hideSubmitButton && <Button type="submit">Weiter</Button>}
     </form>
   );
 }

@@ -218,30 +218,28 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
 
                 <Button
                   className="mt-16"
+                  type="button"
                   onClick={() => remove(index)}
-                  iconAfter={<ClearIcon />}
                   buttonStyle="link"
-                  label="Geschwisterkind entfernen"
-                />
+                >
+                  Geschwisterkind entfernen <ClearIcon />
+                </Button>
               </li>
             );
           })}
         </ul>
 
         <Button
-          onClick={handleAppendGeschwisterkind}
-          iconBefore={<AddIcon />}
-          ariaLabel={`${
-            !fields.length ? "Älteres" : "Weiteres"
-          } Geschwisterkind hinzufügen`}
+          type="button"
           buttonStyle="secondary"
-          label={`${
-            !fields.length ? "Älteres" : "Weiteres"
-          } Geschwisterkind hinzufügen`}
-        />
+          onClick={handleAppendGeschwisterkind}
+        >
+          <AddIcon /> {fields.length === 0 ? "Älteres" : "Weiteres"}{" "}
+          Geschwisterkind hinzufügen
+        </Button>
       </section>
 
-      {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
+      {!hideSubmitButton && <Button type="submit">Weiter</Button>}
     </form>
   );
 }

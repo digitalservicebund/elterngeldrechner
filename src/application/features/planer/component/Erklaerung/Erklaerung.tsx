@@ -12,11 +12,9 @@ type Props = {
 
 export function Erklaerung({ onClose }: Props): ReactNode {
   const closeButton = (
-    <Button
-      onClick={onClose}
-      iconBefore={<CloseIcon />}
-      label="Informationen schließen"
-    />
+    <Button type="button" onClick={onClose}>
+      <CloseIcon /> Informationen schließen
+    </Button>
   );
 
   return (
@@ -36,12 +34,14 @@ export function Erklaerung({ onClose }: Props): ReactNode {
                 return (
                   <li key={content.id}>
                     <Button
-                      buttonStyle="link"
-                      iconBefore={<ExpandMoreIcon />}
-                      onClick={onClick}
-                      label={content.headline}
                       className="text-left !text-base !text-black"
-                    />
+                      type="button"
+                      buttonStyle="link"
+                      onClick={onClick}
+                    >
+                      <ExpandMoreIcon />
+                      {content.headline}
+                    </Button>
                   </li>
                 );
               })}

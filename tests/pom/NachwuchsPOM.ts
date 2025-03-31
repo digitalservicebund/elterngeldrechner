@@ -21,12 +21,12 @@ export class NachwuchsPOM {
       "Wie viele Kinder werden oder wurden geboren?",
     );
 
-    this.erstesGeschwisterkindHinzufuegen = page.getByLabel(
-      "Älteres Geschwisterkind hinzufügen",
-    );
-    this.weiteresGeschwisterkindHinzufuegen = page.getByLabel(
-      "Weiteres Geschwisterkind hinzufügen",
-    );
+    this.erstesGeschwisterkindHinzufuegen = page.getByRole("button", {
+      name: "Älteres Geschwisterkind hinzufügen",
+    });
+    this.weiteresGeschwisterkindHinzufuegen = page.getByRole("button", {
+      name: "Weiteres Geschwisterkind hinzufügen",
+    });
   }
 
   async setGeburtsdatum(value: string) {

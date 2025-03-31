@@ -24,7 +24,9 @@ test("smoke test", async ({ page }) => {
     .filter({ hasText: /^TT\.MM\.JJJJ$/ })
     .click();
   await page.getByPlaceholder("__.__.___").fill("08.12.2024");
-  await page.getByLabel("Älteres Geschwisterkind").click();
+  await page
+    .getByRole("button", { name: "Älteres Geschwisterkind hinzufügen" })
+    .click();
   await page.getByLabel("Wann wurde das").fill("05.03.2022");
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page.getByText("Ja", { exact: true }).click();

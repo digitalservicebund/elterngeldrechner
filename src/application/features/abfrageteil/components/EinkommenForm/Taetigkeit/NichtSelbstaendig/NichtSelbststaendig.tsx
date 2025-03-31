@@ -155,16 +155,17 @@ export function NichtSelbstaendig({
 
                 {zeitraumFields.length > 1 && (
                   <Button
+                    type="button"
                     buttonStyle="link"
-                    label="Zeitraum entfernen"
-                    iconAfter={<ClearIcon />}
                     onClick={() => {
                       entferneZeitraum(zeitraumIndex);
                       remove(zeitraumIndex);
                       setAddButtonDisabled(false);
                       focusZeitraumHinzufuegenButton();
                     }}
-                  />
+                  >
+                    Zeitraum entfernen <ClearIcon />
+                  </Button>
                 )}
               </li>
             );
@@ -174,6 +175,7 @@ export function NichtSelbstaendig({
         <div className="flex flex-col gap-16">
           <Button
             ref={zeitraumHinzufuegenButtonElement}
+            type="button"
             buttonStyle="secondary"
             disabled={addButtonDisabled}
             onClick={() => {
@@ -191,8 +193,9 @@ export function NichtSelbstaendig({
 
               focusLetztesZeitraumListenElement();
             }}
-            label="weiteren Zeitraum hinzufügen"
-          />
+          >
+            weiteren Zeitraum hinzufügen
+          </Button>
         </div>
       </fieldset>
 

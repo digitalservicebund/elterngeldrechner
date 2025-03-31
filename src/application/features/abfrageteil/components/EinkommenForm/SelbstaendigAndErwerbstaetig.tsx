@@ -63,15 +63,15 @@ export function SelbstaendigAndErwerbstaetig({
       })}
 
       <Button
+        type="button"
         ref={taetigkeitHinzfuegenButtonElement}
         buttonStyle="primary"
         onClick={fuegeTaetigkeitHinzu}
-        label={
-          taetigkeitenFields.fields.length
-            ? "weitere Tätigkeit hinzufügen"
-            : "eine Tätigkeit hinzufügen"
-        }
-      />
+      >
+        {taetigkeitenFields.fields.length
+          ? "weitere Tätigkeit hinzufügen"
+          : "eine Tätigkeit hinzufügen"}
+      </Button>
     </>
   );
 }

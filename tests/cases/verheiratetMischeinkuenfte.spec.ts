@@ -23,9 +23,13 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("20.11.2024");
-  await page.getByLabel("Älteres Geschwisterkind").click();
+  await page
+    .getByRole("button", { name: "Älteres Geschwisterkind hinzufügen" })
+    .click();
   await page.getByLabel("Wann wurde das").fill("04.02.2020");
-  await page.getByLabel("Weiteres Geschwisterkind").click();
+  await page
+    .getByRole("button", { name: "Weiteres Geschwisterkind hinzufügen" })
+    .click();
   await page
     .getByLabel("2. Geschwisterkind")
     .getByPlaceholder("__.__.___")

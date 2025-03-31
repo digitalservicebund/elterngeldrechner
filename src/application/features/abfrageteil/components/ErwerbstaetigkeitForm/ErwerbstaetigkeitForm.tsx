@@ -71,7 +71,7 @@ export function ErwerbstaetigkeitForm({
           )}
         </Split>
 
-        {!hideSubmitButton && <Button label="Weiter" isSubmitButton />}
+        {!hideSubmitButton && <Button type="submit">Weiter</Button>}
       </form>
     </FormProvider>
   );

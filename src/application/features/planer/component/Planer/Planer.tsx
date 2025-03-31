@@ -125,12 +125,13 @@ export function Planer({
 
         <Button
           className="my-16 print:hidden"
+          type="button"
           buttonStyle="link"
-          label="Neue leere Planung erstellen"
-          iconBefore={<RestartAltIcon />}
           onClick={neueLeerePlanungErstellen}
           disabled={!mindestensEinLebensmonatGeplant}
-        />
+        >
+          <RestartAltIcon /> Neue leere Planung erstellen
+        </Button>
 
         <GridLayoutProvider
           anzahlElternteile={plan.ausgangslage.anzahlElternteile}

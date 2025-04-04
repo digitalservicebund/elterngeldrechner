@@ -126,7 +126,7 @@ export function NichtSelbstaendig({
       />
 
       <fieldset className="mb-32">
-        <legend className="mb-16">
+        <legend className="mb-8">
           In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?
         </legend>
 

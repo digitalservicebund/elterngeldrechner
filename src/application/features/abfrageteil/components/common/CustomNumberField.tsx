@@ -78,7 +78,7 @@ export function CustomNumberField<
         <label htmlFor={name}>{label}</label>
 
         <IMaskInput
-          className="mt-16 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
+          className="mt-8 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
           inputRef={ref}
           mask={mask}
           unmask

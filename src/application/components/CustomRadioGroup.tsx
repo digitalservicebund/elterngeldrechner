@@ -72,7 +72,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
         aria-describedby={hasError ? errorIdentifier : undefined}
       >
-        <legend className="mb-16 w-full py-4 pr-40">{legend}</legend>
+        <legend className="mb-8 w-full py-4 pr-40">{legend}</legend>
         {!!info && (
           <div className="absolute right-0 top-4">
             <InfoDialog info={info} />
@@ -80,7 +80,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
 
         {slotBetweenLegendAndOptions ? (
-          <div className="mb-16">{slotBetweenLegendAndOptions}</div>
+          <div className="mb-8">{slotBetweenLegendAndOptions}</div>
         ) : null}
 
         {options.map((option, i) => {

@@ -124,7 +124,7 @@ export function AllgemeineAngabenForm({
             Ihre Namen (optional)
           </h3>
 
-          <p>
+          <p className="mb-16">
             Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden
             Schritten verzichten zu können, können Sie hier Ihre Namen oder ein
             Pseudonym angeben, welches wir dann verwenden werden.

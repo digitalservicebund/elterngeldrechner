@@ -43,7 +43,7 @@ export function Counter<TFieldValues extends FieldValues>({
       >
         {label}
       </label>
-      <div className="mt-16 flex flex-row items-center gap-16">
+      <div className="mt-8 flex flex-row items-center gap-16">
         <button
           className="size-32 rounded-full border-none bg-primary-light p-0 text-primary"
           type="button"

@@ -42,7 +42,7 @@ export function CustomDate<
 
   return (
     <div className="flex flex-col">
-      <div className="mb-16 flex w-full justify-between">
+      <div className="mb-8 flex w-full justify-between">
         <label htmlFor={name}>{label}</label>
         {!!info && <InfoDialog info={info} />}
       </div>

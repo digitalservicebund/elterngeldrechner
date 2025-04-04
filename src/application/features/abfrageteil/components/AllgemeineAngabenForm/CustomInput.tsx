@@ -32,7 +32,7 @@ export function CustomInput<TFieldValues extends FieldValues>({
       <div className="flex flex-col">
         <label htmlFor={name}>{label}</label>
         <input
-          className="mt-16 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
+          className="mt-8 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
           {...register(name)}
           type="text"
           id={name}

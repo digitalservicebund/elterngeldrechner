@@ -69,7 +69,7 @@ export function Versicherungen({
       className="mb-32"
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
-      <legend className="mb-16">
+      <legend className="mb-8">
         Ich war während der Ausübung dieser Tätigkeit
       </legend>
 

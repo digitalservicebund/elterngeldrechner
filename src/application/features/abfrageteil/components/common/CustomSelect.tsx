@@ -74,14 +74,14 @@ export function CustomSelect<TFieldValues extends FieldValues>({
         <label htmlFor={name}>{label}</label>
 
         {slotBetweenLabelAndSelect ? (
-          <div className="mb-16">{slotBetweenLabelAndSelect}</div>
+          <div className="mb-8">{slotBetweenLabelAndSelect}</div>
         ) : null}
 
         <div className="relative w-full min-w-max">
           <select
             {...register(name, registerOptions)}
             className={classNames(
-              "mt-16 min-w-max appearance-none border border-solid border-grey-dark bg-white !px-16 py-8 !pr-56",
+              "mt-8 min-w-max appearance-none border border-solid border-grey-dark bg-white !px-16 py-8 !pr-56",
               "focus:!outline focus:!outline-2 focus:!outline-primary disabled:cursor-default",
               error && "border-danger",
             )}

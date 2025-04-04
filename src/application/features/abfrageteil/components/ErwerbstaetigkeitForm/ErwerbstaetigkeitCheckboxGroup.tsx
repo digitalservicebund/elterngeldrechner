@@ -45,7 +45,7 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
       className="mb-32"
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
-      <legend className="mb-16">Ich hatte in diesem Zeitraum…</legend>
+      <legend className="mb-8">Ich hatte in diesem Zeitraum…</legend>
 
       <CustomCheckbox
         register={register}

@@ -5,8 +5,8 @@ import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
 import { HinweisZuWochenstunden } from "./HinweisZuWochenstunden";
 import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
-import { InfoDialog } from "@/application/components";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat";
+import { InfoDialog } from "@/application/features/planer/component/common";
 import {
   type GridColumnDefinition,
   type GridColumnDefinitionPerElternteil,

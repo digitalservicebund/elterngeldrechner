@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useId, useMemo } from "react";
+import { type ReactNode, useId, useMemo } from "react";
 import {
   FieldPath,
   FieldValues,
@@ -8,7 +8,6 @@ import {
   useController,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import { type Info, InfoDialog } from "@/application/components";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
 type Props<
@@ -16,6 +15,7 @@ type Props<
   TName extends FieldPath<TFieldValues>,
 > = UseControllerProps<TFieldValues, TName> & {
   readonly label: string;
+  readonly slotBetweenLabelAndOptions?: ReactNode;
   readonly allowedDecimalPlaces?: 1 | 2;
   readonly suffix?: string;
   readonly min?: number;
@@ -25,7 +25,6 @@ type Props<
   readonly stretch?: boolean;
   readonly required?: boolean;
   readonly ariaDescribedByIfNoError?: string;
-  readonly info?: Info;
 };
 
 export function CustomNumberField<
@@ -35,6 +34,7 @@ export function CustomNumberField<
   control,
   name,
   label,
+  slotBetweenLabelAndOptions,
   allowedDecimalPlaces = 2,
   min = 0,
   max = 99999,
@@ -43,7 +43,6 @@ export function CustomNumberField<
   placeholder,
   required,
   ariaDescribedByIfNoError,
-  info,
 }: Props<TFieldValues, TName>) {
   const registerOptions = useMemo(
     () =>
@@ -69,56 +68,59 @@ export function CustomNumberField<
   return (
     <div
       className={classNames(
-        "flex justify-between",
+        "flex flex-col",
         error && "border-danger",
         className,
       )}
     >
-      <div className="flex flex-col">
-        <label htmlFor={name}>{label}</label>
+      <label className="mb-8" htmlFor={name}>
+        {label}
+      </label>
 
-        <IMaskInput
-          className="mt-8 max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
-          inputRef={ref}
-          mask={mask}
-          unmask
-          blocks={{
-            num: {
-              mask: Number,
-              max,
-              min,
-              thousandsSeparator: ".",
-              scale: allowedDecimalPlaces,
-            },
-          }}
-          lazy={false}
-          autofix
-          value={value === null ? "" : String(value)}
-          onAccept={(value: string) => {
-            if (!value) {
-              onChange(null);
-            } else {
-              onChange(+value);
-            }
-          }}
-          onBlur={onBlur}
-          type="text"
-          inputMode="numeric"
-          name={name}
-          id={name}
-          placeholder={placeholder}
-          aria-invalid={!!error}
-          aria-describedby={descriptionIdentifier}
-          required={required}
-        />
-        {!!error && (
-          <Description id={errorIdentifier} error>
-            {error.message}
-          </Description>
-        )}
-      </div>
+      {!!slotBetweenLabelAndOptions && (
+        <div className="mb-10">{slotBetweenLabelAndOptions}</div>
+      )}
 
-      {!!info && <InfoDialog info={info} />}
+      <IMaskInput
+        className="max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
+        inputRef={ref}
+        mask={mask}
+        unmask
+        blocks={{
+          num: {
+            mask: Number,
+            max,
+            min,
+            thousandsSeparator: ".",
+            scale: allowedDecimalPlaces,
+          },
+        }}
+        lazy={false}
+        autofix
+        value={value === null ? "" : String(value)}
+        onAccept={(value: string) => {
+          if (!value) {
+            onChange(null);
+          } else {
+            onChange(+value);
+          }
+        }}
+        onBlur={onBlur}
+        type="text"
+        inputMode="numeric"
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        aria-invalid={!!error}
+        aria-describedby={descriptionIdentifier}
+        required={required}
+      />
+
+      {!!error && (
+        <Description id={errorIdentifier} error>
+          {error.message}
+        </Description>
+      )}
     </div>
   );
 }

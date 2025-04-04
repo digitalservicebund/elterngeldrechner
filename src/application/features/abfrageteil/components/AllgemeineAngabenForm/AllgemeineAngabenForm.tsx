@@ -1,11 +1,12 @@
 import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
 import { CustomInput } from "./CustomInput";
+import { InfoZuAlleinerziehenden } from "./InfoFuerAlleinerziehenden";
+import { InfoZumMutterschutz } from "./InfoZumMutterschutz";
 import {
   Button,
   CustomRadioGroup,
   CustomRadioGroupOption,
-  InfoText,
 } from "@/application/components";
 import {
   Split,
@@ -22,9 +23,6 @@ const antragstellendeOptions: CustomRadioGroupOption[] = [
   { value: "EinenElternteil", label: "Für einen Elternteil" },
   { value: "FuerBeide", label: "Für zwei Elternteile" },
 ];
-
-const alleinerziehendInfoText =
-  "Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten.";
 
 type Props = {
   readonly id?: string;
@@ -91,12 +89,7 @@ export function AllgemeineAngabenForm({
           name="alleinerziehend"
           errors={formState.errors}
           required
-          slotBetweenLegendAndOptions={
-            <InfoText
-              question="Was bedeutet alleinerziehend?"
-              answer={alleinerziehendInfoText}
-            />
-          }
+          slotBetweenLegendAndOptions={<InfoZuAlleinerziehenden />}
         />
       </section>
 
@@ -193,35 +186,7 @@ export function AllgemeineAngabenForm({
                     { label: "Ich weiß es noch nicht", value: YesNo.NO },
                   ]
             }
-            slotBetweenLegendAndOptions={
-              <InfoText
-                question="Was ist Mutterschutz?"
-                answer={
-                  <>
-                    <p>
-                      Während des Mutterschutzes erhalten Sie
-                      Mutterschaftsleistungen, zum Beispiel:
-                    </p>
-
-                    <ul className="list-inside list-disc">
-                      <li>
-                        das Mutterschaftsgeld der gesetzlichen Krankenkassen
-                      </li>
-                      <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
-                      <li>
-                        die Bezüge für Beamtinnen während des Mutterschutzes
-                      </li>
-                    </ul>
-
-                    <p>
-                      Diese werden – wenn ein Anspruch darauf besteht –
-                      normalerweise in den ersten acht Wochen nach der Geburt
-                      gezahlt.
-                    </p>
-                  </>
-                }
-              />
-            }
+            slotBetweenLegendAndOptions={<InfoZumMutterschutz />}
           />
         </section>
       )}

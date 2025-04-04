@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { useFormContext } from "react-hook-form";
+import { InfoEinkommenFuerErwerbstaetige } from "./InfoEinkommenFuerErwerbstaetige";
 import { Button } from "@/application/components";
 import {
   CustomNumberField,
@@ -14,9 +15,6 @@ type Props = {
   readonly elternteil: ElternteilType;
   readonly monthsBeforeBirth: SelectOption[];
 };
-
-const einkommenNichtSelbststaendigInfoText =
-  "Als Einkommen werden alle Einkünfte aus Ihrer nicht-selbständigen Tätigkeit im Bemessungszeitraum berücksichtigt. Nicht berücksichtigt werden sonstige Bezüge, z.B. Abfindungen, Leistungsprämien, Provisionen, 13. Monatsgehälter. Steuerfreie Einnahmen werden ebenfalls nicht berücksichtigt, z.B. Trinkgelder, steuerfreie Zuschläge, Krankengeld, Kurzarbeitergeld, ALG II";
 
 export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
   const { control, setValue, watch } = useFormContext<StepEinkommenState>();
@@ -41,17 +39,20 @@ export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
 
       {averageOrMonthlyNichtSelbstaendig === "average" && (
         <div>
-          <p className="mb-8">
+          <p className="mb-16">
             Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres
             Kindes <strong>monatlich</strong> brutto verdient?
           </p>
+
+          <InfoEinkommenFuerErwerbstaetige />
+
           <CustomNumberField
+            className="mt-16"
             control={control}
             name={`${elternteil}.bruttoEinkommenNichtSelbstaendig.average`}
             label="Monatliches Einkommen in Brutto"
             suffix="Euro"
             required
-            info={einkommenNichtSelbststaendigInfoText}
           />
         </div>
       )}

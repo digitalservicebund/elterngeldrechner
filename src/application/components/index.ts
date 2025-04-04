@@ -1,5 +1,4 @@
 export { Button } from "./Button";
-export { type Info, InfoDialog } from "./InfoDialog";
 export { InfoText } from "./InfoText";
 export {
   CustomRadioGroup,

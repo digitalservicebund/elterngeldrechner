@@ -10,7 +10,6 @@ import {
   get,
 } from "react-hook-form";
 import { Description } from "./Description";
-import { type Info, InfoDialog } from "@/application/components";
 
 export interface SelectOption<TValue extends string = string> {
   value: TValue;
@@ -28,13 +27,12 @@ type Props<TFieldValues extends FieldValues> = {
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
   readonly label: string;
+  readonly slotBetweenLabelAndSelect?: ReactNode;
   readonly errors?: FieldErrors<TFieldValues>;
   readonly options: SelectOption[];
   readonly autoWidth?: boolean;
   readonly required?: boolean;
   readonly disabled?: boolean;
-  readonly info?: Info;
-  readonly slotBetweenLabelAndSelect?: ReactNode;
   readonly className?: string;
 };
 
@@ -48,7 +46,6 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   autoWidth,
   required,
   disabled,
-  info,
   slotBetweenLabelAndSelect,
   className,
   ...aria
@@ -65,63 +62,62 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   return (
     <div
       className={classNames(
-        "flex w-full justify-between",
+        "flex flex-col items-start",
         autoWidth && "w-auto",
         className,
       )}
     >
-      <div className="flex flex-col items-start">
-        <label htmlFor={name}>{label}</label>
+      <label className="mb-8" htmlFor={name}>
+        {label}
+      </label>
 
-        {slotBetweenLabelAndSelect ? (
-          <div className="mb-8">{slotBetweenLabelAndSelect}</div>
-        ) : null}
+      {!!slotBetweenLabelAndSelect && (
+        <div className="mb-10">{slotBetweenLabelAndSelect}</div>
+      )}
 
-        <div className="relative w-full min-w-max">
-          <select
-            {...register(name, registerOptions)}
-            className={classNames(
-              "mt-8 min-w-max appearance-none border border-solid border-grey-dark bg-white !px-16 py-8 !pr-56",
-              "focus:!outline focus:!outline-2 focus:!outline-primary disabled:cursor-default",
-              error && "border-danger",
-            )}
-            style={customArrows}
-            id={name}
-            disabled={disabled}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${name}-error` : undefined}
-            required={required}
-            {...aria}
+      <div className="relative w-full min-w-max">
+        <select
+          {...register(name, registerOptions)}
+          className={classNames(
+            "min-w-max appearance-none border border-solid border-grey-dark bg-white !px-16 py-8 !pr-56",
+            "focus:!outline focus:!outline-2 focus:!outline-primary disabled:cursor-default",
+            error && "border-danger",
+          )}
+          style={customArrows}
+          id={name}
+          disabled={disabled}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${name}-error` : undefined}
+          required={required}
+          {...aria}
+        >
+          <option
+            className="bg-white px-16 py-8"
+            value=""
+            disabled={required}
+            hidden={required}
           >
-            <option
-              className="bg-white px-16 py-8"
-              value=""
-              disabled={required}
-              hidden={required}
-            >
-              Bitte wählen
-            </option>
+            Bitte wählen
+          </option>
 
-            {options.map((option) => (
-              <option
-                key={option.value}
-                className="bg-white px-16 py-8"
-                value={option.value}
-                hidden={option.hidden}
-              >
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        {!!error && (
-          <Description id={`${name}-error`} error>
-            {error.message}
-          </Description>
-        )}
+          {options.map((option) => (
+            <option
+              key={option.value}
+              className="bg-white px-16 py-8"
+              value={option.value}
+              hidden={option.hidden}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
 
-      {!!info && <InfoDialog info={info} />}
+      {!!error && (
+        <Description id={`${name}-error`} error>
+          {error.message}
+        </Description>
+      )}
     </div>
   );
 }

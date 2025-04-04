@@ -12,11 +12,9 @@ import { useAnchorPositioning } from "./positioning/anchor";
 import { useMarginPositioning } from "./positioning/margin";
 import { useOnClickOutside } from "@/application/hooks/useOnClickOutside";
 
-export type Info = string | ReactNode;
-
 type Props = {
   readonly ariaLabelForDialog?: string;
-  readonly info: Info;
+  readonly info: string | ReactNode;
   readonly id?: string;
   readonly className?: string;
   readonly style?: CSSProperties;

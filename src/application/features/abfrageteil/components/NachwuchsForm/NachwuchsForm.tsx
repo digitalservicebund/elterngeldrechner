@@ -4,8 +4,9 @@ import { useCallback, useId } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Counter } from "./Counter";
 import { CustomDate } from "./CustomDate";
-import { NachwuchsFormInfoText } from "./NachwuchsFormInfoText";
-import { Button, InfoDialog } from "@/application/components";
+import { InfoZuFruehgeburten } from "./InfoZuFruehgeburten";
+import { InfoZumGeschwisterbonus } from "./InfoZumGeschwisterbonus";
+import { Button } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import {
   type StepNachwuchsState,
@@ -115,7 +116,12 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
   const geschwisterKindHeadingBaseIdentifier = useId();
 
   return (
-    <form id={id} onSubmit={handleSubmit(submitNachwuchs)} noValidate>
+    <form
+      id={id}
+      className="flex flex-col gap-16"
+      onSubmit={handleSubmit(submitNachwuchs)}
+      noValidate
+    >
       <CustomDate
         control={control}
         rules={{
@@ -130,8 +136,8 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
         }}
         name={wahrscheinlichesGeburtsDatumName}
         label="Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?"
+        slotBetweenLabelAndInput={<InfoZuFruehgeburten />}
         required
-        info={<NachwuchsFormInfoText />}
       />
 
       <Counter
@@ -155,34 +161,20 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
         required
       />
 
-      <section
-        className="mt-32"
-        aria-describedby={geschwisterHeadingIdentifier}
-      >
+      <section aria-describedby={geschwisterHeadingIdentifier}>
         <h3 id={geschwisterHeadingIdentifier} className="mb-10">
           Gibt es ältere Geschwister?
         </h3>
 
-        <div className="mb-10 flex justify-between">
+        <p className="mb-10 flex justify-between">
           Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben,
           können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den
           Geschwisterbonus.
-          <InfoDialog
-            info={
-              <ul className="list-inside list-disc">
-                Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
-                <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
-                <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
-                <li>
-                  mindestens ein weiteres Kind mit Behinderung unter 14 Jahren
-                  lebt.
-                </li>
-              </ul>
-            }
-          />
-        </div>
+        </p>
 
-        <ul className="m-0 list-none p-0">
+        <InfoZumGeschwisterbonus />
+
+        <ul className="m-0 mt-16 list-none p-0">
           {fields.map((field, index) => {
             const headingIdentifier =
               geschwisterKindHeadingBaseIdentifier + field.id;

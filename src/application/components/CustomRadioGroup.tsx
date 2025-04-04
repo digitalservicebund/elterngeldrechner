@@ -9,7 +9,6 @@ import {
   UseFormRegister,
   get,
 } from "react-hook-form";
-import { Info, InfoDialog } from "@/application/components/InfoDialog";
 
 type RadioGroupValue = string | number;
 
@@ -26,7 +25,6 @@ type Props<TFieldValues extends FieldValues> = {
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
   readonly legend: string | ReactNode;
-  readonly info?: Info;
   readonly slotBetweenLegendAndOptions?: ReactNode;
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
@@ -41,7 +39,6 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   registerOptions,
   name,
   legend,
-  info,
   slotBetweenLegendAndOptions,
   options,
   errors,
@@ -72,16 +69,11 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
         aria-describedby={hasError ? errorIdentifier : undefined}
       >
-        <legend className="mb-8 w-full py-4 pr-40">{legend}</legend>
-        {!!info && (
-          <div className="absolute right-0 top-4">
-            <InfoDialog info={info} />
-          </div>
-        )}
+        <legend className="mb-8">{legend}</legend>
 
-        {slotBetweenLegendAndOptions ? (
+        {!!slotBetweenLegendAndOptions && (
           <div className="mb-8">{slotBetweenLegendAndOptions}</div>
-        ) : null}
+        )}
 
         {options.map((option, i) => {
           const descriptionId = `${baseId}-${option.label}`;

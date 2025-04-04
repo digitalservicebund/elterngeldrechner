@@ -8,8 +8,10 @@ import {
   availableZeitraumOptions,
 } from "./ZeitraumUtil";
 import { Button } from "@/application/components";
+import { InfoEinkommenFuerErwerbstaetige } from "@/application/features/abfrageteil/components/EinkommenForm/InfoEinkommenFuerErwerbstaetige";
 import { Versicherungen } from "@/application/features/abfrageteil/components/EinkommenForm/Taetigkeit/Versicherungen";
 import {
+  InfoZuMiniJobs,
   type SelectOption,
   cloneOptionsList,
 } from "@/application/features/abfrageteil/components/common";
@@ -109,15 +111,13 @@ export function NichtSelbstaendig({
         control={control}
         name={`${baseFieldPath}.bruttoEinkommenDurchschnitt`}
         label="Durchschnittliches Bruttoeinkommen"
+        slotBetweenLabelAndOptions={<InfoEinkommenFuerErwerbstaetige />}
         suffix="Euro"
-        info="Als Einkommen werden alle Einkünfte aus Ihrer nicht-selbständigen Tätigkeit im Bemessungszeitraum berücksichtigt. Nicht berücksichtigt werden sonstige Bezüge, z.B. Abfindungen, Leistungsprämien, Provisionen, 13. Monatsgehälter. Steuerfreie Einnahmen werden ebenfalls nicht berücksichtigt, z.B. Trinkgelder, steuerfreie Zuschläge, Krankengeld, Kurzarbeitergeld, ALG II"
       />
 
       <YesNoRadio
         legend="War diese Tätigkeit ein Mini-Job?"
-        info={`Mini-Job - geringfügige Beschäftigung bis maximal 538 Euro monatlich
-  - vor dem 01.01.2024: bis maximal 520 Euro monatlich
-  - vor dem 01.10.2022: bis maximal 450 Euro monatlich`}
+        slotBetweenLegendAndOptions={<InfoZuMiniJobs />}
         name={`${baseFieldPath}.isMinijob`}
         register={register}
         registerOptions={{ required: "Dieses Feld ist erforderlich" }}

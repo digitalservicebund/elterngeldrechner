@@ -1,5 +1,6 @@
 import { type ForwardedRef, forwardRef, useId } from "react";
 import { type FieldPath, useFormContext } from "react-hook-form";
+import { InfoZurArtDerTaetigkeit } from "./InfoZurArtDerTaetigkeit";
 import { NichtSelbstaendig } from "./NichtSelbstaendig";
 import { Selbststaendig } from "./Selbstaendig";
 import { Button } from "@/application/components";
@@ -56,13 +57,13 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
         register={register}
         name={`${baseFieldPath}.artTaetigkeit`}
         label="Art der Tätigkeit"
+        slotBetweenLabelAndSelect={<InfoZurArtDerTaetigkeit />}
         options={erwerbstaetigkeitOptions}
         registerOptions={{
           required: "Dieses Feld ist erforderlich",
         }}
         errors={errors}
         required
-        info="Einkünfte aus nichtselbständiger Arbeit: z.B. Lohn Gehalt (auch aus einem Minijob) oder Gewinneinkünfte: Einkünfte aus einem Gewerbebetrieb (auch z.B. aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch z.B. aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft"
       />
 
       {istSelbststaendig ? (

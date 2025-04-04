@@ -1,8 +1,10 @@
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
-import { InfoDialog } from "@/application/components";
-import { Geldbetrag } from "@/application/features/planer/component/common";
+import {
+  Geldbetrag,
+  InfoDialog,
+} from "@/application/features/planer/component/common";
 import type { Einkommen, Elterngeldbezug } from "@/monatsplaner";
 
 type Props = {

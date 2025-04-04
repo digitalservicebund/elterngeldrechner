@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { useId } from "react";
+import { type ReactNode, useId } from "react";
 import {
   FieldPath,
   FieldValues,
@@ -7,7 +7,6 @@ import {
   useController,
 } from "react-hook-form";
 import { IMask, IMaskInput } from "react-imask";
-import { type Info, InfoDialog } from "@/application/components";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
 type Props<
@@ -15,14 +14,21 @@ type Props<
   TName extends FieldPath<TFieldValues>,
 > = UseControllerProps<TFieldValues, TName> & {
   readonly label: string;
+  readonly slotBetweenLabelAndInput?: ReactNode;
   readonly required?: boolean;
-  readonly info?: Info;
 };
 
 export function CustomDate<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
->({ control, rules, name, label, required, info }: Props<TFieldValues, TName>) {
+>({
+  control,
+  rules,
+  name,
+  label,
+  slotBetweenLabelAndInput,
+  required,
+}: Props<TFieldValues, TName>) {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },
@@ -42,10 +48,14 @@ export function CustomDate<
 
   return (
     <div className="flex flex-col">
-      <div className="mb-8 flex w-full justify-between">
-        <label htmlFor={name}>{label}</label>
-        {!!info && <InfoDialog info={info} />}
-      </div>
+      <label className="mb-8" htmlFor={name}>
+        {label}
+      </label>
+
+      {!!slotBetweenLabelAndInput && (
+        <div className="mb-10">{slotBetweenLabelAndInput}</div>
+      )}
+
       <div
         className={classNames(
           "mb-16 flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",

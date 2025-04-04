@@ -1,9 +1,10 @@
 import { useId } from "react";
 import { useFormContext } from "react-hook-form";
+import { InfoZurGesetzlichenKrankenversicherung } from "./InfoZurGesetzlichenKrankenversicherung";
+import { InfoZurSteuerklasse } from "./InfoZurSteuerklasse";
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
-  InfoText,
 } from "@/application/components";
 import {
   CustomSelect,
@@ -72,9 +73,6 @@ const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
   },
 ];
 
-const einkommenSteuerklasseInfo =
-  "Wenn Sie die Steuerklasse in den letzten 12 Monaten vor der Geburt Ihres Kindes gewechselt haben: Nehmen Sie die Steuerklasse, die Sie am längsten hatten. Wenn Sie beide gleich lang hatten: Nehmen Sie die aktuellere.";
-
 export function SteuerUndVersicherung({
   elternteil,
   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
@@ -118,16 +116,11 @@ export function SteuerUndVersicherung({
             errors={errors}
             options={steuerKlasseOptions}
             required
-            slotBetweenLabelAndSelect={
-              <InfoText
-                className="pt-8"
-                question="Ich habe die Steuerklasse gewechselt"
-                answer={einkommenSteuerklasseInfo}
-              />
-            }
+            slotBetweenLabelAndSelect={<InfoZurSteuerklasse />}
           />
         </section>
       )}
+
       {!isOnlySelbstaendig && numberOfGeschwisterKinder > 0 && (
         <section aria-labelledby={kinderfreibetraegeHeadingIdentifier}>
           <h3 id={kinderfreibetraegeHeadingIdentifier} className="mb-10">
@@ -173,29 +166,15 @@ export function SteuerUndVersicherung({
 
           <CustomRadioGroup
             legend="Sind Sie gesetzlich pflichtversichert?"
+            slotBetweenLegendAndOptions={
+              <InfoZurGesetzlichenKrankenversicherung />
+            }
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name={`${elternteil}.kassenArt`}
             options={kassenArtOptions}
             errors={errors}
             required
-          />
-
-          <InfoText
-            className="pt-8"
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="list-inside list-disc">
-                  <li>freiwillig gesetzlich versichert,</li>
-                  <li>familienversichert,</li>
-                  <li>privat versichert,</li>
-                  <li>in der freien Heilfürsorge oder</li>
-                  <li>nicht (in Deutschland) krankenversichert sind.</li>
-                </ul>
-              </>
-            }
           />
         </section>
       )}

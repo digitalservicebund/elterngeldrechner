@@ -10,7 +10,6 @@ import {
   get,
 } from "react-hook-form";
 import { Description } from "./Description";
-import { type Info, InfoDialog } from "@/application/components";
 
 type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
@@ -19,7 +18,6 @@ type Props<TFieldValues extends FieldValues> = {
   readonly label: string;
   readonly errors?: FieldErrors<TFieldValues> | boolean;
   readonly onChange?: (newValue: boolean) => void;
-  readonly info?: Info;
   readonly className?: string;
 };
 
@@ -30,7 +28,6 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   label,
   errors,
   onChange,
-  info,
   className,
 }: Props<TFieldValues>) {
   let hasError = false;
@@ -71,34 +68,30 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   const allCheckboxClasses = Object.values(checkboxClasses).join(" ");
 
   return (
-    <div className={classNames(className, "flex justify-between p-8 pl-0")}>
-      <div>
-        <input
-          {...register(name, registerOptions)}
-          type="checkbox"
-          className={classNames(
-            "peer absolute opacity-0",
-            hasError && "border-danger",
-          )}
-          id={name}
-          onClick={onClick}
-          aria-invalid={hasError}
-          aria-describedby={errorMessage ? `${name}-error` : undefined}
-        />
-        <label
-          className={classNames("relative pl-40", allCheckboxClasses)}
-          htmlFor={name}
-        >
-          {label}
-        </label>
-        {!!errorMessage && (
-          <Description id={`${name}-error`} error>
-            {errorMessage}
-          </Description>
+    <div className={classNames("p-8", className)}>
+      <input
+        {...register(name, registerOptions)}
+        type="checkbox"
+        className={classNames(
+          "peer absolute opacity-0",
+          hasError && "border-danger",
         )}
-      </div>
-
-      {!!info && <InfoDialog info={info} />}
+        id={name}
+        onClick={onClick}
+        aria-invalid={hasError}
+        aria-describedby={errorMessage ? `${name}-error` : undefined}
+      />
+      <label
+        className={classNames("relative pl-40", allCheckboxClasses)}
+        htmlFor={name}
+      >
+        {label}
+      </label>
+      {!!errorMessage && (
+        <Description id={`${name}-error`} error>
+          {errorMessage}
+        </Description>
+      )}
     </div>
   );
 }

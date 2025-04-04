@@ -6,5 +6,6 @@ export {
   cloneOptionsList,
 } from "./CustomSelect";
 export { Description } from "./Description";
+export { InfoZuMiniJobs } from "./InfoZuMiniJobs";
 export { Split } from "./Split";
 export { YesNoRadio } from "./YesNoRadio";

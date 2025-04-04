@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
+import { InfoZumEinkommenslimit } from "./InfoZumEinkommenslimit";
 import { Button } from "@/application/components";
 import {
   Split,
@@ -13,8 +14,6 @@ import {
 } from "@/application/features/abfrageteil/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { MAX_EINKOMMEN } from "@/elterngeldrechner";
-
-const einkommenLimitUeberschrittenInfoText = `Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als ${MAX_EINKOMMEN.toLocaleString()} Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen.`;
 
 type Props = {
   readonly id?: string;
@@ -48,7 +47,7 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
         <YesNoRadio
           className="mb-32"
           legend={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${MAX_EINKOMMEN.toLocaleString()} Euro?`}
-          info={einkommenLimitUeberschrittenInfoText}
+          slotBetweenLegendAndOptions={<InfoZumEinkommenslimit />}
           register={methods.register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="limitEinkommenUeberschritten"

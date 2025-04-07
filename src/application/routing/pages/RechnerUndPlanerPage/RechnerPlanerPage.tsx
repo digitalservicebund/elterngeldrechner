@@ -11,9 +11,11 @@ import {
   trackMetricsForPlanerWurdeGeoeffnet,
 } from "./tracking";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
-import { useDialogWhenEinkommenLimitUeberschritten } from "./useDialogWhenEinkommenLimitUeberschritten";
 import { Button } from "@/application/components";
-import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
+import {
+  YesNo,
+  composeAusgangslageFuerPlaner,
+} from "@/application/features/abfrageteil/state";
 import {
   Erklaerung,
   Planer,
@@ -38,14 +40,24 @@ import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 import { type PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function RechnerPlanerPage() {
-  const dialogElement = useRef<HTMLDialogElement>(null);
-  const mainElement = useRef<HTMLDivElement>(null);
-  const { closeDialog } = useDialogWhenEinkommenLimitUeberschritten(
-    dialogElement,
-    mainElement,
-  );
-
   const store = useAppStore();
+  const mainElement = useRef<HTMLDivElement>(null);
+  const dialogElement = useRef<HTMLDialogElement>(null);
+
+  function openDialogWhenEinkommenLimitUebeschritten() {
+    const isEinkommenLimitUeberschritten =
+      store.getState().stepEinkommen.limitEinkommenUeberschritten === YesNo.YES;
+
+    if (isEinkommenLimitUeberschritten) dialogElement.current?.showModal();
+  }
+
+  function closeDialog() {
+    dialogElement.current?.close();
+    mainElement.current?.focus();
+  }
+
+  useEffect(openDialogWhenEinkommenLimitUebeschritten, [store]);
+
   const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
   const initialPlanerInformation = useRef(
     initialPlan !== undefined

@@ -67,7 +67,7 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
         name={isSelbstaendigFieldName}
         label="Gewinneinkünfte"
         errors={hasError}
-        className="pt-16"
+        className="pt-32"
       />
 
       <InfoText

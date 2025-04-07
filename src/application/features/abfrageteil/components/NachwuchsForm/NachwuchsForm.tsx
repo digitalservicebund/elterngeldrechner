@@ -166,7 +166,7 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
           Gibt es ältere Geschwister?
         </h3>
 
-        <p className="mb-10 flex justify-between">
+        <p className="mb-10 flex justify-between p-0">
           Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben,
           können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den
           Geschwisterbonus.

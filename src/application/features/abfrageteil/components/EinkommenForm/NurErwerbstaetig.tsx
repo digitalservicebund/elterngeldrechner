@@ -57,7 +57,7 @@ export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
         </div>
       )}
       {averageOrMonthlyNichtSelbstaendig === "average" && (
-        <p className="my-16 text-16">
+        <p className="my-16">
           Wenn das Einkommen zwischen den Monaten sehr schwankte, klicken Sie
           bitte auf „ausführliche Eingabe“ und geben die Monate einzeln ein.
         </p>

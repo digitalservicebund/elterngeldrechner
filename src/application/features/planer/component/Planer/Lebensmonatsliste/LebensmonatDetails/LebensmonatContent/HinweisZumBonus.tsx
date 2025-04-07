@@ -21,6 +21,9 @@ export function HinweisZumBonus({
           <br />
         </>
       )}
+      Sie erhalten den Partnerschaftsbonus, wenn sie mindestens 24 und höchstens
+      32 Stunden pro Woche arbeiten.
+      <br />
       Sie müssen den Partnerschaftbonus für mindestens 2 Lebensmonate beantragen
       – deshalb wurde automatisch auch der folgende Monat ausgewählt. Sie können
       bis zu vier Lebensmonate Partnerschaftsbonus bekommen.

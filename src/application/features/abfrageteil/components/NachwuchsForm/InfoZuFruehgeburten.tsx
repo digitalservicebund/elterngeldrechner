@@ -16,16 +16,13 @@ export function InfoZuFruehgeburten() {
               mindestens 6 Wochen zu früh: 1 zusätzlicher Monat Basiselterngeld
             </li>
             <li>
-              mindestens 6 Wochen zu früh:1 zusätzlicher Monat Basiselterngeld
+              mindestens 8 Wochen zu früh: 2 zusätzliche Monate Basiselterngeld
             </li>
             <li>
-              mindestens 8 Wochen zu früh:2 zusätzliche Monate Basiselterngeld
+              mindestens 12 Wochen zu früh: 3 zusätzliche Monate Basiselterngeld
             </li>
             <li>
-              mindestens 12 Wochen zu früh:3 zusätzliche Monate Basiselterngeld
-            </li>
-            <li>
-              mindestens 16 Wochen zu früh:4 zusätzliche Monate Basiselterngeld
+              mindestens 16 Wochen zu früh: 4 zusätzliche Monate Basiselterngeld
             </li>
           </ul>
 

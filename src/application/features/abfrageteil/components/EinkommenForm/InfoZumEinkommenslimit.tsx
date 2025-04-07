@@ -5,7 +5,7 @@ import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 export function InfoZumEinkommenslimit(): ReactNode {
   return (
     <InfoText
-      question="Was bedeutet Gesamteinkommen"
+      question="Was bedeutet Gesamteinkommen?"
       answer={
         <p>
           Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld

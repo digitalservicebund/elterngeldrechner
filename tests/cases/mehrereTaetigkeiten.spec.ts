@@ -1,17 +1,19 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("mehrere Tätigkeiten", async ({ page }) => {
   test.slow();
   const screenshot = expectScreenshot({ page });
 
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setAlleinerziehend(false);
+  await allgemeineAngabenPage.setElternteile(1);
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
+  await allgemeineAngabenPage.submit();
+
   // codegen
-  await page.goto("./");
-  await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
-  await page.getByLabel("Für einen Elternteil").click();
-  await page.getByLabel("Mutterschutz").getByText("Ja").click();
-  await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("18.11.2024");
   await page

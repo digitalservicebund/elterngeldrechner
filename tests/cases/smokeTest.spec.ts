@@ -1,4 +1,5 @@
 import { test } from "@playwright/test";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 /**
@@ -13,12 +14,11 @@ import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 test("smoke test", async ({ page }) => {
   test.slow();
 
-  await page.goto("./");
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setAlleinerziehend(true);
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
+  await allgemeineAngabenPage.submit();
 
-  await page.getByLabel("Alleinerziehendenstatus").getByText("Ja").click();
-
-  await page.getByLabel("Mutterschutz").getByText("Ja").click();
-  await page.getByRole("button", { name: "Weiter" }).click();
   await page
     .locator("div")
     .filter({ hasText: /^TT\.MM\.JJJJ$/ })

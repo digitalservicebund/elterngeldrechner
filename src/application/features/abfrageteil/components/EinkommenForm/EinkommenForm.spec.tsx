@@ -129,14 +129,15 @@ describe("Einkommen Page", () => {
       );
 
       // Field Kirchensteuer
-      const kirchensteuerSection =
-        within(elternteil1Section).getByLabelText("Kirchensteuer");
+      const kirchensteuerSection = within(elternteil1Section)
+        .getByText(/kirchensteuerpflichtig/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
       await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
 
       // Field Krankenversicherung
-      const krankenversicherungSection = within(
-        elternteil1Section,
-      ).getByLabelText("Krankenversicherung");
+      const krankenversicherungSection = within(elternteil1Section)
+        .getByText(/pflichtversichert/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
       await userEvent.click(
         within(krankenversicherungSection).getByLabelText(/^Ja/),
       );
@@ -206,21 +207,23 @@ describe("Einkommen Page", () => {
       await userEvent.type(gewinnYearlyField, "12000");
 
       // Field Kirchensteuer
-      const kirchensteuerSection =
-        within(elternteil1Section).getByLabelText("Kirchensteuer");
+      const kirchensteuerSection = within(elternteil1Section)
+        .getByText(/kirchensteuerpflichtig/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
       await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
 
       // Field Krankenversicherung
-      const krankenversicherungSection = within(
-        elternteil1Section,
-      ).getByLabelText("Krankenversicherung");
+      const krankenversicherungSection = within(elternteil1Section)
+        .getByText(/pflichtversichert/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
       await userEvent.click(
         within(krankenversicherungSection).getByLabelText(/^Ja/),
       );
 
       // Field Rentenversicherung
-      const rentenversicherung =
-        within(elternteil1Section).getByLabelText("Rentenversicherung");
+      const rentenversicherung = within(elternteil1Section)
+        .getByText(/rentenversichert/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
       await userEvent.click(
         within(rentenversicherung).getByLabelText(
           "gesetzliche Rentenversicherung",
@@ -288,8 +291,9 @@ describe("Einkommen Page", () => {
       // await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
 
       // Field Kirchensteuer
-      const kirchensteuerSection =
-        within(elternteil1Section).getByLabelText("Kirchensteuer");
+      const kirchensteuerSection = within(elternteil1Section)
+        .getByText(/kirchensteuerpflichtig/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
       await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
 
       // Field Steuerklasse

@@ -1,21 +1,19 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("verheiratet, Mischeinkünfte", async ({ page }) => {
   test.slow();
   const screenshot = expectScreenshot({ page });
 
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setAlleinerziehend(false);
+  await allgemeineAngabenPage.setElternteile(2);
+  await allgemeineAngabenPage.setMutterschutz("Elternteil 2");
+  await allgemeineAngabenPage.submit();
+
   // codegen
-  await page.goto("./");
-  await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
-  await page.getByText("Für zwei Elternteile").click();
-  await page
-    .getByText("Ja, Elternteil 2 ist oder wird im Mutterschutz sein", {
-      exact: true,
-    })
-    .click();
-  await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("20.11.2024");
   await page
@@ -36,7 +34,11 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByText("Einkünfte aus nichtselbstä").click();
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("3");
-  await page.getByLabel("Kirchensteuer").getByText("Ja").click();
+  await page
+    .getByLabel("Elternteil 1")
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Ja" })
+    .click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("4500 Euro");
   await page

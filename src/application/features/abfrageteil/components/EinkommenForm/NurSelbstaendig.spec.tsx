@@ -27,7 +27,9 @@ describe("Einkommens Page only with block Nur Selbständig", () => {
     within(getElternteil1Section()).getByLabelText("Gewinneinkünfte");
 
   const getRentenversicherungElternteil1Section = () =>
-    within(getElternteil1Section()).getByLabelText("Rentenversicherung");
+    within(getElternteil1Section())
+      .getByText(/rentenversichert/i, { selector: "legend" })
+      .closest("fieldset") as HTMLElement;
 
   it("should not show Einkommen aus Selbstständigkeit if the user does have nicht-selbständige Tätigkeit", () => {
     const state = produce(stateFromPreviousSteps, (draft) => {

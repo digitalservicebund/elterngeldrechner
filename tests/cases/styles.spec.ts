@@ -93,20 +93,8 @@ const testStyles = async ({
     allgemeineAngabenPage.elternteile,
   );
 
-  await expect(allgemeineAngabenPage.pseudonyme).toBeVisible();
-
-  await screenshot(
-    "allgemeine-angaben-pseudonyme",
-    allgemeineAngabenPage.pseudonyme,
-  );
-
   await allgemeineAngabenPage.setNameElternteil1("Leia");
   await allgemeineAngabenPage.setNameElternteil2("Luke");
-
-  await screenshot(
-    "allgemeine-angaben-pseudonyme-ausgefuellt",
-    allgemeineAngabenPage.pseudonyme,
-  );
 
   await allgemeineAngabenPage.setMutterschutz("Leia");
   await allgemeineAngabenPage.setNameElternteil1("");

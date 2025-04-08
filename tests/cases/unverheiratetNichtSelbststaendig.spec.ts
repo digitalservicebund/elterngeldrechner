@@ -67,23 +67,23 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .selectOption("1");
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Kirchensteuer")
-    .getByText("Nein")
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Nein" })
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Kirchensteuer")
-    .getByText("Nein")
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Nein" })
     .click();
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Krankenversicherung")
-    .getByText("Ja", { exact: true })
+    .getByRole("radiogroup", { name: "Sind Sie gesetzlich pflichtversichert?" })
+    .getByRole("radio", { name: "Ja" })
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Krankenversicherung")
-    .getByText("Ja", { exact: true })
+    .getByRole("radiogroup", { name: "Sind Sie gesetzlich pflichtversichert?" })
+    .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();
 

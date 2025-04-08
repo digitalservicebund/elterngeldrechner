@@ -41,10 +41,7 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
   const errorIdentifier = useId();
 
   return (
-    <fieldset
-      className="mb-32"
-      aria-describedby={hasError ? errorIdentifier : undefined}
-    >
+    <fieldset aria-describedby={hasError ? errorIdentifier : undefined}>
       <legend className="mb-8">Ich hatte in diesem Zeitraum…</legend>
 
       <CustomCheckbox

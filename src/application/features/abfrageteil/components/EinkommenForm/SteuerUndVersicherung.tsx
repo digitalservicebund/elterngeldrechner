@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { useFormContext } from "react-hook-form";
 import { InfoZurGesetzlichenKrankenversicherung } from "./InfoZurGesetzlichenKrankenversicherung";
 import { InfoZurSteuerklasse } from "./InfoZurSteuerklasse";
@@ -92,108 +91,73 @@ export function SteuerUndVersicherung({
     ),
   );
 
-  const steuerklasseHeadingIdentifier = useId();
-  const kinderfreibetraegeHeadingIdentifier = useId();
-  const kirchensteuerHeadingIdentifier = useId();
-  const krankenversicherungHeadingIdentifier = useId();
-  const rentenversicherungHeadingIdentifier = useId();
   return (
     <>
       {!isOnlySelbstaendig && (
-        <section aria-labelledby={steuerklasseHeadingIdentifier}>
-          <h3 id={steuerklasseHeadingIdentifier} className="mb-10">
-            Steuerklasse
-          </h3>
-
-          <CustomSelect
-            autoWidth
-            register={register}
-            registerOptions={{
-              required: "Eine Option muss ausgewählt sein",
-            }}
-            name={`${elternteil}.steuerKlasse`}
-            label="Welche Steuerklasse hatten Sie in den letzten 12 Monaten?"
-            errors={errors}
-            options={steuerKlasseOptions}
-            required
-            slotBetweenLabelAndSelect={<InfoZurSteuerklasse />}
-          />
-        </section>
+        <CustomSelect
+          autoWidth
+          register={register}
+          registerOptions={{
+            required: "Eine Option muss ausgewählt sein",
+          }}
+          name={`${elternteil}.steuerKlasse`}
+          label="Welche Steuerklasse hatten Sie in den letzten 12 Monaten?"
+          errors={errors}
+          options={steuerKlasseOptions}
+          required
+          slotBetweenLabelAndSelect={<InfoZurSteuerklasse />}
+        />
       )}
 
       {!isOnlySelbstaendig && numberOfGeschwisterKinder > 0 && (
-        <section aria-labelledby={kinderfreibetraegeHeadingIdentifier}>
-          <h3 id={kinderfreibetraegeHeadingIdentifier} className="mb-10">
-            Kinderfreibeträge
-          </h3>
-
-          <CustomSelect
-            autoWidth
-            register={register}
-            registerOptions={{
-              required: "Eine Option muss ausgewählt sein",
-            }}
-            name={`${elternteil}.kinderFreiBetrag`}
-            label="Wie viele Kinderfreibeträge sind aus Ihrer Lohn- und
+        <CustomSelect
+          autoWidth
+          register={register}
+          registerOptions={{
+            required: "Eine Option muss ausgewählt sein",
+          }}
+          name={`${elternteil}.kinderFreiBetrag`}
+          label="Wie viele Kinderfreibeträge sind aus Ihrer Lohn- und
         Gehaltsbescheinigung ersichtlich?"
-            errors={errors}
-            options={kinderFreiBetragOptions}
-            required
-          />
-        </section>
+          errors={errors}
+          options={kinderFreiBetragOptions}
+          required
+        />
       )}
 
-      <section aria-labelledby={kirchensteuerHeadingIdentifier}>
-        <h3 id={kirchensteuerHeadingIdentifier} className="mb-10">
-          Kirchensteuer
-        </h3>
+      <YesNoRadio
+        legend="Sind Sie kirchensteuerpflichtig?"
+        register={register}
+        registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+        name={`${elternteil}.zahlenSieKirchenSteuer`}
+        errors={errors}
+        required
+      />
 
-        <YesNoRadio
-          legend="Sind Sie kirchensteuerpflichtig?"
+      {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
+        <CustomRadioGroup
+          legend="Sind Sie gesetzlich pflichtversichert?"
+          slotBetweenLegendAndOptions={
+            <InfoZurGesetzlichenKrankenversicherung />
+          }
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-          name={`${elternteil}.zahlenSieKirchenSteuer`}
+          name={`${elternteil}.kassenArt`}
+          options={kassenArtOptions}
           errors={errors}
           required
         />
-      </section>
-
-      {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
-        <section aria-labelledby={krankenversicherungHeadingIdentifier}>
-          <h3 id={krankenversicherungHeadingIdentifier} className="mb-10">
-            Krankenversicherung
-          </h3>
-
-          <CustomRadioGroup
-            legend="Sind Sie gesetzlich pflichtversichert?"
-            slotBetweenLegendAndOptions={
-              <InfoZurGesetzlichenKrankenversicherung />
-            }
-            register={register}
-            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-            name={`${elternteil}.kassenArt`}
-            options={kassenArtOptions}
-            errors={errors}
-            required
-          />
-        </section>
       )}
       {!!isOnlySelbstaendig && (
-        <section aria-labelledby={rentenversicherungHeadingIdentifier}>
-          <h3 id={rentenversicherungHeadingIdentifier} className="mb-10">
-            Rentenversicherung
-          </h3>
-
-          <CustomRadioGroup
-            legend="Wie sind Sie rentenversichert?"
-            register={register}
-            registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-            name={`${elternteil}.rentenVersicherung`}
-            options={rentenVersicherungOptions}
-            errors={errors}
-            required
-          />
-        </section>
+        <CustomRadioGroup
+          legend="Wie sind Sie rentenversichert?"
+          register={register}
+          registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+          name={`${elternteil}.rentenVersicherung`}
+          options={rentenVersicherungOptions}
+          errors={errors}
+          required
+        />
       )}
     </>
   );

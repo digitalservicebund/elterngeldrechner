@@ -66,16 +66,10 @@ describe("Steuer und Versicherung", () => {
       render(<EinkommenForm />, { preloadedState: stateFromPreviousSteps });
       const elternteil1Section = getElternteil1Section();
 
-      const einkommenElternteil1KinderfreibetraegeSection =
-        within(elternteil1Section).getByLabelText("Kinderfreibeträge");
-
       expect(
-        within(einkommenElternteil1KinderfreibetraegeSection).getByRole(
-          "combobox",
-          {
-            name: /^wie viele Kinderfreibeträge/i,
-          },
-        ),
+        within(elternteil1Section).getByRole("combobox", {
+          name: /^wie viele Kinderfreibeträge/i,
+        }),
       ).toBeInTheDocument();
     });
 
@@ -85,12 +79,11 @@ describe("Steuer und Versicherung", () => {
       });
       const elternteil1Section = getElternteil1Section();
 
-      const einkommenElternteil1KinderfreibetraegeSection =
-        within(elternteil1Section).queryByLabelText("Kinderfreibeträge");
+      const kinderfreibetraege = within(elternteil1Section).queryByText(
+        /^wie viele Kinderfreibeträge/i,
+      );
 
-      expect(
-        einkommenElternteil1KinderfreibetraegeSection,
-      ).not.toBeInTheDocument();
+      expect(kinderfreibetraege).not.toBeInTheDocument();
     });
   });
 
@@ -178,8 +171,9 @@ describe("Steuer und Versicherung", () => {
 
       const elternteil1Section = getElternteil1Section();
 
-      const kirchensteuerSection =
-        within(elternteil1Section).getByLabelText("Kirchensteuer");
+      const kirchensteuerSection = within(elternteil1Section)
+        .getByText(/kirchensteuerpflichtig/i, { selector: "legend" })
+        .closest("fieldset") as HTMLElement;
 
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
       await userEvent.click(nextPageBtn);
@@ -209,9 +203,11 @@ describe("Steuer und Versicherung", () => {
 
       const elternteil1Section = getElternteil1Section();
 
-      const krankenversicherungSection = within(
-        elternteil1Section,
-      ).getByLabelText("Krankenversicherung");
+      const krankenversicherungSection = within(elternteil1Section)
+        .getByText(/Sind Sie gesetzlich pflichtversichert/i, {
+          selector: "legend",
+        })
+        .closest("fieldset") as HTMLElement;
 
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
       await userEvent.click(nextPageBtn);

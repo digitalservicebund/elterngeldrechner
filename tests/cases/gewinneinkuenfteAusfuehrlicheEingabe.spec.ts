@@ -1,19 +1,19 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   test.slow();
   const screenshot = expectScreenshot({ page });
 
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setAlleinerziehend(false);
+  await allgemeineAngabenPage.setElternteile(2);
+  await allgemeineAngabenPage.setMutterschutz(false);
+  await allgemeineAngabenPage.submit();
+
   // codegen
-  await page.goto("./");
-  await page.getByLabel("Alleinerziehendenstatus").getByText("Nein").click();
-  await page.getByText("Für zwei Elternteile").click();
-  await page
-    .getByText("Nein, kein Elternteil ist oder wird im Mutterschutz sein")
-    .click();
-  await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByPlaceholder("__.__.___").click();
   await page.getByPlaceholder("__.__.___").fill("06.01.2025");
   await page
@@ -34,15 +34,16 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
     .getByRole("radio", { name: "Nein" })
     .click();
   await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("4");
+
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Kirchensteuer")
-    .getByText("Nein", { exact: true })
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Nein" })
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Kirchensteuer")
-    .getByText("Ja")
+    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radio", { name: "Ja" })
     .click();
   await page
     .getByLabel("Gewinn im letzten Kalenderjahr in Brutto")
@@ -51,8 +52,8 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByText("keine gesetzliche").click();
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Krankenversicherung")
-    .getByText("Ja", { exact: true })
+    .getByRole("radiogroup", { name: "Sind Sie gesetzlich pflichtversichert?" })
+    .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByRole("button", { name: "Zur ausführlichen Eingabe" }).click();
   await page.getByLabel("1. Monat", { exact: true }).click();

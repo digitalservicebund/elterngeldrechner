@@ -10,8 +10,6 @@ export class AllgemeineAngabenPOM {
   readonly elternteile: Locator;
   readonly elternteileError: Locator;
 
-  readonly pseudonyme: Locator;
-
   readonly mutterschutz: Locator;
   readonly mutterschutzError: Locator;
 
@@ -36,10 +34,9 @@ export class AllgemeineAngabenPOM {
       "Dieses Feld ist erforderlich",
     );
 
-    this.pseudonyme = page.getByLabel("Ihre Namen (optional)");
-
     this.mutterschutz = page.getByRole("radiogroup", {
       name: "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
+      exact: true,
     });
 
     this.mutterschutzError = this.mutterschutz.getByText(
@@ -76,7 +73,7 @@ export class AllgemeineAngabenPOM {
   }
 
   async setNameElternteil1(value: string) {
-    await this.pseudonyme
+    await this.page
       .getByRole("textbox", { name: "Name für Elternteil 1" })
       .fill(value);
 
@@ -84,7 +81,7 @@ export class AllgemeineAngabenPOM {
   }
 
   async setNameElternteil2(value: string) {
-    await this.pseudonyme
+    await this.page
       .getByRole("textbox", { name: "Name für Elternteil 2" })
       .fill(value);
 

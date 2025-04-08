@@ -9,7 +9,7 @@ describe("Allgemeine Angaben Page", () => {
   it("should display the Alleinerziehendenstatus part of the form right away", () => {
     render(<AllgemeineAngabenForm />);
 
-    expect(screen.getByText("Alleinerziehendenstatus")).toBeInTheDocument();
+    expect(screen.getByText("Sind Sie alleinerziehend?")).toBeInTheDocument();
   });
 
   it("should display the Antragstellenden part of the form after the Alleinerziehendenstatus", async () => {
@@ -17,7 +17,11 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
-    expect(screen.getByText("Eltern")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("should display the optional naming part of the form after the Antragstellenden part", async () => {
@@ -27,7 +31,12 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
-    expect(screen.getByText("Ihre Namen (optional)")).toBeInTheDocument();
+    expect(
+      screen.getByText("Name für Elternteil 1 (optional)"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Name für Elternteil 2 (optional)"),
+    ).toBeInTheDocument();
   });
 
   it("should ask for Mutterschutz if Gemeinsam Erziehende", async () => {
@@ -37,7 +46,11 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
 
-    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("should show correct Mutterschutz options if Gemeinsam Erziehende", async () => {
@@ -66,7 +79,11 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Ja"));
 
-    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
+      ),
+    ).toBeInTheDocument();
   });
 
   it("should show correct Mutterschutz options if Alleinerziehend", async () => {
@@ -123,11 +140,11 @@ describe("Allgemeine Angaben Page", () => {
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
       await userEvent.type(
-        screen.getByLabelText("Name für Elternteil 1"),
+        screen.getByLabelText("Name für Elternteil 1 (optional)"),
         "Finn",
       );
       await userEvent.type(
-        screen.getByLabelText("Name für Elternteil 2"),
+        screen.getByLabelText("Name für Elternteil 2 (optional)"),
         "Fiona",
       );
       await userEvent.click(screen.getByTestId("mutterschutz_option_0"));

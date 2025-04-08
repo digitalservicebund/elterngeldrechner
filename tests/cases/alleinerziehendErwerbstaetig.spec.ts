@@ -1,17 +1,17 @@
 import { test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
+import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("alleinerziehend, erwerbstätig", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
 
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setAlleinerziehend(true);
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
+  await allgemeineAngabenPage.submit();
+
   // codegen
-  await page.goto("./");
-
-  await page.getByLabel("Alleinerziehendenstatus").getByText("Ja").click();
-
-  await page.getByLabel("Mutterschutz").getByText("Ja").click();
-  await page.getByRole("button", { name: "Weiter" }).click();
   await page
     .locator("div")
     .filter({ hasText: /^TT\.MM\.JJJJ$/ })

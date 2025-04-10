@@ -18,13 +18,14 @@ export function EingabeFuerGewinneinkuenfte<
   const descriptionIdentifier = useId();
 
   return (
-    <div className="flex flex-col gap-16">
-      <span id={descriptionIdentifier}>
+    <div>
+      <p id={descriptionIdentifier}>
         Wie hoch war Ihr Gewinn im <b>letzten Kalenderjahr</b> vor der Geburt
         Ihres Kindes?
-      </span>
+      </p>
 
       <InfoText
+        className="mb-8"
         question="Wo finde ich diese Information?"
         answer="Dies ergibt sich in der Regel aus Ihrem letzten Einkommensteuerbescheid oder Sie können schätzen."
       />

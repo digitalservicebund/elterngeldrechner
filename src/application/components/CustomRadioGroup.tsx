@@ -69,7 +69,9 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
         aria-describedby={hasError ? errorIdentifier : undefined}
       >
-        <legend className="mb-8">{legend}</legend>
+        <legend className={slotBetweenLegendAndOptions ? "" : "mb-8"}>
+          {legend}
+        </legend>
 
         {!!slotBetweenLegendAndOptions && (
           <div className="mb-8">{slotBetweenLegendAndOptions}</div>

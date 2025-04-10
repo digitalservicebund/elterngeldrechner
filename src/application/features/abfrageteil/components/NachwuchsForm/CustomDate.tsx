@@ -48,12 +48,12 @@ export function CustomDate<
 
   return (
     <div className="flex flex-col">
-      <label className="mb-8" htmlFor={name}>
+      <label className={slotBetweenLabelAndInput ? "" : "mb-8"} htmlFor={name}>
         {label}
       </label>
 
       {!!slotBetweenLabelAndInput && (
-        <div className="mb-10">{slotBetweenLabelAndInput}</div>
+        <div className="mb-16">{slotBetweenLabelAndInput}</div>
       )}
 
       <div

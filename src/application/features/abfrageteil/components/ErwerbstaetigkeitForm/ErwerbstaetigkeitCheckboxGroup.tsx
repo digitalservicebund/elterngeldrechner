@@ -53,7 +53,6 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
       />
 
       <InfoText
-        className="pt-8"
         question="Was bedeutet das?"
         answer="Zum Beispiel Lohn, Gehalt (auch aus einem Minijob)"
       />
@@ -68,7 +67,6 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
       />
 
       <InfoText
-        className="pt-8"
         question="Was bedeutet das?"
         answer="Einkünfte aus einem Gewerbebetrieb (auch zum Beispiel aus dem Betrieb einer Fotovoltaik-Anlage), Einkünfte aus selbständiger Arbeit (auch zum Beispiel aus einem Nebenberuf), Einkünfte aus Land- und Forstwirtschaft"
       />

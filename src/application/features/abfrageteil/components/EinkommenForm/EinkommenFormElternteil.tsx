@@ -1,3 +1,4 @@
+import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { useId } from "react";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
@@ -72,49 +73,55 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
   const headingIdentifier = useId();
 
   return (
-    <section
-      className="flex flex-col gap-32"
-      aria-labelledby={hasHeading ? headingIdentifier : undefined}
-    >
-      {!!hasHeading && <h3 id={headingIdentifier}>{heading}</h3>}
-
-      {!isErwerbstaetigVorGeburt && (
-        <p>
-          Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird
-          für Sie mit dem Mindestsatz gerechnet und Sie müssen keine weiteren
-          Angaben zum Einkommen machen.
-        </p>
+    <section aria-labelledby={hasHeading ? headingIdentifier : undefined}>
+      {!!hasHeading && (
+        <h3 id={headingIdentifier} className="mb-16">
+          <PersonIcon className="mr-8" />
+          {heading}
+        </h3>
       )}
 
-      {!!isErwerbstaetigVorGeburt && (
-        <>
-          {!!isOnlyErwerbstaetigWithOneTaetigkeit && (
-            <NurErwerbstaetig
-              elternteil={elternteil}
-              monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
-            />
-          )}
+      <div className="flex flex-col gap-56">
+        {!isErwerbstaetigVorGeburt && (
+          <p>
+            Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben,
+            wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine
+            weiteren Angaben zum Einkommen machen.
+          </p>
+        )}
 
-          {!!isOnlySelbstaendig && <NurSelbstaendig elternteil={elternteil} />}
+        {!!isErwerbstaetigVorGeburt && (
+          <>
+            {!!isOnlyErwerbstaetigWithOneTaetigkeit && (
+              <NurErwerbstaetig
+                elternteil={elternteil}
+                monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
+              />
+            )}
 
-          {!hasMiniJob && (
-            <SteuerUndVersicherung
-              elternteil={elternteil}
-              isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten={
-                isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten
-              }
-            />
-          )}
+            {!!isOnlySelbstaendig && (
+              <NurSelbstaendig elternteil={elternteil} />
+            )}
 
-          {!!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
-            <SelbstaendigAndErwerbstaetig
-              elternteil={elternteil}
-              isSelbststaendig={isSelbststaendig}
-              monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
-            />
-          )}
-        </>
-      )}
+            {!hasMiniJob && (
+              <SteuerUndVersicherung
+                elternteil={elternteil}
+                isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten={
+                  isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten
+                }
+              />
+            )}
+
+            {!!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
+              <SelbstaendigAndErwerbstaetig
+                elternteil={elternteil}
+                isSelbststaendig={isSelbststaendig}
+                monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
+              />
+            )}
+          </>
+        )}
+      </div>
     </section>
   );
 }

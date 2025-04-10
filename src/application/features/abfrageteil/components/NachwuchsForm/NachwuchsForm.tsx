@@ -118,7 +118,7 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
   return (
     <form
       id={id}
-      className="flex flex-col gap-16"
+      className="flex flex-col gap-32"
       onSubmit={handleSubmit(submitNachwuchs)}
       noValidate
     >
@@ -161,12 +161,15 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
         required
       />
 
-      <section aria-describedby={geschwisterHeadingIdentifier}>
+      <section
+        aria-describedby={geschwisterHeadingIdentifier}
+        className="pt-32"
+      >
         <h3 id={geschwisterHeadingIdentifier} className="mb-10">
           Gibt es ältere Geschwister?
         </h3>
 
-        <p className="mb-10 flex justify-between p-0">
+        <p className="flex justify-between">
           Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben,
           können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den
           Geschwisterbonus.

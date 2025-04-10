@@ -67,12 +67,12 @@ export function CustomSelect<TFieldValues extends FieldValues>({
         className,
       )}
     >
-      <label className="mb-8" htmlFor={name}>
+      <label className={slotBetweenLabelAndSelect ? "" : "mb-8"} htmlFor={name}>
         {label}
       </label>
 
       {!!slotBetweenLabelAndSelect && (
-        <div className="mb-10">{slotBetweenLabelAndSelect}</div>
+        <div className="mb-16">{slotBetweenLabelAndSelect}</div>
       )}
 
       <div className="relative w-full min-w-max">

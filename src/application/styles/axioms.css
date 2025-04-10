@@ -1,6 +1,7 @@
 #egr-root {
   /* will not prevent forced dark mode */
   color-scheme: only light;
+  @apply mb-80;
 }
 
 #egr-root svg {

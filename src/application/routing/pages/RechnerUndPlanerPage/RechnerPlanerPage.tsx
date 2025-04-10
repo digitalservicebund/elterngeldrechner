@@ -180,7 +180,7 @@ export function RechnerPlanerPage() {
               </Button>
             </div>
 
-            <p className="mb-40 max-w-[70ch]">
+            <p className="max-w-[70ch]">
               Hinweis: Mutterschaftsleistungen werden nicht in der Summe
               berücksichtigt.
               <br />

@@ -4,7 +4,6 @@ import { InfoText } from "@/application/components";
 export function InfoZurGesetzlichenKrankenversicherung(): ReactNode {
   return (
     <InfoText
-      className="pt-8"
       question="Was bedeutet das?"
       answer={
         <>

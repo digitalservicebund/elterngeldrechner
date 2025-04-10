@@ -44,41 +44,39 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
   const headingIdentifier = useId();
 
   return (
-    <section
-      ref={ref}
-      className="flex flex-col gap-32"
-      aria-labelledby={headingIdentifier}
-      tabIndex={-1}
-    >
-      <h3 id={headingIdentifier}>{taetigkeitsIndex + 1}. Tätigkeit</h3>
+    <section ref={ref} aria-labelledby={headingIdentifier} tabIndex={-1}>
+      <h3 id={headingIdentifier} className="mb-16">
+        {taetigkeitsIndex + 1}. Tätigkeit
+      </h3>
 
-      <CustomSelect
-        autoWidth
-        register={register}
-        name={`${baseFieldPath}.artTaetigkeit`}
-        label="Art der Tätigkeit"
-        slotBetweenLabelAndSelect={<InfoZurArtDerTaetigkeit />}
-        options={erwerbstaetigkeitOptions}
-        registerOptions={{
-          required: "Dieses Feld ist erforderlich",
-        }}
-        errors={errors}
-        required
-      />
-
-      {istSelbststaendig ? (
-        <Selbststaendig
-          elternteil={elternteil}
-          taetigkeitsIndex={taetigkeitsIndex}
+      <div className="flex flex-col gap-56">
+        <CustomSelect
+          autoWidth
+          register={register}
+          name={`${baseFieldPath}.artTaetigkeit`}
+          label="Art der Tätigkeit"
+          slotBetweenLabelAndSelect={<InfoZurArtDerTaetigkeit />}
+          options={erwerbstaetigkeitOptions}
+          registerOptions={{
+            required: "Dieses Feld ist erforderlich",
+          }}
+          errors={errors}
+          required
         />
-      ) : (
-        <NichtSelbstaendig
-          elternteil={elternteil}
-          taetigkeitsIndex={taetigkeitsIndex}
-          monthsBeforeBirth={monthsBeforeBirth}
-        />
-      )}
 
+        {istSelbststaendig ? (
+          <Selbststaendig
+            elternteil={elternteil}
+            taetigkeitsIndex={taetigkeitsIndex}
+          />
+        ) : (
+          <NichtSelbstaendig
+            elternteil={elternteil}
+            taetigkeitsIndex={taetigkeitsIndex}
+            monthsBeforeBirth={monthsBeforeBirth}
+          />
+        )}
+      </div>
       <Button type="button" buttonStyle="secondary" onClick={onRemove}>
         Tätigkeit löschen
       </Button>

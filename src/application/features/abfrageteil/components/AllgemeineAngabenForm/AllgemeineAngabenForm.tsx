@@ -62,7 +62,7 @@ export function AllgemeineAngabenForm({
   return (
     <form
       id={id}
-      className="flex flex-col gap-32"
+      className="flex flex-col gap-56"
       onSubmit={handleSubmit(submitAllgemeineAngaben)}
       noValidate
     >

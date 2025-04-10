@@ -26,8 +26,8 @@
   @apply text-22;
 }
 
-#egr-root p {
-  @apply py-4;
+#egr-root p + p {
+  @apply mb-8;
 }
 
 #egr-root button {

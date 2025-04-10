@@ -73,12 +73,15 @@ export function CustomNumberField<
         className,
       )}
     >
-      <label className="mb-8" htmlFor={name}>
+      <label
+        className={slotBetweenLabelAndOptions ? "" : "mb-8"}
+        htmlFor={name}
+      >
         {label}
       </label>
 
       {!!slotBetweenLabelAndOptions && (
-        <div className="mb-10">{slotBetweenLabelAndOptions}</div>
+        <div className="mb-16">{slotBetweenLabelAndOptions}</div>
       )}
 
       <IMaskInput

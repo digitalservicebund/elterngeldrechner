@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
-import { ScrollRestoration } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { FormStep } from "@/application/routing/formSteps";
 
@@ -10,14 +9,17 @@ type Props = {
 
 export function Page({ step, children }: Props) {
   const sectionElement = useRef<HTMLElement>(null);
-  useEffect(() => sectionElement.current?.focus(), []);
+  useEffect(() => {
+    // scroll to top on page navigation
+    // <ScrollNavigation /> does not reliably scroll to top of next page
+    window.scrollTo({ top: 0 });
+    sectionElement.current?.focus();
+  }, []);
 
   const headingIdentifier = useId();
 
   return (
     <div className="page-grid-container print:block">
-      <ScrollRestoration />
-
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
         <Sidebar currentStep={step} />
       </div>

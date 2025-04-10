@@ -13,7 +13,7 @@ export function Page({ step, children }: Props) {
     // scroll to top on page navigation
     // <ScrollNavigation /> does not reliably scroll to top of next page
     window.scrollTo({ top: 0 });
-    sectionElement.current?.focus();
+    // sectionElement.current?.focus();
   }, []);
 
   const headingIdentifier = useId();

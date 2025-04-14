@@ -1,6 +1,5 @@
-import { useCallback } from "react";
+import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
-import { CustomInput } from "./CustomInput";
 import { InfoZuAlleinerziehenden } from "./InfoFuerAlleinerziehenden";
 import { InfoZuAntragstellenden } from "./InfoZuAntragstellenden";
 import { InfoZumMutterschutz } from "./InfoZumMutterschutz";
@@ -53,6 +52,7 @@ export function AllgemeineAngabenForm({
   const antragstellendeFormValue = watch("antragstellende");
   const alleinerziehendenFormValue = watch("alleinerziehend");
 
+  const pseudonymFieldsetDescriptionIdentifier = useId();
   const pseudonymFormValue = watch("pseudonym");
 
   const initializeAntragstellendeIfAlleinerziehend = (
@@ -97,27 +97,34 @@ export function AllgemeineAngabenForm({
       )}
 
       {antragstellendeFormValue === "FuerBeide" && (
-        <div>
-          <p className="mb-16">
+        <fieldset
+          className="flex flex-wrap gap-x-56 gap-y-16"
+          aria-describedby={pseudonymFieldsetDescriptionIdentifier}
+        >
+          <legend className="sr-only">Namen der Elternteile</legend>
+
+          <p id={pseudonymFieldsetDescriptionIdentifier} className="basis-full">
             Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden
             Schritten verzichten zu können, können Sie hier Ihre Namen oder ein
             Pseudonym angeben, welches wir dann verwenden werden.
           </p>
 
-          <div className="flex flex-wrap gap-x-56 gap-y-16">
-            <CustomInput
-              register={register}
-              name="pseudonym.ET1"
-              label="Name für Elternteil 1 (optional)"
+          <label className="flex flex-col gap-8">
+            Name für Elternteil 1 (optional)
+            <input
+              className={CLASS_NAME_PSEUDONYM_INPUT}
+              {...register("pseudonym.ET1")}
             />
+          </label>
 
-            <CustomInput
-              register={register}
-              name="pseudonym.ET2"
-              label="Name für Elternteil 2 (optional)"
+          <label className="flex flex-col gap-8">
+            Name für Elternteil 2 (optional)
+            <input
+              className={CLASS_NAME_PSEUDONYM_INPUT}
+              {...register("pseudonym.ET2")}
             />
-          </div>
-        </div>
+          </label>
+        </fieldset>
       )}
 
       {((alleinerziehendenFormValue === YesNo.NO &&
@@ -170,3 +177,7 @@ export function AllgemeineAngabenForm({
     </form>
   );
 }
+
+// TODO: style dictionary / TailwindCSS component?
+const CLASS_NAME_PSEUDONYM_INPUT =
+  "max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary";

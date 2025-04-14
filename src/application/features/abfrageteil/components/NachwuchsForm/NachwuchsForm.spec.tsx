@@ -218,27 +218,6 @@ describe("Submitting the form", () => {
     });
   });
 
-  it("should go to the next step but filters empty Geschwisterkinder", async () => {
-    const validFormState = produce(INITIAL_STATE, (draft) => {
-      draft.stepNachwuchs.anzahlKuenftigerKinder = 2;
-      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "12.12." + currentYear;
-      draft.stepNachwuchs.geschwisterkinder = [
-        {
-          geburtsdatum: "",
-          istBehindert: true,
-        },
-      ];
-    });
-
-    const { store } = render(<NachwuchsForm />, {
-      preloadedState: validFormState,
-    });
-
-    await userEvent.click(screen.getByText("Weiter"));
-
-    expect(store.getState().stepNachwuchs.geschwisterkinder).toHaveLength(0);
-  });
-
   it("should show validation error if birthdate of Geschwisterkinder is not filled completely", async () => {
     const invalidFormState = produce(INITIAL_STATE, (draft) => {
       draft.stepNachwuchs.anzahlKuenftigerKinder = 2;

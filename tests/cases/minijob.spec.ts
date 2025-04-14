@@ -13,10 +13,6 @@ test("Minijob", async ({ page }) => {
   await allgemeineAngabenPage.submit();
 
   // codegen
-  await page
-    .locator("div")
-    .filter({ hasText: /^TT\.MM\.JJJJ$/ })
-    .click();
   await page.getByPlaceholder("__.__.___").fill("05.03.2025");
   await page.getByRole("button", { name: "Weiter" }).click();
   await page.getByText("Ja", { exact: true }).click();

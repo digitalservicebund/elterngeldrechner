@@ -45,7 +45,7 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
     setValue,
     control,
     watch,
-    formState,
+    formState: { errors },
     getValues,
   } = useForm({
     defaultValues: store.getState().stepNachwuchs,
@@ -58,6 +58,8 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
     },
     [store, onSubmit],
   );
+
+  const wahrscheinlichesGeburtsDatumIdentifier = useId();
 
   const { fields, append, remove } = useFieldArray({
     name: "geschwisterkinder",
@@ -87,11 +89,6 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
       istBehindert: false,
     });
 
-  const wahrscheinlichesGeburtsDatumName = "wahrscheinlichesGeburtsDatum";
-  const wahrscheinlichesGeburtsDatum = getValues(
-    wahrscheinlichesGeburtsDatumName,
-  );
-
   const dateOf = (germanDate: string): Date => {
     const [day, month, year] = germanDate.split(".");
     return new Date(`${year}-${month}-${day}`);
@@ -103,6 +100,9 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
     }
 
     const geburtGeschwisterKind = dateOf(date);
+    const wahrscheinlichesGeburtsDatum = getValues(
+      "wahrscheinlichesGeburtsDatum",
+    );
     const geburtKind = dateOf(wahrscheinlichesGeburtsDatum);
 
     if (geburtGeschwisterKind < geburtKind) {
@@ -113,7 +113,6 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
   };
 
   const geschwisterHeadingIdentifier = useId();
-  const geschwisterKindHeadingBaseIdentifier = useId();
 
   return (
     <form
@@ -122,23 +121,27 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
       onSubmit={handleSubmit(submitNachwuchs)}
       noValidate
     >
-      <CustomDate
-        control={control}
-        rules={{
-          required: "Dieses Feld ist erforderlich",
-          pattern: {
-            value: /^\d{2}\.\d{2}\.\d{4}$/,
-            message: "Bitte das Feld vollständig ausfüllen",
-          },
-          validate: {
-            validateMonth,
-          },
-        }}
-        name={wahrscheinlichesGeburtsDatumName}
-        label="Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?"
-        slotBetweenLabelAndInput={<InfoZuFruehgeburten />}
-        required
-      />
+      <div>
+        <label htmlFor={wahrscheinlichesGeburtsDatumIdentifier}>
+          Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?
+        </label>
+
+        <InfoZuFruehgeburten />
+
+        <CustomDate
+          id={wahrscheinlichesGeburtsDatumIdentifier}
+          className="mt-16"
+          error={errors.wahrscheinlichesGeburtsDatum?.message}
+          {...register("wahrscheinlichesGeburtsDatum", {
+            required: "Dieses Feld ist erforderlich",
+            pattern: {
+              value: /^\d{2}\.\d{2}\.\d{4}$/,
+              message: "Bitte das Feld vollständig ausfüllen",
+            },
+            validate: validateMonth,
+          })}
+        />
+      </div>
 
       <Counter
         register={register}
@@ -155,7 +158,7 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
         }}
         name="anzahlKuenftigerKinder"
         label="Wie viele Kinder werden oder wurden geboren?"
-        errors={formState.errors}
+        errors={errors}
         onIncrease={handleIncrease}
         onDecrease={handleDecrease}
         required
@@ -179,8 +182,8 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
 
         <ul className="m-0 mt-16 list-none p-0">
           {fields.map((field, index) => {
-            const headingIdentifier =
-              geschwisterKindHeadingBaseIdentifier + field.id;
+            const headingIdentifier = `${field.id}-heading`;
+            const geburtsdatumInputIdentifier = `${field.id}-geburtsdatum`;
 
             return (
               <li
@@ -192,17 +195,24 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
                   {index + 1}. Geschwisterkind
                 </h4>
 
+                <label htmlFor={geburtsdatumInputIdentifier}>
+                  Wann wurde das Geschwisterkind geboren?
+                </label>
+
                 <CustomDate
-                  control={control}
-                  rules={{
+                  id={geburtsdatumInputIdentifier}
+                  className="mt-16"
+                  error={
+                    errors.geschwisterkinder?.[index]?.geburtsdatum?.message
+                  }
+                  {...register(`geschwisterkinder.${index}.geburtsdatum`, {
+                    required: "Dieses Feld ist erforderlich",
                     pattern: {
                       value: /^\d{2}\.\d{2}\.\d{4}$/,
                       message: "Bitte das Feld vollständig ausfüllen",
                     },
                     validate: geburtValidation,
-                  }}
-                  name={`geschwisterkinder.${index}.geburtsdatum`}
-                  label="Wann wurde das Geschwisterkind geboren?"
+                  })}
                 />
 
                 <CustomCheckbox

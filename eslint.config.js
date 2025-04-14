@@ -102,7 +102,19 @@ const customRulesConfig = [
   },
 ];
 
-const accessibilityConfig = [accessibilityPlugin["flatConfigs"].recommended];
+const accessibilityConfig = [
+  accessibilityPlugin["flatConfigs"].recommended,
+  {
+    rules: {
+      "jsx-a11y/label-has-associated-control": [
+        "error",
+        {
+          controlComponents: ["CustomDate"],
+        },
+      ],
+    },
+  },
+];
 
 const tailwindConfig = [
   ...tailwindPlugin.configs["flat/recommended"],

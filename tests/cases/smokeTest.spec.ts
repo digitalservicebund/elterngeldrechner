@@ -19,10 +19,6 @@ test("smoke test", async ({ page }) => {
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
   await allgemeineAngabenPage.submit();
 
-  await page
-    .locator("div")
-    .filter({ hasText: /^TT\.MM\.JJJJ$/ })
-    .click();
   await page.getByPlaceholder("__.__.___").fill("08.12.2024");
   await page
     .getByRole("button", { name: "Älteres Geschwisterkind hinzufügen" })

@@ -12,10 +12,6 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   await allgemeineAngabenPage.submit();
 
   // codegen
-  await page
-    .locator("div")
-    .filter({ hasText: /^TT\.MM\.JJJJ$/ })
-    .click();
   await page.getByPlaceholder("__.__.___").fill("08.12.2024");
   await page
     .getByRole("button", { name: "Älteres Geschwisterkind hinzufügen" })

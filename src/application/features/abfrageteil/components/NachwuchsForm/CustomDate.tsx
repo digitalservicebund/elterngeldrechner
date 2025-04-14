@@ -1,66 +1,80 @@
 import classNames from "classnames";
-import { type ReactNode, useId } from "react";
 import {
-  FieldPath,
-  FieldValues,
-  UseControllerProps,
-  useController,
-} from "react-hook-form";
-import { IMask, IMaskInput } from "react-imask";
+  type ForwardedRef,
+  type InputHTMLAttributes,
+  type LegacyRef,
+  type MutableRefObject,
+  forwardRef,
+  useId,
+} from "react";
+import { IMask, useIMask } from "react-imask";
 import { Description } from "@/application/features/abfrageteil/components/common";
 
-type Props<
-  TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
-> = UseControllerProps<TFieldValues, TName> & {
-  readonly label: string;
-  readonly slotBetweenLabelAndInput?: ReactNode;
-  readonly required?: boolean;
+type Props = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "aria-invalid" | "placeholder" // Can't be customized as special usage in component.
+> & {
+  readonly error?: string;
 };
 
-export function CustomDate<
-  TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
->({
-  control,
-  rules,
-  name,
-  label,
-  slotBetweenLabelAndInput,
-  required,
-}: Props<TFieldValues, TName>) {
-  const {
-    field: { onChange, onBlur, value, ref },
-    fieldState: { error },
-  } = useController({ control, rules, name });
-
+export const CustomDate = forwardRef(function CustomDate(
+  {
+    className,
+    "aria-describedby": ariaDescribedBy,
+    error,
+    ...htmlInputAttributes
+  }: Props,
+  ref?: ForwardedRef<HTMLInputElement>,
+) {
   const hasError = error !== undefined;
   const errorIdentifier = useId();
 
   const dateFormatHintIdentifier = useId();
 
-  const ariaDescribedBy = [
+  const descriptionIdentifiers = [
+    ariaDescribedBy,
     dateFormatHintIdentifier,
     hasError ? errorIdentifier : undefined,
   ]
     .filter((identifier) => !!identifier)
     .join(" ");
 
+  const { ref: imaskRef } = useIMask({
+    mask: Date,
+    lazy: true,
+    autofix: "pad",
+    blocks: {
+      d: {
+        mask: IMask.MaskedRange,
+        placeholderChar: "_",
+        from: 1,
+        to: 31,
+        maxLength: 2,
+      },
+      m: {
+        mask: IMask.MaskedRange,
+        placeholderChar: "_",
+        from: 1,
+        to: 12,
+        maxLength: 2,
+      },
+      Y: {
+        mask: IMask.MaskedRange,
+        placeholderChar: "_",
+        from: 1900,
+        to: 2999,
+        maxLength: 4,
+      },
+    },
+  });
+
   return (
-    <div className="flex flex-col">
-      <label className={slotBetweenLabelAndInput ? "" : "mb-8"} htmlFor={name}>
-        {label}
-      </label>
-
-      {!!slotBetweenLabelAndInput && (
-        <div className="mb-16">{slotBetweenLabelAndInput}</div>
-      )}
-
+    <div className={classNames("flex flex-col", className)}>
       <div
         className={classNames(
           "mb-16 flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",
           "focus-within:outline focus-within:outline-2 focus-within:outline-primary",
-          error && "mb-0 border-danger",
+          hasError && "mb-0 border-danger",
         )}
       >
         <span
@@ -71,52 +85,43 @@ export function CustomDate<
           TT.MM.JJJJ
         </span>
 
-        <IMaskInput
+        <input
+          {...htmlInputAttributes}
+          ref={mergeRefs(ref, imaskRef)}
           className="border-none focus:outline-none"
-          name={name}
-          id={name}
-          inputRef={ref}
-          mask={Date}
-          lazy
-          autofix="pad"
-          value={value}
-          blocks={{
-            d: {
-              mask: IMask.MaskedRange,
-              placeholderChar: "_",
-              from: 1,
-              to: 31,
-              maxLength: 2,
-            },
-            m: {
-              mask: IMask.MaskedRange,
-              placeholderChar: "_",
-              from: 1,
-              to: 12,
-              maxLength: 2,
-            },
-            Y: {
-              mask: IMask.MaskedRange,
-              placeholderChar: "_",
-              from: 1900,
-              to: 2999,
-              maxLength: 4,
-            },
-          }}
-          onAccept={onChange}
-          onBlur={onBlur}
           placeholder="__.__.___"
           aria-invalid={hasError}
-          aria-describedby={ariaDescribedBy}
-          required={required}
+          aria-describedby={descriptionIdentifiers}
         />
       </div>
 
       {!!hasError && (
         <Description id={errorIdentifier} error>
-          {error.message}
+          {error}
         </Description>
       )}
     </div>
   );
+});
+
+function mergeRefs<Value>(...refs: ReactReference<Value>[]) {
+  return (value: Value) => {
+    refs.forEach((ref) => {
+      switch (typeof ref) {
+        case "function":
+          ref(value);
+          break;
+
+        case "object":
+          if (ref) (ref as MutableRefObject<Value>).current = value;
+          break;
+      }
+    });
+  };
 }
+
+type ReactReference<Value> =
+  | MutableRefObject<Value>
+  | LegacyRef<Value>
+  | undefined
+  | null;

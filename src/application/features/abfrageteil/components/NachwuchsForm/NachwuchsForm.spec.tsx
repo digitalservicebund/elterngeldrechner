@@ -52,9 +52,9 @@ describe("Nachwuchs Page", () => {
   it("should display the typed value for the expected birthday", async () => {
     render(<NachwuchsForm />);
 
-    const dateField = screen.getByLabelText(
-      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
-    );
+    const dateField = screen.getByRole("textbox", {
+      name: "Geburtsdatum des Kindes",
+    });
 
     await userEvent.type(dateField, "a12.12lasd!2022");
 
@@ -70,11 +70,11 @@ describe("Nachwuchs Page", () => {
 
     await userEvent.click(addButton);
 
-    const dateField = screen.getByLabelText(
-      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
-    );
-
-    expect(dateField).toBeInTheDocument();
+    expect(
+      screen.getByRole("textbox", {
+        name: "Wann wurde das Geschwisterkind geboren?",
+      }),
+    ).toBeVisible();
   });
 
   it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button and check Behinderung-Checkbox", async () => {
@@ -119,10 +119,12 @@ describe("Submitting the form", () => {
       await userEvent.click(screen.getByTestId("erhöhen"));
     }
 
-    const dateField = screen.getByLabelText(
-      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
+    await userEvent.type(
+      screen.getByRole("textbox", {
+        name: "Geburtsdatum des Kindes",
+      }),
+      "a12.12lasd!" + currentYear,
     );
-    await userEvent.type(dateField, "a12.12lasd!" + currentYear);
 
     const addButton = screen.getByRole("button", {
       name: /älteres geschwisterkind hinzufügen/i,

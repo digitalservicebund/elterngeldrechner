@@ -59,7 +59,8 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
     [store, onSubmit],
   );
 
-  const wahrscheinlichesGeburtsDatumIdentifier = useId();
+  const wahrscheinlichesGeburtsDatumInputIdentifier = useId();
+  const wahrscheinlichesGeburtsDatumDescriptionIdentifier = useId();
 
   const { fields, append, remove } = useFieldArray({
     name: "geschwisterkinder",
@@ -122,16 +123,23 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
       noValidate
     >
       <div>
-        <label htmlFor={wahrscheinlichesGeburtsDatumIdentifier}>
+        <span id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
           Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?
-        </label>
+        </span>
 
         <InfoZuFruehgeburten />
 
+        <label
+          className="mt-20 block text-16"
+          htmlFor={wahrscheinlichesGeburtsDatumInputIdentifier}
+        >
+          Geburtsdatum des Kindes
+        </label>
+
         <CustomDate
-          id={wahrscheinlichesGeburtsDatumIdentifier}
-          className="mt-16"
+          id={wahrscheinlichesGeburtsDatumInputIdentifier}
           error={errors.wahrscheinlichesGeburtsDatum?.message}
+          aria-describedby={wahrscheinlichesGeburtsDatumDescriptionIdentifier}
           {...register("wahrscheinlichesGeburtsDatum", {
             required: "Dieses Feld ist erforderlich",
             pattern: {

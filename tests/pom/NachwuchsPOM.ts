@@ -14,9 +14,9 @@ export class NachwuchsPOM {
     this.page = page;
 
     this.heading = page.getByRole("heading", { name: "Kinder", exact: true });
-    this.geburtsdatum = page.getByLabel(
-      "Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?",
-    );
+    this.geburtsdatum = page.getByRole("textbox", {
+      name: "Geburtsdatum des Kindes",
+    });
     this.anzahlKinder = page.getByLabel(
       "Wie viele Kinder werden oder wurden geboren?",
     );

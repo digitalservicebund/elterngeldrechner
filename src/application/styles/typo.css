@@ -26,6 +26,10 @@
   @apply text-22;
 }
 
+#egr-root p {
+  @apply max-w-[70ch];
+}
+
 #egr-root p + p {
   @apply mb-8;
 }

@@ -39,7 +39,7 @@ export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
 
       {averageOrMonthlyNichtSelbstaendig === "average" && (
         <div>
-          <p className="mb-16">
+          <p>
             Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres
             Kindes <strong>monatlich</strong> brutto verdient?
           </p>

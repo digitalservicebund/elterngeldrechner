@@ -27,7 +27,7 @@ export class AllgemeineAngabenPOM {
     );
 
     this.elternteile = page.getByRole("radiogroup", {
-      name: "Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?",
+      name: "Wer soll das Elterngeld bekommen?",
     });
 
     this.elternteileError = this.elternteile.getByText(
@@ -60,11 +60,11 @@ export class AllgemeineAngabenPOM {
 
     switch (anzahl) {
       case 1:
-        label = "Für einen Elternteil";
+        label = "Nur ein Elternteil soll Elterngeld bekommen";
         break;
 
       case 2:
-        label = "Für zwei Elternteile";
+        label = "Beide Elternteile sollen Elterngeld bekommen";
         break;
     }
 

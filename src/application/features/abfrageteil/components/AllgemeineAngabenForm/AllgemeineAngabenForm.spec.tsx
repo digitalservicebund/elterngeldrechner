@@ -18,9 +18,7 @@ describe("Allgemeine Angaben Page", () => {
     await userEvent.click(screen.getByLabelText("Nein"));
 
     expect(
-      screen.getByText(
-        "Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?",
-      ),
+      screen.getByText("Wer soll das Elterngeld bekommen?"),
     ).toBeInTheDocument();
   });
 
@@ -29,7 +27,9 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
-    await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
+    await userEvent.click(
+      screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+    );
 
     expect(
       screen.getByText("Name für Elternteil 1 (optional)"),
@@ -44,7 +44,9 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
-    await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
+    await userEvent.click(
+      screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+    );
 
     expect(
       screen.getByText(
@@ -58,7 +60,9 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Nein"));
 
-    await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
+    await userEvent.click(
+      screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+    );
 
     expect(
       screen.getByText("Ja, Elternteil 1 ist oder wird im Mutterschutz sein"),
@@ -106,7 +110,9 @@ describe("Allgemeine Angaben Page", () => {
     render(<AllgemeineAngabenForm />);
 
     await userEvent.click(screen.getByLabelText("Nein"));
-    await userEvent.click(screen.getByLabelText("Für einen Elternteil"));
+    await userEvent.click(
+      screen.getByLabelText("Nur ein Elternteil soll Elterngeld bekommen"),
+    );
 
     expect(
       screen.getByText("Ja, ich bin oder werde im Mutterschutz sein"),
@@ -138,7 +144,9 @@ describe("Allgemeine Angaben Page", () => {
       const { store } = render(<AllgemeineAngabenForm />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
-      await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
+      await userEvent.click(
+        screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+      );
       await userEvent.type(
         screen.getByLabelText("Name für Elternteil 1 (optional)"),
         "Finn",
@@ -170,7 +178,9 @@ describe("Allgemeine Angaben Page", () => {
       const { store } = render(<AllgemeineAngabenForm />, { preloadedState });
 
       await userEvent.click(screen.getByLabelText("Nein"));
-      await userEvent.click(screen.getByLabelText("Für zwei Elternteile"));
+      await userEvent.click(
+        screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+      );
       await userEvent.click(screen.getByTestId("mutterschutz_option_2"));
       await userEvent.click(screen.getByText("Weiter"));
 

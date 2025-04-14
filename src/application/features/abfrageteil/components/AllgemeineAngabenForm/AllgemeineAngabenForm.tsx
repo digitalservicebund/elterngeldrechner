@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { CustomInput } from "./CustomInput";
 import { InfoZuAlleinerziehenden } from "./InfoFuerAlleinerziehenden";
+import { InfoZuAntragstellenden } from "./InfoZuAntragstellenden";
 import { InfoZumMutterschutz } from "./InfoZumMutterschutz";
 import {
   Button,
@@ -17,8 +18,11 @@ import {
 import { useAppStore } from "@/application/redux/hooks";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
-  { value: "EinenElternteil", label: "Für einen Elternteil" },
-  { value: "FuerBeide", label: "Für zwei Elternteile" },
+  { value: "FuerBeide", label: "Beide Elternteile sollen Elterngeld bekommen" },
+  {
+    value: "EinenElternteil",
+    label: "Nur ein Elternteil soll Elterngeld bekommen",
+  },
 ];
 
 type Props = {
@@ -81,13 +85,14 @@ export function AllgemeineAngabenForm({
 
       {alleinerziehendenFormValue === YesNo.NO && (
         <CustomRadioGroup
-          legend="Möchten Sie das Elterngeld für einen Elternteil oder zwei Elternteile berechnen?"
+          legend="Wer soll das Elterngeld bekommen?"
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="antragstellende"
           errors={formState.errors}
           options={antragstellendeOptions}
           required
+          slotBetweenLegendAndOptions={<InfoZuAntragstellenden />}
         />
       )}
 

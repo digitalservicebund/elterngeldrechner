@@ -1,6 +1,8 @@
 /**
  * Ab dem fünten Mill wird der Cent aufgerundet, sonst abgerunden ("round half
- * up", Kaufmännisches Runden). Siehe Richtlinien zum BEEG 2.0.3.3.1
+ * up", Kaufmännisches Runden). Siehe Richtlinien zum BEEG 2.0.3.3.1.
+ * Bemerkte das **Cent** hier nicht (zwangsweise) für den Euro Cent steht,
+ * sondern lediglich für die Dezimalstelle.
  */
 export function aufDenCentRunden(value: number): number {
   const valueInCents = shiftNumberByDecimalsPrecisely(value, 2);
@@ -25,7 +27,7 @@ export function aufDenCentRunden(value: number): number {
  * was added here in a local manner to stay compliant. In case we should not
  * need this anymore, it is as simple as deleting this function.
  */
-function shiftNumberByDecimalsPrecisely(
+export function shiftNumberByDecimalsPrecisely(
   value: number,
   decimals: number,
 ): number {

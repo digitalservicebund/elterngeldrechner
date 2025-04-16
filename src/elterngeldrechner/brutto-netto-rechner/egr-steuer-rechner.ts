@@ -1,3 +1,8 @@
+import { bestimmeKassenindividuellenZusatzbeitrag } from "./kassenindividueller-zusatzbeitrag";
+import {
+  aufDenCentRunden,
+  shiftNumberByDecimalsPrecisely,
+} from "@/elterngeldrechner/common/math-util";
 import {
   ErwerbsArt,
   FinanzDaten,
@@ -28,6 +33,14 @@ export function abgabenSteuern(
       ? bestimmeWerbekostenpauschale(geburtsdatumDesKindes)
       : 0);
 
+  /** Siehe {@link Eingangsparameter.KVZ } */
+  const KVZ = aufDenCentRunden(
+    shiftNumberByDecimalsPrecisely(
+      bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
+      2,
+    ),
+  );
+
   const eingangsparameter: Eingangsparameter = {
     AF: finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR ? 1 : 0,
     F:
@@ -35,7 +48,7 @@ export function abgabenSteuern(
         ? finanzDaten.splittingFaktor
         : 0,
     KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
-    KVZ: 0.9, // TODO: verify this
+    KVZ,
     LZZ: 2,
     LZZFREIB: 0,
     LZZHINZU: 0,
@@ -178,6 +191,20 @@ if (import.meta.vitest) {
       });
     });
 
+    it("formats the kassenindividuellen Zusatzbeitrag with a rounded precision of decimals and as Prozenwert beetween 1 and 100", async () => {
+      vi.spyOn(
+        await import("./kassenindividueller-zusatzbeitrag"),
+        "bestimmeKassenindividuellenZusatzbeitrag",
+      ).mockReturnValue(0.49715);
+
+      abgabenSteuern(...ANY_PARAMETERS);
+
+      expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
+        expect.anything(),
+        expect.objectContaining({ KVZ: 49.72 }),
+      );
+    });
+
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
       steuerKlasse: SteuerKlasse.SKL1,
@@ -188,6 +215,13 @@ if (import.meta.vitest) {
       mischEinkommenTaetigkeiten: [],
       erwerbsZeitraumLebensMonatList: [],
     };
+
+    const ANY_PARAMETERS: Parameters<typeof abgabenSteuern> = [
+      ANY_FINANZDATEN,
+      ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+      2000,
+      new Date(),
+    ];
 
     const ANY_DATE = new Date();
   });

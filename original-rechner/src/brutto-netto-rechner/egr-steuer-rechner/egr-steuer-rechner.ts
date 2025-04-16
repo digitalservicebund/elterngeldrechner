@@ -82,7 +82,7 @@ export class EgrSteuerRechner {
           ? finanzDaten.splittingFaktor
           : 0,
       KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
-      KVZ: 0.9, // TODO: verify this
+      KVZ: 1.6,
       LZZ: 2,
       LZZFREIB: 0,
       LZZHINZU: 0,

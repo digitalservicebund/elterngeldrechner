@@ -32,7 +32,11 @@ export function bestimmeKassenindividuellenZusatzbeitrag(
  */
 const HISTORIE_DES_DURCHSCHNITTLICHEN_ZUSATZBEITRAGS =
   HistorieEinesParameters.erstelleHistorieVonWerten([
-    { fuerGeburtenAbDem: new Date("2022-12-31"), wert: 0.009 },
+    { fuerGeburtenAbDem: new Date("2025-01-01"), wert: 0.025 },
+    { fuerGeburtenAbDem: new Date("2024-01-01"), wert: 0.017 },
+    { fuerGeburtenAbDem: new Date("2023-01-01"), wert: 0.016 },
+    { fuerGeburtenAbDem: new Date("2022-01-01"), wert: 0.013 }, // for completeness in relation to the announcements
+    { fuerGeburtenAbDem: new Date("2021-01-01"), wert: 0.013 },
   ]);
 
 if (import.meta.vitest) {
@@ -58,14 +62,77 @@ if (import.meta.vitest) {
       );
     });
 
-    it("für Geburten ab dem 31.12.2022 ist der Zusatzbeitrag 0.9%", () => {
+    it("für Geburten ab dem 01.01.2025 ist der Zusatzbeitrag 2.5%", () => {
       assert(
         property(
-          arbitraryDate({ min: new Date("2022-12-31") }),
+          arbitraryDate({ min: new Date("2025-01-01") }),
           (geburtsdatumDesKindes) => {
             expect(
               bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
-            ).toBe(0.009);
+            ).toBe(0.025);
+          },
+        ),
+      );
+    });
+
+    it("für Geburten ab dem 01.01.2024 bis zum 31.12.2024 ist der Zusatzbeitrag 1.7%", () => {
+      assert(
+        property(
+          arbitraryDate({
+            min: new Date("2024-01-01"),
+            max: new Date("2024-12-31"),
+          }),
+          (geburtsdatumDesKindes) => {
+            expect(
+              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
+            ).toBe(0.017);
+          },
+        ),
+      );
+    });
+
+    it("für Geburten ab dem 01.01.2023 bis zum 31.12.2023 ist der Zusatzbeitrag 1.6%", () => {
+      assert(
+        property(
+          arbitraryDate({
+            min: new Date("2023-01-01"),
+            max: new Date("2023-12-31"),
+          }),
+          (geburtsdatumDesKindes) => {
+            expect(
+              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
+            ).toBe(0.016);
+          },
+        ),
+      );
+    });
+
+    it("für Geburten ab dem 01.01.2021 bis zum 31.12.2022 ist der Zusatzbeitrag 1.3%", () => {
+      assert(
+        property(
+          arbitraryDate({
+            min: new Date("2021-01-01"),
+            max: new Date("2022-12-31"),
+          }),
+          (geburtsdatumDesKindes) => {
+            expect(
+              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
+            ).toBe(0.013);
+          },
+        ),
+      );
+    });
+
+    it("für Geburten vor dem 01.01.2021 bleibt der Zusatzbeitrag bei 1.3%", () => {
+      assert(
+        property(
+          arbitraryDate({
+            max: new Date("2020-12-31"),
+          }),
+          (geburtsdatumDesKindes) => {
+            expect(
+              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
+            ).toBe(0.013);
           },
         ),
       );

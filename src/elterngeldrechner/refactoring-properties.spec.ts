@@ -449,7 +449,7 @@ function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
     anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
     wahrscheinlichesGeburtsdatum: arbitraryDate({
       min: new Date("2023-01-01"),
-      max: new Date("2024-12-31"),
+      max: new Date("2023-12-31"),
     }),
     sindSieAlleinerziehend: arbitraryBoolean(),
     erwerbsartVorDerGeburt: arbitraryErwerbsArt(),

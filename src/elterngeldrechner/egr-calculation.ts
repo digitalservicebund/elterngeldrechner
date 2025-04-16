@@ -166,9 +166,9 @@ if (import.meta.vitest) {
         expect(ergebnis.nettoBasis).toBe(0);
         expect(ergebnis.elternGeldErwBasis).toBe(0);
         expect(ergebnis.bruttoPlus).toBe(1950);
-        expect(ergebnis.nettoPlus).toBe(1350.09);
-        expect(ergebnis.elternGeldEtPlus).toBe(279.82);
-        expect(ergebnis.elternGeldKeineEtPlus).toBe(578.69);
+        expect(ergebnis.nettoPlus).toBe(1351.17);
+        expect(ergebnis.elternGeldEtPlus).toBe(280.21);
+        expect(ergebnis.elternGeldKeineEtPlus).toBe(579.24);
       });
 
       it("Test with 'Erwerbstaetigkeit nach Geburt' 2", () => {
@@ -210,7 +210,7 @@ if (import.meta.vitest) {
         expect(ergebnis.bruttoPlus).toBe(0);
         expect(ergebnis.nettoPlus).toBe(0);
         expect(ergebnis.elternGeldEtPlus).toBe(0);
-        expect(ergebnis.elternGeldKeineEtPlus).toBe(451.21);
+        expect(ergebnis.elternGeldKeineEtPlus).toBe(451.56);
       });
     });
 

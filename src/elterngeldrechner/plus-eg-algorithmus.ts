@@ -754,9 +754,9 @@ if (import.meta.vitest) {
           expect(ergebnis.nettoBasis).toBe(0);
           expect(ergebnis.elternGeldErwBasis).toBe(0);
           expect(ergebnis.bruttoPlus).toBe(1950);
-          expect(ergebnis.nettoPlus).toBe(1350.09);
-          expect(ergebnis.elternGeldEtPlus).toBeCloseTo(292.22, 1);
-          expect(ergebnis.elternGeldKeineEtPlus).toBe(584.89);
+          expect(ergebnis.nettoPlus).toBe(1351.17);
+          expect(ergebnis.elternGeldEtPlus).toBe(291.53);
+          expect(ergebnis.elternGeldKeineEtPlus).toBe(584.9);
         });
 
         it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", () => {

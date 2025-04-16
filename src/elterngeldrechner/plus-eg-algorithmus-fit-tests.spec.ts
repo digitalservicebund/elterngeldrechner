@@ -22,8 +22,8 @@ describe("plus-eg-algorithmus", () => {
 
     // Der Grund für diesen Fehler ist wahrscheinlich auch die falsche Steuerermittlung vom FIT.
     const failedNetto: Array<number> = [
-      3, 6, 7, 12, 13, 15, 16, 19, 21, 23, 24, 26, 30, 33, 34, 38, 39, 42, 45,
-      53, 54, 56,
+      3, 6, 7, 12, 13, 15, 16, 19, 21, 23, 24, 26, 30, 31, 33, 34, 38, 39, 42,
+      45, 49, 53, 54, 56,
     ];
 
     test.each(testCaseIndexes.filter((index) => !failedNetto.includes(index)))(

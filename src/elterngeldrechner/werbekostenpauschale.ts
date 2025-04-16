@@ -2,6 +2,7 @@ import {
   HistorieEinesParameters,
   findeFuerGeburtsdatumAnzuwendendenWertEinesParameters,
 } from "./common/HistorieEinesParameters";
+import { aufDenCentRunden } from "./common/math-util";
 
 /**
  * Bestimmt welche Werbekostenpauschale (Arbeitnehmer-Pauschbetrag) anzuwenden
@@ -12,17 +13,17 @@ import {
  * theoretisch nach dem Programmablaufplan für die Einkommenssteuer, werden
  * jedoch abweichend in den Richtilinien zum BEEG 2c.1.4 spezifiziert.
  *
- * @return Betrag in Euro als Zwölftel der jährlichen Pauschale
+ * @return Betrag in Euro als Zwölftel der Jahrespauschale auf den Cent gerundet
  */
 export function bestimmeWerbekostenpauschale(
   geburtsdatumDesKindes: Date,
 ): number {
-  return (
-    findeFuerGeburtsdatumAnzuwendendenWertEinesParameters(
-      geburtsdatumDesKindes,
-      HISTORIE_DER_WERBEKOSTENPAUSCHALE,
-    ) / 12
+  const jahresbetrag = findeFuerGeburtsdatumAnzuwendendenWertEinesParameters(
+    geburtsdatumDesKindes,
+    HISTORIE_DER_WERBEKOSTENPAUSCHALE,
   );
+
+  return aufDenCentRunden(jahresbetrag / 12);
 }
 
 /**
@@ -80,6 +81,21 @@ if (import.meta.vitest) {
           (geburtsdatumDesKindes) => {
             expect(bestimmeWerbekostenpauschale(geburtsdatumDesKindes)).toBe(
               100,
+            );
+          },
+        ),
+      );
+    });
+
+    it("für Geburten vor dem 01.01.2023 bleibt der Betrag bei 83.33€", () => {
+      assert(
+        property(
+          arbitraryDate({
+            max: new Date("2022-12-31"),
+          }),
+          (geburtsdatumDesKindes) => {
+            expect(bestimmeWerbekostenpauschale(geburtsdatumDesKindes)).toEqual(
+              83.33,
             );
           },
         ),

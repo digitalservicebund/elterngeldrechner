@@ -293,7 +293,7 @@ if (import.meta.vitest) {
       );
 
       // then
-      expect(actual).toBe(563.75);
+      expect(actual).toBe(562.66);
     });
   });
 }

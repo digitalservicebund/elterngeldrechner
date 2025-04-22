@@ -13,6 +13,7 @@ import {
   type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   FinanzDatenBerechnet,
+  Geburtstag,
   MischEkZwischenErgebnis,
   MutterschaftsLeistung,
   PLANUNG_ANZAHL_MONATE,
@@ -175,7 +176,7 @@ function mitETVorGeburt(
   let elterngeld_keine_et_plus = 0;
   if (nicht_erw) {
     const werbekostenpauschale = bestimmeWerbekostenpauschale(
-      persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+      new Geburtstag(persoenlicheDaten.wahrscheinlichesGeburtsDatum),
     );
     if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
       throw new Error("wahrscheinlichesGeburtsDatum === undefined");

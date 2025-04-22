@@ -1,3 +1,4 @@
+export { Geburtstag } from "./Geburtstag";
 export {
   ErwerbsTaetigkeit,
   type MischEkTaetigkeit,

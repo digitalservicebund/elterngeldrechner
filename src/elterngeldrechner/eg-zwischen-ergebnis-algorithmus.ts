@@ -4,6 +4,7 @@ import { bestimmeErsatzrate } from "./ersatzrate";
 import {
   Einkommen,
   ErwerbsArt,
+  Geburtstag,
   Kind,
   PersoenlicheDaten,
   ZwischenErgebnis,
@@ -45,7 +46,7 @@ export function elterngeldZwischenergebnis(
     status_et === ErwerbsArt.JA_NICHT_SELBST_MINI
   ) {
     const werbekostenpauschale = bestimmeWerbekostenpauschale(
-      persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+      new Geburtstag(persoenlicheDaten.wahrscheinlichesGeburtsDatum),
     );
     ek_vor_copy = Math.max(ek_vor_copy - werbekostenpauschale, 0);
   }

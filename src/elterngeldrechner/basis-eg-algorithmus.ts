@@ -7,6 +7,7 @@ import {
   ErwerbsArt,
   ErwerbsTaetigkeit,
   FinanzDaten,
+  Geburtstag,
   KassenArt,
   MischEkZwischenErgebnis,
   PersoenlicheDaten,
@@ -113,7 +114,7 @@ export function berechneMischNettoUndBasiselterngeld(
   }
 
   const werbekostenpauschale = bestimmeWerbekostenpauschale(
-    persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+    new Geburtstag(persoenlicheDaten.wahrscheinlichesGeburtsDatum),
   );
   const brutto_elg = aufDenCentRunden(
     (summe_EK_SS +

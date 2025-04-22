@@ -6,6 +6,7 @@ import {
 import {
   ErwerbsArt,
   FinanzDaten,
+  Geburtstag,
   KinderFreiBetrag,
   SteuerKlasse,
   kinderFreiBetragToNumber,
@@ -30,13 +31,15 @@ export function abgabenSteuern(
   const steuerpflichtigesEinkommen =
     bruttoProMonat +
     (istSelbststaendig
-      ? bestimmeWerbekostenpauschale(geburtsdatumDesKindes)
+      ? bestimmeWerbekostenpauschale(new Geburtstag(geburtsdatumDesKindes))
       : 0);
 
   /** Siehe {@link Eingangsparameter.KVZ } */
   const KVZ = aufDenCentRunden(
     shiftNumberByDecimalsPrecisely(
-      bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
+      bestimmeKassenindividuellenZusatzbeitrag(
+        new Geburtstag(geburtsdatumDesKindes),
+      ),
       2,
     ),
   );

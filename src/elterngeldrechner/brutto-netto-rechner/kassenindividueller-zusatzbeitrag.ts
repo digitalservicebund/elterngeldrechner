@@ -1,7 +1,8 @@
 import {
   HistorieEinesParameters,
-  findeFuerGeburtsdatumAnzuwendendenWertEinesParameters,
+  findeFuerGeburtstagAnzuwendendenWertEinesParameters,
 } from "@/elterngeldrechner/common/HistorieEinesParameters";
+import { Geburtstag } from "@/elterngeldrechner/model";
 
 /**
  * Bestimem welcher kassenindivuelle Zusatzbeitrag für die gesetzliche
@@ -18,10 +19,10 @@ import {
  * @return Zusatzbeitrag als Dezimalfaktor zwischen 0 und 1
  */
 export function bestimmeKassenindividuellenZusatzbeitrag(
-  geburtsdatumDesKindes: Date,
+  geburtstag: Geburtstag,
 ): number {
-  return findeFuerGeburtsdatumAnzuwendendenWertEinesParameters(
-    geburtsdatumDesKindes,
+  return findeFuerGeburtstagAnzuwendendenWertEinesParameters(
+    geburtstag,
     HISTORIE_DES_DURCHSCHNITTLICHEN_ZUSATZBEITRAGS,
   );
 }
@@ -32,11 +33,11 @@ export function bestimmeKassenindividuellenZusatzbeitrag(
  */
 const HISTORIE_DES_DURCHSCHNITTLICHEN_ZUSATZBEITRAGS =
   HistorieEinesParameters.erstelleHistorieVonWerten([
-    { fuerGeburtenAbDem: new Date("2025-01-01"), wert: 0.025 },
-    { fuerGeburtenAbDem: new Date("2024-01-01"), wert: 0.017 },
-    { fuerGeburtenAbDem: new Date("2023-01-01"), wert: 0.016 },
-    { fuerGeburtenAbDem: new Date("2022-01-01"), wert: 0.013 }, // for completeness in relation to the announcements
-    { fuerGeburtenAbDem: new Date("2021-01-01"), wert: 0.013 },
+    { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 0.025 },
+    { fuerGeburtenAb: new Geburtstag("2024-01-01"), wert: 0.017 },
+    { fuerGeburtenAb: new Geburtstag("2023-01-01"), wert: 0.016 },
+    { fuerGeburtenAb: new Geburtstag("2022-01-01"), wert: 0.013 }, // for completeness in relation to the announcements
+    { fuerGeburtenAb: new Geburtstag("2021-01-01"), wert: 0.013 },
   ]);
 
 if (import.meta.vitest) {
@@ -51,10 +52,9 @@ if (import.meta.vitest) {
 
     it("gibt immer einen Zusatzbeitrag zwischen 0% und 100% zurück", () => {
       assert(
-        property(arbitraryDate(), (geburtsdatumDesKindes) => {
-          const zusatzbeitrag = bestimmeKassenindividuellenZusatzbeitrag(
-            geburtsdatumDesKindes,
-          );
+        property(arbitraryGeburtstag(), (geburtstag) => {
+          const zusatzbeitrag =
+            bestimmeKassenindividuellenZusatzbeitrag(geburtstag);
 
           expect(zusatzbeitrag).toBeGreaterThanOrEqual(0);
           expect(zusatzbeitrag).toBeLessThanOrEqual(1);
@@ -65,11 +65,11 @@ if (import.meta.vitest) {
     it("für Geburten ab dem 01.01.2025 ist der Zusatzbeitrag 2.5%", () => {
       assert(
         property(
-          arbitraryDate({ min: new Date("2025-01-01") }),
-          (geburtsdatumDesKindes) => {
-            expect(
-              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
-            ).toBe(0.025);
+          arbitraryGeburtstag({ min: new Date("2025-01-01") }),
+          (geburtstag) => {
+            expect(bestimmeKassenindividuellenZusatzbeitrag(geburtstag)).toBe(
+              0.025,
+            );
           },
         ),
       );
@@ -78,14 +78,14 @@ if (import.meta.vitest) {
     it("für Geburten ab dem 01.01.2024 bis zum 31.12.2024 ist der Zusatzbeitrag 1.7%", () => {
       assert(
         property(
-          arbitraryDate({
+          arbitraryGeburtstag({
             min: new Date("2024-01-01"),
             max: new Date("2024-12-31"),
           }),
-          (geburtsdatumDesKindes) => {
-            expect(
-              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
-            ).toBe(0.017);
+          (geburtstag) => {
+            expect(bestimmeKassenindividuellenZusatzbeitrag(geburtstag)).toBe(
+              0.017,
+            );
           },
         ),
       );
@@ -94,14 +94,14 @@ if (import.meta.vitest) {
     it("für Geburten ab dem 01.01.2023 bis zum 31.12.2023 ist der Zusatzbeitrag 1.6%", () => {
       assert(
         property(
-          arbitraryDate({
+          arbitraryGeburtstag({
             min: new Date("2023-01-01"),
             max: new Date("2023-12-31"),
           }),
-          (geburtsdatumDesKindes) => {
-            expect(
-              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
-            ).toBe(0.016);
+          (geburtstag) => {
+            expect(bestimmeKassenindividuellenZusatzbeitrag(geburtstag)).toBe(
+              0.016,
+            );
           },
         ),
       );
@@ -110,14 +110,14 @@ if (import.meta.vitest) {
     it("für Geburten ab dem 01.01.2021 bis zum 31.12.2022 ist der Zusatzbeitrag 1.3%", () => {
       assert(
         property(
-          arbitraryDate({
+          arbitraryGeburtstag({
             min: new Date("2021-01-01"),
             max: new Date("2022-12-31"),
           }),
-          (geburtsdatumDesKindes) => {
-            expect(
-              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
-            ).toBe(0.013);
+          (geburtstag) => {
+            expect(bestimmeKassenindividuellenZusatzbeitrag(geburtstag)).toBe(
+              0.013,
+            );
           },
         ),
       );
@@ -126,16 +126,18 @@ if (import.meta.vitest) {
     it("für Geburten vor dem 01.01.2021 bleibt der Zusatzbeitrag bei 1.3%", () => {
       assert(
         property(
-          arbitraryDate({
-            max: new Date("2020-12-31"),
-          }),
-          (geburtsdatumDesKindes) => {
-            expect(
-              bestimmeKassenindividuellenZusatzbeitrag(geburtsdatumDesKindes),
-            ).toBe(0.013);
+          arbitraryGeburtstag({ max: new Date("2020-12-31") }),
+          (geburtstag) => {
+            expect(bestimmeKassenindividuellenZusatzbeitrag(geburtstag)).toBe(
+              0.013,
+            );
           },
         ),
       );
     });
+
+    function arbitraryGeburtstag(constraints?: { min?: Date; max?: Date }) {
+      return arbitraryDate(constraints).map((date) => new Geburtstag(date));
+    }
   });
 }

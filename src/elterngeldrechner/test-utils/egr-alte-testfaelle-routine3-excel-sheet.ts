@@ -173,10 +173,6 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     return this.numberOf(testCaseIndex, ZWISCHEN_ERGEBNIS_ERSATZ_RATE_PROZENT);
   }
 
-  zwischenErgebnisGeschwisterBonus(testCaseIndex: number) {
-    return this.numberOf(testCaseIndex, ZWISCHEN_ERGEBNIS_GESCHWISTER_BONUS);
-  }
-
   zwischenErgebnisMehrlingsZulage(testCaseIndex: number) {
     return this.numberOf(testCaseIndex, ZWISCHEN_ERGEBNIS_MEHRLINGS_ZULAGE);
   }
@@ -286,7 +282,6 @@ const ZWISCHEN_ERGEBNIS_NETTO_VOR_GEBURT_OFFSET = 130;
 const ZWISCHEN_ERGEBNIS_ELTERN_GELD = 131;
 const ZWISCHEN_ERGEBNIS_ERSATZ_RATE = 132;
 const ZWISCHEN_ERGEBNIS_ERSATZ_RATE_PROZENT = 133;
-const ZWISCHEN_ERGEBNIS_GESCHWISTER_BONUS = 134;
 const ZWISCHEN_ERGEBNIS_MEHRLINGS_ZULAGE = 135;
 const ZWISCHEN_ERGEBNIS_ZEITRAUM_GESCHWISTER_BONUS = 136;
 

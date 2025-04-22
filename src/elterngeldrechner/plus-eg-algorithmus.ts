@@ -140,7 +140,6 @@ function ohneETVorGeburt(): ElternGeldPlusErgebnis {
     elternGeldAusgabe: [],
     ersatzRate: 0,
     etVorGeburt: false,
-    geschwisterBonus: 0,
     geschwisterBonusDeadLine: null,
     hasPartnerBonusError: false,
     mehrlingsZulage: 0,
@@ -362,7 +361,6 @@ function mitETVorGeburt(
     elternGeldBasis: 0,
     ersatzRate: 0,
     etVorGeburt: false,
-    geschwisterBonus: 0,
     geschwisterBonusDeadLine: null,
     hasPartnerBonusError: false,
     mehrlingsZulage: 0,
@@ -619,7 +617,7 @@ function createElterngeldAusgabe(
   ergebnis.elternGeldKeineEtPlus = aufDenCentRunden(elterngeldplus);
   ergebnis.elternGeldEtPlus = aufDenCentRunden(elterngeldplus_erw);
   ergebnis.mehrlingsZulage = aufDenCentRunden(z.mehrlingsZulage);
-  ergebnis.geschwisterBonus = aufDenCentRunden(z.geschwisterBonus);
+
   if (
     !persoenlicheDaten.etVorGeburt ||
     persoenlicheDaten.etVorGeburt === ErwerbsArt.NEIN
@@ -771,7 +769,6 @@ if (import.meta.vitest) {
           const zwischenErgebnis: ZwischenErgebnis = {
             elternGeld: 0,
             ersatzRate: 0,
-            geschwisterBonus: 0,
             mehrlingsZulage: 0,
             nettoVorGeburt: 0,
             zeitraumGeschwisterBonus: null,

@@ -10,11 +10,7 @@ import {
 } from "./model";
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
-import {
-  BETRAG_MEHRLINGSZUSCHLAG,
-  MIN_GESCHWISTERBONUS,
-  RATE_BONUS,
-} from "@/elterngeldrechner/model/egr-berechnung-param-id";
+import { BETRAG_MEHRLINGSZUSCHLAG } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 export function elterngeldZwischenergebnis(
   persoenlicheDaten: PersoenlicheDaten,
@@ -37,9 +33,6 @@ export function elterngeldZwischenergebnis(
   let elterngeldbasis: number;
   let ersatzrate_ausgabe;
   const betrag_Mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
-  let geschwisterbonus: number;
-  const rate_bonus = RATE_BONUS;
-  const min_geschwisterbonus = MIN_GESCHWISTERBONUS;
 
   const zeitraumGeschwisterBonus = determineDeadlineForGeschwisterbonus(
     geschwister,
@@ -63,22 +56,13 @@ export function elterngeldZwischenergebnis(
   } else {
     mehrlingszuschlag = 0;
   }
-  if (zeitraumGeschwisterBonus !== null) {
-    geschwisterbonus = Math.max(
-      elterngeldbasis * rate_bonus,
-      min_geschwisterbonus,
-    );
-  } else {
-    geschwisterbonus = 0;
-  }
+
   elterngeldbasis = aufDenCentRunden(elterngeldbasis);
   ersatzrate_ausgabe = aufDenCentRunden(ersatzrate_ausgabe);
-  geschwisterbonus = aufDenCentRunden(geschwisterbonus);
 
   return {
     elternGeld: elterngeldbasis,
     ersatzRate: ersatzrate_ausgabe,
-    geschwisterBonus: geschwisterbonus,
     mehrlingsZulage: mehrlingszuschlag,
     zeitraumGeschwisterBonus,
     nettoVorGeburt: nettoEinkommen.value,

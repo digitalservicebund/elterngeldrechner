@@ -207,11 +207,6 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
       expect(sheet.zwischenErgebnisErsatzRateProzent(1)).toBe(100);
     });
 
-    it("should read zwischenErgebnisGeschwisterBonus", () => {
-      expect(sheet.zwischenErgebnisGeschwisterBonus(0)).toBe(0);
-      expect(sheet.zwischenErgebnisGeschwisterBonus(1)).toBe(0);
-    });
-
     it("should read zwischenErgebnisMehrlingsZulage", () => {
       expect(sheet.zwischenErgebnisMehrlingsZulage(0)).toBe(0);
       expect(sheet.zwischenErgebnisMehrlingsZulage(1)).toBe(0);

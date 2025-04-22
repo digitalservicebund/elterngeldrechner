@@ -389,7 +389,6 @@ if (import.meta.vitest) {
       ersatzRate: 0,
       geschwisterBonusDeadLine: null,
       nettoNachGeburtDurch: 0,
-      geschwisterBonus: 0,
       mehrlingsZulage: 0,
       bruttoBasis: 0,
       nettoBasis: 0,

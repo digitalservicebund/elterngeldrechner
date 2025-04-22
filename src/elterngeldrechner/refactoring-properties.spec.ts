@@ -166,10 +166,6 @@ function expectCalculatedResultToEqual(
     expected.geschwisterBonusDeadLine,
     context,
   );
-  expect(actual.geschwisterBonus).toBeCloseTo(
-    expected.geschwisterBonus.toNumber(),
-    1,
-  );
   expect(actual.mehrlingsZulage).toBeCloseTo(
     expected.mehrlingsZulage.toNumber(),
     1,

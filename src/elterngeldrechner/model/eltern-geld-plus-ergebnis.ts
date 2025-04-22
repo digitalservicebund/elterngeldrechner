@@ -4,7 +4,6 @@ export interface ElternGeldPlusErgebnis {
   elternGeldAusgabe: ElternGeldAusgabe[];
   ersatzRate: number;
   geschwisterBonusDeadLine: Date | null;
-  geschwisterBonus: number;
   mehrlingsZulage: number;
   bruttoBasis: number;
   nettoBasis: number;

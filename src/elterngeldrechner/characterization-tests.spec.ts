@@ -87,10 +87,10 @@ const STATIC_SEED = 12345;
 
 function arbitraryPersoenlicheDaten(): Arbitrary<PersoenlicheDaten> {
   return arbitraryRecord({
-    wahrscheinlichesGeburtsDatum: arbitraryDate({
+    geburtstagDesKindes: arbitraryDate({
       min: new Date("2020-01-01"),
       max: new Date("2027-12-31"),
-    }),
+    }).map((date) => new Geburtstag(date)),
     anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
     etVorGeburt: arbitraryErwerbsArt(),
     hasEtNachGeburt: arbitraryBoolean(),

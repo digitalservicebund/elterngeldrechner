@@ -13,6 +13,7 @@ import {
   type ElternGeldPlusErgebnis,
   type ErwerbsZeitraumLebensMonat,
   type FinanzDaten,
+  Geburtstag,
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   type PlanungsDaten,
@@ -332,7 +333,7 @@ if (import.meta.vitest) {
     const ANY_MONATE = {};
     const ANY_PERSOENLICHE_DATEN = {
       anzahlKuenftigerKinder: 1,
-      wahrscheinlichesGeburtsDatum: new Date(),
+      geburtstagDesKindes: new Geburtstag(Date.now()),
       etVorGeburt: ErwerbsArt.NEIN,
     };
 

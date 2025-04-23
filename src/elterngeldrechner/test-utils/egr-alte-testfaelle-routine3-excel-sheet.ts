@@ -8,6 +8,7 @@ import {
   Einkommen,
   ElternGeldArt,
   type ErwerbsZeitraumLebensMonat,
+  Geburtstag,
   KassenArt,
   PLANUNG_ANZAHL_MONATE,
   type PersoenlicheDaten,
@@ -30,18 +31,18 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
   createPersoenlicheDaten(testCaseIndex: number): PersoenlicheDaten {
     return {
       anzahlKuenftigerKinder: 1,
-      wahrscheinlichesGeburtsDatum: this.geburtsDatum(testCaseIndex),
+      geburtstagDesKindes: this.geburtstag(testCaseIndex),
       etVorGeburt: this.erwerbsArt(testCaseIndex),
       hasEtNachGeburt: true,
     };
   }
 
-  geburtsDatum(testCaseIndex: number) {
+  geburtstag(testCaseIndex: number) {
     const geburtsDatum = this.numberOf(testCaseIndex, GEBURTS_DATUM_OFFSET);
     if (geburtsDatum === undefined) {
       throw new Error(`geburtsDatum undefined`);
     }
-    return dateFromExcelSerial(geburtsDatum);
+    return new Geburtstag(dateFromExcelSerial(geburtsDatum));
   }
 
   erwerbsArt(testCaseIndex: number) {

@@ -109,23 +109,21 @@ if (import.meta.vitest) {
     });
 
     describe.each([
-      ["2022-02-24T03:24:00", 2021],
-      ["2021-02-24T03:24:00", 2021],
-      ["2020-02-24T03:24:00", 2021],
-      ["2016-02-24T03:24:00", 2021],
-      ["2023-02-24T03:24:00", 2022],
-      ["2024-02-24T03:24:00", 2023],
-      ["2025-02-24T03:24:00", 2024],
-      ["2026-02-24T03:24:00", 2024],
+      [new Date("2022-02-24T03:24:00"), 2021],
+      [new Date("2021-02-24T03:24:00"), 2021],
+      [new Date("2020-02-24T03:24:00"), 2021],
+      [new Date("2016-02-24T03:24:00"), 2021],
+      [new Date("2023-02-24T03:24:00"), 2022],
+      [new Date("2024-02-24T03:24:00"), 2023],
+      [new Date("2025-02-24T03:24:00"), 2024],
+      [new Date("2026-02-24T03:24:00"), 2024],
     ])(
-      "when wahrscheinlichesGeburtsDatum is %s then expect Lohnsteuerjahr %d",
-      (wahrscheinlichesGeburtsDatum, lohnSteuerJahr) => {
+      "when Geburtstag des Kindes is %s then expect Lohnsteuerjahr %d",
+      (geburtsdatumDesKindes, lohnSteuerJahr) => {
         it("should calculate Abgaben", () => {
-          expect(
-            ermittelRelevantesLohnsteuerjahr(
-              new Date(wahrscheinlichesGeburtsDatum),
-            ),
-          ).toBe(lohnSteuerJahr);
+          expect(ermittelRelevantesLohnsteuerjahr(geburtsdatumDesKindes)).toBe(
+            lohnSteuerJahr,
+          );
         });
       },
     );

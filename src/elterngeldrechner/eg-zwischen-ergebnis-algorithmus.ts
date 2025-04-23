@@ -17,10 +17,7 @@ export function elterngeldZwischenergebnis(
   persoenlicheDaten: PersoenlicheDaten,
   nettoEinkommen: Einkommen,
 ): ZwischenErgebnis {
-  if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
-    throw new Error("wahrscheinlichesGeburtsDatum is undefined");
-  }
-  const geburt: Date = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
+  const geburt = persoenlicheDaten.geburtstagDesKindes;
   const geschwister = persoenlicheDaten.geschwister ?? [];
   const no_kinder: number = persoenlicheDaten.anzahlKuenftigerKinder;
   const ek_vor: Einkommen =
@@ -46,7 +43,7 @@ export function elterngeldZwischenergebnis(
     status_et === ErwerbsArt.JA_NICHT_SELBST_MINI
   ) {
     const werbekostenpauschale = bestimmeWerbekostenpauschale(
-      new Geburtstag(persoenlicheDaten.wahrscheinlichesGeburtsDatum),
+      persoenlicheDaten.geburtstagDesKindes,
     );
     ek_vor_copy = Math.max(ek_vor_copy - werbekostenpauschale, 0);
   }
@@ -233,8 +230,8 @@ if (import.meta.vitest) {
 
       it("is undefined if there is no Geschwisterkind with Behinderung", () => {
         const geschwister: Kind[] = [
-          { geburtstag: new Geburtstag(new Date()), istBehindert: false },
-          { geburtstag: new Geburtstag(new Date()), istBehindert: false },
+          { geburtstag: new Geburtstag(Date.now()), istBehindert: false },
+          { geburtstag: new Geburtstag(Date.now()), istBehindert: false },
         ];
 
         const date = ende_bonus_u14(geschwister);

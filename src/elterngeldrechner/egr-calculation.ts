@@ -6,6 +6,7 @@ import {
   ElternGeldDaten,
   ElternGeldPlusErgebnis,
   ErwerbsArt,
+  Geburtstag,
   MischEkZwischenErgebnis,
   finanzDatenOf,
 } from "./model";
@@ -22,7 +23,7 @@ export function calculateElternGeld(
 
   const zwischenErgebnisEinkommen = zwischenErgebnisEinkommenOf(
     clonedElterngeldDaten,
-    clonedElterngeldDaten.persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+    clonedElterngeldDaten.persoenlicheDaten.geburtstagDesKindes,
   );
 
   const zwischenErgebnis = elterngeldZwischenergebnis(
@@ -124,7 +125,7 @@ if (import.meta.vitest) {
         };
 
         const persoenlicheDaten = {
-          wahrscheinlichesGeburtsDatum: new Date("2022-11-25"),
+          geburtstagDesKindes: new Geburtstag("2022-11-25"),
           anzahlKuenftigerKinder: 1,
           etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           hasEtNachGeburt: true,
@@ -182,7 +183,7 @@ if (import.meta.vitest) {
         };
 
         const persoenlicheDaten = {
-          wahrscheinlichesGeburtsDatum: new Date("2022-11-25"),
+          geburtstagDesKindes: new Geburtstag("2022-11-25"),
           anzahlKuenftigerKinder: 1,
           etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           hasEtNachGeburt: false,
@@ -216,7 +217,7 @@ if (import.meta.vitest) {
 
     it("should always calculate the same result for the same inputs with Mischeinkommen", () => {
       const persoenlicheDaten = {
-        wahrscheinlichesGeburtsDatum: new Date(),
+        geburtstagDesKindes: new Geburtstag(Date.now()),
         anzahlKuenftigerKinder: 1,
         etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
       };

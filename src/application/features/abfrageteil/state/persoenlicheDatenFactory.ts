@@ -58,8 +58,9 @@ export const persoenlicheDatenOfUi = (
   elternteil: ElternteilType,
 ): PersoenlicheDaten => {
   return {
-    wahrscheinlichesGeburtsDatum:
+    geburtstagDesKindes: new Geburtstag(
       stepNachwuchsSelectors.getWahrscheinlichesGeburtsDatum(state),
+    ),
     anzahlKuenftigerKinder: state.stepNachwuchs.anzahlKuenftigerKinder,
     etVorGeburt: erwerbsTaetigkeitVorGeburtOf(state, elternteil),
     geschwister: state.stepNachwuchs.geschwisterkinder.map((kind) => ({

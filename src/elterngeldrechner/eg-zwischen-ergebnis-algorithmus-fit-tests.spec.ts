@@ -37,13 +37,6 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         expect(zwischenErgebnis.mehrlingsZulage).toBe(
           sheet.zwischenErgebnisMehrlingsZulage(testCaseIndex),
         );
-
-        expect(
-          zwischenErgebnis.zeitraumGeschwisterBonus ??
-            persoenlicheDaten.wahrscheinlichesGeburtsDatum,
-        ).toEqual(
-          sheet.zwischenErgebnisZeitraumGeschwisterBonus(testCaseIndex),
-        );
       });
     }
   });

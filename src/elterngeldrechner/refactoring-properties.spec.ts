@@ -259,7 +259,7 @@ function expectGeschwisterbonusDeadlineToMatch(
   context: ElternGeldDaten,
 ): void {
   const tagVorDemGeburtsdatum = subDays(
-    context.persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+    context.persoenlicheDaten.geburtstagDesKindes,
     1,
   );
 
@@ -268,7 +268,7 @@ function expectGeschwisterbonusDeadlineToMatch(
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
   return {
-    wahrscheinlichesGeburtsDatum: data.wahrscheinlichesGeburtsdatum,
+    geburtstagDesKindes: data.geburtstagDesKindes,
     anzahlKuenftigerKinder: data.anzahlKuenftigerKinder,
     etVorGeburt: data.erwerbsartVorDerGeburt,
     hasEtNachGeburt: data.erwerbstaetigNachDerGeburt,
@@ -280,7 +280,7 @@ function originalPersoenlicheDatenFrom(
   data: PersoenlicheDatenRaw,
 ): OriginalPersoenlicheDaten {
   const persoenlicheDaten = new OriginalPersoenlicheDaten(
-    data.wahrscheinlichesGeburtsdatum,
+    data.geburtstagDesKindes,
   );
   persoenlicheDaten.anzahlKuenftigerKinder = data.anzahlKuenftigerKinder;
   persoenlicheDaten.sindSieAlleinerziehend = yesNoFrom(
@@ -426,8 +426,7 @@ function erwerbsZeitraumLebensMonatFrom(
 function originalLohnsteuerjahrFrom(
   data: PersoenlicheDatenRaw,
 ): OriginalLohnsteuerjahr {
-  return (data.wahrscheinlichesGeburtsdatum.getFullYear() -
-    1) as OriginalLohnsteuerjahr;
+  return (data.geburtstagDesKindes.getFullYear() - 1) as OriginalLohnsteuerjahr;
 }
 
 function yesNoFrom(value: boolean): YesNo {
@@ -437,10 +436,10 @@ function yesNoFrom(value: boolean): YesNo {
 function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
   return arbitraryRecord({
     anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
-    wahrscheinlichesGeburtsdatum: arbitraryDate({
+    geburtstagDesKindes: arbitraryDate({
       min: new Date("2023-01-01"),
       max: new Date("2023-12-31"),
-    }),
+    }).map((date) => new Geburtstag(date)),
     sindSieAlleinerziehend: arbitraryBoolean(),
     erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
     erwerbstaetigNachDerGeburt: arbitraryBoolean(),
@@ -450,7 +449,7 @@ function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
 
 type PersoenlicheDatenRaw = {
   anzahlKuenftigerKinder: number;
-  wahrscheinlichesGeburtsdatum: Date;
+  geburtstagDesKindes: Geburtstag;
   sindSieAlleinerziehend: boolean;
   erwerbsartVorDerGeburt: ErwerbsArt;
   erwerbstaetigNachDerGeburt: boolean;

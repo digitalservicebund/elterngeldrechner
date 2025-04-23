@@ -87,7 +87,7 @@ if (import.meta.vitest) {
     });
 
     it("automatically sets the time to zero when setting the epoche milliseconds", () => {
-      const geburtstag = new Geburtstag(new Date());
+      const geburtstag = new Geburtstag(Date.now());
       geburtstag.setTime(123456);
 
       expect(geburtstag.getHours()).toBe(0);
@@ -97,7 +97,7 @@ if (import.meta.vitest) {
     });
 
     it("throws an error when trying to set any time value", () => {
-      const geburtstag = new Geburtstag(new Date());
+      const geburtstag = new Geburtstag(Date.now());
 
       expect(() => geburtstag.setHours()).toThrowError();
       expect(() => geburtstag.setMinutes()).toThrowError();

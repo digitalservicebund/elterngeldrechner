@@ -3,6 +3,7 @@ import { EgrAlteTestfaelleRoutine3ExcelSheet } from "./egr-alte-testfaelle-routi
 import {
   ElternGeldArt,
   ErwerbsArt,
+  Geburtstag,
   KassenArt,
   KinderFreiBetrag,
   PLANUNG_ANZAHL_MONATE,
@@ -15,11 +16,11 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
 
   describe("from Testfaelle_alte_Routine3.xlsx", () => {
     it("should read geburtsDatum", () => {
-      expect(sheet.geburtsDatum(0).toISOString()).toBe(
-        new Date("2017-09-06").toISOString(),
+      expect(sheet.geburtstag(0).toISOString()).toBe(
+        new Geburtstag("2017-09-06").toISOString(),
       );
-      expect(sheet.geburtsDatum(1).toISOString()).toBe(
-        new Date("2017-12-05").toISOString(),
+      expect(sheet.geburtstag(1).toISOString()).toBe(
+        new Geburtstag("2017-12-05").toISOString(),
       );
     });
 

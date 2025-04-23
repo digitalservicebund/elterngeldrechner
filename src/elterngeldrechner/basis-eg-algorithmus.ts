@@ -114,7 +114,7 @@ export function berechneMischNettoUndBasiselterngeld(
   }
 
   const werbekostenpauschale = bestimmeWerbekostenpauschale(
-    new Geburtstag(persoenlicheDaten.wahrscheinlichesGeburtsDatum),
+    persoenlicheDaten.geburtstagDesKindes,
   );
   const brutto_elg = aufDenCentRunden(
     (summe_EK_SS +
@@ -249,7 +249,7 @@ export function berechneMischNettoUndBasiselterngeld(
       finanzDaten,
       status,
       brutto_steuer,
-      persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+      persoenlicheDaten.geburtstagDesKindes,
     );
     netto = brutto_elg - summe_steuer_abzug - summe_sozab;
     steuern = summe_steuer_abzug;
@@ -279,7 +279,7 @@ if (import.meta.vitest) {
       it("TESTFALL NO. 1", () => {
         // given
         const persoenlicheDaten = {
-          wahrscheinlichesGeburtsDatum: new Date("2023-01-01"),
+          geburtstagDesKindes: new Geburtstag("2023-01-01"),
           anzahlKuenftigerKinder: 1,
           etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           hasEtNachGeburt: false,

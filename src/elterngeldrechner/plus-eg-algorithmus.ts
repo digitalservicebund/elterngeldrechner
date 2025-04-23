@@ -176,11 +176,8 @@ function mitETVorGeburt(
   let elterngeld_keine_et_plus = 0;
   if (nicht_erw) {
     const werbekostenpauschale = bestimmeWerbekostenpauschale(
-      new Geburtstag(persoenlicheDaten.wahrscheinlichesGeburtsDatum),
+      persoenlicheDaten.geburtstagDesKindes,
     );
-    if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
-      throw new Error("wahrscheinlichesGeburtsDatum === undefined");
-    }
     const anzahl_monate: number = zaehleMonateErwerbsTaetigkeit(
       finanzDaten.erwerbsZeitraumLebensMonatList,
     );
@@ -218,7 +215,7 @@ function mitETVorGeburt(
             brutto_basis,
             finanzDaten,
             persoenlicheDaten.etVorGeburt,
-            persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+            persoenlicheDaten.geburtstagDesKindes,
           );
         }
         if (brutto_plus > 0) {
@@ -226,7 +223,7 @@ function mitETVorGeburt(
             brutto_plus,
             finanzDaten,
             persoenlicheDaten.etVorGeburt,
-            persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+            persoenlicheDaten.geburtstagDesKindes,
           );
         }
       }
@@ -497,16 +494,13 @@ function createElterngeldAusgabe(
   planungsergebnis: PlanungsDaten,
   hatPartnerbonus: boolean,
 ): ElternGeldPlusErgebnis {
-  if (persoenlicheDaten.wahrscheinlichesGeburtsDatum === undefined) {
-    throw new Error("wahrscheinlichesGeburtsDatum === undefined");
-  }
   const ende_geschwisterbonus: Date | null = z.zeitraumGeschwisterBonus;
   const geschw = new Array<number>(PLANUNG_ANZAHL_MONATE).fill(0);
   const isGeschwisterVorhanden =
     (persoenlicheDaten.geschwister ?? []).length > 0;
 
   if (isGeschwisterVorhanden) {
-    const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
+    const geburt = persoenlicheDaten.geburtstagDesKindes;
     const anfang_LM = fillLebensMonateList(geburt);
 
     for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
@@ -700,7 +694,7 @@ if (import.meta.vitest) {
           };
 
           const persoenlicheDaten = {
-            wahrscheinlichesGeburtsDatum: new Date("2022-11-24"),
+            geburtstagDesKindes: new Geburtstag("2022-11-24"),
             anzahlKuenftigerKinder: 1,
             etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
             hasEtNachGeburt: true,
@@ -761,7 +755,7 @@ if (import.meta.vitest) {
         it("should throw error, if finanzdaten mischeinkommen are true and MischEkZwischenErgebnis are null", () => {
           // given
           const persoenlicheDaten = {
-            wahrscheinlichesGeburtsDatum: new Date("2023-11-24T01:02:03.000Z"),
+            geburtstagDesKindes: new Geburtstag("2023-11-24"),
             anzahlKuenftigerKinder: 1,
             etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
             hasEtNachGeburt: true,

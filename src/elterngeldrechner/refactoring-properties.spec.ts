@@ -24,6 +24,7 @@ import {
   ErwerbsTaetigkeit,
   type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
+  Geburtstag,
   KassenArt,
   type Kind,
   KinderFreiBetrag,
@@ -271,7 +272,7 @@ function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {
     anzahlKuenftigerKinder: data.anzahlKuenftigerKinder,
     etVorGeburt: data.erwerbsartVorDerGeburt,
     hasEtNachGeburt: data.erwerbstaetigNachDerGeburt,
-    geschwister: data.kinder.map(kindFrom),
+    geschwister: data.geschwister,
   };
 }
 
@@ -287,7 +288,7 @@ function originalPersoenlicheDatenFrom(
   );
   persoenlicheDaten.etVorGeburt = data.erwerbsartVorDerGeburt;
   persoenlicheDaten.etNachGeburt = yesNoFrom(data.erwerbstaetigNachDerGeburt);
-  persoenlicheDaten.kinder.push(...data.kinder.map(originalKindFrom));
+  persoenlicheDaten.kinder.push(...data.geschwister.map(originalKindFrom));
   return persoenlicheDaten;
 }
 
@@ -328,18 +329,11 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   return finanzdaten;
 }
 
-function kindFrom(data: KindRaw): Kind {
-  return {
-    geburtsdatum: data.geburtsdatum,
-    istBehindert: data.istBehindert,
-  };
-}
-
-function originalKindFrom(data: KindRaw, index: number): OriginalKind {
+function originalKindFrom(data: Kind, index: number): OriginalKind {
   return {
     nummer: index + 2,
-    geburtsdatum: data.geburtsdatum,
-    istBehindert: data.istBehindert,
+    geburtsdatum: data.geburtstag,
+    istBehindert: !!data.istBehindert,
   };
 }
 
@@ -450,7 +444,7 @@ function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
     sindSieAlleinerziehend: arbitraryBoolean(),
     erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
     erwerbstaetigNachDerGeburt: arbitraryBoolean(),
-    kinder: arbitraryArray(arbitraryKind(), { maxLength: 7 }),
+    geschwister: arbitraryArray(arbitraryKind(), { maxLength: 7 }),
   });
 }
 
@@ -460,7 +454,7 @@ type PersoenlicheDatenRaw = {
   sindSieAlleinerziehend: boolean;
   erwerbsartVorDerGeburt: ErwerbsArt;
   erwerbstaetigNachDerGeburt: boolean;
-  kinder: KindRaw[];
+  geschwister: Kind[];
 };
 
 function arbitraryFinanzdatenRaw(): Arbitrary<FinanzdatenRaw> {
@@ -565,20 +559,15 @@ type ErwerbsZeitraumLebensMonatRaw = {
   bruttoProMonat: number;
 };
 
-function arbitraryKind(): Arbitrary<KindRaw> {
+function arbitraryKind(): Arbitrary<Kind> {
   return arbitraryRecord({
-    geburtsdatum: arbitraryDate({
+    geburtstag: arbitraryDate({
       min: new Date("2000-01-01"),
       max: new Date("2022-12-31"),
-    }),
+    }).map((date) => new Geburtstag(date)),
     istBehindert: arbitraryBoolean(),
   });
 }
-
-type KindRaw = {
-  geburtsdatum: Date;
-  istBehindert: boolean;
-};
 
 function arbitraryErwerbsArt(): Arbitrary<ErwerbsArt> {
   return arbitraryConstantFrom(...Object.values(ErwerbsArt));

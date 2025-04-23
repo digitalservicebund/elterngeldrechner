@@ -20,6 +20,7 @@ import {
   ErwerbsTaetigkeit,
   type ErwerbsZeitraumLebensMonat,
   type FinanzDaten,
+  Geburtstag,
   KassenArt,
   type Kind,
   KinderFreiBetrag,
@@ -159,10 +160,10 @@ function arbitraryErwerbszeitraumLebensmonat(): Arbitrary<ErwerbsZeitraumLebensM
 
 function arbitraryKind(): Arbitrary<Kind> {
   return arbitraryRecord({
-    geburtsdatum: arbitraryDate({
+    geburtstag: arbitraryDate({
       min: new Date("2000-01-01"),
       max: new Date("2019-12-31"),
-    }),
+    }).map((date) => new Geburtstag(date)),
     istBehindert: arbitraryBoolean(),
   });
 }

@@ -90,7 +90,7 @@ function ende_bonus_u6(geschwister: Kind[]): Date | undefined {
   const zweitjuengstesGeschwisterkind = findNthLastBornChild(geschwister, 2);
 
   return zweitjuengstesGeschwisterkind
-    ? ende_bonus(zweitjuengstesGeschwisterkind.geburtsdatum, 6)
+    ? ende_bonus(zweitjuengstesGeschwisterkind.geburtstag, 6)
     : undefined;
 }
 
@@ -105,7 +105,7 @@ function ende_bonus_u14(geschwister: Kind[]): Date | undefined {
   );
 
   return juengstesGeschwisterkindMitBehinderung
-    ? ende_bonus(juengstesGeschwisterkindMitBehinderung.geburtsdatum, 14)
+    ? ende_bonus(juengstesGeschwisterkindMitBehinderung.geburtstag, 14)
     : undefined;
 }
 
@@ -113,7 +113,7 @@ function ende_bonus_u3(geschwister: Kind[]): Date | undefined {
   const juengstesGeschwisterkind = findNthLastBornChild(geschwister, 1);
 
   return juengstesGeschwisterkind
-    ? ende_bonus(juengstesGeschwisterkind.geburtsdatum, 3)
+    ? ende_bonus(juengstesGeschwisterkind.geburtstag, 3)
     : undefined;
 }
 
@@ -148,7 +148,7 @@ function compareDateByLatestOrder(left: Date, right: Date): number {
 }
 
 function compareKinderByLatestGeburtsdatum(left: Kind, right: Kind): number {
-  return right.geburtsdatum.getTime() - left.geburtsdatum.getTime();
+  return right.geburtstag.getTime() - left.geburtstag.getTime();
 }
 
 if (import.meta.vitest) {
@@ -165,15 +165,15 @@ if (import.meta.vitest) {
       });
 
       test.each([
-        [new Date("2020-02-14"), new Date("2023-02-13")],
-        [new Date("2020-02-01"), new Date("2023-01-31")],
-        [new Date("2020-01-01"), new Date("2022-12-31")],
-        [new Date("2020-03-01"), new Date("2023-02-28")],
-        [new Date("2021-03-01"), new Date("2024-02-29")],
+        [new Geburtstag("2020-02-14"), new Geburtstag("2023-02-13")],
+        [new Geburtstag("2020-02-01"), new Geburtstag("2023-01-31")],
+        [new Geburtstag("2020-01-01"), new Geburtstag("2022-12-31")],
+        [new Geburtstag("2020-03-01"), new Geburtstag("2023-02-28")],
+        [new Geburtstag("2021-03-01"), new Geburtstag("2024-02-29")],
       ])(
         "when geburt of sister is %s, then ende u3 is %s",
-        (geburtGeschw1: Date, endeU3: Date) => {
-          const geschwister: Kind[] = [{ geburtsdatum: geburtGeschw1 }];
+        (geburtGeschw1, endeU3) => {
+          const geschwister: Kind[] = [{ geburtstag: geburtGeschw1 }];
 
           const date = ende_bonus_u3(geschwister);
 
@@ -183,36 +183,36 @@ if (import.meta.vitest) {
 
       test.each([
         [
-          new Date("2020-02-14"),
-          new Date("1999-02-14"),
-          new Date("2023-02-13"),
+          new Geburtstag("2020-02-14"),
+          new Geburtstag("1999-02-14"),
+          new Geburtstag("2023-02-13"),
         ],
         [
-          new Date("1999-02-14"),
-          new Date("2020-02-14"),
-          new Date("2023-02-13"),
+          new Geburtstag("1999-02-14"),
+          new Geburtstag("2020-02-14"),
+          new Geburtstag("2023-02-13"),
         ],
         [
-          new Date("2020-02-14"),
-          new Date("2020-02-14"),
-          new Date("2023-02-13"),
+          new Geburtstag("2020-02-14"),
+          new Geburtstag("2020-02-14"),
+          new Geburtstag("2023-02-13"),
         ],
         [
-          new Date("2020-02-14"),
-          new Date("2020-02-15"),
-          new Date("2023-02-14"),
+          new Geburtstag("2020-02-14"),
+          new Geburtstag("2020-02-15"),
+          new Geburtstag("2023-02-14"),
         ],
         [
-          new Date("2020-02-14"),
-          new Date("2020-03-14"),
-          new Date("2023-03-13"),
+          new Geburtstag("2020-02-14"),
+          new Geburtstag("2020-03-14"),
+          new Geburtstag("2023-03-13"),
         ],
       ])(
         "when geburt of child is %s, sister is %s and brother is %s, then ende u3 is %s",
-        (geburtGeschw1: Date, geburtGeschw2: Date, endeU3: Date) => {
+        (geburtGeschw1, geburtGeschw2, endeU3) => {
           const geschwister: Kind[] = [
-            { geburtsdatum: geburtGeschw1 },
-            { geburtsdatum: geburtGeschw2 },
+            { geburtstag: geburtGeschw1 },
+            { geburtstag: geburtGeschw2 },
           ];
 
           const date = ende_bonus_u3(geschwister);
@@ -233,8 +233,8 @@ if (import.meta.vitest) {
 
       it("is undefined if there is no Geschwisterkind with Behinderung", () => {
         const geschwister: Kind[] = [
-          { geburtsdatum: new Date(), istBehindert: false },
-          { geburtsdatum: new Date(), istBehindert: false },
+          { geburtstag: new Geburtstag(new Date()), istBehindert: false },
+          { geburtstag: new Geburtstag(new Date()), istBehindert: false },
         ];
 
         const date = ende_bonus_u14(geschwister);
@@ -243,17 +243,17 @@ if (import.meta.vitest) {
       });
 
       test.each([
-        [new Date("2020-02-14"), new Date("2034-02-13")],
-        [new Date("2020-02-01"), new Date("2034-01-31")],
-        [new Date("2020-01-01"), new Date("2033-12-31")],
-        [new Date("2020-03-01"), new Date("2034-02-28")],
-        [new Date("2022-03-01"), new Date("2036-02-29")],
+        [new Geburtstag("2020-02-14"), new Geburtstag("2034-02-13")],
+        [new Geburtstag("2020-02-01"), new Geburtstag("2034-01-31")],
+        [new Geburtstag("2020-01-01"), new Geburtstag("2033-12-31")],
+        [new Geburtstag("2020-03-01"), new Geburtstag("2034-02-28")],
+        [new Geburtstag("2022-03-01"), new Geburtstag("2036-02-29")],
       ])(
         "when geburt of sister is %s and ist behindert, then ende u14 is %s",
-        (geburtGeschw1: Date, endeU14: Date) => {
+        (geburtGeschw1, endeU14) => {
           const geschwister: Kind[] = [
             {
-              geburtsdatum: geburtGeschw1,
+              geburtstag: geburtGeschw1,
               istBehindert: true,
             },
           ];
@@ -266,70 +266,70 @@ if (import.meta.vitest) {
 
       test.each([
         [
-          new Date("2009-01-14"),
+          new Geburtstag("2009-01-14"),
           true,
-          new Date("2008-01-14"),
+          new Geburtstag("2008-01-14"),
           true,
-          new Date("2023-01-13"),
+          new Geburtstag("2023-01-13"),
         ],
         [
-          new Date("2009-01-14"),
+          new Geburtstag("2009-01-14"),
           true,
-          new Date("2009-01-14"),
+          new Geburtstag("2009-01-14"),
           false,
-          new Date("2023-01-13"),
+          new Geburtstag("2023-01-13"),
         ],
         [
-          new Date("2009-01-01"),
+          new Geburtstag("2009-01-01"),
           true,
-          new Date("2009-01-14"),
+          new Geburtstag("2009-01-14"),
           true,
-          new Date("2023-01-13"),
+          new Geburtstag("2023-01-13"),
         ],
         [
-          new Date("2007-01-03"),
+          new Geburtstag("2007-01-03"),
           true,
-          new Date("2009-01-03"),
+          new Geburtstag("2009-01-03"),
           true,
-          new Date("2023-01-02"),
+          new Geburtstag("2023-01-02"),
         ],
         [
-          new Date("2009-01-31"),
+          new Geburtstag("2009-01-31"),
           true,
-          new Date("2010-01-31"),
+          new Geburtstag("2010-01-31"),
           true,
-          new Date("2024-01-30"),
+          new Geburtstag("2024-01-30"),
         ],
         [
-          new Date("2009-02-28"),
+          new Geburtstag("2009-02-28"),
           true,
-          new Date("1980-02-28"),
+          new Geburtstag("1980-02-28"),
           true,
-          new Date("2023-02-27"),
+          new Geburtstag("2023-02-27"),
         ],
         [
-          new Date("2010-02-28"),
+          new Geburtstag("2010-02-28"),
           true,
-          new Date("2010-02-28"),
+          new Geburtstag("2010-02-28"),
           true,
-          new Date("2024-02-27"),
+          new Geburtstag("2024-02-27"),
         ],
       ])(
         "when geburt of sister is %s and istBehindert: %s and brother is %s and istBehindert: %s, then ende u14 is %s",
         (
-          geburtGeschw1: Date,
-          geschw1IstBehindert: boolean,
-          geburtGeschw2: Date,
-          geschw2IstBehindert: boolean,
-          endeU14: Date,
+          geburtGeschw1,
+          geschw1IstBehindert,
+          geburtGeschw2,
+          geschw2IstBehindert,
+          endeU14,
         ) => {
           const geschwister: Kind[] = [
             {
-              geburtsdatum: geburtGeschw1,
+              geburtstag: geburtGeschw1,
               istBehindert: geschw1IstBehindert,
             },
             {
-              geburtsdatum: geburtGeschw2,
+              geburtstag: geburtGeschw2,
               istBehindert: geschw2IstBehindert,
             },
           ];
@@ -351,17 +351,17 @@ if (import.meta.vitest) {
       });
 
       test.each([
-        [new Date("2020-02-14"), new Date("2026-02-13")],
-        [new Date("2020-02-01"), new Date("2026-01-31")],
-        [new Date("2020-01-01"), new Date("2025-12-31")],
-        [new Date("2020-03-01"), new Date("2026-02-28")],
-        [new Date("2022-03-01"), new Date("2028-02-29")],
+        [new Geburtstag("2020-02-14"), new Geburtstag("2026-02-13")],
+        [new Geburtstag("2020-02-01"), new Geburtstag("2026-01-31")],
+        [new Geburtstag("2020-01-01"), new Geburtstag("2025-12-31")],
+        [new Geburtstag("2020-03-01"), new Geburtstag("2026-02-28")],
+        [new Geburtstag("2022-03-01"), new Geburtstag("2028-02-29")],
       ])(
         "when geburt of sister is %s, then ende u6 is %s",
-        (geburtGeschw1: Date, endeU6: Date) => {
+        (geburtGeschw1, endeU6) => {
           const geschwister: Kind[] = [
-            { geburtsdatum: geburtGeschw1 },
-            { geburtsdatum: geburtGeschw1 },
+            { geburtstag: geburtGeschw1 },
+            { geburtstag: geburtGeschw1 },
           ];
 
           const date = ende_bonus_u6(geschwister);
@@ -372,65 +372,60 @@ if (import.meta.vitest) {
 
       test.each([
         [
-          new Date("2017-01-14"),
-          new Date("2017-01-14"),
-          new Date("2016-01-14"),
-          new Date("2023-01-13"),
+          new Geburtstag("2017-01-14"),
+          new Geburtstag("2017-01-14"),
+          new Geburtstag("2016-01-14"),
+          new Geburtstag("2023-01-13"),
         ],
         [
-          new Date("2017-01-01"),
-          new Date("2017-01-14"),
-          new Date("2017-01-14"),
-          new Date("2023-01-13"),
+          new Geburtstag("2017-01-01"),
+          new Geburtstag("2017-01-14"),
+          new Geburtstag("2017-01-14"),
+          new Geburtstag("2023-01-13"),
         ],
         [
-          new Date("2015-01-03"),
-          new Date("2017-01-03"),
-          new Date("2017-01-03"),
-          new Date("2023-01-02"),
+          new Geburtstag("2015-01-03"),
+          new Geburtstag("2017-01-03"),
+          new Geburtstag("2017-01-03"),
+          new Geburtstag("2023-01-02"),
         ],
         [
-          new Date("2015-01-03"),
-          new Date("2015-01-03"),
-          new Date("2017-01-03"),
-          new Date("2021-01-02"),
+          new Geburtstag("2015-01-03"),
+          new Geburtstag("2015-01-03"),
+          new Geburtstag("2017-01-03"),
+          new Geburtstag("2021-01-02"),
         ],
         [
-          new Date("2017-01-31"),
-          new Date("2018-01-31"),
-          new Date("2018-01-31"),
-          new Date("2024-01-30"),
+          new Geburtstag("2017-01-31"),
+          new Geburtstag("2018-01-31"),
+          new Geburtstag("2018-01-31"),
+          new Geburtstag("2024-01-30"),
         ],
         [
-          new Date("2017-02-28"),
-          new Date("2017-02-28"),
-          new Date("1980-02-28"),
-          new Date("2023-02-27"),
+          new Geburtstag("2017-02-28"),
+          new Geburtstag("2017-02-28"),
+          new Geburtstag("1980-02-28"),
+          new Geburtstag("2023-02-27"),
         ],
         [
-          new Date("2018-02-28"),
-          new Date("2018-02-28"),
-          new Date("2018-02-28"),
-          new Date("2024-02-27"),
+          new Geburtstag("2018-02-28"),
+          new Geburtstag("2018-02-28"),
+          new Geburtstag("2018-02-28"),
+          new Geburtstag("2024-02-27"),
         ],
         [
-          new Date("2024-01-03"),
-          new Date("2026-01-03"),
-          new Date("2027-01-03"),
-          new Date("2032-01-02"),
+          new Geburtstag("2024-01-03"),
+          new Geburtstag("2026-01-03"),
+          new Geburtstag("2027-01-03"),
+          new Geburtstag("2032-01-02"),
         ],
       ])(
         "when geburt of sisters are %s and %s and brother is %s, then ende u6 is %s",
-        (
-          geburtGeschw1: Date,
-          geburtGeschw2: Date,
-          geburtGeschw3: Date,
-          endeU6: Date,
-        ) => {
+        (geburtGeschw1, geburtGeschw2, geburtGeschw3, endeU6) => {
           const geschwister: Kind[] = [
-            { geburtsdatum: geburtGeschw1 },
-            { geburtsdatum: geburtGeschw2 },
-            { geburtsdatum: geburtGeschw3 },
+            { geburtstag: geburtGeschw1 },
+            { geburtstag: geburtGeschw2 },
+            { geburtstag: geburtGeschw3 },
           ];
 
           const date = ende_bonus_u6(geschwister);
@@ -455,9 +450,9 @@ if (import.meta.vitest) {
 
       it("returns null if all Geschwister are too old for any bonus", () => {
         const geschwister = [
-          { geburtsdatum: new Date("2016-01-02") },
-          { geburtsdatum: new Date("2013-01-02") },
-          { geburtsdatum: new Date("2005-01-02"), istBehindert: true },
+          { geburtstag: new Geburtstag("2016-01-02") },
+          { geburtstag: new Geburtstag("2013-01-02") },
+          { geburtstag: new Geburtstag("2005-01-02"), istBehindert: true },
         ];
         const geburtsdatum = new Date("2020-01-01");
 
@@ -471,9 +466,9 @@ if (import.meta.vitest) {
 
       it("uses the only deadline that ends after the Geburtstag", () => {
         const geschwister = [
-          { geburtsdatum: new Date("2016-01-02") },
-          { geburtsdatum: new Date("2015-01-02") },
-          { geburtsdatum: new Date("2005-01-02"), istBehindert: true },
+          { geburtstag: new Geburtstag("2016-01-02") },
+          { geburtstag: new Geburtstag("2015-01-02") },
+          { geburtstag: new Geburtstag("2005-01-02"), istBehindert: true },
         ];
         const geburtsdatum = new Date("2020-01-01");
 
@@ -482,14 +477,14 @@ if (import.meta.vitest) {
           geburtsdatum,
         );
 
-        expect(deadline).toEqual(new Date("2021-01-01"));
+        expect(deadline).toEqual(new Geburtstag("2021-01-01"));
       });
 
       it("uses the latest deadline that lasts the longest", () => {
         const geschwister = [
-          { geburtsdatum: new Date("2017-01-02") },
-          { geburtsdatum: new Date("2015-01-02") },
-          { geburtsdatum: new Date("2008-01-02"), istBehindert: true },
+          { geburtstag: new Geburtstag("2017-01-02") },
+          { geburtstag: new Geburtstag("2015-01-02") },
+          { geburtstag: new Geburtstag("2008-01-02"), istBehindert: true },
         ];
         const geburtsdatum = new Date("2020-01-01");
 
@@ -498,7 +493,7 @@ if (import.meta.vitest) {
           geburtsdatum,
         );
 
-        expect(deadline).toEqual(new Date("2022-01-01"));
+        expect(deadline).toEqual(new Geburtstag("2022-01-01"));
       });
     });
 
@@ -509,47 +504,53 @@ if (import.meta.vitest) {
         nthLastBorn: undefined,
       },
       {
-        kinder: [{ geburtsdatum: new Date(2021, 1, 1) }],
+        kinder: [{ geburtstag: new Geburtstag("2021-01-01") }],
         nth: 1,
-        nthLastBorn: { geburtsdatum: new Date(2021, 1, 1) },
+        nthLastBorn: { geburtstag: new Geburtstag("2021-01-01") },
       },
       {
-        kinder: [{ geburtsdatum: new Date(2021, 1, 1) }],
+        kinder: [{ geburtstag: new Geburtstag("2021-01-01") }],
         nth: 2,
         nthLastBorn: undefined,
       },
       {
-        kinder: [{ geburtsdatum: new Date(2021, 1, 1) }],
+        kinder: [{ geburtstag: new Geburtstag("2021-01-01") }],
         nth: 0,
         nthLastBorn: undefined,
       },
       {
         kinder: [
-          { geburtsdatum: new Date(2021, 1, 1), istBehindert: false },
-          { geburtsdatum: new Date(2021, 1, 2), istBehindert: true },
+          { geburtstag: new Geburtstag("2021-01-01"), istBehindert: false },
+          { geburtstag: new Geburtstag("2021-01-02"), istBehindert: true },
         ],
         nth: 1,
-        nthLastBorn: { geburtsdatum: new Date(2021, 1, 2), istBehindert: true },
+        nthLastBorn: {
+          geburtstag: new Geburtstag("2021-01-02"),
+          istBehindert: true,
+        },
       },
       {
         kinder: [
-          { geburtsdatum: new Date(2021, 1, 1), istBehindert: false },
-          { geburtsdatum: new Date(2021, 1, 2), istBehindert: true },
+          { geburtstag: new Geburtstag("2021-01-01"), istBehindert: false },
+          { geburtstag: new Geburtstag("2021-01-02"), istBehindert: true },
         ],
         nth: 2,
         nthLastBorn: {
-          geburtsdatum: new Date(2021, 1, 1),
+          geburtstag: new Geburtstag("2021-01-01"),
           istBehindert: false,
         },
       },
       {
         kinder: [
-          { geburtsdatum: new Date(2021, 1, 1), istBehindert: false },
-          { geburtsdatum: new Date(2020, 1, 1), istBehindert: true },
-          { geburtsdatum: new Date(2021, 1, 2), istBehindert: false },
+          { geburtstag: new Geburtstag("2021-01-01"), istBehindert: false },
+          { geburtstag: new Geburtstag("2020-01-01"), istBehindert: true },
+          { geburtstag: new Geburtstag("2021-01-02"), istBehindert: false },
         ],
         nth: 3,
-        nthLastBorn: { geburtsdatum: new Date(2020, 1, 1), istBehindert: true },
+        nthLastBorn: {
+          geburtstag: new Geburtstag("2020-01-01"),
+          istBehindert: true,
+        },
       },
     ])(
       "find nth last born child - case: #%#",

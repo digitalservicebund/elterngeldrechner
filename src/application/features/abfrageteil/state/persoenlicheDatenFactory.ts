@@ -3,7 +3,11 @@ import { YesNo } from "./YesNo";
 import { stepErwerbstaetigkeitElternteilSelectors } from "./stepErwerbstaetigkeitSlice";
 import { stepNachwuchsSelectors } from "./stepNachwuchsSlice";
 import { RootState } from "@/application/redux";
-import { ErwerbsArt, type PersoenlicheDaten } from "@/elterngeldrechner";
+import {
+  ErwerbsArt,
+  Geburtstag,
+  type PersoenlicheDaten,
+} from "@/elterngeldrechner";
 
 const erwerbsTaetigkeitVorGeburtOf = (
   state: RootState,
@@ -44,9 +48,9 @@ const erwerbsTaetigkeitVorGeburtOf = (
     : ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI;
 };
 
-const dateOf = (date: string): Date => {
-  const [day, month, year] = date.split(".");
-  return new Date(`${year}-${month}-${day}`);
+const geburtstagOf = (dateString: string): Geburtstag => {
+  const [day, month, year] = dateString.split(".");
+  return new Geburtstag(`${year}-${month}-${day}`);
 };
 
 export const persoenlicheDatenOfUi = (
@@ -59,7 +63,7 @@ export const persoenlicheDatenOfUi = (
     anzahlKuenftigerKinder: state.stepNachwuchs.anzahlKuenftigerKinder,
     etVorGeburt: erwerbsTaetigkeitVorGeburtOf(state, elternteil),
     geschwister: state.stepNachwuchs.geschwisterkinder.map((kind) => ({
-      geburtsdatum: dateOf(kind.geburtsdatum),
+      geburtstag: geburtstagOf(kind.geburtsdatum),
       istBehindert: kind.istBehindert,
     })),
   };

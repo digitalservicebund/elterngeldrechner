@@ -7,6 +7,7 @@ export {
   ErwerbsTaetigkeit,
   type ErwerbsZeitraumLebensMonat,
   type FinanzDaten,
+  Geburtstag,
   KassenArt,
   KinderFreiBetrag,
   MAX_EINKOMMEN,

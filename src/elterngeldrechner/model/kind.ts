@@ -1,4 +1,6 @@
+import type { Geburtstag } from "./Geburtstag";
+
 export type Kind = {
-  geburtsdatum: Date;
+  geburtstag: Geburtstag;
   istBehindert?: boolean;
 };

@@ -365,23 +365,30 @@ function mitETVorGeburt(
   };
 }
 
-function fillLebensMonateList(geburt: Date): Date[] {
+function fillLebensMonateList(geburtstagDesKindes: Geburtstag): Date[] {
   // Die Arrays anfang_LM wird mit Index 1-32 benutzt.
   const anfang_LM: Date[] = [];
 
   for (let i: number = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-    const anfang: Date = addMonths(geburt, i);
-    const ende: Date = subDays(addMonths(geburt, i + 1), 1);
+    const anfang: Date = addMonths(geburtstagDesKindes, i);
+    const ende: Date = subDays(addMonths(geburtstagDesKindes, i + 1), 1);
     anfang_LM[i + 1] = anfang;
     if (
-      geburt.getDay() > 28 &&
+      geburtstagDesKindes.getDay() > 28 &&
       anfang.getMonth() === 2 &&
       anfang.getDay() < 5
     ) {
-      anfang_LM[i + 1] = setDate(addMonths(geburt, i + 1), 1);
+      anfang_LM[i + 1] = setDate(addMonths(geburtstagDesKindes, i + 1), 1);
     }
-    if (geburt.getDay() > 28 && ende.getMonth() === 2 && ende.getDay() < 5) {
-      anfang_LM[i + 1] = subDays(setDate(addMonths(geburt, i + 2), 1), 1);
+    if (
+      geburtstagDesKindes.getDay() > 28 &&
+      ende.getMonth() === 2 &&
+      ende.getDay() < 5
+    ) {
+      anfang_LM[i + 1] = subDays(
+        setDate(addMonths(geburtstagDesKindes, i + 2), 1),
+        1,
+      );
     }
   }
 
@@ -500,8 +507,9 @@ function createElterngeldAusgabe(
     (persoenlicheDaten.geschwister ?? []).length > 0;
 
   if (isGeschwisterVorhanden) {
-    const geburt = persoenlicheDaten.geburtstagDesKindes;
-    const anfang_LM = fillLebensMonateList(geburt);
+    const anfang_LM = fillLebensMonateList(
+      persoenlicheDaten.geburtstagDesKindes,
+    );
 
     for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
       if (

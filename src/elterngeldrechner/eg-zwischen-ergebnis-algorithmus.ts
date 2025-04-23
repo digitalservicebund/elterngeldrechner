@@ -69,7 +69,7 @@ export function elterngeldZwischenergebnis(
 
 function determineDeadlineForGeschwisterbonus(
   geschwister: Kind[],
-  geburtsdatum: Date,
+  geburtstagDesKindes: Geburtstag,
 ): Date | null {
   return (
     [
@@ -78,7 +78,7 @@ function determineDeadlineForGeschwisterbonus(
       ende_bonus_u14(geschwister),
     ]
       .filter((date) => date !== undefined)
-      .filter((date) => date >= geburtsdatum)
+      .filter((date) => date >= geburtstagDesKindes)
       .toSorted(compareDateByLatestOrder)[0] ?? null
   );
 }
@@ -434,12 +434,9 @@ if (import.meta.vitest) {
 
     describe("determine deadline for Geschwisterbonus", () => {
       it("returns null if no Geschwister", () => {
-        const geschwister: Kind[] = [];
-        const geburtsdatum = new Date();
-
         const deadline = determineDeadlineForGeschwisterbonus(
-          geschwister,
-          geburtsdatum,
+          [],
+          new Geburtstag(Date.now()),
         );
 
         expect(deadline).toBeNull();
@@ -451,11 +448,10 @@ if (import.meta.vitest) {
           { geburtstag: new Geburtstag("2013-01-02") },
           { geburtstag: new Geburtstag("2005-01-02"), istBehindert: true },
         ];
-        const geburtsdatum = new Date("2020-01-01");
 
         const deadline = determineDeadlineForGeschwisterbonus(
           geschwister,
-          geburtsdatum,
+          new Geburtstag("2020-01-01"),
         );
 
         expect(deadline).toBeNull();
@@ -467,11 +463,10 @@ if (import.meta.vitest) {
           { geburtstag: new Geburtstag("2015-01-02") },
           { geburtstag: new Geburtstag("2005-01-02"), istBehindert: true },
         ];
-        const geburtsdatum = new Date("2020-01-01");
 
         const deadline = determineDeadlineForGeschwisterbonus(
           geschwister,
-          geburtsdatum,
+          new Geburtstag("2020-01-01"),
         );
 
         expect(deadline).toEqual(new Geburtstag("2021-01-01"));
@@ -483,11 +478,10 @@ if (import.meta.vitest) {
           { geburtstag: new Geburtstag("2015-01-02") },
           { geburtstag: new Geburtstag("2008-01-02"), istBehindert: true },
         ];
-        const geburtsdatum = new Date("2020-01-01");
 
         const deadline = determineDeadlineForGeschwisterbonus(
           geschwister,
-          geburtsdatum,
+          new Geburtstag("2020-01-01"),
         );
 
         expect(deadline).toEqual(new Geburtstag("2022-01-01"));

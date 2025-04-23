@@ -4,6 +4,7 @@ import {
   Einkommen,
   ErwerbsArt,
   FinanzDaten,
+  type Geburtstag,
   KassenArt,
   RentenArt,
   SteuerKlasse,
@@ -21,7 +22,7 @@ export function abzuege(
   bruttoProMonat: number,
   finanzDaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ): number {
   let rentenversicherungspflichtig =
     finanzDaten.rentenVersicherung ===
@@ -58,7 +59,7 @@ export function abzuege(
     rentenversicherungspflichtig,
     erwerbsArt,
     bruttoProMonat,
-    geburtsdatumDesKindes,
+    geburtstagDesKindes,
   );
 }
 
@@ -69,7 +70,7 @@ export function abzuege(
 export function nettoEinkommenZwischenErgebnis(
   finanzdaten: FinanzDaten,
   erwerbsArtVorGeburt: ErwerbsArt,
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ): Einkommen {
   const netto: Einkommen = new Einkommen(0);
   const status: ErwerbsArt = erwerbsArtVorGeburt;
@@ -96,7 +97,7 @@ export function nettoEinkommenZwischenErgebnis(
       rentenversicherungspflichtig,
       status,
       brutto,
-      geburtsdatumDesKindes,
+      geburtstagDesKindes,
     );
     netto.value = brutto - steuerUndAbgaben;
   } else {
@@ -112,13 +113,13 @@ export function summeSteuer(
   finanzdaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
   bruttoProMonat: number,
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ): number {
   const charge = abgabenSteuern(
     finanzdaten,
     erwerbsArt,
     bruttoProMonat,
-    geburtsdatumDesKindes,
+    geburtstagDesKindes,
   );
   const kirchensteuersatz: number = 8;
   let kirchenlohnsteuer = calculateChurchTaxes(kirchensteuersatz, charge.bk);
@@ -141,13 +142,13 @@ function berechneSteuernAbgaben(
   rentenversicherungspflichtig: boolean,
   status: ErwerbsArt,
   bruttoProMonat: number,
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ): number {
   const summeAnSteuern = summeSteuer(
     finanzdaten,
     status,
     bruttoProMonat,
-    geburtsdatumDesKindes,
+    geburtstagDesKindes,
   );
   let summe_sozab = summer_svb(
     krankenversicherungspflichtig,
@@ -269,7 +270,9 @@ if (import.meta.vitest) {
 
   describe("brutto-netto-rechner", async () => {
     const { abzuege } = await import("./brutto-netto-rechner");
-    const { KinderFreiBetrag } = await import("@/elterngeldrechner/model");
+    const { KinderFreiBetrag, Geburtstag } = await import(
+      "@/elterngeldrechner/model"
+    );
 
     it("should calculate test from TestErweiterterAlgorithmus.java", () => {
       // given
@@ -289,7 +292,7 @@ if (import.meta.vitest) {
         2000,
         finanzDaten,
         ErwerbsArt.JA_SELBSTSTAENDIG,
-        new Date("2020-01-01"),
+        new Geburtstag("2020-01-01"),
       );
 
       // then

@@ -53,7 +53,7 @@ export function calculateElternGeld(
 
 function zwischenErgebnisEinkommenOf(
   elternGeldDaten: ElternGeldDaten,
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ) {
   korrigiereErwerbsart(elternGeldDaten);
 
@@ -75,7 +75,7 @@ function zwischenErgebnisEinkommenOf(
       zwischenErgebnisEinkommen.nettoEinkommen = nettoEinkommenZwischenErgebnis(
         elternGeldDaten.finanzDaten,
         elternGeldDaten.persoenlicheDaten.etVorGeburt,
-        geburtsdatumDesKindes,
+        geburtstagDesKindes,
       );
     }
   }

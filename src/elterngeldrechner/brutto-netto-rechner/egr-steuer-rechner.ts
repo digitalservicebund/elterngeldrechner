@@ -24,22 +24,18 @@ export function abgabenSteuern(
   finanzDaten: FinanzDaten,
   erwerbsArt: ErwerbsArt,
   bruttoProMonat: number,
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ): { bk: number; lstlzz: number; solzlzz: number } {
   const istSelbststaendig = erwerbsArt === ErwerbsArt.JA_SELBSTSTAENDIG;
 
   const steuerpflichtigesEinkommen =
     bruttoProMonat +
-    (istSelbststaendig
-      ? bestimmeWerbekostenpauschale(new Geburtstag(geburtsdatumDesKindes))
-      : 0);
+    (istSelbststaendig ? bestimmeWerbekostenpauschale(geburtstagDesKindes) : 0);
 
   /** Siehe {@link Eingangsparameter.KVZ } */
   const KVZ = aufDenCentRunden(
     shiftNumberByDecimalsPrecisely(
-      bestimmeKassenindividuellenZusatzbeitrag(
-        new Geburtstag(geburtsdatumDesKindes),
-      ),
+      bestimmeKassenindividuellenZusatzbeitrag(geburtstagDesKindes),
       2,
     ),
   );
@@ -67,9 +63,7 @@ export function abgabenSteuern(
     ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
   };
 
-  const lohnsteuerjahr = ermittelRelevantesLohnsteuerjahr(
-    geburtsdatumDesKindes,
-  );
+  const lohnsteuerjahr = ermittelRelevantesLohnsteuerjahr(geburtstagDesKindes);
 
   const { BK, LSTLZZ, SOLZLZZ } = berechneLohnsteuer(
     lohnsteuerjahr,
@@ -84,9 +78,9 @@ export function abgabenSteuern(
 }
 
 export function ermittelRelevantesLohnsteuerjahr(
-  geburtsdatumDesKindes: Date,
+  geburtstagDesKindes: Geburtstag,
 ): Lohnsteuerjahr {
-  const jahrVorDerGeburt = geburtsdatumDesKindes.getFullYear() - 1;
+  const jahrVorDerGeburt = geburtstagDesKindes.getFullYear() - 1;
   const aeltestesLohnsteuerjahr = UnterstuetzteLohnsteuerjahre.toSorted()[0]!;
 
   return (
@@ -109,19 +103,19 @@ if (import.meta.vitest) {
     });
 
     describe.each([
-      [new Date("2022-02-24T03:24:00"), 2021],
-      [new Date("2021-02-24T03:24:00"), 2021],
-      [new Date("2020-02-24T03:24:00"), 2021],
-      [new Date("2016-02-24T03:24:00"), 2021],
-      [new Date("2023-02-24T03:24:00"), 2022],
-      [new Date("2024-02-24T03:24:00"), 2023],
-      [new Date("2025-02-24T03:24:00"), 2024],
-      [new Date("2026-02-24T03:24:00"), 2024],
+      [new Geburtstag("2022-02-24T03:24:00"), 2021],
+      [new Geburtstag("2021-02-24T03:24:00"), 2021],
+      [new Geburtstag("2020-02-24T03:24:00"), 2021],
+      [new Geburtstag("2016-02-24T03:24:00"), 2021],
+      [new Geburtstag("2023-02-24T03:24:00"), 2022],
+      [new Geburtstag("2024-02-24T03:24:00"), 2023],
+      [new Geburtstag("2025-02-24T03:24:00"), 2024],
+      [new Geburtstag("2026-02-24T03:24:00"), 2024],
     ])(
       "when Geburtstag des Kindes is %s then expect Lohnsteuerjahr %d",
-      (geburtsdatumDesKindes, lohnSteuerJahr) => {
+      (geburtstagDesKindes, lohnSteuerJahr) => {
         it("should calculate Abgaben", () => {
-          expect(ermittelRelevantesLohnsteuerjahr(geburtsdatumDesKindes)).toBe(
+          expect(ermittelRelevantesLohnsteuerjahr(geburtstagDesKindes)).toBe(
             lohnSteuerJahr,
           );
         });
@@ -139,7 +133,7 @@ if (import.meta.vitest) {
           },
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           1,
-          ANY_DATE,
+          ANY_GEBURTSTAG,
         );
 
         // then
@@ -159,7 +153,7 @@ if (import.meta.vitest) {
           },
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
           1,
-          ANY_DATE,
+          ANY_GEBURTSTAG,
         );
 
         // then
@@ -181,7 +175,7 @@ if (import.meta.vitest) {
           },
           ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
           1,
-          ANY_DATE,
+          ANY_GEBURTSTAG,
         );
 
         // then
@@ -217,13 +211,13 @@ if (import.meta.vitest) {
       erwerbsZeitraumLebensMonatList: [],
     };
 
+    const ANY_GEBURTSTAG = new Geburtstag(Date.now());
+
     const ANY_PARAMETERS: Parameters<typeof abgabenSteuern> = [
       ANY_FINANZDATEN,
       ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
       2000,
-      new Date(),
+      ANY_GEBURTSTAG,
     ];
-
-    const ANY_DATE = new Date();
   });
 }

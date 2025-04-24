@@ -3,5 +3,4 @@ export interface ZwischenErgebnis {
   ersatzRate: number;
   mehrlingsZulage: number;
   nettoVorGeburt: number;
-  zeitraumGeschwisterBonus: Date | null;
 }

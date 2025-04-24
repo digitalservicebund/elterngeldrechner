@@ -178,17 +178,6 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     return this.numberOf(testCaseIndex, ZWISCHEN_ERGEBNIS_MEHRLINGS_ZULAGE);
   }
 
-  zwischenErgebnisZeitraumGeschwisterBonus(testCaseIndex: number) {
-    const zeitraumGeschwisterBonus = this.numberOf(
-      testCaseIndex,
-      ZWISCHEN_ERGEBNIS_ZEITRAUM_GESCHWISTER_BONUS,
-    );
-    if (zeitraumGeschwisterBonus === undefined) {
-      throw new Error(`zeitraumGeschwisterBonus undefined`);
-    }
-    return dateFromExcelSerial(zeitraumGeschwisterBonus);
-  }
-
   ergebnisBruttoBasisImBezugsZeitraumDurchschnitt(testCaseIndex: number) {
     return this.numberOf(
       testCaseIndex,
@@ -284,7 +273,6 @@ const ZWISCHEN_ERGEBNIS_ELTERN_GELD = 131;
 const ZWISCHEN_ERGEBNIS_ERSATZ_RATE = 132;
 const ZWISCHEN_ERGEBNIS_ERSATZ_RATE_PROZENT = 133;
 const ZWISCHEN_ERGEBNIS_MEHRLINGS_ZULAGE = 135;
-const ZWISCHEN_ERGEBNIS_ZEITRAUM_GESCHWISTER_BONUS = 136;
 
 function columnOf(testCaseIndex: number) {
   if (testCaseIndex >= EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT) {

@@ -1,4 +1,3 @@
-import { subDays } from "date-fns";
 import {
   type Arbitrary,
   array as arbitraryArray,
@@ -18,7 +17,6 @@ import {
   Einkommen,
   ElternGeldArt,
   type ElternGeldAusgabe,
-  type ElternGeldDaten,
   type ElternGeldPlusErgebnis,
   ErwerbsArt,
   ErwerbsTaetigkeit,
@@ -117,13 +115,11 @@ describe("tests to verify properties during refactoring", () => {
           arbitraryFinanzdatenRaw(),
           arbitraryPlanungsdatenRaw(),
           (persoenlicheDatenRaw, finanzdatenRaw, planungsdatenRaw) => {
-            const elterngelddaten = {
+            const result = calculateElternGeld({
               persoenlicheDaten: persoenlicheDatenFrom(persoenlicheDatenRaw),
               finanzDaten: finanzDatenFrom(finanzdatenRaw),
               planungsDaten: planungsDatenFrom(planungsdatenRaw),
-            };
-
-            const result = calculateElternGeld(elterngelddaten);
+            });
 
             const originalResult =
               new OriginalEgrCalculation().calculateElternGeld(
@@ -136,11 +132,7 @@ describe("tests to verify properties during refactoring", () => {
                 originalLohnsteuerjahrFrom(persoenlicheDatenRaw),
               );
 
-            return expectCalculatedResultToEqual(
-              result,
-              originalResult,
-              elterngelddaten,
-            );
+            return expectCalculatedResultToEqual(result, originalResult);
           },
         ),
         {
@@ -155,18 +147,12 @@ describe("tests to verify properties during refactoring", () => {
 function expectCalculatedResultToEqual(
   actual: ElternGeldPlusErgebnis,
   expected: OriginalElternGeldPlusErgebnis,
-  context: ElternGeldDaten,
 ): void {
   expectAllElterngeldausgabenToMatch(
     actual.elternGeldAusgabe,
     expected.elternGeldAusgabe,
   );
   expect(actual.ersatzRate).toEqual(expected.ersatzRate.toNumber());
-  expectGeschwisterbonusDeadlineToMatch(
-    actual.geschwisterBonusDeadLine,
-    expected.geschwisterBonusDeadLine,
-    context,
-  );
   expect(actual.mehrlingsZulage).toBeCloseTo(
     expected.mehrlingsZulage.toNumber(),
     1,
@@ -240,30 +226,6 @@ function expectElterngeldartToMatch(
   expected: ElternGeldArt | null,
 ): void {
   expect(actual).toEqual(expected ?? ElternGeldArt.KEIN_BEZUG);
-}
-
-/**
- * There was a bug fixed in regards of the deadline for the sibling bonus.
- * To maintain the property testability, it was necessary to make an exception
- * and fix the bug in the original code too. But, it has been made an effort to
- * keep the changes to the original code minimal. In contrast to the production
- * code. In result, there is a minor difference how a "no bonus" is communicated
- * in the deadline. While both algorithms declare a possible `null` value, the
- * original code always uses a `Date` that potentially causes no bonus to be
- * applied. While the productive implementation explicitly communicates "no
- * bonus" as `null`.
- */
-function expectGeschwisterbonusDeadlineToMatch(
-  actual: Date | null,
-  expected: Date | null,
-  context: ElternGeldDaten,
-): void {
-  const tagVorDemGeburtsdatum = subDays(
-    context.persoenlicheDaten.geburtstagDesKindes,
-    1,
-  );
-
-  expect(actual ?? tagVorDemGeburtsdatum).toEqual(expected);
 }
 
 function persoenlicheDatenFrom(data: PersoenlicheDatenRaw): PersoenlicheDaten {

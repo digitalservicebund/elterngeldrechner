@@ -212,15 +212,6 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
       expect(sheet.zwischenErgebnisMehrlingsZulage(0)).toBe(0);
       expect(sheet.zwischenErgebnisMehrlingsZulage(1)).toBe(0);
     });
-
-    it("should read zwischenErgebnisZeitraumGeschwisterBonus", () => {
-      expect(
-        sheet.zwischenErgebnisZeitraumGeschwisterBonus(0).toISOString(),
-      ).toBe(new Date("2017-09-06").toISOString());
-      expect(
-        sheet.zwischenErgebnisZeitraumGeschwisterBonus(1).toISOString(),
-      ).toBe(new Date("2017-12-05").toISOString());
-    });
   });
 
   it(`should read nettoVorGeburt from last column ${

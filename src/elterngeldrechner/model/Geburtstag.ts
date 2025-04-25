@@ -3,24 +3,32 @@
  * birthdays.
  *
  * It is (almost) fully compatible to the native `Date`. Any created
- * `Geburtstag` will have no time value (i.e. it being midnight at
- * "00:00:00.000"). Trying to manipulate the time of a `Geburtstag` will result
- * in errors being thrown. All other operations just work, despite the time will
- * be zeroed again.
+ * `Geburtstag` will have its time fixed to midnight based on the UTZ timezone.
+ * Trying to manipulate the time of a `Geburtstag` will result in errors being
+ * thrown. All other operations just work, despite the time will be zeroed
+ * again.
  */
 export class Geburtstag extends Date {
   constructor(...parameters: ConstructorParameters<typeof Date>) {
     super(...parameters);
-    super.setHours(0, 0, 0, 0);
+    const utcYear = this.getUTCFullYear();
+    const utcMonth = this.getUTCMonth();
+    const utcDate = this.getUTCDate();
+    super.setTime(Date.UTC(utcYear, utcMonth, utcDate));
   }
 
   override setTime(time: number): number {
-    super.setTime(time);
-    super.setHours(0, 0, 0, 0);
-    return this.getTime();
+    const date = new Date(time);
+    return super.setTime(
+      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()),
+    );
   }
 
   override setHours(): number {
+    throw Error("Can not modify time of a timeless Geburtstag.");
+  }
+
+  override setUTCHours(): number {
     throw Error("Can not modify time of a timeless Geburtstag.");
   }
 
@@ -28,11 +36,23 @@ export class Geburtstag extends Date {
     throw Error("Can not modify time of a timeless Geburtstag.");
   }
 
+  override setUTCMinutes(): number {
+    throw Error("Can not modify time of a timeless Geburtstag.");
+  }
+
   override setSeconds(): number {
     throw Error("Can not modify time of a timeless Geburtstag.");
   }
 
+  override setUTCSeconds(): number {
+    throw Error("Can not modify time of a timeless Geburtstag.");
+  }
+
   override setMilliseconds(): number {
+    throw Error("Can not modify time of a timeless Geburtstag.");
+  }
+
+  override setUTCMilliseconds(): number {
     throw Error("Can not modify time of a timeless Geburtstag.");
   }
 }
@@ -51,11 +71,7 @@ if (import.meta.vitest) {
       assert(
         property(arbitraryDate({ min: OLDEST_REPRESENTABLE_DATE }), (date) => {
           const geburtstag = new Geburtstag(date);
-
-          expect(geburtstag.getHours()).toBe(0);
-          expect(geburtstag.getMinutes()).toBe(0);
-          expect(geburtstag.getSeconds()).toBe(0);
-          expect(geburtstag.getMilliseconds()).toBe(0);
+          expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
         }),
       );
     });
@@ -64,11 +80,7 @@ if (import.meta.vitest) {
       assert(
         property(arbitraryDate({ min: OLDEST_REPRESENTABLE_DATE }), (date) => {
           const geburtstag = new Geburtstag(date.toISOString());
-
-          expect(geburtstag.getHours()).toBe(0);
-          expect(geburtstag.getMinutes()).toBe(0);
-          expect(geburtstag.getSeconds()).toBe(0);
-          expect(geburtstag.getMilliseconds()).toBe(0);
+          expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
         }),
       );
     });
@@ -77,11 +89,7 @@ if (import.meta.vitest) {
       assert(
         property(arbitraryDate({ min: OLDEST_REPRESENTABLE_DATE }), (date) => {
           const geburtstag = new Geburtstag(date.getTime());
-
-          expect(geburtstag.getHours()).toBe(0);
-          expect(geburtstag.getMinutes()).toBe(0);
-          expect(geburtstag.getSeconds()).toBe(0);
-          expect(geburtstag.getMilliseconds()).toBe(0);
+          expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
         }),
       );
     });
@@ -90,23 +98,28 @@ if (import.meta.vitest) {
       const geburtstag = new Geburtstag(Date.now());
       geburtstag.setTime(123456);
 
-      expect(geburtstag.getHours()).toBe(0);
-      expect(geburtstag.getMinutes()).toBe(0);
-      expect(geburtstag.getSeconds()).toBe(0);
-      expect(geburtstag.getMilliseconds()).toBe(0);
+      expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
     });
 
     it("throws an error when trying to set any time value", () => {
       const geburtstag = new Geburtstag(Date.now());
 
       expect(() => geburtstag.setHours()).toThrowError();
-      expect(() => geburtstag.setMinutes()).toThrowError();
-      expect(() => geburtstag.setSeconds()).toThrowError();
-      expect(() => geburtstag.setMilliseconds()).toThrowError();
+      expect(() => geburtstag.setUTCHours()).toThrowError();
+      expect(() => geburtstag.setUTCMinutes()).toThrowError();
+      expect(() => geburtstag.setUTCMinutes()).toThrowError();
+      expect(() => geburtstag.setUTCSeconds()).toThrowError();
+      expect(() => geburtstag.setUTCSeconds()).toThrowError();
+      expect(() => geburtstag.setUTCMilliseconds()).toThrowError();
+      expect(() => geburtstag.setUTCMilliseconds()).toThrowError();
     });
-  });
 
-  /* Trying to set the hours on this date will make it become invalid as it
-   * exceed the internal numeric representation. */
-  const OLDEST_REPRESENTABLE_DATE = new Date("-271821-04-21");
+    function getFormattedTime(geburtstag: Geburtstag): string {
+      return geburtstag.toISOString().slice(-13, -1);
+    }
+
+    /* Trying to set the hours on this date will make it become invalid as it
+     * exceed the internal numeric representation. */
+    const OLDEST_REPRESENTABLE_DATE = new Date("-271821-04-21");
+  });
 }

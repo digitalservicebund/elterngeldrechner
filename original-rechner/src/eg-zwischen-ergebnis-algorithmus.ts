@@ -15,7 +15,8 @@ import {
   PAUSCH,
   RATE_BONUS,
 } from "./model/egr-berechnung-param-id";
-import { addYears, subDays } from "date-fns";
+import { utc } from "@date-fns/utc";
+import { addYears, subDays, isLeapYear } from "date-fns";
 
 /**
  * Algorithmus zur Berechnung des Zwischenergebnisses des Elterngeldrechners.
@@ -85,11 +86,11 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
       ) {
         ende = ende_bonus_u14_final;
       } else {
-        ende = subDays(geburt, 1);
+        ende = subDays(geburt, 1, { in: utc });
       }
     }
     if (ende === undefined || ende < geburt) {
-      ende = subDays(geburt, 1);
+      ende = subDays(geburt, 1, { in: utc });
     }
     if (
       status_et === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI ||
@@ -185,9 +186,21 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
     bonusYears: number,
   ): Date {
     if (geburtstag_geschw !== undefined) {
-      return subDays(addYears(geburtstag_geschw, bonusYears), 1);
+      const hasBirthdayOn29thOfFebrurary =
+        geburtstag_geschw.getUTCMonth() === 1 &&
+        geburtstag_geschw.getUTCDate() === 29;
+      const endeBonus = addYears(geburtstag_geschw, bonusYears, { in: utc });
+      const isEndeBonusInLeapYear = isLeapYear(endeBonus);
+      const mustShiftAltersgrenzeToFirstOfMarch =
+        hasBirthdayOn29thOfFebrurary && !isEndeBonusInLeapYear;
+
+      if (mustShiftAltersgrenzeToFirstOfMarch) {
+        endeBonus.setUTCMonth(2, 1);
+      }
+
+      return endeBonus;
     } else {
-      return subDays(geburt, 1);
+      return subDays(geburt, 1, { in: utc });
     }
   }
 }

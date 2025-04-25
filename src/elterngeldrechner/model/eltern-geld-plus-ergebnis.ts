@@ -3,7 +3,6 @@ import { ElternGeldArt } from "./eltern-geld-art";
 export interface ElternGeldPlusErgebnis {
   elternGeldAusgabe: ElternGeldAusgabe[];
   ersatzRate: number;
-  mehrlingsZulage: number;
   bruttoBasis: number;
   nettoBasis: number;
   elternGeldBasis: number;

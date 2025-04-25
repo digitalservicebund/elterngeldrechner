@@ -8,13 +8,11 @@ import {
 } from "./model";
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
-import { BETRAG_MEHRLINGSZUSCHLAG } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 export function elterngeldZwischenergebnis(
   persoenlicheDaten: PersoenlicheDaten,
   nettoEinkommen: Einkommen,
 ): ZwischenErgebnis {
-  const no_kinder: number = persoenlicheDaten.anzahlKuenftigerKinder;
   const ek_vor: Einkommen =
     ErwerbsArt.NEIN !== persoenlicheDaten.etVorGeburt
       ? nettoEinkommen
@@ -22,10 +20,8 @@ export function elterngeldZwischenergebnis(
   let ek_vor_copy = 0;
   ek_vor_copy = ek_vor_copy + ek_vor.value;
   const status_et: ErwerbsArt = persoenlicheDaten.etVorGeburt;
-  let mehrlingszuschlag: number;
   let elterngeldbasis: number;
   let ersatzrate_ausgabe;
-  const betrag_Mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
 
   if (
     status_et === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI ||
@@ -39,11 +35,6 @@ export function elterngeldZwischenergebnis(
   }
   elterngeldbasis = berechneBasiselterngeld(ek_vor_copy);
   ersatzrate_ausgabe = bestimmeErsatzrate(ek_vor_copy);
-  if (no_kinder > 1) {
-    mehrlingszuschlag = betrag_Mehrlingszuschlag * (no_kinder - 1);
-  } else {
-    mehrlingszuschlag = 0;
-  }
 
   elterngeldbasis = aufDenCentRunden(elterngeldbasis);
   ersatzrate_ausgabe = aufDenCentRunden(ersatzrate_ausgabe);
@@ -51,7 +42,6 @@ export function elterngeldZwischenergebnis(
   return {
     elternGeld: elterngeldbasis,
     ersatzRate: ersatzrate_ausgabe,
-    mehrlingsZulage: mehrlingszuschlag,
     nettoVorGeburt: nettoEinkommen.value,
   };
 }

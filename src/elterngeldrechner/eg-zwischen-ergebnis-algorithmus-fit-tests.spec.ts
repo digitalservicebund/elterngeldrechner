@@ -34,9 +34,6 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
         expect(zwischenErgebnis.ersatzRate).toBe(
           sheet.zwischenErgebnisErsatzRate(testCaseIndex),
         );
-        expect(zwischenErgebnis.mehrlingsZulage).toBe(
-          sheet.zwischenErgebnisMehrlingsZulage(testCaseIndex),
-        );
       });
     }
   });

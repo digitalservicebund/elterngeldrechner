@@ -11,6 +11,10 @@ import {
   bestehtAnspruchAufGeschwisterbonus,
 } from "./geschwisterbonus";
 import {
+  berechneDenMehrlingszuschlagFuerBasiselterngeld,
+  berechneDenMehrlingszuschlagFuerElterngeldPlus,
+} from "./mehrlingszuschlag";
+import {
   ElternGeldArt,
   ElternGeldAusgabe,
   ElternGeldKategorie,
@@ -32,10 +36,7 @@ import {
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 import { bruttoEGPlusNeu } from "@/elterngeldrechner/eg-brutto-rechner";
-import {
-  BETRAG_MEHRLINGSZUSCHLAG,
-  MINDESTSATZ,
-} from "@/elterngeldrechner/model/egr-berechnung-param-id";
+import { MINDESTSATZ } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 export function elterngeldPlusErgebnis(
   planungsergebnis: PlanungsDaten,
@@ -146,7 +147,6 @@ function ohneETVorGeburt(): ElternGeldPlusErgebnis {
     ersatzRate: 0,
     etVorGeburt: false,
     hasPartnerBonusError: false,
-    mehrlingsZulage: 0,
     elternGeldBasis: MINDESTSATZ,
     elternGeldKeineEtPlus: MINDESTSATZ / 2,
     bruttoBasis: 0,
@@ -363,7 +363,6 @@ function mitETVorGeburt(
     ersatzRate: 0,
     etVorGeburt: false,
     hasPartnerBonusError: false,
-    mehrlingsZulage: 0,
   };
 }
 
@@ -547,11 +546,7 @@ function createElterngeldAusgabe(
   const basiselterngeld_erw = ergebnis.elternGeldErwBasis;
   const elterngeldplus = aufDenCentRunden(basiselterngeld / 2);
   const elterngeldplus_erw = ergebnis.elternGeldEtPlus;
-  const betrag_mehrlingszuschlag = BETRAG_MEHRLINGSZUSCHLAG;
-  let mehrling: number = 0;
-  if (persoenlicheDaten.anzahlKuenftigerKinder > 0) {
-    mehrling = persoenlicheDaten.anzahlKuenftigerKinder - 1;
-  }
+
   for (let i: number = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
     const ausgabe: ElternGeldAusgabe = {
       lebensMonat: i,
@@ -580,14 +575,18 @@ function createElterngeldAusgabe(
         geschwisterbonus =
           berechneDenGeschwisterbonusFuerBasiselterngeld(basiselterngeld) *
           (geschw[i - 1] ?? 0);
-        mehrlingszuschlag = betrag_mehrlingszuschlag * mehrling;
+        mehrlingszuschlag = berechneDenMehrlingszuschlagFuerBasiselterngeld(
+          persoenlicheDaten.anzahlKuenftigerKinder,
+        );
         elterngeld = basiselterngeld + geschwisterbonus + mehrlingszuschlag;
       }
       if (
         verlauf[i - 1] ===
         ElternGeldKategorie.BASIS_ELTERN_GELD_MIT_ERWERBS_TAETIGKEIT
       ) {
-        mehrlingszuschlag = betrag_mehrlingszuschlag * mehrling;
+        mehrlingszuschlag = berechneDenMehrlingszuschlagFuerBasiselterngeld(
+          persoenlicheDaten.anzahlKuenftigerKinder,
+        );
         geschwisterbonus =
           berechneDenGeschwisterbonusFuerBasiselterngeld(basiselterngeld_erw) *
           (geschw[i - 1] ?? 0);
@@ -597,7 +596,9 @@ function createElterngeldAusgabe(
         verlauf[i - 1] ===
         ElternGeldKategorie.ELTERN_GELD_PLUS_OHNE_ERWERBS_TAETIGKEIT
       ) {
-        mehrlingszuschlag = (mehrling * betrag_mehrlingszuschlag) / 2;
+        mehrlingszuschlag = berechneDenMehrlingszuschlagFuerElterngeldPlus(
+          persoenlicheDaten.anzahlKuenftigerKinder,
+        );
         geschwisterbonus =
           berechneDenGeschwisterbonusFuerElterngeldPlus(elterngeldplus) *
           (geschw[i - 1] ?? 0);
@@ -607,8 +608,10 @@ function createElterngeldAusgabe(
         verlauf[i - 1] ===
         ElternGeldKategorie.ELTERN_GELD_PLUS_MIT_ERWERBS_TAETIGKEIT
       ) {
-        mehrlingszuschlag = (betrag_mehrlingszuschlag * mehrling) / 2;
-        // TODO: Requires proper "Deckelung"
+        // TODO: Requires proper "Deckelung" alltogether
+        mehrlingszuschlag = berechneDenMehrlingszuschlagFuerElterngeldPlus(
+          persoenlicheDaten.anzahlKuenftigerKinder,
+        );
         geschwisterbonus =
           berechneDenGeschwisterbonusFuerElterngeldPlus(elterngeldplus_erw) *
           (geschw[i - 1] ?? 0);
@@ -628,7 +631,6 @@ function createElterngeldAusgabe(
   ergebnis.elternGeldErwBasis = aufDenCentRunden(basiselterngeld_erw);
   ergebnis.elternGeldKeineEtPlus = aufDenCentRunden(elterngeldplus);
   ergebnis.elternGeldEtPlus = aufDenCentRunden(elterngeldplus_erw);
-  ergebnis.mehrlingsZulage = aufDenCentRunden(z.mehrlingsZulage);
 
   if (
     !persoenlicheDaten.etVorGeburt ||
@@ -781,7 +783,6 @@ if (import.meta.vitest) {
           const zwischenErgebnis: ZwischenErgebnis = {
             elternGeld: 0,
             ersatzRate: 0,
-            mehrlingsZulage: 0,
             nettoVorGeburt: 0,
           };
 

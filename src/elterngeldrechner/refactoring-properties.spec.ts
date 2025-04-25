@@ -153,10 +153,6 @@ function expectCalculatedResultToEqual(
     expected.elternGeldAusgabe,
   );
   expect(actual.ersatzRate).toEqual(expected.ersatzRate.toNumber());
-  expect(actual.mehrlingsZulage).toBeCloseTo(
-    expected.mehrlingsZulage.toNumber(),
-    1,
-  );
   expect(actual.bruttoBasis).toBeCloseTo(expected.bruttoBasis.toNumber(), 1);
   expect(actual.nettoBasis).toBeCloseTo(expected.nettoBasis.toNumber(), 1);
   expect(actual.elternGeldBasis).toBeCloseTo(

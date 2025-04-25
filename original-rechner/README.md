@@ -56,6 +56,7 @@ part of the code with a copy from the applications code.
 - separation of date of birth and tax year in combination with an obsolete Werbekostenpauschale
 - separation of data of birth and tax year in combination with an obsolete kassenindividuellen Zusatzbeitrag
 - incorrect handling of leap years for the deadline of the Geschwisterbonus
+- incorrect handling of non UTC dates for timespan of Lebensmonate
 
 ## Continuous Integration
 

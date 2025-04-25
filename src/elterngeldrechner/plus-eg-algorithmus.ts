@@ -1,3 +1,4 @@
+import { utc } from "@date-fns/utc";
 import { addMonths, setDate, subDays } from "date-fns";
 import { abzuege } from "./brutto-netto-rechner/brutto-netto-rechner";
 import {
@@ -371,15 +372,23 @@ function fillLebensMonateList(geburtstagDesKindes: Geburtstag): Date[] {
   const anfang_LM: Date[] = [];
 
   for (let i: number = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-    const anfang: Date = addMonths(geburtstagDesKindes, i);
-    const ende: Date = subDays(addMonths(geburtstagDesKindes, i + 1), 1);
+    const anfang: Date = addMonths(geburtstagDesKindes, i, { in: utc });
+    const ende: Date = subDays(
+      addMonths(geburtstagDesKindes, i + 1, { in: utc }),
+      1,
+      { in: utc },
+    );
     anfang_LM[i + 1] = anfang;
     if (
       geburtstagDesKindes.getDay() > 28 &&
       anfang.getMonth() === 2 &&
       anfang.getDay() < 5
     ) {
-      anfang_LM[i + 1] = setDate(addMonths(geburtstagDesKindes, i + 1), 1);
+      anfang_LM[i + 1] = setDate(
+        addMonths(geburtstagDesKindes, i + 1, { in: utc }),
+        1,
+        { in: utc },
+      );
     }
     if (
       geburtstagDesKindes.getDay() > 28 &&
@@ -387,8 +396,11 @@ function fillLebensMonateList(geburtstagDesKindes: Geburtstag): Date[] {
       ende.getDay() < 5
     ) {
       anfang_LM[i + 1] = subDays(
-        setDate(addMonths(geburtstagDesKindes, i + 2), 1),
+        setDate(addMonths(geburtstagDesKindes, i + 2, { in: utc }), 1, {
+          in: utc,
+        }),
         1,
+        { in: utc },
       );
     }
   }

@@ -31,6 +31,7 @@ import {
   round,
 } from "./common/math-util";
 import { bruttoEGPlusNeu } from "./eg-brutto-rechner";
+import { utc } from "@date-fns/utc";
 import { subDays, addMonths, setDate } from "date-fns";
 import {
   BETRAG_MEHRLINGSZUSCHLAG,
@@ -392,8 +393,10 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
   public fillLebensMonateList(geburt: Date) {
     // Die Arrays anfang_LM und ende_LM werden mit Index 1-32 benutzt.
     for (let i: number = 0; i < PLANUNG_ANZAHL_MONATE; i++) {
-      const anfang: Date = addMonths(geburt, i);
-      const ende: Date = subDays(addMonths(geburt, i + 1), 1);
+      const anfang: Date = addMonths(geburt, i, { in: utc });
+      const ende: Date = subDays(addMonths(geburt, i + 1, { in: utc }), 1, {
+        in: utc,
+      });
       this.anfang_LM[i + 1] = anfang;
       this.ende_LM[i + 1] = ende;
       if (
@@ -402,13 +405,18 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
         anfang.getDay() < 5
       ) {
         // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 1, 1).getTime());
-        this.anfang_LM[i + 1] = setDate(addMonths(geburt, i + 1), 1);
+        this.anfang_LM[i + 1] = setDate(
+          addMonths(geburt, i + 1, { in: utc }),
+          1,
+          { in: utc },
+        );
       }
       if (geburt.getDay() > 28 && ende.getMonth() === 2 && ende.getDay() < 5) {
         // this.anfang_LM[i] = new DateTime(new GregorianCalendar(calGeburt.get(YEAR), calGeburt.get(MONTH) + i + 2, 0).getTime());
         this.anfang_LM[i + 1] = subDays(
-          setDate(addMonths(geburt, i + 2), 1),
+          setDate(addMonths(geburt, i + 2, { in: utc }), 1, { in: utc }),
           1,
+          { in: utc },
         );
       }
     }
@@ -550,25 +558,22 @@ export class PlusEgAlgorithmus extends AbstractAlgorithmus {
     const ende_geschwisterbonus: Date | null = z.zeitraumGeschwisterBonus;
     const geschw = new Array<number>(PLANUNG_ANZAHL_MONATE).fill(0);
     if (persoenlicheDaten.isGeschwisterVorhanden()) {
-      // es sind Geschwister vorhanden
-      const geburt = persoenlicheDaten.wahrscheinlichesGeburtsDatum;
-      if (ende_geschwisterbonus != null && ende_geschwisterbonus >= geburt) {
+      if (ende_geschwisterbonus != null) {
+        this.fillLebensMonateList(
+          persoenlicheDaten.wahrscheinlichesGeburtsDatum,
+        );
+
         for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.anfang_LM[i] = addMonths(geburt, i - 1);
-        }
-        for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-          this.ende_LM[i] = subDays(addMonths(geburt, i), 1);
-        }
-      }
-      for (let i = 1; i <= PLANUNG_ANZAHL_MONATE; i++) {
-        if (
-          ende_geschwisterbonus != null &&
-          ende_geschwisterbonus >= this.anfang_LM[i]
-        ) {
-          geschw[i - 1] = 1;
+          if (
+            ende_geschwisterbonus != null &&
+            ende_geschwisterbonus >= this.anfang_LM[i]
+          ) {
+            geschw[i - 1] = 1;
+          }
         }
       }
     }
+
     ergebnis.geschwisterBonusDeadLine = ende_geschwisterbonus;
     const ausgabeLebensmonate: ElternGeldAusgabe[] = [];
     let basiselterngeld: Big = z.elternGeld;

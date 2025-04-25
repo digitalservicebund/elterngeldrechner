@@ -198,7 +198,7 @@ export class EgZwischenErgebnisAlgorithmus extends AbstractAlgorithmus {
         endeBonus.setUTCMonth(2, 1);
       }
 
-      return endeBonus;
+      return subDays(endeBonus, 1, { in: utc });
     } else {
       return subDays(geburt, 1, { in: utc });
     }

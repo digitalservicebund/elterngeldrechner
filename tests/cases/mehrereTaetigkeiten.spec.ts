@@ -26,13 +26,13 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter" }).click();
   await page
     .getByRole("radiogroup", {
-      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+      name: /ein Gesamteinkommen von/,
     })
     .getByRole("radio", { name: "Nein" })
     .click();
-  await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("1");
+  await page.getByLabel("Welche Steuerklasse").selectOption("1");
   await page
-    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radiogroup", { name: "kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").fill("1350 Euro");

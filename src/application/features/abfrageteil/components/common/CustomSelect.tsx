@@ -26,7 +26,7 @@ type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
-  readonly label: string;
+  readonly label: string | ReactNode;
   readonly slotBetweenLabelAndSelect?: ReactNode;
   readonly errors?: FieldErrors<TFieldValues>;
   readonly options: SelectOption[];

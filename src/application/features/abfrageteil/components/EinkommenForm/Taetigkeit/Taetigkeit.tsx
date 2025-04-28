@@ -9,6 +9,7 @@ import {
   type SelectOption,
 } from "@/application/features/abfrageteil/components/common";
 import {
+  Antragstellende,
   type ElternteilType,
   type StepEinkommenState,
 } from "@/application/features/abfrageteil/state";
@@ -20,6 +21,8 @@ const erwerbstaetigkeitOptions: SelectOption[] = [
 
 type Props = {
   readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
   readonly taetigkeitsIndex: number;
   readonly isSelbststaendig: boolean;
   readonly monthsBeforeBirth: SelectOption[];
@@ -27,7 +30,14 @@ type Props = {
 };
 
 export const Taetigkeit = forwardRef(function Taetigkeit(
-  { elternteil, taetigkeitsIndex, monthsBeforeBirth, onRemove }: Props,
+  {
+    elternteil,
+    elternteilName,
+    antragstellende,
+    taetigkeitsIndex,
+    monthsBeforeBirth,
+    onRemove,
+  }: Props,
   ref?: ForwardedRef<HTMLElement>,
 ) {
   const baseFieldPath: FieldPath<StepEinkommenState> = `${elternteil}.taetigkeitenNichtSelbstaendigUndSelbstaendig.${taetigkeitsIndex}`;
@@ -67,11 +77,15 @@ export const Taetigkeit = forwardRef(function Taetigkeit(
         {istSelbststaendig ? (
           <Selbststaendig
             elternteil={elternteil}
+            elternteilName={elternteilName}
+            antragstellende={antragstellende}
             taetigkeitsIndex={taetigkeitsIndex}
           />
         ) : (
           <NichtSelbstaendig
             elternteil={elternteil}
+            elternteilName={elternteilName}
+            antragstellende={antragstellende}
             taetigkeitsIndex={taetigkeitsIndex}
             monthsBeforeBirth={monthsBeforeBirth}
           />

@@ -7,16 +7,24 @@ import {
   type SelectOption,
 } from "@/application/features/abfrageteil/components/common";
 import type {
+  Antragstellende,
   ElternteilType,
   StepEinkommenState,
 } from "@/application/features/abfrageteil/state";
 
 type Props = {
   readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
   readonly monthsBeforeBirth: SelectOption[];
 };
 
-export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
+export function NurErwerbstaetig({
+  elternteil,
+  elternteilName,
+  antragstellende,
+  monthsBeforeBirth,
+}: Props) {
   const { control, setValue, watch } = useFormContext<StepEinkommenState>();
 
   const averageOrMonthlyNichtSelbstaendig = watch(
@@ -40,8 +48,14 @@ export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
       {averageOrMonthlyNichtSelbstaendig === "average" && (
         <div>
           <p>
-            Wie viel haben Sie in den 12 Kalendermonaten vor der Geburt Ihres
-            Kindes <strong>monatlich</strong> brutto verdient?
+            Wie viel{" "}
+            {antragstellende === "FuerBeide" ? (
+              <>hat {elternteilName}</>
+            ) : (
+              <>haben Sie</>
+            )}{" "}
+            in den 12 Kalendermonaten vor der Geburt Ihres Kindes{" "}
+            <strong>monatlich</strong> brutto verdient?
           </p>
 
           <InfoEinkommenFuerErwerbstaetige />
@@ -78,8 +92,17 @@ export function NurErwerbstaetig({ elternteil, monthsBeforeBirth }: Props) {
           className="my-16 flex flex-wrap gap-16"
         >
           <legend className="mb-10">
-            Geben Sie an, wie viel Sie in den 12 Monaten vor der Geburt Ihres
-            Kindes monatlich verdient haben.
+            {antragstellende === "FuerBeide" ? (
+              <>
+                Geben Sie an, wie viel {elternteilName} in den 12 Monaten vor
+                der Geburt Ihres Kindes monatlich verdient hat.
+              </>
+            ) : (
+              <>
+                Geben Sie an, wie viel Sie in den 12 Monaten vor der Geburt
+                Ihres Kindes monatlich verdient haben.
+              </>
+            )}
             <br />
             Ausgenommen sind:
             <ul className="list-disc pl-16">

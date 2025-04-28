@@ -4,6 +4,7 @@ import { Taetigkeit } from "./Taetigkeit";
 import { Button } from "@/application/components";
 import { type SelectOption } from "@/application/features/abfrageteil/components/common";
 import {
+  Antragstellende,
   type ElternteilType,
   type StepEinkommenState,
   initialTaetigkeit,
@@ -11,12 +12,16 @@ import {
 
 type Props = {
   readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
   readonly isSelbststaendig: boolean;
   readonly monthsBeforeBirth: SelectOption[];
 };
 
 export function SelbstaendigAndErwerbstaetig({
   elternteil,
+  elternteilName,
+  antragstellende,
   isSelbststaendig,
   monthsBeforeBirth,
 }: Props) {
@@ -54,6 +59,8 @@ export function SelbstaendigAndErwerbstaetig({
             key={field.id}
             ref={ref}
             elternteil={elternteil}
+            elternteilName={elternteilName}
+            antragstellende={antragstellende}
             taetigkeitsIndex={index}
             isSelbststaendig={isSelbststaendig}
             monthsBeforeBirth={monthsBeforeBirth}

@@ -20,18 +20,23 @@ import {
   YesNoRadio,
 } from "@/application/features/abfrageteil/components/common";
 import {
+  Antragstellende,
   type ElternteilType,
   type StepEinkommenState,
 } from "@/application/features/abfrageteil/state";
 
 type Props = {
   readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
   readonly taetigkeitsIndex: number;
   readonly monthsBeforeBirth: SelectOption[];
 };
 
 export function NichtSelbstaendig({
   elternteil,
+  elternteilName,
+  antragstellende,
   taetigkeitsIndex,
   monthsBeforeBirth,
 }: Props): ReactNode {
@@ -127,7 +132,13 @@ export function NichtSelbstaendig({
 
       <fieldset>
         <legend className="mb-8">
-          In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?
+          {antragstellende === "FuerBeide" ? (
+            <>
+              In welchem Zeitraum hat {elternteilName} diese Tätigkeit ausgeübt?
+            </>
+          ) : (
+            <>In welchem Zeitraum haben Sie diese Tätigkeit ausgeübt?</>
+          )}
         </legend>
 
         <ul>
@@ -200,6 +211,8 @@ export function NichtSelbstaendig({
       </fieldset>
 
       <Versicherungen
+        elternteilName={elternteilName}
+        antragstellende={antragstellende}
         hasRentenversicherungName={`${baseFieldPath}.versicherungen.hasRentenversicherung`}
         hasKrankenversicherungName={`${baseFieldPath}.versicherungen.hasKrankenversicherung`}
         hasArbeitslosenversicherungName={`${baseFieldPath}.versicherungen.hasArbeitslosenversicherung`}

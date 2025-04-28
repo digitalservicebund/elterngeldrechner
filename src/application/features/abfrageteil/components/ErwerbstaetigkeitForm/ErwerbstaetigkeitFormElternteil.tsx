@@ -77,7 +77,19 @@ function ErwerbstaetigkeitFormElternteil({
 
       <div className="flex flex-col gap-56">
         <YesNoRadio
-          legend="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes erwerbstätig?"
+          legend={
+            antragssteller === "FuerBeide" ? (
+              <>
+                War {elternteilName} in den 12 Monaten vor der Geburt Ihres
+                Kindes erwerbstätig?
+              </>
+            ) : (
+              <>
+                Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes
+                erwerbstätig?
+              </>
+            )
+          }
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name={`${elternteil}.vorGeburt`}
@@ -87,11 +99,27 @@ function ErwerbstaetigkeitFormElternteil({
 
         {wasErwerbstaetig === YesNo.YES && (
           <>
-            <ErwerbstaetigkeitCheckboxGroup elternteil={elternteil} />
+            <ErwerbstaetigkeitCheckboxGroup
+              elternteil={elternteil}
+              elternteilName={elternteilName}
+              antragssteller={antragssteller}
+            />
             {!!isNichtSelbststaendig && !isSelbststaendig && (
               <>
                 <YesNoRadio
-                  legend="Bestand Ihre nichtselbständige Arbeit aus mehreren Tätigkeiten?"
+                  legend={
+                    antragssteller === "FuerBeide" ? (
+                      <>
+                        Bestand die nichtselbständige Arbeit von{" "}
+                        {elternteilName} aus mehreren Tätigkeiten?
+                      </>
+                    ) : (
+                      <>
+                        Bestand Ihre nichtselbständige Arbeit aus mehreren
+                        Tätigkeiten?
+                      </>
+                    )
+                  }
                   register={register}
                   registerOptions={{ required: "Dieses Feld ist erforderlich" }}
                   name={`${elternteil}.mehrereTaetigkeiten`}
@@ -102,7 +130,19 @@ function ErwerbstaetigkeitFormElternteil({
                 {mehrereTaetigkeiten === YesNo.NO && (
                   <>
                     <YesNoRadio
-                      legend="Waren Sie in den 12 Monaten vor der Geburt Ihres Kindes sozialversicherungspflichtig?"
+                      legend={
+                        antragssteller === "FuerBeide" ? (
+                          <>
+                            War {elternteilName} in den 12 Monaten vor der
+                            Geburt Ihres Kindes sozialversicherungspflichtig?
+                          </>
+                        ) : (
+                          <>
+                            Waren Sie in den 12 Monaten vor der Geburt Ihres
+                            Kindes sozialversicherungspflichtig?
+                          </>
+                        )
+                      }
                       register={register}
                       registerOptions={{
                         required: "Dieses Feld ist erforderlich",
@@ -113,7 +153,15 @@ function ErwerbstaetigkeitFormElternteil({
                     />
 
                     <CustomRadioGroup
-                      legend="Hatten Sie Einkommen aus einem Mini-Job?"
+                      legend={
+                        antragssteller === "FuerBeide" ? (
+                          <>
+                            Hatte {elternteilName} Einkommen aus einem Mini-Job?
+                          </>
+                        ) : (
+                          <>Hatten Sie Einkommen aus einem Mini-Job?</>
+                        )
+                      }
                       slotBetweenLegendAndOptions={<InfoZuMiniJobs />}
                       register={register}
                       registerOptions={{

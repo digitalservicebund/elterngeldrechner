@@ -37,7 +37,7 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
 
   await page
     .getByRole("radiogroup", {
-      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+      name: /ein Gesamteinkommen von/,
     })
     .getByRole("radio", { name: "Nein" })
     .click();
@@ -59,30 +59,30 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .fill("3000 Euro");
   await page
     .getByLabel("Elternteil 1")
-    .getByLabel("Welche Steuerklasse hatten Sie")
+    .getByLabel("Welche Steuerklasse")
     .selectOption("1");
   await page
     .getByLabel("Elternteil 2")
-    .getByLabel("Welche Steuerklasse hatten Sie")
+    .getByLabel("Welche Steuerklasse")
     .selectOption("1");
   await page
     .getByLabel("Elternteil 1")
-    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radiogroup", { name: "kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Nein" })
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radiogroup", { name: "kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Nein" })
     .click();
   await page
     .getByLabel("Elternteil 1")
-    .getByRole("radiogroup", { name: "Sind Sie gesetzlich pflichtversichert?" })
+    .getByRole("radiogroup", { name: "gesetzlich pflichtversichert?" })
     .getByRole("radio", { name: "Ja" })
     .click();
   await page
     .getByLabel("Elternteil 2")
-    .getByRole("radiogroup", { name: "Sind Sie gesetzlich pflichtversichert?" })
+    .getByRole("radiogroup", { name: "gesetzlich pflichtversichert?" })
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();

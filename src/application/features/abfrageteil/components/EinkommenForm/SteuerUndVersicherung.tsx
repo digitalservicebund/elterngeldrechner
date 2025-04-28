@@ -11,6 +11,7 @@ import {
   YesNoRadio,
 } from "@/application/features/abfrageteil/components/common";
 import {
+  Antragstellende,
   type ElternteilType,
   type StepEinkommenState,
   stepErwerbstaetigkeitElternteilSelectors,
@@ -25,6 +26,8 @@ import {
 
 type Props = {
   readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
   readonly isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten: boolean;
 };
 
@@ -74,6 +77,8 @@ const rentenVersicherungOptions: CustomRadioGroupOption<RentenArt>[] = [
 
 export function SteuerUndVersicherung({
   elternteil,
+  elternteilName,
+  antragstellende,
   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten,
 }: Props) {
   const {
@@ -101,7 +106,16 @@ export function SteuerUndVersicherung({
             required: "Eine Option muss ausgewählt sein",
           }}
           name={`${elternteil}.steuerKlasse`}
-          label="Welche Steuerklasse hatten Sie in den letzten 12 Monaten?"
+          label={
+            antragstellende === "FuerBeide" ? (
+              <>
+                Welche Steuerklasse hatte {elternteilName} in den letzten 12
+                Monaten?
+              </>
+            ) : (
+              <>Welche Steuerklasse hatten Sie in den letzten 12 Monaten?</>
+            )
+          }
           errors={errors}
           options={steuerKlasseOptions}
           required
@@ -117,8 +131,19 @@ export function SteuerUndVersicherung({
             required: "Eine Option muss ausgewählt sein",
           }}
           name={`${elternteil}.kinderFreiBetrag`}
-          label="Wie viele Kinderfreibeträge sind aus Ihrer Lohn- und
-        Gehaltsbescheinigung ersichtlich?"
+          label={
+            antragstellende === "FuerBeide" ? (
+              <>
+                Wie viele Kinderfreibeträge sind aus der Lohn- und
+                Gehaltsbescheinigung von {elternteilName} ersichtlich?
+              </>
+            ) : (
+              <>
+                Wie viele Kinderfreibeträge sind aus Ihrer Lohn- und
+                Gehaltsbescheinigung ersichtlich?
+              </>
+            )
+          }
           errors={errors}
           options={kinderFreiBetragOptions}
           required
@@ -126,7 +151,13 @@ export function SteuerUndVersicherung({
       )}
 
       <YesNoRadio
-        legend="Sind Sie kirchensteuerpflichtig?"
+        legend={
+          antragstellende === "FuerBeide" ? (
+            <>Ist {elternteilName} kirchensteuerpflichtig?</>
+          ) : (
+            <>Sind Sie kirchensteuerpflichtig?</>
+          )
+        }
         register={register}
         registerOptions={{ required: "Dieses Feld ist erforderlich" }}
         name={`${elternteil}.zahlenSieKirchenSteuer`}
@@ -136,7 +167,13 @@ export function SteuerUndVersicherung({
 
       {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
         <CustomRadioGroup
-          legend="Sind Sie gesetzlich pflichtversichert?"
+          legend={
+            antragstellende === "FuerBeide" ? (
+              <>Ist {elternteilName} gesetzlich pflichtversichert?</>
+            ) : (
+              <>Sind Sie gesetzlich pflichtversichert?</>
+            )
+          }
           slotBetweenLegendAndOptions={
             <InfoZurGesetzlichenKrankenversicherung />
           }
@@ -150,7 +187,13 @@ export function SteuerUndVersicherung({
       )}
       {!!isOnlySelbstaendig && (
         <CustomRadioGroup
-          legend="Wie sind Sie rentenversichert?"
+          legend={
+            antragstellende === "FuerBeide" ? (
+              <>Wie ist {elternteilName} rentenversichert?</>
+            ) : (
+              <>Wie sind Sie rentenversichert?</>
+            )
+          }
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name={`${elternteil}.rentenVersicherung`}

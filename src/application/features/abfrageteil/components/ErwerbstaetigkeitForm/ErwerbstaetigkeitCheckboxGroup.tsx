@@ -6,15 +6,22 @@ import {
   Description,
 } from "@/application/features/abfrageteil/components/common";
 import {
+  Antragstellende,
   type ElternteilType,
   type StepErwerbstaetigkeitState,
 } from "@/application/features/abfrageteil/state";
 
 type Props = {
   readonly elternteil: ElternteilType;
+  readonly elternteilName: string;
+  readonly antragssteller: Antragstellende | null;
 };
 
-export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
+export function ErwerbstaetigkeitCheckboxGroup({
+  elternteil,
+  elternteilName,
+  antragssteller,
+}: Props) {
   const {
     register,
     getValues,
@@ -42,7 +49,13 @@ export function ErwerbstaetigkeitCheckboxGroup({ elternteil }: Props) {
 
   return (
     <fieldset aria-describedby={hasError ? errorIdentifier : undefined}>
-      <legend className="mb-8">Ich hatte in diesem Zeitraum…</legend>
+      <legend className="mb-8">
+        {antragssteller === "FuerBeide" ? (
+          <>{elternteilName} hatte in diesem Zeitraum…</>
+        ) : (
+          <>Ich hatte in diesem Zeitraum…</>
+        )}
+      </legend>
 
       <CustomCheckbox
         register={register}

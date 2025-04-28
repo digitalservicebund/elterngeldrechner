@@ -33,10 +33,10 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByText("Gewinneinkünfte").click();
   await page.getByText("Einkünfte aus nichtselbstä").click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByLabel("Welche Steuerklasse hatten Sie").selectOption("3");
+  await page.getByLabel("Welche Steuerklasse").selectOption("3");
   await page
     .getByLabel("Elternteil 1")
-    .getByRole("radiogroup", { name: "Sind Sie kirchensteuerpflichtig?" })
+    .getByRole("radiogroup", { name: "kirchensteuerpflichtig?" })
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByLabel("Durchschnittliches Bruttoeinkommen").click();
@@ -75,7 +75,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
   await page
     .getByRole("radiogroup", {
-      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+      name: /ein Gesamteinkommen von/,
     })
     .getByRole("radio", { name: "Nein" })
     .click();

@@ -57,11 +57,16 @@ describe("Einkommen Page", () => {
 
     render(<EinkommenForm />, { preloadedState });
 
-    const messages = screen.getAllByText(
-      "Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben, wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.",
-    );
-
-    expect(messages).toHaveLength(2);
+    expect(
+      screen.getByText(
+        "Da Sie für Finn in den letzten 12 Monaten kein Einkommen angegeben haben, wird für Finn mit dem Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Da Sie für Fiona in den letzten 12 Monaten kein Einkommen angegeben haben, wird für Fiona mit dem Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum Einkommen machen.",
+      ),
+    ).toBeInTheDocument();
   });
 
   describe("Submitting the form when only 'erwerbstätig' and no minijob", () => {
@@ -191,7 +196,7 @@ describe("Einkommen Page", () => {
 
       // Field Einkommensgrenze
       const elterngeldAnspruch = screen.getByRole("radiogroup", {
-        name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+        name: /^Hatten Elternteil 1 und Elternteil 2 im Kalenderjahr vor der Geburt ein Gesamteinkommen von zusammen mehr als/,
       });
       await userEvent.click(
         within(elterngeldAnspruch).getByRole("radio", { name: "Nein" }),
@@ -277,7 +282,7 @@ describe("Einkommen Page", () => {
 
       // Field Einkommensgrenze
       const elterngeldAnspruch = screen.getByRole("radiogroup", {
-        name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+        name: /^Hatten Elternteil 1 und Elternteil 2 im Kalenderjahr vor der Geburt ein Gesamteinkommen von zusammen mehr als/,
       });
       await userEvent.click(
         within(elterngeldAnspruch).getByRole("radio", { name: "Nein" }),

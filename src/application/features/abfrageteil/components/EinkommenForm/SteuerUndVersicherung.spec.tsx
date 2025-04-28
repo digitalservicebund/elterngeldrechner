@@ -43,10 +43,10 @@ describe("Steuer und Versicherung", () => {
       /^wie viele Kinderfreibeträge/i,
     );
     const kirchensteuer = within(elternteil1Section).getByText(
-      /^sind Sie kirchensteuerpflichtig/i,
+      /kirchensteuerpflichtig/i,
     );
     const krankenversicherung = within(elternteil1Section).getByText(
-      /^Sind Sie gesetzlich pflichtversichert/i,
+      /gesetzlich pflichtversichert/i,
     );
 
     expect(steuerklasse).toBeInTheDocument();
@@ -113,7 +113,7 @@ describe("Steuer und Versicherung", () => {
       const elternteil1Section = getElternteil1Section();
       const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
       const inputField = within(elternteil1Section).getByLabelText(
-        "Welche Steuerklasse hatten Sie in den letzten 12 Monaten?",
+        "Welche Steuerklasse hatte Elternteil 1 in den letzten 12 Monaten?",
       );
 
       await userEvent.click(nextPageBtn);
@@ -204,7 +204,7 @@ describe("Steuer und Versicherung", () => {
       const elternteil1Section = getElternteil1Section();
 
       const krankenversicherungSection = within(elternteil1Section)
-        .getByText(/Sind Sie gesetzlich pflichtversichert/i, {
+        .getByText(/gesetzlich pflichtversichert/i, {
           selector: "legend",
         })
         .closest("fieldset") as HTMLElement;

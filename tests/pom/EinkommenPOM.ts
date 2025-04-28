@@ -17,7 +17,7 @@ export class EinkommenPOM {
     });
 
     this.gesamteinkommenUeberschritten = page.getByRole("radiogroup", {
-      name: /^Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als/,
+      name: /ein Gesamteinkommen von/,
     });
 
     this.gesamteinkommenUeberschrittenJa =

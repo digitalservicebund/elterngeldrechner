@@ -9,7 +9,7 @@ import {
   stepErwerbstaetigkeitElternteilSelectors,
 } from "@/application/features/abfrageteil/state";
 import type { ElternteilType } from "@/application/features/abfrageteil/state/ElternteilType";
-import { stepAllgemeineAngabenSelectors } from "@/application/features/abfrageteil/state/stepAllgemeineAngabenSlice";
+import { Antragstellende } from "@/application/features/abfrageteil/state/stepAllgemeineAngabenSlice";
 import { useAppSelector } from "@/application/redux/hooks";
 
 const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
@@ -20,9 +20,14 @@ const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
 type Props = {
   readonly elternteil: ElternteilType;
   readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
 };
 
-export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
+export function EinkommenFormElternteil({
+  elternteil,
+  elternteilName,
+  antragstellende,
+}: Props) {
   const isErwerbstaetigVorGeburt = useAppSelector((state) =>
     stepErwerbstaetigkeitElternteilSelectors.isErwerbstaetigVorGeburt(
       state.stepErwerbstaetigkeit[elternteil],
@@ -64,12 +69,8 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
   const isOnlyErwerbstaetigWithOneTaetigkeit =
     isOnlyErwerbstaetig && !isMehrereTaetigkeiten;
 
-  const antragssteller = useAppSelector(
-    stepAllgemeineAngabenSelectors.getAntragssteller,
-  );
-
   const heading = elternteilName;
-  const hasHeading = antragssteller === "FuerBeide";
+  const hasHeading = antragstellende === "FuerBeide";
   const headingIdentifier = useId();
 
   return (
@@ -84,9 +85,20 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
       <div className="flex flex-col gap-56">
         {!isErwerbstaetigVorGeburt && (
           <p>
-            Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben,
-            wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine
-            weiteren Angaben zum Einkommen machen.
+            {antragstellende === "FuerBeide" ? (
+              <>
+                Da Sie für {elternteilName} in den letzten 12 Monaten kein
+                Einkommen angegeben haben, wird für {elternteilName} mit dem
+                Mindestsatz gerechnet und Sie müssen keine weiteren Angaben zum
+                Einkommen machen.
+              </>
+            ) : (
+              <>
+                Da Sie in den letzten 12 Monaten kein Einkommen angegeben haben,
+                wird für Sie mit dem Mindestsatz gerechnet und Sie müssen keine
+                weiteren Angaben zum Einkommen machen.
+              </>
+            )}
           </p>
         )}
 
@@ -95,17 +107,25 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
             {!!isOnlyErwerbstaetigWithOneTaetigkeit && (
               <NurErwerbstaetig
                 elternteil={elternteil}
+                elternteilName={elternteilName}
+                antragstellende={antragstellende}
                 monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
               />
             )}
 
             {!!isOnlySelbstaendig && (
-              <NurSelbstaendig elternteil={elternteil} />
+              <NurSelbstaendig
+                elternteilName={elternteilName}
+                elternteil={elternteil}
+                antragstellende={antragstellende}
+              />
             )}
 
             {!hasMiniJob && (
               <SteuerUndVersicherung
                 elternteil={elternteil}
+                elternteilName={elternteilName}
+                antragstellende={antragstellende}
                 isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten={
                   isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten
                 }
@@ -115,6 +135,8 @@ export function EinkommenFormElternteil({ elternteil, elternteilName }: Props) {
             {!!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
               <SelbstaendigAndErwerbstaetig
                 elternteil={elternteil}
+                elternteilName={elternteilName}
+                antragstellende={antragstellende}
                 isSelbststaendig={isSelbststaendig}
                 monthsBeforeBirth={MONTHS_BEFORE_BIRTH_OPTIONS}
               />

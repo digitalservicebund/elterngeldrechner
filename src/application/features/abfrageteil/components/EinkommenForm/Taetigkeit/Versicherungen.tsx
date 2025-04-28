@@ -5,19 +5,25 @@ import {
   Description,
 } from "@/application/features/abfrageteil/components/common";
 import {
+  Antragstellende,
   type StepEinkommenState,
   type TypeOfVersicherungen,
 } from "@/application/features/abfrageteil/state";
 
 type Props = Readonly<{
   [Property in keyof TypeOfVersicherungen as `${Property}Name`]: Path<StepEinkommenState>;
-}>;
+}> & {
+  readonly elternteilName: string;
+  readonly antragstellende: Antragstellende | null;
+};
 
 export function Versicherungen({
   hasRentenversicherungName,
   hasArbeitslosenversicherungName,
   hasKrankenversicherungName,
   noneName,
+  elternteilName,
+  antragstellende,
 }: Props) {
   const {
     register,
@@ -70,7 +76,11 @@ export function Versicherungen({
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
       <legend className="mb-8">
-        Ich war während der Ausübung dieser Tätigkeit
+        {antragstellende === "FuerBeide" ? (
+          <>{elternteilName} war während der Ausübung dieser Tätigkeit</>
+        ) : (
+          <>Ich war während der Ausübung dieser Tätigkeit</>
+        )}
       </legend>
 
       <CustomCheckbox

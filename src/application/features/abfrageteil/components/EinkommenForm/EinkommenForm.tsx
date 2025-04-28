@@ -40,13 +40,26 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
   const { ET1, ET2 } = useAppSelector(
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
+  const limitEinkommenUeberschrittenLegend =
+    antragstellende === "FuerBeide" ? (
+      <>
+        Hatten {ET1} und {ET2} im Kalenderjahr vor der Geburt ein
+        Gesamteinkommen von zusammen mehr als {MAX_EINKOMMEN.toLocaleString()}{" "}
+        Euro?
+      </>
+    ) : (
+      <>
+        Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr
+        als {MAX_EINKOMMEN.toLocaleString()} Euro?
+      </>
+    );
 
   return (
     <FormProvider {...methods}>
       <form id={id} onSubmit={methods.handleSubmit(submitEinkommen)} noValidate>
         <YesNoRadio
           className="mb-32"
-          legend={`Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr als ${MAX_EINKOMMEN.toLocaleString()} Euro?`}
+          legend={limitEinkommenUeberschrittenLegend}
           slotBetweenLegendAndOptions={<InfoZumEinkommenslimit />}
           register={methods.register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
@@ -55,10 +68,18 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
         />
 
         <Split>
-          <EinkommenFormElternteil elternteil="ET1" elternteilName={ET1} />
+          <EinkommenFormElternteil
+            elternteil="ET1"
+            elternteilName={ET1}
+            antragstellende={antragstellende}
+          />
 
           {antragstellende === "FuerBeide" && (
-            <EinkommenFormElternteil elternteil="ET2" elternteilName={ET2} />
+            <EinkommenFormElternteil
+              elternteil="ET2"
+              elternteilName={ET2}
+              antragstellende={antragstellende}
+            />
           )}
         </Split>
 

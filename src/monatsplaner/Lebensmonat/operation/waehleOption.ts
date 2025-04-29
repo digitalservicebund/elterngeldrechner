@@ -1,9 +1,9 @@
+import { setzeGewaehlteOptionenZurueck } from "./setzeGewaehlteOptionenZurueck";
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type { Elternteil } from "@/monatsplaner/Elternteil";
 import {
   AlleElternteileHabenBonusGewaehlt,
   type Lebensmonat,
-  setzeOptionZurueck,
 } from "@/monatsplaner/Lebensmonat";
 import { waehleOption as waehleOptionInMonat } from "@/monatsplaner/Monat";
 import { Variante } from "@/monatsplaner/Variante";
@@ -24,7 +24,10 @@ export function waehleOption<E extends Elternteil>(
   if (moechteBonusWaehlen) {
     return waehleBonusFuerAlleElternteile(lebensmonat, parameters);
   } else if (mussMonateDerAnderenElternteileZuruecksetzen) {
-    return setzeOptionZurueckUndWaehleOption(lebensmonat, parameters);
+    return setzeGewaehlteOptionenZurueckUndWaehleOption(
+      lebensmonat,
+      parameters,
+    );
   } else {
     return waehleOptionDirekt(parameters, undefined, lebensmonat);
   }
@@ -42,7 +45,7 @@ function waehleBonusFuerAlleElternteile<E extends Elternteil>(
   )(lebensmonat);
 }
 
-function setzeOptionZurueckUndWaehleOption<E extends Elternteil>(
+function setzeGewaehlteOptionenZurueckUndWaehleOption<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
   parameters: BindingParameters<E>,
 ): Lebensmonat<E> {
@@ -52,7 +55,7 @@ function setzeOptionZurueckUndWaehleOption<E extends Elternteil>(
     undefined,
   );
 
-  return compose(setzeOptionZurueck, waehleOption)(lebensmonat);
+  return compose(setzeGewaehlteOptionenZurueck, waehleOption)(lebensmonat);
 }
 
 /**

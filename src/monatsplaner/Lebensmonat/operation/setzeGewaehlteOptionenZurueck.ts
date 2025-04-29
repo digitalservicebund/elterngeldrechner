@@ -1,17 +1,12 @@
 import { type Elternteil, isElternteil } from "@/monatsplaner/Elternteil";
 import type { Lebensmonat } from "@/monatsplaner/Lebensmonat";
-import {
-  type Monat,
-  setzeOptionZurueck as setzeOptionZurueckInMonat,
-} from "@/monatsplaner/Monat";
+import { type Monat, waehleOption } from "@/monatsplaner/Monat";
 import { mapRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-records";
 
-export function setzeOptionZurueck<E extends Elternteil>(
+export function setzeGewaehlteOptionenZurueck<E extends Elternteil>(
   lebensmonat: Lebensmonat<E>,
 ): Lebensmonat<E> {
-  return mapLebensmonat(lebensmonat, (monat) =>
-    setzeOptionZurueckInMonat(monat),
-  );
+  return mapLebensmonat(lebensmonat, (monat) => waehleOption(monat, undefined));
 }
 
 function mapLebensmonat<E extends Elternteil>(
@@ -29,7 +24,6 @@ if (import.meta.vitest) {
       "./erstelleInitialenLebensmonat"
     );
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
-    const { MONAT_MIT_MUTTERSCHUTZ } = await import("@/monatsplaner/Monat");
     const { Variante } = await import("@/monatsplaner/Variante");
 
     it("keeps an ungeplanten Lebensmonat as is", () => {
@@ -38,7 +32,7 @@ if (import.meta.vitest) {
         ANY_LEBENSMONATSZAHL,
       );
 
-      const lebensmonat = setzeOptionZurueck(ungeplanterLebensmonat);
+      const lebensmonat = setzeGewaehlteOptionenZurueck(ungeplanterLebensmonat);
 
       expect(lebensmonat).toEqual(ungeplanterLebensmonat);
     });
@@ -49,7 +43,7 @@ if (import.meta.vitest) {
         ANY_LEBENSMONATSZAHL,
       );
 
-      const lebensmonat = setzeOptionZurueck({
+      const lebensmonat = setzeGewaehlteOptionenZurueck({
         [Elternteil.Eins]: {
           gewaehlteOption: Variante.Basis,
           elterngeldbezug: 10,
@@ -63,14 +57,6 @@ if (import.meta.vitest) {
       });
 
       expect(lebensmonat).toEqual(ungeplanterLebensmonat);
-    });
-
-    it("respects Monate mit Mutterschutz", () => {
-      const lebensmonat = setzeOptionZurueck({
-        [Elternteil.Eins]: MONAT_MIT_MUTTERSCHUTZ,
-      });
-
-      expect(lebensmonat[Elternteil.Eins]).toBe(MONAT_MIT_MUTTERSCHUTZ);
     });
 
     const ANY_AUSGANGSLAGE = {

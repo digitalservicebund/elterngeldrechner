@@ -4,7 +4,7 @@ import type { Elternteil } from "@/monatsplaner/Elternteil";
 import {
   AlleElternteileHabenBonusGewaehlt,
   type Lebensmonat,
-  setzeOptionZurueck,
+  setzeGewaehlteOptionenZurueck,
   waehleOption as waehleOptionInLebensmonat,
 } from "@/monatsplaner/Lebensmonat";
 import {
@@ -108,7 +108,8 @@ function setzeOptionZurueckWennDefiniert<E extends Elternteil>(
   if (!lebensmonat) {
     return lebensmonate;
   } else {
-    const zurueckgesetzterLebensmonat = setzeOptionZurueck(lebensmonat);
+    const zurueckgesetzterLebensmonat =
+      setzeGewaehlteOptionenZurueck(lebensmonat);
     return {
       ...lebensmonate,
       [lebensmonatszahl]: zurueckgesetzterLebensmonat,

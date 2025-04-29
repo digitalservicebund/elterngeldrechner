@@ -1,3 +1,4 @@
+import { ergaenzeBruttoeinkommenFuerPartnerschaftsbonus } from "./ergaenzeBruttoeinkommenFuerPartnerschaftsbonus";
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type { Elternteil } from "@/monatsplaner/Elternteil";
 import {
@@ -37,13 +38,21 @@ export function waehleOption<E extends Elternteil>(
     ungeplanterLebensmonat,
   };
 
+  let lebensmonateNachher = lebensmonate;
+
   if (moechteBonusWaehlen && nochKeinBonusWurdeGewaehlt) {
-    return waehleZweiLebensmonateBonus(lebensmonate, parameters);
+    lebensmonateNachher = waehleZweiLebensmonateBonus(lebensmonate, parameters);
   } else if (!moechteBonusWaehlen) {
-    return waehleBonusAb(lebensmonate, parameters);
+    lebensmonateNachher = waehleBonusAb(lebensmonate, parameters);
   } else {
-    return waehleOptionDirekt(parameters, undefined, lebensmonate);
+    lebensmonateNachher = waehleOptionDirekt(
+      parameters,
+      undefined,
+      lebensmonate,
+    );
   }
+
+  return ergaenzeBruttoeinkommenFuerPartnerschaftsbonus(lebensmonateNachher);
 }
 
 function waehleZweiLebensmonateBonus<E extends Elternteil>(
@@ -226,7 +235,7 @@ function chunksWithMatchingItems<Item>(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, beforeEach, vi, it, expect } = import.meta.vitest;
 
   describe("wähle Option in Lebensmonaten", async () => {
     const { Elternteil } = await import("@/monatsplaner/Elternteil");
@@ -234,6 +243,13 @@ if (import.meta.vitest) {
     const { LetzteLebensmonatszahl } = await import(
       "@/monatsplaner/Lebensmonatszahl"
     );
+
+    beforeEach(async () => {
+      vi.spyOn(
+        await import("./ergaenzeBruttoeinkommenFuerPartnerschaftsbonus"),
+        "ergaenzeBruttoeinkommenFuerPartnerschaftsbonus",
+      ).mockImplementation((lebensmonate) => lebensmonate);
+    });
 
     it("sets the Auswahloption for the correct Lebensmonat and Elternteil", () => {
       const lebensmonateVorher = {
@@ -416,6 +432,36 @@ if (import.meta.vitest) {
 
       expectOption(lebensmonate, 5, Elternteil.Eins).toBe(Variante.Basis);
       expectOption(lebensmonate, 5, Elternteil.Zwei).toBeUndefined();
+    });
+
+    it("calls the operation to automatically ergänze Bruttoeinkommen für Partnerschaftsbonus with the Option gewählt", () => {
+      const lebensmonate = {
+        1: {
+          [Elternteil.Eins]: monat(Variante.Basis),
+          [Elternteil.Zwei]: monat(Variante.Basis),
+        },
+      };
+
+      waehleOption(
+        lebensmonate,
+        1,
+        Elternteil.Zwei,
+        Variante.Plus,
+        ANY_UNGEPLANTER_LEBENSMONAT,
+      );
+
+      expect(
+        ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
+      ).toHaveBeenCalledOnce();
+
+      expect(
+        ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
+      ).toHaveBeenCalledWith({
+        1: {
+          [Elternteil.Eins]: monat(Variante.Basis),
+          [Elternteil.Zwei]: monat(Variante.Plus),
+        },
+      });
     });
 
     function monat(gewaehlteOption?: Auswahloption) {

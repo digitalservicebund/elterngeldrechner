@@ -152,30 +152,6 @@ test("feedback in der planung bei leichter benutzung", async ({ page }) => {
   expect(await feedbackForm.appreciation.isVisible()).toBeTruthy();
 });
 
-test("reset obstacle after changing to easy use", async ({ page }) => {
-  test.slow();
-
-  await page.addInitScript(establishDataLayer);
-
-  await page.goto("./");
-
-  const cookieBanner = new CookieBannerPOM(page);
-  await cookieBanner.consent();
-
-  await fastForwardToPlaner(page);
-
-  const feedbackForm = new FeedbackPOM(page);
-  await feedbackForm.waehleEase(3);
-  await feedbackForm.waehleObstacle("Angaben machen");
-  await feedbackForm.waehleEase(2);
-  await feedbackForm.submit();
-
-  expect(await getEaseTrackingVariable(page)()).toEqual(2);
-  expect(await getObstacleTrackingVariable(page)()).toEqual(null);
-
-  expect(await feedbackForm.appreciation.isVisible()).toBeTruthy();
-});
-
 test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
   test.slow();
 

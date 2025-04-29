@@ -46,12 +46,6 @@ export function UserFeedbackForm({
 
   function handleEaseChange() {
     onChangeEase(form.getValues("ease")!);
-
-    if (isEasyExperience(form.getValues("ease")!)) {
-      if (form.getValues("obstacle")) {
-        onChangeObstacle(null);
-      }
-    }
   }
 
   function handleObstacleChange() {
@@ -83,27 +77,32 @@ export function UserFeedbackForm({
       onSubmit={form.handleSubmit(onSubmit)}
     >
       <h3>Helfen Sie uns den Elterngeldrechner zu verbessern.</h3>
-      <div>
-        <CustomRadioGroup
-          className="mb-32 mt-16 max-w-[29rem]"
-          legend={
-            <b className="mb-16 block">
-              Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
-            </b>
-          }
-          name={"ease" as Path<State>}
-          options={easeOptions}
-          register={form.register}
-          registerOptions={{ onChange: handleEaseChange }}
-          disabled={form.formState.isSubmitted}
-          horizontal
-        />
 
-        {!!easyExperience && submitButton}
-      </div>
+      {!form.formState.isSubmitted && !difficultExperience && (
+        <div>
+          <div className="pb-32 pt-16">
+            <CustomRadioGroup
+              className="mb-32 max-w-[29rem]"
+              legend={
+                <b className="mb-16 block">
+                  Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
+                </b>
+              }
+              name={"ease" as Path<State>}
+              options={easeOptions}
+              register={form.register}
+              registerOptions={{ onChange: handleEaseChange }}
+              disabled={form.formState.isSubmitted}
+              horizontal
+            />
 
-      {!!difficultExperience && (
-        <div className="pt-56">
+            {!!easyExperience && submitButton}
+          </div>
+        </div>
+      )}
+
+      {!form.formState.isSubmitted && !!difficultExperience && (
+        <div className="pb-32 pt-16">
           <CustomRadioGroup
             legend={
               <b className="mb-16 block">Was war die größte Schwierigkeit?</b>
@@ -120,7 +119,7 @@ export function UserFeedbackForm({
       )}
 
       {!!form.formState.isSubmitted && (
-        <div className="py-56">
+        <div className="pb-32 pt-16">
           <h4>Vielen Dank!</h4>
           <p className="font-bold">
             Ihr Feedback hilft uns, den Elterngeldrechner für alle Nutzenden zu

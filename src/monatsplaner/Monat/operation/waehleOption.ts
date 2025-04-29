@@ -13,6 +13,7 @@ export function waehleOption(
       ...monat,
       gewaehlteOption: option,
       elterngeldbezug: undefined, // Can't be known anymore and likely to change.
+      bruttoeinkommen: option === undefined ? undefined : monat.bruttoeinkommen,
       imMutterschutz: false,
     };
   }
@@ -90,7 +91,7 @@ if (import.meta.vitest) {
       expect(monat.bruttoeinkommen).toBe(100);
     });
 
-    it("allows to reset any chosen Option completely", () => {
+    it("allows to reset any chosen Option completely, which also unset the Bruttoeinkommen", () => {
       const monat = waehleOption(
         {
           gewaehlteOption: Variante.Plus,
@@ -102,7 +103,7 @@ if (import.meta.vitest) {
 
       expect(monat).toStrictEqual({
         gewaehlteOption: undefined,
-        bruttoeinkommen: 100,
+        bruttoeinkommen: undefined,
         imMutterschutz: false,
         elterngeldbezug: undefined,
       });

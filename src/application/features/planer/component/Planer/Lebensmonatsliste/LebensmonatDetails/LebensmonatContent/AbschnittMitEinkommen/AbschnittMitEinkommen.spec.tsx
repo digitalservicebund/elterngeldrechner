@@ -298,4 +298,5 @@ const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => {},
 };

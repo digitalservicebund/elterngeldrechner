@@ -30,6 +30,7 @@ export {
 export {
   type Lebensmonate,
   type LebensmonateMitBeliebigenElternteilen,
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
   erstelleInitialeLebensmonate,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
   listeLebensmonateAuf,

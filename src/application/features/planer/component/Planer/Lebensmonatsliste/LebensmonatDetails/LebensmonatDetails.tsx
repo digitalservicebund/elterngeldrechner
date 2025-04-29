@@ -33,6 +33,7 @@ type Props<A extends Ausgangslage> = {
   readonly waehleOption: WaehleOption<A>;
   readonly erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<A>;
   readonly gebeEinkommenAn: GebeEinkommenAn<A>;
+  readonly ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => void;
   readonly onToggle?: (event: ToggleEvent) => void;
   readonly className?: string;
 };
@@ -48,6 +49,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
     onToggle,
     className,
   }: Props<A>,
@@ -107,6 +109,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
   };
 
   return (

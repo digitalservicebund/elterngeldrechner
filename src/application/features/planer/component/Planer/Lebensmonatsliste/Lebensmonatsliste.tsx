@@ -53,6 +53,7 @@ type Props<A extends Ausgangslage> = {
     bruttoeinkommen: number,
   ) => void;
 
+  readonly ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => void;
   readonly onOpenLebensmonat?: () => void;
   readonly className?: string;
 };
@@ -67,6 +68,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
     onOpenLebensmonat,
     className,
   }: Props<A>,
@@ -153,6 +155,9 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
             )}
             waehleOption={waehleOption.bind(null, lebensmonatszahl)}
             gebeEinkommenAn={gebeEinkommenAn.bind(null, lebensmonatszahl)}
+            ergaenzeBruttoeinkommenFuerPartnerschaftsbonus={
+              ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
+            }
             onToggle={triggerOnOpenLebensmonatWhenMatching}
           />
         );

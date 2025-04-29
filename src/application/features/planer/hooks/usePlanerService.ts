@@ -9,6 +9,7 @@ import {
   type PlanMitBeliebigenElternteilen,
   aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
   erstelleInitialeLebensmonate,
   erstelleInitialenLebensmonat,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
@@ -107,6 +108,24 @@ export function usePlanerService(
     [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
   );
 
+  const ergaenzeBruttoeinkommenFuerPartnerschaftsbonusCallback =
+    useCallback((): void => {
+      setPlan((plan) => {
+        const ergaenzterPlan = {
+          ...plan,
+          lebensmonate: ergaenzeBruttoeinkommenFuerPartnerschaftsbonus(
+            plan.lebensmonate,
+          ),
+        };
+        const nextPlan = aktualisiereElterngeldbezuege(
+          berechneElterngeldbezuege,
+          ergaenzterPlan,
+        );
+        updateStatesAndTriggerCallbacks(nextPlan);
+        return nextPlan;
+      });
+    }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks]);
+
   const setztePlanZurueckCallback = useCallback(
     () =>
       setPlan((plan) => {
@@ -141,6 +160,8 @@ export function usePlanerService(
     erstelleVorschlaegeFuerAngabeDesEinkommens:
       erstelleVorschlaegeFuerAngabeDesEinkommensCallback,
     gebeEinkommenAn: gebeEinkommenAnCallback,
+    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus:
+      ergaenzeBruttoeinkommenFuerPartnerschaftsbonusCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
     ueberschreibePlan,
   };

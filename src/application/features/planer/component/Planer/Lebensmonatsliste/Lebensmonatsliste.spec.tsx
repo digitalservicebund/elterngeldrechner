@@ -229,4 +229,5 @@ const ANY_PROPS = {
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => {},
 };

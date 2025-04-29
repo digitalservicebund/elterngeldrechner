@@ -51,6 +51,7 @@ type InformationenZumLebensmonat<A extends Ausgangslage> = {
   waehleOption: WaehleOption<A>;
   erstelleVorschlaegeFuerAngabeDesEinkommens: ErstelleVorschlaegeFuerAngabeDesEinkommens<A>;
   gebeEinkommenAn: GebeEinkommenAn<A>;
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => void;
 };
 
 export type BestimmeAuswahlmoeglichkeiten<A extends Ausgangslage> = (

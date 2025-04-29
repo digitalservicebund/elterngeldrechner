@@ -70,6 +70,7 @@ export function Planer({
     waehleOption,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
     setzePlanZurueck,
     ueberschreibePlan,
   } = usePlanerService(
@@ -162,6 +163,9 @@ export function Planer({
                 erstelleVorschlaegeFuerAngabeDesEinkommens
               }
               gebeEinkommenAn={gebeEinkommenAn}
+              ergaenzeBruttoeinkommenFuerPartnerschaftsbonus={
+                ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
+              }
               onOpenLebensmonat={onOpenLebensmonat}
             />
 

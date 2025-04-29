@@ -1,4 +1,5 @@
 export * from "./aktualisiereElterngeldbezuege";
+export * from "./ergaenzeBruttoeinkommenFuerPartnerschaftsbonus";
 export * from "./erstelleInitialeLebensmonate";
 export * from "./erstelleVorschlaegeFuerAngabeDesEinkommens";
 export * from "./gebeEinkommenAn";

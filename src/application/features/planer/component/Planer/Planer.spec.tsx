@@ -180,6 +180,7 @@ const ANY_SERVICE_VALUES = {
   waehleOption: () => {},
   erstelleVorschlaegeFuerAngabeDesEinkommens: () => [],
   gebeEinkommenAn: () => {},
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => {},
   setzePlanZurueck: () => {},
   ueberschreibePlan: () => {},
 };

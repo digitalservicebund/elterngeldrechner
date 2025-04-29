@@ -16,6 +16,7 @@ import {
   Variante,
   aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
+  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
   erstelleInitialeLebensmonate,
   erstelleVorschlaegeFuerAngabeDesEinkommens,
   gebeEinkommenAn,
@@ -38,6 +39,10 @@ describe("use Planer service", () => {
     vi.spyOn(monatsplaner, "gebeEinkommenAn").mockImplementation(
       (_, plan) => plan,
     );
+    vi.spyOn(
+      monatsplaner,
+      "ergaenzeBruttoeinkommenFuerPartnerschaftsbonus",
+    ).mockImplementation((lebensmonate) => lebensmonate);
     vi.spyOn(monatsplaner, "setzePlanZurueck").mockReturnValue(ANY_PLAN);
     vi.spyOn(monatsplaner, "bestimmeAuswahlmoeglichkeiten").mockReturnValue(
       ANY_AUSWAHLMOEGLICHKEITEN,
@@ -332,6 +337,41 @@ describe("use Planer service", () => {
         Elternteil.Eins,
         300,
       );
+    });
+  });
+
+  describe("ergänze Bruttoeinkommen für Partnerschaftbonus", () => {
+    it("updates the Lebensmonate when complement Partnerschaftbonus", () => {
+      const initialPlan = { ...ANY_PLAN, lebensmonate: {} };
+      const ergaenzteLebensmonate = { 1: ANY_LEBENSMONAT };
+      vi.mocked(ergaenzeBruttoeinkommenFuerPartnerschaftsbonus).mockReturnValue(
+        ergaenzteLebensmonate,
+      );
+
+      const { result } = renderPlanerServiceHook({
+        initialInformation: { plan: initialPlan },
+      });
+      expect(result.current.plan.lebensmonate).toStrictEqual(
+        initialPlan.lebensmonate,
+      );
+
+      act(() =>
+        result.current.ergaenzeBruttoeinkommenFuerPartnerschaftsbonus(),
+      );
+      expect(result.current.plan.lebensmonate).toStrictEqual(
+        ergaenzteLebensmonate,
+      );
+    });
+
+    it("triggers the update of the Elterngeldbezüge", async () => {
+      vi.spyOn(await import("@/monatsplaner"), "aktualisiereElterngeldbezuege");
+      const { result } = renderPlanerServiceHook();
+
+      act(() =>
+        result.current.ergaenzeBruttoeinkommenFuerPartnerschaftsbonus(),
+      );
+
+      expect(aktualisiereElterngeldbezuege).toHaveBeenCalledOnce();
     });
   });
 

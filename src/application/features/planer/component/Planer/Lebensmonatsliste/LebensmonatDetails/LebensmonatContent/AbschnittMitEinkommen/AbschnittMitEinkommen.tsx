@@ -37,6 +37,7 @@ export function AbschnittMitEinkommen(): ReactNode {
     lebensmonat,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
+    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
   } = useInformationenZumLebensmonat();
 
   const mustInputsBeVisible = checkIfInputsMustBeVisible(lebensmonat);
@@ -111,6 +112,9 @@ export function AbschnittMitEinkommen(): ReactNode {
                       ariaLabel={ariaLabel}
                       ariaDescribedBy={hinweisZuWochenstundenIdentifier}
                       gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
+                      onEinkommenAngegeben={
+                        ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
+                      }
                     />
 
                     {!!istLebensmonatMitMutterschutz && (

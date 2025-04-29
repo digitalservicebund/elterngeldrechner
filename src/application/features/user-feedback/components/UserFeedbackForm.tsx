@@ -71,14 +71,25 @@ export function UserFeedbackForm({
 
   return (
     <form
-      className={classNames(className, "flex flex-col gap-8 print:hidden")}
+      className={classNames(
+        className,
+        "-mb-80 flex flex-col gap-8 print:hidden pt-24 pb-56",
+      )}
+      style={{
+        backgroundColor: "#f4f4f4",
+        boxShadow: "0 0 0 100vw #f4f4f4",
+        clipPath: "inset(0 -100vw)",
+      }}
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <div className="rounded bg-primary-light px-24 py-32">
+      <h3>Helfen Sie uns den Elterngeldrechner zu verbessern.</h3>
+      <div>
         <CustomRadioGroup
-          className="mx-16 mb-20 mt-16 max-w-[29rem]"
+          className="mb-32 mt-16 max-w-[29rem]"
           legend={
-            <b>Wie einfach war es für Sie den Elterngeldrechner zu nutzen?</b>
+            <b className="mb-16 block">
+              Wie einfach war es für Sie den Elterngeldrechner zu nutzen?
+            </b>
           }
           name={"ease" as Path<State>}
           options={easeOptions}
@@ -92,9 +103,11 @@ export function UserFeedbackForm({
       </div>
 
       {!!difficultExperience && (
-        <div className="rounded bg-primary-light px-24 py-32">
+        <div className="pt-56">
           <CustomRadioGroup
-            legend={<b>Was war die größte Schwierigkeit?</b>}
+            legend={
+              <b className="mb-16 block">Was war die größte Schwierigkeit?</b>
+            }
             name={"obstacle" as Path<State>}
             register={form.register}
             options={obstacleOptions}
@@ -107,11 +120,12 @@ export function UserFeedbackForm({
       )}
 
       {!!form.formState.isSubmitted && (
-        <div className="rounded bg-primary-light px-24 py-32">
-          <b>
-            Vielen Dank! Ihr Feedback hilft uns, den Elterngeldrechner für alle
-            Nutzenden zu verbessern!
-          </b>
+        <div className="py-56">
+          <h4>Vielen Dank!</h4>
+          <p className="font-bold">
+            Ihr Feedback hilft uns, den Elterngeldrechner für alle Nutzenden zu
+            verbessern!
+          </p>
         </div>
       )}
     </form>
@@ -144,7 +158,7 @@ const easeOptions: CustomRadioGroupOption<number>[] = [
 function descriptionContainer(text: string) {
   return function accessibleDescriptionContainer(id: string) {
     return (
-      <span className="absolute mt-80 whitespace-nowrap" id={id}>
+      <span className="absolute mt-80 whitespace-nowrap text-16" id={id}>
         {text}
       </span>
     );

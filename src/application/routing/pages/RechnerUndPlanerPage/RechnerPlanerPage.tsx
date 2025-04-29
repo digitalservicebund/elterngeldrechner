@@ -152,16 +152,6 @@ export function RechnerPlanerPage() {
               }}
             />
 
-            {!!showFeedbackForm && (
-              <UserFeedbackForm
-                ease={getTrackedEase()}
-                obstacle={getTrackedObstacle()}
-                onChangeEase={trackEase}
-                onChangeObstacle={trackObstacle}
-                onSubmit={() => (rememberSubmit.current = true)}
-              />
-            )}
-
             <div className="flex gap-16">
               <Button
                 type="button"
@@ -188,6 +178,16 @@ export function RechnerPlanerPage() {
               etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch
               Steuern entrichtet werden.
             </p>
+
+            {!!showFeedbackForm && (
+              <UserFeedbackForm
+                ease={getTrackedEase()}
+                obstacle={getTrackedObstacle()}
+                onChangeEase={trackEase}
+                onChangeObstacle={trackObstacle}
+                onSubmit={() => (rememberSubmit.current = true)}
+              />
+            )}
           </div>
         )}
       </div>

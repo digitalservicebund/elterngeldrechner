@@ -130,7 +130,7 @@ function getLabelClassName(
   horizontal: boolean,
   disabled: boolean,
 ) {
-  return classNames("flex content-center gap-16", {
+  return classNames("flex content-center gap-x-16 gap-y-8", {
     "text-danger": hasError,
     "items-center": horizontal,
     "flex-col": horizontal,

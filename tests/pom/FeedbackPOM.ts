@@ -10,7 +10,7 @@ export class FeedbackPOM {
     this.page = page;
 
     this.appreciation = page.getByText(
-      "Vielen Dank! Ihr Feedback hilft uns, den Elterngeldrechner für alle Nutzenden zu verbessern!",
+      "Ihr Feedback hilft uns, den Elterngeldrechner für alle Nutzenden zu verbessern!",
     );
     this.easeQuestion = this.page.getByRole("radiogroup", {
       name: "Wie einfach war es für Sie den Elterngeldrechner zu nutzen?",

@@ -2,13 +2,11 @@ import {
   type Arbitrary,
   array as arbitraryArray,
   boolean as arbitraryBoolean,
-  constant as arbitraryConstant,
   constantFrom as arbitraryConstantFrom,
   date as arbitraryDate,
   integer as arbitraryInteger,
   record as arbitraryRecord,
   sample,
-  tuple as arbitraryTuple,
 } from "fast-check";
 import { describe, expect, test } from "vitest";
 import { calculateElternGeld } from "./egr-calculation";
@@ -140,22 +138,18 @@ function arbitraryMischEkTaetigkeit(): Arbitrary<MischEkTaetigkeit> {
 }
 
 function arbitraryErwerbszeitraumLebensmonat(): Arbitrary<ErwerbsZeitraumLebensMonat> {
-  return arbitraryInteger({
-    min: 1,
-    max: 32,
-  })
-    .chain((vonLebensmonat) =>
-      arbitraryTuple(
-        arbitraryConstant(vonLebensmonat),
-        arbitraryInteger({ min: vonLebensmonat, max: 32 }),
-        arbitraryBruttoeinkommen(),
-      ),
-    )
-    .map(([vonLebensMonat, bisLebensMonat, bruttoProMonat]) => ({
-      vonLebensMonat,
-      bisLebensMonat,
-      bruttoProMonat,
-    }));
+  return arbitraryRecord({
+    vonLebensMonat: arbitraryInteger({ min: 1, max: 32 }),
+    bruttoProMonat: arbitraryBruttoeinkommen(),
+  }).chain(({ vonLebensMonat, bruttoProMonat }) =>
+    arbitraryInteger({ min: vonLebensMonat, max: 32 }).map(
+      (bisLebensMonat) => ({
+        vonLebensMonat,
+        bisLebensMonat,
+        bruttoProMonat,
+      }),
+    ),
+  );
 }
 
 function arbitraryKind(): Arbitrary<Kind> {

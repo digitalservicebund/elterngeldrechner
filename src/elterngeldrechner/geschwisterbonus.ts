@@ -460,7 +460,7 @@ if (import.meta.vitest) {
         zeitpunkt: (geschwister: AtLeastOne<Kind>) => Arbitrary<Date>,
       ): Arbitrary<Parameters<typeof hatAnspruchAufGeschwisterbonus>[0]> {
         return geschwister.chain((geschwister) =>
-          tuple(constant(geschwister), zeitpunkt(geschwister)),
+          zeitpunkt(geschwister).map((zeitpunkt) => [geschwister, zeitpunkt]),
         );
       }
 

@@ -40,8 +40,6 @@ if (import.meta.vitest) {
       assert,
       property,
       date: arbitraryDate,
-      record: arbitraryRecord,
-      constant,
     } = await import("fast-check");
 
     beforeEach(async () => {
@@ -181,10 +179,7 @@ if (import.meta.vitest) {
       today: ArbitraryRelativeDate,
     ): Arbitrary<{ birthdate: Date; today: Date }> {
       return birthdate.chain((birthdate) =>
-        arbitraryRecord({
-          birthdate: constant(birthdate),
-          today: today(birthdate),
-        }),
+        today(birthdate).map((today) => ({ birthdate, today })),
       );
     }
 

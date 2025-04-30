@@ -3,13 +3,11 @@ import {
   array as arbitraryArray,
   assert as assertProperty,
   boolean as arbitraryBoolean,
-  constant as arbitraryConstant,
   constantFrom as arbitraryConstantFrom,
   date as arbitraryDate,
   integer as arbitraryInteger,
   property,
   record as arbitraryRecord,
-  tuple as arbitraryTuple,
 } from "fast-check";
 import { assert, describe, expect, it } from "vitest";
 import { calculateElternGeld } from "./egr-calculation";
@@ -492,22 +490,18 @@ type MischEkTaetigkeitRaw = {
 };
 
 function arbitraryErwerbszeitraumLebensmonat(): Arbitrary<ErwerbsZeitraumLebensMonatRaw> {
-  return arbitraryInteger({
-    min: 1,
-    max: 32,
-  })
-    .chain((vonLebensmonat) =>
-      arbitraryTuple(
-        arbitraryConstant(vonLebensmonat),
-        arbitraryInteger({ min: vonLebensmonat, max: 32 }),
-        arbitraryBruttoeinkommen(),
-      ),
-    )
-    .map(([vonLebensmonat, bisLebensmonat, bruttoProMonat]) => ({
-      vonLebensmonat,
-      bisLebensmonat,
-      bruttoProMonat,
-    }));
+  return arbitraryRecord({
+    vonLebensmonat: arbitraryInteger({ min: 1, max: 32 }),
+    bruttoProMonat: arbitraryBruttoeinkommen(),
+  }).chain(({ vonLebensmonat, bruttoProMonat }) =>
+    arbitraryInteger({ min: vonLebensmonat, max: 32 }).map(
+      (bisLebensmonat) => ({
+        vonLebensmonat,
+        bisLebensmonat,
+        bruttoProMonat,
+      }),
+    ),
+  );
 }
 
 type ErwerbsZeitraumLebensMonatRaw = {

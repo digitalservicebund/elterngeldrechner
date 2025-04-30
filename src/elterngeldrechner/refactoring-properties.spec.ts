@@ -395,8 +395,8 @@ function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
   return arbitraryRecord({
     anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
     geburtstagDesKindes: arbitraryDate({
-      min: new Date("2023-01-01"),
-      max: new Date("2023-12-31"),
+      min: new Date("2024-01-01"),
+      max: new Date("2024-12-31"),
     }).map((date) => new Geburtstag(date)),
     sindSieAlleinerziehend: arbitraryBoolean(),
     erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
@@ -520,7 +520,7 @@ function arbitraryKind(): Arbitrary<Kind> {
   return arbitraryRecord({
     geburtstag: arbitraryDate({
       min: new Date("2000-01-01"),
-      max: new Date("2022-12-31"),
+      max: new Date("2023-12-31"),
     }).map((date) => new Geburtstag(date)),
     istBehindert: arbitraryBoolean(),
   });

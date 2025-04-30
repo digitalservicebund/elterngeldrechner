@@ -7,12 +7,13 @@ import { Geburtstag } from "./model";
 
 /**
  * Bestimmt welche Werbekostenpauschale (Arbeitnehmer-Pauschbetrag) anzuwenden
- * ist. Betrag bezieht sich auf einen Kalendarmonat.
+ * ist. Betrag bezieht sich auf einen Kalendarmonat. Auch "Arbeitnehmer
+ * Pauschbetrag" genannt.
  *
  * Siehe § 2c und Foldende im Gesetz zum Elterngeld und zur Elternzeit
  * (Bundeselterngeld- und Elternzeitgesetz - BEEG). Die Werte richten sich
  * theoretisch nach dem Programmablaufplan für die Einkommenssteuer, werden
- * jedoch abweichend in den Richtilinien zum BEEG 2c.1.4 spezifiziert.
+ * jedoch **abweichend** in den Richtlinien zum BEEG 2c.1.4.0 spezifiziert.
  *
  * @return Betrag in Euro als Zwölftel der Jahrespauschale auf den Cent gerundet
  */

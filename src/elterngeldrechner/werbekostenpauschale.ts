@@ -1,6 +1,6 @@
 import {
   HistorieEinesParameters,
-  findeFuerGeburtstagAnzuwendendenWertEinesParameters,
+  findeAnzuwendendenWertZumZeitpunkt,
 } from "./common/HistorieEinesParameters";
 import { aufDenCentRunden } from "./common/math-util";
 import { Geburtstag } from "./model";
@@ -16,10 +16,12 @@ import { Geburtstag } from "./model";
  *
  * @return Betrag in Euro als Zwölftel der Jahrespauschale auf den Cent gerundet
  */
-export function bestimmeWerbekostenpauschale(geburtstag: Geburtstag): number {
-  const jahresbetrag = findeFuerGeburtstagAnzuwendendenWertEinesParameters(
-    geburtstag,
+export function bestimmeWerbekostenpauschale(
+  geburtstagDesKindes: Geburtstag,
+): number {
+  const jahresbetrag = findeAnzuwendendenWertZumZeitpunkt(
     HISTORIE_DER_WERBEKOSTENPAUSCHALE,
+    geburtstagDesKindes,
   );
 
   return aufDenCentRunden(jahresbetrag / 12);
@@ -31,10 +33,10 @@ export function bestimmeWerbekostenpauschale(geburtstag: Geburtstag): number {
  */
 const HISTORIE_DER_WERBEKOSTENPAUSCHALE =
   HistorieEinesParameters.erstelleHistorieVonWerten([
-    { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 1230 },
-    { fuerGeburtenAb: new Geburtstag("2024-01-01"), wert: 1200 }, // for completeness in relation to the referenced document
-    { fuerGeburtenAb: new Geburtstag("2023-01-01"), wert: 1200 },
-    { fuerGeburtenAb: new Geburtstag("2022-12-31"), wert: 1000 }, // TODO: Correct date unknown, but satisfies old tests for now.
+    { anzuwendenAbDem: new Geburtstag("2025-01-01"), wert: 1230 },
+    { anzuwendenAbDem: new Geburtstag("2024-01-01"), wert: 1200 }, // for completeness in relation to the referenced document
+    { anzuwendenAbDem: new Geburtstag("2023-01-01"), wert: 1200 },
+    { anzuwendenAbDem: new Geburtstag("2022-12-31"), wert: 1000 }, // TODO: Correct date unknown, but satisfies old tests for now.
   ]);
 
 if (import.meta.vitest) {
@@ -47,51 +49,39 @@ if (import.meta.vitest) {
       date: arbitraryDate,
     } = await import("fast-check");
 
-    it("gibt immer einen positiven Betrag zurück", () => {
+    it("für Geburten ab dem 01.01.2025 ist der Betrag 102.50€", () =>
+      assertWerbekostenpauschale({ from: new Date("2025-01-01") }, 102.5));
+
+    it("für Geburten ab dem 01.01.2023 bis zum 31.12.2024 ist der Betrag 100.00€", () =>
+      assertWerbekostenpauschale(
+        { from: new Date("2023-01-01"), to: new Date("2024-12-31") },
+        100,
+      ));
+
+    it("für Geburten vor dem 01.01.2023 bleibt der Betrag bei 83.33€", () =>
+      assertWerbekostenpauschale({ to: new Date("2022-12-31") }, 83.33));
+
+    // Relevant for arithmetic ops as the return type doesn't guarantee it.
+    it("is always a posistive number", () =>
       assert(
         property(arbitraryGeburtstag(), (geburtstag) => {
           expect(bestimmeWerbekostenpauschale(geburtstag)).toBeGreaterThan(0);
         }),
-      );
-    });
+      ));
 
-    it("für Geburten ab dem 01.01.2025 ist der Betrag 102.50€", () => {
+    function assertWerbekostenpauschale(
+      timespan: { from?: Date; to?: Date },
+      toBe: number,
+    ): void {
       assert(
         property(
-          arbitraryGeburtstag({ min: new Date("2025-01-01") }),
-          (geburtstag) => {
-            expect(bestimmeWerbekostenpauschale(geburtstag)).toBe(102.5);
+          arbitraryGeburtstag({ min: timespan.from, max: timespan.to }),
+          (zeitpunkt) => {
+            expect(bestimmeWerbekostenpauschale(zeitpunkt)).toBe(toBe);
           },
         ),
       );
-    });
-
-    it("für Geburten ab dem 01.01.2023 bis zum 31.12.2024 ist der Betrag 100.00€", () => {
-      assert(
-        property(
-          arbitraryGeburtstag({
-            min: new Date("2023-01-01"),
-            max: new Date("2024-12-31"),
-          }),
-          (geburtstag) => {
-            expect(bestimmeWerbekostenpauschale(geburtstag)).toBe(100);
-          },
-        ),
-      );
-    });
-
-    it("für Geburten vor dem 01.01.2023 bleibt der Betrag bei 83.33€", () => {
-      assert(
-        property(
-          arbitraryGeburtstag({
-            max: new Date("2022-12-31"),
-          }),
-          (geburtstag) => {
-            expect(bestimmeWerbekostenpauschale(geburtstag)).toEqual(83.33);
-          },
-        ),
-      );
-    });
+    }
 
     function arbitraryGeburtstag(constraints?: { min?: Date; max?: Date }) {
       return arbitraryDate(constraints).map((date) => new Geburtstag(date));

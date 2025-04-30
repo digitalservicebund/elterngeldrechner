@@ -1,15 +1,13 @@
-import { Geburtstag } from "@/elterngeldrechner/model";
-
-export function findeFuerGeburtstagAnzuwendendenWertEinesParameters<Wert>(
-  geburtstag: Geburtstag,
+export function findeAnzuwendendenWertZumZeitpunkt<Wert>(
   historie: HistorieEinesParameters<Wert>,
+  zeitpunkt: Date,
 ): Wert {
-  if (geburtstag >= historie.eintrag.fuerGeburtenAb) {
+  if (zeitpunkt >= historie.eintrag.anzuwendenAbDem) {
     return historie.eintrag.wert;
   } else if (historie.vorherigerEintrag) {
-    return findeFuerGeburtstagAnzuwendendenWertEinesParameters(
-      geburtstag,
+    return findeAnzuwendendenWertZumZeitpunkt(
       historie.vorherigerEintrag,
+      zeitpunkt,
     );
   } else {
     return historie.eintrag.wert; // Fallback case when history isn't long enough: take the oldest entry.
@@ -18,8 +16,8 @@ export function findeFuerGeburtstagAnzuwendendenWertEinesParameters<Wert>(
 
 /**
  * This encodes the concept that a calculation parameter changes over time.
- * When a new amount is officially determined, it will also be specified from
- * which birthday on it has to be applied from. Therefore, this type implements
+ * When a new value is officially determined, it will also be specified from
+ * which moment on it has to be applied from. Therefore, this type implements
  * the domain logic and ensures the defined entries create a valid timeline.
  * This recursive data structure can be traversed to find the applicable value.
  * Though, it intentionally does not implement any methods on its own, but
@@ -49,15 +47,15 @@ export class HistorieEinesParameters<Wert> {
    *
    * With its interface it enforces to have at least one entry defined. If there
    * are multiple entries, they get automatically sorted by their related
-   * birthday to always create a proper timeline for the history. If well
-   * tested, this prevents the hassle do deal with any invalid state/exceptions
-   * during runtime in the domain logic.
+   * date to always create a proper timeline for the history. If well tested,
+   * this prevents the hassle do deal with any invalid state/exceptions during
+   * runtime in the domain logic.
    */
   public static erstelleHistorieVonWerten<Wert>(
     eintraege: EintraegeFuerHistorieEinesParameters<Wert>,
   ): HistorieEinesParameters<Wert> {
     const zeitlichSortierteEintraege = eintraege.toSorted((left, right) =>
-      compareDateByLatestFirst(left.fuerGeburtenAb, right.fuerGeburtenAb),
+      compareDateByLatestFirst(left.anzuwendenAbDem, right.anzuwendenAbDem),
     ) as EintraegeFuerHistorieEinesParameters<Wert>; // TypeScript looses this information.
 
     const [eintrag, vorherigerEintrag, ...weitereEintraege] =
@@ -80,7 +78,7 @@ export class HistorieEinesParameters<Wert> {
   ) {
     const istInDerVergangenheit =
       vorherigerEintrag !== undefined &&
-      vorherigerEintrag.eintrag.fuerGeburtenAb > eintrag.fuerGeburtenAb;
+      vorherigerEintrag.eintrag.anzuwendenAbDem > eintrag.anzuwendenAbDem;
 
     if (istInDerVergangenheit) {
       throw new Error(
@@ -100,7 +98,7 @@ type EintraegeFuerHistorieEinesParameters<Wert> = [
 ];
 
 type EintragFuerHistorieEinesParameters<Wert> = {
-  fuerGeburtenAb: Geburtstag;
+  anzuwendenAbDem: Date;
   wert: Wert;
 };
 
@@ -117,60 +115,60 @@ if (import.meta.vitest) {
       array: arbitraryArray,
     } = await import("fast-check");
 
-    describe("finde für Geburtstag anzuwendenden Wert eines Parameters", () => {
-      it("gibt den Wert zurück wo der Geburtstag nach dem Eintrag ist, aber noch vor dem nächsten Eintrag liegt", () => {
+    describe("finde anzuwendenden Wert zum Zeitpunkt", () => {
+      it("gibt den Wert zurück wo der Zeitpunkt nach dem Eintrag ist, aber noch vor dem nächsten Eintrag liegt", () => {
         const historie = HistorieEinesParameters.erstelleHistorieVonWerten([
-          { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 1 },
-          { fuerGeburtenAb: new Geburtstag("2024-11-24"), wert: 2 },
-          { fuerGeburtenAb: new Geburtstag("2024-03-31"), wert: 3 },
+          { anzuwendenAbDem: new Date("2025-01-01"), wert: 1 },
+          { anzuwendenAbDem: new Date("2024-11-24"), wert: 2 },
+          { anzuwendenAbDem: new Date("2024-03-31"), wert: 3 },
         ]);
 
-        const wert = findeFuerGeburtstagAnzuwendendenWertEinesParameters(
-          new Geburtstag("2024-12-01"),
+        const wert = findeAnzuwendendenWertZumZeitpunkt(
           historie,
+          new Date("2024-12-01"),
         );
 
         expect(wert).toBe(2);
       });
 
-      it("gibt den Wert zurück wo der Geburtstag exakt mit dem Eintrag übereinstimmt und nicht den Eintrag davor", () => {
+      it("gibt den Wert zurück wo der Zeitpunkt exakt mit dem Eintrag übereinstimmt und nicht den Eintrag davor", () => {
         const historie = HistorieEinesParameters.erstelleHistorieVonWerten([
-          { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 1 },
-          { fuerGeburtenAb: new Geburtstag("2024-11-24"), wert: 2 },
-          { fuerGeburtenAb: new Geburtstag("2024-03-31"), wert: 3 },
+          { anzuwendenAbDem: new Date("2025-01-01"), wert: 1 },
+          { anzuwendenAbDem: new Date("2024-11-24"), wert: 2 },
+          { anzuwendenAbDem: new Date("2024-03-31"), wert: 3 },
         ]);
 
-        const wert = findeFuerGeburtstagAnzuwendendenWertEinesParameters(
-          new Geburtstag("2024-11-24"),
+        const wert = findeAnzuwendendenWertZumZeitpunkt(
           historie,
+          new Date("2024-11-24"),
         );
 
         expect(wert).toBe(2);
       });
 
-      it("gibt den Wert des neusten Eintrags zurück wenn der Geburtstag noch davor liegt", () => {
+      it("gibt den Wert des neusten Eintrags zurück wenn der Zeitpunkt noch davor liegt", () => {
         const historie = HistorieEinesParameters.erstelleHistorieVonWerten([
-          { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 1 },
-          { fuerGeburtenAb: new Geburtstag("2024-11-24"), wert: 2 },
+          { anzuwendenAbDem: new Date("2025-01-01"), wert: 1 },
+          { anzuwendenAbDem: new Date("2024-11-24"), wert: 2 },
         ]);
 
-        const wert = findeFuerGeburtstagAnzuwendendenWertEinesParameters(
-          new Geburtstag("2025-01-02"),
+        const wert = findeAnzuwendendenWertZumZeitpunkt(
           historie,
+          new Date("2025-01-02"),
         );
 
         expect(wert).toBe(1);
       });
 
-      it("gibt den Wert des ältesten Eintrags zurück wenn der Geburtstag noch später zurückliegt", () => {
+      it("gibt den Wert des ältesten Eintrags zurück wenn der Zeitpunkt noch später zurückliegt", () => {
         const historie = HistorieEinesParameters.erstelleHistorieVonWerten([
-          { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 1 },
-          { fuerGeburtenAb: new Geburtstag("2024-11-24"), wert: 2 },
+          { anzuwendenAbDem: new Date("2025-01-01"), wert: 1 },
+          { anzuwendenAbDem: new Date("2024-11-24"), wert: 2 },
         ]);
 
-        const wert = findeFuerGeburtstagAnzuwendendenWertEinesParameters(
-          new Geburtstag("2024-11-23"),
+        const wert = findeAnzuwendendenWertZumZeitpunkt(
           historie,
+          new Date("2024-11-23"),
         );
 
         expect(wert).toBe(2);
@@ -180,20 +178,21 @@ if (import.meta.vitest) {
     describe("erstelle Historie der Werbekostenpauschale", () => {
       it("sortiert die Einträge zeitlich korrekt", () => {
         const historie = HistorieEinesParameters.erstelleHistorieVonWerten([
-          { fuerGeburtenAb: new Geburtstag("2024-11-24"), wert: 1 },
-          { fuerGeburtenAb: new Geburtstag("2025-01-01"), wert: 2 },
-          { fuerGeburtenAb: new Geburtstag("2024-03-31"), wert: 3 },
+          { anzuwendenAbDem: new Date("2024-11-24"), wert: 1 },
+          { anzuwendenAbDem: new Date("2025-01-01"), wert: 2 },
+          { anzuwendenAbDem: new Date("2024-03-31"), wert: 3 },
         ]);
 
-        expect(historie.eintrag.fuerGeburtenAb).toEqual(
-          new Geburtstag("2025-01-01"),
+        expect(historie.eintrag.anzuwendenAbDem).toEqual(
+          new Date("2025-01-01"),
         );
-        expect(historie.vorherigerEintrag?.eintrag.fuerGeburtenAb).toEqual(
-          new Geburtstag("2024-11-24"),
+        expect(historie.vorherigerEintrag?.eintrag.anzuwendenAbDem).toEqual(
+          new Date("2024-11-24"),
         );
         expect(
-          historie.vorherigerEintrag?.vorherigerEintrag?.eintrag.fuerGeburtenAb,
-        ).toEqual(new Geburtstag("2024-03-31"));
+          historie.vorherigerEintrag?.vorherigerEintrag?.eintrag
+            .anzuwendenAbDem,
+        ).toEqual(new Date("2024-03-31"));
       });
 
       it("schlägt nie fehl eine Historie zu erstellen", () => {
@@ -215,7 +214,7 @@ if (import.meta.vitest) {
 
       function arbitraryEintragFuerHistorieEinesParameters() {
         return arbitraryRecord({
-          fuerGeburtenAb: arbitraryDate().map((date) => new Geburtstag(date)),
+          anzuwendenAbDem: arbitraryDate(),
           wert: arbitraryFloat(),
         });
       }

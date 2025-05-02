@@ -13,10 +13,12 @@ import {
   F_FAKTOR,
   GRENZE_MIDI_MAX,
   GRENZE_MINI_MIDI,
-  SATZ_ALV_BEEG,
-  SATZ_KVPV_BEEG,
-  SATZ_RV_BEEG,
 } from "@/elterngeldrechner/model/egr-berechnung-param-id";
+import {
+  berechneAbzuegeFuerDieArbeitsfoerderung,
+  berechneAbzuegeFuerDieKrankenUndPflegeversicherung,
+  berechneAbzuegeFuerDieRentenversicherung,
+} from "@/elterngeldrechner/sozialabgaben/Abzuege";
 
 export function abzuege(
   bruttoProMonat: number,
@@ -172,11 +174,7 @@ function summer_svb(
   let abgaben_kvpv = 0;
   let abgaben_rv = 0;
   let abgaben_alv = 0;
-  let abgaben_gleitzone = 0;
   const brutto_rech_sub = brutto_sub;
-  const satz_kvpv_beeg = SATZ_KVPV_BEEG;
-  const satz_rv_beeg = SATZ_RV_BEEG;
-  const satz_alv_beeg = SATZ_ALV_BEEG;
   const f_faktor = F_FAKTOR;
   const grenze_mini_midi = GRENZE_MINI_MIDI;
   const grenze_midi_max = GRENZE_MIDI_MAX;
@@ -186,20 +184,16 @@ function summer_svb(
 
   if (isNoMidi) {
     if (krankenversicherungspflichtig_sub) {
-      abgaben_kvpv = brutto_rech_sub * satz_kvpv_beeg;
+      abgaben_kvpv =
+        berechneAbzuegeFuerDieKrankenUndPflegeversicherung(brutto_rech_sub);
     }
     if (rentenversicherungspflichtig_sub) {
-      abgaben_rv = brutto_rech_sub * satz_rv_beeg;
+      abgaben_rv = berechneAbzuegeFuerDieRentenversicherung(brutto_rech_sub);
     }
     if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-      abgaben_alv = brutto_rech_sub * satz_alv_beeg;
+      abgaben_alv = berechneAbzuegeFuerDieArbeitsfoerderung(brutto_rech_sub);
     }
-  }
-  if (
-    brutto_rech_sub > grenze_mini_midi &&
-    brutto_rech_sub <= grenze_midi_max
-  ) {
-    let beitragsatz = 0;
+  } else {
     const tmp = grenze_mini_midi * f_faktor;
     const bd850_450 = grenze_midi_max - grenze_mini_midi;
     const bd850 = grenze_midi_max;
@@ -215,22 +209,22 @@ function summer_svb(
     let bemessungsentgelt = tmp2 * tmp3;
     bemessungsentgelt = bemessungsentgelt + tmp;
     if (krankenversicherungspflichtig_sub) {
-      beitragsatz = beitragsatz + satz_kvpv_beeg;
+      abgaben_kvpv =
+        berechneAbzuegeFuerDieKrankenUndPflegeversicherung(bemessungsentgelt);
     }
     if (rentenversicherungspflichtig_sub) {
-      beitragsatz = beitragsatz + satz_rv_beeg;
+      abgaben_rv = berechneAbzuegeFuerDieRentenversicherung(bemessungsentgelt);
     }
     if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-      beitragsatz = beitragsatz + satz_alv_beeg;
+      abgaben_alv = berechneAbzuegeFuerDieArbeitsfoerderung(bemessungsentgelt);
     }
-    abgaben_gleitzone = beitragsatz * bemessungsentgelt;
-    abgaben_kvpv = aufDenCentRunden(abgaben_kvpv);
-    abgaben_rv = aufDenCentRunden(abgaben_rv);
-    abgaben_alv = aufDenCentRunden(abgaben_alv);
-    abgaben_gleitzone = aufDenCentRunden(abgaben_gleitzone);
   }
 
-  return abgaben_kvpv + abgaben_rv + abgaben_alv + abgaben_gleitzone;
+  abgaben_kvpv = aufDenCentRunden(abgaben_kvpv);
+  abgaben_rv = aufDenCentRunden(abgaben_rv);
+  abgaben_alv = aufDenCentRunden(abgaben_alv);
+
+  return abgaben_kvpv + abgaben_rv + abgaben_alv;
 }
 
 export function summe_svb_misch(
@@ -243,17 +237,15 @@ export function summe_svb_misch(
   let abgaben_rv = 0;
   let abgaben_alv = 0;
   const brutto_rech_sub = brutto_sub;
-  const satz_kvpv_beeg = SATZ_KVPV_BEEG;
-  const satz_rv_beeg = SATZ_RV_BEEG;
-  const satz_alv_beeg = SATZ_ALV_BEEG;
   if (krankenversicherungspflichtig_sub) {
-    abgaben_kvpv = brutto_rech_sub * satz_kvpv_beeg;
+    abgaben_kvpv =
+      berechneAbzuegeFuerDieKrankenUndPflegeversicherung(brutto_rech_sub);
   }
   if (rentenversicherungspflichtig_sub) {
-    abgaben_rv = brutto_rech_sub * satz_rv_beeg;
+    abgaben_rv = berechneAbzuegeFuerDieRentenversicherung(brutto_rech_sub);
   }
   if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-    abgaben_alv = brutto_rech_sub * satz_alv_beeg;
+    abgaben_alv = berechneAbzuegeFuerDieArbeitsfoerderung(brutto_rech_sub);
   }
   abgaben_kvpv = aufDenCentRunden(abgaben_kvpv);
   abgaben_rv = aufDenCentRunden(abgaben_rv);

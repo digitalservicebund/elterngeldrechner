@@ -242,7 +242,7 @@ export function berechneMischNettoUndBasiselterngeld(
     const summe_sozab = summe_svb_misch(
       krankenversicherungspflichtig > 0,
       rentenversicherungspflichtig > 0,
-      status,
+      status === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
       brutto_sv,
     );
     const summe_steuer_abzug = summeSteuer(

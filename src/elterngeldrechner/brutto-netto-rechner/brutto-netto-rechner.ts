@@ -155,7 +155,7 @@ function berechneSteuernAbgaben(
   let summe_sozab = summer_svb(
     krankenversicherungspflichtig,
     rentenversicherungspflichtig,
-    status,
+    status === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
     bruttoProMonat,
   );
   summe_sozab = aufDenCentRunden(summe_sozab);
@@ -166,91 +166,65 @@ function berechneSteuernAbgaben(
  * Ermittlung der Sozialversicherungsabgaben in Summe.
  */
 function summer_svb(
-  krankenversicherungspflichtig_sub: boolean,
-  rentenversicherungspflichtig_sub: boolean,
-  status_sub: ErwerbsArt,
-  brutto_sub: number,
+  istKrankenversicherungspflichtig: boolean,
+  istRentenversicherungspflichtig: boolean,
+  istArbeitsfoerderungspflichtig: boolean,
+  arbeitsentgelt: number,
 ): number {
-  let abgaben_kvpv = 0;
-  let abgaben_rv = 0;
-  let abgaben_alv = 0;
-  const brutto_rech_sub = brutto_sub;
-  const f_faktor = F_FAKTOR;
-  const grenze_mini_midi = GRENZE_MINI_MIDI;
-  const grenze_midi_max = GRENZE_MIDI_MAX;
-
   const isNoMidi =
-    brutto_rech_sub > grenze_midi_max || brutto_rech_sub <= grenze_mini_midi;
+    arbeitsentgelt > GRENZE_MIDI_MAX || arbeitsentgelt <= GRENZE_MINI_MIDI;
 
   if (isNoMidi) {
-    if (krankenversicherungspflichtig_sub) {
-      abgaben_kvpv =
-        berechneAbzuegeFuerDieKrankenUndPflegeversicherung(brutto_rech_sub);
-    }
-    if (rentenversicherungspflichtig_sub) {
-      abgaben_rv = berechneAbzuegeFuerDieRentenversicherung(brutto_rech_sub);
-    }
-    if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-      abgaben_alv = berechneAbzuegeFuerDieArbeitsfoerderung(brutto_rech_sub);
-    }
+    return summe_svb_misch(
+      istKrankenversicherungspflichtig,
+      istRentenversicherungspflichtig,
+      istArbeitsfoerderungspflichtig,
+      arbeitsentgelt,
+    );
   } else {
-    const tmp = grenze_mini_midi * f_faktor;
-    const bd850_450 = grenze_midi_max - grenze_mini_midi;
-    const bd850 = grenze_midi_max;
-    const bd450 = grenze_mini_midi;
+    const tmp = GRENZE_MINI_MIDI * F_FAKTOR;
+    const bd850_450 = GRENZE_MIDI_MAX - GRENZE_MINI_MIDI;
+    const bd850 = GRENZE_MIDI_MAX;
+    const bd450 = GRENZE_MINI_MIDI;
     const x = bd850 / bd850_450;
 
     let y: number;
-    y = bd450 * f_faktor;
+    y = bd450 * F_FAKTOR;
     y = y / bd850_450;
 
     const tmp2 = x - y;
-    const tmp3 = brutto_rech_sub - grenze_mini_midi;
+    const tmp3 = arbeitsentgelt - GRENZE_MINI_MIDI;
     let bemessungsentgelt = tmp2 * tmp3;
     bemessungsentgelt = bemessungsentgelt + tmp;
-    if (krankenversicherungspflichtig_sub) {
-      abgaben_kvpv =
-        berechneAbzuegeFuerDieKrankenUndPflegeversicherung(bemessungsentgelt);
-    }
-    if (rentenversicherungspflichtig_sub) {
-      abgaben_rv = berechneAbzuegeFuerDieRentenversicherung(bemessungsentgelt);
-    }
-    if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-      abgaben_alv = berechneAbzuegeFuerDieArbeitsfoerderung(bemessungsentgelt);
-    }
+
+    return summe_svb_misch(
+      istKrankenversicherungspflichtig,
+      istRentenversicherungspflichtig,
+      istArbeitsfoerderungspflichtig,
+      bemessungsentgelt,
+    );
   }
-
-  abgaben_kvpv = aufDenCentRunden(abgaben_kvpv);
-  abgaben_rv = aufDenCentRunden(abgaben_rv);
-  abgaben_alv = aufDenCentRunden(abgaben_alv);
-
-  return abgaben_kvpv + abgaben_rv + abgaben_alv;
 }
 
 export function summe_svb_misch(
-  krankenversicherungspflichtig_sub: boolean,
-  rentenversicherungspflichtig_sub: boolean,
-  status_sub: ErwerbsArt,
-  brutto_sub: number,
+  istKrankenversicherungspflichtig: boolean,
+  istRentenversicherungspflichtig: boolean,
+  istArbeitsfoerderungspflichtig: boolean,
+  bemessungsgrundlage: number,
 ): number {
-  let abgaben_kvpv = 0;
-  let abgaben_rv = 0;
-  let abgaben_alv = 0;
-  const brutto_rech_sub = brutto_sub;
-  if (krankenversicherungspflichtig_sub) {
-    abgaben_kvpv =
-      berechneAbzuegeFuerDieKrankenUndPflegeversicherung(brutto_rech_sub);
-  }
-  if (rentenversicherungspflichtig_sub) {
-    abgaben_rv = berechneAbzuegeFuerDieRentenversicherung(brutto_rech_sub);
-  }
-  if (status_sub === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI) {
-    abgaben_alv = berechneAbzuegeFuerDieArbeitsfoerderung(brutto_rech_sub);
-  }
-  abgaben_kvpv = aufDenCentRunden(abgaben_kvpv);
-  abgaben_rv = aufDenCentRunden(abgaben_rv);
-  abgaben_alv = aufDenCentRunden(abgaben_alv);
-  return aufDenCentRunden(abgaben_kvpv + abgaben_rv + abgaben_alv);
+  const abzuege = [
+    istKrankenversicherungspflichtig
+      ? berechneAbzuegeFuerDieKrankenUndPflegeversicherung(bemessungsgrundlage)
+      : 0,
+    istRentenversicherungspflichtig
+      ? berechneAbzuegeFuerDieRentenversicherung(bemessungsgrundlage)
+      : 0,
+    istArbeitsfoerderungspflichtig
+      ? berechneAbzuegeFuerDieArbeitsfoerderung(bemessungsgrundlage)
+      : 0,
+  ];
+
+  return abzuege.reduce((summe, abzug) => summe + abzug, 0);
 }
 
 function calculateChurchTaxes(kirchensteuersatz: number, bk: number): number {

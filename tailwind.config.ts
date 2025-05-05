@@ -33,6 +33,7 @@ export default {
       text: "#000000",
       "text-light": "#595959",
       success: "#056639",
+      warning: "#e18324",
       danger: "#B4081A",
       Basis: "#004B76",
       Plus: "#80CDEC",

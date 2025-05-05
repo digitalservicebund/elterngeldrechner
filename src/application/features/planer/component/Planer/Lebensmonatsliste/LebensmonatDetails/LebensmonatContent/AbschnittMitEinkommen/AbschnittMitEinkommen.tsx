@@ -82,8 +82,11 @@ export function AbschnittMitEinkommen(): ReactNode {
         <>
           {listeElternteileFuerAusgangslageAuf(ausgangslage).map(
             (elternteil) => {
-              const { imMutterschutz, bruttoeinkommen } =
+              const { imMutterschutz, bruttoeinkommen, gewaehlteOption } =
                 lebensmonat[elternteil];
+
+              const bruttoEinkommenIsMissing =
+                gewaehlteOption === Variante.Bonus && !bruttoeinkommen;
 
               if (imMutterschutz) {
                 return (
@@ -108,6 +111,7 @@ export function AbschnittMitEinkommen(): ReactNode {
                     <BruttoeinkommenInput
                       key={elternteil}
                       bruttoeinkommen={bruttoeinkommen}
+                      isMissing={bruttoEinkommenIsMissing}
                       vorschlaege={vorschlaege}
                       ariaLabel={ariaLabel}
                       ariaDescribedBy={hinweisZuWochenstundenIdentifier}

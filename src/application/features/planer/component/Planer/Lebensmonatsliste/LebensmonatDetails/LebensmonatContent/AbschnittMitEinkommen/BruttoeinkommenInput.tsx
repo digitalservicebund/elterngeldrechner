@@ -1,4 +1,5 @@
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
+import ErrorIcon from "@digitalservicebund/icons/Error";
 import classNames from "classnames";
 import {
   type CSSProperties,
@@ -11,6 +12,7 @@ import type { Einkommen } from "@/monatsplaner";
 
 type Props = {
   readonly bruttoeinkommen: Einkommen | undefined;
+  readonly isMissing: boolean;
   readonly vorschlaege: number[];
   readonly ariaLabel: string;
   readonly ariaDescribedBy?: string;
@@ -21,6 +23,7 @@ type Props = {
 
 export function BruttoeinkommenInput({
   bruttoeinkommen,
+  isMissing,
   vorschlaege,
   ariaLabel,
   ariaDescribedBy,
@@ -48,7 +51,12 @@ export function BruttoeinkommenInput({
   return (
     <div className="flex flex-col gap-4" style={style}>
       <label htmlFor={inputIdentifier}>
-        <BusinessCenterIcon /> Einkommen in € (brutto)
+        {isMissing ? (
+          <ErrorIcon className="text-warning" />
+        ) : (
+          <BusinessCenterIcon />
+        )}{" "}
+        Einkommen in € (brutto)
       </label>
 
       <input
@@ -56,7 +64,8 @@ export function BruttoeinkommenInput({
         type="text"
         className={classNames(
           "appearance-none px-24 py-10",
-          "border-2 border-solid border-Basis",
+          "border-2 border-solid",
+          isMissing ? "border-warning" : "border-Basis",
         )}
         aria-label={ariaLabel}
         aria-describedby={ariaDescribedBy}

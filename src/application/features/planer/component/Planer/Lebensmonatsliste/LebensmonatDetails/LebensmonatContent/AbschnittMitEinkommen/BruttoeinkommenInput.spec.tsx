@@ -11,6 +11,13 @@ describe("Buttoeinkommen Input", () => {
       screen.getByRole("combobox", { name: "test aria label" }),
     ).toBeVisible();
     expect(screen.getByLabelText("Einkommen in € (brutto)")).toBeVisible();
+    expect(screen.getByTestId("BusinessCenterOutlinedIcon")).toBeVisible();
+  });
+
+  it("shows the error icon when input is missing", () => {
+    render(<BruttoeinkommenInput {...ANY_PROPS} isMissing />);
+
+    expect(screen.getByTestId("ErrorIcon")).toBeVisible();
   });
 
   it("uses the given Bruttoeinkommen as input value", () => {
@@ -74,6 +81,7 @@ describe("Buttoeinkommen Input", () => {
 
 const ANY_PROPS = {
   bruttoeinkommen: undefined,
+  isMissing: false,
   vorschlaege: [],
   ariaLabel: "",
   gebeEinkommenAn: () => {},

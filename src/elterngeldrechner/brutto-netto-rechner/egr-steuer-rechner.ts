@@ -1,4 +1,5 @@
-import { bestimmeKassenindividuellenZusatzbeitrag } from "./kassenindividueller-zusatzbeitrag";
+import { bestimmeKassenindividuellenZusatzbeitrag } from "./KassenindividuellerZusatzbeitrag";
+import { bestimmeWerbekostenpauschale } from "@/elterngeldrechner/Werbekostenpauschale";
 import {
   aufDenCentRunden,
   shiftNumberByDecimalsPrecisely,
@@ -12,7 +13,6 @@ import {
   kinderFreiBetragToNumber,
   steuerklasseToNumber,
 } from "@/elterngeldrechner/model";
-import { bestimmeWerbekostenpauschale } from "@/elterngeldrechner/werbekostenpauschale";
 import {
   type Eingangsparameter,
   type Lohnsteuerjahr,
@@ -188,7 +188,7 @@ if (import.meta.vitest) {
 
     it("formats the kassenindividuellen Zusatzbeitrag with a rounded precision of decimals and as Prozenwert beetween 1 and 100", async () => {
       vi.spyOn(
-        await import("./kassenindividueller-zusatzbeitrag"),
+        await import("./KassenindividuellerZusatzbeitrag"),
         "bestimmeKassenindividuellenZusatzbeitrag",
       ).mockReturnValue(0.49715);
 

@@ -1,4 +1,14 @@
 import { abgabenSteuern } from "./egr-steuer-rechner";
+import {
+  berechneAbzuegeFuerDieArbeitsfoerderung,
+  berechneAbzuegeFuerDieKrankenUndPflegeversicherung,
+  berechneAbzuegeFuerDieRentenversicherung,
+} from "@/elterngeldrechner/Sozialabgaben/Abzuege";
+import {
+  berechneUebergangszonenentgeld,
+  istArbeitsentgeldImUebergangsbereich,
+} from "@/elterngeldrechner/Sozialabgaben/EinkommenImUebergangsbereich";
+import { ermittelGeringfuegigkeitsgrenze } from "@/elterngeldrechner/Sozialabgaben/Geringfuegigkeitsgrenze";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 import {
   Einkommen,
@@ -9,16 +19,6 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "@/elterngeldrechner/model";
-import {
-  berechneAbzuegeFuerDieArbeitsfoerderung,
-  berechneAbzuegeFuerDieKrankenUndPflegeversicherung,
-  berechneAbzuegeFuerDieRentenversicherung,
-} from "@/elterngeldrechner/sozialabgaben/Abzuege";
-import {
-  berechneUebergangszonenentgeld,
-  istArbeitsentgeldImUebergangsbereich,
-} from "@/elterngeldrechner/sozialabgaben/EinkommenImUebergangsbereich";
-import { ermittelGeringfuegigkeitsgrenze } from "@/elterngeldrechner/sozialabgaben/Geringfuegigkeitsgrenze";
 
 export function abzuege(
   bruttoProMonat: number,

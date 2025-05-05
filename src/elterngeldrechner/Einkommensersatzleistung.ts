@@ -1,5 +1,5 @@
+import { bestimmeErsatzrate } from "./Ersatzrate";
 import { aufDenCentRunden } from "./common/math-util";
-import { bestimmeErsatzrate } from "./ersatzrate";
 
 /**
  * Berechnung der Elterngeldhöhe als Einkommensersatzleistung ohne Boni für den
@@ -95,7 +95,7 @@ function clampValue(minimum: number, value: number, maximum: number): number {
 if (import.meta.vitest) {
   const { describe, it, test, expect } = import.meta.vitest;
 
-  describe("einkommensersatzleistung", async () => {
+  describe("Einkommensersatzleistung", async () => {
     const {
       assert,
       property,

@@ -1,12 +1,12 @@
-import { berechneBasiselterngeld } from "./einkommensersatzleistung";
-import { bestimmeErsatzrate } from "./ersatzrate";
+import { berechneBasiselterngeld } from "./Einkommensersatzleistung";
+import { bestimmeErsatzrate } from "./Ersatzrate";
+import { bestimmeWerbekostenpauschale } from "./Werbekostenpauschale";
 import {
   Einkommen,
   ErwerbsArt,
   PersoenlicheDaten,
   ZwischenErgebnis,
 } from "./model";
-import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 
 export function elterngeldZwischenergebnis(

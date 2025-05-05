@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { elterngeldZwischenergebnis } from "./eg-zwischen-ergebnis-algorithmus";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "./test-utils/egr-alte-testfaelle-routine3-excel-sheet";
-import { EgrOhneMischeinkommenExcelSheet } from "./test-utils/egr-ohne-mischeinkommen-excel-sheet";
 
 describe("eg-zwischen-ergebnis-algorithmus", () => {
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
@@ -9,7 +8,7 @@ describe("eg-zwischen-ergebnis-algorithmus", () => {
   describe("should calculate ZwischenErgebnis for test cases from Testfaelle_alte_Routine3.xlsx", () => {
     for (
       let testCaseIndex = 0;
-      testCaseIndex < EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT;
+      testCaseIndex < EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT;
       testCaseIndex++
     ) {
       it(`TEST CASE NO. ${sheet.testFallNummer(testCaseIndex)}`, () => {

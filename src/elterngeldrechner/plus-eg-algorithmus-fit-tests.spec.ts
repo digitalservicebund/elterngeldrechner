@@ -9,14 +9,13 @@ import {
 } from "./model";
 import { elterngeldPlusErgebnis } from "./plus-eg-algorithmus";
 import { EgrAlteTestfaelleRoutine3ExcelSheet } from "./test-utils/egr-alte-testfaelle-routine3-excel-sheet";
-import { EgrOhneMischeinkommenExcelSheet } from "./test-utils/egr-ohne-mischeinkommen-excel-sheet";
 
 describe("plus-eg-algorithmus", () => {
   const sheet = new EgrAlteTestfaelleRoutine3ExcelSheet();
 
   describe("should calculate ElternGeldPlusErgebnis for test cases from Testfaelle_alte_Routine3.xlsx", () => {
     const testCaseIndexes = Array.from(
-      { length: EgrOhneMischeinkommenExcelSheet.TEST_CASE_COUNT },
+      { length: EgrAlteTestfaelleRoutine3ExcelSheet.TEST_CASE_COUNT },
       (_, index) => index,
     );
 

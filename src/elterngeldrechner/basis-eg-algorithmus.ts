@@ -299,7 +299,7 @@ if (import.meta.vitest) {
   describe("basis-eg-algorithmus", async () => {
     const { Einkommen, KinderFreiBetrag } = await import("./model");
 
-    describe("should calculate MischNettoUndBasiselterngeld for test cases from Testfaelle_010219.xlsx", () => {
+    describe("should calculate MischNettoUndBasiselterngeld", () => {
       it("TESTFALL NO. 1", () => {
         // given
         const persoenlicheDaten = {

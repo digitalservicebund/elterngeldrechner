@@ -14,13 +14,13 @@ import {
   RentenArt,
   SteuerKlasse,
 } from "./model";
+import {
+  berechneUebergangszonenentgeld,
+  istArbeitsentgeldImUebergangsbereich,
+} from "./sozialabgaben/EinkommenImUebergangsbereich";
+import { ermittelGeringfuegigkeitsgrenze } from "./sozialabgaben/Geringfuegigkeitsgrenze";
 import { bestimmeWerbekostenpauschale } from "./werbekostenpauschale";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
-import {
-  F_FAKTOR,
-  GRENZE_MIDI_MAX,
-  GRENZE_MINI_MIDI,
-} from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 const ANZAHL_MONATE_PRO_JAHR: number = 12;
 
@@ -32,21 +32,21 @@ export function berechneMischNettoUndBasiselterngeld(
   let steuern = 0;
   let abgaben = 0;
   finanzDaten.mischEinkommenTaetigkeiten.forEach((mischEkTaetigkeit) => {
-    const { bruttoEinkommenDurchschnitt } = mischEkTaetigkeit;
-    if (
-      bruttoEinkommenDurchschnitt > GRENZE_MINI_MIDI &&
-      bruttoEinkommenDurchschnitt <= GRENZE_MIDI_MAX &&
-      mischEkTaetigkeit.erwerbsTaetigkeit ===
-        ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG
-    ) {
-      const midiRange = GRENZE_MIDI_MAX - GRENZE_MINI_MIDI;
-      const overMini = bruttoEinkommenDurchschnitt - GRENZE_MINI_MIDI;
-      const faktoredMin = GRENZE_MINI_MIDI * F_FAKTOR;
-      const faktoredMidi =
-        ((GRENZE_MIDI_MAX - faktoredMin) / midiRange) * overMini;
+    const { bruttoEinkommenDurchschnitt, erwerbsTaetigkeit } =
+      mischEkTaetigkeit;
+    const istNichtSelbstaendig =
+      erwerbsTaetigkeit === ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG;
+    const istMidiJob = istArbeitsentgeldImUebergangsbereich(
+      bruttoEinkommenDurchschnitt,
+      FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS,
+    );
+
+    if (istMidiJob && istNichtSelbstaendig)
       mischEkTaetigkeit.bruttoEinkommenDurchschnittMidi =
-        faktoredMin + faktoredMidi;
-    }
+        berechneUebergangszonenentgeld(
+          bruttoEinkommenDurchschnitt,
+          FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS,
+        );
   });
 
   let betrachtungsmonate: number = 0;
@@ -213,8 +213,13 @@ export function berechneMischNettoUndBasiselterngeld(
   if (summe_EK_SS > summe_EK_NS + summe_EK_GNS) {
     status = ErwerbsArt.JA_SELBSTSTAENDIG;
   }
+
+  const geringfuegigkeitsgrenze = ermittelGeringfuegigkeitsgrenze(
+    FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS,
+  );
+
   if (
-    brutto_elg <= GRENZE_MINI_MIDI &&
+    brutto_elg <= geringfuegigkeitsgrenze &&
     status !== ErwerbsArt.JA_SELBSTSTAENDIG
   ) {
     status = ErwerbsArt.JA_NICHT_SELBST_MINI;
@@ -268,6 +273,25 @@ export function berechneMischNettoUndBasiselterngeld(
     status: status,
   };
 }
+
+/**
+ * In the past, the Elterngeldrechner was designed with static calculation
+ * parameters (e.g. Geringfügigkeitsgrenze). This does not reflect the reality,
+ * nor the regulations. During the period of remodeling work, there has to be
+ * a compromise. The revised low level modules are already aware of historic
+ * changes. However, the "old" higher level algorithm is not yet capable to
+ * integrate with that. Therefore, it temporarily falls back to a fixed point in
+ * time again. Just very explicitly this time. At the point in time this code is
+ * written we mark the year 2025. The Bemessungszeitraum lies within 2024 for
+ * the majority of our current users. Therefore the 1st of January 2024 should
+ * be the reference date. Additionally, till today no relevant parameter has
+ * changed since then. So this Zeitpunkt is also fully valid for
+ * Bemessungszeiträume which span into 2025 as well. In result, the absolute
+ * vast majority of our users are covered correctly by this temporal solution.
+ */
+const FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS = new Date(
+  "2024-01-01T00:00:00.000Z",
+);
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

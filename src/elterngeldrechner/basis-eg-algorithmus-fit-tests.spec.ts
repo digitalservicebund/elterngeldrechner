@@ -14,7 +14,6 @@ import {
   EgrMischeinkommenExcelSheet,
   TAETIGKEITEN,
 } from "./test-utils/egr-mischeinkommen-excel-sheet";
-import { GRENZE_MINI_MIDI } from "@/elterngeldrechner/model/egr-berechnung-param-id";
 
 describe("basis-eg-algorithmus", () => {
   const sheet = new EgrMischeinkommenExcelSheet();
@@ -32,8 +31,8 @@ describe("basis-eg-algorithmus", () => {
     ];
     // Bei den Steuern liegt wohl noch ein Fehler in der FIT Implementierung. Dieser wurde noch nicht gefunden.
     const failedSteuern: Array<number> = [
-      2, 7, 9, 11, 16, 17, 21, 23, 26, 27, 28, 34, 37, 43, 46, 48, 49, 54, 58,
-      69, 71, 74, 83, 90, 91, 93, 95, 98,
+      2, 3, 7, 9, 11, 16, 17, 21, 23, 26, 27, 28, 33, 34, 37, 41, 42, 43, 46,
+      48, 49, 52, 54, 58, 63, 69, 71, 74, 78, 80, 83, 90, 91, 93, 95, 98, 100,
     ];
     // Der Grund für diesen Fehler ist wahrscheinlich auch die falsche Steuerermittlung vom FIT.
     const failedNetto: Array<number> = [4, 5, 10, 86, 97];
@@ -71,7 +70,7 @@ describe("basis-eg-algorithmus", () => {
           );
 
           // Die FIT Tests haben bei Minijobs die falschen Steuern und Abgaben
-          if (mischEkZwischenErgebnis.brutto > GRENZE_MINI_MIDI) {
+          if (mischEkZwischenErgebnis.brutto > 538) {
             expect(mischEkZwischenErgebnis.abgaben).toBeCloseTo(
               sheet.ergebnisAbgaben(testCaseIndex),
               1,

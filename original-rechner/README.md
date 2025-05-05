@@ -57,6 +57,7 @@ part of the code with a copy from the applications code.
 - separation of data of birth and tax year in combination with an obsolete kassenindividuellen Zusatzbeitrag
 - incorrect handling of leap years for the deadline of the Geschwisterbonus
 - incorrect handling of non UTC dates for timespan of Lebensmonate
+- outdated parameters for Midi-Jobs in a constellation that was never valid
 
 ## Continuous Integration
 

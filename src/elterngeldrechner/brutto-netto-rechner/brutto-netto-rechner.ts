@@ -10,15 +10,15 @@ import {
   SteuerKlasse,
 } from "@/elterngeldrechner/model";
 import {
-  F_FAKTOR,
-  GRENZE_MIDI_MAX,
-  GRENZE_MINI_MIDI,
-} from "@/elterngeldrechner/model/egr-berechnung-param-id";
-import {
   berechneAbzuegeFuerDieArbeitsfoerderung,
   berechneAbzuegeFuerDieKrankenUndPflegeversicherung,
   berechneAbzuegeFuerDieRentenversicherung,
 } from "@/elterngeldrechner/sozialabgaben/Abzuege";
+import {
+  berechneUebergangszonenentgeld,
+  istArbeitsentgeldImUebergangsbereich,
+} from "@/elterngeldrechner/sozialabgaben/EinkommenImUebergangsbereich";
+import { ermittelGeringfuegigkeitsgrenze } from "@/elterngeldrechner/sozialabgaben/Geringfuegigkeitsgrenze";
 
 export function abzuege(
   bruttoProMonat: number,
@@ -127,7 +127,12 @@ export function summeSteuer(
   let kirchenlohnsteuer = calculateChurchTaxes(kirchensteuersatz, charge.bk);
   kirchenlohnsteuer = aufDenCentRunden(kirchenlohnsteuer);
   let summeSteuer = charge.lstlzz + charge.solzlzz;
-  if (bruttoProMonat <= GRENZE_MINI_MIDI) {
+
+  const geringfuegigkeitsgrenze = ermittelGeringfuegigkeitsgrenze(
+    FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS,
+  );
+
+  if (bruttoProMonat <= geringfuegigkeitsgrenze) {
     kirchenlohnsteuer = 0;
     summeSteuer = 0;
   }
@@ -169,41 +174,26 @@ function summer_svb(
   istKrankenversicherungspflichtig: boolean,
   istRentenversicherungspflichtig: boolean,
   istArbeitsfoerderungspflichtig: boolean,
-  arbeitsentgelt: number,
+  arbeitsentgeld: number,
 ): number {
-  const isNoMidi =
-    arbeitsentgelt > GRENZE_MIDI_MAX || arbeitsentgelt <= GRENZE_MINI_MIDI;
+  const istMidiJob = istArbeitsentgeldImUebergangsbereich(
+    arbeitsentgeld,
+    FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS,
+  );
 
-  if (isNoMidi) {
-    return summe_svb_misch(
-      istKrankenversicherungspflichtig,
-      istRentenversicherungspflichtig,
-      istArbeitsfoerderungspflichtig,
-      arbeitsentgelt,
-    );
-  } else {
-    const tmp = GRENZE_MINI_MIDI * F_FAKTOR;
-    const bd850_450 = GRENZE_MIDI_MAX - GRENZE_MINI_MIDI;
-    const bd850 = GRENZE_MIDI_MAX;
-    const bd450 = GRENZE_MINI_MIDI;
-    const x = bd850 / bd850_450;
+  const bemessungsgrundlage = istMidiJob
+    ? berechneUebergangszonenentgeld(
+        arbeitsentgeld,
+        FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS,
+      )
+    : arbeitsentgeld;
 
-    let y: number;
-    y = bd450 * F_FAKTOR;
-    y = y / bd850_450;
-
-    const tmp2 = x - y;
-    const tmp3 = arbeitsentgelt - GRENZE_MINI_MIDI;
-    let bemessungsentgelt = tmp2 * tmp3;
-    bemessungsentgelt = bemessungsentgelt + tmp;
-
-    return summe_svb_misch(
-      istKrankenversicherungspflichtig,
-      istRentenversicherungspflichtig,
-      istArbeitsfoerderungspflichtig,
-      bemessungsentgelt,
-    );
-  }
+  return summe_svb_misch(
+    istKrankenversicherungspflichtig,
+    istRentenversicherungspflichtig,
+    istArbeitsfoerderungspflichtig,
+    bemessungsgrundlage,
+  );
 }
 
 export function summe_svb_misch(
@@ -230,6 +220,25 @@ export function summe_svb_misch(
 function calculateChurchTaxes(kirchensteuersatz: number, bk: number): number {
   return (bk / 100) * kirchensteuersatz;
 }
+
+/**
+ * In the past, the Elterngeldrechner was designed with static calculation
+ * parameters (e.g. Geringfügigkeitsgrenze). This does not reflect the reality,
+ * nor the regulations. During the period of remodeling work, there has to be
+ * a compromise. The revised low level modules are already aware of historic
+ * changes. However, the "old" higher level algorithm is not yet capable to
+ * integrate with that. Therefore, it temporarily falls back to a fixed point in
+ * time again. Just very explicitly this time. At the point in time this code is
+ * written we mark the year 2025. The Bemessungszeitraum lies within 2024 for
+ * the majority of our current users. Therefore the 1st of January 2024 should
+ * be the reference date. Additionally, till today no relevant parameter has
+ * changed since then. So this Zeitpunkt is also fully valid for
+ * Bemessungszeiträume which span into 2025 as well. In result, the absolute
+ * vast majority of our users are covered correctly by this temporal solution.
+ */
+const FIXED_ZEITPUNKT_FOR_HISTORIC_PARAMETERS = new Date(
+  "2024-01-01T00:00:00.000Z",
+);
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

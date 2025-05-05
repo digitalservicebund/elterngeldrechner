@@ -20,6 +20,8 @@ It is obligatory to acquire domain knowledge before interacting with the domain.
 Though, the tests often use behavior-driven-design language to describe the
 tested behavior.
 
+### Some History
+
 The code within this package has a long history. It origins in an implementation
 as macros within an Excel spreadsheet using Visual Basic for Applications as
 programming language. During the course of the development, the macros have been
@@ -33,4 +35,15 @@ package defines some data models it operates on. The rest are a bunch of
 functions implementing various parts of the algorithm, creating a complex
 call-tree. While being quite functional, the data is not fully immutable yet.
 
-With continuous work on, more helpful documentation should be provided.
+### Current State
+
+Based on the architecture decision record (ADR) No.3 this packages continuous to see
+some significant changes. While the ADR focuses primarily on the testing
+strategy, it puts some important emphasis on the quality of the actual
+implementation. Therefore, code unit follow strongly their related regulatory
+norms. The terminology is unaltered and often the implementation can be directly
+compared to the original document. Importantly there are plenty of references to
+the implemented norm (sections). Furthermore, the general calculation algorithm
+strongly follows the flow of the public guidelines.
+
+Further documentation updates expected.

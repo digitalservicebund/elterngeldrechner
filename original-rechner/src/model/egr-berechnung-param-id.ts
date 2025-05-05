@@ -8,7 +8,7 @@ import Big, { RoundingMode } from "big.js";
 /**
  * F Faktor Gleitzone f_faktor
  */
-export const F_FAKTOR = Big(0.7509); // ab 2021 (vorher 0.7547)
+export const F_FAKTOR = Big(0.6667);
 
 /*******************************************************
  * Pauschalbeträge des §2f BEEG
@@ -73,11 +73,11 @@ export const HOECHST_ET = Big(2770);
 /**
  * Grenze_Minijob_Midijob
  */
-export const GRENZE_MINI_MIDI = Big(520); // ab 01.10.2022 (vorher 450)
+export const GRENZE_MINI_MIDI = Big(538);
 /**
  * Grenze_Midijob_Max
  */
-export const GRENZE_MIDI_MAX = Big(1300); // vorher 850 // 2000 since 01.01.2023 ?
+export const GRENZE_MIDI_MAX = Big(2000);
 
 /**
  * Wir benötigen den pauschbetrag pro Monat, deshalb wird in dieser Methode diese errechnet....

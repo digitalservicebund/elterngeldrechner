@@ -9,11 +9,28 @@
 <meta name="description" content="Berechnen Sie mit dem Elterngeldrechner unverbindlich, wie viel Elterngeld Sie bekommen können. "/>
 <link rel="shortcut icon" type="image/x-icon" href="familienportal-homepage-favicon.ico"/>
 <link rel="stylesheet" href="fpo-169894-39.css" ><link rel="stylesheet" href="index-249996-14.css" >
-<script src="commons-169780-10.js" defer="false" ></script><script src="fpo-169782-42.js" defer="false" ></script><script src="anton-remote-form-126918-9.js" ></script><script src="index-250002-19.js" ></script>
+<script src="commons-169780-10.js" defer="false" ></script><script src="fpo-169782-43.js" defer="false" ></script><script src="anton-remote-form-126918-9.js" ></script><script src="index-250002-19.js" ></script>
 <script type="text/javascript">
 window.doTrack = true;
 </script>
 <script type="text/javascript">
+const matomoTags = [
+'3WFAC9KC'
+];
+// initMatomoTags
+window.initMatomoTags = () => {
+const _mtm = window._mtm = window._mtm || [];
+_mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
+const d = document;
+matomoTags.forEach(tag => {
+const g = d.createElement('script');
+const s = d.getElementsByTagName('script')[0];
+g.async = true;
+g.src = 'https://analytics.init.de/js/container_' + tag + '.js';
+s.parentNode.insertBefore(g, s);
+});
+};
+// initMatomo
 window.initMatomo = () => {
 console.info(">> Init Matomo");
 // check of cookie banner schon beantwortet
@@ -21,33 +38,31 @@ var _paq = window._paq = window._paq || [];
 _paq.push(['disableCookies']);
 _paq.push(['enableLinkTracking']);
 _paq.push(['trackPageView']);
-(function() {
-var u= "https://analytics.init.de/";
-_paq.push(['setTrackerUrl', u+'matomo.php']);
+(function () {
+var u = "https://analytics.init.de/";
+_paq.push(['setTrackerUrl', u + 'matomo.php']);
 _paq.push(['setSiteId', '86']);
-var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+g.type = 'text/javascript';
+g.async = true;
+g.src = u + 'matomo.js';
+s.parentNode.insertBefore(g, s);
 })();
+if (matomoTags.length > 0) {
+window.initMatomoTags();
+}
 }
 const allowCookie = document.cookie.split(";").find((cookie) => cookie.includes("cookie-allow-tracking"));
 if (allowCookie && allowCookie.split("=")[1] === "1") {
 /* tracking disabled */
 }
 </script>
-<script>
-var _mtm = window._mtm = window._mtm || [];
-_mtm.push({'mtm.startTime': (new Date().getTime()), 'event': 'mtm.Start'});
-(function() {
-var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-g.async=true; g.src='https://analytics.init.de/js/container_3WFAC9KC.js'; s.parentNode.insertBefore(g,s);
-})();
-</script>
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Elterngeldrechner mit Planer">
 <meta name="twitter:description" content="Das Portal für Familien des Bundesfamilienministeriums">
 <meta name="twitter:image" content="https://familienportal.de/resource/blob/126368/0d9fd007bd9aacde803cff19245909fb/fpo-logo-2-data.jpg"> <meta name="twitter:image:alt" content="Neuer Inhalt">
 <script src="include.js"></script><link rel="stylesheet" href="include.css">
-  <script type="module" crossorigin src="./assets/index-CCkhChkq.js"></script>
+  <script type="module" crossorigin src="./assets/index-Bk8k9s00.js"></script>
   <link rel="stylesheet" crossorigin href="./assets/index-DtJwUKRe.css">
 </head>	<body data-svg-sprite="sprite-svg-data.svg"    >
 <div class="cookie-banner" aria-hidden="true">

@@ -26,6 +26,9 @@ export function aufDenCentRunden(value: number): number {
  * Anyhow, for backwards compatibility and for established regression tests this
  * was added here in a local manner to stay compliant. In case we should not
  * need this anymore, it is as simple as deleting this function.
+ *
+ * FIXME: This currently suffers from very big or small floating point numbers
+ * that are represented as strings using exponents.
  */
 export function shiftNumberByDecimalsPrecisely(
   value: number,

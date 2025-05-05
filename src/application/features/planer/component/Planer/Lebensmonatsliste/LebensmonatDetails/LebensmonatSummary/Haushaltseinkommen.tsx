@@ -1,4 +1,5 @@
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
+import ErrorIcon from "@digitalservicebund/icons/Error";
 import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
 import {
@@ -10,6 +11,7 @@ import type { Einkommen, Elterngeldbezug } from "@/monatsplaner";
 type Props = {
   readonly elterngeldbezug?: Elterngeldbezug;
   readonly bruttoeinkommen?: Einkommen;
+  readonly bruttoeinkommenIsMissing: boolean;
   readonly imMutterschutz?: boolean;
   readonly className?: string;
   readonly style?: CSSProperties;
@@ -18,6 +20,7 @@ type Props = {
 export function Haushaltseinkommen({
   elterngeldbezug,
   bruttoeinkommen,
+  bruttoeinkommenIsMissing,
   imMutterschutz,
   className,
   style,
@@ -49,6 +52,12 @@ export function Haushaltseinkommen({
             <BusinessCenterIcon />
             &nbsp;
             <Geldbetrag betrag={bruttoeinkommen} />
+          </span>
+        )}
+
+        {!!bruttoeinkommenIsMissing && (
+          <span>
+            <ErrorIcon className="text-warning" />
           </span>
         )}
       </div>

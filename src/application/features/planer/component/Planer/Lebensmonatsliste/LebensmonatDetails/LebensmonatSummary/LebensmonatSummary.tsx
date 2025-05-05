@@ -15,6 +15,7 @@ import {
 } from "@/application/features/planer/layout";
 import {
   Elternteil,
+  Variante,
   listeElternteileFuerAusgangslageAuf,
 } from "@/monatsplaner";
 
@@ -73,6 +74,9 @@ export function LebensmonatSummary(): ReactNode {
           imMutterschutz,
         } = lebensmonat[elternteil];
 
+        const bruttoEinkommenIsMissing =
+          gewaehlteOption === Variante.Bonus && !bruttoeinkommen;
+
         return (
           <Fragment key={elternteil}>
             <Haushaltseinkommen
@@ -80,6 +84,7 @@ export function LebensmonatSummary(): ReactNode {
               style={elterngeldbezugColumns[elternteil]}
               elterngeldbezug={elterngeldbezug}
               bruttoeinkommen={bruttoeinkommen}
+              bruttoeinkommenIsMissing={bruttoEinkommenIsMissing}
               imMutterschutz={imMutterschutz}
               ariaHidden
             />

@@ -265,5 +265,6 @@ const ANY_PROPS = {
   elternteil: Elternteil.Eins,
   auswahlmoeglichkeiten: ANY_AUSWAHLMOEGLICHKEITEN,
   imMutterschutz: false,
+  bruttoeinkommenIsMissing: false,
   waehleOption: () => {},
 };

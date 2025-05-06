@@ -93,6 +93,7 @@ export function LebensmonatSummary(): ReactNode {
               className="row-start-1"
               style={gewaehlteOptionColumns[elternteil]}
               imMutterschutz={imMutterschutz}
+              bruttoeinkommenIsMissing={bruttoEinkommenIsMissing}
               option={gewaehlteOption}
               ariaHidden
             />

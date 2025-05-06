@@ -37,6 +37,7 @@ describe("Auswahloption Label", () => {
 const ANY_PROPS = {
   option: Variante.Basis,
   istBasisImMutterschutz: false,
+  istBonusWithMissingBruttoeinkommen: false,
   elterngeldbezug: 0,
   htmlFor: "",
 };

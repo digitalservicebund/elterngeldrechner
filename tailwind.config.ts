@@ -38,6 +38,8 @@ export default {
       Basis: "#004B76",
       Plus: "#80CDEC",
       Bonus: "#66B692",
+      "Bonus-dark": "#40775e",
+      "Bonus-light": "#e1eee8",
     },
     fontSize: {
       14: ["0.875rem", { lineHeight: "1.429" }],

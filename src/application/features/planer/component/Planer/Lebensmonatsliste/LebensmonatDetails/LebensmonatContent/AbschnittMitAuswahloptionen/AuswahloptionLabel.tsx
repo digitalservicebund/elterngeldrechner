@@ -12,6 +12,7 @@ import {
 type Props = {
   readonly option: Auswahloption;
   readonly istBasisImMutterschutz: boolean; // TODO: How to enforce relation with `option` caller friendly?
+  readonly istBonusWithMissingBruttoeinkommen: boolean;
   readonly elterngeldbezug: Elterngeldbezug;
   readonly istAusgewaehlt?: boolean;
   readonly istAuswaehlbar?: boolean;
@@ -21,6 +22,7 @@ type Props = {
 export function AuswahloptionLabel({
   option,
   istBasisImMutterschutz,
+  istBonusWithMissingBruttoeinkommen,
   elterngeldbezug,
   istAusgewaehlt,
   istAuswaehlbar,
@@ -29,6 +31,7 @@ export function AuswahloptionLabel({
   const { label, className, checkedClassName, icon } = getRenderProperties(
     option,
     istBasisImMutterschutz,
+    istBonusWithMissingBruttoeinkommen,
   );
 
   return (
@@ -63,6 +66,7 @@ export function AuswahloptionLabel({
 function getRenderProperties(
   option: Auswahloption,
   istBasisImMutterschutz: boolean,
+  istBonusWithMissingBruttoeinkommen: boolean,
 ): RenderProperties {
   switch (option) {
     case Variante.Basis:
@@ -85,7 +89,9 @@ function getRenderProperties(
     case Variante.Bonus:
       return {
         label: "Bonus",
-        className: "bg-Bonus text-black",
+        className: istBonusWithMissingBruttoeinkommen
+          ? "bg-Bonus-light text-black border-2 border-dashed border-Bonus-dark"
+          : "bg-Bonus text-black",
         checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
       };
 

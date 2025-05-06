@@ -6,6 +6,7 @@ import { type Auswahloption, KeinElterngeld, Variante } from "@/monatsplaner";
 
 type Props = {
   readonly imMutterschutz?: boolean;
+  readonly bruttoeinkommenIsMissing: boolean;
   readonly option?: Auswahloption;
   readonly className?: string;
   readonly style?: CSSProperties;
@@ -14,13 +15,14 @@ type Props = {
 
 export function GewaehlteOption({
   imMutterschutz,
+  bruttoeinkommenIsMissing,
   option,
   className,
   style,
   ariaHidden,
 }: Props): ReactNode {
   const label = getLabel(imMutterschutz, option);
-  const conditionalClassName = getClassName(option);
+  const conditionalClassName = getClassName(option, bruttoeinkommenIsMissing);
   const icon = getIcon(option !== undefined, imMutterschutz);
 
   /*
@@ -76,7 +78,10 @@ function getLabel(imMutterschutz?: boolean, option?: Auswahloption): string {
   }
 }
 
-function getClassName(option?: Auswahloption): string {
+function getClassName(
+  option: Auswahloption | undefined,
+  bruttoeinkommenIsMissing: boolean,
+): string {
   switch (option) {
     case Variante.Basis:
       return "bg-Basis text-white";
@@ -85,7 +90,9 @@ function getClassName(option?: Auswahloption): string {
       return "bg-Plus text-black";
 
     case Variante.Bonus:
-      return "bg-Bonus text-black";
+      return bruttoeinkommenIsMissing
+        ? "bg-Bonus-light text-black border-2 border-dashed border-Bonus-dark"
+        : "bg-Bonus text-black";
 
     case KeinElterngeld:
       return "bg-white text-black border-grey border-2 border-solid";

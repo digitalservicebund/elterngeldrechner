@@ -21,6 +21,7 @@ type Props = {
   readonly elternteil: Elternteil;
   readonly auswahlmoeglichkeiten: Auswahlmoeglichkeiten;
   readonly imMutterschutz: boolean;
+  readonly bruttoeinkommenIsMissing: boolean;
   readonly gewaehlteOption?: Auswahloption;
   readonly waehleOption: (option: Auswahloption | undefined) => void;
 };
@@ -29,6 +30,7 @@ export function AuswahlEingabe({
   legend,
   elternteil,
   imMutterschutz,
+  bruttoeinkommenIsMissing,
   gewaehlteOption,
   auswahlmoeglichkeiten,
   waehleOption,
@@ -112,6 +114,10 @@ export function AuswahlEingabe({
 
             const istBasisImMutterschutz =
               option === Variante.Basis && imMutterschutz;
+            const istBonusWithMissingBruttoeinkommen =
+              option === Variante.Bonus &&
+              istAusgewaehlt &&
+              bruttoeinkommenIsMissing;
 
             return (
               <div
@@ -125,6 +131,9 @@ export function AuswahlEingabe({
                 <AuswahloptionLabel
                   option={option}
                   istBasisImMutterschutz={istBasisImMutterschutz}
+                  istBonusWithMissingBruttoeinkommen={
+                    istBonusWithMissingBruttoeinkommen
+                  }
                   elterngeldbezug={elterngeldbezug}
                   istAusgewaehlt={istAusgewaehlt}
                   istAuswaehlbar={istAuswaehlbar}

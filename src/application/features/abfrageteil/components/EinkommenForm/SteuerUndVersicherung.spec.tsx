@@ -9,7 +9,7 @@ import {
   screen,
   within,
 } from "@/application/test-utils";
-import { KinderFreiBetrag, RentenArt, SteuerKlasse } from "@/elterngeldrechner";
+import { KinderFreiBetrag, RentenArt, Steuerklasse } from "@/elterngeldrechner";
 
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
@@ -91,7 +91,7 @@ describe("Steuer und Versicherung", () => {
     const validFormStateNurErwerbstaetig = produce(
       stateFromPreviousSteps,
       (draft) => {
-        draft.stepEinkommen.ET1.steuerKlasse = SteuerKlasse.SKL1;
+        draft.stepEinkommen.ET1.steuerklasse = Steuerklasse.I;
         draft.stepEinkommen.ET1.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
         draft.stepEinkommen.ET1.rentenVersicherung =
           RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
@@ -102,7 +102,7 @@ describe("Steuer und Versicherung", () => {
       const formStateWithoutSteuerklasse = produce(
         validFormStateNurErwerbstaetig,
         (draft) => {
-          draft.stepEinkommen.ET1.steuerKlasse = null;
+          draft.stepEinkommen.ET1.steuerklasse = null;
         },
       );
 

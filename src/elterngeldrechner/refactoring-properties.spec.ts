@@ -29,7 +29,7 @@ import {
   PersoenlicheDaten,
   PlanungsDaten,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "./model";
 import {
   Big,
@@ -44,6 +44,7 @@ import {
   MischEkTaetigkeit as OriginalMischEkTaetigkeit,
   PersoenlicheDaten as OriginalPersoenlicheDaten,
   PlanungsDaten as OriginalPlanungsDaten,
+  SteuerKlasse as OriginalSteuerklasse,
   YesNo,
 } from "original-rechner";
 
@@ -253,7 +254,7 @@ function finanzDatenFrom(data: FinanzdatenRaw): FinanzDaten {
     bruttoEinkommen: new Einkommen(data.bruttoeinkommen),
     istKirchensteuerpflichtig: data.zahlenSieKirchensteuer,
     kinderFreiBetrag: data.kinderfreibetrag,
-    steuerKlasse: data.steuerklasse,
+    steuerklasse: data.steuerklasse,
     kassenArt: data.kassenart,
     rentenVersicherung: data.rentenversicherung,
     splittingFaktor: data.splittingfaktor,
@@ -271,7 +272,8 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   finanzdaten.bruttoEinkommen = new OriginalEinkommen(data.bruttoeinkommen);
   finanzdaten.zahlenSieKirchenSteuer = yesNoFrom(data.zahlenSieKirchensteuer);
   finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
-  finanzdaten.steuerKlasse = data.steuerklasse;
+  finanzdaten.steuerKlasse =
+    STEUERKLASSE_TO_ORIGINAL_STEUERKLASSE[data.steuerklasse];
   finanzdaten.kassenArt = data.kassenart;
   finanzdaten.rentenVersicherung = data.rentenversicherung;
   finanzdaten.splittingFaktor = data.splittingfaktor;
@@ -284,6 +286,19 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
     );
   return finanzdaten;
 }
+
+const STEUERKLASSE_TO_ORIGINAL_STEUERKLASSE: Record<
+  Steuerklasse,
+  OriginalSteuerklasse
+> = {
+  [Steuerklasse.I]: OriginalSteuerklasse.SKL1,
+  [Steuerklasse.II]: OriginalSteuerklasse.SKL2,
+  [Steuerklasse.III]: OriginalSteuerklasse.SKL3,
+  [Steuerklasse.IV]: OriginalSteuerklasse.SKL4,
+  [Steuerklasse.IVMitFaktor]: OriginalSteuerklasse.SKL4_FAKTOR,
+  [Steuerklasse.V]: OriginalSteuerklasse.SKL5,
+  [Steuerklasse.VI]: OriginalSteuerklasse.SKL6,
+};
 
 function originalKindFrom(data: Kind, index: number): OriginalKind {
   return {
@@ -438,7 +453,7 @@ type FinanzdatenRaw = {
   bruttoeinkommen: number;
   zahlenSieKirchensteuer: boolean;
   kinderfreibetrag: KinderFreiBetrag;
-  steuerklasse: SteuerKlasse;
+  steuerklasse: Steuerklasse;
   kassenart: KassenArt;
   rentenversicherung: RentenArt;
   splittingfaktor: number;
@@ -536,8 +551,8 @@ function arbitraryKinderfreibetrag(): Arbitrary<KinderFreiBetrag> {
   return arbitraryConstantFrom(...Object.values(KinderFreiBetrag));
 }
 
-function arbitrarySteuerklasse(): Arbitrary<SteuerKlasse> {
-  return arbitraryConstantFrom(...Object.values(SteuerKlasse));
+function arbitrarySteuerklasse(): Arbitrary<Steuerklasse> {
+  return arbitraryConstantFrom(...Object.values(Steuerklasse));
 }
 
 function arbitraryKassenart(): Arbitrary<KassenArt> {

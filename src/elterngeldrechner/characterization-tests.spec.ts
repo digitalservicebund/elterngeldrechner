@@ -27,7 +27,7 @@ import {
   type PersoenlicheDaten,
   type PlanungsDaten,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "./model";
 
 describe("characterization tests", () => {
@@ -101,7 +101,7 @@ function arbitraryFinanzdaten(): Arbitrary<FinanzDaten> {
     bruttoEinkommen: arbitraryBruttoeinkommen(),
     istKirchensteuerpflichtig: arbitraryBoolean(),
     kinderFreiBetrag: arbitraryKinderfreibetrag(),
-    steuerKlasse: arbitrarySteuerklasse(),
+    steuerklasse: arbitrarySteuerklasse(),
     kassenArt: arbitraryKassenart(),
     rentenVersicherung: arbitraryRentenart(),
     splittingFaktor: arbitrarySplittingfaktor(),
@@ -178,8 +178,8 @@ function arbitraryKinderfreibetrag(): Arbitrary<KinderFreiBetrag> {
   return arbitraryConstantFrom(...Object.values(KinderFreiBetrag));
 }
 
-function arbitrarySteuerklasse(): Arbitrary<SteuerKlasse> {
-  return arbitraryConstantFrom(...Object.values(SteuerKlasse));
+function arbitrarySteuerklasse(): Arbitrary<Steuerklasse> {
+  return arbitraryConstantFrom(...Object.values(Steuerklasse));
 }
 
 function arbitraryKassenart(): Arbitrary<KassenArt> {

@@ -3,7 +3,7 @@ import {
   type MonatlichesBrutto,
   YesNo,
 } from "@/application/features/abfrageteil/state";
-import { KassenArt, KinderFreiBetrag, SteuerKlasse } from "@/elterngeldrechner";
+import { KassenArt, KinderFreiBetrag, Steuerklasse } from "@/elterngeldrechner";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {
@@ -70,7 +70,7 @@ export const preloadedState = {
           null,
         ],
       },
-      steuerKlasse: SteuerKlasse.SKL3,
+      steuerklasse: Steuerklasse.III,
       splittingFaktor: null,
       kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {
@@ -136,7 +136,7 @@ export const preloadedState = {
           800, 900, 1000, 800, 2000, 1200, 1500, 1300, 1000, 1800, 1600, 2500,
         ],
       },
-      steuerKlasse: SteuerKlasse.SKL1,
+      steuerklasse: Steuerklasse.I,
       splittingFaktor: null,
       kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {

@@ -16,6 +16,6 @@ export {
   type PersoenlicheDaten,
   type PlanungsDaten,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "./model";
 export { calculateElternGeld } from "./egr-calculation";

@@ -186,7 +186,7 @@ if (import.meta.vitest) {
 
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/application/test-utils");
-    const { ErwerbsArt, KassenArt, SteuerKlasse, RentenArt, KinderFreiBetrag } =
+    const { ErwerbsArt, KassenArt, Steuerklasse, RentenArt, KinderFreiBetrag } =
       await import("@/elterngeldrechner");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
@@ -339,7 +339,7 @@ if (import.meta.vitest) {
 
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
-      steuerKlasse: SteuerKlasse.SKL1,
+      steuerklasse: Steuerklasse.I,
       kinderFreiBetrag: KinderFreiBetrag.ZKF0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

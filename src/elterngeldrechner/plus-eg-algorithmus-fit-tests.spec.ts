@@ -101,7 +101,7 @@ const createFinanzDaten = (
   return {
     bruttoEinkommen: new Einkommen(0),
     istKirchensteuerpflichtig: sheet.kirchenSteuer(testCaseIndex),
-    steuerKlasse: sheet.steuerKlasse(testCaseIndex),
+    steuerklasse: sheet.steuerklasse(testCaseIndex),
     splittingFaktor: sheet.splittingFaktor(testCaseIndex),
     kinderFreiBetrag: sheet.kinderFreiBetrag(testCaseIndex),
     kassenArt: sheet.krankenVersicherung(testCaseIndex),

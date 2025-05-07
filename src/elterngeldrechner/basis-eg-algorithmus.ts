@@ -18,7 +18,7 @@ import {
   MischEkZwischenErgebnis,
   PersoenlicheDaten,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "./model";
 import { aufDenCentRunden } from "@/elterngeldrechner/common/math-util";
 
@@ -235,14 +235,14 @@ export function berechneMischNettoUndBasiselterngeld(
     netto = brutto_elg;
   } else {
     if (status === ErwerbsArt.JA_SELBSTSTAENDIG) {
-      finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
+      finanzDaten.steuerklasse = Steuerklasse.IV;
       finanzDaten.splittingFaktor = 1.0;
     }
-    if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4) {
+    if (finanzDaten.steuerklasse === Steuerklasse.IV) {
       finanzDaten.splittingFaktor = 1.0;
     }
-    if (finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR) {
-      finanzDaten.steuerKlasse = SteuerKlasse.SKL4;
+    if (finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor) {
+      finanzDaten.steuerklasse = Steuerklasse.IV;
     }
     const summe_sozab = summe_svb_misch(
       krankenversicherungspflichtig > 0,
@@ -314,7 +314,7 @@ if (import.meta.vitest) {
           istKirchensteuerpflichtig: false,
           bruttoEinkommen: new Einkommen(0),
           kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-          steuerKlasse: SteuerKlasse.SKL5,
+          steuerklasse: Steuerklasse.V,
           kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
           splittingFaktor: 1.0,

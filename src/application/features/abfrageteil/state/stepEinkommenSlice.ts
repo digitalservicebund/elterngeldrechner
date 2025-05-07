@@ -9,7 +9,7 @@ import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner";
 
 export interface Zeitraum {
@@ -62,7 +62,7 @@ const initialAverageOrMonthlyStateSelbstaendig: AverageOrMonthlyState = {
 
 export interface StepEinkommenElternteil {
   bruttoEinkommenNichtSelbstaendig: AverageOrMonthlyState;
-  steuerKlasse: SteuerKlasse | null;
+  steuerklasse: Steuerklasse | null;
   splittingFaktor: number | null;
   kinderFreiBetrag: KinderFreiBetrag | null;
   gewinnSelbstaendig: AverageOrMonthlyState;
@@ -97,7 +97,7 @@ export const initialTaetigkeit: Taetigkeit = {
 const initialStepEinkommenElternteil: StepEinkommenElternteil = {
   bruttoEinkommenNichtSelbstaendig:
     initialAverageOrMonthlyStateNichtSelbstaendig,
-  steuerKlasse: null,
+  steuerklasse: null,
   splittingFaktor: null,
   kinderFreiBetrag: KinderFreiBetrag.ZKF1,
   gewinnSelbstaendig: initialAverageOrMonthlyStateSelbstaendig,

@@ -13,7 +13,7 @@ import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner";
 
 describe("Einkommen Page", () => {
@@ -159,7 +159,7 @@ describe("Einkommen Page", () => {
               length: 12,
             }).fill(1000),
           },
-          steuerKlasse: SteuerKlasse.SKL4,
+          steuerklasse: Steuerklasse.IV,
           splittingFaktor: null,
           kinderFreiBetrag: KinderFreiBetrag.ZKF4,
           zahlenSieKirchenSteuer: YesNo.YES,
@@ -361,7 +361,7 @@ describe("Einkommen Page", () => {
           zahlenSieKirchenSteuer: YesNo.YES,
           kassenArt: null,
           kinderFreiBetrag: KinderFreiBetrag.ZKF4,
-          steuerKlasse: SteuerKlasse.SKL4,
+          steuerklasse: Steuerklasse.IV,
           taetigkeitenNichtSelbstaendigUndSelbstaendig: [
             {
               artTaetigkeit: "NichtSelbststaendig",

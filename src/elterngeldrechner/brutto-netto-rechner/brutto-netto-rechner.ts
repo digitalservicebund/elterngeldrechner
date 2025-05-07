@@ -17,7 +17,7 @@ import {
   type Geburtstag,
   KassenArt,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner/model";
 
 export function abzuege(
@@ -44,15 +44,15 @@ export function abzuege(
     rentenversicherungspflichtig = true;
   }
 
-  let steuerKlasse = finanzDaten.steuerKlasse;
+  let steuerklasse = finanzDaten.steuerklasse;
   let splittingFaktor = finanzDaten.splittingFaktor;
   if (erwerbsArt === ErwerbsArt.JA_SELBSTSTAENDIG) {
-    steuerKlasse = SteuerKlasse.SKL4;
+    steuerklasse = Steuerklasse.IV;
     splittingFaktor = 1.0;
   }
 
   // TODO Prüfen on diese Zuweisungen nötig und sinnvoll sind, wenn die Methode vom EGR aufgerufen wird.
-  finanzDaten.steuerKlasse = steuerKlasse;
+  finanzDaten.steuerklasse = steuerklasse;
   finanzDaten.splittingFaktor = splittingFaktor;
 
   return berechneSteuernAbgaben(
@@ -253,7 +253,7 @@ if (import.meta.vitest) {
       // given
       const finanzDaten = {
         bruttoEinkommen: new Einkommen(0),
-        steuerKlasse: SteuerKlasse.SKL4,
+        steuerklasse: Steuerklasse.IV,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
         kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
         rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

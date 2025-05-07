@@ -21,7 +21,7 @@ import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner";
 
 type Props = {
@@ -31,12 +31,12 @@ type Props = {
   readonly isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten: boolean;
 };
 
-const steuerKlasseOptions: SelectOption<SteuerKlasse | "">[] = [
-  { value: SteuerKlasse.SKL1, label: "1" },
-  { value: SteuerKlasse.SKL2, label: "2" },
-  { value: SteuerKlasse.SKL3, label: "3" },
-  { value: SteuerKlasse.SKL4, label: "4" },
-  { value: SteuerKlasse.SKL5, label: "5" },
+const steuerklasseOptions: SelectOption<Steuerklasse | "">[] = [
+  { value: Steuerklasse.I, label: "1" },
+  { value: Steuerklasse.II, label: "2" },
+  { value: Steuerklasse.III, label: "3" },
+  { value: Steuerklasse.IV, label: "4" },
+  { value: Steuerklasse.V, label: "5" },
 ];
 
 const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
@@ -105,7 +105,7 @@ export function SteuerUndVersicherung({
           registerOptions={{
             required: "Eine Option muss ausgewählt sein",
           }}
-          name={`${elternteil}.steuerKlasse`}
+          name={`${elternteil}.steuerklasse`}
           label={
             antragstellende === "FuerBeide" ? (
               <>
@@ -117,7 +117,7 @@ export function SteuerUndVersicherung({
             )
           }
           errors={errors}
-          options={steuerKlasseOptions}
+          options={steuerklasseOptions}
           required
           slotBetweenLabelAndSelect={<InfoZurSteuerklasse />}
         />

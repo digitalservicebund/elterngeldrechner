@@ -15,7 +15,7 @@ import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner";
 
 const averageFromAverageOrMonthly = (
@@ -147,8 +147,8 @@ export const finanzDatenOfUi = (
       : false;
   const kinderFreiBetrag =
     state.stepEinkommen[elternteil].kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
-  const steuerKlasse =
-    state.stepEinkommen[elternteil].steuerKlasse ?? SteuerKlasse.SKL1;
+  const steuerklasse =
+    state.stepEinkommen[elternteil].steuerklasse ?? Steuerklasse.I;
   const kassenArt =
     state.stepEinkommen[elternteil].kassenArt ??
     KassenArt.GESETZLICH_PFLICHTVERSICHERT;
@@ -174,7 +174,7 @@ export const finanzDatenOfUi = (
     bruttoEinkommen,
     istKirchensteuerpflichtig,
     kinderFreiBetrag,
-    steuerKlasse,
+    steuerklasse,
     kassenArt,
     rentenVersicherung,
     splittingFaktor,

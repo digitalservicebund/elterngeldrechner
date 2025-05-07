@@ -13,8 +13,8 @@ import {
   PLANUNG_ANZAHL_MONATE,
   type PersoenlicheDaten,
   RentenArt,
+  Steuerklasse,
   kinderFreiBetragOfNumber,
-  steuerklasseOfNumber,
 } from "@/elterngeldrechner/model";
 
 export class EgrAlteTestfaelleRoutine3ExcelSheet {
@@ -55,9 +55,9 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
     return kirchenSteuer === "zahlt Kirchensteuer";
   }
 
-  steuerKlasse(testCaseIndex: number) {
-    const steuerKlasse = this.numberOf(testCaseIndex, STEUER_KLASSE_OFFSET);
-    return steuerklasseOfNumber(steuerKlasse);
+  steuerklasse(testCaseIndex: number) {
+    const value = this.numberOf(testCaseIndex, STEUER_KLASSE_OFFSET);
+    return parseSteuerklasse(value);
   }
 
   splittingFaktor(testCaseIndex: number) {
@@ -279,4 +279,23 @@ function columnOf(testCaseIndex: number) {
     throw new Error("testCaseIndex out of bound");
   }
   return testCaseIndex + TEST_DATA_COLUMN_OFFSET;
+}
+
+function parseSteuerklasse(value: number): Steuerklasse {
+  switch (value) {
+    case 1:
+      return Steuerklasse.I;
+    case 2:
+      return Steuerklasse.II;
+    case 3:
+      return Steuerklasse.III;
+    case 4:
+      return Steuerklasse.IV;
+    case 5:
+      return Steuerklasse.V;
+    case 6:
+      return Steuerklasse.VI;
+    default:
+      throw new Error(`Unknown value for Steuerklasse: "${value}"`);
+  }
 }

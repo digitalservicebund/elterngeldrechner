@@ -108,7 +108,7 @@ if (import.meta.vitest) {
       KinderFreiBetrag,
       PLANUNG_ANZAHL_MONATE,
       RentenArt,
-      SteuerKlasse,
+      Steuerklasse,
       ErwerbsTaetigkeit,
       MutterschaftsLeistung,
     } = await import("./model");
@@ -134,7 +134,7 @@ if (import.meta.vitest) {
         const finanzDaten = {
           ...ANY_FINANZDATEN,
           bruttoEinkommen: new Einkommen(2800),
-          steuerKlasse: SteuerKlasse.SKL1,
+          steuerKlasse: Steuerklasse.I,
           kinderFreiBetrag: KinderFreiBetrag.ZKF1,
           erwerbsZeitraumLebensMonatList: [
             {
@@ -192,7 +192,7 @@ if (import.meta.vitest) {
         const finanzDaten = {
           ...ANY_FINANZDATEN,
           bruttoEinkommen: new Einkommen(2100),
-          steuerKlasse: SteuerKlasse.SKL4,
+          steuerKlasse: Steuerklasse.IV,
           kinderFreiBetrag: KinderFreiBetrag.ZKF1,
           erwerbsZeitraumLebensMonatList: [],
         };
@@ -241,7 +241,7 @@ if (import.meta.vitest) {
 
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
-      steuerKlasse: SteuerKlasse.SKL1,
+      steuerklasse: Steuerklasse.I,
       kinderFreiBetrag: KinderFreiBetrag.ZKF0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

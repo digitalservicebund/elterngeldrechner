@@ -4,7 +4,7 @@ import {
   ErwerbsArt,
   ErwerbsTaetigkeit,
   KinderFreiBetrag,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner/model";
 
 describe("egr-mischeinkommen-excel-sheet", () => {
@@ -112,9 +112,9 @@ describe("egr-mischeinkommen-excel-sheet", () => {
       expect(sheet.arbeitslosenVersicherungsPflichtig(2, 1)).toBe(true);
     });
 
-    it("should read steuerKlasse", () => {
-      expect(sheet.steuerKlasse(0)).toBe(SteuerKlasse.SKL5);
-      expect(sheet.steuerKlasse(1)).toBe(SteuerKlasse.SKL1);
+    it("should read steuerklasse", () => {
+      expect(sheet.steuerklasse(0)).toBe(Steuerklasse.V);
+      expect(sheet.steuerklasse(1)).toBe(Steuerklasse.I);
     });
 
     it("should read splittingFaktor", () => {

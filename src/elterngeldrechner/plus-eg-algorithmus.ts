@@ -693,7 +693,7 @@ if (import.meta.vitest) {
       KassenArt,
       KinderFreiBetrag,
       RentenArt,
-      SteuerKlasse,
+      Steuerklasse,
     } = await import("./model");
 
     const { elterngeldZwischenergebnis } = await import(
@@ -722,7 +722,7 @@ if (import.meta.vitest) {
           const finanzDaten = {
             ...ANY_FINANZDATEN,
             bruttoEinkommen: new Einkommen(2800),
-            steuerKlasse: SteuerKlasse.SKL1,
+            steuerklasse: Steuerklasse.I,
             kinderFreiBetrag: KinderFreiBetrag.ZKF1,
             erwerbsZeitraumLebensMonatList: [
               {
@@ -838,7 +838,7 @@ if (import.meta.vitest) {
 
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
-      steuerKlasse: SteuerKlasse.SKL1,
+      steuerklasse: Steuerklasse.I,
       kinderFreiBetrag: KinderFreiBetrag.ZKF0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

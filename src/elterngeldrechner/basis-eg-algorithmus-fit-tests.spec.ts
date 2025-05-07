@@ -117,7 +117,7 @@ const createFinanzDaten = (
   return {
     bruttoEinkommen: new Einkommen(0),
     kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-    steuerKlasse: sheet.steuerKlasse(testCaseIndex),
+    steuerklasse: sheet.steuerklasse(testCaseIndex),
     splittingFaktor: sheet.splittingFaktor(testCaseIndex),
     kinderFreiBetrag: sheet.kinderFreiBetrag(testCaseIndex),
     rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

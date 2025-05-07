@@ -8,7 +8,7 @@ import {
   KinderFreiBetrag,
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner/model";
 
 describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
@@ -36,10 +36,10 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
       expect(sheet.kirchenSteuer(1)).toBe(true);
     });
 
-    it("should read steuerKlasse", () => {
-      expect(sheet.steuerKlasse(0)).toBe(SteuerKlasse.SKL2);
-      expect(sheet.steuerKlasse(1)).toBe(SteuerKlasse.SKL3);
-      expect(sheet.steuerKlasse(3)).toBe(SteuerKlasse.SKL5);
+    it("should read steuerklasse", () => {
+      expect(sheet.steuerklasse(0)).toBe(Steuerklasse.II);
+      expect(sheet.steuerklasse(1)).toBe(Steuerklasse.III);
+      expect(sheet.steuerklasse(3)).toBe(Steuerklasse.V);
     });
 
     it("should read splittingFaktor", () => {

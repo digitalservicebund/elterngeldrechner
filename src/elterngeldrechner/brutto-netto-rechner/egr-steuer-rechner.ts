@@ -9,9 +9,8 @@ import {
   FinanzDaten,
   Geburtstag,
   KinderFreiBetrag,
-  SteuerKlasse,
+  Steuerklasse,
   kinderFreiBetragToNumber,
-  steuerklasseToNumber,
 } from "@/elterngeldrechner/model";
 import {
   type Eingangsparameter,
@@ -41,9 +40,9 @@ export function abgabenSteuern(
   );
 
   const eingangsparameter: Eingangsparameter = {
-    AF: finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR ? 1 : 0,
+    AF: finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor ? 1 : 0,
     F:
-      finanzDaten.steuerKlasse === SteuerKlasse.SKL4_FAKTOR
+      finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor
         ? finanzDaten.splittingFaktor
         : 0,
     KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
@@ -58,7 +57,7 @@ export function abgabenSteuern(
     PVZ: 0,
     R: finanzDaten.istKirchensteuerpflichtig ? 1 : 0,
     RE4: steuerpflichtigesEinkommen * 100,
-    STKL: steuerklasseToNumber(finanzDaten.steuerKlasse),
+    STKL: STEUERKLASSE_TO_STKL_EINGANGSPARAMETER[finanzDaten.steuerklasse],
     VBEZ: 0,
     ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
   };
@@ -89,6 +88,19 @@ export function ermittelRelevantesLohnsteuerjahr(
     ) ?? aeltestesLohnsteuerjahr
   );
 }
+
+const STEUERKLASSE_TO_STKL_EINGANGSPARAMETER: Record<
+  Steuerklasse,
+  Eingangsparameter["STKL"]
+> = {
+  [Steuerklasse.I]: 1,
+  [Steuerklasse.II]: 2,
+  [Steuerklasse.III]: 3,
+  [Steuerklasse.IV]: 4,
+  [Steuerklasse.IVMitFaktor]: 4,
+  [Steuerklasse.V]: 5,
+  [Steuerklasse.VI]: 6,
+};
 
 if (import.meta.vitest) {
   const { describe, it, expect, beforeEach, vi } = import.meta.vitest;
@@ -128,7 +140,7 @@ if (import.meta.vitest) {
         abgabenSteuern(
           {
             ...ANY_FINANZDATEN,
-            steuerKlasse: SteuerKlasse.SKL4_FAKTOR,
+            steuerklasse: Steuerklasse.IVMitFaktor,
             splittingFaktor: 1,
           },
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
@@ -148,7 +160,7 @@ if (import.meta.vitest) {
         abgabenSteuern(
           {
             ...ANY_FINANZDATEN,
-            steuerKlasse: SteuerKlasse.SKL4,
+            steuerklasse: Steuerklasse.IV,
             splittingFaktor: 0,
           },
           ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
@@ -170,7 +182,7 @@ if (import.meta.vitest) {
         abgabenSteuern(
           {
             ...ANY_FINANZDATEN,
-            steuerKlasse: SteuerKlasse.SKL5,
+            steuerklasse: Steuerklasse.V,
             kinderFreiBetrag: KinderFreiBetrag.ZKF1,
           },
           ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
@@ -202,7 +214,7 @@ if (import.meta.vitest) {
 
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
-      steuerKlasse: SteuerKlasse.SKL1,
+      steuerklasse: Steuerklasse.I,
       kinderFreiBetrag: KinderFreiBetrag.ZKF0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

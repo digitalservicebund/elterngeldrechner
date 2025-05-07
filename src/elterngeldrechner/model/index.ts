@@ -34,10 +34,6 @@ export {
 export { type PersoenlicheDaten } from "./persoenliche-daten";
 export { PLANUNG_ANZAHL_MONATE, type PlanungsDaten } from "./planungs-daten";
 export { RentenArt } from "./renten-art";
-export {
-  SteuerKlasse,
-  steuerklasseOfNumber,
-  steuerklasseToNumber,
-} from "./steuer-klasse";
+export { Steuerklasse } from "./Steuerklasse";
 export type { ZwischenErgebnis } from "./zwischen-ergebnis";
 export { MAX_EINKOMMEN } from "./egr-berechnung-param-id";

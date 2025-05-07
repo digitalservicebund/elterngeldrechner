@@ -2,8 +2,8 @@ import xlsx from "node-xlsx";
 import { erwerbsArtOf } from "./fit-excel-sheet-util";
 import {
   ErwerbsTaetigkeit,
+  Steuerklasse,
   kinderFreiBetragOfNumber,
-  steuerklasseOfNumber,
 } from "@/elterngeldrechner/model";
 
 type Taetigkeit = 0 | 1 | 2;
@@ -139,11 +139,11 @@ export class EgrMischeinkommenExcelSheet {
     return zahlenSieKirchenSteuer === "zahlt Kirchensteuer";
   }
 
-  steuerKlasse(testCaseIndex: number) {
-    const steuerKlasse = this.sheet.data[STEUER_KLASSE_OFFSET]?.[
+  steuerklasse(testCaseIndex: number) {
+    const value = this.sheet.data[STEUER_KLASSE_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as number;
-    return steuerklasseOfNumber(steuerKlasse);
+    return parseSteuerklasse(value);
   }
 
   splittingFaktor(testCaseIndex: number) {
@@ -297,4 +297,23 @@ function convertJaNeinToBooleanUndefined(jaNein: string): boolean | undefined {
       return true;
   }
   return undefined;
+}
+
+function parseSteuerklasse(value: number): Steuerklasse {
+  switch (value) {
+    case 1:
+      return Steuerklasse.I;
+    case 2:
+      return Steuerklasse.II;
+    case 3:
+      return Steuerklasse.III;
+    case 4:
+      return Steuerklasse.IV;
+    case 5:
+      return Steuerklasse.V;
+    case 6:
+      return Steuerklasse.VI;
+    default:
+      throw new Error(`Unknown value for Steuerklasse: "${value}"`);
+  }
 }

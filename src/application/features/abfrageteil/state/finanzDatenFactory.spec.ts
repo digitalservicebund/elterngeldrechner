@@ -16,7 +16,7 @@ import {
   KinderFreiBetrag,
   type MischEkTaetigkeit,
   RentenArt,
-  SteuerKlasse,
+  Steuerklasse,
 } from "@/elterngeldrechner";
 import { YesNo } from "original-rechner";
 
@@ -533,28 +533,28 @@ describe("finanzDatenFactory", () => {
   });
 
   describe.each([
-    [null, SteuerKlasse.SKL1],
-    [SteuerKlasse.SKL1, SteuerKlasse.SKL1],
-    [SteuerKlasse.SKL2, SteuerKlasse.SKL2],
-    [SteuerKlasse.SKL3, SteuerKlasse.SKL3],
-    [SteuerKlasse.SKL4, SteuerKlasse.SKL4],
-    [SteuerKlasse.SKL4_FAKTOR, SteuerKlasse.SKL4_FAKTOR],
-    [SteuerKlasse.SKL5, SteuerKlasse.SKL5],
-    [SteuerKlasse.SKL6, SteuerKlasse.SKL6],
+    [null, Steuerklasse.I],
+    [Steuerklasse.I, Steuerklasse.I],
+    [Steuerklasse.II, Steuerklasse.II],
+    [Steuerklasse.III, Steuerklasse.III],
+    [Steuerklasse.IV, Steuerklasse.IV],
+    [Steuerklasse.IVMitFaktor, Steuerklasse.IVMitFaktor],
+    [Steuerklasse.V, Steuerklasse.V],
+    [Steuerklasse.VI, Steuerklasse.VI],
   ])(
     "when einkommen SteuerKlasse is %s, then finanzDaten Steuerklasse are %s",
     (
-      einkommenSteuerKlasse: SteuerKlasse | null,
-      finanzDatenSteuerklasse: SteuerKlasse,
+      einkommenSteuerklasse: Steuerklasse | null,
+      finanzDatenSteuerklasse: Steuerklasse,
     ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         const state = produce(INITIAL_STATE, (draft) => {
-          draft.stepEinkommen.ET1.steuerKlasse = einkommenSteuerKlasse;
+          draft.stepEinkommen.ET1.steuerklasse = einkommenSteuerklasse;
         });
 
         const finanzDaten = finanzDatenOfUi(state, "ET1", []);
 
-        expect(finanzDaten.steuerKlasse).toBe(finanzDatenSteuerklasse);
+        expect(finanzDaten.steuerklasse).toBe(finanzDatenSteuerklasse);
       });
     },
   );
@@ -669,7 +669,7 @@ describe("finanzDatenFactory", () => {
       {
         bruttoEinkommenNichtSelbstaendig:
           initialAverageOrMonthlyStateNichtSelbstaendig,
-        steuerKlasse: null,
+        steuerklasse: null,
         splittingFaktor: null,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
         gewinnSelbstaendig: initialAverageOrMonthlyStateNichtSelbstaendig,
@@ -687,7 +687,7 @@ describe("finanzDatenFactory", () => {
         bruttoEinkommen: new Einkommen(0),
         istKirchensteuerpflichtig: false,
         kinderFreiBetrag: KinderFreiBetrag.ZKF1,
-        steuerKlasse: SteuerKlasse.SKL1,
+        steuerklasse: Steuerklasse.I,
         kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
         rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
         splittingFaktor: 1.0,

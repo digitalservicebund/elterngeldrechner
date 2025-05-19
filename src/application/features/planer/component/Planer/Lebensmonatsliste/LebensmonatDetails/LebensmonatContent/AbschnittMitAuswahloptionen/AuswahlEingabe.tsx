@@ -122,12 +122,24 @@ export function AuswahlEingabe({
             return (
               <div
                 key={option}
-                className={classNames(
-                  "rounded",
-                  "outline-2 outline-offset-2 outline-Basis focus-within:outline",
-                )}
+                className="rounded"
                 style={{ gridRowStart, ...inputColumns[elternteil] }}
               >
+                <input
+                  id={inputIdentifier}
+                  type="radio"
+                  className="peer absolute appearance-none opacity-0 focus:border-none focus:outline-none"
+                  name={legend}
+                  value={option}
+                  checked={istAusgewaehlt}
+                  onChange={waehleDieseOption}
+                  onClick={setzeAuswahlZurueckWennBereitsAusgewaehlt}
+                  aria-disabled={!istAuswaehlbar}
+                  aria-label={inputAriaLabel}
+                  aria-describedby={inputDescriptionIdentifier}
+                  aria-details={infoIdentifier}
+                />
+
                 <AuswahloptionLabel
                   option={option}
                   istBasisImMutterschutz={istBasisImMutterschutz}
@@ -138,21 +150,6 @@ export function AuswahlEingabe({
                   istAusgewaehlt={istAusgewaehlt}
                   istAuswaehlbar={istAuswaehlbar}
                   htmlFor={inputIdentifier}
-                />
-
-                <input
-                  id={inputIdentifier}
-                  type="radio"
-                  className="absolute appearance-none opacity-0 focus:border-none focus:outline-none"
-                  name={legend}
-                  value={option}
-                  checked={istAusgewaehlt}
-                  onChange={waehleDieseOption}
-                  onClick={setzeAuswahlZurueckWennBereitsAusgewaehlt}
-                  aria-disabled={!istAuswaehlbar}
-                  aria-label={inputAriaLabel}
-                  aria-describedby={inputDescriptionIdentifier}
-                  aria-details={infoIdentifier}
                 />
 
                 <span

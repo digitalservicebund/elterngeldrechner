@@ -42,7 +42,7 @@ export function GewaehlteOption({
   return (
     <span
       className={classNames(
-        "flex min-h-42 items-center justify-center gap-4 rounded p-8 text-center font-bold @container",
+        "flex min-h-56 items-center justify-center gap-4 rounded p-8 text-center font-bold @container",
         className,
         conditionalClassName,
       )}

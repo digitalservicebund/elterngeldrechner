@@ -46,6 +46,7 @@ export default {
       "Bonus-light": "#e1eee8",
     },
     fontSize: {
+      12: ["0.75rem", { lineHeight: "1.429" }],
       14: ["0.875rem", { lineHeight: "1.429" }],
       16: ["1rem", { lineHeight: "1.375" }],
       base: ["1.125rem", { lineHeight: "1.556" }],

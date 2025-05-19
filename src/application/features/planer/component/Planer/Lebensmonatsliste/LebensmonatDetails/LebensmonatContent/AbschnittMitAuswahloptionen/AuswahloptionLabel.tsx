@@ -32,6 +32,7 @@ export function AuswahloptionLabel({
     option,
     istBasisImMutterschutz,
     istBonusWithMissingBruttoeinkommen,
+    !!istAuswaehlbar,
   );
 
   const icon = getIcon(
@@ -43,14 +44,15 @@ export function AuswahloptionLabel({
   return (
     <label
       className={classNames(
-        "group/label flex min-h-42 items-center rounded bg-Basis p-8 text-14",
+        "flex min-h-42 items-center rounded bg-Basis p-8 text-14",
         {
-          "cursor-default !bg-grey !text-black justify-center": !istAuswaehlbar,
+          "cursor-default !bg-grey !text-grey-dark": !istAuswaehlbar,
         },
         {
           "hover:underline hover:underline-offset-2":
             istAuswaehlbar && !istBasisImMutterschutz,
         },
+        "outline-2 outline-offset-2 outline-Basis peer-focus-visible:outline",
         className,
       )}
       htmlFor={htmlFor}
@@ -96,22 +98,12 @@ function getIcon(
         strokeWidth={2}
       />
       {!!istAusgewaehlt && (
-        <>
-          <path
-            className="group-hover/label:hidden"
-            d="M 5,9 l 3,3 l 5,-6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-          />
-          <path
-            className="hidden group-hover/label:block"
-            d="M 9,9 l 3,3 M 9,9 l -3,-3 M 9,9 l -3,3 M 9,9 l 3,-3"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-          />
-        </>
+        <path
+          d="M 5,9 l 3,3 l 5,-6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+        />
       )}
     </svg>
   );
@@ -121,23 +113,53 @@ function getRenderProperties(
   option: Auswahloption,
   istBasisImMutterschutz: boolean,
   istBonusWithMissingBruttoeinkommen: boolean,
+  istAuswaehlbar: boolean,
 ): RenderProperties {
   switch (option) {
     case Variante.Basis:
       return {
-        label: istBasisImMutterschutz ? "Mutterschutz" : "Basis",
+        label: istBasisImMutterschutz ? (
+          "Mutterschutz"
+        ) : (
+          <>
+            Basis{" "}
+            {istAuswaehlbar ? (
+              ""
+            ) : (
+              <span className="text-12 font-regular">(nicht verfügbar)</span>
+            )}
+          </>
+        ),
         className: `bg-Basis text-white ${!istBasisImMutterschutz && "hover:bg-Basis-hover"}`,
       };
 
     case Variante.Plus:
       return {
-        label: "Plus",
+        label: (
+          <>
+            Plus{" "}
+            {istAuswaehlbar ? (
+              ""
+            ) : (
+              <span className="text-12 font-regular">(nicht verfügbar)</span>
+            )}
+          </>
+        ),
         className: "bg-Plus text-black hover:bg-Plus-hover",
       };
 
     case Variante.Bonus:
       return {
-        label: "Bonus",
+        label: (
+          <>
+            Bonus{" "}
+            {istAuswaehlbar ? (
+              ""
+            ) : (
+              <span className="text-12 font-regular">(nicht verfügbar)</span>
+            )}
+          </>
+        ),
         className: istBonusWithMissingBruttoeinkommen
           ? "bg-Bonus-light text-black relative before:content-[''] before:absolute before:inset-0 before:border-2 before:border-Bonus-dark before:border-dashed before:rounded"
           : "bg-Bonus text-black hover:bg-Bonus-hover",
@@ -152,6 +174,6 @@ function getRenderProperties(
 }
 
 type RenderProperties = {
-  label: string;
+  label: ReactNode;
   className: string;
 };

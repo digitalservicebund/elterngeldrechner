@@ -124,7 +124,7 @@ export function AuswahlEingabe({
                 key={option}
                 className={classNames(
                   "rounded",
-                  "outline-2 outline-offset-6 outline-primary focus-within:underline focus-within:outline",
+                  "outline-2 outline-offset-2 outline-Basis focus-within:outline",
                 )}
                 style={{ gridRowStart, ...inputColumns[elternteil] }}
               >

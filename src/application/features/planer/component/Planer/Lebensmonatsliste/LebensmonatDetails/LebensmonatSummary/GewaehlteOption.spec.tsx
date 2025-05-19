@@ -15,7 +15,7 @@ describe("GewaehlteOption", () => {
     render(<GewaehlteOption {...ANY_PROPS} option={undefined} />);
 
     expect(screen.getByText("hinzufügen")).toBeInTheDocument();
-    expect(screen.getByTestId("AddIcon")).toBeVisible();
+    expect(screen.getByTestId("AddCircleOutlineIcon")).toBeVisible();
   });
 
   it.each([

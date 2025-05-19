@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { HinweisZumBonus } from "./HinweisZumBonus";
 import { LebensmonatContent } from "./LebensmonatContent";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat";
 import {
@@ -35,44 +34,6 @@ describe("Lebensmonat Content", () => {
     render(<LebensmonatContent />);
 
     expect(screen.getByText("5. Lebensmonat")).toBeVisible();
-  });
-
-  describe("hint for Bonus", () => {
-    beforeEach(async () => {
-      vi.spyOn(await import("./HinweisZumBonus"), "HinweisZumBonus");
-    });
-
-    it("shows the hint when Bonus is chosen", () => {
-      vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
-      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
-        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
-        lebensmonat: {
-          [Elternteil.Eins]: monat(Variante.Bonus),
-          [Elternteil.Zwei]: monat(Variante.Bonus),
-        },
-      });
-
-      render(<LebensmonatContent />);
-
-      expect(screen.queryByText("Test Bonus Hinweis Text")).toBeInTheDocument();
-    });
-
-    it("hides the hint when no Bonus is chosen", () => {
-      vi.mocked(HinweisZumBonus).mockReturnValue("Test Bonus Hinweis Text");
-      vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
-        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
-        lebensmonat: {
-          [Elternteil.Eins]: monat(Variante.Basis),
-          [Elternteil.Zwei]: monat(Variante.Plus),
-        },
-      });
-
-      render(<LebensmonatContent />);
-
-      expect(
-        screen.queryByText("Test Bonus Hinweis Text"),
-      ).not.toBeInTheDocument();
-    });
   });
 });
 

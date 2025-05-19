@@ -1,4 +1,4 @@
-import AddIcon from "@digitalservicebund/icons/Add";
+import AddIcon from "@digitalservicebund/icons/AddCircleOutline";
 import LockIcon from "@digitalservicebund/icons/Lock";
 import classNames from "classnames";
 import type { CSSProperties, ReactNode } from "react";
@@ -42,7 +42,7 @@ export function GewaehlteOption({
   return (
     <span
       className={classNames(
-        "flex min-h-56 items-center justify-center gap-4 rounded p-8 text-center font-bold @container",
+        "flex min-h-42 items-center justify-center gap-4 rounded p-8 text-center font-bold @container",
         className,
         conditionalClassName,
       )}
@@ -91,7 +91,7 @@ function getClassName(
 
     case Variante.Bonus:
       return bruttoeinkommenIsMissing
-        ? "bg-Bonus-light text-black border-2 border-dashed border-Bonus-dark"
+        ? "bg-Bonus-light text-black relative before:content-[''] before:absolute before:inset-0 before:border-2 before:border-Bonus-dark before:border-dashed before:rounded"
         : "bg-Bonus text-black";
 
     case KeinElterngeld:

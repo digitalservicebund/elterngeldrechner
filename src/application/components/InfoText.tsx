@@ -1,9 +1,11 @@
+import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
 
 type Props = {
   readonly question: string;
   readonly answer: ReactNode;
   readonly className?: string;
+  readonly classNameContent?: string;
   readonly style?: CSSProperties;
 };
 
@@ -11,6 +13,7 @@ export function InfoText({
   question,
   answer,
   className,
+  classNameContent,
   style,
 }: Props): ReactNode {
   return (
@@ -23,7 +26,12 @@ export function InfoText({
         <u>{question}</u>
       </summary>
 
-      <div className="mt-4 border-0 border-l-4 border-solid border-grey pl-10">
+      <div
+        className={classNames(
+          "mt-4 border-0 border-l-4 border-solid border-grey pl-10",
+          classNameContent,
+        )}
+      >
         {typeof answer === "string" ? <p>{answer}</p> : answer}
       </div>
     </details>

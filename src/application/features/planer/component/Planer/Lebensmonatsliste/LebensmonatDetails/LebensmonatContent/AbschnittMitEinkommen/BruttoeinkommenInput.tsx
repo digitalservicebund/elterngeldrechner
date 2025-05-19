@@ -1,5 +1,4 @@
 import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
-import ErrorIcon from "@digitalservicebund/icons/Error";
 import classNames from "classnames";
 import {
   type CSSProperties,
@@ -51,12 +50,7 @@ export function BruttoeinkommenInput({
   return (
     <div className="flex flex-col gap-4" style={style}>
       <label htmlFor={inputIdentifier}>
-        {isMissing ? (
-          <ErrorIcon className="text-warning" />
-        ) : (
-          <BusinessCenterIcon />
-        )}{" "}
-        Einkommen in € (brutto)
+        <BusinessCenterIcon /> Einkommen in € (brutto)
       </label>
 
       <input

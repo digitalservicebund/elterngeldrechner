@@ -14,12 +14,6 @@ describe("Buttoeinkommen Input", () => {
     expect(screen.getByTestId("BusinessCenterOutlinedIcon")).toBeVisible();
   });
 
-  it("shows the error icon when input is missing", () => {
-    render(<BruttoeinkommenInput {...ANY_PROPS} isMissing />);
-
-    expect(screen.getByTestId("ErrorIcon")).toBeVisible();
-  });
-
   it("uses the given Bruttoeinkommen as input value", () => {
     render(<BruttoeinkommenInput {...ANY_PROPS} bruttoeinkommen={251} />);
 

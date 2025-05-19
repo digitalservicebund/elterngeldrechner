@@ -45,7 +45,6 @@ export class RechnerPlanerPOM {
     elternteil?: string,
   ): Promise<void> {
     await this.openLebensmonat(lebensmonatszahl);
-    await this.expandAbschnittMitEinkommen();
 
     const label = elternteil
       ? `Bruttoeinkommen von ${elternteil} im ${lebensmonatszahl}. Lebensmonat`
@@ -62,18 +61,6 @@ export class RechnerPlanerPOM {
     if (isClosed) {
       await details.click();
     }
-  }
-
-  private async expandAbschnittMitEinkommen(): Promise<void> {
-    const button = this.page.getByRole("button", {
-      name: "Bruttoeinkommen hinzufügen",
-    });
-
-    const isExpanded = JSON.parse(
-      (await button.getAttribute("aria-expanded")) ?? "false",
-    ) as boolean;
-
-    if (!isExpanded) await button.click();
   }
 
   async zeigeMehrLebensmonateAn(): Promise<void> {

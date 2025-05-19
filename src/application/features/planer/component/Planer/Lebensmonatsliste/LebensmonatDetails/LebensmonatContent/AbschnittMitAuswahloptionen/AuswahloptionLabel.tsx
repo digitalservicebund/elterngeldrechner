@@ -28,38 +28,92 @@ export function AuswahloptionLabel({
   istAuswaehlbar,
   htmlFor,
 }: Props): ReactNode {
-  const { label, className, checkedClassName, icon } = getRenderProperties(
+  const { label, className } = getRenderProperties(
     option,
     istBasisImMutterschutz,
     istBonusWithMissingBruttoeinkommen,
   );
 
+  const icon = getIcon(
+    istBasisImMutterschutz,
+    !!istAusgewaehlt,
+    !!istAuswaehlbar,
+  );
+
   return (
     <label
       className={classNames(
-        "flex min-h-56 items-center justify-center rounded bg-Basis p-8 text-center",
-        { "cursor-default !bg-grey !text-black": !istAuswaehlbar },
-        { "hover:underline": istAuswaehlbar },
-        { [checkedClassName]: istAusgewaehlt && istAuswaehlbar },
+        "group/label flex min-h-42 items-center rounded bg-Basis p-8 text-14",
+        {
+          "cursor-default !bg-grey !text-black justify-center": !istAuswaehlbar,
+        },
+        {
+          "hover:underline hover:underline-offset-2":
+            istAuswaehlbar && !istBasisImMutterschutz,
+        },
         className,
       )}
-      style={{ fontSize: "min(1em, 4.8cqi)" }}
       htmlFor={htmlFor}
     >
-      <span aria-hidden>
-        <span className="inline-flex items-center font-bold">
-          {!!icon && <>{icon}&nbsp;</>}
-          {label}
-        </span>
+      <span aria-hidden className="flex items-center gap-6">
+        {icon}
+        <div className="text-2 pb-2 leading-none">
+          <span className="font-bold">{label}</span>
 
-        {!!elterngeldbezug && (
-          <>
-            &nbsp;
-            <Geldbetrag betrag={elterngeldbezug} />
-          </>
-        )}
+          {!!elterngeldbezug && (
+            <>
+              &nbsp;
+              <Geldbetrag betrag={elterngeldbezug} />
+            </>
+          )}
+        </div>
       </span>
     </label>
+  );
+}
+
+function getIcon(
+  istBasisImMutterschutz: boolean,
+  istAusgewaehlt: boolean,
+  istAuswaehlbar: boolean,
+) {
+  if (istBasisImMutterschutz) {
+    return <LockIcon className="text-Plus" />;
+  }
+
+  if (!istAuswaehlbar) {
+    return undefined;
+  }
+
+  return (
+    <svg viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+      <circle
+        cx="9"
+        cy="9"
+        r="8"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+      />
+      {!!istAusgewaehlt && (
+        <>
+          <path
+            className="group-hover/label:hidden"
+            d="M 5,9 l 3,3 l 5,-6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+          />
+          <path
+            className="hidden group-hover/label:block"
+            d="M 9,9 l 3,3 M 9,9 l -3,-3 M 9,9 l -3,3 M 9,9 l 3,-3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+          />
+        </>
+      )}
+    </svg>
   );
 }
 
@@ -72,46 +126,32 @@ function getRenderProperties(
     case Variante.Basis:
       return {
         label: istBasisImMutterschutz ? "Mutterschutz" : "Basis",
-        className: "bg-Basis text-white",
-        checkedClassName: classNames("ring-Plus", SHARED_CHECKED_CLASS_NAME),
-        icon: istBasisImMutterschutz ? (
-          <LockIcon className="text-Plus" />
-        ) : undefined,
+        className: `bg-Basis text-white ${!istBasisImMutterschutz && "hover:bg-Basis-hover"}`,
       };
 
     case Variante.Plus:
       return {
         label: "Plus",
-        className: "bg-Plus text-black",
-        checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
+        className: "bg-Plus text-black hover:bg-Plus-hover",
       };
 
     case Variante.Bonus:
       return {
         label: "Bonus",
         className: istBonusWithMissingBruttoeinkommen
-          ? "bg-Bonus-light text-black border-2 border-dashed border-Bonus-dark"
-          : "bg-Bonus text-black",
-        checkedClassName: classNames("ring-Basis", SHARED_CHECKED_CLASS_NAME),
+          ? "bg-Bonus-light text-black relative before:content-[''] before:absolute before:inset-0 before:border-2 before:border-Bonus-dark before:border-dashed before:rounded"
+          : "bg-Bonus text-black hover:bg-Bonus-hover",
       };
 
     case KeinElterngeld:
       return {
         label: "kein Elterngeld",
         className: "bg-white text-black border-grey border-2 border-solid",
-        checkedClassName: classNames(
-          "ring-Basis border-none",
-          SHARED_CHECKED_CLASS_NAME,
-        ),
       };
   }
 }
 
-const SHARED_CHECKED_CLASS_NAME = "ring-4";
-
 type RenderProperties = {
   label: string;
   className: string;
-  checkedClassName: string;
-  icon?: ReactNode;
 };

@@ -1,12 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AbschnittMitEinkommen } from "./AbschnittMitEinkommen";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat";
 import {
   AusgangslageFuerEinElternteil,
   type Auswahloption,
-  Auswahloptionen,
   Elternteil,
   KeinElterngeld,
   MONAT_MIT_MUTTERSCHUTZ,
@@ -27,22 +25,12 @@ describe("Abschnitt mit Einkommen", () => {
     render(<AbschnittMitEinkommen />);
 
     expect(
-      screen.getByText("Sie haben in diesem Monat Einkommen?"),
-    ).toBeVisible();
-  });
-
-  it("includes a dialog with further information", () => {
-    render(<AbschnittMitEinkommen />);
-
-    expect(
-      screen.getByRole("button", {
-        name: "Öffne Informationen zu Einkommen während des Elterngeldbezugs",
-      }),
+      screen.getByText("Haben Sie Einkommen? Dann tragen Sie es bitte ein."),
     ).toBeVisible();
   });
 
   describe("inputs for Bruttoeinkommen", () => {
-    it("shows an input for the Bruttoeinkommen for each Elternteil", async () => {
+    it("shows an input for the Bruttoeinkommen for each Elternteil", () => {
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
         ausgangslage: {
@@ -61,7 +49,6 @@ describe("Abschnitt mit Einkommen", () => {
       });
 
       render(<AbschnittMitEinkommen />);
-      await toggleInputsVisibility();
 
       expect(
         screen.getByRole("combobox", {
@@ -76,7 +63,7 @@ describe("Abschnitt mit Einkommen", () => {
       ).toBeVisible();
     });
 
-    it("shows some text instead of input for Elternteil with Monat im Mutterschutz", async () => {
+    it("shows some text instead of input for Elternteil with Monat im Mutterschutz", () => {
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
         ausgangslage: {
@@ -95,7 +82,6 @@ describe("Abschnitt mit Einkommen", () => {
       });
 
       render(<AbschnittMitEinkommen />);
-      await toggleInputsVisibility();
 
       expect(
         screen.queryByRole("combobox", {
@@ -116,7 +102,7 @@ describe("Abschnitt mit Einkommen", () => {
       );
     });
 
-    it("shows and input fo the Bruttoeinkommen for a single Elternteil", async () => {
+    it("shows and input fo the Bruttoeinkommen for a single Elternteil", () => {
       vi.mocked(
         useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
       ).mockReturnValue({
@@ -130,7 +116,6 @@ describe("Abschnitt mit Einkommen", () => {
       });
 
       render(<AbschnittMitEinkommen />);
-      await toggleInputsVisibility();
 
       expect(
         screen.getByRole("combobox", {
@@ -139,7 +124,7 @@ describe("Abschnitt mit Einkommen", () => {
       ).toBeVisible();
     });
 
-    it("uses the provided callback to determine the Vorschläge for the Einkommen per Elternteil", async () => {
+    it("uses the provided callback to determine the Vorschläge for the Einkommen per Elternteil", () => {
       const erstelleVorschlaegeFuerAngabeDesEinkommens = vi.fn(() => []);
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
@@ -147,9 +132,6 @@ describe("Abschnitt mit Einkommen", () => {
       });
 
       render(<AbschnittMitEinkommen />);
-      expect(erstelleVorschlaegeFuerAngabeDesEinkommens).not.toHaveBeenCalled();
-
-      await toggleInputsVisibility();
 
       expect(erstelleVorschlaegeFuerAngabeDesEinkommens).toHaveBeenCalledTimes(
         2,
@@ -162,106 +144,6 @@ describe("Abschnitt mit Einkommen", () => {
       );
     });
   });
-
-  describe("inputs visibility toggle behavior", () => {
-    it.each(Auswahloptionen.filter((option) => option !== Variante.Bonus))(
-      "hides initially the inputs when %s is chosen and no Bruttoeinkommen",
-      (option) => {
-        vi.mocked(
-          useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
-        ).mockReturnValue({
-          ...ANY_INFORMATION_ZUM_LEBENSMONAT,
-          ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
-          lebensmonat: { [Elternteil.Eins]: monat(option, undefined) },
-        });
-
-        render(<AbschnittMitEinkommen />);
-
-        expectInputsNotToBeVisible();
-      },
-    );
-
-    it("shows the inputs automatically when Bonus is chosen and no Bruttoeinkommen", () => {
-      vi.mocked(
-        useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
-      ).mockReturnValue({
-        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
-        ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
-        lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus, undefined) },
-      });
-
-      render(<AbschnittMitEinkommen />);
-
-      expectInputsToBeVisible();
-    });
-
-    it.each(Auswahloptionen)(
-      "shows the inputs automatically when %s is chosen and some Bruttoeinkommen is was already specified",
-      (option) => {
-        vi.mocked(
-          useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
-        ).mockReturnValue({
-          ...ANY_INFORMATION_ZUM_LEBENSMONAT,
-          ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
-          lebensmonat: { [Elternteil.Eins]: monat(option, 1) },
-        });
-
-        render(<AbschnittMitEinkommen />);
-
-        expectInputsToBeVisible();
-      },
-    );
-
-    it("can not manually hide inputs again when automatically opened", async () => {
-      vi.mocked(
-        useInformationenZumLebensmonat<AusgangslageFuerEinElternteil>,
-      ).mockReturnValue({
-        ...ANY_INFORMATION_ZUM_LEBENSMONAT,
-        ausgangslage: ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL,
-        lebensmonat: { [Elternteil.Eins]: monat(Variante.Bonus, 1) },
-      });
-
-      render(<AbschnittMitEinkommen />);
-
-      expectInputsToBeVisible();
-      await toggleInputsVisibility();
-      expectInputsToBeVisible();
-    });
-
-    function expectInputsToBeVisible() {
-      const inputs = screen.getAllByRole("combobox", {
-        name: /Bruttoeinkommen/,
-      });
-
-      inputs.forEach((input) => expect(input).toBeVisible());
-    }
-
-    function expectInputsNotToBeVisible() {
-      const inputs = screen.queryAllByRole("combobox", {
-        name: /Bruttoeinkommen/,
-      });
-      inputs.forEach((input) => expect(input).not.toBeVisible());
-    }
-  });
-
-  it("shows an hint for the Wochenstunden when inputs are visible", async () => {
-    render(<AbschnittMitEinkommen />);
-
-    await toggleInputsVisibility();
-
-    expect(
-      screen.getByText(
-        "Sie dürfen in diesem Monat nur maximal 32 Stunden pro Woche arbeiten",
-      ),
-    );
-  });
-
-  async function toggleInputsVisibility(): Promise<void> {
-    const toggle = screen.getByRole("button", {
-      name: "Bruttoeinkommen hinzufügen",
-    });
-    await userEvent.click(toggle);
-  }
 });
 
 function monat(gewaehlteOption?: Auswahloption, bruttoeinkommen?: number) {
@@ -269,11 +151,6 @@ function monat(gewaehlteOption?: Auswahloption, bruttoeinkommen?: number) {
 }
 
 const ANY_GEBURTSDATUM_DES_KINDES = new Date();
-
-const ANY_AUSGANGSLAGE_FUER_EIN_ELTERNTEIL = {
-  anzahlElternteile: 1 as const,
-  geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
-};
 
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   ausgangslage: {

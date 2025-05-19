@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import { AbschnittMitAuswahloptionen } from "./AbschnittMitAuswahloptionen";
 import { AbschnittMitEinkommen } from "./AbschnittMitEinkommen";
-import { HinweisZumBonus } from "./HinweisZumBonus";
 import { useInformationenZumLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat";
 import { ZeitraumLabel } from "@/application/features/planer/component/common";
 import {
@@ -10,26 +9,17 @@ import {
   useGridLayout,
 } from "@/application/features/planer/layout";
 import { berechneZeitraumFuerLebensmonat } from "@/lebensmonatrechner";
-import { AlleElternteileHabenBonusGewaehlt } from "@/monatsplaner";
 
 export function LebensmonatContent(): ReactNode {
   const gridLayout = useGridLayout();
   const descriptionArea = useGridColumn(DESCRIPTION_COLUMN_DEFINITION);
-  const hinweisZumBonusArea = useGridColumn(
-    HINWEIS_ZUM_BONUS_COLUMN_DEFINITION,
-  );
 
-  const { ausgangslage, lebensmonatszahl, lebensmonat } =
-    useInformationenZumLebensmonat();
+  const { ausgangslage, lebensmonatszahl } = useInformationenZumLebensmonat();
 
   const zeitraum = berechneZeitraumFuerLebensmonat(
     ausgangslage.geburtsdatumDesKindes,
     lebensmonatszahl,
   );
-
-  const isBonusHintVisible =
-    AlleElternteileHabenBonusGewaehlt.asPredicate(lebensmonat);
-  const hasMultipleElternteile = Object.keys(lebensmonat).length > 1;
 
   return (
     <div
@@ -44,14 +34,6 @@ export function LebensmonatContent(): ReactNode {
 
       <AbschnittMitAuswahloptionen />
       <AbschnittMitEinkommen />
-
-      {!!isBonusHintVisible && (
-        <HinweisZumBonus
-          className="mt-24"
-          style={hinweisZumBonusArea}
-          hasMultipleElternteile={hasMultipleElternteile}
-        />
-      )}
     </div>
   );
 }
@@ -59,9 +41,4 @@ export function LebensmonatContent(): ReactNode {
 const DESCRIPTION_COLUMN_DEFINITION: GridColumnDefinition = {
   1: ["left-outside", "right-outside"],
   2: ["et1-outside", "et2-outside"],
-};
-
-const HINWEIS_ZUM_BONUS_COLUMN_DEFINITION: GridColumnDefinition = {
-  1: ["left-middle", "right-middle"],
-  2: ["et1-middle", "et2-middle"],
 };

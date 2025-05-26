@@ -5,7 +5,7 @@ import { Fragment, type ReactNode, useId } from "react";
 import type {
   BeispielIdentifier,
   BeschreibungFuerEinBeispiel,
-} from "@/application/features/planer/hooks";
+} from "@/application/features/beispiele/hooks";
 
 type Props = {
   readonly beschreibungenDerBeispiele: BeschreibungFuerEinBeispiel[];

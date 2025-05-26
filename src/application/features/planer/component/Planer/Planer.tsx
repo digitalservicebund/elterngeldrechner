@@ -2,17 +2,19 @@ import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
 import { Anleitung } from "./Anleitung";
-import { BeispielAuswahl } from "./BeispielAuswahl";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Button, PrintButton } from "@/application/components";
+import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import {
   type BeispielServiceCallbacks,
+  useBeispieleService,
+} from "@/application/features/beispiele/hooks";
+import {
   type InitialInformation,
   type PlanerServiceCallbacks,
-  useBeispieleService,
   usePlanerService,
 } from "@/application/features/planer/hooks";
 import { GridLayoutProvider } from "@/application/features/planer/layout";

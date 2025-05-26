@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { BeispielAuswahl } from "./BeispielAuswahl";
-import type { BeschreibungFuerEinBeispiel } from "@/application/features/planer/hooks";
+import type { BeschreibungFuerEinBeispiel } from "@/application/features/beispiele/hooks";
 
 /*
  * These tests currently heavily struggle because of how the component

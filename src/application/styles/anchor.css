@@ -1,12 +1,13 @@
 .anchor-top-top {
+  /* stylelint-disable-next-line declaration-property-value-no-unknown */
   top: anchor(top);
 }
 
 .anchor-right-left {
+  /* stylelint-disable-next-line declaration-property-value-no-unknown */
   right: anchor(left);
 }
 
 .anchor-flip-inline {
-  /* stylelint-disable-next-line property-no-unknown */
   position-try-fallbacks: flip-inline;
 }

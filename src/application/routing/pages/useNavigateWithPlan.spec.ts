@@ -36,7 +36,7 @@ describe("use navigate with Plan", () => {
       vi.mocked(useNavigate).mockReturnValue(navigate);
 
       const { result } = renderHook(() => useNavigateWithPlan());
-      result.current.navigateWithPlanState("anywhere", ANY_PLAN);
+      void result.current.navigateWithPlanState("anywhere", ANY_PLAN);
 
       expect(navigate).toHaveBeenCalledOnce();
       expect(navigate).toHaveBeenLastCalledWith(expect.anything(), {
@@ -49,7 +49,7 @@ describe("use navigate with Plan", () => {
       vi.mocked(useNavigate).mockReturnValue(navigate);
 
       const { result } = renderHook(() => useNavigateWithPlan());
-      result.current.navigateWithPlanState("/cool-page", undefined);
+      void result.current.navigateWithPlanState("/cool-page", undefined);
 
       expect(navigate).toHaveBeenCalledOnce();
       expect(navigate).toHaveBeenLastCalledWith(

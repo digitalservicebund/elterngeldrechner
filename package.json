@@ -80,7 +80,7 @@
     "react-hook-form": "^7.57.0",
     "react-imask": "^7.5.0",
     "react-redux": "^9.2.0",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^7.6.2"
   },
   "overrides": {
     "esbuild": "^0.25.0"

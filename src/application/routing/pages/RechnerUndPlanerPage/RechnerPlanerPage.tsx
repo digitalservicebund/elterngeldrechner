@@ -115,14 +115,14 @@ export function RechnerPlanerPage() {
 
   const navigateToEinkommenPage = () => {
     if (rememberSubmit.current) submitFeedback();
-    navigate(formSteps.einkommen.route);
+    void navigate(formSteps.einkommen.route);
   };
 
   function navigateToZusammenfassungUndDatenPage(): void {
     if (istPlanGueltig) {
       if (rememberSubmit.current) submitFeedback();
 
-      navigateWithPlanState(formSteps.zusammenfassungUndDaten.route, plan);
+      void navigateWithPlanState(formSteps.zusammenfassungUndDaten.route, plan);
     }
   }
 

@@ -25,7 +25,7 @@ export function NachwuchsPage() {
     );
 
     trackNutzergruppe(birthdate);
-    navigate(formSteps.erwerbstaetigkeit.route);
+    void navigate(formSteps.erwerbstaetigkeit.route);
   };
 
   return (

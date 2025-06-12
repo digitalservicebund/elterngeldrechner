@@ -41,7 +41,7 @@ export function Planer({
   className,
 }: Props): ReactNode {
   // Intermediate "cache" to resolve mutual parameter dependency between hooks
-  const setzeBeispielauswahlZurueckCallback = useRef<() => void>();
+  const setzeBeispielauswahlZurueckCallback = useRef<() => void>(undefined);
 
   const {
     onOpenLebensmonat,

@@ -1,9 +1,9 @@
-import { ReactHTML, type ReactNode, createElement } from "react";
+import { HTMLElementType, type ReactNode, createElement } from "react";
 import type { Zeitraum } from "@/lebensmonatrechner";
 
 type Props = {
   readonly zeitraum: Zeitraum;
-  readonly htmlElementType?: keyof ReactHTML;
+  readonly htmlElementType?: HTMLElementType;
   readonly prefix?: string;
   readonly className?: string;
 };

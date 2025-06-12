@@ -2,7 +2,7 @@ import { CSSProperties, RefObject, useLayoutEffect, useState } from "react";
 
 export function useMarginPositioning(
   isOpen: boolean,
-  buttonRef: RefObject<HTMLButtonElement>,
+  buttonRef: RefObject<HTMLButtonElement | null>,
 ) {
   const toolTipWidth = 400;
 

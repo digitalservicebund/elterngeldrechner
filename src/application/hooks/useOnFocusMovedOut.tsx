@@ -1,7 +1,7 @@
 import { type RefObject, useCallback, useEffect } from "react";
 
 export function useOnFocusMovedOut(
-  element: RefObject<HTMLElement>,
+  element: RefObject<HTMLElement | null>,
   onFocusMovedOut: () => void,
 ) {
   const checkIfFocusHasMovedOut = useCallback(

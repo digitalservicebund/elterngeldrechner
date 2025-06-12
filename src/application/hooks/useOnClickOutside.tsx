@@ -1,7 +1,7 @@
 import { type RefObject, useCallback, useEffect } from "react";
 
 export function useOnClickOutside(
-  element: RefObject<HTMLElement>,
+  element: RefObject<HTMLElement | null>,
   onClickOutside: () => void,
 ) {
   const checkIfClickedOutside = useCallback(

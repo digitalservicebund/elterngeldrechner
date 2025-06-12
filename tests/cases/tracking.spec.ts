@@ -178,8 +178,8 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
   const zusammenfassungPage = new ZusammenfassungPOM(page);
   await zusammenfassungPage.back();
 
-  expect(await rechnerUndPlaner.heading.isVisible()).toBeTruthy();
-  expect(await feedbackForm.appreciation.isVisible()).toBeFalsy();
+  await expect(rechnerUndPlaner.heading).toBeVisible();
+  await expect(feedbackForm.appreciation).not.toBeVisible();
 });
 
 test("feedback wird nicht ohne consent angezeigt", async ({ page }) => {

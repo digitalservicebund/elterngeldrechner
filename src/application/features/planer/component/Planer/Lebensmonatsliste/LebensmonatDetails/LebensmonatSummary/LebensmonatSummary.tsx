@@ -80,7 +80,7 @@ export function LebensmonatSummary(): ReactNode {
         return (
           <Fragment key={elternteil}>
             <Haushaltseinkommen
-              className="row-start-1 self-center justify-self-center"
+              className="row-start-1 place-self-center"
               style={elterngeldbezugColumns[elternteil]}
               elterngeldbezug={elterngeldbezug}
               bruttoeinkommen={bruttoeinkommen}

@@ -59,7 +59,7 @@
     "node-xlsx": "^0.24.0",
     "original-rechner": "file:original-rechner",
     "postcss": "^8.5.5",
-    "prettier": "^3.2.5",
+    "prettier": "^3.5.3",
     "sass": "^1.89.2",
     "stylelint": "^16.20.0",
     "stylelint-config-recommended": "^16.0.0",

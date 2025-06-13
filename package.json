@@ -21,8 +21,8 @@
     "audit-licenses": "license-checker-rseidelsohn --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "engines": {
-    "node": "24.1.0",
-    "npm": "11.4.1"
+    "node": "24",
+    "npm": "11"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",

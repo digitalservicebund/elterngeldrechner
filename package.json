@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^8.34.0",
     "@typescript-eslint/parser": "^8.34.0",
     "@vitejs/plugin-react": "^4.5.2",
-    "@vitest/eslint-plugin": "^1.2.2",
+    "@vitest/eslint-plugin": "^1.2.4",
     "autoprefixer": "^10.4.21",
     "commitlint": "^19.8.1",
     "eslint": "^9.28.0",

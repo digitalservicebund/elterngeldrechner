@@ -21,8 +21,8 @@
     "audit-licenses": "license-checker-rseidelsohn --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
   },
   "engines": {
-    "node": "20.11.1",
-    "npm": "10.2.4"
+    "node": "24.1.0",
+    "npm": "11.4.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.2",
@@ -33,7 +33,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/luxon": "^3.6.2",
-    "@types/node": "^20.11.28",
+    "@types/node": "^24.0.1",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@typescript-eslint/eslint-plugin": "^8.34.0",

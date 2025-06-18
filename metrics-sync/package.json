@@ -9,9 +9,9 @@
     "test:watch": "vitest watch"
   },
   "devDependencies": {
-    "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
-    "vitest": "^3.0.5"
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "overrides": {
     "esbuild": "^0.25.0"

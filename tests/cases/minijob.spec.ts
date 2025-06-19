@@ -7,6 +7,7 @@ test("Minijob", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(1);
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);

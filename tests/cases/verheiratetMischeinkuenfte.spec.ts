@@ -8,6 +8,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setMutterschutz("Elternteil 2");

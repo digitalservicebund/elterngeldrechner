@@ -35,6 +35,7 @@ const testStyles = async ({
     allgemeineAngabenPage.alleinerziehend,
   );
 
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
 
   await screenshot(

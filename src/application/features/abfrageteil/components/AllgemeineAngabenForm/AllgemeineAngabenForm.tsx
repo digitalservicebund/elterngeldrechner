@@ -8,13 +8,18 @@ import {
   CustomRadioGroup,
   CustomRadioGroupOption,
 } from "@/application/components";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
+import {
+  CustomSelect,
+  SelectOption,
+  YesNoRadio,
+} from "@/application/features/abfrageteil/components/common";
 import {
   StepAllgemeineAngabenState,
   YesNo,
   stepAllgemeineAngabenSlice,
 } from "@/application/features/abfrageteil/state";
 import { useAppStore } from "@/application/redux/hooks";
+import { allBundeslaender } from "@/pdfAntrag";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   { value: "FuerBeide", label: "Beide Elternteile sollen Elterngeld bekommen" },
@@ -63,6 +68,10 @@ export function AllgemeineAngabenForm({
     }
   };
 
+  const bundeslandOptions: SelectOption<string>[] = allBundeslaender.map(
+    (l) => ({ value: l, label: l }),
+  );
+
   return (
     <form
       id={id}
@@ -70,6 +79,19 @@ export function AllgemeineAngabenForm({
       onSubmit={handleSubmit(submitAllgemeineAngaben)}
       noValidate
     >
+      <CustomSelect
+        autoWidth
+        register={register}
+        registerOptions={{
+          required: "Ein Bundesland muss ausgewählt sein",
+        }}
+        name="bundesland"
+        label="In welchem Bundesland planen Sie Elterngeld zu beantragen?"
+        errors={formState.errors}
+        options={bundeslandOptions}
+        required
+      />
+
       <YesNoRadio
         legend="Sind Sie alleinerziehend?"
         register={register}

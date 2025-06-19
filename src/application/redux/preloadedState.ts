@@ -4,9 +4,11 @@ import {
   YesNo,
 } from "@/application/features/abfrageteil/state";
 import { KassenArt, KinderFreiBetrag, Steuerklasse } from "@/elterngeldrechner";
+import { Bundesland } from "@/pdfAntrag";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {
+    bundesland: "Berlin" as Bundesland,
     antragstellende: "FuerBeide" as Antragstellende,
     pseudonym: {
       ET1: "Jasper Darwin Artus",

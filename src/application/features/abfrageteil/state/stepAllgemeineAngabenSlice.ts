@@ -1,11 +1,13 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
 import { RootState } from "@/application/redux";
+import { Bundesland } from "@/pdfAntrag";
 
 export type Antragstellende = "EinenElternteil" | "FuerBeide";
 type AntragstellendeSelektor = "ET1" | "ET2";
 
 export interface StepAllgemeineAngabenState {
+  bundesland: Bundesland | null;
   antragstellende: Antragstellende | null;
   pseudonym: {
     ET1: string;
@@ -16,6 +18,7 @@ export interface StepAllgemeineAngabenState {
 }
 
 const initialState: StepAllgemeineAngabenState = {
+  bundesland: null,
   antragstellende: null,
   pseudonym: {
     ET1: "",
@@ -48,7 +51,11 @@ const getElternteilNames = createSelector(
   },
 );
 
+const getBundesland = (state: RootState) =>
+  state.stepAllgemeineAngaben.bundesland;
+
 export const stepAllgemeineAngabenSelectors = {
   getAntragssteller,
   getElternteilNames,
+  getBundesland,
 };

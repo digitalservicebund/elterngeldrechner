@@ -129,6 +129,12 @@ describe("Allgemeine Angaben Page", () => {
     it("should persist the step", async () => {
       const { store } = render(<AllgemeineAngabenForm />);
 
+      await userEvent.selectOptions(
+        screen.getByLabelText(
+          "In welchem Bundesland planen Sie Elterngeld zu beantragen?",
+        ),
+        "Berlin",
+      );
       await userEvent.click(screen.getByLabelText("Ja"));
       await userEvent.click(screen.getByTestId("mutterschutz_option_0"));
       await userEvent.click(screen.getByText("Weiter"));
@@ -143,6 +149,12 @@ describe("Allgemeine Angaben Page", () => {
     it("should persist the pseudonym", async () => {
       const { store } = render(<AllgemeineAngabenForm />);
 
+      await userEvent.selectOptions(
+        screen.getByLabelText(
+          "In welchem Bundesland planen Sie Elterngeld zu beantragen?",
+        ),
+        "Berlin",
+      );
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(
         screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
@@ -177,6 +189,12 @@ describe("Allgemeine Angaben Page", () => {
 
       const { store } = render(<AllgemeineAngabenForm />, { preloadedState });
 
+      await userEvent.selectOptions(
+        screen.getByLabelText(
+          "In welchem Bundesland planen Sie Elterngeld zu beantragen?",
+        ),
+        "Berlin",
+      );
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(
         screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),

@@ -15,6 +15,7 @@ test("smoke test", async ({ page }) => {
   test.slow();
 
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
   await allgemeineAngabenPage.submit();

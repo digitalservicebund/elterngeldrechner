@@ -4,6 +4,8 @@ export class AllgemeineAngabenPOM {
   readonly page: Page;
   readonly heading: Locator;
 
+  readonly bundesland: Locator;
+
   readonly alleinerziehend: Locator;
   readonly alleinerziehendError: Locator;
 
@@ -17,6 +19,10 @@ export class AllgemeineAngabenPOM {
     this.page = page;
 
     this.heading = page.getByRole("heading", { name: "Allgemeine Angaben" });
+
+    this.bundesland = page.getByLabel(
+      "In welchem Bundesland planen Sie Elterngeld zu beantragen?",
+    );
 
     this.alleinerziehend = page.getByRole("radiogroup", {
       name: "Sind Sie alleinerziehend?",
@@ -46,6 +52,11 @@ export class AllgemeineAngabenPOM {
 
   async goto() {
     await this.page.goto("./");
+    return this;
+  }
+
+  async setBundesland(value: string) {
+    await this.bundesland.selectOption(value);
     return this;
   }
 

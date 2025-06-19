@@ -18,12 +18,12 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  await page.goto("./");
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
 
   const cookieBanner = new CookieBannerPOM(page);
   await cookieBanner.consent();
 
-  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(1);
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
@@ -64,12 +64,12 @@ test("paar das mutterschutz und bonus nimmt", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  await page.goto("./");
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
 
   const cookieBanner = new CookieBannerPOM(page);
   await cookieBanner.consent();
 
-  const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");
@@ -113,7 +113,7 @@ test("feedback in der planung bei schwieriger benutzung", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  await page.goto("./");
+  await new AllgemeineAngabenPOM(page).goto();
 
   const cookieBanner = new CookieBannerPOM(page);
   await cookieBanner.consent();
@@ -136,7 +136,7 @@ test("feedback in der planung bei leichter benutzung", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  await page.goto("./");
+  await new AllgemeineAngabenPOM(page).goto();
 
   const cookieBanner = new CookieBannerPOM(page);
   await cookieBanner.consent();
@@ -157,7 +157,7 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  await page.goto("./");
+  await new AllgemeineAngabenPOM(page).goto();
 
   const cookieBanner = new CookieBannerPOM(page);
   await cookieBanner.consent();
@@ -187,7 +187,7 @@ test("feedback wird nicht ohne consent angezeigt", async ({ page }) => {
 
   await page.addInitScript(establishDataLayer);
 
-  await page.goto("./");
+  await new AllgemeineAngabenPOM(page).goto();
 
   await fastForwardToPlaner(page);
 
@@ -221,6 +221,7 @@ async function fastForwardToPlaner(page: Page) {
 
 async function fastForwardAllgemeineAngaben(page: Page) {
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");

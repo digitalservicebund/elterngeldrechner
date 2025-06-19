@@ -23,6 +23,7 @@ test("basic accessibility run", async ({ page }, testInfo) => {
 
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
   await allgemeineAngabenPage.goto();
+  await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
   await allgemeineAngabenPage.setNameElternteil1("Jane");

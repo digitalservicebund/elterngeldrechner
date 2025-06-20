@@ -10,7 +10,7 @@ import { Specification } from "@/monatsplaner/common/specification";
 
 export const JedesElternteilBeziehtKeineOderMindestensZweiLebensmonate =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Bitte beachten Sie: Aktuell ist die Planung nicht vollständig. Nur einen Monat auszuwählen ist nicht zulässig. Der Elternteil, der sich für Elterngeld entscheidet, muss mindestens zwei Monate Elterngeld auswählen.",
+    "Aktuell ist die Planung nicht vollständig. Nur einen Monat auszuwählen ist nicht zulässig. Der Elternteil, der sich für Elterngeld entscheidet, muss mindestens zwei Monate Elterngeld auswählen.",
     (lebensmonate) => {
       const monateProElternteil = Object.values(lebensmonate)
         .flatMap(

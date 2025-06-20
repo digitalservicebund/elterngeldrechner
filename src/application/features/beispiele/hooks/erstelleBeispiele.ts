@@ -444,7 +444,7 @@ if (import.meta.vitest) {
     }
 
     const TOLERATED_VALIDATION_VIOLATION_MESSAGES = [
-      "Bitte beachten Sie: Die Planung ist derzeit noch nicht vollständig. Während Sie den Partnerschaftsbonus bekommen, müssen Sie 24 bis 32 Stunden pro Woche arbeiten. Tragen Sie bitte das voraussichtliche Einkommen für diese Monate ein.",
+      "Die Planung ist derzeit noch nicht vollständig. Während Sie den Partnerschaftsbonus bekommen, müssen Sie 24 bis 32 Stunden pro Woche arbeiten. Tragen Sie bitte das voraussichtliche Einkommen für diese Monate ein.",
     ];
 
     function arbitraryPseudonymeDerElternteile() {

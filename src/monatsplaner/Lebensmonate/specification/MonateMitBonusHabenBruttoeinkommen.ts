@@ -8,7 +8,7 @@ import { Specification } from "@/monatsplaner/common/specification";
 
 export const MonateMitBonusHabenBruttoeinkommen =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Bitte beachten Sie: Die Planung ist derzeit noch nicht vollständig. Während Sie den Partnerschaftsbonus bekommen, müssen Sie 24 bis 32 Stunden pro Woche arbeiten. Tragen Sie bitte das voraussichtliche Einkommen für diese Monate ein.",
+    "Die Planung ist derzeit noch nicht vollständig. Während Sie den Partnerschaftsbonus bekommen, müssen Sie 24 bis 32 Stunden pro Woche arbeiten. Tragen Sie bitte das voraussichtliche Einkommen für diese Monate ein.",
     (lebensmonate) =>
       Object.values(lebensmonate)
         .flatMap((lebensmonat) => Object.values(lebensmonat))

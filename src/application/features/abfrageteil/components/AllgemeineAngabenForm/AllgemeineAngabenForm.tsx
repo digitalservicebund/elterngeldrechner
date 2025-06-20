@@ -1,7 +1,8 @@
-import { useCallback, useId } from "react";
-import { useForm } from "react-hook-form";
+import { useCallback } from "react";
+import { FieldError, get, useForm } from "react-hook-form";
 import { InfoZuAlleinerziehenden } from "./InfoFuerAlleinerziehenden";
 import { InfoZuAntragstellenden } from "./InfoZuAntragstellenden";
+import { InfoZuVornamen } from "./InfoZuVornamen";
 import { InfoZumMutterschutz } from "./InfoZumMutterschutz";
 import {
   Button,
@@ -57,8 +58,14 @@ export function AllgemeineAngabenForm({
   const antragstellendeFormValue = watch("antragstellende");
   const alleinerziehendenFormValue = watch("alleinerziehend");
 
-  const pseudonymFieldsetDescriptionIdentifier = useId();
   const pseudonymFormValue = watch("pseudonym");
+
+  const pseudonym1Error = get(formState.errors, "pseudonym.ET1") as
+    | FieldError
+    | undefined;
+  const pseudonym2Error = get(formState.errors, "pseudonym.ET2") as
+    | FieldError
+    | undefined;
 
   const initializeAntragstellendeIfAlleinerziehend = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -119,33 +126,47 @@ export function AllgemeineAngabenForm({
       )}
 
       {antragstellendeFormValue === "FuerBeide" && (
-        <fieldset
-          className="flex flex-wrap gap-x-56 gap-y-16"
-          aria-describedby={pseudonymFieldsetDescriptionIdentifier}
-        >
-          <legend className="sr-only">Namen der Elternteile</legend>
+        <fieldset>
+          <legend>Bitte geben Sie Ihre Vornamen an.</legend>
 
-          <p id={pseudonymFieldsetDescriptionIdentifier} className="basis-full">
-            Um auf die Begriffe Elternteil 1 und Elternteil 2 in den folgenden
-            Schritten verzichten zu können, können Sie hier Ihre Namen oder ein
-            Pseudonym angeben, welches wir dann verwenden werden.
-          </p>
+          <InfoZuVornamen />
+          <div className="flex flex-wrap gap-x-56 gap-y-16 pt-16">
+            <div>
+              <label className="flex flex-col gap-8">
+                Name für Elternteil 1
+                <input
+                  className={CLASS_NAME_PSEUDONYM_INPUT}
+                  {...register("pseudonym.ET1", {
+                    required: "Dieses Feld ist erforderlich",
+                  })}
+                  required
+                />
+              </label>
+              {!!pseudonym1Error && (
+                <span className="mt-8 text-14 text-danger">
+                  {pseudonym1Error.message}
+                </span>
+              )}
+            </div>
 
-          <label className="flex flex-col gap-8">
-            Name für Elternteil 1 (optional)
-            <input
-              className={CLASS_NAME_PSEUDONYM_INPUT}
-              {...register("pseudonym.ET1")}
-            />
-          </label>
-
-          <label className="flex flex-col gap-8">
-            Name für Elternteil 2 (optional)
-            <input
-              className={CLASS_NAME_PSEUDONYM_INPUT}
-              {...register("pseudonym.ET2")}
-            />
-          </label>
+            <div>
+              <label className="flex flex-col gap-8">
+                Name für Elternteil 2
+                <input
+                  className={CLASS_NAME_PSEUDONYM_INPUT}
+                  {...register("pseudonym.ET2", {
+                    required: "Dieses Feld ist erforderlich",
+                  })}
+                  required
+                />
+              </label>
+              {!!pseudonym2Error && (
+                <span className="mt-8 text-14 text-danger">
+                  {pseudonym2Error.message}
+                </span>
+              )}
+            </div>
+          </div>
         </fieldset>
       )}
 

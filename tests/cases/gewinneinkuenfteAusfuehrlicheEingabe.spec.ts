@@ -11,6 +11,8 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
+  await allgemeineAngabenPage.setNameElternteil1("Elternteil 1");
+  await allgemeineAngabenPage.setNameElternteil2("Elternteil 2");
   await allgemeineAngabenPage.setMutterschutz(false);
   await allgemeineAngabenPage.submit();
 

@@ -31,12 +31,8 @@ describe("Allgemeine Angaben Page", () => {
       screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
     );
 
-    expect(
-      screen.getByText("Name für Elternteil 1 (optional)"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("Name für Elternteil 2 (optional)"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Name für Elternteil 1")).toBeInTheDocument();
+    expect(screen.getByText("Name für Elternteil 2")).toBeInTheDocument();
   });
 
   it("should ask for Mutterschutz if Gemeinsam Erziehende", async () => {
@@ -160,11 +156,11 @@ describe("Allgemeine Angaben Page", () => {
         screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
       );
       await userEvent.type(
-        screen.getByLabelText("Name für Elternteil 1 (optional)"),
+        screen.getByLabelText("Name für Elternteil 1"),
         "Finn",
       );
       await userEvent.type(
-        screen.getByLabelText("Name für Elternteil 2 (optional)"),
+        screen.getByLabelText("Name für Elternteil 2"),
         "Fiona",
       );
       await userEvent.click(screen.getByTestId("mutterschutz_option_0"));
@@ -198,6 +194,14 @@ describe("Allgemeine Angaben Page", () => {
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(
         screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+      );
+      await userEvent.type(
+        screen.getByLabelText("Name für Elternteil 1"),
+        "Finn",
+      );
+      await userEvent.type(
+        screen.getByLabelText("Name für Elternteil 2"),
+        "Fiona",
       );
       await userEvent.click(screen.getByTestId("mutterschutz_option_2"));
       await userEvent.click(screen.getByText("Weiter"));

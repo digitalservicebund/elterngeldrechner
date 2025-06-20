@@ -73,23 +73,11 @@ export function AbschnittMitEinkommen(): ReactNode {
             </p>
           </>
         )}
-        <InfoText
-          question="Wie funktioniert Einkommen mit Elterngeld?"
-          answer={<InfoZumEinkommen />}
-          classNameContent="bg-white pr-16 py-8"
-        />
-        {!!istLebensmonatMitBonus && (
-          <InfoText
-            question="Wie funktioniert der Partnerschaftsbonus?"
-            answer={<InfoZumBonus />}
-            classNameContent="bg-white pr-16 py-8"
-          />
-        )}
 
         {!!istBruttoeinkommenMissing && (
-          <div className="w-full rounded bg-warning-light px-8 py-6">
+          <div className="mt-8 w-full rounded bg-warning-light px-8 py-6">
             <ErrorIcon className="text-warning" /> Beim Partnerschaftsbonus ist
-            Arbeit in Teilzeit Pflicht.
+            Arbeit in Teilzeit Pflicht. Geben Sie ein Einkommen ein.
           </div>
         )}
       </div>
@@ -134,6 +122,19 @@ export function AbschnittMitEinkommen(): ReactNode {
           );
         }
       })}
+
+      <div className="my-16 flex flex-wrap gap-6" style={headingColumn}>
+        <InfoText
+          question="Wie funktioniert Einkommen mit Elterngeld?"
+          answer={<InfoZumEinkommen />}
+        />
+        {!!istLebensmonatMitBonus && (
+          <InfoText
+            question="Wie funktioniert der Partnerschaftsbonus?"
+            answer={<InfoZumBonus />}
+          />
+        )}
+      </div>
     </div>
   );
 }

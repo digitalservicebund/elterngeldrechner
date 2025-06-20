@@ -98,7 +98,7 @@ const testStyles = async ({
   await allgemeineAngabenPage.setNameElternteil2("Luke");
 
   await allgemeineAngabenPage.setMutterschutz("Leia");
-  await allgemeineAngabenPage.setNameElternteil1("");
+  await allgemeineAngabenPage.setNameElternteil1("Elternteil 1");
 
   await screenshot("allgemeine-angaben-beide", page.locator("#egr-root"));
 

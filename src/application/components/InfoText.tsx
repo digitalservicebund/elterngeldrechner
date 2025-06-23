@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
 
 type Props = {
@@ -24,11 +23,7 @@ export function InfoText({
         <u>{question}</u>
       </summary>
 
-      <div
-        className={classNames(
-          "mt-4 border-0 border-l-4 border-solid border-grey pl-10",
-        )}
-      >
+      <div className="mt-4 border-0 border-l-4 border-solid border-grey pl-10">
         {typeof answer === "string" ? <p>{answer}</p> : answer}
       </div>
     </details>

@@ -7,12 +7,8 @@ on:
 jobs:
   url-check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: check urls
         run: |
           # grep for all urls in all places, e.g. also in comments
@@ -22,9 +18,7 @@ jobs:
           | \
 
           # remove duplicates
-          sort \
-          | \
-          uniq \
+          sort | uniq \
           | \
 
           # filter out test/technical urls
@@ -34,8 +28,8 @@ jobs:
 
           # request every url and fail as soon as a http status is >= 400
           # hint: exit 255 causes xargs to exit
-          xargs -t -n1 \
-            sh -c 'curl --head --fail-with-body $0 || exit 255'
+          xargs --verbose --max-args=1 \
+            sh -c 'curl --head --retry 1 --fail-with-body $0 || exit 255'
 
       - name: Send failure to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba

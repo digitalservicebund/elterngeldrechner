@@ -17,7 +17,7 @@ import antragImg from "@/pdfAntrag/assets/antrag.png";
 import seiteImg from "@/pdfAntrag/assets/seite.png";
 import { preparePDF } from "@/pdfAntrag/pdf-erstellen";
 
-export function ZusammenfassungUndDatenPage(): ReactNode {
+export function DatenuebernahmeAntragPage(): ReactNode {
   const store = useAppStore();
 
   const { plan, navigateWithPlanState } = useNavigateWithPlan();
@@ -79,7 +79,7 @@ export function ZusammenfassungUndDatenPage(): ReactNode {
   }
 
   return (
-    <Page step={formSteps.zusammenfassungUndDaten}>
+    <Page step={formSteps.datenuebernahmeAntrag}>
       <div className="flex flex-col gap-56">
         {isSupported ? (
           <div>

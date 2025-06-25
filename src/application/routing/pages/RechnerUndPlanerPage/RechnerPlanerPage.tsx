@@ -118,11 +118,11 @@ export function RechnerPlanerPage() {
     void navigate(formSteps.einkommen.route);
   };
 
-  function navigateToZusammenfassungUndDatenPage(): void {
+  function navigateToDatenuebernahmeAntragPage(): void {
     if (istPlanGueltig) {
       if (rememberSubmit.current) submitFeedback();
 
-      void navigateWithPlanState(formSteps.zusammenfassungUndDaten.route, plan);
+      void navigateWithPlanState(formSteps.datenuebernahmeAntrag.route, plan);
     }
   }
 
@@ -164,9 +164,9 @@ export function RechnerPlanerPage() {
               <Button
                 type="button"
                 disabled={!istPlanGueltig}
-                onClick={navigateToZusammenfassungUndDatenPage}
+                onClick={navigateToDatenuebernahmeAntragPage}
               >
-                Zur Zusammenfassung
+                Planung für den Antrag übernehmen
               </Button>
             </div>
 

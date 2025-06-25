@@ -28,9 +28,9 @@ export const formSteps = {
     shortName: "Monatsplaner",
     route: "/rechner-planer",
   },
-  zusammenfassungUndDaten: {
+  datenuebernahmeAntrag: {
     heading: "Übernahme Ihrer Planung in den PDF Antrag auf Elterngeld",
     shortName: "Datenübernahme Antrag",
-    route: "/zusammenfassung-und-daten",
+    route: "/datenuebernahme-antrag",
   },
 } as const;

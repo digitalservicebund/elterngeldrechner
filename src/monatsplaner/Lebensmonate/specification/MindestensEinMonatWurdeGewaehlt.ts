@@ -5,7 +5,7 @@ import { Specification } from "@/monatsplaner/common/specification";
 
 export const MindestensEinMonatWurdeGewaehlt =
   Specification.fromPredicate<LebensmonateMitBeliebigenElternteilen>(
-    "Aktuell ist im Planer keine Auswahl getroffen. Bitte wählen Sie zunächst Ihre Monate mit Elterngeld aus, bevor Sie zur Zusammenfassung fortfahren.",
+    "Aktuell ist im Planer keine Auswahl getroffen. Bitte wählen Sie zunächst Ihre Monate mit Elterngeld aus, bevor Sie zur Datenübernahme Antrag fortfahren.",
     (lebensmonate) =>
       Object.values(lebensmonate)
         .flatMap(Object.values)

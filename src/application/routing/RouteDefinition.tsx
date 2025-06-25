@@ -2,11 +2,11 @@ import { Navigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import {
   AllgemeineAngabenPage,
+  DatenuebernahmeAntragPage,
   EinkommenPage,
   ErwerbstaetigkeitPage,
   NachwuchsPage,
   RechnerPlanerPage,
-  ZusammenfassungUndDatenPage,
 } from "./pages";
 import { RootState } from "@/application/redux";
 import RouteGuard from "@/application/routing/RouteGuard";
@@ -72,8 +72,8 @@ const internalRouteDefinition: InternalRouteDefinition = [
     },
   },
   {
-    element: <ZusammenfassungUndDatenPage />,
-    path: formSteps.zusammenfassungUndDaten.route,
+    element: <DatenuebernahmeAntragPage />,
+    path: formSteps.datenuebernahmeAntrag.route,
     precondition: (_: RootState, plan?: PlanMitBeliebigenElternteilen) => {
       return plan != null;
     },

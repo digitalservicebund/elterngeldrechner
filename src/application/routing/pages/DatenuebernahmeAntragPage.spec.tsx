@@ -1,32 +1,32 @@
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { ZusammenfassungUndDatenPage } from "./ZusammenfassungUndDatenPage";
+import { DatenuebernahmeAntragPage } from "./DatenuebernahmeAntragPage";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { render, screen } from "@/application/test-utils";
 
-describe("Zusammenfassung und Daten Page", () => {
+describe("Datenuebernahme Antrag Page", () => {
   beforeEach(async () => {
     vi.spyOn(await import("./useNavigateWithPlan"), "useNavigateWithPlan");
   });
 
-  it("shows a section for the Zusammenfassung if a Plan was provided", () => {
+  it("shows a section for the Datenuebernahme Antrag if a Plan was provided", () => {
     vi.mocked(useNavigateWithPlan).mockReturnValue({
       plan: ANY_PLAN,
       navigateWithPlanState: () => undefined,
     });
 
-    render(<ZusammenfassungUndDatenPage />);
+    render(<DatenuebernahmeAntragPage />);
 
-    expect(screen.getByLabelText("Zusammenfassung")).toBeVisible();
+    expect(screen.getByLabelText("DatenuebernahmeAntrag")).toBeVisible();
   });
 
-  it("shows hint instead of Zusammenfassung when no Plan was provided", () => {
+  it("shows hint instead of Datenuebernahme Antrag when no Plan was provided", () => {
     vi.mocked(useNavigateWithPlan).mockReturnValue({
       plan: undefined,
       navigateWithPlanState: () => undefined,
     });
 
-    render(<ZusammenfassungUndDatenPage />);
+    render(<DatenuebernahmeAntragPage />);
 
     expect(screen.getByText("Es wurde noch kein Plan erstellt"));
   });
@@ -38,7 +38,7 @@ describe("Zusammenfassung und Daten Page", () => {
       navigateWithPlanState,
     });
 
-    render(<ZusammenfassungUndDatenPage />);
+    render(<DatenuebernahmeAntragPage />);
 
     const button = screen.getByRole("button", { name: "Zurück" });
     await userEvent.click(button);

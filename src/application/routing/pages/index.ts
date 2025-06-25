@@ -3,4 +3,4 @@ export { NachwuchsPage } from "./NachwuchsPage";
 export { ErwerbstaetigkeitPage } from "./ErwerbstaetigkeitPage";
 export { EinkommenPage } from "./EinkommenPage";
 export { RechnerPlanerPage } from "./RechnerUndPlanerPage";
-export { ZusammenfassungUndDatenPage } from "./ZusammenfassungUndDatenPage";
+export { DatenuebernahmeAntragPage } from "./DatenuebernahmeAntragPage";

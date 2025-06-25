@@ -15,19 +15,26 @@ jobs:
 
       - name: check urls
         run: |
-          ls ./src/application
+          # grep for all urls in all places, e.g. also in comments
           grep --no-messages --recursive --no-filename --only-matching --extended-regexp \
             "(http|https)://[a-zA-Z0-9./?!=_-]*" \
             ./src/application/**/* \
-            | \
-            grep --extended-regexp --line-regexp --invert-match \
-            "http://localhost|http://www.w3.org/2000/svg|https://test.tld/tag-manager" \
-            | \
-            sort \
-            | \
-            uniq \
-            | \
-            xargs -t -n1 \
+          | \
+
+          # remove duplicates
+          sort \
+          | \
+          uniq \
+          | \
+
+          # filter out test/technical urls
+          grep --extended-regexp --line-regexp --invert-match \
+          "http://localhost|http://www.w3.org/2000/svg|https://test.tld/tag-manager" \
+          | \
+
+          # request every url and fail as soon as a http status is >= 400
+          # hint: exit 255 causes xargs to exit
+          xargs -t -n1 \
             sh -c 'curl --head --fail-with-body $0 || exit 255'
 
       - name: Send failure to Slack

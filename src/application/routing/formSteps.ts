@@ -29,7 +29,8 @@ export const formSteps = {
     route: "/rechner-planer",
   },
   zusammenfassungUndDaten: {
-    heading: "Zusammenfassung",
+    heading: "Übernahme Ihrer Planung in den PDF Antrag auf Elterngeld",
+    shortName: "Datenübernahme Antrag",
     route: "/zusammenfassung-und-daten",
   },
 } as const;

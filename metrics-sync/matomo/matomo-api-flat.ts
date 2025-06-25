@@ -43,7 +43,6 @@ function flatten(actions: Action[]): FlatStructure<Action, Subtable>[] {
     const actionFields: Flattened<Action, "action"> = Object.fromEntries(
       Object.entries(action)
         .filter(([key]) => key !== "subtable")
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         .map(([key, value]) => [`action_${key}`, String(value)]),
     ) as Flattened<Action, "action">;
 

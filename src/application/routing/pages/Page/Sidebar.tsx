@@ -33,7 +33,7 @@ export function Sidebar({ currentStep }: Props) {
     navbar: "m-0 list-none p-0 max-[1169px]:mb-40",
     navbarActivatorLarge: "hidden text-nowrap px-24 py-16",
     navbarActivatorSmall:
-      "max-[1169px]:flex max-[1169px]:w-full max-[1169px]:items-center max-[1169px]:justify-between max-[1169px]:border-none max-[1169px]:bg-primary-light max-[1169px]:text-black",
+      "max-[1169px]:text-16 max-[1169px]:flex max-[1169px]:w-full max-[1169px]:items-center max-[1169px]:justify-between max-[1169px]:border-none max-[1169px]:bg-primary-light max-[1169px]:text-black",
 
     menuBase: "counter-item-reset m-0 list-none p-0",
     menuClosed: "max-[1169px]:invisible max-[1169px]:absolute",

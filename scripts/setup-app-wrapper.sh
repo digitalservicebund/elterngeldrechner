@@ -96,6 +96,9 @@ wget \
 
 mv egr.html index.html
 
+cp ../src/pdfAntrag/assets/antrag.pdf .
+cp ../src/pdfAntrag/assets/seite.pdf .
+
 # Remove assets from live egr, will be replaced by new ones
 rm index-*.js
 rm index-*.css

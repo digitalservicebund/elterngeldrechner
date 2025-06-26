@@ -11,7 +11,7 @@ import { Variante, isVariante } from "./Variante";
  * be iterated in TypeScript.
  */
 
-export const KeinElterngeld = "kein Elterngeld";
+export const KeinElterngeld = "kein Elterngeld" as const;
 
 export const Auswahloptionen = [KeinElterngeld, ...Object.values(Variante)] as (
   | Variante

@@ -1,34 +1,55 @@
 import userEvent from "@testing-library/user-event";
+import { produce } from "immer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DatenuebernahmeAntragPage } from "./DatenuebernahmeAntragPage";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
-import { render, screen } from "@/application/test-utils";
+import { INITIAL_STATE, render, screen } from "@/application/test-utils";
 
 describe("Datenuebernahme Antrag Page", () => {
   beforeEach(async () => {
     vi.spyOn(await import("./useNavigateWithPlan"), "useNavigateWithPlan");
   });
 
-  it("shows a section for the Datenuebernahme Antrag if a Plan was provided", () => {
+  it("shows a section for the Datenuebernahme Antrag with option to download pdf if a Plan was provided and Bundesland is supported", () => {
     vi.mocked(useNavigateWithPlan).mockReturnValue({
       plan: ANY_PLAN,
       navigateWithPlanState: () => undefined,
     });
 
-    render(<DatenuebernahmeAntragPage />);
+    render(<DatenuebernahmeAntragPage />, { preloadedState: initialTestState });
 
-    expect(screen.getByLabelText("DatenuebernahmeAntrag")).toBeVisible();
+    expect(
+      screen.getByLabelText(
+        "Übernahme Ihrer Planung in den PDF Antrag auf Elterngeld",
+      ),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Antrag_auf_Elterngeld.pdf" }),
+    ).toBeVisible();
   });
 
-  it("shows hint instead of Datenuebernahme Antrag when no Plan was provided", () => {
+  it("shows a section for the Datenuebernahme Antrag with links instead of option to download pdf if a Plan was provided and Bundesland is unsupported", () => {
+    const state = produce(initialTestState, (draft) => {
+      draft.stepAllgemeineAngaben.bundesland = "Bayern";
+    });
+
     vi.mocked(useNavigateWithPlan).mockReturnValue({
-      plan: undefined,
+      plan: ANY_PLAN,
       navigateWithPlanState: () => undefined,
     });
 
-    render(<DatenuebernahmeAntragPage />);
+    render(<DatenuebernahmeAntragPage />, { preloadedState: state });
 
-    expect(screen.getByText("Es wurde noch kein Plan erstellt"));
+    expect(
+      screen.getByLabelText(
+        "Übernahme Ihrer Planung in den PDF Antrag auf Elterngeld",
+      ),
+    ).toBeVisible();
+    expect(
+      screen.getByText(
+        "Die Übernahme der Planung ist nur in den sogenannten Bundeseinheitlichen Antrag möglich.",
+      ),
+    ).toBeVisible();
   });
 
   it("uses the existing Plan when navigating back to the Rechner", async () => {
@@ -38,7 +59,7 @@ describe("Datenuebernahme Antrag Page", () => {
       navigateWithPlanState,
     });
 
-    render(<DatenuebernahmeAntragPage />);
+    render(<DatenuebernahmeAntragPage />, { preloadedState: initialTestState });
 
     const button = screen.getByRole("button", { name: "Zurück" });
     await userEvent.click(button);
@@ -58,3 +79,13 @@ const ANY_PLAN = {
   },
   lebensmonate: {},
 };
+
+const initialTestState = produce(INITIAL_STATE, (draft) => {
+  draft.stepAllgemeineAngaben.bundesland = "Berlin";
+  draft.stepAllgemeineAngaben.pseudonym = {
+    ET1: "Elternteil 1",
+    ET2: "Elternteil 2",
+  };
+  draft.stepNachwuchs.anzahlKuenftigerKinder = 1;
+  draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "01.01.2100";
+});

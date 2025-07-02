@@ -14,12 +14,12 @@ export function AllgemeineAngabenPage() {
   return (
     <Page step={formSteps.allgemeinAngaben}>
       <div className="flex flex-col gap-56">
+        TEST
         <AllgemeineAngabenForm
           id={formIdentifier}
           onSubmit={navigateToNachwuchsPage}
           hideSubmitButton
         />
-
         <div>
           <Button type="submit" form={formIdentifier}>
             Weiter

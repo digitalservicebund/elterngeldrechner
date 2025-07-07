@@ -20,7 +20,7 @@ describe("Datenuebernahme Antrag Page", () => {
 
     expect(
       screen.getByLabelText(
-        "Übernahme Ihrer Planung in den PDF Antrag auf Elterngeld",
+        "Übernahme Planung in den PDF Antrag auf Elterngeld",
       ),
     ).toBeVisible();
     expect(
@@ -42,12 +42,12 @@ describe("Datenuebernahme Antrag Page", () => {
 
     expect(
       screen.getByLabelText(
-        "Übernahme Ihrer Planung in den PDF Antrag auf Elterngeld",
+        "Übernahme Planung in den PDF Antrag auf Elterngeld",
       ),
     ).toBeVisible();
     expect(
       screen.getByText(
-        "Die Übernahme der Planung ist nur in den sogenannten Bundeseinheitlichen Antrag möglich.",
+        "Die automatische Übernahme Ihrer Elterngeld-Planung ist nur im bundeseinheitlichen Antrag möglich.",
       ),
     ).toBeVisible();
   });

@@ -21,7 +21,7 @@ test("Minijob", async ({ page }) => {
   await page.getByText("Nein").nth(3).click();
   await page.getByText("Ja").nth(4).click();
   await page.getByRole("button", { name: "Weiter" }).click();
-  await page.getByText("Nein").click();
+  await page.getByTestId("limitEinkommenUeberschritten_option_1").click();
   await page.getByLabel("Monatliches Einkommen in Brutto").click();
   await page.getByLabel("Monatliches Einkommen in Brutto").fill("510 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
@@ -38,7 +38,9 @@ test("Minijob", async ({ page }) => {
   await planer.waehleOption(11, "Basis");
   await planer.waehleOption(12, "Basis");
 
-  await page.getByRole("button", { name: "Zur Zusammenfassung" }).click();
+  await page
+    .getByRole("button", { name: "Planung für den Antrag übernehmen" })
+    .click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",

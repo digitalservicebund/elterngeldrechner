@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 import expectScreenshot from "../expectScreenshot";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 
 test("alleinerziehend, erwerbslos", async ({ page }) => {
   const screenshot = expectScreenshot({ page });
@@ -43,8 +43,8 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(14, "Basis");
   await rechnerUndPlaner.submit();
 
-  const zusammenfassungPage = new ZusammenfassungPOM(page);
-  await expect(zusammenfassungPage.heading).toBeVisible();
+  const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
+  await expect(datenuebernahmeAntragPage.heading).toBeVisible();
 
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(

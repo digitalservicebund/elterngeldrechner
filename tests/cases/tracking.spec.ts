@@ -1,12 +1,12 @@
 import { Page, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { CookieBannerPOM } from "../pom/CookieBannerPOM";
+import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { FeedbackPOM } from "../pom/FeedbackPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
-import { ZusammenfassungPOM } from "../pom/ZusammenfassungPOM";
 
 import {
   establishDataLayer,
@@ -175,8 +175,8 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
 
   expect(await feedbackForm.appreciation.isVisible()).toBeFalsy();
 
-  const zusammenfassungPage = new ZusammenfassungPOM(page);
-  await zusammenfassungPage.back();
+  const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
+  await datenuebernahmeAntragPage.back();
 
   await expect(rechnerUndPlaner.heading).toBeVisible();
   await expect(feedbackForm.appreciation).not.toBeVisible();

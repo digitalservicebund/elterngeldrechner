@@ -71,7 +71,10 @@ export class RechnerPlanerPOM {
 
   async submit() {
     await this.page
-      .getByRole("button", { name: "Zur Zusammenfassung", exact: true })
+      .getByRole("button", {
+        name: "Planung für den Antrag übernehmen",
+        exact: true,
+      })
       .click();
   }
 }

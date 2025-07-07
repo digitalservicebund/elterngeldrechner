@@ -20,9 +20,7 @@ export class AllgemeineAngabenPOM {
 
     this.heading = page.getByRole("heading", { name: "Allgemeine Angaben" });
 
-    this.bundesland = page.getByLabel(
-      "In welchem Bundesland planen Sie Elterngeld zu beantragen?",
-    );
+    this.bundesland = page.getByLabel("bundesland");
 
     this.alleinerziehend = page.getByRole("radiogroup", {
       name: "Sind Sie alleinerziehend?",

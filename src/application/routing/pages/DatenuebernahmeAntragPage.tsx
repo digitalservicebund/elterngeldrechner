@@ -1,3 +1,4 @@
+import ArrowOutward from "@digitalservicebund/icons/ArrowOutward";
 import AntragIcon from "@digitalservicebund/icons/ContentCopyOutlined";
 import SeiteIcon from "@digitalservicebund/icons/DescriptionOutlined";
 import download from "downloadjs";
@@ -36,9 +37,6 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     supportedBundeslaender as ReadonlyArray<string>
   ).includes(bundeslandString);
 
-  const ressourcesForSelectedUnsupportedBundesland =
-    unsupportedBundeslaenderRessources[bundeslandString];
-
   let nameET1 = "";
   let nameET2 = "";
   if (plan?.ausgangslage?.anzahlElternteile === 2) {
@@ -50,8 +48,14 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     setDownloading(true);
 
     const informationForPdfAntrag = {
-      nameET1: store.getState().stepAllgemeineAngaben.pseudonym.ET1,
-      nameET2: store.getState().stepAllgemeineAngaben.pseudonym.ET2,
+      nameET1:
+        plan?.ausgangslage?.anzahlElternteile === 2
+          ? store.getState().stepAllgemeineAngaben.pseudonym.ET1
+          : "",
+      nameET2:
+        plan?.ausgangslage?.anzahlElternteile === 2
+          ? store.getState().stepAllgemeineAngaben.pseudonym.ET2
+          : "",
       anzahlKinder: store.getState().stepNachwuchs.anzahlKuenftigerKinder,
       geburtsdatum: store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
     };
@@ -67,8 +71,14 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     setSeiteDownloading(true);
 
     const informationForPdfAntrag = {
-      nameET1: store.getState().stepAllgemeineAngaben.pseudonym.ET1,
-      nameET2: store.getState().stepAllgemeineAngaben.pseudonym.ET2,
+      nameET1:
+        plan?.ausgangslage?.anzahlElternteile === 2
+          ? store.getState().stepAllgemeineAngaben.pseudonym.ET1
+          : "",
+      nameET2:
+        plan?.ausgangslage?.anzahlElternteile === 2
+          ? store.getState().stepAllgemeineAngaben.pseudonym.ET2
+          : "",
     };
 
     const pdfBytes = await preparePDF(false, informationForPdfAntrag, plan);
@@ -163,46 +173,30 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           </div>
         ) : (
           <div>
-            <h3 className="my-16">
-              Tut uns leid. {bundesland} nutzt eine eigene Version des Antrags
-              auf Elterngeld.
-            </h3>
-            <p className="mb-32">
-              Die Übernahme der Planung ist nur in den sogenannten
-              Bundeseinheitlichen Antrag möglich.
+            <p className="my-16 text-24 font-bold">
+              Tut uns leid. {bundesland} verwendet eine eigene Version des
+              Antrags auf Elterngeld.
             </p>
-
             <p>
-              Wenn Sie einen Antrag auf Elterngeld stellen wollen, können Sie
-              die Planung selbst übertragen.
+              Die automatische Übernahme Ihrer Elterngeld-Planung ist nur im
+              bundeseinheitlichen Antrag möglich.
             </p>
-            <p>Sie haben im Bundesland {bundesland} folgende Optionen:</p>
-            <ul className="list-disc pl-24">
-              <li>
-                Sie können den{" "}
-                <a
-                  className="underline"
-                  href={ressourcesForSelectedUnsupportedBundesland.online}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Online-Antrag
-                </a>{" "}
-                von {bundesland} nutzen und die Planung selber übertragen
-              </li>
-              <li>
-                Sie können einen{" "}
-                <a
-                  className="underline"
-                  href={ressourcesForSelectedUnsupportedBundesland.pdf}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  PDF-Antrag
-                </a>{" "}
-                ausfüllen
-              </li>
-            </ul>
+            <p className="mb-32">
+              Wenn Sie in {bundesland} Elterngeld beantragen möchten, müssen Sie
+              Ihre Planung manuell übertragen.
+            </p>
+            <p>
+              Den PDF-Antrag für {bundesland} sowie den Zugang zum Online-Antrag
+              finden Sie auf folgender Seite:
+            </p>
+            <a
+              className="font-bold underline"
+              href={unsupportedBundeslaenderRessources[bundeslandString]}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <ArrowOutward /> Zum Antrag auf Elterngeld in {bundesland}
+            </a>
           </div>
         )}
 

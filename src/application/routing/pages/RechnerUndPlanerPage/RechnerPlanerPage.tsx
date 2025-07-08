@@ -166,7 +166,7 @@ export function RechnerPlanerPage() {
                 disabled={!istPlanGueltig}
                 onClick={navigateToDatenuebernahmeAntragPage}
               >
-                Planung für den Antrag übernehmen
+                Planung in den Antrag übernehmen
               </Button>
             </div>
 

@@ -76,7 +76,7 @@ test("smoke test", async ({ page }) => {
   await planer.gebeEinkommenAn(18, 1000);
 
   await page
-    .getByRole("button", { name: "Planung für den Antrag übernehmen" })
+    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
     .click();
 
   await page.isVisible("text='Planung der Monate im Detail'");

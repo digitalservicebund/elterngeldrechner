@@ -110,7 +110,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await planer.waehleOption(13, "Basis", "Elternteil 1");
 
   await page
-    .getByRole("button", { name: "Planung für den Antrag übernehmen" })
+    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
     .click();
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(

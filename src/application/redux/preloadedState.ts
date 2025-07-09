@@ -19,7 +19,7 @@ export const preloadedState = {
   },
   stepNachwuchs: {
     anzahlKuenftigerKinder: 1,
-    wahrscheinlichesGeburtsDatum: "01.04.2024",
+    wahrscheinlichesGeburtsDatum: "01.04.2025",
     geschwisterkinder: [
       {
         geburtsdatum: "24.10.2019",

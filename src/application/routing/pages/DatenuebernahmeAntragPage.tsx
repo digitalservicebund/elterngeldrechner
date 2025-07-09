@@ -7,11 +7,15 @@ import { Page } from "./Page";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
-import { stepAllgemeineAngabenSelectors } from "@/application/features/abfrageteil/state";
+import {
+  parseGermanDateString,
+  stepAllgemeineAngabenSelectors,
+} from "@/application/features/abfrageteil/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import {
   supportedBundeslaender,
+  supportedBundeslaenderRessources,
   unsupportedBundeslaenderRessources,
 } from "@/pdfAntrag";
 import antragImg from "@/pdfAntrag/assets/antrag.png";
@@ -30,60 +34,47 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 
   const bundesland =
     useAppSelector(stepAllgemeineAngabenSelectors.getBundesland) || "";
-  const bundeslandString =
+  const unsupportedBundeslandString =
     bundesland.toString() as keyof typeof unsupportedBundeslaenderRessources;
+  const supportedBundeslandString =
+    bundesland.toString() as keyof typeof supportedBundeslaenderRessources;
 
   const isSupported = (
     supportedBundeslaender as ReadonlyArray<string>
-  ).includes(bundeslandString);
+  ).includes(bundesland);
 
-  let nameET1 = "";
-  let nameET2 = "";
-  if (plan?.ausgangslage?.anzahlElternteile === 2) {
-    nameET1 = store.getState().stepAllgemeineAngaben.pseudonym.ET1;
-    nameET2 = store.getState().stepAllgemeineAngaben.pseudonym.ET2;
-  }
+  const informationForPdfAntrag = {
+    nameET1: store.getState().stepAllgemeineAngaben.pseudonym.ET1,
+    nameET2: store.getState().stepAllgemeineAngaben.pseudonym.ET2,
+    geburtsdatum: parseGermanDateString(
+      store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
+    ),
+  };
 
-  async function downloadPdf() {
+  async function downloadGanzerAntrag() {
     setDownloading(true);
 
-    const informationForPdfAntrag = {
-      nameET1:
-        plan?.ausgangslage?.anzahlElternteile === 2
-          ? store.getState().stepAllgemeineAngaben.pseudonym.ET1
-          : "",
-      nameET2:
-        plan?.ausgangslage?.anzahlElternteile === 2
-          ? store.getState().stepAllgemeineAngaben.pseudonym.ET2
-          : "",
-      anzahlKinder: store.getState().stepNachwuchs.anzahlKuenftigerKinder,
-      geburtsdatum: store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
-    };
+    try {
+      const pdfBytes = await preparePDF(true, informationForPdfAntrag, plan);
 
-    const pdfBytes = await preparePDF(true, informationForPdfAntrag, plan);
-
-    download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
+      download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
+    } catch {
+      // error handling
+    }
 
     setDownloading(false);
   }
 
-  async function downloadSeite() {
+  async function downloadPlanungsseite() {
     setSeiteDownloading(true);
 
-    const informationForPdfAntrag = {
-      nameET1:
-        plan?.ausgangslage?.anzahlElternteile === 2
-          ? store.getState().stepAllgemeineAngaben.pseudonym.ET1
-          : "",
-      nameET2:
-        plan?.ausgangslage?.anzahlElternteile === 2
-          ? store.getState().stepAllgemeineAngaben.pseudonym.ET2
-          : "",
-    };
+    try {
+      const pdfBytes = await preparePDF(false, informationForPdfAntrag, plan);
 
-    const pdfBytes = await preparePDF(false, informationForPdfAntrag, plan);
-
-    download(pdfBytes, "Seite18_Antrag_Elterngeld.pdf", "application/pdf");
+      download(pdfBytes, "Seite18_Antrag_Elterngeld.pdf", "application/pdf");
+    } catch {
+      // error handling
+    }
 
     setSeiteDownloading(false);
   }
@@ -100,33 +91,51 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                 </div>
                 <div>
                   <strong>Gesamter Antrag:</strong>
-                  <p className="mb-24">
-                    Sie können die PDF des gesamten Antrags auf Elterngeld nun
+                  <p>
+                    Sie können die PDF des gesamten Antrags auf Elterngeld
                     herunterladen und ausfüllen.
                   </p>
-                  <p>Wir haben in den Antrag übernommen:</p>
-                  <ul className="mb-24 list-disc pl-24">
-                    {plan?.ausgangslage?.anzahlElternteile === 2 ? (
-                      <li>Vornamen der Eltern</li>
-                    ) : (
-                      ""
-                    )}
-                    <li>Geburtsdatum des Kindes</li>
-                    <li>Anzahl der Kinder</li>
-                    <li>Ihre Planung von Elterngeld</li>
-                  </ul>
-                  {downloading ? (
-                    "Bitte warten..."
+                  {plan?.ausgangslage?.anzahlElternteile === 2 ? (
+                    <p>
+                      Wir haben die Planung für{" "}
+                      {informationForPdfAntrag.nameET1} und{" "}
+                      {informationForPdfAntrag.nameET2} in den Antrag
+                      übernommen.
+                    </p>
                   ) : (
-                    <Button
-                      type="button"
-                      buttonStyle="link"
-                      className="!text-base font-bold !text-black"
-                      onClick={downloadPdf}
-                    >
-                      <AntragIcon /> Antrag_auf_Elterngeld.pdf
-                    </Button>
+                    ""
                   )}
+                  <div className="mb-32 mt-24">
+                    {downloading ? (
+                      "Bitte warten..."
+                    ) : (
+                      <Button
+                        type="button"
+                        buttonStyle="link"
+                        className="!text-base font-bold !text-black"
+                        onClick={downloadGanzerAntrag}
+                      >
+                        <AntragIcon /> Antrag_auf_Elterngeld.pdf
+                      </Button>
+                    )}
+                  </div>
+                  <p>
+                    Damit Ihr Antrag auf Elterngeld vollständig ist, benötigen
+                    Sie einige Anlagen. Diese finden Sie auf der folgenden
+                    Seite:
+                  </p>
+                  <a
+                    className="font-bold underline"
+                    href={
+                      supportedBundeslaenderRessources[
+                        supportedBundeslandString
+                      ]
+                    }
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <ArrowOutward /> Antrag auf Elterngeld in {bundesland}
+                  </a>
                 </div>
               </div>
             </div>
@@ -141,7 +150,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                     Sie haben schon angefangen den Antrag auszufüllen? Dann
                     finden Sie hier die einzelne Seite Ihrer Planung als
                     Download. Ersetzen Sie diese mit der aktuellen Seite 18 im
-                    Antrag.
+                    Antrag auf Elterngeld.
                   </p>
                   {seiteDownloading ? (
                     "Bitte warten..."
@@ -150,7 +159,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                       type="button"
                       buttonStyle="link"
                       className="!text-base font-bold !text-black"
-                      onClick={downloadSeite}
+                      onClick={downloadPlanungsseite}
                     >
                       <SeiteIcon /> Seite18_Antrag_Elterngeld.pdf
                     </Button>
@@ -161,10 +170,10 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               {plan?.ausgangslage?.anzahlElternteile === 2 ? (
                 <Alert headline="Hinweis" className="mt-32">
                   Bei der Übernahme Ihrer Planung in den Antrag berücksichtigen
-                  wir {nameET1} immer auf der linken Seite und {nameET2} auf der
-                  rechten Seite. Behalten Sie diese Anordnung bei, da die
-                  Planung sonst nicht der richtigen Person zugeordnet werden
-                  kann.
+                  wir {informationForPdfAntrag.nameET1} immer auf der linken
+                  Seite und {informationForPdfAntrag.nameET2} auf der rechten
+                  Seite. Behalten Sie diese Anordnung bei, da die Planung sonst
+                  nicht der richtigen Person zugeordnet werden kann.
                 </Alert>
               ) : (
                 ""
@@ -191,7 +200,9 @@ export function DatenuebernahmeAntragPage(): ReactNode {
             </p>
             <a
               className="font-bold underline"
-              href={unsupportedBundeslaenderRessources[bundeslandString]}
+              href={
+                unsupportedBundeslaenderRessources[unsupportedBundeslandString]
+              }
               target="_blank"
               rel="noreferrer"
             >

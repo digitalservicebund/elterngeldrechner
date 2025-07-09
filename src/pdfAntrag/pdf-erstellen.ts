@@ -1,4 +1,5 @@
 import { PDFDocument, rgb } from "@cantoo/pdf-lib";
+import { getFieldNames, getPdfFileName } from "./pdf-versions";
 import {
   Lebensmonatszahl,
   PlanMitBeliebigenElternteilen,
@@ -8,8 +9,7 @@ import {
 interface InformationForPdfAntrag {
   nameET1: string;
   nameET2: string;
-  anzahlKinder?: number;
-  geburtsdatum?: string;
+  geburtsdatum: Date;
 }
 
 export async function preparePDF(
@@ -17,54 +17,52 @@ export async function preparePDF(
   informationForPdfAntrag: InformationForPdfAntrag,
   plan: PlanMitBeliebigenElternteilen | undefined,
 ) {
-  const formUrl = completeForm ? "antrag.pdf" : "seite.pdf";
-  const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
+  const birthday = new Date(informationForPdfAntrag.geburtsdatum);
 
-  const pdfDoc = await PDFDocument.load(formPdfBytes);
+  const fieldNames = getFieldNames(birthday);
+  if (fieldNames === null) {
+    throw Error("No set of field names available for selected birthday.");
+  }
+
+  const pdfDoc = await getPdfDocument(completeForm, birthday);
+  if (pdfDoc === null) {
+    throw Error("No pdf available for selected birthday.");
+  }
 
   const form = pdfDoc.getForm();
 
-  if (completeForm) {
+  // const fields = form.getFields()
+  // fields.forEach(field => {
+  //   const type = field.constructor.name
+  //   const name = field.getName()
+  //   console.log(`${type}: ${name}`)
+  // })
+
+  if (completeForm && plan?.ausgangslage?.anzahlElternteile === 2) {
     form
-      .getTextField("1a Anzahl der Kinder")
-      .setText(
-        informationForPdfAntrag.anzahlKinder
-          ? informationForPdfAntrag.anzahlKinder.toString()
-          : "",
-      );
+      .getTextField(fieldNames.vornameET1)
+      .setText(informationForPdfAntrag.nameET1);
     form
-      .getTextField("1b Geburtsdatum Jahr")
-      .setText(
-        informationForPdfAntrag.geburtsdatum
-          ? informationForPdfAntrag.geburtsdatum.toString()
-          : "",
-      );
+      .getTextField(fieldNames.vornameET2)
+      .setText(informationForPdfAntrag.nameET2);
   }
 
-  if (plan?.ausgangslage?.anzahlElternteile === 2) {
-    const nameET1 = informationForPdfAntrag.nameET1;
-    const nameET2 = informationForPdfAntrag.nameET2;
-
-    if (completeForm) {
-      form.getTextField("2b Vorname(n) AS").setText(nameET1);
-      form.getTextField("2b Vorname(n) 2E").setText(nameET2);
-    } else {
-      const pages = pdfDoc.getPages();
-      const page = pages[0];
-      if (page) {
-        page.drawText(nameET1, {
-          x: 65,
-          y: 825,
-          size: 10,
-          color: rgb(0, 0, 0),
-        });
-        page.drawText(nameET2, {
-          x: 325,
-          y: 825,
-          size: 10,
-          color: rgb(0, 0, 0),
-        });
-      }
+  if (!completeForm && plan?.ausgangslage?.anzahlElternteile === 2) {
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+    if (page) {
+      page.drawText(informationForPdfAntrag.nameET1, {
+        x: 65,
+        y: 825,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
+      page.drawText(informationForPdfAntrag.nameET2, {
+        x: 325,
+        y: 825,
+        size: 10,
+        color: rgb(0, 0, 0),
+      });
     }
   }
 
@@ -74,13 +72,13 @@ export async function preparePDF(
         .gewaehlteOption
     ) {
       case Variante.Basis:
-        form.getCheckBox(`10 Basiselterngeld AS Monat ${i}`).check();
+        form.getCheckBox(`${fieldNames.basisET1} ${i}`).check();
         break;
       case Variante.Plus:
-        form.getCheckBox(`10 Elterngeld Plus AS Monat ${i}`).check();
+        form.getCheckBox(`${fieldNames.plusET1} ${i}`).check();
         break;
       case Variante.Bonus:
-        form.getCheckBox(`10 P-Bonus AS Monat ${i}`).check();
+        form.getCheckBox(`${fieldNames.bonusET1} ${i}`).check();
         break;
       default:
         break;
@@ -92,13 +90,13 @@ export async function preparePDF(
           .gewaehlteOption
       ) {
         case Variante.Basis:
-          form.getCheckBox(`10 Basiselterngeld 2E Monat ${i}`).check();
+          form.getCheckBox(`${fieldNames.basisET2} ${i}`).check();
           break;
         case Variante.Plus:
-          form.getCheckBox(`10 Elterngeld Plus 2E Monat ${i}`).check();
+          form.getCheckBox(`${fieldNames.plusET2} ${i}`).check();
           break;
         case Variante.Bonus:
-          form.getCheckBox(`10 P-Bonus 2E Monat ${i}`).check();
+          form.getCheckBox(`${fieldNames.bonusET2} ${i}`).check();
           break;
         default:
           break;
@@ -109,4 +107,20 @@ export async function preparePDF(
   const pdfBytes = await pdfDoc.save();
 
   return pdfBytes;
+}
+
+async function getPdfDocument(completeForm: boolean, birthday: Date) {
+  const baseUrl = getPdfFileName(birthday);
+  if (baseUrl === null) {
+    return null;
+  }
+
+  const formUrl = completeForm
+    ? `${baseUrl}_antrag.pdf`
+    : `${baseUrl}_seite.pdf`;
+
+  const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
+  const pdfDoc = await PDFDocument.load(formPdfBytes);
+
+  return pdfDoc;
 }

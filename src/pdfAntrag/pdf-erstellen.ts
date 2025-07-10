@@ -1,6 +1,11 @@
 import { PDFDocument, rgb } from "@cantoo/pdf-lib";
-import { getFieldNames, getPdfFileName } from "./pdf-versions";
 import {
+  getFieldName,
+  getFieldNameForVornamen,
+  getPdfVersion,
+} from "./pdf-versions";
+import {
+  Elternteil,
   Lebensmonatszahl,
   PlanMitBeliebigenElternteilen,
   Variante,
@@ -17,33 +22,26 @@ export async function preparePDF(
   informationForPdfAntrag: InformationForPdfAntrag,
   plan: PlanMitBeliebigenElternteilen | undefined,
 ) {
-  const birthday = new Date(informationForPdfAntrag.geburtsdatum);
-
-  const fieldNames = getFieldNames(birthday);
-  if (fieldNames === null) {
-    throw Error("No set of field names available for selected birthday.");
-  }
-
-  const pdfDoc = await getPdfDocument(completeForm, birthday);
-  if (pdfDoc === null) {
-    throw Error("No pdf available for selected birthday.");
-  }
-
+  const pdfDoc = await getPdfDocument(
+    completeForm,
+    informationForPdfAntrag.geburtsdatum,
+  );
   const form = pdfDoc.getForm();
-
-  // const fields = form.getFields()
-  // fields.forEach(field => {
-  //   const type = field.constructor.name
-  //   const name = field.getName()
-  //   console.log(`${type}: ${name}`)
-  // })
 
   if (completeForm && plan?.ausgangslage?.anzahlElternteile === 2) {
     form
-      .getTextField(fieldNames.vornameET1)
+      .getTextField(
+        getFieldNameForVornamen(informationForPdfAntrag.geburtsdatum)[
+          Elternteil.Eins
+        ],
+      )
       .setText(informationForPdfAntrag.nameET1);
     form
-      .getTextField(fieldNames.vornameET2)
+      .getTextField(
+        getFieldNameForVornamen(informationForPdfAntrag.geburtsdatum)[
+          Elternteil.Zwei
+        ],
+      )
       .setText(informationForPdfAntrag.nameET2);
   }
 
@@ -72,13 +70,40 @@ export async function preparePDF(
         .gewaehlteOption
     ) {
       case Variante.Basis:
-        form.getCheckBox(`${fieldNames.basisET1} ${i}`).check();
+        form
+          .getCheckBox(
+            getFieldName({
+              geburtsdatum: informationForPdfAntrag.geburtsdatum,
+              variante: Variante.Basis,
+              elternteil: Elternteil.Eins,
+              lebensmonat: i as Lebensmonatszahl,
+            }),
+          )
+          .check();
         break;
       case Variante.Plus:
-        form.getCheckBox(`${fieldNames.plusET1} ${i}`).check();
+        form
+          .getCheckBox(
+            getFieldName({
+              geburtsdatum: informationForPdfAntrag.geburtsdatum,
+              variante: Variante.Plus,
+              elternteil: Elternteil.Eins,
+              lebensmonat: i as Lebensmonatszahl,
+            }),
+          )
+          .check();
         break;
       case Variante.Bonus:
-        form.getCheckBox(`${fieldNames.bonusET1} ${i}`).check();
+        form
+          .getCheckBox(
+            getFieldName({
+              geburtsdatum: informationForPdfAntrag.geburtsdatum,
+              variante: Variante.Bonus,
+              elternteil: Elternteil.Eins,
+              lebensmonat: i as Lebensmonatszahl,
+            }),
+          )
+          .check();
         break;
       default:
         break;
@@ -90,13 +115,40 @@ export async function preparePDF(
           .gewaehlteOption
       ) {
         case Variante.Basis:
-          form.getCheckBox(`${fieldNames.basisET2} ${i}`).check();
+          form
+            .getCheckBox(
+              getFieldName({
+                geburtsdatum: informationForPdfAntrag.geburtsdatum,
+                variante: Variante.Basis,
+                elternteil: Elternteil.Zwei,
+                lebensmonat: i as Lebensmonatszahl,
+              }),
+            )
+            .check();
           break;
         case Variante.Plus:
-          form.getCheckBox(`${fieldNames.plusET2} ${i}`).check();
+          form
+            .getCheckBox(
+              getFieldName({
+                geburtsdatum: informationForPdfAntrag.geburtsdatum,
+                variante: Variante.Plus,
+                elternteil: Elternteil.Zwei,
+                lebensmonat: i as Lebensmonatszahl,
+              }),
+            )
+            .check();
           break;
         case Variante.Bonus:
-          form.getCheckBox(`${fieldNames.bonusET2} ${i}`).check();
+          form
+            .getCheckBox(
+              getFieldName({
+                geburtsdatum: informationForPdfAntrag.geburtsdatum,
+                variante: Variante.Bonus,
+                elternteil: Elternteil.Zwei,
+                lebensmonat: i as Lebensmonatszahl,
+              }),
+            )
+            .check();
           break;
         default:
           break;
@@ -109,15 +161,15 @@ export async function preparePDF(
   return pdfBytes;
 }
 
-async function getPdfDocument(completeForm: boolean, birthday: Date) {
-  const baseUrl = getPdfFileName(birthday);
-  if (baseUrl === null) {
-    return null;
+async function getPdfDocument(completeForm: boolean, geburtsdatum: Date) {
+  const pdfVersion = getPdfVersion(geburtsdatum);
+  if (!pdfVersion) {
+    throw Error("PDF Version not found");
   }
 
   const formUrl = completeForm
-    ? `${baseUrl}_antrag.pdf`
-    : `${baseUrl}_seite.pdf`;
+    ? `${pdfVersion.pdfFileName}_antrag.pdf`
+    : `${pdfVersion.pdfFileName}_seite.pdf`;
 
   const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
   const pdfDoc = await PDFDocument.load(formPdfBytes);

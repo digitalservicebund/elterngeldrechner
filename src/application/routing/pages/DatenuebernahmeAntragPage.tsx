@@ -103,7 +103,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                       übernommen.
                     </p>
                   ) : (
-                    ""
+                    <p>Wir haben die Planung in den Antrag übernommen.</p>
                   )}
                   <div className="mb-32 mt-24">
                     {downloading ? (

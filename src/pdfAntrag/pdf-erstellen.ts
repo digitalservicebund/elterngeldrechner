@@ -17,13 +17,15 @@ interface InformationForPdfAntrag {
   geburtsdatum: Date;
 }
 
-export async function preparePDF(options: {
+export async function preparePDF({
+  completeForm,
+  informationForPdfAntrag,
+  plan,
+}: {
   completeForm: boolean;
   informationForPdfAntrag: InformationForPdfAntrag;
   plan: PlanMitBeliebigenElternteilen | undefined;
 }) {
-  const { completeForm, informationForPdfAntrag, plan } = options;
-
   const pdfDoc = await getPdfDocument(
     completeForm,
     informationForPdfAntrag.geburtsdatum,
@@ -47,6 +49,9 @@ export async function preparePDF(options: {
       .setText(informationForPdfAntrag.nameET2);
   }
 
+  // The single page has no textfields for the names of the parents.
+  // The following writes the names on top of the page,
+  // if both parents filled out the planer.
   if (!completeForm && plan?.ausgangslage?.anzahlElternteile === 2) {
     const pages = pdfDoc.getPages();
     const page = pages[0];

@@ -20,7 +20,7 @@ import {
   stepAllgemeineAngabenSlice,
 } from "@/application/features/abfrageteil/state";
 import { useAppStore } from "@/application/redux/hooks";
-import { allBundeslaender } from "@/pdfAntrag";
+import { bundeslaender } from "@/pdfAntrag";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   { value: "FuerBeide", label: "Beide Elternteile sollen Elterngeld bekommen" },
@@ -75,8 +75,8 @@ export function AllgemeineAngabenForm({
     }
   };
 
-  const bundeslandOptions: SelectOption<string>[] = allBundeslaender.map(
-    (l) => ({ value: l, label: l }),
+  const bundeslandOptions: SelectOption<string>[] = bundeslaender.map(
+    (bundesland) => ({ value: bundesland.name, label: bundesland.name }),
   );
 
   return (

@@ -9,14 +9,17 @@ const pdfVersions = [
   pdfVersionVonApril2025,
 ] as const;
 
-export function getFieldName(options: {
+export function getFieldName({
+  geburtsdatum,
+  variante,
+  elternteil,
+  lebensmonat,
+}: {
   geburtsdatum: Date;
   variante: Variante;
   elternteil: Elternteil;
   lebensmonat: Lebensmonatszahl;
 }) {
-  const { geburtsdatum, variante, elternteil, lebensmonat } = options;
-
   const fieldName =
     getPdfVersion(geburtsdatum)?.fieldNames[variante][elternteil][
       (lebensmonat as number) - 1

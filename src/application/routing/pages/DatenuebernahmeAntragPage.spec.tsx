@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DatenuebernahmeAntragPage } from "./DatenuebernahmeAntragPage";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { INITIAL_STATE, render, screen } from "@/application/test-utils";
+import { bundeslaender } from "@/pdfAntrag";
 
 describe("Datenuebernahme Antrag Page", () => {
   beforeEach(async () => {
@@ -30,7 +31,7 @@ describe("Datenuebernahme Antrag Page", () => {
 
   it("shows a section for the Datenuebernahme Antrag with links instead of option to download pdf if a Plan was provided and Bundesland is unsupported", () => {
     const state = produce(initialTestState, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = "Bayern";
+      draft.stepAllgemeineAngaben.bundesland = bundeslaender[0];
     });
 
     vi.mocked(useNavigateWithPlan).mockReturnValue({
@@ -81,7 +82,7 @@ const ANY_PLAN = {
 };
 
 const initialTestState = produce(INITIAL_STATE, (draft) => {
-  draft.stepAllgemeineAngaben.bundesland = "Berlin";
+  draft.stepAllgemeineAngaben.bundesland = bundeslaender[2];
   draft.stepAllgemeineAngaben.pseudonym = {
     ET1: "Elternteil 1",
     ET2: "Elternteil 2",

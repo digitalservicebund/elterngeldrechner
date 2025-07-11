@@ -13,11 +13,7 @@ import {
 } from "@/application/features/abfrageteil/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
-import {
-  supportedBundeslaender,
-  supportedBundeslaenderRessources,
-  unsupportedBundeslaenderRessources,
-} from "@/pdfAntrag";
+import { bundeslaender } from "@/pdfAntrag";
 import antragImg from "@/pdfAntrag/assets/antrag.png";
 import seiteImg from "@/pdfAntrag/assets/seite.png";
 import { preparePDF } from "@/pdfAntrag/pdf-erstellen";
@@ -32,16 +28,16 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const [downloading, setDownloading] = useState(false);
   const [seiteDownloading, setSeiteDownloading] = useState(false);
 
-  const bundesland =
-    useAppSelector(stepAllgemeineAngabenSelectors.getBundesland) || "";
-  const unsupportedBundeslandString =
-    bundesland.toString() as keyof typeof unsupportedBundeslaenderRessources;
-  const supportedBundeslandString =
-    bundesland.toString() as keyof typeof supportedBundeslaenderRessources;
+  const bundeslandString = useAppSelector(
+    stepAllgemeineAngabenSelectors.getBundesland,
+  ) as string;
 
-  const isSupported = (
-    supportedBundeslaender as ReadonlyArray<string>
-  ).includes(bundesland);
+  const bundesland = bundeslaender.find(
+    (bundesland) => bundesland.name === bundeslandString,
+  );
+  if (bundesland === undefined) {
+    throw Error("");
+  }
 
   const informationForPdfAntrag = {
     nameET1: store.getState().stepAllgemeineAngaben.pseudonym.ET1,
@@ -63,7 +59,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 
       download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
     } catch {
-      // error handling
+      setDownloading(false);
     }
 
     setDownloading(false);
@@ -81,7 +77,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 
       download(pdfBytes, "Seite18_Antrag_Elterngeld.pdf", "application/pdf");
     } catch {
-      // error handling
+      setSeiteDownloading(false);
     }
 
     setSeiteDownloading(false);
@@ -90,7 +86,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   return (
     <Page step={formSteps.datenuebernahmeAntrag}>
       <div className="flex flex-col gap-56">
-        {isSupported ? (
+        {bundesland.isSupported ? (
           <div>
             <div className="mb-32 bg-off-white p-24">
               <div className="flex flex-wrap gap-24 sm:flex-nowrap">
@@ -134,15 +130,11 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                   </p>
                   <a
                     className="font-bold underline"
-                    href={
-                      supportedBundeslaenderRessources[
-                        supportedBundeslandString
-                      ]
-                    }
+                    href={bundesland.link}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <ArrowOutward /> Antrag auf Elterngeld in {bundesland}
+                    <ArrowOutward /> Antrag auf Elterngeld in {bundesland.name}
                   </a>
                 </div>
               </div>
@@ -191,7 +183,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
         ) : (
           <div>
             <p className="my-16 text-24 font-bold">
-              Tut uns leid. {bundesland} verwendet eine eigene Version des
+              Tut uns leid. {bundesland.name} verwendet eine eigene Version des
               Antrags auf Elterngeld.
             </p>
             <p>
@@ -199,22 +191,20 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               bundeseinheitlichen Antrag möglich.
             </p>
             <p className="mb-32">
-              Wenn Sie in {bundesland} Elterngeld beantragen möchten, müssen Sie
-              Ihre Planung manuell übertragen.
+              Wenn Sie in {bundesland.name} Elterngeld beantragen möchten,
+              müssen Sie Ihre Planung manuell übertragen.
             </p>
             <p>
-              Den PDF-Antrag für {bundesland} sowie den Zugang zum Online-Antrag
-              finden Sie auf folgender Seite:
+              Den PDF-Antrag für {bundesland.name} sowie den Zugang zum
+              Online-Antrag finden Sie auf folgender Seite:
             </p>
             <a
               className="font-bold underline"
-              href={
-                unsupportedBundeslaenderRessources[unsupportedBundeslandString]
-              }
+              href={bundesland.link}
               target="_blank"
               rel="noreferrer"
             >
-              <ArrowOutward /> Zum Antrag auf Elterngeld in {bundesland}
+              <ArrowOutward /> Zum Antrag auf Elterngeld in {bundesland.name}
             </a>
           </div>
         )}

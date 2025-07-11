@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test";
-import expectScreenshot from "../expectScreenshot";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
@@ -8,8 +7,6 @@ import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
@@ -61,17 +58,9 @@ test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
   const referenceSinglePagePdfTexts =
     await datenuebernahmeAntragPage.getReferencePdfSeite(false);
   expect(actualSinglePagePdfTexts).toEqual(referenceSinglePagePdfTexts);
-
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
 });
 
 test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Bayern");
   await allgemeineAngabenPage.setAlleinerziehend(false);
@@ -105,17 +94,9 @@ test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
   await expect(datenuebernahmeAntragPage.heading).toBeVisible();
-
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
 });
 
 test("alleine, unterstütztes Bundesland", async ({ page }) => {
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(true);
@@ -155,17 +136,9 @@ test("alleine, unterstütztes Bundesland", async ({ page }) => {
   const referenceSinglePagePdfValues =
     await datenuebernahmeAntragPage.getReferencePdfSeite(true);
   expect(actualSinglePagePdfValues).toEqual(referenceSinglePagePdfValues);
-
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
 });
 
 test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Bayern");
   await allgemeineAngabenPage.setAlleinerziehend(true);
@@ -193,10 +166,4 @@ test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
   await expect(datenuebernahmeAntragPage.heading).toBeVisible();
-
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
 });

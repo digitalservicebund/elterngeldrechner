@@ -41,14 +41,17 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(12, "Basis");
   await rechnerUndPlaner.waehleOption(13, "Basis");
   await rechnerUndPlaner.waehleOption(14, "Basis");
-  await rechnerUndPlaner.submit();
 
-  const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
-  await expect(datenuebernahmeAntragPage.heading).toBeVisible();
-
+  await page.emulateMedia({ media: "print" });
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",
     page.getByLabel("Planung der Monate im Detail"),
   );
+  await page.emulateMedia({ media: "screen" });
+
+  await rechnerUndPlaner.submit();
+
+  const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
+  await expect(datenuebernahmeAntragPage.heading).toBeVisible();
 });

@@ -23,6 +23,8 @@ jobs:
       - name: Get branch of PR
         uses: xt0rted/pull-request-comment-branch@v2
         id: comment-branch
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:

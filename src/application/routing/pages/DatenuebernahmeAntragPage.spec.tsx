@@ -31,7 +31,7 @@ describe("Datenuebernahme Antrag Page", () => {
 
   it("shows a section for the Datenuebernahme Antrag with links instead of option to download pdf if a Plan was provided and Bundesland is unsupported", () => {
     const state = produce(initialTestState, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = bundeslaender[0];
+      draft.stepAllgemeineAngaben.bundesland = bundeslaender[0].name;
     });
 
     vi.mocked(useNavigateWithPlan).mockReturnValue({
@@ -82,7 +82,7 @@ const ANY_PLAN = {
 };
 
 const initialTestState = produce(INITIAL_STATE, (draft) => {
-  draft.stepAllgemeineAngaben.bundesland = bundeslaender[2];
+  draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
   draft.stepAllgemeineAngaben.pseudonym = {
     ET1: "Elternteil 1",
     ET2: "Elternteil 2",

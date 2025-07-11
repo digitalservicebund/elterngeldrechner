@@ -30,13 +30,13 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 
   const bundeslandString = useAppSelector(
     stepAllgemeineAngabenSelectors.getBundesland,
-  ) as string;
+  );
 
   const bundesland = bundeslaender.find(
     (bundesland) => bundesland.name === bundeslandString,
   );
   if (bundesland === undefined) {
-    throw Error("");
+    throw Error("bundesland should not be undefined");
   }
 
   const informationForPdfAntrag = {

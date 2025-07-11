@@ -18,7 +18,7 @@ jobs:
       # Required for thollander/actions-comment-pull-request@v3
       # https://github.com/thollander/actions-comment-pull-request?tab=readme-ov-file#permissions
       pull-requests: write
-
+      issues: read
     steps:
       - name: Get branch of PR
         uses: xt0rted/pull-request-comment-branch@v2

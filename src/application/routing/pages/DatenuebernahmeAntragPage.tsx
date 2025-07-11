@@ -16,7 +16,10 @@ import { formSteps } from "@/application/routing/formSteps";
 import { bundeslaender } from "@/pdfAntrag";
 import antragImg from "@/pdfAntrag/assets/antrag.png";
 import seiteImg from "@/pdfAntrag/assets/seite.png";
-import { preparePDF } from "@/pdfAntrag/pdf-erstellen";
+import {
+  prepareGanzerAntrag,
+  preparePlanungsseite,
+} from "@/pdfAntrag/pdf-erstellen";
 
 export function DatenuebernahmeAntragPage(): ReactNode {
   const store = useAppStore();
@@ -25,7 +28,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const navigateToRechnerUndPlanerPage = () =>
     navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
 
-  const [downloading, setDownloading] = useState(false);
+  const [antragDownloading, setAntragDownloading] = useState(false);
   const [seiteDownloading, setSeiteDownloading] = useState(false);
 
   const bundeslandString = useAppSelector(
@@ -48,29 +51,27 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   };
 
   async function downloadGanzerAntrag() {
-    setDownloading(true);
+    setAntragDownloading(true);
 
     try {
-      const pdfBytes = await preparePDF({
-        completeForm: true,
+      const pdfBytes = await prepareGanzerAntrag({
         informationForPdfAntrag,
         plan,
       });
 
       download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
     } catch {
-      setDownloading(false);
+      setAntragDownloading(false);
     }
 
-    setDownloading(false);
+    setAntragDownloading(false);
   }
 
   async function downloadPlanungsseite() {
     setSeiteDownloading(true);
 
     try {
-      const pdfBytes = await preparePDF({
-        completeForm: false,
+      const pdfBytes = await preparePlanungsseite({
         informationForPdfAntrag,
         plan,
       });
@@ -110,7 +111,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                     <p>Wir haben die Planung in den Antrag übernommen.</p>
                   )}
                   <div className="mb-32 mt-24">
-                    {downloading ? (
+                    {antragDownloading ? (
                       "Bitte warten..."
                     ) : (
                       <Button

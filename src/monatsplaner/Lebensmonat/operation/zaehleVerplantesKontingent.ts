@@ -3,7 +3,6 @@ import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type { Elternteil } from "@/monatsplaner/Elternteil";
 import type { Lebensmonat } from "@/monatsplaner/Lebensmonat";
 import { zaehleVerplantesKontingent as zaehleVerplantesKontingentInMonat } from "@/monatsplaner/Monat";
-import { Variante } from "@/monatsplaner/Variante";
 import {
   VerplantesKontingent,
   addiere,
@@ -21,12 +20,7 @@ export function zaehleVerplantesKontingent<E extends Elternteil>(
     .map(([, monat]) => monat)
     .map(zaehleVerplantesKontingentInMonat);
 
-  const kontingent = addiere(...kontingentProMonat);
-
-  // Bonus is counted special by the whole Lebensmonat counting as zero or one.
-  return kontingent[Variante.Bonus] > 0
-    ? { ...kontingent, [Variante.Bonus]: 1 }
-    : kontingent;
+  return addiere(...kontingentProMonat);
 }
 
 if (import.meta.vitest) {
@@ -51,7 +45,7 @@ if (import.meta.vitest) {
       expect(kontingent[KeinElterngeld]).toBe(0);
     });
 
-    it("ceils the Partnerschaftsbonus of all Elternteile to one", () => {
+    it("each month of the Partnerschaftsbonus is counted as one for each Elternteil", () => {
       const lebensmonat = {
         [Elternteil.Eins]: monat(Variante.Bonus),
         [Elternteil.Zwei]: monat(Variante.Bonus),
@@ -59,7 +53,7 @@ if (import.meta.vitest) {
 
       const kontingent = zaehleVerplantesKontingent(lebensmonat);
 
-      expect(kontingent[Variante.Bonus]).toBe(1);
+      expect(kontingent[Variante.Bonus]).toBe(2);
     });
 
     it("sums up only the Kontingent for the given Elternteil", () => {

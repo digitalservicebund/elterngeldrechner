@@ -36,7 +36,7 @@ export function bestimmeVerfuegbaresKontingent(
 
 const MINIMALE_ANZAHL_BASIS_MONATE = 12;
 const ANZAHL_BASIS_MIT_PARTNER_MONATEN = 14;
-const ANZAHL_BONUS_LEBENSMONATE = 4;
+const ANZAHL_BONUS_LEBENSMONATE = 8;
 const ANZAHL_PLUS_MONATE_PRO_BASIS_MONAT = 2;
 
 if (import.meta.vitest) {
@@ -114,7 +114,7 @@ if (import.meta.vitest) {
     });
 
     describe("for two Elternteile", () => {
-      it("has always 4 lebensmonate Partnerschaftsbonus", () => {
+      it("has always 4 lebensmonate Partnerschaftsbonus each", () => {
         assert(
           property(
             arbitraryPseudonymeDerElternteile(),
@@ -128,7 +128,7 @@ if (import.meta.vitest) {
 
               const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
 
-              expect(kontingent[Variante.Bonus]).toBe(4);
+              expect(kontingent[Variante.Bonus]).toBe(8);
             },
           ),
         );

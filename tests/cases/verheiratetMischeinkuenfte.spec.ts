@@ -109,12 +109,15 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await planer.gebeEinkommenAn(12, 6500, "Elternteil 1");
   await planer.waehleOption(13, "Basis", "Elternteil 1");
 
-  await page
-    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
-    .click();
+  await page.emulateMedia({ media: "print" });
   await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
   await screenshot(
     "planungsdetails",
     page.getByLabel("Planung der Monate im Detail"),
   );
+  await page.emulateMedia({ media: "screen" });
+
+  await page
+    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
+    .click();
 });

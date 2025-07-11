@@ -19,6 +19,7 @@ export function ermittelGeringfuegigkeitsgrenze(zeitpunkt: Date): number {
 
 const HISTORIE_DER_GERINGFUEGIGKEITSGRENZE =
   HistorieEinesParameters.erstelleHistorieVonWerten([
+    { anzuwendenAbDem: new Date("2025-01-01"), wert: 556 },
     { anzuwendenAbDem: new Date("2024-01-01"), wert: 538 },
     { anzuwendenAbDem: new Date("2022-10-01"), wert: 520 },
     { anzuwendenAbDem: new Date("2013-01-01"), wert: 450 },
@@ -36,8 +37,14 @@ if (import.meta.vitest) {
       date: arbitraryDate,
     } = await import("fast-check");
 
-    it("is 538€ from the 01.01.2024 on", () =>
-      assertGeringfuegigkeitsgrenze({ from: new Date("2024-01-01") }, 538));
+    it("is 556€ from the 01.01.2025 on", () =>
+      assertGeringfuegigkeitsgrenze({ from: new Date("2025-01-01") }, 556));
+
+    it("is 538€ between the 01.01.2024 and 31.12.2024", () =>
+      assertGeringfuegigkeitsgrenze(
+        { from: new Date("2024-01-01"), to: new Date("2024-12-31") },
+        538,
+      ));
 
     it("is 520€ between the 01.10.2022 and 31.12.2023", () =>
       assertGeringfuegigkeitsgrenze(

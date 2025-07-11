@@ -6,13 +6,11 @@ export function InfoZuVornamen(): ReactNode {
     <InfoText
       question="Warum soll ich einen Vornamen angeben?"
       answer={
-        <>
-          <p>
-            Wir fragen nach Ihrem Vornamen, damit Sie bei der Planung einen
-            guten Überblick haben. Und falls Sie sich entscheiden, Ihre Daten in
-            den Antrag zu übertragen, können wir Sie darin zuordnen.
-          </p>
-        </>
+        <p>
+          Wir fragen nach Ihrem Vornamen, damit Sie bei der Planung einen guten
+          Überblick haben. Und falls Sie sich entscheiden, Ihre Daten in den
+          Antrag zu übertragen, können wir Sie darin zuordnen.
+        </p>
       }
     />
   );

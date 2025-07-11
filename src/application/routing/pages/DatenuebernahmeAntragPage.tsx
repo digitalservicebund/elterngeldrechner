@@ -55,7 +55,11 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     setDownloading(true);
 
     try {
-      const pdfBytes = await preparePDF(true, informationForPdfAntrag, plan);
+      const pdfBytes = await preparePDF({
+        completeForm: true,
+        informationForPdfAntrag,
+        plan,
+      });
 
       download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
     } catch {
@@ -69,7 +73,11 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     setSeiteDownloading(true);
 
     try {
-      const pdfBytes = await preparePDF(false, informationForPdfAntrag, plan);
+      const pdfBytes = await preparePDF({
+        completeForm: false,
+        informationForPdfAntrag,
+        plan,
+      });
 
       download(pdfBytes, "Seite18_Antrag_Elterngeld.pdf", "application/pdf");
     } catch {

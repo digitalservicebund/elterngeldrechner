@@ -15,9 +15,12 @@ export function getFieldName(options: {
   elternteil: Elternteil;
   lebensmonat: Lebensmonatszahl;
 }) {
-  const fieldName = getPdfVersion(options.geburtsdatum)?.fieldNames[
-    options.variante
-  ][options.elternteil][(options.lebensmonat as number) - 1];
+  const { geburtsdatum, variante, elternteil, lebensmonat } = options;
+
+  const fieldName =
+    getPdfVersion(geburtsdatum)?.fieldNames[variante][elternteil][
+      (lebensmonat as number) - 1
+    ];
   if (!fieldName) {
     throw Error("PDF Version not found");
   }

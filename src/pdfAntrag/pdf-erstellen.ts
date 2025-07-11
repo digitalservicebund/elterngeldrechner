@@ -17,11 +17,13 @@ interface InformationForPdfAntrag {
   geburtsdatum: Date;
 }
 
-export async function preparePDF(
-  completeForm: boolean,
-  informationForPdfAntrag: InformationForPdfAntrag,
-  plan: PlanMitBeliebigenElternteilen | undefined,
-) {
+export async function preparePDF(options: {
+  completeForm: boolean;
+  informationForPdfAntrag: InformationForPdfAntrag;
+  plan: PlanMitBeliebigenElternteilen | undefined;
+}) {
+  const { completeForm, informationForPdfAntrag, plan } = options;
+
   const pdfDoc = await getPdfDocument(
     completeForm,
     informationForPdfAntrag.geburtsdatum,
@@ -156,9 +158,7 @@ export async function preparePDF(
     }
   }
 
-  const pdfBytes = await pdfDoc.save();
-
-  return pdfBytes;
+  return await pdfDoc.save();
 }
 
 async function getPdfDocument(completeForm: boolean, geburtsdatum: Date) {

@@ -70,9 +70,7 @@ export class DatenuebernahmeAntragPOM {
     const pdfArrayBuffer = new Uint8Array(pdfBuffer);
     const pdfDoc = await PDFDocument.load(pdfArrayBuffer);
 
-    const pdfCheckboxValues = getCheckboxValues(pdfDoc);
-
-    return pdfCheckboxValues;
+    return getCheckboxValues(pdfDoc);
   }
 
   async getReferencePdfAntrag(singleParent: boolean) {
@@ -97,9 +95,7 @@ export class DatenuebernahmeAntragPOM {
     const pdfArrayBuffer = new Uint8Array(pdfBuffer);
     const pdfDoc = await PDFDocument.load(pdfArrayBuffer);
 
-    const pdfCheckboxValues = getCheckboxValues(pdfDoc);
-
-    return pdfCheckboxValues;
+    return getCheckboxValues(pdfDoc);
   }
 
   async back() {
@@ -148,30 +144,24 @@ function getCheckboxValues(pdf: PDFDocument) {
 
   for (let i = 1; i < 19; i++) {
     const basis1 = form.getCheckBox(`10 Basiselterngeld AS Monat ${i}`);
-    const isBasis1Checked = basis1.isChecked();
-    pdfCheckboxValues.basis1.push(isBasis1Checked);
+    pdfCheckboxValues.basis1.push(basis1.isChecked());
 
     const basis2 = form.getCheckBox(`10 Basiselterngeld 2E Monat ${i}`);
-    const isBasis2Checked = basis2.isChecked();
-    pdfCheckboxValues.basis2.push(isBasis2Checked);
+    pdfCheckboxValues.basis2.push(basis2.isChecked());
   }
 
   for (let i = 1; i < 33; i++) {
     const plus1 = form.getCheckBox(`10 Elterngeld Plus AS Monat ${i}`);
-    const isPlus1Checked = plus1.isChecked();
-    pdfCheckboxValues.plus1.push(isPlus1Checked);
+    pdfCheckboxValues.plus1.push(plus1.isChecked());
 
     const plus2 = form.getCheckBox(`10 Elterngeld Plus 2E Monat ${i}`);
-    const isPlus2Checked = plus2.isChecked();
-    pdfCheckboxValues.plus2.push(isPlus2Checked);
+    pdfCheckboxValues.plus2.push(plus2.isChecked());
 
     const bonus1 = form.getCheckBox(`10 P-Bonus AS Monat ${i}`);
-    const isBonus1Checked = bonus1.isChecked();
-    pdfCheckboxValues.bonus1.push(isBonus1Checked);
+    pdfCheckboxValues.bonus1.push(bonus1.isChecked());
 
     const bonus2 = form.getCheckBox(`10 P-Bonus AS Monat ${i}`);
-    const isBonus2Checked = bonus2.isChecked();
-    pdfCheckboxValues.bonus2.push(isBonus2Checked);
+    pdfCheckboxValues.bonus2.push(bonus2.isChecked());
   }
 
   return pdfCheckboxValues;

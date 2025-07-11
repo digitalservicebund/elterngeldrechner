@@ -53,7 +53,7 @@ if (import.meta.vitest) {
 
       expect(kontingent[Variante.Basis]).toBe(2.5);
       expect(kontingent[Variante.Plus]).toBe(5);
-      expect(kontingent[Variante.Bonus]).toBe(2);
+      expect(kontingent[Variante.Bonus]).toBe(4);
       expect(kontingent[KeinElterngeld]).toBe(1);
     });
 

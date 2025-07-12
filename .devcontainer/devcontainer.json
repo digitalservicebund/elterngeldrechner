@@ -1,22 +1,6 @@
 {
   "build": { "dockerfile": "Dockerfile" },
   "postCreateCommand": "npm install && npx playwright install --with-deps chromium",
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "bradlc.vscode-tailwindcss",
-        "ms-playwright.playwright",
-        "esbenp.prettier-vscode",
-        "vitest.explorer"
-      ],
-      "settings": {
-        "editor.formatOnSave": true,
-        "[javascript][javascriptreact][typescript][typescriptreact]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
-        }
-      }
-    }
-  },
   "features": {
     "ghcr.io/devcontainers/features/sshd:1": {
       "version": "latest"

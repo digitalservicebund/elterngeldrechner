@@ -74,8 +74,8 @@ const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <DatenuebernahmeAntragPage />,
     path: formSteps.datenuebernahmeAntrag.route,
-    precondition: (_: RootState, plan?: PlanMitBeliebigenElternteilen) => {
-      return plan != null;
+    precondition: (state: RootState, plan?: PlanMitBeliebigenElternteilen) => {
+      return plan != null && state.stepAllgemeineAngaben.bundesland != null;
     },
   },
   {

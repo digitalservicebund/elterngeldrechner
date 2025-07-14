@@ -8,7 +8,6 @@ import {
   Elternteil,
   Lebensmonatszahl,
   PlanMitBeliebigenElternteilen,
-  Variante,
 } from "@/monatsplaner";
 
 interface InformationForPdfAntrag {
@@ -150,47 +149,19 @@ function fillCheckboxes({
   plan: PlanMitBeliebigenElternteilen | undefined;
 }) {
   for (let i = 1; i < 33; i++) {
-    switch (
-      plan?.lebensmonate[i as Lebensmonatszahl]?.[elternteil].gewaehlteOption
-    ) {
-      case Variante.Basis:
-        form
-          .getCheckBox(
-            getFieldName({
-              geburtsdatum,
-              variante: Variante.Basis,
-              elternteil: elternteil,
-              lebensmonat: i as Lebensmonatszahl,
-            }),
-          )
-          .check();
-        break;
-      case Variante.Plus:
-        form
-          .getCheckBox(
-            getFieldName({
-              geburtsdatum,
-              variante: Variante.Plus,
-              elternteil: elternteil,
-              lebensmonat: i as Lebensmonatszahl,
-            }),
-          )
-          .check();
-        break;
-      case Variante.Bonus:
-        form
-          .getCheckBox(
-            getFieldName({
-              geburtsdatum,
-              variante: Variante.Bonus,
-              elternteil: elternteil,
-              lebensmonat: i as Lebensmonatszahl,
-            }),
-          )
-          .check();
-        break;
-      default:
-        break;
+    const variante =
+      plan?.lebensmonate[i as Lebensmonatszahl]?.[elternteil].gewaehlteOption;
+    if (variante != undefined && variante != "kein Elterngeld") {
+      form
+        .getCheckBox(
+          getFieldName({
+            geburtsdatum,
+            variante,
+            elternteil: elternteil,
+            lebensmonat: i as Lebensmonatszahl,
+          }),
+        )
+        .check();
     }
   }
 }

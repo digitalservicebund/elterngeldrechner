@@ -1,4 +1,5 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
+import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
 import { Anleitung } from "./Anleitung";
@@ -6,7 +7,7 @@ import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
-import { Button, PrintButton } from "@/application/components";
+import { Button } from "@/application/components";
 import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import {
   type BeispielServiceCallbacks,
@@ -172,7 +173,16 @@ export function Planer({
             />
 
             <div className="p-32">
-              <PrintButton />
+              <div className="print:hidden">
+                <Button type="button" buttonStyle="link" onClick={window.print}>
+                  <SaveAltIcon /> Drucken der Planung
+                </Button>
+
+                <p>
+                  Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
+                  „als PDF speichern“ aus.
+                </p>
+              </div>
             </div>
           </div>
         </GridLayoutProvider>

@@ -4,4 +4,3 @@ export {
   CustomRadioGroup,
   type CustomRadioGroupOption,
 } from "./CustomRadioGroup";
-export { PrintButton } from "./PrintButton";

@@ -20,6 +20,10 @@ import {
   listeElternteileFuerAusgangslageAuf,
 } from "@/monatsplaner";
 
+export function trackMetricsForPlanungDrucken(): void {
+  pushTrackingEvent("Planung-wurde-gedruckt");
+}
+
 export function trackMetricsForPlanerWurdeGeoeffnet(): void {
   resetTrackingPlanung();
 }

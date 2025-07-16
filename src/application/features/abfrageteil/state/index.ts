@@ -9,6 +9,7 @@ export {
 export {
   type StepNachwuchsState,
   parseGermanDateString,
+  stepNachwuchsSelectors,
   stepNachwuchsSlice,
 } from "./stepNachwuchsSlice";
 export {

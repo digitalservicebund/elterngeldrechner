@@ -213,4 +213,5 @@ export type Callbacks = Partial<{
   ) => void;
   onWaehleOption: () => void;
   onSetzePlanZurueck: () => void;
+  onPlanungDrucken: () => void;
 }>;

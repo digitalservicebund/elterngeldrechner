@@ -9,6 +9,7 @@ import {
   trackMetricsForLebensmonatWurdeGeoeffnet,
   trackMetricsForPlanWurdeZurueckgesetzt,
   trackMetricsForPlanerWurdeGeoeffnet,
+  trackMetricsForPlanungDrucken,
 } from "./tracking";
 import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/application/components";
@@ -147,8 +148,9 @@ export function RechnerPlanerPage() {
                 onWaehleOption: trackMetricsForEineOptionWurdeGewaehlt,
                 onSetzePlanZurueck: trackMetricsForPlanWurdeZurueckgesetzt,
                 onOpenLebensmonat: trackMetricsForLebensmonatWurdeGeoeffnet,
-                onOpenErklaerung: showErklaerung,
                 onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
+                onPlanungDrucken: trackMetricsForPlanungDrucken,
+                onOpenErklaerung: showErklaerung,
               }}
             />
 

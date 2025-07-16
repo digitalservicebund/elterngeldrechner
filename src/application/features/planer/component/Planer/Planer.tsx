@@ -45,6 +45,7 @@ export function Planer({
   const setzeBeispielauswahlZurueckCallback = useRef<() => void>(undefined);
 
   const {
+    onPlanungDrucken,
     onOpenLebensmonat,
     onOpenErklaerung,
     onWaehleBeispielAus,
@@ -104,6 +105,11 @@ export function Planer({
 
   const mindestensEinLebensmonatGeplant =
     Object.keys(plan.lebensmonate).length > 0;
+
+  const planungDrucken = () => {
+    window.print();
+    onPlanungDrucken?.();
+  };
 
   return (
     <>
@@ -174,7 +180,11 @@ export function Planer({
 
             <div className="p-32">
               <div className="print:hidden">
-                <Button type="button" buttonStyle="link" onClick={window.print}>
+                <Button
+                  type="button"
+                  buttonStyle="link"
+                  onClick={planungDrucken}
+                >
                   <SaveAltIcon /> Drucken der Planung
                 </Button>
 

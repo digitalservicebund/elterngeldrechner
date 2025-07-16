@@ -13,6 +13,7 @@ import {
 } from "@/application/features/abfrageteil/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
+import { pushTrackingEvent } from "@/application/user-tracking";
 import { bundeslaender } from "@/pdfAntrag";
 import antragImg from "@/pdfAntrag/assets/antrag.png";
 import seiteImg from "@/pdfAntrag/assets/seite.png";
@@ -60,6 +61,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       });
 
       download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
+
+      pushTrackingEvent("Ganzer-Antrag-wurde-heruntergeladen");
     } catch {
       setAntragDownloading(false);
     }
@@ -77,6 +80,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       });
 
       download(pdfBytes, "Seite18_Antrag_Elterngeld.pdf", "application/pdf");
+
+      pushTrackingEvent("Planungsseite-wurde-heruntergeladen");
     } catch {
       setSeiteDownloading(false);
     }

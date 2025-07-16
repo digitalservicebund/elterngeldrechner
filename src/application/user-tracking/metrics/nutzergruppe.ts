@@ -9,10 +9,10 @@ export function trackNutzergruppe(birthdate: Date): void {
 
 function mapBirthdateToNutzergruppe(birthdate: Date): Nutzergruppe {
   const today = new Date();
-  const tenWeeksBeforeBeforeBirth = subWeeks(birthdate, 10);
+  const tenWeeksBeforeBirth = subWeeks(birthdate, 10);
   const threeMonthsAfterBirth = addMonths(birthdate, 3);
 
-  if (today < tenWeeksBeforeBeforeBirth) {
+  if (today < tenWeeksBeforeBirth) {
     return Nutzergruppe.WerdendeElternPhase1;
   } else if (today < birthdate) {
     return Nutzergruppe.WerdendeElternPhase2;

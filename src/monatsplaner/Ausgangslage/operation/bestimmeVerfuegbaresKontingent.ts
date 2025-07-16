@@ -22,21 +22,26 @@ export function bestimmeVerfuegbaresKontingent(
   const { anzahlElternteile, istAlleinerziehend } = ausgangslage;
   const sindMehrereElternteile = anzahlElternteile > 1;
 
-  const anzahlBonusMonate =
-    sindMehrereElternteile || istAlleinerziehend
-      ? ANZAHL_BONUS_LEBENSMONATE
-      : 0;
+  const anzahlBonusMonate = () => {
+    if (sindMehrereElternteile) {
+      return ANZAHL_BONUS_LEBENSMONATE * 2;
+    } else if (istAlleinerziehend) {
+      return ANZAHL_BONUS_LEBENSMONATE;
+    } else {
+      return 0;
+    }
+  };
 
   return {
     [Variante.Basis]: anzahlBasisMonate,
     [Variante.Plus]: anzahlPlusMonate,
-    [Variante.Bonus]: anzahlBonusMonate,
+    [Variante.Bonus]: anzahlBonusMonate(),
   };
 }
 
 const MINIMALE_ANZAHL_BASIS_MONATE = 12;
 const ANZAHL_BASIS_MIT_PARTNER_MONATEN = 14;
-const ANZAHL_BONUS_LEBENSMONATE = 8;
+const ANZAHL_BONUS_LEBENSMONATE = 4;
 const ANZAHL_PLUS_MONATE_PRO_BASIS_MONAT = 2;
 
 if (import.meta.vitest) {

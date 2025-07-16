@@ -75,7 +75,8 @@ export function Sidebar({ currentStep }: Props) {
           <strong className="mr-20">
             {currentStepNumber}/{totalStepCount}
           </strong>
-          {currentStep.heading}
+          {("shortName" in currentStep && currentStep.shortName) ||
+            currentStep.heading}
         </span>
 
         {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}

@@ -416,6 +416,8 @@ describe("use Planer service", () => {
         callbacks: { onChange },
       });
 
+      vi.clearAllMocks();
+
       waehleAnyOption(result.current.waehleOption);
 
       expect(onChange).toHaveBeenCalledOnce();
@@ -433,20 +435,21 @@ describe("use Planer service", () => {
       const { result } = renderPlanerServiceHook({
         callbacks: { onChange },
       });
+
+      vi.clearAllMocks();
+
       waehleAnyOption(result.current.waehleOption);
 
       expect(onChange).toHaveBeenCalledOnce();
       expect(onChange).toHaveBeenLastCalledWith(ANY_PLAN, false);
     });
 
-    it("does not trigger callback if the initial Plan is invalid", () => {
-      vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
-        Result.error([{ message: "ungültig" }]),
-      );
+    it("does trigger callback initially", () => {
       const onChange = vi.fn();
+
       renderPlanerServiceHook({ callbacks: { onChange } });
 
-      expect(onChange).not.toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalledOnce();
     });
 
     it("triggers the given callback when specifying an Einkommen", () => {
@@ -455,6 +458,8 @@ describe("use Planer service", () => {
       const { result } = renderPlanerServiceHook({
         callbacks: { onChange },
       });
+
+      vi.clearAllMocks();
 
       gebeAnyEinkommenAn(result.current.gebeEinkommenAn);
 
@@ -468,6 +473,8 @@ describe("use Planer service", () => {
       const { result } = renderPlanerServiceHook({
         callbacks: { onChange },
       });
+
+      vi.clearAllMocks();
 
       act(() => result.current.setzePlanZurueck());
 

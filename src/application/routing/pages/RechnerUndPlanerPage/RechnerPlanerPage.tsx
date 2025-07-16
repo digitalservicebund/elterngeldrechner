@@ -66,7 +66,7 @@ export function RechnerPlanerPage() {
       : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
   );
   const [plan, setPlan] = useState(() => initialPlan);
-  const [istPlanGueltig, setIstPlanGueltig] = useState(true);
+  const [istPlanGueltig, setIstPlanGueltig] = useState(false);
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
   const hasPlan = plan !== undefined;
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();

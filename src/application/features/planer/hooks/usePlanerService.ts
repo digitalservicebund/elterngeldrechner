@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   type Ausgangslage,
   type Auswahloption,
@@ -39,6 +39,12 @@ export function usePlanerService(
       callbacks?.onChange?.(nextPlan, nextValidierungsfehler.length === 0);
     },
     [updateValidierungsfehler, callbacks],
+  );
+
+  useEffect(
+    () => callbacks?.onChange?.(plan, validierungsfehler.length === 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

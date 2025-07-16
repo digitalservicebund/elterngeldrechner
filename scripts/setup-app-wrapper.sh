@@ -96,13 +96,6 @@ wget \
 
 mv egr.html index.html
 
-cp ../src/pdfAntrag/assets/bis2024-03-31_antrag.pdf .
-cp ../src/pdfAntrag/assets/bis2024-03-31_seite.pdf .
-cp ../src/pdfAntrag/assets/von2024-04-01bis2025-03-31_antrag.pdf .
-cp ../src/pdfAntrag/assets/von2024-04-01bis2025-03-31_seite.pdf .
-cp ../src/pdfAntrag/assets/von2025-04-01_antrag.pdf .
-cp ../src/pdfAntrag/assets/von2025-04-01_seite.pdf .
-
 # Remove assets from live egr, will be replaced by new ones
 rm index-*.js
 rm index-*.css

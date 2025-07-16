@@ -128,8 +128,8 @@ async function getPdfDocument({
   }
 
   const formUrl = completeForm
-    ? `${pdfVersion.pdfFileName}_antrag.pdf`
-    : `${pdfVersion.pdfFileName}_seite.pdf`;
+    ? pdfVersion.pdfFileAntragPath
+    : pdfVersion.pdfFileSeitePath;
 
   const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
   const pdfDoc = await PDFDocument.load(formPdfBytes);

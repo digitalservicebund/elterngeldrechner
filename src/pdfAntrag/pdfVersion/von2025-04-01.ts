@@ -1,9 +1,12 @@
 import { Elternteil, Variante } from "@/monatsplaner";
+import pdfFileAntrag from "@/pdfAntrag/assets/von2025-04-01_antrag.pdf";
+import pdfFileSeite from "@/pdfAntrag/assets/von2025-04-01_seite.pdf";
 
 export const pdfVersionVonApril2025 = {
   start: new Date("2025-04-01"),
   end: new Date("2100-03-31"),
-  pdfFileName: "von2025-04-01",
+  pdfFileAntragPath: pdfFileAntrag,
+  pdfFileSeitePath: pdfFileSeite,
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "2b Vorname(n) AS",

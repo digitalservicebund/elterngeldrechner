@@ -14,7 +14,7 @@ import {
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
-import { bundeslaender } from "@/pdfAntrag";
+import { Bundesland, bundeslaender } from "@/pdfAntrag";
 import antragImg from "@/pdfAntrag/assets/antrag.png";
 import seiteImg from "@/pdfAntrag/assets/seite.png";
 import {
@@ -50,6 +50,15 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
     ),
   };
+
+  function trackClickOnAnlagenlink(
+    event: React.MouseEvent<HTMLAnchorElement>,
+    bundesland: Bundesland,
+  ) {
+    event.preventDefault();
+    pushTrackingEvent("Anlagen-zu-Antrag-wurden-heruntergeladen");
+    window.open(bundesland.link, "_blank", "noreferrer");
+  }
 
   async function downloadGanzerAntrag() {
     setAntragDownloading(true);
@@ -139,6 +148,9 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                     href={bundesland.link}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={(event) =>
+                      trackClickOnAnlagenlink(event, bundesland)
+                    }
                   >
                     <ArrowOutward /> Antrag auf Elterngeld in {bundesland.name}
                   </a>
@@ -209,6 +221,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               href={bundesland.link}
               target="_blank"
               rel="noreferrer"
+              onClick={(event) => trackClickOnAnlagenlink(event, bundesland)}
             >
               <ArrowOutward /> Zum Antrag auf Elterngeld in {bundesland.name}
             </a>

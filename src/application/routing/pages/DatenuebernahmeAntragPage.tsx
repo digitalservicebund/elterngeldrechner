@@ -51,7 +51,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     ),
   };
 
-  function trackClickOnAnlagenlink(
+  function trackedDownloadOfAnlagen(
     event: React.MouseEvent<HTMLAnchorElement>,
     bundesland: Bundesland,
   ) {
@@ -149,7 +149,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                     target="_blank"
                     rel="noreferrer"
                     onClick={(event) =>
-                      trackClickOnAnlagenlink(event, bundesland)
+                      trackedDownloadOfAnlagen(event, bundesland)
                     }
                   >
                     <ArrowOutward /> Antrag auf Elterngeld in {bundesland.name}
@@ -221,7 +221,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               href={bundesland.link}
               target="_blank"
               rel="noreferrer"
-              onClick={(event) => trackClickOnAnlagenlink(event, bundesland)}
+              onClick={(event) => trackedDownloadOfAnlagen(event, bundesland)}
             >
               <ArrowOutward /> Zum Antrag auf Elterngeld in {bundesland.name}
             </a>

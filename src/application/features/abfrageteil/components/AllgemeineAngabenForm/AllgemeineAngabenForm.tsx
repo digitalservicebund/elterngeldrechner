@@ -9,6 +9,7 @@ import {
   CustomRadioGroup,
   CustomRadioGroupOption,
 } from "@/application/components";
+import { Alert } from "@/application/components/Alert";
 import {
   CustomSelect,
   SelectOption,
@@ -23,10 +24,17 @@ import { useAppStore } from "@/application/redux/hooks";
 import { bundeslaender } from "@/pdfAntrag";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
-  { value: "FuerBeide", label: "Beide Elternteile sollen Elterngeld bekommen" },
+  {
+    value: "FuerBeide",
+    label: "Ja, beide Elternteile sollen Elterngeld bekommen",
+  },
   {
     value: "EinenElternteil",
-    label: "Nur ein Elternteil soll Elterngeld bekommen",
+    label: "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen",
+  },
+  {
+    value: "FuerBeideUnentschlossen",
+    label: "Wir wissen es noch nicht: Ein Elternteil überlegt noch",
   },
 ];
 
@@ -114,7 +122,7 @@ export function AllgemeineAngabenForm({
 
       {alleinerziehendenFormValue === YesNo.NO && (
         <CustomRadioGroup
-          legend="Wer soll das Elterngeld bekommen?"
+          legend="Sollen beide Elternteile Elterngeld bekommen? Dann bekommen beide mehr und länger Elterngeld."
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="antragstellende"
@@ -125,7 +133,17 @@ export function AllgemeineAngabenForm({
         />
       )}
 
-      {antragstellendeFormValue === "FuerBeide" && (
+      {antragstellendeFormValue === "FuerBeideUnentschlossen" && (
+        <Alert headline="Hinweis" className="-mt-20">
+          Auf den nächsten Seiten planen Sie Ihr Elterngeld gemeinsam mit dem
+          anderen Elternteil. So sehen Sie, welche Vorteile es hat, wenn Sie
+          zusammen planen. Außerdem bekommen Sie einen Überblick, wie Sie das
+          Geld aufteilen können.
+        </Alert>
+      )}
+
+      {(antragstellendeFormValue === "FuerBeide" ||
+        antragstellendeFormValue === "FuerBeideUnentschlossen") && (
         <fieldset>
           <legend>Bitte geben Sie Ihre Vornamen an.</legend>
 

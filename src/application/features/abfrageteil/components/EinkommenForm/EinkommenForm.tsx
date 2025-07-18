@@ -41,7 +41,8 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
     stepAllgemeineAngabenSelectors.getElternteilNames,
   );
   const limitEinkommenUeberschrittenLegend =
-    antragstellende === "FuerBeide" ? (
+    antragstellende === "FuerBeide" ||
+    antragstellende === "FuerBeideUnentschlossen" ? (
       <>
         Hatten {ET1} und {ET2} im Kalenderjahr vor der Geburt ein
         Gesamteinkommen von zusammen mehr als {MAX_EINKOMMEN.toLocaleString()}{" "}
@@ -74,7 +75,8 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
             antragstellende={antragstellende}
           />
 
-          {antragstellende === "FuerBeide" && (
+          {(antragstellende === "FuerBeide" ||
+            antragstellende === "FuerBeideUnentschlossen") && (
             <EinkommenFormElternteil
               elternteil="ET2"
               elternteilName={ET2}

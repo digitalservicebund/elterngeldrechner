@@ -28,7 +28,8 @@ export function EingabeFuerGewinneinkuenfte<
   return (
     <div>
       <p id={descriptionIdentifier}>
-        {antragstellende === "FuerBeide" ? (
+        {antragstellende === "FuerBeide" ||
+        antragstellende === "FuerBeideUnentschlossen" ? (
           <>
             Wie hoch war der Gewinn von {elternteilName} im{" "}
             <b>letzten Kalenderjahr</b> vor der Geburt Ihres Kindes?

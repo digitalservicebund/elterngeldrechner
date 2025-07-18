@@ -63,7 +63,9 @@ function ErwerbstaetigkeitFormElternteil({
   }, [elternteil, wasErwerbstaetig, setValue]);
 
   const heading = elternteilName;
-  const hasHeading = antragssteller === "FuerBeide";
+  const hasHeading =
+    antragssteller === "FuerBeide" ||
+    antragssteller === "FuerBeideUnentschlossen";
   const headingIdentifier = useId();
 
   return (
@@ -78,7 +80,8 @@ function ErwerbstaetigkeitFormElternteil({
       <div className="flex flex-col gap-56">
         <YesNoRadio
           legend={
-            antragssteller === "FuerBeide" ? (
+            antragssteller === "FuerBeide" ||
+            antragssteller === "FuerBeideUnentschlossen" ? (
               <>
                 War {elternteilName} in den 12 Monaten vor der Geburt Ihres
                 Kindes erwerbstätig?
@@ -108,7 +111,8 @@ function ErwerbstaetigkeitFormElternteil({
               <>
                 <YesNoRadio
                   legend={
-                    antragssteller === "FuerBeide" ? (
+                    antragssteller === "FuerBeide" ||
+                    antragssteller === "FuerBeideUnentschlossen" ? (
                       <>
                         Bestand die nichtselbständige Arbeit von{" "}
                         {elternteilName} aus mehreren Tätigkeiten?
@@ -131,7 +135,8 @@ function ErwerbstaetigkeitFormElternteil({
                   <>
                     <YesNoRadio
                       legend={
-                        antragssteller === "FuerBeide" ? (
+                        antragssteller === "FuerBeide" ||
+                        antragssteller === "FuerBeideUnentschlossen" ? (
                           <>
                             War {elternteilName} in den 12 Monaten vor der
                             Geburt Ihres Kindes sozialversicherungspflichtig?
@@ -154,7 +159,8 @@ function ErwerbstaetigkeitFormElternteil({
 
                     <CustomRadioGroup
                       legend={
-                        antragssteller === "FuerBeide" ? (
+                        antragssteller === "FuerBeide" ||
+                        antragssteller === "FuerBeideUnentschlossen" ? (
                           <>
                             Hatte {elternteilName} Einkommen aus einem Mini-Job?
                           </>

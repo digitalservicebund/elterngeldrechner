@@ -2,7 +2,10 @@ import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
 import { RootState } from "@/application/redux";
 
-export type Antragstellende = "EinenElternteil" | "FuerBeide";
+export type Antragstellende =
+  | "EinenElternteil"
+  | "FuerBeide"
+  | "FuerBeideUnentschlossen";
 type AntragstellendeSelektor = "ET1" | "ET2";
 
 export interface StepAllgemeineAngabenState {

@@ -76,7 +76,8 @@ export function Versicherungen({
       aria-describedby={hasError ? errorIdentifier : undefined}
     >
       <legend className="mb-8">
-        {antragstellende === "FuerBeide" ? (
+        {antragstellende === "FuerBeide" ||
+        antragstellende === "FuerBeideUnentschlossen" ? (
           <>{elternteilName} war während der Ausübung dieser Tätigkeit</>
         ) : (
           <>Ich war während der Ausübung dieser Tätigkeit</>

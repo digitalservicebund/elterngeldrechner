@@ -18,7 +18,9 @@ describe("Allgemeine Angaben Page", () => {
     await userEvent.click(screen.getByLabelText("Nein"));
 
     expect(
-      screen.getByText("Wer soll das Elterngeld bekommen?"),
+      screen.getByText(
+        "Sollen beide Elternteile Elterngeld bekommen? Dann bekommen beide mehr und länger Elterngeld.",
+      ),
     ).toBeInTheDocument();
   });
 
@@ -28,7 +30,7 @@ describe("Allgemeine Angaben Page", () => {
     await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(
-      screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+      screen.getByLabelText("Ja, beide Elternteile sollen Elterngeld bekommen"),
     );
 
     expect(screen.getByText("Name für Elternteil 1")).toBeInTheDocument();
@@ -41,7 +43,7 @@ describe("Allgemeine Angaben Page", () => {
     await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(
-      screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+      screen.getByLabelText("Ja, beide Elternteile sollen Elterngeld bekommen"),
     );
 
     expect(
@@ -57,7 +59,7 @@ describe("Allgemeine Angaben Page", () => {
     await userEvent.click(screen.getByLabelText("Nein"));
 
     await userEvent.click(
-      screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+      screen.getByLabelText("Ja, beide Elternteile sollen Elterngeld bekommen"),
     );
 
     expect(
@@ -107,7 +109,9 @@ describe("Allgemeine Angaben Page", () => {
 
     await userEvent.click(screen.getByLabelText("Nein"));
     await userEvent.click(
-      screen.getByLabelText("Nur ein Elternteil soll Elterngeld bekommen"),
+      screen.getByLabelText(
+        "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen",
+      ),
     );
 
     expect(
@@ -153,7 +157,9 @@ describe("Allgemeine Angaben Page", () => {
       );
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(
-        screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+        screen.getByLabelText(
+          "Ja, beide Elternteile sollen Elterngeld bekommen",
+        ),
       );
       await userEvent.type(
         screen.getByLabelText("Name für Elternteil 1"),
@@ -193,7 +199,9 @@ describe("Allgemeine Angaben Page", () => {
       );
       await userEvent.click(screen.getByLabelText("Nein"));
       await userEvent.click(
-        screen.getByLabelText("Beide Elternteile sollen Elterngeld bekommen"),
+        screen.getByLabelText(
+          "Ja, beide Elternteile sollen Elterngeld bekommen",
+        ),
       );
       await userEvent.type(
         screen.getByLabelText("Name für Elternteil 1"),

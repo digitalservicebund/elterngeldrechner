@@ -50,8 +50,7 @@ export function ErwerbstaetigkeitCheckboxGroup({
   return (
     <fieldset aria-describedby={hasError ? errorIdentifier : undefined}>
       <legend className="mb-8">
-        {antragssteller === "FuerBeide" ||
-        antragssteller === "FuerBeideUnentschlossen" ? (
+        {antragssteller === "FuerBeide" ? (
           <>{elternteilName} hatte in diesem Zeitraum…</>
         ) : (
           <>Ich hatte in diesem Zeitraum…</>

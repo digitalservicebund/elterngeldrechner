@@ -49,8 +49,7 @@ export function NurErwerbstaetig({
         <div>
           <p>
             Wie viel{" "}
-            {antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            {antragstellende === "FuerBeide" ? (
               <>hat {elternteilName}</>
             ) : (
               <>haben Sie</>
@@ -93,8 +92,7 @@ export function NurErwerbstaetig({
           className="my-16 flex flex-wrap gap-16"
         >
           <legend className="mb-10">
-            {antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            {antragstellende === "FuerBeide" ? (
               <>
                 Geben Sie an, wie viel {elternteilName} in den 12 Monaten vor
                 der Geburt Ihres Kindes monatlich verdient hat.

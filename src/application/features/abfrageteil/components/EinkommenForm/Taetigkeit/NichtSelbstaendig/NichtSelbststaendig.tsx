@@ -132,8 +132,7 @@ export function NichtSelbstaendig({
 
       <fieldset>
         <legend className="mb-8">
-          {antragstellende === "FuerBeide" ||
-          antragstellende === "FuerBeideUnentschlossen" ? (
+          {antragstellende === "FuerBeide" ? (
             <>
               In welchem Zeitraum hat {elternteilName} diese Tätigkeit ausgeübt?
             </>

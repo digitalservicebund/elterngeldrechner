@@ -70,9 +70,7 @@ export function EinkommenFormElternteil({
     isOnlyErwerbstaetig && !isMehrereTaetigkeiten;
 
   const heading = elternteilName;
-  const hasHeading =
-    antragstellende === "FuerBeide" ||
-    antragstellende === "FuerBeideUnentschlossen";
+  const hasHeading = antragstellende === "FuerBeide";
   const headingIdentifier = useId();
 
   return (
@@ -87,8 +85,7 @@ export function EinkommenFormElternteil({
       <div className="flex flex-col gap-56">
         {!isErwerbstaetigVorGeburt && (
           <p>
-            {antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            {antragstellende === "FuerBeide" ? (
               <>
                 Da Sie für {elternteilName} in den letzten 12 Monaten kein
                 Einkommen angegeben haben, wird für {elternteilName} mit dem

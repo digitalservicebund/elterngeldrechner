@@ -201,7 +201,7 @@ export function RechnerPlanerPage() {
         <p>
           Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld
           bekommen. Falls noch nicht feststeht, ob Sie die Grenze von{" "}
-          {MAX_EINKOMMEN.toLocaleString()} Euro überschreiten, können Sie
+          {MAX_EINKOMMEN.toLocaleString("de-DE")} Euro überschreiten, können Sie
           trotzdem einen Antrag stellen.
         </p>
 

@@ -44,13 +44,13 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
     antragstellende === "FuerBeide" ? (
       <>
         Hatten {ET1} und {ET2} im Kalenderjahr vor der Geburt ein
-        Gesamteinkommen von zusammen mehr als {MAX_EINKOMMEN.toLocaleString()}{" "}
-        Euro?
+        Gesamteinkommen von zusammen mehr als{" "}
+        {MAX_EINKOMMEN.toLocaleString("de-DE")} Euro?
       </>
     ) : (
       <>
         Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr
-        als {MAX_EINKOMMEN.toLocaleString()} Euro?
+        als {MAX_EINKOMMEN.toLocaleString("de-DE")} Euro?
       </>
     );
 

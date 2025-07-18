@@ -10,8 +10,8 @@ export function InfoZumEinkommenslimit(): ReactNode {
         <p>
           Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld
           bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden
-          Jahreseinkommen von mehr als {MAX_EINKOMMEN.toLocaleString()} Euro bei
-          Alleinerziehenden, Paaren und getrennt Erziehenden.
+          Jahreseinkommen von mehr als {MAX_EINKOMMEN.toLocaleString("de-DE")}{" "}
+          Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden.
           <br />
           Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid.
           <br />

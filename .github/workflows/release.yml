@@ -1,8 +1,8 @@
 name: Release
+
 on:
-  push:
-    tags:
-      - "*"
+  release:
+    types: [created]
 
 jobs:
   release:
@@ -23,12 +23,12 @@ jobs:
 
       - name: Create archive for static build assets
         working-directory: dist/assets
-        run: zip -r build-assets.zip .
+        run: zip -r "$(date "+%Y-%m-%d").zip" .
 
       - name: Create new release
         uses: softprops/action-gh-release@c43d7637b9b9ce3e953168c325d27253a5d48d8e
         with:
-          files: dist/assets/build-assets.zip
+          files: dist/assets/"$(date "+%Y-%m-%d").zip"
 
       - name: Report Deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

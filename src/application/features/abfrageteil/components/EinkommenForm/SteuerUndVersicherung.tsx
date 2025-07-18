@@ -107,8 +107,7 @@ export function SteuerUndVersicherung({
           }}
           name={`${elternteil}.steuerklasse`}
           label={
-            antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            antragstellende === "FuerBeide" ? (
               <>
                 Welche Steuerklasse hatte {elternteilName} in den letzten 12
                 Monaten?
@@ -133,8 +132,7 @@ export function SteuerUndVersicherung({
           }}
           name={`${elternteil}.kinderFreiBetrag`}
           label={
-            antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            antragstellende === "FuerBeide" ? (
               <>
                 Wie viele Kinderfreibeträge sind aus der Lohn- und
                 Gehaltsbescheinigung von {elternteilName} ersichtlich?
@@ -154,8 +152,7 @@ export function SteuerUndVersicherung({
 
       <YesNoRadio
         legend={
-          antragstellende === "FuerBeide" ||
-          antragstellende === "FuerBeideUnentschlossen" ? (
+          antragstellende === "FuerBeide" ? (
             <>Ist {elternteilName} kirchensteuerpflichtig?</>
           ) : (
             <>Sind Sie kirchensteuerpflichtig?</>
@@ -171,8 +168,7 @@ export function SteuerUndVersicherung({
       {!isSelbstaendigAndErwerbstaetigOrMehrereTaetigkeiten && (
         <CustomRadioGroup
           legend={
-            antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            antragstellende === "FuerBeide" ? (
               <>Ist {elternteilName} gesetzlich pflichtversichert?</>
             ) : (
               <>Sind Sie gesetzlich pflichtversichert?</>
@@ -192,8 +188,7 @@ export function SteuerUndVersicherung({
       {!!isOnlySelbstaendig && (
         <CustomRadioGroup
           legend={
-            antragstellende === "FuerBeide" ||
-            antragstellende === "FuerBeideUnentschlossen" ? (
+            antragstellende === "FuerBeide" ? (
               <>Wie ist {elternteilName} rentenversichert?</>
             ) : (
               <>Wie sind Sie rentenversichert?</>

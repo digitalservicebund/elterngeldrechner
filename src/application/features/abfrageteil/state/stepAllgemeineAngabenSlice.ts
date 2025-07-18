@@ -40,7 +40,9 @@ export const stepAllgemeineAngabenSlice = createSlice({
 });
 
 const getAntragssteller = (state: RootState) =>
-  state.stepAllgemeineAngaben.antragstellende;
+  state.stepAllgemeineAngaben.antragstellende === "FuerBeideUnentschlossen"
+    ? "FuerBeide"
+    : state.stepAllgemeineAngaben.antragstellende;
 
 const getElternteilNames = createSelector(
   (state: RootState) => state.stepAllgemeineAngaben.pseudonym.ET1,

@@ -47,10 +47,7 @@ export function ErwerbstaetigkeitForm({
 
   // reset state if ET2 is not displayed anymore
   useEffect(() => {
-    if (
-      antragssteller !== "FuerBeide" &&
-      antragssteller !== "FuerBeideUnentschlossen"
-    ) {
+    if (antragssteller !== "FuerBeide") {
       setValue("ET2", initialStepErwerbstaetigkeitElternteil);
     }
   }, [antragssteller, setValue]);
@@ -65,8 +62,7 @@ export function ErwerbstaetigkeitForm({
             antragssteller={antragssteller}
           />
 
-          {(antragssteller === "FuerBeide" ||
-            antragssteller === "FuerBeideUnentschlossen") && (
+          {antragssteller === "FuerBeide" && (
             <ErwerbstaetigkeitFormElternteil
               elternteil="ET2"
               elternteilName={ET2}

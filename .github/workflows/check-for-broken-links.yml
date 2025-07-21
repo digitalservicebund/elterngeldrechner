@@ -9,27 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: check urls
-        run: |
-          # grep for all urls in all places, e.g. also in comments
-          grep --no-messages --recursive --no-filename --only-matching --extended-regexp \
-            "(http|https)://[a-zA-Z0-9./?!=_-]*" \
-            ./src/application/**/* \
-          | \
 
-          # remove duplicates
-          sort | uniq \
-          | \
+      - name: Find all strings starting with https in the pdfAntrag feature
+        run: grep -rhoE --include=\*.ts  'https?://[^"'\'' >]+' ./src/pdfAntrag > pdf-links.txt
 
-          # filter out test/technical urls
-          grep --extended-regexp --line-regexp --invert-match \
-          "http://localhost|http://www.w3.org/2000/svg|https://test.tld/tag-manager" \
-          | \
+      - name: Find all values of href tags used within the src directory
+        run: grep -rhoE 'href="[^"]+"' ./src | grep -v 'href="/"$' | sed -E 's/^href="//;s/"$//' | sed 's/&.*//' > href-links.txt
 
-          # request every url and fail as soon as a http status is >= 400
-          # hint: exit 255 causes xargs to exit
-          xargs --verbose --max-args=1 \
-            sh -c 'curl --head --retry 1 --fail-with-body $0 || exit 255'
+      - name: Fetch first byte of each url to validate accessibility without downloading content
+        run: cat pdf-links.txt href-links.txt | xargs -n 1 -t sh -c "curl --range 0-1 --silent --retry 1 --fail -L \"\$1\" -o /dev/null 2> /dev/null || exit 255" sh
 
       - name: Send failure to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba

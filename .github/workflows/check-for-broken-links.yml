@@ -10,14 +10,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Find all strings starting with https in the pdfAntrag feature
+      - name: Extract urls from pdfAntrag feature directory
         run: grep -rhoE --include=\*.ts  'https?://[^"'\'' >]+' ./src/pdfAntrag > pdf-links.txt
 
-      - name: Find all values of href tags used within the src directory
+      - name: Extract href urls from source directory
         run: grep -rhoE 'href="[^"]+"' ./src | grep -v 'href="/"$' | sed -E 's/^href="//;s/"$//' | sed 's/&.*//' > href-links.txt
 
-      - name: Fetch first byte of each url to validate accessibility without downloading content
-        run: cat pdf-links.txt href-links.txt | xargs -n 1 -t sh -c "curl --range 0-1 --silent --retry 1 --fail -L \"\$1\" -o /dev/null 2> /dev/null || exit 255" sh
+      - name: Check url accessibility and log failures
+        run: |
+          exit_code=0
+          failed_counter=0
+          while read -r url; do
+            echo "Checking: $url"
+            if ! curl -A "Mozilla/5.0" --range 0-1 --silent --retry 1 --fail -L -v "$url" -o /dev/null 2>/tmp/curl_error; then
+              echo "Failed: $url"
+              exit_code=1
+              failed_counter=$((failed_counter + 1))
+
+              # Create logs directory only when needed
+              mkdir -p curl-logs
+
+              # Create log file for this failed request
+              log_file="curl-logs/failed-request-$(printf "%03d" $failed_counter).log"
+              {
+                echo -e "URL: $url\nTimestamp: $(date)\n"
+                cat /tmp/curl_error
+              } > "$log_file"
+            fi
+          done < <(cat pdf-links.txt href-links.txt)
+          exit $exit_code
+
+      - name: Upload detailed logs for broken links
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: failed-curl-logs
+          path: curl-logs/
+          retention-days: 7
 
       - name: Send failure to Slack
         uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba

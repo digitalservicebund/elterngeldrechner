@@ -37,10 +37,12 @@ describe("Planer", () => {
     const onChange = () => {};
     const onOpenErklaerung = () => {};
     const berechneElterngeldbezuege = () => ({}) as never;
+    const planInAntragUebernehmen = () => ({}) as never;
     render(
       <Planer
         initialInformation={initialInformation}
         berechneElterngeldbezuege={berechneElterngeldbezuege}
+        planInAntragUebernehmen={planInAntragUebernehmen}
         callbacks={{ onChange, onOpenErklaerung }}
       />,
     );
@@ -116,6 +118,7 @@ const ANY_AUSGANGSLAGE = {
 const ANY_PROPS = {
   initialInformation: { ausgangslage: ANY_AUSGANGSLAGE },
   berechneElterngeldbezuege: () => ({}) as never,
+  planInAntragUebernehmen: () => ({}) as never,
   callbacks: { onOpenErklaerung: () => {} },
 };
 
@@ -184,4 +187,6 @@ const ANY_SERVICE_VALUES = {
   ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => {},
   setzePlanZurueck: () => {},
   ueberschreibePlan: () => {},
+  ueberpruefePlanung: () => {},
+  schalteBonusFrei: () => {},
 };

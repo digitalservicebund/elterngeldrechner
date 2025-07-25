@@ -1,45 +1,31 @@
-import classNames from "classnames";
+import LightbulbIcon from "@digitalservicebund/icons/LightbulbOutlined";
 import { ReactNode, useId } from "react";
 
 type Props = {
   readonly validierungsfehler: string[];
-  readonly className?: string;
 };
 
 export function Validierungsfehlerbox({
   validierungsfehler,
-  className,
 }: Props): ReactNode {
   const headingIdentifier = useId();
-  const hasFehler = validierungsfehler.length > 0;
 
   return (
     <section
-      className={classNames(
-        className,
-        "p-16",
-        "border-0 border-l-4 border-solid border-tertiary bg-tertiary-light",
-        { "sr-only": !hasFehler },
-      )}
+      className="flex w-full flex-col items-center gap-16 bg-grey-light p-40"
       aria-live="polite"
       aria-labelledby={headingIdentifier}
     >
-      <h3
-        id={headingIdentifier}
-        className="text-base"
-        aria-label="Validierungsfehler"
-      >
-        Bitte beachten Sie:
-      </h3>
+      <h5 id={headingIdentifier} aria-label="Validierungsfehler">
+        <LightbulbIcon className="text-primary" /> Ihre Planung ist noch nicht
+        gültig.
+      </h5>
 
-      <ul
-        className="list-inside list-disc"
-        aria-label="Liste mit Validierungsfehler"
-      >
+      <p className="text-center" aria-label="Liste mit Validierungsfehler">
         {validierungsfehler.map((fehler) => (
-          <li key={fehler}>{fehler}</li>
+          <span key={fehler}>{fehler}</span>
         ))}
-      </ul>
+      </p>
     </section>
   );
 }

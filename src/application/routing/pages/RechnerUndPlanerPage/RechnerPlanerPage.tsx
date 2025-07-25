@@ -143,6 +143,7 @@ export function RechnerPlanerPage() {
             <Planer
               initialInformation={initialPlanerInformation.current}
               berechneElterngeldbezuege={berechneElterngeldbezuege}
+              planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}
               callbacks={{
                 onChange: handlePlanChanges,
                 onWaehleOption: trackMetricsForEineOptionWurdeGewaehlt,
@@ -161,14 +162,6 @@ export function RechnerPlanerPage() {
                 onClick={navigateToEinkommenPage}
               >
                 Zurück
-              </Button>
-
-              <Button
-                type="button"
-                disabled={!istPlanGueltig}
-                onClick={navigateToDatenuebernahmeAntragPage}
-              >
-                Planung in den Antrag übernehmen
               </Button>
             </div>
 

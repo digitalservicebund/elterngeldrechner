@@ -1,12 +1,11 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
-import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
 import { ReactNode, useCallback, useId, useRef } from "react";
 import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
-import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
+import { Pruefbuttonbox } from "./Pruefbuttonbox";
 import { Button } from "@/application/components";
 import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import {
@@ -27,6 +26,7 @@ import {
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
+  readonly planInAntragUebernehmen: () => void;
   readonly callbacks: PlanerServiceCallbacks &
     BeispielServiceCallbacks<Ausgangslage> & {
       onOpenLebensmonat?: () => void;
@@ -40,6 +40,7 @@ export function Planer({
   berechneElterngeldbezuege,
   callbacks,
   className,
+  planInAntragUebernehmen,
 }: Props): ReactNode {
   // Intermediate "cache" to resolve mutual parameter dependency between hooks
   const setzeBeispielauswahlZurueckCallback = useRef<() => void>(undefined);
@@ -68,7 +69,6 @@ export function Planer({
 
   const {
     plan,
-    validierungsfehler,
     erstelleUngeplantenLebensmonat,
     bestimmeAuswahlmoeglichkeiten,
     waehleOption,
@@ -77,6 +77,8 @@ export function Planer({
     ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
     setzePlanZurueck,
     ueberschreibePlan,
+    ueberpruefePlanung,
+    schalteBonusFrei,
   } = usePlanerService(
     initialInformation,
     berechneElterngeldbezuege,
@@ -105,11 +107,6 @@ export function Planer({
 
   const mindestensEinLebensmonatGeplant =
     Object.keys(plan.lebensmonate).length > 0;
-
-  const planungDrucken = () => {
-    window.print();
-    onPlanungDrucken?.();
-  };
 
   return (
     <>
@@ -161,46 +158,35 @@ export function Planer({
               plan={plan}
             />
 
-            <Lebensmonatsliste
-              ref={lebensmonatslistenElement}
-              className="py-2"
-              plan={plan}
-              erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
-              bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-              waehleOption={waehleOption}
-              erstelleVorschlaegeFuerAngabeDesEinkommens={
-                erstelleVorschlaegeFuerAngabeDesEinkommens
-              }
-              gebeEinkommenAn={gebeEinkommenAn}
-              ergaenzeBruttoeinkommenFuerPartnerschaftsbonus={
-                ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
-              }
-              onOpenLebensmonat={onOpenLebensmonat}
-            />
+            <div>
+              <Lebensmonatsliste
+                ref={lebensmonatslistenElement}
+                className="py-2"
+                plan={plan}
+                erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
+                bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
+                waehleOption={waehleOption}
+                erstelleVorschlaegeFuerAngabeDesEinkommens={
+                  erstelleVorschlaegeFuerAngabeDesEinkommens
+                }
+                gebeEinkommenAn={gebeEinkommenAn}
+                ergaenzeBruttoeinkommenFuerPartnerschaftsbonus={
+                  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
+                }
+                onOpenLebensmonat={onOpenLebensmonat}
+              />
 
-            <div className="p-32">
-              <div className="print:hidden">
-                <Button
-                  type="button"
-                  buttonStyle="link"
-                  onClick={planungDrucken}
-                >
-                  <SaveAltIcon /> Drucken der Planung
-                </Button>
-
-                <p>
-                  Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
-                  „als PDF speichern“ aus.
-                </p>
-              </div>
+              <Pruefbuttonbox
+                className="p-16"
+                plan={plan}
+                ueberpruefePlanung={ueberpruefePlanung}
+                planInAntragUebernehmen={planInAntragUebernehmen}
+                bonusFreischalten={schalteBonusFrei}
+                onPlanungDrucken={onPlanungDrucken}
+              />
             </div>
           </div>
         </GridLayoutProvider>
-
-        <Validierungsfehlerbox
-          className="mt-40"
-          validierungsfehler={validierungsfehler}
-        />
       </section>
     </>
   );

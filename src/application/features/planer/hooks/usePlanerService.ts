@@ -157,6 +157,36 @@ export function usePlanerService(
     [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks],
   );
 
+  const ueberpruefePlanung = useCallback(
+    () => validierePlanFuerFinaleAbgabe(plan),
+    [plan],
+  );
+
+  const schalteBonusFrei = useCallback(
+    () =>
+      // plan: PlanMitBeliebigenElternteilen,
+      {
+        //   setPlan((plan) => {
+        //     const nextPlan = waehleOption(
+        //       berechneElterngeldbezuege,
+        //       plan,
+        //       lebensmonatszahl,
+        //       elternteil,
+        //       option,
+        //     ).unwrapOrElse((error) => {
+        //       // eslint-disable-next-line no-console
+        //       console.error(error);
+        //       return plan;
+        //     });
+        //     updateStatesAndTriggerCallbacks(nextPlan);
+        //     return nextPlan;
+        //   });
+        //   callbacks?.onWaehleOption?.();
+      },
+    [],
+    // [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, callbacks],
+  );
+
   return {
     plan,
     validierungsfehler,
@@ -170,6 +200,8 @@ export function usePlanerService(
       ergaenzeBruttoeinkommenFuerPartnerschaftsbonusCallback,
     setzePlanZurueck: setztePlanZurueckCallback,
     ueberschreibePlan,
+    ueberpruefePlanung,
+    schalteBonusFrei,
   };
 }
 

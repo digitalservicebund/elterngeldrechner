@@ -163,6 +163,8 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
         );
       })}
 
+      <div className="m-10 mx-80 border border-solid border-off-white"></div>
+
       <button
         type="button"
         className={classNames(

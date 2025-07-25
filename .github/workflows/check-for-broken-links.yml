@@ -7,14 +7,21 @@ on:
 jobs:
   url-check:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Extract urls from pdfAntrag feature directory
-        run: grep -rhoE --include=\*.ts  'https?://[^"'\'' >]+' ./src/pdfAntrag > pdf-links.txt
+      - name: Find all urls within double quotes
+        run: grep -rhoE --include=\*.{js,ts,jsx,tsx} '"https?://[^"'\'' >]+"' ./src | sed 's/^"\(.*\)"$/\1/' > links.txt
 
-      - name: Extract href urls from source directory
-        run: grep -rhoE 'href="[^"]+"' ./src | grep -v 'href="/"$' | sed -E 's/^href="//;s/"$//' | sed 's/&.*//' > href-links.txt
+      - name: Write ignore list from GitHub variable
+        run: echo '${{ vars.LINK_CHECK_IGNORE_DOMAINS }}' > ignore_domains.json
+
+      - name: Print ignore reasons (for documentation)
+        run: jq -r '.[] | "- \(.domain) -> \(.reason)"' ignore_domains.json
+
+      - name: Filter links.txt using ignore list
+        run: grep -vE "https?://($(jq -r '.[].domain' ignore_domains.json | sed 's/\./\\./g' | paste -sd '|' -))" links.txt > filtered_links.txt
 
       - name: Check url accessibility and log failures
         run: |
@@ -22,7 +29,7 @@ jobs:
           failed_counter=0
           while read -r url; do
             echo "Checking: $url"
-            if ! curl -A "Mozilla/5.0" --range 0-1 --silent --retry 1 --fail -L -v "$url" -o /dev/null 2>/tmp/curl_error; then
+            if ! curl --range 0-1 --silent --retry 1 --fail -L -v "$url" -o /dev/null 2>/tmp/curl_error; then
               echo "Failed: $url"
               exit_code=1
               failed_counter=$((failed_counter + 1))
@@ -37,7 +44,7 @@ jobs:
                 cat /tmp/curl_error
               } > "$log_file"
             fi
-          done < <(cat pdf-links.txt href-links.txt)
+          done < <(cat filtered_links.txt)
           exit $exit_code
 
       - name: Upload detailed logs for broken links

@@ -2,7 +2,7 @@ name: Check for broken links
 
 on:
   schedule:
-    - cron: "0 8 * * *" # Run every day at 9AM (Berlin time)
+    - cron: "0 7 * * 1-5" # Run every weekday at 9AM Berlin time (UTC+1/+2)
 
 jobs:
   url-check:

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
 import { usePlanerService } from "@/application/features/planer/hooks";
-import { Elternteil, KeinElterngeld, Variante } from "@/monatsplaner";
+import { Elternteil, KeinElterngeld, Result, Variante } from "@/monatsplaner";
 
 describe("Planer", () => {
   beforeEach(async () => {
@@ -187,6 +187,8 @@ const ANY_SERVICE_VALUES = {
   ergaenzeBruttoeinkommenFuerPartnerschaftsbonus: () => {},
   setzePlanZurueck: () => {},
   ueberschreibePlan: () => {},
-  ueberpruefePlanung: () => {},
+  ueberpruefePlanung: () => {
+    return Result.ok(undefined);
+  },
   schalteBonusFrei: () => {},
 };

@@ -17,9 +17,9 @@ export function Prueftippbox({ tips, onBonusFreischalten }: Props): ReactNode {
           <div className="flex gap-10">
             <LightbulbIcon className="-mt-8 text-[2.3rem]" />
             <span>
-              Tipp: Wenn Sie im Anschluss an Ihre Planung beide in Teilzeit
-              arbeiten, können Sie den Partnerschaftsbonus bekommen. Sie
-              bekommen dann zusammen noch vier Monate zusätzlich Elterngeld.
+              Tipp: Wenn Sie im Anschluss an Ihre Planung <strong>beide</strong>{" "}
+              in Teilzeit arbeiten, können Sie den Partnerschaftsbonus bekommen.
+              Sie bekommen dann zusammen noch vier Monate zusätzlich Elterngeld.
             </span>
           </div>
 

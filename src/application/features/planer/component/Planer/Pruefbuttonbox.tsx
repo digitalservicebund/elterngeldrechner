@@ -134,8 +134,7 @@ function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
 
   const availableBonus = verfuegbaresKontingent[Variante.Bonus];
 
-  // TODO: Fully aware that there could be zero Basis but one Plus
-  const hasBasisLeft = remainingBasis > 0;
+  const hasBasisLeft = remainingBasis > 0.5;
   const hasPlusLeft = remainingPlus > 0;
   const hasBonusLeft = remainingBonus > 0;
 
@@ -144,25 +143,25 @@ function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
 
     if (hasBasisLeft && hasPlusLeft) {
       tips.push(
-        `Sie können noch ${remainingBasis} Monate Basiselterngeld verteilen oder Sie können noch ${remainingPlus} Monate ElterngeldPlus verteilen`,
+        `Sie können noch ${remainingBasis === 1 ? "ein Monat" : `${remainingBasis} Monate`} Basiselterngeld oder noch ${remainingPlus === 1 ? "ein Monat" : `${remainingPlus} Monate`} ElterngeldPlus verteilen`,
       );
     } else {
       if (hasBasisLeft) {
         tips.push(
-          `Sie können noch ${remainingBasis} Monate Basiselterngeld verteilen.`,
+          `Sie können noch ${remainingBasis === 1 ? "ein Monat" : `${remainingBasis} Monate`} Basiselterngeld verteilen.`,
         );
       }
 
       if (hasPlusLeft) {
         tips.push(
-          `Sie können noch ${remainingPlus} Monate ElterngeldPlus verteilen.`,
+          `Sie können noch ${remainingPlus === 1 ? "ein Monat" : `${remainingPlus} Monate`} ElterngeldPlus verteilen.`,
         );
       }
     }
 
     if (hasBonusLeft) {
       tips.push(
-        `Jeder von Ihnen kann noch ${remainingBonus} Monate Partnerschaftsbonus verteilen`,
+        `Jeder von Ihnen kann noch ${remainingBonus === 2 ? "ein Monat" : `${remainingBonus / 2} Monate`} Partnerschaftsbonus verteilen`,
       );
     }
 
@@ -172,7 +171,7 @@ function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
   } else if (remainingBonus > 0) {
     return {
       normalTips: [
-        `Jeder von Ihnen kann noch ${remainingBonus} Monate Partnerschaftsbonus verteilen`,
+        `Jeder von Ihnen kann noch ${remainingBonus === 2 ? "ein Monat" : `${remainingBonus / 2} Monate`} Partnerschaftsbonus verteilen`,
       ],
       hasSpecialBonusTip: false,
     };

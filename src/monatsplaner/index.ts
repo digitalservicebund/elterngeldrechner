@@ -47,6 +47,7 @@ export { MONAT_MIT_MUTTERSCHUTZ, type Monat } from "./Monat";
 export {
   type Plan,
   type PlanMitBeliebigenElternteilen,
+  aktiviereBonus,
   aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
   gebeEinkommenAn,

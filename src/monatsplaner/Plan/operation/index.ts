@@ -1,3 +1,4 @@
+export * from "./aktiviereBonus";
 export * from "./aktualisiereElterngeldbezuege";
 export * from "./bestimmeAuswahlmoeglichkeiten";
 export * from "./gebeEinkommenAn";

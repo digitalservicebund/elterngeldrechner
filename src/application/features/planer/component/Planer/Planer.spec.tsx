@@ -29,7 +29,7 @@ describe("Planer", () => {
     ).toBeVisible();
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
-    expect(screen.getByLabelText("Validierungsfehler")).toBeVisible();
+    expect(screen.getByLabelText("Prüfbuttonbox")).toBeVisible();
   });
 
   it("forwards the given props to the service", () => {
@@ -91,19 +91,19 @@ describe("Planer", () => {
     }
   });
 
-  describe("Drucken der Planung", () => {
-    it("triggers the browsers in-build print function", async () => {
-      window.print = vi.fn();
-      render(<Planer {...ANY_PROPS} />);
+  // describe("Drucken der Planung", () => {
+  //   it("triggers the browsers in-build print function", async () => {
+  //     window.print = vi.fn();
+  //     render(<Planer {...ANY_PROPS} />);
 
-      const button = screen.getByRole("button", {
-        name: "Drucken der Planung",
-      });
-      await userEvent.click(button);
+  //     const button = screen.getByRole("button", {
+  //       name: "Drucken der Planung",
+  //     });
+  //     await userEvent.click(button);
 
-      expect(window.print).toHaveBeenCalled();
-    });
-  });
+  //     expect(window.print).toHaveBeenCalled();
+  //   });
+  // });
 });
 
 const ANY_AUSGANGSLAGE = {

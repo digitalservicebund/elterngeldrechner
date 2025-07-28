@@ -46,10 +46,6 @@ jobs:
             fi
           done < filtered_links.txt
 
-          # Create a comma-separated list of urls
-          failed_csv=$(paste -sd, failed_urls.txt)
-          echo "FAILED_URLS=$failed_csv" >> "$GITHUB_ENV"
-
           # Create a newline separated markdown list of slack formatted urls
           failed_csv=$(while read -r url; do echo "- <$url|$url>"; done < failed_urls.txt | paste -sd '\n' -)
           printf 'FAILED_URLS<<EOF\n%s\nEOF\n' "$failed_csv" >> "$GITHUB_ENV"

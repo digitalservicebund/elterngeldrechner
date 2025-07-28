@@ -3,10 +3,11 @@ import {
   type Ausgangslage,
   type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
-  type Elternteil,
+  Elternteil,
   type Lebensmonatszahl,
   type Plan,
   type PlanMitBeliebigenElternteilen,
+  Variante,
   aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
   ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
@@ -162,30 +163,24 @@ export function usePlanerService(
     [plan],
   );
 
-  const schalteBonusFrei = useCallback(
-    () =>
-      // plan: PlanMitBeliebigenElternteilen,
-      {
-        //   setPlan((plan) => {
-        //     const nextPlan = waehleOption(
-        //       berechneElterngeldbezuege,
-        //       plan,
-        //       lebensmonatszahl,
-        //       elternteil,
-        //       option,
-        //     ).unwrapOrElse((error) => {
-        //       // eslint-disable-next-line no-console
-        //       console.error(error);
-        //       return plan;
-        //     });
-        //     updateStatesAndTriggerCallbacks(nextPlan);
-        //     return nextPlan;
-        //   });
-        //   callbacks?.onWaehleOption?.();
-      },
-    [],
-    // [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, callbacks],
-  );
+  const schalteBonusFrei = useCallback(() => {
+    setPlan((plan) => {
+      const nextPlan = waehleOption(
+        berechneElterngeldbezuege,
+        plan,
+        15,
+        Elternteil.Eins,
+        Variante.Bonus,
+      ).unwrapOrElse((error) => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return plan;
+      });
+      updateStatesAndTriggerCallbacks(nextPlan);
+      return nextPlan;
+    });
+    // callbacks?.onWaehleOption?.();
+  }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks]);
 
   return {
     plan,

@@ -28,25 +28,33 @@ jobs:
         run: |
           exit_code=0
           failed_counter=0
+          : > failed_urls.txt
           while read -r url; do
             echo "Checking: $url"
             if ! curl --range 0-1 --silent --retry 1 --fail -L -v "$url" -o /dev/null 2>/tmp/curl_error; then
               echo "Failed: $url"
+              echo "$url" >> failed_urls.txt
               exit_code=1
               failed_counter=$((failed_counter + 1))
 
-              # Create logs directory only when needed
               mkdir -p curl-logs
-
-              # Create log file for this failed request
-              log_file="curl-logs/failed-request-$(printf "%03d" $failed_counter).log"
+              log_file="curl-logs/failed-request-$(printf "%03d" "$failed_counter").log"
               {
                 echo -e "URL: $url\nTimestamp: $(date)\n"
                 cat /tmp/curl_error
               } > "$log_file"
             fi
-          done < <(cat filtered_links.txt)
-          exit $exit_code
+          done < filtered_links.txt
+
+          # Create a comma-separated list of urls
+          failed_csv=$(paste -sd, failed_urls.txt)
+          echo "FAILED_URLS=$failed_csv" >> "$GITHUB_ENV"
+
+          # Create a newline separated markdown list of slack formatted urls
+          failed_csv=$(while read -r url; do echo "- <$url|$url>"; done < failed_urls.txt | paste -sd '\n' -)
+          printf 'FAILED_URLS<<EOF\n%s\nEOF\n' "$failed_csv" >> "$GITHUB_ENV"
+
+          exit "$exit_code"
 
       - name: Upload detailed logs for broken links
         if: failure()
@@ -57,7 +65,33 @@ jobs:
           retention-days: 7
 
       - name: Send failure to Slack
-        uses: digitalservicebund/notify-on-failure-gha@66c485757701f8d5dbee32f24df38d904ca693ba
+        uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0
         if: failure()
-        with:
+        env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        with:
+          payload: |
+            {
+              "text": "Mindestens eine Anwendung, die wir referenzieren, ist nicht erreichbar. Mehr technische Informationen findet ihr <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|hier>.",
+              "attachments": [
+                {
+                  "color": "#ff0000",
+                  "blocks": [
+                    {
+                      "type": "context",
+                      "elements": [
+                        {
+                          "type": "mrkdwn",
+                          "text": "*Fehlgeschlagene Links:*"
+                        },
+                        {
+                          "type": "mrkdwn",
+                          "text": ${{ toJson(env.FAILED_URLS) }}
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }

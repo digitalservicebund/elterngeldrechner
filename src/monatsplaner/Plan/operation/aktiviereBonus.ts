@@ -11,7 +11,6 @@ import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngel
 import { Elternteil } from "@/monatsplaner/Elternteil";
 import { erstelleInitialenLebensmonat } from "@/monatsplaner/Lebensmonat";
 import { waehleOption as waehleOptionInLebensmonaten } from "@/monatsplaner/Lebensmonate";
-import { findeLetztenLebensmonat } from "@/monatsplaner/Lebensmonate/operation/findeLetztenLebensmonat";
 import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
 import type { Plan } from "@/monatsplaner/Plan";
 import { VorlaeufigGueltigerPlan } from "@/monatsplaner/Plan/specification";
@@ -22,18 +21,32 @@ import type { SpecificationViolation } from "@/monatsplaner/common/specification
 export function aktiviereBonus<A extends Ausgangslage>(
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   plan: Plan<A>,
+  lebensmonatszahl: Lebensmonatszahl,
 ): Result<Plan<A>, SpecificationViolation[]> {
-  const lebensmonatszahl = (findeLetztenLebensmonat(plan.lebensmonate) +
-    1) as Lebensmonatszahl;
-
   const ungeplanterLebensmonat = erstelleInitialenLebensmonat(
     plan.ausgangslage,
-    lebensmonatszahl,
+    (lebensmonatszahl + 1) as Lebensmonatszahl,
   );
 
-  const gewaehlteLebensmonate = waehleOptionInLebensmonaten(
+  const erstenZweiBonusmonateHinzugefuegt = waehleOptionInLebensmonaten(
     plan.lebensmonate,
-    lebensmonatszahl,
+    (lebensmonatszahl + 1) as Lebensmonatszahl,
+    Elternteil.Eins as ElternteileByAusgangslage<A>,
+    Variante.Bonus,
+    ungeplanterLebensmonat,
+  );
+
+  const dritterBonusmonatHinzugefuegt = waehleOptionInLebensmonaten(
+    erstenZweiBonusmonateHinzugefuegt,
+    (lebensmonatszahl + 3) as Lebensmonatszahl,
+    Elternteil.Zwei as ElternteileByAusgangslage<A>,
+    Variante.Bonus,
+    ungeplanterLebensmonat,
+  );
+
+  const vierterBonusmonatHinzugefuegt = waehleOptionInLebensmonaten(
+    dritterBonusmonatHinzugefuegt,
+    (lebensmonatszahl + 4) as Lebensmonatszahl,
     Elternteil.Zwei as ElternteileByAusgangslage<A>,
     Variante.Bonus,
     ungeplanterLebensmonat,
@@ -41,7 +54,7 @@ export function aktiviereBonus<A extends Ausgangslage>(
 
   const gewaehlterPlan: Plan<A> = {
     ...plan,
-    lebensmonate: gewaehlteLebensmonate,
+    lebensmonate: vierterBonusmonatHinzugefuegt,
   };
 
   return VorlaeufigGueltigerPlan<A>()
@@ -111,6 +124,7 @@ if (import.meta.vitest) {
       const planMitPartnerschaftsbonus = aktiviereBonus(
         () => ({}),
         plan,
+        4,
       ).unwrapOrElse(() => plan);
 
       expect(planMitPartnerschaftsbonus.lebensmonate).toStrictEqual({
@@ -135,6 +149,14 @@ if (import.meta.vitest) {
           [Elternteil.Zwei]: monat(Variante.Bonus),
         },
         6: {
+          [Elternteil.Eins]: monat(Variante.Bonus),
+          [Elternteil.Zwei]: monat(Variante.Bonus),
+        },
+        7: {
+          [Elternteil.Eins]: monat(Variante.Bonus),
+          [Elternteil.Zwei]: monat(Variante.Bonus),
+        },
+        8: {
           [Elternteil.Eins]: monat(Variante.Bonus),
           [Elternteil.Zwei]: monat(Variante.Bonus),
         },

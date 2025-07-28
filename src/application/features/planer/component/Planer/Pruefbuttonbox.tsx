@@ -1,7 +1,7 @@
 import CheckIcon from "@digitalservicebund/icons/Check";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
-import { type ReactNode, useCallback, useEffect, useState } from "react";
+import { type ReactNode, useCallback, useEffect, useId, useState } from "react";
 import { Prueftippbox } from "./Prueftippbox";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { Button } from "@/application/components/Button";
@@ -31,6 +31,7 @@ export function Pruefbuttonbox({
   bonusFreischalten,
   onPlanungDrucken,
 }: Props): ReactNode {
+  const headingIdentifier = useId();
   const planungDrucken = () => {
     window.print();
     onPlanungDrucken?.();
@@ -71,7 +72,13 @@ export function Pruefbuttonbox({
   }, [plan.lebensmonate]);
 
   return (
-    <div className={classNames("flex flex-col items-center gap-16", className)}>
+    <section
+      className={classNames("flex flex-col items-center gap-16", className)}
+      aria-labelledby={headingIdentifier}
+    >
+      <h4 id={headingIdentifier} className="sr-only">
+        Prüfbuttonbox
+      </h4>
       {!istPlanungUeberprueft ? (
         <Button type="button" onClick={ueberpruefePlanungCallback}>
           Planung überprüfen
@@ -113,7 +120,7 @@ export function Pruefbuttonbox({
       ) : (
         <Validierungsfehlerbox validierungsfehler={validierungsfehler} />
       )}
-    </div>
+    </section>
   );
 }
 

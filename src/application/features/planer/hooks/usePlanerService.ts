@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { findeLetztenVerplantenLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/findeLetztenVerplantenLebensmonat";
 import {
   type Ausgangslage,
   type Auswahloption,
@@ -7,7 +8,7 @@ import {
   type Lebensmonatszahl,
   type Plan,
   type PlanMitBeliebigenElternteilen,
-  Variante,
+  aktiviereBonus,
   aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
   ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
@@ -165,12 +166,12 @@ export function usePlanerService(
 
   const schalteBonusFrei = useCallback(() => {
     setPlan((plan) => {
-      const nextPlan = waehleOption(
+      const nextPlan = aktiviereBonus(
         berechneElterngeldbezuege,
         plan,
-        15,
-        Elternteil.Eins,
-        Variante.Bonus,
+        findeLetztenVerplantenLebensmonat(
+          plan.lebensmonate,
+        ) as Lebensmonatszahl,
       ).unwrapOrElse((error) => {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -179,7 +180,6 @@ export function usePlanerService(
       updateStatesAndTriggerCallbacks(nextPlan);
       return nextPlan;
     });
-    // callbacks?.onWaehleOption?.();
   }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks]);
 
   return {

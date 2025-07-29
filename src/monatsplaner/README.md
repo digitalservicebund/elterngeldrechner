@@ -32,7 +32,9 @@ tested behavior.
 
 Using a functional inspired implementation, all use-cases to read or write data
 are represented as pure functions. These are grouped as `operations` according
-to their primary object value they act on.
+to their primary object value they act on. Additionally, the operations can be
+split into different levels — for example, the weahleOptions are implemented
+both at the _Plan_ level and at the _Monat_ level.
 
 Furthermore, the domain makes heavy use of the specification design pattern. It
 is used for in-memory validation, as well as query mechanisms. The domain

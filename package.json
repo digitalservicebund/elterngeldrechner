@@ -13,7 +13,6 @@
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",
     "test-e2e": "playwright test",
-    "test-e2e-update": "playwright test --update-snapshots",
     "type-check": "tsc",
     "lint": "f() { eslint --no-warn-ignored --max-warnings=0 ${@:-**/*.{ts,tsx\\}}; }; f",
     "lint-fix": "f() { eslint --no-warn-ignored --fix ${@:-*.{ts,tsx\\}}; }; f",

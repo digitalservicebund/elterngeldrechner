@@ -1,4 +1,4 @@
-# 1. external-link-checking
+# 1. External Link Checking
 
 Date: 2025-07-25
 

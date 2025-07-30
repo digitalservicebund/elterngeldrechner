@@ -105,12 +105,12 @@ export function Pruefbuttonbox({
               Planung in den Antrag übernehmen
             </Button>
 
-            <div className="print:hidden">
+            <div className="flex flex-wrap justify-center print:hidden">
               <Button type="button" buttonStyle="link" onClick={planungDrucken}>
-                <SaveAltIcon /> Drucken der Planung
+                <SaveAltIcon className="mr-8" /> Drucken der Planung
               </Button>
 
-              <p>
+              <p className="mt-8">
                 Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
                 „als PDF speichern“ aus.
               </p>

@@ -1,12 +1,12 @@
 import { Elternteil, Variante } from "@/monatsplaner";
-import pdfFileAntrag from "@/pdfAntrag/assets/von2024-04-01bis2025-03-31_antrag.pdf";
-import pdfFileSeite from "@/pdfAntrag/assets/von2024-04-01bis2025-03-31_seite.pdf";
 
 export const pdfVersionZwischenApril2024UndApril2025 = {
   start: new Date("2024-04-01"),
   end: new Date("2025-03-31"),
-  pdfFileAntragPath: pdfFileAntrag,
-  pdfFileSeitePath: pdfFileSeite,
+  pdfFileAntragPath:
+    "https://www.bmbfsfj.bund.de/resource/blob/268174/b91612ebb7236fe35844bef6de51bf1e/von2024-04-01bis2025-03-31-antrag-dhu7g-jp-data.pdf",
+  pdfFileSeitePath:
+    "https://www.bmbfsfj.bund.de/resource/blob/268176/50f856ad3793e483be6672ddaf7ce772/von2024-04-01bis2025-03-31-seite-cark7are-data.pdf",
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "txt.vorname2b",

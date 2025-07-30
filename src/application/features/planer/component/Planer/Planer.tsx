@@ -5,6 +5,7 @@ import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
+import { CustomHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
 import { Pruefbuttonbox } from "./Pruefbuttonbox";
 import { Button } from "@/application/components";
 import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
@@ -98,7 +99,7 @@ export function Planer({
 
   const headingIdentifier = useId();
 
-  const lebensmonatslistenElement = useRef<HTMLElement>(null);
+  const lebensmonatslistenElement = useRef<CustomHTMLElement>(null);
 
   const neueLeerePlanungErstellen = useCallback(() => {
     setzePlanZurueck();
@@ -107,6 +108,11 @@ export function Planer({
 
   const mindestensEinLebensmonatGeplant =
     Object.keys(plan.lebensmonate).length > 0;
+
+  function bonusFreischalten() {
+    schalteBonusFrei();
+    lebensmonatslistenElement.current?.focusOnBonus();
+  }
 
   return (
     <>
@@ -181,7 +187,7 @@ export function Planer({
                 plan={plan}
                 ueberpruefePlanung={ueberpruefePlanung}
                 planInAntragUebernehmen={planInAntragUebernehmen}
-                bonusFreischalten={schalteBonusFrei}
+                bonusFreischalten={bonusFreischalten}
                 onPlanungDrucken={onPlanungDrucken}
               />
             </div>

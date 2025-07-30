@@ -6,11 +6,15 @@ import {
   ReactNode,
   forwardRef,
   useId,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { LebensmonatDetails } from "./LebensmonatDetails";
+import {
+  CustomHTMLDetailsElement,
+  LebensmonatDetails,
+} from "./LebensmonatDetails";
 import { findeLetztenVerplantenLebensmonat } from "./findeLetztenVerplantenLebensmonat";
 import {
   type Ausgangslage,
@@ -23,6 +27,10 @@ import {
   LetzteLebensmonatszahl,
   type Plan,
 } from "@/monatsplaner";
+
+export interface CustomHTMLElement extends HTMLElement {
+  focusOnBonus: () => void;
+}
 
 type Props<A extends Ausgangslage> = {
   readonly plan: Plan<A>;
@@ -72,9 +80,30 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     onOpenLebensmonat,
     className,
   }: Props<A>,
-  ref?: ForwardedRef<HTMLElement>,
+  ref?: ForwardedRef<CustomHTMLElement>,
 ): ReactNode {
   const headingIdentifier = useId();
+
+  const referenceLebensmonat = useRef<CustomHTMLDetailsElement>(null);
+
+  useImperativeHandle<
+    CustomHTMLElement | null,
+    CustomHTMLElement | null
+  >(ref, () => {
+    if (referenceLebensmonat.current === null) {
+      return null;
+    } else {
+      const focusOnBonus = async () => {
+        await setIsBonusFocused(true);
+        await referenceLebensmonat.current?.openSummary();
+      };
+
+      return {
+        ...referenceLebensmonat.current,
+        focusOnBonus: focusOnBonus,
+      };
+    }
+  }, [referenceLebensmonat]);
 
   const letzterGeplanterLebensmonat = useMemo(
     () => findeLetztenVerplantenLebensmonat(plan.lebensmonate),
@@ -91,14 +120,14 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     manuellGesetzterLetzterSichtbarerLebensmonat,
   );
 
-  const naechsterZuPlanenderLebensmonat = useRef<HTMLDetailsElement>(null);
   const kannMehrLebensmonateAnzeigen = letzterSichtbarerLebensmonat < 32;
 
   function zeigeMehrLebensmonateAn(): void {
+    setIsBonusFocused(false);
     setManuellGesetzterLetzterSichtbarerLebensmonat(
       Math.min(letzterSichtbarerLebensmonat + 2, LetzteLebensmonatszahl),
     );
-    naechsterZuPlanenderLebensmonat.current?.focus();
+    referenceLebensmonat.current?.focus();
   }
 
   function zeigeWenigerMonateAn(): void {
@@ -112,6 +141,8 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
       onOpenLebensmonat?.();
     }
   }
+
+  const [isBonusFocused, setIsBonusFocused] = useState(false);
 
   return (
     <section
@@ -131,11 +162,12 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
           plan.lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
 
-        const istNaechsterZuPlanenderLebensmonat =
-          lebensmonatszahl === (letzterGeplanterLebensmonat ?? 0) + 1;
+        const istReferenceLebensmonat = isBonusFocused
+          ? lebensmonatszahl === (letzterGeplanterLebensmonat ?? 0) - 3
+          : lebensmonatszahl === (letzterGeplanterLebensmonat ?? 0) + 1;
 
-        const reference = istNaechsterZuPlanenderLebensmonat
-          ? naechsterZuPlanenderLebensmonat
+        const reference = istReferenceLebensmonat
+          ? referenceLebensmonat
           : undefined;
 
         return (

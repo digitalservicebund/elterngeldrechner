@@ -1,3 +1,4 @@
+import { ChevronLeft } from "@digitalservicebund/icons/index";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -158,10 +159,10 @@ export function RechnerPlanerPage() {
             <div className="flex gap-16">
               <Button
                 type="button"
-                buttonStyle="secondary"
+                buttonStyle="link"
                 onClick={navigateToEinkommenPage}
               >
-                Zurück
+                <ChevronLeft /> Zurück zur Auswahl
               </Button>
             </div>
 

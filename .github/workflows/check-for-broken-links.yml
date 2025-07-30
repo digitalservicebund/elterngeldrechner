@@ -31,7 +31,7 @@ jobs:
           : > failed_urls.txt
           while read -r url; do
             echo "Checking: $url"
-            if ! curl --range 0-1 --connect-timeout 5 --max-time 10 --silent --retry 1 --fail -L -v "$url" -o /dev/null 2>/tmp/curl_error; then
+            if ! curl --range 0-1 --connect-timeout 5 --max-time 10 --silent --retry 3 --fail -L -v "$url" -o /dev/null 2>/tmp/curl_error; then
               echo "Failed: $url"
               echo "$url" >> failed_urls.txt
               exit_code=1

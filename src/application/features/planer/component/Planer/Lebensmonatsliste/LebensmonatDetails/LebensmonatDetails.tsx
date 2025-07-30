@@ -25,6 +25,10 @@ import type {
   Lebensmonatszahl,
 } from "@/monatsplaner";
 
+export interface CustomHTMLDetailsElement extends HTMLDetailsElement {
+  openSummary: () => void;
+}
+
 type Props<A extends Ausgangslage> = {
   readonly ausgangslage: A;
   readonly lebensmonatszahl: Lebensmonatszahl;
@@ -53,15 +57,15 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     onToggle,
     className,
   }: Props<A>,
-  ref?: ForwardedRef<HTMLDetailsElement | null>,
+  ref?: ForwardedRef<CustomHTMLDetailsElement | null>,
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
-  const detailsElement = useRef<HTMLDetailsElement>(null);
+  const detailsElement = useRef<CustomHTMLDetailsElement>(null);
 
   useImperativeHandle<
-    HTMLDetailsElement | null,
-    HTMLDetailsElement | null
+    CustomHTMLDetailsElement | null,
+    CustomHTMLDetailsElement | null
   >(ref, () => {
     if (detailsElement.current === null) {
       return null;
@@ -69,17 +73,33 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
       const focusSummary = () =>
         detailsElement.current?.querySelector("summary")?.focus();
 
+      const openSummary = async () => {
+        await setIsEventOnClickOutsideBlocked(true);
+
+        if (detailsElement.current != null) {
+          detailsElement.current.open = true;
+        }
+
+        toggleDetailsElement(true);
+      };
+
       return {
         ...detailsElement.current,
         focus: focusSummary,
+        openSummary: openSummary,
       };
     }
   }, [detailsElement]);
 
+  const [isEventOnClickOutsideBlocked, setIsEventOnClickOutsideBlocked] =
+    useState(false);
+
   useOnClickOutside(detailsElement, () => {
-    if (detailsElement.current != null) {
+    if (detailsElement.current != null && !isEventOnClickOutsideBlocked) {
       detailsElement.current.open = false;
     }
+
+    setIsEventOnClickOutsideBlocked(false);
   });
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -89,6 +109,12 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     const fixedEvent = fixToggleEvent(event.nativeEvent, isExpanded);
     const isExpandedNext = fixedEvent.newState === "open";
 
+    toggleDetailsElement(isExpandedNext);
+
+    onToggle?.(fixedEvent);
+  }
+
+  function toggleDetailsElement(isExpandedNext: boolean) {
     setIsExpanded(isExpandedNext);
 
     if (isExpandedNext) {
@@ -97,8 +123,6 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
         behavior: "instant",
       });
     }
-
-    onToggle?.(fixedEvent);
   }
 
   const informationenZumLebensmonat = {

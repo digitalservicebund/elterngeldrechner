@@ -24,6 +24,26 @@ jobs:
       - name: Generate date for archive
         run: echo ARCHIVE_DATE="$(date '+%Y-%m-%d')" >> "$GITHUB_ENV"
 
+      # The hosting provider expects an archive containing exactly one javascript file
+      # and one css file. Both files will be re-bundled with the rest of the code by the
+      # cms. The archive must not include any additional assets such as images or documents.
+
+      # Reference: /architecture-decision-records/0005-bundle-architecture.md
+
+      - name: Verify build assets
+        working-directory: dist/assets
+        run: |
+          js_count=$(find . -maxdepth 1 -type f -name 'index-*.js' | wc -l)
+          css_count=$(find . -maxdepth 1 -type f -name 'index-*.css' | wc -l)
+          total_count=$(find . -maxdepth 1 -type f | wc -l)
+
+          if [ "$js_count" -ne 1 ] || [ "$css_count" -ne 1 ] || [ "$total_count" -ne 2 ]; then
+            echo "Error: Directory must contain exactly one index-*.js and one index-*.css file (2 files total)"
+            exit 1
+          else
+            echo "Asset check passed"
+          fi
+
       - name: Create archive for static build assets
         working-directory: dist/assets
         run: zip -r "EGR-${{ env.ARCHIVE_DATE }}.zip" .

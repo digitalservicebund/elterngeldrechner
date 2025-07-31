@@ -1,18 +1,16 @@
 import { Elternteil, Variante } from "@/monatsplaner";
-import pdfFileAntrag from "@/pdfAntrag/assets/von2025-04-01_antrag.pdf";
-import pdfFileSeite from "@/pdfAntrag/assets/von2025-04-01_seite.pdf";
 
-const isDevEnvironment = import.meta.env.DEV === true;
+const isProdEnvironment = import.meta.env.PROD === true;
 
 export const pdfVersionVonApril2025 = {
   start: new Date("2025-04-01"),
   end: new Date("2100-03-31"),
-  pdfFileAntragPath: isDevEnvironment
-    ? pdfFileAntrag
-    : "https://familienportal.de/resource/blob/268180/d96895e36a42b1e6833845e094896f98/von2025-04-01-antrag-dugk8e8o-data.pdf",
-  pdfFileSeitePath: isDevEnvironment
-    ? pdfFileSeite
-    : "https://familienportal.de/resource/blob/268182/a4ff0ff5d87635c021db900ba935ac59/von2025-04-01-seite-cbtwmuh0-data.pdf",
+  pdfFileAntragPath: isProdEnvironment
+    ? "https://familienportal.de/resource/blob/268180/d96895e36a42b1e6833845e094896f98/von2025-04-01-antrag-dugk8e8o-data.pdf"
+    : "/documents/von2025-04-01_antrag.pdf",
+  pdfFileSeitePath: isProdEnvironment
+    ? "https://familienportal.de/resource/blob/268182/a4ff0ff5d87635c021db900ba935ac59/von2025-04-01-seite-cbtwmuh0-data.pdf"
+    : "/documents/von2025-04-01_seite.pdf",
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "2b Vorname(n) AS",

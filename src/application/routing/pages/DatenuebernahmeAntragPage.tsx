@@ -15,8 +15,6 @@ import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
 import { Bundesland, bundeslaender } from "@/pdfAntrag";
-import antragImg from "@/pdfAntrag/assets/antrag.png";
-import seiteImg from "@/pdfAntrag/assets/seite.png";
 import {
   prepareGanzerAntrag,
   preparePlanungsseite,
@@ -25,7 +23,15 @@ import {
 export function DatenuebernahmeAntragPage(): ReactNode {
   const store = useAppStore();
 
-  const isDevEnvironment = import.meta.env.DEV === true;
+  const isProdEnvironment = import.meta.env.PROD === true;
+
+  const antragsPreview = isProdEnvironment
+    ? "https://familienportal.de/resource/image/268156/uncropped/416/517/2855b052b7b158e7837e408aa99da72/A75DE9654F3FF4D375EEC17CAF074398/antrag-dbelx2vc.webp"
+    : "/images/ganzer-antrag.png";
+
+  const seitenPreview = isProdEnvironment
+    ? "https://familienportal.de/resource/image/268158/uncropped/365/517/f6976e854397a0d72dc0c6ed67618b3d/07B27D863D09408289D2141CD4C5B92F/seite-dpzgavdq.webp"
+    : "/images/seite-planung.png";
 
   const { plan, navigateWithPlanState } = useNavigateWithPlan();
   const navigateToRechnerUndPlanerPage = () =>
@@ -108,15 +114,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
             <div className="mb-32 bg-off-white p-24">
               <div className="flex flex-wrap gap-24 sm:flex-nowrap">
                 <div>
-                  <img
-                    src={
-                      isDevEnvironment
-                        ? antragImg
-                        : "https://familienportal.de/resource/image/268156/uncropped/416/517/2855b052b7b158e7837e408aa99da72/A75DE9654F3FF4D375EEC17CAF074398/antrag-dbelx2vc.webp"
-                    }
-                    alt=""
-                    className="max-w-[200px]"
-                  />
+                  <img src={antragsPreview} alt="" className="max-w-[200px]" />
                 </div>
                 <div>
                   <strong>Gesamter Antrag:</strong>
@@ -170,15 +168,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
             <div className="bg-off-white p-24">
               <div className="flex flex-wrap gap-24 sm:flex-nowrap">
                 <div>
-                  <img
-                    src={
-                      isDevEnvironment
-                        ? seiteImg
-                        : "https://familienportal.de/resource/image/268158/uncropped/365/517/f6976e854397a0d72dc0c6ed67618b3d/07B27D863D09408289D2141CD4C5B92F/seite-dpzgavdq.webp"
-                    }
-                    alt=""
-                    className="max-w-[200px]"
-                  />
+                  <img src={seitenPreview} alt="" className="max-w-[200px]" />
                 </div>
                 <div>
                   <strong>Einzelne Seite:</strong>

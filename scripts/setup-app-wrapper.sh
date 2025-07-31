@@ -79,10 +79,20 @@ if [ "$cache" == "true" ]; then
   fi
 fi
 
-# Clean start
-rm -rf $target_directory ./index.html
-mkdir $target_directory
-cd $target_directory
+rm -f ./index.html
+
+# Create target directory if it doesn't exist
+mkdir -p "$target_directory"
+
+# Remove all contents except static images and documents
+find "$target_directory" -mindepth 1 \
+  -not -path "$target_directory/images" \
+  -not -path "$target_directory/images/*" \
+  -not -path "$target_directory/documents" \
+  -not -path "$target_directory/documents/*" \
+  -delete
+
+cd "$target_directory"
 
 # Fetch live host webpage
 wget \

@@ -29,7 +29,12 @@ yarn-error.log*
 .idea/
 
 /tmp_preview
-/public
+public/*.js
+public/*.css
+public/*.ttf
+public/*.woff
+public/*.ico
+public/*.svg
 
 # playwright
 /test-results/

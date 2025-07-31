@@ -13,7 +13,7 @@ jobs:
       - uses: ./.github/actions/cached-node-install
 
       - name: Build egr
-        run: npm run build
+        run: npm run build:production
         env:
           VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
           EGR_BUILD_VERSION_HASH: ${{ github.sha }}

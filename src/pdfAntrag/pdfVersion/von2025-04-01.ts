@@ -1,5 +1,6 @@
 import { Elternteil, Variante } from "@/monatsplaner";
 
+const basePath = import.meta.env.BASE_URL;
 const isProdEnvironment = import.meta.env.MODE === "production";
 
 export const pdfVersionVonApril2025 = {
@@ -7,10 +8,10 @@ export const pdfVersionVonApril2025 = {
   end: new Date("2100-03-31"),
   pdfFileAntragPath: isProdEnvironment
     ? "https://familienportal.de/resource/blob/268180/d96895e36a42b1e6833845e094896f98/von2025-04-01-antrag-dugk8e8o-data.pdf"
-    : "/documents/von2025-04-01_antrag.pdf",
+    : `${basePath}/documents/von2025-04-01_antrag.pdf`,
   pdfFileSeitePath: isProdEnvironment
     ? "https://familienportal.de/resource/blob/268182/a4ff0ff5d87635c021db900ba935ac59/von2025-04-01-seite-cbtwmuh0-data.pdf"
-    : "/documents/von2025-04-01_seite.pdf",
+    : `${basePath}/documents/von2025-04-01_seite.pdf`,
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "2b Vorname(n) AS",

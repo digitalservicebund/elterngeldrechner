@@ -41,7 +41,7 @@ jobs:
       - uses: ./.github/actions/cached-node-install
 
       - name: Set vite base path for static assets
-        run: echo "VITE_BASE_PATH=/$(basename "${{ github.repository }}")${{ inputs.path }}/" >> "$GITHUB_ENV"
+        run: echo "VITE_BASE_PATH=/$(basename "${{ github.repository }}")${{ inputs.path }}" >> "$GITHUB_ENV"
 
       - name: build page assets
         run: |

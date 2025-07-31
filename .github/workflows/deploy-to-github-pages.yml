@@ -43,9 +43,6 @@ jobs:
       - name: Set vite base path for static assets
         run: echo "VITE_BASE_PATH=/$(basename "${{ github.repository }}")${{ inputs.path }}/" >> "$GITHUB_ENV"
 
-      - name: Show github env
-        run: echo "$GITHUB_ENV"
-
       - name: build page assets
         run: |
           set -ex

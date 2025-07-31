@@ -17,7 +17,7 @@ on:
 
       artifact_name:
         description: |
-          name of an already uploaded artifact to this run that contains the page build  
+          name of an already uploaded artifact to this run that contains the page build
           if defined skips building and downloads the artifact instead
         type: string
         required: false
@@ -39,6 +39,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: ./.github/actions/cached-node-install
+
+      - name: Set vite base path for static assets
+        run: echo "VITE_BASE_PATH=/$(basename "${{ github.repository }}")${{ inputs.path }}/" >> "$GITHUB_ENV"
+
+      - name: Show github env
+        run: echo "$GITHUB_ENV"
 
       - name: build page assets
         run: |

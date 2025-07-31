@@ -5,7 +5,7 @@ import { OutputAsset, OutputChunk } from "rollup";
 import { PluginOption, defineConfig } from "vite";
 
 export default defineConfig({
-  base: "./",
+  base: process.env.VITE_BASE_PATH || "/",
   plugins: [react(), includeReleaseVersionInBundlePlugin()],
   resolve: {
     alias: {

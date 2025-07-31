@@ -1,6 +1,6 @@
 import { Elternteil, Variante } from "@/monatsplaner";
 
-const isProdEnvironment = import.meta.env.PROD === true;
+const isProdEnvironment = import.meta.env.MODE === "production";
 
 export const pdfVersionZwischenApril2024UndApril2025 = {
   start: new Date("2024-04-01"),

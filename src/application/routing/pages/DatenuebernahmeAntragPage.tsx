@@ -23,7 +23,7 @@ import {
 export function DatenuebernahmeAntragPage(): ReactNode {
   const store = useAppStore();
 
-  const isProdEnvironment = import.meta.env.PROD === true;
+  const isProdEnvironment = import.meta.env.MODE === "production";
 
   const antragsPreview = isProdEnvironment
     ? "https://familienportal.de/resource/image/268156/uncropped/416/517/2855b052b7b158e7837e408aa99da72/A75DE9654F3FF4D375EEC17CAF074398/antrag-dbelx2vc.webp"

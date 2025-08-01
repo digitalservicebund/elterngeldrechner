@@ -1,5 +1,4 @@
-const stagingBasePath = import.meta.env.BASE_URL;
-const familienportalBasePath = "https://familienportal.de/resource";
+const baseUrl = import.meta.env.BASE_URL;
 
 const isStagingEnvironment = import.meta.env.MODE === "staging";
 const isProductionEnvironment = import.meta.env.MODE === "production";
@@ -27,9 +26,9 @@ export function generateLink({
   publicPath: string;
 }) {
   if (isProductionEnvironment) {
-    return familienportalBasePath + familienportalPath;
+    return baseUrl + familienportalPath;
   } else if (isStagingEnvironment) {
-    return stagingBasePath + publicPath;
+    return baseUrl + publicPath;
   } else {
     return publicPath;
   }

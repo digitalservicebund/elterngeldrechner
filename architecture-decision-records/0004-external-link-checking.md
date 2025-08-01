@@ -8,48 +8,42 @@ Accepted by Engineering (Dennis, Jakob)
 
 ## Context
 
-The project initially included a simple GitHub action that identifies all links within
-the repository and uses curl to verify whether they are still valid and accessible.
+The repository included a github action to identify all links and check their availability
+using `curl`. It helped surface broken links early and integrated well into the existing ci setup.
 
-This action, however, has some limitations. It was missing a couple of links after adding
-a new feature next to the application directory, does pick up links we don't want to
-validate like xml namespaces of svgs and more critically does have false positives
-on a regular basis because the web servers start blocking calls from the github
-infrastructure.
+Over time, a few limitations became apparent. Some links were missed after adding features outside
+the main application directory. Others were picked up unintentionally, such as xml namespaces from
+svgs. Certain domains also began blocking requests from githubs infrastructure, which led to
+occasional false positives.
 
-We are not sure yet how the servers decide which requests to block but we verified it
-by testing to reach the domain lvwa.sachsen-anhalt.de from localhost which worked, from
-a github codespace which did not work, from a github action which did not work as well
-and from a github action that uses a developer machine as runner which did work.
+We confirmed the blocking behavior by testing access to the domain `lvwa.sachsen-anhalt.de`. It
+worked from localhost, failed from github codespaces and github actions, and worked again when
+routed through a developer machine used as a github runner.
 
-## First Iteration
+## Iteration
 
-In a first iteration we decided to introduce an ignore list that includes both domains
-which actively block github infrastructure as well as those which should not be checked
-despite being matched by the grep pattern, like xml namespaces.
+To improve reliability without increasing complexity, we added an ignore list. It filters out
+domains that block github traffic and excludes patterns like xml namespaces that aren’t
+meaningful to validate.
 
-The solution seemed promising as it struck a reasonable balance between time invested
-and output. Therefore we opted against a more sophisticated parsing approach as well
-as against including additional infrastructure like a custom github runner hosted in
-our platform to tackle the blocked request problem.
+The solution offered a good balance between effort and impact. We decided not to invest in
+more complex parsing or set up extra infrastructure like a custom github runner to work
+around blocked requests.
 
-## Last Iteration
+## Change
 
-Unfortunately the github action kept failing with false positives on a daily basis and
-caused noise in the slack channel while also adding tasks on top of the engineers' to-do
-lists.
+Despite improvements, the action still triggered false positives often enough to become
+distracting. It created noise in slack and added small, repetitive tasks to engineers
+daily work.
 
-In order to reduce the number of false positives and code complexity (the action became
-quite complex at this point), we shifted the check left towards a pre-commit hook that
-uses the tool Lychee. The tool runs within 3-4 seconds, is easy to configure while also
-reducing the number of false positives because requests are coming from our local machines.
+We shifted the check to a pre-commit hook using lychee. It runs in a few seconds, is easy
+to configure, and significantly reduces false positives by making requests from local
+machines instead of githubs infrastructure.
 
 ## Consequences
 
-The consequence of shifting left with the link checking is that, if no engineer
-is working, no links are getting checked. However if no engineer is available
-to code, they are probably on vacation and cannot fix broken links anyway.
+Link checks no longer run automatically when no one is committing code. This is acceptable,
+since broken links can’t be fixed if developers are away from their keyboards anyway.
 
-Additionally, it can be a bit cumbersome for the workflow if the pre-commit
-hook fails: the developer might have to stash their changes, fix the link
-first, and then apply the changes again.
+The pre-commit hook adds a small bump to the developer workflow when it fails. Fixing
+a link might require stashing changes and restoring them after.

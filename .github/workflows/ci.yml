@@ -27,35 +27,13 @@ jobs:
           ALLOW_EXTREMELY_SLOW_TESTS: true
         run: npm run test-all
 
-  build:
-    runs-on: ubuntu-24.04
-    outputs:
-      artifact_name: assets
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/cached-node-install
-
-      - name: build assets
-        run: npm run build:development
-        env:
-          EGR_BUILD_VERSION_HASH: ${{ github.sha }}
-
-      - name: upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          path: ./dist
-          name: assets
-
   deploy:
     needs:
       - lint-and-test
-      - build
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:
       path: main
-      artifact_name: ${{ needs.build.outputs.artifact_name }}
     secrets: inherit
 
   generate-sbom:

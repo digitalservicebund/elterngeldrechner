@@ -22,6 +22,8 @@ pre-commit:
     github-actions-lint:
       glob: ".github/workflows/*"
       run: actionlint {staged_files}
+    links:
+      run: lychee src/**/*.{ts,tsx} -n
 
 commit-msg:
   commands:

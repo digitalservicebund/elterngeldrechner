@@ -3,8 +3,8 @@ import { produce } from "immer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DatenuebernahmeAntragPage } from "./DatenuebernahmeAntragPage";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
+import { bundeslaender } from "@/application/features/pdfAntrag";
 import { INITIAL_STATE, render, screen } from "@/application/test-utils";
-import { bundeslaender } from "@/pdfAntrag";
 
 describe("Datenuebernahme Antrag Page", () => {
   beforeEach(async () => {

@@ -3,8 +3,8 @@ import {
   type MonatlichesBrutto,
   YesNo,
 } from "@/application/features/abfrageteil/state";
+import { bundeslaender } from "@/application/features/pdfAntrag";
 import { KassenArt, KinderFreiBetrag, Steuerklasse } from "@/elterngeldrechner";
-import { bundeslaender } from "@/pdfAntrag";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {

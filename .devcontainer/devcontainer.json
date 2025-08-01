@@ -1,9 +1,0 @@
-{
-  "build": { "dockerfile": "Dockerfile" },
-  "postCreateCommand": "npm install && npx playwright install --with-deps chromium",
-  "features": {
-    "ghcr.io/devcontainers/features/sshd:1": {
-      "version": "latest"
-    }
-  }
-}

@@ -20,8 +20,8 @@ import {
   YesNo,
   stepAllgemeineAngabenSlice,
 } from "@/application/features/abfrageteil/state";
+import { bundeslaender } from "@/application/features/pdfAntrag";
 import { useAppStore } from "@/application/redux/hooks";
-import { bundeslaender } from "@/pdfAntrag";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   {

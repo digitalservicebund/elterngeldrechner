@@ -33,7 +33,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:
-      path: main
+      path: /main
     secrets: inherit
 
   generate-sbom:

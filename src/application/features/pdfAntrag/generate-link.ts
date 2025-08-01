@@ -5,16 +5,19 @@ const isStagingEnvironment = import.meta.env.MODE === "staging";
 const isProductionEnvironment = import.meta.env.MODE === "production";
 
 /**
- * Due to technical limitations on the side of the hosting provider we
- * cannot import static assets as we're used to using the vite build
- * chain but generate links ourselves. In order to have valid links
- * for all environments we need to either use the familienportal,
- * github or no base path.
+ * Generates a valid url to a static asset depending on the deployment environment.
  *
- * @param familienportalPath is the relative path starting after resource part
- * @param relativePath is the relative path pointing towards the public folder
+ * Due to technical limitations of the hosting provider, static assets must be uploaded manually
+ * before they can be used. During this process the provider adds the asset to their resource api
+ * and generates a new filename including a hash. Because of this, we cannot rely on vites default
+ * asset handling and must construct asset urls manually. This function helps resolve the correct
+ * asset url depending on whether we're running in a local environment, on familienportal, or via
+ * github pages.
  *
- * @returns a valid link to the asset based on the given environment
+ * @param familienportalPath - The provider assigned path to the asset relative to their resource api.
+ * @param relativePath - The path to the asset as it exists in the local public folder.
+ *
+ * @returns a valid asset url appropriate for the current environment.
  */
 export function generateLink({
   familienportalPath,

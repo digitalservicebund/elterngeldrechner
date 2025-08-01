@@ -7,12 +7,12 @@ export const pdfVersionVonApril2025 = {
   pdfFileAntragPath: generateLink({
     familienportalPath:
       "/blob/268180/d96895e36a42b1e6833845e094896f98/von2025-04-01-antrag-dugk8e8o-data.pdf",
-    relativePath: "/documents/von2025-04-01_antrag.pdf",
+    publicPath: "/documents/von2025-04-01_antrag.pdf",
   }),
   pdfFileSeitePath: generateLink({
     familienportalPath:
       "/blob/268182/a4ff0ff5d87635c021db900ba935ac59/von2025-04-01-seite-cbtwmuh0-data.pdf",
-    relativePath: "/documents/von2025-04-01_seite.pdf",
+    publicPath: "/documents/von2025-04-01_seite.pdf",
   }),
   fieldNames: {
     vorname: {

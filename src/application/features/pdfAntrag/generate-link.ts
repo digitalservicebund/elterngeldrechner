@@ -1,4 +1,4 @@
-const relativeBasePath = import.meta.env.BASE_URL;
+const stagingBasePath = import.meta.env.BASE_URL;
 const familienportalBasePath = "https://familienportal.de/resource";
 
 const isStagingEnvironment = import.meta.env.MODE === "staging";
@@ -15,22 +15,22 @@ const isProductionEnvironment = import.meta.env.MODE === "production";
  * github pages.
  *
  * @param familienportalPath - The provider assigned path to the asset relative to their resource api.
- * @param relativePath - The path to the asset as it exists in the local public folder.
+ * @param publicPath - The path to the asset file as it exists in the local public folder.
  *
  * @returns a valid asset url appropriate for the current environment.
  */
 export function generateLink({
   familienportalPath,
-  relativePath,
+  publicPath,
 }: {
   familienportalPath: string;
-  relativePath: string;
+  publicPath: string;
 }) {
   if (isProductionEnvironment) {
     return familienportalBasePath + familienportalPath;
   } else if (isStagingEnvironment) {
-    return relativeBasePath + relativePath;
+    return stagingBasePath + publicPath;
   } else {
-    return relativePath;
+    return publicPath;
   }
 }

@@ -7,12 +7,12 @@ export const pdfVersionZwischenApril2024UndApril2025 = {
   pdfFileAntragPath: generateLink({
     familienportalPath:
       "/blob/268174/b91612ebb7236fe35844bef6de51bf1e/von2024-04-01bis2025-03-31-antrag-dhu7g-jp-data.pdf",
-    relativePath: "/documents/von2024-04-01bis2025-03-31_seite.pdf",
+    publicPath: "/documents/von2024-04-01bis2025-03-31_seite.pdf",
   }),
   pdfFileSeitePath: generateLink({
     familienportalPath:
       "/blob/268176/50f856ad3793e483be6672ddaf7ce772/von2024-04-01bis2025-03-31-seite-cark7are-data.pdf",
-    relativePath: "/documents/von2024-04-01bis2025-03-31_seite.pdf",
+    publicPath: "/documents/von2024-04-01bis2025-03-31_seite.pdf",
   }),
   fieldNames: {
     vorname: {

@@ -26,7 +26,7 @@ export function generateLink({
   publicPath: string;
 }) {
   if (isProductionEnvironment) {
-    return baseUrl + familienportalPath;
+    return "/resource" + familienportalPath;
   } else if (isStagingEnvironment) {
     return baseUrl + publicPath;
   } else {

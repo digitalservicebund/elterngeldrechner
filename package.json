@@ -10,7 +10,7 @@
     "build:development": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build --mode development",
     "build:production": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build --mode production",
     "build:staging": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build --mode staging",
-    "serve-e2e": "scripts/setup-app-wrapper.sh --target public && vite build && http-server dist",
+    "serve-e2e": "scripts/setup-app-wrapper.sh --target public && vite build --mode development && http-server dist",
     "test": "LC_ALL=de-DE.utf8 vitest",
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",

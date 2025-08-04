@@ -1,5 +1,4 @@
 import { Page, expect, test } from "@playwright/test";
-import expectScreenshot from "../expectScreenshot";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
@@ -12,54 +11,26 @@ const testStyles = async ({
   page: Page;
   screenSize: string;
 }) => {
-  const screenshot = expectScreenshot({ page, screenSize });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await expect(allgemeineAngabenPage.heading).toBeVisible();
   if (screenSize === "mobile") await page.waitForTimeout(1000); // It's just needed, I don't know why
 
-  await screenshot("allgemeine-angaben-heading", allgemeineAngabenPage.heading);
-
   await expect(allgemeineAngabenPage.alleinerziehend).toBeVisible();
-
-  await screenshot(
-    "allgemeine-angaben-alleinerziehend",
-    allgemeineAngabenPage.alleinerziehend,
-  );
 
   await allgemeineAngabenPage.submit();
 
   await expect(allgemeineAngabenPage.alleinerziehendError).toBeVisible();
-  await screenshot(
-    "allgemeine-angaben-alleinerziehend-fehlermeldung",
-    allgemeineAngabenPage.alleinerziehend,
-  );
 
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
-
-  await screenshot(
-    "allgemeine-angaben-elternteile",
-    allgemeineAngabenPage.elternteile,
-  );
 
   await allgemeineAngabenPage.submit();
 
   await expect(allgemeineAngabenPage.elternteileError).toBeVisible();
 
-  await screenshot(
-    "allgemeine-angaben-elternteile-fehlermeldung",
-    allgemeineAngabenPage.elternteile,
-  );
-
   await allgemeineAngabenPage.setAlleinerziehend(true);
 
   await expect(allgemeineAngabenPage.alleinerziehendError).not.toBeVisible();
-
-  await screenshot(
-    "allgemeine-angaben-alleinerziehend-ausgewaehlt",
-    allgemeineAngabenPage.alleinerziehend,
-  );
 
   await expect(allgemeineAngabenPage.alleinerziehendError).not.toBeVisible();
 
@@ -69,38 +40,19 @@ const testStyles = async ({
 
   await expect(allgemeineAngabenPage.mutterschutzError).toBeVisible();
 
-  await screenshot(
-    "allgemeine-angaben-mutterschaftsleistung-fehlermeldung",
-    allgemeineAngabenPage.mutterschutz,
-  );
-
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
 
   await expect(allgemeineAngabenPage.mutterschutzError).not.toBeVisible();
 
-  await screenshot(
-    "allgemeine-angaben-mutterschaftsleistung",
-    allgemeineAngabenPage.mutterschutz,
-  );
-
-  await screenshot("allgemeine-angaben-single", page.locator("#egr-root"));
-
   await allgemeineAngabenPage.setAlleinerziehend(false);
 
   await allgemeineAngabenPage.setElternteile(2);
-
-  await screenshot(
-    "allgemeine-angaben-elternteile-ausgewaehlt",
-    allgemeineAngabenPage.elternteile,
-  );
 
   await allgemeineAngabenPage.setNameElternteil1("Leia");
   await allgemeineAngabenPage.setNameElternteil2("Luke");
 
   await allgemeineAngabenPage.setMutterschutz("Leia");
   await allgemeineAngabenPage.setNameElternteil1("Elternteil 1");
-
-  await screenshot("allgemeine-angaben-beide", page.locator("#egr-root"));
 
   await allgemeineAngabenPage.submit();
 

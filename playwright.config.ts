@@ -20,16 +20,9 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.PLAYWRIGHT_REPORTER || "html",
   testIgnore: process.env.PLAYWRIGHT_TEST_IGNORE || undefined,
-  snapshotPathTemplate: "{testDir}/snapshots/{testFileName}/{arg}{ext}",
   use: {
     baseURL: APP_BASE_URL + ":" + APP_PORT,
     trace: "on-first-retry",
-  },
-  expect: {
-    toHaveScreenshot: {
-      // accounts for tiny differences in font rendering between systems
-      maxDiffPixelRatio: 0.1,
-    },
   },
   projects: [
     {

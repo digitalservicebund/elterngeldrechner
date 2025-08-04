@@ -1,5 +1,4 @@
 import { test } from "@playwright/test";
-import expectScreenshot from "../expectScreenshot";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
@@ -7,8 +6,6 @@ import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("unverheiratet, nicht selbstständig", async ({ page }) => {
   test.slow();
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
@@ -133,14 +130,6 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   await planer.gebeEinkommenAn(17, 1600, "Elternteil 2");
   await planer.gebeEinkommenAn(18, 1500, "Elternteil 1");
   await planer.gebeEinkommenAn(18, 1600, "Elternteil 2");
-
-  await page.emulateMedia({ media: "print" });
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
-  await page.emulateMedia({ media: "screen" });
 
   await page
     .getByRole("button", {

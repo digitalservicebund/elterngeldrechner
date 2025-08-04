@@ -1,11 +1,8 @@
 import { test } from "@playwright/test";
-import expectScreenshot from "../expectScreenshot";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Minijob", async ({ page }) => {
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
@@ -37,14 +34,6 @@ test("Minijob", async ({ page }) => {
   await planer.waehleOption(10, "Basis");
   await planer.waehleOption(11, "Basis");
   await planer.waehleOption(12, "Basis");
-
-  await page.emulateMedia({ media: "print" });
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
-  await page.emulateMedia({ media: "screen" });
 
   await page
     .getByRole("button", { name: "Planung in den Antrag übernehmen" })

@@ -1,12 +1,9 @@
 import { test } from "@playwright/test";
-import expectScreenshot from "../expectScreenshot";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   test.slow();
-  const screenshot = expectScreenshot({ page });
-
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
@@ -97,14 +94,6 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await planer.waehleOption(7, "Basis", "Elternteil 1");
   await planer.waehleOption(9, "Plus", "Elternteil 2");
   await planer.waehleOption(10, "Plus", "Elternteil 2");
-
-  await page.emulateMedia({ media: "print" });
-  await screenshot("planungsuebersicht", page.getByLabel("Planungsübersicht"));
-  await screenshot(
-    "planungsdetails",
-    page.getByLabel("Planung der Monate im Detail"),
-  );
-  await page.emulateMedia({ media: "screen" });
 
   await page
     .getByRole("button", { name: "Planung in den Antrag übernehmen" })

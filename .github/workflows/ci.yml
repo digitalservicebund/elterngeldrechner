@@ -26,9 +26,13 @@ jobs:
       - name: lint and test
         run: npm run test-all
 
+  e2e-test:
+    uses: ./.github/workflows/e2e-test.yml
+
   deploy:
     needs:
       - lint-and-test
+      - e2e-test
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:

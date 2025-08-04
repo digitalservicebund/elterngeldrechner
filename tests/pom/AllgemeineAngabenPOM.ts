@@ -31,7 +31,7 @@ export class AllgemeineAngabenPOM {
     );
 
     this.elternteile = page.getByRole("radiogroup", {
-      name: "Wer soll das Elterngeld bekommen?",
+      name: "Sollen beide Elternteile Elterngeld bekommen? Dann bekommen beide mehr und länger Elterngeld.",
     });
 
     this.elternteileError = this.elternteile.getByText(
@@ -69,11 +69,12 @@ export class AllgemeineAngabenPOM {
 
     switch (anzahl) {
       case 1:
-        label = "Nur ein Elternteil soll Elterngeld bekommen";
+        label =
+          "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen";
         break;
 
       case 2:
-        label = "Beide Elternteile sollen Elterngeld bekommen";
+        label = "Ja, beide Elternteile sollen Elterngeld bekommen";
         break;
     }
 

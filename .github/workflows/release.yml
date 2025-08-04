@@ -17,6 +17,7 @@ jobs:
         env:
           VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
           EGR_BUILD_VERSION_HASH: ${{ github.sha }}
+          VITE_BASE_PATH: /resource
 
       - name: Audit Licenses
         run: npm run audit-licenses

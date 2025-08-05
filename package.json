@@ -56,7 +56,7 @@
     "fast-check": "^3.23.2",
     "http-server": "^14.1.1",
     "immer": "^10.1.1",
-    "lefthook": "^1.11.13",
+    "lefthook": "^1.12.2",
     "license-checker-rseidelsohn": "^4.4.2",
     "node-xlsx": "^0.24.0",
     "original-rechner": "file:original-rechner",

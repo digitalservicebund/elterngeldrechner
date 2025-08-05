@@ -24,6 +24,8 @@ pre-commit:
       run: actionlint {staged_files}
     links:
       run: lychee src/**/*.{ts,tsx} -n
+    secret-scanning:
+      run: talisman --githook pre-commit
 
 commit-msg:
   commands:

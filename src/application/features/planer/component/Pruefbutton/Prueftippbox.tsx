@@ -1,12 +1,12 @@
 import AddIcon from "@digitalservicebund/icons/Add";
 import LightbulbIcon from "@digitalservicebund/icons/LightbulbOutlined";
-import { ReactNode } from "react";
+import { ReactNode, SyntheticEvent } from "react";
 import { Tips } from "./generateTips";
 import { Button } from "@/application/components/Button";
 
 type Props = {
   readonly tips: Tips;
-  readonly onBonusFreischalten?: () => void;
+  readonly onBonusFreischalten?: (event: SyntheticEvent) => void;
 };
 
 export function Prueftippbox({ tips, onBonusFreischalten }: Props): ReactNode {

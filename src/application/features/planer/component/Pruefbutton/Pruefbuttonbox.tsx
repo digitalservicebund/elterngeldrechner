@@ -1,7 +1,14 @@
 import CheckIcon from "@digitalservicebund/icons/Check";
 import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
-import { type ReactNode, useCallback, useEffect, useId, useState } from "react";
+import {
+  type ReactNode,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 import { Prueftippbox } from "./Prueftippbox";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { type Tips, generateTips } from "./generateTips";
@@ -17,7 +24,7 @@ type Props = {
   readonly plan: PlanMitBeliebigenElternteilen;
   readonly ueberpruefePlanung: () => Result<void, SpecificationViolation[]>;
   readonly planInAntragUebernehmen: () => void;
-  readonly bonusFreischalten?: () => void;
+  readonly bonusFreischalten?: (event: SyntheticEvent) => void;
   readonly onPlanungDrucken?: () => void;
 };
 

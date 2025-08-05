@@ -73,9 +73,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
       const focusSummary = () =>
         detailsElement.current?.querySelector("summary")?.focus();
 
-      const openSummary = async () => {
-        await setIsEventOnClickOutsideBlocked(true);
-
+      const openSummary = () => {
         if (detailsElement.current != null) {
           detailsElement.current.open = true;
         }
@@ -91,15 +89,10 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     }
   }, [detailsElement]);
 
-  const [isEventOnClickOutsideBlocked, setIsEventOnClickOutsideBlocked] =
-    useState(false);
-
   useOnClickOutside(detailsElement, () => {
-    if (detailsElement.current != null && !isEventOnClickOutsideBlocked) {
+    if (detailsElement.current != null) {
       detailsElement.current.open = false;
     }
-
-    setIsEventOnClickOutsideBlocked(false);
   });
 
   const [isExpanded, setIsExpanded] = useState(false);

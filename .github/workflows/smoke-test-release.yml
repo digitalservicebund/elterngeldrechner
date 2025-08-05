@@ -84,8 +84,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
         with:
-          payload: |
-            { "text": "Successfully tested the ${{ env.tag }} release. :rocket:" }
+          payload: '{ "text": "Release ${{ env.tag }} is live and has successfully passed the initial test. :rocket:" }'
 
       - name: Create metabase release event
         if: success() && steps.cache-tested-version.outputs.cache-hit != 'true'

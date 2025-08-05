@@ -1,7 +1,7 @@
 import AddIcon from "@digitalservicebund/icons/Add";
 import LightbulbIcon from "@digitalservicebund/icons/LightbulbOutlined";
 import { ReactNode } from "react";
-import { Tips } from "./Pruefbuttonbox";
+import { Tips } from "./generateTips";
 import { Button } from "@/application/components/Button";
 
 type Props = {
@@ -16,11 +16,11 @@ export function Prueftippbox({ tips, onBonusFreischalten }: Props): ReactNode {
         <div className="my-10 flex flex-col items-center gap-24 bg-white p-40">
           <div className="flex gap-10">
             <LightbulbIcon className="-mt-8 text-[2.3rem]" />
-            <span>
+            <p>
               Tipp: Wenn Sie im Anschluss an Ihre Planung <strong>beide</strong>{" "}
               in Teilzeit arbeiten, können Sie den Partnerschaftsbonus bekommen.
               Sie bekommen dann zusammen noch vier Monate zusätzlich Elterngeld.
-            </span>
+            </p>
           </div>
 
           <Button

@@ -12,8 +12,8 @@ import {
   useState,
 } from "react";
 import {
-  CustomHTMLDetailsElement,
   LebensmonatDetails,
+  LebensmonatDetailsHTMLElement,
 } from "./LebensmonatDetails";
 import { findeLetztenVerplantenLebensmonat } from "./findeLetztenVerplantenLebensmonat";
 import {
@@ -28,7 +28,7 @@ import {
   type Plan,
 } from "@/monatsplaner";
 
-export interface CustomHTMLElement extends HTMLElement {
+export interface LebensmonatsHTMLElement extends HTMLElement {
   focusOnBonus: () => void;
 }
 
@@ -80,15 +80,15 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     onOpenLebensmonat,
     className,
   }: Props<A>,
-  ref?: ForwardedRef<CustomHTMLElement>,
+  ref?: ForwardedRef<LebensmonatsHTMLElement>,
 ): ReactNode {
   const headingIdentifier = useId();
 
-  const referenceLebensmonat = useRef<CustomHTMLDetailsElement>(null);
+  const referenceLebensmonat = useRef<LebensmonatDetailsHTMLElement>(null);
 
   useImperativeHandle<
-    CustomHTMLElement | null,
-    CustomHTMLElement | null
+    LebensmonatsHTMLElement | null,
+    LebensmonatsHTMLElement | null
   >(ref, () => {
     if (referenceLebensmonat.current === null) {
       return null;

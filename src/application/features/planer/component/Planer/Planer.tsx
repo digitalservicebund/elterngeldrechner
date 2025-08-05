@@ -1,6 +1,6 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
-import { ReactNode, useCallback, useId, useRef } from "react";
+import { ReactNode, SyntheticEvent, useCallback, useId, useRef } from "react";
 import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
@@ -109,8 +109,18 @@ export function Planer({
   const mindestensEinLebensmonatGeplant =
     Object.keys(plan.lebensmonate).length > 0;
 
-  function bonusFreischalten() {
+  function bonusFreischalten(event: SyntheticEvent) {
+    // The click event emitted by the bonus freischalten button
+    // triggers both this function and thus the focusOnBonus and
+    // the onClickOutside listener resulting in a race condition
+    // setting the open state of the LebensmonatDetail to false.
+    //
+    // The stopPropagation() prevents the onClickOutside listener
+    // from beeing triggered.
+    event.stopPropagation();
+
     schalteBonusFrei();
+
     lebensmonatslistenElement.current?.focusOnBonus();
   }
 

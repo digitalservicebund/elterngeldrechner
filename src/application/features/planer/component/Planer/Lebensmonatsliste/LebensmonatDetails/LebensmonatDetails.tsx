@@ -25,7 +25,7 @@ import type {
   Lebensmonatszahl,
 } from "@/monatsplaner";
 
-export interface CustomHTMLDetailsElement extends HTMLDetailsElement {
+export interface LebensmonatDetailsHTMLElement extends HTMLDetailsElement {
   openSummary: () => void;
 }
 
@@ -57,15 +57,15 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     onToggle,
     className,
   }: Props<A>,
-  ref?: ForwardedRef<CustomHTMLDetailsElement | null>,
+  ref?: ForwardedRef<LebensmonatDetailsHTMLElement | null>,
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
-  const detailsElement = useRef<CustomHTMLDetailsElement>(null);
+  const detailsElement = useRef<LebensmonatDetailsHTMLElement>(null);
 
   useImperativeHandle<
-    CustomHTMLDetailsElement | null,
-    CustomHTMLDetailsElement | null
+    LebensmonatDetailsHTMLElement | null,
+    LebensmonatDetailsHTMLElement | null
   >(ref, () => {
     if (detailsElement.current === null) {
       return null;

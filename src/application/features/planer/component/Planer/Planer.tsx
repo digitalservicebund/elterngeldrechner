@@ -5,14 +5,14 @@ import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
-import { CustomHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
-import { Pruefbuttonbox } from "./Pruefbuttonbox";
+import { LebensmonatsHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
 import { Button } from "@/application/components";
 import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import {
   type BeispielServiceCallbacks,
   useBeispieleService,
 } from "@/application/features/beispiele/hooks";
+import { Pruefbuttonbox } from "@/application/features/planer/component/Pruefbutton/Pruefbuttonbox";
 import {
   type InitialInformation,
   type PlanerServiceCallbacks,
@@ -99,7 +99,7 @@ export function Planer({
 
   const headingIdentifier = useId();
 
-  const lebensmonatslistenElement = useRef<CustomHTMLElement>(null);
+  const lebensmonatslistenElement = useRef<LebensmonatsHTMLElement>(null);
 
   const neueLeerePlanungErstellen = useCallback(() => {
     setzePlanZurueck();

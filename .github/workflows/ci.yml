@@ -17,6 +17,7 @@ defaults:
 jobs:
   lint-and-test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -51,6 +52,7 @@ jobs:
 
   audit-licenses:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 

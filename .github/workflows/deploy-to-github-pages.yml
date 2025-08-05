@@ -33,6 +33,7 @@ jobs:
   build:
     if: "${{ inputs.artifact_name == '' }}"
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     outputs:
       artifact_name: assets
     steps:

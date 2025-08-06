@@ -5,7 +5,8 @@ import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
-import { LebensmonatsHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
+import { LebensmonatslisteHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
+import { findeLetztenVerplantenLebensmonat } from "./Lebensmonatsliste/findeLetztenVerplantenLebensmonat";
 import { Button } from "@/application/components";
 import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import {
@@ -22,6 +23,7 @@ import { GridLayoutProvider } from "@/application/features/planer/layout";
 import {
   type Ausgangslage,
   type BerechneElterngeldbezuegeCallback,
+  PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
 
 type Props = {
@@ -66,6 +68,12 @@ export function Planer({
       onSetzePlanZurueckFromProps,
       setzeBeispielauswahlZurueckCallback.current,
     ),
+    onSchalteBonusFrei: (nextPlan: PlanMitBeliebigenElternteilen) => {
+      const monat = findeLetztenVerplantenLebensmonat(nextPlan.lebensmonate);
+      if (monat) {
+        lebensmonatslistenElement.current?.fokusAufMonat(monat - 3);
+      }
+    },
   };
 
   const {
@@ -99,7 +107,7 @@ export function Planer({
 
   const headingIdentifier = useId();
 
-  const lebensmonatslistenElement = useRef<LebensmonatsHTMLElement>(null);
+  const lebensmonatslistenElement = useRef<LebensmonatslisteHTMLElement>(null);
 
   const neueLeerePlanungErstellen = useCallback(() => {
     setzePlanZurueck();
@@ -120,8 +128,6 @@ export function Planer({
     event.stopPropagation();
 
     schalteBonusFrei();
-
-    lebensmonatslistenElement.current?.focusOnBonus();
   }
 
   return (

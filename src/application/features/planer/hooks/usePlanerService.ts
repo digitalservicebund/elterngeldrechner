@@ -178,9 +178,10 @@ export function usePlanerService(
         return plan;
       });
       updateStatesAndTriggerCallbacks(nextPlan);
+      callbacks?.onSchalteBonusFrei?.(nextPlan);
       return nextPlan;
     });
-  }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks]);
+  }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, callbacks]);
 
   return {
     plan,
@@ -247,4 +248,5 @@ export type Callbacks = Partial<{
   onWaehleOption: () => void;
   onSetzePlanZurueck: () => void;
   onPlanungDrucken: () => void;
+  onSchalteBonusFrei: (plan: PlanMitBeliebigenElternteilen) => void;
 }>;

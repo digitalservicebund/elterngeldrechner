@@ -28,8 +28,8 @@ import {
   type Plan,
 } from "@/monatsplaner";
 
-export interface LebensmonatsHTMLElement extends HTMLElement {
-  focusOnBonus: () => void;
+export interface LebensmonatslisteHTMLElement extends HTMLElement {
+  fokusAufMonat: (monat: number) => void;
 }
 
 type Props<A extends Ausgangslage> = {
@@ -80,30 +80,42 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     onOpenLebensmonat,
     className,
   }: Props<A>,
-  ref?: ForwardedRef<LebensmonatsHTMLElement>,
+  ref?: ForwardedRef<LebensmonatslisteHTMLElement>,
 ): ReactNode {
   const headingIdentifier = useId();
 
-  const referenceLebensmonat = useRef<LebensmonatDetailsHTMLElement>(null);
+  const referenceLebensmonate = useRef<
+    (LebensmonatDetailsHTMLElement | null)[]
+  >([]);
+
+  if (referenceLebensmonate.current.length !== 32) {
+    referenceLebensmonate.current = Array.from(
+      { length: 32 },
+      (_, i) => referenceLebensmonate.current[i] ?? null,
+    );
+  }
+
+  // const referenceLebensmonat = useRef<LebensmonatDetailsHTMLElement | null>(null);
 
   useImperativeHandle<
-    LebensmonatsHTMLElement | null,
-    LebensmonatsHTMLElement | null
+    LebensmonatslisteHTMLElement | null,
+    LebensmonatslisteHTMLElement | null
   >(ref, () => {
-    if (referenceLebensmonat.current === null) {
-      return null;
-    } else {
-      const focusOnBonus = async () => {
-        await setIsBonusFocused(true);
-        await referenceLebensmonat.current?.openSummary();
-      };
+    // const reference = referenceLebensmonat.current
+    // if (!reference) return null;
 
-      return {
-        ...referenceLebensmonat.current,
-        focusOnBonus: focusOnBonus,
-      };
-    }
-  }, [referenceLebensmonat]);
+    const fokusAufMonat = (monat: number) => {
+      const index = monat - 1;
+
+      // Compensate for render delay to possibly create new element (non critical).
+      setTimeout(() => referenceLebensmonate.current[index]?.openSummary());
+    };
+
+    return {
+      // ...reference,
+      fokusAufMonat,
+    };
+  }, [referenceLebensmonate]);
 
   const letzterGeplanterLebensmonat = useMemo(
     () => findeLetztenVerplantenLebensmonat(plan.lebensmonate),
@@ -123,11 +135,10 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   const kannMehrLebensmonateAnzeigen = letzterSichtbarerLebensmonat < 32;
 
   function zeigeMehrLebensmonateAn(): void {
-    setIsBonusFocused(false);
     setManuellGesetzterLetzterSichtbarerLebensmonat(
       Math.min(letzterSichtbarerLebensmonat + 2, LetzteLebensmonatszahl),
     );
-    referenceLebensmonat.current?.focus();
+    referenceLebensmonate.current[letzterGeplanterLebensmonat ?? 0]?.focus();
   }
 
   function zeigeWenigerMonateAn(): void {
@@ -142,8 +153,6 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     }
   }
 
-  const [isBonusFocused, setIsBonusFocused] = useState(false);
-
   return (
     <section
       ref={ref}
@@ -157,23 +166,17 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
 
       {Lebensmonatszahlen.filter(
         (lebensmonatszahl) => lebensmonatszahl <= letzterSichtbarerLebensmonat,
-      ).map((lebensmonatszahl) => {
+      ).map((lebensmonatszahl, index) => {
         const lebensmonat =
           plan.lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
 
-        const istReferenceLebensmonat = isBonusFocused
-          ? lebensmonatszahl === (letzterGeplanterLebensmonat ?? 0) - 3
-          : lebensmonatszahl === (letzterGeplanterLebensmonat ?? 0) + 1;
-
-        const reference = istReferenceLebensmonat
-          ? referenceLebensmonat
-          : undefined;
-
         return (
           <LebensmonatDetails
             key={lebensmonatszahl}
-            ref={reference}
+            ref={(reference) =>
+              (referenceLebensmonate.current[index] = reference)
+            }
             ausgangslage={plan.ausgangslage}
             lebensmonatszahl={lebensmonatszahl}
             lebensmonat={lebensmonat}
@@ -221,5 +224,5 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     </section>
   );
 }) as <A extends Ausgangslage>(
-  props: Props<A> & { ref?: ForwardedRef<HTMLElement> },
+  props: Props<A> & { ref?: ForwardedRef<LebensmonatslisteHTMLElement> },
 ) => ReactNode;

@@ -57,37 +57,30 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     onToggle,
     className,
   }: Props<A>,
-  ref?: ForwardedRef<LebensmonatDetailsHTMLElement | null>,
+  ref: ForwardedRef<LebensmonatDetailsHTMLElement>,
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
   const detailsElement = useRef<LebensmonatDetailsHTMLElement>(null);
 
-  useImperativeHandle<
-    LebensmonatDetailsHTMLElement | null,
-    LebensmonatDetailsHTMLElement | null
-  >(ref, () => {
-    if (detailsElement.current === null) {
-      return null;
-    } else {
-      const focusSummary = () =>
-        detailsElement.current?.querySelector("summary")?.focus();
+  useImperativeHandle(ref, () => {
+    const current = detailsElement.current;
+    if (!current) throw new Error("detailsElement is not mounted");
 
-      const openSummary = () => {
-        if (detailsElement.current != null) {
-          detailsElement.current.open = true;
-        }
+    const focusSummary = () => current.querySelector("summary")?.focus();
 
-        toggleDetailsElement(true);
-      };
+    const openSummary = () => {
+      current.open = true;
 
-      return {
-        ...detailsElement.current,
-        focus: focusSummary,
-        openSummary: openSummary,
-      };
-    }
-  }, [detailsElement]);
+      toggleDetailsElement(true);
+    };
+
+    return {
+      ...current,
+      focus: focusSummary,
+      openSummary: openSummary,
+    };
+  }, []);
 
   useOnClickOutside(detailsElement, () => {
     if (detailsElement.current != null) {
@@ -150,7 +143,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     </ProvideInformationenZumLebensmonat>
   );
 }) as <A extends Ausgangslage>(
-  props: Props<A> & { ref?: ForwardedRef<HTMLDetailsElement | null> },
+  props: Props<A> & { ref: ForwardedRef<LebensmonatDetailsHTMLElement> },
 ) => ReactNode;
 
 /**

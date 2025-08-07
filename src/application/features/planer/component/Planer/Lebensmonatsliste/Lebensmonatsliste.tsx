@@ -88,6 +88,8 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     (LebensmonatDetailsHTMLElement | null)[]
   >([]);
 
+  const referenceLebensmonatsliste = useRef<LebensmonatslisteHTMLElement>(null);
+
   if (referenceLebensmonate.current.length !== 32) {
     referenceLebensmonate.current = Array.from(
       { length: 32 },
@@ -95,14 +97,9 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     );
   }
 
-  // const referenceLebensmonat = useRef<LebensmonatDetailsHTMLElement | null>(null);
-
-  useImperativeHandle<
-    LebensmonatslisteHTMLElement | null,
-    LebensmonatslisteHTMLElement | null
-  >(ref, () => {
-    // const reference = referenceLebensmonat.current
-    // if (!reference) return null;
+  useImperativeHandle(ref, () => {
+    const reference = referenceLebensmonatsliste.current;
+    if (!reference) throw new Error("lebensmonatslisteElement is not mounted");
 
     const fokusAufMonat = (monat: number) => {
       const index = monat - 1;
@@ -112,7 +109,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     };
 
     return {
-      // ...reference,
+      ...reference,
       fokusAufMonat,
     };
   }, [referenceLebensmonate]);
@@ -155,7 +152,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
 
   return (
     <section
-      ref={ref}
+      ref={referenceLebensmonatsliste}
       className={classNames("flex flex-col", className)}
       aria-labelledby={headingIdentifier}
       tabIndex={-1}

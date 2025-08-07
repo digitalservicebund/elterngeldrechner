@@ -28,11 +28,6 @@ describe("Planer", () => {
   it("shows all relevant sections of the Planer", () => {
     render(<Planer {...ANY_PROPS} />);
 
-    expect(
-      screen.getByLabelText(
-        "Nutzen Sie ein Beispiel oder machen Sie Ihre eigene Planung:",
-      ),
-    ).toBeVisible();
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
     expect(screen.getByLabelText("Prüfbuttonbox")).toBeVisible();

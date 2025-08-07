@@ -73,7 +73,9 @@ done
 
 # Maybe there is nothing to do...
 if [ "$cache" == "true" ]; then
-  if [ -d "$target_directory" ] && find "$target_directory" -type d -newermt "$(date +%F)" | grep -q .; then
+  if [ -d "$target_directory" ] && ! find "$target_directory" -maxdepth 1 -type f | grep -q .; then
+    echo "No direct files in $target_directory. Proceeding..."
+  else
     echo "App wrapper is up-to-date. Nothing to do."
     exit 0
   fi

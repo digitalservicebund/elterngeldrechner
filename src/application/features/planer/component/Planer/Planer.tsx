@@ -15,11 +15,6 @@ import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { LebensmonatslisteHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
 import { Button } from "@/application/components";
-import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
-import {
-  type BeispielServiceCallbacks,
-  useBeispieleService,
-} from "@/application/features/beispiele/hooks";
 import { Pruefbuttonbox } from "@/application/features/planer/component/Pruefbutton/Pruefbuttonbox";
 import {
   type InitialInformation,
@@ -28,20 +23,16 @@ import {
 } from "@/application/features/planer/hooks";
 import { GridLayoutProvider } from "@/application/features/planer/layout";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
-import {
-  type Ausgangslage,
-  type BerechneElterngeldbezuegeCallback,
-} from "@/monatsplaner";
+import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
   readonly planInAntragUebernehmen: () => void;
-  readonly callbacks: PlanerServiceCallbacks &
-    BeispielServiceCallbacks<Ausgangslage> & {
-      onOpenLebensmonat?: () => void;
-      onOpenErklaerung: () => void;
-    };
+  readonly callbacks: PlanerServiceCallbacks & {
+    onOpenLebensmonat?: () => void;
+    onOpenErklaerung: () => void;
+  };
   readonly className?: string;
 };
 
@@ -52,14 +43,10 @@ export function Planer({
   className,
   planInAntragUebernehmen,
 }: Props): ReactNode {
-  // Intermediate "cache" to resolve mutual parameter dependency between hooks
-  const setzeBeispielauswahlZurueckCallback = useRef<() => void>(undefined);
-
   const {
     onPlanungDrucken,
     onOpenLebensmonat,
     onOpenErklaerung,
-    onWaehleBeispielAus,
     onWaehleOption: onWaehleOptionFromProps,
     onSetzePlanZurueck: onSetzePlanZurueckFromProps,
     ...remaingingPlanerServiceCallbacks
@@ -67,14 +54,8 @@ export function Planer({
 
   const planerServiceCallbacks = {
     ...remaingingPlanerServiceCallbacks,
-    onWaehleOption: fanOut(
-      onWaehleOptionFromProps,
-      setzeBeispielauswahlZurueckCallback.current,
-    ),
-    onSetzePlanZurueck: fanOut(
-      onSetzePlanZurueckFromProps,
-      setzeBeispielauswahlZurueckCallback.current,
-    ),
+    onWaehleOption: onWaehleOptionFromProps,
+    onSetzePlanZurueck: onSetzePlanZurueckFromProps,
   };
 
   const {
@@ -86,7 +67,6 @@ export function Planer({
     gebeEinkommenAn,
     ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
     setzePlanZurueck,
-    ueberschreibePlan,
     ueberpruefePlanung,
     schalteBonusFrei,
   } = usePlanerService(
@@ -94,17 +74,6 @@ export function Planer({
     berechneElterngeldbezuege,
     planerServiceCallbacks,
   );
-
-  const {
-    beschreibungenDerBeispiele,
-    waehleBeispielAus,
-    istBeispielAusgewaehlt,
-    setzeBeispielauswahlZurueck,
-  } = useBeispieleService(plan.ausgangslage, ueberschreibePlan, {
-    onWaehleBeispielAus,
-  });
-
-  setzeBeispielauswahlZurueckCallback.current = setzeBeispielauswahlZurueck;
 
   const headingIdentifier = useId();
 
@@ -154,16 +123,6 @@ export function Planer({
         </h3>
 
         <Anleitung onOpenErklaerung={onOpenErklaerung} />
-
-        <BeispielAuswahl
-          className={classNames(
-            "mt-56",
-            CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS,
-          )}
-          beschreibungenDerBeispiele={beschreibungenDerBeispiele}
-          waehleBeispielAus={waehleBeispielAus}
-          istBeispielAusgewaehlt={istBeispielAusgewaehlt}
-        />
 
         <Button
           className="my-16 print:hidden"
@@ -225,14 +184,6 @@ export function Planer({
       </section>
     </>
   );
-}
-
-function fanOut<Parameters extends unknown[]>(
-  ...functions: Array<((...parameters: Parameters) => void) | undefined>
-): (...parameters: Parameters) => void {
-  return (...parameters: Parameters) => {
-    functions.forEach((fn) => fn?.(...parameters));
-  };
 }
 
 //TODO: docs to explan --> Compensate for render delay to possibly create new element (non critical).

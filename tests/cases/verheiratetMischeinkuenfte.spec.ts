@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("verheiratet, Mischeinkünfte", async ({ page }) => {
@@ -80,6 +81,9 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
     .getByRole("radio", { name: "Nein" })
     .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(1, "Basis", "Elternteil 1");

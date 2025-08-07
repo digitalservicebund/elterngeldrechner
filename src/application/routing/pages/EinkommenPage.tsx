@@ -11,14 +11,14 @@ export function EinkommenPage() {
   const navigate = useNavigate();
   const navigateToErwerbstaetigkeitPage = () =>
     navigate(formSteps.erwerbstaetigkeit.route);
-  const navigateToPlanerPage = () => navigate(formSteps.rechnerUndPlaner.route);
+  const navigateToBeispielePage = () => navigate(formSteps.beispiele.route);
 
   return (
     <Page step={formSteps.einkommen}>
       <div className="flex flex-col gap-56">
         <EinkommenForm
           id={formIdentifier}
-          onSubmit={navigateToPlanerPage}
+          onSubmit={navigateToBeispielePage}
           hideSubmitButton
         />
 

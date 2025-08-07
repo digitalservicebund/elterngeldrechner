@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Minijob", async ({ page }) => {
@@ -22,6 +23,9 @@ test("Minijob", async ({ page }) => {
   await page.getByLabel("Monatliches Einkommen in Brutto").click();
   await page.getByLabel("Monatliches Einkommen in Brutto").fill("510 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(3, "Basis");

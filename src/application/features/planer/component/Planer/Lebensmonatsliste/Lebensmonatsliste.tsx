@@ -29,7 +29,7 @@ import {
 } from "@/monatsplaner";
 
 export interface LebensmonatslisteHTMLElement extends HTMLElement {
-  fokusAufMonat: (monat: number) => void;
+  openLebensmonatsSummary: (monat: number) => void;
 }
 
 type Props<A extends Ausgangslage> = {
@@ -98,10 +98,10 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   }
 
   useImperativeHandle(ref, () => {
-    const reference = referenceLebensmonatsliste.current;
-    if (!reference) throw new Error("lebensmonatslisteElement is not mounted");
+    const current = referenceLebensmonatsliste.current;
+    if (!current) throw new Error("lebensmonatslisteElement is not mounted");
 
-    const fokusAufMonat = (monat: number) => {
+    const openLebensmonatsSummary = (monat: number) => {
       const index = monat - 1;
 
       // Compensate for render delay to possibly create new element (non critical).
@@ -109,8 +109,8 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     };
 
     return {
-      ...reference,
-      fokusAufMonat,
+      ...current,
+      openLebensmonatsSummary,
     };
   }, [referenceLebensmonate]);
 

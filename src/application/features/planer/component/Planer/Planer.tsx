@@ -71,7 +71,7 @@ export function Planer({
     onSchalteBonusFrei: (nextPlan: PlanMitBeliebigenElternteilen) => {
       const monat = findeLetztenVerplantenLebensmonat(nextPlan.lebensmonate);
       if (monat) {
-        lebensmonatslistenElement.current?.fokusAufMonat(monat - 3);
+        lebensmonatslistenElement.current?.openLebensmonatsSummary(monat - 3);
       }
     },
   };

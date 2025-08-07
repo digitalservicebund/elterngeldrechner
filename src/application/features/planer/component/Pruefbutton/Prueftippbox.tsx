@@ -36,24 +36,15 @@ export function Prueftippbox({ tips, onBonusFreischalten }: Props): ReactNode {
 
       {tips.normalTips.length > 0 && (
         <div className="my-10 bg-white p-40">
-          {tips.normalTips.length === 1 ? (
-            <p>
-              <LightbulbIcon className="mr-10 text-primary" />
-              Tipp:&nbsp; {tips.normalTips[0]}
-            </p>
-          ) : (
-            <>
-              <p className="-mt-8">
-                <LightbulbIcon className="mr-10 text-primary" />
-                Tipp:&nbsp;
-              </p>
-              <ul className="ml-40 mt-10 list-disc pl-24">
-                {tips.normalTips.map((tip) => (
-                  <li key={tip}>{tip}</li>
-                ))}
-              </ul>
-            </>
-          )}
+          <p className="-mt-8">
+            <LightbulbIcon className="mr-10 text-primary" />
+            Tipp:&nbsp;
+          </p>
+          <ul className="ml-40 mt-10 list-disc pl-24">
+            {tips.normalTips.map((tip) => (
+              <li key={tip}>{tip}</li>
+            ))}
+          </ul>
         </div>
       )}
     </>

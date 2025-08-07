@@ -2,6 +2,7 @@ import { Navigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import {
   AllgemeineAngabenPage,
+  BeispielePage,
   DatenuebernahmeAntragPage,
   EinkommenPage,
   ErwerbstaetigkeitPage,
@@ -62,6 +63,13 @@ const internalRouteDefinition: InternalRouteDefinition = [
     path: formSteps.einkommen.route,
     precondition: (state: RootState) => {
       return state.stepErwerbstaetigkeit.ET1.vorGeburt != null;
+    },
+  },
+  {
+    element: <BeispielePage />,
+    path: formSteps.beispiele.route,
+    precondition: (state: RootState) => {
+      return state.stepEinkommen.limitEinkommenUeberschritten != null;
     },
   },
   {

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
@@ -25,6 +26,9 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
 

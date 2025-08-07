@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
@@ -86,6 +87,9 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.gebeEinkommenAn(1, 3000, "Elternteil 2");

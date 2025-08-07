@@ -1,6 +1,7 @@
 import { AxeBuilder } from "@axe-core/playwright";
 import { type Page, type TestInfo, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
@@ -54,6 +55,9 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   // TODO: Extend POM to "see" more UI elements.
   await expectPageToBeAccessible(page, testInfo);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {
     elternteile: ["Jane", "John"],

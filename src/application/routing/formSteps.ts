@@ -23,6 +23,11 @@ export const formSteps = {
     heading: "Ihr Einkommen",
     route: "/einkommen",
   },
+  beispiele: {
+    heading: "Wie stellen Sie sich Ihre Elternzeit ungefähr vor?",
+    shortName: "Planung starten",
+    route: "/beispiele",
+  },
   rechnerUndPlaner: {
     heading: "Planen Sie Ihr Elterngeld",
     shortName: "Monatsplaner",

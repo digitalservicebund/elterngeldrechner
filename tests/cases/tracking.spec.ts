@@ -1,5 +1,6 @@
 import { Page, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
@@ -41,6 +42,9 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
   await rechnerUndPlaner.waehleOption(3, "Basis");
@@ -93,6 +97,9 @@ test("paar das mutterschutz und bonus nimmt", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {
     elternteile: ["Jane", "John"],
@@ -218,6 +225,7 @@ async function fastForwardToPlaner(page: Page) {
   await fastForwardNachwuchs(page);
   await fastForwardErwerbstaetigkeit(page);
   await fastForwardEinkommen(page);
+  await fastForwardBeispiele(page);
 
   return await fastForwardPlanung(page);
 }
@@ -253,6 +261,11 @@ async function fastForwardEinkommen(page: Page) {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+}
+
+async function fastForwardBeispiele(page: Page) {
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 }
 
 async function fastForwardPlanung(page: Page) {

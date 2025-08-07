@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Page } from "./Page";
+import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./RechnerUndPlanerPage/tracking";
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
@@ -26,13 +27,13 @@ export function BeispielePage() {
   const ausgangslage = composeAusgangslageFuerPlaner(store.getState());
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
-  // TODO: Tracking
-
   const {
     beschreibungenDerBeispiele,
     waehleBeispielAus,
     istBeispielAusgewaehlt,
-  } = useBeispieleService(ausgangslage, setPlan);
+  } = useBeispieleService(ausgangslage, setPlan, {
+    onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
+  });
 
   return (
     <Page step={formSteps.beispiele}>

@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("mehrere Tätigkeiten", async ({ page }) => {
@@ -86,6 +87,9 @@ test("mehrere Tätigkeiten", async ({ page }) => {
     .getByText("arbeitslosenversicherungspflichtig")
     .click();
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(4, "Basis");

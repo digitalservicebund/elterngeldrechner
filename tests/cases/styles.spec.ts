@@ -1,5 +1,6 @@
 import { Page, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
@@ -74,6 +75,10 @@ const testStyles = async ({
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  // TODO
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 };
 
 test("mobile styles", async ({ page }) => {

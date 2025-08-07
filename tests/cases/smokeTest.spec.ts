@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 /**
@@ -49,6 +50,9 @@ test("smoke test", async ({ page }) => {
     .getByRole("radio", { name: "Ja" })
     .click();
   await page.getByRole("button", { name: "Weiter" }).click();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(3, "Basis");

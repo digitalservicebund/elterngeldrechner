@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
@@ -30,6 +31,9 @@ test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
   await rechnerUndPlaner.waehleOption(3, "Basis", "Annika");
@@ -86,6 +90,9 @@ test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
 
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
+
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
   await rechnerUndPlaner.waehleOption(3, "Basis", "Annika");
   await rechnerUndPlaner.waehleOption(4, "Basis", "Annika");
@@ -116,6 +123,9 @@ test("alleine, unterstütztes Bundesland", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
   await rechnerUndPlaner.waehleOption(3, "Basis");
@@ -159,6 +169,9 @@ test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
   const einkommenPage = new EinkommenPOM(page);
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
   await rechnerUndPlaner.waehleOption(3, "Basis");

@@ -1,5 +1,6 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
+import { BeispielePOM } from "../pom/BeispielePOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
@@ -81,6 +82,9 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await page.getByLabel("12. Monat").click();
   await page.getByLabel("12. Monat").fill("3000 Euro");
   await page.getByRole("button", { name: "Weiter" }).click();
+
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);
   await planer.waehleOption(1, "Basis", "Elternteil 1");

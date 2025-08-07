@@ -112,9 +112,9 @@ export function RechnerPlanerPage() {
 
   const navigate = useNavigate();
 
-  const navigateToEinkommenPage = () => {
+  const navigateToBeispielePage = () => {
     if (rememberSubmit.current) submitFeedback();
-    void navigate(formSteps.einkommen.route);
+    void navigate(formSteps.beispiele.route);
   };
 
   function navigateToDatenuebernahmeAntragPage(): void {
@@ -154,8 +154,8 @@ export function RechnerPlanerPage() {
             <div className="flex gap-16">
               <Button
                 type="button"
-                buttonStyle="link"
-                onClick={navigateToEinkommenPage}
+                buttonStyle="secondary"
+                onClick={navigateToBeispielePage}
               >
                 <ChevronLeft /> Zurück zur Auswahl
               </Button>

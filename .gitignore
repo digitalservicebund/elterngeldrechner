@@ -35,6 +35,7 @@ public/*.ttf
 public/*.woff
 public/*.ico
 public/*.svg
+public/*.html
 
 # playwright
 /test-results/

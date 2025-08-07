@@ -57,7 +57,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     onToggle,
     className,
   }: Props<A>,
-  ref: ForwardedRef<LebensmonatDetailsHTMLElement>,
+  ref?: ForwardedRef<LebensmonatDetailsHTMLElement>,
 ): ReactNode {
   const detailsAriaLabel = `${lebensmonatszahl}. Lebensmonat`;
 
@@ -78,7 +78,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     return {
       ...current,
       focus: focusSummary,
-      openSummary: openSummary,
+      openSummary,
     };
   }, []);
 
@@ -143,7 +143,7 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
     </ProvideInformationenZumLebensmonat>
   );
 }) as <A extends Ausgangslage>(
-  props: Props<A> & { ref: ForwardedRef<LebensmonatDetailsHTMLElement> },
+  props: Props<A> & { ref?: ForwardedRef<LebensmonatDetailsHTMLElement> },
 ) => ReactNode;
 
 /**

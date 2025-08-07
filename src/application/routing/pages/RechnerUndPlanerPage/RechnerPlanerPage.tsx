@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   trackMetricsForDerPlanHatSichGeaendert,
-  trackMetricsForEinBeispielWurdeAusgewaehlt,
   trackMetricsForEineOptionWurdeGewaehlt,
   trackMetricsForErklaerungenWurdenGeoeffnet,
   trackMetricsForErklaerungenWurdenGeschlossen,
@@ -145,7 +144,6 @@ export function RechnerPlanerPage() {
                 onWaehleOption: trackMetricsForEineOptionWurdeGewaehlt,
                 onSetzePlanZurueck: trackMetricsForPlanWurdeZurueckgesetzt,
                 onOpenLebensmonat: trackMetricsForLebensmonatWurdeGeoeffnet,
-                onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
                 onPlanungDrucken: trackMetricsForPlanungDrucken,
                 onOpenErklaerung: showErklaerung,
               }}

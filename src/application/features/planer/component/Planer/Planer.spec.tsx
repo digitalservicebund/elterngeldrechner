@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-// import userEvent from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
 import { usePlanerService } from "@/application/features/planer/hooks";
@@ -57,39 +57,39 @@ describe("Planer", () => {
     );
   });
 
-  // describe("neue leere Planung erstellen", () => {
-  //   it("calls the callback to reset the Plan", async () => {
-  //     const setzePlanZurueck = vi.fn();
-  //     vi.mocked(usePlanerService).mockReturnValue({
-  //       ...ANY_SERVICE_VALUES,
-  //       setzePlanZurueck,
-  //     });
+  describe("neue leere Planung erstellen", () => {
+    it("calls the callback to reset the Plan", async () => {
+      const setzePlanZurueck = vi.fn();
+      vi.mocked(usePlanerService).mockReturnValue({
+        ...ANY_SERVICE_VALUES,
+        setzePlanZurueck,
+      });
 
-  //     render(<Planer {...ANY_PROPS} />);
-  //     await clickNeueLeerePlanungErstellen();
+      render(<Planer {...ANY_PROPS} />);
+      await clickNeueLeerePlanungErstellen();
 
-  //     expect(setzePlanZurueck).toHaveBeenCalledOnce();
-  //   });
+      expect(setzePlanZurueck).toHaveBeenCalledOnce();
+    });
 
-  //   it.skip("shifts focus", async () => {
-  //     const focus = vi.fn();
-  //     // TypeError: Cannot set property focus of #<HTMLElement> which has only a getter
-  //     window.HTMLElement.prototype.focus = focus;
-  //     render(<Planer {...ANY_PROPS} />);
+    it.skip("shifts focus", async () => {
+      const focus = vi.fn();
+      // TypeError: Cannot set property focus of #<HTMLElement> which has only a getter
+      window.HTMLElement.prototype.focus = focus;
+      render(<Planer {...ANY_PROPS} />);
 
-  //     await clickNeueLeerePlanungErstellen();
+      await clickNeueLeerePlanungErstellen();
 
-  //     expect(focus).toHaveBeenCalled();
-  //     expect(focus).toHaveBeenCalledWith({ preventScroll: true });
-  //   });
+      expect(focus).toHaveBeenCalled();
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    });
 
-  //   async function clickNeueLeerePlanungErstellen(): Promise<void> {
-  //     const button = screen.getByRole("button", {
-  //       name: "Neue leere Planung erstellen",
-  //     });
-  //     await userEvent.click(button);
-  //   }
-  // });
+    async function clickNeueLeerePlanungErstellen(): Promise<void> {
+      const button = screen.getByRole("button", {
+        name: "Neue leere Planung erstellen",
+      });
+      await userEvent.click(button);
+    }
+  });
 
   // describe("Drucken der Planung", () => {
   //   it("triggers the browsers in-build print function", async () => {
@@ -122,28 +122,30 @@ const ANY_PROPS = {
   callbacks: { onOpenErklaerung: () => {} },
 };
 
-const ANY_SERVICE_VALUES = {
-  plan: {
-    ausgangslage: {
-      anzahlElternteile: 2 as const,
-      pseudonymeDerElternteile: {
-        [Elternteil.Eins]: "Jane",
-        [Elternteil.Zwei]: "John",
-      },
-      geburtsdatumDesKindes: new Date(),
+const ANY_PLAN = {
+  ausgangslage: {
+    anzahlElternteile: 2 as const,
+    pseudonymeDerElternteile: {
+      [Elternteil.Eins]: "Jane",
+      [Elternteil.Zwei]: "John",
     },
-    lebensmonate: {
-      1: {
-        [Elternteil.Eins]: {
-          gewaehlteOption: "Basiselterngeld" as Variante,
-          imMutterschutz: false as const,
-        },
-        [Elternteil.Zwei]: {
-          imMutterschutz: false as const,
-        },
+    geburtsdatumDesKindes: new Date(),
+  },
+  lebensmonate: {
+    1: {
+      [Elternteil.Eins]: {
+        gewaehlteOption: "Basiselterngeld" as Variante,
+        imMutterschutz: false as const,
+      },
+      [Elternteil.Zwei]: {
+        imMutterschutz: false as const,
       },
     },
   },
+};
+
+const ANY_SERVICE_VALUES = {
+  plan: ANY_PLAN,
   verfuegbaresKontingent: {
     [Variante.Basis]: 0,
     [Variante.Plus]: 0,
@@ -190,5 +192,7 @@ const ANY_SERVICE_VALUES = {
   ueberpruefePlanung: () => {
     return Result.ok(undefined);
   },
-  schalteBonusFrei: () => {},
+  schalteBonusFrei: () => {
+    return ANY_PLAN;
+  },
 };

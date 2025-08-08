@@ -113,18 +113,19 @@ export function Planer({
 
   const neueLeerePlanungErstellen = useCallback(() => {
     setzePlanZurueck();
-    lebensmonatslistenElement.current?.focus({ preventScroll: true });
+    // TODO: Fix ref in Lebensmonatsliste to allow the use of .focus()
+    // lebensmonatslistenElement.current?.focus({ preventScroll: true });
   }, [setzePlanZurueck]);
 
   const mindestensEinLebensmonatGeplant =
     Object.keys(plan.lebensmonate).length > 0;
 
-  const { triggerEffectBySignal: fokusAufLebensmonat } = useEffectWithSignal(
-    (lebensmonatszahl: Lebensmonatszahl) =>
-      lebensmonatslistenElement.current?.fokusAufLebensmonat(
+  const { triggerEffectBySignal: openLebensmonatsSummary } =
+    useEffectWithSignal((lebensmonatszahl: Lebensmonatszahl) =>
+      lebensmonatslistenElement.current?.openLebensmonatsSummary(
         lebensmonatszahl - 3,
       ),
-  );
+    );
 
   function bonusFreischalten(event: SyntheticEvent) {
     // The click event emitted by the bonus freischalten button
@@ -141,7 +142,7 @@ export function Planer({
     const monat = findeLetztenVerplantenLebensmonat(nextPlan.lebensmonate);
 
     if (monat) {
-      fokusAufLebensmonat(monat);
+      openLebensmonatsSummary(monat);
     }
   }
 

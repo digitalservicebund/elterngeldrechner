@@ -64,19 +64,21 @@ export const LebensmonatDetails = forwardRef(function LebensmonatDetails<
   const detailsElement = useRef<LebensmonatDetailsHTMLElement>(null);
 
   useImperativeHandle(ref, () => {
-    const current = detailsElement.current;
-    if (!current) throw new Error("detailsElement is not mounted");
+    const currentDomReference = detailsElement.current;
+    // TODO: Check for solution without throw Error
+    if (!currentDomReference) throw new Error("detailsElement is not mounted");
 
-    const focusSummary = () => current.querySelector("summary")?.focus();
+    const focusSummary = () =>
+      currentDomReference.querySelector("summary")?.focus();
 
     const openSummary = () => {
-      current.open = true;
+      currentDomReference.open = true;
 
       toggleDetailsElement(true);
     };
 
     return {
-      ...current,
+      ...currentDomReference,
       focus: focusSummary,
       openSummary,
     };

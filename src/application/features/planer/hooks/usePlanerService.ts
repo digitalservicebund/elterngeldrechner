@@ -165,23 +165,22 @@ export function usePlanerService(
   );
 
   const schalteBonusFrei = useCallback(() => {
-    setPlan((plan) => {
-      const nextPlan = aktiviereBonus(
-        berechneElterngeldbezuege,
-        plan,
-        findeLetztenVerplantenLebensmonat(
-          plan.lebensmonate,
-        ) as Lebensmonatszahl,
-      ).unwrapOrElse((error) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        return plan;
-      });
-      updateStatesAndTriggerCallbacks(nextPlan);
-      callbacks?.onSchalteBonusFrei?.(nextPlan);
-      return nextPlan;
+    const nextPlan = aktiviereBonus(
+      berechneElterngeldbezuege,
+      plan,
+      findeLetztenVerplantenLebensmonat(plan.lebensmonate) as Lebensmonatszahl,
+    ).unwrapOrElse((error) => {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      return plan;
     });
-  }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, callbacks]);
+
+    setPlan(nextPlan);
+
+    updateStatesAndTriggerCallbacks(nextPlan);
+
+    return nextPlan;
+  }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, plan]);
 
   return {
     plan,
@@ -248,5 +247,4 @@ export type Callbacks = Partial<{
   onWaehleOption: () => void;
   onSetzePlanZurueck: () => void;
   onPlanungDrucken: () => void;
-  onSchalteBonusFrei: (plan: PlanMitBeliebigenElternteilen) => void;
 }>;

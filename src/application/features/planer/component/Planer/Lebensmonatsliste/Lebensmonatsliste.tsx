@@ -29,7 +29,7 @@ import {
 } from "@/monatsplaner";
 
 export interface LebensmonatslisteHTMLElement extends HTMLElement {
-  openLebensmonatsSummary: (monat: number) => void;
+  fokusAufLebensmonat: (monat: number) => void;
 }
 
 type Props<A extends Ausgangslage> = {
@@ -98,19 +98,20 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   }
 
   useImperativeHandle(ref, () => {
-    const current = referenceLebensmonatsliste.current;
-    if (!current) throw new Error("lebensmonatslisteElement is not mounted");
+    const reference = referenceLebensmonatsliste.current;
+    if (!reference) throw new Error("lebensmonatslisteElement is not mounted");
 
-    const openLebensmonatsSummary = (monat: number) => {
+    // Frage: Wie kann man die Callchain hier behalten?
+
+    const fokusAufLebensmonat = (monat: number) => {
       const index = monat - 1;
 
-      // Compensate for render delay to possibly create new element (non critical).
-      setTimeout(() => referenceLebensmonate.current[index]?.openSummary());
+      referenceLebensmonate.current[index]?.openSummary();
     };
 
     return {
-      ...current,
-      openLebensmonatsSummary,
+      ...reference,
+      fokusAufLebensmonat,
     };
   }, [referenceLebensmonate]);
 

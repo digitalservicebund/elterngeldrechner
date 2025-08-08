@@ -3,7 +3,13 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
 import { usePlanerService } from "@/application/features/planer/hooks";
-import { Elternteil, KeinElterngeld, Result, Variante } from "@/monatsplaner";
+import {
+  Elternteil,
+  KeinElterngeld,
+  Lebensmonatszahl,
+  Result,
+  Variante,
+} from "@/monatsplaner";
 
 describe("Planer", () => {
   beforeEach(async () => {
@@ -90,20 +96,6 @@ describe("Planer", () => {
       await userEvent.click(button);
     }
   });
-
-  // describe("Drucken der Planung", () => {
-  //   it("triggers the browsers in-build print function", async () => {
-  //     window.print = vi.fn();
-  //     render(<Planer {...ANY_PROPS} />);
-
-  //     const button = screen.getByRole("button", {
-  //       name: "Drucken der Planung",
-  //     });
-  //     await userEvent.click(button);
-
-  //     expect(window.print).toHaveBeenCalled();
-  //   });
-  // });
 });
 
 const ANY_AUSGANGSLAGE = {
@@ -122,30 +114,28 @@ const ANY_PROPS = {
   callbacks: { onOpenErklaerung: () => {} },
 };
 
-const ANY_PLAN = {
-  ausgangslage: {
-    anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    },
-    geburtsdatumDesKindes: new Date(),
-  },
-  lebensmonate: {
-    1: {
-      [Elternteil.Eins]: {
-        gewaehlteOption: "Basiselterngeld" as Variante,
-        imMutterschutz: false as const,
-      },
-      [Elternteil.Zwei]: {
-        imMutterschutz: false as const,
-      },
-    },
-  },
-};
-
 const ANY_SERVICE_VALUES = {
-  plan: ANY_PLAN,
+  plan: {
+    ausgangslage: {
+      anzahlElternteile: 2 as const,
+      pseudonymeDerElternteile: {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      },
+      geburtsdatumDesKindes: new Date(),
+    },
+    lebensmonate: {
+      1: {
+        [Elternteil.Eins]: {
+          gewaehlteOption: "Basiselterngeld" as Variante,
+          imMutterschutz: false as const,
+        },
+        [Elternteil.Zwei]: {
+          imMutterschutz: false as const,
+        },
+      },
+    },
+  },
   verfuegbaresKontingent: {
     [Variante.Basis]: 0,
     [Variante.Plus]: 0,
@@ -193,6 +183,6 @@ const ANY_SERVICE_VALUES = {
     return Result.ok(undefined);
   },
   schalteBonusFrei: () => {
-    return ANY_PLAN;
+    return 1 as Lebensmonatszahl;
   },
 };

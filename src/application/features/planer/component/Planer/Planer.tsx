@@ -14,7 +14,6 @@ import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { LebensmonatslisteHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
-import { findeLetztenVerplantenLebensmonat } from "./Lebensmonatsliste/findeLetztenVerplantenLebensmonat";
 import { Button } from "@/application/components";
 import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import {
@@ -123,7 +122,7 @@ export function Planer({
   const { triggerEffectBySignal: openLebensmonatsSummary } =
     useEffectWithSignal((lebensmonatszahl: Lebensmonatszahl) =>
       lebensmonatslistenElement.current?.openLebensmonatsSummary(
-        lebensmonatszahl - 3,
+        lebensmonatszahl,
       ),
     );
 
@@ -137,12 +136,10 @@ export function Planer({
     // from beeing triggered.
     event.stopPropagation();
 
-    const nextPlan = schalteBonusFrei();
+    const ersterBonusMonat = schalteBonusFrei();
 
-    const monat = findeLetztenVerplantenLebensmonat(nextPlan.lebensmonate);
-
-    if (monat) {
-      openLebensmonatsSummary(monat);
+    if (ersterBonusMonat) {
+      openLebensmonatsSummary(ersterBonusMonat);
     }
   }
 

@@ -29,7 +29,7 @@ import {
 } from "@/monatsplaner";
 
 export interface LebensmonatslisteHTMLElement extends HTMLElement {
-  openLebensmonatsSummary: (monat: number) => void;
+  openLebensmonatsSummary: (monat: Lebensmonatszahl) => void;
 }
 
 type Props<A extends Ausgangslage> = {
@@ -85,17 +85,10 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
   const headingIdentifier = useId();
 
   const referenceLebensmonate = useRef<
-    (LebensmonatDetailsHTMLElement | null)[]
-  >([]);
+    Partial<Record<Lebensmonatszahl, LebensmonatDetailsHTMLElement | null>>
+  >({});
 
   const referenceLebensmonatsliste = useRef<LebensmonatslisteHTMLElement>(null);
-
-  if (referenceLebensmonate.current.length !== 32) {
-    referenceLebensmonate.current = Array.from(
-      { length: 32 },
-      (_, i) => referenceLebensmonate.current[i] ?? null,
-    );
-  }
 
   useImperativeHandle(ref, () => {
     const currentDomReference = referenceLebensmonatsliste.current;
@@ -103,10 +96,8 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     if (!currentDomReference)
       throw new Error("lebensmonatslisteElement is not mounted");
 
-    const openLebensmonatsSummary = (monat: number) => {
-      const index = monat - 1;
-
-      referenceLebensmonate.current[index]?.openSummary();
+    const openLebensmonatsSummary = (monat: Lebensmonatszahl) => {
+      referenceLebensmonate.current[monat]?.openSummary();
     };
 
     return {
@@ -136,7 +127,9 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
     setManuellGesetzterLetzterSichtbarerLebensmonat(
       Math.min(letzterSichtbarerLebensmonat + 2, LetzteLebensmonatszahl),
     );
-    referenceLebensmonate.current[letzterGeplanterLebensmonat ?? 0]?.focus();
+    referenceLebensmonate.current[
+      ((letzterGeplanterLebensmonat ?? 0) + 1) as Lebensmonatszahl
+    ]?.focus();
   }
 
   function zeigeWenigerMonateAn(): void {
@@ -164,7 +157,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
 
       {Lebensmonatszahlen.filter(
         (lebensmonatszahl) => lebensmonatszahl <= letzterSichtbarerLebensmonat,
-      ).map((lebensmonatszahl, index) => {
+      ).map((lebensmonatszahl) => {
         const lebensmonat =
           plan.lebensmonate[lebensmonatszahl] ??
           erstelleUngeplantenLebensmonat(lebensmonatszahl);
@@ -173,7 +166,7 @@ export const Lebensmonatsliste = forwardRef(function Lebensmonatsliste<
           <LebensmonatDetails
             key={lebensmonatszahl}
             ref={(reference) =>
-              (referenceLebensmonate.current[index] = reference)
+              (referenceLebensmonate.current[lebensmonatszahl] = reference)
             }
             ausgangslage={plan.ausgangslage}
             lebensmonatszahl={lebensmonatszahl}

@@ -8,6 +8,7 @@ import {
   type Lebensmonatszahl,
   type Plan,
   type PlanMitBeliebigenElternteilen,
+  Variante,
   aktiviereBonus,
   aktualisiereElterngeldbezuege,
   bestimmeAuswahlmoeglichkeiten,
@@ -19,6 +20,7 @@ import {
   setzePlanZurueck,
   validierePlanFuerFinaleAbgabe,
   waehleOption,
+  zaehleVerplantesKontingent,
 } from "@/monatsplaner";
 
 export function usePlanerService(
@@ -179,7 +181,20 @@ export function usePlanerService(
 
     updateStatesAndTriggerCallbacks(nextPlan);
 
-    return nextPlan;
+    const verplantesBonusKontingent = zaehleVerplantesKontingent(
+      nextPlan.lebensmonate,
+    )[Variante.Bonus];
+    const letzterVerplanterLebensmonat = findeLetztenVerplantenLebensmonat(
+      nextPlan.lebensmonate,
+    );
+
+    if (letzterVerplanterLebensmonat) {
+      return (letzterVerplanterLebensmonat -
+        verplantesBonusKontingent / 2 +
+        1) as Lebensmonatszahl;
+    } else {
+      return undefined;
+    }
   }, [berechneElterngeldbezuege, updateStatesAndTriggerCallbacks, plan]);
 
   return {

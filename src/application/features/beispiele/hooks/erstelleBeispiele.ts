@@ -188,7 +188,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld erhalten",
+      titel: "Länger Elterngeld bekommen",
       beschreibung:
         "Lohnt sich, wenn Sie in Teilzeit arbeiten möchten. Für mehr Zeit mit der Familie ",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
@@ -203,10 +203,10 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       ]),
     },
     {
-      identifier: "Gemeinsame Planung - Unterstützung im ersten Monat",
-      titel: "Unterstützung im ersten Monat",
+      identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
+      titel: "Ein Jahr mit Begleitung",
       beschreibung:
-        "Gemeinsam starten. Nach dem ersten Lebensjahr den Partnerschaftsbonus nutzen.",
+        "Gemeinsam starten. Nach dem ersten Lebensjahr übernimmt der andere Elternteil für einen Monat.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: beideBasis, anzahl: 1 },
         {

@@ -81,7 +81,7 @@ jobs:
       - name: Audit Licenses
         run: npm run audit-licenses
 
-  verify-original-rechner-remains-untouched:
+  original-rechner-lock:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

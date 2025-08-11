@@ -11,7 +11,7 @@ defaults:
     shell: bash
 
 jobs:
-  lint-and-test:
+  static-code-analysis:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -19,10 +19,21 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      - name: lint and test
-        run: npm run test-all
+      - name: lint
+        run: npm run type-check && npm run lint && npm run stylelint
 
-  e2e-test:
+  test-suite-vitest:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/cached-node-install
+
+      - name: lint
+        run: npm run test
+
+  test-suite-playwright:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -32,12 +43,12 @@ jobs:
 
       - uses: ./.github/actions/cached-playwright-setup
 
-      - name: Run Playwright e2e tests
+      - name: Run playwright e2e tests
         run: npm run test-e2e
         env:
           PLAYWRIGHT_TEST_IGNORE: "tests/cases/smokeTest.spec.ts"
 
-      - name: Upload Playwright blob report
+      - name: Upload playwright report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -47,8 +58,9 @@ jobs:
 
   deploy:
     needs:
-      - lint-and-test
-      - e2e-test
+      - static-code-analysis
+      - test-suite-vitest
+      - test-suite-playwright
     if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy-to-github-pages.yml
     with:

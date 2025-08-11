@@ -265,7 +265,10 @@ if (import.meta.vitest) {
     const {
       validierePlanFuerFinaleAbgabe,
       teileLebensmonateBeiElternteileAuf,
+      zaehleVerplantesKontingent,
+      bestimmeVerfuegbaresKontingent,
     } = await import("@/monatsplaner");
+
     const {
       assert,
       property,
@@ -277,68 +280,81 @@ if (import.meta.vitest) {
     } = await import("fast-check");
 
     // TODO: Property test for any Ausgangslage produces correct Plan (Mutterschutz!)
-    // TODO: "Property test" for unique identifiers.
-    // TODO: Property test that no Titel nor Beschreibung is empty.
     // TODO: Property test that no Plan is empty or just Mutterschutz.
-    // TODO: Property test that always three examples are created.
 
     describe("for single Elternteil", () => {
       it("always creates a correct Plan for each Beispiel", () => {
-        assert(
-          property(
-            arbitraryFlag(),
-            arbitraryFlag(),
-            arbitraryDate(),
-            (
-              istAlleinerziehend,
-              mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
-              geburtsdatumDesKindes,
-            ) => {
-              const ausgangslage: Ausgangslage = {
-                anzahlElternteile: 1,
-                istAlleinerziehend,
-                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
-                geburtsdatumDesKindes,
-              };
+        assertBeispieleFuerEinElternteil((beispiele) => {
+          beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
+        });
+      });
 
-              const beispiele = erstelleBeispiele(ausgangslage);
+      it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
+        assertBeispieleFuerEinElternteil((beispiele) => {
+          beispiele.forEach(({ plan }) => expectPlanExhaustsKontingent(plan));
+        });
+      });
 
-              beispiele.forEach((beispiel) => {
-                expectPlanToBeCorrect(beispiel.plan);
-              });
-            },
-          ),
-        );
+      it("generates unique identifiers", () => {
+        assertBeispieleFuerEinElternteil((beispiele) => {
+          const identifiers = beispiele.map((it) => it.identifier);
+
+          const uniqueIdentifiers = identifiers.filter((item, index) => {
+            return identifiers.indexOf(item) === index;
+          });
+
+          expect(identifiers.length).toEqual(uniqueIdentifiers.length);
+        });
+      });
+
+      it("generated no empty descriptions", () => {
+        assertBeispieleFuerEinElternteil((beispiele) => {
+          expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
+        });
+      });
+
+      it("generates no empty titles", () => {
+        assertBeispieleFuerEinElternteil((beispiele) => {
+          expect(beispiele.map((it) => it.titel)).not.toContain("");
+        });
       });
     });
 
     describe("for two Elternteile", () => {
       it("always creates a correct Plan for each Beispiel", () => {
-        assert(
-          property(
-            arbitraryFlag(),
-            arbitraryPseudonymeDerElternteile(),
-            arbitraryDate(),
-            (
-              mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
-              pseudonymeDerElternteile,
-              geburtsdatumDesKindes,
-            ) => {
-              const ausgangslage: Ausgangslage = {
-                anzahlElternteile: 2,
-                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
-                pseudonymeDerElternteile,
-                geburtsdatumDesKindes,
-              };
-
-              const beispiele = erstelleBeispiele(ausgangslage);
-
-              beispiele.forEach(({ plan }) => {
-                expectPlanToBeCorrect(plan);
-              });
-            },
-          ),
+        assertBeispieleFuerBeideElternteile((beispiele) =>
+          beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan)),
         );
+      });
+
+      it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
+        assertBeispieleFuerBeideElternteile((beispiele) =>
+          beispiele.forEach(({ plan }) => expectPlanExhaustsKontingent(plan)),
+        );
+      });
+
+      it("generates unique identifiers", () => {
+        assertBeispieleFuerBeideElternteile((beispiele) => {
+          const identifiers = beispiele.map((it) => it.identifier);
+
+          const uniqueIdentifiers = identifiers.filter((item, index) => {
+            return identifiers.indexOf(item) === index;
+          });
+
+          expect(identifiers.length).toEqual(uniqueIdentifiers.length);
+        });
+      });
+
+      it("generates no empty descriptions", () => {
+        assertBeispieleFuerBeideElternteile((beispiele) => {
+          expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
+        });
+      });
+
+      it("generates no empty titles", () => {
+        assertBeispieleFuerBeideElternteile((beispiele) => {
+          expect(beispiele.map((it) => it.titel)).not.toContain("");
+        });
       });
 
       /**
@@ -423,6 +439,89 @@ if (import.meta.vitest) {
       );
 
       expect(criticalViolations).toHaveLength(0);
+    }
+
+    function expectPlanExhaustsKontingent(plan: Plan<Ausgangslage>): void {
+      const verfuegbaresKontingent = bestimmeVerfuegbaresKontingent(
+        plan.ausgangslage,
+      );
+
+      const totalVerfuegbaresKontigent = Object.values(
+        verfuegbaresKontingent,
+      ).reduce((acc, curr) => acc + curr, 0);
+
+      const verplantesKontingent = zaehleVerplantesKontingent(
+        plan.lebensmonate,
+      );
+
+      const totalVerplantesKontingent = Object.values(
+        verplantesKontingent,
+      ).reduce((acc, curr) => acc + curr, 0);
+
+      const restlichesKontingent =
+        totalVerfuegbaresKontigent - totalVerplantesKontingent;
+
+      // Cases where restlichesKontingent is negative are handled by
+      // separate correctness tests. I intentionally avoid checking for
+      // negative values here to prevent developers from encountering
+      // confusing, conflicting test failures if planning exceeds
+      // the allowed months.
+
+      expect(restlichesKontingent).toBeLessThanOrEqual(0);
+    }
+
+    function assertBeispieleFuerEinElternteil(
+      assertion: (beispiele: Beispiel<AusgangslageFuerEinElternteil>[]) => void,
+    ) {
+      assert(
+        property(
+          arbitraryFlag(),
+          arbitraryFlag(),
+          arbitraryDate(),
+          (
+            istAlleinerziehend,
+            mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+            geburtsdatumDesKindes,
+          ) => {
+            const ausgangslage: Ausgangslage = {
+              anzahlElternteile: 1,
+              istAlleinerziehend,
+              mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+              geburtsdatumDesKindes,
+            };
+
+            assertion(erstelleBeispiele(ausgangslage));
+          },
+        ),
+      );
+    }
+
+    function assertBeispieleFuerBeideElternteile(
+      assertion: (
+        beispiele: Beispiel<AusgangslageFuerZweiElternteile>[],
+      ) => void,
+    ) {
+      assert(
+        property(
+          arbitraryFlag(),
+          arbitraryPseudonymeDerElternteile(),
+          arbitraryDate(),
+          (
+            mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+            pseudonymeDerElternteile,
+            geburtsdatumDesKindes,
+          ) => {
+            const ausgangslage: Ausgangslage = {
+              anzahlElternteile: 2,
+              mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+              pseudonymeDerElternteile,
+              geburtsdatumDesKindes,
+            };
+
+            assertion(erstelleBeispiele(ausgangslage));
+          },
+        ),
+      );
     }
 
     const TOLERATED_VALIDATION_VIOLATION_MESSAGES = [

@@ -30,7 +30,7 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      - name: lint
+      - name: test
         run: npm run test
 
   test-suite-playwright:

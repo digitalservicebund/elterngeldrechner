@@ -43,7 +43,8 @@ test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(9, "Basis", "Anton");
   await rechnerUndPlaner.waehleOption(10, "Basis", "Anton");
   await rechnerUndPlaner.waehleOption(11, "Plus", "Anton");
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
 
@@ -90,7 +91,8 @@ test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(4, "Basis", "Annika");
   await rechnerUndPlaner.waehleOption(5, "Basis", "Anton");
   await rechnerUndPlaner.waehleOption(6, "Basis", "Anton");
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
   await expect(datenuebernahmeAntragPage.heading).toBeVisible();
@@ -122,7 +124,8 @@ test("alleine, unterstütztes Bundesland", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(6, "Basis");
   await rechnerUndPlaner.waehleOption(9, "Plus");
   await rechnerUndPlaner.waehleOption(10, "Plus");
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
   const actualCompleteFormPdfValues =
@@ -162,7 +165,8 @@ test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(4, "Basis");
   await rechnerUndPlaner.waehleOption(5, "Basis");
   await rechnerUndPlaner.waehleOption(6, "Basis");
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
   await expect(datenuebernahmeAntragPage.heading).toBeVisible();

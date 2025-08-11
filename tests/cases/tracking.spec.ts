@@ -54,7 +54,8 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(11, "Basis");
   await rechnerUndPlaner.waehleOption(12, "Basis");
 
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   expect(await getTrackingVariable(page, "geplante-monate")).toEqual(12);
 });
@@ -103,7 +104,8 @@ test("paar das mutterschutz und bonus nimmt", async ({ page }) => {
   await rechnerUndPlaner.gebeEinkommenAn(4, 1500, "John");
   await rechnerUndPlaner.gebeEinkommenAn(5, 1500, "Jane");
   await rechnerUndPlaner.gebeEinkommenAn(5, 1500, "John");
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   expect(await getTrackingVariable(page, "geplante-monate")).toEqual(8);
 });
@@ -171,7 +173,8 @@ test("feedback in der planung wird nur ein mal abgefragt", async ({ page }) => {
 
   expect(await feedbackForm.appreciation.isVisible()).toBeTruthy();
 
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   expect(await feedbackForm.appreciation.isVisible()).toBeFalsy();
 

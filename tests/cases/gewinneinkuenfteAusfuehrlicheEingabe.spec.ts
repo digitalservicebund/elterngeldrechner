@@ -95,7 +95,6 @@ test("Gewinneinkünfte, ausführliche Eingabe", async ({ page }) => {
   await planer.waehleOption(9, "Plus", "Elternteil 2");
   await planer.waehleOption(10, "Plus", "Elternteil 2");
 
-  await page
-    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
-    .click();
+  await planer.ueberpruefen();
+  await planer.uebernehmen();
 });

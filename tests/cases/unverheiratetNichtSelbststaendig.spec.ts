@@ -131,10 +131,6 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   await planer.gebeEinkommenAn(18, 1500, "Elternteil 1");
   await planer.gebeEinkommenAn(18, 1600, "Elternteil 2");
 
-  await page
-    .getByRole("button", {
-      name: "Planung in den Antrag übernehmen",
-      exact: true,
-    })
-    .click();
+  await planer.ueberpruefen();
+  await planer.uebernehmen();
 });

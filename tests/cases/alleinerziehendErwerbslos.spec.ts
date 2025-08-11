@@ -39,7 +39,8 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(13, "Basis");
   await rechnerUndPlaner.waehleOption(14, "Basis");
 
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
   await expect(datenuebernahmeAntragPage.heading).toBeVisible();

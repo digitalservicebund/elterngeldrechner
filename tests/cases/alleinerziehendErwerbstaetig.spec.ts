@@ -65,7 +65,6 @@ test("alleinerziehend, erwerbstätig", async ({ page }) => {
   await planer.waehleOption(18, "Bonus");
   await planer.gebeEinkommenAn(18, 1000);
 
-  await page
-    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
-    .click();
+  await planer.ueberpruefen();
+  await planer.uebernehmen();
 });

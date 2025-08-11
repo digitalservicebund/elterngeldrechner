@@ -35,7 +35,6 @@ test("Minijob", async ({ page }) => {
   await planer.waehleOption(11, "Basis");
   await planer.waehleOption(12, "Basis");
 
-  await page
-    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
-    .click();
+  await planer.ueberpruefen();
+  await planer.uebernehmen();
 });

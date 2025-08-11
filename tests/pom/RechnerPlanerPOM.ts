@@ -69,7 +69,16 @@ export class RechnerPlanerPOM {
       .click();
   }
 
-  async submit() {
+  async ueberpruefen(): Promise<void> {
+    await this.page
+      .getByRole("button", {
+        name: "Planung überprüfen",
+        exact: true,
+      })
+      .click();
+  }
+
+  async uebernehmen() {
     await this.page
       .getByRole("button", {
         name: "Planung in den Antrag übernehmen",

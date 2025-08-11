@@ -67,7 +67,8 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   await expectPageToBeAccessible(page, testInfo, ["nested-interactive"]); // FIXME: fix ignored rule
   await rechnerUndPlaner.gebeEinkommenAn(5, 1500, "Jane");
   await rechnerUndPlaner.gebeEinkommenAn(5, 1500, "John");
-  await rechnerUndPlaner.submit();
+  await rechnerUndPlaner.ueberpruefen();
+  await rechnerUndPlaner.uebernehmen();
 
   await expectPageToBeAccessible(page, testInfo);
 });

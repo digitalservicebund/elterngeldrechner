@@ -97,7 +97,6 @@ test("mehrere Tätigkeiten", async ({ page }) => {
   await planer.waehleOption(10, "Basis");
   await planer.waehleOption(12, "Basis");
 
-  await page
-    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
-    .click();
+  await planer.ueberpruefen();
+  await planer.uebernehmen();
 });

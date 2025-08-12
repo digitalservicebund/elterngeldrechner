@@ -275,6 +275,7 @@ if (import.meta.vitest) {
       property,
       record,
       constant,
+      tuple,
       boolean: arbitraryBoolean,
       string: arbitraryString,
       date: arbitraryDate,
@@ -285,117 +286,71 @@ if (import.meta.vitest) {
     // TODO: Property test for any Ausgangslage produces correct Plan (Mutterschutz!)
     // TODO: Property test that no Plan is empty or just Mutterschutz.
 
-    describe("for single Elternteil", () => {
+    describe("erstelleBeispiele", () => {
       it("always creates a correct Plan for each Beispiel", () => {
         assert(
-          property(arbitraryAusgangslageEinElternteil, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          property(arbritraryAusgangslagen, (ausgangslagen) => {
+            ausgangslagen.forEach((ausgangslage) => {
+              const beispiele = erstelleBeispiele(ausgangslage);
 
-            beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
+              beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
+            });
           }),
         );
       });
 
       it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
         assert(
-          property(arbitraryAusgangslageEinElternteil, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          property(arbritraryAusgangslagen, (ausgangslagen) => {
+            ausgangslagen.forEach((ausgangslage) => {
+              const beispiele = erstelleBeispiele(ausgangslage);
 
-            beispiele.forEach(({ plan }) => expectPlanExhaustsKontingent(plan));
+              beispiele.forEach(({ plan }) => {
+                expectPlanExhaustsKontingent(plan);
+              });
+            });
           }),
         );
       });
 
       it("generates unique identifiers", () => {
         assert(
-          property(arbitraryAusgangslageEinElternteil, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          property(arbritraryAusgangslagen, (ausgangslagen) => {
+            ausgangslagen.forEach((ausgangslage) => {
+              const beispiele = erstelleBeispiele(ausgangslage);
 
-            const identifiers = beispiele.map((it) => it.identifier);
+              const identifiers = beispiele.map((it) => it.identifier);
 
-            const uniqueIdentifiers = identifiers.filter((item, index) => {
-              return identifiers.indexOf(item) === index;
+              const uniqueIdentifiers = identifiers.filter((item, index) => {
+                return identifiers.indexOf(item) === index;
+              });
+
+              expect(identifiers.length).toEqual(uniqueIdentifiers.length);
             });
-
-            expect(identifiers.length).toEqual(uniqueIdentifiers.length);
           }),
         );
       });
 
       it("generated no empty descriptions", () => {
         assert(
-          property(arbitraryAusgangslageEinElternteil, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          property(arbritraryAusgangslagen, (ausgangslagen) => {
+            ausgangslagen.forEach((ausgangslage) => {
+              const beispiele = erstelleBeispiele(ausgangslage);
 
-            expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
-          }),
-        );
-      });
-
-      it("generates no empty titles", () => {
-        assert(
-          property(arbitraryAusgangslageEinElternteil, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
-
-            expect(beispiele.map((it) => it.titel)).not.toContain("");
-          }),
-        );
-      });
-    });
-
-    describe("for two Elternteile", () => {
-      it("always creates a correct Plan for each Beispiel", () => {
-        assert(
-          property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
-
-            beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
-          }),
-        );
-      });
-
-      it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
-        assert(
-          property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
-
-            beispiele.forEach(({ plan }) => expectPlanExhaustsKontingent(plan));
-          }),
-        );
-      });
-
-      it("generates unique identifiers", () => {
-        assert(
-          property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
-
-            const identifiers = beispiele.map((it) => it.identifier);
-
-            const uniqueIdentifiers = identifiers.filter((item, index) => {
-              return identifiers.indexOf(item) === index;
+              expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
             });
-
-            expect(identifiers.length).toEqual(uniqueIdentifiers.length);
-          }),
-        );
-      });
-
-      it("generates no empty descriptions", () => {
-        assert(
-          property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
-
-            expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
           }),
         );
       });
 
       it("generates no empty titles", () => {
         assert(
-          property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          property(arbritraryAusgangslagen, (ausgangslagen) => {
+            ausgangslagen.forEach((ausgangslage) => {
+              const beispiele = erstelleBeispiele(ausgangslage);
 
-            expect(beispiele.map((it) => it.titel)).not.toContain("");
+              expect(beispiele.map((it) => it.titel)).not.toContain("");
+            });
           }),
         );
       });
@@ -525,6 +480,11 @@ if (import.meta.vitest) {
         pseudonymeDerElternteile: arbitraryPseudonymeDerElternteile(),
         geburtsdatumDesKindes: arbitraryDate(),
       });
+
+    const arbritraryAusgangslagen = tuple(
+      arbitraryAusgangslageEinElternteil,
+      arbitraryAusgangslageZweiElternteile,
+    );
 
     const TOLERATED_VALIDATION_VIOLATION_MESSAGES = [
       "Beim Partnerschaftsbonus ist Arbeiten in Teilzeit Pflicht. Bitte geben Sie ein Einkommen ein.",

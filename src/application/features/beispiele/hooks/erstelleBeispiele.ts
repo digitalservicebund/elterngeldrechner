@@ -153,6 +153,18 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     MONAT_MIT_PLUS,
   );
 
+  const mutterPlusPartnerInBasis = lebensmonatFuerMutterMitPartnerIn(
+    ausgangslage,
+    MONAT_MIT_PLUS,
+    MONAT_MIT_BASIS,
+  );
+
+  const mutterBasisPartnerInPlus = lebensmonatFuerMutterMitPartnerIn(
+    ausgangslage,
+    MONAT_MIT_BASIS,
+    MONAT_MIT_PLUS,
+  );
+
   const beidePlus = lebensmonatFuerMutterMitPartnerIn(
     ausgangslage,
     MONAT_MIT_PLUS,
@@ -203,6 +215,49 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
           anzahl: sindPartnermonateVerfuegbar ? 11 : 9,
         },
         { lebensmonat: nurPartnerInBasis, anzahl: 1 },
+      ]),
+    },
+    {
+      identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
+      titel: "Start zu zweit - flexibel zurück",
+      beschreibung: "Gemeinsam in die Elternzeit starten und abschließen.",
+      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
+        { lebensmonat: beideBasis, anzahl: 1 },
+        {
+          lebensmonat: nurMutterBasis,
+          anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
+        },
+        { lebensmonat: nurMutterPlus, anzahl: 3 },
+        { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
+        { lebensmonat: nurPartnerInBasis, anzahl: 1 },
+      ]),
+    },
+    {
+      identifier: "Gemeinsame Planung - Elternzeit ausschöpfen",
+      titel: "Elternzeit ausschöpfen",
+      beschreibung:
+        "Sechs Monate zusammen Elterngeld nehmen. Dann länger Elternzeit mit halbem Elterngeld.",
+      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
+        { lebensmonat: mutterBasisPartnerInPlus, anzahl: 2 },
+        {
+          lebensmonat: beidePlus,
+          anzahl: sindPartnermonateVerfuegbar ? 3 : 1,
+        },
+        { lebensmonat: nurMutterPlus, anzahl: 16 },
+      ]),
+    },
+    {
+      identifier: "Gemeinsame Planung - Geteilte Elternzeit",
+      titel: "Geteilte Elternzeit",
+      beschreibung:
+        "Volles und halbes Elterngeld kombiniert: 8 Monate mehr Zeit zusammen verbringen.",
+      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
+        { lebensmonat: mutterBasisPartnerInPlus, anzahl: 6 },
+        {
+          lebensmonat: beidePlus,
+          anzahl: sindPartnermonateVerfuegbar ? 2 : 0,
+        },
+        { lebensmonat: nurMutterPlus, anzahl: 6 },
       ]),
     },
   ];
@@ -426,28 +481,17 @@ if (import.meta.vitest) {
         plan.ausgangslage,
       );
 
-      const totalVerfuegbaresKontigent = Object.values(
-        verfuegbaresKontingent,
-      ).reduce((acc, curr) => acc + curr, 0);
-
       const verplantesKontingent = zaehleVerplantesKontingent(
         plan.lebensmonate,
       );
 
-      const totalVerplantesKontingent = Object.values(
-        verplantesKontingent,
-      ).reduce((acc, curr) => acc + curr, 0);
+      const rest = sum(verfuegbaresKontingent) - sum(verplantesKontingent);
 
-      const restlichesKontingent =
-        totalVerfuegbaresKontigent - totalVerplantesKontingent;
+      expect(rest).toEqual(0);
+    }
 
-      // Cases where restlichesKontingent is negative are handled by
-      // separate correctness tests. I intentionally avoid checking for
-      // negative values here to prevent developers from encountering
-      // confusing, conflicting test failures if planning exceeds
-      // the allowed months.
-
-      expect(restlichesKontingent).toBeLessThanOrEqual(0);
+    function sum(record: Readonly<Record<Variante, number>>) {
+      return record.Basiselterngeld + record.ElterngeldPlus;
     }
 
     function arbitraryPseudonymeDerElternteile() {

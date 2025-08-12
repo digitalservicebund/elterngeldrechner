@@ -286,9 +286,6 @@ if (import.meta.vitest) {
 
     // TODO: Property test that no Plan is empty or just Mutterschutz.
 
-    // TODO: Expand ausgangslagen into their own test cases
-    // TODO: Observe plan in sys out to verify correctness
-
     describe("erstelleBeispiele", () => {
       it("always creates a correct Plan for each Beispiel", () => {
         assert(

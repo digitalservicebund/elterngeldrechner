@@ -284,8 +284,6 @@ if (import.meta.vitest) {
       record: arbitraryRecord,
     } = await import("fast-check");
 
-    // TODO: Property test that no Plan is empty or just Mutterschutz.
-
     describe("erstelleBeispiele", () => {
       it("always creates a correct Plan for each Beispiel", () => {
         assert(

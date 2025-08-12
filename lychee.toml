@@ -2,5 +2,6 @@ exclude = [
     'https://test.tld/tag-manager',         # Path used to mock matomo in unit tests
     'https://familienportal.de/resource',   # Base path for assets hosted on familienportal
     'https?://localhost',                   # Path is sometimes used in comments
-    'https://stackoverflow.com'             # Likely to be within a code comment
+    'https://stackoverflow.com',            # Likely to be within a code comment
+    'https://github.com',                   # Likely to be within a code comment
 ]

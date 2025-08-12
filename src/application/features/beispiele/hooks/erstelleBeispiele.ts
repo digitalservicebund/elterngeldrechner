@@ -352,6 +352,23 @@ if (import.meta.vitest) {
         );
       });
 
+      // We intentionally do not add Bonus in the Beispiele in
+      // order to generate Plans which are valid right away without
+      // adding an Einkommen.
+      it("always creates a Plan without Partnerschaftsbonus", () => {
+        assert(
+          property(arbritraryAusgangslagen, (ausgangslagen) => {
+            ausgangslagen.forEach((ausgangslage) => {
+              const beispiele = erstelleBeispiele(ausgangslage);
+
+              beispiele.forEach(({ plan }) =>
+                expactPlanWithoutPartnerschaftsbonus(plan),
+              );
+            });
+          }),
+        );
+      });
+
       it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
         assert(
           property(arbritraryAusgangslagen, (ausgangslagen) => {
@@ -474,6 +491,16 @@ if (import.meta.vitest) {
       );
 
       expect(criticalViolations).toHaveLength(0);
+    }
+
+    function expactPlanWithoutPartnerschaftsbonus(
+      plan: Plan<Ausgangslage>,
+    ): void {
+      const verplantesKontingent = zaehleVerplantesKontingent(
+        plan.lebensmonate,
+      );
+
+      expect(verplantesKontingent.Partnerschaftsbonus).toEqual(0);
     }
 
     function expectPlanExhaustsKontingent(plan: Plan<Ausgangslage>): void {

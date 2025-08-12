@@ -276,6 +276,7 @@ if (import.meta.vitest) {
       record,
       constant,
       tuple,
+      oneof,
       boolean: arbitraryBoolean,
       string: arbitraryString,
       date: arbitraryDate,
@@ -283,8 +284,10 @@ if (import.meta.vitest) {
       record: arbitraryRecord,
     } = await import("fast-check");
 
-    // TODO: Property test for any Ausgangslage produces correct Plan (Mutterschutz!)
     // TODO: Property test that no Plan is empty or just Mutterschutz.
+
+    // TODO: Expand ausgangslagen into their own test cases
+    // TODO: Observe plan in sys out to verify correctness
 
     describe("erstelleBeispiele", () => {
       it("always creates a correct Plan for each Beispiel", () => {
@@ -472,6 +475,19 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: arbitraryDate(),
       });
 
+    const arbitraryAusgangslageEinElternteilMitMutterschutz: Arbitrary<AusgangslageFuerEinElternteil> =
+      record({
+        anzahlElternteile: constant(1),
+        mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
+          arbitraryFlag(),
+        istAlleinerziehend: arbitraryFlag(),
+        geburtsdatumDesKindes: arbitraryDate(),
+        informationenZumMutterschutz: constant({
+          empfaenger: Elternteil.Eins,
+          letzterLebensmonatMitSchutz: 2,
+        }),
+      });
+
     const arbitraryAusgangslageZweiElternteile: Arbitrary<AusgangslageFuerZweiElternteile> =
       record({
         anzahlElternteile: constant(2),
@@ -481,9 +497,32 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: arbitraryDate(),
       });
 
+    const arbitraryAusgangslageZweiElternteileMitMutterschutz: Arbitrary<AusgangslageFuerZweiElternteile> =
+      record({
+        anzahlElternteile: constant(2),
+        mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
+          arbitraryFlag(),
+        pseudonymeDerElternteile: arbitraryPseudonymeDerElternteile(),
+        geburtsdatumDesKindes: arbitraryDate(),
+        informationenZumMutterschutz: record({
+          empfaenger: oneof(
+            constant(Elternteil.Eins),
+            constant(Elternteil.Zwei),
+          ),
+          letzterLebensmonatMitSchutz: constant(2),
+        }),
+      });
+
+    // The Ausgangslagen are combined as tuple because it is hard to
+    // model dependencies like anzahlElternteile to used properties and
+    // also to make sure that each run gets exactly one Ausgangslage with
+    // Mutterschutz and one Ausgangslage without Mutterschutz.
+
     const arbritraryAusgangslagen = tuple(
       arbitraryAusgangslageEinElternteil,
       arbitraryAusgangslageZweiElternteile,
+      arbitraryAusgangslageEinElternteilMitMutterschutz,
+      arbitraryAusgangslageZweiElternteileMitMutterschutz,
     );
 
     const TOLERATED_VALIDATION_VIOLATION_MESSAGES = [

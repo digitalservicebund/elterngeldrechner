@@ -1,6 +1,6 @@
 fileignoreconfig:
-- filename: src/application/features/beispiele/component/BeispielAuswahl.tsx
-  checksum: 7b547c7d617e299486ddfec456fc82e5f954f06385982127fffc9d8c0b2d2645
+- filename: src/application/features/beispiele/component/BeispielLegend.tsx
+  checksum: f1d06dfac4c2bd99eab2b4d5afbd4c7b5c0047efc151b6b286d9b16e05049280
 scopeconfig:
 - scope: node
 version: "1.0"

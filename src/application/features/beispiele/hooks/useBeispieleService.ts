@@ -11,11 +11,13 @@ export function useBeispieleService<A extends Ausgangslage>(
   setzePlan: (plan: Plan<A>) => void,
   callbacks?: Callbacks<A>,
 ) {
-  const beispiele = useMemo(
+  const beispiele: Beispiel<A>[] = useMemo(
     () => erstelleBeispiele(ausgangslage),
     [ausgangslage],
   );
 
+  // This will very likely become obsolete and can be removed
+  // as the new visualization needs access to the plan anyway
   const beispieleOhnePlan = useMemo(
     () => beispiele.map(({ plan: _, ...rest }) => rest),
     [beispiele],
@@ -53,6 +55,7 @@ export function useBeispieleService<A extends Ausgangslage>(
   );
 
   return {
+    beispiele,
     beispieleOhnePlan,
     waehleBeispielAus,
     istBeispielAusgewaehlt,

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { BeispielAuswahl } from "./BeispielAuswahl";
-import type { BeschreibungFuerEinBeispiel } from "@/application/features/beispiele/hooks";
+import type { BeispielOhnePlan } from "@/application/features/beispiele/hooks";
 
 /*
  * These tests currently heavily struggle because of how the component
@@ -181,8 +181,8 @@ it("marks the button of a Beispiel that is selected", () => {
 });
 
 function beschreibungFuerEinBeispiel(
-  beschreibung: Partial<BeschreibungFuerEinBeispiel>,
-): BeschreibungFuerEinBeispiel {
+  beschreibung: Partial<BeispielOhnePlan>,
+): BeispielOhnePlan {
   return {
     identifier: crypto.randomUUID(),
     titel: "Test Titel",

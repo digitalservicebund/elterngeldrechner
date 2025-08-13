@@ -301,15 +301,13 @@ const UNGEPLANTER_MONAT: Monat = {
   imMutterschutz: false,
 };
 
-export type Beispiel<A extends Ausgangslage> = BeschreibungFuerEinBeispiel &
-  Readonly<{
-    plan: Plan<A>;
-  }>;
+export type BeispielOhnePlan = Omit<Beispiel<never>, "plan">;
 
-export type BeschreibungFuerEinBeispiel = Readonly<{
+export type Beispiel<A extends Ausgangslage> = Readonly<{
   identifier: BeispielIdentifier;
   titel: string;
   beschreibung: string;
+  plan: Plan<A>;
 }>;
 
 export type BeispielIdentifier = string; // Just for communication purposes yet.

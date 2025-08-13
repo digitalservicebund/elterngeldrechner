@@ -4,11 +4,11 @@ import classNames from "classnames";
 import { Fragment, type ReactNode, useId } from "react";
 import type {
   BeispielIdentifier,
-  BeschreibungFuerEinBeispiel,
+  BeispielOhnePlan,
 } from "@/application/features/beispiele/hooks";
 
 type Props = {
-  readonly beschreibungenDerBeispiele: BeschreibungFuerEinBeispiel[];
+  readonly beschreibungenDerBeispiele: BeispielOhnePlan[];
   readonly waehleBeispielAus: (beispiel: BeispielIdentifier) => void;
   readonly istBeispielAusgewaehlt: (beispiel: BeispielIdentifier) => boolean;
   readonly className?: string;

@@ -28,13 +28,10 @@ export function BeispielePage() {
   const ausgangslage = composeAusgangslageFuerPlaner(store.getState());
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
-  const {
-    beschreibungenDerBeispiele,
-    waehleBeispielAus,
-    istBeispielAusgewaehlt,
-  } = useBeispieleService(ausgangslage, setPlan, {
-    onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
-  });
+  const { beispieleOhnePlan, waehleBeispielAus, istBeispielAusgewaehlt } =
+    useBeispieleService(ausgangslage, setPlan, {
+      onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
+    });
 
   return (
     <Page step={formSteps.beispiele}>
@@ -44,7 +41,7 @@ export function BeispielePage() {
         <div>
           <BeispielAuswahl
             className="mx-[-15px] sm:mx-0"
-            beschreibungenDerBeispiele={beschreibungenDerBeispiele}
+            beispiele={beispieleOhnePlan}
             waehleBeispielAus={waehleBeispielAus}
             istBeispielAusgewaehlt={istBeispielAusgewaehlt}
           />

@@ -24,23 +24,18 @@ describe("Beispiel Auswahl", () => {
   });
 
   it("shows a section with Titel and Beschreibung for each Beispiel", () => {
-    const beschreibungenDerBeispiele = [
-      beschreibungFuerEinBeispiel({
+    const beispiele = [
+      createBeispiel({
         titel: "Erster Titel",
         beschreibung: "Erste Beschreibung",
       }),
-      beschreibungFuerEinBeispiel({
+      createBeispiel({
         titel: "Zweiter Titel",
         beschreibung: "Zweite Beschreibung",
       }),
     ];
 
-    render(
-      <BeispielAuswahl
-        {...ANY_PROPS}
-        beschreibungenDerBeispiele={beschreibungenDerBeispiele}
-      />,
-    );
+    render(<BeispielAuswahl {...ANY_PROPS} beispiele={beispiele} />);
 
     // TODO: Fix usage of proper regions instead if plain text.
     expect(screen.getAllByText("Erster Titel").at(0)).toBeVisible();
@@ -50,17 +45,12 @@ describe("Beispiel Auswahl", () => {
   });
 
   it("shows a button for each Beispiel to select it", () => {
-    const beschreibungenDerBeispiele = [
-      beschreibungFuerEinBeispiel({ titel: "Erster Titel" }),
-      beschreibungFuerEinBeispiel({ titel: "Zweiter Titel" }),
+    const beispiele = [
+      createBeispiel({ titel: "Erster Titel" }),
+      createBeispiel({ titel: "Zweiter Titel" }),
     ];
 
-    render(
-      <BeispielAuswahl
-        {...ANY_PROPS}
-        beschreibungenDerBeispiele={beschreibungenDerBeispiele}
-      />,
-    );
+    render(<BeispielAuswahl {...ANY_PROPS} beispiele={beispiele} />);
 
     expect(
       screen
@@ -84,12 +74,12 @@ describe("Beispiel Auswahl", () => {
 
 it("calls the given callback with the identifier of the Beispiel when the button is clicked", async () => {
   const waehleBeispielAus = vi.fn();
-  const beschreibungenDerBeispiele = [
-    beschreibungFuerEinBeispiel({
+  const beispiele = [
+    createBeispiel({
       identifier: "erster-identifier",
       titel: "Erster Titel",
     }),
-    beschreibungFuerEinBeispiel({
+    createBeispiel({
       identifier: "zweiter-identifier",
       titel: "Zweiter Titel",
     }),
@@ -98,7 +88,7 @@ it("calls the given callback with the identifier of the Beispiel when the button
   render(
     <BeispielAuswahl
       {...ANY_PROPS}
-      beschreibungenDerBeispiele={beschreibungenDerBeispiele}
+      beispiele={beispiele}
       waehleBeispielAus={waehleBeispielAus}
     />,
   );
@@ -118,15 +108,15 @@ it("calls the given callback with the identifier of the Beispiel when the button
 
 it("uses the given callback to determine if a Beispiel is selected or not", () => {
   const istBeispielAusgewaehlt = vi.fn().mockReturnValue(false);
-  const beschreibungenDerBeispiele = [
-    beschreibungFuerEinBeispiel({ identifier: "erster-identifier" }),
-    beschreibungFuerEinBeispiel({ identifier: "zweiter-identifier" }),
+  const beispiele = [
+    createBeispiel({ identifier: "erster-identifier" }),
+    createBeispiel({ identifier: "zweiter-identifier" }),
   ];
 
   render(
     <BeispielAuswahl
       {...ANY_PROPS}
-      beschreibungenDerBeispiele={beschreibungenDerBeispiele}
+      beispiele={beispiele}
       istBeispielAusgewaehlt={istBeispielAusgewaehlt}
     />,
   );
@@ -141,12 +131,12 @@ it("marks the button of a Beispiel that is selected", () => {
     (identifier) => identifier === "zweiter-identifier",
   );
 
-  const beschreibungenDerBeispiele = [
-    beschreibungFuerEinBeispiel({
+  const beispiele = [
+    createBeispiel({
       identifier: "erster-identifier",
       titel: "Erster Titel",
     }),
-    beschreibungFuerEinBeispiel({
+    createBeispiel({
       identifier: "zweiter-identifier",
       titel: "Zweiter Titel",
     }),
@@ -155,7 +145,7 @@ it("marks the button of a Beispiel that is selected", () => {
   render(
     <BeispielAuswahl
       {...ANY_PROPS}
-      beschreibungenDerBeispiele={beschreibungenDerBeispiele}
+      beispiele={beispiele}
       istBeispielAusgewaehlt={istBeispielAusgewaehlt}
     />,
   );
@@ -180,7 +170,7 @@ it("marks the button of a Beispiel that is selected", () => {
   expect(buttonFuerZweitesBeispiel).toHaveAttribute("aria-disabled", "true");
 });
 
-function beschreibungFuerEinBeispiel(
+function createBeispiel(
   beschreibung: Partial<BeispielOhnePlan>,
 ): BeispielOhnePlan {
   return {
@@ -192,7 +182,7 @@ function beschreibungFuerEinBeispiel(
 }
 
 const ANY_PROPS = {
-  beschreibungenDerBeispiele: [],
+  beispiele: [],
   waehleBeispielAus: () => {},
   istBeispielAusgewaehlt: () => false,
 };

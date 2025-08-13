@@ -1,6 +1,6 @@
 fileignoreconfig:
-- filename: .github/workflows/smoke-test-release.yml
-  checksum: b86f399b5ab8f7f76fd2cd36df483df8b70c5fdab44544f120fc88dd3ca0f7b3
+- filename: src/application/features/beispiele/component/BeispielAuswahl.tsx
+  checksum: 7b547c7d617e299486ddfec456fc82e5f954f06385982127fffc9d8c0b2d2645
 scopeconfig:
 - scope: node
 version: "1.0"

@@ -317,7 +317,7 @@ export type BeispielIdentifier = string; // Just for communication purposes yet.
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("erstelle Beispiele", async () => {
+  describe("erstelleBeispiele", async () => {
     const {
       validierePlanFuerFinaleAbgabe,
       teileLebensmonateBeiElternteileAuf,
@@ -339,142 +339,140 @@ if (import.meta.vitest) {
       record: arbitraryRecord,
     } = await import("fast-check");
 
-    describe("erstelleBeispiele", () => {
-      it("always creates a correct Plan for each Beispiel", () => {
-        assert(
-          property(arbritraryAusgangslagen, (ausgangslagen) => {
-            ausgangslagen.forEach((ausgangslage) => {
-              const beispiele = erstelleBeispiele(ausgangslage);
+    it("always creates a correct Plan for each Beispiel", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          ausgangslagen.forEach((ausgangslage) => {
+            const beispiele = erstelleBeispiele(ausgangslage);
 
-              beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
+            beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
+          });
+        }),
+      );
+    });
+
+    // We intentionally do not add Bonus in the Beispiele in
+    // order to generate Plans which are valid right away without
+    // adding an Einkommen.
+    it("always creates a Plan without Partnerschaftsbonus", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          ausgangslagen.forEach((ausgangslage) => {
+            const beispiele = erstelleBeispiele(ausgangslage);
+
+            beispiele.forEach(({ plan }) =>
+              expactPlanWithoutPartnerschaftsbonus(plan),
+            );
+          });
+        }),
+      );
+    });
+
+    it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          ausgangslagen.forEach((ausgangslage) => {
+            const beispiele = erstelleBeispiele(ausgangslage);
+
+            beispiele.forEach(({ plan }) => {
+              expectPlanExhaustsKontingent(plan);
             });
-          }),
-        );
-      });
+          });
+        }),
+      );
+    });
 
-      // We intentionally do not add Bonus in the Beispiele in
-      // order to generate Plans which are valid right away without
-      // adding an Einkommen.
-      it("always creates a Plan without Partnerschaftsbonus", () => {
-        assert(
-          property(arbritraryAusgangslagen, (ausgangslagen) => {
-            ausgangslagen.forEach((ausgangslage) => {
-              const beispiele = erstelleBeispiele(ausgangslage);
+    it("generates unique identifiers", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          ausgangslagen.forEach((ausgangslage) => {
+            const beispiele = erstelleBeispiele(ausgangslage);
 
-              beispiele.forEach(({ plan }) =>
-                expactPlanWithoutPartnerschaftsbonus(plan),
+            const identifiers = beispiele.map((it) => it.identifier);
+
+            const uniqueIdentifiers = identifiers.filter((item, index) => {
+              return identifiers.indexOf(item) === index;
+            });
+
+            expect(identifiers.length).toEqual(uniqueIdentifiers.length);
+          });
+        }),
+      );
+    });
+
+    it("generated no empty descriptions", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          ausgangslagen.forEach((ausgangslage) => {
+            const beispiele = erstelleBeispiele(ausgangslage);
+
+            expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
+          });
+        }),
+      );
+    });
+
+    it("generates no empty titles", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          ausgangslagen.forEach((ausgangslage) => {
+            const beispiele = erstelleBeispiele(ausgangslage);
+
+            expect(beispiele.map((it) => it.titel)).not.toContain("");
+          });
+        }),
+      );
+    });
+
+    /**
+     * To produce a somehow readable test case without plenty of utility
+     * function for clean code, this test make heavily use (and overloads it)
+     * of the terms "left" and "right". Left stands for everything related to
+     * the mother being the first Elternteil (commonly displayed left). Right
+     * means the "mirrored" version where the mother is the second Elternteil.
+     * Type (inlay) hints should do the rest to help follow the test case.
+     */
+    it("mirrors the Plan based on who is is in Mutterschutz", () => {
+      assert(
+        property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
+          const left = erstelleBeispiele({
+            ...ausgangslage,
+            informationenZumMutterschutz: {
+              empfaenger: Elternteil.Eins,
+              letzterLebensmonatMitSchutz: 2,
+            },
+          });
+
+          const right = erstelleBeispiele({
+            ...ausgangslage,
+            informationenZumMutterschutz: {
+              empfaenger: Elternteil.Zwei,
+              letzterLebensmonatMitSchutz: 2,
+            },
+          });
+
+          left
+            .map<
+              [
+                Beispiel<AusgangslageFuerZweiElternteile>,
+                Beispiel<AusgangslageFuerZweiElternteile>,
+              ]
+            >((beispiel, index) => [beispiel, right[index]!]) // zip pairs of left and right examples
+            .map(([left, right]) => [
+              teileLebensmonateBeiElternteileAuf(left.plan),
+              teileLebensmonateBeiElternteileAuf(right.plan),
+            ])
+            .every(([left, right]) => {
+              expect(left?.[Elternteil.Eins]).toStrictEqual(
+                right?.[Elternteil.Zwei],
+              );
+
+              expect(left?.[Elternteil.Zwei]).toStrictEqual(
+                right?.[Elternteil.Eins],
               );
             });
-          }),
-        );
-      });
-
-      it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
-        assert(
-          property(arbritraryAusgangslagen, (ausgangslagen) => {
-            ausgangslagen.forEach((ausgangslage) => {
-              const beispiele = erstelleBeispiele(ausgangslage);
-
-              beispiele.forEach(({ plan }) => {
-                expectPlanExhaustsKontingent(plan);
-              });
-            });
-          }),
-        );
-      });
-
-      it("generates unique identifiers", () => {
-        assert(
-          property(arbritraryAusgangslagen, (ausgangslagen) => {
-            ausgangslagen.forEach((ausgangslage) => {
-              const beispiele = erstelleBeispiele(ausgangslage);
-
-              const identifiers = beispiele.map((it) => it.identifier);
-
-              const uniqueIdentifiers = identifiers.filter((item, index) => {
-                return identifiers.indexOf(item) === index;
-              });
-
-              expect(identifiers.length).toEqual(uniqueIdentifiers.length);
-            });
-          }),
-        );
-      });
-
-      it("generated no empty descriptions", () => {
-        assert(
-          property(arbritraryAusgangslagen, (ausgangslagen) => {
-            ausgangslagen.forEach((ausgangslage) => {
-              const beispiele = erstelleBeispiele(ausgangslage);
-
-              expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
-            });
-          }),
-        );
-      });
-
-      it("generates no empty titles", () => {
-        assert(
-          property(arbritraryAusgangslagen, (ausgangslagen) => {
-            ausgangslagen.forEach((ausgangslage) => {
-              const beispiele = erstelleBeispiele(ausgangslage);
-
-              expect(beispiele.map((it) => it.titel)).not.toContain("");
-            });
-          }),
-        );
-      });
-
-      /**
-       * To produce a somehow readable test case without plenty of utility
-       * function for clean code, this test make heavily use (and overloads it)
-       * of the terms "left" and "right". Left stands for everything related to
-       * the mother being the first Elternteil (commonly displayed left). Right
-       * means the "mirrored" version where the mother is the second Elternteil.
-       * Type (inlay) hints should do the rest to help follow the test case.
-       */
-      it("mirrors the Plan based on who is is in Mutterschutz", () => {
-        assert(
-          property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-            const left = erstelleBeispiele({
-              ...ausgangslage,
-              informationenZumMutterschutz: {
-                empfaenger: Elternteil.Eins,
-                letzterLebensmonatMitSchutz: 2,
-              },
-            });
-
-            const right = erstelleBeispiele({
-              ...ausgangslage,
-              informationenZumMutterschutz: {
-                empfaenger: Elternteil.Zwei,
-                letzterLebensmonatMitSchutz: 2,
-              },
-            });
-
-            left
-              .map<
-                [
-                  Beispiel<AusgangslageFuerZweiElternteile>,
-                  Beispiel<AusgangslageFuerZweiElternteile>,
-                ]
-              >((beispiel, index) => [beispiel, right[index]!]) // zip pairs of left and right examples
-              .map(([left, right]) => [
-                teileLebensmonateBeiElternteileAuf(left.plan),
-                teileLebensmonateBeiElternteileAuf(right.plan),
-              ])
-              .every(([left, right]) => {
-                expect(left?.[Elternteil.Eins]).toStrictEqual(
-                  right?.[Elternteil.Zwei],
-                );
-
-                expect(left?.[Elternteil.Zwei]).toStrictEqual(
-                  right?.[Elternteil.Eins],
-                );
-              });
-          }),
-        );
-      });
+        }),
+      );
     });
 
     function expectPlanToBeCorrect(plan: Plan<Ausgangslage>): void {

@@ -16,8 +16,8 @@ export function useBeispieleService<A extends Ausgangslage>(
     [ausgangslage],
   );
 
-  const beschreibungenDerBeispiele = useMemo(
-    () => beispiele.map(({ plan: _, ...beschreibung }) => beschreibung),
+  const beispieleOhnePlan = useMemo(
+    () => beispiele.map(({ plan: _, ...rest }) => rest),
     [beispiele],
   );
 
@@ -53,7 +53,7 @@ export function useBeispieleService<A extends Ausgangslage>(
   );
 
   return {
-    beschreibungenDerBeispiele,
+    beispieleOhnePlan,
     waehleBeispielAus,
     istBeispielAusgewaehlt,
     setzeBeispielauswahlZurueck,
@@ -107,7 +107,7 @@ if (import.meta.vitest) {
           useBeispieleService(ANY_AUSGANGSLAGE, ANY_SETZE_PLAN),
         );
 
-        expect(result.current.beschreibungenDerBeispiele).toStrictEqual([
+        expect(result.current.beispieleOhnePlan).toStrictEqual([
           {
             identifier: "erster-identifier",
             titel: "Erster Titel",

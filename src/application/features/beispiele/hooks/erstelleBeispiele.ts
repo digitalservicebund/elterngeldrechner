@@ -41,12 +41,16 @@ function erstelleBeispieleFuerAlleinPlanende(
 
   return [
     {
-      identifier: "Allein planend - Ungeteilte Zeit fürs Kind",
-      titel: "Ungeteilte Zeit fürs Kind",
+      identifier: "Allein planend - Länger Elterngeld erhalten",
+      titel: "Länger Elterngeld erhalten",
       beschreibung:
-        "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
+        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 12 },
+        { lebensmonat: basis, anzahl: 2 },
+        {
+          lebensmonat: plus,
+          anzahl: 20 - Math.max(anzahlMonateMitMutterschutz - 2, 0) * 2,
+        },
       ]),
     },
     {
@@ -60,16 +64,12 @@ function erstelleBeispieleFuerAlleinPlanende(
       ]),
     },
     {
-      identifier: "Allein planend - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld erhalten",
+      identifier: "Allein planend - Ein Jahr Elterngeld",
+      titel: "Ein Jahr Elterngeld",
       beschreibung:
-        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
+        "Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 2 },
-        {
-          lebensmonat: plus,
-          anzahl: 20 - Math.max(anzahlMonateMitMutterschutz - 2, 0) * 2,
-        },
+        { lebensmonat: basis, anzahl: 12 },
       ]),
     },
   ];
@@ -86,12 +86,13 @@ function erstelleBeispieleFuerAlleinerziehende(
 
   return [
     {
-      identifier: "Alleinerziehend - Ungeteilte Zeit fürs Kind",
-      titel: "Ungeteilte Zeit fürs Kind",
+      identifier: "Alleinerziehend - Länger Elterngeld erhalten",
+      titel: "Länger Elterngeld erhalten",
       beschreibung:
-        "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
+        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 },
+        { lebensmonat: basis, anzahl: 8 },
+        { lebensmonat: plus, anzahl: sindPartnermonateVerfuegbar ? 12 : 8 },
       ]),
     },
     {
@@ -105,13 +106,12 @@ function erstelleBeispieleFuerAlleinerziehende(
       ]),
     },
     {
-      identifier: "Alleinerziehend - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld erhalten",
+      identifier: "Alleinerziehend - Ein Jahr Elterngeld",
+      titel: "Ein Jahr Elterngeld",
       beschreibung:
-        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
+        "Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 8 },
-        { lebensmonat: plus, anzahl: sindPartnermonateVerfuegbar ? 12 : 8 },
+        { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 },
       ]),
     },
   ];

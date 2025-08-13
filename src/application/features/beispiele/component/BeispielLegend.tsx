@@ -1,38 +1,25 @@
-import CloseIcon from "@digitalservicebund/icons/Close";
 import type { ReactNode } from "react";
+import {
+  BeispielVariante,
+  BeispielVariantenplakette,
+} from "./BeispielVariantenplakette";
+import { Variante } from "@/monatsplaner";
 
 export function BeispielLegend(): ReactNode {
+  const varianten: BeispielVariante[] = [
+    Variante.Basis,
+    Variante.Plus,
+    "Kein Elterngeld",
+  ];
+
   return (
     <ul className="flex gap-20">
-      <li className="flex items-center gap-10">
-        <span
-          className="flex h-[32px] w-[64px] items-center justify-center bg-Basis text-white"
-          aria-hidden="true"
-        >
-          B
-        </span>
-        <strong>Basiselterngeld</strong>
-      </li>
-
-      <li className="flex items-center gap-10">
-        <span
-          className="flex h-[32px] w-[64px] items-center justify-center bg-Plus"
-          aria-hidden="true"
-        >
-          P
-        </span>
-        <strong>ElterngeldPlus</strong>
-      </li>
-
-      <li className="flex items-center gap-10">
-        <span
-          className="flex h-[32px] w-[64px] items-center justify-center border border-solid border-grey"
-          aria-hidden="true"
-        >
-          <CloseIcon aria-hidden="true" focusable="false" />
-        </span>
-        <strong>Kein Elterngeld</strong>
-      </li>
+      {varianten.map((variante, i) => (
+        <li key={variante + i} className="flex items-center gap-10">
+          <BeispielVariantenplakette variante={variante} />
+          <strong>{variante}</strong>
+        </li>
+      ))}
     </ul>
   );
 }

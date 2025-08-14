@@ -11,7 +11,7 @@ export function BeispielLegend(): ReactNode {
   ];
 
   return (
-    <ul className="flex gap-20">
+    <ul className="flex flex-wrap gap-20">
       {varianten.map((variante, i) => (
         <li key={variante + i} className="flex items-center gap-10">
           <BeispielVariantenplakette

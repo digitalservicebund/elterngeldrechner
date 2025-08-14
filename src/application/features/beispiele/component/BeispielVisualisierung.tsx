@@ -1,7 +1,6 @@
-import CloseIcon from "@digitalservicebund/icons/Close";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
-import classNames from "classnames";
 import type { ReactNode } from "react";
+import { BeispielVariantenplakette } from "./BeispielVariantenplakette";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import {
   BeispielVariante,
@@ -28,25 +27,6 @@ type Props = {
 function renderDistribution(
   distribution: Partial<Record<BeispielVariante, number>>,
 ) {
-  type VariantenConfiguration = { classnames: string; content: ReactNode };
-
-  const variantenConfig: Record<BeispielVariante, VariantenConfiguration> = {
-    Basiselterngeld: {
-      classnames: "bg-Basis text-white",
-      content: <p style={{ fontSize: "14px" }}>B</p>,
-    },
-    ElterngeldPlus: {
-      classnames: "bg-Plus",
-      content: <p style={{ fontSize: "14px" }}>P</p>,
-    },
-    [KeinElterngeld]: {
-      classnames: "bg-gray-400 border-solid border-2 border-grey",
-      content: <CloseIcon fontSize={14} />,
-    },
-  };
-
-  const classnames = "flex items-center justify-center text-sm font-bold";
-
   const records = getRecordEntriesWithStringKeys(
     distribution,
     isBeispielVariante,
@@ -55,13 +35,12 @@ function renderDistribution(
   return (
     <div className="flex h-[24px]">
       {records.map(([key, count]) => (
-        <div
+        <BeispielVariantenplakette
           key={key}
-          className={classNames(classnames, variantenConfig[key].classnames)}
-          style={{ flexGrow: count, flexBasis: 0 }}
-        >
-          {variantenConfig[key].content}
-        </div>
+          variante={key}
+          className="text-sm flex items-center justify-center font-bold"
+          style={{ flexGrow: count, flexBasis: 0, fontSize: 14 }}
+        />
       ))}
     </div>
   );
@@ -121,14 +100,14 @@ export function BeispielVisualisierung({ beispiel }: Props): ReactNode {
 
     return (
       <div>
-        <p>
+        <p className="pb-4">
           <PersonIcon className="mr-4" />
           {nameLeft} {sumLeft} Monate
         </p>
 
         <div>{renderDistribution(distributionLeft)}</div>
 
-        <p>
+        <p className="pb-4 pt-16">
           <PersonIcon className="mr-4" />
           {nameRight} {sumRight} Monate
         </p>

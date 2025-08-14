@@ -14,7 +14,10 @@ export function BeispielLegend(): ReactNode {
     <ul className="flex gap-20">
       {varianten.map((variante, i) => (
         <li key={variante + i} className="flex items-center gap-10">
-          <BeispielVariantenplakette variante={variante} />
+          <BeispielVariantenplakette
+            variante={variante}
+            className="h-[32px] w-[64px]"
+          />
           <strong>{variante}</strong>
         </li>
       ))}

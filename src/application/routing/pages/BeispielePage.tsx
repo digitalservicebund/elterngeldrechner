@@ -5,8 +5,8 @@ import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./RechnerUndPlanerPa
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
-import { BeispielAuswahl } from "@/application/features/beispiele/component/BeispielAuswahl";
 import { BeispielLegend } from "@/application/features/beispiele/component/BeispielLegend";
+import { BeispielVisualisierung } from "@/application/features/beispiele/component/BeispielVisualisierung";
 import { useBeispieleService } from "@/application/features/beispiele/hooks";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
@@ -28,24 +28,21 @@ export function BeispielePage() {
   const ausgangslage = composeAusgangslageFuerPlaner(store.getState());
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
-  const { beispieleOhnePlan, waehleBeispielAus, istBeispielAusgewaehlt } =
-    useBeispieleService(ausgangslage, setPlan, {
-      onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
-    });
+  const { beispiele } = useBeispieleService(ausgangslage, setPlan, {
+    onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
+  });
 
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-56">
         <BeispielLegend />
 
-        <div>
-          <BeispielAuswahl
-            className="mx-[-15px] sm:mx-0"
-            beispiele={beispieleOhnePlan}
-            waehleBeispielAus={waehleBeispielAus}
-            istBeispielAusgewaehlt={istBeispielAusgewaehlt}
+        {beispiele.map((beispiel) => (
+          <BeispielVisualisierung
+            key={beispiel.identifier}
+            beispiel={beispiel}
           />
-        </div>
+        ))}
 
         <div className="flex gap-16">
           <Button

@@ -1,15 +1,13 @@
 import type { ReactNode } from "react";
-import {
-  BeispielVariante,
-  BeispielVariantenplakette,
-} from "./BeispielVariantenplakette";
-import { Variante } from "@/monatsplaner";
+import { BeispielVariantenplakette } from "./BeispielVariantenplakette";
+import { BeispielVariante } from "@/application/features/beispiele/types";
+import { KeinElterngeld, Variante } from "@/monatsplaner";
 
 export function BeispielLegend(): ReactNode {
   const varianten: BeispielVariante[] = [
     Variante.Basis,
     Variante.Plus,
-    "Kein Elterngeld",
+    KeinElterngeld,
   ];
 
   return (

@@ -68,8 +68,8 @@ export const bundeslaender = [
   },
   {
     name: "Sachsen-Anhalt",
-    isSupported: false,
-    link: "https://lvwa.sachsen-anhalt.de/das-lvwa/landesjugendamt/familien-und-frauen/elterngeld-und-elternzeit",
+    isSupported: true,
+    link: "https://lvwa.sachsen-anhalt.de/das-lvwa/landesjugendamt/familien-und-frauen/elterngeld-und-elternzeit/antragsformulare",
   },
   {
     name: "Schleswig-Holstein",

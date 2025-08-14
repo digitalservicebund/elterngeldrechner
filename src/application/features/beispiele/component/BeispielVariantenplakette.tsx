@@ -1,41 +1,56 @@
 import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { BeispielVariante } from "@/application/features/beispiele/types";
 import { KeinElterngeld, Variante } from "@/monatsplaner";
 
 type Props = {
   readonly variante: BeispielVariante;
+  readonly style?: CSSProperties;
   readonly className?: string;
 };
 
-export function BeispielVariantenplakette({ variante }: Props): ReactNode {
-  const baseClasses = "flex items-center justify-center h-[32px] w-[64px]";
+export function BeispielVariantenplakette({
+  variante,
+  style,
+  className,
+}: Props): ReactNode {
+  const baseClasses = "flex items-center justify-center";
 
   switch (variante) {
     case KeinElterngeld:
       return (
-        <span
-          className={classNames(baseClasses, "border border-solid border-grey")}
+        <div
+          className={classNames(
+            baseClasses,
+            className,
+            "border border-solid border-grey",
+          )}
           aria-hidden="true"
+          style={style}
         >
           <CloseIcon aria-hidden="true" focusable="false" />
-        </span>
+        </div>
       );
     case Variante.Basis:
       return (
-        <span
-          className={classNames(baseClasses, "bg-Basis text-white")}
+        <div
+          className={classNames(baseClasses, className, "bg-Basis text-white")}
           aria-hidden="true"
+          style={style}
         >
           B
-        </span>
+        </div>
       );
     case Variante.Plus:
       return (
-        <span className={classNames(baseClasses, "bg-Plus")} aria-hidden="true">
+        <div
+          className={classNames(baseClasses, className, "bg-Plus")}
+          aria-hidden="true"
+          style={style}
+        >
           P
-        </span>
+        </div>
       );
   }
 }

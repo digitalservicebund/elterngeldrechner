@@ -1,8 +1,7 @@
 fileignoreconfig:
 - filename: src/application/routing/pages/BeispielePage.tsx
-  checksum: 11d4ac5654bf14844ce3ae7c977bb363e5233d766cd23737637ce4a9b80d1170
-- filename: src/application/features/beispiele/component/BeispielVisualisierung.tsx
-  checksum: a5a0617b7ae8ecbcd1c7ba8e3ea906c96f2af7a097dffdc180ff7d6ffc77998e
+  checksum: 7362309af0d734a216e82e13dc74520e38cb8a40ae85149fa4ba5b6f39cd9687
+version: "1.0"
 scopeconfig:
 - scope: node
 version: "1.0"

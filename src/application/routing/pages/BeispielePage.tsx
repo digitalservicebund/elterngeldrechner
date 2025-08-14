@@ -5,8 +5,8 @@ import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./RechnerUndPlanerPa
 import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
+import { BeispielAuswahlbox } from "@/application/features/beispiele/component/BeispielAuswahlbox";
 import { BeispielLegend } from "@/application/features/beispiele/component/BeispielLegend";
-import { BeispielVisualisierung } from "@/application/features/beispiele/component/BeispielVisualisierung";
 import { useBeispieleService } from "@/application/features/beispiele/hooks";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
@@ -37,12 +37,11 @@ export function BeispielePage() {
       <div className="flex flex-col gap-56">
         <BeispielLegend />
 
-        {beispiele.map((beispiel) => (
-          <BeispielVisualisierung
-            key={beispiel.identifier}
-            beispiel={beispiel}
-          />
-        ))}
+        <div className="flex flex-wrap gap-26">
+          {beispiele.map((beispiel) => (
+            <BeispielAuswahlbox key={beispiel.identifier} beispiel={beispiel} />
+          ))}
+        </div>
 
         <div className="flex gap-16">
           <Button

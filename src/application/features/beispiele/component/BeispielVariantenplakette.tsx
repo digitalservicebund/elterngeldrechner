@@ -24,7 +24,7 @@ export function BeispielVariantenplakette({
           className={classNames(
             baseClasses,
             className,
-            "border border-solid border-grey",
+            "bg-white border border-solid border-grey",
           )}
           aria-hidden="true"
           style={style}

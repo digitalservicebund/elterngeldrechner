@@ -22,6 +22,7 @@ import { getRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-
 
 type Props = {
   readonly beispiel: Beispiel<Ausgangslage>;
+  readonly className?: string;
 };
 
 function renderDistribution(
@@ -74,7 +75,10 @@ function calculateDistributionSum(
   );
 }
 
-export function BeispielVisualisierung({ beispiel }: Props): ReactNode {
+export function BeispielVisualisierung({
+  beispiel,
+  className,
+}: Props): ReactNode {
   const lebensmonate = listeLebensmonateAuf(beispiel.plan.lebensmonate);
   if (beispiel.plan.ausgangslage.anzahlElternteile == 1) {
     const distribution = calculateDistribution(lebensmonate, Elternteil.Eins);
@@ -99,7 +103,7 @@ export function BeispielVisualisierung({ beispiel }: Props): ReactNode {
     const sumRight = calculateDistributionSum(distributionRight);
 
     return (
-      <div>
+      <div className={className}>
         <p className="pb-4">
           <PersonIcon className="mr-4" />
           {nameLeft} {sumLeft} Monate

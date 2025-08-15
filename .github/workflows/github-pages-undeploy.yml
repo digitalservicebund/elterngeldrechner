@@ -1,0 +1,44 @@
+name: Undeploy from GitHub Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: relative URL path where assets are stored (e.g. '/feature/fancy-stuff')
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  undeploy:
+    runs-on: ubuntu-24.04
+    env:
+      GIT_REMOTE_AUTHENTICATED_URL: https://${{ github.token }}@github.com/${{ github.repository }}
+      GITHUB_PAGES_BRANCH_NAME: gh-pages
+      PAGE_PATH: ./${{ inputs.path }}
+      GIT_CONFIG_USER_NAME: ${{ github.actor }}
+      GIT_CONFIG_USER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+      GIT_COMMIT_MESSAGE: "Automated undeployment from GitHub Pages (${{ inputs.path }})"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.GITHUB_PAGES_BRANCH_NAME }}
+
+      - name: Remove deployed path
+        run: |
+          set -ex
+          rm -rf "$PAGE_PATH"
+
+      - name: Commit and push removal
+        run: |
+          set -ex
+          git config user.name "$GIT_CONFIG_USER_NAME"
+          git config user.email "$GIT_CONFIG_USER_EMAIL"
+          git remote set-url --push origin "$GIT_REMOTE_AUTHENTICATED_URL"
+          git add -A
+          git diff-index --cached --quiet HEAD || \
+            git commit -m "$GIT_COMMIT_MESSAGE"
+          git push origin $GITHUB_PAGES_BRANCH_NAME

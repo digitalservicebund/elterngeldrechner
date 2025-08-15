@@ -1,6 +1,7 @@
+import AccessTime from "@digitalservicebund/icons/AccessTime";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
-import { BeispielVariantenplakette } from "./BeispielVariantenplakette";
+import { BeispielMonatsverteilung } from "./BeispielMonatsverteilung";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import {
   BeispielVariante,
@@ -16,36 +17,14 @@ import {
   Lebensmonat,
   Lebensmonate,
   Variante,
+  listeElternteileFuerAusgangslageAuf,
   listeLebensmonateAuf,
 } from "@/monatsplaner";
-import { getRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-records";
 
 type Props = {
   readonly beispiel: Beispiel<Ausgangslage>;
   readonly className?: string;
 };
-
-function renderDistribution(
-  distribution: Partial<Record<BeispielVariante, number>>,
-) {
-  const records = getRecordEntriesWithStringKeys(
-    distribution,
-    isBeispielVariante,
-  );
-
-  return (
-    <div className="flex h-[24px]">
-      {records.map(([key, count]) => (
-        <BeispielVariantenplakette
-          key={key}
-          variante={key}
-          className="text-sm flex items-center justify-center font-bold"
-          style={{ flexGrow: count, flexBasis: 0, fontSize: 14 }}
-        />
-      ))}
-    </div>
-  );
-}
 
 function keineAuswahlAlsKeinElterngeld(
   option: Variante | typeof KeinElterngeld | undefined,
@@ -53,7 +32,7 @@ function keineAuswahlAlsKeinElterngeld(
   return option === undefined ? KeinElterngeld : option;
 }
 
-function calculateDistribution<E extends Elternteil>(
+function errechneMonatsverteilung<E extends Elternteil>(
   lebensmonate: [Lebensmonatszahl, Lebensmonat<E>][],
   elternteil: E,
 ) {
@@ -67,7 +46,7 @@ function calculateDistribution<E extends Elternteil>(
     );
 }
 
-function calculateDistributionSum(
+function summiereMonatsverteilung(
   distribution: Partial<Record<BeispielVariante, number>>,
 ) {
   return (
@@ -79,47 +58,42 @@ export function BeispielVisualisierung({
   beispiel,
   className,
 }: Props): ReactNode {
-  const lebensmonate = listeLebensmonateAuf(beispiel.plan.lebensmonate);
-  if (beispiel.plan.ausgangslage.anzahlElternteile == 1) {
-    const distribution = calculateDistribution(lebensmonate, Elternteil.Eins);
+  const ausgangslage = beispiel.plan.ausgangslage;
 
-    return <div>{renderDistribution(distribution)}</div>;
-  } else {
-    const ausgangslage = beispiel.plan.ausgangslage;
+  const balken = listeElternteileFuerAusgangslageAuf(ausgangslage).map(
+    (elternteil) => {
+      const lebensmonate = listeLebensmonateAuf(beispiel.plan.lebensmonate);
+      const monatsverteilung = errechneMonatsverteilung(
+        lebensmonate,
+        elternteil,
+      );
 
-    const distributionLeft = calculateDistribution(
-      lebensmonate,
-      Elternteil.Eins,
-    );
-    const distributionRight = calculateDistribution(
-      lebensmonate,
-      Elternteil.Zwei,
-    );
+      const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
+      const summeGeplanteMonate = summiereMonatsverteilung(monatsverteilung);
 
-    const nameLeft = ausgangslage.pseudonymeDerElternteile[Elternteil.Eins];
-    const nameRight = ausgangslage.pseudonymeDerElternteile[Elternteil.Zwei];
+      const isEinElternteil = !pseudonym;
 
-    const sumLeft = calculateDistributionSum(distributionLeft);
-    const sumRight = calculateDistributionSum(distributionRight);
+      return (
+        <div key={elternteil}>
+          <p className="pb-4 pt-16">
+            {isEinElternteil ? (
+              <AccessTime className="mr-4" />
+            ) : (
+              <PersonIcon className="mr-4" />
+            )}
+            <span className="mr-4">
+              {isEinElternteil ? "Summe" : pseudonym}
+            </span>
+            {summeGeplanteMonate} Monate
+          </p>
 
-    return (
-      <div className={className}>
-        <p className="pb-4">
-          <PersonIcon className="mr-4" />
-          {nameLeft} {sumLeft} Monate
-        </p>
+          <BeispielMonatsverteilung monatsverteilung={monatsverteilung} />
+        </div>
+      );
+    },
+  );
 
-        <div>{renderDistribution(distributionLeft)}</div>
-
-        <p className="pb-4 pt-16">
-          <PersonIcon className="mr-4" />
-          {nameRight} {sumRight} Monate
-        </p>
-
-        <div>{renderDistribution(distributionRight)}</div>
-      </div>
-    );
-  }
+  return <div className={className}>{balken}</div>;
 }
 
 if (import.meta.vitest) {
@@ -129,15 +103,15 @@ if (import.meta.vitest) {
     ElternteileByAusgangslage<AusgangslageFuerEinElternteil>
   >;
 
-  describe("calculateDistributionSum", () => {
+  describe("summiereMonatsverteilung", () => {
     it("calculates correctly even with missing variants", () => {
       const distribution: Partial<Record<BeispielVariante, number>> = {
         [Variante.Basis]: 5,
       };
 
-      const distributionSum = calculateDistributionSum(distribution);
+      const summeGeplanteMonate = summiereMonatsverteilung(distribution);
 
-      expect(distributionSum).toEqual(5);
+      expect(summeGeplanteMonate).toEqual(5);
     });
   });
 
@@ -152,12 +126,12 @@ if (import.meta.vitest) {
         },
       };
 
-      const distribution = calculateDistribution(
+      const monatsverteilung = errechneMonatsverteilung(
         listeLebensmonateAuf(lebensmonate),
         Elternteil.Eins,
       );
 
-      expect(distribution).toEqual({ "kein Elterngeld": 1 });
+      expect(monatsverteilung).toEqual({ "kein Elterngeld": 1 });
     });
 
     // The Beispiele never contains Bonus months in order to
@@ -179,12 +153,12 @@ if (import.meta.vitest) {
         },
       };
 
-      const distribution = calculateDistribution(
+      const monatsverteilung = errechneMonatsverteilung(
         listeLebensmonateAuf(lebensmonate),
         Elternteil.Eins,
       );
 
-      expect(distribution).toEqual({ Basiselterngeld: 1 });
+      expect(monatsverteilung).toEqual({ Basiselterngeld: 1 });
     });
 
     it("counts distribution per option", () => {
@@ -222,12 +196,15 @@ if (import.meta.vitest) {
         },
       };
 
-      const distribution = calculateDistribution(
+      const monatsverteilung = errechneMonatsverteilung(
         listeLebensmonateAuf(lebensmonate),
         Elternteil.Eins,
       );
 
-      expect(distribution).toEqual({ Basiselterngeld: 2, ElterngeldPlus: 3 });
+      expect(monatsverteilung).toEqual({
+        Basiselterngeld: 2,
+        ElterngeldPlus: 3,
+      });
     });
   });
 }

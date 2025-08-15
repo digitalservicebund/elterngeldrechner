@@ -1,26 +1,23 @@
-import { BeispielVariantenplakette } from "./BeispielVariantenplakette";
-import {
-  type BeispielVariante,
-  isBeispielVariante,
-} from "@/application/features/beispiele/types";
+import { BeispielAuswahloptionPlakette } from "./BeispielAuswahloptionPlakette";
+import { Auswahloption, isAuswahloption } from "@/monatsplaner/Auswahloption";
 import { getRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-records";
 
 type Props = {
-  readonly monatsverteilung: Partial<Record<BeispielVariante, number>>;
+  readonly monatsverteilung: Partial<Record<Auswahloption, number>>;
 };
 
 export function BeispielMonatsverteilung({ monatsverteilung }: Props) {
-  const records = getRecordEntriesWithStringKeys(
+  const listeMonatsverteilung = getRecordEntriesWithStringKeys(
     monatsverteilung,
-    isBeispielVariante,
+    isAuswahloption,
   );
 
   return (
     <div className="flex h-[24px]">
-      {records.map(([key, count]) => (
-        <BeispielVariantenplakette
+      {listeMonatsverteilung.map(([key, count]) => (
+        <BeispielAuswahloptionPlakette
           key={key}
-          variante={key}
+          auswahloption={key}
           className="text-sm flex items-center justify-center font-bold"
           style={{ flexGrow: count, flexBasis: 0, fontSize: 14 }}
         />

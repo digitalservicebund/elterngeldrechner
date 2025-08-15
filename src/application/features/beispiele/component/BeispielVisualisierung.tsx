@@ -3,14 +3,11 @@ import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
 import { BeispielMonatsverteilung } from "./BeispielMonatsverteilung";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
-import {
-  BeispielVariante,
-  isBeispielVariante,
-} from "@/application/features/beispiele/types";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
 import {
   Ausgangslage,
   AusgangslageFuerEinElternteil,
+  Auswahloption,
   Elternteil,
   ElternteileByAusgangslage,
   KeinElterngeld,
@@ -20,17 +17,13 @@ import {
   listeElternteileFuerAusgangslageAuf,
   listeLebensmonateAuf,
 } from "@/monatsplaner";
+import { isAuswahloption } from "@/monatsplaner/Auswahloption";
+import { getRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-records";
 
 type Props = {
   readonly beispiel: Beispiel<Ausgangslage>;
   readonly className?: string;
 };
-
-function keineAuswahlAlsKeinElterngeld(
-  option: Variante | typeof KeinElterngeld | undefined,
-): Variante | typeof KeinElterngeld {
-  return option === undefined ? KeinElterngeld : option;
-}
 
 function errechneMonatsverteilung<E extends Elternteil>(
   lebensmonate: [Lebensmonatszahl, Lebensmonat<E>][],
@@ -38,20 +31,20 @@ function errechneMonatsverteilung<E extends Elternteil>(
 ) {
   return lebensmonate
     .map(([_, lebensmonat]) => lebensmonat[elternteil].gewaehlteOption)
-    .map((option) => keineAuswahlAlsKeinElterngeld(option))
-    .filter((option) => isBeispielVariante(option))
+    .map((option) => (option === undefined ? KeinElterngeld : option))
     .reduce(
       (counts, key) => ((counts[key] = (counts[key] ?? 0) + 1), counts),
-      {} as Partial<Record<BeispielVariante, number>>,
+      {} as Partial<Record<Auswahloption, number>>,
     );
 }
 
 function summiereMonatsverteilung(
-  distribution: Partial<Record<BeispielVariante, number>>,
+  monatsverteilung: Partial<Record<Auswahloption, number>>,
 ) {
-  return (
-    (distribution.Basiselterngeld ?? 0) + (distribution.ElterngeldPlus ?? 0)
-  );
+  return getRecordEntriesWithStringKeys(monatsverteilung, isAuswahloption)
+    .filter(([variante, _]) => variante !== KeinElterngeld)
+    .map(([_, anzahl]) => anzahl)
+    .reduce((acc, curr) => acc + (curr ?? 0), 0);
 }
 
 export function BeispielVisualisierung({
@@ -104,19 +97,20 @@ if (import.meta.vitest) {
   >;
 
   describe("summiereMonatsverteilung", () => {
-    it("calculates correctly even with missing variants", () => {
-      const distribution: Partial<Record<BeispielVariante, number>> = {
+    it("ignoriert die option kein Elterngeld zur korrekten Summenbildung", () => {
+      const monatsverteilung: Partial<Record<Auswahloption, number>> = {
         [Variante.Basis]: 5,
+        [KeinElterngeld]: 2,
       };
 
-      const summeGeplanteMonate = summiereMonatsverteilung(distribution);
+      const summeGeplanteMonate = summiereMonatsverteilung(monatsverteilung);
 
       expect(summeGeplanteMonate).toEqual(5);
     });
   });
 
-  describe("calculateDistribution", () => {
-    it("maps undefined options to kein elterngeld", () => {
+  describe("errechneMonatsverteilung", () => {
+    it("ersetzt leere Monate mit kein Elterngeld fuer die Visualisierung", () => {
       const lebensmonate: LebensmonateEinElternteil = {
         1: {
           [Elternteil.Eins]: {
@@ -134,34 +128,7 @@ if (import.meta.vitest) {
       expect(monatsverteilung).toEqual({ "kein Elterngeld": 1 });
     });
 
-    // The Beispiele never contains Bonus months in order to
-    // generate Lebensmonate wich are valid right away and the
-    // user has a good experience once moved on to the Planer
-    it("removes bonus items from the distribution", () => {
-      const lebensmonate: LebensmonateEinElternteil = {
-        1: {
-          [Elternteil.Eins]: {
-            gewaehlteOption: Variante.Basis,
-            imMutterschutz: false,
-          },
-        },
-        2: {
-          [Elternteil.Eins]: {
-            gewaehlteOption: Variante.Bonus,
-            imMutterschutz: false,
-          },
-        },
-      };
-
-      const monatsverteilung = errechneMonatsverteilung(
-        listeLebensmonateAuf(lebensmonate),
-        Elternteil.Eins,
-      );
-
-      expect(monatsverteilung).toEqual({ Basiselterngeld: 1 });
-    });
-
-    it("counts distribution per option", () => {
+    it("errechnet die monatsverteilung nach option", () => {
       const lebensmonate: LebensmonateEinElternteil = {
         1: {
           [Elternteil.Eins]: {

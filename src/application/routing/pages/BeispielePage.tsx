@@ -6,7 +6,7 @@ import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
 import { BeispielAuswahlbox } from "@/application/features/beispiele/component/BeispielAuswahlbox";
-import { BeispielLegend } from "@/application/features/beispiele/component/BeispielLegend";
+import { BeispielAuswahloptionLegende } from "@/application/features/beispiele/component/BeispielAuswahloptionLegende";
 import { useBeispieleService } from "@/application/features/beispiele/hooks";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
@@ -35,7 +35,7 @@ export function BeispielePage() {
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-56">
-        <BeispielLegend />
+        <BeispielAuswahloptionLegende beispiele={beispiele} />
 
         <div className="flex flex-wrap gap-26">
           {beispiele.map((beispiel) => (

@@ -33,7 +33,7 @@ export function BeispielAuswahlbox({ beispiel }: Props): ReactNode {
         </span>
       </p>
 
-      <BeispielVisualisierung beispiel={beispiel} className="mt-auto pt-24" />
+      <BeispielVisualisierung beispiel={beispiel} className="mt-auto" />
     </div>
   );
 }

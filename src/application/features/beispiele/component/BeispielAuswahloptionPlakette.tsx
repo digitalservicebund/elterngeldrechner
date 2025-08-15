@@ -1,23 +1,22 @@
 import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
 import type { CSSProperties, ReactNode } from "react";
-import { BeispielVariante } from "@/application/features/beispiele/types";
-import { KeinElterngeld, Variante } from "@/monatsplaner";
+import { Auswahloption, KeinElterngeld, Variante } from "@/monatsplaner";
 
 type Props = {
-  readonly variante: BeispielVariante;
+  readonly auswahloption: Auswahloption;
   readonly style?: CSSProperties;
   readonly className?: string;
 };
 
-export function BeispielVariantenplakette({
-  variante,
+export function BeispielAuswahloptionPlakette({
+  auswahloption,
   style,
   className,
 }: Props): ReactNode {
   const baseClasses = "flex items-center justify-center";
 
-  switch (variante) {
+  switch (auswahloption) {
     case KeinElterngeld:
       return (
         <div
@@ -50,6 +49,16 @@ export function BeispielVariantenplakette({
           style={style}
         >
           P
+        </div>
+      );
+    case Variante.Bonus:
+      return (
+        <div
+          className={classNames(baseClasses, className, "bg-Bonus")}
+          aria-hidden="true"
+          style={style}
+        >
+          B
         </div>
       );
   }

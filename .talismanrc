@@ -4,3 +4,4 @@ fileignoreconfig:
 scopeconfig:
 - scope: node
 version: "1.0"
+threshold: medium

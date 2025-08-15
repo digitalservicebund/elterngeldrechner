@@ -8,6 +8,20 @@ on:
         required: true
         type: string
 
+  workflow_call:
+    inputs:
+      path:
+        description: relative URL path where to put assets (e.g. '/feature/fancy-stuff')
+        required: true
+        type: string
+
+      artifact_name:
+        description: |
+          name of an already uploaded artifact to this run that contains the page build
+          if defined skips building and downloads the artifact instead
+        type: string
+        required: false
+
 permissions:
   contents: write
 

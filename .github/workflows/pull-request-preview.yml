@@ -1,0 +1,47 @@
+name: Pull Request Preview Deployments
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    if: github.event.action != 'closed'
+    uses: ./.github/workflows/github-pages-deploy.yml
+    with:
+      path: /pr/${{ github.event.pull_request.number }}
+    secrets: inherit
+
+  comment-preview-url:
+    needs: deploy
+    if: github.event.action != 'closed' && needs.deploy.result == 'success'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Post preview URL to PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -e
+          REPO_OWNER=$(echo "$REPO" | cut -d/ -f1)
+          REPO_NAME=$(echo "$REPO" | cut -d/ -f2)
+          PREVIEW_PATH="/pr/${PR_NUMBER}"
+          PREVIEW_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}${PREVIEW_PATH}/#/allgemeine-angaben"
+
+          echo "Posting preview URL: $PREVIEW_URL"
+
+          gh pr comment "$PR_NUMBER" \
+            --repo "$REPO" \
+            --body "🚀 Preview available at: ${PREVIEW_URL}"
+
+  undeploy:
+    if: github.event.action == 'closed'
+    uses: ./.github/workflows/github-pages-undeploy.yml
+    with:
+      path: /pr/${{ github.event.pull_request.number }}
+    secrets: inherit

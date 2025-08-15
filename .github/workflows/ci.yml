@@ -62,7 +62,7 @@ jobs:
       - test-suite-vitest
       - test-suite-playwright
     if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/deploy-to-github-pages.yml
+    uses: ./.github/workflows/github-pages-deploy.yml
     with:
       path: /main
     secrets: inherit

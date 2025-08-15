@@ -11,7 +11,6 @@ import {
   trackMetricsForPlanerWurdeGeoeffnet,
   trackMetricsForPlanungDrucken,
 } from "./tracking";
-import { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";
 import { Button } from "@/application/components";
 import {
   YesNo,
@@ -26,10 +25,11 @@ import {
   UserFeedbackForm,
   useUserFeedback,
 } from "@/application/features/user-feedback";
+import { useBerechneElterngeldbezuege } from "@/application/hooks/useBerechneElterngeldbezuege";
+import { useNavigateWithPlan } from "@/application/hooks/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { Page } from "@/application/routing/pages/Page";
-import { useNavigateWithPlan } from "@/application/routing/pages/useNavigateWithPlan";
 import {
   getTrackedEase,
   getTrackedObstacle,

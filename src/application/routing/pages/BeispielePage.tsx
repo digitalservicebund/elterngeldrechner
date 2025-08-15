@@ -37,10 +37,18 @@ export function BeispielePage() {
       <div className="flex flex-col gap-56">
         <BeispielAuswahloptionLegende beispiele={beispiele} />
 
-        <div className="flex flex-wrap gap-26">
+        <div className="grid grid-cols-1 gap-26 md:grid-cols-2">
           {beispiele.map((beispiel) => (
             <BeispielAuswahlbox key={beispiel.identifier} beispiel={beispiel} />
           ))}
+
+          <div className="flex flex-col rounded bg-off-white p-24 md:col-span-2">
+            <h4>Eigene Planung anlegen</h4>
+            <p>
+              Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
+              erstellen Sie eine Planung ohne Planungshilfe.
+            </p>
+          </div>
         </div>
 
         <div className="flex gap-16">

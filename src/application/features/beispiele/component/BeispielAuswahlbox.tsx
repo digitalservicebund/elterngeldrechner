@@ -13,7 +13,7 @@ export function BeispielAuswahlbox({ beispiel }: Props): ReactNode {
   // Implement aria support for title and description
 
   return (
-    <div className="flex w-[360px] flex-col rounded bg-off-white p-24">
+    <div className="flex flex-col rounded bg-off-white p-24">
       <h4 className="break-words">{beispiel.titel}</h4>
       <p className="break-words">{beispiel.beschreibung}</p>
 

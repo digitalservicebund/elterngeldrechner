@@ -13,6 +13,48 @@ import {
   getTrackingVariableFrom,
 } from "@/application/user-tracking/core/data-layer";
 
+// The planner once emitted a change event on initial rendering, which did
+// fix a bug in the application, but at the same time introduced a new issue
+// in the metabase dashboard because the metric of users who visited the planner
+// and how many of them actually made changes to the plan did not work anymore,
+// as everyone who opened the planner emitted the event "Plan-wurde-geändert".
+test("planer event erst nach wirklicher planung", async ({ page }) => {
+  test.slow();
+
+  await page.addInitScript(establishDataLayer);
+
+  const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
+  await allgemeineAngabenPage.setBundesland("Berlin");
+  await allgemeineAngabenPage.setAlleinerziehend(false);
+  await allgemeineAngabenPage.setElternteile(1);
+  await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
+  await allgemeineAngabenPage.submit();
+
+  const nachwuchsPage = new NachwuchsPOM(page);
+  await nachwuchsPage.setGeburtsdatum("02.02.2025");
+  await nachwuchsPage.setAnzahlKinder(1);
+  await nachwuchsPage.submit();
+
+  const erwerbstaetigkeitPage = new ErwerbstaetigkeitPOM(page, {});
+  await erwerbstaetigkeitPage.setErwerbstaetig(false);
+  await erwerbstaetigkeitPage.submit();
+
+  const einkommenPage = new EinkommenPOM(page);
+  await einkommenPage.setGesamteinkommenUeberschritten(false);
+  await einkommenPage.submit();
+
+  expect(await hasTrackingEvent(page, "Plan-wurde-geändert")).toBeFalsy();
+
+  const rechnerUndPlaner = new RechnerPlanerPOM(page);
+  await rechnerUndPlaner.waehleOption(3, "Basis");
+
+  expect(await hasTrackingEvent(page, "Plan-wurde-geändert")).toBeTruthy();
+});
+
 test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   test.slow();
 
@@ -211,6 +253,12 @@ async function getTrackingVariable(page: Page, name: string) {
   const dataLayer = await page.evaluate(() => window._mtm!);
 
   return getTrackingVariableFrom(dataLayer, name);
+}
+
+async function hasTrackingEvent(page: Page, name: string) {
+  const dataLayer = await page.evaluate(() => window._mtm!);
+
+  return dataLayer.some((it) => it["event"] === name);
 }
 
 async function fastForwardToPlaner(page: Page) {

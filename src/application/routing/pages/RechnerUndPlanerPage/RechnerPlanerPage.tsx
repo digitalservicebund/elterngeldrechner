@@ -67,18 +67,15 @@ export function RechnerPlanerPage() {
       : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
   );
   const [plan, setPlan] = useState(() => initialPlan);
-  const [istPlanGueltig, setIstPlanGueltig] = useState(false);
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
   const hasPlan = plan !== undefined;
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
-    istPlanGueltig: boolean,
   ): void {
     setHasChanges(true);
     setPlan(plan);
-    setIstPlanGueltig(istPlanGueltig);
   }
 
   const [trackingConsent, setTrackingConsent] = useState(false);
@@ -109,7 +106,7 @@ export function RechnerPlanerPage() {
     nextPlan: PlanMitBeliebigenElternteilen,
     istPlanGueltig: boolean,
   ): void {
-    updateStateForChangedPlan(nextPlan, istPlanGueltig);
+    updateStateForChangedPlan(nextPlan);
     trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
   }
 
@@ -121,11 +118,9 @@ export function RechnerPlanerPage() {
   };
 
   function navigateToDatenuebernahmeAntragPage(): void {
-    if (istPlanGueltig) {
-      if (rememberSubmit.current) submitFeedback();
+    if (rememberSubmit.current) submitFeedback();
 
-      void navigateWithPlanState(formSteps.datenuebernahmeAntrag.route, plan);
-    }
+    void navigateWithPlanState(formSteps.datenuebernahmeAntrag.route, plan);
   }
 
   useEffect(trackMetricsForPlanerWurdeGeoeffnet, []);

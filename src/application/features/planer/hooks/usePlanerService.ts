@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { findeLetztenVerplantenLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/findeLetztenVerplantenLebensmonat";
 import {
   type Ausgangslage,
@@ -45,11 +45,15 @@ export function usePlanerService(
     [updateValidierungsfehler, callbacks],
   );
 
-  useEffect(
-    () => callbacks?.onChange?.(plan, validierungsfehler.length === 0),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  // Commit Message:
+  // Reference to existing ticket on github
+  // This bug did reveal again another underlying problem
+  // described in the github issue that the unique event count
+  // is too high anyway. We should have, with the bug, been only
+  // able to reach 100% of focused conversion rate
+
+  // implement test that onChange is not triggered initially
+  // If possible revert commit and then remove isPlanGueltig state
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const erstelleUngeplantenLebensmonatCallback = useCallback(

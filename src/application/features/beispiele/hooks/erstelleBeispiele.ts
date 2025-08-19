@@ -82,7 +82,6 @@ function erstelleBeispieleFuerAlleinerziehende(
 
   const basis = { [Elternteil.Eins]: MONAT_MIT_BASIS };
   const plus = { [Elternteil.Eins]: MONAT_MIT_PLUS };
-  const bonus = { [Elternteil.Eins]: MONAT_MIT_BONUS };
 
   return [
     {
@@ -92,7 +91,6 @@ function erstelleBeispieleFuerAlleinerziehende(
         "Nutzen Sie Basiselterngeld, um sich ganz auf das Kind zu konzentrieren.",
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 },
-        { lebensmonat: bonus, anzahl: 4 },
       ]),
     },
     {
@@ -103,7 +101,6 @@ function erstelleBeispieleFuerAlleinerziehende(
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 12 : 10 },
         { lebensmonat: plus, anzahl: 4 },
-        { lebensmonat: bonus, anzahl: 4 },
       ]),
     },
     {
@@ -114,7 +111,6 @@ function erstelleBeispieleFuerAlleinerziehende(
       plan: erstellePlanFuerEinBeispiel(ausgangslage, [
         { lebensmonat: basis, anzahl: 8 },
         { lebensmonat: plus, anzahl: sindPartnermonateVerfuegbar ? 12 : 8 },
-        { lebensmonat: bonus, anzahl: 4 },
       ]),
     },
   ];
@@ -162,12 +158,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     MONAT_MIT_PLUS,
   );
 
-  const beideBonus = lebensmonatFuerMutterMitPartnerIn(
-    ausgangslage,
-    MONAT_MIT_BONUS,
-    MONAT_MIT_BONUS,
-  );
-
   return [
     {
       identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
@@ -183,7 +173,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
           lebensmonat: nurPartnerInBasis,
           anzahl: sindPartnermonateVerfuegbar ? 7 : 6,
         },
-        { lebensmonat: beideBonus, anzahl: 4 },
       ]),
     },
     {
@@ -199,7 +188,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
           lebensmonat: nurPartnerInPlus,
           anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
         },
-        { lebensmonat: beideBonus, anzahl: 4 },
       ]),
     },
     {
@@ -214,7 +202,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
           anzahl: sindPartnermonateVerfuegbar ? 11 : 9,
         },
         { lebensmonat: nurPartnerInBasis, anzahl: 1 },
-        { lebensmonat: beideBonus, anzahl: 4 },
       ]),
     },
   ];
@@ -251,11 +238,6 @@ const MONAT_MIT_BASIS: Monat = {
 
 const MONAT_MIT_PLUS: Monat = {
   gewaehlteOption: Variante.Plus,
-  imMutterschutz: false,
-};
-
-const MONAT_MIT_BONUS: Monat = {
-  gewaehlteOption: Variante.Bonus,
   imMutterschutz: false,
 };
 

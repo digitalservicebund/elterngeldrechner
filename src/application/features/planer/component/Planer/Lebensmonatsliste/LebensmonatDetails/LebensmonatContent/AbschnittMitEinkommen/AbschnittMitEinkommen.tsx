@@ -31,7 +31,6 @@ export function AbschnittMitEinkommen(): ReactNode {
     lebensmonat,
     erstelleVorschlaegeFuerAngabeDesEinkommens,
     gebeEinkommenAn,
-    ergaenzeBruttoeinkommenFuerPartnerschaftsbonus,
   } = useInformationenZumLebensmonat();
 
   const istLebensmonatMitBonus = listeMonateAuf(lebensmonat).some(
@@ -114,9 +113,6 @@ export function AbschnittMitEinkommen(): ReactNode {
                 ariaLabel={ariaLabel}
                 ariaDescribedBy={hinweisZuWochenstundenIdentifier}
                 gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
-                onEinkommenAngegeben={
-                  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
-                }
               />
             </div>
           );

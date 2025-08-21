@@ -1,14 +1,6 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
-import {
-  ReactNode,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from "react";
+import { ReactNode, SyntheticEvent, useCallback, useId, useRef } from "react";
 import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
@@ -27,6 +19,7 @@ import {
   usePlanerService,
 } from "@/application/features/planer/hooks";
 import { GridLayoutProvider } from "@/application/features/planer/layout";
+import { useEffectWithSignal } from "@/application/hooks/useEffectWithSignal";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
 import {
   type Ausgangslage,
@@ -234,31 +227,5 @@ function fanOut<Parameters extends unknown[]>(
     functions.forEach((fn) => fn?.(...parameters));
   };
 }
-
-//TODO: docs to explan --> Compensate for render delay to possibly create new element (non critical).
-function useEffectWithSignal<CallbackArgument>(
-  // TODO: Use unique internal symbol for initial state
-  effectCallback: (argument: CallbackArgument) => void,
-) {
-  // Argument can technically be undefined on first render
-  const [signal, setSignal] = useState<Signal<CallbackArgument>>({
-    nonce: 0,
-    argument: undefined,
-  });
-
-  useEffect(() => {
-    if (signal.argument !== undefined) {
-      effectCallback(signal.argument);
-    }
-  }, [signal, effectCallback]);
-
-  const triggerEffectBySignal = (argument: CallbackArgument) => {
-    setSignal({ nonce: signal.nonce + 1, argument });
-  };
-
-  return { triggerEffectBySignal };
-}
-
-type Signal<T> = { nonce: number; argument: T | undefined };
 
 const CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS = "mx-[-15px] sm:mx-0";

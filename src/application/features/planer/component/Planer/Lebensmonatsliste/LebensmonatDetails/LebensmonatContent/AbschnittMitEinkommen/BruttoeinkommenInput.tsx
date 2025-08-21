@@ -16,7 +16,6 @@ type Props = {
   readonly ariaLabel: string;
   readonly ariaDescribedBy?: string;
   readonly gebeEinkommenAn: (bruttoeinkommen: number) => void;
-  readonly onEinkommenAngegeben?: () => void;
   readonly style?: CSSProperties;
 };
 
@@ -27,7 +26,6 @@ export function BruttoeinkommenInput({
   ariaLabel,
   ariaDescribedBy,
   gebeEinkommenAn,
-  onEinkommenAngegeben,
   style,
 }: Props): ReactNode {
   const inputIdentifier = useId();
@@ -70,7 +68,6 @@ export function BruttoeinkommenInput({
         list={datalistIdentifier}
         onKeyDown={filterNonNumbericInput}
         onChange={gebeBruttoeinkommenAn}
-        onBlur={onEinkommenAngegeben}
       />
 
       <datalist id={datalistIdentifier}>

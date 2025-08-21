@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
@@ -54,22 +54,6 @@ describe("Buttoeinkommen Input", () => {
     await userEvent.type(input, "a!}.-");
 
     expect(gebeEinkommenAn).not.toHaveBeenCalledOnce();
-  });
-
-  it("triggers the given callback when being finished and leaving the input", async () => {
-    const onEinkommenAngegeben = vi.fn();
-    render(
-      <BruttoeinkommenInput
-        {...ANY_PROPS}
-        onEinkommenAngegeben={onEinkommenAngegeben}
-      />,
-    );
-
-    const input = screen.getByRole("combobox");
-    await userEvent.type(input, "123");
-    fireEvent.blur(input); // No good user interaction to actually simulate.
-
-    expect(onEinkommenAngegeben).toHaveBeenCalledOnce();
   });
 });
 

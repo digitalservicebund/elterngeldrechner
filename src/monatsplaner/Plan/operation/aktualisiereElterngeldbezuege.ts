@@ -6,7 +6,7 @@ import {
 } from "@/monatsplaner/Ausgangslage";
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type {
-  BerechneElterngeldbezuegeCallback,
+  BerechneElterngeldbezuegeByElternteilCallback,
   Elterngeldbezug,
 } from "@/monatsplaner/Elterngeldbezug";
 import type { Elternteil } from "@/monatsplaner/Elternteil";
@@ -17,7 +17,7 @@ import type { Plan } from "@/monatsplaner/Plan";
  * @param elternteil - if undefined, updates for all Elternteile
  */
 export function aktualisiereElterngeldbezuege<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
   plan: Plan<A>,
   elternteil?: ElternteileByAusgangslage<A>,
 ): Plan<A> {

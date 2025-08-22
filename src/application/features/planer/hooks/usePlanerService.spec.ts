@@ -7,7 +7,7 @@ import {
 import { INITIAL_STATE, act, renderHook } from "@/application/test-utils";
 import {
   type Auswahloption,
-  type BerechneElterngeldbezuegeCallback,
+  type BerechneElterngeldbezuegeByElternteilCallback,
   type Elterngeldbezug,
   Elternteil,
   KeinElterngeld,
@@ -532,7 +532,7 @@ describe("use Planer service", () => {
 
 function renderPlanerServiceHook(options?: {
   initialInformation?: InitialInformation;
-  berechneElterngeldbezuege?: BerechneElterngeldbezuegeCallback;
+  berechneElterngeldbezuege?: BerechneElterngeldbezuegeByElternteilCallback;
   callbacks?: Callbacks;
 }) {
   const initialInformation = options?.initialInformation ?? {

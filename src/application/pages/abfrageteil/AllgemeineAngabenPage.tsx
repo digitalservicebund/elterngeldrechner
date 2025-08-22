@@ -1,8 +1,8 @@
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
-import { Page } from "./Page";
 import { Button } from "@/application/components";
 import { AllgemeineAngabenForm } from "@/application/features/abfrageteil";
+import { Page } from "@/application/pages/Page";
 import { formSteps } from "@/application/routing/formSteps";
 
 export function AllgemeineAngabenPage() {

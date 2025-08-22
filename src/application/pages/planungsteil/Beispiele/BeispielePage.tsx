@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Page } from "./Page";
-import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./RechnerUndPlanerPage/tracking";
-import { useNavigateWithPlan } from "./useNavigateWithPlan";
+import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
 import { BeispielAuswahlbox } from "@/application/features/beispiele/component/BeispielAuswahlbox";
 import { BeispielAuswahloptionLegende } from "@/application/features/beispiele/component/BeispielAuswahloptionLegende";
 import { useBeispieleService } from "@/application/features/beispiele/hooks";
+import { Page } from "@/application/pages/Page";
+import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
@@ -31,6 +31,21 @@ export function BeispielePage() {
   const { beispiele } = useBeispieleService(ausgangslage, setPlan, {
     onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
   });
+
+  // Extract beispiel selection into its own component and pass calculation
+  // function
+  //
+  // Like this but adapted to beispiele for example only the sum and for
+  // either one or two parents:
+  //
+  // readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback
+  //
+  // potential version:
+  //
+  // readonly berechneGesamtbezug: BerechneElterngeldGesamtbezugCallback
+  //
+  // That way the beispiele does not have to know about the elterngeldrechner
+  // feature
 
   return (
     <Page step={formSteps.beispiele}>

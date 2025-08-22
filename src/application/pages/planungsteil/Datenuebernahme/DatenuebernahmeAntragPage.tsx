@@ -3,7 +3,6 @@ import AntragIcon from "@digitalservicebund/icons/ContentCopyOutlined";
 import SeiteIcon from "@digitalservicebund/icons/DescriptionOutlined";
 import download from "downloadjs";
 import { type ReactNode, useState } from "react";
-import { Page } from "./Page";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import {
@@ -19,7 +18,8 @@ import {
   imageAntrag,
   imageSeite,
 } from "@/application/features/pdfAntrag/pdf-images";
-import { useNavigateWithPlan } from "@/application/hooks/useNavigateWithPlan";
+import { Page } from "@/application/pages/Page";
+import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
@@ -249,7 +249,7 @@ if (import.meta.vitest) {
 
   describe("Datenuebernahme Antrag Page", async () => {
     const { useNavigateWithPlan } = await import(
-      "@/application/hooks/useNavigateWithPlan"
+      "@/application/pages/planungsteil/useNavigateWithPlan"
     );
 
     const { INITIAL_STATE, render, screen } = await import(
@@ -259,9 +259,12 @@ if (import.meta.vitest) {
     const { produce } = await import("immer");
 
     beforeEach(() => {
-      vi.mock(import("@/application/hooks/useNavigateWithPlan"), () => ({
-        useNavigateWithPlan: vi.fn(),
-      }));
+      vi.mock(
+        import("@/application/pages/planungsteil/useNavigateWithPlan"),
+        () => ({
+          useNavigateWithPlan: vi.fn(),
+        }),
+      );
     });
 
     it("shows a section for the Datenuebernahme Antrag with option to download pdf if a Plan was provided and Bundesland is supported", () => {

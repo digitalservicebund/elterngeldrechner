@@ -48,6 +48,9 @@ test("planer event erst nach wirklicher planung", async ({ page }) => {
   await einkommenPage.setGesamteinkommenUeberschritten(false);
   await einkommenPage.submit();
 
+  const beispielePage = new BeispielePOM(page);
+  await beispielePage.submit();
+
   expect(await hasTrackingEvent(page, "Plan-wurde-geändert")).toBeFalsy();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);

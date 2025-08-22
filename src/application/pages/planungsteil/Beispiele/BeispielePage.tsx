@@ -6,10 +6,10 @@ import { composeAusgangslageFuerPlaner } from "@/application/features/abfragetei
 import { BeispielAuswahlbox } from "@/application/features/beispiele/component/BeispielAuswahlbox";
 import { BeispielAuswahloptionLegende } from "@/application/features/beispiele/component/BeispielAuswahloptionLegende";
 import { useBeispieleService } from "@/application/features/beispiele/hooks";
-import { useNavigateWithPlan } from "@/application/hooks/useNavigateWithPlan";
+import { Page } from "@/application/pages/Page";
+import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
-import { Page } from "@/application/routing/pages/Page";
 import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {

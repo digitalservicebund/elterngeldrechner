@@ -25,11 +25,11 @@ import {
   UserFeedbackForm,
   useUserFeedback,
 } from "@/application/features/user-feedback";
-import { useBerechneElterngeldbezuege } from "@/application/hooks/useBerechneElterngeldbezuege";
-import { useNavigateWithPlan } from "@/application/hooks/useNavigateWithPlan";
+import { Page } from "@/application/pages/Page";
+import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
+import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
-import { Page } from "@/application/routing/pages/Page";
 import {
   getTrackedEase,
   getTrackedObstacle,
@@ -40,7 +40,7 @@ import {
 import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 import { type PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
-export function RechnerPlanerPage() {
+export function PlanerPage() {
   const store = useAppStore();
   const mainElement = useRef<HTMLDivElement>(null);
   const dialogElement = useRef<HTMLDialogElement>(null);

@@ -7,6 +7,7 @@ import { BeispielAuswahlbox } from "@/application/features/beispiele/component/B
 import { BeispielAuswahloptionLegende } from "@/application/features/beispiele/component/BeispielAuswahloptionLegende";
 import { useBeispieleService } from "@/application/features/beispiele/hooks";
 import { Page } from "@/application/pages/Page";
+import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
@@ -32,20 +33,7 @@ export function BeispielePage() {
     onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
   });
 
-  // Extract beispiel selection into its own component and pass calculation
-  // function
-  //
-  // Like this but adapted to beispiele for example only the sum and for
-  // either one or two parents:
-  //
-  // readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback
-  //
-  // potential version:
-  //
-  // readonly berechneGesamtbezug: BerechneElterngeldGesamtbezugCallback
-  //
-  // That way the beispiele does not have to know about the elterngeldrechner
-  // feature
+  const { berechneElterngeldbezuegeByPlan } = useBerechneElterngeldbezuege();
 
   return (
     <Page step={formSteps.beispiele}>
@@ -54,7 +42,11 @@ export function BeispielePage() {
 
         <div className="grid grid-cols-1 gap-26 md:grid-cols-2">
           {beispiele.map((beispiel) => (
-            <BeispielAuswahlbox key={beispiel.identifier} beispiel={beispiel} />
+            <BeispielAuswahlbox
+              key={beispiel.identifier}
+              berechneElterngeldbezuege={berechneElterngeldbezuegeByPlan}
+              beispiel={beispiel}
+            />
           ))}
 
           <div className="flex flex-col rounded bg-off-white p-24 md:col-span-2">

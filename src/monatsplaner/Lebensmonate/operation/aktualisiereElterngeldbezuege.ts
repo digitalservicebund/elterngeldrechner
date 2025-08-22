@@ -1,6 +1,6 @@
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
 import type {
-  ElterngeldbezuegeFuerElternteil,
+  Elterngeldbezuege,
   Elterngeldbezug,
 } from "@/monatsplaner/Elterngeldbezug";
 import type { Elternteil } from "@/monatsplaner/Elternteil";
@@ -18,7 +18,7 @@ import { mapRecordEntriesWithIntegerKeys } from "@/monatsplaner/common/type-safe
 export function aktualisiereElterngeldbezuege<E extends Elternteil>(
   lebensmonate: Lebensmonate<E>,
   elternteil: E,
-  elterngeldbezuege: ElterngeldbezuegeFuerElternteil,
+  elterngeldbezuege: Elterngeldbezuege,
 ): Lebensmonate<E> {
   return mapLebensmonate(lebensmonate, (lebensmonat, lebensmonatszahl) =>
     aktualisiereElterngeldbezugImLebensmonat(

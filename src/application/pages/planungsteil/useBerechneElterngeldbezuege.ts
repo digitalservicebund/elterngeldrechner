@@ -20,25 +20,45 @@ import {
   calculateElternGeld,
 } from "@/elterngeldrechner";
 import {
+  Ausgangslage,
+  AusgangslageFuerEinElternteil,
+  AusgangslageFuerZweiElternteile,
   type Auswahloption,
-  type BerechneElterngeldbezuegeCallback,
-  type ElterngeldbezuegeFuerElternteil,
+  Elterngeldbezug,
   Elternteil,
   KeinElterngeld,
+  Lebensmonatszahl,
   Lebensmonatszahlen,
   type Monat,
+  Plan,
   Variante,
+  isLebensmonatszahl,
   isVariante,
+  listeElternteileFuerAusgangslageAuf,
+  teileLebensmonateBeiElternteileAuf,
 } from "@/monatsplaner";
+import {
+  BerechneElterngeldbezuegeByElternteilCallback,
+  Elterngeldbezuege,
+} from "@/monatsplaner/Elterngeldbezug";
+import { getRecordEntriesWithIntegerKeys } from "@/monatsplaner/common/type-safe-records";
 
-export function useBerechneElterngeldbezuege(): BerechneElterngeldbezuegeCallback {
+export function useBerechneElterngeldbezuege() {
   const store = useAppStore();
   const parameter = useRef(createStaticCalculationParameter(store.getState()));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useCallback(
-    berechneElterngeldbezuege.bind(null, parameter.current),
-    [],
-  );
+
+  return {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    berechneElterngeldbezuegeByElternteil: useCallback(
+      berechneElterngeldbezuegeByElternteil.bind(null, parameter.current),
+      [],
+    ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    berechneElterngeldbezuegeByPlan: useCallback(
+      berechneElterngeldbezuegeByPlan.bind(null, parameter.current),
+      [],
+    ),
+  };
 }
 
 function createStaticCalculationParameter(
@@ -56,11 +76,37 @@ function createStaticCalculationParameter(
   };
 }
 
-function berechneElterngeldbezuege(
+function berechneElterngeldbezuegeByPlan<A extends Ausgangslage>(
+  staticParameter: StaticCalculationParameter,
+  plan: Plan<A>,
+): Elterngeldbezuege {
+  const lebensmonate = teileLebensmonateBeiElternteileAuf(plan);
+
+  return listeElternteileFuerAusgangslageAuf(plan.ausgangslage)
+    .map((elternteil) =>
+      berechneElterngeldbezuegeByElternteil(
+        staticParameter,
+        elternteil,
+        lebensmonate[elternteil],
+      ),
+    )
+    .flatMap((geplanteMonate) =>
+      getRecordEntriesWithIntegerKeys(geplanteMonate, isLebensmonatszahl),
+    )
+    .reduce(
+      (acc, [key, curr]) =>
+        key in acc
+          ? { ...acc, [key]: (curr ?? 0) + (acc[key] ?? 0) }
+          : { ...acc, [key]: curr },
+      {} as Partial<Record<Lebensmonatszahl, Elterngeldbezug>>,
+    );
+}
+
+function berechneElterngeldbezuegeByElternteil(
   staticParameter: StaticCalculationParameter,
   elternteil: Elternteil,
   monate: GeplanteMonate,
-): ElterngeldbezuegeFuerElternteil {
+): Elterngeldbezuege {
   const elterngelddaten = buildParameterForCalculation(
     staticParameter[elternteil],
     monate,
@@ -119,7 +165,7 @@ function transformMonateToPlanungsdaten(monate: GeplanteMonate): PlanungsDaten {
 
 function elterngeldbezuegeFrom(
   ergebnis: ElternGeldPlusErgebnis,
-): ElterngeldbezuegeFuerElternteil {
+): Elterngeldbezuege {
   return ergebnis.elternGeldAusgabe.reduce(
     (elterngeldbezuege, ausgabe) => ({
       ...elterngeldbezuege,
@@ -179,7 +225,8 @@ type StaticCalculationParameterForElternteil = {
   finanzdaten: FinanzDaten;
 };
 
-type GeplanteMonate = Parameters<BerechneElterngeldbezuegeCallback>[1];
+type GeplanteMonate =
+  Parameters<BerechneElterngeldbezuegeByElternteilCallback>[1];
 
 if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
@@ -208,14 +255,18 @@ if (import.meta.vitest) {
     });
 
     it("calls the methods to create the static calculation parameter only once initially", () => {
-      const { result } = renderHook(() => useBerechneElterngeldbezuege());
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByElternteil } = hook.result.current;
 
       expect(persoenlicheDatenOfUi).toHaveBeenCalled();
       expect(finanzDatenOfUi).toHaveBeenCalled();
+
       vi.clearAllMocks();
 
-      result.current(ANY_ELTERNTEIL, ANY_MONATE);
-      result.current(ANY_ELTERNTEIL, ANY_MONATE);
+      berechneElterngeldbezuegeByElternteil(ANY_ELTERNTEIL, ANY_MONATE);
+
+      berechneElterngeldbezuegeByElternteil(ANY_ELTERNTEIL, ANY_MONATE);
 
       expect(persoenlicheDatenOfUi).not.toHaveBeenCalled();
       expect(finanzDatenOfUi).not.toHaveBeenCalled();
@@ -228,8 +279,11 @@ if (import.meta.vitest) {
       const finanzDaten = ANY_FINANZDATEN;
       vi.mocked(finanzDatenOfUi).mockReturnValue(finanzDaten);
 
-      const { result } = renderHook(() => useBerechneElterngeldbezuege());
-      result.current(ANY_ELTERNTEIL, {});
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByElternteil } = hook.result.current;
+
+      berechneElterngeldbezuegeByElternteil(ANY_ELTERNTEIL, {});
 
       expect(calculateElternGeld).toHaveBeenCalledWith({
         persoenlicheDaten,
@@ -239,8 +293,11 @@ if (import.meta.vitest) {
     });
 
     it("transforms the chosen Variante of the geplante Monate for the calculation", () => {
-      const { result } = renderHook(() => useBerechneElterngeldbezuege());
-      result.current(ANY_ELTERNTEIL, {
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByElternteil } = hook.result.current;
+
+      berechneElterngeldbezuegeByElternteil(ANY_ELTERNTEIL, {
         1: monat(Variante.Plus),
         2: monat(Variante.Basis),
         4: monat(KeinElterngeld),
@@ -268,7 +325,12 @@ if (import.meta.vitest) {
       );
 
       const { result } = renderHook(() => useBerechneElterngeldbezuege());
-      const elterngeldbezuege = result.current(ANY_ELTERNTEIL, {});
+
+      const elterngeldbezuege =
+        result.current.berechneElterngeldbezuegeByElternteil(
+          ANY_ELTERNTEIL,
+          {},
+        );
 
       expect(elterngeldbezuege).toStrictEqual({ 1: 100, 2: 200 });
     });
@@ -277,8 +339,11 @@ if (import.meta.vitest) {
       const observeredErwerbsZeitraumLebensMonatListen =
         spyOnCalculationAndObserveErwerbsZeitraumLebensMonatListen();
 
-      const { result } = renderHook(() => useBerechneElterngeldbezuege());
-      result.current(ANY_ELTERNTEIL, {
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByElternteil } = hook.result.current;
+
+      berechneElterngeldbezuegeByElternteil(ANY_ELTERNTEIL, {
         1: monat(KeinElterngeld, 100),
         2: monat(Variante.Plus, 200),
         5: monat(Variante.Bonus, 500),
@@ -305,8 +370,11 @@ if (import.meta.vitest) {
       const observeredErwerbsZeitraumLebensMonatListen =
         spyOnCalculationAndObserveErwerbsZeitraumLebensMonatListen();
 
-      const { result } = renderHook(() => useBerechneElterngeldbezuege());
-      result.current(ANY_ELTERNTEIL, {
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByElternteil } = hook.result.current;
+
+      berechneElterngeldbezuegeByElternteil(ANY_ELTERNTEIL, {
         1: monat(Variante.Basis, 100),
         2: monat(Variante.Plus, null),
         5: monat(Variante.Basis, 0),
@@ -327,6 +395,94 @@ if (import.meta.vitest) {
           },
         ],
       ]);
+    });
+
+    it("adds up the elterngeldbezuege for both elternteile as gesamtbezuege", () => {
+      vi.mocked(calculateElternGeld).mockReturnValue(
+        calculationResult([100, 200]),
+      );
+
+      const plan: Plan<AusgangslageFuerZweiElternteile> = {
+        ausgangslage: {
+          anzahlElternteile: 2,
+          geburtsdatumDesKindes: new Date(),
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+        },
+        lebensmonate: {
+          1: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Basis,
+              bruttoeinkommen: 100,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              bruttoeinkommen: null,
+              imMutterschutz: false as const,
+            },
+          },
+          2: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Basis,
+              bruttoeinkommen: 100,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              bruttoeinkommen: null,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+      };
+
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByPlan } = hook.result.current;
+
+      const elterngeldbezuege = berechneElterngeldbezuegeByPlan(plan);
+
+      expect(elterngeldbezuege).toStrictEqual({ 1: 200, 2: 400 });
+    });
+
+    it("forwards the bezuege as gesamtbezuege for einen elternteil", () => {
+      vi.mocked(calculateElternGeld).mockReturnValue(
+        calculationResult([100, 200]),
+      );
+
+      const plan: Plan<AusgangslageFuerEinElternteil> = {
+        ausgangslage: {
+          anzahlElternteile: 1,
+          geburtsdatumDesKindes: new Date(),
+        },
+        lebensmonate: {
+          1: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Basis,
+              bruttoeinkommen: 100,
+              imMutterschutz: false as const,
+            },
+          },
+          2: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Basis,
+              bruttoeinkommen: 100,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+      };
+
+      const hook = renderHook(() => useBerechneElterngeldbezuege());
+
+      const { berechneElterngeldbezuegeByPlan } = hook.result.current;
+
+      const elterngeldbezuege = berechneElterngeldbezuegeByPlan(plan);
+
+      expect(elterngeldbezuege).toStrictEqual({ 1: 100, 2: 200 });
     });
 
     const ANY_ELTERNTEIL = Elternteil.Eins;

@@ -68,7 +68,9 @@ export function PlanerPage() {
   const [plan, setPlan] = useState(() => initialPlan);
   const [hasChanges, setHasChanges] = useState(!!initialPlan);
   const hasPlan = plan !== undefined;
-  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
+
+  const { berechneElterngeldbezuegeByElternteil } =
+    useBerechneElterngeldbezuege();
 
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
@@ -137,7 +139,7 @@ export function PlanerPage() {
           <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
             <Planer
               initialInformation={initialPlanerInformation.current}
-              berechneElterngeldbezuege={berechneElterngeldbezuege}
+              berechneElterngeldbezuege={berechneElterngeldbezuegeByElternteil}
               planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}
               callbacks={{
                 onChange: handlePlanChanges,

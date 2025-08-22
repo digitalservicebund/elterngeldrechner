@@ -12,13 +12,13 @@ import {
   Auswahloptionen,
   KeinElterngeld,
 } from "@/monatsplaner/Auswahloption";
-import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngeldbezug";
+import type { BerechneElterngeldbezuegeByElternteilCallback } from "@/monatsplaner/Elterngeldbezug";
 import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
 import type { Plan } from "@/monatsplaner/Plan";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
 
 export function bestimmeAuswahlmoeglichkeiten<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,
@@ -38,7 +38,7 @@ export function bestimmeAuswahlmoeglichkeiten<A extends Ausgangslage>(
 }
 
 function createAuswahlmoeglichkeit<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,

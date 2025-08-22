@@ -4,7 +4,7 @@ import type {
   ElternteileByAusgangslage,
 } from "@/monatsplaner/Ausgangslage";
 import type { Auswahloption } from "@/monatsplaner/Auswahloption";
-import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngeldbezug";
+import type { BerechneElterngeldbezuegeByElternteilCallback } from "@/monatsplaner/Elterngeldbezug";
 import type { Elternteil } from "@/monatsplaner/Elternteil";
 import { erstelleInitialenLebensmonat } from "@/monatsplaner/Lebensmonat";
 import { waehleOption as waehleOptionInLebensmonaten } from "@/monatsplaner/Lebensmonate";
@@ -15,7 +15,7 @@ import { Result } from "@/monatsplaner/common/Result";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
 
 export function waehleOption<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,

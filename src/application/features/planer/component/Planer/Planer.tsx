@@ -16,11 +16,11 @@ import {
 import { GridLayoutProvider } from "@/application/features/planer/layout";
 import { useEffectWithSignal } from "@/application/hooks/useEffectWithSignal";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
-import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
+import { type BerechneElterngeldbezuegeByElternteilCallback } from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
-  readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
+  readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback;
   readonly planInAntragUebernehmen: () => void;
   readonly callbacks: PlanerServiceCallbacks & {
     onOpenLebensmonat?: () => void;

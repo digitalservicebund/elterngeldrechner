@@ -1,14 +1,20 @@
+import { Ausgangslage } from "./Ausgangslage";
 import type { Elternteil } from "./Elternteil";
 import type { Lebensmonatszahl } from "./Lebensmonatszahl";
 import type { Monat } from "./Monat";
+import { Plan } from "./Plan";
 
 export type Elterngeldbezug = number | null;
 
-export type ElterngeldbezuegeFuerElternteil = Readonly<
+export type Elterngeldbezuege = Readonly<
   Partial<Record<Lebensmonatszahl, Elterngeldbezug>>
 >;
 
-export type BerechneElterngeldbezuegeCallback = (
+export type BerechneElterngeldbezuegeByElternteilCallback = (
   elternteil: Elternteil,
   monate: Readonly<Partial<Record<Lebensmonatszahl, Monat>>>,
-) => ElterngeldbezuegeFuerElternteil;
+) => Elterngeldbezuege;
+
+export type BerechneElterngeldbezuegeByPlanCallback<A extends Ausgangslage> = (
+  plan: Plan<A>,
+) => Elterngeldbezuege;

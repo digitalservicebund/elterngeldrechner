@@ -14,11 +14,11 @@ export {
   KeinElterngeld,
 } from "./Auswahloption";
 export { type Einkommen } from "./Einkommen";
+export type { Elterngeldbezuege, Elterngeldbezug } from "./Elterngeldbezug";
 export type {
-  ElterngeldbezuegeFuerElternteil,
-  Elterngeldbezug,
+  BerechneElterngeldbezuegeByElternteilCallback,
+  BerechneElterngeldbezuegeByPlanCallback,
 } from "./Elterngeldbezug";
-export type { BerechneElterngeldbezuegeCallback } from "./Elterngeldbezug";
 export { Elternteil, compareElternteile } from "./Elternteil";
 export {
   AlleElternteileHabenBonusGewaehlt,

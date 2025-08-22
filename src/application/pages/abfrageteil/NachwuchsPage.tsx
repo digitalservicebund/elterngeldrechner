@@ -1,12 +1,12 @@
 import { useId } from "react";
 import { useNavigate } from "react-router-dom";
-import { Page } from "./Page";
 import { Button } from "@/application/components";
 import { NachwuchsForm } from "@/application/features/abfrageteil";
 import {
   StepNachwuchsState,
   parseGermanDateString,
 } from "@/application/features/abfrageteil/state";
+import { Page } from "@/application/pages/Page";
 import { formSteps } from "@/application/routing/formSteps";
 import { trackNutzergruppe } from "@/application/user-tracking";
 

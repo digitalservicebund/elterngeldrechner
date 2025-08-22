@@ -3,8 +3,6 @@ import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
 import download from "downloadjs";
 import { type ReactNode, useState } from "react";
-import { Page } from "./Page";
-import { useNavigateWithPlan } from "./useNavigateWithPlan";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import {
@@ -20,6 +18,8 @@ import {
   imageAntrag,
   imageSeite,
 } from "@/application/features/pdfAntrag/pdf-images";
+import { Page } from "@/application/pages/Page";
+import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
@@ -243,4 +243,111 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       </div>
     </Page>
   );
+}
+
+if (import.meta.vitest) {
+  const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
+
+  describe("Datenuebernahme Antrag Page", async () => {
+    const { useNavigateWithPlan } = await import(
+      "@/application/pages/planungsteil/useNavigateWithPlan"
+    );
+
+    const { INITIAL_STATE, render, screen } = await import(
+      "@/application/test-utils"
+    );
+
+    const { produce } = await import("immer");
+
+    beforeEach(() => {
+      vi.mock(
+        import("@/application/pages/planungsteil/useNavigateWithPlan"),
+        () => ({
+          useNavigateWithPlan: vi.fn(),
+        }),
+      );
+    });
+
+    it("shows a section for the Datenuebernahme Antrag with option to download pdf if a Plan was provided and Bundesland is supported", () => {
+      vi.mocked(useNavigateWithPlan).mockReturnValue({
+        plan: ANY_PLAN,
+        navigateWithPlanState: () => undefined,
+      });
+
+      render(<DatenuebernahmeAntragPage />, {
+        preloadedState: initialTestState,
+      });
+
+      expect(
+        screen.getByLabelText(
+          "Übernahme Planung in den PDF Antrag auf Elterngeld",
+        ),
+      ).toBeVisible();
+      expect(
+        screen.getByRole("button", { name: "Antrag_auf_Elterngeld.pdf" }),
+      ).toBeVisible();
+    });
+
+    it("shows a section for the Datenuebernahme Antrag with links instead of option to download pdf if a Plan was provided and Bundesland is unsupported", () => {
+      const state = produce(initialTestState, (draft) => {
+        draft.stepAllgemeineAngaben.bundesland = bundeslaender[0].name;
+      });
+
+      vi.mocked(useNavigateWithPlan).mockReturnValue({
+        plan: ANY_PLAN,
+        navigateWithPlanState: () => undefined,
+      });
+
+      render(<DatenuebernahmeAntragPage />, { preloadedState: state });
+
+      expect(
+        screen.getByLabelText(
+          "Übernahme Planung in den PDF Antrag auf Elterngeld",
+        ),
+      ).toBeVisible();
+      expect(
+        screen.getByText(
+          "Die automatische Übernahme Ihrer Elterngeld-Planung ist nur im bundeseinheitlichen Antrag möglich.",
+        ),
+      ).toBeVisible();
+    });
+
+    it("uses the existing Plan when navigating back to the Rechner", () => {
+      const navigateWithPlanState = vi.fn();
+      vi.mocked(useNavigateWithPlan).mockReturnValue({
+        plan: ANY_PLAN,
+        navigateWithPlanState,
+      });
+
+      render(<DatenuebernahmeAntragPage />, {
+        preloadedState: initialTestState,
+      });
+
+      screen.getByRole("button", { name: "Zurück" }).click();
+
+      expect(navigateWithPlanState).toHaveBeenCalledOnce();
+      expect(navigateWithPlanState).toHaveBeenLastCalledWith(
+        "/rechner-planer",
+        ANY_PLAN,
+      );
+    });
+
+    const ANY_PLAN = {
+      ausgangslage: {
+        anzahlElternteile: 1 as const,
+        geburtsdatumDesKindes: new Date(),
+      },
+      lebensmonate: {},
+    };
+
+    const initialTestState = produce(INITIAL_STATE, (draft) => {
+      draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
+      draft.stepAllgemeineAngaben.pseudonym = {
+        ET1: "Elternteil 1",
+        ET2: "Elternteil 2",
+      };
+      draft.stepNachwuchs.anzahlKuenftigerKinder = 1;
+      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "01.01.2100";
+    });
+  });
 }

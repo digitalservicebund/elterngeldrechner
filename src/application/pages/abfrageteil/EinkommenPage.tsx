@@ -1,23 +1,24 @@
 import { useId } from "react";
-import { useNavigate } from "react-router";
-import { Page } from "./Page";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/application/components";
-import { ErwerbstaetigkeitForm } from "@/application/features/abfrageteil";
+import { EinkommenForm } from "@/application/features/abfrageteil";
+import { Page } from "@/application/pages/Page";
 import { formSteps } from "@/application/routing/formSteps";
 
-export function ErwerbstaetigkeitPage() {
+export function EinkommenPage() {
   const formIdentifier = useId();
 
   const navigate = useNavigate();
-  const navigateToNachwuchsPage = () => navigate(formSteps.nachwuchs.route);
-  const navigateToEinkommenPage = () => navigate(formSteps.einkommen.route);
+  const navigateToErwerbstaetigkeitPage = () =>
+    navigate(formSteps.erwerbstaetigkeit.route);
+  const navigateToBeispielePage = () => navigate(formSteps.beispiele.route);
 
   return (
-    <Page step={formSteps.erwerbstaetigkeit}>
+    <Page step={formSteps.einkommen}>
       <div className="flex flex-col gap-56">
-        <ErwerbstaetigkeitForm
+        <EinkommenForm
           id={formIdentifier}
-          onSubmit={navigateToEinkommenPage}
+          onSubmit={navigateToBeispielePage}
           hideSubmitButton
         />
 
@@ -25,7 +26,7 @@ export function ErwerbstaetigkeitPage() {
           <Button
             type="button"
             buttonStyle="secondary"
-            onClick={navigateToNachwuchsPage}
+            onClick={navigateToErwerbstaetigkeitPage}
           >
             Zurück
           </Button>

@@ -7,8 +7,8 @@ import {
   EinkommenPage,
   ErwerbstaetigkeitPage,
   NachwuchsPage,
-  RechnerPlanerPage,
-} from "./pages";
+  PlanerPage,
+} from "@/application/pages";
 import { RootState } from "@/application/redux";
 import RouteGuard from "@/application/routing/RouteGuard";
 import {
@@ -73,7 +73,7 @@ const internalRouteDefinition: InternalRouteDefinition = [
     },
   },
   {
-    element: <RechnerPlanerPage />,
+    element: <PlanerPage />,
     path: formSteps.rechnerUndPlaner.route,
     precondition: (state: RootState) => {
       return state.stepEinkommen.limitEinkommenUeberschritten != null;

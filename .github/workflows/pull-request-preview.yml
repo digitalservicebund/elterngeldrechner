@@ -18,7 +18,7 @@ jobs:
 
   comment-preview-url:
     needs: deploy
-    if: github.event.action != 'closed' && needs.deploy.result == 'success'
+    if: github.event.action == 'opened' && needs.deploy.result == 'success'
     runs-on: ubuntu-24.04
     steps:
       - name: Post preview URL to PR

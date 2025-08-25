@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
@@ -6,13 +6,16 @@ import { composeAusgangslageFuerPlaner } from "@/application/features/abfragetei
 import { BeispielAuswahlbox } from "@/application/features/beispiele/component/BeispielAuswahlbox";
 import { BeispielAuswahlboxBody } from "@/application/features/beispiele/component/BeispielAuswahlboxBody";
 import { BeispielAuswahloptionLegende } from "@/application/features/beispiele/component/BeispielAuswahloptionLegende";
-import { useBeispieleService } from "@/application/features/beispiele/hooks";
+import {
+  Beispiel,
+  erstelleBeispiele,
+} from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import { Page } from "@/application/pages/Page";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
-import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
   // TODO: Implement keyboard navigation and test accessibility tree
@@ -22,6 +25,7 @@ export function BeispielePage() {
   const navigate = useNavigate();
 
   const { navigateWithPlanState } = useNavigateWithPlan();
+  const { berechneElterngeldbezuegeByPlan } = useBerechneElterngeldbezuege();
 
   const navigateToEinkommenPage = async () => {
     await navigate(formSteps.einkommen.route);
@@ -38,11 +42,10 @@ export function BeispielePage() {
 
   const [aktivesBeispiel, setAktivesBeispiel] = useState<string>(KeineAuswahl);
 
-  const { beispiele } = useBeispieleService(ausgangslage, setPlan, {
-    onWaehleBeispielAus: trackMetricsForEinBeispielWurdeAusgewaehlt,
-  });
-
-  const { berechneElterngeldbezuegeByPlan } = useBerechneElterngeldbezuege();
+  const beispiele: Beispiel<Ausgangslage>[] = useMemo(
+    () => erstelleBeispiele(ausgangslage),
+    [ausgangslage],
+  );
 
   const handleBeispielChange = (aktivierteOption: string) => {
     const neuesAktivesBeispiel = beispiele.find(
@@ -57,7 +60,7 @@ export function BeispielePage() {
       });
     } else if (aktivierteOption === EigenePlanung) {
       setPlan({
-        ausgangslage: composeAusgangslageFuerPlaner(store.getState()),
+        ausgangslage: ausgangslage,
         lebensmonate: {},
       });
     }

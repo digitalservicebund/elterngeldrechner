@@ -1,51 +1,62 @@
-import { ReactNode } from "react";
-import { BeispielVisualisierung } from "./BeispielVisualisierung";
-import { Geldbetrag } from "@/application/components";
-import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
-import { Ausgangslage, isLebensmonatszahl } from "@/monatsplaner";
-import { BerechneElterngeldbezuegeByPlanCallback } from "@/monatsplaner/Elterngeldbezug";
-import { getRecordEntriesWithIntegerKeys } from "@/monatsplaner/common/type-safe-records";
+import classNames from "classnames";
+import { ReactNode, useId } from "react";
 
 type Props = {
-  readonly beispiel: Beispiel<Ausgangslage>;
-  readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeByPlanCallback<Ausgangslage>;
+  readonly titel: string;
+  readonly beschreibung: string;
+  readonly checked: boolean;
+  readonly onChange: () => void;
   readonly className?: string;
+  readonly children?: ReactNode;
 };
 
 export function BeispielAuswahlbox({
-  beispiel,
-  berechneElterngeldbezuege,
+  titel,
+  beschreibung,
+  checked,
+  onChange,
+  className,
+  children,
 }: Props): ReactNode {
-  // Change to proper radio buttons with active states
-  // Implement aria support for title and description
+  // TODO: Iterate over naming of components
 
-  const gesamtbezuege = getRecordEntriesWithIntegerKeys(
-    berechneElterngeldbezuege(beispiel.plan),
-    isLebensmonatszahl,
-  ).reduce((acc, [_, value]) => acc + (value ?? 0), 0);
+  const radioId = useId();
 
   return (
-    <div className="flex flex-col rounded bg-off-white p-24">
-      <h4 className="break-words">{beispiel.titel}</h4>
-      <p className="break-words">{beispiel.beschreibung}</p>
+    <label
+      htmlFor={radioId}
+      className={classNames(
+        "grid cursor-pointer grid-cols-[auto_1fr] gap-x-10 rounded bg-off-white p-24",
+        "has-[:focus]:ring-2 has-[:focus]:ring-primary",
+        "has-[:checked]:bg-primary-light",
+        className,
+      )}
+    >
+      <input
+        id={radioId}
+        type="radio"
+        name={titel}
+        checked={checked}
+        onChange={onChange}
+        className={classNames(
+          "relative size-32 min-w-32 rounded-full border-2 border-solid border-black bg-white",
+          "before:size-16 before:rounded-full before:content-['']",
+          "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
+          "checked:before:bg-black self-center",
+        )}
+      />
 
-      <div className="mt-16 h-[1px] w-full bg-grey" />
+      <h4 id={`${radioId}-titel`} className="self-center break-words">
+        {titel}
+      </h4>
 
-      <p className="pt-16">
-        Elterngeld Summe
-        <span className="ml-10 rounded bg-primary-light px-10 py-2">
-          <Geldbetrag betrag={gesamtbezuege} />
-        </span>
-      </p>
+      <p className="col-span-2 break-words">{beschreibung}</p>
 
-      <p className="pt-16">
-        Elterngeld bis
-        <span className="ml-10 rounded bg-primary-light px-10 py-2">
-          13. Lebensmonat
-        </span>
-      </p>
+      {!!children && (
+        <div className="col-span-2 mt-16 h-[1px] w-full bg-grey" />
+      )}
 
-      <BeispielVisualisierung beispiel={beispiel} className="mt-auto" />
-    </div>
+      {children}
+    </label>
   );
 }

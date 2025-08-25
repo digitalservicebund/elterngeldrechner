@@ -3,13 +3,13 @@ import { useNavigate } from "react-router";
 import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
-import { BeispielAuswahlbox } from "@/application/features/beispiele/component/BeispielAuswahlbox";
-import { BeispielAuswahlboxBody } from "@/application/features/beispiele/component/BeispielAuswahlboxBody";
-import { BeispielAuswahloptionLegende } from "@/application/features/beispiele/component/BeispielAuswahloptionLegende";
 import {
-  Beispiel,
+  AuswahloptionenLegende as BeispielAuswahloptionenLegende,
+  type Beispiel,
+  Beschreibung as BeispielBeschreibung,
+  Radiobutton as BeispielRadiobutton,
   erstelleBeispiele,
-} from "@/application/features/beispiele/hooks/erstelleBeispiele";
+} from "@/application/features/beispiele";
 import { Page } from "@/application/pages/Page";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
@@ -75,7 +75,7 @@ export function BeispielePage() {
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-56">
-        <BeispielAuswahloptionLegende beispiele={beispiele} />
+        <BeispielAuswahloptionenLegende beispiele={beispiele} />
 
         <div
           className="grid grid-cols-1 gap-26 md:grid-cols-2"
@@ -83,21 +83,21 @@ export function BeispielePage() {
           aria-label="Beispielauswahl"
         >
           {beispiele.map((beispiel) => (
-            <BeispielAuswahlbox
+            <BeispielRadiobutton
               titel={beispiel.titel}
               key={beispiel.identifier}
               beschreibung={beispiel.beschreibung}
               checked={aktivesBeispiel === beispiel.identifier}
               onChange={() => handleBeispielChange(beispiel.identifier)}
             >
-              <BeispielAuswahlboxBody
+              <BeispielBeschreibung
                 beispiel={beispiel}
                 berechneElterngeldbezuege={berechneElterngeldbezuegeByPlan}
               />
-            </BeispielAuswahlbox>
+            </BeispielRadiobutton>
           ))}
 
-          <BeispielAuswahlbox
+          <BeispielRadiobutton
             titel="Eigene Planung anlegen"
             beschreibung="Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
             erstellen Sie eine Planung ohne Planungshilfe."

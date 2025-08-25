@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { BeispielAuswahloptionPlakette } from "./BeispielAuswahloptionPlakette";
+import { AuswahloptionPlakette } from "./AuswahloptionPlakette";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import {
   Ausgangslage,
@@ -14,6 +14,24 @@ type Props = {
   readonly beispiele: Beispiel<Ausgangslage>[];
 };
 
+export function AuswahloptionenLegende({ beispiele }: Props): ReactNode {
+  const auswahloptionen = findeVerwendeteAuswahloptionen(beispiele);
+
+  return (
+    <ul className="flex flex-wrap gap-20">
+      {auswahloptionen.map((option) => (
+        <li key={option} className="flex items-center gap-10">
+          <AuswahloptionPlakette
+            auswahloption={option}
+            className="h-[32px] w-[64px]"
+          />
+          <strong>{option}</strong>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function findeVerwendeteAuswahloptionen(
   beispiele: Beispiel<Ausgangslage>[],
 ): Auswahloption[] {
@@ -27,24 +45,6 @@ function findeVerwendeteAuswahloptionen(
       [] as Auswahloption[],
     )
     .toSorted((a, b) => a.localeCompare(b));
-}
-
-export function BeispielAuswahloptionLegende({ beispiele }: Props): ReactNode {
-  const auswahloptionen = findeVerwendeteAuswahloptionen(beispiele);
-
-  return (
-    <ul className="flex flex-wrap gap-20">
-      {auswahloptionen.map((option) => (
-        <li key={option} className="flex items-center gap-10">
-          <BeispielAuswahloptionPlakette
-            auswahloption={option}
-            className="h-[32px] w-[64px]"
-          />
-          <strong>{option}</strong>
-        </li>
-      ))}
-    </ul>
-  );
 }
 
 if (import.meta.vitest) {

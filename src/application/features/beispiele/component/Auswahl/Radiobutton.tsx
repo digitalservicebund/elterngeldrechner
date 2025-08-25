@@ -10,7 +10,7 @@ type Props = {
   readonly children?: ReactNode;
 };
 
-export function BeispielAuswahlbox({
+export function Radiobutton({
   titel,
   beschreibung,
   checked,
@@ -18,8 +18,6 @@ export function BeispielAuswahlbox({
   className,
   children,
 }: Props): ReactNode {
-  // TODO: Iterate over naming of components
-
   const radioId = useId();
 
   return (

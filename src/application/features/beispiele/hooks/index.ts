@@ -1,1 +1,6 @@
-export type { BeispielIdentifier, BeispielOhnePlan } from "./erstelleBeispiele";
+export type {
+  Beispiel,
+  BeispielIdentifier,
+  BeispielOhnePlan,
+} from "./erstelleBeispiele";
+export { erstelleBeispiele } from "./erstelleBeispiele";

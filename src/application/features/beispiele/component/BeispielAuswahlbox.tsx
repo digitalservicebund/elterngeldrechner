@@ -19,15 +19,10 @@ export function BeispielAuswahlbox({
   // Change to proper radio buttons with active states
   // Implement aria support for title and description
 
-  const elterngeldbezuege = getRecordEntriesWithIntegerKeys(
+  const gesamtbezuege = getRecordEntriesWithIntegerKeys(
     berechneElterngeldbezuege(beispiel.plan),
     isLebensmonatszahl,
-  );
-
-  const gesamtbezuege = elterngeldbezuege.reduce(
-    (acc, [_, value]) => acc + (value ?? 0),
-    0,
-  );
+  ).reduce((acc, [_, value]) => acc + (value ?? 0), 0);
 
   return (
     <div className="flex flex-col rounded bg-off-white p-24">

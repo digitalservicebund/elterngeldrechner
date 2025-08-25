@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { EinkommenFuerElternteil } from "./EinkommenFuerElternteil";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
 import { berechneGesamtsumme } from "./berechneGesamtsumme";
-import { Geldbetrag } from "@/application/features/planer/component/common";
+import { Geldbetrag } from "@/application/components";
 import {
   type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,

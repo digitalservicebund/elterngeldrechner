@@ -3,7 +3,7 @@ import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import type { ReactNode } from "react";
 import type { SummeFuerElternteil } from "./berechneGesamtsumme";
-import { Geldbetrag } from "@/application/features/planer/component/common";
+import { Geldbetrag } from "@/application/components";
 
 type Props = {
   readonly pseudonym: string | undefined;

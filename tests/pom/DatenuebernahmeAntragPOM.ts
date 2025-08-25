@@ -60,7 +60,7 @@ export class DatenuebernahmeAntragPOM {
       this.page.waitForEvent("download"),
       this.page
         .getByRole("button", {
-          name: "Seite18_Antrag_Elterngeld.pdf",
+          name: "Seite_Planung_Elterngeld.pdf",
         })
         .click(),
     ]);

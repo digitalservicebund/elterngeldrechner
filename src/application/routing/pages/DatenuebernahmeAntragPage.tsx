@@ -1,6 +1,6 @@
 import ArrowOutward from "@digitalservicebund/icons/ArrowOutward";
-import AntragIcon from "@digitalservicebund/icons/ContentCopyOutlined";
-import SeiteIcon from "@digitalservicebund/icons/DescriptionOutlined";
+import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
+import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
 import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Page } from "./Page";
@@ -90,7 +90,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
         plan,
       });
 
-      download(pdfBytes, "Seite18_Antrag_Elterngeld.pdf", "application/pdf");
+      download(pdfBytes, "Seite_Planung_Elterngeld.pdf", "application/pdf");
 
       pushTrackingEvent("Planungsseite-wurde-heruntergeladen");
     } catch {
@@ -136,26 +136,26 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                         className="!text-base font-bold !text-black"
                         onClick={downloadGanzerAntrag}
                       >
-                        <AntragIcon /> Antrag_auf_Elterngeld.pdf
+                        <FileDownloadIcon className="mr-6" />
+                        Antrag_auf_Elterngeld.pdf
                       </Button>
                     )}
                   </div>
                   <p>
-                    Damit Ihr Antrag auf Elterngeld vollständig ist, benötigen
-                    Sie einige Anlagen. Diese finden Sie auf der folgenden
-                    Seite:
+                    Hier finden Sie eine
+                    <a
+                      className="mx-4 font-bold underline"
+                      href={bundesland.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(event) =>
+                        trackedDownloadOfAnlagen(event, bundesland)
+                      }
+                    >
+                      <OpenInNewIcon /> Übersicht der Anlagen
+                    </a>
+                    zu Ihrem Antrag.
                   </p>
-                  <a
-                    className="font-bold underline"
-                    href={bundesland.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={(event) =>
-                      trackedDownloadOfAnlagen(event, bundesland)
-                    }
-                  >
-                    <ArrowOutward /> Antrag auf Elterngeld in {bundesland.name}
-                  </a>
                 </div>
               </div>
             </div>
@@ -181,7 +181,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                       className="!text-base font-bold !text-black"
                       onClick={downloadPlanungsseite}
                     >
-                      <SeiteIcon /> Seite18_Antrag_Elterngeld.pdf
+                      <FileDownloadIcon className="mr-6" />
+                      Seite_Planung_Elterngeld.pdf
                     </Button>
                   )}
                 </div>

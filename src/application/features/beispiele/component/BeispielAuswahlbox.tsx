@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { BeispielVisualisierung } from "./BeispielVisualisierung";
+import { Geldbetrag } from "@/application/components";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import { Ausgangslage, isLebensmonatszahl } from "@/monatsplaner";
 import { BerechneElterngeldbezuegeByPlanCallback } from "@/monatsplaner/Elterngeldbezug";
@@ -18,16 +19,15 @@ export function BeispielAuswahlbox({
   // Change to proper radio buttons with active states
   // Implement aria support for title and description
 
-  // Merge with Gesammtsummenanzeige as the next step
-
   const elterngeldbezuege = getRecordEntriesWithIntegerKeys(
     berechneElterngeldbezuege(beispiel.plan),
     isLebensmonatszahl,
   );
 
-  const gesamtbezuege = elterngeldbezuege
-    .reduce((acc, [_, value]) => acc + (value ?? 0), 0)
-    .toLocaleString("de-DE");
+  const gesamtbezuege = elterngeldbezuege.reduce(
+    (acc, [_, value]) => acc + (value ?? 0),
+    0,
+  );
 
   return (
     <div className="flex flex-col rounded bg-off-white p-24">
@@ -39,7 +39,7 @@ export function BeispielAuswahlbox({
       <p className="pt-16">
         Elterngeld Summe
         <span className="ml-10 rounded bg-primary-light px-10 py-2">
-          {gesamtbezuege} €
+          <Geldbetrag betrag={gesamtbezuege} />
         </span>
       </p>
 

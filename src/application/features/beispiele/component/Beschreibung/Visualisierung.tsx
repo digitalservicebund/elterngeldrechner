@@ -1,7 +1,7 @@
 import AccessTime from "@digitalservicebund/icons/AccessTime";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
-import { BeispielMonatsverteilung } from "./BeispielMonatsverteilung";
+import { Monatsverteilung } from "./Monatsverteilung";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
 import {
@@ -25,32 +25,7 @@ type Props = {
   readonly className?: string;
 };
 
-function errechneMonatsverteilung<E extends Elternteil>(
-  lebensmonate: [Lebensmonatszahl, Lebensmonat<E>][],
-  elternteil: E,
-) {
-  return lebensmonate
-    .map(([_, lebensmonat]) => lebensmonat[elternteil].gewaehlteOption)
-    .map((option) => (option === undefined ? KeinElterngeld : option))
-    .reduce(
-      (counts, key) => ((counts[key] = (counts[key] ?? 0) + 1), counts),
-      {} as Partial<Record<Auswahloption, number>>,
-    );
-}
-
-function summiereMonatsverteilung(
-  monatsverteilung: Partial<Record<Auswahloption, number>>,
-) {
-  return getRecordEntriesWithStringKeys(monatsverteilung, isAuswahloption)
-    .filter(([variante, _]) => variante !== KeinElterngeld)
-    .map(([_, anzahl]) => anzahl)
-    .reduce((acc, curr) => acc + (curr ?? 0), 0);
-}
-
-export function BeispielVisualisierung({
-  beispiel,
-  className,
-}: Props): ReactNode {
+export function Visualisierung({ beispiel, className }: Props): ReactNode {
   const ausgangslage = beispiel.plan.ausgangslage;
 
   const balken = listeElternteileFuerAusgangslageAuf(ausgangslage).map(
@@ -80,13 +55,35 @@ export function BeispielVisualisierung({
             {summeGeplanteMonate} Monate
           </p>
 
-          <BeispielMonatsverteilung monatsverteilung={monatsverteilung} />
+          <Monatsverteilung monatsverteilung={monatsverteilung} />
         </div>
       );
     },
   );
 
   return <div className={className}>{balken}</div>;
+}
+
+function errechneMonatsverteilung<E extends Elternteil>(
+  lebensmonate: [Lebensmonatszahl, Lebensmonat<E>][],
+  elternteil: E,
+) {
+  return lebensmonate
+    .map(([_, lebensmonat]) => lebensmonat[elternteil].gewaehlteOption)
+    .map((option) => (option === undefined ? KeinElterngeld : option))
+    .reduce(
+      (counts, key) => ((counts[key] = (counts[key] ?? 0) + 1), counts),
+      {} as Partial<Record<Auswahloption, number>>,
+    );
+}
+
+function summiereMonatsverteilung(
+  monatsverteilung: Partial<Record<Auswahloption, number>>,
+) {
+  return getRecordEntriesWithStringKeys(monatsverteilung, isAuswahloption)
+    .filter(([variante, _]) => variante !== KeinElterngeld)
+    .map(([_, anzahl]) => anzahl)
+    .reduce((acc, curr) => acc + (curr ?? 0), 0);
 }
 
 if (import.meta.vitest) {

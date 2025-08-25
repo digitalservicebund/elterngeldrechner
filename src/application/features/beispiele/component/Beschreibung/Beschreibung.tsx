@@ -1,4 +1,4 @@
-import { BeispielVisualisierung } from "./BeispielVisualisierung";
+import { Visualisierung } from "./Visualisierung";
 import { Geldbetrag } from "@/application/components";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import {
@@ -13,10 +13,7 @@ type Props = {
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeByPlanCallback<Ausgangslage>;
 };
 
-export function BeispielAuswahlboxBody({
-  beispiel,
-  berechneElterngeldbezuege,
-}: Props) {
+export function Beschreibung({ beispiel, berechneElterngeldbezuege }: Props) {
   const gesamtbezuege = getRecordEntriesWithIntegerKeys(
     berechneElterngeldbezuege(beispiel.plan),
     isLebensmonatszahl,
@@ -38,10 +35,7 @@ export function BeispielAuswahlboxBody({
         </span>
       </p>
 
-      <BeispielVisualisierung
-        beispiel={beispiel}
-        className="col-span-2 mt-auto"
-      />
+      <Visualisierung beispiel={beispiel} className="col-span-2 mt-auto" />
     </>
   );
 }

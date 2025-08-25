@@ -9,7 +9,7 @@ type Props = {
   readonly className?: string;
 };
 
-export function BeispielAuswahloptionPlakette({
+export function AuswahloptionPlakette({
   auswahloption,
   style,
   className,

@@ -1,0 +1,1 @@
+export { Beschreibung } from "./Beschreibung";

@@ -6,3 +6,4 @@ export * from "./setzePlanZurueck";
 export * from "./teileLebensmonateBeiElternteileAuf";
 export * from "./validierePlanFuerFinaleAbgabe";
 export * from "./waehleOption";
+export * from "./berechneGesamtsumme";

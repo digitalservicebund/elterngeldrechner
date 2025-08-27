@@ -1,6 +1,9 @@
 import {
   type Ausgangslage,
+  AusgangslageFuerEinElternteil,
+  AusgangslageFuerZweiElternteile,
   type Auswahloption,
+  type BerechneElterngeldbezuegeCallback,
   Elternteil,
   type ElternteileByAusgangslage,
   type Lebensmonat,
@@ -8,6 +11,7 @@ import {
   MONAT_MIT_MUTTERSCHUTZ,
   type Plan,
   Variante,
+  aktualisiereElterngeldbezuege,
   erstelleInitialeLebensmonate,
   listeMonateAuf,
 } from "@/monatsplaner";
@@ -27,10 +31,8 @@ import {
  */
 export function erstellePlanFuerEinBeispiel<A extends Ausgangslage>(
   ausgangslage: A,
-  abschnitte: Array<{
-    lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
-    anzahl: number;
-  }>,
+  abschnitte: Abschnitt<A>[],
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ): Plan<A> {
   const initialeLebensmonate = erstelleInitialeLebensmonate(ausgangslage);
   const relevantAbschnitte = abschnitte.filter(
@@ -44,11 +46,12 @@ export function erstellePlanFuerEinBeispiel<A extends Ausgangslage>(
       if (abschnitt === undefined) {
         return lebensmonate;
       } else {
-        if (abschnitt.anzahl > 1)
+        if (abschnitt.anzahl > 1) {
           relevantAbschnitte.unshift({
             ...abschnitt,
             anzahl: abschnitt.anzahl - 1,
           });
+        }
 
         const lebensmonat = mergeLebensmonat(
           abschnitt.lebensmonat,
@@ -61,7 +64,9 @@ export function erstellePlanFuerEinBeispiel<A extends Ausgangslage>(
     initialeLebensmonate,
   );
 
-  return { ausgangslage, lebensmonate };
+  const plan = { ausgangslage, lebensmonate };
+
+  return aktualisiereElterngeldbezuege(berechneElterngeldbezuege, plan);
 }
 
 /**
@@ -80,24 +85,57 @@ function mergeLebensmonat<E extends Elternteil>(
   );
 }
 
-if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+type Abschnitt<A extends Ausgangslage> = {
+  lebensmonat: Lebensmonat<ElternteileByAusgangslage<A>>;
+  anzahl: number;
+};
 
-  describe("erstelle Plan für ein Beispiel", () => {
-    // TODO: Make this a property test once generators are in place
+if (import.meta.vitest) {
+  const { describe, it, expect, vi } = import.meta.vitest;
+
+  // TODO: Make this a property test once generators are in place
+
+  describe("erstelle Plan für ein Beispiel", async () => {
+    const { getRecordEntriesWithIntegerKeys } = await import(
+      "@/application/utilities"
+    );
+
+    const { KeinElterngeld, isLebensmonatszahl } = await import(
+      "@/monatsplaner"
+    );
+
     it("maintains the given Ausgangslage for the created Plan", () => {
+      const berechneElterngeldbezuege = vi
+        .fn()
+        .mockImplementation(staticElterngeldbezuege);
+
       const ausgangslage: Ausgangslage = {
         anzahlElternteile: 1,
-        geburtsdatumDesKindes: ANY_GEBURTSDATUM,
+        geburtsdatumDesKindes: new Date(),
       };
 
-      const plan = erstellePlanFuerEinBeispiel(ausgangslage, []);
+      const abschnitte: Abschnitt<AusgangslageFuerEinElternteil>[] = [];
+
+      const plan = erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        abschnitte,
+        berechneElterngeldbezuege,
+      );
 
       expect(plan.ausgangslage).toBe(ausgangslage);
     });
 
     it("repeats the Lebensmonat of each Abschnitt correctly", () => {
-      const abschnitte = [
+      const berechneElterngeldbezuege = vi
+        .fn()
+        .mockImplementation(staticElterngeldbezuege);
+
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        geburtsdatumDesKindes: new Date(),
+      };
+
+      const abschnitte: Abschnitt<AusgangslageFuerEinElternteil>[] = [
         {
           lebensmonat: { [Elternteil.Eins]: monat(Variante.Basis) },
           anzahl: 2,
@@ -112,30 +150,41 @@ if (import.meta.vitest) {
         },
       ];
 
-      const plan = erstellePlanFuerEinBeispiel(ANY_AUSGANGSLAGE, abschnitte);
+      const plan = erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        abschnitte,
+        berechneElterngeldbezuege,
+      );
 
       expect(plan.lebensmonate).toStrictEqual({
-        1: { [Elternteil.Eins]: monat(Variante.Basis) },
-        2: { [Elternteil.Eins]: monat(Variante.Basis) },
-        3: { [Elternteil.Eins]: monat(Variante.Plus) },
-        4: { [Elternteil.Eins]: monat(Variante.Bonus) },
-        5: { [Elternteil.Eins]: monat(Variante.Bonus) },
-        6: { [Elternteil.Eins]: monat(Variante.Bonus) },
+        1: { [Elternteil.Eins]: monat(Variante.Basis, 200) },
+        2: { [Elternteil.Eins]: monat(Variante.Basis, 200) },
+        3: { [Elternteil.Eins]: monat(Variante.Plus, 100) },
+        4: { [Elternteil.Eins]: monat(Variante.Bonus, 50) },
+        5: { [Elternteil.Eins]: monat(Variante.Bonus, 50) },
+        6: { [Elternteil.Eins]: monat(Variante.Bonus, 50) },
       });
     });
 
     it("merges Lebensmonate of Abschnitte with the initial Lebensmonate of domain based on the Ausgangslage", () => {
+      const berechneElterngeldbezuege = vi
+        .fn()
+        .mockImplementation(staticElterngeldbezuege);
+
       const ausgangslage: Ausgangslage = {
         anzahlElternteile: 2,
         informationenZumMutterschutz: {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 1,
         },
-        pseudonymeDerElternteile: ANY_PSEUDONYME,
-        geburtsdatumDesKindes: ANY_GEBURTSDATUM,
+        pseudonymeDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+        geburtsdatumDesKindes: new Date(),
       };
 
-      const abschnitte = [
+      const abschnitte: Abschnitt<AusgangslageFuerZweiElternteile>[] = [
         {
           lebensmonat: {
             [Elternteil.Eins]: monat(Variante.Plus),
@@ -145,22 +194,35 @@ if (import.meta.vitest) {
         },
       ];
 
-      const plan = erstellePlanFuerEinBeispiel(ausgangslage, abschnitte);
+      const plan = erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        abschnitte,
+        berechneElterngeldbezuege,
+      );
 
       expect(plan.lebensmonate).toStrictEqual({
         1: {
-          [Elternteil.Eins]: monat(Variante.Plus),
+          [Elternteil.Eins]: monat(Variante.Plus, 100),
           [Elternteil.Zwei]: MONAT_MIT_MUTTERSCHUTZ,
         },
         2: {
-          [Elternteil.Eins]: monat(Variante.Plus),
-          [Elternteil.Zwei]: monat(Variante.Plus),
+          [Elternteil.Eins]: monat(Variante.Plus, 100),
+          [Elternteil.Zwei]: monat(Variante.Plus, 100),
         },
       });
     });
 
     it("ignores Abschnitte with an Anzahl of 0", () => {
-      const abschnitte = [
+      const berechneElterngeldbezuege = vi
+        .fn()
+        .mockImplementation(staticElterngeldbezuege);
+
+      const ausgangslage = {
+        anzahlElternteile: 1 as const,
+        geburtsdatumDesKindes: new Date(),
+      };
+
+      const abschnitte: Abschnitt<AusgangslageFuerEinElternteil>[] = [
         {
           lebensmonat: { [Elternteil.Eins]: monat(Variante.Basis) },
           anzahl: 1,
@@ -175,28 +237,45 @@ if (import.meta.vitest) {
         },
       ];
 
-      const plan = erstellePlanFuerEinBeispiel(ANY_AUSGANGSLAGE, abschnitte);
+      const plan = erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        abschnitte,
+        berechneElterngeldbezuege,
+      );
 
       expect(plan.lebensmonate).toStrictEqual({
-        1: { [Elternteil.Eins]: monat(Variante.Basis) },
-        2: { [Elternteil.Eins]: monat(Variante.Bonus) },
+        1: { [Elternteil.Eins]: monat(Variante.Basis, 200) },
+        2: { [Elternteil.Eins]: monat(Variante.Bonus, 50) },
       });
     });
 
-    function monat(gewaehlteOption: Auswahloption) {
-      return { gewaehlteOption, imMutterschutz: false as const };
+    function monat(gewaehlteOption: Auswahloption, elterngeldbezug?: number) {
+      return {
+        gewaehlteOption,
+        imMutterschutz: false as const,
+        elterngeldbezug: elterngeldbezug ? elterngeldbezug : undefined,
+      };
     }
 
-    const ANY_GEBURTSDATUM = new Date();
+    const staticElterngeldbezuege: BerechneElterngeldbezuegeCallback = (
+      _,
+      monate,
+    ) => {
+      const mockBetraege: Record<Auswahloption, number> = {
+        [Variante.Basis]: 200,
+        [Variante.Plus]: 100,
+        [Variante.Bonus]: 50,
+        [KeinElterngeld]: 0,
+      };
 
-    const ANY_PSEUDONYME = {
-      [Elternteil.Eins]: "Jane",
-      [Elternteil.Zwei]: "John",
-    };
-
-    const ANY_AUSGANGSLAGE = {
-      anzahlElternteile: 1 as const,
-      geburtsdatumDesKindes: ANY_GEBURTSDATUM,
+      return Object.fromEntries(
+        getRecordEntriesWithIntegerKeys(monate, isLebensmonatszahl)
+          .filter(([_, monat]) => monat.gewaehlteOption !== undefined)
+          .map(([lebensmonatszahl, monat]) => [
+            lebensmonatszahl,
+            mockBetraege[monat.gewaehlteOption!],
+          ]),
+      );
     };
   });
 }

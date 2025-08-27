@@ -2,8 +2,8 @@ import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutl
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import type { SummeFuerElternteil } from "./berechneGesamtsumme";
 import { Geldbetrag } from "@/application/components";
+import type { SummeFuerElternteil } from "@/monatsplaner";
 
 type Props = {
   readonly pseudonym: string | undefined;

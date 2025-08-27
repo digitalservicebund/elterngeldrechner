@@ -11,6 +11,18 @@ import {
   teileLebensmonateBeiElternteileAuf,
 } from "@/monatsplaner";
 
+// TODO: Move to monatsplaner as shared function between planer and beispiele
+// TODO: Revert changes useBerechneElterngeldbezuege to keep original signature
+// TODO: Call useBerechneElterngeldbezuege in erstelleBeispiele to emit correct plans
+
+// TODO: Optionally implement stricter Monat type definition that makes sure elterngeldbezug
+// is not null if variant is bonus for example
+
+// TODO: Implement test that makes sure all beispiele have elterngeldbezuege until type
+// system takes care of this
+
+// TODO: Add architecture decision record about in source testing
+
 export function berechneGesamtsumme<A extends Ausgangslage>(
   plan: Plan<A>,
 ): Gesamtsumme<ElternteileByAusgangslage<A>> {

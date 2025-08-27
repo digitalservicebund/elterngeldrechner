@@ -4,6 +4,8 @@ import {
   type Ausgangslage,
   type AusgangslageFuerEinElternteil,
   type AusgangslageFuerZweiElternteile,
+  type Auswahloption,
+  type BerechneElterngeldbezuegeCallback,
   Elternteil,
   type Lebensmonat,
   type Monat,
@@ -14,24 +16,33 @@ import {
 
 export function erstelleBeispiele<A extends Ausgangslage>(
   ausgangslage: A,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ): Beispiel<A>[] {
   switch (ausgangslage.anzahlElternteile) {
     case 1:
       return (
         ausgangslage.istAlleinerziehend
-          ? erstelleBeispieleFuerAlleinerziehende(ausgangslage)
-          : erstelleBeispieleFuerAlleinPlanende(ausgangslage)
+          ? erstelleBeispieleFuerAlleinerziehende(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            )
+          : erstelleBeispieleFuerAlleinPlanende(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            )
       ) as Beispiel<A>[]; // Limitation of TypeScript to match inferred type correctly.
 
     case 2:
       return erstelleBeispieleFuerDieGemeinsamePlanung(
         ausgangslage,
+        berechneElterngeldbezuege,
       ) as Beispiel<A>[]; // Limitation of TypeScript to match inferred type correctly.
   }
 }
 
 function erstelleBeispieleFuerAlleinPlanende(
   ausgangslage: AusgangslageFuerEinElternteil,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ): Beispiel<AusgangslageFuerEinElternteil>[] {
   const anzahlMonateMitMutterschutz =
     ausgangslage.informationenZumMutterschutz?.letzterLebensmonatMitSchutz ?? 0;
@@ -45,38 +56,49 @@ function erstelleBeispieleFuerAlleinPlanende(
       titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 2 },
-        {
-          lebensmonat: plus,
-          anzahl: 20 - Math.max(anzahlMonateMitMutterschutz - 2, 0) * 2,
-        },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: basis, anzahl: 2 },
+          {
+            lebensmonat: plus,
+            anzahl: 20 - Math.max(anzahlMonateMitMutterschutz - 2, 0) * 2,
+          },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Allein planend - Beruf und Familie vereinen",
       titel: "Beruf und Familie vereinen",
       beschreibung:
         "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 10 },
-        { lebensmonat: plus, anzahl: 4 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: basis, anzahl: 10 },
+          { lebensmonat: plus, anzahl: 4 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Allein planend - Ein Jahr Elterngeld",
       titel: "Ein Jahr Elterngeld",
       beschreibung:
         "Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 12 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [{ lebensmonat: basis, anzahl: 12 }],
+        berechneElterngeldbezuege,
+      ),
     },
   ];
 }
 
 function erstelleBeispieleFuerAlleinerziehende(
   ausgangslage: AusgangslageFuerEinElternteil,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ): Beispiel<AusgangslageFuerEinElternteil>[] {
   const sindPartnermonateVerfuegbar =
     PartnermonateSindVerfuegbar.asPredicate(ausgangslage);
@@ -90,35 +112,46 @@ function erstelleBeispieleFuerAlleinerziehende(
       titel: "Länger Elterngeld erhalten",
       beschreibung:
         "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: 8 },
-        { lebensmonat: plus, anzahl: sindPartnermonateVerfuegbar ? 12 : 8 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: basis, anzahl: 8 },
+          { lebensmonat: plus, anzahl: sindPartnermonateVerfuegbar ? 12 : 8 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Alleinerziehend - Beruf und Familie vereinen",
       titel: "Beruf und Familie vereinen",
       beschreibung:
         "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 12 : 10 },
-        { lebensmonat: plus, anzahl: 4 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 12 : 10 },
+          { lebensmonat: plus, anzahl: 4 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Alleinerziehend - Ein Jahr Elterngeld",
       titel: "Ein Jahr Elterngeld",
       beschreibung:
         "Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [{ lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 }],
+        berechneElterngeldbezuege,
+      ),
     },
   ];
 }
 
 function erstelleBeispieleFuerDieGemeinsamePlanung(
   ausgangslage: AusgangslageFuerZweiElternteile,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
 ): Beispiel<AusgangslageFuerZweiElternteile>[] {
   const sindPartnermonateVerfuegbar =
     PartnermonateSindVerfuegbar.asPredicate(ausgangslage);
@@ -177,88 +210,112 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       titel: "Partnerschaftliche Aufteilung",
       beschreibung:
         "Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        {
-          lebensmonat: nurMutterBasis,
-          anzahl: sindPartnermonateVerfuegbar ? 7 : 6,
-        },
-        {
-          lebensmonat: nurPartnerInBasis,
-          anzahl: sindPartnermonateVerfuegbar ? 7 : 6,
-        },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          {
+            lebensmonat: nurMutterBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 7 : 6,
+          },
+          {
+            lebensmonat: nurPartnerInBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 7 : 6,
+          },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
       titel: "Länger Elterngeld bekommen",
       beschreibung:
         "Lohnt sich, wenn Sie in Teilzeit arbeiten möchten. Für mehr Zeit mit der Familie ",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: nurMutterBasis, anzahl: 2 },
-        { lebensmonat: nurMutterPlus, anzahl: 5 },
-        { lebensmonat: beidePlus, anzahl: 5 },
-        {
-          lebensmonat: nurPartnerInPlus,
-          anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
-        },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: nurMutterBasis, anzahl: 2 },
+          { lebensmonat: nurMutterPlus, anzahl: 5 },
+          { lebensmonat: beidePlus, anzahl: 5 },
+          {
+            lebensmonat: nurPartnerInPlus,
+            anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
+          },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
       titel: "Ein Jahr mit Begleitung",
       beschreibung:
         "Gemeinsam starten. Nach dem ersten Lebensjahr übernimmt der andere Elternteil für einen Monat.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: beideBasis, anzahl: 1 },
-        {
-          lebensmonat: nurMutterBasis,
-          anzahl: sindPartnermonateVerfuegbar ? 11 : 9,
-        },
-        { lebensmonat: nurPartnerInBasis, anzahl: 1 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: beideBasis, anzahl: 1 },
+          {
+            lebensmonat: nurMutterBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 11 : 9,
+          },
+          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
       titel: "Start zu zweit - flexibel zurück",
       beschreibung: "Gemeinsam in die Elternzeit starten und abschließen.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: beideBasis, anzahl: 1 },
-        {
-          lebensmonat: nurMutterBasis,
-          anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
-        },
-        { lebensmonat: nurMutterPlus, anzahl: 3 },
-        { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
-        { lebensmonat: nurPartnerInBasis, anzahl: 1 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: beideBasis, anzahl: 1 },
+          {
+            lebensmonat: nurMutterBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
+          },
+          { lebensmonat: nurMutterPlus, anzahl: 3 },
+          { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
+          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Gemeinsame Planung - Elternzeit ausschöpfen",
       titel: "Elternzeit ausschöpfen",
       beschreibung:
         "Sechs Monate zusammen Elterngeld nehmen. Dann länger Elternzeit mit halbem Elterngeld.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: mutterBasisPartnerInPlus, anzahl: 2 },
-        {
-          lebensmonat: beidePlus,
-          anzahl: sindPartnermonateVerfuegbar ? 3 : 1,
-        },
-        { lebensmonat: nurMutterPlus, anzahl: 16 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: mutterBasisPartnerInPlus, anzahl: 2 },
+          {
+            lebensmonat: beidePlus,
+            anzahl: sindPartnermonateVerfuegbar ? 3 : 1,
+          },
+          { lebensmonat: nurMutterPlus, anzahl: 16 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
     {
       identifier: "Gemeinsame Planung - Geteilte Elternzeit",
       titel: "Geteilte Elternzeit",
       beschreibung:
         "Volles und halbes Elterngeld kombiniert: 8 Monate mehr Zeit zusammen verbringen.",
-      plan: erstellePlanFuerEinBeispiel(ausgangslage, [
-        { lebensmonat: mutterBasisPartnerInPlus, anzahl: 6 },
-        {
-          lebensmonat: beidePlus,
-          anzahl: sindPartnermonateVerfuegbar ? 2 : 0,
-        },
-        { lebensmonat: nurMutterPlus, anzahl: 6 },
-      ]),
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: mutterBasisPartnerInPlus, anzahl: 6 },
+          {
+            lebensmonat: beidePlus,
+            anzahl: sindPartnermonateVerfuegbar ? 2 : 0,
+          },
+          { lebensmonat: nurMutterPlus, anzahl: 6 },
+        ],
+        berechneElterngeldbezuege,
+      ),
     },
   ];
 }
@@ -313,7 +370,7 @@ export type Beispiel<A extends Ausgangslage> = Readonly<{
 export type BeispielIdentifier = string; // Just for communication purposes yet.
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("erstelleBeispiele", async () => {
     const {
@@ -321,6 +378,10 @@ if (import.meta.vitest) {
       teileLebensmonateBeiElternteileAuf,
       zaehleVerplantesKontingent,
       bestimmeVerfuegbaresKontingent,
+      listeElternteileFuerAusgangslageAuf,
+      listeLebensmonateAuf,
+      isLebensmonatszahl,
+      KeinElterngeld,
     } = await import("@/monatsplaner");
 
     const {
@@ -337,14 +398,66 @@ if (import.meta.vitest) {
       record: arbitraryRecord,
     } = await import("fast-check");
 
+    const { getRecordEntriesWithIntegerKeys } = await import(
+      "@/application/utilities"
+    );
+
     it("always creates a correct Plan for each Beispiel", () => {
       assert(
         property(arbritraryAusgangslagen, (ausgangslagen) => {
-          ausgangslagen.forEach((ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
 
-            beispiele.forEach(({ plan }) => expectPlanToBeCorrect(plan));
-          });
+          for (const ausgangslage of ausgangslagen) {
+            const beispiele = erstelleBeispiele(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            );
+
+            for (const beispiel of beispiele) {
+              expectPlanToBeCorrect(beispiel.plan);
+            }
+          }
+        }),
+      );
+    });
+
+    it("calculates the elterngeldbezuege of a plan", () => {
+      assert(
+        property(arbritraryAusgangslagen, (ausgangslagen) => {
+          const berechneElterngeldbezuege = vi
+            .fn()
+            .mockImplementation(staticElterngeldbezuege);
+
+          const beispiele = ausgangslagen.flatMap((ausgangslage) =>
+            erstelleBeispiele(ausgangslage, berechneElterngeldbezuege),
+          );
+
+          for (const beispiel of beispiele) {
+            const lebensmonate = listeLebensmonateAuf(
+              beispiel.plan.lebensmonate,
+            );
+
+            for (const [lebensmonatszahl, lebensmonat] of lebensmonate) {
+              const elternteile = listeElternteileFuerAusgangslageAuf(
+                beispiel.plan.ausgangslage,
+              );
+
+              for (const elternteil of elternteile) {
+                const erwarteBezuege = (monat: Monat): boolean => {
+                  return (
+                    monat.gewaehlteOption !== undefined && !monat.imMutterschutz
+                  );
+                };
+
+                if (erwarteBezuege(lebensmonat[elternteil])) {
+                  expect(
+                    lebensmonat[elternteil].elterngeldbezug,
+                    `${lebensmonatszahl} in ${beispiel.titel} hat nicht alle Elterngeldbezüge`,
+                  ).toBeGreaterThan(0);
+                }
+              }
+            }
+          }
         }),
       );
     });
@@ -355,13 +468,18 @@ if (import.meta.vitest) {
     it("always creates a Plan without Partnerschaftsbonus", () => {
       assert(
         property(arbritraryAusgangslagen, (ausgangslagen) => {
-          ausgangslagen.forEach((ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
 
-            beispiele.forEach(({ plan }) =>
-              expactPlanWithoutPartnerschaftsbonus(plan),
+          for (const ausgangslage of ausgangslagen) {
+            const beispiele = erstelleBeispiele(
+              ausgangslage,
+              berechneElterngeldbezuege,
             );
-          });
+
+            for (const beispiel of beispiele) {
+              expactPlanWithoutPartnerschaftsbonus(beispiel.plan);
+            }
+          }
         }),
       );
     });
@@ -369,13 +487,18 @@ if (import.meta.vitest) {
     it("always creates a Plan that exhausts the full Kontingent for each Beispiel", () => {
       assert(
         property(arbritraryAusgangslagen, (ausgangslagen) => {
-          ausgangslagen.forEach((ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
 
-            beispiele.forEach(({ plan }) => {
-              expectPlanExhaustsKontingent(plan);
-            });
-          });
+          for (const ausgangslage of ausgangslagen) {
+            const beispiele = erstelleBeispiele(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            );
+
+            for (const beispiel of beispiele) {
+              expectPlanExhaustsKontingent(beispiel.plan);
+            }
+          }
         }),
       );
     });
@@ -383,8 +506,13 @@ if (import.meta.vitest) {
     it("generates unique identifiers", () => {
       assert(
         property(arbritraryAusgangslagen, (ausgangslagen) => {
-          ausgangslagen.forEach((ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
+
+          for (const ausgangslage of ausgangslagen) {
+            const beispiele = erstelleBeispiele(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            );
 
             const identifiers = beispiele.map((it) => it.identifier);
 
@@ -393,7 +521,7 @@ if (import.meta.vitest) {
             });
 
             expect(identifiers.length).toEqual(uniqueIdentifiers.length);
-          });
+          }
         }),
       );
     });
@@ -401,11 +529,16 @@ if (import.meta.vitest) {
     it("generated no empty descriptions", () => {
       assert(
         property(arbritraryAusgangslagen, (ausgangslagen) => {
-          ausgangslagen.forEach((ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
+
+          for (const ausgangslage of ausgangslagen) {
+            const beispiele = erstelleBeispiele(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            );
 
             expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
-          });
+          }
         }),
       );
     });
@@ -413,11 +546,16 @@ if (import.meta.vitest) {
     it("generates no empty titles", () => {
       assert(
         property(arbritraryAusgangslagen, (ausgangslagen) => {
-          ausgangslagen.forEach((ausgangslage) => {
-            const beispiele = erstelleBeispiele(ausgangslage);
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
+
+          for (const ausgangslage of ausgangslagen) {
+            const beispiele = erstelleBeispiele(
+              ausgangslage,
+              berechneElterngeldbezuege,
+            );
 
             expect(beispiele.map((it) => it.titel)).not.toContain("");
-          });
+          }
         }),
       );
     });
@@ -433,21 +571,29 @@ if (import.meta.vitest) {
     it("mirrors the Plan based on who is is in Mutterschutz", () => {
       assert(
         property(arbitraryAusgangslageZweiElternteile, (ausgangslage) => {
-          const left = erstelleBeispiele({
-            ...ausgangslage,
-            informationenZumMutterschutz: {
-              empfaenger: Elternteil.Eins,
-              letzterLebensmonatMitSchutz: 2,
-            },
-          });
+          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
 
-          const right = erstelleBeispiele({
-            ...ausgangslage,
-            informationenZumMutterschutz: {
-              empfaenger: Elternteil.Zwei,
-              letzterLebensmonatMitSchutz: 2,
+          const left = erstelleBeispiele(
+            {
+              ...ausgangslage,
+              informationenZumMutterschutz: {
+                empfaenger: Elternteil.Eins,
+                letzterLebensmonatMitSchutz: 2,
+              },
             },
-          });
+            berechneElterngeldbezuege,
+          );
+
+          const right = erstelleBeispiele(
+            {
+              ...ausgangslage,
+              informationenZumMutterschutz: {
+                empfaenger: Elternteil.Zwei,
+                letzterLebensmonatMitSchutz: 2,
+              },
+            },
+            berechneElterngeldbezuege,
+          );
 
           left
             .map<
@@ -472,6 +618,27 @@ if (import.meta.vitest) {
         }),
       );
     });
+
+    const staticElterngeldbezuege: BerechneElterngeldbezuegeCallback = (
+      _,
+      monate,
+    ) => {
+      const mockBetraege: Record<Auswahloption, number> = {
+        [Variante.Basis]: 200,
+        [Variante.Plus]: 100,
+        [Variante.Bonus]: 50,
+        [KeinElterngeld]: 0,
+      };
+
+      return Object.fromEntries(
+        getRecordEntriesWithIntegerKeys(monate, isLebensmonatszahl)
+          .filter(([_, monat]) => monat.gewaehlteOption !== undefined)
+          .map(([lebensmonatszahl, monat]) => [
+            lebensmonatszahl,
+            mockBetraege[monat.gewaehlteOption!],
+          ]),
+      );
+    };
 
     function expectPlanToBeCorrect(plan: Plan<Ausgangslage>): void {
       const violations = validierePlanFuerFinaleAbgabe(plan).mapOrElse<

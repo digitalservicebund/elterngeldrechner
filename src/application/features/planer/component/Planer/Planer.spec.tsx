@@ -9,6 +9,7 @@ import {
   Lebensmonatszahl,
   Result,
   Variante,
+  berechneGesamtsumme,
 } from "@/monatsplaner";
 
 describe("Planer", () => {
@@ -17,6 +18,33 @@ describe("Planer", () => {
       await import("@/application/features/planer/hooks"),
       "usePlanerService",
     ).mockReturnValue(ANY_SERVICE_VALUES);
+
+    vi.mock(import("@/monatsplaner"), async (importOriginal) => {
+      const originalMonatsplaner = await importOriginal();
+
+      return {
+        ...originalMonatsplaner,
+        berechneGesamtsumme: vi.fn(),
+      };
+    });
+
+    await vi.hoisted(async () => {});
+
+    vi.mocked(berechneGesamtsumme).mockReturnValue({
+      elterngeldbezug: 7041,
+      proElternteil: {
+        [Elternteil.Eins]: {
+          anzahlMonateMitBezug: 0,
+          elterngeldbezug: 0,
+          bruttoeinkommen: 0,
+        },
+        [Elternteil.Zwei]: {
+          anzahlMonateMitBezug: 0,
+          elterngeldbezug: 0,
+          bruttoeinkommen: 0,
+        },
+      },
+    });
   });
 
   it("shows a section", () => {

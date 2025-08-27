@@ -3,7 +3,7 @@ import { findeLetztenVerplantenLebensmonat } from "@/application/features/planer
 import {
   type Ausgangslage,
   type Auswahloption,
-  type BerechneElterngeldbezuegeByElternteilCallback,
+  type BerechneElterngeldbezuegeCallback,
   Elternteil,
   type Lebensmonatszahl,
   type Plan,
@@ -25,7 +25,7 @@ import {
 
 export function usePlanerService(
   initialInformation: InitialInformation,
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   callbacks?: Callbacks,
 ) {
   const [plan, setPlan] = useState(

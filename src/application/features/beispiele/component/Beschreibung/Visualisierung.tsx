@@ -49,10 +49,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
             ) : (
               <PersonIcon className="mr-4" />
             )}
-            <span className="mr-4">
-              {isEinElternteil ? "Summe" : pseudonym}
-            </span>
-            {summeGeplanteMonate} Monate
+            {isEinElternteil ? "Summe" : pseudonym} {summeGeplanteMonate} Monate
           </p>
 
           <Monatsverteilung monatsverteilung={monatsverteilung} />

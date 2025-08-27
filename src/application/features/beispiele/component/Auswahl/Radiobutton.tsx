@@ -37,7 +37,7 @@ export function Radiobutton({
         checked={checked}
         onChange={onChange}
         className={classNames(
-          "relative size-32 min-w-32 rounded-full border-2 border-solid border-black bg-white",
+          "peer relative size-32 min-w-32 rounded-full border-2 border-solid border-black bg-white",
           "before:size-16 before:rounded-full before:content-['']",
           "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
           "checked:before:bg-black self-center",
@@ -54,7 +54,9 @@ export function Radiobutton({
         <div className="col-span-2 mt-16 h-[1px] w-full bg-grey" />
       )}
 
-      {children}
+      <div className="col-span-2 flex flex-col gap-4 peer-checked:[&_span]:bg-grey-light">
+        {children}
+      </div>
     </label>
   );
 }

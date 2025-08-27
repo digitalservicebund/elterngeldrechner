@@ -10,8 +10,6 @@ type Props = {
 export function Beschreibung({ beispiel }: Props) {
   const gesamtbezug = berechneGesamtsumme(beispiel.plan).elterngeldbezug;
 
-  // TODO: Implement white background for gesamtbezug if item is selected
-
   return (
     <>
       <p className="col-span-2 pt-16">

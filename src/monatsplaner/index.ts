@@ -49,6 +49,7 @@ export {
   aktualisiereElterngeldbezuege,
   berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
+  bestimmeLetztenGeplantenLebensmonat,
   gebeEinkommenAn,
   mapLebensmonateProElternteil,
   setzePlanZurueck,

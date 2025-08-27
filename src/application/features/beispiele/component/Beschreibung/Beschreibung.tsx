@@ -1,7 +1,12 @@
 import { Visualisierung } from "./Visualisierung";
 import { Geldbetrag } from "@/application/components";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
-import { Ausgangslage, berechneGesamtsumme } from "@/monatsplaner";
+import {
+  type Ausgangslage,
+  type AusgangslageFuerEinElternteil,
+  berechneGesamtsumme,
+  bestimmeLetztenGeplantenLebensmonat,
+} from "@/monatsplaner";
 
 type Props = {
   readonly beispiel: Beispiel<Ausgangslage>;
@@ -9,6 +14,7 @@ type Props = {
 
 export function Beschreibung({ beispiel }: Props) {
   const gesamtbezug = berechneGesamtsumme(beispiel.plan).elterngeldbezug;
+  const letzterLebensmonat = bestimmeLetztenGeplantenLebensmonat(beispiel.plan);
 
   return (
     <>
@@ -22,11 +28,98 @@ export function Beschreibung({ beispiel }: Props) {
       <p className="col-span-2 pt-16">
         Elterngeld bis
         <span className="ml-10 rounded bg-primary-light px-10 py-2">
-          13. Lebensmonat
+          {letzterLebensmonat}. Lebensmonat
         </span>
       </p>
 
       <Visualisierung beispiel={beispiel} className="col-span-2 mt-auto" />
     </>
   );
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("Beschreibung", async () => {
+    const { render, screen } = await import("@testing-library/react");
+    const { Elternteil, Variante, KeinElterngeld } = await import(
+      "@/monatsplaner"
+    );
+
+    it("renders the gesammtsumme of the given beispiel", () => {
+      const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
+        identifier: "test-beispiel",
+        titel: "Test Beispiel",
+        beschreibung: "Beispiel mit zwei Monaten Elterngeldbezug",
+        plan: {
+          ausgangslage: {
+            anzahlElternteile: 1,
+            geburtsdatumDesKindes: new Date(),
+          },
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Basis,
+                imMutterschutz: false as const,
+                elterngeldbezug: 100,
+              },
+            },
+            2: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Basis,
+                imMutterschutz: false as const,
+                elterngeldbezug: 200,
+              },
+            },
+          },
+        },
+      };
+
+      render(<Beschreibung beispiel={beispiel} />);
+
+      expect(screen.getByText("Elterngeld Summe")).toBeVisible();
+      expect(screen.getByText("300 €")).toBeVisible();
+    });
+
+    it("renders the letzten lebensmonat of the given beispiel", () => {
+      const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
+        identifier: "test-beispiel",
+        titel: "Test Beispiel",
+        beschreibung: "Beispiel mit zwei Monaten Elterngeldbezug",
+        plan: {
+          ausgangslage: {
+            anzahlElternteile: 1,
+            geburtsdatumDesKindes: new Date(),
+          },
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Basis,
+                imMutterschutz: false as const,
+                elterngeldbezug: 100,
+              },
+            },
+            2: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Basis,
+                imMutterschutz: false as const,
+                elterngeldbezug: 200,
+              },
+            },
+            3: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: KeinElterngeld,
+                imMutterschutz: false as const,
+              },
+            },
+          },
+        },
+      };
+
+      render(<Beschreibung beispiel={beispiel} />);
+
+      expect(screen.getByText("Elterngeld bis")).toBeVisible();
+      expect(screen.getByText("2. Lebensmonat")).toBeVisible();
+    });
+  });
 }

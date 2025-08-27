@@ -1,11 +1,11 @@
 import AccessTime from "@digitalservicebund/icons/AccessTime";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
-import { Monatsverteilung } from "./Monatsverteilung";
 import {
   errechneMonatsverteilung,
   summiereMonatsverteilung,
 } from "./berechneMonatsverteilung";
+import { AuswahloptionPlakette } from "@/application/features/beispiele/component/Erklaerung/AuswahloptionPlakette";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import {
   Ausgangslage,
@@ -24,14 +24,15 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
   const balken = listeElternteileFuerAusgangslageAuf(ausgangslage).map(
     (elternteil) => {
       const lebensmonate = listeLebensmonateAuf(beispiel.plan.lebensmonate);
+
       const monatsverteilung = errechneMonatsverteilung(
         lebensmonate,
         elternteil,
       );
 
-      const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
       const summeGeplanteMonate = summiereMonatsverteilung(monatsverteilung);
 
+      const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
       const isEinElternteil = !pseudonym;
 
       return (
@@ -44,8 +45,16 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
             )}
             {isEinElternteil ? "Summe" : pseudonym} {summeGeplanteMonate} Monate
           </p>
-
-          <Monatsverteilung monatsverteilung={monatsverteilung} />
+          <div className="flex h-[24px]">
+            {monatsverteilung.map(([key, count]) => (
+              <AuswahloptionPlakette
+                key={key}
+                auswahloption={key}
+                className="text-sm flex items-center justify-center font-bold"
+                style={{ flexGrow: count, flexBasis: 0, fontSize: 14 }}
+              />
+            ))}
+          </div>
         </div>
       );
     },

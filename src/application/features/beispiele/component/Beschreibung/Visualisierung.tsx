@@ -3,6 +3,7 @@ import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
 import { Monatsverteilung } from "./Monatsverteilung";
 import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
+import { getRecordEntriesWithStringKeys } from "@/application/utilities";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
 import {
   Ausgangslage,
@@ -18,7 +19,6 @@ import {
   listeLebensmonateAuf,
 } from "@/monatsplaner";
 import { isAuswahloption } from "@/monatsplaner/Auswahloption";
-import { getRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-records";
 
 type Props = {
   readonly beispiel: Beispiel<Ausgangslage>;

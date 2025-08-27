@@ -19,3 +19,35 @@ export function Zusammenfassung({ plan, className }: Props): ReactNode {
     </div>
   );
 }
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("Zusammenfassung", async () => {
+    const { render, screen } = await import("@testing-library/react");
+
+    it("shows a section for the Planungsübersicht", () => {
+      render(<Zusammenfassung {...ANY_PROPS} />);
+
+      expect(screen.getByLabelText("Planungsübersicht")).toBeVisible();
+    });
+
+    it("shows a section for the Planungsdetails", () => {
+      render(<Zusammenfassung {...ANY_PROPS} />);
+
+      expect(
+        screen.getByLabelText("Planung der Monate im Detail"),
+      ).toBeVisible();
+    });
+  });
+
+  const ANY_PROPS = {
+    plan: {
+      ausgangslage: {
+        anzahlElternteile: 1 as const,
+        geburtsdatumDesKindes: new Date(),
+      },
+      lebensmonate: {},
+    },
+  };
+}

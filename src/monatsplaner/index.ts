@@ -15,10 +15,7 @@ export {
 } from "./Auswahloption";
 export { type Einkommen } from "./Einkommen";
 export type { Elterngeldbezuege, Elterngeldbezug } from "./Elterngeldbezug";
-export type {
-  BerechneElterngeldbezuegeByElternteilCallback,
-  BerechneElterngeldbezuegeByPlanCallback,
-} from "./Elterngeldbezug";
+export type { BerechneElterngeldbezuegeCallback } from "./Elterngeldbezug";
 export { Elternteil, compareElternteile } from "./Elternteil";
 export {
   AlleElternteileHabenBonusGewaehlt,
@@ -47,8 +44,10 @@ export { MONAT_MIT_MUTTERSCHUTZ, type Monat } from "./Monat";
 export {
   type Plan,
   type PlanMitBeliebigenElternteilen,
+  type SummeFuerElternteil,
   aktiviereBonus,
   aktualisiereElterngeldbezuege,
+  berechneGesamtsumme,
   bestimmeAuswahlmoeglichkeiten,
   gebeEinkommenAn,
   mapLebensmonateProElternteil,

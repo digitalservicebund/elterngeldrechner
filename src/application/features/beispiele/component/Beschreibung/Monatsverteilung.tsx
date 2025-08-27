@@ -1,6 +1,6 @@
 import { AuswahloptionPlakette } from "@/application/features/beispiele/component/Erklaerung/AuswahloptionPlakette";
+import { getRecordEntriesWithStringKeys } from "@/application/utilities";
 import { Auswahloption, isAuswahloption } from "@/monatsplaner/Auswahloption";
-import { getRecordEntriesWithStringKeys } from "@/monatsplaner/common/type-safe-records";
 
 type Props = {
   readonly monatsverteilung: Partial<Record<Auswahloption, number>>;

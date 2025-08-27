@@ -3,14 +3,14 @@ import type {
   Ausgangslage,
   ElternteileByAusgangslage,
 } from "@/monatsplaner/Ausgangslage";
-import type { BerechneElterngeldbezuegeByElternteilCallback } from "@/monatsplaner/Elterngeldbezug";
+import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngeldbezug";
 import { erstelleInitialenLebensmonat } from "@/monatsplaner/Lebensmonat";
 import { gebeEinkommenAn as gebeEinkommenInLebensmonatenAn } from "@/monatsplaner/Lebensmonate";
 import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
 import type { Plan } from "@/monatsplaner/Plan";
 
 export function gebeEinkommenAn<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
   elternteil: ElternteileByAusgangslage<A>,

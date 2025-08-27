@@ -7,7 +7,7 @@ import {
   type Auswahloption,
   KeinElterngeld,
 } from "@/monatsplaner/Auswahloption";
-import type { BerechneElterngeldbezuegeByElternteilCallback } from "@/monatsplaner/Elterngeldbezug";
+import type { BerechneElterngeldbezuegeCallback } from "@/monatsplaner/Elterngeldbezug";
 import { Elternteil } from "@/monatsplaner/Elternteil";
 import { erstelleInitialenLebensmonat } from "@/monatsplaner/Lebensmonat";
 import { waehleOption as waehleOptionInLebensmonaten } from "@/monatsplaner/Lebensmonate";
@@ -19,7 +19,7 @@ import { Result } from "@/monatsplaner/common/Result";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
 
 export function aktiviereBonus<A extends Ausgangslage>(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeByElternteilCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
   plan: Plan<A>,
   lebensmonatszahl: Lebensmonatszahl,
 ): Result<Plan<A>, SpecificationViolation[]> {

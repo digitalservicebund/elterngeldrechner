@@ -30,6 +30,7 @@ export function BeispielePage() {
   // TODO: Add architecture decision record about split in planungsteil, abfrageteil (to be removed after refactoring)
   // TODO: Add readme with hint to source of infoirmation (git hygiene, adr, readme in packages, comments)
   // TODO: What to do with new utiltities package? How to share type safe records? adr? new package? keep duplicated?
+  // TODO: Adr about typical structure of features (hooks, components, functions to calculate stuff)
 
   const store = useAppStore();
   const navigate = useNavigate();

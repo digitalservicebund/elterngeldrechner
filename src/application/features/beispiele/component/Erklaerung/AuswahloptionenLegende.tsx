@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { AuswahloptionPlakette } from "./AuswahloptionPlakette";
-import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
+import { Beispiel } from "@/application/features/beispiele";
 import {
   Ausgangslage,
   AusgangslageFuerEinElternteil,

@@ -1,6 +1,6 @@
 import { Visualisierung } from "./Visualisierung";
 import { Geldbetrag } from "@/application/components";
-import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
+import { Beispiel } from "@/application/features/beispiele";
 import {
   type Ausgangslage,
   type AusgangslageFuerEinElternteil,

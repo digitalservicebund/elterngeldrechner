@@ -5,8 +5,8 @@ import {
   errechneMonatsverteilung,
   summiereMonatsverteilung,
 } from "./berechneMonatsverteilung";
+import { Beispiel } from "@/application/features/beispiele";
 import { AuswahloptionPlakette } from "@/application/features/beispiele/component/Erklaerung/AuswahloptionPlakette";
-import { Beispiel } from "@/application/features/beispiele/hooks/erstelleBeispiele";
 import {
   Ausgangslage,
   listeElternteileFuerAusgangslageAuf,

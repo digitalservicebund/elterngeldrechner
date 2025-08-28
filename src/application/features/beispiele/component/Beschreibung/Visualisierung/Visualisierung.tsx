@@ -1,10 +1,7 @@
 import AccessTime from "@digitalservicebund/icons/AccessTime";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
-import {
-  errechneMonatsverteilung,
-  summiereMonatsverteilung,
-} from "./berechneMonatsverteilung";
+import { erstelleMonatsverteilung } from "./erstelleMonatsverteilung";
 import { Beispiel } from "@/application/features/beispiele";
 import { AuswahloptionPlakette } from "@/application/features/beispiele/component/Erklaerung/AuswahloptionPlakette";
 import {
@@ -25,12 +22,11 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
     (elternteil) => {
       const lebensmonate = listeLebensmonateAuf(beispiel.plan.lebensmonate);
 
-      const monatsverteilung = errechneMonatsverteilung(
-        lebensmonate,
-        elternteil,
-      );
-
-      const summeGeplanteMonate = summiereMonatsverteilung(monatsverteilung);
+      const {
+        monatsverteilung,
+        summe: summeGeplanteMonate,
+        beschreibung: beschreibungMonatsverteilung,
+      } = erstelleMonatsverteilung(lebensmonate, elternteil);
 
       const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
       const isEinElternteil = !pseudonym;
@@ -45,7 +41,11 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
             )}
             {isEinElternteil ? "Summe" : pseudonym} {summeGeplanteMonate} Monate
           </p>
-          <div className="flex h-[24px]">
+          <div
+            className="flex h-[24px]"
+            role="img"
+            aria-label={beschreibungMonatsverteilung}
+          >
             {monatsverteilung.map(([key, count], index) => (
               <AuswahloptionPlakette
                 key={`${key}-${index}`}

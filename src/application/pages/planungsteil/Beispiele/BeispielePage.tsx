@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
@@ -106,10 +106,21 @@ export function BeispielePage() {
   const navigateToRechnerUndPlanerPage = async () => {
     await navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
   };
+  const screenreaderAnleitungId = useId();
 
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-56">
+        <section aria-labelledby={screenreaderAnleitungId} className="sr-only">
+          <h4 id={screenreaderAnleitungId}>Anleitung</h4>
+
+          <p>
+            Auf dieser Seite können Sie aus einem der vordefinierten Beispiele
+            auswählen. Sie können diesen Schritt mit der Option Eigene Planung
+            überspringen.
+          </p>
+        </section>
+
         <BeispielAuswahloptionenLegende beispiele={beispiele} />
 
         <div
@@ -138,7 +149,6 @@ export function BeispielePage() {
             className="md:col-span-2"
           />
         </div>
-
         <div className="flex gap-16">
           <Button
             type="button"

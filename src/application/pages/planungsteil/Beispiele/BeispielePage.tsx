@@ -20,7 +20,12 @@ import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
   // TODO: Implement keyboard navigation and test accessibility tree
+
   // TODO: Implement page test for state handling and navigation
+  // TODO: Seite zeigt eine Kachel pro Beispiel
+  // TODO: Seite selektiert vorher Beispiel nach Plan
+  // TODO: Eigene Planung setzte den Plan auf leer wenn nur beispiel
+  // TODO: Eigene Planung setzt den Plan auf eigene planung wnen initial Plan
 
   // TODO: Align features (abrageteil, ...) with pages (abfrageteil, planungsteil)
   // TODO: Add architecture decision record about split in planungsteil, abfrageteil (to be removed after refactoring)
@@ -31,7 +36,7 @@ export function BeispielePage() {
   const store = useAppStore();
   const navigate = useNavigate();
 
-  const { navigateWithPlanState, plan: initialPlan } = useNavigateWithPlan();
+  const { navigateWithPlanState, plan: initialerPlan } = useNavigateWithPlan();
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
@@ -57,9 +62,9 @@ export function BeispielePage() {
   );
 
   useEffect(() => {
-    if (initialPlan) {
+    if (initialerPlan) {
       const passendesBeispiel = findePassendesBeispiel(
-        initialPlan,
+        initialerPlan,
         berechneElterngeldbezuege,
       );
 
@@ -67,7 +72,7 @@ export function BeispielePage() {
         setPlan(passendesBeispiel.plan);
         setAktivesBeispiel(passendesBeispiel.identifier);
       } else {
-        setPlan(initialPlan);
+        setPlan(initialerPlan);
         setAktivesBeispiel(EigenePlanung);
       }
     }
@@ -87,12 +92,12 @@ export function BeispielePage() {
         identifier: neuesAktivesBeispiel.identifier,
       });
     } else if (aktivierteOption === EigenePlanung) {
-      const defaultPlan = {
+      const leererPlan = {
         ausgangslage: ausgangslage,
         lebensmonate: {},
       };
 
-      setPlan(plan || defaultPlan);
+      setPlan(initialerPlan || leererPlan);
     }
 
     setAktivesBeispiel(aktivierteOption);

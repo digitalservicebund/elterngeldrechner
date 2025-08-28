@@ -32,7 +32,7 @@ import {
 export function erstellePlanFuerEinBeispiel<A extends Ausgangslage>(
   ausgangslage: A,
   abschnitte: Abschnitt<A>[],
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback | undefined,
 ): Plan<A> {
   const initialeLebensmonate = erstelleInitialeLebensmonate(ausgangslage);
   const relevantAbschnitte = abschnitte.filter(
@@ -66,7 +66,11 @@ export function erstellePlanFuerEinBeispiel<A extends Ausgangslage>(
 
   const plan = { ausgangslage, lebensmonate };
 
-  return aktualisiereElterngeldbezuege(berechneElterngeldbezuege, plan);
+  if (berechneElterngeldbezuege) {
+    return aktualisiereElterngeldbezuege(berechneElterngeldbezuege, plan);
+  } else {
+    return plan;
+  }
 }
 
 /**

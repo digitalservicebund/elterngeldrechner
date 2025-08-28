@@ -358,8 +358,6 @@ const UNGEPLANTER_MONAT: Monat = {
   imMutterschutz: false,
 };
 
-export type BeispielOhnePlan = Omit<Beispiel<never>, "plan">;
-
 export type Beispiel<A extends Ausgangslage> = Readonly<{
   identifier: BeispielIdentifier;
   titel: string;

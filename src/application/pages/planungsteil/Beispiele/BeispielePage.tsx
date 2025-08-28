@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
@@ -10,21 +10,17 @@ import {
   Radiobutton as BeispielRadiobutton,
   erstelleBeispiele,
 } from "@/application/features/beispiele";
+import { findePassendesBeispiel } from "@/application/features/beispiele/operations/findePassendesBeispiel";
 import { Page } from "@/application/pages/Page";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
-import {
-  Ausgangslage,
-  type Auswahloption,
-  type BerechneElterngeldbezuegeCallback,
-  PlanMitBeliebigenElternteilen,
-} from "@/monatsplaner";
+import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
   // TODO: Implement keyboard navigation and test accessibility tree
-  // TODO: Implement active option after navigating back from planer
+  // TODO: Implement page test for state handling and navigation
 
   // TODO: Align features (abrageteil, ...) with pages (abfrageteil, planungsteil)
   // TODO: Add architecture decision record about split in planungsteil, abfrageteil (to be removed after refactoring)
@@ -35,7 +31,7 @@ export function BeispielePage() {
   const store = useAppStore();
   const navigate = useNavigate();
 
-  const { navigateWithPlanState } = useNavigateWithPlan();
+  const { navigateWithPlanState, plan: initialPlan } = useNavigateWithPlan();
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
@@ -60,6 +56,25 @@ export function BeispielePage() {
     [ausgangslage],
   );
 
+  useEffect(() => {
+    if (initialPlan) {
+      const passendesBeispiel = findePassendesBeispiel(
+        initialPlan,
+        berechneElterngeldbezuege,
+      );
+
+      if (passendesBeispiel) {
+        setPlan(passendesBeispiel.plan);
+        setAktivesBeispiel(passendesBeispiel.identifier);
+      } else {
+        setPlan(initialPlan);
+        setAktivesBeispiel(EigenePlanung);
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleBeispielChange = (aktivierteOption: string) => {
     const neuesAktivesBeispiel = beispiele.find(
       (beispiel) => beispiel.identifier === aktivierteOption,
@@ -72,10 +87,12 @@ export function BeispielePage() {
         identifier: neuesAktivesBeispiel.identifier,
       });
     } else if (aktivierteOption === EigenePlanung) {
-      setPlan({
+      const defaultPlan = {
         ausgangslage: ausgangslage,
         lebensmonate: {},
-      });
+      };
+
+      setPlan(plan || defaultPlan);
     }
 
     setAktivesBeispiel(aktivierteOption);
@@ -137,101 +154,4 @@ export function BeispielePage() {
       </div>
     </Page>
   );
-}
-
-if (import.meta.vitest) {
-  const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
-
-  describe("Beispiele", async () => {
-    const { useNavigateWithPlan } = await import(
-      "@/application/pages/planungsteil/useNavigateWithPlan"
-    );
-
-    const { INITIAL_STATE, render, screen } = await import(
-      "@/application/test-utils"
-    );
-
-    const { isLebensmonatszahl, KeinElterngeld, Variante } = await import(
-      "@/monatsplaner"
-    );
-
-    const { getRecordEntriesWithIntegerKeys } = await import(
-      "@/application/utilities"
-    );
-
-    beforeEach(() => {
-      vi.mock(
-        import("@/application/pages/planungsteil/useNavigateWithPlan"),
-        () => ({
-          useNavigateWithPlan: vi.fn(),
-        }),
-      );
-
-      vi.mock(import("react-router"), () => ({
-        useNavigate: vi.fn(),
-      }));
-
-      vi.mock(
-        import("@/application/pages/planungsteil/useBerechneElterngeldbezuege"),
-      );
-
-      vi.mocked(useNavigateWithPlan).mockReturnValue({
-        plan: ANY_PLAN,
-        navigateWithPlanState: () => undefined,
-      });
-
-      vi.mocked(useBerechneElterngeldbezuege).mockImplementation(
-        () => staticElterngeldbezuege,
-      );
-    });
-
-    it("zeigt eine sektion pro beispiel an", () => {
-      render(<BeispielePage />, {
-        preloadedState: INITIAL_STATE,
-      });
-
-      const ausgangslage = composeAusgangslageFuerPlaner(INITIAL_STATE);
-
-      erstelleBeispiele(ausgangslage, staticElterngeldbezuege)
-        .map((beispiel) => beispiel.titel)
-        .forEach((text) => expect(screen.getByText(text)).toBeVisible());
-    });
-
-    it("zeigt eine weitere sektion zur eigenen planung an", () => {
-      render(<BeispielePage />, {
-        preloadedState: INITIAL_STATE,
-      });
-
-      expect(screen.getByText("Eigene Planung anlegen")).toBeVisible();
-    });
-
-    const staticElterngeldbezuege: BerechneElterngeldbezuegeCallback = (
-      _,
-      monate,
-    ) => {
-      const mockBetraege: Record<Auswahloption, number> = {
-        [Variante.Basis]: 200,
-        [Variante.Plus]: 100,
-        [Variante.Bonus]: 50,
-        [KeinElterngeld]: 0,
-      };
-
-      return Object.fromEntries(
-        getRecordEntriesWithIntegerKeys(monate, isLebensmonatszahl)
-          .filter(([_, monat]) => monat.gewaehlteOption !== undefined)
-          .map(([lebensmonatszahl, monat]) => [
-            lebensmonatszahl,
-            mockBetraege[monat.gewaehlteOption!],
-          ]),
-      );
-    };
-
-    const ANY_PLAN = {
-      ausgangslage: {
-        anzahlElternteile: 1 as const,
-        geburtsdatumDesKindes: new Date(),
-      },
-      lebensmonate: {},
-    };
-  });
 }

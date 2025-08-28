@@ -1,6 +1,5 @@
 import { ChevronLeft } from "@digitalservicebund/icons/index";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   trackMetricsForDerPlanHatSichGeaendert,
   trackMetricsForEineOptionWurdeGewaehlt,
@@ -110,11 +109,9 @@ export function PlanerPage() {
     trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
   }
 
-  const navigate = useNavigate();
-
   const navigateToBeispielePage = () => {
     if (rememberSubmit.current) submitFeedback();
-    void navigate(formSteps.beispiele.route);
+    void navigateWithPlanState(formSteps.beispiele.route, plan);
   };
 
   function navigateToDatenuebernahmeAntragPage(): void {

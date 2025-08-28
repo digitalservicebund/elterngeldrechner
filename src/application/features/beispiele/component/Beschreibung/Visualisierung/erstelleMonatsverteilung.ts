@@ -13,6 +13,17 @@ import {
 
 export type Monatsverteilung = [Auswahloption, number][];
 
+export function erstelleMonatsverteilung<E extends Elternteil>(
+  lebensmonate: [Lebensmonatszahl, Lebensmonat<E>][],
+  elternteil: E,
+) {
+  const monatsverteilung = berrechneMonatsverteilung(lebensmonate, elternteil);
+  const beschreibung = generiereMonatsverteilungBeschreibung(monatsverteilung);
+  const summe = summiereMonatsverteilung(monatsverteilung);
+
+  return { monatsverteilung, beschreibung, summe };
+}
+
 /**
  * Computes a run-length encoding of the chosen options for the given array of Lebensmonate.
  *
@@ -22,7 +33,7 @@ export type Monatsverteilung = [Auswahloption, number][];
  * Consecutive identical options are then grouped together into tuples of the Lebensmonatszahl
  * and the count, where count represents the number of consecutive months with the same option.
  */
-export function errechneMonatsverteilung<E extends Elternteil>(
+function berrechneMonatsverteilung<E extends Elternteil>(
   lebensmonate: [Lebensmonatszahl, Lebensmonat<E>][],
   elternteil: E,
 ): [Auswahloption, number][] {
@@ -43,11 +54,34 @@ export function errechneMonatsverteilung<E extends Elternteil>(
  * Reduces the monatsverteilung back into the sum of all elements which are
  * valid options like Basis, Plus or Bonus.
  */
-export function summiereMonatsverteilung(monatsverteilung: Monatsverteilung) {
+function summiereMonatsverteilung(monatsverteilung: Monatsverteilung) {
   return monatsverteilung
     .filter(([variante, _]) => variante !== KeinElterngeld)
     .map(([_, anzahl]) => anzahl)
     .reduce((acc, curr) => acc + (curr ?? 0), 0);
+}
+
+/**
+ * Converts the given verteilung in a string that can be used for example
+ * as aria description.
+ */
+function generiereMonatsverteilungBeschreibung(
+  verteilung: [Auswahloption, number][],
+): string {
+  const { beschreibungen } = verteilung.reduce(
+    (acc, [option, dauer]) => {
+      const startMonat = acc.aktuellerMonat;
+      const endMonat = startMonat + dauer - 1;
+
+      acc.beschreibungen.push(`${option} Monat ${startMonat}-${endMonat}`);
+      acc.aktuellerMonat = endMonat + 1;
+
+      return acc;
+    },
+    { aktuellerMonat: 1, beschreibungen: [] as string[] },
+  );
+
+  return beschreibungen.join(", ");
 }
 
 if (import.meta.vitest) {
@@ -56,6 +90,39 @@ if (import.meta.vitest) {
   type LebensmonateEinElternteil = Lebensmonate<
     ElternteileByAusgangslage<AusgangslageFuerEinElternteil>
   >;
+
+  describe("generiereMonatsverteilungBeschreibung", () => {
+    it("generates beschreibung for a simple case of 12 monate basis straight", () => {
+      const text = generiereMonatsverteilungBeschreibung([
+        [Variante.Basis, 12],
+      ]);
+
+      expect(text).toEqual("Basiselterngeld Monat 1-12");
+    });
+
+    it("generates beschreibung for basis followed by no other planned months", () => {
+      const text = generiereMonatsverteilungBeschreibung([
+        [Variante.Basis, 6],
+        [KeinElterngeld, 6],
+      ]);
+
+      expect(text).toEqual(
+        "Basiselterngeld Monat 1-6, kein Elterngeld Monat 7-12",
+      );
+    });
+
+    it("generates beschreibung for basis followed by pause ending with basis again", () => {
+      const text = generiereMonatsverteilungBeschreibung([
+        [Variante.Basis, 2],
+        [KeinElterngeld, 10],
+        [Variante.Basis, 2],
+      ]);
+
+      expect(text).toEqual(
+        "Basiselterngeld Monat 1-2, kein Elterngeld Monat 3-12, Basiselterngeld Monat 13-14",
+      );
+    });
+  });
 
   describe("summiereMonatsverteilung", () => {
     it("ignoriert die option kein Elterngeld zur korrekten Summenbildung", () => {
@@ -81,7 +148,7 @@ if (import.meta.vitest) {
         },
       };
 
-      const monatsverteilung = errechneMonatsverteilung(
+      const monatsverteilung = berrechneMonatsverteilung(
         listeLebensmonateAuf(lebensmonate),
         Elternteil.Eins,
       );
@@ -124,7 +191,7 @@ if (import.meta.vitest) {
         },
       };
 
-      const monatsverteilung = errechneMonatsverteilung(
+      const monatsverteilung = berrechneMonatsverteilung(
         listeLebensmonateAuf(lebensmonate),
         Elternteil.Eins,
       );
@@ -169,7 +236,7 @@ if (import.meta.vitest) {
         },
       };
 
-      const monatsverteilung = errechneMonatsverteilung(
+      const monatsverteilung = berrechneMonatsverteilung(
         listeLebensmonateAuf(lebensmonate),
         Elternteil.Eins,
       );

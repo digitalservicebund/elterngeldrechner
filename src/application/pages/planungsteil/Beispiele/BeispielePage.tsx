@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
@@ -19,8 +19,6 @@ import { formSteps } from "@/application/routing/formSteps";
 import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
-  // TODO: Implement keyboard navigation and test accessibility tree
-
   // TODO: Implement page test for state handling and navigation
   // TODO: Seite zeigt eine Kachel pro Beispiel
   // TODO: Seite selektiert vorher Beispiel nach Plan
@@ -106,32 +104,28 @@ export function BeispielePage() {
   const navigateToRechnerUndPlanerPage = async () => {
     await navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
   };
-  const screenreaderAnleitungId = useId();
 
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-56">
-        <section aria-labelledby={screenreaderAnleitungId} className="sr-only">
-          <h4 id={screenreaderAnleitungId}>Anleitung</h4>
-
-          <p>
-            Auf dieser Seite können Sie aus einem der vordefinierten Beispiele
-            auswählen. Sie können diesen Schritt mit der Option Eigene Planung
-            überspringen.
-          </p>
-        </section>
+        <p className="sr-only">
+          Auf dieser Seite können Sie aus einem der vordefinierten Beispiele
+          auswählen. Sie können diesen Schritt mit der Option Eigene Planung
+          überspringen.
+        </p>
 
         <BeispielAuswahloptionenLegende beispiele={beispiele} />
 
         <div
           className="grid grid-cols-1 gap-26 md:grid-cols-2"
-          role="radiogroup"
           aria-label="Beispielauswahl"
+          role="radiogroup"
         >
           {beispiele.map((beispiel) => (
             <BeispielRadiobutton
               titel={beispiel.titel}
               key={beispiel.identifier}
+              inputName="Beispieloption"
               beschreibung={beispiel.beschreibung}
               checked={aktivesBeispiel === beispiel.identifier}
               onChange={() => handleBeispielChange(beispiel.identifier)}
@@ -144,11 +138,13 @@ export function BeispielePage() {
             titel="Eigene Planung anlegen"
             beschreibung="Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
             erstellen Sie eine Planung ohne Planungshilfe."
+            inputName="Beispieloption"
             checked={aktivesBeispiel === EigenePlanung}
             onChange={() => handleBeispielChange(EigenePlanung)}
             className="md:col-span-2"
           />
         </div>
+
         <div className="flex gap-16">
           <Button
             type="button"

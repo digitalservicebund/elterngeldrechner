@@ -26,7 +26,7 @@ export function Beschreibung({ beispiel }: Props) {
       </p>
 
       <p className="col-span-2 pt-16">
-        Elterngeld bis
+        Elterngeld bis zum
         <span className="ml-10 rounded bg-primary-light px-10 py-2">
           {letzterLebensmonat}. Lebensmonat
         </span>
@@ -118,7 +118,7 @@ if (import.meta.vitest) {
 
       render(<Beschreibung beispiel={beispiel} />);
 
-      expect(screen.getByText("Elterngeld bis")).toBeVisible();
+      expect(screen.getByText("Elterngeld bis zum")).toBeVisible();
       expect(screen.getByText("2. Lebensmonat")).toBeVisible();
     });
   });

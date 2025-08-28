@@ -4,6 +4,7 @@ import { ReactNode, useId } from "react";
 type Props = {
   readonly titel: string;
   readonly beschreibung: string;
+  readonly inputName: string;
   readonly checked: boolean;
   readonly onChange: () => void;
   readonly className?: string;
@@ -13,6 +14,7 @@ type Props = {
 export function Radiobutton({
   titel,
   beschreibung,
+  inputName,
   checked,
   onChange,
   className,
@@ -33,7 +35,7 @@ export function Radiobutton({
       <input
         id={radioId}
         type="radio"
-        name={titel}
+        name={inputName}
         checked={checked}
         onChange={onChange}
         className={classNames(
@@ -42,13 +44,16 @@ export function Radiobutton({
           "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
           "checked:before:bg-black self-center",
         )}
+        aria-labelledby={`${radioId}-titel ${radioId}-beschreibung`}
       />
 
       <h4 id={`${radioId}-titel`} className="self-center break-words">
         {titel}
       </h4>
 
-      <p className="col-span-2 break-words">{beschreibung}</p>
+      <p id={`${radioId}-beschreibung`} className="col-span-2 break-words">
+        {beschreibung}
+      </p>
 
       {!!children && (
         <div className="col-span-2 mt-16 h-[1px] w-full bg-grey" />

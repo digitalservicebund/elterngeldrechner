@@ -73,10 +73,15 @@ function generiereMonatsverteilungBeschreibung(
       const startMonat = acc.aktuellerMonat;
       const endMonat = startMonat + dauer - 1;
 
-      acc.beschreibungen.push(`${option} Monat ${startMonat}-${endMonat}`);
-      acc.aktuellerMonat = endMonat + 1;
+      const beschreibung =
+        endMonat > startMonat
+          ? `${option} Monat ${startMonat}-${endMonat}`
+          : `${option} Monat ${startMonat}`;
 
-      return acc;
+      return {
+        aktuellerMonat: endMonat + 1,
+        beschreibungen: [...acc.beschreibungen, beschreibung],
+      };
     },
     { aktuellerMonat: 1, beschreibungen: [] as string[] },
   );
@@ -111,7 +116,7 @@ if (import.meta.vitest) {
       );
     });
 
-    it("generates beschreibung for basis followed by pause ending with basis again", () => {
+    it("generates beschreibung for basis followed by a pause and ending with basis again", () => {
       const text = generiereMonatsverteilungBeschreibung([
         [Variante.Basis, 2],
         [KeinElterngeld, 10],
@@ -120,6 +125,18 @@ if (import.meta.vitest) {
 
       expect(text).toEqual(
         "Basiselterngeld Monat 1-2, kein Elterngeld Monat 3-12, Basiselterngeld Monat 13-14",
+      );
+    });
+
+    it("generates a single number for a single monat", () => {
+      const text = generiereMonatsverteilungBeschreibung([
+        [Variante.Basis, 2],
+        [KeinElterngeld, 10],
+        [Variante.Basis, 1],
+      ]);
+
+      expect(text).toEqual(
+        "Basiselterngeld Monat 1-2, kein Elterngeld Monat 3-12, Basiselterngeld Monat 13",
       );
     });
   });

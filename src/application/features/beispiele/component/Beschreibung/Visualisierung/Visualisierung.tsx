@@ -33,7 +33,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
 
       return (
         <div key={elternteil}>
-          <p className="pb-4 pt-16">
+          <p className="pb-4 pt-16" aria-hidden="true">
             {isEinElternteil ? (
               <AccessTime className="mr-4" />
             ) : (
@@ -41,11 +41,12 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
             )}
             {isEinElternteil ? "Summe" : pseudonym} {summeGeplanteMonate} Monate
           </p>
-          <div
-            className="flex h-[24px]"
-            role="img"
-            aria-label={beschreibungMonatsverteilung}
-          >
+
+          <span className="sr-only">
+            {pseudonym + beschreibungMonatsverteilung}
+          </span>
+
+          <div className="flex h-[24px]" aria-hidden="true">
             {monatsverteilung.map(([key, count], index) => (
               <AuswahloptionPlakette
                 key={`${key}-${index}`}

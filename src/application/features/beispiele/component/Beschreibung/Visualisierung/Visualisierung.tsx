@@ -46,9 +46,9 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
             {isEinElternteil ? "Summe" : pseudonym} {summeGeplanteMonate} Monate
           </p>
           <div className="flex h-[24px]">
-            {monatsverteilung.map(([key, count]) => (
+            {monatsverteilung.map(([key, count], index) => (
               <AuswahloptionPlakette
-                key={key}
+                key={`${key}-${index}`}
                 auswahloption={key}
                 className="text-sm flex items-center justify-center font-bold"
                 style={{ flexGrow: count, flexBasis: 0, fontSize: 14 }}

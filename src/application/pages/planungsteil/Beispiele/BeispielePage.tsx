@@ -114,16 +114,15 @@ export function BeispielePage() {
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-32">
+        <p>
+          Sie können eine Planungshilfe auswählen und sie anschließend im Planer
+          nach Ihren Bedürfnissen anpassen.
+        </p>
+
         <BeispielAuswahloptionenLegende beispiele={beispiele} />
 
         <fieldset>
           <legend className="sr-only">Beispielauswahl</legend>
-
-          <p className="sr-only">
-            Auf dieser Seite können Sie aus einem der vordefinierten Beispiele
-            auswählen. Sie können diesen Schritt mit der Option Eigene Planung
-            überspringen.
-          </p>
 
           <div className="grid grid-cols-1 gap-26 md:grid-cols-2">
             {beispiele.map((beispiel) => (

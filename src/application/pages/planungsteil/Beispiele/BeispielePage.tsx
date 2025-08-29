@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
-import { trackMetricsForEinBeispielWurdeAusgewaehlt } from "./tracking";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
 import {
@@ -15,12 +14,15 @@ import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/u
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
+import {
+  pushTrackingEvent,
+  setTrackingVariable,
+} from "@/application/user-tracking";
 import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
-  // TODO: Implement changed in matomo and prepare for release
-  // TODO: Fix Eigene Planung layout for ein elternteil
-  // TODO: Use radiobuttons if possible
+  // TODO: Fix Eigene Planung layout for ein elternteil in the last layout row
+  // TODO: Ensure consistent use of the term beispiele rather than planungshilfen
 
   const store = useAppStore();
   const navigate = useNavigate();
@@ -63,6 +65,27 @@ export function BeispielePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const setIdentifierTrackingVariable = setTrackingVariable.bind(
+    null,
+    "Identifier-des-ausgewaehlten-Beispiels",
+  );
+
+  function sindGemeinsamErziehend(ausgangslage: Ausgangslage): boolean {
+    return ausgangslage.anzahlElternteile === 2;
+  }
+
+  function istAlleinePlanend(ausgangslage: Ausgangslage): boolean {
+    return (
+      ausgangslage.anzahlElternteile === 1 && !ausgangslage.istAlleinerziehend
+    );
+  }
+
+  function istAlleinerziehend(ausgangslage: Ausgangslage): boolean {
+    return (
+      ausgangslage.anzahlElternteile === 1 && !!ausgangslage.istAlleinerziehend
+    );
+  }
+
   const aktiviereOption = (aktivierteOption: string) => {
     const neuesAktivesBeispiel = beispiele.find(
       (beispiel) => beispiel.identifier === aktivierteOption,
@@ -71,18 +94,37 @@ export function BeispielePage() {
     if (neuesAktivesBeispiel) {
       setPlan(neuesAktivesBeispiel.plan);
 
-      trackMetricsForEinBeispielWurdeAusgewaehlt({
-        identifier: neuesAktivesBeispiel.identifier,
-      });
+      setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
     } else if (aktivierteOption === EigenePlanung) {
       if (initialerPlan) {
         setPlan(initialerPlan);
       } else {
         setPlan(undefined);
       }
+
+      // All beispiele are prefixed with a description of the
+      // ausgangslage. The same prefix is applied to eigene
+      // planung to ensure its identifier remains consistent
+      // with the other examples in Metabase.
+
+      if (sindGemeinsamErziehend(ausgangslage)) {
+        setIdentifierTrackingVariable(
+          "Gemeinsame Planung - Eigene Planung anlegen",
+        );
+      } else if (istAlleinePlanend(ausgangslage)) {
+        setIdentifierTrackingVariable(
+          "Allein planend - Eigene Planung anlegen",
+        );
+      } else if (istAlleinerziehend(ausgangslage)) {
+        setIdentifierTrackingVariable(
+          "Alleinerziehend - Eigene Planung anlegen",
+        );
+      }
     }
 
     setAktivesBeispiel(aktivierteOption);
+
+    pushTrackingEvent("Beispiel-wurde-ausgewählt");
   };
 
   const navigateToRechnerUndPlanerPage = async () => {
@@ -165,8 +207,6 @@ if (import.meta.vitest) {
       "@/application/pages/planungsteil/useNavigateStateful"
     );
 
-    const { Elternteil, Variante } = await import("@/monatsplaner");
-
     const { render, screen } = await import("@/application/test-utils");
     const { INITIAL_STATE } = await import("@/application/test-utils");
 
@@ -190,111 +230,157 @@ if (import.meta.vitest) {
       });
     });
 
-    it("zeigt eine kachel pro beispiel und eine option für eigene planung", () => {
-      render(<BeispielePage />, {
-        preloadedState: INITIAL_STATE,
+    describe("selection", async () => {
+      const { Elternteil, Variante } = await import("@/monatsplaner");
+
+      it("zeigt eine kachel pro beispiel und eine option für eigene planung", () => {
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        expect(screen.getAllByRole("radio")).toHaveLength(7);
       });
 
-      expect(screen.getAllByRole("radio")).toHaveLength(7);
-    });
+      it("navigiert mit beispiel und plan nachdem eine beispiel selektiert wurde", () => {
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
 
-    it("navigiert mit beispiel und plan nachdem eine beispiel selektiert wurde", () => {
-      render(<BeispielePage />, {
-        preloadedState: INITIAL_STATE,
-      });
+        screen.getByText("Partnerschaftliche Aufteilung").click();
 
-      screen.getByText("Partnerschaftliche Aufteilung").click();
+        screen.getByText("Weiter").click();
 
-      screen.getByText("Weiter").click();
+        const expectation = (argument: NavigateState) => {
+          return (
+            argument.plan != null &&
+            argument.beispiel != null &&
+            argument.beispiel.titel === "Partnerschaftliche Aufteilung"
+          );
+        };
 
-      const expectation = (argument: NavigateState) => {
-        return (
-          argument.plan != null &&
-          argument.beispiel != null &&
-          argument.beispiel.titel === "Partnerschaftliche Aufteilung"
+        expect(navigateSpy).toHaveBeenCalledWith(
+          "/rechner-planer",
+          expect.toSatisfy(expectation),
         );
-      };
-
-      expect(navigateSpy).toHaveBeenCalledWith(
-        "/rechner-planer",
-        expect.toSatisfy(expectation),
-      );
-    });
-
-    it("im ersten durchlauf überschreibt eigene planung ein vorher selektiertes beispiel", () => {
-      render(<BeispielePage />, {
-        preloadedState: INITIAL_STATE,
       });
 
-      screen.getByText("Partnerschaftliche Aufteilung").click();
+      it("im ersten durchlauf überschreibt eigene planung ein vorher selektiertes beispiel", () => {
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
 
-      screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Partnerschaftliche Aufteilung").click();
 
-      screen.getByText("Weiter").click();
+        screen.getByText("Eigene Planung anlegen").click();
 
-      const expectation = (argument: NavigateState) => {
-        return argument.plan === undefined && argument.beispiel == null;
-      };
+        screen.getByText("Weiter").click();
 
-      expect(navigateSpy).toHaveBeenCalledWith(
-        "/rechner-planer",
-        expect.toSatisfy(expectation),
-      );
-    });
+        const expectation = (argument: NavigateState) => {
+          return argument.plan === undefined && argument.beispiel == null;
+        };
 
-    it("verwendet fuer eigene planung den plan aus dem navigation state wenn gesetzt", () => {
-      vi.mocked(useNavigateStateful).mockReturnValue({
-        navigationState: {
-          plan: {
-            ausgangslage: {
-              anzahlElternteile: 1,
-              geburtsdatumDesKindes: new Date(),
-            },
-            lebensmonate: {
-              1: {
-                [Elternteil.Eins]: {
-                  gewaehlteOption: Variante.Plus,
-                  imMutterschutz: false as const,
-                },
-                [Elternteil.Zwei]: {
-                  gewaehlteOption: Variante.Plus,
-                  imMutterschutz: false as const,
-                },
+        expect(navigateSpy).toHaveBeenCalledWith(
+          "/rechner-planer",
+          expect.toSatisfy(expectation),
+        );
+      });
+
+      it("verwendet fuer eigene planung den plan aus dem navigation state wenn gesetzt", () => {
+        vi.mocked(useNavigateStateful).mockReturnValue({
+          navigationState: {
+            plan: {
+              ausgangslage: {
+                anzahlElternteile: 1,
+                geburtsdatumDesKindes: new Date(),
               },
-              2: {
-                [Elternteil.Eins]: {
-                  gewaehlteOption: Variante.Plus,
-                  imMutterschutz: false as const,
+              lebensmonate: {
+                1: {
+                  [Elternteil.Eins]: {
+                    gewaehlteOption: Variante.Plus,
+                    imMutterschutz: false as const,
+                  },
+                  [Elternteil.Zwei]: {
+                    gewaehlteOption: Variante.Plus,
+                    imMutterschutz: false as const,
+                  },
                 },
-                [Elternteil.Zwei]: {
-                  gewaehlteOption: Variante.Plus,
-                  imMutterschutz: false as const,
+                2: {
+                  [Elternteil.Eins]: {
+                    gewaehlteOption: Variante.Plus,
+                    imMutterschutz: false as const,
+                  },
+                  [Elternteil.Zwei]: {
+                    gewaehlteOption: Variante.Plus,
+                    imMutterschutz: false as const,
+                  },
                 },
               },
             },
           },
-        },
-        navigateStateful: navigateSpy,
+          navigateStateful: navigateSpy,
+        });
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftliche Aufteilung").click();
+
+        screen.getByText("Eigene Planung anlegen").click();
+
+        screen.getByText("Weiter").click();
+
+        const expectation = (argument: NavigateState) => {
+          return !!argument.plan && argument.beispiel == null;
+        };
+
+        expect(navigateSpy).toHaveBeenCalledWith(
+          "/rechner-planer",
+          expect.toSatisfy(expectation),
+        );
+      });
+    });
+
+    describe("tracking", async () => {
+      const trackingModule = await import("@/application/user-tracking");
+
+      it("schreibt nach einer auswahl die option in eine tracking variable", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
+        );
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftliche Aufteilung").click();
+
+        expect(trackingFunction).toHaveBeenCalledExactlyOnceWith(
+          "Identifier-des-ausgewaehlten-Beispiels",
+          "Gemeinsame Planung - Partnerschaftliche Aufteilung",
+        );
       });
 
-      render(<BeispielePage />, {
-        preloadedState: INITIAL_STATE,
+      it("trackt eigene planung anlegen im gleichen schema wie die optionen", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
+        );
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftliche Aufteilung").click();
+
+        screen.getByText("Eigene Planung anlegen").click();
+
+        expect(trackingFunction).toHaveBeenLastCalledWith(
+          "Identifier-des-ausgewaehlten-Beispiels",
+          "Gemeinsame Planung - Eigene Planung anlegen",
+        );
       });
-
-      screen.getByText("Partnerschaftliche Aufteilung").click();
-
-      screen.getByText("Eigene Planung anlegen").click();
-
-      screen.getByText("Weiter").click();
-
-      const expectation = (argument: NavigateState) => {
-        return !!argument.plan && argument.beispiel == null;
-      };
-
-      expect(navigateSpy).toHaveBeenCalledWith(
-        "/rechner-planer",
-        expect.toSatisfy(expectation),
-      );
     });
   });
 }

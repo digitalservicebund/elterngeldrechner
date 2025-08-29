@@ -33,6 +33,7 @@ test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
@@ -91,6 +92,7 @@ test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
@@ -125,6 +127,7 @@ test("alleine, unterstütztes Bundesland", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
@@ -171,6 +174,7 @@ test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);

@@ -49,6 +49,7 @@ test("planer event erst nach wirklicher planung", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   expect(await hasTrackingEvent(page, "Plan-wurde-geändert")).toBeFalsy();
@@ -89,6 +90,7 @@ test("10 monate basis und 2 monate mutterschaftsleistung", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
@@ -144,6 +146,7 @@ test("paar das mutterschutz und bonus nimmt", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {
@@ -316,6 +319,7 @@ async function fastForwardEinkommen(page: Page) {
 
 async function fastForwardBeispiele(page: Page) {
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 }
 

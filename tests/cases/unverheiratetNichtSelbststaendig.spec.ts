@@ -89,6 +89,7 @@ test("unverheiratet, nicht selbstständig", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter" }).click();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);

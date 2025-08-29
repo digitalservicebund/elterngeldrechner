@@ -57,6 +57,7 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page, {

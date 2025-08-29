@@ -83,6 +83,7 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByRole("button", { name: "Weiter", exact: true }).click();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const planer = new RechnerPlanerPOM(page);

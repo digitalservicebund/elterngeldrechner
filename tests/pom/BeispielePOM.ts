@@ -14,6 +14,10 @@ export class BeispielePOM {
     });
   }
 
+  async waehleOption(option: string): Promise<void> {
+    await this.page.getByRole("radio", { name: option }).check();
+  }
+
   async submit() {
     await this.page
       .getByRole("button", { name: "Weiter", exact: true })

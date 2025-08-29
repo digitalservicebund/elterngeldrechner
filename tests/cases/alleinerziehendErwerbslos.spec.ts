@@ -28,6 +28,7 @@ test("alleinerziehend, erwerbslos", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);

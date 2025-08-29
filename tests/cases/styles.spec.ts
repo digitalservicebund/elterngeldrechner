@@ -78,6 +78,7 @@ const testStyles = async ({
 
   // TODO
   const beispielePage = new BeispielePOM(page);
+  await beispielePage.waehleOption("Eigene Planung");
   await beispielePage.submit();
 };
 

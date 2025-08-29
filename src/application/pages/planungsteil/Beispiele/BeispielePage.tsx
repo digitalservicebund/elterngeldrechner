@@ -25,6 +25,12 @@ export function BeispielePage() {
   // TODO: Eigene Planung setzte den Plan auf leer wenn nur beispiel
   // TODO: Eigene Planung setzt den Plan auf eigene planung wnen initial Plan
 
+  // TODO: Extend meaningful end to end test and use "Eigene Planung" in existing ones
+
+  // TODO: Implement changed in matomo and prepare for release
+
+  // TODO: Display selected plan in beispiel page
+
   // TODO: Align features (abrageteil, ...) with pages (abfrageteil, planungsteil)
   // TODO: Add architecture decision record about split in planungsteil, abfrageteil (to be removed after refactoring)
   // TODO: Add readme with hint to source of infoirmation (git hygiene, adr, readme in packages, comments)
@@ -78,7 +84,7 @@ export function BeispielePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleBeispielChange = (aktivierteOption: string) => {
+  const aktiviereOption = (aktivierteOption: string) => {
     const neuesAktivesBeispiel = beispiele.find(
       (beispiel) => beispiel.identifier === aktivierteOption,
     );
@@ -107,43 +113,43 @@ export function BeispielePage() {
 
   return (
     <Page step={formSteps.beispiele}>
-      <div className="flex flex-col gap-56">
-        <p className="sr-only">
-          Auf dieser Seite können Sie aus einem der vordefinierten Beispiele
-          auswählen. Sie können diesen Schritt mit der Option Eigene Planung
-          überspringen.
-        </p>
-
+      <div className="flex flex-col gap-32">
         <BeispielAuswahloptionenLegende beispiele={beispiele} />
 
-        <div
-          className="grid grid-cols-1 gap-26 md:grid-cols-2"
-          aria-label="Beispielauswahl"
-          role="radiogroup"
-        >
-          {beispiele.map((beispiel) => (
-            <BeispielRadiobutton
-              titel={beispiel.titel}
-              key={beispiel.identifier}
-              inputName="Beispieloption"
-              beschreibung={beispiel.beschreibung}
-              checked={aktivesBeispiel === beispiel.identifier}
-              onChange={() => handleBeispielChange(beispiel.identifier)}
-            >
-              <BeispielBeschreibung beispiel={beispiel} />
-            </BeispielRadiobutton>
-          ))}
+        <fieldset>
+          <legend className="sr-only">Beispielauswahl</legend>
 
-          <BeispielRadiobutton
-            titel="Eigene Planung anlegen"
-            beschreibung="Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
+          <p className="sr-only">
+            Auf dieser Seite können Sie aus einem der vordefinierten Beispiele
+            auswählen. Sie können diesen Schritt mit der Option Eigene Planung
+            überspringen.
+          </p>
+
+          <div className="grid grid-cols-1 gap-26 md:grid-cols-2">
+            {beispiele.map((beispiel) => (
+              <BeispielRadiobutton
+                titel={beispiel.titel}
+                key={beispiel.identifier}
+                inputName="Beispieloption"
+                beschreibung={beispiel.beschreibung}
+                checked={aktivesBeispiel === beispiel.identifier}
+                onChange={() => aktiviereOption(beispiel.identifier)}
+              >
+                <BeispielBeschreibung beispiel={beispiel} />
+              </BeispielRadiobutton>
+            ))}
+
+            <BeispielRadiobutton
+              titel="Eigene Planung anlegen"
+              beschreibung="Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
             erstellen Sie eine Planung ohne Planungshilfe."
-            inputName="Beispieloption"
-            checked={aktivesBeispiel === EigenePlanung}
-            onChange={() => handleBeispielChange(EigenePlanung)}
-            className="md:col-span-2"
-          />
-        </div>
+              inputName="Beispieloption"
+              checked={aktivesBeispiel === EigenePlanung}
+              onChange={() => aktiviereOption(EigenePlanung)}
+              className="md:col-span-2"
+            />
+          </div>
+        </fieldset>
 
         <div className="flex gap-16">
           <Button

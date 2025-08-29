@@ -18,23 +18,9 @@ import { formSteps } from "@/application/routing/formSteps";
 import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
-  // TODO: Implement page test for state handling and navigation
-  // TODO: Seite zeigt eine Kachel pro Beispiel
-  // TODO: Seite selektiert vorher Beispiel nach Plan
-  // TODO: Eigene Planung setzte den Plan auf leer wenn nur beispiel
-  // TODO: Eigene Planung setzt den Plan auf eigene planung wnen initial Plan
-
-  // TODO: Extend meaningful end to end test and use "Eigene Planung" in existing ones
-
   // TODO: Implement changed in matomo and prepare for release
-
-  // TODO: Display selected plan in beispiel page
-
-  // TODO: Align features (abrageteil, ...) with pages (abfrageteil, planungsteil)
-  // TODO: Add architecture decision record about split in planungsteil, abfrageteil (to be removed after refactoring)
-  // TODO: Add readme with hint to source of infoirmation (git hygiene, adr, readme in packages, comments)
-  // TODO: What to do with new utiltities package? How to share type safe records? adr? new package? keep duplicated?
-  // TODO: Adr about typical structure of features (hooks, components, functions to calculate stuff)
+  // TODO: Fix Eigene Planung layout for ein elternteil
+  // TODO: Use radiobuttons if possible
 
   const store = useAppStore();
   const navigate = useNavigate();
@@ -89,12 +75,11 @@ export function BeispielePage() {
         identifier: neuesAktivesBeispiel.identifier,
       });
     } else if (aktivierteOption === EigenePlanung) {
-      const leererPlan = {
-        ausgangslage: ausgangslage,
-        lebensmonate: {},
-      };
-
-      setPlan(initialerPlan || leererPlan);
+      if (initialerPlan) {
+        setPlan(initialerPlan);
+      } else {
+        setPlan(undefined);
+      }
     }
 
     setAktivesBeispiel(aktivierteOption);
@@ -170,4 +155,146 @@ export function BeispielePage() {
       </div>
     </Page>
   );
+}
+
+if (import.meta.vitest) {
+  const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
+
+  describe("Beispiele Page", async () => {
+    const { useNavigateStateful } = await import(
+      "@/application/pages/planungsteil/useNavigateStateful"
+    );
+
+    const { Elternteil, Variante } = await import("@/monatsplaner");
+
+    const { render, screen } = await import("@/application/test-utils");
+    const { INITIAL_STATE } = await import("@/application/test-utils");
+
+    type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
+    type NavigateStateful = NavigateStatefulHook["navigateStateful"];
+    type NavigateState = Parameters<NavigateStateful>[1];
+
+    const navigateSpy = vi.fn<NavigateStateful>();
+
+    beforeEach(() => {
+      vi.mock(import("react-router"), () => ({ useNavigate: vi.fn() }));
+
+      vi.mock(
+        import("@/application/pages/planungsteil/useNavigateStateful"),
+        () => ({ useNavigateStateful: vi.fn() }),
+      );
+
+      vi.mocked(useNavigateStateful).mockReturnValue({
+        navigationState: {},
+        navigateStateful: navigateSpy,
+      });
+    });
+
+    it("zeigt eine kachel pro beispiel und eine option für eigene planung", () => {
+      render(<BeispielePage />, {
+        preloadedState: INITIAL_STATE,
+      });
+
+      expect(screen.getAllByRole("radio")).toHaveLength(7);
+    });
+
+    it("navigiert mit beispiel und plan nachdem eine beispiel selektiert wurde", () => {
+      render(<BeispielePage />, {
+        preloadedState: INITIAL_STATE,
+      });
+
+      screen.getByText("Partnerschaftliche Aufteilung").click();
+
+      screen.getByText("Weiter").click();
+
+      const expectation = (argument: NavigateState) => {
+        return (
+          argument.plan != null &&
+          argument.beispiel != null &&
+          argument.beispiel.titel === "Partnerschaftliche Aufteilung"
+        );
+      };
+
+      expect(navigateSpy).toHaveBeenCalledWith(
+        "/rechner-planer",
+        expect.toSatisfy(expectation),
+      );
+    });
+
+    it("im ersten durchlauf überschreibt eigene planung ein vorher selektiertes beispiel", () => {
+      render(<BeispielePage />, {
+        preloadedState: INITIAL_STATE,
+      });
+
+      screen.getByText("Partnerschaftliche Aufteilung").click();
+
+      screen.getByText("Eigene Planung anlegen").click();
+
+      screen.getByText("Weiter").click();
+
+      const expectation = (argument: NavigateState) => {
+        return argument.plan === undefined && argument.beispiel == null;
+      };
+
+      expect(navigateSpy).toHaveBeenCalledWith(
+        "/rechner-planer",
+        expect.toSatisfy(expectation),
+      );
+    });
+
+    it("verwendet fuer eigene planung den plan aus dem navigation state wenn gesetzt", () => {
+      vi.mocked(useNavigateStateful).mockReturnValue({
+        navigationState: {
+          plan: {
+            ausgangslage: {
+              anzahlElternteile: 1,
+              geburtsdatumDesKindes: new Date(),
+            },
+            lebensmonate: {
+              1: {
+                [Elternteil.Eins]: {
+                  gewaehlteOption: Variante.Plus,
+                  imMutterschutz: false as const,
+                },
+                [Elternteil.Zwei]: {
+                  gewaehlteOption: Variante.Plus,
+                  imMutterschutz: false as const,
+                },
+              },
+              2: {
+                [Elternteil.Eins]: {
+                  gewaehlteOption: Variante.Plus,
+                  imMutterschutz: false as const,
+                },
+                [Elternteil.Zwei]: {
+                  gewaehlteOption: Variante.Plus,
+                  imMutterschutz: false as const,
+                },
+              },
+            },
+          },
+        },
+        navigateStateful: navigateSpy,
+      });
+
+      render(<BeispielePage />, {
+        preloadedState: INITIAL_STATE,
+      });
+
+      screen.getByText("Partnerschaftliche Aufteilung").click();
+
+      screen.getByText("Eigene Planung anlegen").click();
+
+      screen.getByText("Weiter").click();
+
+      const expectation = (argument: NavigateState) => {
+        return !!argument.plan && argument.beispiel == null;
+      };
+
+      expect(navigateSpy).toHaveBeenCalledWith(
+        "/rechner-planer",
+        expect.toSatisfy(expectation),
+      );
+    });
+  });
 }

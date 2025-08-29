@@ -126,7 +126,7 @@ export function BeispielePage() {
             <BeispielRadiobutton
               titel="Eigene Planung anlegen"
               beschreibung="Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
-            erstellen Sie eine Planung ohne Planungshilfe."
+              erstellen eine Planung ohne Planungshilfe."
               inputName="Beispieloption"
               checked={aktivesBeispiel === EigenePlanung}
               onChange={() => aktiviereOption(EigenePlanung)}

@@ -26,7 +26,7 @@ import {
 } from "@/application/features/user-feedback";
 import { Page } from "@/application/pages/Page";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
-import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
+import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import {
@@ -58,15 +58,17 @@ export function PlanerPage() {
 
   useEffect(openDialogWhenEinkommenLimitUebeschritten, [store]);
 
-  const { plan: initialPlan, navigateWithPlanState } = useNavigateWithPlan();
+  const { navigationState, navigateStateful } = useNavigateStateful();
+  const { plan: initialPlan, beispiel } = navigationState;
+
   const initialPlanerInformation = useRef(
     initialPlan !== undefined
       ? { plan: initialPlan }
       : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
   );
+
   const [plan, setPlan] = useState(() => initialPlan);
-  const [hasChanges, setHasChanges] = useState(!!initialPlan);
-  const hasPlan = plan !== undefined;
+  const [hasChanges, setHasChanges] = useState(initialPlan && !beispiel);
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
@@ -111,22 +113,25 @@ export function PlanerPage() {
 
   const navigateToBeispielePage = () => {
     if (rememberSubmit.current) submitFeedback();
-    void navigateWithPlanState(formSteps.beispiele.route, plan);
+
+    if (hasChanges) {
+      void navigateStateful(formSteps.beispiele.route, { plan });
+    } else {
+      void navigateStateful(formSteps.beispiele.route, { beispiel });
+    }
   };
 
   function navigateToDatenuebernahmeAntragPage(): void {
     if (rememberSubmit.current) submitFeedback();
 
-    void navigateWithPlanState(formSteps.datenuebernahmeAntrag.route, plan);
+    void navigateStateful(formSteps.datenuebernahmeAntrag.route, { plan });
   }
 
   useEffect(trackMetricsForPlanerWurdeGeoeffnet, []);
 
   return (
     <Page step={formSteps.rechnerUndPlaner}>
-      {!!hasPlan && (
-        <Zusammenfassung plan={plan} className="hidden print:block" />
-      )}
+      {!!plan && <Zusammenfassung plan={plan} className="hidden print:block" />}
 
       <div className="print:hidden">
         {isErklaerungOpen ? (

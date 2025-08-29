@@ -19,7 +19,7 @@ import {
   imageSeite,
 } from "@/application/features/pdfAntrag/pdf-images";
 import { Page } from "@/application/pages/Page";
-import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
+import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
@@ -27,9 +27,12 @@ import { pushTrackingEvent } from "@/application/user-tracking";
 export function DatenuebernahmeAntragPage(): ReactNode {
   const store = useAppStore();
 
-  const { plan, navigateWithPlanState } = useNavigateWithPlan();
-  const navigateToRechnerUndPlanerPage = () =>
-    navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
+  const { navigationState, navigateStateful } = useNavigateStateful();
+  const { plan } = navigationState;
+
+  const navigateToRechnerUndPlanerPage = () => {
+    void navigateStateful(formSteps.rechnerUndPlaner.route, navigationState);
+  };
 
   const [antragDownloading, setAntragDownloading] = useState(false);
   const [seiteDownloading, setSeiteDownloading] = useState(false);
@@ -249,8 +252,8 @@ if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
   describe("Datenuebernahme Antrag Page", async () => {
-    const { useNavigateWithPlan } = await import(
-      "@/application/pages/planungsteil/useNavigateWithPlan"
+    const { useNavigateStateful: useStatefulNavigate } = await import(
+      "@/application/pages/planungsteil/useNavigateStateful"
     );
 
     const { INITIAL_STATE, render, screen } = await import(
@@ -261,17 +264,17 @@ if (import.meta.vitest) {
 
     beforeEach(() => {
       vi.mock(
-        import("@/application/pages/planungsteil/useNavigateWithPlan"),
+        import("@/application/pages/planungsteil/useNavigateStateful"),
         () => ({
-          useNavigateWithPlan: vi.fn(),
+          useNavigateStateful: vi.fn(),
         }),
       );
     });
 
     it("shows a section for the Datenuebernahme Antrag with option to download pdf if a Plan was provided and Bundesland is supported", () => {
-      vi.mocked(useNavigateWithPlan).mockReturnValue({
-        plan: ANY_PLAN,
-        navigateWithPlanState: () => undefined,
+      vi.mocked(useStatefulNavigate).mockReturnValue({
+        navigationState: { plan: ANY_PLAN },
+        navigateStateful: () => undefined,
       });
 
       render(<DatenuebernahmeAntragPage />, {
@@ -293,9 +296,9 @@ if (import.meta.vitest) {
         draft.stepAllgemeineAngaben.bundesland = bundeslaender[0].name;
       });
 
-      vi.mocked(useNavigateWithPlan).mockReturnValue({
-        plan: ANY_PLAN,
-        navigateWithPlanState: () => undefined,
+      vi.mocked(useStatefulNavigate).mockReturnValue({
+        navigationState: { plan: ANY_PLAN },
+        navigateStateful: () => undefined,
       });
 
       render(<DatenuebernahmeAntragPage />, { preloadedState: state });
@@ -313,10 +316,11 @@ if (import.meta.vitest) {
     });
 
     it("uses the existing Plan when navigating back to the Rechner", () => {
-      const navigateWithPlanState = vi.fn();
-      vi.mocked(useNavigateWithPlan).mockReturnValue({
-        plan: ANY_PLAN,
-        navigateWithPlanState,
+      const navigateStateful = vi.fn();
+
+      vi.mocked(useStatefulNavigate).mockReturnValue({
+        navigationState: { plan: ANY_PLAN },
+        navigateStateful,
       });
 
       render(<DatenuebernahmeAntragPage />, {
@@ -325,11 +329,11 @@ if (import.meta.vitest) {
 
       screen.getByRole("button", { name: "Zurück" }).click();
 
-      expect(navigateWithPlanState).toHaveBeenCalledOnce();
-      expect(navigateWithPlanState).toHaveBeenLastCalledWith(
-        "/rechner-planer",
-        ANY_PLAN,
-      );
+      expect(navigateStateful).toHaveBeenCalledOnce();
+
+      expect(navigateStateful).toHaveBeenLastCalledWith("/rechner-planer", {
+        plan: ANY_PLAN,
+      });
     });
 
     const ANY_PLAN = {

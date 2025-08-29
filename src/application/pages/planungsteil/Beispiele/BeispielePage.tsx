@@ -10,10 +10,9 @@ import {
   Radiobutton as BeispielRadiobutton,
   erstelleBeispiele,
 } from "@/application/features/beispiele";
-import { findePassendesBeispiel } from "@/application/features/beispiele/operations/findePassendesBeispiel";
 import { Page } from "@/application/pages/Page";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
-import { useNavigateWithPlan } from "@/application/pages/planungsteil/useNavigateWithPlan";
+import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
@@ -40,7 +39,8 @@ export function BeispielePage() {
   const store = useAppStore();
   const navigate = useNavigate();
 
-  const { navigateWithPlanState, plan: initialerPlan } = useNavigateWithPlan();
+  const { navigationState, navigateStateful } = useNavigateStateful();
+  const { plan: initialerPlan, beispiel: initialesBeispiel } = navigationState;
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
@@ -66,19 +66,12 @@ export function BeispielePage() {
   );
 
   useEffect(() => {
-    if (initialerPlan) {
-      const passendesBeispiel = findePassendesBeispiel(
-        initialerPlan,
-        berechneElterngeldbezuege,
-      );
-
-      if (passendesBeispiel) {
-        setPlan(passendesBeispiel.plan);
-        setAktivesBeispiel(passendesBeispiel.identifier);
-      } else {
-        setPlan(initialerPlan);
-        setAktivesBeispiel(EigenePlanung);
-      }
+    if (initialesBeispiel) {
+      setPlan(initialesBeispiel.plan);
+      setAktivesBeispiel(initialesBeispiel.identifier);
+    } else if (initialerPlan) {
+      setPlan(initialerPlan);
+      setAktivesBeispiel(EigenePlanung);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,7 +101,14 @@ export function BeispielePage() {
   };
 
   const navigateToRechnerUndPlanerPage = async () => {
-    await navigateWithPlanState(formSteps.rechnerUndPlaner.route, plan);
+    const beispiel = beispiele.find((beispiel) => {
+      return beispiel.identifier === aktivesBeispiel;
+    });
+
+    await navigateStateful(formSteps.rechnerUndPlaner.route, {
+      plan,
+      beispiel,
+    });
   };
 
   return (

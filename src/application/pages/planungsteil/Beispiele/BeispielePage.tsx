@@ -157,7 +157,6 @@ export function BeispielePage() {
                 titel={beispiel.titel}
                 key={beispiel.identifier}
                 inputName="Beispieloption"
-                beschreibung={beispiel.beschreibung}
                 checked={aktivesBeispiel === beispiel.identifier}
                 onChange={() => aktiviereOption(beispiel.identifier)}
               >
@@ -166,9 +165,11 @@ export function BeispielePage() {
             ))}
 
             <BeispielRadiobutton
-              titel="Eigene Planung anlegen"
-              beschreibung="Sie probieren selbst aus, wie Sie Ihr Elterngeld aufteilen und
-              erstellen eine Planung ohne Planungshilfe."
+              titel={
+                initialerPlan
+                  ? "Meine Planung fortsetzen"
+                  : "Eigene Planung anlegen"
+              }
               inputName="Beispieloption"
               checked={aktivesBeispiel === EigenePlanung}
               onChange={() => aktiviereOption(EigenePlanung)}
@@ -326,7 +327,7 @@ if (import.meta.vitest) {
 
         screen.getByText("Partnerschaftliche Aufteilung").click();
 
-        screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Meine Planung fortsetzen").click();
 
         screen.getByText("Weiter").click();
 

@@ -54,8 +54,6 @@ function erstelleBeispieleFuerAlleinPlanende(
     {
       identifier: "Allein planend - Länger Elterngeld erhalten",
       titel: "Länger Elterngeld erhalten",
-      beschreibung:
-        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -71,8 +69,6 @@ function erstelleBeispieleFuerAlleinPlanende(
     {
       identifier: "Allein planend - Beruf und Familie vereinen",
       titel: "Beruf und Familie vereinen",
-      beschreibung:
-        "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -85,8 +81,6 @@ function erstelleBeispieleFuerAlleinPlanende(
     {
       identifier: "Allein planend - Ein Jahr Elterngeld",
       titel: "Ein Jahr Elterngeld",
-      beschreibung:
-        "Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [{ lebensmonat: basis, anzahl: 12 }],
@@ -110,8 +104,6 @@ function erstelleBeispieleFuerAlleinerziehende(
     {
       identifier: "Alleinerziehend - Länger Elterngeld erhalten",
       titel: "Länger Elterngeld erhalten",
-      beschreibung:
-        "Finanzielle Sicherheit bei halbem Elterngeld. Lohnt sich besonders bei Teilzeit.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -124,8 +116,6 @@ function erstelleBeispieleFuerAlleinerziehende(
     {
       identifier: "Alleinerziehend - Beruf und Familie vereinen",
       titel: "Beruf und Familie vereinen",
-      beschreibung:
-        "Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -138,8 +128,6 @@ function erstelleBeispieleFuerAlleinerziehende(
     {
       identifier: "Alleinerziehend - Ein Jahr Elterngeld",
       titel: "Ein Jahr Elterngeld",
-      beschreibung:
-        "Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [{ lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 }],
@@ -208,8 +196,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     {
       identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
       titel: "Partnerschaftliche Aufteilung",
-      beschreibung:
-        "Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -227,9 +213,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld bekommen",
-      beschreibung:
-        "Lohnt sich, wenn Sie in Teilzeit arbeiten möchten. Für mehr Zeit mit der Familie ",
+      titel: "Länger Elterngeld",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -247,8 +231,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     {
       identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
       titel: "Ein Jahr mit Begleitung",
-      beschreibung:
-        "Gemeinsam starten. Nach dem ersten Lebensjahr übernimmt der andere Elternteil für einen Monat.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -264,8 +246,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
-      titel: "Start zu zweit - flexibel zurück",
-      beschreibung: "Gemeinsam in die Elternzeit starten und abschließen.",
+      titel: "Flexibel zurück",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -284,8 +265,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     {
       identifier: "Gemeinsame Planung - Elternzeit ausschöpfen",
       titel: "Elternzeit ausschöpfen",
-      beschreibung:
-        "Sechs Monate zusammen Elterngeld nehmen. Dann länger Elternzeit mit halbem Elterngeld.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -302,8 +281,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     {
       identifier: "Gemeinsame Planung - Geteilte Elternzeit",
       titel: "Geteilte Elternzeit",
-      beschreibung:
-        "Volles und halbes Elterngeld kombiniert: 8 Monate mehr Zeit zusammen verbringen.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -361,7 +338,6 @@ const UNGEPLANTER_MONAT: Monat = {
 export type Beispiel<A extends Ausgangslage> = Readonly<{
   identifier: BeispielIdentifier;
   titel: string;
-  beschreibung: string;
   plan: Plan<A>;
 }>;
 
@@ -519,23 +495,6 @@ if (import.meta.vitest) {
             });
 
             expect(identifiers.length).toEqual(uniqueIdentifiers.length);
-          }
-        }),
-      );
-    });
-
-    it("generated no empty descriptions", () => {
-      assert(
-        property(arbritraryAusgangslagen, (ausgangslagen) => {
-          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
-
-          for (const ausgangslage of ausgangslagen) {
-            const beispiele = erstelleBeispiele(
-              ausgangslage,
-              berechneElterngeldbezuege,
-            );
-
-            expect(beispiele.map((it) => it.beschreibung)).not.toContain("");
           }
         }),
       );

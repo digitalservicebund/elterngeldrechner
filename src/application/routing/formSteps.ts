@@ -24,7 +24,7 @@ export const formSteps = {
     route: "/einkommen",
   },
   beispiele: {
-    heading: "Wie stellen Sie sich Ihre Elternzeit ungefähr vor?",
+    heading: "Wie stellen Sie sich Ihre Elternzeit vor?",
     shortName: "Planung starten",
     route: "/beispiele",
   },

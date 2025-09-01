@@ -18,7 +18,7 @@ export function Beschreibung({ beispiel }: Props) {
 
   return (
     <>
-      <div className="col-span-2 ">
+      <div className="col-span-2">
         <p className="mb-2">Elterngeld Summe</p>
 
         <p className="inline-block rounded bg-primary-light px-10 py-2">
@@ -52,7 +52,6 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "test-beispiel",
         titel: "Test Beispiel",
-        beschreibung: "Beispiel mit zwei Monaten Elterngeldbezug",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,
@@ -87,7 +86,6 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "test-beispiel",
         titel: "Test Beispiel",
-        beschreibung: "Beispiel mit zwei Monaten Elterngeldbezug",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,

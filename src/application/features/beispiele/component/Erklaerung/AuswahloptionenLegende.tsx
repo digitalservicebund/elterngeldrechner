@@ -57,7 +57,6 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "Testbeispiel",
         titel: "Testbeispiel",
-        beschreibung: "Beispiel mit nur Basis und Plus aber kein Bonus",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,
@@ -95,7 +94,6 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "Testbeispiel",
         titel: "Testbeispiel",
-        beschreibung: "Beispiel mit nur Basis und Plus aber kein Bonus",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,
@@ -133,7 +131,6 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "Testbeispiel",
         titel: "Testbeispiel",
-        beschreibung: "Beispiel mit nur Basis und Plus aber kein Bonus",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,

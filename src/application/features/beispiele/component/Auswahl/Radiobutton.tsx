@@ -3,7 +3,6 @@ import { ReactNode, useId } from "react";
 
 type Props = {
   readonly titel: string;
-  readonly beschreibung: string;
   readonly inputName: string;
   readonly checked: boolean;
   readonly onChange: () => void;
@@ -13,7 +12,6 @@ type Props = {
 
 export function Radiobutton({
   titel,
-  beschreibung,
   inputName,
   checked,
   onChange,
@@ -55,18 +53,7 @@ export function Radiobutton({
         {titel}
       </p>
 
-      <p
-        id={`${radioId}-beschreibung`}
-        className="col-span-2 break-words pt-10"
-      >
-        {beschreibung}
-      </p>
-
-      {!!children && (
-        <div className="col-span-2 my-10 h-[1px] w-full bg-grey" />
-      )}
-
-      <div className="col-span-2 flex flex-col gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">
+      <div className="col-span-2 flex flex-col gap-4 pt-10 peer-checked:[&_.bg-primary-light]:bg-grey-light">
         {children}
       </div>
     </label>

@@ -38,7 +38,7 @@ export function Gesamtsummenanzeige({
     >
       {!!hasMultipleElternteile && !!showGesamtsumme && (
         <div className="flex basis-full flex-wrap items-center justify-center gap-6">
-          <div className="flex flex-wrap items-center gap-4 rounded-[6px] bg-white px-10 py-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 rounded-[6px] bg-white px-10 py-6">
             {!!children && <>{children}</>}
 
             <p className="mb-0 font-bold">

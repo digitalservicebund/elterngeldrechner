@@ -20,6 +20,7 @@ import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
+  readonly beschreibungKopfleiste?: string;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
   readonly planInAntragUebernehmen: () => void;
   readonly callbacks: PlanerServiceCallbacks & {
@@ -31,6 +32,7 @@ type Props = {
 
 export function Planer({
   initialInformation,
+  beschreibungKopfleiste,
   berechneElterngeldbezuege,
   callbacks,
   className,
@@ -143,7 +145,9 @@ export function Planer({
             <Gesamtsummenanzeige
               className="border-t-2 border-solid !border-white bg-off-white py-10"
               plan={plan}
-            />
+            >
+              {!!beschreibungKopfleiste && <p>{beschreibungKopfleiste}</p>}
+            </Gesamtsummenanzeige>
 
             <div>
               <Lebensmonatsliste

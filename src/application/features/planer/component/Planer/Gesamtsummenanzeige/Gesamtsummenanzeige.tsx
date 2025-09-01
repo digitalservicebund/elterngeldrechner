@@ -12,10 +12,15 @@ import {
 
 type Props = {
   readonly plan: PlanMitBeliebigenElternteilen;
+  readonly children?: React.ReactNode;
   readonly className?: string;
 };
 
-export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
+export function Gesamtsummenanzeige({
+  plan,
+  className,
+  children,
+}: Props): ReactNode {
   const gesamtsumme = berechneGesamtsumme(plan);
   const showGesamtsumme = gesamtsumme.elterngeldbezug > 0;
   const hasMultipleElternteile = plan.ausgangslage.anzahlElternteile > 1;
@@ -32,11 +37,15 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
       )}
     >
       {!!hasMultipleElternteile && !!showGesamtsumme && (
-        <div className="basis-full">
-          <span className="max-w-fit rounded-[6px] bg-white px-10 py-6 font-bold">
-            Gesamtsumme Elterngeld:{" "}
-            <Geldbetrag betrag={gesamtsumme.elterngeldbezug} />
-          </span>
+        <div className="flex basis-full flex-wrap items-center justify-center gap-6">
+          <div className="flex flex-wrap items-center gap-4 rounded-[6px] bg-white px-10 py-6">
+            {!!children && <>{children}</>}
+
+            <p className="mb-0 font-bold">
+              Gesamtsumme Elterngeld:{" "}
+              <Geldbetrag betrag={gesamtsumme.elterngeldbezug} />
+            </p>
+          </div>
         </div>
       )}
 

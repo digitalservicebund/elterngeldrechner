@@ -61,6 +61,10 @@ export function PlanerPage() {
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan: initialPlan, beispiel } = navigationState;
 
+  const [beschreibungKopfleiste, setBeschreibungKopfleiste] = useState(
+    navigationState.beispiel?.titel,
+  );
+
   const initialPlanerInformation = useRef(
     initialPlan !== undefined
       ? { plan: initialPlan }
@@ -75,6 +79,7 @@ export function PlanerPage() {
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
   ): void {
+    setBeschreibungKopfleiste(undefined);
     setHasChanges(true);
     setPlan(plan);
   }
@@ -139,6 +144,7 @@ export function PlanerPage() {
         ) : (
           <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
             <Planer
+              beschreibungKopfleiste={beschreibungKopfleiste}
               initialInformation={initialPlanerInformation.current}
               berechneElterngeldbezuege={berechneElterngeldbezuege}
               planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}

@@ -32,19 +32,21 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
       const isEinElternteil = !pseudonym;
 
       return (
-        <div key={elternteil}>
-          <p className="pb-4 pt-16" aria-hidden="true">
-            {isEinElternteil ? (
-              <AccessTime className="mr-4" />
-            ) : (
-              <PersonIcon className="mr-4" />
-            )}
-            {isEinElternteil ? "Summe" : pseudonym} {summeGeplanteMonate} Monate
-          </p>
+        <div key={elternteil} className="pt-8 ">
+          <div className="flex flex-wrap items-center gap-2 pb-8">
+            <p>
+              {isEinElternteil ? (
+                <AccessTime aria-hidden="true" className="mr-4" />
+              ) : (
+                <PersonIcon aria-hidden="true" className="mr-4" />
+              )}
+              {isEinElternteil ? "Summe" : pseudonym}
+            </p>
 
-          <span className="sr-only">
-            {pseudonym + beschreibungMonatsverteilung}
-          </span>
+            <p className="mb-0">{summeGeplanteMonate} Monate</p>
+
+            <p className="sr-only">{beschreibungMonatsverteilung}</p>
+          </div>
 
           <div className="flex h-[24px]" aria-hidden="true">
             {monatsverteilung.map(([key, count], index) => (

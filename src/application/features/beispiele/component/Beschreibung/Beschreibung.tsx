@@ -18,19 +18,21 @@ export function Beschreibung({ beispiel }: Props) {
 
   return (
     <>
-      <p className="col-span-2 pt-16">
-        Elterngeld Summe
-        <span className="ml-10 rounded bg-primary-light px-10 py-2">
-          <Geldbetrag betrag={gesamtbezug} />
-        </span>
-      </p>
+      <div className="col-span-2 ">
+        <p className="mb-2">Elterngeld Summe</p>
 
-      <p className="col-span-2 pt-16">
-        Elterngeld bis zum
-        <span className="ml-10 rounded bg-primary-light px-10 py-2">
+        <p className="inline-block rounded bg-primary-light px-10 py-2">
+          <Geldbetrag betrag={gesamtbezug} />
+        </p>
+      </div>
+
+      <div className="col-span-2 pt-10">
+        <p className="mb-2">Elterngeld bis zum</p>
+
+        <p className="inline-block rounded bg-primary-light px-10 py-2">
           {letzterLebensmonat}. Lebensmonat
-        </span>
-      </p>
+        </p>
+      </div>
 
       <Visualisierung beispiel={beispiel} className="col-span-2 mt-auto" />
     </>

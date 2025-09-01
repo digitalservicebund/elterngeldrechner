@@ -47,16 +47,23 @@ export function Radiobutton({
         aria-labelledby={`${radioId}-titel ${radioId}-beschreibung`}
       />
 
-      <h4 id={`${radioId}-titel`} className="self-center break-words">
+      <p
+        id={`${radioId}-titel`}
+        className="self-center break-words"
+        style={{ fontSize: 22, lineHeight: 1.5, fontWeight: 600 }}
+      >
         {titel}
-      </h4>
+      </p>
 
-      <p id={`${radioId}-beschreibung`} className="col-span-2 break-words">
+      <p
+        id={`${radioId}-beschreibung`}
+        className="col-span-2 break-words pt-10"
+      >
         {beschreibung}
       </p>
 
       {!!children && (
-        <div className="col-span-2 mt-16 h-[1px] w-full bg-grey" />
+        <div className="col-span-2 my-10 h-[1px] w-full bg-grey" />
       )}
 
       <div className="col-span-2 flex flex-col gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">

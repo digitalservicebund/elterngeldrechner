@@ -151,7 +151,7 @@ export function BeispielePage() {
         <fieldset>
           <legend className="sr-only">Beispielauswahl</legend>
 
-          <div className="grid grid-cols-1 gap-26 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-26 md:grid-cols-3">
             {beispiele.map((beispiel) => (
               <BeispielRadiobutton
                 titel={beispiel.titel}
@@ -172,7 +172,7 @@ export function BeispielePage() {
               inputName="Beispieloption"
               checked={aktivesBeispiel === EigenePlanung}
               onChange={() => aktiviereOption(EigenePlanung)}
-              className="md:col-span-2"
+              className="md:col-span-3"
             />
           </div>
         </fieldset>

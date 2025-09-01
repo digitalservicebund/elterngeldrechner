@@ -31,6 +31,15 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
         className,
       )}
     >
+      {!!hasMultipleElternteile && !!showGesamtsumme && (
+        <div className="basis-full">
+          <span className="max-w-fit rounded-[6px] bg-white px-10 py-6 font-bold">
+            Gesamtsumme Elterngeld:{" "}
+            <Geldbetrag betrag={gesamtsumme.elterngeldbezug} />
+          </span>
+        </div>
+      )}
+
       {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
         (elternteil) => (
           <ElterngeldFuerElternteil
@@ -40,13 +49,6 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
             showSumme={showGesamtsumme}
           />
         ),
-      )}
-
-      {!!hasMultipleElternteile && !!showGesamtsumme && (
-        <span className="basis-full font-bold">
-          Gesamtsumme Elterngeld:{" "}
-          <Geldbetrag betrag={gesamtsumme.elterngeldbezug} />
-        </span>
       )}
 
       {!!jemandHatEinkommen &&

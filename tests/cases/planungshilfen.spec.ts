@@ -6,7 +6,7 @@ import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
-test("beispiel partnerschaftliche aufteilung", async ({ page }) => {
+test("beispiel partnerschaftlich aufgeteilt ", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
@@ -32,7 +32,7 @@ test("beispiel partnerschaftliche aufteilung", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
-  await beispielePage.waehleOption("Partnerschaftliche Aufteilung");
+  await beispielePage.waehleOption("Partnerschaftlich aufgeteilt");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);

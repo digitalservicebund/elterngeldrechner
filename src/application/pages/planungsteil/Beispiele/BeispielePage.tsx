@@ -1,12 +1,14 @@
+import ChevronRight from "@digitalservicebund/icons/ChevronRight";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
 import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
+import type { Beispiel } from "@/application/features/beispiele";
 import {
   AuswahloptionenLegende as BeispielAuswahloptionenLegende,
-  type Beispiel,
   Beschreibung as BeispielBeschreibung,
   Radiobutton as BeispielRadiobutton,
+  Visualisierung as BeispielVisualisierung,
   erstelleBeispiele,
 } from "@/application/features/beispiele";
 import { Page } from "@/application/pages/Page";
@@ -21,7 +23,6 @@ import {
 import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 export function BeispielePage() {
-  // TODO: Fix Eigene Planung layout for ein elternteil in the last layout row
   // TODO: Ensure consistent use of the term beispiele rather than planungshilfen
 
   const store = useAppStore();
@@ -32,12 +33,30 @@ export function BeispielePage() {
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const navigateToEinkommenPage = async () => {
+  const ausgangslage = composeAusgangslageFuerPlaner(store.getState());
+  const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
+
+  const navigiereZuEinkommen = async () => {
     await navigate(formSteps.einkommen.route);
   };
 
-  const ausgangslage = composeAusgangslageFuerPlaner(store.getState());
-  const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
+  const navigiereZuPlaner = async () => {
+    const beispiel = beispiele.find((beispiel) => {
+      return beispiel.identifier === aktivesBeispiel;
+    });
+
+    await navigateStateful(formSteps.rechnerUndPlaner.route, {
+      beispiel,
+      plan,
+    });
+  };
+
+  const navigiereZuPlanerMitInitialemPlan = async () => {
+    await navigateStateful(formSteps.rechnerUndPlaner.route, {
+      beispiel: undefined,
+      plan: initialerPlan,
+    });
+  };
 
   // TODO: I tried to type state as BeispielIdentifier | "KeineAuswahl" | "EigenePlanung"
   // but all are strings, so typescript considers the literals redundant and the types clash.
@@ -57,9 +76,6 @@ export function BeispielePage() {
     if (initialesBeispiel) {
       setPlan(initialesBeispiel.plan);
       setAktivesBeispiel(initialesBeispiel.identifier);
-    } else if (initialerPlan) {
-      setPlan(initialerPlan);
-      setAktivesBeispiel(EigenePlanung);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,11 +112,7 @@ export function BeispielePage() {
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
     } else if (aktivierteOption === EigenePlanung) {
-      if (initialerPlan) {
-        setPlan(initialerPlan);
-      } else {
-        setPlan(undefined);
-      }
+      setPlan(undefined);
 
       // All beispiele are prefixed with a description of the
       // ausgangslage. The same prefix is applied to eigene
@@ -127,17 +139,6 @@ export function BeispielePage() {
     pushTrackingEvent("Beispiel-wurde-ausgewählt");
   };
 
-  const navigateToRechnerUndPlanerPage = async () => {
-    const beispiel = beispiele.find((beispiel) => {
-      return beispiel.identifier === aktivesBeispiel;
-    });
-
-    await navigateStateful(formSteps.rechnerUndPlaner.route, {
-      plan,
-      beispiel,
-    });
-  };
-
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-32">
@@ -151,7 +152,7 @@ export function BeispielePage() {
         <fieldset>
           <legend className="sr-only">Beispielauswahl</legend>
 
-          <div className="grid grid-cols-1 gap-26 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-26 sm:grid-cols-2 md:grid-cols-3">
             {beispiele.map((beispiel) => (
               <BeispielRadiobutton
                 titel={beispiel.titel}
@@ -159,21 +160,17 @@ export function BeispielePage() {
                 inputName="Beispieloption"
                 checked={aktivesBeispiel === beispiel.identifier}
                 onChange={() => aktiviereOption(beispiel.identifier)}
-              >
-                <BeispielBeschreibung beispiel={beispiel} />
-              </BeispielRadiobutton>
+                body={<BeispielBeschreibung beispiel={beispiel} />}
+                footer={<BeispielVisualisierung beispiel={beispiel} />}
+              />
             ))}
 
             <BeispielRadiobutton
-              titel={
-                initialerPlan
-                  ? "Meine Planung fortsetzen"
-                  : "Eigene Planung anlegen"
-              }
+              titel="Eigene Planung anlegen"
               inputName="Beispieloption"
               checked={aktivesBeispiel === EigenePlanung}
               onChange={() => aktiviereOption(EigenePlanung)}
-              className="md:col-span-3"
+              className="col-span-full"
             />
           </div>
         </fieldset>
@@ -182,7 +179,7 @@ export function BeispielePage() {
           <Button
             type="button"
             buttonStyle="secondary"
-            onClick={navigateToEinkommenPage}
+            onClick={() => navigiereZuEinkommen()}
           >
             Zurück
           </Button>
@@ -190,10 +187,24 @@ export function BeispielePage() {
           <Button
             type="button"
             buttonStyle="primary"
-            onClick={navigateToRechnerUndPlanerPage}
+            onClick={() => navigiereZuPlaner()}
           >
             Weiter
           </Button>
+
+          {!!initialerPlan && (
+            <div className="content-center pl-20">
+              <Button
+                type="button"
+                buttonStyle="link"
+                onClick={() => navigiereZuPlanerMitInitialemPlan()}
+              >
+                Meine Planung fortsetzen
+              </Button>
+
+              <ChevronRight />
+            </div>
+          )}
         </div>
       </div>
     </Page>
@@ -247,7 +258,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftliche Aufteilung").click();
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
 
         screen.getByText("Weiter").click();
 
@@ -255,7 +266,7 @@ if (import.meta.vitest) {
           return (
             argument.plan != null &&
             argument.beispiel != null &&
-            argument.beispiel.titel === "Partnerschaftliche Aufteilung"
+            argument.beispiel.titel === "Partnerschaftlich aufgeteilt"
           );
         };
 
@@ -265,12 +276,12 @@ if (import.meta.vitest) {
         );
       });
 
-      it("im ersten durchlauf überschreibt eigene planung ein vorher selektiertes beispiel", () => {
+      it("eigene planung überschreibt ein vorher selektiertes beispiel", () => {
         render(<BeispielePage />, {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftliche Aufteilung").click();
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
 
         screen.getByText("Eigene Planung anlegen").click();
 
@@ -286,7 +297,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("verwendet fuer eigene planung den plan aus dem navigation state wenn gesetzt", () => {
+      it("meine planung fortsetzen übernimmt den initialen plan", () => {
         vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
@@ -325,11 +336,9 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftliche Aufteilung").click();
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
 
         screen.getByText("Meine Planung fortsetzen").click();
-
-        screen.getByText("Weiter").click();
 
         const expectation = (argument: NavigateState) => {
           return !!argument.plan && argument.beispiel == null;
@@ -355,7 +364,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftliche Aufteilung").click();
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
 
         expect(trackingFunction).toHaveBeenCalledExactlyOnceWith(
           "Identifier-des-ausgewaehlten-Beispiels",
@@ -373,7 +382,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftliche Aufteilung").click();
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
 
         screen.getByText("Eigene Planung anlegen").click();
 

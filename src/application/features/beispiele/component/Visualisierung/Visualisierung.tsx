@@ -33,7 +33,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
 
       return (
         <div key={elternteil} className="pt-8 ">
-          <div className="flex flex-wrap items-center gap-2 pb-8">
+          <div className="flex flex-wrap items-center gap-[6px] pb-8">
             <p>
               {isEinElternteil ? (
                 <AccessTime aria-hidden="true" className="mr-4" />

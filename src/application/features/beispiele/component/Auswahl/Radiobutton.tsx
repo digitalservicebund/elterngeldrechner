@@ -5,18 +5,20 @@ type Props = {
   readonly titel: string;
   readonly inputName: string;
   readonly checked: boolean;
+  readonly body?: ReactNode;
+  readonly footer?: ReactNode;
   readonly onChange: () => void;
   readonly className?: string;
-  readonly children?: ReactNode;
 };
 
 export function Radiobutton({
   titel,
   inputName,
   checked,
+  body,
+  footer,
   onChange,
   className,
-  children,
 }: Props): ReactNode {
   const radioId = useId();
 
@@ -24,7 +26,7 @@ export function Radiobutton({
     <label
       htmlFor={radioId}
       className={classNames(
-        "grid cursor-pointer grid-cols-[auto_1fr] gap-x-10 rounded bg-off-white p-24",
+        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[5rem_1fr_1fr] gap-x-10 rounded bg-off-white p-24",
         "has-[:focus]:ring-2 has-[:focus]:ring-primary",
         "has-[:checked]:bg-primary-light",
         className,
@@ -37,24 +39,28 @@ export function Radiobutton({
         checked={checked}
         onChange={onChange}
         className={classNames(
-          "peer relative size-32 min-w-32 rounded-full border-2 border-solid border-black bg-white",
+          "peer relative size-32 min-w-32 self-center rounded-full border-2 border-solid border-black bg-white",
           "before:size-16 before:rounded-full before:content-['']",
           "before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2",
-          "checked:before:bg-black self-center",
+          "checked:before:bg-black",
         )}
         aria-labelledby={`${radioId}-titel ${radioId}-beschreibung`}
       />
 
       <p
         id={`${radioId}-titel`}
-        className="self-center break-words"
-        style={{ fontSize: 22, lineHeight: 1.5, fontWeight: 600 }}
+        className="min-w-0 self-center break-words"
+        style={{ fontSize: 22, fontWeight: 600 }}
       >
         {titel}
       </p>
 
-      <div className="col-span-2 flex flex-col gap-4 pt-10 peer-checked:[&_.bg-primary-light]:bg-grey-light">
-        {children}
+      <div className="col-span-2 flex flex-col justify-center gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">
+        {body}
+      </div>
+
+      <div className="col-span-2 flex flex-col justify-center gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">
+        {footer}
       </div>
     </label>
   );

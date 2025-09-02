@@ -1,4 +1,3 @@
-import { Visualisierung } from "./Visualisierung";
 import { Geldbetrag } from "@/application/components";
 import { Beispiel } from "@/application/features/beispiele";
 import {
@@ -26,15 +25,13 @@ export function Beschreibung({ beispiel }: Props) {
         </p>
       </div>
 
-      <div className="col-span-2 pt-10">
+      <div className="col-span-2">
         <p className="mb-2">Elterngeld bis zum</p>
 
         <p className="inline-block rounded bg-primary-light px-10 py-2">
           {letzterLebensmonat}. Lebensmonat
         </p>
       </div>
-
-      <Visualisierung beispiel={beispiel} className="col-span-2 mt-auto" />
     </>
   );
 }

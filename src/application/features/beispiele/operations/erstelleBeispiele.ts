@@ -195,7 +195,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
   return [
     {
       identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
-      titel: "Partnerschaftliche Aufteilung",
+      titel: "Partnerschaftlich aufgeteilt",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -230,7 +230,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
-      titel: "Ein Jahr mit Begleitung",
+      titel: "Begleitete Übergänge",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -246,7 +246,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
-      titel: "Flexibel zurück",
+      titel: "Flexibler Wiedereinstieg",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -280,7 +280,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Geteilte Elternzeit",
-      titel: "Geteilte Elternzeit",
+      titel: "Gemeinsame Elternzeit",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [

@@ -40,7 +40,7 @@ test("beispiel partnerschaftlich aufgeteilt ", async ({ page }) => {
   await rechnerUndPlaner.uebernehmen();
 });
 
-test("beispiel ein jahr elterngeld", async ({ page }) => {
+test("beispiel volles elterngeld", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(true);
@@ -60,7 +60,7 @@ test("beispiel ein jahr elterngeld", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
-  await beispielePage.waehleOption("Ein Jahr Elterngeld");
+  await beispielePage.waehleOption("Volles Elterngeld");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);

@@ -53,7 +53,7 @@ function erstelleBeispieleFuerAlleinPlanende(
   return [
     {
       identifier: "Allein planend - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld erhalten",
+      titel: "Länger Elterngeld",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -80,7 +80,7 @@ function erstelleBeispieleFuerAlleinPlanende(
     },
     {
       identifier: "Allein planend - Ein Jahr Elterngeld",
-      titel: "Ein Jahr Elterngeld",
+      titel: "Volles Elterngeld",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [{ lebensmonat: basis, anzahl: 12 }],
@@ -103,7 +103,7 @@ function erstelleBeispieleFuerAlleinerziehende(
   return [
     {
       identifier: "Alleinerziehend - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld erhalten",
+      titel: "Länger Elterngeld",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
@@ -127,7 +127,7 @@ function erstelleBeispieleFuerAlleinerziehende(
     },
     {
       identifier: "Alleinerziehend - Ein Jahr Elterngeld",
-      titel: "Ein Jahr Elterngeld",
+      titel: "Volles Elterngeld",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [{ lebensmonat: basis, anzahl: sindPartnermonateVerfuegbar ? 14 : 12 }],

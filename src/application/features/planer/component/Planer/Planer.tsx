@@ -20,7 +20,6 @@ import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
-  readonly beschreibungKopfleiste?: string;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
   readonly planInAntragUebernehmen: () => void;
   readonly callbacks: PlanerServiceCallbacks & {
@@ -32,7 +31,6 @@ type Props = {
 
 export function Planer({
   initialInformation,
-  beschreibungKopfleiste,
   berechneElterngeldbezuege,
   callbacks,
   className,
@@ -117,10 +115,28 @@ export function Planer({
           Planer Anwendung
         </h3>
 
-        <Anleitung onOpenErklaerung={onOpenErklaerung} />
+        <Anleitung onOpenErklaerung={onOpenErklaerung}>
+          {initialInformation.beispiel ? (
+            <p>
+              Sie finden hier einen Vorschlag für eine Planung und die Höhe
+              Ihres Elterngeldes. Zusätzlich können Sie angeben, ob und wie viel
+              Einkommen Sie pro Monat haben werden. So erhalten Sie einen
+              Überblick über Ihr voraussichtliches Haushaltseinkommen. Im
+              nächsten Schritt können Sie Ihre Planung in den Antrag übernehmen.
+            </p>
+          ) : (
+            <p>
+              Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden
+              Monat planen. Zusätzlich können Sie angeben, ob und wie viel
+              Einkommen Sie pro Monat haben werden. So erhalten Sie einen
+              Überblick über Ihr voraussichtliches Haushaltseinkommen. Im
+              nächsten Schritt können Sie Ihre Planung in den Antrag übernehmen.
+            </p>
+          )}
+        </Anleitung>
 
         <Button
-          className="my-16 print:hidden"
+          className="my-16 pt-32 print:hidden"
           type="button"
           buttonStyle="link"
           onClick={neueLeerePlanungErstellen}
@@ -146,7 +162,9 @@ export function Planer({
               className="border-t-2 border-solid !border-white bg-off-white py-10"
               plan={plan}
             >
-              {!!beschreibungKopfleiste && <p>{beschreibungKopfleiste}</p>}
+              {!!initialInformation.beispiel && (
+                <p>{initialInformation.beispiel.titel}</p>
+              )}
             </Gesamtsummenanzeige>
 
             <div>

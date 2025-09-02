@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { Beispiel } from "@/application/features/beispiele";
 import { findeLetztenVerplantenLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/findeLetztenVerplantenLebensmonat";
 import {
   type Ausgangslage,
@@ -242,10 +243,15 @@ function extractFehlernachrichten(violations: { message: string }[]): string[] {
 }
 
 export type InitialInformation =
-  | { ausgangslage: Ausgangslage; plan?: undefined }
+  | {
+      ausgangslage: Ausgangslage;
+      plan?: undefined;
+      beispiel?: Beispiel<Ausgangslage>;
+    }
   | {
       ausgangslage?: undefined;
       plan: PlanMitBeliebigenElternteilen;
+      beispiel?: Beispiel<Ausgangslage>;
     };
 
 export type Callbacks = Partial<{

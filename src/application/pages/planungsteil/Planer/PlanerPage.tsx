@@ -61,14 +61,13 @@ export function PlanerPage() {
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan: initialPlan, beispiel } = navigationState;
 
-  const [beschreibungKopfleiste, setBeschreibungKopfleiste] = useState(
-    navigationState.beispiel?.titel,
-  );
-
-  const initialPlanerInformation = useRef(
+  const [initialPlanerInformation, setInitialPlanerInformation] = useState(
     initialPlan !== undefined
-      ? { plan: initialPlan }
-      : { ausgangslage: composeAusgangslageFuerPlaner(store.getState()) },
+      ? { plan: initialPlan, beispiel: beispiel }
+      : {
+          ausgangslage: composeAusgangslageFuerPlaner(store.getState()),
+          beispiel: beispiel,
+        },
   );
 
   const [plan, setPlan] = useState(() => initialPlan);
@@ -76,11 +75,18 @@ export function PlanerPage() {
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
+  function resetBeispiel() {
+    setInitialPlanerInformation({
+      ...initialPlanerInformation,
+      beispiel: undefined,
+    });
+  }
+
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
   ): void {
-    setBeschreibungKopfleiste(undefined);
     setHasChanges(true);
+    resetBeispiel();
     setPlan(plan);
   }
 
@@ -144,8 +150,7 @@ export function PlanerPage() {
         ) : (
           <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
             <Planer
-              beschreibungKopfleiste={beschreibungKopfleiste}
-              initialInformation={initialPlanerInformation.current}
+              initialInformation={initialPlanerInformation}
               berechneElterngeldbezuege={berechneElterngeldbezuege}
               planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}
               callbacks={{

@@ -213,7 +213,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
-      titel: "Länger Elterngeld",
+      titel: "Längere Elternzeit",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [

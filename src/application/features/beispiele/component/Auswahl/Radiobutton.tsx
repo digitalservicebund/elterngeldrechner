@@ -26,7 +26,7 @@ export function Radiobutton({
     <label
       htmlFor={radioId}
       className={classNames(
-        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[5rem_1fr_1fr] gap-x-10 rounded bg-off-white p-24",
+        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[4rem_1fr_1fr] gap-x-10 rounded bg-off-white p-24",
         "has-[:focus]:ring-2 has-[:focus]:ring-primary",
         "has-[:checked]:bg-primary-light",
         className,
@@ -49,19 +49,22 @@ export function Radiobutton({
 
       <p
         id={`${radioId}-titel`}
-        className="min-w-0 self-center break-words"
-        style={{ fontSize: 22, fontWeight: 600 }}
+        className="min-w-0 self-center break-words text-[19px] font-bold leading-[1.4]"
       >
         {titel}
       </p>
 
-      <div className="col-span-2 flex flex-col justify-center gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">
-        {body}
-      </div>
+      {!!body && (
+        <div className="col-span-2 flex flex-col justify-center gap-4 pt-16 peer-checked:[&_.bg-primary-light]:bg-grey-light">
+          {body}
+        </div>
+      )}
 
-      <div className="col-span-2 flex flex-col justify-center gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">
-        {footer}
-      </div>
+      {!!footer && (
+        <div className="col-span-2 flex flex-col justify-center gap-4 peer-checked:[&_.bg-primary-light]:bg-grey-light">
+          {footer}
+        </div>
+      )}
     </label>
   );
 }

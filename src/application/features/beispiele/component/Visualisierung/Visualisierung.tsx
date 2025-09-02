@@ -32,7 +32,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
       const isEinElternteil = !pseudonym;
 
       return (
-        <div key={elternteil} className="pt-8 ">
+        <div key={elternteil} className="pt-10 ">
           <div className="flex flex-wrap items-center gap-[6px] pb-8">
             <p>
               {isEinElternteil ? (

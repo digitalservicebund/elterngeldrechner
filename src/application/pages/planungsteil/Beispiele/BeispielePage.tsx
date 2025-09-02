@@ -142,7 +142,7 @@ export function BeispielePage() {
   return (
     <Page step={formSteps.beispiele}>
       <div className="flex flex-col gap-32">
-        <p>
+        <p className="pb-40">
           Sie können eine Planungshilfe auswählen und sie anschließend im Planer
           nach Ihren Bedürfnissen anpassen.
         </p>
@@ -152,7 +152,7 @@ export function BeispielePage() {
         <fieldset>
           <legend className="sr-only">Beispielauswahl</legend>
 
-          <div className="grid grid-cols-1 gap-26 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-24 sm:grid-cols-2 md:grid-cols-3">
             {beispiele.map((beispiel) => (
               <BeispielRadiobutton
                 titel={beispiel.titel}

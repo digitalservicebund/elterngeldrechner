@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
 import { usePlanerService } from "@/application/features/planer/hooks";
@@ -47,12 +46,6 @@ describe("Planer", () => {
     });
   });
 
-  it("shows a section", () => {
-    render(<Planer {...ANY_PROPS} />);
-
-    expect(screen.getByLabelText("Planer Anwendung")).toBeVisible();
-  });
-
   it("shows all relevant sections of the Planer", () => {
     render(<Planer {...ANY_PROPS} />);
 
@@ -85,27 +78,6 @@ describe("Planer", () => {
         onChange,
       }),
     );
-  });
-
-  describe("neue leere Planung erstellen", () => {
-    it.skip("shifts focus", async () => {
-      const focus = vi.fn();
-      // TypeError: Cannot set property focus of #<HTMLElement> which has only a getter
-      window.HTMLElement.prototype.focus = focus;
-      render(<Planer {...ANY_PROPS} />);
-
-      await clickNeueLeerePlanungErstellen();
-
-      expect(focus).toHaveBeenCalled();
-      expect(focus).toHaveBeenCalledWith({ preventScroll: true });
-    });
-
-    async function clickNeueLeerePlanungErstellen(): Promise<void> {
-      const button = screen.getByRole("button", {
-        name: "Neue leere Planung erstellen",
-      });
-      await userEvent.click(button);
-    }
   });
 });
 

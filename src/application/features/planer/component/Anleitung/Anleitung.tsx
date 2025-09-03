@@ -3,18 +3,23 @@ import { type ReactNode, useId } from "react";
 import { Button } from "@/application/components";
 
 type Props = {
+  readonly className?: string;
   readonly children: ReactNode;
   readonly onOpenErklaerung: () => void;
 };
 
-export function Anleitung({ children, onOpenErklaerung }: Props): ReactNode {
+export function Anleitung({
+  className,
+  children,
+  onOpenErklaerung,
+}: Props): ReactNode {
   const headingIdentifier = useId();
 
   return (
-    <section aria-labelledby={headingIdentifier}>
-      <h3 id={headingIdentifier} className="sr-only">
+    <section aria-labelledby={headingIdentifier} className={className}>
+      <h4 id={headingIdentifier} className="sr-only">
         Anleitung
-      </h3>
+      </h4>
 
       {children}
 

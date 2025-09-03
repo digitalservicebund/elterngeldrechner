@@ -1,5 +1,5 @@
-import { ChevronLeft } from "@digitalservicebund/icons/index";
-import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, RestartAlt } from "@digitalservicebund/icons/index";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   trackMetricsForDerPlanHatSichGeaendert,
   trackMetricsForEineOptionWurdeGewaehlt,
@@ -144,6 +144,17 @@ export function PlanerPage() {
 
   useEffect(trackMetricsForPlanerWurdeGeoeffnet, []);
 
+  // TODO: Consider implementing erklaerung as a new layer that
+  // covers the planer and not replaces it in the dom.
+
+  // TODO: Fix the mutterschutz edge case. Correct implementation
+  // can be found in the beispiel page and should be shared.
+
+  const mindestensEinLebensmonatGeplant =
+    plan && Object.keys(plan.lebensmonate).length > 0;
+
+  const headingIdentifier = useId();
+
   return (
     <Page step={formSteps.rechnerUndPlaner}>
       {!!plan && <Zusammenfassung plan={plan} className="hidden print:block" />}
@@ -152,54 +163,72 @@ export function PlanerPage() {
         {isErklaerungOpen ? (
           <Erklaerung onClose={hideErklaerung} />
         ) : (
-          <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
-            <Anleitung onOpenErklaerung={showErklaerung}>
-              {initialPlanerInformation.beispiel ? (
-                <p>
-                  Sie finden hier einen Vorschlag für eine Planung und die Höhe
-                  Ihres Elterngeldes. Zusätzlich können Sie angeben, ob und wie
-                  viel Einkommen Sie pro Monat haben werden. So erhalten Sie
-                  einen Überblick über Ihr voraussichtliches Haushaltseinkommen.
-                  Im nächsten Schritt können Sie Ihre Planung in den Antrag
-                  übernehmen.
-                </p>
-              ) : (
-                <p>
-                  Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden
-                  Monat planen. Zusätzlich können Sie angeben, ob und wie viel
-                  Einkommen Sie pro Monat haben werden. So erhalten Sie einen
-                  Überblick über Ihr voraussichtliches Haushaltseinkommen. Im
-                  nächsten Schritt können Sie Ihre Planung in den Antrag
-                  übernehmen.
-                </p>
-              )}
-            </Anleitung>
+          <div ref={mainElement} className="grid" tabIndex={-1}>
+            <section
+              className="print:hidden"
+              aria-labelledby={headingIdentifier}
+            >
+              <h3 id={headingIdentifier} className="sr-only">
+                Planer Anwendung
+              </h3>
 
-            <Planer
-              ref={planerRef}
-              initialInformation={initialPlanerInformation}
-              berechneElterngeldbezuege={berechneElterngeldbezuege}
-              planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}
-              callbacks={{
-                onChange: handlePlanChanges,
-                onWaehleOption: trackMetricsForEineOptionWurdeGewaehlt,
-                onSetzePlanZurueck: trackMetricsForPlanWurdeZurueckgesetzt,
-                onOpenLebensmonat: trackMetricsForLebensmonatWurdeGeoeffnet,
-                onPlanungDrucken: trackMetricsForPlanungDrucken,
-              }}
-            />
+              <Anleitung className="mb-32" onOpenErklaerung={showErklaerung}>
+                {initialPlanerInformation.beispiel ? (
+                  <p>
+                    Sie finden hier einen Vorschlag für eine Planung und die
+                    Höhe Ihres Elterngeldes. Zusätzlich können Sie angeben, ob
+                    und wie viel Einkommen Sie pro Monat haben werden. So
+                    erhalten Sie einen Überblick über Ihr voraussichtliches
+                    Haushaltseinkommen. Im nächsten Schritt können Sie Ihre
+                    Planung in den Antrag übernehmen.
+                  </p>
+                ) : (
+                  <p>
+                    Mit dem Rechner und Planer können Sie Ihr Elterngeld für
+                    jeden Monat planen. Zusätzlich können Sie angeben, ob und
+                    wie viel Einkommen Sie pro Monat haben werden. So erhalten
+                    Sie einen Überblick über Ihr voraussichtliches
+                    Haushaltseinkommen. Im nächsten Schritt können Sie Ihre
+                    Planung in den Antrag übernehmen.
+                  </p>
+                )}
+              </Anleitung>
 
-            <div className="flex gap-16">
               <Button
+                className="mb-8 justify-self-start print:hidden"
                 type="button"
-                buttonStyle="secondary"
-                onClick={navigateToBeispielePage}
+                buttonStyle="link"
+                onClick={() => planerRef.current?.setzePlanZurueck()}
+                disabled={!mindestensEinLebensmonatGeplant}
               >
-                <ChevronLeft /> Zurück zur Auswahl
+                <RestartAlt /> Neue leere Planung erstellen
               </Button>
-            </div>
 
-            <p className="max-w-[70ch]">
+              <Planer
+                ref={planerRef}
+                initialInformation={initialPlanerInformation}
+                berechneElterngeldbezuege={berechneElterngeldbezuege}
+                planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}
+                callbacks={{
+                  onChange: handlePlanChanges,
+                  onWaehleOption: trackMetricsForEineOptionWurdeGewaehlt,
+                  onSetzePlanZurueck: trackMetricsForPlanWurdeZurueckgesetzt,
+                  onOpenLebensmonat: trackMetricsForLebensmonatWurdeGeoeffnet,
+                  onPlanungDrucken: trackMetricsForPlanungDrucken,
+                }}
+              />
+            </section>
+
+            <Button
+              type="button"
+              buttonStyle="secondary"
+              className="mt-16 justify-self-start print:hidden"
+              onClick={navigateToBeispielePage}
+            >
+              <ChevronLeft /> Zurück zur Auswahl
+            </Button>
+
+            <p className="my-16 max-w-[70ch]">
               Hinweis: Mutterschaftsleistungen werden nicht in der Summe
               berücksichtigt.
               <br />

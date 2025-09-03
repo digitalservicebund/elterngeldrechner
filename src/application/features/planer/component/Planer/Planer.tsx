@@ -1,11 +1,8 @@
-import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
 import {
   ReactNode,
   Ref,
   SyntheticEvent,
-  useCallback,
-  useId,
   useImperativeHandle,
   useRef,
 } from "react";
@@ -13,7 +10,6 @@ import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
 import { LebensmonatslisteHTMLElement } from "./Lebensmonatsliste/Lebensmonatsliste";
-import { Button } from "@/application/components";
 import { Pruefbuttonbox } from "@/application/features/planer/component/Pruefbutton/Pruefbuttonbox";
 import {
   type InitialInformation,
@@ -32,7 +28,6 @@ type Props = {
   readonly callbacks: PlanerServiceCallbacks & {
     onOpenLebensmonat?: () => void;
   };
-  readonly className?: string;
   readonly ref?: Ref<PlanerHandle>;
 };
 
@@ -44,7 +39,6 @@ export function Planer({
   initialInformation,
   berechneElterngeldbezuege,
   callbacks,
-  className,
   planInAntragUebernehmen,
   ref,
 }: Props): ReactNode {
@@ -79,24 +73,13 @@ export function Planer({
     planerServiceCallbacks,
   );
 
-  const headingIdentifier = useId();
-
   const lebensmonatslistenElement = useRef<LebensmonatslisteHTMLElement>(null);
-
-  const neueLeerePlanungErstellen = useCallback(() => {
-    setzePlanZurueck();
-    // TODO: Fix ref in Lebensmonatsliste to allow the use of .focus()
-    // lebensmonatslistenElement.current?.focus({ preventScroll: true });
-  }, [setzePlanZurueck]);
 
   useImperativeHandle(ref, () => {
     return {
       setzePlanZurueck,
     };
   }, [setzePlanZurueck]);
-
-  const mindestensEinLebensmonatGeplant =
-    Object.keys(plan.lebensmonate).length > 0;
 
   const { triggerEffectBySignal: openLebensmonatsSummary } =
     useEffectWithSignal((lebensmonatszahl: Lebensmonatszahl) =>
@@ -123,79 +106,54 @@ export function Planer({
   }
 
   return (
-    <>
-      <section
-        className={classNames(className, "print:hidden")}
-        aria-labelledby={headingIdentifier}
+    <GridLayoutProvider anzahlElternteile={plan.ausgangslage.anzahlElternteile}>
+      <div
+        className={classNames(
+          "mx-[-15px] sm:mx-0",
+          "flex flex-col",
+          "divide-x-0 divide-y-2 divide-solid divide-off-white",
+          "border-2 border-solid border-off-white",
+        )}
       >
-        <h3 id={headingIdentifier} className="sr-only">
-          Planer Anwendung
-        </h3>
+        <KontingentUebersicht className="bg-off-white py-10" plan={plan} />
 
-        <Button
-          className="my-16 print:hidden"
-          type="button"
-          buttonStyle="link"
-          onClick={neueLeerePlanungErstellen}
-          disabled={!mindestensEinLebensmonatGeplant}
+        <Gesamtsummenanzeige
+          className="border-t-2 border-solid !border-white bg-off-white py-10"
+          plan={plan}
         >
-          <RestartAltIcon /> Neue leere Planung erstellen
-        </Button>
+          {!!initialInformation.beispiel && (
+            <p>{initialInformation.beispiel.titel}</p>
+          )}
+        </Gesamtsummenanzeige>
 
-        <GridLayoutProvider
-          anzahlElternteile={plan.ausgangslage.anzahlElternteile}
-        >
-          <div
-            className={classNames(
-              CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS,
-              "flex flex-col",
-              "divide-x-0 divide-y-2 divide-solid divide-off-white",
-              "border-2 border-solid border-off-white",
-            )}
-          >
-            <KontingentUebersicht className="bg-off-white py-10" plan={plan} />
+        <div>
+          <Lebensmonatsliste
+            ref={lebensmonatslistenElement}
+            className="py-2"
+            plan={plan}
+            erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
+            bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
+            waehleOption={waehleOption}
+            erstelleVorschlaegeFuerAngabeDesEinkommens={
+              erstelleVorschlaegeFuerAngabeDesEinkommens
+            }
+            gebeEinkommenAn={gebeEinkommenAn}
+            ergaenzeBruttoeinkommenFuerPartnerschaftsbonus={
+              ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
+            }
+            onOpenLebensmonat={onOpenLebensmonat}
+          />
 
-            <Gesamtsummenanzeige
-              className="border-t-2 border-solid !border-white bg-off-white py-10"
-              plan={plan}
-            >
-              {!!initialInformation.beispiel && (
-                <p>{initialInformation.beispiel.titel}</p>
-              )}
-            </Gesamtsummenanzeige>
-
-            <div>
-              <Lebensmonatsliste
-                ref={lebensmonatslistenElement}
-                className="py-2"
-                plan={plan}
-                erstelleUngeplantenLebensmonat={erstelleUngeplantenLebensmonat}
-                bestimmeAuswahlmoeglichkeiten={bestimmeAuswahlmoeglichkeiten}
-                waehleOption={waehleOption}
-                erstelleVorschlaegeFuerAngabeDesEinkommens={
-                  erstelleVorschlaegeFuerAngabeDesEinkommens
-                }
-                gebeEinkommenAn={gebeEinkommenAn}
-                ergaenzeBruttoeinkommenFuerPartnerschaftsbonus={
-                  ergaenzeBruttoeinkommenFuerPartnerschaftsbonus
-                }
-                onOpenLebensmonat={onOpenLebensmonat}
-              />
-
-              <Pruefbuttonbox
-                className="p-16"
-                plan={plan}
-                ueberpruefePlanung={ueberpruefePlanung}
-                planInAntragUebernehmen={planInAntragUebernehmen}
-                bonusFreischalten={bonusFreischalten}
-                onPlanungDrucken={onPlanungDrucken}
-              />
-            </div>
-          </div>
-        </GridLayoutProvider>
-      </section>
-    </>
+          <Pruefbuttonbox
+            className="p-16"
+            plan={plan}
+            ueberpruefePlanung={ueberpruefePlanung}
+            planInAntragUebernehmen={planInAntragUebernehmen}
+            bonusFreischalten={bonusFreischalten}
+            onPlanungDrucken={onPlanungDrucken}
+          />
+        </div>
+      </div>
+    </GridLayoutProvider>
   );
 }
-
-const CLASS_NAME_ERASE_MARGIN_ON_SMALL_SCREENS = "mx-[-15px] sm:mx-0";

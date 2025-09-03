@@ -20,7 +20,13 @@ import {
   pushTrackingEvent,
   setTrackingVariable,
 } from "@/application/user-tracking";
-import { Ausgangslage, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import {
+  Ausgangslage,
+  AusgangslageFuerZweiElternteile,
+  erstelleInitialeLebensmonate,
+  listeLebensmonateAuf,
+} from "@/monatsplaner";
 
 export function BeispielePage() {
   // TODO: Ensure consistent use of the term beispiele rather than planungshilfen
@@ -57,6 +63,26 @@ export function BeispielePage() {
       plan: initialerPlan,
     });
   };
+
+  const hatEigenePlanung = useMemo(() => {
+    if (!initialerPlan) {
+      return false;
+    }
+
+    const lebensmonateAusgangslage = erstelleInitialeLebensmonate(
+      initialerPlan.ausgangslage,
+    );
+
+    const lebensmonateInitial = listeLebensmonateAuf(lebensmonateAusgangslage)
+      .flatMap(([_, lebensmonat]) => Object.values(lebensmonat))
+      .filter((lebensmonat) => lebensmonat.gewaehlteOption).length;
+
+    const lebensmonateGeplant = listeLebensmonateAuf(initialerPlan.lebensmonate)
+      .flatMap(([_, lebensmonat]) => Object.values(lebensmonat))
+      .filter((lebensmonat) => lebensmonat.gewaehlteOption).length;
+
+    return lebensmonateGeplant > lebensmonateInitial;
+  }, [initialerPlan]);
 
   // TODO: I tried to type state as BeispielIdentifier | "KeineAuswahl" | "EigenePlanung"
   // but all are strings, so typescript considers the literals redundant and the types clash.
@@ -192,7 +218,7 @@ export function BeispielePage() {
             Weiter
           </Button>
 
-          {!!initialerPlan && (
+          {!!hatEigenePlanung && (
             <div className="content-center pl-20">
               <Button
                 type="button"
@@ -243,7 +269,8 @@ if (import.meta.vitest) {
     });
 
     describe("selection", async () => {
-      const { Elternteil, Variante } = await import("@/monatsplaner");
+      const { Elternteil, Variante, erstelleInitialeLebensmonate } =
+        await import("@/monatsplaner");
 
       it("zeigt eine kachel pro beispiel und eine option für eigene planung", () => {
         render(<BeispielePage />, {
@@ -295,6 +322,119 @@ if (import.meta.vitest) {
           "/rechner-planer",
           expect.toSatisfy(expectation),
         );
+      });
+
+      it("meine planung fortsetzen ist nicht sichtbar bei leerem plan", () => {
+        const ausgangslage: AusgangslageFuerZweiElternteile = {
+          anzahlElternteile: 2 as const,
+          geburtsdatumDesKindes: new Date(),
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+        };
+
+        vi.mocked(useNavigateStateful).mockReturnValue({
+          navigationState: {
+            plan: {
+              ausgangslage: ausgangslage,
+              lebensmonate: {},
+            },
+          },
+          navigateStateful: navigateSpy,
+        });
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        expect(screen.queryByText("Meine Planung fortsetzen")).toBeNull();
+      });
+
+      it("meine planung fortsetzen ist sichtbar wenn ein plan erstellt wurde", () => {
+        const ausgangslage: AusgangslageFuerZweiElternteile = {
+          anzahlElternteile: 2 as const,
+          geburtsdatumDesKindes: new Date(),
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+          informationenZumMutterschutz: {
+            empfaenger: Elternteil.Eins,
+            letzterLebensmonatMitSchutz: 2,
+          },
+        };
+
+        vi.mocked(useNavigateStateful).mockReturnValue({
+          navigationState: {
+            plan: {
+              ausgangslage: ausgangslage,
+              lebensmonate: {
+                1: {
+                  [Elternteil.Eins]: {
+                    gewaehlteOption: Variante.Basis,
+                    imMutterschutz: true as const,
+                    elterngeldbezug: null,
+                    bruttoeinkommen: null,
+                  },
+                  [Elternteil.Zwei]: {
+                    gewaehlteOption: Variante.Basis,
+                    imMutterschutz: false as const,
+                  },
+                },
+                2: {
+                  [Elternteil.Eins]: {
+                    gewaehlteOption: Variante.Basis,
+                    imMutterschutz: true as const,
+                    elterngeldbezug: null,
+                    bruttoeinkommen: null,
+                  },
+                  [Elternteil.Zwei]: {
+                    imMutterschutz: false as const,
+                  },
+                },
+              },
+            },
+          },
+          navigateStateful: navigateSpy,
+        });
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        expect(screen.queryByText("Meine Planung fortsetzen")).not.toBeNull();
+      });
+
+      it("meine planung fortsetzen ist nicht sichtbar bei leerem plan mit mutterschutz", () => {
+        const ausgangslage: AusgangslageFuerZweiElternteile = {
+          anzahlElternteile: 2 as const,
+          geburtsdatumDesKindes: new Date(),
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+          informationenZumMutterschutz: {
+            empfaenger: Elternteil.Eins,
+            letzterLebensmonatMitSchutz: 2,
+          },
+        };
+
+        vi.mocked(useNavigateStateful).mockReturnValue({
+          navigationState: {
+            plan: {
+              ausgangslage: ausgangslage,
+              lebensmonate: erstelleInitialeLebensmonate(ausgangslage),
+            },
+          },
+          navigateStateful: navigateSpy,
+        });
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        expect(screen.queryByText("Meine Planung fortsetzen")).toBeNull();
       });
 
       it("meine planung fortsetzen übernimmt den initialen plan", () => {

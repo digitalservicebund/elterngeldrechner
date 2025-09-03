@@ -12,9 +12,9 @@ export function Anleitung({ children, onOpenErklaerung }: Props): ReactNode {
 
   return (
     <section aria-labelledby={headingIdentifier}>
-      <h4 id={headingIdentifier} className="sr-only">
+      <h3 id={headingIdentifier} className="sr-only">
         Anleitung
-      </h4>
+      </h3>
 
       {children}
 

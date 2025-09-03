@@ -9,7 +9,6 @@ import {
   useImperativeHandle,
   useRef,
 } from "react";
-import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
 import { Lebensmonatsliste } from "./Lebensmonatsliste";
@@ -32,7 +31,6 @@ type Props = {
   readonly planInAntragUebernehmen: () => void;
   readonly callbacks: PlanerServiceCallbacks & {
     onOpenLebensmonat?: () => void;
-    onOpenErklaerung: () => void;
   };
   readonly className?: string;
   readonly ref?: Ref<PlanerHandle>;
@@ -53,7 +51,6 @@ export function Planer({
   const {
     onPlanungDrucken,
     onOpenLebensmonat,
-    onOpenErklaerung,
     onWaehleOption: onWaehleOptionFromProps,
     onSetzePlanZurueck: onSetzePlanZurueckFromProps,
     ...remaingingPlanerServiceCallbacks
@@ -135,28 +132,8 @@ export function Planer({
           Planer Anwendung
         </h3>
 
-        <Anleitung onOpenErklaerung={onOpenErklaerung}>
-          {initialInformation.beispiel ? (
-            <p>
-              Sie finden hier einen Vorschlag für eine Planung und die Höhe
-              Ihres Elterngeldes. Zusätzlich können Sie angeben, ob und wie viel
-              Einkommen Sie pro Monat haben werden. So erhalten Sie einen
-              Überblick über Ihr voraussichtliches Haushaltseinkommen. Im
-              nächsten Schritt können Sie Ihre Planung in den Antrag übernehmen.
-            </p>
-          ) : (
-            <p>
-              Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden
-              Monat planen. Zusätzlich können Sie angeben, ob und wie viel
-              Einkommen Sie pro Monat haben werden. So erhalten Sie einen
-              Überblick über Ihr voraussichtliches Haushaltseinkommen. Im
-              nächsten Schritt können Sie Ihre Planung in den Antrag übernehmen.
-            </p>
-          )}
-        </Anleitung>
-
         <Button
-          className="my-16 pt-32 print:hidden"
+          className="my-16 print:hidden"
           type="button"
           buttonStyle="link"
           onClick={neueLeerePlanungErstellen}

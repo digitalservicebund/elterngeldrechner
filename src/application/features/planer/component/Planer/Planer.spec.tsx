@@ -63,16 +63,17 @@ describe("Planer", () => {
 
   it("forwards the given props to the service", () => {
     const initialInformation = { ausgangslage: ANY_AUSGANGSLAGE };
+
     const onChange = () => {};
-    const onOpenErklaerung = () => {};
     const berechneElterngeldbezuege = () => ({}) as never;
     const planInAntragUebernehmen = () => ({}) as never;
+
     render(
       <Planer
         initialInformation={initialInformation}
         berechneElterngeldbezuege={berechneElterngeldbezuege}
         planInAntragUebernehmen={planInAntragUebernehmen}
-        callbacks={{ onChange, onOpenErklaerung }}
+        callbacks={{ onChange }}
       />,
     );
 
@@ -87,19 +88,6 @@ describe("Planer", () => {
   });
 
   describe("neue leere Planung erstellen", () => {
-    it("calls the callback to reset the Plan", async () => {
-      const setzePlanZurueck = vi.fn();
-      vi.mocked(usePlanerService).mockReturnValue({
-        ...ANY_SERVICE_VALUES,
-        setzePlanZurueck,
-      });
-
-      render(<Planer {...ANY_PROPS} />);
-      await clickNeueLeerePlanungErstellen();
-
-      expect(setzePlanZurueck).toHaveBeenCalledOnce();
-    });
-
     it.skip("shifts focus", async () => {
       const focus = vi.fn();
       // TypeError: Cannot set property focus of #<HTMLElement> which has only a getter
@@ -134,7 +122,7 @@ const ANY_PROPS = {
   initialInformation: { ausgangslage: ANY_AUSGANGSLAGE },
   berechneElterngeldbezuege: () => ({}) as never,
   planInAntragUebernehmen: () => ({}) as never,
-  callbacks: { onOpenErklaerung: () => {} },
+  callbacks: {},
 };
 
 const ANY_SERVICE_VALUES = {

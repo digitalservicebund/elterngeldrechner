@@ -16,6 +16,7 @@ import {
   composeAusgangslageFuerPlaner,
 } from "@/application/features/abfrageteil/state";
 import {
+  Anleitung,
   Erklaerung,
   Planer,
   PlanerHandle,
@@ -152,6 +153,28 @@ export function PlanerPage() {
           <Erklaerung onClose={hideErklaerung} />
         ) : (
           <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
+            <Anleitung onOpenErklaerung={showErklaerung}>
+              {initialPlanerInformation.beispiel ? (
+                <p>
+                  Sie finden hier einen Vorschlag für eine Planung und die Höhe
+                  Ihres Elterngeldes. Zusätzlich können Sie angeben, ob und wie
+                  viel Einkommen Sie pro Monat haben werden. So erhalten Sie
+                  einen Überblick über Ihr voraussichtliches Haushaltseinkommen.
+                  Im nächsten Schritt können Sie Ihre Planung in den Antrag
+                  übernehmen.
+                </p>
+              ) : (
+                <p>
+                  Mit dem Rechner und Planer können Sie Ihr Elterngeld für jeden
+                  Monat planen. Zusätzlich können Sie angeben, ob und wie viel
+                  Einkommen Sie pro Monat haben werden. So erhalten Sie einen
+                  Überblick über Ihr voraussichtliches Haushaltseinkommen. Im
+                  nächsten Schritt können Sie Ihre Planung in den Antrag
+                  übernehmen.
+                </p>
+              )}
+            </Anleitung>
+
             <Planer
               ref={planerRef}
               initialInformation={initialPlanerInformation}
@@ -163,7 +186,6 @@ export function PlanerPage() {
                 onSetzePlanZurueck: trackMetricsForPlanWurdeZurueckgesetzt,
                 onOpenLebensmonat: trackMetricsForLebensmonatWurdeGeoeffnet,
                 onPlanungDrucken: trackMetricsForPlanungDrucken,
-                onOpenErklaerung: showErklaerung,
               }}
             />
 

@@ -1,6 +1,14 @@
 import RestartAltIcon from "@digitalservicebund/icons/RestartAlt";
 import classNames from "classnames";
-import { ReactNode, SyntheticEvent, useCallback, useId, useRef } from "react";
+import {
+  ReactNode,
+  Ref,
+  SyntheticEvent,
+  useCallback,
+  useId,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { Anleitung } from "./Anleitung";
 import { Gesamtsummenanzeige } from "./Gesamtsummenanzeige";
 import { KontingentUebersicht } from "./KontingentUebersicht";
@@ -27,6 +35,11 @@ type Props = {
     onOpenErklaerung: () => void;
   };
   readonly className?: string;
+  readonly ref?: Ref<PlanerHandle>;
+};
+
+export type PlanerHandle = {
+  setzePlanZurueck: () => void;
 };
 
 export function Planer({
@@ -35,6 +48,7 @@ export function Planer({
   callbacks,
   className,
   planInAntragUebernehmen,
+  ref,
 }: Props): ReactNode {
   const {
     onPlanungDrucken,
@@ -76,6 +90,12 @@ export function Planer({
     setzePlanZurueck();
     // TODO: Fix ref in Lebensmonatsliste to allow the use of .focus()
     // lebensmonatslistenElement.current?.focus({ preventScroll: true });
+  }, [setzePlanZurueck]);
+
+  useImperativeHandle(ref, () => {
+    return {
+      setzePlanZurueck,
+    };
   }, [setzePlanZurueck]);
 
   const mindestensEinLebensmonatGeplant =

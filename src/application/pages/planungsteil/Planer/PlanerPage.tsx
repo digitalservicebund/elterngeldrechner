@@ -18,6 +18,7 @@ import {
 import {
   Erklaerung,
   Planer,
+  PlanerHandle,
   Zusammenfassung,
 } from "@/application/features/planer";
 import {
@@ -57,6 +58,8 @@ export function PlanerPage() {
   }
 
   useEffect(openDialogWhenEinkommenLimitUebeschritten, [store]);
+
+  const planerRef = useRef<PlanerHandle>(null);
 
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan: initialPlan, beispiel } = navigationState;
@@ -150,6 +153,7 @@ export function PlanerPage() {
         ) : (
           <div ref={mainElement} className="flex flex-col gap-56" tabIndex={-1}>
             <Planer
+              ref={planerRef}
               initialInformation={initialPlanerInformation}
               berechneElterngeldbezuege={berechneElterngeldbezuege}
               planInAntragUebernehmen={navigateToDatenuebernahmeAntragPage}

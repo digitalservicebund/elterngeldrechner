@@ -39,19 +39,19 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
 
     if (hasBasisLeft && hasPlusLeft) {
       tips.push(
-        `Sie können noch ${remainingBasis === 1 ? "ein Monat" : `${remainingBasis} Monate`} Basiselterngeld oder noch ${remainingPlus === 1 ? "ein Monat" : `${remainingPlus} Monate`} ElterngeldPlus verteilen.`,
+        `Sie können noch ${remainingBasis} ${remainingBasis === 1 ? "Monat" : "Monate"} Basiselterngeld oder noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`,
       );
     } else {
       if (hasPlusLeft) {
         tips.push(
-          `Sie können noch ${remainingPlus === 1 ? "ein Monat" : `${remainingPlus} Monate`} ElterngeldPlus verteilen.`,
+          `Sie können noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`,
         );
       }
     }
 
     if (hasBonusLeft) {
       tips.push(
-        `Jede bzw. jeder von Ihnen kann noch ${remainingBonus === 2 ? "ein Monat" : `${remainingBonus / 2} Monate`} Partnerschaftsbonus verteilen.`,
+        `Jede bzw. jeder von Ihnen kann noch ${remainingBonus / 2} ${remainingBonus === 2 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`,
       );
     }
 
@@ -69,7 +69,7 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
     } else {
       return {
         normalTips: [
-          `Jede bzw. jeder von Ihnen kann noch ${remainingBonus === 2 ? "ein Monat" : `${remainingBonus / 2} Monate`} Partnerschaftsbonus verteilen.`,
+          `Jede bzw. jeder von Ihnen kann noch ${remainingBonus / 2} ${remainingBonus === 2 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`,
         ],
         hasSpecialBonusTip: false,
       };
@@ -118,7 +118,7 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("generateTips", () => {
-    it("generates tips for two parents and no months selected", () => {
+    it("generates tips for two parents with no months selected", () => {
       const expectedTips = {
         normalTips: [
           "Sie können noch 14 Monate Basiselterngeld oder noch 28 Monate ElterngeldPlus verteilen.",
@@ -133,7 +133,7 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
-    it("generates tips for two parents and both Basis and Plus and Bonus available", () => {
+    it("generates tips for two parents with both Basis with Plus and Bonus available", () => {
       const expectedTips = {
         normalTips: [
           "Sie können noch 10 Monate Basiselterngeld oder noch 21 Monate ElterngeldPlus verteilen.",
@@ -148,10 +148,10 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
-    it("generates tips for two parents and only Plus and Bonus available", () => {
+    it("generates tips for two parents with only Plus and Bonus available", () => {
       const expectedTips = {
         normalTips: [
-          "Sie können noch ein Monat ElterngeldPlus verteilen.",
+          "Sie können noch 1 Monat ElterngeldPlus verteilen.",
           "Jede bzw. jeder von Ihnen kann noch 4 Monate Partnerschaftsbonus verteilen.",
         ],
         hasSpecialBonusTip: false,
@@ -163,7 +163,7 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
-    it("generates tips for two parents and only and all Bonus available and available to activate", () => {
+    it("generated specialBonusTip when parents exhaust their contingent with 14 basis months", () => {
       const expectedTips = {
         normalTips: [],
         hasSpecialBonusTip: true,
@@ -175,7 +175,7 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
-    it("generates tips for two parents and only and all Bonus available but not available to activate", () => {
+    it("generates tips for two parents with only and all Bonus available but not available to activate", () => {
       const expectedTips = {
         normalTips: [
           "Sie können noch 8 Monate Partnerschaftsbonus verteilen. Beachten Sie: Elterngeld muss ab dem 15. Lebensmonat fortlaufend und ohne Unterbrechung bezogen werden, darum ist Partnerschaftsbonus aktuell ausgegraut.",
@@ -209,7 +209,7 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
-    it("generates tips for two parents and only but not all Bonus available", () => {
+    it("generates tips for two parents with only but not all Bonus available", () => {
       const expectedTips = {
         normalTips: [
           "Jede bzw. jeder von Ihnen kann noch 3 Monate Partnerschaftsbonus verteilen.",
@@ -223,7 +223,7 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
-    it("generates no tips for two parents and nothing available", () => {
+    it("generates no tips for two parents with nothing available", () => {
       const expectedTips = {
         normalTips: [],
         hasSpecialBonusTip: false,

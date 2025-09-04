@@ -76,6 +76,9 @@ export function Planer({
   const lebensmonatslistenElement = useRef<LebensmonatslisteHTMLElement>(null);
 
   useImperativeHandle(ref, () => {
+    // TODO: Fix ref in Lebensmonatsliste to allow the use of .focus()
+    // lebensmonatslistenElement.current?.focus({ preventScroll: true })
+
     return {
       setzePlanZurueck,
     };

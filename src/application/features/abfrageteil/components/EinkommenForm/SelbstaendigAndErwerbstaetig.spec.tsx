@@ -57,7 +57,32 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     ).not.toBeInTheDocument();
   });
 
-  it("should select the kind of the Tätigkeit and focus selection when added", async () => {
+  it("should select the kind of the Tätigkeit", async () => {
+    render(<EinkommenForm />, {
+      preloadedState: stateFromPreviousSteps,
+    });
+    const elternteil1Section = getElternteil1Section();
+
+    await userEvent.click(
+      within(elternteil1Section).getByText("eine Tätigkeit hinzufügen"),
+    );
+    const select = within(elternteil1Section).getByRole("combobox", {
+      name: "Art der Tätigkeit",
+    });
+
+    expect(
+      within(select).getByRole("option", {
+        name: "nichtselbständige Arbeit",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      within(select).getByRole("option", {
+        name: "Gewinneinkünfte",
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("should focus selection of the kind of the Tätigkeit when added", async () => {
     render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
@@ -71,17 +96,6 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     });
 
     expect(document.activeElement).toBe(select);
-
-    expect(
-      within(select).getByRole("option", {
-        name: "nichtselbständige Arbeit",
-      }),
-    ).toBeInTheDocument();
-    expect(
-      within(select).getByRole("option", {
-        name: "Gewinneinkünfte",
-      }),
-    ).toBeInTheDocument();
   });
 
   it("should remove a Tätigkeit", async () => {

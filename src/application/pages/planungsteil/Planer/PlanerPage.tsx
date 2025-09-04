@@ -39,7 +39,11 @@ import {
   trackObstacle,
 } from "@/application/user-tracking";
 import { MAX_EINKOMMEN } from "@/elterngeldrechner";
-import { type PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import type {
+  AusgangslageFuerZweiElternteile,
+  PlanMitBeliebigenElternteilen,
+} from "@/monatsplaner";
+import { sindLebensmonateGeplant } from "@/monatsplaner";
 
 export function PlanerPage() {
   const store = useAppStore();
@@ -147,11 +151,7 @@ export function PlanerPage() {
   // TODO: Consider implementing erklaerung as a new layer that
   // covers the planer and not replaces it in the dom.
 
-  // TODO: Fix the mutterschutz edge case. Correct implementation
-  // can be found in the beispiel page and should be shared.
-
-  const mindestensEinLebensmonatGeplant =
-    plan && Object.keys(plan.lebensmonate).length > 0;
+  const mindestensEinLebensmonatGeplant = plan && sindLebensmonateGeplant(plan);
 
   const headingIdentifier = useId();
 
@@ -276,4 +276,154 @@ export function PlanerPage() {
       </dialog>
     </Page>
   );
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
+
+  describe("Planer Page", async () => {
+    const { Elternteil, Variante, berechneGesamtsumme } = await import(
+      "@/monatsplaner"
+    );
+
+    const { useNavigateStateful } = await import(
+      "@/application/pages/planungsteil/useNavigateStateful"
+    );
+
+    const { render, screen } = await import("@/application/test-utils");
+    const { INITIAL_STATE } = await import("@/application/test-utils");
+
+    type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
+    type NavigateStateful = NavigateStatefulHook["navigateStateful"];
+
+    const navigateSpy = vi.fn<NavigateStateful>();
+
+    beforeEach(() => {
+      vi.mock(import("react-router"), () => ({ useNavigate: vi.fn() }));
+
+      vi.mock(
+        import("@/application/pages/planungsteil/useNavigateStateful"),
+        () => ({ useNavigateStateful: vi.fn() }),
+      );
+
+      vi.mocked(berechneGesamtsumme).mockReturnValue({
+        elterngeldbezug: 400,
+        proElternteil: {
+          [Elternteil.Eins]: {
+            anzahlMonateMitBezug: 2,
+            elterngeldbezug: 200,
+            bruttoeinkommen: 0,
+          },
+          [Elternteil.Zwei]: {
+            anzahlMonateMitBezug: 2,
+            elterngeldbezug: 200,
+            bruttoeinkommen: 0,
+          },
+        },
+      });
+
+      vi.mocked(useNavigateStateful).mockReturnValue({
+        navigationState: {},
+        navigateStateful: navigateSpy,
+      });
+    });
+
+    describe("Neue leere Planung erstellen", async () => {
+      const { erstelleInitialeLebensmonate } = await import("@/monatsplaner");
+
+      it("ist interaktiv wenn eine Änderung am Plan gemacht wurde", () => {
+        const ausgangslage: AusgangslageFuerZweiElternteile = {
+          anzahlElternteile: 2 as const,
+          geburtsdatumDesKindes: new Date(),
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+          informationenZumMutterschutz: {
+            empfaenger: Elternteil.Eins,
+            letzterLebensmonatMitSchutz: 2,
+          },
+        };
+
+        vi.mocked(useNavigateStateful).mockReturnValue({
+          navigationState: {
+            plan: {
+              ausgangslage: ausgangslage,
+              lebensmonate: {
+                1: {
+                  [Elternteil.Eins]: {
+                    gewaehlteOption: Variante.Basis,
+                    imMutterschutz: true as const,
+                    elterngeldbezug: null,
+                    bruttoeinkommen: null,
+                  },
+                  [Elternteil.Zwei]: {
+                    gewaehlteOption: Variante.Basis,
+                    imMutterschutz: false as const,
+                  },
+                },
+                2: {
+                  [Elternteil.Eins]: {
+                    gewaehlteOption: Variante.Basis,
+                    imMutterschutz: true as const,
+                    elterngeldbezug: null,
+                    bruttoeinkommen: null,
+                  },
+                  [Elternteil.Zwei]: {
+                    imMutterschutz: false as const,
+                  },
+                },
+              },
+            },
+          },
+          navigateStateful: navigateSpy,
+        });
+
+        render(<PlanerPage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        const resetPlanButton = screen.queryByText(
+          "Neue leere Planung erstellen",
+        );
+
+        expect(resetPlanButton).not.toBeDisabled();
+      });
+
+      it("ist deaktiviert bei leerem Plan mit Mutterschutz", () => {
+        const ausgangslage: AusgangslageFuerZweiElternteile = {
+          anzahlElternteile: 2 as const,
+          geburtsdatumDesKindes: new Date(),
+          pseudonymeDerElternteile: {
+            [Elternteil.Eins]: "Jane",
+            [Elternteil.Zwei]: "John",
+          },
+          informationenZumMutterschutz: {
+            empfaenger: Elternteil.Eins,
+            letzterLebensmonatMitSchutz: 2,
+          },
+        };
+
+        vi.mocked(useNavigateStateful).mockReturnValue({
+          navigationState: {
+            plan: {
+              ausgangslage: ausgangslage,
+              lebensmonate: erstelleInitialeLebensmonate(ausgangslage),
+            },
+          },
+          navigateStateful: navigateSpy,
+        });
+
+        render(<PlanerPage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        const resetPlanButton = screen.queryByText(
+          "Neue leere Planung erstellen",
+        );
+
+        expect(resetPlanButton).toBeDisabled();
+      });
+    });
+  });
 }

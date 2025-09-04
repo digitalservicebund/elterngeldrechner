@@ -20,13 +20,12 @@ import {
   pushTrackingEvent,
   setTrackingVariable,
 } from "@/application/user-tracking";
-import type { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
-import {
+import type {
   Ausgangslage,
   AusgangslageFuerZweiElternteile,
-  erstelleInitialeLebensmonate,
-  listeLebensmonateAuf,
+  PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
+import { sindLebensmonateGeplant } from "@/monatsplaner";
 
 export function BeispielePage() {
   // TODO: Ensure consistent use of the term beispiele rather than planungshilfen
@@ -64,25 +63,10 @@ export function BeispielePage() {
     });
   };
 
-  const hatEigenePlanung = useMemo(() => {
-    if (!initialerPlan) {
-      return false;
-    }
-
-    const lebensmonateAusgangslage = erstelleInitialeLebensmonate(
-      initialerPlan.ausgangslage,
-    );
-
-    const lebensmonateInitial = listeLebensmonateAuf(lebensmonateAusgangslage)
-      .flatMap(([_, lebensmonat]) => Object.values(lebensmonat))
-      .filter((lebensmonat) => lebensmonat.gewaehlteOption).length;
-
-    const lebensmonateGeplant = listeLebensmonateAuf(initialerPlan.lebensmonate)
-      .flatMap(([_, lebensmonat]) => Object.values(lebensmonat))
-      .filter((lebensmonat) => lebensmonat.gewaehlteOption).length;
-
-    return lebensmonateGeplant > lebensmonateInitial;
-  }, [initialerPlan]);
+  const hatEigenePlanung = useMemo(
+    () => initialerPlan && sindLebensmonateGeplant(initialerPlan),
+    [initialerPlan],
+  );
 
   // TODO: I tried to type state as BeispielIdentifier | "KeineAuswahl" | "EigenePlanung"
   // but all are strings, so typescript considers the literals redundant and the types clash.

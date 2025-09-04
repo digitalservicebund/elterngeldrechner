@@ -53,6 +53,7 @@ export {
   gebeEinkommenAn,
   mapLebensmonateProElternteil,
   setzePlanZurueck,
+  sindLebensmonateGeplant,
   teileLebensmonateBeiElternteileAuf,
   validierePlanFuerFinaleAbgabe,
   waehleOption,

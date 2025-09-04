@@ -8,3 +8,4 @@ export * from "./validierePlanFuerFinaleAbgabe";
 export * from "./waehleOption";
 export * from "./berechneGesamtsumme";
 export * from "./bestimmeLetztenGeplantenLebensmonat";
+export * from "./sindLebensmonateGeplant";

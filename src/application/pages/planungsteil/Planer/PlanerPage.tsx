@@ -172,7 +172,7 @@ export function PlanerPage() {
                 Planer Anwendung
               </h3>
 
-              <Anleitung className="mb-32" onOpenErklaerung={showErklaerung}>
+              <Anleitung className="mb-40" onOpenErklaerung={showErklaerung}>
                 {initialPlanerInformation.beispiel ? (
                   <p>
                     Sie finden hier einen Vorschlag für eine Planung und die

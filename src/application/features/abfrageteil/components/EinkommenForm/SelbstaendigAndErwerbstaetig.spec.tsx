@@ -129,7 +129,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     }
   });
 
-  it("should add 'weiteren Zeitraum' and focus it when clicked on button in section Zeitraum 1. Tätigkeit", async () => {
+  it("should add 'weiteren Zeitraum' when clicked on button in section Zeitraum 1. Tätigkeit", async () => {
     render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
@@ -157,6 +157,26 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     expect(
       within(einkommenElternteil1TaetigkeitenBis).queryAllByRole("option"),
     ).toHaveLength(13);
+  });
+
+  it("should focus 'weiteren Zeitraum' when clicked on button in section Zeitraum 1. Tätigkeit", async () => {
+    render(<EinkommenForm />, {
+      preloadedState: stateFromPreviousSteps,
+    });
+
+    const elternteil1Section = getElternteil1Section();
+    const btnElternteil1 = within(elternteil1Section).getByRole("button", {
+      name: "eine Tätigkeit hinzufügen",
+    });
+    await userEvent.click(btnElternteil1);
+
+    const button = within(elternteil1Section).getByRole("button", {
+      name: "weiteren Zeitraum hinzufügen",
+    });
+    await userEvent.click(button);
+
+    const einkommenElternteil1TaetigkeitenVon =
+      within(elternteil1Section).getAllByLabelText("von")[1]!;
 
     expect(document.activeElement).toBe(einkommenElternteil1TaetigkeitenVon);
   });

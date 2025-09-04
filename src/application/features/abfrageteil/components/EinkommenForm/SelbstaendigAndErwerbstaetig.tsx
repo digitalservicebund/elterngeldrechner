@@ -39,8 +39,6 @@ export function SelbstaendigAndErwerbstaetig({
 
   function fuegeTaetigkeitHinzu(): void {
     taetigkeitenFields.append(initialTaetigkeit);
-    // Compensate for render delay adding new element for Taetigkeit (non critical).
-    setTimeout(() => letztesTaetigkeitsElement.current?.focus());
   }
 
   function entferneTaetigkeit(index: number): void {

@@ -75,11 +75,6 @@ export function NichtSelbstaendig({
 
   const letztesZeitraumListenElement = useRef<HTMLLIElement>(null);
 
-  function focusLetztesZeitraumListenElement() {
-    // Compensate for render delay to possibly create new element (non critical).
-    setTimeout(() => letztesZeitraumListenElement.current?.focus());
-  }
-
   function entferneZeitraum(index: number): void {
     setMonthsBeforeBirthList((months) => {
       months.splice(index, 1);
@@ -201,8 +196,6 @@ export function NichtSelbstaendig({
                 (availableMonth: SelectOption) => !availableMonth.hidden,
               ).length;
               setAddButtonDisabled(availableMonthsSize === 1);
-
-              focusLetztesZeitraumListenElement();
             }}
           >
             weiteren Zeitraum hinzufügen

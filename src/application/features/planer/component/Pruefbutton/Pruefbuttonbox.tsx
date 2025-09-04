@@ -115,7 +115,7 @@ export function Pruefbuttonbox({
                 <SaveAltIcon className="mr-8" /> Drucken der Planung
               </Button>
 
-              <p className="mt-8">
+              <p className="mt-8 max-w-none">
                 Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
                 „als PDF speichern“ aus.
               </p>

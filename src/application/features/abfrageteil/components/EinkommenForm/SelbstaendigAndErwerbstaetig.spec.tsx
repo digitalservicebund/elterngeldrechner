@@ -57,7 +57,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     ).not.toBeInTheDocument();
   });
 
-  it("should select the kind of the Tätigkeit", async () => {
+  it("should select the kind of the Tätigkeit and focus selection when added", async () => {
     render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
@@ -69,6 +69,8 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     const select = within(elternteil1Section).getByRole("combobox", {
       name: "Art der Tätigkeit",
     });
+
+    expect(document.activeElement).toBe(select);
 
     expect(
       within(select).getByRole("option", {
@@ -127,7 +129,7 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     }
   });
 
-  it("should add 'weiteren Zeitraum' when clicked on button in section Zeitraum 1. Tätigkeit", async () => {
+  it("should add 'weiteren Zeitraum' and focus it when clicked on button in section Zeitraum 1. Tätigkeit", async () => {
     render(<EinkommenForm />, {
       preloadedState: stateFromPreviousSteps,
     });
@@ -155,6 +157,8 @@ describe("Einkommens Page only with block Selbständige And Erwerbstätige", () 
     expect(
       within(einkommenElternteil1TaetigkeitenBis).queryAllByRole("option"),
     ).toHaveLength(13);
+
+    expect(document.activeElement).toBe(einkommenElternteil1TaetigkeitenVon);
   });
 
   it("should show 'Mini-Job' when choose 'Einkünfte aus nichtselbständiger Arbeit'", async () => {

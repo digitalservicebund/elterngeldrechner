@@ -36,8 +36,6 @@ export function InfoDialog({
 
   function openModal() {
     setIsModalOpen(true);
-    // Compensate for render delay to make button visible (non critical).
-    setTimeout(() => dialogContentElement.current?.focus());
   }
 
   function closeModal(restoreFocus: boolean) {

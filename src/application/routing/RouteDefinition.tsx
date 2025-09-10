@@ -1,12 +1,15 @@
 import { Navigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import {
-  AllgemeineAngabenPage,
   BeispielePage,
   DatenuebernahmeAntragPage,
+  EinfuehrungsPage,
   EinkommenPage,
   ErwerbstaetigkeitPage,
+  FamiliePage,
+  KindPage,
   NachwuchsPage,
+  PersonPage,
   PlanerPage,
 } from "@/application/pages";
 import { RootState } from "@/application/redux";
@@ -41,9 +44,31 @@ import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 const internalRouteDefinition: InternalRouteDefinition = [
   {
-    element: <AllgemeineAngabenPage />,
-    path: formSteps.allgemeinAngaben.route,
+    element: <EinfuehrungsPage />,
+    path: formSteps.einfuehrung.route,
   },
+  {
+    element: <KindPage />,
+    path: formSteps.kind.route,
+    precondition: () => {
+      return true;
+    },
+  },
+  {
+    element: <FamiliePage />,
+    path: formSteps.familie.route,
+    precondition: () => {
+      return true;
+    },
+  },
+  {
+    element: <PersonPage />,
+    path: formSteps.person.route,
+    precondition: () => {
+      return true;
+    },
+  },
+
   {
     element: <NachwuchsPage />,
     path: formSteps.nachwuchs.route,
@@ -87,7 +112,7 @@ const internalRouteDefinition: InternalRouteDefinition = [
     },
   },
   {
-    element: <Navigate to={formSteps.allgemeinAngaben.route} replace />,
+    element: <Navigate to={formSteps.einfuehrung.route} replace />,
     path: "*",
   },
 ];

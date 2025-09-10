@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { preloadedState } from "./preloadedState";
+import { stepPrototypSlice } from "@/application/features/abfrage-prototyp/state";
 import {
   stepAllgemeineAngabenSlice,
   stepEinkommenSlice,
@@ -14,6 +15,7 @@ export const reducers = combineReducers({
   stepErwerbstaetigkeit: stepErwerbstaetigkeitSlice.reducer,
   stepEinkommen: stepEinkommenSlice.reducer,
   feedback: feedbackSlice.reducer,
+  stepPrototyp: stepPrototypSlice.reducer,
 });
 
 const store = configureStore({

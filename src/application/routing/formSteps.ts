@@ -7,6 +7,24 @@ export interface FormStep {
 export type StepRoute = (typeof formSteps)[keyof typeof formSteps]["route"];
 
 export const formSteps = {
+  einfuehrung: {
+    heading: "So nutzen Sie den Elterngeldrechner mit Planer",
+    shortName: "Einführungsseite",
+    route: "/einfuehrung",
+  },
+  kind: {
+    heading: "1. Angaben zum Kind",
+    route: "/kind",
+  },
+  familie: {
+    heading: "2. Angaben zur Familie",
+    route: "/familie",
+  },
+  person: {
+    heading: "3. Angaben Person",
+    route: "/person",
+  },
+
   allgemeinAngaben: {
     heading: "Allgemeine Angaben",
     route: "/allgemeine-angaben",

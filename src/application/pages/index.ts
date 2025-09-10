@@ -10,3 +10,10 @@ export {
   DatenuebernahmeAntragPage,
   PlanerPage,
 } from "./planungsteil";
+
+export {
+  EinfuehrungsPage,
+  FamiliePage,
+  KindPage,
+  PersonPage,
+} from "./abfrage-protoyp";

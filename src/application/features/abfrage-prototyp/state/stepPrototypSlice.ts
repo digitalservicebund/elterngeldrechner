@@ -28,6 +28,11 @@ export interface StepPrototypState {
   geschwisterkinder: Kind[];
 
   limitEinkommenUeberschritten: YesNo | null;
+
+  isNichtSelbststaendig: boolean;
+  isSelbststaendig: boolean;
+  hasSozialleistungen: boolean;
+  hasKeinEinkommen: boolean;
 }
 
 const initialState: StepPrototypState = {
@@ -45,6 +50,11 @@ const initialState: StepPrototypState = {
   geschwisterkinder: [],
 
   limitEinkommenUeberschritten: null,
+
+  isNichtSelbststaendig: false,
+  isSelbststaendig: false,
+  hasSozialleistungen: false,
+  hasKeinEinkommen: false,
 };
 
 export const stepPrototypSlice = createSlice({
@@ -56,13 +66,13 @@ export const stepPrototypSlice = createSlice({
 });
 
 const getAntragssteller = (state: RootState) =>
-  state.stepAllgemeineAngaben.antragstellende === "FuerBeideUnentschlossen"
+  state.stepPrototyp.antragstellende === "FuerBeideUnentschlossen"
     ? "FuerBeide"
-    : state.stepAllgemeineAngaben.antragstellende;
+    : state.stepPrototyp.antragstellende;
 
 const getElternteilNames = createSelector(
-  (state: RootState) => state.stepAllgemeineAngaben.pseudonym.ET1,
-  (state: RootState) => state.stepAllgemeineAngaben.pseudonym.ET2,
+  (state: RootState) => state.stepPrototyp.pseudonym.ET1,
+  (state: RootState) => state.stepPrototyp.pseudonym.ET2,
   (pseudonymElternteil1, pseudonymElternteil2) => {
     return {
       ET1: pseudonymElternteil1 || "Elternteil 1",
@@ -71,11 +81,10 @@ const getElternteilNames = createSelector(
   },
 );
 
-const getBundesland = (state: RootState) =>
-  state.stepAllgemeineAngaben.bundesland;
+const getBundesland = (state: RootState) => state.stepPrototyp.bundesland;
 
 const getWahrscheinlichesGeburtsDatum = createSelector(
-  (state: RootState) => state.stepNachwuchs.wahrscheinlichesGeburtsDatum,
+  (state: RootState) => state.stepPrototyp.wahrscheinlichesGeburtsDatum,
   parseGermanDateString,
 );
 

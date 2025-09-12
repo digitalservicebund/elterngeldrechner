@@ -6,9 +6,16 @@ import { FormStep } from "@/application/routing/formSteps";
 type Props = {
   readonly step: FormStep;
   readonly children: ReactNode;
+  readonly customHeading?: string;
+  readonly navigationDetails?: string;
 };
 
-export function Page({ step, children }: Props) {
+export function Page({
+  step,
+  children,
+  customHeading,
+  navigationDetails,
+}: Props) {
   const sectionElement = useRef<HTMLElement>(null);
   useEffect(() => {
     sectionElement.current?.focus({ preventScroll: true });
@@ -21,7 +28,7 @@ export function Page({ step, children }: Props) {
       <ScrollRestoration />
 
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
-        <Sidebar currentStep={step} />
+        <Sidebar currentStep={step} navigationDetails={navigationDetails} />
       </div>
 
       <section
@@ -32,7 +39,7 @@ export function Page({ step, children }: Props) {
         tabIndex={-1}
       >
         <h2 id={headingIdentifier} className="mb-10 print:m-0">
-          {step.heading}
+          {customHeading ? customHeading : step.heading}
         </h2>
 
         {children}

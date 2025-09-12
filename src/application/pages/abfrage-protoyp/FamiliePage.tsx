@@ -10,7 +10,7 @@ export function FamiliePage() {
 
   const navigate = useNavigate();
   const navigateToKindPage = () => navigate(formSteps.kind.route);
-  const navigateToPersonPage = () => navigate(formSteps.person.route);
+  const navigateToPersonPage = () => navigate(formSteps.person1.route);
 
   return (
     <Page step={formSteps.familie}>

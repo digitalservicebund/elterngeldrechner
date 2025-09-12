@@ -4,11 +4,8 @@ import {
   BeispielePage,
   DatenuebernahmeAntragPage,
   EinfuehrungsPage,
-  EinkommenPage,
-  ErwerbstaetigkeitPage,
   FamiliePage,
   KindPage,
-  NachwuchsPage,
   PersonPage,
   PlanerPage,
 } from "@/application/pages";
@@ -20,7 +17,7 @@ import {
   InternalRouteDefinition,
   InternalStepRoute,
 } from "@/application/routing/internalRoutes";
-import { PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import { Elternteil, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
 
 // Every page in our application, except for the first one, expects certain redux state
 // slices to be present. Prior to introducing real routes, users could not navigate
@@ -57,37 +54,22 @@ const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <FamiliePage />,
     path: formSteps.familie.route,
+    precondition: (state: RootState) => {
+      return state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0;
+    },
+  },
+  {
+    element: <PersonPage elternteil={Elternteil.Eins} />,
+    path: formSteps.person1.route,
+    precondition: (state: RootState) => {
+      return state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0;
+    },
+  },
+  {
+    element: <PersonPage elternteil={Elternteil.Zwei} />,
+    path: formSteps.person2.route,
     precondition: () => {
       return true;
-    },
-  },
-  {
-    element: <PersonPage />,
-    path: formSteps.person.route,
-    precondition: () => {
-      return true;
-    },
-  },
-
-  {
-    element: <NachwuchsPage />,
-    path: formSteps.nachwuchs.route,
-    precondition: (state: RootState) => {
-      return state.stepAllgemeineAngaben.mutterschutz != null;
-    },
-  },
-  {
-    element: <ErwerbstaetigkeitPage />,
-    path: formSteps.erwerbstaetigkeit.route,
-    precondition: (state: RootState) => {
-      return !!state.stepNachwuchs.wahrscheinlichesGeburtsDatum;
-    },
-  },
-  {
-    element: <EinkommenPage />,
-    path: formSteps.einkommen.route,
-    precondition: (state: RootState) => {
-      return state.stepErwerbstaetigkeit.ET1.vorGeburt != null;
     },
   },
   {

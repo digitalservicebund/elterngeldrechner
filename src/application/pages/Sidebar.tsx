@@ -8,9 +8,10 @@ import { FormStep, formSteps } from "@/application/routing/formSteps";
 
 type Props = {
   readonly currentStep: FormStep;
+  readonly navigationDetails?: string;
 };
 
-export function Sidebar({ currentStep }: Props) {
+export function Sidebar({ currentStep, navigationDetails }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = useCallback(() => setIsOpen((isOpen) => !isOpen), []);
 
@@ -117,8 +118,11 @@ export function Sidebar({ currentStep }: Props) {
                 aria-current={ariaCurrent}
                 disabled={!isNavigatable}
               >
-                {("shortName" in step && step.shortName) || step.heading}
+                {"shortName" in step && step.shortName}
               </button>
+              {step === currentStep && navigationDetails && (
+                <p className="ml-40">{navigationDetails}</p>
+              )}
             </li>
           );
         })}

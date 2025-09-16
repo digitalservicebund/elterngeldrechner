@@ -33,6 +33,23 @@ export interface StepPrototypState {
   isSelbststaendig: boolean;
   hasSozialleistungen: boolean;
   hasKeinEinkommen: boolean;
+
+  hasMutterschutzDiesesKind: boolean;
+  isBeamtet: boolean;
+  hasElterngeldAnderesKind: boolean;
+  hasMutterschutzAnderesKind: boolean;
+  hasErkrankung: boolean;
+
+  mutterschutzDiesesKindVon: string;
+  mutterschutzDiesesKindBis: string;
+  mutterschutzAnderesKindVon: string;
+  mutterschutzAnderesKindBis: string;
+  elterngeldVon: string;
+  elterngeldBis: string;
+  krankheitVon: string;
+  krankheitBis: string;
+  dienstVon: string;
+  dienstBis: string;
 }
 
 const initialState: StepPrototypState = {
@@ -55,6 +72,23 @@ const initialState: StepPrototypState = {
   isSelbststaendig: false,
   hasSozialleistungen: false,
   hasKeinEinkommen: false,
+
+  hasMutterschutzDiesesKind: false,
+  isBeamtet: false,
+  hasElterngeldAnderesKind: false,
+  hasMutterschutzAnderesKind: false,
+  hasErkrankung: false,
+
+  mutterschutzDiesesKindVon: "",
+  mutterschutzDiesesKindBis: "",
+  mutterschutzAnderesKindVon: "",
+  mutterschutzAnderesKindBis: "",
+  elterngeldVon: "",
+  elterngeldBis: "",
+  krankheitVon: "",
+  krankheitBis: "",
+  dienstVon: "",
+  dienstBis: "",
 };
 
 export const stepPrototypSlice = createSlice({

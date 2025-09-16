@@ -23,6 +23,7 @@ import {
   StepPrototypState,
 } from "@/application/features/abfrage-prototyp/state";
 import { useAppSelector } from "@/application/redux/hooks";
+import { Ausklammerung } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 
 type Props = {
   elternteil: Elternteil;
@@ -35,12 +36,24 @@ export function PersonPage({ elternteil }: Props) {
     useState<PersonPageStepKey>("angabenPerson");
   const [currentPersonPageFlow, setCurrentPersonPageFlow] =
     useState<PersonPageFlow>();
+  const [hasAusklammerungsgrund, setHasAusklammerungsgrund] =
+    useState<boolean>(false);
+  const [auszuklammerndeZeitraeume, setAuszuklammerndeZeitraeume] =
+    useState<Ausklammerung[]>();
 
   const navigate = useNavigate();
   const navigateToFamiliePage = () => navigate(formSteps.familie.route);
-  const navigateToNextStep = (flow: PersonPageFlow | undefined) => {
-    const nextStep = getNextStep(currentPersonPageStep, flow);
+  const navigateToNextStep = (
+    flow: PersonPageFlow | undefined,
+    hasAusklammerungsgrund: boolean | undefined,
+  ) => {
+    const nextStep = getNextStep(
+      currentPersonPageStep,
+      flow,
+      hasAusklammerungsgrund,
+    );
     if (nextStep === "routingEnded") {
+      console.log("Routing beendet - Übergang zum Figma Prototypen");
       // navigateToFamiliePage()
     } else {
       setCurrentPersonPageStep(nextStep);
@@ -53,17 +66,31 @@ export function PersonPage({ elternteil }: Props) {
       const lastStep = getLastStep(
         currentPersonPageStep,
         currentPersonPageFlow,
+        hasAusklammerungsgrund,
       );
       setCurrentPersonPageStep(lastStep);
     }
   };
 
-  function handleSubmit(_: StepPrototypState, flow?: PersonPageFlow) {
-    console.log("Flow: ", flow);
+  function handleSubmit(
+    _: StepPrototypState,
+    flow?: PersonPageFlow,
+    hasAusklammerungsgrund?: boolean,
+    auszuklammerndeZeitraeume?: Ausklammerung[],
+  ) {
     if (flow) {
       setCurrentPersonPageFlow(flow);
     }
-    navigateToNextStep(flow ?? currentPersonPageFlow);
+    if (hasAusklammerungsgrund) {
+      setHasAusklammerungsgrund(hasAusklammerungsgrund);
+    }
+    if (auszuklammerndeZeitraeume?.length) {
+      setAuszuklammerndeZeitraeume(auszuklammerndeZeitraeume);
+    }
+    setTimeout(() =>
+      navigateToNextStep(flow ?? currentPersonPageFlow, hasAusklammerungsgrund),
+    );
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const elternteilNames = useAppSelector(
@@ -121,7 +148,7 @@ export function PersonPage({ elternteil }: Props) {
             onSubmit={handleSubmit}
             hideSubmitButton
             elternteil={elternteil}
-            // flow={currentPersonPageFlow}
+            flow={currentPersonPageFlow}
           />
         )}
 
@@ -131,7 +158,8 @@ export function PersonPage({ elternteil }: Props) {
             onSubmit={handleSubmit}
             hideSubmitButton
             elternteil={elternteil}
-            // flow={currentPersonPageFlow}
+            flow={currentPersonPageFlow}
+            hasAusklammerungsgrund={hasAusklammerungsgrund}
           />
         )}
 
@@ -141,7 +169,9 @@ export function PersonPage({ elternteil }: Props) {
             onSubmit={handleSubmit}
             hideSubmitButton
             elternteil={elternteil}
-            // flow={currentPersonPageFlow}
+            flow={currentPersonPageFlow}
+            hasAusklammerungsgrund={hasAusklammerungsgrund}
+            auszuklammerndeZeitraeume={auszuklammerndeZeitraeume}
           />
         )}
 

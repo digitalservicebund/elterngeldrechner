@@ -66,19 +66,29 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
   const errorIdentifier = useId();
 
   const personPageFlow = () => {
-    if (getValues("hasKeinEinkommen")) {
+    if (getValues("isSelbststaendig")) {
+      if (getValues("isNichtSelbststaendig")) {
+        return PersonPageFlow.mischeinkuenfte;
+      }
+      return PersonPageFlow.selbststaendig;
+    } else if (getValues("isNichtSelbststaendig")) {
+      if (getValues("hasKeinEinkommen") && getValues("hasSozialleistungen")) {
+        return PersonPageFlow.nichtSelbststaendigBeides;
+      } else if (getValues("hasKeinEinkommen")) {
+        return PersonPageFlow.nichtSelbststaendigKeinEinkommen;
+      } else if (getValues("hasSozialleistungen")) {
+        return PersonPageFlow.nichtSelbststaendigErsatzleistungen;
+      }
+      return PersonPageFlow.nichtSelbststaendig;
+    } else if (
+      getValues("hasKeinEinkommen") &&
+      getValues("hasSozialleistungen")
+    ) {
+      return PersonPageFlow.sozialleistungenKeinEinkommen;
+    } else if (getValues("hasKeinEinkommen")) {
       return PersonPageFlow.keinEinkommen;
     } else if (getValues("hasSozialleistungen")) {
       return PersonPageFlow.sozialleistungen;
-    } else if (
-      getValues("isSelbststaendig") &&
-      getValues("isNichtSelbststaendig")
-    ) {
-      return PersonPageFlow.mischeinkuenfte;
-    } else if (getValues("isSelbststaendig")) {
-      return PersonPageFlow.selbststaendig;
-    } else if (getValues("isNichtSelbststaendig")) {
-      return PersonPageFlow.nichtSelbststaendig;
     }
     return undefined;
   };

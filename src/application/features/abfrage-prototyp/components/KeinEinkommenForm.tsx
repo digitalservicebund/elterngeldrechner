@@ -1,16 +1,11 @@
-import { useCallback, useId } from "react";
-import { FieldError, get, useForm } from "react-hook-form";
+import { useCallback } from "react";
+import { useForm } from "react-hook-form";
 import {
   type StepPrototypState,
   stepPrototypSlice,
-  stepPrototypSelectors,
 } from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
-import { YesNo } from "@/application/features/abfrageteil/state";
-import { berechneMaximalenBemessungszeitraum } from "./berechneBemessungszeitraum";
-import { ErwerbstaetigkeitCheckboxGroup } from "../../abfrageteil/components/ErwerbstaetigkeitForm/ErwerbstaetigkeitCheckboxGroup";
 import { PersonPageFlow } from "./PersonPageRouting";
 
 type Props = {
@@ -21,10 +16,10 @@ type Props = {
   readonly flow?: PersonPageFlow;
 };
 
-export function KeinEinkommenForm({ id, onSubmit, elternteil, flow }: Props) {
+export function KeinEinkommenForm({ id, onSubmit }: Props) {
   const store = useAppStore();
 
-  const { register, handleSubmit, setValue, watch, formState } = useForm({
+  const { handleSubmit } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 
@@ -35,34 +30,6 @@ export function KeinEinkommenForm({ id, onSubmit, elternteil, flow }: Props) {
     },
     [store, onSubmit],
   );
-
-  const pseudonym1Error = get(formState.errors, "pseudonym.ET1") as
-    | FieldError
-    | undefined;
-
-  // const alleinerziehendenFormValue = watch("alleinerziehend");
-
-  const initializeAntragstellendeIfAlleinerziehend = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if ((event.target.value as YesNo) === YesNo.YES) {
-      setValue("antragstellende", "EinenElternteil");
-    }
-  };
-
-  const geburtsdatumDesKindes = useAppSelector(
-    stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
-  );
-  const maximalerBemessungszeitraum = berechneMaximalenBemessungszeitraum(
-    geburtsdatumDesKindes,
-  );
-  const formattedDate = (date: Date) => {
-    return date.toLocaleDateString("de-DE", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
 
   return (
     <form

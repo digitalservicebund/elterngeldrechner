@@ -1,5 +1,5 @@
-import { useCallback, useId } from "react";
-import { FieldError, get, useForm } from "react-hook-form";
+import { useCallback } from "react";
+import { useForm } from "react-hook-form";
 import {
   type StepPrototypState,
   stepPrototypSlice,
@@ -7,26 +7,37 @@ import {
 } from "@/application/features/abfrage-prototyp/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
-import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
-import { YesNo } from "@/application/features/abfrageteil/state";
-import { berechneMaximalenBemessungszeitraum } from "./berechneBemessungszeitraum";
-import { ErwerbstaetigkeitCheckboxGroup } from "../../abfrageteil/components/ErwerbstaetigkeitForm/ErwerbstaetigkeitCheckboxGroup";
+import {
+  Ausklammerung,
+  berechneGenauenBemessungszeitraum,
+} from "./berechneBemessungszeitraum";
+import { PersonPageFlow } from "./PersonPageRouting";
+import { Alert } from "@/application/components/Alert";
 
 type Props = {
   readonly id?: string;
   readonly onSubmit?: (values: StepPrototypState) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
+  readonly flow?: PersonPageFlow;
+  readonly hasAusklammerungsgrund?: boolean;
+  readonly auszuklammerndeZeitraeume?: Ausklammerung[];
 };
 
-export function Bemessungszeitraum({ id, onSubmit, elternteil }: Props) {
+export function Bemessungszeitraum({
+  id,
+  onSubmit,
+  flow,
+  hasAusklammerungsgrund,
+  auszuklammerndeZeitraeume,
+}: Props) {
   const store = useAppStore();
 
-  const { register, handleSubmit, setValue, watch, formState } = useForm({
+  const { handleSubmit } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 
-  const submitNachwuchs = useCallback(
+  const submitBmz = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
       onSubmit?.(values);
@@ -34,25 +45,13 @@ export function Bemessungszeitraum({ id, onSubmit, elternteil }: Props) {
     [store, onSubmit],
   );
 
-  const pseudonym1Error = get(formState.errors, "pseudonym.ET1") as
-    | FieldError
-    | undefined;
-
-  // const alleinerziehendenFormValue = watch("alleinerziehend");
-
-  const initializeAntragstellendeIfAlleinerziehend = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if ((event.target.value as YesNo) === YesNo.YES) {
-      setValue("antragstellende", "EinenElternteil");
-    }
-  };
-
   const geburtsdatumDesKindes = useAppSelector(
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
   );
-  const maximalerBemessungszeitraum = berechneMaximalenBemessungszeitraum(
+  const maximalerBemessungszeitraum = berechneGenauenBemessungszeitraum(
     geburtsdatumDesKindes,
+    flow ?? PersonPageFlow.noFlow,
+    auszuklammerndeZeitraeume ?? [],
   );
   const formattedDate = (date: Date) => {
     return date.toLocaleDateString("de-DE", {
@@ -63,19 +62,44 @@ export function Bemessungszeitraum({ id, onSubmit, elternteil }: Props) {
   };
 
   return (
-    <form
-      id={id}
-      // className="flex flex-col gap-32"
-      onSubmit={handleSubmit(submitNachwuchs)}
-      noValidate
-    >
-      <h3>Bemessungszeitraum</h3>
-
-      {/* <ErwerbstaetigkeitCheckboxGroup
-        elternteil={"ET1"}
-        elternteilName={"Sascha"}
-        antragssteller={"FuerBeide"}
-      /> */}
+    <form id={id} onSubmit={handleSubmit(submitBmz)} noValidate>
+      <div>
+        <h3 className="mb-16">Das ist Ihr errechneter Bemessungszeitraum:</h3>
+        <section
+          className="rounded bg-grey-light p-24"
+          aria-live="polite"
+          aria-labelledby="bmz"
+        >
+          <h4 className="text-center">{maximalerBemessungszeitraum}</h4>
+        </section>
+        {hasAusklammerungsgrund && (
+          <section
+            className="rounded border-dashed p-24 mt-32"
+            aria-live="polite"
+            aria-labelledby="bmz"
+          >
+            <div className="pl-32">
+              <h4 className="italic">Übersprungene Zeiträume:</h4>
+              {auszuklammerndeZeitraeume &&
+                auszuklammerndeZeitraeume.map((ausklammerung) => (
+                  <p key={ausklammerung.beschreibung}>
+                    {ausklammerung.beschreibung}{" "}
+                    {formattedDate(ausklammerung.von)} bis{" "}
+                    {formattedDate(ausklammerung.bis)}
+                  </p>
+                ))}
+            </div>
+          </section>
+        )}
+        {(flow === PersonPageFlow.selbststaendig ||
+          flow === PersonPageFlow.mischeinkuenfte) && (
+          <Alert headline="Hinweis" className="mt-32">
+            Wenn Sie noch ein weiteres Jahr zurückgehen wollen, müssen Sie das
+            selbst eintragen.In diesem Planer kann der Zeitraum nur um ein Jahr
+            verschoben werden.
+          </Alert>
+        )}
+      </div>
     </form>
   );
 }

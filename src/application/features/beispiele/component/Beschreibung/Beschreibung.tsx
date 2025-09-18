@@ -3,6 +3,7 @@ import { Beispiel } from "@/application/features/beispiele";
 import {
   type Ausgangslage,
   type AusgangslageFuerEinElternteil,
+  type Auswahloption,
   berechneGesamtsumme,
   bestimmeLetztenGeplantenLebensmonat,
 } from "@/monatsplaner";
@@ -56,18 +57,10 @@ if (import.meta.vitest) {
           },
           lebensmonate: {
             1: {
-              [Elternteil.Eins]: {
-                gewaehlteOption: Variante.Basis,
-                imMutterschutz: false as const,
-                elterngeldbezug: 100,
-              },
+              [Elternteil.Eins]: monat(Variante.Basis, 100),
             },
             2: {
-              [Elternteil.Eins]: {
-                gewaehlteOption: Variante.Basis,
-                imMutterschutz: false as const,
-                elterngeldbezug: 200,
-              },
+              [Elternteil.Eins]: monat(Variante.Basis, 200),
             },
           },
         },
@@ -90,24 +83,13 @@ if (import.meta.vitest) {
           },
           lebensmonate: {
             1: {
-              [Elternteil.Eins]: {
-                gewaehlteOption: Variante.Basis,
-                imMutterschutz: false as const,
-                elterngeldbezug: 100,
-              },
+              [Elternteil.Eins]: monat(Variante.Basis, 100),
             },
             2: {
-              [Elternteil.Eins]: {
-                gewaehlteOption: Variante.Basis,
-                imMutterschutz: false as const,
-                elterngeldbezug: 200,
-              },
+              [Elternteil.Eins]: monat(Variante.Basis, 200),
             },
             3: {
-              [Elternteil.Eins]: {
-                gewaehlteOption: KeinElterngeld,
-                imMutterschutz: false as const,
-              },
+              [Elternteil.Eins]: monat(KeinElterngeld),
             },
           },
         },
@@ -118,5 +100,13 @@ if (import.meta.vitest) {
       expect(screen.getByText("Elterngeld bis zum")).toBeVisible();
       expect(screen.getByText("2. Lebensmonat")).toBeVisible();
     });
+
+    function monat(gewaehlteOption: Auswahloption, elterngeldbezug?: number) {
+      return {
+        gewaehlteOption,
+        imMutterschutz: false as const,
+        elterngeldbezug: elterngeldbezug ? elterngeldbezug : undefined,
+      };
+    }
   });
 }

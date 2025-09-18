@@ -36,7 +36,7 @@ export const Button = forwardRef(function Button(
   );
 });
 
-type ButtonStyle = "primary" | "secondary" | "link";
+type ButtonStyle = "primary" | "secondary" | "link" | "noLine";
 
 const CLASS_NAMES_PER_BUTTON_STYLE: Record<ButtonStyle, string> = {
   // The [@media(hover:hover)]:hover is used to ensure that the hover style is only applied
@@ -47,4 +47,6 @@ const CLASS_NAMES_PER_BUTTON_STYLE: Record<ButtonStyle, string> = {
   secondary:
     "bg-transparent text-primary px-24 py-16 [@media(hover:hover)]:hover:bg-primary [@media(hover:hover)]:hover:text-white active:focus:bg-primary active:focus:text-white",
   link: "bg-transparent text-primary p-0 border-none [@media(hover:hover)]:hover:bg-transparent active:focus:outline-none underline",
+  noLine:
+    "bg-transparent text-primary p-0 border-none [@media(hover:hover)]:hover:bg-transparent active:focus:outline-none",
 };

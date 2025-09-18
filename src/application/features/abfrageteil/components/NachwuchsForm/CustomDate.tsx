@@ -72,18 +72,18 @@ export const CustomDate = forwardRef(function CustomDate(
     <div className={classNames("flex flex-col", className)}>
       <div
         className={classNames(
-          "mb-16 flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",
+          "flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",
           "focus-within:outline focus-within:outline-2 focus-within:outline-primary",
           hasError && "mb-0 border-danger",
         )}
       >
-        <span
+        {/* <span
           id={dateFormatHintIdentifier}
           className="text-14 text-text-light"
           aria-label="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
         >
           TT.MM.JJJJ
-        </span>
+        </span> */}
 
         <input
           {...htmlInputAttributes}
@@ -94,6 +94,13 @@ export const CustomDate = forwardRef(function CustomDate(
           aria-describedby={descriptionIdentifiers}
         />
       </div>
+      <span
+        id={dateFormatHintIdentifier}
+        className="text-14 text-text-light mb-16"
+        aria-label="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
+      >
+        im Format TT.MM.JJJJ
+      </span>
 
       {!!hasError && (
         <Description id={errorIdentifier} error>

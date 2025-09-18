@@ -3,15 +3,17 @@ import { InfoText } from "@/application/components";
 export function InfoZuFruehgeburten() {
   return (
     <InfoText
-      question="Kam Ihr Kind zu früh zur Welt?"
+      question="Das Kind kommt oder kam zu früh auf die Welt"
       answer={
         <>
           <p>
-            Wenn Ihr Kind zu früh zur Welt kommt, können Sie länger Elterngeld
-            bekommen. Dabei kommt es auf den errechneten Geburtstermin an:
+            Wenn Ihr Kind mindestens 6 Wochen zu früh zur Welt gekommen ist,
+            können Sie diesen Service nicht nutzen. Wenden Sie sich bei Fragen
+            Ihrer Aufteilung der Elterngeldmonate an Ihre zuständige
+            Elterngeldstelle.
           </p>
 
-          <ul className="list-inside list-disc">
+          {/* <ul className="list-inside list-disc">
             <li>
               mindestens 6 Wochen zu früh: 1 zusätzlicher Monat Basiselterngeld
             </li>
@@ -44,7 +46,7 @@ export function InfoZuFruehgeburten() {
               Ihre Elterngeldstelle
             </a>
             .
-          </p>
+          </p> */}
         </>
       }
     />

@@ -37,7 +37,7 @@ export function berechneUngefaehrenBemessungszeitraum(
   ) {
     return `Kalenderjahr ${geburtsdatum.getFullYear() - 1}`;
   }
-  return `${formatRelativeMonth(geburtsdatum, 14)} bis ${formatRelativeMonth(geburtsdatum, 1)}`;
+  return `${formatRelativeMonth(geburtsdatum, 12)} bis ${formatRelativeMonth(geburtsdatum, 1)}`;
 }
 
 export type Ausklammerung = {
@@ -104,4 +104,57 @@ export function berechneGenauenBemessungszeitraum(
     date.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
 
   return `${format(ersterMonat)} bis ${format(letzterMonat)}`;
+}
+
+export function berechneExaktenBemessungszeitraum(
+  geburtsdatum: Date,
+  flow: PersonPageFlow,
+  auszuklammerndeZeitraeume: Ausklammerung[],
+): string {
+  if (
+    flow === PersonPageFlow.selbststaendig ||
+    flow === PersonPageFlow.mischeinkuenfte
+  ) {
+    return `Kalenderjahr ${geburtsdatum.getFullYear() - 1}`;
+  }
+
+  const monate: Date[] = berechneMonateFuerGenauenBemessungszeitraum(
+    geburtsdatum,
+    auszuklammerndeZeitraeume,
+  ).sort((a, b) => a.getTime() - b.getTime());
+
+  if (monate.length === 0) {
+    return "kein Zeitraum verfügbar";
+  }
+
+  const zeitraeume: { start: Date; end: Date }[] = [];
+  let start = monate[0];
+  let prev = monate[0];
+
+  for (let i = 1; i < monate.length; i++) {
+    const aktueller = monate[i];
+
+    const diffInMonths =
+      aktueller!.getFullYear() * 12 +
+      aktueller!.getMonth() -
+      (prev!.getFullYear() * 12 + prev!.getMonth());
+
+    if (diffInMonths > 1 && start && prev) {
+      zeitraeume.push({ start, end: prev });
+      start = aktueller;
+    }
+
+    prev = aktueller;
+  }
+
+  if (start && prev) {
+    zeitraeume.push({ start, end: prev });
+  }
+
+  const format = (date: Date) =>
+    date.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+
+  return zeitraeume
+    .map(({ start, end }) => `${format(start)} bis ${format(end)}`)
+    .join(" & ");
 }

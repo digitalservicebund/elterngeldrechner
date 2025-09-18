@@ -9,7 +9,7 @@ import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 import {
   Ausklammerung,
-  berechneGenauenBemessungszeitraum,
+  berechneExaktenBemessungszeitraum,
 } from "./berechneBemessungszeitraum";
 import { PersonPageFlow } from "./PersonPageRouting";
 import { Alert } from "@/application/components/Alert";
@@ -20,7 +20,7 @@ type Props = {
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  readonly hasAusklammerungsgrund?: boolean;
+  readonly hasAusklammerungsgrund: boolean;
   readonly auszuklammerndeZeitraeume?: Ausklammerung[];
 };
 
@@ -28,7 +28,6 @@ export function Bemessungszeitraum({
   id,
   onSubmit,
   flow,
-  hasAusklammerungsgrund,
   auszuklammerndeZeitraeume,
 }: Props) {
   const store = useAppStore();
@@ -48,7 +47,7 @@ export function Bemessungszeitraum({
   const geburtsdatumDesKindes = useAppSelector(
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
   );
-  const maximalerBemessungszeitraum = berechneGenauenBemessungszeitraum(
+  const maximalerBemessungszeitraum = berechneExaktenBemessungszeitraum(
     geburtsdatumDesKindes,
     flow ?? PersonPageFlow.noFlow,
     auszuklammerndeZeitraeume ?? [],
@@ -72,7 +71,7 @@ export function Bemessungszeitraum({
         >
           <h4 className="text-center">{maximalerBemessungszeitraum}</h4>
         </section>
-        {hasAusklammerungsgrund && (
+        {auszuklammerndeZeitraeume && auszuklammerndeZeitraeume?.length > 0 && (
           <section
             className="rounded border-dashed p-24 mt-32"
             aria-live="polite"

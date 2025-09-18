@@ -63,6 +63,7 @@ export function PersonPage({ elternteil }: Props) {
     if (currentPersonPageStep === "angabenPerson") {
       navigateToFamiliePage();
     } else {
+      console.log(hasAusklammerungsgrund);
       const lastStep = getLastStep(
         currentPersonPageStep,
         currentPersonPageFlow,
@@ -81,16 +82,18 @@ export function PersonPage({ elternteil }: Props) {
     if (flow) {
       setCurrentPersonPageFlow(flow);
     }
-    if (hasAusklammerungsgrund) {
+    if (hasAusklammerungsgrund !== undefined) {
       setHasAusklammerungsgrund(hasAusklammerungsgrund);
+      if (hasAusklammerungsgrund === false) {
+        setAuszuklammerndeZeitraeume(undefined);
+      }
     }
-    if (auszuklammerndeZeitraeume?.length) {
+    if (auszuklammerndeZeitraeume) {
       setAuszuklammerndeZeitraeume(auszuklammerndeZeitraeume);
     }
-    setTimeout(() =>
-      navigateToNextStep(flow ?? currentPersonPageFlow, hasAusklammerungsgrund),
-    );
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    navigateToNextStep(flow ?? currentPersonPageFlow, hasAusklammerungsgrund),
+      window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const elternteilNames = useAppSelector(
@@ -113,7 +116,7 @@ export function PersonPage({ elternteil }: Props) {
       customHeading={customHeading()}
       navigationDetails={navigationDetails}
     >
-      <div className="flex flex-col gap-56">
+      <div className="flex flex-col gap-40">
         {currentPersonPageStep === "angabenPerson" && (
           <PersonForm
             id={formIdentifier}

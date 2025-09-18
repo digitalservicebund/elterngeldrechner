@@ -3,7 +3,7 @@ import { InfoText } from "@/application/components";
 export function InfoZumGeschwisterbonus() {
   return (
     <InfoText
-      question="Was ist der Geschwisterbonus?"
+      question="Wann kann ich einen Geschwisterbonus erhalten?"
       answer={
         <ul className="list-inside list-disc">
           Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt

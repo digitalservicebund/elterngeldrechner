@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { MouseEvent } from "react";
+import { MouseEvent, ReactNode } from "react";
 import {
   FieldError,
   FieldErrors,
@@ -16,6 +16,8 @@ type Props<TFieldValues extends FieldValues> = {
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
   readonly label: string;
+  readonly labelHeading?: string;
+  readonly labelComponent?: ReactNode;
   readonly errors?: FieldErrors<TFieldValues> | boolean;
   readonly onChange?: (newValue: boolean) => void;
   readonly className?: string;
@@ -26,6 +28,8 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   registerOptions,
   name,
   label,
+  labelHeading,
+  labelComponent,
   errors,
   onChange,
   className,
@@ -68,7 +72,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   const allCheckboxClasses = Object.values(checkboxClasses).join(" ");
 
   return (
-    <div className={classNames("p-8", className)}>
+    <div className={classNames("p-8 flex", className)}>
       <input
         {...register(name, registerOptions)}
         type="checkbox"
@@ -85,7 +89,11 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
         className={classNames("relative pl-40", allCheckboxClasses)}
         htmlFor={name}
       >
-        {label}
+        <div>
+          <strong>{labelHeading}</strong>
+          <p className="mb-8">{label}</p>
+          {labelComponent}
+        </div>
       </label>
       {!!errorMessage && (
         <Description id={`${name}-error`} error>

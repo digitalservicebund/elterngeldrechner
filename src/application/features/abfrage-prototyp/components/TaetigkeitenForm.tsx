@@ -95,7 +95,7 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
 
   return (
     <form id={id} onSubmit={handleSubmit(submitNachwuchs)} noValidate>
-      <div>
+      <div className="mt-40">
         <h3 className="mb-16">
           Welche Tätigkeiten hatten Sie:
           <ul className="list list-disc ml-40">
@@ -116,34 +116,38 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
           name="isNichtSelbststaendig"
-          label="Ich war in diesem Zeitraum nicht-selbstständig"
+          labelHeading="Ich war in diesem Zeitraum nicht-selbstständig"
+          label="zum Beispiel angestellt: ob in Vollzeit, Teilzeit, als Minijob, in Ausbildung, Freiwilligendienst oder als Beamter/Beamtin."
           errors={hasError}
         />
 
         <CustomCheckbox
-          className="mt-20"
+          className="mt-16"
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
           name="isSelbststaendig"
-          label="Ich war in diesem Zeitraum selbstständig"
+          labelHeading="Ich war in diesem Zeitraum selbstständig"
+          label="zum Beispiel freiberuflich, mit Gewerbe, als Honorarkraft, mit Land- oder Forstbetrieb"
           errors={hasError}
         />
 
         <CustomCheckbox
-          className="mt-20"
+          className="mt-16"
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
           name="hasSozialleistungen"
-          label="Ich habe Sozialleistungen oder Lohnersatzleistungen erhalten"
+          labelHeading="Ich habe Sozialleistungen oder Lohnersatzleistungen erhalten"
+          label="zum Beispiel BAföG, Bürgergeld, Arbeitslosengeld, Krankengeld oder Elterngeld."
           errors={hasError}
         />
 
         <CustomCheckbox
-          className="mt-20"
+          className="mt-16"
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
           name="hasKeinEinkommen"
-          label="Ich hatte in diesem Zeitraum kein Einkommen"
+          labelHeading="Ich hatte in diesem Zeitraum kein Einkommen"
+          label="zum Beispiel während eines Studiums, unbezahlter Urlaub oder Pflegezeiten."
           errors={hasError}
         />
 

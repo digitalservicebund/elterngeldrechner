@@ -79,13 +79,13 @@ export function KindForm({ id, onSubmit }: Props) {
       onSubmit={handleSubmit(submitNachwuchs)}
       noValidate
     >
-      <div>
+      <div className="mt-40">
         <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
           Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?
         </h3>
 
         <label
-          className="mt-20 block text-16"
+          className="mt-20 block text-16 mb-4"
           htmlFor={wahrscheinlichesGeburtsDatumInputIdentifier}
         >
           Geburtsdatum
@@ -113,7 +113,7 @@ export function KindForm({ id, onSubmit }: Props) {
           Wie viele Kinder werden oder wurden geboren?
         </h3>
 
-        <p className="pb-20">
+        <p className="pb-20 mt-10">
           Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
           Kinder an (zum Beispiel 2 bei Zwillingen).
         </p>

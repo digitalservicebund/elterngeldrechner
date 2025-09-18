@@ -14,6 +14,8 @@ import {
 import { PersonPageFlow } from "./PersonPageRouting";
 import { CustomDate } from "../../abfrageteil/components/NachwuchsForm/CustomDate";
 import { parseGermanDateString } from "../state/stepPrototypSlice";
+import { Button } from "@/application/components";
+import RedoIcon from "@digitalservicebund/icons/Redo";
 
 type Props = {
   readonly id?: string;
@@ -37,8 +39,35 @@ export function AusklammerungsZeitenForm({
 }: Props) {
   const store = useAppStore();
 
-  const { register, handleSubmit, getValues, setValue } = useForm({
-    defaultValues: store.getState().stepPrototyp,
+  const stepState = store.getState().stepPrototyp;
+
+  const geburtsdatumDesKindes = useAppSelector(
+    stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
+  );
+
+  const berechneterMutterschutzBeginn = (geburtsdatum: Date): Date => {
+    const date = new Date(geburtsdatum);
+    return new Date(date.setDate(date.getDate() - 42));
+  };
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      ...stepState,
+      mutterschutzDiesesKindVon: stepState.hasMutterschutzDiesesKind
+        ? berechneterMutterschutzBeginn(
+            geburtsdatumDesKindes,
+          ).toLocaleDateString("de-DE")
+        : "",
+      mutterschutzDiesesKindBis: stepState.hasMutterschutzDiesesKind
+        ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
+        : "",
+    },
   });
 
   const submitAusklammerungsZeiten = useCallback(
@@ -49,57 +78,27 @@ export function AusklammerungsZeitenForm({
     [store, onSubmit],
   );
 
-  // const validateMonth = (date: string) => {
-  //   const [inputDay, inputMonth, inputYear] = date.split(".");
-  //   const year = Number.parseInt(inputYear ?? "0");
-  //   const inputDate = new Date(`${year}-${inputMonth}-${inputDay}`);
-  //   const now = new Date(Date.now());
-  //   const dateMaxMonthAgo = new Date(
-  //     now.setUTCFullYear(now.getUTCFullYear() - 3),
-  //   );
-
-  //   if (inputDate >= dateMaxMonthAgo) {
-  //     return true;
-  //   } else {
-  //     return `Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.`;
-  //   }
-  // };
-
-  const geburtsdatumDesKindes = useAppSelector(
-    stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
-  );
   const ungefährerBemessungszeitraum = berechneUngefaehrenBemessungszeitraum(
     geburtsdatumDesKindes,
     flow ?? PersonPageFlow.noFlow,
   );
 
-  const berechneterMutterschutzBeginn = (geburtsdatum: Date): Date => {
-    const date = new Date(geburtsdatum);
-    return new Date(date.setDate(date.getDate() - 42));
-  };
+  const hasMutterschutzDiesesKind = getValues("hasMutterschutzDiesesKind");
+  const mutterschutzDiesesKindVon = watch("mutterschutzDiesesKindVon");
+  const mutterschutzDiesesKindBis = watch("mutterschutzDiesesKindBis");
 
-  function berechneMutterschutz() {
-    if (getValues("hasMutterschutzDiesesKind")) {
-      setValue(
-        "mutterschutzDiesesKindBis",
-        geburtsdatumDesKindes.toLocaleDateString(),
-      );
-      setValue(
-        "mutterschutzDiesesKindVon",
-        berechneterMutterschutzBeginn(
-          geburtsdatumDesKindes,
-        ).toLocaleDateString(),
-      );
-    }
-  }
-  berechneMutterschutz();
+  const hasMutterschutzAnderesKind = getValues("hasMutterschutzAnderesKind");
+  const hasElterngeldAnderesKind = getValues("hasElterngeldAnderesKind");
+  const hasErkrankung = getValues("hasErkrankung");
+  const isBeamtet = getValues("isBeamtet");
 
   const ausklammerungen = (): Ausklammerung[] => {
     const ausklammerungen: Ausklammerung[] = [];
 
     if (
-      getValues("mutterschutzDiesesKindVon") &&
-      getValues("mutterschutzDiesesKindBis")
+      mutterschutzDiesesKindVon.length > 0 &&
+      mutterschutzDiesesKindBis.length > 0 &&
+      !isBeamtet
     ) {
       const mutterschutz: Ausklammerung = {
         beschreibung: "Mutterschutz für dieses Kind",
@@ -109,16 +108,34 @@ export function AusklammerungsZeitenForm({
       ausklammerungen.push(mutterschutz);
     }
 
+    if (getValues("elterngeldVon") && getValues("elterngeldBis")) {
+      const elterngeld: Ausklammerung = {
+        beschreibung: "Elterngeld für älteres Kind",
+        von: parseGermanDateString(getValues("elterngeldVon")),
+        bis: parseGermanDateString(getValues("elterngeldBis")),
+      };
+      ausklammerungen.push(elterngeld);
+    }
+
     if (
       getValues("mutterschutzAnderesKindVon") &&
       getValues("mutterschutzAnderesKindBis")
     ) {
-      const mutterschutz: Ausklammerung = {
+      const mutterschutzAnderesKind: Ausklammerung = {
         beschreibung: "Mutterschutz für älteres Kind",
         von: parseGermanDateString(getValues("mutterschutzAnderesKindVon")),
         bis: parseGermanDateString(getValues("mutterschutzAnderesKindBis")),
       };
-      ausklammerungen.push(mutterschutz);
+      ausklammerungen.push(mutterschutzAnderesKind);
+    }
+
+    if (getValues("krankheitVon") && getValues("krankheitBis")) {
+      const erkrankung: Ausklammerung = {
+        beschreibung: "Mutterschutz für älteres Kind",
+        von: parseGermanDateString(getValues("krankheitVon")),
+        bis: parseGermanDateString(getValues("krankheitBis")),
+      };
+      ausklammerungen.push(erkrankung);
     }
 
     return ausklammerungen;
@@ -137,156 +154,166 @@ export function AusklammerungsZeitenForm({
         </ul>
       </h3>
 
-      <section className="mt-32">
-        <h5>Von wann bis wann waren oder werden Sie im Mutterschutz sein?</h5>
-        <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-          <div>
-            <label className="mt-20 block text-16">
-              Beginn des Mutterschutzes
-            </label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("mutterschutzDiesesKindVon", {
-                required: "Dieses Feld ist erforderlich",
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
+      {hasMutterschutzDiesesKind && (
+        <section className="mt-32">
+          <h5>Von wann bis wann waren oder werden Sie im Mutterschutz sein?</h5>
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label className="mt-20 block text-16">
+                Beginn des Mutterschutzes
+              </label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.mutterschutzDiesesKindVon?.message}
+                {...register("mutterschutzDiesesKindVon", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
+            <div>
+              <label className="mt-20 block text-16">
+                Ende des Mutterschutzes
+              </label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.mutterschutzDiesesKindBis?.message}
+                {...register("mutterschutzDiesesKindBis", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
           </div>
-          <div>
-            <label className="mt-20 block text-16">
-              Ende des Mutterschutzes
-            </label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("mutterschutzDiesesKindBis", {
-                required: "Dieses Feld ist erforderlich",
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="mt-32">
-        <h5>
-          Von wann bis wann waren Sie im Mutterschutz für ein älteres Kind?
-        </h5>
-        <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-          <div>
-            <label className="mt-20 block text-16">
-              Beginn des Mutterschutzes
-            </label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("mutterschutzAnderesKindVon", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
+      {hasMutterschutzAnderesKind && (
+        <section className="mt-32">
+          <h5>
+            Von wann bis wann waren Sie im Mutterschutz für ein älteres Kind?
+          </h5>
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label className="mt-20 block text-16">
+                Beginn des Mutterschutzes
+              </label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.mutterschutzAnderesKindVon?.message}
+                {...register("mutterschutzAnderesKindVon", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
+            <div>
+              <label className="mt-20 block text-16">
+                Ende des Mutterschutzes
+              </label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.mutterschutzAnderesKindBis?.message}
+                {...register("mutterschutzAnderesKindBis", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
           </div>
-          <div>
-            <label className="mt-20 block text-16">
-              Ende des Mutterschutzes
-            </label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("mutterschutzAnderesKindBis", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="mt-32">
-        <h5>
-          Von wann bis wann haben Sie Elterngeld für ein älteres Kind (maximal
-          14 Monate alt) bekommen?
-        </h5>
-        <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-          <div>
-            <label className="mt-20 block text-16">Beginn</label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("elterngeldVon", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
+      {hasElterngeldAnderesKind && (
+        <section className="mt-32">
+          <h5>
+            Von wann bis wann haben Sie Elterngeld für ein älteres Kind (maximal
+            14 Monate alt) bekommen?
+          </h5>
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label className="mt-20 block text-16">Beginn</label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.elterngeldVon?.message}
+                {...register("elterngeldVon", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
+            <div>
+              <label className="mt-20 block text-16">Ende</label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.elterngeldBis?.message}
+                {...register("elterngeldBis", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
           </div>
-          <div>
-            <label className="mt-20 block text-16">Ende</label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("elterngeldBis", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="mt-32">
-        <h5>Von wann bis wann waren Sie wegen Ihrer Schwangerschaft krank?</h5>
-        <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-          <div>
-            <label className="mt-20 block text-16">Beginn</label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("krankheitVon", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
+      {hasErkrankung && (
+        <section className="mt-32">
+          <h5>
+            Von wann bis wann waren Sie wegen Ihrer Schwangerschaft krank?
+          </h5>
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label className="mt-20 block text-16">Beginn</label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.krankheitVon?.message}
+                {...register("krankheitVon", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
+            <div>
+              <label className="mt-20 block text-16">Ende</label>
+              <CustomDate
+                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
+                error={errors.krankheitBis?.message}
+                {...register("krankheitBis", {
+                  required: "Dieses Feld ist erforderlich",
+                  pattern: {
+                    value: /^\d{2}\.\d{2}\.\d{4}$/,
+                    message: "Bitte das Feld vollständig ausfüllen",
+                  },
+                })}
+              />
+            </div>
           </div>
-          <div>
-            <label className="mt-20 block text-16">Ende</label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("krankheitBis", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-                // validate: validateMonth,
-              })}
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      <section className="mt-32">
+      {/* <section className="mt-32">
         <h5>
           Von wann bis wann haben Sie Wehrdienst oder Zivildienst geleistet?
         </h5>
@@ -318,7 +345,17 @@ export function AusklammerungsZeitenForm({
             />
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <Button
+        className="mt-40"
+        type="button"
+        // onClick={}
+        buttonStyle="noLine"
+      >
+        <RedoIcon className="pr-4" />
+        Seite überspringen
+      </Button>
     </form>
   );
 }

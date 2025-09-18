@@ -26,3 +26,12 @@ in our application through the Lohnsteuerrechner, as well as the Sozialgesetzbuc
 Regelungskompetenz lies at the federal level, while the Vollzugskompetenz lies at the municipal
 level. Legal amendments are published in the Bundesanzeiger, for example the annually updated
 Programmablaufplan. Project partners are obligated to inform us of relevant changes.
+
+## Code Language Conventions
+
+This project uses a hybrid approach to language in code, mixing English and German. While technical implementation
+uses English (`function validate()`), domain-specific terms can be kept in German (`function istArbeitsentgeldImUebergangsbereich()`).
+This is crucial because many German administrative terms lack precise English equivalents, leading to inconsistencies and communication
+overhead when translated. This hybrid approach ensures clear communication with domain experts and maintains code readability within our
+specific context. While we acknowledge this might pose a barrier for non-German speaking contributors, we believe it's the most effective
+solution for our project. We encourage contributors to ask questions about any unfamiliar German terms.

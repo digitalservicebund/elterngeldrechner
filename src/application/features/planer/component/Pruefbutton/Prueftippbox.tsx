@@ -6,10 +6,15 @@ import { Button } from "@/application/components/Button";
 
 type Props = {
   readonly tips: Tips;
+  readonly alleinerziehend?: boolean;
   readonly onBonusFreischalten?: (event: SyntheticEvent) => void;
 };
 
-export function Prueftippbox({ tips, onBonusFreischalten }: Props): ReactNode {
+export function Prueftippbox({
+  tips,
+  alleinerziehend,
+  onBonusFreischalten,
+}: Props): ReactNode {
   return (
     <>
       {tips.hasSpecialBonusTip === true && (
@@ -17,9 +22,13 @@ export function Prueftippbox({ tips, onBonusFreischalten }: Props): ReactNode {
           <div className="flex gap-10">
             <LightbulbIcon className="-mt-8 text-[2.3rem]" />
             <p>
-              Tipp: Wenn Sie im Anschluss an Ihre Planung <strong>beide</strong>{" "}
+              Tipp: Wenn Sie im Anschluss an Ihre Planung{" "}
+              {!alleinerziehend && <strong>beide </strong>}
               in Teilzeit arbeiten, können Sie den Partnerschaftsbonus bekommen.
-              Sie bekommen dann zusammen noch vier Monate zusätzlich Elterngeld.
+              Sie bekommen dann {!alleinerziehend && (
+                <span>zusammen </span>
+              )}{" "}
+              noch vier Monate zusätzlich Elterngeld.
             </p>
           </div>
 

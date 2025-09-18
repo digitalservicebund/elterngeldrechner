@@ -95,7 +95,11 @@ export function Pruefbuttonbox({
               <CheckIcon /> Super. Ihre Planung ist gültig.
             </h5>
 
-            <Prueftippbox tips={tips} onBonusFreischalten={bonusFreischalten} />
+            <Prueftippbox
+              tips={tips}
+              alleinerziehend={plan.ausgangslage.istAlleinerziehend}
+              onBonusFreischalten={bonusFreischalten}
+            />
 
             <span>
               Sie können Ihre Planung in den Antrag auf Elterngeld übernehmen

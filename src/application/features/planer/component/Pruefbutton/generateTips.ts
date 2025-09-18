@@ -33,25 +33,30 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
   const hasPlusLeft = remainingPlus > 0;
   const hasBonusLeft = remainingBonus > 0;
 
+  const tipForBasisAndPlusLeft = `Sie können noch ${remainingBasis} ${remainingBasis === 1 ? "Monat" : "Monate"} Basiselterngeld oder noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`;
+  const tipForPlusLeft = `Sie können noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`;
+  const tipForBonusLeft = () => {
+    if (plan.ausgangslage.istAlleinerziehend) {
+      return `Sie können noch ${remainingBonus} ${remainingBonus === 1 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`;
+    } else {
+      return `Jede bzw. jeder von Ihnen kann noch ${remainingBonus / 2} ${remainingBonus === 2 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`;
+    }
+  };
+  const tipForPlusBlocked = `Sie können noch ${remainingBonus} Monate Partnerschaftsbonus verteilen. Beachten Sie: Elterngeld muss ab dem 15. Lebensmonat fortlaufend und ohne Unterbrechung bezogen werden, darum ist Partnerschaftsbonus aktuell ausgegraut.`;
+
   if (hasBasisLeft || hasPlusLeft) {
     const tips = [];
 
     if (hasBasisLeft && hasPlusLeft) {
-      tips.push(
-        `Sie können noch ${remainingBasis} ${remainingBasis === 1 ? "Monat" : "Monate"} Basiselterngeld oder noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`,
-      );
+      tips.push(tipForBasisAndPlusLeft);
     } else {
       if (hasPlusLeft) {
-        tips.push(
-          `Sie können noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`,
-        );
+        tips.push(tipForPlusLeft);
       }
     }
 
     if (hasBonusLeft) {
-      tips.push(
-        `Jede bzw. jeder von Ihnen kann noch ${remainingBonus / 2} ${remainingBonus === 2 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`,
-      );
+      tips.push(tipForBonusLeft());
     }
 
     return { normalTips: tips, hasSpecialBonusTip: false };
@@ -60,16 +65,12 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
       return { normalTips: [], hasSpecialBonusTip: true };
     } else if (verplantesKontingent[Variante.Bonus] === 0) {
       return {
-        normalTips: [
-          "Sie können noch 8 Monate Partnerschaftsbonus verteilen. Beachten Sie: Elterngeld muss ab dem 15. Lebensmonat fortlaufend und ohne Unterbrechung bezogen werden, darum ist Partnerschaftsbonus aktuell ausgegraut.",
-        ],
+        normalTips: [tipForPlusBlocked],
         hasSpecialBonusTip: false,
       };
     } else {
       return {
-        normalTips: [
-          `Jede bzw. jeder von Ihnen kann noch ${remainingBonus / 2} ${remainingBonus === 2 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`,
-        ],
+        normalTips: [tipForBonusLeft()],
         hasSpecialBonusTip: false,
       };
     }
@@ -97,10 +98,13 @@ function prüfeBonusFreischaltenVerfuegbarkeit(
   if (
     letzterVerplanterLebensmonat > 14 &&
     planungLetzterLebensmonat &&
-    (planungLetzterLebensmonat["Elternteil 1"].gewaehlteOption ===
-      "kein Elterngeld" ||
-      planungLetzterLebensmonat["Elternteil 2"].gewaehlteOption ===
-        "kein Elterngeld")
+    (plan.ausgangslage.istAlleinerziehend
+      ? planungLetzterLebensmonat["Elternteil 1"].gewaehlteOption ===
+        "kein Elterngeld"
+      : planungLetzterLebensmonat["Elternteil 1"].gewaehlteOption ===
+          "kein Elterngeld" ||
+        planungLetzterLebensmonat["Elternteil 2"].gewaehlteOption ===
+          "kein Elterngeld")
   ) {
     return false;
   } else if (

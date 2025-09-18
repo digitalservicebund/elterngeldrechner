@@ -1,6 +1,5 @@
 import { findeLetztenVerplantenLebensmonat } from "@/application/features/planer/component/Planer/Lebensmonatsliste/findeLetztenVerplantenLebensmonat";
 import {
-  Auswahloption,
   Elternteil,
   Lebensmonatszahl,
   type PlanMitBeliebigenElternteilen,
@@ -237,46 +236,63 @@ if (import.meta.vitest) {
   });
 }
 
-function makePlan({
-  anzahlBasis,
-  anzahlPlus,
-  anzahlBonus,
-}: {
+type MakePlanOptions = {
   anzahlBasis: number;
   anzahlPlus: number;
   anzahlBonus: number;
-}): PlanMitBeliebigenElternteilen {
-  let month = 1;
-  // eslint-disable-next-line
-  const lebensmonate: Record<number, any> = {};
+};
 
-  const monat = (gewaehlteOption?: Auswahloption) => {
-    return { gewaehlteOption, imMutterschutz: false as const };
-  };
+/** This method generates a simple plan with a certain amount of selected months
+ * by inputting the amount of months for each variant. However, since it is
+ * simply used to test the tip generation, it is not necessarily a valid plan.
+ *
+ * @param options MakePlanOptions: {anzahlBasis: number, anzahlPlus: number, anzahlBonus: number}
+ */
+function makePlan(options: MakePlanOptions): PlanMitBeliebigenElternteilen {
+  const { anzahlBasis, anzahlPlus, anzahlBonus } = options;
 
-  const addMonth = (variante: Variante, anzahl: number) => {
-    for (
-      let i = 0;
-      i < (variante === Variante.Bonus ? anzahl / 2 : anzahl);
-      i++
-    ) {
-      if (variante === Variante.Bonus) {
-        lebensmonate[month] = {
-          [Elternteil.Eins]: monat(variante),
-          [Elternteil.Zwei]: monat(variante),
-        };
-      } else {
-        lebensmonate[month] = {
-          [Elternteil.Eins]: monat(variante),
-        };
-      }
-      month++;
-    }
-  };
+  const segments = [
+    {
+      count: anzahlBasis,
+      template: () => ({
+        [Elternteil.Eins]: {
+          gewaehlteOption: Variante.Basis,
+          imMutterschutz: false as const,
+        },
+      }),
+    },
+    {
+      count: anzahlPlus,
+      template: () => ({
+        [Elternteil.Eins]: {
+          gewaehlteOption: Variante.Plus,
+          imMutterschutz: false as const,
+        },
+      }),
+    },
+    {
+      count: anzahlBonus / 2,
+      template: () => ({
+        [Elternteil.Eins]: {
+          gewaehlteOption: Variante.Bonus,
+          imMutterschutz: false as const,
+        },
+        [Elternteil.Zwei]: {
+          gewaehlteOption: Variante.Bonus,
+          imMutterschutz: false as const,
+        },
+      }),
+    },
+  ];
 
-  addMonth(Variante.Basis, anzahlBasis);
-  addMonth(Variante.Plus, anzahlPlus);
-  addMonth(Variante.Bonus, anzahlBonus);
+  const lebensmonate: PlanMitBeliebigenElternteilen["lebensmonate"] =
+    Object.fromEntries(
+      segments
+        .flatMap(({ count, template }) =>
+          Array.from({ length: count }, template),
+        )
+        .map((value, idx) => [(idx + 1) as Lebensmonatszahl, value]),
+    );
 
   return {
     ausgangslage: {

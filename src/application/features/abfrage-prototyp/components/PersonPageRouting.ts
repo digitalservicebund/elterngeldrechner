@@ -68,7 +68,7 @@ export function getLastStep(
   hasAusklammerungsgrund: boolean | undefined,
 ): PersonPageStepKey {
   if (currentStep === "bmz") {
-    if (hasAusklammerungsgrund) {
+    if (hasAusklammerungsgrund && hasAusklammerungsgrund === true) {
       return "ausklammerungZeiten";
     }
     return "ausklammerungGruende";

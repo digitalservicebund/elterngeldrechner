@@ -11,6 +11,12 @@ import { berechneUngefaehrenBemessungszeitraum } from "./berechneBemessungszeitr
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Alert } from "@/application/components/Alert";
 import { PersonPageFlow } from "./PersonPageRouting";
+import { InfoZumMutterschutz } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZumMutterschutz";
+import { InfoZuMutterschutzAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuMutterschutzAnderesKind";
+import { InfoZuElternzeitAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuElternzeitAnderesKind";
+import { InfoZuKrankheit } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuKrankheit";
+import { Button } from "@/application/components";
+import RedoIcon from "@digitalservicebund/icons/Redo";
 
 type Props = {
   readonly id?: string;
@@ -61,6 +67,11 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
     return anyOptionIsSelected;
   }
 
+  // const hasGeschwisterkinder = () => {
+  //   const geschwisterkinder = getValues("geschwisterkinder")
+  //   return geschwisterkinder.length > 0 ? true : false
+  // }
+
   return (
     <form
       id={id}
@@ -68,7 +79,7 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
       noValidate
     >
       <div>
-        <h3 className="mb-16">
+        <h3 className="mb-16 mt-40">
           Treffen folgende Gründe auf Sie zu für den Zeitraum:
           <ul className="list list-disc ml-40">
             <li>{ungefährerBemessungszeitraum}</li>
@@ -97,6 +108,7 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
           register={register}
           name="hasMutterschutzDiesesKind"
           label="Ich war oder werde im Mutterschutz sein und hatte weniger Einkommen"
+          labelComponent={<InfoZumMutterschutz />}
         />
 
         {flow !== PersonPageFlow.selbststaendig && (
@@ -108,25 +120,32 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
           />
         )}
 
+        {/* {hasGeschwisterkinder() && ( */}
         <CustomCheckbox
           className="mt-20"
           register={register}
           name="hasElterngeldAnderesKind"
           label="Ich habe Elterngeld für ein älteres Kind bekommen und hatte weniger Einkommen"
+          labelComponent={<InfoZuElternzeitAnderesKind />}
         />
+        {/* )} */}
 
+        {/* {hasGeschwisterkinder() && ( */}
         <CustomCheckbox
           className="mt-20"
           register={register}
           name="hasMutterschutzAnderesKind"
           label="Ich war im Mutterschutz für ein älteres Kind und hatte weniger Einkommen"
+          labelComponent={<InfoZuMutterschutzAnderesKind />}
         />
+        {/* )} */}
 
         <CustomCheckbox
           className="mt-20"
           register={register}
           name="hasErkrankung"
           label="Ich hatte eine Erkrankung wegen meiner Schwangerschaft und hatte weniger Einkommen"
+          labelComponent={<InfoZuKrankheit />}
         />
       </div>
 
@@ -139,9 +158,10 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
         Sie das möchten, müssen Sie das später im Antrag angeben.
       </Alert>
 
-      <div className="mt-32">
-        <p>Seite überspringen</p>
-      </div>
+      <Button className="mt-40" type="button" buttonStyle="noLine">
+        <RedoIcon className="pr-4" />
+        Seite überspringen
+      </Button>
     </form>
   );
 }

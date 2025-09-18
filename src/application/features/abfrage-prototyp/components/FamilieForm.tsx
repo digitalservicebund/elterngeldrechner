@@ -85,12 +85,14 @@ export function FamilieForm({ id, onSubmit }: Props) {
   return (
     <form
       id={id}
-      className="flex flex-col gap-32"
+      className="flex flex-col gap-40"
       onSubmit={handleSubmit(submitNachwuchs)}
       noValidate
     >
-      <div>
-        <h3>In welchem Bundesland wollen Sie Elterngeld beantragen?</h3>
+      <div className="mt-40">
+        <h3 className="mb-10">
+          In welchem Bundesland wollen Sie Elterngeld beantragen?
+        </h3>
 
         <CustomSelect
           autoWidth
@@ -99,7 +101,7 @@ export function FamilieForm({ id, onSubmit }: Props) {
             required: "Ein Bundesland muss ausgewählt sein",
           }}
           name="bundesland"
-          label="In welchem Bundesland planen Sie Elterngeld zu beantragen?"
+          label="Bundesland"
           errors={formState.errors}
           options={bundeslandOptions}
           required
@@ -111,7 +113,7 @@ export function FamilieForm({ id, onSubmit }: Props) {
           Gibt es ältere Geschwisterkinder?
         </h3>
 
-        <p className="flex justify-between">
+        <p className="flex justify-between mb-10">
           Wenn Sie weitere Kinder haben, die ebenfalls in Ihrem Haushalt leben,
           können Sie vielleicht einen Zuschlag zum Elterngeld bekommen, den
           Geschwisterbonus.
@@ -184,7 +186,7 @@ export function FamilieForm({ id, onSubmit }: Props) {
       </section>
 
       <div>
-        <h3>
+        <h3 className="mb-10">
           Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von mehr
           als 175.000 Euro?
         </h3>

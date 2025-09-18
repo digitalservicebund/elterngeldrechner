@@ -8,6 +8,8 @@ import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
 import { YesNo } from "@/application/features/abfrageteil/state";
+import { InfoZuVornamen } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuVornamen";
+import { InfoZuAlleinerziehenden } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoFuerAlleinerziehenden";
 
 type Props = {
   readonly id?: string;
@@ -78,7 +80,9 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
         )}
 
         <div className="mt-20">
-          <label className="block text-16">Vorname</label>
+          <label className="block text-16 mb-4">
+            Vorname {elternteil === Elternteil.Eins ? "Person 1" : "Person 2"}
+          </label>
           <input
             className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
             {...register("pseudonym.ET1", {
@@ -91,6 +95,9 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
               {pseudonym1Error.message}
             </p>
           )}
+          <div className="mt-16">
+            <InfoZuVornamen />
+          </div>
         </div>
       </div>
 
@@ -109,6 +116,10 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
             errors={formState.errors}
             required
           />
+
+          <div className="mt-16">
+            <InfoZuAlleinerziehenden />
+          </div>
         </div>
       )}
 

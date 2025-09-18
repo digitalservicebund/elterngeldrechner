@@ -185,7 +185,8 @@ export function usePlanerService(
 
     if (letzterVerplanterLebensmonat) {
       return (letzterVerplanterLebensmonat -
-        verplantesBonusKontingent / 2 +
+        verplantesBonusKontingent /
+          (plan.ausgangslage.istAlleinerziehend ? 1 : 2) +
         1) as Lebensmonatszahl;
     } else {
       return undefined;

@@ -39,7 +39,7 @@ export function aktiviereBonus<A extends Ausgangslage>(
   const dritterBonusmonatHinzugefuegt = waehleOptionInLebensmonaten(
     erstenZweiBonusmonateHinzugefuegt,
     (lebensmonatszahl + 3) as Lebensmonatszahl,
-    Elternteil.Zwei as ElternteileByAusgangslage<A>,
+    Elternteil.Eins as ElternteileByAusgangslage<A>,
     Variante.Bonus,
     ungeplanterLebensmonat,
   );
@@ -47,7 +47,7 @@ export function aktiviereBonus<A extends Ausgangslage>(
   const vierterBonusmonatHinzugefuegt = waehleOptionInLebensmonaten(
     dritterBonusmonatHinzugefuegt,
     (lebensmonatszahl + 4) as Lebensmonatszahl,
-    Elternteil.Zwei as ElternteileByAusgangslage<A>,
+    Elternteil.Eins as ElternteileByAusgangslage<A>,
     Variante.Bonus,
     ungeplanterLebensmonat,
   );

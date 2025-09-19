@@ -6,6 +6,10 @@ async function createElterngeldrechnerMetadataRecord(object: unknown) {
   await createTableRecord("mwp01ckwe69i1fg", object);
 }
 
+async function createElterngeldrechnerReferrerRecord(object: unknown) {
+  await createTableRecord("m0u8pt1wx0mhlnp", object);
+}
+
 async function createTableRecord(tableId: string, object: unknown) {
   const { config } = await import("../env");
 
@@ -30,4 +34,5 @@ async function createTableRecord(tableId: string, object: unknown) {
 export default {
   createElterngeldrechnerEventRecord,
   createElterngeldrechnerMetadataRecord,
+  createElterngeldrechnerReferrerRecord,
 };

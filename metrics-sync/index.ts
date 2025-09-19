@@ -18,6 +18,10 @@ const ignoredEventActionLabels = ["Klick"];
 const metadata = await matomo.fetchPageStatistics(date);
 await noco.createElterngeldrechnerMetadataRecord({ Datum: date, ...metadata });
 
+const referrer = await matomo.fetchReferrerStatistics(date);
+const referrerRows = referrer.map((element) => ({ Datum: date, ...element }));
+await noco.createElterngeldrechnerReferrerRecord(referrerRows);
+
 const eventActions = await matomo.fetchEventActions(date);
 const flatElements = flatten(eventActions);
 const rows = flatElements.map((element) => ({ Datum: date, ...element }));

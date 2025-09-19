@@ -1,3 +1,8 @@
+export type Method =
+  | "Events.getAction"
+  | "Actions.getPageTitles"
+  | "Actions.getPageUrls";
+
 export type Subtable = {
   label: string;
   nb_uniq_visitors: number;
@@ -25,13 +30,7 @@ export type Action = {
   subtable?: Subtable[];
 };
 
-export type EventModuleMethod = "Events.getAction";
-
-export type MetadataModuleMethod = "Actions.getPageTitles";
-
-export type Method = MetadataModuleMethod | EventModuleMethod;
-
-export type PageStatistic = {
+export type Page = {
   label: string;
   nb_visits: number;
   nb_uniq_visitors: number;
@@ -75,3 +74,39 @@ export type PageStatistic = {
   exit_rate: string;
   segment: string;
 };
+
+export interface Url {
+  label: string;
+  nb_visits: number;
+  nb_hits: number;
+  sum_time_spent: number;
+  min_time_network?: string;
+  max_time_network?: string;
+  min_time_server?: string;
+  max_time_server?: string;
+  min_time_transfer?: string;
+  max_time_transfer?: string;
+  min_time_dom_processing?: string;
+  max_time_dom_processing?: string;
+  min_time_dom_completion?: string;
+  max_time_dom_completion?: string;
+  min_time_on_load?: string;
+  max_time_on_load?: string;
+  avg_time_network: string;
+  avg_time_server: string;
+  avg_time_transfer: string;
+  avg_time_dom_processing: string;
+  avg_time_dom_completion: string;
+  avg_time_on_load: string;
+  avg_page_load_time: string;
+  avg_time_on_page: string;
+  bounce_rate: string;
+  exit_rate: string;
+  idsubdatatable?: number;
+  segment?: string;
+  nb_uniq_visitors?: number;
+  entry_nb_uniq_visitors?: number;
+  exit_nb_uniq_visitors?: number;
+  url?: string;
+  subtable?: Url[];
+}

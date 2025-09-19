@@ -33,13 +33,20 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
   const hasPlusLeft = remainingPlus > 0;
   const hasBonusLeft = remainingBonus > 0;
 
-  const tipForBasisAndPlusLeft = `Sie können noch ${remainingBasis} ${remainingBasis === 1 ? "Monat" : "Monate"} Basiselterngeld oder noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`;
-  const tipForPlusLeft = `Sie können noch ${remainingPlus} ${remainingPlus === 1 ? "Monat" : "Monate"} ElterngeldPlus verteilen.`;
-  const tipForBonusLeft = () => {
-    if (plan.ausgangslage.istAlleinerziehend) {
-      return `Sie können noch ${remainingBonus} ${remainingBonus === 1 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`;
+  function pluralize(singular: string, plural: string, count: number) {
+    return count === 1 ? singular : plural;
+  }
+  const remainingMonthsString = (amount: number) => {
+    return `${amount} ${pluralize("Monat", "Monate", amount)}`;
+  };
+
+  const tipForBasisAndPlusLeft = `Sie können noch ${remainingMonthsString(remainingBasis)} Basiselterngeld oder noch ${remainingMonthsString(remainingPlus)} ElterngeldPlus verteilen.`;
+  const tipForPlusLeft = `Sie können noch ${remainingMonthsString(remainingPlus)} ElterngeldPlus verteilen.`;
+  const tipForBonusLeft = (istAlleinerziehend?: boolean) => {
+    if (istAlleinerziehend) {
+      return `Sie können noch ${remainingMonthsString(remainingBonus)} Partnerschaftsbonus verteilen.`;
     } else {
-      return `Jede bzw. jeder von Ihnen kann noch ${remainingBonus / 2} ${remainingBonus === 2 ? "Monat" : "Monate"} Partnerschaftsbonus verteilen.`;
+      return `Jede bzw. jeder von Ihnen kann noch ${remainingMonthsString(remainingBonus / 2)} Partnerschaftsbonus verteilen.`;
     }
   };
   const tipForPlusBlocked = `Sie können noch ${remainingBonus} Monate Partnerschaftsbonus verteilen. Beachten Sie: Elterngeld muss ab dem 15. Lebensmonat fortlaufend und ohne Unterbrechung bezogen werden, darum ist Partnerschaftsbonus aktuell ausgegraut.`;
@@ -56,7 +63,7 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
     }
 
     if (hasBonusLeft) {
-      tips.push(tipForBonusLeft());
+      tips.push(tipForBonusLeft(plan.ausgangslage.istAlleinerziehend));
     }
 
     return { normalTips: tips, hasSpecialBonusTip: false };
@@ -70,7 +77,7 @@ export function generateTips(plan: PlanMitBeliebigenElternteilen): Tips {
       };
     } else {
       return {
-        normalTips: [tipForBonusLeft()],
+        normalTips: [tipForBonusLeft(plan.ausgangslage.istAlleinerziehend)],
         hasSpecialBonusTip: false,
       };
     }
@@ -95,16 +102,22 @@ function prüfeBonusFreischaltenVerfuegbarkeit(
     plan.lebensmonate,
   )[Variante.Bonus];
 
+  const istLetzterVerplanterLebensmonatKeinElterngeld = () => {
+    if (!planungLetzterLebensmonat) return false;
+
+    const gewaehlteOptionLetzterLebensmonat = [
+      planungLetzterLebensmonat["Elternteil 1"]?.gewaehlteOption,
+      ...(plan.ausgangslage.istAlleinerziehend
+        ? []
+        : [planungLetzterLebensmonat["Elternteil 2"]?.gewaehlteOption]),
+    ];
+
+    return gewaehlteOptionLetzterLebensmonat.includes("kein Elterngeld");
+  };
+
   if (
     letzterVerplanterLebensmonat > 14 &&
-    planungLetzterLebensmonat &&
-    (plan.ausgangslage.istAlleinerziehend
-      ? planungLetzterLebensmonat["Elternteil 1"].gewaehlteOption ===
-        "kein Elterngeld"
-      : planungLetzterLebensmonat["Elternteil 1"].gewaehlteOption ===
-          "kein Elterngeld" ||
-        planungLetzterLebensmonat["Elternteil 2"].gewaehlteOption ===
-          "kein Elterngeld")
+    istLetzterVerplanterLebensmonatKeinElterngeld()
   ) {
     return false;
   } else if (
@@ -226,6 +239,27 @@ if (import.meta.vitest) {
       expect(generatedTips).toEqual(expectedTips);
     });
 
+    it("generates tips for single parent with only but not all Bonus available", () => {
+      const expectedTips = {
+        normalTips: ["Sie können noch 2 Monate Partnerschaftsbonus verteilen."],
+        hasSpecialBonusTip: false,
+      };
+
+      const plan = makePlan({ anzahlBasis: 14, anzahlPlus: 0, anzahlBonus: 2 });
+      const actualPlan: PlanMitBeliebigenElternteilen = {
+        ...plan,
+        ausgangslage: {
+          anzahlElternteile: 1 as const,
+          mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
+          geburtsdatumDesKindes: new Date(),
+          istAlleinerziehend: true,
+        },
+      };
+      const generatedTips = generateTips(actualPlan);
+
+      expect(generatedTips).toEqual(expectedTips);
+    });
+
     it("generates no tips for two parents with nothing available", () => {
       const expectedTips = {
         normalTips: [],
@@ -236,6 +270,105 @@ if (import.meta.vitest) {
       const generatedTips = generateTips(plan);
 
       expect(generatedTips).toEqual(expectedTips);
+    });
+  });
+
+  describe("prüfeBonusFreischaltenVerfuegbarkeit", () => {
+    it("returns true if no bonus months are selected", () => {
+      const plan = makePlan({ anzahlBasis: 0, anzahlPlus: 0, anzahlBonus: 0 });
+
+      expect(prüfeBonusFreischaltenVerfuegbarkeit(plan)).toBe(true);
+    });
+
+    it("returns false if bonus months are selected", () => {
+      const plan = makePlan({ anzahlBasis: 0, anzahlPlus: 0, anzahlBonus: 2 });
+
+      expect(prüfeBonusFreischaltenVerfuegbarkeit(plan)).toBe(false);
+    });
+
+    it("returns true if planung is longer than 14 months and not ends with kein Elterngeld", () => {
+      const plan = makePlan({ anzahlBasis: 12, anzahlPlus: 4, anzahlBonus: 0 });
+
+      expect(prüfeBonusFreischaltenVerfuegbarkeit(plan)).toBe(true);
+    });
+
+    it("returns false if planung is longer than 14 months and ends with kein Elterngeld for any parent", () => {
+      const plan = makePlan({ anzahlBasis: 13, anzahlPlus: 1, anzahlBonus: 0 });
+
+      const actualPlan: PlanMitBeliebigenElternteilen = {
+        ...plan,
+        lebensmonate: {
+          ...plan.lebensmonate,
+          [15]: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: "kein Elterngeld" as Variante,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+      };
+
+      expect(prüfeBonusFreischaltenVerfuegbarkeit(actualPlan)).toBe(false);
+    });
+
+    it("returns true if planung is longer than 14 months, is for a single parent and Elternteil Eins not ends with kein Elterngeld", () => {
+      const plan = makePlan({ anzahlBasis: 12, anzahlPlus: 3, anzahlBonus: 0 });
+
+      const actualPlan: PlanMitBeliebigenElternteilen = {
+        ausgangslage: {
+          anzahlElternteile: 1 as const,
+          mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
+          geburtsdatumDesKindes: new Date(),
+          istAlleinerziehend: true,
+        },
+        lebensmonate: {
+          ...plan.lebensmonate,
+          [16]: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: "kein Elterngeld" as Variante,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+      };
+
+      expect(prüfeBonusFreischaltenVerfuegbarkeit(actualPlan)).toBe(true);
+    });
+
+    it("returns false if planung is longer than 14 months, is for a single parent and Elternteil Eins ends with kein Elterngeld", () => {
+      const plan = makePlan({ anzahlBasis: 13, anzahlPlus: 1, anzahlBonus: 0 });
+
+      const actualPlan: PlanMitBeliebigenElternteilen = {
+        ausgangslage: {
+          anzahlElternteile: 1 as const,
+          mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
+          geburtsdatumDesKindes: new Date(),
+          istAlleinerziehend: true,
+        },
+        lebensmonate: {
+          ...plan.lebensmonate,
+          [15]: {
+            [Elternteil.Eins]: {
+              gewaehlteOption: "kein Elterngeld" as Variante,
+              imMutterschutz: false as const,
+            },
+            [Elternteil.Zwei]: {
+              gewaehlteOption: Variante.Plus,
+              imMutterschutz: false as const,
+            },
+          },
+        },
+      };
+
+      expect(prüfeBonusFreischaltenVerfuegbarkeit(actualPlan)).toBe(false);
     });
   });
 }

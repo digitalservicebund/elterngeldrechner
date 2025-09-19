@@ -313,40 +313,6 @@ export function AusklammerungsZeitenForm({
         </section>
       )}
 
-      {/* <section className="mt-32">
-        <h5>
-          Von wann bis wann haben Sie Wehrdienst oder Zivildienst geleistet?
-        </h5>
-        <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-          <div>
-            <label className="mt-20 block text-16">Beginn</label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("dienstVon", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-              })}
-            />
-          </div>
-          <div>
-            <label className="mt-20 block text-16">Ende</label>
-            <CustomDate
-              // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-              {...register("dienstBis", {
-                required: undefined,
-                pattern: {
-                  value: /^\d{2}\.\d{2}\.\d{4}$/,
-                  message: "Bitte das Feld vollständig ausfüllen",
-                },
-              })}
-            />
-          </div>
-        </div>
-      </section> */}
-
       <Button
         className="mt-40"
         type="button"

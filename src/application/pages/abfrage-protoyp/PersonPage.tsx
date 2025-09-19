@@ -62,6 +62,7 @@ export function PersonPage({ elternteil }: Props) {
   const navigateToLastStep = () => {
     if (currentPersonPageStep === "angabenPerson") {
       navigateToFamiliePage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       console.log(hasAusklammerungsgrund);
       const lastStep = getLastStep(
@@ -70,6 +71,7 @@ export function PersonPage({ elternteil }: Props) {
         hasAusklammerungsgrund,
       );
       setCurrentPersonPageStep(lastStep);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -92,8 +94,8 @@ export function PersonPage({ elternteil }: Props) {
       setAuszuklammerndeZeitraeume(auszuklammerndeZeitraeume);
     }
 
-    navigateToNextStep(flow ?? currentPersonPageFlow, hasAusklammerungsgrund),
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    navigateToNextStep(flow ?? currentPersonPageFlow, hasAusklammerungsgrund);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const elternteilNames = useAppSelector(
@@ -142,6 +144,18 @@ export function PersonPage({ elternteil }: Props) {
             hideSubmitButton
             elternteil={elternteil}
             flow={currentPersonPageFlow}
+            pageType="zeitraumKeinEinkommen"
+          />
+        )}
+
+        {currentPersonPageStep === "zeitraumErsatzleistungen" && (
+          <KeinEinkommenForm
+            id={formIdentifier}
+            onSubmit={handleSubmit}
+            hideSubmitButton
+            elternteil={elternteil}
+            flow={currentPersonPageFlow}
+            pageType="zeitraumErsatzleistungen"
           />
         )}
 
@@ -188,7 +202,9 @@ export function PersonPage({ elternteil }: Props) {
           </Button>
 
           <Button type="submit" form={formIdentifier}>
-            Weiter
+            {currentPersonPageStep === "bmz"
+              ? "Verstanden und weiter"
+              : "Weiter"}
           </Button>
         </div>
       </div>

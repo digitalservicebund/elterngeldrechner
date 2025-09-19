@@ -34,11 +34,17 @@ export interface StepPrototypState {
   hasSozialleistungen: boolean;
   hasKeinEinkommen: boolean;
 
+  keinEinkommenVon: string;
+  keinEinkommenBis: string;
+  sozialleistungenVon: string;
+  sozialleistungenBis: string;
+
   hasMutterschutzDiesesKind: boolean;
   isBeamtet: boolean;
   hasElterngeldAnderesKind: boolean;
   hasMutterschutzAnderesKind: boolean;
   hasErkrankung: boolean;
+  hasKeinGrund: boolean;
 
   mutterschutzDiesesKindVon: string;
   mutterschutzDiesesKindBis: string;
@@ -73,11 +79,17 @@ const initialState: StepPrototypState = {
   hasSozialleistungen: false,
   hasKeinEinkommen: false,
 
+  keinEinkommenVon: "",
+  keinEinkommenBis: "",
+  sozialleistungenVon: "",
+  sozialleistungenBis: "",
+
   hasMutterschutzDiesesKind: false,
   isBeamtet: false,
   hasElterngeldAnderesKind: false,
   hasMutterschutzAnderesKind: false,
   hasErkrankung: false,
+  hasKeinGrund: false,
 
   mutterschutzDiesesKindVon: "",
   mutterschutzDiesesKindBis: "",

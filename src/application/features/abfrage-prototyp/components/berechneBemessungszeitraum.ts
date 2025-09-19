@@ -115,7 +115,7 @@ export function berechneExaktenBemessungszeitraum(
     flow === PersonPageFlow.selbststaendig ||
     flow === PersonPageFlow.mischeinkuenfte
   ) {
-    return `Kalenderjahr ${geburtsdatum.getFullYear() - 1}`;
+    return `Kalenderjahr ${geburtsdatum.getFullYear() - (auszuklammerndeZeitraeume.length > 0 ? 2 : 1)}`;
   }
 
   const monate: Date[] = berechneMonateFuerGenauenBemessungszeitraum(

@@ -15,8 +15,6 @@ import { InfoZumMutterschutz } from "../../abfrageteil/components/AllgemeineAnga
 import { InfoZuMutterschutzAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuMutterschutzAnderesKind";
 import { InfoZuElternzeitAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuElternzeitAnderesKind";
 import { InfoZuKrankheit } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuKrankheit";
-import { Button } from "@/application/components";
-import RedoIcon from "@digitalservicebund/icons/Redo";
 
 type Props = {
   readonly id?: string;
@@ -33,7 +31,7 @@ type Props = {
 export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
   const store = useAppStore();
 
-  const { register, handleSubmit, getValues } = useForm({
+  const { register, handleSubmit, getValues, setValue } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 
@@ -53,18 +51,16 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
     flow ?? PersonPageFlow.noFlow,
   );
 
-  function isAnyOptionSelected(): boolean {
-    const anyOptionIsSelected = (
-      [
-        "hasMutterschutzDiesesKind",
-        "isBeamtet",
-        "hasElterngeldAnderesKind",
-        "hasMutterschutzAnderesKind",
-        "hasErkrankung",
-      ] as const
-    ).some((fieldName) => getValues(fieldName));
+  const checkboxNames: (keyof StepPrototypState)[] = [
+    "hasMutterschutzDiesesKind",
+    "hasMutterschutzAnderesKind",
+    "isBeamtet",
+    "hasElterngeldAnderesKind",
+    "hasErkrankung",
+  ];
 
-    return anyOptionIsSelected;
+  function isAnyOptionSelected(): boolean {
+    return checkboxNames.some((fieldName) => getValues(fieldName));
   }
 
   // const hasGeschwisterkinder = () => {
@@ -109,14 +105,39 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
           name="hasMutterschutzDiesesKind"
           label="Ich war oder werde im Mutterschutz sein und hatte weniger Einkommen"
           labelComponent={<InfoZumMutterschutz />}
+          onChange={(checked) => {
+            if (checked) {
+              setValue("hasKeinGrund", false);
+            }
+          }}
         />
+
+        {/* {hasGeschwisterkinder() && ( */}
+        <CustomCheckbox
+          className="mt-20"
+          register={register}
+          name="hasMutterschutzAnderesKind"
+          label="Ich war im Mutterschutz für ein älteres Kind und hatte weniger Einkommen"
+          labelComponent={<InfoZuMutterschutzAnderesKind />}
+          onChange={(checked) => {
+            if (checked) {
+              setValue("hasKeinGrund", false);
+            }
+          }}
+        />
+        {/* )} */}
 
         {flow !== PersonPageFlow.selbststaendig && (
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="isBeamtet"
-            label="Ich bin Beamtin und war oder werde im Mutterschutz sein "
+            label="Ich bin Beamtin und war oder werde im Mutterschutz sein"
+            onChange={(checked) => {
+              if (checked) {
+                setValue("hasKeinGrund", false);
+              }
+            }}
           />
         )}
 
@@ -127,16 +148,11 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
           name="hasElterngeldAnderesKind"
           label="Ich habe Elterngeld für ein älteres Kind bekommen und hatte weniger Einkommen"
           labelComponent={<InfoZuElternzeitAnderesKind />}
-        />
-        {/* )} */}
-
-        {/* {hasGeschwisterkinder() && ( */}
-        <CustomCheckbox
-          className="mt-20"
-          register={register}
-          name="hasMutterschutzAnderesKind"
-          label="Ich war im Mutterschutz für ein älteres Kind und hatte weniger Einkommen"
-          labelComponent={<InfoZuMutterschutzAnderesKind />}
+          onChange={(checked) => {
+            if (checked) {
+              setValue("hasKeinGrund", false);
+            }
+          }}
         />
         {/* )} */}
 
@@ -146,6 +162,24 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
           name="hasErkrankung"
           label="Ich hatte eine Erkrankung wegen meiner Schwangerschaft und hatte weniger Einkommen"
           labelComponent={<InfoZuKrankheit />}
+          onChange={(checked) => {
+            if (checked) {
+              setValue("hasKeinGrund", false);
+            }
+          }}
+        />
+
+        <CustomCheckbox
+          className="mt-20"
+          register={register}
+          name="hasKeinGrund"
+          label="Keiner der genannten Gründe"
+          onChange={(checked) => {
+            setValue("hasKeinGrund", checked);
+            if (checked) {
+              checkboxNames.forEach((name) => setValue(name, false));
+            }
+          }}
         />
       </div>
 
@@ -157,11 +191,6 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
         Zeitraum bei der Berechnung des Elterngeldes übersprungen werden. Wenn
         Sie das möchten, müssen Sie das später im Antrag angeben.
       </Alert>
-
-      <Button className="mt-40" type="button" buttonStyle="noLine">
-        <RedoIcon className="pr-4" />
-        Seite überspringen
-      </Button>
     </form>
   );
 }

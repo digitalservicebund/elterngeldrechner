@@ -2,6 +2,7 @@ export const personPageSteps = {
   angabenPerson: "Angaben Person",
   einkommenArt: "Art des Einkommens",
   zeitraumKeinEinkommen: "Zeitraum kein Einkommen",
+  zeitraumErsatzleistungen: "Zeitraum Sozial-/Ersatzleistungen",
   ausklammerungGruende: "Gründe weniger Einkommen",
   ausklammerungZeiten: "Daten weniger Einkommen",
   bmz: "Bemessungszeitraum",
@@ -32,13 +33,16 @@ export function getNextStep(
   } else if (currentStep === "einkommenArt") {
     if (
       flow === PersonPageFlow.keinEinkommen ||
-      flow === PersonPageFlow.sozialleistungen ||
       flow === PersonPageFlow.sozialleistungenKeinEinkommen ||
       flow === PersonPageFlow.nichtSelbststaendigKeinEinkommen ||
-      flow === PersonPageFlow.nichtSelbststaendigErsatzleistungen ||
       flow === PersonPageFlow.nichtSelbststaendigBeides
     ) {
       return "zeitraumKeinEinkommen";
+    } else if (
+      flow === PersonPageFlow.sozialleistungen ||
+      flow === PersonPageFlow.nichtSelbststaendigErsatzleistungen
+    ) {
+      return "zeitraumErsatzleistungen";
     }
     return "ausklammerungGruende";
   } else if (currentStep === "ausklammerungGruende") {
@@ -49,17 +53,25 @@ export function getNextStep(
   } else if (currentStep === "ausklammerungZeiten") {
     return "bmz";
   } else if (currentStep === "zeitraumKeinEinkommen") {
+    if (flow === PersonPageFlow.keinEinkommen) {
+      return "routingEnded";
+    } else if (
+      flow === PersonPageFlow.sozialleistungenKeinEinkommen ||
+      flow === PersonPageFlow.nichtSelbststaendigBeides
+    ) {
+      return "zeitraumErsatzleistungen";
+    }
+    return "ausklammerungGruende";
+  } else if (currentStep === "zeitraumErsatzleistungen") {
     if (
-      flow === PersonPageFlow.keinEinkommen ||
       flow === PersonPageFlow.sozialleistungen ||
       flow === PersonPageFlow.sozialleistungenKeinEinkommen
     ) {
       return "routingEnded";
     }
     return "ausklammerungGruende";
-  } else {
-    return "routingEnded";
   }
+  return "routingEnded";
 }
 
 export function getLastStep(
@@ -77,12 +89,27 @@ export function getLastStep(
   } else if (currentStep === "ausklammerungGruende") {
     if (
       flow === PersonPageFlow.keinEinkommen ||
-      flow === PersonPageFlow.sozialleistungen
+      flow === PersonPageFlow.nichtSelbststaendigKeinEinkommen
     ) {
       return "zeitraumKeinEinkommen";
+    } else if (
+      flow === PersonPageFlow.sozialleistungen ||
+      flow === PersonPageFlow.sozialleistungenKeinEinkommen ||
+      flow === PersonPageFlow.nichtSelbststaendigErsatzleistungen ||
+      flow === PersonPageFlow.nichtSelbststaendigBeides
+    ) {
+      return "zeitraumErsatzleistungen";
     }
     return "einkommenArt";
   } else if (currentStep === "zeitraumKeinEinkommen") {
+    return "einkommenArt";
+  } else if (currentStep === "zeitraumErsatzleistungen") {
+    if (
+      flow === PersonPageFlow.sozialleistungenKeinEinkommen ||
+      flow === PersonPageFlow.nichtSelbststaendigBeides
+    ) {
+      return "zeitraumKeinEinkommen";
+    }
     return "einkommenArt";
   }
   return "angabenPerson";

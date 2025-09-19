@@ -14,8 +14,6 @@ import {
 import { PersonPageFlow } from "./PersonPageRouting";
 import { CustomDate } from "../../abfrageteil/components/NachwuchsForm/CustomDate";
 import { parseGermanDateString } from "../state/stepPrototypSlice";
-import { Button } from "@/application/components";
-import RedoIcon from "@digitalservicebund/icons/Redo";
 
 type Props = {
   readonly id?: string;
@@ -312,16 +310,6 @@ export function AusklammerungsZeitenForm({
           </div>
         </section>
       )}
-
-      <Button
-        className="mt-40"
-        type="button"
-        // onClick={}
-        buttonStyle="noLine"
-      >
-        <RedoIcon className="pr-4" />
-        Seite überspringen
-      </Button>
     </form>
   );
 }

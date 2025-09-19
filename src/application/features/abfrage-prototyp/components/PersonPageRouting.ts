@@ -1,3 +1,5 @@
+import { YesNo } from "../../abfrageteil/state";
+
 export const personPageSteps = {
   angabenPerson: "Angaben Person",
   einkommenArt: "Art des Einkommens",
@@ -6,6 +8,9 @@ export const personPageSteps = {
   ausklammerungGruende: "Gründe weniger Einkommen",
   ausklammerungZeiten: "Daten weniger Einkommen",
   bmz: "Bemessungszeitraum",
+  anzahlTaetigkeiten: "Anzahl Tätigkeiten",
+  uebersichtTaetigkeiten: "Übersicht Tätigkeiten",
+  einkommenAngaben: "Tätigkeit 1,",
 } as const;
 
 export type PersonPageStepKey = keyof typeof personPageSteps;
@@ -27,6 +32,7 @@ export function getNextStep(
   currentStep: PersonPageStepKey,
   flow: PersonPageFlow | undefined,
   hasAusklammerungsgrund: boolean | undefined,
+  hasMehrereTaetigkeiten: YesNo | null,
 ): PersonPageStepKey | "routingEnded" {
   if (currentStep === "angabenPerson" || flow === undefined) {
     return "einkommenArt";
@@ -70,6 +76,15 @@ export function getNextStep(
       return "routingEnded";
     }
     return "ausklammerungGruende";
+  } else if (currentStep === "bmz") {
+    return "anzahlTaetigkeiten";
+  } else if (currentStep === "anzahlTaetigkeiten") {
+    if (hasMehrereTaetigkeiten === YesNo.YES) {
+      return "uebersichtTaetigkeiten";
+    }
+    return "einkommenAngaben";
+  } else if (currentStep === "uebersichtTaetigkeiten") {
+    return "einkommenAngaben";
   }
   return "routingEnded";
 }
@@ -78,8 +93,18 @@ export function getLastStep(
   currentStep: PersonPageStepKey,
   flow: PersonPageFlow | undefined,
   hasAusklammerungsgrund: boolean | undefined,
+  hasMehrereTaetigkeiten: YesNo | null,
 ): PersonPageStepKey {
-  if (currentStep === "bmz") {
+  if (currentStep === "einkommenAngaben") {
+    if (hasMehrereTaetigkeiten === YesNo.YES) {
+      return "uebersichtTaetigkeiten";
+    }
+    return "anzahlTaetigkeiten";
+  } else if (currentStep === "uebersichtTaetigkeiten") {
+    return "anzahlTaetigkeiten";
+  } else if (currentStep === "anzahlTaetigkeiten") {
+    return "bmz";
+  } else if (currentStep === "bmz") {
     if (hasAusklammerungsgrund && hasAusklammerungsgrund === true) {
       return "ausklammerungZeiten";
     }

@@ -1,8 +1,12 @@
+export { AnzahlTaetigkeitenForm } from "./AnzahlTaetigkeitenForm";
 export { AusklammerungsGruendeForm } from "./AusklammerungsGruendeForm";
 export { AusklammerungsZeitenForm } from "./AusklammerungsZeitenForm";
 export { Bemessungszeitraum } from "./Bemessungszeitraum";
+export { EinkommenAngabenForm } from "./EinkommenAngabenForm";
+export { InfoZuTaetigkeiten } from "./InfoZuTaetigkeiten";
 export { KeinEinkommenForm } from "./KeinEinkommenForm";
 export { KindForm } from "./KindForm";
 export { FamilieForm } from "./FamilieForm";
 export { PersonForm } from "./PersonForm";
 export { TaetigkeitenForm } from "./TaetigkeitenForm";
+export { UebersichtTaetigkeitenForm } from "./UebersichtTaetigkeitenForm";

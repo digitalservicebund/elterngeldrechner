@@ -13,6 +13,11 @@ export type Antragstellende =
   | "FuerBeideUnentschlossen";
 type AntragstellendeSelektor = "ET1" | "ET2";
 
+export type TaetigkeitAngaben = {
+  taetigkeitenArt: TaetigkeitenSelektor;
+};
+export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
+
 export interface StepPrototypState {
   bundesland: string | null;
   antragstellende: Antragstellende | null;
@@ -56,6 +61,9 @@ export interface StepPrototypState {
   krankheitBis: string;
   dienstVon: string;
   dienstBis: string;
+
+  hasMehrereTaetigkeiten: YesNo | null;
+  taetigkeiten: TaetigkeitAngaben[];
 }
 
 const initialState: StepPrototypState = {
@@ -101,6 +109,9 @@ const initialState: StepPrototypState = {
   krankheitBis: "",
   dienstVon: "",
   dienstBis: "",
+
+  hasMehrereTaetigkeiten: null,
+  taetigkeiten: [],
 };
 
 export const stepPrototypSlice = createSlice({

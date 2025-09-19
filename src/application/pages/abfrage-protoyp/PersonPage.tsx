@@ -4,12 +4,15 @@ import { Button } from "@/application/components";
 import { Page } from "@/application/pages/Page";
 import { formSteps } from "@/application/routing/formSteps";
 import {
+  AnzahlTaetigkeitenForm,
   AusklammerungsGruendeForm,
   AusklammerungsZeitenForm,
   Bemessungszeitraum,
+  EinkommenAngabenForm,
   KeinEinkommenForm,
   PersonForm,
   TaetigkeitenForm,
+  UebersichtTaetigkeitenForm,
 } from "@/application/features/abfrage-prototyp";
 import { Elternteil } from "@/monatsplaner";
 import {
@@ -24,6 +27,7 @@ import {
 } from "@/application/features/abfrage-prototyp/state";
 import { useAppSelector } from "@/application/redux/hooks";
 import { Ausklammerung } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import { YesNo } from "@/application/features/abfrageteil/state";
 
 type Props = {
   elternteil: Elternteil;
@@ -40,17 +44,21 @@ export function PersonPage({ elternteil }: Props) {
     useState<boolean>(false);
   const [auszuklammerndeZeitraeume, setAuszuklammerndeZeitraeume] =
     useState<Ausklammerung[]>();
+  const [hasMehrereTaetigkeiten, setHasMehrereTaetigkeiten] =
+    useState<YesNo | null>(null);
 
   const navigate = useNavigate();
   const navigateToFamiliePage = () => navigate(formSteps.familie.route);
   const navigateToNextStep = (
     flow: PersonPageFlow | undefined,
     hasAusklammerungsgrund: boolean | undefined,
+    hasMehrereTaetigkeiten: YesNo | null,
   ) => {
     const nextStep = getNextStep(
       currentPersonPageStep,
       flow,
       hasAusklammerungsgrund,
+      hasMehrereTaetigkeiten,
     );
     if (nextStep === "routingEnded") {
       console.log("Routing beendet - Übergang zum Figma Prototypen");
@@ -69,6 +77,7 @@ export function PersonPage({ elternteil }: Props) {
         currentPersonPageStep,
         currentPersonPageFlow,
         hasAusklammerungsgrund,
+        hasMehrereTaetigkeiten,
       );
       setCurrentPersonPageStep(lastStep);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -80,6 +89,7 @@ export function PersonPage({ elternteil }: Props) {
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
+    hasMehrereTaetigkeiten?: YesNo | null,
   ) {
     if (flow) {
       setCurrentPersonPageFlow(flow);
@@ -93,8 +103,15 @@ export function PersonPage({ elternteil }: Props) {
     if (auszuklammerndeZeitraeume) {
       setAuszuklammerndeZeitraeume(auszuklammerndeZeitraeume);
     }
+    if (hasMehrereTaetigkeiten) {
+      setHasMehrereTaetigkeiten(hasMehrereTaetigkeiten);
+    }
 
-    navigateToNextStep(flow ?? currentPersonPageFlow, hasAusklammerungsgrund);
+    navigateToNextStep(
+      flow ?? currentPersonPageFlow,
+      hasAusklammerungsgrund,
+      hasMehrereTaetigkeiten ?? null,
+    );
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -182,6 +199,42 @@ export function PersonPage({ elternteil }: Props) {
 
         {currentPersonPageStep === "bmz" && (
           <Bemessungszeitraum
+            id={formIdentifier}
+            onSubmit={handleSubmit}
+            hideSubmitButton
+            elternteil={elternteil}
+            flow={currentPersonPageFlow}
+            hasAusklammerungsgrund={hasAusklammerungsgrund}
+            auszuklammerndeZeitraeume={auszuklammerndeZeitraeume}
+          />
+        )}
+
+        {currentPersonPageStep === "anzahlTaetigkeiten" && (
+          <AnzahlTaetigkeitenForm
+            id={formIdentifier}
+            onSubmit={handleSubmit}
+            hideSubmitButton
+            elternteil={elternteil}
+            flow={currentPersonPageFlow}
+            hasAusklammerungsgrund={hasAusklammerungsgrund}
+            auszuklammerndeZeitraeume={auszuklammerndeZeitraeume}
+          />
+        )}
+
+        {currentPersonPageStep === "uebersichtTaetigkeiten" && (
+          <UebersichtTaetigkeitenForm
+            id={formIdentifier}
+            onSubmit={handleSubmit}
+            hideSubmitButton
+            elternteil={elternteil}
+            flow={currentPersonPageFlow}
+            hasAusklammerungsgrund={hasAusklammerungsgrund}
+            auszuklammerndeZeitraeume={auszuklammerndeZeitraeume}
+          />
+        )}
+
+        {currentPersonPageStep === "einkommenAngaben" && (
+          <EinkommenAngabenForm
             id={formIdentifier}
             onSubmit={handleSubmit}
             hideSubmitButton

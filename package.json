@@ -76,7 +76,7 @@
     "@cantoo/pdf-lib": "^2.5.2",
     "@date-fns/utc": "^2.1.1",
     "@digitalservicebund/icons": "^2.0.1",
-    "@reduxjs/toolkit": "^2.8.2",
+    "@reduxjs/toolkit": "^2.9.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "downloadjs": "^1.4.7",

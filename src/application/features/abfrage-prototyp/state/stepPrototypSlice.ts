@@ -1,6 +1,10 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
-import { YesNo } from "@/application/features/abfrageteil/state";
+import {
+  TypeOfVersicherungen,
+  YesNo,
+} from "@/application/features/abfrageteil/state";
 import { RootState } from "@/application/redux";
+import { Steuerklasse } from "@/elterngeldrechner";
 
 interface Kind {
   geburtsdatum: string;
@@ -15,6 +19,17 @@ type AntragstellendeSelektor = "ET1" | "ET2";
 
 export type TaetigkeitAngaben = {
   taetigkeitenArt: TaetigkeitenSelektor;
+
+  bruttoJahresgewinn: number | null;
+  selbststaendigPflichtversichert: boolean | null;
+  selbststaendigRentenversichert: "gesetzlich" | "privat" | "nicht" | null;
+
+  bruttoMonatsschnitt: number | null;
+
+  isMinijob: boolean | null;
+  steuerklasse: Steuerklasse | null;
+  zahlenSieKirchenSteuer: YesNo | null;
+  versicherung: TypeOfVersicherungen | null;
 };
 export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
 

@@ -242,6 +242,7 @@ export function PersonPage({ elternteil }: Props) {
             flow={currentPersonPageFlow}
             hasAusklammerungsgrund={hasAusklammerungsgrund}
             auszuklammerndeZeitraeume={auszuklammerndeZeitraeume}
+            taetigkeitIndex={0}
           />
         )}
 

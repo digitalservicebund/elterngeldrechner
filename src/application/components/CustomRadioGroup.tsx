@@ -24,7 +24,7 @@ type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
-  readonly legend: string | ReactNode;
+  readonly legend?: string | ReactNode;
   readonly slotBetweenLegendAndOptions?: ReactNode;
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;

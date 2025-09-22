@@ -73,7 +73,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@cantoo/pdf-lib": "^2.4.4",
+    "@cantoo/pdf-lib": "^2.5.2",
     "@date-fns/utc": "^2.1.1",
     "@digitalservicebund/icons": "^2.0.1",
     "@reduxjs/toolkit": "^2.8.2",

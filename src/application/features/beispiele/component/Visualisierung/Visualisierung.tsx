@@ -33,8 +33,8 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
 
       return (
         <div key={elternteil} className="pt-10 ">
-          <div className="flex flex-wrap items-center gap-[6px] pb-8">
-            <p>
+          <div className="flex items-center gap-[6px] pb-8">
+            <p className="truncate">
               {isEinElternteil ? (
                 <AccessTime aria-hidden="true" className="mr-4" />
               ) : (
@@ -43,7 +43,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
               {isEinElternteil ? "Summe" : pseudonym}
             </p>
 
-            <p className="mb-0">{summeGeplanteMonate} Monate</p>
+            <p className="mb-0 shrink-0">{summeGeplanteMonate} Monate</p>
 
             <p className="sr-only">{beschreibungMonatsverteilung}</p>
           </div>

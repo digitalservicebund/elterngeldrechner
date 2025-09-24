@@ -19,18 +19,14 @@ export function Beschreibung({ beispiel }: Props) {
   return (
     <>
       <div className="col-span-2">
-        <p className="mb-8">Elterngeld Summe</p>
-
-        <p className="inline-block rounded bg-primary-light px-10 py-2">
-          <Geldbetrag betrag={gesamtbezug} />
+        <p className="mb-8">
+          <Geldbetrag betrag={gesamtbezug} /> Elterngeld
         </p>
       </div>
 
       <div className="col-span-2">
-        <p className="mb-8">Elterngeld bis zum</p>
-
-        <p className="inline-block rounded bg-primary-light px-10 py-2">
-          {letzterLebensmonat}. Lebensmonat
+        <p className="mb-8 truncate">
+          {letzterLebensmonat} Lebensmonate Elterngeld
         </p>
       </div>
     </>
@@ -68,8 +64,7 @@ if (import.meta.vitest) {
 
       render(<Beschreibung beispiel={beispiel} />);
 
-      expect(screen.getByText("Elterngeld Summe")).toBeVisible();
-      expect(screen.getByText("300 €")).toBeVisible();
+      expect(screen.getByText("300 € Elterngeld")).toBeVisible();
     });
 
     it("renders the letzten lebensmonat of the given beispiel", () => {
@@ -97,8 +92,7 @@ if (import.meta.vitest) {
 
       render(<Beschreibung beispiel={beispiel} />);
 
-      expect(screen.getByText("Elterngeld bis zum")).toBeVisible();
-      expect(screen.getByText("2. Lebensmonat")).toBeVisible();
+      expect(screen.getByText("2 Lebensmonate Elterngeld")).toBeVisible();
     });
 
     function monat(gewaehlteOption: Auswahloption, elterngeldbezug?: number) {

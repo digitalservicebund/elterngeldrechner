@@ -18,7 +18,7 @@ export function AuswahloptionenLegende({ beispiele }: Props): ReactNode {
   const auswahloptionen = findeVerwendeteAuswahloptionen(beispiele);
 
   return (
-    <ul className="flex flex-wrap gap-56" aria-hidden="true">
+    <ul className="flex flex-wrap gap-16 md:gap-56" aria-hidden="true">
       {auswahloptionen.map((option) => (
         <li key={option} className="flex items-center gap-10">
           <AuswahloptionPlakette

@@ -1,4 +1,4 @@
-import ChevronRight from "@digitalservicebund/icons/ChevronRight";
+import EditIcon from "@digitalservicebund/icons/EditOutlined";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
@@ -28,7 +28,7 @@ import type {
 import { sindLebensmonateGeplant } from "@/monatsplaner";
 
 export function BeispielePage() {
-  // TODO: Ensure consistent use of the term beispiele rather than planungshilfen
+  // TODO: Ensure consistent use of the term planungshilfen rather than beispiele
 
   const store = useAppStore();
   const navigate = useNavigate();
@@ -185,6 +185,20 @@ export function BeispielePage() {
           </div>
         </fieldset>
 
+        {!!hatEigenePlanung && (
+          <div className="content-center">
+            <EditIcon className="mr-4" />
+
+            <Button
+              type="button"
+              buttonStyle="link"
+              onClick={() => navigiereZuPlanerMitInitialemPlan()}
+            >
+              Planungs-Entwurf weiter bearbeiten
+            </Button>
+          </div>
+        )}
+
         <div className="flex gap-16">
           <Button
             type="button"
@@ -201,20 +215,6 @@ export function BeispielePage() {
           >
             Weiter
           </Button>
-
-          {!!hatEigenePlanung && (
-            <div className="content-center pl-20">
-              <Button
-                type="button"
-                buttonStyle="link"
-                onClick={() => navigiereZuPlanerMitInitialemPlan()}
-              >
-                Meine Planung fortsetzen
-              </Button>
-
-              <ChevronRight />
-            </div>
-          )}
         </div>
       </div>
     </Page>
@@ -308,7 +308,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("meine planung fortsetzen ist nicht sichtbar bei leerem plan", () => {
+      it("planungs-entwurf weiter bearbeiten ist nicht sichtbar bei leerem plan", () => {
         const ausgangslage: AusgangslageFuerZweiElternteile = {
           anzahlElternteile: 2 as const,
           geburtsdatumDesKindes: new Date(),
@@ -332,10 +332,12 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        expect(screen.queryByText("Meine Planung fortsetzen")).toBeNull();
+        expect(
+          screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
+        ).toBeNull();
       });
 
-      it("meine planung fortsetzen ist sichtbar wenn ein plan erstellt wurde", () => {
+      it("planungs-entwurf weiter bearbeiten ist sichtbar wenn ein plan erstellt wurde", () => {
         const ausgangslage: AusgangslageFuerZweiElternteile = {
           anzahlElternteile: 2 as const,
           geburtsdatumDesKindes: new Date(),
@@ -387,10 +389,12 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        expect(screen.queryByText("Meine Planung fortsetzen")).not.toBeNull();
+        expect(
+          screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
+        ).not.toBeNull();
       });
 
-      it("meine planung fortsetzen ist nicht sichtbar bei leerem plan mit mutterschutz", () => {
+      it("planungs-entwurf weiter bearbeiten ist nicht sichtbar bei leerem plan mit mutterschutz", () => {
         const ausgangslage: AusgangslageFuerZweiElternteile = {
           anzahlElternteile: 2 as const,
           geburtsdatumDesKindes: new Date(),
@@ -418,10 +422,12 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        expect(screen.queryByText("Meine Planung fortsetzen")).toBeNull();
+        expect(
+          screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
+        ).toBeNull();
       });
 
-      it("meine planung fortsetzen übernimmt den initialen plan", () => {
+      it("planungs-entwurf weiter bearbeiten übernimmt den initialen plan", () => {
         vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
@@ -462,7 +468,7 @@ if (import.meta.vitest) {
 
         screen.getByText("Partnerschaftlich aufgeteilt").click();
 
-        screen.getByText("Meine Planung fortsetzen").click();
+        screen.getByText("Planungs-Entwurf weiter bearbeiten").click();
 
         const expectation = (argument: NavigateState) => {
           return !!argument.plan && argument.beispiel == null;

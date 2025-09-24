@@ -32,7 +32,7 @@ export function Gesamtsummenanzeige({
   return (
     <section
       className={classNames(
-        "flex flex-wrap justify-evenly gap-y-16 text-center",
+        "flex flex-col justify-evenly gap-y-16 text-center",
         className,
       )}
     >
@@ -49,29 +49,36 @@ export function Gesamtsummenanzeige({
         </div>
       )}
 
-      {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
-        (elternteil) => (
-          <ElterngeldFuerElternteil
-            key={elternteil}
-            pseudonym={plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]}
-            summe={gesamtsumme.proElternteil[elternteil]}
-            showSumme={showGesamtsumme}
-          />
-        ),
-      )}
-
-      {!!jemandHatEinkommen &&
-        listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
+      <div className="flex flex-wrap justify-evenly gap-4">
+        {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
           (elternteil) => (
-            <EinkommenFuerElternteil
+            <ElterngeldFuerElternteil
               key={elternteil}
               pseudonym={
                 plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
               }
               summe={gesamtsumme.proElternteil[elternteil]}
+              showSumme={showGesamtsumme}
             />
           ),
         )}
+      </div>
+
+      {!!jemandHatEinkommen && (
+        <div className="flex flex-wrap justify-evenly gap-4">
+          {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
+            (elternteil) => (
+              <EinkommenFuerElternteil
+                key={elternteil}
+                pseudonym={
+                  plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
+                }
+                summe={gesamtsumme.proElternteil[elternteil]}
+              />
+            ),
+          )}
+        </div>
+      )}
     </section>
   );
 }

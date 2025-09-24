@@ -51,7 +51,7 @@ jobs:
         run: zip -r "EGR-${{ env.ARCHIVE_DATE }}.zip" .
 
       - name: Upload assets to release
-        uses: softprops/action-gh-release@c43d7637b9b9ce3e953168c325d27253a5d48d8e
+        uses: softprops/action-gh-release@97d42c1b50f585f357413698aa1b779307aa0d52
         with:
           files: dist/assets/EGR-${{ env.ARCHIVE_DATE }}.zip
 

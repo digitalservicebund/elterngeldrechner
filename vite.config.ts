@@ -1,12 +1,11 @@
 /// <reference types="vitest" />
 import path from "path";
 import react from "@vitejs/plugin-react";
-import { OutputAsset, OutputChunk } from "rollup";
-import { PluginOption, defineConfig } from "vite";
+import { defineConfig } from "vite";
 
 export default defineConfig({
   base: process.env.VITE_BASE_PATH || "/",
-  plugins: [react(), includeReleaseVersionInBundlePlugin()],
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -34,26 +33,6 @@ export default defineConfig({
     "import.meta.vitest": "undefined",
   },
 });
-
-function includeReleaseVersionInBundlePlugin(): PluginOption {
-  return {
-    name: "include-release-version-in-bundle",
-    enforce: "post",
-    generateBundle(_, bundle) {
-      const version = process.env.EGR_BUILD_VERSION_HASH || "dev";
-
-      function isJavascript(f: OutputChunk | OutputAsset): f is OutputChunk {
-        return f.type === "chunk" && f.fileName.endsWith(".js");
-      }
-
-      Object.entries(bundle).forEach(([_, file]) => {
-        if (isJavascript(file)) {
-          file.code += `window.__BUILD_VERSION_HASH__ = '${version}';`;
-        }
-      });
-    },
-  };
-}
 
 /**
  * Creates a file path for the snapshot to locate it directly next to the

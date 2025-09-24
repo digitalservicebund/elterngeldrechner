@@ -45,8 +45,6 @@ jobs:
 
       - name: Run playwright e2e tests
         run: npm run test-e2e
-        env:
-          PLAYWRIGHT_TEST_IGNORE: "tests/cases/smokeTest.spec.ts"
 
       - name: Upload playwright report
         if: always()

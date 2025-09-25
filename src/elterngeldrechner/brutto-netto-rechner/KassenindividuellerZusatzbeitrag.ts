@@ -124,7 +124,9 @@ if (import.meta.vitest) {
     }
 
     function arbitraryGeburtstag(constraints?: { min?: Date; max?: Date }) {
-      return arbitraryDate(constraints).map((date) => new Geburtstag(date));
+      return arbitraryDate({ ...constraints, noInvalidDate: true }).map(
+        (date) => new Geburtstag(date),
+      );
     }
   });
 }

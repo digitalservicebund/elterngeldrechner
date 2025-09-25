@@ -405,17 +405,21 @@ function yesNoFrom(value: boolean): YesNo {
 }
 
 function arbitraryPersoenlicheDatenRaw(): Arbitrary<PersoenlicheDatenRaw> {
-  return arbitraryRecord({
-    anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
-    geburtstagDesKindes: arbitraryDate({
-      min: new Date("2024-01-01"),
-      max: new Date("2024-12-31"),
-    }).map((date) => new Geburtstag(date)),
-    sindSieAlleinerziehend: arbitraryBoolean(),
-    erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
-    erwerbstaetigNachDerGeburt: arbitraryBoolean(),
-    geschwister: arbitraryArray(arbitraryKind(), { maxLength: 7 }),
-  });
+  return arbitraryRecord(
+    {
+      anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
+      geburtstagDesKindes: arbitraryDate({
+        min: new Date("2024-01-01"),
+        max: new Date("2024-12-31"),
+        noInvalidDate: true,
+      }).map((date) => new Geburtstag(date)),
+      sindSieAlleinerziehend: arbitraryBoolean(),
+      erwerbsartVorDerGeburt: arbitraryErwerbsArt(),
+      erwerbstaetigNachDerGeburt: arbitraryBoolean(),
+      geschwister: arbitraryArray(arbitraryKind(), { maxLength: 7 }),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 type PersoenlicheDatenRaw = {
@@ -428,25 +432,28 @@ type PersoenlicheDatenRaw = {
 };
 
 function arbitraryFinanzdatenRaw(): Arbitrary<FinanzdatenRaw> {
-  return arbitraryRecord({
-    bruttoeinkommen: arbitraryBruttoeinkommen(),
-    zahlenSieKirchensteuer: arbitraryBoolean(),
-    kinderfreibetrag: arbitraryKinderfreibetrag(),
-    steuerklasse: arbitrarySteuerklasse(),
-    kassenart: arbitraryKassenart(),
-    rentenversicherung: arbitraryRentenart(),
-    splittingfaktor: arbitrarySplittingfaktor(),
-    mischEinkommenTaetigkeiten: arbitraryArray(
-      arbitraryMischEkTaetigkeitRaw(),
-      {
-        maxLength: 10,
-      },
-    ),
-    erwerbsZeitraumLebensmonatList: arbitraryArray(
-      arbitraryErwerbszeitraumLebensmonat(),
-      { maxLength: 10 },
-    ),
-  });
+  return arbitraryRecord(
+    {
+      bruttoeinkommen: arbitraryBruttoeinkommen(),
+      zahlenSieKirchensteuer: arbitraryBoolean(),
+      kinderfreibetrag: arbitraryKinderfreibetrag(),
+      steuerklasse: arbitrarySteuerklasse(),
+      kassenart: arbitraryKassenart(),
+      rentenversicherung: arbitraryRentenart(),
+      splittingfaktor: arbitrarySplittingfaktor(),
+      mischEinkommenTaetigkeiten: arbitraryArray(
+        arbitraryMischEkTaetigkeitRaw(),
+        {
+          maxLength: 10,
+        },
+      ),
+      erwerbsZeitraumLebensmonatList: arbitraryArray(
+        arbitraryErwerbszeitraumLebensmonat(),
+        { maxLength: 10 },
+      ),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 type FinanzdatenRaw = {
@@ -462,13 +469,16 @@ type FinanzdatenRaw = {
 };
 
 function arbitraryPlanungsdatenRaw(): Arbitrary<PlanungsdatenRaw> {
-  return arbitraryRecord({
-    alleinerziehend: arbitraryBoolean(),
-    erwerbsstatus: arbitraryBoolean(),
-    partnerbonus: arbitraryBoolean(),
-    mutterschaftsleistungen: arbitraryMutterschaftsleistungen(),
-    planung: arbitraryArray(arbitraryElterngeldart(), { maxLength: 32 }),
-  });
+  return arbitraryRecord(
+    {
+      alleinerziehend: arbitraryBoolean(),
+      erwerbsstatus: arbitraryBoolean(),
+      partnerbonus: arbitraryBoolean(),
+      mutterschaftsleistungen: arbitraryMutterschaftsleistungen(),
+      planung: arbitraryArray(arbitraryElterngeldart(), { maxLength: 32 }),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 type PlanungsdatenRaw = {
@@ -480,18 +490,21 @@ type PlanungsdatenRaw = {
 };
 
 function arbitraryMischEkTaetigkeitRaw(): Arbitrary<MischEkTaetigkeitRaw> {
-  return arbitraryRecord({
-    erwerbstaetigkeit: arbitraryErwerbstaetigkeit(),
-    bruttoeinkommenDurchschnitt: arbitraryBruttoeinkommen(),
-    bruttoeinkommenDurchschnittMidi: arbitraryBruttoeinkommen(),
-    bemessungszeitraumMonate: arbitraryArray(arbitraryBoolean(), {
-      minLength: 12,
-      maxLength: 12,
-    }),
-    rentenversicherungspflichtig: arbitraryBoolean(),
-    krankenversicherungspflichtig: arbitraryBoolean(),
-    arbeitslosenversicherungspflichtig: arbitraryBoolean(),
-  });
+  return arbitraryRecord(
+    {
+      erwerbstaetigkeit: arbitraryErwerbstaetigkeit(),
+      bruttoeinkommenDurchschnitt: arbitraryBruttoeinkommen(),
+      bruttoeinkommenDurchschnittMidi: arbitraryBruttoeinkommen(),
+      bemessungszeitraumMonate: arbitraryArray(arbitraryBoolean(), {
+        minLength: 12,
+        maxLength: 12,
+      }),
+      rentenversicherungspflichtig: arbitraryBoolean(),
+      krankenversicherungspflichtig: arbitraryBoolean(),
+      arbeitslosenversicherungspflichtig: arbitraryBoolean(),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 type MischEkTaetigkeitRaw = {
@@ -505,10 +518,13 @@ type MischEkTaetigkeitRaw = {
 };
 
 function arbitraryErwerbszeitraumLebensmonat(): Arbitrary<ErwerbsZeitraumLebensMonatRaw> {
-  return arbitraryRecord({
-    vonLebensmonat: arbitraryInteger({ min: 1, max: 32 }),
-    bruttoProMonat: arbitraryBruttoeinkommen(),
-  }).chain(({ vonLebensmonat, bruttoProMonat }) =>
+  return arbitraryRecord(
+    {
+      vonLebensmonat: arbitraryInteger({ min: 1, max: 32 }),
+      bruttoProMonat: arbitraryBruttoeinkommen(),
+    },
+    { noNullPrototype: true },
+  ).chain(({ vonLebensmonat, bruttoProMonat }) =>
     arbitraryInteger({ min: vonLebensmonat, max: 32 }).map(
       (bisLebensmonat) => ({
         vonLebensmonat,
@@ -526,13 +542,17 @@ type ErwerbsZeitraumLebensMonatRaw = {
 };
 
 function arbitraryKind(): Arbitrary<Kind> {
-  return arbitraryRecord({
-    geburtstag: arbitraryDate({
-      min: new Date("2000-01-01"),
-      max: new Date("2023-12-31"),
-    }).map((date) => new Geburtstag(date)),
-    istBehindert: arbitraryBoolean(),
-  });
+  return arbitraryRecord(
+    {
+      geburtstag: arbitraryDate({
+        min: new Date("2000-01-01"),
+        max: new Date("2023-12-31"),
+        noInvalidDate: true,
+      }).map((date) => new Geburtstag(date)),
+      istBehindert: arbitraryBoolean(),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 function arbitraryErwerbsArt(): Arbitrary<ErwerbsArt> {

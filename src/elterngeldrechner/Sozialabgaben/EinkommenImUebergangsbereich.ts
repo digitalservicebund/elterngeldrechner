@@ -94,7 +94,7 @@ if (import.meta.vitest) {
       it("is always false if Arbeitsentgeld is below or equal to the Geringfügigkeitsgrenze", () =>
         assert(
           property(
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             arbitraryRealtisticBetragInEuro().chain((geringfuegigkeitsgrenze) =>
               arbitraryRealtisticBetragInEuro({
                 max: geringfuegigkeitsgrenze,
@@ -118,7 +118,7 @@ if (import.meta.vitest) {
       it("is always false if Arbeitsentgeld is above the Obergrenze des Übergangsbereichs", () =>
         assert(
           property(
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             arbitraryRealtisticBetragInEuro().chain((obergrenze) =>
               arbitraryRealtisticBetragInEuro({
                 min: obergrenze,
@@ -140,7 +140,7 @@ if (import.meta.vitest) {
       it("is true if Arbeitsentgeld is above Geringfuegigkeitsgrenze and below or equal Obergrenze des Übergangsbereichs", () =>
         assert(
           property(
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             arbitraryRealtisticBetragInEuro()
               .chain((geringfuegigkeitsgrenze) =>
                 arbitraryRealtisticBetragInEuro({
@@ -186,7 +186,7 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryRealtisticBetragInEuro(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (arbeitsentgeld, zeitpunkt) => {
               expect(
                 berechneUebergangszonenentgeld(arbeitsentgeld, zeitpunkt),
@@ -198,7 +198,7 @@ if (import.meta.vitest) {
       it("is equal to the Arbeitsentgeld if Arbeitsentgeld equals the Obergrenze", () =>
         assert(
           property(
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             arbitraryRealtisticBetragInEuro().chain((geringfuegigkeitsgrenze) =>
               arbitraryRealtisticBetragInEuro({
                 min: geringfuegigkeitsgrenze,
@@ -227,7 +227,7 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryRealtisticBetragInEuro(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (arbeitsentgeld, zeitpunkt) => {
               const uebergangszonenentgelt = berechneUebergangszonenentgeld(
                 arbeitsentgeld,

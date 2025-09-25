@@ -50,11 +50,14 @@ describe("characterization tests", () => {
  */
 function getSaticSampleOfElterngelddaten(): ElternGeldDaten {
   return sample(
-    arbitraryRecord({
-      persoenlicheDaten: arbitraryPersoenlicheDaten(),
-      finanzDaten: arbitraryFinanzdaten(),
-      planungsDaten: arbitraryPlanungsdaten(),
-    }),
+    arbitraryRecord(
+      {
+        persoenlicheDaten: arbitraryPersoenlicheDaten(),
+        finanzDaten: arbitraryFinanzdaten(),
+        planungsDaten: arbitraryPlanungsdaten(),
+      },
+      { noNullPrototype: true },
+    ),
     {
       seed: STATIC_SEED,
       numRuns: 1,
@@ -84,64 +87,80 @@ const ENOUGH_SAMPLES = 10_000;
 const STATIC_SEED = 12345;
 
 function arbitraryPersoenlicheDaten(): Arbitrary<PersoenlicheDaten> {
-  return arbitraryRecord({
-    geburtstagDesKindes: arbitraryDate({
-      min: new Date("2020-01-01"),
-      max: new Date("2027-12-31"),
-    }).map((date) => new Geburtstag(date)),
-    anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
-    etVorGeburt: arbitraryErwerbsArt(),
-    hasEtNachGeburt: arbitraryBoolean(),
-    geschwister: arbitraryArray(arbitraryKind(), { maxLength: 7 }),
-  });
+  return arbitraryRecord(
+    {
+      geburtstagDesKindes: arbitraryDate({
+        min: new Date("2020-01-01"),
+        max: new Date("2027-12-31"),
+        noInvalidDate: true,
+      }).map((date) => new Geburtstag(date)),
+      anzahlKuenftigerKinder: arbitraryInteger({ min: 1, max: 5 }),
+      etVorGeburt: arbitraryErwerbsArt(),
+      hasEtNachGeburt: arbitraryBoolean(),
+      geschwister: arbitraryArray(arbitraryKind(), { maxLength: 7 }),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 function arbitraryFinanzdaten(): Arbitrary<FinanzDaten> {
-  return arbitraryRecord({
-    bruttoEinkommen: arbitraryBruttoeinkommen(),
-    istKirchensteuerpflichtig: arbitraryBoolean(),
-    kinderFreiBetrag: arbitraryKinderfreibetrag(),
-    steuerklasse: arbitrarySteuerklasse(),
-    kassenArt: arbitraryKassenart(),
-    rentenVersicherung: arbitraryRentenart(),
-    splittingFaktor: arbitrarySplittingfaktor(),
-    mischEinkommenTaetigkeiten: arbitraryArray(arbitraryMischEkTaetigkeit(), {
-      maxLength: 5,
-    }),
-    erwerbsZeitraumLebensMonatList: arbitraryArray(
-      arbitraryErwerbszeitraumLebensmonat(),
-      { maxLength: 5 },
-    ),
-  });
+  return arbitraryRecord(
+    {
+      bruttoEinkommen: arbitraryBruttoeinkommen(),
+      istKirchensteuerpflichtig: arbitraryBoolean(),
+      kinderFreiBetrag: arbitraryKinderfreibetrag(),
+      steuerklasse: arbitrarySteuerklasse(),
+      kassenArt: arbitraryKassenart(),
+      rentenVersicherung: arbitraryRentenart(),
+      splittingFaktor: arbitrarySplittingfaktor(),
+      mischEinkommenTaetigkeiten: arbitraryArray(arbitraryMischEkTaetigkeit(), {
+        maxLength: 5,
+      }),
+      erwerbsZeitraumLebensMonatList: arbitraryArray(
+        arbitraryErwerbszeitraumLebensmonat(),
+        { maxLength: 5 },
+      ),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 function arbitraryPlanungsdaten(): Arbitrary<PlanungsDaten> {
-  return arbitraryRecord({
-    mutterschaftsLeistung: arbitraryMutterschaftsleistungen(),
-    planung: arbitraryArray(arbitraryElterngeldart(), { maxLength: 32 }),
-  });
+  return arbitraryRecord(
+    {
+      mutterschaftsLeistung: arbitraryMutterschaftsleistungen(),
+      planung: arbitraryArray(arbitraryElterngeldart(), { maxLength: 32 }),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 function arbitraryMischEkTaetigkeit(): Arbitrary<MischEkTaetigkeit> {
-  return arbitraryRecord({
-    erwerbsTaetigkeit: arbitraryErwerbstaetigkeit(),
-    bruttoEinkommenDurchschnitt: arbitraryBrutto(),
-    bruttoEinkommenDurchschnittMidi: arbitraryBrutto(),
-    bemessungsZeitraumMonate: arbitraryArray(arbitraryBoolean(), {
-      minLength: 12,
-      maxLength: 12,
-    }),
-    istRentenVersicherungsPflichtig: arbitraryBoolean(),
-    istKrankenVersicherungsPflichtig: arbitraryBoolean(),
-    istArbeitslosenVersicherungsPflichtig: arbitraryBoolean(),
-  });
+  return arbitraryRecord(
+    {
+      erwerbsTaetigkeit: arbitraryErwerbstaetigkeit(),
+      bruttoEinkommenDurchschnitt: arbitraryBrutto(),
+      bruttoEinkommenDurchschnittMidi: arbitraryBrutto(),
+      bemessungsZeitraumMonate: arbitraryArray(arbitraryBoolean(), {
+        minLength: 12,
+        maxLength: 12,
+      }),
+      istRentenVersicherungsPflichtig: arbitraryBoolean(),
+      istKrankenVersicherungsPflichtig: arbitraryBoolean(),
+      istArbeitslosenVersicherungsPflichtig: arbitraryBoolean(),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 function arbitraryErwerbszeitraumLebensmonat(): Arbitrary<ErwerbsZeitraumLebensMonat> {
-  return arbitraryRecord({
-    vonLebensMonat: arbitraryInteger({ min: 1, max: 32 }),
-    bruttoProMonat: arbitraryBruttoeinkommen(),
-  }).chain(({ vonLebensMonat, bruttoProMonat }) =>
+  return arbitraryRecord(
+    {
+      vonLebensMonat: arbitraryInteger({ min: 1, max: 32 }),
+      bruttoProMonat: arbitraryBruttoeinkommen(),
+    },
+    { noNullPrototype: true },
+  ).chain(({ vonLebensMonat, bruttoProMonat }) =>
     arbitraryInteger({ min: vonLebensMonat, max: 32 }).map(
       (bisLebensMonat) => ({
         vonLebensMonat,
@@ -153,13 +172,17 @@ function arbitraryErwerbszeitraumLebensmonat(): Arbitrary<ErwerbsZeitraumLebensM
 }
 
 function arbitraryKind(): Arbitrary<Kind> {
-  return arbitraryRecord({
-    geburtstag: arbitraryDate({
-      min: new Date("2000-01-01"),
-      max: new Date("2019-12-31"),
-    }).map((date) => new Geburtstag(date)),
-    istBehindert: arbitraryBoolean(),
-  });
+  return arbitraryRecord(
+    {
+      geburtstag: arbitraryDate({
+        min: new Date("2000-01-01"),
+        max: new Date("2019-12-31"),
+        noInvalidDate: true,
+      }).map((date) => new Geburtstag(date)),
+      istBehindert: arbitraryBoolean(),
+    },
+    { noNullPrototype: true },
+  );
 }
 
 function arbitraryErwerbsArt(): Arbitrary<ErwerbsArt> {

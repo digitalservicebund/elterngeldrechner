@@ -39,7 +39,7 @@ if (import.meta.vitest) {
     it("is 0.6667 since the 01.10.2022 on", () =>
       assert(
         property(
-          arbitraryDate({ min: new Date("2022-10-01") }),
+          arbitraryDate({ min: new Date("2022-10-01"), noInvalidDate: true }),
           (zeitpunkt) => {
             expect(ermittelFFaktor(zeitpunkt)).toBe(0.6667);
           },
@@ -49,7 +49,7 @@ if (import.meta.vitest) {
     it("is 0.1743 till the 30.09.2022 on", () =>
       assert(
         property(
-          arbitraryDate({ max: new Date("2022-09-30") }),
+          arbitraryDate({ max: new Date("2022-09-30"), noInvalidDate: true }),
           (zeitpunkt) => {
             expect(ermittelFFaktor(zeitpunkt)).toBe(0.7143);
           },
@@ -59,7 +59,7 @@ if (import.meta.vitest) {
     // Vergleiche: "[...] wird das Ergebnis auf die vierte Nachkommastelle gerundet."
     it("has never more than 4 decimal fraction digits", () =>
       assert(
-        property(arbitraryDate(), (zeitpunkt) => {
+        property(arbitraryDate({ noInvalidDate: true }), (zeitpunkt) => {
           const fFaktor = ermittelFFaktor(zeitpunkt);
           const numberOfDigitalFractionDigits =
             fFaktor
@@ -77,7 +77,7 @@ if (import.meta.vitest) {
     // Relevant for arithmetic ops as the return type doesn't guarantee it.
     it("is always a positive number", () =>
       assert(
-        property(arbitraryDate(), (zeitpunkt) => {
+        property(arbitraryDate({ noInvalidDate: true }), (zeitpunkt) => {
           expect(ermittelFFaktor(zeitpunkt)).toBeGreaterThan(0);
         }),
       ));

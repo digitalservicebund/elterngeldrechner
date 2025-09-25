@@ -38,18 +38,21 @@ if (import.meta.vitest) {
     describe("for one Elternteil", () => {
       it("is satisfied if is alleinerziehend and was erwerbstäig", () => {
         assert(
-          property(arbitraryDate(), (geburtsdatumDesKindes) => {
-            const ausgangslage: Ausgangslage = {
-              anzahlElternteile: 1 as const,
-              istAlleinerziehend: true,
-              mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
-              geburtsdatumDesKindes,
-            };
+          property(
+            arbitraryDate({ noInvalidDate: true }),
+            (geburtsdatumDesKindes) => {
+              const ausgangslage: Ausgangslage = {
+                anzahlElternteile: 1 as const,
+                istAlleinerziehend: true,
+                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
+                geburtsdatumDesKindes,
+              };
 
-            expect(PartnermonateSindVerfuegbar.asPredicate(ausgangslage)).toBe(
-              true,
-            );
-          }),
+              expect(
+                PartnermonateSindVerfuegbar.asPredicate(ausgangslage),
+              ).toBe(true);
+            },
+          ),
         );
       });
 
@@ -57,7 +60,7 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryBoolean(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (
               mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
               geburtsdatumDesKindes,
@@ -81,13 +84,12 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryBoolean(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (istAlleinerziehend, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 1 as const,
                 istAlleinerziehend,
-                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
-                  false,
+                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: false,
                 geburtsdatumDesKindes,
               };
 
@@ -105,12 +107,11 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryPseudonymeDerElternteile(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
-                  true,
+                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
                 geburtsdatumDesKindes,
                 pseudonymeDerElternteile,
               };
@@ -127,12 +128,11 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryPseudonymeDerElternteile(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
-                  false,
+                mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: false,
                 geburtsdatumDesKindes,
                 pseudonymeDerElternteile,
               };

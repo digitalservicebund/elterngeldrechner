@@ -58,58 +58,67 @@ if (import.meta.vitest) {
     describe("for one Elternteil", () => {
       it("has always zero Lebensmonate with Partnerschaftbonus", () => {
         assert(
-          property(arbitraryDate(), (geburtsdatumDesKindes) => {
-            const ausgangslage: Ausgangslage = {
-              anzahlElternteile: 1 as const,
-              geburtsdatumDesKindes,
-            };
+          property(
+            arbitraryDate({ noInvalidDate: true }),
+            (geburtsdatumDesKindes) => {
+              const ausgangslage: Ausgangslage = {
+                anzahlElternteile: 1 as const,
+                geburtsdatumDesKindes,
+              };
 
-            const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
+              const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
 
-            expect(kontingent[Variante.Bonus]).toBe(0);
-          }),
+              expect(kontingent[Variante.Bonus]).toBe(0);
+            },
+          ),
         );
       });
 
       it("has 12 Monate Basiselterngeld and 24 ElterngeldPlus if no Partnermonate are available", () => {
         assert(
-          property(arbitraryDate(), (geburtsdatumDesKindes) => {
-            vi.spyOn(
-              PartnermonateSindVerfuegbar,
-              "asPredicate",
-            ).mockReturnValue(false);
+          property(
+            arbitraryDate({ noInvalidDate: true }),
+            (geburtsdatumDesKindes) => {
+              vi.spyOn(
+                PartnermonateSindVerfuegbar,
+                "asPredicate",
+              ).mockReturnValue(false);
 
-            const ausgangslage: Ausgangslage = {
-              anzahlElternteile: 1 as const,
-              geburtsdatumDesKindes,
-            };
+              const ausgangslage: Ausgangslage = {
+                anzahlElternteile: 1 as const,
+                geburtsdatumDesKindes,
+              };
 
-            const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
+              const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
 
-            expect(kontingent[Variante.Basis]).toBe(12);
-            expect(kontingent[Variante.Plus]).toBe(24);
-          }),
+              expect(kontingent[Variante.Basis]).toBe(12);
+              expect(kontingent[Variante.Plus]).toBe(24);
+            },
+          ),
         );
       });
 
       it("has 14 Monate Basiselterngeld and 28 ElterngeldPlus if Partnermonate are available", () => {
         assert(
-          property(arbitraryDate(), (geburtsdatumDesKindes) => {
-            vi.spyOn(
-              PartnermonateSindVerfuegbar,
-              "asPredicate",
-            ).mockReturnValue(true);
+          property(
+            arbitraryDate({ noInvalidDate: true }),
+            (geburtsdatumDesKindes) => {
+              vi.spyOn(
+                PartnermonateSindVerfuegbar,
+                "asPredicate",
+              ).mockReturnValue(true);
 
-            const ausgangslage: Ausgangslage = {
-              anzahlElternteile: 1 as const,
-              geburtsdatumDesKindes,
-            };
+              const ausgangslage: Ausgangslage = {
+                anzahlElternteile: 1 as const,
+                geburtsdatumDesKindes,
+              };
 
-            const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
+              const kontingent = bestimmeVerfuegbaresKontingent(ausgangslage);
 
-            expect(kontingent[Variante.Basis]).toBe(14);
-            expect(kontingent[Variante.Plus]).toBe(28);
-          }),
+              expect(kontingent[Variante.Basis]).toBe(14);
+              expect(kontingent[Variante.Plus]).toBe(28);
+            },
+          ),
         );
       });
     });
@@ -119,7 +128,7 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryPseudonymeDerElternteile(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
@@ -139,7 +148,7 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryPseudonymeDerElternteile(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
               vi.spyOn(
                 PartnermonateSindVerfuegbar,
@@ -165,7 +174,7 @@ if (import.meta.vitest) {
         assert(
           property(
             arbitraryPseudonymeDerElternteile(),
-            arbitraryDate(),
+            arbitraryDate({ noInvalidDate: true }),
             (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
               vi.spyOn(
                 PartnermonateSindVerfuegbar,

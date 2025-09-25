@@ -191,6 +191,7 @@ if (import.meta.vitest) {
         arbitraryDate({
           min: constraints?.min?.(birthdate),
           max: constraints?.max?.(birthdate),
+          noInvalidDate: true,
         });
     }
 

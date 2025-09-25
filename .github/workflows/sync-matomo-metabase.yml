@@ -12,10 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set up Node.js (LTS)
-        uses: actions/setup-node@v5
+      - uses: ./.github/actions/cached-node-install
         with:
-          node-version: lts/*
+          directory: metrics-sync
 
       - name: Install dependencies
         working-directory: metrics-sync

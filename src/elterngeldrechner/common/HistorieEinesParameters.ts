@@ -214,7 +214,7 @@ if (import.meta.vitest) {
 
       function arbitraryEintragFuerHistorieEinesParameters() {
         return arbitraryRecord({
-          anzuwendenAbDem: arbitraryDate(),
+          anzuwendenAbDem: arbitraryDate({ noInvalidDate: true }),
           wert: arbitraryFloat(),
         });
       }

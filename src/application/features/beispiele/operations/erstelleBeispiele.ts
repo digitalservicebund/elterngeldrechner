@@ -658,7 +658,7 @@ if (import.meta.vitest) {
         mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
           arbitraryFlag(),
         istAlleinerziehend: arbitraryFlag(),
-        geburtsdatumDesKindes: arbitraryDate(),
+        geburtsdatumDesKindes: arbitraryDate({ noInvalidDate: true }),
       });
 
     const arbitraryAusgangslageEinElternteilMitMutterschutz: Arbitrary<AusgangslageFuerEinElternteil> =
@@ -667,7 +667,7 @@ if (import.meta.vitest) {
         mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
           arbitraryFlag(),
         istAlleinerziehend: arbitraryFlag(),
-        geburtsdatumDesKindes: arbitraryDate(),
+        geburtsdatumDesKindes: arbitraryDate({ noInvalidDate: true }),
         informationenZumMutterschutz: constant({
           empfaenger: Elternteil.Eins,
           letzterLebensmonatMitSchutz: 2,
@@ -680,7 +680,7 @@ if (import.meta.vitest) {
         mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
           arbitraryFlag(),
         pseudonymeDerElternteile: arbitraryPseudonymeDerElternteile(),
-        geburtsdatumDesKindes: arbitraryDate(),
+        geburtsdatumDesKindes: arbitraryDate({ noInvalidDate: true }),
       });
 
     const arbitraryAusgangslageZweiElternteileMitMutterschutz: Arbitrary<AusgangslageFuerZweiElternteile> =
@@ -689,7 +689,7 @@ if (import.meta.vitest) {
         mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
           arbitraryFlag(),
         pseudonymeDerElternteile: arbitraryPseudonymeDerElternteile(),
-        geburtsdatumDesKindes: arbitraryDate(),
+        geburtsdatumDesKindes: arbitraryDate({ noInvalidDate: true }),
         informationenZumMutterschutz: record({
           empfaenger: oneof(
             constant(Elternteil.Eins),

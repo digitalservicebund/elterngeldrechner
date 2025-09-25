@@ -67,7 +67,7 @@ if (import.meta.vitest) {
     // Vergleiche: "[...] und auf volle Euro aufgerundet wird."
     it("never has any digital fraction digit", () =>
       assert(
-        property(arbitraryDate(), (zeitpunkt) => {
+        property(arbitraryDate({ noInvalidDate: true }), (zeitpunkt) => {
           const grenze = ermittelGeringfuegigkeitsgrenze(zeitpunkt);
           const numberOfDigitalFractionDigits =
             grenze
@@ -85,7 +85,7 @@ if (import.meta.vitest) {
     // Relevant for arithmetic ops as the return type doesn't guarantee it.
     it("is always a positive number", () =>
       assert(
-        property(arbitraryDate(), (zeitpunkt) => {
+        property(arbitraryDate({ noInvalidDate: true }), (zeitpunkt) => {
           expect(ermittelGeringfuegigkeitsgrenze(zeitpunkt)).toBeGreaterThan(0);
         }),
       ));
@@ -96,7 +96,11 @@ if (import.meta.vitest) {
     ): void {
       assert(
         property(
-          arbitraryDate({ min: timespan.from, max: timespan.to }),
+          arbitraryDate({
+            min: timespan.from,
+            max: timespan.to,
+            noInvalidDate: true,
+          }),
           (zeitpunkt) => {
             expect(ermittelGeringfuegigkeitsgrenze(zeitpunkt)).toBe(toBe);
           },

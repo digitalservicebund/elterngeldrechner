@@ -69,28 +69,46 @@ if (import.meta.vitest) {
 
     it("automatically sets the time to zero when created from a raw date", () => {
       assert(
-        property(arbitraryDate({ min: OLDEST_REPRESENTABLE_DATE }), (date) => {
-          const geburtstag = new Geburtstag(date);
-          expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
-        }),
+        property(
+          arbitraryDate({
+            min: OLDEST_REPRESENTABLE_DATE,
+            noInvalidDate: true,
+          }),
+          (date) => {
+            const geburtstag = new Geburtstag(date);
+            expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
+          },
+        ),
       );
     });
 
     it("automatically sets the time to zero when created from an ISO string", () => {
       assert(
-        property(arbitraryDate({ min: OLDEST_REPRESENTABLE_DATE }), (date) => {
-          const geburtstag = new Geburtstag(date.toISOString());
-          expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
-        }),
+        property(
+          arbitraryDate({
+            min: OLDEST_REPRESENTABLE_DATE,
+            noInvalidDate: true,
+          }),
+          (date) => {
+            const geburtstag = new Geburtstag(date.toISOString());
+            expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
+          },
+        ),
       );
     });
 
     it("automatically sets the time to zero when created from milliseconds", () => {
       assert(
-        property(arbitraryDate({ min: OLDEST_REPRESENTABLE_DATE }), (date) => {
-          const geburtstag = new Geburtstag(date.getTime());
-          expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
-        }),
+        property(
+          arbitraryDate({
+            min: OLDEST_REPRESENTABLE_DATE,
+            noInvalidDate: true,
+          }),
+          (date) => {
+            const geburtstag = new Geburtstag(date.getTime());
+            expect(getFormattedTime(geburtstag)).toBe("00:00:00.000");
+          },
+        ),
       );
     });
 

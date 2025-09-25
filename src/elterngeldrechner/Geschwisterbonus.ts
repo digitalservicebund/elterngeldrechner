@@ -492,19 +492,25 @@ if (import.meta.vitest) {
         constraints: (geschwister: AtLeastOne<Kind>) => DateConstraints,
       ) {
         return (geschwister: AtLeastOne<Kind>) =>
-          arbitraryDate(constraints(geschwister));
+          arbitraryDate({
+            ...constraints(geschwister),
+            noInvalidDate: true,
+          });
       }
 
       function arbitraryKind(constraints?: KindConstraints): Arbitrary<Kind> {
         const { istBehindert } = constraints ?? {};
 
-        return arbitraryRecord({
-          geburtstag: arbitraryGeburtstag(constraints?.geburtstag),
-          istBehindert:
-            istBehindert !== undefined
-              ? constant(istBehindert)
-              : option(arbitraryBoolean(), { nil: undefined }),
-        });
+        return arbitraryRecord(
+          {
+            geburtstag: arbitraryGeburtstag(constraints?.geburtstag),
+            istBehindert:
+              istBehindert !== undefined
+                ? constant(istBehindert)
+                : option(arbitraryBoolean(), { nil: undefined }),
+          },
+          { noNullPrototype: true },
+        );
       }
 
       type KindConstraints = {
@@ -525,9 +531,9 @@ if (import.meta.vitest) {
         max = isAfter(max, min) ? max : min;
 
         return arbitraryDate({
-          ...constraints,
           min,
           max,
+          ...constraints,
           noInvalidDate: true,
         }).map((date) => new Geburtstag(date));
       }

@@ -65,7 +65,7 @@ if (import.meta.vitest) {
     // Relevant for arithmetic ops as the return type doesn't guarantee it.
     it("is always a posistive number", () =>
       assert(
-        property(arbitraryDate(), (zeitpunkt) => {
+        property(arbitraryDate({ noInvalidDate: true }), (zeitpunkt) => {
           expect(
             ermittelObergrenzeDesUebergangsbereichs(zeitpunkt),
           ).toBeGreaterThan(0);
@@ -78,7 +78,11 @@ if (import.meta.vitest) {
     ): void {
       assert(
         property(
-          arbitraryDate({ min: timespan.from, max: timespan.to }),
+          arbitraryDate({
+            min: timespan.from,
+            max: timespan.to,
+            noInvalidDate: true,
+          }),
           (zeitpunkt) => {
             expect(ermittelObergrenzeDesUebergangsbereichs(zeitpunkt)).toBe(
               toBe,

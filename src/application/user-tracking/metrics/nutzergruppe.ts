@@ -7,27 +7,20 @@ export function trackNutzergruppe(birthdate: Date): void {
   setTrackingVariable("nutzergruppe", nutzergruppe);
 }
 
-function mapBirthdateToNutzergruppe(birthdate: Date): Nutzergruppe {
+function mapBirthdateToNutzergruppe(birthdate: Date) {
   const today = new Date();
   const tenWeeksBeforeBirth = subWeeks(birthdate, 10);
   const threeMonthsAfterBirth = addMonths(birthdate, 3);
 
   if (today < tenWeeksBeforeBirth) {
-    return Nutzergruppe.WerdendeElternPhase1;
+    return "werdende Eltern (Phase 1)";
   } else if (today < birthdate) {
-    return Nutzergruppe.WerdendeElternPhase2;
+    return "werdende Eltern (Phase 2)";
   } else if (today < threeMonthsAfterBirth) {
-    return Nutzergruppe.JungeEltern;
+    return "junge Eltern";
   } else {
-    return Nutzergruppe.NachbeantragendeEltern;
+    return "nachbeantragende Eltern";
   }
-}
-
-enum Nutzergruppe {
-  WerdendeElternPhase1 = "werdende Eltern (Phase 1)",
-  WerdendeElternPhase2 = "werdende Eltern (Phase 2)",
-  JungeEltern = "junge Eltern",
-  NachbeantragendeEltern = "nachbeantragende Eltern",
 }
 
 if (import.meta.vitest) {

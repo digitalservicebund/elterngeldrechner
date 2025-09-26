@@ -131,7 +131,7 @@ const GRID_COLUMN_TEMPLATE_ZWEI_ELTERNTEILE: CSSProperties = {
   maxWidth: "70ch",
   margin: "auto",
   gridTemplateColumns:
-    "minmax(0, 2fr) minmax(0, 3fr) minmax(0, 8fr) minmax(0, 3fr) minmax(0, 8fr) minmax(0, 3fr) minmax(0, 2fr)",
+    "minmax(65px, 2fr) minmax(0, 3fr) minmax(0, 8fr) minmax(22px, 3fr) minmax(0, 8fr) minmax(0, 3fr) minmax(65px, 2fr)",
   gridTemplateAreas: `"${ZweiElternteileColumnNames.join(" ")}"`,
 };
 

@@ -38,6 +38,7 @@ export function GewaehlteOption({
   const labelClassName = classNames({
     "hidden @[12ch]:block": canHideLabelWhenTooNarrow,
   });
+  const labelStyle = getLabelStyle(option);
 
   return (
     <span
@@ -50,7 +51,9 @@ export function GewaehlteOption({
       aria-hidden={ariaHidden}
     >
       {icon}
-      <span className={classNames("-mt-4", labelClassName)}>{label}</span>
+      <span className={classNames("-mt-4", labelClassName)} style={labelStyle}>
+        {label}
+      </span>
     </span>
   );
 }
@@ -111,4 +114,16 @@ function getIcon(
   } else if (!hasAuswahl) {
     return <AddIcon />;
   } else return undefined;
+}
+
+// Scales the 'kein Elterngeld' text on smaller screens. Normally, small screens
+// hide the text and show only the icon, but since this option has no icon, the
+// font size is adjusted instead.
+function getLabelStyle(option: Auswahloption | undefined): CSSProperties {
+  switch (option) {
+    case KeinElterngeld:
+      return { fontSize: "clamp(0.75rem, 2.4vw, 1.125rem)" };
+    default:
+      return {};
+  }
 }

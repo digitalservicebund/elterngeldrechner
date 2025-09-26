@@ -15,17 +15,29 @@ import { PersonPageFlow } from "./PersonPageRouting";
 import IconAdd from "@digitalservicebund/icons/Add";
 import IconClear from "@digitalservicebund/icons/Clear";
 import IconEdit from "@digitalservicebund/icons/CreateOutlined";
-import { TaetigkeitenSelektor } from "../state/stepPrototypSlice";
+import {
+  TaetigkeitAngaben,
+  TaetigkeitenSelektor,
+} from "../state/stepPrototypSlice";
 import { Button } from "@/application/components";
 import classNames from "classnames";
+import { Antragstellende, YesNo } from "../../abfrageteil/state";
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: (values: StepPrototypState) => void;
+  readonly onSubmit?: (
+    values: StepPrototypState,
+    antragsstellende?: Antragstellende,
+    flow?: PersonPageFlow,
+    hasAusklammerungsgrund?: boolean,
+    auszuklammerndeZeitraeume?: Ausklammerung[],
+    hasMehrereTaetigkeiten?: YesNo | null,
+    taetigkeiten?: TaetigkeitAngaben[],
+  ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  readonly hasAusklammerungsgrund: boolean;
+  // readonly hasAusklammerungsgrund: boolean;
   readonly auszuklammerndeZeitraeume?: Ausklammerung[];
 };
 
@@ -34,39 +46,72 @@ export function UebersichtTaetigkeitenForm({
   onSubmit,
   flow,
   auszuklammerndeZeitraeume,
+  elternteil,
 }: Props) {
   const store = useAppStore();
 
   const stepState = store.getState().stepPrototyp;
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, getValues } = useForm({
     defaultValues: {
       ...stepState,
-      taetigkeiten:
-        stepState.taetigkeiten?.length > 0
-          ? stepState.taetigkeiten
-          : [
-              {
-                taetigkeitenArt: (flow === PersonPageFlow.selbststaendig
-                  ? "selbststaendig"
-                  : "nichtSelbststaendig") as TaetigkeitenSelektor,
-                bruttoJahresgewinn: null,
-                selbststaendigPflichtversichert: null,
-                selbststaendigRentenversichert: null,
-                bruttoMonatsschnitt: null,
-                isMinijob: null,
-                steuerklasse: null,
-                zahlenSieKirchenSteuer: null,
-                versicherung: null,
-              },
-            ],
+      ET1: {
+        ...stepState.ET1,
+        taetigkeiten:
+          stepState.ET1.taetigkeiten.length > 0
+            ? stepState.ET1.taetigkeiten
+            : [
+                {
+                  taetigkeitenArt: (flow === PersonPageFlow.selbststaendig
+                    ? "selbststaendig"
+                    : "nichtSelbststaendig") as TaetigkeitenSelektor,
+                  bruttoJahresgewinn: null,
+                  selbststaendigPflichtversichert: null,
+                  selbststaendigRentenversichert: null,
+                  bruttoMonatsschnitt: null,
+                  isMinijob: null,
+                  steuerklasse: null,
+                  zahlenSieKirchenSteuer: null,
+                  versicherung: null,
+                },
+              ],
+      },
+      ET2: {
+        ...stepState.ET2,
+        taetigkeiten:
+          stepState.ET2.taetigkeiten.length > 0
+            ? stepState.ET2.taetigkeiten
+            : [
+                {
+                  taetigkeitenArt: (flow === PersonPageFlow.selbststaendig
+                    ? "selbststaendig"
+                    : "nichtSelbststaendig") as TaetigkeitenSelektor,
+                  bruttoJahresgewinn: null,
+                  selbststaendigPflichtversichert: null,
+                  selbststaendigRentenversichert: null,
+                  bruttoMonatsschnitt: null,
+                  isMinijob: null,
+                  steuerklasse: null,
+                  zahlenSieKirchenSteuer: null,
+                  versicherung: null,
+                },
+              ],
+      },
     },
   });
 
   const submitTaetigkeiten = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values);
+      onSubmit?.(
+        values,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        getValues("ET1.taetigkeiten"),
+      );
     },
     [store, onSubmit],
   );
@@ -82,14 +127,16 @@ export function UebersichtTaetigkeitenForm({
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const taetigkeiten = watch("taetigkeiten");
+  const taetigkeiten = watch(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten`,
+  );
 
   const [neueTaetigkeitArt, setNeueTaetigkeitArt] =
     useState<TaetigkeitenSelektor | null>(null);
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "taetigkeiten",
+    name: `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten`,
   });
 
   const onAddTaetigkeit = (art: TaetigkeitenSelektor | null) => {

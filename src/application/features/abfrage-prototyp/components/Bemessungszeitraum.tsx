@@ -20,7 +20,7 @@ type Props = {
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  readonly hasAusklammerungsgrund: boolean;
+  // readonly hasAusklammerungsgrund: boolean;
   readonly auszuklammerndeZeitraeume?: Ausklammerung[];
 };
 

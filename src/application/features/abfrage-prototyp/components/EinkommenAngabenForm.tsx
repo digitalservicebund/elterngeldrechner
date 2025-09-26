@@ -17,14 +17,15 @@ import {
   CustomNumberField,
   YesNoRadio,
 } from "../../abfrageteil/components/common";
-import { YesNo } from "../../abfrageteil/state";
+import { Antragstellende, YesNo } from "../../abfrageteil/state";
 import { CustomRadioGroup } from "@/application/components";
-import { TaetigkeitenSelektor } from "../state/stepPrototypSlice";
+import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
 
 type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
+    antragsstellende?: Antragstellende,
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
@@ -33,9 +34,9 @@ type Props = {
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  readonly hasAusklammerungsgrund: boolean;
+  // readonly hasAusklammerungsgrund: boolean;
   readonly auszuklammerndeZeitraeume?: Ausklammerung[];
-  readonly taetigkeitIndex: number;
+  readonly einkommenAngabenStep: EinkommenAngabenStep;
 };
 
 export function EinkommenAngabenForm({
@@ -43,47 +44,19 @@ export function EinkommenAngabenForm({
   onSubmit,
   flow,
   auszuklammerndeZeitraeume,
-  taetigkeitIndex,
+  einkommenAngabenStep,
+  elternteil,
 }: Props) {
   const store = useAppStore();
 
-  const stepState = store.getState().stepPrototyp;
+  const { control, handleSubmit, register, formState } = useForm({
+    defaultValues: store.getState().stepPrototyp,
+  });
 
-  const { control, handleSubmit, register, formState, watch, getValues } =
-    useForm({
-      defaultValues: {
-        ...stepState,
-        taetigkeiten:
-          stepState.taetigkeiten?.length > 0
-            ? stepState.taetigkeiten
-            : [
-                {
-                  taetigkeitenArt: (flow === PersonPageFlow.selbststaendig
-                    ? "selbststaendig"
-                    : "nichtSelbststaendig") as TaetigkeitenSelektor,
-                  bruttoJahresgewinn: null,
-                  selbststaendigPflichtversichert: null,
-                  selbststaendigRentenversichert: null,
-                  bruttoMonatsschnitt: null,
-                  isMinijob: null,
-                  steuerklasse: null,
-                  zahlenSieKirchenSteuer: null,
-                  versicherung: null,
-                },
-              ],
-      },
-    });
-
-  const submitAngabenTaetigkeit = useCallback(
+  const submitAngabenEinkommen = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(
-        values,
-        undefined,
-        undefined,
-        undefined,
-        getValues("hasMehrereTaetigkeiten"),
-      );
+      onSubmit?.(values);
     },
     [store, onSubmit],
   );
@@ -97,22 +70,21 @@ export function EinkommenAngabenForm({
     auszuklammerndeZeitraeume ?? [],
   );
 
-  const taetigkeiten = watch("taetigkeiten");
-
-  console.log(getValues("taetigkeiten"));
-
   return (
-    <form id={id} onSubmit={handleSubmit(submitAngabenTaetigkeit)} noValidate>
+    <form id={id} onSubmit={handleSubmit(submitAngabenEinkommen)} noValidate>
       <div>
         <div className="mt-40 rounded bg-grey-light inline-block py-10">
           <span className="font-bold px-20">
             Bemessungszeitraum: {maximalerBemessungszeitraum}
           </span>
         </div>
-        <h2 className="mt-16">Einkommen {taetigkeitIndex + 1}:</h2>
+        <h2 className="mt-16">
+          Einkommen {einkommenAngabenStep.taetigkeitIndex + 1}:
+        </h2>
 
-        {taetigkeiten[taetigkeitIndex]!.taetigkeitenArt ===
-          "selbststaendig" && (
+        <p>Test</p>
+
+        {einkommenAngabenStep.taetigkeitArt === "selbststaendig" && (
           <div>
             <h3 className="mb-40">Einkommen aus selbstständiger Arbeit</h3>
 
@@ -123,7 +95,7 @@ export function EinkommenAngabenForm({
               slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="taetigkeiten.0.selbststaendigPflichtversichert"
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigPflichtversichert`}
               errors={formState.errors}
             />
 
@@ -131,7 +103,7 @@ export function EinkommenAngabenForm({
             <CustomRadioGroup
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="taetigkeiten.0.selbststaendigRentenversichert"
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigRentenversichert`}
               errors={formState.errors}
               options={[
                 {
@@ -155,7 +127,7 @@ export function EinkommenAngabenForm({
               verdient??
             </h5>
             <CustomNumberField
-              name="taetigkeiten.0.bruttoJahresgewinn"
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
               label="Brutto-Gewinn im Kalenderjahr"
               suffix="Euro"
               control={control}
@@ -163,27 +135,29 @@ export function EinkommenAngabenForm({
           </div>
         )}
 
-        {taetigkeiten[taetigkeitIndex]!.taetigkeitenArt ===
-          "nichtSelbststaendig" && (
-          <div>
-            <h3 className="mb-40">
-              Einkommen aus nicht-selbstständiger Arbeit
-            </h3>
+        {einkommenAngabenStep.taetigkeitArt === "nichtSelbststaendig" &&
+          (einkommenAngabenStep.einkommenFormPart === "A" ? (
+            <div>
+              <h3 className="mb-40">
+                Einkommen aus nicht-selbstständiger Arbeit
+              </h3>
 
-            <h5 className="mb-8">
-              Handelt es sich um Einkommen aus einem Minijob?{" "}
-            </h5>
-            <YesNoRadio
-              className="mb-32"
-              legend=""
-              slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
-              register={register}
-              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name="taetigkeiten.0.isMinijob"
-              errors={formState.errors}
-            />
-          </div>
-        )}
+              <h5 className="mb-8">
+                Handelt es sich um Einkommen aus einem Minijob?{" "}
+              </h5>
+              <YesNoRadio
+                className="mb-32"
+                legend=""
+                slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
+                register={register}
+                registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+                name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.0.isMinijob`}
+                errors={formState.errors}
+              />
+            </div>
+          ) : (
+            <p>Test</p>
+          ))}
       </div>
     </form>
   );

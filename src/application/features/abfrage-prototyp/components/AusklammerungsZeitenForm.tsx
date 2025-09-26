@@ -14,11 +14,13 @@ import {
 import { PersonPageFlow } from "./PersonPageRouting";
 import { CustomDate } from "../../abfrageteil/components/NachwuchsForm/CustomDate";
 import { parseGermanDateString } from "../state/stepPrototypSlice";
+import { Antragstellende } from "../../abfrageteil/state";
 
 type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
+    antragsstellende?: Antragstellende,
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
@@ -26,14 +28,14 @@ type Props = {
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  readonly hasAusklammerungsgrund: boolean;
+  // readonly hasAusklammerungsgrund: boolean;
 };
 
 export function AusklammerungsZeitenForm({
   id,
   onSubmit,
   flow,
-  hasAusklammerungsgrund,
+  elternteil,
 }: Props) {
   const store = useAppStore();
 
@@ -57,12 +59,20 @@ export function AusklammerungsZeitenForm({
   } = useForm({
     defaultValues: {
       ...stepState,
-      mutterschutzDiesesKindVon: stepState.hasMutterschutzDiesesKind
+      mutterschutzDiesesKindVon: (
+        elternteil === Elternteil.Eins
+          ? stepState.ET1.hasMutterschutzDiesesKind
+          : stepState.ET2.hasMutterschutzDiesesKind
+      )
         ? berechneterMutterschutzBeginn(
             geburtsdatumDesKindes,
           ).toLocaleDateString("de-DE")
         : "",
-      mutterschutzDiesesKindBis: stepState.hasMutterschutzDiesesKind
+      mutterschutzDiesesKindBis: (
+        elternteil === Elternteil.Eins
+          ? stepState.ET1.hasMutterschutzDiesesKind
+          : stepState.ET2.hasMutterschutzDiesesKind
+      )
         ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
         : "",
     },
@@ -71,7 +81,7 @@ export function AusklammerungsZeitenForm({
   const submitAusklammerungsZeiten = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, undefined, hasAusklammerungsgrund, ausklammerungen());
+      onSubmit?.(values, undefined, undefined, undefined, ausklammerungen());
     },
     [store, onSubmit],
   );
@@ -81,14 +91,28 @@ export function AusklammerungsZeitenForm({
     flow ?? PersonPageFlow.noFlow,
   );
 
-  const hasMutterschutzDiesesKind = getValues("hasMutterschutzDiesesKind");
-  const mutterschutzDiesesKindVon = watch("mutterschutzDiesesKindVon");
-  const mutterschutzDiesesKindBis = watch("mutterschutzDiesesKindBis");
+  const hasMutterschutzDiesesKind = getValues(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
+  );
+  const mutterschutzDiesesKindVon = watch(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
+  );
+  const mutterschutzDiesesKindBis = watch(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
+  );
 
-  const hasMutterschutzAnderesKind = getValues("hasMutterschutzAnderesKind");
-  const hasElterngeldAnderesKind = getValues("hasElterngeldAnderesKind");
-  const hasErkrankung = getValues("hasErkrankung");
-  const isBeamtet = getValues("isBeamtet");
+  const hasMutterschutzAnderesKind = getValues(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`,
+  );
+  const hasElterngeldAnderesKind = getValues(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasElterngeldAnderesKind`,
+  );
+  const hasErkrankung = getValues(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasErkrankung`,
+  );
+  const isBeamtet = getValues(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
+  );
 
   const ausklammerungen = (): Ausklammerung[] => {
     const ausklammerungen: Ausklammerung[] = [];
@@ -106,32 +130,74 @@ export function AusklammerungsZeitenForm({
       ausklammerungen.push(mutterschutz);
     }
 
-    if (getValues("elterngeldVon") && getValues("elterngeldBis")) {
+    if (
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldVon`,
+      ) &&
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldBis`,
+      )
+    ) {
       const elterngeld: Ausklammerung = {
         beschreibung: "Elterngeld für älteres Kind",
-        von: parseGermanDateString(getValues("elterngeldVon")),
-        bis: parseGermanDateString(getValues("elterngeldBis")),
+        von: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldVon`,
+          ),
+        ),
+        bis: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldBis`,
+          ),
+        ),
       };
       ausklammerungen.push(elterngeld);
     }
 
     if (
-      getValues("mutterschutzAnderesKindVon") &&
-      getValues("mutterschutzAnderesKindBis")
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindVon`,
+      ) &&
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindBis`,
+      )
     ) {
       const mutterschutzAnderesKind: Ausklammerung = {
         beschreibung: "Mutterschutz für älteres Kind",
-        von: parseGermanDateString(getValues("mutterschutzAnderesKindVon")),
-        bis: parseGermanDateString(getValues("mutterschutzAnderesKindBis")),
+        von: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindVon`,
+          ),
+        ),
+        bis: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindBis`,
+          ),
+        ),
       };
       ausklammerungen.push(mutterschutzAnderesKind);
     }
 
-    if (getValues("krankheitVon") && getValues("krankheitBis")) {
+    if (
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,
+      ) &&
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitBis`,
+      )
+    ) {
       const erkrankung: Ausklammerung = {
         beschreibung: "Mutterschutz für älteres Kind",
-        von: parseGermanDateString(getValues("krankheitVon")),
-        bis: parseGermanDateString(getValues("krankheitBis")),
+        von: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,
+          ),
+        ),
+        bis: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitBis`,
+          ),
+        ),
       };
       ausklammerungen.push(erkrankung);
     }
@@ -204,14 +270,21 @@ export function AusklammerungsZeitenForm({
               </label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.mutterschutzAnderesKindVon?.message}
-                {...register("mutterschutzAnderesKindVon", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.mutterschutzAnderesKindVon?.message
+                    : errors.ET2?.mutterschutzAnderesKindVon?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindVon`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
+                    pattern: {
+                      value: /^\d{2}\.\d{2}\.\d{4}$/,
+                      message: "Bitte das Feld vollständig ausfüllen",
+                    },
                   },
-                })}
+                )}
               />
             </div>
             <div>
@@ -220,14 +293,21 @@ export function AusklammerungsZeitenForm({
               </label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.mutterschutzAnderesKindBis?.message}
-                {...register("mutterschutzAnderesKindBis", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.mutterschutzAnderesKindBis?.message
+                    : errors.ET2?.mutterschutzAnderesKindBis?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindBis`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
+                    pattern: {
+                      value: /^\d{2}\.\d{2}\.\d{4}$/,
+                      message: "Bitte das Feld vollständig ausfüllen",
+                    },
                   },
-                })}
+                )}
               />
             </div>
           </div>
@@ -245,28 +325,42 @@ export function AusklammerungsZeitenForm({
               <label className="mt-20 block text-16">Beginn</label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.elterngeldVon?.message}
-                {...register("elterngeldVon", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.elterngeldVon?.message
+                    : errors.ET2?.elterngeldVon?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldVon`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
+                    pattern: {
+                      value: /^\d{2}\.\d{2}\.\d{4}$/,
+                      message: "Bitte das Feld vollständig ausfüllen",
+                    },
                   },
-                })}
+                )}
               />
             </div>
             <div>
               <label className="mt-20 block text-16">Ende</label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.elterngeldBis?.message}
-                {...register("elterngeldBis", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.elterngeldBis?.message
+                    : errors.ET2?.elterngeldBis?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldBis`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
+                    pattern: {
+                      value: /^\d{2}\.\d{2}\.\d{4}$/,
+                      message: "Bitte das Feld vollständig ausfüllen",
+                    },
                   },
-                })}
+                )}
               />
             </div>
           </div>
@@ -283,28 +377,42 @@ export function AusklammerungsZeitenForm({
               <label className="mt-20 block text-16">Beginn</label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.krankheitVon?.message}
-                {...register("krankheitVon", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.krankheitVon?.message
+                    : errors.ET2?.krankheitVon?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
+                    pattern: {
+                      value: /^\d{2}\.\d{2}\.\d{4}$/,
+                      message: "Bitte das Feld vollständig ausfüllen",
+                    },
                   },
-                })}
+                )}
               />
             </div>
             <div>
               <label className="mt-20 block text-16">Ende</label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.krankheitBis?.message}
-                {...register("krankheitBis", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.krankheitBis?.message
+                    : errors.ET2?.krankheitBis?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitBis`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
+                    pattern: {
+                      value: /^\d{2}\.\d{2}\.\d{4}$/,
+                      message: "Bitte das Feld vollständig ausfüllen",
+                    },
                   },
-                })}
+                )}
               />
             </div>
           </div>

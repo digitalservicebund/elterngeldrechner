@@ -20,7 +20,12 @@ type Props = {
   readonly pageType: "zeitraumKeinEinkommen" | "zeitraumErsatzleistungen";
 };
 
-export function KeinEinkommenForm({ id, onSubmit, pageType }: Props) {
+export function KeinEinkommenForm({
+  id,
+  onSubmit,
+  pageType,
+  elternteil,
+}: Props) {
   const store = useAppStore();
 
   const {
@@ -75,28 +80,42 @@ export function KeinEinkommenForm({ id, onSubmit, pageType }: Props) {
                 <label className="mt-20 block text-16">Start</label>
                 <CustomDate
                   // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                  error={errors.keinEinkommenVon?.message}
-                  {...register("keinEinkommenVon", {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.keinEinkommenVon?.message
+                      : errors.ET2?.keinEinkommenVon?.message
+                  }
+                  {...register(
+                    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.keinEinkommenVon`,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  })}
+                  )}
                 />
               </div>
               <div>
                 <label className="mt-20 block text-16">Ende</label>
                 <CustomDate
                   // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                  error={errors.keinEinkommenBis?.message}
-                  {...register("keinEinkommenBis", {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.keinEinkommenBis?.message
+                      : errors.ET2?.keinEinkommenBis?.message
+                  }
+                  {...register(
+                    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.keinEinkommenBis`,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  })}
+                  )}
                 />
               </div>
             </div>
@@ -123,28 +142,42 @@ export function KeinEinkommenForm({ id, onSubmit, pageType }: Props) {
                 <label className="mt-20 block text-16">Start</label>
                 <CustomDate
                   // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                  error={errors.sozialleistungenVon?.message}
-                  {...register("sozialleistungenVon", {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.sozialleistungenVon?.message
+                      : errors.ET2?.sozialleistungenVon?.message
+                  }
+                  {...register(
+                    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.sozialleistungenVon`,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  })}
+                  )}
                 />
               </div>
               <div>
                 <label className="mt-20 block text-16">Ende</label>
                 <CustomDate
                   // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                  error={errors.sozialleistungenBis?.message}
-                  {...register("sozialleistungenBis", {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.sozialleistungenBis?.message
+                      : errors.ET2?.sozialleistungenBis?.message
+                  }
+                  {...register(
+                    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.sozialleistungenBis`,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  })}
+                  )}
                 />
               </div>
             </div>

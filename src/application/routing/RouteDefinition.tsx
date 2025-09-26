@@ -18,6 +18,7 @@ import {
   InternalStepRoute,
 } from "@/application/routing/internalRoutes";
 import { Elternteil, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
+import { YesNo } from "../features/abfrageteil/state";
 
 // Every page in our application, except for the first one, expects certain redux state
 // slices to be present. Prior to introducing real routes, users could not navigate
@@ -68,29 +69,32 @@ const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <PersonPage elternteil={Elternteil.Zwei} />,
     path: formSteps.person2.route,
-    precondition: () => {
-      return true;
+    precondition: (state: RootState) => {
+      return (
+        state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0 &&
+        state.stepPrototyp.alleinerziehend === YesNo.NO
+      );
     },
   },
   {
     element: <BeispielePage />,
     path: formSteps.beispiele.route,
     precondition: (state: RootState) => {
-      return state.stepEinkommen.limitEinkommenUeberschritten != null;
+      return state.stepPrototyp.limitEinkommenUeberschritten != null;
     },
   },
   {
     element: <PlanerPage />,
     path: formSteps.rechnerUndPlaner.route,
     precondition: (state: RootState) => {
-      return state.stepEinkommen.limitEinkommenUeberschritten != null;
+      return state.stepPrototyp.limitEinkommenUeberschritten != null;
     },
   },
   {
     element: <DatenuebernahmeAntragPage />,
     path: formSteps.datenuebernahmeAntrag.route,
     precondition: (state: RootState, plan?: PlanMitBeliebigenElternteilen) => {
-      return plan != null && state.stepAllgemeineAngaben.bundesland != null;
+      return plan != null && state.stepPrototyp.bundesland != null;
     },
   },
   {

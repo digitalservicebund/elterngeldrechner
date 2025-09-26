@@ -4,6 +4,7 @@ import {
   type StepPrototypState,
   stepPrototypSlice,
   stepPrototypSelectors,
+  Antragstellende,
 } from "@/application/features/abfrage-prototyp/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
@@ -20,6 +21,7 @@ type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
+    antragsstellende?: Antragstellende,
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
@@ -28,7 +30,7 @@ type Props = {
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  readonly hasAusklammerungsgrund: boolean;
+  // readonly hasAusklammerungsgrund: boolean;
   readonly auszuklammerndeZeitraeume?: Ausklammerung[];
 };
 
@@ -37,6 +39,7 @@ export function AnzahlTaetigkeitenForm({
   onSubmit,
   flow,
   auszuklammerndeZeitraeume,
+  elternteil,
 }: Props) {
   const store = useAppStore();
 
@@ -52,7 +55,10 @@ export function AnzahlTaetigkeitenForm({
         undefined,
         undefined,
         undefined,
-        getValues("hasMehrereTaetigkeiten"),
+        undefined,
+        getValues(
+          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMehrereTaetigkeiten`,
+        ),
       );
     },
     [store, onSubmit],
@@ -85,7 +91,7 @@ export function AnzahlTaetigkeitenForm({
           slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-          name="hasMehrereTaetigkeiten"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMehrereTaetigkeiten`}
           errors={formState.errors}
         />
       </div>

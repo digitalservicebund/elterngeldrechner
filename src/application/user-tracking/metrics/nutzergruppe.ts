@@ -1,208 +1,102 @@
-import { addMonths, subWeeks } from "date-fns";
-import type { Arbitrary } from "fast-check";
+import { addMonths, addWeeks, isBefore, subWeeks } from "date-fns";
 import { setTrackingVariable } from "@/application/user-tracking/core";
 
 export function trackNutzergruppe(birthdate: Date): void {
-  const nutzergruppe = mapBirthdateToNutzergruppe(birthdate);
+  const nutzergruppe = determineNutzergruppe(new Date(), birthdate);
+
   setTrackingVariable("nutzergruppe", nutzergruppe);
 }
 
-function mapBirthdateToNutzergruppe(birthdate: Date) {
-  const today = new Date();
-  const tenWeeksBeforeBirth = subWeeks(birthdate, 10);
-  const threeMonthsAfterBirth = addMonths(birthdate, 3);
+function determineNutzergruppe(today: Date, birthdate: Date) {
+  const startOfPregnancy = subWeeks(birthdate, 40);
 
-  if (today < tenWeeksBeforeBirth) {
-    return "werdende Eltern (Phase 1)";
-  } else if (today < birthdate) {
-    return "werdende Eltern (Phase 2)";
-  } else if (today < threeMonthsAfterBirth) {
-    return "junge Eltern";
+  if (isBefore(today, addWeeks(startOfPregnancy, 13))) {
+    return "werdende Eltern (1. Trimester)";
+  } else if (isBefore(today, addWeeks(startOfPregnancy, 27))) {
+    return "werdende Eltern (2. Trimester)";
+  } else if (isBefore(today, birthdate)) {
+    return "werdende Eltern (3. Trimester)";
+  } else if (isBefore(today, addMonths(birthdate, 3))) {
+    return "frische Eltern";
   } else {
     return "nachbeantragende Eltern";
   }
 }
 
 if (import.meta.vitest) {
-  const { describe, beforeEach, afterEach, it, expect, vi } = import.meta
-    .vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
-  describe("track Nutzergruppe", async () => {
-    const { subDays } = await import("date-fns");
-    const {
-      assert,
-      property,
-      date: arbitraryDate,
-    } = await import("fast-check");
+  describe("determineNutzergruppe", () => {
+    it("returns 'nachbeantragende Eltern' 3 months past the birthdate", () => {
+      const birthdate = new Date("2024-01-01");
+      const today = new Date("2024-04-01");
 
-    beforeEach(async () => {
-      vi.useFakeTimers();
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-      vi.spyOn(
-        await import("@/application/user-tracking/core"),
-        "setTrackingVariable",
-      );
+      expect(nutzergruppe).toEqual("nachbeantragende Eltern");
     });
 
-    afterEach(() => {
-      vi.useRealTimers();
+    it("returns 'frische Eltern' (3 months - 1 day) past the birthdate", () => {
+      const birthdate = new Date("2024-01-01");
+      const today = new Date("2024-03-31");
+
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
+
+      expect(nutzergruppe).toEqual("frische Eltern");
     });
 
-    it("sets the tracking variable 'nutzergruppe'", () => {
-      assert(
-        property(arbitraryBirthdate(), (birthdate) => {
-          vi.mocked(setTrackingVariable).mockReset();
+    it("returns 'frische Eltern' on the birthdate", () => {
+      const birthdate = new Date("2024-01-01");
+      const today = new Date("2024-01-01");
 
-          trackNutzergruppe(birthdate);
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-          expect(setTrackingVariable).toHaveBeenCalledTimes(1);
-          expect(setTrackingVariable).toHaveBeenLastCalledWith(
-            "nutzergruppe",
-            expect.anything(),
-          );
-        }),
-      );
+      expect(nutzergruppe).toEqual("frische Eltern");
     });
 
-    it("Nutzergruppe is 'werdende Eltern (Phase 1)' if today is earlier than 10 weeks before the birthdate", () => {
-      assert(
-        property(
-          arbitraryParameters(
-            arbitraryBirthdate(),
-            arbitraryToday({
-              max: (birthdate) => subDays(subWeeks(birthdate, 10), 1),
-            }),
-          ),
-          ({ birthdate, today }) => {
-            vi.mocked(setTrackingVariable).mockReset();
-            vi.setSystemTime(today);
+    it("returns 'werdende Eltern (3. Trimester)' on the day before the birthdate", () => {
+      const birthdate = new Date("2024-10-07");
+      const today = new Date("2024-10-06");
 
-            trackNutzergruppe(birthdate);
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-            expect(setTrackingVariable).toHaveBeenCalledWith(
-              expect.anything(),
-              "werdende Eltern (Phase 1)",
-            );
-          },
-        ),
-      );
+      expect(nutzergruppe).toEqual("werdende Eltern (3. Trimester)");
     });
 
-    it("Nutzergruppe is 'werdende Eltern (Phase 2)' if today is between the 31st week of pregnancy and date of birth", () => {
-      assert(
-        property(
-          arbitraryParameters(
-            arbitraryBirthdate(),
-            arbitraryToday({
-              min: (birthdate) => subWeeks(birthdate, 10),
-              max: (birthdate) => subDays(birthdate, 1),
-            }),
-          ),
-          ({ birthdate, today }) => {
-            vi.mocked(setTrackingVariable).mockReset();
-            vi.setSystemTime(today);
+    it("returns 'werdende Eltern (3. Trimester)' on the start of the third trimester", () => {
+      const birthdate = new Date("2024-10-07");
+      const today = new Date("2024-07-08");
 
-            trackNutzergruppe(birthdate);
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-            expect(setTrackingVariable).toHaveBeenCalledWith(
-              expect.anything(),
-              "werdende Eltern (Phase 2)",
-            );
-          },
-        ),
-      );
+      expect(nutzergruppe).toEqual("werdende Eltern (3. Trimester)");
     });
 
-    it("Nutzergruppe is 'junge Eltern' if today is between the date of birth and three months after", () => {
-      assert(
-        property(
-          arbitraryParameters(
-            arbitraryBirthdate(),
-            arbitraryToday({
-              min: (birthdate) => birthdate,
-              max: (birthdate) => subDays(addMonths(birthdate, 3), 1),
-            }),
-          ),
-          ({ birthdate, today }) => {
-            vi.mocked(setTrackingVariable).mockReset();
-            vi.setSystemTime(today);
+    it("returns 'werdende Eltern (2. Trimester)' on the start of the second trimester", () => {
+      const birthdate = new Date("2024-10-07");
+      const today = new Date("2024-04-01");
 
-            trackNutzergruppe(birthdate);
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-            expect(setTrackingVariable).toHaveBeenCalledWith(
-              expect.anything(),
-              "junge Eltern",
-            );
-          },
-        ),
-      );
+      expect(nutzergruppe).toEqual("werdende Eltern (2. Trimester)");
     });
 
-    it("Nutzergruppe is 'nachbeantragende Eltern' if today is later than three months after birth", () => {
-      assert(
-        property(
-          arbitraryParameters(
-            arbitraryBirthdate(),
-            arbitraryToday({
-              min: (birthdate) => addMonths(birthdate, 3),
-            }),
-          ),
-          ({ birthdate, today }) => {
-            vi.mocked(setTrackingVariable).mockReset();
-            vi.setSystemTime(today);
+    it("returns 'werdende Eltern (1. Trimester)' on the end of the first trimester", () => {
+      const birthdate = new Date("2024-10-07");
+      const today = new Date("2024-03-31");
 
-            trackNutzergruppe(birthdate);
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-            expect(setTrackingVariable).toHaveBeenCalledWith(
-              expect.anything(),
-              "nachbeantragende Eltern",
-            );
-          },
-        ),
-      );
+      expect(nutzergruppe).toEqual("werdende Eltern (1. Trimester)");
     });
 
-    /**
-     * Produce arbitrary test parameters by providing a readable interface that
-     * supports multiple parameter to depend on each other. I.e. the arbitrarily
-     * sample birth date is passed into the generation of the date for today.
-     */
-    function arbitraryParameters(
-      birthdate: Arbitrary<Date>,
-      today: ArbitraryRelativeDate,
-    ): Arbitrary<{ birthdate: Date; today: Date }> {
-      return birthdate.chain((birthdate) =>
-        today(birthdate).map((today) => ({ birthdate, today })),
-      );
-    }
+    it("returns 'werdende Eltern (1. Trimester)' on the last menstrual period", () => {
+      const birthdate = new Date("2024-10-07");
+      const today = new Date("2024-01-01");
 
-    function arbitraryToday(constraints?: {
-      min?: (birthdate: Date) => Date;
-      max?: (birthdate: Date) => Date;
-    }): ArbitraryRelativeDate {
-      return (birthdate: Date) =>
-        arbitraryDate({
-          min: constraints?.min?.(birthdate),
-          max: constraints?.max?.(birthdate),
-          noInvalidDate: true,
-        });
-    }
+      const nutzergruppe = determineNutzergruppe(today, birthdate);
 
-    type ArbitraryRelativeDate = (date: Date) => Arbitrary<Date>;
-
-    /**
-     * Wrapper around {@link arbitraryDate} to ensure usable dates are produced.
-     * Like no invalid dates and dates in a range that allow arithmetic
-     * operations. For example if the latest date technically representable is
-     * generated, it would no more be possible to subtract any time span from
-     * it.
-     */
-    function arbitraryBirthdate(constraints?: { min?: Date; max?: Date }) {
-      return arbitraryDate({
-        min: constraints?.min ?? new Date("2020-01-01"),
-        max: constraints?.max ?? new Date("2050-01-01"),
-        noInvalidDate: true,
-      });
-    }
+      expect(nutzergruppe).toEqual("werdende Eltern (1. Trimester)");
+    });
   });
 }

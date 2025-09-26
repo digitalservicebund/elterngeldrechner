@@ -2,7 +2,10 @@ import ChevronRight from "@digitalservicebund/icons/ChevronRight";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
-import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
+import {
+  composeAusgangslageFuerPlaner,
+  YesNo,
+} from "@/application/features/abfrageteil/state";
 import type { Beispiel } from "@/application/features/beispiele";
 import {
   AuswahloptionenLegende as BeispielAuswahloptionenLegende,
@@ -42,7 +45,13 @@ export function BeispielePage() {
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
   const navigiereZuEinkommen = async () => {
-    await navigate(formSteps.einkommen.route);
+    const state = store.getState();
+    const alleinerziehend = state.stepPrototyp.alleinerziehend;
+    if (alleinerziehend === YesNo.YES) {
+      await navigate(formSteps.person1.route);
+    } else {
+      await navigate(formSteps.person2.route);
+    }
   };
 
   const navigiereZuPlaner = async () => {

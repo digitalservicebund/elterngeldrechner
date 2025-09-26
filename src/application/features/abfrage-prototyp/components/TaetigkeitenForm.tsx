@@ -4,6 +4,7 @@ import {
   type StepPrototypState,
   stepPrototypSlice,
   stepPrototypSelectors,
+  Antragstellende,
 } from "@/application/features/abfrage-prototyp/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
@@ -18,13 +19,14 @@ type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
+    antragsstellende?: Antragstellende,
     flow?: PersonPageFlow,
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil?: Elternteil;
 };
 
-export function TaetigkeitenForm({ id, onSubmit }: Props) {
+export function TaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
   const store = useAppStore();
 
   const { register, handleSubmit, getValues, formState } = useForm({
@@ -34,7 +36,7 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
   const submitNachwuchs = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, personPageFlow());
+      onSubmit?.(values, undefined, personPageFlow());
     },
     [store, onSubmit],
   );
@@ -47,12 +49,13 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
   );
 
   function isAnyOptionSelected(): true | string {
+    const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
     const anyOptionIsSelected = (
       [
-        "isNichtSelbststaendig",
-        "isSelbststaendig",
-        "hasSozialleistungen",
-        "hasKeinEinkommen",
+        `${person}.isNichtSelbststaendig`,
+        `${person}.isSelbststaendig`,
+        `${person}.hasSozialleistungen`,
+        `${person}.hasKeinEinkommen`,
       ] as const
     ).some((fieldName) => getValues(fieldName));
 
@@ -66,28 +69,67 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
   const errorIdentifier = useId();
 
   const personPageFlow = () => {
-    if (getValues("isSelbststaendig")) {
-      if (getValues("isNichtSelbststaendig")) {
+    if (
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isSelbststaendig`,
+      )
+    ) {
+      if (
+        getValues(
+          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isNichtSelbststaendig`,
+        )
+      ) {
         return PersonPageFlow.mischeinkuenfte;
       }
       return PersonPageFlow.selbststaendig;
-    } else if (getValues("isNichtSelbststaendig")) {
-      if (getValues("hasKeinEinkommen") && getValues("hasSozialleistungen")) {
+    } else if (
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isNichtSelbststaendig`,
+      )
+    ) {
+      if (
+        getValues(
+          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinEinkommen`,
+        ) &&
+        getValues(
+          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasSozialleistungen`,
+        )
+      ) {
         return PersonPageFlow.nichtSelbststaendigBeides;
-      } else if (getValues("hasKeinEinkommen")) {
+      } else if (
+        getValues(
+          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinEinkommen`,
+        )
+      ) {
         return PersonPageFlow.nichtSelbststaendigKeinEinkommen;
-      } else if (getValues("hasSozialleistungen")) {
+      } else if (
+        getValues(
+          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasSozialleistungen`,
+        )
+      ) {
         return PersonPageFlow.nichtSelbststaendigErsatzleistungen;
       }
       return PersonPageFlow.nichtSelbststaendig;
     } else if (
-      getValues("hasKeinEinkommen") &&
-      getValues("hasSozialleistungen")
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinEinkommen`,
+      ) &&
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasSozialleistungen`,
+      )
     ) {
       return PersonPageFlow.sozialleistungenKeinEinkommen;
-    } else if (getValues("hasKeinEinkommen")) {
+    } else if (
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinEinkommen`,
+      )
+    ) {
       return PersonPageFlow.keinEinkommen;
-    } else if (getValues("hasSozialleistungen")) {
+    } else if (
+      getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasSozialleistungen`,
+      )
+    ) {
       return PersonPageFlow.sozialleistungen;
     }
     return undefined;
@@ -115,7 +157,7 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
         <CustomCheckbox
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
-          name="isNichtSelbststaendig"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isNichtSelbststaendig`}
           labelHeading="Ich war in diesem Zeitraum nicht-selbstständig"
           label="zum Beispiel angestellt: ob in Vollzeit, Teilzeit, als Minijob, in Ausbildung, Freiwilligendienst oder als Beamter/Beamtin."
           errors={hasError}
@@ -125,7 +167,7 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
           className="mt-16"
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
-          name="isSelbststaendig"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isSelbststaendig`}
           labelHeading="Ich war in diesem Zeitraum selbstständig"
           label="zum Beispiel freiberuflich, mit Gewerbe, als Honorarkraft, mit Land- oder Forstbetrieb"
           errors={hasError}
@@ -135,7 +177,7 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
           className="mt-16"
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
-          name="hasSozialleistungen"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasSozialleistungen`}
           labelHeading="Ich habe Sozialleistungen oder Lohnersatzleistungen erhalten"
           label="zum Beispiel BAföG, Bürgergeld, Arbeitslosengeld, Krankengeld oder Elterngeld."
           errors={hasError}
@@ -145,7 +187,7 @@ export function TaetigkeitenForm({ id, onSubmit }: Props) {
           className="mt-16"
           register={register}
           registerOptions={{ validate: { isAnyOptionSelected } }}
-          name="hasKeinEinkommen"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinEinkommen`}
           labelHeading="Ich hatte in diesem Zeitraum kein Einkommen"
           label="zum Beispiel während eines Studiums, unbezahlter Urlaub oder Pflegezeiten."
           errors={hasError}

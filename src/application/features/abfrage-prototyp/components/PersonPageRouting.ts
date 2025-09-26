@@ -1,4 +1,4 @@
-import { YesNo } from "../../abfrageteil/state";
+import { Antragstellende, YesNo } from "../../abfrageteil/state";
 
 export const personPageSteps = {
   angabenPerson: "Angaben Person",
@@ -33,8 +33,13 @@ export function getNextStep(
   flow: PersonPageFlow | undefined,
   hasAusklammerungsgrund: boolean | undefined,
   hasMehrereTaetigkeiten: YesNo | null,
+  antragstellende: Antragstellende | null,
 ): PersonPageStepKey | "routingEnded" {
   if (currentStep === "angabenPerson" || flow === undefined) {
+    if (antragstellende === "EinenElternteil") {
+      console.log("test");
+      return "routingEnded";
+    }
     return "einkommenArt";
   } else if (currentStep === "einkommenArt") {
     if (

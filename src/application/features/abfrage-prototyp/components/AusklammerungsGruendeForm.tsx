@@ -15,11 +15,13 @@ import { InfoZumMutterschutz } from "../../abfrageteil/components/AllgemeineAnga
 import { InfoZuMutterschutzAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuMutterschutzAnderesKind";
 import { InfoZuElternzeitAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuElternzeitAnderesKind";
 import { InfoZuKrankheit } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuKrankheit";
+import { Antragstellende } from "../../abfrageteil/state";
 
 type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
+    antragsstellende?: Antragstellende,
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
   ) => void;
@@ -28,17 +30,24 @@ type Props = {
   readonly flow?: PersonPageFlow;
 };
 
-export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
+export function AusklammerungsGruendeForm({
+  id,
+  onSubmit,
+  flow,
+  elternteil,
+}: Props) {
   const store = useAppStore();
 
   const { register, handleSubmit, getValues, setValue } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 
+  console.log(getValues("ET1.taetigkeiten"));
+
   const submitAusklammerungsGruende = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, undefined, isAnyOptionSelected());
+      onSubmit?.(values, undefined, undefined, isAnyOptionSelected());
     },
     [store, onSubmit],
   );
@@ -51,16 +60,27 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
     flow ?? PersonPageFlow.noFlow,
   );
 
-  const checkboxNames: (keyof StepPrototypState)[] = [
-    "hasMutterschutzDiesesKind",
-    "hasMutterschutzAnderesKind",
-    "isBeamtet",
-    "hasElterngeldAnderesKind",
-    "hasErkrankung",
+  const checkboxNames = [
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
+    // `${elternteil === Elternteil.Eins}.hasMutterschutzAnderesKind`,
+    // `${elternteil === Elternteil.Eins}.isBeamtet`,
+    // `${elternteil === Elternteil.Eins}.hasElterngeldAnderesKind`,
+    // `${elternteil === Elternteil.Eins}.hasErkrankung`,
   ];
 
   function isAnyOptionSelected(): boolean {
-    return checkboxNames.some((fieldName) => getValues(fieldName));
+    const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
+    const anyOptionIsSelected = (
+      [
+        `${person}.hasMutterschutzDiesesKind`,
+        `${person}.hasMutterschutzAnderesKind`,
+        `${person}.isBeamtet`,
+        `${person}.hasElterngeldAnderesKind`,
+        `${person}.hasErkrankung`,
+      ] as const
+    ).some((fieldName) => getValues(fieldName));
+
+    return anyOptionIsSelected;
   }
 
   // const hasGeschwisterkinder = () => {
@@ -102,12 +122,15 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
       <div className="mt-32">
         <CustomCheckbox
           register={register}
-          name="hasMutterschutzDiesesKind"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`}
           label="Ich war oder werde im Mutterschutz sein und hatte weniger Einkommen"
           labelComponent={<InfoZumMutterschutz />}
           onChange={(checked) => {
             if (checked) {
-              setValue("hasKeinGrund", false);
+              setValue(
+                `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
+                false,
+              );
             }
           }}
         />
@@ -116,12 +139,15 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
         <CustomCheckbox
           className="mt-20"
           register={register}
-          name="hasMutterschutzAnderesKind"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`}
           label="Ich war im Mutterschutz für ein älteres Kind und hatte weniger Einkommen"
           labelComponent={<InfoZuMutterschutzAnderesKind />}
           onChange={(checked) => {
             if (checked) {
-              setValue("hasKeinGrund", false);
+              setValue(
+                `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
+                false,
+              );
             }
           }}
         />
@@ -131,11 +157,14 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
           <CustomCheckbox
             className="mt-20"
             register={register}
-            name="isBeamtet"
+            name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`}
             label="Ich bin Beamtin und war oder werde im Mutterschutz sein"
             onChange={(checked) => {
               if (checked) {
-                setValue("hasKeinGrund", false);
+                setValue(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
+                  false,
+                );
               }
             }}
           />
@@ -145,12 +174,15 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
         <CustomCheckbox
           className="mt-20"
           register={register}
-          name="hasElterngeldAnderesKind"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasElterngeldAnderesKind`}
           label="Ich habe Elterngeld für ein älteres Kind bekommen und hatte weniger Einkommen"
           labelComponent={<InfoZuElternzeitAnderesKind />}
           onChange={(checked) => {
             if (checked) {
-              setValue("hasKeinGrund", false);
+              setValue(
+                `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
+                false,
+              );
             }
           }}
         />
@@ -159,12 +191,15 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
         <CustomCheckbox
           className="mt-20"
           register={register}
-          name="hasErkrankung"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasErkrankung`}
           label="Ich hatte eine Erkrankung wegen meiner Schwangerschaft und hatte weniger Einkommen"
           labelComponent={<InfoZuKrankheit />}
           onChange={(checked) => {
             if (checked) {
-              setValue("hasKeinGrund", false);
+              setValue(
+                `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
+                false,
+              );
             }
           }}
         />
@@ -172,12 +207,23 @@ export function AusklammerungsGruendeForm({ id, onSubmit, flow }: Props) {
         <CustomCheckbox
           className="mt-20"
           register={register}
-          name="hasKeinGrund"
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`}
           label="Keiner der genannten Gründe"
           onChange={(checked) => {
-            setValue("hasKeinGrund", checked);
+            setValue(
+              `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
+              checked,
+            );
             if (checked) {
-              checkboxNames.forEach((name) => setValue(name, false));
+              (
+                [
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`,
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasElterngeldAnderesKind`,
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasErkrankung`,
+                ] as const
+              ).forEach((name) => setValue(name, false));
             }
           }}
         />

@@ -15,40 +15,9 @@ export type Antragstellende =
   | "EinenElternteil"
   | "FuerBeide"
   | "FuerBeideUnentschlossen";
-type AntragstellendeSelektor = "ET1" | "ET2";
+// type AntragstellendeSelektor = "ET1" | "ET2";
 
-export type TaetigkeitAngaben = {
-  taetigkeitenArt: TaetigkeitenSelektor;
-
-  bruttoJahresgewinn: number | null;
-  selbststaendigPflichtversichert: boolean | null;
-  selbststaendigRentenversichert: "gesetzlich" | "privat" | "nicht" | null;
-
-  bruttoMonatsschnitt: number | null;
-
-  isMinijob: boolean | null;
-  steuerklasse: Steuerklasse | null;
-  zahlenSieKirchenSteuer: YesNo | null;
-  versicherung: TypeOfVersicherungen | null;
-};
-export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
-
-export interface StepPrototypState {
-  bundesland: string | null;
-  antragstellende: Antragstellende | null;
-  pseudonym: {
-    ET1: string;
-    ET2: string;
-  };
-  alleinerziehend: YesNo | null;
-  mutterschutz: YesNo | AntragstellendeSelektor | null;
-
-  anzahlKuenftigerKinder: number;
-  wahrscheinlichesGeburtsDatum: string;
-  geschwisterkinder: Kind[];
-
-  limitEinkommenUeberschritten: YesNo | null;
-
+export type PersonenAngaben = {
   isNichtSelbststaendig: boolean;
   isSelbststaendig: boolean;
   hasSozialleistungen: boolean;
@@ -79,6 +48,39 @@ export interface StepPrototypState {
 
   hasMehrereTaetigkeiten: YesNo | null;
   taetigkeiten: TaetigkeitAngaben[];
+};
+
+export type TaetigkeitAngaben = {
+  taetigkeitenArt: TaetigkeitenSelektor;
+
+  bruttoJahresgewinn: number | null;
+  selbststaendigPflichtversichert: boolean | null;
+  selbststaendigRentenversichert: "gesetzlich" | "privat" | "nicht" | null;
+
+  bruttoMonatsschnitt: number | null;
+
+  isMinijob: boolean | null;
+  steuerklasse: Steuerklasse | null;
+  zahlenSieKirchenSteuer: YesNo | null;
+  versicherung: TypeOfVersicherungen | null;
+};
+export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
+
+export interface StepPrototypState {
+  bundesland: string | null;
+  antragstellende: Antragstellende | null;
+  pseudonym: {
+    ET1: string;
+    ET2: string;
+  };
+  alleinerziehend: YesNo | null;
+  anzahlKuenftigerKinder: number;
+  wahrscheinlichesGeburtsDatum: string;
+  geschwisterkinder: Kind[];
+  limitEinkommenUeberschritten: YesNo | null;
+
+  ET1: PersonenAngaben;
+  ET2: PersonenAngaben;
 }
 
 const initialState: StepPrototypState = {
@@ -89,44 +91,76 @@ const initialState: StepPrototypState = {
     ET2: "",
   },
   alleinerziehend: null,
-  mutterschutz: null,
-
   anzahlKuenftigerKinder: 1,
   wahrscheinlichesGeburtsDatum: "",
   geschwisterkinder: [],
-
   limitEinkommenUeberschritten: null,
 
-  isNichtSelbststaendig: false,
-  isSelbststaendig: false,
-  hasSozialleistungen: false,
-  hasKeinEinkommen: false,
+  ET1: {
+    isNichtSelbststaendig: false,
+    isSelbststaendig: false,
+    hasSozialleistungen: false,
+    hasKeinEinkommen: false,
 
-  keinEinkommenVon: "",
-  keinEinkommenBis: "",
-  sozialleistungenVon: "",
-  sozialleistungenBis: "",
+    keinEinkommenVon: "",
+    keinEinkommenBis: "",
+    sozialleistungenVon: "",
+    sozialleistungenBis: "",
 
-  hasMutterschutzDiesesKind: false,
-  isBeamtet: false,
-  hasElterngeldAnderesKind: false,
-  hasMutterschutzAnderesKind: false,
-  hasErkrankung: false,
-  hasKeinGrund: false,
+    hasMutterschutzDiesesKind: false,
+    isBeamtet: false,
+    hasElterngeldAnderesKind: false,
+    hasMutterschutzAnderesKind: false,
+    hasErkrankung: false,
+    hasKeinGrund: false,
 
-  mutterschutzDiesesKindVon: "",
-  mutterschutzDiesesKindBis: "",
-  mutterschutzAnderesKindVon: "",
-  mutterschutzAnderesKindBis: "",
-  elterngeldVon: "",
-  elterngeldBis: "",
-  krankheitVon: "",
-  krankheitBis: "",
-  dienstVon: "",
-  dienstBis: "",
+    mutterschutzDiesesKindVon: "",
+    mutterschutzDiesesKindBis: "",
+    mutterschutzAnderesKindVon: "",
+    mutterschutzAnderesKindBis: "",
+    elterngeldVon: "",
+    elterngeldBis: "",
+    krankheitVon: "",
+    krankheitBis: "",
+    dienstVon: "",
+    dienstBis: "",
 
-  hasMehrereTaetigkeiten: null,
-  taetigkeiten: [],
+    hasMehrereTaetigkeiten: null,
+    taetigkeiten: [],
+  },
+
+  ET2: {
+    isNichtSelbststaendig: false,
+    isSelbststaendig: false,
+    hasSozialleistungen: false,
+    hasKeinEinkommen: false,
+
+    keinEinkommenVon: "",
+    keinEinkommenBis: "",
+    sozialleistungenVon: "",
+    sozialleistungenBis: "",
+
+    hasMutterschutzDiesesKind: false,
+    isBeamtet: false,
+    hasElterngeldAnderesKind: false,
+    hasMutterschutzAnderesKind: false,
+    hasErkrankung: false,
+    hasKeinGrund: false,
+
+    mutterschutzDiesesKindVon: "",
+    mutterschutzDiesesKindBis: "",
+    mutterschutzAnderesKindVon: "",
+    mutterschutzAnderesKindBis: "",
+    elterngeldVon: "",
+    elterngeldBis: "",
+    krankheitVon: "",
+    krankheitBis: "",
+    dienstVon: "",
+    dienstBis: "",
+
+    hasMehrereTaetigkeiten: null,
+    taetigkeiten: [],
+  },
 };
 
 export const stepPrototypSlice = createSlice({
@@ -160,6 +194,14 @@ const getWahrscheinlichesGeburtsDatum = createSelector(
   parseGermanDateString,
 );
 
+const getAlleinerziehend = (state: RootState) =>
+  state.stepPrototyp.alleinerziehend;
+
+const getTaetigkeitenET1 = (state: RootState) =>
+  state.stepPrototyp.ET1.taetigkeiten;
+const getTaetigkeitenET2 = (state: RootState) =>
+  state.stepPrototyp.ET2.taetigkeiten;
+
 export function parseGermanDateString(germanDateString: string): Date {
   const [day, month, year] = germanDateString.split(".");
   return new Date(`${year}-${month}-${day}`);
@@ -170,4 +212,7 @@ export const stepPrototypSelectors = {
   getElternteilNames,
   getBundesland,
   getWahrscheinlichesGeburtsDatum,
+  getAlleinerziehend,
+  getTaetigkeitenET1,
+  getTaetigkeitenET2,
 };

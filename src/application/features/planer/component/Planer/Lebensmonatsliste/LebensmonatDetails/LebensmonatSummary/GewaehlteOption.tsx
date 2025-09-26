@@ -47,11 +47,14 @@ export function GewaehlteOption({
         className,
         conditionalClassName,
       )}
-      style={style}
+      style={{ ...style, ...labelStyle.container }}
       aria-hidden={ariaHidden}
     >
       {icon}
-      <span className={classNames("-mt-4", labelClassName)} style={labelStyle}>
+      <span
+        className={classNames("-mt-4", labelClassName)}
+        style={labelStyle.children}
+      >
         {label}
       </span>
     </span>
@@ -119,11 +122,22 @@ function getIcon(
 // Scales the 'kein Elterngeld' text on smaller screens. Normally, small screens
 // hide the text and show only the icon, but since this option has no icon, the
 // font size is adjusted instead.
-function getLabelStyle(option: Auswahloption | undefined): CSSProperties {
+function getLabelStyle(option: Auswahloption | undefined): LabelStyle {
   switch (option) {
     case KeinElterngeld:
-      return { fontSize: "clamp(0.75rem, 2.4vw, 1.125rem)" };
+      return {
+        container: { containerType: "inline-size" },
+        children: { fontSize: "clamp(0.75rem, 28cqw, 1.125rem)" },
+      };
     default:
-      return {};
+      return {
+        container: { containerType: "inline-size" },
+        children: { fontSize: "clamp(1rem, 26cqw, 1.125rem)" },
+      };
   }
 }
+
+type LabelStyle = {
+  container: React.CSSProperties;
+  children: React.CSSProperties;
+};

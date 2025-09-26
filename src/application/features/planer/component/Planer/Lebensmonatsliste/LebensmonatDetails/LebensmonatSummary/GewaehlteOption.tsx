@@ -127,7 +127,7 @@ function getLabelStyle(option: Auswahloption | undefined): LabelStyle {
     case KeinElterngeld:
       return {
         container: { containerType: "inline-size" },
-        children: { fontSize: "clamp(0.75rem, 28cqw, 1.125rem)" },
+        children: { fontSize: "clamp(0.70rem, 24cqw, 1.125rem)" },
       };
     default:
       return {

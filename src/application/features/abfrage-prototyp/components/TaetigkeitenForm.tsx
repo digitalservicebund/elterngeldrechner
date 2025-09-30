@@ -1,5 +1,5 @@
 import { useCallback, useId } from "react";
-import { FieldError, get, useForm } from "react-hook-form";
+import { FieldError, get, useForm, useFieldArray } from "react-hook-form";
 import {
   type StepPrototypState,
   stepPrototypSlice,
@@ -35,8 +35,24 @@ export function TaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
 
   const submitNachwuchs = useCallback(
     (values: StepPrototypState) => {
+      const flow = personPageFlow();
+
+      if (elternteil === Elternteil.Eins) {
+        const lastFlow = getValues("ET1.taetigkeitenFlow");
+        if (flow && flow != lastFlow) {
+          values.ET1.taetigkeiten = [];
+          values.ET1.taetigkeitenFlow = flow;
+        }
+      } else {
+        const lastFlow = getValues("ET2.taetigkeitenFlow");
+        if (flow && flow != lastFlow) {
+          values.ET2.taetigkeiten = [];
+          values.ET2.taetigkeitenFlow = flow;
+        }
+      }
+
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, undefined, personPageFlow());
+      onSubmit?.(values, undefined, flow);
     },
     [store, onSubmit],
   );
@@ -62,9 +78,10 @@ export function TaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
     return anyOptionIsSelected || "Bitte wählen sie mindestens ein Feld aus.";
   }
 
-  const error = get(formState.errors, "isNichtSelbststaendig") as
-    | FieldError
-    | undefined;
+  const error = get(
+    formState.errors,
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isNichtSelbststaendig`,
+  ) as FieldError | undefined;
   const hasError = error !== undefined;
   const errorIdentifier = useId();
 

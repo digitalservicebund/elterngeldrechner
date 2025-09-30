@@ -43,7 +43,6 @@ type Props = {
 export type EinkommenAngabenStep = {
   taetigkeitIndex: number;
   taetigkeitArt: TaetigkeitenSelektor | null;
-  einkommenFormPart: "A" | "B";
 };
 
 export function PersonPage({ elternteil }: Props) {
@@ -65,9 +64,9 @@ export function PersonPage({ elternteil }: Props) {
     useState<Ausklammerung[]>();
   const [auszuklammerndeZeitraeumeET2, setAuszuklammerndeZeitraeumeET2] =
     useState<Ausklammerung[]>();
-  const [hasMehrereTaetigkeitenET1, setHasMehrereTaetigkeitenET1] =
+  const [hasWeitereTaetigkeitenET1, setHasWeitereTaetigkeitenET1] =
     useState<YesNo | null>(null);
-  const [hasMehrereTaetigkeitenET2, setHasMehrereTaetigkeitenET2] =
+  const [hasWeitereTaetigkeitenET2, setHasWeitereTaetigkeitenET2] =
     useState<YesNo | null>(null);
   const [einkommenAngabenStepsET1, setEinkommenAngabenStepsET1] = useState<
     EinkommenAngabenStep[]
@@ -79,13 +78,11 @@ export function PersonPage({ elternteil }: Props) {
     useState<EinkommenAngabenStep>({
       taetigkeitIndex: 0,
       taetigkeitArt: null,
-      einkommenFormPart: "A",
     });
   const [currentEinkommenAngabenStepET2, setCurrentEinkommenAngabenStepET2] =
     useState<EinkommenAngabenStep>({
       taetigkeitIndex: 0,
       taetigkeitArt: null,
-      einkommenFormPart: "A",
     });
 
   const alleinerziehend = useAppSelector(
@@ -95,23 +92,23 @@ export function PersonPage({ elternteil }: Props) {
   const navigate = useNavigate();
 
   const navigateToNextStep = (
+    antragstellende: Antragstellende | null,
     flow: PersonPageFlow | undefined,
     hasAusklammerungsgrund: boolean | undefined,
-    hasMehrereTaetigkeiten: YesNo | null,
-    antragstellende: Antragstellende | null,
-    taetigkeiten?: TaetigkeitAngaben[],
+    hasWeitereTaetigkeiten: YesNo | null,
+    // taetigkeiten?: TaetigkeitAngaben[],
   ) => {
     const nextStep = getNextStep(
+      elternteil,
       elternteil === Elternteil.Eins
         ? currentPersonPageStepET1
         : currentPersonPageStepET2,
       flow,
       hasAusklammerungsgrund,
-      hasMehrereTaetigkeiten,
+      hasWeitereTaetigkeiten,
       antragstellende,
     );
     if (nextStep === "einkommenAngaben") {
-      createEinkommenRouting(hasMehrereTaetigkeiten, taetigkeiten);
       if (elternteil === Elternteil.Eins) {
         setCurrentPersonPageStepET1("einkommenAngaben");
       } else {
@@ -146,6 +143,21 @@ export function PersonPage({ elternteil }: Props) {
   };
 
   const navigateToLastStep = () => {
+    const lastStep = getLastStep(
+      elternteil === Elternteil.Eins
+        ? currentPersonPageStepET1
+        : currentPersonPageStepET2,
+      elternteil === Elternteil.Eins
+        ? currentPersonPageFlowET1
+        : currentPersonPageFlowET2,
+      elternteil === Elternteil.Eins
+        ? hasAusklammerungsgrundET1
+        : hasAusklammerungsgrundET2,
+      elternteil === Elternteil.Eins
+        ? hasWeitereTaetigkeitenET1
+        : hasWeitereTaetigkeitenET2,
+    );
+
     if (
       elternteil === Elternteil.Eins &&
       currentPersonPageStepET1 === "angabenPerson"
@@ -158,21 +170,21 @@ export function PersonPage({ elternteil }: Props) {
     ) {
       navigate(formSteps.person1.route);
       window.scrollTo({ top: 0, behavior: "smooth" });
+    } else if (
+      elternteil === Elternteil.Eins
+        ? currentPersonPageStepET1 === "einkommenAngaben"
+        : currentPersonPageStepET2 === "einkommenAngaben"
+    ) {
+      const routingStatus = handleEinkommenRouting(true);
+      if (routingStatus === "einkommenRoutingBeendet") {
+        if (elternteil === Elternteil.Eins) {
+          setCurrentPersonPageStepET1(lastStep);
+        } else {
+          setCurrentPersonPageStepET2(lastStep);
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } else {
-      const lastStep = getLastStep(
-        elternteil === Elternteil.Eins
-          ? currentPersonPageStepET1
-          : currentPersonPageStepET2,
-        elternteil === Elternteil.Eins
-          ? currentPersonPageFlowET1
-          : currentPersonPageFlowET2,
-        elternteil === Elternteil.Eins
-          ? hasAusklammerungsgrundET1
-          : hasAusklammerungsgrundET2,
-        elternteil === Elternteil.Eins
-          ? hasMehrereTaetigkeitenET1
-          : hasMehrereTaetigkeitenET2,
-      );
       if (elternteil === Elternteil.Eins) {
         setCurrentPersonPageStepET1(lastStep);
       } else {
@@ -188,8 +200,8 @@ export function PersonPage({ elternteil }: Props) {
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
-    hasMehrereTaetigkeiten?: YesNo | null,
-    taetigkeiten?: TaetigkeitAngaben[],
+    hasWeitereTaetigkeiten?: YesNo | null,
+    taetigkeitenRouting?: EinkommenAngabenStep[],
   ) {
     if (flow) {
       if (elternteil === Elternteil.Eins) {
@@ -219,113 +231,83 @@ export function PersonPage({ elternteil }: Props) {
         setAuszuklammerndeZeitraeumeET2(auszuklammerndeZeitraeume);
       }
     }
-    if (hasMehrereTaetigkeiten) {
+    if (hasWeitereTaetigkeiten) {
       if (elternteil === Elternteil.Eins) {
-        setHasMehrereTaetigkeitenET1(hasMehrereTaetigkeiten);
+        setHasWeitereTaetigkeitenET1(hasWeitereTaetigkeiten);
       } else {
-        setHasMehrereTaetigkeitenET2(hasMehrereTaetigkeiten);
+        setHasWeitereTaetigkeitenET2(hasWeitereTaetigkeiten);
+      }
+    }
+    if (taetigkeitenRouting) {
+      if (elternteil === Elternteil.Eins) {
+        setEinkommenAngabenStepsET1(taetigkeitenRouting);
+        setCurrentEinkommenAngabenStepET1(taetigkeitenRouting[0]!);
+      } else {
+        setEinkommenAngabenStepsET2(taetigkeitenRouting);
+        setCurrentEinkommenAngabenStepET2(taetigkeitenRouting[0]!);
       }
     }
 
     navigateToNextStep(
+      antragsstellende ?? null,
       flow ??
         (elternteil === Elternteil.Eins
           ? currentPersonPageFlowET1
           : currentPersonPageFlowET2),
       hasAusklammerungsgrund,
-      hasMehrereTaetigkeiten ?? null,
-      antragsstellende ?? null,
-      taetigkeiten,
+      hasWeitereTaetigkeiten ?? null,
     );
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function createEinkommenRouting(
-    hasMehrereTaetigkeiten: YesNo | null,
-    taetigkeiten?: TaetigkeitAngaben[],
-  ) {
-    const einkommenAngabenSteps: EinkommenAngabenStep[] = [];
-
-    if (hasMehrereTaetigkeiten === YesNo.NO) {
-      const taetigkeitArt = (): TaetigkeitenSelektor => {
-        const flow =
-          elternteil === Elternteil.Eins
-            ? currentPersonPageFlowET1
-            : currentPersonPageFlowET2;
-        if (flow === PersonPageFlow.selbststaendig) {
-          return "selbststaendig";
-        } else {
-          return "nichtSelbststaendig";
-        }
-      };
-
-      einkommenAngabenSteps.push({
-        taetigkeitIndex: 0,
-        taetigkeitArt: taetigkeitArt(),
-        einkommenFormPart: "A",
-      });
-
-      if (einkommenAngabenSteps[0]?.taetigkeitArt === "nichtSelbststaendig") {
-        einkommenAngabenSteps.push({
-          taetigkeitIndex: 0,
-          taetigkeitArt: "nichtSelbststaendig",
-          einkommenFormPart: "B",
-        });
-      }
-    } else if (taetigkeiten) {
-      taetigkeiten.forEach((value, index) => {
-        einkommenAngabenSteps.push({
-          taetigkeitIndex: index,
-          taetigkeitArt: value.taetigkeitenArt,
-          einkommenFormPart: "A",
-        });
-        if (value.taetigkeitenArt === "nichtSelbststaendig") {
-          einkommenAngabenSteps.push({
-            taetigkeitIndex: index,
-            taetigkeitArt: "nichtSelbststaendig",
-            einkommenFormPart: "B",
-          });
-        }
-      });
-    }
-
-    if (einkommenAngabenSteps[0]) {
-      if (elternteil === Elternteil.Eins) {
-        setEinkommenAngabenStepsET1(einkommenAngabenSteps);
-        setCurrentEinkommenAngabenStepET1(einkommenAngabenSteps[0]);
-      } else {
-        setEinkommenAngabenStepsET2(einkommenAngabenSteps);
-        setCurrentEinkommenAngabenStepET2(einkommenAngabenSteps[0]);
-      }
-    }
-  }
-
-  function handleEinkommenRouting():
-    | "einkommenRoutingLaeuft"
-    | "einkommenRoutingBeendet" {
+  function handleEinkommenRouting(
+    backwards?: boolean,
+  ): "einkommenRoutingLaeuft" | "einkommenRoutingBeendet" {
     if (elternteil === Elternteil.Eins) {
       const indexOfStep = einkommenAngabenStepsET1.indexOf(
         currentEinkommenAngabenStepET1,
       );
-      if (einkommenAngabenStepsET1.length > indexOfStep + 1) {
-        setCurrentEinkommenAngabenStepET1(
-          einkommenAngabenStepsET1[indexOfStep + 1]!,
-        );
-        return "einkommenRoutingLaeuft";
+      if (backwards) {
+        if (indexOfStep > 0) {
+          setCurrentEinkommenAngabenStepET1(
+            einkommenAngabenStepsET1[indexOfStep - 1]!,
+          );
+          return "einkommenRoutingLaeuft";
+        } else {
+          return "einkommenRoutingBeendet";
+        }
       } else {
-        return "einkommenRoutingBeendet";
+        if (einkommenAngabenStepsET1.length > indexOfStep + 1) {
+          setCurrentEinkommenAngabenStepET1(
+            einkommenAngabenStepsET1[indexOfStep + 1]!,
+          );
+          return "einkommenRoutingLaeuft";
+        } else {
+          return "einkommenRoutingBeendet";
+        }
       }
     } else {
       const indexOfStep = einkommenAngabenStepsET2.indexOf(
         currentEinkommenAngabenStepET2,
       );
-      if (einkommenAngabenStepsET2.length > indexOfStep + 1) {
-        setCurrentEinkommenAngabenStepET2(
-          einkommenAngabenStepsET2[indexOfStep]!,
-        );
-        return "einkommenRoutingLaeuft";
+      if (backwards) {
+        if (indexOfStep > 0) {
+          setCurrentEinkommenAngabenStepET2(
+            einkommenAngabenStepsET2[indexOfStep - 1]!,
+          );
+          return "einkommenRoutingLaeuft";
+        } else {
+          return "einkommenRoutingBeendet";
+        }
       } else {
-        return "einkommenRoutingBeendet";
+        if (einkommenAngabenStepsET2.length > indexOfStep + 1) {
+          setCurrentEinkommenAngabenStepET2(
+            einkommenAngabenStepsET2[indexOfStep + 1]!,
+          );
+          return "einkommenRoutingLaeuft";
+        } else {
+          return "einkommenRoutingBeendet";
+        }
       }
     }
   }
@@ -345,8 +327,26 @@ export function PersonPage({ elternteil }: Props) {
       currentPersonPageStepET2 == "angabenPerson"
     ) {
       return "4. Sollen beide Elternteile Elterngeld bekommen?";
+    } else if (
+      elternteil === Elternteil.Eins
+        ? currentPersonPageStepET1 === "einkommenAngaben"
+        : currentPersonPageStepET2 === "einkommenAngaben"
+    ) {
+      if (elternteil === Elternteil.Eins) {
+        if (einkommenAngabenStepsET1.length === 1) {
+          return "Einkommen";
+        } else {
+          return `Einkommen ${currentEinkommenAngabenStepET1.taetigkeitIndex + 1}`;
+        }
+      } else {
+        if (einkommenAngabenStepsET2.length === 1) {
+          return "Einkommen";
+        } else {
+          return `Einkommen ${currentEinkommenAngabenStepET2.taetigkeitIndex + 1}`;
+        }
+      }
     }
-    return `3. Einkommensdaten ${elternteil === Elternteil.Eins ? elternteilNames.ET1 : elternteilNames.ET2}`;
+    return `${elternteil === Elternteil.Eins ? "3" : "4"}. Einkommensdaten ${elternteil === Elternteil.Eins ? elternteilNames.ET1 : elternteilNames.ET2}`;
   };
 
   const navigationDetails = "";

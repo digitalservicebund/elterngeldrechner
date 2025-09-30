@@ -16,6 +16,7 @@ type Props<
 > = UseControllerProps<TFieldValues, TName> & {
   readonly label: string;
   readonly slotBetweenLabelAndOptions?: ReactNode;
+  readonly slotBeforeLabel?: ReactNode;
   readonly allowedDecimalPlaces?: 1 | 2;
   readonly suffix?: string;
   readonly min?: number;
@@ -35,6 +36,7 @@ export function CustomNumberField<
   name,
   label,
   slotBetweenLabelAndOptions,
+  slotBeforeLabel,
   allowedDecimalPlaces = 2,
   min = 0,
   max = 99999,
@@ -73,6 +75,8 @@ export function CustomNumberField<
         className,
       )}
     >
+      {!!slotBeforeLabel && <div className="mb-16">{slotBeforeLabel}</div>}
+
       <label
         className={slotBetweenLabelAndOptions ? "" : "mb-8"}
         htmlFor={name}
@@ -85,7 +89,7 @@ export function CustomNumberField<
       )}
 
       <IMaskInput
-        className="max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
+        className="max-w-[20rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
         inputRef={ref}
         mask={mask}
         unmask

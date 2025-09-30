@@ -16,6 +16,11 @@ import { PersonPageFlow } from "./PersonPageRouting";
 import { InfoZuTaetigkeiten } from "./InfoZuTaetigkeiten";
 import { YesNoRadio } from "../../abfrageteil/components/common";
 import { YesNo } from "../../abfrageteil/state";
+import {
+  TaetigkeitAngaben,
+  TaetigkeitenSelektor,
+} from "../state/stepPrototypSlice";
+import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
 
 type Props = {
   readonly id?: string;
@@ -25,7 +30,8 @@ type Props = {
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
-    hasMehrereTaetigkeiten?: YesNo | null,
+    hasWeitereTaetigkeiten?: YesNo | null,
+    taetigkeitenRouting?: EinkommenAngabenStep[],
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
@@ -43,12 +49,74 @@ export function AnzahlTaetigkeitenForm({
 }: Props) {
   const store = useAppStore();
 
+  const stepState = store.getState().stepPrototyp;
+
+  const taetigkeitenDefaults: TaetigkeitAngaben[] = [
+    {
+      taetigkeitenArt:
+        flow === PersonPageFlow.selbststaendig ||
+        flow === PersonPageFlow.mischeinkuenfte
+          ? "selbststaendig"
+          : "nichtSelbststaendig",
+
+      zahlenSieKirchenSteuer: null,
+
+      selbststaendigKVPflichtversichert: null,
+      selbststaendigRVPflichtversichert: null,
+      selbststaendigAVPflichtversichert: null,
+      bruttoJahresgewinn: null,
+
+      bruttoMonatsschnitt: null,
+      isMinijob: null,
+      steuerklasse: null,
+      versicherung: null,
+    },
+  ];
+
+  if (flow === PersonPageFlow.mischeinkuenfte) {
+    taetigkeitenDefaults.push({
+      taetigkeitenArt: "nichtSelbststaendig",
+
+      zahlenSieKirchenSteuer: null,
+
+      selbststaendigKVPflichtversichert: null,
+      selbststaendigRVPflichtversichert: null,
+      selbststaendigAVPflichtversichert: null,
+      bruttoJahresgewinn: null,
+
+      bruttoMonatsschnitt: null,
+      isMinijob: null,
+      steuerklasse: null,
+      versicherung: null,
+    });
+  }
+
   const { handleSubmit, register, formState, getValues } = useForm({
-    defaultValues: store.getState().stepPrototyp,
+    defaultValues: {
+      ...stepState,
+      ET1: {
+        ...stepState.ET1,
+        taetigkeiten:
+          stepState.ET1.taetigkeiten.length > 0 || elternteil != Elternteil.Eins
+            ? stepState.ET1.taetigkeiten
+            : taetigkeitenDefaults,
+      },
+      ET2: {
+        ...stepState.ET2,
+        taetigkeiten:
+          stepState.ET2.taetigkeiten.length > 0 || elternteil != Elternteil.Zwei
+            ? stepState.ET2.taetigkeiten
+            : taetigkeitenDefaults,
+      },
+    },
   });
 
   const submitAnzahlTaetigkeiten = useCallback(
     (values: StepPrototypState) => {
+      const hasWeitereTaetigkeiten = getValues(
+        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasWeitereTaetigkeiten`,
+      );
+
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
       onSubmit?.(
         values,
@@ -56,13 +124,29 @@ export function AnzahlTaetigkeitenForm({
         undefined,
         undefined,
         undefined,
-        getValues(
-          `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMehrereTaetigkeiten`,
-        ),
+        hasWeitereTaetigkeiten,
+        hasWeitereTaetigkeiten === YesNo.NO
+          ? elternteil === Elternteil.Eins
+            ? createEinkommenRouting(values.ET1.taetigkeiten)
+            : createEinkommenRouting(values.ET2.taetigkeiten)
+          : undefined,
       );
     },
     [store, onSubmit],
   );
+
+  function createEinkommenRouting(taetigkeiten: TaetigkeitAngaben[]) {
+    const einkommenAngabenSteps: EinkommenAngabenStep[] = [];
+
+    taetigkeiten.forEach((value, index) => {
+      einkommenAngabenSteps.push({
+        taetigkeitIndex: index,
+        taetigkeitArt: value.taetigkeitenArt,
+      });
+    });
+
+    return einkommenAngabenSteps;
+  }
 
   const geburtsdatumDesKindes = useAppSelector(
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
@@ -91,7 +175,7 @@ export function AnzahlTaetigkeitenForm({
           slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
           register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMehrereTaetigkeiten`}
+          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasWeitereTaetigkeiten`}
           errors={formState.errors}
         />
       </div>

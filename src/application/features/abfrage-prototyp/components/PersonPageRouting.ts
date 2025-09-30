@@ -1,3 +1,4 @@
+import { Elternteil } from "@/monatsplaner";
 import { Antragstellende, YesNo } from "../../abfrageteil/state";
 
 export const personPageSteps = {
@@ -29,15 +30,18 @@ export enum PersonPageFlow {
 }
 
 export function getNextStep(
+  elternteil: Elternteil,
   currentStep: PersonPageStepKey,
   flow: PersonPageFlow | undefined,
   hasAusklammerungsgrund: boolean | undefined,
-  hasMehrereTaetigkeiten: YesNo | null,
+  hasWeitereTaetigkeiten: YesNo | null,
   antragstellende: Antragstellende | null,
 ): PersonPageStepKey | "routingEnded" {
   if (currentStep === "angabenPerson" || flow === undefined) {
-    if (antragstellende === "EinenElternteil") {
-      console.log("test");
+    if (
+      elternteil === Elternteil.Zwei &&
+      antragstellende === "EinenElternteil"
+    ) {
       return "routingEnded";
     }
     return "einkommenArt";
@@ -84,7 +88,7 @@ export function getNextStep(
   } else if (currentStep === "bmz") {
     return "anzahlTaetigkeiten";
   } else if (currentStep === "anzahlTaetigkeiten") {
-    if (hasMehrereTaetigkeiten === YesNo.YES) {
+    if (hasWeitereTaetigkeiten === YesNo.YES) {
       return "uebersichtTaetigkeiten";
     }
     return "einkommenAngaben";
@@ -98,10 +102,10 @@ export function getLastStep(
   currentStep: PersonPageStepKey,
   flow: PersonPageFlow | undefined,
   hasAusklammerungsgrund: boolean | undefined,
-  hasMehrereTaetigkeiten: YesNo | null,
+  hasWeitereTaetigkeiten: YesNo | null,
 ): PersonPageStepKey {
   if (currentStep === "einkommenAngaben") {
-    if (hasMehrereTaetigkeiten === YesNo.YES) {
+    if (hasWeitereTaetigkeiten === YesNo.YES) {
       return "uebersichtTaetigkeiten";
     }
     return "anzahlTaetigkeiten";

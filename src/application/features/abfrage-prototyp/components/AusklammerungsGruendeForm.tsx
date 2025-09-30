@@ -42,8 +42,6 @@ export function AusklammerungsGruendeForm({
     defaultValues: store.getState().stepPrototyp,
   });
 
-  console.log(getValues("ET1.taetigkeiten"));
-
   const submitAusklammerungsGruende = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));

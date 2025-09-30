@@ -52,13 +52,13 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
     | FieldError
     | undefined;
 
-  const initializeAntragstellendeIfAlleinerziehend = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if ((event.target.value as YesNo) === YesNo.YES) {
-      setValue("antragstellende", "EinenElternteil");
-    }
-  };
+  // const initializeAntragstellendeIfAlleinerziehend = (
+  //   event: React.ChangeEvent<HTMLInputElement>,
+  // ) => {
+  //   if ((event.target.value as YesNo) === YesNo.YES) {
+  //     setValue("antragstellende", "EinenElternteil");
+  //   }
+  // };
 
   const antragstellendeOptions: CustomRadioGroupOption[] = [
     {
@@ -85,12 +85,7 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
   };
 
   return (
-    <form
-      id={id}
-      // className="flex flex-col gap-32"
-      onSubmit={handleSubmit(submitNachwuchs)}
-      noValidate
-    >
+    <form id={id} onSubmit={handleSubmit(submitNachwuchs)} noValidate>
       {elternteil === Elternteil.Eins && (
         <div>
           <p>
@@ -129,7 +124,7 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
               register={register}
               registerOptions={{
                 required: "Dieses Feld ist erforderlich",
-                onChange: initializeAntragstellendeIfAlleinerziehend,
+                // onChange: initializeAntragstellendeIfAlleinerziehend,
               }}
               name="alleinerziehend"
               errors={formState.errors}
@@ -146,7 +141,6 @@ export function PersonForm({ id, onSubmit, elternteil }: Props) {
       {elternteil === Elternteil.Zwei && (
         <div className="mt-40">
           <CustomRadioGroup
-            // legend="Sollen beide Elternteile Elterngeld bekommen? Dann bekommen beide mehr und länger Elterngeld."
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
             name="antragstellende"

@@ -5,6 +5,7 @@ import {
 } from "@/application/features/abfrageteil/state";
 import { RootState } from "@/application/redux";
 import { Steuerklasse } from "@/elterngeldrechner";
+import { PersonPageFlow } from "../components/PersonPageRouting";
 
 interface Kind {
   geburtsdatum: string;
@@ -46,22 +47,24 @@ export type PersonenAngaben = {
   dienstVon: string;
   dienstBis: string;
 
-  hasMehrereTaetigkeiten: YesNo | null;
+  taetigkeitenFlow: PersonPageFlow | null;
+  hasWeitereTaetigkeiten: YesNo | null;
   taetigkeiten: TaetigkeitAngaben[];
 };
 
 export type TaetigkeitAngaben = {
   taetigkeitenArt: TaetigkeitenSelektor;
 
+  zahlenSieKirchenSteuer: YesNo | null;
+
+  selbststaendigKVPflichtversichert: boolean | null;
+  selbststaendigRVPflichtversichert: boolean | null;
+  selbststaendigAVPflichtversichert: boolean | null;
   bruttoJahresgewinn: number | null;
-  selbststaendigPflichtversichert: boolean | null;
-  selbststaendigRentenversichert: "gesetzlich" | "privat" | "nicht" | null;
 
   bruttoMonatsschnitt: number | null;
-
-  isMinijob: boolean | null;
+  isMinijob: YesNo | null;
   steuerklasse: Steuerklasse | null;
-  zahlenSieKirchenSteuer: YesNo | null;
   versicherung: TypeOfVersicherungen | null;
 };
 export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
@@ -125,7 +128,8 @@ const initialState: StepPrototypState = {
     dienstVon: "",
     dienstBis: "",
 
-    hasMehrereTaetigkeiten: null,
+    taetigkeitenFlow: null,
+    hasWeitereTaetigkeiten: null,
     taetigkeiten: [],
   },
 
@@ -158,7 +162,8 @@ const initialState: StepPrototypState = {
     dienstVon: "",
     dienstBis: "",
 
-    hasMehrereTaetigkeiten: null,
+    taetigkeitenFlow: null,
+    hasWeitereTaetigkeiten: null,
     taetigkeiten: [],
   },
 };

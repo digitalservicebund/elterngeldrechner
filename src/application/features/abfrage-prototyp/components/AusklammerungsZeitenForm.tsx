@@ -59,22 +59,36 @@ export function AusklammerungsZeitenForm({
   } = useForm({
     defaultValues: {
       ...stepState,
-      mutterschutzDiesesKindVon: (
-        elternteil === Elternteil.Eins
-          ? stepState.ET1.hasMutterschutzDiesesKind
-          : stepState.ET2.hasMutterschutzDiesesKind
-      )
-        ? berechneterMutterschutzBeginn(
-            geburtsdatumDesKindes,
-          ).toLocaleDateString("de-DE")
-        : "",
-      mutterschutzDiesesKindBis: (
-        elternteil === Elternteil.Eins
-          ? stepState.ET1.hasMutterschutzDiesesKind
-          : stepState.ET2.hasMutterschutzDiesesKind
-      )
-        ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
-        : "",
+      ET1: {
+        ...stepState.ET1,
+        mutterschutzDiesesKindVon:
+          stepState.ET1.mutterschutzAnderesKindVon.length === 0 &&
+          stepState.ET1.hasMutterschutzDiesesKind
+            ? berechneterMutterschutzBeginn(
+                geburtsdatumDesKindes,
+              ).toLocaleDateString("de-DE")
+            : "",
+        mutterschutzDiesesKindBis:
+          stepState.ET1.mutterschutzAnderesKindVon.length === 0 &&
+          stepState.ET1.hasMutterschutzDiesesKind
+            ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
+            : "",
+      },
+      ET2: {
+        ...stepState.ET2,
+        mutterschutzDiesesKindVon:
+          stepState.ET2.mutterschutzAnderesKindVon.length === 0 &&
+          stepState.ET2.hasMutterschutzDiesesKind
+            ? berechneterMutterschutzBeginn(
+                geburtsdatumDesKindes,
+              ).toLocaleDateString("de-DE")
+            : "",
+        mutterschutzDiesesKindBis:
+          stepState.ET2.mutterschutzAnderesKindVon.length === 0 &&
+          stepState.ET2.hasMutterschutzDiesesKind
+            ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
+            : "",
+      },
     },
   });
 
@@ -124,8 +138,16 @@ export function AusklammerungsZeitenForm({
     ) {
       const mutterschutz: Ausklammerung = {
         beschreibung: "Mutterschutz für dieses Kind",
-        von: parseGermanDateString(getValues("mutterschutzDiesesKindVon")),
-        bis: parseGermanDateString(getValues("mutterschutzDiesesKindBis")),
+        von: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
+          ),
+        ),
+        bis: parseGermanDateString(
+          getValues(
+            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
+          ),
+        ),
       };
       ausklammerungen.push(mutterschutz);
     }
@@ -228,14 +250,17 @@ export function AusklammerungsZeitenForm({
               </label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.mutterschutzDiesesKindVon?.message}
-                {...register("mutterschutzDiesesKindVon", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.mutterschutzDiesesKindVon?.message
+                    : errors.ET2?.mutterschutzDiesesKindVon?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
                   },
-                })}
+                )}
               />
             </div>
             <div>
@@ -244,14 +269,17 @@ export function AusklammerungsZeitenForm({
               </label>
               <CustomDate
                 // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={errors.mutterschutzDiesesKindBis?.message}
-                {...register("mutterschutzDiesesKindBis", {
-                  required: "Dieses Feld ist erforderlich",
-                  pattern: {
-                    value: /^\d{2}\.\d{2}\.\d{4}$/,
-                    message: "Bitte das Feld vollständig ausfüllen",
+                error={
+                  elternteil === Elternteil.Eins
+                    ? errors.ET1?.mutterschutzDiesesKindBis?.message
+                    : errors.ET2?.mutterschutzDiesesKindBis?.message
+                }
+                {...register(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
+                  {
+                    required: "Dieses Feld ist erforderlich",
                   },
-                })}
+                )}
               />
             </div>
           </div>

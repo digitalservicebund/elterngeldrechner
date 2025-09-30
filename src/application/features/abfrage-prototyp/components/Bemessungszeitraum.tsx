@@ -20,7 +20,6 @@ type Props = {
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
   readonly flow?: PersonPageFlow;
-  // readonly hasAusklammerungsgrund: boolean;
   readonly auszuklammerndeZeitraeume?: Ausklammerung[];
 };
 
@@ -32,7 +31,7 @@ export function Bemessungszeitraum({
 }: Props) {
   const store = useAppStore();
 
-  const { handleSubmit } = useForm({
+  const { handleSubmit, getValues } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 

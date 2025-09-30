@@ -52,6 +52,7 @@ export function BeispielePage() {
     } else {
       await navigate(formSteps.person2.route);
     }
+    // navigate(-1)
   };
 
   const navigiereZuPlaner = async () => {

@@ -12,14 +12,18 @@ import {
   berechneExaktenBemessungszeitraum,
 } from "./berechneBemessungszeitraum";
 import { PersonPageFlow } from "./PersonPageRouting";
-import { InfoZuTaetigkeiten } from "./InfoZuTaetigkeiten";
 import {
   CustomNumberField,
+  InfoZuMiniJobs,
   YesNoRadio,
 } from "../../abfrageteil/components/common";
 import { Antragstellende, YesNo } from "../../abfrageteil/state";
 import { CustomRadioGroup } from "@/application/components";
 import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
+import { InfoZuKVPflicht } from "./InfoZuKVPflicht";
+import { InfoZuRVPflicht } from "./InfoZuRVPflicht";
+import { InfoZuAVPflicht } from "./InfoZuAVPflicht";
+import { InfoZuBruttoGewinn } from "./InfoZuBruttoGewinn";
 
 type Props = {
   readonly id?: string;
@@ -29,7 +33,7 @@ type Props = {
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
     auszuklammerndeZeitraeume?: Ausklammerung[],
-    hasMehrereTaetigkeiten?: YesNo | null,
+    hasWeitereTaetigkeiten?: YesNo | null,
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
@@ -49,9 +53,10 @@ export function EinkommenAngabenForm({
 }: Props) {
   const store = useAppStore();
 
-  const { control, handleSubmit, register, formState } = useForm({
-    defaultValues: store.getState().stepPrototyp,
-  });
+  const { control, handleSubmit, register, formState, watch, getValues } =
+    useForm({
+      defaultValues: store.getState().stepPrototyp,
+    });
 
   const submitAngabenEinkommen = useCallback(
     (values: StepPrototypState) => {
@@ -70,94 +75,151 @@ export function EinkommenAngabenForm({
     auszuklammerndeZeitraeume ?? [],
   );
 
+  const isMinijob = watch(
+    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.isMinijob`,
+  );
+
   return (
     <form id={id} onSubmit={handleSubmit(submitAngabenEinkommen)} noValidate>
       <div>
-        <div className="mt-40 rounded bg-grey-light inline-block py-10">
-          <span className="font-bold px-20">
-            Bemessungszeitraum: {maximalerBemessungszeitraum}
-          </span>
-        </div>
-        <h2 className="mt-16">
-          Einkommen {einkommenAngabenStep.taetigkeitIndex + 1}:
-        </h2>
-
-        <p>Test</p>
-
         {einkommenAngabenStep.taetigkeitArt === "selbststaendig" && (
           <div>
-            <h3 className="mb-40">Einkommen aus selbstständiger Arbeit</h3>
+            <h3>Einkommen aus selbstständiger Arbeit</h3>
+            <div className="mt-20 mb-40 rounded bg-grey-light inline-block py-10">
+              <span className="font-bold px-20">
+                Bemessungszeitraum: {maximalerBemessungszeitraum}
+              </span>
+            </div>
 
-            <h5 className="mb-8">Sind Sie gesetzlich pflichtversichert?</h5>
+            <h5 className="mb-8">Sind Sie kirchensteuerpflichtig?</h5>
             <YesNoRadio
               className="mb-32"
               legend=""
-              slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigPflichtversichert`}
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.zahlenSieKirchenSteuer`}
               errors={formState.errors}
             />
 
-            <h5 className="mb-8 mt-40">Wie waren Sie rentenversichert?</h5>
-            <CustomRadioGroup
+            <h5 className="mb-8">
+              Sind Sie über die gesetzliche Krankenversicherung
+              pflichtversichert?
+            </h5>
+            <YesNoRadio
+              className="mb-32"
+              legend=""
+              slotBetweenLegendAndOptions={<InfoZuKVPflicht />}
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigRentenversichert`}
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigKVPflichtversichert`}
               errors={formState.errors}
-              options={[
-                {
-                  value: "gesetzlich",
-                  label: "gesetzlich rentenversichert",
-                },
-                {
-                  value: "privat",
-                  label: "privat rentenversichert",
-                },
-                {
-                  value: "nicht",
-                  label: "Ich war nicht rentenversichert",
-                },
-              ]}
-              required
+            />
+
+            <h5 className="mb-8">
+              Zahlen Sie Pflichtbeiträge in die gesetzliche Rentenversicherung?
+            </h5>
+            <YesNoRadio
+              className="mb-32"
+              legend=""
+              slotBetweenLegendAndOptions={<InfoZuRVPflicht />}
+              register={register}
+              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigRVPflichtversichert`}
+              errors={formState.errors}
+            />
+
+            <h5 className="mb-8">
+              Zahlen Sie Pflichtbeiträge in die gesetzliche
+              Arbeitslosenversicherung?
+            </h5>
+            <YesNoRadio
+              className="mb-32"
+              legend=""
+              slotBetweenLegendAndOptions={<InfoZuAVPflicht />}
+              register={register}
+              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigAVPflichtversichert`}
+              errors={formState.errors}
             />
 
             <h5 className="mb-8 mt-40">
               Wie viel haben Sie im Bemessungszeitraum brutto im Kalenderjahr
-              verdient??
+              verdient?
             </h5>
             <CustomNumberField
               name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
               label="Brutto-Gewinn im Kalenderjahr"
+              slotBeforeLabel={<InfoZuBruttoGewinn />}
               suffix="Euro"
               control={control}
             />
           </div>
         )}
 
-        {einkommenAngabenStep.taetigkeitArt === "nichtSelbststaendig" &&
-          (einkommenAngabenStep.einkommenFormPart === "A" ? (
-            <div>
-              <h3 className="mb-40">
-                Einkommen aus nicht-selbstständiger Arbeit
-              </h3>
+        {einkommenAngabenStep.taetigkeitArt === "nichtSelbststaendig" && (
+          <div>
+            <h3>Einkommen aus nicht-selbstständiger Arbeit</h3>
 
-              <h5 className="mb-8">
-                Handelt es sich um Einkommen aus einem Minijob?{" "}
-              </h5>
-              <YesNoRadio
-                className="mb-32"
-                legend=""
-                slotBetweenLegendAndOptions={<InfoZuTaetigkeiten />}
-                register={register}
-                registerOptions={{ required: "Dieses Feld ist erforderlich" }}
-                name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.0.isMinijob`}
-                errors={formState.errors}
-              />
+            <div className="mt-20 mb-40 rounded bg-grey-light inline-block py-10">
+              <span className="font-bold px-20">
+                Bemessungszeitraum: {maximalerBemessungszeitraum}
+              </span>
             </div>
-          ) : (
-            <p>Test</p>
-          ))}
+
+            <h5 className="mb-8">
+              Handelt es sich um Einkommen aus einem Minijob?{" "}
+            </h5>
+            <YesNoRadio
+              className="mb-32"
+              legend=""
+              slotBetweenLegendAndOptions={<InfoZuMiniJobs />}
+              register={register}
+              registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.isMinijob`}
+              errors={formState.errors}
+            />
+
+            {isMinijob === YesNo.YES && (
+              <div>
+                <h5 className="mb-8 mt-40">
+                  Wie viel haben Sie im Bemessungszeitraum durchschnittlich im
+                  Monat brutto verdient?
+                </h5>
+                <p className="mt-20">
+                  Wenn Ihr Einkommen über diesen Zeitraum schwankte, geben Sie
+                  Ihr Einkommen pro Monat ein.
+                </p>
+                <CustomNumberField
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
+                  label="Durschnittliches Brutto-Einkommen pro Monat"
+                  suffix="Euro"
+                  control={control}
+                  className="mt-20"
+                />
+              </div>
+            )}
+
+            {isMinijob === YesNo.NO && (
+              <div>
+                <h5 className="mb-8 mt-40">
+                  Test: Wie viel haben Sie im Bemessungszeitraum
+                  durchschnittlich im Monat brutto verdient?
+                </h5>
+                <p className="mt-20">
+                  Wenn Ihr Einkommen über diesen Zeitraum schwankte, geben Sie
+                  Ihr Einkommen pro Monat ein.
+                </p>
+                <CustomNumberField
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
+                  label="Durschnittliches Brutto-Einkommen pro Monat"
+                  suffix="Euro"
+                  control={control}
+                  className="mt-20"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </form>
   );

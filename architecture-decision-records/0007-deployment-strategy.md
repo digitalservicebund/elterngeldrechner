@@ -9,15 +9,15 @@ Date: 2025-09-24
 
 ## Context
 
-The Elterngeldrechner is part of the Familienportal, managed via a content management system operated by a hosting partner.
+The Elterngeldrechner is part of the Familienportal, which is managed via a content management system operated by a hosting partner.
 
 Until now, releasing a new version involved uploading the artifact to a sharepoint folder and notifying our hosting partner.
-Typically, they would include it in their next scheduled release, which could take several days, or publish it immediately
+Typically, they would include it in their next scheduled release, which could take several days or weeks, or publish it next to immediately,
 if we requested a hotfix.
 
-This process was slow, relied on manual communication, and had the additional drawback that we never knew exactly when
-a release would go live. This uncertainty was especially problematic for releases that required deploying a new version
-of the matomo container, which should only happen once the new version was live.
+This process was slow, relied on manual communication (and thus occasionally some delays due to illnesses, holidays etc.), and had the additional drawback
+that we never knew exactly when a release would go live. This uncertainty was especially problematic for releases that required deploying a new version
+of the matomo container, which required the new version to be live.
 
 To work around this, we previously appended the last commit hash to the bundle and set up a github action that checked
 hourly whether the new commit had gone live and notified us accordingly. While effective, this solution added unnecessary
@@ -30,8 +30,8 @@ to optimize the process. After several discussions, the following scenarios emer
 
 #### 1. Deployment via HTTP or SFTP
 
-Deploying files via HTTP or SFTP, supported by Core Media, seemed the most obvious solution. Unfortunately, the hosting partner
-team we contacted faced organizational limitations that prevented them from setting up such an interface.
+Deploying files via HTTP or SFTP, supported by Core Media, seemed the most obvious solution. Unfortunately, security limitations is the system of the
+hosting partner prevented the team that we contacted from setting up such an interface.
 
 #### 2. Hosting a Web Server on Hosting Partner’s Side
 
@@ -53,7 +53,7 @@ Although technically feasible, these organizational and contractual obstacles ma
 
 #### 4. Hosting via CMS with Access (Chosen Approach)
 
-Our partner granting direct access to the content management system allows our team to deploy static files independently,
+Our partner granting us direct access to the content management system allows our team to deploy static files independently,
 decoupling releases from the hosting partner’s release cycle. Uploading takes only a minute, enabling rapid iteration
 without the need for constant coordination.
 
@@ -73,7 +73,7 @@ This approach also removes unnecessary steps:
 
 ## Decision
 
-We will deploy the Elterngeldrechner using **direct cms access**, enabling the team to publish static files ourselves. This approach:
+We will, for now, deploy the Elterngeldrechner using **direct cms access**, enabling the team to publish static files ourselves. This approach:
 
 - Resolves the main release bottlenecks
 - Supports faster iteration and shorter release cycles

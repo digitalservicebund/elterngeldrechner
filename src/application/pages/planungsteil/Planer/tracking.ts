@@ -40,17 +40,6 @@ export function trackMetricsForLebensmonatWurdeGeoeffnet(): void {
   pushTrackingEvent("Lebensmonat-wurde-im-Planer-geöffnet");
 }
 
-export function trackMetricsForEinBeispielWurdeAusgewaehlt(beispiel: {
-  identifier: string;
-}): void {
-  setTrackingVariable(
-    "Identifier-des-ausgewaehlten-Beispiels-im-Planer",
-    beispiel.identifier,
-  );
-
-  pushTrackingEvent("Beispiel-wurde-im-Planer-ausgewählt");
-}
-
 export function trackMetricsForDerPlanHatSichGeaendert(
   plan: PlanMitBeliebigenElternteilen,
   istPlanGueltig: boolean,

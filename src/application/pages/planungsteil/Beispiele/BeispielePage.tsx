@@ -50,6 +50,10 @@ export function BeispielePage() {
       return beispiel.identifier === aktivesBeispiel;
     });
 
+    if (beispiel) {
+      pushTrackingEvent("Beispiel-wurde-ausgewählt");
+    }
+
     await navigateStateful(formSteps.rechnerUndPlaner.route, {
       beispiel,
       plan,
@@ -145,8 +149,6 @@ export function BeispielePage() {
     }
 
     setAktivesBeispiel(aktivierteOption);
-
-    pushTrackingEvent("Beispiel-wurde-ausgewählt");
   };
 
   return (
@@ -520,6 +522,52 @@ if (import.meta.vitest) {
           "Identifier-des-ausgewaehlten-Beispiels",
           "Gemeinsame Planung - Eigene Planung anlegen",
         );
+      });
+
+      it("trackt Beispiel-wurde-ausgewählt wenn mit einem Beispiel weiter navigiert wurde", () => {
+        const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).toHaveBeenLastCalledWith(
+          "Beispiel-wurde-ausgewählt",
+        );
+      });
+
+      it("trackt Beispiel-wurde-ausgewählt nur ein mal bei der Navigation und nicht beim durchprobieren", () => {
+        const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
+
+        screen.getByText("Längere Elternzeit").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).toHaveBeenCalledOnce();
+      });
+
+      it("trackt Beispiel-wurde-ausgewählt nicht wenn mit der Option Eigene Planung weiter navigiert wurde", () => {
+        const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Eigene Planung anlegen").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).not.toBeCalled();
       });
     });
   });

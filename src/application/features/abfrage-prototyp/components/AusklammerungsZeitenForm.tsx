@@ -209,7 +209,7 @@ export function AusklammerungsZeitenForm({
       )
     ) {
       const erkrankung: Ausklammerung = {
-        beschreibung: "Mutterschutz für älteres Kind",
+        beschreibung: "Krankheit wegen der Schwangerschaft",
         von: parseGermanDateString(
           getValues(
             `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,

@@ -153,9 +153,9 @@ export function UebersichtTaetigkeitenForm({
         bruttoJahresgewinn: null,
 
         bruttoMonatsschnitt: null,
+        bruttoMonatsangaben: null,
         isMinijob: null,
         steuerklasse: null,
-        versicherung: null,
       });
     }
     setIsOpen(false);

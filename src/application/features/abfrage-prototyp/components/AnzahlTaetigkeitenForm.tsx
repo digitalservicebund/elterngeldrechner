@@ -67,9 +67,9 @@ export function AnzahlTaetigkeitenForm({
       bruttoJahresgewinn: null,
 
       bruttoMonatsschnitt: null,
+      bruttoMonatsangaben: null,
       isMinijob: null,
       steuerklasse: null,
-      versicherung: null,
     },
   ];
 
@@ -85,9 +85,9 @@ export function AnzahlTaetigkeitenForm({
       bruttoJahresgewinn: null,
 
       bruttoMonatsschnitt: null,
+      bruttoMonatsangaben: null,
       isMinijob: null,
       steuerklasse: null,
-      versicherung: null,
     });
   }
 

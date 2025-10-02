@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   type StepPrototypState,
@@ -10,11 +10,15 @@ import { Elternteil } from "@/monatsplaner";
 import {
   Ausklammerung,
   berechneExaktenBemessungszeitraum,
+  erstelleExakteZeitabschnitteBemessungszeitraum,
+  ZeitabschnittArt,
 } from "./berechneBemessungszeitraum";
 import { PersonPageFlow } from "./PersonPageRouting";
 import {
   CustomNumberField,
+  CustomSelect,
   InfoZuMiniJobs,
+  SelectOption,
   YesNoRadio,
 } from "../../abfrageteil/components/common";
 import { Antragstellende, YesNo } from "../../abfrageteil/state";
@@ -24,6 +28,9 @@ import { InfoZuKVPflicht } from "./InfoZuKVPflicht";
 import { InfoZuRVPflicht } from "./InfoZuRVPflicht";
 import { InfoZuAVPflicht } from "./InfoZuAVPflicht";
 import { InfoZuBruttoGewinn } from "./InfoZuBruttoGewinn";
+import ToggleOff from "@digitalservicebund/icons/ToggleOff";
+import ToggleOn from "@digitalservicebund/icons/ToggleOn";
+import { Steuerklasse } from "@/elterngeldrechner";
 
 type Props = {
   readonly id?: string;
@@ -74,10 +81,46 @@ export function EinkommenAngabenForm({
     flow ?? PersonPageFlow.noFlow,
     auszuklammerndeZeitraeume ?? [],
   );
+  const exakteZeitabschnitteBemessungszeitraum =
+    erstelleExakteZeitabschnitteBemessungszeitraum(
+      geburtsdatumDesKindes,
+      flow ?? PersonPageFlow.noFlow,
+      auszuklammerndeZeitraeume ?? [],
+    );
 
   const isMinijob = watch(
     `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.isMinijob`,
   );
+
+  const [isMinijobToggled, setIsMinijobToggled] = useState<boolean>(false);
+  const [isRegularJobToggled, setIsRegularJobToggled] =
+    useState<boolean>(false);
+
+  const steuerklasseOptions: SelectOption<Steuerklasse | "">[] = [
+    { value: Steuerklasse.I, label: "1" },
+    { value: Steuerklasse.II, label: "2" },
+    { value: Steuerklasse.III, label: "3" },
+    { value: Steuerklasse.IV, label: "4" },
+    { value: Steuerklasse.V, label: "5" },
+  ];
+
+  const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from(
+    { length: 12 },
+    (_, index) => ({
+      label: `${index + 1}. Monat`,
+      value: `${index + 1}`,
+    }),
+  );
+
+  const monthsBeforeBirth: SelectOption[] = MONTHS_BEFORE_BIRTH_OPTIONS;
+
+  const formattedDate = (date: Date) => {
+    return date.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
 
   return (
     <form id={id} onSubmit={handleSubmit(submitAngabenEinkommen)} noValidate>
@@ -108,7 +151,7 @@ export function EinkommenAngabenForm({
             <YesNoRadio
               className="mb-32"
               legend=""
-              slotBetweenLegendAndOptions={<InfoZuKVPflicht />}
+              slotBetweenLegendAndOptions={<InfoZuKVPflicht selbststaendig />}
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigKVPflichtversichert`}
@@ -121,7 +164,7 @@ export function EinkommenAngabenForm({
             <YesNoRadio
               className="mb-32"
               legend=""
-              slotBetweenLegendAndOptions={<InfoZuRVPflicht />}
+              slotBetweenLegendAndOptions={<InfoZuRVPflicht selbststaendig />}
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigRVPflichtversichert`}
@@ -135,7 +178,7 @@ export function EinkommenAngabenForm({
             <YesNoRadio
               className="mb-32"
               legend=""
-              slotBetweenLegendAndOptions={<InfoZuAVPflicht />}
+              slotBetweenLegendAndOptions={<InfoZuAVPflicht selbststaendig />}
               register={register}
               registerOptions={{ required: "Dieses Feld ist erforderlich" }}
               name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigAVPflichtversichert`}
@@ -149,7 +192,7 @@ export function EinkommenAngabenForm({
             <CustomNumberField
               name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
               label="Brutto-Gewinn im Kalenderjahr"
-              slotBeforeLabel={<InfoZuBruttoGewinn />}
+              slotBeforeLabel={<InfoZuBruttoGewinn selbststaendig />}
               suffix="Euro"
               control={control}
             />
@@ -189,33 +232,203 @@ export function EinkommenAngabenForm({
                   Wenn Ihr Einkommen über diesen Zeitraum schwankte, geben Sie
                   Ihr Einkommen pro Monat ein.
                 </p>
-                <CustomNumberField
-                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
-                  label="Durschnittliches Brutto-Einkommen pro Monat"
-                  suffix="Euro"
-                  control={control}
-                  className="mt-20"
-                />
+                <div
+                  className="my-20 mb-32 cursor-pointer"
+                  onClick={() => setIsMinijobToggled(!isMinijobToggled)}
+                >
+                  {!isMinijobToggled ? <ToggleOff /> : <ToggleOn />}
+                  <span className="pl-8">Durchschnittswert oder Monat</span>
+                </div>
+                {!isMinijobToggled ? (
+                  <CustomNumberField
+                    name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsschnitt`}
+                    label="Durschnittliches Brutto-Einkommen pro Monat"
+                    suffix="Euro"
+                    control={control}
+                  />
+                ) : (
+                  <>
+                    {exakteZeitabschnitteBemessungszeitraum!.map(
+                      ({ art, zeitabschnitt }, index) =>
+                        art === ZeitabschnittArt.ausklammerung ? (
+                          <section
+                            key={index}
+                            className="rounded border-dashed p-16 my-32"
+                            aria-live="polite"
+                            aria-labelledby="bmz"
+                          >
+                            <div className="pl-32">
+                              <h4 className="italic">
+                                Übersprungener Zeitraum:
+                              </h4>
+                              <p key={zeitabschnitt.beschreibung}>
+                                {zeitabschnitt.beschreibung}{" "}
+                                {formattedDate(zeitabschnitt.von)} bis{" "}
+                                {formattedDate(zeitabschnitt.bis)}
+                              </p>
+                            </div>
+                          </section>
+                        ) : (
+                          <div key={index} className="bg-off-white p-40 pt-32">
+                            <div className="pl-8">
+                              <strong>{zeitabschnitt.beschreibung}</strong>
+                              {zeitabschnitt.monate.map(
+                                ({ monatsIndex, monatsName }) => (
+                                  <CustomNumberField
+                                    className="mt-10"
+                                    control={control}
+                                    name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsangaben.${monatsIndex}`}
+                                    label={`${monatsName} Brutto-Einkommen`}
+                                    suffix="Euro"
+                                    required
+                                  />
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        ),
+                    )}
+                  </>
+                )}
               </div>
             )}
 
             {isMinijob === YesNo.NO && (
               <div>
-                <h5 className="mb-8 mt-40">
-                  Test: Wie viel haben Sie im Bemessungszeitraum
-                  durchschnittlich im Monat brutto verdient?
+                <h5 className="mb-20">Welche Steuerklasse hatten Sie?</h5>
+                <CustomSelect
+                  className="mb-32"
+                  autoWidth
+                  register={register}
+                  registerOptions={{
+                    required: "Eine Option muss ausgewählt sein",
+                  }}
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.steuerklasse`}
+                  label="Steuerklasse"
+                  errors={formState.errors}
+                  options={steuerklasseOptions}
+                  required
+                />
+
+                <h5 className="mb-8">Sind Sie kirchensteuerpflichtig?</h5>
+                <YesNoRadio
+                  className="mb-32"
+                  legend=""
+                  register={register}
+                  registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.zahlenSieKirchenSteuer`}
+                  errors={formState.errors}
+                />
+
+                <h5 className="mb-8">
+                  Sind Sie über die gesetzliche Krankenversicherung
+                  pflichtversichert?
                 </h5>
+                <YesNoRadio
+                  className="mb-32"
+                  legend=""
+                  slotBetweenLegendAndOptions={<InfoZuKVPflicht />}
+                  register={register}
+                  registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigKVPflichtversichert`}
+                  errors={formState.errors}
+                />
+
+                <h5 className="mb-8">
+                  Zahlen Sie Pflichtbeiträge in die gesetzliche
+                  Rentenversicherung?
+                </h5>
+                <YesNoRadio
+                  className="mb-32"
+                  legend=""
+                  slotBetweenLegendAndOptions={<InfoZuRVPflicht />}
+                  register={register}
+                  registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigRVPflichtversichert`}
+                  errors={formState.errors}
+                />
+
+                <h5 className="mb-8">
+                  Zahlen Sie Pflichtbeiträge in die gesetzliche
+                  Arbeitslosenversicherung?
+                </h5>
+                <YesNoRadio
+                  className="mb-32"
+                  legend=""
+                  slotBetweenLegendAndOptions={<InfoZuAVPflicht />}
+                  register={register}
+                  registerOptions={{ required: "Dieses Feld ist erforderlich" }}
+                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.selbststaendigAVPflichtversichert`}
+                  errors={formState.errors}
+                />
+
+                <h5 className="mb-8 mt-40 mb-20">
+                  Wie viel haben Sie im Bemessungszeitraum durchschnittlich im
+                  Monat brutto verdient?
+                </h5>
+                <InfoZuBruttoGewinn />
                 <p className="mt-20">
                   Wenn Ihr Einkommen über diesen Zeitraum schwankte, geben Sie
                   Ihr Einkommen pro Monat ein.
                 </p>
-                <CustomNumberField
-                  name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoJahresgewinn`}
-                  label="Durschnittliches Brutto-Einkommen pro Monat"
-                  suffix="Euro"
-                  control={control}
-                  className="mt-20"
-                />
+                <div
+                  className="my-20 mb-32 cursor-pointer"
+                  onClick={() => setIsRegularJobToggled(!isRegularJobToggled)}
+                >
+                  {!isRegularJobToggled ? <ToggleOff /> : <ToggleOn />}
+                  <span className="pl-8">Durchschnittswert oder Monat</span>
+                </div>
+                {!isRegularJobToggled ? (
+                  <CustomNumberField
+                    name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsschnitt`}
+                    label="Durschnittliches Brutto-Einkommen pro Monat"
+                    suffix="Euro"
+                    control={control}
+                  />
+                ) : (
+                  <>
+                    {exakteZeitabschnitteBemessungszeitraum!.map(
+                      ({ art, zeitabschnitt }, index) =>
+                        art === ZeitabschnittArt.ausklammerung ? (
+                          <section
+                            key={index}
+                            className="rounded border-dashed p-16 my-32"
+                            aria-live="polite"
+                            aria-labelledby="bmz"
+                          >
+                            <div className="pl-32">
+                              <h4 className="italic">
+                                Übersprungener Zeitraum:
+                              </h4>
+                              <p key={zeitabschnitt.beschreibung}>
+                                {zeitabschnitt.beschreibung}{" "}
+                                {formattedDate(zeitabschnitt.von)} bis{" "}
+                                {formattedDate(zeitabschnitt.bis)}
+                              </p>
+                            </div>
+                          </section>
+                        ) : (
+                          <div key={index} className="bg-off-white p-40 pt-32">
+                            <div className="pl-8">
+                              <strong>{zeitabschnitt.beschreibung}</strong>
+                              {zeitabschnitt.monate.map(
+                                ({ monatsIndex, monatsName }) => (
+                                  <CustomNumberField
+                                    className="mt-10"
+                                    control={control}
+                                    name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsangaben.${monatsIndex}`}
+                                    label={`${monatsName} Brutto-Einkommen`}
+                                    suffix="Euro"
+                                    required
+                                  />
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        ),
+                    )}
+                  </>
+                )}
               </div>
             )}
           </div>

@@ -57,7 +57,7 @@
     "http-server": "^14.1.1",
     "immer": "^10.1.3",
     "jsdom": "^27.0.0",
-    "lefthook": "^1.13.2",
+    "lefthook": "^1.13.5",
     "license-checker-rseidelsohn": "^4.4.2",
     "node-xlsx": "^0.24.0",
     "original-rechner": "file:original-rechner",

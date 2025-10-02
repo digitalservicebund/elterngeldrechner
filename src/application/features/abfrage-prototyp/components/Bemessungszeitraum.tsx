@@ -80,7 +80,7 @@ export function Bemessungszeitraum({
               <h4 className="italic">Übersprungene Zeiträume:</h4>
               {auszuklammerndeZeitraeume &&
                 auszuklammerndeZeitraeume.map((ausklammerung) => (
-                  <p key={ausklammerung.beschreibung}>
+                  <p key={ausklammerung.beschreibung} className="m-0">
                     {ausklammerung.beschreibung}{" "}
                     {formattedDate(ausklammerung.von)} bis{" "}
                     {formattedDate(ausklammerung.bis)}

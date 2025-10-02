@@ -63,9 +63,10 @@ export type TaetigkeitAngaben = {
   bruttoJahresgewinn: number | null;
 
   bruttoMonatsschnitt: number | null;
+  bruttoMonatsangaben: number[] | null;
   isMinijob: YesNo | null;
   steuerklasse: Steuerklasse | null;
-  versicherung: TypeOfVersicherungen | null;
+  // versicherung: TypeOfVersicherungen | null;
 };
 export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
 

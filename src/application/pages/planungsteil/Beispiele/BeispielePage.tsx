@@ -20,6 +20,7 @@ import {
   pushTrackingEvent,
   setTrackingVariable,
   trackReachedConversionGoal,
+  trackUsageOfPlanungshilfen,
 } from "@/application/user-tracking";
 import type {
   Ausgangslage,
@@ -53,6 +54,7 @@ export function BeispielePage() {
 
     if (beispiel) {
       trackReachedConversionGoal();
+      trackUsageOfPlanungshilfen();
     }
 
     await navigateStateful(formSteps.rechnerUndPlaner.route, {
@@ -541,6 +543,40 @@ if (import.meta.vitest) {
         const trackingFunction = vi.spyOn(
           trackingModule,
           "trackReachedConversionGoal",
+        );
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Eigene Planung anlegen").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).not.toHaveBeenCalled();
+      });
+
+      it("trackt zu dem conversion goal auch noch dass es durch die planungshilfen erreicht wurde", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "trackUsageOfPlanungshilfen",
+        );
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).toHaveBeenCalled();
+      });
+
+      it("trackt nicht die nutzung der planungshilfen wenn eigene planung verwendet wird", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "trackUsageOfPlanungshilfen",
         );
 
         render(<BeispielePage />, {

@@ -50,10 +50,6 @@ export function BeispielePage() {
       return beispiel.identifier === aktivesBeispiel;
     });
 
-    if (beispiel) {
-      pushTrackingEvent("Beispiel-wurde-ausgewählt");
-    }
-
     await navigateStateful(formSteps.rechnerUndPlaner.route, {
       beispiel,
       plan,
@@ -100,22 +96,6 @@ export function BeispielePage() {
     "Identifier-des-ausgewaehlten-Beispiels",
   );
 
-  function sindGemeinsamErziehend(ausgangslage: Ausgangslage): boolean {
-    return ausgangslage.anzahlElternteile === 2;
-  }
-
-  function istAlleinePlanend(ausgangslage: Ausgangslage): boolean {
-    return (
-      ausgangslage.anzahlElternteile === 1 && !ausgangslage.istAlleinerziehend
-    );
-  }
-
-  function istAlleinerziehend(ausgangslage: Ausgangslage): boolean {
-    return (
-      ausgangslage.anzahlElternteile === 1 && !!ausgangslage.istAlleinerziehend
-    );
-  }
-
   const aktiviereOption = (aktivierteOption: string) => {
     const neuesAktivesBeispiel = beispiele.find(
       (beispiel) => beispiel.identifier === aktivierteOption,
@@ -125,27 +105,12 @@ export function BeispielePage() {
       setPlan(neuesAktivesBeispiel.plan);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
+
+      pushTrackingEvent("Beispiel-wurde-ausgewählt");
     } else if (aktivierteOption === EigenePlanung) {
       setPlan(undefined);
 
-      // All beispiele are prefixed with a description of the
-      // ausgangslage. The same prefix is applied to eigene
-      // planung to ensure its identifier remains consistent
-      // with the other examples in Metabase.
-
-      if (sindGemeinsamErziehend(ausgangslage)) {
-        setIdentifierTrackingVariable(
-          "Gemeinsame Planung - Eigene Planung anlegen",
-        );
-      } else if (istAlleinePlanend(ausgangslage)) {
-        setIdentifierTrackingVariable(
-          "Allein planend - Eigene Planung anlegen",
-        );
-      } else if (istAlleinerziehend(ausgangslage)) {
-        setIdentifierTrackingVariable(
-          "Alleinerziehend - Eigene Planung anlegen",
-        );
-      }
+      setIdentifierTrackingVariable(null);
     }
 
     setAktivesBeispiel(aktivierteOption);
@@ -504,7 +469,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("trackt eigene planung anlegen im gleichen schema wie die optionen", () => {
+      it("eigene planung setzt das tracking des ausgewaehlten beispiel zurueck", () => {
         const trackingFunction = vi.spyOn(
           trackingModule,
           "setTrackingVariable",
@@ -520,11 +485,11 @@ if (import.meta.vitest) {
 
         expect(trackingFunction).toHaveBeenLastCalledWith(
           "Identifier-des-ausgewaehlten-Beispiels",
-          "Gemeinsame Planung - Eigene Planung anlegen",
+          null,
         );
       });
 
-      it("trackt Beispiel-wurde-ausgewählt wenn mit einem Beispiel weiter navigiert wurde", () => {
+      it("trackt Beispiel-wurde-ausgewählt nach Auswahl eines Beispiels", () => {
         const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
 
         render(<BeispielePage />, {
@@ -532,31 +497,13 @@ if (import.meta.vitest) {
         });
 
         screen.getByText("Partnerschaftlich aufgeteilt").click();
-
-        screen.getByText("Weiter").click();
 
         expect(trackingFunction).toHaveBeenLastCalledWith(
           "Beispiel-wurde-ausgewählt",
         );
       });
 
-      it("trackt Beispiel-wurde-ausgewählt nur ein mal bei der Navigation und nicht beim durchprobieren", () => {
-        const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
-
-        render(<BeispielePage />, {
-          preloadedState: INITIAL_STATE,
-        });
-
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
-
-        screen.getByText("Längere Elternzeit").click();
-
-        screen.getByText("Weiter").click();
-
-        expect(trackingFunction).toHaveBeenCalledOnce();
-      });
-
-      it("trackt Beispiel-wurde-ausgewählt nicht wenn mit der Option Eigene Planung weiter navigiert wurde", () => {
+      it("trackt Beispiel-wurde-ausgewählt nicht bei der Option Eigene Planung", () => {
         const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
 
         render(<BeispielePage />, {
@@ -564,8 +511,6 @@ if (import.meta.vitest) {
         });
 
         screen.getByText("Eigene Planung anlegen").click();
-
-        screen.getByText("Weiter").click();
 
         expect(trackingFunction).not.toBeCalled();
       });

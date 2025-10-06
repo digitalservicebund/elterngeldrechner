@@ -49,7 +49,7 @@ export function Gesamtsummenanzeige({
         </div>
       )}
 
-      <div className="flex flex-wrap justify-evenly gap-4">
+      <div className="flex flex-col justify-center sm:flex-row sm:gap-[60px]">
         {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
           (elternteil) => (
             <ElterngeldFuerElternteil
@@ -65,7 +65,7 @@ export function Gesamtsummenanzeige({
       </div>
 
       {!!jemandHatEinkommen && (
-        <div className="flex flex-wrap justify-evenly gap-4">
+        <div className="flex flex-col justify-center md:flex-row md:gap-[60px]">
           {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
             (elternteil) => (
               <EinkommenFuerElternteil

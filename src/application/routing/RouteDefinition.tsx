@@ -18,7 +18,14 @@ import {
   InternalStepRoute,
 } from "@/application/routing/internalRoutes";
 import { Elternteil, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
-import { YesNo } from "../features/abfrageteil/state";
+import {
+  stepAllgemeineAngabenSlice,
+  stepEinkommenSlice,
+  stepErwerbstaetigkeitSlice,
+  stepNachwuchsSlice,
+  YesNo,
+} from "../features/abfrageteil/state";
+import { useAppStore } from "../redux/hooks";
 
 // Every page in our application, except for the first one, expects certain redux state
 // slices to be present. Prior to introducing real routes, users could not navigate
@@ -79,7 +86,26 @@ const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <BeispielePage />,
     path: formSteps.beispiele.route,
-    precondition: (state: RootState) => {
+    precondition: (state: RootState, store: ReturnType<typeof useAppStore>) => {
+      if (state.stepPrototyp) {
+        store.dispatch(
+          stepAllgemeineAngabenSlice.actions.migrateFromPrototype(
+            state.stepPrototyp,
+          ),
+        );
+        store.dispatch(
+          stepNachwuchsSlice.actions.migrateFromPrototype(state.stepPrototyp),
+        );
+        store.dispatch(
+          stepErwerbstaetigkeitSlice.actions.migrateFromPrototype(
+            state.stepPrototyp,
+          ),
+        );
+        store.dispatch(
+          stepEinkommenSlice.actions.migrateFromPrototype(state.stepPrototyp),
+        );
+      }
+
       return state.stepPrototyp.limitEinkommenUeberschritten != null;
     },
   },
@@ -93,7 +119,11 @@ const internalRouteDefinition: InternalRouteDefinition = [
   {
     element: <DatenuebernahmeAntragPage />,
     path: formSteps.datenuebernahmeAntrag.route,
-    precondition: (state: RootState, plan?: PlanMitBeliebigenElternteilen) => {
+    precondition: (
+      state: RootState,
+      _,
+      plan?: PlanMitBeliebigenElternteilen,
+    ) => {
       return plan != null && state.stepPrototyp.bundesland != null;
     },
   },

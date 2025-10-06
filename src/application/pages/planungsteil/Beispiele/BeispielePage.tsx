@@ -42,6 +42,8 @@ export function BeispielePage() {
   // TODO: Ensure consistent use of the term planungshilfen rather than beispiele
 
   const store = useAppStore();
+
+  console.log("store", store.getState());
   const navigate = useNavigate();
 
   const { navigationState, navigateStateful } = useNavigateStateful();

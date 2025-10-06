@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { formSteps } from "./formSteps";
 import { RootState } from "@/application/redux";
+import { useAppStore } from "../redux/hooks";
 
 type InternalStepRoute = {
   element: ReactNode;
@@ -8,7 +9,10 @@ type InternalStepRoute = {
 };
 
 type InternalGuardedRoute = InternalStepRoute & {
-  precondition: (state: RootState) => boolean;
+  precondition: (
+    state: RootState,
+    store: ReturnType<typeof useAppStore>,
+  ) => boolean;
 };
 
 type InternalRedirectRoute = {

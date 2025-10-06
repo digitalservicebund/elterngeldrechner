@@ -26,6 +26,7 @@ type Props<
   readonly stretch?: boolean;
   readonly required?: boolean;
   readonly ariaDescribedByIfNoError?: string;
+  readonly onChange?: (value: number | null) => void;
 };
 
 export function CustomNumberField<
@@ -35,6 +36,7 @@ export function CustomNumberField<
   control,
   name,
   label,
+  onChange: externalOnChange,
   slotBetweenLabelAndOptions,
   slotBeforeLabel,
   allowedDecimalPlaces = 2,
@@ -45,7 +47,9 @@ export function CustomNumberField<
   placeholder,
   required,
   ariaDescribedByIfNoError,
-}: Props<TFieldValues, TName>) {
+}: Props<TFieldValues, TName> & {
+  onChange?: (value: number | null) => void;
+}) {
   const registerOptions = useMemo(
     () =>
       ({
@@ -106,11 +110,14 @@ export function CustomNumberField<
         autofix
         value={value === null ? "" : String(value)}
         onAccept={(value: string) => {
-          if (!value) {
-            onChange(null);
-          } else {
-            onChange(+value);
-          }
+          const parsed = value ? +value : null;
+          onChange(parsed);
+          externalOnChange?.(parsed);
+          // if (!value) {
+          //   onChange(null);
+          // } else {
+          //   onChange(+value);
+          // }
         }}
         onBlur={onBlur}
         type="text"

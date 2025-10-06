@@ -288,8 +288,6 @@ export function erstelleExakteZeitabschnitteBemessungszeitraum(
     return vonA.getTime() - vonB.getTime();
   });
 
-  console.log(combined);
-
   return combined;
 }
 

@@ -1,5 +1,6 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "@/application/redux";
+import { StepPrototypState } from "../../abfrage-prototyp/state";
 
 interface Kind {
   geburtsdatum: string;
@@ -30,6 +31,14 @@ export const stepNachwuchsSlice = createSlice({
         ...payload,
         geschwisterkinder: filteredEmptyGeschwisterkinder,
       };
+    },
+    migrateFromPrototype(state, action: PayloadAction<StepPrototypState>) {
+      const prototype = action.payload;
+
+      state.anzahlKuenftigerKinder = prototype.anzahlKuenftigerKinder;
+      state.wahrscheinlichesGeburtsDatum =
+        prototype.wahrscheinlichesGeburtsDatum;
+      state.geschwisterkinder = prototype.geschwisterkinder;
     },
   },
 });

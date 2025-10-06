@@ -11,6 +11,7 @@ type Props = {
 
   readonly precondition: (
     state: RootState,
+    store: ReturnType<typeof useAppStore>,
     plan?: PlanMitBeliebigenElternteilen,
   ) => boolean;
 };
@@ -22,7 +23,7 @@ function RouteGuard({ precondition, fallback, children }: Props) {
   const state = location?.state as StateWithOptionalPlan;
   const plan = state ? state.plan : undefined;
 
-  if (precondition(store.getState(), plan)) {
+  if (precondition(store.getState(), store, plan)) {
     return <>{children}</>;
   } else {
     return <Navigate to={fallback} replace />;

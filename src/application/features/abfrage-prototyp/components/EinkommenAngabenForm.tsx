@@ -22,7 +22,6 @@ import {
   YesNoRadio,
 } from "../../abfrageteil/components/common";
 import { Antragstellende, YesNo } from "../../abfrageteil/state";
-import { CustomRadioGroup } from "@/application/components";
 import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
 import { InfoZuKVPflicht } from "./InfoZuKVPflicht";
 import { InfoZuRVPflicht } from "./InfoZuRVPflicht";
@@ -60,7 +59,7 @@ export function EinkommenAngabenForm({
 }: Props) {
   const store = useAppStore();
 
-  const { control, handleSubmit, register, formState, watch, getValues } =
+  const { control, handleSubmit, register, formState, watch, setValue } =
     useForm({
       defaultValues: store.getState().stepPrototyp,
     });
@@ -103,16 +102,6 @@ export function EinkommenAngabenForm({
     { value: Steuerklasse.IV, label: "4" },
     { value: Steuerklasse.V, label: "5" },
   ];
-
-  const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from(
-    { length: 12 },
-    (_, index) => ({
-      label: `${index + 1}. Monat`,
-      value: `${index + 1}`,
-    }),
-  );
-
-  const monthsBeforeBirth: SelectOption[] = MONTHS_BEFORE_BIRTH_OPTIONS;
 
   const formattedDate = (date: Date) => {
     return date.toLocaleDateString("de-DE", {
@@ -245,6 +234,12 @@ export function EinkommenAngabenForm({
                     label="Durschnittliches Brutto-Einkommen pro Monat"
                     suffix="Euro"
                     control={control}
+                    onChange={() => {
+                      setValue(
+                        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsangaben`,
+                        null,
+                      );
+                    }}
                   />
                 ) : (
                   <>
@@ -281,6 +276,12 @@ export function EinkommenAngabenForm({
                                     label={`${monatsName} Brutto-Einkommen`}
                                     suffix="Euro"
                                     required
+                                    onChange={() => {
+                                      setValue(
+                                        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsschnitt`,
+                                        null,
+                                      );
+                                    }}
                                   />
                                 ),
                               )}
@@ -384,6 +385,12 @@ export function EinkommenAngabenForm({
                     label="Durschnittliches Brutto-Einkommen pro Monat"
                     suffix="Euro"
                     control={control}
+                    onChange={() => {
+                      setValue(
+                        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsangaben`,
+                        null,
+                      );
+                    }}
                   />
                 ) : (
                   <>
@@ -420,6 +427,12 @@ export function EinkommenAngabenForm({
                                     label={`${monatsName} Brutto-Einkommen`}
                                     suffix="Euro"
                                     required
+                                    onChange={() => {
+                                      setValue(
+                                        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${einkommenAngabenStep.taetigkeitIndex}.bruttoMonatsschnitt`,
+                                        null,
+                                      );
+                                    }}
                                   />
                                 ),
                               )}

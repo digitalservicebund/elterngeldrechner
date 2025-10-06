@@ -34,6 +34,8 @@ export function BeispielePage() {
   // TODO: Ensure consistent use of the term beispiele rather than planungshilfen
 
   const store = useAppStore();
+
+  console.log("store", store.getState());
   const navigate = useNavigate();
 
   const { navigationState, navigateStateful } = useNavigateStateful();

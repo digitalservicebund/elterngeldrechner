@@ -19,6 +19,7 @@ import { formSteps } from "@/application/routing/formSteps";
 import {
   pushTrackingEvent,
   setTrackingVariable,
+  trackReachedConversionGoal,
 } from "@/application/user-tracking";
 import type {
   Ausgangslage,
@@ -49,6 +50,10 @@ export function BeispielePage() {
     const beispiel = beispiele.find((beispiel) => {
       return beispiel.identifier === aktivesBeispiel;
     });
+
+    if (beispiel) {
+      trackReachedConversionGoal();
+    }
 
     await navigateStateful(formSteps.rechnerUndPlaner.route, {
       beispiel,
@@ -513,6 +518,40 @@ if (import.meta.vitest) {
         screen.getByText("Eigene Planung anlegen").click();
 
         expect(trackingFunction).not.toBeCalled();
+      });
+
+      it("erreicht conversion goal wenn mit einem Beispiel weiter navigiert wird", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "trackReachedConversionGoal",
+        );
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Partnerschaftlich aufgeteilt").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).toHaveBeenCalledOnce();
+      });
+
+      it("erreicht conversion goal nicht wenn mit eigener Planung weiter navigiert wird", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "trackReachedConversionGoal",
+        );
+
+        render(<BeispielePage />, {
+          preloadedState: INITIAL_STATE,
+        });
+
+        screen.getByText("Eigene Planung anlegen").click();
+
+        screen.getByText("Weiter").click();
+
+        expect(trackingFunction).not.toHaveBeenCalled();
       });
     });
   });

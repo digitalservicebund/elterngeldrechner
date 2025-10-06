@@ -26,7 +26,15 @@ export function getTrackingVariableFrom<T>(
   return lastElementsProperty ? (lastElementsProperty as T) : null;
 }
 
-export function pushTrackingEvent(name: string): void {
+type PushOptions = Partial<{ unique: boolean }>;
+
+export function pushTrackingEvent(name: string, options?: PushOptions): void {
+  if (options?.unique) {
+    if (window._mtm?.some((it) => it["event"] === name)) {
+      return;
+    }
+  }
+
   window._mtm?.push({ event: name });
 }
 
@@ -103,6 +111,14 @@ if (import.meta.vitest) {
           { "variable-a": 1 },
           { event: "test-event" },
         ]);
+      });
+
+      it("appends an entry to the data layer but respects unique option", () => {
+        window._mtm = [{ event: "test-event" }];
+
+        pushTrackingEvent("test-event", { unique: true });
+
+        expect(window._mtm).toStrictEqual([{ event: "test-event" }]);
       });
     });
   });

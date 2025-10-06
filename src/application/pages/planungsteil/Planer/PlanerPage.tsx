@@ -37,6 +37,7 @@ import {
   isTrackingAllowedByUser,
   trackEase,
   trackObstacle,
+  trackReachedConversionGoal,
 } from "@/application/user-tracking";
 import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 import type {
@@ -93,6 +94,7 @@ export function PlanerPage() {
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
   ): void {
+    trackReachedConversionGoal();
     setHasChanges(true);
     resetBeispiel();
     setPlan(plan);

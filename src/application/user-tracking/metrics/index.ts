@@ -12,3 +12,4 @@ export {
   trackPlannedMonths,
   trackPlannedMonthsWithIncome,
 } from "./planung";
+export { trackReachedConversionGoal } from "./conversionGoal";

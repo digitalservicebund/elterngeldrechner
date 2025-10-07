@@ -39,7 +39,7 @@ jobs:
         uses: softprops/action-gh-release@62c96d0c4e8a889135c1f3a25910db8dbe0e85f7
         with:
           tag_name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
-          name: "Release ${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
+          name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
           files: dist/assets/*
           body: ${{ steps.git-cliff.outputs.content }}
 

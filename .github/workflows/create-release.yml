@@ -22,7 +22,7 @@ jobs:
         run: npm run audit-licenses
 
       - name: Generate the changelog
-        uses: orhun/git-cliff-action@v4
+        uses: orhun/git-cliff-action@d77b37db2e3f7398432d34b72a12aa3e2ba87e51
         id: git-cliff
         with:
           args: --unreleased

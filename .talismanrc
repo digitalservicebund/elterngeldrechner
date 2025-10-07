@@ -1,6 +1,8 @@
 fileignoreconfig:
 - filename: src/application/routing/pages/BeispielePage.tsx
   checksum: 7362309af0d734a216e82e13dc74520e38cb8a40ae85149fa4ba5b6f39cd9687
+- filename: .github/workflows/create-release.yml
+  checksum: adcffd3566b06440679beff57b70eb701e5be20f407f9da10c28d0077ef86146
 version: "1.0"
 scopeconfig:
 - scope: node

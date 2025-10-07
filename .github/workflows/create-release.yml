@@ -1,8 +1,6 @@
-name: Create Release Assets
+name: Create Release
 
-on:
-  release:
-    types: [created]
+on: workflow_dispatch
 
 jobs:
   release:
@@ -23,10 +21,27 @@ jobs:
       - name: Audit Licenses
         run: npm run audit-licenses
 
-      - name: Upload assets to release
+      - name: Generate the changelog
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
+        with:
+          args: --unreleased
+
+      - name: Generate release date
+        id: release_date
+        run: echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Generate short SHA
+        id: short_sha
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Create the release
         uses: softprops/action-gh-release@62c96d0c4e8a889135c1f3a25910db8dbe0e85f7
         with:
+          tag_name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
+          name: "Release ${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
           files: dist/assets/*
+          body: ${{ steps.git-cliff.outputs.content }}
 
       - name: Report Deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
@@ -36,19 +51,20 @@ jobs:
           metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
-      - name: Create metabase release event
+      - name: Create Metabase release event
         env:
           METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}
           METABASE_DOMAIN: ${{ secrets.EGR_METABASE_DOMAIN }}
+          RELEASE_NAME: "Release ${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
         run: |
-          # Get the current timestamp in the required format (ISO 8601 with timezone)
+          # Get the current timestamp in ISO 8601 format
           TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%S.000+00:00")
 
           curl -X POST "https://${METABASE_DOMAIN}/api/timeline-event/" \
             -H "x-api-key: $METABASE_API_KEY" \
             -H "Content-Type: application/json" \
             -d '{
-                  "name": "Release",
+                  "name": "'"$RELEASE_NAME"'",
                   "description": null,
                   "timestamp": "'"$TIMESTAMP"'",
                   "timeline_id": 1,

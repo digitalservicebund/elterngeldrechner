@@ -1,11 +1,8 @@
 import {
   pushTrackingEvent,
-  resetTrackingPlanung,
   setTrackingVariable,
   trackAnzahlGeplanterMonateDesPartnersDerMutter,
   trackPartnerschaftlicheVerteilung,
-  trackPlannedMonths,
-  trackPlannedMonthsWithIncome,
 } from "@/application/user-tracking";
 import {
   type Ausgangslage,
@@ -22,10 +19,6 @@ import {
 
 export function trackMetricsForPlanungDrucken(): void {
   pushTrackingEvent("Planung-wurde-gedruckt");
-}
-
-export function trackMetricsForPlanerWurdeGeoeffnet(): void {
-  resetTrackingPlanung();
 }
 
 export function trackMetricsForErklaerungenWurdenGeoeffnet(): void {
@@ -48,10 +41,7 @@ export function trackMetricsForDerPlanHatSichGeaendert(
     trackPartnerschaftlicheVerteilungForPlan(plan);
   }
 
-  trackPlannedMonths(plan);
-  trackPlannedMonthsWithIncome(plan);
   evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(plan);
-  pushTrackingEvent("Plan-wurde-geändert");
 }
 
 export function trackMetricsForEineOptionWurdeGewaehlt(): void {
@@ -59,7 +49,6 @@ export function trackMetricsForEineOptionWurdeGewaehlt(): void {
 }
 
 export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
-  resetTrackingPlanung();
   pushTrackingEvent("Plan-wurde-zurückgesetzt");
   setTrackingVariable("Identifier-des-ausgewaehlten-Beispiels-im-Planer", null);
 }

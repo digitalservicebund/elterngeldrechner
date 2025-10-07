@@ -7,10 +7,5 @@ export {
 export { trackNutzergruppe } from "./nutzergruppe";
 export { trackUsageOfPlanungshilfen } from "./planungshilfen";
 export { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
-export {
-  resetTrackingPlanung,
-  trackAnzahlGeplanterMonateDesPartnersDerMutter,
-  trackPlannedMonths,
-  trackPlannedMonthsWithIncome,
-} from "./planung";
+export { trackAnzahlGeplanterMonateDesPartnersDerMutter } from "./planung";
 export { trackReachedConversionGoal } from "./conversionGoal";

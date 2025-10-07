@@ -7,7 +7,6 @@ import {
   trackMetricsForErklaerungenWurdenGeschlossen,
   trackMetricsForLebensmonatWurdeGeoeffnet,
   trackMetricsForPlanWurdeZurueckgesetzt,
-  trackMetricsForPlanerWurdeGeoeffnet,
   trackMetricsForPlanungDrucken,
 } from "./tracking";
 import { Button } from "@/application/components";
@@ -147,8 +146,6 @@ export function PlanerPage() {
 
     void navigateStateful(formSteps.datenuebernahmeAntrag.route, { plan });
   }
-
-  useEffect(trackMetricsForPlanerWurdeGeoeffnet, []);
 
   // TODO: Consider implementing erklaerung as a new layer that
   // covers the planer and not replaces it in the dom.

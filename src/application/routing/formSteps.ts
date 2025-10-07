@@ -13,22 +13,22 @@ export const formSteps = {
     route: "/einfuehrung",
   },
   kind: {
-    heading: "1. Angaben zum Kind",
+    heading: "Angaben zum Kind",
     shortName: "Angaben zum Kind",
     route: "/kind",
   },
   familie: {
-    heading: "2. Angaben zur Familie",
+    heading: "Angaben zur Familie",
     shortName: "Angaben zur Familie",
     route: "/familie",
   },
   person1: {
-    heading: "3. Angaben Person 1",
+    heading: "Angaben Person 1",
     shortName: "Angaben Person 1",
     route: "/person1",
   },
   person2: {
-    heading: "4. Angaben Person 2",
+    heading: "Angaben Person 2",
     shortName: "Angaben Person 2",
     route: "/person2",
   },

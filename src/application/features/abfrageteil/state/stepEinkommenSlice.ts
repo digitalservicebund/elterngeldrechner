@@ -14,6 +14,7 @@ import {
 import { StepPrototypState } from "../../abfrage-prototyp/state";
 import { Taetigkeit } from "../components/EinkommenForm/Taetigkeit";
 import { PersonPageFlow } from "../../abfrage-prototyp/components/PersonPageRouting";
+import { TaetigkeitAngaben } from "../../abfrage-prototyp/state/stepPrototypSlice";
 
 export interface Zeitraum {
   from: string;
@@ -199,7 +200,8 @@ export const stepEinkommenSlice = createSlice({
         )
           ? KassenArt.GESETZLICH_PFLICHTVERSICHERT
           : KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
-        taetigkeitenNichtSelbstaendigUndSelbstaendig: [],
+        taetigkeitenNichtSelbstaendigUndSelbstaendig:
+          prototype.ET1.taetigkeiten.map(mapTaetigkeitAngabenToTaetigkeit),
         istErwerbstaetig:
           prototype.ET1.isNichtSelbststaendig || prototype.ET1.isSelbststaendig
             ? YesNo.YES
@@ -272,7 +274,8 @@ export const stepEinkommenSlice = createSlice({
         )
           ? KassenArt.GESETZLICH_PFLICHTVERSICHERT
           : KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
-        taetigkeitenNichtSelbstaendigUndSelbstaendig: [],
+        taetigkeitenNichtSelbstaendigUndSelbstaendig:
+          prototype.ET2.taetigkeiten.map(mapTaetigkeitAngabenToTaetigkeit),
         istErwerbstaetig:
           prototype.ET2.isNichtSelbststaendig || prototype.ET2.isSelbststaendig
             ? YesNo.YES
@@ -390,3 +393,47 @@ export const stepEinkommenSlice = createSlice({
   // );
   // },
 });
+
+function mapTaetigkeitAngabenToTaetigkeit(
+  angaben: TaetigkeitAngaben,
+): Taetigkeit {
+  const versicherungen: TypeOfVersicherungen = {
+    hasRentenversicherung:
+      angaben.selbststaendigRVPflichtversichert != null
+        ? angaben.selbststaendigRVPflichtversichert
+        : false,
+    hasKrankenversicherung:
+      angaben.selbststaendigKVPflichtversichert != null
+        ? angaben.selbststaendigKVPflichtversichert
+        : false,
+    hasArbeitslosenversicherung:
+      angaben.selbststaendigAVPflichtversichert != null
+        ? angaben.selbststaendigAVPflichtversichert
+        : false,
+    none:
+      angaben.selbststaendigRVPflichtversichert ||
+      angaben.selbststaendigKVPflichtversichert ||
+      angaben.selbststaendigAVPflichtversichert
+        ? false
+        : true,
+  };
+
+  if (angaben.taetigkeitenArt === "selbststaendig") {
+    return {
+      artTaetigkeit: "Selbststaendig",
+      gewinneinkuenfte: angaben.bruttoJahresgewinn,
+      versicherungen,
+    };
+  }
+
+  return {
+    artTaetigkeit: "NichtSelbststaendig",
+    bruttoEinkommenDurchschnitt:
+      angaben.bruttoMonatsschnitt != null
+        ? angaben.bruttoMonatsschnitt
+        : (angaben.bruttoMonatsangaben?.reduce((a, b) => a + b, 0) ?? 0),
+    isMinijob: angaben.isMinijob,
+    zeitraum: [{ from: "1", to: "12" }],
+    versicherungen,
+  };
+}

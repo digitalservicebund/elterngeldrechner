@@ -66,7 +66,6 @@ export type TaetigkeitAngaben = {
   bruttoMonatsangaben: number[] | null;
   isMinijob: YesNo | null;
   steuerklasse: Steuerklasse | null;
-  // versicherung: TypeOfVersicherungen | null;
 };
 export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
 

@@ -326,7 +326,7 @@ export function PersonPage({ elternteil }: Props) {
       elternteil === Elternteil.Zwei &&
       currentPersonPageStepET2 == "angabenPerson"
     ) {
-      return "4. Sollen beide Elternteile Elterngeld bekommen?";
+      return "Sollen beide Elternteile Elterngeld bekommen?";
     } else if (
       elternteil === Elternteil.Eins
         ? currentPersonPageStepET1 === "einkommenAngaben"
@@ -346,7 +346,7 @@ export function PersonPage({ elternteil }: Props) {
         }
       }
     }
-    return `${elternteil === Elternteil.Eins ? "3" : "4"}. Einkommensdaten ${elternteil === Elternteil.Eins ? elternteilNames.ET1 : elternteilNames.ET2}`;
+    return `Einkommensdaten ${elternteil === Elternteil.Eins ? elternteilNames.ET1 : elternteilNames.ET2}`;
   };
 
   const navigationDetails = "";

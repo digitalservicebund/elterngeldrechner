@@ -13,7 +13,6 @@ body = """
             {{ commit.message | upper_first }}\
     {% endfor %}
 {% endfor %}
-**Full Changelog:** {{ commit_range.from }}..{{ commit_range.to }}
 """
 
 # Remove leading and trailing whitespaces from the changelog's body.

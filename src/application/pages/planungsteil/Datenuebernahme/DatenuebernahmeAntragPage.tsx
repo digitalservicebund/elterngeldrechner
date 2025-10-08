@@ -65,6 +65,10 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     window.open(bundesland.link, "_blank", "noreferrer");
   }
 
+  function trackReferenzAufLandesseite() {
+    pushTrackingEvent("Referenz-auf-Landesseite-wurde-geklickt");
+  }
+
   async function downloadGanzerAntrag() {
     setAntragDownloading(true);
 
@@ -227,7 +231,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               href={bundesland.link}
               target="_blank"
               rel="noreferrer"
-              onClick={(event) => trackedDownloadOfAnlagen(event, bundesland)}
+              onClick={() => trackReferenzAufLandesseite()}
             >
               <ArrowOutward /> Zum Antrag auf Elterngeld in {bundesland.name}
             </a>

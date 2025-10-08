@@ -11,37 +11,34 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      - name: Build egr
+      - name: Build elterngeldrechner for production
         run: npm run build:production
         env:
           VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE: ${{ secrets.USER_TRACKING_TAG_MANAGER_SOURCE }}
           EGR_BUILD_VERSION_HASH: ${{ github.sha }}
           VITE_BASE_PATH: /resource
 
-      - name: Audit Licenses
+      - name: Audit licenses
         run: npm run audit-licenses
+
+      - name: Generate the next version
+        uses: orhun/git-cliff-action@d77b37db2e3f7398432d34b72a12aa3e2ba87e51
+        id: version
+        with:
+          args: --bumped-version
 
       - name: Generate the changelog
         uses: orhun/git-cliff-action@d77b37db2e3f7398432d34b72a12aa3e2ba87e51
-        id: git-cliff
+        id: changelog
         with:
           args: --unreleased
-
-      - name: Generate release date
-        id: release_date
-        run: echo "RELEASE_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-      - name: Generate short SHA
-        id: short_sha
-        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Create the release
         uses: softprops/action-gh-release@aec2ec56f94eb8180ceec724245f64ef008b89f5
         with:
-          tag_name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
-          name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
+          tag_name: ${{ steps.version.outputs.content }}
+          body: ${{ steps.changelog.outputs.content }}
           files: dist/assets/*
-          body: ${{ steps.git-cliff.outputs.content }}
 
       - name: Report Deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
@@ -55,7 +52,7 @@ jobs:
         env:
           METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}
           METABASE_DOMAIN: ${{ secrets.EGR_METABASE_DOMAIN }}
-          RELEASE_NAME: "Release ${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
+          RELEASE_NAME: ${{ steps.version.outputs.content }}
         run: |
           # Get the current timestamp in ISO 8601 format
           TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%S.000+00:00")

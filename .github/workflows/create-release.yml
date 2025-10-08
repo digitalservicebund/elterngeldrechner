@@ -26,6 +26,8 @@ jobs:
         id: git-cliff
         with:
           args: --unreleased
+        env:
+          OUTPUT: release-notes.md
 
       - name: Generate release date
         id: release_date
@@ -41,8 +43,7 @@ jobs:
           tag_name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
           name: "${{ env.RELEASE_DATE }}-${{ env.SHORT_SHA }}"
           files: dist/assets/*
-          body: |
-            ${{ steps.git-cliff.outputs.content }}
+          body_path: release-notes.md
 
       - name: Report Deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

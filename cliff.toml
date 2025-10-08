@@ -12,3 +12,9 @@ body = """
     {% endfor %}
 {% endfor %}
 """
+
+[git]
+tag_pattern = "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+
+[bump]
+initial_tag = "1.0.0"

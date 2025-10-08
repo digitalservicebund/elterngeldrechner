@@ -8,17 +8,13 @@ export function InfoZuTaetigkeiten(): ReactNode {
       answer={
         <>
           <p>
-            Während des Mutterschutzes erhalten Sie Mutterschaftsleistungen, zum
-            Beispiel:
+            Geben Sie hier an, ob Sie im Bemessungszeitraum mehr als einen Job
+            oder eine zusätzliche Tätigkeit hatten – zum Beispiel eine
+            Nebentätigkeit oder einen Minijob.
           </p>
-          <ul className="list-inside list-disc ml-10">
-            <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
-            <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
-            <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
-          </ul>
           <p>
-            Diese werden – wenn ein Anspruch darauf besteht – normalerweise in
-            den ersten acht Wochen nach der Geburt gezahlt.
+            Diese Informationen helfen dabei, Ihr Einkommen vollständig zu
+            erfassen und das Elterngeld richtig zu berechnen.
           </p>
         </>
       }

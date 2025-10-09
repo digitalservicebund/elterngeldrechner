@@ -1,5 +1,5 @@
 import { useCallback, useId } from "react";
-import { FieldError, get, useForm, useFieldArray } from "react-hook-form";
+import { FieldError, get, useForm } from "react-hook-form";
 import {
   type StepPrototypState,
   stepPrototypSlice,

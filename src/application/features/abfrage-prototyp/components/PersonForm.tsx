@@ -7,10 +7,7 @@ import {
 import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
-import {
-  Antragstellende,
-  YesNo,
-} from "@/application/features/abfrageteil/state";
+import { Antragstellende } from "@/application/features/abfrageteil/state";
 import { InfoZuVornamen } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuVornamen";
 import { InfoZuAlleinerziehenden } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoFuerAlleinerziehenden";
 import {
@@ -32,10 +29,9 @@ type Props = {
 export function PersonForm({ id, onSubmit, elternteil }: Props) {
   const store = useAppStore();
 
-  const { register, getValues, handleSubmit, setValue, formState, watch } =
-    useForm({
-      defaultValues: store.getState().stepPrototyp,
-    });
+  const { register, getValues, handleSubmit, formState, watch } = useForm({
+    defaultValues: store.getState().stepPrototyp,
+  });
 
   const submitNachwuchs = useCallback(
     (values: StepPrototypState) => {

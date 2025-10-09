@@ -1,10 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
-import {
-  Antragstellende,
-  stepAllgemeineAngabenSlice,
-} from "./stepAllgemeineAngabenSlice";
-import { stepErwerbstaetigkeitSlice } from "./stepErwerbstaetigkeitSlice";
+import { Antragstellende } from "./stepAllgemeineAngabenSlice";
 import {
   KassenArt,
   KinderFreiBetrag,
@@ -115,10 +111,10 @@ const initialStepEinkommenElternteil: StepEinkommenElternteil = {
   istNichtSelbststaendig: null,
 };
 
-const resetStepEinkommenElternteil: StepEinkommenElternteil = {
-  ...initialStepEinkommenElternteil,
-  istErwerbstaetig: YesNo.NO,
-};
+// const resetStepEinkommenElternteil: StepEinkommenElternteil = {
+//   ...initialStepEinkommenElternteil,
+//   istErwerbstaetig: YesNo.NO,
+// };
 
 export interface StepEinkommenState {
   ET1: StepEinkommenElternteil;

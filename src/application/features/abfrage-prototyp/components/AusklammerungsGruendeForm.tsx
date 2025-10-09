@@ -58,14 +58,6 @@ export function AusklammerungsGruendeForm({
     flow ?? PersonPageFlow.noFlow,
   );
 
-  const checkboxNames = [
-    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
-    // `${elternteil === Elternteil.Eins}.hasMutterschutzAnderesKind`,
-    // `${elternteil === Elternteil.Eins}.isBeamtet`,
-    // `${elternteil === Elternteil.Eins}.hasElterngeldAnderesKind`,
-    // `${elternteil === Elternteil.Eins}.hasErkrankung`,
-  ];
-
   function isAnyOptionSelected(): boolean {
     const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
     const anyOptionIsSelected = (
@@ -121,7 +113,7 @@ export function AusklammerungsGruendeForm({
         <CustomCheckbox
           register={register}
           name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`}
-          label="Ich war oder werde im Mutterschutz sein und hatte weniger Einkommen"
+          label="Ich war oder werde im Mutterschutz sein"
           labelComponent={<InfoZumMutterschutz />}
           onChange={(checked) => {
             if (checked) {

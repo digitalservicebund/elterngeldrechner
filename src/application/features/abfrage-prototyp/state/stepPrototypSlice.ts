@@ -1,8 +1,5 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
-import {
-  TypeOfVersicherungen,
-  YesNo,
-} from "@/application/features/abfrageteil/state";
+import { YesNo } from "@/application/features/abfrageteil/state";
 import { RootState } from "@/application/redux";
 import { Steuerklasse } from "@/elterngeldrechner";
 import { PersonPageFlow } from "../components/PersonPageRouting";

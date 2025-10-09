@@ -31,10 +31,7 @@ import {
   Antragstellende,
   YesNo,
 } from "@/application/features/abfrageteil/state";
-import {
-  TaetigkeitAngaben,
-  TaetigkeitenSelektor,
-} from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
+import { TaetigkeitenSelektor } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
 
 type Props = {
   elternteil: Elternteil;

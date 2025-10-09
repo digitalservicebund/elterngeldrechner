@@ -16,10 +16,7 @@ import { PersonPageFlow } from "./PersonPageRouting";
 import { InfoZuTaetigkeiten } from "./InfoZuTaetigkeiten";
 import { YesNoRadio } from "../../abfrageteil/components/common";
 import { YesNo } from "../../abfrageteil/state";
-import {
-  TaetigkeitAngaben,
-  TaetigkeitenSelektor,
-} from "../state/stepPrototypSlice";
+import { TaetigkeitAngaben } from "../state/stepPrototypSlice";
 import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
 
 type Props = {

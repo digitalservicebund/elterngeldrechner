@@ -31,7 +31,7 @@ export function Bemessungszeitraum({
 }: Props) {
   const store = useAppStore();
 
-  const { handleSubmit, getValues } = useForm({
+  const { handleSubmit } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 

@@ -21,11 +21,9 @@ jobs:
       - name: Audit licenses
         run: npm run audit-licenses
 
-      - name: Generate the next version
-        uses: orhun/git-cliff-action@d77b37db2e3f7398432d34b72a12aa3e2ba87e51
+      - name: Determine next numeric version tag
+        run: echo "tag_name=$(( $(git tag | grep -E '^[0-9]+$' | sort -n | tail -1 2>/dev/null || echo 0) + 1 ))" >> "$GITHUB_OUTPUT"
         id: version
-        with:
-          args: --bumped-version
 
       - name: Generate the changelog
         uses: orhun/git-cliff-action@d77b37db2e3f7398432d34b72a12aa3e2ba87e51
@@ -36,7 +34,7 @@ jobs:
       - name: Create the release
         uses: softprops/action-gh-release@aec2ec56f94eb8180ceec724245f64ef008b89f5
         with:
-          tag_name: ${{ steps.version.outputs.content }}
+          tag_name: ${{ steps.version.outputs.tag_name }}
           body: ${{ steps.changelog.outputs.content }}
           files: dist/assets/*
 
@@ -52,7 +50,7 @@ jobs:
         env:
           METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}
           METABASE_DOMAIN: ${{ secrets.EGR_METABASE_DOMAIN }}
-          RELEASE_NAME: ${{ steps.version.outputs.content }}
+          RELEASE_NAME: ${{ steps.version.outputs.tag_name }}
         run: |
           # Get the current timestamp in ISO 8601 format
           TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%S.000+00:00")

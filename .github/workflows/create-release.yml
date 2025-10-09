@@ -37,6 +37,7 @@ jobs:
         uses: softprops/action-gh-release@aec2ec56f94eb8180ceec724245f64ef008b89f5
         with:
           tag_name: ${{ steps.version.outputs.tag_name }}
+          name: "Release ${{ steps.version.outputs.tag_name }}"
           body: ${{ steps.changelog.outputs.content }}
           files: dist/assets/*
 

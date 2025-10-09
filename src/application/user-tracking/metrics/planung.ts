@@ -1,4 +1,7 @@
-import { setTrackingVariable } from "@/application/user-tracking/core";
+import {
+  pushTrackingEvent,
+  setTrackingVariable,
+} from "@/application/user-tracking/core";
 
 /**
  * The Partner:in of the Mutter is the Elternteil without Mutterschaftsleistung.
@@ -13,4 +16,12 @@ export function trackAnzahlGeplanterMonateDesPartnersDerMutter(
     "anzahlGeplanterMonateDesPartnersDerMutter",
     anzahlGeplanterMonate,
   );
+}
+
+export function trackAnzahlGeplanteMonateMitEinkommen(count: number) {
+  setTrackingVariable("geplante-monate-mit-einkommen", count);
+}
+
+export function trackAngabeEinesEinkommens() {
+  pushTrackingEvent("einkommen-im-monat-angegeben", { unique: true });
 }

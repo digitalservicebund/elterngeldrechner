@@ -1,6 +1,8 @@
 import {
   pushTrackingEvent,
   setTrackingVariable,
+  trackAngabeEinesEinkommens,
+  trackAnzahlGeplanteMonateMitEinkommen,
   trackAnzahlGeplanterMonateDesPartnersDerMutter,
   trackPartnerschaftlicheVerteilung,
 } from "@/application/user-tracking";
@@ -10,6 +12,7 @@ import {
   Elternteil,
   type ElternteileByAusgangslage,
   type Lebensmonate,
+  type Monat,
   type Plan,
   type PlanMitBeliebigenElternteilen,
   Variante,
@@ -41,6 +44,7 @@ export function trackMetricsForDerPlanHatSichGeaendert(
     trackPartnerschaftlicheVerteilungForPlan(plan);
   }
 
+  evaluateAndTrackMonatMitEinkommenMetrics(plan);
   evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(plan);
 }
 
@@ -51,6 +55,32 @@ export function trackMetricsForEineOptionWurdeGewaehlt(): void {
 export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   pushTrackingEvent("Plan-wurde-zurückgesetzt");
   setTrackingVariable("Identifier-des-ausgewaehlten-Beispiels-im-Planer", null);
+}
+
+function evaluateAndTrackMonatMitEinkommenMetrics(
+  plan: PlanMitBeliebigenElternteilen,
+) {
+  const monateMitEinkommen = countMonateMitEinkommen(plan);
+
+  if (monateMitEinkommen > 0) {
+    trackAngabeEinesEinkommens();
+  }
+
+  trackAnzahlGeplanteMonateMitEinkommen(monateMitEinkommen);
+}
+
+function countMonateMitEinkommen(plan: PlanMitBeliebigenElternteilen) {
+  const hatMonatEinkommen = (monat: Monat) => {
+    return !!(
+      monat.bruttoeinkommen &&
+      monat.bruttoeinkommen > 0 &&
+      monat.gewaehlteOption
+    );
+  };
+
+  return Object.values(plan.lebensmonate)
+    .map((it) => Object.values(it).filter(hatMonatEinkommen).length)
+    .reduce((acc, cur) => acc + cur, 0);
 }
 
 function trackPartnerschaftlicheVerteilungForPlan(
@@ -127,6 +157,48 @@ if (import.meta.vitest) {
   const { vi, describe, beforeEach, it, expect } = import.meta.vitest;
 
   describe("track metrics for planer", () => {
+    describe("evaluate and track events regarding months with income", () => {
+      it("counts month with income per lebensmonate and elternteil", () => {
+        const plan = {
+          ausgangslage: {
+            anzahlElternteile: 2 as const,
+            pseudonymeDerElternteile: {
+              [Elternteil.Eins]: "Jane",
+              [Elternteil.Zwei]: "Joe",
+            },
+            geburtsdatumDesKindes: new Date(),
+          },
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Plus,
+                imMutterschutz: false as const,
+                bruttoeinkommen: 2000,
+              },
+              [Elternteil.Zwei]: {
+                gewaehlteOption: Variante.Plus,
+                imMutterschutz: false as const,
+                bruttoeinkommen: 2000,
+              },
+            },
+            2: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Plus,
+                imMutterschutz: false as const,
+                bruttoeinkommen: 2000,
+              },
+              [Elternteil.Zwei]: {
+                gewaehlteOption: Variante.Plus,
+                imMutterschutz: false as const,
+              },
+            },
+          },
+        };
+
+        expect(countMonateMitEinkommen(plan)).toBe(3);
+      });
+    });
+
     describe("evaluate and track Anzahl geplanter Monate des Partners der Mutter", async () => {
       const { Variante, KeinElterngeld } = await import("@/monatsplaner");
 

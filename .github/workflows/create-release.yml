@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-tags: true
+          fetch-depth: 0
 
       - uses: ./.github/actions/cached-node-install
 

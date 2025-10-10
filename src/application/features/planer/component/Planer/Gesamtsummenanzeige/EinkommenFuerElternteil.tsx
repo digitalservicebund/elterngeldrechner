@@ -1,6 +1,4 @@
 import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
-import classNames from "classnames";
 import type { ReactNode } from "react";
 import { Geldbetrag } from "@/application/components";
 import type { SummeFuerElternteil } from "@/monatsplaner";
@@ -11,21 +9,10 @@ type Props = {
   readonly className?: string;
 };
 
-export function EinkommenFuerElternteil({
-  pseudonym,
-  summe,
-  className,
-}: Props): ReactNode {
+export function EinkommenFuerElternteil({ summe }: Props): ReactNode {
   return (
-    <div className={classNames("flex flex-col items-center", className)}>
-      <span className="font-bold">
-        {!!pseudonym && (
-          <>
-            <PersonIcon /> {pseudonym}:{" "}
-          </>
-        )}
-        Einkommen
-      </span>
+    <div>
+      <span className="pr-4">Einkommen:</span>
 
       <span>
         <BusinessCenterOutlined className="mr-4" />

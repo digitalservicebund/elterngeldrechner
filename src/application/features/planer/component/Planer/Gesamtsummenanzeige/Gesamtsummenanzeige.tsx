@@ -49,36 +49,39 @@ export function Gesamtsummenanzeige({
         </div>
       )}
 
-      <div className="flex flex-col justify-center sm:flex-row sm:gap-[60px]">
+      <div className="flex flex-col justify-center gap-10 sm:flex-row sm:gap-[60px]">
         {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
-          (elternteil) => (
-            <ElterngeldFuerElternteil
-              key={elternteil}
-              pseudonym={
-                plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
-              }
-              summe={gesamtsumme.proElternteil[elternteil]}
-              showSumme={showGesamtsumme}
-            />
-          ),
-        )}
-      </div>
-
-      {!!jemandHatEinkommen && (
-        <div className="flex flex-col justify-center md:flex-row md:gap-[60px]">
-          {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
-            (elternteil) => (
-              <EinkommenFuerElternteil
+          (elternteil, index) => (
+            <div
+              className={classNames(
+                "flex flex-col",
+                index === 0 ? "sm:items-end" : "sm:items-start",
+              )}
+              key={index}
+            >
+              <ElterngeldFuerElternteil
                 key={elternteil}
                 pseudonym={
                   plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
                 }
                 summe={gesamtsumme.proElternteil[elternteil]}
+                showSumme={showGesamtsumme}
+                className={index === 0 ? "sm:items-end" : "sm:items-start"}
               />
-            ),
-          )}
-        </div>
-      )}
+
+              {!!jemandHatEinkommen && (
+                <EinkommenFuerElternteil
+                  key={elternteil}
+                  pseudonym={
+                    plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
+                  }
+                  summe={gesamtsumme.proElternteil[elternteil]}
+                />
+              )}
+            </div>
+          ),
+        )}
+      </div>
     </section>
   );
 }

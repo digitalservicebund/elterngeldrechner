@@ -22,7 +22,7 @@ export function ElterngeldFuerElternteil({
   const formattedAnzahlMonateMitBezug = `${anzahlMonateMitBezug} Monat${anzahlMonateMitBezug == 1 ? "" : "e"}`;
 
   return (
-    <div className={classNames("flex flex-col items-center", className)}>
+    <div className={classNames("flex flex-col", className)}>
       <span className="font-bold">
         {pseudonym ? (
           <>

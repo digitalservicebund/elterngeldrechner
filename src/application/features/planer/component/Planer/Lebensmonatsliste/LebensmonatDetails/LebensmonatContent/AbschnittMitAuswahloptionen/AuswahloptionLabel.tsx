@@ -46,7 +46,7 @@ export function AuswahloptionLabel({
       className={classNames(
         "flex min-h-42 items-center rounded bg-Basis p-8 text-14",
         {
-          "cursor-default !bg-grey !text-grey-dark": !istAuswaehlbar,
+          "cursor-default !bg-grey !text-grey-dark pb-10": !istAuswaehlbar,
         },
         {
           "hover:underline hover:underline-offset-2":
@@ -59,15 +59,10 @@ export function AuswahloptionLabel({
     >
       <span aria-hidden className="flex items-center gap-6">
         {icon}
-        <div className="text-2 pb-2 leading-none">
+        <div className="text-2 flex flex-col gap-4 pb-2 leading-none sm:flex-row">
           <span className="font-bold">{label}</span>
 
-          {!!elterngeldbezug && (
-            <>
-              &nbsp;
-              <Geldbetrag betrag={elterngeldbezug} />
-            </>
-          )}
+          {!!elterngeldbezug && <Geldbetrag betrag={elterngeldbezug} />}
         </div>
       </span>
     </label>
@@ -126,7 +121,9 @@ function getRenderProperties(
             {istAuswaehlbar ? (
               ""
             ) : (
-              <span className="text-12 font-regular">(nicht verfügbar)</span>
+              <span className="mr-8 text-12 font-regular leading-none">
+                (nicht verfügbar)
+              </span>
             )}
           </>
         ),
@@ -141,7 +138,9 @@ function getRenderProperties(
             {istAuswaehlbar ? (
               ""
             ) : (
-              <span className="text-12 font-regular">(nicht verfügbar)</span>
+              <span className="mr-8 text-12 font-regular leading-none">
+                (nicht verfügbar)
+              </span>
             )}
           </>
         ),
@@ -156,7 +155,9 @@ function getRenderProperties(
             {istAuswaehlbar ? (
               ""
             ) : (
-              <span className="text-12 font-regular">(nicht verfügbar)</span>
+              <span className="mr-8 text-12 font-regular leading-none">
+                (nicht verfügbar)
+              </span>
             )}
           </>
         ),

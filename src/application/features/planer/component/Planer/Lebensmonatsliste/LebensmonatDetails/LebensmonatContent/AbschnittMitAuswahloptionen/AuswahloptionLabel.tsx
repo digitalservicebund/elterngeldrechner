@@ -46,7 +46,7 @@ export function AuswahloptionLabel({
       className={classNames(
         "flex min-h-42 items-center rounded bg-Basis p-8 text-14",
         {
-          "cursor-default !bg-grey !text-grey-dark pb-10": !istAuswaehlbar,
+          "cursor-default !bg-grey !text-grey-dark": !istAuswaehlbar,
         },
         {
           "hover:underline hover:underline-offset-2":
@@ -116,16 +116,16 @@ function getRenderProperties(
         label: istBasisImMutterschutz ? (
           "Mutterschutz"
         ) : (
-          <>
+          <div className="flex flex-col sm:flex-row sm:gap-4">
             Basis{" "}
             {istAuswaehlbar ? (
               ""
             ) : (
-              <span className="mr-8 text-12 font-regular leading-none">
+              <span className="pt-2 text-12 font-regular leading-4 sm:pt-1">
                 (nicht verfügbar)
               </span>
             )}
-          </>
+          </div>
         ),
         className: `bg-Basis text-white ${!istBasisImMutterschutz && "hover:bg-Basis-hover"}`,
       };
@@ -133,16 +133,16 @@ function getRenderProperties(
     case Variante.Plus:
       return {
         label: (
-          <>
+          <div className="flex flex-col sm:flex-row sm:gap-4">
             Plus{" "}
             {istAuswaehlbar ? (
               ""
             ) : (
-              <span className="mr-8 text-12 font-regular leading-none">
+              <span className="pt-2 text-12 font-regular leading-4 sm:pt-1">
                 (nicht verfügbar)
               </span>
             )}
-          </>
+          </div>
         ),
         className: "bg-Plus text-black hover:bg-Plus-hover",
       };
@@ -150,16 +150,16 @@ function getRenderProperties(
     case Variante.Bonus:
       return {
         label: (
-          <>
+          <div className="flex flex-col sm:flex-row sm:gap-4">
             Bonus{" "}
             {istAuswaehlbar ? (
               ""
             ) : (
-              <span className="mr-8 text-12 font-regular leading-none">
+              <span className="pt-2 text-12 font-regular leading-4 sm:pt-1">
                 (nicht verfügbar)
               </span>
             )}
-          </>
+          </div>
         ),
         className: istBonusWithMissingBruttoeinkommen
           ? "bg-Bonus-light text-black relative before:content-[''] before:absolute before:inset-0 before:border-2 before:border-Bonus-dark before:border-dashed before:rounded"

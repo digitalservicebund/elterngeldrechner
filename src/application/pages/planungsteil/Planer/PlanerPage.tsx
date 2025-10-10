@@ -93,7 +93,6 @@ export function PlanerPage() {
   function updateStateForChangedPlan(
     plan: PlanMitBeliebigenElternteilen,
   ): void {
-    trackReachedConversionGoal();
     setHasChanges(true);
     resetBeispiel();
     setPlan(plan);
@@ -128,6 +127,8 @@ export function PlanerPage() {
     istPlanGueltig: boolean,
   ): void {
     updateStateForChangedPlan(nextPlan);
+
+    trackReachedConversionGoal();
     trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
   }
 

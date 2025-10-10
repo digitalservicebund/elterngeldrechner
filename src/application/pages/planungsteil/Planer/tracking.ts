@@ -1,9 +1,6 @@
 import {
   pushTrackingEvent,
   setTrackingVariable,
-  trackAngabeEinesEinkommens,
-  trackAnzahlGeplanteMonateMitEinkommen,
-  trackAnzahlGeplanterMonateDesPartnersDerMutter,
   trackPartnerschaftlicheVerteilung,
 } from "@/application/user-tracking";
 import {
@@ -11,14 +8,19 @@ import {
   type Auswahloption,
   Elternteil,
   type ElternteileByAusgangslage,
-  type Lebensmonate,
   type Monat,
   type Plan,
   type PlanMitBeliebigenElternteilen,
   Variante,
   isVariante,
   listeElternteileFuerAusgangslageAuf,
+  listeLebensmonateAuf,
+  listeMonateAuf,
 } from "@/monatsplaner";
+
+export function trackMetricsForAngabeEinesEinkommens(): void {
+  pushTrackingEvent("einkommen-im-monat-angegeben", { unique: true });
+}
 
 export function trackMetricsForPlanungDrucken(): void {
   pushTrackingEvent("Planung-wurde-gedruckt");
@@ -44,8 +46,9 @@ export function trackMetricsForDerPlanHatSichGeaendert(
     trackPartnerschaftlicheVerteilungForPlan(plan);
   }
 
-  evaluateAndTrackMonatMitEinkommenMetrics(plan);
-  evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(plan);
+  trackGeplanteMonate(plan);
+  trackGeplanteMonateMitEinkommen(plan);
+  trackGeplanteMonateDesPartnersDerMutter(plan);
 }
 
 export function trackMetricsForEineOptionWurdeGewaehlt(): void {
@@ -55,32 +58,6 @@ export function trackMetricsForEineOptionWurdeGewaehlt(): void {
 export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   pushTrackingEvent("Plan-wurde-zurückgesetzt");
   setTrackingVariable("Identifier-des-ausgewaehlten-Beispiels-im-Planer", null);
-}
-
-function evaluateAndTrackMonatMitEinkommenMetrics(
-  plan: PlanMitBeliebigenElternteilen,
-) {
-  const monateMitEinkommen = countMonateMitEinkommen(plan);
-
-  if (monateMitEinkommen > 0) {
-    trackAngabeEinesEinkommens();
-  }
-
-  trackAnzahlGeplanteMonateMitEinkommen(monateMitEinkommen);
-}
-
-function countMonateMitEinkommen(plan: PlanMitBeliebigenElternteilen) {
-  const hatMonatEinkommen = (monat: Monat) => {
-    return !!(
-      monat.bruttoeinkommen &&
-      monat.bruttoeinkommen > 0 &&
-      monat.gewaehlteOption
-    );
-  };
-
-  return Object.values(plan.lebensmonate)
-    .map((it) => Object.values(it).filter(hatMonatEinkommen).length)
-    .reduce((acc, cur) => acc + cur, 0);
 }
 
 function trackPartnerschaftlicheVerteilungForPlan(
@@ -109,18 +86,52 @@ function trackPartnerschaftlicheVerteilungForPlan(
   trackPartnerschaftlicheVerteilung(auswahlProMonatProElternteil);
 }
 
-function evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter<
-  A extends Ausgangslage,
->(plan: Plan<A>): void {
-  const partnerDerMutter = bestimmePartnerDerMutter(plan.ausgangslage);
-  const isTrackingApplicable = partnerDerMutter !== null;
+function trackGeplanteMonate(plan: PlanMitBeliebigenElternteilen) {
+  const filterOptions = {
+    monatPredicate: istGeplanterMonat,
+  };
 
-  if (isTrackingApplicable) {
-    const anzahlGeplanterMonate = countGeplanteMonate(
-      plan.lebensmonate,
-      partnerDerMutter,
-    );
-    trackAnzahlGeplanterMonateDesPartnersDerMutter(anzahlGeplanterMonate);
+  const geplanteMonate = zaehleMonate(plan, filterOptions);
+
+  setTrackingVariable("geplante-monate", geplanteMonate);
+}
+
+function trackGeplanteMonateMitEinkommen(plan: PlanMitBeliebigenElternteilen) {
+  const filterOptions = {
+    monatPredicate: istMonatMitEinkommen,
+  };
+
+  const monateMitEinkommen = zaehleMonate(plan, filterOptions);
+
+  if (monateMitEinkommen > 0) {
+    pushTrackingEvent("einkommen-im-monat-angegeben", { unique: true });
+  }
+
+  setTrackingVariable("geplante-monate-mit-einkommen", monateMitEinkommen);
+}
+
+/**
+ * The Partner:in of the Mutter is the Elternteil without Mutterschaftsleistung.
+ * That means this only applies if there are more than one Elternteil and if any
+ * of them receives Mutterschaftsleistungen.Geplante Monate are only those where
+ * the Partner:in receives Elterngeld.
+ */
+function trackGeplanteMonateDesPartnersDerMutter<A extends Ausgangslage>(
+  plan: Plan<A>,
+): void {
+  const partnerDerMutter = bestimmePartnerDerMutter(plan.ausgangslage);
+
+  if (partnerDerMutter !== null) {
+    const filterOptions = {
+      monatPredicate: istGeplanterMonat,
+      elternteilPredicate: partnerDerMutter,
+    };
+
+    const anzahlGeplanterMonate = zaehleMonate(plan, filterOptions);
+
+    const trackingKey = "geplante-monate-des-partners-der-mutter";
+
+    setTrackingVariable(trackingKey, anzahlGeplanterMonate);
   }
 }
 
@@ -143,22 +154,59 @@ function bestimmePartnerDerMutter<A extends Ausgangslage>(
   }
 }
 
-function countGeplanteMonate<E extends Elternteil>(
-  lebensmonate: Lebensmonate<E>,
-  partner: E,
-): number {
-  return Object.values(lebensmonate)
-    .map((lebensmonat) => lebensmonat[partner])
-    .map((monat) => monat.gewaehlteOption)
-    .filter(isVariante).length;
+function istGeplanterMonat(monat: Monat) {
+  return isVariante(monat.gewaehlteOption);
+}
+
+function istMonatMitEinkommen(monat: Monat) {
+  return !!(
+    monat.bruttoeinkommen &&
+    monat.bruttoeinkommen > 0 &&
+    monat.gewaehlteOption
+  );
+}
+
+type ZaehleMonatFilter = Partial<{
+  monatPredicate: (monat: Monat) => boolean;
+  elternteilPredicate: Elternteil;
+}>;
+
+function zaehleMonate<A extends Ausgangslage>(
+  plan: Plan<A>,
+  filterOptions: ZaehleMonatFilter,
+) {
+  const alleMonate = listeLebensmonateAuf(plan.lebensmonate).flatMap(
+    ([_, lebensmonat]) => listeMonateAuf(lebensmonat),
+  );
+
+  const gefilterteMonate = alleMonate
+    .filter(([elternteil, _]) => {
+      return filterOptions.elternteilPredicate
+        ? filterOptions.elternteilPredicate === elternteil
+        : true;
+    })
+    .filter(([_, monat]) => {
+      return filterOptions.monatPredicate
+        ? filterOptions.monatPredicate(monat)
+        : true;
+    });
+
+  return gefilterteMonate.length;
 }
 
 if (import.meta.vitest) {
-  const { vi, describe, beforeEach, it, expect } = import.meta.vitest;
+  const { vi, describe, it, expect } = import.meta.vitest;
 
   describe("track metrics for planer", () => {
-    describe("evaluate and track events regarding months with income", () => {
+    describe("evaluate and track geplante monate mit einkommen", async () => {
+      const trackingModule = await import("@/application/user-tracking");
+
       it("counts month with income per lebensmonate and elternteil", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
+        );
+
         const plan = {
           ausgangslage: {
             anzahlElternteile: 2 as const,
@@ -195,21 +243,71 @@ if (import.meta.vitest) {
           },
         };
 
-        expect(countMonateMitEinkommen(plan)).toBe(3);
+        trackGeplanteMonateMitEinkommen(plan);
+
+        expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 3);
       });
     });
 
-    describe("evaluate and track Anzahl geplanter Monate des Partners der Mutter", async () => {
+    describe("evaluate and track geplante monate", async () => {
       const { Variante, KeinElterngeld } = await import("@/monatsplaner");
+      const trackingModule = await import("@/application/user-tracking");
 
-      beforeEach(async () => {
-        vi.spyOn(
-          await import("@/application/user-tracking"),
-          "trackAnzahlGeplanterMonateDesPartnersDerMutter",
+      it("counts month per lebensmonate and elternteil including kein elterngeld", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
         );
+
+        const plan = {
+          ausgangslage: {
+            anzahlElternteile: 2 as const,
+            pseudonymeDerElternteile: {
+              [Elternteil.Eins]: "Jane",
+              [Elternteil.Zwei]: "Joe",
+            },
+            geburtsdatumDesKindes: new Date(),
+          },
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Basis,
+                imMutterschutz: false as const,
+              },
+              [Elternteil.Zwei]: {
+                gewaehlteOption: KeinElterngeld,
+                imMutterschutz: false as const,
+              },
+            },
+            2: {
+              [Elternteil.Eins]: {
+                gewaehlteOption: Variante.Plus,
+                imMutterschutz: false as const,
+              },
+              [Elternteil.Zwei]: {
+                gewaehlteOption: undefined,
+                imMutterschutz: false as const,
+              },
+            },
+          },
+        };
+
+        trackGeplanteMonate(plan);
+
+        expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
       });
+    });
+
+    describe("evaluate and track geplante monate des partners der mutter", async () => {
+      const { Variante, KeinElterngeld } = await import("@/monatsplaner");
+      const trackingModule = await import("@/application/user-tracking");
 
       it("tracks nothing if given a Plan with single Elternteil, even it has Mutterschutz", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
+        );
+
         const plan = {
           ausgangslage: {
             anzahlElternteile: 1 as const,
@@ -226,14 +324,17 @@ if (import.meta.vitest) {
           },
         };
 
-        evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(plan);
+        trackGeplanteMonateDesPartnersDerMutter(plan);
 
-        expect(
-          trackAnzahlGeplanterMonateDesPartnersDerMutter,
-        ).not.toHaveBeenCalled();
+        expect(trackingFunction).not.toHaveBeenCalled();
       });
 
       it("tracks nothing if there are two Elternteile but none has Mutterschutz", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
+        );
+
         const plan = {
           ausgangslage: {
             anzahlElternteile: 2 as const,
@@ -249,14 +350,17 @@ if (import.meta.vitest) {
           },
         };
 
-        evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(plan);
+        trackGeplanteMonateDesPartnersDerMutter(plan);
 
-        expect(
-          trackAnzahlGeplanterMonateDesPartnersDerMutter,
-        ).not.toHaveBeenCalled();
+        expect(trackingFunction).not.toHaveBeenCalled();
       });
 
       it("tracks number of Monate with a Varinate of the Elternteil that does not have Mutterschutz", () => {
+        const trackingFunction = vi.spyOn(
+          trackingModule,
+          "setTrackingVariable",
+        );
+
         const plan = {
           ausgangslage: {
             anzahlElternteile: 2 as const,
@@ -287,14 +391,10 @@ if (import.meta.vitest) {
           },
         };
 
-        evaluateAndTrackAnzahlGeplanterMonateDesPartnersDerMutter(plan);
+        trackGeplanteMonateDesPartnersDerMutter(plan);
 
-        expect(
-          trackAnzahlGeplanterMonateDesPartnersDerMutter,
-        ).toHaveBeenCalledOnce();
-        expect(
-          trackAnzahlGeplanterMonateDesPartnersDerMutter,
-        ).toHaveBeenCalledWith(2);
+        expect(trackingFunction).toHaveBeenCalledOnce();
+        expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
       });
 
       function monat(gewaehlteOption: Auswahloption | undefined) {

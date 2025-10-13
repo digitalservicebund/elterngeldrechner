@@ -57,10 +57,10 @@ export function Gesamtsummenanzeige({
                 "flex flex-col",
                 index === 0 ? "sm:items-end" : "sm:items-start",
               )}
-              key={index}
+              key={elternteil}
             >
               <ElterngeldFuerElternteil
-                key={elternteil}
+                key={`Elterngeld ${elternteil}`}
                 pseudonym={
                   plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
                 }
@@ -72,9 +72,6 @@ export function Gesamtsummenanzeige({
               {!!jemandHatEinkommen && (
                 <EinkommenFuerElternteil
                   key={`Einkommen ${elternteil}`}
-                  pseudonym={
-                    plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
-                  }
                   summe={gesamtsumme.proElternteil[elternteil]}
                 />
               )}

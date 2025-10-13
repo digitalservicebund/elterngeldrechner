@@ -4,9 +4,7 @@ import { Geldbetrag } from "@/application/components";
 import type { SummeFuerElternteil } from "@/monatsplaner";
 
 type Props = {
-  readonly pseudonym: string | undefined;
   readonly summe: SummeFuerElternteil;
-  readonly className?: string;
 };
 
 export function EinkommenFuerElternteil({ summe }: Props): ReactNode {

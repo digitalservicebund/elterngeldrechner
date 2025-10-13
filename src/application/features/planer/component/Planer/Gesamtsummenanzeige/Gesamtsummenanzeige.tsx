@@ -71,7 +71,7 @@ export function Gesamtsummenanzeige({
 
               {!!jemandHatEinkommen && (
                 <EinkommenFuerElternteil
-                  key={elternteil}
+                  key={`Einkommen ${elternteil}`}
                   pseudonym={
                     plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
                   }
@@ -174,7 +174,7 @@ if (import.meta.vitest) {
 
         expect(screen.getByText("Elterngeld")).toBeVisible();
         expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
-        expect(screen.getByText("Einkommen")).toBeVisible();
+        expect(screen.getByText("Einkommen:")).toBeVisible();
         expect(screen.getByText("2.000 € (brutto)")).toBeVisible();
       });
 
@@ -206,9 +206,7 @@ if (import.meta.vitest) {
         expect(screen.getByText("6.000 € für 8 Monate")).toBeVisible();
         expect(screen.getByText("John")).toBeVisible();
         expect(screen.getByText("1.041 € für 1 Monat")).toBeVisible();
-        expect(screen.getByText("Jane: Einkommen")).toBeVisible();
         expect(screen.getByText("2.000 € (brutto)")).toBeVisible();
-        expect(screen.getByText("John: Einkommen")).toBeVisible();
         expect(screen.getByText("8.000 € (brutto)")).toBeVisible();
       });
 

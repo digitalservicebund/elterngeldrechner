@@ -54,7 +54,7 @@ export function Gesamtsummenanzeige({
           (elternteil, index) => (
             <div
               className={classNames(
-                "flex flex-col",
+                "flex flex-col w-full",
                 index === 0 ? "sm:items-end" : "sm:items-start",
               )}
               key={elternteil}

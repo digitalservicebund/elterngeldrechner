@@ -101,7 +101,8 @@ export function PlanerPage() {
   const [trackingConsent, setTrackingConsent] = useState(false);
   const { isFeebackSubmitted, submitFeedback } = useUserFeedback();
   const rememberSubmit = useRef(false);
-  const showFeedbackForm = hasChanges && !isFeebackSubmitted && trackingConsent;
+  const showFeedbackForm =
+    (hasChanges || !!beispiel) && !isFeebackSubmitted && trackingConsent;
 
   useEffect(() => {
     void (async () => {

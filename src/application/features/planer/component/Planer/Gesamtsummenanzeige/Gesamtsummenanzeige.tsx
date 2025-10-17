@@ -48,6 +48,19 @@ export function Gesamtsummenanzeige({
     .map((elternteil) => gesamtsumme.proElternteil[elternteil].bruttoeinkommen)
     .reduce((sum, bruttoeinkommen) => sum + (bruttoeinkommen ?? 0), 0);
 
+  const getTextOrientationClassByElternteil = (elternteil: Elternteil) => {
+    if (hasMultipleElternteile) {
+      switch (elternteil) {
+        case Elternteil.Eins:
+          return "text-right";
+        case Elternteil.Zwei:
+          return "text-left";
+      }
+    } else {
+      return "text-center";
+    }
+  };
+
   return (
     <section
       className={classNames(
@@ -70,9 +83,9 @@ export function Gesamtsummenanzeige({
 
       <div className="grid" style={gridLayout}>
         {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
-          (elternteil, index) => (
+          (elternteil) => (
             <div
-              className={index % 2 === 0 ? "text-right" : "text-left"}
+              className={getTextOrientationClassByElternteil(elternteil)}
               style={gridColumn[elternteil]}
               key={elternteil}
             >

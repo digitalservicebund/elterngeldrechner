@@ -4,7 +4,13 @@ import { EinkommenFuerElternteil } from "./EinkommenFuerElternteil";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
 import { Geldbetrag } from "@/application/components";
 import {
+  type GridColumnDefinitionPerElternteil,
+  useGridColumnPerElternteil,
+  useGridLayout,
+} from "@/application/features/planer/layout";
+import {
   type AusgangslageFuerEinElternteil,
+  Elternteil,
   type PlanMitBeliebigenElternteilen,
   berechneGesamtsumme,
   listeElternteileFuerAusgangslageAuf,
@@ -16,11 +22,24 @@ type Props = {
   readonly className?: string;
 };
 
+const gridColumnDefinition: GridColumnDefinitionPerElternteil = {
+  1: {
+    [Elternteil.Eins]: ["left-outside", "right-outside"],
+  },
+  2: {
+    [Elternteil.Eins]: ["et1-outside", "et1-inside"],
+    [Elternteil.Zwei]: ["et2-inside", "et2-outside"],
+  },
+};
+
 export function Gesamtsummenanzeige({
   plan,
   className,
   children,
 }: Props): ReactNode {
+  const gridLayout = useGridLayout();
+  const gridColumn = useGridColumnPerElternteil(gridColumnDefinition);
+
   const gesamtsumme = berechneGesamtsumme(plan);
   const showGesamtsumme = gesamtsumme.elterngeldbezug > 0;
   const hasMultipleElternteile = plan.ausgangslage.anzahlElternteile > 1;
@@ -49,14 +68,12 @@ export function Gesamtsummenanzeige({
         </div>
       )}
 
-      <div className="flex flex-col justify-center gap-10 sm:flex-row sm:gap-[60px]">
+      <div className="grid" style={gridLayout}>
         {listeElternteileFuerAusgangslageAuf(plan.ausgangslage).map(
           (elternteil, index) => (
             <div
-              className={classNames(
-                "flex flex-col w-full",
-                index === 0 ? "sm:items-end" : "sm:items-start",
-              )}
+              className={index % 2 === 0 ? "text-right" : "text-left"}
+              style={gridColumn[elternteil]}
               key={elternteil}
             >
               <ElterngeldFuerElternteil
@@ -66,7 +83,6 @@ export function Gesamtsummenanzeige({
                 }
                 summe={gesamtsumme.proElternteil[elternteil]}
                 showSumme={showGesamtsumme}
-                className={index === 0 ? "sm:items-end" : "sm:items-start"}
               />
 
               {!!jemandHatEinkommen && (

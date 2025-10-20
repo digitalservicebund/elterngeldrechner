@@ -143,7 +143,9 @@ export function PlanerPage() {
     }
   };
 
-  function navigateToDatenuebernahmeAntragPage(): void {
+  function navigateToDatenuebernahmeAntragPage(
+    plan: PlanMitBeliebigenElternteilen,
+  ): void {
     if (rememberSubmit.current) submitFeedback();
 
     void navigateStateful(formSteps.datenuebernahmeAntrag.route, { plan });

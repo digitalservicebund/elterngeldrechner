@@ -19,12 +19,17 @@ import {
 import { GridLayoutProvider } from "@/application/features/planer/layout";
 import { useEffectWithSignal } from "@/application/hooks/useEffectWithSignal";
 import { Lebensmonatszahl } from "@/lebensmonatrechner/Lebensmonatszahl";
-import { type BerechneElterngeldbezuegeCallback } from "@/monatsplaner";
+import {
+  type BerechneElterngeldbezuegeCallback,
+  PlanMitBeliebigenElternteilen,
+} from "@/monatsplaner";
 
 type Props = {
   readonly initialInformation: InitialInformation;
   readonly berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback;
-  readonly planInAntragUebernehmen: () => void;
+  readonly planInAntragUebernehmen: (
+    plan: PlanMitBeliebigenElternteilen,
+  ) => void;
   readonly callbacks: PlanerServiceCallbacks & {
     onOpenLebensmonat?: () => void;
   };
@@ -151,7 +156,7 @@ export function Planer({
             className="p-16"
             plan={plan}
             ueberpruefePlanung={ueberpruefePlanung}
-            planInAntragUebernehmen={planInAntragUebernehmen}
+            planInAntragUebernehmen={() => planInAntragUebernehmen(plan)}
             bonusFreischalten={bonusFreischalten}
             onPlanungDrucken={onPlanungDrucken}
           />

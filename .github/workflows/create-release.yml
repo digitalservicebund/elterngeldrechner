@@ -64,7 +64,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
                   "name": "'"$RELEASE_NAME"'",
-                  "description": "'"RELEASE_DESCRIPTION"'",
+                  "description": "'"$RELEASE_DESCRIPTION"'",
                   "timestamp": "'"$TIMESTAMP"'",
                   "timeline_id": 1,
                   "icon": "cloud",

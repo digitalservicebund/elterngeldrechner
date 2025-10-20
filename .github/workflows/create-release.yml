@@ -54,7 +54,6 @@ jobs:
           METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}
           METABASE_DOMAIN: ${{ secrets.EGR_METABASE_DOMAIN }}
           RELEASE_NAME: "Release ${{ steps.version.outputs.tag_name }}"
-          RELEASE_DESCRIPTION: ${{ steps.changelog.outputs.content }}
         run: |
           # Get the current timestamp in ISO 8601 format
           TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%S.000+00:00")
@@ -64,7 +63,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
                   "name": "'"$RELEASE_NAME"'",
-                  "description": "'"$RELEASE_DESCRIPTION"'",
+                  "description": null,
                   "timestamp": "'"$TIMESTAMP"'",
                   "timeline_id": 1,
                   "icon": "cloud",

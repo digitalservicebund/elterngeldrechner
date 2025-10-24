@@ -24,7 +24,6 @@ import {
 } from "@/application/features/abfrageteil/state";
 import { feedbackSlice } from "@/application/features/user-feedback";
 import { AppStore, RootState, reducers } from "@/application/redux";
-import { configurationSlice } from "@/application/redux/configurationSlice";
 
 interface RenderOptionsWithRedux extends RenderOptions {
   preloadedState?: Partial<RootState>;
@@ -88,6 +87,5 @@ export const INITIAL_STATE: RootState = {
   stepNachwuchs: stepNachwuchsSlice.getInitialState(),
   stepErwerbstaetigkeit: stepErwerbstaetigkeitSlice.getInitialState(),
   stepEinkommen: stepEinkommenSlice.getInitialState(),
-  configuration: configurationSlice.getInitialState(),
   feedback: feedbackSlice.getInitialState(),
 };

@@ -10,13 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const rootDiv = document.getElementById("egr-root");
   if (!rootDiv) return;
 
-  const elternGeldDigitalWizardUrl =
-    rootDiv.dataset["elternGeldDigitalWizardUrl"];
-
   createRoot(rootDiv).render(
     <StrictMode>
       <Provider store={store}>
-        <App elternGeldDigitalWizardUrl={elternGeldDigitalWizardUrl} />
+        <App />
       </Provider>
     </StrictMode>,
   );

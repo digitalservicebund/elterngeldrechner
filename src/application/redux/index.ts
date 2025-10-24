@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { configurationSlice } from "./configurationSlice";
 import { preloadedState } from "./preloadedState";
 import {
   stepAllgemeineAngabenSlice,
@@ -14,7 +13,6 @@ export const reducers = combineReducers({
   stepNachwuchs: stepNachwuchsSlice.reducer,
   stepErwerbstaetigkeit: stepErwerbstaetigkeitSlice.reducer,
   stepEinkommen: stepEinkommenSlice.reducer,
-  configuration: configurationSlice.reducer,
   feedback: feedbackSlice.reducer,
 });
 

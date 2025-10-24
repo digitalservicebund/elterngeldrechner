@@ -43,9 +43,17 @@ export class DatenuebernahmeAntragPOM {
         })
         .click(),
     ]);
-    await download.saveAs("test-results/test_antrag.pdf");
 
-    const pdfBuffer = await fs.readFile("test-results/test_antrag.pdf");
+    const pdfBuffer = await download.createReadStream().then(async (stream) => {
+      const chunks = [];
+
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+      }
+
+      return Buffer.concat(chunks);
+    });
+
     const pdfArrayBuffer = new Uint8Array(pdfBuffer);
     const pdfDoc = await PDFDocument.load(pdfArrayBuffer);
 
@@ -64,9 +72,17 @@ export class DatenuebernahmeAntragPOM {
         })
         .click(),
     ]);
-    await download.saveAs("test-results/test_seite.pdf");
 
-    const pdfBuffer = await fs.readFile("test-results/test_seite.pdf");
+    const pdfBuffer = await download.createReadStream().then(async (stream) => {
+      const chunks = [];
+
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+      }
+
+      return Buffer.concat(chunks);
+    });
+
     const pdfArrayBuffer = new Uint8Array(pdfBuffer);
     const pdfDoc = await PDFDocument.load(pdfArrayBuffer);
 

@@ -3,6 +3,7 @@ import { ReactNode, useId } from "react";
 
 type Props = {
   readonly titel: string;
+  readonly beschreibung: string;
   readonly inputName: string;
   readonly checked: boolean;
   readonly body?: ReactNode;
@@ -13,6 +14,7 @@ type Props = {
 
 export function Radiobutton({
   titel,
+  beschreibung,
   inputName,
   checked,
   body,
@@ -26,7 +28,7 @@ export function Radiobutton({
     <label
       htmlFor={radioId}
       className={classNames(
-        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[4rem_auto_1fr] gap-x-10 rounded bg-off-white p-20",
+        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[4rem_auto_1fr] gap-x-10 rounded bg-off-white p-20 pt-10",
         "has-[:focus]:ring-2 has-[:focus]:ring-primary",
         "has-[:checked]:bg-primary-light",
         className,
@@ -53,6 +55,12 @@ export function Radiobutton({
       >
         {titel}
       </p>
+
+      <p id={`${radioId}-beschreibung`} className="col-span-2 break-words">
+        {beschreibung}
+      </p>
+
+      <div></div>
 
       {!!body && (
         <div className="col-span-2 flex flex-col justify-center gap-4 py-10">

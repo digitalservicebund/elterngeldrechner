@@ -18,17 +18,20 @@ export function AuswahloptionenLegende({ beispiele }: Props): ReactNode {
   const auswahloptionen = findeVerwendeteAuswahloptionen(beispiele);
 
   return (
-    <ul className="flex flex-wrap gap-16 md:gap-56" aria-hidden="true">
-      {auswahloptionen.map((option) => (
-        <li key={option} className="flex items-center gap-10">
-          <AuswahloptionPlakette
-            auswahloption={option}
-            className="h-[32px] w-[64px]"
-          />
-          <strong>{option}</strong>
-        </li>
-      ))}
-    </ul>
+    <div className="rounded border border-solid border-grey p-20 pt-10">
+      <p className="pb-10">Erklärung Abbildung:</p>
+      <ul className="flex flex-wrap gap-16 md:gap-56" aria-hidden="true">
+        {auswahloptionen.map((option) => (
+          <li key={option} className="flex items-center gap-10">
+            <AuswahloptionPlakette
+              auswahloption={option}
+              className="h-[24px] w-[64px] text-14 font-bold leading-tight"
+            />
+            <span>= {option}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -57,6 +60,7 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "Testbeispiel",
         titel: "Testbeispiel",
+        beschreibung: "Beispiel mit nur Basis und Plus aber kein Bonus",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,
@@ -94,6 +98,7 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "Testbeispiel",
         titel: "Testbeispiel",
+        beschreibung: "Beispiel mit nur Basis und Plus aber kein Bonus",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,
@@ -131,6 +136,7 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "Testbeispiel",
         titel: "Testbeispiel",
+        beschreibung: "Beispiel mit nur Basis und Plus aber kein Bonus",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,

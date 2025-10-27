@@ -25,7 +25,7 @@ export function AuswahloptionenLegende({ beispiele }: Props): ReactNode {
           <li key={option} className="flex items-center gap-10">
             <AuswahloptionPlakette
               auswahloption={option}
-              className="h-[24px] w-[64px] text-14 font-bold leading-tight"
+              className="h-[24px] w-[64px] text-14 font-bold"
             />
             <span>= {option}</span>
           </li>

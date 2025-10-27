@@ -1,3 +1,4 @@
+import AddIcon from "@digitalservicebund/icons/Add";
 import EditIcon from "@digitalservicebund/icons/EditOutlined";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
@@ -11,7 +12,12 @@ import {
   Visualisierung as BeispielVisualisierung,
   erstelleBeispiele,
 } from "@/application/features/beispiele";
+import { Anleitung, Erklaerung } from "@/application/features/planer";
 import { Page } from "@/application/pages/Page";
+import {
+  trackMetricsForErklaerungenWurdenGeoeffnet,
+  trackMetricsForErklaerungenWurdenGeschlossen,
+} from "@/application/pages/planungsteil/Planer/tracking";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppStore } from "@/application/redux/hooks";
@@ -70,6 +76,8 @@ export function BeispielePage() {
     });
   };
 
+  const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
+
   const hatEigenePlanung = useMemo(
     () => initialerPlan && sindLebensmonateGeplant(initialerPlan),
     [initialerPlan],
@@ -123,74 +131,131 @@ export function BeispielePage() {
     setAktivesBeispiel(aktivierteOption);
   };
 
+  function showErklaerung(): void {
+    setIsErklaerungOpen(true);
+    trackMetricsForErklaerungenWurdenGeoeffnet();
+  }
+
+  function hideErklaerung(): void {
+    setIsErklaerungOpen(false);
+    window.scrollTo(0, 0);
+    trackMetricsForErklaerungenWurdenGeschlossen();
+  }
+
+  const [areAllBeispieleVisible, setAreAllBeispieleVisible] = useState(false);
+
+  const listeMitBeispielen = areAllBeispieleVisible
+    ? beispiele
+    : beispiele.slice(0, 2);
+
+  function showAllBeispiele(): void {
+    setAreAllBeispieleVisible(true);
+  }
+
   return (
     <Page step={formSteps.beispiele}>
-      <div className="flex flex-col gap-32">
-        <p className="pb-40">
-          Sie können eine Planungshilfe auswählen und sie anschließend im Planer
-          nach Ihren Bedürfnissen anpassen.
-        </p>
+      {isErklaerungOpen ? (
+        <Erklaerung onClose={hideErklaerung} />
+      ) : (
+        <div className="flex flex-col gap-32">
+          <h3>Wollen Sie einen Vorschlag für Ihre Planung?</h3>
 
-        <BeispielAuswahloptionenLegende beispiele={beispiele} />
+          <div className="mb-20">
+            <p>
+              Wählen Sie einen Vorschlag aus und passen Sie ihn im Planer auf
+              der nächsten Seite an. Alternativ können Sie auch eine eigene
+              Planung ohne Vorschlag beginnen.
+            </p>
 
-        <fieldset>
-          <legend className="sr-only">Beispielauswahl</legend>
-
-          <div className="grid grid-cols-1 gap-24 sm:grid-cols-2 md:grid-cols-3">
-            {beispiele.map((beispiel) => (
-              <BeispielRadiobutton
-                titel={beispiel.titel}
-                key={beispiel.identifier}
-                inputName="Beispieloption"
-                checked={aktivesBeispiel === beispiel.identifier}
-                onChange={() => aktiviereOption(beispiel.identifier)}
-                body={<BeispielBeschreibung beispiel={beispiel} />}
-                footer={<BeispielVisualisierung beispiel={beispiel} />}
-              />
-            ))}
-
-            <BeispielRadiobutton
-              titel="Eigene Planung anlegen"
-              inputName="Beispieloption"
-              checked={aktivesBeispiel === EigenePlanung}
-              onChange={() => aktiviereOption(EigenePlanung)}
-              className="col-span-full"
+            <Anleitung
+              description="Erfahren Sie mehr über das Elterngeld"
+              onOpenErklaerung={showErklaerung}
+              className="-mt-10 mb-16"
             />
-          </div>
-        </fieldset>
 
-        {!!hatEigenePlanung && (
-          <div className="content-center">
-            <EditIcon className="mr-4" />
+            <BeispielAuswahloptionenLegende beispiele={beispiele} />
+          </div>
+
+          <fieldset>
+            <legend className="sr-only">Beispielauswahl</legend>
+
+            <div className="grid grid-cols-1 gap-24 sm:grid-cols-2 md:grid-cols-3">
+              {listeMitBeispielen.map((beispiel) => (
+                <BeispielRadiobutton
+                  titel={beispiel.titel}
+                  key={beispiel.identifier}
+                  inputName="Beispieloption"
+                  beschreibung={beispiel.beschreibung}
+                  checked={aktivesBeispiel === beispiel.identifier}
+                  onChange={() => aktiviereOption(beispiel.identifier)}
+                  body={
+                    beispiel.identifier !== EigenePlanung && (
+                      <BeispielBeschreibung beispiel={beispiel} />
+                    )
+                  }
+                  footer={
+                    beispiel.identifier !== EigenePlanung && (
+                      <BeispielVisualisierung beispiel={beispiel} />
+                    )
+                  }
+                />
+              ))}
+
+              <BeispielRadiobutton
+                titel="Eigene Planung"
+                beschreibung="Erstellen Sie Ihre eigene Planung und probieren Sie verschiedene Aufteilungen des Elterngelds aus."
+                inputName="Beispieloption"
+                checked={aktivesBeispiel === EigenePlanung}
+                onChange={() => aktiviereOption(EigenePlanung)}
+              />
+
+              {beispiele.length > 3 && !areAllBeispieleVisible && (
+                <Button
+                  className="col-span-full mb-20"
+                  type="button"
+                  buttonStyle="link"
+                  onClick={showAllBeispiele}
+                >
+                  <AddIcon className="mr-4" />
+                  Noch mehr Vorschläge anzeigen
+                </Button>
+              )}
+            </div>
+          </fieldset>
+
+          {!!hatEigenePlanung && (
+            <div className="content-center">
+              <EditIcon className="mr-4" />
+
+              <Button
+                type="button"
+                buttonStyle="link"
+                onClick={() => navigiereZuPlanerMitInitialemPlan()}
+              >
+                Planungs-Entwurf weiter bearbeiten
+              </Button>
+            </div>
+          )}
+
+          <div className="flex gap-16">
+            <Button
+              type="button"
+              buttonStyle="secondary"
+              onClick={() => navigiereZuEinkommen()}
+            >
+              Zurück
+            </Button>
 
             <Button
               type="button"
-              buttonStyle="link"
-              onClick={() => navigiereZuPlanerMitInitialemPlan()}
+              buttonStyle="primary"
+              onClick={() => navigiereZuPlaner()}
             >
-              Planungs-Entwurf weiter bearbeiten
+              Weiter
             </Button>
           </div>
-        )}
-
-        <div className="flex gap-16">
-          <Button
-            type="button"
-            buttonStyle="secondary"
-            onClick={() => navigiereZuEinkommen()}
-          >
-            Zurück
-          </Button>
-
-          <Button
-            type="button"
-            buttonStyle="primary"
-            onClick={() => navigiereZuPlaner()}
-          >
-            Weiter
-          </Button>
         </div>
-      </div>
+      )}
     </Page>
   );
 }
@@ -235,7 +300,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        expect(screen.getAllByRole("radio")).toHaveLength(7);
+        expect(screen.getAllByRole("radio")).toHaveLength(3);
       });
 
       it("navigiert mit beispiel und plan nachdem eine beispiel selektiert wurde", () => {
@@ -243,7 +308,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Weiter").click();
 
@@ -251,7 +316,7 @@ if (import.meta.vitest) {
           return (
             argument.plan != null &&
             argument.beispiel != null &&
-            argument.beispiel.titel === "Partnerschaftlich aufgeteilt"
+            argument.beispiel.titel === "Vorschlag 1"
           );
         };
 
@@ -266,9 +331,9 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
-        screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Eigene Planung").click();
 
         screen.getByText("Weiter").click();
 
@@ -440,7 +505,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Planungs-Entwurf weiter bearbeiten").click();
 
@@ -468,7 +533,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
         expect(trackingFunction).toHaveBeenCalledExactlyOnceWith(
           "Identifier-des-ausgewaehlten-Beispiels",
@@ -486,9 +551,9 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
-        screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Eigene Planung").click();
 
         expect(trackingFunction).toHaveBeenLastCalledWith(
           "Identifier-des-ausgewaehlten-Beispiels",
@@ -503,7 +568,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
         expect(trackingFunction).toHaveBeenLastCalledWith(
           "Beispiel-wurde-ausgewählt",
@@ -517,7 +582,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Eigene Planung").click();
 
         expect(trackingFunction).not.toBeCalled();
       });
@@ -532,7 +597,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Weiter").click();
 
@@ -549,7 +614,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Eigene Planung").click();
 
         screen.getByText("Weiter").click();
 
@@ -566,7 +631,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Partnerschaftlich aufgeteilt").click();
+        screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Weiter").click();
 
@@ -583,7 +648,7 @@ if (import.meta.vitest) {
           preloadedState: INITIAL_STATE,
         });
 
-        screen.getByText("Eigene Planung anlegen").click();
+        screen.getByText("Eigene Planung").click();
 
         screen.getByText("Weiter").click();
 

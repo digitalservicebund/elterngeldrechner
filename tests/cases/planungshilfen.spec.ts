@@ -32,7 +32,7 @@ test("beispiel partnerschaftlich aufgeteilt ", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
-  await beispielePage.waehleOption("Partnerschaftlich aufgeteilt");
+  await beispielePage.waehleOption("Vorschlag 1");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);
@@ -60,7 +60,7 @@ test("beispiel volles elterngeld", async ({ page }) => {
   await einkommenPage.submit();
 
   const beispielePage = new BeispielePOM(page);
-  await beispielePage.waehleOption("Volles Elterngeld");
+  await beispielePage.waehleOption("Vorschlag 2");
   await beispielePage.submit();
 
   const rechnerUndPlaner = new RechnerPlanerPOM(page);

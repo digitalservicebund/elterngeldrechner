@@ -1,4 +1,3 @@
-import AccessTime from "@digitalservicebund/icons/AccessTime";
 import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
 import { erstelleMonatsverteilung } from "./erstelleMonatsverteilung";
@@ -28,23 +27,16 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
         beschreibung: beschreibungMonatsverteilung,
       } = erstelleMonatsverteilung(lebensmonate, elternteil);
 
-      const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
-      const isEinElternteil = !pseudonym;
-
       return (
         <div key={elternteil} className="pt-10 ">
           <div className="flex items-center gap-[6px] pb-8">
-            <p className="truncate">
-              {isEinElternteil ? (
-                <AccessTime aria-hidden="true" className="mr-4" />
-              ) : (
+            {ausgangslage.anzahlElternteile === 2 && (
+              <p className="truncate">
                 <PersonIcon aria-hidden="true" className="mr-4" />
-              )}
-              {isEinElternteil ? "Summe" : pseudonym}
-            </p>
-
-            <p className="mb-0 shrink-0">{summeGeplanteMonate} Monate</p>
-
+                {ausgangslage.pseudonymeDerElternteile?.[elternteil]}
+              </p>
+            )}
+            <p className="sr-only">{summeGeplanteMonate} Monate Elterngeld</p>
             <p className="sr-only">{beschreibungMonatsverteilung}</p>
           </div>
 

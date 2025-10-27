@@ -4,13 +4,15 @@ import { Button } from "@/application/components";
 
 type Props = {
   readonly className?: string;
-  readonly children: ReactNode;
+  readonly children?: ReactNode;
+  readonly description?: string;
   readonly onOpenErklaerung: () => void;
 };
 
 export function Anleitung({
   className,
   children,
+  description,
   onOpenErklaerung,
 }: Props): ReactNode {
   const headingIdentifier = useId();
@@ -30,7 +32,7 @@ export function Anleitung({
         onClick={onOpenErklaerung}
       >
         <ReadMoreIcon className="mr-4" />
-        Hier finden Sie weitere Informationen zu Elterngeld
+        {description || "Hier finden Sie weitere Informationen zu Elterngeld"}
       </Button>
     </section>
   );

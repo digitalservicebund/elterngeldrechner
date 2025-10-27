@@ -46,6 +46,7 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "test-beispiel",
         titel: "Test Beispiel",
+        beschreibung: "Beispiel mit zwei Monaten Elterngeldbezug",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,
@@ -71,6 +72,7 @@ if (import.meta.vitest) {
       const beispiel: Beispiel<AusgangslageFuerEinElternteil> = {
         identifier: "test-beispiel",
         titel: "Test Beispiel",
+        beschreibung: "Beispiel mit zwei Monaten Elterngeldbezug",
         plan: {
           ausgangslage: {
             anzahlElternteile: 1,

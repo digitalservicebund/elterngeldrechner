@@ -76,7 +76,7 @@ jobs:
         run: rm --recursive --force "$PAGE_PATH"
 
       - name: download artifact with assets to path
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         id: download-artifact
         with:
           name: ${{ inputs.artifact_name != '' && inputs.artifact_name || needs.build.outputs.artifact_name }}

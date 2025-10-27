@@ -14,15 +14,13 @@ export function AuswahloptionPlakette({
   style,
   className,
 }: Props): ReactNode {
-  const baseClasses = "flex items-center justify-center";
-
   switch (auswahloption) {
     case KeinElterngeld:
       return (
         <div
           className={classNames(
-            baseClasses,
             className,
+            "flex items-center justify-center",
             "bg-white border border-solid border-grey",
           )}
           aria-hidden="true"
@@ -34,7 +32,7 @@ export function AuswahloptionPlakette({
     case Variante.Basis:
       return (
         <div
-          className={classNames(baseClasses, className, "bg-Basis text-white")}
+          className={classNames(className, "bg-Basis text-white text-center")}
           aria-hidden="true"
           style={style}
         >
@@ -44,7 +42,7 @@ export function AuswahloptionPlakette({
     case Variante.Plus:
       return (
         <div
-          className={classNames(baseClasses, className, "bg-Plus")}
+          className={classNames(className, "bg-Plus text-center")}
           aria-hidden="true"
           style={style}
         >
@@ -54,7 +52,7 @@ export function AuswahloptionPlakette({
     case Variante.Bonus:
       return (
         <div
-          className={classNames(baseClasses, className, "bg-Bonus")}
+          className={classNames(className, "bg-Bonus text-center")}
           aria-hidden="true"
           style={style}
         >

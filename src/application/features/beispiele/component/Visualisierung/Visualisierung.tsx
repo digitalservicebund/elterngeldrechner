@@ -45,8 +45,8 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
               <AuswahloptionPlakette
                 key={`${key}-${index}`}
                 auswahloption={key}
-                className="text-sm flex items-center justify-center font-bold"
-                style={{ flexGrow: count, flexBasis: 0, fontSize: 14 }}
+                className="text-14 font-bold"
+                style={{ flexGrow: count, flexBasis: 0 }}
               />
             ))}
           </div>

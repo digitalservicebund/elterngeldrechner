@@ -28,7 +28,7 @@ export function Radiobutton({
     <label
       htmlFor={radioId}
       className={classNames(
-        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[4rem_auto_1fr] gap-x-10 rounded bg-off-white p-20 pt-10",
+        "grid h-full cursor-pointer grid-cols-[auto_1fr] grid-rows-[4rem_1fr_auto_auto] gap-x-10 rounded bg-off-white p-20 pt-10",
         "has-[:focus]:ring-2 has-[:focus]:ring-primary",
         "has-[:checked]:bg-primary-light",
         className,
@@ -56,20 +56,18 @@ export function Radiobutton({
         {titel}
       </p>
 
-      <p id={`${radioId}-beschreibung`} className="col-span-2 break-words">
+      <p id={`${radioId}-beschreibung`} className="col-span-full break-words">
         {beschreibung}
       </p>
 
-      <div></div>
-
       {!!body && (
-        <div className="col-span-2 flex flex-col justify-center gap-4 py-10">
+        <div className="col-span-full flex flex-col justify-center gap-4 py-10">
           {body}
         </div>
       )}
 
       {!!footer && (
-        <div className="col-span-2 flex flex-col justify-center gap-4">
+        <div className="col-span-full flex flex-col justify-center gap-4">
           {footer}
         </div>
       )}

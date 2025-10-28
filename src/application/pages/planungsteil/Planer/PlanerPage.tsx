@@ -3,8 +3,6 @@ import { useEffect, useId, useRef, useState } from "react";
 import {
   trackMetricsForDerPlanHatSichGeaendert,
   trackMetricsForEineOptionWurdeGewaehlt,
-  trackMetricsForErklaerungenWurdenGeoeffnet,
-  trackMetricsForErklaerungenWurdenGeschlossen,
   trackMetricsForLebensmonatWurdeGeoeffnet,
   trackMetricsForPlanWurdeZurueckgesetzt,
   trackMetricsForPlanungDrucken,
@@ -112,15 +110,9 @@ export function PlanerPage() {
 
   const [isErklaerungOpen, setIsErklaerungOpen] = useState(false);
 
-  function showErklaerung(): void {
-    setIsErklaerungOpen(true);
-    trackMetricsForErklaerungenWurdenGeoeffnet();
-  }
-
   function hideErklaerung(): void {
     setIsErklaerungOpen(false);
     window.scrollTo(0, 0);
-    trackMetricsForErklaerungenWurdenGeschlossen();
   }
 
   function handlePlanChanges(
@@ -175,7 +167,10 @@ export function PlanerPage() {
                 Planer Anwendung
               </h3>
 
-              <Anleitung className="mb-40" onOpenErklaerung={showErklaerung}>
+              <Anleitung
+                className="mb-40"
+                onOpenErklaerung={() => setIsErklaerungOpen(true)}
+              >
                 {initialPlanerInformation.beispiel ? (
                   <p>
                     Sie finden hier einen Vorschlag für eine Planung und die

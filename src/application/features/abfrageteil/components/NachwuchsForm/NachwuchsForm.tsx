@@ -364,7 +364,7 @@ if (import.meta.vitest) {
 
   describe("Nachwuchs Form Validation", async () => {
     const { NachwuchsForm } = await import("./NachwuchsForm");
-    const { fireEvent, render, screen, waitFor } = await import(
+    const { fireEvent, renderForm, screen, waitFor } = await import(
       "@/application/test-utils"
     );
 
@@ -394,11 +394,11 @@ if (import.meta.vitest) {
           ],
         };
 
-        const dom = render(
-          <NachwuchsForm id="form" initialState={validFormState} />,
-        );
+        const form = renderForm(NachwuchsForm, {
+          initialState: validFormState,
+        });
 
-        fireEvent.submit(dom.container.querySelector("#form")!);
+        fireEvent.submit(form);
 
         await waitFor(() => {
           expect(
@@ -423,11 +423,11 @@ if (import.meta.vitest) {
           ],
         };
 
-        const dom = render(
-          <NachwuchsForm id="form" initialState={validFormState} />,
-        );
+        const form = renderForm(NachwuchsForm, {
+          initialState: validFormState,
+        });
 
-        fireEvent.submit(dom.container.querySelector("#form")!);
+        fireEvent.submit(form);
 
         await waitFor(() => {
           expect(
@@ -451,11 +451,11 @@ if (import.meta.vitest) {
         ],
       };
 
-      const dom = render(
-        <NachwuchsForm id="form" initialState={invalidFormState} />,
-      );
+      const form = renderForm(NachwuchsForm, {
+        initialState: invalidFormState,
+      });
 
-      fireEvent.submit(dom.container.querySelector("#form")!);
+      fireEvent.submit(form);
 
       await waitFor(() => {
         expect(
@@ -476,11 +476,11 @@ if (import.meta.vitest) {
         ],
       };
 
-      const dom = render(
-        <NachwuchsForm id="form" initialState={invalidFormState} />,
-      );
+      const form = renderForm(NachwuchsForm, {
+        initialState: invalidFormState,
+      });
 
-      fireEvent.submit(dom.container.querySelector("#form")!);
+      fireEvent.submit(form);
 
       await waitFor(() => {
         expect(
@@ -503,11 +503,11 @@ if (import.meta.vitest) {
         ],
       };
 
-      const dom = render(
-        <NachwuchsForm id="form" initialState={invalidFormState} />,
-      );
+      const form = renderForm(NachwuchsForm, {
+        initialState: invalidFormState,
+      });
 
-      fireEvent.submit(dom.container.querySelector("#form")!);
+      fireEvent.submit(form);
 
       await waitFor(() => {
         expect(

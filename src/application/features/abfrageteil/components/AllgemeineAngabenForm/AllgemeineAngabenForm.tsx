@@ -380,7 +380,7 @@ if (import.meta.vitest) {
   });
 
   describe("Allgemeine Angaben Form Validation", async () => {
-    const { fireEvent, render, waitFor, screen } = await import(
+    const { fireEvent, renderForm, waitFor, screen } = await import(
       "@/application/test-utils"
     );
 
@@ -396,11 +396,11 @@ if (import.meta.vitest) {
     };
 
     it("should show a validation error if some information is missing", async () => {
-      const dom = render(
-        <AllgemeineAngabenForm id="form" initialState={initialState} />,
-      );
+      const form = renderForm(AllgemeineAngabenForm, {
+        initialState: initialState,
+      });
 
-      fireEvent.submit(dom.container.querySelector("#form")!);
+      fireEvent.submit(form);
 
       await waitFor(() => {
         expect(

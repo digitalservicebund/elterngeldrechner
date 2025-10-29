@@ -352,11 +352,6 @@ if (import.meta.vitest) {
         );
 
         const elternteil1Section = getElternteil1Section();
-        //
-        // // Field
-        // const kirchensteuerSection =
-        //   within(elternteil1Section).getByLabelText("Kirchensteuer");
-        // await userEvent.click(within(kirchensteuerSection).getByLabelText("Ja"));
 
         // Field Kirchensteuer
         const kirchensteuerSection = within(elternteil1Section)

@@ -242,7 +242,7 @@ describe("use Planer service", () => {
       vi.mocked(waehleOption).mockReturnValue(
         Result.error([{ message: "invalid plan" }]),
       );
-      vi.spyOn(global.console, "error").mockImplementation(() => {});
+      vi.spyOn(console, "error").mockImplementation(() => {});
 
       const { result } = renderPlanerServiceHook({
         initialInformation: { plan: initialPlan },

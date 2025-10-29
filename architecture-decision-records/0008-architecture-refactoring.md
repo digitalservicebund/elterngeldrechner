@@ -75,11 +75,18 @@ readability and reduce the distance between related pieces of code.
 - src/
   - application/
     - App.tsx
+    - index.tsx
+    - README.md
     - redux/
     - routing/
     - styles/
     - features/
       - components/
+        - user-feedback/
+        - Alert.tsx
+        - Button.tsx
+        - Page.tsx
+        - Sidebar.tsx
       - datenabfrage/
         - components/
         - allgemeine-angaben/
@@ -89,13 +96,16 @@ readability and reduce the distance between related pieces of code.
           - allgemeineAngabenSchema.ts
           - allgemeineAngabenSlice.ts
       - planer/
+        - components/
+          - Anleitung/
+          - Erklaerung/
         - planungshilfen/
           - components/
           - services/beispielGenerator/
           - PlanungshilfePage.tsx
         - planer/
           - components/
-          - layout/
+          - layouts/
           - hooks/
           - PlanerPage.tsx
         - hooks/
@@ -103,9 +113,20 @@ readability and reduce the distance between related pieces of code.
       - datenuebernahme/
         - services/pdfGenerator/
         - DatenuebernahmePage.tsx
-    - integration-test/
+    - tests/
+      - integration/
+      - utilities/
+        - setupTests.ts
+        - test-utils.tsx
+    - type-declarations/
+    - user-tracking/
+    - utilities/
+      - type-safe-records/
+    - hooks/
+      - useEffectWithSignal.tsx
   - elterngeldrechner
   - lebensmonatrechner
   - lohnsteuerrechner
   - monatsplaner
+  - bemessungszeitraumrechner
 ```

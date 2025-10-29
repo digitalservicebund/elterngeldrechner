@@ -1,6 +1,6 @@
 import AddIcon from "@digitalservicebund/icons/Add";
 import ClearIcon from "@digitalservicebund/icons/Clear";
-import { useCallback, useId } from "react";
+import { useId } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Counter } from "./Counter";
 import { CustomDate } from "./CustomDate";
@@ -8,11 +8,7 @@ import { InfoZuFruehgeburten } from "./InfoZuFruehgeburten";
 import { InfoZumGeschwisterbonus } from "./InfoZumGeschwisterbonus";
 import { Button } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
-import {
-  type StepNachwuchsState,
-  stepNachwuchsSlice,
-} from "@/application/features/abfrageteil/state";
-import { useAppStore } from "@/application/redux/hooks";
+import { type StepNachwuchsState } from "@/application/features/abfrageteil/state";
 
 const validateMonth = (date: string) => {
   const [inputDay, inputMonth, inputYear] = date.split(".");
@@ -32,13 +28,11 @@ const validateMonth = (date: string) => {
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: (values: StepNachwuchsState) => void;
-  readonly hideSubmitButton?: boolean;
+  readonly initialState?: StepNachwuchsState;
+  readonly onSubmit?: (data: StepNachwuchsState) => void;
 };
 
-export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
-  const store = useAppStore();
-
+export function NachwuchsForm({ id, initialState, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
@@ -48,16 +42,12 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
     formState: { errors },
     getValues,
   } = useForm({
-    defaultValues: store.getState().stepNachwuchs,
+    defaultValues: initialState,
   });
 
-  const submitNachwuchs = useCallback(
-    (values: StepNachwuchsState) => {
-      store.dispatch(stepNachwuchsSlice.actions.submitStep(values));
-      onSubmit?.(values);
-    },
-    [store, onSubmit],
-  );
+  const submitNachwuchs = (values: StepNachwuchsState) => {
+    onSubmit?.(values);
+  };
 
   const wahrscheinlichesGeburtsDatumInputIdentifier = useId();
   const wahrscheinlichesGeburtsDatumDescriptionIdentifier = useId();
@@ -251,8 +241,279 @@ export function NachwuchsForm({ id, onSubmit, hideSubmitButton }: Props) {
           Geschwisterkind hinzufügen
         </Button>
       </section>
-
-      {!hideSubmitButton && <Button type="submit">Weiter</Button>}
     </form>
   );
+}
+if (import.meta.vitest) {
+  const { afterEach, beforeEach, describe, expect, it, vi } = import.meta
+    .vitest;
+
+  describe("Nachwuchs Form", async () => {
+    const { render, screen } = await import("@/application/test-utils");
+    const { userEvent } = await import("@testing-library/user-event");
+
+    const initialState: StepNachwuchsState = {
+      anzahlKuenftigerKinder: 1,
+      wahrscheinlichesGeburtsDatum: "",
+      geschwisterkinder: [],
+    };
+
+    it("should increase and decrease number of expected children", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const numberField = screen.getByLabelText(
+        "Wie viele Kinder werden oder wurden geboren?",
+      );
+
+      expect(numberField).toHaveValue(1);
+
+      await userEvent.click(screen.getByTestId("erhöhen"));
+      expect(numberField).toHaveValue(2);
+
+      await userEvent.click(screen.getByTestId("verringern"));
+      expect(numberField).toHaveValue(1);
+    });
+
+    it("should not increase beyond 8 expected children", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const numberField = screen.getByLabelText(
+        "Wie viele Kinder werden oder wurden geboren?",
+      );
+
+      for (let i = 0; i < 20; i++) {
+        await userEvent.click(screen.getByTestId("erhöhen"));
+      }
+      expect(numberField).toHaveValue(8);
+    });
+
+    it("should not decrease below 0 children", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const numberField = screen.getByLabelText(
+        "Wie viele Kinder werden oder wurden geboren?",
+      );
+
+      for (let i = 0; i < 20; i++) {
+        await userEvent.click(screen.getByTestId("verringern"));
+      }
+      expect(numberField).toHaveValue(0);
+    });
+
+    it("should display the typed value for the expected birthday", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const dateField = screen.getByRole("textbox", {
+        name: "Geburtsdatum des Kindes",
+      });
+
+      await userEvent.type(dateField, "a12.12lasd!2022");
+
+      expect(dateField).toHaveValue("12.12.2022");
+    });
+
+    it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const addButton = screen.getByRole("button", {
+        name: /älteres geschwisterkind hinzufügen/i,
+      });
+
+      await userEvent.click(addButton);
+
+      expect(
+        screen.getByRole("textbox", {
+          name: "Wann wurde das Geschwisterkind geboren?",
+        }),
+      ).toBeVisible();
+    });
+
+    it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button and check Behinderung-Checkbox", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const addButton = screen.getByRole("button", {
+        name: /älteres geschwisterkind hinzufügen/i,
+      });
+
+      await userEvent.click(addButton);
+
+      const checkbox = screen.getByLabelText(
+        "Das Geschwisterkind hat eine Behinderung",
+      );
+
+      expect(checkbox).not.toBeChecked();
+
+      await userEvent.click(checkbox);
+      expect(checkbox).toBeChecked();
+    });
+
+    it("should change the title of the add new Geschwisterkind button after the first added child", async () => {
+      render(<NachwuchsForm initialState={initialState} />);
+
+      const addButton = screen.getByRole("button", {
+        name: /älteres geschwisterkind hinzufügen/i,
+      });
+
+      await userEvent.click(addButton);
+
+      expect(addButton).toHaveAccessibleName(
+        /weiteres geschwisterkind hinzufügen/i,
+      );
+    });
+  });
+
+  describe("Nachwuchs Form Validation", async () => {
+    const { NachwuchsForm } = await import("./NachwuchsForm");
+    const { fireEvent, render, screen, waitFor } = await import(
+      "@/application/test-utils"
+    );
+
+    describe("warning for too old birthdate", () => {
+      beforeEach(() => {
+        vi.stubGlobal("jest", {
+          advanceTimersByTime: vi.advanceTimersByTime.bind(vi),
+        });
+        vi.useFakeTimers();
+      });
+
+      afterEach(() => {
+        vi.useRealTimers();
+      });
+
+      it("should accept expected birth of child that is 32 months before current date", async () => {
+        vi.setSystemTime(new Date("2023-01-02"));
+
+        const validFormState: StepNachwuchsState = {
+          anzahlKuenftigerKinder: 2,
+          wahrscheinlichesGeburtsDatum: "02.01.2020",
+          geschwisterkinder: [
+            {
+              geburtsdatum: "",
+              istBehindert: true,
+            },
+          ],
+        };
+
+        const dom = render(
+          <NachwuchsForm id="form" initialState={validFormState} />,
+        );
+
+        fireEvent.submit(dom.container.querySelector("#form")!);
+
+        await waitFor(() => {
+          expect(
+            screen.queryByText(
+              "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
+            ),
+          ).not.toBeInTheDocument();
+        });
+      });
+
+      it("should not accept expected birth of child that is more than 32 months before current date", async () => {
+        vi.setSystemTime(new Date("2023-01-02"));
+
+        const validFormState: StepNachwuchsState = {
+          anzahlKuenftigerKinder: 2,
+          wahrscheinlichesGeburtsDatum: "01.01.2020",
+          geschwisterkinder: [
+            {
+              geburtsdatum: "",
+              istBehindert: true,
+            },
+          ],
+        };
+
+        const dom = render(
+          <NachwuchsForm id="form" initialState={validFormState} />,
+        );
+
+        fireEvent.submit(dom.container.querySelector("#form")!);
+
+        await waitFor(() => {
+          expect(
+            screen.getByText(
+              "Elterngeld wird maximal für 32 Lebensmonate rückwirkend gezahlt.",
+            ),
+          ).toBeInTheDocument();
+        });
+      });
+    });
+
+    it("should show validation error if birthdate of Geschwisterkinder is not filled completely", async () => {
+      const invalidFormState: StepNachwuchsState = {
+        anzahlKuenftigerKinder: 2,
+        wahrscheinlichesGeburtsDatum: "12.12.2022",
+        geschwisterkinder: [
+          {
+            geburtsdatum: "12.05.20",
+            istBehindert: false,
+          },
+        ],
+      };
+
+      const dom = render(
+        <NachwuchsForm id="form" initialState={invalidFormState} />,
+      );
+
+      fireEvent.submit(dom.container.querySelector("#form")!);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText("Bitte das Feld vollständig ausfüllen"),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it("should show validation error if birthdate of Geschwisterkinder is after birthdate of Kind", async () => {
+      const invalidFormState: StepNachwuchsState = {
+        anzahlKuenftigerKinder: 2,
+        wahrscheinlichesGeburtsDatum: "12.12.2022",
+        geschwisterkinder: [
+          {
+            geburtsdatum: "13.12.2022",
+            istBehindert: false,
+          },
+        ],
+      };
+
+      const dom = render(
+        <NachwuchsForm id="form" initialState={invalidFormState} />,
+      );
+
+      fireEvent.submit(dom.container.querySelector("#form")!);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            "Wählen Sie ein anderes Datum. Geschwister müssen älter sein als das neue Kind.",
+          ),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it("should show a validation error if some information is missing", async () => {
+      const invalidFormState: StepNachwuchsState = {
+        anzahlKuenftigerKinder: 1,
+        wahrscheinlichesGeburtsDatum: "",
+        geschwisterkinder: [
+          {
+            geburtsdatum: "01.03.1985",
+            istBehindert: true,
+          },
+        ],
+      };
+
+      const dom = render(
+        <NachwuchsForm id="form" initialState={invalidFormState} />,
+      );
+
+      fireEvent.submit(dom.container.querySelector("#form")!);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText("Dieses Feld ist erforderlich"),
+        ).toBeInTheDocument();
+      });
+    });
+  });
 }

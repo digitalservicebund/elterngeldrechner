@@ -1,11 +1,9 @@
-import { useCallback } from "react";
 import { FieldError, get, useForm } from "react-hook-form";
 import { InfoZuAlleinerziehenden } from "./InfoFuerAlleinerziehenden";
 import { InfoZuAntragstellenden } from "./InfoZuAntragstellenden";
 import { InfoZuVornamen } from "./InfoZuVornamen";
 import { InfoZumMutterschutz } from "./InfoZumMutterschutz";
 import {
-  Button,
   CustomRadioGroup,
   CustomRadioGroupOption,
 } from "@/application/components";
@@ -18,10 +16,8 @@ import {
 import {
   StepAllgemeineAngabenState,
   YesNo,
-  stepAllgemeineAngabenSlice,
 } from "@/application/features/abfrageteil/state";
 import { bundeslaender } from "@/application/features/pdfAntrag";
-import { useAppStore } from "@/application/redux/hooks";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   {
@@ -40,28 +36,18 @@ const antragstellendeOptions: CustomRadioGroupOption[] = [
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: () => void;
-  readonly hideSubmitButton?: boolean;
+  readonly initialState?: StepAllgemeineAngabenState;
+  readonly onSubmit?: (data: StepAllgemeineAngabenState) => void;
 };
 
-export function AllgemeineAngabenForm({
-  id,
-  onSubmit,
-  hideSubmitButton,
-}: Props) {
-  const store = useAppStore();
-
+export function AllgemeineAngabenForm({ id, initialState, onSubmit }: Props) {
   const { register, handleSubmit, watch, formState, setValue } = useForm({
-    defaultValues: store.getState().stepAllgemeineAngaben,
+    defaultValues: initialState,
   });
 
-  const submitAllgemeineAngaben = useCallback(
-    (values: StepAllgemeineAngabenState) => {
-      store.dispatch(stepAllgemeineAngabenSlice.actions.submitStep(values));
-      onSubmit?.();
-    },
-    [store, onSubmit],
-  );
+  const submitAllgemeineAngaben = (values: StepAllgemeineAngabenState) => {
+    onSubmit?.(values);
+  };
 
   const antragstellendeFormValue = watch("antragstellende");
   const alleinerziehendenFormValue = watch("alleinerziehend");
@@ -233,8 +219,6 @@ export function AllgemeineAngabenForm({
           slotBetweenLegendAndOptions={<InfoZumMutterschutz />}
         />
       )}
-
-      {!hideSubmitButton && <Button type="submit">Weiter</Button>}
     </form>
   );
 }
@@ -242,3 +226,187 @@ export function AllgemeineAngabenForm({
 // TODO: style dictionary / TailwindCSS component?
 const CLASS_NAME_PSEUDONYM_INPUT =
   "max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary";
+
+if (import.meta.vitest) {
+  const { describe, expect, it } = import.meta.vitest;
+
+  describe("Allgemeine Angaben Form", async () => {
+    const { render, screen } = await import("@/application/test-utils");
+    const { userEvent } = await import("@testing-library/user-event");
+
+    const initialState: StepAllgemeineAngabenState = {
+      bundesland: null,
+      antragstellende: null,
+      pseudonym: {
+        ET1: "",
+        ET2: "",
+      },
+      alleinerziehend: null,
+      mutterschutz: null,
+    };
+
+    it("should display the Alleinerziehendenstatus part of the form right away", () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      expect(screen.getByText("Sind Sie alleinerziehend?")).toBeInTheDocument();
+    });
+
+    it("should display the Antragstellenden part of the form after the Alleinerziehendenstatus", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Nein"));
+
+      expect(
+        screen.getByText(
+          "Sollen beide Elternteile Elterngeld bekommen? Dann bekommen beide mehr und länger Elterngeld.",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("should display the optional naming part of the form after the Antragstellenden part", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Nein"));
+
+      await userEvent.click(
+        screen.getByLabelText(
+          "Ja, beide Elternteile sollen Elterngeld bekommen",
+        ),
+      );
+
+      expect(screen.getByText("Name für Elternteil 1")).toBeInTheDocument();
+      expect(screen.getByText("Name für Elternteil 2")).toBeInTheDocument();
+    });
+
+    it("should ask for Mutterschutz if Gemeinsam Erziehende", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Nein"));
+
+      await userEvent.click(
+        screen.getByLabelText(
+          "Ja, beide Elternteile sollen Elterngeld bekommen",
+        ),
+      );
+
+      expect(
+        screen.getByText(
+          "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("should show correct Mutterschutz options if Gemeinsam Erziehende", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Nein"));
+
+      await userEvent.click(
+        screen.getByLabelText(
+          "Ja, beide Elternteile sollen Elterngeld bekommen",
+        ),
+      );
+
+      expect(
+        screen.getByText("Ja, Elternteil 1 ist oder wird im Mutterschutz sein"),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText("Ja, Elternteil 2 ist oder wird im Mutterschutz sein"),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(
+          "Nein, kein Elternteil ist oder wird im Mutterschutz sein",
+        ),
+      ).toBeInTheDocument();
+
+      expect(screen.getByText("Ich weiß es noch nicht")).toBeInTheDocument();
+    });
+
+    it("should ask for Mutterschutz if Alleinerziehend", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Ja"));
+
+      expect(
+        screen.getByText(
+          "Sind Sie im Mutterschutz oder werden Sie im Mutterschutz sein?",
+        ),
+      ).toBeInTheDocument();
+    });
+
+    it("should show correct Mutterschutz options if Alleinerziehend", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Ja"));
+
+      expect(
+        screen.getByText("Ja, ich bin oder werde im Mutterschutz sein"),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(
+          "Nein, ich bin nicht oder werde nicht im Mutterschutz sein",
+        ),
+      ).toBeInTheDocument();
+
+      expect(screen.getByText("Ich weiß es noch nicht")).toBeInTheDocument();
+    });
+
+    it("should show correct Mutterschutz options if Ein Elternteil", async () => {
+      render(<AllgemeineAngabenForm initialState={initialState} />);
+
+      await userEvent.click(screen.getByLabelText("Nein"));
+
+      await userEvent.click(
+        screen.getByLabelText(
+          "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen",
+        ),
+      );
+
+      expect(
+        screen.getByText("Ja, ich bin oder werde im Mutterschutz sein"),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByText(
+          "Nein, ich bin nicht oder werde nicht im Mutterschutz sein",
+        ),
+      ).toBeInTheDocument();
+
+      expect(screen.getByText("Ich weiß es noch nicht")).toBeInTheDocument();
+    });
+  });
+
+  describe("Allgemeine Angaben Form Validation", async () => {
+    const { fireEvent, render, waitFor, screen } = await import(
+      "@/application/test-utils"
+    );
+
+    const initialState: StepAllgemeineAngabenState = {
+      bundesland: null,
+      antragstellende: null,
+      pseudonym: {
+        ET1: "",
+        ET2: "",
+      },
+      alleinerziehend: null,
+      mutterschutz: null,
+    };
+
+    it("should show a validation error if some information is missing", async () => {
+      const dom = render(
+        <AllgemeineAngabenForm id="form" initialState={initialState} />,
+      );
+
+      fireEvent.submit(dom.container.querySelector("#form")!);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText("Dieses Feld ist erforderlich"),
+        ).toBeInTheDocument();
+      });
+    });
+  });
+}

@@ -1,8 +1,6 @@
-import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
 import { InfoZumEinkommenslimit } from "./InfoZumEinkommenslimit";
-import { Button } from "@/application/components";
 import {
   Split,
   YesNoRadio,
@@ -10,29 +8,23 @@ import {
 import {
   type StepEinkommenState,
   stepAllgemeineAngabenSelectors,
-  stepEinkommenSlice,
 } from "@/application/features/abfrageteil/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { useAppSelector } from "@/application/redux/hooks";
 import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: () => void;
-  readonly hideSubmitButton?: boolean;
+  readonly initialState?: StepEinkommenState;
+  readonly onSubmit?: (data: StepEinkommenState) => void;
 };
 
-export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
-  const store = useAppStore();
-  const methods = useForm({ defaultValues: store.getState().stepEinkommen });
+export function EinkommenForm({ id, initialState, onSubmit }: Props) {
+  const methods = useForm({ defaultValues: initialState });
   const { errors } = methods.formState;
 
-  const submitEinkommen = useCallback(
-    (values: StepEinkommenState) => {
-      store.dispatch(stepEinkommenSlice.actions.submitStep(values));
-      onSubmit?.();
-    },
-    [store, onSubmit],
-  );
+  const submitEinkommen = (values: StepEinkommenState) => {
+    onSubmit?.(values);
+  };
 
   const antragstellende = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -82,8 +74,6 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
             />
           )}
         </Split>
-
-        {!hideSubmitButton && <Button type="submit">Weiter</Button>}
       </form>
     </FormProvider>
   );

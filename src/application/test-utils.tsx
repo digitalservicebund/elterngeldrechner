@@ -101,7 +101,7 @@ function renderForm<P>(Component: FormComponentType<P>, props: P) {
   }
 
   if (!(formElement instanceof HTMLFormElement)) {
-    throw new Error(
+    throw new TypeError(
       `Element with id "${formId}" is not of type HTMLFormElement, but <${formElement.tagName}>.`,
     );
   }

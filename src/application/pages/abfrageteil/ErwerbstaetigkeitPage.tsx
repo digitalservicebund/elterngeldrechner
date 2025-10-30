@@ -40,7 +40,7 @@ export function ErwerbstaetigkeitPage() {
           nameElternteilEins={ET1}
           nameElternteilZwei={ET2}
           antragssteller={antragssteller}
-          initialState={initialState}
+          defaultValues={initialState}
           onSubmit={onFormSubmission}
         />
 

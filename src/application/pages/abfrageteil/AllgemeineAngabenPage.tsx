@@ -27,7 +27,7 @@ export function AllgemeineAngabenPage() {
       <div className="flex flex-col gap-56">
         <AllgemeineAngabenForm
           id={formIdentifier}
-          initialState={initialeState}
+          defaultValues={initialeState}
           onSubmit={onFormSubmission}
         />
 

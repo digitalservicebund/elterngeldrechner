@@ -36,13 +36,13 @@ const antragstellendeOptions: CustomRadioGroupOption[] = [
 
 type Props = {
   readonly id?: string;
-  readonly initialState?: StepAllgemeineAngabenState;
+  readonly defaultValues?: StepAllgemeineAngabenState;
   readonly onSubmit?: (data: StepAllgemeineAngabenState) => void;
 };
 
-export function AllgemeineAngabenForm({ id, initialState, onSubmit }: Props) {
+export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
   const { register, handleSubmit, watch, formState, setValue } = useForm({
-    defaultValues: initialState,
+    defaultValues,
   });
 
   const submitAllgemeineAngaben = (values: StepAllgemeineAngabenState) => {
@@ -246,13 +246,13 @@ if (import.meta.vitest) {
     };
 
     it("should display the Alleinerziehendenstatus part of the form right away", () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       expect(screen.getByText("Sind Sie alleinerziehend?")).toBeInTheDocument();
     });
 
     it("should display the Antragstellenden part of the form after the Alleinerziehendenstatus", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -264,7 +264,7 @@ if (import.meta.vitest) {
     });
 
     it("should display the optional naming part of the form after the Antragstellenden part", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -279,7 +279,7 @@ if (import.meta.vitest) {
     });
 
     it("should ask for Mutterschutz if Gemeinsam Erziehende", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -297,7 +297,7 @@ if (import.meta.vitest) {
     });
 
     it("should show correct Mutterschutz options if Gemeinsam Erziehende", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
 
@@ -325,7 +325,7 @@ if (import.meta.vitest) {
     });
 
     it("should ask for Mutterschutz if Alleinerziehend", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Ja"));
 
@@ -337,7 +337,7 @@ if (import.meta.vitest) {
     });
 
     it("should show correct Mutterschutz options if Alleinerziehend", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Ja"));
 
@@ -355,7 +355,7 @@ if (import.meta.vitest) {
     });
 
     it("should show correct Mutterschutz options if Ein Elternteil", async () => {
-      render(<AllgemeineAngabenForm initialState={initialState} />);
+      render(<AllgemeineAngabenForm defaultValues={initialState} />);
 
       await userEvent.click(screen.getByLabelText("Nein"));
 

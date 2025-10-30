@@ -28,11 +28,11 @@ const validateMonth = (date: string) => {
 
 type Props = {
   readonly id?: string;
-  readonly initialState?: StepNachwuchsState;
+  readonly defaultValues?: StepNachwuchsState;
   readonly onSubmit?: (data: StepNachwuchsState) => void;
 };
 
-export function NachwuchsForm({ id, initialState, onSubmit }: Props) {
+export function NachwuchsForm({ id, defaultValues, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
@@ -42,7 +42,7 @@ export function NachwuchsForm({ id, initialState, onSubmit }: Props) {
     formState: { errors },
     getValues,
   } = useForm({
-    defaultValues: initialState,
+    defaultValues,
   });
 
   const submitNachwuchs = (values: StepNachwuchsState) => {
@@ -259,7 +259,7 @@ if (import.meta.vitest) {
     };
 
     it("should increase and decrease number of expected children", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const numberField = screen.getByLabelText(
         "Wie viele Kinder werden oder wurden geboren?",
@@ -275,7 +275,7 @@ if (import.meta.vitest) {
     });
 
     it("should not increase beyond 8 expected children", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const numberField = screen.getByLabelText(
         "Wie viele Kinder werden oder wurden geboren?",
@@ -288,7 +288,7 @@ if (import.meta.vitest) {
     });
 
     it("should not decrease below 0 children", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const numberField = screen.getByLabelText(
         "Wie viele Kinder werden oder wurden geboren?",
@@ -301,7 +301,7 @@ if (import.meta.vitest) {
     });
 
     it("should display the typed value for the expected birthday", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const dateField = screen.getByRole("textbox", {
         name: "Geburtsdatum des Kindes",
@@ -313,7 +313,7 @@ if (import.meta.vitest) {
     });
 
     it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const addButton = screen.getByRole("button", {
         name: /älteres geschwisterkind hinzufügen/i,
@@ -329,7 +329,7 @@ if (import.meta.vitest) {
     });
 
     it("should add one new Geschwisterkind if clicked on the Geschwisterkind Add Button and check Behinderung-Checkbox", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const addButton = screen.getByRole("button", {
         name: /älteres geschwisterkind hinzufügen/i,
@@ -348,7 +348,7 @@ if (import.meta.vitest) {
     });
 
     it("should change the title of the add new Geschwisterkind button after the first added child", async () => {
-      render(<NachwuchsForm initialState={initialState} />);
+      render(<NachwuchsForm defaultValues={initialState} />);
 
       const addButton = screen.getByRole("button", {
         name: /älteres geschwisterkind hinzufügen/i,

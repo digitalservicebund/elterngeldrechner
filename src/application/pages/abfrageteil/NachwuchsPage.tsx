@@ -34,7 +34,7 @@ export function NachwuchsPage() {
       <div className="flex flex-col gap-56">
         <NachwuchsForm
           id={formIdentifier}
-          initialState={initialState}
+          defaultValues={initialState}
           onSubmit={onFormSubmission}
         />
 

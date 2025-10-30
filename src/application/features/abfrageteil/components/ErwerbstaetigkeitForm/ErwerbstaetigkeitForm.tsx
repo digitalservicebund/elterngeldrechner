@@ -13,7 +13,7 @@ type Props = {
   readonly nameElternteilEins: string;
   readonly nameElternteilZwei: string;
   readonly antragssteller: Antragstellende | null;
-  readonly initialState?: StepErwerbstaetigkeitState;
+  readonly defaultValues?: StepErwerbstaetigkeitState;
   readonly onSubmit?: (data: StepErwerbstaetigkeitState) => void;
 };
 
@@ -22,11 +22,11 @@ export function ErwerbstaetigkeitForm({
   antragssteller,
   nameElternteilEins,
   nameElternteilZwei,
-  initialState,
+  defaultValues,
   onSubmit,
 }: Props) {
   const methods = useForm({
-    defaultValues: initialState,
+    defaultValues,
   });
 
   const { handleSubmit, setValue } = methods;

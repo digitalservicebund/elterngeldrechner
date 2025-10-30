@@ -14,12 +14,12 @@ import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 
 type Props = {
   readonly id?: string;
-  readonly initialState?: StepEinkommenState;
+  readonly defaultValues?: StepEinkommenState;
   readonly onSubmit?: (data: StepEinkommenState) => void;
 };
 
-export function EinkommenForm({ id, initialState, onSubmit }: Props) {
-  const methods = useForm({ defaultValues: initialState });
+export function EinkommenForm({ id, defaultValues, onSubmit }: Props) {
+  const methods = useForm({ defaultValues });
   const { errors } = methods.formState;
 
   const submitEinkommen = (values: StepEinkommenState) => {

@@ -27,7 +27,7 @@ export function EinkommenPage() {
       <div className="flex flex-col gap-56">
         <EinkommenForm
           id={formIdentifier}
-          initialState={initialeState}
+          defaultValues={initialeState}
           onSubmit={onFormSubmission}
         />
 

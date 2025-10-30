@@ -91,12 +91,12 @@ export function AbschnittMitEinkommen(): ReactNode {
         const bruttoEinkommenIsMissing =
           gewaehlteOption === Variante.Bonus && !bruttoeinkommen;
 
-        const margin: CSSProperties =
-          ausgangslage.anzahlElternteile > 1
-            ? elternteil === Elternteil.Eins
-              ? { marginLeft: 20 }
-              : { marginRight: 20 }
-            : {};
+        const margin: CSSProperties = {
+          ...(ausgangslage.anzahlElternteile > 1 &&
+            elternteil === Elternteil.Eins && { marginLeft: 20 }),
+          ...(ausgangslage.anzahlElternteile > 1 &&
+            elternteil === Elternteil.Zwei && { marginRight: 20 }),
+        };
 
         const vorschlaege =
           erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);

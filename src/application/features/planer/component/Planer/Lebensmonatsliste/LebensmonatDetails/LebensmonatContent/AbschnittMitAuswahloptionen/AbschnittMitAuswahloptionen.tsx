@@ -27,6 +27,11 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
     bestimmeAuswahlmoeglichkeiten,
   );
 
+  const hasMutterschutz =
+    ausgangslage.informationenZumMutterschutz &&
+    lebensmonatszahl <=
+      ausgangslage.informationenZumMutterschutz?.letzterLebensmonatMitSchutz;
+
   return (
     <>
       {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => {
@@ -38,24 +43,22 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
         const bruttoeinkommenIsMissing = !bruttoeinkommen;
 
         return (
-          <>
-            <AuswahlEingabe
-              key={elternteil}
-              legend={legend}
-              elternteil={elternteil}
-              imMutterschutz={imMutterschutz}
-              bruttoeinkommenIsMissing={bruttoeinkommenIsMissing}
-              gewaehlteOption={gewaehlteOption}
-              auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-              waehleOption={waehleOption.bind(null, elternteil)}
-            />
-
-            {!!imMutterschutz && (
-              <HinweisFuerSchlossSymbol className="mx-20 mt-16" />
-            )}
-          </>
+          <AuswahlEingabe
+            key={elternteil}
+            legend={legend}
+            elternteil={elternteil}
+            imMutterschutz={imMutterschutz}
+            bruttoeinkommenIsMissing={bruttoeinkommenIsMissing}
+            gewaehlteOption={gewaehlteOption}
+            auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+            waehleOption={waehleOption.bind(null, elternteil)}
+          />
         );
       })}
+
+      {!!hasMutterschutz && (
+        <HinweisFuerSchlossSymbol className="mx-20 mt-16" />
+      )}
 
       {!!showHinweis && (
         <HinweisFuerNichtAuswaehlbareOptionen className="mx-20 mt-16" />

@@ -114,7 +114,12 @@ function getRenderProperties(
     case Variante.Basis:
       return {
         label: istBasisImMutterschutz ? (
-          "Mutterschutz"
+          <div className="flex flex-col sm:flex-row sm:gap-4">
+            Basis{" "}
+            <span className="pt-2 text-12 font-regular italic leading-4 sm:pt-1">
+              Mutterschutz
+            </span>
+          </div>
         ) : (
           <div className="flex flex-col sm:flex-row sm:gap-4">
             Basis{" "}

@@ -1,7 +1,5 @@
-import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import { AuswahloptionLabel } from "./AuswahloptionLabel";
-import { InfoDialog } from "@/application/features/planer/component/common";
 import {
   type GridColumnDefinitionPerElternteil,
   useGridColumnPerElternteil,
@@ -38,7 +36,6 @@ export function AuswahlEingabe({
   const fieldsetColumns = useGridColumnPerElternteil(
     FIELDSET_COLUMN_DEFINITION,
   );
-  const infoColumns = useGridColumnPerElternteil(INFO_COLUMN_DEFINITIONS);
   const inputColumns = useGridColumnPerElternteil(INPUT_COLUMN_DEFINITIONS);
 
   const baseIdentifier = useId();
@@ -53,48 +50,11 @@ export function AuswahlEingabe({
 
         {Auswahloptionen.sort(sortByAuswahloption).map(
           (option, optionIndex) => {
-            const { istAuswaehlbar, grundWiesoNichtAuswaehlbar } =
-              auswahlmoeglichkeiten[option];
-
-            const infoIdentifier = getInfoIdentifier(
-              baseIdentifier,
-              option,
-              istAuswaehlbar,
-            );
-            const infoAriaLabel = `Informationen wieso ${option} nicht verfügbar ist`;
-            const gridRowStart = optionIndex + 1;
-
-            return (
-              !istAuswaehlbar && (
-                <InfoDialog
-                  key={option}
-                  id={infoIdentifier}
-                  className={classNames(
-                    "min-w-24 self-center justify-self-center",
-                    { invisible: !grundWiesoNichtAuswaehlbar },
-                  )}
-                  style={{ gridRowStart, ...infoColumns[elternteil] }}
-                  ariaLabelForDialog={infoAriaLabel}
-                  info={grundWiesoNichtAuswaehlbar}
-                />
-              )
-            );
-          },
-        )}
-
-        {Auswahloptionen.sort(sortByAuswahloption).map(
-          (option, optionIndex) => {
             const {
               elterngeldbezug,
               istAuswaehlbar,
               grundWiesoNichtAuswaehlbar,
             } = auswahlmoeglichkeiten[option];
-
-            const infoIdentifier = getInfoIdentifier(
-              baseIdentifier,
-              option,
-              istAuswaehlbar,
-            );
 
             const inputIdentifier = `${baseIdentifier}-input-${option}`;
             const inputDescriptionIdentifier = `${baseIdentifier}-input-description-${option}`;
@@ -137,7 +97,6 @@ export function AuswahlEingabe({
                   aria-disabled={!istAuswaehlbar}
                   aria-label={inputAriaLabel}
                   aria-describedby={inputDescriptionIdentifier}
-                  aria-details={infoIdentifier}
                 />
 
                 <AuswahloptionLabel
@@ -166,14 +125,6 @@ export function AuswahlEingabe({
       </fieldset>
     </div>
   );
-}
-
-function getInfoIdentifier(
-  baseIdentifier: string,
-  option: Auswahloption,
-  istAuswaehlbar: boolean,
-): string | undefined {
-  return istAuswaehlbar ? undefined : `${baseIdentifier}-info-${option}`;
 }
 
 function composeAriaLabelForAuswahloption(
@@ -215,16 +166,6 @@ const FIELDSET_COLUMN_DEFINITION: GridColumnDefinitionPerElternteil = {
   2: {
     [Elternteil.Eins]: ["et1-outside", "et1-inside"],
     [Elternteil.Zwei]: ["et2-inside", "et2-outside"],
-  },
-};
-
-const INFO_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
-  1: {
-    [Elternteil.Eins]: "right-outside",
-  },
-  2: {
-    [Elternteil.Eins]: "et1-outside",
-    [Elternteil.Zwei]: "et2-outside",
   },
 };
 

@@ -21,7 +21,7 @@ export function GewaehlteOption({
   style,
   ariaHidden,
 }: Props): ReactNode {
-  const label = getLabel(imMutterschutz, option);
+  const label = getLabel(option);
   const conditionalClassName = getClassName(option, bruttoeinkommenIsMissing);
   const icon = getIcon(option !== undefined, imMutterschutz);
 
@@ -61,26 +61,22 @@ export function GewaehlteOption({
   );
 }
 
-function getLabel(imMutterschutz?: boolean, option?: Auswahloption): string {
-  if (imMutterschutz) {
-    return "Mutterschutz";
-  } else {
-    switch (option) {
-      case Variante.Basis:
-        return "Basis";
+function getLabel(option?: Auswahloption): string {
+  switch (option) {
+    case Variante.Basis:
+      return "Basis";
 
-      case Variante.Plus:
-        return "Plus";
+    case Variante.Plus:
+      return "Plus";
 
-      case Variante.Bonus:
-        return "Bonus";
+    case Variante.Bonus:
+      return "Bonus";
 
-      case KeinElterngeld:
-        return "kein Elterngeld";
+    case KeinElterngeld:
+      return "kein Elterngeld";
 
-      case undefined:
-        return "hinzufügen";
-    }
+    case undefined:
+      return "hinzufügen";
   }
 }
 

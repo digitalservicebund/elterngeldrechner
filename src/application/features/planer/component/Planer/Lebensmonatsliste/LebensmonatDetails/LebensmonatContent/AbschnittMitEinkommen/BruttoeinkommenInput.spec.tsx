@@ -58,6 +58,7 @@ describe("Buttoeinkommen Input", () => {
 });
 
 const ANY_PROPS = {
+  imMutterschutz: false,
   bruttoeinkommen: undefined,
   isMissing: false,
   vorschlaege: [],

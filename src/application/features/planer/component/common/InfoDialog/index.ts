@@ -1,1 +1,0 @@
-export { InfoDialog } from "./InfoDialog";

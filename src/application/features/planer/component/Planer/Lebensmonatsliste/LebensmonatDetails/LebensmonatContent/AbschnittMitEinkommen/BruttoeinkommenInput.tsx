@@ -10,6 +10,7 @@ import {
 import type { Einkommen } from "@/monatsplaner";
 
 type Props = {
+  readonly imMutterschutz: boolean;
   readonly bruttoeinkommen: Einkommen | undefined;
   readonly isMissing: boolean;
   readonly vorschlaege: number[];
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export function BruttoeinkommenInput({
+  imMutterschutz,
   bruttoeinkommen,
   isMissing,
   vorschlaege,
@@ -47,7 +49,10 @@ export function BruttoeinkommenInput({
 
   return (
     <div className="flex flex-col gap-4" style={style}>
-      <label htmlFor={inputIdentifier}>
+      <label
+        htmlFor={inputIdentifier}
+        className={imMutterschutz ? "text-grey-dark" : ""}
+      >
         <BusinessCenterIcon /> Einkommen in € (brutto)
       </label>
 
@@ -57,6 +62,7 @@ export function BruttoeinkommenInput({
         className={classNames(
           "appearance-none px-24 py-10",
           "border-2 border-solid",
+          imMutterschutz ? "border-grey-dark" : "border-Basis",
           isMissing ? "border-warning" : "border-Basis",
         )}
         aria-label={ariaLabel}
@@ -68,7 +74,10 @@ export function BruttoeinkommenInput({
         list={datalistIdentifier}
         onKeyDown={filterNonNumbericInput}
         onChange={gebeBruttoeinkommenAn}
+        disabled={imMutterschutz}
       />
+
+      {!!imMutterschutz && <p>Arbeiten im Mutterschutz ist nicht erlaubt</p>}
 
       <datalist id={datalistIdentifier}>
         {vorschlaege.map((value) => (

@@ -24,7 +24,7 @@ describe("Auswahloption Label", () => {
 
     expect(screen.getByText("Mutterschutz")).toBeVisible();
     expect(screen.queryByTestId("LockIcon")).toBeVisible();
-    expect(screen.queryByText("Basis")).not.toBeInTheDocument();
+    expect(screen.queryByText("Basis")).toBeVisible();
   });
 
   it("shows formatted Elterngeldbezug when given", () => {

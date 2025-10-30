@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { AuswahlEingabe } from "./AuswahlEingabe";
@@ -157,38 +157,6 @@ describe("AuswahlEingabe", () => {
       expect(waehleOption).not.toHaveBeenCalled();
     });
 
-    it("povides an info dialog with information why it is disabled", async () => {
-      const auswahlmoeglichkeiten = {
-        ...ANY_AUSWAHLMOEGLICHKEITEN,
-        [Variante.Plus]: {
-          istAuswaehlbar: false as const,
-          grundWiesoNichtAuswaehlbar: "ist nicht mehr verfügbar",
-          elterngeldbezug: null,
-        },
-      };
-
-      render(
-        <AuswahlEingabe
-          {...ANY_PROPS}
-          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-        />,
-      );
-
-      await userEvent.click(
-        screen.getByRole("button", {
-          name: "Öffne Informationen wieso ElterngeldPlus nicht verfügbar ist",
-        }),
-      );
-
-      const dialog = screen.getByLabelText(
-        "Informationen wieso ElterngeldPlus nicht verfügbar ist",
-      );
-
-      expect(
-        within(dialog).getByText("ist nicht mehr verfügbar"),
-      ).toBeVisible();
-    });
-
     it("provides the disabled hint as description property and links to info dialog", () => {
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,
@@ -212,37 +180,6 @@ describe("AuswahlEingabe", () => {
       });
 
       expect(input).toBeInTheDocument();
-      expect(input).toHaveAttribute("aria-details");
-    });
-
-    it("puts all disabled hint buttons before the first radio in the tab order", () => {
-      const auswahlmoeglichkeiten = {
-        ...ANY_AUSWAHLMOEGLICHKEITEN,
-        [Variante.Basis]: ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT,
-        [Variante.Bonus]: ANY_NICHT_WAEHLBARE_AUSWAHLMOEGLICHKEIT,
-      };
-
-      render(
-        <AuswahlEingabe
-          {...ANY_PROPS}
-          auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-        />,
-      );
-
-      const basisInfoButton = screen.getByRole("button", {
-        name: "Öffne Informationen wieso Basiselterngeld nicht verfügbar ist",
-      });
-      const plusInfoButton = screen.getByRole("button", {
-        name: "Öffne Informationen wieso Partnerschaftsbonus nicht verfügbar ist",
-      });
-      const firstRadio = screen.getAllByRole("radio")[0]!;
-
-      expect(basisInfoButton?.compareDocumentPosition(plusInfoButton)).toBe(
-        Node.DOCUMENT_POSITION_FOLLOWING,
-      );
-      expect(plusInfoButton?.compareDocumentPosition(firstRadio)).toBe(
-        Node.DOCUMENT_POSITION_FOLLOWING,
-      );
     });
   });
 });

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { AuswahlEingabe } from "./AuswahlEingabe";
 import { HinweisFuerNichtAuswaehlbareOptionen } from "./HinweisFuerNichtAuswaehlbareOptionen";
+import { HinweisFuerSchlossSymbol } from "./HinweisFuerSchlossSymbol";
 import {
   type BestimmeAuswahlmoeglichkeiten,
   useInformationenZumLebensmonat,
@@ -37,21 +38,27 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
         const bruttoeinkommenIsMissing = !bruttoeinkommen;
 
         return (
-          <AuswahlEingabe
-            key={elternteil}
-            legend={legend}
-            elternteil={elternteil}
-            imMutterschutz={imMutterschutz}
-            bruttoeinkommenIsMissing={bruttoeinkommenIsMissing}
-            gewaehlteOption={gewaehlteOption}
-            auswahlmoeglichkeiten={auswahlmoeglichkeiten}
-            waehleOption={waehleOption.bind(null, elternteil)}
-          />
+          <>
+            <AuswahlEingabe
+              key={elternteil}
+              legend={legend}
+              elternteil={elternteil}
+              imMutterschutz={imMutterschutz}
+              bruttoeinkommenIsMissing={bruttoeinkommenIsMissing}
+              gewaehlteOption={gewaehlteOption}
+              auswahlmoeglichkeiten={auswahlmoeglichkeiten}
+              waehleOption={waehleOption.bind(null, elternteil)}
+            />
+
+            {!!imMutterschutz && (
+              <HinweisFuerSchlossSymbol className="mx-20 mt-16" />
+            )}
+          </>
         );
       })}
 
       {!!showHinweis && (
-        <HinweisFuerNichtAuswaehlbareOptionen className="mt-16" />
+        <HinweisFuerNichtAuswaehlbareOptionen className="mx-20 mt-16" />
       )}
     </>
   );

@@ -24,11 +24,7 @@ describe("Elterngeldbezugsanzeige", () => {
   it("shows an information if being im Mutterschutz", () => {
     render(<Haushaltseinkommen {...ANY_PROPS} imMutterschutz />);
 
-    expect(
-      screen.queryByRole("button", {
-        name: "Öffne Informationen zum Elterngeldbezug im Mutterschutz",
-      }),
-    ).toBeVisible();
+    expect(screen.queryByText("Mutterschutz")).toBeVisible();
   });
 });
 

@@ -1,7 +1,6 @@
 import ErrorIcon from "@digitalservicebund/icons/Error";
-import { ReactNode, useId } from "react";
+import { CSSProperties, ReactNode, useId } from "react";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
-import { HinweisZumMutterschutz } from "./HinweisZumMutterschutz";
 import { InfoZumBonus } from "./InfoZumBonus";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
 import { InfoText } from "@/application/components";
@@ -48,7 +47,10 @@ export function AbschnittMitEinkommen(): ReactNode {
 
   return (
     <div className="contents">
-      <div className="mb-16 mt-32 flex flex-wrap gap-6" style={headingColumn}>
+      <div
+        className="mx-20 mb-16 mt-32 flex flex-wrap gap-6"
+        style={headingColumn}
+      >
         {istLebensmonatMitBonus ? (
           <>
             <span className="font-bold">
@@ -63,7 +65,8 @@ export function AbschnittMitEinkommen(): ReactNode {
         ) : (
           <>
             <span className="font-bold">
-              Haben Sie Einkommen? Dann tragen Sie es bitte ein.
+              Haben Sie neben dem Elterngeld noch andere Einnahmen in diesem
+              Monat?
             </span>
 
             <p>
@@ -88,38 +91,38 @@ export function AbschnittMitEinkommen(): ReactNode {
         const bruttoEinkommenIsMissing =
           gewaehlteOption === Variante.Bonus && !bruttoeinkommen;
 
-        if (imMutterschutz) {
-          return (
-            <HinweisZumMutterschutz
-              key={elternteil}
-              style={bruttoeinkommenColumns[elternteil]}
-            />
-          );
-        } else {
-          const vorschlaege =
-            erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
-          const ariaLabel = composeAriaLabelForBruttoeinkommen(
-            ausgangslage.pseudonymeDerElternteile?.[elternteil],
-            lebensmonatszahl,
-          );
+        const margin: CSSProperties =
+          ausgangslage.anzahlElternteile > 1
+            ? elternteil === Elternteil.Eins
+              ? { marginLeft: 20 }
+              : { marginRight: 20 }
+            : {};
 
-          return (
-            <div key={elternteil} style={bruttoeinkommenColumns[elternteil]}>
-              <BruttoeinkommenInput
-                key={elternteil}
-                bruttoeinkommen={bruttoeinkommen}
-                isMissing={bruttoEinkommenIsMissing}
-                vorschlaege={vorschlaege}
-                ariaLabel={ariaLabel}
-                ariaDescribedBy={hinweisZuWochenstundenIdentifier}
-                gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
-              />
-            </div>
-          );
-        }
+        const vorschlaege =
+          erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
+        const ariaLabel = composeAriaLabelForBruttoeinkommen(
+          ausgangslage.pseudonymeDerElternteile?.[elternteil],
+          lebensmonatszahl,
+        );
+
+        return (
+          <div key={elternteil} style={bruttoeinkommenColumns[elternteil]}>
+            <BruttoeinkommenInput
+              key={elternteil}
+              imMutterschutz={imMutterschutz}
+              bruttoeinkommen={bruttoeinkommen}
+              isMissing={bruttoEinkommenIsMissing}
+              vorschlaege={vorschlaege}
+              ariaLabel={ariaLabel}
+              ariaDescribedBy={hinweisZuWochenstundenIdentifier}
+              gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
+              style={margin}
+            />
+          </div>
+        );
       })}
 
-      <div className="my-16 flex flex-wrap gap-6" style={headingColumn}>
+      <div className="mx-20 my-16 flex flex-wrap gap-6" style={headingColumn}>
         <InfoText
           question="Wie funktioniert Einkommen mit Elterngeld?"
           answer={<InfoZumEinkommen />}
@@ -146,7 +149,7 @@ function composeAriaLabelForBruttoeinkommen(
 
 const HEADING_COLUMN_DEFINITION: GridColumnDefinition = {
   1: ["left-outside", "right-outside"],
-  2: ["et1-middle", "et2-middle"],
+  2: ["et1-outside", "et2-outside"],
 };
 
 const BRUTTOEINKOMMEN_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
@@ -154,7 +157,7 @@ const BRUTTOEINKOMMEN_COLUMN_DEFINITIONS: GridColumnDefinitionPerElternteil = {
     [Elternteil.Eins]: ["left-middle", "right-middle"],
   },
   2: {
-    [Elternteil.Eins]: ["et1-middle", "et1-inside"],
-    [Elternteil.Zwei]: ["et2-inside", "et2-middle"],
+    [Elternteil.Eins]: ["et1-outside", "et1-inside"],
+    [Elternteil.Zwei]: ["et2-inside", "et2-outside"],
   },
 };

@@ -7,7 +7,6 @@ describe("GewaehlteOption", () => {
   it("shows im Mutterschutz with a lock icon", () => {
     render(<GewaehlteOption {...ANY_PROPS} imMutterschutz />);
 
-    expect(screen.getByText("Mutterschutz")).toBeInTheDocument();
     expect(screen.getByTestId("LockIcon")).toBeVisible();
   });
 

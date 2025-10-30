@@ -10,7 +10,7 @@ export function InfoZumEinkommen(): ReactNode {
         Beachten Sie Folgendes:
       </p>
 
-      <ul className="ml-16 list-disc pl-24">
+      <ul className="ml-32 list-disc">
         <li>Ihr Einkommen beeinflusst die Höhe Ihres Elterngeldes</li>
         <li>
           Von dem Bruttoeinkommen, das Sie eingeben, werden in pauschaler Form

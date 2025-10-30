@@ -25,7 +25,9 @@ describe("Abschnitt mit Einkommen", () => {
     render(<AbschnittMitEinkommen />);
 
     expect(
-      screen.getByText("Haben Sie Einkommen? Dann tragen Sie es bitte ein."),
+      screen.getByText(
+        "Haben Sie neben dem Elterngeld noch andere Einnahmen in diesem Monat?",
+      ),
     ).toBeVisible();
   });
 
@@ -87,12 +89,10 @@ describe("Abschnitt mit Einkommen", () => {
         screen.queryByRole("combobox", {
           name: "Bruttoeinkommen von Jane im 5. Lebensmonat",
         }),
-      ).not.toBeInTheDocument();
+      ).toBeDisabled();
 
       expect(
-        screen.getByText(
-          "Nach der Geburt haben Mütter in der Regel Anspruch auf acht Wochen Mutterschutz. Während dieser Zeit dürfen sie nicht arbeiten. Sie können in dieser Zeit kein Einkommen angeben.",
-        ),
+        screen.getByText("Arbeiten im Mutterschutz ist nicht erlaubt"),
       ).toBeVisible();
 
       expect(

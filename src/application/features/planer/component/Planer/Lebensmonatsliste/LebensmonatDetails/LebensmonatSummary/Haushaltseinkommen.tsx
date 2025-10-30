@@ -3,7 +3,6 @@ import ErrorIcon from "@digitalservicebund/icons/Error";
 import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
 import { Geldbetrag } from "@/application/components";
-import { InfoDialog } from "@/application/features/planer/component/common";
 import type { Einkommen, Elterngeldbezug } from "@/monatsplaner";
 
 type Props = {
@@ -26,13 +25,16 @@ export function Haushaltseinkommen({
 }: Props): ReactNode | undefined {
   if (imMutterschutz) {
     return (
-      <InfoDialog
-        className={className}
+      <div
+        className={classNames(
+          "flex flex-col items-center text-14 italic",
+          className,
+        )}
         style={style}
-        ariaLabelForDialog="Informationen zum Elterngeldbezug im Mutterschutz"
-        info="Sie haben angegeben, dass Sie Mutterschaftsleistungen beziehen. Monate mit Mutterschaftsleistungen gelten als Monate mit Basiselterngeld. Sind die Mutterschaftsleistungen höher als
-        das Elterngeld, bekommen Sie nur die Mutterschaftsleistungen."
-      />
+        aria-hidden={ariaHidden}
+      >
+        Mutterschutz
+      </div>
     );
   } else {
     return (

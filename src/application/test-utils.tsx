@@ -76,11 +76,48 @@ function renderHookWithRedux<Result, Props>(
   };
 }
 
+type FormComponentType<P> = React.ComponentType<P & { id: string }>;
+
+/**
+ * Renders an arbitrary form component, automatically adds an id,
+ * and returns the HTMLFormElement.
+ *
+ * Throws an error if the element with the id is not found
+ * or is not a <form> element.
+ *
+ * @param Component The form component (e.g., AllgemeineAngabenForm)
+ * @param props The props for the component (e.g., { defaultValues: ... })
+ * @returns The form element itself to be passed on to fireEvent.submit(...)
+ */
+function renderForm<P>(Component: FormComponentType<P>, props: P) {
+  const formId = "form-under-test";
+
+  const { container } = render(<Component {...props} id={formId} />);
+
+  const formElement = container.querySelector(`#${formId}`);
+
+  if (!formElement) {
+    throw new Error(`Unable to locate form "${formId}" in the dom.`);
+  }
+
+  if (!(formElement instanceof HTMLFormElement)) {
+    throw new TypeError(
+      `Element with id "${formId}" is not of type HTMLFormElement, but <${formElement.tagName}>.`,
+    );
+  }
+
+  return formElement;
+}
+
 // re-export everything
 export * from "@testing-library/react";
 
 // override render method
-export { renderHookWithRedux as renderHook, renderWithRedux as render };
+export {
+  renderForm,
+  renderHookWithRedux as renderHook,
+  renderWithRedux as render,
+};
 
 export const INITIAL_STATE: RootState = {
   stepAllgemeineAngaben: stepAllgemeineAngabenSlice.getInitialState(),

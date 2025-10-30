@@ -297,8 +297,6 @@ if (import.meta.vitest) {
     const navigateSpy = vi.fn<NavigateStateful>();
 
     beforeEach(() => {
-      vi.mock(import("react-router"), () => ({ useNavigate: vi.fn() }));
-
       vi.mock(
         import("@/application/pages/planungsteil/useNavigateStateful"),
         () => ({ useNavigateStateful: vi.fn() }),

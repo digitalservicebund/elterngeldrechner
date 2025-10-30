@@ -1,8 +1,6 @@
-import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { EinkommenFormElternteil } from "./EinkommenFormElternteil";
 import { InfoZumEinkommenslimit } from "./InfoZumEinkommenslimit";
-import { Button } from "@/application/components";
 import {
   Split,
   YesNoRadio,
@@ -10,29 +8,28 @@ import {
 import {
   type StepEinkommenState,
   stepAllgemeineAngabenSelectors,
-  stepEinkommenSlice,
 } from "@/application/features/abfrageteil/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { useAppSelector } from "@/application/redux/hooks";
 import { MAX_EINKOMMEN } from "@/elterngeldrechner";
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: () => void;
-  readonly hideSubmitButton?: boolean;
+  readonly defaultValues?: StepEinkommenState;
+  readonly onSubmit?: (data: StepEinkommenState) => void;
 };
 
-export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
-  const store = useAppStore();
-  const methods = useForm({ defaultValues: store.getState().stepEinkommen });
-  const { errors } = methods.formState;
+export function EinkommenForm({ id, defaultValues, onSubmit }: Props) {
+  const methods = useForm({ defaultValues });
 
-  const submitEinkommen = useCallback(
-    (values: StepEinkommenState) => {
-      store.dispatch(stepEinkommenSlice.actions.submitStep(values));
-      onSubmit?.();
-    },
-    [store, onSubmit],
-  );
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
+
+  const submitEinkommen = (values: StepEinkommenState) => {
+    onSubmit?.(values);
+  };
 
   const antragstellende = useAppSelector(
     stepAllgemeineAngabenSelectors.getAntragssteller,
@@ -56,12 +53,12 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
 
   return (
     <FormProvider {...methods}>
-      <form id={id} onSubmit={methods.handleSubmit(submitEinkommen)} noValidate>
+      <form id={id} onSubmit={handleSubmit(submitEinkommen)} noValidate>
         <YesNoRadio
           className="mb-32"
           legend={limitEinkommenUeberschrittenLegend}
           slotBetweenLegendAndOptions={<InfoZumEinkommenslimit />}
-          register={methods.register}
+          register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="limitEinkommenUeberschritten"
           errors={errors}
@@ -82,8 +79,6 @@ export function EinkommenForm({ id, onSubmit, hideSubmitButton }: Props) {
             />
           )}
         </Split>
-
-        {!hideSubmitButton && <Button type="submit">Weiter</Button>}
       </form>
     </FormProvider>
   );

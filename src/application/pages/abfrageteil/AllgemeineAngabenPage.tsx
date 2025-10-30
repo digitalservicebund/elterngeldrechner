@@ -15,7 +15,7 @@ export function AllgemeineAngabenPage() {
   const navigate = useNavigate();
 
   const formIdentifier = useId();
-  const initialeState = store.getState().stepAllgemeineAngaben;
+  const initialState = store.getState().stepAllgemeineAngaben;
 
   const onFormSubmission = (data: StepAllgemeineAngabenState) => {
     store.dispatch(stepAllgemeineAngabenSlice.actions.submitStep(data));
@@ -27,7 +27,7 @@ export function AllgemeineAngabenPage() {
       <div className="flex flex-col gap-56">
         <AllgemeineAngabenForm
           id={formIdentifier}
-          defaultValues={initialeState}
+          defaultValues={initialState}
           onSubmit={onFormSubmission}
         />
 

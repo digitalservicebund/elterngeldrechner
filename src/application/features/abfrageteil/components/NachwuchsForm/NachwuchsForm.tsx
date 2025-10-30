@@ -424,7 +424,7 @@ if (import.meta.vitest) {
         };
 
         const form = renderForm(NachwuchsForm, {
-          initialState: validFormState,
+          defaultValues: validFormState,
         });
 
         fireEvent.submit(form);
@@ -452,7 +452,7 @@ if (import.meta.vitest) {
       };
 
       const form = renderForm(NachwuchsForm, {
-        initialState: invalidFormState,
+        defaultValues: invalidFormState,
       });
 
       fireEvent.submit(form);
@@ -477,7 +477,7 @@ if (import.meta.vitest) {
       };
 
       const form = renderForm(NachwuchsForm, {
-        initialState: invalidFormState,
+        defaultValues: invalidFormState,
       });
 
       fireEvent.submit(form);
@@ -504,7 +504,7 @@ if (import.meta.vitest) {
       };
 
       const form = renderForm(NachwuchsForm, {
-        initialState: invalidFormState,
+        defaultValues: invalidFormState,
       });
 
       fireEvent.submit(form);

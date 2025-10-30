@@ -15,7 +15,7 @@ export function EinkommenPage() {
   const navigate = useNavigate();
 
   const formIdentifier = useId();
-  const initialeState = store.getState().stepEinkommen;
+  const initialState = store.getState().stepEinkommen;
 
   const onFormSubmission = (data: StepEinkommenState) => {
     store.dispatch(stepEinkommenSlice.actions.submitStep(data));
@@ -27,7 +27,7 @@ export function EinkommenPage() {
       <div className="flex flex-col gap-56">
         <EinkommenForm
           id={formIdentifier}
-          defaultValues={initialeState}
+          defaultValues={initialState}
           onSubmit={onFormSubmission}
         />
 

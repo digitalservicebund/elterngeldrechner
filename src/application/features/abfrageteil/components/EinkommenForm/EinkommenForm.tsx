@@ -20,7 +20,12 @@ type Props = {
 
 export function EinkommenForm({ id, defaultValues, onSubmit }: Props) {
   const methods = useForm({ defaultValues });
-  const { errors } = methods.formState;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
   const submitEinkommen = (values: StepEinkommenState) => {
     onSubmit?.(values);
@@ -48,12 +53,12 @@ export function EinkommenForm({ id, defaultValues, onSubmit }: Props) {
 
   return (
     <FormProvider {...methods}>
-      <form id={id} onSubmit={methods.handleSubmit(submitEinkommen)} noValidate>
+      <form id={id} onSubmit={handleSubmit(submitEinkommen)} noValidate>
         <YesNoRadio
           className="mb-32"
           legend={limitEinkommenUeberschrittenLegend}
           slotBetweenLegendAndOptions={<InfoZumEinkommenslimit />}
-          register={methods.register}
+          register={register}
           registerOptions={{ required: "Dieses Feld ist erforderlich" }}
           name="limitEinkommenUeberschritten"
           errors={errors}

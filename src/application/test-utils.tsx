@@ -86,7 +86,7 @@ type FormComponentType<P> = React.ComponentType<P & { id: string }>;
  * or is not a <form> element.
  *
  * @param Component The form component (e.g., AllgemeineAngabenForm)
- * @param props The props for the component (e.g., { initialState: ... })
+ * @param props The props for the component (e.g., { defaultValues: ... })
  * @returns The form element itself to be passed on to fireEvent.submit(...)
  */
 function renderForm<P>(Component: FormComponentType<P>, props: P) {

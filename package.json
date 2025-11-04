@@ -71,7 +71,7 @@
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.46.2",
     "vite": "^7.1.12",
-    "vitest": "^4.0.5"
+    "vitest": "^4.0.6"
   },
   "dependencies": {
     "@cantoo/pdf-lib": "^2.5.3",

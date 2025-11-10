@@ -77,7 +77,11 @@ export function BruttoeinkommenInput({
         disabled={imMutterschutz}
       />
 
-      {!!imMutterschutz && <p>Arbeiten im Mutterschutz ist nicht erlaubt</p>}
+      {!!imMutterschutz && (
+        <p className="text-14 italic leading-snug">
+          Arbeiten im Mutterschutz ist nicht erlaubt
+        </p>
+      )}
 
       <datalist id={datalistIdentifier}>
         {vorschlaege.map((value) => (

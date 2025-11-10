@@ -18,7 +18,7 @@ export function Prueftippbox({
   return (
     <>
       {tips.hasSpecialBonusTip === true && (
-        <div className="my-10 flex flex-col items-center gap-24 bg-white p-40">
+        <div className="my-10 flex flex-col items-center gap-24 bg-white p-20">
           <div className="flex gap-10">
             <LightbulbIcon className="-mt-8 text-[2.3rem]" />
             <p>
@@ -44,7 +44,7 @@ export function Prueftippbox({
       )}
 
       {tips.normalTips.length > 0 && (
-        <div className="my-10 bg-white p-40">
+        <div className="my-10 bg-white p-20">
           <p className="-mt-8">
             <LightbulbIcon className="mr-10 text-primary" />
             Tipp:&nbsp;

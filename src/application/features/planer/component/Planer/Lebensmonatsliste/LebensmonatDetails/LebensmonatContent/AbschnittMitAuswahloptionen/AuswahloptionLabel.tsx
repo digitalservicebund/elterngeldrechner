@@ -59,8 +59,18 @@ export function AuswahloptionLabel({
     >
       <span aria-hidden className="flex items-center gap-6">
         {icon}
-        <div className="text-2 flex flex-col gap-4 pb-2 leading-none sm:flex-row">
-          <span className="font-bold">{label}</span>
+        <div className="text-2 flex flex-col gap-4 pb-2 leading-none sm:flex-row sm:items-baseline">
+          <div
+            className={classNames(
+              "font-bold",
+              "flex flex-col sm:flex-row sm:items-baseline sm:gap-4",
+              {
+                "pr-20": !icon,
+              },
+            )}
+          >
+            {label}
+          </div>
 
           {!!elterngeldbezug && <Geldbetrag betrag={elterngeldbezug} />}
         </div>
@@ -114,23 +124,21 @@ function getRenderProperties(
     case Variante.Basis:
       return {
         label: istBasisImMutterschutz ? (
-          <div className="flex flex-col sm:flex-row sm:gap-4">
-            Basis{" "}
-            <span className="pt-2 text-12 font-regular italic leading-4 sm:pt-1">
+          <>
+            <span>Basis</span>
+            <span className="pt-2 text-12 font-regular italic leading-4">
               Mutterschutz
             </span>
-          </div>
+          </>
         ) : (
-          <div className="flex flex-col sm:flex-row sm:gap-4">
-            Basis{" "}
-            {istAuswaehlbar ? (
-              ""
-            ) : (
-              <span className="pt-2 text-12 font-regular leading-4 sm:pt-1">
+          <>
+            <span>Basis</span>
+            {!istAuswaehlbar && (
+              <span className="pt-2 text-12 font-regular leading-4">
                 (nicht verfügbar)
               </span>
             )}
-          </div>
+          </>
         ),
         className: `bg-Basis text-white ${!istBasisImMutterschutz && "hover:bg-Basis-hover"}`,
       };
@@ -138,16 +146,14 @@ function getRenderProperties(
     case Variante.Plus:
       return {
         label: (
-          <div className="flex flex-col sm:flex-row sm:gap-4">
-            Plus{" "}
-            {istAuswaehlbar ? (
-              ""
-            ) : (
-              <span className="pt-2 text-12 font-regular leading-4 sm:pt-1">
+          <>
+            <span>Plus</span>
+            {!istAuswaehlbar && (
+              <span className="pt-2 text-12 font-regular leading-4">
                 (nicht verfügbar)
               </span>
             )}
-          </div>
+          </>
         ),
         className: "bg-Plus text-black hover:bg-Plus-hover",
       };
@@ -155,16 +161,14 @@ function getRenderProperties(
     case Variante.Bonus:
       return {
         label: (
-          <div className="flex flex-col sm:flex-row sm:gap-4">
-            Bonus{" "}
-            {istAuswaehlbar ? (
-              ""
-            ) : (
-              <span className="pt-2 text-12 font-regular leading-4 sm:pt-1">
+          <>
+            <span>Bonus</span>
+            {!istAuswaehlbar && (
+              <span className="pt-2 text-12 font-regular leading-4">
                 (nicht verfügbar)
               </span>
             )}
-          </div>
+          </>
         ),
         className: istBonusWithMissingBruttoeinkommen
           ? "bg-Bonus-light text-black relative before:content-[''] before:absolute before:inset-0 before:border-2 before:border-Bonus-dark before:border-dashed before:rounded"

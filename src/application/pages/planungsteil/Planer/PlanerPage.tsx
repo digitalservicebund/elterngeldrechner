@@ -195,14 +195,14 @@ export function PlanerPage() {
               <Button
                 type="button"
                 buttonStyle="link"
-                className="mr-20 justify-self-start print:hidden"
+                className="mr-20 justify-self-start text-base print:hidden"
                 onClick={navigateToBeispielePage}
               >
                 <ChevronLeft /> Zurück zur Auswahl
               </Button>
 
               <Button
-                className="mb-8 justify-self-start print:hidden"
+                className="mb-8 justify-self-start text-base print:hidden"
                 type="button"
                 buttonStyle="link"
                 onClick={() => planerRef.current?.setzePlanZurueck()}

@@ -90,7 +90,7 @@ export function Pruefbuttonbox({
         </Button>
       ) : istPlanungGueltig ? (
         <>
-          <div className="flex w-full flex-col items-center gap-16 bg-Bonus-light p-40">
+          <div className="flex w-full flex-col items-center gap-16 bg-Bonus-light p-32">
             <h5>
               <CheckIcon /> Super. Ihre Planung ist gültig.
             </h5>

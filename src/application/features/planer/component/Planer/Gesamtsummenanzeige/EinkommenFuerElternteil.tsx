@@ -1,16 +1,23 @@
 import BusinessCenterOutlined from "@digitalservicebund/icons/BusinessCenterOutlined";
+import classNames from "classnames";
 import type { ReactNode } from "react";
 import { Geldbetrag } from "@/application/components";
 import type { SummeFuerElternteil } from "@/monatsplaner";
 
 type Props = {
   readonly summe: SummeFuerElternteil;
+  readonly className?: string;
 };
 
-export function EinkommenFuerElternteil({ summe }: Props): ReactNode {
+export function EinkommenFuerElternteil({
+  summe,
+  className,
+}: Props): ReactNode {
   return (
-    <div>
-      <span className="pr-4">Einkommen:</span>
+    <div
+      className={classNames("flex flex-col sm:gap-4 sm:flex-row", className)}
+    >
+      <span>Einkommen:</span>
 
       <span>
         <BusinessCenterOutlined className="mr-4" />

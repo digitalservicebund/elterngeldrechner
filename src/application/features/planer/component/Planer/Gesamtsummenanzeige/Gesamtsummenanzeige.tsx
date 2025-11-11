@@ -52,9 +52,9 @@ export function Gesamtsummenanzeige({
     if (hasMultipleElternteile) {
       switch (elternteil) {
         case Elternteil.Eins:
-          return "text-right";
+          return "text-right justify-end";
         case Elternteil.Zwei:
-          return "text-left";
+          return "text-left justify-start";
       }
     } else {
       return "text-center";
@@ -102,6 +102,7 @@ export function Gesamtsummenanzeige({
                 <EinkommenFuerElternteil
                   key={`Einkommen ${elternteil}`}
                   summe={gesamtsumme.proElternteil[elternteil]}
+                  className={getTextOrientationClassByElternteil(elternteil)}
                 />
               )}
             </div>

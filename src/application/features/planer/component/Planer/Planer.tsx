@@ -128,11 +128,7 @@ export function Planer({
         <Gesamtsummenanzeige
           className="border-t-2 border-solid !border-white bg-off-white py-10"
           plan={plan}
-        >
-          {!!initialInformation.beispiel && (
-            <p>{initialInformation.beispiel.titel}</p>
-          )}
-        </Gesamtsummenanzeige>
+        />
 
         <div>
           <Lebensmonatsliste

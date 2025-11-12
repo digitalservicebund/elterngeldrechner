@@ -13,10 +13,18 @@ import { Erwerbstaetigkeit } from "./Erwerbstaetigkeit";
 export function berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(
   geburtsdatum: Date,
 ): Bemessungszeitraum[] {
+  const anzahlMonate = geburtsdatum.getMonth();
+  const monate = Array.from({ length: anzahlMonate }, (_, i) => ({
+    monatsIndex: i,
+    monatsDatum: new Date(geburtsdatum.getFullYear(), i, 1),
+  }));
+
   const fragmentZeitabschnittNichtSelbststaendig: Einklammerung = {
     von: new Date(geburtsdatum.getFullYear(), 0, 1),
     bis: geburtsdatum,
+    monate,
   };
+
   const fragmentBemessungszeitraumNichtSelbststaendig: Bemessungszeitraum = {
     startdatum: fragmentZeitabschnittNichtSelbststaendig.von,
     enddatum: fragmentZeitabschnittNichtSelbststaendig.bis,
@@ -61,12 +69,15 @@ export function berechneUngefaehrenBemessungszeitraum(
 const getUngefaehrenSelbststaendigenBemessungszeitraum = (
   geburtsdatum: Date,
 ): Bemessungszeitraum => {
+  const monate = Array.from({ length: 12 }, (_, i) => ({
+    monatsIndex: i,
+    monatsDatum: new Date(geburtsdatum.getFullYear() - 1, i, 1),
+  }));
+
   const zeitabschnitt = {
     von: new Date(geburtsdatum.getFullYear() - 1, 0, 1),
     bis: new Date(geburtsdatum.getFullYear(), 0, 0),
-    // TODO:
-    // beschreibung:
-    // monate: berechneMonate
+    monate,
   };
   return erstelleBemessungszeitraumAusEinklammerung(zeitabschnitt);
 };
@@ -80,12 +91,25 @@ const getUngefaehrenSelbststaendigenBemessungszeitraum = (
 const getUngefaehrenNichtSelbststaendigenBemessungszeitraum = (
   geburtsdatum: Date,
 ): Bemessungszeitraum => {
+  const startDatum = new Date(
+    geburtsdatum.getFullYear() - 1,
+    geburtsdatum.getMonth(),
+    1,
+  );
+
+  const monate = Array.from({ length: 12 }, (_, i) => ({
+    monatsIndex: i,
+    monatsDatum: new Date(
+      startDatum.getFullYear(),
+      startDatum.getMonth() + i,
+      1,
+    ),
+  }));
+
   const zeitabschnitt = {
-    von: new Date(geburtsdatum.getFullYear() - 1, geburtsdatum.getMonth(), 1),
+    von: startDatum,
     bis: new Date(geburtsdatum.getFullYear(), geburtsdatum.getMonth(), 0),
-    // TODO:
-    // beschreibung:
-    // monate: berechneMonate
+    monate,
   };
   return erstelleBemessungszeitraumAusEinklammerung(zeitabschnitt);
 };

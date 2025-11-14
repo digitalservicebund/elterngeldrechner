@@ -1,4 +1,8 @@
-import { Bemessungszeitraum, ZeitabschnittArt } from "./Bemessungszeitraum";
+import {
+  Bemessungszeitraum,
+  Zeitabschnitt,
+  ZeitabschnittArt,
+} from "./Bemessungszeitraum";
 import { Einklammerung } from "./Einklammerung";
 import { Erwerbstaetigkeit } from "./Erwerbstaetigkeit";
 
@@ -8,7 +12,7 @@ import { Erwerbstaetigkeit } from "./Erwerbstaetigkeit";
  *
  * @param {Date} geburtsdatum Das Geburtsdatum des Kindes.
  * @returns {Bemessungszeitraum[]} Ein Array, das den BMZ für Selbstständige (Vorjahr)
- * und ein Fragment des BMZ für Nicht-Selbstständige (Januar bis Geburt) enthält.
+ * und ein Fragment des BMZ für Nicht-Selbstständige (Januar bis Geburt bzw. Monat vor Geburt) enthält.
  */
 export function berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(
   geburtsdatum: Date,
@@ -16,11 +20,11 @@ export function berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(
   const anzahlMonate = geburtsdatum.getMonth();
   const monate = Array.from({ length: anzahlMonate }, (_, i) => ({
     monatsIndex: i,
-    monatsDatum: new Date(geburtsdatum.getFullYear(), i, 1),
+    monatsDatum: new Date(Date.UTC(geburtsdatum.getFullYear(), i, 1)),
   }));
 
   const fragmentZeitabschnittNichtSelbststaendig: Einklammerung = {
-    von: new Date(geburtsdatum.getFullYear(), 0, 1),
+    von: new Date(Date.UTC(geburtsdatum.getFullYear(), 0, 1)),
     bis: geburtsdatum,
     monate,
   };
@@ -71,12 +75,12 @@ const getUngefaehrenSelbststaendigenBemessungszeitraum = (
 ): Bemessungszeitraum => {
   const monate = Array.from({ length: 12 }, (_, i) => ({
     monatsIndex: i,
-    monatsDatum: new Date(geburtsdatum.getFullYear() - 1, i, 1),
+    monatsDatum: new Date(Date.UTC(geburtsdatum.getFullYear() - 1, i, 1)),
   }));
 
   const zeitabschnitt = {
-    von: new Date(geburtsdatum.getFullYear() - 1, 0, 1),
-    bis: new Date(geburtsdatum.getFullYear(), 0, 0),
+    von: new Date(Date.UTC(geburtsdatum.getFullYear() - 1, 0, 1)),
+    bis: new Date(Date.UTC(geburtsdatum.getFullYear(), 0, 0)),
     monate,
   };
   return erstelleBemessungszeitraumAusEinklammerung(zeitabschnitt);
@@ -92,23 +96,21 @@ const getUngefaehrenNichtSelbststaendigenBemessungszeitraum = (
   geburtsdatum: Date,
 ): Bemessungszeitraum => {
   const startDatum = new Date(
-    geburtsdatum.getFullYear() - 1,
-    geburtsdatum.getMonth(),
-    1,
+    Date.UTC(geburtsdatum.getFullYear() - 1, geburtsdatum.getMonth(), 1),
   );
 
   const monate = Array.from({ length: 12 }, (_, i) => ({
     monatsIndex: i,
     monatsDatum: new Date(
-      startDatum.getFullYear(),
-      startDatum.getMonth() + i,
-      1,
+      Date.UTC(startDatum.getFullYear(), startDatum.getMonth() + i, 1),
     ),
   }));
 
   const zeitabschnitt = {
     von: startDatum,
-    bis: new Date(geburtsdatum.getFullYear(), geburtsdatum.getMonth(), 0),
+    bis: new Date(
+      Date.UTC(geburtsdatum.getFullYear(), geburtsdatum.getMonth(), 0),
+    ),
     monate,
   };
   return erstelleBemessungszeitraumAusEinklammerung(zeitabschnitt);
@@ -132,3 +134,86 @@ const erstelleBemessungszeitraumAusEinklammerung = (
     ],
   };
 };
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  const createDate = (datumsString: string) => new Date(datumsString);
+
+  describe("berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung", () => {
+    const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+    const result =
+      berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(geburtsdatum);
+
+    it("returns an array with two bemessungszeitraeume (BMZ) for selbststaendig and nicht-selbststaendig", () => {
+      expect(result).toBeInstanceOf(Array);
+      expect(result).toHaveLength(2);
+      expect(result).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            startdatum: expect.any(Date) as Date,
+            enddatum: expect.any(Date) as Date,
+            zeitabschnitte: expect.any(Array) as Zeitabschnitt[],
+          }),
+        ]),
+      );
+    });
+
+    it("includes the necessary and correct dates of the BMZ for selbststaendige as first object of the array", () => {
+      const bmzSelbststaendig = result[0];
+
+      expect(bmzSelbststaendig).toBeDefined();
+      expect(bmzSelbststaendig!.startdatum).toEqual(
+        createDate("2024-01-01T00:00:00.000Z"),
+      );
+      expect(bmzSelbststaendig!.enddatum).toEqual(
+        createDate("2024-12-31T00:00:00.000Z"),
+      );
+      expect(bmzSelbststaendig!.zeitabschnitte).toBeInstanceOf(Array);
+
+      const ersterZeitabschnitt = bmzSelbststaendig!.zeitabschnitte[0];
+
+      expect(ersterZeitabschnitt).toBeDefined();
+
+      const einklammerung = ersterZeitabschnitt?.zeitabschnitt as Einklammerung;
+
+      expect(einklammerung.monate).toHaveLength(12);
+      expect(einklammerung.monate[0]!.monatsDatum).toEqual(
+        createDate("2024-01-01T00:00:00.000Z"),
+      );
+      expect(einklammerung.monate[11]!.monatsDatum).toEqual(
+        createDate("2024-12-01T00:00:00.000Z"),
+      );
+    });
+
+    it("includes the necessary and correct dates of the BMZ for nicht-selbststaendige as second object of the array", () => {
+      const bmzFragmentNichtSelbststaendig = result[1];
+
+      expect(bmzFragmentNichtSelbststaendig).toBeDefined();
+      expect(bmzFragmentNichtSelbststaendig!.startdatum).toEqual(
+        createDate("2025-01-01T00:00:00.000Z"),
+      );
+      expect(bmzFragmentNichtSelbststaendig!.enddatum).toEqual(
+        createDate("2025-10-15T00:00:00.000Z"),
+      );
+      expect(bmzFragmentNichtSelbststaendig!.zeitabschnitte).toBeInstanceOf(
+        Array,
+      );
+
+      const ersterZeitabschnitt =
+        bmzFragmentNichtSelbststaendig!.zeitabschnitte[0];
+
+      expect(ersterZeitabschnitt).toBeDefined();
+
+      const einklammerung = ersterZeitabschnitt!.zeitabschnitt as Einklammerung;
+
+      expect(einklammerung.monate).toHaveLength(9);
+      expect(einklammerung.monate[0]!.monatsDatum).toEqual(
+        createDate("2025-01-01T00:00:00.000Z"),
+      );
+      expect(einklammerung.monate[8]!.monatsDatum).toEqual(
+        createDate("2025-09-01T00:00:00.000Z"),
+      );
+    });
+  });
+}

@@ -175,7 +175,7 @@ if (import.meta.vitest) {
 
       expect(ersterZeitabschnitt).toBeDefined();
 
-      const einklammerung = ersterZeitabschnitt?.zeitabschnitt as Einklammerung;
+      const einklammerung = ersterZeitabschnitt!.zeitabschnitt as Einklammerung;
 
       expect(einklammerung.monate).toHaveLength(12);
       expect(einklammerung.monate[0]!.monatsDatum).toEqual(
@@ -212,6 +212,106 @@ if (import.meta.vitest) {
         createDate("2025-01-01T00:00:00.000Z"),
       );
       expect(einklammerung.monate[8]!.monatsDatum).toEqual(
+        createDate("2025-09-01T00:00:00.000Z"),
+      );
+    });
+  });
+
+  describe("berechneUngefaehrenBemessungszeitraum", () => {
+    it("returns an bemessungszeitraum (BMZ) object for selbststaendig, which contains one zeitabschnitt as an array with 12 elements", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const erwerbstaetigkeit = Erwerbstaetigkeit.SELBSTSTAENDIG;
+
+      const result = berechneUngefaehrenBemessungszeitraum(
+        geburtsdatum,
+        erwerbstaetigkeit,
+      );
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          startdatum: expect.any(Date) as Date,
+          enddatum: expect.any(Date) as Date,
+          zeitabschnitte: expect.any(Array) as Zeitabschnitt[],
+        }),
+      );
+
+      const einklammerung = result.zeitabschnitte[0]!
+        .zeitabschnitt as Einklammerung;
+      expect(einklammerung.monate).toBeInstanceOf(Array);
+      expect(einklammerung.monate).toHaveLength(12);
+    });
+
+    it("includes the necessary and correct dates of the BMZ for selbststaendige", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const erwerbstaetigkeit = Erwerbstaetigkeit.SELBSTSTAENDIG;
+
+      const result = berechneUngefaehrenBemessungszeitraum(
+        geburtsdatum,
+        erwerbstaetigkeit,
+      );
+
+      expect(result.startdatum).toEqual(createDate("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(createDate("2024-12-31T00:00:00.000Z"));
+
+      expect(result.zeitabschnitte).toBeInstanceOf(Array);
+      const ersterZeitabschnitt = result.zeitabschnitte[0];
+      expect(ersterZeitabschnitt).toBeDefined();
+
+      const einklammerung = ersterZeitabschnitt!.zeitabschnitt as Einklammerung;
+      expect(einklammerung.monate).toHaveLength(12);
+      expect(einklammerung.monate[0]!.monatsDatum).toEqual(
+        createDate("2024-01-01T00:00:00.000Z"),
+      );
+      expect(einklammerung.monate[11]!.monatsDatum).toEqual(
+        createDate("2024-12-01T00:00:00.000Z"),
+      );
+    });
+
+    it("returns an bemessungszeitraum (BMZ) object for nicht-selbststaendig, which contains one zeitabschnitt as an array with 12 elements", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const erwerbstaetigkeit = Erwerbstaetigkeit.ANGESTELLT;
+
+      const result = berechneUngefaehrenBemessungszeitraum(
+        geburtsdatum,
+        erwerbstaetigkeit,
+      );
+
+      expect(result).toEqual(
+        expect.objectContaining({
+          startdatum: expect.any(Date) as Date,
+          enddatum: expect.any(Date) as Date,
+          zeitabschnitte: expect.any(Array) as Zeitabschnitt[],
+        }),
+      );
+
+      const einklammerung = result.zeitabschnitte[0]!
+        .zeitabschnitt as Einklammerung;
+      expect(einklammerung.monate).toBeInstanceOf(Array);
+      expect(einklammerung.monate).toHaveLength(12);
+    });
+
+    it("includes the necessary and correct dates of the BMZ for nicht-selbststaendige as second object of the array", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const erwerbstaetigkeit = Erwerbstaetigkeit.ANGESTELLT;
+
+      const result = berechneUngefaehrenBemessungszeitraum(
+        geburtsdatum,
+        erwerbstaetigkeit,
+      );
+
+      expect(result.startdatum).toEqual(createDate("2024-10-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(createDate("2025-09-30T00:00:00.000Z"));
+
+      expect(result.zeitabschnitte).toBeInstanceOf(Array);
+      const ersterZeitabschnitt = result.zeitabschnitte[0];
+      expect(ersterZeitabschnitt).toBeDefined();
+
+      const einklammerung = ersterZeitabschnitt!.zeitabschnitt as Einklammerung;
+      expect(einklammerung.monate).toHaveLength(12);
+      expect(einklammerung.monate[0]!.monatsDatum).toEqual(
+        createDate("2024-10-01T00:00:00.000Z"),
+      );
+      expect(einklammerung.monate[11]!.monatsDatum).toEqual(
         createDate("2025-09-01T00:00:00.000Z"),
       );
     });

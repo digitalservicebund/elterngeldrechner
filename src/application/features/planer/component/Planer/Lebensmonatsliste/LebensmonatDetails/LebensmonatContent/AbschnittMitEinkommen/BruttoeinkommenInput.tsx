@@ -18,6 +18,7 @@ type Props = {
   readonly ariaDescribedBy?: string;
   readonly gebeEinkommenAn: (bruttoeinkommen: number) => void;
   readonly style?: CSSProperties;
+  readonly className?: string;
 };
 
 export function BruttoeinkommenInput({
@@ -29,6 +30,7 @@ export function BruttoeinkommenInput({
   ariaDescribedBy,
   gebeEinkommenAn,
   style,
+  className,
 }: Props): ReactNode {
   const inputIdentifier = useId();
 
@@ -48,10 +50,10 @@ export function BruttoeinkommenInput({
   const datalistIdentifier = useId();
 
   return (
-    <div className="flex flex-col gap-4" style={style}>
+    <div className={classNames("flex flex-col gap-4", className)} style={style}>
       <label
         htmlFor={inputIdentifier}
-        className={imMutterschutz ? "text-grey-dark" : ""}
+        className={imMutterschutz ? "cursor-not-allowed text-grey-dark" : ""}
       >
         <BusinessCenterIcon /> Einkommen in € (brutto)
       </label>
@@ -62,7 +64,9 @@ export function BruttoeinkommenInput({
         className={classNames(
           "appearance-none px-24 py-10",
           "border-2 border-solid",
-          imMutterschutz ? "border-grey-dark" : "border-Basis",
+          imMutterschutz
+            ? "cursor-not-allowed border-grey-dark"
+            : "border-Basis",
           isMissing ? "border-warning" : "border-Basis",
         )}
         aria-label={ariaLabel}

@@ -1,5 +1,6 @@
 import ErrorIcon from "@digitalservicebund/icons/Error";
-import { CSSProperties, ReactNode, useId } from "react";
+import classNames from "classnames";
+import { ReactNode, useId } from "react";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
 import { InfoZumBonus } from "./InfoZumBonus";
 import { InfoZumEinkommen } from "./InfoZumEinkommen";
@@ -91,12 +92,14 @@ export function AbschnittMitEinkommen(): ReactNode {
         const bruttoEinkommenIsMissing =
           gewaehlteOption === Variante.Bonus && !bruttoeinkommen;
 
-        const margin: CSSProperties = {
-          ...(ausgangslage.anzahlElternteile > 1 &&
-            elternteil === Elternteil.Eins && { marginLeft: 20 }),
-          ...(ausgangslage.anzahlElternteile > 1 &&
-            elternteil === Elternteil.Zwei && { marginRight: 20 }),
-        };
+        const margin = classNames({
+          "ml-20":
+            ausgangslage.anzahlElternteile > 1 &&
+            elternteil === Elternteil.Eins,
+          "mr-20":
+            ausgangslage.anzahlElternteile > 1 &&
+            elternteil === Elternteil.Zwei,
+        });
 
         const vorschlaege =
           erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
@@ -116,7 +119,7 @@ export function AbschnittMitEinkommen(): ReactNode {
               ariaLabel={ariaLabel}
               ariaDescribedBy={hinweisZuWochenstundenIdentifier}
               gebeEinkommenAn={gebeEinkommenAn.bind(null, elternteil)}
-              style={margin}
+              className={margin}
             />
           </div>
         );

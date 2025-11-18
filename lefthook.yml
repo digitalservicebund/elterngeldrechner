@@ -1,8 +1,11 @@
-skip_output:
-  - meta
+output:
+  - summary
   - empty_summary
+  - success
+  - failure
   - execution
   - execution_out
+  - execution_info
   - skips
 
 pre-commit:

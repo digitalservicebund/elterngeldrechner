@@ -125,13 +125,17 @@ export function BeispielePage() {
     } else if (aktivierteOption === EigenePlanung) {
       setPlan(undefined);
 
-      const elternStatus = ausgangslage.istAlleinerziehend
-        ? "Alleinerziehend"
-        : ausgangslage.anzahlElternteile === 2
-          ? "Gemeinsame Planung"
-          : "Allein planend";
+      const elternStatus = () => {
+        if (ausgangslage.istAlleinerziehend) {
+          return "Alleinerziehend";
+        }
+        if (ausgangslage.anzahlElternteile === 2) {
+          return "Gemeinsame Planung";
+        }
+        return "Allein planend";
+      };
 
-      setIdentifierTrackingVariable(`${elternStatus} - Eigene Planung`);
+      setIdentifierTrackingVariable(`${elternStatus()} - Eigene Planung`);
     }
 
     pushTrackingEvent("Beispiel-wurde-ausgewählt");

@@ -549,7 +549,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("eigene planung setzt das tracking des ausgewaehlten beispiel zurueck", () => {
+      it("schreibt bei eigener planung diese in die tracking variable", () => {
         const trackingFunction = vi.spyOn(
           trackingModule,
           "setTrackingVariable",
@@ -565,7 +565,7 @@ if (import.meta.vitest) {
 
         expect(trackingFunction).toHaveBeenLastCalledWith(
           "Identifier-des-ausgewaehlten-Beispiels",
-          null,
+          "Gemeinsame Planung - Eigene Planung",
         );
       });
 
@@ -583,7 +583,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("trackt Beispiel-wurde-ausgewählt nicht bei der Option Eigene Planung", () => {
+      it("trackt Beispiel-wurde-ausgewählt auch bei der Option Eigene Planung", () => {
         const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
 
         render(<BeispielePage />, {
@@ -592,7 +592,9 @@ if (import.meta.vitest) {
 
         screen.getByText("Eigene Planung").click();
 
-        expect(trackingFunction).not.toBeCalled();
+        expect(trackingFunction).toHaveBeenLastCalledWith(
+          "Beispiel-wurde-ausgewählt",
+        );
       });
 
       it("erreicht conversion goal wenn mit einem Beispiel weiter navigiert wird", () => {

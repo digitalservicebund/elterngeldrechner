@@ -1,28 +1,7 @@
-import {
-  MUTTERSCHUTZ_DAUER_GESAMT_STANDARD,
-  MUTTERSCHUTZ_DAUER_GESAMT_VERLAENGERT,
-  MUTTERSCHUTZ_TAGE_NACH_GEBURT_STANDARD,
-  MUTTERSCHUTZ_TAGE_NACH_GEBURT_VERLAENGERT,
-  MUTTERSCHUTZ_TAGE_VOR_GEBURT_STANDARD,
-  TAG_IN_MS,
-} from "./constants";
-
-export type Brand<K, T> = K & { readonly __brand: T };
-
-export type Mutterschutz = Brand<
-  {
-    readonly startdatum: Date;
-    readonly enddatum: Date;
-  },
-  "Mutterschutz"
->;
-
-export enum VerlaengerungsGrund {
-  UNSPEZIFISCHER_VERLAENGERUNGSGRUND = "UNSPEZIFISCHER_VERLAENGERUNGSGRUND",
-  FRUEHGEBURT = "FRUEHGEBURT",
-  MEHRLINGE = "MEHRLINGE",
-  BEHINDERUNG = "BEHINDERUNG",
-}
+export type Mutterschutz = {
+  readonly startdatum: Date;
+  readonly enddatum: Date;
+};
 
 /**
  * Berechnet den Beginn und das Ende der Mutterschutzfrist.
@@ -30,13 +9,13 @@ export enum VerlaengerungsGrund {
  *
  * @param {Date} errechneterGeburtstermin - Der errechnete Geburtstermin des Kindes.
  * @param {Date} [tatsaechlichesGeburtsdatum] - Für den Fall der erfolgten Geburt optional das tatsächliche Geburtsdatum.
- * @param {VerlaengerungsGrund} [verlaengerungsGrund] - Optional ein Verlängerungsgrund für den Mutterschutz.
+ * @param {VerlaengerungsGrund} [hatVerlaengerungsGrund] - Optional, falls ein Verlängerungsgrund für den Mutterschutz vorliegt.
  * @returns {Mutterschutz} Ein Objekt, das das Start- (`startdatum`) und Enddatum (`enddatum`) des Mutterschutzes enthält.
  */
 export function berechneMutterschutz(
   errechneterGeburtstermin: Date,
   tatsaechlichesGeburtsdatum?: Date,
-  verlaengerungsGrund?: VerlaengerungsGrund,
+  hatVerlaengerungsGrund?: boolean,
 ): Mutterschutz {
   const startdatum = berechneterMutterschutzBeginn(
     errechneterGeburtstermin,
@@ -46,12 +25,12 @@ export function berechneMutterschutz(
     errechneterGeburtstermin,
     tatsaechlichesGeburtsdatum,
     startdatum,
-    verlaengerungsGrund,
+    hatVerlaengerungsGrund,
   );
 
   if (enddatum <= startdatum) throw new Error("Invalid Range");
 
-  return { startdatum, enddatum } as Mutterschutz;
+  return { startdatum, enddatum };
 }
 
 /**
@@ -63,8 +42,7 @@ const berechneterMutterschutzBeginn = (
   tatsaechlichesGeburtsdatum?: Date,
 ): Date => {
   const startFromCalculatedBirthdate =
-    errechneterGeburtstermin.getTime() -
-    MUTTERSCHUTZ_TAGE_VOR_GEBURT_STANDARD * TAG_IN_MS;
+    errechneterGeburtstermin.getTime() - weeks(6);
   return new Date(
     tatsaechlichesGeburtsdatum
       ? Math.min(
@@ -83,12 +61,12 @@ const berechnetesMutterschutzEnde = (
   errechneterGeburtstermin: Date,
   tatsaechlichesGeburtsdatum: Date | undefined,
   startdatum: Date,
-  verlaengerungsGrund: VerlaengerungsGrund | undefined,
+  hatVerlaengerungsGrund: boolean | undefined,
 ): Date => {
   const verwendetesGeburtsdatum =
     tatsaechlichesGeburtsdatum ?? errechneterGeburtstermin;
 
-  return verlaengerungsGrund
+  return hatVerlaengerungsGrund
     ? getVerlaengertesEnde(verwendetesGeburtsdatum, startdatum)
     : getStandardEnde(verwendetesGeburtsdatum, startdatum);
 };
@@ -102,11 +80,8 @@ const getStandardEnde = (
   geburtsdatum: Date,
   beginnMutterschutz: Date,
 ): Date => {
-  const endFromBirth =
-    geburtsdatum.getTime() + MUTTERSCHUTZ_TAGE_NACH_GEBURT_STANDARD * TAG_IN_MS;
-  const endFromStart =
-    beginnMutterschutz.getTime() +
-    MUTTERSCHUTZ_DAUER_GESAMT_STANDARD * TAG_IN_MS;
+  const endFromBirth = geburtsdatum.getTime() + weeks(8);
+  const endFromStart = beginnMutterschutz.getTime() + weeks(14);
   return new Date(Math.max(endFromBirth, endFromStart));
 };
 
@@ -120,14 +95,12 @@ const getVerlaengertesEnde = (
   geburtsdatum: Date,
   beginnMutterschutz: Date,
 ): Date => {
-  const endFromBirth =
-    geburtsdatum.getTime() +
-    MUTTERSCHUTZ_TAGE_NACH_GEBURT_VERLAENGERT * TAG_IN_MS;
-  const endFromStart =
-    beginnMutterschutz.getTime() +
-    MUTTERSCHUTZ_DAUER_GESAMT_VERLAENGERT * TAG_IN_MS;
+  const endFromBirth = geburtsdatum.getTime() + weeks(12);
+  const endFromStart = beginnMutterschutz.getTime() + weeks(18);
   return new Date(Math.max(endFromBirth, endFromStart));
 };
+
+const weeks = (value: number) => value * 7 * 24 * 60 * 60 * 1000;
 
 if (import.meta.vitest) {
   const { describe, expect, test } = import.meta.vitest;
@@ -140,7 +113,7 @@ if (import.meta.vitest) {
       ({
         errechneterGeburtstermin,
         tatsaechlichesGeburtsdatum,
-        verlaengerungsGrund,
+        hatVerlaengerungsGrund,
         erwartetesStartdatum,
         erwartetesEnddatum,
       }) => {
@@ -149,7 +122,7 @@ if (import.meta.vitest) {
           tatsaechlichesGeburtsdatum
             ? createDate(tatsaechlichesGeburtsdatum)
             : undefined,
-          verlaengerungsGrund,
+          hatVerlaengerungsGrund,
         );
 
         expect(startdatum).toEqual(createDate(erwartetesStartdatum));
@@ -163,7 +136,7 @@ interface MutterschutzTestfall {
   testfall: string;
   errechneterGeburtstermin: string;
   tatsaechlichesGeburtsdatum?: string;
-  verlaengerungsGrund?: VerlaengerungsGrund;
+  hatVerlaengerungsGrund?: boolean;
   erwartetesStartdatum: string;
   erwartetesEnddatum: string;
 }
@@ -194,36 +167,36 @@ const mutterschutzTestfaelle: MutterschutzTestfall[] = [
   },
   {
     testfall:
-      "Frühgeburt nach § 3 Abs. 2 Satz 2 Nummer 1 MuSchG (Geburt mehr als 6 Wochen vor ET) - Startdatum entspricht Geburtsdatum und Gesamtdauer von 18 Wochen gilt",
+      "Z.B. Frühgeburt nach § 3 Abs. 2 Satz 2 Nummer 1 MuSchG (Geburt mehr als 6 Wochen vor ET) - Startdatum entspricht Geburtsdatum und Gesamtdauer von 18 Wochen gilt",
     errechneterGeburtstermin: "2025-10-15T00:00:00.000Z",
     tatsaechlichesGeburtsdatum: "2025-09-02T00:00:00.000Z",
-    verlaengerungsGrund: VerlaengerungsGrund.FRUEHGEBURT,
+    hatVerlaengerungsGrund: true,
     erwartetesStartdatum: "2025-09-02T00:00:00.000Z",
     erwartetesEnddatum: "2026-01-06T00:00:00.000Z",
   },
   {
     testfall:
-      "Mehrlinge nach § 3 Abs. 2 Satz 2 Nummer 2 MuSchG (ungeboren) - Verlängerte Schutzfrist von 12 Wochen nach ET",
+      "Z.B. Mehrlinge nach § 3 Abs. 2 Satz 2 Nummer 2 MuSchG (ungeboren) - Verlängerte Schutzfrist von 12 Wochen nach ET",
     errechneterGeburtstermin: "2025-10-15T00:00:00.000Z",
-    verlaengerungsGrund: VerlaengerungsGrund.MEHRLINGE,
+    hatVerlaengerungsGrund: true,
     erwartetesStartdatum: "2025-09-03T00:00:00.000Z",
     erwartetesEnddatum: "2026-01-07T00:00:00.000Z",
   },
   {
     testfall:
-      "Mehrlinge nach § 3 Abs. 2 Satz 2 Nummer 2 MuSchG (Geburt vor ET) - Gesamtdauer von 18 Wochen gilt",
+      "Z.B. Mehrlinge nach § 3 Abs. 2 Satz 2 Nummer 2 MuSchG (Geburt vor ET) - Gesamtdauer von 18 Wochen gilt",
     errechneterGeburtstermin: "2025-10-15T00:00:00.000Z",
     tatsaechlichesGeburtsdatum: "2025-10-14T00:00:00.000Z",
-    verlaengerungsGrund: VerlaengerungsGrund.MEHRLINGE,
+    hatVerlaengerungsGrund: true,
     erwartetesStartdatum: "2025-09-03T00:00:00.000Z",
     erwartetesEnddatum: "2026-01-07T00:00:00.000Z",
   },
   {
     testfall:
-      "Behinderung nach § 3 Abs. 2 Satz 2 Nummer 3 MuSchG (Geburt nach ET) - Verlängerte Schutzfrist wird nach hinten verschoben",
+      "Z.B. Behinderung nach § 3 Abs. 2 Satz 2 Nummer 3 MuSchG (Geburt nach ET) - Verlängerte Schutzfrist wird nach hinten verschoben",
     errechneterGeburtstermin: "2025-10-15T00:00:00.000Z",
     tatsaechlichesGeburtsdatum: "2025-10-16T00:00:00.000Z",
-    verlaengerungsGrund: VerlaengerungsGrund.BEHINDERUNG,
+    hatVerlaengerungsGrund: true,
     erwartetesStartdatum: "2025-09-03T00:00:00.000Z",
     erwartetesEnddatum: "2026-01-08T00:00:00.000Z",
   },

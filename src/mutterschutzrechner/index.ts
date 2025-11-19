@@ -1,5 +1,1 @@
-export {
-  type Mutterschutz,
-  VerlaengerungsGrund,
-  berechneMutterschutz,
-} from "./berechneMutteschutz";
+export { type Mutterschutz, berechneMutterschutz } from "./berechneMutteschutz";

@@ -63,6 +63,8 @@ export function BeispielePage() {
       trackUsageOfPlanungshilfen();
     }
 
+    pushTrackingEvent("Planung-wurde-gestartet", { unique: true });
+
     await navigateStateful(formSteps.rechnerUndPlaner.route, {
       beispiel,
       plan,
@@ -120,13 +122,19 @@ export function BeispielePage() {
       setPlan(neuesAktivesBeispiel.plan);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
-
-      pushTrackingEvent("Beispiel-wurde-ausgewählt");
     } else if (aktivierteOption === EigenePlanung) {
       setPlan(undefined);
 
-      setIdentifierTrackingVariable(null);
+      const elternStatus = ausgangslage.istAlleinerziehend
+        ? "Alleinerziehend"
+        : ausgangslage.anzahlElternteile === 2
+          ? "Gemeinsame Planung"
+          : "Allein planend";
+
+      setIdentifierTrackingVariable(`${elternStatus} - Eigene Planung`);
     }
+
+    pushTrackingEvent("Beispiel-wurde-ausgewählt");
 
     setAktivesBeispiel(aktivierteOption);
   };

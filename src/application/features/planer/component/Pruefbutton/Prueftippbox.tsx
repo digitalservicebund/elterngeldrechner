@@ -36,6 +36,7 @@ export function Prueftippbox({
             type="button"
             buttonStyle="secondary"
             className="bg-white"
+            id="bonus-freischalten-button"
             onClick={onBonusFreischalten}
           >
             <AddIcon /> zusätzlich Bonus freischalten

@@ -37,7 +37,7 @@ jobs:
     outputs:
       artifact_name: assets
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./.github/actions/cached-node-install
 
@@ -68,7 +68,7 @@ jobs:
       GIT_COMMIT_MESSAGE: "Automated deployment to GitHub pages (${{ inputs.path }} | ${{ github.ref_name }} | ${{ github.sha }})"
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: gh-pages
 

@@ -1,6 +1,7 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
+import { YesNo } from "./YesNo";
+import { StepPrototypState } from "@/application/features/abfrage-prototyp/state";
 import { RootState } from "@/application/redux";
-import { StepPrototypState } from "../../abfrage-prototyp/state";
 
 interface Kind {
   geburtsdatum: string;
@@ -35,10 +36,17 @@ export const stepNachwuchsSlice = createSlice({
     migrateFromPrototype(state, action: PayloadAction<StepPrototypState>) {
       const prototype = action.payload;
 
-      state.anzahlKuenftigerKinder = prototype.anzahlKuenftigerKinder;
+      state.anzahlKuenftigerKinder = prototype.kind.anzahlKuenftigerKinder;
       state.wahrscheinlichesGeburtsDatum =
-        prototype.wahrscheinlichesGeburtsDatum;
-      state.geschwisterkinder = prototype.geschwisterkinder;
+        prototype.kind.geburtsdatum.length > 0
+          ? prototype.kind.geburtsdatum
+          : prototype.kind.errechneterGeburtstermin;
+      state.geschwisterkinder = prototype.geschwister.geschwisterkinder.map(
+        (kind) => ({
+          geburtsdatum: kind.geburtsdatum,
+          istBehindert: kind.istBehindert === YesNo.YES,
+        }),
+      );
     },
   },
 });

@@ -1,14 +1,13 @@
 export {
+  AngabenPersonForm,
   AnzahlTaetigkeitenForm,
   AusklammerungsGruendeForm,
   AusklammerungsZeitenForm,
   Bemessungszeitraum,
   EinkommenAngabenForm,
-  InfoZuTaetigkeiten,
   FamilieForm,
+  InfoZuTaetigkeiten,
   KeinEinkommenForm,
-  KindForm,
-  PersonForm,
   TaetigkeitenForm,
   UebersichtTaetigkeitenForm,
 } from "./components";

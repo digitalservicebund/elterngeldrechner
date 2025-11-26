@@ -82,7 +82,7 @@ export function CustomNumberField<
       {!!slotBeforeLabel && <div className="mb-16">{slotBeforeLabel}</div>}
 
       <label
-        className={slotBetweenLabelAndOptions ? "" : "mb-8"}
+        className={slotBetweenLabelAndOptions ? "text-16" : "mb-4 text-16"}
         htmlFor={name}
       >
         {label}

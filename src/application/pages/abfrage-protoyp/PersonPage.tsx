@@ -1,40 +1,40 @@
 import { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/application/components";
-import { Page } from "@/application/pages/Page";
-import { formSteps } from "@/application/routing/formSteps";
 import {
+  AngabenPersonForm,
   AnzahlTaetigkeitenForm,
   AusklammerungsGruendeForm,
   AusklammerungsZeitenForm,
   Bemessungszeitraum,
   EinkommenAngabenForm,
   KeinEinkommenForm,
-  PersonForm,
   TaetigkeitenForm,
   UebersichtTaetigkeitenForm,
 } from "@/application/features/abfrage-prototyp";
-import { Elternteil } from "@/monatsplaner";
 import {
-  getLastStep,
-  getNextStep,
   PersonPageFlow,
   PersonPageStepKey,
+  getLastStep,
+  getNextStep,
 } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
-import {
-  stepPrototypSelectors,
-  StepPrototypState,
-} from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector } from "@/application/redux/hooks";
 import { Ausklammerung } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import {
+  StepPrototypState,
+  stepPrototypSelectors,
+} from "@/application/features/abfrage-prototyp/state";
+import { TaetigkeitenSelektor } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
 import {
   Antragstellende,
   YesNo,
 } from "@/application/features/abfrageteil/state";
-import { TaetigkeitenSelektor } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
+import { Page } from "@/application/pages/Page";
+import { useAppSelector } from "@/application/redux/hooks";
+import { formSteps } from "@/application/routing/formSteps";
+import { Elternteil } from "@/monatsplaner";
 
 type Props = {
-  elternteil: Elternteil;
+  readonly elternteil: Elternteil;
 };
 
 export type EinkommenAngabenStep = {
@@ -192,7 +192,7 @@ export function PersonPage({ elternteil }: Props) {
   };
 
   function handleSubmit(
-    _: StepPrototypState,
+    state: StepPrototypState,
     antragsstellende?: Antragstellende,
     flow?: PersonPageFlow,
     hasAusklammerungsgrund?: boolean,
@@ -200,6 +200,8 @@ export function PersonPage({ elternteil }: Props) {
     hasWeitereTaetigkeiten?: YesNo | null,
     taetigkeitenRouting?: EinkommenAngabenStep[],
   ) {
+    console.log(state);
+
     if (flow) {
       if (elternteil === Elternteil.Eins) {
         setCurrentPersonPageFlowET1(flow);
@@ -360,7 +362,7 @@ export function PersonPage({ elternteil }: Props) {
         {(elternteil === Elternteil.Eins
           ? currentPersonPageStepET1
           : currentPersonPageStepET2) === "angabenPerson" && (
-          <PersonForm
+          <AngabenPersonForm
             id={formIdentifier}
             onSubmit={handleSubmit}
             hideSubmitButton

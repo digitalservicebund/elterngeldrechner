@@ -94,13 +94,13 @@ export const CustomDate = forwardRef(function CustomDate(
           aria-describedby={descriptionIdentifiers}
         />
       </div>
-      <span
+      {/* <span
         id={dateFormatHintIdentifier}
         className="text-14 text-text-light mb-16"
         aria-label="Eingabeformat Tag Monat Jahr zum Beispiel 12.05.2022"
       >
         im Format TT.MM.JJJJ
-      </span>
+      </span> */}
 
       {!!hasError && (
         <Description id={errorIdentifier} error>

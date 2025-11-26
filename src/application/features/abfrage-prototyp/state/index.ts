@@ -4,3 +4,8 @@ export {
   stepPrototypSelectors,
   stepPrototypSlice,
 } from "./stepPrototypSlice";
+
+export {
+  type RoutingPrototypState,
+  routingPrototypSlice,
+} from "./routingPrototypSlice";

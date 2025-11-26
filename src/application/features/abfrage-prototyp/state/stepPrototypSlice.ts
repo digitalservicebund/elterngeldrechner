@@ -1,21 +1,41 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { RootState } from "@/application/redux";
 import { Steuerklasse } from "@/elterngeldrechner";
-import { PersonPageFlow } from "../components/PersonPageRouting";
 
 interface Kind {
   geburtsdatum: string;
-  istBehindert: boolean;
+  istBehindert: YesNo | null;
 }
 
 export type Antragstellende =
   | "EinenElternteil"
   | "FuerBeide"
   | "FuerBeideUnentschlossen";
-// type AntragstellendeSelektor = "ET1" | "ET2";
+
+export type FamilienAngaben = {
+  bundesland: string | null;
+  limitEinkommenUeberschritten: YesNo | null;
+};
+
+export type KindAngaben = {
+  geburtIstErfolgt: YesNo | null;
+  anzahlKuenftigerKinder: number;
+  errechneterGeburtstermin: string;
+  geburtsdatum: string;
+};
+
+export type GeschwisterAngaben = {
+  esGibtGeschwister: (YesNo | null)[];
+  geschwisterkinder: Kind[];
+};
+
+export type Mutterschutz = "Ja" | "Nein" | "Unentschlossen";
 
 export type PersonenAngaben = {
+  mutterschutz: YesNo | null;
+
   isNichtSelbststaendig: boolean;
   isSelbststaendig: boolean;
   hasSozialleistungen: boolean;
@@ -67,36 +87,47 @@ export type TaetigkeitAngaben = {
 export type TaetigkeitenSelektor = "selbststaendig" | "nichtSelbststaendig";
 
 export interface StepPrototypState {
-  bundesland: string | null;
+  familie: FamilienAngaben;
+  kind: KindAngaben;
+  geschwister: GeschwisterAngaben;
+
   antragstellende: Antragstellende | null;
   pseudonym: {
     ET1: string;
     ET2: string;
   };
   alleinerziehend: YesNo | null;
-  anzahlKuenftigerKinder: number;
-  wahrscheinlichesGeburtsDatum: string;
-  geschwisterkinder: Kind[];
-  limitEinkommenUeberschritten: YesNo | null;
 
   ET1: PersonenAngaben;
   ET2: PersonenAngaben;
 }
 
 const initialState: StepPrototypState = {
-  bundesland: null,
+  familie: {
+    bundesland: null,
+    limitEinkommenUeberschritten: null,
+  },
+  kind: {
+    geburtIstErfolgt: null,
+    anzahlKuenftigerKinder: 1,
+    errechneterGeburtstermin: "",
+    geburtsdatum: "",
+  },
+  geschwister: {
+    esGibtGeschwister: [null],
+    geschwisterkinder: [],
+  },
+
   antragstellende: null,
   pseudonym: {
     ET1: "",
     ET2: "",
   },
   alleinerziehend: null,
-  anzahlKuenftigerKinder: 1,
-  wahrscheinlichesGeburtsDatum: "",
-  geschwisterkinder: [],
-  limitEinkommenUeberschritten: null,
 
   ET1: {
+    mutterschutz: null,
+
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
     hasSozialleistungen: false,
@@ -131,6 +162,8 @@ const initialState: StepPrototypState = {
   },
 
   ET2: {
+    mutterschutz: null,
+
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
     hasSozialleistungen: false,
@@ -189,10 +222,14 @@ const getElternteilNames = createSelector(
   },
 );
 
-const getBundesland = (state: RootState) => state.stepPrototyp.bundesland;
+const getBundesland = (state: RootState) =>
+  state.stepPrototyp.familie.bundesland;
 
 const getWahrscheinlichesGeburtsDatum = createSelector(
-  (state: RootState) => state.stepPrototyp.wahrscheinlichesGeburtsDatum,
+  (state: RootState) =>
+    state.stepPrototyp.kind.geburtsdatum.length > 0
+      ? state.stepPrototyp.kind.geburtsdatum
+      : state.stepPrototyp.kind.errechneterGeburtstermin,
   parseGermanDateString,
 );
 

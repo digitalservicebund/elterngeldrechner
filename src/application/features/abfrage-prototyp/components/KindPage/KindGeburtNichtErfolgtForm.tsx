@@ -31,14 +31,12 @@ type Props = {
   readonly hideSubmitButton?: boolean;
 };
 
-export function KindForm({ id, onSubmit }: Props) {
+export function KindGeburtNichtErfolgtForm({ id, onSubmit }: Props) {
   const store = useAppStore();
 
   const {
     register,
     handleSubmit,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: store.getState().stepPrototyp,
@@ -55,23 +53,6 @@ export function KindForm({ id, onSubmit }: Props) {
   const wahrscheinlichesGeburtsDatumInputIdentifier = useId();
   const wahrscheinlichesGeburtsDatumDescriptionIdentifier = useId();
 
-  // Registration as a number is necessary because the addition "numberFutureChildren + 1" is added like a string and results in "21"
-  register("anzahlKuenftigerKinder", { valueAsNumber: true });
-  const anzahlKuenftigerKinder = watch("anzahlKuenftigerKinder");
-
-  const handleDecrease = () =>
-    setValue(
-      "anzahlKuenftigerKinder",
-      Math.max(anzahlKuenftigerKinder - 1, 0),
-      { shouldDirty: true },
-    );
-  const handleIncrease = () =>
-    setValue(
-      "anzahlKuenftigerKinder",
-      Math.min(anzahlKuenftigerKinder + 1, 8),
-      { shouldDirty: true },
-    );
-
   return (
     <form
       id={id}
@@ -81,39 +62,10 @@ export function KindForm({ id, onSubmit }: Props) {
     >
       <div className="mt-40">
         <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
-          Wann ist der Geburtstermin oder das Geburtsdatum von Ihrem Kind?
-        </h3>
-
-        <label
-          className="mt-20 block text-16 mb-4"
-          htmlFor={wahrscheinlichesGeburtsDatumInputIdentifier}
-        >
-          Geburtsdatum
-        </label>
-
-        <CustomDate
-          id={wahrscheinlichesGeburtsDatumInputIdentifier}
-          error={errors.wahrscheinlichesGeburtsDatum?.message}
-          aria-describedby={wahrscheinlichesGeburtsDatumDescriptionIdentifier}
-          {...register("wahrscheinlichesGeburtsDatum", {
-            required: "Dieses Feld ist erforderlich",
-            pattern: {
-              value: /^\d{2}\.\d{2}\.\d{4}$/,
-              message: "Bitte das Feld vollständig ausfüllen",
-            },
-            validate: validateMonth,
-          })}
-        />
-
-        <InfoZuFruehgeburten />
-      </div>
-
-      <div>
-        <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
           Wie viele Kinder werden oder wurden geboren?
         </h3>
 
-        <p className="pb-20 mt-10">
+        <p className="mt-10 pb-20">
           Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
           Kinder an (zum Beispiel 2 bei Zwillingen).
         </p>
@@ -131,12 +83,39 @@ export function KindForm({ id, onSubmit }: Props) {
             },
             required: "Dieses Feld ist erforderlich",
           }}
-          name="anzahlKuenftigerKinder"
-          label=""
+          name="kind.anzahlKuenftigerKinder"
+          label="Anzahl der Kinder"
           errors={errors}
-          onIncrease={handleIncrease}
-          onDecrease={handleDecrease}
           required
+        />
+      </div>
+
+      <div className="mt-20">
+        <h3 className="mb-10">
+          Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
+        </h3>
+
+        <InfoZuFruehgeburten />
+
+        <label
+          className="mb-4 mt-20 block text-16"
+          htmlFor={wahrscheinlichesGeburtsDatumInputIdentifier}
+        >
+          Errechneter Entbindungstermin (TT.MM.JJJJ)
+        </label>
+
+        <CustomDate
+          id={wahrscheinlichesGeburtsDatumInputIdentifier}
+          error={errors.kind?.errechneterGeburtstermin?.message}
+          aria-describedby={wahrscheinlichesGeburtsDatumDescriptionIdentifier}
+          {...register("kind.errechneterGeburtstermin", {
+            required: "Dieses Feld ist erforderlich",
+            pattern: {
+              value: /^\d{2}\.\d{2}\.\d{4}$/,
+              message: "Bitte das Feld vollständig ausfüllen",
+            },
+            validate: validateMonth,
+          })}
         />
       </div>
     </form>

@@ -16,7 +16,10 @@ import {
   RouterProvider,
   createMemoryRouter,
 } from "react-router-dom";
-import { stepPrototypSlice } from "./features/abfrage-prototyp/state";
+import {
+  routingPrototypSlice,
+  stepPrototypSlice,
+} from "./features/abfrage-prototyp/state";
 import {
   stepAllgemeineAngabenSlice,
   stepEinkommenSlice,
@@ -127,4 +130,5 @@ export const INITIAL_STATE: RootState = {
   stepEinkommen: stepEinkommenSlice.getInitialState(),
   feedback: feedbackSlice.getInitialState(),
   stepPrototyp: stepPrototypSlice.getInitialState(),
+  routingPrototyp: routingPrototypSlice.getInitialState(),
 };

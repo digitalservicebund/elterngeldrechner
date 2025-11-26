@@ -1,35 +1,38 @@
+import ToggleOff from "@digitalservicebund/icons/ToggleOff";
+import ToggleOn from "@digitalservicebund/icons/ToggleOn";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  type StepPrototypState,
-  stepPrototypSlice,
-  stepPrototypSelectors,
-} from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { Elternteil } from "@/monatsplaner";
+import { InfoZuKVPflicht } from "./InfoZuKVPflicht";
+import { InfoZuRVPflicht } from "./InfoZuRVPflicht";
+import { InfoZuAVPflicht } from "./InfoZuAVPflicht";
+import { InfoZuBruttoGewinn } from "./InfoZuBruttoGewinn";
+import { PersonPageFlow } from "./PersonPageRouting";
 import {
   Ausklammerung,
+  ZeitabschnittArt,
   berechneExaktenBemessungszeitraum,
   erstelleExakteZeitabschnitteBemessungszeitraum,
-  ZeitabschnittArt,
 } from "./berechneBemessungszeitraum";
-import { PersonPageFlow } from "./PersonPageRouting";
+import {
+  type StepPrototypState,
+  stepPrototypSelectors,
+  stepPrototypSlice,
+} from "@/application/features/abfrage-prototyp/state";
 import {
   CustomNumberField,
   CustomSelect,
   InfoZuMiniJobs,
   SelectOption,
   YesNoRadio,
-} from "../../abfrageteil/components/common";
-import { Antragstellende, YesNo } from "../../abfrageteil/state";
+} from "@/application/features/abfrageteil/components/common";
+import {
+  Antragstellende,
+  YesNo,
+} from "@/application/features/abfrageteil/state";
 import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
-import { InfoZuKVPflicht } from "./InfoZuKVPflicht";
-import { InfoZuRVPflicht } from "./InfoZuRVPflicht";
-import { InfoZuAVPflicht } from "./InfoZuAVPflicht";
-import { InfoZuBruttoGewinn } from "./InfoZuBruttoGewinn";
-import ToggleOff from "@digitalservicebund/icons/ToggleOff";
-import ToggleOn from "@digitalservicebund/icons/ToggleOn";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Steuerklasse } from "@/elterngeldrechner";
+import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
@@ -117,8 +120,8 @@ export function EinkommenAngabenForm({
         {einkommenAngabenStep.taetigkeitArt === "selbststaendig" && (
           <div>
             <h3>Einkommen aus selbstständiger Arbeit</h3>
-            <div className="mt-20 mb-40 rounded bg-grey-light inline-block py-10">
-              <span className="font-bold px-20">
+            <div className="mb-40 mt-20 inline-block rounded bg-grey-light py-10">
+              <span className="px-20 font-bold">
                 Bemessungszeitraum: {maximalerBemessungszeitraum}
               </span>
             </div>
@@ -192,8 +195,8 @@ export function EinkommenAngabenForm({
           <div>
             <h3>Einkommen aus nicht-selbstständiger Arbeit</h3>
 
-            <div className="mt-20 mb-40 rounded bg-grey-light inline-block py-10">
-              <span className="font-bold px-20">
+            <div className="mb-40 mt-20 inline-block rounded bg-grey-light py-10">
+              <span className="px-20 font-bold">
                 Bemessungszeitraum: {maximalerBemessungszeitraum}
               </span>
             </div>
@@ -248,7 +251,7 @@ export function EinkommenAngabenForm({
                         art === ZeitabschnittArt.ausklammerung ? (
                           <section
                             key={index}
-                            className="rounded border-dashed p-16 my-32"
+                            className="my-32 rounded border-dashed p-16"
                             aria-live="polite"
                             aria-labelledby="bmz"
                           >
@@ -363,7 +366,7 @@ export function EinkommenAngabenForm({
                   errors={formState.errors}
                 />
 
-                <h5 className="mb-8 mt-40 mb-20">
+                <h5 className="mb-20 mb-8 mt-40">
                   Wie viel haben Sie im Bemessungszeitraum durchschnittlich im
                   Monat brutto verdient?
                 </h5>
@@ -399,7 +402,7 @@ export function EinkommenAngabenForm({
                         art === ZeitabschnittArt.ausklammerung ? (
                           <section
                             key={index}
-                            className="rounded border-dashed p-16 my-32"
+                            className="my-32 rounded border-dashed p-16"
                             aria-live="polite"
                             aria-labelledby="bmz"
                           >

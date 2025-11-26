@@ -1,6 +1,13 @@
 import { Navigate } from "react-router-dom";
 import { formSteps } from "./formSteps";
 import {
+  // YesNo,
+  stepAllgemeineAngabenSlice,
+  stepEinkommenSlice,
+  stepErwerbstaetigkeitSlice,
+  stepNachwuchsSlice,
+} from "@/application/features/abfrageteil/state";
+import {
   BeispielePage,
   DatenuebernahmeAntragPage,
   EinfuehrungsPage,
@@ -9,7 +16,9 @@ import {
   PersonPage,
   PlanerPage,
 } from "@/application/pages";
+import { GeschwisterPage } from "@/application/pages/abfrage-protoyp/GeschwisterPage";
 import { RootState } from "@/application/redux";
+import { useAppStore } from "@/application/redux/hooks";
 import RouteGuard from "@/application/routing/RouteGuard";
 import {
   InternalGuardedRoute,
@@ -18,14 +27,6 @@ import {
   InternalStepRoute,
 } from "@/application/routing/internalRoutes";
 import { Elternteil, PlanMitBeliebigenElternteilen } from "@/monatsplaner";
-import {
-  stepAllgemeineAngabenSlice,
-  stepEinkommenSlice,
-  stepErwerbstaetigkeitSlice,
-  stepNachwuchsSlice,
-  YesNo,
-} from "../features/abfrageteil/state";
-import { useAppStore } from "../redux/hooks";
 
 // Every page in our application, except for the first one, expects certain redux state
 // slices to be present. Prior to introducing real routes, users could not navigate
@@ -53,6 +54,14 @@ const internalRouteDefinition: InternalRouteDefinition = [
     path: formSteps.einfuehrung.route,
   },
   {
+    element: <FamiliePage />,
+    path: formSteps.familie.route,
+    precondition: () => {
+      return true;
+      // return state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0;
+    },
+  },
+  {
     element: <KindPage />,
     path: formSteps.kind.route,
     precondition: () => {
@@ -60,27 +69,29 @@ const internalRouteDefinition: InternalRouteDefinition = [
     },
   },
   {
-    element: <FamiliePage />,
-    path: formSteps.familie.route,
-    precondition: (state: RootState) => {
-      return state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0;
+    element: <GeschwisterPage />,
+    path: formSteps.geschwister.route,
+    precondition: () => {
+      return true;
     },
   },
   {
     element: <PersonPage elternteil={Elternteil.Eins} />,
     path: formSteps.person1.route,
-    precondition: (state: RootState) => {
-      return state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0;
+    precondition: () => {
+      return true;
+      // return state.stepPrototyp.geburtsdatum.length > 0;
     },
   },
   {
     element: <PersonPage elternteil={Elternteil.Zwei} />,
     path: formSteps.person2.route,
-    precondition: (state: RootState) => {
-      return (
-        state.stepPrototyp.wahrscheinlichesGeburtsDatum.length > 0 &&
-        state.stepPrototyp.alleinerziehend === YesNo.NO
-      );
+    precondition: () => {
+      return true;
+      // return (
+      //   state.stepPrototyp.geburtsdatum.length > 0 &&
+      //   state.stepPrototyp.alleinerziehend === YesNo.NO
+      // );
     },
   },
   {
@@ -106,14 +117,14 @@ const internalRouteDefinition: InternalRouteDefinition = [
         );
       }
 
-      return state.stepPrototyp.limitEinkommenUeberschritten != null;
+      return state.stepPrototyp.familie.limitEinkommenUeberschritten != null;
     },
   },
   {
     element: <PlanerPage />,
     path: formSteps.rechnerUndPlaner.route,
     precondition: (state: RootState) => {
-      return state.stepPrototyp.limitEinkommenUeberschritten != null;
+      return state.stepPrototyp.familie.limitEinkommenUeberschritten != null;
     },
   },
   {
@@ -124,7 +135,7 @@ const internalRouteDefinition: InternalRouteDefinition = [
       _,
       plan?: PlanMitBeliebigenElternteilen,
     ) => {
-      return plan != null && state.stepPrototyp.bundesland != null;
+      return plan != null && state.stepPrototyp.familie.bundesland != null;
     },
   },
   {

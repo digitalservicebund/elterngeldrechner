@@ -12,15 +12,20 @@ export const formSteps = {
     shortName: "Übersicht",
     route: "/einfuehrung",
   },
+  familie: {
+    heading: "Angaben zur Familie",
+    shortName: "Angaben zur Familie",
+    route: "/familie",
+  },
   kind: {
     heading: "Angaben zum Kind",
     shortName: "Angaben zum Kind",
     route: "/kind",
   },
-  familie: {
-    heading: "Angaben zur Familie",
-    shortName: "Angaben zur Familie",
-    route: "/familie",
+  geschwister: {
+    heading: "Angaben zu Geschwistern",
+    shortName: "Angaben zu Geschwistern",
+    route: "/geschwister",
   },
   person1: {
     heading: "Angaben Person 1",
@@ -51,6 +56,7 @@ export const formSteps = {
   // },
   beispiele: {
     heading: "Planung starten",
+    shortName: "Planung starten",
     route: "/beispiele",
   },
   rechnerUndPlaner: {

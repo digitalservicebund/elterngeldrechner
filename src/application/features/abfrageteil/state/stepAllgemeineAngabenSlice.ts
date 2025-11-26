@@ -1,7 +1,7 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
+import { StepPrototypState } from "@/application/features/abfrage-prototyp/state";
 import { RootState } from "@/application/redux";
-import { StepPrototypState } from "../../abfrage-prototyp/state";
 
 export type Antragstellende =
   | "EinenElternteil"
@@ -40,16 +40,16 @@ export const stepAllgemeineAngabenSlice = createSlice({
     migrateFromPrototype(state, action: PayloadAction<StepPrototypState>) {
       const prototype = action.payload;
 
-      state.bundesland = prototype.bundesland;
+      state.bundesland = prototype.familie.bundesland;
       state.antragstellende =
         prototype.antragstellende != null
           ? prototype.antragstellende
           : "EinenElternteil";
-      (state.pseudonym = {
+      state.pseudonym = {
         ET1: prototype.pseudonym.ET1,
         ET2: prototype.pseudonym.ET2,
-      }),
-        (state.alleinerziehend = prototype.alleinerziehend);
+      };
+      state.alleinerziehend = prototype.alleinerziehend;
       state.mutterschutz =
         prototype.ET1.hasMutterschutzDiesesKind ||
         prototype.ET2.hasMutterschutzDiesesKind

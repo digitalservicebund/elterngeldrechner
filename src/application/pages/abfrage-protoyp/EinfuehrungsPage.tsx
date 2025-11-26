@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/application/components";
+import { Alert } from "@/application/components/Alert";
 import { Page } from "@/application/pages/Page";
 import { formSteps } from "@/application/routing/formSteps";
-import { Alert } from "@/application/components/Alert";
 
 export function EinfuehrungsPage() {
   const navigate = useNavigate();
-  const navigateToKindPage = () => navigate(formSteps.kind.route);
 
   return (
     <Page step={formSteps.einfuehrung}>
-      <div className="flex flex-col gap-40 mt-40">
+      <div className="mt-40 flex flex-col gap-40">
         <Alert headline="Hinweis">
           <span>
             Die Ergebnisse des Elterngeldrechners sind unverbindlich. Ihre
@@ -60,7 +59,10 @@ export function EinfuehrungsPage() {
         </div>
 
         <div className="mt-40">
-          <Button type="submit" onClick={navigateToKindPage}>
+          <Button
+            type="submit"
+            onClick={() => navigate(formSteps.familie.route)}
+          >
             Verstanden und Weiter
           </Button>
         </div>

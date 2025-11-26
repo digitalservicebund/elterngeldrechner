@@ -141,11 +141,12 @@ if (import.meta.vitest) {
   const createDate = (datumsString: string) => new Date(datumsString);
 
   describe("berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung", () => {
-    const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
-    const result =
-      berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(geburtsdatum);
-
     it("returns an array with two bemessungszeitraeume (BMZ) for selbststaendig and nicht-selbststaendig", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+
+      const result =
+        berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(geburtsdatum);
+
       expect(result).toBeInstanceOf(Array);
       expect(result).toHaveLength(2);
       expect(result).toEqual(
@@ -160,6 +161,10 @@ if (import.meta.vitest) {
     });
 
     it("includes the necessary and correct dates of the BMZ for selbststaendige as first object of the array", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+
+      const result =
+        berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(geburtsdatum);
       const bmzSelbststaendig = result[0];
 
       expect(bmzSelbststaendig).toBeDefined();
@@ -187,6 +192,11 @@ if (import.meta.vitest) {
     });
 
     it("includes the necessary and correct dates of the BMZ for nicht-selbststaendige as second object of the array", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+
+      const result =
+        berechneRelevanteBemessungszeitraeumeFuerErsteEinordnung(geburtsdatum);
+
       const bmzFragmentNichtSelbststaendig = result[1];
 
       expect(bmzFragmentNichtSelbststaendig).toBeDefined();

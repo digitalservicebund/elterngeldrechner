@@ -330,6 +330,226 @@ if (import.meta.vitest) {
 
   const createDate = (datumString: string) => new Date(datumString);
 
+  describe("berechneMonateFuerGenauenBemessungszeitraum", () => {
+    /**
+     * Jahr:               |---------------------- 2024 --------------------|---------------------- 2025 ----------------------|
+     * Monat:              |[01][02][03][04][05][06][07][08][09][10][11][12]|[01][02][03][04][05][06][07][08][09][10][11][12]  |
+     * Ausklammerungen:    |                                                |                                                  |
+     * Bemessungszeitraum: |                                     XX  XX  XX | XX  XX  XX  XX  XX  XX  XX  XX  XX               |
+     */
+    it("returns 01.10.24 - 01.09.25 (12) if Geburtsdatum is the 15.10.25 and no Ausklammerungen", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const ausklammerungen: Ausklammerung[] = [];
+
+      const monate = berechneMonateFuerGenauenBemessungszeitraum(
+        geburtsdatum,
+        ausklammerungen,
+      );
+
+      expect(monate).toEqual([
+        {
+          monatsDatum: new Date("2024-10-01T00:00:00.000Z"),
+          monatsIndex: 0,
+        },
+        {
+          monatsDatum: new Date("2024-11-01T00:00:00.000Z"),
+          monatsIndex: 1,
+        },
+        {
+          monatsDatum: new Date("2024-12-01T00:00:00.000Z"),
+          monatsIndex: 2,
+        },
+        {
+          monatsDatum: new Date("2025-01-01T00:00:00.000Z"),
+          monatsIndex: 3,
+        },
+        {
+          monatsDatum: new Date("2025-02-01T00:00:00.000Z"),
+          monatsIndex: 4,
+        },
+        {
+          monatsDatum: new Date("2025-03-01T00:00:00.000Z"),
+          monatsIndex: 5,
+        },
+        {
+          monatsDatum: new Date("2025-04-01T00:00:00.000Z"),
+          monatsIndex: 6,
+        },
+        {
+          monatsDatum: new Date("2025-05-01T00:00:00.000Z"),
+          monatsIndex: 7,
+        },
+        {
+          monatsDatum: new Date("2025-06-01T00:00:00.000Z"),
+          monatsIndex: 8,
+        },
+        {
+          monatsDatum: new Date("2025-07-01T00:00:00.000Z"),
+          monatsIndex: 9,
+        },
+        {
+          monatsDatum: new Date("2025-08-01T00:00:00.000Z"),
+          monatsIndex: 10,
+        },
+        {
+          monatsDatum: new Date("2025-09-01T00:00:00.000Z"),
+          monatsIndex: 11,
+        },
+      ]);
+    });
+
+    /**
+     * Jahr:               |---------------------- 2024 --------------------|---------------------- 2025 ----------------------|
+     * Monat:              |[01][02][03][04][05][06][07][08][09][10][11][12]|[01][02][03][04][05][06][07][08][09][10][11][12]  |
+     * Ausklammerungen:    |                                                |                 XX                               |
+     * Bemessungszeitraum: |                                 XX  XX  XX  XX | XX  XX  XX  XX      XX  XX  XX  XX               |
+     */
+    it("returns 01.09.24 - 01.04.25 (8) and 01.06.25 - 01.09.25 (4) if Geburtsdatum is the 15.10.25 and Ausklammerungen contains 01.05.25 - 12.05.25", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const ausklammerungen: Ausklammerung[] = [
+        {
+          von: new Date("2025-05-01T00:00:00.000Z"),
+          bis: new Date("2025-05-12T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+      ];
+
+      const monate = berechneMonateFuerGenauenBemessungszeitraum(
+        geburtsdatum,
+        ausklammerungen,
+      );
+
+      expect(monate).toEqual([
+        {
+          monatsDatum: new Date("2024-09-01T00:00:00.000Z"),
+          monatsIndex: 0,
+        },
+        {
+          monatsDatum: new Date("2024-10-01T00:00:00.000Z"),
+          monatsIndex: 1,
+        },
+        {
+          monatsDatum: new Date("2024-11-01T00:00:00.000Z"),
+          monatsIndex: 2,
+        },
+        {
+          monatsDatum: new Date("2024-12-01T00:00:00.000Z"),
+          monatsIndex: 3,
+        },
+        {
+          monatsDatum: new Date("2025-01-01T00:00:00.000Z"),
+          monatsIndex: 4,
+        },
+        {
+          monatsDatum: new Date("2025-02-01T00:00:00.000Z"),
+          monatsIndex: 5,
+        },
+        {
+          monatsDatum: new Date("2025-03-01T00:00:00.000Z"),
+          monatsIndex: 6,
+        },
+        {
+          monatsDatum: new Date("2025-04-01T00:00:00.000Z"),
+          monatsIndex: 7,
+        },
+        {
+          monatsDatum: new Date("2025-06-01T00:00:00.000Z"),
+          monatsIndex: 8,
+        },
+        {
+          monatsDatum: new Date("2025-07-01T00:00:00.000Z"),
+          monatsIndex: 9,
+        },
+        {
+          monatsDatum: new Date("2025-08-01T00:00:00.000Z"),
+          monatsIndex: 10,
+        },
+        {
+          monatsDatum: new Date("2025-09-01T00:00:00.000Z"),
+          monatsIndex: 11,
+        },
+      ]);
+    });
+
+    /**
+     * Jahr:               ---------------------- 2024 --------------------|---------------------- 2025 ----------------------
+     * Monat:              [01][02][03][04][05][06][07][08][09][10][11][12]|[01][02][03][04][05][06][07][08][09][10][11][12]
+     * Ausklammerungen:                                                    |                 XX
+     * Bemessungszeitraum:                                  XX  XX  XX  XX | XX  XX  XX  XX      XX  XX  XX  XX
+     */
+    it("returns 01.09.24 - 01.04.25 (8) and 01.06.25 - 01.09.25 (4) if Geburtsdatum is the 15.10.25 and Ausklammerungen contains 01.05.25 - 12.05.25 and 15.05.25 - 17.05.25", () => {
+      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const ausklammerungen: Ausklammerung[] = [
+        {
+          von: new Date("2025-05-01T00:00:00.000Z"),
+          bis: new Date("2025-05-12T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+        {
+          von: new Date("2025-05-15T00:00:00.000Z"),
+          bis: new Date("2025-05-17T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+      ];
+
+      const monate = berechneMonateFuerGenauenBemessungszeitraum(
+        geburtsdatum,
+        ausklammerungen,
+      );
+
+      expect(monate).toEqual([
+        {
+          monatsDatum: new Date("2024-09-01T00:00:00.000Z"),
+          monatsIndex: 0,
+        },
+        {
+          monatsDatum: new Date("2024-10-01T00:00:00.000Z"),
+          monatsIndex: 1,
+        },
+        {
+          monatsDatum: new Date("2024-11-01T00:00:00.000Z"),
+          monatsIndex: 2,
+        },
+        {
+          monatsDatum: new Date("2024-12-01T00:00:00.000Z"),
+          monatsIndex: 3,
+        },
+        {
+          monatsDatum: new Date("2025-01-01T00:00:00.000Z"),
+          monatsIndex: 4,
+        },
+        {
+          monatsDatum: new Date("2025-02-01T00:00:00.000Z"),
+          monatsIndex: 5,
+        },
+        {
+          monatsDatum: new Date("2025-03-01T00:00:00.000Z"),
+          monatsIndex: 6,
+        },
+        {
+          monatsDatum: new Date("2025-04-01T00:00:00.000Z"),
+          monatsIndex: 7,
+        },
+        {
+          monatsDatum: new Date("2025-06-01T00:00:00.000Z"),
+          monatsIndex: 8,
+        },
+        {
+          monatsDatum: new Date("2025-07-01T00:00:00.000Z"),
+          monatsIndex: 9,
+        },
+        {
+          monatsDatum: new Date("2025-08-01T00:00:00.000Z"),
+          monatsIndex: 10,
+        },
+        {
+          monatsDatum: new Date("2025-09-01T00:00:00.000Z"),
+          monatsIndex: 11,
+        },
+      ]);
+    });
+  });
+
   describe("berechneGenauenBemessungszeitraum", () => {
     it("returns an bemessungszeitraum (BMZ) object for either selbststaendig or nicht-selbststaendig without ausklammerung which contains one zeitabschnitt as an array with 12 elements", () => {
       const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");

@@ -60,10 +60,10 @@ export function berechneGenauenBemessungszeitraum(
  * @param {Ausklammerung[]} auszuklammerndeZeitraeume - Eine Liste von Zeiträumen, die zur Prüfung der Verschiebung herangezogen werden.
  * @returns {Bemessungszeitraum} Das vollständige BZR-Objekt.
  */
-const getGenauenSelbststaendigenBemessungszeitraum = (
+function getGenauenSelbststaendigenBemessungszeitraum(
   geburtsdatum: Date,
   auszuklammerndeZeitraeume: Ausklammerung[],
-): Bemessungszeitraum => {
+): Bemessungszeitraum {
   const jahrDesBemessungszeitraums =
     ermittleJahrDesBemessungszeitraumsFuerSelbststaendige(
       geburtsdatum.getFullYear(),
@@ -101,7 +101,7 @@ const getGenauenSelbststaendigenBemessungszeitraum = (
     enddatum: einklammerung.bis,
     zeitabschnitte: sortierteAbschnitte,
   };
-};
+}
 
 /**
  * Ermittelt das korrekte Jahr des Bemessungszeitraums für Selbstständige.
@@ -109,10 +109,10 @@ const getGenauenSelbststaendigenBemessungszeitraum = (
  * Eine Verschiebung um mehr als ein Jahr ist erstmal nicht vorgesehen, wäre aber
  * evtl. eine gute Iteration für die Zukunft.
  */
-const ermittleJahrDesBemessungszeitraumsFuerSelbststaendige = (
+function ermittleJahrDesBemessungszeitraumsFuerSelbststaendige(
   geburtsjahr: number,
   auszuklammerndeZeitraeume: Ausklammerung[],
-): number => {
+): number {
   const jahrVorGeburtsjahr = geburtsjahr - 1;
 
   const standardBMZStart = new Date(Date.UTC(jahrVorGeburtsjahr, 0, 1));
@@ -124,7 +124,7 @@ const ermittleJahrDesBemessungszeitraumsFuerSelbststaendige = (
   );
 
   return mussVerschobenWerden ? jahrVorGeburtsjahr - 1 : jahrVorGeburtsjahr;
-};
+}
 
 /** Logik und Helper für Nicht-Selbstständige */
 

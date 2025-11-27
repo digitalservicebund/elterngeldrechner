@@ -104,26 +104,30 @@ function getGenauenSelbststaendigenBemessungszeitraum(
 }
 
 /**
- * Ermittelt das korrekte Jahr des Bemessungszeitraums für Selbstständige.
- * Verschiebt das Jahr um ein Jahr, wenn eine Ausklammerung im Standard-BMZ liegt.
- * Eine Verschiebung um mehr als ein Jahr ist erstmal nicht vorgesehen, wäre aber
- * evtl. eine gute Iteration für die Zukunft.
+ * Ermittelt das korrekte Jahr des Bemessungszeitraums für Selbstständige
+ * indem es so lange ein Jahr zurück geht bis kein Ausklammerungszeitraum
+ * mehr vorliegt.
  */
 function ermittleJahrDesBemessungszeitraumsFuerSelbststaendige(
   geburtsjahr: number,
   auszuklammerndeZeitraeume: Ausklammerung[],
 ): number {
-  const jahrVorGeburtsjahr = geburtsjahr - 1;
+  const findeJahr = (year: number): number => {
+    const mussVerschobenWerden = auszuklammerndeZeitraeume.some((zeitraum) => {
+      return (
+        zeitraum.von <= new Date(Date.UTC(year, 11, 31)) &&
+        zeitraum.bis >= new Date(Date.UTC(year, 0, 1))
+      );
+    });
 
-  const standardBMZStart = new Date(Date.UTC(jahrVorGeburtsjahr, 0, 1));
-  const standardBMZEnde = new Date(Date.UTC(jahrVorGeburtsjahr, 11, 31));
+    if (mussVerschobenWerden) {
+      return findeJahr(year - 1);
+    }
 
-  const mussVerschobenWerden = auszuklammerndeZeitraeume.some(
-    (zeitraum) =>
-      zeitraum.von <= standardBMZEnde && zeitraum.bis >= standardBMZStart,
-  );
+    return year;
+  };
 
-  return mussVerschobenWerden ? jahrVorGeburtsjahr - 1 : jahrVorGeburtsjahr;
+  return findeJahr(geburtsjahr - 1);
 }
 
 /** Logik und Helper für Nicht-Selbstständige */
@@ -545,6 +549,85 @@ if (import.meta.vitest) {
           monatsIndex: 11,
         },
       ]);
+    });
+  });
+
+  describe("getGenauenSelbststaendigenBemessungszeitraum", () => {
+    it("returns the previous year as the Bemessungszeitraum for Selbstaendig when no Ausklammerung applies", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+      const auszuklammerndeZeitraeume: Ausklammerung[] = [];
+
+      const result = getGenauenSelbststaendigenBemessungszeitraum(
+        geburtsdatum,
+        auszuklammerndeZeitraeume,
+      );
+
+      expect(result.startdatum).toEqual(new Date("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2024-12-31T00:00:00.000Z"));
+    });
+
+    it("returns the previous year as the Bemessungszeitraum for Selbstaendig when Ausklammerung applies to the year before the previous year", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+      const auszuklammerndeZeitraeume: Ausklammerung[] = [
+        {
+          von: new Date("2023-05-02T00:00:00.000Z"),
+          bis: new Date("2023-05-03T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+      ];
+
+      const result = getGenauenSelbststaendigenBemessungszeitraum(
+        geburtsdatum,
+        auszuklammerndeZeitraeume,
+      );
+
+      expect(result.startdatum).toEqual(new Date("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2024-12-31T00:00:00.000Z"));
+    });
+
+    it("returns the year before the previous year as the Bemessungszeitraum for Selbstaendig when exactly one Ausklammerung applies in the previous year", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+
+      const auszuklammerndeZeitraeume: Ausklammerung[] = [
+        {
+          von: new Date("2024-05-02T00:00:00.000Z"),
+          bis: new Date("2024-05-03T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+      ];
+
+      const result = getGenauenSelbststaendigenBemessungszeitraum(
+        geburtsdatum,
+        auszuklammerndeZeitraeume,
+      );
+
+      expect(result.startdatum).toEqual(new Date("2023-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2023-12-31T00:00:00.000Z"));
+    });
+
+    it("returns the year t–3 as the Bemessungszeitraum for Selbstaendig when Ausklammerungen apply in both the previous year and the year before that", () => {
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+
+      const auszuklammerndeZeitraeume: Ausklammerung[] = [
+        {
+          von: new Date("2024-05-02T00:00:00.000Z"),
+          bis: new Date("2024-05-03T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+        {
+          von: new Date("2023-05-02T00:00:00.000Z"),
+          bis: new Date("2023-05-03T00:00:00.000Z"),
+          beschreibung: "Test",
+        },
+      ];
+
+      const result = getGenauenSelbststaendigenBemessungszeitraum(
+        geburtsdatum,
+        auszuklammerndeZeitraeume,
+      );
+
+      expect(result.startdatum).toEqual(new Date("2022-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2022-12-31T00:00:00.000Z"));
     });
   });
 

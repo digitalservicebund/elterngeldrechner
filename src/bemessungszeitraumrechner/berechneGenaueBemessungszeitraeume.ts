@@ -328,8 +328,6 @@ function gruppiereMonatseintraege(monate: Monatseintrag[]): Monatseintrag[][] {
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  const createDate = (datumString: string) => new Date(datumString);
-
   describe("berechneMonateFuerGenauenBemessungszeitraum", () => {
     /**
      * Jahr:               |---------------------- 2024 --------------------|---------------------- 2025 ----------------------|
@@ -338,7 +336,7 @@ if (import.meta.vitest) {
      * Bemessungszeitraum: |                                     XX  XX  XX | XX  XX  XX  XX  XX  XX  XX  XX  XX               |
      */
     it("returns 01.10.24 - 01.09.25 (12) if Geburtsdatum is the 15.10.25 and no Ausklammerungen", () => {
-      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
       const ausklammerungen: Ausklammerung[] = [];
 
       const monate = berechneMonateFuerGenauenBemessungszeitraum(
@@ -405,7 +403,7 @@ if (import.meta.vitest) {
      * Bemessungszeitraum: |                                 XX  XX  XX  XX | XX  XX  XX  XX      XX  XX  XX  XX               |
      */
     it("returns 01.09.24 - 01.04.25 (8) and 01.06.25 - 01.09.25 (4) if Geburtsdatum is the 15.10.25 and Ausklammerungen contains 01.05.25 - 12.05.25", () => {
-      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
       const ausklammerungen: Ausklammerung[] = [
         {
           von: new Date("2025-05-01T00:00:00.000Z"),
@@ -478,7 +476,7 @@ if (import.meta.vitest) {
      * Bemessungszeitraum:                                  XX  XX  XX  XX | XX  XX  XX  XX      XX  XX  XX  XX
      */
     it("returns 01.09.24 - 01.04.25 (8) and 01.06.25 - 01.09.25 (4) if Geburtsdatum is the 15.10.25 and Ausklammerungen contains 01.05.25 - 12.05.25 and 15.05.25 - 17.05.25", () => {
-      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
       const ausklammerungen: Ausklammerung[] = [
         {
           von: new Date("2025-05-01T00:00:00.000Z"),
@@ -552,7 +550,7 @@ if (import.meta.vitest) {
 
   describe("berechneGenauenBemessungszeitraum", () => {
     it("returns an bemessungszeitraum (BMZ) object for either selbststaendig or nicht-selbststaendig without ausklammerung which contains one zeitabschnitt as an array with 12 elements", () => {
-      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
       const erwerbstaetigkeit = Erwerbstaetigkeit.SELBSTSTAENDIG;
       const auszuklammerndeZeitraeume: Ausklammerung[] = [];
 
@@ -581,7 +579,7 @@ if (import.meta.vitest) {
     const erwerbstaetigkeit = Erwerbstaetigkeit.SELBSTSTAENDIG;
 
     it("returns an bemessungszeitraum (BMZ) object for either selbststaendig or nicht-selbststaendig without ausklammerung which contains one zeitabschnitt as an array with 12 elements", () => {
-      const geburtsdatum = createDate("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [];
 
       const result = berechneGenauenBemessungszeitraum(
@@ -605,7 +603,7 @@ if (import.meta.vitest) {
     });
 
     it("returns the correct BMZ without ausklammerung", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [];
 
       const result = berechneGenauenBemessungszeitraum(
@@ -614,8 +612,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-01-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2024-12-31T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2024-12-31T00:00:00.000Z"));
 
       expect(result.zeitabschnitte[0]).toBeDefined();
 
@@ -623,17 +621,17 @@ if (import.meta.vitest) {
         .zeitabschnitt as Einklammerung;
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[0]).toEqual({
-        monatsDatum: createDate("2024-01-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-01-01T00:00:00.000Z"),
         monatsIndex: 0,
       });
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2025-10-02T00:00:00.000Z"),
-          bis: createDate("2026-01-08T00:00:00.000Z"),
+          von: new Date("2025-10-02T00:00:00.000Z"),
+          bis: new Date("2026-01-08T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
       ];
@@ -644,8 +642,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-01-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2024-12-31T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2024-12-31T00:00:00.000Z"));
 
       expect(result.zeitabschnitte[0]).toBeDefined();
       expect(result.zeitabschnitte[0]!.art).toEqual(
@@ -657,7 +655,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[0]).toEqual({
-        monatsDatum: createDate("2024-01-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-01-01T00:00:00.000Z"),
         monatsIndex: 0,
       });
 
@@ -669,15 +667,15 @@ if (import.meta.vitest) {
       const ausklammerung = result.zeitabschnitte[1]!
         .zeitabschnitt as Ausklammerung;
 
-      expect(ausklammerung.von).toEqual(createDate("2025-10-02T00:00:00.000Z"));
+      expect(ausklammerung.von).toEqual(new Date("2025-10-02T00:00:00.000Z"));
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen overlapping a year", () => {
-      const geburtsdatum = createDate("2026-01-01T00:00:00.000Z");
+      const geburtsdatum = new Date("2026-01-01T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2025-11-11T00:00:00.000Z"),
-          bis: createDate("2026-02-26T00:00:00.000Z"),
+          von: new Date("2025-11-11T00:00:00.000Z"),
+          bis: new Date("2026-02-26T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
       ];
@@ -688,8 +686,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-01-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2024-12-31T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2024-12-31T00:00:00.000Z"));
 
       expect(result.zeitabschnitte[0]).toBeDefined();
       expect(result.zeitabschnitte[0]!.art).toEqual(
@@ -701,7 +699,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[11]).toEqual({
-        monatsDatum: createDate("2024-12-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-12-01T00:00:00.000Z"),
         monatsIndex: 11,
       });
 
@@ -719,16 +717,16 @@ if (import.meta.vitest) {
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen and sickness", () => {
-      const geburtsdatum = createDate("2026-02-12T00:00:00.000Z");
+      const geburtsdatum = new Date("2026-02-12T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2026-01-10T00:00:00.000Z"),
-          bis: createDate("2026-04-09T00:00:00.000Z"),
+          von: new Date("2026-01-10T00:00:00.000Z"),
+          bis: new Date("2026-04-09T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
         {
-          von: createDate("2025-08-10T00:00:00.000Z"),
-          bis: createDate("2025-08-20T00:00:00.000Z"),
+          von: new Date("2025-08-10T00:00:00.000Z"),
+          bis: new Date("2025-08-20T00:00:00.000Z"),
           beschreibung: "Schwangerschaftsbedingte Krankheit",
         },
       ];
@@ -739,8 +737,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-01-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2024-12-31T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-01-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2024-12-31T00:00:00.000Z"));
 
       expect(result.zeitabschnitte).toBeInstanceOf(Array);
       expect(result.zeitabschnitte).toHaveLength(3);
@@ -755,7 +753,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[5]).toEqual({
-        monatsDatum: createDate("2024-06-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-06-01T00:00:00.000Z"),
         monatsIndex: 5,
       });
 
@@ -789,7 +787,7 @@ if (import.meta.vitest) {
     const erwerbstaetigkeit = Erwerbstaetigkeit.ANGESTELLT;
 
     it("returns the correct BMZ without ausklammerung", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [];
 
       const result = berechneGenauenBemessungszeitraum(
@@ -798,8 +796,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-11-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2025-10-31T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-11-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2025-10-31T00:00:00.000Z"));
 
       expect(result.zeitabschnitte[0]).toBeDefined();
 
@@ -807,17 +805,17 @@ if (import.meta.vitest) {
         .zeitabschnitt as Einklammerung;
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[0]).toEqual({
-        monatsDatum: createDate("2024-11-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-11-01T00:00:00.000Z"),
         monatsIndex: 0,
       });
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2025-10-02T00:00:00.000Z"),
-          bis: createDate("2026-01-08T00:00:00.000Z"),
+          von: new Date("2025-10-02T00:00:00.000Z"),
+          bis: new Date("2026-01-08T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
       ];
@@ -828,8 +826,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-10-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2025-09-30T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-10-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2025-09-30T00:00:00.000Z"));
 
       expect(result.zeitabschnitte[0]).toBeDefined();
       expect(result.zeitabschnitte[0]!.art).toEqual(
@@ -841,7 +839,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[0]).toEqual({
-        monatsDatum: createDate("2024-10-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-10-01T00:00:00.000Z"),
         monatsIndex: 0,
       });
 
@@ -853,20 +851,20 @@ if (import.meta.vitest) {
       const ausklammerung = result.zeitabschnitte[1]!
         .zeitabschnitt as Ausklammerung;
 
-      expect(ausklammerung.von).toEqual(createDate("2025-10-02T00:00:00.000Z"));
+      expect(ausklammerung.von).toEqual(new Date("2025-10-02T00:00:00.000Z"));
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen and sickness", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2025-10-02T00:00:00.000Z"),
-          bis: createDate("2026-01-08T00:00:00.000Z"),
+          von: new Date("2025-10-02T00:00:00.000Z"),
+          bis: new Date("2026-01-08T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
         {
-          von: createDate("2025-06-15T00:00:00.000Z"),
-          bis: createDate("2025-08-02T00:00:00.000Z"),
+          von: new Date("2025-06-15T00:00:00.000Z"),
+          bis: new Date("2025-08-02T00:00:00.000Z"),
           beschreibung: "Schwangerschaftsbedingte Krankheit",
         },
       ];
@@ -877,8 +875,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2024-07-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2025-09-30T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2024-07-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2025-09-30T00:00:00.000Z"));
 
       expect(result.zeitabschnitte).toBeInstanceOf(Array);
       expect(result.zeitabschnitte).toHaveLength(4);
@@ -893,7 +891,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[1]).toEqual({
-        monatsDatum: createDate("2024-08-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-08-01T00:00:00.000Z"),
         monatsIndex: 1,
       });
 
@@ -919,7 +917,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung2.monate).toBeInstanceOf(Array);
       expect(einklammerung2.monate[0]).toEqual({
-        monatsDatum: createDate("2025-09-01T00:00:00.000Z"),
+        monatsDatum: new Date("2025-09-01T00:00:00.000Z"),
         monatsIndex: 11,
       });
 
@@ -937,21 +935,21 @@ if (import.meta.vitest) {
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen, sickness and elterngeld for other child", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2025-10-02T00:00:00.000Z"),
-          bis: createDate("2026-01-08T00:00:00.000Z"),
+          von: new Date("2025-10-02T00:00:00.000Z"),
+          bis: new Date("2026-01-08T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
         {
-          von: createDate("2025-06-15T00:00:00.000Z"),
-          bis: createDate("2025-08-02T00:00:00.000Z"),
+          von: new Date("2025-06-15T00:00:00.000Z"),
+          bis: new Date("2025-08-02T00:00:00.000Z"),
           beschreibung: "Schwangerschaftsbedingte Krankheit",
         },
         {
-          von: createDate("2023-10-03T00:00:00.000Z"),
-          bis: createDate("2024-10-03T00:00:00.000Z"),
+          von: new Date("2023-10-03T00:00:00.000Z"),
+          bis: new Date("2024-10-03T00:00:00.000Z"),
           beschreibung: "Elterngeld für anderes Kind",
         },
       ];
@@ -962,8 +960,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2023-06-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2025-09-30T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2023-06-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2025-09-30T00:00:00.000Z"));
 
       expect(result.zeitabschnitte).toBeInstanceOf(Array);
       expect(result.zeitabschnitte).toHaveLength(6);
@@ -978,7 +976,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[1]).toEqual({
-        monatsDatum: createDate("2023-07-01T00:00:00.000Z"),
+        monatsDatum: new Date("2023-07-01T00:00:00.000Z"),
         monatsIndex: 1,
       });
 
@@ -1002,7 +1000,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung2.monate).toBeInstanceOf(Array);
       expect(einklammerung2.monate[0]).toEqual({
-        monatsDatum: createDate("2024-11-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-11-01T00:00:00.000Z"),
         monatsIndex: 4,
       });
 
@@ -1028,7 +1026,7 @@ if (import.meta.vitest) {
 
       expect(einklammerung3.monate).toBeInstanceOf(Array);
       expect(einklammerung3.monate[0]).toEqual({
-        monatsDatum: createDate("2025-09-01T00:00:00.000Z"),
+        monatsDatum: new Date("2025-09-01T00:00:00.000Z"),
         monatsIndex: 11,
       });
 
@@ -1046,26 +1044,26 @@ if (import.meta.vitest) {
     });
 
     it("returns the correct BMZ with mutterschaftsleistungen, sickness and mutterschaftsleistungen and elterngeld for other child", () => {
-      const geburtsdatum = createDate("2025-11-13T00:00:00.000Z");
+      const geburtsdatum = new Date("2025-11-13T00:00:00.000Z");
       const auszuklammerndeZeitraeume: Ausklammerung[] = [
         {
-          von: createDate("2025-10-02T00:00:00.000Z"),
-          bis: createDate("2026-01-08T00:00:00.000Z"),
+          von: new Date("2025-10-02T00:00:00.000Z"),
+          bis: new Date("2026-01-08T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für dieses Kind",
         },
         {
-          von: createDate("2025-06-15T00:00:00.000Z"),
-          bis: createDate("2025-08-02T00:00:00.000Z"),
+          von: new Date("2025-06-15T00:00:00.000Z"),
+          bis: new Date("2025-08-02T00:00:00.000Z"),
           beschreibung: "Schwangerschaftsbedingte Krankheit",
         },
         {
-          von: createDate("2023-10-03T00:00:00.000Z"),
-          bis: createDate("2024-10-03T00:00:00.000Z"),
+          von: new Date("2023-10-03T00:00:00.000Z"),
+          bis: new Date("2024-10-03T00:00:00.000Z"),
           beschreibung: "Elterngeld für anderes Kind",
         },
         {
-          von: createDate("2023-08-22T00:00:00.000Z"),
-          bis: createDate("2023-10-02T00:00:00.000Z"),
+          von: new Date("2023-08-22T00:00:00.000Z"),
+          bis: new Date("2023-10-02T00:00:00.000Z"),
           beschreibung: "Mutterschaftsleistungen für anderes Kind",
         },
       ];
@@ -1076,8 +1074,8 @@ if (import.meta.vitest) {
         auszuklammerndeZeitraeume,
       );
 
-      expect(result.startdatum).toEqual(createDate("2023-04-01T00:00:00.000Z"));
-      expect(result.enddatum).toEqual(createDate("2025-09-30T00:00:00.000Z"));
+      expect(result.startdatum).toEqual(new Date("2023-04-01T00:00:00.000Z"));
+      expect(result.enddatum).toEqual(new Date("2025-09-30T00:00:00.000Z"));
 
       expect(result.zeitabschnitte).toBeInstanceOf(Array);
       expect(result.zeitabschnitte).toHaveLength(7);
@@ -1090,7 +1088,7 @@ if (import.meta.vitest) {
         .zeitabschnitt as Einklammerung;
       expect(einklammerung.monate).toBeInstanceOf(Array);
       expect(einklammerung.monate[2]).toEqual({
-        monatsDatum: createDate("2023-06-01T00:00:00.000Z"),
+        monatsDatum: new Date("2023-06-01T00:00:00.000Z"),
         monatsIndex: 2,
       });
 
@@ -1122,7 +1120,7 @@ if (import.meta.vitest) {
         .zeitabschnitt as Einklammerung;
       expect(einklammerung2.monate).toBeInstanceOf(Array);
       expect(einklammerung2.monate[0]).toEqual({
-        monatsDatum: createDate("2024-11-01T00:00:00.000Z"),
+        monatsDatum: new Date("2024-11-01T00:00:00.000Z"),
         monatsIndex: 4,
       });
 
@@ -1144,7 +1142,7 @@ if (import.meta.vitest) {
         .zeitabschnitt as Einklammerung;
       expect(einklammerung3.monate).toBeInstanceOf(Array);
       expect(einklammerung3.monate[0]).toEqual({
-        monatsDatum: createDate("2025-09-01T00:00:00.000Z"),
+        monatsDatum: new Date("2025-09-01T00:00:00.000Z"),
         monatsIndex: 11,
       });
 

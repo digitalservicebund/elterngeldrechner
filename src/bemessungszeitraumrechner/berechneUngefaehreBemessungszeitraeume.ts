@@ -30,9 +30,9 @@ export function berechneUngefaehrenBemessungszeitraum(
  * Berücksichtigung von Ausklammerungen.
  * Regel: 1. Januar bis 31. Dezember des Jahres vor dem Geburtsjahr.
  */
-const getUngefaehrenSelbststaendigenBemessungszeitraum = (
+function getUngefaehrenSelbststaendigenBemessungszeitraum(
   geburtsdatum: Date,
-): Bemessungszeitraum => {
+): Bemessungszeitraum {
   const monate = Array.from({ length: 12 }, (_, i) => ({
     monatsIndex: i,
     monatsDatum: new Date(Date.UTC(geburtsdatum.getFullYear() - 1, i, 1)),
@@ -44,7 +44,7 @@ const getUngefaehrenSelbststaendigenBemessungszeitraum = (
     monate,
   };
   return erstelleBemessungszeitraumAusEinklammerung(zeitabschnitt);
-};
+}
 
 /**
  * Ermittelt den BMZ für Nicht-Selbstständige (12 Monate vor Geburtsmonat) ohne
@@ -52,9 +52,9 @@ const getUngefaehrenSelbststaendigenBemessungszeitraum = (
  * Regel: 1. Tag des Monats, der 12 Monate vor dem Geburtsmonat liegt,
  * bis zum letzten Tag des Monats vor dem Geburtsmonat.
  */
-const getUngefaehrenNichtSelbststaendigenBemessungszeitraum = (
+function getUngefaehrenNichtSelbststaendigenBemessungszeitraum(
   geburtsdatum: Date,
-): Bemessungszeitraum => {
+): Bemessungszeitraum {
   const startDatum = new Date(
     Date.UTC(geburtsdatum.getFullYear() - 1, geburtsdatum.getMonth(), 1),
   );
@@ -74,15 +74,15 @@ const getUngefaehrenNichtSelbststaendigenBemessungszeitraum = (
     monate,
   };
   return erstelleBemessungszeitraumAusEinklammerung(zeitabschnitt);
-};
+}
 
 /**
  * Erzeugt ein standardisiertes Bemessungszeitraum-Objekt
  * aus einem einzelnen Einklammerungs-Zeitabschnitt.
  */
-const erstelleBemessungszeitraumAusEinklammerung = (
+function erstelleBemessungszeitraumAusEinklammerung(
   zeitabschnitt: Einklammerung,
-): Bemessungszeitraum => {
+): Bemessungszeitraum {
   return {
     startdatum: zeitabschnitt.von,
     enddatum: zeitabschnitt.bis,
@@ -93,7 +93,7 @@ const erstelleBemessungszeitraumAusEinklammerung = (
       },
     ],
   };
-};
+}
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

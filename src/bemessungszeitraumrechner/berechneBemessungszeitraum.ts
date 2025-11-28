@@ -95,10 +95,10 @@ function gruppiereMonateInZeitraeume(monate: Date[]): Zeitraum[] {
   }
 
   const monatsGruppen = monate.reduce((gruppen: Date[][], monat: Date) => {
-    const vorherigeGruppe = gruppen[gruppen.length - 1];
+    const vorherigeGruppe = gruppen.at(-1);
 
     if (vorherigeGruppe) {
-      const letzterMonat = vorherigeGruppe[vorherigeGruppe.length - 1];
+      const letzterMonat = vorherigeGruppe.at(-1);
 
       if (letzterMonat && istMonatFolgend(letzterMonat, monat)) {
         vorherigeGruppe.push(monat);

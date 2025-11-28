@@ -24,7 +24,7 @@ export function istAusklammerungInMonat(
 }
 
 function naechsterMonat(datum: Date): Date {
-  const naechstesDatum = new Date(datum.getTime());
+  const naechstesDatum = new Date(datum);
   naechstesDatum.setUTCMonth(naechstesDatum.getUTCMonth() + 1);
   return naechstesDatum;
 }

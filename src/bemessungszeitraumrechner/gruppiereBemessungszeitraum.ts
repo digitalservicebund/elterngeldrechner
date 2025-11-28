@@ -35,9 +35,9 @@ export function gruppiereBemessungszeitraum(
 }
 
 function generiereMonate(zeitraum: Zeitraum): Date[] {
-  const startDatum = new Date(zeitraum.von.getTime());
+  const startDatum = new Date(zeitraum.von);
   startDatum.setUTCDate(1);
-  const endDatum = new Date(zeitraum.bis.getTime());
+  const endDatum = new Date(zeitraum.bis);
 
   return generiereMonateRekursiv(startDatum, endDatum);
 }
@@ -52,7 +52,7 @@ function generiereMonateRekursiv(startDatum: Date, endDatum: Date): Date[] {
     endDatum,
   );
 
-  return [new Date(startDatum.getTime()), ...weitereMonate];
+  return [new Date(startDatum), ...weitereMonate];
 }
 
 if (import.meta.vitest) {

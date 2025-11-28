@@ -172,8 +172,45 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
 
   return [
     {
-      identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
+      identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
       titel: "Vorschlag 1",
+      beschreibung:
+        "Begleitete Übergänge: Gemeinsam starten - nach dem ersten Lebensjahr übernimmt der andere Elternteil für einen Monat.",
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: beideBasis, anzahl: 1 },
+          {
+            lebensmonat: nurMutterBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 11 : 9,
+          },
+          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
+        ],
+        berechneElterngeldbezuege,
+      ),
+    },
+    {
+      identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
+      titel: "Vorschlag 2",
+      beschreibung:
+        "Länger Elterngeld erhalten: Lohnt sich, wenn Sie in Teilzeit arbeiten möchten.",
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: nurMutterBasis, anzahl: 2 },
+          { lebensmonat: nurMutterPlus, anzahl: 5 },
+          { lebensmonat: beidePlus, anzahl: 5 },
+          {
+            lebensmonat: nurPartnerInPlus,
+            anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
+          },
+        ],
+        berechneElterngeldbezuege,
+      ),
+    },
+    {
+      identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
+      titel: "Vorschlag 3",
       beschreibung:
         "Partnerschaftliche Aufteilung: Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
       plan: erstellePlanFuerEinBeispiel(
@@ -193,7 +230,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
-      titel: "Vorschlag 2",
+      titel: "Vorschlag 4",
       beschreibung:
         "Flexibler Wiedereinstieg: Gemeinsam in die Elternzeit starten und sie gemeinsam abschließen.",
       plan: erstellePlanFuerEinBeispiel(
@@ -207,43 +244,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
           { lebensmonat: nurMutterPlus, anzahl: 3 },
           { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
           { lebensmonat: nurPartnerInBasis, anzahl: 1 },
-        ],
-        berechneElterngeldbezuege,
-      ),
-    },
-    {
-      identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
-      titel: "Vorschlag 3",
-      beschreibung:
-        "Begleitete Übergänge: Gemeinsam starten - nach dem ersten Lebensjahr übernimmt der andere Elternteil für einen Monat.",
-      plan: erstellePlanFuerEinBeispiel(
-        ausgangslage,
-        [
-          { lebensmonat: beideBasis, anzahl: 1 },
-          {
-            lebensmonat: nurMutterBasis,
-            anzahl: sindPartnermonateVerfuegbar ? 11 : 9,
-          },
-          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
-        ],
-        berechneElterngeldbezuege,
-      ),
-    },
-    {
-      identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
-      titel: "Vorschlag 4",
-      beschreibung:
-        "Länger Elterngeld erhalten: Lohnt sich, wenn Sie in Teilzeit arbeiten möchten.",
-      plan: erstellePlanFuerEinBeispiel(
-        ausgangslage,
-        [
-          { lebensmonat: nurMutterBasis, anzahl: 2 },
-          { lebensmonat: nurMutterPlus, anzahl: 5 },
-          { lebensmonat: beidePlus, anzahl: 5 },
-          {
-            lebensmonat: nurPartnerInPlus,
-            anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
-          },
         ],
         berechneElterngeldbezuege,
       ),

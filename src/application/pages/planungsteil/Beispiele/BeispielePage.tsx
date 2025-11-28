@@ -549,7 +549,7 @@ if (import.meta.vitest) {
 
         expect(trackingFunction).toHaveBeenCalledExactlyOnceWith(
           "Identifier-des-ausgewaehlten-Beispiels",
-          "Gemeinsame Planung - Partnerschaftliche Aufteilung",
+          "Gemeinsame Planung - Ein Jahr mit Begleitung",
         );
       });
 

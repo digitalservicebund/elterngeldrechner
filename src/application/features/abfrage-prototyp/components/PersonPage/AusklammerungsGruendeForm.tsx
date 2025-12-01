@@ -1,21 +1,19 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { InfoZuAusklammerungsgruende } from "./InfoZuAusklammerungsgruende";
+import { Alert } from "@/application/components/Alert";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import {
   type StepPrototypState,
   stepPrototypSlice,
-  stepPrototypSelectors,
 } from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { Elternteil } from "@/monatsplaner";
-import { berechneUngefaehrenBemessungszeitraum } from "./berechneBemessungszeitraum";
+import { InfoZuElternzeitAnderesKind } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuElternzeitAnderesKind";
+import { InfoZuKrankheit } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuKrankheit";
+import { InfoZuMutterschutzAnderesKind } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuMutterschutzAnderesKind";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
-import { Alert } from "@/application/components/Alert";
-import { PersonPageFlow } from "./PersonPageRouting";
-import { InfoZumMutterschutz } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZumMutterschutz";
-import { InfoZuMutterschutzAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuMutterschutzAnderesKind";
-import { InfoZuElternzeitAnderesKind } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuElternzeitAnderesKind";
-import { InfoZuKrankheit } from "../../abfrageteil/components/AllgemeineAngabenForm/InfoZuKrankheit";
-import { Antragstellende } from "../../abfrageteil/state";
+import { Antragstellende } from "@/application/features/abfrageteil/state";
+import { useAppStore } from "@/application/redux/hooks";
+import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
@@ -30,12 +28,7 @@ type Props = {
   readonly flow?: PersonPageFlow;
 };
 
-export function AusklammerungsGruendeForm({
-  id,
-  onSubmit,
-  flow,
-  elternteil,
-}: Props) {
+export function AusklammerungsGruendeForm({ id, onSubmit, elternteil }: Props) {
   const store = useAppStore();
 
   const { register, handleSubmit, getValues, setValue } = useForm({
@@ -50,21 +43,11 @@ export function AusklammerungsGruendeForm({
     [store, onSubmit],
   );
 
-  const geburtsdatumDesKindes = useAppSelector(
-    stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
-  );
-  const ungefährerBemessungszeitraum = berechneUngefaehrenBemessungszeitraum(
-    geburtsdatumDesKindes,
-    flow ?? PersonPageFlow.noFlow,
-  );
-
   function isAnyOptionSelected(): boolean {
     const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
     const anyOptionIsSelected = (
       [
-        `${person}.hasMutterschutzDiesesKind`,
         `${person}.hasMutterschutzAnderesKind`,
-        `${person}.isBeamtet`,
         `${person}.hasElterngeldAnderesKind`,
         `${person}.hasErkrankung`,
       ] as const
@@ -85,52 +68,17 @@ export function AusklammerungsGruendeForm({
       noValidate
     >
       <div>
-        <h3 className="mb-16 mt-40">
-          Treffen folgende Gründe auf Sie zu für den Zeitraum:
-          <ul className="list list-disc ml-40">
-            <li>{ungefährerBemessungszeitraum}</li>
-          </ul>
-        </h3>
-        {(flow === PersonPageFlow.selbststaendig ||
-          flow === PersonPageFlow.mischeinkuenfte) && (
-          <p>
-            Wenn Sie hier etwas auswählen, kann für die Berechnung Ihres
-            Elterngeldes ein anderes Jahr genommen werden. Und zwar das Jahr, in
-            dem Sie mehr verdient haben.
-          </p>
-        )}
-        {flow !== PersonPageFlow.selbststaendig &&
-          flow !== PersonPageFlow.mischeinkuenfte && (
-            <p>
-              Wenn Sie hier etwas auswählen, kann für die Berechnung Ihres
-              Elterngeldes ein anderer Monat genommen werden. Und zwar der
-              Monat, in dem Sie mehr verdient haben.
-            </p>
-          )}
+        <h3 className="mb-16 mt-40">Treffen folgende Gründe auf Sie zu?</h3>
+        <InfoZuAusklammerungsgruende />
       </div>
 
       <div className="mt-32">
-        <CustomCheckbox
-          register={register}
-          name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`}
-          label="Ich war oder werde im Mutterschutz sein"
-          labelComponent={<InfoZumMutterschutz />}
-          onChange={(checked) => {
-            if (checked) {
-              setValue(
-                `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
-                false,
-              );
-            }
-          }}
-        />
-
         {/* {hasGeschwisterkinder() && ( */}
         <CustomCheckbox
           className="mt-20"
           register={register}
           name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`}
-          label="Ich war im Mutterschutz für ein älteres Kind und hatte weniger Einkommen"
+          label="Ich war für ein älteres Kind im Mutterschutz"
           labelComponent={<InfoZuMutterschutzAnderesKind />}
           onChange={(checked) => {
             if (checked) {
@@ -143,29 +91,12 @@ export function AusklammerungsGruendeForm({
         />
         {/* )} */}
 
-        {flow !== PersonPageFlow.selbststaendig && (
-          <CustomCheckbox
-            className="mt-20"
-            register={register}
-            name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`}
-            label="Ich bin Beamtin und war oder werde im Mutterschutz sein"
-            onChange={(checked) => {
-              if (checked) {
-                setValue(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasKeinGrund`,
-                  false,
-                );
-              }
-            }}
-          />
-        )}
-
         {/* {hasGeschwisterkinder() && ( */}
         <CustomCheckbox
           className="mt-20"
           register={register}
           name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasElterngeldAnderesKind`}
-          label="Ich habe Elterngeld für ein älteres Kind bekommen und hatte weniger Einkommen"
+          label="Ich habe für ein älteres Kind Elterngeld bekommen"
           labelComponent={<InfoZuElternzeitAnderesKind />}
           onChange={(checked) => {
             if (checked) {
@@ -223,9 +154,9 @@ export function AusklammerungsGruendeForm({
         headline="Gut zu wissen für die spätere Antragstellung:"
         className="mt-32"
       >
-        Wenn Sie vor der Geburt selbständig gearbeitet haben, kann dieser
-        Zeitraum bei der Berechnung des Elterngeldes übersprungen werden. Wenn
-        Sie das möchten, müssen Sie das später im Antrag angeben.
+        Wenn Sie vor der Geburt selbstständig waren und auf dieser Seite einen
+        Grund auswählen, können Sie später im Elterngeldantrag beantragen, den
+        Bemessungszeitraum aufgrund dieser Angaben um ein Jahr vorzuverlegen.
       </Alert>
     </form>
   );

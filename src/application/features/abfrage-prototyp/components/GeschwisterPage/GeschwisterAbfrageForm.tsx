@@ -4,7 +4,7 @@ import {
   type StepPrototypState,
   stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
-import { InfoZuFruehgeburten } from "@/application/features/abfrageteil/components/NachwuchsForm/InfoZuFruehgeburten";
+import { InfoZumGeschwisterbonus } from "@/application/features/abfrageteil/components/NachwuchsForm/InfoZumGeschwisterbonus";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
 import { useAppStore } from "@/application/redux/hooks";
 
@@ -43,7 +43,7 @@ export function GeschwisterAbfrageForm({ id, onSubmit }: Props) {
       <div className="mt-40">
         <h3 className="mb-10">Gibt es ältere Geschwisterkinder?</h3>
 
-        <InfoZuFruehgeburten />
+        <InfoZumGeschwisterbonus />
 
         <YesNoRadio
           className="mb-32 mt-20"

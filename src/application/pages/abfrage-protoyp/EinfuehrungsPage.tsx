@@ -31,7 +31,7 @@ export function EinfuehrungsPage() {
           <ul className="list list-disc pt-10">
             <li className="ml-32">
               Sie können die Monate für sich und den anderen Elternteil nach
-              Wunsch aufteilen
+              Wunsch aufteilen.
             </li>
             <li className="ml-32">
               Der Planer überprüft ob Ihre Planung korrekt und gültig ist.

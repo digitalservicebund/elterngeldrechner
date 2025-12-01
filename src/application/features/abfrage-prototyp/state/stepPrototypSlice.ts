@@ -38,6 +38,7 @@ export type PersonenAngaben = {
 
   isNichtSelbststaendig: boolean;
   isSelbststaendig: boolean;
+  isBeamtet: boolean;
   hasSozialleistungen: boolean;
   hasKeinEinkommen: boolean;
 
@@ -47,7 +48,7 @@ export type PersonenAngaben = {
   sozialleistungenBis: string;
 
   hasMutterschutzDiesesKind: boolean;
-  isBeamtet: boolean;
+
   hasElterngeldAnderesKind: boolean;
   hasMutterschutzAnderesKind: boolean;
   hasErkrankung: boolean;
@@ -130,6 +131,7 @@ const initialState: StepPrototypState = {
 
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
+    isBeamtet: false,
     hasSozialleistungen: false,
     hasKeinEinkommen: false,
 
@@ -139,7 +141,6 @@ const initialState: StepPrototypState = {
     sozialleistungenBis: "",
 
     hasMutterschutzDiesesKind: false,
-    isBeamtet: false,
     hasElterngeldAnderesKind: false,
     hasMutterschutzAnderesKind: false,
     hasErkrankung: false,
@@ -166,6 +167,7 @@ const initialState: StepPrototypState = {
 
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
+    isBeamtet: false,
     hasSozialleistungen: false,
     hasKeinEinkommen: false,
 
@@ -175,7 +177,6 @@ const initialState: StepPrototypState = {
     sozialleistungenBis: "",
 
     hasMutterschutzDiesesKind: false,
-    isBeamtet: false,
     hasElterngeldAnderesKind: false,
     hasMutterschutzAnderesKind: false,
     hasErkrankung: false,
@@ -241,6 +242,15 @@ const getTaetigkeitenET1 = (state: RootState) =>
 const getTaetigkeitenET2 = (state: RootState) =>
   state.stepPrototyp.ET2.taetigkeiten;
 
+const getHasAusklammerungET1 = (state: RootState) =>
+  state.stepPrototyp.ET1.hasMutterschutzAnderesKind ||
+  state.stepPrototyp.ET1.hasElterngeldAnderesKind ||
+  state.stepPrototyp.ET1.hasErkrankung;
+const getHasAusklammerungET2 = (state: RootState) =>
+  state.stepPrototyp.ET2.hasMutterschutzAnderesKind ||
+  state.stepPrototyp.ET2.hasElterngeldAnderesKind ||
+  state.stepPrototyp.ET2.hasErkrankung;
+
 export function parseGermanDateString(germanDateString: string): Date {
   const [day, month, year] = germanDateString.split(".");
   return new Date(`${year}-${month}-${day}`);
@@ -254,4 +264,6 @@ export const stepPrototypSelectors = {
   getAlleinerziehend,
   getTaetigkeitenET1,
   getTaetigkeitenET2,
+  getHasAusklammerungET1,
+  getHasAusklammerungET2,
 };

@@ -33,22 +33,14 @@ export function KindPage() {
     const geburtIstErfolgt = values.kind.geburtIstErfolgt as YesNo;
     const errechneterGeburtstermin = values.kind.errechneterGeburtstermin;
 
-    const { routingZuNaechsterSeite, naechsteRoute } = kindPageRouter(
+    const { routingZuNaechstemFormStep, naechsteRoute } = kindPageRouter(
       "forward",
       currentKindPageRoute,
       geburtIstErfolgt,
       errechneterGeburtstermin,
     );
 
-    if (naechsteRoute) {
-      const data: RoutingPrototypState = {
-        ...routerState,
-        currentKindPageRoute: naechsteRoute,
-      };
-      dispatch(routingPrototypSlice.actions.submitRouting(data));
-    }
-
-    if (routingZuNaechsterSeite) {
+    if (routingZuNaechstemFormStep) {
       const data: RoutingPrototypState = {
         ...routerState,
         currentGeschwisterPageRoute: 0,
@@ -57,17 +49,25 @@ export function KindPage() {
 
       void navigate(formSteps.geschwister.route);
     }
+
+    if (naechsteRoute) {
+      const data: RoutingPrototypState = {
+        ...routerState,
+        currentKindPageRoute: naechsteRoute,
+      };
+      dispatch(routingPrototypSlice.actions.submitRouting(data));
+    }
   };
 
   const onBackwardRouting = () => {
-    const { routingZuNaechsterSeite, naechsteRoute } = kindPageRouter(
+    const { routingZuNaechstemFormStep, naechsteRoute } = kindPageRouter(
       "backward",
       currentKindPageRoute,
       YesNo.NO,
       "",
     );
 
-    if (routingZuNaechsterSeite) {
+    if (routingZuNaechstemFormStep) {
       void navigate(formSteps.familie.route);
       return;
     }
@@ -140,7 +140,7 @@ const kindPageRouter = (
   currentKindPageRoute: KindPageRoutes,
   geburtIstErfolgt: YesNo,
   errechneterGeburtstermin: string,
-): { routingZuNaechsterSeite: boolean; naechsteRoute?: KindPageRoutes } => {
+): { routingZuNaechstemFormStep: boolean; naechsteRoute?: KindPageRoutes } => {
   const today = new Date();
   const et = parseGermanDateString(errechneterGeburtstermin);
 
@@ -151,31 +151,31 @@ const kindPageRouter = (
       case KindPageRoutes.ABFRAGE_GEBURT:
         if (geburtIstErfolgt === YesNo.YES) {
           return {
-            routingZuNaechsterSeite: false,
+            routingZuNaechstemFormStep: false,
             naechsteRoute: KindPageRoutes.GEBURT_ERFOLGT,
           };
         } else {
           return {
-            routingZuNaechsterSeite: false,
+            routingZuNaechstemFormStep: false,
             naechsteRoute: KindPageRoutes.GEBURT_NICHT_ERFOLGT,
           };
         }
       case KindPageRoutes.GEBURT_ERFOLGT:
-        return { routingZuNaechsterSeite: true };
+        return { routingZuNaechstemFormStep: true };
       case KindPageRoutes.GEBURT_NICHT_ERFOLGT:
         if (timeDifference > 14) {
           return {
-            routingZuNaechsterSeite: false,
+            routingZuNaechstemFormStep: false,
             naechsteRoute: KindPageRoutes.GEBURT_PLAUSIBILITAETSCHECK,
           };
         } else {
-          return { routingZuNaechsterSeite: true };
+          return { routingZuNaechstemFormStep: true };
         }
       case KindPageRoutes.GEBURT_PLAUSIBILITAETSCHECK:
-        return { routingZuNaechsterSeite: true };
+        return { routingZuNaechstemFormStep: true };
       default:
         return {
-          routingZuNaechsterSeite: false,
+          routingZuNaechstemFormStep: false,
           naechsteRoute: currentKindPageRoute,
         };
     }
@@ -185,27 +185,27 @@ const kindPageRouter = (
     switch (currentKindPageRoute) {
       case KindPageRoutes.GEBURT_PLAUSIBILITAETSCHECK:
         return {
-          routingZuNaechsterSeite: false,
+          routingZuNaechstemFormStep: false,
           naechsteRoute: KindPageRoutes.GEBURT_NICHT_ERFOLGT,
         };
       case KindPageRoutes.GEBURT_ERFOLGT:
       case KindPageRoutes.GEBURT_NICHT_ERFOLGT:
         return {
-          routingZuNaechsterSeite: false,
+          routingZuNaechstemFormStep: false,
           naechsteRoute: KindPageRoutes.ABFRAGE_GEBURT,
         };
       case KindPageRoutes.ABFRAGE_GEBURT:
-        return { routingZuNaechsterSeite: true };
+        return { routingZuNaechstemFormStep: true };
       default:
         return {
-          routingZuNaechsterSeite: false,
+          routingZuNaechstemFormStep: false,
           naechsteRoute: currentKindPageRoute,
         };
     }
   }
 
   return {
-    routingZuNaechsterSeite: false,
+    routingZuNaechstemFormStep: false,
     naechsteRoute: currentKindPageRoute,
   };
 };

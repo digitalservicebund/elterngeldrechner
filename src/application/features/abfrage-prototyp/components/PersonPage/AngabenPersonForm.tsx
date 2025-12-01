@@ -11,20 +11,15 @@ import {
 import { InfoZuAlleinerziehenden } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoFuerAlleinerziehenden";
 import { InfoZuAntragstellenden } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuAntragstellenden";
 import { InfoZuVornamen } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuVornamen";
+import { InfoZumMutterschutz } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZumMutterschutz";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
-import {
-  Antragstellende,
-  YesNo,
-} from "@/application/features/abfrageteil/state";
+import { YesNo } from "@/application/features/abfrageteil/state";
 import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: (
-    values: StepPrototypState,
-    antragsstellende?: Antragstellende,
-  ) => void;
+  readonly onSubmit?: (values: StepPrototypState) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
 };
@@ -37,13 +32,13 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
   });
 
   const antragstellende = watch("antragstellende");
-  const antragsstellendenStatus = (): Antragstellende | undefined => {
-    const antragssteller = getValues("antragstellende");
-    if (antragssteller != null) {
-      return antragssteller;
-    }
-    return undefined;
-  };
+  // const antragsstellendenStatus = (): Antragstellende | undefined => {
+  //   const antragssteller = getValues("antragstellende");
+  //   if (antragssteller != null) {
+  //     return antragssteller;
+  //   }
+  //   return undefined;
+  // };
 
   const submitNachwuchs = useCallback(
     (values: StepPrototypState) => {
@@ -51,9 +46,9 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
         values.ET2.mutterschutz = null;
       }
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, antragsstellendenStatus());
+      onSubmit?.(values);
     },
-    [store, onSubmit, antragsstellendenStatus],
+    [store, onSubmit],
   );
 
   const pseudonym1Error = get(formState.errors, "pseudonym.ET1") as
@@ -160,7 +155,7 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
               Sind oder werden Sie im Mutterschutz sein?
             </h3>
 
-            <InfoZuAlleinerziehenden />
+            <InfoZumMutterschutz />
 
             <CustomRadioGroup
               className="mt-20"
@@ -222,7 +217,7 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
                     Sind oder werden Sie im Mutterschutz sein?
                   </h3>
 
-                  <InfoZuAlleinerziehenden />
+                  <InfoZumMutterschutz />
 
                   <CustomRadioGroup
                     className="mt-20"

@@ -1,11 +1,11 @@
 import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
+import { InfoZuGeburtsdatum } from "./InfoZuGeburtsdatum";
 import {
   type StepPrototypState,
   stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
-import { InfoZuFruehgeburten } from "@/application/features/abfrageteil/components/NachwuchsForm/InfoZuFruehgeburten";
 import { useAppStore } from "@/application/redux/hooks";
 
 const validateMonth = (date: string) => {
@@ -63,7 +63,7 @@ export function KindGeburtPlausibilitaetscheck({ id, onSubmit }: Props) {
           Wann war das tatsächliche Geburtsdatum Ihres Kindes?
         </h3>
 
-        <InfoZuFruehgeburten />
+        <InfoZuGeburtsdatum />
 
         <label
           className="mb-4 mt-20 block text-16"

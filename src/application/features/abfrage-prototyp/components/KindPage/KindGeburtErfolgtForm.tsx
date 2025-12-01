@@ -1,12 +1,13 @@
 import { useCallback, useId } from "react";
 import { useForm } from "react-hook-form";
+import { InfoZuET } from "./InfoZuET";
+import { InfoZuGeburtsdatum } from "./InfoZuGeburtsdatum";
 import {
   type StepPrototypState,
   stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
 import { Counter } from "@/application/features/abfrageteil/components/NachwuchsForm/Counter";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
-import { InfoZuFruehgeburten } from "@/application/features/abfrageteil/components/NachwuchsForm/InfoZuFruehgeburten";
 import { useAppStore } from "@/application/redux/hooks";
 
 const validateMonth = (date: string) => {
@@ -61,9 +62,8 @@ export function KindGeburtErfolgtForm({ id, onSubmit }: Props) {
       onSubmit={handleSubmit(submitNachwuchs)}
       noValidate
     >
-      <h2 className="mt-20">Herzlichen Glückwunsch!</h2>
-
       <div>
+        <h3 className="mt-20">Herzlichen Glückwunsch!</h3>
         <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
           Wie viele Kinder werden oder wurden geboren?
         </h3>
@@ -98,7 +98,7 @@ export function KindGeburtErfolgtForm({ id, onSubmit }: Props) {
           Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
         </h3>
 
-        <InfoZuFruehgeburten />
+        <InfoZuET />
 
         <label
           className="mb-4 mt-20 block text-16"
@@ -127,7 +127,7 @@ export function KindGeburtErfolgtForm({ id, onSubmit }: Props) {
           Wann war das tatsächliche Geburtsdatum Ihres Kindes?
         </h3>
 
-        <InfoZuFruehgeburten />
+        <InfoZuGeburtsdatum />
 
         <label
           className="mb-4 mt-20 block text-16"

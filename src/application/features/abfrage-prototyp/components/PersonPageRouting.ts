@@ -1,5 +1,8 @@
+import {
+  Antragstellende,
+  YesNo,
+} from "@/application/features/abfrageteil/state";
 import { Elternteil } from "@/monatsplaner";
-import { Antragstellende, YesNo } from "../../abfrageteil/state";
 
 export const personPageSteps = {
   angabenPerson: "Angaben Person",
@@ -35,17 +38,18 @@ export function getNextStep(
   flow: PersonPageFlow | undefined,
   hasAusklammerungsgrund: boolean | undefined,
   hasWeitereTaetigkeiten: YesNo | null,
-  antragstellende: Antragstellende | null,
+  // antragstellende: Antragstellende | null,
 ): PersonPageStepKey | "routingEnded" {
-  if (currentStep === "angabenPerson" || flow === undefined) {
-    if (
-      elternteil === Elternteil.Zwei &&
-      antragstellende === "EinenElternteil"
-    ) {
-      return "routingEnded";
-    }
-    return "einkommenArt";
-  } else if (currentStep === "einkommenArt") {
+  // if (currentStep === "angabenPerson" || flow === undefined) {
+  //   if (
+  //     elternteil === Elternteil.Zwei &&
+  //     antragstellende === "EinenElternteil"
+  //   ) {
+  //     return "routingEnded";
+  //   }
+  //   return "einkommenArt";
+  // } else
+  if (currentStep === "einkommenArt") {
     if (
       flow === PersonPageFlow.keinEinkommen ||
       flow === PersonPageFlow.sozialleistungenKeinEinkommen ||
@@ -60,13 +64,13 @@ export function getNextStep(
       return "zeitraumErsatzleistungen";
     }
     return "ausklammerungGruende";
-  } else if (currentStep === "ausklammerungGruende") {
-    if (hasAusklammerungsgrund) {
-      return "ausklammerungZeiten";
-    }
-    return "bmz";
-  } else if (currentStep === "ausklammerungZeiten") {
-    return "bmz";
+    // } else if (currentStep === "ausklammerungGruende") {
+    //   if (hasAusklammerungsgrund) {
+    //     return "ausklammerungZeiten";
+    //   }
+    //   return "bmz";
+    // } else if (currentStep === "ausklammerungZeiten") {
+    //   return "bmz";
   } else if (currentStep === "zeitraumKeinEinkommen") {
     if (flow === PersonPageFlow.keinEinkommen) {
       return "routingEnded";
@@ -85,8 +89,8 @@ export function getNextStep(
       return "routingEnded";
     }
     return "ausklammerungGruende";
-  } else if (currentStep === "bmz") {
-    return "anzahlTaetigkeiten";
+    // } else if (currentStep === "bmz") {
+    //   return "anzahlTaetigkeiten";
   } else if (currentStep === "anzahlTaetigkeiten") {
     if (hasWeitereTaetigkeiten === YesNo.YES) {
       return "uebersichtTaetigkeiten";

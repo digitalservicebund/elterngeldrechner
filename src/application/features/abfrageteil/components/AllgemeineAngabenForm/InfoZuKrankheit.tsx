@@ -8,8 +8,9 @@ export function InfoZuKrankheit(): ReactNode {
       answer={
         <>
           <p>
-            Sie können Zeiten übersprigen, in denen Sie aufgrund der
-            Schwangerschaft krank waren und weniger verdient haben.
+            Wenn Sie wegen Ihrer Schwangerschaft krank waren, können diese
+            Monate auch ausgeklammert werden. Diesen Zeitraum müssen Sie durch
+            ein ärztliches Attest nachweisen.
           </p>
         </>
       }

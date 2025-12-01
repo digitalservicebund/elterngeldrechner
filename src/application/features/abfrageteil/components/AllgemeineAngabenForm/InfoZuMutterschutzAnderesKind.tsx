@@ -8,8 +8,10 @@ export function InfoZuMutterschutzAnderesKind(): ReactNode {
       answer={
         <>
           <p>
-            Sie können Zeiten übersprigen, in denen Sie im Mutterschutz für ein
-            älteres Kind waren.
+            Bei der Berechnung des Elterngelds, können auch die Monate des
+            Mutterschutzes für ein älteres Kind aus dem Bemessungszeitraum
+            herausgerechnet werden. Diesen Zeitraum können Sie aus der
+            Bescheinigung Ihres Arbeitgebers oder Ihrer Krankenkasse ablesen.
           </p>
         </>
       }

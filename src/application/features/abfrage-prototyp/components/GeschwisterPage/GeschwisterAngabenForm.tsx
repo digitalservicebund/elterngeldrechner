@@ -94,7 +94,9 @@ export function GeschwisterAngabenForm({
       noValidate
     >
       <div className="mt-40">
-        <h3 className="mb-10">Wann wurde das Geschwisterkind geboren?</h3>
+        <h3 className="mb-10">
+          Wann wurde das {geschwisterIndex}. Geschwisterkind geboren?
+        </h3>
 
         <label
           className="mb-4 mt-20 block text-16"

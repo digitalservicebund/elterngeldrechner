@@ -8,8 +8,9 @@ export function InfoZuVornamen(): ReactNode {
       answer={
         <p>
           Wir fragen nach Ihrem Vornamen, damit Sie bei der Planung einen guten
-          Überblick haben. Und falls Sie sich entscheiden, Ihre Daten in den
-          Antrag zu übertragen, können wir Sie darin zuordnen.
+          Überblick haben. Er ist außerdem entscheidend für die korrekte
+          Zuordnung Ihrer Daten, falls Sie sich entscheiden, diese direkt in den
+          Antrag zu übertragen.
         </p>
       }
     />

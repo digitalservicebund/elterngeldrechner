@@ -8,8 +8,9 @@ import {
   RoutingPrototypState,
   StepPrototypState,
   routingPrototypSlice,
-  stepPrototypSlice,
+  // stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
+import { PersonPageRoutes } from "@/application/features/abfrage-prototyp/state/routingPrototypSlice";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { Page } from "@/application/pages/Page";
 import { RootState } from "@/application/redux";
@@ -27,19 +28,25 @@ export function GeschwisterPage() {
     const esGibtGeschwister = values.geschwister.esGibtGeschwister;
 
     if (esGibtGeschwister[currentGeschwisterPageRoute] === YesNo.NO) {
+      const data: RoutingPrototypState = {
+        ...routerState,
+        currentPersonPageRouteET1: PersonPageRoutes.ANGABEN_PERSON,
+      };
+      dispatch(routingPrototypSlice.actions.submitRouting(data));
+
       void navigate(formSteps.person1.route);
       return;
     } else {
-      const nextEsGibtGeschwister = [...esGibtGeschwister, null];
-      const nextGeschwisterState = {
-        ...values.geschwister,
-        esGibtGeschwister: nextEsGibtGeschwister,
-      };
-      const newValues: StepPrototypState = {
-        ...values,
-        geschwister: nextGeschwisterState,
-      };
-      dispatch(stepPrototypSlice.actions.submitStep(newValues));
+      // const nextEsGibtGeschwister = [...esGibtGeschwister, null];
+      // const nextGeschwisterState = {
+      //   ...values.geschwister,
+      //   esGibtGeschwister: nextEsGibtGeschwister,
+      // };
+      // const newValues: StepPrototypState = {
+      //   ...values,
+      //   geschwister: nextGeschwisterState,
+      // };
+      // dispatch(stepPrototypSlice.actions.submitStep(newValues));
 
       const data: RoutingPrototypState = {
         ...routerState,

@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 
 export enum KindPageRoutes {
   ABFRAGE_GEBURT,
@@ -9,32 +10,33 @@ export enum KindPageRoutes {
 
 export enum PersonPageRoutes {
   ANGABEN_PERSON,
+  AUSKLAMMERUNGS_GRUENDE,
+  AUSKLAMMERUNGS_ZEITEN,
   ABFRAGE_TAETIGKEITEN,
-  ABFRAGE_AUSKLAMMERUNGEN,
-  UEBERSICHT_BMZ,
-  ABFRAGE_EINKOMMEN,
+  DETAILS_TAETIGKEIT,
+  WEITERE_TAETIGKEIT,
 }
 
 export interface RoutingPrototypState {
   currentKindPageRoute: KindPageRoutes;
   currentGeschwisterPageRoute: number;
-  person1: {
-    currentPerson1PageRoute: PersonPageRoutes;
-  };
-  person2: {
-    currentPerson2PageRoute: PersonPageRoutes;
-  };
+  currentPersonPageRouteET1: PersonPageRoutes;
+  currentPersonPageFlowET1: PersonPageFlow;
+  currentPersonPageIncomeIndexET1: number;
+  currentPersonPageRouteET2: PersonPageRoutes;
+  currentPersonPageFlowET2: PersonPageFlow;
+  currentPersonPageIncomeIndexET2: number;
 }
 
 const initialState: RoutingPrototypState = {
   currentKindPageRoute: KindPageRoutes.ABFRAGE_GEBURT,
   currentGeschwisterPageRoute: 0,
-  person1: {
-    currentPerson1PageRoute: PersonPageRoutes.ANGABEN_PERSON,
-  },
-  person2: {
-    currentPerson2PageRoute: PersonPageRoutes.ANGABEN_PERSON,
-  },
+  currentPersonPageRouteET1: PersonPageRoutes.ANGABEN_PERSON,
+  currentPersonPageFlowET1: PersonPageFlow.noFlow,
+  currentPersonPageIncomeIndexET1: 0,
+  currentPersonPageRouteET2: PersonPageRoutes.ANGABEN_PERSON,
+  currentPersonPageFlowET2: PersonPageFlow.noFlow,
+  currentPersonPageIncomeIndexET2: 0,
 };
 
 export const routingPrototypSlice = createSlice({

@@ -1,19 +1,15 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
-import {
-  Ausklammerung,
-  berechneUngefaehrenBemessungszeitraum,
-} from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import { Ausklammerung } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 import {
   type StepPrototypState,
-  stepPrototypSelectors,
   stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
 import { parseGermanDateString } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
 import { Antragstellende } from "@/application/features/abfrageteil/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 
 type Props = {
@@ -27,23 +23,23 @@ type Props = {
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
-  readonly flow?: PersonPageFlow;
+  // readonly flow?: PersonPageFlow;
   // readonly hasAusklammerungsgrund: boolean;
 };
 
 export function AusklammerungsZeitenForm({
   id,
   onSubmit,
-  flow,
+  // flow,
   elternteil,
 }: Props) {
   const store = useAppStore();
 
   // const stepState = store.getState().stepPrototyp;
 
-  const geburtsdatumDesKindes = useAppSelector(
-    stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
-  );
+  // const geburtsdatumDesKindes = useAppSelector(
+  //   stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
+  // );
 
   // const berechneterMutterschutzBeginn = (geburtsdatum: Date): Date => {
   //   const date = new Date(geburtsdatum);
@@ -54,7 +50,7 @@ export function AusklammerungsZeitenForm({
     register,
     handleSubmit,
     getValues,
-    watch,
+    // watch,
     formState: { errors },
   } = useForm({
     defaultValues: store.getState().stepPrototyp,
@@ -101,20 +97,20 @@ export function AusklammerungsZeitenForm({
     [store, onSubmit],
   );
 
-  const ungefährerBemessungszeitraum = berechneUngefaehrenBemessungszeitraum(
-    geburtsdatumDesKindes,
-    flow ?? PersonPageFlow.noFlow,
-  );
+  // const ungefährerBemessungszeitraum = berechneUngefaehrenBemessungszeitraum(
+  //   geburtsdatumDesKindes,
+  //   flow ?? PersonPageFlow.noFlow,
+  // );
 
-  const hasMutterschutzDiesesKind = getValues(
-    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
-  );
-  const mutterschutzDiesesKindVon = watch(
-    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
-  );
-  const mutterschutzDiesesKindBis = watch(
-    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
-  );
+  // const hasMutterschutzDiesesKind = getValues(
+  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
+  // );
+  // const mutterschutzDiesesKindVon = watch(
+  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
+  // );
+  // const mutterschutzDiesesKindBis = watch(
+  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
+  // );
 
   const hasMutterschutzAnderesKind = getValues(
     `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`,
@@ -125,33 +121,33 @@ export function AusklammerungsZeitenForm({
   const hasErkrankung = getValues(
     `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasErkrankung`,
   );
-  const isBeamtet = getValues(
-    `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
-  );
+  // const isBeamtet = getValues(
+  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
+  // );
 
   const ausklammerungen = (): Ausklammerung[] => {
     const ausklammerungen: Ausklammerung[] = [];
 
-    if (
-      mutterschutzDiesesKindVon.length > 0 &&
-      mutterschutzDiesesKindBis.length > 0 &&
-      !isBeamtet
-    ) {
-      const mutterschutz: Ausklammerung = {
-        beschreibung: "Mutterschutz für dieses Kind",
-        von: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
-          ),
-        ),
-        bis: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
-          ),
-        ),
-      };
-      ausklammerungen.push(mutterschutz);
-    }
+    // if (
+    //   mutterschutzDiesesKindVon.length > 0 &&
+    //   mutterschutzDiesesKindBis.length > 0 &&
+    //   !isBeamtet
+    // ) {
+    //   const mutterschutz: Ausklammerung = {
+    //     beschreibung: "Mutterschutz für dieses Kind",
+    //     von: parseGermanDateString(
+    //       getValues(
+    //         `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
+    //       ),
+    //     ),
+    //     bis: parseGermanDateString(
+    //       getValues(
+    //         `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
+    //       ),
+    //     ),
+    //   };
+    //   ausklammerungen.push(mutterschutz);
+    // }
 
     if (
       getValues(
@@ -234,7 +230,7 @@ export function AusklammerungsZeitenForm({
       onSubmit={handleSubmit(submitAusklammerungsZeiten)}
       noValidate
     >
-      <h3 className="mb-40 mt-40">Bitte machen Sie Detailangaben</h3>
+      <h3 className="my-40">Bitte machen Sie Detailangaben</h3>
 
       {hasMutterschutzAnderesKind ? (
         <section className="mt-32">
@@ -243,7 +239,7 @@ export function AusklammerungsZeitenForm({
           </h5>
           <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
             <div>
-              <label className="mt-20 block text-16 mb-4">
+              <label className="mb-4 mt-20 block text-16">
                 Beginn des Mutterschutzes (TT.MM.JJJJ)
               </label>
               <CustomDate
@@ -266,7 +262,7 @@ export function AusklammerungsZeitenForm({
               />
             </div>
             <div>
-              <label className="mt-20 block text-16 mb-4">
+              <label className="mb-4 mt-20 block text-16">
                 Ende des Mutterschutzes (TT.MM.JJJJ)
               </label>
               <CustomDate

@@ -1,15 +1,15 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
+import { berechneMaximalenBemessungszeitraum } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 import {
   type StepPrototypState,
-  stepPrototypSlice,
   stepPrototypSelectors,
+  stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
+import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
-import { PersonPageFlow } from "./PersonPageRouting";
-import { CustomDate } from "../../abfrageteil/components/NachwuchsForm/CustomDate";
-import { berechneMaximalenBemessungszeitraum } from "./berechneBemessungszeitraum";
 
 type Props = {
   readonly id?: string;
@@ -63,7 +63,7 @@ export function KeinEinkommenForm({
           <div className="mt-40">
             <h3 className="mb-16">
               Geben Sie an von wann bis wann Sie kein Einkommen hatten:
-              <ul className="list list-disc ml-40">
+              <ul className="list ml-40 list-disc">
                 <li>{maximalerBemessungszeitraum[0]}</li>
                 <li>{maximalerBemessungszeitraum[1]}</li>
               </ul>
@@ -129,7 +129,7 @@ export function KeinEinkommenForm({
             <h3 className="mb-16">
               Geben Sie an von wann bis wann Sie Sozialleistungen oder
               Lohnersatzleistungen erhalten haben:
-              <ul className="list list-disc ml-40">
+              <ul className="list ml-40 list-disc">
                 <li>{maximalerBemessungszeitraum[0]}</li>
                 <li>{maximalerBemessungszeitraum[1]}</li>
               </ul>

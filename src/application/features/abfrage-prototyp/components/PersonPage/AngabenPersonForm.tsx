@@ -13,7 +13,6 @@ import { InfoZuAntragstellenden } from "@/application/features/abfrageteil/compo
 import { InfoZuVornamen } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuVornamen";
 import { InfoZumMutterschutz } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZumMutterschutz";
 import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
-import { YesNo } from "@/application/features/abfrageteil/state";
 import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 
@@ -42,7 +41,10 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
 
   const submitNachwuchs = useCallback(
     (values: StepPrototypState) => {
-      if (values.ET1.mutterschutz === YesNo.YES) {
+      if (
+        values.ET1.mutterschutz === "Ja" ||
+        values.ET1.mutterschutz === "Unentschlossen"
+      ) {
         values.ET2.mutterschutz = null;
       }
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
@@ -75,15 +77,15 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
 
   const mutterschutzOptions: CustomRadioGroupOption[] = [
     {
-      value: YesNo.YES,
+      value: "Ja",
       label: "Ja",
     },
     {
-      value: YesNo.NO,
+      value: "Nein",
       label: "Nein",
     },
     {
-      value: YesNo.YES,
+      value: "Unentschlossen",
       label: "Ich weiß es noch nicht",
     },
   ];
@@ -211,7 +213,7 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
                 </div>
               </div>
 
-              {mutterschutzET1 !== YesNo.YES && (
+              {mutterschutzET1 === "Nein" && (
                 <div className="mt-32">
                   <h3 className="mb-10">
                     Sind oder werden Sie im Mutterschutz sein?

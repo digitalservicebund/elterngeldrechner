@@ -1,5 +1,5 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
-import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
+import { Ausklammerung } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { RootState } from "@/application/redux";
 import { Steuerklasse } from "@/elterngeldrechner";
@@ -34,7 +34,15 @@ export type GeschwisterAngaben = {
 export type Mutterschutz = "Ja" | "Nein" | "Unentschlossen";
 
 export type PersonenAngaben = {
-  mutterschutz: YesNo | null;
+  mutterschutz: Mutterschutz | null;
+
+  hasMutterschutzAnderesKind: boolean;
+  ausklammerungenMutterschutzAnderesKind: Ausklammerung[];
+  hasElterngeldAnderesKind: boolean;
+  ausklammerungenElterngeldAnderesKind: Ausklammerung[];
+  hasErkrankung: boolean;
+  ausklammerungenErkrankung: Ausklammerung[];
+  hasKeinGrund: boolean;
 
   isNichtSelbststaendig: boolean;
   isSelbststaendig: boolean;
@@ -42,31 +50,25 @@ export type PersonenAngaben = {
   hasSozialleistungen: boolean;
   hasKeinEinkommen: boolean;
 
-  keinEinkommenVon: string;
-  keinEinkommenBis: string;
-  sozialleistungenVon: string;
-  sozialleistungenBis: string;
+  // keinEinkommenVon: string;
+  // keinEinkommenBis: string;
+  // sozialleistungenVon: string;
+  // sozialleistungenBis: string;
 
-  hasMutterschutzDiesesKind: boolean;
+  // hasMutterschutzDiesesKind: boolean;
+  // mutterschutzDiesesKindVon: string;
+  // mutterschutzDiesesKindBis: string;
+  // mutterschutzAnderesKindVon: string;
+  // mutterschutzAnderesKindBis: string;
+  // elterngeldVon: string;
+  // elterngeldBis: string;
+  // krankheitVon: string;
+  // krankheitBis: string;
+  // dienstVon: string;
+  // dienstBis: string;
 
-  hasElterngeldAnderesKind: boolean;
-  hasMutterschutzAnderesKind: boolean;
-  hasErkrankung: boolean;
-  hasKeinGrund: boolean;
-
-  mutterschutzDiesesKindVon: string;
-  mutterschutzDiesesKindBis: string;
-  mutterschutzAnderesKindVon: string;
-  mutterschutzAnderesKindBis: string;
-  elterngeldVon: string;
-  elterngeldBis: string;
-  krankheitVon: string;
-  krankheitBis: string;
-  dienstVon: string;
-  dienstBis: string;
-
-  taetigkeitenFlow: PersonPageFlow | null;
-  hasWeitereTaetigkeiten: YesNo | null;
+  // taetigkeitenFlow: PersonPageFlow | null;
+  // hasWeitereTaetigkeiten: YesNo | null;
   taetigkeiten: TaetigkeitAngaben[];
 };
 
@@ -129,72 +131,40 @@ const initialState: StepPrototypState = {
   ET1: {
     mutterschutz: null,
 
+    hasMutterschutzAnderesKind: false,
+    ausklammerungenMutterschutzAnderesKind: [],
+    hasElterngeldAnderesKind: false,
+    ausklammerungenElterngeldAnderesKind: [],
+    hasErkrankung: false,
+    ausklammerungenErkrankung: [],
+    hasKeinGrund: false,
+
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
     isBeamtet: false,
     hasSozialleistungen: false,
     hasKeinEinkommen: false,
 
-    keinEinkommenVon: "",
-    keinEinkommenBis: "",
-    sozialleistungenVon: "",
-    sozialleistungenBis: "",
-
-    hasMutterschutzDiesesKind: false,
-    hasElterngeldAnderesKind: false,
-    hasMutterschutzAnderesKind: false,
-    hasErkrankung: false,
-    hasKeinGrund: false,
-
-    mutterschutzDiesesKindVon: "",
-    mutterschutzDiesesKindBis: "",
-    mutterschutzAnderesKindVon: "",
-    mutterschutzAnderesKindBis: "",
-    elterngeldVon: "",
-    elterngeldBis: "",
-    krankheitVon: "",
-    krankheitBis: "",
-    dienstVon: "",
-    dienstBis: "",
-
-    taetigkeitenFlow: null,
-    hasWeitereTaetigkeiten: null,
     taetigkeiten: [],
   },
 
   ET2: {
     mutterschutz: null,
 
+    hasMutterschutzAnderesKind: false,
+    ausklammerungenMutterschutzAnderesKind: [],
+    hasElterngeldAnderesKind: false,
+    ausklammerungenElterngeldAnderesKind: [],
+    hasErkrankung: false,
+    ausklammerungenErkrankung: [],
+    hasKeinGrund: false,
+
     isNichtSelbststaendig: false,
     isSelbststaendig: false,
     isBeamtet: false,
     hasSozialleistungen: false,
     hasKeinEinkommen: false,
 
-    keinEinkommenVon: "",
-    keinEinkommenBis: "",
-    sozialleistungenVon: "",
-    sozialleistungenBis: "",
-
-    hasMutterschutzDiesesKind: false,
-    hasElterngeldAnderesKind: false,
-    hasMutterschutzAnderesKind: false,
-    hasErkrankung: false,
-    hasKeinGrund: false,
-
-    mutterschutzDiesesKindVon: "",
-    mutterschutzDiesesKindBis: "",
-    mutterschutzAnderesKindVon: "",
-    mutterschutzAnderesKindBis: "",
-    elterngeldVon: "",
-    elterngeldBis: "",
-    krankheitVon: "",
-    krankheitBis: "",
-    dienstVon: "",
-    dienstBis: "",
-
-    taetigkeitenFlow: null,
-    hasWeitereTaetigkeiten: null,
     taetigkeiten: [],
   },
 };
@@ -237,6 +207,22 @@ const getWahrscheinlichesGeburtsDatum = createSelector(
 const getAlleinerziehend = (state: RootState) =>
   state.stepPrototyp.alleinerziehend;
 
+const getMutterschutz = (state: RootState) => {
+  if (
+    state.stepPrototyp.ET1.mutterschutz === "Ja" ||
+    state.stepPrototyp.ET1.mutterschutz === "Unentschlossen"
+  ) {
+    return "ET1";
+  } else if (
+    state.stepPrototyp.ET2.mutterschutz === "Ja" ||
+    state.stepPrototyp.ET2.mutterschutz === "Unentschlossen"
+  ) {
+    return "ET2";
+  } else {
+    return YesNo.NO;
+  }
+};
+
 const getTaetigkeitenET1 = (state: RootState) =>
   state.stepPrototyp.ET1.taetigkeiten;
 const getTaetigkeitenET2 = (state: RootState) =>
@@ -262,6 +248,7 @@ export const stepPrototypSelectors = {
   getBundesland,
   getWahrscheinlichesGeburtsDatum,
   getAlleinerziehend,
+  getMutterschutz,
   getTaetigkeitenET1,
   getTaetigkeitenET2,
   getHasAusklammerungET1,

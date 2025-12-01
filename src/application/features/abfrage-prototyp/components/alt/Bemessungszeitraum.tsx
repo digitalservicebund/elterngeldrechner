@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import {
-  type StepPrototypState,
-  stepPrototypSlice,
-  stepPrototypSelectors,
-} from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { Elternteil } from "@/monatsplaner";
+import { Alert } from "@/application/components/Alert";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import {
   Ausklammerung,
   berechneExaktenBemessungszeitraum,
-} from "./berechneBemessungszeitraum";
-import { PersonPageFlow } from "./PersonPageRouting";
-import { Alert } from "@/application/components/Alert";
+} from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import {
+  type StepPrototypState,
+  stepPrototypSelectors,
+  stepPrototypSlice,
+} from "@/application/features/abfrage-prototyp/state";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
@@ -70,25 +70,26 @@ export function Bemessungszeitraum({
         >
           <h4 className="text-center">{maximalerBemessungszeitraum}</h4>
         </section>
-        {auszuklammerndeZeitraeume && auszuklammerndeZeitraeume?.length > 0 && (
+        {auszuklammerndeZeitraeume && auszuklammerndeZeitraeume?.length > 0 ? (
           <section
-            className="rounded border-dashed p-24 mt-32"
+            className="mt-32 rounded border-dashed p-24"
             aria-live="polite"
             aria-labelledby="bmz"
           >
             <div className="pl-32">
               <h4 className="italic">Übersprungene Zeiträume:</h4>
-              {auszuklammerndeZeitraeume &&
-                auszuklammerndeZeitraeume.map((ausklammerung) => (
-                  <p key={ausklammerung.beschreibung} className="m-0">
-                    {ausklammerung.beschreibung}{" "}
-                    {formattedDate(ausklammerung.von)} bis{" "}
-                    {formattedDate(ausklammerung.bis)}
-                  </p>
-                ))}
+              {auszuklammerndeZeitraeume
+                ? auszuklammerndeZeitraeume.map((ausklammerung) => (
+                    <p key={ausklammerung.beschreibung} className="m-0">
+                      {ausklammerung.beschreibung}{" "}
+                      {formattedDate(ausklammerung.von)} bis{" "}
+                      {formattedDate(ausklammerung.bis)}
+                    </p>
+                  ))
+                : null}
             </div>
           </section>
-        )}
+        ) : null}
         {(flow === PersonPageFlow.selbststaendig ||
           flow === PersonPageFlow.mischeinkuenfte) && (
           <Alert headline="Hinweis" className="mt-32">

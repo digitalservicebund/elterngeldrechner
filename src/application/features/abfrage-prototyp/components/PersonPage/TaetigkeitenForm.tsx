@@ -51,6 +51,7 @@ export function TaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
       [
         `${person}.isNichtSelbststaendig`,
         `${person}.isSelbststaendig`,
+        `${person}.isBeamtet`,
         `${person}.hasSozialleistungen`,
         `${person}.hasKeinEinkommen`,
       ] as const

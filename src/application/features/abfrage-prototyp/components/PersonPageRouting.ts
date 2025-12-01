@@ -1,8 +1,4 @@
-import {
-  Antragstellende,
-  YesNo,
-} from "@/application/features/abfrageteil/state";
-import { Elternteil } from "@/monatsplaner";
+import { YesNo } from "@/application/features/abfrageteil/state";
 
 export const personPageSteps = {
   angabenPerson: "Angaben Person",
@@ -33,10 +29,10 @@ export enum PersonPageFlow {
 }
 
 export function getNextStep(
-  elternteil: Elternteil,
+  // elternteil: Elternteil,
   currentStep: PersonPageStepKey,
   flow: PersonPageFlow | undefined,
-  hasAusklammerungsgrund: boolean | undefined,
+  // hasAusklammerungsgrund: boolean | undefined,
   hasWeitereTaetigkeiten: YesNo | null,
   // antragstellende: Antragstellende | null,
 ): PersonPageStepKey | "routingEnded" {

@@ -1,23 +1,23 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import {
-  type StepPrototypState,
-  stepPrototypSlice,
-  stepPrototypSelectors,
-  Antragstellende,
-} from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { Elternteil } from "@/monatsplaner";
+import { InfoZuTaetigkeiten } from "@/application/features/abfrage-prototyp/components/InfoZuTaetigkeiten";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import {
   Ausklammerung,
   berechneExaktenBemessungszeitraum,
-} from "./berechneBemessungszeitraum";
-import { PersonPageFlow } from "./PersonPageRouting";
-import { InfoZuTaetigkeiten } from "./InfoZuTaetigkeiten";
-import { YesNoRadio } from "../../abfrageteil/components/common";
-import { YesNo } from "../../abfrageteil/state";
-import { TaetigkeitAngaben } from "../state/stepPrototypSlice";
+} from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import {
+  Antragstellende,
+  type StepPrototypState,
+  stepPrototypSelectors,
+  stepPrototypSlice,
+} from "@/application/features/abfrage-prototyp/state";
+import { TaetigkeitAngaben } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
+import { YesNoRadio } from "@/application/features/abfrageteil/components/common";
+import { YesNo } from "@/application/features/abfrageteil/state";
 import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
@@ -157,8 +157,8 @@ export function AnzahlTaetigkeitenForm({
   return (
     <form id={id} onSubmit={handleSubmit(submitAnzahlTaetigkeiten)} noValidate>
       <div>
-        <div className="mt-40 rounded bg-grey-light inline-block py-10">
-          <span className="font-bold px-20">
+        <div className="mt-40 inline-block rounded bg-grey-light py-10">
+          <span className="px-20 font-bold">
             Bemessungszeitraum: {maximalerBemessungszeitraum}
           </span>
         </div>

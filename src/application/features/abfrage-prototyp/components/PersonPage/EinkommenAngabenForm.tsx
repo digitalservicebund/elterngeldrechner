@@ -2,17 +2,17 @@ import ToggleOff from "@digitalservicebund/icons/ToggleOff";
 import ToggleOn from "@digitalservicebund/icons/ToggleOn";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { InfoZuKVPflicht } from "./InfoZuKVPflicht";
-import { InfoZuRVPflicht } from "./InfoZuRVPflicht";
-import { InfoZuAVPflicht } from "./InfoZuAVPflicht";
-import { InfoZuBruttoGewinn } from "./InfoZuBruttoGewinn";
-import { PersonPageFlow } from "./PersonPageRouting";
+import { InfoZuAVPflicht } from "./../InfoZuAVPflicht";
+import { InfoZuBruttoGewinn } from "./../InfoZuBruttoGewinn";
+import { InfoZuKVPflicht } from "./../InfoZuKVPflicht";
+import { InfoZuRVPflicht } from "./../InfoZuRVPflicht";
+import { PersonPageFlow } from "./../PersonPageRouting";
 import {
   Ausklammerung,
   ZeitabschnittArt,
   berechneExaktenBemessungszeitraum,
   erstelleExakteZeitabschnitteBemessungszeitraum,
-} from "./berechneBemessungszeitraum";
+} from "./../berechneBemessungszeitraum";
 import {
   type StepPrototypState,
   stepPrototypSelectors,
@@ -116,6 +116,7 @@ export function EinkommenAngabenForm({
 
   return (
     <form id={id} onSubmit={handleSubmit(submitAngabenEinkommen)} noValidate>
+      <p>test</p>
       <div>
         {einkommenAngabenStep.taetigkeitArt === "selbststaendig" && (
           <div>

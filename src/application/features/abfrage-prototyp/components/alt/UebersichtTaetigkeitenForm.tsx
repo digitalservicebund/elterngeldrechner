@@ -1,28 +1,31 @@
-import { useCallback, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import {
-  type StepPrototypState,
-  stepPrototypSlice,
-  stepPrototypSelectors,
-} from "@/application/features/abfrage-prototyp/state";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
-import { Elternteil } from "@/monatsplaner";
-import {
-  Ausklammerung,
-  berechneExaktenBemessungszeitraum,
-} from "./berechneBemessungszeitraum";
-import { PersonPageFlow } from "./PersonPageRouting";
 import IconAdd from "@digitalservicebund/icons/Add";
 import IconClear from "@digitalservicebund/icons/Clear";
 import IconEdit from "@digitalservicebund/icons/CreateOutlined";
+import classNames from "classnames";
+import { useCallback, useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 import {
   TaetigkeitAngaben,
   TaetigkeitenSelektor,
-} from "../state/stepPrototypSlice";
+} from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
 import { Button } from "@/application/components";
-import classNames from "classnames";
-import { Antragstellende, YesNo } from "../../abfrageteil/state";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
+import {
+  Ausklammerung,
+  berechneExaktenBemessungszeitraum,
+} from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import {
+  type StepPrototypState,
+  stepPrototypSelectors,
+  stepPrototypSlice,
+} from "@/application/features/abfrage-prototyp/state";
+import {
+  Antragstellende,
+  YesNo,
+} from "@/application/features/abfrageteil/state";
 import { EinkommenAngabenStep } from "@/application/pages/abfrage-protoyp/PersonPage";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
@@ -183,13 +186,13 @@ export function UebersichtTaetigkeitenForm({
   return (
     <form id={id} onSubmit={handleSubmit(submitTaetigkeiten)} noValidate>
       <div>
-        <div className="mt-40 rounded bg-grey-light inline-block py-10">
-          <span className="font-bold px-20">
+        <div className="mt-40 inline-block rounded bg-grey-light py-10">
+          <span className="px-20 font-bold">
             Bemessungszeitraum: {maximalerBemessungszeitraum}
           </span>
         </div>
 
-        <h3 className="mt-16 mb-32">
+        <h3 className="mb-32 mt-16">
           Bitte fügen Sie die weiteren Tätigkeiten hinzu
         </h3>
 
@@ -198,7 +201,7 @@ export function UebersichtTaetigkeitenForm({
             {(
               flow === PersonPageFlow.mischeinkuenfte ? index <= 1 : index === 0
             ) ? (
-              <div className="flex flex-col mb-40 gap-4 bg-primary-light border border-solid border-primary pl-40 pr-32 py-24 text-primary">
+              <div className="mb-40 flex flex-col gap-4 border border-solid border-primary bg-primary-light py-24 pl-40 pr-32 text-primary">
                 <h4>Tätigkeit {index + 1}:</h4>
                 <p>
                   Einkommen aus{" "}
@@ -211,10 +214,10 @@ export function UebersichtTaetigkeitenForm({
             ) : (
               <div>
                 {isBeingChanged === index ? (
-                  <div className="border border-dashed border-primary py-24 cursor-pointer flex flex-col mb-10 gap-20">
+                  <div className="mb-10 flex cursor-pointer flex-col gap-20 border border-dashed border-primary py-24">
                     <div className="flex flex-col gap-4 pl-40">
                       <h4 className="text-primary">Tätigkeit {index + 1}:</h4>
-                      <div className="flex flex-col gap-10 mt-16 mb-4">
+                      <div className="mb-4 mt-16 flex flex-col gap-10">
                         <label className={getLabelClassName(false)}>
                           <input
                             type="radio"
@@ -274,7 +277,7 @@ export function UebersichtTaetigkeitenForm({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex mb-40 gap-4 bg-off-white border border-solid border-primary pl-40 pr-32 py-24 text-primary">
+                  <div className="mb-40 flex gap-4 border border-solid border-primary bg-off-white py-24 pl-40 pr-32 text-primary">
                     <div className="flex flex-col">
                       <h4>Tätigkeit {index + 1}:</h4>
                       <p>
@@ -285,7 +288,7 @@ export function UebersichtTaetigkeitenForm({
                         Arbeit
                       </p>
                     </div>
-                    <div className="flex flex-col ml-auto mr-20">
+                    <div className="ml-auto mr-20 flex flex-col">
                       <div>
                         <IconClear className="mr-8" />
                         <Button
@@ -318,10 +321,10 @@ export function UebersichtTaetigkeitenForm({
         ))}
 
         {!isBeingChanged && (
-          <div className="border border-dashed border-primary py-24 cursor-pointer">
+          <div className="cursor-pointer border border-dashed border-primary py-24">
             {!isOpen && (
               <div
-                className="flex justify-center items-center text-primary"
+                className="flex items-center justify-center text-primary"
                 onClick={() => addTaetigkeit()}
               >
                 <IconAdd />
@@ -329,13 +332,13 @@ export function UebersichtTaetigkeitenForm({
               </div>
             )}
 
-            {isOpen && (
-              <div className="flex flex-col mb-10 gap-20">
+            {isOpen ? (
+              <div className="mb-10 flex flex-col gap-20">
                 <div className="flex flex-col gap-4 pl-40">
                   <h4 className="text-primary">
                     Tätigkeit {taetigkeiten.length + 1}:
                   </h4>
-                  <div className="flex flex-col gap-10 mt-16 mb-4">
+                  <div className="mb-4 mt-16 flex flex-col gap-10">
                     <label className={getLabelClassName(false)}>
                       <input
                         type="radio"
@@ -388,7 +391,7 @@ export function UebersichtTaetigkeitenForm({
                   </Button>
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         )}
       </div>

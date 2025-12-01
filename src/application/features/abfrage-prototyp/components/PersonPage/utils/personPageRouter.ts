@@ -27,13 +27,6 @@ export const personPageRouter = (
   //   hasAusklammerungsgrund
   // )
 
-  // const hasKeinEinkommen = flow === PersonPageFlow.keinEinkommen
-  //   || flow === PersonPageFlow.sozialleistungen
-  //   || flow === PersonPageFlow.sozialleistungenKeinEinkommen
-  //   || flow === PersonPageFlow.nichtSelbststaendigKeinEinkommen
-  //   || flow === PersonPageFlow.nichtSelbststaendigErsatzleistungen
-  //   || flow === PersonPageFlow.nichtSelbststaendigBeides
-
   if (direction === "forward") {
     switch (currentPersonPageRoute) {
       case PersonPageRoutes.ANGABEN_PERSON:

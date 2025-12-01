@@ -25,7 +25,7 @@ type Props = {
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
-  readonly flow?: PersonPageFlow;
+  // readonly flow?: PersonPageFlow;
 };
 
 export function AusklammerungsGruendeForm({ id, onSubmit, elternteil }: Props) {
@@ -138,7 +138,6 @@ export function AusklammerungsGruendeForm({ id, onSubmit, elternteil }: Props) {
             if (checked) {
               (
                 [
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`,
                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasElterngeldAnderesKind`,

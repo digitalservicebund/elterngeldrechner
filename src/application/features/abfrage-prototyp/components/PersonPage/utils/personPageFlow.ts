@@ -1,6 +1,6 @@
 import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 
-export function personPageFlow(
+export function getPersonPageFlow(
   isSelbststaendig: boolean,
   isNichtSelbststaendig: boolean,
   hasKeinEinkommen: boolean,

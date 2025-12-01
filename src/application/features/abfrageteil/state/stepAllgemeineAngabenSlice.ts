@@ -51,12 +51,13 @@ export const stepAllgemeineAngabenSlice = createSlice({
       };
       state.alleinerziehend = prototype.alleinerziehend;
       state.mutterschutz =
-        prototype.ET1.hasMutterschutzDiesesKind ||
-        prototype.ET2.hasMutterschutzDiesesKind
-          ? prototype.ET1.hasMutterschutzDiesesKind
-            ? "ET1"
-            : "ET2"
-          : YesNo.NO;
+        prototype.ET1.mutterschutz === "Ja" ||
+        prototype.ET1.mutterschutz === "Unentschlossen"
+          ? "ET1"
+          : prototype.ET2.mutterschutz === "Ja" ||
+              prototype.ET2.mutterschutz === "Unentschlossen"
+            ? "ET2"
+            : YesNo.NO;
     },
   },
 });

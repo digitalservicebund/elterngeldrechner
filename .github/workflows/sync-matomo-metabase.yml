@@ -12,13 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - uses: ./.github/actions/cached-node-install
-        with:
-          directory: metrics-sync
-
       - name: Install dependencies
         working-directory: metrics-sync
-        run: npm install
+        run: npm ci
 
       - name: Run metrics sync script
         working-directory: metrics-sync

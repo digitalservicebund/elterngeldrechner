@@ -976,7 +976,7 @@ export class PAP_2024 extends Programmablaufplan {
 if (import.meta.vitest) {
   const { describe, test, expect } = import.meta.vitest;
 
-  describe("Programmablaufplan 2023", () => {
+  describe("Programmablaufplan 2024", () => {
     test.each<{
       jahreslohn: number;
       steuerklasse: 1 | 2 | 3 | 4 | 5 | 6;

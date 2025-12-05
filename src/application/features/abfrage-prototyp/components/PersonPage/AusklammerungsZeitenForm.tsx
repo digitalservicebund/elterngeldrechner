@@ -1,92 +1,32 @@
 import { useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
-import { Ausklammerung } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import { ArrayPath, Path, useFieldArray, useForm } from "react-hook-form";
+import { Button } from "@/application/components";
 import {
   type StepPrototypState,
   stepPrototypSlice,
 } from "@/application/features/abfrage-prototyp/state";
-import { parseGermanDateString } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
-import { Antragstellende } from "@/application/features/abfrageteil/state";
 import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 
 type Props = {
   readonly id?: string;
-  readonly onSubmit?: (
-    values: StepPrototypState,
-    // antragsstellende?: Antragstellende,
-    // flow?: PersonPageFlow,
-    // hasAusklammerungsgrund?: boolean,
-    // auszuklammerndeZeitraeume?: Ausklammerung[],
-  ) => void;
+  readonly onSubmit?: (values: StepPrototypState) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
-  // readonly flow?: PersonPageFlow;
-  // readonly hasAusklammerungsgrund: boolean;
 };
 
-export function AusklammerungsZeitenForm({
-  id,
-  onSubmit,
-  // flow,
-  elternteil,
-}: Props) {
+export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
   const store = useAppStore();
 
-  // const stepState = store.getState().stepPrototyp;
-
-  // const geburtsdatumDesKindes = useAppSelector(
-  //   stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
-  // );
-
-  // const berechneterMutterschutzBeginn = (geburtsdatum: Date): Date => {
-  //   const date = new Date(geburtsdatum);
-  //   return new Date(date.setDate(date.getDate() - 42));
-  // };
-
   const {
+    control,
     register,
     handleSubmit,
     getValues,
-    // watch,
     formState: { errors },
   } = useForm({
     defaultValues: store.getState().stepPrototyp,
-    // defaultValues: {
-    //   ...stepState,
-    // ET1: {
-    //   ...stepState.ET1,
-    //   mutterschutzDiesesKindVon:
-    //     stepState.ET1.mutterschutzAnderesKindVon.length === 0 &&
-    //     stepState.ET1.hasMutterschutzDiesesKind
-    //       ? berechneterMutterschutzBeginn(
-    //           geburtsdatumDesKindes,
-    //         ).toLocaleDateString("de-DE")
-    //       : "",
-    //   mutterschutzDiesesKindBis:
-    //     stepState.ET1.mutterschutzAnderesKindVon.length === 0 &&
-    //     stepState.ET1.hasMutterschutzDiesesKind
-    //       ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
-    //       : "",
-    // },
-    // ET2: {
-    //   ...stepState.ET2,
-    //   mutterschutzDiesesKindVon:
-    //     stepState.ET2.mutterschutzAnderesKindVon.length === 0 &&
-    //     stepState.ET2.hasMutterschutzDiesesKind
-    //       ? berechneterMutterschutzBeginn(
-    //           geburtsdatumDesKindes,
-    //         ).toLocaleDateString("de-DE")
-    //       : "",
-    //   mutterschutzDiesesKindBis:
-    //     stepState.ET2.mutterschutzAnderesKindVon.length === 0 &&
-    //     stepState.ET2.hasMutterschutzDiesesKind
-    //       ? geburtsdatumDesKindes.toLocaleDateString("de-DE")
-    //       : "",
-    // },
-    // },
   });
 
   const submitAusklammerungsZeiten = useCallback(
@@ -97,21 +37,6 @@ export function AusklammerungsZeitenForm({
     [store, onSubmit],
   );
 
-  // const ungefährerBemessungszeitraum = berechneUngefaehrenBemessungszeitraum(
-  //   geburtsdatumDesKindes,
-  //   flow ?? PersonPageFlow.noFlow,
-  // );
-
-  // const hasMutterschutzDiesesKind = getValues(
-  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzDiesesKind`,
-  // );
-  // const mutterschutzDiesesKindVon = watch(
-  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
-  // );
-  // const mutterschutzDiesesKindBis = watch(
-  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
-  // );
-
   const hasMutterschutzAnderesKind = getValues(
     `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`,
   );
@@ -121,108 +46,26 @@ export function AusklammerungsZeitenForm({
   const hasErkrankung = getValues(
     `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasErkrankung`,
   );
-  // const isBeamtet = getValues(
-  //   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
-  // );
 
-  const ausklammerungen = (): Ausklammerung[] => {
-    const ausklammerungen: Ausklammerung[] = [];
+  const ausklammerungenMutterschutzAnderesKind = `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.ausklammerungenMutterschutzAnderesKind`;
+  const ausklammerungenElterngeldAnderesKind = `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.ausklammerungenElterngeldAnderesKind`;
+  const ausklammerungenErkrankung = `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.ausklammerungenErkrankung`;
 
-    // if (
-    //   mutterschutzDiesesKindVon.length > 0 &&
-    //   mutterschutzDiesesKindBis.length > 0 &&
-    //   !isBeamtet
-    // ) {
-    //   const mutterschutz: Ausklammerung = {
-    //     beschreibung: "Mutterschutz für dieses Kind",
-    //     von: parseGermanDateString(
-    //       getValues(
-    //         `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindVon`,
-    //       ),
-    //     ),
-    //     bis: parseGermanDateString(
-    //       getValues(
-    //         `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzDiesesKindBis`,
-    //       ),
-    //     ),
-    //   };
-    //   ausklammerungen.push(mutterschutz);
-    // }
+  const { fields: fieldsMutterschutz, append: appendMutterschutz } =
+    useFieldArray({
+      control,
+      name: ausklammerungenMutterschutzAnderesKind as ArrayPath<StepPrototypState>,
+    });
 
-    if (
-      getValues(
-        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldVon`,
-      ) &&
-      getValues(
-        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldBis`,
-      )
-    ) {
-      const elterngeld: Ausklammerung = {
-        beschreibung: "Elterngeld für älteres Kind",
-        von: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldVon`,
-          ),
-        ),
-        bis: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldBis`,
-          ),
-        ),
-      };
-      ausklammerungen.push(elterngeld);
-    }
+  const { fields: fieldsElterngeld, append: appendElterngeld } = useFieldArray({
+    control,
+    name: ausklammerungenElterngeldAnderesKind as ArrayPath<StepPrototypState>,
+  });
 
-    if (
-      getValues(
-        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindVon`,
-      ) &&
-      getValues(
-        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindBis`,
-      )
-    ) {
-      const mutterschutzAnderesKind: Ausklammerung = {
-        beschreibung: "Mutterschutz für älteres Kind",
-        von: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindVon`,
-          ),
-        ),
-        bis: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindBis`,
-          ),
-        ),
-      };
-      ausklammerungen.push(mutterschutzAnderesKind);
-    }
-
-    if (
-      getValues(
-        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,
-      ) &&
-      getValues(
-        `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitBis`,
-      )
-    ) {
-      const erkrankung: Ausklammerung = {
-        beschreibung: "Krankheit wegen der Schwangerschaft",
-        von: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,
-          ),
-        ),
-        bis: parseGermanDateString(
-          getValues(
-            `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitBis`,
-          ),
-        ),
-      };
-      ausklammerungen.push(erkrankung);
-    }
-
-    return ausklammerungen;
-  };
+  const { fields: fieldsErkrankung, append: appendErkrankung } = useFieldArray({
+    control,
+    name: ausklammerungenErkrankung as ArrayPath<StepPrototypState>,
+  });
 
   return (
     <form
@@ -235,109 +78,167 @@ export function AusklammerungsZeitenForm({
       {hasMutterschutzAnderesKind ? (
         <section className="mt-32">
           <h5>
-            Von wann bis wann waren Sie im Mutterschutz für ein älteres Kind?
+            Von wann bis wann waren Sie für ein älteres Kind im Mutterschutz?
           </h5>
-          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-            <div>
-              <label className="mb-4 mt-20 block text-16">
-                Beginn des Mutterschutzes (TT.MM.JJJJ)
-              </label>
-              <CustomDate
-                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={
-                  elternteil === Elternteil.Eins
-                    ? errors.ET1?.mutterschutzAnderesKindVon?.message
-                    : errors.ET2?.mutterschutzAnderesKindVon?.message
-                }
-                {...register(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindVon`,
-                  {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+
+          {fieldsMutterschutz.map((field, index) => (
+            <div
+              key={field.id}
+              className="flex flex-wrap gap-56 *:grow *:basis-[22rem]"
+            >
+              <div>
+                <label
+                  className="mb-4 mt-20 block text-16"
+                  htmlFor={`ausklammerungenMutterschutzAnderesKind-${index}-von`}
+                >
+                  Beginn des Mutterschutzes (TT.MM.JJJJ)
+                </label>
+                <CustomDate
+                  id={`ausklammerungenMutterschutzAnderesKind-${index}-von`}
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.ausklammerungenMutterschutzAnderesKind
+                          ?.message
+                      : errors.ET2?.ausklammerungenMutterschutzAnderesKind
+                          ?.message
+                  }
+                  {...register(
+                    `${ausklammerungenMutterschutzAnderesKind}.${index}.von` as Path<StepPrototypState>,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  },
-                )}
-              />
-            </div>
-            <div>
-              <label className="mb-4 mt-20 block text-16">
-                Ende des Mutterschutzes (TT.MM.JJJJ)
-              </label>
-              <CustomDate
-                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={
-                  elternteil === Elternteil.Eins
-                    ? errors.ET1?.mutterschutzAnderesKindBis?.message
-                    : errors.ET2?.mutterschutzAnderesKindBis?.message
-                }
-                {...register(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.mutterschutzAnderesKindBis`,
-                  {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  )}
+                />
+              </div>
+              <div>
+                <label
+                  className="mb-4 mt-20 block text-16"
+                  htmlFor={`ausklammerungenMutterschutzAnderesKind-${index}-bis`}
+                >
+                  Ende des Mutterschutzes (TT.MM.JJJJ)
+                </label>
+                <CustomDate
+                  id={`ausklammerungenMutterschutzAnderesKind-${index}-bis`}
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.ausklammerungenMutterschutzAnderesKind
+                          ?.message
+                      : errors.ET2?.ausklammerungenMutterschutzAnderesKind
+                          ?.message
+                  }
+                  {...register(
+                    `${ausklammerungenMutterschutzAnderesKind}.${index}.bis` as Path<StepPrototypState>,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  },
-                )}
-              />
+                  )}
+                />
+              </div>
             </div>
-          </div>
+          ))}
+
+          <Button
+            className="pt-20 text-left !text-base"
+            type="button"
+            buttonStyle="link"
+            onClick={() => {
+              appendMutterschutz({ von: null, bis: null });
+            }}
+          >
+            + Weiteren Zeitraum für Mutterschutz hinzufügen
+          </Button>
         </section>
       ) : null}
 
       {hasElterngeldAnderesKind ? (
         <section className="mt-32">
           <h5>
-            Von wann bis wann haben Sie Elterngeld für ein älteres Kind (maximal
-            14 Monate alt) bekommen?
+            Von wann bis wann haben Sie für ein älteres Kind (maximal 14 Monate
+            alt) Elterngeld bekommen?
           </h5>
-          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-            <div>
-              <label className="mt-20 block text-16">Beginn</label>
-              <CustomDate
-                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={
-                  elternteil === Elternteil.Eins
-                    ? errors.ET1?.elterngeldVon?.message
-                    : errors.ET2?.elterngeldVon?.message
-                }
-                {...register(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldVon`,
-                  {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+
+          {fieldsElterngeld.map((field, index) => (
+            <div
+              key={field.id}
+              className="flex flex-wrap gap-56 *:grow *:basis-[22rem]"
+            >
+              <div>
+                <label
+                  className="mb-4 mt-20 block text-16"
+                  htmlFor={`ausklammerungenElterngeldAnderesKind-${index}-von`}
+                >
+                  Beginn (TT.MM.JJJJ)
+                </label>
+                <CustomDate
+                  id={`ausklammerungenElterngeldAnderesKind-${index}-von`}
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.ausklammerungenElterngeldAnderesKind
+                          ?.message
+                      : errors.ET2?.ausklammerungenElterngeldAnderesKind
+                          ?.message
+                  }
+                  {...register(
+                    `${ausklammerungenElterngeldAnderesKind}.${index}.von` as Path<StepPrototypState>,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  },
-                )}
-              />
-            </div>
-            <div>
-              <label className="mt-20 block text-16">Ende</label>
-              <CustomDate
-                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={
-                  elternteil === Elternteil.Eins
-                    ? errors.ET1?.elterngeldBis?.message
-                    : errors.ET2?.elterngeldBis?.message
-                }
-                {...register(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.elterngeldBis`,
-                  {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  )}
+                />
+              </div>
+              <div>
+                <label
+                  className="mb-4 mt-20 block text-16"
+                  htmlFor={`ausklammerungenElterngeldAnderesKind-${index}-bis`}
+                >
+                  Ende (TT.MM.JJJJ)
+                </label>
+                <CustomDate
+                  id={`ausklammerungenElterngeldAnderesKind-${index}-bis`}
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.ausklammerungenElterngeldAnderesKind
+                          ?.message
+                      : errors.ET2?.ausklammerungenElterngeldAnderesKind
+                          ?.message
+                  }
+                  {...register(
+                    `${ausklammerungenElterngeldAnderesKind}.${index}.bis` as Path<StepPrototypState>,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  },
-                )}
-              />
+                  )}
+                />
+              </div>
             </div>
-          </div>
+          ))}
+
+          <Button
+            className="pt-20 text-left !text-base"
+            type="button"
+            buttonStyle="link"
+            onClick={() => {
+              appendElterngeld({ von: null, bis: null });
+            }}
+          >
+            + Weiteren Zeitraum für Elterngeld hinzufügen
+          </Button>
         </section>
       ) : null}
 
@@ -346,50 +247,77 @@ export function AusklammerungsZeitenForm({
           <h5>
             Von wann bis wann waren Sie wegen Ihrer Schwangerschaft krank?
           </h5>
-          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-            <div>
-              <label className="mt-20 block text-16">Beginn</label>
-              <CustomDate
-                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={
-                  elternteil === Elternteil.Eins
-                    ? errors.ET1?.krankheitVon?.message
-                    : errors.ET2?.krankheitVon?.message
-                }
-                {...register(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitVon`,
-                  {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+
+          {fieldsErkrankung.map((field, index) => (
+            <div
+              key={field.id}
+              className="flex flex-wrap gap-56 *:grow *:basis-[22rem]"
+            >
+              <div>
+                <label
+                  className="mb-4 mt-20 block text-16"
+                  htmlFor={`ausklammerungenErkrankung-${index}-von`}
+                >
+                  Beginn (TT.MM.JJJJ)
+                </label>
+                <CustomDate
+                  id={`ausklammerungenErkrankung-${index}-von`}
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.ausklammerungenErkrankung?.message
+                      : errors.ET2?.ausklammerungenErkrankung?.message
+                  }
+                  {...register(
+                    `${ausklammerungenErkrankung}.${index}.von` as Path<StepPrototypState>,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  },
-                )}
-              />
-            </div>
-            <div>
-              <label className="mt-20 block text-16">Ende</label>
-              <CustomDate
-                // id="{wahrscheinlichesGeburtsDatumInputIdentifier}"
-                error={
-                  elternteil === Elternteil.Eins
-                    ? errors.ET1?.krankheitBis?.message
-                    : errors.ET2?.krankheitBis?.message
-                }
-                {...register(
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.krankheitBis`,
-                  {
-                    required: "Dieses Feld ist erforderlich",
-                    pattern: {
-                      value: /^\d{2}\.\d{2}\.\d{4}$/,
-                      message: "Bitte das Feld vollständig ausfüllen",
+                  )}
+                />
+              </div>
+              <div>
+                <label
+                  className="mb-4 mt-20 block text-16"
+                  htmlFor={`ausklammerungenErkrankung-${index}-bis`}
+                >
+                  Ende (TT.MM.JJJJ)
+                </label>
+                <CustomDate
+                  id={`ausklammerungenErkrankung-${index}-bis`}
+                  error={
+                    elternteil === Elternteil.Eins
+                      ? errors.ET1?.ausklammerungenErkrankung?.message
+                      : errors.ET2?.ausklammerungenErkrankung?.message
+                  }
+                  {...register(
+                    `${ausklammerungenErkrankung}.${index}.bis` as Path<StepPrototypState>,
+                    {
+                      required: "Dieses Feld ist erforderlich",
+                      pattern: {
+                        value: /^\d{2}\.\d{2}\.\d{4}$/,
+                        message: "Bitte das Feld vollständig ausfüllen",
+                      },
                     },
-                  },
-                )}
-              />
+                  )}
+                />
+              </div>
             </div>
-          </div>
+          ))}
+
+          <Button
+            className="pt-20 text-left !text-base"
+            type="button"
+            buttonStyle="link"
+            onClick={() => {
+              appendErkrankung({ von: null, bis: null });
+            }}
+          >
+            + Weiteren Zeitraum für Krankheit in der Schwangerschaft hinzufügen
+          </Button>
         </section>
       ) : null}
     </form>

@@ -3,6 +3,7 @@ import { Ausklammerung } from "@/application/features/abfrage-prototyp/component
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { RootState } from "@/application/redux";
 import { Steuerklasse } from "@/elterngeldrechner";
+import { berechneMutterschutz } from "@/mutterschutzrechner";
 
 interface Kind {
   geburtsdatum: string;
@@ -33,15 +34,20 @@ export type GeschwisterAngaben = {
 
 export type Mutterschutz = "Ja" | "Nein" | "Unentschlossen";
 
+export type AusklammerungInputs = {
+  von: string | null;
+  bis: string | null;
+};
+
 export type PersonenAngaben = {
   mutterschutz: Mutterschutz | null;
 
   hasMutterschutzAnderesKind: boolean;
-  ausklammerungenMutterschutzAnderesKind: Ausklammerung[];
+  ausklammerungenMutterschutzAnderesKind: AusklammerungInputs[];
   hasElterngeldAnderesKind: boolean;
-  ausklammerungenElterngeldAnderesKind: Ausklammerung[];
+  ausklammerungenElterngeldAnderesKind: AusklammerungInputs[];
   hasErkrankung: boolean;
-  ausklammerungenErkrankung: Ausklammerung[];
+  ausklammerungenErkrankung: AusklammerungInputs[];
   hasKeinGrund: boolean;
 
   isNichtSelbststaendig: boolean;
@@ -139,11 +145,26 @@ const initialState: StepPrototypState = {
     mutterschutz: null,
 
     hasMutterschutzAnderesKind: false,
-    ausklammerungenMutterschutzAnderesKind: [],
+    ausklammerungenMutterschutzAnderesKind: [
+      {
+        von: null,
+        bis: null,
+      },
+    ],
     hasElterngeldAnderesKind: false,
-    ausklammerungenElterngeldAnderesKind: [],
+    ausklammerungenElterngeldAnderesKind: [
+      {
+        von: null,
+        bis: null,
+      },
+    ],
     hasErkrankung: false,
-    ausklammerungenErkrankung: [],
+    ausklammerungenErkrankung: [
+      {
+        von: null,
+        bis: null,
+      },
+    ],
     hasKeinGrund: false,
 
     isNichtSelbststaendig: false,
@@ -160,11 +181,26 @@ const initialState: StepPrototypState = {
     mutterschutz: null,
 
     hasMutterschutzAnderesKind: false,
-    ausklammerungenMutterschutzAnderesKind: [],
+    ausklammerungenMutterschutzAnderesKind: [
+      {
+        von: null,
+        bis: null,
+      },
+    ],
     hasElterngeldAnderesKind: false,
-    ausklammerungenElterngeldAnderesKind: [],
+    ausklammerungenElterngeldAnderesKind: [
+      {
+        von: null,
+        bis: null,
+      },
+    ],
     hasErkrankung: false,
-    ausklammerungenErkrankung: [],
+    ausklammerungenErkrankung: [
+      {
+        von: null,
+        bis: null,
+      },
+    ],
     hasKeinGrund: false,
 
     isNichtSelbststaendig: false,
@@ -241,20 +277,112 @@ const getHasAusklammerungET1 = (state: RootState) =>
   state.stepPrototyp.ET1.hasMutterschutzAnderesKind ||
   state.stepPrototyp.ET1.hasElterngeldAnderesKind ||
   state.stepPrototyp.ET1.hasErkrankung;
-const getAusklammerungenET1 = (state: RootState) => [
-  ...state.stepPrototyp.ET1.ausklammerungenElterngeldAnderesKind,
-  ...state.stepPrototyp.ET1.ausklammerungenMutterschutzAnderesKind,
-  ...state.stepPrototyp.ET1.ausklammerungenErkrankung,
-];
+const getAusklammerungenET1 = (state: RootState): Ausklammerung[] | [] => {
+  const hasMutterschutz =
+    state.stepPrototyp.ET1.mutterschutz === "Ja" ||
+    state.stepPrototyp.ET1.mutterschutz === "Unentschlossen";
+  const { startdatum, enddatum } = berechneMutterschutz(
+    parseGermanDateString(state.stepPrototyp.kind.errechneterGeburtstermin),
+    state.stepPrototyp.kind.geburtsdatum.length > 0
+      ? parseGermanDateString(state.stepPrototyp.kind.geburtsdatum)
+      : undefined,
+    state.stepPrototyp.geschwister.geschwisterkinder.length > 0,
+  );
+  const mutterschutz =
+    hasMutterschutz && !state.stepPrototyp.ET1.isBeamtet
+      ? [
+          {
+            beschreibung: "Mutterschutz dieses Kind",
+            von: startdatum,
+            bis: enddatum,
+          },
+        ]
+      : [];
+  const elterngeld = state.stepPrototyp.ET1.ausklammerungenElterngeldAnderesKind
+    .filter((item) => item.von && item.bis)
+    .map((item) => ({
+      beschreibung: "Elterngeld anderes Kind",
+      von: parseGermanDateString(item.von!),
+      bis: parseGermanDateString(item.bis!),
+    }));
+  const mutterschutzAnderesKind =
+    state.stepPrototyp.ET1.ausklammerungenMutterschutzAnderesKind
+      .filter((item) => item.von && item.bis)
+      .map((item) => ({
+        beschreibung: "Mutterschutz anderes Kind",
+        von: parseGermanDateString(item.von!),
+        bis: parseGermanDateString(item.bis!),
+      }));
+  const erkrankung = state.stepPrototyp.ET1.ausklammerungenErkrankung
+    .filter((item) => item.von && item.bis)
+    .map((item) => ({
+      beschreibung: "Erkrankung",
+      von: parseGermanDateString(item.von!),
+      bis: parseGermanDateString(item.bis!),
+    }));
+
+  return [
+    ...mutterschutz,
+    ...elterngeld,
+    ...mutterschutzAnderesKind,
+    ...erkrankung,
+  ];
+};
 const getHasAusklammerungET2 = (state: RootState) =>
   state.stepPrototyp.ET2.hasMutterschutzAnderesKind ||
   state.stepPrototyp.ET2.hasElterngeldAnderesKind ||
   state.stepPrototyp.ET2.hasErkrankung;
-const getAusklammerungenET2 = (state: RootState) => [
-  ...state.stepPrototyp.ET2.ausklammerungenElterngeldAnderesKind,
-  ...state.stepPrototyp.ET2.ausklammerungenMutterschutzAnderesKind,
-  ...state.stepPrototyp.ET2.ausklammerungenErkrankung,
-];
+const getAusklammerungenET2 = (state: RootState): Ausklammerung[] => {
+  const hasMutterschutz =
+    state.stepPrototyp.ET2.mutterschutz === "Ja" ||
+    state.stepPrototyp.ET2.mutterschutz === "Unentschlossen";
+  const { startdatum, enddatum } = berechneMutterschutz(
+    parseGermanDateString(state.stepPrototyp.kind.errechneterGeburtstermin),
+    state.stepPrototyp.kind.geburtsdatum.length > 0
+      ? parseGermanDateString(state.stepPrototyp.kind.geburtsdatum)
+      : undefined,
+    state.stepPrototyp.geschwister.geschwisterkinder.length > 0,
+  );
+  const mutterschutz =
+    hasMutterschutz && !state.stepPrototyp.ET2.isBeamtet
+      ? [
+          {
+            beschreibung: "Mutterschutz dieses Kind",
+            von: startdatum,
+            bis: enddatum,
+          },
+        ]
+      : [];
+  const elterngeld = state.stepPrototyp.ET2.ausklammerungenElterngeldAnderesKind
+    .filter((item) => item.von && item.bis)
+    .map((item) => ({
+      beschreibung: "Elterngeld anderes Kind",
+      von: parseGermanDateString(item.von!),
+      bis: parseGermanDateString(item.bis!),
+    }));
+  const mutterschutzAnderesKind =
+    state.stepPrototyp.ET2.ausklammerungenMutterschutzAnderesKind
+      .filter((item) => item.von && item.bis)
+      .map((item) => ({
+        beschreibung: "Mutterschutz anderes Kind",
+        von: parseGermanDateString(item.von!),
+        bis: parseGermanDateString(item.bis!),
+      }));
+  const erkrankung = state.stepPrototyp.ET2.ausklammerungenErkrankung
+    .filter((item) => item.von && item.bis)
+    .map((item) => ({
+      beschreibung: "Erkrankung",
+      von: parseGermanDateString(item.von!),
+      bis: parseGermanDateString(item.bis!),
+    }));
+
+  return [
+    ...mutterschutz,
+    ...elterngeld,
+    ...mutterschutzAnderesKind,
+    ...erkrankung,
+  ];
+};
 
 export function parseGermanDateString(germanDateString: string): Date {
   const [day, month, year] = germanDateString.split(".");

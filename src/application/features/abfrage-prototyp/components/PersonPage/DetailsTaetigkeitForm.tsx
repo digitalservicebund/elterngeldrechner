@@ -81,14 +81,40 @@ export function DetailsTaetigkeitForm({
     ausklammerungen,
   );
 
+  const formattedDate = (date: Date) => {
+    return date.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
   return (
     <form id={id} onSubmit={handleSubmit(submitAngabenEinkommen)} noValidate>
       <div>
-        <div className="my-40 inline-block rounded bg-grey-light py-10">
-          <span className="px-20 font-bold">
-            Bemessungszeitraum: {maximalerBemessungszeitraum}
-          </span>
-        </div>
+        <section className="mb-40" aria-live="polite" aria-labelledby="bmz">
+          <div className="mt-40 rounded bg-grey-light py-10">
+            <span className="text-18 px-20 font-bold">
+              Bemessungszeitraum: {maximalerBemessungszeitraum}
+            </span>
+          </div>
+          {ausklammerungen.length > 0 ? (
+            <div className="rounded-b border-x border-b border-t-0 border-dashed border-grey p-20">
+              <h5 className="text-14">Übersprungene Zeiträume:</h5>
+              <ul className="ml-32 mt-4 list-disc text-14">
+                {ausklammerungen
+                  ? ausklammerungen.map((ausklammerung) => (
+                      <li key={ausklammerung.beschreibung} className="m-0">
+                        {ausklammerung.beschreibung}{" "}
+                        {formattedDate(ausklammerung.von)} bis{" "}
+                        {formattedDate(ausklammerung.bis)}
+                      </li>
+                    ))
+                  : null}
+              </ul>
+            </div>
+          ) : null}
+        </section>
 
         {taetigkeit?.taetigkeitenArt === "selbststaendig" && (
           <div>

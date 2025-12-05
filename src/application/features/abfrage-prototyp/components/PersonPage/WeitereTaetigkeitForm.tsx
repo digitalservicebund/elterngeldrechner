@@ -1,6 +1,12 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { InfoZuWeitereTaetigkeiten } from "./InfoBoxen/InfoZuWeitereTaetigkeiten";
+import {
+  CustomRadioGroup,
+  CustomRadioGroupOption,
+} from "@/application/components";
 import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
+import { berechneExaktenBemessungszeitraum } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 import {
   type StepPrototypState,
   stepPrototypSelectors,
@@ -9,12 +15,6 @@ import {
 import { YesNo } from "@/application/features/abfrageteil/state";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
-import {
-  CustomRadioGroup,
-  CustomRadioGroupOption,
-} from "@/application/components";
-import { InfoZuWeitereTaetigkeiten } from "./InfoBoxen/InfoZuWeitereTaetigkeiten";
-import { berechneExaktenBemessungszeitraum } from "../berechneBemessungszeitraum";
 
 type Props = {
   readonly id?: string;
@@ -144,6 +144,14 @@ export function WeitereTaetigkeitForm({
     { value: YesNo.NO, label: "Nein, ich hatte keine weiteren Tätigkeiten" },
   ];
 
+  const formattedDate = (date: Date) => {
+    return date.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
   return (
     <form
       id={id}
@@ -152,11 +160,29 @@ export function WeitereTaetigkeitForm({
       noValidate
     >
       <div className="mt-40">
-        <div className="mb-40 mt-20 inline-block rounded bg-grey-light py-10">
-          <span className="px-20 font-bold">
-            Bemessungszeitraum: {maximalerBemessungszeitraum}
-          </span>
-        </div>
+        <section className="mb-40" aria-live="polite" aria-labelledby="bmz">
+          <div className="mt-40 rounded bg-grey-light py-10">
+            <span className="text-18 px-20 font-bold">
+              Bemessungszeitraum: {maximalerBemessungszeitraum}
+            </span>
+          </div>
+          {ausklammerungen.length > 0 ? (
+            <div className="rounded-b border-x border-b border-t-0 border-dashed border-grey p-20">
+              <h5 className="text-14">Übersprungene Zeiträume:</h5>
+              <ul className="ml-32 mt-4 list-disc text-14">
+                {ausklammerungen
+                  ? ausklammerungen.map((ausklammerung) => (
+                      <li key={ausklammerung.beschreibung} className="m-0">
+                        {ausklammerung.beschreibung}{" "}
+                        {formattedDate(ausklammerung.von)} bis{" "}
+                        {formattedDate(ausklammerung.bis)}
+                      </li>
+                    ))
+                  : null}
+              </ul>
+            </div>
+          ) : null}
+        </section>
 
         <h3 className="mb-10">
           Hatten Sie noch weitere Tätigkeiten im Bemessungszeitraum?

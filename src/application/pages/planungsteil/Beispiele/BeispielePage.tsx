@@ -43,7 +43,6 @@ export function BeispielePage() {
 
   const store = useAppStore();
 
-  console.log("store", store.getState());
   const navigate = useNavigate();
 
   const { navigationState, navigateStateful } = useNavigateStateful();

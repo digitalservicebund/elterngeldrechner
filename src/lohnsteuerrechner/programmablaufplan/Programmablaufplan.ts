@@ -60,6 +60,15 @@ const INITIALE_AUSGANGSPARAMETER: Ausgangsparameter = {
   VKVLZZ: 0,
 };
 
+// The Eingangsparameter definition was stable until the Programmablaufplan
+// for 2025 where the enum of KRV was changed from (0 | 1 | 2) to (0 | 1).
+// The change initially was not applied to this abstract interface since
+// other years still need the old definition. It'd require implementing a
+// definition per year. Otherwise the compiler is not able to catch bugs
+// like calling the 2025 implementation with krv = 2 which is invalid in
+// that year and causes wrong calculations. We should consider to do this
+// refactoring in the near future.
+
 // Unfortunately can't be read-only.
 export type Eingangsparameter = {
   /**
@@ -84,7 +93,8 @@ export type Eingangsparameter = {
    * oder einer berufsständischen Versorgungseinrichtung
    * pflichtversichert oder bei Befreiung von der Versicherungspflicht
    * freiwillig versichert; es gilt die Beitragsbemessungsgrenze Ost
-   * (BBG Ost)
+   * (BBG Ost) bis 31.12.2024 bzw. die allgemeine Beitragsbemessungsgrenze
+   * ab 01.01.2025.
    * 2 = wenn nicht 0 oder 1
    */
   KRV: 0 | 1 | 2;
@@ -227,7 +237,7 @@ export type Ausgangsparameter = {
 
   /**
    * Für den Lohnzahlungszeitraum berücksichtigte Beiträge des
-   * Arbeitnehmers zur protectedn Basis-Krankenversicherung und privaten
+   * Arbeitnehmers zur privaten Basis-Krankenversicherung und privaten
    * Pflege-Pflichtversicherung (ggf. auch die Mindestvorsorgepauschale)
    * in Cent beim laufenden Arbeitslohn. Für Zwecke der
    * Lohnsteuerbescheinigung sind die einzelnen Ausgabewerte

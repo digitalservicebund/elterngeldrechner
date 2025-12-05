@@ -23,7 +23,7 @@ type Props = {
   readonly flow?: PersonPageFlow;
 };
 
-export function TaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
+export function AbfrageTaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
   const store = useAppStore();
 
   const { register, handleSubmit, getValues, formState } = useForm({

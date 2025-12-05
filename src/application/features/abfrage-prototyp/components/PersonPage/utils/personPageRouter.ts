@@ -7,26 +7,16 @@ export const personPageRouter = (
   currentPersonPageRoute: PersonPageRoutes,
   elternteil: Elternteil,
   antragstellende: Antragstellende | null,
-  // flow: PersonPageFlow,
-  // currentPersonFlowStep: PersonPageFlowStep,
   hasAusklammerungsgrund?: boolean,
   hasKeinEinkommen?: boolean,
+  isSelbststaendigeTaetigkeit?: boolean,
   hasWeitereTaetigkeit?: boolean,
+  isSelbststaendigenFlow?: boolean,
+  isFirstIncomeInMischeinkuenfteFlow?: boolean,
 ): {
   routingZuNaechstemFormStep: boolean;
   naechstePersonPageRoute?: PersonPageRoutes;
-  // naechsterPersonFlowStep?: PersonPageFlowStep
 } => {
-  // const {
-  //   routingZuNaechsterPageRoute,
-  //   naechsterPersonFlowStep
-  // } = personFlowRouter(
-  //   direction,
-  //   flow,
-  //   currentPersonFlowStep,
-  //   hasAusklammerungsgrund
-  // )
-
   if (direction === "forward") {
     switch (currentPersonPageRoute) {
       case PersonPageRoutes.ANGABEN_PERSON:
@@ -65,11 +55,39 @@ export const personPageRouter = (
           naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
         };
       case PersonPageRoutes.DETAILS_TAETIGKEIT:
+        if (isFirstIncomeInMischeinkuenfteFlow) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
+          };
+        }
+        if (isSelbststaendigeTaetigkeit) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT,
+          };
+        }
+        return {
+          routingZuNaechstemFormStep: false,
+          naechstePersonPageRoute: PersonPageRoutes.DETAILS_ANGESTELLT,
+        };
+      case PersonPageRoutes.DETAILS_ANGESTELLT:
+        return {
+          routingZuNaechstemFormStep: false,
+          naechstePersonPageRoute: PersonPageRoutes.EINGABE_EINKOMMEN,
+        };
+      case PersonPageRoutes.EINGABE_EINKOMMEN:
         return {
           routingZuNaechstemFormStep: false,
           naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT,
         };
       case PersonPageRoutes.WEITERE_TAETIGKEIT:
+        if (hasWeitereTaetigkeit && isSelbststaendigenFlow) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT_ART,
+          };
+        }
         if (hasWeitereTaetigkeit) {
           return {
             routingZuNaechstemFormStep: false,
@@ -77,6 +95,11 @@ export const personPageRouter = (
           };
         }
         return { routingZuNaechstemFormStep: true };
+      case PersonPageRoutes.WEITERE_TAETIGKEIT_ART:
+        return {
+          routingZuNaechstemFormStep: false,
+          naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
+        };
       default:
         return {
           routingZuNaechstemFormStep: false,
@@ -87,17 +110,54 @@ export const personPageRouter = (
 
   if (direction === "backward") {
     switch (currentPersonPageRoute) {
-      case PersonPageRoutes.ANGABEN_PERSON:
-        return { routingZuNaechstemFormStep: true };
-      case PersonPageRoutes.AUSKLAMMERUNGS_GRUENDE:
+      case PersonPageRoutes.WEITERE_TAETIGKEIT_ART:
         return {
           routingZuNaechstemFormStep: false,
-          naechstePersonPageRoute: PersonPageRoutes.ANGABEN_PERSON,
+          naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT,
         };
-      case PersonPageRoutes.AUSKLAMMERUNGS_ZEITEN:
+      case PersonPageRoutes.WEITERE_TAETIGKEIT:
+        if (isSelbststaendigeTaetigkeit) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
+          };
+        }
         return {
           routingZuNaechstemFormStep: false,
-          naechstePersonPageRoute: PersonPageRoutes.AUSKLAMMERUNGS_GRUENDE,
+          naechstePersonPageRoute: PersonPageRoutes.EINGABE_EINKOMMEN,
+        };
+      case PersonPageRoutes.EINGABE_EINKOMMEN:
+        return {
+          routingZuNaechstemFormStep: false,
+          naechstePersonPageRoute: PersonPageRoutes.DETAILS_ANGESTELLT,
+        };
+      case PersonPageRoutes.DETAILS_ANGESTELLT:
+        return {
+          routingZuNaechstemFormStep: false,
+          naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
+        };
+      case PersonPageRoutes.DETAILS_TAETIGKEIT:
+        if (isFirstIncomeInMischeinkuenfteFlow) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
+          };
+        }
+        if (hasWeitereTaetigkeit && isSelbststaendigenFlow) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT_ART,
+          };
+        }
+        if (hasWeitereTaetigkeit) {
+          return {
+            routingZuNaechstemFormStep: false,
+            naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT,
+          };
+        }
+        return {
+          routingZuNaechstemFormStep: false,
+          naechstePersonPageRoute: PersonPageRoutes.ABFRAGE_TAETIGKEITEN,
         };
       case PersonPageRoutes.ABFRAGE_TAETIGKEITEN:
         if (hasAusklammerungsgrund) {
@@ -110,22 +170,18 @@ export const personPageRouter = (
           routingZuNaechstemFormStep: false,
           naechstePersonPageRoute: PersonPageRoutes.AUSKLAMMERUNGS_GRUENDE,
         };
-      case PersonPageRoutes.DETAILS_TAETIGKEIT:
-        if (hasWeitereTaetigkeit) {
-          return {
-            routingZuNaechstemFormStep: false,
-            naechstePersonPageRoute: PersonPageRoutes.WEITERE_TAETIGKEIT,
-          };
-        }
+      case PersonPageRoutes.AUSKLAMMERUNGS_ZEITEN:
         return {
           routingZuNaechstemFormStep: false,
-          naechstePersonPageRoute: PersonPageRoutes.ABFRAGE_TAETIGKEITEN,
+          naechstePersonPageRoute: PersonPageRoutes.AUSKLAMMERUNGS_GRUENDE,
         };
-      case PersonPageRoutes.WEITERE_TAETIGKEIT:
+      case PersonPageRoutes.AUSKLAMMERUNGS_GRUENDE:
         return {
           routingZuNaechstemFormStep: false,
-          naechstePersonPageRoute: PersonPageRoutes.DETAILS_TAETIGKEIT,
+          naechstePersonPageRoute: PersonPageRoutes.ANGABEN_PERSON,
         };
+      case PersonPageRoutes.ANGABEN_PERSON:
+        return { routingZuNaechstemFormStep: true };
       default:
         return {
           routingZuNaechstemFormStep: false,
@@ -139,120 +195,3 @@ export const personPageRouter = (
     naechstePersonPageRoute: currentPersonPageRoute,
   };
 };
-
-// const personFlowRouter = (
-//   direction: "forward" | "backward",
-//   flow: PersonPageFlow,
-//   currentPersonFlowStep: PersonPageFlowStep,
-//   hasAusklammerungsgrund?: boolean
-// ): {
-//   routingZuNaechsterPageRoute: boolean,
-//   naechsterPersonFlowStep?: PersonPageFlowStep
-// } => {
-//   if (direction === "forward") {
-//     switch (currentPersonFlowStep) {
-//       case PersonPageFlowStep.AUSKLAMMERUNGS_GRUENDE:
-//         if (hasAusklammerungsgrund) {
-//           return {
-//             routingZuNaechsterPageRoute: false,
-//             naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_ZEITEN
-//           }
-//         }
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: PersonPageFlowStep.BMZ
-//         }
-//       case PersonPageFlowStep.AUSKLAMMERUNGS_ZEITEN:
-//         if (flow === PersonPageFlow.selbststaendig || flow === PersonPageFlow.mischeinkuenfte) {
-//           return {
-//             routingZuNaechsterPageRoute: false,
-//             naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_LOOP
-//           }
-//         }
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: PersonPageFlowStep.BMZ
-//         }
-//       case PersonPageFlowStep.AUSKLAMMERUNGS_LOOP:
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: PersonPageFlowStep.BMZ
-//         }
-//       case PersonPageFlowStep.BMZ:
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: PersonPageFlowStep.EINKOMMEN
-//         }
-//       case PersonPageFlowStep.EINKOMMEN:
-//         // if (timeDifference > 14) {
-//         //   return {
-//         //     routingZuNaechsterSeite: false,
-//         //     naechsteRoute: KindPageRoutes.GEBURT_PLAUSIBILITAETSCHECK,
-//         //   };
-//         // } else {
-//         //   return { routingZuNaechsterSeite: true };
-//         // }
-//         break
-//       default:
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: currentPersonFlowStep
-//         }
-//     }
-//   }
-
-//   if (direction === "backward") {
-//     switch (currentPersonFlowStep) {
-//       case PersonPageFlowStep.AUSKLAMMERUNGS_GRUENDE:
-//         return { routingZuNaechsterPageRoute: true }
-//       case PersonPageFlowStep.AUSKLAMMERUNGS_ZEITEN:
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_GRUENDE
-//         }
-//       case PersonPageFlowStep.AUSKLAMMERUNGS_LOOP:
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_ZEITEN
-//         }
-//       case PersonPageFlowStep.BMZ:
-//         if (hasAusklammerungsgrund === false) {
-//           return {
-//             routingZuNaechsterPageRoute: false,
-//             naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_GRUENDE
-//           }
-//         } else {
-//           if (flow === PersonPageFlow.selbststaendig || flow === PersonPageFlow.mischeinkuenfte) {
-//             return {
-//               routingZuNaechsterPageRoute: false,
-//               naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_LOOP
-//             }
-//           }
-//           return {
-//             routingZuNaechsterPageRoute: false,
-//             naechsterPersonFlowStep: PersonPageFlowStep.AUSKLAMMERUNGS_ZEITEN
-//           }
-//         }
-//       case PersonPageFlowStep.EINKOMMEN:
-//         // if (timeDifference > 14) {
-//         //   return {
-//         //     routingZuNaechsterSeite: false,
-//         //     naechsteRoute: KindPageRoutes.GEBURT_PLAUSIBILITAETSCHECK,
-//         //   };
-//         // } else {
-//         //   return { routingZuNaechsterSeite: true };
-//         // }
-//         break
-//       default:
-//         return {
-//           routingZuNaechsterPageRoute: false,
-//           naechsterPersonFlowStep: currentPersonFlowStep
-//         }
-//     }
-//   }
-
-//   return {
-//     routingZuNaechsterPageRoute: false,
-//     naechsterPersonFlowStep: currentPersonFlowStep
-//   }
-// };

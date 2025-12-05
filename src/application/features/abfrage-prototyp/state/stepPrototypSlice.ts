@@ -69,7 +69,13 @@ export type PersonenAngaben = {
 
   // taetigkeitenFlow: PersonPageFlow | null;
   // hasWeitereTaetigkeiten: YesNo | null;
+  uebersichtTaetigkeiten: TaetigkeitUebersicht[];
   taetigkeiten: TaetigkeitAngaben[];
+};
+
+export type TaetigkeitUebersicht = {
+  isActive: YesNo | null;
+  taetigkeitenSelektor: TaetigkeitenSelektor;
 };
 
 export type TaetigkeitAngaben = {
@@ -82,6 +88,7 @@ export type TaetigkeitAngaben = {
   selbststaendigAVPflichtversichert: boolean | null;
   bruttoJahresgewinn: number | null;
 
+  isDurchschnittseinkommen: YesNo | null;
   bruttoMonatsschnitt: number | null;
   bruttoMonatsangaben: number[] | null;
   isMinijob: YesNo | null;
@@ -145,6 +152,7 @@ const initialState: StepPrototypState = {
     hasSozialleistungen: false,
     hasKeinEinkommen: false,
 
+    uebersichtTaetigkeiten: [],
     taetigkeiten: [],
   },
 
@@ -165,6 +173,7 @@ const initialState: StepPrototypState = {
     hasSozialleistungen: false,
     hasKeinEinkommen: false,
 
+    uebersichtTaetigkeiten: [],
     taetigkeiten: [],
   },
 };
@@ -232,10 +241,20 @@ const getHasAusklammerungET1 = (state: RootState) =>
   state.stepPrototyp.ET1.hasMutterschutzAnderesKind ||
   state.stepPrototyp.ET1.hasElterngeldAnderesKind ||
   state.stepPrototyp.ET1.hasErkrankung;
+const getAusklammerungenET1 = (state: RootState) => [
+  ...state.stepPrototyp.ET1.ausklammerungenElterngeldAnderesKind,
+  ...state.stepPrototyp.ET1.ausklammerungenMutterschutzAnderesKind,
+  ...state.stepPrototyp.ET1.ausklammerungenErkrankung,
+];
 const getHasAusklammerungET2 = (state: RootState) =>
   state.stepPrototyp.ET2.hasMutterschutzAnderesKind ||
   state.stepPrototyp.ET2.hasElterngeldAnderesKind ||
   state.stepPrototyp.ET2.hasErkrankung;
+const getAusklammerungenET2 = (state: RootState) => [
+  ...state.stepPrototyp.ET2.ausklammerungenElterngeldAnderesKind,
+  ...state.stepPrototyp.ET2.ausklammerungenMutterschutzAnderesKind,
+  ...state.stepPrototyp.ET2.ausklammerungenErkrankung,
+];
 
 export function parseGermanDateString(germanDateString: string): Date {
   const [day, month, year] = germanDateString.split(".");
@@ -252,5 +271,7 @@ export const stepPrototypSelectors = {
   getTaetigkeitenET1,
   getTaetigkeitenET2,
   getHasAusklammerungET1,
+  getAusklammerungenET1,
   getHasAusklammerungET2,
+  getAusklammerungenET2,
 };

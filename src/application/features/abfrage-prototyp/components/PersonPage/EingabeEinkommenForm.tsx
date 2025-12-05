@@ -1,0 +1,186 @@
+import { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { InfoZuBruttoGewinn } from "@/application/features/abfrage-prototyp/components/InfoZuBruttoGewinn";
+import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
+import {
+  ZeitabschnittArt,
+  berechneExaktenBemessungszeitraum,
+  erstelleExakteZeitabschnitteBemessungszeitraum,
+} from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
+import {
+  type StepPrototypState,
+  stepPrototypSelectors,
+  stepPrototypSlice,
+} from "@/application/features/abfrage-prototyp/state";
+import { CustomNumberField } from "@/application/features/abfrageteil/components/common";
+import { YesNo } from "@/application/features/abfrageteil/state";
+import { useAppSelector, useAppStore } from "@/application/redux/hooks";
+import { Elternteil } from "@/monatsplaner";
+
+type Props = {
+  readonly id?: string;
+  readonly onSubmit?: (values: StepPrototypState) => void;
+  readonly hideSubmitButton?: boolean;
+  readonly elternteil: Elternteil;
+  readonly incomeIndex: number;
+};
+
+export function EingabeEinkommenForm({
+  id,
+  onSubmit,
+  elternteil,
+  incomeIndex,
+}: Props) {
+  const store = useAppStore();
+
+  const { control, handleSubmit, setValue } = useForm({
+    defaultValues: store.getState().stepPrototyp,
+  });
+
+  const submitAngabenEinkommen = useCallback(
+    (values: StepPrototypState) => {
+      store.dispatch(stepPrototypSlice.actions.submitStep(values));
+      onSubmit?.(values);
+    },
+    [store, onSubmit],
+  );
+
+  const taetigkeitenET1 = useAppSelector(
+    stepPrototypSelectors.getTaetigkeitenET1,
+  );
+  const taetigkeitenET2 = useAppSelector(
+    stepPrototypSelectors.getTaetigkeitenET2,
+  );
+  const taetigkeit =
+    elternteil === Elternteil.Eins
+      ? taetigkeitenET1[incomeIndex]
+      : taetigkeitenET2[incomeIndex];
+
+  const ausklammerungenET1 = useAppSelector(
+    stepPrototypSelectors.getAusklammerungenET1,
+  );
+  const ausklammerungenET2 = useAppSelector(
+    stepPrototypSelectors.getAusklammerungenET2,
+  );
+  const ausklammerungen =
+    elternteil === Elternteil.Eins ? ausklammerungenET1 : ausklammerungenET2;
+
+  const geburtsdatumDesKindes = useAppSelector(
+    stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
+  );
+  const flowForBMZ =
+    taetigkeit?.taetigkeitenArt === "selbststaendig"
+      ? PersonPageFlow.selbststaendig
+      : PersonPageFlow.nichtSelbststaendig;
+  const maximalerBemessungszeitraum = berechneExaktenBemessungszeitraum(
+    geburtsdatumDesKindes,
+    flowForBMZ,
+    ausklammerungen,
+  );
+  const exakteZeitabschnitteBemessungszeitraum =
+    erstelleExakteZeitabschnitteBemessungszeitraum(
+      geburtsdatumDesKindes,
+      flowForBMZ,
+      ausklammerungen,
+    );
+
+  const formattedDate = (date: Date) => {
+    return date.toLocaleDateString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  return (
+    <form id={id} onSubmit={handleSubmit(submitAngabenEinkommen)} noValidate>
+      <div>
+        <div className="my-40 inline-block rounded bg-grey-light py-10">
+          <span className="px-20 font-bold">
+            Bemessungszeitraum: {maximalerBemessungszeitraum}
+          </span>
+        </div>
+        <h3 className="mb-40">Details zur angestellten Tätigkeit</h3>
+
+        {taetigkeit?.isDurchschnittseinkommen === YesNo.YES && (
+          <div>
+            <h5 className="mb-8">
+              Wie viel haben Sie von {maximalerBemessungszeitraum} im Monat
+              brutto verdient?
+            </h5>
+            <CustomNumberField
+              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${incomeIndex}.bruttoMonatsschnitt`}
+              label="Monatliches Brutto-Einkommen"
+              suffix="Euro"
+              slotBeforeLabel={<InfoZuBruttoGewinn />}
+              control={control}
+              onChange={() => {
+                setValue(
+                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${incomeIndex}.bruttoMonatsangaben`,
+                  null,
+                );
+              }}
+            />
+          </div>
+        )}
+
+        {taetigkeit?.isDurchschnittseinkommen === YesNo.NO && (
+          <div>
+            <h5 className="mb-20">
+              Wie viel haben Sie von {maximalerBemessungszeitraum} im Monat
+              brutto verdient?
+            </h5>
+            <InfoZuBruttoGewinn />
+            <div className="mt-32">
+              {exakteZeitabschnitteBemessungszeitraum!.map(
+                ({ art, zeitabschnitt }, index) =>
+                  art === ZeitabschnittArt.ausklammerung ? (
+                    <section
+                      key={index}
+                      className="my-32 rounded border-dashed p-16"
+                      aria-live="polite"
+                      aria-labelledby="bmz"
+                    >
+                      <div className="pl-32">
+                        <h4 className="italic">Übersprungener Zeitraum:</h4>
+                        <p key={zeitabschnitt.beschreibung}>
+                          {zeitabschnitt.beschreibung}{" "}
+                          {formattedDate(zeitabschnitt.von)} bis{" "}
+                          {formattedDate(zeitabschnitt.bis)}
+                        </p>
+                      </div>
+                    </section>
+                  ) : (
+                    <div key={index} className="bg-off-white p-40 pt-32">
+                      <div className="pl-8">
+                        <strong>{zeitabschnitt.beschreibung}</strong>
+                        {zeitabschnitt.monate.map(
+                          ({ monatsIndex, monatsName }) => (
+                            <CustomNumberField
+                              key={monatsIndex}
+                              className="mt-10"
+                              control={control}
+                              name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${incomeIndex}.bruttoMonatsangaben.${monatsIndex}`}
+                              label={`${monatsName} Brutto-Einkommen`}
+                              suffix="Euro"
+                              required
+                              onChange={() => {
+                                setValue(
+                                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${incomeIndex}.bruttoMonatsschnitt`,
+                                  null,
+                                );
+                              }}
+                            />
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  ),
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </form>
+  );
+}

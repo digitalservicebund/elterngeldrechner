@@ -4,10 +4,8 @@ export {
   AusklammerungsGruendeForm,
   AusklammerungsZeitenForm,
   Bemessungszeitraum,
-  EinkommenAngabenForm,
   FamilieForm,
   InfoZuTaetigkeiten,
   KeinEinkommenForm,
-  TaetigkeitenForm,
   UebersichtTaetigkeitenForm,
 } from "./components";

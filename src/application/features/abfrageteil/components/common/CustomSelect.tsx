@@ -34,6 +34,7 @@ type Props<TFieldValues extends FieldValues> = {
   readonly required?: boolean;
   readonly disabled?: boolean;
   readonly className?: string;
+  readonly customPlaceholder?: string;
 };
 
 export function CustomSelect<TFieldValues extends FieldValues>({
@@ -48,6 +49,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
   disabled,
   slotBetweenLabelAndSelect,
   className,
+  customPlaceholder,
   ...aria
 }: Props<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
@@ -100,7 +102,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
             disabled={required}
             hidden={required}
           >
-            Bitte wählen
+            {customPlaceholder ?? "Bitte wählen"}
           </option>
 
           {options.map((option) => (

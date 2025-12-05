@@ -31,6 +31,7 @@ export function GeschwisterPage() {
       const data: RoutingPrototypState = {
         ...routerState,
         currentPersonPageRouteET1: PersonPageRoutes.ANGABEN_PERSON,
+        currentPersonPageIncomeIndexET1: 0,
       };
       dispatch(routingPrototypSlice.actions.submitRouting(data));
 

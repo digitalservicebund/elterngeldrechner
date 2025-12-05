@@ -174,6 +174,10 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
 
       {elternteil === Elternteil.Zwei && (
         <div className="mt-40">
+          <h3 className="mb-20">
+            Sollen beide Elternteile Elterngeld bekommen?
+          </h3>
+
           <CustomRadioGroup
             register={register}
             registerOptions={{ required: "Dieses Feld ist erforderlich" }}
@@ -191,8 +195,10 @@ export function AngabenPersonForm({ id, onSubmit, elternteil }: Props) {
                 <h3>Wie heißt Person 2 die Elterngeld erhalten soll?</h3>
 
                 <div className="mt-20">
+                  <InfoZuVornamen />
+
                   <label
-                    className="mb-4 block text-16"
+                    className="mb-4 mt-20 block text-16"
                     htmlFor={personNameInputIdentifier}
                   >
                     Vorname Person 2

@@ -1,8 +1,7 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { InfoZuAusklammerungsgruende } from "./InfoZuAusklammerungsgruende";
+import { InfoZuAusklammerungsgruende } from "./InfoBoxen/InfoZuAusklammerungsgruende";
 import { Alert } from "@/application/components/Alert";
-import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import {
   type StepPrototypState,
   stepPrototypSlice,
@@ -11,7 +10,6 @@ import { InfoZuElternzeitAnderesKind } from "@/application/features/abfrageteil/
 import { InfoZuKrankheit } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuKrankheit";
 import { InfoZuMutterschutzAnderesKind } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuMutterschutzAnderesKind";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
-import { Antragstellende } from "@/application/features/abfrageteil/state";
 import { useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 
@@ -19,9 +17,9 @@ type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
-    antragsstellende?: Antragstellende,
-    flow?: PersonPageFlow,
-    hasAusklammerungsgrund?: boolean,
+    // antragsstellende?: Antragstellende,
+    // flow?: PersonPageFlow,
+    // hasAusklammerungsgrund?: boolean,
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
@@ -31,30 +29,30 @@ type Props = {
 export function AusklammerungsGruendeForm({ id, onSubmit, elternteil }: Props) {
   const store = useAppStore();
 
-  const { register, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     defaultValues: store.getState().stepPrototyp,
   });
 
   const submitAusklammerungsGruende = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, undefined, undefined, isAnyOptionSelected());
+      onSubmit?.(values);
     },
     [store, onSubmit],
   );
 
-  function isAnyOptionSelected(): boolean {
-    const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
-    const anyOptionIsSelected = (
-      [
-        `${person}.hasMutterschutzAnderesKind`,
-        `${person}.hasElterngeldAnderesKind`,
-        `${person}.hasErkrankung`,
-      ] as const
-    ).some((fieldName) => getValues(fieldName));
+  // function isAnyOptionSelected(): boolean {
+  //   const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
+  //   const anyOptionIsSelected = (
+  //     [
+  //       `${person}.hasMutterschutzAnderesKind`,
+  //       `${person}.hasElterngeldAnderesKind`,
+  //       `${person}.hasErkrankung`,
+  //     ] as const
+  //   ).some((fieldName) => getValues(fieldName));
 
-    return anyOptionIsSelected;
-  }
+  //   return anyOptionIsSelected;
+  // }
 
   // const hasGeschwisterkinder = () => {
   //   const geschwisterkinder = getValues("geschwisterkinder")

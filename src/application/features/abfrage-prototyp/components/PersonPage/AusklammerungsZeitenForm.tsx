@@ -16,10 +16,10 @@ type Props = {
   readonly id?: string;
   readonly onSubmit?: (
     values: StepPrototypState,
-    antragsstellende?: Antragstellende,
-    flow?: PersonPageFlow,
-    hasAusklammerungsgrund?: boolean,
-    auszuklammerndeZeitraeume?: Ausklammerung[],
+    // antragsstellende?: Antragstellende,
+    // flow?: PersonPageFlow,
+    // hasAusklammerungsgrund?: boolean,
+    // auszuklammerndeZeitraeume?: Ausklammerung[],
   ) => void;
   readonly hideSubmitButton?: boolean;
   readonly elternteil: Elternteil;
@@ -92,7 +92,7 @@ export function AusklammerungsZeitenForm({
   const submitAusklammerungsZeiten = useCallback(
     (values: StepPrototypState) => {
       store.dispatch(stepPrototypSlice.actions.submitStep(values));
-      onSubmit?.(values, undefined, undefined, undefined, ausklammerungen());
+      onSubmit?.(values);
     },
     [store, onSubmit],
   );

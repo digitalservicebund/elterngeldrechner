@@ -63,6 +63,7 @@ export function AnzahlTaetigkeitenForm({
       selbststaendigAVPflichtversichert: null,
       bruttoJahresgewinn: null,
 
+      isDurchschnittseinkommen: null,
       bruttoMonatsschnitt: null,
       bruttoMonatsangaben: null,
       isMinijob: null,
@@ -81,6 +82,7 @@ export function AnzahlTaetigkeitenForm({
       selbststaendigAVPflichtversichert: null,
       bruttoJahresgewinn: null,
 
+      isDurchschnittseinkommen: null,
       bruttoMonatsschnitt: null,
       bruttoMonatsangaben: null,
       isMinijob: null,

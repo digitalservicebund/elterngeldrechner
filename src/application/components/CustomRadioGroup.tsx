@@ -17,6 +17,7 @@ export interface CustomRadioGroupOption<
 > {
   value: V;
   label: string;
+  labelNode?: ReactNode;
   description?: (id: string) => ReactNode;
 }
 
@@ -95,7 +96,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
                 required={required}
                 disabled={disabled}
               />
-              {option.label}
+              {option.labelNode ?? option.label}
 
               {!!option.description && option.description(descriptionId)}
             </label>

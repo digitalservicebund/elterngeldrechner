@@ -292,7 +292,7 @@ const getAusklammerungenET1 = (state: RootState): Ausklammerung[] | [] => {
     hasMutterschutz && !state.stepPrototyp.ET1.isBeamtet
       ? [
           {
-            beschreibung: "Mutterschutz dieses Kind",
+            beschreibung: "Mutterschutz für dieses Kind",
             von: startdatum,
             bis: enddatum,
           },
@@ -301,7 +301,7 @@ const getAusklammerungenET1 = (state: RootState): Ausklammerung[] | [] => {
   const elterngeld = state.stepPrototyp.ET1.ausklammerungenElterngeldAnderesKind
     .filter((item) => item.von && item.bis)
     .map((item) => ({
-      beschreibung: "Elterngeld anderes Kind",
+      beschreibung: "Elterngeld für anderes Kind",
       von: parseGermanDateString(item.von!),
       bis: parseGermanDateString(item.bis!),
     }));
@@ -309,14 +309,14 @@ const getAusklammerungenET1 = (state: RootState): Ausklammerung[] | [] => {
     state.stepPrototyp.ET1.ausklammerungenMutterschutzAnderesKind
       .filter((item) => item.von && item.bis)
       .map((item) => ({
-        beschreibung: "Mutterschutz anderes Kind",
+        beschreibung: "Mutterschutz für anderes Kind",
         von: parseGermanDateString(item.von!),
         bis: parseGermanDateString(item.bis!),
       }));
   const erkrankung = state.stepPrototyp.ET1.ausklammerungenErkrankung
     .filter((item) => item.von && item.bis)
     .map((item) => ({
-      beschreibung: "Erkrankung",
+      beschreibung: "Krankheit wegen der Schwangerschaft",
       von: parseGermanDateString(item.von!),
       bis: parseGermanDateString(item.bis!),
     }));
@@ -347,7 +347,7 @@ const getAusklammerungenET2 = (state: RootState): Ausklammerung[] => {
     hasMutterschutz && !state.stepPrototyp.ET2.isBeamtet
       ? [
           {
-            beschreibung: "Mutterschutz dieses Kind",
+            beschreibung: "Mutterschutz für dieses Kind",
             von: startdatum,
             bis: enddatum,
           },
@@ -356,7 +356,7 @@ const getAusklammerungenET2 = (state: RootState): Ausklammerung[] => {
   const elterngeld = state.stepPrototyp.ET2.ausklammerungenElterngeldAnderesKind
     .filter((item) => item.von && item.bis)
     .map((item) => ({
-      beschreibung: "Elterngeld anderes Kind",
+      beschreibung: "Elterngeld für anderes Kind",
       von: parseGermanDateString(item.von!),
       bis: parseGermanDateString(item.bis!),
     }));
@@ -364,14 +364,14 @@ const getAusklammerungenET2 = (state: RootState): Ausklammerung[] => {
     state.stepPrototyp.ET2.ausklammerungenMutterschutzAnderesKind
       .filter((item) => item.von && item.bis)
       .map((item) => ({
-        beschreibung: "Mutterschutz anderes Kind",
+        beschreibung: "Mutterschutz für anderes Kind",
         von: parseGermanDateString(item.von!),
         bis: parseGermanDateString(item.bis!),
       }));
   const erkrankung = state.stepPrototyp.ET2.ausklammerungenErkrankung
     .filter((item) => item.von && item.bis)
     .map((item) => ({
-      beschreibung: "Erkrankung",
+      beschreibung: "Krankheit wegen der Schwangerschaft",
       von: parseGermanDateString(item.von!),
       bis: parseGermanDateString(item.bis!),
     }));

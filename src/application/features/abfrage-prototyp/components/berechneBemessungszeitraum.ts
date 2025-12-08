@@ -22,7 +22,7 @@ export function berechneMaximalenBemessungszeitraum(
   geburtsdatum: Date,
 ): string[] {
   return [
-    `im Kalenderjahr ${geburtsdatum.getFullYear() - 1}`,
+    `in den Kalenderjahren ${geburtsdatum.getFullYear() - 1} bis zum Geburtsdatum ${formattedDate(geburtsdatum)}`,
     `und vom ${formattedDate(new Date(geburtsdatum.getFullYear(), 0, 1))} bis ${formattedDate(geburtsdatum)}`,
   ];
 }

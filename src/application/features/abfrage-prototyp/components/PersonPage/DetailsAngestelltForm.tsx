@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import {
   CustomRadioGroup,
   CustomRadioGroupOption,
@@ -7,7 +8,6 @@ import {
 import { InfoZuAVPflicht } from "@/application/features/abfrage-prototyp/components/InfoZuAVPflicht";
 import { InfoZuKVPflicht } from "@/application/features/abfrage-prototyp/components/InfoZuKVPflicht";
 import { InfoZuRVPflicht } from "@/application/features/abfrage-prototyp/components/InfoZuRVPflicht";
-import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import { berechneExaktenBemessungszeitraum } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 import {
   type StepPrototypState,
@@ -20,6 +20,7 @@ import {
   YesNoRadio,
 } from "@/application/features/abfrageteil/components/common";
 import { YesNo } from "@/application/features/abfrageteil/state";
+import { RootState } from "@/application/redux";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Steuerklasse } from "@/elterngeldrechner";
 import { Elternteil } from "@/monatsplaner";
@@ -58,6 +59,8 @@ export function DetailsAngestelltForm({
   const taetigkeitenET2 = useAppSelector(
     stepPrototypSelectors.getTaetigkeitenET2,
   );
+  const taetigkeiten =
+    elternteil === Elternteil.Eins ? taetigkeitenET1 : taetigkeitenET2;
   const taetigkeit =
     elternteil === Elternteil.Eins
       ? taetigkeitenET1[incomeIndex]
@@ -75,13 +78,16 @@ export function DetailsAngestelltForm({
   const geburtsdatumDesKindes = useAppSelector(
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
   );
-  const flowForBMZ =
-    taetigkeit?.taetigkeitenArt === "selbststaendig"
-      ? PersonPageFlow.selbststaendig
-      : PersonPageFlow.nichtSelbststaendig;
+
+  const routerState = useSelector((state: RootState) => state.routingPrototyp);
+  const currentPersonPageFlow =
+    elternteil === Elternteil.Eins
+      ? routerState.currentPersonPageFlowET1
+      : routerState.currentPersonPageFlowET2;
+
   const maximalerBemessungszeitraum = berechneExaktenBemessungszeitraum(
     geburtsdatumDesKindes,
-    flowForBMZ,
+    currentPersonPageFlow,
     ausklammerungen,
   );
 
@@ -133,7 +139,10 @@ export function DetailsAngestelltForm({
           ) : null}
         </section>
 
-        <h3 className="mb-40">Details zur angestellten Tätigkeit</h3>
+        <h3 className="mb-40">
+          Details zur angestellten Tätigkeit{" "}
+          {taetigkeiten.length > 1 ? incomeIndex + 1 : ""}
+        </h3>
 
         {taetigkeit?.isMinijob === YesNo.NO && (
           <div>

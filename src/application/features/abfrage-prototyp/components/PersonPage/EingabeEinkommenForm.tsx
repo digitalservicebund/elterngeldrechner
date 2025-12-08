@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { InfoZuBruttoGewinn } from "@/application/features/abfrage-prototyp/components/InfoZuBruttoGewinn";
 import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
 import {
@@ -14,6 +15,7 @@ import {
 } from "@/application/features/abfrage-prototyp/state";
 import { CustomNumberField } from "@/application/features/abfrageteil/components/common";
 import { YesNo } from "@/application/features/abfrageteil/state";
+import { RootState } from "@/application/redux";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { Elternteil } from "@/monatsplaner";
 
@@ -51,6 +53,8 @@ export function EingabeEinkommenForm({
   const taetigkeitenET2 = useAppSelector(
     stepPrototypSelectors.getTaetigkeitenET2,
   );
+  const taetigkeiten =
+    elternteil === Elternteil.Eins ? taetigkeitenET1 : taetigkeitenET2;
   const taetigkeit =
     elternteil === Elternteil.Eins
       ? taetigkeitenET1[incomeIndex]
@@ -68,13 +72,20 @@ export function EingabeEinkommenForm({
   const geburtsdatumDesKindes = useAppSelector(
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
   );
+
+  const routerState = useSelector((state: RootState) => state.routingPrototyp);
+  const currentPersonPageFlow =
+    elternteil === Elternteil.Eins
+      ? routerState.currentPersonPageFlowET1
+      : routerState.currentPersonPageFlowET2;
+
   const flowForBMZ =
     taetigkeit?.taetigkeitenArt === "selbststaendig"
       ? PersonPageFlow.selbststaendig
       : PersonPageFlow.nichtSelbststaendig;
   const maximalerBemessungszeitraum = berechneExaktenBemessungszeitraum(
     geburtsdatumDesKindes,
-    flowForBMZ,
+    currentPersonPageFlow,
     ausklammerungen,
   );
   const exakteZeitabschnitteBemessungszeitraum =
@@ -119,7 +130,10 @@ export function EingabeEinkommenForm({
           ) : null}
         </section>
 
-        <h3 className="mb-40">Details zur angestellten Tätigkeit</h3>
+        <h3 className="mb-40">
+          Details zur angestellten Tätigkeit{" "}
+          {taetigkeiten.length > 1 ? incomeIndex + 1 : ""}
+        </h3>
 
         {taetigkeit?.isDurchschnittseinkommen === YesNo.YES && (
           <div>

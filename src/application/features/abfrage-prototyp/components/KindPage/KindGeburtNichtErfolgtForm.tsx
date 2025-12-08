@@ -61,6 +61,35 @@ export function KindGeburtNichtErfolgtForm({ id, onSubmit }: Props) {
       noValidate
     >
       <div className="mt-40">
+        <h3 className="mb-10">
+          Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
+        </h3>
+
+        <InfoZuET />
+
+        <label
+          className="mb-4 mt-20 block text-16"
+          htmlFor={wahrscheinlichesGeburtsDatumInputIdentifier}
+        >
+          Errechneter Entbindungstermin (TT.MM.JJJJ)
+        </label>
+
+        <CustomDate
+          id={wahrscheinlichesGeburtsDatumInputIdentifier}
+          error={errors.kind?.errechneterGeburtstermin?.message}
+          aria-describedby={wahrscheinlichesGeburtsDatumDescriptionIdentifier}
+          {...register("kind.errechneterGeburtstermin", {
+            required: "Dieses Feld ist erforderlich",
+            pattern: {
+              value: /^\d{2}\.\d{2}\.\d{4}$/,
+              message: "Bitte das Feld vollständig ausfüllen",
+            },
+            validate: validateMonth,
+          })}
+        />
+      </div>
+
+      <div className="mt-20">
         <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
           Wie viele Kinder werden oder wurden geboren?
         </h3>
@@ -87,35 +116,6 @@ export function KindGeburtNichtErfolgtForm({ id, onSubmit }: Props) {
           label="Anzahl der Kinder"
           errors={errors}
           required
-        />
-      </div>
-
-      <div className="mt-20">
-        <h3 className="mb-10">
-          Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
-        </h3>
-
-        <InfoZuET />
-
-        <label
-          className="mb-4 mt-20 block text-16"
-          htmlFor={wahrscheinlichesGeburtsDatumInputIdentifier}
-        >
-          Errechneter Entbindungstermin (TT.MM.JJJJ)
-        </label>
-
-        <CustomDate
-          id={wahrscheinlichesGeburtsDatumInputIdentifier}
-          error={errors.kind?.errechneterGeburtstermin?.message}
-          aria-describedby={wahrscheinlichesGeburtsDatumDescriptionIdentifier}
-          {...register("kind.errechneterGeburtstermin", {
-            required: "Dieses Feld ist erforderlich",
-            pattern: {
-              value: /^\d{2}\.\d{2}\.\d{4}$/,
-              message: "Bitte das Feld vollständig ausfüllen",
-            },
-            validate: validateMonth,
-          })}
         />
       </div>
     </form>

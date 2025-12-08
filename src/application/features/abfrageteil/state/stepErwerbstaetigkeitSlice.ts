@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
-import { StepPrototypState } from "../../abfrage-prototyp/state";
+import { StepPrototypState } from "@/application/features/abfrage-prototyp/state";
 
 export type MonatlichesBrutto = "MiniJob" | "MehrAlsMiniJob";
 

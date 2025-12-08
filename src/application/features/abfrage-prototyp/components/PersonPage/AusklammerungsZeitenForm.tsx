@@ -97,18 +97,31 @@ export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
                   id={`ausklammerungenMutterschutzAnderesKind-${index}-von`}
                   error={
                     elternteil === Elternteil.Eins
-                      ? errors.ET1?.ausklammerungenMutterschutzAnderesKind
-                          ?.message
-                      : errors.ET2?.ausklammerungenMutterschutzAnderesKind
-                          ?.message
+                      ? errors.ET1?.ausklammerungenMutterschutzAnderesKind?.[
+                          index
+                        ]?.von?.message
+                      : errors.ET2?.ausklammerungenMutterschutzAnderesKind?.[
+                          index
+                        ]?.von?.message
                   }
                   {...register(
                     `${ausklammerungenMutterschutzAnderesKind}.${index}.von` as Path<StepPrototypState>,
                     {
-                      required: "Dieses Feld ist erforderlich",
-                      pattern: {
-                        value: /^\d{2}\.\d{2}\.\d{4}$/,
-                        message: "Bitte das Feld vollständig ausfüllen",
+                      validate: (value) => {
+                        const bisFieldPath =
+                          `${ausklammerungenMutterschutzAnderesKind}.${index}.bis` as Path<StepPrototypState>;
+                        const bisValue = getValues(bisFieldPath);
+
+                        if (bisValue && !value) {
+                          return "Bitte geben Sie auch das Startdatum an.";
+                        }
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+                        if (value && !dateRegex.test(value as string)) {
+                          return "Bitte das Datum vollständig (TT.MM.JJJJ) ausfüllen";
+                        }
+
+                        return true;
                       },
                     },
                   )}
@@ -125,18 +138,31 @@ export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
                   id={`ausklammerungenMutterschutzAnderesKind-${index}-bis`}
                   error={
                     elternteil === Elternteil.Eins
-                      ? errors.ET1?.ausklammerungenMutterschutzAnderesKind
-                          ?.message
-                      : errors.ET2?.ausklammerungenMutterschutzAnderesKind
-                          ?.message
+                      ? errors.ET1?.ausklammerungenMutterschutzAnderesKind?.[
+                          index
+                        ]?.bis?.message
+                      : errors.ET2?.ausklammerungenMutterschutzAnderesKind?.[
+                          index
+                        ]?.bis?.message
                   }
                   {...register(
                     `${ausklammerungenMutterschutzAnderesKind}.${index}.bis` as Path<StepPrototypState>,
                     {
-                      required: "Dieses Feld ist erforderlich",
-                      pattern: {
-                        value: /^\d{2}\.\d{2}\.\d{4}$/,
-                        message: "Bitte das Feld vollständig ausfüllen",
+                      validate: (value) => {
+                        const vonFieldPath =
+                          `${ausklammerungenMutterschutzAnderesKind}.${index}.von` as Path<StepPrototypState>;
+                        const vonValue = getValues(vonFieldPath);
+
+                        if (vonValue && !value) {
+                          return "Bitte geben Sie auch das Enddatum an.";
+                        }
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+                        if (value && !dateRegex.test(value as string)) {
+                          return "Bitte das Datum vollständig (TT.MM.JJJJ) ausfüllen";
+                        }
+
+                        return true;
                       },
                     },
                   )}
@@ -181,18 +207,31 @@ export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
                   id={`ausklammerungenElterngeldAnderesKind-${index}-von`}
                   error={
                     elternteil === Elternteil.Eins
-                      ? errors.ET1?.ausklammerungenElterngeldAnderesKind
-                          ?.message
-                      : errors.ET2?.ausklammerungenElterngeldAnderesKind
-                          ?.message
+                      ? errors.ET1?.ausklammerungenElterngeldAnderesKind?.[
+                          index
+                        ]?.von?.message
+                      : errors.ET2?.ausklammerungenElterngeldAnderesKind?.[
+                          index
+                        ]?.von?.message
                   }
                   {...register(
                     `${ausklammerungenElterngeldAnderesKind}.${index}.von` as Path<StepPrototypState>,
                     {
-                      required: "Dieses Feld ist erforderlich",
-                      pattern: {
-                        value: /^\d{2}\.\d{2}\.\d{4}$/,
-                        message: "Bitte das Feld vollständig ausfüllen",
+                      validate: (value) => {
+                        const bisFieldPath =
+                          `${ausklammerungenElterngeldAnderesKind}.${index}.bis` as Path<StepPrototypState>;
+                        const bisValue = getValues(bisFieldPath);
+
+                        if (bisValue && !value) {
+                          return "Bitte geben Sie auch das Startdatum an.";
+                        }
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+                        if (value && !dateRegex.test(value as string)) {
+                          return "Bitte das Datum vollständig (TT.MM.JJJJ) ausfüllen";
+                        }
+
+                        return true;
                       },
                     },
                   )}
@@ -209,18 +248,31 @@ export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
                   id={`ausklammerungenElterngeldAnderesKind-${index}-bis`}
                   error={
                     elternteil === Elternteil.Eins
-                      ? errors.ET1?.ausklammerungenElterngeldAnderesKind
-                          ?.message
-                      : errors.ET2?.ausklammerungenElterngeldAnderesKind
-                          ?.message
+                      ? errors.ET1?.ausklammerungenElterngeldAnderesKind?.[
+                          index
+                        ]?.bis?.message
+                      : errors.ET2?.ausklammerungenElterngeldAnderesKind?.[
+                          index
+                        ]?.bis?.message
                   }
                   {...register(
                     `${ausklammerungenElterngeldAnderesKind}.${index}.bis` as Path<StepPrototypState>,
                     {
-                      required: "Dieses Feld ist erforderlich",
-                      pattern: {
-                        value: /^\d{2}\.\d{2}\.\d{4}$/,
-                        message: "Bitte das Feld vollständig ausfüllen",
+                      validate: (value) => {
+                        const vonFieldPath =
+                          `${ausklammerungenElterngeldAnderesKind}.${index}.von` as Path<StepPrototypState>;
+                        const vonValue = getValues(vonFieldPath);
+
+                        if (vonValue && !value) {
+                          return "Bitte geben Sie auch das Enddatum an.";
+                        }
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+                        if (value && !dateRegex.test(value as string)) {
+                          return "Bitte das Datum vollständig (TT.MM.JJJJ) ausfüllen";
+                        }
+
+                        return true;
                       },
                     },
                   )}
@@ -264,16 +316,29 @@ export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
                   id={`ausklammerungenErkrankung-${index}-von`}
                   error={
                     elternteil === Elternteil.Eins
-                      ? errors.ET1?.ausklammerungenErkrankung?.message
-                      : errors.ET2?.ausklammerungenErkrankung?.message
+                      ? errors.ET1?.ausklammerungenErkrankung?.[index]?.von
+                          ?.message
+                      : errors.ET2?.ausklammerungenErkrankung?.[index]?.von
+                          ?.message
                   }
                   {...register(
                     `${ausklammerungenErkrankung}.${index}.von` as Path<StepPrototypState>,
                     {
-                      required: "Dieses Feld ist erforderlich",
-                      pattern: {
-                        value: /^\d{2}\.\d{2}\.\d{4}$/,
-                        message: "Bitte das Feld vollständig ausfüllen",
+                      validate: (value) => {
+                        const bisFieldPath =
+                          `${ausklammerungenErkrankung}.${index}.bis` as Path<StepPrototypState>;
+                        const bisValue = getValues(bisFieldPath);
+
+                        if (bisValue && !value) {
+                          return "Bitte geben Sie auch das Startdatum an.";
+                        }
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+                        if (value && !dateRegex.test(value as string)) {
+                          return "Bitte das Datum vollständig (TT.MM.JJJJ) ausfüllen";
+                        }
+
+                        return true;
                       },
                     },
                   )}
@@ -290,16 +355,29 @@ export function AusklammerungsZeitenForm({ id, onSubmit, elternteil }: Props) {
                   id={`ausklammerungenErkrankung-${index}-bis`}
                   error={
                     elternteil === Elternteil.Eins
-                      ? errors.ET1?.ausklammerungenErkrankung?.message
-                      : errors.ET2?.ausklammerungenErkrankung?.message
+                      ? errors.ET1?.ausklammerungenErkrankung?.[index]?.bis
+                          ?.message
+                      : errors.ET2?.ausklammerungenErkrankung?.[index]?.bis
+                          ?.message
                   }
                   {...register(
                     `${ausklammerungenErkrankung}.${index}.bis` as Path<StepPrototypState>,
                     {
-                      required: "Dieses Feld ist erforderlich",
-                      pattern: {
-                        value: /^\d{2}\.\d{2}\.\d{4}$/,
-                        message: "Bitte das Feld vollständig ausfüllen",
+                      validate: (value) => {
+                        const vonFieldPath =
+                          `${ausklammerungenErkrankung}.${index}.von` as Path<StepPrototypState>;
+                        const vonValue = getValues(vonFieldPath);
+
+                        if (vonValue && !value) {
+                          return "Bitte geben Sie auch das Enddatum an.";
+                        }
+                        const dateRegex = /^\d{2}\.\d{2}\.\d{4}$/;
+
+                        if (value && !dateRegex.test(value as string)) {
+                          return "Bitte das Datum vollständig (TT.MM.JJJJ) ausfüllen";
+                        }
+
+                        return true;
                       },
                     },
                   )}

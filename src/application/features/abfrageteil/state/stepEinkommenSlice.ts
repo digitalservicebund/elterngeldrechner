@@ -1,16 +1,15 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
 import { Antragstellende } from "./stepAllgemeineAngabenSlice";
+import { StepPrototypState } from "@/application/features/abfrage-prototyp/state";
+import { TaetigkeitAngaben } from "@/application/features/abfrage-prototyp/state/stepPrototypSlice";
+import { Taetigkeit } from "@/application/features/abfrageteil/components/EinkommenForm/Taetigkeit";
 import {
   KassenArt,
   KinderFreiBetrag,
   RentenArt,
   Steuerklasse,
 } from "@/elterngeldrechner";
-import { StepPrototypState } from "../../abfrage-prototyp/state";
-import { Taetigkeit } from "../components/EinkommenForm/Taetigkeit";
-import { PersonPageFlow } from "../../abfrage-prototyp/components/PersonPageRouting";
-import { TaetigkeitAngaben } from "../../abfrage-prototyp/state/stepPrototypSlice";
 
 export interface Zeitraum {
   from: string;
@@ -142,7 +141,7 @@ export const stepEinkommenSlice = createSlice({
       state.ET1 = {
         bruttoEinkommenNichtSelbstaendig:
           prototype.ET1.isSelbststaendig ||
-          prototype.ET1.hasWeitereTaetigkeiten === YesNo.YES
+          prototype.ET1.taetigkeiten.length > 1
             ? initialAverageOrMonthlyStateNichtSelbstaendig
             : prototype.ET1.taetigkeiten[0]?.bruttoMonatsschnitt &&
                 prototype.ET1.taetigkeiten[0]?.bruttoMonatsschnitt != null
@@ -159,7 +158,7 @@ export const stepEinkommenSlice = createSlice({
                   average: null,
                   perYear: null,
                   perMonth: prototype.ET1.taetigkeiten[0]?.bruttoMonatsangaben
-                    ? prototype.ET1.taetigkeiten[0]!.bruttoMonatsangaben
+                    ? prototype.ET1.taetigkeiten[0].bruttoMonatsangaben
                     : Array.from<number | null>({ length: 12 }).fill(null),
                 },
         steuerklasse: prototype.ET1.taetigkeiten.some(
@@ -173,7 +172,7 @@ export const stepEinkommenSlice = createSlice({
         kinderFreiBetrag: KinderFreiBetrag.ZKF0_5,
         gewinnSelbstaendig:
           !prototype.ET1.isSelbststaendig ||
-          prototype.ET1.hasWeitereTaetigkeiten === YesNo.YES
+          prototype.ET1.taetigkeiten.length > 1
             ? initialAverageOrMonthlyStateSelbstaendig
             : {
                 type: "yearly",
@@ -203,7 +202,7 @@ export const stepEinkommenSlice = createSlice({
             ? YesNo.YES
             : YesNo.NO,
         hasMischEinkommen:
-          prototype.ET1.taetigkeitenFlow === PersonPageFlow.mischeinkuenfte
+          prototype.ET1.isSelbststaendig && prototype.ET1.isNichtSelbststaendig
             ? YesNo.YES
             : YesNo.NO,
         istSelbststaendig:
@@ -216,7 +215,7 @@ export const stepEinkommenSlice = createSlice({
       state.ET2 = {
         bruttoEinkommenNichtSelbstaendig:
           prototype.ET2.isSelbststaendig ||
-          prototype.ET2.hasWeitereTaetigkeiten === YesNo.YES
+          prototype.ET2.taetigkeiten.length > 1
             ? initialAverageOrMonthlyStateNichtSelbstaendig
             : prototype.ET2.taetigkeiten[0]?.bruttoMonatsschnitt &&
                 prototype.ET2.taetigkeiten[0]?.bruttoMonatsschnitt != null
@@ -247,7 +246,7 @@ export const stepEinkommenSlice = createSlice({
         kinderFreiBetrag: KinderFreiBetrag.ZKF0_5,
         gewinnSelbstaendig:
           !prototype.ET2.isSelbststaendig ||
-          prototype.ET2.hasWeitereTaetigkeiten === YesNo.YES
+          prototype.ET2.taetigkeiten.length > 1
             ? initialAverageOrMonthlyStateSelbstaendig
             : {
                 type: "yearly",
@@ -277,7 +276,7 @@ export const stepEinkommenSlice = createSlice({
             ? YesNo.YES
             : YesNo.NO,
         hasMischEinkommen:
-          prototype.ET2.taetigkeitenFlow === PersonPageFlow.mischeinkuenfte
+          prototype.ET2.isSelbststaendig && prototype.ET2.isNichtSelbststaendig
             ? YesNo.YES
             : YesNo.NO,
         istSelbststaendig:
@@ -292,7 +291,7 @@ export const stepEinkommenSlice = createSlice({
           ? prototype.antragstellende
           : "EinenElternteil";
       state.limitEinkommenUeberschritten =
-        prototype.limitEinkommenUeberschritten;
+        prototype.familie.limitEinkommenUeberschritten;
     },
   },
   // extraReducers: (builder) => {

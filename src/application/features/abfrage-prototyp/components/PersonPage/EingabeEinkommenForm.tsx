@@ -112,7 +112,8 @@ export function EingabeEinkommenForm({
               Bemessungszeitraum: {maximalerBemessungszeitraum}
             </span>
           </div>
-          {ausklammerungen.length > 0 ? (
+          {ausklammerungen.length > 0 &&
+          taetigkeit?.isDurchschnittseinkommen === YesNo.YES ? (
             <div className="rounded-b border-x border-b border-t-0 border-dashed border-grey p-20">
               <h5 className="text-14">Übersprungene Zeiträume:</h5>
               <ul className="ml-32 mt-4 list-disc text-14">
@@ -196,7 +197,7 @@ export function EingabeEinkommenForm({
                               name={`${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${incomeIndex}.bruttoMonatsangaben.${monatsIndex}`}
                               label={`${monatsName} Brutto-Einkommen`}
                               suffix="Euro"
-                              required
+                              required={false}
                               onChange={() => {
                                 setValue(
                                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.taetigkeiten.${incomeIndex}.bruttoMonatsschnitt`,

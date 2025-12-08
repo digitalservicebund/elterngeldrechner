@@ -62,38 +62,8 @@ export function KindGeburtErfolgtForm({ id, onSubmit }: Props) {
       onSubmit={handleSubmit(submitNachwuchs)}
       noValidate
     >
-      <div>
-        <h3 className="mt-20">Herzlichen Glückwunsch!</h3>
-        <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
-          Wie viele Kinder werden oder wurden geboren?
-        </h3>
-
-        <p className="mt-10 pb-20">
-          Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
-          Kinder an (zum Beispiel 2 bei Zwillingen).
-        </p>
-
-        <Counter
-          register={register}
-          registerOptions={{
-            max: {
-              value: 8,
-              message: "Es können nicht mehr als 8 Kinder angegeben werden",
-            },
-            min: {
-              value: 1,
-              message: "Es muss mindestens ein Kind angegeben werden",
-            },
-            required: "Dieses Feld ist erforderlich",
-          }}
-          name="kind.anzahlKuenftigerKinder"
-          label="Anzahl der Kinder"
-          errors={errors}
-          required
-        />
-      </div>
-
       <div className="mt-20">
+        <h3>Herzlichen Glückwunsch!</h3>
         <h3 className="mb-10">
           Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
         </h3>
@@ -148,6 +118,36 @@ export function KindGeburtErfolgtForm({ id, onSubmit }: Props) {
             },
             validate: validateMonth,
           })}
+        />
+      </div>
+
+      <div className="mt-20">
+        <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
+          Wie viele Kinder werden oder wurden geboren?
+        </h3>
+
+        <p className="mt-10 pb-20">
+          Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
+          Kinder an (zum Beispiel 2 bei Zwillingen).
+        </p>
+
+        <Counter
+          register={register}
+          registerOptions={{
+            max: {
+              value: 8,
+              message: "Es können nicht mehr als 8 Kinder angegeben werden",
+            },
+            min: {
+              value: 1,
+              message: "Es muss mindestens ein Kind angegeben werden",
+            },
+            required: "Dieses Feld ist erforderlich",
+          }}
+          name="kind.anzahlKuenftigerKinder"
+          label="Anzahl der Kinder"
+          errors={errors}
+          required
         />
       </div>
     </form>

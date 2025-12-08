@@ -48,15 +48,17 @@ export function CustomNumberField<
   required,
   ariaDescribedByIfNoError,
 }: Props<TFieldValues, TName> & {
-  onChange?: (value: number | null) => void;
+  readonly onChange?: (value: number | null) => void;
 }) {
-  const registerOptions = useMemo(
-    () =>
-      ({
-        required: "Dieses Feld ist erforderlich",
-      }) satisfies RegisterOptions,
-    [],
-  );
+  const registerOptions = useMemo(() => {
+    const options: RegisterOptions<TFieldValues, TName> = {};
+
+    if (required) {
+      options.required = "Dieses Feld ist erforderlich";
+    }
+
+    return options;
+  }, [required]);
 
   const {
     field: { onChange, onBlur, value, ref },
@@ -93,7 +95,7 @@ export function CustomNumberField<
       )}
 
       <IMaskInput
-        className="max-w-[20rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
+        className="max-w-xs border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
         inputRef={ref}
         mask={mask}
         unmask

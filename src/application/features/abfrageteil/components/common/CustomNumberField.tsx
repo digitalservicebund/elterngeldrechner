@@ -41,7 +41,7 @@ export function CustomNumberField<
   slotBeforeLabel,
   allowedDecimalPlaces = 2,
   min = 0,
-  max = 99999,
+  max = 999999,
   suffix,
   className,
   placeholder,

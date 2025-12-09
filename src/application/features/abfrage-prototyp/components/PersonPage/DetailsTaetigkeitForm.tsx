@@ -75,6 +75,15 @@ export function DetailsTaetigkeitForm({
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
   );
 
+  const verbeamtungET1 = useAppSelector(
+    stepPrototypSelectors.getVerbeamtungET1,
+  );
+  const verbeamtungET2 = useAppSelector(
+    stepPrototypSelectors.getVerbeamtungET2,
+  );
+  const verbeamtung =
+    elternteil === Elternteil.Eins ? verbeamtungET1 : verbeamtungET2;
+
   const routerState = useSelector((state: RootState) => state.routingPrototyp);
   const currentPersonPageFlow =
     elternteil === Elternteil.Eins
@@ -210,7 +219,7 @@ export function DetailsTaetigkeitForm({
         {taetigkeit?.taetigkeitenArt === "nichtSelbststaendig" && (
           <div>
             <h3 className="mb-10">
-              Details zur angestellten Tätigkeit{" "}
+              Details zur {!verbeamtung ? "angestellten " : ""}Tätigkeit{" "}
               {taetigkeiten.length > 1 ? incomeIndex + 1 : ""}
             </h3>
             <p>

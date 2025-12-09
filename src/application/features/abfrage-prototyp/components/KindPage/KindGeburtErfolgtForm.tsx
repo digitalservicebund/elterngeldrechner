@@ -123,7 +123,7 @@ export function KindGeburtErfolgtForm({ id, onSubmit }: Props) {
 
       <div className="mt-20">
         <h3 id={wahrscheinlichesGeburtsDatumDescriptionIdentifier}>
-          Wie viele Kinder werden oder wurden geboren?
+          Wie viele Kinder wurden geboren?
         </h3>
 
         <p className="mt-10 pb-20">

@@ -60,6 +60,15 @@ export function EingabeEinkommenForm({
       ? taetigkeitenET1[incomeIndex]
       : taetigkeitenET2[incomeIndex];
 
+  const verbeamtungET1 = useAppSelector(
+    stepPrototypSelectors.getVerbeamtungET1,
+  );
+  const verbeamtungET2 = useAppSelector(
+    stepPrototypSelectors.getVerbeamtungET2,
+  );
+  const verbeamtung =
+    elternteil === Elternteil.Eins ? verbeamtungET1 : verbeamtungET2;
+
   const ausklammerungenET1 = useAppSelector(
     stepPrototypSelectors.getAusklammerungenET1,
   );
@@ -132,7 +141,7 @@ export function EingabeEinkommenForm({
         </section>
 
         <h3 className="mb-40">
-          Details zur angestellten Tätigkeit{" "}
+          Details zur {!verbeamtung ? "angestellten " : ""}Tätigkeit{" "}
           {taetigkeiten.length > 1 ? incomeIndex + 1 : ""}
         </h3>
 

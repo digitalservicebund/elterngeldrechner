@@ -4,17 +4,14 @@ import { InfoText } from "@/application/components";
 export function InfoZuTaetigkeiten(): ReactNode {
   return (
     <InfoText
-      question="Was sind weitere Tätigkeiten?"
+      question="Warum fragen wir das?"
       answer={
         <>
           <p>
-            Geben Sie hier an, ob Sie im Bemessungszeitraum mehr als einen Job
-            oder eine zusätzliche Tätigkeit hatten – zum Beispiel eine
-            Nebentätigkeit oder einen Minijob.
-          </p>
-          <p>
-            Diese Informationen helfen dabei, Ihr Einkommen vollständig zu
-            erfassen und das Elterngeld richtig zu berechnen.
+            Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld
+            festzulegen. Der Bemessungszeitraum ist die Zeit vor der Geburt, in
+            der Ihr Einkommen geprüft wird. Daraus wird die Höhe Ihres
+            Elterngeldes berechnet.
           </p>
         </>
       }

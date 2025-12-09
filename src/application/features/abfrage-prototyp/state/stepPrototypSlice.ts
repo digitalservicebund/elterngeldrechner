@@ -268,6 +268,11 @@ const getMutterschutz = (state: RootState) => {
   }
 };
 
+const getVerbeamtungET1 = (state: RootState) =>
+  state.stepPrototyp.ET1.isBeamtet;
+const getVerbeamtungET2 = (state: RootState) =>
+  state.stepPrototyp.ET2.isBeamtet;
+
 const getTaetigkeitenET1 = (state: RootState) =>
   state.stepPrototyp.ET1.taetigkeiten;
 const getTaetigkeitenET2 = (state: RootState) =>
@@ -396,6 +401,8 @@ export const stepPrototypSelectors = {
   getWahrscheinlichesGeburtsDatum,
   getAlleinerziehend,
   getMutterschutz,
+  getVerbeamtungET1,
+  getVerbeamtungET2,
   getTaetigkeitenET1,
   getTaetigkeitenET2,
   getHasAusklammerungET1,

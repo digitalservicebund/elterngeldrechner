@@ -1,8 +1,8 @@
 import { useCallback, useId } from "react";
 import { FieldError, get, useForm } from "react-hook-form";
+import { berechneBetrachtungszeitraum } from "./utils/berechneBetrachtungszeitraum";
 import { InfoZuTaetigkeiten } from "@/application/features/abfrage-prototyp/components/InfoZuTaetigkeiten";
 import { PersonPageFlow } from "@/application/features/abfrage-prototyp/components/PersonPageRouting";
-import { berechneMaximalenBemessungszeitraum } from "@/application/features/abfrage-prototyp/components/berechneBemessungszeitraum";
 import {
   type StepPrototypState,
   stepPrototypSelectors,
@@ -38,12 +38,23 @@ export function AbfrageTaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
     [store, onSubmit],
   );
 
+  const ausklammerungenET1 = useAppSelector(
+    stepPrototypSelectors.getAusklammerungenET1,
+  );
+  const ausklammerungenET2 = useAppSelector(
+    stepPrototypSelectors.getAusklammerungenET2,
+  );
+  const ausklammerungen =
+    elternteil === Elternteil.Eins ? ausklammerungenET1 : ausklammerungenET2;
+
   const geburtsdatumDesKindes = useAppSelector(
     stepPrototypSelectors.getWahrscheinlichesGeburtsDatum,
   );
-  const maximalerBemessungszeitraum = berechneMaximalenBemessungszeitraum(
+  const betrachtungszeitraum = berechneBetrachtungszeitraum(
     geburtsdatumDesKindes,
+    ausklammerungen,
   );
+  const betrachtungszeitraumString = `in den Kalenderjahren ${betrachtungszeitraum.von.getFullYear()} bis zum Geburtsdatum ${betrachtungszeitraum.bis.toLocaleDateString()}`;
 
   function isAnyOptionSelected(): true | string {
     const person = elternteil === Elternteil.Eins ? "ET1" : "ET2";
@@ -79,7 +90,7 @@ export function AbfrageTaetigkeitenForm({ id, onSubmit, elternteil }: Props) {
           aria-labelledby="bmz"
         >
           <ul className="list ml-40 list-disc">
-            <li className="text-28">{maximalerBemessungszeitraum[0]}</li>
+            <li className="text-28">{betrachtungszeitraumString}</li>
           </ul>
         </div>
       </div>

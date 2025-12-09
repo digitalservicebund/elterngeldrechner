@@ -137,7 +137,6 @@ export function AusklammerungsGruendeForm({ id, onSubmit, elternteil }: Props) {
               (
                 [
                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasMutterschutzAnderesKind`,
-                  `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.isBeamtet`,
                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasElterngeldAnderesKind`,
                   `${elternteil === Elternteil.Eins ? "ET1" : "ET2"}.hasErkrankung`,
                 ] as const

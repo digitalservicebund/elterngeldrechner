@@ -115,13 +115,13 @@ export function PersonPage({ elternteil }: Props) {
       elternteil === Elternteil.Eins
         ? getPersonPageFlow(
             values.ET1.isSelbststaendig,
-            values.ET1.isNichtSelbststaendig,
+            values.ET1.isNichtSelbststaendig || values.ET1.isBeamtet,
             values.ET1.hasKeinEinkommen,
             values.ET1.hasSozialleistungen,
           )
         : getPersonPageFlow(
             values.ET2.isSelbststaendig,
-            values.ET2.isNichtSelbststaendig,
+            values.ET2.isNichtSelbststaendig || values.ET2.isBeamtet,
             values.ET2.hasKeinEinkommen,
             values.ET2.hasSozialleistungen,
           );

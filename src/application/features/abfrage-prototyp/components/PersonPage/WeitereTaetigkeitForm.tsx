@@ -140,8 +140,8 @@ export function WeitereTaetigkeitForm({
   );
 
   const hasWeitereTaetigkeitOptions: CustomRadioGroupOption<YesNo>[] = [
-    { value: YesNo.YES, label: "Ja, ich hatte eine weiteren Tätigkeiten" },
-    { value: YesNo.NO, label: "Nein, ich hatte keine weiteren Tätigkeiten" },
+    { value: YesNo.YES, label: "Ja, ich hatte eine weitere Tätigkeit" },
+    { value: YesNo.NO, label: "Nein, ich hatte keine weitere Tätigkeit" },
   ];
 
   const formattedDate = (date: Date) => {

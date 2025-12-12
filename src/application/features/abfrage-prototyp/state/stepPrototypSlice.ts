@@ -291,7 +291,7 @@ const getAusklammerungenET1 = (state: RootState): Ausklammerung[] | [] => {
     state.stepPrototyp.kind.geburtsdatum.length > 0
       ? parseGermanDateString(state.stepPrototyp.kind.geburtsdatum)
       : undefined,
-    state.stepPrototyp.geschwister.geschwisterkinder.length > 0,
+    state.stepPrototyp.kind.anzahlKuenftigerKinder > 1,
   );
   const mutterschutz =
     hasMutterschutz && !state.stepPrototyp.ET1.isBeamtet
@@ -346,7 +346,7 @@ const getAusklammerungenET2 = (state: RootState): Ausklammerung[] => {
     state.stepPrototyp.kind.geburtsdatum.length > 0
       ? parseGermanDateString(state.stepPrototyp.kind.geburtsdatum)
       : undefined,
-    state.stepPrototyp.geschwister.geschwisterkinder.length > 0,
+    state.stepPrototyp.kind.anzahlKuenftigerKinder > 1,
   );
   const mutterschutz =
     hasMutterschutz && !state.stepPrototyp.ET2.isBeamtet

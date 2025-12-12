@@ -27,6 +27,9 @@ export default defineConfig({
       indent: 0,
       min: true,
     },
+    chaiConfig: {
+      truncateThreshold: 0,
+    },
   },
   define: {
     "import.meta.vitest": "undefined",

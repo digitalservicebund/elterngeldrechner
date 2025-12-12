@@ -980,6 +980,13 @@ export class PAP_2021 extends Programmablaufplan {
 if (import.meta.vitest) {
   const { describe, test, expect } = import.meta.vitest;
 
+  // Tests are based on the Prüftabelle in the attachments of the Programmablaufplan.
+
+  // Tip: One strategy to transfer the data is to copy the table into a new file, bring
+  // it into a structure well suited for multiline editing, split the editor view so the
+  // data is next to the test implementation and then use multicursor to copy it block by
+  // block.
+
   describe("Programmablaufplan 2023", () => {
     test.each<{
       jahreslohn: number;

@@ -107,11 +107,11 @@ import {
 /**
  * Geänderter Programmablaufplan für die maschinelle Berechnung
  * der vom Arbeitslohn einzubehaltenden Lohnsteuer, des Solidaritätszuschlags
- * und der Maßstabsteuer für die Kirchenlohnsteuer für 2024
+ * und der Maßstabsteuer für die Kirchenlohnsteuer für 2025
  *
- * https://www.bundesfinanzministerium.de/Content/DE/Downloads/Steuern/Steuerarten/Lohnsteuer/Programmablaufplan/2024-02-23-geaenderte-PAP-2024-anwendung-ab-dem-1-april-2024-anlage-1.pdf?__blob=publicationFile&v=3
+ * https://www.bundesfinanzministerium.de/Content/DE/Downloads/Steuern/Steuerarten/Lohnsteuer/Programmablaufplan/2024-11-22-PAP-2025_anlage.pdf?__blob=publicationFile&v=2
  */
-export class PAP_2024 extends Programmablaufplan {
+export class PAP_2025 extends Programmablaufplan {
   /**
    * Altersentlastungsbetrag
    * (§ 39b Absatz 2 Satz 3 EStG)
@@ -228,21 +228,21 @@ export class PAP_2024 extends Programmablaufplan {
   private LSTJAHR: number = 0;
 
   /**
+   * Mindeststeuer für die Steuerklassen V und VI in Euro
+   */
+  private MIST: number = 0;
+
+  /**
    * Beitragssatz des Arbeitgebers zur Pflegeversicherung
-   * (5 Dezimalstellen)
+   * (6 Dezimalstellen)
    */
   private PVSATZAG: number = 0;
 
   /**
    * Beitragssatz des Arbeitnehmers zur Pflegeversicherung
-   * (5 Dezimalstellen)
+   * (6 Dezimalstellen)
    */
   private PVSATZAN: number = 0;
-
-  /**
-   * Mindeststeuer für die Steuerklassen V und VI in Euro
-   */
-  private MIST: number = 0;
 
   /**
    * Beitragssatz des Arbeitnehmers in der allgemeinen gesetzlichen
@@ -429,24 +429,22 @@ export class PAP_2024 extends Programmablaufplan {
   private ZZX: number = 0;
 
   protected start(): void {
-    this.LST2024();
+    this.LST2025();
   }
 
   /**
-   * 5. Programmablaufplan 2024
+   * 5. Programmablaufplan 2025
    * Steuerung
    *
    * Bemerkungen:
    * - vereinfacht da Lohnsteuer für mehrjährige nicht relevant ist
    * - vereinfacht da sonstige Einnahmen nicht relevant sind.
    */
-  private LST2024(): void {
+  private LST2025(): void {
     this.MPARA();
     this.MRE4JL();
 
-    // überspringe da nicht relevant:
     // VBEZBSO = 0
-    // KENNVMT = 0
 
     this.MRE4();
     this.MRE4ABZ();
@@ -454,32 +452,27 @@ export class PAP_2024 extends Programmablaufplan {
 
     // Überspringe da nicht relevant:
     // MSONST()
-    // MVMT()
   }
+
   /**
    * Zuweisung von Werten für bestimmte Sozialversicherungsparameter.
    */
   private MPARA(): void {
-    if (this.eingangsparameter.KRV < 2) {
-      if (this.eingangsparameter.KRV === 0) {
-        this.BBGRV = 90600;
-      } else {
-        this.BBGRV = 89400;
-      }
-
+    if (this.eingangsparameter.KRV <= 1) {
+      this.BBGRV = 96600;
       this.RVSATZAN = 0.093;
     }
 
-    this.BBGKVPV = 62100;
+    this.BBGKVPV = 66150;
     this.KVSATZAN = this.eingangsparameter.KVZ / 2 / 100 + 0.07;
-    this.KVSATZAG = 0.0085 + 0.07;
+    this.KVSATZAG = 0.0125 + 0.07;
 
     if (this.eingangsparameter.PVS === 1) {
-      this.PVSATZAN = 0.022;
-      this.PVSATZAG = 0.012;
+      this.PVSATZAN = 0.023;
+      this.PVSATZAG = 0.013;
     } else {
-      this.PVSATZAN = 0.017;
-      this.PVSATZAG = 0.017;
+      this.PVSATZAN = 0.018;
+      this.PVSATZAG = 0.018;
     }
 
     if (this.eingangsparameter.PVZ === 1) {
@@ -488,16 +481,16 @@ export class PAP_2024 extends Programmablaufplan {
       this.PVSATZAN = this.PVSATZAN - this.eingangsparameter.PVA * 0.0025;
     }
 
-    this.W1STKL5 = 13279;
-    this.W2STKL5 = 33380;
+    this.W1STKL5 = 13785;
+    this.W2STKL5 = 34240;
     this.W3STKL5 = 222260;
-    this.GFB = 11604;
-    this.SOLZFREI = 18130;
+    this.GFB = 12096;
+    this.SOLZFREI = 19950;
   }
 
   /**
-   * Ermittlung des Jahresarbeitslohns und der Freibeträge.
-   * (§ 39b Absatz 2 Satz 2 EStG)
+   * Ermittlung des Jahresarbeitslohns nach
+   * § 39b Absatz 2 Satz 2 EStG
    */
   private MRE4JL(): void {
     if (this.eingangsparameter.LZZ === 1) {
@@ -528,9 +521,8 @@ export class PAP_2024 extends Programmablaufplan {
   }
 
   /**
-   * Freibeträge für Versorgungs-
-   * bezüge, Altersentlastungsbetrag
-   * (§ 39b Absatz 2 Satz 3 EStG)
+   * Ermittlung der Freibeträge nach § 39b
+   * Absatz 2 Satz 3 EStG
    *
    * Bemerkungen:
    * - vereinfacht mit Annahme das "ZVBEZ" immer "0" ist (Kontext
@@ -567,9 +559,8 @@ export class PAP_2024 extends Programmablaufplan {
   }
 
   /**
-   * Ermittlung des Jahresarbeitslohns nach Abzug der
-   * Freibeträge nach
-   * § 39b Absatz 2 Satz 3 und 4 EStG
+   * Abzug der Freibeträge nach § 39b Absatz 2
+   * Satz 3 und 4 EStG vom Jahresarbeitslohn
    *
    * Bemerkungen:
    * - vereinfacht da das "KENNVMT" Feld fix auf "0" steht (Kontext: Merker für
@@ -585,11 +576,6 @@ export class PAP_2024 extends Programmablaufplan {
 
     this.ZRE4VP = this.ZRE4J;
 
-    // Überspringe da nicht relevant:
-    // if (KENNVMT === 2) {
-    //   ZRE4VP = ZRE4VP - ENTSCH /100
-    // }
-
     this.ZVBEZ = this.ZVBEZJ - this.FVB;
 
     if (this.ZVBEZ < 0) {
@@ -598,7 +584,7 @@ export class PAP_2024 extends Programmablaufplan {
   }
 
   /**
-   * Ermittlung der Jahreslohnsteuer auf laufende Lohnzahlungszeiträume
+   * Ermittlung der Jahreslohnsteuer auf laufende Bezüge
    */
   private MBERECH(): void {
     this.MZTABFB();
@@ -673,18 +659,18 @@ export class PAP_2024 extends Programmablaufplan {
 
     if (this.eingangsparameter.STKL === 1) {
       this.SAP = 36;
-      this.KFB = this.eingangsparameter.ZKF * 9312;
+      this.KFB = this.eingangsparameter.ZKF * 9600;
     } else if (this.eingangsparameter.STKL === 2) {
       this.EFA = 4260;
       this.SAP = 36;
-      this.KFB = this.eingangsparameter.ZKF * 9312;
+      this.KFB = this.eingangsparameter.ZKF * 9600;
     } else if (this.eingangsparameter.STKL === 3) {
       this.KZTAB = 2;
       this.SAP = 36;
-      this.KFB = this.eingangsparameter.ZKF * 9312;
+      this.KFB = this.eingangsparameter.ZKF * 9600;
     } else if (this.eingangsparameter.STKL === 4) {
       this.SAP = 36;
-      this.KFB = this.eingangsparameter.ZKF * 4656;
+      this.KFB = this.eingangsparameter.ZKF * 4800;
     } else if (this.eingangsparameter.STKL === 5) {
       this.SAP = 36;
       this.KFB = 0;
@@ -706,10 +692,8 @@ export class PAP_2024 extends Programmablaufplan {
   private MLSTJAHR(): void {
     this.UPEVP();
 
-    // Überspringe da nicht relevant:
-    // if (KENNVMT !== 1) {...} else {...}
-
     this.ZVE = this.ZRE4 - this.ZTABFB - this.VSP;
+
     this.UPMLST();
   }
 
@@ -760,7 +744,7 @@ export class PAP_2024 extends Programmablaufplan {
     }
 
     if (this.eingangsparameter.STKL < 5) {
-      this.UPTAB24();
+      this.UPTAB25();
     } else {
       this.MST5_6();
     }
@@ -772,7 +756,7 @@ export class PAP_2024 extends Programmablaufplan {
    * Absatz 4 EStG)
    */
   private UPEVP(): void {
-    if (this.eingangsparameter.KRV > 1) {
+    if (this.eingangsparameter.KRV === 1) {
       this.VSP1 = 0;
     } else {
       if (this.ZRE4VP > this.BBGRV) {
@@ -876,10 +860,10 @@ export class PAP_2024 extends Programmablaufplan {
 
   private UP5_6(): void {
     this.X = this.ZX * 1.25;
-    this.UPTAB24();
+    this.UPTAB25();
     this.ST1 = this.ST;
     this.X = this.ZX * 0.75;
-    this.UPTAB24();
+    this.UPTAB25();
     this.ST2 = this.ST;
     this.DIFF = (this.ST1 - this.ST2) * 2;
     this.MIST = aufDenEuroAbrunden(this.ZX * 0.14);
@@ -941,32 +925,32 @@ export class PAP_2024 extends Programmablaufplan {
    * Tarifliche Einkommensteuer
    * (§ 32a EStG)
    */
-  private UPTAB24(): void {
+  private UPTAB25(): void {
     if (this.X < this.GFB + 1) {
       this.ST = 0;
     }
     //
-    else if (this.X < 17006) {
+    else if (this.X < 17444) {
       this.Y = (this.X - this.GFB) / 10000;
-      this.RW = this.Y * 922.98;
+      this.RW = this.Y * 932.3;
       this.RW = this.RW + 1400;
       this.ST = aufDenEuroAbrunden(this.RW * this.Y);
     }
     //
-    else if (this.X < 66761) {
-      this.Y = (this.X - 17005) / 10000;
-      this.RW = this.Y * 181.19;
+    else if (this.X < 68481) {
+      this.Y = (this.X - 17443) / 10000;
+      this.RW = this.Y * 176.64;
       this.RW = this.RW + 2397;
       this.RW = this.RW * this.Y;
-      this.ST = aufDenEuroAbrunden(this.RW + 1025.38);
+      this.ST = aufDenEuroAbrunden(this.RW + 1015.13);
     }
     //
     else if (this.X < 277826) {
-      this.ST = aufDenEuroAbrunden(this.X * 0.42 - 10602.13);
+      this.ST = aufDenEuroAbrunden(this.X * 0.42 - 10911.92);
     }
     //
     else {
-      this.ST = aufDenEuroAbrunden(this.X * 0.45 - 18936.88);
+      this.ST = aufDenEuroAbrunden(this.X * 0.45 - 19246.67);
     }
 
     this.ST = this.ST * this.KZTAB;
@@ -983,7 +967,7 @@ if (import.meta.vitest) {
   // data is next to the test implementation and then use multicursor to copy it block by
   // block.
 
-  describe("Programmablaufplan 2024", () => {
+  describe("Programmablaufplan 2025", () => {
     test.each<{
       jahreslohn: number;
       steuerklasse: 1 | 2 | 3 | 4 | 5 | 6;
@@ -1025,251 +1009,251 @@ if (import.meta.vitest) {
       { jahreslohn: 15000, steuerklasse: 5, jahreslohnsteuer: 1475 },
       { jahreslohn: 15000, steuerklasse: 6, jahreslohnsteuer: 1652 },
       // Zeile 6
-      { jahreslohn: 17500, steuerklasse: 1, jahreslohnsteuer: 165 },
+      { jahreslohn: 17500, steuerklasse: 1, jahreslohnsteuer: 88 },
       { jahreslohn: 17500, steuerklasse: 2, jahreslohnsteuer: 0 },
       { jahreslohn: 17500, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 17500, steuerklasse: 4, jahreslohnsteuer: 165 },
+      { jahreslohn: 17500, steuerklasse: 4, jahreslohnsteuer: 88 },
       { jahreslohn: 17500, steuerklasse: 5, jahreslohnsteuer: 1778 },
-      { jahreslohn: 17500, steuerklasse: 6, jahreslohnsteuer: 2150 },
+      { jahreslohn: 17500, steuerklasse: 6, jahreslohnsteuer: 2007 },
       // Zeile 7
-      { jahreslohn: 20000, steuerklasse: 1, jahreslohnsteuer: 550 },
+      { jahreslohn: 20000, steuerklasse: 1, jahreslohnsteuer: 436 },
       { jahreslohn: 20000, steuerklasse: 2, jahreslohnsteuer: 0 },
       { jahreslohn: 20000, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 20000, steuerklasse: 4, jahreslohnsteuer: 550 },
-      { jahreslohn: 20000, steuerklasse: 5, jahreslohnsteuer: 2516 },
-      { jahreslohn: 20000, steuerklasse: 6, jahreslohnsteuer: 3048 },
+      { jahreslohn: 20000, steuerklasse: 4, jahreslohnsteuer: 436 },
+      { jahreslohn: 20000, steuerklasse: 5, jahreslohnsteuer: 2331 },
+      { jahreslohn: 20000, steuerklasse: 6, jahreslohnsteuer: 2863 },
       // Zeile 8
-      { jahreslohn: 22500, steuerklasse: 1, jahreslohnsteuer: 990 },
-      { jahreslohn: 22500, steuerklasse: 2, jahreslohnsteuer: 169 },
+      { jahreslohn: 22500, steuerklasse: 1, jahreslohnsteuer: 852 },
+      { jahreslohn: 22500, steuerklasse: 2, jahreslohnsteuer: 75 },
       { jahreslohn: 22500, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 22500, steuerklasse: 4, jahreslohnsteuer: 990 },
-      { jahreslohn: 22500, steuerklasse: 5, jahreslohnsteuer: 3361 },
-      { jahreslohn: 22500, steuerklasse: 6, jahreslohnsteuer: 3893 },
+      { jahreslohn: 22500, steuerklasse: 4, jahreslohnsteuer: 852 },
+      { jahreslohn: 22500, steuerklasse: 5, jahreslohnsteuer: 3172 },
+      { jahreslohn: 22500, steuerklasse: 6, jahreslohnsteuer: 3703 },
       // Zeile 9
-      { jahreslohn: 25000, steuerklasse: 1, jahreslohnsteuer: 1478 },
-      { jahreslohn: 25000, steuerklasse: 2, jahreslohnsteuer: 533 },
+      { jahreslohn: 25000, steuerklasse: 1, jahreslohnsteuer: 1330 },
+      { jahreslohn: 25000, steuerklasse: 2, jahreslohnsteuer: 415 },
       { jahreslohn: 25000, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 25000, steuerklasse: 4, jahreslohnsteuer: 1478 },
-      { jahreslohn: 25000, steuerklasse: 5, jahreslohnsteuer: 4207 },
-      { jahreslohn: 25000, steuerklasse: 6, jahreslohnsteuer: 4739 },
+      { jahreslohn: 25000, steuerklasse: 4, jahreslohnsteuer: 1330 },
+      { jahreslohn: 25000, steuerklasse: 5, jahreslohnsteuer: 4012 },
+      { jahreslohn: 25000, steuerklasse: 6, jahreslohnsteuer: 4544 },
       // Zeile 10
-      { jahreslohn: 27500, steuerklasse: 1, jahreslohnsteuer: 1982 },
-      { jahreslohn: 27500, steuerklasse: 2, jahreslohnsteuer: 974 },
+      { jahreslohn: 27500, steuerklasse: 1, jahreslohnsteuer: 1826 },
+      { jahreslohn: 27500, steuerklasse: 2, jahreslohnsteuer: 831 },
       { jahreslohn: 27500, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 27500, steuerklasse: 4, jahreslohnsteuer: 1982 },
-      { jahreslohn: 27500, steuerklasse: 5, jahreslohnsteuer: 5053 },
-      { jahreslohn: 27500, steuerklasse: 6, jahreslohnsteuer: 5585 },
+      { jahreslohn: 27500, steuerklasse: 4, jahreslohnsteuer: 1826 },
+      { jahreslohn: 27500, steuerklasse: 5, jahreslohnsteuer: 4853 },
+      { jahreslohn: 27500, steuerklasse: 6, jahreslohnsteuer: 5384 },
       // Zeile 11
-      { jahreslohn: 30000, steuerklasse: 1, jahreslohnsteuer: 2501 },
-      { jahreslohn: 30000, steuerklasse: 2, jahreslohnsteuer: 1466 },
+      { jahreslohn: 30000, steuerklasse: 1, jahreslohnsteuer: 2336 },
+      { jahreslohn: 30000, steuerklasse: 2, jahreslohnsteuer: 1311 },
       { jahreslohn: 30000, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 30000, steuerklasse: 4, jahreslohnsteuer: 2501 },
-      { jahreslohn: 30000, steuerklasse: 5, jahreslohnsteuer: 5899 },
-      { jahreslohn: 30000, steuerklasse: 6, jahreslohnsteuer: 6420 },
+      { jahreslohn: 30000, steuerklasse: 4, jahreslohnsteuer: 2336 },
+      { jahreslohn: 30000, steuerklasse: 5, jahreslohnsteuer: 5693 },
+      { jahreslohn: 30000, steuerklasse: 6, jahreslohnsteuer: 6225 },
       // Zeile 12
-      { jahreslohn: 32500, steuerklasse: 1, jahreslohnsteuer: 3033 },
-      { jahreslohn: 32500, steuerklasse: 2, jahreslohnsteuer: 1973 },
-      { jahreslohn: 32500, steuerklasse: 3, jahreslohnsteuer: 250 },
-      { jahreslohn: 32500, steuerklasse: 4, jahreslohnsteuer: 3033 },
-      { jahreslohn: 32500, steuerklasse: 5, jahreslohnsteuer: 6686 },
-      { jahreslohn: 32500, steuerklasse: 6, jahreslohnsteuer: 7146 },
+      { jahreslohn: 32500, steuerklasse: 1, jahreslohnsteuer: 2860 },
+      { jahreslohn: 32500, steuerklasse: 2, jahreslohnsteuer: 1810 },
+      { jahreslohn: 32500, steuerklasse: 3, jahreslohnsteuer: 78 },
+      { jahreslohn: 32500, steuerklasse: 4, jahreslohnsteuer: 2860 },
+      { jahreslohn: 32500, steuerklasse: 5, jahreslohnsteuer: 6534 },
+      { jahreslohn: 32500, steuerklasse: 6, jahreslohnsteuer: 7024 },
       // Zeile 13
-      { jahreslohn: 35000, steuerklasse: 1, jahreslohnsteuer: 3581 },
-      { jahreslohn: 35000, steuerklasse: 2, jahreslohnsteuer: 2495 },
-      { jahreslohn: 35000, steuerklasse: 3, jahreslohnsteuer: 584 },
-      { jahreslohn: 35000, steuerklasse: 4, jahreslohnsteuer: 3581 },
-      { jahreslohn: 35000, steuerklasse: 5, jahreslohnsteuer: 7422 },
-      { jahreslohn: 35000, steuerklasse: 6, jahreslohnsteuer: 7900 },
+      { jahreslohn: 35000, steuerklasse: 1, jahreslohnsteuer: 3399 },
+      { jahreslohn: 35000, steuerklasse: 2, jahreslohnsteuer: 2324 },
+      { jahreslohn: 35000, steuerklasse: 3, jahreslohnsteuer: 388 },
+      { jahreslohn: 35000, steuerklasse: 4, jahreslohnsteuer: 3399 },
+      { jahreslohn: 35000, steuerklasse: 5, jahreslohnsteuer: 7292 },
+      { jahreslohn: 35000, steuerklasse: 6, jahreslohnsteuer: 7762 },
       // Zeile 14
-      { jahreslohn: 37500, steuerklasse: 1, jahreslohnsteuer: 4144 },
-      { jahreslohn: 37500, steuerklasse: 2, jahreslohnsteuer: 3032 },
-      { jahreslohn: 37500, steuerklasse: 3, jahreslohnsteuer: 954 },
-      { jahreslohn: 37500, steuerklasse: 4, jahreslohnsteuer: 4144 },
-      { jahreslohn: 37500, steuerklasse: 5, jahreslohnsteuer: 8190 },
-      { jahreslohn: 37500, steuerklasse: 6, jahreslohnsteuer: 8686 },
+      { jahreslohn: 37500, steuerklasse: 1, jahreslohnsteuer: 3951 },
+      { jahreslohn: 37500, steuerklasse: 2, jahreslohnsteuer: 2852 },
+      { jahreslohn: 37500, steuerklasse: 3, jahreslohnsteuer: 734 },
+      { jahreslohn: 37500, steuerklasse: 4, jahreslohnsteuer: 3951 },
+      { jahreslohn: 37500, steuerklasse: 5, jahreslohnsteuer: 8042 },
+      { jahreslohn: 37500, steuerklasse: 6, jahreslohnsteuer: 8530 },
       // Zeile 15
-      { jahreslohn: 40000, steuerklasse: 1, jahreslohnsteuer: 4721 },
-      { jahreslohn: 40000, steuerklasse: 2, jahreslohnsteuer: 3583 },
-      { jahreslohn: 40000, steuerklasse: 3, jahreslohnsteuer: 1360 },
-      { jahreslohn: 40000, steuerklasse: 4, jahreslohnsteuer: 4721 },
-      { jahreslohn: 40000, steuerklasse: 5, jahreslohnsteuer: 8986 },
-      { jahreslohn: 40000, steuerklasse: 6, jahreslohnsteuer: 9500 },
+      { jahreslohn: 40000, steuerklasse: 1, jahreslohnsteuer: 4518 },
+      { jahreslohn: 40000, steuerklasse: 2, jahreslohnsteuer: 3394 },
+      { jahreslohn: 40000, steuerklasse: 3, jahreslohnsteuer: 1118 },
+      { jahreslohn: 40000, steuerklasse: 4, jahreslohnsteuer: 4518 },
+      { jahreslohn: 40000, steuerklasse: 5, jahreslohnsteuer: 8818 },
+      { jahreslohn: 40000, steuerklasse: 6, jahreslohnsteuer: 9324 },
       // Zeile 16
-      { jahreslohn: 42500, steuerklasse: 1, jahreslohnsteuer: 5313 },
-      { jahreslohn: 42500, steuerklasse: 2, jahreslohnsteuer: 4150 },
-      { jahreslohn: 42500, steuerklasse: 3, jahreslohnsteuer: 1804 },
-      { jahreslohn: 42500, steuerklasse: 4, jahreslohnsteuer: 5313 },
-      { jahreslohn: 42500, steuerklasse: 5, jahreslohnsteuer: 9810 },
-      { jahreslohn: 42500, steuerklasse: 6, jahreslohnsteuer: 10338 },
+      { jahreslohn: 42500, steuerklasse: 1, jahreslohnsteuer: 5099 },
+      { jahreslohn: 42500, steuerklasse: 2, jahreslohnsteuer: 3951 },
+      { jahreslohn: 42500, steuerklasse: 3, jahreslohnsteuer: 1540 },
+      { jahreslohn: 42500, steuerklasse: 4, jahreslohnsteuer: 5099 },
+      { jahreslohn: 42500, steuerklasse: 5, jahreslohnsteuer: 9622 },
+      { jahreslohn: 42500, steuerklasse: 6, jahreslohnsteuer: 10146 },
       // Zeile 17
-      { jahreslohn: 45000, steuerklasse: 1, jahreslohnsteuer: 5919 },
-      { jahreslohn: 45000, steuerklasse: 2, jahreslohnsteuer: 4732 },
-      { jahreslohn: 45000, steuerklasse: 3, jahreslohnsteuer: 2284 },
-      { jahreslohn: 45000, steuerklasse: 4, jahreslohnsteuer: 5919 },
-      { jahreslohn: 45000, steuerklasse: 5, jahreslohnsteuer: 10652 },
-      { jahreslohn: 45000, steuerklasse: 6, jahreslohnsteuer: 11184 },
+      { jahreslohn: 45000, steuerklasse: 1, jahreslohnsteuer: 5694 },
+      { jahreslohn: 45000, steuerklasse: 2, jahreslohnsteuer: 4522 },
+      { jahreslohn: 45000, steuerklasse: 3, jahreslohnsteuer: 1998 },
+      { jahreslohn: 45000, steuerklasse: 4, jahreslohnsteuer: 5694 },
+      { jahreslohn: 45000, steuerklasse: 5, jahreslohnsteuer: 10454 },
+      { jahreslohn: 45000, steuerklasse: 6, jahreslohnsteuer: 10986 },
       // Zeile 18
-      { jahreslohn: 47500, steuerklasse: 1, jahreslohnsteuer: 6541 },
-      { jahreslohn: 47500, steuerklasse: 2, jahreslohnsteuer: 5328 },
-      { jahreslohn: 47500, steuerklasse: 3, jahreslohnsteuer: 2774 },
-      { jahreslohn: 47500, steuerklasse: 4, jahreslohnsteuer: 6541 },
-      { jahreslohn: 47500, steuerklasse: 5, jahreslohnsteuer: 11498 },
-      { jahreslohn: 47500, steuerklasse: 6, jahreslohnsteuer: 12030 },
+      { jahreslohn: 47500, steuerklasse: 1, jahreslohnsteuer: 6303 },
+      { jahreslohn: 47500, steuerklasse: 2, jahreslohnsteuer: 5107 },
+      { jahreslohn: 47500, steuerklasse: 3, jahreslohnsteuer: 2480 },
+      { jahreslohn: 47500, steuerklasse: 4, jahreslohnsteuer: 6303 },
+      { jahreslohn: 47500, steuerklasse: 5, jahreslohnsteuer: 11295 },
+      { jahreslohn: 47500, steuerklasse: 6, jahreslohnsteuer: 11826 },
       // Zeile 19
-      { jahreslohn: 50000, steuerklasse: 1, jahreslohnsteuer: 7177 },
-      { jahreslohn: 50000, steuerklasse: 2, jahreslohnsteuer: 5940 },
-      { jahreslohn: 50000, steuerklasse: 3, jahreslohnsteuer: 3270 },
-      { jahreslohn: 50000, steuerklasse: 4, jahreslohnsteuer: 7177 },
-      { jahreslohn: 50000, steuerklasse: 5, jahreslohnsteuer: 12344 },
-      { jahreslohn: 50000, steuerklasse: 6, jahreslohnsteuer: 12875 },
+      { jahreslohn: 50000, steuerklasse: 1, jahreslohnsteuer: 6927 },
+      { jahreslohn: 50000, steuerklasse: 2, jahreslohnsteuer: 5707 },
+      { jahreslohn: 50000, steuerklasse: 3, jahreslohnsteuer: 2970 },
+      { jahreslohn: 50000, steuerklasse: 4, jahreslohnsteuer: 6927 },
+      { jahreslohn: 50000, steuerklasse: 5, jahreslohnsteuer: 12135 },
+      { jahreslohn: 50000, steuerklasse: 6, jahreslohnsteuer: 12667 },
       // Zeile 20
-      { jahreslohn: 52500, steuerklasse: 1, jahreslohnsteuer: 7827 },
-      { jahreslohn: 52500, steuerklasse: 2, jahreslohnsteuer: 6566 },
-      { jahreslohn: 52500, steuerklasse: 3, jahreslohnsteuer: 3776 },
-      { jahreslohn: 52500, steuerklasse: 4, jahreslohnsteuer: 7827 },
-      { jahreslohn: 52500, steuerklasse: 5, jahreslohnsteuer: 13189 },
-      { jahreslohn: 52500, steuerklasse: 6, jahreslohnsteuer: 13721 },
+      { jahreslohn: 52500, steuerklasse: 1, jahreslohnsteuer: 7564 },
+      { jahreslohn: 52500, steuerklasse: 2, jahreslohnsteuer: 6321 },
+      { jahreslohn: 52500, steuerklasse: 3, jahreslohnsteuer: 3468 },
+      { jahreslohn: 52500, steuerklasse: 4, jahreslohnsteuer: 7564 },
+      { jahreslohn: 52500, steuerklasse: 5, jahreslohnsteuer: 12976 },
+      { jahreslohn: 52500, steuerklasse: 6, jahreslohnsteuer: 13508 },
       // Zeile 21
-      { jahreslohn: 55000, steuerklasse: 1, jahreslohnsteuer: 8492 },
-      { jahreslohn: 55000, steuerklasse: 2, jahreslohnsteuer: 7208 },
-      { jahreslohn: 55000, steuerklasse: 3, jahreslohnsteuer: 4288 },
-      { jahreslohn: 55000, steuerklasse: 4, jahreslohnsteuer: 8492 },
-      { jahreslohn: 55000, steuerklasse: 5, jahreslohnsteuer: 14035 },
-      { jahreslohn: 55000, steuerklasse: 6, jahreslohnsteuer: 14567 },
+      { jahreslohn: 55000, steuerklasse: 1, jahreslohnsteuer: 8216 },
+      { jahreslohn: 55000, steuerklasse: 2, jahreslohnsteuer: 6949 },
+      { jahreslohn: 55000, steuerklasse: 3, jahreslohnsteuer: 3972 },
+      { jahreslohn: 55000, steuerklasse: 4, jahreslohnsteuer: 8216 },
+      { jahreslohn: 55000, steuerklasse: 5, jahreslohnsteuer: 13816 },
+      { jahreslohn: 55000, steuerklasse: 6, jahreslohnsteuer: 14348 },
       // Zeile 22
-      { jahreslohn: 57500, steuerklasse: 1, jahreslohnsteuer: 9172 },
-      { jahreslohn: 57500, steuerklasse: 2, jahreslohnsteuer: 7864 },
-      { jahreslohn: 57500, steuerklasse: 3, jahreslohnsteuer: 4806 },
-      { jahreslohn: 57500, steuerklasse: 4, jahreslohnsteuer: 9172 },
-      { jahreslohn: 57500, steuerklasse: 5, jahreslohnsteuer: 14881 },
-      { jahreslohn: 57500, steuerklasse: 6, jahreslohnsteuer: 15413 },
+      { jahreslohn: 57500, steuerklasse: 1, jahreslohnsteuer: 8881 },
+      { jahreslohn: 57500, steuerklasse: 2, jahreslohnsteuer: 7592 },
+      { jahreslohn: 57500, steuerklasse: 3, jahreslohnsteuer: 4482 },
+      { jahreslohn: 57500, steuerklasse: 4, jahreslohnsteuer: 8881 },
+      { jahreslohn: 57500, steuerklasse: 5, jahreslohnsteuer: 14657 },
+      { jahreslohn: 57500, steuerklasse: 6, jahreslohnsteuer: 15188 },
       // Zeile 23
-      { jahreslohn: 60000, steuerklasse: 1, jahreslohnsteuer: 9867 },
-      { jahreslohn: 60000, steuerklasse: 2, jahreslohnsteuer: 8535 },
-      { jahreslohn: 60000, steuerklasse: 3, jahreslohnsteuer: 5334 },
-      { jahreslohn: 60000, steuerklasse: 4, jahreslohnsteuer: 9867 },
-      { jahreslohn: 60000, steuerklasse: 5, jahreslohnsteuer: 15727 },
-      { jahreslohn: 60000, steuerklasse: 6, jahreslohnsteuer: 16259 },
+      { jahreslohn: 60000, steuerklasse: 1, jahreslohnsteuer: 9561 },
+      { jahreslohn: 60000, steuerklasse: 2, jahreslohnsteuer: 8250 },
+      { jahreslohn: 60000, steuerklasse: 3, jahreslohnsteuer: 5002 },
+      { jahreslohn: 60000, steuerklasse: 4, jahreslohnsteuer: 9561 },
+      { jahreslohn: 60000, steuerklasse: 5, jahreslohnsteuer: 15498 },
+      { jahreslohn: 60000, steuerklasse: 6, jahreslohnsteuer: 16029 },
       // Zeile 24
-      { jahreslohn: 62500, steuerklasse: 1, jahreslohnsteuer: 10591 },
-      { jahreslohn: 62500, steuerklasse: 2, jahreslohnsteuer: 9234 },
-      { jahreslohn: 62500, steuerklasse: 3, jahreslohnsteuer: 5878 },
-      { jahreslohn: 62500, steuerklasse: 4, jahreslohnsteuer: 10591 },
-      { jahreslohn: 62500, steuerklasse: 5, jahreslohnsteuer: 16589 },
-      { jahreslohn: 62500, steuerklasse: 6, jahreslohnsteuer: 17121 },
+      { jahreslohn: 62500, steuerklasse: 1, jahreslohnsteuer: 10255 },
+      { jahreslohn: 62500, steuerklasse: 2, jahreslohnsteuer: 8921 },
+      { jahreslohn: 62500, steuerklasse: 3, jahreslohnsteuer: 5526 },
+      { jahreslohn: 62500, steuerklasse: 4, jahreslohnsteuer: 10255 },
+      { jahreslohn: 62500, steuerklasse: 5, jahreslohnsteuer: 16338 },
+      { jahreslohn: 62500, steuerklasse: 6, jahreslohnsteuer: 16870 },
       // Zeile 25
-      { jahreslohn: 65000, steuerklasse: 1, jahreslohnsteuer: 11407 },
-      { jahreslohn: 65000, steuerklasse: 2, jahreslohnsteuer: 10019 },
-      { jahreslohn: 65000, steuerklasse: 3, jahreslohnsteuer: 6488 },
-      { jahreslohn: 65000, steuerklasse: 4, jahreslohnsteuer: 11407 },
-      { jahreslohn: 65000, steuerklasse: 5, jahreslohnsteuer: 17542 },
-      { jahreslohn: 65000, steuerklasse: 6, jahreslohnsteuer: 18073 },
+      { jahreslohn: 65000, steuerklasse: 1, jahreslohnsteuer: 10964 },
+      { jahreslohn: 65000, steuerklasse: 2, jahreslohnsteuer: 9607 },
+      { jahreslohn: 65000, steuerklasse: 3, jahreslohnsteuer: 6058 },
+      { jahreslohn: 65000, steuerklasse: 4, jahreslohnsteuer: 10964 },
+      { jahreslohn: 65000, steuerklasse: 5, jahreslohnsteuer: 17178 },
+      { jahreslohn: 65000, steuerklasse: 6, jahreslohnsteuer: 17710 },
       // Zeile 26
-      { jahreslohn: 67500, steuerklasse: 1, jahreslohnsteuer: 12243 },
-      { jahreslohn: 67500, steuerklasse: 2, jahreslohnsteuer: 10822 },
-      { jahreslohn: 67500, steuerklasse: 3, jahreslohnsteuer: 7108 },
-      { jahreslohn: 67500, steuerklasse: 4, jahreslohnsteuer: 12243 },
-      { jahreslohn: 67500, steuerklasse: 5, jahreslohnsteuer: 18494 },
-      { jahreslohn: 67500, steuerklasse: 6, jahreslohnsteuer: 19026 },
+      { jahreslohn: 67500, steuerklasse: 1, jahreslohnsteuer: 11738 },
+      { jahreslohn: 67500, steuerklasse: 2, jahreslohnsteuer: 10355 },
+      { jahreslohn: 67500, steuerklasse: 3, jahreslohnsteuer: 6636 },
+      { jahreslohn: 67500, steuerklasse: 4, jahreslohnsteuer: 11738 },
+      { jahreslohn: 67500, steuerklasse: 5, jahreslohnsteuer: 18079 },
+      { jahreslohn: 67500, steuerklasse: 6, jahreslohnsteuer: 18611 },
       // Zeile 27
-      { jahreslohn: 70000, steuerklasse: 1, jahreslohnsteuer: 13097 },
-      { jahreslohn: 70000, steuerklasse: 2, jahreslohnsteuer: 11644 },
-      { jahreslohn: 70000, steuerklasse: 3, jahreslohnsteuer: 7736 },
-      { jahreslohn: 70000, steuerklasse: 4, jahreslohnsteuer: 13097 },
-      { jahreslohn: 70000, steuerklasse: 5, jahreslohnsteuer: 19446 },
-      { jahreslohn: 70000, steuerklasse: 6, jahreslohnsteuer: 19978 },
+      { jahreslohn: 70000, steuerklasse: 1, jahreslohnsteuer: 12575 },
+      { jahreslohn: 70000, steuerklasse: 2, jahreslohnsteuer: 11160 },
+      { jahreslohn: 70000, steuerklasse: 3, jahreslohnsteuer: 7256 },
+      { jahreslohn: 70000, steuerklasse: 4, jahreslohnsteuer: 12575 },
+      { jahreslohn: 70000, steuerklasse: 5, jahreslohnsteuer: 19032 },
+      { jahreslohn: 70000, steuerklasse: 6, jahreslohnsteuer: 19564 },
       // Zeile 28
-      { jahreslohn: 72500, steuerklasse: 1, jahreslohnsteuer: 13969 },
-      { jahreslohn: 72500, steuerklasse: 2, jahreslohnsteuer: 12485 },
-      { jahreslohn: 72500, steuerklasse: 3, jahreslohnsteuer: 8374 },
-      { jahreslohn: 72500, steuerklasse: 4, jahreslohnsteuer: 13969 },
-      { jahreslohn: 72500, steuerklasse: 5, jahreslohnsteuer: 20399 },
-      { jahreslohn: 72500, steuerklasse: 6, jahreslohnsteuer: 20931 },
+      { jahreslohn: 72500, steuerklasse: 1, jahreslohnsteuer: 13430 },
+      { jahreslohn: 72500, steuerklasse: 2, jahreslohnsteuer: 11984 },
+      { jahreslohn: 72500, steuerklasse: 3, jahreslohnsteuer: 7886 },
+      { jahreslohn: 72500, steuerklasse: 4, jahreslohnsteuer: 13430 },
+      { jahreslohn: 72500, steuerklasse: 5, jahreslohnsteuer: 19984 },
+      { jahreslohn: 72500, steuerklasse: 6, jahreslohnsteuer: 20516 },
       // Zeile 29
-      { jahreslohn: 75000, steuerklasse: 1, jahreslohnsteuer: 14861 },
-      { jahreslohn: 75000, steuerklasse: 2, jahreslohnsteuer: 13344 },
-      { jahreslohn: 75000, steuerklasse: 3, jahreslohnsteuer: 9022 },
-      { jahreslohn: 75000, steuerklasse: 4, jahreslohnsteuer: 14861 },
-      { jahreslohn: 75000, steuerklasse: 5, jahreslohnsteuer: 21351 },
-      { jahreslohn: 75000, steuerklasse: 6, jahreslohnsteuer: 21883 },
+      { jahreslohn: 75000, steuerklasse: 1, jahreslohnsteuer: 14303 },
+      { jahreslohn: 75000, steuerklasse: 2, jahreslohnsteuer: 12826 },
+      { jahreslohn: 75000, steuerklasse: 3, jahreslohnsteuer: 8524 },
+      { jahreslohn: 75000, steuerklasse: 4, jahreslohnsteuer: 14303 },
+      { jahreslohn: 75000, steuerklasse: 5, jahreslohnsteuer: 20937 },
+      { jahreslohn: 75000, steuerklasse: 6, jahreslohnsteuer: 21468 },
       // Zeile 30
-      { jahreslohn: 77500, steuerklasse: 1, jahreslohnsteuer: 15771 },
-      { jahreslohn: 77500, steuerklasse: 2, jahreslohnsteuer: 14222 },
-      { jahreslohn: 77500, steuerklasse: 3, jahreslohnsteuer: 9678 },
-      { jahreslohn: 77500, steuerklasse: 4, jahreslohnsteuer: 15771 },
-      { jahreslohn: 77500, steuerklasse: 5, jahreslohnsteuer: 22304 },
-      { jahreslohn: 77500, steuerklasse: 6, jahreslohnsteuer: 22835 },
+      { jahreslohn: 77500, steuerklasse: 1, jahreslohnsteuer: 15194 },
+      { jahreslohn: 77500, steuerklasse: 2, jahreslohnsteuer: 13687 },
+      { jahreslohn: 77500, steuerklasse: 3, jahreslohnsteuer: 9172 },
+      { jahreslohn: 77500, steuerklasse: 4, jahreslohnsteuer: 15194 },
+      { jahreslohn: 77500, steuerklasse: 5, jahreslohnsteuer: 21889 },
+      { jahreslohn: 77500, steuerklasse: 6, jahreslohnsteuer: 22420 },
       // Zeile 31
-      { jahreslohn: 80000, steuerklasse: 1, jahreslohnsteuer: 16699 },
-      { jahreslohn: 80000, steuerklasse: 2, jahreslohnsteuer: 15119 },
-      { jahreslohn: 80000, steuerklasse: 3, jahreslohnsteuer: 10346 },
-      { jahreslohn: 80000, steuerklasse: 4, jahreslohnsteuer: 16699 },
-      { jahreslohn: 80000, steuerklasse: 5, jahreslohnsteuer: 23256 },
-      { jahreslohn: 80000, steuerklasse: 6, jahreslohnsteuer: 23787 },
+      { jahreslohn: 80000, steuerklasse: 1, jahreslohnsteuer: 16104 },
+      { jahreslohn: 80000, steuerklasse: 2, jahreslohnsteuer: 14565 },
+      { jahreslohn: 80000, steuerklasse: 3, jahreslohnsteuer: 9828 },
+      { jahreslohn: 80000, steuerklasse: 4, jahreslohnsteuer: 16104 },
+      { jahreslohn: 80000, steuerklasse: 5, jahreslohnsteuer: 22841 },
+      { jahreslohn: 80000, steuerklasse: 6, jahreslohnsteuer: 23373 },
       // Zeile 32
-      { jahreslohn: 82500, steuerklasse: 1, jahreslohnsteuer: 17646 },
-      { jahreslohn: 82500, steuerklasse: 2, jahreslohnsteuer: 16034 },
-      { jahreslohn: 82500, steuerklasse: 3, jahreslohnsteuer: 11020 },
-      { jahreslohn: 82500, steuerklasse: 4, jahreslohnsteuer: 17646 },
-      { jahreslohn: 82500, steuerklasse: 5, jahreslohnsteuer: 24208 },
-      { jahreslohn: 82500, steuerklasse: 6, jahreslohnsteuer: 24740 },
+      { jahreslohn: 82500, steuerklasse: 1, jahreslohnsteuer: 17031 },
+      { jahreslohn: 82500, steuerklasse: 2, jahreslohnsteuer: 15462 },
+      { jahreslohn: 82500, steuerklasse: 3, jahreslohnsteuer: 10494 },
+      { jahreslohn: 82500, steuerklasse: 4, jahreslohnsteuer: 17031 },
+      { jahreslohn: 82500, steuerklasse: 5, jahreslohnsteuer: 23793 },
+      { jahreslohn: 82500, steuerklasse: 6, jahreslohnsteuer: 24325 },
       // Zeile 33
-      { jahreslohn: 85000, steuerklasse: 1, jahreslohnsteuer: 18598 },
-      { jahreslohn: 85000, steuerklasse: 2, jahreslohnsteuer: 16968 },
-      { jahreslohn: 85000, steuerklasse: 3, jahreslohnsteuer: 11706 },
-      { jahreslohn: 85000, steuerklasse: 4, jahreslohnsteuer: 18598 },
-      { jahreslohn: 85000, steuerklasse: 5, jahreslohnsteuer: 25160 },
-      { jahreslohn: 85000, steuerklasse: 6, jahreslohnsteuer: 25692 },
+      { jahreslohn: 85000, steuerklasse: 1, jahreslohnsteuer: 17977 },
+      { jahreslohn: 85000, steuerklasse: 2, jahreslohnsteuer: 16376 },
+      { jahreslohn: 85000, steuerklasse: 3, jahreslohnsteuer: 11170 },
+      { jahreslohn: 85000, steuerklasse: 4, jahreslohnsteuer: 17977 },
+      { jahreslohn: 85000, steuerklasse: 5, jahreslohnsteuer: 24746 },
+      { jahreslohn: 85000, steuerklasse: 6, jahreslohnsteuer: 25278 },
       // Zeile 34
-      { jahreslohn: 87500, steuerklasse: 1, jahreslohnsteuer: 19550 },
-      { jahreslohn: 87500, steuerklasse: 2, jahreslohnsteuer: 17917 },
-      { jahreslohn: 87500, steuerklasse: 3, jahreslohnsteuer: 12400 },
-      { jahreslohn: 87500, steuerklasse: 4, jahreslohnsteuer: 19550 },
-      { jahreslohn: 87500, steuerklasse: 5, jahreslohnsteuer: 26113 },
-      { jahreslohn: 87500, steuerklasse: 6, jahreslohnsteuer: 26645 },
+      { jahreslohn: 87500, steuerklasse: 1, jahreslohnsteuer: 18929 },
+      { jahreslohn: 87500, steuerklasse: 2, jahreslohnsteuer: 17310 },
+      { jahreslohn: 87500, steuerklasse: 3, jahreslohnsteuer: 11852 },
+      { jahreslohn: 87500, steuerklasse: 4, jahreslohnsteuer: 18929 },
+      { jahreslohn: 87500, steuerklasse: 5, jahreslohnsteuer: 25698 },
+      { jahreslohn: 87500, steuerklasse: 6, jahreslohnsteuer: 26230 },
       // Zeile 35
-      { jahreslohn: 90000, steuerklasse: 1, jahreslohnsteuer: 20503 },
-      { jahreslohn: 90000, steuerklasse: 2, jahreslohnsteuer: 18870 },
-      { jahreslohn: 90000, steuerklasse: 3, jahreslohnsteuer: 13102 },
-      { jahreslohn: 90000, steuerklasse: 4, jahreslohnsteuer: 20503 },
-      { jahreslohn: 90000, steuerklasse: 5, jahreslohnsteuer: 27065 },
-      { jahreslohn: 90000, steuerklasse: 6, jahreslohnsteuer: 27597 },
+      { jahreslohn: 90000, steuerklasse: 1, jahreslohnsteuer: 19882 },
+      { jahreslohn: 90000, steuerklasse: 2, jahreslohnsteuer: 18259 },
+      { jahreslohn: 90000, steuerklasse: 3, jahreslohnsteuer: 12546 },
+      { jahreslohn: 90000, steuerklasse: 4, jahreslohnsteuer: 19882 },
+      { jahreslohn: 90000, steuerklasse: 5, jahreslohnsteuer: 26651 },
+      { jahreslohn: 90000, steuerklasse: 6, jahreslohnsteuer: 27182 },
       // Zeile 36
-      { jahreslohn: 92500, steuerklasse: 1, jahreslohnsteuer: 21529 },
-      { jahreslohn: 92500, steuerklasse: 2, jahreslohnsteuer: 19897 },
-      { jahreslohn: 92500, steuerklasse: 3, jahreslohnsteuer: 13872 },
-      { jahreslohn: 92500, steuerklasse: 4, jahreslohnsteuer: 21529 },
-      { jahreslohn: 92500, steuerklasse: 5, jahreslohnsteuer: 28092 },
-      { jahreslohn: 92500, steuerklasse: 6, jahreslohnsteuer: 28624 },
+      { jahreslohn: 92500, steuerklasse: 1, jahreslohnsteuer: 20834 },
+      { jahreslohn: 92500, steuerklasse: 2, jahreslohnsteuer: 19211 },
+      { jahreslohn: 92500, steuerklasse: 3, jahreslohnsteuer: 13248 },
+      { jahreslohn: 92500, steuerklasse: 4, jahreslohnsteuer: 20834 },
+      { jahreslohn: 92500, steuerklasse: 5, jahreslohnsteuer: 27603 },
+      { jahreslohn: 92500, steuerklasse: 6, jahreslohnsteuer: 28135 },
       // Zeile 37
-      { jahreslohn: 95000, steuerklasse: 1, jahreslohnsteuer: 22579 },
-      { jahreslohn: 95000, steuerklasse: 2, jahreslohnsteuer: 20947 },
-      { jahreslohn: 95000, steuerklasse: 3, jahreslohnsteuer: 14668 },
-      { jahreslohn: 95000, steuerklasse: 4, jahreslohnsteuer: 22579 },
-      { jahreslohn: 95000, steuerklasse: 5, jahreslohnsteuer: 29142 },
-      { jahreslohn: 95000, steuerklasse: 6, jahreslohnsteuer: 29674 },
+      { jahreslohn: 95000, steuerklasse: 1, jahreslohnsteuer: 21786 },
+      { jahreslohn: 95000, steuerklasse: 2, jahreslohnsteuer: 20163 },
+      { jahreslohn: 95000, steuerklasse: 3, jahreslohnsteuer: 13960 },
+      { jahreslohn: 95000, steuerklasse: 4, jahreslohnsteuer: 21786 },
+      { jahreslohn: 95000, steuerklasse: 5, jahreslohnsteuer: 28555 },
+      { jahreslohn: 95000, steuerklasse: 6, jahreslohnsteuer: 29087 },
       // Zeile 38
-      { jahreslohn: 97500, steuerklasse: 1, jahreslohnsteuer: 23629 },
-      { jahreslohn: 97500, steuerklasse: 2, jahreslohnsteuer: 21997 },
-      { jahreslohn: 97500, steuerklasse: 3, jahreslohnsteuer: 15478 },
-      { jahreslohn: 97500, steuerklasse: 4, jahreslohnsteuer: 23629 },
-      { jahreslohn: 97500, steuerklasse: 5, jahreslohnsteuer: 30192 },
-      { jahreslohn: 97500, steuerklasse: 6, jahreslohnsteuer: 30724 },
+      { jahreslohn: 97500, steuerklasse: 1, jahreslohnsteuer: 22774 },
+      { jahreslohn: 97500, steuerklasse: 2, jahreslohnsteuer: 21151 },
+      { jahreslohn: 97500, steuerklasse: 3, jahreslohnsteuer: 14706 },
+      { jahreslohn: 97500, steuerklasse: 4, jahreslohnsteuer: 22774 },
+      { jahreslohn: 97500, steuerklasse: 5, jahreslohnsteuer: 29543 },
+      { jahreslohn: 97500, steuerklasse: 6, jahreslohnsteuer: 30075 },
       // Zeile 39
-      { jahreslohn: 100000, steuerklasse: 1, jahreslohnsteuer: 24679 },
-      { jahreslohn: 100000, steuerklasse: 2, jahreslohnsteuer: 23047 },
-      { jahreslohn: 100000, steuerklasse: 3, jahreslohnsteuer: 16298 },
-      { jahreslohn: 100000, steuerklasse: 4, jahreslohnsteuer: 24679 },
-      { jahreslohn: 100000, steuerklasse: 5, jahreslohnsteuer: 31242 },
-      { jahreslohn: 100000, steuerklasse: 6, jahreslohnsteuer: 31774 },
+      { jahreslohn: 100000, steuerklasse: 1, jahreslohnsteuer: 23824 },
+      { jahreslohn: 100000, steuerklasse: 2, jahreslohnsteuer: 22201 },
+      { jahreslohn: 100000, steuerklasse: 3, jahreslohnsteuer: 15510 },
+      { jahreslohn: 100000, steuerklasse: 4, jahreslohnsteuer: 23824 },
+      { jahreslohn: 100000, steuerklasse: 5, jahreslohnsteuer: 30593 },
+      { jahreslohn: 100000, steuerklasse: 6, jahreslohnsteuer: 31125 },
     ])(
       "Allgemeine Prüftabelle - Jahreslohn: '$jahreslohn' Euro; Steuerklasse: '$steuerklasse';",
       ({ jahreslohn, steuerklasse, jahreslohnsteuer }) => {
-        const programm = new PAP_2024({
+        const programm = new PAP_2025({
           AF: 0,
           F: 0,
           KRV: 0,
-          KVZ: 1.7,
+          KVZ: 2.5,
           LZZ: 1,
           LZZFREIB: 0,
           LZZHINZU: 0,
@@ -1328,257 +1312,257 @@ if (import.meta.vitest) {
       { jahreslohn: 12500, steuerklasse: 5, jahreslohnsteuer: 1362 },
       { jahreslohn: 12500, steuerklasse: 6, jahreslohnsteuer: 1540 },
       // Zeile 5
-      { jahreslohn: 15000, steuerklasse: 1, jahreslohnsteuer: 47 },
+      { jahreslohn: 15000, steuerklasse: 1, jahreslohnsteuer: 0 },
       { jahreslohn: 15000, steuerklasse: 2, jahreslohnsteuer: 0 },
       { jahreslohn: 15000, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 15000, steuerklasse: 4, jahreslohnsteuer: 47 },
+      { jahreslohn: 15000, steuerklasse: 4, jahreslohnsteuer: 0 },
       { jahreslohn: 15000, steuerklasse: 5, jahreslohnsteuer: 1670 },
       { jahreslohn: 15000, steuerklasse: 6, jahreslohnsteuer: 1848 },
       // Zeile 6
-      { jahreslohn: 17500, steuerklasse: 1, jahreslohnsteuer: 450 },
+      { jahreslohn: 17500, steuerklasse: 1, jahreslohnsteuer: 360 },
       { jahreslohn: 17500, steuerklasse: 2, jahreslohnsteuer: 0 },
       { jahreslohn: 17500, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 17500, steuerklasse: 4, jahreslohnsteuer: 450 },
-      { jahreslohn: 17500, steuerklasse: 5, jahreslohnsteuer: 2302 },
-      { jahreslohn: 17500, steuerklasse: 6, jahreslohnsteuer: 2833 },
+      { jahreslohn: 17500, steuerklasse: 4, jahreslohnsteuer: 360 },
+      { jahreslohn: 17500, steuerklasse: 5, jahreslohnsteuer: 2159 },
+      { jahreslohn: 17500, steuerklasse: 6, jahreslohnsteuer: 2691 },
       // Zeile 7
-      { jahreslohn: 20000, steuerklasse: 1, jahreslohnsteuer: 984 },
-      { jahreslohn: 20000, steuerklasse: 2, jahreslohnsteuer: 144 },
+      { jahreslohn: 20000, steuerklasse: 1, jahreslohnsteuer: 872 },
+      { jahreslohn: 20000, steuerklasse: 2, jahreslohnsteuer: 69 },
       { jahreslohn: 20000, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 20000, steuerklasse: 4, jahreslohnsteuer: 984 },
-      { jahreslohn: 20000, steuerklasse: 5, jahreslohnsteuer: 3352 },
-      { jahreslohn: 20000, steuerklasse: 6, jahreslohnsteuer: 3883 },
+      { jahreslohn: 20000, steuerklasse: 4, jahreslohnsteuer: 872 },
+      { jahreslohn: 20000, steuerklasse: 5, jahreslohnsteuer: 3209 },
+      { jahreslohn: 20000, steuerklasse: 6, jahreslohnsteuer: 3741 },
       // Zeile 8
-      { jahreslohn: 22500, steuerklasse: 1, jahreslohnsteuer: 1593 },
-      { jahreslohn: 22500, steuerklasse: 2, jahreslohnsteuer: 596 },
+      { jahreslohn: 22500, steuerklasse: 1, jahreslohnsteuer: 1474 },
+      { jahreslohn: 22500, steuerklasse: 2, jahreslohnsteuer: 499 },
       { jahreslohn: 22500, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 22500, steuerklasse: 4, jahreslohnsteuer: 1593 },
-      { jahreslohn: 22500, steuerklasse: 5, jahreslohnsteuer: 4402 },
-      { jahreslohn: 22500, steuerklasse: 6, jahreslohnsteuer: 4933 },
+      { jahreslohn: 22500, steuerklasse: 4, jahreslohnsteuer: 1474 },
+      { jahreslohn: 22500, steuerklasse: 5, jahreslohnsteuer: 4259 },
+      { jahreslohn: 22500, steuerklasse: 6, jahreslohnsteuer: 4791 },
       // Zeile 9
-      { jahreslohn: 25000, steuerklasse: 1, jahreslohnsteuer: 2225 },
-      { jahreslohn: 25000, steuerklasse: 2, jahreslohnsteuer: 1162 },
+      { jahreslohn: 25000, steuerklasse: 1, jahreslohnsteuer: 2101 },
+      { jahreslohn: 25000, steuerklasse: 2, jahreslohnsteuer: 1046 },
       { jahreslohn: 25000, steuerklasse: 3, jahreslohnsteuer: 0 },
-      { jahreslohn: 25000, steuerklasse: 4, jahreslohnsteuer: 2225 },
-      { jahreslohn: 25000, steuerklasse: 5, jahreslohnsteuer: 5452 },
-      { jahreslohn: 25000, steuerklasse: 6, jahreslohnsteuer: 5983 },
+      { jahreslohn: 25000, steuerklasse: 4, jahreslohnsteuer: 2101 },
+      { jahreslohn: 25000, steuerklasse: 5, jahreslohnsteuer: 5309 },
+      { jahreslohn: 25000, steuerklasse: 6, jahreslohnsteuer: 5841 },
       // Zeile 10
-      { jahreslohn: 27500, steuerklasse: 1, jahreslohnsteuer: 2879 },
-      { jahreslohn: 27500, steuerklasse: 2, jahreslohnsteuer: 1778 },
-      { jahreslohn: 27500, steuerklasse: 3, jahreslohnsteuer: 2 },
-      { jahreslohn: 27500, steuerklasse: 4, jahreslohnsteuer: 2879 },
-      { jahreslohn: 27500, steuerklasse: 5, jahreslohnsteuer: 6480 },
-      { jahreslohn: 27500, steuerklasse: 6, jahreslohnsteuer: 6934 },
+      { jahreslohn: 27500, steuerklasse: 1, jahreslohnsteuer: 2750 },
+      { jahreslohn: 27500, steuerklasse: 2, jahreslohnsteuer: 1658 },
+      { jahreslohn: 27500, steuerklasse: 3, jahreslohnsteuer: 0 },
+      { jahreslohn: 27500, steuerklasse: 4, jahreslohnsteuer: 2750 },
+      { jahreslohn: 27500, steuerklasse: 5, jahreslohnsteuer: 6359 },
+      { jahreslohn: 27500, steuerklasse: 6, jahreslohnsteuer: 6874 },
       // Zeile 11
-      { jahreslohn: 30000, steuerklasse: 1, jahreslohnsteuer: 3556 },
-      { jahreslohn: 30000, steuerklasse: 2, jahreslohnsteuer: 2416 },
-      { jahreslohn: 30000, steuerklasse: 3, jahreslohnsteuer: 382 },
-      { jahreslohn: 30000, steuerklasse: 4, jahreslohnsteuer: 3556 },
-      { jahreslohn: 30000, steuerklasse: 5, jahreslohnsteuer: 7386 },
-      { jahreslohn: 30000, steuerklasse: 6, jahreslohnsteuer: 7866 },
+      { jahreslohn: 30000, steuerklasse: 1, jahreslohnsteuer: 3421 },
+      { jahreslohn: 30000, steuerklasse: 2, jahreslohnsteuer: 2291 },
+      { jahreslohn: 30000, steuerklasse: 3, jahreslohnsteuer: 226 },
+      { jahreslohn: 30000, steuerklasse: 4, jahreslohnsteuer: 3421 },
+      { jahreslohn: 30000, steuerklasse: 5, jahreslohnsteuer: 7324 },
+      { jahreslohn: 30000, steuerklasse: 6, jahreslohnsteuer: 7792 },
       // Zeile 12
-      { jahreslohn: 32500, steuerklasse: 1, jahreslohnsteuer: 4256 },
-      { jahreslohn: 32500, steuerklasse: 2, jahreslohnsteuer: 3077 },
-      { jahreslohn: 32500, steuerklasse: 3, jahreslohnsteuer: 820 },
-      { jahreslohn: 32500, steuerklasse: 4, jahreslohnsteuer: 4256 },
-      { jahreslohn: 32500, steuerklasse: 5, jahreslohnsteuer: 8340 },
-      { jahreslohn: 32500, steuerklasse: 6, jahreslohnsteuer: 8842 },
+      { jahreslohn: 32500, steuerklasse: 1, jahreslohnsteuer: 4115 },
+      { jahreslohn: 32500, steuerklasse: 2, jahreslohnsteuer: 2947 },
+      { jahreslohn: 32500, steuerklasse: 3, jahreslohnsteuer: 642 },
+      { jahreslohn: 32500, steuerklasse: 4, jahreslohnsteuer: 4115 },
+      { jahreslohn: 32500, steuerklasse: 5, jahreslohnsteuer: 8264 },
+      { jahreslohn: 32500, steuerklasse: 6, jahreslohnsteuer: 8758 },
       // Zeile 13
-      { jahreslohn: 35000, steuerklasse: 1, jahreslohnsteuer: 4978 },
-      { jahreslohn: 35000, steuerklasse: 2, jahreslohnsteuer: 3761 },
-      { jahreslohn: 35000, steuerklasse: 3, jahreslohnsteuer: 1314 },
-      { jahreslohn: 35000, steuerklasse: 4, jahreslohnsteuer: 4978 },
-      { jahreslohn: 35000, steuerklasse: 5, jahreslohnsteuer: 9342 },
-      { jahreslohn: 35000, steuerklasse: 6, jahreslohnsteuer: 9864 },
+      { jahreslohn: 35000, steuerklasse: 1, jahreslohnsteuer: 4830 },
+      { jahreslohn: 35000, steuerklasse: 2, jahreslohnsteuer: 3624 },
+      { jahreslohn: 35000, steuerklasse: 3, jahreslohnsteuer: 1114 },
+      { jahreslohn: 35000, steuerklasse: 4, jahreslohnsteuer: 4830 },
+      { jahreslohn: 35000, steuerklasse: 5, jahreslohnsteuer: 9248 },
+      { jahreslohn: 35000, steuerklasse: 6, jahreslohnsteuer: 9766 },
       // Zeile 14
-      { jahreslohn: 37500, steuerklasse: 1, jahreslohnsteuer: 5723 },
-      { jahreslohn: 37500, steuerklasse: 2, jahreslohnsteuer: 4467 },
-      { jahreslohn: 37500, steuerklasse: 3, jahreslohnsteuer: 1866 },
-      { jahreslohn: 37500, steuerklasse: 4, jahreslohnsteuer: 5723 },
-      { jahreslohn: 37500, steuerklasse: 5, jahreslohnsteuer: 10380 },
-      { jahreslohn: 37500, steuerklasse: 6, jahreslohnsteuer: 10912 },
+      { jahreslohn: 37500, steuerklasse: 1, jahreslohnsteuer: 5567 },
+      { jahreslohn: 37500, steuerklasse: 2, jahreslohnsteuer: 4324 },
+      { jahreslohn: 37500, steuerklasse: 3, jahreslohnsteuer: 1646 },
+      { jahreslohn: 37500, steuerklasse: 4, jahreslohnsteuer: 5567 },
+      { jahreslohn: 37500, steuerklasse: 5, jahreslohnsteuer: 10277 },
+      { jahreslohn: 37500, steuerklasse: 6, jahreslohnsteuer: 10809 },
       // Zeile 15
-      { jahreslohn: 40000, steuerklasse: 1, jahreslohnsteuer: 6490 },
-      { jahreslohn: 40000, steuerklasse: 2, jahreslohnsteuer: 5196 },
-      { jahreslohn: 40000, steuerklasse: 3, jahreslohnsteuer: 2466 },
-      { jahreslohn: 40000, steuerklasse: 4, jahreslohnsteuer: 6490 },
-      { jahreslohn: 40000, steuerklasse: 5, jahreslohnsteuer: 11430 },
-      { jahreslohn: 40000, steuerklasse: 6, jahreslohnsteuer: 11962 },
+      { jahreslohn: 40000, steuerklasse: 1, jahreslohnsteuer: 6327 },
+      { jahreslohn: 40000, steuerklasse: 2, jahreslohnsteuer: 5046 },
+      { jahreslohn: 40000, steuerklasse: 3, jahreslohnsteuer: 2234 },
+      { jahreslohn: 40000, steuerklasse: 4, jahreslohnsteuer: 6327 },
+      { jahreslohn: 40000, steuerklasse: 5, jahreslohnsteuer: 11327 },
+      { jahreslohn: 40000, steuerklasse: 6, jahreslohnsteuer: 11859 },
       // Zeile 16
-      { jahreslohn: 42500, steuerklasse: 1, jahreslohnsteuer: 7281 },
-      { jahreslohn: 42500, steuerklasse: 2, jahreslohnsteuer: 5948 },
-      { jahreslohn: 42500, steuerklasse: 3, jahreslohnsteuer: 3078 },
-      { jahreslohn: 42500, steuerklasse: 4, jahreslohnsteuer: 7281 },
-      { jahreslohn: 42500, steuerklasse: 5, jahreslohnsteuer: 12480 },
-      { jahreslohn: 42500, steuerklasse: 6, jahreslohnsteuer: 13012 },
+      { jahreslohn: 42500, steuerklasse: 1, jahreslohnsteuer: 7108 },
+      { jahreslohn: 42500, steuerklasse: 2, jahreslohnsteuer: 5790 },
+      { jahreslohn: 42500, steuerklasse: 3, jahreslohnsteuer: 2842 },
+      { jahreslohn: 42500, steuerklasse: 4, jahreslohnsteuer: 7108 },
+      { jahreslohn: 42500, steuerklasse: 5, jahreslohnsteuer: 12377 },
+      { jahreslohn: 42500, steuerklasse: 6, jahreslohnsteuer: 12909 },
       // Zeile 17
-      { jahreslohn: 45000, steuerklasse: 1, jahreslohnsteuer: 8093 },
-      { jahreslohn: 45000, steuerklasse: 2, jahreslohnsteuer: 6722 },
-      { jahreslohn: 45000, steuerklasse: 3, jahreslohnsteuer: 3702 },
-      { jahreslohn: 45000, steuerklasse: 4, jahreslohnsteuer: 8093 },
-      { jahreslohn: 45000, steuerklasse: 5, jahreslohnsteuer: 13530 },
-      { jahreslohn: 45000, steuerklasse: 6, jahreslohnsteuer: 14062 },
+      { jahreslohn: 45000, steuerklasse: 1, jahreslohnsteuer: 7912 },
+      { jahreslohn: 45000, steuerklasse: 2, jahreslohnsteuer: 6556 },
+      { jahreslohn: 45000, steuerklasse: 3, jahreslohnsteuer: 3462 },
+      { jahreslohn: 45000, steuerklasse: 4, jahreslohnsteuer: 7912 },
+      { jahreslohn: 45000, steuerklasse: 5, jahreslohnsteuer: 13427 },
+      { jahreslohn: 45000, steuerklasse: 6, jahreslohnsteuer: 13959 },
       // Zeile 18
-      { jahreslohn: 47500, steuerklasse: 1, jahreslohnsteuer: 8929 },
-      { jahreslohn: 47500, steuerklasse: 2, jahreslohnsteuer: 7519 },
-      { jahreslohn: 47500, steuerklasse: 3, jahreslohnsteuer: 4338 },
-      { jahreslohn: 47500, steuerklasse: 4, jahreslohnsteuer: 8929 },
-      { jahreslohn: 47500, steuerklasse: 5, jahreslohnsteuer: 14580 },
-      { jahreslohn: 47500, steuerklasse: 6, jahreslohnsteuer: 15112 },
+      { jahreslohn: 47500, steuerklasse: 1, jahreslohnsteuer: 8738 },
+      { jahreslohn: 47500, steuerklasse: 2, jahreslohnsteuer: 7344 },
+      { jahreslohn: 47500, steuerklasse: 3, jahreslohnsteuer: 4092 },
+      { jahreslohn: 47500, steuerklasse: 4, jahreslohnsteuer: 8738 },
+      { jahreslohn: 47500, steuerklasse: 5, jahreslohnsteuer: 14477 },
+      { jahreslohn: 47500, steuerklasse: 6, jahreslohnsteuer: 15009 },
       // Zeile 19
-      { jahreslohn: 50000, steuerklasse: 1, jahreslohnsteuer: 9787 },
-      { jahreslohn: 50000, steuerklasse: 2, jahreslohnsteuer: 8338 },
-      { jahreslohn: 50000, steuerklasse: 3, jahreslohnsteuer: 4984 },
-      { jahreslohn: 50000, steuerklasse: 4, jahreslohnsteuer: 9787 },
-      { jahreslohn: 50000, steuerklasse: 5, jahreslohnsteuer: 15630 },
-      { jahreslohn: 50000, steuerklasse: 6, jahreslohnsteuer: 16162 },
+      { jahreslohn: 50000, steuerklasse: 1, jahreslohnsteuer: 9586 },
+      { jahreslohn: 50000, steuerklasse: 2, jahreslohnsteuer: 8154 },
+      { jahreslohn: 50000, steuerklasse: 3, jahreslohnsteuer: 4734 },
+      { jahreslohn: 50000, steuerklasse: 4, jahreslohnsteuer: 9586 },
+      { jahreslohn: 50000, steuerklasse: 5, jahreslohnsteuer: 15527 },
+      { jahreslohn: 50000, steuerklasse: 6, jahreslohnsteuer: 16059 },
       // Zeile 20
-      { jahreslohn: 52500, steuerklasse: 1, jahreslohnsteuer: 10668 },
-      { jahreslohn: 52500, steuerklasse: 2, jahreslohnsteuer: 9181 },
-      { jahreslohn: 52500, steuerklasse: 3, jahreslohnsteuer: 5642 },
-      { jahreslohn: 52500, steuerklasse: 4, jahreslohnsteuer: 10668 },
-      { jahreslohn: 52500, steuerklasse: 5, jahreslohnsteuer: 16680 },
-      { jahreslohn: 52500, steuerklasse: 6, jahreslohnsteuer: 17212 },
+      { jahreslohn: 52500, steuerklasse: 1, jahreslohnsteuer: 10455 },
+      { jahreslohn: 52500, steuerklasse: 2, jahreslohnsteuer: 8986 },
+      { jahreslohn: 52500, steuerklasse: 3, jahreslohnsteuer: 5386 },
+      { jahreslohn: 52500, steuerklasse: 4, jahreslohnsteuer: 10455 },
+      { jahreslohn: 52500, steuerklasse: 5, jahreslohnsteuer: 16577 },
+      { jahreslohn: 52500, steuerklasse: 6, jahreslohnsteuer: 17109 },
       // Zeile 21
-      { jahreslohn: 55000, steuerklasse: 1, jahreslohnsteuer: 11571 },
-      { jahreslohn: 55000, steuerklasse: 2, jahreslohnsteuer: 10045 },
-      { jahreslohn: 55000, steuerklasse: 3, jahreslohnsteuer: 6312 },
-      { jahreslohn: 55000, steuerklasse: 4, jahreslohnsteuer: 11571 },
-      { jahreslohn: 55000, steuerklasse: 5, jahreslohnsteuer: 17730 },
-      { jahreslohn: 55000, steuerklasse: 6, jahreslohnsteuer: 18262 },
+      { jahreslohn: 55000, steuerklasse: 1, jahreslohnsteuer: 11347 },
+      { jahreslohn: 55000, steuerklasse: 2, jahreslohnsteuer: 9841 },
+      { jahreslohn: 55000, steuerklasse: 3, jahreslohnsteuer: 6050 },
+      { jahreslohn: 55000, steuerklasse: 4, jahreslohnsteuer: 11347 },
+      { jahreslohn: 55000, steuerklasse: 5, jahreslohnsteuer: 17627 },
+      { jahreslohn: 55000, steuerklasse: 6, jahreslohnsteuer: 18159 },
       // Zeile 22
-      { jahreslohn: 57500, steuerklasse: 1, jahreslohnsteuer: 12497 },
-      { jahreslohn: 57500, steuerklasse: 2, jahreslohnsteuer: 10933 },
-      { jahreslohn: 57500, steuerklasse: 3, jahreslohnsteuer: 6992 },
-      { jahreslohn: 57500, steuerklasse: 4, jahreslohnsteuer: 12497 },
-      { jahreslohn: 57500, steuerklasse: 5, jahreslohnsteuer: 18780 },
-      { jahreslohn: 57500, steuerklasse: 6, jahreslohnsteuer: 19312 },
+      { jahreslohn: 57500, steuerklasse: 1, jahreslohnsteuer: 12261 },
+      { jahreslohn: 57500, steuerklasse: 2, jahreslohnsteuer: 10717 },
+      { jahreslohn: 57500, steuerklasse: 3, jahreslohnsteuer: 6724 },
+      { jahreslohn: 57500, steuerklasse: 4, jahreslohnsteuer: 12261 },
+      { jahreslohn: 57500, steuerklasse: 5, jahreslohnsteuer: 18677 },
+      { jahreslohn: 57500, steuerklasse: 6, jahreslohnsteuer: 19209 },
       // Zeile 23
-      { jahreslohn: 60000, steuerklasse: 1, jahreslohnsteuer: 13446 },
-      { jahreslohn: 60000, steuerklasse: 2, jahreslohnsteuer: 11843 },
-      { jahreslohn: 60000, steuerklasse: 3, jahreslohnsteuer: 7684 },
-      { jahreslohn: 60000, steuerklasse: 4, jahreslohnsteuer: 13446 },
-      { jahreslohn: 60000, steuerklasse: 5, jahreslohnsteuer: 19830 },
-      { jahreslohn: 60000, steuerklasse: 6, jahreslohnsteuer: 20362 },
+      { jahreslohn: 60000, steuerklasse: 1, jahreslohnsteuer: 13197 },
+      { jahreslohn: 60000, steuerklasse: 2, jahreslohnsteuer: 11616 },
+      { jahreslohn: 60000, steuerklasse: 3, jahreslohnsteuer: 7410 },
+      { jahreslohn: 60000, steuerklasse: 4, jahreslohnsteuer: 13197 },
+      { jahreslohn: 60000, steuerklasse: 5, jahreslohnsteuer: 19727 },
+      { jahreslohn: 60000, steuerklasse: 6, jahreslohnsteuer: 20259 },
       // Zeile 24
-      { jahreslohn: 62500, steuerklasse: 1, jahreslohnsteuer: 14418 },
-      { jahreslohn: 62500, steuerklasse: 2, jahreslohnsteuer: 12776 },
-      { jahreslohn: 62500, steuerklasse: 3, jahreslohnsteuer: 8388 },
-      { jahreslohn: 62500, steuerklasse: 4, jahreslohnsteuer: 14418 },
-      { jahreslohn: 62500, steuerklasse: 5, jahreslohnsteuer: 20880 },
-      { jahreslohn: 62500, steuerklasse: 6, jahreslohnsteuer: 21412 },
+      { jahreslohn: 62500, steuerklasse: 1, jahreslohnsteuer: 14156 },
+      { jahreslohn: 62500, steuerklasse: 2, jahreslohnsteuer: 12536 },
+      { jahreslohn: 62500, steuerklasse: 3, jahreslohnsteuer: 8108 },
+      { jahreslohn: 62500, steuerklasse: 4, jahreslohnsteuer: 14156 },
+      { jahreslohn: 62500, steuerklasse: 5, jahreslohnsteuer: 20777 },
+      { jahreslohn: 62500, steuerklasse: 6, jahreslohnsteuer: 21309 },
       // Zeile 25
-      { jahreslohn: 65000, steuerklasse: 1, jahreslohnsteuer: 15412 },
-      { jahreslohn: 65000, steuerklasse: 2, jahreslohnsteuer: 13731 },
-      { jahreslohn: 65000, steuerklasse: 3, jahreslohnsteuer: 9102 },
-      { jahreslohn: 65000, steuerklasse: 4, jahreslohnsteuer: 15412 },
-      { jahreslohn: 65000, steuerklasse: 5, jahreslohnsteuer: 21930 },
-      { jahreslohn: 65000, steuerklasse: 6, jahreslohnsteuer: 22462 },
+      { jahreslohn: 65000, steuerklasse: 1, jahreslohnsteuer: 15136 },
+      { jahreslohn: 65000, steuerklasse: 2, jahreslohnsteuer: 13479 },
+      { jahreslohn: 65000, steuerklasse: 3, jahreslohnsteuer: 8816 },
+      { jahreslohn: 65000, steuerklasse: 4, jahreslohnsteuer: 15136 },
+      { jahreslohn: 65000, steuerklasse: 5, jahreslohnsteuer: 21827 },
+      { jahreslohn: 65000, steuerklasse: 6, jahreslohnsteuer: 22359 },
       // Zeile 26
-      { jahreslohn: 67500, steuerklasse: 1, jahreslohnsteuer: 16428 },
-      { jahreslohn: 67500, steuerklasse: 2, jahreslohnsteuer: 14709 },
-      { jahreslohn: 67500, steuerklasse: 3, jahreslohnsteuer: 9828 },
-      { jahreslohn: 67500, steuerklasse: 4, jahreslohnsteuer: 16428 },
-      { jahreslohn: 67500, steuerklasse: 5, jahreslohnsteuer: 22980 },
-      { jahreslohn: 67500, steuerklasse: 6, jahreslohnsteuer: 23512 },
+      { jahreslohn: 67500, steuerklasse: 1, jahreslohnsteuer: 16138 },
+      { jahreslohn: 67500, steuerklasse: 2, jahreslohnsteuer: 14444 },
+      { jahreslohn: 67500, steuerklasse: 3, jahreslohnsteuer: 9534 },
+      { jahreslohn: 67500, steuerklasse: 4, jahreslohnsteuer: 16138 },
+      { jahreslohn: 67500, steuerklasse: 5, jahreslohnsteuer: 22877 },
+      { jahreslohn: 67500, steuerklasse: 6, jahreslohnsteuer: 23409 },
       // Zeile 27
-      { jahreslohn: 70000, steuerklasse: 1, jahreslohnsteuer: 17468 },
-      { jahreslohn: 70000, steuerklasse: 2, jahreslohnsteuer: 15710 },
-      { jahreslohn: 70000, steuerklasse: 3, jahreslohnsteuer: 10566 },
-      { jahreslohn: 70000, steuerklasse: 4, jahreslohnsteuer: 17468 },
-      { jahreslohn: 70000, steuerklasse: 5, jahreslohnsteuer: 24030 },
-      { jahreslohn: 70000, steuerklasse: 6, jahreslohnsteuer: 24562 },
+      { jahreslohn: 70000, steuerklasse: 1, jahreslohnsteuer: 17163 },
+      { jahreslohn: 70000, steuerklasse: 2, jahreslohnsteuer: 15430 },
+      { jahreslohn: 70000, steuerklasse: 3, jahreslohnsteuer: 10264 },
+      { jahreslohn: 70000, steuerklasse: 4, jahreslohnsteuer: 17163 },
+      { jahreslohn: 70000, steuerklasse: 5, jahreslohnsteuer: 23927 },
+      { jahreslohn: 70000, steuerklasse: 6, jahreslohnsteuer: 24459 },
       // Zeile 28
-      { jahreslohn: 72500, steuerklasse: 1, jahreslohnsteuer: 18518 },
-      { jahreslohn: 72500, steuerklasse: 2, jahreslohnsteuer: 16734 },
-      { jahreslohn: 72500, steuerklasse: 3, jahreslohnsteuer: 11314 },
-      { jahreslohn: 72500, steuerklasse: 4, jahreslohnsteuer: 18518 },
-      { jahreslohn: 72500, steuerklasse: 5, jahreslohnsteuer: 25080 },
-      { jahreslohn: 72500, steuerklasse: 6, jahreslohnsteuer: 25612 },
+      { jahreslohn: 72500, steuerklasse: 1, jahreslohnsteuer: 18208 },
+      { jahreslohn: 72500, steuerklasse: 2, jahreslohnsteuer: 16439 },
+      { jahreslohn: 72500, steuerklasse: 3, jahreslohnsteuer: 11004 },
+      { jahreslohn: 72500, steuerklasse: 4, jahreslohnsteuer: 18208 },
+      { jahreslohn: 72500, steuerklasse: 5, jahreslohnsteuer: 24977 },
+      { jahreslohn: 72500, steuerklasse: 6, jahreslohnsteuer: 25509 },
       // Zeile 29
-      { jahreslohn: 75000, steuerklasse: 1, jahreslohnsteuer: 19568 },
-      { jahreslohn: 75000, steuerklasse: 2, jahreslohnsteuer: 17778 },
-      { jahreslohn: 75000, steuerklasse: 3, jahreslohnsteuer: 12074 },
-      { jahreslohn: 75000, steuerklasse: 4, jahreslohnsteuer: 19568 },
-      { jahreslohn: 75000, steuerklasse: 5, jahreslohnsteuer: 26130 },
-      { jahreslohn: 75000, steuerklasse: 6, jahreslohnsteuer: 26662 },
+      { jahreslohn: 75000, steuerklasse: 1, jahreslohnsteuer: 19258 },
+      { jahreslohn: 75000, steuerklasse: 2, jahreslohnsteuer: 17470 },
+      { jahreslohn: 75000, steuerklasse: 3, jahreslohnsteuer: 11758 },
+      { jahreslohn: 75000, steuerklasse: 4, jahreslohnsteuer: 19258 },
+      { jahreslohn: 75000, steuerklasse: 5, jahreslohnsteuer: 26027 },
+      { jahreslohn: 75000, steuerklasse: 6, jahreslohnsteuer: 26559 },
       // Zeile 30
-      { jahreslohn: 77500, steuerklasse: 1, jahreslohnsteuer: 20618 },
-      { jahreslohn: 77500, steuerklasse: 2, jahreslohnsteuer: 18828 },
-      { jahreslohn: 77500, steuerklasse: 3, jahreslohnsteuer: 12846 },
-      { jahreslohn: 77500, steuerklasse: 4, jahreslohnsteuer: 20618 },
-      { jahreslohn: 77500, steuerklasse: 5, jahreslohnsteuer: 27180 },
-      { jahreslohn: 77500, steuerklasse: 6, jahreslohnsteuer: 27712 },
+      { jahreslohn: 77500, steuerklasse: 1, jahreslohnsteuer: 20308 },
+      { jahreslohn: 77500, steuerklasse: 2, jahreslohnsteuer: 18519 },
+      { jahreslohn: 77500, steuerklasse: 3, jahreslohnsteuer: 12520 },
+      { jahreslohn: 77500, steuerklasse: 4, jahreslohnsteuer: 20308 },
+      { jahreslohn: 77500, steuerklasse: 5, jahreslohnsteuer: 27077 },
+      { jahreslohn: 77500, steuerklasse: 6, jahreslohnsteuer: 27609 },
       // Zeile 31
-      { jahreslohn: 80000, steuerklasse: 1, jahreslohnsteuer: 21668 },
-      { jahreslohn: 80000, steuerklasse: 2, jahreslohnsteuer: 19878 },
-      { jahreslohn: 80000, steuerklasse: 3, jahreslohnsteuer: 13628 },
-      { jahreslohn: 80000, steuerklasse: 4, jahreslohnsteuer: 21668 },
-      { jahreslohn: 80000, steuerklasse: 5, jahreslohnsteuer: 28230 },
-      { jahreslohn: 80000, steuerklasse: 6, jahreslohnsteuer: 28762 },
+      { jahreslohn: 80000, steuerklasse: 1, jahreslohnsteuer: 21358 },
+      { jahreslohn: 80000, steuerklasse: 2, jahreslohnsteuer: 19569 },
+      { jahreslohn: 80000, steuerklasse: 3, jahreslohnsteuer: 13294 },
+      { jahreslohn: 80000, steuerklasse: 4, jahreslohnsteuer: 21358 },
+      { jahreslohn: 80000, steuerklasse: 5, jahreslohnsteuer: 28127 },
+      { jahreslohn: 80000, steuerklasse: 6, jahreslohnsteuer: 28659 },
       // Zeile 32
-      { jahreslohn: 82500, steuerklasse: 1, jahreslohnsteuer: 22718 },
-      { jahreslohn: 82500, steuerklasse: 2, jahreslohnsteuer: 20928 },
-      { jahreslohn: 82500, steuerklasse: 3, jahreslohnsteuer: 14422 },
-      { jahreslohn: 82500, steuerklasse: 4, jahreslohnsteuer: 22718 },
-      { jahreslohn: 82500, steuerklasse: 5, jahreslohnsteuer: 29280 },
-      { jahreslohn: 82500, steuerklasse: 6, jahreslohnsteuer: 29812 },
+      { jahreslohn: 82500, steuerklasse: 1, jahreslohnsteuer: 22408 },
+      { jahreslohn: 82500, steuerklasse: 2, jahreslohnsteuer: 20619 },
+      { jahreslohn: 82500, steuerklasse: 3, jahreslohnsteuer: 14080 },
+      { jahreslohn: 82500, steuerklasse: 4, jahreslohnsteuer: 22408 },
+      { jahreslohn: 82500, steuerklasse: 5, jahreslohnsteuer: 29177 },
+      { jahreslohn: 82500, steuerklasse: 6, jahreslohnsteuer: 29709 },
       // Zeile 33
-      { jahreslohn: 85000, steuerklasse: 1, jahreslohnsteuer: 23768 },
-      { jahreslohn: 85000, steuerklasse: 2, jahreslohnsteuer: 21978 },
-      { jahreslohn: 85000, steuerklasse: 3, jahreslohnsteuer: 15228 },
-      { jahreslohn: 85000, steuerklasse: 4, jahreslohnsteuer: 23768 },
-      { jahreslohn: 85000, steuerklasse: 5, jahreslohnsteuer: 30330 },
-      { jahreslohn: 85000, steuerklasse: 6, jahreslohnsteuer: 30862 },
+      { jahreslohn: 85000, steuerklasse: 1, jahreslohnsteuer: 23458 },
+      { jahreslohn: 85000, steuerklasse: 2, jahreslohnsteuer: 21669 },
+      { jahreslohn: 85000, steuerklasse: 3, jahreslohnsteuer: 14876 },
+      { jahreslohn: 85000, steuerklasse: 4, jahreslohnsteuer: 23458 },
+      { jahreslohn: 85000, steuerklasse: 5, jahreslohnsteuer: 30227 },
+      { jahreslohn: 85000, steuerklasse: 6, jahreslohnsteuer: 30759 },
       // Zeile 34
-      { jahreslohn: 87500, steuerklasse: 1, jahreslohnsteuer: 24818 },
-      { jahreslohn: 87500, steuerklasse: 2, jahreslohnsteuer: 23028 },
-      { jahreslohn: 87500, steuerklasse: 3, jahreslohnsteuer: 16044 },
-      { jahreslohn: 87500, steuerklasse: 4, jahreslohnsteuer: 24818 },
-      { jahreslohn: 87500, steuerklasse: 5, jahreslohnsteuer: 31380 },
-      { jahreslohn: 87500, steuerklasse: 6, jahreslohnsteuer: 31912 },
+      { jahreslohn: 87500, steuerklasse: 1, jahreslohnsteuer: 24508 },
+      { jahreslohn: 87500, steuerklasse: 2, jahreslohnsteuer: 22719 },
+      { jahreslohn: 87500, steuerklasse: 3, jahreslohnsteuer: 15682 },
+      { jahreslohn: 87500, steuerklasse: 4, jahreslohnsteuer: 24508 },
+      { jahreslohn: 87500, steuerklasse: 5, jahreslohnsteuer: 31277 },
+      { jahreslohn: 87500, steuerklasse: 6, jahreslohnsteuer: 31809 },
       // Zeile 35
-      { jahreslohn: 90000, steuerklasse: 1, jahreslohnsteuer: 25868 },
-      { jahreslohn: 90000, steuerklasse: 2, jahreslohnsteuer: 24078 },
-      { jahreslohn: 90000, steuerklasse: 3, jahreslohnsteuer: 16872 },
-      { jahreslohn: 90000, steuerklasse: 4, jahreslohnsteuer: 25868 },
-      { jahreslohn: 90000, steuerklasse: 5, jahreslohnsteuer: 32430 },
-      { jahreslohn: 90000, steuerklasse: 6, jahreslohnsteuer: 32962 },
+      { jahreslohn: 90000, steuerklasse: 1, jahreslohnsteuer: 25558 },
+      { jahreslohn: 90000, steuerklasse: 2, jahreslohnsteuer: 23769 },
+      { jahreslohn: 90000, steuerklasse: 3, jahreslohnsteuer: 16502 },
+      { jahreslohn: 90000, steuerklasse: 4, jahreslohnsteuer: 25558 },
+      { jahreslohn: 90000, steuerklasse: 5, jahreslohnsteuer: 32327 },
+      { jahreslohn: 90000, steuerklasse: 6, jahreslohnsteuer: 32859 },
       // Zeile 36
-      { jahreslohn: 92500, steuerklasse: 1, jahreslohnsteuer: 26918 },
-      { jahreslohn: 92500, steuerklasse: 2, jahreslohnsteuer: 25128 },
-      { jahreslohn: 92500, steuerklasse: 3, jahreslohnsteuer: 17710 },
-      { jahreslohn: 92500, steuerklasse: 4, jahreslohnsteuer: 26918 },
-      { jahreslohn: 92500, steuerklasse: 5, jahreslohnsteuer: 33480 },
-      { jahreslohn: 92500, steuerklasse: 6, jahreslohnsteuer: 34012 },
+      { jahreslohn: 92500, steuerklasse: 1, jahreslohnsteuer: 26608 },
+      { jahreslohn: 92500, steuerklasse: 2, jahreslohnsteuer: 24819 },
+      { jahreslohn: 92500, steuerklasse: 3, jahreslohnsteuer: 17330 },
+      { jahreslohn: 92500, steuerklasse: 4, jahreslohnsteuer: 26608 },
+      { jahreslohn: 92500, steuerklasse: 5, jahreslohnsteuer: 33377 },
+      { jahreslohn: 92500, steuerklasse: 6, jahreslohnsteuer: 33909 },
       // Zeile 37
-      { jahreslohn: 95000, steuerklasse: 1, jahreslohnsteuer: 27968 },
-      { jahreslohn: 95000, steuerklasse: 2, jahreslohnsteuer: 26178 },
-      { jahreslohn: 95000, steuerklasse: 3, jahreslohnsteuer: 18562 },
-      { jahreslohn: 95000, steuerklasse: 4, jahreslohnsteuer: 27968 },
-      { jahreslohn: 95000, steuerklasse: 5, jahreslohnsteuer: 34530 },
-      { jahreslohn: 95000, steuerklasse: 6, jahreslohnsteuer: 35062 },
+      { jahreslohn: 95000, steuerklasse: 1, jahreslohnsteuer: 27658 },
+      { jahreslohn: 95000, steuerklasse: 2, jahreslohnsteuer: 25869 },
+      { jahreslohn: 95000, steuerklasse: 3, jahreslohnsteuer: 18170 },
+      { jahreslohn: 95000, steuerklasse: 4, jahreslohnsteuer: 27658 },
+      { jahreslohn: 95000, steuerklasse: 5, jahreslohnsteuer: 34427 },
+      { jahreslohn: 95000, steuerklasse: 6, jahreslohnsteuer: 34959 },
       // Zeile 38
-      { jahreslohn: 97500, steuerklasse: 1, jahreslohnsteuer: 29018 },
-      { jahreslohn: 97500, steuerklasse: 2, jahreslohnsteuer: 27228 },
-      { jahreslohn: 97500, steuerklasse: 3, jahreslohnsteuer: 19424 },
-      { jahreslohn: 97500, steuerklasse: 4, jahreslohnsteuer: 29018 },
-      { jahreslohn: 97500, steuerklasse: 5, jahreslohnsteuer: 35580 },
-      { jahreslohn: 97500, steuerklasse: 6, jahreslohnsteuer: 36112 },
+      { jahreslohn: 97500, steuerklasse: 1, jahreslohnsteuer: 28708 },
+      { jahreslohn: 97500, steuerklasse: 2, jahreslohnsteuer: 26919 },
+      { jahreslohn: 97500, steuerklasse: 3, jahreslohnsteuer: 19022 },
+      { jahreslohn: 97500, steuerklasse: 4, jahreslohnsteuer: 28708 },
+      { jahreslohn: 97500, steuerklasse: 5, jahreslohnsteuer: 35477 },
+      { jahreslohn: 97500, steuerklasse: 6, jahreslohnsteuer: 36009 },
       // Zeile 39
-      { jahreslohn: 100000, steuerklasse: 1, jahreslohnsteuer: 30068 },
-      { jahreslohn: 100000, steuerklasse: 2, jahreslohnsteuer: 28278 },
-      { jahreslohn: 100000, steuerklasse: 3, jahreslohnsteuer: 20296 },
-      { jahreslohn: 100000, steuerklasse: 4, jahreslohnsteuer: 30068 },
-      { jahreslohn: 100000, steuerklasse: 5, jahreslohnsteuer: 36630 },
-      { jahreslohn: 100000, steuerklasse: 6, jahreslohnsteuer: 37162 },
+      { jahreslohn: 100000, steuerklasse: 1, jahreslohnsteuer: 29758 },
+      { jahreslohn: 100000, steuerklasse: 2, jahreslohnsteuer: 27969 },
+      { jahreslohn: 100000, steuerklasse: 3, jahreslohnsteuer: 19884 },
+      { jahreslohn: 100000, steuerklasse: 4, jahreslohnsteuer: 29758 },
+      { jahreslohn: 100000, steuerklasse: 5, jahreslohnsteuer: 36527 },
+      { jahreslohn: 100000, steuerklasse: 6, jahreslohnsteuer: 37059 },
     ])(
       "Besondere Prüftabelle - Jahreseinkommen: '$jahreslohn' Euro; Steuerklasse: '$steuerklasse';",
       ({ jahreslohn, steuerklasse, jahreslohnsteuer }) => {
-        const programm = new PAP_2024({
+        const programm = new PAP_2025({
           AF: 0,
           F: 0,
-          KRV: 2,
+          KRV: 1,
           KVZ: 0,
           LZZ: 1,
           LZZFREIB: 0,

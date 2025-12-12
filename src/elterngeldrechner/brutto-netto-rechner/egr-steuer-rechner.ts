@@ -39,13 +39,20 @@ export function abgabenSteuern(
     ),
   );
 
+  const lohnsteuerjahr = ermittelRelevantesLohnsteuerjahr(geburtstagDesKindes);
+
   const eingangsparameter: Eingangsparameter = {
     AF: finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor ? 1 : 0,
     F:
       finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor
         ? finanzDaten.splittingFaktor
         : 0,
-    KRV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI ? 2 : 0,
+    KRV:
+      erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI
+        ? lohnsteuerjahr >= 2025
+          ? 1
+          : 2
+        : 0,
     KVZ,
     LZZ: 2,
     LZZFREIB: 0,
@@ -61,8 +68,6 @@ export function abgabenSteuern(
     VBEZ: 0,
     ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
   };
-
-  const lohnsteuerjahr = ermittelRelevantesLohnsteuerjahr(geburtstagDesKindes);
 
   const { BK, LSTLZZ, SOLZLZZ } = berechneLohnsteuer(
     lohnsteuerjahr,
@@ -103,16 +108,39 @@ const STEUERKLASSE_TO_STKL_EINGANGSPARAMETER: Record<
 };
 
 if (import.meta.vitest) {
-  const { describe, it, expect, beforeEach, vi } = import.meta.vitest;
+  const { describe, it, expect, beforeEach, vi, test } = import.meta.vitest;
 
   describe("erg-steuer-rechner", async () => {
-    const { Einkommen, KassenArt, RentenArt } = await import(
-      "@/elterngeldrechner/model"
-    );
+    const { Einkommen, KassenArt, RentenArt } =
+      await import("@/elterngeldrechner/model");
 
     beforeEach(async () => {
       vi.spyOn(await import("@/lohnsteuerrechner"), "berechneLohnsteuer");
     });
+
+    test.each([
+      [2024, 2],
+      [2025, 2],
+      [2026, 1],
+      [2027, 1],
+    ])(
+      "when Geburtsjahr is %s then expect Merker für die Vorsorgepauschale to be %d",
+      (geburtsjahr, krv) => {
+        const geburtstag = new Geburtstag(`${geburtsjahr}-01-15T00:00:00`);
+
+        abgabenSteuern(
+          ANY_FINANZDATEN,
+          ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
+          1,
+          geburtstag,
+        );
+
+        expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({ KRV: krv }),
+        );
+      },
+    );
 
     describe.each([
       [new Geburtstag("2022-02-24T03:24:00"), 2021],
@@ -122,7 +150,7 @@ if (import.meta.vitest) {
       [new Geburtstag("2023-02-24T03:24:00"), 2022],
       [new Geburtstag("2024-02-24T03:24:00"), 2023],
       [new Geburtstag("2025-02-24T03:24:00"), 2024],
-      [new Geburtstag("2026-02-24T03:24:00"), 2024],
+      [new Geburtstag("2026-02-24T03:24:00"), 2025],
     ])(
       "when Geburtstag des Kindes is %s then expect Lohnsteuerjahr %d",
       (geburtstagDesKindes, lohnSteuerJahr) => {

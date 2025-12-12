@@ -84,6 +84,25 @@ if (import.meta.vitest) {
 
       expect(istAusklammerungInMonat(monat, ausklammerungen)).toBe(false);
     });
+
+    describe("time-zone edge cases", () => {
+      it("soll true zurückgeben, wenn eine Ausklammerung im Monat liegt (mit Zeitzone)", () => {
+        const monat = new Date("2023-07-01T00:00:00.000Z");
+
+        // Central European Summer Time (CEST)
+        const ausklammerungenMitZeitzone: Ausklammerung[] = [
+          {
+            von: new Date("2023-08-01T01:59:59.000+02:00"),
+            bis: new Date("2023-08-07T22:00:00.000+02:00"),
+            beschreibung: "Test Zeitzone",
+          },
+        ];
+
+        expect(istAusklammerungInMonat(monat, ausklammerungenMitZeitzone)).toBe(
+          true,
+        );
+      });
+    });
   });
 
   describe("findeJahrOhneAusklammerung", () => {

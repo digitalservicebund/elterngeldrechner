@@ -38,7 +38,7 @@ export function berechneBemessungszeitraum<
   switch (erwerbstaetigkeit) {
     case "Selbstaendig": {
       const startJahr = new Date(
-        Date.UTC(geburtsdatum.getFullYear() - 1, 0, 1),
+        Date.UTC(geburtsdatum.getUTCFullYear() - 1, 0, 1),
       );
 
       const bemessungsjahr = findeJahrOhneAusklammerung(
@@ -55,7 +55,7 @@ export function berechneBemessungszeitraum<
     }
     case "Nicht-Selbstaendig": {
       const geburtsmonat = new Date(
-        Date.UTC(geburtsdatum.getFullYear(), geburtsdatum.getUTCMonth(), 1),
+        Date.UTC(geburtsdatum.getUTCFullYear(), geburtsdatum.getUTCMonth(), 1),
       );
 
       const monate = sammleBemessungsmonate(
@@ -260,6 +260,18 @@ if (import.meta.vitest) {
             },
           ],
         },
+        {
+          name: "should handle new years eve timezone edge case correctly (local vs utc year)",
+          geburtsdatum: new Date("2023-12-31T23:00:00.000Z"),
+          ausklammerungen: [],
+          expected: [
+            {
+              // 12 Monate vor dem Geburtsmonat (Dez 23) -> Dez 22 bis Nov 23
+              von: new Date("2022-12-01T00:00:00.000Z"),
+              bis: new Date("2023-11-01T00:00:00.000Z"),
+            },
+          ],
+        },
       ];
 
       it.each(testCases)("$name", (options) => {
@@ -347,6 +359,17 @@ if (import.meta.vitest) {
             {
               von: new Date("2024-01-01T00:00:00.000Z"),
               bis: new Date("2024-12-01T00:00:00.000Z"),
+            },
+          ],
+        },
+        {
+          name: "should determine the correct assessment year on new years eve (local vs utc year)",
+          geburtsdatum: new Date("2023-12-31T23:00:00.000Z"),
+          ausklammerungen: [],
+          expected: [
+            {
+              von: new Date("2022-01-01T00:00:00.000Z"),
+              bis: new Date("2022-12-01T00:00:00.000Z"),
             },
           ],
         },

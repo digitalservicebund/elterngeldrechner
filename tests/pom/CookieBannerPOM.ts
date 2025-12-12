@@ -13,10 +13,11 @@ export class CookieBannerPOM {
       .getByText(/^\s*Einwilligen\s*$/)
       .click();
   }
+
   dissent() {
     return this.page
       .getByRole("button")
-      .getByText(/^\s*Einwilligen\s*$/)
+      .getByText(/^\s*Ablehnen\s*$/)
       .click();
   }
 }

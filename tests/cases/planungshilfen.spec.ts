@@ -1,6 +1,7 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { BeispielePOM } from "../pom/BeispielePOM";
+import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
@@ -8,6 +9,10 @@ import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("beispiel partnerschaftlich aufgeteilt ", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
@@ -42,6 +47,10 @@ test("beispiel partnerschaftlich aufgeteilt ", async ({ page }) => {
 
 test("beispiel volles elterngeld", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);

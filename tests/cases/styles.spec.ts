@@ -1,6 +1,7 @@
 import { Page, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { BeispielePOM } from "../pom/BeispielePOM";
+import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
@@ -13,6 +14,10 @@ const testStyles = async ({
   screenSize: string;
 }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await expect(allgemeineAngabenPage.heading).toBeVisible();
   if (screenSize === "mobile") await page.waitForTimeout(1000); // It's just needed, I don't know why
 

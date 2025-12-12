@@ -2,6 +2,7 @@ import { AxeBuilder } from "@axe-core/playwright";
 import { type Page, type TestInfo, expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { BeispielePOM } from "../pom/BeispielePOM";
+import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
 import { NachwuchsPOM } from "../pom/NachwuchsPOM";
@@ -23,7 +24,12 @@ test("basic accessibility run", async ({ page }, testInfo) => {
   test.slow();
 
   const allgemeineAngabenPage = new AllgemeineAngabenPOM(page);
+
   await allgemeineAngabenPage.goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);

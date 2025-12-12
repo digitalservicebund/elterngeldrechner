@@ -1,11 +1,16 @@
 import { test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { BeispielePOM } from "../pom/BeispielePOM";
+import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("mehrere Tätigkeiten", async ({ page }) => {
   test.slow();
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(1);

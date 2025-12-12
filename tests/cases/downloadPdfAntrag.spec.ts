@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { AllgemeineAngabenPOM } from "../pom/AllgemeineAngabenPOM";
 import { BeispielePOM } from "../pom/BeispielePOM";
+import { CookieBannerPOM } from "../pom/CookieBannerPOM";
 import { DatenuebernahmeAntragPOM } from "../pom/DatenuebernahmeAntragPOM";
 import { EinkommenPOM } from "../pom/EinkommenPOM";
 import { ErwerbstaetigkeitPOM } from "../pom/ErwerbstaetigkeitPOM";
@@ -9,6 +10,10 @@ import { RechnerPlanerPOM } from "../pom/RechnerPlanerPOM";
 
 test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
@@ -68,6 +73,10 @@ test("gemeinsam, unterstütztes Bundesland", async ({ page }) => {
 
 test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Bayern");
   await allgemeineAngabenPage.setAlleinerziehend(false);
   await allgemeineAngabenPage.setElternteile(2);
@@ -109,6 +118,10 @@ test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
 
 test("alleine, unterstütztes Bundesland", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Berlin");
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);
@@ -156,6 +169,10 @@ test("alleine, unterstütztes Bundesland", async ({ page }) => {
 
 test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
   const allgemeineAngabenPage = await new AllgemeineAngabenPOM(page).goto();
+
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.consent();
+
   await allgemeineAngabenPage.setBundesland("Bayern");
   await allgemeineAngabenPage.setAlleinerziehend(true);
   await allgemeineAngabenPage.setMutterschutzFuerEinePerson(true);

@@ -96,6 +96,9 @@ test("feedback wird nicht ohne consent angezeigt", async ({ page }) => {
 
   await new AllgemeineAngabenPOM(page).goto();
 
+  const cookieBanner = new CookieBannerPOM(page);
+  await cookieBanner.dissent();
+
   await fastForwardToPlaner(page);
 
   const feedbackForm = new FeedbackPOM(page);

@@ -190,20 +190,21 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       ),
     },
     {
-      identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
+      identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
       titel: "Vorschlag 2",
       beschreibung:
-        "Länger Elterngeld erhalten: Lohnt sich, wenn Sie in Teilzeit arbeiten möchten.",
+        "Flexibler Wiedereinstieg: Gemeinsam in die Elternzeit starten und sie gemeinsam abschließen.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
-          { lebensmonat: nurMutterBasis, anzahl: 2 },
-          { lebensmonat: nurMutterPlus, anzahl: 5 },
-          { lebensmonat: beidePlus, anzahl: 5 },
+          { lebensmonat: beideBasis, anzahl: 1 },
           {
-            lebensmonat: nurPartnerInPlus,
-            anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
+            lebensmonat: nurMutterBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
           },
+          { lebensmonat: nurMutterPlus, anzahl: 3 },
+          { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
+          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
         ],
         berechneElterngeldbezuege,
       ),
@@ -229,21 +230,20 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       ),
     },
     {
-      identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
+      identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
       titel: "Vorschlag 4",
       beschreibung:
-        "Flexibler Wiedereinstieg: Gemeinsam in die Elternzeit starten und sie gemeinsam abschließen.",
+        "Länger Elterngeld erhalten: Lohnt sich, wenn Sie in Teilzeit arbeiten möchten.",
       plan: erstellePlanFuerEinBeispiel(
         ausgangslage,
         [
-          { lebensmonat: beideBasis, anzahl: 1 },
+          { lebensmonat: nurMutterBasis, anzahl: 2 },
+          { lebensmonat: nurMutterPlus, anzahl: 5 },
+          { lebensmonat: beidePlus, anzahl: 5 },
           {
-            lebensmonat: nurMutterBasis,
-            anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
+            lebensmonat: nurPartnerInPlus,
+            anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
           },
-          { lebensmonat: nurMutterPlus, anzahl: 3 },
-          { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
-          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
         ],
         berechneElterngeldbezuege,
       ),

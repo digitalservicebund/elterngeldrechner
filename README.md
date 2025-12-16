@@ -3,6 +3,14 @@
 Elterngeldrechner mit Planer im [Familienportal des BMFSFJ](https://familienportal.de/familienportal/meta/egr). For
 detailed information about the project and its components, the following sources are available.
 
+> ℹ️ Quick Note about this Repository
+>
+> We are planning to migrate our codebase to Open CoDE. At the moment, Open CoDE hosts a mirror of this repository,
+> but it will become the single source of truth going forward. This decision is motivated by our commitment to digital
+> sovereignty — since the platform is hosted by Zendis — as well as to open source principles, as Open CoDE is based on GitLab.
+>
+> Gitlab Repository: https://gitlab.opencode.de/digitalservicebund/elterngeldrechner
+
 ## Markdown in Packages
 
 The packages, such as the monatsplaner or application, contain its own documentation with specific information

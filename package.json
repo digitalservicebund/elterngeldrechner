@@ -57,7 +57,7 @@
     "fast-check": "^4.4.0",
     "http-server": "^14.1.1",
     "immer": "^11.0.1",
-    "jsdom": "^27.2.0",
+    "jsdom": "^27.3.0",
     "lefthook": "^2.0.9",
     "license-checker-rseidelsohn": "^4.4.2",
     "node-xlsx": "^0.24.0",

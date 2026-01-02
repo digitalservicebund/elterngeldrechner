@@ -9,18 +9,19 @@ type GruppiereBemessungszeitraumOptions = {
 type GruppiereBemessungszeitraumResult = Array<Date[] | Ausklammerung>;
 
 /**
- * Diese Funktion erstellt eine alternative Sichtweise auf einen
- * Bemessungszeitraum inklusive der betrachteten Ausklammerungen.
+ * Diese Funktion transformiert den Bemessungszeitraum (BMZ) in eine
+ * kombinierte chronologische Darstellung, bei der zusätzlich zu den relevanten
+ * Zeiträumen für den BMZ ebenso die betrachteten Ausklammerungen inkludiert sind.
  *
- * Der Bemessungszeitraum wird in die einzelnen Monate aufgefächert
- * und gemeinsam mit den Ausklammerungen in einem Array einsortiert.
+ * Der Algorithmus fächert den BMZ in die einzelnen Monate auf und sortiert sie
+ * gemeinsam mit den Ausklammerungen in ein Array ein.
  *
  * Beispiel Eingabe
  * Bemessungszeitraum: [{Jan bis Mar}, {May bis Jun}]
  * Ausklammerungen: [{5. Apr bis 7. Apr mit Grund X}]
  *
  * Beispiel Ausgabe
- * [Jan, Feb, Mar, {5. Apr bis 7. Apr mit Grund X}, May, Jun]
+ * [[Jan, Feb, Mar], {5. Apr bis 7. Apr mit Grund X}, [May, Jun]]
  */
 export function gruppiereBemessungszeitraum(
   options: GruppiereBemessungszeitraumOptions,

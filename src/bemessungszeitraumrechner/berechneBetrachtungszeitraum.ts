@@ -2,9 +2,9 @@ import { Ausklammerung, findeJahrOhneAusklammerung } from "./ausklammerung";
 import { Zeitraum, vorherigesJahr } from "./zeitraum";
 
 /**
- * Diese Funktion berechnet den Betrachtungszeitraum anhand des Geburtsdatum und aller
- * Ausklammerungen. Die Funktion erstellt ein Zeitraum Objekt, welches von dem Start
- * des ersten Jahres reicht in dem keine Ausklammerung zutrifft und mit dem
+ * Diese Funktion berechnet den Betrachtungszeitraum anhand des Geburtsdatums und aller
+ * Ausklammerungen. Die Funktion erstellt ein Zeitraum-Objekt, welches mit dem Start
+ * des ersten Jahres, in dem keine Ausklammerung zutrifft, beginnt und mit dem
  * tatsächlichen Geburtsdatum abschließt.
  */
 export function berechneBetrachtungszeitraum(

@@ -17,18 +17,20 @@ type BerechneBemessungszeitraumResult<
 > = T["ausklammerungen"] extends [] ? [Zeitraum] : Zeitraum[];
 
 /**
- * Die Funktion berechnet den Bemessungszeitraum anhang des Geburtsdatum, der
- * Erwerbstätigkeit und aller Ausklammerungen. Der Algorithmus ist eine Abbildung
- * des Bundeselterngeld- und Elternzeitgesetz § 2b.
+ * Die Funktion berechnet den Bemessungszeitraum (BMZ) auf Basis des Geburtsdatums, der
+ * Art der Erwerbstätigkeit und aller vorliegenden Ausklammerungen.
+ * Der Algorithmus bildet die gesetzlichen Vorgaben gemäß § 2b BEEG
+ * (Bundeselterngeld- und Elternzeitgesetz) ab.
  *
- * Der Algorithmus unterscheidet sich darin, dass für Selbständige immer das letzte
- * abgeschlossene Geschäftjahr maßgeblich ist, in welchem keine Ausklammerung liegt,
- * und für Nicht-Selbständige die letzten 12 Kalendermonate, exklusive solcher, wo
- * eine Ausklammerung zutrifft.
+ * Der Algorithmus unterscheidet sich darin, dass je nach Art der Erwerbstätigkeit
+ * unterschiedliche Zeiträume maßgeblich sind. Bei Selbständige ist es immer das
+ * letzte abgeschlossene Kalenderjahr, in welchem keine Ausklammerung liegt.
+ * Bei Nicht-Selbständige beinhaltet der BMZ die letzten 12 vollen Kalendermonate
+ * vor der Geburt, exklusive solcher, in denen eine Ausklammerung vorliegt.
  *
- * Das Ergebnis ist, wenn keine Ausklammerungen gegeben sind, sicher genau ein
- * Objekt und ist eine Menge an Objekten, sobald mindestens eine Ausklammerung
- * gegeben ist.
+ * Sofern keine Ausklammerungen vorliegen, ist der Rückgabewert sicher genau ein
+ * Zeitraum-Objekt. Sobald mindestens eine Ausklammerung gegeben ist, wird  eine
+ * Menge an Zeitraum-Objekten zurückgegeben.
  */
 export function berechneBemessungszeitraum<
   T extends BerechneBemessungszeitraumOptions,

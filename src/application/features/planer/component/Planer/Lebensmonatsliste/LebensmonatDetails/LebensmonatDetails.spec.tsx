@@ -67,7 +67,7 @@ const ANY_AUSWAHLMOEGLICHKEITEN = {
 const ANY_PROPS = {
   ausgangslage: {
     anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
+    namenDerElternteile: {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     },

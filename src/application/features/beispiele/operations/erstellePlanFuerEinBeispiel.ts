@@ -181,7 +181,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 1,
         },
-        pseudonymeDerElternteile: {
+        namenDerElternteile: {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },

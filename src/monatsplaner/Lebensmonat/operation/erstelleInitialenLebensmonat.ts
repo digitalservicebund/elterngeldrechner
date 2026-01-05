@@ -62,7 +62,7 @@ if (import.meta.vitest) {
       const lebensmonat = erstelleInitialenLebensmonat(
         {
           anzahlElternteile: 2,
-          pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+          namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
           geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         ANY_LEBENSMONATS_ZAHL,
@@ -78,7 +78,7 @@ if (import.meta.vitest) {
         {
           informationenZumMutterschutz: undefined,
           anzahlElternteile: 2,
-          pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+          namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
           geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         ANY_LEBENSMONATS_ZAHL,
@@ -129,7 +129,7 @@ if (import.meta.vitest) {
             empfaenger: Elternteil.Zwei,
             letzterLebensmonatMitSchutz: 2,
           },
-          pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+          namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
           geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
         },
         2,
@@ -139,7 +139,7 @@ if (import.meta.vitest) {
       expect(lebensmonat[Elternteil.Zwei].imMutterschutz).toBe(true);
     });
 
-    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+    const ANY_NAMES_TWO_ELTERNTEILE = {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };

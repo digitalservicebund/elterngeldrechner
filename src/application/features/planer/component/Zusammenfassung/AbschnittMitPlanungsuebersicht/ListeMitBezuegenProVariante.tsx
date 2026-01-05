@@ -7,16 +7,16 @@ import { Variante, compareVarianten } from "@/monatsplaner";
 
 type Props = {
   readonly bezuegeProVariante: Record<Variante, Bezug>;
-  readonly pseudonymDesElternteils: string | undefined;
+  readonly nameDesElternteils: string | undefined;
 };
 
 export function ListeMitBezuegenProVariante({
   bezuegeProVariante,
-  pseudonymDesElternteils,
+  nameDesElternteils,
 }: Props): ReactNode {
   const ariaLabel =
     "Bezüge pro Elterngeldvariante" +
-    (pseudonymDesElternteils ? ` von ${pseudonymDesElternteils}` : "");
+    (nameDesElternteils ? ` von ${nameDesElternteils}` : "");
 
   return (
     <ul

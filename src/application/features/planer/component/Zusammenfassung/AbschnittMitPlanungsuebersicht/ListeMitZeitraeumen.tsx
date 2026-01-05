@@ -4,16 +4,16 @@ import type { Zeitraum } from "@/lebensmonatrechner";
 
 type Props = {
   readonly zeitraeume: Zeitraum[];
-  readonly pseudonymDesElternteils: string | undefined;
+  readonly nameDesElternteils: string | undefined;
 };
 
 export function ListeMitZeitraeumen({
   zeitraeume,
-  pseudonymDesElternteils,
+  nameDesElternteils,
 }: Props): ReactNode {
   const ariaLabel =
     "Zeiträume mit Elterngeldbezug" +
-    (pseudonymDesElternteils ? ` von ${pseudonymDesElternteils}` : "");
+    (nameDesElternteils ? ` von ${nameDesElternteils}` : "");
 
   return (
     <ul className="list-none" aria-label={ariaLabel}>

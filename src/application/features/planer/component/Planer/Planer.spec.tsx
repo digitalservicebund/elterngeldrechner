@@ -83,7 +83,7 @@ describe("Planer", () => {
 
 const ANY_AUSGANGSLAGE = {
   anzahlElternteile: 2 as const,
-  pseudonymeDerElternteile: {
+  namenDerElternteile: {
     [Elternteil.Eins]: "Jane",
     [Elternteil.Zwei]: "John",
   },
@@ -101,7 +101,7 @@ const ANY_SERVICE_VALUES = {
   plan: {
     ausgangslage: {
       anzahlElternteile: 2 as const,
-      pseudonymeDerElternteile: {
+      namenDerElternteile: {
         [Elternteil.Eins]: "Jane",
         [Elternteil.Zwei]: "John",
       },

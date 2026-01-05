@@ -5,10 +5,7 @@ import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
 describe("Liste mit Zeiträumen", () => {
   it("shows a list", () => {
     render(
-      <ListeMitZeitraeumen
-        {...ANY_PROPS}
-        pseudonymDesElternteils={undefined}
-      />,
+      <ListeMitZeitraeumen {...ANY_PROPS} nameDesElternteils={undefined} />,
     );
 
     expect(
@@ -18,10 +15,8 @@ describe("Liste mit Zeiträumen", () => {
     ).toBeVisible();
   });
 
-  it("shows a list using the Pseudonym", () => {
-    render(
-      <ListeMitZeitraeumen {...ANY_PROPS} pseudonymDesElternteils="Jane" />,
-    );
+  it("shows a list using the name", () => {
+    render(<ListeMitZeitraeumen {...ANY_PROPS} nameDesElternteils="Jane" />);
 
     expect(
       screen.getByRole("list", {
@@ -48,5 +43,5 @@ describe("Liste mit Zeiträumen", () => {
 
 const ANY_PROPS = {
   zeitraeume: [],
-  pseudonymDesElternteils: undefined,
+  nameDesElternteils: undefined,
 };

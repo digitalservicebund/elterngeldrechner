@@ -47,7 +47,7 @@ function monat(
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   ausgangslage: {
     anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
+    namenDerElternteile: {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     },

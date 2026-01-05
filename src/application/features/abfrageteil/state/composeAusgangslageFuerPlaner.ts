@@ -58,12 +58,10 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
     }
 
     case 2: {
-      const pseudonyme = getPseudonymeFuerAlleElternteile(
-        stepAllgemeineAngaben.pseudonym,
-      );
-      const pseudonymeDerElternteile = {
-        [Elternteil.Eins]: pseudonyme[Elternteil.Eins],
-        [Elternteil.Zwei]: pseudonyme[Elternteil.Zwei],
+      const namen = getNamenFuerAlleElternteile(stepAllgemeineAngaben.name);
+      const namenDerElternteile = {
+        [Elternteil.Eins]: namen[Elternteil.Eins],
+        [Elternteil.Zwei]: namen[Elternteil.Zwei],
       };
       let empfaenger;
       switch (stepAllgemeineAngaben.mutterschutz) {
@@ -83,7 +81,7 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
       return {
         ...sharedAusganslageProperties,
         anzahlElternteile,
-        pseudonymeDerElternteile,
+        namenDerElternteile: namenDerElternteile,
         informationenZumMutterschutz,
         istAlleinerziehend: false,
       };
@@ -91,11 +89,11 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
   }
 }
 
-function getPseudonymeFuerAlleElternteile(possiblyEmptyPseudonyme: {
+function getNamenFuerAlleElternteile(possiblyEmptyNames: {
   ET1: string;
   ET2: string;
 }): Record<Elternteil, string> {
-  const { ET1, ET2 } = possiblyEmptyPseudonyme;
+  const { ET1, ET2 } = possiblyEmptyNames;
   return {
     [Elternteil.Eins]: ET1 || "Elternteil 1",
     [Elternteil.Zwei]: ET2 || "Elternteil 2",
@@ -141,35 +139,29 @@ if (import.meta.vitest) {
       });
     });
 
-    describe("Pseudonyme der Elternteile", () => {
-      it("assigns the correct Pseudonyme for two Elternteil", () => {
+    describe("Namen der Elternteile", () => {
+      it("assigns the correct names for two Elternteil", () => {
         const state = produce(INITIAL_STATE, (draft) => {
-          draft.stepAllgemeineAngaben.pseudonym = { ET1: "Jane", ET2: "John" };
+          draft.stepAllgemeineAngaben.name = { ET1: "Jane", ET2: "John" };
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const { pseudonymeDerElternteile } =
-          composeAusgangslageFuerPlaner(state);
+        const { namenDerElternteile } = composeAusgangslageFuerPlaner(state);
 
-        expect(pseudonymeDerElternteile?.[Elternteil.Eins]).toBe("Jane");
-        expect(pseudonymeDerElternteile?.[Elternteil.Zwei]).toBe("John");
+        expect(namenDerElternteile?.[Elternteil.Eins]).toBe("Jane");
+        expect(namenDerElternteile?.[Elternteil.Zwei]).toBe("John");
       });
 
-      it("uses default Pseudonyme if kept empty", () => {
+      it("uses default names if kept empty", () => {
         const state = produce(INITIAL_STATE, (draft) => {
-          draft.stepAllgemeineAngaben.pseudonym = { ET1: "", ET2: "" };
+          draft.stepAllgemeineAngaben.name = { ET1: "", ET2: "" };
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
         });
 
-        const { pseudonymeDerElternteile } =
-          composeAusgangslageFuerPlaner(state);
+        const { namenDerElternteile } = composeAusgangslageFuerPlaner(state);
 
-        expect(pseudonymeDerElternteile?.[Elternteil.Eins]).toBe(
-          "Elternteil 1",
-        );
-        expect(pseudonymeDerElternteile?.[Elternteil.Zwei]).toBe(
-          "Elternteil 2",
-        );
+        expect(namenDerElternteile?.[Elternteil.Eins]).toBe("Elternteil 1");
+        expect(namenDerElternteile?.[Elternteil.Zwei]).toBe("Elternteil 2");
       });
     });
 

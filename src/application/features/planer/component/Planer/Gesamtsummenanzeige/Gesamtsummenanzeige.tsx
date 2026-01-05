@@ -82,9 +82,7 @@ export function Gesamtsummenanzeige({ plan, className }: Props): ReactNode {
             >
               <ElterngeldFuerElternteil
                 key={`Elterngeld ${elternteil}`}
-                pseudonym={
-                  plan.ausgangslage.pseudonymeDerElternteile?.[elternteil]
-                }
+                name={plan.ausgangslage.namenDerElternteile?.[elternteil]}
                 summe={gesamtsumme.proElternteil[elternteil]}
                 showSumme={showGesamtsumme}
               />
@@ -196,7 +194,7 @@ if (import.meta.vitest) {
         expect(screen.getByText("2.000 € (brutto)")).toBeVisible();
       });
 
-      it("includes the Pseudonym when more than one Elternteil", () => {
+      it("includes the name when more than one Elternteil", () => {
         vi.mocked(berechneGesamtsumme).mockReturnValue({
           ...ANY_GESAMTSUMME,
           proElternteil: {
@@ -268,14 +266,14 @@ if (import.meta.vitest) {
     }
 
     function ausgangslageFuerZweiElternteile(
-      pseudonymEins: string = ANY_NAME,
-      pseudonymZwei: string = ANY_NAME,
+      nameEins: string = ANY_NAME,
+      nameZwei: string = ANY_NAME,
     ) {
       return {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
-          [Elternteil.Eins]: pseudonymEins,
-          [Elternteil.Zwei]: pseudonymZwei,
+        namenDerElternteile: {
+          [Elternteil.Eins]: nameEins,
+          [Elternteil.Zwei]: nameZwei,
         },
         geburtsdatumDesKindes: new Date(),
       };

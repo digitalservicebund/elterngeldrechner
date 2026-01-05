@@ -210,7 +210,7 @@ if (import.meta.vitest) {
         const plan = {
           ausgangslage: {
             anzahlElternteile: 2 as const,
-            pseudonymeDerElternteile: {
+            namenDerElternteile: {
               [Elternteil.Eins]: "Jane",
               [Elternteil.Zwei]: "Joe",
             },
@@ -262,7 +262,7 @@ if (import.meta.vitest) {
         const plan = {
           ausgangslage: {
             anzahlElternteile: 2 as const,
-            pseudonymeDerElternteile: {
+            namenDerElternteile: {
               [Elternteil.Eins]: "Jane",
               [Elternteil.Zwei]: "Joe",
             },
@@ -339,7 +339,7 @@ if (import.meta.vitest) {
           ausgangslage: {
             anzahlElternteile: 2 as const,
             informationenZumMutterschutz: undefined,
-            pseudonymeDerElternteile: ANY_PSEUDONYME_DER_ELTERNTEILE,
+            namenDerElternteile: ANY_NAME_DER_ELTERNTEILE,
             geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
           },
           lebensmonate: {
@@ -368,7 +368,7 @@ if (import.meta.vitest) {
               empfaenger: Elternteil.Zwei,
               letzterLebensmonatMitSchutz: 2 as const,
             },
-            pseudonymeDerElternteile: ANY_PSEUDONYME_DER_ELTERNTEILE,
+            namenDerElternteile: ANY_NAME_DER_ELTERNTEILE,
             geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
           },
           lebensmonate: {
@@ -402,7 +402,7 @@ if (import.meta.vitest) {
       }
 
       const ANY_GEBURTSDATUM_DES_KINDES = new Date();
-      const ANY_PSEUDONYME_DER_ELTERNTEILE = {
+      const ANY_NAME_DER_ELTERNTEILE = {
         [Elternteil.Eins]: "Jane",
         [Elternteil.Zwei]: "John",
       };

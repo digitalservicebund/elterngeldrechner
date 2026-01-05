@@ -253,7 +253,7 @@ if (import.meta.vitest) {
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
+        namenDerElternteile: {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },

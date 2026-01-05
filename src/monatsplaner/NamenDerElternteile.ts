@@ -1,6 +1,6 @@
 import { Elternteil } from "@/monatsplaner/Elternteil";
 
-export type PseudonymeDerElternteile<E extends Elternteil> = [E] extends [
+export type NamenDerElternteile<E extends Elternteil> = [E] extends [
   Elternteil.Eins,
 ]
   ? undefined

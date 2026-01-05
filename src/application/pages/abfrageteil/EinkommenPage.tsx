@@ -84,7 +84,7 @@ if (import.meta.vitest) {
 
       const preloadedState = produce(INITIAL_STATE, (draft) => {
         draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-        draft.stepAllgemeineAngaben.pseudonym = { ET1, ET2 };
+        draft.stepAllgemeineAngaben.name = { ET1, ET2 };
         draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
         draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = true;
         draft.stepErwerbstaetigkeit.ET1.isSelbststaendig = false;
@@ -106,7 +106,7 @@ if (import.meta.vitest) {
 
       const preloadedState = produce(INITIAL_STATE, (draft) => {
         draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-        draft.stepAllgemeineAngaben.pseudonym = { ET1, ET2 };
+        draft.stepAllgemeineAngaben.name = { ET1, ET2 };
         draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "08.08.2022";
         draft.stepErwerbstaetigkeit.ET1.isNichtSelbststaendig = false;
         draft.stepErwerbstaetigkeit.ET1.monatlichesBrutto = "MiniJob";
@@ -132,7 +132,7 @@ if (import.meta.vitest) {
       it("should transfer all input fields into the store after clicking to next page", async () => {
         const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-          draft.stepAllgemeineAngaben.pseudonym = {
+          draft.stepAllgemeineAngaben.name = {
             ET1: "Elternteil 1",
             ET2: "Elternteil 2",
           };
@@ -234,7 +234,7 @@ if (import.meta.vitest) {
       it("should transfer all input fields into the store after clicking to next page", async () => {
         const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-          draft.stepAllgemeineAngaben.pseudonym = {
+          draft.stepAllgemeineAngaben.name = {
             ET1: "Elternteil 1",
             ET2: "Elternteil 2",
           };
@@ -325,7 +325,7 @@ if (import.meta.vitest) {
       it("should transfer all input fields into the store after clicking to next page", async () => {
         const preloadedState = produce(INITIAL_STATE, (draft) => {
           draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-          draft.stepAllgemeineAngaben.pseudonym = {
+          draft.stepAllgemeineAngaben.name = {
             ET1: "Elternteil 1",
             ET2: "Elternteil 2",
           };

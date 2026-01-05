@@ -49,8 +49,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   }
 
   const informationForPdfAntrag = {
-    nameET1: store.getState().stepAllgemeineAngaben.pseudonym.ET1,
-    nameET2: store.getState().stepAllgemeineAngaben.pseudonym.ET2,
+    nameET1: store.getState().stepAllgemeineAngaben.name.ET1,
+    nameET2: store.getState().stepAllgemeineAngaben.name.ET2,
     geburtsdatum: parseGermanDateString(
       store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
     ),
@@ -350,7 +350,7 @@ if (import.meta.vitest) {
 
     const initialTestState = produce(INITIAL_STATE, (draft) => {
       draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
-      draft.stepAllgemeineAngaben.pseudonym = {
+      draft.stepAllgemeineAngaben.name = {
         ET1: "Elternteil 1",
         ET2: "Elternteil 2",
       };

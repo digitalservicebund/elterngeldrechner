@@ -1,6 +1,6 @@
 import type { Elternteil } from "@/monatsplaner/Elternteil";
 import type { InformationenZumMutterschutz } from "@/monatsplaner/InformationenZumMutterschutz";
-import type { PseudonymeDerElternteile } from "@/monatsplaner/PseudonymeDerElternteile";
+import type { NamenDerElternteile } from "@/monatsplaner/NamenDerElternteile";
 
 export type Ausgangslage =
   | AusgangslageFuerEinElternteil
@@ -21,8 +21,8 @@ type BasisAusgangslage<E extends Elternteil> = {
   readonly istAlleinerziehend?: [E] extends [Elternteil.Eins] ? boolean : false;
   readonly mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum?: boolean;
 } & ([E] extends [Elternteil.Eins]
-  ? { pseudonymeDerElternteile?: PseudonymeDerElternteile<E> }
-  : { pseudonymeDerElternteile: PseudonymeDerElternteile<E> });
+  ? { namenDerElternteile?: NamenDerElternteile<E> }
+  : { namenDerElternteile: NamenDerElternteile<E> });
 
 export type ElternteileByAusgangslage<A extends Ausgangslage> =
   A extends AusgangslageFuerEinElternteil

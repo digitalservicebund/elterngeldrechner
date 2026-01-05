@@ -5,14 +5,14 @@ import { Geldbetrag } from "@/application/components";
 import type { SummeFuerElternteil } from "@/monatsplaner";
 
 type Props = {
-  readonly pseudonym: string | undefined;
+  readonly name: string | undefined;
   readonly summe: SummeFuerElternteil;
   readonly showSumme: boolean;
   readonly className?: string;
 };
 
 export function ElterngeldFuerElternteil({
-  pseudonym,
+  name,
   summe,
   showSumme,
   className,
@@ -24,9 +24,9 @@ export function ElterngeldFuerElternteil({
   return (
     <div className={classNames("flex flex-col", className)}>
       <span className="font-bold">
-        {pseudonym ? (
+        {name ? (
           <>
-            <PersonIcon /> {pseudonym}{" "}
+            <PersonIcon /> {name}{" "}
           </>
         ) : (
           "Elterngeld"

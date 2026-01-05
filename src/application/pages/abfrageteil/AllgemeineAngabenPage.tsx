@@ -82,7 +82,7 @@ if (import.meta.vitest) {
       });
     });
 
-    it("should persist the pseudonym", async () => {
+    it("should persist the name", async () => {
       const { store } = render(<AllgemeineAngabenPage />);
 
       await userEvent.selectOptions(
@@ -112,7 +112,7 @@ if (import.meta.vitest) {
         alleinerziehend: YesNo.NO,
         antragstellende: "FuerBeide",
         mutterschutz: "ET1",
-        pseudonym: {
+        name: {
           ET1: "Finn",
           ET2: "Fiona",
         },

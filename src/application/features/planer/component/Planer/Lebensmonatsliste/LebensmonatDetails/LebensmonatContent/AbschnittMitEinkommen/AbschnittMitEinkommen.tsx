@@ -104,7 +104,7 @@ export function AbschnittMitEinkommen(): ReactNode {
         const vorschlaege =
           erstelleVorschlaegeFuerAngabeDesEinkommens(elternteil);
         const ariaLabel = composeAriaLabelForBruttoeinkommen(
-          ausgangslage.pseudonymeDerElternteile?.[elternteil],
+          ausgangslage.namenDerElternteile?.[elternteil],
           lebensmonatszahl,
         );
 
@@ -142,11 +142,11 @@ export function AbschnittMitEinkommen(): ReactNode {
 }
 
 function composeAriaLabelForBruttoeinkommen(
-  pseudonym: string | undefined,
+  name: string | undefined,
   lebensmonatszahl: Lebensmonatszahl,
 ): string {
-  return pseudonym
-    ? `Bruttoeinkommen von ${pseudonym} im ${lebensmonatszahl}. Lebensmonat`
+  return name
+    ? `Bruttoeinkommen von ${name} im ${lebensmonatszahl}. Lebensmonat`
     : `Bruttoeinkommen im ${lebensmonatszahl}. Lebensmonat`;
 }
 

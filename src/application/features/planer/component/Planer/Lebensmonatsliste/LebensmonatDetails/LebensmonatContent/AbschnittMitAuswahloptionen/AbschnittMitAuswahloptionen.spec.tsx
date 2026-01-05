@@ -24,7 +24,7 @@ describe("Abschnitt mit Auswahloptionen", () => {
       ...ANY_INFORMATION_ZUM_LEBENSMONAT,
       ausgangslage: {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
+        namenDerElternteile: {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },
@@ -134,7 +134,7 @@ const ANY_MONAT = { imMutterschutz: false as const };
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   ausgangslage: {
     anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
+    namenDerElternteile: {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     },

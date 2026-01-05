@@ -101,7 +101,7 @@ if (import.meta.vitest) {
     it("is satisfied for two Elternteile when Bonus is chosen", () => {
       const ausgangslage = {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
+        namenDerElternteile: {
           [Elternteil.Eins]: "",
           [Elternteil.Zwei]: "",
         },

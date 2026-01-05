@@ -29,17 +29,16 @@ export function TabelleMitLebensmonaten<A extends Ausgangslage>({
           <th scope="col">Lebensmonate</th>
 
           {elternteileToShow.sort(compareElternteile).map((elternteil) => {
-            const pseudonym =
-              ausgangslage.pseudonymeDerElternteile?.[elternteil];
+            const name = ausgangslage.namenDerElternteile?.[elternteil];
 
             return (
               <th
                 scope="col"
-                abbr={pseudonym || "Ihre Planung"}
+                abbr={name || "Ihre Planung"}
                 className="pl-32 last:pr-8"
                 key={elternteil}
               >
-                <PersonIcon /> {pseudonym || "Ihre Planung"}
+                <PersonIcon /> {name || "Ihre Planung"}
               </th>
             );
           })}

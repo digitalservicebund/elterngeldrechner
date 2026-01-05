@@ -15,7 +15,7 @@ describe("Einkommens Page only with block Erwerbstätigkeit", () => {
 
   const stateFromPreviousSteps = produce(INITIAL_STATE, (draft) => {
     draft.stepAllgemeineAngaben.antragstellende = "FuerBeide";
-    draft.stepAllgemeineAngaben.pseudonym = {
+    draft.stepAllgemeineAngaben.name = {
       ET1: "Elternteil 1",
       ET2: "Elternteil 2",
     };

@@ -434,7 +434,7 @@ function makePlan(options: MakePlanOptions): PlanMitBeliebigenElternteilen {
   return {
     ausgangslage: {
       anzahlElternteile: 2 as const,
-      pseudonymeDerElternteile: {
+      namenDerElternteile: {
         [Elternteil.Eins]: "Jasper",
         [Elternteil.Zwei]: "Salome",
       },

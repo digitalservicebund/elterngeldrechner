@@ -48,7 +48,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         informationenZumMutterschutz: undefined,
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
@@ -74,7 +74,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 2,
         },
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
@@ -108,7 +108,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 2,
         },
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
@@ -138,7 +138,7 @@ if (import.meta.vitest) {
           empfaenger: Elternteil.Zwei,
           letzterLebensmonatMitSchutz: 2,
         },
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
@@ -161,7 +161,7 @@ if (import.meta.vitest) {
       expect(isSatisfied).toBe(false);
     });
 
-    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+    const ANY_NAMES_TWO_ELTERNTEILE = {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };

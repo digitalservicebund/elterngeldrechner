@@ -94,7 +94,7 @@ function formuliereAnrede<A extends Ausgangslage>(
 ): string {
   return ausgangslage.anzahlElternteile === 1
     ? "Sie"
-    : ausgangslage.pseudonymeDerElternteile[elternteil];
+    : ausgangslage.namenDerElternteile[elternteil];
 }
 
 function beschreibeMutterschutz(
@@ -174,7 +174,7 @@ if (import.meta.vitest) {
       it("combines the Beschreibung for two Elternteile", () => {
         const ausgangslage = {
           anzahlElternteile: 2 as const,
-          pseudonymeDerElternteile: {
+          namenDerElternteile: {
             [Elternteil.Eins]: "Jane",
             [Elternteil.Zwei]: "John",
           },
@@ -227,7 +227,7 @@ if (import.meta.vitest) {
       });
 
       describe("beschreibe Elternteil", () => {
-        const pseudonym = "Jane";
+        const name = "Jane";
 
         test.each([
           {
@@ -364,8 +364,8 @@ if (import.meta.vitest) {
               }
             : {
                 anzahlElternteile: 2 as const,
-                pseudonymeDerElternteile: {
-                  [Elternteil.Eins]: pseudonym,
+                namenDerElternteile: {
+                  [Elternteil.Eins]: name,
                   [Elternteil.Zwei]: "Elternteil 2",
                 },
                 geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,

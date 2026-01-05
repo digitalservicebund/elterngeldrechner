@@ -37,7 +37,7 @@ describe("Abschnitt mit Einkommen", () => {
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
         ausgangslage: {
           anzahlElternteile: 2 as const,
-          pseudonymeDerElternteile: {
+          namenDerElternteile: {
             [Elternteil.Eins]: "Jane",
             [Elternteil.Zwei]: "John",
           },
@@ -70,7 +70,7 @@ describe("Abschnitt mit Einkommen", () => {
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,
         ausgangslage: {
           anzahlElternteile: 2 as const,
-          pseudonymeDerElternteile: {
+          namenDerElternteile: {
             [Elternteil.Eins]: "Jane",
             [Elternteil.Zwei]: "John",
           },
@@ -155,7 +155,7 @@ const ANY_GEBURTSDATUM_DES_KINDES = new Date();
 const ANY_INFORMATION_ZUM_LEBENSMONAT = {
   ausgangslage: {
     anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
+    namenDerElternteile: {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     },

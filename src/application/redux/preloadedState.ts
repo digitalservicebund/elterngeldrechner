@@ -10,7 +10,7 @@ export const preloadedState = {
   stepAllgemeineAngaben: {
     bundesland: bundeslaender[2].name,
     antragstellende: "FuerBeide" as Antragstellende,
-    pseudonym: {
+    name: {
       ET1: "Jasper Darwin Artus",
       ET2: "Salomé Loreley Zoe",
     },

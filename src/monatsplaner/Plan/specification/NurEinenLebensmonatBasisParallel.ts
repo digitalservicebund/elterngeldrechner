@@ -121,7 +121,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         hatBehindertesGeschwisterkind: true,
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
       const lebensmonate = LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS;
@@ -134,7 +134,7 @@ if (import.meta.vitest) {
       const ausgangslage = {
         sindMehrlinge: true,
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
       const lebensmonate = LEBENSMONATE_WITH_MULITPLE_PARALLEL_BASIS;
@@ -163,7 +163,7 @@ if (import.meta.vitest) {
       return { gewaehlteOption, imMutterschutz: false as const };
     }
 
-    const ANY_PSEUDONYME_TWO_ELTERNTEILE = {
+    const ANY_NAMES_TWO_ELTERNTEILE = {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };
@@ -173,7 +173,7 @@ if (import.meta.vitest) {
     const ANY_PLAN = {
       ausgangslage: {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       },
       lebensmonate: {},

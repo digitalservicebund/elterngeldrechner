@@ -52,12 +52,12 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
   const antragstellendeFormValue = watch("antragstellende");
   const alleinerziehendenFormValue = watch("alleinerziehend");
 
-  const pseudonymFormValue = watch("pseudonym");
+  const nameFormValue = watch("name");
 
-  const pseudonym1Error = get(formState.errors, "pseudonym.ET1") as
+  const name1Error = get(formState.errors, "name.ET1") as
     | FieldError
     | undefined;
-  const pseudonym2Error = get(formState.errors, "pseudonym.ET2") as
+  const name2Error = get(formState.errors, "name.ET2") as
     | FieldError
     | undefined;
 
@@ -139,16 +139,16 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
               <label className="flex flex-col gap-8">
                 Name für Elternteil 1
                 <input
-                  className={CLASS_NAME_PSEUDONYM_INPUT}
-                  {...register("pseudonym.ET1", {
+                  className={CLASS_NAME_INPUT}
+                  {...register("name.ET1", {
                     required: "Dieses Feld ist erforderlich",
                   })}
                   required
                 />
               </label>
-              {!!pseudonym1Error && (
+              {!!name1Error && (
                 <span className="mt-8 text-14 text-danger">
-                  {pseudonym1Error.message}
+                  {name1Error.message}
                 </span>
               )}
             </div>
@@ -157,16 +157,16 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
               <label className="flex flex-col gap-8">
                 Name für Elternteil 2
                 <input
-                  className={CLASS_NAME_PSEUDONYM_INPUT}
-                  {...register("pseudonym.ET2", {
+                  className={CLASS_NAME_INPUT}
+                  {...register("name.ET2", {
                     required: "Dieses Feld ist erforderlich",
                   })}
                   required
                 />
               </label>
-              {!!pseudonym2Error && (
+              {!!name2Error && (
                 <span className="mt-8 text-14 text-danger">
-                  {pseudonym2Error.message}
+                  {name2Error.message}
                 </span>
               )}
             </div>
@@ -201,11 +201,11 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
                 ]
               : [
                   {
-                    label: `Ja, ${pseudonymFormValue.ET1 || "Elternteil 1"} ist oder wird im Mutterschutz sein`,
+                    label: `Ja, ${nameFormValue.ET1 || "Elternteil 1"} ist oder wird im Mutterschutz sein`,
                     value: "ET1",
                   },
                   {
-                    label: `Ja, ${pseudonymFormValue.ET2 || "Elternteil 2"} ist oder wird im Mutterschutz sein`,
+                    label: `Ja, ${nameFormValue.ET2 || "Elternteil 2"} ist oder wird im Mutterschutz sein`,
                     value: "ET2",
                   },
                   {
@@ -224,7 +224,7 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
 }
 
 // TODO: style dictionary / TailwindCSS component?
-const CLASS_NAME_PSEUDONYM_INPUT =
+const CLASS_NAME_INPUT =
   "max-w-[14.25rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary";
 
 if (import.meta.vitest) {
@@ -237,7 +237,7 @@ if (import.meta.vitest) {
     const initialState: StepAllgemeineAngabenState = {
       bundesland: null,
       antragstellende: null,
-      pseudonym: {
+      name: {
         ET1: "",
         ET2: "",
       },
@@ -387,7 +387,7 @@ if (import.meta.vitest) {
     const initialState: StepAllgemeineAngabenState = {
       bundesland: null,
       antragstellende: null,
-      pseudonym: {
+      name: {
         ET1: "",
         ET2: "",
       },

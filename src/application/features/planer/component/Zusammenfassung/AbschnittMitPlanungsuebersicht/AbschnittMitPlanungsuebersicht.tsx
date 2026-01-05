@@ -40,13 +40,12 @@ export function AbschnittMitPlanungsuebersicht({ plan }: Props): ReactNode {
             bezuegeProVariante,
           } = planungsuebersicht[elternteil];
 
-          const pseudonym =
-            plan.ausgangslage.pseudonymeDerElternteile?.[elternteil];
+          const name = plan.ausgangslage.namenDerElternteile?.[elternteil];
 
           return (
             <div key={elternteil} className="flex flex-col gap-8">
               <h4 className="text-base">
-                <PersonIcon /> {pseudonym || "Ihre Planung"}
+                <PersonIcon /> {name || "Ihre Planung"}
               </h4>
 
               <span>
@@ -61,13 +60,13 @@ export function AbschnittMitPlanungsuebersicht({ plan }: Props): ReactNode {
 
                 <ListeMitZeitraeumen
                   zeitraeume={zeitraeumeMitDurchgaenigenBezug}
-                  pseudonymDesElternteils={pseudonym}
+                  nameDesElternteils={name}
                 />
               </div>
 
               <ListeMitBezuegenProVariante
                 bezuegeProVariante={bezuegeProVariante}
-                pseudonymDesElternteils={pseudonym}
+                nameDesElternteils={name}
               />
             </div>
           );

@@ -55,7 +55,7 @@ describe("use Planer service", () => {
       vi.mocked(erstelleInitialeLebensmonate).mockReturnValue({});
       const ausgangslage = {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: {
+        namenDerElternteile: {
           [Elternteil.Eins]: "Jane",
           [Elternteil.Zwei]: "John",
         },

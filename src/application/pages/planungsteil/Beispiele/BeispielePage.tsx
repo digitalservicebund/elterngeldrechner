@@ -363,7 +363,7 @@ if (import.meta.vitest) {
         const ausgangslage: AusgangslageFuerZweiElternteile = {
           anzahlElternteile: 2 as const,
           geburtsdatumDesKindes: new Date(),
-          pseudonymeDerElternteile: {
+          namenDerElternteile: {
             [Elternteil.Eins]: "Jane",
             [Elternteil.Zwei]: "John",
           },
@@ -392,7 +392,7 @@ if (import.meta.vitest) {
         const ausgangslage: AusgangslageFuerZweiElternteile = {
           anzahlElternteile: 2 as const,
           geburtsdatumDesKindes: new Date(),
-          pseudonymeDerElternteile: {
+          namenDerElternteile: {
             [Elternteil.Eins]: "Jane",
             [Elternteil.Zwei]: "John",
           },
@@ -449,7 +449,7 @@ if (import.meta.vitest) {
         const ausgangslage: AusgangslageFuerZweiElternteile = {
           anzahlElternteile: 2 as const,
           geburtsdatumDesKindes: new Date(),
-          pseudonymeDerElternteile: {
+          namenDerElternteile: {
             [Elternteil.Eins]: "Jane",
             [Elternteil.Zwei]: "John",
           },

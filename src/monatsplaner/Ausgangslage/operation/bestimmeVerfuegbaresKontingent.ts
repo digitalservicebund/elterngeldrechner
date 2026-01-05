@@ -127,12 +127,12 @@ if (import.meta.vitest) {
       it("has always 4 lebensmonate Partnerschaftsbonus each", () => {
         assert(
           property(
-            arbitraryPseudonymeDerElternteile(),
+            arbitraryNamenDerElternteile(),
             arbitraryDate({ noInvalidDate: true }),
-            (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
+            (namenDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                pseudonymeDerElternteile,
+                namenDerElternteile: namenDerElternteile,
                 geburtsdatumDesKindes,
               };
 
@@ -147,9 +147,9 @@ if (import.meta.vitest) {
       it("has 12 Monate Basiselterngeld and 24 Monate ElterngeldPlus if no Partnermonate are available", () => {
         assert(
           property(
-            arbitraryPseudonymeDerElternteile(),
+            arbitraryNamenDerElternteile(),
             arbitraryDate({ noInvalidDate: true }),
-            (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
+            (namenDerElternteile, geburtsdatumDesKindes) => {
               vi.spyOn(
                 PartnermonateSindVerfuegbar,
                 "asPredicate",
@@ -157,7 +157,7 @@ if (import.meta.vitest) {
 
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                pseudonymeDerElternteile,
+                namenDerElternteile: namenDerElternteile,
                 geburtsdatumDesKindes,
               };
 
@@ -173,9 +173,9 @@ if (import.meta.vitest) {
       it("has 14 Monate Basiselterngeld and 28 Monate ElterngeldPlus if Partnermonate are available", () => {
         assert(
           property(
-            arbitraryPseudonymeDerElternteile(),
+            arbitraryNamenDerElternteile(),
             arbitraryDate({ noInvalidDate: true }),
-            (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
+            (namenDerElternteile, geburtsdatumDesKindes) => {
               vi.spyOn(
                 PartnermonateSindVerfuegbar,
                 "asPredicate",
@@ -183,7 +183,7 @@ if (import.meta.vitest) {
 
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                pseudonymeDerElternteile,
+                namenDerElternteile: namenDerElternteile,
                 geburtsdatumDesKindes,
               };
 
@@ -197,7 +197,7 @@ if (import.meta.vitest) {
       });
     });
 
-    function arbitraryPseudonymeDerElternteile() {
+    function arbitraryNamenDerElternteile() {
       return arbitraryRecord({
         [Elternteil.Eins]: arbitraryString(),
         [Elternteil.Zwei]: arbitraryString(),

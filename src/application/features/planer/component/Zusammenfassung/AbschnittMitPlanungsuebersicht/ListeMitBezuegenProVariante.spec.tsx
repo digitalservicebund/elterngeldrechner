@@ -8,7 +8,7 @@ describe("Liste mit Bezügen pro Variante", () => {
     render(
       <ListeMitBezuegenProVariante
         {...ANY_PROPS}
-        pseudonymDesElternteils={undefined}
+        nameDesElternteils={undefined}
       />,
     );
 
@@ -19,12 +19,9 @@ describe("Liste mit Bezügen pro Variante", () => {
     ).toBeVisible();
   });
 
-  it("shows a list using the Pseudonym", () => {
+  it("shows a list using the name", () => {
     render(
-      <ListeMitBezuegenProVariante
-        {...ANY_PROPS}
-        pseudonymDesElternteils="Jane"
-      />,
+      <ListeMitBezuegenProVariante {...ANY_PROPS} nameDesElternteils="Jane" />,
     );
 
     expect(
@@ -83,5 +80,5 @@ const ANY_PROPS = {
     [Variante.Plus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
     [Variante.Bonus]: { anzahlMonate: 0, elterngeld: 0, bruttoeinkommen: 0 },
   },
-  pseudonymDesElternteils: undefined,
+  nameDesElternteils: undefined,
 };

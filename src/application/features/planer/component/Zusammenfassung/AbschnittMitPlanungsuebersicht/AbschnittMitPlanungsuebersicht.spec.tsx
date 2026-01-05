@@ -10,7 +10,7 @@ describe("Abschnitt mit Planungsübersicht", () => {
     expect(screen.getByLabelText("Planungsübersicht"));
   });
 
-  it("shows the Pseudonym and the Gesamtbezug for each Elternteil", async () => {
+  it("shows the name and the Gesamtbezug for each Elternteil", async () => {
     vi.spyOn(
       await import("./erstellePlanungsuebersicht"),
       "erstellePlanungsuebersicht",
@@ -77,12 +77,12 @@ describe("Abschnitt mit Planungsübersicht", () => {
   });
 });
 
-function ausgangslage(pseudonymEins: string, pseudonymZwei: string) {
+function ausgangslage(nameEins: string, nameZwei: string) {
   return {
     anzahlElternteile: 2 as const,
-    pseudonymeDerElternteile: {
-      [Elternteil.Eins]: pseudonymEins,
-      [Elternteil.Zwei]: pseudonymZwei,
+    namenDerElternteile: {
+      [Elternteil.Eins]: nameEins,
+      [Elternteil.Zwei]: nameZwei,
     },
     geburtsdatumDesKindes: new Date(),
   };

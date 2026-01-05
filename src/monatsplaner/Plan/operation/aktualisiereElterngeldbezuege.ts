@@ -54,7 +54,7 @@ if (import.meta.vitest) {
         const planVorher = {
           ausgangslage: {
             anzahlElternteile: 2 as const,
-            pseudonymeDerElternteile: ANY_PSEUDONYME,
+            namenDerElternteile: ANY_NAMES,
             geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
           },
           lebensmonate: {
@@ -144,7 +144,7 @@ if (import.meta.vitest) {
 
           const ausgangslage = {
             anzahlElternteile: 2 as const,
-            pseudonymeDerElternteile: ANY_PSEUDONYME,
+            namenDerElternteile: ANY_NAMES,
             geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
           };
 
@@ -216,7 +216,7 @@ if (import.meta.vitest) {
       };
     }
 
-    const ANY_PSEUDONYME = {
+    const ANY_NAMES = {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };

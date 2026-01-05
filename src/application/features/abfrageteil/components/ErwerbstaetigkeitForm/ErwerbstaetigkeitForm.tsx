@@ -75,7 +75,7 @@ if (import.meta.vitest) {
     const { render, screen } = await import("@/application/test-utils");
     const { userEvent } = await import("@testing-library/user-event");
 
-    it("should show the pseudonym for Elternteil 1 and 2", () => {
+    it("should show the name for Elternteil 1 and 2", () => {
       const [elternteilEins, elternteilZwei] = renderForm("FuerBeide");
 
       expect(screen.getByText(elternteilEins)).toBeInTheDocument();

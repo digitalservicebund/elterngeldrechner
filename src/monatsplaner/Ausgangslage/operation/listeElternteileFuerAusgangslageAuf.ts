@@ -36,7 +36,7 @@ if (import.meta.vitest) {
     it("lists Elternteil 1 and 2 in correct order for Ausgangslage with two Elternteile", () => {
       const ausgangslage = {
         anzahlElternteile: 2 as const,
-        pseudonymeDerElternteile: ANY_PSEUDONYME_FOR_TWO_ELTERNTEILE,
+        namenDerElternteile: ANY_NAMES_FOR_TWO_ELTERNTEILE,
         geburtsdatumDesKindes: ANY_GEBURTSDATUM_DES_KINDES,
       };
 
@@ -46,7 +46,7 @@ if (import.meta.vitest) {
     });
 
     const ANY_GEBURTSDATUM_DES_KINDES = new Date();
-    const ANY_PSEUDONYME_FOR_TWO_ELTERNTEILE = {
+    const ANY_NAMES_FOR_TWO_ELTERNTEILE = {
       [Elternteil.Eins]: "Jane",
       [Elternteil.Zwei]: "John",
     };

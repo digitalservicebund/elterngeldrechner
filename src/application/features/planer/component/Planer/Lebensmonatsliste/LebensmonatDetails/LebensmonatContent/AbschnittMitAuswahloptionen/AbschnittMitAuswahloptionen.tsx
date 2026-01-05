@@ -35,8 +35,8 @@ export function AbschnittMitAuswahloptionen(): ReactNode {
   return (
     <>
       {listeElternteileFuerAusgangslageAuf(ausgangslage).map((elternteil) => {
-        const pseudonym = ausgangslage.pseudonymeDerElternteile?.[elternteil];
-        const legend = composeLegendForAuswahl(lebensmonatszahl, pseudonym);
+        const name = ausgangslage.namenDerElternteile?.[elternteil];
+        const legend = composeLegendForAuswahl(lebensmonatszahl, name);
         const { imMutterschutz, gewaehlteOption, bruttoeinkommen } =
           lebensmonat[elternteil];
         const auswahlmoeglichkeiten = bestimmeAuswahlmoeglichkeiten(elternteil);
@@ -79,9 +79,9 @@ function isAnyAuswahloptionNotSelectable<A extends Ausgangslage>(
 }
 function composeLegendForAuswahl(
   lebensmonatszahl: Lebensmonatszahl,
-  pseudonym: string | undefined,
+  name: string | undefined,
 ): string {
-  return pseudonym
-    ? `Auswahl von ${pseudonym} für den ${lebensmonatszahl}. Lebensmonat`
+  return name
+    ? `Auswahl von ${name} für den ${lebensmonatszahl}. Lebensmonat`
     : `Auswahl für den ${lebensmonatszahl}. Lebensmonat`;
 }

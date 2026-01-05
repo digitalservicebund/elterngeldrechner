@@ -614,7 +614,7 @@ if (import.meta.vitest) {
       return record.Basiselterngeld + record.ElterngeldPlus;
     }
 
-    function arbitraryPseudonymeDerElternteile() {
+    function arbitraryNamenDerElternteile() {
       return arbitraryRecord({
         [Elternteil.Eins]: arbitraryString(),
         [Elternteil.Zwei]: arbitraryString(),
@@ -652,7 +652,7 @@ if (import.meta.vitest) {
         anzahlElternteile: constant(2),
         mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
           arbitraryFlag(),
-        pseudonymeDerElternteile: arbitraryPseudonymeDerElternteile(),
+        namenDerElternteile: arbitraryNamenDerElternteile(),
         geburtsdatumDesKindes: arbitraryDate({ noInvalidDate: true }),
       });
 
@@ -661,7 +661,7 @@ if (import.meta.vitest) {
         anzahlElternteile: constant(2),
         mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum:
           arbitraryFlag(),
-        pseudonymeDerElternteile: arbitraryPseudonymeDerElternteile(),
+        namenDerElternteile: arbitraryNamenDerElternteile(),
         geburtsdatumDesKindes: arbitraryDate({ noInvalidDate: true }),
         informationenZumMutterschutz: record({
           empfaenger: oneof(

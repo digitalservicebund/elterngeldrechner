@@ -106,14 +106,14 @@ if (import.meta.vitest) {
       it("is satisfied if at least one Elternteil was erwerbstätig", () => {
         assert(
           property(
-            arbitraryPseudonymeDerElternteile(),
+            arbitraryNamenDerElternteile(),
             arbitraryDate({ noInvalidDate: true }),
-            (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
+            (namenDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
                 mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
                 geburtsdatumDesKindes,
-                pseudonymeDerElternteile,
+                namenDerElternteile: namenDerElternteile,
               };
 
               expect(
@@ -127,14 +127,14 @@ if (import.meta.vitest) {
       it("is unsatisfied if no Elternteil was erwerbstätig", () => {
         assert(
           property(
-            arbitraryPseudonymeDerElternteile(),
+            arbitraryNamenDerElternteile(),
             arbitraryDate({ noInvalidDate: true }),
-            (pseudonymeDerElternteile, geburtsdatumDesKindes) => {
+            (namenDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
                 mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: false,
                 geburtsdatumDesKindes,
-                pseudonymeDerElternteile,
+                namenDerElternteile: namenDerElternteile,
               };
 
               expect(
@@ -146,7 +146,7 @@ if (import.meta.vitest) {
       });
     });
 
-    function arbitraryPseudonymeDerElternteile() {
+    function arbitraryNamenDerElternteile() {
       return arbitraryRecord({
         [Elternteil.Eins]: arbitraryString(),
         [Elternteil.Zwei]: arbitraryString(),

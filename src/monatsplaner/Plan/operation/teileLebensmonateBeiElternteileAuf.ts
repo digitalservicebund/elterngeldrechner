@@ -142,7 +142,7 @@ if (import.meta.vitest) {
 
     const AUSGANGSLAGE_MIT_ZWEI_ELTERNTEILE = {
       anzahlElternteile: 2 as const,
-      pseudonymeDerElternteile: {
+      namenDerElternteile: {
         [Elternteil.Eins]: "Jane",
         [Elternteil.Zwei]: "John",
       },

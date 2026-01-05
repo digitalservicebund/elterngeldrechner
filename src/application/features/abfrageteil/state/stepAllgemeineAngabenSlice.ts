@@ -11,7 +11,7 @@ type AntragstellendeSelektor = "ET1" | "ET2";
 export interface StepAllgemeineAngabenState {
   bundesland: string | null;
   antragstellende: Antragstellende | null;
-  pseudonym: {
+  name: {
     ET1: string;
     ET2: string;
   };
@@ -22,7 +22,7 @@ export interface StepAllgemeineAngabenState {
 const initialState: StepAllgemeineAngabenState = {
   bundesland: null,
   antragstellende: null,
-  pseudonym: {
+  name: {
     ET1: "",
     ET2: "",
   },
@@ -45,12 +45,12 @@ const getAntragssteller = (state: RootState) =>
     : state.stepAllgemeineAngaben.antragstellende;
 
 const getElternteilNames = createSelector(
-  (state: RootState) => state.stepAllgemeineAngaben.pseudonym.ET1,
-  (state: RootState) => state.stepAllgemeineAngaben.pseudonym.ET2,
-  (pseudonymElternteil1, pseudonymElternteil2) => {
+  (state: RootState) => state.stepAllgemeineAngaben.name.ET1,
+  (state: RootState) => state.stepAllgemeineAngaben.name.ET2,
+  (nameElternteil1, nameElternteil2) => {
     return {
-      ET1: pseudonymElternteil1 || "Elternteil 1",
-      ET2: pseudonymElternteil2 || "Elternteil 2",
+      ET1: nameElternteil1 || "Elternteil 1",
+      ET2: nameElternteil2 || "Elternteil 2",
     };
   },
 );

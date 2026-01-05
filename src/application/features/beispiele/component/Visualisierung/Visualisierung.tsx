@@ -33,7 +33,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
             {ausgangslage.anzahlElternteile === 2 && (
               <p className="truncate">
                 <PersonIcon aria-hidden="true" className="mr-4" />
-                {ausgangslage.pseudonymeDerElternteile?.[elternteil]}
+                {ausgangslage.namenDerElternteile?.[elternteil]}
               </p>
             )}
             <p className="sr-only">{summeGeplanteMonate} Monate Elterngeld</p>

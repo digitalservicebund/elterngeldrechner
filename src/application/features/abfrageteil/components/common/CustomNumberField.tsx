@@ -95,20 +95,33 @@ export function CustomNumberField<
             max,
             min,
             thousandsSeparator: ".",
+            radix: ",",
+            mapToRadix: [],
             scale: allowedDecimalPlaces,
           },
         }}
         lazy={false}
         autofix
         value={value === null ? "" : String(value)}
-        onAccept={(value: string) => {
-          if (!value) {
+        onAccept={(_, mask) => {
+          const rawValue = mask.unmaskedValue;
+
+          if (!rawValue || rawValue === "") {
             onChange(null);
           } else {
-            onChange(+value);
+            onChange(Number(rawValue));
           }
         }}
         onBlur={onBlur}
+        onCopy={(e: React.ClipboardEvent<HTMLInputElement>) => {
+          const selection = globalThis.getSelection()?.toString();
+
+          if (selection && value !== null) {
+            e.preventDefault();
+            const cleanValue = selection.replaceAll(/[^0-9,]/g, "");
+            e.clipboardData.setData("text/plain", cleanValue);
+          }
+        }}
         type="text"
         inputMode="numeric"
         name={name}

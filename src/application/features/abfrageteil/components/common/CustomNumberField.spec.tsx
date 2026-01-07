@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useForm } from "react-hook-form";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -78,5 +78,47 @@ describe("Custom Number Field", () => {
     await userEvent.click(submitButton);
 
     expect(onSubmit).toHaveBeenCalledWith({ testField: 2.5 });
+  });
+
+  it("should handle pasted values with thousands separators correctly", async () => {
+    render(<TestComponent />);
+    const numberField = screen.getByLabelText("Number Field Label");
+    const submitButton = screen.getByRole("button", { name: "Submit" });
+
+    await userEvent.click(numberField);
+    await userEvent.paste("2.500");
+    await userEvent.click(submitButton);
+
+    expect(onSubmit).toHaveBeenCalledWith({ testField: 2500 });
+  });
+
+  it("should clean the value from thousands separators and suffix when copied", async () => {
+    render(<TestComponent />);
+    const numberField = screen.getByLabelText("Number Field Label");
+
+    if (!(numberField instanceof HTMLInputElement)) {
+      throw new TypeError("Element is not an input");
+    }
+
+    await userEvent.type(numberField, "1234");
+    await userEvent.click(numberField);
+    numberField.select();
+
+    const selectionMock = numberField.value;
+    const selectionSpy = vi.spyOn(globalThis, "getSelection").mockReturnValue({
+      toString: () => selectionMock,
+    } as Selection);
+
+    const clipboardData = {
+      setData: vi.fn(),
+      getData: vi.fn(),
+    };
+
+    fireEvent.copy(numberField, {
+      clipboardData: clipboardData,
+    });
+
+    expect(clipboardData.setData).toHaveBeenCalledWith("text/plain", "1234");
+    selectionSpy.mockRestore();
   });
 });

@@ -101,17 +101,12 @@ export function Pruefbuttonbox({
               onBonusFreischalten={bonusFreischalten}
             />
 
-            <span>
-              Sie können Ihre Planung in den Antrag auf Elterngeld übernehmen
-              oder herunterladen.
-            </span>
-
             <Button
               type="button"
               onClick={planInAntragUebernehmen}
-              className="my-10"
+              className="my-20"
             >
-              Planung in den Antrag übernehmen
+              Planung in den Papierantrag übernehmen
             </Button>
 
             <div className="flex flex-wrap justify-center print:hidden">

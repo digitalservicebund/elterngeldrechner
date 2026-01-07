@@ -109,14 +109,16 @@ export function Pruefbuttonbox({
               Planung in den Papierantrag übernehmen
             </Button>
 
-            <div className="flex flex-wrap justify-center print:hidden">
+            <div className="flex flex-col text-center print:hidden">
               <Button type="button" buttonStyle="link" onClick={planungDrucken}>
-                <SaveAltIcon className="mr-8" /> Drucken der Planung
+                <SaveAltIcon className="mr-8" />
+                Planung als PDF drucken oder speichern
               </Button>
 
-              <p className="mt-8 max-w-none">
+              <p className="mt-8">Sie können Ihre Planung ausdrucken.</p>
+              <p className="max-w-none">
                 Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
-                „als PDF speichern“ aus.
+                „Als PDF speichern“ aus.
               </p>
             </div>
           </div>

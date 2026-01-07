@@ -119,6 +119,6 @@ test("verheiratet, Mischeinkünfte", async ({ page }) => {
   await page.getByRole("button", { name: "Planung überprüfen" }).click();
 
   await page
-    .getByRole("button", { name: "Planung in den Antrag übernehmen" })
+    .getByRole("button", { name: "Planung in den Papierantrag übernehmen" })
     .click();
 });

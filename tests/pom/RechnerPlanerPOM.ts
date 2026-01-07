@@ -81,7 +81,7 @@ export class RechnerPlanerPOM {
   async uebernehmen() {
     await this.page
       .getByRole("button", {
-        name: "Planung in den Antrag übernehmen",
+        name: "Planung in den Papierantrag übernehmen",
         exact: true,
       })
       .click();

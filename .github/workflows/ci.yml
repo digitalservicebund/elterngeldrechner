@@ -65,21 +65,6 @@ jobs:
       path: /main
     secrets: inherit
 
-  generate-sbom:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: generate bill
-        uses: advanced-security/generate-sbom-action@v1 # trusted as part of GitHub organization
-        id: generate-sbom
-
-      - name: upload bill as artifact
-        uses: actions/upload-artifact@v6
-        with:
-          path: ${{ steps.generate-sbom.outputs.fileName }}
-          name: SBOM
-
   audit-licenses:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -98,3 +83,79 @@ jobs:
       - run: |
           git diff-tree --name-only -r ${{ github.sha }} \
             | grep 'original-rechner/src' && exit 1 || exit 0
+
+  deploy-stackit-staging:
+    runs-on: ubuntu-24.04
+    needs:
+      - test-suite-vitest
+      - test-suite-playwright
+      - original-rechner-lock
+      - static-code-analysis
+      - audit-licenses
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/cached-node-install
+
+      - name: Run build specific for stack it staging environment
+        run: npm run build:staging
+        env:
+          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud
+
+      - name: Synchronize build output with object storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
+          AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
+        run: |
+          aws s3 cp dist/documents/ s3://egr-assets-staging/documents/ --recursive
+          aws s3 cp dist/images/ s3://egr-assets-staging/images/ --recursive
+
+          aws s3 cp dist/assets/index-*.js s3://egr-assets-staging/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          aws s3 cp dist/assets/index-*.css s3://egr-assets-staging/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+  deploy-stackit-production:
+    runs-on: ubuntu-24.04
+    if: startsWith(github.event.ref, 'refs/tags/v')
+    needs:
+      - test-suite-vitest
+      - test-suite-playwright
+      - original-rechner-lock
+      - static-code-analysis
+      - audit-licenses
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/cached-node-install
+
+      - name: Run build specific for stack it production environment
+        run: npm run build:production
+        env:
+          VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud
+
+      - name: Synchronize build output with object storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_PRODUCTION_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_PRODUCTION_SECRET_ACCESS_KEY }}
+          AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
+        run: |
+          aws s3 cp dist/documents/ s3://egr-assets-production/documents/ --recursive
+          aws s3 cp dist/images/ s3://egr-assets-production/images/ --recursive
+
+          aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+  generate-sbom:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: generate bill
+        uses: advanced-security/generate-sbom-action@v1 # trusted as part of GitHub organization
+        id: generate-sbom
+
+      - name: upload bill as artifact
+        uses: actions/upload-artifact@v6
+        with:
+          path: ${{ steps.generate-sbom.outputs.fileName }}
+          name: SBOM

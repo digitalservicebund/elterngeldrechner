@@ -54,17 +54,6 @@ jobs:
           path: playwright-report/
           retention-days: 1
 
-  deploy:
-    needs:
-      - static-code-analysis
-      - test-suite-vitest
-      - test-suite-playwright
-    if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/github-pages-deploy.yml
-    with:
-      path: /main
-    secrets: inherit
-
   audit-licenses:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -84,7 +73,7 @@ jobs:
           git diff-tree --name-only -r ${{ github.sha }} \
             | grep 'original-rechner/src' && exit 1 || exit 0
 
-  deploy-stackit-staging:
+  deploy-staging:
     runs-on: ubuntu-24.04
     needs:
       - test-suite-vitest
@@ -114,7 +103,7 @@ jobs:
           aws s3 cp dist/assets/index-*.js s3://egr-assets-staging/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-staging/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
-  deploy-stackit-production:
+  deploy-production:
     runs-on: ubuntu-24.04
     if: startsWith(github.event.ref, 'refs/tags/v')
     needs:

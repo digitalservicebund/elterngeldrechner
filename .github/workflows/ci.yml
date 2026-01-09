@@ -74,6 +74,7 @@ jobs:
             | grep 'original-rechner/src' && exit 1 || exit 0
 
   deploy-staging:
+    if: "!startsWith(github.ref, 'refs/tags/')"
     runs-on: ubuntu-24.04
     needs:
       - test-suite-vitest
@@ -105,7 +106,7 @@ jobs:
 
   deploy-production:
     runs-on: ubuntu-24.04
-    if: startsWith(github.event.ref, 'refs/tags/v')
+    if: startsWith(github.event.ref, 'refs/tags/')
     needs:
       - test-suite-vitest
       - test-suite-playwright
@@ -133,6 +134,58 @@ jobs:
 
           aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+  create-release:
+    runs-on: ubuntu-24.04
+    needs: deploy-production
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Generate Changelog
+        uses: orhun/git-cliff-action@e16f179f0be49ecdfe63753837f20b9531642772
+        id: changelog
+        with:
+          args: --latest
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          body: ${{ steps.changelog.outputs.content }}
+
+      - name: Report Deployment
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+        with:
+          project: elterngeldrechner
+          environment: production
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
+
+      - name: Create Metabase Release Event
+        env:
+          METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}
+          METABASE_DOMAIN: ${{ secrets.EGR_METABASE_DOMAIN }}
+          RELEASE_NAME: "Release ${{ github.ref_name }}"
+        run: |
+          TIMESTAMP=$(date --utc +"%Y-%m-%dT%H:%M:%S.000+00:00")
+          curl -X POST "https://${METABASE_DOMAIN}/api/timeline-event/" \
+            -H "x-api-key: $METABASE_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+                  "name": "'"$RELEASE_NAME"'",
+                  "description": null,
+                  "timestamp": "'"$TIMESTAMP"'",
+                  "timeline_id": 1,
+                  "icon": "cloud",
+                  "timezone": "Europe/Berlin",
+                  "time_matters": false,
+                  "archived": false,
+                  "source": "collections"
+                }'
 
   generate-sbom:
     runs-on: ubuntu-24.04

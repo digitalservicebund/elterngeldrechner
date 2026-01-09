@@ -32,7 +32,7 @@
     "@playwright/test": "^1.57.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.0",
+    "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
     "@types/downloadjs": "^1.4.6",
     "@types/luxon": "^3.7.1",

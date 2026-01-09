@@ -25,4 +25,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
-        run: aws s3 rm s3://egr-assets-staging/preview/${{ inputs.path }} --recursive
+          PREVIEW_PATH: ${{ inputs.path }}
+        run: aws s3 rm "s3://egr-assets-staging/preview/${PREVIEW_PATH}" --recursive

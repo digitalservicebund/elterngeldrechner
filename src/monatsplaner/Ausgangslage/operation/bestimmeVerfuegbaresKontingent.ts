@@ -132,7 +132,7 @@ if (import.meta.vitest) {
             (namenDerElternteile, geburtsdatumDesKindes) => {
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                namenDerElternteile: namenDerElternteile,
+                namenDerElternteile,
                 geburtsdatumDesKindes,
               };
 
@@ -157,7 +157,7 @@ if (import.meta.vitest) {
 
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                namenDerElternteile: namenDerElternteile,
+                namenDerElternteile,
                 geburtsdatumDesKindes,
               };
 
@@ -183,7 +183,7 @@ if (import.meta.vitest) {
 
               const ausgangslage: Ausgangslage = {
                 anzahlElternteile: 2 as const,
-                namenDerElternteile: namenDerElternteile,
+                namenDerElternteile,
                 geburtsdatumDesKindes,
               };
 

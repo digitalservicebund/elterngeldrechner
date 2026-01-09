@@ -81,7 +81,7 @@ export function composeAusgangslageFuerPlaner(state: RootState): Ausgangslage {
       return {
         ...sharedAusganslageProperties,
         anzahlElternteile,
-        namenDerElternteile: namenDerElternteile,
+        namenDerElternteile,
         informationenZumMutterschutz,
         istAlleinerziehend: false,
       };

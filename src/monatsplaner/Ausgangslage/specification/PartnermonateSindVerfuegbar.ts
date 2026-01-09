@@ -113,7 +113,7 @@ if (import.meta.vitest) {
                 anzahlElternteile: 2 as const,
                 mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: true,
                 geburtsdatumDesKindes,
-                namenDerElternteile: namenDerElternteile,
+                namenDerElternteile,
               };
 
               expect(
@@ -134,7 +134,7 @@ if (import.meta.vitest) {
                 anzahlElternteile: 2 as const,
                 mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum: false,
                 geburtsdatumDesKindes,
-                namenDerElternteile: namenDerElternteile,
+                namenDerElternteile,
               };
 
               expect(

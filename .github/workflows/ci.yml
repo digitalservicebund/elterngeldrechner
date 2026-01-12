@@ -83,7 +83,7 @@ jobs:
       - audit-licenses
     uses: ./.github/workflows/preview-deploy.yml
     with:
-      path: /main
+      name: main
     secrets: inherit
 
   deploy-staging:

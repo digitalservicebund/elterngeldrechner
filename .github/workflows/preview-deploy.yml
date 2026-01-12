@@ -1,17 +1,17 @@
-name: Deploy Preview on Staging Environment
+name: Deploy Preview
 
 on:
   workflow_dispatch:
     inputs:
-      path:
-        description: relative URL path where to put assets (e.g. '/feature/fancy-stuff')
+      name:
+        description: The name used to publish the feature. The preview will be accessible at $domain/preview/$name.
         required: true
         type: string
 
   workflow_call:
     inputs:
-      path:
-        description: relative URL path where to put assets (e.g. '/feature/fancy-stuff')
+      name:
+        description: The name used to publish the feature. The preview will be accessible at $domain/preview/$name.
         required: true
         type: string
 
@@ -31,15 +31,15 @@ jobs:
       - name: Run preview build specific for stack it staging environment
         run: npm run build:staging
         env:
-          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/${{ inputs.path }}
+          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/${{ inputs.name }}
 
       - name: Synchronize build output with object storage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
-          PREVIEW_PATH: ${{ inputs.path }}
-        run: aws s3 sync dist/ "s3://egr-assets-staging/preview/${PREVIEW_PATH}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          PREVIEW_NAME: ${{ inputs.name }}
+        run: aws s3 sync dist/ "s3://egr-assets-staging/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

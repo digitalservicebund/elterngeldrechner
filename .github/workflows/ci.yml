@@ -117,6 +117,14 @@ jobs:
           aws s3 cp dist/assets/index-*.js s3://egr-assets-staging/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-staging/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
+      - name: Report deployment for statistics
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+        with:
+          project: elterngeldrechner
+          environment: staging
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
+
   deploy-production:
     runs-on: ubuntu-24.04
     if: startsWith(github.event.ref, 'refs/tags/')
@@ -147,6 +155,14 @@ jobs:
 
           aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+      - name: Report deployment for statistics
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+        with:
+          project: elterngeldrechner
+          environment: production
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
   create-release:
     runs-on: ubuntu-24.04

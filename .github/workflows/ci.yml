@@ -103,7 +103,7 @@ jobs:
       - name: Run build specific for stack it staging environment
         run: npm run build:staging
         env:
-          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud
+          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/
 
       - name: Synchronize build output with object storage
         env:
@@ -142,7 +142,7 @@ jobs:
       - name: Run build specific for stack it production environment
         run: npm run build:production
         env:
-          VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud
+          VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud/
 
       - name: Synchronize build output with object storage
         env:

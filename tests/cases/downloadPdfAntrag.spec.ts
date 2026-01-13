@@ -110,10 +110,16 @@ test("gemeinsam, nicht unterstütztes Bundesland", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(5, "Basis", "Anton");
   await rechnerUndPlaner.waehleOption(6, "Basis", "Anton");
   await rechnerUndPlaner.ueberpruefen();
-  await rechnerUndPlaner.uebernehmen();
+
+  await expect(
+    page.getByRole("button", {
+      name: "Planung in den Papierantrag übernehmen",
+      exact: true,
+    }),
+  ).not.toBeVisible();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
-  await expect(datenuebernahmeAntragPage.heading).toBeVisible();
+  await expect(datenuebernahmeAntragPage.heading).not.toBeVisible();
 });
 
 test("alleine, unterstütztes Bundesland", async ({ page }) => {
@@ -200,8 +206,14 @@ test("alleine, nicht unterstütztes Bundesland", async ({ page }) => {
   await rechnerUndPlaner.waehleOption(5, "Basis");
   await rechnerUndPlaner.waehleOption(6, "Basis");
   await rechnerUndPlaner.ueberpruefen();
-  await rechnerUndPlaner.uebernehmen();
+
+  await expect(
+    page.getByRole("button", {
+      name: "Planung in den Papierantrag übernehmen",
+      exact: true,
+    }),
+  ).not.toBeVisible();
 
   const datenuebernahmeAntragPage = new DatenuebernahmeAntragPOM(page);
-  await expect(datenuebernahmeAntragPage.heading).toBeVisible();
+  await expect(datenuebernahmeAntragPage.heading).not.toBeVisible();
 });

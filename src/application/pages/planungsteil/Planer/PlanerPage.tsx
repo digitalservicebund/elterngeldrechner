@@ -12,6 +12,7 @@ import {
   YesNo,
   composeAusgangslageFuerPlaner,
 } from "@/application/features/abfrageteil/state";
+import { bundeslaender } from "@/application/features/pdfAntrag";
 import {
   Anleitung,
   Erklaerung,
@@ -291,6 +292,8 @@ if (import.meta.vitest) {
     const { render, screen } = await import("@/application/test-utils");
     const { INITIAL_STATE } = await import("@/application/test-utils");
 
+    const { produce } = await import("immer");
+
     type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
     type NavigateStateful = NavigateStatefulHook["navigateStateful"];
 
@@ -376,7 +379,7 @@ if (import.meta.vitest) {
         });
 
         render(<PlanerPage />, {
-          preloadedState: INITIAL_STATE,
+          preloadedState: initialTestState,
         });
 
         const resetPlanButton = screen.queryByText(
@@ -411,7 +414,7 @@ if (import.meta.vitest) {
         });
 
         render(<PlanerPage />, {
-          preloadedState: INITIAL_STATE,
+          preloadedState: initialTestState,
         });
 
         const resetPlanButton = screen.queryByText(
@@ -420,6 +423,10 @@ if (import.meta.vitest) {
 
         expect(resetPlanButton).toBeDisabled();
       });
+    });
+
+    const initialTestState = produce(INITIAL_STATE, (draft) => {
+      draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
     });
   });
 }

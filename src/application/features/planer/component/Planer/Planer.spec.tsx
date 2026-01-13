@@ -1,7 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { produce } from "immer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
+import { bundeslaender } from "@/application/features/pdfAntrag";
 import { usePlanerService } from "@/application/features/planer/hooks";
+import { INITIAL_STATE, render, screen } from "@/application/test-utils";
 import {
   Elternteil,
   KeinElterngeld,
@@ -47,7 +49,9 @@ describe("Planer", () => {
   });
 
   it("shows all relevant sections of the Planer", () => {
-    render(<Planer {...ANY_PROPS} />);
+    render(<Planer {...ANY_PROPS} />, {
+      preloadedState: initialTestState,
+    });
 
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
@@ -68,6 +72,7 @@ describe("Planer", () => {
         planInAntragUebernehmen={planInAntragUebernehmen}
         callbacks={{ onChange }}
       />,
+      { preloadedState: initialTestState },
     );
 
     expect(usePlanerService).toHaveBeenCalledOnce();
@@ -169,3 +174,7 @@ const ANY_SERVICE_VALUES = {
     return 1 as Lebensmonatszahl;
   },
 };
+
+const initialTestState = produce(INITIAL_STATE, (draft) => {
+  draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
+});

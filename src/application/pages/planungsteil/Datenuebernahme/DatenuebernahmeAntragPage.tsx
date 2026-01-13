@@ -1,4 +1,3 @@
-// import ArrowOutward from "@digitalservicebund/icons/ArrowOutward";
 import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
 import download from "downloadjs";
@@ -19,6 +18,19 @@ import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigat
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
+
+function trackedDownloadOfAnlagen(
+  event: React.MouseEvent<HTMLAnchorElement>,
+  bundesland: Bundesland,
+) {
+  event.preventDefault();
+  pushTrackingEvent("Anlagen-zu-Antrag-wurden-heruntergeladen");
+  window.open(bundesland.link, "_blank", "noreferrer");
+}
+
+function trackReferenzAufOnlinetool() {
+  pushTrackingEvent("Referenz-auf-Onlinetool-wurde-geklickt");
+}
 
 export function DatenuebernahmeAntragPage(): ReactNode {
   const store = useAppStore();
@@ -41,7 +53,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
     (bundesland) => bundesland.name === bundeslandString,
   );
   if (bundesland === undefined) {
-    throw Error("bundesland should not be undefined");
+    throw new Error("bundesland should not be undefined");
   }
 
   const informationForPdfAntrag = {
@@ -51,19 +63,6 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
     ),
   };
-
-  function trackedDownloadOfAnlagen(
-    event: React.MouseEvent<HTMLAnchorElement>,
-    bundesland: Bundesland,
-  ) {
-    event.preventDefault();
-    pushTrackingEvent("Anlagen-zu-Antrag-wurden-heruntergeladen");
-    window.open(bundesland.link, "_blank", "noreferrer");
-  }
-
-  function trackReferenzAufOnlinetool() {
-    pushTrackingEvent("Referenz-auf-Onlinetool-wurde-geklickt");
-  }
 
   async function downloadGanzerAntrag() {
     setAntragDownloading(true);

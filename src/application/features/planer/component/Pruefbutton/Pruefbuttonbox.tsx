@@ -33,6 +33,14 @@ type Props = {
   readonly onPlanungDrucken?: () => void;
 };
 
+function trackReferenzAufOnlinetool() {
+  pushTrackingEvent("Referenz-auf-Onlinetool-wurde-geklickt");
+}
+
+function trackReferenzAufLandesseite() {
+  pushTrackingEvent("Referenz-auf-Landesseite-wurde-geklickt");
+}
+
 export function Pruefbuttonbox({
   className,
   plan,
@@ -79,15 +87,7 @@ export function Pruefbuttonbox({
     (bundesland) => bundesland.name === bundeslandString,
   );
   if (bundesland === undefined) {
-    throw Error("bundesland should not be undefined");
-  }
-
-  function trackReferenzAufOnlinetool() {
-    pushTrackingEvent("Referenz-auf-Onlinetool-wurde-geklickt");
-  }
-
-  function trackReferenzAufLandesseite() {
-    pushTrackingEvent("Referenz-auf-Landesseite-wurde-geklickt");
+    throw new Error("bundesland should not be undefined");
   }
 
   const ueberpruefePlanungCallback = useCallback(() => {

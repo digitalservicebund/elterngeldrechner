@@ -3,8 +3,8 @@ import { Elternteil, Variante } from "@/monatsplaner";
 export const pdfVersionVorApril2024 = {
   start: new Date("2020-01-01"),
   end: new Date("2024-03-31"),
-  pdfFileAntragPath: "/documents/bis2024-03-31_seite.pdf",
-  pdfFileSeitePath: "/documents/bis2024-03-31_seite.pdf",
+  pdfFileAntragPath: `${import.meta.env.BASE_URL}documents/bis2024-03-31_seite.pdf`,
+  pdfFileSeitePath: `${import.meta.env.BASE_URL}documents/bis2024-03-31_seite.pdf`,
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "Vorname2B",

@@ -112,7 +112,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               <div className="flex flex-wrap gap-24 sm:flex-nowrap">
                 <div>
                   <img
-                    src="/images/elterngeldantrag.png"
+                    src={`${import.meta.env.BASE_URL}images/elterngeldantrag.png`}
                     alt=""
                     className="max-w-[200px]"
                   />
@@ -170,7 +170,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               <div className="flex flex-wrap gap-24 sm:flex-nowrap">
                 <div>
                   <img
-                    src="/images/planungsseite.png"
+                    src={`${import.meta.env.BASE_URL}images/planungsseite.png`}
                     alt=""
                     className="max-w-[200px]"
                   />

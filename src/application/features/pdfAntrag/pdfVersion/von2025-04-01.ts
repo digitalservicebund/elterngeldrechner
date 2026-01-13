@@ -3,8 +3,8 @@ import { Elternteil, Variante } from "@/monatsplaner";
 export const pdfVersionVonApril2025 = {
   start: new Date("2025-04-01"),
   end: new Date("2100-03-31"),
-  pdfFileAntragPath: "/documents/von2025-04-01_antrag.pdf",
-  pdfFileSeitePath: "/documents/von2025-04-01_seite.pdf",
+  pdfFileAntragPath: `${import.meta.env.BASE_URL}documents/von2025-04-01_antrag.pdf`,
+  pdfFileSeitePath: `${import.meta.env.BASE_URL}documents/von2025-04-01_seite.pdf`,
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "2b Vorname(n) AS",

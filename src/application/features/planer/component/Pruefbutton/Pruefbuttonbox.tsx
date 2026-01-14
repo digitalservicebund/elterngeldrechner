@@ -136,15 +136,16 @@ export function Pruefbuttonbox({
                     Antrag ist nicht möglich.
                   </p>
                   <p>
-                    Möchten Sie den Antrag volldigital einreichen, finden Sie{" "}
+                    Möchten Sie den Antrag digital einreichen, finden Sie{" "}
                     <a
-                      className="font-bold underline"
+                      className="text-primary underline"
                       href={bundesland.linkOnlinetool}
                       target="_blank"
                       rel="noreferrer"
                       onClick={() => trackReferenzAufOnlinetool()}
                     >
-                      hier
+                      hier{" "}
+                      <span className="sr-only">(öffnet in neuem Fenster)</span>
                     </a>{" "}
                     das passende Tool.
                   </p>
@@ -153,7 +154,12 @@ export function Pruefbuttonbox({
             )}
 
             <div className="flex flex-col text-center print:hidden">
-              <Button type="button" buttonStyle="link" onClick={planungDrucken}>
+              <Button
+                className="text-base"
+                type="button"
+                buttonStyle="link"
+                onClick={planungDrucken}
+              >
                 <SaveAltIcon className="mr-8" />
                 Planung als PDF drucken oder speichern
               </Button>
@@ -172,14 +178,15 @@ export function Pruefbuttonbox({
                   Online-Antrag finden Sie auf folgender Seite:
                 </p>
                 <a
-                  className="font-bold underline"
+                  className="text-primary underline"
                   href={bundesland.link}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => trackReferenzAufLandesseite()}
                 >
-                  <ArrowOutward /> Zum Antrag auf Elterngeld in{" "}
-                  {bundesland.name}
+                  <ArrowOutward aria-hidden="true" /> Zum Antrag auf Elterngeld
+                  in {bundesland.name}
+                  <span className="sr-only">(öffnet in neuem Fenster)</span>
                 </a>
               </div>
             )}
@@ -315,7 +322,7 @@ if (import.meta.vitest) {
         ).toBeVisible();
         expect(
           screen.getByRole("link", {
-            name: "Zum Antrag auf Elterngeld in Baden-Württemberg",
+            name: /Zum Antrag auf Elterngeld in Baden-Württemberg/,
           }),
         ).toBeVisible();
       });

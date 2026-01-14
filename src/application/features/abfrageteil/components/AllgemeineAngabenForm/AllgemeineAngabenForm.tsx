@@ -17,7 +17,7 @@ import {
   StepAllgemeineAngabenState,
   YesNo,
 } from "@/application/features/abfrageteil/state";
-import { bundeslaender } from "@/application/features/pdfAntrag";
+import { BUNDESLAENDER_ENTITIES } from "@/application/features/pdfAntrag";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   {
@@ -69,9 +69,9 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
     }
   };
 
-  const bundeslandOptions: SelectOption<string>[] = bundeslaender.map(
-    (bundesland) => ({ value: bundesland.name, label: bundesland.name }),
-  );
+  const bundeslandOptions: SelectOption<string>[] = Object.entries(
+    BUNDESLAENDER_ENTITIES,
+  ).map(([name]) => ({ value: name, label: name }));
 
   return (
     <form

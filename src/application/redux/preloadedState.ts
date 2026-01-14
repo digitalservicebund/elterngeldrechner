@@ -3,12 +3,12 @@ import {
   type MonatlichesBrutto,
   YesNo,
 } from "@/application/features/abfrageteil/state";
-import { bundeslaender } from "@/application/features/pdfAntrag";
+import { BundeslandName } from "@/application/features/pdfAntrag";
 import { KassenArt, KinderFreiBetrag, Steuerklasse } from "@/elterngeldrechner";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {
-    bundesland: bundeslaender[2].name,
+    bundesland: "Berlin" as BundeslandName,
     antragstellende: "FuerBeide" as Antragstellende,
     name: {
       ET1: "Jasper Darwin Artus",

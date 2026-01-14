@@ -1,7 +1,6 @@
 import { produce } from "immer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
-import { bundeslaender } from "@/application/features/pdfAntrag";
 import { usePlanerService } from "@/application/features/planer/hooks";
 import { INITIAL_STATE, render, screen } from "@/application/test-utils";
 import {
@@ -176,5 +175,5 @@ const ANY_SERVICE_VALUES = {
 };
 
 const initialTestState = produce(INITIAL_STATE, (draft) => {
-  draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
+  draft.stepAllgemeineAngaben.bundesland = "Berlin";
 });

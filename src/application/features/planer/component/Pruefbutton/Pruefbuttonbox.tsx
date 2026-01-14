@@ -15,7 +15,6 @@ import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { type Tips, generateTips } from "./generateTips";
 import { Button } from "@/application/components/Button";
 import { stepAllgemeineAngabenSelectors } from "@/application/features/abfrageteil/state";
-import { bundeslaender } from "@/application/features/pdfAntrag";
 import { useAppSelector } from "@/application/redux/hooks";
 import { pushTrackingEvent } from "@/application/user-tracking";
 import {
@@ -79,15 +78,11 @@ export function Pruefbuttonbox({
     hasSpecialBonusTip: false,
   });
 
-  const bundeslandString = useAppSelector(
+  const bundesland = useAppSelector(
     stepAllgemeineAngabenSelectors.getBundesland,
   );
-
-  const bundesland = bundeslaender.find(
-    (bundesland) => bundesland.name === bundeslandString,
-  );
-  if (bundesland === undefined) {
-    throw new Error("bundesland should not be undefined");
+  if (bundesland === null) {
+    throw new Error("bundesland should not be null");
   }
 
   const ueberpruefePlanungCallback = useCallback(() => {
@@ -354,11 +349,11 @@ if (import.meta.vitest) {
     };
 
     const supportedBundeslandTestState = produce(INITIAL_STATE, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
+      draft.stepAllgemeineAngaben.bundesland = "Berlin";
     });
 
     const notSupportedBundeslandTestState = produce(INITIAL_STATE, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = bundeslaender[0].name;
+      draft.stepAllgemeineAngaben.bundesland = "Baden-Württemberg";
     });
   });
 }

@@ -12,7 +12,6 @@ import {
   YesNo,
   composeAusgangslageFuerPlaner,
 } from "@/application/features/abfrageteil/state";
-import { bundeslaender } from "@/application/features/pdfAntrag";
 import {
   Anleitung,
   Erklaerung,
@@ -426,7 +425,7 @@ if (import.meta.vitest) {
     });
 
     const initialTestState = produce(INITIAL_STATE, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
+      draft.stepAllgemeineAngaben.bundesland = "Berlin";
     });
   });
 }

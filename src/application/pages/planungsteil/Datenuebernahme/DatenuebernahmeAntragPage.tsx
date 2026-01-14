@@ -8,7 +8,7 @@ import {
   parseGermanDateString,
   stepAllgemeineAngabenSelectors,
 } from "@/application/features/abfrageteil/state";
-import { Bundesland, bundeslaender } from "@/application/features/pdfAntrag";
+import { Bundesland } from "@/application/features/pdfAntrag";
 import {
   prepareGanzerAntrag,
   preparePlanungsseite,
@@ -45,15 +45,11 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const [antragDownloading, setAntragDownloading] = useState(false);
   const [seiteDownloading, setSeiteDownloading] = useState(false);
 
-  const bundeslandString = useAppSelector(
+  const bundesland = useAppSelector(
     stepAllgemeineAngabenSelectors.getBundesland,
   );
-
-  const bundesland = bundeslaender.find(
-    (bundesland) => bundesland.name === bundeslandString,
-  );
-  if (bundesland === undefined) {
-    throw new Error("bundesland should not be undefined");
+  if (bundesland === null) {
+    throw new Error("bundesland should not be null");
   }
 
   const informationForPdfAntrag = {
@@ -324,7 +320,7 @@ if (import.meta.vitest) {
     };
 
     const initialTestState = produce(INITIAL_STATE, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = bundeslaender[2].name;
+      draft.stepAllgemeineAngaben.bundesland = "Berlin";
       draft.stepAllgemeineAngaben.name = {
         ET1: "Elternteil 1",
         ET2: "Elternteil 2",

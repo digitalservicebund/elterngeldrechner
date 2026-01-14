@@ -143,7 +143,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               <p>
                 Hier finden Sie eine
                 <a
-                  className="mx-4 font-bold underline"
+                  className="mx-4 text-primary underline"
                   href={bundesland.link}
                   target="_blank"
                   rel="noreferrer"
@@ -151,7 +151,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                     trackedDownloadOfAnlagen(event, bundesland)
                   }
                 >
-                  <OpenInNewIcon /> Übersicht der Anlagen
+                  <OpenInNewIcon aria-hidden="true" /> Übersicht der Anlagen
+                  <span className="sr-only">(öffnet in neuem Fenster)</span>
                 </a>
                 zu Ihrem Antrag.
               </p>
@@ -209,13 +210,14 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           werden. Wenn Sie den Antrag dennoch digital einreichen möchten, können
           Sie Ihre Planungsdaten manuell in{" "}
           <a
-            className="font-bold underline"
+            className="text-primary underline"
             href={bundesland.linkOnlinetool}
             target="_blank"
             rel="noreferrer"
             onClick={() => trackReferenzAufOnlinetool()}
           >
-            das offizielle Tool
+            das offizielle Tool{" "}
+            <span className="sr-only">(öffnet in neuem Fenster)</span>
           </a>{" "}
           übertragen.
         </p>

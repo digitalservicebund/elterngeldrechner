@@ -4,7 +4,7 @@ Date: 2026-01-14
 
 ## Status
 
-- Draft by: Dennis
+- Accepted by: Dennis & Jakob
 
 ## History
 

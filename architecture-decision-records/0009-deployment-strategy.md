@@ -6,6 +6,10 @@ Date: 2026-01-14
 
 - Draft by: Dennis
 
+## History
+
+- [Deployment Strategy from 24.09.2025](architecture-decision-records/0007-deployment-strategy.md)
+
 ## Context
 
 The previously implemented change in the deployment strategy worked as expected, reduced
@@ -15,6 +19,10 @@ However, at the end of last year, as part of the contract negotiations with our 
 partners, the discussion around the hosting topic came up once again. In cooperation with the
 legal, platform and strategy team we were able to propose a sensible solution that addresses
 the challenges mentioned in the initial architecture decision record.
+
+The goal of the architecture change is to eradicate the manual steps necessary for a deployment,
+enabling the team to shift the working method more towards trunk-based development and thus
+further increase deployment frequency.
 
 ## Architecture
 

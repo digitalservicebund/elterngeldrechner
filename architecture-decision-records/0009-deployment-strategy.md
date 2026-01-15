@@ -84,7 +84,7 @@ the URI pointing to our bucket.
 - We are now able to roll out releases on each pushed commit and tag without manual steps necessary.
 - We were able to sunset GitHub Pages and replace it with our own platform, reducing our dependency on GitHub.
 - Since we host the files ourselves and do so as well for the images and documents, we could drop generate-link.ts.
-- Since we're now also integrated with the staging CMS, we can, for the first time, test that integration before releasing.
+- Since every commit to main is now automatically reflected in the staging cms, integration testing has been simplified.
 
 ## Consequences
 

@@ -1,7 +1,7 @@
-export type BundeslandName = keyof typeof BUNDESLAENDER_ENTITIES;
-export type Bundesland = (typeof BUNDESLAENDER_ENTITIES)[BundeslandName];
+export type BundeslandName = keyof typeof BUNDESLAND_ANTRAG_DATA;
+export type Bundesland = (typeof BUNDESLAND_ANTRAG_DATA)[BundeslandName];
 
-export const BUNDESLAENDER_ENTITIES = {
+export const BUNDESLAND_ANTRAG_DATA = {
   "Baden-Württemberg": {
     name: "Baden-Württemberg",
     isSupported: false,

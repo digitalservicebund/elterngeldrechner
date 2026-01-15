@@ -1,7 +1,7 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
 import {
-  BUNDESLAENDER_ENTITIES,
+  BUNDESLAND_ANTRAG_DATA,
   BundeslandName,
 } from "@/application/features/pdfAntrag";
 import { RootState } from "@/application/redux";
@@ -62,7 +62,7 @@ const getElternteilNames = createSelector(
 const getBundesland = (state: RootState) => {
   const name = state.stepAllgemeineAngaben.bundesland;
 
-  return name ? BUNDESLAENDER_ENTITIES[name] : null;
+  return name ? BUNDESLAND_ANTRAG_DATA[name] : null;
 };
 
 export const stepAllgemeineAngabenSelectors = {

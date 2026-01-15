@@ -8,7 +8,7 @@ const webServer = process.env.PLAYWRIGHT_SKIP_SERVER
   : {
       command: `npm run serve-e2e -- --port ${APP_PORT}`,
       url: APP_BASE_URL + ":" + APP_PORT,
-      reuseExistingServer: false,
+      reuseExistingServer: !process.env.CI,
       env: { ...process.env, VITE_APP_PRELOAD_STATE: "false" },
     };
 

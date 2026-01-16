@@ -35,7 +35,7 @@ if [[ $confirm != [yY] ]]; then
     exit 0
 fi
 
-git tag "$NEXT"
+git tag "$NEXT" -m "Create tag for release $NEXT"
 git push origin "$NEXT"
 
 echo "Done! Version $NEXT has been tagged and pushed."

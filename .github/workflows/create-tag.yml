@@ -1,0 +1,49 @@
+name: Create Tag for Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          fetch-tags: true
+          token: ${{ secrets.EGR_RELEASE_TOKEN }}
+
+      - name: Get Latest Tag
+        id: get_tag
+        run: |
+          LATEST=$(git tag | grep -E '^[0-9]+$' | sort -n | tail -1)
+
+          if [ -z "$LATEST" ]; then
+            echo "::error::Kein Tag in der Historie gefunden."
+            echo "Der Workflow wird abgebrochen, um einen ungewollten Start von vorne zu verhindern."
+            exit 1
+          fi
+
+          echo "LATEST_TAG=$LATEST" >> $GITHUB_OUTPUT
+
+      - name: Create and Push Tag
+        id: create_tag
+        run: |
+          LATEST=${{ steps.get_tag.outputs.LATEST_TAG }}
+          NEXT=$(( LATEST + 1 ))
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git commit --allow-empty -m "ci: release version $NEXT"
+
+          git tag $NEXT
+          git push origin main --tags
+
+          echo "NEXT_TAG=$NEXT" >> $GITHUB_OUTPUT
+
+      - name: Display Release Tag
+        run: echo "Ein neues Release wurde erstellt mit dem Tag ${{ steps.create_tag.outputs.NEXT_TAG }}"

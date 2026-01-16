@@ -40,3 +40,13 @@ jobs:
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
           PREVIEW_NAME: ${{ inputs.name }}
         run: aws s3 sync dist/ "s3://egr-assets-staging/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+      - name: Add Preview Link to Summary
+        if: success()
+        run: |
+          {
+            echo "### Preview Deployment erfolgreich!"
+            echo ""
+            echo "Die Preview-Version ist jetzt unter folgendem Link erreichbar:"
+            echo "**URL:**[https://assets.elterngeldrechner.dev.tech.digitalservice.dev/preview/${{ inputs.name }}/index.html](https://assets.elterngeldrechner.dev.tech.digitalservice.dev/preview/${{ inputs.name }}/index.html)"
+          } >> $GITHUB_STEP_SUMMARY

@@ -7,6 +7,7 @@ import {
   PAP_2023,
   PAP_2024,
   PAP_2025,
+  PAP_2026,
   type Programmablaufplan,
 } from "./programmablaufplan";
 
@@ -24,6 +25,7 @@ const ABLAUFPLAENE = {
   2023: PAP_2023,
   2024: PAP_2024,
   2025: PAP_2025,
+  2026: PAP_2026,
 } satisfies Record<
   Lohnsteuerjahr,
   { new (eingangsparameter: Eingangsparameter): Programmablaufplan }

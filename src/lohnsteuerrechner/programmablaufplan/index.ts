@@ -8,3 +8,4 @@ export { PAP_2022 } from "./PAP_2022";
 export { PAP_2023 } from "./PAP_2023";
 export { PAP_2024 } from "./PAP_2024";
 export { PAP_2025 } from "./PAP_2025";
+export { PAP_2026 } from "./PAP_2026";

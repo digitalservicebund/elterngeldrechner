@@ -57,7 +57,7 @@ const INITIALE_AUSGANGSPARAMETER: Ausgangsparameter = {
   BK: 0,
   LSTLZZ: 0,
   SOLZLZZ: 0,
-  VKVLZZ: 0,
+  VKVLZZ: 0, // Parameter wurde in 2026 entfernt
 };
 
 // The Eingangsparameter definition was stable until the Programmablaufplan
@@ -81,6 +81,14 @@ export type Eingangsparameter = {
    * eingetragener Faktor mit drei Nachkommastellen
    */
   F: number;
+
+  /**
+   * Merker für die Vorsorgepauschale
+   * 0 = der Arbeitnehmer ist in der Arbeitslosenversicherung
+   * pflichtversichert; es gilt die allgemeine Beitragsbemessungsgrenze
+   * 1 = wenn nicht 0
+   */
+  ALV: 0 | 1;
 
   /**
    * Merker für die Vorsorgepauschale
@@ -133,19 +141,30 @@ export type Eingangsparameter = {
   LZZHINZU: number;
 
   /**
-   * Dem Arbeitgeber mitgeteilte Beiträge des Arbeitnehmers für eine
-   * protected Basiskranken- bzw. Pflege-Pflichtversicherung im Sinne des
-   * § 10 Absatz 1 Nummer 3 EStG in Cent; der Wert ist unabhängig vom
-   * Lohnzahlungszeitraum immer als Monatsbetrag anzugeben
+   * Die als elektronische Lohnsteuerabzugsmerkmale für den
+   * Arbeitgeber nach § 39 Absatz 4 Nummer 4 Buchstabe b EStG
+   * festgestellten oder in der Bescheinigung für den Lohnsteuerabzug
+   * eingetragenen Beiträge zur privaten Basiskranken- und Pflege-
+   * Pflichtversicherung im Sinne des § 10 Absatz 1 Nummer 3 EStG in
+   * Cent; der Wert ist unabhängig vom Lohnzahlungszeitraum immer als
+   * Monatsbetrag anzugeben
    */
   PKPV: number;
+
+  /**
+   * Steuerfreier Arbeitgeberzuschuss für eine private
+   * Krankenversicherung und für eine private Pflege-Pflichtversicherung
+   * in Cent; der Wert ist unabhängig vom Lohnzahlungszeitraum immer
+   * als Monatsbetrag anzugeben
+   */
+  PKPVAGZ: number;
 
   /**
    * 0 = gesetzlich krankenversicherte Arbeitnehmer
    * 1 = ausschließlich privat krankenversicherte Arbeitnehmer ohne
    * Arbeitgeberzuschuss
    * 2 = ausschließlich privat krankenversicherte Arbeitnehmer mit
-   * Arbeitgeberzuschuss
+   * Arbeitgeberzuschuss (Parameter wurde in 2026 entfernt)
    */
   PKV: 0 | 1 | 2;
 
@@ -217,6 +236,14 @@ export type Eingangsparameter = {
    */
   ZKF: number;
 };
+
+// The Ausgangsparameter definition was stable until the Programmablaufplan
+// for 2026 where VKVLZZ was removed. The change initially was not applied
+// to this abstract interface since other years still need the old definition.
+// It'd require implementing a definition per year. Otherwise the compiler
+// is not able to catch bugs like calling the 2026 implementation and
+// expecting the result to contain the removed field. We should
+// consider to do this refactoring in the near future.
 
 export type Ausgangsparameter = {
   /**

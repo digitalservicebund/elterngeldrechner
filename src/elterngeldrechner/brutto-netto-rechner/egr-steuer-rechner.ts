@@ -47,6 +47,7 @@ export function abgabenSteuern(
       finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor
         ? finanzDaten.splittingFaktor
         : 0,
+    ALV: 0,
     KRV:
       erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI
         ? lohnsteuerjahr >= 2025
@@ -58,6 +59,7 @@ export function abgabenSteuern(
     LZZFREIB: 0,
     LZZHINZU: 0,
     PKPV: 0,
+    PKPVAGZ: 0,
     PKV: 0,
     PVA: 0, // Fix nach Richtlinien zum BEEG. Geschwister können nicht betrachtet werden.
     PVS: 0,

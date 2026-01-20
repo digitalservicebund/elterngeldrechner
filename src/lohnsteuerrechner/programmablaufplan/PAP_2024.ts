@@ -1267,6 +1267,7 @@ if (import.meta.vitest) {
       ({ jahreslohn, steuerklasse, jahreslohnsteuer }) => {
         const programm = new PAP_2024({
           AF: 0,
+          ALV: 0,
           F: 0,
           KRV: 0,
           KVZ: 1.7,
@@ -1274,6 +1275,7 @@ if (import.meta.vitest) {
           LZZFREIB: 0,
           LZZHINZU: 0,
           PKPV: 0,
+          PKPVAGZ: 0,
           PKV: 0,
           PVA: 0,
           PVS: 0,
@@ -1577,6 +1579,7 @@ if (import.meta.vitest) {
       ({ jahreslohn, steuerklasse, jahreslohnsteuer }) => {
         const programm = new PAP_2024({
           AF: 0,
+          ALV: 0,
           F: 0,
           KRV: 2,
           KVZ: 0,
@@ -1584,6 +1587,7 @@ if (import.meta.vitest) {
           LZZFREIB: 0,
           LZZHINZU: 0,
           PKPV: 0,
+          PKPVAGZ: 0,
           PKV: 1,
           PVA: 0,
           PVS: 0,

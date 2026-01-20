@@ -777,7 +777,9 @@ export class PAP_2026 extends Programmablaufplan {
         }
       }
     } else {
-      this.VSPKVPV = this.ZRE4VPR * (this.KVSATZAN + this.PVSATZAN);
+      this.VSPKVPV = aufDenCentAbrunden(
+        this.ZRE4VPR * (this.KVSATZAN + this.PVSATZAN),
+      );
     }
 
     this.VSP = aufDenEuroAufrunden(this.VSPKVPV + this.VSPR);
@@ -795,9 +797,9 @@ export class PAP_2026 extends Programmablaufplan {
       this.ZRE4VPR = this.ZRE4VP;
     }
 
-    this.VSPALV = this.AVSATZAN * this.ZRE4VPR;
+    this.VSPALV = aufDenCentAbrunden(this.AVSATZAN * this.ZRE4VPR);
 
-    this.VSPHB = this.VSPALV + this.VSPKVPV;
+    this.VSPHB = aufDenCentAbrunden(this.VSPALV + this.VSPKVPV);
 
     if (this.VSPHB > 1900) {
       this.VSPHB = 1900;

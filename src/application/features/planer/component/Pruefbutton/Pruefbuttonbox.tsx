@@ -132,11 +132,10 @@ export function Pruefbuttonbox({
 
                 <div className="mb-40 text-center">
                   <p className="max-w-none">
-                    Beachten Sie: Eine Übermittlung der Planung in den digitalen
-                    Antrag ist nicht möglich.
-                  </p>
-                  <p>
-                    Möchten Sie den Antrag digital einreichen, finden Sie{" "}
+                    Bitte beachten Sie: Eine automatische Übermittlung Ihrer
+                    Planung in den digitalen Antrag ist derzeit nicht möglich.
+                    Um den Antrag digital einzureichen, übertragen Sie Ihre
+                    Daten bitte manuell in das{" "}
                     <a
                       className="text-primary underline"
                       href={bundesland.linkOnlinetool}
@@ -144,10 +143,10 @@ export function Pruefbuttonbox({
                       rel="noreferrer"
                       onClick={() => trackReferenzAufOnlinetool()}
                     >
-                      hier{" "}
+                      das offizielle Tool
                       <span className="sr-only">(öffnet in neuem Fenster)</span>
                     </a>{" "}
-                    das passende Tool.
+                    .
                   </p>
                 </div>
               </div>
@@ -203,9 +202,8 @@ if (import.meta.vitest) {
   const { vi, describe, it, expect } = import.meta.vitest;
 
   describe("Pruefbuttonbox", async () => {
-    const { INITIAL_STATE, render, screen } = await import(
-      "@/application/test-utils"
-    );
+    const { INITIAL_STATE, render, screen } =
+      await import("@/application/test-utils");
     const { produce } = await import("immer");
     const { Elternteil, Result } = await import("@/monatsplaner");
     const { userEvent } = await import("@testing-library/user-event");
@@ -285,7 +283,9 @@ if (import.meta.vitest) {
             name: "Planung als PDF drucken oder speichern",
           }),
         ).toBeVisible();
-        expect(screen.getByRole("link", { name: /hier/i })).toBeVisible();
+        expect(
+          screen.getByRole("link", { name: /offizielle Tool/i }),
+        ).toBeVisible();
       });
 
       it("shows a button to print and a link to the application page if bundesland is not supported", async () => {

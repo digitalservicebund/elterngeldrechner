@@ -105,10 +105,10 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
               <img
-                    src={`${import.meta.env.BASE_URL}images/elterngeldantrag.png`}
-                    alt=""
-                    className="max-w-[200px]"
-                  />
+                src={`${import.meta.env.BASE_URL}images/elterngeldantrag.png`}
+                alt=""
+                className="max-w-[200px]"
+              />
             </div>
             <div>
               <strong>Gesamter Antrag:</strong>
@@ -164,10 +164,10 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
               <img
-                    src={`${import.meta.env.BASE_URL}images/planungsseite.png`}
-                    alt=""
-                    className="max-w-[200px]"
-                  />
+                src={`${import.meta.env.BASE_URL}images/planungsseite.png`}
+                alt=""
+                className="max-w-[200px]"
+              />
             </div>
             <div>
               <strong>Einzelne Seite:</strong>
@@ -207,8 +207,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 
         <p className="my-40">
           Ihre Daten können nicht direkt in den digitalen Antrag übertragen
-          werden. Wenn Sie den Antrag dennoch digital einreichen möchten, können
-          Sie Ihre Planungsdaten manuell in{" "}
+          werden. Wenn Sie den Antrag digital einreichen möchten, können Sie
+          Ihre Planungsdaten manuell in{" "}
           <a
             className="text-primary underline"
             href={bundesland.linkOnlinetool}

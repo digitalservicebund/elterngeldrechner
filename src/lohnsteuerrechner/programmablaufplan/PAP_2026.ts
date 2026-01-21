@@ -105,11 +105,11 @@ import {
  */
 
 /**
- * Geänderter Programmablaufplan für die maschinelle Berechnung
+ * Programmablaufplan für die maschinelle Berechnung
  * der vom Arbeitslohn einzubehaltenden Lohnsteuer, des Solidaritätszuschlags
- * und der Maßstabsteuer für die Kirchenlohnsteuer für 2025
+ * und der Maßstabsteuer für die Kirchenlohnsteuer für 2026
  *
- * https://www.bundesfinanzministerium.de/Content/DE/Downloads/Steuern/Steuerarten/Lohnsteuer/Programmablaufplan/2024-11-22-PAP-2025_anlage.pdf?__blob=publicationFile&v=2
+ * https://www.bundesfinanzministerium.de/Content/DE/Downloads/Steuern/Steuerarten/Lohnsteuer/Programmablaufplan/2025-11-12-PAP-2026-anlage-1.pdf?__blob=publicationFile&v=2
  */
 export class PAP_2026 extends Programmablaufplan {
   /**
@@ -614,7 +614,8 @@ export class PAP_2026 extends Programmablaufplan {
   }
 
   /**
-   * Ermittelung der festen Tabellenfreibeträten (ohne Vorsorgepauschale).
+   * Ermittlung der festen Tabellenfreibeträge
+   * (ohne Vorsorgepauschale)
    *
    * Bemerkungen:
    * - vereinfacht auf relevante Felder die benötigt werden [siehe Anmerkungen

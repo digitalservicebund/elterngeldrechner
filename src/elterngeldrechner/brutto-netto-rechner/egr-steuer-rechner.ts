@@ -47,7 +47,7 @@ export function abgabenSteuern(
       finanzDaten.steuerklasse === Steuerklasse.IVMitFaktor
         ? finanzDaten.splittingFaktor
         : 0,
-    ALV: 0,
+    ALV: erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI ? 0 : 1,
     KRV:
       erwerbsArt === ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI
         ? lohnsteuerjahr >= 2025

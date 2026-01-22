@@ -105,7 +105,6 @@ if (import.meta.vitest) {
     const {
       ElternGeldArt,
       KassenArt,
-      KinderFreiBetrag,
       PLANUNG_ANZAHL_MONATE,
       RentenArt,
       Steuerklasse,
@@ -135,7 +134,7 @@ if (import.meta.vitest) {
           ...ANY_FINANZDATEN,
           bruttoEinkommen: new Einkommen(2800),
           steuerKlasse: Steuerklasse.I,
-          kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+          kinderFreiBetrag: 1,
           erwerbsZeitraumLebensMonatList: [
             {
               vonLebensMonat: 1,
@@ -193,7 +192,7 @@ if (import.meta.vitest) {
           ...ANY_FINANZDATEN,
           bruttoEinkommen: new Einkommen(2100),
           steuerKlasse: Steuerklasse.IV,
-          kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+          kinderFreiBetrag: 1,
           erwerbsZeitraumLebensMonatList: [],
         };
 
@@ -242,7 +241,7 @@ if (import.meta.vitest) {
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
       steuerklasse: Steuerklasse.I,
-      kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+      kinderFreiBetrag: 0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
       splittingFaktor: 1.0,

@@ -3,7 +3,6 @@ import { Einkommen } from "./einkommen";
 import { ElternGeldArt } from "./eltern-geld-art";
 import { ErwerbsZeitraumLebensMonat } from "./erwerbs-zeitraum-lebens-monat";
 import { KassenArt } from "./kassen-art";
-import { KinderFreiBetrag } from "./kinder-frei-betrag";
 import { MischEkTaetigkeit } from "./misch-ek-taetigkeit";
 import { PLANUNG_ANZAHL_MONATE, PlanungsDaten } from "./planungs-daten";
 import { RentenArt } from "./renten-art";
@@ -12,7 +11,7 @@ import { RentenArt } from "./renten-art";
 export type FinanzDaten = {
   readonly bruttoEinkommen: Einkommen;
   readonly istKirchensteuerpflichtig?: boolean;
-  kinderFreiBetrag: KinderFreiBetrag;
+  kinderFreiBetrag: number;
   steuerklasse: Steuerklasse;
   kassenArt: KassenArt;
   rentenVersicherung: RentenArt;

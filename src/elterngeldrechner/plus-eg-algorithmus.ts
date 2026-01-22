@@ -687,18 +687,11 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("ElterngeldPlus Algorithmus", async () => {
-    const {
-      Einkommen,
-      ErwerbsTaetigkeit,
-      KassenArt,
-      KinderFreiBetrag,
-      RentenArt,
-      Steuerklasse,
-    } = await import("./model");
+    const { Einkommen, ErwerbsTaetigkeit, KassenArt, RentenArt, Steuerklasse } =
+      await import("./model");
 
-    const { elterngeldZwischenergebnis } = await import(
-      "./eg-zwischen-ergebnis-algorithmus"
-    );
+    const { elterngeldZwischenergebnis } =
+      await import("./eg-zwischen-ergebnis-algorithmus");
 
     describe("plus-eg-algorithmus", () => {
       describe("should calculate ElternGeldPlusErgebnis", () => {
@@ -723,7 +716,7 @@ if (import.meta.vitest) {
             ...ANY_FINANZDATEN,
             bruttoEinkommen: new Einkommen(2800),
             steuerklasse: Steuerklasse.I,
-            kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+            kinderFreiBetrag: 1,
             erwerbsZeitraumLebensMonatList: [
               {
                 vonLebensMonat: 1,
@@ -839,7 +832,7 @@ if (import.meta.vitest) {
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
       steuerklasse: Steuerklasse.I,
-      kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+      kinderFreiBetrag: 0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
       splittingFaktor: 1.0,

@@ -8,9 +8,7 @@ import {
   ErwerbsArt,
   FinanzDaten,
   Geburtstag,
-  KinderFreiBetrag,
   Steuerklasse,
-  kinderFreiBetragToNumber,
 } from "@/elterngeldrechner/model";
 import {
   type Eingangsparameter,
@@ -66,12 +64,15 @@ export function abgabenSteuern(
     RE4: steuerpflichtigesEinkommen * 100,
     STKL: STEUERKLASSE_TO_STKL_EINGANGSPARAMETER[finanzDaten.steuerklasse],
     VBEZ: 0,
-    ZKF: kinderFreiBetragToNumber(finanzDaten.kinderFreiBetrag),
+    ZKF: finanzDaten.kinderFreiBetrag,
   };
 
-  const { BK, LSTLZZ, SOLZLZZ } = berechneLohnsteuer(
+  const { BK, SOLZLZZ } = berechneLohnsteuer(lohnsteuerjahr, eingangsparameter);
+
+  const eingangsparameterOhneZKF = { ...eingangsparameter, ZKF: 0 };
+  const { LSTLZZ } = berechneLohnsteuer(
     lohnsteuerjahr,
-    eingangsparameter,
+    eingangsparameterOhneZKF,
   );
 
   return {
@@ -210,8 +211,8 @@ if (import.meta.vitest) {
         abgabenSteuern(
           {
             ...ANY_FINANZDATEN,
-            steuerklasse: Steuerklasse.V,
-            kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+            steuerklasse: Steuerklasse.III,
+            kinderFreiBetrag: 1,
           },
           ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI,
           1,
@@ -219,9 +220,13 @@ if (import.meta.vitest) {
         );
 
         // then
-        expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
+        expect(berechneLohnsteuer).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({ ZKF: 1 }),
+        );
+        expect(berechneLohnsteuer).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({ ZKF: 0 }),
         );
       });
     });
@@ -243,7 +248,7 @@ if (import.meta.vitest) {
     const ANY_FINANZDATEN = {
       bruttoEinkommen: new Einkommen(0),
       steuerklasse: Steuerklasse.I,
-      kinderFreiBetrag: KinderFreiBetrag.ZKF0,
+      kinderFreiBetrag: 0,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
       splittingFaktor: 1.0,

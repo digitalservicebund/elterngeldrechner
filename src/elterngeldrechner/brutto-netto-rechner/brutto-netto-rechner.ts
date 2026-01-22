@@ -245,16 +245,14 @@ if (import.meta.vitest) {
 
   describe("brutto-netto-rechner", async () => {
     const { abzuege } = await import("./brutto-netto-rechner");
-    const { KinderFreiBetrag, Geburtstag } = await import(
-      "@/elterngeldrechner/model"
-    );
+    const { Geburtstag } = await import("@/elterngeldrechner/model");
 
     it("should calculate test from TestErweiterterAlgorithmus.java", () => {
       // given
       const finanzDaten = {
         bruttoEinkommen: new Einkommen(0),
         steuerklasse: Steuerklasse.IV,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        kinderFreiBetrag: 1,
         kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
         rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
         splittingFaktor: 1.0,

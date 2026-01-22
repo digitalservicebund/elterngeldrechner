@@ -5,7 +5,6 @@ import {
   ErwerbsArt,
   Geburtstag,
   KassenArt,
-  KinderFreiBetrag,
   PLANUNG_ANZAHL_MONATE,
   RentenArt,
   Steuerklasse,
@@ -47,9 +46,9 @@ describe("egr-alte-testfaelle-routine3-excel-sheet", () => {
     });
 
     it("should read kinderFreiBetrag", () => {
-      expect(sheet.kinderFreiBetrag(0)).toBe(KinderFreiBetrag.ZKF3);
-      expect(sheet.kinderFreiBetrag(1)).toBe(KinderFreiBetrag.ZKF1);
-      expect(sheet.kinderFreiBetrag(7)).toBe(KinderFreiBetrag.ZKF2);
+      expect(sheet.kinderFreiBetrag(0)).toBe(3);
+      expect(sheet.kinderFreiBetrag(1)).toBe(1);
+      expect(sheet.kinderFreiBetrag(7)).toBe(2);
     });
 
     it("should read krankenVersicherung", () => {

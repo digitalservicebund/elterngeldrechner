@@ -54,11 +54,10 @@ if (import.meta.vitest) {
 
   describe("Einkommen Page", async () => {
     const { userEvent } = await import("@testing-library/user-event");
-    const { INITIAL_STATE, render, screen, within } = await import(
-      "@/application/test-utils"
-    );
+    const { INITIAL_STATE, render, screen, within } =
+      await import("@/application/test-utils");
 
-    const { KassenArt, KinderFreiBetrag, RentenArt, Steuerklasse } =
+    const { KassenArt, RentenArt, Steuerklasse } =
       await import("@/elterngeldrechner");
 
     const { produce } = await import("immer");
@@ -184,14 +183,6 @@ if (import.meta.vitest) {
           "4",
         );
 
-        // Field Kinderfreibeträge
-        await userEvent.selectOptions(
-          within(elternteil1Section).getByLabelText(
-            /wie viele Kinderfreibeträge/i,
-          ),
-          "4,0",
-        );
-
         // Field Kirchensteuer
         const kirchensteuerSection = within(elternteil1Section)
           .getByText(/kirchensteuerpflichtig/i, { selector: "legend" })
@@ -222,7 +213,6 @@ if (import.meta.vitest) {
             },
             steuerklasse: Steuerklasse.IV,
             splittingFaktor: null,
-            kinderFreiBetrag: KinderFreiBetrag.ZKF4,
             zahlenSieKirchenSteuer: YesNo.YES,
             kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
           },
@@ -367,14 +357,6 @@ if (import.meta.vitest) {
           "4",
         );
 
-        // Field Kinderfreibeträge
-        await userEvent.selectOptions(
-          within(elternteil1Section).getByLabelText(
-            /wie viele Kinderfreibeträge/i,
-          ),
-          "4,0",
-        );
-
         const btnElternteil1 = within(elternteil1Section).getByRole("button", {
           name: "eine Tätigkeit hinzufügen",
         });
@@ -422,7 +404,6 @@ if (import.meta.vitest) {
           ET1: {
             zahlenSieKirchenSteuer: YesNo.YES,
             kassenArt: null,
-            kinderFreiBetrag: KinderFreiBetrag.ZKF4,
             steuerklasse: Steuerklasse.IV,
             taetigkeitenNichtSelbstaendigUndSelbstaendig: [
               {

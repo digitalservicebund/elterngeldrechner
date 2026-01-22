@@ -4,7 +4,7 @@ import {
   YesNo,
 } from "@/application/features/abfrageteil/state";
 import { BundeslandName } from "@/application/features/pdfAntrag";
-import { KassenArt, KinderFreiBetrag, Steuerklasse } from "@/elterngeldrechner";
+import { KassenArt, Steuerklasse } from "@/elterngeldrechner";
 
 export const preloadedState = {
   stepAllgemeineAngaben: {
@@ -74,7 +74,6 @@ export const preloadedState = {
       },
       steuerklasse: Steuerklasse.III,
       splittingFaktor: null,
-      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
       gewinnSelbstaendig: {
         type: "average" as const,
         average: null,
@@ -140,7 +139,7 @@ export const preloadedState = {
       },
       steuerklasse: Steuerklasse.I,
       splittingFaktor: null,
-      kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+      kinderFreiBetrag: 1,
       gewinnSelbstaendig: {
         type: "average" as const,
         average: null,

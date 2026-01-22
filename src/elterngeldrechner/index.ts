@@ -9,7 +9,6 @@ export {
   type FinanzDaten,
   Geburtstag,
   KassenArt,
-  KinderFreiBetrag,
   MAX_EINKOMMEN,
   type MischEkTaetigkeit,
   MutterschaftsLeistung,

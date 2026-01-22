@@ -1,10 +1,6 @@
 import xlsx from "node-xlsx";
 import { erwerbsArtOf } from "./fit-excel-sheet-util";
-import {
-  ErwerbsTaetigkeit,
-  Steuerklasse,
-  kinderFreiBetragOfNumber,
-} from "@/elterngeldrechner/model";
+import { ErwerbsTaetigkeit, Steuerklasse } from "@/elterngeldrechner/model";
 
 type Taetigkeit = 0 | 1 | 2;
 export const TAETIGKEITEN: Taetigkeit[] = [0, 1, 2];
@@ -156,7 +152,7 @@ export class EgrMischeinkommenExcelSheet {
     const kinderFreiBetragNumber = this.sheet.data[KINDER_FREI_BETRAG_OFFSET]?.[
       columnOf(testCaseIndex)
     ] as number;
-    const kinderFreiBetrag = kinderFreiBetragOfNumber(kinderFreiBetragNumber);
+    const kinderFreiBetrag = kinderFreiBetragNumber;
     if (kinderFreiBetrag === undefined) {
       throw new Error(
         `kinderFreiBetrag number ${kinderFreiBetragNumber} unknown`,

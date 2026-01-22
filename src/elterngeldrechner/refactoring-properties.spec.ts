@@ -30,6 +30,7 @@ import {
   PlanungsDaten,
   RentenArt,
   Steuerklasse,
+  kinderFreiBetragOfNumber,
 } from "./model";
 import {
   Big,
@@ -271,7 +272,8 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
   const finanzdaten = new OriginalFinanzDaten();
   finanzdaten.bruttoEinkommen = new OriginalEinkommen(data.bruttoeinkommen);
   finanzdaten.zahlenSieKirchenSteuer = yesNoFrom(data.zahlenSieKirchensteuer);
-  finanzdaten.kinderFreiBetrag = data.kinderfreibetrag;
+  finanzdaten.kinderFreiBetrag =
+    kinderFreiBetragOfNumber(data.kinderfreibetrag) ?? KinderFreiBetrag.ZKF0;
   finanzdaten.steuerKlasse =
     STEUERKLASSE_TO_ORIGINAL_STEUERKLASSE[data.steuerklasse];
   finanzdaten.kassenArt = data.kassenart;
@@ -459,7 +461,7 @@ function arbitraryFinanzdatenRaw(): Arbitrary<FinanzdatenRaw> {
 type FinanzdatenRaw = {
   bruttoeinkommen: number;
   zahlenSieKirchensteuer: boolean;
-  kinderfreibetrag: KinderFreiBetrag;
+  kinderfreibetrag: number;
   steuerklasse: Steuerklasse;
   kassenart: KassenArt;
   rentenversicherung: RentenArt;
@@ -567,8 +569,8 @@ function arbitraryElterngeldart(): Arbitrary<ElternGeldArt> {
   return arbitraryConstantFrom(...Object.values(ElternGeldArt));
 }
 
-function arbitraryKinderfreibetrag(): Arbitrary<KinderFreiBetrag> {
-  return arbitraryConstantFrom(...Object.values(KinderFreiBetrag));
+function arbitraryKinderfreibetrag(): Arbitrary<number> {
+  return arbitraryInteger({ min: 0, max: 10 }).map((n) => n * 0.5);
 }
 
 function arbitrarySteuerklasse(): Arbitrary<Steuerklasse> {

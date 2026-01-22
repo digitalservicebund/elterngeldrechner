@@ -21,11 +21,6 @@ export {
 export type { FinanzDatenBerechnet } from "./finanz-daten";
 export { KassenArt } from "./kassen-art";
 export type { Kind } from "./kind";
-export {
-  KinderFreiBetrag,
-  kinderFreiBetragOfNumber,
-  kinderFreiBetragToNumber,
-} from "./kinder-frei-betrag";
 export type { MischEkZwischenErgebnis } from "./misch-ek-zwischen-ergebnis";
 export {
   MutterschaftsLeistung,

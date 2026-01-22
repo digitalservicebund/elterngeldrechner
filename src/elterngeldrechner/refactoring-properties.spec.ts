@@ -23,14 +23,12 @@ import {
   Geburtstag,
   KassenArt,
   type Kind,
-  KinderFreiBetrag,
   MischEkTaetigkeit,
   MutterschaftsLeistung,
   PersoenlicheDaten,
   PlanungsDaten,
   RentenArt,
   Steuerklasse,
-  kinderFreiBetragOfNumber,
 } from "./model";
 import {
   Big,
@@ -287,6 +285,51 @@ function originalFinanzDatenFrom(data: FinanzdatenRaw): OriginalFinanzDaten {
       originalErwerbsZeitraumLebensMonatFrom,
     );
   return finanzdaten;
+}
+
+enum KinderFreiBetrag {
+  ZKF0 = "0",
+  ZKF0_5 = "0,5",
+  ZKF1 = "1",
+  ZKF1_5 = "1,5",
+  ZKF2 = "2",
+  ZKF2_5 = "2,5",
+  ZKF3 = "3",
+  ZKF3_5 = "3,5",
+  ZKF4 = "4",
+  ZKF4_5 = "4,5",
+  ZKF5 = "5",
+}
+
+function kinderFreiBetragOfNumber(
+  kinderFreiBetrag: number,
+): KinderFreiBetrag | undefined {
+  switch (kinderFreiBetrag) {
+    case 0:
+      return KinderFreiBetrag.ZKF0;
+    case 0.5:
+      return KinderFreiBetrag.ZKF0_5;
+    case 1:
+      return KinderFreiBetrag.ZKF1;
+    case 1.5:
+      return KinderFreiBetrag.ZKF1_5;
+    case 2:
+      return KinderFreiBetrag.ZKF2;
+    case 2.5:
+      return KinderFreiBetrag.ZKF2_5;
+    case 3:
+      return KinderFreiBetrag.ZKF3;
+    case 3.5:
+      return KinderFreiBetrag.ZKF3_5;
+    case 4:
+      return KinderFreiBetrag.ZKF4;
+    case 4.5:
+      return KinderFreiBetrag.ZKF4_5;
+    case 5:
+      return KinderFreiBetrag.ZKF5;
+    default:
+      return undefined;
+  }
 }
 
 const STEUERKLASSE_TO_ORIGINAL_STEUERKLASSE: Record<

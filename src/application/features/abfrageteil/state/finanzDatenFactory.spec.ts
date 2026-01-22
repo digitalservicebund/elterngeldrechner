@@ -1,5 +1,6 @@
 import { produce } from "immer";
 import { describe, expect, it } from "vitest";
+import { YesNo } from "./YesNo";
 import { finanzDatenOfUi } from "./finanzDatenFactory";
 import {
   AverageOrMonthlyState,
@@ -13,12 +14,10 @@ import {
   ErwerbsTaetigkeit,
   type FinanzDaten,
   KassenArt,
-  KinderFreiBetrag,
   type MischEkTaetigkeit,
   RentenArt,
   Steuerklasse,
 } from "@/elterngeldrechner";
-import { YesNo } from "original-rechner";
 
 describe("finanzDatenFactory", () => {
   it("should create FinanzDaten for ET2 with bruttoEinkommenZeitraumList", () => {
@@ -560,37 +559,6 @@ describe("finanzDatenFactory", () => {
   );
 
   describe.each([
-    [null, KinderFreiBetrag.ZKF0],
-    [KinderFreiBetrag.ZKF0, KinderFreiBetrag.ZKF0],
-    [KinderFreiBetrag.ZKF0_5, KinderFreiBetrag.ZKF0_5],
-    [KinderFreiBetrag.ZKF1, KinderFreiBetrag.ZKF1],
-    [KinderFreiBetrag.ZKF1_5, KinderFreiBetrag.ZKF1_5],
-    [KinderFreiBetrag.ZKF2, KinderFreiBetrag.ZKF2],
-    [KinderFreiBetrag.ZKF2_5, KinderFreiBetrag.ZKF2_5],
-    [KinderFreiBetrag.ZKF3, KinderFreiBetrag.ZKF3],
-    [KinderFreiBetrag.ZKF3_5, KinderFreiBetrag.ZKF3_5],
-    [KinderFreiBetrag.ZKF4, KinderFreiBetrag.ZKF4],
-    [KinderFreiBetrag.ZKF4_5, KinderFreiBetrag.ZKF4_5],
-    [KinderFreiBetrag.ZKF5, KinderFreiBetrag.ZKF5],
-  ])(
-    "when einkommen KinderFreiBetrag is %s, then finanzDaten KinderFreiBetrag are %s",
-    (
-      einkommenKinderFreiBetrag: KinderFreiBetrag | null,
-      finanzDatenKinderFreiBetrag: KinderFreiBetrag,
-    ) => {
-      it("should create FinanzDaten for StepEinkommenElternteil", () => {
-        const state = produce(INITIAL_STATE, (draft) => {
-          draft.stepEinkommen.ET1.kinderFreiBetrag = einkommenKinderFreiBetrag;
-        });
-
-        const finanzDaten = finanzDatenOfUi(state, "ET1", []);
-
-        expect(finanzDaten.kinderFreiBetrag).toBe(finanzDatenKinderFreiBetrag);
-      });
-    },
-  );
-
-  describe.each([
     [null, RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG],
     [
       RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
@@ -671,7 +639,7 @@ describe("finanzDatenFactory", () => {
           initialAverageOrMonthlyStateNichtSelbstaendig,
         steuerklasse: null,
         splittingFaktor: null,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        kinderFreiBetrag: 0,
         gewinnSelbstaendig: initialAverageOrMonthlyStateNichtSelbstaendig,
         rentenVersicherung: null,
         zahlenSieKirchenSteuer: null,
@@ -686,7 +654,7 @@ describe("finanzDatenFactory", () => {
       {
         bruttoEinkommen: new Einkommen(0),
         istKirchensteuerpflichtig: false,
-        kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+        kinderFreiBetrag: 0,
         steuerklasse: Steuerklasse.I,
         kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
         rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

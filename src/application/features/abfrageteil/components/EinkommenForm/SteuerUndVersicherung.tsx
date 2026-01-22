@@ -17,12 +17,7 @@ import {
   stepErwerbstaetigkeitElternteilSelectors,
 } from "@/application/features/abfrageteil/state";
 import { useAppSelector } from "@/application/redux/hooks";
-import {
-  KassenArt,
-  KinderFreiBetrag,
-  RentenArt,
-  Steuerklasse,
-} from "@/elterngeldrechner";
+import { KassenArt, RentenArt, Steuerklasse } from "@/elterngeldrechner";
 
 type Props = {
   readonly elternteil: ElternteilType;
@@ -37,20 +32,6 @@ const steuerklasseOptions: SelectOption<Steuerklasse | "">[] = [
   { value: Steuerklasse.III, label: "3" },
   { value: Steuerklasse.IV, label: "4" },
   { value: Steuerklasse.V, label: "5" },
-];
-
-const kinderFreiBetragOptions: SelectOption<KinderFreiBetrag | "">[] = [
-  { value: KinderFreiBetrag.ZKF0, label: "0" },
-  { value: KinderFreiBetrag.ZKF0_5, label: "0,5" },
-  { value: KinderFreiBetrag.ZKF1, label: "1,0" },
-  { value: KinderFreiBetrag.ZKF1_5, label: "1,5" },
-  { value: KinderFreiBetrag.ZKF2, label: "2,0" },
-  { value: KinderFreiBetrag.ZKF2_5, label: "2,5" },
-  { value: KinderFreiBetrag.ZKF3, label: "3,0" },
-  { value: KinderFreiBetrag.ZKF3_5, label: "3,5" },
-  { value: KinderFreiBetrag.ZKF4, label: "4,0" },
-  { value: KinderFreiBetrag.ZKF4_5, label: "4,5" },
-  { value: KinderFreiBetrag.ZKF5, label: "5,0" },
 ];
 
 const kassenArtOptions: CustomRadioGroupOption<KassenArt>[] = [
@@ -86,10 +67,6 @@ export function SteuerUndVersicherung({
     formState: { errors },
   } = useFormContext<StepEinkommenState>();
 
-  const numberOfGeschwisterKinder = useAppSelector(
-    (state) => state.stepNachwuchs.geschwisterkinder.length,
-  );
-
   const isOnlySelbstaendig = useAppSelector((state) =>
     stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
       state.stepErwerbstaetigkeit[elternteil],
@@ -120,33 +97,6 @@ export function SteuerUndVersicherung({
           options={steuerklasseOptions}
           required
           slotBetweenLabelAndSelect={<InfoZurSteuerklasse />}
-        />
-      )}
-
-      {!isOnlySelbstaendig && numberOfGeschwisterKinder > 0 && (
-        <CustomSelect
-          autoWidth
-          register={register}
-          registerOptions={{
-            required: "Eine Option muss ausgewählt sein",
-          }}
-          name={`${elternteil}.kinderFreiBetrag`}
-          label={
-            antragstellende === "FuerBeide" ? (
-              <>
-                Wie viele Kinderfreibeträge sind aus der Lohn- und
-                Gehaltsbescheinigung von {elternteilName} ersichtlich?
-              </>
-            ) : (
-              <>
-                Wie viele Kinderfreibeträge sind aus Ihrer Lohn- und
-                Gehaltsbescheinigung ersichtlich?
-              </>
-            )
-          }
-          errors={errors}
-          options={kinderFreiBetragOptions}
-          required
         />
       )}
 

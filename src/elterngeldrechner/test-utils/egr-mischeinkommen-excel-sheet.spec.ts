@@ -3,7 +3,6 @@ import { EgrMischeinkommenExcelSheet } from "./egr-mischeinkommen-excel-sheet";
 import {
   ErwerbsArt,
   ErwerbsTaetigkeit,
-  KinderFreiBetrag,
   Steuerklasse,
 } from "@/elterngeldrechner/model";
 
@@ -122,8 +121,8 @@ describe("egr-mischeinkommen-excel-sheet", () => {
     });
 
     it("should read kinderFreiBetrag", () => {
-      expect(sheet.kinderFreiBetrag(0)).toBe(KinderFreiBetrag.ZKF1);
-      expect(sheet.kinderFreiBetrag(1)).toBe(KinderFreiBetrag.ZKF3);
+      expect(sheet.kinderFreiBetrag(0)).toBe(1);
+      expect(sheet.kinderFreiBetrag(1)).toBe(3);
     });
 
     it("should read zahlenSieKirchenSteuer", () => {

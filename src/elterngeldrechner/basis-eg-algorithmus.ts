@@ -297,7 +297,7 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("basis-eg-algorithmus", async () => {
-    const { Einkommen, KinderFreiBetrag } = await import("./model");
+    const { Einkommen } = await import("./model");
 
     describe("should calculate MischNettoUndBasiselterngeld", () => {
       it("TESTFALL NO. 1", () => {
@@ -313,7 +313,7 @@ if (import.meta.vitest) {
         const finanzDaten: FinanzDaten = {
           istKirchensteuerpflichtig: false,
           bruttoEinkommen: new Einkommen(0),
-          kinderFreiBetrag: KinderFreiBetrag.ZKF1,
+          kinderFreiBetrag: 1,
           steuerklasse: Steuerklasse.V,
           kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,

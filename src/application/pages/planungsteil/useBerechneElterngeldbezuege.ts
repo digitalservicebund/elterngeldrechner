@@ -17,8 +17,15 @@ import {
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   type PlanungsDaten,
+  Steuerklasse,
   calculateElternGeld,
 } from "@/elterngeldrechner";
+import {
+  ErwerbsArt,
+  KassenArt,
+  Kind,
+  RentenArt,
+} from "@/elterngeldrechner/model";
 import {
   type Auswahloption,
   Elternteil,
@@ -91,11 +98,42 @@ function buildParameterForCalculation(
   persoenlicheDaten.hasEtNachGeburt = monateMitErwerbstaetigkeit.length > 0;
   finanzdaten.erwerbsZeitraumLebensMonatList = monateMitErwerbstaetigkeit;
 
+  if (
+    persoenlicheDaten.geschwister &&
+    persoenlicheDaten.geschwister.length > 0
+  ) {
+    finanzdaten.kinderFreiBetrag = berechneKinderfreibetrag(
+      persoenlicheDaten.geschwister,
+      finanzdaten.steuerklasse,
+    );
+  }
+
   return {
     persoenlicheDaten,
     finanzDaten: finanzdaten,
     planungsDaten: planungsdaten,
   };
+}
+
+function berechneKinderfreibetrag(
+  geschwister: Kind[],
+  steuerklasse: Steuerklasse,
+) {
+  const anzahlGeschwister = geschwister.length;
+  switch (steuerklasse) {
+    case Steuerklasse.I:
+    case Steuerklasse.II:
+    case Steuerklasse.IV:
+    case Steuerklasse.IVMitFaktor:
+      return anzahlGeschwister * 0.5;
+    case Steuerklasse.III:
+      return anzahlGeschwister;
+    case Steuerklasse.V:
+    case Steuerklasse.VI:
+      return 0;
+    default:
+      return 0;
+  }
 }
 
 function transformMonateForFinanzdaten(
@@ -189,8 +227,6 @@ if (import.meta.vitest) {
 
   describe("errechnete Elterngeldbezüge selector", async () => {
     const { renderHook } = await import("@/application/test-utils");
-    const { ErwerbsArt, KassenArt, Steuerklasse, RentenArt, KinderFreiBetrag } =
-      await import("@/elterngeldrechner");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
     beforeEach(async () => {
@@ -352,23 +388,6 @@ if (import.meta.vitest) {
     });
 
     const ANY_ELTERNTEIL = Elternteil.Eins;
-    const ANY_MONATE = {};
-    const ANY_PERSOENLICHE_DATEN = {
-      anzahlKuenftigerKinder: 1,
-      geburtstagDesKindes: new Geburtstag(Date.now()),
-      etVorGeburt: ErwerbsArt.NEIN,
-    };
-
-    const ANY_FINANZDATEN = {
-      bruttoEinkommen: new Einkommen(0),
-      steuerklasse: Steuerklasse.I,
-      kinderFreiBetrag: KinderFreiBetrag.ZKF0,
-      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-      rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-      splittingFaktor: 1.0,
-      mischEinkommenTaetigkeiten: [],
-      erwerbsZeitraumLebensMonatList: [],
-    };
 
     function monat(
       gewaehlteOption?: Auswahloption,
@@ -443,4 +462,77 @@ if (import.meta.vitest) {
       };
     }
   });
+
+  describe("buildParameterForCalculation", () => {
+    let mockStaticParameter: StaticCalculationParameterForElternteil;
+
+    beforeEach(() => {
+      mockStaticParameter = {
+        persoenlicheDaten: {
+          ...ANY_PERSOENLICHE_DATEN,
+          geschwister: [{ geburtstag: ANY_GEBURTSTAG }],
+        },
+        finanzdaten: ANY_FINANZDATEN,
+      };
+    });
+
+    it("berechnet den Kinderfreibetrag korrekt auf 0.5, wenn ein Geschwisterkind vorhanden ist und Steuerklasse I gewählt", () => {
+      const result = buildParameterForCalculation(
+        mockStaticParameter,
+        ANY_MONATE,
+      );
+
+      expect(result.finanzDaten.kinderFreiBetrag).toBe(0.5);
+    });
+
+    it("berechnet den Kinderfreibetrag korrekt auf 1, wenn ein Geschwisterkind vorhanden ist und Steuerklasse III gewählt", () => {
+      const specificMockStaticParameter = {
+        ...mockStaticParameter,
+        finanzdaten: {
+          ...ANY_FINANZDATEN,
+          steuerklasse: Steuerklasse.III,
+        },
+      };
+      const result = buildParameterForCalculation(
+        specificMockStaticParameter,
+        ANY_MONATE,
+      );
+
+      expect(result.finanzDaten.kinderFreiBetrag).toBe(1);
+    });
+
+    it("berechnet den Kinderfreibetrag korrekt auf 0, wenn ein Geschwisterkind vorhanden ist und Steuerklasse V gewählt", () => {
+      const specificMockStaticParameter = {
+        ...mockStaticParameter,
+        finanzdaten: {
+          ...ANY_FINANZDATEN,
+          steuerklasse: Steuerklasse.V,
+        },
+      };
+      const result = buildParameterForCalculation(
+        specificMockStaticParameter,
+        ANY_MONATE,
+      );
+
+      expect(result.finanzDaten.kinderFreiBetrag).toBe(0);
+    });
+  });
+
+  const ANY_MONATE = {};
+  const ANY_PERSOENLICHE_DATEN = {
+    anzahlKuenftigerKinder: 1,
+    geburtstagDesKindes: new Geburtstag(Date.now()),
+    etVorGeburt: ErwerbsArt.NEIN,
+  };
+  const ANY_GEBURTSTAG = new Geburtstag(Date.now());
+  const ANY_FINANZDATEN = {
+    bruttoEinkommen: new Einkommen(0),
+    steuerklasse: Steuerklasse.I,
+    kinderFreiBetrag: 0,
+    kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+    rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+    splittingFaktor: 1.0,
+    mischEinkommenTaetigkeiten: [],
+    erwerbsZeitraumLebensMonatList: [],
+  };
 }

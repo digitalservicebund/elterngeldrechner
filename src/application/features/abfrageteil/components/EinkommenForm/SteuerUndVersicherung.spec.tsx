@@ -9,7 +9,7 @@ import {
   screen,
   within,
 } from "@/application/test-utils";
-import { KinderFreiBetrag, RentenArt, Steuerklasse } from "@/elterngeldrechner";
+import { RentenArt, Steuerklasse } from "@/elterngeldrechner";
 
 describe("Steuer und Versicherung", () => {
   const getElternteil1Section = () => screen.getByLabelText("Elternteil 1");
@@ -39,9 +39,6 @@ describe("Steuer und Versicherung", () => {
 
     const steuerklasse =
       within(elternteil1Section).getByText(/welche Steuerklasse/i);
-    const kinderfreibetraege = within(elternteil1Section).getByText(
-      /^wie viele Kinderfreibeträge/i,
-    );
     const kirchensteuer = within(elternteil1Section).getByText(
       /kirchensteuerpflichtig/i,
     );
@@ -50,41 +47,8 @@ describe("Steuer und Versicherung", () => {
     );
 
     expect(steuerklasse).toBeInTheDocument();
-    expect(kinderfreibetraege).toBeInTheDocument();
     expect(kirchensteuer).toBeInTheDocument();
     expect(krankenversicherung).toBeInTheDocument();
-  });
-  describe("Kinderfreibeträge", () => {
-    const stateWithNoGeschwisterKind = produce(
-      stateFromPreviousSteps,
-      (draft) => {
-        draft.stepNachwuchs.geschwisterkinder = [];
-      },
-    );
-
-    it("should show Kinderfreibeitrag if there is at least one Geschwisterkind", () => {
-      render(<EinkommenPage />, { preloadedState: stateFromPreviousSteps });
-      const elternteil1Section = getElternteil1Section();
-
-      expect(
-        within(elternteil1Section).getByRole("combobox", {
-          name: /^wie viele Kinderfreibeträge/i,
-        }),
-      ).toBeInTheDocument();
-    });
-
-    it("should not show Kinderfreibeitrag if there is no Geschwisterkind", () => {
-      render(<EinkommenPage />, {
-        preloadedState: stateWithNoGeschwisterKind,
-      });
-      const elternteil1Section = getElternteil1Section();
-
-      const kinderfreibetraege = within(elternteil1Section).queryByText(
-        /^wie viele Kinderfreibeträge/i,
-      );
-
-      expect(kinderfreibetraege).not.toBeInTheDocument();
-    });
   });
 
   describe("Validation of form", () => {
@@ -92,7 +56,6 @@ describe("Steuer und Versicherung", () => {
       stateFromPreviousSteps,
       (draft) => {
         draft.stepEinkommen.ET1.steuerklasse = Steuerklasse.I;
-        draft.stepEinkommen.ET1.kinderFreiBetrag = KinderFreiBetrag.ZKF1;
         draft.stepEinkommen.ET1.rentenVersicherung =
           RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG;
       },
@@ -123,36 +86,6 @@ describe("Steuer und Versicherung", () => {
       expect(error).toBeInTheDocument();
 
       await userEvent.selectOptions(inputField, "1");
-      const error2 = within(elternteil1Section).queryByText(
-        "Eine Option muss ausgewählt sein",
-      );
-      expect(error2).not.toBeInTheDocument();
-    });
-
-    it("should only accept if Kinderfreibeträge is selected", async () => {
-      const formStateWithoutKinderfreibetraege = produce(
-        validFormStateNurErwerbstaetig,
-        (draft) => {
-          draft.stepEinkommen.ET1.kinderFreiBetrag = null;
-        },
-      );
-
-      render(<EinkommenPage />, {
-        preloadedState: formStateWithoutKinderfreibetraege,
-      });
-      const elternteil1Section = getElternteil1Section();
-      const nextPageBtn = screen.getByRole("button", { name: "Weiter" });
-      const inputField = within(elternteil1Section).getByLabelText(
-        /^wie viele Kinderfreibeträge/i,
-      );
-
-      await userEvent.click(nextPageBtn);
-      const error = within(elternteil1Section).getByText(
-        "Eine Option muss ausgewählt sein",
-      );
-      expect(error).toBeInTheDocument();
-
-      await userEvent.selectOptions(inputField, "1,0");
       const error2 = within(elternteil1Section).queryByText(
         "Eine Option muss ausgewählt sein",
       );

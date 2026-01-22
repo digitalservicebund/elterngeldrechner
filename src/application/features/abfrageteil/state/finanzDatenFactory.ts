@@ -13,7 +13,6 @@ import {
   type ErwerbsZeitraumLebensMonat,
   FinanzDaten,
   KassenArt,
-  KinderFreiBetrag,
   RentenArt,
   Steuerklasse,
 } from "@/elterngeldrechner";
@@ -145,8 +144,7 @@ export const finanzDatenOfUi = (
     state.stepEinkommen[elternteil].zahlenSieKirchenSteuer === YesNo.YES
       ? true
       : false;
-  const kinderFreiBetrag =
-    state.stepEinkommen[elternteil].kinderFreiBetrag ?? KinderFreiBetrag.ZKF0;
+  const kinderFreiBetrag = 0;
   const steuerklasse =
     state.stepEinkommen[elternteil].steuerklasse ?? Steuerklasse.I;
   const kassenArt =

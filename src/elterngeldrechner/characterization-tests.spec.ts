@@ -28,6 +28,7 @@ import {
   type PlanungsDaten,
   RentenArt,
   Steuerklasse,
+  kinderFreiBetragToNumber,
 } from "./model";
 
 describe("characterization tests", () => {
@@ -197,8 +198,10 @@ function arbitraryElterngeldart(): Arbitrary<ElternGeldArt> {
   return arbitraryConstantFrom(...Object.values(ElternGeldArt));
 }
 
-function arbitraryKinderfreibetrag(): Arbitrary<KinderFreiBetrag> {
-  return arbitraryConstantFrom(...Object.values(KinderFreiBetrag));
+function arbitraryKinderfreibetrag(): Arbitrary<number> {
+  return arbitraryConstantFrom(...Object.values(KinderFreiBetrag)).map(
+    (kinderFreiBetrag) => kinderFreiBetragToNumber(kinderFreiBetrag),
+  );
 }
 
 function arbitrarySteuerklasse(): Arbitrary<Steuerklasse> {

@@ -5,12 +5,7 @@ import {
   stepAllgemeineAngabenSlice,
 } from "./stepAllgemeineAngabenSlice";
 import { stepErwerbstaetigkeitSlice } from "./stepErwerbstaetigkeitSlice";
-import {
-  KassenArt,
-  KinderFreiBetrag,
-  RentenArt,
-  Steuerklasse,
-} from "@/elterngeldrechner";
+import { KassenArt, RentenArt, Steuerklasse } from "@/elterngeldrechner";
 
 export interface Zeitraum {
   from: string;
@@ -64,7 +59,6 @@ export interface StepEinkommenElternteil {
   bruttoEinkommenNichtSelbstaendig: AverageOrMonthlyState;
   steuerklasse: Steuerklasse | null;
   splittingFaktor: number | null;
-  kinderFreiBetrag: KinderFreiBetrag | null;
   gewinnSelbstaendig: AverageOrMonthlyState;
   rentenVersicherung: RentenArt | null;
   zahlenSieKirchenSteuer: YesNo | null;
@@ -99,7 +93,6 @@ const initialStepEinkommenElternteil: StepEinkommenElternteil = {
     initialAverageOrMonthlyStateNichtSelbstaendig,
   steuerklasse: null,
   splittingFaktor: null,
-  kinderFreiBetrag: KinderFreiBetrag.ZKF1,
   gewinnSelbstaendig: initialAverageOrMonthlyStateSelbstaendig,
   rentenVersicherung: null,
   zahlenSieKirchenSteuer: null,

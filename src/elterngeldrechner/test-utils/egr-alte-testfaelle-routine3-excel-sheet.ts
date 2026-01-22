@@ -14,7 +14,6 @@ import {
   type PersoenlicheDaten,
   RentenArt,
   Steuerklasse,
-  kinderFreiBetragOfNumber,
 } from "@/elterngeldrechner/model";
 
 export class EgrAlteTestfaelleRoutine3ExcelSheet {
@@ -69,7 +68,7 @@ export class EgrAlteTestfaelleRoutine3ExcelSheet {
       testCaseIndex,
       KINDER_FREI_BETRAG_OFFSET,
     );
-    const kinderFreiBetrag = kinderFreiBetragOfNumber(kinderFreiBetragNumber);
+    const kinderFreiBetrag = kinderFreiBetragNumber;
     if (kinderFreiBetrag === undefined) {
       throw new Error(
         `kinderFreiBetrag number ${kinderFreiBetragNumber} unknown`,

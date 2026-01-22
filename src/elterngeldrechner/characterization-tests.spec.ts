@@ -21,14 +21,12 @@ import {
   Geburtstag,
   KassenArt,
   type Kind,
-  KinderFreiBetrag,
   type MischEkTaetigkeit,
   MutterschaftsLeistung,
   type PersoenlicheDaten,
   type PlanungsDaten,
   RentenArt,
   Steuerklasse,
-  kinderFreiBetragToNumber,
 } from "./model";
 
 describe("characterization tests", () => {
@@ -199,9 +197,7 @@ function arbitraryElterngeldart(): Arbitrary<ElternGeldArt> {
 }
 
 function arbitraryKinderfreibetrag(): Arbitrary<number> {
-  return arbitraryConstantFrom(...Object.values(KinderFreiBetrag)).map(
-    (kinderFreiBetrag) => kinderFreiBetragToNumber(kinderFreiBetrag),
-  );
+  return arbitraryInteger({ min: 0, max: 10 }).map((n) => n * 0.5);
 }
 
 function arbitrarySteuerklasse(): Arbitrary<Steuerklasse> {

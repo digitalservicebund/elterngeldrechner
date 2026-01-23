@@ -70,7 +70,11 @@ export function berechneElterngeldPlus(
  * wird. Umsetzung gemäß § 2 Absatz 3 des Gesetz zum Elterngeld und zur
  * Elternzeit (Bundeselterngeld- und Elternzeitgesetz - BEEG).
  *
- * @return Betrag in Euro, nicht negativ
+ * Der Einkommensunterschiedsbetrag ist ein Zwischenergebnis der Berechnung und
+ * wird daher auf den Cent gerundet. Siehe Richtlinien zum BEEG 2.0.3.3.1 und
+ * Anhang II Abschnitt D.V.
+ *
+ * @return Betrag in Euro, auf den Cent gerundet, nicht negativ
  */
 function bestimmeErsatzleistungsbezugswert(
   elterngeldnettoImBemessungszeitraum: number,
@@ -85,7 +89,7 @@ function bestimmeErsatzleistungsbezugswert(
     gedeckeltesElterngeldNettoImBemessungszeitraum -
     elterngeldnettoImBezugszeitraum;
 
-  return Math.max(einkommensunterschiedsbetrag, 0);
+  return aufDenCentRunden(Math.max(einkommensunterschiedsbetrag, 0));
 }
 
 function clampValue(minimum: number, value: number, maximum: number): number {
@@ -124,7 +128,7 @@ if (import.meta.vitest) {
           ),
         ));
 
-      it("ist niemals höher als die Differenz zwischen dem Elterngeldnetto im Bemessungszeitraum und Bezugszeitraum, wenn es nicht der Mindestbetrag ist", () =>
+      it("ist niemals höher als der auf den Cent gerundete Einkommensunterschiedsbetrag, wenn es nicht der Mindestbetrag ist", () =>
         assert(
           property(
             arbitraryNettoeinkommen(),
@@ -140,13 +144,20 @@ if (import.meta.vitest) {
 
               const istMindestbetrag = ersatzleistung === 300;
 
-              const differenz =
-                elterngeldnettoImBemessungszeitraum -
-                elterngeldnettoImBezugszeitraum;
-
-              expect(istMindestbetrag || ersatzleistung <= differenz).toBe(
-                true,
+              // Der Einkommensunterschiedsbetrag ist ein Zwischenergebnis und wird
+              // auf den Cent gerundet (Richtlinien zum BEEG 2.0.3.3.1)
+              const einkommensunterschiedsbetrag = aufDenCentRunden(
+                Math.max(
+                  elterngeldnettoImBemessungszeitraum -
+                    elterngeldnettoImBezugszeitraum,
+                  0,
+                ),
               );
+
+              expect(
+                istMindestbetrag ||
+                  ersatzleistung <= einkommensunterschiedsbetrag,
+              ).toBe(true);
             },
           ),
         ));

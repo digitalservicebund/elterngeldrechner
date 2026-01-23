@@ -67,13 +67,15 @@ export function abgabenSteuern(
     ZKF: finanzDaten.kinderFreiBetrag,
   };
 
+  // Gemäß § 2e BEEG wird der Kinderfreibetrag nur bei der Berechnung von
+  // Solidaritätszuschlag (Absatz 4) und Kirchensteuer (Absatz 5)
+  // berücksichtigt. Bei der Lohnsteuer wird kein
+  // Kinderfreibetrag berücksichtigt (Absatz 6).
   const { BK, SOLZLZZ } = berechneLohnsteuer(lohnsteuerjahr, eingangsparameter);
-
-  const eingangsparameterOhneZKF = { ...eingangsparameter, ZKF: 0 };
-  const { LSTLZZ } = berechneLohnsteuer(
-    lohnsteuerjahr,
-    eingangsparameterOhneZKF,
-  );
+  const { LSTLZZ } = berechneLohnsteuer(lohnsteuerjahr, {
+    ...eingangsparameter,
+    ZKF: 0,
+  });
 
   return {
     bk: BK / 100,

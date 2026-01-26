@@ -1,26 +1,26 @@
 import * as z from "zod";
 
-export const GeburtSchema = z.object({ istGeboren: z.boolean().optional() });
+export const GeburtSchema = z.object({ istGeboren: z.boolean() });
 
 export const UngeborenesKindSchema = z.object({
-  errechneterEntbindungstermin: z.date().optional(),
-  anzahl: z.number().min(1).optional(),
+  errechneterEntbindungstermin: z.date(),
+  anzahl: z.number().min(1),
 });
 
 export const GeborenesKindSchema = z.object({
-  geburtsdatum: z.date().optional(),
-  anzahl: z.number().min(1).optional(),
+  geburtsdatum: z.date(),
+  anzahl: z.number().min(1),
 });
 
 export const KindSchema = z.xor([UngeborenesKindSchema, GeborenesKindSchema]);
 
-export type Geburt = Required<z.infer<typeof GeburtSchema>>;
+export type Geburt = z.infer<typeof GeburtSchema>;
 
-export type UngeborenesKind = Required<z.infer<typeof UngeborenesKindSchema>>;
+export type UngeborenesKind = z.infer<typeof UngeborenesKindSchema>;
 
-export type GeborenesKind = Required<z.infer<typeof GeborenesKindSchema>>;
+export type GeborenesKind = z.infer<typeof GeborenesKindSchema>;
 
-export type Kind = Required<z.infer<typeof KindSchema>>;
+export type Kind = z.infer<typeof KindSchema>;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -38,8 +38,8 @@ if (import.meta.vitest) {
       }).toEqual(expect.schemaMatching(GeburtSchema));
     });
 
-    it("is valid if istGeboren is absent", () => {
-      expect({}).toEqual(expect.schemaMatching(GeburtSchema));
+    it("is invalid if istGeboren is absent", () => {
+      expect({}).not.toEqual(expect.schemaMatching(GeburtSchema));
     });
 
     it("is invalid if istGeboren is a string instead of a boolean", () => {
@@ -71,7 +71,21 @@ if (import.meta.vitest) {
         errechneterEntbindungstermin: new Date(
           Date.parse("2025-01-26T00:00:00Z"),
         ),
-      }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema.required()));
+      }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
+    });
+
+    it("is invalid if anzahl is missing", () => {
+      expect({
+        errechneterEntbindungstermin: new Date(
+          Date.parse("2025-01-26T00:00:00Z"),
+        ),
+      }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
+    });
+
+    it("is invalid if errechneterEntbindungstermin is missing", () => {
+      expect({
+        anzahl: 1,
+      }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
     it("is invalid if errechneterEntbindungstermin is a string instead of a Date", () => {
@@ -117,7 +131,19 @@ if (import.meta.vitest) {
       expect({
         anzahl: -1,
         geburtsdatum: new Date(Date.parse("2025-01-26T00:00:00Z")),
-      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema.required()));
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
+    });
+
+    it("is invalid if anzahl is missing", () => {
+      expect({
+        geburtsdatum: new Date(Date.parse("2025-01-26T00:00:00Z")),
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
+    });
+
+    it("is invalid if geburtsdatum is missing", () => {
+      expect({
+        anzahl: 1,
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
     it("is invalid if geburtsdatum is a string instead of a Date", () => {

@@ -1,5 +1,6 @@
 import { Navigate, RouterProvider, createHashRouter } from "react-router-dom";
-import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite";
+import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemein-angaben/AllgemeineAngaben.page";
+import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite.page";
 
 export default function Router() {
   // The hash router does not support the `hashType` property
@@ -21,7 +22,10 @@ export default function Router() {
       element: <Startseite />,
       path: "/abfrageteil-v2/startseite",
     },
-
+    {
+      element: <AllgemeineAngaben />,
+      path: "/abfrageteil-v2/allgemeine-angaben",
+    },
     {
       element: <Navigate to="/abfrageteil-v2/startseite" replace />,
       path: "*",

@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const Bundesland = z.enum([
+export const bundeslaender = [
   "Baden-Württemberg",
   "Bayern",
   "Berlin",
@@ -17,33 +17,124 @@ const Bundesland = z.enum([
   "Sachsen-Anhalt",
   "Schleswig-Holstein",
   "Thüringen",
-]);
+];
 
 export const AllgemeineAngabenSchema = z.object({
-  bundesland: Bundesland.optional(),
-  gesamteinkommenGrenzeUeberschritten: z.boolean().optional(),
+  bundesland: z.enum(bundeslaender, {
+    error: "Bitte wählen Sie ein Bundesland.",
+  }),
+  gesamteinkommenGrenzeUeberschritten: z.union([
+    z.boolean(),
+    z.stringbool({
+      truthy: ["true"],
+      falsy: ["false"],
+      error: "Wählen Sie bitte Ja oder Nein",
+    }),
+  ]),
 });
 
-export type AllgemeineAngaben = Required<
-  z.infer<typeof AllgemeineAngabenSchema>
->;
+export type AllgemeineAngaben = z.infer<typeof AllgemeineAngabenSchema>;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("AllgemeineAngabenSchema", () => {
-    it("allows all values to be absent", () => {
-      const familie = {};
+    it("rejects when all values are absent", () => {
+      const allgemeineAngaben = {};
 
-      expect(familie).toEqual(expect.schemaMatching(AllgemeineAngabenSchema));
+      expect(allgemeineAngaben).not.toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
     });
 
-    it("accepts a valid bundesland", () => {
-      const familie = {
+    it("rejects when only bundesland is provided", () => {
+      const allgemeineAngaben = {
         bundesland: "Berlin",
       };
 
-      expect(familie).toEqual(expect.schemaMatching(AllgemeineAngabenSchema));
+      expect(allgemeineAngaben).not.toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    it("rejects an invalid bundesland", () => {
+      const allgemeineAngaben = {
+        bundesland: "InvalidState",
+        gesamteinkommenGrenzeUeberschritten: true,
+      };
+
+      expect(allgemeineAngaben).not.toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    it("rejects when only gesamteinkommenGrenzeUeberschritten is provided", () => {
+      const allgemeineAngaben = {
+        gesamteinkommenGrenzeUeberschritten: true,
+      };
+
+      expect(allgemeineAngaben).not.toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    it("rejects non-boolean value for gesamteinkommenGrenzeUeberschritten", () => {
+      const allgemeineAngaben = {
+        bundesland: "Berlin",
+        gesamteinkommenGrenzeUeberschritten: "yes",
+      };
+
+      expect(allgemeineAngaben).not.toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    it("accepts a complete valid object with boolean true", () => {
+      const allgemeineAngaben = {
+        bundesland: "Bayern",
+        gesamteinkommenGrenzeUeberschritten: true,
+      };
+
+      expect(allgemeineAngaben).toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    it("accepts a complete valid object with boolean false", () => {
+      const allgemeineAngaben = {
+        bundesland: "Bayern",
+        gesamteinkommenGrenzeUeberschritten: false,
+      };
+
+      expect(allgemeineAngaben).toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    // Html radio inputs always submit string values, so we need to convert
+    // the "true" and "false" strings to actual booleans before validation.
+    it("accepts a complete valid object with string 'true'", () => {
+      const allgemeineAngaben = {
+        bundesland: "Bayern",
+        gesamteinkommenGrenzeUeberschritten: "true",
+      };
+
+      expect(allgemeineAngaben).toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
+    });
+
+    // Html radio inputs always submit string values, so we need to convert
+    // the "true" and "false" strings to actual booleans before validation.
+    it("accepts a complete valid object with string 'false'", () => {
+      const allgemeineAngaben = {
+        bundesland: "Bayern",
+        gesamteinkommenGrenzeUeberschritten: "false",
+      };
+
+      expect(allgemeineAngaben).toEqual(
+        expect.schemaMatching(AllgemeineAngabenSchema),
+      );
     });
 
     it("accepts all valid bundesland values", () => {
@@ -67,55 +158,11 @@ if (import.meta.vitest) {
       ];
 
       for (const bundesland of bundeslaender) {
-        expect({ bundesland }).toEqual(
-          expect.schemaMatching(AllgemeineAngabenSchema),
-        );
+        expect({
+          bundesland,
+          gesamteinkommenGrenzeUeberschritten: true,
+        }).toEqual(expect.schemaMatching(AllgemeineAngabenSchema));
       }
-    });
-
-    it("rejects an invalid bundesland", () => {
-      const familie = {
-        bundesland: "InvalidState",
-      };
-
-      expect(familie).not.toEqual(
-        expect.schemaMatching(AllgemeineAngabenSchema),
-      );
-    });
-
-    it("accepts gesamteinkommenGrenzeUeberschritten as true", () => {
-      const familie = {
-        gesamteinkommenGrenzeUeberschritten: true,
-      };
-
-      expect(familie).toEqual(expect.schemaMatching(AllgemeineAngabenSchema));
-    });
-
-    it("accepts gesamteinkommenGrenzeUeberschritten as false", () => {
-      const familie = {
-        gesamteinkommenGrenzeUeberschritten: false,
-      };
-
-      expect(familie).toEqual(expect.schemaMatching(AllgemeineAngabenSchema));
-    });
-
-    it("rejects non-boolean value for gesamteinkommenGrenzeUeberschritten", () => {
-      const familie = {
-        gesamteinkommenGrenzeUeberschritten: "yes",
-      };
-
-      expect(familie).not.toEqual(
-        expect.schemaMatching(AllgemeineAngabenSchema),
-      );
-    });
-
-    it("accepts a complete valid object", () => {
-      const familie = {
-        bundesland: "Bayern",
-        gesamteinkommenGrenzeUeberschritten: false,
-      };
-
-      expect(familie).toEqual(expect.schemaMatching(AllgemeineAngabenSchema));
     });
   });
 }

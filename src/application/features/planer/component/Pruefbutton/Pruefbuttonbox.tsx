@@ -78,10 +78,10 @@ export function Pruefbuttonbox({
     hasSpecialBonusTip: false,
   });
 
-  const bundesland = useAppSelector(
-    stepAllgemeineAngabenSelectors.getBundesland,
+  const bundeslandAntragSupport = useAppSelector(
+    stepAllgemeineAngabenSelectors.getBundeslandAntragSupport,
   );
-  if (bundesland === null) {
+  if (bundeslandAntragSupport === null) {
     throw new Error("bundesland should not be null");
   }
 
@@ -120,7 +120,7 @@ export function Pruefbuttonbox({
               onBonusFreischalten={bonusFreischalten}
             />
 
-            {!!bundesland.isSupported && (
+            {!!bundeslandAntragSupport.isSupported && (
               <div className="flex flex-col items-center">
                 <Button
                   type="button"
@@ -138,7 +138,7 @@ export function Pruefbuttonbox({
                     Daten bitte manuell in das{" "}
                     <a
                       className="text-primary underline"
-                      href={bundesland.linkOnlinetool}
+                      href={bundeslandAntragSupport.linkOnlinetool}
                       target="_blank"
                       rel="noreferrer"
                       onClick={() => trackReferenzAufOnlinetool()}
@@ -170,21 +170,21 @@ export function Pruefbuttonbox({
               </p>
             </div>
 
-            {!bundesland.isSupported && (
+            {!bundeslandAntragSupport.isSupported && (
               <div className="mt-40 text-center">
                 <p className="max-w-none">
-                  Den PDF-Antrag für {bundesland.name} sowie den Zugang zum
-                  Online-Antrag finden Sie auf folgender Seite:
+                  Den PDF-Antrag für {bundeslandAntragSupport.name} sowie den
+                  Zugang zum Online-Antrag finden Sie auf folgender Seite:
                 </p>
                 <a
                   className="text-primary underline"
-                  href={bundesland.link}
+                  href={bundeslandAntragSupport.link}
                   target="_blank"
                   rel="noreferrer"
                   onClick={() => trackReferenzAufLandesseite()}
                 >
                   <ArrowOutward aria-hidden="true" /> Zum Antrag auf Elterngeld
-                  in {bundesland.name}
+                  in {bundeslandAntragSupport.name}
                   <span className="sr-only">(öffnet in neuem Fenster)</span>
                 </a>
               </div>

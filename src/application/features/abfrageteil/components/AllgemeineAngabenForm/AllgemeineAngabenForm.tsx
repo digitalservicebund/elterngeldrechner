@@ -17,7 +17,7 @@ import {
   StepAllgemeineAngabenState,
   YesNo,
 } from "@/application/features/abfrageteil/state";
-import { BUNDESLAND_ANTRAG_DATA } from "@/application/features/pdfAntrag";
+import { getBundeslandAntragSupportMap } from "@/application/features/pdfAntrag";
 
 const antragstellendeOptions: CustomRadioGroupOption[] = [
   {
@@ -70,7 +70,7 @@ export function AllgemeineAngabenForm({ id, defaultValues, onSubmit }: Props) {
   };
 
   const bundeslandOptions: SelectOption<string>[] = Object.entries(
-    BUNDESLAND_ANTRAG_DATA,
+    getBundeslandAntragSupportMap(),
   ).map(([name]) => ({ value: name, label: name }));
 
   return (
@@ -380,9 +380,8 @@ if (import.meta.vitest) {
   });
 
   describe("Allgemeine Angaben Form Validation", async () => {
-    const { fireEvent, renderForm, waitFor, screen } = await import(
-      "@/application/test-utils"
-    );
+    const { fireEvent, renderForm, waitFor, screen } =
+      await import("@/application/test-utils");
 
     const initialState: StepAllgemeineAngabenState = {
       bundesland: null,

@@ -1,8 +1,8 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { YesNo } from "./YesNo";
 import {
-  BUNDESLAND_ANTRAG_DATA,
-  BundeslandName,
+  Bundesland,
+  getBundeslandAntragSupportByName,
 } from "@/application/features/pdfAntrag";
 import { RootState } from "@/application/redux";
 
@@ -13,7 +13,7 @@ export type Antragstellende =
 type AntragstellendeSelektor = "ET1" | "ET2";
 
 export interface StepAllgemeineAngabenState {
-  bundesland: BundeslandName | null;
+  bundesland: Bundesland | null;
   antragstellende: Antragstellende | null;
   name: {
     ET1: string;
@@ -59,14 +59,13 @@ const getElternteilNames = createSelector(
   },
 );
 
-const getBundesland = (state: RootState) => {
-  const name = state.stepAllgemeineAngaben.bundesland;
-
-  return name ? BUNDESLAND_ANTRAG_DATA[name] : null;
-};
+const getBundeslandAntragSupport = createSelector(
+  (state: RootState) => state.stepAllgemeineAngaben.bundesland,
+  (name) => (name ? getBundeslandAntragSupportByName(name) : null),
+);
 
 export const stepAllgemeineAngabenSelectors = {
   getAntragssteller,
   getElternteilNames,
-  getBundesland,
+  getBundeslandAntragSupport,
 };

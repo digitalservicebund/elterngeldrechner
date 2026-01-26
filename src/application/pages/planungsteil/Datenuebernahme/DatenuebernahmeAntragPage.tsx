@@ -8,7 +8,7 @@ import {
   parseGermanDateString,
   stepAllgemeineAngabenSelectors,
 } from "@/application/features/abfrageteil/state";
-import { Bundesland } from "@/application/features/pdfAntrag";
+import { BundeslandAntragSupport } from "@/application/features/pdfAntrag";
 import {
   prepareGanzerAntrag,
   preparePlanungsseite,
@@ -21,11 +21,11 @@ import { pushTrackingEvent } from "@/application/user-tracking";
 
 function trackedDownloadOfAnlagen(
   event: React.MouseEvent<HTMLAnchorElement>,
-  bundesland: Bundesland,
+  bundeslandAntragSupport: BundeslandAntragSupport,
 ) {
   event.preventDefault();
   pushTrackingEvent("Anlagen-zu-Antrag-wurden-heruntergeladen");
-  window.open(bundesland.link, "_blank", "noreferrer");
+  window.open(bundeslandAntragSupport.link, "_blank", "noreferrer");
 }
 
 function trackReferenzAufOnlinetool() {
@@ -46,7 +46,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const [seiteDownloading, setSeiteDownloading] = useState(false);
 
   const bundesland = useAppSelector(
-    stepAllgemeineAngabenSelectors.getBundesland,
+    stepAllgemeineAngabenSelectors.getBundeslandAntragSupport,
   );
   if (bundesland === null) {
     throw new Error("bundesland should not be null");

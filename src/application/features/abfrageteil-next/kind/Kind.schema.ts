@@ -1,30 +1,21 @@
-import { Temporal } from "@js-temporal/polyfill";
 import * as z from "zod";
-
-const germanDateSchema = z
-  .string()
-  .regex(/^\d{2}\.\d{2}\.\d{4}$/, {
-    error: "Bitte geben Sie ein gültiges Datum im Format TT.MM.JJJJ ein",
-  })
-  .transform((value) => {
-    const [day, month, year] = value.split(".");
-    return Temporal.PlainDate.from(`${year}-${month}-${day}`);
-  });
+import {
+  BooleanRadiobuttonSchema,
+  GermanDateinputSchema,
+} from "@/application/features/abfrageteil-next/common-schemas";
 
 export const GeburtSchema = z.object({
-  istGeboren: z.enum(["yes", "no"], {
-    error: "Wählen Sie bitte Ja oder Nein",
-  }),
+  istGeboren: BooleanRadiobuttonSchema,
 });
 
 export const UngeborenesKindSchema = z.object({
-  errechneterEntbindungstermin: germanDateSchema,
+  errechneterEntbindungstermin: GermanDateinputSchema,
   anzahl: z.number().min(1),
 });
 
 export const GeborenesKindSchema = z.object({
-  geburtsdatum: germanDateSchema,
-  errechneterEntbindungstermin: germanDateSchema,
+  geburtsdatum: GermanDateinputSchema,
+  errechneterEntbindungstermin: GermanDateinputSchema,
   anzahl: z.number().min(1),
 });
 

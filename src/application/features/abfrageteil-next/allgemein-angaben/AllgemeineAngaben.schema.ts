@@ -1,5 +1,7 @@
 import * as z from "zod";
 
+import { BooleanRadiobuttonSchema } from "@/application/features/abfrageteil-next/common-schemas";
+
 export const bundeslaender = [
   "Baden-Württemberg",
   "Bayern",
@@ -23,9 +25,7 @@ export const AllgemeineAngabenSchema = z.object({
   bundesland: z.enum(bundeslaender, {
     error: "Bitte wählen Sie ein Bundesland.",
   }),
-  gesamteinkommenGrenzeUeberschritten: z.enum(["yes", "no"], {
-    error: "Wählen Sie bitte Ja oder Nein",
-  }),
+  gesamteinkommenGrenzeUeberschritten: BooleanRadiobuttonSchema,
 });
 
 export type AllgemeineAngaben = z.infer<typeof AllgemeineAngabenSchema>;

@@ -1,5 +1,7 @@
 import { Navigate, RouterProvider, createHashRouter } from "react-router-dom";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemein-angaben/AllgemeineAngaben.page";
+import { GeborenesKind } from "@/application/features/abfrageteil-next/kind/GeborenesKind.page";
+import { Kind } from "@/application/features/abfrageteil-next/kind/Kind.page";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite.page";
 
 export default function Router() {
@@ -26,6 +28,8 @@ export default function Router() {
       element: <AllgemeineAngaben />,
       path: "/abfrageteil-v2/allgemeine-angaben",
     },
+    { element: <Kind />, path: "/abfrageteil-v2/kind" },
+    { element: <GeborenesKind />, path: "/abfrageteil-v2/kind/geboren" },
     {
       element: <Navigate to="/abfrageteil-v2/startseite" replace />,
       path: "*",

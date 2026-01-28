@@ -48,10 +48,10 @@ export function AllgemeineAngaben() {
           errors={formErrors}
           register={register}
           options={[
-            { value: "true", label: "Ja" },
-            { value: "false", label: "Nein" },
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
           ]}
-          {...register("gesamteinkommenGrenzeUeberschritten")}
+          name="gesamteinkommenGrenzeUeberschritten"
           slotBetweenLegendAndOptions={
             <InfoText
               question="Was bedeutet Gesamteinkommen?"

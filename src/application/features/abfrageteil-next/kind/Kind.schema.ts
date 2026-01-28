@@ -1,14 +1,30 @@
+import { Temporal } from "@js-temporal/polyfill";
 import * as z from "zod";
 
-export const GeburtSchema = z.object({ istGeboren: z.boolean() });
+const germanDateSchema = z
+  .string()
+  .regex(/^\d{2}\.\d{2}\.\d{4}$/, {
+    error: "Bitte geben Sie ein gültiges Datum im Format TT.MM.JJJJ ein",
+  })
+  .transform((value) => {
+    const [day, month, year] = value.split(".");
+    return Temporal.PlainDate.from(`${year}-${month}-${day}`);
+  });
+
+export const GeburtSchema = z.object({
+  istGeboren: z.enum(["yes", "no"], {
+    error: "Wählen Sie bitte Ja oder Nein",
+  }),
+});
 
 export const UngeborenesKindSchema = z.object({
-  errechneterEntbindungstermin: z.date(),
+  errechneterEntbindungstermin: germanDateSchema,
   anzahl: z.number().min(1),
 });
 
 export const GeborenesKindSchema = z.object({
-  geburtsdatum: z.date(),
+  geburtsdatum: germanDateSchema,
+  errechneterEntbindungstermin: germanDateSchema,
   anzahl: z.number().min(1),
 });
 
@@ -25,16 +41,16 @@ export type Kind = z.infer<typeof KindSchema>;
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("GeburtSchema", () => {
-    it("is valid if istGeboren is true", () => {
+  describe("", () => {
+    it("is valid if istGeboren is 'yes'", () => {
       expect({
-        istGeboren: true,
+        istGeboren: "yes",
       }).toEqual(expect.schemaMatching(GeburtSchema));
     });
 
-    it("is valid if istGeboren is false", () => {
+    it("is valid if istGeboren is 'no'", () => {
       expect({
-        istGeboren: false,
+        istGeboren: "no",
       }).toEqual(expect.schemaMatching(GeburtSchema));
     });
 
@@ -42,9 +58,21 @@ if (import.meta.vitest) {
       expect({}).not.toEqual(expect.schemaMatching(GeburtSchema));
     });
 
-    it("is invalid if istGeboren is a string instead of a boolean", () => {
+    it("is invalid if istGeboren is boolean true", () => {
       expect({
-        istGeboren: "true",
+        istGeboren: true,
+      }).not.toEqual(expect.schemaMatching(GeburtSchema));
+    });
+
+    it("is invalid if istGeboren is boolean false", () => {
+      expect({
+        istGeboren: false,
+      }).not.toEqual(expect.schemaMatching(GeburtSchema));
+    });
+
+    it("is invalid if istGeboren is an arbitrary string", () => {
+      expect({
+        istGeboren: "maybe",
       }).not.toEqual(expect.schemaMatching(GeburtSchema));
     });
 
@@ -56,29 +84,23 @@ if (import.meta.vitest) {
   });
 
   describe("UngeborenesKindSchema", () => {
-    it("is valid if anzahl is positive and errechneterEntbindungstermin is a Date object", () => {
+    it("is valid with German date format DD.MM.YYYY", () => {
       expect({
         anzahl: 1,
-        errechneterEntbindungstermin: new Date(
-          Date.parse("2025-01-26T00:00:00Z"),
-        ),
+        errechneterEntbindungstermin: "26.01.2025",
       }).toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
     it("is invalid if the anzahl is negative", () => {
       expect({
         anzahl: -1,
-        errechneterEntbindungstermin: new Date(
-          Date.parse("2025-01-26T00:00:00Z"),
-        ),
+        errechneterEntbindungstermin: "26.01.2025",
       }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
     it("is invalid if anzahl is missing", () => {
       expect({
-        errechneterEntbindungstermin: new Date(
-          Date.parse("2025-01-26T00:00:00Z"),
-        ),
+        errechneterEntbindungstermin: "26.01.2025",
       }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
@@ -88,24 +110,24 @@ if (import.meta.vitest) {
       }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
-    it("is invalid if errechneterEntbindungstermin is a string instead of a Date", () => {
+    it("is invalid if errechneterEntbindungstermin is an empty string", () => {
       expect({
         anzahl: 1,
-        errechneterEntbindungstermin: "2025-02-15",
+        errechneterEntbindungstermin: "",
       }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
-    it("is invalid if errechneterEntbindungstermin is a timestamp number instead of a Date", () => {
+    it("is invalid if errechneterEntbindungstermin has wrong format", () => {
       expect({
         anzahl: 1,
-        errechneterEntbindungstermin: Date.parse("2025-02-15T00:00:00Z"),
+        errechneterEntbindungstermin: "2025-01-26",
       }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
-    it("is invalid if errechneterEntbindungstermin is an invalid Date object", () => {
+    it("is invalid if errechneterEntbindungstermin is a partial input", () => {
       expect({
         anzahl: 1,
-        errechneterEntbindungstermin: new Date("invalid"),
+        errechneterEntbindungstermin: "11",
       }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
@@ -118,52 +140,72 @@ if (import.meta.vitest) {
   });
 
   describe("GeborenesKindSchema", () => {
-    it("is valid if anzahl is positive and geburtsdatum is a Date object", () => {
-      const kind: GeborenesKind = {
+    it("is valid with German date format DD.MM.YYYY", () => {
+      expect({
         anzahl: 1,
-        geburtsdatum: new Date(Date.parse("2025-01-26T00:00:00Z")),
-      };
-
-      expect(kind).toEqual(expect.schemaMatching(GeborenesKindSchema));
+        geburtsdatum: "26.01.2025",
+        errechneterEntbindungstermin: "20.01.2025",
+      }).toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
     it("is invalid if the anzahl is negative", () => {
       expect({
         anzahl: -1,
-        geburtsdatum: new Date(Date.parse("2025-01-26T00:00:00Z")),
+        geburtsdatum: "26.01.2025",
+        errechneterEntbindungstermin: "20.01.2025",
       }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
     it("is invalid if anzahl is missing", () => {
       expect({
-        geburtsdatum: new Date(Date.parse("2025-01-26T00:00:00Z")),
+        geburtsdatum: "26.01.2025",
+        errechneterEntbindungstermin: "20.01.2025",
       }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
     it("is invalid if geburtsdatum is missing", () => {
       expect({
         anzahl: 1,
+        errechneterEntbindungstermin: "20.01.2025",
       }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
-    it("is invalid if geburtsdatum is a string instead of a Date", () => {
+    it("is invalid if errechneterEntbindungstermin is missing", () => {
+      expect({
+        anzahl: 1,
+        geburtsdatum: "26.01.2025",
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
+    });
+
+    it("is invalid if geburtsdatum is an empty string", () => {
+      expect({
+        anzahl: 1,
+        geburtsdatum: "",
+        errechneterEntbindungstermin: "20.01.2025",
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
+    });
+
+    it("is invalid if errechneterEntbindungstermin is an empty string", () => {
+      expect({
+        anzahl: 1,
+        geburtsdatum: "26.01.2025",
+        errechneterEntbindungstermin: "",
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
+    });
+
+    it("is invalid if geburtsdatum has wrong format", () => {
       expect({
         anzahl: 1,
         geburtsdatum: "2025-01-26",
+        errechneterEntbindungstermin: "20.01.2025",
       }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
-    it("is invalid if geburtsdatum is a timestamp number instead of a Date", () => {
+    it("is invalid if errechneterEntbindungstermin has wrong format", () => {
       expect({
         anzahl: 1,
-        geburtsdatum: Date.parse("2025-01-26T00:00:00Z"),
-      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
-    });
-
-    it("is invalid if geburtsdatum is an invalid Date object", () => {
-      expect({
-        anzahl: 1,
-        geburtsdatum: new Date("invalid"),
+        geburtsdatum: "26.01.2025",
+        errechneterEntbindungstermin: "2025-01-20",
       }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
 
@@ -171,6 +213,15 @@ if (import.meta.vitest) {
       expect({
         anzahl: 1,
         geburtsdatum: null,
+        errechneterEntbindungstermin: "20.01.2025",
+      }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
+    });
+
+    it("is invalid if errechneterEntbindungstermin is null", () => {
+      expect({
+        anzahl: 1,
+        geburtsdatum: "26.01.2025",
+        errechneterEntbindungstermin: null,
       }).not.toEqual(expect.schemaMatching(GeborenesKindSchema));
     });
   });

@@ -1,5 +1,5 @@
 import { Navigate, RouterProvider, createHashRouter } from "react-router";
-import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemein-angaben/AllgemeineAngaben.page";
+import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.page";
 import { GeborenesKind } from "@/application/features/abfrageteil-next/kind/GeborenesKind.page";
 import { Kind } from "@/application/features/abfrageteil-next/kind/Kind.page";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite.page";

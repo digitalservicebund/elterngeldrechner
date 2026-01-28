@@ -34,7 +34,6 @@ export function PageV2({
       </div>
 
       <section
-        id={currentNavigationItem}
         ref={sectionElement}
         className="page-grid-content relative focus:outline-none"
         aria-labelledby={headingIdentifier}

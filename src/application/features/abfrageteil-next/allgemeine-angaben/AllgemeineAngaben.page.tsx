@@ -8,6 +8,7 @@ import {
   bundeslaender,
 } from "./AllgemeineAngaben.schema";
 import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { PageV2 } from "@/application/components/PageV2";
 import {
   CustomSelect,
   SelectOption,
@@ -27,43 +28,65 @@ export function AllgemeineAngaben() {
   );
 
   return (
-    <>
-      <h2>Allgemeine Angaben</h2>
+    <PageV2
+      heading="Allgemeine Angaben"
+      navigationItems={[]}
+      currentNavigationItem=""
+    >
       <form
         id={formIdentifier}
-        className="flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-56"
         onSubmit={handleSubmit(() => void navigate("/abfrageteil-v2/kind"))}
       >
-        <CustomSelect
-          autoWidth
-          label="In welchem Bundesland planen Sie Elterngeld zu beantragen?"
-          errors={formErrors}
-          register={register}
-          options={bundeslandOptions}
-          {...register("bundesland")}
-        />
+        <div>
+          <h3 className="mb-10">
+            In welchem Bundesland wollen Sie Elterngeld beantragen?
+          </h3>
 
-        <CustomRadioGroup
-          legend="Hatten Sie im Kalenderjahr vor der Geburt ein Gesammteinkommen von mehr als 175.000 Euro?"
-          errors={formErrors}
-          register={register}
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-          name="gesamteinkommenGrenzeUeberschritten"
-          slotBetweenLegendAndOptions={
-            <InfoText
-              question="Was bedeutet Gesamteinkommen?"
-              answer="Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 175.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen."
-            ></InfoText>
-          }
-        />
+          <CustomSelect
+            autoWidth
+            label="Bundesland"
+            errors={formErrors}
+            register={register}
+            options={bundeslandOptions}
+            {...register("bundesland")}
+          />
+        </div>
 
-        <Button type="submit" buttonStyle="primary" form={formIdentifier}>
-          Verstanden und weiter
-        </Button>
+        <div>
+          <h3 className="mb-10">
+            Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von
+            mehr als 175.000 Euro?
+          </h3>
+
+          <CustomRadioGroup
+            legend=""
+            errors={formErrors}
+            register={register}
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+            name="gesamteinkommenGrenzeUeberschritten"
+            slotBetweenLegendAndOptions={
+              <InfoText
+                question="Was bedeutet Gesamteinkommen?"
+                answer="Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 175.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen."
+              ></InfoText>
+            }
+          />
+        </div>
+
+        <div className="flex gap-16">
+          <Button type="button" buttonStyle="secondary" onClick={() => {}}>
+            Zurück
+          </Button>
+
+          <Button type="submit" form={formIdentifier}>
+            Weiter
+          </Button>
+        </div>
       </form>
-    </>
+    </PageV2>
   );
 }

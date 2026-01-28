@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
 import { ErwerbstaetigkeitForm } from "@/application/features/abfrageteil";
 import {
@@ -67,15 +67,14 @@ if (import.meta.vitest) {
 
   describe("Erwerbstaetigkeit Page", async () => {
     const { userEvent } = await import("@testing-library/user-event");
-    const { INITIAL_STATE, render, screen } = await import(
-      "@/application/test-utils"
-    );
+    const { INITIAL_STATE, render, screen } =
+      await import("@/application/test-utils");
     const { produce } = await import("immer");
 
     const { YesNo } = await import("@/application/features/abfrageteil/state");
 
     beforeEach(() => {
-      vi.mock(import("react-router-dom"), async (importOriginal) => {
+      vi.mock(import("react-router"), async (importOriginal) => {
         const actual = await importOriginal();
 
         return {

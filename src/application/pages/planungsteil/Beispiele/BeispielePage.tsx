@@ -276,9 +276,8 @@ if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
   describe("Beispiele Page", async () => {
-    const { useNavigateStateful } = await import(
-      "@/application/pages/planungsteil/useNavigateStateful"
-    );
+    const { useNavigateStateful } =
+      await import("@/application/pages/planungsteil/useNavigateStateful");
 
     const { render, screen } = await import("@/application/test-utils");
     const { INITIAL_STATE } = await import("@/application/test-utils");
@@ -290,7 +289,14 @@ if (import.meta.vitest) {
     const navigateSpy = vi.fn<NavigateStateful>();
 
     beforeEach(() => {
-      vi.mock(import("react-router"), () => ({ useNavigate: vi.fn() }));
+      vi.mock(import("react-router"), async (importOriginal) => {
+        const actualImplementation = await importOriginal();
+
+        return {
+          ...actualImplementation,
+          useNavigate: vi.fn(),
+        };
+      });
 
       vi.mock(
         import("@/application/pages/planungsteil/useNavigateStateful"),

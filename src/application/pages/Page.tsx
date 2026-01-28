@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
-import { ScrollRestoration } from "react-router-dom";
+import { ScrollRestoration } from "react-router";
 import { Sidebar } from "./Sidebar";
 import { FormStep } from "@/application/routing/formSteps";
 

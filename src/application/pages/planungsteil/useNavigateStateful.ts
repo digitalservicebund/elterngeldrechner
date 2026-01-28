@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { type To, useLocation, useNavigate } from "react-router-dom";
+import { type To, useLocation, useNavigate } from "react-router";
 import type { Beispiel } from "@/application/features/beispiele";
 import type {
   Ausgangslage,
@@ -28,7 +28,7 @@ type NavigationState = {
 if (import.meta.vitest) {
   const { vi, describe, it, expect } = import.meta.vitest;
 
-  vi.mock("react-router-dom");
+  vi.mock("react-router");
 
   describe("use stateful navigation", async () => {
     const { renderHook } = await import("@testing-library/react");

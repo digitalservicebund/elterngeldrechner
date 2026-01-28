@@ -1,4 +1,4 @@
-import { Navigate, RouterProvider, createHashRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createHashRouter } from "react-router";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemein-angaben/AllgemeineAngaben.page";
 import { GeborenesKind } from "@/application/features/abfrageteil-next/kind/GeborenesKind.page";
 import { Kind } from "@/application/features/abfrageteil-next/kind/Kind.page";

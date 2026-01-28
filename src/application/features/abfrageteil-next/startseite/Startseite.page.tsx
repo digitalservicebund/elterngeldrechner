@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import { PageV2 } from "@/application/components/PageV2";

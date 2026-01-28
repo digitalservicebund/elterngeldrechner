@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Geburt, GeburtSchema } from "./Kind.schema";
 import { Button, CustomRadioGroup } from "@/application/components";
 

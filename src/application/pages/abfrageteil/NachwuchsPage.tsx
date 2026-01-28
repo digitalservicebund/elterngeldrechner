@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
 import { NachwuchsForm } from "@/application/features/abfrageteil";
 import {
@@ -66,7 +66,7 @@ if (import.meta.vitest) {
     const { render, screen } = await import("@/application/test-utils");
 
     beforeEach(() => {
-      vi.mock(import("react-router-dom"), async (importOriginal) => {
+      vi.mock(import("react-router"), async (importOriginal) => {
         const actual = await importOriginal();
 
         return {

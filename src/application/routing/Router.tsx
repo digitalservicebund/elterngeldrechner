@@ -1,4 +1,4 @@
-import { RouterProvider, createHashRouter } from "react-router-dom";
+import { RouterProvider, createHashRouter } from "react-router";
 import routeDefinition from "@/application/routing/RouteDefinition";
 
 export default function Router() {

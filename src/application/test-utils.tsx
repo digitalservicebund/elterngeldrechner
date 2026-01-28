@@ -15,7 +15,7 @@ import {
   type RouteObject,
   RouterProvider,
   createMemoryRouter,
-} from "react-router-dom";
+} from "react-router";
 import {
   stepAllgemeineAngabenSlice,
   stepEinkommenSlice,

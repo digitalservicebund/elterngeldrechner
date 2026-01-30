@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 import { Ausklammerung } from "./ausklammerung";
 import { Zeitraum, naechsterMonat } from "./zeitraum";
 
@@ -6,7 +8,9 @@ type GruppiereBemessungszeitraumOptions = {
   ausklammerungen: Ausklammerung[];
 };
 
-type GruppiereBemessungszeitraumResult = Array<Date[] | Ausklammerung>;
+type GruppiereBemessungszeitraumResult = Array<
+  Temporal.PlainYearMonth[] | Ausklammerung
+>;
 
 /**
  * Diese Funktion transformiert den Bemessungszeitraum (BMZ) in eine
@@ -28,46 +32,52 @@ export function gruppiereBemessungszeitraum(
 ): GruppiereBemessungszeitraumResult {
   const { bemessungszeitraum, ausklammerungen } = options;
 
-  const monatsgruppen: Date[][] = bemessungszeitraum.map(generiereMonate);
+  const monatsgruppen: Temporal.PlainYearMonth[][] =
+    bemessungszeitraum.map(generiereMonate);
 
-  const alleElemente: GruppiereBemessungszeitraumResult = [
-    ...monatsgruppen,
-    ...ausklammerungen,
+  const elementeMitSchluessel = [
+    ...monatsgruppen
+      .filter((gruppe) => gruppe.length > 0)
+      .map((gruppe) => ({
+        wert: gruppe,
+        typ: "monate" as const,
+        sortierMonat: gruppe[0]!,
+      })),
+    ...ausklammerungen.map((ausklammerung) => ({
+      wert: ausklammerung,
+      typ: "ausklammerung" as const,
+      sortierMonat: Temporal.PlainYearMonth.from({
+        year: ausklammerung.von.year,
+        month: ausklammerung.von.month,
+      }),
+    })),
   ];
 
-  const sortierteElemente = [...alleElemente].sort((a, b) => {
-    const datumLeft = Array.isArray(a) ? a[0] : a.von;
-    const datumRight = Array.isArray(b) ? b[0] : b.von;
+  const sortierteElemente = elementeMitSchluessel.sort((a, b) =>
+    Temporal.PlainYearMonth.compare(a.sortierMonat, b.sortierMonat),
+  );
 
-    if (!datumLeft || !datumRight) {
-      return 0;
-    }
-
-    return datumLeft.getTime() - datumRight.getTime();
-  });
-
-  return sortierteElemente;
+  return sortierteElemente.map((element) => element.wert);
 }
 
-function generiereMonate(zeitraum: Zeitraum): Date[] {
-  const startDatum = new Date(zeitraum.von);
-  startDatum.setUTCDate(1);
-  const endDatum = new Date(zeitraum.bis);
-
-  return generiereMonateRekursiv(startDatum, endDatum);
+function generiereMonate(zeitraum: Zeitraum): Temporal.PlainYearMonth[] {
+  return generiereMonateRekursiv(zeitraum.von, zeitraum.bis);
 }
 
-function generiereMonateRekursiv(startDatum: Date, endDatum: Date): Date[] {
-  if (startDatum > endDatum) {
+function generiereMonateRekursiv(
+  startMonat: Temporal.PlainYearMonth,
+  endMonat: Temporal.PlainYearMonth,
+): Temporal.PlainYearMonth[] {
+  if (Temporal.PlainYearMonth.compare(startMonat, endMonat) > 0) {
     return [];
   }
 
   const weitereMonate = generiereMonateRekursiv(
-    naechsterMonat(startDatum),
-    endDatum,
+    naechsterMonat(startMonat),
+    endMonat,
   );
 
-  return [new Date(startDatum), ...weitereMonate];
+  return [startMonat, ...weitereMonate];
 }
 
 if (import.meta.vitest) {
@@ -77,8 +87,8 @@ if (import.meta.vitest) {
     it("fans out the Monate of a Bemessungszeitraum", () => {
       const bemessungszeitraum = [
         {
-          von: new Date("2024-01-01T00:00:00.000Z"),
-          bis: new Date("2024-12-01T00:00:00.000Z"),
+          von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+          bis: Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
         },
       ];
 
@@ -87,42 +97,40 @@ if (import.meta.vitest) {
         ausklammerungen: [],
       });
 
-      const expectation: GruppiereBemessungszeitraumResult = [
+      expect(result).toEqual([
         [
-          new Date("2024-01-01T00:00:00.000Z"),
-          new Date("2024-02-01T00:00:00.000Z"),
-          new Date("2024-03-01T00:00:00.000Z"),
-          new Date("2024-04-01T00:00:00.000Z"),
-          new Date("2024-05-01T00:00:00.000Z"),
-          new Date("2024-06-01T00:00:00.000Z"),
-          new Date("2024-07-01T00:00:00.000Z"),
-          new Date("2024-08-01T00:00:00.000Z"),
-          new Date("2024-09-01T00:00:00.000Z"),
-          new Date("2024-10-01T00:00:00.000Z"),
-          new Date("2024-11-01T00:00:00.000Z"),
-          new Date("2024-12-01T00:00:00.000Z"),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 2 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 3 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 4 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 5 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 6 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 7 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 8 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 9 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 11 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
         ],
-      ];
-
-      expect(result).toEqual(expectation);
+      ]);
     });
 
     it("inserts the dividing Ausklammerung in between the groups of Monate", () => {
       const bemessungszeitraum = [
         {
-          von: new Date("2024-01-01T00:00:00.000Z"),
-          bis: new Date("2024-06-01T00:00:00.000Z"),
+          von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+          bis: Temporal.PlainYearMonth.from({ year: 2024, month: 6 }),
         },
         {
-          von: new Date("2024-08-01T00:00:00.000Z"),
-          bis: new Date("2025-01-01T00:00:00.000Z"),
+          von: Temporal.PlainYearMonth.from({ year: 2024, month: 8 }),
+          bis: Temporal.PlainYearMonth.from({ year: 2025, month: 1 }),
         },
       ];
 
-      const ausklammerungen = [
+      const ausklammerungen: Ausklammerung[] = [
         {
-          von: new Date("2024-07-05T00:00:00.000Z"),
-          bis: new Date("2024-07-07T00:00:00.000Z"),
+          von: Temporal.PlainDate.from({ year: 2024, month: 7, day: 5 }),
+          bis: Temporal.PlainDate.from({ year: 2024, month: 7, day: 7 }),
           beschreibung: "Krankheit",
         },
       ];
@@ -132,31 +140,29 @@ if (import.meta.vitest) {
         ausklammerungen,
       });
 
-      const expectation: GruppiereBemessungszeitraumResult = [
+      expect(result).toEqual([
         [
-          new Date("2024-01-01T00:00:00.000Z"),
-          new Date("2024-02-01T00:00:00.000Z"),
-          new Date("2024-03-01T00:00:00.000Z"),
-          new Date("2024-04-01T00:00:00.000Z"),
-          new Date("2024-05-01T00:00:00.000Z"),
-          new Date("2024-06-01T00:00:00.000Z"),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 2 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 3 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 4 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 5 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 6 }),
         ],
         {
-          von: new Date("2024-07-05T00:00:00.000Z"),
-          bis: new Date("2024-07-07T00:00:00.000Z"),
+          von: Temporal.PlainDate.from({ year: 2024, month: 7, day: 5 }),
+          bis: Temporal.PlainDate.from({ year: 2024, month: 7, day: 7 }),
           beschreibung: "Krankheit",
         },
         [
-          new Date("2024-08-01T00:00:00.000Z"),
-          new Date("2024-09-01T00:00:00.000Z"),
-          new Date("2024-10-01T00:00:00.000Z"),
-          new Date("2024-11-01T00:00:00.000Z"),
-          new Date("2024-12-01T00:00:00.000Z"),
-          new Date("2025-01-01T00:00:00.000Z"),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 8 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 9 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 11 }),
+          Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
+          Temporal.PlainYearMonth.from({ year: 2025, month: 1 }),
         ],
-      ];
-
-      expect(result).toEqual(expectation);
+      ]);
     });
   });
 }

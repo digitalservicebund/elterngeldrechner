@@ -1,32 +1,42 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 import { Ausklammerung } from "./Ausklammerung";
 
+/**
+ * Prüft, ob eine Ausklammerung in einen gegebenen Monat fällt.
+ * Eine Ausklammerung überlappt mit einem Monat, wenn:
+ * - Die Ausklammerung vor dem Ende des Monats beginnt UND
+ * - Die Ausklammerung nach dem Anfang des Monats endet
+ */
 export function istAusklammerungInMonat(
-  monat: Date,
+  monat: Temporal.PlainYearMonth,
   ausklammerungen: readonly Ausklammerung[],
 ): boolean {
+  const monatStart = monat.toPlainDate({ day: 1 });
+  const naechsterMonatStart = monat.add({ months: 1 }).toPlainDate({ day: 1 });
+
   return ausklammerungen.some((ausklammerung) => {
     return (
-      ausklammerung.von < naechsterMonat(monat) && ausklammerung.bis >= monat
+      Temporal.PlainDate.compare(ausklammerung.von, naechsterMonatStart) < 0 &&
+      Temporal.PlainDate.compare(ausklammerung.bis, monatStart) >= 0
     );
   });
 }
 
-function naechsterMonat(datum: Date): Date {
-  const naechstesDatum = new Date(datum);
-  naechstesDatum.setUTCMonth(naechstesDatum.getUTCMonth() + 1);
-  return naechstesDatum;
-}
-
+/**
+ * Findet das erste Jahr ohne Ausklammerung, ausgehend von einem Startdatum.
+ * Gibt den Januar dieses Jahres als PlainYearMonth zurück.
+ */
 export function findeJahrOhneAusklammerung(
-  startDatum: Date,
+  startMonat: Temporal.PlainYearMonth,
   ausklammerungen: readonly Ausklammerung[],
-): Date {
-  const sortierteAusklammerungen = [...ausklammerungen].sort(
-    (a, b) => b.bis.getTime() - a.bis.getTime(),
+): Temporal.PlainYearMonth {
+  const sortierteAusklammerungen = [...ausklammerungen].sort((a, b) =>
+    Temporal.PlainDate.compare(b.bis, a.bis),
   );
 
   return findeJahrOhneAusklammerungRekursiv(
-    startDatum.getUTCFullYear(),
+    startMonat.year,
     sortierteAusklammerungen,
   );
 }
@@ -34,9 +44,9 @@ export function findeJahrOhneAusklammerung(
 function findeJahrOhneAusklammerungRekursiv(
   aktuellesJahr: number,
   ausklammerungen: readonly Ausklammerung[],
-): Date {
+): Temporal.PlainYearMonth {
   if (ausklammerungen.length === 0) {
-    return new Date(Date.UTC(aktuellesJahr, 0, 1));
+    return Temporal.PlainYearMonth.from({ year: aktuellesJahr, month: 1 });
   }
 
   const [naechsteAusklammerung, ...restlicheAusklammerungen] = ausklammerungen;
@@ -44,13 +54,13 @@ function findeJahrOhneAusklammerungRekursiv(
   const endeNaechsteAusklammerung = naechsteAusklammerung!.bis;
   const startNaechsteAusklammerung = naechsteAusklammerung!.von;
 
-  if (aktuellesJahr > endeNaechsteAusklammerung.getUTCFullYear()) {
-    return new Date(Date.UTC(aktuellesJahr, 0, 1));
+  if (aktuellesJahr > endeNaechsteAusklammerung.year) {
+    return Temporal.PlainYearMonth.from({ year: aktuellesJahr, month: 1 });
   }
 
-  if (aktuellesJahr >= startNaechsteAusklammerung.getUTCFullYear()) {
+  if (aktuellesJahr >= startNaechsteAusklammerung.year) {
     return findeJahrOhneAusklammerungRekursiv(
-      startNaechsteAusklammerung.getUTCFullYear() - 1,
+      startNaechsteAusklammerung.year - 1,
       restlicheAusklammerungen,
     );
   }
@@ -67,91 +77,89 @@ if (import.meta.vitest) {
   describe("istAusklammerungInMonat", () => {
     const ausklammerungen: Ausklammerung[] = [
       {
-        von: new Date("2023-07-15T00:00:00.000Z"),
-        bis: new Date("2023-07-31T00:00:00.000Z"),
+        von: Temporal.PlainDate.from({ year: 2023, month: 7, day: 15 }),
+        bis: Temporal.PlainDate.from({ year: 2023, month: 7, day: 31 }),
         beschreibung: "Test",
       },
     ];
 
     it("soll true zurückgeben, wenn eine Ausklammerung im Monat liegt", () => {
-      const monat = new Date("2023-07-01T00:00:00.000Z");
+      const monat = Temporal.PlainYearMonth.from({ year: 2023, month: 7 });
 
       expect(istAusklammerungInMonat(monat, ausklammerungen)).toBe(true);
     });
 
     it("soll false zurückgeben, wenn keine Ausklammerung im Monat liegt", () => {
-      const monat = new Date("2023-08-01T00:00:00.000Z");
+      const monat = Temporal.PlainYearMonth.from({ year: 2023, month: 8 });
 
       expect(istAusklammerungInMonat(monat, ausklammerungen)).toBe(false);
     });
 
-    describe("time-zone edge cases", () => {
-      it("soll true zurückgeben, wenn eine Ausklammerung im Monat liegt (mit Zeitzone)", () => {
-        const monat = new Date("2023-07-01T00:00:00.000Z");
+    it("soll true zurückgeben, wenn eine Ausklammerung den Monatswechsel überlappt", () => {
+      const monat = Temporal.PlainYearMonth.from({ year: 2023, month: 7 });
 
-        // Central European Summer Time (CEST)
-        const ausklammerungenMitZeitzone: Ausklammerung[] = [
-          {
-            von: new Date("2023-08-01T01:59:59.000+02:00"),
-            bis: new Date("2023-08-07T22:00:00.000+02:00"),
-            beschreibung: "Test Zeitzone",
-          },
-        ];
+      // Ausklammerung beginnt kurz vor Monatsende Juli und endet im August
+      const ausklammerungenMonatswechsel: Ausklammerung[] = [
+        {
+          von: Temporal.PlainDate.from({ year: 2023, month: 7, day: 31 }),
+          bis: Temporal.PlainDate.from({ year: 2023, month: 8, day: 7 }),
+          beschreibung: "Test Monatswechsel",
+        },
+      ];
 
-        expect(istAusklammerungInMonat(monat, ausklammerungenMitZeitzone)).toBe(
-          true,
-        );
-      });
+      expect(istAusklammerungInMonat(monat, ausklammerungenMonatswechsel)).toBe(
+        true,
+      );
     });
   });
 
   describe("findeJahrOhneAusklammerung", () => {
     const ausklammerungen: Ausklammerung[] = [
       {
-        von: new Date("2023-01-01T00:00:00.000Z"),
-        bis: new Date("2023-12-31T00:00:00.000Z"),
+        von: Temporal.PlainDate.from({ year: 2023, month: 1, day: 1 }),
+        bis: Temporal.PlainDate.from({ year: 2023, month: 12, day: 31 }),
         beschreibung: "Ganzes Jahr",
       },
     ];
 
     it("soll das gegebene Jahr zurückgeben, wenn keine Ausklammerung vorliegt", () => {
-      const jahr = new Date("2024-01-01T00:00:00.000Z");
+      const jahr = Temporal.PlainYearMonth.from({ year: 2024, month: 1 });
 
       const result = findeJahrOhneAusklammerung(jahr, ausklammerungen);
 
-      expect(result.getUTCFullYear()).toBe(2024);
+      expect(result.year).toBe(2024);
     });
 
     it("soll das vorherige Jahr finden, wenn das aktuelle eine Ausklammerung hat", () => {
-      const jahr = new Date("2023-01-01T00:00:00.000Z");
+      const jahr = Temporal.PlainYearMonth.from({ year: 2023, month: 1 });
 
       const result = findeJahrOhneAusklammerung(jahr, ausklammerungen);
 
-      expect(result.getUTCFullYear()).toBe(2022);
+      expect(result.year).toBe(2022);
     });
 
     it("soll rekursiv nach dem vorherigen Jahr suchen", () => {
       const ausklammerungenMehrereJahre: Ausklammerung[] = [
         {
-          von: new Date("2023-01-01T00:00:00.000Z"),
-          bis: new Date("2023-12-31T00:00:00.000Z"),
+          von: Temporal.PlainDate.from({ year: 2023, month: 1, day: 1 }),
+          bis: Temporal.PlainDate.from({ year: 2023, month: 12, day: 31 }),
           beschreibung: "2023",
         },
         {
-          von: new Date("2022-01-01T00:00:00.000Z"),
-          bis: new Date("2022-12-31T00:00:00.000Z"),
+          von: Temporal.PlainDate.from({ year: 2022, month: 1, day: 1 }),
+          bis: Temporal.PlainDate.from({ year: 2022, month: 12, day: 31 }),
           beschreibung: "2022",
         },
       ];
 
-      const jahr = new Date("2023-01-01T00:00:00.000Z");
+      const jahr = Temporal.PlainYearMonth.from({ year: 2023, month: 1 });
 
       const result = findeJahrOhneAusklammerung(
         jahr,
         ausklammerungenMehrereJahre,
       );
 
-      expect(result.getUTCFullYear()).toBe(2021);
+      expect(result.year).toBe(2021);
     });
   });
 }

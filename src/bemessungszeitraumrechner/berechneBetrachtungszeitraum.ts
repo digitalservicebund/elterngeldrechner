@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 import { Ausklammerung, findeJahrOhneAusklammerung } from "./ausklammerung";
 import { Zeitraum, vorherigesJahr } from "./zeitraum";
 
@@ -5,20 +7,25 @@ import { Zeitraum, vorherigesJahr } from "./zeitraum";
  * Diese Funktion berechnet den Betrachtungszeitraum anhand des Geburtsdatums und aller
  * Ausklammerungen. Die Funktion erstellt ein Zeitraum-Objekt, welches mit dem Start
  * des ersten Jahres, in dem keine Ausklammerung zutrifft, beginnt und mit dem
- * tatsächlichen Geburtsdatum abschließt.
+ * Geburtsmonat abschließt.
  */
 export function berechneBetrachtungszeitraum(
   geburtsdatum: Date,
   ausklammerungen: Ausklammerung[],
 ): Zeitraum {
+  const geburtsmonat = Temporal.PlainYearMonth.from({
+    year: geburtsdatum.getUTCFullYear(),
+    month: geburtsdatum.getUTCMonth() + 1,
+  });
+
   const startJahr = findeJahrOhneAusklammerung(
-    vorherigesJahr(geburtsdatum),
+    vorherigesJahr(geburtsmonat),
     ausklammerungen,
   );
 
   return {
-    von: new Date(Date.UTC(startJahr.getUTCFullYear(), 0, 1)),
-    bis: geburtsdatum,
+    von: Temporal.PlainYearMonth.from({ year: startJahr.year, month: 1 }),
+    bis: geburtsmonat,
   };
 }
 
@@ -35,23 +42,29 @@ if (import.meta.vitest) {
         ausklammerungen,
       );
 
-      expect(betrachtungszeitraum).toEqual({
-        von: new Date("2024-01-01T00:00:00.000Z"),
-        bis: new Date("2025-10-15T00:00:00.000Z"),
-      });
+      expect(
+        betrachtungszeitraum.von.equals(
+          Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+        ),
+      ).toBe(true);
+      expect(
+        betrachtungszeitraum.bis.equals(
+          Temporal.PlainYearMonth.from({ year: 2025, month: 10 }),
+        ),
+      ).toBe(true);
     });
 
     it("finds the first calendar year that no Ausklammerungen can be applied to", () => {
       const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
       const ausklammerungen: Ausklammerung[] = [
         {
-          von: new Date("2024-05-01T00:00:00.000Z"),
-          bis: new Date("2024-05-12T00:00:00.000Z"),
+          von: Temporal.PlainDate.from({ year: 2024, month: 5, day: 1 }),
+          bis: Temporal.PlainDate.from({ year: 2024, month: 5, day: 12 }),
           beschreibung: "Test",
         },
         {
-          von: new Date("2022-03-03T00:00:00.000Z"),
-          bis: new Date("2022-03-09T00:00:00.000Z"),
+          von: Temporal.PlainDate.from({ year: 2022, month: 3, day: 3 }),
+          bis: Temporal.PlainDate.from({ year: 2022, month: 3, day: 9 }),
           beschreibung: "Test",
         },
       ];
@@ -61,10 +74,16 @@ if (import.meta.vitest) {
         ausklammerungen,
       );
 
-      expect(betrachtungszeitraum).toEqual({
-        von: new Date("2023-01-01T00:00:00.000Z"),
-        bis: new Date("2025-10-15T00:00:00.000Z"),
-      });
+      expect(
+        betrachtungszeitraum.von.equals(
+          Temporal.PlainYearMonth.from({ year: 2023, month: 1 }),
+        ),
+      ).toBe(true);
+      expect(
+        betrachtungszeitraum.bis.equals(
+          Temporal.PlainYearMonth.from({ year: 2025, month: 10 }),
+        ),
+      ).toBe(true);
     });
   });
 }

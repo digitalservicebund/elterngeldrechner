@@ -3,7 +3,7 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
-  type AllgemeineAngaben,
+  type AllgemeineAngaben as AllgemeineAngabenPage,
   AllgemeineAngabenSchema,
   bundeslaender,
 } from "./AllgemeineAngaben.schema";
@@ -14,7 +14,7 @@ import {
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
 
-export function AllgemeineAngaben() {
+export function AllgemeineAngabenPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
 

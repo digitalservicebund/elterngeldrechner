@@ -2,10 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { Geburt, GeburtSchema } from "./Kind.schema";
+import { GeburtSchema } from "./Kind.schema";
 import { Button, CustomRadioGroup } from "@/application/components";
 
-export function Kind() {
+export function KindPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
 
@@ -14,10 +14,8 @@ export function Kind() {
   });
   const { errors } = formState;
 
-  const navigateNextPage = (geburt: Geburt) => {
-    if (geburt.istGeboren) {
-      void navigate("/abfrageteil-v2/kind/geboren");
-    }
+  const navigateNextPage = () => {
+    void navigate("/abfrageteil-v2/kind/geboren");
   };
 
   return (

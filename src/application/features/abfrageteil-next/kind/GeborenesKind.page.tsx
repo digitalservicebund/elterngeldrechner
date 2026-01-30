@@ -7,7 +7,7 @@ import { CustomDate } from "@/application/features/abfrageteil/components/Nachwu
 
 // TODO: Find a better way to handle conversion of dates and booleans!
 
-export function GeborenesKind() {
+export function GeborenesKindPage() {
   const formIdentifier = useId();
 
   const { register, handleSubmit, formState } = useForm({

@@ -43,3 +43,10 @@ This is crucial because many German administrative terms lack precise English eq
 overhead when translated. This hybrid approach ensures clear communication with domain experts and maintains code readability within our
 specific context. While we acknowledge this might pose a barrier for non-German speaking contributors, we believe it's the most effective
 solution for our project. We encourage contributors to ask questions about any unfamiliar German terms.
+
+## Use of AI in Development
+
+To maximize our engineering focus on code quality and the delivery of production-ready enhancements and new features, this project
+utilizes AI assistance for repetitive tasks, boilerplate code generation, discoveries, and prototyping.
+To maintain our high standards, all AI-generated output is strictly reviewed, refined and validated by our engineers. We treat AI as
+a tool to increase productivity, while the final responsibility for logic and security remains entirely with the human team.

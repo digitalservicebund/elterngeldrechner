@@ -1,3 +1,5 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 import {
   Ausklammerung,
   findeJahrOhneAusklammerung,
@@ -39,9 +41,10 @@ export function berechneBemessungszeitraum<
 
   switch (erwerbstaetigkeit) {
     case "Selbstaendig": {
-      const startJahr = new Date(
-        Date.UTC(geburtsdatum.getUTCFullYear() - 1, 0, 1),
-      );
+      const startJahr = Temporal.PlainYearMonth.from({
+        year: geburtsdatum.getUTCFullYear() - 1,
+        month: 1,
+      });
 
       const bemessungsjahr = findeJahrOhneAusklammerung(
         startJahr,
@@ -51,14 +54,18 @@ export function berechneBemessungszeitraum<
       return [
         {
           von: bemessungsjahr,
-          bis: new Date(Date.UTC(bemessungsjahr.getUTCFullYear(), 11, 1)),
+          bis: Temporal.PlainYearMonth.from({
+            year: bemessungsjahr.year,
+            month: 12,
+          }),
         },
       ] as BerechneBemessungszeitraumResult<T>;
     }
     case "Nicht-Selbstaendig": {
-      const geburtsmonat = new Date(
-        Date.UTC(geburtsdatum.getUTCFullYear(), geburtsdatum.getUTCMonth(), 1),
-      );
+      const geburtsmonat = Temporal.PlainYearMonth.from({
+        year: geburtsdatum.getUTCFullYear(),
+        month: geburtsdatum.getUTCMonth() + 1,
+      });
 
       const monate = sammleBemessungsmonate(
         vorherigerMonat(geburtsmonat),
@@ -73,10 +80,10 @@ export function berechneBemessungszeitraum<
 }
 
 function sammleBemessungsmonate(
-  monat: Date,
+  monat: Temporal.PlainYearMonth,
   ausklammerungen: readonly Ausklammerung[],
-  monatSammlung: Date[] = [],
-): Date[] {
+  monatSammlung: Temporal.PlainYearMonth[] = [],
+): Temporal.PlainYearMonth[] {
   if (monatSammlung.length === 12) {
     return monatSammlung;
   }
@@ -90,28 +97,33 @@ function sammleBemessungsmonate(
   );
 }
 
-function gruppiereMonateInZeitraeume(monate: Date[]): Zeitraum[] {
+function gruppiereMonateInZeitraeume(
+  monate: Temporal.PlainYearMonth[],
+): Zeitraum[] {
   if (monate.length === 0) {
     return [];
   }
 
-  const monatsGruppen = monate.reduce((gruppen: Date[][], monat: Date) => {
-    const vorherigeGruppe = gruppen.at(-1);
+  const monatsGruppen = monate.reduce(
+    (gruppen: Temporal.PlainYearMonth[][], monat: Temporal.PlainYearMonth) => {
+      const vorherigeGruppe = gruppen.at(-1);
 
-    if (vorherigeGruppe) {
-      const letzterMonat = vorherigeGruppe.at(-1);
+      if (vorherigeGruppe) {
+        const letzterMonat = vorherigeGruppe.at(-1);
 
-      if (letzterMonat && istMonatFolgend(letzterMonat, monat)) {
-        vorherigeGruppe.push(monat);
+        if (letzterMonat && istMonatFolgend(letzterMonat, monat)) {
+          vorherigeGruppe.push(monat);
 
-        return gruppen;
+          return gruppen;
+        }
       }
-    }
 
-    gruppen.push([monat]);
+      gruppen.push([monat]);
 
-    return gruppen;
-  }, []);
+      return gruppen;
+    },
+    [],
+  );
 
   return monatsGruppen.flatMap((gruppe) => {
     const von = gruppe[0];
@@ -132,15 +144,15 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-10-02T00:00:00.000Z"),
-              bis: new Date("2026-01-08T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
               beschreibung: "Mutterschutz",
             },
           ],
           expected: [
             {
-              von: new Date("2024-10-01T00:00:00.000Z"),
-              bis: new Date("2025-09-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
             },
           ],
         },
@@ -149,15 +161,15 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2026-11-11T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2026-09-30T00:00:00.000Z"),
-              bis: new Date("2027-01-06T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2026, month: 9, day: 30 }),
+              bis: Temporal.PlainDate.from({ year: 2027, month: 1, day: 6 }),
               beschreibung: "Mutterschutz",
             },
           ],
           expected: [
             {
-              von: new Date("2025-09-01T00:00:00.000Z"),
-              bis: new Date("2026-08-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2026, month: 8 }),
             },
           ],
         },
@@ -166,24 +178,24 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-10-02T00:00:00.000Z"),
-              bis: new Date("2026-01-08T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
               beschreibung: "Mutterschutz",
             },
             {
-              von: new Date("2025-06-15T00:00:00.000Z"),
-              bis: new Date("2025-08-02T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 6, day: 15 }),
+              bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 2 }),
               beschreibung: "Krankheit",
             },
           ],
           expected: [
             {
-              von: new Date("2024-07-01T00:00:00.000Z"),
-              bis: new Date("2025-05-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 7 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 5 }),
             },
             {
-              von: new Date("2025-09-01T00:00:00.000Z"),
-              bis: new Date("2025-09-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
             },
           ],
         },
@@ -192,33 +204,33 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-10-02T00:00:00.000Z"),
-              bis: new Date("2026-01-08T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
               beschreibung: "Mutterschutz",
             },
             {
-              von: new Date("2025-06-15T00:00:00.000Z"),
-              bis: new Date("2025-08-02T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 6, day: 15 }),
+              bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 2 }),
               beschreibung: "Krankheit",
             },
             {
-              von: new Date("2023-10-03T00:00:00.000Z"),
-              bis: new Date("2024-10-03T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2023, month: 10, day: 3 }),
+              bis: Temporal.PlainDate.from({ year: 2024, month: 10, day: 3 }),
               beschreibung: "Elterngeld anderes Kind",
             },
           ],
           expected: [
             {
-              von: new Date("2023-06-01T00:00:00.000Z"),
-              bis: new Date("2023-09-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2023, month: 6 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2023, month: 9 }),
             },
             {
-              von: new Date("2024-11-01T00:00:00.000Z"),
-              bis: new Date("2025-05-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 11 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 5 }),
             },
             {
-              von: new Date("2025-09-01T00:00:00.000Z"),
-              bis: new Date("2025-09-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
             },
           ],
         },
@@ -227,38 +239,38 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-10-02T00:00:00.000Z"),
-              bis: new Date("2026-01-08T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
               beschreibung: "Mutterschutz",
             },
             {
-              von: new Date("2025-06-15T00:00:00.000Z"),
-              bis: new Date("2025-08-02T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 6, day: 15 }),
+              bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 2 }),
               beschreibung: "Krankheit",
             },
             {
-              von: new Date("2023-10-03T00:00:00.000Z"),
-              bis: new Date("2024-10-03T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2023, month: 10, day: 3 }),
+              bis: Temporal.PlainDate.from({ year: 2024, month: 10, day: 3 }),
               beschreibung: "Elterngeld anderes Kind",
             },
             {
-              von: new Date("2023-08-22T00:00:00.000Z"),
-              bis: new Date("2023-12-14T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2023, month: 8, day: 22 }),
+              bis: Temporal.PlainDate.from({ year: 2023, month: 12, day: 14 }),
               beschreibung: "Mutterschutz anderes Kind",
             },
           ],
           expected: [
             {
-              von: new Date("2023-04-01T00:00:00.000Z"),
-              bis: new Date("2023-07-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2023, month: 4 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2023, month: 7 }),
             },
             {
-              von: new Date("2024-11-01T00:00:00.000Z"),
-              bis: new Date("2025-05-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 11 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 5 }),
             },
             {
-              von: new Date("2025-09-01T00:00:00.000Z"),
-              bis: new Date("2025-09-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 9 }),
             },
           ],
         },
@@ -269,8 +281,8 @@ if (import.meta.vitest) {
           expected: [
             {
               // 12 Monate vor dem Geburtsmonat (Dez 23) -> Dez 22 bis Nov 23
-              von: new Date("2022-12-01T00:00:00.000Z"),
-              bis: new Date("2023-11-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2022, month: 12 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2023, month: 11 }),
             },
           ],
         },
@@ -285,7 +297,11 @@ if (import.meta.vitest) {
           ausklammerungen: ausklammerungen as Ausklammerung[],
         });
 
-        expect(bemessungszeitraum).toEqual(expected);
+        expect(bemessungszeitraum).toHaveLength(expected.length);
+        bemessungszeitraum.forEach((zeitraum, index) => {
+          expect(zeitraum.von.equals(expected[index]!.von)).toBe(true);
+          expect(zeitraum.bis.equals(expected[index]!.bis)).toBe(true);
+        });
       });
     });
 
@@ -296,15 +312,15 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-10-02T00:00:00.000Z"),
-              bis: new Date("2026-01-08T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
               beschreibung: "Mutterschutz",
             },
           ],
           expected: [
             {
-              von: new Date("2024-01-01T00:00:00.000Z"),
-              bis: new Date("2024-12-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
             },
           ],
         },
@@ -313,15 +329,15 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2026-01-01T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-11-20T00:00:00.000Z"),
-              bis: new Date("2026-02-26T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 11, day: 20 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 2, day: 26 }),
               beschreibung: "Mutterschutz",
             },
           ],
           expected: [
             {
-              von: new Date("2024-01-01T00:00:00.000Z"),
-              bis: new Date("2024-12-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
             },
           ],
         },
@@ -330,15 +346,15 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2026-02-12T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2026-01-01T00:00:00.000Z"),
-              bis: new Date("2026-04-09T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2026, month: 1, day: 1 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 4, day: 9 }),
               beschreibung: "Mutterschutz",
             },
           ],
           expected: [
             {
-              von: new Date("2025-01-01T00:00:00.000Z"),
-              bis: new Date("2025-12-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2025, month: 1 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 12 }),
             },
           ],
         },
@@ -347,20 +363,20 @@ if (import.meta.vitest) {
           geburtsdatum: new Date("2026-02-12T00:00:00.000Z"),
           ausklammerungen: [
             {
-              von: new Date("2025-08-01T00:00:00.000Z"),
-              bis: new Date("2025-08-31T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2025, month: 8, day: 1 }),
+              bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 31 }),
               beschreibung: "Krankheit",
             },
             {
-              von: new Date("2026-01-01T00:00:00.000Z"),
-              bis: new Date("2026-04-09T00:00:00.000Z"),
+              von: Temporal.PlainDate.from({ year: 2026, month: 1, day: 1 }),
+              bis: Temporal.PlainDate.from({ year: 2026, month: 4, day: 9 }),
               beschreibung: "Mutterschutz",
             },
           ],
           expected: [
             {
-              von: new Date("2024-01-01T00:00:00.000Z"),
-              bis: new Date("2024-12-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
             },
           ],
         },
@@ -370,8 +386,8 @@ if (import.meta.vitest) {
           ausklammerungen: [],
           expected: [
             {
-              von: new Date("2022-01-01T00:00:00.000Z"),
-              bis: new Date("2022-12-01T00:00:00.000Z"),
+              von: Temporal.PlainYearMonth.from({ year: 2022, month: 1 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2022, month: 12 }),
             },
           ],
         },
@@ -386,7 +402,11 @@ if (import.meta.vitest) {
           ausklammerungen: ausklammerungen as Ausklammerung[],
         });
 
-        expect(bemessungszeitraum).toEqual(expected);
+        expect(bemessungszeitraum).toHaveLength(expected.length);
+        bemessungszeitraum.forEach((zeitraum, index) => {
+          expect(zeitraum.von.equals(expected[index]!.von)).toBe(true);
+          expect(zeitraum.bis.equals(expected[index]!.bis)).toBe(true);
+        });
       });
     });
   });

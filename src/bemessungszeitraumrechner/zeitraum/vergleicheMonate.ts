@@ -1,7 +1,12 @@
+import { Temporal } from "@js-temporal/polyfill";
+
 import { naechsterMonat } from "./manipuliereMonat";
 
-export function istMonatFolgend(vormonat: Date, folgemonat: Date): boolean {
-  return naechsterMonat(vormonat).getTime() === folgemonat.getTime();
+export function istMonatFolgend(
+  vormonat: Temporal.PlainYearMonth,
+  folgemonat: Temporal.PlainYearMonth,
+): boolean {
+  return naechsterMonat(vormonat).equals(folgemonat);
 }
 
 if (import.meta.vitest) {
@@ -9,32 +14,72 @@ if (import.meta.vitest) {
 
   describe("istMonatFolgend", () => {
     it("soll true zurückgeben, wenn der zweite Monat direkt auf den ersten folgt", () => {
-      const ersterMonat = new Date("2024-01-01T00:00:00.000Z");
-      const zweiterMonat = new Date("2024-02-01T00:00:00.000Z");
+      const ersterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 1,
+      });
+
+      const zweiterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 2,
+      });
+
       expect(istMonatFolgend(ersterMonat, zweiterMonat)).toBe(true);
     });
 
     it("soll true zurückgeben, wenn der zweite Monat direkt auf den ersten folgt und über die Jahresgrenze geht", () => {
-      const ersterMonat = new Date("2024-12-01T00:00:00.000Z");
-      const zweiterMonat = new Date("2025-01-01T00:00:00.000Z");
+      const ersterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 12,
+      });
+
+      const zweiterMonat = Temporal.PlainYearMonth.from({
+        year: 2025,
+        month: 1,
+      });
+
       expect(istMonatFolgend(ersterMonat, zweiterMonat)).toBe(true);
     });
 
     it("soll false zurückgeben, wenn der zweite Monat nicht direkt auf den ersten folgt (gleicher Monat)", () => {
-      const ersterMonat = new Date("2024-01-01T00:00:00.000Z");
-      const zweiterMonat = new Date("2024-01-01T00:00:00.000Z");
+      const ersterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 1,
+      });
+
+      const zweiterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 1,
+      });
+
       expect(istMonatFolgend(ersterMonat, zweiterMonat)).toBe(false);
     });
 
     it("soll false zurückgeben, wenn der zweite Monat nicht direkt auf den ersten folgt (Monat davor)", () => {
-      const ersterMonat = new Date("2024-02-01T00:00:00.000Z");
-      const zweiterMonat = new Date("2024-01-01T00:00:00.000Z");
+      const ersterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 2,
+      });
+
+      const zweiterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 1,
+      });
+
       expect(istMonatFolgend(ersterMonat, zweiterMonat)).toBe(false);
     });
 
     it("soll false zurückgeben, wenn der zweite Monat nicht direkt auf den ersten folgt (zwei Monate später)", () => {
-      const ersterMonat = new Date("2024-01-01T00:00:00.000Z");
-      const zweiterMonat = new Date("2024-03-01T00:00:00.000Z");
+      const ersterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 1,
+      });
+
+      const zweiterMonat = Temporal.PlainYearMonth.from({
+        year: 2024,
+        month: 3,
+      });
+
       expect(istMonatFolgend(ersterMonat, zweiterMonat)).toBe(false);
     });
   });

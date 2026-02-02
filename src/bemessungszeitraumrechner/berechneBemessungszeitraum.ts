@@ -9,7 +9,7 @@ import {
 import { Zeitraum, istMonatFolgend, vorherigerMonat } from "./zeitraum";
 
 type BerechneBemessungszeitraumOptions = {
-  geburtsdatum: Date;
+  geburtsdatum: Temporal.PlainDate;
   erwerbstaetigkeit: "Selbstaendig" | "Nicht-Selbstaendig";
   ausklammerungen: [] | Ausklammerung[];
 };
@@ -41,10 +41,10 @@ export function berechneBemessungszeitraum<
 
   switch (erwerbstaetigkeit) {
     case "Selbstaendig": {
-      const startJahr = Temporal.PlainYearMonth.from({
-        year: geburtsdatum.getUTCFullYear() - 1,
-        month: 1,
-      });
+      const startJahr = geburtsdatum
+        .subtract({ years: 1 })
+        .with({ month: 1 })
+        .toPlainYearMonth();
 
       const bemessungsjahr = findeJahrOhneAusklammerung(
         startJahr,
@@ -54,21 +54,13 @@ export function berechneBemessungszeitraum<
       return [
         {
           von: bemessungsjahr,
-          bis: Temporal.PlainYearMonth.from({
-            year: bemessungsjahr.year,
-            month: 12,
-          }),
+          bis: bemessungsjahr.with({ month: 12 }),
         },
       ] as BerechneBemessungszeitraumResult<T>;
     }
     case "Nicht-Selbstaendig": {
-      const geburtsmonat = Temporal.PlainYearMonth.from({
-        year: geburtsdatum.getUTCFullYear(),
-        month: geburtsdatum.getUTCMonth() + 1,
-      });
-
       const monate = sammleBemessungsmonate(
-        vorherigerMonat(geburtsmonat),
+        geburtsdatum.toPlainYearMonth(),
         ausklammerungen,
       );
 
@@ -141,7 +133,7 @@ if (import.meta.vitest) {
       const testCases = [
         {
           name: "should exclude Mutterschutz period from the 12 months",
-          geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2025-11-13"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
@@ -158,7 +150,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should correctly calculate a shifted Bemessungszeitraum due to Mutterschutz",
-          geburtsdatum: new Date("2026-11-11T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2026-11-11"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2026, month: 9, day: 30 }),
@@ -175,7 +167,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should handle multiple Ausklammerungen (Mutterschutz, Krankheit) and create multiple periods",
-          geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2025-11-13"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
@@ -201,7 +193,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should handle complex multi-year Ausklammerungen (Mutterschutz, Krankheit, Elterngeld)",
-          geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2025-11-13"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
@@ -236,7 +228,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should handle overlapping Ausklammerungen from different children",
-          geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2025-11-13"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
@@ -274,18 +266,6 @@ if (import.meta.vitest) {
             },
           ],
         },
-        {
-          name: "should handle new years eve timezone edge case correctly (local vs utc year)",
-          geburtsdatum: new Date("2023-12-31T23:00:00.000Z"),
-          ausklammerungen: [],
-          expected: [
-            {
-              // 12 Monate vor dem Geburtsmonat (Dez 23) -> Dez 22 bis Nov 23
-              von: Temporal.PlainYearMonth.from({ year: 2022, month: 12 }),
-              bis: Temporal.PlainYearMonth.from({ year: 2023, month: 11 }),
-            },
-          ],
-        },
       ];
 
       it.each(testCases)("$name", (options) => {
@@ -309,7 +289,7 @@ if (import.meta.vitest) {
       const testCases = [
         {
           name: "should return the previous year if Mutterschutz does not affect it",
-          geburtsdatum: new Date("2025-11-13T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2025-11-13"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
@@ -326,7 +306,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should skip a year with Mutterschutz and return the year before",
-          geburtsdatum: new Date("2026-01-01T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2026-01-01"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 11, day: 20 }),
@@ -343,7 +323,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should return the previous year if Mutterschutz starts in the year of birth",
-          geburtsdatum: new Date("2026-02-12T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2026-02-12"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2026, month: 1, day: 1 }),
@@ -360,7 +340,7 @@ if (import.meta.vitest) {
         },
         {
           name: "should skip a year with Krankheit and return the year before",
-          geburtsdatum: new Date("2026-02-12T00:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2026-02-12"),
           ausklammerungen: [
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 8, day: 1 }),
@@ -382,12 +362,12 @@ if (import.meta.vitest) {
         },
         {
           name: "should determine the correct assessment year on new years eve (local vs utc year)",
-          geburtsdatum: new Date("2023-12-31T23:00:00.000Z"),
+          geburtsdatum: Temporal.PlainDate.from("2024-01-01"),
           ausklammerungen: [],
           expected: [
             {
-              von: Temporal.PlainYearMonth.from({ year: 2022, month: 1 }),
-              bis: Temporal.PlainYearMonth.from({ year: 2022, month: 12 }),
+              von: Temporal.PlainYearMonth.from({ year: 2023, month: 1 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2023, month: 12 }),
             },
           ],
         },

@@ -10,38 +10,62 @@ import {
 } from "@/application/features/abfrageteil-next/kind/Kind.schema";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite.page";
 
+type GeschwisterkindAbfrage = { istVorhanden: boolean };
+
+type GeschwisterkindAngaben = {
+  geburtsdatum: Temporal.PlainDate;
+  hatBehinderung: boolean;
+  istWeiteresGeschwisterkindVorhanden: boolean;
+};
+
 enum Route {
   Startseite,
-  Allgemein,
-  Kind,
-  GeborenesKind,
-  Geschwister,
-  UngeborenesKind,
-  WahrscheinlichGeborenesKind,
+
+  AllgemeineAngaben,
+
+  KindAbfrage,
+  GeborenesKindAngaben,
+  UngeborenesKindAngaben,
+  WahrscheinlichGeborenesKindAbfrage,
+
+  GeschwisterkindAbfrage,
+  GeschwisterkindAngaben,
+
+  ElternteilAllgemeineAngaben,
+  // ElternteilAusklammerungsgruendeAngaben,
+  // ElternteilAusklammerungszeitenAngaben,
+  // ElternteilTaetigkeitenAngaben,
 }
+
 type Event =
   | { route: Route.Startseite }
-  | { route: Route.Allgemein }
-  | { route: Route.Kind; payload: Geburt }
-  | { route: Route.GeborenesKind; payload: GeborenesKind }
-  | { route: Route.UngeborenesKind; payload: UngeborenesKind }
-  | { route: Route.WahrscheinlichGeborenesKind; payload: GeborenesKind };
+  | { route: Route.AllgemeineAngaben }
+  | { route: Route.KindAbfrage; payload: Geburt }
+  | { route: Route.GeborenesKindAngaben; payload: GeborenesKind }
+  | { route: Route.UngeborenesKindAngaben; payload: UngeborenesKind }
+  | { route: Route.WahrscheinlichGeborenesKindAbfrage; payload: GeborenesKind }
+  | { route: Route.GeschwisterkindAbfrage; payload: GeschwisterkindAbfrage }
+  | { route: Route.GeschwisterkindAngaben; payload: GeschwisterkindAngaben }
+  | {
+      route: Route.ElternteilAllgemeineAngaben;
+      payload: GeschwisterkindAbfrage;
+    };
 
 export function getNextRoute(currentRoute: Event): Route {
   switch (currentRoute.route) {
     case Route.Startseite:
-      return Route.Allgemein;
-    case Route.Allgemein:
-      return Route.Kind;
-    case Route.Kind:
+      return Route.AllgemeineAngaben;
+    case Route.AllgemeineAngaben:
+      return Route.KindAbfrage;
+    case Route.KindAbfrage:
       if (currentRoute.payload.istGeboren) {
-        return Route.GeborenesKind;
+        return Route.GeborenesKindAngaben;
       } else {
-        return Route.UngeborenesKind;
+        return Route.UngeborenesKindAngaben;
       }
-    case Route.GeborenesKind:
-      return Route.Geschwister;
-    case Route.UngeborenesKind: {
+    case Route.GeborenesKindAngaben:
+      return Route.GeschwisterkindAbfrage;
+    case Route.UngeborenesKindAngaben: {
       const { errechneterEntbindungstermin } = currentRoute.payload;
       const heuteVorZweiWochen = Temporal.Now.plainDateISO().subtract({
         days: 14,
@@ -54,13 +78,23 @@ export function getNextRoute(currentRoute: Event): Route {
         ) < 0;
 
       if (istGeburtWahrscheinlich) {
-        return Route.WahrscheinlichGeborenesKind;
+        return Route.WahrscheinlichGeborenesKindAbfrage;
       } else {
-        return Route.Geschwister;
+        return Route.GeschwisterkindAbfrage;
       }
     }
-    case Route.WahrscheinlichGeborenesKind:
-      return Route.Geschwister;
+    case Route.WahrscheinlichGeborenesKindAbfrage:
+      return Route.GeschwisterkindAbfrage;
+    case Route.GeschwisterkindAbfrage:
+      return currentRoute.payload.istVorhanden
+        ? Route.GeschwisterkindAngaben
+        : Route.ElternteilAllgemeineAngaben;
+    case Route.GeschwisterkindAngaben:
+      return currentRoute.payload.istWeiteresGeschwisterkindVorhanden
+        ? Route.GeschwisterkindAngaben
+        : Route.ElternteilAllgemeineAngaben;
+    case Route.ElternteilAllgemeineAngaben:
+      throw Error("Not yet implemented.");
   }
 }
 
@@ -77,39 +111,39 @@ if (import.meta.vitest) {
   });
 
   describe("getNextRoute", () => {
-    it("returns Allgemein given Startseite as currentRoute", () => {
+    it("returns AllgemeineAngaben given Startseite as currentRoute", () => {
       const nextRoute = getNextRoute({ route: Route.Startseite });
 
-      expect(nextRoute).toEqual(Route.Allgemein);
+      expect(nextRoute).toEqual(Route.AllgemeineAngaben);
     });
 
-    it("returns Kind given Allgemein as currentRoute", () => {
-      const nextRoute = getNextRoute({ route: Route.Allgemein });
+    it("returns KindAbfrage given AllgemeineAngaben as currentRoute", () => {
+      const nextRoute = getNextRoute({ route: Route.AllgemeineAngaben });
 
-      expect(nextRoute).toEqual(Route.Kind);
+      expect(nextRoute).toEqual(Route.KindAbfrage);
     });
 
-    it("returns GeborenesKind given Kind as currentRoute and istGeboren true", () => {
+    it("returns GeborenesKindAngaben given KindAbfrage as currentRoute and istGeboren true", () => {
       const nextRoute = getNextRoute({
-        route: Route.Kind,
+        route: Route.KindAbfrage,
         payload: { istGeboren: true },
       });
 
-      expect(nextRoute).toEqual(Route.GeborenesKind);
+      expect(nextRoute).toEqual(Route.GeborenesKindAngaben);
     });
 
-    it("returns UngeborenesKind given Kind as currentRoute and istGeboren false", () => {
+    it("returns UngeborenesKindAngaben given KindAbfrage as currentRoute and istGeboren false", () => {
       const nextRoute = getNextRoute({
-        route: Route.Kind,
+        route: Route.KindAbfrage,
         payload: { istGeboren: false },
       });
 
-      expect(nextRoute).toEqual(Route.UngeborenesKind);
+      expect(nextRoute).toEqual(Route.UngeborenesKindAngaben);
     });
 
-    it("returns Geschwister given GeborenesKind as currentRoute and required inputs", () => {
+    it("returns GeschwisterkindAbfrage given GeborenesKindAngaben as currentRoute and required inputs", () => {
       const nextRoute = getNextRoute({
-        route: Route.GeborenesKind,
+        route: Route.GeborenesKindAngaben,
         payload: {
           errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
           geburtsdatum: Temporal.Now.plainDateISO(),
@@ -117,57 +151,57 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(nextRoute).toEqual(Route.Geschwister);
+      expect(nextRoute).toEqual(Route.GeschwisterkindAbfrage);
     });
 
-    it("returns Geschwister given UngeborenesKind as currentRoute and date under threshold", () => {
+    it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date under threshold", () => {
       const nextRoute = getNextRoute({
-        route: Route.UngeborenesKind,
+        route: Route.UngeborenesKindAngaben,
         payload: {
           errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
           anzahl: 1,
         },
       });
 
-      expect(nextRoute).toEqual(Route.Geschwister);
+      expect(nextRoute).toEqual(Route.GeschwisterkindAbfrage);
     });
 
-    it("returns Geschwister given UngeborenesKind as currentRoute and date exactly at threshold", () => {
+    it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date exactly at threshold", () => {
       vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
 
       const nextRoute = getNextRoute({
-        route: Route.UngeborenesKind,
+        route: Route.UngeborenesKindAngaben,
         payload: {
           errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-18"),
           anzahl: 1,
         },
       });
 
-      expect(nextRoute).toEqual(Route.Geschwister);
+      expect(nextRoute).toEqual(Route.GeschwisterkindAbfrage);
     });
 
-    it("returns UngeborenesKindValidierung given UngeborenesKind as currentRoute and date before threshold", () => {
+    it("returns WahrscheinlichGeborenesKindAbfrage given UngeborenesKindAngaben as currentRoute and date before threshold", () => {
       vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
 
       const nextRoute = getNextRoute({
-        route: Route.UngeborenesKind,
+        route: Route.UngeborenesKindAngaben,
         payload: {
           errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-17"),
           anzahl: 1,
         },
       });
 
-      expect(nextRoute).toEqual(Route.WahrscheinlichGeborenesKind);
+      expect(nextRoute).toEqual(Route.WahrscheinlichGeborenesKindAbfrage);
     });
 
-    it("returns Geschwister given WahrscheinlichGeborenesKind as currentRoute", () => {
+    it("returns GeschwisterkindAbfrage given WahrscheinlichGeborenesKindAbfrage as currentRoute", () => {
       const heute = Temporal.Now.plainDateISO();
       const heuteVorMehrAlsZweiWochen = Temporal.Now.plainDateISO().subtract({
         days: 15,
       });
 
       const nextRoute = getNextRoute({
-        route: Route.WahrscheinlichGeborenesKind,
+        route: Route.WahrscheinlichGeborenesKindAbfrage,
         payload: {
           errechneterEntbindungstermin: heuteVorMehrAlsZweiWochen,
           geburtsdatum: heute,
@@ -175,7 +209,55 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(nextRoute).toEqual(Route.Geschwister);
+      expect(nextRoute).toEqual(Route.GeschwisterkindAbfrage);
+    });
+
+    it("returns GeschwisterkindAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals yes", () => {
+      const nextRoute = getNextRoute({
+        route: Route.GeschwisterkindAbfrage,
+        payload: {
+          istVorhanden: true,
+        },
+      });
+
+      expect(nextRoute).toEqual(Route.GeschwisterkindAngaben);
+    });
+
+    it("returns ElternteilAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
+      const nextRoute = getNextRoute({
+        route: Route.GeschwisterkindAbfrage,
+        payload: {
+          istVorhanden: false,
+        },
+      });
+
+      expect(nextRoute).toEqual(Route.ElternteilAllgemeineAngaben);
+    });
+
+    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+      const nextRoute = getNextRoute({
+        route: Route.GeschwisterkindAngaben,
+        payload: {
+          geburtsdatum: Temporal.Now.plainDateISO(),
+          hatBehinderung: false,
+          istWeiteresGeschwisterkindVorhanden: true,
+        },
+      });
+
+      expect(nextRoute).toEqual(Route.GeschwisterkindAngaben);
+    });
+
+    it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
+      const nextRoute = getNextRoute({
+        route: Route.GeschwisterkindAngaben,
+        payload: {
+          geburtsdatum: Temporal.Now.plainDateISO(),
+          hatBehinderung: false,
+          istWeiteresGeschwisterkindVorhanden: false,
+        },
+      });
+
+      expect(nextRoute).toEqual(Route.ElternteilAllgemeineAngaben);
     });
   });
 }

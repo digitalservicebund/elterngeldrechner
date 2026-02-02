@@ -32,32 +32,42 @@ export function gruppiereBemessungszeitraum(
 ): GruppiereBemessungszeitraumResult {
   const { bemessungszeitraum, ausklammerungen } = options;
 
-  const monatsgruppen: Temporal.PlainYearMonth[][] =
-    bemessungszeitraum.map(generiereMonate);
+  const monatsgruppen = bemessungszeitraum.map(generiereMonate);
 
-  const elementeMitSchluessel = [
-    ...monatsgruppen
-      .filter((gruppe) => gruppe.length > 0)
-      .map((gruppe) => ({
-        wert: gruppe,
-        typ: "monate" as const,
-        sortierMonat: gruppe[0]!,
-      })),
-    ...ausklammerungen.map((ausklammerung) => ({
-      wert: ausklammerung,
-      typ: "ausklammerung" as const,
-      sortierMonat: Temporal.PlainYearMonth.from({
-        year: ausklammerung.von.year,
-        month: ausklammerung.von.month,
-      }),
-    })),
+  const sortierbareGruppen = [...monatsgruppen]
+    .filter((gruppe) => gruppe.length > 0)
+    .map(alsSortierbareGruppe);
+
+  const sortierbareAusklammerungen = [
+    ...ausklammerungen.map(alsSortierbareAusklammerung),
   ];
 
-  const sortierteElemente = elementeMitSchluessel.sort((a, b) =>
+  const sortiertbareElemente = [
+    ...sortierbareGruppen,
+    ...sortierbareAusklammerungen,
+  ];
+
+  const sortierteElemente = sortiertbareElemente.sort((a, b) =>
     Temporal.PlainYearMonth.compare(a.sortierMonat, b.sortierMonat),
   );
 
   return sortierteElemente.map((element) => element.wert);
+}
+
+function alsSortierbareGruppe(gruppe: Temporal.PlainYearMonth[]) {
+  return {
+    wert: gruppe,
+    typ: "monate" as const,
+    sortierMonat: gruppe[0]!,
+  };
+}
+
+function alsSortierbareAusklammerung(ausklammerung: Ausklammerung) {
+  return {
+    wert: ausklammerung,
+    typ: "ausklammerung" as const,
+    sortierMonat: ausklammerung.von.toPlainYearMonth(),
+  };
 }
 
 function generiereMonate(zeitraum: Zeitraum): Temporal.PlainYearMonth[] {

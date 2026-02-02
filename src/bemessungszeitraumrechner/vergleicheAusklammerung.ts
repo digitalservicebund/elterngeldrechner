@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 
-import { Ausklammerung } from "./Ausklammerung";
+import type { Ausklammerung } from "./Ausklammerung";
 
 /**
  * Prüft, ob eine Ausklammerung in einen gegebenen Monat fällt.

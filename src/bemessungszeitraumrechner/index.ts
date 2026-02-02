@@ -1,5 +1,5 @@
-export type { Ausklammerung } from "./ausklammerung";
-export type { Zeitraum } from "./zeitraum";
+export type { Ausklammerung } from "./Ausklammerung";
+export type { Zeitraum } from "./Zeitraum";
 
 export { berechneBetrachtungszeitraum } from "./berechneBetrachtungszeitraum";
 export { gruppiereBemessungszeitraum } from "./gruppiereBemessungszeitraum";

@@ -1,12 +1,12 @@
 import { Temporal } from "@js-temporal/polyfill";
 
+import type { Ausklammerung } from "./Ausklammerung";
+import type { Zeitraum } from "./Zeitraum";
+
 import {
-  Ausklammerung,
   findeJahrOhneAusklammerung,
   istAusklammerungInMonat,
-} from "./ausklammerung";
-
-import { Zeitraum, istMonatFolgend, vorherigerMonat } from "./zeitraum";
+} from "./vergleicheAusklammerung";
 
 type BerechneBemessungszeitraumOptions = {
   geburtsdatum: Temporal.PlainDate;
@@ -83,7 +83,7 @@ function sammleBemessungsmonate(
   const istAusklammerung = istAusklammerungInMonat(monat, ausklammerungen);
 
   return sammleBemessungsmonate(
-    vorherigerMonat(monat),
+    monat.subtract({ months: 1 }),
     ausklammerungen,
     istAusklammerung ? monatSammlung : [monat, ...monatSammlung],
   );
@@ -103,7 +103,7 @@ function gruppiereMonateInZeitraeume(
       if (vorherigeGruppe) {
         const letzterMonat = vorherigeGruppe.at(-1);
 
-        if (letzterMonat && istMonatFolgend(letzterMonat, monat)) {
+        if (letzterMonat && letzterMonat.add({ months: 1 }).equals(monat)) {
           vorherigeGruppe.push(monat);
 
           return gruppen;

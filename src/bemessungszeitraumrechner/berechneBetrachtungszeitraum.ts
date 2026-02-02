@@ -1,7 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
 
-import { Ausklammerung, findeJahrOhneAusklammerung } from "./ausklammerung";
-import { Zeitraum, vorherigesJahr } from "./zeitraum";
+import type { Ausklammerung } from "./Ausklammerung";
+import type { Zeitraum } from "./Zeitraum";
+
+import { findeJahrOhneAusklammerung } from "./vergleicheAusklammerung";
 
 /**
  * Diese Funktion berechnet den Betrachtungszeitraum anhand des Geburtsdatums und aller
@@ -10,22 +12,17 @@ import { Zeitraum, vorherigesJahr } from "./zeitraum";
  * Geburtsmonat abschließt.
  */
 export function berechneBetrachtungszeitraum(
-  geburtsdatum: Date,
+  geburtsdatum: Temporal.PlainDate,
   ausklammerungen: Ausklammerung[],
 ): Zeitraum {
-  const geburtsmonat = Temporal.PlainYearMonth.from({
-    year: geburtsdatum.getUTCFullYear(),
-    month: geburtsdatum.getUTCMonth() + 1,
-  });
-
   const startJahr = findeJahrOhneAusklammerung(
-    vorherigesJahr(geburtsmonat),
+    geburtsdatum.subtract({ years: 1 }).toPlainYearMonth(),
     ausklammerungen,
   );
 
   return {
     von: Temporal.PlainYearMonth.from({ year: startJahr.year, month: 1 }),
-    bis: geburtsmonat,
+    bis: geburtsdatum.toPlainYearMonth(),
   };
 }
 
@@ -34,7 +31,7 @@ if (import.meta.vitest) {
 
   describe("berechneBetrachtungszeitraum", () => {
     it("finds the previous calendar year as Betrachtungszeitraum if given no Ausklammerungen", () => {
-      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
       const ausklammerungen: Ausklammerung[] = [];
 
       const betrachtungszeitraum = berechneBetrachtungszeitraum(
@@ -55,7 +52,7 @@ if (import.meta.vitest) {
     });
 
     it("finds the first calendar year that no Ausklammerungen can be applied to", () => {
-      const geburtsdatum = new Date("2025-10-15T00:00:00.000Z");
+      const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
       const ausklammerungen: Ausklammerung[] = [
         {
           von: Temporal.PlainDate.from({ year: 2024, month: 5, day: 1 }),

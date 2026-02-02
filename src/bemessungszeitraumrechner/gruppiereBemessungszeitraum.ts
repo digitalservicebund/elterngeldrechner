@@ -1,7 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 
-import { Ausklammerung } from "./ausklammerung";
-import { Zeitraum, naechsterMonat } from "./zeitraum";
+import type { Ausklammerung } from "./Ausklammerung";
+import type { Zeitraum } from "./Zeitraum";
 
 type GruppiereBemessungszeitraumOptions = {
   bemessungszeitraum: Zeitraum[];
@@ -73,7 +73,7 @@ function generiereMonateRekursiv(
   }
 
   const weitereMonate = generiereMonateRekursiv(
-    naechsterMonat(startMonat),
+    startMonat.add({ months: 1 }),
     endMonat,
   );
 

@@ -10,15 +10,15 @@ import {
 } from "@/application/features/abfrageteil-next/kind/Kind.schema";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite.page";
 
-type GeschwisterkindAbfrage = { istVorhanden: boolean };
+export type GeschwisterkindAbfrage = { istVorhanden: boolean };
 
-type GeschwisterkindAngaben = {
+export type GeschwisterkindAngaben = {
   geburtsdatum: Temporal.PlainDate;
   hatBehinderung: boolean;
   istWeiteresGeschwisterkindVorhanden: boolean;
 };
 
-enum Route {
+export enum Route {
   Startseite,
 
   AllgemeineAngaben,
@@ -37,7 +37,9 @@ enum Route {
   // ElternteilTaetigkeitenAngaben,
 }
 
-type Event =
+// TODO: Give slugs a try to index in Geschwister and Elternteil
+
+export type Event =
   | { route: Route.Startseite }
   | { route: Route.AllgemeineAngaben }
   | { route: Route.KindAbfrage; payload: Geburt }
@@ -45,7 +47,11 @@ type Event =
   | { route: Route.UngeborenesKindAngaben; payload: UngeborenesKind }
   | { route: Route.WahrscheinlichGeborenesKindAbfrage; payload: GeborenesKind }
   | { route: Route.GeschwisterkindAbfrage; payload: GeschwisterkindAbfrage }
-  | { route: Route.GeschwisterkindAngaben; payload: GeschwisterkindAngaben }
+  | {
+      route: Route.GeschwisterkindAngaben;
+      index: number;
+      payload: GeschwisterkindAngaben;
+    }
   | {
       route: Route.ElternteilAllgemeineAngaben;
       payload: GeschwisterkindAbfrage;
@@ -237,6 +243,7 @@ if (import.meta.vitest) {
     it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals yes", () => {
       const nextRoute = getNextRoute({
         route: Route.GeschwisterkindAngaben,
+        index: 0,
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,
@@ -250,6 +257,7 @@ if (import.meta.vitest) {
     it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
       const nextRoute = getNextRoute({
         route: Route.GeschwisterkindAngaben,
+        index: 0,
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,

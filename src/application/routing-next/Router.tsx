@@ -1,5 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { Navigate, RouterProvider, createHashRouter } from "react-router";
+import {
+  Navigate,
+  RouterProvider,
+  createHashRouter,
+  generatePath,
+} from "react-router";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.page";
 import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKind.page";
 import { KindPage } from "@/application/features/abfrageteil-next/kind/Kind.page";
@@ -19,25 +24,23 @@ export type GeschwisterkindAngaben = {
 };
 
 export enum Route {
-  Startseite,
+  Startseite = "/startseite",
 
-  AllgemeineAngaben,
+  AllgemeineAngaben = "/allgemeine-angaben",
 
-  KindAbfrage,
-  GeborenesKindAngaben,
-  UngeborenesKindAngaben,
-  WahrscheinlichGeborenesKindAbfrage,
+  KindAbfrage = "/kind",
+  GeborenesKindAngaben = "/kind/geboren",
+  UngeborenesKindAngaben = "/kind/ungeboren",
+  WahrscheinlichGeborenesKindAbfrage = "/kind/ungeboren/validierung",
 
-  GeschwisterkindAbfrage,
-  GeschwisterkindAngaben,
+  GeschwisterkindAbfrage = "/geschwisterkind",
+  GeschwisterkindAngaben = "/geschwisterkind/:index",
 
-  ElternteilAllgemeineAngaben,
+  ElternteilAllgemeineAngaben = "/elternteil/:index",
   // ElternteilAusklammerungsgruendeAngaben,
   // ElternteilAusklammerungszeitenAngaben,
   // ElternteilTaetigkeitenAngaben,
 }
-
-// TODO: Give slugs a try to index in Geschwister and Elternteil
 
 export type Event =
   | { route: Route.Startseite }
@@ -49,15 +52,31 @@ export type Event =
   | { route: Route.GeschwisterkindAbfrage; payload: GeschwisterkindAbfrage }
   | {
       route: Route.GeschwisterkindAngaben;
-      index: number;
+      params: { index: number };
       payload: GeschwisterkindAngaben;
     }
   | {
       route: Route.ElternteilAllgemeineAngaben;
+      params: { index: number };
       payload: GeschwisterkindAbfrage;
     };
 
-export function getNextRoute(currentRoute: Event): Route {
+function paramsToStrings(
+  params: Record<string, number>,
+): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(params).map(([key, value]) => [key, value.toString()]),
+  );
+}
+
+export function generatePathFromEvent(event: Event) {
+  return generatePath(
+    event.route.toString(),
+    "params" in event ? paramsToStrings(event.params) : undefined,
+  );
+}
+
+export function getNextRoute(currentRoute: Event): string {
   switch (currentRoute.route) {
     case Route.Startseite:
       return Route.AllgemeineAngaben;
@@ -93,11 +112,13 @@ export function getNextRoute(currentRoute: Event): Route {
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
       return currentRoute.payload.istVorhanden
-        ? Route.GeschwisterkindAngaben
+        ? generatePath(Route.GeschwisterkindAngaben, { index: "0" })
         : Route.ElternteilAllgemeineAngaben;
     case Route.GeschwisterkindAngaben:
       return currentRoute.payload.istWeiteresGeschwisterkindVorhanden
-        ? Route.GeschwisterkindAngaben
+        ? generatePath(Route.GeschwisterkindAngaben, {
+            index: (currentRoute.params.index + 1).toString(),
+          })
         : Route.ElternteilAllgemeineAngaben;
     case Route.ElternteilAllgemeineAngaben:
       throw Error("Not yet implemented.");
@@ -105,16 +126,13 @@ export function getNextRoute(currentRoute: Event): Route {
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect, vi, beforeEach, afterEach } = import.meta
-    .vitest;
+  const { describe, it, expect } = import.meta.vitest;
 
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
+  const { vi, beforeEach, afterEach } = import.meta.vitest;
 
-  afterEach(() => {
-    vi.useRealTimers();
-  });
+  beforeEach(() => vi.useFakeTimers());
+
+  afterEach(() => vi.useRealTimers());
 
   describe("getNextRoute", () => {
     it("returns AllgemeineAngaben given Startseite as currentRoute", () => {
@@ -226,7 +244,7 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(nextRoute).toEqual(Route.GeschwisterkindAngaben);
+      expect(nextRoute).toEqual("/geschwisterkind/0");
     });
 
     it("returns ElternteilAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
@@ -243,7 +261,7 @@ if (import.meta.vitest) {
     it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals yes", () => {
       const nextRoute = getNextRoute({
         route: Route.GeschwisterkindAngaben,
-        index: 0,
+        params: { index: 0 },
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,
@@ -251,13 +269,27 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(nextRoute).toEqual(Route.GeschwisterkindAngaben);
+      expect(nextRoute).toEqual("/geschwisterkind/1");
+    });
+
+    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+      const nextRoute = getNextRoute({
+        route: Route.GeschwisterkindAngaben,
+        params: { index: 1 },
+        payload: {
+          geburtsdatum: Temporal.Now.plainDateISO(),
+          hatBehinderung: false,
+          istWeiteresGeschwisterkindVorhanden: true,
+        },
+      });
+
+      expect(nextRoute).toEqual("/geschwisterkind/2");
     });
 
     it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
       const nextRoute = getNextRoute({
         route: Route.GeschwisterkindAngaben,
-        index: 0,
+        params: { index: 0 },
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,

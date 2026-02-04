@@ -1,15 +1,22 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { type Event, Route, getNextRoute } from "./Router";
+import {
+  type Event,
+  Route,
+  generatePathFromEvent,
+  getNextRoute,
+} from "./Router";
 
 type EventLog = [Event, ...Event[]];
 
 function filtereValidenEventPfad(eventLog: EventLog): Event[] {
   return eventLog
     .reduceRight(
-      (acc, cur) => [
-        ...acc,
-        ...(getNextRoute(cur) === acc[acc.length - 1]!.route ? [cur] : []),
-      ],
+      (acc, event) => {
+        const letzteEventRoute = generatePathFromEvent(acc[acc.length - 1]!);
+        const istVorherigesEvent = getNextRoute(event) === letzteEventRoute;
+
+        return [...acc, ...(istVorherigesEvent ? [event] : [])];
+      },
       [eventLog[eventLog.length - 1] as Event],
     )
     .toReversed();
@@ -80,7 +87,7 @@ if (import.meta.vitest) {
       ]);
     });
 
-    it.skip("skips GeschwisterkindAngaben events when user changes istVorhanden to false", () => {
+    it("skips GeschwisterkindAngaben events when user changes istVorhanden to false", () => {
       const eventLog: EventLog = [
         { route: Route.Startseite },
         {
@@ -101,7 +108,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          index: 0,
+          params: { index: 0 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
             hatBehinderung: false,
@@ -110,7 +117,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          index: 1,
+          params: { index: 1 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2018-12-23"),
             hatBehinderung: false,
@@ -119,9 +126,18 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          index: 0,
+          params: { index: 0 },
           payload: {
-            geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
+            geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: true,
+          },
+        },
+        {
+          route: Route.GeschwisterkindAngaben,
+          params: { index: 1 },
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,
             istWeiteresGeschwisterkindVorhanden: false,
           },
@@ -150,9 +166,18 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          index: 0,
+          params: { index: 0 },
           payload: {
-            geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
+            geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: true,
+          },
+        },
+        {
+          route: Route.GeschwisterkindAngaben,
+          params: { index: 1 },
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,
             istWeiteresGeschwisterkindVorhanden: false,
           },

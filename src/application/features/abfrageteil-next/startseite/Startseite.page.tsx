@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
-import { PageV2 } from "@/application/components/PageV2";
+import { Page } from "@/application/features/abfrageteil-next/components/Page";
 
 export function Startseite() {
   const navigate = useNavigate();
 
   const navigateNextPage = () => {
-    void navigate("/abfrageteil-v2/allgemeine-angaben");
+    void navigate("/abfrageteil-next/allgemeine-angaben");
   };
 
   return (
-    <PageV2
+    <Page
       heading="So nutzen Sie den Elterngeldrechner mit Planer"
       navigationItems={[]}
       currentNavigationItem=""
@@ -76,6 +76,6 @@ export function Startseite() {
           </Button>
         </div>
       </div>
-    </PageV2>
+    </Page>
   );
 }

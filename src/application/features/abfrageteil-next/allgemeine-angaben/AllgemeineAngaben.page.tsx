@@ -8,12 +8,12 @@ import {
   bundeslaender,
 } from "./AllgemeineAngaben.schema";
 import { Button, CustomRadioGroup, InfoText } from "@/application/components";
-import { PageV2 } from "@/application/components/PageV2";
 import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
 import { useEventContext } from "@/application/features/abfrageteil-next/EventContext";
+import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import {
   Route,
   getNextRoute,
@@ -50,11 +50,11 @@ export function AllgemeineAngabenPage() {
       payload: values,
     });
 
-    void navigate(`/abfrageteil-v2${nextPath}`);
+    void navigate(`/abfrageteil-next${nextPath}`);
   };
 
   return (
-    <PageV2
+    <Page
       heading="Allgemeine Angaben"
       navigationItems={[]}
       currentNavigationItem=""
@@ -113,6 +113,6 @@ export function AllgemeineAngabenPage() {
           </Button>
         </div>
       </form>
-    </PageV2>
+    </Page>
   );
 }

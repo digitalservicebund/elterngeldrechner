@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router";
-import { SidebarV2 } from "./SidebarV2";
+import { Sidebar } from "./Sidebar";
 
 type Props = {
   readonly children: ReactNode;
@@ -9,7 +9,7 @@ type Props = {
   readonly currentNavigationItem: string;
 };
 
-export function PageV2({
+export function Page({
   children,
   heading,
   navigationItems,
@@ -27,7 +27,7 @@ export function PageV2({
       <ScrollRestoration />
 
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
-        <SidebarV2
+        <Sidebar
           navigationItems={navigationItems}
           currentNavigationItem={currentNavigationItem}
         />

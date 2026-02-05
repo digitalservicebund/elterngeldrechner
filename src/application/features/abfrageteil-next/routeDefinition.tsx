@@ -20,16 +20,16 @@ const routes = [
     children: [
       {
         element: <Startseite />,
-        path: "/abfrageteil-v2/startseite",
+        path: "/abfrageteil-next/startseite",
       },
       {
         element: <AllgemeineAngabenPage />,
-        path: "/abfrageteil-v2/allgemeine-angaben",
+        path: "/abfrageteil-next/allgemeine-angaben",
       },
-      { element: <KindPage />, path: "/abfrageteil-v2/kind" },
+      { element: <KindPage />, path: "/abfrageteil-next/kind" },
       {
         element: <GeborenesKindPage />,
-        path: "/abfrageteil-v2/kind/geboren",
+        path: "/abfrageteil-next/kind/geboren",
       },
     ],
   },

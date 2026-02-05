@@ -15,7 +15,7 @@ export function KindPage() {
   const { errors } = formState;
 
   const navigateNextPage = () => {
-    void navigate("/abfrageteil-v2/kind/geboren");
+    void navigate("/abfrageteil-next/kind/geboren");
   };
 
   return (

@@ -3,7 +3,7 @@ type Props = {
   readonly currentNavigationItem: string;
 };
 
-export function SidebarV2({
+export function Sidebar({
   navigationItems: _navigationItems,
   currentNavigationItem: _currentNavigationItem,
 }: Props) {

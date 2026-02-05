@@ -6,7 +6,7 @@ import React, {
   useReducer,
 } from "react";
 
-import type { FormEvent, PayloadMap } from "./Router";
+import type { FormEvent, PayloadMap } from "./routing";
 
 type EventContextType = {
   readonly eventLog: FormEvent[];
@@ -76,7 +76,7 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("findLastInEventLog", async () => {
-    const { Route } = await import("./Router");
+    const { Route } = await import("./routing");
 
     it("it returns the last object matching the route", () => {
       const result = findLastInEventLog(

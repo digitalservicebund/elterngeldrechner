@@ -13,9 +13,12 @@ import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
+import { useEventContext } from "@/application/features/abfrageteil-next/EventContext";
+import {
+  Route,
+  getNextRoute,
+} from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/schema";
-import { useEventContext } from "@/application/routing-next/EventContext";
-import { Route, getNextRoute } from "@/application/routing-next/Router";
 
 export function AllgemeineAngabenPage() {
   const { dispatch, findLastEvent } = useEventContext();

@@ -4,7 +4,7 @@ import {
   Route,
   generatePathFromEvent,
   getNextRoute,
-} from "./Router";
+} from "./routing";
 
 type EventLog = [FormEvent, ...FormEvent[]];
 

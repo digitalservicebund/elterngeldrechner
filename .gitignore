@@ -23,6 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# direnv
+.envrc
+
 # editor settings
 .vscode
 .history

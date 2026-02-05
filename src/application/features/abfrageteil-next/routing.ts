@@ -1,20 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import {
-  Navigate,
-  RouterProvider,
-  createHashRouter,
-  generatePath,
-} from "react-router";
-import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.page";
+import { generatePath } from "react-router";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.schema";
-import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKind.page";
-import { KindPage } from "@/application/features/abfrageteil-next/kind/Kind.page";
 import {
   GeborenesKind,
   Geburt,
   UngeborenesKind,
 } from "@/application/features/abfrageteil-next/kind/Kind.schema";
-import { Startseite } from "@/application/features/abfrageteil-next/startseite/Startseite.page";
 
 export type GeschwisterkindAbfrage = { istVorhanden: boolean };
 
@@ -302,38 +293,4 @@ if (import.meta.vitest) {
       expect(nextRoute).toEqual(Route.ElternteilAllgemeineAngaben);
     });
   });
-}
-
-export default function Router() {
-  // The hash router does not support the `hashType` property
-  // at this point in time. This means that the routes look
-  // like this: http://localhost:3000/#/nachwuchs and also
-  // that jQuery throws the following error on initial page
-  // load. The root of this issue is that jQuery tries to
-  // navigate to the hash part of the window.location but
-  // fails to do so because of the leading slash.
-  //
-  // Source: commons-*.js
-  // Error: Uncaught Error: Syntax error, unrecognized expression
-  //
-  // https://github.com/remix-run/react-router/pull/11310
-  // https://v5.reactrouter.com/web/api/HashRouter/hashtype-string
-
-  const router = createHashRouter([
-    {
-      element: <Startseite />,
-      path: "/abfrageteil-v2/startseite",
-    },
-    {
-      element: <AllgemeineAngabenPage />,
-      path: "/abfrageteil-v2/allgemeine-angaben",
-    },
-    { element: <KindPage />, path: "/abfrageteil-v2/kind" },
-    { element: <GeborenesKindPage />, path: "/abfrageteil-v2/kind/geboren" },
-    {
-      element: <Navigate to="/abfrageteil-v2/startseite" replace />,
-      path: "*",
-    },
-  ]);
-  return <RouterProvider router={router} />;
 }

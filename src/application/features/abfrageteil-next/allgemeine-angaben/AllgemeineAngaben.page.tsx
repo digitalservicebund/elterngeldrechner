@@ -13,6 +13,7 @@ import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
+import { encodeSafely } from "@/application/features/abfrageteil-next/schema";
 import { useEventContext } from "@/application/routing-next/EventContext";
 import { Route, getNextRoute } from "@/application/routing-next/Router";
 
@@ -24,13 +25,9 @@ export function AllgemeineAngabenPage() {
 
   const lastEvent = findLastEvent(Route.AllgemeineAngaben);
 
-  const defaultValues = lastEvent
-    ? AllgemeineAngabenSchema.encode(lastEvent)
-    : undefined;
-
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(AllgemeineAngabenSchema),
-    defaultValues: defaultValues,
+    defaultValues: encodeSafely(AllgemeineAngabenSchema, lastEvent),
   });
 
   const { errors: formErrors } = formState;

@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   BooleanRadiobuttonCodec,
   GermanDateinputCodec,
-} from "@/application/features/abfrageteil-next/codecs";
+} from "@/application/features/abfrageteil-next/schema";
 
 export const GeburtSchema = z.object({
   istGeboren: BooleanRadiobuttonCodec,

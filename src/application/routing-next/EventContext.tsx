@@ -14,14 +14,9 @@ type EventContextType = {
 
 const abfrageteilReducer = (
   state: FormEvent[],
-  action: { type: "DISPATCH_EVENT"; event: FormEvent },
+  action: FormEvent,
 ): FormEvent[] => {
-  switch (action.type) {
-    case "DISPATCH_EVENT":
-      return [...state, action.event];
-    default:
-      return state;
-  }
+  return [...state, action];
 };
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -34,7 +29,7 @@ export function EventProvider({
   const [eventLog, dispatchAction] = useReducer(abfrageteilReducer, []);
 
   const dispatch = useCallback((event: FormEvent) => {
-    dispatchAction({ type: "DISPATCH_EVENT", event });
+    dispatchAction(event);
   }, []);
 
   const value = useMemo(

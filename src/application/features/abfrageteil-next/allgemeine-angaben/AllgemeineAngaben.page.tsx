@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
   AllgemeineAngaben,
-  type AllgemeineAngaben as AllgemeineAngabenPage,
   AllgemeineAngabenSchema,
   bundeslaender,
 } from "./AllgemeineAngaben.schema";
@@ -14,7 +13,6 @@ import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
-import { invertBooleanRadiobuttonSchema } from "@/application/features/abfrageteil-next/common-schemas";
 import { useEventContext } from "@/application/routing-next/EventContext";
 import { Route, getNextRoute } from "@/application/routing-next/Router";
 
@@ -27,12 +25,7 @@ export function AllgemeineAngabenPage() {
   const lastEvent = findLastEvent(Route.AllgemeineAngaben);
 
   const defaultValues = lastEvent
-    ? {
-        bundesland: lastEvent.bundesland,
-        gesamteinkommenGrenzeUeberschritten: invertBooleanRadiobuttonSchema(
-          lastEvent.gesamteinkommenGrenzeUeberschritten,
-        ),
-      }
+    ? AllgemeineAngabenSchema.encode(lastEvent)
     : undefined;
 
   const { register, handleSubmit, formState } = useForm({

@@ -1,13 +1,13 @@
 import { z } from "zod";
 import {
-  BooleanRadiobuttonSchema,
-  GermanDateinputSchema,
-} from "@/application/features/abfrageteil-next/common-schemas";
+  BooleanRadiobuttonCodec,
+  GermanDateinputCodec,
+} from "@/application/features/abfrageteil-next/codecs";
 
 const VorhandenesGeschwisterkind = z.object({
   istVorhanden: z.literal("yes"),
-  geburtsdatum: GermanDateinputSchema,
-  hatBehinderung: BooleanRadiobuttonSchema,
+  geburtsdatum: GermanDateinputCodec,
+  hatBehinderung: BooleanRadiobuttonCodec,
 });
 
 const KeinGeschwisterkind = z.object({

@@ -1,21 +1,21 @@
 import { z } from "zod";
 import {
-  BooleanRadiobuttonSchema,
-  GermanDateinputSchema,
-} from "@/application/features/abfrageteil-next/common-schemas";
+  BooleanRadiobuttonCodec,
+  GermanDateinputCodec,
+} from "@/application/features/abfrageteil-next/codecs";
 
 export const GeburtSchema = z.object({
-  istGeboren: BooleanRadiobuttonSchema,
+  istGeboren: BooleanRadiobuttonCodec,
 });
 
 export const UngeborenesKindSchema = z.object({
-  errechneterEntbindungstermin: GermanDateinputSchema,
+  errechneterEntbindungstermin: GermanDateinputCodec,
   anzahl: z.number().min(1),
 });
 
 export const GeborenesKindSchema = z.object({
-  geburtsdatum: GermanDateinputSchema,
-  errechneterEntbindungstermin: GermanDateinputSchema,
+  geburtsdatum: GermanDateinputCodec,
+  errechneterEntbindungstermin: GermanDateinputCodec,
   anzahl: z.number().min(1),
 });
 

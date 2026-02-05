@@ -1,14 +1,14 @@
 import { Temporal } from "@js-temporal/polyfill";
 import {
-  type Event,
+  type FormEvent,
   Route,
   generatePathFromEvent,
   getNextRoute,
 } from "./Router";
 
-type EventLog = [Event, ...Event[]];
+type EventLog = [FormEvent, ...FormEvent[]];
 
-function filtereValidenEventPfad(eventLog: EventLog): Event[] {
+function filtereValidenEventPfad(eventLog: EventLog): FormEvent[] {
   return eventLog
     .reduceRight(
       (acc, event) => {
@@ -17,7 +17,7 @@ function filtereValidenEventPfad(eventLog: EventLog): Event[] {
 
         return [...acc, ...(istVorherigesEvent ? [event] : [])];
       },
-      [eventLog[eventLog.length - 1] as Event],
+      [eventLog[eventLog.length - 1] as FormEvent],
     )
     .toReversed();
 }
@@ -38,7 +38,7 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result: Event[] = filtereValidenEventPfad(eventLog);
+      const result: FormEvent[] = filtereValidenEventPfad(eventLog);
 
       expect(result).toEqual(eventLog);
     });

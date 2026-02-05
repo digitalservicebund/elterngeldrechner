@@ -42,7 +42,7 @@ export enum Route {
   // ElternteilTaetigkeitenAngaben,
 }
 
-export type Event =
+export type FormEvent =
   | { route: Route.Startseite }
   | { route: Route.AllgemeineAngaben }
   | { route: Route.KindAbfrage; payload: Geburt }
@@ -69,14 +69,14 @@ function paramsToStrings(
   );
 }
 
-export function generatePathFromEvent(event: Event) {
+export function generatePathFromEvent(event: FormEvent) {
   return generatePath(
     event.route.toString(),
     "params" in event ? paramsToStrings(event.params) : undefined,
   );
 }
 
-export function getNextRoute(currentRoute: Event): string {
+export function getNextRoute(currentRoute: FormEvent): string {
   switch (currentRoute.route) {
     case Route.Startseite:
       return Route.AllgemeineAngaben;

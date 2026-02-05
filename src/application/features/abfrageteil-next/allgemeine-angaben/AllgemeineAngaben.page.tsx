@@ -13,10 +13,13 @@ import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
+import { useEventContext } from "@/application/routing-next/EventContext";
+import { Route, getNextRoute } from "@/application/routing-next/Router";
 
 export function AllgemeineAngabenPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
+  const { dispatch } = useEventContext();
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(AllgemeineAngabenSchema),
@@ -27,6 +30,16 @@ export function AllgemeineAngabenPage() {
     (name) => ({ value: name, label: name }),
   );
 
+  const onSubmit = () => {
+    dispatch({
+      route: Route.AllgemeineAngaben,
+    });
+
+    const nextPath = getNextRoute({ route: Route.AllgemeineAngaben });
+
+    void navigate(`/abfrageteil-v2${nextPath}`);
+  };
+
   return (
     <PageV2
       heading="Allgemeine Angaben"
@@ -36,7 +49,7 @@ export function AllgemeineAngabenPage() {
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-56"
-        onSubmit={handleSubmit(() => void navigate("/abfrageteil-v2/kind"))}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div>
           <h3 className="mb-10">

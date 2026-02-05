@@ -18,3 +18,21 @@ const BooleanRadiobuttonSchema = z
   .transform((arg) => arg === "yes");
 
 export { BooleanRadiobuttonSchema, GermanDateinputSchema };
+
+export function invertBooleanRadiobuttonSchema(input: boolean): "yes" | "no" {
+  return input ? "yes" : "no";
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("invertBooleanRadiobuttonSchema", () => {
+    it("transforms true into radiobutton schema yes", () => {
+      expect(invertBooleanRadiobuttonSchema(true)).toEqual("yes");
+    });
+
+    it("transforms false into radiobutton schema no", () => {
+      expect(invertBooleanRadiobuttonSchema(false)).toEqual("no");
+    });
+  });
+}

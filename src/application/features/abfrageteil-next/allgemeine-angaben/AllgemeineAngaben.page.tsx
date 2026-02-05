@@ -3,6 +3,7 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
+  AllgemeineAngaben,
   type AllgemeineAngaben as AllgemeineAngabenPage,
   AllgemeineAngabenSchema,
   bundeslaender,
@@ -13,29 +14,48 @@ import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
+import { invertBooleanRadiobuttonSchema } from "@/application/features/abfrageteil-next/common-schemas";
 import { useEventContext } from "@/application/routing-next/EventContext";
 import { Route, getNextRoute } from "@/application/routing-next/Router";
 
 export function AllgemeineAngabenPage() {
+  const { dispatch, findLastEvent } = useEventContext();
+
   const formIdentifier = useId();
   const navigate = useNavigate();
-  const { dispatch } = useEventContext();
+
+  const lastEvent = findLastEvent(Route.AllgemeineAngaben);
+
+  const defaultValues = lastEvent
+    ? {
+        bundesland: lastEvent.bundesland,
+        gesamteinkommenGrenzeUeberschritten: invertBooleanRadiobuttonSchema(
+          lastEvent.gesamteinkommenGrenzeUeberschritten,
+        ),
+      }
+    : undefined;
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(AllgemeineAngabenSchema),
+    defaultValues: defaultValues,
   });
+
   const { errors: formErrors } = formState;
 
   const bundeslandOptions: SelectOption<string>[] = bundeslaender.map(
     (name) => ({ value: name, label: name }),
   );
 
-  const onSubmit = () => {
+  const onSubmit = (values: AllgemeineAngaben) => {
     dispatch({
       route: Route.AllgemeineAngaben,
+      payload: values,
     });
 
-    const nextPath = getNextRoute({ route: Route.AllgemeineAngaben });
+    const nextPath = getNextRoute({
+      route: Route.AllgemeineAngaben,
+      payload: values,
+    });
 
     void navigate(`/abfrageteil-v2${nextPath}`);
   };

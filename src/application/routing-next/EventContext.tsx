@@ -5,11 +5,15 @@ import React, {
   useMemo,
   useReducer,
 } from "react";
-import { FormEvent } from "./Router";
+
+import type { FormEvent, PayloadMap } from "./Router";
 
 type EventContextType = {
   readonly eventLog: FormEvent[];
   readonly dispatch: (event: FormEvent) => void;
+  readonly findLastEvent: <R extends FormEvent["route"]>(
+    route: R,
+  ) => PayloadMap[R] | undefined;
 };
 
 const abfrageteilReducer = (
@@ -32,13 +36,20 @@ export function EventProvider({
     dispatchAction(event);
   }, []);
 
-  const value = useMemo(
-    () => ({
+  const findLastEvent = useCallback(
+    <R extends FormEvent["route"]>(route: R) => {
+      return findLastInEventLog(eventLog, route);
+    },
+    [eventLog],
+  );
+
+  const value = useMemo(() => {
+    return {
       eventLog,
       dispatch,
-    }),
-    [eventLog, dispatch],
-  );
+      findLastEvent,
+    };
+  }, [eventLog, dispatch, findLastEvent]);
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>
@@ -51,3 +62,53 @@ export const useEventContext = () => {
     throw new Error("useEventContext must be used within EventProvider");
   return context;
 };
+
+function findLastInEventLog<R extends FormEvent["route"]>(
+  eventLog: FormEvent[],
+  route: R,
+): PayloadMap[R] | undefined {
+  return eventLog.findLast((event) => event.route === route)?.payload as
+    | PayloadMap[R]
+    | undefined;
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("findLastInEventLog", async () => {
+    const { Route } = await import("./Router");
+
+    it("it returns the last object matching the route", () => {
+      const result = findLastInEventLog(
+        [
+          {
+            route: Route.AllgemeineAngaben,
+            payload: {
+              bundesland: "Berlin",
+              gesamteinkommenGrenzeUeberschritten: false,
+            },
+          },
+          {
+            route: Route.AllgemeineAngaben,
+            payload: {
+              bundesland: "Berlin",
+              gesamteinkommenGrenzeUeberschritten: true,
+            },
+          },
+        ],
+        Route.AllgemeineAngaben,
+      );
+
+      expect(result).toEqual({
+        bundesland: "Berlin",
+        gesamteinkommenGrenzeUeberschritten: true,
+      });
+    });
+
+    it("it returns undefined if no object matches the route", () => {
+      const result = findLastInEventLog([], Route.AllgemeineAngaben);
+
+      expect(result).toBeUndefined();
+    });
+  });
+}

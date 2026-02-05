@@ -28,8 +28,13 @@ if (import.meta.vitest) {
   describe("filtereValidenEventPfad", () => {
     it("returns all events when no events are skipped", () => {
       const eventLog: EventLog = [
-        { route: Route.Startseite },
-        { route: Route.AllgemeineAngaben },
+        {
+          route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
+        },
         {
           route: Route.KindAbfrage,
           payload: {
@@ -45,9 +50,12 @@ if (import.meta.vitest) {
 
     it("skips old KindAbfrage event when newer one exists with different payload", () => {
       const eventLog: EventLog = [
-        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
         },
         { route: Route.KindAbfrage, payload: { istGeboren: false } },
         {
@@ -71,9 +79,12 @@ if (import.meta.vitest) {
       const result = filtereValidenEventPfad(eventLog);
 
       expect(result).toEqual([
-        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
         },
         { route: Route.KindAbfrage, payload: { istGeboren: true } },
         {
@@ -89,9 +100,12 @@ if (import.meta.vitest) {
 
     it("skips GeschwisterkindAngaben events when user changes istVorhanden to false", () => {
       const eventLog: EventLog = [
-        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
         },
         { route: Route.KindAbfrage, payload: { istGeboren: true } },
         {
@@ -147,9 +161,12 @@ if (import.meta.vitest) {
       const result = filtereValidenEventPfad(eventLog);
 
       expect(result).toEqual([
-        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
         },
         { route: Route.KindAbfrage, payload: { istGeboren: true } },
         {

@@ -6,6 +6,7 @@ import {
   generatePath,
 } from "react-router";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.page";
+import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.schema";
 import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKind.page";
 import { KindPage } from "@/application/features/abfrageteil-next/kind/Kind.page";
 import {
@@ -43,8 +44,7 @@ export enum Route {
 }
 
 export type FormEvent =
-  | { route: Route.Startseite }
-  | { route: Route.AllgemeineAngaben }
+  | { route: Route.AllgemeineAngaben; payload: AllgemeineAngaben }
   | { route: Route.KindAbfrage; payload: Geburt }
   | { route: Route.GeborenesKindAngaben; payload: GeborenesKind }
   | { route: Route.UngeborenesKindAngaben; payload: UngeborenesKind }
@@ -60,6 +60,10 @@ export type FormEvent =
       params: { index: number };
       payload: GeschwisterkindAbfrage;
     };
+
+export type PayloadMap = {
+  [E in FormEvent as E["route"]]: E["payload"];
+};
 
 function paramsToStrings(
   params: Record<string, number>,
@@ -78,8 +82,6 @@ export function generatePathFromEvent(event: FormEvent) {
 
 export function getNextRoute(currentRoute: FormEvent): string {
   switch (currentRoute.route) {
-    case Route.Startseite:
-      return Route.AllgemeineAngaben;
     case Route.AllgemeineAngaben:
       return Route.KindAbfrage;
     case Route.KindAbfrage:
@@ -135,14 +137,14 @@ if (import.meta.vitest) {
   afterEach(() => vi.useRealTimers());
 
   describe("getNextRoute", () => {
-    it("returns AllgemeineAngaben given Startseite as currentRoute", () => {
-      const nextRoute = getNextRoute({ route: Route.Startseite });
-
-      expect(nextRoute).toEqual(Route.AllgemeineAngaben);
-    });
-
     it("returns KindAbfrage given AllgemeineAngaben as currentRoute", () => {
-      const nextRoute = getNextRoute({ route: Route.AllgemeineAngaben });
+      const nextRoute = getNextRoute({
+        route: Route.AllgemeineAngaben,
+        payload: {
+          bundesland: "Berlin",
+          gesamteinkommenGrenzeUeberschritten: false,
+        },
+      });
 
       expect(nextRoute).toEqual(Route.KindAbfrage);
     });

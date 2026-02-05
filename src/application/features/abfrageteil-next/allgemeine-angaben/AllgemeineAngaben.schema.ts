@@ -30,6 +30,8 @@ export const AllgemeineAngabenSchema = z.object({
 
 export type AllgemeineAngaben = z.infer<typeof AllgemeineAngabenSchema>;
 
+export type AllgemeineAngabenInput = z.input<typeof AllgemeineAngabenSchema>;
+
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
-import { GeborenesKindSchema } from "./Kind.schema";
+import { GeborenesKindSchema } from "./KindSchema";
 import { Button } from "@/application/components";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
 

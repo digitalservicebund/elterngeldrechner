@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { GeburtSchema } from "./Kind.schema";
+import { GeburtSchema } from "./KindSchema";
 import { Button, CustomRadioGroup } from "@/application/components";
 
 export function KindPage() {

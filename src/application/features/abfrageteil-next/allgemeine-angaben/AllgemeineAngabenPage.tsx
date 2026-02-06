@@ -6,7 +6,7 @@ import {
   AllgemeineAngaben,
   AllgemeineAngabenSchema,
   bundeslaender,
-} from "./AllgemeineAngaben.schema";
+} from "./AllgemeineAngabenSchema";
 import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import {
   CustomSelect,

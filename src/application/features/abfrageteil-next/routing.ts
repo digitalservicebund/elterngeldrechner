@@ -1,11 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { generatePath } from "react-router";
-import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngaben.schema";
+import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
   GeborenesKind,
   Geburt,
   UngeborenesKind,
-} from "@/application/features/abfrageteil-next/kind/Kind.schema";
+} from "@/application/features/abfrageteil-next/kind/KindSchema";
 
 export type GeschwisterkindAbfrage = { istVorhanden: boolean };
 

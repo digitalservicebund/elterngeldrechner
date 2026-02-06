@@ -14,7 +14,6 @@ import type {
 } from "@/application/features/abfrageteil-next/routing/routing";
 
 type EventContextType = {
-  readonly eventStream: FormEvent[];
   readonly dispatch: (event: FormEvent) => void;
   readonly findLastEvent: <R extends FormEvent["route"]>(
     route: R,
@@ -46,11 +45,10 @@ export function EventProvider({
 
   const value = useMemo(() => {
     return {
-      eventStream,
       dispatch,
       findLastEvent,
     };
-  }, [eventStream, dispatch, findLastEvent]);
+  }, [dispatch, findLastEvent]);
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>

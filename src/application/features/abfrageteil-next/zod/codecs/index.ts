@@ -1,2 +1,2 @@
 export { BooleanRadiobuttonCodec } from "./BooleanRadiobuttonCodec";
-export { GermanDateInputCodec as GermanDateinputCodec } from "./GermanDateInputCodec";
+export { GermanDateInputCodec } from "./GermanDateInputCodec";

@@ -1,12 +1,12 @@
 import { z } from "zod";
 import {
   BooleanRadiobuttonCodec,
-  GermanDateinputCodec,
+  GermanDateInputCodec,
 } from "@/application/features/abfrageteil-next/zod";
 
 const VorhandenesGeschwisterkind = z.object({
   istVorhanden: z.literal("yes"),
-  geburtsdatum: GermanDateinputCodec,
+  geburtsdatum: GermanDateInputCodec,
   hatBehinderung: BooleanRadiobuttonCodec,
 });
 

@@ -1,7 +1,7 @@
 import {
   FormEvent,
   PayloadMap,
-} from "@/application/features/abfrageteil-next/routing";
+} from "@/application/features/abfrageteil-next/routing/routing";
 
 export function findLastEvent<R extends FormEvent["route"]>(
   eventStream: FormEvent[],
@@ -16,7 +16,7 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("findLastEvent", async () => {
-    const { Route } = await import("../../routing");
+    const { Route } = await import("../../routing/routing");
 
     it("it returns the last object matching the route", () => {
       const result = findLastEvent(

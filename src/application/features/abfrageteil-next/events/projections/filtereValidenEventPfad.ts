@@ -5,7 +5,7 @@ import {
   Route,
   generatePathFromEvent,
   getNextRoute,
-} from "@/application/features/abfrageteil-next/routing";
+} from "@/application/features/abfrageteil-next/routing/routing";
 
 function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
   return eventStream

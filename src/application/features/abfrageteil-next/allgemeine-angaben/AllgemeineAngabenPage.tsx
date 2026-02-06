@@ -17,7 +17,7 @@ import { useEventContext } from "@/application/features/abfrageteil-next/events/
 import {
   Route,
   getNextRoute,
-} from "@/application/features/abfrageteil-next/routing";
+} from "@/application/features/abfrageteil-next/routing/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function AllgemeineAngabenPage() {

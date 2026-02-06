@@ -10,7 +10,7 @@ import { findLastEvent as findLastInEventStream } from "./projections/findLastEv
 import type {
   FormEvent,
   PayloadMap,
-} from "@/application/features/abfrageteil-next/routing";
+} from "@/application/features/abfrageteil-next/routing/routing";
 
 type EventContextType = {
   readonly eventStream: FormEvent[];

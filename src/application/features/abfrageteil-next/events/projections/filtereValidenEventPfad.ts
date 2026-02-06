@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { EventLog } from "@/application/features/abfrageteil-next/events/EventStream";
+import { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import {
   type FormEvent,
   Route,
@@ -7,8 +7,8 @@ import {
   getNextRoute,
 } from "@/application/features/abfrageteil-next/routing";
 
-function filtereValidenEventPfad(eventLog: EventLog): FormEvent[] {
-  return eventLog
+function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
+  return eventStream
     .reduceRight(
       (acc, event) => {
         const letzteEventRoute = generatePathFromEvent(acc[acc.length - 1]!);
@@ -16,7 +16,7 @@ function filtereValidenEventPfad(eventLog: EventLog): FormEvent[] {
 
         return [...acc, ...(istVorherigesEvent ? [event] : [])];
       },
-      [eventLog[eventLog.length - 1] as FormEvent],
+      [eventStream[eventStream.length - 1] as FormEvent],
     )
     .toReversed();
 }
@@ -26,7 +26,7 @@ if (import.meta.vitest) {
 
   describe("filtereValidenEventPfad", () => {
     it("returns all events when no events are skipped", () => {
-      const eventLog: EventLog = [
+      const eventStream: EventStream = [
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -42,13 +42,13 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result: FormEvent[] = filtereValidenEventPfad(eventLog);
+      const result: FormEvent[] = filtereValidenEventPfad(eventStream);
 
-      expect(result).toEqual(eventLog);
+      expect(result).toEqual(eventStream);
     });
 
     it("skips old KindAbfrage event when newer one exists with different payload", () => {
-      const eventLog: EventLog = [
+      const eventStream: EventStream = [
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -75,7 +75,7 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result = filtereValidenEventPfad(eventLog);
+      const result = filtereValidenEventPfad(eventStream);
 
       expect(result).toEqual([
         {
@@ -98,7 +98,7 @@ if (import.meta.vitest) {
     });
 
     it("skips GeschwisterkindAngaben events when user changes istVorhanden to false", () => {
-      const eventLog: EventLog = [
+      const eventStream: EventStream = [
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -157,7 +157,7 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result = filtereValidenEventPfad(eventLog);
+      const result = filtereValidenEventPfad(eventStream);
 
       expect(result).toEqual([
         {

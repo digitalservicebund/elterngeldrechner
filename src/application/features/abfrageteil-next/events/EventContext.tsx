@@ -6,14 +6,14 @@ import React, {
   useReducer,
 } from "react";
 
-import { findLastEvent as findLastInEventLog } from "./projections/findLastEvent";
+import { findLastEvent as findLastInEventStream } from "./projections/findLastEvent";
 import type {
   FormEvent,
   PayloadMap,
 } from "@/application/features/abfrageteil-next/routing";
 
 type EventContextType = {
-  readonly eventLog: FormEvent[];
+  readonly eventStream: FormEvent[];
   readonly dispatch: (event: FormEvent) => void;
   readonly findLastEvent: <R extends FormEvent["route"]>(
     route: R,
@@ -34,7 +34,7 @@ export function EventProvider({
 }: {
   readonly children: React.ReactNode;
 }) {
-  const [eventLog, dispatchAction] = useReducer(abfrageteilReducer, []);
+  const [eventStream, dispatchAction] = useReducer(abfrageteilReducer, []);
 
   const dispatch = useCallback((event: FormEvent) => {
     dispatchAction(event);
@@ -42,18 +42,18 @@ export function EventProvider({
 
   const findLastEvent = useCallback(
     <R extends FormEvent["route"]>(route: R) => {
-      return findLastInEventLog(eventLog, route);
+      return findLastInEventStream(eventStream, route);
     },
-    [eventLog],
+    [eventStream],
   );
 
   const value = useMemo(() => {
     return {
-      eventLog,
+      eventStream,
       dispatch,
       findLastEvent,
     };
-  }, [eventLog, dispatch, findLastEvent]);
+  }, [eventStream, dispatch, findLastEvent]);
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>

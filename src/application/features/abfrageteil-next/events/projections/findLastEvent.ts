@@ -4,10 +4,10 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 
 export function findLastEvent<R extends FormEvent["route"]>(
-  eventLog: FormEvent[],
+  eventStream: FormEvent[],
   route: R,
 ): PayloadMap[R] | undefined {
-  return eventLog.findLast((event) => event.route === route)?.payload as
+  return eventStream.findLast((event) => event.route === route)?.payload as
     | PayloadMap[R]
     | undefined;
 }
@@ -15,7 +15,7 @@ export function findLastEvent<R extends FormEvent["route"]>(
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("findLastInEventLog", async () => {
+  describe("findLastEvent", async () => {
     const { Route } = await import("../../routing");
 
     it("it returns the last object matching the route", () => {

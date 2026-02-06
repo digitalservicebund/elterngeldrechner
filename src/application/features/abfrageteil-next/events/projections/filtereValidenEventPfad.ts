@@ -7,7 +7,7 @@ import {
   getNextRoute,
 } from "@/application/features/abfrageteil-next/routing/routing";
 
-function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
+export function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
   return eventStream
     .reduceRight(
       (acc, event) => {

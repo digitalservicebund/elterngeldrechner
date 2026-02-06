@@ -35,6 +35,7 @@ export enum Route {
 }
 
 export type FormEvent =
+  | { route: Route.Startseite }
   | { route: Route.AllgemeineAngaben; payload: AllgemeineAngaben }
   | { route: Route.KindAbfrage; payload: Geburt }
   | { route: Route.GeborenesKindAngaben; payload: GeborenesKind }
@@ -53,7 +54,9 @@ export type FormEvent =
     };
 
 export type PayloadMap = {
-  [E in FormEvent as E["route"]]: E["payload"];
+  [E in FormEvent as E["route"]]: "payload" extends keyof E
+    ? E["payload"]
+    : never;
 };
 
 function paramsToStrings(
@@ -73,6 +76,8 @@ export function generatePathFromEvent(event: FormEvent) {
 
 export function getNextRoute(currentRoute: FormEvent): string {
   switch (currentRoute.route) {
+    case Route.Startseite:
+      return Route.AllgemeineAngaben;
     case Route.AllgemeineAngaben:
       return Route.KindAbfrage;
     case Route.KindAbfrage:

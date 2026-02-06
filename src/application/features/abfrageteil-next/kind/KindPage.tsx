@@ -13,7 +13,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function KindPage() {
-  const { dispatch, findLastEvent } = useEventContext();
+  const { dispatch, findLastEvent, findLastRoute } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -40,6 +40,10 @@ export function KindPage() {
     });
 
     void navigate(`/abfrageteil-next${nextPath}`);
+  };
+
+  const navigateBack = () => {
+    void navigate(`/abfrageteil-next${findLastRoute(currentRoute)}`);
   };
 
   return (
@@ -69,7 +73,7 @@ export function KindPage() {
         </div>
 
         <div className="flex gap-16">
-          <Button type="button" buttonStyle="secondary" onClick={() => {}}>
+          <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>
 

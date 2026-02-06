@@ -7,7 +7,9 @@ export function findLastEvent<R extends FormEvent["route"]>(
   eventStream: FormEvent[],
   route: R,
 ): PayloadMap[R] | undefined {
-  return eventStream.findLast((event) => event.route === route)?.payload as
+  return eventStream
+    .filter((event) => "payload" in event)
+    .findLast((event) => event.route === route)?.payload as
     | PayloadMap[R]
     | undefined;
 }

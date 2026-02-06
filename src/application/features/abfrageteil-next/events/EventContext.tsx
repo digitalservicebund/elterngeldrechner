@@ -6,11 +6,14 @@ import React, {
   useReducer,
 } from "react";
 
+import { isEventStream } from "./EventStream";
+import { filtereValidenEventPfad } from "./projections/filtereValidenEventPfad";
 import { findLastEvent as findLastInEventStream } from "./projections/findLastEvent";
 
-import type {
+import {
   FormEvent,
   PayloadMap,
+  Route,
 } from "@/application/features/abfrageteil-next/routing/routing";
 
 type EventContextType = {
@@ -18,6 +21,7 @@ type EventContextType = {
   readonly findLastEvent: <R extends FormEvent["route"]>(
     route: R,
   ) => PayloadMap[R] | undefined;
+  readonly findLastRoute: (route: Exclude<Route, Route.Startseite>) => Route;
 };
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -43,12 +47,30 @@ export function EventProvider({
     [eventStream],
   );
 
+  const findLastRoute = useCallback(
+    (route: Exclude<Route, Route.Startseite>) => {
+      const validerEventPfad = isEventStream(eventStream)
+        ? filtereValidenEventPfad(eventStream)
+        : [];
+
+      const formRoutes = validerEventPfad.map((event) => event.route);
+
+      const index = formRoutes.findIndex(
+        (currentRoute) => currentRoute === route,
+      );
+
+      return index === -1 ? formRoutes.at(-1)! : formRoutes[index - 1]!;
+    },
+    [eventStream],
+  );
+
   const value = useMemo(() => {
     return {
       dispatch,
       findLastEvent,
+      findLastRoute,
     };
-  }, [dispatch, findLastEvent]);
+  }, [dispatch, findLastEvent, findLastRoute]);
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>

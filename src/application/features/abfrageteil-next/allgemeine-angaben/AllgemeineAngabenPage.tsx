@@ -21,12 +21,14 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function AllgemeineAngabenPage() {
-  const { dispatch, findLastEvent } = useEventContext();
+  const { dispatch, findLastEvent, findLastRoute } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const lastEvent = findLastEvent(Route.AllgemeineAngaben);
+  const currentRoute = Route.AllgemeineAngaben;
+
+  const lastEvent = findLastEvent(currentRoute);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(AllgemeineAngabenSchema),
@@ -41,16 +43,20 @@ export function AllgemeineAngabenPage() {
 
   const onSubmit = (values: AllgemeineAngaben) => {
     dispatch({
-      route: Route.AllgemeineAngaben,
+      route: currentRoute,
       payload: values,
     });
 
     const nextPath = getNextRoute({
-      route: Route.AllgemeineAngaben,
+      route: currentRoute,
       payload: values,
     });
 
     void navigate(`/abfrageteil-next${nextPath}`);
+  };
+
+  const navigateBack = () => {
+    void navigate(`/abfrageteil-next${findLastRoute(currentRoute)}`);
   };
 
   return (
@@ -104,7 +110,7 @@ export function AllgemeineAngabenPage() {
         </div>
 
         <div className="flex gap-16">
-          <Button type="button" buttonStyle="secondary" onClick={() => {}}>
+          <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>
 

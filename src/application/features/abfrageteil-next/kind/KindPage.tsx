@@ -44,7 +44,7 @@ export function KindPage() {
 
   return (
     <Page
-      heading="Allgemeine zum Kind"
+      heading="Angaben zum Kind"
       navigationItems={[]}
       currentNavigationItem=""
     >

@@ -12,8 +12,8 @@ import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
-import { useEventContext } from "@/application/features/abfrageteil-next/EventContext";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
   Route,
   getNextRoute,

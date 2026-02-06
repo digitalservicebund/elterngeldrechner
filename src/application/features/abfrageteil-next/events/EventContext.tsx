@@ -6,7 +6,11 @@ import React, {
   useReducer,
 } from "react";
 
-import type { FormEvent, PayloadMap } from "./routing";
+import { findLastEvent as findLastInEventLog } from "./projections/findLastEvent";
+import type {
+  FormEvent,
+  PayloadMap,
+} from "@/application/features/abfrageteil-next/routing";
 
 type EventContextType = {
   readonly eventLog: FormEvent[];
@@ -62,53 +66,3 @@ export const useEventContext = () => {
     throw new Error("useEventContext must be used within EventProvider");
   return context;
 };
-
-function findLastInEventLog<R extends FormEvent["route"]>(
-  eventLog: FormEvent[],
-  route: R,
-): PayloadMap[R] | undefined {
-  return eventLog.findLast((event) => event.route === route)?.payload as
-    | PayloadMap[R]
-    | undefined;
-}
-
-if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
-
-  describe("findLastInEventLog", async () => {
-    const { Route } = await import("./routing");
-
-    it("it returns the last object matching the route", () => {
-      const result = findLastInEventLog(
-        [
-          {
-            route: Route.AllgemeineAngaben,
-            payload: {
-              bundesland: "Berlin",
-              gesamteinkommenGrenzeUeberschritten: false,
-            },
-          },
-          {
-            route: Route.AllgemeineAngaben,
-            payload: {
-              bundesland: "Berlin",
-              gesamteinkommenGrenzeUeberschritten: true,
-            },
-          },
-        ],
-        Route.AllgemeineAngaben,
-      );
-
-      expect(result).toEqual({
-        bundesland: "Berlin",
-        gesamteinkommenGrenzeUeberschritten: true,
-      });
-    });
-
-    it("it returns undefined if no object matches the route", () => {
-      const result = findLastInEventLog([], Route.AllgemeineAngaben);
-
-      expect(result).toBeUndefined();
-    });
-  });
-}

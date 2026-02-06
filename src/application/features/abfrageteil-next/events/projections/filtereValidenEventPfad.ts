@@ -1,12 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { EventLog } from "@/application/features/abfrageteil-next/events/EventStream";
 import {
   type FormEvent,
   Route,
   generatePathFromEvent,
   getNextRoute,
-} from "./routing";
-
-type EventLog = [FormEvent, ...FormEvent[]];
+} from "@/application/features/abfrageteil-next/routing";
 
 function filtereValidenEventPfad(eventLog: EventLog): FormEvent[] {
   return eventLog

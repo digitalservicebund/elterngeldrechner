@@ -1,0 +1,54 @@
+import {
+  FormEvent,
+  PayloadMap,
+} from "@/application/features/abfrageteil-next/routing";
+
+export function findLastEvent<R extends FormEvent["route"]>(
+  eventLog: FormEvent[],
+  route: R,
+): PayloadMap[R] | undefined {
+  return eventLog.findLast((event) => event.route === route)?.payload as
+    | PayloadMap[R]
+    | undefined;
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("findLastInEventLog", async () => {
+    const { Route } = await import("../../routing");
+
+    it("it returns the last object matching the route", () => {
+      const result = findLastEvent(
+        [
+          {
+            route: Route.AllgemeineAngaben,
+            payload: {
+              bundesland: "Berlin",
+              gesamteinkommenGrenzeUeberschritten: false,
+            },
+          },
+          {
+            route: Route.AllgemeineAngaben,
+            payload: {
+              bundesland: "Berlin",
+              gesamteinkommenGrenzeUeberschritten: true,
+            },
+          },
+        ],
+        Route.AllgemeineAngaben,
+      );
+
+      expect(result).toEqual({
+        bundesland: "Berlin",
+        gesamteinkommenGrenzeUeberschritten: true,
+      });
+    });
+
+    it("it returns undefined if no object matches the route", () => {
+      const result = findLastEvent([], Route.AllgemeineAngaben);
+
+      expect(result).toBeUndefined();
+    });
+  });
+}

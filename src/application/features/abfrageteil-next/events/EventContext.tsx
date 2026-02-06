@@ -7,6 +7,7 @@ import React, {
 } from "react";
 
 import { findLastEvent as findLastInEventStream } from "./projections/findLastEvent";
+
 import type {
   FormEvent,
   PayloadMap,
@@ -20,13 +21,6 @@ type EventContextType = {
   ) => PayloadMap[R] | undefined;
 };
 
-const abfrageteilReducer = (
-  state: FormEvent[],
-  action: FormEvent,
-): FormEvent[] => {
-  return [...state, action];
-};
-
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
 export function EventProvider({
@@ -34,7 +28,10 @@ export function EventProvider({
 }: {
   readonly children: React.ReactNode;
 }) {
-  const [eventStream, dispatchAction] = useReducer(abfrageteilReducer, []);
+  const [eventStream, dispatchAction] = useReducer(
+    (state: FormEvent[], action: FormEvent) => [...state, action],
+    [],
+  );
 
   const dispatch = useCallback((event: FormEvent) => {
     dispatchAction(event);

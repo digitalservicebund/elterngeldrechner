@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { BooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/schema";
+import { BooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod";
 
 export const bundeslaender = [
   "Baden-Württemberg",

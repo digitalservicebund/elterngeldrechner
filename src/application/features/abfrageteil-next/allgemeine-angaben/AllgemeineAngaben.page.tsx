@@ -18,7 +18,7 @@ import {
   Route,
   getNextRoute,
 } from "@/application/features/abfrageteil-next/routing";
-import { encodeSafely } from "@/application/features/abfrageteil-next/schema";
+import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function AllgemeineAngabenPage() {
   const { dispatch, findLastEvent } = useEventContext();

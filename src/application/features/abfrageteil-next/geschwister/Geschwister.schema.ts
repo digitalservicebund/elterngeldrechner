@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   BooleanRadiobuttonCodec,
   GermanDateinputCodec,
-} from "@/application/features/abfrageteil-next/schema";
+} from "@/application/features/abfrageteil-next/zod";
 
 const VorhandenesGeschwisterkind = z.object({
   istVorhanden: z.literal("yes"),

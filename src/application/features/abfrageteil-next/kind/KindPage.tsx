@@ -39,11 +39,11 @@ export function KindPage() {
       payload: values,
     });
 
-    void navigate(`/abfrageteil-next${nextPath}`);
+    void navigate(nextPath);
   };
 
   const navigateBack = () => {
-    void navigate(`/abfrageteil-next${findLastRoute(currentRoute)}`);
+    void navigate(findLastRoute(currentRoute));
   };
 
   return (

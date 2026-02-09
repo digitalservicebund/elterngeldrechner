@@ -12,7 +12,7 @@ export function Startseite() {
 
   const navigateNextPage = () => {
     dispatch({ route: Route.Startseite });
-    void navigate("/abfrageteil-next/allgemeine-angaben");
+    void navigate("/allgemeine-angaben");
   };
 
   return (

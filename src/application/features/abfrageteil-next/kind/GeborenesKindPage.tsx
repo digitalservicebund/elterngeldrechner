@@ -40,7 +40,7 @@ export function GeborenesKindPage() {
       payload: values,
     });
 
-    void navigate(`/abfrageteil-next${nextPath}`);
+    void navigate(nextPath);
   };
 
   const entbindungsterminInputIdentifier = useId();

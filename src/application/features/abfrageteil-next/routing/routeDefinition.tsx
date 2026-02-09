@@ -19,19 +19,19 @@ export const routeDefinition = [
     children: [
       {
         element: <Startseite />,
-        path: "/abfrageteil-next/startseite",
+        path: "/startseite",
       },
       {
         element: <AllgemeineAngabenPage />,
-        path: "/abfrageteil-next/allgemeine-angaben",
+        path: "/allgemeine-angaben",
       },
-      { element: <KindPage />, path: "/abfrageteil-next/kind" },
+      { element: <KindPage />, path: "/kind" },
       {
         element: <GeborenesKindPage />,
-        path: "/abfrageteil-next/kind/geboren",
+        path: "/kind/geboren",
       },
       {
-        element: <Navigate to="/abfrageteil-next/startseite" replace />,
+        element: <Navigate to="/startseite" replace />,
         path: "*",
       },
     ],

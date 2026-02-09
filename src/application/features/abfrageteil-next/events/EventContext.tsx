@@ -5,13 +5,14 @@ import React, {
   useMemo,
   useReducer,
 } from "react";
-
 import { isEventStream } from "./EventStream";
-import { filtereValidenEventPfad } from "./projections/filtereValidenEventPfad";
-import { findLastEvent as findLastInEventStream } from "./projections/findLastEvent";
-
+import {
+  findLastEvent as findLastInEventStream,
+  findLastRoute as findLastRouteInEventStream,
+} from "./projections";
 import {
   FormEvent,
+  FormRoutes,
   PayloadMap,
   Route,
 } from "@/application/features/abfrageteil-next/routing/routing";
@@ -42,24 +43,22 @@ export function EventProvider({
 
   const findLastEvent = useCallback(
     <R extends FormEvent["route"]>(route: R) => {
-      return findLastInEventStream(eventStream, route);
+      if (isEventStream(eventStream)) {
+        return findLastInEventStream(eventStream, route);
+      } else {
+        return undefined;
+      }
     },
     [eventStream],
   );
 
   const findLastRoute = useCallback(
-    (route: Exclude<Route, Route.Startseite>) => {
-      const validerEventPfad = isEventStream(eventStream)
-        ? filtereValidenEventPfad(eventStream)
-        : [];
-
-      const formRoutes = validerEventPfad.map((event) => event.route);
-
-      const index = formRoutes.findIndex(
-        (currentRoute) => currentRoute === route,
-      );
-
-      return index === -1 ? formRoutes.at(-1)! : formRoutes[index - 1]!;
+    (route: FormRoutes) => {
+      if (isEventStream(eventStream)) {
+        return findLastRouteInEventStream(eventStream, route);
+      } else {
+        return Route.Startseite;
+      }
     },
     [eventStream],
   );

@@ -11,7 +11,7 @@ export function Startseite() {
   const navigate = useNavigate();
 
   const navigateNextPage = () => {
-    dispatch({ route: Route.Startseite });
+    dispatch({ route: Route.Startseite, payload: {} });
     void navigate("/allgemeine-angaben");
   };
 

@@ -23,6 +23,7 @@ if (import.meta.vitest) {
     it("returns /allgemeine-angaben when called from /kind without the kind event in the event stream", () => {
       const lastRoute = findLastRoute(
         [
+          { route: Route.Startseite },
           {
             route: Route.AllgemeineAngaben,
             payload: {
@@ -40,6 +41,7 @@ if (import.meta.vitest) {
     it("returns /allgemeine-angaben when called from /kind with the kind event in the event stream", () => {
       const lastRoute = findLastRoute(
         [
+          { route: Route.Startseite },
           {
             route: Route.AllgemeineAngaben,
             payload: {

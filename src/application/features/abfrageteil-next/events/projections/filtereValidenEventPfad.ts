@@ -27,6 +27,7 @@ if (import.meta.vitest) {
   describe("filtereValidenEventPfad", () => {
     it("returns all events when no events are skipped", () => {
       const eventStream: EventStream = [
+        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -49,6 +50,7 @@ if (import.meta.vitest) {
 
     it("skips old KindAbfrage event when newer one exists with different payload", () => {
       const eventStream: EventStream = [
+        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -78,6 +80,7 @@ if (import.meta.vitest) {
       const result = filtereValidenEventPfad(eventStream);
 
       expect(result).toEqual([
+        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -99,6 +102,7 @@ if (import.meta.vitest) {
 
     it("skips GeschwisterkindAngaben events when user changes istVorhanden to false", () => {
       const eventStream: EventStream = [
+        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
           payload: {
@@ -160,6 +164,7 @@ if (import.meta.vitest) {
       const result = filtereValidenEventPfad(eventStream);
 
       expect(result).toEqual([
+        { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
           payload: {

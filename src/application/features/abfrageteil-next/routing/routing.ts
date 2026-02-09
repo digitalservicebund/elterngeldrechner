@@ -37,7 +37,7 @@ export enum Route {
 export type FormRoutes = Exclude<Route, Route.Startseite>;
 
 export type FormEvent =
-  | { route: Route.Startseite; payload: Record<string, never> }
+  | { route: Route.Startseite; payload?: never }
   | { route: Route.AllgemeineAngaben; payload: AllgemeineAngaben }
   | { route: Route.KindAbfrage; payload: Geburt }
   | { route: Route.GeborenesKindAngaben; payload: GeborenesKind }

@@ -22,7 +22,7 @@ if (import.meta.vitest) {
     it("it returns the last object matching the route", () => {
       const result = findLastEvent(
         [
-          { route: Route.Startseite, payload: {} },
+          { route: Route.Startseite },
           {
             route: Route.AllgemeineAngaben,
             payload: {
@@ -49,7 +49,7 @@ if (import.meta.vitest) {
 
     it("it returns undefined if no object matches the route", () => {
       const result = findLastEvent(
-        [{ route: Route.Startseite, payload: {} }],
+        [{ route: Route.Startseite }],
         Route.AllgemeineAngaben,
       );
 

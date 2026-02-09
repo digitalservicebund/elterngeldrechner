@@ -1,5 +1,6 @@
 import "@/application/styles/index.css";
 import { RouterProvider, createHashRouter } from "react-router";
+import { isAbfrageteilNextEnabled } from "./feature-flags";
 import { routeDefinition as routeDefinitionNext } from "@/application/features/abfrageteil-next/routing/routeDefinition";
 import routeDefinition from "@/application/routing/RouteDefinition";
 
@@ -17,7 +18,9 @@ import routeDefinition from "@/application/routing/RouteDefinition";
 // https://github.com/remix-run/react-router/pull/11310
 // https://v5.reactrouter.com/web/api/HashRouter/hashtype-string
 
-const router = createHashRouter([...routeDefinitionNext, ...routeDefinition]);
+const router = createHashRouter(
+  isAbfrageteilNextEnabled() ? routeDefinitionNext : routeDefinition,
+);
 
 export function App() {
   return <RouterProvider router={router} />;

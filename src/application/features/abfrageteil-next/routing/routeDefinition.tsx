@@ -1,5 +1,4 @@
-import { Outlet } from "react-router";
-import { isAbfrageteilNextEnabled } from "@/application/feature-flags";
+import { Navigate, Outlet } from "react-router";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKindPage";
@@ -14,7 +13,7 @@ function EventProviderLayout() {
   );
 }
 
-const routes = [
+export const routeDefinition = [
   {
     element: <EventProviderLayout />,
     children: [
@@ -31,8 +30,10 @@ const routes = [
         element: <GeborenesKindPage />,
         path: "/abfrageteil-next/kind/geboren",
       },
+      {
+        element: <Navigate to="/abfrageteil-next/startseite" replace />,
+        path: "*",
+      },
     ],
   },
 ];
-
-export const routeDefinition = isAbfrageteilNextEnabled() ? routes : [];

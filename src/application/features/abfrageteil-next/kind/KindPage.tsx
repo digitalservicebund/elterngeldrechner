@@ -13,17 +13,18 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function KindPage() {
-  const { dispatch, findLastEvent, findLastRoute } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, findeVorherigeRoute } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
   const currentRoute = Route.KindAbfrage;
-  const lastEvent = findLastEvent(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(GeburtSchema),
-    defaultValues: encodeSafely(GeburtSchema, lastEvent),
+    defaultValues: encodeSafely(GeburtSchema, letztesGueltigesEvent),
   });
 
   const { errors: formErrors } = formState;
@@ -43,7 +44,7 @@ export function KindPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findLastRoute(currentRoute));
+    void navigate(findeVorherigeRoute(currentRoute));
   };
 
   return (

@@ -14,17 +14,17 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function GeborenesKindPage() {
-  const { dispatch, findLastEvent } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
   const currentRoute = Route.GeborenesKindAngaben;
-  const lastEvent = findLastEvent(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(GeborenesKindSchema),
-    defaultValues: encodeSafely(GeborenesKindSchema, lastEvent),
+    defaultValues: encodeSafely(GeborenesKindSchema, letztesGueltigesEvent),
   });
 
   const { errors: formErrors } = formState;

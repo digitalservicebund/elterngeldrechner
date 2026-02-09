@@ -21,18 +21,19 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function AllgemeineAngabenPage() {
-  const { dispatch, findLastEvent, findLastRoute } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, findeVorherigeRoute } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
 
   const currentRoute = Route.AllgemeineAngaben;
 
-  const lastEvent = findLastEvent(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(AllgemeineAngabenSchema),
-    defaultValues: encodeSafely(AllgemeineAngabenSchema, lastEvent),
+    defaultValues: encodeSafely(AllgemeineAngabenSchema, letztesGueltigesEvent),
   });
 
   const { errors: formErrors } = formState;
@@ -56,7 +57,7 @@ export function AllgemeineAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findLastRoute(currentRoute));
+    void navigate(findeVorherigeRoute(currentRoute));
   };
 
   return (

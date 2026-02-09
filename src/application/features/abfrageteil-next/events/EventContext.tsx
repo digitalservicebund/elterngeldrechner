@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { isEventStream } from "./EventStream";
 import {
-  findLastEvent as findLastInEventStream,
-  findLastRoute as findLastRouteInEventStream,
+  findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
+  findeVorherigeRoute as findeVorherigeRouteInEventStream,
 } from "./projections";
 import {
   FormEvent,
@@ -19,10 +19,14 @@ import {
 
 type EventContextType = {
   readonly dispatch: (event: FormEvent) => void;
-  readonly findLastEvent: <R extends FormEvent["route"]>(
+
+  readonly findeLetztesGueltigesEvent: <R extends FormEvent["route"]>(
     route: R,
   ) => PayloadMap[R] | undefined;
-  readonly findLastRoute: (route: Exclude<Route, Route.Startseite>) => Route;
+
+  readonly findeVorherigeRoute: (
+    route: Exclude<Route, Route.Startseite>,
+  ) => Route;
 };
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -41,10 +45,10 @@ export function EventProvider({
     dispatchAction(event);
   }, []);
 
-  const findLastEvent = useCallback(
+  const findeLetztesGueltigesEvent = useCallback(
     <R extends FormEvent["route"]>(route: R) => {
       if (isEventStream(eventStream)) {
-        return findLastInEventStream(eventStream, route);
+        return findeLetztesGueltigesEventInEventStream(eventStream, route);
       } else {
         return undefined;
       }
@@ -52,10 +56,10 @@ export function EventProvider({
     [eventStream],
   );
 
-  const findLastRoute = useCallback(
+  const findeVorherigeRoute = useCallback(
     (route: FormRoutes) => {
       if (isEventStream(eventStream)) {
-        return findLastRouteInEventStream(eventStream, route);
+        return findeVorherigeRouteInEventStream(eventStream, route);
       } else {
         return Route.Startseite;
       }
@@ -66,10 +70,10 @@ export function EventProvider({
   const value = useMemo(() => {
     return {
       dispatch,
-      findLastEvent,
-      findLastRoute,
+      findeVorherigeRoute,
+      findeLetztesGueltigesEvent,
     };
-  }, [dispatch, findLastEvent, findLastRoute]);
+  }, [dispatch, findeVorherigeRoute, findeLetztesGueltigesEvent]);
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>

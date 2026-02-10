@@ -156,6 +156,13 @@ jobs:
           aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
+      - name: Upload build artifacts for release
+        uses: actions/upload-artifact@v6
+        with:
+          name: production-build
+          path: dist/assets/index-*
+          retention-days: 1
+
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
         with:
@@ -173,6 +180,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Download build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: production-build
+
       - name: Generate Changelog
         uses: orhun/git-cliff-action@e16f179f0be49ecdfe63753837f20b9531642772
         id: changelog
@@ -185,6 +197,9 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: "Release ${{ github.ref_name }}"
           body: ${{ steps.changelog.outputs.content }}
+          files: |
+            dist/assets/index-*.js
+            dist/assets/index-*.css
 
       - name: Report Deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

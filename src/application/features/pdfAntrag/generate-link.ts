@@ -23,7 +23,7 @@ export function generateLink(linkGenerationProps: GenerateLinkProps) {
   const { familienportalPath, publicPath } = linkGenerationProps;
 
   if (isFamilienportalAssetStorage()) {
-    return `https://familienportal.de/resource/${familienportalPath}`;
+    return `${baseUrl}${familienportalPath}`;
   } else {
     return `${baseUrl}${publicPath}`;
   }

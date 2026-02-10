@@ -188,7 +188,7 @@ jobs:
       - name: Run build specific for familienportal environment
         run: npm run build:production
         env:
-          VITE_BASE_PATH: https://familienportal.de/resource/
+          VITE_BASE_PATH: /resource/
           VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
 
       - name: Upload familienportal build artifacts for release

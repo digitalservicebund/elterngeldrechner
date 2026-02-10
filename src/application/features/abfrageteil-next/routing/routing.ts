@@ -2,19 +2,15 @@ import { Temporal } from "@js-temporal/polyfill";
 import { generatePath } from "react-router";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
+  GeschwisterkindAbfrage,
+  GeschwisterkindAngaben,
+} from "@/application/features/abfrageteil-next/geschwister/GeschwisterSchema";
+import {
   GeborenesKind,
   Geburt,
   UngeborenesKind,
   WahrscheinlichGeborenesKind,
 } from "@/application/features/abfrageteil-next/kind/KindSchema";
-
-export type GeschwisterkindAbfrage = { istVorhanden: boolean };
-
-export type GeschwisterkindAngaben = {
-  geburtsdatum: Temporal.PlainDate;
-  hatBehinderung: boolean;
-  istWeiteresGeschwisterkindVorhanden: boolean;
-};
 
 export enum Route {
   Startseite = "/startseite",

@@ -20,37 +20,40 @@ export function erstelleBeispiele<A extends Ausgangslage>(
 ): Beispiel<A>[] {
   switch (ausgangslage.anzahlElternteile) {
     case 1:
-      return (
-        ausgangslage.istAlleinerziehend
-          ? erstelleBeispieleFuerAlleinerziehende(
+      return ausgangslage.istAlleinerziehend
+        ? benenneBeispiele(
+            erstelleBeispieleFuerAlleinerziehende(
               ausgangslage,
               berechneElterngeldbezuege,
-            )
-          : erstelleBeispieleFuerAlleinPlanende(
+            ) as Beispiel<A>[], // Limitation of TypeScript to match inferred type correctly.
+          )
+        : benenneBeispiele(
+            erstelleBeispieleFuerAlleinPlanende(
               ausgangslage,
               berechneElterngeldbezuege,
-            )
-      ) as Beispiel<A>[]; // Limitation of TypeScript to match inferred type correctly.
+            ) as Beispiel<A>[], // Limitation of TypeScript to match inferred type correctly.
+          );
 
     case 2:
-      return erstelleBeispieleFuerDieGemeinsamePlanung(
-        ausgangslage,
-        berechneElterngeldbezuege,
-      ) as Beispiel<A>[]; // Limitation of TypeScript to match inferred type correctly.
+      return benenneBeispiele(
+        erstelleBeispieleFuerDieGemeinsamePlanung(
+          ausgangslage,
+          berechneElterngeldbezuege,
+        ) as Beispiel<A>[], // Limitation of TypeScript to match inferred type correctly.
+      );
   }
 }
 
 function erstelleBeispieleFuerAlleinPlanende(
   ausgangslage: AusgangslageFuerEinElternteil,
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-): Beispiel<AusgangslageFuerEinElternteil>[] {
+): UnbenanntesBeispiel<AusgangslageFuerEinElternteil>[] {
   const basis = { [Elternteil.Eins]: MONAT_MIT_BASIS };
   const plus = { [Elternteil.Eins]: MONAT_MIT_PLUS };
 
   return [
     {
       identifier: "Allein planend - Beruf und Familie vereinen",
-      titel: "Vorschlag 1",
       beschreibung:
         "Beruf und Familie vereinen: Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(
@@ -64,7 +67,6 @@ function erstelleBeispieleFuerAlleinPlanende(
     },
     {
       identifier: "Allein planend - Ein Jahr Elterngeld",
-      titel: "Vorschlag 2",
       beschreibung:
         "Ein Jahr Elterngeld: Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
       plan: erstellePlanFuerEinBeispiel(
@@ -79,7 +81,7 @@ function erstelleBeispieleFuerAlleinPlanende(
 function erstelleBeispieleFuerAlleinerziehende(
   ausgangslage: AusgangslageFuerEinElternteil,
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-): Beispiel<AusgangslageFuerEinElternteil>[] {
+): UnbenanntesBeispiel<AusgangslageFuerEinElternteil>[] {
   const sindPartnermonateVerfuegbar =
     PartnermonateSindVerfuegbar.asPredicate(ausgangslage);
 
@@ -89,7 +91,6 @@ function erstelleBeispieleFuerAlleinerziehende(
   return [
     {
       identifier: "Alleinerziehend - Beruf und Familie vereinen",
-      titel: "Vorschlag 1",
       beschreibung:
         "Beruf und Familie vereinen: Für einen leichteren Übergang während des Wiedereinstiegs in den Beruf.",
       plan: erstellePlanFuerEinBeispiel(
@@ -103,7 +104,6 @@ function erstelleBeispieleFuerAlleinerziehende(
     },
     {
       identifier: "Alleinerziehend - Ein Jahr Elterngeld",
-      titel: "Vorschlag 2",
       beschreibung:
         "Ein Jahr Elterngeld: Das Basiselterngeld unterstützt Sie dabei, sich ganz Ihrem Kind zu widmen.",
       plan: erstellePlanFuerEinBeispiel(
@@ -118,7 +118,7 @@ function erstelleBeispieleFuerAlleinerziehende(
 function erstelleBeispieleFuerDieGemeinsamePlanung(
   ausgangslage: AusgangslageFuerZweiElternteile,
   berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-): Beispiel<AusgangslageFuerZweiElternteile>[] {
+): UnbenanntesBeispiel<AusgangslageFuerZweiElternteile>[] {
   const sindPartnermonateVerfuegbar =
     PartnermonateSindVerfuegbar.asPredicate(ausgangslage);
 
@@ -173,7 +173,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
   return [
     {
       identifier: "Gemeinsame Planung - Ein Jahr mit Begleitung",
-      titel: "Vorschlag 1",
       beschreibung:
         "Begleitete Übergänge: Gemeinsam starten - nach dem ersten Lebensjahr übernimmt der andere Elternteil für einen Monat.",
       plan: erstellePlanFuerEinBeispiel(
@@ -191,7 +190,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
-      titel: "Vorschlag 2",
       beschreibung:
         "Partnerschaftliche Aufteilung: Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
       plan: erstellePlanFuerEinBeispiel(
@@ -211,7 +209,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
-      titel: "Vorschlag 3",
       beschreibung:
         "Länger Elterngeld erhalten: Lohnt sich, wenn Sie in Teilzeit arbeiten möchten.",
       plan: erstellePlanFuerEinBeispiel(
@@ -230,7 +227,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
-      titel: "Vorschlag 4",
       beschreibung:
         "Flexibler Wiedereinstieg: Gemeinsam in die Elternzeit starten und sie gemeinsam abschließen.",
       plan: erstellePlanFuerEinBeispiel(
@@ -250,7 +246,6 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Elternzeit ausschöpfen",
-      titel: "Vorschlag 5",
       beschreibung:
         "Elternzeit ausschöpfen: Sechs Monate zusammen Elterngeld nehmen. Dann länger Elternzeit mit halbem Elterngeld.",
       plan: erstellePlanFuerEinBeispiel(
@@ -313,6 +308,17 @@ export type Beispiel<A extends Ausgangslage> = Readonly<{
   beschreibung: string;
   plan: Plan<A>;
 }>;
+
+type UnbenanntesBeispiel<A extends Ausgangslage> = Omit<Beispiel<A>, "titel">;
+
+function benenneBeispiele<A extends Ausgangslage>(
+  beispiele: UnbenanntesBeispiel<A>[],
+): Beispiel<A>[] {
+  return beispiele.map((beispiel, index) => ({
+    titel: `Vorschlag ${index + 1}`,
+    ...beispiel,
+  }));
+}
 
 export type BeispielIdentifier = string; // Just for communication purposes yet.
 
@@ -472,21 +478,45 @@ if (import.meta.vitest) {
       );
     });
 
-    it("generates no empty titles", () => {
-      assert(
-        property(arbritraryAusgangslagen, (ausgangslagen) => {
-          const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
+    it("generates titles containing of 'Vorschlag' followed by the index starting at 1 for one Elternteil", () => {
+      const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
 
-          for (const ausgangslage of ausgangslagen) {
-            const beispiele = erstelleBeispiele(
-              ausgangslage,
-              berechneElterngeldbezuege,
-            );
-
-            expect(beispiele.map((it) => it.titel)).not.toContain("");
-          }
-        }),
+      const beispiele = erstelleBeispiele(
+        {
+          anzahlElternteile: 1,
+          geburtsdatumDesKindes: new Date("2025-01-01"),
+        },
+        berechneElterngeldbezuege,
       );
+
+      expect(beispiele.map((it) => it.titel)).toEqual([
+        "Vorschlag 1",
+        "Vorschlag 2",
+      ]);
+    });
+
+    it("generates titles containing of 'Vorschlag' followed by the index starting at 1 for two Elternteile", () => {
+      const berechneElterngeldbezuege = vi.fn().mockReturnValue({});
+
+      const beispiele = erstelleBeispiele(
+        {
+          anzahlElternteile: 2,
+          geburtsdatumDesKindes: new Date("2025-01-01"),
+          namenDerElternteile: {
+            [Elternteil.Eins]: "Elternteil 1",
+            [Elternteil.Zwei]: "Elternteil 2",
+          },
+        },
+        berechneElterngeldbezuege,
+      );
+
+      expect(beispiele.map((it) => it.titel)).toEqual([
+        "Vorschlag 1",
+        "Vorschlag 2",
+        "Vorschlag 3",
+        "Vorschlag 4",
+        "Vorschlag 5",
+      ]);
     });
 
     /**

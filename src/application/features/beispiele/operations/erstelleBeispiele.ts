@@ -190,28 +190,8 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
       ),
     },
     {
-      identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
-      titel: "Vorschlag 2",
-      beschreibung:
-        "Flexibler Wiedereinstieg: Gemeinsam in die Elternzeit starten und sie gemeinsam abschließen.",
-      plan: erstellePlanFuerEinBeispiel(
-        ausgangslage,
-        [
-          { lebensmonat: beideBasis, anzahl: 1 },
-          {
-            lebensmonat: nurMutterBasis,
-            anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
-          },
-          { lebensmonat: nurMutterPlus, anzahl: 3 },
-          { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
-          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
-        ],
-        berechneElterngeldbezuege,
-      ),
-    },
-    {
       identifier: "Gemeinsame Planung - Partnerschaftliche Aufteilung",
-      titel: "Vorschlag 3",
+      titel: "Vorschlag 2",
       beschreibung:
         "Partnerschaftliche Aufteilung: Für Eltern, die sich die Betreuung ihres Kindes teilen möchten.",
       plan: erstellePlanFuerEinBeispiel(
@@ -231,7 +211,7 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
     },
     {
       identifier: "Gemeinsame Planung - Länger Elterngeld erhalten",
-      titel: "Vorschlag 4",
+      titel: "Vorschlag 3",
       beschreibung:
         "Länger Elterngeld erhalten: Lohnt sich, wenn Sie in Teilzeit arbeiten möchten.",
       plan: erstellePlanFuerEinBeispiel(
@@ -244,6 +224,26 @@ function erstelleBeispieleFuerDieGemeinsamePlanung(
             lebensmonat: nurPartnerInPlus,
             anzahl: sindPartnermonateVerfuegbar ? 9 : 5,
           },
+        ],
+        berechneElterngeldbezuege,
+      ),
+    },
+    {
+      identifier: "Gemeinsame Planung - Start zu zweit - flexibel zurück",
+      titel: "Vorschlag 4",
+      beschreibung:
+        "Flexibler Wiedereinstieg: Gemeinsam in die Elternzeit starten und sie gemeinsam abschließen.",
+      plan: erstellePlanFuerEinBeispiel(
+        ausgangslage,
+        [
+          { lebensmonat: beideBasis, anzahl: 1 },
+          {
+            lebensmonat: nurMutterBasis,
+            anzahl: sindPartnermonateVerfuegbar ? 8 : 6,
+          },
+          { lebensmonat: nurMutterPlus, anzahl: 3 },
+          { lebensmonat: mutterPlusPartnerInBasis, anzahl: 1 },
+          { lebensmonat: nurPartnerInBasis, anzahl: 1 },
         ],
         berechneElterngeldbezuege,
       ),
@@ -345,9 +345,8 @@ if (import.meta.vitest) {
       record: arbitraryRecord,
     } = await import("fast-check");
 
-    const { getRecordEntriesWithIntegerKeys } = await import(
-      "@/application/utilities"
-    );
+    const { getRecordEntriesWithIntegerKeys } =
+      await import("@/application/utilities");
 
     it("always creates a correct Plan for each Beispiel", () => {
       assert(

@@ -19,6 +19,10 @@ export const GeborenesKindSchema = z.object({
   anzahl: z.number().min(1),
 });
 
+export const WahrscheinlichGeborenesKindSchema = z.object({
+  geburtsdatum: GermanDateInputCodec,
+});
+
 export const KindSchema = z.xor([UngeborenesKindSchema, GeborenesKindSchema]);
 
 export type Geburt = z.infer<typeof GeburtSchema>;
@@ -26,6 +30,10 @@ export type Geburt = z.infer<typeof GeburtSchema>;
 export type UngeborenesKind = z.infer<typeof UngeborenesKindSchema>;
 
 export type GeborenesKind = z.infer<typeof GeborenesKindSchema>;
+
+export type WahrscheinlichGeborenesKind = z.infer<
+  typeof WahrscheinlichGeborenesKindSchema
+>;
 
 export type Kind = z.infer<typeof KindSchema>;
 

@@ -5,6 +5,7 @@ import {
   GeborenesKind,
   Geburt,
   UngeborenesKind,
+  WahrscheinlichGeborenesKind,
 } from "@/application/features/abfrageteil-next/kind/KindSchema";
 
 export type GeschwisterkindAbfrage = { istVorhanden: boolean };
@@ -42,7 +43,10 @@ export type FormEvent =
   | { route: Route.KindAbfrage; payload: Geburt }
   | { route: Route.GeborenesKindAngaben; payload: GeborenesKind }
   | { route: Route.UngeborenesKindAngaben; payload: UngeborenesKind }
-  | { route: Route.WahrscheinlichGeborenesKindAbfrage; payload: GeborenesKind }
+  | {
+      route: Route.WahrscheinlichGeborenesKindAbfrage;
+      payload: WahrscheinlichGeborenesKind;
+    }
   | { route: Route.GeschwisterkindAbfrage; payload: GeschwisterkindAbfrage }
   | {
       route: Route.GeschwisterkindAngaben;
@@ -220,16 +224,11 @@ if (import.meta.vitest) {
 
     it("returns GeschwisterkindAbfrage given WahrscheinlichGeborenesKindAbfrage as currentRoute", () => {
       const heute = Temporal.Now.plainDateISO();
-      const heuteVorMehrAlsZweiWochen = Temporal.Now.plainDateISO().subtract({
-        days: 15,
-      });
 
       const nextRoute = getNextRoute({
         route: Route.WahrscheinlichGeborenesKindAbfrage,
         payload: {
-          errechneterEntbindungstermin: heuteVorMehrAlsZweiWochen,
           geburtsdatum: heute,
-          anzahl: 1,
         },
       });
 

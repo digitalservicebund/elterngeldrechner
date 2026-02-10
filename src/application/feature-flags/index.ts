@@ -8,4 +8,10 @@ function isAbfrageteilNextEnabled() {
   return import.meta.env["VITE_FEATURE_FLAG_ABFRAGETEIL_V2"] === "true";
 }
 
-export { isAbfrageteilNextEnabled };
+function isFamilienportalAssetStorage() {
+  return (
+    import.meta.env["VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE"] === "true"
+  );
+}
+
+export { isAbfrageteilNextEnabled, isFamilienportalAssetStorage };

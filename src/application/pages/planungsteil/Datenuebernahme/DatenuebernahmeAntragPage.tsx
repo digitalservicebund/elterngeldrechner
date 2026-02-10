@@ -13,6 +13,10 @@ import {
   prepareGanzerAntrag,
   preparePlanungsseite,
 } from "@/application/features/pdfAntrag/pdf-erstellen";
+import {
+  imageAntrag,
+  imageSeite,
+} from "@/application/features/pdfAntrag/pdf-images";
 import { Page } from "@/application/pages/Page";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
@@ -104,11 +108,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
         <div className="mb-32 bg-off-white p-24">
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
-              <img
-                src={`${import.meta.env.BASE_URL}images/elterngeldantrag.png`}
-                alt=""
-                className="max-w-[200px]"
-              />
+              <img src={imageAntrag} alt="" className="max-w-[200px]" />
             </div>
             <div>
               <strong>Gesamter Antrag:</strong>
@@ -163,11 +163,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
         <div className="bg-off-white p-24">
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
-              <img
-                src={`${import.meta.env.BASE_URL}images/planungsseite.png`}
-                alt=""
-                className="max-w-[200px]"
-              />
+              <img src={imageSeite} alt="" className="max-w-[200px]" />
             </div>
             <div>
               <strong>Einzelne Seite:</strong>

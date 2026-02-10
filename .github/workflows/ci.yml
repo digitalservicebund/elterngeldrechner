@@ -163,6 +163,19 @@ jobs:
           path: dist/assets/index-*
           retention-days: 1
 
+      - name: Run build specific for familienportal environment
+        run: npm run build:production
+        env:
+          VITE_BASE_PATH: https://familienportal.de/resource/
+          VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
+
+      - name: Upload familienportal build artifacts for release
+        uses: actions/upload-artifact@v6
+        with:
+          name: familienportal-build
+          path: dist/assets/index-*
+          retention-days: 1
+
       - name: Report deployment for statistics
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
         with:
@@ -184,6 +197,13 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: production-build
+          path: production-build
+
+      - name: Download familienportal build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: familienportal-build
+          path: familienportal-build
 
       - name: Generate Changelog
         uses: orhun/git-cliff-action@e16f179f0be49ecdfe63753837f20b9531642772
@@ -198,8 +218,8 @@ jobs:
           name: "Release ${{ github.ref_name }}"
           body: ${{ steps.changelog.outputs.content }}
           files: |
-            dist/assets/index-*.js
-            dist/assets/index-*.css
+            familienportal-build/index-*.js
+            familienportal-build/index-*.css
 
       - name: Report Deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

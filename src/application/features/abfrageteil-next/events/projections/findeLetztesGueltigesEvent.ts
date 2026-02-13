@@ -17,7 +17,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("findeLetztesGueltigesEvent", async () => {
-    const { Route } = await import("../../routing/routing");
+    const { Route } =
+      await import("@/application/features/abfrageteil-next/routing/Route");
 
     it("it returns the last object matching the route", () => {
       const result = findeLetztesGueltigesEvent(

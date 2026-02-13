@@ -10,10 +10,8 @@ import { Button } from "@/application/components";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import {
-  Route,
-  getNextRoute,
-} from "@/application/features/abfrageteil-next/routing/routing";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
+import { getNextRoute } from "@/application/features/abfrageteil-next/routing/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function WahrscheinlichGeborenesKindPage() {

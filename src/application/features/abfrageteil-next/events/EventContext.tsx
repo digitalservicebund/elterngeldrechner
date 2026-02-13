@@ -11,11 +11,11 @@ import {
   findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
   findeVorherigeRoute as findeVorherigeRouteInEventStream,
 } from "./projections";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   FormEvent,
   FormRoutes,
   PayloadMap,
-  Route,
 } from "@/application/features/abfrageteil-next/routing/routing";
 
 type EventContextType = {

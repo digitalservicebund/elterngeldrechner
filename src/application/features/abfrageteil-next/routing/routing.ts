@@ -1,5 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { generatePath } from "react-router";
+import { Route } from "./Route";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
   GeschwisterkindAbfrage,
@@ -11,25 +12,6 @@ import {
   UngeborenesKind,
   WahrscheinlichGeborenesKind,
 } from "@/application/features/abfrageteil-next/kind/KindSchema";
-
-export enum Route {
-  Startseite = "/startseite",
-
-  AllgemeineAngaben = "/allgemeine-angaben",
-
-  KindAbfrage = "/kind",
-  GeborenesKindAngaben = "/kind/geboren",
-  UngeborenesKindAngaben = "/kind/ungeboren",
-  WahrscheinlichGeborenesKindAbfrage = "/kind/ungeboren/validierung",
-
-  GeschwisterkindAbfrage = "/geschwisterkind",
-  GeschwisterkindAngaben = "/geschwisterkind/:index",
-
-  ElternteilAllgemeineAngaben = "/elternteil/:index",
-  // ElternteilAusklammerungsgruendeAngaben,
-  // ElternteilAusklammerungszeitenAngaben,
-  // ElternteilTaetigkeitenAngaben,
-}
 
 export type FormRoutes = Exclude<Route, Route.Startseite>;
 

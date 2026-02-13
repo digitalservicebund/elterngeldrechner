@@ -14,10 +14,9 @@ import {
 } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import {
-  Route,
-  getNextRoute,
-} from "@/application/features/abfrageteil-next/routing/routing";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
+import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routeDefinition";
+import { getNextRoute } from "@/application/features/abfrageteil-next/routing/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function AllgemeineAngabenPage() {
@@ -57,7 +56,7 @@ export function AllgemeineAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigeRoute(currentRoute));
+    void navigate(generateAbfrageteilPath(findeVorherigeRoute(currentRoute)));
   };
 
   return (

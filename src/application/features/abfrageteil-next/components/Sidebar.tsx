@@ -2,36 +2,47 @@ import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
 import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import classNames from "classnames";
 import { useCallback, useId, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { generatePath, useLocation, useNavigate } from "react-router";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
+import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routeDefinition";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
 
-type NavigationItem = {
-  readonly label: string;
-  readonly path: string;
+type NavigationItem = NavigationStep & {
   readonly navigatable: boolean;
 };
 
-const staticSteps: Omit<NavigationItem, "navigatable">[] = [
-  { label: "Startseite", path: "/abfrageteil/startseite" },
+type NavigationStep = {
+  readonly label: string;
+  readonly path: string;
+};
+
+const navigationSteps: NavigationStep[] = [
+  { label: "Startseite", path: generateAbfrageteilPath(Route.Startseite) },
   {
     label: "Angaben zur Familie",
-    path: "/abfrageteil/allgemeine-angaben",
+    path: generateAbfrageteilPath(Route.AllgemeineAngaben),
   },
   {
     label: "Angaben zum Kind",
-    path: "/abfrageteil/kind",
+    path: generateAbfrageteilPath(Route.KindAbfrage),
   },
   {
     label: "Angaben zu Geschwistern",
-    path: "/abfrageteil/geschwister",
+    path: generateAbfrageteilPath(Route.GeschwisterkindAbfrage),
   },
   {
     label: "Angaben Person 1",
-    path: "/abfrageteil/elternteil/0",
+    path: generatePath(
+      generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
+      { index: "0" },
+    ),
   },
   {
     label: "Angaben Person 2",
-    path: "/abfrageteil/elternteil/1",
+    path: generatePath(
+      generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
+      { index: "1" },
+    ),
   },
   { label: "Planungshilfen", path: "/beispiele" },
   {
@@ -43,6 +54,24 @@ const staticSteps: Omit<NavigationItem, "navigatable">[] = [
     path: "/datenuebernahme-antrag",
   },
 ];
+
+function erstelleNavigationsItems(pathname: string) {
+  const currentIndex = navigationSteps.findIndex(
+    ({ path }) => path === pathname,
+  );
+  const stepsBeforeCurrentStep = navigationSteps.slice(0, currentIndex);
+  const stepsAfterCurrentStep = navigationSteps.slice(currentIndex);
+  return [
+    ...stepsBeforeCurrentStep.map((step) => ({
+      ...step,
+      navigatable: true,
+    })),
+    ...stepsAfterCurrentStep.map((step) => ({
+      ...step,
+      navigatable: false,
+    })),
+  ];
+}
 
 export function Sidebar() {
   const { pathname } = useLocation();
@@ -56,19 +85,7 @@ export function Sidebar() {
   useOnFocusMovedOut(navigationElement, closeMenu);
 
   const navigationItems: NavigationItem[] = useMemo(() => {
-    const currentIndex = staticSteps.findIndex(({ path }) => path === pathname);
-    const stepsBeforeCurrentStep = staticSteps.slice(0, currentIndex);
-    const stepsAfterCurrentStep = staticSteps.slice(currentIndex);
-    return [
-      ...stepsBeforeCurrentStep.map((step) => ({
-        ...step,
-        navigatable: true,
-      })),
-      ...stepsAfterCurrentStep.map((step) => ({
-        ...step,
-        navigatable: false,
-      })),
-    ];
+    return erstelleNavigationsItems(pathname);
   }, [pathname]);
 
   const currentStepIndex = navigationItems.findIndex(
@@ -144,8 +161,8 @@ export function Sidebar() {
         {navigationItems.map((item, index) => {
           const isCurrent = index === currentStepIndex;
           const isDone = index < currentStepIndex;
-          const isNavigatable = item.navigatable;
-          const isLast = index === totalStepCount - 1;
+          const isDisabled = !item.navigatable;
+          const hasFollowing = index !== totalStepCount - 1;
 
           return (
             <li
@@ -154,19 +171,19 @@ export function Sidebar() {
               className={classNames({
                 [twClasses.stepBase]: true,
                 [twClasses.stepCircle]: true,
-                [twClasses.stepCurrent]: isCurrent,
                 [twClasses.stepDone]: isDone,
-                [twClasses.stepDivider]: !isLast,
+                [twClasses.stepCurrent]: isCurrent,
+                [twClasses.stepDivider]: hasFollowing,
               })}
             >
               <button
                 className={classNames(twClasses.stepHeading, {
-                  "cursor-default": !isNavigatable,
+                  "cursor-default": isDisabled,
                 })}
                 type="button"
                 onClick={() => navigate(item.path)}
                 aria-current={isCurrent ? "step" : undefined}
-                disabled={!isNavigatable}
+                disabled={isDisabled}
               >
                 {item.label}
               </button>
@@ -176,4 +193,46 @@ export function Sidebar() {
       </ol>
     </nav>
   );
+}
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("erstelleNavigationsItems", () => {
+    it("returns list of NavigationItems with lenght 9 and all navigatable false", () => {
+      const result = erstelleNavigationsItems(
+        generateAbfrageteilPath(Route.Startseite),
+      );
+
+      expect(result.map((item) => item.navigatable)).toEqual([
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ]);
+    });
+
+    it("returns list of NavigationItems with lenght 9 and all navigatable before Route.KindeAbfrage true and all others false", () => {
+      const result = erstelleNavigationsItems(
+        generateAbfrageteilPath(Route.KindAbfrage),
+      );
+
+      expect(result.map((item) => item.navigatable)).toEqual([
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ]);
+    });
+  });
 }

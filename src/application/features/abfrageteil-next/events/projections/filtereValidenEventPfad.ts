@@ -1,8 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   type FormEvent,
-  Route,
   generatePathFromEvent,
   getNextRoute,
 } from "@/application/features/abfrageteil-next/routing/routing";

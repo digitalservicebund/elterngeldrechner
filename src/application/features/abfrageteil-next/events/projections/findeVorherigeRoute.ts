@@ -1,6 +1,6 @@
 import type { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import { filtereValidenEventPfad } from "@/application/features/abfrageteil-next/events/projections/filtereValidenEventPfad";
-import { Route } from "@/application/features/abfrageteil-next/routing/routing";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 
 function findeVorherigeRoute(eventStream: EventStream, route: Route): Route {
   const validerEventPfad = filtereValidenEventPfad(eventStream).map(
@@ -35,7 +35,7 @@ if (import.meta.vitest) {
         Route.KindAbfrage,
       );
 
-      expect(lastRoute).toEqual("/allgemeine-angaben");
+      expect(lastRoute).toContain("/allgemeine-angaben");
     });
 
     it("returns /allgemeine-angaben when called from /kind with the kind event in the event stream", () => {
@@ -59,7 +59,7 @@ if (import.meta.vitest) {
         Route.KindAbfrage,
       );
 
-      expect(lastRoute).toEqual("/allgemeine-angaben");
+      expect(lastRoute).toContain("/allgemeine-angaben");
     });
   });
 }

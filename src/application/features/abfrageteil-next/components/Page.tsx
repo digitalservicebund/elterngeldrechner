@@ -5,16 +5,9 @@ import { Sidebar } from "./Sidebar";
 type Props = {
   readonly children: ReactNode;
   readonly heading: string;
-  readonly navigationItems: string[];
-  readonly currentNavigationItem: string;
 };
 
-export function Page({
-  children,
-  heading,
-  navigationItems,
-  currentNavigationItem,
-}: Props) {
+export function Page({ children, heading }: Props) {
   const sectionElement = useRef<HTMLElement>(null);
   useEffect(() => {
     sectionElement.current?.focus({ preventScroll: true });
@@ -27,10 +20,7 @@ export function Page({
       <ScrollRestoration />
 
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
-        <Sidebar
-          navigationItems={navigationItems}
-          currentNavigationItem={currentNavigationItem}
-        />
+        <Sidebar />
       </div>
 
       <section

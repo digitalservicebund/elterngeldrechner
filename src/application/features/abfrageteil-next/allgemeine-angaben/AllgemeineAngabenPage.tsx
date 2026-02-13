@@ -61,11 +61,7 @@ export function AllgemeineAngabenPage() {
   };
 
   return (
-    <Page
-      heading="Allgemeine Angaben"
-      navigationItems={[]}
-      currentNavigationItem=""
-    >
+    <Page heading="Allgemeine Angaben">
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-56"

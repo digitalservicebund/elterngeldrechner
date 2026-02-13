@@ -1,4 +1,5 @@
 import { Navigate, Outlet } from "react-router";
+import { Route } from "./routing";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKindPage";
@@ -19,19 +20,19 @@ export const routeDefinition = [
     children: [
       {
         element: <Startseite />,
-        path: "/startseite",
+        path: `/abfrageteil${Route.Startseite}`,
       },
       {
         element: <AllgemeineAngabenPage />,
-        path: "/allgemeine-angaben",
+        path: `/abfrageteil${Route.AllgemeineAngaben}`,
       },
-      { element: <KindPage />, path: "/kind" },
+      { element: <KindPage />, path: `/abfrageteil${Route.KindAbfrage}` },
       {
         element: <GeborenesKindPage />,
-        path: "/kind/geboren",
+        path: `/abfrageteil${Route.GeborenesKindAngaben}`,
       },
       {
-        element: <Navigate to="/startseite" replace />,
+        element: <Navigate to="/abfrageteil/startseite" replace />,
         path: "*",
       },
     ],

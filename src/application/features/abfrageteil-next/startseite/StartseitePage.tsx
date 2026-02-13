@@ -12,15 +12,11 @@ export function Startseite() {
 
   const navigateNextPage = () => {
     dispatch({ route: Route.Startseite });
-    void navigate("/allgemeine-angaben");
+    void navigate("/abfrageteil/allgemeine-angaben");
   };
 
   return (
-    <Page
-      heading="So nutzen Sie den Elterngeldrechner mit Planer"
-      navigationItems={[]}
-      currentNavigationItem=""
-    >
+    <Page heading="So nutzen Sie den Elterngeldrechner mit Planer">
       <div className="mt-40 flex flex-col gap-40">
         <Alert headline="Hinweis">
           <span>

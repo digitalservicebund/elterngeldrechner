@@ -47,11 +47,7 @@ export function UngeborenesKindPage() {
   const anzahlKinderInputIdentifier = useId();
 
   return (
-    <Page
-      heading="Geburtsdatum des Kindes"
-      navigationItems={[]}
-      currentNavigationItem=""
-    >
+    <Page heading="Geburtsdatum des Kindes">
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-56"

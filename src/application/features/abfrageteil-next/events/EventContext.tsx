@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { isEventStream } from "./EventStream";
 import {
+  filtereValidenEventPfad as filtereValidenEventPfadInEventStream,
   findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
   findeVorherigeRoute as findeVorherigeRouteInEventStream,
 } from "./projections";
@@ -19,6 +20,8 @@ import {
 
 type EventContextType = {
   readonly dispatch: (event: FormEvent) => void;
+
+  readonly filtereValidenEventPfad: () => FormEvent[];
 
   readonly findeLetztesGueltigesEvent: <R extends FormEvent["route"]>(
     route: R,
@@ -45,6 +48,14 @@ export function EventProvider({
     dispatchAction(event);
   }, []);
 
+  const filtereValidenEventPfad = useCallback(() => {
+    if (isEventStream(eventStream)) {
+      return filtereValidenEventPfadInEventStream(eventStream);
+    } else {
+      return [];
+    }
+  }, [eventStream]);
+
   const findeLetztesGueltigesEvent = useCallback(
     <R extends FormEvent["route"]>(route: R) => {
       if (isEventStream(eventStream)) {
@@ -70,10 +81,16 @@ export function EventProvider({
   const value = useMemo(() => {
     return {
       dispatch,
+      filtereValidenEventPfad,
       findeVorherigeRoute,
       findeLetztesGueltigesEvent,
     };
-  }, [dispatch, findeVorherigeRoute, findeLetztesGueltigesEvent]);
+  }, [
+    dispatch,
+    filtereValidenEventPfad,
+    findeVorherigeRoute,
+    findeLetztesGueltigesEvent,
+  ]);
 
   return (
     <EventContext.Provider value={value}>{children}</EventContext.Provider>

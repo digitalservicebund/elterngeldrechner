@@ -7,6 +7,11 @@ on:
         description: The name used to publish the feature. The preview will be accessible at $domain/preview/$name.
         required: true
         type: string
+      enable_new_abfrageteil:
+        description: "Neuen Abfrageteil verwenden?"
+        required: false
+        type: boolean
+        default: false
 
   workflow_call:
     inputs:
@@ -14,6 +19,10 @@ on:
         description: The name used to publish the feature. The preview will be accessible at $domain/preview/$name.
         required: true
         type: string
+      enable_new_abfrageteil:
+        required: false
+        type: boolean
+        default: false
 
 defaults:
   run:
@@ -32,6 +41,7 @@ jobs:
         run: npm run build:staging
         env:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/${{ inputs.name }}/
+          VITE_FEATURE_FLAG_ABFRAGETEIL_V2: ${{ inputs.enable_new_abfrageteil }}
 
       - name: Synchronize build output with object storage
         env:

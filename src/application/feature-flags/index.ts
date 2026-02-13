@@ -5,12 +5,12 @@
 // future refactoring easier.
 
 function isAbfrageteilNextEnabled() {
-  return import.meta.env["VITE_FEATURE_FLAG_ABFRAGETEIL_V2"] === "true";
+  return import.meta.env.VITE_FEATURE_FLAG_ABFRAGETEIL_V2 === true;
 }
 
 function isFamilienportalAssetStorage() {
   return (
-    import.meta.env["VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE"] === "true"
+    import.meta.env.VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE === true
   );
 }
 

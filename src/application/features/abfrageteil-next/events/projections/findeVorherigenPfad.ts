@@ -1,10 +1,10 @@
 import type { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
-import { filtereValidenEventPfad } from "@/application/features/abfrageteil-next/events/projections/filtereValidenEventPfad";
+import { filtereValideEventHistorie } from "@/application/features/abfrageteil-next/events/projections";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routing";
 
 function findeVorherigenPfad(eventStream: EventStream, route: Route): string {
-  const validerEventPfad = filtereValidenEventPfad(eventStream).map(
+  const validerEventPfad = filtereValideEventHistorie(eventStream).map(
     (event) => event.route,
   );
 

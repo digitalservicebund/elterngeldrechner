@@ -7,7 +7,9 @@ import {
   generatePathFromEvent,
 } from "@/application/features/abfrageteil-next/routing/routing";
 
-export function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
+export function filtereValideEventHistorie(
+  eventStream: EventStream,
+): FormEvent[] {
   return eventStream
     .reduceRight(
       (acc, event) => {
@@ -26,7 +28,7 @@ export function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("filtereValidenEventPfad", () => {
+  describe("filtereValideEventHistorie", () => {
     it("returns all events when no events are skipped", () => {
       const eventStream: EventStream = [
         { route: Route.Startseite },
@@ -45,7 +47,7 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result: FormEvent[] = filtereValidenEventPfad(eventStream);
+      const result: FormEvent[] = filtereValideEventHistorie(eventStream);
 
       expect(result).toEqual(eventStream);
     });
@@ -79,7 +81,7 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result = filtereValidenEventPfad(eventStream);
+      const result = filtereValideEventHistorie(eventStream);
 
       expect(result).toEqual([
         { route: Route.Startseite },
@@ -163,7 +165,7 @@ if (import.meta.vitest) {
         },
       ];
 
-      const result = filtereValidenEventPfad(eventStream);
+      const result = filtereValideEventHistorie(eventStream);
 
       expect(result).toEqual([
         { route: Route.Startseite },

@@ -235,7 +235,7 @@ if (import.meta.vitest) {
       expect(nextRoute).toEqual(Route.ElternteilAllgemeineAngaben);
     });
 
-    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and istWeiteresGeschwisterkindVorhanden equals yes", () => {
       const nextRoute = getNextRoute({
         route: Route.GeschwisterkindAngaben,
         params: { index: 0 },
@@ -249,7 +249,7 @@ if (import.meta.vitest) {
       expect(nextRoute).toEqual("/geschwisterkind/1");
     });
 
-    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals one and istWeiteresGeschwisterkindVorhanden equals yes", () => {
       const nextRoute = getNextRoute({
         route: Route.GeschwisterkindAngaben,
         params: { index: 1 },

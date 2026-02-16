@@ -6,8 +6,8 @@ import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/
 import { KindPage } from "@/application/features/abfrageteil-next/kind/KindPage";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/StartseitePage";
 
-export function generateAbfrageteilPath(route: Route): string {
-  return `/abfrageteil${route}`;
+export function generateAbfrageteilPath(subpath: string): string {
+  return `/abfrageteil${subpath}`;
 }
 
 function EventProviderLayout() {

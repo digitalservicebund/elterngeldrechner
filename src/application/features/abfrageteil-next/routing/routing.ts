@@ -58,14 +58,14 @@ export function generatePathFromEvent(event: FormEvent) {
   );
 }
 
-export function getNextRoute(currentRoute: FormEvent): string {
-  switch (currentRoute.route) {
+export function getNextRoute(event: FormEvent): string {
+  switch (event.route) {
     case Route.Startseite:
       return Route.AllgemeineAngaben;
     case Route.AllgemeineAngaben:
       return Route.KindAbfrage;
     case Route.KindAbfrage:
-      if (currentRoute.payload.istGeboren) {
+      if (event.payload.istGeboren) {
         return Route.GeborenesKindAngaben;
       } else {
         return Route.UngeborenesKindAngaben;
@@ -73,7 +73,7 @@ export function getNextRoute(currentRoute: FormEvent): string {
     case Route.GeborenesKindAngaben:
       return Route.GeschwisterkindAbfrage;
     case Route.UngeborenesKindAngaben: {
-      const { errechneterEntbindungstermin } = currentRoute.payload;
+      const { errechneterEntbindungstermin } = event.payload;
       const heuteVorZweiWochen = Temporal.Now.plainDateISO().subtract({
         days: 14,
       });
@@ -93,13 +93,13 @@ export function getNextRoute(currentRoute: FormEvent): string {
     case Route.WahrscheinlichGeborenesKindAbfrage:
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
-      return currentRoute.payload.istVorhanden
+      return event.payload.istVorhanden
         ? generatePath(Route.GeschwisterkindAngaben, { index: "0" })
         : Route.ElternteilAllgemeineAngaben;
     case Route.GeschwisterkindAngaben:
-      return currentRoute.payload.istWeiteresGeschwisterkindVorhanden
+      return event.payload.istWeiteresGeschwisterkindVorhanden
         ? generatePath(Route.GeschwisterkindAngaben, {
-            index: (currentRoute.params.index + 1).toString(),
+            index: (event.params.index + 1).toString(),
           })
         : Route.ElternteilAllgemeineAngaben;
     case Route.ElternteilAllgemeineAngaben:

@@ -11,7 +11,11 @@ import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { usePageIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import { getNextRoute } from "@/application/features/abfrageteil-next/routing/routing";
+import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routeDefinition";
+import {
+  FormEvent,
+  getNextRoute,
+} from "@/application/features/abfrageteil-next/routing/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function GeschwisterkindAngabenPage() {
@@ -37,19 +41,15 @@ export function GeschwisterkindAngabenPage() {
   // const { errors: formErrors } = formState;
 
   const onSubmit = (values: GeschwisterkindAngaben) => {
-    dispatch({
+    const event: FormEvent = {
       route: currentRoute,
-      params: { index },
       payload: values,
-    });
-
-    const nextPath = getNextRoute({
-      route: currentRoute,
       params: { index },
-      payload: values,
-    });
+    };
 
-    void navigate(nextPath);
+    dispatch(event);
+
+    void navigate(generateAbfrageteilPath(getNextRoute(event)));
   };
 
   const navigateBack = () => {

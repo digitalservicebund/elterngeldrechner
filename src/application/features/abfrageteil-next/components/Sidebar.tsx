@@ -88,8 +88,8 @@ export function Sidebar() {
     return erstelleNavigationsItems(pathname);
   }, [pathname]);
 
-  const currentStepIndex = navigationItems.findIndex(
-    (item) => item.path === pathname,
+  const currentStepIndex = navigationItems.findIndex((item) =>
+    pathname.startsWith(item.path),
   );
   const currentStepNumber = currentStepIndex + 1;
   const totalStepCount = navigationItems.length;

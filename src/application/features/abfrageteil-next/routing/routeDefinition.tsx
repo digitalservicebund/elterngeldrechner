@@ -3,8 +3,12 @@ import { Route } from "./Route";
 import { generateAbfrageteilPath } from "./routing";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
+import { GeschwisterkindAbfragePage } from "@/application/features/abfrageteil-next/geschwister/GeschwisterkindAbfragePage";
+import { GeschwisterkindAngabenPage } from "@/application/features/abfrageteil-next/geschwister/GeschwisterkindAngabenPage";
 import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKindPage";
 import { KindPage } from "@/application/features/abfrageteil-next/kind/KindPage";
+import { UngeborenesKindPage } from "@/application/features/abfrageteil-next/kind/UngeborenesKindPage";
+import { WahrscheinlichGeborenesKindPage } from "@/application/features/abfrageteil-next/kind/WahrscheinlichGeborenesKindPage";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/StartseitePage";
 
 function EventProviderLayout() {
@@ -34,6 +38,22 @@ export const routeDefinition = [
       {
         element: <GeborenesKindPage />,
         path: generateAbfrageteilPath(Route.GeborenesKindAngaben),
+      },
+      {
+        element: <UngeborenesKindPage />,
+        path: generateAbfrageteilPath(Route.UngeborenesKindAngaben),
+      },
+      {
+        element: <WahrscheinlichGeborenesKindPage />,
+        path: generateAbfrageteilPath(Route.WahrscheinlichGeborenesKindAbfrage),
+      },
+      {
+        element: <GeschwisterkindAbfragePage />,
+        path: generateAbfrageteilPath(Route.GeschwisterkindAbfrage),
+      },
+      {
+        element: <GeschwisterkindAngabenPage />,
+        path: generateAbfrageteilPath(Route.GeschwisterkindAngaben),
       },
       {
         element: (

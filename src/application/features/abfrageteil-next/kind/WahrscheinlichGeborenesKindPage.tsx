@@ -18,7 +18,8 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function WahrscheinlichGeborenesKindPage() {
-  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -42,6 +43,10 @@ export function WahrscheinlichGeborenesKindPage() {
     dispatch(event);
 
     void navigate(findeNaechstenPfad(event));
+  };
+
+  const navigateBack = () => {
+    void navigate(findeVorherigenPfad(currentRoute));
   };
 
   const geburtsdatumInputIdentifier = useId();
@@ -77,7 +82,7 @@ export function WahrscheinlichGeborenesKindPage() {
         </div>
 
         <div className="flex gap-16">
-          <Button type="button" buttonStyle="secondary" onClick={() => {}}>
+          <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>
 

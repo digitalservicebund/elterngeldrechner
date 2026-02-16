@@ -15,7 +15,8 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function UngeborenesKindPage() {
-  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -36,6 +37,10 @@ export function UngeborenesKindPage() {
     dispatch(event);
 
     void navigate(findeNaechstenPfad(event));
+  };
+
+  const navigateBack = () => {
+    void navigate(findeVorherigenPfad(currentRoute));
   };
 
   const entbindungsterminInputIdentifier = useId();
@@ -82,7 +87,7 @@ export function UngeborenesKindPage() {
         </div>
 
         <div className="flex gap-16">
-          <Button type="button" buttonStyle="secondary" onClick={() => {}}>
+          <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>
 

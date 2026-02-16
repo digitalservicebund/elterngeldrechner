@@ -11,10 +11,9 @@ import { CustomDate } from "@/application/features/abfrageteil/components/Nachwu
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routeDefinition";
 import {
   FormEvent,
-  getNextRoute,
+  findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
@@ -42,7 +41,7 @@ export function WahrscheinlichGeborenesKindPage() {
 
     dispatch(event);
 
-    void navigate(generateAbfrageteilPath(getNextRoute(event)));
+    void navigate(findeNaechstenPfad(event));
   };
 
   const geburtsdatumInputIdentifier = useId();

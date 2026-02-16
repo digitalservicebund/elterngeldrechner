@@ -3,16 +3,18 @@ import { EventStream } from "@/application/features/abfrageteil-next/events/Even
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   type FormEvent,
+  findeNaechstenPfad,
   generatePathFromEvent,
-  getNextRoute,
 } from "@/application/features/abfrageteil-next/routing/routing";
 
 export function filtereValidenEventPfad(eventStream: EventStream): FormEvent[] {
   return eventStream
     .reduceRight(
       (acc, event) => {
-        const letzteEventRoute = generatePathFromEvent(acc[acc.length - 1]!);
-        const istVorherigesEvent = getNextRoute(event) === letzteEventRoute;
+        const letzerEventPfad = generatePathFromEvent(acc[acc.length - 1]!);
+        const naechsterPfad = findeNaechstenPfad(event);
+
+        const istVorherigesEvent = naechsterPfad === letzerEventPfad;
 
         return [...acc, ...(istVorherigesEvent ? [event] : [])];
       },

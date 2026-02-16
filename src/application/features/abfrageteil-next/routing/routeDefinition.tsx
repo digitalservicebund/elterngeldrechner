@@ -1,14 +1,11 @@
 import { Navigate, Outlet } from "react-router";
 import { Route } from "./Route";
+import { generateAbfrageteilPath } from "./routing";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import { GeborenesKindPage } from "@/application/features/abfrageteil-next/kind/GeborenesKindPage";
 import { KindPage } from "@/application/features/abfrageteil-next/kind/KindPage";
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/StartseitePage";
-
-export function generateAbfrageteilPath(subpath: string): string {
-  return `/abfrageteil${subpath}`;
-}
 
 function EventProviderLayout() {
   return (

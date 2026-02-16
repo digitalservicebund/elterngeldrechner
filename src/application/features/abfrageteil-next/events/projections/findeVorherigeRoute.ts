@@ -1,8 +1,9 @@
 import type { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import { filtereValidenEventPfad } from "@/application/features/abfrageteil-next/events/projections/filtereValidenEventPfad";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
+import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routing";
 
-function findeVorherigeRoute(eventStream: EventStream, route: Route): Route {
+function findeVorherigenPfad(eventStream: EventStream, route: Route): string {
   const validerEventPfad = filtereValidenEventPfad(eventStream).map(
     (event) => event.route,
   );
@@ -11,17 +12,19 @@ function findeVorherigeRoute(eventStream: EventStream, route: Route): Route {
     (currentRoute) => currentRoute === route,
   );
 
-  return (validerEventPfad[aktuelleRouteIndex - 1] || validerEventPfad.at(-1))!;
+  return generateAbfrageteilPath(
+    (validerEventPfad[aktuelleRouteIndex - 1] || validerEventPfad.at(-1))!,
+  );
 }
 
-export { findeVorherigeRoute };
+export { findeVorherigenPfad };
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("findeVorherigeRoute", () => {
-    it("returns /allgemeine-angaben when called from /kind without the kind event in the event stream", () => {
-      const lastRoute = findeVorherigeRoute(
+  describe("findeVorherigenPfad", () => {
+    it("returns /abfrageteil/allgemeine-angaben when called from /kind without the kind event in the event stream", () => {
+      const vorherigerPfad = findeVorherigenPfad(
         [
           { route: Route.Startseite },
           {
@@ -35,11 +38,11 @@ if (import.meta.vitest) {
         Route.KindAbfrage,
       );
 
-      expect(lastRoute).toContain("/allgemeine-angaben");
+      expect(vorherigerPfad).toEqual("/abfrageteil/allgemeine-angaben");
     });
 
-    it("returns /allgemeine-angaben when called from /kind with the kind event in the event stream", () => {
-      const lastRoute = findeVorherigeRoute(
+    it("returns /abfrageteil/allgemeine-angaben when called from /kind with the kind event in the event stream", () => {
+      const vorherigerPfad = findeVorherigenPfad(
         [
           { route: Route.Startseite },
           {
@@ -59,7 +62,7 @@ if (import.meta.vitest) {
         Route.KindAbfrage,
       );
 
-      expect(lastRoute).toContain("/allgemeine-angaben");
+      expect(vorherigerPfad).toEqual("/abfrageteil/allgemeine-angaben");
     });
   });
 }

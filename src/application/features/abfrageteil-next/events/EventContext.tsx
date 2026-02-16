@@ -9,13 +9,14 @@ import { isEventStream } from "./EventStream";
 import {
   filtereValidenEventPfad as filtereValidenEventPfadInEventStream,
   findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
-  findeVorherigeRoute as findeVorherigeRouteInEventStream,
+  findeVorherigenPfad as findeVorherigenPfadInEventStream,
 } from "./projections";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   FormEvent,
   FormRoutes,
   PayloadMap,
+  generateAbfrageteilPath,
 } from "@/application/features/abfrageteil-next/routing/routing";
 
 type EventContextType = {
@@ -27,9 +28,9 @@ type EventContextType = {
     route: R,
   ) => PayloadMap[R] | undefined;
 
-  readonly findeVorherigeRoute: (
+  readonly findeVorherigenPfad: (
     route: Exclude<Route, Route.Startseite>,
-  ) => Route;
+  ) => string;
 };
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
@@ -67,12 +68,12 @@ export function EventProvider({
     [eventStream],
   );
 
-  const findeVorherigeRoute = useCallback(
+  const findeVorherigenPfad = useCallback(
     (route: FormRoutes) => {
       if (isEventStream(eventStream)) {
-        return findeVorherigeRouteInEventStream(eventStream, route);
+        return findeVorherigenPfadInEventStream(eventStream, route);
       } else {
-        return Route.Startseite;
+        return generateAbfrageteilPath(Route.Startseite);
       }
     },
     [eventStream],
@@ -82,13 +83,13 @@ export function EventProvider({
     return {
       dispatch,
       filtereValidenEventPfad,
-      findeVorherigeRoute,
+      findeVorherigenPfad,
       findeLetztesGueltigesEvent,
     };
   }, [
     dispatch,
     filtereValidenEventPfad,
-    findeVorherigeRoute,
+    findeVorherigenPfad,
     findeLetztesGueltigesEvent,
   ]);
 

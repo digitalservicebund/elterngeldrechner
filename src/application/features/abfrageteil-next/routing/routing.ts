@@ -33,8 +33,8 @@ export type FormEvent =
     }
   | {
       route: Route.ElternteilAllgemeineAngaben;
-      params: { index: number };
-      payload: GeschwisterkindAbfrage;
+      params: { index: 0 | 1 };
+      payload: unknown;
     };
 
 export type PayloadMap = {

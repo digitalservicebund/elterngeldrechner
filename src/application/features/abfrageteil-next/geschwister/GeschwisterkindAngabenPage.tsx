@@ -53,7 +53,7 @@ export function GeschwisterkindAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigeRoute(currentRoute));
+    void navigate(generateAbfrageteilPath(findeVorherigeRoute(currentRoute)));
   };
 
   return (

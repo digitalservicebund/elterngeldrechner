@@ -50,7 +50,7 @@ export function GeschwisterkindAbfragePage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigeRoute(currentRoute));
+    void navigate(generateAbfrageteilPath(findeVorherigeRoute(currentRoute)));
   };
 
   return (

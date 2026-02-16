@@ -40,7 +40,7 @@ export function KindPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigeRoute(currentRoute));
+    void navigate(generateAbfrageteilPath(findeVorherigeRoute(currentRoute)));
   };
 
   return (

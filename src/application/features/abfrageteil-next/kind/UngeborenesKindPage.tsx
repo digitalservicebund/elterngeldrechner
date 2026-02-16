@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { UngeborenesKind, UngeborenesKindSchema } from "./KindSchema";
 import { Button } from "@/application/components";
 import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
+import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -83,7 +84,16 @@ export function UngeborenesKindPage() {
             Kinder an (zum Beispiel 2 bei Zwillingen).
           </p>
 
-          {/* input einfügen */}
+          <NumberInput
+            {...register("anzahl", {
+              valueAsNumber: true,
+              max: { value: 8, message: "Maximal 8 Kinder" },
+              min: { value: 1, message: "Mindestens 1 Kind" },
+              required: "Erforderlich",
+            })}
+            label="Anzahl der Kinder"
+            errors={formErrors.anzahl?.message}
+          />
         </div>
 
         <div className="flex gap-16">

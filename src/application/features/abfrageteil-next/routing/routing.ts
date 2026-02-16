@@ -2,6 +2,7 @@ import { Temporal } from "@js-temporal/polyfill";
 import { generatePath } from "react-router";
 import { Route } from "./Route";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
+import { ElternteilAllgemeineAngaben } from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
 import {
   GeschwisterkindAbfrage,
   GeschwisterkindAngaben,
@@ -34,7 +35,7 @@ export type FormEvent =
   | {
       route: Route.ElternteilAllgemeineAngaben;
       params: { index: 0 | 1 };
-      payload: unknown;
+      payload: ElternteilAllgemeineAngaben;
     };
 
 export type PayloadMap = {

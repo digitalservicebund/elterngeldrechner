@@ -6,7 +6,7 @@ import {
   GeschwisterkindAbfrage,
   GeschwisterkindAbfrageSchema,
 } from "./GeschwisterSchema";
-import { Button } from "@/application/components";
+import { Button, CustomRadioGroup } from "@/application/components";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -26,8 +26,7 @@ export function GeschwisterkindAbfragePage() {
   const currentRoute = Route.GeschwisterkindAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  // const { register, handleSubmit, formState } = useForm({
-  const { handleSubmit } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(GeschwisterkindAbfrageSchema),
     defaultValues: encodeSafely(
       GeschwisterkindAbfrageSchema,
@@ -35,7 +34,7 @@ export function GeschwisterkindAbfragePage() {
     ),
   });
 
-  // const { errors: formErrors } = formState;
+  const { errors: formErrors } = formState;
 
   const onSubmit = (values: GeschwisterkindAbfrage) => {
     const event: FormEvent = {
@@ -53,16 +52,25 @@ export function GeschwisterkindAbfragePage() {
   };
 
   return (
-    <Page heading="">
+    <Page heading="Angaben zu Geschwistern">
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-56"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          {/* <h3 className="mb-10"></h3> */}
+          <h3 className="mb-10">Gibt es ältere Geschwisterkinder?</h3>
 
-          {/* input */}
+          <CustomRadioGroup
+            legend=""
+            errors={formErrors}
+            register={register}
+            name="istVorhanden"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          />
         </div>
 
         <div className="flex gap-16">

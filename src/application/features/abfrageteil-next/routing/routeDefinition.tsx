@@ -2,6 +2,10 @@ import { Navigate, Outlet } from "react-router";
 import { Route } from "./Route";
 import { generateAbfrageteilPath } from "./routing";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
+import { ElternteilAllgemeineAngabenPage } from "@/application/features/abfrageteil-next/elternteil/ElternteilAllgemeineAngabenPage";
+import { ElternteilAusklammerungGruendePage } from "@/application/features/abfrageteil-next/elternteil/ElternteilAusklammerungGruendePage";
+import { ElternteilAusklammerungZeitenPage } from "@/application/features/abfrageteil-next/elternteil/ElternteilAusklammerungZeitenPage";
+import { ElternteilTaetigkeitenAbfragePage } from "@/application/features/abfrageteil-next/elternteil/ElternteilTaetigkeitenAbfragePage";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import { GeschwisterkindAbfragePage } from "@/application/features/abfrageteil-next/geschwister/GeschwisterkindAbfragePage";
 import { GeschwisterkindAngabenPage } from "@/application/features/abfrageteil-next/geschwister/GeschwisterkindAngabenPage";
@@ -54,6 +58,26 @@ export const routeDefinition = [
       {
         element: <GeschwisterkindAngabenPage />,
         path: generateAbfrageteilPath(Route.GeschwisterkindAngaben),
+      },
+      {
+        element: <ElternteilAllgemeineAngabenPage />,
+        path: generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
+      },
+      {
+        element: <ElternteilAusklammerungGruendePage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilAusklammerungGruendeAngaben,
+        ),
+      },
+      {
+        element: <ElternteilAusklammerungZeitenPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilAusklammerungZeitenAngaben,
+        ),
+      },
+      {
+        element: <ElternteilTaetigkeitenAbfragePage />,
+        path: generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
       },
       {
         element: (

@@ -56,7 +56,7 @@ export type ElternteilAusklammerungZeiten = z.infer<
   typeof ElternteilAusklammerungZeitenSchema
 >;
 
-export const ElternteilFinanzielleSituationSchema = z.object({
+export const ElternteilTaetigkeitenAbfrageSchema = z.object({
   istNichtSelbststaendig: z.boolean(),
   istSelbststaendig: z.boolean(),
   istVerbeamtet: z.boolean(),
@@ -64,6 +64,6 @@ export const ElternteilFinanzielleSituationSchema = z.object({
   hatKeinEinkommen: z.boolean(),
 });
 
-export type ElternteilFinanzielleSituation = z.infer<
-  typeof ElternteilFinanzielleSituationSchema
+export type ElternteilTaetigkeitenAbfrage = z.infer<
+  typeof ElternteilTaetigkeitenAbfrageSchema
 >;

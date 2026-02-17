@@ -12,7 +12,8 @@ export enum Route {
   GeschwisterkindAngaben = "/geschwisterkind/:index",
 
   ElternteilAllgemeineAngaben = "/elternteil/:index",
-  // ElternteilAusklammerungsgruendeAngaben,
-  // ElternteilAusklammerungszeitenAngaben,
+  ElternteilAusklammerungGruendeAngaben = "/elternteil/:index/ausklammerung-gruende",
+  ElternteilAusklammerungZeitenAngaben = "/elternteil/:index/ausklammerung-zeiten",
+  ElternteilTaetigkeitenAbfrage = "/elternteil/:index/taetigkeiten-abfrage",
   // ElternteilTaetigkeitenAngaben = "/elternteil/:index/taetigkeit/:index",
 }

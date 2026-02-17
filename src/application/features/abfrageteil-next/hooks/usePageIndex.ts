@@ -11,3 +11,7 @@ export function usePageIndex(fallback = 0): number {
 
   return isNaN(parsedIndex) ? fallback : parsedIndex;
 }
+
+export function useElternteilIndex(): 0 | 1 {
+  return usePageIndex() === 1 ? 1 : 0;
+}

@@ -2,7 +2,12 @@ import { Temporal } from "@js-temporal/polyfill";
 import { generatePath } from "react-router";
 import { Route } from "./Route";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
-import { ElternteilAllgemeineAngaben } from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
+import {
+  ElternteilAllgemeineAngaben,
+  ElternteilAusklammerungGruende,
+  ElternteilAusklammerungZeiten,
+  ElternteilTaetigkeitenAbfrage,
+} from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
 import {
   GeschwisterkindAbfrage,
   GeschwisterkindAngaben,
@@ -36,6 +41,21 @@ export type FormEvent =
       route: Route.ElternteilAllgemeineAngaben;
       params: { index: 0 | 1 };
       payload: ElternteilAllgemeineAngaben;
+    }
+  | {
+      route: Route.ElternteilAusklammerungGruendeAngaben;
+      params: { index: 0 | 1 };
+      payload: ElternteilAusklammerungGruende;
+    }
+  | {
+      route: Route.ElternteilAusklammerungZeitenAngaben;
+      params: { index: 0 | 1 };
+      payload: ElternteilAusklammerungZeiten;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitenAbfrage;
+      params: { index: 0 | 1 };
+      payload: ElternteilTaetigkeitenAbfrage;
     };
 
 export type PayloadMap = {
@@ -106,6 +126,9 @@ function getNextSubpath(event: FormEvent): string {
           })
         : Route.ElternteilAllgemeineAngaben;
     case Route.ElternteilAllgemeineAngaben:
+    case Route.ElternteilAusklammerungGruendeAngaben:
+    case Route.ElternteilAusklammerungZeitenAngaben:
+    case Route.ElternteilTaetigkeitenAbfrage:
       throw Error("Not yet implemented.");
   }
 }

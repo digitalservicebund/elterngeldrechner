@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { UngeborenesKind, UngeborenesKindSchema } from "./KindSchema";
 import { Button } from "@/application/components";
-import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
+import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
@@ -67,7 +67,7 @@ export function UngeborenesKindPage() {
             Errechneter Entbindungstermin (TT.MM.JJJJ)
           </label>
 
-          <CustomDate
+          <DateInput
             id={entbindungsterminInputIdentifier}
             error={formErrors.errechneterEntbindungstermin?.message}
             {...register("errechneterEntbindungstermin")}

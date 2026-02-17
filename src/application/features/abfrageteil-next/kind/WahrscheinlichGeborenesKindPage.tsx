@@ -7,7 +7,7 @@ import {
   WahrscheinlichGeborenesKindSchema,
 } from "./KindSchema";
 import { Button } from "@/application/components";
-import { CustomDate } from "@/application/features/abfrageteil/components/NachwuchsForm/CustomDate";
+import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -73,7 +73,7 @@ export function WahrscheinlichGeborenesKindPage() {
             Geburtsdatum (TT.MM.JJJJ)
           </label>
 
-          <CustomDate
+          <DateInput
             id={geburtsdatumInputIdentifier}
             error={formErrors.geburtsdatum?.message}
             aria-describedby={geburtsdatumInputIdentifier}

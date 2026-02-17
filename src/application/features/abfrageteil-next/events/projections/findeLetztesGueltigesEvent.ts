@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import {
   FormEvent,
@@ -7,10 +8,16 @@ import {
 export function findeLetztesGueltigesEvent<R extends FormEvent["route"]>(
   eventStream: EventStream,
   route: R,
+  index?: number,
 ): PayloadMap[R] | undefined {
-  return eventStream.findLast((event) => event.route === route)?.payload as
-    | PayloadMap[R]
-    | undefined;
+  const lastEvent = eventStream.findLast((event) => {
+    if (typeof index === "number" && "params" in event) {
+      return event.route === route && event.params.index === index;
+    }
+    return event.route === route;
+  });
+
+  return lastEvent?.payload as PayloadMap[R] | undefined;
 }
 
 if (import.meta.vitest) {
@@ -45,6 +52,44 @@ if (import.meta.vitest) {
       expect(result).toEqual({
         bundesland: "Berlin",
         gesamteinkommenGrenzeUeberschritten: true,
+      });
+    });
+
+    it("it returns the last object matching the route and the index", () => {
+      const result = findeLetztesGueltigesEvent(
+        [
+          { route: Route.Startseite },
+          {
+            route: Route.GeschwisterkindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              hatBehinderung: false,
+              istWeiteresGeschwisterkindVorhanden: true,
+            },
+            params: {
+              index: 0,
+            },
+          },
+          {
+            route: Route.GeschwisterkindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2023-12-23"),
+              hatBehinderung: false,
+              istWeiteresGeschwisterkindVorhanden: false,
+            },
+            params: {
+              index: 1,
+            },
+          },
+        ],
+        Route.GeschwisterkindAngaben,
+        0,
+      );
+
+      expect(result).toEqual({
+        geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+        hatBehinderung: false,
+        istWeiteresGeschwisterkindVorhanden: true,
       });
     });
 

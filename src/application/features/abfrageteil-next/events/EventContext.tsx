@@ -26,6 +26,7 @@ type EventContextType = {
 
   readonly findeLetztesGueltigesEvent: <R extends FormEvent["route"]>(
     route: R,
+    index?: number,
   ) => PayloadMap[R] | undefined;
 
   readonly findeVorherigenPfad: (
@@ -58,9 +59,13 @@ export function EventProvider({
   }, [eventStream]);
 
   const findeLetztesGueltigesEvent = useCallback(
-    <R extends FormEvent["route"]>(route: R) => {
+    <R extends FormEvent["route"]>(route: R, index?: number) => {
       if (isEventStream(eventStream)) {
-        return findeLetztesGueltigesEventInEventStream(eventStream, route);
+        return findeLetztesGueltigesEventInEventStream(
+          eventStream,
+          route,
+          index,
+        );
       } else {
         return undefined;
       }

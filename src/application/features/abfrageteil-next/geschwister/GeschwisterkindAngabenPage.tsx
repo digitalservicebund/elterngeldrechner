@@ -26,8 +26,11 @@ export function GeschwisterkindAngabenPage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.GeschwisterkindAngaben;
-  const index = usePageIndex();
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, index);
+  const geschwisterIndex = usePageIndex();
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    currentRoute,
+    geschwisterIndex,
+  );
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(GeschwisterkindAngabenSchema),
@@ -43,7 +46,7 @@ export function GeschwisterkindAngabenPage() {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: { index },
+      params: { geschwisterIndex },
     };
 
     dispatch(event);

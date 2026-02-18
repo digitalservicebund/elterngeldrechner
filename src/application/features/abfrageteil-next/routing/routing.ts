@@ -34,27 +34,27 @@ export type FormEvent =
   | { route: Route.GeschwisterkindAbfrage; payload: GeschwisterkindAbfrage }
   | {
       route: Route.GeschwisterkindAngaben;
-      params: { index: number };
+      params: { geschwisterIndex: number };
       payload: GeschwisterkindAngaben;
     }
   | {
       route: Route.ElternteilAllgemeineAngaben;
-      params: { index: 0 | 1 };
+      params: { elternteilIndex: 0 | 1 };
       payload: ElternteilAllgemeineAngaben;
     }
   | {
       route: Route.ElternteilAusklammerungGruendeAngaben;
-      params: { index: 0 | 1 };
+      params: { elternteilIndex: 0 | 1 };
       payload: ElternteilAusklammerungGruende;
     }
   | {
       route: Route.ElternteilAusklammerungZeitenAngaben;
-      params: { index: 0 | 1 };
+      params: { elternteilIndex: 0 | 1 };
       payload: ElternteilAusklammerungZeiten;
     }
   | {
       route: Route.ElternteilTaetigkeitenAbfrage;
-      params: { index: 0 | 1 };
+      params: { elternteilIndex: 0 | 1 };
       payload: ElternteilTaetigkeitenAbfrage;
     };
 
@@ -117,25 +117,29 @@ function getNextSubpath(event: FormEvent): string {
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
       return event.payload.istVorhanden
-        ? generatePath(Route.GeschwisterkindAngaben, { index: "0" })
-        : Route.ElternteilAllgemeineAngaben;
+        ? generatePath(Route.GeschwisterkindAngaben, { geschwisterIndex: "0" })
+        : generatePath(Route.ElternteilAllgemeineAngaben, {
+            elternteilIndex: "0",
+          });
     case Route.GeschwisterkindAngaben:
       return event.payload.istWeiteresGeschwisterkindVorhanden
         ? generatePath(Route.GeschwisterkindAngaben, {
-            index: (event.params.index + 1).toString(),
+            geschwisterIndex: (event.params.geschwisterIndex + 1).toString(),
           })
-        : generatePath(Route.ElternteilAllgemeineAngaben, { index: "0" });
+        : generatePath(Route.ElternteilAllgemeineAngaben, {
+            elternteilIndex: "0",
+          });
     case Route.ElternteilAllgemeineAngaben:
       return generatePath(Route.ElternteilAusklammerungGruendeAngaben, {
-        index: event.params.index.toString(),
+        elternteilIndex: event.params.elternteilIndex.toString(),
       });
     case Route.ElternteilAusklammerungGruendeAngaben:
       return generatePath(Route.ElternteilAusklammerungZeitenAngaben, {
-        index: event.params.index.toString(),
+        elternteilIndex: event.params.elternteilIndex.toString(),
       });
     case Route.ElternteilAusklammerungZeitenAngaben:
       return generatePath(Route.ElternteilTaetigkeitenAbfrage, {
-        index: event.params.index.toString(),
+        elternteilIndex: event.params.elternteilIndex.toString(),
       });
     case Route.ElternteilTaetigkeitenAbfrage:
       throw Error("Not yet implemented.");
@@ -271,13 +275,13 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/elternteil/:index");
+      expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");
     });
 
     it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and istWeiteresGeschwisterkindVorhanden equals yes", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.GeschwisterkindAngaben,
-        params: { index: 0 },
+        params: { geschwisterIndex: 0 },
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,
@@ -291,7 +295,7 @@ if (import.meta.vitest) {
     it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals one and istWeiteresGeschwisterkindVorhanden equals yes", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.GeschwisterkindAngaben,
-        params: { index: 1 },
+        params: { geschwisterIndex: 1 },
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,
@@ -305,7 +309,7 @@ if (import.meta.vitest) {
     it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.GeschwisterkindAngaben,
-        params: { index: 0 },
+        params: { geschwisterIndex: 0 },
         payload: {
           geburtsdatum: Temporal.Now.plainDateISO(),
           hatBehinderung: false,
@@ -319,7 +323,7 @@ if (import.meta.vitest) {
     it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 0", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAllgemeineAngaben,
-        params: { index: 0 },
+        params: { elternteilIndex: 0 },
         payload: {
           name: "Vorname",
           istAlleinerziehend: false,
@@ -335,7 +339,7 @@ if (import.meta.vitest) {
     it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 1", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAllgemeineAngaben,
-        params: { index: 1 },
+        params: { elternteilIndex: 1 },
         payload: {
           name: "Vorname",
           istAlleinerziehend: false,
@@ -351,7 +355,7 @@ if (import.meta.vitest) {
     it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { index: 0 },
+        params: { elternteilIndex: 0 },
         payload: {
           hatMutterschutzAelteresKind: true,
           hatElterngeldAelteresKind: true,
@@ -368,7 +372,7 @@ if (import.meta.vitest) {
     it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { index: 1 },
+        params: { elternteilIndex: 1 },
         payload: {
           hatMutterschutzAelteresKind: true,
           hatElterngeldAelteresKind: true,
@@ -385,7 +389,7 @@ if (import.meta.vitest) {
     it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 0", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAusklammerungZeitenAngaben,
-        params: { index: 0 },
+        params: { elternteilIndex: 0 },
         payload: [
           {
             grund: "mutterschutz",
@@ -403,7 +407,7 @@ if (import.meta.vitest) {
     it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 1", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAusklammerungZeitenAngaben,
-        params: { index: 1 },
+        params: { elternteilIndex: 1 },
         payload: [
           {
             grund: "mutterschutz",

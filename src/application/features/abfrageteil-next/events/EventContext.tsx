@@ -59,12 +59,12 @@ export function EventProvider({
   }, [eventStream]);
 
   const findeLetztesGueltigesEvent = useCallback(
-    <R extends FormEvent["route"]>(route: R, index?: number) => {
+    <R extends FormEvent["route"]>(route: R, geschwisterIndex?: number) => {
       if (isEventStream(eventStream)) {
         return findeLetztesGueltigesEventInEventStream(
           eventStream,
           route,
-          index,
+          geschwisterIndex,
         );
       } else {
         return undefined;

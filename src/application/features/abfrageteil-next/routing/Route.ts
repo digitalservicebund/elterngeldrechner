@@ -9,11 +9,19 @@ export enum Route {
   WahrscheinlichGeborenesKindAbfrage = "/kind/ungeboren/validierung",
 
   GeschwisterkindAbfrage = "/geschwisterkind",
-  GeschwisterkindAngaben = "/geschwisterkind/:index",
+  GeschwisterkindAngaben = "/geschwisterkind/:geschwisterIndex",
 
-  ElternteilAllgemeineAngaben = "/elternteil/:index",
-  ElternteilAusklammerungGruendeAngaben = "/elternteil/:index/ausklammerung-gruende",
-  ElternteilAusklammerungZeitenAngaben = "/elternteil/:index/ausklammerung-zeiten",
-  ElternteilTaetigkeitenAbfrage = "/elternteil/:index/taetigkeiten-abfrage",
-  // ElternteilTaetigkeitenAngaben = "/elternteil/:index/taetigkeit/:index",
+  ElternteilAllgemeineAngaben = "/elternteil/:elternteilIndex",
+  ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/ausklammerung-gruende",
+  ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung-zeiten",
+  ElternteilTaetigkeitenAbfrage = "/elternteil/:elternteilIndex/taetigkeiten-abfrage",
+
+  ElternteilTaetigkeitAngabenSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/selbststaendig",
+  ElternteilTaetigkeitAngabenNichtSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig",
+  ElternteilTaetigkeitAngabenMinijob = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/minijob",
+  ElternteilTaetigkeitAngabenSozialversicherungen = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/sozialversicherungen",
+  ElternteilTaetigkeitAngabenEinkommen = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen",
+  ElternteilTaetigkeitAngabenEinkommenDetails = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen/detailliert",
+  ElternteilWeitereTaetigkeitAbfrage = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/weitere-taetigkeit",
+  ElternteilWeitereTaetigkeitAngaben = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/weitere-taetigkeit-angaben",
 }

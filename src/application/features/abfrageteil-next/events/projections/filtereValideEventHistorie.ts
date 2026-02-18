@@ -129,7 +129,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          params: { index: 0 },
+          params: { geschwisterIndex: 0 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
             hatBehinderung: false,
@@ -138,7 +138,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          params: { index: 1 },
+          params: { geschwisterIndex: 1 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2018-12-23"),
             hatBehinderung: false,
@@ -147,7 +147,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          params: { index: 0 },
+          params: { geschwisterIndex: 0 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
@@ -156,7 +156,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          params: { index: 1 },
+          params: { geschwisterIndex: 1 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,
@@ -191,7 +191,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          params: { index: 0 },
+          params: { geschwisterIndex: 0 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
@@ -200,7 +200,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.GeschwisterkindAngaben,
-          params: { index: 1 },
+          params: { geschwisterIndex: 1 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,

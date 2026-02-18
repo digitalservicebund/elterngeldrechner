@@ -34,14 +34,14 @@ const navigationSteps: NavigationStep[] = [
     label: "Angaben Person 1",
     path: generatePath(
       generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
-      { index: "0" },
+      { elternteilIndex: "0" },
     ),
   },
   {
     label: "Angaben Person 2",
     path: generatePath(
       generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
-      { index: "1" },
+      { elternteilIndex: "1" },
     ),
   },
   { label: "Planungshilfen", path: "/beispiele" },

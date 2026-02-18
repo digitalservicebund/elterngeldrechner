@@ -25,7 +25,7 @@ export function ElternteilAusklammerungZeitenPage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.ElternteilAusklammerungZeitenAngaben;
-  const index = useElternteilIndex();
+  const elternteilIndex = useElternteilIndex();
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   // const { register, handleSubmit, formState } = useForm({
@@ -43,7 +43,7 @@ export function ElternteilAusklammerungZeitenPage() {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: { index },
+      params: { elternteilIndex },
     };
 
     dispatch(event);

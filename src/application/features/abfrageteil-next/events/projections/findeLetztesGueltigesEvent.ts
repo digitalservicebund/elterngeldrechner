@@ -8,11 +8,18 @@ import {
 export function findeLetztesGueltigesEvent<R extends FormEvent["route"]>(
   eventStream: EventStream,
   route: R,
-  index?: number,
+  geschwisterIndex?: number,
 ): PayloadMap[R] | undefined {
   const lastEvent = eventStream.findLast((event) => {
-    if (typeof index === "number" && "params" in event) {
-      return event.route === route && event.params.index === index;
+    if (
+      typeof geschwisterIndex === "number" &&
+      "params" in event &&
+      "geschwisterIndex" in event.params
+    ) {
+      return (
+        event.route === route &&
+        event.params.geschwisterIndex === geschwisterIndex
+      );
     }
     return event.route === route;
   });
@@ -67,7 +74,7 @@ if (import.meta.vitest) {
               istWeiteresGeschwisterkindVorhanden: true,
             },
             params: {
-              index: 0,
+              geschwisterIndex: 0,
             },
           },
           {
@@ -78,7 +85,7 @@ if (import.meta.vitest) {
               istWeiteresGeschwisterkindVorhanden: false,
             },
             params: {
-              index: 1,
+              geschwisterIndex: 1,
             },
           },
         ],

@@ -77,7 +77,7 @@ export type ExtractParams<T extends string> =
       ? Param
       : never;
 
-type RouteParams<R extends Route> = Record<ExtractParams<R>, string>;
+export type RouteParams<R extends Route> = Record<ExtractParams<R>, string>;
 
 function paramsToStrings(
   params: Record<string, number>,

@@ -10,7 +10,7 @@ import { Button, CustomRadioGroup } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { usePageIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
+import { useGeschwisterIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   FormEvent,
@@ -26,7 +26,7 @@ export function GeschwisterkindAngabenPage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.GeschwisterkindAngaben;
-  const geschwisterIndex = usePageIndex();
+  const geschwisterIndex = useGeschwisterIndex();
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, {
     geschwisterIndex,
   });

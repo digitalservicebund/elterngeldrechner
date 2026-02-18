@@ -1,17 +1,31 @@
 import { useParams } from "react-router";
+import { Route } from "@/application/features/abfrageteil-next/routing/Route";
+import { RouteParams } from "@/application/features/abfrageteil-next/routing/routing";
 
-export function usePageIndex(fallback = 0): number {
-  const { index } = useParams<{ index?: string }>();
+function useParsedIndex(paramName: string, defaultValue: number = 0): number {
+  const params = useParams();
+  const value = params[paramName];
 
-  if (index === undefined) {
-    return fallback;
-  }
+  if (value === undefined) return defaultValue;
 
-  const parsedIndex = parseInt(index, 10);
+  const parsed = Number(value);
+  return isNaN(parsed) ? defaultValue : parsed;
+}
 
-  return isNaN(parsedIndex) ? fallback : parsedIndex;
+export function useGeschwisterIndex(): number {
+  return useParsedIndex("geschwisterIndex");
 }
 
 export function useElternteilIndex(): 0 | 1 {
-  return usePageIndex() === 1 ? 1 : 0;
+  const index = useParsedIndex("elternteilIndex");
+  return index === 1 ? 1 : 0;
+}
+
+export function useTaetigkeitIndex(): number {
+  return useParsedIndex("taetigkeitIndex");
+}
+
+// TOD0: Maybe refactor in this direction
+export function useRouteParams<R extends Route>(_: R) {
+  return useParams<RouteParams<R>>();
 }

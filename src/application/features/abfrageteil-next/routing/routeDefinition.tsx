@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation } from "react-router";
 import { Route } from "./Route";
 import { generateAbfrageteilPath } from "./routing";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
@@ -16,9 +16,11 @@ import { WahrscheinlichGeborenesKindPage } from "@/application/features/abfraget
 import { Startseite } from "@/application/features/abfrageteil-next/startseite/StartseitePage";
 
 function EventProviderLayout() {
+  const location = useLocation();
+
   return (
     <EventProvider>
-      <Outlet />
+      <Outlet key={location.pathname} />
     </EventProvider>
   );
 }

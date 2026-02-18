@@ -3,7 +3,10 @@ import { filtereValideEventHistorie } from "@/application/features/abfrageteil-n
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routing";
 
-function findeVorherigenPfad(eventStream: EventStream, route: Route): string {
+export function findeVorherigenPfad(
+  eventStream: EventStream,
+  route: Route,
+): string {
   const validerEventPfad = filtereValideEventHistorie(eventStream).map(
     (event) => event.route,
   );
@@ -16,8 +19,6 @@ function findeVorherigenPfad(eventStream: EventStream, route: Route): string {
     (validerEventPfad[aktuelleRouteIndex - 1] || validerEventPfad.at(-1))!,
   );
 }
-
-export { findeVorherigenPfad };
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

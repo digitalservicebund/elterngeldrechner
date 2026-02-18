@@ -27,10 +27,9 @@ export function GeschwisterkindAngabenPage() {
 
   const currentRoute = Route.GeschwisterkindAngaben;
   const geschwisterIndex = usePageIndex();
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    currentRoute,
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, {
     geschwisterIndex,
-  );
+  });
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(GeschwisterkindAngabenSchema),
@@ -55,7 +54,7 @@ export function GeschwisterkindAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+    void navigate(findeVorherigenPfad(currentRoute, { geschwisterIndex }));
   };
 
   const geburtsdatumInputIdentifier = useId();

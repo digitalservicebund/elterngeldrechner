@@ -26,7 +26,9 @@ export function ElternteilAusklammerungGruendePage() {
 
   const currentRoute = Route.ElternteilAusklammerungGruendeAngaben;
   const elternteilIndex = useElternteilIndex();
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, {
+    elternteilIndex,
+  });
 
   // const { register, handleSubmit, formState } = useForm({
   const { handleSubmit } = useForm({
@@ -52,7 +54,7 @@ export function ElternteilAusklammerungGruendePage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+    void navigate(findeVorherigenPfad(currentRoute, { elternteilIndex }));
   };
 
   return (

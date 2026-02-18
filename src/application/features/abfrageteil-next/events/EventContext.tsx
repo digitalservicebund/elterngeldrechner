@@ -14,7 +14,7 @@ import {
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   FormEvent,
-  FormRoutes,
+  ParamsMap,
   PayloadMap,
   generateAbfrageteilPath,
 } from "@/application/features/abfrageteil-next/routing/routing";
@@ -26,11 +26,12 @@ type EventContextType = {
 
   readonly findeLetztesGueltigesEvent: <R extends FormEvent["route"]>(
     route: R,
-    index?: number,
+    ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
   ) => PayloadMap[R] | undefined;
 
-  readonly findeVorherigenPfad: (
-    route: Exclude<Route, Route.Startseite>,
+  readonly findeVorherigenPfad: <R extends FormEvent["route"]>(
+    route: R,
+    ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
   ) => string;
 };
 
@@ -59,12 +60,15 @@ export function EventProvider({
   }, [eventStream]);
 
   const findeLetztesGueltigesEvent = useCallback(
-    <R extends FormEvent["route"]>(route: R, geschwisterIndex?: number) => {
+    <R extends FormEvent["route"]>(
+      route: R,
+      ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
+    ) => {
       if (isEventStream(eventStream)) {
         return findeLetztesGueltigesEventInEventStream(
           eventStream,
           route,
-          geschwisterIndex,
+          ...args,
         );
       } else {
         return undefined;
@@ -74,9 +78,12 @@ export function EventProvider({
   );
 
   const findeVorherigenPfad = useCallback(
-    (route: FormRoutes) => {
+    <R extends FormEvent["route"]>(
+      route: R,
+      ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
+    ) => {
       if (isEventStream(eventStream)) {
-        return findeVorherigenPfadInEventStream(eventStream, route);
+        return findeVorherigenPfadInEventStream(eventStream, route, ...args);
       } else {
         return generateAbfrageteilPath(Route.Startseite);
       }

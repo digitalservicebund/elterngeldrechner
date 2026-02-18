@@ -64,7 +64,13 @@ export type PayloadMap = {
     : never;
 };
 
-type ExtractParams<T extends string> =
+export type ParamsMap = {
+  [E in FormEvent as E["route"]]: "params" extends keyof E
+    ? E["params"]
+    : never;
+};
+
+export type ExtractParams<T extends string> =
   T extends `${string}:${infer Param}/${infer Rest}`
     ? Param | ExtractParams<`/${Rest}`>
     : T extends `${string}:${infer Param}`

@@ -1,5 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { generatePath } from "react-router";
+import { generatePath as generateReactRouterPath } from "react-router";
 import { Route } from "./Route";
 import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
@@ -64,6 +64,15 @@ export type PayloadMap = {
     : never;
 };
 
+type ExtractParams<T extends string> =
+  T extends `${string}:${infer Param}/${infer Rest}`
+    ? Param | ExtractParams<`/${Rest}`>
+    : T extends `${string}:${infer Param}`
+      ? Param
+      : never;
+
+type RouteParams<R extends Route> = Record<ExtractParams<R>, string>;
+
 function paramsToStrings(
   params: Record<string, number>,
 ): Record<string, string> {
@@ -78,11 +87,26 @@ export function generateAbfrageteilPath(subpath: string): string {
 
 export function generatePathFromEvent(event: FormEvent) {
   return generateAbfrageteilPath(
-    generatePath(
+    generateReactRouterPath(
       event.route.toString(),
       "params" in event ? paramsToStrings(event.params) : undefined,
     ),
   );
+}
+
+function generatePathInner(
+  route: string,
+  params?: Record<string, string>,
+): string {
+  return generateReactRouterPath(route, params);
+}
+
+function generatePath<R extends Route>(
+  ...args: ExtractParams<R> extends never
+    ? [route: R]
+    : [route: R, params: RouteParams<R>]
+) {
+  return generatePathInner(args[0], args[1]);
 }
 
 function getNextSubpath(event: FormEvent): string {
@@ -117,7 +141,9 @@ function getNextSubpath(event: FormEvent): string {
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
       return event.payload.istVorhanden
-        ? generatePath(Route.GeschwisterkindAngaben, { geschwisterIndex: "0" })
+        ? generatePath(Route.GeschwisterkindAngaben, {
+            geschwisterIndex: "0",
+          })
         : generatePath(Route.ElternteilAllgemeineAngaben, {
             elternteilIndex: "0",
           });
@@ -421,5 +447,20 @@ if (import.meta.vitest) {
         "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
       );
     });
+
+    // Compile time only check
+    if (false as boolean) {
+      // Rendering static routes without params
+      generatePath(Route.Startseite);
+
+      // @ts-expect-error rendering static route with params
+      generatePath(Route.Startseite, { index: "1" });
+
+      // Rendering dynamic routes with params
+      generatePath(Route.GeschwisterkindAngaben, { geschwisterIndex: "0" });
+
+      // @ts-expect-error rendering dynamic routes without params
+      generatePath(Route.GeschwisterkindAngaben);
+    }
   });
 }

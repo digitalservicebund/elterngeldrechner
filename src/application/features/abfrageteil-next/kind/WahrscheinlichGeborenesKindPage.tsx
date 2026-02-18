@@ -6,7 +6,7 @@ import {
   WahrscheinlichGeborenesKind,
   WahrscheinlichGeborenesKindSchema,
 } from "./KindSchema";
-import { Button } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
@@ -64,7 +64,10 @@ export function WahrscheinlichGeborenesKindPage() {
             Wann war das tatsächliche Geburtsdatum Ihres Kindes?
           </h3>
 
-          {/* <InfoZuGeburtsdatum /> */}
+          <InfoText
+            question="Was ist das tatsächliche Geburtsdatum?"
+            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, dass in die Geburtsurkunde eingetragen wird. Meistens werden Kinder ab nicht genau am errechneten Termin geboren."
+          />
 
           <label
             className="mb-4 mt-20 block text-16"

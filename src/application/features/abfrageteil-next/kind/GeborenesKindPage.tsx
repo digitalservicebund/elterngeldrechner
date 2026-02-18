@@ -3,7 +3,7 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { GeborenesKind, GeborenesKindSchema } from "./KindSchema";
-import { Button } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
@@ -62,8 +62,13 @@ export function GeborenesKindPage() {
             Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
           </h3>
 
+          <InfoText
+            question="Was ist der errechnete Entbindungstermin?"
+            answer='Den errechneten Entbindungstermin finden Sie in Ihrem Mutterpass unter dem Abschnitt "Voraussichtlicher Entbindungstermin" oder auf den Ultraschallberichten.'
+          />
+
           <label
-            className="block text-16"
+            className="mb-4 mt-20 block text-16"
             htmlFor={entbindungsterminInputIdentifier}
           >
             Errechneter Entbindungstermin (TT.MM.JJJJ)
@@ -81,7 +86,10 @@ export function GeborenesKindPage() {
             Wann war das tatsächliche Geburtsdatum Ihres Kindes?
           </h3>
 
-          {/* <InfoZuGeburtsdatum /> */}
+          <InfoText
+            question="Was ist das tatsächliche Geburtsdatum?"
+            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, dass in die Geburtsurkunde eingetragen wird. Meistens werden Kinder ab nicht genau am errechneten Termin geboren."
+          />
 
           <label
             className="mb-4 mt-20 block text-16"

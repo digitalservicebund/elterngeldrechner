@@ -26,7 +26,10 @@ export function NumberInput({
       className={classNames("egr-input-group", errors && "egr-input--error")}
     >
       <label
-        className={classNames("block text-16", errors ? "text-danger" : null)}
+        className={classNames(
+          "mb-4 block text-16",
+          errors ? "text-danger" : null,
+        )}
         htmlFor={name}
       >
         {label}

@@ -124,10 +124,19 @@ function getNextSubpath(event: FormEvent): string {
         ? generatePath(Route.GeschwisterkindAngaben, {
             index: (event.params.index + 1).toString(),
           })
-        : Route.ElternteilAllgemeineAngaben;
+        : generatePath(Route.ElternteilAllgemeineAngaben, { index: "0" });
     case Route.ElternteilAllgemeineAngaben:
+      return generatePath(Route.ElternteilAusklammerungGruendeAngaben, {
+        index: event.params.index.toString(),
+      });
     case Route.ElternteilAusklammerungGruendeAngaben:
+      return generatePath(Route.ElternteilAusklammerungZeitenAngaben, {
+        index: event.params.index.toString(),
+      });
     case Route.ElternteilAusklammerungZeitenAngaben:
+      return generatePath(Route.ElternteilTaetigkeitenAbfrage, {
+        index: event.params.index.toString(),
+      });
     case Route.ElternteilTaetigkeitenAbfrage:
       throw Error("Not yet implemented.");
   }
@@ -304,7 +313,109 @@ if (import.meta.vitest) {
         },
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/elternteil/:index");
+      expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");
+    });
+
+    it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 0", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilAllgemeineAngaben,
+        params: { index: 0 },
+        payload: {
+          name: "Vorname",
+          istAlleinerziehend: false,
+          istImMutterschutz: true,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/0/ausklammerung-gruende",
+      );
+    });
+
+    it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 1", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilAllgemeineAngaben,
+        params: { index: 1 },
+        payload: {
+          name: "Vorname",
+          istAlleinerziehend: false,
+          istImMutterschutz: true,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/1/ausklammerung-gruende",
+      );
+    });
+
+    it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilAusklammerungGruendeAngaben,
+        params: { index: 0 },
+        payload: {
+          hatMutterschutzAelteresKind: true,
+          hatElterngeldAelteresKind: true,
+          hatSchwangerschaftsbedingteErkrankung: true,
+          hatKeinAusklammerungsgruende: false,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/0/ausklammerung-zeiten",
+      );
+    });
+
+    it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilAusklammerungGruendeAngaben,
+        params: { index: 1 },
+        payload: {
+          hatMutterschutzAelteresKind: true,
+          hatElterngeldAelteresKind: true,
+          hatSchwangerschaftsbedingteErkrankung: true,
+          hatKeinAusklammerungsgruende: false,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/1/ausklammerung-zeiten",
+      );
+    });
+
+    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 0", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilAusklammerungZeitenAngaben,
+        params: { index: 0 },
+        payload: [
+          {
+            grund: "mutterschutz",
+            von: Temporal.PlainDate.from("2025-12-23"),
+            bis: Temporal.PlainDate.from("2026-02-05"),
+          },
+        ],
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+      );
+    });
+
+    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 1", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilAusklammerungZeitenAngaben,
+        params: { index: 1 },
+        payload: [
+          {
+            grund: "mutterschutz",
+            von: Temporal.PlainDate.from("2025-12-23"),
+            bis: Temporal.PlainDate.from("2026-02-05"),
+          },
+        ],
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+      );
     });
   });
 }

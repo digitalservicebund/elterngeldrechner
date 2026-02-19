@@ -6,7 +6,8 @@ import {
   ElternteilTaetigkeitenAbfrage,
   ElternteilTaetigkeitenAbfrageSchema,
 } from "./ElternteilSchema";
-import { Button } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
+import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useElternteilIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
@@ -30,8 +31,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
     elternteilIndex,
   });
 
-  // const { register, handleSubmit, formState } = useForm({
-  const { handleSubmit } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
     defaultValues: encodeSafely(
       ElternteilTaetigkeitenAbfrageSchema,
@@ -39,7 +39,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
     ),
   });
 
-  // const { errors: formErrors } = formState;
+  const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
     const event: FormEvent = {
@@ -65,9 +65,52 @@ export function ElternteilTaetigkeitenAbfragePage() {
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          {/* <h3 className="mb-10"></h3> */}
+          <h3>Treffen folgende Gründe auf Sie zu?</h3>
 
-          {/* input */}
+          <InfoText
+            question="Warum fragen wir das?"
+            answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Der Bemessungszeitraum ist die Zeit vor der Geburt, in der Ihr Einkommen geprüft wird. Daraus wird die Höhe Ihres Elterngeldes berechnet."
+          />
+
+          <CustomCheckbox
+            className="mt-20"
+            register={register}
+            name="istNichtSelbststaendig"
+            label="Ich war oder bin angestellt"
+            errors={formErrors}
+          />
+
+          <CustomCheckbox
+            className="mt-20"
+            register={register}
+            name="istSelbststaendig"
+            label="Ich war oder bin selbstständig"
+            errors={formErrors}
+          />
+
+          <CustomCheckbox
+            className="mt-20"
+            register={register}
+            name="istVerbeamtet"
+            label="Ich war oder bin Beamtin "
+            errors={formErrors}
+          />
+
+          <CustomCheckbox
+            className="mt-20"
+            register={register}
+            name="hatAndereLeistungen"
+            label="Ich erhielt oder erhalte Sozialleistungen oder Lohnersatzleistungen  "
+            errors={formErrors}
+          />
+
+          <CustomCheckbox
+            className="mt-20"
+            register={register}
+            name="hatKeinEinkommen"
+            label="Ich hatte oder habe kein Einkommen"
+            errors={formErrors}
+          />
         </div>
 
         <div className="flex gap-16">

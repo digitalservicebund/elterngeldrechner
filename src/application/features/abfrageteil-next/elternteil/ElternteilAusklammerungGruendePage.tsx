@@ -101,7 +101,7 @@ export function ElternteilAusklammerungGruendePage() {
           <CustomCheckbox
             className="mt-20"
             register={register}
-            name="hatKeinAusklammerungsgruende"
+            name="hatKeineAusklammerungsgruende"
             label="Keiner der genannten Gründe"
             errors={formErrors}
           />

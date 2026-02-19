@@ -20,7 +20,7 @@ export const ElternteilAusklammerungGruendeSchema = z
     hatMutterschutzAelteresKind: z.boolean(),
     hatElterngeldAelteresKind: z.boolean(),
     hatSchwangerschaftsbedingteErkrankung: z.boolean(),
-    hatKeinAusklammerungsgruende: z.boolean(),
+    hatKeineAusklammerungsgruende: z.boolean(),
   })
   .refine(
     (data) => {
@@ -29,14 +29,14 @@ export const ElternteilAusklammerungGruendeSchema = z
         data.hatElterngeldAelteresKind ||
         data.hatSchwangerschaftsbedingteErkrankung;
 
-      return hatIrgendeinenGrund && data.hatKeinAusklammerungsgruende
+      return hatIrgendeinenGrund && data.hatKeineAusklammerungsgruende
         ? false
         : true;
     },
     {
       message:
         "Widersprüchliche Angaben: Sie können nicht gleichzeit Gründe angeben und 'Keine Gründe' auswählen.",
-      path: ["hatKeinAusklammerungsgruende"],
+      path: ["hatKeineAusklammerungsgruende"],
     },
   );
 

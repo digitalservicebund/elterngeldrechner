@@ -7,6 +7,7 @@ import {
   ElternteilAusklammerungZeitenSchema,
 } from "./ElternteilSchema";
 import { Button } from "@/application/components";
+import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useElternteilIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
@@ -30,8 +31,7 @@ export function ElternteilAusklammerungZeitenPage() {
     elternteilIndex,
   });
 
-  // const { register, handleSubmit, formState } = useForm({
-  const { handleSubmit } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(ElternteilAusklammerungZeitenSchema),
     defaultValues: encodeSafely(
       ElternteilAusklammerungZeitenSchema,
@@ -39,7 +39,7 @@ export function ElternteilAusklammerungZeitenPage() {
     ),
   });
 
-  // const { errors: formErrors } = formState;
+  const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilAusklammerungZeiten) => {
     const event: FormEvent = {
@@ -58,16 +58,130 @@ export function ElternteilAusklammerungZeitenPage() {
   };
 
   return (
-    <Page heading="">
+    <Page heading="Finanzielle Situation">
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-56"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div>
-          {/* <h3 className="mb-10"></h3> */}
+        <h3>Bitte machen Sie Detailangaben</h3>
 
-          {/* input */}
+        <div>
+          <h5>
+            Von wann bis wann waren Sie für ein älteres Kind im Mutterschutz?
+          </h5>
+
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor="ausklammerungenMutterschutzAnderesKind-von"
+              >
+                Beginn des Mutterschutzes (TT.MM.JJJJ)
+              </label>
+
+              <DateInput
+                id="ausklammerungenMutterschutzAnderesKind-von"
+                {...register}
+                error={formErrors[0]?.von?.message}
+                name=""
+              />
+            </div>
+            <div>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor="ausklammerungenMutterschutzAnderesKind-bis"
+              >
+                Ende des Mutterschutzes (TT.MM.JJJJ)
+              </label>
+
+              <DateInput
+                id="ausklammerungenMutterschutzAnderesKind-bis"
+                {...register}
+                error={formErrors[0]?.bis?.message}
+                name=""
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h5>
+            Von wann bis wann haben Sie Elterngeld für ein älteres Kind (maximal
+            14 Monate alt) bekommen?
+          </h5>
+
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor="ausklammerungenMutterschutzAnderesKind-von"
+              >
+                Beginn (TT.MM.JJJJ)
+              </label>
+
+              <DateInput
+                id="ausklammerungenMutterschutzAnderesKind-von"
+                {...register}
+                error={formErrors[0]?.von?.message}
+                name=""
+              />
+            </div>
+            <div>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor="ausklammerungenMutterschutzAnderesKind-bis"
+              >
+                Ende (TT.MM.JJJJ)
+              </label>
+
+              <DateInput
+                id="ausklammerungenMutterschutzAnderesKind-bis"
+                {...register}
+                error={formErrors[0]?.bis?.message}
+                name=""
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h5>
+            Von wann bis wann waren Sie wegen Ihrer Schwangerschaft krank?
+          </h5>
+
+          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
+            <div>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor="ausklammerungenMutterschutzAnderesKind-von"
+              >
+                Beginn (TT.MM.JJJJ)
+              </label>
+
+              <DateInput
+                id="ausklammerungenMutterschutzAnderesKind-von"
+                {...register}
+                error={formErrors[0]?.von?.message}
+                name=""
+              />
+            </div>
+            <div>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor="ausklammerungenMutterschutzAnderesKind-bis"
+              >
+                Ende (TT.MM.JJJJ)
+              </label>
+
+              <DateInput
+                id="ausklammerungenMutterschutzAnderesKind-bis"
+                {...register}
+                error={formErrors[0]?.bis?.message}
+                name=""
+              />
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-16">

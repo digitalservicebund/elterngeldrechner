@@ -1,10 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
-import {
+import type {
   FormEvent,
   ParamsMap,
   PayloadMap,
-} from "@/application/features/abfrageteil-next/routing/routing";
+} from "@/application/features/abfrageteil-next/routing";
 
 export function findeLetztesGueltigesEvent<R extends FormEvent["route"]>(
   eventStream: EventStream,
@@ -38,7 +38,7 @@ if (import.meta.vitest) {
 
   describe("findeLetztesGueltigesEvent", async () => {
     const { Route } =
-      await import("@/application/features/abfrageteil-next/routing/Route");
+      await import("@/application/features/abfrageteil-next/routing");
 
     it("it returns the last object matching the route", () => {
       const result = findeLetztesGueltigesEvent(

@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { Route } from "./Route";
-import { generateAbfrageteilPath } from "./routing";
+import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { AllgemeineAngabenPage } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenPage";
 import { ElternteilAllgemeineAngabenPage } from "@/application/features/abfrageteil-next/elternteil/ElternteilAllgemeineAngabenPage";
 import { ElternteilAusklammerungGruendePage } from "@/application/features/abfrageteil-next/elternteil/ElternteilAusklammerungGruendePage";
@@ -25,7 +25,7 @@ function EventProviderLayout() {
   );
 }
 
-export const routeDefinition = [
+const RouteDefinition = [
   {
     element: <EventProviderLayout />,
     children: [
@@ -90,3 +90,5 @@ export const routeDefinition = [
     ],
   },
 ];
+
+export default RouteDefinition;

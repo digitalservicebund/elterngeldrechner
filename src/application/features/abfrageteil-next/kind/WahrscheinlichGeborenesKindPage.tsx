@@ -10,11 +10,11 @@ import { Button, InfoText } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
-  FormEvent,
+  type FormEvent,
+  Route,
   findeNaechstenPfad,
-} from "@/application/features/abfrageteil-next/routing/routing";
+} from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function WahrscheinlichGeborenesKindPage() {

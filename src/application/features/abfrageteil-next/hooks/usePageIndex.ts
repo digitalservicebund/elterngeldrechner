@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import { RouteParams } from "@/application/features/abfrageteil-next/routing/routing";
+import type { RouteParams } from "@/application/features/abfrageteil-next/routing";
+import { Route } from "@/application/features/abfrageteil-next/routing";
 
 function useParsedIndex(paramName: string, defaultValue: number = 0): number {
   const params = useParams();

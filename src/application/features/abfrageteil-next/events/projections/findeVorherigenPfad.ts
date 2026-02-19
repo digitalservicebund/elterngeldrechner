@@ -1,12 +1,12 @@
 import { Temporal } from "@js-temporal/polyfill";
 import type { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import { filtereValideEventHistorie } from "@/application/features/abfrageteil-next/events/projections";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
   type FormEvent,
   type ParamsMap,
+  Route,
   generatePathFromEvent,
-} from "@/application/features/abfrageteil-next/routing/routing";
+} from "@/application/features/abfrageteil-next/routing";
 
 export function findeVorherigenPfad<R extends FormEvent["route"]>(
   eventStream: EventStream,

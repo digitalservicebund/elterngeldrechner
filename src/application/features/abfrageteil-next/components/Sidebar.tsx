@@ -3,8 +3,10 @@ import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import classNames from "classnames";
 import { useCallback, useId, useMemo, useRef, useState } from "react";
 import { generatePath, useLocation, useNavigate } from "react-router";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routing";
+import {
+  Route,
+  generateAbfrageteilPath,
+} from "@/application/features/abfrageteil-next/routing";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
 
 type NavigationItem = NavigationStep & {

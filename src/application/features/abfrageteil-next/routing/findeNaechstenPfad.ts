@@ -1,118 +1,11 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { generatePath as generateReactRouterPath } from "react-router";
+import { FormEvent } from "./FormEvent";
 import { Route } from "./Route";
-import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
-import {
-  ElternteilAllgemeineAngaben,
-  ElternteilAusklammerungGruende,
-  ElternteilAusklammerungZeiten,
-  ElternteilTaetigkeitenAbfrage,
-} from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
-import {
-  GeschwisterkindAbfrage,
-  GeschwisterkindAngaben,
-} from "@/application/features/abfrageteil-next/geschwister/GeschwisterSchema";
-import {
-  GeborenesKind,
-  Geburt,
-  UngeborenesKind,
-  WahrscheinlichGeborenesKind,
-} from "@/application/features/abfrageteil-next/kind/KindSchema";
+import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
+import { generateParametrizedPath } from "./generatePath/generateParametrizedPath";
 
-export type FormRoutes = Exclude<Route, Route.Startseite>;
-
-export type FormEvent =
-  | { route: Route.Startseite; payload?: never }
-  | { route: Route.AllgemeineAngaben; payload: AllgemeineAngaben }
-  | { route: Route.KindAbfrage; payload: Geburt }
-  | { route: Route.GeborenesKindAngaben; payload: GeborenesKind }
-  | { route: Route.UngeborenesKindAngaben; payload: UngeborenesKind }
-  | {
-      route: Route.WahrscheinlichGeborenesKindAbfrage;
-      payload: WahrscheinlichGeborenesKind;
-    }
-  | { route: Route.GeschwisterkindAbfrage; payload: GeschwisterkindAbfrage }
-  | {
-      route: Route.GeschwisterkindAngaben;
-      params: { geschwisterIndex: number };
-      payload: GeschwisterkindAngaben;
-    }
-  | {
-      route: Route.ElternteilAllgemeineAngaben;
-      params: { elternteilIndex: 0 | 1 };
-      payload: ElternteilAllgemeineAngaben;
-    }
-  | {
-      route: Route.ElternteilAusklammerungGruendeAngaben;
-      params: { elternteilIndex: 0 | 1 };
-      payload: ElternteilAusklammerungGruende;
-    }
-  | {
-      route: Route.ElternteilAusklammerungZeitenAngaben;
-      params: { elternteilIndex: 0 | 1 };
-      payload: ElternteilAusklammerungZeiten;
-    }
-  | {
-      route: Route.ElternteilTaetigkeitenAbfrage;
-      params: { elternteilIndex: 0 | 1 };
-      payload: ElternteilTaetigkeitenAbfrage;
-    };
-
-export type PayloadMap = {
-  [E in FormEvent as E["route"]]: "payload" extends keyof E
-    ? E["payload"]
-    : never;
-};
-
-export type ParamsMap = {
-  [E in FormEvent as E["route"]]: "params" extends keyof E
-    ? E["params"]
-    : never;
-};
-
-export type ExtractParams<T extends string> =
-  T extends `${string}:${infer Param}/${infer Rest}`
-    ? Param | ExtractParams<`/${Rest}`>
-    : T extends `${string}:${infer Param}`
-      ? Param
-      : never;
-
-export type RouteParams<R extends Route> = Record<ExtractParams<R>, string>;
-
-function paramsToStrings(
-  params: Record<string, number>,
-): Record<string, string> {
-  return Object.fromEntries(
-    Object.entries(params).map(([key, value]) => [key, value.toString()]),
-  );
-}
-
-export function generateAbfrageteilPath(subpath: string): string {
-  return `/abfrageteil${subpath}`;
-}
-
-export function generatePathFromEvent(event: FormEvent) {
-  return generateAbfrageteilPath(
-    generateReactRouterPath(
-      event.route.toString(),
-      "params" in event ? paramsToStrings(event.params) : undefined,
-    ),
-  );
-}
-
-function generatePathInner(
-  route: string,
-  params?: Record<string, string>,
-): string {
-  return generateReactRouterPath(route, params);
-}
-
-function generatePath<R extends Route>(
-  ...args: ExtractParams<R> extends never
-    ? [route: R]
-    : [route: R, params: RouteParams<R>]
-) {
-  return generatePathInner(args[0], args[1]);
+export function findeNaechstenPfad(event: FormEvent): string {
+  return generateAbfrageteilPath(getNextSubpath(event));
 }
 
 function getNextSubpath(event: FormEvent): string {
@@ -147,39 +40,41 @@ function getNextSubpath(event: FormEvent): string {
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
       return event.payload.istVorhanden
-        ? generatePath(Route.GeschwisterkindAngaben, {
+        ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
             geschwisterIndex: "0",
           })
-        : generatePath(Route.ElternteilAllgemeineAngaben, {
+        : generateParametrizedPath(Route.ElternteilAllgemeineAngaben, {
             elternteilIndex: "0",
           });
     case Route.GeschwisterkindAngaben:
       return event.payload.istWeiteresGeschwisterkindVorhanden
-        ? generatePath(Route.GeschwisterkindAngaben, {
+        ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
             geschwisterIndex: (event.params.geschwisterIndex + 1).toString(),
           })
-        : generatePath(Route.ElternteilAllgemeineAngaben, {
+        : generateParametrizedPath(Route.ElternteilAllgemeineAngaben, {
             elternteilIndex: "0",
           });
     case Route.ElternteilAllgemeineAngaben:
-      return generatePath(Route.ElternteilAusklammerungGruendeAngaben, {
-        elternteilIndex: event.params.elternteilIndex.toString(),
-      });
+      return generateParametrizedPath(
+        Route.ElternteilAusklammerungGruendeAngaben,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+        },
+      );
     case Route.ElternteilAusklammerungGruendeAngaben:
-      return generatePath(Route.ElternteilAusklammerungZeitenAngaben, {
-        elternteilIndex: event.params.elternteilIndex.toString(),
-      });
+      return generateParametrizedPath(
+        Route.ElternteilAusklammerungZeitenAngaben,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+        },
+      );
     case Route.ElternteilAusklammerungZeitenAngaben:
-      return generatePath(Route.ElternteilTaetigkeitenAbfrage, {
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: event.params.elternteilIndex.toString(),
       });
     case Route.ElternteilTaetigkeitenAbfrage:
       throw Error("Not yet implemented.");
   }
-}
-
-export function findeNaechstenPfad(event: FormEvent): string {
-  return generateAbfrageteilPath(getNextSubpath(event));
 }
 
 if (import.meta.vitest) {
@@ -453,20 +348,5 @@ if (import.meta.vitest) {
         "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
       );
     });
-
-    // Compile time only check
-    if (false as boolean) {
-      // Rendering static routes without params
-      generatePath(Route.Startseite);
-
-      // @ts-expect-error rendering static route with params
-      generatePath(Route.Startseite, { index: "1" });
-
-      // Rendering dynamic routes with params
-      generatePath(Route.GeschwisterkindAngaben, { geschwisterIndex: "0" });
-
-      // @ts-expect-error rendering dynamic routes without params
-      generatePath(Route.GeschwisterkindAngaben);
-    }
   });
 }

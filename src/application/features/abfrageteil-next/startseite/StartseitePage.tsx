@@ -3,8 +3,10 @@ import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import { generateAbfrageteilPath } from "@/application/features/abfrageteil-next/routing/routing";
+import {
+  Route,
+  generateAbfrageteilPath,
+} from "@/application/features/abfrageteil-next/routing";
 
 export function Startseite() {
   const { dispatch } = useEventContext();

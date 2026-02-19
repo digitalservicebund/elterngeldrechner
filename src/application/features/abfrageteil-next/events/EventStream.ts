@@ -1,4 +1,4 @@
-import { FormEvent } from "@/application/features/abfrageteil-next/routing/routing";
+import type { FormEvent } from "@/application/features/abfrageteil-next/routing";
 
 export function isEventStream(
   formEvents: FormEvent[],

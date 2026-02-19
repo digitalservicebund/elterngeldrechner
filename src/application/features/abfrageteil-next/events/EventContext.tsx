@@ -11,13 +11,13 @@ import {
   findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
   findeVorherigenPfad as findeVorherigenPfadInEventStream,
 } from "./projections";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
-  FormEvent,
-  ParamsMap,
-  PayloadMap,
+  type FormEvent,
+  type ParamsMap,
+  type PayloadMap,
+  Route,
   generateAbfrageteilPath,
-} from "@/application/features/abfrageteil-next/routing/routing";
+} from "@/application/features/abfrageteil-next/routing";
 
 type EventContextType = {
   readonly dispatch: (event: FormEvent) => void;

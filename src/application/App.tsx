@@ -1,8 +1,8 @@
 import "@/application/styles/index.css";
 import { RouterProvider, createHashRouter } from "react-router";
 import { isAbfrageteilNextEnabled } from "./feature-flags";
-import { routeDefinition as routeDefinitionNext } from "@/application/features/abfrageteil-next/routing/routeDefinition";
-import routeDefinition from "@/application/routing/RouteDefinition";
+import { routeDefinition } from "@/application/features/abfrageteil-next/routing";
+import legacyRouteDefinition from "@/application/routing/RouteDefinition";
 
 // The hash router does not support the `hashType` property
 // at this point in time. This means that the routes look
@@ -19,7 +19,7 @@ import routeDefinition from "@/application/routing/RouteDefinition";
 // https://v5.reactrouter.com/web/api/HashRouter/hashtype-string
 
 const router = createHashRouter(
-  isAbfrageteilNextEnabled() ? routeDefinitionNext : routeDefinition,
+  isAbfrageteilNextEnabled() ? routeDefinition : legacyRouteDefinition,
 );
 
 export function App() {

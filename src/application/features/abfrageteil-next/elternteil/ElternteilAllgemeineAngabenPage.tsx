@@ -12,7 +12,7 @@ import { InfoZuVornamen } from "@/application/features/abfrageteil/components/Al
 import { InfoZumMutterschutz } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZumMutterschutz";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { useElternteilIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
+import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
   Route,
@@ -28,10 +28,11 @@ export function ElternteilAllgemeineAngabenPage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.ElternteilAllgemeineAngaben;
-  const elternteilIndex = useElternteilIndex();
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, {
-    elternteilIndex,
-  });
+  const routeParams = useRouteParams(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    currentRoute,
+    routeParams,
+  );
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(ElternteilAllgemeineAngabenSchema),
@@ -47,7 +48,7 @@ export function ElternteilAllgemeineAngabenPage() {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: { elternteilIndex },
+      params: routeParams,
     };
 
     dispatch(event);
@@ -56,7 +57,7 @@ export function ElternteilAllgemeineAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, { elternteilIndex }));
+    void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const personNameInputIdentifier = useId();

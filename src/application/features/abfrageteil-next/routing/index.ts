@@ -5,8 +5,6 @@ export { Route } from "./Route";
 
 export { findeNaechstenPfad } from "./findeNaechstenPfad";
 
-export { default as routeDefinition } from "./RouteDefinition";
-
 export {
   generateAbfrageteilPath,
   generateParametrizedPath,

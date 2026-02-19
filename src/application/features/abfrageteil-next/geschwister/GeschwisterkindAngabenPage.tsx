@@ -10,7 +10,7 @@ import { Button, CustomRadioGroup } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { useGeschwisterIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
+import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
   Route,
@@ -26,10 +26,12 @@ export function GeschwisterkindAngabenPage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.GeschwisterkindAngaben;
-  const geschwisterIndex = useGeschwisterIndex();
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, {
-    geschwisterIndex,
-  });
+  const routeParams = useRouteParams(Route.GeschwisterkindAngaben);
+
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    currentRoute,
+    routeParams,
+  );
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(GeschwisterkindAngabenSchema),
@@ -45,7 +47,7 @@ export function GeschwisterkindAngabenPage() {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: { geschwisterIndex },
+      params: routeParams,
     };
 
     dispatch(event);
@@ -54,7 +56,7 @@ export function GeschwisterkindAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, { geschwisterIndex }));
+    void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const geburtsdatumInputIdentifier = useId();

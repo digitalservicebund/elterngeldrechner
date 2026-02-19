@@ -36,22 +36,22 @@ export type FormEvent =
     }
   | {
       route: Route.ElternteilAllgemeineAngaben;
-      params: { elternteilIndex: 0 | 1 };
+      params: { elternteilIndex: number };
       payload: ElternteilAllgemeineAngaben;
     }
   | {
       route: Route.ElternteilAusklammerungGruendeAngaben;
-      params: { elternteilIndex: 0 | 1 };
+      params: { elternteilIndex: number };
       payload: ElternteilAusklammerungGruende;
     }
   | {
       route: Route.ElternteilAusklammerungZeitenAngaben;
-      params: { elternteilIndex: 0 | 1 };
+      params: { elternteilIndex: number };
       payload: ElternteilAusklammerungZeiten;
     }
   | {
       route: Route.ElternteilTaetigkeitenAbfrage;
-      params: { elternteilIndex: 0 | 1 };
+      params: { elternteilIndex: number };
       payload: ElternteilTaetigkeitenAbfrage;
     };
 

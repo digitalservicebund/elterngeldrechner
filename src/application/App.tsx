@@ -1,7 +1,7 @@
 import "@/application/styles/index.css";
 import { RouterProvider, createHashRouter } from "react-router";
 import { isAbfrageteilNextEnabled } from "./feature-flags";
-import { routeDefinition } from "@/application/features/abfrageteil-next/routing";
+import routeDefinition from "@/application/features/abfrageteil-next/routing/RouteDefinition";
 import legacyRouteDefinition from "@/application/routing/RouteDefinition";
 
 // The hash router does not support the `hashType` property

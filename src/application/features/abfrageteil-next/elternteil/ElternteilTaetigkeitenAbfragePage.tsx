@@ -10,7 +10,7 @@ import { Button, InfoText } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { useElternteilIndex } from "@/application/features/abfrageteil-next/hooks/usePageIndex";
+import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
   Route,
@@ -26,10 +26,11 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.ElternteilTaetigkeitenAbfrage;
-  const elternteilIndex = useElternteilIndex();
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute, {
-    elternteilIndex,
-  });
+  const routeParams = useRouteParams(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    currentRoute,
+    routeParams,
+  );
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
@@ -45,7 +46,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: { elternteilIndex },
+      params: routeParams,
     };
 
     dispatch(event);
@@ -54,7 +55,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, { elternteilIndex }));
+    void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   return (

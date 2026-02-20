@@ -141,7 +141,7 @@ if (import.meta.vitest) {
         {
           von: Temporal.PlainDate.from({ year: 2024, month: 7, day: 5 }),
           bis: Temporal.PlainDate.from({ year: 2024, month: 7, day: 7 }),
-          beschreibung: "Krankheit",
+          grund: "Krankheit",
         },
       ];
 
@@ -162,7 +162,7 @@ if (import.meta.vitest) {
         {
           von: Temporal.PlainDate.from({ year: 2024, month: 7, day: 5 }),
           bis: Temporal.PlainDate.from({ year: 2024, month: 7, day: 7 }),
-          beschreibung: "Krankheit",
+          grund: "Krankheit",
         },
         [
           Temporal.PlainYearMonth.from({ year: 2024, month: 8 }),

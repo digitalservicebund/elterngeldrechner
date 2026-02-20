@@ -138,7 +138,7 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
           ],
           expected: [
@@ -155,7 +155,7 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2026, month: 9, day: 30 }),
               bis: Temporal.PlainDate.from({ year: 2027, month: 1, day: 6 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
           ],
           expected: [
@@ -172,12 +172,12 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 6, day: 15 }),
               bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 2 }),
-              beschreibung: "Krankheit",
+              grund: "Krankheit",
             },
           ],
           expected: [
@@ -198,17 +198,17 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 6, day: 15 }),
               bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 2 }),
-              beschreibung: "Krankheit",
+              grund: "Krankheit",
             },
             {
               von: Temporal.PlainDate.from({ year: 2023, month: 10, day: 3 }),
               bis: Temporal.PlainDate.from({ year: 2024, month: 10, day: 3 }),
-              beschreibung: "Elterngeld anderes Kind",
+              grund: "Elterngeld anderes Kind",
             },
           ],
           expected: [
@@ -233,22 +233,22 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 6, day: 15 }),
               bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 2 }),
-              beschreibung: "Krankheit",
+              grund: "Krankheit",
             },
             {
               von: Temporal.PlainDate.from({ year: 2023, month: 10, day: 3 }),
               bis: Temporal.PlainDate.from({ year: 2024, month: 10, day: 3 }),
-              beschreibung: "Elterngeld anderes Kind",
+              grund: "Elterngeld anderes Kind",
             },
             {
               von: Temporal.PlainDate.from({ year: 2023, month: 8, day: 22 }),
               bis: Temporal.PlainDate.from({ year: 2023, month: 12, day: 14 }),
-              beschreibung: "Mutterschutz anderes Kind",
+              grund: "Mutterschutz anderes Kind",
             },
           ],
           expected: [
@@ -294,7 +294,7 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 10, day: 2 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 1, day: 8 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
           ],
           expected: [
@@ -311,7 +311,7 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 11, day: 20 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 2, day: 26 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
           ],
           expected: [
@@ -328,7 +328,7 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2026, month: 1, day: 1 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 4, day: 9 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
           ],
           expected: [
@@ -345,12 +345,12 @@ if (import.meta.vitest) {
             {
               von: Temporal.PlainDate.from({ year: 2025, month: 8, day: 1 }),
               bis: Temporal.PlainDate.from({ year: 2025, month: 8, day: 31 }),
-              beschreibung: "Krankheit",
+              grund: "Krankheit",
             },
             {
               von: Temporal.PlainDate.from({ year: 2026, month: 1, day: 1 }),
               bis: Temporal.PlainDate.from({ year: 2026, month: 4, day: 9 }),
-              beschreibung: "Mutterschutz",
+              grund: "Mutterschutz",
             },
           ],
           expected: [

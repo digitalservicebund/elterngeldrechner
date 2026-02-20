@@ -79,7 +79,7 @@ if (import.meta.vitest) {
       {
         von: Temporal.PlainDate.from({ year: 2023, month: 7, day: 15 }),
         bis: Temporal.PlainDate.from({ year: 2023, month: 7, day: 31 }),
-        beschreibung: "Test",
+        grund: "Test",
       },
     ];
 
@@ -103,7 +103,7 @@ if (import.meta.vitest) {
         {
           von: Temporal.PlainDate.from({ year: 2023, month: 7, day: 31 }),
           bis: Temporal.PlainDate.from({ year: 2023, month: 8, day: 7 }),
-          beschreibung: "Test Monatswechsel",
+          grund: "Test Monatswechsel",
         },
       ];
 
@@ -118,7 +118,7 @@ if (import.meta.vitest) {
       {
         von: Temporal.PlainDate.from({ year: 2023, month: 1, day: 1 }),
         bis: Temporal.PlainDate.from({ year: 2023, month: 12, day: 31 }),
-        beschreibung: "Ganzes Jahr",
+        grund: "Ganzes Jahr",
       },
     ];
 
@@ -143,12 +143,12 @@ if (import.meta.vitest) {
         {
           von: Temporal.PlainDate.from({ year: 2023, month: 1, day: 1 }),
           bis: Temporal.PlainDate.from({ year: 2023, month: 12, day: 31 }),
-          beschreibung: "2023",
+          grund: "2023",
         },
         {
           von: Temporal.PlainDate.from({ year: 2022, month: 1, day: 1 }),
           bis: Temporal.PlainDate.from({ year: 2022, month: 12, day: 31 }),
-          beschreibung: "2022",
+          grund: "2022",
         },
       ];
 

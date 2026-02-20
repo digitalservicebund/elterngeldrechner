@@ -57,12 +57,12 @@ if (import.meta.vitest) {
         {
           von: Temporal.PlainDate.from({ year: 2024, month: 5, day: 1 }),
           bis: Temporal.PlainDate.from({ year: 2024, month: 5, day: 12 }),
-          beschreibung: "Test",
+          grund: "Test",
         },
         {
           von: Temporal.PlainDate.from({ year: 2022, month: 3, day: 3 }),
           bis: Temporal.PlainDate.from({ year: 2022, month: 3, day: 9 }),
-          beschreibung: "Test",
+          grund: "Test",
         },
       ];
 

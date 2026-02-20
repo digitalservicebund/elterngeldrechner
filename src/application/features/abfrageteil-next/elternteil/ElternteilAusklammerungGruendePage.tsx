@@ -33,7 +33,7 @@ export function ElternteilAusklammerungGruendePage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, setValue } = useForm({
     resolver: zodResolver(ElternteilAusklammerungGruendeSchema),
     defaultValues: encodeSafely(
       ElternteilAusklammerungGruendeSchema,
@@ -59,6 +59,12 @@ export function ElternteilAusklammerungGruendePage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
+  const handleCheckboxChange = (checked: boolean) => {
+    if (checked) {
+      setValue("hatKeineAusklammerungsgruende", false);
+    }
+  };
+
   return (
     <Page heading="Finanzielle Situation">
       <form
@@ -80,6 +86,7 @@ export function ElternteilAusklammerungGruendePage() {
             name="hatMutterschutzAelteresKind"
             label="Ich war für ein älteres Kind im Mutterschutz"
             errors={formErrors}
+            onChange={(checked) => handleCheckboxChange(checked)}
           />
 
           <CustomCheckbox
@@ -88,6 +95,7 @@ export function ElternteilAusklammerungGruendePage() {
             name="hatElterngeldAelteresKind"
             label="Ich habe für ein älteres Kind Elterngeld bekommen"
             errors={formErrors}
+            onChange={(checked) => handleCheckboxChange(checked)}
           />
 
           <CustomCheckbox
@@ -96,6 +104,7 @@ export function ElternteilAusklammerungGruendePage() {
             name="hatSchwangerschaftsbedingteErkrankung"
             label="Ich hatte eine Erkrankung wegen meiner Schwangerschaft und hatte weniger Einkommen"
             errors={formErrors}
+            onChange={(checked) => handleCheckboxChange(checked)}
           />
 
           <CustomCheckbox
@@ -104,6 +113,13 @@ export function ElternteilAusklammerungGruendePage() {
             name="hatKeineAusklammerungsgruende"
             label="Keiner der genannten Gründe"
             errors={formErrors}
+            onChange={(checked) => {
+              if (checked) {
+                setValue("hatMutterschutzAelteresKind", false);
+                setValue("hatElterngeldAelteresKind", false);
+                setValue("hatSchwangerschaftsbedingteErkrankung", false);
+              }
+            }}
           />
         </div>
 

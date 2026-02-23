@@ -26,8 +26,8 @@ export function ElternteilAusklammerungZeitenInput({
   const { fields, append } = useFieldArray({ control, name: grund });
 
   return (
-    <div className="flex flex-col gap-20 border-b pb-32 last:border-0">
-      <h5 className="text-18 font-bold leading-tight">{title}</h5>
+    <div>
+      <h5 className="pb-16 font-bold">{title}</h5>
 
       {fields.map((field, index) => (
         <div key={field.id} className="flex flex-col gap-16">
@@ -59,8 +59,8 @@ export function ElternteilAusklammerungZeitenInput({
 
       <Button
         type="button"
-        buttonStyle="secondary"
-        className="mt-8 self-start"
+        buttonStyle="link"
+        className="self-start"
         onClick={() => append({ von: "", bis: "" })}
       >
         + Weiteren Zeitraum hinzufügen

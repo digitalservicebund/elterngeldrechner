@@ -16,7 +16,7 @@ import legacyRouteDefinition from "@/application/routing/RouteDefinition";
 // Error: Uncaught Error: Syntax error, unrecognized expression
 //
 // https://github.com/remix-run/react-router/pull/11310
-// https://v5.reactrouter.com/web/api/HashRouter/hashtype-string
+// https://reactrouter.com/api/declarative-routers/HashRouter
 
 const router = createHashRouter(
   isAbfrageteilNextEnabled() ? routeDefinition : legacyRouteDefinition,

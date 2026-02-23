@@ -22,14 +22,15 @@ function getNextSubpath(event: FormEvent): string {
       return Route.GeschwisterkindAbfrage;
     case Route.UngeborenesKindAngaben: {
       const { errechneterEntbindungstermin } = event.payload;
-      const heuteVorZweiWochen = Temporal.Now.plainDateISO().subtract({
-        days: 14,
-      });
+      const heuteVorZweiWochenPlusZweiTagen =
+        Temporal.Now.plainDateISO().subtract({
+          days: 16,
+        });
 
       const istGeburtWahrscheinlich =
         Temporal.PlainDateTime.compare(
           errechneterEntbindungstermin,
-          heuteVorZweiWochen,
+          heuteVorZweiWochenPlusZweiTagen,
         ) < 0;
 
       return istGeburtWahrscheinlich
@@ -167,7 +168,7 @@ if (import.meta.vitest) {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.UngeborenesKindAngaben,
         payload: {
-          errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-17"),
+          errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-15"),
           anzahl: 1,
         },
       });

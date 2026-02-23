@@ -33,7 +33,7 @@ export function ElternteilAusklammerungGruendePage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState, setValue } = useForm({
+  const form = useForm<ElternteilAusklammerungGruende>({
     resolver: zodResolver(ElternteilAusklammerungGruendeSchema),
     defaultValues: encodeSafely(
       ElternteilAusklammerungGruendeSchema,
@@ -41,6 +41,7 @@ export function ElternteilAusklammerungGruendePage() {
     ),
   });
 
+  const { register, handleSubmit, formState, setValue } = form;
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilAusklammerungGruende) => {

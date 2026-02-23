@@ -63,10 +63,12 @@ function getNextSubpath(event: FormEvent): string {
         },
       );
     case Route.ElternteilAusklammerungGruendeAngaben: {
+      const { payload } = event;
       const hatAusklammerungsgrund =
-        event.payload.hatMutterschutzAelteresKind ||
-        event.payload.hatElterngeldAelteresKind ||
-        event.payload.hatSchwangerschaftsbedingteErkrankung;
+        !payload.hatKeineAusklammerungsgruende &&
+        (payload.hatMutterschutzAelteresKind ||
+          payload.hatElterngeldAelteresKind ||
+          payload.hatSchwangerschaftsbedingteErkrankung);
       const zielRoute = hatAusklammerungsgrund
         ? Route.ElternteilAusklammerungZeitenAngaben
         : Route.ElternteilTaetigkeitenAbfrage;
@@ -324,9 +326,6 @@ if (import.meta.vitest) {
         route: Route.ElternteilAusklammerungGruendeAngaben,
         params: { elternteilIndex: 0 },
         payload: {
-          hatMutterschutzAelteresKind: false,
-          hatElterngeldAelteresKind: false,
-          hatSchwangerschaftsbedingteErkrankung: false,
           hatKeineAusklammerungsgruende: true,
         },
       });
@@ -375,9 +374,6 @@ if (import.meta.vitest) {
         route: Route.ElternteilAusklammerungGruendeAngaben,
         params: { elternteilIndex: 1 },
         payload: {
-          hatMutterschutzAelteresKind: false,
-          hatElterngeldAelteresKind: false,
-          hatSchwangerschaftsbedingteErkrankung: false,
           hatKeineAusklammerungsgruende: true,
         },
       });

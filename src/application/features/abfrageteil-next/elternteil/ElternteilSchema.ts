@@ -15,30 +15,21 @@ export type ElternteilAllgemeineAngaben = z.infer<
   typeof ElternteilAllgemeineAngabenSchema
 >;
 
-export const ElternteilAusklammerungGruendeSchema = z
-  .object({
-    hatMutterschutzAelteresKind: z.boolean(),
-    hatElterngeldAelteresKind: z.boolean(),
-    hatSchwangerschaftsbedingteErkrankung: z.boolean(),
-    hatKeineAusklammerungsgruende: z.boolean(),
-  })
-  .refine(
-    (data) => {
-      const hatIrgendeinenGrund =
-        data.hatMutterschutzAelteresKind ||
-        data.hatElterngeldAelteresKind ||
-        data.hatSchwangerschaftsbedingteErkrankung;
+const AusklammerungGruendeSchema = z.object({
+  hatMutterschutzAelteresKind: z.boolean(),
+  hatElterngeldAelteresKind: z.boolean(),
+  hatSchwangerschaftsbedingteErkrankung: z.boolean(),
+});
 
-      return hatIrgendeinenGrund && data.hatKeineAusklammerungsgruende
-        ? false
-        : true;
-    },
-    {
-      message:
-        "Widersprüchliche Angaben: Sie können nicht gleichzeit Gründe angeben und 'Keine Gründe' auswählen.",
-      path: ["hatKeineAusklammerungsgruende"],
-    },
-  );
+export const ElternteilAusklammerungGruendeSchema = z.discriminatedUnion(
+  "hatKeineAusklammerungsgruende",
+  [
+    z.object({ hatKeineAusklammerungsgruende: z.literal(true) }),
+    AusklammerungGruendeSchema.extend({
+      hatKeineAusklammerungsgruende: z.literal(false),
+    }),
+  ],
+);
 
 export type ElternteilAusklammerungGruende = z.infer<
   typeof ElternteilAusklammerungGruendeSchema
@@ -71,13 +62,20 @@ export type ElternteilAusklammerungZeiten = z.infer<
   typeof ElternteilAusklammerungZeitenSchema
 >;
 
-export const ElternteilTaetigkeitenAbfrageSchema = z.object({
+const TaetigkeitenSchema = z.object({
   istNichtSelbststaendig: z.boolean(),
   istSelbststaendig: z.boolean(),
   istVerbeamtet: z.boolean(),
   hatAndereLeistungen: z.boolean(),
-  hatKeinEinkommen: z.boolean(),
 });
+
+export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
+  "hatKeinEinkommen",
+  [
+    z.object({ hatKeinEinkommen: z.literal(true) }),
+    TaetigkeitenSchema.extend({ hatKeinEinkommen: z.literal(false) }),
+  ],
+);
 
 export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema

@@ -32,14 +32,14 @@ export function ElternteilTaetigkeitenAbfragePage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const form = useForm<ElternteilTaetigkeitenAbfrage>({
     resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
     defaultValues: encodeSafely(
       ElternteilTaetigkeitenAbfrageSchema,
       letztesGueltigesEvent,
     ),
   });
-
+  const { register, handleSubmit, formState } = form;
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {

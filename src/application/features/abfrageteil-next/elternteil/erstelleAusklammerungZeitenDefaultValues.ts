@@ -4,9 +4,14 @@ import type {
   ElternteilAusklammerungZeiten,
 } from "./ElternteilSchema";
 
+type AusklammerungGruendeAktiv = Extract<
+  ElternteilAusklammerungGruende,
+  { hatKeineAusklammerungsgruende: false }
+>;
+
 const schemaMapping: Record<
   keyof ElternteilAusklammerungZeiten,
-  keyof ElternteilAusklammerungGruende
+  keyof AusklammerungGruendeAktiv
 > = {
   mutterschutz: "hatMutterschutzAelteresKind",
   elterngeld: "hatElterngeldAelteresKind",
@@ -22,7 +27,11 @@ export function erstelleAusklammerungZeitenDefaultValues(
   return (
     Object.keys(schemaMapping) as (keyof ElternteilAusklammerungZeiten)[]
   ).reduce<ElternteilAusklammerungszeitenInput>((acc, ausklammerungsgrund) => {
-    if (ausklammerungsgruende === undefined) {
+    if (!ausklammerungsgruende) {
+      return { ...acc, [ausklammerungsgrund]: [] };
+    }
+
+    if (ausklammerungsgruende.hatKeineAusklammerungsgruende) {
       return { ...acc, [ausklammerungsgrund]: [] };
     }
 
@@ -54,9 +63,6 @@ if (import.meta.vitest) {
   };
 
   const keineGruende: ElternteilAusklammerungGruende = {
-    hatMutterschutzAelteresKind: false,
-    hatElterngeldAelteresKind: false,
-    hatSchwangerschaftsbedingteErkrankung: false,
     hatKeineAusklammerungsgruende: true,
   };
 
@@ -99,7 +105,7 @@ if (import.meta.vitest) {
       ).toEqual(vorhandeneZeiten);
     });
 
-    it("returns empty array when grund is explicitly deactivated and data existed", () => {
+    it("returns empty array when hatKeineAusklammerungsgruende is true", () => {
       expect(
         erstelleAusklammerungZeitenDefaultValues(
           vorhandeneZeiten,

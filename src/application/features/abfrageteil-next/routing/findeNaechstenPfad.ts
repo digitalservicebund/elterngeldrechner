@@ -390,13 +390,16 @@ if (import.meta.vitest) {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAusklammerungZeitenAngaben,
         params: { elternteilIndex: 0 },
-        payload: [
-          {
-            grund: "mutterschutz",
-            von: Temporal.PlainDate.from("2025-12-23"),
-            bis: Temporal.PlainDate.from("2026-02-05"),
-          },
-        ],
+        payload: {
+          mutterschutz: [
+            {
+              von: Temporal.PlainDate.from("2025-12-23"),
+              bis: Temporal.PlainDate.from("2026-02-05"),
+            },
+          ],
+          elterngeld: [],
+          erkrankung: [],
+        },
       });
 
       expect(naechsterPfad).toEqual(
@@ -408,13 +411,16 @@ if (import.meta.vitest) {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilAusklammerungZeitenAngaben,
         params: { elternteilIndex: 1 },
-        payload: [
-          {
-            grund: "mutterschutz",
-            von: Temporal.PlainDate.from("2025-12-23"),
-            bis: Temporal.PlainDate.from("2026-02-05"),
-          },
-        ],
+        payload: {
+          mutterschutz: [
+            {
+              von: Temporal.PlainDate.from("2025-12-23"),
+              bis: Temporal.PlainDate.from("2026-02-05"),
+            },
+          ],
+          elterngeld: [],
+          erkrankung: [],
+        },
       });
 
       expect(naechsterPfad).toEqual(

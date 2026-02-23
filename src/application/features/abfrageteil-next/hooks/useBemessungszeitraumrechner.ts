@@ -1,7 +1,9 @@
 import { Temporal } from "@js-temporal/polyfill";
+import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import type { PayloadMap } from "@/application/features/abfrageteil-next/routing";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
+import type { Ausklammerung } from "@/bemessungszeitraumrechner";
 import {
   berechneBemessungszeitraum,
   berechneBetrachtungszeitraum,
@@ -10,12 +12,13 @@ import {
 export function useBemessungszeitraumrechner(elternteilIndex: number) {
   const { findeLetztesGueltigesEvent } = useEventContext();
 
-  const findeAusklammerungszeiten = () => {
-    return (
-      findeLetztesGueltigesEvent(Route.ElternteilAusklammerungZeitenAngaben, {
-        elternteilIndex,
-      }) || []
+  const findeAusklammerungszeiten = (): Ausklammerung[] => {
+    const event = findeLetztesGueltigesEvent(
+      Route.ElternteilAusklammerungZeitenAngaben,
+      { elternteilIndex },
     );
+
+    return event ? flacheAusklammerungen(event) : [];
   };
 
   const findeGeburtsdatum = () => {
@@ -62,14 +65,26 @@ export function useBemessungszeitraumrechner(elternteilIndex: number) {
       );
     },
   };
+
+  type BerechneBemessungszeitraumParameter = Parameters<
+    typeof berechneBemessungszeitraum
+  >[0];
+
+  type Erwerbstaetigkeit =
+    BerechneBemessungszeitraumParameter["erwerbstaetigkeit"];
+
+  function flacheAusklammerungen(
+    ausklammerungszeiten: ElternteilAusklammerungZeiten,
+  ): Ausklammerung[] {
+    return (
+      Object.keys(
+        ausklammerungszeiten,
+      ) as (keyof ElternteilAusklammerungZeiten)[]
+    ).flatMap((grund) =>
+      ausklammerungszeiten[grund].map((zeitraum) => ({ ...zeitraum, grund })),
+    );
+  }
 }
-
-type BerechneBemessungszeitraumParameter = Parameters<
-  typeof berechneBemessungszeitraum
->[0];
-
-type Erwerbstaetigkeit =
-  BerechneBemessungszeitraumParameter["erwerbstaetigkeit"];
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -142,13 +157,16 @@ if (import.meta.vitest) {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
             anzahl: 1,
           },
-          [Route.ElternteilAusklammerungZeitenAngaben]: [
-            {
-              grund: "mutterschutz" as const,
-              von: Temporal.PlainDate.from("2024-11-01"),
-              bis: Temporal.PlainDate.from("2025-02-15"),
-            },
-          ],
+          [Route.ElternteilAusklammerungZeitenAngaben]: {
+            mutterschutz: [
+              {
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
+            ],
+            elterngeld: [],
+            erkrankung: [],
+          },
         });
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
@@ -160,7 +178,7 @@ if (import.meta.vitest) {
           erwerbstaetigkeit: "Nicht-Selbstaendig",
           ausklammerungen: [
             {
-              grund: "mutterschutz" as const,
+              grund: "mutterschutz",
               von: Temporal.PlainDate.from("2024-11-01"),
               bis: Temporal.PlainDate.from("2025-02-15"),
             },
@@ -256,13 +274,16 @@ if (import.meta.vitest) {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
             anzahl: 1,
           },
-          [Route.ElternteilAusklammerungZeitenAngaben]: [
-            {
-              grund: "mutterschutz" as const,
-              von: Temporal.PlainDate.from("2024-11-01"),
-              bis: Temporal.PlainDate.from("2025-02-15"),
-            },
-          ],
+          [Route.ElternteilAusklammerungZeitenAngaben]: {
+            mutterschutz: [
+              {
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
+            ],
+            elterngeld: [],
+            erkrankung: [],
+          },
         });
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
@@ -273,7 +294,7 @@ if (import.meta.vitest) {
           Temporal.PlainDate.from("2025-06-15"),
           [
             {
-              grund: "mutterschutz" as const,
+              grund: "mutterschutz",
               von: Temporal.PlainDate.from("2024-11-01"),
               bis: Temporal.PlainDate.from("2025-02-15"),
             },

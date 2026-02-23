@@ -44,13 +44,28 @@ export type ElternteilAusklammerungGruende = z.infer<
   typeof ElternteilAusklammerungGruendeSchema
 >;
 
-export const ElternteilAusklammerungZeitenSchema = z.array(
-  z.object({
-    grund: z.enum(["mutterschutz", "elterngeld", "erkrankung"]),
-    von: GermanDateInputCodec,
-    bis: GermanDateInputCodec,
-  }),
-);
+// TODO: Make illegal state not representable between schemas hatSchwangerschaftsbedingteErkrankung: true and erkrankung.length > 0
+
+export const ElternteilAusklammerungZeitenSchema = z.object({
+  mutterschutz: z.array(
+    z.object({
+      von: GermanDateInputCodec,
+      bis: GermanDateInputCodec,
+    }),
+  ),
+  elterngeld: z.array(
+    z.object({
+      von: GermanDateInputCodec,
+      bis: GermanDateInputCodec,
+    }),
+  ),
+  erkrankung: z.array(
+    z.object({
+      von: GermanDateInputCodec,
+      bis: GermanDateInputCodec,
+    }),
+  ),
+});
 
 export type ElternteilAusklammerungZeiten = z.infer<
   typeof ElternteilAusklammerungZeitenSchema

@@ -222,7 +222,7 @@ jobs:
           path: familienportal-build
 
       - name: Generate Changelog
-        uses: orhun/git-cliff-action@e16f179f0be49ecdfe63753837f20b9531642772
+        uses: orhun/git-cliff-action@c93ef52f3d0ddcdcc9bd5447d98d458a11cd4f72
         id: changelog
         with:
           args: --latest

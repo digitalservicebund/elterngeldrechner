@@ -10,9 +10,9 @@ import {
 import { erstelleAusklammerungZeitenDefaultValues } from "./erstelleAusklammerungZeitenDefaultValues";
 import { Button } from "@/application/components";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
-import { ElternteilAusklammerungZeitenInput } from "@/application/features/abfrageteil-next/elternteil/ElternteilAusklammerungZeitenInput";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
+import { ElternteilAusklammerungZeitenInput } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilAusklammerungZeitenInput";
 import {
   type FormEvent,
   Route,

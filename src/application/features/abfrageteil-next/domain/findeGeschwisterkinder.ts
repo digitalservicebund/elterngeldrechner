@@ -1,4 +1,4 @@
-import type { GeschwisterkindAngaben } from "@/application/features/abfrageteil-next/geschwister/GeschwisterSchema";
+import type { GeschwisterkindAngaben } from "@/application/features/abfrageteil-next/pages/geschwister/GeschwisterSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 

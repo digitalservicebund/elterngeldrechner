@@ -1,22 +1,25 @@
 import { Route } from "./Route";
 
-import { AllgemeineAngaben } from "@/application/features/abfrageteil-next/allgemeine-angaben/AllgemeineAngabenSchema";
-import {
+import type { AllgemeineAngaben } from "@/application/features/abfrageteil-next/pages/allgemeine-angaben";
+
+import type {
   ElternteilAllgemeineAngaben,
   ElternteilAusklammerungGruende,
   ElternteilAusklammerungZeiten,
   ElternteilTaetigkeitenAbfrage,
-} from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
-import {
+} from "@/application/features/abfrageteil-next/pages/elternteil";
+
+import type {
   GeschwisterkindAbfrage,
   GeschwisterkindAngaben,
-} from "@/application/features/abfrageteil-next/geschwister/GeschwisterSchema";
-import {
+} from "@/application/features/abfrageteil-next/pages/geschwister";
+
+import type {
   GeborenesKind,
   Geburt,
   UngeborenesKind,
   WahrscheinlichGeborenesKind,
-} from "@/application/features/abfrageteil-next/kind/KindSchema";
+} from "@/application/features/abfrageteil-next/pages/kind";
 
 export type FormEvent =
   | { route: Route.Startseite; payload?: never }

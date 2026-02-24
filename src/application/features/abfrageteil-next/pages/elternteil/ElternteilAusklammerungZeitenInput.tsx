@@ -4,7 +4,7 @@ import { DateInput } from "@/application/features/abfrageteil-next/components/Da
 import {
   ElternteilAusklammerungszeitenInput,
   ElternteilAusklammerungszeitenOutput,
-} from "@/application/features/abfrageteil-next/elternteil/ElternteilAusklammerungZeitenPage";
+} from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilAusklammerungZeitenPage";
 
 interface ElternteilAusklammerungZeitenInputProps {
   readonly grund: keyof ElternteilAusklammerungszeitenInput;

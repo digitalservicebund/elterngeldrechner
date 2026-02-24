@@ -1,4 +1,4 @@
-import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
+import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import type { Ausklammerung } from "@/bemessungszeitraumrechner";

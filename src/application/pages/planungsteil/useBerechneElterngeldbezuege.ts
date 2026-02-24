@@ -20,12 +20,7 @@ import {
   Steuerklasse,
   calculateElternGeld,
 } from "@/elterngeldrechner";
-import {
-  ErwerbsArt,
-  KassenArt,
-  Kind,
-  RentenArt,
-} from "@/elterngeldrechner/model";
+import { ErwerbsArt, KassenArt, RentenArt } from "@/elterngeldrechner/model";
 import {
   type Auswahloption,
   Elternteil,
@@ -98,28 +93,22 @@ function buildParameterForCalculation(
   persoenlicheDaten.hasEtNachGeburt = monateMitErwerbstaetigkeit.length > 0;
   finanzdaten.erwerbsZeitraumLebensMonatList = monateMitErwerbstaetigkeit;
 
-  if (
-    persoenlicheDaten.geschwister &&
-    persoenlicheDaten.geschwister.length > 0
-  ) {
-    finanzdaten.kinderFreiBetrag = berechneKinderfreibetrag(
-      persoenlicheDaten.geschwister,
-      finanzdaten.steuerklasse,
-    );
-  }
+  const kinderfreibetrag = berechneKinderfreibetrag(
+    persoenlicheDaten?.geschwister?.length ?? 0,
+    finanzdaten.steuerklasse,
+  );
 
   return {
     persoenlicheDaten,
-    finanzDaten: finanzdaten,
     planungsDaten: planungsdaten,
+    finanzDaten: { ...finanzdaten, kinderFreiBetrag: kinderfreibetrag },
   };
 }
 
 function berechneKinderfreibetrag(
-  geschwister: Kind[],
+  anzahlGeschwister: number,
   steuerklasse: Steuerklasse,
 ) {
-  const anzahlGeschwister = geschwister.length;
   switch (steuerklasse) {
     case Steuerklasse.I:
     case Steuerklasse.II:
@@ -130,8 +119,6 @@ function berechneKinderfreibetrag(
       return anzahlGeschwister;
     case Steuerklasse.V:
     case Steuerklasse.VI:
-      return 0;
-    default:
       return 0;
   }
 }

@@ -81,6 +81,15 @@ function getNextSubpath(event: FormEvent): string {
         elternteilIndex: event.params.elternteilIndex.toString(),
       });
     case Route.ElternteilTaetigkeitenAbfrage:
+    case Route.ElternteilTaetigkeitAngabenSelbststaendig:
+    case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig:
+    case Route.ElternteilTaetigkeitAngabenMinijob:
+    case Route.ElternteilTaetigkeitAngabenSozialversicherungen:
+    case Route.ElternteilTaetigkeitAngabenEinkommen:
+    case Route.ElternteilTaetigkeitAngabenEinkommenDetails:
+    case Route.ElternteilWeitereTaetigkeitAbfrage:
+    case Route.ElternteilWeitereTaetigkeitAngaben:
+    case Route.ElternteilZweitePersonAngaben:
       throw Error("Not yet implemented.");
   }
 }

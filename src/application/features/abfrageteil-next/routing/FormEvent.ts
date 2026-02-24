@@ -9,6 +9,7 @@ import type {
   ElternteilTaetigkeitenAbfrage,
 } from "@/application/features/abfrageteil-next/pages/elternteil";
 
+import { ElternteilZweitePersonAngaben } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import type {
   GeschwisterkindAbfrage,
   GeschwisterkindAngaben,
@@ -20,6 +21,16 @@ import type {
   UngeborenesKind,
   WahrscheinlichGeborenesKind,
 } from "@/application/features/abfrageteil-next/pages/kind";
+import {
+  TaetigkeitGleichesEinkommenAngaben,
+  TaetigkeitMinijobEinkommendetailsAbfrage,
+  TaetigkeitNichtSelbststaendigAngaben,
+  TaetigkeitNichtSelbststaendigMinijobAbfrage,
+  TaetigkeitSelbststaendigAngaben,
+  TaetigkeitUnleichesEinkommenAngaben,
+  WeitereTaetigkeitAbfrage,
+  WeitereTaetigkeitArtAbfrage,
+} from "@/application/features/abfrageteil-next/pages/taetigkeit/TaetigkeitSchema";
 
 export type FormEvent =
   | { route: Route.Startseite; payload?: never }
@@ -56,6 +67,51 @@ export type FormEvent =
       route: Route.ElternteilTaetigkeitenAbfrage;
       params: { elternteilIndex: number };
       payload: ElternteilTaetigkeitenAbfrage;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenSelbststaendig;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitSelbststaendigAngaben;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitNichtSelbststaendigMinijobAbfrage;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenMinijob;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitMinijobEinkommendetailsAbfrage;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenSozialversicherungen;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitNichtSelbststaendigAngaben;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenEinkommen;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitGleichesEinkommenAngaben;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenEinkommenDetails;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitUnleichesEinkommenAngaben;
+    }
+  | {
+      route: Route.ElternteilWeitereTaetigkeitAbfrage;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: WeitereTaetigkeitAbfrage;
+    }
+  | {
+      route: Route.ElternteilWeitereTaetigkeitAngaben;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: WeitereTaetigkeitArtAbfrage;
+    }
+  | {
+      route: Route.ElternteilZweitePersonAngaben;
+      params: { elternteilIndex: number };
+      payload: ElternteilZweitePersonAngaben;
     };
 
 export type PayloadMap = {

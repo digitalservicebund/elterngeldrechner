@@ -8,6 +8,7 @@ import React, {
 import { isEventStream } from "./EventStream";
 import {
   filtereValideEventHistorie as filtereValideEventHistorieInEventStream,
+  findeAlleGueltigenEvents as findeAlleGueltigenEventsInEventStream,
   findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
   findeVorherigenPfad as findeVorherigenPfadInEventStream,
 } from "./projections";
@@ -23,6 +24,10 @@ type EventContextType = {
   readonly dispatch: (event: FormEvent) => void;
 
   readonly filtereValideEventHistorie: () => FormEvent[];
+
+  readonly findeAlleGueltigenEvents: <R extends FormEvent["route"]>(
+    route: R,
+  ) => PayloadMap[R][];
 
   readonly findeLetztesGueltigesEvent: <R extends FormEvent["route"]>(
     route: R,
@@ -58,6 +63,17 @@ export function EventProvider({
       return [];
     }
   }, [eventStream]);
+
+  const findeAlleGueltigenEvents = useCallback(
+    <R extends FormEvent["route"]>(route: R) => {
+      if (isEventStream(eventStream)) {
+        return findeAlleGueltigenEventsInEventStream(eventStream, route);
+      } else {
+        return [] as PayloadMap[R][];
+      }
+    },
+    [eventStream],
+  ) as EventContextType["findeAlleGueltigenEvents"];
 
   const findeLetztesGueltigesEvent = useCallback(
     <R extends FormEvent["route"]>(
@@ -95,14 +111,16 @@ export function EventProvider({
     return {
       dispatch,
       filtereValideEventHistorie,
-      findeVorherigenPfad,
+      findeAlleGueltigenEvents,
       findeLetztesGueltigesEvent,
+      findeVorherigenPfad,
     };
   }, [
     dispatch,
     filtereValideEventHistorie,
-    findeVorherigenPfad,
+    findeAlleGueltigenEvents,
     findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
   ]);
 
   return (

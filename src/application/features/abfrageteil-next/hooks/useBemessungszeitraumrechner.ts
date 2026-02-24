@@ -1,68 +1,30 @@
-import { Temporal } from "@js-temporal/polyfill";
-import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/elternteil/ElternteilSchema";
+import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import type { PayloadMap } from "@/application/features/abfrageteil-next/routing";
-import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import type { Ausklammerung } from "@/bemessungszeitraumrechner";
 import {
   berechneBemessungszeitraum,
   berechneBetrachtungszeitraum,
 } from "@/bemessungszeitraumrechner";
 
 export function useBemessungszeitraumrechner(elternteilIndex: number) {
-  const { findeLetztesGueltigesEvent } = useEventContext();
+  const { filtereValideEventHistorie } = useEventContext();
 
-  const findeAusklammerungszeiten = (): Ausklammerung[] => {
-    const event = findeLetztesGueltigesEvent(
-      Route.ElternteilAusklammerungZeitenAngaben,
-      { elternteilIndex },
-    );
+  const eventStream = filtereValideEventHistorie();
 
-    return event ? flacheAusklammerungen(event) : [];
-  };
-
-  const findeGeburtsdatum = () => {
-    const geborenesKindEvent = findeLetztesGueltigesEvent(
-      Route.GeborenesKindAngaben,
-    );
-
-    if (geborenesKindEvent) {
-      return geborenesKindEvent.geburtsdatum;
-    }
-
-    const wahrscheinlichGeborenesKindEvent = findeLetztesGueltigesEvent(
-      Route.WahrscheinlichGeborenesKindAbfrage,
-    );
-
-    if (wahrscheinlichGeborenesKindEvent) {
-      return wahrscheinlichGeborenesKindEvent.geburtsdatum;
-    }
-
-    const ungeborenesKindEvent = findeLetztesGueltigesEvent(
-      Route.UngeborenesKindAngaben,
-    );
-
-    if (ungeborenesKindEvent) {
-      return ungeborenesKindEvent.errechneterEntbindungstermin;
-    }
-
-    throw new Error("At least one event of the Kind flow is required.");
-  };
+  const geburtsdatum = findeGeburtsdatum(eventStream);
+  const ausklammerungen = findeAusklammerungen(eventStream, elternteilIndex);
 
   return {
     berechneBemessungszeitraum: (erwerbstaetigkeit: Erwerbstaetigkeit) => {
       return berechneBemessungszeitraum({
+        geburtsdatum,
         erwerbstaetigkeit,
-        geburtsdatum: findeGeburtsdatum(),
-        ausklammerungen: findeAusklammerungszeiten(),
+        ausklammerungen,
       });
     },
 
     berechneBetrachtungszeitraum: () => {
-      return berechneBetrachtungszeitraum(
-        findeGeburtsdatum(),
-        findeAusklammerungszeiten(),
-      );
+      return berechneBetrachtungszeitraum(geburtsdatum, ausklammerungen);
     },
   };
 
@@ -72,52 +34,70 @@ export function useBemessungszeitraumrechner(elternteilIndex: number) {
 
   type Erwerbstaetigkeit =
     BerechneBemessungszeitraumParameter["erwerbstaetigkeit"];
-
-  function flacheAusklammerungen(
-    ausklammerungszeiten: ElternteilAusklammerungZeiten,
-  ): Ausklammerung[] {
-    return (
-      Object.keys(
-        ausklammerungszeiten,
-      ) as (keyof ElternteilAusklammerungZeiten)[]
-    ).flatMap((grund) =>
-      ausklammerungszeiten[grund].map((zeitraum) => ({ ...zeitraum, grund })),
-    );
-  }
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
-  const { beforeEach, vi } = import.meta.vitest;
+  const { describe, it, expect, beforeEach, vi } = import.meta.vitest;
 
-  beforeEach(async () => {
-    const bmzRechnerPaket = await import("@/bemessungszeitraumrechner");
-
-    vi.spyOn(bmzRechnerPaket, "berechneBemessungszeitraum").mockReturnValue([
-      {
-        von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
-        bis: Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
-      },
-    ]);
-
-    vi.spyOn(bmzRechnerPaket, "berechneBetrachtungszeitraum").mockReturnValue({
-      von: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
-      bis: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
-    });
-  });
+  vi.mock(
+    import("@/application/features/abfrageteil-next/events/EventContext"),
+    () => ({ useEventContext: vi.fn() }),
+  );
 
   describe("useBemessungszeitraumrechner", async () => {
+    const { Temporal } = await import("@js-temporal/polyfill");
     const { renderHook } = await import("@testing-library/react");
+
+    const { Route } =
+      await import("@/application/features/abfrageteil-next/routing/Route");
+    const { useEventContext } =
+      await import("@/application/features/abfrageteil-next/events/EventContext");
+    type FormEvent =
+      import("@/application/features/abfrageteil-next/routing/FormEvent").FormEvent;
+
+    const bmzRechnerPaket = await import("@/bemessungszeitraumrechner");
+
+    type EventContextType = ReturnType<typeof useEventContext>;
+
+    function mockEventContext(events: FormEvent[]) {
+      vi.mocked(useEventContext).mockReturnValue({
+        dispatch: vi.fn(),
+        filtereValideEventHistorie: vi.fn().mockReturnValue(events),
+        findeAlleGueltigenEvents: vi.fn(),
+        findeLetztesGueltigesEvent: vi.fn(),
+        findeVorherigenPfad: vi.fn(),
+      } as unknown as EventContextType);
+    }
+
+    beforeEach(() => {
+      vi.spyOn(bmzRechnerPaket, "berechneBemessungszeitraum").mockReturnValue([
+        {
+          von: Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+          bis: Temporal.PlainYearMonth.from({ year: 2024, month: 12 }),
+        },
+      ]);
+
+      vi.spyOn(bmzRechnerPaket, "berechneBetrachtungszeitraum").mockReturnValue(
+        {
+          von: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
+          bis: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
+        },
+      );
+    });
 
     describe("berechneBemessungszeitraum", () => {
       it("passes geburtsdatum, erwerbstaetigkeit and empty ausklammerungen", () => {
-        mockEventContext({
-          [Route.GeborenesKindAngaben]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -131,13 +111,17 @@ if (import.meta.vitest) {
       });
 
       it("passes Selbstaendig as erwerbstaetigkeit", () => {
-        mockEventContext({
-          [Route.GeborenesKindAngaben]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -151,23 +135,31 @@ if (import.meta.vitest) {
       });
 
       it("passes ausklammerungszeiten when present", () => {
-        mockEventContext({
-          [Route.GeborenesKindAngaben]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
           },
-          [Route.ElternteilAusklammerungZeitenAngaben]: {
-            mutterschutz: [
-              {
-                von: Temporal.PlainDate.from("2024-11-01"),
-                bis: Temporal.PlainDate.from("2025-02-15"),
-              },
-            ],
-            elterngeld: [],
-            erkrankung: [],
+          {
+            route: Route.ElternteilAusklammerungZeitenAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              mutterschutz: [
+                {
+                  von: Temporal.PlainDate.from("2024-11-01"),
+                  bis: Temporal.PlainDate.from("2025-02-15"),
+                },
+              ],
+              elterngeld: [],
+              erkrankung: [],
+            },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -187,12 +179,16 @@ if (import.meta.vitest) {
       });
 
       it("passes errechneterEntbindungstermin from UngeborenesKindAngaben", () => {
-        mockEventContext({
-          [Route.UngeborenesKindAngaben]: {
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-09-01"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.UngeborenesKindAngaben,
+            payload: {
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-09-01"),
+              anzahl: 1,
+            },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -206,15 +202,20 @@ if (import.meta.vitest) {
       });
 
       it("prioritizes geburtsdatum from WahrscheinlichGeborenesKindAbfrage over errechneterEntbindungstermin from UngeborenesKindAngaben", () => {
-        mockEventContext({
-          [Route.UngeborenesKindAngaben]: {
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-03-01"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.UngeborenesKindAngaben,
+            payload: {
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-03-01"),
+              anzahl: 1,
+            },
           },
-          [Route.WahrscheinlichGeborenesKindAbfrage]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-03-20"),
+          {
+            route: Route.WahrscheinlichGeborenesKindAbfrage,
+            payload: { geburtsdatum: Temporal.PlainDate.from("2025-03-20") },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -227,35 +228,58 @@ if (import.meta.vitest) {
         });
       });
 
-      it("passes the elternteilIndex to findeLetztesGueltigesEvent when looking up ausklammerungszeiten", () => {
-        const findeLetztesGueltigesEvent = mockEventContext({
-          [Route.GeborenesKindAngaben]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
-            anzahl: 1,
+      it("passes ausklammerungszeiten only for the given elternteilIndex", () => {
+        mockEventContext([
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
           },
-        });
+          {
+            route: Route.ElternteilAusklammerungZeitenAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              mutterschutz: [
+                {
+                  von: Temporal.PlainDate.from("2024-11-01"),
+                  bis: Temporal.PlainDate.from("2025-02-15"),
+                },
+              ],
+              elterngeld: [],
+              erkrankung: [],
+            },
+          },
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(1));
 
         result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
 
-        expect(findeLetztesGueltigesEvent).toHaveBeenCalledWith(
-          Route.ElternteilAusklammerungZeitenAngaben,
-          { elternteilIndex: 1 },
-        );
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
+          geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+          erwerbstaetigkeit: "Nicht-Selbstaendig",
+          ausklammerungen: [],
+        });
       });
     });
 
     describe("berechneBetrachtungszeitraum", () => {
       it("passes geburtsdatum and empty ausklammerungen", () => {
-        mockEventContext({
-          [Route.GeborenesKindAngaben]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -268,23 +292,31 @@ if (import.meta.vitest) {
       });
 
       it("passes ausklammerungszeiten when present", () => {
-        mockEventContext({
-          [Route.GeborenesKindAngaben]: {
-            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
-            anzahl: 1,
+        mockEventContext([
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
           },
-          [Route.ElternteilAusklammerungZeitenAngaben]: {
-            mutterschutz: [
-              {
-                von: Temporal.PlainDate.from("2024-11-01"),
-                bis: Temporal.PlainDate.from("2025-02-15"),
-              },
-            ],
-            elterngeld: [],
-            erkrankung: [],
+          {
+            route: Route.ElternteilAusklammerungZeitenAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              mutterschutz: [
+                {
+                  von: Temporal.PlainDate.from("2024-11-01"),
+                  bis: Temporal.PlainDate.from("2025-02-15"),
+                },
+              ],
+              elterngeld: [],
+              erkrankung: [],
+            },
           },
-        });
+        ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(0));
 
@@ -302,32 +334,5 @@ if (import.meta.vitest) {
         );
       });
     });
-
-    vi.mock(
-      import("@/application/features/abfrageteil-next/events/EventContext"),
-      () => ({
-        useEventContext: vi.fn(),
-      }),
-    );
-
-    const { useEventContext } =
-      await import("@/application/features/abfrageteil-next/events/EventContext");
-
-    type EventContextType = ReturnType<typeof useEventContext>;
-
-    function mockEventContext(events: Partial<PayloadMap>) {
-      const findeLetztesGueltigesEvent = vi.fn(
-        (route: Route) => events[route as keyof PayloadMap],
-      ) as EventContextType["findeLetztesGueltigesEvent"];
-
-      vi.mocked(useEventContext).mockReturnValue({
-        dispatch: vi.fn(),
-        findeVorherigenPfad: vi.fn(),
-        filtereValideEventHistorie: vi.fn(),
-        findeLetztesGueltigesEvent,
-      });
-
-      return findeLetztesGueltigesEvent;
-    }
   });
 }

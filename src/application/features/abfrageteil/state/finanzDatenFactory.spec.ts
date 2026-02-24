@@ -654,7 +654,6 @@ describe("finanzDatenFactory", () => {
       {
         bruttoEinkommen: new Einkommen(0),
         istKirchensteuerpflichtig: false,
-        kinderFreiBetrag: 0,
         steuerklasse: Steuerklasse.I,
         kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
         rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
@@ -665,7 +664,11 @@ describe("finanzDatenFactory", () => {
     ],
   ])(
     "%s",
-    (_: string, einkommen: StepEinkommenElternteil, expected: FinanzDaten) => {
+    (
+      _: string,
+      einkommen: StepEinkommenElternteil,
+      expected: Omit<FinanzDaten, "kinderFreiBetrag">,
+    ) => {
       it("should create FinanzDaten for StepEinkommenElternteil", () => {
         const state = produce(INITIAL_STATE, (draft) => {
           draft.stepEinkommen.ET1 = einkommen;

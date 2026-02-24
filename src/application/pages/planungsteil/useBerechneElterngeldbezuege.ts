@@ -204,7 +204,7 @@ type StaticCalculationParameter = Record<
 
 type StaticCalculationParameterForElternteil = {
   persoenlicheDaten: PersoenlicheDaten;
-  finanzdaten: FinanzDaten;
+  finanzdaten: Omit<FinanzDaten, "kinderFreiBetrag">;
 };
 
 type GeplanteMonate = Parameters<BerechneElterngeldbezuegeCallback>[1];

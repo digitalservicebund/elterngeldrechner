@@ -110,7 +110,7 @@ export const finanzDatenOfUi = (
   state: RootState,
   elternteil: ElternteilType,
   bruttoEinkommenZeitraumSanitized: BruttoEinkommenZeitraum[],
-): FinanzDaten => {
+): Omit<FinanzDaten, "kinderFreiBetrag"> => {
   const stateErwerbsTaetigkeit = state.stepErwerbstaetigkeit[elternteil];
   const isOnlySelbstaendig =
     stepErwerbstaetigkeitElternteilSelectors.isOnlySelbstaendig(
@@ -144,7 +144,6 @@ export const finanzDatenOfUi = (
     state.stepEinkommen[elternteil].zahlenSieKirchenSteuer === YesNo.YES
       ? true
       : false;
-  const kinderFreiBetrag = 0;
   const steuerklasse =
     state.stepEinkommen[elternteil].steuerklasse ?? Steuerklasse.I;
   const kassenArt =
@@ -171,7 +170,6 @@ export const finanzDatenOfUi = (
   return {
     bruttoEinkommen,
     istKirchensteuerpflichtig,
-    kinderFreiBetrag,
     steuerklasse,
     kassenArt,
     rentenVersicherung,

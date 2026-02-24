@@ -44,7 +44,7 @@ export type TaetigkeitNichtSelbststaendigAngaben = z.infer<
 >;
 
 export const TaetigkeitGleichesEinkommenAngabenSchema = z.object({
-  monatsbrutto: z.number(),
+  monatsbrutto: z.array(z.number()).length(12),
 });
 
 export type TaetigkeitGleichesEinkommenAngaben = z.infer<
@@ -52,7 +52,7 @@ export type TaetigkeitGleichesEinkommenAngaben = z.infer<
 >;
 
 export const TaetigkeitUnleichesEinkommenAngabenSchema = z.object({
-  monatsbruttoDetailsangaben: z.array(z.number()),
+  monatsbrutto: z.array(z.number()).length(12),
 });
 
 export type TaetigkeitUnleichesEinkommenAngaben = z.infer<

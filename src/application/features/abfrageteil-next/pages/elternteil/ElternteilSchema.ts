@@ -80,3 +80,12 @@ export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
 export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
 >;
+
+export const ElternteilZweitePersonAngabenSchema = z.object({
+  wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
+  name: z.string(),
+});
+
+export type ElternteilZweitePersonAngaben = z.infer<
+  typeof ElternteilZweitePersonAngabenSchema
+>;

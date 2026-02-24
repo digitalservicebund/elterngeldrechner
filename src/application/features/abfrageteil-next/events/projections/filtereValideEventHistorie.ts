@@ -1,5 +1,4 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import {
   type FormEvent,
   Route,
@@ -8,7 +7,7 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 
 export function filtereValideEventHistorie(
-  eventStream: EventStream,
+  eventStream: FormEvent[],
 ): FormEvent[] {
   return eventStream
     .reduceRight(
@@ -30,7 +29,7 @@ if (import.meta.vitest) {
 
   describe("filtereValideEventHistorie", () => {
     it("returns all events when no events are skipped", () => {
-      const eventStream: EventStream = [
+      const eventStream: FormEvent[] = [
         { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
@@ -53,7 +52,7 @@ if (import.meta.vitest) {
     });
 
     it("skips old KindAbfrage event when newer one exists with different payload", () => {
-      const eventStream: EventStream = [
+      const eventStream: FormEvent[] = [
         { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,
@@ -105,7 +104,7 @@ if (import.meta.vitest) {
     });
 
     it("skips GeschwisterkindAngaben events when user changes istVorhanden to false", () => {
-      const eventStream: EventStream = [
+      const eventStream: FormEvent[] = [
         { route: Route.Startseite },
         {
           route: Route.AllgemeineAngaben,

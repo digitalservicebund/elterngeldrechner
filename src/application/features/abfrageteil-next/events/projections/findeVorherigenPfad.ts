@@ -1,5 +1,4 @@
 import { Temporal } from "@js-temporal/polyfill";
-import type { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import { filtereValideEventHistorie } from "@/application/features/abfrageteil-next/events/projections";
 import {
   type FormEvent,
@@ -9,7 +8,7 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 
 export function findeVorherigenPfad<R extends FormEvent["route"]>(
-  eventStream: EventStream,
+  eventStream: [FormEvent, ...FormEvent[]],
   route: R,
   ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
 ): string {
@@ -145,5 +144,13 @@ if (import.meta.vitest) {
 
       expect(vorherigerPfad).toEqual("/abfrageteil/geschwisterkind/1");
     });
+
+    // Hack to make assertions type only and prevent runtime execution which
+    // would fail. Vitest has support for type level testing with .test-d.ts
+    // files but that breaks with out in-source testing convention.
+    if (false as boolean) {
+      // @ts-expect-error findeVorherigenPfad without events is illegal
+      findeVorherigenPfad([], Route.KindAbfrage);
+    }
   });
 }

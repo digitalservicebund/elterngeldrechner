@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useReducer,
 } from "react";
-import { isEventStream } from "./EventStream";
 import {
   filtereValideEventHistorie as filtereValideEventHistorieInEventStream,
   findeAlleGueltigenEvents as findeAlleGueltigenEventsInEventStream,
@@ -57,20 +56,12 @@ export function EventProvider({
   }, []);
 
   const filtereValideEventHistorie = useCallback(() => {
-    if (isEventStream(eventStream)) {
-      return filtereValideEventHistorieInEventStream(eventStream);
-    } else {
-      return [];
-    }
+    return filtereValideEventHistorieInEventStream(eventStream);
   }, [eventStream]);
 
   const findeAlleGueltigenEvents = useCallback(
     <R extends FormEvent["route"]>(route: R) => {
-      if (isEventStream(eventStream)) {
-        return findeAlleGueltigenEventsInEventStream(eventStream, route);
-      } else {
-        return [] as PayloadMap[R][];
-      }
+      return findeAlleGueltigenEventsInEventStream(eventStream, route);
     },
     [eventStream],
   ) as EventContextType["findeAlleGueltigenEvents"];
@@ -80,15 +71,11 @@ export function EventProvider({
       route: R,
       ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
     ) => {
-      if (isEventStream(eventStream)) {
-        return findeLetztesGueltigesEventInEventStream(
-          eventStream,
-          route,
-          ...args,
-        );
-      } else {
-        return undefined;
-      }
+      return findeLetztesGueltigesEventInEventStream(
+        eventStream,
+        route,
+        ...args,
+      );
     },
     [eventStream],
   );
@@ -98,7 +85,13 @@ export function EventProvider({
       route: R,
       ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
     ) => {
-      if (isEventStream(eventStream)) {
+      const isStreamWithElements = (
+        formEvents: FormEvent[],
+      ): formEvents is [FormEvent, ...FormEvent[]] => {
+        return formEvents.length > 0;
+      };
+
+      if (isStreamWithElements(eventStream)) {
         return findeVorherigenPfadInEventStream(eventStream, route, ...args);
       } else {
         return generateAbfrageteilPath(Route.Startseite);

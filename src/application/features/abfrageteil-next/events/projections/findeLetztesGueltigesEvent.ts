@@ -1,5 +1,4 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
 import type {
   FormEvent,
   ParamsMap,
@@ -7,7 +6,7 @@ import type {
 } from "@/application/features/abfrageteil-next/routing";
 
 export function findeLetztesGueltigesEvent<R extends FormEvent["route"]>(
-  eventStream: EventStream,
+  eventStream: FormEvent[],
   route: R,
   ...args: ParamsMap[R] extends never ? [] : [params: ParamsMap[R]]
 ): PayloadMap[R] | undefined {

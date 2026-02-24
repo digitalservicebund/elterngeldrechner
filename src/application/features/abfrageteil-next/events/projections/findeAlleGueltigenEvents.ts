@@ -1,14 +1,12 @@
 import { filtereValideEventHistorie } from "./filtereValideEventHistorie";
 
-import type { EventStream } from "@/application/features/abfrageteil-next/events/EventStream";
-
 import type {
   FormEvent,
   PayloadMap,
 } from "@/application/features/abfrageteil-next/routing";
 
 export function findeAlleGueltigenEvents<R extends FormEvent["route"]>(
-  eventStream: EventStream,
+  eventStream: FormEvent[],
   route: R,
 ): PayloadMap[R][] {
   return filtereValideEventHistorie(eventStream)
@@ -31,7 +29,7 @@ if (import.meta.vitest) {
       await import("@/application/features/abfrageteil-next/routing");
 
     it("returns payloads for all matching events in the valid history", () => {
-      const eventStream: EventStream = [
+      const eventStream: FormEvent[] = [
         { route: Route.Startseite },
         {
           route: Route.GeschwisterkindAbfrage,
@@ -77,7 +75,7 @@ if (import.meta.vitest) {
     });
 
     it("returns an empty array when no events match the route", () => {
-      const eventStream: EventStream = [{ route: Route.Startseite }];
+      const eventStream: FormEvent[] = [{ route: Route.Startseite }];
 
       const result = findeAlleGueltigenEvents(
         eventStream,

@@ -4,10 +4,15 @@ import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "./findeInformationenZumMutterschutz";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
-import type { Ausgangslage } from "@/monatsplaner/Ausgangslage/Ausgangslage";
+import type {
+  AusgangslageFuerEinElternteil,
+  AusgangslageFuerZweiElternteile,
+} from "@/monatsplaner/Ausgangslage/Ausgangslage";
 import { Elternteil } from "@/monatsplaner/Elternteil";
 
-export function erstelleAusgangslage(events: FormEvent[]): Ausgangslage {
+export function erstelleAusgangslage(
+  events: FormEvent[],
+): AusgangslageFuerEinElternteil | AusgangslageFuerZweiElternteile {
   const anzahlKinder = findeAnzahlKinder(events);
   const sindMehrlinge = anzahlKinder > 1;
   const geburtsdatumDesKindes = new Date(findeGeburtsdatum(events).toString());
@@ -19,13 +24,89 @@ export function erstelleAusgangslage(events: FormEvent[]): Ausgangslage {
     anzahlKinder,
   );
 
-  return {
-    sindMehrlinge,
-    anzahlElternteile: 1,
-    geburtsdatumDesKindes,
-    hatBehindertesGeschwisterkind,
-    informationenZumMutterschutz,
-  };
+  const zweitePersonAngaben = findeAngabenZurZweitenPerson(events);
+
+  if (zweitePersonAngaben.wirdZweitePersonBeruecksichtigt === true) {
+    const mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum =
+      warMindestensEinElternteilErwerbstaetig(events);
+
+    const nameDesErstenElternteils = findeNameDesErstenElternteils(events);
+
+    return {
+      sindMehrlinge,
+      anzahlElternteile: 2,
+      geburtsdatumDesKindes,
+      istAlleinerziehend: false,
+      hatBehindertesGeschwisterkind,
+      informationenZumMutterschutz,
+      mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+      namenDerElternteile: {
+        [Elternteil.Eins]: nameDesErstenElternteils,
+        [Elternteil.Zwei]: zweitePersonAngaben.name,
+      },
+    };
+  } else {
+    return {
+      sindMehrlinge,
+      anzahlElternteile: 1,
+      geburtsdatumDesKindes,
+      hatBehindertesGeschwisterkind,
+      informationenZumMutterschutz,
+    };
+  }
+}
+
+type ZweitePersonAngabenEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilZweitePersonAngaben }
+>;
+
+function findeAngabenZurZweitenPerson(events: FormEvent[]) {
+  const event = [...events]
+    .reverse()
+    .find((e): e is ZweitePersonAngabenEvent => {
+      return e.route === Route.ElternteilZweitePersonAngaben;
+    });
+
+  if (!event) {
+    throw new Error(`Missing event for Angaben of Elternteil 2.`);
+  }
+
+  return event.payload;
+}
+
+type AllgemeineAngabenEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilAllgemeineAngaben }
+>;
+
+function findeNameDesErstenElternteils(events: FormEvent[]): string {
+  const event = [...events].reverse().find((e): e is AllgemeineAngabenEvent => {
+    return (
+      e.route === Route.ElternteilAllgemeineAngaben &&
+      e.params.elternteilIndex === 0
+    );
+  });
+
+  if (!event) {
+    throw new Error(`Missing event for Allgemein Angaben of Elternteil 1.`);
+  }
+
+  return event.payload.name;
+}
+
+type TaetigkeitenAbfrageEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilTaetigkeitenAbfrage }
+>;
+
+function warMindestensEinElternteilErwerbstaetig(events: FormEvent[]): boolean {
+  return events.some((e): e is TaetigkeitenAbfrageEvent => {
+    return (
+      e.route === Route.ElternteilTaetigkeitenAbfrage &&
+      !e.payload.hatKeinEinkommen
+    );
+  });
 }
 
 if (import.meta.vitest) {
@@ -33,6 +114,11 @@ if (import.meta.vitest) {
 
   describe("erstelleAusgangslage", async () => {
     const { Temporal } = await import("@js-temporal/polyfill");
+
+    const zweitePersonNichtBeruecksichtigt: FormEvent = {
+      route: Route.ElternteilZweitePersonAngaben,
+      payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
+    };
 
     describe("geburtsdatumDesKindes", () => {
       it("uses geburtsdatum from GeborenesKindAngaben", () => {
@@ -46,6 +132,7 @@ if (import.meta.vitest) {
               anzahl: 1,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -69,6 +156,7 @@ if (import.meta.vitest) {
             route: Route.WahrscheinlichGeborenesKindAbfrage,
             payload: { geburtsdatum: Temporal.PlainDate.from("2025-03-20") },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -88,6 +176,7 @@ if (import.meta.vitest) {
               anzahl: 1,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -121,6 +210,7 @@ if (import.meta.vitest) {
               elternteilIndex: 0,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -128,8 +218,35 @@ if (import.meta.vitest) {
         expect(ausgangslage.anzahlElternteile).toEqual(1);
       });
 
-      it("is 2 when Elternteil 2 event also exists", () => {
-        // TODO: Implement once the schema for Elternteil 2 is in place.
+      it("is 2 when ElternteilZweitePersonAngaben has wirdZweitePersonBeruecksichtigt true", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-12-20"),
+              anzahl: 1,
+            },
+          },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
+          {
+            route: Route.ElternteilZweitePersonAngaben,
+            payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(ausgangslage.anzahlElternteile).toEqual(2);
       });
     });
 
@@ -145,6 +262,7 @@ if (import.meta.vitest) {
               anzahl: 1,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -163,6 +281,7 @@ if (import.meta.vitest) {
               anzahl: 2,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -188,6 +307,7 @@ if (import.meta.vitest) {
             route: Route.GeschwisterkindAbfrage,
             payload: { istVorhanden: false },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -207,6 +327,7 @@ if (import.meta.vitest) {
               istWeiteresGeschwisterkindVorhanden: false,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -235,6 +356,7 @@ if (import.meta.vitest) {
               istWeiteresGeschwisterkindVorhanden: false,
             },
           },
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -274,7 +396,11 @@ if (import.meta.vitest) {
       };
 
       it("is undefined when Elternteil 1 is not in Mutterschutz", () => {
-        const events: FormEvent[] = [kindEvent, elternteil1OhneMutterschutz];
+        const events: FormEvent[] = [
+          kindEvent,
+          elternteil1OhneMutterschutz,
+          zweitePersonNichtBeruecksichtigt,
+        ];
 
         const ausgangslage = erstelleAusgangslage(events);
 
@@ -282,7 +408,11 @@ if (import.meta.vitest) {
       });
 
       it("sets Elternteil.Eins as Empfänger for one Elternteil in Mutterschutz", () => {
-        const events: FormEvent[] = [kindEvent, elternteil1MitMutterschutz];
+        const events: FormEvent[] = [
+          kindEvent,
+          elternteil1MitMutterschutz,
+          zweitePersonNichtBeruecksichtigt,
+        ];
 
         const ausgangslage = erstelleAusgangslage(events);
 
@@ -292,7 +422,11 @@ if (import.meta.vitest) {
       });
 
       it("sets letzterLebensmonatMitSchutz to 2 for a single child", () => {
-        const events: FormEvent[] = [kindEvent, elternteil1MitMutterschutz];
+        const events: FormEvent[] = [
+          kindEvent,
+          elternteil1MitMutterschutz,
+          zweitePersonNichtBeruecksichtigt,
+        ];
 
         const ausgangslage = erstelleAusgangslage(events);
 
@@ -314,6 +448,7 @@ if (import.meta.vitest) {
             },
           },
           elternteil1MitMutterschutz,
+          zweitePersonNichtBeruecksichtigt,
         ];
 
         const ausgangslage = erstelleAusgangslage(events);
@@ -327,17 +462,117 @@ if (import.meta.vitest) {
 
     describe("namenDerElternteile", () => {
       it("assigns names to both Elternteile", () => {
-        // TODO: Implement once the schema for Elternteil 2 is in place.
+        const events: FormEvent[] = [
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-12-20"),
+              anzahl: 1,
+            },
+          },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
+          {
+            route: Route.ElternteilZweitePersonAngaben,
+            payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(ausgangslage.namenDerElternteile).toEqual({
+          [Elternteil.Eins]: "Hanna",
+          [Elternteil.Zwei]: "Max",
+        });
       });
     });
 
     describe("mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum", () => {
+      const kindEvent: FormEvent = {
+        route: Route.GeborenesKindAngaben,
+        payload: {
+          geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+          errechneterEntbindungstermin: Temporal.PlainDate.from("2025-12-20"),
+          anzahl: 1,
+        },
+      };
+
+      const elternteil1Event: FormEvent = {
+        route: Route.ElternteilAllgemeineAngaben,
+        params: { elternteilIndex: 0 },
+        payload: {
+          name: "Hanna",
+          istAlleinerziehend: false,
+          istImMutterschutz: false,
+        },
+      };
+
+      const zweitePersonEvent: FormEvent = {
+        route: Route.ElternteilZweitePersonAngaben,
+        payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+      };
+
       it("is false when both Elternteile have hatKeinEinkommen", () => {
-        // TODO: Implement once the schema for Elternteil 2 is in place.
+        const events: FormEvent[] = [
+          kindEvent,
+          elternteil1Event,
+          zweitePersonEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: { hatKeinEinkommen: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 1 },
+            payload: { hatKeinEinkommen: true },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toEqual(false);
       });
 
       it("is true when any Elternteil does not have hatKeinEinkommen", () => {
-        // TODO: Implement once the schema for Elternteil 2 is in place.
+        const events: FormEvent[] = [
+          kindEvent,
+          elternteil1Event,
+          zweitePersonEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: { hatKeinEinkommen: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 1 },
+            payload: {
+              hatKeinEinkommen: false,
+              istSelbststaendig: true,
+              istNichtSelbststaendig: false,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toEqual(true);
       });
     });
   });

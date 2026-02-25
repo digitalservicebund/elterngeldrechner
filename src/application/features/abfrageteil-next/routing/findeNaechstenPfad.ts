@@ -80,7 +80,19 @@ function getNextSubpath(event: FormEvent): string {
       return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: event.params.elternteilIndex.toString(),
       });
-    case Route.ElternteilTaetigkeitenAbfrage:
+    case Route.ElternteilTaetigkeitenAbfrage: {
+      const { payload } = event;
+      if (payload.hatKeinEinkommen) {
+        return Route.ElternteilZweitePersonAngaben;
+      }
+      const zielRoute = payload.istSelbststaendig
+        ? Route.ElternteilTaetigkeitAngabenSelbststaendig
+        : Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: event.params.elternteilIndex.toString(),
+        taetigkeitIndex: "0",
+      });
+    }
     case Route.ElternteilTaetigkeitAngabenSelbststaendig:
     case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig:
     case Route.ElternteilTaetigkeitAngabenMinijob:
@@ -431,6 +443,74 @@ if (import.meta.vitest) {
 
       expect(naechsterPfad).toEqual(
         "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+      );
+    });
+
+    it("returns ElternteilZweitePersonAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilTaetigkeitenAbfrage,
+        params: { elternteilIndex: 0 },
+        payload: {
+          hatKeinEinkommen: true,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/abfrage-zweite-person",
+      );
+    });
+
+    it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute and only istSelbststaendig true", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilTaetigkeitenAbfrage,
+        params: { elternteilIndex: 0 },
+        payload: {
+          istNichtSelbststaendig: false,
+          istSelbststaendig: true,
+          istVerbeamtet: false,
+          hatAndereLeistungen: false,
+          hatKeinEinkommen: false,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/0/taetigkeit/0/selbststaendig",
+      );
+    });
+
+    it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig true and any other true", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilTaetigkeitenAbfrage,
+        params: { elternteilIndex: 0 },
+        payload: {
+          istNichtSelbststaendig: true,
+          istSelbststaendig: true,
+          istVerbeamtet: true,
+          hatAndereLeistungen: true,
+          hatKeinEinkommen: false,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/0/taetigkeit/0/selbststaendig",
+      );
+    });
+
+    it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig false and istNichtSelbststaendig true", () => {
+      const naechsterPfad = findeNaechstenPfad({
+        route: Route.ElternteilTaetigkeitenAbfrage,
+        params: { elternteilIndex: 0 },
+        payload: {
+          istNichtSelbststaendig: true,
+          istSelbststaendig: false,
+          istVerbeamtet: true,
+          hatAndereLeistungen: true,
+          hatKeinEinkommen: false,
+        },
+      });
+
+      expect(naechsterPfad).toEqual(
+        "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig",
       );
     });
   });

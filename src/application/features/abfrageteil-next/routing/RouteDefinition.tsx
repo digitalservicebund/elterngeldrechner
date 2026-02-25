@@ -16,6 +16,7 @@ import {
   UngeborenesKindPage,
   WahrscheinlichGeborenesKindPage,
 } from "@/application/features/abfrageteil-next/pages";
+import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSelbststaendigPage";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -82,6 +83,12 @@ const RouteDefinition = [
       {
         element: <ElternteilTaetigkeitenAbfragePage />,
         path: generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenSelbststaendigPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilTaetigkeitAngabenSelbststaendig,
+        ),
       },
       {
         element: (

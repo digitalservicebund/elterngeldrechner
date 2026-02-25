@@ -14,15 +14,15 @@ import { findeJahrOhneAusklammerung } from "./vergleicheAusklammerung";
 export function berechneBetrachtungszeitraum(
   geburtsdatum: Temporal.PlainDate,
   ausklammerungen: Ausklammerung[],
-): Zeitraum {
+): Zeitraum<Temporal.PlainDate> {
   const startJahr = findeJahrOhneAusklammerung(
     geburtsdatum.subtract({ years: 1 }).toPlainYearMonth(),
     ausklammerungen,
   );
 
   return {
-    von: Temporal.PlainYearMonth.from({ year: startJahr.year, month: 1 }),
-    bis: geburtsdatum.toPlainYearMonth(),
+    von: Temporal.PlainDate.from({ year: startJahr.year, month: 1, day: 1 }),
+    bis: geburtsdatum,
   };
 }
 
@@ -41,12 +41,12 @@ if (import.meta.vitest) {
 
       expect(
         betrachtungszeitraum.von.equals(
-          Temporal.PlainYearMonth.from({ year: 2024, month: 1 }),
+          Temporal.PlainDate.from({ year: 2024, month: 1, day: 1 }),
         ),
       ).toBe(true);
       expect(
         betrachtungszeitraum.bis.equals(
-          Temporal.PlainYearMonth.from({ year: 2025, month: 10 }),
+          Temporal.PlainDate.from({ year: 2025, month: 10, day: 15 }),
         ),
       ).toBe(true);
     });
@@ -73,12 +73,12 @@ if (import.meta.vitest) {
 
       expect(
         betrachtungszeitraum.von.equals(
-          Temporal.PlainYearMonth.from({ year: 2023, month: 1 }),
+          Temporal.PlainDate.from({ year: 2023, month: 1, day: 1 }),
         ),
       ).toBe(true);
       expect(
         betrachtungszeitraum.bis.equals(
-          Temporal.PlainYearMonth.from({ year: 2025, month: 10 }),
+          Temporal.PlainDate.from({ year: 2025, month: 10, day: 15 }),
         ),
       ).toBe(true);
     });

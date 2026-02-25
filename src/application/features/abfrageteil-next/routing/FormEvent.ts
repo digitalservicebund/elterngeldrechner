@@ -110,7 +110,6 @@ export type FormEvent =
     }
   | {
       route: Route.ElternteilZweitePersonAngaben;
-      params: { elternteilIndex: number };
       payload: ElternteilZweitePersonAngaben;
     };
 

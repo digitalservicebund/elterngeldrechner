@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import React, {
   createContext,
   useCallback,
@@ -41,14 +42,25 @@ type EventContextType = {
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
+const isDev = import.meta.env.DEV;
+
 export function EventProvider({
   children,
 }: {
   readonly children: React.ReactNode;
 }) {
   const [eventStream, dispatchAction] = useReducer(
-    (state: FormEvent[], action: FormEvent) => [...state, action],
+    (state: FormEvent[], action: FormEvent) => {
+      const newState = [...state, action];
+
+      if (isDev) {
+        sessionStorage.setItem("EGR_SESSION_STORAGE", JSON.stringify(newState));
+      }
+
+      return newState;
+    },
     [],
+    isDev ? getInitialState : () => [],
   );
 
   const dispatch = useCallback((event: FormEvent) => {
@@ -126,4 +138,37 @@ export const useEventContext = () => {
   if (!context)
     throw new Error("useEventContext must be used within EventProvider");
   return context;
+};
+
+const getInitialState = (): FormEvent[] => {
+  const saved = sessionStorage.getItem("EGR_SESSION_STORAGE");
+  if (!saved) return [];
+
+  try {
+    const rawData: unknown = JSON.parse(saved, (_key, value): unknown => {
+      if (typeof value === "string") {
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        const yearMonthRegex = /^\d{4}-\d{2}$/;
+
+        if (dateRegex.test(value)) {
+          return Temporal.PlainDate.from(value);
+        }
+        if (yearMonthRegex.test(value)) {
+          return Temporal.PlainYearMonth.from(value);
+        }
+      }
+      return value;
+    });
+
+    // TODO: Create FormEventSchema to validate with zod here
+    // const result = z.array(FormEventSchema).safeParse(rawData);
+
+    // if (result.success) {
+    //   return result.data;
+    // }
+
+    return rawData as FormEvent[];
+  } catch {
+    return [];
+  }
 };

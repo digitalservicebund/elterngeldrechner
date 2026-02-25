@@ -117,7 +117,7 @@ if (import.meta.vitest) {
 
     const zweitePersonNichtBeruecksichtigt: FormEvent = {
       route: Route.ElternteilZweitePersonAngaben,
-      payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
+      payload: { wirdZweitePersonBeruecksichtigt: false },
     };
 
     describe("geburtsdatumDesKindes", () => {

@@ -79,8 +79,8 @@ if (import.meta.vitest) {
 
       vi.spyOn(bmzRechnerPaket, "berechneBetrachtungszeitraum").mockReturnValue(
         {
-          von: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
-          bis: Temporal.PlainYearMonth.from({ year: 2024, month: 10 }),
+          von: Temporal.PlainDate.from({ year: 2024, month: 10, day: 1 }),
+          bis: Temporal.PlainDate.from({ year: 2024, month: 10, day: 1 }),
         },
       );
     });

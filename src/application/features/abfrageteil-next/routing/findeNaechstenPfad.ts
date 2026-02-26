@@ -85,9 +85,21 @@ function getNextSubpath(event: FormEvent): string {
       if (payload.hatKeinEinkommen) {
         return Route.ElternteilZweitePersonAngaben;
       }
-      const zielRoute = payload.istSelbststaendig
-        ? Route.ElternteilTaetigkeitAngabenSelbststaendig
-        : Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      const getZielRoute = (payload: {
+        istSelbststaendig: boolean;
+        istNichtSelbststaendig: boolean;
+      }) => {
+        if (payload.istSelbststaendig && payload.istNichtSelbststaendig) {
+          return Route.ElternteilTaetigkeitAngabenMischeinkunft;
+        }
+
+        if (payload.istSelbststaendig) {
+          return Route.ElternteilTaetigkeitAngabenSelbststaendig;
+        }
+
+        return Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      };
+      const zielRoute = getZielRoute(payload);
       return generateParametrizedPath(zielRoute, {
         elternteilIndex: event.params.elternteilIndex.toString(),
         taetigkeitIndex: "0",
@@ -95,11 +107,13 @@ function getNextSubpath(event: FormEvent): string {
     }
     case Route.ElternteilTaetigkeitAngabenSelbststaendig:
     case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig:
+    case Route.ElternteilTaetigkeitAngabenMischeinkunft:
     case Route.ElternteilTaetigkeitAngabenMinijob:
     case Route.ElternteilTaetigkeitAngabenSozialversicherungen:
     case Route.ElternteilTaetigkeitAngabenEinkommen:
     case Route.ElternteilTaetigkeitAngabenEinkommenDetails:
     case Route.ElternteilWeitereTaetigkeitAbfrage:
+    case Route.ElternteilWeitereTaetigkeitSelbststaendigAbfrage:
     case Route.ElternteilWeitereTaetigkeitAngaben:
     case Route.ElternteilZweitePersonAngaben:
       throw Error("Not yet implemented.");
@@ -478,21 +492,21 @@ if (import.meta.vitest) {
       );
     });
 
-    it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig true and any other true", () => {
+    it("returns ElternteilTaetigkeitAngabenMischeinkunft given ElternteilTaetigkeitenAbfrage as currentRoute and both istSelbststaendig and istNichtSelbststaendig true", () => {
       const naechsterPfad = findeNaechstenPfad({
         route: Route.ElternteilTaetigkeitenAbfrage,
         params: { elternteilIndex: 0 },
         payload: {
           istNichtSelbststaendig: true,
           istSelbststaendig: true,
-          istVerbeamtet: true,
-          hatAndereLeistungen: true,
+          istVerbeamtet: false,
+          hatAndereLeistungen: false,
           hatKeinEinkommen: false,
         },
       });
 
       expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeit/0/selbststaendig",
+        "/abfrageteil/elternteil/0/taetigkeit/0/mischeinkunft",
       );
     });
 

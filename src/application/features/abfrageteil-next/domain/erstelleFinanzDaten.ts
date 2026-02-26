@@ -25,7 +25,7 @@ export function erstelleFinanzDaten(
       steuerklasse: Steuerklasse.I,
       kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-      splittingFaktor: 1.0,
+      splittingFaktor: 1,
       mischEinkommenTaetigkeiten: [],
       erwerbsZeitraumLebensMonatList: [],
     };
@@ -101,7 +101,7 @@ function findeMonatsbrutto(
       );
     });
 
-  return detailEvent?.payload.monatsbrutto ?? Array<number>(12).fill(0);
+  return detailEvent?.payload.monatsbrutto ?? new Array<number>(12).fill(0);
 }
 
 function durchschnittMonatsbrutto(monatsbrutto: number[]): number {
@@ -129,7 +129,7 @@ function erstelleEinfacheFinanzDaten(
       rentenVersicherung: payload.istGesetzlichRentenversichert
         ? RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG
         : RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
-      splittingFaktor: 1.0,
+      splittingFaktor: 1,
       mischEinkommenTaetigkeiten: [],
       erwerbsZeitraumLebensMonatList: [],
     };
@@ -148,7 +148,7 @@ function erstelleEinfacheFinanzDaten(
       steuerklasse: Steuerklasse.I,
       kassenArt: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
       rentenVersicherung: RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
-      splittingFaktor: 1.0,
+      splittingFaktor: 1,
       mischEinkommenTaetigkeiten: [],
       erwerbsZeitraumLebensMonatList: [],
     };
@@ -170,7 +170,7 @@ function erstelleEinfacheFinanzDaten(
     rentenVersicherung: sozialversicherungen.istGesetzlichRentenversichert
       ? RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG
       : RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
-    splittingFaktor: 1.0,
+    splittingFaktor: 1,
     mischEinkommenTaetigkeiten: [],
     erwerbsZeitraumLebensMonatList: [],
   };
@@ -183,9 +183,7 @@ function erstelleMischeinkommenFinanzDaten(
 ): Omit<FinanzDaten, "kinderFreiBetrag"> {
   const mischEinkommenTaetigkeiten = alleTaetigkeitEvents
     .map((event) => erstelleMischEkTaetigkeit(events, elternteilIndex, event))
-    .filter((taetigkeit) =>
-      taetigkeit.bemessungsZeitraumMonate.some((aktiv) => aktiv),
-    );
+    .filter((taetigkeit) => taetigkeit.bemessungsZeitraumMonate.some(Boolean));
 
   const erstesNichtSelbststaendigEvent = alleTaetigkeitEvents.find(
     (e): e is NichtSelbststaendigEvent => {
@@ -210,7 +208,7 @@ function erstelleMischeinkommenFinanzDaten(
     steuerklasse: sozialversicherungen?.steuerklasse ?? Steuerklasse.I,
     kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
     rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-    splittingFaktor: 1.0,
+    splittingFaktor: 1,
     mischEinkommenTaetigkeiten,
     erwerbsZeitraumLebensMonatList: [],
   };
@@ -231,7 +229,7 @@ function erstelleMischEkTaetigkeit(
       erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
       bruttoEinkommenDurchschnitt: payload.bruttoJahresgewinn / 12,
       bruttoEinkommenDurchschnittMidi: 0,
-      bemessungsZeitraumMonate: Array<boolean>(12).fill(true),
+      bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
       istRentenVersicherungsPflichtig: payload.istGesetzlichRentenversichert,
       istKrankenVersicherungsPflichtig:
         payload.istGesetzlichKrankenpflichtversichert,
@@ -323,7 +321,7 @@ if (import.meta.vitest) {
           steuerklasse: Steuerklasse.I,
           kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1.0,
+          splittingFaktor: 1,
           mischEinkommenTaetigkeiten: [],
           erwerbsZeitraumLebensMonatList: [],
         });
@@ -381,7 +379,7 @@ if (import.meta.vitest) {
           steuerklasse: Steuerklasse.I,
           kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1.0,
+          splittingFaktor: 1,
           mischEinkommenTaetigkeiten: [],
           erwerbsZeitraumLebensMonatList: [],
         });
@@ -415,7 +413,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-            payload: { monatsbrutto: Array<number>(12).fill(556) },
+            payload: { monatsbrutto: new Array<number>(12).fill(556) },
           },
         ];
 
@@ -427,7 +425,7 @@ if (import.meta.vitest) {
           steuerklasse: Steuerklasse.I,
           kassenArt: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1.0,
+          splittingFaktor: 1,
           mischEinkommenTaetigkeiten: [],
           erwerbsZeitraumLebensMonatList: [],
         });
@@ -469,7 +467,7 @@ if (import.meta.vitest) {
           steuerklasse: Steuerklasse.I,
           kassenArt: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1.0,
+          splittingFaktor: 1,
           mischEinkommenTaetigkeiten: [],
           erwerbsZeitraumLebensMonatList: [],
         });
@@ -510,7 +508,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-            payload: { monatsbrutto: Array<number>(12).fill(3000) },
+            payload: { monatsbrutto: new Array<number>(12).fill(3000) },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -520,7 +518,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-            payload: { monatsbrutto: Array<number>(12).fill(400) },
+            payload: { monatsbrutto: new Array<number>(12).fill(400) },
           },
         ];
 
@@ -532,13 +530,13 @@ if (import.meta.vitest) {
           steuerklasse: Steuerklasse.I,
           kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
           rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1.0,
+          splittingFaktor: 1,
           mischEinkommenTaetigkeiten: [
             {
               erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
               bruttoEinkommenDurchschnitt: 3000,
               bruttoEinkommenDurchschnittMidi: 0,
-              bemessungsZeitraumMonate: Array<boolean>(12).fill(true),
+              bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
               istRentenVersicherungsPflichtig: true,
               istKrankenVersicherungsPflichtig: true,
               istArbeitslosenVersicherungsPflichtig: true,
@@ -547,7 +545,7 @@ if (import.meta.vitest) {
               erwerbsTaetigkeit: ErwerbsTaetigkeit.MINIJOB,
               bruttoEinkommenDurchschnitt: 400,
               bruttoEinkommenDurchschnittMidi: 0,
-              bemessungsZeitraumMonate: Array<boolean>(12).fill(true),
+              bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
               istRentenVersicherungsPflichtig: false,
               istKrankenVersicherungsPflichtig: false,
               istArbeitslosenVersicherungsPflichtig: false,
@@ -604,7 +602,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-            payload: { monatsbrutto: Array<number>(12).fill(400) },
+            payload: { monatsbrutto: new Array<number>(12).fill(400) },
           },
         ];
 
@@ -680,7 +678,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-            payload: { monatsbrutto: Array<number>(12).fill(3000) },
+            payload: { monatsbrutto: new Array<number>(12).fill(3000) },
           },
         ];
 
@@ -692,7 +690,7 @@ if (import.meta.vitest) {
             erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
             bruttoEinkommenDurchschnitt: 2000,
             bruttoEinkommenDurchschnittMidi: 0,
-            bemessungsZeitraumMonate: Array<boolean>(12).fill(true),
+            bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
             istRentenVersicherungsPflichtig: false,
             istKrankenVersicherungsPflichtig: false,
             istArbeitslosenVersicherungsPflichtig: false,
@@ -701,7 +699,7 @@ if (import.meta.vitest) {
             erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
             bruttoEinkommenDurchschnitt: 3000,
             bruttoEinkommenDurchschnittMidi: 0,
-            bemessungsZeitraumMonate: Array<boolean>(12).fill(true),
+            bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
             istRentenVersicherungsPflichtig: true,
             istKrankenVersicherungsPflichtig: true,
             istArbeitslosenVersicherungsPflichtig: true,

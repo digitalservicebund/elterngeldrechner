@@ -106,15 +106,48 @@ function getNextSubpath(event: FormEvent): string {
       });
     }
     case Route.ElternteilTaetigkeitAngabenSelbststaendig:
+      return generateParametrizedPath(
+        Route.ElternteilWeitereTaetigkeitAbfrage,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+          taetigkeitIndex: event.params.taetigkeitIndex.toString(),
+        },
+      );
+    case Route.ElternteilWeitereTaetigkeitAbfrage: {
+      const {
+        istWeitereTaetigkeitVorhanden,
+        istSelbststaendigeTaetigkeitMoeglich,
+      } = event.payload;
+      if (!istWeitereTaetigkeitVorhanden) {
+        return Route.ElternteilZweitePersonAngaben;
+      }
+      const zielRoute = istSelbststaendigeTaetigkeitMoeglich
+        ? Route.ElternteilWeitereTaetigkeitAngaben
+        : Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      const taetigkeitIndex = istSelbststaendigeTaetigkeitMoeglich
+        ? event.params.taetigkeitIndex
+        : event.params.taetigkeitIndex + 1;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: event.params.elternteilIndex.toString(),
+        taetigkeitIndex: taetigkeitIndex.toString(),
+      });
+    }
+    case Route.ElternteilWeitereTaetigkeitAngaben: {
+      const { istWeitereTaetigkeitSelbststaendigeTaetigkeit } = event.payload;
+      const zielRoute = istWeitereTaetigkeitSelbststaendigeTaetigkeit
+        ? Route.ElternteilTaetigkeitAngabenSelbststaendig
+        : Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: event.params.elternteilIndex.toString(),
+        taetigkeitIndex: (event.params.taetigkeitIndex + 1).toString(),
+      });
+    }
     case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig:
     case Route.ElternteilTaetigkeitAngabenMischeinkunft:
     case Route.ElternteilTaetigkeitAngabenMinijob:
     case Route.ElternteilTaetigkeitAngabenSozialversicherungen:
     case Route.ElternteilTaetigkeitAngabenEinkommen:
     case Route.ElternteilTaetigkeitAngabenEinkommenDetails:
-    case Route.ElternteilWeitereTaetigkeitAbfrage:
-    case Route.ElternteilWeitereTaetigkeitSelbststaendigAbfrage:
-    case Route.ElternteilWeitereTaetigkeitAngaben:
     case Route.ElternteilZweitePersonAngaben:
       throw Error("Not yet implemented.");
   }
@@ -130,402 +163,523 @@ if (import.meta.vitest) {
   afterEach(() => vi.useRealTimers());
 
   describe("findeNaechstenPfad", () => {
-    it("returns KindAbfrage given AllgemeineAngaben as currentRoute", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.AllgemeineAngaben,
-        payload: {
-          bundesland: "Berlin",
-          gesamteinkommenGrenzeUeberschritten: false,
-        },
-      });
+    describe("AllgemeineAngaben", () => {
+      it("returns KindAbfrage given AllgemeineAngaben as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
+        });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/kind");
+        expect(naechsterPfad).toEqual("/abfrageteil/kind");
+      });
     });
 
-    it("returns GeborenesKindAngaben given KindAbfrage as currentRoute and istGeboren true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.KindAbfrage,
-        payload: { istGeboren: true },
+    describe("KindAbfrage", () => {
+      it("returns GeborenesKindAngaben given KindAbfrage as currentRoute and istGeboren true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.KindAbfrage,
+          payload: { istGeboren: true },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/kind/geboren");
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/kind/geboren");
+      it("returns UngeborenesKindAngaben given KindAbfrage as currentRoute and istGeboren false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.KindAbfrage,
+          payload: { istGeboren: false },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/kind/ungeboren");
+      });
     });
 
-    it("returns UngeborenesKindAngaben given KindAbfrage as currentRoute and istGeboren false", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.KindAbfrage,
-        payload: { istGeboren: false },
-      });
+    describe("GeborenesKindAngaben", () => {
+      it("returns GeschwisterkindAbfrage given GeborenesKindAngaben as currentRoute and required inputs", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeborenesKindAngaben,
+          payload: {
+            errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
+            geburtsdatum: Temporal.Now.plainDateISO(),
+            anzahl: 1,
+          },
+        });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/kind/ungeboren");
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+      });
     });
 
-    it("returns GeschwisterkindAbfrage given GeborenesKindAngaben as currentRoute and required inputs", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.GeborenesKindAngaben,
-        payload: {
-          errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
-          geburtsdatum: Temporal.Now.plainDateISO(),
-          anzahl: 1,
-        },
+    describe("UngeborenesKindAngaben", () => {
+      it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date under threshold", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.UngeborenesKindAngaben,
+          payload: {
+            errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
+            anzahl: 1,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+      it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date exactly at threshold", () => {
+        vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
+
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.UngeborenesKindAngaben,
+          payload: {
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-18"),
+            anzahl: 1,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+      });
+
+      it("returns WahrscheinlichGeborenesKindAbfrage given UngeborenesKindAngaben as currentRoute and date before threshold", () => {
+        vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
+
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.UngeborenesKindAngaben,
+          payload: {
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-15"),
+            anzahl: 1,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/kind/ungeboren/validierung",
+        );
+      });
     });
 
-    it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date under threshold", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.UngeborenesKindAngaben,
-        payload: {
-          errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
-          anzahl: 1,
-        },
-      });
+    describe("WahrscheinlichGeborenesKindAbfrage", () => {
+      it("returns GeschwisterkindAbfrage given WahrscheinlichGeborenesKindAbfrage as currentRoute", () => {
+        const heute = Temporal.Now.plainDateISO();
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.WahrscheinlichGeborenesKindAbfrage,
+          payload: {
+            geburtsdatum: heute,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+      });
     });
 
-    it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date exactly at threshold", () => {
-      vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
+    describe("GeschwisterkindAbfrage", () => {
+      it("returns GeschwisterkindAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals yes", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterkindAbfrage,
+          payload: {
+            istVorhanden: true,
+          },
+        });
 
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.UngeborenesKindAngaben,
-        payload: {
-          errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-18"),
-          anzahl: 1,
-        },
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/0");
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+      it("returns ElternteilAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterkindAbfrage,
+          payload: {
+            istVorhanden: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");
+      });
     });
 
-    it("returns WahrscheinlichGeborenesKindAbfrage given UngeborenesKindAngaben as currentRoute and date before threshold", () => {
-      vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
+    describe("GeschwisterkindAngaben", () => {
+      it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 0 },
+          payload: {
+            geburtsdatum: Temporal.Now.plainDateISO(),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: true,
+          },
+        });
 
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.UngeborenesKindAngaben,
-        payload: {
-          errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-15"),
-          anzahl: 1,
-        },
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/1");
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/kind/ungeboren/validierung");
+      it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals one and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 1 },
+          payload: {
+            geburtsdatum: Temporal.Now.plainDateISO(),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/2");
+      });
+
+      it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 0 },
+          payload: {
+            geburtsdatum: Temporal.Now.plainDateISO(),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");
+      });
     });
 
-    it("returns GeschwisterkindAbfrage given WahrscheinlichGeborenesKindAbfrage as currentRoute", () => {
-      const heute = Temporal.Now.plainDateISO();
+    describe("ElternteilAllgemeineAngaben", () => {
+      it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 0", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            name: "Vorname",
+            istAlleinerziehend: false,
+            istImMutterschutz: true,
+          },
+        });
 
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.WahrscheinlichGeborenesKindAbfrage,
-        payload: {
-          geburtsdatum: heute,
-        },
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/ausklammerung-gruende",
+        );
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
+      it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 1", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 1 },
+          payload: {
+            name: "Vorname",
+            istAlleinerziehend: false,
+            istImMutterschutz: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/ausklammerung-gruende",
+        );
+      });
     });
 
-    it("returns GeschwisterkindAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals yes", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.GeschwisterkindAbfrage,
-        payload: {
-          istVorhanden: true,
-        },
+    describe("ElternteilAusklammerungGruendeAngaben", () => {
+      it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0 and at least one ausklammerungsgrund", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatMutterschutzAelteresKind: true,
+            hatElterngeldAelteresKind: true,
+            hatSchwangerschaftsbedingteErkrankung: true,
+            hatKeineAusklammerungsgruende: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/ausklammerung-zeiten",
+        );
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/0");
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0 and no ausklammerungsgrund", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatMutterschutzAelteresKind: false,
+            hatElterngeldAelteresKind: false,
+            hatSchwangerschaftsbedingteErkrankung: false,
+            hatKeineAusklammerungsgruende: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0 and hatKeineAusklammerungsgruende true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatKeineAusklammerungsgruende: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+        );
+      });
+
+      it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 1 },
+          payload: {
+            hatMutterschutzAelteresKind: true,
+            hatElterngeldAelteresKind: true,
+            hatSchwangerschaftsbedingteErkrankung: true,
+            hatKeineAusklammerungsgruende: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/ausklammerung-zeiten",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1 and no ausklammerungsgrund", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 1 },
+          payload: {
+            hatMutterschutzAelteresKind: false,
+            hatElterngeldAelteresKind: false,
+            hatSchwangerschaftsbedingteErkrankung: false,
+            hatKeineAusklammerungsgruende: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1 and hatKeineAusklammerungsgruende true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 1 },
+          payload: {
+            hatKeineAusklammerungsgruende: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+        );
+      });
     });
 
-    it("returns ElternteilAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.GeschwisterkindAbfrage,
-        payload: {
-          istVorhanden: false,
-        },
+    describe("ElternteilAusklammerungZeitenAngaben", () => {
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 0", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungZeitenAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            mutterschutz: [
+              {
+                von: Temporal.PlainDate.from("2025-12-23"),
+                bis: Temporal.PlainDate.from("2026-02-05"),
+              },
+            ],
+            elterngeld: [],
+            erkrankung: [],
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+        );
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 1", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungZeitenAngaben,
+          params: { elternteilIndex: 1 },
+          payload: {
+            mutterschutz: [
+              {
+                von: Temporal.PlainDate.from("2025-12-23"),
+                bis: Temporal.PlainDate.from("2026-02-05"),
+              },
+            ],
+            elterngeld: [],
+            erkrankung: [],
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+        );
+      });
     });
 
-    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and istWeiteresGeschwisterkindVorhanden equals yes", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.GeschwisterkindAngaben,
-        params: { geschwisterIndex: 0 },
-        payload: {
-          geburtsdatum: Temporal.Now.plainDateISO(),
-          hatBehinderung: false,
-          istWeiteresGeschwisterkindVorhanden: true,
-        },
+    describe("ElternteilTaetigkeitenAbfrage", () => {
+      it("returns ElternteilZweitePersonAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatKeinEinkommen: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/abfrage-zweite-person",
+        );
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/1");
+      it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute and only istSelbststaendig true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: true,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/selbststaendig",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitAngabenMischeinkunft given ElternteilTaetigkeitenAbfrage as currentRoute and both istSelbststaendig and istNichtSelbststaendig true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: true,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/mischeinkunft",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig false and istNichtSelbststaendig true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: false,
+            istVerbeamtet: true,
+            hatAndereLeistungen: true,
+            hatKeinEinkommen: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig",
+        );
+      });
     });
 
-    it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals one and istWeiteresGeschwisterkindVorhanden equals yes", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.GeschwisterkindAngaben,
-        params: { geschwisterIndex: 1 },
-        payload: {
-          geburtsdatum: Temporal.Now.plainDateISO(),
-          hatBehinderung: false,
-          istWeiteresGeschwisterkindVorhanden: true,
-        },
-      });
+    describe("ElternteilTaetigkeitAngabenSelbststaendig", () => {
+      it("returns ElternteilWeitereTaetigkeitAbfrage given ElternteilTaetigkeitAngabenSelbststaendig as currentRoute and istWeitereTaetigkeitVorhanden false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenSelbststaendig,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            bruttoJahresgewinn: 10000,
+          },
+        });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/2");
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit",
+        );
+      });
     });
 
-    it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.GeschwisterkindAngaben,
-        params: { geschwisterIndex: 0 },
-        payload: {
-          geburtsdatum: Temporal.Now.plainDateISO(),
-          hatBehinderung: false,
-          istWeiteresGeschwisterkindVorhanden: false,
-        },
+    describe("ElternteilWeitereTaetigkeitAbfrage", () => {
+      it("returns ElternteilZweitePersonAngaben given ElternteilWeitereTaetigkeitAbfrage as currentRoute and istWeitereTaetigkeitVorhanden false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+            istSelbststaendigeTaetigkeitMoeglich: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/abfrage-zweite-person",
+        );
       });
 
-      expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");
+      it("returns ElternteilWeitereTaetigkeitAngaben given ElternteilWeitereTaetigkeitAbfrage as currentRoute and both istWeitereTaetigkeitVorhanden and istSelbststaendigeTaetigkeitMoeglich true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: true,
+            istSelbststaendigeTaetigkeitMoeglich: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit-angaben",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilWeitereTaetigkeitAbfrage as currentRoute, istWeitereTaetigkeitVorhanden true and istSelbststaendigeTaetigkeitMoeglich false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: true,
+            istSelbststaendigeTaetigkeitMoeglich: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
+        );
+      });
     });
 
-    it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 0", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAllgemeineAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          name: "Vorname",
-          istAlleinerziehend: false,
-          istImMutterschutz: true,
-        },
+    describe("ElternteilWeitereTaetigkeitAngaben", () => {
+      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilWeitereTaetigkeitAngaben as currentRoute and istWeitereTaetigkeitSelbststaendigeTaetigkeit false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAngaben,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitSelbststaendigeTaetigkeit: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
+        );
       });
 
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/ausklammerung-gruende",
-      );
-    });
+      it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilWeitereTaetigkeitAngaben as currentRoute and istWeitereTaetigkeitSelbststaendigeTaetigkeit true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAngaben,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitSelbststaendigeTaetigkeit: true,
+          },
+        });
 
-    it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 1", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAllgemeineAngaben,
-        params: { elternteilIndex: 1 },
-        payload: {
-          name: "Vorname",
-          istAlleinerziehend: false,
-          istImMutterschutz: true,
-        },
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/1/selbststaendig",
+        );
       });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/1/ausklammerung-gruende",
-      );
-    });
-
-    it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0 and at least one ausklammerungsgrund", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          hatMutterschutzAelteresKind: true,
-          hatElterngeldAelteresKind: true,
-          hatSchwangerschaftsbedingteErkrankung: true,
-          hatKeineAusklammerungsgruende: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/ausklammerung-zeiten",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0 and no ausklammerungsgrund", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          hatMutterschutzAelteresKind: false,
-          hatElterngeldAelteresKind: false,
-          hatSchwangerschaftsbedingteErkrankung: false,
-          hatKeineAusklammerungsgruende: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 0 and hatKeineAusklammerungsgruende true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          hatKeineAusklammerungsgruende: true,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
-      );
-    });
-
-    it("returns ElternteilAusklammerungZeitenAngaben given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 1 },
-        payload: {
-          hatMutterschutzAelteresKind: true,
-          hatElterngeldAelteresKind: true,
-          hatSchwangerschaftsbedingteErkrankung: true,
-          hatKeineAusklammerungsgruende: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/1/ausklammerung-zeiten",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1 and no ausklammerungsgrund", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 1 },
-        payload: {
-          hatMutterschutzAelteresKind: false,
-          hatElterngeldAelteresKind: false,
-          hatSchwangerschaftsbedingteErkrankung: false,
-          hatKeineAusklammerungsgruende: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungGruendeAngaben as currentRoute and index 1 and hatKeineAusklammerungsgruende true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 1 },
-        payload: {
-          hatKeineAusklammerungsgruende: true,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 0", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungZeitenAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          mutterschutz: [
-            {
-              von: Temporal.PlainDate.from("2025-12-23"),
-              bis: Temporal.PlainDate.from("2026-02-05"),
-            },
-          ],
-          elterngeld: [],
-          erkrankung: [],
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungZeitenAngaben as currentRoute and index 1", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilAusklammerungZeitenAngaben,
-        params: { elternteilIndex: 1 },
-        payload: {
-          mutterschutz: [
-            {
-              von: Temporal.PlainDate.from("2025-12-23"),
-              bis: Temporal.PlainDate.from("2026-02-05"),
-            },
-          ],
-          elterngeld: [],
-          erkrankung: [],
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
-      );
-    });
-
-    it("returns ElternteilZweitePersonAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilTaetigkeitenAbfrage,
-        params: { elternteilIndex: 0 },
-        payload: {
-          hatKeinEinkommen: true,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/abfrage-zweite-person",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute and only istSelbststaendig true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilTaetigkeitenAbfrage,
-        params: { elternteilIndex: 0 },
-        payload: {
-          istNichtSelbststaendig: false,
-          istSelbststaendig: true,
-          istVerbeamtet: false,
-          hatAndereLeistungen: false,
-          hatKeinEinkommen: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeit/0/selbststaendig",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitAngabenMischeinkunft given ElternteilTaetigkeitenAbfrage as currentRoute and both istSelbststaendig and istNichtSelbststaendig true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilTaetigkeitenAbfrage,
-        params: { elternteilIndex: 0 },
-        payload: {
-          istNichtSelbststaendig: true,
-          istSelbststaendig: true,
-          istVerbeamtet: false,
-          hatAndereLeistungen: false,
-          hatKeinEinkommen: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeit/0/mischeinkunft",
-      );
-    });
-
-    it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig false and istNichtSelbststaendig true", () => {
-      const naechsterPfad = findeNaechstenPfad({
-        route: Route.ElternteilTaetigkeitenAbfrage,
-        params: { elternteilIndex: 0 },
-        payload: {
-          istNichtSelbststaendig: true,
-          istSelbststaendig: false,
-          istVerbeamtet: true,
-          hatAndereLeistungen: true,
-          hatKeinEinkommen: false,
-        },
-      });
-
-      expect(naechsterPfad).toEqual(
-        "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig",
-      );
     });
   });
 }

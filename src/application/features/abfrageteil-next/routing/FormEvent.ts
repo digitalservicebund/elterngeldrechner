@@ -109,11 +109,6 @@ export type FormEvent =
       payload: WeitereTaetigkeitAbfrage;
     }
   | {
-      route: Route.ElternteilWeitereTaetigkeitSelbststaendigAbfrage;
-      params: { elternteilIndex: number; taetigkeitIndex: number };
-      payload: WeitereTaetigkeitAbfrage;
-    }
-  | {
       route: Route.ElternteilWeitereTaetigkeitAngaben;
       params: { elternteilIndex: number; taetigkeitIndex: number };
       payload: WeitereTaetigkeitArtAbfrage;

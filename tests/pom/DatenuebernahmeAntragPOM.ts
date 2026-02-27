@@ -30,7 +30,7 @@ export class DatenuebernahmeAntragPOM {
     this.opts = opts;
 
     this.heading = page.getByRole("heading", {
-      name: "Übernahme Planung in den PDF Antrag auf Elterngeld",
+      name: "Übernahme Planung in den Papierantrag auf Elterngeld",
     });
   }
 

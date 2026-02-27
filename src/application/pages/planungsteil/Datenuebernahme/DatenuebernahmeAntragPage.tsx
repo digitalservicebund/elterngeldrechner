@@ -265,7 +265,7 @@ if (import.meta.vitest) {
 
       expect(
         screen.getByLabelText(
-          "Übernahme Planung in den PDF Antrag auf Elterngeld",
+          "Übernahme Planung in den Papierantrag auf Elterngeld",
         ),
       ).toBeVisible();
       expect(

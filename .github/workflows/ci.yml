@@ -48,7 +48,7 @@ jobs:
 
       - name: Upload playwright report
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-report
           path: playwright-report/
@@ -171,7 +171,7 @@ jobs:
           aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
       - name: Upload build artifacts for release
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: production-build
           path: dist/assets/index-*
@@ -206,7 +206,7 @@ jobs:
           VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
 
       - name: Upload familienportal build artifacts for release
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: familienportal-build
           path: dist/assets/index-*
@@ -291,7 +291,7 @@ jobs:
         id: generate-sbom
 
       - name: upload bill as artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           path: ${{ steps.generate-sbom.outputs.fileName }}
           name: SBOM

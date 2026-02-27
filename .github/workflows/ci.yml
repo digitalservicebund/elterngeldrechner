@@ -210,13 +210,13 @@ jobs:
           fetch-depth: 0
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: production-build
           path: production-build
 
       - name: Download familienportal build artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: familienportal-build
           path: familienportal-build

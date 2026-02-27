@@ -16,6 +16,7 @@ import {
   UngeborenesKindPage,
   WahrscheinlichGeborenesKindPage,
 } from "@/application/features/abfrageteil-next/pages";
+import { ElternteilTaetigkeitAngabenMischeinkunftPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMischeinkunftPage";
 import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSelbststaendigPage";
 import { ElternteilWeitereTaetigkeitAbfragePage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAbfragePage";
 import { ElternteilWeitereTaetigkeitAngabenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAngabenPage";
@@ -90,6 +91,12 @@ const RouteDefinition = [
         element: <ElternteilTaetigkeitAngabenSelbststaendigPage />,
         path: generateAbfrageteilPath(
           Route.ElternteilTaetigkeitAngabenSelbststaendig,
+        ),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenMischeinkunftPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilTaetigkeitAngabenMischeinkunft,
         ),
       },
       {

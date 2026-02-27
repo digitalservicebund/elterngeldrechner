@@ -74,14 +74,14 @@ export type FormEvent =
       payload: TaetigkeitSelbststaendigAngaben;
     }
   | {
-      route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
-      params: { elternteilIndex: number; taetigkeitIndex: number };
-      payload: TaetigkeitNichtSelbststaendigMinijobAbfrage;
-    }
-  | {
       route: Route.ElternteilTaetigkeitAngabenMischeinkunft;
       params: { elternteilIndex: number; taetigkeitIndex: number };
       payload: TaetigkeitSelbststaendigAngaben;
+    }
+  | {
+      route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
+      params: { elternteilIndex: number; taetigkeitIndex: number };
+      payload: TaetigkeitNichtSelbststaendigMinijobAbfrage;
     }
   | {
       route: Route.ElternteilTaetigkeitAngabenMinijob;

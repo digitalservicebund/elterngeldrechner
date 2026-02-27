@@ -17,8 +17,8 @@ export enum Route {
   ElternteilTaetigkeitenAbfrage = "/elternteil/:elternteilIndex/taetigkeiten-abfrage",
 
   ElternteilTaetigkeitAngabenSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/selbststaendig",
-  ElternteilTaetigkeitAngabenNichtSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig",
   ElternteilTaetigkeitAngabenMischeinkunft = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/mischeinkunft",
+  ElternteilTaetigkeitAngabenNichtSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig",
   ElternteilTaetigkeitAngabenMinijob = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/minijob",
   ElternteilTaetigkeitAngabenSozialversicherungen = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/sozialversicherungen",
   ElternteilTaetigkeitAngabenEinkommen = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen",

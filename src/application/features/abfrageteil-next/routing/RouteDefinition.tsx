@@ -17,8 +17,13 @@ import {
   WahrscheinlichGeborenesKindPage,
 } from "@/application/features/abfrageteil-next/pages";
 import { ElternteilZweitePersonAngabenPage } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilZweitePersonAngabenPage";
+import { ElternteilTaetigkeitAngabenEinkommenDetailsPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenDetailsPage";
+import { ElternteilTaetigkeitAngabenEinkommenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenPage";
+import { ElternteilTaetigkeitAngabenMinijobPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMinijobPage";
 import { ElternteilTaetigkeitAngabenMischeinkunftPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMischeinkunftPage";
+import { ElternteilTaetigkeitAngabenNichtSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenNichtSelbststaendigPage";
 import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSelbststaendigPage";
+import { ElternteilTaetigkeitAngabenSozialversicherungenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSozialversicherungenPage";
 import { ElternteilWeitereTaetigkeitAbfragePage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAbfragePage";
 import { ElternteilWeitereTaetigkeitAngabenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAngabenPage";
 import { BeispielePage } from "@/application/pages";
@@ -99,6 +104,34 @@ const RouteDefinition = [
         element: <ElternteilTaetigkeitAngabenMischeinkunftPage />,
         path: generateAbfrageteilPath(
           Route.ElternteilTaetigkeitAngabenMischeinkunft,
+        ),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenNichtSelbststaendigPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+        ),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenMinijobPage />,
+        path: generateAbfrageteilPath(Route.ElternteilTaetigkeitAngabenMinijob),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenSozialversicherungenPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+        ),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenEinkommenPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilTaetigkeitAngabenEinkommen,
+        ),
+      },
+      {
+        element: <ElternteilTaetigkeitAngabenEinkommenDetailsPage />,
+        path: generateAbfrageteilPath(
+          Route.ElternteilTaetigkeitAngabenEinkommenDetails,
         ),
       },
       {

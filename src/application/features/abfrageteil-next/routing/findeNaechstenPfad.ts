@@ -3,6 +3,7 @@ import { FormEvent } from "./FormEvent";
 import { Route } from "./Route";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { generateParametrizedPath } from "./generatePath/generateParametrizedPath";
+import { Steuerklasse } from "@/elterngeldrechner";
 
 export function findeNaechstenPfad(event: FormEvent): string {
   const subpath = getNextSubpath(event);
@@ -124,6 +125,34 @@ function getNextSubpath(event: FormEvent): string {
           taetigkeitIndex: (event.params.taetigkeitIndex + 1).toString(),
         },
       );
+    case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig: {
+      const zielRoute = event.payload.istTaetigkeitMinijob
+        ? Route.ElternteilTaetigkeitAngabenMinijob
+        : Route.ElternteilTaetigkeitAngabenSozialversicherungen;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: event.params.elternteilIndex.toString(),
+        taetigkeitIndex: event.params.taetigkeitIndex.toString(),
+      });
+    }
+    case Route.ElternteilTaetigkeitAngabenMinijob:
+    case Route.ElternteilTaetigkeitAngabenSozialversicherungen: {
+      const zielRoute = event.payload.istEinkommenGleichVerteilt
+        ? Route.ElternteilTaetigkeitAngabenEinkommen
+        : Route.ElternteilTaetigkeitAngabenEinkommenDetails;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: event.params.elternteilIndex.toString(),
+        taetigkeitIndex: event.params.taetigkeitIndex.toString(),
+      });
+    }
+    case Route.ElternteilTaetigkeitAngabenEinkommen:
+    case Route.ElternteilTaetigkeitAngabenEinkommenDetails:
+      return generateParametrizedPath(
+        Route.ElternteilWeitereTaetigkeitAbfrage,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+          taetigkeitIndex: event.params.taetigkeitIndex.toString(),
+        },
+      );
     case Route.ElternteilWeitereTaetigkeitAbfrage: {
       const {
         istWeitereTaetigkeitVorhanden,
@@ -165,12 +194,6 @@ function getNextSubpath(event: FormEvent): string {
         },
       );
     }
-    case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig:
-    case Route.ElternteilTaetigkeitAngabenMinijob:
-    case Route.ElternteilTaetigkeitAngabenSozialversicherungen:
-    case Route.ElternteilTaetigkeitAngabenEinkommen:
-    case Route.ElternteilTaetigkeitAngabenEinkommenDetails:
-      throw Error("Not yet implemented.");
   }
 }
 
@@ -642,6 +665,138 @@ if (import.meta.vitest) {
 
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitAngabenNichtSelbststaendig", () => {
+      it("returns ElternteilTaetigkeitAngabenMinijob given ElternteilTaetigkeitAngabenNichtSelbststaendig as currentRoute and istTaetigkeitMinijob true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istTaetigkeitMinijob: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/minijob",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitAngabenSozialversicherungen given ElternteilTaetigkeitAngabenNichtSelbststaendig as currentRoute and istTaetigkeitMinijob false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istTaetigkeitMinijob: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/sozialversicherungen",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitAngabenMinijob", () => {
+      it("returns ElternteilTaetigkeitAngabenEinkommen given ElternteilTaetigkeitAngabenMinijob as currentRoute and istEinkommenGleichVerteilt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenMinijob,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istEinkommenGleichVerteilt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitAngabenEinkommenDetails given ElternteilTaetigkeitAngabenMinijob as currentRoute and istEinkommenGleichVerteilt false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenMinijob,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istEinkommenGleichVerteilt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen/detailliert",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitAngabenSozialversicherungen", () => {
+      it("returns ElternteilTaetigkeitAngabenEinkommen given ElternteilTaetigkeitAngabenSozialversicherungen as currentRoute and istEinkommenGleichVerteilt true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            istEinkommenGleichVerteilt: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitAngabenEinkommenDetails given ElternteilTaetigkeitAngabenSozialversicherungen as currentRoute and istEinkommenGleichVerteilt false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: true,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            istEinkommenGleichVerteilt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen/detailliert",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitAngabenEinkommen", () => {
+      it("returns ElternteilWeitereTaetigkeitAbfrage given ElternteilTaetigkeitAngabenEinkommen as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenEinkommen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            monatsbrutto: [],
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit",
+        );
+      });
+    });
+
+    describe("ElternteilTaetigkeitAngabenEinkommenDetails", () => {
+      it("returns ElternteilWeitereTaetigkeitAbfrage given ElternteilTaetigkeitAngabenEinkommenDetails as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitAngabenEinkommenDetails,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            monatsbrutto: [],
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit",
         );
       });
     });

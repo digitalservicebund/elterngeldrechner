@@ -32,7 +32,7 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilTaetigkeitAngabenSelbststaendig;
+  const currentRoute = Route.ElternteilTaetigkeitAngabenMischeinkunft;
   const routeParams = useRouteParams(currentRoute);
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(
     currentRoute,

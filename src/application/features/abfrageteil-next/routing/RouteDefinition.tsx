@@ -16,10 +16,12 @@ import {
   UngeborenesKindPage,
   WahrscheinlichGeborenesKindPage,
 } from "@/application/features/abfrageteil-next/pages";
+import { ElternteilZweitePersonAngabenPage } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilZweitePersonAngabenPage";
 import { ElternteilTaetigkeitAngabenMischeinkunftPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMischeinkunftPage";
 import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSelbststaendigPage";
 import { ElternteilWeitereTaetigkeitAbfragePage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAbfragePage";
 import { ElternteilWeitereTaetigkeitAngabenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAngabenPage";
+import { BeispielePage } from "@/application/pages";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -106,6 +108,14 @@ const RouteDefinition = [
       {
         element: <ElternteilWeitereTaetigkeitAngabenPage />,
         path: generateAbfrageteilPath(Route.ElternteilWeitereTaetigkeitAngaben),
+      },
+      {
+        element: <ElternteilZweitePersonAngabenPage />,
+        path: generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
+      },
+      {
+        element: <BeispielePage />,
+        path: "/beispiele",
       },
       {
         element: (

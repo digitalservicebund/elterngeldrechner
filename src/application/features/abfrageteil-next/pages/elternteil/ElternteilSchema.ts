@@ -6,7 +6,7 @@ import {
 import { OptionalBooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod/codecs/OptionalBooleanRadiobuttonCodec";
 
 export const ElternteilAllgemeineAngabenSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1),
   istAlleinerziehend: BooleanRadiobuttonCodec,
   istImMutterschutz: OptionalBooleanRadiobuttonCodec,
 });
@@ -81,14 +81,23 @@ export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
 >;
 
-export const ElternteilZweitePersonAngabenSchema = z.union([
-  z.object({ wirdZweitePersonBeruecksichtigt: z.literal(undefined) }),
-  z.object({ wirdZweitePersonBeruecksichtigt: z.literal(false) }),
-  z.object({
-    wirdZweitePersonBeruecksichtigt: z.literal(true),
-    name: z.string(),
-  }),
-]);
+export const ElternteilZweitePersonAngabenSchema = z
+  .object({
+    wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
+    name: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.wirdZweitePersonBeruecksichtigt !== false) {
+        return !!data.name && data.name.trim().length > 0;
+      }
+      return true;
+    },
+    {
+      message: "Bitte geben Sie einen Namen an.",
+      path: ["name"],
+    },
+  );
 
 export type ElternteilZweitePersonAngaben = z.infer<
   typeof ElternteilZweitePersonAngabenSchema

@@ -5,7 +5,10 @@ import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath"
 import { generateParametrizedPath } from "./generatePath/generateParametrizedPath";
 
 export function findeNaechstenPfad(event: FormEvent): string {
-  return generateAbfrageteilPath(getNextSubpath(event));
+  const subpath = getNextSubpath(event);
+  return subpath === "/beispiele"
+    ? "/beispiele"
+    : generateAbfrageteilPath(subpath);
 }
 
 function getNextSubpath(event: FormEvent): string {
@@ -150,12 +153,23 @@ function getNextSubpath(event: FormEvent): string {
         taetigkeitIndex: (event.params.taetigkeitIndex + 1).toString(),
       });
     }
+    case Route.ElternteilZweitePersonAngaben: {
+      const { wirdZweitePersonBeruecksichtigt } = event.payload;
+      if (wirdZweitePersonBeruecksichtigt === false) {
+        return "/beispiele";
+      }
+      return generateParametrizedPath(
+        Route.ElternteilAusklammerungGruendeAngaben,
+        {
+          elternteilIndex: "1",
+        },
+      );
+    }
     case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig:
     case Route.ElternteilTaetigkeitAngabenMinijob:
     case Route.ElternteilTaetigkeitAngabenSozialversicherungen:
     case Route.ElternteilTaetigkeitAngabenEinkommen:
     case Route.ElternteilTaetigkeitAngabenEinkommenDetails:
-    case Route.ElternteilZweitePersonAngaben:
       throw Error("Not yet implemented.");
   }
 }
@@ -706,6 +720,47 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/taetigkeit/1/selbststaendig",
         );
+      });
+    });
+
+    describe("ElternteilZweitePersonAngaben", () => {
+      it("returns ElternteilAusklammerungGruendeAngaben and elternteilIndex 1 given ElternteilZweitePersonAngaben as currentRoute and wirdZweitePersonBeruecksichtigt yes", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+            name: "Person 2",
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/ausklammerung-gruende",
+        );
+      });
+
+      it("returns ElternteilAusklammerungGruendeAngaben and elternteilIndex 1 given ElternteilZweitePersonAngaben as currentRoute and wirdZweitePersonBeruecksichtigt unknown", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: undefined,
+            name: "Person 2",
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/ausklammerung-gruende",
+        );
+      });
+
+      it("returns path for BeispielePage given ElternteilZweitePersonAngaben as currentRoute and wirdZweitePersonBeruecksichtigt no", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
       });
     });
   });

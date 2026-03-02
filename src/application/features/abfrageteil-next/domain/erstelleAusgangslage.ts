@@ -42,7 +42,7 @@ export function erstelleAusgangslage(
       mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
       namenDerElternteile: {
         [Elternteil.Eins]: nameDesErstenElternteils,
-        [Elternteil.Zwei]: zweitePersonAngaben.name,
+        [Elternteil.Zwei]: zweitePersonAngaben.name!,
       },
     };
   } else {
@@ -117,7 +117,7 @@ if (import.meta.vitest) {
 
     const zweitePersonNichtBeruecksichtigt: FormEvent = {
       route: Route.ElternteilZweitePersonAngaben,
-      payload: { wirdZweitePersonBeruecksichtigt: false },
+      payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
     };
 
     describe("geburtsdatumDesKindes", () => {

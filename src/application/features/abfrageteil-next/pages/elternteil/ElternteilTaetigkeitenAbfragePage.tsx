@@ -10,6 +10,7 @@ import { Button, InfoText } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
+import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
@@ -58,15 +59,33 @@ export function ElternteilTaetigkeitenAbfragePage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
+  const { berechneBetrachtungszeitraum } = useBemessungszeitraumrechner(
+    routeParams.elternteilIndex,
+  );
+  const betrachtungszeitraum = berechneBetrachtungszeitraum();
+
   return (
-    <Page heading="">
+    <Page heading="Finanzielle Situation">
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-56"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <h3>Treffen folgende Gründe auf Sie zu?</h3>
+          <h3>Bitte wählen Sie alles aus, was auf Sie zutrifft:</h3>
+
+          <div
+            className="my-10 rounded bg-grey-light p-20"
+            aria-live="polite"
+            aria-labelledby="bmz"
+          >
+            <ul className="list ml-40 list-disc">
+              <li className="text-28">
+                in den Kalenderjahren {betrachtungszeitraum.von.year} bis zum
+                Geburtsdatum {betrachtungszeitraum.von.toLocaleString()}
+              </li>
+            </ul>
+          </div>
 
           <InfoText
             question="Warum fragen wir das?"

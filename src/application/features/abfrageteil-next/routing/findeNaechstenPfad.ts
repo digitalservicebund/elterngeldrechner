@@ -86,9 +86,13 @@ function getNextSubpath(event: FormEvent): string {
       });
     case Route.ElternteilTaetigkeitenAbfrage: {
       const { payload } = event;
+
       if (payload.hatKeinEinkommen) {
-        return Route.ElternteilZweitePersonAngaben;
+        return event.params.elternteilIndex === 0
+          ? Route.ElternteilZweitePersonAngaben
+          : "/beispiele";
       }
+
       const getZielRoute = (payload: {
         istSelbststaendig: boolean;
         istNichtSelbststaendig: boolean;
@@ -159,7 +163,9 @@ function getNextSubpath(event: FormEvent): string {
         istSelbststaendigeTaetigkeitMoeglich,
       } = event.payload;
       if (!istWeitereTaetigkeitVorhanden) {
-        return Route.ElternteilZweitePersonAngaben;
+        return event.params.elternteilIndex === 0
+          ? Route.ElternteilZweitePersonAngaben
+          : "/beispiele";
       }
       const zielRoute = istSelbststaendigeTaetigkeitMoeglich
         ? Route.ElternteilWeitereTaetigkeitAngaben
@@ -560,7 +566,7 @@ if (import.meta.vitest) {
     });
 
     describe("ElternteilTaetigkeitenAbfrage", () => {
-      it("returns ElternteilZweitePersonAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true", () => {
+      it("returns ElternteilZweitePersonAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true and elternteilIndex 0", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
@@ -572,6 +578,18 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/abfrage-zweite-person",
         );
+      });
+
+      it("returns path for BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true and elternteilIndex 1", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 1 },
+          payload: {
+            hatKeinEinkommen: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
       });
 
       it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute and only istSelbststaendig true", () => {

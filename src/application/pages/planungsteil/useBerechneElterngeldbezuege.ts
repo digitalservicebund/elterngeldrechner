@@ -1,9 +1,14 @@
 import { useCallback, useRef } from "react";
+import { isAbfrageteilNextEnabled } from "@/application/feature-flags";
 import {
   type ElternteilType,
   finanzDatenOfUi,
   persoenlicheDatenOfUi,
 } from "@/application/features/abfrageteil/state";
+import { erstelleFinanzdatenAllerElternteile } from "@/application/features/abfrageteil-next/domain/erstelleFinanzdaten";
+import { erstellePersoenlicheDatenAllerElternteile } from "@/application/features/abfrageteil-next/domain/erstellePersoenlicheDaten";
+import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
+import { FormEvent } from "@/application/features/abfrageteil-next/routing";
 import type { RootState } from "@/application/redux";
 import { useAppStore } from "@/application/redux/hooks";
 import {
@@ -37,7 +42,15 @@ import {
 
 export function useBerechneElterngeldbezuege() {
   const store = useAppStore();
-  const parameter = useRef(createStaticCalculationParameter(store.getState()));
+  const eventContext = useEventContext();
+
+  const parameter = useRef(
+    isAbfrageteilNextEnabled()
+      ? createStaticCalculationParameterNext(
+          eventContext.filtereValideEventHistorie(),
+        )
+      : createStaticCalculationParameter(store.getState()),
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
@@ -198,6 +211,60 @@ function createStaticCalculationParameterForElternteil(
   };
 }
 
+function createStaticCalculationParameterNext(
+  events: FormEvent[],
+): StaticCalculationParameter {
+  const finanzdaten = erstelleFinanzdatenAllerElternteile(events);
+  const persoenlicheDaten = erstellePersoenlicheDatenAllerElternteile(events);
+
+  const sindBeideElternteile =
+    finanzdaten.anzahlElternteile === 2 &&
+    persoenlicheDaten.anzahlElternteile === 2;
+
+  if (sindBeideElternteile) {
+    return {
+      [Elternteil.Eins]: {
+        persoenlicheDaten: persoenlicheDaten[Elternteil.Eins],
+        finanzdaten: finanzdaten[Elternteil.Eins],
+      },
+      [Elternteil.Zwei]: {
+        persoenlicheDaten: persoenlicheDaten[Elternteil.Zwei],
+        finanzdaten: finanzdaten[Elternteil.Zwei],
+      },
+    };
+  }
+
+  return {
+    [Elternteil.Eins]: {
+      persoenlicheDaten: persoenlicheDaten[Elternteil.Eins],
+      finanzdaten: finanzdaten[Elternteil.Eins],
+    },
+    [Elternteil.Zwei]: erstelleDefaultElternteilZweiParameter(
+      persoenlicheDaten[Elternteil.Eins],
+    ),
+  };
+}
+
+function erstelleDefaultElternteilZweiParameter(
+  persoenlicheDatenDefault: PersoenlicheDaten,
+): StaticCalculationParameterForElternteil {
+  return {
+    persoenlicheDaten: {
+      ...persoenlicheDatenDefault,
+      etVorGeburt: ErwerbsArt.NEIN,
+    },
+    finanzdaten: {
+      bruttoEinkommen: new Einkommen(0),
+      steuerklasse: Steuerklasse.I,
+      kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+      rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+      splittingFaktor: 1.0,
+      mischEinkommenTaetigkeiten: [],
+      erwerbsZeitraumLebensMonatList: [],
+    },
+  };
+}
+
 type StaticCalculationParameter = Record<
   Elternteil,
   StaticCalculationParameterForElternteil
@@ -218,6 +285,17 @@ if (import.meta.vitest) {
     const { KeinElterngeld } = await import("@/monatsplaner");
 
     beforeEach(async () => {
+      vi.spyOn(
+        await import("@/application/features/abfrageteil-next/events/EventContext"),
+        "useEventContext",
+      ).mockReturnValue({
+        findeVorherigenPfad: () => "/",
+        filtereValideEventHistorie: () => [],
+        findeAlleGueltigenEvents: () => [],
+        findeLetztesGueltigesEvent: () => undefined,
+        dispatch: () => {},
+      });
+
       vi.spyOn(
         await import("@/application/features/abfrageteil/state"),
         "persoenlicheDatenOfUi",

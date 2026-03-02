@@ -1,5 +1,6 @@
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
 import { findeTaetigkeiten } from "./findeTaetigkeiten";
+import { sindBeideElternteile } from "./sindBeideElternteile";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
@@ -11,6 +12,39 @@ import {
   Steuerklasse,
 } from "@/elterngeldrechner";
 import type { MischEkTaetigkeit } from "@/elterngeldrechner/model/misch-ek-taetigkeit";
+import { Elternteil } from "@/monatsplaner/Elternteil";
+
+export function erstelleFinanzdatenAllerElternteile(
+  events: FormEvent[],
+): FinanzdatenAllerElternteile {
+  if (sindBeideElternteile(events)) {
+    return {
+      anzahlElternteile: 2,
+      [Elternteil.Eins]: erstelleFinanzDaten(events, 0),
+      [Elternteil.Zwei]: erstelleFinanzDaten(events, 1),
+    };
+  }
+
+  return {
+    anzahlElternteile: 1,
+    [Elternteil.Eins]: erstelleFinanzDaten(events, 0),
+  };
+}
+
+type FinanzdatenEinesElternteils = {
+  readonly anzahlElternteile: 1;
+  readonly [Elternteil.Eins]: Omit<FinanzDaten, "kinderFreiBetrag">;
+};
+
+type FinanzdatenBeiderElternteile = {
+  readonly anzahlElternteile: 2;
+  readonly [Elternteil.Eins]: Omit<FinanzDaten, "kinderFreiBetrag">;
+  readonly [Elternteil.Zwei]: Omit<FinanzDaten, "kinderFreiBetrag">;
+};
+
+export type FinanzdatenAllerElternteile =
+  | FinanzdatenEinesElternteils
+  | FinanzdatenBeiderElternteile;
 
 export function erstelleFinanzDaten(
   events: FormEvent[],
@@ -300,6 +334,76 @@ type TaetigkeitEvent = SelbststaendigEvent | NichtSelbststaendigEvent;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
+
+  describe("erstelleFinanzDatenBeiderElternteile", () => {
+    it("returns anzahlElternteile 1 when zweite Person is not considered", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: { hatKeinEinkommen: true },
+        },
+        {
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: { wirdZweitePersonBeruecksichtigt: false },
+        },
+      ];
+
+      const finanzdaten = erstelleFinanzdatenAllerElternteile(events);
+
+      expect(finanzdaten).toEqual({
+        anzahlElternteile: 1,
+        [Elternteil.Eins]: {
+          bruttoEinkommen: new Einkommen(0),
+          istKirchensteuerpflichtig: false,
+          steuerklasse: Steuerklasse.I,
+          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+          splittingFaktor: 1,
+          mischEinkommenTaetigkeiten: [],
+          erwerbsZeitraumLebensMonatList: [],
+        },
+      });
+    });
+
+    it("returns anzahlElternteile 2 with both FinanzDaten when zweite Person is considered", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: { hatKeinEinkommen: true },
+        },
+        {
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 1 },
+          payload: { hatKeinEinkommen: true },
+        },
+      ];
+
+      const finanzdaten = erstelleFinanzdatenAllerElternteile(events);
+
+      const leereFinanzDaten = {
+        bruttoEinkommen: new Einkommen(0),
+        istKirchensteuerpflichtig: false,
+        steuerklasse: Steuerklasse.I,
+        kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
+        rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
+        splittingFaktor: 1,
+        mischEinkommenTaetigkeiten: [],
+        erwerbsZeitraumLebensMonatList: [],
+      };
+
+      expect(finanzdaten).toEqual({
+        anzahlElternteile: 2,
+        [Elternteil.Eins]: leereFinanzDaten,
+        [Elternteil.Zwei]: leereFinanzDaten,
+      });
+    });
+  });
 
   describe("erstelleFinanzDaten", () => {
     describe("Kein Einkommen", () => {

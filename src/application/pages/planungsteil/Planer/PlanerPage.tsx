@@ -8,10 +8,7 @@ import {
   trackMetricsForPlanungDrucken,
 } from "./tracking";
 import { Button } from "@/application/components";
-import {
-  YesNo,
-  composeAusgangslageFuerPlaner,
-} from "@/application/features/abfrageteil/state";
+import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   Anleitung,
   Erklaerung,
@@ -24,6 +21,7 @@ import {
   useUserFeedback,
 } from "@/application/features/user-feedback";
 import { Page } from "@/application/pages/Page";
+import { useAusgangslage } from "@/application/pages/planungsteil/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { useAppStore } from "@/application/redux/hooks";
@@ -67,13 +65,12 @@ export function PlanerPage() {
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan: initialPlan, beispiel } = navigationState;
 
+  const ausgangslage = useAusgangslage();
+
   const [initialPlanerInformation, setInitialPlanerInformation] = useState(
     initialPlan !== undefined
       ? { plan: initialPlan, beispiel: beispiel }
-      : {
-          ausgangslage: composeAusgangslageFuerPlaner(store.getState()),
-          beispiel: beispiel,
-        },
+      : { ausgangslage, beispiel: beispiel },
   );
 
   const [plan, setPlan] = useState(() => initialPlan);
@@ -280,13 +277,11 @@ if (import.meta.vitest) {
   const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
   describe("Planer Page", async () => {
-    const { Elternteil, Variante, berechneGesamtsumme } = await import(
-      "@/monatsplaner"
-    );
+    const { Elternteil, Variante, berechneGesamtsumme } =
+      await import("@/monatsplaner");
 
-    const { useNavigateStateful } = await import(
-      "@/application/pages/planungsteil/useNavigateStateful"
-    );
+    const { useNavigateStateful } =
+      await import("@/application/pages/planungsteil/useNavigateStateful");
 
     const { render, screen } = await import("@/application/test-utils");
     const { INITIAL_STATE } = await import("@/application/test-utils");
@@ -298,7 +293,18 @@ if (import.meta.vitest) {
 
     const navigateSpy = vi.fn<NavigateStateful>();
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      vi.spyOn(
+        await import("@/application/features/abfrageteil-next/events/EventContext"),
+        "useEventContext",
+      ).mockReturnValue({
+        filtereValideEventHistorie: () => [],
+        findeAlleGueltigenEvents: () => [],
+        findeLetztesGueltigesEvent: () => undefined,
+        findeVorherigenPfad: () => "/",
+        dispatch: () => {},
+      });
+
       vi.mock(
         import("@/application/pages/planungsteil/useNavigateStateful"),
         () => ({ useNavigateStateful: vi.fn() }),

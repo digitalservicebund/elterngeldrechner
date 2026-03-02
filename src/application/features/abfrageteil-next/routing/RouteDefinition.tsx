@@ -26,7 +26,11 @@ import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/fea
 import { ElternteilTaetigkeitAngabenSozialversicherungenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSozialversicherungenPage";
 import { ElternteilWeitereTaetigkeitAbfragePage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAbfragePage";
 import { ElternteilWeitereTaetigkeitAngabenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAngabenPage";
-import { BeispielePage } from "@/application/pages";
+import {
+  BeispielePage,
+  DatenuebernahmeAntragPage,
+  PlanerPage,
+} from "@/application/pages";
 
 function EventProviderLayout() {
   const location = useLocation();
@@ -149,6 +153,14 @@ const RouteDefinition = [
       {
         element: <BeispielePage />,
         path: "/beispiele",
+      },
+      {
+        element: <PlanerPage />,
+        path: "/rechner-planer",
+      },
+      {
+        element: <DatenuebernahmeAntragPage />,
+        path: "/datenuebernahme-antrag",
       },
       {
         element: (

@@ -4,6 +4,7 @@ import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeMinijob } from "./findeMinijob";
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
 import { findeTaetigkeiten } from "./findeTaetigkeiten";
+import { sindBeideElternteile } from "./sindBeideElternteile";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
@@ -12,6 +13,39 @@ import {
   type PersoenlicheDaten,
   Steuerklasse,
 } from "@/elterngeldrechner";
+import { Elternteil } from "@/monatsplaner/Elternteil";
+
+export function erstellePersoenlicheDatenAllerElternteile(
+  events: FormEvent[],
+): PersoenlicheDatenAllerElternteile {
+  if (sindBeideElternteile(events)) {
+    return {
+      anzahlElternteile: 2,
+      [Elternteil.Eins]: erstellePersoenlicheDaten(events, 0),
+      [Elternteil.Zwei]: erstellePersoenlicheDaten(events, 1),
+    };
+  }
+
+  return {
+    anzahlElternteile: 1,
+    [Elternteil.Eins]: erstellePersoenlicheDaten(events, 0),
+  };
+}
+
+type PersoenlicheDatenEinesElternteils = {
+  readonly anzahlElternteile: 1;
+  readonly [Elternteil.Eins]: PersoenlicheDaten;
+};
+
+type PersoenlicheDatenBeiderElternteile = {
+  readonly anzahlElternteile: 2;
+  readonly [Elternteil.Eins]: PersoenlicheDaten;
+  readonly [Elternteil.Zwei]: PersoenlicheDaten;
+};
+
+export type PersoenlicheDatenAllerElternteile =
+  | PersoenlicheDatenEinesElternteils
+  | PersoenlicheDatenBeiderElternteile;
 
 export function erstellePersoenlicheDaten(
   events: FormEvent[],
@@ -84,6 +118,69 @@ function findeErsteSozialversicherungInformation(
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
+
+  describe("erstellePersoenlicheDatenBeiderElternteile", async () => {
+    const { Temporal } = await import("@js-temporal/polyfill");
+
+    const kindEvent: FormEvent = {
+      route: Route.GeborenesKindAngaben,
+      payload: {
+        geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+        errechneterEntbindungstermin: Temporal.PlainDate.from("2025-06-10"),
+        anzahl: 1,
+      },
+    };
+
+    it("returns anzahlElternteile 1 when zweite Person is not considered", () => {
+      const events: FormEvent[] = [
+        kindEvent,
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: { hatKeinEinkommen: true },
+        },
+        {
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: { wirdZweitePersonBeruecksichtigt: false },
+        },
+      ];
+
+      const result = erstellePersoenlicheDatenAllerElternteile(events);
+
+      expect(result).toEqual({
+        anzahlElternteile: 1,
+        [Elternteil.Eins]: erstellePersoenlicheDaten(events, 0),
+      });
+    });
+
+    it("returns anzahlElternteile 2 with both PersoenlicheDaten when zweite Person is considered", () => {
+      const events: FormEvent[] = [
+        kindEvent,
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: { hatKeinEinkommen: true },
+        },
+        {
+          route: Route.ElternteilZweitePersonAngaben,
+          payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 1 },
+          payload: { hatKeinEinkommen: true },
+        },
+      ];
+
+      const result = erstellePersoenlicheDatenAllerElternteile(events);
+
+      expect(result).toEqual({
+        anzahlElternteile: 2,
+        [Elternteil.Eins]: erstellePersoenlicheDaten(events, 0),
+        [Elternteil.Zwei]: erstellePersoenlicheDaten(events, 1),
+      });
+    });
+  });
 
   describe("erstellePersoenlicheDaten", async () => {
     const { Temporal } = await import("@js-temporal/polyfill");

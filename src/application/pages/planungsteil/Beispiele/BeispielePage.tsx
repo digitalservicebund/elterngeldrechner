@@ -3,7 +3,6 @@ import EditIcon from "@digitalservicebund/icons/EditOutlined";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
-import { composeAusgangslageFuerPlaner } from "@/application/features/abfrageteil/state";
 import type { Beispiel } from "@/application/features/beispiele";
 import {
   AuswahloptionenLegende as BeispielAuswahloptionenLegende,
@@ -18,9 +17,9 @@ import {
   trackMetricsForErklaerungenWurdenGeoeffnet,
   trackMetricsForErklaerungenWurdenGeschlossen,
 } from "@/application/pages/planungsteil/Planer/tracking";
+import { useAusgangslage } from "@/application/pages/planungsteil/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
-import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import {
   pushTrackingEvent,
@@ -38,7 +37,6 @@ import { sindLebensmonateGeplant } from "@/monatsplaner";
 export function BeispielePage() {
   // TODO: Ensure consistent use of the term planungshilfen rather than beispiele
 
-  const store = useAppStore();
   const navigate = useNavigate();
 
   const { navigationState, navigateStateful } = useNavigateStateful();
@@ -46,7 +44,7 @@ export function BeispielePage() {
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const ausgangslage = composeAusgangslageFuerPlaner(store.getState());
+  const ausgangslage = useAusgangslage();
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
   const navigiereZuEinkommen = async () => {
@@ -288,7 +286,18 @@ if (import.meta.vitest) {
 
     const navigateSpy = vi.fn<NavigateStateful>();
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      vi.spyOn(
+        await import("@/application/features/abfrageteil-next/events/EventContext"),
+        "useEventContext",
+      ).mockReturnValue({
+        filtereValideEventHistorie: () => [],
+        findeAlleGueltigenEvents: () => [],
+        findeLetztesGueltigesEvent: () => undefined,
+        findeVorherigenPfad: () => "/",
+        dispatch: () => {},
+      });
+
       vi.mock(import("react-router"), async (importOriginal) => {
         const actualImplementation = await importOriginal();
 

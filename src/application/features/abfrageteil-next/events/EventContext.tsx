@@ -2,9 +2,11 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
 } from "react";
+import { persistEventstream, restoreEventstream } from "./persistence";
 import {
   filtereValideEventHistorie as filtereValideEventHistorieInEventStream,
   findeAlleGueltigenEvents as findeAlleGueltigenEventsInEventStream,
@@ -13,7 +15,6 @@ import {
 } from "./projections";
 import {
   type FormEvent,
-  FormEventSchema,
   type ParamsMap,
   type PayloadMap,
   Route,
@@ -42,7 +43,7 @@ type EventContextType = {
 
 const EventContext = createContext<EventContextType | undefined>(undefined);
 
-const isDev = import.meta.env.DEV;
+const isDevelopmentEnviornment = import.meta.env.DEV;
 
 export function EventProvider({
   children,
@@ -50,19 +51,14 @@ export function EventProvider({
   readonly children: React.ReactNode;
 }) {
   const [eventStream, dispatchAction] = useReducer(
-    (state: FormEvent[], action: FormEvent) => {
-      const newState = [...state, action];
-
-      if (isDev) {
-        const encoded = newState.map((event) => FormEventSchema.encode(event));
-        sessionStorage.setItem("EGR_SESSION_STORAGE", JSON.stringify(encoded));
-      }
-
-      return newState;
-    },
-    [],
-    isDev ? getInitialState : () => [],
+    (state: FormEvent[], action: FormEvent) => [...state, action],
+    undefined,
+    () => (isDevelopmentEnviornment ? restoreEventstream() : []),
   );
+
+  useEffect(() => {
+    if (isDevelopmentEnviornment) persistEventstream(eventStream);
+  }, [eventStream]);
 
   const dispatch = useCallback((event: FormEvent) => {
     dispatchAction(event);
@@ -142,22 +138,3 @@ export const useEventContext = () => {
 };
 
 export const useOptionalEventContext = () => useContext(EventContext);
-
-const getInitialState = (): FormEvent[] => {
-  const saved = sessionStorage.getItem("EGR_SESSION_STORAGE");
-  if (!saved) return [];
-
-  try {
-    const rawData: unknown = JSON.parse(saved);
-
-    if (!Array.isArray(rawData)) return [];
-
-    return rawData.flatMap((item: unknown) => {
-      const result = FormEventSchema.safeParse(item);
-
-      return result.success ? [result.data] : [];
-    });
-  } catch {
-    return [];
-  }
-};

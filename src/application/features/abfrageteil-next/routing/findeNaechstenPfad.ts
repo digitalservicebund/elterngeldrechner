@@ -404,7 +404,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/ausklammerung-gruende",
+          "/abfrageteil/elternteil/0/finanzielles/ausklammerung/gruende",
         );
       });
 
@@ -420,7 +420,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/ausklammerung-gruende",
+          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/gruende",
         );
       });
     });
@@ -439,7 +439,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/ausklammerung-zeiten",
+          "/abfrageteil/elternteil/0/finanzielles/ausklammerung/zeiten",
         );
       });
 
@@ -456,7 +456,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
         );
       });
 
@@ -470,7 +470,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
         );
       });
 
@@ -487,7 +487,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/ausklammerung-zeiten",
+          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/zeiten",
         );
       });
 
@@ -504,7 +504,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+          "/abfrageteil/elternteil/1/finanzielles/taetigkeit/abfrage",
         );
       });
 
@@ -518,7 +518,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+          "/abfrageteil/elternteil/1/finanzielles/taetigkeit/abfrage",
         );
       });
     });
@@ -541,7 +541,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeiten-abfrage",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
         );
       });
 
@@ -562,7 +562,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/taetigkeiten-abfrage",
+          "/abfrageteil/elternteil/1/finanzielles/taetigkeit/abfrage",
         );
       });
     });
@@ -608,7 +608,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/selbststaendig",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/selbststaendig",
         );
       });
 
@@ -626,7 +626,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/mischeinkunft",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/mischeinkunft",
         );
       });
 
@@ -644,7 +644,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig",
         );
       });
     });
@@ -664,7 +664,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit",
         );
       });
     });
@@ -684,7 +684,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/1/nicht-selbststaendig",
         );
       });
     });
@@ -700,7 +700,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/minijob",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig/minijob",
         );
       });
 
@@ -714,7 +714,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/sozialversicherungen",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig/sozialversicherungen",
         );
       });
     });
@@ -730,7 +730,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig/einkommen",
         );
       });
 
@@ -744,7 +744,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen/detailliert",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig/einkommen/detailliert",
         );
       });
     });
@@ -765,7 +765,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig/einkommen",
         );
       });
 
@@ -784,7 +784,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/nicht-selbststaendig/einkommen/detailliert",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/nicht-selbststaendig/einkommen/detailliert",
         );
       });
     });
@@ -800,7 +800,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit",
         );
       });
     });
@@ -816,7 +816,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit",
         );
       });
     });
@@ -850,7 +850,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/0/weitere-taetigkeit-angaben",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit-angaben",
         );
       });
 
@@ -866,7 +866,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/1/nicht-selbststaendig",
         );
       });
 
@@ -910,7 +910,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/1/nicht-selbststaendig",
         );
       });
 
@@ -924,7 +924,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/taetigkeit/1/selbststaendig",
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/1/selbststaendig",
         );
       });
     });
@@ -940,7 +940,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/ausklammerung-gruende",
+          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/gruende",
         );
       });
 
@@ -954,7 +954,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/ausklammerung-gruende",
+          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/gruende",
         );
       });
 

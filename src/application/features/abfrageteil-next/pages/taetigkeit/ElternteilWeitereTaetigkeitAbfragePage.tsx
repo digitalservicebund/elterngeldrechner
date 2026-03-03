@@ -49,6 +49,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   const WeitereTaetigkeitAbfrageFormValuesSchema =
     WeitereTaetigkeitAbfrageSchema.omit({
       istSelbststaendigeTaetigkeitMoeglich: true,
+      istPersonAlleinerziehend: true,
     });
   type WeitereTaetigkeitAbfrageFormValues = z.infer<
     typeof WeitereTaetigkeitAbfrageFormValuesSchema

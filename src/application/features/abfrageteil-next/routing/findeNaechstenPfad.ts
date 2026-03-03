@@ -7,9 +7,7 @@ import { Steuerklasse } from "@/elterngeldrechner";
 
 export function findeNaechstenPfad(event: FormEvent): string {
   const subpath = getNextSubpath(event);
-  return subpath === "/beispiele"
-    ? "/beispiele"
-    : generateAbfrageteilPath(subpath);
+  return subpath === "DONE" ? "/beispiele" : generateAbfrageteilPath(subpath);
 }
 
 function getNextSubpath(event: FormEvent): string {
@@ -90,7 +88,7 @@ function getNextSubpath(event: FormEvent): string {
       if (payload.hatKeinEinkommen) {
         return event.params.elternteilIndex === 0
           ? Route.ElternteilZweitePersonAngaben
-          : "/beispiele";
+          : "DONE";
       }
 
       const getZielRoute = (payload: {
@@ -161,11 +159,15 @@ function getNextSubpath(event: FormEvent): string {
       const {
         istWeitereTaetigkeitVorhanden,
         istSelbststaendigeTaetigkeitMoeglich,
+        istPersonAlleinerziehend,
       } = event.payload;
+      if (istPersonAlleinerziehend) {
+        return "DONE";
+      }
       if (!istWeitereTaetigkeitVorhanden) {
         return event.params.elternteilIndex === 0
           ? Route.ElternteilZweitePersonAngaben
-          : "/beispiele";
+          : "DONE";
       }
       const zielRoute = istSelbststaendigeTaetigkeitMoeglich
         ? Route.ElternteilWeitereTaetigkeitAngaben
@@ -191,7 +193,7 @@ function getNextSubpath(event: FormEvent): string {
     case Route.ElternteilZweitePersonAngaben: {
       const { wirdZweitePersonBeruecksichtigt } = event.payload;
       if (wirdZweitePersonBeruecksichtigt === false) {
-        return "/beispiele";
+        return "DONE";
       }
       return generateParametrizedPath(
         Route.ElternteilAusklammerungGruendeAngaben,
@@ -827,6 +829,7 @@ if (import.meta.vitest) {
           payload: {
             istWeitereTaetigkeitVorhanden: false,
             istSelbststaendigeTaetigkeitMoeglich: true,
+            istPersonAlleinerziehend: false,
           },
         });
 
@@ -842,6 +845,7 @@ if (import.meta.vitest) {
           payload: {
             istWeitereTaetigkeitVorhanden: true,
             istSelbststaendigeTaetigkeitMoeglich: true,
+            istPersonAlleinerziehend: false,
           },
         });
 
@@ -857,12 +861,41 @@ if (import.meta.vitest) {
           payload: {
             istWeitereTaetigkeitVorhanden: true,
             istSelbststaendigeTaetigkeitMoeglich: false,
+            istPersonAlleinerziehend: false,
           },
         });
 
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/taetigkeit/1/nicht-selbststaendig",
         );
+      });
+
+      it("returns /beispiele given ElternteilWeitereTaetigkeitAbfrage as currentRoute, istWeitereTaetigkeitVorhanden false and istPersonAlleinerziehend true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+            istSelbststaendigeTaetigkeitMoeglich: false,
+            istPersonAlleinerziehend: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
+      });
+
+      it("returns /beispiele given ElternteilWeitereTaetigkeitAbfrage as currentRoute, elternteilIndex 1 and istWeitereTaetigkeitVorhanden false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: false,
+            istSelbststaendigeTaetigkeitMoeglich: false,
+            istPersonAlleinerziehend: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
       });
     });
 

@@ -62,6 +62,7 @@ export type TaetigkeitUnleichesEinkommenAngaben = z.infer<
 export const WeitereTaetigkeitAbfrageSchema = z.object({
   istWeitereTaetigkeitVorhanden: BooleanRadiobuttonCodec,
   istSelbststaendigeTaetigkeitMoeglich: z.boolean(),
+  istPersonAlleinerziehend: z.boolean(),
 });
 
 export type WeitereTaetigkeitAbfrage = z.infer<

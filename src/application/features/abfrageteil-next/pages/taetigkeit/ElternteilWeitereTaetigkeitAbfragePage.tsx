@@ -6,6 +6,7 @@ import { z } from "zod";
 import { WeitereTaetigkeitAbfrageSchema } from "./TaetigkeitSchema";
 import { Button, CustomRadioGroup } from "@/application/components";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeAlleinerziehend } from "@/application/features/abfrageteil-next/domain/findeAlleinerziehend";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
@@ -43,6 +44,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   const istSelbststaendigeTaetigkeitMoeglich =
     taetigkeiten.hatKeinEinkommen === false &&
     taetigkeiten.istSelbststaendig === true;
+  const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
 
   const WeitereTaetigkeitAbfrageFormValuesSchema =
     WeitereTaetigkeitAbfrageSchema.omit({
@@ -65,7 +67,11 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   const onSubmit = (values: WeitereTaetigkeitAbfrageFormValues) => {
     const event: FormEvent = {
       route: currentRoute,
-      payload: { ...values, istSelbststaendigeTaetigkeitMoeglich },
+      payload: {
+        ...values,
+        istSelbststaendigeTaetigkeitMoeglich,
+        istPersonAlleinerziehend,
+      },
       params: routeParams,
     };
 

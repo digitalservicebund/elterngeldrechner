@@ -1,3 +1,4 @@
+export { FormEventSchema } from "./FormEvent";
 export type { FormEvent, ParamsMap, PayloadMap } from "./FormEvent";
 export type { ExtractParams, RouteParams } from "./generatePath";
 

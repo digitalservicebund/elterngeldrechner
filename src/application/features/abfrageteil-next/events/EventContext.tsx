@@ -1,4 +1,3 @@
-import { Temporal } from "@js-temporal/polyfill";
 import React, {
   createContext,
   useCallback,
@@ -14,6 +13,7 @@ import {
 } from "./projections";
 import {
   type FormEvent,
+  FormEventSchema,
   type ParamsMap,
   type PayloadMap,
   Route,
@@ -54,7 +54,8 @@ export function EventProvider({
       const newState = [...state, action];
 
       if (isDev) {
-        sessionStorage.setItem("EGR_SESSION_STORAGE", JSON.stringify(newState));
+        const encoded = newState.map((event) => FormEventSchema.encode(event));
+        sessionStorage.setItem("EGR_SESSION_STORAGE", JSON.stringify(encoded));
       }
 
       return newState;
@@ -142,39 +143,20 @@ export const useEventContext = () => {
 
 export const useOptionalEventContext = () => useContext(EventContext);
 
-// TODO: Initial state must be revoked if the path changes
-//
-// Unexpected Application Error!
-// [ { "expected": "boolean", "code": "invalid_type", "path": [ "istPersonAlleinerziehend" ], "message": "Invalid input: expected boolean, received undefined" } ]
-// On http://localhost:5173/#/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit
 const getInitialState = (): FormEvent[] => {
   const saved = sessionStorage.getItem("EGR_SESSION_STORAGE");
   if (!saved) return [];
 
   try {
-    const rawData: unknown = JSON.parse(saved, (_key, value): unknown => {
-      if (typeof value === "string") {
-        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-        const yearMonthRegex = /^\d{4}-\d{2}$/;
+    const rawData: unknown = JSON.parse(saved);
 
-        if (dateRegex.test(value)) {
-          return Temporal.PlainDate.from(value);
-        }
-        if (yearMonthRegex.test(value)) {
-          return Temporal.PlainYearMonth.from(value);
-        }
-      }
-      return value;
+    if (!Array.isArray(rawData)) return [];
+
+    return rawData.flatMap((item: unknown) => {
+      const result = FormEventSchema.safeParse(item);
+
+      return result.success ? [result.data] : [];
     });
-
-    // TODO: Create FormEventSchema to validate with zod here
-    // const result = z.array(FormEventSchema).safeParse(rawData);
-
-    // if (result.success) {
-    //   return result.data;
-    // }
-
-    return rawData as FormEvent[];
   } catch {
     return [];
   }

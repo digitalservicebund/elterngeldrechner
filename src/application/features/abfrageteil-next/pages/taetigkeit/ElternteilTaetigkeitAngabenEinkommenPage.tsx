@@ -10,8 +10,9 @@ import { Button } from "@/application/components";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
+import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-// import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
+import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
@@ -64,10 +65,12 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
-  // const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
-  //   routeParams.elternteilIndex,
-  // );
-  // const bemessungszeitraum = berechneBemessungszeitraum("Nicht-Selbstaendig");
+  const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
+    routeParams.elternteilIndex,
+  );
+  const bemessungszeitraum = berechneBemessungszeitraum("Nicht-Selbstaendig");
+  const formatierterBemessungszeitraum =
+    formatiereBemessungszeitraum(bemessungszeitraum);
 
   const eventStream = filtereValideEventHistorie();
   const ausklammerungen = findeAusklammerungen(
@@ -85,7 +88,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
         <div className="mt-20">
           <div className="rounded bg-grey-light py-10">
             <span className="text-18 px-20 font-bold">
-              Bemessungszeitraum: {}
+              Bemessungszeitraum: {formatierterBemessungszeitraum}
             </span>
           </div>
           {ausklammerungen.length > 0 ? (
@@ -109,8 +112,8 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie viel haben Sie von Juni 2024 - Mai 2025 im Monat brutto
-            verdient?
+            Wie viel haben Sie von {formatierterBemessungszeitraum} im Monat
+            brutto verdient?
           </h5>
 
           {/* <InfoZuAlleinerziehenden /> */}

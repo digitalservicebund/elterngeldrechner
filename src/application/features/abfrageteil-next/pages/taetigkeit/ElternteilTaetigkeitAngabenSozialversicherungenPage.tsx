@@ -13,6 +13,7 @@ import {
 } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
+import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -71,7 +72,9 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );
-  const bemessungszeitraum = berechneBemessungszeitraum("Selbstaendig");
+  const bemessungszeitraum = berechneBemessungszeitraum("Nicht-Selbstaendig");
+  const formatierterBemessungszeitraum =
+    formatiereBemessungszeitraum(bemessungszeitraum);
 
   const eventStream = filtereValideEventHistorie();
   const ausklammerungen = findeAusklammerungen(
@@ -97,7 +100,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         <div className="mt-20">
           <div className="rounded bg-grey-light py-10">
             <span className="text-18 px-20 font-bold">
-              Bemessungszeitraum: Kalenderjahr {bemessungszeitraum[0]?.von.year}
+              Bemessungszeitraum: {formatierterBemessungszeitraum}
             </span>
           </div>
           {ausklammerungen.length > 0 ? (
@@ -207,7 +210,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie haben Sie von Juni 2024 - Mai 2025 im Monat brutto verdient?
+            Wie haben Sie von {formatierterBemessungszeitraum} im Monat brutto
+            verdient?
           </h5>
 
           <CustomRadioGroup

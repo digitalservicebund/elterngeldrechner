@@ -82,7 +82,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             <ul className="list ml-40 list-disc">
               <li className="text-28">
                 in den Kalenderjahren {betrachtungszeitraum.von.year} bis zum
-                Geburtsdatum {betrachtungszeitraum.von.toLocaleString()}
+                Geburtsdatum {betrachtungszeitraum.bis.toLocaleString()}
               </li>
             </ul>
           </div>

@@ -60,7 +60,7 @@ export function berechneBemessungszeitraum<
     }
     case "Nicht-Selbstaendig": {
       const monate = sammleBemessungsmonate(
-        geburtsdatum.toPlainYearMonth(),
+        geburtsdatum.toPlainYearMonth().subtract({ months: 1 }),
         ausklammerungen,
       );
 
@@ -131,6 +131,17 @@ if (import.meta.vitest) {
   describe("berechneBemessungszeitraum", () => {
     describe("nicht-selbstaendig", () => {
       const testCases = [
+        {
+          name: "should return the 12 months before birth month when there are no Ausklammerungen",
+          geburtsdatum: Temporal.PlainDate.from("2025-11-13"),
+          ausklammerungen: [],
+          expected: [
+            {
+              von: Temporal.PlainYearMonth.from({ year: 2024, month: 11 }),
+              bis: Temporal.PlainYearMonth.from({ year: 2025, month: 10 }),
+            },
+          ],
+        },
         {
           name: "should exclude Mutterschutz period from the 12 months",
           geburtsdatum: Temporal.PlainDate.from("2025-11-13"),

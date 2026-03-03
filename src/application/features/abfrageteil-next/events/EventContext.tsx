@@ -140,6 +140,13 @@ export const useEventContext = () => {
   return context;
 };
 
+export const useOptionalEventContext = () => useContext(EventContext);
+
+// TODO: Initial state must be revoked if the path changes
+//
+// Unexpected Application Error!
+// [ { "expected": "boolean", "code": "invalid_type", "path": [ "istPersonAlleinerziehend" ], "message": "Invalid input: expected boolean, received undefined" } ]
+// On http://localhost:5173/#/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit
 const getInitialState = (): FormEvent[] => {
   const saved = sessionStorage.getItem("EGR_SESSION_STORAGE");
   if (!saved) return [];

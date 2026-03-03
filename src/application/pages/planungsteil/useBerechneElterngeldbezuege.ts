@@ -7,7 +7,7 @@ import {
 } from "@/application/features/abfrageteil/state";
 import { erstelleFinanzdatenAllerElternteile } from "@/application/features/abfrageteil-next/domain/erstelleFinanzdaten";
 import { erstellePersoenlicheDatenAllerElternteile } from "@/application/features/abfrageteil-next/domain/erstellePersoenlicheDaten";
-import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
+import { useOptionalEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { FormEvent } from "@/application/features/abfrageteil-next/routing";
 import type { RootState } from "@/application/redux";
 import { useAppStore } from "@/application/redux/hooks";
@@ -42,10 +42,10 @@ import {
 
 export function useBerechneElterngeldbezuege() {
   const store = useAppStore();
-  const eventContext = useEventContext();
+  const eventContext = useOptionalEventContext();
 
   const parameter = useRef(
-    isAbfrageteilNextEnabled()
+    isAbfrageteilNextEnabled() && eventContext
       ? createStaticCalculationParameterNext(
           eventContext.filtereValideEventHistorie(),
         )
@@ -287,7 +287,7 @@ if (import.meta.vitest) {
     beforeEach(async () => {
       vi.spyOn(
         await import("@/application/features/abfrageteil-next/events/EventContext"),
-        "useEventContext",
+        "useOptionalEventContext",
       ).mockReturnValue({
         findeVorherigenPfad: () => "/",
         filtereValideEventHistorie: () => [],

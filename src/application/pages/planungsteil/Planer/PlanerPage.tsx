@@ -296,7 +296,7 @@ if (import.meta.vitest) {
     beforeEach(async () => {
       vi.spyOn(
         await import("@/application/features/abfrageteil-next/events/EventContext"),
-        "useEventContext",
+        "useOptionalEventContext",
       ).mockReturnValue({
         filtereValideEventHistorie: () => [],
         findeAlleGueltigenEvents: () => [],

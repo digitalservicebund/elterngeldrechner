@@ -3,8 +3,8 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
-  TaetigkeitGleichesEinkommenAngaben,
-  TaetigkeitGleichesEinkommenAngabenSchema,
+  TaetigkeitUnleichesEinkommenAngaben,
+  TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button } from "@/application/components";
 // import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
@@ -41,16 +41,16 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
 
   // const { register, handleSubmit, formState } = useForm({
   const { handleSubmit } = useForm({
-    resolver: zodResolver(TaetigkeitGleichesEinkommenAngabenSchema),
+    resolver: zodResolver(TaetigkeitUnleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
-      TaetigkeitGleichesEinkommenAngabenSchema,
+      TaetigkeitUnleichesEinkommenAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
 
   // const { errors: formErrors } = formState;
 
-  const onSubmit = (values: TaetigkeitGleichesEinkommenAngaben) => {
+  const onSubmit = (values: TaetigkeitUnleichesEinkommenAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,

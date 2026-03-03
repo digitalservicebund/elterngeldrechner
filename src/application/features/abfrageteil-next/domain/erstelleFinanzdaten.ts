@@ -122,7 +122,9 @@ function findeMonatsbrutto(
   });
 
   if (gleichEvent) {
-    return gleichEvent.payload.monatsbrutto;
+    return new Array<number>(12).fill(
+      gleichEvent.payload.durchschnittlichesMonatsbrutto,
+    );
   }
 
   const detailEvent = [...events]
@@ -517,7 +519,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-            payload: { monatsbrutto: new Array<number>(12).fill(556) },
+            payload: { durchschnittlichesMonatsbrutto: 556 },
           },
         ];
 
@@ -612,7 +614,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-            payload: { monatsbrutto: new Array<number>(12).fill(3000) },
+            payload: { durchschnittlichesMonatsbrutto: 3000 },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -622,7 +624,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-            payload: { monatsbrutto: new Array<number>(12).fill(400) },
+            payload: { durchschnittlichesMonatsbrutto: 400 },
           },
         ];
 
@@ -706,7 +708,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-            payload: { monatsbrutto: new Array<number>(12).fill(400) },
+            payload: { durchschnittlichesMonatsbrutto: 400 },
           },
         ];
 
@@ -782,7 +784,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
-            payload: { monatsbrutto: new Array<number>(12).fill(3000) },
+            payload: { durchschnittlichesMonatsbrutto: 3000 },
           },
         ];
 

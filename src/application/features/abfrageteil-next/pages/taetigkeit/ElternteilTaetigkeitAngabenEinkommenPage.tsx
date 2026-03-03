@@ -119,7 +119,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
           {/* <InfoZuAlleinerziehenden /> */}
 
           <NumberInput
-            {...register("monatsbrutto", {
+            {...register("durchschnittlichesMonatsbrutto", {
               valueAsNumber: true,
               max: {
                 value: 15000,
@@ -130,7 +130,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
               required: "Bitte geben Sie ein Einkommen an",
             })}
             label="Monatliches Brutto-Einkommen"
-            errors={formErrors.monatsbrutto?.message}
+            errors={formErrors.durchschnittlichesMonatsbrutto?.message}
           />
         </div>
 

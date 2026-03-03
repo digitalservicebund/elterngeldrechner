@@ -795,7 +795,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenEinkommen,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: {
-            monatsbrutto: [],
+            durchschnittlichesMonatsbrutto: 1000,
           },
         });
 

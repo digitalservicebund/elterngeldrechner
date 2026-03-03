@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration, useLocation } from "react-router";
 import { Sidebar } from "./Sidebar";
@@ -29,7 +30,11 @@ export function Page({ children, heading }: Props) {
     <div className="page-grid-container print:block">
       <ScrollRestoration />
 
-      <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
+      <div
+        className={classNames("page-grid-sidebar relative print:hidden", {
+          "min-[1170px]:mr-56": isPastStartseite,
+        })}
+      >
         {isPastStartseite ? <Sidebar /> : null}
       </div>
 

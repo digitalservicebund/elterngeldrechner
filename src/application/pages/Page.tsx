@@ -1,6 +1,8 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
 import { ScrollRestoration } from "react-router";
 import { Sidebar } from "./Sidebar";
+import { isAbfrageteilNextEnabled } from "@/application/feature-flags";
+import { Sidebar as SidebarNext } from "@/application/features/abfrageteil-next/components/Sidebar";
 import { FormStep } from "@/application/routing/formSteps";
 
 type Props = {
@@ -21,7 +23,11 @@ export function Page({ step, children }: Props) {
       <ScrollRestoration />
 
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
-        <Sidebar currentStep={step} />
+        {isAbfrageteilNextEnabled() ? (
+          <SidebarNext />
+        ) : (
+          <Sidebar currentStep={step} />
+        )}
       </div>
 
       <section

@@ -12,19 +12,20 @@ export enum Route {
   GeschwisterkindAngaben = "/geschwisterkind/:geschwisterIndex",
 
   ElternteilAllgemeineAngaben = "/elternteil/:elternteilIndex",
-  ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/ausklammerung-gruende",
-  ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung-zeiten",
-  ElternteilTaetigkeitenAbfrage = "/elternteil/:elternteilIndex/taetigkeiten-abfrage",
 
-  ElternteilTaetigkeitAngabenSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/selbststaendig",
-  ElternteilTaetigkeitAngabenMischeinkunft = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/mischeinkunft",
-  ElternteilTaetigkeitAngabenNichtSelbststaendig = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig",
-  ElternteilTaetigkeitAngabenMinijob = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/minijob",
-  ElternteilTaetigkeitAngabenSozialversicherungen = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/sozialversicherungen",
-  ElternteilTaetigkeitAngabenEinkommen = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen",
-  ElternteilTaetigkeitAngabenEinkommenDetails = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen/detailliert",
-  ElternteilWeitereTaetigkeitAbfrage = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/weitere-taetigkeit",
-  ElternteilWeitereTaetigkeitAngaben = "/elternteil/:elternteilIndex/taetigkeit/:taetigkeitIndex/weitere-taetigkeit-angaben",
+  ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/finanzielles/ausklammerung/gruende",
+  ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/finanzielles/ausklammerung/zeiten",
+
+  ElternteilTaetigkeitenAbfrage = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/abfrage",
+  ElternteilTaetigkeitAngabenSelbststaendig = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/selbststaendig",
+  ElternteilTaetigkeitAngabenMischeinkunft = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/mischeinkunft",
+  ElternteilTaetigkeitAngabenNichtSelbststaendig = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/nicht-selbststaendig",
+  ElternteilTaetigkeitAngabenMinijob = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/minijob",
+  ElternteilTaetigkeitAngabenSozialversicherungen = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/sozialversicherungen",
+  ElternteilTaetigkeitAngabenEinkommen = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen",
+  ElternteilTaetigkeitAngabenEinkommenDetails = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen/detailliert",
+  ElternteilWeitereTaetigkeitAbfrage = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/weitere-taetigkeit",
+  ElternteilWeitereTaetigkeitAngaben = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/weitere-taetigkeit-angaben",
 
   ElternteilZweitePersonAngaben = "/elternteil/abfrage-zweite-person",
 }

@@ -1,6 +1,10 @@
 import { ReactNode, useEffect, useId, useRef } from "react";
-import { ScrollRestoration } from "react-router";
+import { ScrollRestoration, useLocation } from "react-router";
 import { Sidebar } from "./Sidebar";
+import {
+  Route,
+  generateAbfrageteilPath,
+} from "@/application/features/abfrageteil-next/routing";
 
 type Props = {
   readonly children: ReactNode;
@@ -8,6 +12,8 @@ type Props = {
 };
 
 export function Page({ children, heading }: Props) {
+  const { pathname } = useLocation();
+
   const sectionElement = useRef<HTMLElement>(null);
   useEffect(() => {
     sectionElement.current?.focus({ preventScroll: true });
@@ -15,12 +21,16 @@ export function Page({ children, heading }: Props) {
 
   const headingIdentifier = useId();
 
+  const isPastStartseite = !pathname.startsWith(
+    generateAbfrageteilPath(Route.Startseite),
+  );
+
   return (
     <div className="page-grid-container print:block">
       <ScrollRestoration />
 
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">
-        <Sidebar />
+        {isPastStartseite ? <Sidebar /> : null}
       </div>
 
       <section

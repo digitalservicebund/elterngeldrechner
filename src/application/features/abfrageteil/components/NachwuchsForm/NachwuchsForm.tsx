@@ -1,5 +1,3 @@
-import AddIcon from "@digitalservicebund/icons/Add";
-import ClearIcon from "@digitalservicebund/icons/Clear";
 import { useId } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Counter } from "./Counter";
@@ -9,6 +7,8 @@ import { InfoZumGeschwisterbonus } from "./InfoZumGeschwisterbonus";
 import { Button } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { type StepNachwuchsState } from "@/application/features/abfrageteil/state";
+import AddIcon from "~icons/material-symbols/add";
+import CloseIcon from "~icons/material-symbols/close";
 
 const validateMonth = (date: string) => {
   const [inputDay, inputMonth, inputYear] = date.split(".");
@@ -225,7 +225,7 @@ export function NachwuchsForm({ id, defaultValues, onSubmit }: Props) {
                   onClick={() => remove(index)}
                   buttonStyle="link"
                 >
-                  Geschwisterkind entfernen <ClearIcon />
+                  Geschwisterkind entfernen <CloseIcon />
                 </Button>
               </li>
             );
@@ -364,9 +364,8 @@ if (import.meta.vitest) {
 
   describe("Nachwuchs Form Validation", async () => {
     const { NachwuchsForm } = await import("./NachwuchsForm");
-    const { fireEvent, renderForm, screen, waitFor } = await import(
-      "@/application/test-utils"
-    );
+    const { fireEvent, renderForm, screen, waitFor } =
+      await import("@/application/test-utils");
 
     describe("warning for too old birthdate", () => {
       beforeEach(() => {

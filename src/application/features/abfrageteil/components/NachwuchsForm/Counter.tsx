@@ -1,5 +1,3 @@
-import AddIcon from "@digitalservicebund/icons/Add";
-import RemoveIcon from "@digitalservicebund/icons/Remove";
 import classNames from "classnames";
 import {
   FieldError,
@@ -11,6 +9,8 @@ import {
   get,
 } from "react-hook-form";
 import { Description } from "@/application/features/abfrageteil/components/common";
+import AddIcon from "~icons/material-symbols/add";
+import RemoveIcon from "~icons/material-symbols/remove";
 
 type Props<TFieldValues extends FieldValues> = {
   readonly register: UseFormRegister<TFieldValues>;

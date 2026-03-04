@@ -1,4 +1,3 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { ReactNode } from "react";
 import { DatenfeldFuerMonat } from "./DatenfeldFuerMonat";
 import { ZeitraumLabel } from "@/application/features/planer/component/common";
@@ -10,6 +9,7 @@ import {
   compareElternteile,
   listeLebensmonateAuf,
 } from "@/monatsplaner";
+import PersonIcon from "~icons/material-symbols/person-outline";
 
 type Props<A extends Ausgangslage> = {
   readonly ausgangslage: A;

@@ -1,9 +1,9 @@
-import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
-import ErrorIcon from "@digitalservicebund/icons/Error";
 import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
 import { Geldbetrag } from "@/application/components";
 import type { Einkommen, Elterngeldbezug } from "@/monatsplaner";
+import BusinessCenterIcon from "~icons/material-symbols/business-center-outline";
+import ErrorIcon from "~icons/material-symbols/error";
 
 type Props = {
   readonly elterngeldbezug?: Elterngeldbezug;

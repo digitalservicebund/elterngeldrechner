@@ -1,8 +1,8 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import classNames from "classnames";
 import type { ReactNode } from "react";
 import { Geldbetrag } from "@/application/components";
 import type { SummeFuerElternteil } from "@/monatsplaner";
+import PersonIcon from "~icons/material-symbols/person-outline";
 
 type Props = {
   readonly name: string | undefined;

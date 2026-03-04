@@ -1,4 +1,3 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { ReactNode, useId } from "react";
 import { ListeMitBezuegenProVariante } from "./ListeMitBezuegenProVariante";
 import { ListeMitZeitraeumen } from "./ListeMitZeitraeumen";
@@ -8,6 +7,7 @@ import {
   type PlanMitBeliebigenElternteilen,
   listeElternteileFuerAusgangslageAuf,
 } from "@/monatsplaner";
+import PersonIcon from "~icons/material-symbols/person-outline";
 
 type Props = {
   readonly plan: PlanMitBeliebigenElternteilen;

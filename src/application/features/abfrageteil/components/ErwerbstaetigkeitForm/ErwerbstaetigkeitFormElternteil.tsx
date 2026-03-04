@@ -1,4 +1,3 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { useEffect, useId } from "react";
 import { useFormContext } from "react-hook-form";
 import { ErwerbstaetigkeitCheckboxGroup } from "./ErwerbstaetigkeitCheckboxGroup";
@@ -18,6 +17,7 @@ import {
   YesNo,
   initialStepErwerbstaetigkeitElternteil,
 } from "@/application/features/abfrageteil/state";
+import PersonIcon from "~icons/material-symbols/person-outline";
 
 const monatlichesBruttoOptions: CustomRadioGroupOption<MonatlichesBrutto>[] = [
   {

@@ -1,5 +1,3 @@
-import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
-import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
 import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
@@ -22,6 +20,8 @@ import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigat
 import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
+import FileDownloadIcon from "~icons/material-symbols/file-download";
+import OpenInNewIcon from "~icons/material-symbols/open-in-new";
 
 function trackedDownloadOfAnlagen(
   event: React.MouseEvent<HTMLAnchorElement>,

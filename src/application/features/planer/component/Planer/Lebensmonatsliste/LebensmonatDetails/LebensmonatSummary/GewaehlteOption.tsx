@@ -1,8 +1,8 @@
-import AddIcon from "@digitalservicebund/icons/AddCircleOutline";
-import LockIcon from "@digitalservicebund/icons/Lock";
 import classNames from "classnames";
 import type { CSSProperties, ReactNode } from "react";
 import { type Auswahloption, KeinElterngeld, Variante } from "@/monatsplaner";
+import AddIcon from "~icons/material-symbols/add-circle-outline";
+import LockIcon from "~icons/material-symbols/lock";
 
 type Props = {
   readonly imMutterschutz?: boolean;

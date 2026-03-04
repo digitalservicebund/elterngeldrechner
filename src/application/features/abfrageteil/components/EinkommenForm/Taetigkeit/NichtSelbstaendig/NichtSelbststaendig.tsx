@@ -1,4 +1,3 @@
-import ClearIcon from "@digitalservicebund/icons/Clear";
 import { type ReactNode, useRef, useState } from "react";
 import { type FieldPath, useFieldArray, useFormContext } from "react-hook-form";
 import { Zeitraum } from "./Zeitraum";
@@ -24,6 +23,7 @@ import {
   type ElternteilType,
   type StepEinkommenState,
 } from "@/application/features/abfrageteil/state";
+import CloseIcon from "~icons/material-symbols/close";
 
 type Props = {
   readonly elternteil: ElternteilType;
@@ -170,7 +170,7 @@ export function NichtSelbstaendig({
                       focusZeitraumHinzufuegenButton();
                     }}
                   >
-                    Zeitraum entfernen <ClearIcon />
+                    Zeitraum entfernen <CloseIcon />
                   </Button>
                 )}
               </li>

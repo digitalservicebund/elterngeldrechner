@@ -1,5 +1,3 @@
-import AddIcon from "@digitalservicebund/icons/Add";
-import EditIcon from "@digitalservicebund/icons/EditOutlined";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
@@ -33,6 +31,8 @@ import type {
   PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
 import { sindLebensmonateGeplant } from "@/monatsplaner";
+import AddIcon from "~icons/material-symbols/add";
+import EditIcon from "~icons/material-symbols/edit-outline";
 
 export function BeispielePage() {
   // TODO: Ensure consistent use of the term planungshilfen rather than beispiele

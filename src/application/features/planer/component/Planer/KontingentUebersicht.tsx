@@ -1,4 +1,3 @@
-import SquareIcon from "@digitalservicebund/icons/SquareRounded";
 import classNames from "classnames";
 import { ReactNode, useId, useMemo } from "react";
 import {
@@ -8,6 +7,7 @@ import {
   listeKontingentAuf,
   zaehleVerplantesKontingent,
 } from "@/monatsplaner";
+import SquareIcon from "~icons/material-symbols/square-rounded";
 
 type Props = {
   readonly plan: PlanMitBeliebigenElternteilen;

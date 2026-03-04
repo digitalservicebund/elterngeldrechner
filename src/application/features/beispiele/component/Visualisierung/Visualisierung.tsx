@@ -1,4 +1,3 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import type { ReactNode } from "react";
 import { erstelleMonatsverteilung } from "./erstelleMonatsverteilung";
 import { Beispiel } from "@/application/features/beispiele";
@@ -8,6 +7,7 @@ import {
   listeElternteileFuerAusgangslageAuf,
   listeLebensmonateAuf,
 } from "@/monatsplaner";
+import PersonIcon from "~icons/material-symbols/person-outline";
 
 type Props = {
   readonly beispiel: Beispiel<Ausgangslage>;

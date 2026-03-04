@@ -1,4 +1,3 @@
-import ErrorIcon from "@digitalservicebund/icons/Error";
 import classNames from "classnames";
 import { ReactNode, useId } from "react";
 import { BruttoeinkommenInput } from "./BruttoeinkommenInput";
@@ -19,6 +18,7 @@ import {
   listeElternteileFuerAusgangslageAuf,
   listeMonateAuf,
 } from "@/monatsplaner";
+import ErrorIcon from "~icons/material-symbols/error";
 
 export function AbschnittMitEinkommen(): ReactNode {
   const headingColumn = useGridColumn(HEADING_COLUMN_DEFINITION);

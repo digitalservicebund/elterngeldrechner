@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useId } from "react";
+import { Temporal } from "@js-temporal/polyfill";
+import { useId, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
@@ -7,7 +8,7 @@ import {
   TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button } from "@/application/components";
-// import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
+import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
@@ -20,6 +21,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { gruppiereBemessungszeitraum } from "@/bemessungszeitraumrechner";
 
 export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const {
@@ -39,8 +41,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     routeParams,
   );
 
-  // const { register, handleSubmit, formState } = useForm({
-  const { handleSubmit } = useForm({
+  const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(TaetigkeitUnleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitUnleichesEinkommenAngabenSchema,
@@ -48,7 +49,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     ),
   });
 
-  // const { errors: formErrors } = formState;
+  const { errors: formErrors } = formState;
 
   const onSubmit = (values: TaetigkeitUnleichesEinkommenAngaben) => {
     const event: FormEvent = {
@@ -78,6 +79,46 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     eventStream,
     routeParams.elternteilIndex,
   );
+
+  const zeitabschnitte = gruppiereBemessungszeitraum({
+    bemessungszeitraum,
+    ausklammerungen,
+  });
+  const alleEinkommensMonate = useMemo(() => {
+    return zeitabschnitte
+      .filter((zeitabschnitt): zeitabschnitt is Temporal.PlainYearMonth[] =>
+        Array.isArray(zeitabschnitt),
+      )
+      .flat();
+  }, [zeitabschnitte]);
+
+  const berechneMonatsindex = (
+    aktuellerMonat: Temporal.PlainYearMonth,
+    alleMonate: Temporal.PlainYearMonth[],
+  ): number => {
+    return alleMonate.findIndex((monat) => monat.equals(aktuellerMonat));
+  };
+
+  const erstelleZeitabschnittUeberschrift = (
+    zeitabschnitt: Temporal.PlainYearMonth[],
+    blockNummer: number,
+  ): string => {
+    if (zeitabschnitt.length === 0) return `Zeitraum ${blockNummer}`;
+
+    const vonMonat = zeitabschnitt[0];
+    const bisMonat = zeitabschnitt.at(-1);
+
+    if (vonMonat && bisMonat) {
+      const von = vonMonat.toPlainDate({ day: 1 }).toLocaleString("de-DE");
+      const bis = bisMonat
+        .toPlainDate({ day: bisMonat.daysInMonth })
+        .toLocaleString("de-DE");
+
+      return `Zeitraum ${blockNummer}: ${von} – ${bis}`;
+    }
+
+    return `Zeitraum ${blockNummer}`;
+  };
 
   return (
     <Page heading="Finanzielle Situation">
@@ -112,57 +153,75 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
         <h3 className="mb-10">Details zur angestellten Tätigkeit</h3>
 
         <div>
-          <h5 className="mb-10">
+          <h5 className="mb-20">
             Wie viel haben Sie von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
 
           {/* <InfoZuAlleinerziehenden /> */}
 
-          {/* {exakteZeitabschnitteBemessungszeitraum!.map(
-            ({ art, zeitabschnitt }, index) => art === ZeitabschnittArt.ausklammerung ? (
-              <section
-                key={index}
-                className="my-32 rounded border-dashed p-16"
-                aria-live="polite"
-                aria-labelledby="bmz"
-              >
-                <div className="pl-32">
-                  <h4 className="italic">Übersprungener Zeitraum:</h4>
-                  <p key={zeitabschnitt.beschreibung}>
-                    {zeitabschnitt.beschreibung}{" "}
-                    {formattedDate(zeitabschnitt.von)} bis{" "}
-                    {formattedDate(zeitabschnitt.bis)}
-                  </p>
+          {zeitabschnitte.map((zeitabschnitt, index) => {
+            if (!Array.isArray(zeitabschnitt)) {
+              return (
+                <div
+                  key={index}
+                  className="my-32 rounded border-dashed p-16"
+                  aria-live="polite"
+                >
+                  <div className="pl-32">
+                    <h4 className="italic">Übersprungener Zeitraum:</h4>
+                    <p>
+                      {zeitabschnitt.grund} {zeitabschnitt.von.toLocaleString()}{" "}
+                      bis {zeitabschnitt.bis.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
-              </section>
-            ) : (
+              );
+            }
+
+            const einkommensBlockNummer = zeitabschnitte
+              .slice(0, index + 1)
+              .filter(Array.isArray).length;
+
+            return (
               <div key={index} className="bg-off-white p-40 pt-32">
-                <div className="pl-8">
-                  <strong>{zeitabschnitt.beschreibung}</strong>
-                  {zeitabschnitt.monate.map(
-                    ({ monatsIndex, monatsName }) => (
+                <div className="flex flex-col gap-16 pl-8">
+                  <h5>
+                    {erstelleZeitabschnittUeberschrift(
+                      zeitabschnitt,
+                      einkommensBlockNummer,
+                    )}
+                  </h5>
+                  {zeitabschnitt.map((month) => {
+                    const monatsIndex = berechneMonatsindex(
+                      month,
+                      alleEinkommensMonate,
+                    );
+                    const label = `${month.toPlainDate({ day: 1 }).toLocaleString("de-DE", { month: "long", year: "numeric" })} Brutto-Einkommen`;
+
+                    return (
                       <NumberInput
-                        key={monatsIndex}
+                        key={month.toString()}
                         {...register(`monatsbrutto.${monatsIndex}`, {
                           valueAsNumber: true,
                           max: {
                             value: 15000,
-                            message:
-                              "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
+                            message: "Maximaleinkommen überschritten",
                           },
-                          min: { value: 0, message: "Bitte geben Sie ein Einkommen an" },
-                          required: "Bitte geben Sie ein Einkommen an",
+                          min: {
+                            value: 0,
+                            message: "Bitte geben Sie ein Einkommen an",
+                          },
                         })}
-                        label={`${monatsName} Brutto-Einkommen`}
-                        errors={formErrors.monatsbrutto[monatsIndex]?.message}
+                        label={label}
+                        errors={formErrors.monatsbrutto?.[monatsIndex]?.message}
                       />
-                    ),
-                  )}
+                    );
+                  })}
                 </div>
               </div>
-            ),
-          )} */}
+            );
+          })}
         </div>
 
         <div className="flex gap-16">

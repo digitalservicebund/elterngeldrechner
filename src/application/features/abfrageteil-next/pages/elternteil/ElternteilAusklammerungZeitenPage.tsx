@@ -93,27 +93,27 @@ export function ElternteilAusklammerungZeitenPage() {
       >
         <h3>Bitte machen Sie Detailangaben</h3>
 
-        {defaultValues["mutterschutz"].length > 0 && (
+        {defaultValues["mutterschutzGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
-            grund="mutterschutz"
+            grund="mutterschutzGeschwisterkind"
             title="Von wann bis wann waren Sie für ein älteres Kind im Mutterschutz?"
             control={control}
             errors={errors}
           />
         )}
 
-        {defaultValues["elterngeld"].length > 0 && (
+        {defaultValues["elterngeldGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
-            grund="elterngeld"
+            grund="elterngeldGeschwisterkind"
             title="Von wann bis wann haben Sie Elterngeld für ein älteres Kind bekommen?"
             control={control}
             errors={errors}
           />
         )}
 
-        {defaultValues["erkrankung"].length > 0 && (
+        {defaultValues["erkrankungSchwangerschaft"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
-            grund="erkrankung"
+            grund="erkrankungSchwangerschaft"
             title="Von wann bis wann waren Sie wegen Ihrer Schwangerschaft krank?"
             control={control}
             errors={errors}

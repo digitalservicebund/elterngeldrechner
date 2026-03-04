@@ -529,14 +529,14 @@ if (import.meta.vitest) {
           route: Route.ElternteilAusklammerungZeitenAngaben,
           params: { elternteilIndex: 0 },
           payload: {
-            mutterschutz: [
+            mutterschutzGeschwisterkind: [
               {
                 von: Temporal.PlainDate.from("2025-12-23"),
                 bis: Temporal.PlainDate.from("2026-02-05"),
               },
             ],
-            elterngeld: [],
-            erkrankung: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
           },
         });
 
@@ -550,14 +550,14 @@ if (import.meta.vitest) {
           route: Route.ElternteilAusklammerungZeitenAngaben,
           params: { elternteilIndex: 1 },
           payload: {
-            mutterschutz: [
+            mutterschutzGeschwisterkind: [
               {
                 von: Temporal.PlainDate.from("2025-12-23"),
                 bis: Temporal.PlainDate.from("2026-02-05"),
               },
             ],
-            elterngeld: [],
-            erkrankung: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
           },
         });
 

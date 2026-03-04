@@ -13,9 +13,9 @@ const schemaMapping: Record<
   keyof ElternteilAusklammerungZeiten,
   keyof AusklammerungGruendeAktiv
 > = {
-  mutterschutz: "hatMutterschutzAelteresKind",
-  elterngeld: "hatElterngeldAelteresKind",
-  erkrankung: "hatSchwangerschaftsbedingteErkrankung",
+  mutterschutzGeschwisterkind: "hatMutterschutzAelteresKind",
+  elterngeldGeschwisterkind: "hatElterngeldAelteresKind",
+  erkrankungSchwangerschaft: "hatSchwangerschaftsbedingteErkrankung",
 };
 
 // TODO: The function accepts undefined for ausklammerungsgruende because we cannot
@@ -67,12 +67,12 @@ if (import.meta.vitest) {
   };
 
   const vorhandeneZeiten: ElternteilAusklammerungszeitenInput = {
-    mutterschutz: [
+    mutterschutzGeschwisterkind: [
       { von: "01.01.2023", bis: "28.02.2023" },
       { von: "01.03.2023", bis: "31.03.2023" },
     ],
-    elterngeld: [{ von: "01.04.2023", bis: "30.04.2023" }],
-    erkrankung: [{ von: "01.05.2023", bis: "31.05.2023" }],
+    elterngeldGeschwisterkind: [{ von: "01.04.2023", bis: "30.04.2023" }],
+    erkrankungSchwangerschaft: [{ von: "01.05.2023", bis: "31.05.2023" }],
   };
 
   describe("erstelleAusklammerungZeitenDefaultValues", () => {
@@ -80,9 +80,9 @@ if (import.meta.vitest) {
       expect(
         erstelleAusklammerungZeitenDefaultValues(undefined, undefined),
       ).toEqual({
-        mutterschutz: [],
-        elterngeld: [],
-        erkrankung: [],
+        mutterschutzGeschwisterkind: [],
+        elterngeldGeschwisterkind: [],
+        erkrankungSchwangerschaft: [],
       });
     });
 
@@ -90,9 +90,9 @@ if (import.meta.vitest) {
       expect(
         erstelleAusklammerungZeitenDefaultValues(vorhandeneZeiten, undefined),
       ).toEqual({
-        mutterschutz: [],
-        elterngeld: [],
-        erkrankung: [],
+        mutterschutzGeschwisterkind: [],
+        elterngeldGeschwisterkind: [],
+        erkrankungSchwangerschaft: [],
       });
     });
 
@@ -112,9 +112,9 @@ if (import.meta.vitest) {
           keineGruende,
         ),
       ).toEqual({
-        mutterschutz: [],
-        elterngeld: [],
-        erkrankung: [],
+        mutterschutzGeschwisterkind: [],
+        elterngeldGeschwisterkind: [],
+        erkrankungSchwangerschaft: [],
       });
     });
 
@@ -132,9 +132,10 @@ if (import.meta.vitest) {
           teilweiseAktiv,
         ),
       ).toEqual({
-        mutterschutz: vorhandeneZeiten.mutterschutz,
-        erkrankung: vorhandeneZeiten.erkrankung,
-        elterngeld: [],
+        mutterschutzGeschwisterkind:
+          vorhandeneZeiten.mutterschutzGeschwisterkind,
+        erkrankungSchwangerschaft: vorhandeneZeiten.erkrankungSchwangerschaft,
+        elterngeldGeschwisterkind: [],
       });
     });
 
@@ -142,9 +143,9 @@ if (import.meta.vitest) {
       expect(
         erstelleAusklammerungZeitenDefaultValues(undefined, alleGruendeAktiv),
       ).toEqual({
-        mutterschutz: [{ von: "", bis: "" }],
-        elterngeld: [{ von: "", bis: "" }],
-        erkrankung: [{ von: "", bis: "" }],
+        mutterschutzGeschwisterkind: [{ von: "", bis: "" }],
+        elterngeldGeschwisterkind: [{ von: "", bis: "" }],
+        erkrankungSchwangerschaft: [{ von: "", bis: "" }],
       });
     });
   });

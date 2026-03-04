@@ -1,13 +1,111 @@
+import { Temporal } from "@js-temporal/polyfill";
 import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import type { Ausklammerung } from "@/bemessungszeitraumrechner";
+import { berechneMutterschutz } from "@/mutterschutzrechner";
 
 export function findeAusklammerungen(
   events: FormEvent[],
   elternteilIndex: number,
 ): Ausklammerung[] {
-  const event = [...events]
+  const ausklammerungszeitenEvent = findeAusklammerungszeiten(
+    events,
+    elternteilIndex,
+  );
+
+  const eingegebeneAusklammerungen = ausklammerungszeitenEvent
+    ? flacheAusklammerungen(ausklammerungszeitenEvent.payload)
+    : [];
+
+  if (elternteilIndex === 0 && istImMutterschutz(events)) {
+    const errechneteAusklammerungen = [
+      errechneMutterschutzAusklammerung(events),
+    ];
+
+    return [...eingegebeneAusklammerungen, ...errechneteAusklammerungen];
+  } else {
+    return eingegebeneAusklammerungen;
+  }
+}
+
+function errechneMutterschutzAusklammerung(events: FormEvent[]) {
+  const mutterschutz = berechneMutterschutz(
+    findeErrechnetenEntbindungstermin(events),
+    findeGeburtsdatum(events),
+  );
+
+  const startdatumMilliseconds = Temporal.Instant.fromEpochMilliseconds(
+    mutterschutz.startdatum.getTime(),
+  );
+
+  const enddatumMilliseconds = Temporal.Instant.fromEpochMilliseconds(
+    mutterschutz.enddatum.getTime(),
+  );
+
+  return {
+    grund: "mutterschutz",
+    von: startdatumMilliseconds.toZonedDateTimeISO("UTC").toPlainDate(),
+    bis: enddatumMilliseconds.toZonedDateTimeISO("UTC").toPlainDate(),
+  } satisfies Ausklammerung;
+}
+
+function findeErrechnetenEntbindungstermin(events: FormEvent[]): Date {
+  for (const event of [...events].reverse()) {
+    if (
+      event.route === Route.GeborenesKindAngaben ||
+      event.route === Route.UngeborenesKindAngaben
+    ) {
+      const { errechneterEntbindungstermin } = event.payload;
+
+      return new Date(
+        errechneterEntbindungstermin.toZonedDateTime("UTC").epochMilliseconds,
+      );
+    }
+  }
+
+  throw new Error("At least one event of the Kind flow is required.");
+}
+
+function findeGeburtsdatum(events: FormEvent[]): Date | undefined {
+  for (const event of [...events].reverse()) {
+    if (
+      event.route === Route.GeborenesKindAngaben ||
+      event.route === Route.WahrscheinlichGeborenesKindAbfrage
+    ) {
+      const { geburtsdatum } = event.payload;
+
+      return new Date(geburtsdatum.toZonedDateTime("UTC").epochMilliseconds);
+    }
+  }
+
+  return undefined;
+}
+
+function istImMutterschutz(events: FormEvent[]): boolean {
+  const allgemeineAngabenEvent = [...events]
+    .reverse()
+    .find((event): event is ElternteilAllgemeineAngabenEvent => {
+      return (
+        event.route === Route.ElternteilAllgemeineAngaben &&
+        event.params.elternteilIndex === 0
+      );
+    });
+
+  if (!allgemeineAngabenEvent) {
+    throw new Error(
+      "Elternteil Allgemeine Angaben Event is required for Elternteil 0.",
+    );
+  }
+
+  return allgemeineAngabenEvent.payload.istImMutterschutz ?? true;
+}
+
+function findeAusklammerungszeiten(
+  events: FormEvent[],
+  elternteilIndex: number,
+) {
+  return [...events]
     .reverse()
     .find((event): event is AusklammerungZeitenEvent => {
       return (
@@ -15,8 +113,6 @@ export function findeAusklammerungen(
         event.params.elternteilIndex === elternteilIndex
       );
     });
-
-  return event ? flacheAusklammerungen(event.payload) : [];
 }
 
 function flacheAusklammerungen(
@@ -34,30 +130,95 @@ type AusklammerungZeitenEvent = Extract<
   { route: Route.ElternteilAusklammerungZeitenAngaben }
 >;
 
+type ElternteilAllgemeineAngabenEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilAllgemeineAngaben }
+>;
+
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("findeAusklammerungen", async () => {
     const { Temporal } = await import("@js-temporal/polyfill");
 
-    it("returns empty array when no event exists for the elternteilIndex", () => {
-      expect(findeAusklammerungen([], 0)).toEqual([]);
+    it("returns empty array when no event exists for the elternteilIndex and Elternteil not in mutterschutz", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: false,
+          },
+        },
+      ];
+
+      expect(findeAusklammerungen(events, 0)).toEqual([]);
+    });
+
+    it("returns only Mutterschutz for this child when no other Ausklammerung given", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: true,
+          },
+        },
+        {
+          route: Route.GeborenesKindAngaben,
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2026-03-03"),
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2026-03-03"),
+            anzahl: 1,
+          },
+        },
+        {
+          route: Route.ElternteilAusklammerungZeitenAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            mutterschutzGeschwisterkind: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
+          },
+        },
+      ];
+
+      expect(findeAusklammerungen(events, 0)).toEqual([
+        {
+          grund: "mutterschutz",
+          von: Temporal.PlainDate.from("2026-01-20"),
+          bis: Temporal.PlainDate.from("2026-04-28"),
+        },
+      ]);
     });
 
     it("returns empty array when no event exists for the given elternteilIndex", () => {
       const events: FormEvent[] = [
         {
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: false,
+          },
+        },
+        {
           route: Route.ElternteilAusklammerungZeitenAngaben,
           params: { elternteilIndex: 1 },
           payload: {
-            mutterschutz: [
+            mutterschutzGeschwisterkind: [
               {
                 von: Temporal.PlainDate.from("2024-11-01"),
                 bis: Temporal.PlainDate.from("2025-02-15"),
               },
             ],
-            elterngeld: [],
-            erkrankung: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
           },
         },
       ];
@@ -68,34 +229,43 @@ if (import.meta.vitest) {
     it("flattens all Ausklammerungszeiträume with their Grund", () => {
       const events: FormEvent[] = [
         {
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: false,
+          },
+        },
+        {
           route: Route.ElternteilAusklammerungZeitenAngaben,
           params: { elternteilIndex: 0 },
           payload: {
-            mutterschutz: [
+            mutterschutzGeschwisterkind: [
               {
                 von: Temporal.PlainDate.from("2024-11-01"),
                 bis: Temporal.PlainDate.from("2025-02-15"),
               },
             ],
-            elterngeld: [
+            elterngeldGeschwisterkind: [
               {
                 von: Temporal.PlainDate.from("2023-01-01"),
                 bis: Temporal.PlainDate.from("2023-06-30"),
               },
             ],
-            erkrankung: [],
+            erkrankungSchwangerschaft: [],
           },
         },
       ];
 
       expect(findeAusklammerungen(events, 0)).toEqual([
         {
-          grund: "mutterschutz",
+          grund: "mutterschutzGeschwisterkind",
           von: Temporal.PlainDate.from("2024-11-01"),
           bis: Temporal.PlainDate.from("2025-02-15"),
         },
         {
-          grund: "elterngeld",
+          grund: "elterngeldGeschwisterkind",
           von: Temporal.PlainDate.from("2023-01-01"),
           bis: Temporal.PlainDate.from("2023-06-30"),
         },
@@ -105,29 +275,42 @@ if (import.meta.vitest) {
     it("uses the most recent event for the given elternteilIndex", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAusklammerungZeitenAngaben,
+          route: Route.ElternteilAllgemeineAngaben,
           params: { elternteilIndex: 0 },
-          payload: { mutterschutz: [], elterngeld: [], erkrankung: [] },
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: false,
+          },
         },
         {
           route: Route.ElternteilAusklammerungZeitenAngaben,
           params: { elternteilIndex: 0 },
           payload: {
-            mutterschutz: [
+            mutterschutzGeschwisterkind: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
+          },
+        },
+        {
+          route: Route.ElternteilAusklammerungZeitenAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            mutterschutzGeschwisterkind: [
               {
                 von: Temporal.PlainDate.from("2024-11-01"),
                 bis: Temporal.PlainDate.from("2025-02-15"),
               },
             ],
-            elterngeld: [],
-            erkrankung: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
           },
         },
       ];
 
       expect(findeAusklammerungen(events, 0)).toEqual([
         {
-          grund: "mutterschutz",
+          grund: "mutterschutzGeschwisterkind",
           von: Temporal.PlainDate.from("2024-11-01"),
           bis: Temporal.PlainDate.from("2025-02-15"),
         },

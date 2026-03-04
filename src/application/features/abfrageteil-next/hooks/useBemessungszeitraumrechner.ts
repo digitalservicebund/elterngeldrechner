@@ -2,6 +2,7 @@ import { findeAusklammerungen } from "@/application/features/abfrageteil-next/do
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
+  Ausklammerung,
   berechneBemessungszeitraum,
   berechneBetrachtungszeitraum,
 } from "@/bemessungszeitraumrechner";
@@ -86,8 +87,17 @@ if (import.meta.vitest) {
     });
 
     describe("berechneBemessungszeitraum", () => {
-      it("passes geburtsdatum, erwerbstaetigkeit and empty ausklammerungen", () => {
+      it("passes geburtsdatum", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.GeborenesKindAngaben,
             payload: {
@@ -103,15 +113,58 @@ if (import.meta.vitest) {
 
         result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
 
-        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
-          geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-          erwerbstaetigkeit: "Nicht-Selbstaendig",
-          ausklammerungen: [],
-        });
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+            erwerbstaetigkeit: "Nicht-Selbstaendig",
+          }),
+        );
+      });
+
+      it("passes Nicht-Selbstaendig as erwerbstaetigkeit", () => {
+        mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-06-10"),
+              anzahl: 1,
+            },
+          },
+        ]);
+
+        const { result } = renderHook(() => useBemessungszeitraumrechner(0));
+
+        result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
+
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            erwerbstaetigkeit: "Nicht-Selbstaendig",
+          }),
+        );
       });
 
       it("passes Selbstaendig as erwerbstaetigkeit", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.GeborenesKindAngaben,
             payload: {
@@ -127,15 +180,24 @@ if (import.meta.vitest) {
 
         result.current.berechneBemessungszeitraum("Selbstaendig");
 
-        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
-          geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-          erwerbstaetigkeit: "Selbstaendig",
-          ausklammerungen: [],
-        });
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            erwerbstaetigkeit: "Selbstaendig",
+          }),
+        );
       });
 
       it("passes ausklammerungszeiten when present", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.GeborenesKindAngaben,
             payload: {
@@ -149,14 +211,14 @@ if (import.meta.vitest) {
             route: Route.ElternteilAusklammerungZeitenAngaben,
             params: { elternteilIndex: 0 },
             payload: {
-              mutterschutz: [
+              mutterschutzGeschwisterkind: [
                 {
                   von: Temporal.PlainDate.from("2024-11-01"),
                   bis: Temporal.PlainDate.from("2025-02-15"),
                 },
               ],
-              elterngeld: [],
-              erkrankung: [],
+              elterngeldGeschwisterkind: [],
+              erkrankungSchwangerschaft: [],
             },
           },
         ]);
@@ -165,21 +227,30 @@ if (import.meta.vitest) {
 
         result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
 
-        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
-          geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-          erwerbstaetigkeit: "Nicht-Selbstaendig",
-          ausklammerungen: [
-            {
-              grund: "mutterschutz",
-              von: Temporal.PlainDate.from("2024-11-01"),
-              bis: Temporal.PlainDate.from("2025-02-15"),
-            },
-          ],
-        });
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            ausklammerungen: expect.arrayContaining([
+              {
+                grund: "mutterschutzGeschwisterkind",
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
+            ]) as Ausklammerung[],
+          }),
+        );
       });
 
       it("passes errechneterEntbindungstermin from UngeborenesKindAngaben", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.UngeborenesKindAngaben,
             payload: {
@@ -194,15 +265,24 @@ if (import.meta.vitest) {
 
         result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
 
-        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
-          geburtsdatum: Temporal.PlainDate.from("2025-09-01"),
-          erwerbstaetigkeit: "Nicht-Selbstaendig",
-          ausklammerungen: [],
-        });
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            geburtsdatum: Temporal.PlainDate.from("2025-09-01"),
+          }),
+        );
       });
 
       it("prioritizes geburtsdatum from WahrscheinlichGeborenesKindAbfrage over errechneterEntbindungstermin from UngeborenesKindAngaben", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.UngeborenesKindAngaben,
             payload: {
@@ -221,15 +301,24 @@ if (import.meta.vitest) {
 
         result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
 
-        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
-          geburtsdatum: Temporal.PlainDate.from("2025-03-20"),
-          erwerbstaetigkeit: "Nicht-Selbstaendig",
-          ausklammerungen: [],
-        });
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            geburtsdatum: Temporal.PlainDate.from("2025-03-20"),
+          }),
+        );
       });
 
       it("passes ausklammerungszeiten only for the given elternteilIndex", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.GeborenesKindAngaben,
             payload: {
@@ -243,14 +332,14 @@ if (import.meta.vitest) {
             route: Route.ElternteilAusklammerungZeitenAngaben,
             params: { elternteilIndex: 0 },
             payload: {
-              mutterschutz: [
+              mutterschutzGeschwisterkind: [
                 {
                   von: Temporal.PlainDate.from("2024-11-01"),
                   bis: Temporal.PlainDate.from("2025-02-15"),
                 },
               ],
-              elterngeld: [],
-              erkrankung: [],
+              elterngeldGeschwisterkind: [],
+              erkrankungSchwangerschaft: [],
             },
           },
         ]);
@@ -259,17 +348,32 @@ if (import.meta.vitest) {
 
         result.current.berechneBemessungszeitraum("Nicht-Selbstaendig");
 
-        expect(berechneBemessungszeitraum).toHaveBeenCalledWith({
-          geburtsdatum: Temporal.PlainDate.from("2025-06-15"),
-          erwerbstaetigkeit: "Nicht-Selbstaendig",
-          ausklammerungen: [],
-        });
+        expect(berechneBemessungszeitraum).toHaveBeenCalledWith(
+          expect.objectContaining({
+            ausklammerungen: expect.not.arrayContaining([
+              {
+                grund: "mutterschutzGeschwisterkind",
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
+            ]) as Ausklammerung[],
+          }),
+        );
       });
     });
 
     describe("berechneBetrachtungszeitraum", () => {
-      it("passes geburtsdatum and empty ausklammerungen", () => {
+      it("passes geburtsdatum", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.GeborenesKindAngaben,
             payload: {
@@ -287,12 +391,21 @@ if (import.meta.vitest) {
 
         expect(berechneBetrachtungszeitraum).toHaveBeenCalledWith(
           Temporal.PlainDate.from("2025-06-15"),
-          [],
+          expect.any(Array),
         );
       });
 
-      it("passes ausklammerungszeiten when present", () => {
+      it("passes ausklammerungszeiten", () => {
         mockEventContext([
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: true,
+            },
+          },
           {
             route: Route.GeborenesKindAngaben,
             payload: {
@@ -306,14 +419,14 @@ if (import.meta.vitest) {
             route: Route.ElternteilAusklammerungZeitenAngaben,
             params: { elternteilIndex: 0 },
             payload: {
-              mutterschutz: [
+              mutterschutzGeschwisterkind: [
                 {
                   von: Temporal.PlainDate.from("2024-11-01"),
                   bis: Temporal.PlainDate.from("2025-02-15"),
                 },
               ],
-              elterngeld: [],
-              erkrankung: [],
+              elterngeldGeschwisterkind: [],
+              erkrankungSchwangerschaft: [],
             },
           },
         ]);
@@ -324,13 +437,13 @@ if (import.meta.vitest) {
 
         expect(berechneBetrachtungszeitraum).toHaveBeenCalledWith(
           Temporal.PlainDate.from("2025-06-15"),
-          [
+          expect.arrayContaining([
             {
-              grund: "mutterschutz",
+              grund: "mutterschutzGeschwisterkind",
               von: Temporal.PlainDate.from("2024-11-01"),
               bis: Temporal.PlainDate.from("2025-02-15"),
             },
-          ],
+          ]),
         );
       });
     });

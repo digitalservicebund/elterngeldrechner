@@ -1,3 +1,4 @@
+import { findeAlleinerziehend } from "./findeAlleinerziehend";
 import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
@@ -23,6 +24,16 @@ export function erstelleAusgangslage(
     events,
     anzahlKinder,
   );
+
+  if (findeAlleinerziehend(events)) {
+    return {
+      sindMehrlinge,
+      anzahlElternteile: 1,
+      geburtsdatumDesKindes,
+      hatBehindertesGeschwisterkind,
+      informationenZumMutterschutz,
+    };
+  }
 
   const zweitePersonAngaben = findeAngabenZurZweitenPerson(events);
 
@@ -132,6 +143,15 @@ if (import.meta.vitest) {
               anzahl: 1,
             },
           },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
           zweitePersonNichtBeruecksichtigt,
         ];
 
@@ -156,6 +176,15 @@ if (import.meta.vitest) {
             route: Route.WahrscheinlichGeborenesKindAbfrage,
             payload: { geburtsdatum: Temporal.PlainDate.from("2025-03-20") },
           },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
           zweitePersonNichtBeruecksichtigt,
         ];
 
@@ -176,6 +205,15 @@ if (import.meta.vitest) {
               anzahl: 1,
             },
           },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
           zweitePersonNichtBeruecksichtigt,
         ];
 
@@ -188,6 +226,49 @@ if (import.meta.vitest) {
     });
 
     describe("anzahlElternteile", () => {
+      it("is 1 when Person 1 is alleinerziehend and no ElternteilZweitePersonAngaben event exists", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-12-20"),
+              anzahl: 1,
+            },
+          },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: true,
+              istImMutterschutz: false,
+            },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(ausgangslage.anzahlElternteile).toEqual(1);
+      });
+
+      it("throws when neither ElternteilZweitePersonAngaben nor ElternteilAllgemeineAngaben for Elternteil 1 is present", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-12-20"),
+              anzahl: 1,
+            },
+          },
+        ];
+
+        expect(() => erstelleAusgangslage(events)).toThrow();
+      });
+
       it("is 1 when only Elternteil 1 event exists", () => {
         const events: FormEvent[] = [
           {
@@ -262,6 +343,15 @@ if (import.meta.vitest) {
               anzahl: 1,
             },
           },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
           zweitePersonNichtBeruecksichtigt,
         ];
 
@@ -279,6 +369,15 @@ if (import.meta.vitest) {
               errechneterEntbindungstermin:
                 Temporal.PlainDate.from("2025-12-20"),
               anzahl: 2,
+            },
+          },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
             },
           },
           zweitePersonNichtBeruecksichtigt,
@@ -307,6 +406,15 @@ if (import.meta.vitest) {
             route: Route.GeschwisterkindAbfrage,
             payload: { istVorhanden: false },
           },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
           zweitePersonNichtBeruecksichtigt,
         ];
 
@@ -325,6 +433,15 @@ if (import.meta.vitest) {
               geburtsdatum: Temporal.PlainDate.from("2022-05-10"),
               hatBehinderung: false,
               istWeiteresGeschwisterkindVorhanden: false,
+            },
+          },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
             },
           },
           zweitePersonNichtBeruecksichtigt,
@@ -354,6 +471,15 @@ if (import.meta.vitest) {
               geburtsdatum: Temporal.PlainDate.from("2022-07-01"),
               hatBehinderung: true,
               istWeiteresGeschwisterkindVorhanden: false,
+            },
+          },
+          {
+            route: Route.ElternteilAllgemeineAngaben,
+            params: { elternteilIndex: 0 },
+            payload: {
+              name: "Person 1",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
             },
           },
           zweitePersonNichtBeruecksichtigt,

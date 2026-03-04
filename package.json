@@ -94,6 +94,15 @@
   },
   "overrides": {
     "esbuild": "^0.25.10",
-    "lodash": "^4.17.23"
+    "lodash": "^4.17.23",
+    "eslint": {
+      "minimatch": "^9.0.9"
+    },
+    "eslint-plugin-import": {
+      "minimatch": "^9.0.9"
+    },
+    "eslint-plugin-react": {
+      "minimatch": "^9.0.9"
+    }
   }
 }

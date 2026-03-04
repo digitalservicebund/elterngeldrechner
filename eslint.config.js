@@ -129,6 +129,7 @@ const importConfig = [
     rules: {
       "import/first": "error",
       "import/newline-after-import": "error",
+      "import/no-unresolved": ["error", { ignore: ["^~icons/"] }],
       "import/order": [
         "error",
         {

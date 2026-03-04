@@ -1,4 +1,3 @@
-import PersonIcon from "@digitalservicebund/icons/PersonOutline";
 import { useId } from "react";
 import { NurErwerbstaetig } from "./NurErwerbstaetig";
 import { NurSelbstaendig } from "./NurSelbstaendig";
@@ -11,6 +10,7 @@ import {
 import type { ElternteilType } from "@/application/features/abfrageteil/state/ElternteilType";
 import { Antragstellende } from "@/application/features/abfrageteil/state/stepAllgemeineAngabenSlice";
 import { useAppSelector } from "@/application/redux/hooks";
+import PersonIcon from "~icons/material-symbols/person-outline";
 
 const MONTHS_BEFORE_BIRTH_OPTIONS = Array.from({ length: 12 }, (_, index) => ({
   label: `${index + 1}. Monat`,

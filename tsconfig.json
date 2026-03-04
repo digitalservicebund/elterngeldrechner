@@ -8,7 +8,7 @@
     "strict": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "types": ["vitest/importMeta", "node"],
+    "types": ["vitest/importMeta", "node", "unplugin-icons/types/react"],
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",

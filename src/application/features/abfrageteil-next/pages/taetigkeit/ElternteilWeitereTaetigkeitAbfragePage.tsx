@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { z } from "zod";
 import { WeitereTaetigkeitAbfrageSchema } from "./TaetigkeitSchema";
 import { Button, CustomRadioGroup } from "@/application/components";
+import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil-next/domain/findeAlleinerziehend";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
@@ -85,10 +86,15 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
+  const taetigkeitenFlow =
+    taetigkeiten.hatKeinEinkommen === false &&
+    taetigkeiten.istSelbststaendig === true
+      ? "Selbstaendig"
+      : "Nicht-Selbstaendig";
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );
-  const bemessungszeitraum = berechneBemessungszeitraum("Selbstaendig");
+  const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
 
   return (
     <Page heading="Finanzielle Situation">
@@ -97,13 +103,11 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
         className="mt-40 flex flex-col gap-56"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="mt-20">
-          <div className="rounded bg-grey-light py-10">
-            <span className="text-18 px-20 font-bold">
-              Bemessungszeitraum: Kalenderjahr {bemessungszeitraum[0]?.von.year}
-            </span>
-          </div>
-        </div>
+        <BemessungszeitraumBox
+          bemessungszeitraum={bemessungszeitraum}
+          ausklammerungen={[]}
+          taetigkeitenFlow={taetigkeitenFlow}
+        />
 
         <div>
           <h3 className="mb-10">

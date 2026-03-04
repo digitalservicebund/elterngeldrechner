@@ -8,6 +8,7 @@ import {
 } from "./TaetigkeitSchema";
 import { Button, CustomRadioGroup } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
+import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
@@ -83,28 +84,11 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
         className="mt-40 flex flex-col gap-56"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="mt-20">
-          <div className="rounded bg-grey-light py-10">
-            <span className="text-18 px-20 font-bold">
-              Bemessungszeitraum: Kalenderjahr {bemessungszeitraum[0]?.von.year}
-            </span>
-          </div>
-          {ausklammerungen.length > 0 ? (
-            <div className="rounded-b border-x border-b border-t-0 border-dashed border-grey p-20">
-              <h5 className="text-14">Übersprungene Zeiträume:</h5>
-              <ul className="ml-32 mt-4 list-disc text-14">
-                {ausklammerungen
-                  ? ausklammerungen.map((ausklammerung) => (
-                      <li key={ausklammerung.von.toString()} className="m-0">
-                        {ausklammerung.grund} {ausklammerung.von.toString()} bis{" "}
-                        {ausklammerung.bis.toString()}
-                      </li>
-                    ))
-                  : null}
-              </ul>
-            </div>
-          ) : null}
-        </div>
+        <BemessungszeitraumBox
+          bemessungszeitraum={bemessungszeitraum}
+          ausklammerungen={ausklammerungen}
+          taetigkeitenFlow="Selbstaendig"
+        />
 
         <div>
           <h3 className="mb-10">Details zur selbstständigen Tätigkeit</h3>
@@ -191,7 +175,7 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
         <div>
           <h5 className="mb-10">
             Wie viel haben Sie mit Ihrer selbstständigen Arbeit brutto im
-            Kalenderjahr 2023 verdient?
+            Kalenderjahr {bemessungszeitraum[0]?.von.year} verdient?
           </h5>
 
           {/* <InfoZuAlleinerziehenden /> */}

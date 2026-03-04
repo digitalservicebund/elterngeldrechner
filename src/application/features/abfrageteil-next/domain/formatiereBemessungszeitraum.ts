@@ -2,7 +2,9 @@ import { Zeitraum } from "@/bemessungszeitraumrechner";
 
 export const formatiereBemessungszeitraum = (
   zeitraeume: Zeitraum[],
+  trennstrichAusgeschrieben?: boolean,
 ): string => {
+  const datumTrennung = trennstrichAusgeschrieben ? "bis" : "–";
   return zeitraeume
     .map((time) => {
       const von = time.von
@@ -12,7 +14,7 @@ export const formatiereBemessungszeitraum = (
         .toPlainDate({ day: 1 })
         .toLocaleString("de-DE", { month: "long", year: "numeric" });
 
-      return von === bis ? von : `${von} – ${bis}`;
+      return von === bis ? von : `${von} ${datumTrennung} ${bis}`;
     })
     .join(" & ");
 };
@@ -37,6 +39,19 @@ if (import.meta.vitest) {
 
       expect(formatiereBemessungszeitraum(zeitraeume)).toEqual(
         "November 2024 – Oktober 2025",
+      );
+    });
+
+    it("returns string of one von and bis with written bis when zeitraeume array has one zeitraum and trennstrichAusgeschrieben true", () => {
+      const zeitraeume: Zeitraum[] = [
+        {
+          von: Temporal.PlainYearMonth.from("2024-11"),
+          bis: Temporal.PlainYearMonth.from("2025-10"),
+        },
+      ];
+
+      expect(formatiereBemessungszeitraum(zeitraeume, true)).toEqual(
+        "November 2024 bis Oktober 2025",
       );
     });
 

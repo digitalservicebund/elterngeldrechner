@@ -160,7 +160,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
             question="Wo finde ich diese Information?"
             answer={
               <>
-                <p className=”mb-16”>
+                <p className="mb-16">
                   Am genauesten finden Sie Ihr monatliches Bruttogehalt auf
                   Ihrer Gehaltsabrechnung (meist als „Brutto” oder
                   „Gesamtbrutto” bezeichnet).

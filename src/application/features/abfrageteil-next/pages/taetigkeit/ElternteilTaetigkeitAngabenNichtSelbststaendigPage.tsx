@@ -6,7 +6,7 @@ import {
   TaetigkeitNichtSelbststaendigMinijobAbfrage,
   TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
+import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
@@ -85,10 +85,10 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
   );
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -98,22 +98,54 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
         />
 
         <div>
-          <h3 className="mb-10">Details zur angestellten Tätigkeit</h3>
+          <h3 className="mb-10">
+            Details zur Tätigkeit als Angestellte oder Angestellter
+          </h3>
 
           <p>
-            Bitte geben Sie hier Details zu Ihrer Tätigkeit an. Im Anschluss
-            haben Sie die Möglichkeit noch eine weitere Tätigkeit anzugeben.
+            Bitte geben Sie hier Details zur Tätigkeit von [Name Person 1] an.
+            Im Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
+            anzugeben.
           </p>
         </div>
 
         <div>
           <h5 className="mb-10">
-            Handelt es sich um Einkommen aus einem Minijob?{" "}
+            Handelt es sich um Einkommen aus einem Minijob?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was ist ein Minijob?"
+            answer={
+              <>
+                <p>
+                  Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
+                </p>
+                <p>
+                  Man darf im Monat nicht mehr als die gesetzlich festgelegte
+                  Grenze verdienen.
+                </p>
+
+                <p className="mt-16">Diese Grenze liegt:</p>
+                <ul className="mb-16 list-inside list-disc">
+                  <li>seit 2025 bei 556 Euro im Monat,</li>
+                  <li>im Jahr 2024 bei 538 Euro im Monat,</li>
+                  <li>von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,</li>
+                  <li>davor bei 450 Euro im Monat.</li>
+                </ul>
+
+                <p>
+                  Beim Minijob fallen meist keine Steuern und Sozialabgaben an.
+                  Deshalb zieht die Elterngeldstelle von diesem Einkommen auch
+                  nichts ab. Es wird mit dem vollen Betrag gerechnet, den man
+                  verdient hat.
+                </p>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -125,7 +157,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

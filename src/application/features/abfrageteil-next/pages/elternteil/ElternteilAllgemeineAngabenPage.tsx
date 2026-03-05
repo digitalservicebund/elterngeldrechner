@@ -74,7 +74,7 @@ export function ElternteilAllgemeineAngabenPage() {
 
         <div>
           <h3 className="mb-10">
-            Wie heißt Person 1 die Elterngeld erhalten soll?
+            Wie heißt Person 1, die Elterngeld erhalten soll?
           </h3>
 
           <InfoText
@@ -128,7 +128,7 @@ export function ElternteilAllgemeineAngabenPage() {
         </div>
 
         <div>
-          {/* TODO: Abfrage ob Kind schon geboren */}
+          {/* TODO-Abfrage: Abfrage ob Kind schon geboren */}
           <h3 className="mb-10">War [Person] im Mutterschutz?</h3>
 
           <InfoText

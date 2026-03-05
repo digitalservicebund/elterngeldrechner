@@ -81,7 +81,7 @@ export function ElternteilAusklammerungGruendePage() {
             answer="Wenn Sie hier etwas auswählen, können Monate, in denen Sie weniger verdient haben, übersprungen werden. Für die Berechnung des Elterngeldes werden dann Monate verwendet, in denen Sie mehr verdient haben."
           />
 
-          {/* TODO: InfoText zu Komponente hinzufügen */}
+          {/* TODO-Abfrage: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -91,7 +91,7 @@ export function ElternteilAusklammerungGruendePage() {
             onChange={(checked) => handleCheckboxChange(checked)}
           />
 
-          {/* TODO: InfoText zu Komponente hinzufügen */}
+          {/* TODO-Abfrage: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -101,7 +101,7 @@ export function ElternteilAusklammerungGruendePage() {
             onChange={(checked) => handleCheckboxChange(checked)}
           />
 
-          {/* TODO: InfoText zu Komponente hinzufügen */}
+          {/* TODO-Abfrage: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -127,7 +127,7 @@ export function ElternteilAusklammerungGruendePage() {
           />
         </div>
 
-        {/* TODO: Icon bei Alert ändern */}
+        {/* TODO-Abfrage: Icon bei Alert ändern */}
         <Alert headline="Gut zu wissen für die spätere Antragstellung:">
           Wenn Sie vor der Geburt selbstständig waren und Gründe vorliegen, den
           Bemessungszeitraum zu verschieben (wie auf dieser Seite angegeben),

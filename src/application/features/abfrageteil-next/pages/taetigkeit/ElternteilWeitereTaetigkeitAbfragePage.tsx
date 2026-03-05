@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import { WeitereTaetigkeitAbfrageSchema } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
+import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil-next/domain/findeAlleinerziehend";
@@ -97,10 +97,10 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -111,12 +111,29 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
 
         <div>
           <h3 className="mb-10">
-            Hatten Sie noch weitere Tätigkeiten im Bemessungszeitraum?
+            Hatte [Person] noch weitere Tätigkeiten im Bemessungszeitraum?
           </h3>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was sind weitere Tätigkeiten?"
+            answer={
+              <>
+                <p>
+                  Hier sind alle zusätzlichen Tätigkeiten gemeint, aus denen Sie
+                  im Bemessungszeitraum Einkommen bezogen haben.
+                </p>
+
+                <p>Dazu zählen:</p>
+                <ul className="mb-16 list-inside list-disc">
+                  <li>Angestelltentätigkeiten (auch Teilzeit oder Minijobs)</li>
+                  <li>Weiteres Einkommen durch Selbstständigkeit</li>
+                </ul>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -134,7 +151,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

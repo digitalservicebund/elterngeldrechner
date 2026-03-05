@@ -90,10 +90,10 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
   );
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -102,12 +102,14 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
-        <h3 className="mb-10">Details zur angestellten Tätigkeit</h3>
+        <h3 className="mb-10">
+          Details zur Tätigkeit als Angestellte oder Angestellter
+        </h3>
 
         <div>
           <h5 className="mb-10">
-            Wie haben Sie von {formatierterBemessungszeitraum} im Monat brutto
-            verdient?
+            Wie hat [Person] von {formatierterBemessungszeitraum} im Monat
+            brutto verdient?
           </h5>
 
           <CustomRadioGroup
@@ -118,14 +120,17 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
             options={[
               {
                 value: "yes",
-                label: "Ich habe jeden Monat gleich viel verdient",
+                label: "[Person] hat jeden Monat gleich viel verdient",
               },
-              { value: "no", label: "Ich habe unterschiedlich viel verdient" },
+              {
+                value: "no",
+                label: "[Person] hat  unterschiedlich viel verdient",
+              },
             ]}
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

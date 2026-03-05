@@ -93,7 +93,7 @@ export function ElternteilAusklammerungZeitenPage() {
       >
         <h3>Bitte machen Sie Detailangaben:</h3>
 
-        {/* TODO: Mutterschutz zu Label und Button hinzufügen */}
+        {/* TODO-Abfrage: Mutterschutz zu Label und Button hinzufügen */}
         {defaultValues["mutterschutzGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="mutterschutzGeschwisterkind"
@@ -103,7 +103,7 @@ export function ElternteilAusklammerungZeitenPage() {
           />
         )}
 
-        {/* TODO: Mutterschutz zu Button hinzufügen */}
+        {/* TODO-Abfrage: Mutterschutz zu Button hinzufügen */}
         {defaultValues["elterngeldGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="elterngeldGeschwisterkind"
@@ -113,7 +113,7 @@ export function ElternteilAusklammerungZeitenPage() {
           />
         )}
 
-        {/* TODO: Mutterschutz zu Button hinzufügen */}
+        {/* TODO-Abfrage: Mutterschutz zu Button hinzufügen */}
         {defaultValues["erkrankungSchwangerschaft"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="erkrankungSchwangerschaft"

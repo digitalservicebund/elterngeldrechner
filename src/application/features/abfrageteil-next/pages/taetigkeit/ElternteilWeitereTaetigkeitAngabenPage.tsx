@@ -58,31 +58,31 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
   };
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
           <h3 className="mb-10">
-            Um was handelt oder handelte es sich bei der weiteren
-            Tätigkeit?{" "}
+            Um was handelt oder handelte es sich bei der weiteren Tätigkeit?
           </h3>
 
+          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomRadioGroup
             legend=""
             errors={formErrors}
             register={register}
             name="istWeitereTaetigkeitSelbststaendigeTaetigkeit"
             options={[
-              { value: "no", label: "Ich war oder bin angestellt" },
-              { value: "yes", label: "Ich war oder bin selbstständig" },
+              { value: "no", label: "[Person] war oder ist angestellt" },
+              { value: "yes", label: "[Person] war oder ist selbstständig" },
             ]}
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

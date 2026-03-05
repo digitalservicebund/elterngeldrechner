@@ -6,8 +6,7 @@ import {
   TaetigkeitSelbststaendigAngaben,
   TaetigkeitSelbststaendigAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
-import { Alert } from "@/application/components/Alert";
+import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
@@ -78,10 +77,10 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
   );
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -94,13 +93,14 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           <h3 className="mb-10">Details zur selbstständigen Tätigkeit</h3>
 
           <p>
-            Bitte geben Sie hier Details zu Ihrer Tätigkeit an. Im Anschluss
-            haben Sie die Möglichkeit noch eine weitere Tätigkeit anzugeben.
+            Bitte geben Sie hier Details zur Tätigkeit von [Person] an. Im
+            Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
+            anzugeben.
           </p>
         </div>
 
         <div>
-          <h5 className="mb-10">Sind Sie Kirchensteuerpflichtig?</h5>
+          <h5 className="mb-10">Ist [Person] kirchensteuerpflichtig?</h5>
 
           <CustomRadioGroup
             legend=""
@@ -116,12 +116,39 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Sind Sie über die gesetzliche Krankenversicherung pflichtversichert?
+            Ist [Person] über die gesetzliche Krankenversicherung
+            pflichtversichert?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Mit einer selbstständigen Tätigkeit sind Sie in der Regel
+                  nicht automatisch gesetzlich pflichtversichert.
+                </p>
+
+                <p>Sie wählen „Nein“, wenn Sie</p>
+                <ul className="mb-16 list-inside list-disc">
+                  <li>freiwillig gesetzlich versichert,</li>
+                  <li>familienversichert,</li>
+                  <li>privat versichert,</li>
+                  <li>nicht (in Deutschland) krankenversichert sind.</li>
+                </ul>
+
+                <p>
+                  Hinweis: In diesem Fall müssen Sie entsprechende Beiträge für
+                  Ihre Krankenversicherung zusätzlich eigenständig einplanen, da
+                  sie im Elterngeldrechner nicht automatisch berücksichtigt
+                  werden.
+                </p>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -135,12 +162,17 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlen Sie Pflichtbeiträge in die gesetzliche Rentenversicherung?
+            Zahlt [Person] Pflichtbeiträge in die gesetzliche
+            Rentenversicherung?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was bedeutet das?"
+            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert. Pflichtbeiträge fallen nur in wenigen Fällen an, zum Beispiel für Künstler:innen oder Journalist:innen über die Künstlersozialkasse. Wenn Sie in ein berufsständisches Versorgungswerk eingezahlt haben, wird dies bei der Elterngeldberechnung berücksichtigt."
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -154,13 +186,17 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlen Sie Pflichtbeiträge in die gesetzliche
+            Zahlt [Person] Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was bedeutet das?"
+            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Arbeitslosenversicherung abgeschlossen haben."
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -174,11 +210,46 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie viel haben Sie mit Ihrer selbstständigen Arbeit brutto im
-            Kalenderjahr {bemessungszeitraum[0]?.von.year} verdient?
+            Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von
+            [Person] im Jahr {bemessungszeitraum[0]?.von.year}?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            className="mb-16"
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p>
+                  Wenn der aktuelle Einkommensteuerbescheid noch nicht vorliegt,
+                  geben Sie einen geschätzten Gewinn an. Beachten Sie, dass die
+                  spätere Berechnung ihres Elterngeldes durch die
+                  Elterngeldstelle dadurch anders ausfallen kann.
+                </p>
+                <div className="mt-16">
+                  <p>
+                    Für Selbstständige zählt der Gewinn aus der selbstständigen
+                    Tätigkeit. Der Gewinn ist der Betrag, der nach Abzug aller
+                    betrieblichen Ausgaben von Ihren Betriebseinnahmen übrig
+                    bleibt. Maßgeblich ist nicht Ihr gesamter Umsatz, sondern
+                    dieser Gewinn.
+                  </p>
+                  <p>
+                    Den maßgeblichen Gewinn finden Sie in Ihrem
+                    Einkommensteuerbescheid bei den Einkünften aus
+                    selbstständiger Arbeit oder aus Gewerbebetrieb oder aus
+                    Land- und Forstwirtschaft.
+                  </p>
+                  <p>
+                    Einnahmen aus Vermietung und Verpachtung oder aus
+                    Kapitalvermögen (zum Beispiel Zinsen) sind zwar im
+                    Steuerbescheid enthalten, zählen beim Elterngeld jedoch
+                    nicht als Erwerbseinkommen und bleiben daher
+                    unberücksichtigt.
+                  </p>
+                </div>
+              </>
+            }
+          />
 
           <NumberInput
             {...register("bruttoJahresgewinn", {
@@ -191,21 +262,12 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
               min: { value: 0, message: "Bitte geben Sie ein Einkommen an" },
               required: "Bitte geben Sie ein Einkommen an",
             })}
-            label="Brutto-Gewinn im gesamten Kalenderjahr"
+            label="Gewinn im gesamten Kalenderjahr"
             errors={formErrors.bruttoJahresgewinn?.message}
           />
         </div>
 
-        <Alert
-          headline="Ihr Einkommenststeuerbescheid für das letzte Jahr liegt noch nicht vor?"
-          className="mt-40"
-        >
-          Wenn der aktuelle Einkommensteuerbescheid noch nicht vorliegt, geben
-          Sie einen geschätzten Brutto-Gewinn an. Beachten Sie, dass das
-          Ergebnis der Elterngeldberechnung dadurch abweichen kann.
-        </Alert>
-
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

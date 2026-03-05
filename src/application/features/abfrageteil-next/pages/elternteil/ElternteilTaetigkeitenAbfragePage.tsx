@@ -88,7 +88,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Das ist die Zeit vor der Geburt Ihres Kindes, aus der Ihr Einkommen für die Berechnung des Elterngeldes verwendet wird. Welche Zeit genau berücksichtigt wird, hängt von Ihrer persönlichen Situation ab."
           />
 
-          {/* TODO: Erklärung unter Label und Label bold */}
+          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -97,7 +97,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             errors={formErrors}
           />
 
-          {/* TODO: Erklärung unter Label und Label bold */}
+          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -106,7 +106,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             errors={formErrors}
           />
 
-          {/* TODO: Erklärung unter Label und Label bold */}
+          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -115,7 +115,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             errors={formErrors}
           />
 
-          {/* TODO: Erklärung unter Label und Label bold */}
+          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -124,7 +124,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             errors={formErrors}
           />
 
-          {/* TODO: Erklärung unter Label und Label bold */}
+          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}

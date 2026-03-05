@@ -103,7 +103,7 @@ export function ElternteilZweitePersonAngabenPage() {
           wirdZweitePersonBeruecksichtigt === "unknown") && (
           <div className="mt-20">
             <h3 className="mb-10">
-              Wie heißt Person 2 die Elterngeld erhalten soll?
+              Wie heißt Person 2, die Elterngeld erhalten soll?
             </h3>
 
             <InfoText
@@ -132,7 +132,7 @@ export function ElternteilZweitePersonAngabenPage() {
           </div>
         )}
 
-        {/* TODO: Input für Mutterschutz */}
+        {/* TODO-Abfrage: Input für Mutterschutz */}
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

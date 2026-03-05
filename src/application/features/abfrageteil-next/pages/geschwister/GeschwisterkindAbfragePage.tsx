@@ -6,7 +6,8 @@ import {
   GeschwisterkindAbfrage,
   GeschwisterkindAbfrageSchema,
 } from "./GeschwisterSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -70,27 +71,22 @@ export function GeschwisterkindAbfragePage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-            slotBetweenLegendAndOptions={
-              <InfoText
-                question="Wann kann ich einen Geschwisterbonus erhalten?"
-                answer={
-                  <ul className="list-inside list-disc">
-                    Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
-                    <li>
-                      mindestens ein weiteres Kind unter 3 Jahren lebt oder
-                    </li>
-                    <li>
-                      mindestens 2 weitere Kinder unter 6 Jahren leben oder
-                    </li>
-                    <li>
-                      mindestens ein weiteres Kind mit Behinderung unter 14
-                      Jahren lebt.
-                    </li>
-                  </ul>
-                }
-              />
-            }
-          />
+          >
+            <InfoText
+              question="Wann kann ich einen Geschwisterbonus erhalten?"
+              answer={
+                <ul className="list-inside list-disc">
+                  Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
+                  <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
+                  <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
+                  <li>
+                    mindestens ein weiteres Kind mit Behinderung unter 14 Jahren
+                    lebt.
+                  </li>
+                </ul>
+              }
+            />
+          </CustomRadioGroup>
         </div>
 
         <div className="mt-40 flex gap-16">

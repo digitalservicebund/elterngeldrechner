@@ -81,7 +81,6 @@ export function ElternteilAusklammerungGruendePage() {
             answer="Wenn Sie hier etwas auswählen, können Monate, in denen Sie weniger verdient haben, übersprungen werden. Für die Berechnung des Elterngeldes werden dann Monate verwendet, in denen Sie mehr verdient haben."
           />
 
-          {/* TODO-Abfrage: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -89,9 +88,13 @@ export function ElternteilAusklammerungGruendePage() {
             label="[Person] war für ein älteres Kind im Mutterschutz"
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
-          />
+          >
+            <InfoText
+              question="Was bedeutet Mutterschutz für ein älteres Kind?"
+              answer="Bei der Berechnung des Elterngelds können die Monate, in denen Sie Mutterschaftsleistungen für ein älteres Kind erhalten haben, übersprungen werden. Diesen Zeitraum können Sie aus der Bescheinigung Ihres Arbeitgebers oder Ihrer Krankenkasse ablesen."
+            />
+          </CustomCheckbox>
 
-          {/* TODO-Abfrage: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -99,9 +102,13 @@ export function ElternteilAusklammerungGruendePage() {
             label="[Person] hat für ein älteres Kind Elterngeld bekommen"
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
-          />
+          >
+            <InfoText
+              question="Was bedeutet Elterngeld für ein älteres Kind?"
+              answer="Bei der Berechnung des Elterngelds können auch die Monate, in denen Sie Elterngeld für ein älteres Kind erhalten haben, übersprungen werden. Das gilt nur für die ersten 14 Lebensmonate dieses Kindes."
+            />
+          </CustomCheckbox>
 
-          {/* TODO-Abfrage: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
@@ -109,7 +116,12 @@ export function ElternteilAusklammerungGruendePage() {
             label="[Person] hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen"
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
-          />
+          >
+            <InfoText
+              question="Was bedeutet Krankheit wegen der Schwangerschaft?"
+              answer="Wenn Sie aufgrund Ihrer Schwangerschaft krank waren, können diese Monate übersprungen werden."
+            />
+          </CustomCheckbox>
 
           <CustomCheckbox
             className="mt-20"

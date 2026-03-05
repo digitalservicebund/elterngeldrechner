@@ -6,8 +6,9 @@ import {
   TaetigkeitNichtSelbststaendigMinijobAbfrage,
   TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
@@ -114,36 +115,6 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
             Handelt es sich um Einkommen aus einem Minijob?
           </h5>
 
-          <InfoText
-            question="Was ist ein Minijob?"
-            answer={
-              <>
-                <p>
-                  Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
-                </p>
-                <p>
-                  Man darf im Monat nicht mehr als die gesetzlich festgelegte
-                  Grenze verdienen.
-                </p>
-
-                <p className="mt-16">Diese Grenze liegt:</p>
-                <ul className="mb-16 list-inside list-disc">
-                  <li>seit 2025 bei 556 Euro im Monat,</li>
-                  <li>im Jahr 2024 bei 538 Euro im Monat,</li>
-                  <li>von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,</li>
-                  <li>davor bei 450 Euro im Monat.</li>
-                </ul>
-
-                <p>
-                  Beim Minijob fallen meist keine Steuern und Sozialabgaben an.
-                  Deshalb zieht die Elterngeldstelle von diesem Einkommen auch
-                  nichts ab. Es wird mit dem vollen Betrag gerechnet, den man
-                  verdient hat.
-                </p>
-              </>
-            }
-          />
-
           <CustomRadioGroup
             className="mt-16"
             legend=""
@@ -154,7 +125,37 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was ist ein Minijob?"
+              answer={
+                <>
+                  <p>
+                    Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
+                    Man darf im Monat nicht mehr als die gesetzlich festgelegte
+                    Grenze verdienen.
+                  </p>
+
+                  <p>Diese Grenze liegt:</p>
+                  <ul className="my-16 ml-8 list-inside list-disc">
+                    <li>seit 2025 bei 556 Euro im Monat,</li>
+                    <li>im Jahr 2024 bei 538 Euro im Monat,</li>
+                    <li>
+                      von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,
+                    </li>
+                    <li>davor bei 450 Euro im Monat.</li>
+                  </ul>
+
+                  <p>
+                    Beim Minijob fallen meist keine Steuern und Sozialabgaben
+                    an. Deshalb zieht die Elterngeldstelle von diesem Einkommen
+                    auch nichts ab. Es wird mit dem vollen Betrag gerechnet, den
+                    man verdient hat.
+                  </p>
+                </>
+              }
+            />
+          </CustomRadioGroup>
         </div>
 
         <div className="mt-40 flex gap-16">

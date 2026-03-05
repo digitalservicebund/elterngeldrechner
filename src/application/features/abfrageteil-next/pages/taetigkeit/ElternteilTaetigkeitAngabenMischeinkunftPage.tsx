@@ -6,8 +6,9 @@ import {
   TaetigkeitSelbststaendigAngaben,
   TaetigkeitSelbststaendigAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
@@ -120,33 +121,6 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
             pflichtversichert?
           </h5>
 
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Mit einer selbstständigen Tätigkeit sind Sie in der Regel
-                  nicht automatisch gesetzlich pflichtversichert.
-                </p>
-
-                <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="mb-16 list-inside list-disc">
-                  <li>freiwillig gesetzlich versichert,</li>
-                  <li>familienversichert,</li>
-                  <li>privat versichert,</li>
-                  <li>nicht (in Deutschland) krankenversichert sind.</li>
-                </ul>
-
-                <p>
-                  Hinweis: In diesem Fall müssen Sie entsprechende Beiträge für
-                  Ihre Krankenversicherung zusätzlich eigenständig einplanen, da
-                  sie im Elterngeldrechner nicht automatisch berücksichtigt
-                  werden.
-                </p>
-              </>
-            }
-          />
-
           <CustomRadioGroup
             className="mt-16"
             legend=""
@@ -157,7 +131,34 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p>
+                    Mit einer selbstständigen Tätigkeit sind Sie in der Regel
+                    nicht automatisch gesetzlich pflichtversichert.
+                  </p>
+
+                  <p>Sie wählen „Nein“, wenn Sie</p>
+                  <ul className="my-16 ml-8 list-inside list-disc">
+                    <li>freiwillig gesetzlich versichert, </li>
+                    <li>familienversichert,</li>
+                    <li>privat versichert,</li>
+                    <li>nicht (in Deutschland) krankenversichert sind.</li>
+                  </ul>
+
+                  <p>
+                    Hinweis: In diesem Fall müssen Sie entsprechende Beiträge
+                    für Ihre Krankenversicherung zusätzlich eigenständig
+                    einplanen, da sie im Elterngeldrechner nicht automatisch
+                    berücksichtigt werden.
+                  </p>
+                </>
+              }
+            />
+          </CustomRadioGroup>
         </div>
 
         <div>
@@ -165,11 +166,6 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
             Zahlt [Person] Pflichtbeiträge in die gesetzliche
             Rentenversicherung?
           </h5>
-
-          <InfoText
-            question="Was bedeutet das?"
-            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert. Pflichtbeiträge fallen nur in wenigen Fällen an, zum Beispiel für Künstler:innen oder Journalist:innen über die Künstlersozialkasse. Wenn Sie in ein berufsständisches Versorgungswerk eingezahlt haben, wird dies bei der Elterngeldberechnung berücksichtigt."
-          />
 
           <CustomRadioGroup
             className="mt-16"
@@ -181,7 +177,12 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert. Pflichtbeiträge fallen nur in wenigen Fällen an, zum Beispiel für Künstler:innen oder Journalist:innen über die Künstlersozialkasse. Wenn Sie in ein berufsständisches Versorgungswerk eingezahlt haben, wird dies bei der Elterngeldberechnung berücksichtigt."
+            />
+          </CustomRadioGroup>
         </div>
 
         <div>
@@ -189,11 +190,6 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
             Zahlt [Person] Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
-
-          <InfoText
-            question="Was bedeutet das?"
-            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Arbeitslosenversicherung abgeschlossen haben."
-          />
 
           <CustomRadioGroup
             className="mt-16"
@@ -205,7 +201,12 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Arbeitslosenversicherung abgeschlossen haben."
+            />
+          </CustomRadioGroup>
         </div>
 
         <div>
@@ -250,7 +251,6 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
               </>
             }
           />
-
           <NumberInput
             {...register("bruttoJahresgewinn", {
               valueAsNumber: true,

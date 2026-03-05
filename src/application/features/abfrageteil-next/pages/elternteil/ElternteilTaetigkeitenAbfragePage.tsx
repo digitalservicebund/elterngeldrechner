@@ -88,50 +88,64 @@ export function ElternteilTaetigkeitenAbfragePage() {
             answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Das ist die Zeit vor der Geburt Ihres Kindes, aus der Ihr Einkommen für die Berechnung des Elterngeldes verwendet wird. Welche Zeit genau berücksichtigt wird, hängt von Ihrer persönlichen Situation ab."
           />
 
-          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
-            className="mt-20"
+            className="mt-20 font-bold"
             register={register}
             name="istNichtSelbststaendig"
             label="[Person] war oder ist angestellt"
             errors={formErrors}
-          />
+          >
+            <p className="font-regular">
+              zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
+              Freiwilligendienst.
+            </p>
+          </CustomCheckbox>
 
-          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
-            className="mt-20"
+            className="mt-20 font-bold"
             register={register}
             name="istSelbststaendig"
             label="[Person] war oder ist selbstständig"
             errors={formErrors}
-          />
+          >
+            <p className="font-regular">
+              zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
+              Freiwilligendienst.
+            </p>
+          </CustomCheckbox>
 
-          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
-            className="mt-20"
+            className="mt-20 font-bold"
             register={register}
             name="istVerbeamtet"
             label="[Person] war oder ist Beamtin"
             errors={formErrors}
           />
 
-          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
-            className="mt-20"
+            className="mt-20 font-bold"
             register={register}
             name="hatAndereLeistungen"
             label="[Person] erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen"
             errors={formErrors}
-          />
+          >
+            <p className="font-regular">
+              zum Beispiel Bürgergeld, Arbeitslosengeld, Krankengeld oder
+              Elterngeld.
+            </p>
+          </CustomCheckbox>
 
-          {/* TODO-Abfrage: Erklärung unter Label und Label bold */}
           <CustomCheckbox
-            className="mt-20"
+            className="mt-20 font-bold"
             register={register}
             name="hatKeinEinkommen"
             label="[Person] hatte oder hat kein Einkommen"
             errors={formErrors}
-          />
+          >
+            <p className="font-regular">
+              zum Beispiel während eines Studiums, als Hausfrau oder Hausmann.
+            </p>
+          </CustomCheckbox>
         </div>
 
         <div className="mt-40 flex gap-16">

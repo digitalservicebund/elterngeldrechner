@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import { WeitereTaetigkeitAbfrageSchema } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil-next/domain/findeAlleinerziehend";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
@@ -115,6 +116,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
           </h3>
 
           <InfoText
+            className="mb-16"
             question="Was sind weitere Tätigkeiten?"
             answer={
               <>
@@ -124,8 +126,11 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
                 </p>
 
                 <p>Dazu zählen:</p>
-                <ul className="mb-16 list-inside list-disc">
-                  <li>Angestelltentätigkeiten (auch Teilzeit oder Minijobs)</li>
+                <ul className="my-16 ml-8 list-inside list-disc">
+                  <li>
+                    Weitere angestellten Tätigkeiten (auch Teilzeit oder
+                    Minijobs)
+                  </li>
                   <li>Weiteres Einkommen durch Selbstständigkeit</li>
                 </ul>
               </>

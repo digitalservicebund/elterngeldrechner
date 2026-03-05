@@ -6,7 +6,8 @@ import {
   ElternteilAllgemeineAngaben,
   ElternteilAllgemeineAngabenSchema,
 } from "./ElternteilSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";

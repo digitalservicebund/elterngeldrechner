@@ -6,12 +6,13 @@ import {
   TaetigkeitNichtSelbststaendigAngaben,
   TaetigkeitNichtSelbststaendigAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
@@ -154,32 +155,6 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             pflichtversichert?
           </h5>
 
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
-                  die gesetzliche Pflichtversicherung.
-                </p>
-
-                <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="mb-16 list-inside list-disc">
-                  <li>freiwillig gesetzlich versichert,</li>
-                  <li>familienversichert,</li>
-                  <li>privat versichert,</li>
-                  <li>nicht (in Deutschland) krankenversichert sind.</li>
-                </ul>
-
-                <p>
-                  Wenn Ihr regelmäßiges Jahresbrutto über der gesetzlich
-                  festgelegten Einkommensgrenze liegt, sind Sie in der Regel
-                  nicht mehr gesetzlich pflichtversichert.
-                </p>
-              </>
-            }
-          />
-
           <CustomRadioGroup
             className="mt-16"
             legend=""
@@ -190,7 +165,33 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p>
+                    Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
+                    die gesetzliche Pflichtversicherung.
+                  </p>
+
+                  <p>Sie wählen „Nein“, wenn Sie</p>
+                  <ul className="my-16 ml-8 list-inside list-disc">
+                    <li>freiwillig gesetzlich versichert,</li>
+                    <li>familienversichert,</li>
+                    <li>privat versichert, </li>
+                    <li>nicht (in Deutschland) krankenversichert sind.</li>
+                  </ul>
+
+                  <p>
+                    Wenn Ihr regelmäßiges Jahresbrutto über der gesetzlich
+                    festgelegten Einkommensgrenze liegt, sind Sie in der Regel
+                    nicht mehr gesetzlich pflichtversichert.
+                  </p>
+                </>
+              }
+            />
+          </CustomRadioGroup>
         </div>
 
         <div>
@@ -198,35 +199,6 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             Zahlt [Person] Pflichtbeiträge in die gesetzliche
             Rentenversicherung?
           </h5>
-
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Wenn Sie angestellt sind, zahlen Sie in der Regel automatisch
-                  Pflichtbeiträge zur gesetzlichen Rentenversicherung.
-                </p>
-
-                <p>
-                  Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
-                  Beispiel weil Sie:
-                </p>
-                <ul className="mb-16 list-inside list-disc">
-                  <li>verbeamtet sind,</li>
-                  <li>selbstständig tätig sind,</li>
-                  <li>
-                    geringfügig beschäftigt (Minijob ohne
-                    Rentenversicherungspflicht) sind,
-                  </li>
-                  <li>
-                    oder aus anderen Gründen von der Versicherungspflicht
-                    befreit wurden.
-                  </li>
-                </ul>
-              </>
-            }
-          />
 
           <CustomRadioGroup
             className="mt-16"
@@ -238,7 +210,37 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p>
+                    Wenn Sie angestellt sind, zahlen Sie in der Regel
+                    automatisch Pflichtbeiträge zur gesetzlichen
+                    Rentenversicherung.
+                  </p>
+
+                  <p>
+                    Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
+                    zum Beispiel weil Sie:
+                  </p>
+                  <ul className="my-16 ml-8 list-inside list-disc">
+                    <li>verbeamtet sind,</li>
+                    <li>selbstständig tätig sind,</li>
+                    <li>
+                      geringfügig beschäftigt (Minijob ohne
+                      Rentenversicherungspflicht) sind,
+                    </li>
+                    <li>
+                      oder aus anderen Gründen von der Versicherungspflicht
+                      befreit wurden.
+                    </li>
+                  </ul>
+                </>
+              }
+            />
+          </CustomRadioGroup>
         </div>
 
         <div>
@@ -246,35 +248,6 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             Zahlt [Person] Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
-
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Wenn Sie angestellt sind, zahlen Sie in der Regel automatisch
-                  Pflichtbeiträge zur gesetzlichen Arbeitslosenversicherung.
-                </p>
-
-                <p>
-                  Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
-                  Beispiel weil Sie:
-                </p>
-                <ul className="mb-16 list-inside list-disc">
-                  <li>verbeamtet sind,</li>
-                  <li>selbstständig tätig sind,</li>
-                  <li>
-                    geringfügig beschäftigt (Minijob ohne
-                    Rentenversicherungspflicht) sind,
-                  </li>
-                  <li>
-                    oder aus anderen Gründen von der Versicherungspflicht
-                    befreit wurden.
-                  </li>
-                </ul>
-              </>
-            }
-          />
 
           <CustomRadioGroup
             className="mt-16"
@@ -286,7 +259,37 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               { value: "yes", label: "Ja" },
               { value: "no", label: "Nein" },
             ]}
-          />
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p>
+                    Wenn Sie angestellt sind, zahlen Sie in der Regel
+                    automatisch Pflichtbeiträge zur gesetzlichen
+                    Arbeitslosenversicherung.
+                  </p>
+
+                  <p>
+                    Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
+                    zum Beispiel weil Sie:
+                  </p>
+                  <ul className="my-16 ml-8 list-inside list-disc">
+                    <li>verbeamtet sind,</li>
+                    <li>selbstständig tätig sind,</li>
+                    <li>
+                      geringfügig beschäftigt (Minijob ohne
+                      Rentenversicherungspflicht) sind,
+                    </li>
+                    <li>
+                      oder aus anderen Gründen von der Versicherungspflicht
+                      befreit wurden.
+                    </li>
+                  </ul>
+                </>
+              }
+            />
+          </CustomRadioGroup>
         </div>
 
         <div>

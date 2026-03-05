@@ -7,11 +7,12 @@ import {
   AllgemeineAngabenSchema,
   bundeslaender,
 } from "./AllgemeineAngabenSchema";
-import { Button, CustomRadioGroup, InfoText } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import {
   CustomSelect,
   SelectOption,
 } from "@/application/features/abfrageteil/components/common";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -92,30 +93,28 @@ export function AllgemeineAngabenPage() {
               { value: "no", label: "Nein" },
             ]}
             name="gesamteinkommenGrenzeUeberschritten"
-            slotBetweenLegendAndOptions={
-              <InfoText
-                question="Was bedeutet Gesamteinkommen?"
-                answer={
-                  <>
-                    <p>
-                      Wenn Sie besonders viel Einkommen haben, können Sie kein
-                      Elterngeld bekommen. Elterngeld ist ausgeschlossen ab
-                      einem zu versteuernden Jahreseinkommen von mehr als
-                      175.000 Euro bei Alleinerziehenden, Paaren und getrennt
-                      Erziehenden.
-                    </p>
-                    <p>
-                      Diese Angabe finden Sie beispielsweise auf Ihrem
-                      Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben
-                      Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt
-                      erziehende Eltern rechnen Sie das Einkommen beider
-                      Elternteile zusammen.
-                    </p>
-                  </>
-                }
-              ></InfoText>
-            }
-          />
+          >
+            <InfoText
+              question="Was bedeutet Gesamteinkommen?"
+              answer={
+                <>
+                  <p>
+                    Wenn Sie besonders viel Einkommen haben, können Sie kein
+                    Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem
+                    zu versteuernden Jahreseinkommen von mehr als 175.000 Euro
+                    bei Alleinerziehenden, Paaren und getrennt Erziehenden.
+                  </p>
+                  <p>
+                    Diese Angabe finden Sie beispielsweise auf Ihrem
+                    Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben
+                    Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt
+                    erziehende Eltern rechnen Sie das Einkommen beider
+                    Elternteile zusammen.
+                  </p>
+                </>
+              }
+            ></InfoText>
+          </CustomRadioGroup>
         </div>
 
         <div className="mt-40 flex gap-16">

@@ -19,6 +19,7 @@ type Props<TFieldValues extends FieldValues> = {
   readonly errors?: FieldErrors<TFieldValues> | boolean;
   readonly onChange?: (newValue: boolean) => void;
   readonly className?: string;
+  readonly children?: React.ReactNode;
 };
 
 export function CustomCheckbox<TFieldValues extends FieldValues>({
@@ -29,6 +30,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   errors,
   onChange,
   className,
+  children,
 }: Props<TFieldValues>) {
   let hasError = false;
   let errorMessage = "";
@@ -92,6 +94,8 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
           {errorMessage}
         </Description>
       )}
+
+      <div className="pl-40 pt-10">{children}</div>
     </div>
   );
 }

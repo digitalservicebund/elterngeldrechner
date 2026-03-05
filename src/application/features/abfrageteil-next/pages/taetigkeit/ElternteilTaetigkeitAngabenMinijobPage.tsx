@@ -6,8 +6,9 @@ import {
   TaetigkeitMinijobEinkommendetailsAbfrage,
   TaetigkeitMinijobEinkommendetailsAbfrageSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
+import { Button } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";

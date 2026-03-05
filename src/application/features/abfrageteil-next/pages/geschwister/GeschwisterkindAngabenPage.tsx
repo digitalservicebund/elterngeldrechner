@@ -6,7 +6,8 @@ import {
   GeschwisterkindAngaben,
   GeschwisterkindAngabenSchema,
 } from "./GeschwisterSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
+import { Button } from "@/application/components";
+import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";

@@ -63,7 +63,7 @@ export function ElternteilAusklammerungZeitenInput({
         className="self-start"
         onClick={() => append({ von: "", bis: "" })}
       >
-        + Weiteren Zeitraum hinzufügen
+        <span className="text-16">+ Weiteren Zeitraum hinzufügen</span>
       </Button>
     </div>
   );

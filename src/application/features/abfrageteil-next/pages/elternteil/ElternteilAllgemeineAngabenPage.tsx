@@ -6,10 +6,7 @@ import {
   ElternteilAllgemeineAngaben,
   ElternteilAllgemeineAngabenSchema,
 } from "./ElternteilSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
-import { InfoZuAlleinerziehenden } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoFuerAlleinerziehenden";
-import { InfoZuVornamen } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuVornamen";
-import { InfoZumMutterschutz } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZumMutterschutz";
+import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -66,10 +63,10 @@ export function ElternteilAllgemeineAngabenPage() {
     <Page heading="Angaben Person 1">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <p>
+        <p className="-mt-20">
           Auf den folgenden Seiten fragen wir alle Informationen zu Person 1 ab.
           Sollte es eine weitere Person geben, können hierzu Angaben im
           Anschluss gemacht werden.
@@ -80,9 +77,12 @@ export function ElternteilAllgemeineAngabenPage() {
             Wie heißt Person 1 die Elterngeld erhalten soll?
           </h3>
 
-          <InfoZuVornamen />
+          <InfoText
+            question="Warum soll ich einen Vornamen angeben?"
+            answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
+          />
 
-          <div className="mt-20">
+          <div className="mt-16">
             <label
               className="mb-4 block text-16"
               htmlFor={personNameInputIdentifier}
@@ -107,11 +107,15 @@ export function ElternteilAllgemeineAngabenPage() {
         </div>
 
         <div>
-          <h3 className="mb-10">Sind Sie alleinerziehend?</h3>
+          <h3 className="mb-10">Ist [Person] alleinerziehend?</h3>
 
-          <InfoZuAlleinerziehenden />
+          <InfoText
+            question="Was bedeutet alleinerziehend?"
+            answer="Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten."
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -123,12 +127,36 @@ export function ElternteilAllgemeineAngabenPage() {
           />
         </div>
 
-        <div className="mt-32">
-          <h3 className="mb-10">Sind oder werden Sie im Mutterschutz sein?</h3>
+        <div>
+          {/* TODO: Abfrage ob Kind schon geboren */}
+          <h3 className="mb-10">War [Person] im Mutterschutz?</h3>
 
-          <InfoZumMutterschutz />
+          <InfoText
+            question="Was ist Mutterschutz?"
+            answer={
+              <>
+                <p>
+                  Während des Mutterschutzes erhalten Sie
+                  Mutterschaftsleistungen, zum Beispiel:
+                </p>
+
+                <ul className="list-inside list-disc">
+                  <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
+                  <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+                  <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
+                </ul>
+
+                <p>
+                  Diese werden – wenn ein Anspruch darauf besteht –
+                  normalerweise in den ersten acht Wochen nach der Geburt
+                  gezahlt.
+                </p>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -150,7 +178,7 @@ export function ElternteilAllgemeineAngabenPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

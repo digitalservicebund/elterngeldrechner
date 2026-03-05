@@ -67,43 +67,46 @@ export function ElternteilAusklammerungGruendePage() {
   };
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Angaben [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <h3>Treffen folgende Gründe auf Sie zu?</h3>
+          <h3>Treffen folgende Gründe auf [Person] zu?</h3>
 
           <InfoText
             question="Warum fragen wir das?"
-            answer="Wenn Sie hier etwas auswählen, kann für die Berechnung Ihres Elterngeldes ein anderer Monat genommen werden. Und zwar der Monat, in dem Sie mehr verdient haben. "
+            answer="Wenn Sie hier etwas auswählen, können Monate, in denen Sie weniger verdient haben, übersprungen werden. Für die Berechnung des Elterngeldes werden dann Monate verwendet, in denen Sie mehr verdient haben."
           />
 
+          {/* TODO: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="hatMutterschutzAelteresKind"
-            label="Ich war für ein älteres Kind im Mutterschutz"
+            label="[Person] war für ein älteres Kind im Mutterschutz"
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
           />
 
+          {/* TODO: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="hatElterngeldAelteresKind"
-            label="Ich habe für ein älteres Kind Elterngeld bekommen"
+            label="[Person] hat für ein älteres Kind Elterngeld bekommen"
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
           />
 
+          {/* TODO: InfoText zu Komponente hinzufügen */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="hatSchwangerschaftsbedingteErkrankung"
-            label="Ich hatte eine Erkrankung wegen meiner Schwangerschaft und hatte weniger Einkommen"
+            label="[Person] hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen"
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
           />
@@ -124,13 +127,15 @@ export function ElternteilAusklammerungGruendePage() {
           />
         </div>
 
+        {/* TODO: Icon bei Alert ändern */}
         <Alert headline="Gut zu wissen für die spätere Antragstellung:">
-          Wenn Sie vor der Geburt selbstständig waren und auf dieser Seite einen
-          Grund auswählen, können Sie später im Elterngeldantrag beantragen, den
-          Bemessungszeitraum aufgrund dieser Angaben um ein Jahr vorzuverlegen.
+          Wenn Sie vor der Geburt selbstständig waren und Gründe vorliegen, den
+          Bemessungszeitraum zu verschieben (wie auf dieser Seite angegeben),
+          können Sie später im Elterngeldantrag beantragen, den
+          Bemessungszeitraum um ein Jahr vorzuverlegen.
         </Alert>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

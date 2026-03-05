@@ -6,8 +6,7 @@ import {
   ElternteilZweitePersonAngaben,
   ElternteilZweitePersonAngabenSchema,
 } from "./ElternteilSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
-import { InfoZuVornamen } from "@/application/features/abfrageteil/components/AllgemeineAngabenForm/InfoZuVornamen";
+import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -63,7 +62,7 @@ export function ElternteilZweitePersonAngabenPage() {
     <Page heading="Angaben Person 2">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
@@ -71,9 +70,13 @@ export function ElternteilZweitePersonAngabenPage() {
             Sollen beide Elternteile Elterngeld bekommen?
           </h3>
 
-          {/* <InfoZuVornamen /> */}
+          <InfoText
+            question="Warum fragen wir das?"
+            answer="Planen Sie Ihr Elterngeld gemeinsam – wenn das für Sie möglich ist. Manchmal möchte ein Elternteil kein Elterngeld bekommen, zum Beispiel weil das zweite Einkommen gebraucht wird."
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -103,7 +106,10 @@ export function ElternteilZweitePersonAngabenPage() {
               Wie heißt Person 2 die Elterngeld erhalten soll?
             </h3>
 
-            <InfoZuVornamen />
+            <InfoText
+              question="Warum soll ich einen Vornamen angeben?"
+              answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
+            />
 
             <label
               className="mb-4 mt-20 block text-16"
@@ -126,7 +132,9 @@ export function ElternteilZweitePersonAngabenPage() {
           </div>
         )}
 
-        <div className="flex gap-16">
+        {/* TODO: Input für Mutterschutz */}
+
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

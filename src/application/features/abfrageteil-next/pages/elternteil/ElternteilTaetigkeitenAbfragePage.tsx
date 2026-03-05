@@ -63,77 +63,78 @@ export function ElternteilTaetigkeitenAbfragePage() {
     routeParams.elternteilIndex,
   );
   const betrachtungszeitraum = berechneBetrachtungszeitraum();
+  const geburtsdatumString = betrachtungszeitraum.bis.toLocaleString("de-DE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <h3>Bitte wählen Sie alles aus, was auf Sie zutrifft:</h3>
-
-          <div
-            className="my-10 rounded bg-grey-light p-20"
-            aria-live="polite"
-            aria-labelledby="bmz"
-          >
-            <ul className="list ml-40 list-disc">
-              <li className="text-28">
-                in den Kalenderjahren {betrachtungszeitraum.von.year} bis zum
-                Geburtsdatum {betrachtungszeitraum.bis.toLocaleString()}
-              </li>
-            </ul>
-          </div>
+          <h3 className="mb-10">
+            Bitte wählen Sie alles aus, was auf [Person] vom Kalenderjahr{" "}
+            {betrachtungszeitraum.von.year} bis zum Geburtsdatum{" "}
+            {geburtsdatumString} zutrifft:
+          </h3>
 
           <InfoText
             question="Warum fragen wir das?"
-            answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Der Bemessungszeitraum ist die Zeit vor der Geburt, in der Ihr Einkommen geprüft wird. Daraus wird die Höhe Ihres Elterngeldes berechnet."
+            answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Das ist die Zeit vor der Geburt Ihres Kindes, aus der Ihr Einkommen für die Berechnung des Elterngeldes verwendet wird. Welche Zeit genau berücksichtigt wird, hängt von Ihrer persönlichen Situation ab."
           />
 
+          {/* TODO: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="istNichtSelbststaendig"
-            label="Ich war oder bin angestellt"
+            label="[Person] war oder ist angestellt"
             errors={formErrors}
           />
 
+          {/* TODO: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="istSelbststaendig"
-            label="Ich war oder bin selbstständig"
+            label="[Person] war oder ist selbstständig"
             errors={formErrors}
           />
 
+          {/* TODO: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="istVerbeamtet"
-            label="Ich war oder bin Beamtin "
+            label="[Person] war oder ist Beamtin"
             errors={formErrors}
           />
 
+          {/* TODO: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="hatAndereLeistungen"
-            label="Ich erhielt oder erhalte Sozialleistungen oder Lohnersatzleistungen  "
+            label="[Person] erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen"
             errors={formErrors}
           />
 
+          {/* TODO: Erklärung unter Label und Label bold */}
           <CustomCheckbox
             className="mt-20"
             register={register}
             name="hatKeinEinkommen"
-            label="Ich hatte oder habe kein Einkommen"
+            label="[Person] hatte oder hat kein Einkommen"
             errors={formErrors}
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

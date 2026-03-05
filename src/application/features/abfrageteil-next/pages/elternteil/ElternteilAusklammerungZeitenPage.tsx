@@ -85,42 +85,45 @@ export function ElternteilAusklammerungZeitenPage() {
   };
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Angaben [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h3>Bitte machen Sie Detailangaben</h3>
+        <h3>Bitte machen Sie Detailangaben:</h3>
 
+        {/* TODO: Mutterschutz zu Label und Button hinzufügen */}
         {defaultValues["mutterschutzGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="mutterschutzGeschwisterkind"
-            title="Von wann bis wann waren Sie für ein älteres Kind im Mutterschutz?"
+            title="Von wann bis wann war [Person] im Mutterschutz für ein älteres Kind?"
             control={control}
             errors={errors}
           />
         )}
 
+        {/* TODO: Mutterschutz zu Button hinzufügen */}
         {defaultValues["elterngeldGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="elterngeldGeschwisterkind"
-            title="Von wann bis wann haben Sie Elterngeld für ein älteres Kind bekommen?"
+            title="Von wann bis wann hat [Person] Elterngeld für ein älteres Kind (maximal 14 Monate alt) bekommen?"
             control={control}
             errors={errors}
           />
         )}
 
+        {/* TODO: Mutterschutz zu Button hinzufügen */}
         {defaultValues["erkrankungSchwangerschaft"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="erkrankungSchwangerschaft"
-            title="Von wann bis wann waren Sie wegen Ihrer Schwangerschaft krank?"
+            title="Von wann bis wann war [Person] wegen der Schwangerschaft krank?"
             control={control}
             errors={errors}
           />
         )}
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

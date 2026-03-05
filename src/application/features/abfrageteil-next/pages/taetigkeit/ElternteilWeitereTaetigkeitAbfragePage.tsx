@@ -141,11 +141,12 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
             options={[
               {
                 value: "yes",
-                label: "Ja, ich hatte eine weiteren Tätigkeiten",
+                label:
+                  "Ja, [Person] hatte eine oder mehrere weitere Tätigkeiten",
               },
               {
                 value: "no",
-                label: "Nein, ich hatte keine weiteren Tätigkeiten",
+                label: "Nein, [Person] hatte keine weiteren Tätigkeiten",
               },
             ]}
           />

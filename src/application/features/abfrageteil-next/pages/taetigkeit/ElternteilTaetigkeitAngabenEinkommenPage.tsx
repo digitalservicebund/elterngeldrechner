@@ -6,7 +6,7 @@ import {
   TaetigkeitGleichesEinkommenAngaben,
   TaetigkeitGleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button } from "@/application/components";
+import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
@@ -91,10 +91,10 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
   );
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -103,15 +103,35 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
-        <h3 className="mb-10">Details zur angestellten Tätigkeit</h3>
+        <h3 className="mb-10">
+          Details zur Tätigkeit als Angestellte oder Angestellter
+        </h3>
 
         <div>
           <h5 className="mb-10">
-            Wie viel haben Sie von {formatierterBemessungszeitraum} im Monat
+            Wie viel hat [Person] von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            className="mb-16"
+            question="Wo finde ich diese Information?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Am genauesten finden Sie Ihr monatliches Bruttogehalt auf
+                  Ihrer Gehaltsabrechnung (meist als „Brutto“ oder
+                  „Gesamtbrutto“ bezeichnet).
+                </p>
+                <p>
+                  Auf Ihrer Lohnsteuerbescheinigung steht das Jahresbrutto. Wenn
+                  Sie das ganze Jahr gleich viel verdient haben, können Sie
+                  diesen Betrag durch 12 teilen, um einen durchschnittlichen
+                  Monatswert zu berechnen.
+                </p>
+              </>
+            }
+          />
 
           <NumberInput
             {...register("durchschnittlichesMonatsbrutto", {
@@ -129,7 +149,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

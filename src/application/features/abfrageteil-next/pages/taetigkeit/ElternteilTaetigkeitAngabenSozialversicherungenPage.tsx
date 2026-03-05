@@ -6,7 +6,7 @@ import {
   TaetigkeitNichtSelbststaendigAngaben,
   TaetigkeitNichtSelbststaendigAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button, CustomRadioGroup } from "@/application/components";
+import { Button, CustomRadioGroup, InfoText } from "@/application/components";
 import {
   CustomSelect,
   SelectOption,
@@ -103,10 +103,10 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   ];
 
   return (
-    <Page heading="Finanzielle Situation">
+    <Page heading="Finanzielle Situation [Person]">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -115,11 +115,14 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
-        <h3 className="mb-10">Details zur selbstständigen Tätigkeit</h3>
+        <h3 className="mb-10">
+          Details zur Tätigkeit als Angestellte oder Angestellter
+        </h3>
 
         <div>
-          <h5 className="mb-10">Welche Steuerklasse hatten Sie?</h5>
+          <h5 className="mb-10">Welche Steuerklasse hatte [Person]?</h5>
 
+          {/* TODO-Abfrage-Abfrage: Custom Placeholder */}
           <CustomSelect
             autoWidth
             label="Steuerklasse"
@@ -131,7 +134,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         </div>
 
         <div>
-          <h5 className="mb-10">Sind Sie Kirchensteuerpflichtig?</h5>
+          <h5 className="mb-10">Ist [Person] kirchensteuerpflichtig?</h5>
 
           <CustomRadioGroup
             legend=""
@@ -147,12 +150,38 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Sind Sie über die gesetzliche Krankenversicherung pflichtversichert?
+            Ist [Person] über die gesetzliche Krankenversicherung
+            pflichtversichert?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
+                  die gesetzliche Pflichtversicherung.
+                </p>
+
+                <p>Sie wählen „Nein“, wenn Sie</p>
+                <ul className="mb-16 list-inside list-disc">
+                  <li>freiwillig gesetzlich versichert,</li>
+                  <li>familienversichert,</li>
+                  <li>privat versichert,</li>
+                  <li>nicht (in Deutschland) krankenversichert sind.</li>
+                </ul>
+
+                <p>
+                  Wenn Ihr regelmäßiges Jahresbrutto über der gesetzlich
+                  festgelegten Einkommensgrenze liegt, sind Sie in der Regel
+                  nicht mehr gesetzlich pflichtversichert.
+                </p>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -166,12 +195,41 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlen Sie Pflichtbeiträge in die gesetzliche Rentenversicherung?
+            Zahlt [Person] Pflichtbeiträge in die gesetzliche
+            Rentenversicherung?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Wenn Sie angestellt sind, zahlen Sie in der Regel automatisch
+                  Pflichtbeiträge zur gesetzlichen Rentenversicherung.
+                </p>
+
+                <p>
+                  Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
+                  Beispiel weil Sie:
+                </p>
+                <ul className="mb-16 list-inside list-disc">
+                  <li>verbeamtet sind,</li>
+                  <li>selbstständig tätig sind,</li>
+                  <li>
+                    geringfügig beschäftigt (Minijob ohne
+                    Rentenversicherungspflicht) sind,
+                  </li>
+                  <li>
+                    oder aus anderen Gründen von der Versicherungspflicht
+                    befreit wurden.
+                  </li>
+                </ul>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -185,13 +243,41 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlen Sie Pflichtbeiträge in die gesetzliche
+            Zahlt [Person] Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
 
-          {/* <InfoZuAlleinerziehenden /> */}
+          <InfoText
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Wenn Sie angestellt sind, zahlen Sie in der Regel automatisch
+                  Pflichtbeiträge zur gesetzlichen Arbeitslosenversicherung.
+                </p>
+
+                <p>
+                  Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
+                  Beispiel weil Sie:
+                </p>
+                <ul className="mb-16 list-inside list-disc">
+                  <li>verbeamtet sind,</li>
+                  <li>selbstständig tätig sind,</li>
+                  <li>
+                    geringfügig beschäftigt (Minijob ohne
+                    Rentenversicherungspflicht) sind,
+                  </li>
+                  <li>
+                    oder aus anderen Gründen von der Versicherungspflicht
+                    befreit wurden.
+                  </li>
+                </ul>
+              </>
+            }
+          />
 
           <CustomRadioGroup
+            className="mt-16"
             legend=""
             errors={formErrors}
             register={register}
@@ -205,8 +291,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie haben Sie von {formatierterBemessungszeitraum} im Monat brutto
-            verdient?
+            Wie hat [Person] von {formatierterBemessungszeitraum} im Monat
+            brutto verdient?
           </h5>
 
           <CustomRadioGroup
@@ -217,14 +303,17 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             options={[
               {
                 value: "yes",
-                label: "Ich habe jeden Monat gleich viel verdient",
+                label: "[Person] hat  jeden Monat gleich viel verdient",
               },
-              { value: "no", label: "Ich habe unterschiedlich viel verdient" },
+              {
+                value: "no",
+                label: "[Person] hat  unterschiedlich viel verdient",
+              },
             ]}
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

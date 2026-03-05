@@ -49,15 +49,15 @@ export function GeborenesKindPage() {
   const anzahlKinderInputIdentifier = useId();
 
   return (
-    <Page heading="Angaben zum Kind">
+    <Page heading="Angaben zur Geburt">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
+        <h3>Herzlichen Glückwunsch!</h3>
         <div>
-          <h3>Herzlichen Glückwunsch!</h3>
           <h3 className="mb-10">
             Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
           </h3>
@@ -88,7 +88,7 @@ export function GeborenesKindPage() {
 
           <InfoText
             question="Was ist das tatsächliche Geburtsdatum?"
-            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, dass in die Geburtsurkunde eingetragen wird. Meistens werden Kinder ab nicht genau am errechneten Termin geboren."
+            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, das in die Geburtsurkunde eingetragen ist. Wenn Ihr Kind besonders früh, das heißt mindestens sechs Wochen vor dem errechneten Termin geboren wurde, können Sie länger Elterngeld bekommen."
           />
 
           <label
@@ -106,7 +106,7 @@ export function GeborenesKindPage() {
           />
         </div>
 
-        <div className="mt-20">
+        <div>
           <h3 id={anzahlKinderInputIdentifier}>
             Wie viele Kinder wurden geboren?
           </h3>
@@ -128,7 +128,7 @@ export function GeborenesKindPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

@@ -52,13 +52,17 @@ export function WahrscheinlichGeborenesKindPage() {
   const geburtsdatumInputIdentifier = useId();
 
   return (
-    <Page heading="Angaben zum Kind">
+    <Page heading="Angaben zur Geburt">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
+        <h3>
+          Der Entbindungstermin liegt mehr als 2 Wochen in der Vergangenheit.
+          Wir gehen davon aus, dass Ihr Kind schon geboren wurde.
+        </h3>
         <div>
           <h3 className="mb-10">
             Wann war das tatsächliche Geburtsdatum Ihres Kindes?
@@ -66,7 +70,7 @@ export function WahrscheinlichGeborenesKindPage() {
 
           <InfoText
             question="Was ist das tatsächliche Geburtsdatum?"
-            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, dass in die Geburtsurkunde eingetragen wird. Meistens werden Kinder ab nicht genau am errechneten Termin geboren."
+            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, das in die Geburtsurkunde eingetragen ist. "
           />
 
           <label
@@ -84,7 +88,7 @@ export function WahrscheinlichGeborenesKindPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

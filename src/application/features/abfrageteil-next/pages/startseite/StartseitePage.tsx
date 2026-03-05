@@ -47,7 +47,7 @@ export function Startseite() {
               Wunsch aufteilen.
             </li>
             <li className="ml-32">
-              Der Planer überprüft ob Ihre Planung korrekt und gültig ist.
+              Der Planer überprüft, ob Ihre Planung korrekt und gültig ist.
             </li>
           </ul>
 
@@ -62,16 +62,17 @@ export function Startseite() {
           <h5 className="mt-32">Übersicht bekommen</h5>
           <ul className="list list-disc pt-10">
             <li className="ml-32">
-              Ergänzen Sie neben dem Elterngeld auch Ihr Einkommen, um eine
-              Gesamtübersicht Ihrer Finanzen während der Elternzeit zu erhalten.
+              Ergänzen Sie neben dem Elterngeld auch Ihr Einkommen, um einen
+              vollständigen Überblick über Ihre Finanzen während des
+              Elterngeldbezugs zu erhalten.
             </li>
             <li className="ml-32">
-              Übertragen Sie die Planung in den PDF-Antrag auf Elterngeld.
+              Übertragen Sie die Planung in den Papierantrag auf Elterngeld.
             </li>
           </ul>
         </div>
 
-        <div>
+        <div className="mt-40">
           <Button
             type="button"
             buttonStyle="primary"

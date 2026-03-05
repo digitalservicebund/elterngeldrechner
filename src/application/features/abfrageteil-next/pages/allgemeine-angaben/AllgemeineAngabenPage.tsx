@@ -59,7 +59,7 @@ export function AllgemeineAngabenPage() {
     <Page heading="Allgemeine Angaben">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
@@ -95,13 +95,30 @@ export function AllgemeineAngabenPage() {
             slotBetweenLegendAndOptions={
               <InfoText
                 question="Was bedeutet Gesamteinkommen?"
-                answer="Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu versteuernden Jahreseinkommen von mehr als 175.000 Euro bei Alleinerziehenden, Paaren und getrennt Erziehenden. Diese Angabe finden Sie beispielsweise auf Ihrem Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen Sie das Einkommen beider Elternteile zusammen."
+                answer={
+                  <>
+                    <p>
+                      Wenn Sie besonders viel Einkommen haben, können Sie kein
+                      Elterngeld bekommen. Elterngeld ist ausgeschlossen ab
+                      einem zu versteuernden Jahreseinkommen von mehr als
+                      175.000 Euro bei Alleinerziehenden, Paaren und getrennt
+                      Erziehenden.
+                    </p>
+                    <p>
+                      Diese Angabe finden Sie beispielsweise auf Ihrem
+                      Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben
+                      Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt
+                      erziehende Eltern rechnen Sie das Einkommen beider
+                      Elternteile zusammen.
+                    </p>
+                  </>
+                }
               ></InfoText>
             }
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

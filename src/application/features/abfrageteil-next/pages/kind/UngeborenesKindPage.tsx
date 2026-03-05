@@ -48,10 +48,10 @@ export function UngeborenesKindPage() {
   const anzahlKinderInputIdentifier = useId();
 
   return (
-    <Page heading="Geburtsdatum des Kindes">
+    <Page heading="Angaben zur Geburt">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
@@ -81,7 +81,7 @@ export function UngeborenesKindPage() {
 
         <div className="mt-20">
           <h3 id={anzahlKinderInputIdentifier}>
-            Wie viele Kinder wurden geboren?
+            Wie viele Kinder werden geboren?
           </h3>
 
           <p className="mt-10 pb-20">
@@ -101,7 +101,7 @@ export function UngeborenesKindPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

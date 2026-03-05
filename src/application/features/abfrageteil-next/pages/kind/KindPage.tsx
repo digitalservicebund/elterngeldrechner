@@ -43,14 +43,14 @@ export function KindPage() {
   };
 
   return (
-    <Page heading="Angaben zum Kind">
+    <Page heading="Angaben zur Geburt">
       <form
         id={formIdentifier}
-        className="mt-40 flex flex-col gap-56"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <h3 className="mb-10">Ist ihr Kind schon geboren?</h3>
+          <h3 className="mb-10">Ist Ihr Kind schon geboren?</h3>
 
           <CustomRadioGroup
             legend=""
@@ -64,7 +64,7 @@ export function KindPage() {
           />
         </div>
 
-        <div className="flex gap-16">
+        <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

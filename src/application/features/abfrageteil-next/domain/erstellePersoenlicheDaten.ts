@@ -1,7 +1,6 @@
 import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
-import { findeMinijob } from "./findeMinijob";
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
 import { findeTaetigkeiten } from "./findeTaetigkeiten";
 import { sindBeideElternteile } from "./sindBeideElternteile";
@@ -76,25 +75,47 @@ function findeErwerbsartVorGeburt(
     return ErwerbsArt.NEIN;
   }
 
-  const { istSelbststaendig, istNichtSelbststaendig } = taetigkeiten;
-
-  if (istSelbststaendig && istNichtSelbststaendig) {
-    return ErwerbsArt.JA_MISCHEINKOMMEN;
-  }
-
-  if (istSelbststaendig) {
-    return ErwerbsArt.JA_SELBSTSTAENDIG;
-  }
-
-  const minijob = findeErsteMinijobInformation(events, elternteilIndex);
-  if (minijob.istTaetigkeitMinijob) {
-    return ErwerbsArt.JA_NICHT_SELBST_MINI;
-  }
-
-  const sozialversicherungen = findeErsteSozialversicherungInformation(
+  const alleTaetigkeitEvents = findeTaetigkeitAngabenEvents(
     events,
     elternteilIndex,
   );
+
+  const hatSelbststaendig = alleTaetigkeitEvents.some(
+    (e) => e.route === Route.ElternteilTaetigkeitAngabenSelbststaendig,
+  );
+  const hatNichtSelbststaendig = alleTaetigkeitEvents.some(
+    (e) => e.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+  );
+
+  if (hatSelbststaendig && hatNichtSelbststaendig) {
+    return ErwerbsArt.JA_MISCHEINKOMMEN;
+  }
+
+  if (hatSelbststaendig) {
+    return ErwerbsArt.JA_SELBSTSTAENDIG;
+  }
+
+  const erstesNichtSelbststaendigEvent = alleTaetigkeitEvents.find(
+    (e): e is NichtSelbststaendigEvent =>
+      e.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+  );
+
+  if (!erstesNichtSelbststaendigEvent) {
+    throw new Error(
+      `No Taetigkeit events found for elternteil ${elternteilIndex}.`,
+    );
+  }
+
+  if (erstesNichtSelbststaendigEvent.payload.istTaetigkeitMinijob) {
+    return ErwerbsArt.JA_NICHT_SELBST_MINI;
+  }
+
+  const sozialversicherungen = findeSozialversicherungen(
+    events,
+    elternteilIndex,
+    erstesNichtSelbststaendigEvent.params.taetigkeitIndex,
+  );
+
   if (sozialversicherungen.istGesetzlichRentenversichert) {
     return ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
   }
@@ -102,19 +123,39 @@ function findeErwerbsartVorGeburt(
   return ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI;
 }
 
-function findeErsteMinijobInformation(
+function findeTaetigkeitAngabenEvents(
   events: FormEvent[],
   elternteilIndex: number,
-) {
-  return findeMinijob(events, elternteilIndex, 0);
+): TaetigkeitEvent[] {
+  const relevantEvents = events.filter((e): e is TaetigkeitEvent => {
+    return (
+      (e.route === Route.ElternteilTaetigkeitAngabenSelbststaendig ||
+        e.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig) &&
+      e.params.elternteilIndex === elternteilIndex
+    );
+  });
+
+  const byIndex = new Map<number, TaetigkeitEvent>();
+  for (const event of relevantEvents) {
+    byIndex.set(event.params.taetigkeitIndex, event);
+  }
+
+  return Array.from(byIndex.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([, event]) => event);
 }
 
-function findeErsteSozialversicherungInformation(
-  events: FormEvent[],
-  elternteilIndex: number,
-) {
-  return findeSozialversicherungen(events, elternteilIndex, 0);
-}
+type SelbststaendigEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilTaetigkeitAngabenSelbststaendig }
+>;
+
+type NichtSelbststaendigEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig }
+>;
+
+type TaetigkeitEvent = SelbststaendigEvent | NichtSelbststaendigEvent;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -303,6 +344,17 @@ if (import.meta.vitest) {
               hatAndereLeistungen: false,
             },
           },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: {
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: false,
+              istGesetzlichRentenversichert: false,
+              istGesetzlichArbeitlosenversichert: false,
+              bruttoJahresgewinn: 60000,
+            },
+          },
         ];
 
         const result = erstellePersoenlicheDaten(events, 0);
@@ -323,6 +375,22 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: {
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: false,
+              istGesetzlichRentenversichert: false,
+              istGesetzlichArbeitlosenversichert: false,
+              bruttoJahresgewinn: 24000,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istTaetigkeitMinijob: false },
           },
         ];
 
@@ -431,6 +499,86 @@ if (import.meta.vitest) {
         const result = erstellePersoenlicheDaten(events, 0);
 
         expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_OHNE_SOZI);
+      });
+
+      it("is JA_NICHT_SELBST_MIT_SOZI when multiple nicht-selbstständige sozialversicherungspflichtige Tätigkeiten exist", () => {
+        const events: FormEvent[] = [
+          geborenesKindEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatKeinEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: false },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: {
+              steuerklasse: Steuerklasse.I,
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: true,
+              istGesetzlichRentenversichert: true,
+              istGesetzlichArbeitlosenversichert: true,
+              istEinkommenGleichVerteilt: true,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istTaetigkeitMinijob: false },
+          },
+        ];
+
+        const result = erstellePersoenlicheDaten(events, 0);
+
+        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI);
+      });
+
+      it("is JA_MISCHEINKOMMEN when Abfrage only lists nicht-selbstständig but a selbstständige Tätigkeit was added later", () => {
+        const events: FormEvent[] = [
+          geborenesKindEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatKeinEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: false },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: {
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: false,
+              istGesetzlichRentenversichert: false,
+              istGesetzlichArbeitlosenversichert: false,
+              bruttoJahresgewinn: 24000,
+            },
+          },
+        ];
+
+        const result = erstellePersoenlicheDaten(events, 0);
+
+        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_MISCHEINKOMMEN);
       });
 
       it("uses only events for the given elternteilIndex", () => {

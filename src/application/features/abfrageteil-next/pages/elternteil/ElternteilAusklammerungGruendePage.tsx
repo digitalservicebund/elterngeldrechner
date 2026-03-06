@@ -10,6 +10,7 @@ import { Button, InfoText } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
@@ -20,8 +21,12 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function ElternteilAusklammerungGruendePage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -66,15 +71,18 @@ export function ElternteilAusklammerungGruendePage() {
     }
   };
 
+  const eventStream = filtereValideEventHistorie();
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Angaben [Person]">
+    <Page heading={`Angaben ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div>
-          <h3>Treffen folgende Gründe auf [Person] zu?</h3>
+          <h3>Treffen folgende Gründe auf {vorname} zu?</h3>
 
           <InfoText
             question="Warum fragen wir das?"
@@ -85,7 +93,7 @@ export function ElternteilAusklammerungGruendePage() {
             className="mt-20"
             register={register}
             name="hatMutterschutzAelteresKind"
-            label="[Person] war für ein älteres Kind im Mutterschutz"
+            label={`${vorname} war für ein älteres Kind im Mutterschutz`}
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
           >
@@ -99,7 +107,7 @@ export function ElternteilAusklammerungGruendePage() {
             className="mt-20"
             register={register}
             name="hatElterngeldAelteresKind"
-            label="[Person] hat für ein älteres Kind Elterngeld bekommen"
+            label={`${vorname} hat für ein älteres Kind Elterngeld bekommen`}
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
           >
@@ -113,7 +121,7 @@ export function ElternteilAusklammerungGruendePage() {
             className="mt-20"
             register={register}
             name="hatSchwangerschaftsbedingteErkrankung"
-            label="[Person] hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen"
+            label={`${vorname} hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen`}
             errors={formErrors}
             onChange={(checked) => handleCheckboxChange(checked)}
           >

@@ -16,6 +16,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
@@ -95,6 +96,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
     true,
   );
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   const steuerklasseOptions: SelectOption<Steuerklasse | "">[] = [
     { value: Steuerklasse.I, label: "1" },
     { value: Steuerklasse.II, label: "2" },
@@ -104,7 +107,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   ];
 
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -121,7 +124,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         </h3>
 
         <div>
-          <h5 className="mb-10">Welche Steuerklasse hatte [Person]?</h5>
+          <h5 className="mb-10">Welche Steuerklasse hatte {vorname}?</h5>
 
           {/* TODO-Abfrage-Abfrage: Custom Placeholder */}
           <CustomSelect
@@ -135,7 +138,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         </div>
 
         <div>
-          <h5 className="mb-10">Ist [Person] kirchensteuerpflichtig?</h5>
+          <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
 
           <CustomRadioGroup
             legend=""
@@ -151,7 +154,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Ist [Person] über die gesetzliche Krankenversicherung
+            Ist {vorname} über die gesetzliche Krankenversicherung
             pflichtversichert?
           </h5>
 
@@ -170,13 +173,13 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p>
+                  <p className="mb-16">
                     Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
                     die gesetzliche Pflichtversicherung.
                   </p>
 
                   <p>Sie wählen „Nein“, wenn Sie</p>
-                  <ul className="my-16 ml-8 list-inside list-disc">
+                  <ul className="mb-16 ml-8 list-inside list-disc">
                     <li>freiwillig gesetzlich versichert,</li>
                     <li>familienversichert,</li>
                     <li>privat versichert, </li>
@@ -196,7 +199,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlt [Person] Pflichtbeiträge in die gesetzliche
+            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
             Rentenversicherung?
           </h5>
 
@@ -215,7 +218,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p>
+                  <p className="mb-16">
                     Wenn Sie angestellt sind, zahlen Sie in der Regel
                     automatisch Pflichtbeiträge zur gesetzlichen
                     Rentenversicherung.
@@ -225,7 +228,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                     Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
                     zum Beispiel weil Sie:
                   </p>
-                  <ul className="my-16 ml-8 list-inside list-disc">
+                  <ul className="mb-16 ml-8 list-inside list-disc">
                     <li>verbeamtet sind,</li>
                     <li>selbstständig tätig sind,</li>
                     <li>
@@ -245,7 +248,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlt [Person] Pflichtbeiträge in die gesetzliche
+            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
 
@@ -264,7 +267,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p>
+                  <p className="mb-16">
                     Wenn Sie angestellt sind, zahlen Sie in der Regel
                     automatisch Pflichtbeiträge zur gesetzlichen
                     Arbeitslosenversicherung.
@@ -274,7 +277,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                     Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
                     zum Beispiel weil Sie:
                   </p>
-                  <ul className="my-16 ml-8 list-inside list-disc">
+                  <ul className="mb-16 ml-8 list-inside list-disc">
                     <li>verbeamtet sind,</li>
                     <li>selbstständig tätig sind,</li>
                     <li>
@@ -294,7 +297,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie hat [Person] von {formatierterBemessungszeitraum} im Monat
+            Wie hat {vorname} von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
 
@@ -306,11 +309,11 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             options={[
               {
                 value: "yes",
-                label: "[Person] hat  jeden Monat gleich viel verdient",
+                label: `${vorname} hat  jeden Monat gleich viel verdient`,
               },
               {
                 value: "no",
-                label: "[Person] hat  unterschiedlich viel verdient",
+                label: `${vorname} hat  unterschiedlich viel verdient`,
               },
             ]}
           />

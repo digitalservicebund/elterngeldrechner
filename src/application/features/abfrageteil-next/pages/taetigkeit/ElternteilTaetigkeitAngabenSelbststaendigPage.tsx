@@ -12,6 +12,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -77,8 +78,10 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
     routeParams.elternteilIndex,
   );
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -94,14 +97,14 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           <h3 className="mb-10">Details zur selbstständigen Tätigkeit</h3>
 
           <p>
-            Bitte geben Sie hier Details zur Tätigkeit von [Person] an. Im
+            Bitte geben Sie hier Details zur Tätigkeit von {vorname} an. Im
             Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
             anzugeben.
           </p>
         </div>
 
         <div>
-          <h5 className="mb-10">Ist [Person] kirchensteuerpflichtig?</h5>
+          <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
 
           <CustomRadioGroup
             legend=""
@@ -117,7 +120,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Ist [Person] über die gesetzliche Krankenversicherung
+            Ist {vorname} über die gesetzliche Krankenversicherung
             pflichtversichert?
           </h5>
 
@@ -136,13 +139,13 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p>
+                  <p className="mb-16">
                     Mit einer selbstständigen Tätigkeit sind Sie in der Regel
                     nicht automatisch gesetzlich pflichtversichert.
                   </p>
 
                   <p>Sie wählen „Nein“, wenn Sie</p>
-                  <ul className="my-16 ml-8 list-inside list-disc">
+                  <ul className="mb-16 ml-8 list-inside list-disc">
                     <li>freiwillig gesetzlich versichert, </li>
                     <li>familienversichert,</li>
                     <li>privat versichert,</li>
@@ -163,7 +166,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlt [Person] Pflichtbeiträge in die gesetzliche
+            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
             Rentenversicherung?
           </h5>
 
@@ -187,7 +190,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div>
           <h5 className="mb-10">
-            Zahlt [Person] Pflichtbeiträge in die gesetzliche
+            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
 
@@ -212,7 +215,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         <div>
           <h5 className="mb-10">
             Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von
-            [Person] im Jahr {bemessungszeitraum[0]?.von.year}?
+            {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
           </h5>
 
           <InfoText

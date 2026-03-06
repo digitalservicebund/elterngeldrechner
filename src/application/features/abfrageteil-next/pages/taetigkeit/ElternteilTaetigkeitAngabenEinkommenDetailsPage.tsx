@@ -13,6 +13,7 @@ import { NumberInput } from "@/application/features/abfrageteil-next/components/
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
@@ -92,6 +93,8 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     true,
   );
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   const zeitabschnitte = gruppiereBemessungszeitraum({
     bemessungszeitraum,
     ausklammerungen,
@@ -121,10 +124,20 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     const bisMonat = zeitabschnitt.at(-1);
 
     if (vonMonat && bisMonat) {
-      const von = vonMonat.toPlainDate({ day: 1 }).toLocaleString("de-DE");
+      const von = vonMonat
+        .toPlainDate({ day: 1 })
+        .toLocaleString("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
       const bis = bisMonat
         .toPlainDate({ day: bisMonat.daysInMonth })
-        .toLocaleString("de-DE");
+        .toLocaleString("de-DE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
 
       return `Zeitraum ${blockNummer}: ${von} – ${bis}`;
     }
@@ -133,10 +146,10 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   };
 
   return (
-    <Page heading="">
+    <Page heading="Details zur Tätigkeit als Angestellte oder Angestellter">
       <form
         id={formIdentifier}
-        className="flex flex-col gap-40"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -145,13 +158,9 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
-        <h3 className="mb-10">
-          Details zur Tätigkeit als Angestellte oder Angestellter
-        </h3>
-
         <div>
           <h5 className="mb-20">
-            Wie viel hat [Person] von {formatierterBemessungszeitraum} im Monat
+            Wie viel hat {vorname} von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
 

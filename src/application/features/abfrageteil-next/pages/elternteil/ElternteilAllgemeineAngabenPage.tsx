@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Temporal } from "@js-temporal/polyfill";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -9,6 +10,7 @@ import {
 import { Button, InfoText } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
@@ -19,8 +21,12 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function ElternteilAllgemeineAngabenPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -32,7 +38,7 @@ export function ElternteilAllgemeineAngabenPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, watch } = useForm({
     resolver: zodResolver(ElternteilAllgemeineAngabenSchema),
     defaultValues: encodeSafely(
       ElternteilAllgemeineAngabenSchema,
@@ -57,6 +63,14 @@ export function ElternteilAllgemeineAngabenPage() {
   const navigateBack = () => {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
+
+  const nameInForm = watch("name");
+  const vorname = nameInForm?.trim() || "Person 1";
+
+  const eventStream = filtereValideEventHistorie();
+  const geburtstdatum = findeGeburtsdatum(eventStream);
+  const heute = Temporal.Now.plainDateISO();
+  const geburtIstErfolgt = Temporal.PlainDate.compare(heute, geburtstdatum) > 0;
 
   const personNameInputIdentifier = useId();
 
@@ -108,7 +122,7 @@ export function ElternteilAllgemeineAngabenPage() {
         </div>
 
         <div>
-          <h3 className="mb-10">Ist [Person] alleinerziehend?</h3>
+          <h3 className="mb-10">Ist {vorname} alleinerziehend?</h3>
 
           <InfoText
             question="Was bedeutet alleinerziehend?"
@@ -129,8 +143,11 @@ export function ElternteilAllgemeineAngabenPage() {
         </div>
 
         <div>
-          {/* TODO-Abfrage: Abfrage ob Kind schon geboren */}
-          <h3 className="mb-10">War [Person] im Mutterschutz?</h3>
+          <h3 className="mb-10">
+            {geburtIstErfolgt
+              ? `War ${vorname} im Mutterschutz?`
+              : `Wird ${vorname} im Mutterschutz sein?`}
+          </h3>
 
           <InfoText
             question="Was ist Mutterschutz?"

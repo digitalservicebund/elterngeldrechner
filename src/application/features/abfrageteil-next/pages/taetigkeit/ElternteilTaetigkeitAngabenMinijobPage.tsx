@@ -12,6 +12,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
@@ -90,8 +91,10 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
     true,
   );
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -109,7 +112,7 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie hat [Person] von {formatierterBemessungszeitraum} im Monat
+            Wie hat {vorname} von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
 
@@ -121,11 +124,11 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
             options={[
               {
                 value: "yes",
-                label: "[Person] hat jeden Monat gleich viel verdient",
+                label: `${vorname} hat jeden Monat gleich viel verdient`,
               },
               {
                 value: "no",
-                label: "[Person] hat  unterschiedlich viel verdient",
+                label: `${vorname} hat  unterschiedlich viel verdient`,
               },
             ]}
           />

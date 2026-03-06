@@ -9,6 +9,7 @@ import {
 import { Button } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
@@ -19,8 +20,12 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function ElternteilWeitereTaetigkeitAngabenPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -58,8 +63,11 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
+  const eventStream = filtereValideEventHistorie();
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -77,8 +85,8 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
             register={register}
             name="istWeitereTaetigkeitSelbststaendigeTaetigkeit"
             options={[
-              { value: "no", label: "[Person] war oder ist angestellt" },
-              { value: "yes", label: "[Person] war oder ist selbstständig" },
+              { value: "no", label: `${vorname} war oder ist angestellt` },
+              { value: "yes", label: `${vorname} war oder ist selbstständig` },
             ]}
           />
         </div>

@@ -9,6 +9,7 @@ import {
 import { Button, InfoText } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -20,8 +21,12 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
 export function ElternteilTaetigkeitenAbfragePage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -69,8 +74,11 @@ export function ElternteilTaetigkeitenAbfragePage() {
     year: "numeric",
   });
 
+  const eventStream = filtereValideEventHistorie();
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -78,7 +86,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
       >
         <div>
           <h3 className="mb-10">
-            Bitte wählen Sie alles aus, was auf [Person] vom Kalenderjahr{" "}
+            Bitte wählen Sie alles aus, was auf {vorname} vom Kalenderjahr{" "}
             {betrachtungszeitraum.von.year} bis zum Geburtsdatum{" "}
             {geburtsdatumString} zutrifft:
           </h3>
@@ -92,7 +100,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             className="mt-20 font-bold"
             register={register}
             name="istNichtSelbststaendig"
-            label="[Person] war oder ist angestellt"
+            label={`${vorname} war oder ist angestellt`}
             errors={formErrors}
           >
             <p className="font-regular">
@@ -105,7 +113,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             className="mt-20 font-bold"
             register={register}
             name="istSelbststaendig"
-            label="[Person] war oder ist selbstständig"
+            label={`${vorname} war oder ist selbstständig`}
             errors={formErrors}
           >
             <p className="font-regular">
@@ -118,7 +126,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             className="mt-20 font-bold"
             register={register}
             name="istVerbeamtet"
-            label="[Person] war oder ist Beamtin"
+            label={`${vorname} war oder ist Beamtin`}
             errors={formErrors}
           />
 
@@ -126,7 +134,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             className="mt-20 font-bold"
             register={register}
             name="hatAndereLeistungen"
-            label="[Person] erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen"
+            label={`${vorname} erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen`}
             errors={formErrors}
           >
             <p className="font-regular">
@@ -139,7 +147,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             className="mt-20 font-bold"
             register={register}
             name="hatKeinEinkommen"
-            label="[Person] hatte oder hat kein Einkommen"
+            label={`${vorname} hatte oder hat kein Einkommen`}
             errors={formErrors}
           >
             <p className="font-regular">

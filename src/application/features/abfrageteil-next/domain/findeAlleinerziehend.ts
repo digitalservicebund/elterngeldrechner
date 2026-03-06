@@ -24,7 +24,7 @@ type ElternteilAllgemeineAngabenEvent = Extract<
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("findeMinijob", () => {
+  describe("findeAlleinerziehend", () => {
     it("throws when no event exists", () => {
       expect(() => findeAlleinerziehend([])).toThrow();
     });

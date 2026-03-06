@@ -10,6 +10,7 @@ import {
 import { erstelleAusklammerungZeitenDefaultValues } from "./erstelleAusklammerungZeitenDefaultValues";
 import { Button } from "@/application/components";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import { ElternteilAusklammerungZeitenInput } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilAusklammerungZeitenInput";
@@ -29,8 +30,12 @@ export type ElternteilAusklammerungszeitenOutput = z.output<
 >;
 
 export function ElternteilAusklammerungZeitenPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -84,8 +89,11 @@ export function ElternteilAusklammerungZeitenPage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
+  const eventStream = filtereValideEventHistorie();
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Angaben [Person]">
+    <Page heading={`Angaben ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -97,27 +105,27 @@ export function ElternteilAusklammerungZeitenPage() {
         {defaultValues["mutterschutzGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="mutterschutzGeschwisterkind"
-            title="Von wann bis wann war [Person] im Mutterschutz für ein älteres Kind?"
+            title={`Von wann bis wann war ${vorname} im Mutterschutz für ein älteres Kind?`}
             control={control}
             errors={errors}
           />
         )}
 
-        {/* TODO-Abfrage: Mutterschutz zu Button hinzufügen */}
+        {/* TODO-Abfrage: Elterngeld zu Button hinzufügen */}
         {defaultValues["elterngeldGeschwisterkind"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="elterngeldGeschwisterkind"
-            title="Von wann bis wann hat [Person] Elterngeld für ein älteres Kind (maximal 14 Monate alt) bekommen?"
+            title={`Von wann bis wann hat ${vorname} Elterngeld für ein älteres Kind (maximal 14 Monate alt) bekommen?`}
             control={control}
             errors={errors}
           />
         )}
 
-        {/* TODO-Abfrage: Mutterschutz zu Button hinzufügen */}
+        {/* TODO-Abfrage: Erkrankung zu Button hinzufügen */}
         {defaultValues["erkrankungSchwangerschaft"].length > 0 && (
           <ElternteilAusklammerungZeitenInput
             grund="erkrankungSchwangerschaft"
-            title="Von wann bis wann war [Person] wegen der Schwangerschaft krank?"
+            title={`Von wann bis wann war ${vorname} wegen der Schwangerschaft krank?`}
             control={control}
             errors={errors}
           />

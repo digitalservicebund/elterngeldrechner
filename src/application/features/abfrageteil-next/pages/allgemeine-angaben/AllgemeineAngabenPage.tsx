@@ -104,12 +104,15 @@ export function AllgemeineAngabenPage() {
                     zu versteuernden Jahreseinkommen von mehr als 175.000 Euro
                     bei Alleinerziehenden, Paaren und getrennt Erziehenden.
                   </p>
-                  <p>
+                  <p className="mb-0">
                     Diese Angabe finden Sie beispielsweise auf Ihrem
-                    Steuerbescheid. Wenn Sie Ihr Kind alleine erziehen, geben
-                    Sie nur Ihr eigenes Einkommen an. Als Paar oder getrennt
-                    erziehende Eltern rechnen Sie das Einkommen beider
-                    Elternteile zusammen.
+                    Steuerbescheid.
+                  </p>
+                  <p>
+                    Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr
+                    eigenes Einkommen an. Als Paar oder getrennt erziehende
+                    Eltern rechnen Sie das Einkommen beider Elternteile
+                    zusammen.
                   </p>
                 </>
               }

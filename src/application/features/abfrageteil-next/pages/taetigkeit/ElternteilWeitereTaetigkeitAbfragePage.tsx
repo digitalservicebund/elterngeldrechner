@@ -10,6 +10,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil-next/domain/findeAlleinerziehend";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -97,8 +98,10 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   );
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -112,7 +115,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
 
         <div>
           <h3 className="mb-10">
-            Hatte [Person] noch weitere Tätigkeiten im Bemessungszeitraum?
+            Hatte {vorname} noch weitere Tätigkeiten im Bemessungszeitraum?
           </h3>
 
           <InfoText
@@ -126,7 +129,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
                 </p>
 
                 <p>Dazu zählen:</p>
-                <ul className="my-16 ml-8 list-inside list-disc">
+                <ul className="ml-8 list-inside list-disc">
                   <li>
                     Weitere angestellten Tätigkeiten (auch Teilzeit oder
                     Minijobs)
@@ -146,12 +149,11 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
             options={[
               {
                 value: "yes",
-                label:
-                  "Ja, [Person] hatte eine oder mehrere weitere Tätigkeiten",
+                label: `Ja, ${vorname} hatte eine oder mehrere weitere Tätigkeiten`,
               },
               {
                 value: "no",
-                label: "Nein, [Person] hatte keine weiteren Tätigkeiten",
+                label: `Nein, ${vorname} hatte keine weiteren Tätigkeiten`,
               },
             ]}
           />

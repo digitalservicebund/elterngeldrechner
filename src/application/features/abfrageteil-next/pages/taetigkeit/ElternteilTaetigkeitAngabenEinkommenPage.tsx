@@ -12,6 +12,7 @@ import { NumberInput } from "@/application/features/abfrageteil-next/components/
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
@@ -90,11 +91,13 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
     true,
   );
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="">
+    <Page heading="Details zur Tätigkeit als Angestellte oder Angestellter">
       <form
         id={formIdentifier}
-        className="flex flex-col gap-40"
+        className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
         <BemessungszeitraumBox
@@ -103,13 +106,9 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
-        <h3 className="mb-10">
-          Details zur Tätigkeit als Angestellte oder Angestellter
-        </h3>
-
         <div>
           <h5 className="mb-10">
-            Wie viel hat [Person] von {formatierterBemessungszeitraum} im Monat
+            Wie viel hat {vorname} von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
 

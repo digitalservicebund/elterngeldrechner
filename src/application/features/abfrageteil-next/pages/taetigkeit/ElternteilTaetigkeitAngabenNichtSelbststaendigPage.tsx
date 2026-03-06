@@ -12,6 +12,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
+import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -85,8 +86,10 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
     routeParams.elternteilIndex,
   );
 
+  const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
   return (
-    <Page heading="Finanzielle Situation [Person]">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
@@ -104,8 +107,8 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
           </h3>
 
           <p>
-            Bitte geben Sie hier Details zur Tätigkeit von [Name Person 1] an.
-            Im Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
+            Bitte geben Sie hier Details zur Tätigkeit von {vorname} an. Im
+            Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
             anzugeben.
           </p>
         </div>
@@ -130,14 +133,14 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
               question="Was ist ein Minijob?"
               answer={
                 <>
-                  <p>
+                  <p className="mb-16">
                     Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
                     Man darf im Monat nicht mehr als die gesetzlich festgelegte
                     Grenze verdienen.
                   </p>
 
                   <p>Diese Grenze liegt:</p>
-                  <ul className="my-16 ml-8 list-inside list-disc">
+                  <ul className="mb-16 ml-8 list-inside list-disc">
                     <li>seit 2025 bei 556 Euro im Monat,</li>
                     <li>im Jahr 2024 bei 538 Euro im Monat,</li>
                     <li>

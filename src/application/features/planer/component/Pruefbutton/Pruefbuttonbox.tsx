@@ -14,8 +14,7 @@ import { Prueftippbox } from "./Prueftippbox";
 import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { type Tips, generateTips } from "./generateTips";
 import { Button } from "@/application/components/Button";
-import { stepAllgemeineAngabenSelectors } from "@/application/features/abfrageteil/state";
-import { useAppSelector } from "@/application/redux/hooks";
+import { useAntragInformationen } from "@/application/pages/planungsteil/useAntragInformationen";
 import { pushTrackingEvent } from "@/application/user-tracking";
 import {
   type PlanMitBeliebigenElternteilen,
@@ -78,9 +77,7 @@ export function Pruefbuttonbox({
     hasSpecialBonusTip: false,
   });
 
-  const bundeslandAntragSupport = useAppSelector(
-    stepAllgemeineAngabenSelectors.getBundeslandAntragSupport,
-  );
+  const bundeslandAntragSupport = useAntragInformationen();
   if (bundeslandAntragSupport === null) {
     throw new Error("bundesland should not be null");
   }

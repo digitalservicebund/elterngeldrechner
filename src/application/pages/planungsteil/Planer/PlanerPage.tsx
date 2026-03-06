@@ -8,7 +8,6 @@ import {
   trackMetricsForPlanungDrucken,
 } from "./tracking";
 import { Button } from "@/application/components";
-import { YesNo } from "@/application/features/abfrageteil/state";
 import {
   Anleitung,
   Erklaerung,
@@ -23,8 +22,8 @@ import {
 import { Page } from "@/application/pages/Page";
 import { useAusgangslage } from "@/application/pages/planungsteil/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/useBerechneElterngeldbezuege";
+import { useEinkommenInformationen } from "@/application/pages/planungsteil/useEinkommenInformationen";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
-import { useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import {
   getTrackedEase,
@@ -42,15 +41,13 @@ import type {
 import { sindLebensmonateGeplant } from "@/monatsplaner";
 
 export function PlanerPage() {
-  const store = useAppStore();
   const mainElement = useRef<HTMLDivElement>(null);
   const dialogElement = useRef<HTMLDialogElement>(null);
 
-  function openDialogWhenEinkommenLimitUebeschritten() {
-    const isEinkommenLimitUeberschritten =
-      store.getState().stepEinkommen.limitEinkommenUeberschritten === YesNo.YES;
+  const { gesamteinkommenGrenzeUeberschritten } = useEinkommenInformationen();
 
-    if (isEinkommenLimitUeberschritten) dialogElement.current?.showModal();
+  function openDialogWhenEinkommenLimitUebeschritten() {
+    if (gesamteinkommenGrenzeUeberschritten) dialogElement.current?.showModal();
   }
 
   function closeDialog() {
@@ -58,7 +55,9 @@ export function PlanerPage() {
     mainElement.current?.focus();
   }
 
-  useEffect(openDialogWhenEinkommenLimitUebeschritten, [store]);
+  useEffect(openDialogWhenEinkommenLimitUebeschritten, [
+    gesamteinkommenGrenzeUeberschritten,
+  ]);
 
   const planerRef = useRef<PlanerHandle>(null);
 
@@ -300,6 +299,7 @@ if (import.meta.vitest) {
       ).mockReturnValue({
         filtereValideEventHistorie: () => [],
         findeAlleGueltigenEvents: () => [],
+        findeLetztesEvent: () => undefined,
         findeLetztesGueltigesEvent: () => undefined,
         findeVorherigenPfad: () => "/",
         dispatch: () => {},

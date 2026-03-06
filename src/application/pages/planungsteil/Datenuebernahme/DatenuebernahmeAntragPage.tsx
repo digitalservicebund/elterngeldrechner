@@ -4,10 +4,6 @@ import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
-import {
-  parseGermanDateString,
-  stepAllgemeineAngabenSelectors,
-} from "@/application/features/abfrageteil/state";
 import { BundeslandAntragSupport } from "@/application/features/pdfAntrag";
 import {
   prepareGanzerAntrag,
@@ -18,10 +14,11 @@ import {
   imageSeite,
 } from "@/application/features/pdfAntrag/pdf-images";
 import { Page } from "@/application/pages/Page";
+import { useAntragInformationen } from "@/application/pages/planungsteil/useAntragInformationen";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
-import { useAppSelector, useAppStore } from "@/application/redux/hooks";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
+import { Elternteil } from "@/monatsplaner";
 
 function trackedDownloadOfAnlagen(
   event: React.MouseEvent<HTMLAnchorElement>,
@@ -37,8 +34,6 @@ function trackReferenzAufOnlinetool() {
 }
 
 export function DatenuebernahmeAntragPage(): ReactNode {
-  const store = useAppStore();
-
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan } = navigationState;
 
@@ -49,19 +44,15 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const [antragDownloading, setAntragDownloading] = useState(false);
   const [seiteDownloading, setSeiteDownloading] = useState(false);
 
-  const bundesland = useAppSelector(
-    stepAllgemeineAngabenSelectors.getBundeslandAntragSupport,
-  );
+  const bundesland = useAntragInformationen();
   if (bundesland === null) {
     throw new Error("bundesland should not be null");
   }
 
   const informationForPdfAntrag = {
-    nameET1: store.getState().stepAllgemeineAngaben.name.ET1,
-    nameET2: store.getState().stepAllgemeineAngaben.name.ET2,
-    geburtsdatum: parseGermanDateString(
-      store.getState().stepNachwuchs.wahrscheinlichesGeburtsDatum,
-    ),
+    nameET1: plan!.ausgangslage.namenDerElternteile?.[Elternteil.Eins] ?? "",
+    nameET2: plan!.ausgangslage.namenDerElternteile?.[Elternteil.Zwei] ?? "",
+    geburtsdatum: plan!.ausgangslage.geburtsdatumDesKindes,
   };
 
   async function downloadGanzerAntrag() {
@@ -319,12 +310,6 @@ if (import.meta.vitest) {
 
     const initialTestState = produce(INITIAL_STATE, (draft) => {
       draft.stepAllgemeineAngaben.bundesland = "Berlin";
-      draft.stepAllgemeineAngaben.name = {
-        ET1: "Elternteil 1",
-        ET2: "Elternteil 2",
-      };
-      draft.stepNachwuchs.anzahlKuenftigerKinder = 1;
-      draft.stepNachwuchs.wahrscheinlichesGeburtsDatum = "01.01.2100";
     });
   });
 }

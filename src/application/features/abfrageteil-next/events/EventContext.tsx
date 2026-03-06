@@ -10,6 +10,7 @@ import { persistEventstream, restoreEventstream } from "./persistence";
 import {
   filtereValideEventHistorie as filtereValideEventHistorieInEventStream,
   findeAlleGueltigenEvents as findeAlleGueltigenEventsInEventStream,
+  findeLetztesEvent as findeLetztesEventInEventStream,
   findeLetztesGueltigesEvent as findeLetztesGueltigesEventInEventStream,
   findeVorherigenPfad as findeVorherigenPfadInEventStream,
 } from "./projections";
@@ -25,6 +26,8 @@ type EventContextType = {
   readonly dispatch: (event: FormEvent) => void;
 
   readonly filtereValideEventHistorie: () => FormEvent[];
+
+  readonly findeLetztesEvent: () => FormEvent | undefined;
 
   readonly findeAlleGueltigenEvents: <R extends FormEvent["route"]>(
     route: R,
@@ -89,6 +92,10 @@ export function EventProvider({
     [eventStream],
   );
 
+  const findeLetztesEvent = useCallback(() => {
+    return findeLetztesEventInEventStream(eventStream);
+  }, [eventStream]);
+
   const findeVorherigenPfad = useCallback(
     <R extends FormEvent["route"]>(
       route: R,
@@ -114,6 +121,7 @@ export function EventProvider({
       dispatch,
       filtereValideEventHistorie,
       findeAlleGueltigenEvents,
+      findeLetztesEvent,
       findeLetztesGueltigesEvent,
       findeVorherigenPfad,
     };
@@ -121,6 +129,7 @@ export function EventProvider({
     dispatch,
     filtereValideEventHistorie,
     findeAlleGueltigenEvents,
+    findeLetztesEvent,
     findeLetztesGueltigesEvent,
     findeVorherigenPfad,
   ]);

@@ -292,6 +292,7 @@ if (import.meta.vitest) {
         findeVorherigenPfad: () => "/",
         filtereValideEventHistorie: () => [],
         findeAlleGueltigenEvents: () => [],
+        findeLetztesEvent: () => undefined,
         findeLetztesGueltigesEvent: () => undefined,
         dispatch: () => {},
       });

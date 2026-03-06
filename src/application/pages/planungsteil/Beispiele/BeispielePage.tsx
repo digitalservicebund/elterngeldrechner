@@ -3,6 +3,9 @@ import EditIcon from "@digitalservicebund/icons/EditOutlined";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/components";
+import { isAbfrageteilNextEnabled } from "@/application/feature-flags";
+import { useOptionalEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
+import { generatePathFromEvent } from "@/application/features/abfrageteil-next/routing";
 import type { Beispiel } from "@/application/features/beispiele";
 import {
   AuswahloptionenLegende as BeispielAuswahloptionenLegende,
@@ -45,10 +48,17 @@ export function BeispielePage() {
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
   const ausgangslage = useAusgangslage();
+  const eventContext = useOptionalEventContext();
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
   const navigiereZuEinkommen = async () => {
-    await navigate(formSteps.einkommen.route);
+    if (isAbfrageteilNextEnabled() && eventContext) {
+      const letztesEvent = eventContext.findeLetztesEvent();
+
+      await navigate(generatePathFromEvent(letztesEvent!));
+    } else {
+      await navigate(formSteps.einkommen.route);
+    }
   };
 
   const navigiereZuPlaner = async () => {
@@ -293,6 +303,7 @@ if (import.meta.vitest) {
       ).mockReturnValue({
         filtereValideEventHistorie: () => [],
         findeAlleGueltigenEvents: () => [],
+        findeLetztesEvent: () => undefined,
         findeLetztesGueltigesEvent: () => undefined,
         findeVorherigenPfad: () => "/",
         dispatch: () => {},

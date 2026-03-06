@@ -161,13 +161,10 @@ function getNextSubpath(event: FormEvent): string {
         istSelbststaendigeTaetigkeitMoeglich,
         istPersonAlleinerziehend,
       } = event.payload;
-      if (istPersonAlleinerziehend) {
-        return "DONE";
-      }
       if (!istWeitereTaetigkeitVorhanden) {
-        return event.params.elternteilIndex === 0
-          ? Route.ElternteilZweitePersonAngaben
-          : "DONE";
+        return istPersonAlleinerziehend || event.params.elternteilIndex === 1
+          ? "DONE"
+          : Route.ElternteilZweitePersonAngaben;
       }
       const zielRoute = istSelbststaendigeTaetigkeitMoeglich
         ? Route.ElternteilWeitereTaetigkeitAngaben
@@ -867,6 +864,22 @@ if (import.meta.vitest) {
 
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/finanzielles/taetigkeit/1/nicht-selbststaendig",
+        );
+      });
+
+      it("returns ElternteilWeitereTaetigkeitAngaben given ElternteilWeitereTaetigkeitAbfrage as currentRoute, istWeitereTaetigkeitVorhanden true, istSelbststaendigeTaetigkeitMoeglich true and istPersonAlleinerziehend true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            istWeitereTaetigkeitVorhanden: true,
+            istSelbststaendigeTaetigkeitMoeglich: true,
+            istPersonAlleinerziehend: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/0/weitere-taetigkeit-angaben",
         );
       });
 

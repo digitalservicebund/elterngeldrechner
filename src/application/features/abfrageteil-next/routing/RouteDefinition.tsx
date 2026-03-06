@@ -1,5 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { Route } from "./Route";
+import { RouteGuardAbfrageteil } from "./RouteGuardAbfrageteil";
+import { RouteGuardPlaner } from "./RouteGuardPlaner";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -55,112 +57,130 @@ const RouteDefinition = [
         path: generateAbfrageteilPath(Route.AllgemeineAngaben),
       },
       {
-        element: <KindPage />,
-        path: generateAbfrageteilPath(Route.KindAbfrage),
+        element: <RouteGuardAbfrageteil />,
+        children: [
+          {
+            element: <KindPage />,
+            path: generateAbfrageteilPath(Route.KindAbfrage),
+          },
+          {
+            element: <GeborenesKindPage />,
+            path: generateAbfrageteilPath(Route.GeborenesKindAngaben),
+          },
+          {
+            element: <UngeborenesKindPage />,
+            path: generateAbfrageteilPath(Route.UngeborenesKindAngaben),
+          },
+          {
+            element: <WahrscheinlichGeborenesKindPage />,
+            path: generateAbfrageteilPath(
+              Route.WahrscheinlichGeborenesKindAbfrage,
+            ),
+          },
+          {
+            element: <GeschwisterkindAbfragePage />,
+            path: generateAbfrageteilPath(Route.GeschwisterkindAbfrage),
+          },
+          {
+            element: <GeschwisterkindAngabenPage />,
+            path: generateAbfrageteilPath(Route.GeschwisterkindAngaben),
+          },
+          {
+            element: <ElternteilAllgemeineAngabenPage />,
+            path: generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
+          },
+          {
+            element: <ElternteilAusklammerungGruendePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilAusklammerungGruendeAngaben,
+            ),
+          },
+          {
+            element: <ElternteilAusklammerungZeitenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilAusklammerungZeitenAngaben,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitenAbfragePage />,
+            path: generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenSelbststaendigPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenSelbststaendig,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenMischeinkunftPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenMischeinkunft,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenNichtSelbststaendigPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenMinijobPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenMinijob,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenSozialversicherungenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenEinkommenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenEinkommen,
+            ),
+          },
+          {
+            element: <ElternteilTaetigkeitAngabenEinkommenDetailsPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilTaetigkeitAngabenEinkommenDetails,
+            ),
+          },
+          {
+            element: <ElternteilWeitereTaetigkeitAbfragePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilWeitereTaetigkeitAbfrage,
+            ),
+          },
+          {
+            element: <ElternteilWeitereTaetigkeitAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilWeitereTaetigkeitAngaben,
+            ),
+          },
+          {
+            element: <ElternteilZweitePersonAngabenPage />,
+            path: generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
+          },
+          {
+            element: <BeispielePage />,
+            path: "/beispiele",
+          },
+        ],
       },
       {
-        element: <GeborenesKindPage />,
-        path: generateAbfrageteilPath(Route.GeborenesKindAngaben),
-      },
-      {
-        element: <UngeborenesKindPage />,
-        path: generateAbfrageteilPath(Route.UngeborenesKindAngaben),
-      },
-      {
-        element: <WahrscheinlichGeborenesKindPage />,
-        path: generateAbfrageteilPath(Route.WahrscheinlichGeborenesKindAbfrage),
-      },
-      {
-        element: <GeschwisterkindAbfragePage />,
-        path: generateAbfrageteilPath(Route.GeschwisterkindAbfrage),
-      },
-      {
-        element: <GeschwisterkindAngabenPage />,
-        path: generateAbfrageteilPath(Route.GeschwisterkindAngaben),
-      },
-      {
-        element: <ElternteilAllgemeineAngabenPage />,
-        path: generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
-      },
-      {
-        element: <ElternteilAusklammerungGruendePage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilAusklammerungGruendeAngaben,
-        ),
-      },
-      {
-        element: <ElternteilAusklammerungZeitenPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilAusklammerungZeitenAngaben,
-        ),
-      },
-      {
-        element: <ElternteilTaetigkeitenAbfragePage />,
-        path: generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenSelbststaendigPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilTaetigkeitAngabenSelbststaendig,
-        ),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenMischeinkunftPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilTaetigkeitAngabenMischeinkunft,
-        ),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenNichtSelbststaendigPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
-        ),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenMinijobPage />,
-        path: generateAbfrageteilPath(Route.ElternteilTaetigkeitAngabenMinijob),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenSozialversicherungenPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-        ),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenEinkommenPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilTaetigkeitAngabenEinkommen,
-        ),
-      },
-      {
-        element: <ElternteilTaetigkeitAngabenEinkommenDetailsPage />,
-        path: generateAbfrageteilPath(
-          Route.ElternteilTaetigkeitAngabenEinkommenDetails,
-        ),
-      },
-      {
-        element: <ElternteilWeitereTaetigkeitAbfragePage />,
-        path: generateAbfrageteilPath(Route.ElternteilWeitereTaetigkeitAbfrage),
-      },
-      {
-        element: <ElternteilWeitereTaetigkeitAngabenPage />,
-        path: generateAbfrageteilPath(Route.ElternteilWeitereTaetigkeitAngaben),
-      },
-      {
-        element: <ElternteilZweitePersonAngabenPage />,
-        path: generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
-      },
-      {
-        element: <BeispielePage />,
-        path: "/beispiele",
-      },
-      {
-        element: <PlanerPage />,
-        path: "/rechner-planer",
-      },
-      {
-        element: <DatenuebernahmeAntragPage />,
-        path: "/datenuebernahme-antrag",
+        element: <RouteGuardPlaner />,
+        children: [
+          {
+            element: <PlanerPage />,
+            path: "/rechner-planer",
+          },
+          {
+            element: <DatenuebernahmeAntragPage />,
+            path: "/datenuebernahme-antrag",
+          },
+        ],
       },
       {
         element: (

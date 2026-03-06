@@ -10,6 +10,7 @@ import { Button, InfoText } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeGeschwisterkinder } from "@/application/features/abfrageteil-next/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -37,13 +38,32 @@ export function ElternteilAusklammerungGruendePage() {
     currentRoute,
     routeParams,
   );
+  const letztesGueltigesEventData = encodeSafely(
+    ElternteilAusklammerungGruendeSchema,
+    letztesGueltigesEvent,
+  );
+
+  const eventStream = filtereValideEventHistorie();
+  const esGibtGeschwisterkinder =
+    findeGeschwisterkinder(eventStream).length > 0;
+
+  const defaultValues =
+    !letztesGueltigesEventData ||
+    letztesGueltigesEventData.hatKeineAusklammerungsgruende !== false
+      ? letztesGueltigesEventData
+      : ({
+          ...letztesGueltigesEventData,
+          hatMutterschutzAelteresKind:
+            !!esGibtGeschwisterkinder &&
+            letztesGueltigesEventData.hatMutterschutzAelteresKind,
+          hatElterngeldAelteresKind:
+            !!esGibtGeschwisterkinder &&
+            letztesGueltigesEventData.hatElterngeldAelteresKind,
+        } satisfies ElternteilAusklammerungGruende);
 
   const form = useForm<ElternteilAusklammerungGruende>({
     resolver: zodResolver(ElternteilAusklammerungGruendeSchema),
-    defaultValues: encodeSafely(
-      ElternteilAusklammerungGruendeSchema,
-      letztesGueltigesEvent,
-    ),
+    defaultValues,
   });
 
   const { register, handleSubmit, formState, setValue } = form;
@@ -71,7 +91,6 @@ export function ElternteilAusklammerungGruendePage() {
     }
   };
 
-  const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   return (
@@ -89,33 +108,41 @@ export function ElternteilAusklammerungGruendePage() {
             answer="Wenn Sie hier etwas auswählen, können Monate, in denen Sie weniger verdient haben, übersprungen werden. Für die Berechnung des Elterngeldes werden dann Monate verwendet, in denen Sie mehr verdient haben."
           />
 
-          <CustomCheckbox
-            className="mt-20"
-            register={register}
-            name="hatMutterschutzAelteresKind"
-            label={`${vorname} war für ein älteres Kind im Mutterschutz`}
-            errors={formErrors}
-            onChange={(checked) => handleCheckboxChange(checked)}
-          >
-            <InfoText
-              question="Was bedeutet Mutterschutz für ein älteres Kind?"
-              answer="Bei der Berechnung des Elterngelds können die Monate, in denen Sie Mutterschaftsleistungen für ein älteres Kind erhalten haben, übersprungen werden. Diesen Zeitraum können Sie aus der Bescheinigung Ihres Arbeitgebers oder Ihrer Krankenkasse ablesen."
-            />
-          </CustomCheckbox>
+          {esGibtGeschwisterkinder ? (
+            <CustomCheckbox
+              className="mt-20"
+              register={register}
+              name="hatMutterschutzAelteresKind"
+              label={`${vorname} war für ein älteres Kind im Mutterschutz`}
+              errors={formErrors}
+              onChange={(checked) => handleCheckboxChange(checked)}
+            >
+              <InfoText
+                question="Was bedeutet Mutterschutz für ein älteres Kind?"
+                answer="Bei der Berechnung des Elterngelds können die Monate, in denen Sie Mutterschaftsleistungen für ein älteres Kind erhalten haben, übersprungen werden. Diesen Zeitraum können Sie aus der Bescheinigung Ihres Arbeitgebers oder Ihrer Krankenkasse ablesen."
+              />
+            </CustomCheckbox>
+          ) : (
+            <input type="hidden" {...register("hatMutterschutzAelteresKind")} />
+          )}
 
-          <CustomCheckbox
-            className="mt-20"
-            register={register}
-            name="hatElterngeldAelteresKind"
-            label={`${vorname} hat für ein älteres Kind Elterngeld bekommen`}
-            errors={formErrors}
-            onChange={(checked) => handleCheckboxChange(checked)}
-          >
-            <InfoText
-              question="Was bedeutet Elterngeld für ein älteres Kind?"
-              answer="Bei der Berechnung des Elterngelds können auch die Monate, in denen Sie Elterngeld für ein älteres Kind erhalten haben, übersprungen werden. Das gilt nur für die ersten 14 Lebensmonate dieses Kindes."
-            />
-          </CustomCheckbox>
+          {esGibtGeschwisterkinder ? (
+            <CustomCheckbox
+              className="mt-20"
+              register={register}
+              name="hatElterngeldAelteresKind"
+              label={`${vorname} hat für ein älteres Kind Elterngeld bekommen`}
+              errors={formErrors}
+              onChange={(checked) => handleCheckboxChange(checked)}
+            >
+              <InfoText
+                question="Was bedeutet Elterngeld für ein älteres Kind?"
+                answer="Bei der Berechnung des Elterngelds können auch die Monate, in denen Sie Elterngeld für ein älteres Kind erhalten haben, übersprungen werden. Das gilt nur für die ersten 14 Lebensmonate dieses Kindes."
+              />
+            </CustomCheckbox>
+          ) : (
+            <input type="hidden" {...register("hatElterngeldAelteresKind")} />
+          )}
 
           <CustomCheckbox
             className="mt-20"

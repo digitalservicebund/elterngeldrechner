@@ -92,9 +92,25 @@ function istImMutterschutz(events: FormEvent[]): boolean {
       );
     });
 
+  const taetigkeitenAbfrageEvent = [...events]
+    .reverse()
+    .find((event): event is ElternteilTaetigkeitenAbfrageEvent => {
+      return (
+        event.route === Route.ElternteilTaetigkeitenAbfrage &&
+        event.params.elternteilIndex === 0
+      );
+    });
+
   if (!allgemeineAngabenEvent) {
     throw new Error(
       "Elternteil Allgemeine Angaben Event is required for Elternteil 0.",
+    );
+  }
+
+  if (taetigkeitenAbfrageEvent) {
+    return !(
+      !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
+      taetigkeitenAbfrageEvent.payload.istVerbeamtet
     );
   }
 
@@ -133,6 +149,11 @@ type AusklammerungZeitenEvent = Extract<
 type ElternteilAllgemeineAngabenEvent = Extract<
   FormEvent,
   { route: Route.ElternteilAllgemeineAngaben }
+>;
+
+type ElternteilTaetigkeitenAbfrageEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilTaetigkeitenAbfrage }
 >;
 
 if (import.meta.vitest) {
@@ -194,6 +215,50 @@ if (import.meta.vitest) {
           bis: Temporal.PlainDate.from("2026-04-28"),
         },
       ]);
+    });
+
+    it("returns empty array when Mutterschutz and no other Ausklammerung given but person is beamtet", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilAllgemeineAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: true,
+          },
+        },
+        {
+          route: Route.GeborenesKindAngaben,
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2026-03-03"),
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2026-03-03"),
+            anzahl: 1,
+          },
+        },
+        {
+          route: Route.ElternteilAusklammerungZeitenAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            mutterschutzGeschwisterkind: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: false,
+            istVerbeamtet: true,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: false,
+          },
+        },
+      ];
+
+      expect(findeAusklammerungen(events, 0)).toEqual([]);
     });
 
     it("returns empty array when no event exists for the given elternteilIndex", () => {

@@ -62,12 +62,22 @@ export type ElternteilAusklammerungZeiten = z.infer<
   typeof ElternteilAusklammerungZeitenSchema
 >;
 
-const TaetigkeitenSchema = z.object({
-  istNichtSelbststaendig: z.boolean(),
-  istSelbststaendig: z.boolean(),
-  istVerbeamtet: z.boolean(),
-  hatAndereLeistungen: z.boolean(),
-});
+const TaetigkeitenSchema = z
+  .object({
+    istNichtSelbststaendig: z.boolean(),
+    istSelbststaendig: z.boolean(),
+    istVerbeamtet: z.boolean(),
+    hatAndereLeistungen: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      return Object.values(data).some((value) => value === true);
+    },
+    {
+      message: "Bitte treffen Sie mindestens eine Auswahl.",
+      path: ["hatKeinEinkommen"],
+    },
+  );
 
 export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
   "hatKeinEinkommen",

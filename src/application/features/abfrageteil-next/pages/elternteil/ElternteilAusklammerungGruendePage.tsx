@@ -41,7 +41,12 @@ export function ElternteilAusklammerungGruendePage() {
   const letztesGueltigesEventData = encodeSafely(
     ElternteilAusklammerungGruendeSchema,
     letztesGueltigesEvent,
-  );
+  ) ?? {
+    hatMutterschutzAelteresKind: false,
+    hatElterngeldAelteresKind: false,
+    hatSchwangerschaftsbedingteErkrankung: false,
+    hatKeineAusklammerungsgruende: false,
+  };
 
   const eventStream = filtereValideEventHistorie();
   const esGibtGeschwisterkinder =
@@ -51,15 +56,15 @@ export function ElternteilAusklammerungGruendePage() {
     !letztesGueltigesEventData ||
     letztesGueltigesEventData.hatKeineAusklammerungsgruende !== false
       ? letztesGueltigesEventData
-      : ({
+      : {
           ...letztesGueltigesEventData,
           hatMutterschutzAelteresKind:
             !!esGibtGeschwisterkinder &&
-            letztesGueltigesEventData.hatMutterschutzAelteresKind,
+            !!letztesGueltigesEventData.hatMutterschutzAelteresKind,
           hatElterngeldAelteresKind:
             !!esGibtGeschwisterkinder &&
-            letztesGueltigesEventData.hatElterngeldAelteresKind,
-        } satisfies ElternteilAusklammerungGruende);
+            !!letztesGueltigesEventData.hatElterngeldAelteresKind,
+        };
 
   const form = useForm<ElternteilAusklammerungGruende>({
     resolver: zodResolver(ElternteilAusklammerungGruendeSchema),

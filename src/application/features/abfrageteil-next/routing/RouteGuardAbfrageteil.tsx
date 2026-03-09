@@ -18,6 +18,11 @@ export function RouteGuardAbfrageteil() {
   }
 
   const valideEventHistorie = filtereValideEventHistorie();
+
+  if (valideEventHistorie[0]?.route === undefined) {
+    return <Navigate to={allgemeineAngabenPfad} replace />;
+  }
+
   const letztesValidesEvent =
     valideEventHistorie[valideEventHistorie.length - 1];
 

@@ -17,6 +17,22 @@ interface ElternteilAusklammerungZeitenInputProps {
   readonly errors: FieldErrors<ElternteilAusklammerungszeitenInput>;
 }
 
+const BUTTON_TEXT_MAPPING: Record<
+  keyof ElternteilAusklammerungszeitenInput,
+  string
+> = {
+  mutterschutzGeschwisterkind: "für Mutterschutz",
+  elterngeldGeschwisterkind: "für Elterngeld",
+  erkrankungSchwangerschaft: "für Krankheit in der Schwangerschaft",
+};
+
+const erstelleButtonText = (
+  grund: keyof ElternteilAusklammerungszeitenInput,
+): string => {
+  const zusatz = BUTTON_TEXT_MAPPING[grund];
+  return `+ Weiteren Zeitraum ${zusatz} hinzufügen`;
+};
+
 export function ElternteilAusklammerungZeitenInput({
   grund,
   title,
@@ -63,7 +79,7 @@ export function ElternteilAusklammerungZeitenInput({
         className="self-start"
         onClick={() => append({ von: "", bis: "" })}
       >
-        <span className="text-16">+ Weiteren Zeitraum hinzufügen</span>
+        <span className="text-16">{erstelleButtonText(grund)}</span>
       </Button>
     </div>
   );

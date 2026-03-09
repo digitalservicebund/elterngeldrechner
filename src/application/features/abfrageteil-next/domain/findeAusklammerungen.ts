@@ -1,4 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
+import { differenceInDays } from "date-fns";
+import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -30,9 +32,19 @@ export function findeAusklammerungen(
 }
 
 function errechneMutterschutzAusklammerung(events: FormEvent[]) {
+  const errechneterEntbindungstermin =
+    findeErrechnetenEntbindungstermin(events);
+  const geburtsdatum = findeGeburtsdatum(events);
+  const anzahlKinder = findeAnzahlKinder(events);
+
   const mutterschutz = berechneMutterschutz(
-    findeErrechnetenEntbindungstermin(events),
-    findeGeburtsdatum(events),
+    errechneterEntbindungstermin,
+    geburtsdatum,
+    ueberpruefeVerlaengerungsgrundMutterschutz(
+      errechneterEntbindungstermin,
+      anzahlKinder,
+      geburtsdatum,
+    ),
   );
 
   const startdatumMilliseconds = Temporal.Instant.fromEpochMilliseconds(
@@ -77,6 +89,24 @@ function findeGeburtsdatum(events: FormEvent[]): Date | undefined {
 
       return new Date(geburtsdatum.toZonedDateTime("UTC").epochMilliseconds);
     }
+  }
+
+  return undefined;
+}
+
+function ueberpruefeVerlaengerungsgrundMutterschutz(
+  errechneterEntbindungstermin: Date,
+  anzahlKinder: number,
+  geburtsdatum?: Date,
+): boolean | undefined {
+  if (anzahlKinder > 1) return true;
+
+  if (geburtsdatum) {
+    const differenzZwischenGeburtUndET = differenceInDays(
+      errechneterEntbindungstermin,
+      geburtsdatum,
+    );
+    return differenzZwischenGeburtUndET > 42;
   }
 
   return undefined;
@@ -380,6 +410,60 @@ if (import.meta.vitest) {
           bis: Temporal.PlainDate.from("2025-02-15"),
         },
       ]);
+    });
+  });
+
+  describe("ueberpruefeVerlaengerungsgrundMutterschutz", () => {
+    it("returns true when anzahlKinder greater than 1", () => {
+      const errechneterEntbindungstermin = new Date("2026-03-09");
+      const anzahlKinder = 2;
+
+      expect(
+        ueberpruefeVerlaengerungsgrundMutterschutz(
+          errechneterEntbindungstermin,
+          anzahlKinder,
+        ),
+      ).toEqual(true);
+    });
+
+    it("returns undefined when anzahlKinder 1 and geburtsdatum undefined", () => {
+      const errechneterEntbindungstermin = new Date("2026-03-09");
+      const anzahlKinder = 1;
+
+      expect(
+        ueberpruefeVerlaengerungsgrundMutterschutz(
+          errechneterEntbindungstermin,
+          anzahlKinder,
+        ),
+      ).toEqual(undefined);
+    });
+
+    it("returns false when anzahlKinder 1 and geburtsdatum not 6 weeks earlier than ET", () => {
+      const errechneterEntbindungstermin = new Date("2026-03-09");
+      const geburtsdatum = new Date("2026-03-09");
+      const anzahlKinder = 1;
+
+      expect(
+        ueberpruefeVerlaengerungsgrundMutterschutz(
+          errechneterEntbindungstermin,
+          anzahlKinder,
+          geburtsdatum,
+        ),
+      ).toEqual(false);
+    });
+
+    it("returns true when anzahlKinder 1 and geburtsdatum 43 days earlier than ET", () => {
+      const errechneterEntbindungstermin = new Date("2026-03-09");
+      const geburtsdatum = new Date("2026-01-25");
+      const anzahlKinder = 1;
+
+      expect(
+        ueberpruefeVerlaengerungsgrundMutterschutz(
+          errechneterEntbindungstermin,
+          anzahlKinder,
+          geburtsdatum,
+        ),
+      ).toEqual(true);
     });
   });
 }

@@ -342,6 +342,14 @@ if (import.meta.vitest) {
               erkrankungSchwangerschaft: [],
             },
           },
+          {
+            route: Route.ElternteilZweitePersonAngaben,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
+              name: "Person 2",
+              istImMutterschutz: false,
+            },
+          },
         ]);
 
         const { result } = renderHook(() => useBemessungszeitraumrechner(1));

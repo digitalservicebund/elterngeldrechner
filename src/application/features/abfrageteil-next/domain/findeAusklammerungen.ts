@@ -20,7 +20,7 @@ export function findeAusklammerungen(
     ? flacheAusklammerungen(ausklammerungszeitenEvent.payload)
     : [];
 
-  if (elternteilIndex === 0 && istImMutterschutz(events)) {
+  if (istImMutterschutz(events, elternteilIndex)) {
     const errechneteAusklammerungen = [
       errechneMutterschutzAusklammerung(events),
     ];
@@ -112,7 +112,35 @@ function ueberpruefeVerlaengerungsgrundMutterschutz(
   return undefined;
 }
 
-function istImMutterschutz(events: FormEvent[]): boolean {
+function istImMutterschutz(
+  events: FormEvent[],
+  elternteilIndex: number,
+): boolean {
+  const istElternteilImMutterschutz =
+    elternteilIndex === 0
+      ? istErsterElternteilImMutterschutz(events)
+      : istZweiterElternteilImMutterschutz(events);
+
+  const taetigkeitenAbfrageEvent = [...events]
+    .reverse()
+    .find((event): event is ElternteilTaetigkeitenAbfrageEvent => {
+      return (
+        event.route === Route.ElternteilTaetigkeitenAbfrage &&
+        event.params.elternteilIndex === elternteilIndex
+      );
+    });
+
+  if (taetigkeitenAbfrageEvent) {
+    return !(
+      !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
+      taetigkeitenAbfrageEvent.payload.istVerbeamtet
+    );
+  }
+
+  return istElternteilImMutterschutz;
+}
+
+function istErsterElternteilImMutterschutz(events: FormEvent[]): boolean {
   const allgemeineAngabenEvent = [...events]
     .reverse()
     .find((event): event is ElternteilAllgemeineAngabenEvent => {
@@ -122,29 +150,29 @@ function istImMutterschutz(events: FormEvent[]): boolean {
       );
     });
 
-  const taetigkeitenAbfrageEvent = [...events]
-    .reverse()
-    .find((event): event is ElternteilTaetigkeitenAbfrageEvent => {
-      return (
-        event.route === Route.ElternteilTaetigkeitenAbfrage &&
-        event.params.elternteilIndex === 0
-      );
-    });
-
   if (!allgemeineAngabenEvent) {
     throw new Error(
-      "Elternteil Allgemeine Angaben Event is required for Elternteil 0.",
-    );
-  }
-
-  if (taetigkeitenAbfrageEvent) {
-    return !(
-      !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
-      taetigkeitenAbfrageEvent.payload.istVerbeamtet
+      "Elternteil Allgemeine Angaben Event is required for Elternteil 1.",
     );
   }
 
   return allgemeineAngabenEvent.payload.istImMutterschutz ?? true;
+}
+
+function istZweiterElternteilImMutterschutz(events: FormEvent[]): boolean {
+  const zweitePersonAngabenEvent = [...events]
+    .reverse()
+    .find((event): event is ElternteilZweitePersonAngabenEvent => {
+      return event.route === Route.ElternteilZweitePersonAngaben;
+    });
+
+  if (!zweitePersonAngabenEvent) {
+    throw new Error(
+      "Elternteil Zweite Person Angaben Event is required for Elternteil 2.",
+    );
+  }
+
+  return zweitePersonAngabenEvent.payload.istImMutterschutz ?? false;
 }
 
 function findeAusklammerungszeiten(
@@ -179,6 +207,11 @@ type AusklammerungZeitenEvent = Extract<
 type ElternteilAllgemeineAngabenEvent = Extract<
   FormEvent,
   { route: Route.ElternteilAllgemeineAngaben }
+>;
+
+type ElternteilZweitePersonAngabenEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilZweitePersonAngaben }
 >;
 
 type ElternteilTaetigkeitenAbfrageEvent = Extract<

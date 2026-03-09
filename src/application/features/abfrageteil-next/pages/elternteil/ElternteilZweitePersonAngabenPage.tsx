@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Temporal } from "@js-temporal/polyfill";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -9,6 +10,9 @@ import {
 import { Button, InfoText } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
+import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
   type FormEvent,
@@ -16,10 +20,15 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { Elternteil } from "@/monatsplaner";
 
 export function ElternteilZweitePersonAngabenPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    findeVorherigenPfad,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -56,6 +65,20 @@ export function ElternteilZweitePersonAngabenPage() {
   const wirdZweitePersonBeruecksichtigt = watch(
     "wirdZweitePersonBeruecksichtigt",
   );
+
+  const nameInForm = watch("name");
+  const vorname = nameInForm?.trim() || "Person 2";
+
+  const eventStream = filtereValideEventHistorie();
+  const geburtstdatum = findeGeburtsdatum(eventStream);
+  const heute = Temporal.Now.plainDateISO();
+  const geburtIstErfolgt = Temporal.PlainDate.compare(heute, geburtstdatum) > 0;
+
+  const istErsterElternteilImMutterschutz =
+    findeInformationenZumMutterschutz(
+      eventStream,
+      findeAnzahlKinder(eventStream),
+    )?.empfaenger === Elternteil.Eins;
 
   const personNameInputIdentifier = useId();
 
@@ -102,38 +125,98 @@ export function ElternteilZweitePersonAngabenPage() {
 
         {(wirdZweitePersonBeruecksichtigt === "yes" ||
           wirdZweitePersonBeruecksichtigt === "unknown") && (
-          <div className="mt-20">
-            <h3 className="mb-10">
-              Wie heißt Person 2, die Elterngeld erhalten soll?
-            </h3>
+          <>
+            <div className="mt-20">
+              <h3 className="mb-10">
+                Wie heißt Person 2, die Elterngeld erhalten soll?
+              </h3>
 
-            <InfoText
-              question="Warum soll ich einen Vornamen angeben?"
-              answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
-            />
+              <InfoText
+                question="Warum soll ich einen Vornamen angeben?"
+                answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
+              />
 
-            <label
-              className="mb-4 mt-20 block text-16"
-              htmlFor={personNameInputIdentifier}
-            >
-              Vorname Person 2
-            </label>
+              <label
+                className="mb-4 mt-20 block text-16"
+                htmlFor={personNameInputIdentifier}
+              >
+                Vorname Person 2
+              </label>
 
-            <input
-              id={personNameInputIdentifier}
-              className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
-              {...register("name")}
-            />
+              <input
+                id={personNameInputIdentifier}
+                className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
+                {...register("name")}
+              />
 
-            {"name" in formErrors && (
-              <p className="mt-8 text-14 text-danger">
-                {formErrors.name?.message}
-              </p>
+              {"name" in formErrors && (
+                <p className="mt-8 text-14 text-danger">
+                  {formErrors.name?.message}
+                </p>
+              )}
+            </div>
+
+            {!istErsterElternteilImMutterschutz && (
+              <div>
+                <h3 className="mb-10">
+                  {geburtIstErfolgt
+                    ? `War ${vorname} im Mutterschutz?`
+                    : `Wird ${vorname} im Mutterschutz sein?`}
+                </h3>
+
+                <InfoText
+                  question="Was ist Mutterschutz?"
+                  answer={
+                    <>
+                      <p>
+                        Während des Mutterschutzes erhalten Sie
+                        Mutterschaftsleistungen, zum Beispiel:
+                      </p>
+
+                      <ul className="list-inside list-disc">
+                        <li>
+                          das Mutterschaftsgeld der gesetzlichen Krankenkassen
+                        </li>
+                        <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+                        <li>
+                          die Bezüge für Beamtinnen während des Mutterschutzes
+                        </li>
+                      </ul>
+
+                      <p>
+                        Diese werden – wenn ein Anspruch darauf besteht –
+                        normalerweise in den ersten acht Wochen nach der Geburt
+                        gezahlt.
+                      </p>
+                    </>
+                  }
+                />
+
+                <CustomRadioGroup
+                  className="mt-16"
+                  legend=""
+                  errors={formErrors}
+                  register={register}
+                  name="istImMutterschutz"
+                  options={[
+                    {
+                      value: "yes",
+                      label: "Ja",
+                    },
+                    {
+                      value: "no",
+                      label: "Nein",
+                    },
+                    {
+                      value: "unknown",
+                      label: "Ich weiß es noch nicht",
+                    },
+                  ]}
+                />
+              </div>
             )}
-          </div>
+          </>
         )}
-
-        {/* TODO-Abfrage: Input für Mutterschutz */}
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

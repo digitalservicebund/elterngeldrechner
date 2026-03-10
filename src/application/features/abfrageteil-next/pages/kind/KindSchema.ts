@@ -10,7 +10,10 @@ export const GeburtSchema = z.object({
 
 export const UngeborenesKindSchema = z.object({
   errechneterEntbindungstermin: GermanDateInputCodec,
-  anzahl: z.number().min(1),
+  anzahl: z.coerce
+    .number()
+    .min(1, "Mindestens 1 Kind")
+    .max(8, "Maximal 8 Kinder"),
 });
 
 export const GeborenesKindSchema = z.object({
@@ -40,7 +43,7 @@ export type Kind = z.infer<typeof KindSchema>;
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("", () => {
+  describe("GeburtSchema", () => {
     it("is valid if istGeboren is 'yes'", () => {
       expect({
         istGeboren: "yes",
@@ -88,6 +91,34 @@ if (import.meta.vitest) {
         anzahl: 1,
         errechneterEntbindungstermin: "26.01.2025",
       }).toEqual(expect.schemaMatching(UngeborenesKindSchema));
+    });
+
+    it("is valid if anzahl is at minimum", () => {
+      expect({
+        anzahl: 8,
+        errechneterEntbindungstermin: "26.01.2025",
+      }).toEqual(expect.schemaMatching(UngeborenesKindSchema));
+    });
+
+    it("is valid if anzahl is at maximum", () => {
+      expect({
+        anzahl: 8,
+        errechneterEntbindungstermin: "26.01.2025",
+      }).toEqual(expect.schemaMatching(UngeborenesKindSchema));
+    });
+
+    it("is invalid if anzahl is below minimum", () => {
+      expect({
+        anzahl: 0,
+        errechneterEntbindungstermin: "26.01.2025",
+      }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
+    });
+
+    it("is invalid if anzahl is above maximum", () => {
+      expect({
+        anzahl: 9,
+        errechneterEntbindungstermin: "26.01.2025",
+      }).not.toEqual(expect.schemaMatching(UngeborenesKindSchema));
     });
 
     it("is invalid if the anzahl is negative", () => {

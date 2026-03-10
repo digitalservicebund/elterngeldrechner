@@ -77,6 +77,8 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
+  const showGeneralErrorMessage = !!formErrors.hatKeinEinkommen?.message;
+
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
@@ -101,7 +103,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             register={register}
             name="istNichtSelbststaendig"
             label={`${vorname} war oder ist angestellt`}
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
           >
             <p className="font-regular">
               zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
@@ -114,7 +116,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             register={register}
             name="istSelbststaendig"
             label={`${vorname} war oder ist selbstständig`}
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
           >
             <p className="font-regular">
               zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
@@ -127,7 +129,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             register={register}
             name="istVerbeamtet"
             label={`${vorname} war oder ist Beamtin`}
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
           />
 
           <CustomCheckbox
@@ -135,7 +137,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             register={register}
             name="hatAndereLeistungen"
             label={`${vorname} erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen`}
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
           >
             <p className="font-regular">
               zum Beispiel Bürgergeld, Arbeitslosengeld, Krankengeld oder
@@ -148,12 +150,18 @@ export function ElternteilTaetigkeitenAbfragePage() {
             register={register}
             name="hatKeinEinkommen"
             label={`${vorname} hatte oder hat kein Einkommen`}
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
           >
             <p className="font-regular">
               zum Beispiel während eines Studiums, als Hausfrau oder Hausmann.
             </p>
           </CustomCheckbox>
+
+          {!!showGeneralErrorMessage && (
+            <p className="text-red-500 font-medium mt-4 text-danger">
+              {formErrors.hatKeinEinkommen?.message}
+            </p>
+          )}
         </div>
 
         <div className="mt-40 flex gap-16">

@@ -98,6 +98,9 @@ export function ElternteilAusklammerungGruendePage() {
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
+  const showGeneralErrorMessage =
+    !!formErrors.hatKeineAusklammerungsgruende?.message;
+
   return (
     <Page heading={`Angaben ${vorname}`}>
       <form
@@ -119,7 +122,7 @@ export function ElternteilAusklammerungGruendePage() {
               register={register}
               name="hatMutterschutzAelteresKind"
               label={`${vorname} war für ein älteres Kind im Mutterschutz`}
-              errors={formErrors}
+              errors={showGeneralErrorMessage}
               onChange={(checked) => handleCheckboxChange(checked)}
             >
               <InfoText
@@ -137,7 +140,7 @@ export function ElternteilAusklammerungGruendePage() {
               register={register}
               name="hatElterngeldAelteresKind"
               label={`${vorname} hat für ein älteres Kind Elterngeld bekommen`}
-              errors={formErrors}
+              errors={showGeneralErrorMessage}
               onChange={(checked) => handleCheckboxChange(checked)}
             >
               <InfoText
@@ -154,7 +157,7 @@ export function ElternteilAusklammerungGruendePage() {
             register={register}
             name="hatSchwangerschaftsbedingteErkrankung"
             label={`${vorname} hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen`}
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
             onChange={(checked) => handleCheckboxChange(checked)}
           >
             <InfoText
@@ -168,7 +171,7 @@ export function ElternteilAusklammerungGruendePage() {
             register={register}
             name="hatKeineAusklammerungsgruende"
             label="Keiner der genannten Gründe"
-            errors={formErrors}
+            errors={showGeneralErrorMessage}
             onChange={(checked) => {
               if (checked) {
                 setValue("hatMutterschutzAelteresKind", false);
@@ -177,6 +180,12 @@ export function ElternteilAusklammerungGruendePage() {
               }
             }}
           />
+
+          {!!showGeneralErrorMessage && (
+            <p className="text-red-500 font-medium mt-4 text-danger">
+              {formErrors.hatKeineAusklammerungsgruende?.message}
+            </p>
+          )}
         </div>
 
         {/* TODO-Abfrage: Icon bei Alert ändern */}

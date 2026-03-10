@@ -15,11 +15,21 @@ export type ElternteilAllgemeineAngaben = z.infer<
   typeof ElternteilAllgemeineAngabenSchema
 >;
 
-const AusklammerungGruendeSchema = z.object({
-  hatMutterschutzAelteresKind: z.boolean(),
-  hatElterngeldAelteresKind: z.boolean(),
-  hatSchwangerschaftsbedingteErkrankung: z.boolean(),
-});
+const AusklammerungGruendeSchema = z
+  .object({
+    hatMutterschutzAelteresKind: z.boolean(),
+    hatElterngeldAelteresKind: z.boolean(),
+    hatSchwangerschaftsbedingteErkrankung: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      return Object.values(data).some((value) => value === true);
+    },
+    {
+      message: "Bitte treffen Sie mindestens eine Auswahl.",
+      path: ["hatKeineAusklammerungsgruende"],
+    },
+  );
 
 export const ElternteilAusklammerungGruendeSchema = z.discriminatedUnion(
   "hatKeineAusklammerungsgruende",

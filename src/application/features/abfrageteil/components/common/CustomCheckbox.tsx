@@ -51,8 +51,9 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   };
 
   const checkboxClasses = {
-    defaultBorderState:
-      "before:absolute before:left-0 before:top-0 before:size-32 before:border before:border-solid before:border-primary before:bg-white before:content-['']",
+    defaultBorderState: hasError
+      ? "before:absolute before:left-0 before:top-0 before:size-32 before:border before:border-solid before:border-danger before:bg-white before:content-['']"
+      : "before:absolute before:left-0 before:top-0 before:size-32 before:border before:border-solid before:border-primary before:bg-white before:content-['']",
     defaultMarkerState:
       "after:absolute after:left-8 after:top-8 after:size-16 after:content-['']",
 

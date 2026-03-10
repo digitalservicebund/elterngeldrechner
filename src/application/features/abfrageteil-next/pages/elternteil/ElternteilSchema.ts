@@ -26,7 +26,7 @@ const AusklammerungGruendeSchema = z
       return Object.values(data).some((value) => value === true);
     },
     {
-      message: "Bitte treffen Sie mindestens eine Auswahl.",
+      message: "Bitte treffen Sie eine Auswahl.",
       path: ["hatKeineAusklammerungsgruende"],
     },
   );
@@ -84,7 +84,7 @@ const TaetigkeitenSchema = z
       return Object.values(data).some((value) => value === true);
     },
     {
-      message: "Bitte treffen Sie mindestens eine Auswahl.",
+      message: "Bitte treffen Sie eine Auswahl.",
       path: ["hatKeinEinkommen"],
     },
   );

@@ -6,7 +6,7 @@ import {
 import { OptionalBooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod/codecs/OptionalBooleanRadiobuttonCodec";
 
 export const ElternteilAllgemeineAngabenSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, "Der Name darf nicht leer sein"),
   istAlleinerziehend: BooleanRadiobuttonCodec,
   istImMutterschutz: OptionalBooleanRadiobuttonCodec,
 });

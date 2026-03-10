@@ -109,9 +109,7 @@ export function ElternteilAllgemeineAngabenPage() {
             <input
               id={personNameInputIdentifier}
               className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
-              {...register("name", {
-                required: "Dieses Feld ist erforderlich",
-              })}
+              {...register("name")}
             />
 
             {!!formErrors.name && (

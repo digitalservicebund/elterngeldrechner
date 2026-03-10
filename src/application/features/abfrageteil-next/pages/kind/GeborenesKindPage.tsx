@@ -117,12 +117,7 @@ export function GeborenesKindPage() {
           </p>
 
           <NumberInput
-            {...register("anzahl", {
-              valueAsNumber: true,
-              max: { value: 8, message: "Maximal 8 Kinder" },
-              min: { value: 1, message: "Mindestens 1 Kind" },
-              required: "Erforderlich",
-            })}
+            {...register("anzahl")}
             label="Anzahl der Kinder"
             errors={formErrors.anzahl?.message}
           />

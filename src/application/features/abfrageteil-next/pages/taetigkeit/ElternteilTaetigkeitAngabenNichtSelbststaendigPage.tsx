@@ -113,53 +113,47 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
           </p>
         </div>
 
-        <div>
-          <h5 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h5 className="mb-10">
             Handelt es sich um Einkommen aus einem Minijob?
           </h5>
+          errors={formErrors}
+          register={register}
+          name="istTaetigkeitMinijob"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        >
+          <InfoText
+            question="Was ist ein Minijob?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
+                  Man darf im Monat nicht mehr als die gesetzlich festgelegte
+                  Grenze verdienen.
+                </p>
 
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istTaetigkeitMinijob"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          >
-            <InfoText
-              question="Was ist ein Minijob?"
-              answer={
-                <>
-                  <p className="mb-16">
-                    Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
-                    Man darf im Monat nicht mehr als die gesetzlich festgelegte
-                    Grenze verdienen.
-                  </p>
+                <p>Diese Grenze liegt:</p>
+                <ul className="mb-16 ml-8 list-inside list-disc">
+                  <li>seit 2025 bei 556 Euro im Monat,</li>
+                  <li>im Jahr 2024 bei 538 Euro im Monat,</li>
+                  <li>von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,</li>
+                  <li>davor bei 450 Euro im Monat.</li>
+                </ul>
 
-                  <p>Diese Grenze liegt:</p>
-                  <ul className="mb-16 ml-8 list-inside list-disc">
-                    <li>seit 2025 bei 556 Euro im Monat,</li>
-                    <li>im Jahr 2024 bei 538 Euro im Monat,</li>
-                    <li>
-                      von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,
-                    </li>
-                    <li>davor bei 450 Euro im Monat.</li>
-                  </ul>
-
-                  <p>
-                    Beim Minijob fallen meist keine Steuern und Sozialabgaben
-                    an. Deshalb zieht die Elterngeldstelle von diesem Einkommen
-                    auch nichts ab. Es wird mit dem vollen Betrag gerechnet, den
-                    man verdient hat.
-                  </p>
-                </>
-              }
-            />
-          </CustomRadioGroup>
-        </div>
+                <p>
+                  Beim Minijob fallen meist keine Steuern und Sozialabgaben an.
+                  Deshalb zieht die Elterngeldstelle von diesem Einkommen auch
+                  nichts ab. Es wird mit dem vollen Betrag gerechnet, den man
+                  verdient hat.
+                </p>
+              </>
+            }
+          />
+        </CustomRadioGroup>
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

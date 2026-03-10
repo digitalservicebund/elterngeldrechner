@@ -121,34 +121,48 @@ export function ElternteilAllgemeineAngabenPage() {
           </div>
         </div>
 
-        <div>
-          <h3 className="mb-10">Ist {vorname} alleinerziehend?</h3>
-
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h3 className="mb-10">Ist {vorname} alleinerziehend?</h3>
+          errors={formErrors}
+          register={register}
+          name="istAlleinerziehend"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        >
           <InfoText
             question="Was bedeutet alleinerziehend?"
             answer="Als alleinerziehend gelten Sie, wenn der andere Elternteil weder mit Ihnen noch mit dem Kind zusammen wohnt und Sie steuerrechtlich als alleinerziehend gelten."
           />
+        </CustomRadioGroup>
 
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istAlleinerziehend"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          />
-        </div>
-
-        <div>
-          <h3 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h3 className="mb-10">
             {geburtIstErfolgt
               ? `War ${vorname} im Mutterschutz?`
               : `Wird ${vorname} im Mutterschutz sein?`}
           </h3>
-
+          errors={formErrors}
+          register={register}
+          name="istImMutterschutz"
+          options={[
+            {
+              value: "yes",
+              label: "Ja",
+            },
+            {
+              value: "no",
+              label: "Nein",
+            },
+            {
+              value: "unknown",
+              label: "Ich weiß es noch nicht",
+            },
+          ]}
+        >
           <InfoText
             question="Was ist Mutterschutz?"
             answer={
@@ -172,29 +186,7 @@ export function ElternteilAllgemeineAngabenPage() {
               </>
             }
           />
-
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istImMutterschutz"
-            options={[
-              {
-                value: "yes",
-                label: "Ja",
-              },
-              {
-                value: "no",
-                label: "Nein",
-              },
-              {
-                value: "unknown",
-                label: "Ich weiß es noch nicht",
-              },
-            ]}
-          />
-        </div>
+        </CustomRadioGroup>
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

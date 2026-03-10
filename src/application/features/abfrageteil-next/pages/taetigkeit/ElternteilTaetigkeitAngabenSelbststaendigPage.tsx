@@ -103,114 +103,100 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           </p>
         </div>
 
-        <div>
-          <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
+        <CustomRadioGroup
+          legend=<h5 className="mb-10">
+            Ist {vorname} kirchensteuerpflichtig?
+          </h5>
+          errors={formErrors}
+          register={register}
+          name="istKirchensteuerpflichtig"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        />
 
-          <CustomRadioGroup
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istKirchensteuerpflichtig"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          />
-        </div>
-
-        <div>
-          <h5 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h5 className="mb-10">
             Ist {vorname} über die gesetzliche Krankenversicherung
             pflichtversichert?
           </h5>
+          errors={formErrors}
+          register={register}
+          name="istGesetzlichKrankenpflichtversichert"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        >
+          <InfoText
+            question="Was bedeutet das?"
+            answer={
+              <>
+                <p className="mb-16">
+                  Mit einer selbstständigen Tätigkeit sind Sie in der Regel
+                  nicht automatisch gesetzlich pflichtversichert.
+                </p>
 
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istGesetzlichKrankenpflichtversichert"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          >
-            <InfoText
-              question="Was bedeutet das?"
-              answer={
-                <>
-                  <p className="mb-16">
-                    Mit einer selbstständigen Tätigkeit sind Sie in der Regel
-                    nicht automatisch gesetzlich pflichtversichert.
-                  </p>
+                <p>Sie wählen „Nein“, wenn Sie</p>
+                <ul className="mb-16 ml-8 list-inside list-disc">
+                  <li>freiwillig gesetzlich versichert, </li>
+                  <li>familienversichert,</li>
+                  <li>privat versichert,</li>
+                  <li>nicht (in Deutschland) krankenversichert sind.</li>
+                </ul>
 
-                  <p>Sie wählen „Nein“, wenn Sie</p>
-                  <ul className="mb-16 ml-8 list-inside list-disc">
-                    <li>freiwillig gesetzlich versichert, </li>
-                    <li>familienversichert,</li>
-                    <li>privat versichert,</li>
-                    <li>nicht (in Deutschland) krankenversichert sind.</li>
-                  </ul>
+                <p>
+                  Hinweis: In diesem Fall müssen Sie entsprechende Beiträge für
+                  Ihre Krankenversicherung zusätzlich eigenständig einplanen, da
+                  sie im Elterngeldrechner nicht automatisch berücksichtigt
+                  werden.
+                </p>
+              </>
+            }
+          />
+        </CustomRadioGroup>
 
-                  <p>
-                    Hinweis: In diesem Fall müssen Sie entsprechende Beiträge
-                    für Ihre Krankenversicherung zusätzlich eigenständig
-                    einplanen, da sie im Elterngeldrechner nicht automatisch
-                    berücksichtigt werden.
-                  </p>
-                </>
-              }
-            />
-          </CustomRadioGroup>
-        </div>
-
-        <div>
-          <h5 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h5 className="mb-10">
             Zahlt {vorname} Pflichtbeiträge in die gesetzliche
             Rentenversicherung?
           </h5>
+          errors={formErrors}
+          register={register}
+          name="istGesetzlichRentenversichert"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        >
+          <InfoText
+            question="Was bedeutet das?"
+            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert. Pflichtbeiträge fallen nur in wenigen Fällen an, zum Beispiel für Künstler:innen oder Journalist:innen über die Künstlersozialkasse. Wenn Sie in ein berufsständisches Versorgungswerk eingezahlt haben, wird dies bei der Elterngeldberechnung berücksichtigt."
+          />
+        </CustomRadioGroup>
 
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istGesetzlichRentenversichert"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          >
-            <InfoText
-              question="Was bedeutet das?"
-              answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert. Pflichtbeiträge fallen nur in wenigen Fällen an, zum Beispiel für Künstler:innen oder Journalist:innen über die Künstlersozialkasse. Wenn Sie in ein berufsständisches Versorgungswerk eingezahlt haben, wird dies bei der Elterngeldberechnung berücksichtigt."
-            />
-          </CustomRadioGroup>
-        </div>
-
-        <div>
-          <h5 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h5 className="mb-10">
             Zahlt {vorname} Pflichtbeiträge in die gesetzliche
             Arbeitslosenversicherung?
           </h5>
-
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istGesetzlichArbeitlosenversichert"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          >
-            <InfoText
-              question="Was bedeutet das?"
-              answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Arbeitslosenversicherung abgeschlossen haben."
-            />
-          </CustomRadioGroup>
-        </div>
+          errors={formErrors}
+          register={register}
+          name="istGesetzlichArbeitlosenversichert"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        >
+          <InfoText
+            question="Was bedeutet das?"
+            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Arbeitslosenversicherung abgeschlossen haben."
+          />
+        </CustomRadioGroup>
 
         <div>
           <h5 className="mb-10">

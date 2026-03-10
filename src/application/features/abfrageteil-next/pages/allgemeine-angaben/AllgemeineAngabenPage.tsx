@@ -79,13 +79,11 @@ export function AllgemeineAngabenPage() {
         </div>
 
         <div>
-          <h3 className="mb-10">
-            Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von
-            mehr als 175.000 Euro?
-          </h3>
-
           <CustomRadioGroup
-            legend=""
+            legend=<h3 className="mb-10">
+              Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von
+              mehr als 175.000 Euro?
+            </h3>
             errors={formErrors}
             register={register}
             options={[

@@ -110,29 +110,25 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
           Details zur Tätigkeit als Angestellte oder Angestellter
         </h3>
 
-        <div>
-          <h5 className="mb-10">
+        <CustomRadioGroup
+          legend=<h5 className="mb-10">
             Wie hat {vorname} von {formatierterBemessungszeitraum} im Monat
             brutto verdient?
           </h5>
-
-          <CustomRadioGroup
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istEinkommenGleichVerteilt"
-            options={[
-              {
-                value: "yes",
-                label: `${vorname} hat jeden Monat gleich viel verdient`,
-              },
-              {
-                value: "no",
-                label: `${vorname} hat  unterschiedlich viel verdient`,
-              },
-            ]}
-          />
-        </div>
+          errors={formErrors}
+          register={register}
+          name="istEinkommenGleichVerteilt"
+          options={[
+            {
+              value: "yes",
+              label: `${vorname} hat jeden Monat gleich viel verdient`,
+            },
+            {
+              value: "no",
+              label: `${vorname} hat  unterschiedlich viel verdient`,
+            },
+          ]}
+        />
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

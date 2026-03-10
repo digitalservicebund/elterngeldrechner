@@ -89,39 +89,35 @@ export function ElternteilZweitePersonAngabenPage() {
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div>
-          <h3 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h3 className="mb-10">
             Sollen beide Elternteile Elterngeld bekommen?
           </h3>
-
+          errors={formErrors}
+          register={register}
+          name="wirdZweitePersonBeruecksichtigt"
+          options={[
+            {
+              value: "yes",
+              label: "Ja, beide Elternteile sollen Elterngeld bekommen",
+            },
+            {
+              value: "no",
+              label:
+                "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen",
+            },
+            {
+              value: "unknown",
+              label: "Wir wissen es noch nicht: Ein Elternteil überlegt noch",
+            },
+          ]}
+        >
           <InfoText
             question="Warum fragen wir das?"
             answer="Planen Sie Ihr Elterngeld gemeinsam – wenn das für Sie möglich ist. Manchmal möchte ein Elternteil kein Elterngeld bekommen, zum Beispiel weil das zweite Einkommen gebraucht wird."
           />
-
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="wirdZweitePersonBeruecksichtigt"
-            options={[
-              {
-                value: "yes",
-                label: "Ja, beide Elternteile sollen Elterngeld bekommen",
-              },
-              {
-                value: "no",
-                label:
-                  "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen",
-              },
-              {
-                value: "unknown",
-                label: "Wir wissen es noch nicht: Ein Elternteil überlegt noch",
-              },
-            ]}
-          />
-        </div>
+        </CustomRadioGroup>
 
         {(wirdZweitePersonBeruecksichtigt === "yes" ||
           wirdZweitePersonBeruecksichtigt === "unknown") && (
@@ -157,13 +153,31 @@ export function ElternteilZweitePersonAngabenPage() {
             </div>
 
             {!istErsterElternteilImMutterschutz && (
-              <div>
-                <h3 className="mb-10">
+              <CustomRadioGroup
+                className="mt-16"
+                legend=<h3 className="mb-10">
                   {geburtIstErfolgt
                     ? `War ${vorname} im Mutterschutz?`
                     : `Wird ${vorname} im Mutterschutz sein?`}
                 </h3>
-
+                errors={formErrors}
+                register={register}
+                name="istImMutterschutz"
+                options={[
+                  {
+                    value: "yes",
+                    label: "Ja",
+                  },
+                  {
+                    value: "no",
+                    label: "Nein",
+                  },
+                  {
+                    value: "unknown",
+                    label: "Ich weiß es noch nicht",
+                  },
+                ]}
+              >
                 <InfoText
                   question="Was ist Mutterschutz?"
                   answer={
@@ -191,29 +205,7 @@ export function ElternteilZweitePersonAngabenPage() {
                     </>
                   }
                 />
-
-                <CustomRadioGroup
-                  className="mt-16"
-                  legend=""
-                  errors={formErrors}
-                  register={register}
-                  name="istImMutterschutz"
-                  options={[
-                    {
-                      value: "yes",
-                      label: "Ja",
-                    },
-                    {
-                      value: "no",
-                      label: "Nein",
-                    },
-                    {
-                      value: "unknown",
-                      label: "Ich weiß es noch nicht",
-                    },
-                  ]}
-                />
-              </div>
+              </CustomRadioGroup>
             )}
           </>
         )}

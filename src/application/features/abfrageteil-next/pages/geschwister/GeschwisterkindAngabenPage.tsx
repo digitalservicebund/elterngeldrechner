@@ -87,37 +87,31 @@ export function GeschwisterkindAngabenPage() {
           />
         </div>
 
-        <div>
-          <h3 className="mb-10">Hat das Geschwisterkind eine Behinderung?</h3>
+        <CustomRadioGroup
+          legend=<h3 className="mb-10">
+            Hat das Geschwisterkind eine Behinderung?
+          </h3>
+          errors={formErrors}
+          register={register}
+          name="hatBehinderung"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        />
 
-          <CustomRadioGroup
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="hatBehinderung"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          />
-        </div>
-
-        <div>
-          <h3 className="mb-10">
+        <CustomRadioGroup
+          legend=<h3 className="mb-10">
             Gibt es noch ein weiteres Geschwisterkinder?
           </h3>
-
-          <CustomRadioGroup
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istWeiteresGeschwisterkindVorhanden"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          />
-        </div>
+          errors={formErrors}
+          register={register}
+          name="istWeiteresGeschwisterkindVorhanden"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        />
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

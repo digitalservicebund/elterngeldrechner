@@ -59,35 +59,31 @@ export function GeschwisterkindAbfragePage() {
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div>
-          <h3 className="mb-10">Gibt es ältere Geschwisterkinder?</h3>
-
-          <CustomRadioGroup
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istVorhanden"
-            options={[
-              { value: "yes", label: "Ja" },
-              { value: "no", label: "Nein" },
-            ]}
-          >
-            <InfoText
-              question="Wann kann ich einen Geschwisterbonus erhalten?"
-              answer={
-                <ul className="list-inside list-disc">
-                  Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
-                  <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
-                  <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
-                  <li>
-                    mindestens ein weiteres Kind mit Behinderung unter 14 Jahren
-                    lebt.
-                  </li>
-                </ul>
-              }
-            />
-          </CustomRadioGroup>
-        </div>
+        <CustomRadioGroup
+          legend=<h3 className="mb-10">Gibt es ältere Geschwisterkinder?</h3>
+          errors={formErrors}
+          register={register}
+          name="istVorhanden"
+          options={[
+            { value: "yes", label: "Ja" },
+            { value: "no", label: "Nein" },
+          ]}
+        >
+          <InfoText
+            question="Wann kann ich einen Geschwisterbonus erhalten?"
+            answer={
+              <ul className="list-inside list-disc">
+                Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
+                <li>mindestens ein weiteres Kind unter 3 Jahren lebt oder</li>
+                <li>mindestens 2 weitere Kinder unter 6 Jahren leben oder</li>
+                <li>
+                  mindestens ein weiteres Kind mit Behinderung unter 14 Jahren
+                  lebt.
+                </li>
+              </ul>
+            }
+          />
+        </CustomRadioGroup>
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

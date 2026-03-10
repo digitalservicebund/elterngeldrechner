@@ -73,51 +73,45 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div>
-          <h3 className="mb-10">
+        <CustomRadioGroup
+          legend=<h3 className="mb-10">
             Um was handelt oder handelte es sich bei der weiteren Tätigkeit?
           </h3>
-
-          <CustomRadioGroup
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istWeitereTaetigkeitSelbststaendigeTaetigkeit"
-            options={[
-              {
-                value: "no",
-                label: "",
-                description: (id) => (
-                  <div id={id}>
-                    <p className="font-bold">
-                      {vorname} war oder ist angestellt
-                    </p>
-                    <p>
-                      zum Beispiel in Vollzeit, Teilzeit, als Minijob, in
-                      Ausbildung, Freiwilligendienst.
-                    </p>
-                  </div>
-                ),
-              },
-              {
-                value: "yes",
-                label: "",
-                description: (id) => (
-                  <div id={id}>
-                    <p className="font-bold">
-                      {vorname} war oder ist selbstständig
-                    </p>
-                    <p>
-                      zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel),
-                      Land- oder Forstwirtschaft, Freiberuflichkeit,
-                      Selbstständig (GbR, GmbH, Beteiligung).
-                    </p>
-                  </div>
-                ),
-              },
-            ]}
-          />
-        </div>
+          errors={formErrors}
+          register={register}
+          name="istWeitereTaetigkeitSelbststaendigeTaetigkeit"
+          options={[
+            {
+              value: "no",
+              label: "",
+              description: (id) => (
+                <div id={id}>
+                  <p className="font-bold">{vorname} war oder ist angestellt</p>
+                  <p>
+                    zum Beispiel in Vollzeit, Teilzeit, als Minijob, in
+                    Ausbildung, Freiwilligendienst.
+                  </p>
+                </div>
+              ),
+            },
+            {
+              value: "yes",
+              label: "",
+              description: (id) => (
+                <div id={id}>
+                  <p className="font-bold">
+                    {vorname} war oder ist selbstständig
+                  </p>
+                  <p>
+                    zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land-
+                    oder Forstwirtschaft, Freiberuflichkeit, Selbstständig (GbR,
+                    GmbH, Beteiligung).
+                  </p>
+                </div>
+              ),
+            },
+          ]}
+        />
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

@@ -113,11 +113,25 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
-        <div>
-          <h3 className="mb-10">
+        <CustomRadioGroup
+          className="mt-16"
+          legend=<h3 className="mb-10">
             Hatte {vorname} noch weitere Tätigkeiten im Bemessungszeitraum?
           </h3>
-
+          errors={formErrors}
+          register={register}
+          name="istWeitereTaetigkeitVorhanden"
+          options={[
+            {
+              value: "yes",
+              label: `Ja, ${vorname} hatte eine oder mehrere weitere Tätigkeiten`,
+            },
+            {
+              value: "no",
+              label: `Nein, ${vorname} hatte keine weiteren Tätigkeiten`,
+            },
+          ]}
+        >
           <InfoText
             className="mb-16"
             question="Was sind weitere Tätigkeiten?"
@@ -139,25 +153,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
               </>
             }
           />
-
-          <CustomRadioGroup
-            className="mt-16"
-            legend=""
-            errors={formErrors}
-            register={register}
-            name="istWeitereTaetigkeitVorhanden"
-            options={[
-              {
-                value: "yes",
-                label: `Ja, ${vorname} hatte eine oder mehrere weitere Tätigkeiten`,
-              },
-              {
-                value: "no",
-                label: `Nein, ${vorname} hatte keine weiteren Tätigkeiten`,
-              },
-            ]}
-          />
-        </div>
+        </CustomRadioGroup>
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

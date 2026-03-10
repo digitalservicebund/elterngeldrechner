@@ -34,7 +34,7 @@ export function BemessungszeitraumBox({
     <div className="mt-20">
       {bemessungszeitraum.length > 0 && (
         <div className="rounded bg-grey-light py-10">
-          <span className="text-18 px-20 font-bold">
+          <span className="px-20 font-bold">
             Bemessungszeitraum: {bemessungszeitraumUeberschrift()}
           </span>
         </div>
@@ -44,21 +44,19 @@ export function BemessungszeitraumBox({
         <div
           className={`rounded-b border-x border-b border-dashed border-grey p-20 ${bemessungszeitraum.length > 0 ? "border-t-0" : "border-t"}`}
         >
-          <h5 className="font-semibold text-14">
+          <p className="font-bold">
             {ausklammerungen.length > 1
               ? "Übersprungene Zeiträume"
               : "Übersprungener Zeitraum"}
             :
-          </h5>
-          <ul className="ml-32 mt-4 list-disc text-14">
+          </p>
+          <ul className="ml-32 mt-4 list-disc">
             {ausklammerungen.map((ausklammerung, index) => (
               <li
                 key={`${ausklammerung.von.toString()}-${index}`}
                 className="m-0"
               >
-                <span className="font-medium">
-                  {ausklammerungGrund(ausklammerung.grund)}
-                </span>{" "}
+                {ausklammerungGrund(ausklammerung.grund)}{" "}
                 {ausklammerung.von.toLocaleString("de-DE", {
                   day: "2-digit",
                   month: "2-digit",

@@ -15,7 +15,7 @@
 }
 
 #egr-root h3 {
-  @apply text-28 font-regular;
+  @apply text-28 font-bold leading-tight;
 }
 
 #egr-root h4 {

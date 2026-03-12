@@ -9,7 +9,7 @@ import {
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 
 export function RouteGuardAbfrageteil() {
-  const { filtereValideEventHistorie, findeLetztesEvent } = useEventContext();
+  const { filtereValideEventHistorie } = useEventContext();
   const { pathname } = useLocation();
 
   const startseitePfad = generateAbfrageteilPath(Route.Startseite);
@@ -22,18 +22,13 @@ export function RouteGuardAbfrageteil() {
   }
 
   const valideEventHistorie = filtereValideEventHistorie();
-  const letztesValidesEvent = findeLetztesEvent();
 
-  if (
-    valideEventHistorie[0]?.route === undefined ||
-    letztesValidesEvent === undefined
-  ) {
+  if (valideEventHistorie.length === 0) {
     return <Navigate to={allgemeineAngabenPfad} replace />;
   }
 
   const letzteErlaubteRoute = findeLetzteErlaubteRoute(
     valideEventHistorie,
-    letztesValidesEvent,
     pathname,
   );
 
@@ -46,10 +41,12 @@ export function RouteGuardAbfrageteil() {
 
 function findeLetzteErlaubteRoute(
   valideEventHistorie: FormEvent[],
-  letztesValidesEvent: FormEvent,
   aktuelleRoute: string,
 ) {
-  const maximalErlaubterPfad = findeNaechstenPfad(letztesValidesEvent);
+  const letztesValidesEvent = valideEventHistorie.at(-1);
+  const maximalErlaubterPfad = findeNaechstenPfad(
+    letztesValidesEvent ?? { route: Route.Startseite },
+  );
 
   if (aktuelleRoute === maximalErlaubterPfad) {
     return undefined;
@@ -87,19 +84,9 @@ if (import.meta.vitest) {
           },
         },
       ];
-      const letztesEvent: FormEvent = {
-        route: Route.ElternteilAllgemeineAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          name: "Hanna",
-          istAlleinerziehend: false,
-          istImMutterschutz: true,
-        },
-      };
 
       const result = findeLetzteErlaubteRoute(
         eventStream,
-        letztesEvent,
         "/abfrageteil/elternteil/0/finanzielles/ausklammerung/gruende",
       );
 
@@ -128,20 +115,9 @@ if (import.meta.vitest) {
           },
         },
       ];
-      const letztesEvent: FormEvent = {
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          hatKeineAusklammerungsgruende: false,
-          hatMutterschutzAelteresKind: true,
-          hatElterngeldAelteresKind: false,
-          hatSchwangerschaftsbedingteErkrankung: false,
-        },
-      };
 
       const result = findeLetzteErlaubteRoute(
         eventStream,
-        letztesEvent,
         "/abfrageteil/elternteil/0",
       );
 
@@ -170,20 +146,9 @@ if (import.meta.vitest) {
           },
         },
       ];
-      const letztesEvent: FormEvent = {
-        route: Route.ElternteilAusklammerungGruendeAngaben,
-        params: { elternteilIndex: 0 },
-        payload: {
-          hatKeineAusklammerungsgruende: false,
-          hatMutterschutzAelteresKind: true,
-          hatElterngeldAelteresKind: false,
-          hatSchwangerschaftsbedingteErkrankung: false,
-        },
-      };
 
       const result = findeLetzteErlaubteRoute(
         eventStream,
-        letztesEvent,
         "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
       );
 

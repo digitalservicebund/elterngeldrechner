@@ -9,6 +9,12 @@ import {
 export function filtereValideEventHistorie(
   eventStream: FormEvent[],
 ): FormEvent[] {
+  const lastEvent = eventStream.at(-1);
+
+  if (lastEvent === undefined) {
+    return [];
+  }
+
   return eventStream
     .reduceRight(
       (acc, event) => {
@@ -19,7 +25,7 @@ export function filtereValideEventHistorie(
 
         return [...acc, ...(istVorherigesEvent ? [event] : [])];
       },
-      [eventStream[eventStream.length - 1] as FormEvent],
+      [lastEvent],
     )
     .toReversed();
 }
@@ -28,6 +34,14 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("filtereValideEventHistorie", () => {
+    it("returns empty array when no events are present", () => {
+      const eventStream: FormEvent[] = [];
+
+      const result: FormEvent[] = filtereValideEventHistorie(eventStream);
+
+      expect(result).toEqual([]);
+    });
+
     it("returns all events when no events are skipped", () => {
       const eventStream: FormEvent[] = [
         { route: Route.Startseite },

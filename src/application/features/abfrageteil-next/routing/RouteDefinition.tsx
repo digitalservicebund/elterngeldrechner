@@ -1,7 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { Route } from "./Route";
 import { RouteGuardAbfrageteil } from "./RouteGuardAbfrageteil";
-import { RouteGuardPlaner } from "./RouteGuardPlaner";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -163,24 +162,19 @@ const RouteDefinition = [
             element: <ElternteilZweitePersonAngabenPage />,
             path: generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
           },
-          {
-            element: <BeispielePage />,
-            path: "/beispiele",
-          },
         ],
       },
       {
-        element: <RouteGuardPlaner />,
-        children: [
-          {
-            element: <PlanerPage />,
-            path: "/rechner-planer",
-          },
-          {
-            element: <DatenuebernahmeAntragPage />,
-            path: "/datenuebernahme-antrag",
-          },
-        ],
+        element: <BeispielePage />,
+        path: "/beispiele",
+      },
+      {
+        element: <PlanerPage />,
+        path: "/rechner-planer",
+      },
+      {
+        element: <DatenuebernahmeAntragPage />,
+        path: "/datenuebernahme-antrag",
       },
       {
         element: (

@@ -133,16 +133,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
           />
 
           <NumberInput
-            {...register("durchschnittlichesMonatsbrutto", {
-              valueAsNumber: true,
-              max: {
-                value: 15000,
-                message:
-                  "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
-              },
-              min: { value: 0, message: "Bitte geben Sie ein Einkommen an" },
-              required: "Bitte geben Sie ein Einkommen an",
-            })}
+            {...register("durchschnittlichesMonatsbrutto")}
             label="Monatliches Brutto-Einkommen"
             errors={formErrors.durchschnittlichesMonatsbrutto?.message}
           />

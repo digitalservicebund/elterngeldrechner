@@ -51,8 +51,16 @@ export type TaetigkeitNichtSelbststaendigAngaben = z.infer<
   typeof TaetigkeitNichtSelbststaendigAngabenSchema
 >;
 
+const BruttoMonatseinkommen = z.coerce
+  .number()
+  .max(
+    15000,
+    "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
+  )
+  .min(1, "Bitte geben Sie ein Einkommen an");
+
 export const TaetigkeitGleichesEinkommenAngabenSchema = z.object({
-  durchschnittlichesMonatsbrutto: z.number(),
+  durchschnittlichesMonatsbrutto: BruttoMonatseinkommen,
 });
 
 export type TaetigkeitGleichesEinkommenAngaben = z.infer<

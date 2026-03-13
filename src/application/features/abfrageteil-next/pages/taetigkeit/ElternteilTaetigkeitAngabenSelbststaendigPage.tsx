@@ -86,6 +86,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
+        noValidate
       >
         <BemessungszeitraumBox
           bemessungszeitraum={bemessungszeitraum}

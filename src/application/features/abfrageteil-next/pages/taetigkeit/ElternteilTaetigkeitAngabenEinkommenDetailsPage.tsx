@@ -124,13 +124,11 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     const bisMonat = zeitabschnitt.at(-1);
 
     if (vonMonat && bisMonat) {
-      const von = vonMonat
-        .toPlainDate({ day: 1 })
-        .toLocaleString("de-DE", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
+      const von = vonMonat.toPlainDate({ day: 1 }).toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
       const bis = bisMonat
         .toPlainDate({ day: bisMonat.daysInMonth })
         .toLocaleString("de-DE", {
@@ -151,6 +149,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
+        noValidate
       >
         <BemessungszeitraumBox
           bemessungszeitraum={bemessungszeitraum}

@@ -68,6 +68,7 @@ export function GeschwisterkindAngabenPage() {
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
+        noValidate
       >
         <div>
           <h3 className="mb-10">Wann wurde das Geschwisterkind geboren?</h3>

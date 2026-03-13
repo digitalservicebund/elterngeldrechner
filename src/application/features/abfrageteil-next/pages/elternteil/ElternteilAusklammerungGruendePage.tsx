@@ -107,6 +107,7 @@ export function ElternteilAusklammerungGruendePage() {
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
+        noValidate
       >
         <div>
           <h3>Treffen folgende Gründe auf {vorname} zu?</h3>

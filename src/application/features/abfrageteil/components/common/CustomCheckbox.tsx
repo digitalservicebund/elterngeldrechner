@@ -20,6 +20,7 @@ type Props<TFieldValues extends FieldValues> = {
   readonly onChange?: (newValue: boolean) => void;
   readonly className?: string;
   readonly children?: React.ReactNode;
+  readonly "aria-describedby"?: string;
 };
 
 export function CustomCheckbox<TFieldValues extends FieldValues>({
@@ -31,6 +32,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   onChange,
   className,
   children,
+  "aria-describedby": externalDescribedBy,
 }: Props<TFieldValues>) {
   let hasError = false;
   let errorMessage = "";
@@ -44,6 +46,13 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
     }
   }
 
+  const describedBy = [
+    errorMessage ? `${name}-error` : undefined,
+    externalDescribedBy,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const onClick = (event: MouseEvent<HTMLInputElement>) => {
     if (onChange) {
       onChange(event.currentTarget.checked);
@@ -51,17 +60,26 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
   };
 
   const checkboxClasses = {
-    defaultBorderState: hasError
-      ? "before:absolute before:left-0 before:top-0 before:size-32 before:border before:border-solid before:border-danger before:bg-white before:content-['']"
-      : "before:absolute before:left-0 before:top-0 before:size-32 before:border before:border-solid before:border-primary before:bg-white before:content-['']",
+    defaultBorderState: classNames(
+      "before:absolute before:left-0 before:top-0 before:size-32 before:border before:border-solid before:bg-white before:content-['']",
+      {
+        "before:border-danger": hasError,
+        "before:border-primary": !hasError,
+      },
+    ),
     defaultMarkerState:
       "after:absolute after:left-8 after:top-8 after:size-16 after:content-['']",
 
     focusBorderState:
+      !hasError &&
       "peer-focus:before:outline peer-focus:before:outline-2 peer-focus:before:outline-primary",
 
-    activeMarkerState: "peer-checked:after:bg-primary",
-    activeBorderState: "peer-checked:before:border-primary",
+    activeMarkerState: hasError
+      ? "peer-checked:after:bg-danger"
+      : "peer-checked:after:bg-primary",
+    activeBorderState: hasError
+      ? "peer-checked:before:border-danger"
+      : "peer-checked:before:border-primary",
 
     errorClasses: hasError
       ? "before:border-danger peer-checked:after:bg-danger text-danger"
@@ -82,7 +100,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
         id={name}
         onClick={onClick}
         aria-invalid={hasError}
-        aria-describedby={errorMessage ? `${name}-error` : undefined}
+        aria-describedby={describedBy || undefined}
       />
       <label
         className={classNames("relative pl-40 block", allCheckboxClasses)}

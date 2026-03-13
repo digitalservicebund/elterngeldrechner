@@ -79,6 +79,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   const showGeneralErrorMessage = !!formErrors.hatKeinEinkommen?.message;
+  const generalErrorId = "keine-auswahl-fehler";
 
   const handleTaetigkeitChange = (checked: boolean) => {
     if (checked) setValue("hatKeinEinkommen", false);
@@ -114,6 +115,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="istNichtSelbststaendig"
             label={`${vorname} war oder ist angestellt`}
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
@@ -128,6 +132,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="istSelbststaendig"
             label={`${vorname} war oder ist selbstständig`}
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
@@ -143,6 +150,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="istVerbeamtet"
             label={`${vorname} war oder ist Beamtin`}
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={handleTaetigkeitChange}
           />
 
@@ -152,6 +162,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="hatAndereLeistungen"
             label={`${vorname} erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen`}
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
@@ -166,6 +179,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="hatKeinEinkommen"
             label={`${vorname} hatte oder hat kein Einkommen`}
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={handleKeinEinkommenChange}
           >
             <p className="font-regular">
@@ -174,7 +190,13 @@ export function ElternteilTaetigkeitenAbfragePage() {
           </CustomCheckbox>
 
           {!!showGeneralErrorMessage && (
-            <p className="text-red-500 font-medium mt-4 text-danger">
+            <p
+              id={generalErrorId}
+              className="text-red-500 font-medium mt-4 text-danger"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic
+            >
               {formErrors.hatKeinEinkommen?.message}
             </p>
           )}

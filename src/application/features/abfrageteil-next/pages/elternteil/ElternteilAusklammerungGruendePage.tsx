@@ -100,6 +100,7 @@ export function ElternteilAusklammerungGruendePage() {
 
   const showGeneralErrorMessage =
     !!formErrors.hatKeineAusklammerungsgruende?.message;
+  const generalErrorId = "keine-auswahl-fehler";
 
   return (
     <Page heading={`Angaben ${vorname}`}>
@@ -124,6 +125,9 @@ export function ElternteilAusklammerungGruendePage() {
               name="hatMutterschutzAelteresKind"
               label={`${vorname} war für ein älteres Kind im Mutterschutz`}
               errors={showGeneralErrorMessage}
+              aria-describedby={
+                showGeneralErrorMessage ? generalErrorId : undefined
+              }
               onChange={(checked) => handleCheckboxChange(checked)}
             >
               <InfoText
@@ -142,6 +146,9 @@ export function ElternteilAusklammerungGruendePage() {
               name="hatElterngeldAelteresKind"
               label={`${vorname} hat für ein älteres Kind Elterngeld bekommen`}
               errors={showGeneralErrorMessage}
+              aria-describedby={
+                showGeneralErrorMessage ? generalErrorId : undefined
+              }
               onChange={(checked) => handleCheckboxChange(checked)}
             >
               <InfoText
@@ -159,6 +166,9 @@ export function ElternteilAusklammerungGruendePage() {
             name="hatSchwangerschaftsbedingteErkrankung"
             label={`${vorname} hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen`}
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={(checked) => handleCheckboxChange(checked)}
           >
             <InfoText
@@ -173,6 +183,9 @@ export function ElternteilAusklammerungGruendePage() {
             name="hatKeineAusklammerungsgruende"
             label="Keiner der genannten Gründe"
             errors={showGeneralErrorMessage}
+            aria-describedby={
+              showGeneralErrorMessage ? generalErrorId : undefined
+            }
             onChange={(checked) => {
               if (checked) {
                 setValue("hatMutterschutzAelteresKind", false);
@@ -183,7 +196,13 @@ export function ElternteilAusklammerungGruendePage() {
           />
 
           {!!showGeneralErrorMessage && (
-            <p className="text-red-500 font-medium mt-4 text-danger">
+            <p
+              id={generalErrorId}
+              className="text-red-500 font-medium mt-4 text-danger"
+              role="alert"
+              aria-live="assertive"
+              aria-atomic
+            >
               {formErrors.hatKeineAusklammerungsgruende?.message}
             </p>
           )}

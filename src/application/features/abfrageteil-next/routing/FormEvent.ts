@@ -138,6 +138,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   }),
   z.object({
     route: z.literal(Route.ElternteilZweitePersonAngaben),
+    params: ElternteilParams,
     payload: ElternteilZweitePersonAngabenSchema,
   }),
 ]);

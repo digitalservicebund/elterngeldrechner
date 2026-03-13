@@ -101,8 +101,14 @@ export const taetigkeitenFelder = Object.keys(
 export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
   "hatKeinEinkommen",
   [
-    z.object({ hatKeinEinkommen: z.literal(true) }),
-    TaetigkeitenSchema.extend({ hatKeinEinkommen: z.literal(false) }),
+    z.object({
+      hatKeinEinkommen: z.literal(true),
+      istPersonAlleinerziehend: z.boolean(),
+    }),
+    TaetigkeitenSchema.extend({
+      hatKeinEinkommen: z.literal(false),
+      istPersonAlleinerziehend: z.boolean(),
+    }),
   ],
 );
 

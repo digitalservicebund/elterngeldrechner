@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { z } from "zod";
 import {
   ElternteilTaetigkeitenAbfrage,
   ElternteilTaetigkeitenAbfrageSchema,
@@ -10,6 +11,7 @@ import {
 import { Button, InfoText } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeAlleinerziehend } from "@/application/features/abfrageteil-next/domain/findeAlleinerziehend";
 import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
@@ -39,8 +41,21 @@ export function ElternteilTaetigkeitenAbfragePage() {
     routeParams,
   );
 
+  const eventStream = filtereValideEventHistorie();
+  const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
+
+  const ElternteilTaetigkeitenAbfrageFormValuesSchema = z.discriminatedUnion(
+    "hatKeinEinkommen",
+    ElternteilTaetigkeitenAbfrageSchema.options.map((option) =>
+      option.omit({ istPersonAlleinerziehend: true }),
+    ),
+  );
+  type ElternteilTaetigkeitenAbfrageFormValues = z.infer<
+    typeof ElternteilTaetigkeitenAbfrageFormValuesSchema
+  >;
+
   const form = useForm<ElternteilTaetigkeitenAbfrage>({
-    resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
+    resolver: zodResolver(ElternteilTaetigkeitenAbfrageFormValuesSchema),
     defaultValues: encodeSafely(
       ElternteilTaetigkeitenAbfrageSchema,
       letztesGueltigesEvent,
@@ -49,10 +64,13 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const { register, handleSubmit, formState, setValue } = form;
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
+  const onSubmit = (values: ElternteilTaetigkeitenAbfrageFormValues) => {
     const event: FormEvent = {
       route: currentRoute,
-      payload: values,
+      payload: {
+        ...values,
+        istPersonAlleinerziehend,
+      },
       params: routeParams,
     };
 
@@ -75,7 +93,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
     year: "numeric",
   });
 
-  const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   const showGeneralErrorMessage = !!formErrors.hatKeinEinkommen?.message;

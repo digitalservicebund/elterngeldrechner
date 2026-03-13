@@ -14,6 +14,7 @@ import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domai
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
+import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
   Route,
@@ -34,7 +35,11 @@ export function ElternteilZweitePersonAngabenPage() {
   const navigate = useNavigate();
 
   const currentRoute = Route.ElternteilZweitePersonAngaben;
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
+  const routeParams = useRouteParams(currentRoute);
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    currentRoute,
+    routeParams,
+  );
 
   const { register, handleSubmit, formState, watch } = useForm({
     resolver: zodResolver(ElternteilZweitePersonAngabenSchema),
@@ -51,6 +56,7 @@ export function ElternteilZweitePersonAngabenPage() {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
+      params: routeParams,
     };
 
     dispatch(event);
@@ -59,7 +65,7 @@ export function ElternteilZweitePersonAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+    void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const wirdZweitePersonBeruecksichtigt = watch(

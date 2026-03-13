@@ -26,5 +26,5 @@ export enum Route {
   ElternteilWeitereTaetigkeitAbfrage = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/weitere-taetigkeit",
   ElternteilWeitereTaetigkeitAngaben = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/weitere-taetigkeit-angaben",
 
-  ElternteilZweitePersonAngaben = "/elternteil/abfrage-zweite-person",
+  ElternteilZweitePersonAngaben = "/elternteil/:elternteilIndex/abfrage-zweite-person",
 }

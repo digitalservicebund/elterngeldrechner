@@ -63,6 +63,7 @@ export function Sidebar() {
   );
   const zweitePersonEvent = findeLetztesGueltigesEvent(
     Route.ElternteilZweitePersonAngaben,
+    { elternteilIndex: 1 },
   );
 
   const person1Name = person1Event?.name;
@@ -101,7 +102,7 @@ export function Sidebar() {
           { elternteilIndex: "0" },
         ),
         navigatePath: generatePath(
-          generateAbfrageteilPath(Route.ElternteilAusklammerungGruendeAngaben),
+          generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
           { elternteilIndex: "0" },
         ),
       },
@@ -110,8 +111,9 @@ export function Sidebar() {
     if (istNichtAlleinerziehend) {
       schritte.push({
         label: `Angaben ${person2Name ?? "Person 2"}`,
-        matchingPath: generateAbfrageteilPath(
-          Route.ElternteilZweitePersonAngaben,
+        matchingPath: generatePath(
+          generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
+          { elternteilIndex: "1" },
         ),
       });
     }
@@ -124,7 +126,7 @@ export function Sidebar() {
           { elternteilIndex: "1" },
         ),
         navigatePath: generatePath(
-          generateAbfrageteilPath(Route.ElternteilAusklammerungGruendeAngaben),
+          generateAbfrageteilPath(Route.ElternteilTaetigkeitenAbfrage),
           { elternteilIndex: "1" },
         ),
       });

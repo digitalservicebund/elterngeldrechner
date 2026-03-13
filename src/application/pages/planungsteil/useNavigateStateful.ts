@@ -109,6 +109,7 @@ if (import.meta.vitest) {
     key: "",
     search: "",
     hash: "",
+    unstable_mask: undefined,
   };
 
   const ANY_PLAN = {

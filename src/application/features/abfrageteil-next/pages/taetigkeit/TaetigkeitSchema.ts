@@ -68,7 +68,7 @@ export type TaetigkeitGleichesEinkommenAngaben = z.infer<
 >;
 
 export const TaetigkeitUnleichesEinkommenAngabenSchema = z.object({
-  monatsbrutto: z.array(z.number()).length(12),
+  monatsbrutto: z.array(BruttoMonatseinkommen).length(12),
 });
 
 export type TaetigkeitUnleichesEinkommenAngaben = z.infer<

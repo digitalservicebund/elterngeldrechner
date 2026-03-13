@@ -39,7 +39,10 @@ export type TaetigkeitMinijobEinkommendetailsAbfrage = z.infer<
 >;
 
 export const TaetigkeitNichtSelbststaendigAngabenSchema = z.object({
-  steuerklasse: z.enum(Steuerklasse),
+  steuerklasse: z.enum(
+    Steuerklasse,
+    "Wählen Sie bitte eine der Steuerklassen aus",
+  ),
   istKirchensteuerpflichtig: BooleanRadiobuttonCodec,
   istGesetzlichKrankenpflichtversichert: BooleanRadiobuttonCodec,
   istGesetzlichRentenversichert: BooleanRadiobuttonCodec,

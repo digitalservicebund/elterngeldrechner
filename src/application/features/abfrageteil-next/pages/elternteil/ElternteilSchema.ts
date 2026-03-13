@@ -1,4 +1,6 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { z } from "zod";
+import { ElternteilAusklammerungszeitenInput } from "./ElternteilAusklammerungZeitenPage";
 import {
   BooleanRadiobuttonCodec,
   GermanDateInputCodec,
@@ -47,25 +49,28 @@ export type ElternteilAusklammerungGruende = z.infer<
 
 // TODO: Make illegal state not representable between schemas hatSchwangerschaftsbedingteErkrankung: true and erkrankung.length > 0
 
+const zeitspanne = z
+  .object({
+    von: GermanDateInputCodec,
+    bis: GermanDateInputCodec,
+  })
+  .superRefine(({ von, bis }, context) => {
+    if (!(von instanceof Temporal.PlainDate)) return;
+    if (!(bis instanceof Temporal.PlainDate)) return;
+
+    if (Temporal.PlainDate.compare(von, bis) === 1) {
+      context.addIssue({
+        code: "custom",
+        message: "Der Start einer Ausklammerung muss vor dem Ende liegen.",
+        path: ["von"],
+      });
+    }
+  });
+
 export const ElternteilAusklammerungZeitenSchema = z.object({
-  mutterschutzGeschwisterkind: z.array(
-    z.object({
-      von: GermanDateInputCodec,
-      bis: GermanDateInputCodec,
-    }),
-  ),
-  elterngeldGeschwisterkind: z.array(
-    z.object({
-      von: GermanDateInputCodec,
-      bis: GermanDateInputCodec,
-    }),
-  ),
-  erkrankungSchwangerschaft: z.array(
-    z.object({
-      von: GermanDateInputCodec,
-      bis: GermanDateInputCodec,
-    }),
-  ),
+  mutterschutzGeschwisterkind: z.array(zeitspanne),
+  elterngeldGeschwisterkind: z.array(zeitspanne),
+  erkrankungSchwangerschaft: z.array(zeitspanne),
 });
 
 export type ElternteilAusklammerungZeiten = z.infer<
@@ -123,3 +128,100 @@ export const ElternteilZweitePersonAngabenSchema = z
 export type ElternteilZweitePersonAngaben = z.infer<
   typeof ElternteilZweitePersonAngabenSchema
 >;
+
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
+
+  describe("ElternteilAusklammerungsZeiten", () => {
+    const schema = ElternteilAusklammerungZeitenSchema;
+
+    it("rejects mutterschutzGeschwisterkind if von > bis", () => {
+      const ausklammerungszeiten: ElternteilAusklammerungszeitenInput = {
+        mutterschutzGeschwisterkind: [
+          {
+            von: "04.01.2025",
+            bis: "01.01.2025",
+          },
+        ],
+        elterngeldGeschwisterkind: [
+          {
+            von: "01.04.2025",
+            bis: "01.05.2025",
+          },
+        ],
+        erkrankungSchwangerschaft: [
+          {
+            von: "01.06.2025",
+            bis: "01.07.2025",
+          },
+        ],
+      };
+
+      const result = schema.safeParse(ausklammerungszeiten);
+
+      expect(result.success).toBeFalsy();
+
+      if (!result.success) {
+        expect(result.error.issues[0]).toMatchObject({
+          code: "custom",
+          path: ["mutterschutzGeschwisterkind", 0, "von"],
+          message: "Der Start einer Ausklammerung muss vor dem Ende liegen.",
+        });
+      }
+    });
+
+    it("accepts mutterschutzGeschwisterkind if von === bis", () => {
+      const ausklammerungszeiten: ElternteilAusklammerungszeitenInput = {
+        mutterschutzGeschwisterkind: [
+          {
+            von: "01.01.2025",
+            bis: "01.01.2025",
+          },
+        ],
+        elterngeldGeschwisterkind: [
+          {
+            von: "01.04.2025",
+            bis: "01.05.2025",
+          },
+        ],
+        erkrankungSchwangerschaft: [
+          {
+            von: "01.06.2025",
+            bis: "01.07.2025",
+          },
+        ],
+      };
+
+      const result = schema.safeParse(ausklammerungszeiten);
+
+      expect(result.success).toBeTruthy();
+    });
+
+    it("accepts mutterschutzGeschwisterkind if von < bis", () => {
+      const ausklammerungszeiten: ElternteilAusklammerungszeitenInput = {
+        mutterschutzGeschwisterkind: [
+          {
+            von: "01.01.2025",
+            bis: "01.02.2025",
+          },
+        ],
+        elterngeldGeschwisterkind: [
+          {
+            von: "01.04.2025",
+            bis: "01.05.2025",
+          },
+        ],
+        erkrankungSchwangerschaft: [
+          {
+            von: "01.06.2025",
+            bis: "01.07.2025",
+          },
+        ],
+      };
+
+      const result = schema.safeParse(ausklammerungszeiten);
+
+      expect(result.success).toBeTruthy();
+    });
+  });
+}

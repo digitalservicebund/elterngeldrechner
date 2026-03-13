@@ -49,7 +49,7 @@ export type ElternteilAusklammerungGruende = z.infer<
 
 // TODO: Make illegal state not representable between schemas hatSchwangerschaftsbedingteErkrankung: true and erkrankung.length > 0
 
-const zeitspanne = z
+const Zeitspanne = z
   .object({
     von: GermanDateInputCodec,
     bis: GermanDateInputCodec,
@@ -68,9 +68,9 @@ const zeitspanne = z
   });
 
 export const ElternteilAusklammerungZeitenSchema = z.object({
-  mutterschutzGeschwisterkind: z.array(zeitspanne),
-  elterngeldGeschwisterkind: z.array(zeitspanne),
-  erkrankungSchwangerschaft: z.array(zeitspanne),
+  mutterschutzGeschwisterkind: z.array(Zeitspanne),
+  elterngeldGeschwisterkind: z.array(Zeitspanne),
+  erkrankungSchwangerschaft: z.array(Zeitspanne),
 });
 
 export type ElternteilAusklammerungZeiten = z.infer<

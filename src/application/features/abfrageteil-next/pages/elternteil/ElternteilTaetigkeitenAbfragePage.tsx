@@ -119,8 +119,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
             errors={showGeneralErrorMessage}
           >
             <p className="font-regular">
-              zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
-              Freiwilligendienst.
+              zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land- oder
+              Forstwirtschaft, Freiberuflichkeit, Selbstständig (GbR, GmbH,
+              Beteiligung).
             </p>
           </CustomCheckbox>
 

@@ -85,7 +85,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
         aria-describedby={errorMessage ? `${name}-error` : undefined}
       />
       <label
-        className={classNames("relative pl-40", allCheckboxClasses)}
+        className={classNames("relative pl-40 block", allCheckboxClasses)}
         htmlFor={name}
       >
         {label}
@@ -96,7 +96,7 @@ export function CustomCheckbox<TFieldValues extends FieldValues>({
         </Description>
       )}
 
-      <div className="pl-40 pt-10">{children}</div>
+      <div className="pl-40">{children}</div>
     </div>
   );
 }

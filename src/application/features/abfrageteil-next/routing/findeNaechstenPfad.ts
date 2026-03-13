@@ -188,16 +188,17 @@ function getNextSubpath(event: FormEvent): string {
       });
     }
     case Route.ElternteilZweitePersonAngaben: {
-      const { wirdZweitePersonBeruecksichtigt } = event.payload;
+      const { wirdZweitePersonBeruecksichtigt, ueberspringeAusklammerungen } =
+        event.payload;
       if (wirdZweitePersonBeruecksichtigt === false) {
         return "DONE";
       }
-      return generateParametrizedPath(
-        Route.ElternteilAusklammerungGruendeAngaben,
-        {
-          elternteilIndex: "1",
-        },
-      );
+      const zielRoute = ueberspringeAusklammerungen
+        ? Route.ElternteilTaetigkeitenAbfrage
+        : Route.ElternteilAusklammerungGruendeAngaben;
+      return generateParametrizedPath(zielRoute, {
+        elternteilIndex: "1",
+      });
     }
   }
 }

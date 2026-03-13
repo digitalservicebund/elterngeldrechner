@@ -12,6 +12,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
+import { findeGeschwisterkinder } from "@/application/features/abfrageteil-next/domain/findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -50,7 +51,11 @@ export function ElternteilZweitePersonAngabenPage() {
   const onSubmit = (values: ElternteilZweitePersonAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
-      payload: values,
+      payload: {
+        ...values,
+        ueberspringeAusklammerungen:
+          istErsterElternteilImMutterschutz && !esGibtGeschwisterkinder,
+      },
     };
 
     dispatch(event);
@@ -79,6 +84,8 @@ export function ElternteilZweitePersonAngabenPage() {
       eventStream,
       findeAnzahlKinder(eventStream),
     )?.empfaenger === Elternteil.Eins;
+  const esGibtGeschwisterkinder =
+    findeGeschwisterkinder(eventStream).length > 0;
 
   const personNameInputIdentifier = useId();
 

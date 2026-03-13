@@ -115,6 +115,7 @@ export const ElternteilZweitePersonAngabenSchema = z
     wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
     name: z.string().optional(),
     istImMutterschutz: OptionalBooleanRadiobuttonCodec,
+    ueberspringeAusklammerungen: z.boolean().optional(),
   })
   .refine(
     (data) => {

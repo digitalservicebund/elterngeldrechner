@@ -131,10 +131,10 @@ function istImMutterschutz(
     });
 
   if (taetigkeitenAbfrageEvent) {
-    return !(
-      !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
+    return !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
       taetigkeitenAbfrageEvent.payload.istVerbeamtet
-    );
+      ? false
+      : istElternteilImMutterschutz;
   }
 
   return istElternteilImMutterschutz;

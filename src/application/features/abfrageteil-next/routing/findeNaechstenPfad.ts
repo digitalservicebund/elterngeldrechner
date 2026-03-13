@@ -401,7 +401,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/finanzielles/ausklammerung/gruende",
+          "/abfrageteil/elternteil/0/ausklammerung/gruende",
         );
       });
 
@@ -417,7 +417,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/gruende",
+          "/abfrageteil/elternteil/1/ausklammerung/gruende",
         );
       });
     });
@@ -436,7 +436,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/0/finanzielles/ausklammerung/zeiten",
+          "/abfrageteil/elternteil/0/ausklammerung/zeiten",
         );
       });
 
@@ -484,7 +484,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/zeiten",
+          "/abfrageteil/elternteil/1/ausklammerung/zeiten",
         );
       });
 
@@ -953,7 +953,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/gruende",
+          "/abfrageteil/elternteil/1/ausklammerung/gruende",
         );
       });
 
@@ -967,7 +967,7 @@ if (import.meta.vitest) {
         });
 
         expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/finanzielles/ausklammerung/gruende",
+          "/abfrageteil/elternteil/1/ausklammerung/gruende",
         );
       });
 

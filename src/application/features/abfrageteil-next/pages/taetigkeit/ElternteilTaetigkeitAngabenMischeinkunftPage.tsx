@@ -86,6 +86,7 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
         id={formIdentifier}
         className="mt-40 flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
+        noValidate
       >
         <BemessungszeitraumBox
           bemessungszeitraum={bemessungszeitraum}
@@ -241,16 +242,7 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
             }
           />
           <NumberInput
-            {...register("bruttoJahresgewinn", {
-              valueAsNumber: true,
-              max: {
-                value: 175000,
-                message:
-                  "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
-              },
-              min: { value: 0, message: "Bitte geben Sie ein Einkommen an" },
-              required: "Bitte geben Sie ein Einkommen an",
-            })}
+            {...register("bruttoJahresgewinn")}
             label="Gewinn im gesamten Kalenderjahr"
             errors={formErrors.bruttoJahresgewinn?.message}
           />

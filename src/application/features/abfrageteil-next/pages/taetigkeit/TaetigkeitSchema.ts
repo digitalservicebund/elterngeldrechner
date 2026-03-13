@@ -3,7 +3,7 @@ import { BooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next
 import { Steuerklasse } from "@/elterngeldrechner";
 
 const BruttoJahresgewinn = z.coerce
-  .number()
+  .number({ error: "Invalide Eingabe" })
   .max(
     175000,
     "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
@@ -52,7 +52,7 @@ export type TaetigkeitNichtSelbststaendigAngaben = z.infer<
 >;
 
 const BruttoMonatseinkommen = z.coerce
-  .number()
+  .number({ error: "Invalide Eingabe" })
   .max(
     15000,
     "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",

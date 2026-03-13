@@ -5,7 +5,7 @@ import {
 } from "@/application/features/abfrageteil-next/zod";
 
 const AnzahlDerKinder = z.coerce
-  .number()
+  .number({ error: "Invalide Eingabe" })
   .min(1, "Mindestens 1 Kind")
   .max(8, "Maximal 8 Kinder");
 

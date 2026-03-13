@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import {
   ElternteilTaetigkeitenAbfrage,
   ElternteilTaetigkeitenAbfrageSchema,
+  taetigkeitenFelder,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
@@ -45,7 +46,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
       letztesGueltigesEvent,
     ),
   });
-  const { register, handleSubmit, formState } = form;
+  const { register, handleSubmit, formState, setValue } = form;
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
@@ -79,6 +80,14 @@ export function ElternteilTaetigkeitenAbfragePage() {
 
   const showGeneralErrorMessage = !!formErrors.hatKeinEinkommen?.message;
 
+  const handleTaetigkeitChange = (checked: boolean) => {
+    if (checked) setValue("hatKeinEinkommen", false);
+  };
+
+  const handleKeinEinkommenChange = (checked: boolean) => {
+    if (checked) taetigkeitenFelder.forEach((feld) => setValue(feld, false));
+  };
+
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
@@ -105,6 +114,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="istNichtSelbststaendig"
             label={`${vorname} war oder ist angestellt`}
             errors={showGeneralErrorMessage}
+            onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
               zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
@@ -118,6 +128,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="istSelbststaendig"
             label={`${vorname} war oder ist selbstständig`}
             errors={showGeneralErrorMessage}
+            onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
               zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land- oder
@@ -132,6 +143,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="istVerbeamtet"
             label={`${vorname} war oder ist Beamtin`}
             errors={showGeneralErrorMessage}
+            onChange={handleTaetigkeitChange}
           />
 
           <CustomCheckbox
@@ -140,6 +152,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="hatAndereLeistungen"
             label={`${vorname} erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen`}
             errors={showGeneralErrorMessage}
+            onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
               zum Beispiel Bürgergeld, Arbeitslosengeld, Krankengeld oder
@@ -153,6 +166,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             name="hatKeinEinkommen"
             label={`${vorname} hatte oder hat kein Einkommen`}
             errors={showGeneralErrorMessage}
+            onChange={handleKeinEinkommenChange}
           >
             <p className="font-regular">
               zum Beispiel während eines Studiums, als Hausfrau oder Hausmann.

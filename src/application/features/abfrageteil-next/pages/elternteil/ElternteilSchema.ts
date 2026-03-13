@@ -94,6 +94,10 @@ const TaetigkeitenSchema = z
     },
   );
 
+export const taetigkeitenFelder = Object.keys(
+  TaetigkeitenSchema.def.shape,
+) as Array<keyof z.infer<typeof TaetigkeitenSchema>>;
+
 export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
   "hatKeinEinkommen",
   [
@@ -131,6 +135,48 @@ export type ElternteilZweitePersonAngaben = z.infer<
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
+
+  describe("ElternteilTaetigkeitenAbfrageSchema", () => {
+    const schema = ElternteilTaetigkeitenAbfrageSchema;
+
+    it("accepts hatKeinEinkommen: true alone", () => {
+      const result = schema.safeParse({ hatKeinEinkommen: true });
+
+      expect(result.success).toBeTruthy();
+    });
+
+    it("rejects hatKeinEinkommen: false with no other field selected", () => {
+      const result = schema.safeParse({
+        hatKeinEinkommen: false,
+        istNichtSelbststaendig: false,
+        istSelbststaendig: false,
+        istVerbeamtet: false,
+        hatAndereLeistungen: false,
+      });
+
+      expect(result.success).toBeFalsy();
+
+      if (!result.success) {
+        expect(result.error.issues[0]).toMatchObject({
+          code: "custom",
+          path: ["hatKeinEinkommen"],
+          message: "Bitte treffen Sie eine Auswahl.",
+        });
+      }
+    });
+
+    it("accepts hatKeinEinkommen: false with at least one other field selected", () => {
+      const result = schema.safeParse({
+        hatKeinEinkommen: false,
+        istNichtSelbststaendig: true,
+        istSelbststaendig: false,
+        istVerbeamtet: false,
+        hatAndereLeistungen: false,
+      });
+
+      expect(result.success).toBeTruthy();
+    });
+  });
 
   describe("ElternteilAusklammerungsZeiten", () => {
     const schema = ElternteilAusklammerungZeitenSchema;

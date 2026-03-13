@@ -2,12 +2,20 @@ import { z } from "zod";
 import { BooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod";
 import { Steuerklasse } from "@/elterngeldrechner";
 
+const BruttoJahresgewinn = z.coerce
+  .number()
+  .max(
+    175000,
+    "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
+  )
+  .min(1, "Bitte geben Sie ein Einkommen an");
+
 export const TaetigkeitSelbststaendigAngabenSchema = z.object({
   istKirchensteuerpflichtig: BooleanRadiobuttonCodec,
   istGesetzlichKrankenpflichtversichert: BooleanRadiobuttonCodec,
   istGesetzlichRentenversichert: BooleanRadiobuttonCodec,
   istGesetzlichArbeitlosenversichert: BooleanRadiobuttonCodec,
-  bruttoJahresgewinn: z.number(),
+  bruttoJahresgewinn: BruttoJahresgewinn,
 });
 
 export type TaetigkeitSelbststaendigAngaben = z.infer<

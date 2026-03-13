@@ -201,7 +201,7 @@ export function ElternteilTaetigkeitAngabenMischeinkunftPage() {
 
         <div>
           <h5 className="mb-10">
-            Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von
+            Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von{" "}
             {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
           </h5>
 

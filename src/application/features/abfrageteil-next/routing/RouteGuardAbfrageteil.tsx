@@ -87,7 +87,7 @@ if (import.meta.vitest) {
 
       const result = findeLetzteErlaubteRoute(
         eventStream,
-        "/abfrageteil/elternteil/0/finanzielles/ausklammerung/gruende",
+        "/abfrageteil/elternteil/0/ausklammerung/gruende",
       );
 
       expect(result).toBeUndefined();
@@ -152,9 +152,7 @@ if (import.meta.vitest) {
         "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
       );
 
-      expect(result).toEqual(
-        "/abfrageteil/elternteil/0/finanzielles/ausklammerung/zeiten",
-      );
+      expect(result).toEqual("/abfrageteil/elternteil/0/ausklammerung/zeiten");
     });
   });
 }

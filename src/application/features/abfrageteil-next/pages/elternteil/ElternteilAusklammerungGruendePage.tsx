@@ -10,7 +10,9 @@ import { Button, InfoText } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
+import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil-next/domain/findeGeschwisterkinder";
+import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -20,6 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { Elternteil } from "@/monatsplaner";
 
 export function ElternteilAusklammerungGruendePage() {
   const {
@@ -52,19 +55,34 @@ export function ElternteilAusklammerungGruendePage() {
   const esGibtGeschwisterkinder =
     findeGeschwisterkinder(eventStream).length > 0;
 
+  const mutterschutzInformation = findeInformationenZumMutterschutz(
+    eventStream,
+    findeAnzahlKinder(eventStream),
+  );
+
+  const istErsterElternteil = routeParams.elternteilIndex === 0;
+  const warErsterElternteilInMutterschutz =
+    mutterschutzInformation?.empfaenger === Elternteil.Eins;
+
+  const istSchwangerschaftserkrankungMoeglich =
+    istErsterElternteil || !warErsterElternteilInMutterschutz;
+
   const defaultValues =
     !letztesGueltigesEventData ||
     letztesGueltigesEventData.hatKeineAusklammerungsgruende !== false
       ? letztesGueltigesEventData
-      : {
+      : ({
           ...letztesGueltigesEventData,
           hatMutterschutzAelteresKind:
-            !!esGibtGeschwisterkinder &&
-            !!letztesGueltigesEventData.hatMutterschutzAelteresKind,
+            esGibtGeschwisterkinder &&
+            letztesGueltigesEventData.hatMutterschutzAelteresKind,
           hatElterngeldAelteresKind:
-            !!esGibtGeschwisterkinder &&
-            !!letztesGueltigesEventData.hatElterngeldAelteresKind,
-        };
+            esGibtGeschwisterkinder &&
+            letztesGueltigesEventData.hatElterngeldAelteresKind,
+          hatSchwangerschaftsbedingteErkrankung:
+            istSchwangerschaftserkrankungMoeglich &&
+            letztesGueltigesEventData.hatSchwangerschaftsbedingteErkrankung,
+        } satisfies ElternteilAusklammerungGruende);
 
   const form = useForm<ElternteilAusklammerungGruende>({
     resolver: zodResolver(ElternteilAusklammerungGruendeSchema),
@@ -160,22 +178,29 @@ export function ElternteilAusklammerungGruendePage() {
             <input type="hidden" {...register("hatElterngeldAelteresKind")} />
           )}
 
-          <CustomCheckbox
-            className="mt-20"
-            register={register}
-            name="hatSchwangerschaftsbedingteErkrankung"
-            label={`${vorname} hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen`}
-            errors={showGeneralErrorMessage}
-            aria-describedby={
-              showGeneralErrorMessage ? generalErrorId : undefined
-            }
-            onChange={(checked) => handleCheckboxChange(checked)}
-          >
-            <InfoText
-              question="Was bedeutet Krankheit wegen der Schwangerschaft?"
-              answer="Wenn Sie aufgrund Ihrer Schwangerschaft krank waren, können diese Monate übersprungen werden."
+          {istSchwangerschaftserkrankungMoeglich ? (
+            <CustomCheckbox
+              className="mt-20"
+              register={register}
+              name="hatSchwangerschaftsbedingteErkrankung"
+              label={`${vorname} hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen`}
+              errors={showGeneralErrorMessage}
+              aria-describedby={
+                showGeneralErrorMessage ? generalErrorId : undefined
+              }
+              onChange={(checked) => handleCheckboxChange(checked)}
+            >
+              <InfoText
+                question="Was bedeutet Krankheit wegen der Schwangerschaft?"
+                answer="Wenn Sie aufgrund Ihrer Schwangerschaft krank waren, können diese Monate übersprungen werden."
+              />
+            </CustomCheckbox>
+          ) : (
+            <input
+              type="hidden"
+              {...register("hatSchwangerschaftsbedingteErkrankung")}
             />
-          </CustomCheckbox>
+          )}
 
           <CustomCheckbox
             className="mt-20"

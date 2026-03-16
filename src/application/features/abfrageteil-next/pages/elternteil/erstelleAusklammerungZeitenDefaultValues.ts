@@ -45,9 +45,16 @@ export function erstelleAusklammerungZeitenDefaultValues(
 
     const wiederverwendbareZeiten = existingValues?.[ausklammerungsgrund];
 
+    if (wiederverwendbareZeiten && wiederverwendbareZeiten.length > 0) {
+      return {
+        ...acc,
+        [ausklammerungsgrund]: wiederverwendbareZeiten,
+      };
+    }
+
     return {
       ...acc,
-      [ausklammerungsgrund]: wiederverwendbareZeiten ?? [{ von: "", bis: "" }],
+      [ausklammerungsgrund]: [{ von: "", bis: "" }],
     };
   }, {} as ElternteilAusklammerungszeitenInput);
 }
@@ -83,6 +90,37 @@ if (import.meta.vitest) {
         mutterschutzGeschwisterkind: [],
         elterngeldGeschwisterkind: [],
         erkrankungSchwangerschaft: [],
+      });
+    });
+
+    it("default values are given for ausklammerungsgrund where vorhandeneZeiten is an empty array", () => {
+      const ausklammerungsgruende = {
+        hatElterngeldAelteresKind: false,
+        hatKeineAusklammerungsgruende: false,
+        hatMutterschutzAelteresKind: false,
+        hatSchwangerschaftsbedingteErkrankung: true,
+      };
+
+      const vorhandeneZeiten = {
+        mutterschutzGeschwisterkind: [],
+        elterngeldGeschwisterkind: [],
+        erkrankungSchwangerschaft: [],
+      };
+
+      const defaultValues = erstelleAusklammerungZeitenDefaultValues(
+        vorhandeneZeiten,
+        ausklammerungsgruende,
+      );
+
+      expect(defaultValues).toEqual({
+        mutterschutzGeschwisterkind: [],
+        elterngeldGeschwisterkind: [],
+        erkrankungSchwangerschaft: [
+          {
+            von: "",
+            bis: "",
+          },
+        ],
       });
     });
 

@@ -10,7 +10,7 @@ import { OptionalBooleanRadiobuttonCodec } from "@/application/features/abfraget
 export const ElternteilEinsAllgemeineAngabenSchema = z.object({
   name: z.string().min(1, "Der Name darf nicht leer sein"),
   istAlleinerziehend: BooleanRadiobuttonCodec,
-  istImMutterschutz: OptionalBooleanRadiobuttonCodec,
+  istImMutterschutz: BooleanRadiobuttonCodec,
 });
 
 export type ElternteilEinsAllgemeineAngaben = z.infer<
@@ -118,7 +118,7 @@ export const ElternteilZweiAllgemeineAngabenSchema = z
   .object({
     wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
     name: z.string().optional(),
-    istImMutterschutz: OptionalBooleanRadiobuttonCodec,
+    istImMutterschutz: BooleanRadiobuttonCodec.optional(),
   })
   .refine(
     (data) => {

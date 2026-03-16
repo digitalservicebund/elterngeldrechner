@@ -165,18 +165,8 @@ export function ElternteilZweiAllgemeineAngabenPage() {
                 register={register}
                 name="istImMutterschutz"
                 options={[
-                  {
-                    value: "yes",
-                    label: "Ja",
-                  },
-                  {
-                    value: "no",
-                    label: "Nein",
-                  },
-                  {
-                    value: "unknown",
-                    label: "Ich weiß es noch nicht",
-                  },
+                  { value: "yes", label: "Ja" },
+                  { value: "no", label: "Nein" },
                 ]}
               >
                 <InfoText
@@ -184,8 +174,13 @@ export function ElternteilZweiAllgemeineAngabenPage() {
                   answer={
                     <>
                       <p>
-                        Während des Mutterschutzes erhalten Sie
-                        Mutterschaftsleistungen, zum Beispiel:
+                        Jede angestellte oder verbeamtete Schwangere hat in
+                        Deutschland gesetzlichen Anspruch auf Mutterschutz. Nach
+                        dem Mutterschutzgesetz gelten insbesondere
+                        Mutterschutzfristen, die 6 Wochen vor der dem
+                        errechneten Geburtstermin beginnen und in der Regel 8
+                        Wochen danach enden. Während der Schutzfristen erhalten
+                        Sie Mutterschaftsleistungen, zum Beispiel:
                       </p>
 
                       <ul className="list-inside list-disc">
@@ -198,10 +193,14 @@ export function ElternteilZweiAllgemeineAngabenPage() {
                         </li>
                       </ul>
 
+                      <p className="mt-20 font-bold">
+                        Sie sind noch ganz am Anfang Ihrer Schwangerschaft?
+                      </p>
                       <p>
-                        Diese werden – wenn ein Anspruch darauf besteht –
-                        normalerweise in den ersten acht Wochen nach der Geburt
-                        gezahlt.
+                        Auch wenn der Termin noch weit weg ist: Wählen Sie “Ja”,
+                        wenn Sie zum Zeitpunkt der Geburt angestellt oder
+                        verbeamtet sind. Dann steht Ihnen der Mutterschutz
+                        gesetzlich zu.
                       </p>
                     </>
                   }

@@ -7,14 +7,14 @@ import {
 } from "@/application/features/abfrageteil-next/zod";
 import { OptionalBooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod/codecs/OptionalBooleanRadiobuttonCodec";
 
-export const ElternteilAllgemeineAngabenSchema = z.object({
+export const ElternteilEinsAllgemeineAngabenSchema = z.object({
   name: z.string().min(1, "Der Name darf nicht leer sein"),
   istAlleinerziehend: BooleanRadiobuttonCodec,
   istImMutterschutz: OptionalBooleanRadiobuttonCodec,
 });
 
-export type ElternteilAllgemeineAngaben = z.infer<
-  typeof ElternteilAllgemeineAngabenSchema
+export type ElternteilEinsAllgemeineAngaben = z.infer<
+  typeof ElternteilEinsAllgemeineAngabenSchema
 >;
 
 const AusklammerungGruendeSchema = z

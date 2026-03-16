@@ -3,9 +3,9 @@ import { z } from "zod";
 import { Route } from "./Route";
 import { AllgemeineAngabenSchema } from "@/application/features/abfrageteil-next/pages/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
-  ElternteilAllgemeineAngabenSchema,
   ElternteilAusklammerungGruendeSchema,
   ElternteilAusklammerungZeitenSchema,
+  ElternteilEinsAllgemeineAngabenSchema,
   ElternteilTaetigkeitenAbfrageSchema,
   ElternteilZweitePersonAngabenSchema,
 } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
@@ -72,9 +72,8 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: GeschwisterkindAngabenSchema,
   }),
   z.object({
-    route: z.literal(Route.ElternteilAllgemeineAngaben),
-    params: ElternteilParams,
-    payload: ElternteilAllgemeineAngabenSchema,
+    route: z.literal(Route.ElternteilEinsAllgemeineAngaben),
+    payload: ElternteilEinsAllgemeineAngabenSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilAusklammerungGruendeAngaben),

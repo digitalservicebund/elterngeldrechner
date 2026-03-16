@@ -46,22 +46,18 @@ function getNextSubpath(event: FormEvent): string {
         ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
             geschwisterIndex: "0",
           })
-        : generateParametrizedPath(Route.ElternteilAllgemeineAngaben, {
-            elternteilIndex: "0",
-          });
+        : Route.ElternteilEinsAllgemeineAngaben;
     case Route.GeschwisterkindAngaben:
       return event.payload.istWeiteresGeschwisterkindVorhanden
         ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
             geschwisterIndex: (event.params.geschwisterIndex + 1).toString(),
           })
-        : generateParametrizedPath(Route.ElternteilAllgemeineAngaben, {
-            elternteilIndex: "0",
-          });
-    case Route.ElternteilAllgemeineAngaben:
+        : Route.ElternteilEinsAllgemeineAngaben;
+    case Route.ElternteilEinsAllgemeineAngaben:
       return generateParametrizedPath(
         Route.ElternteilAusklammerungGruendeAngaben,
         {
-          elternteilIndex: event.params.elternteilIndex.toString(),
+          elternteilIndex: "0",
         },
       );
     case Route.ElternteilAusklammerungGruendeAngaben: {
@@ -337,7 +333,7 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/0");
       });
 
-      it("returns ElternteilAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
+      it("returns ElternteilEinsAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAbfrage,
           payload: {
@@ -378,7 +374,7 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/2");
       });
 
-      it("returns ElternteilAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
+      it("returns ElternteilEinsAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterIndex: 0 },
@@ -393,11 +389,10 @@ if (import.meta.vitest) {
       });
     });
 
-    describe("ElternteilAllgemeineAngaben", () => {
-      it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 0", () => {
+    describe("ElternteilEinsAllgemeineAngaben", () => {
+      it("returns ElternteilAusklammerungGruendeAngaben given ElternteilEinsAllgemeineAngaben as currentRoute and index 0", () => {
         const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Vorname",
             istAlleinerziehend: false,
@@ -407,22 +402,6 @@ if (import.meta.vitest) {
 
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/ausklammerung/gruende",
-        );
-      });
-
-      it("returns ElternteilAusklammerungGruendeAngaben given ElternteilAllgemeineAngaben as currentRoute and index 1", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 1 },
-          payload: {
-            name: "Vorname",
-            istAlleinerziehend: false,
-            istImMutterschutz: true,
-          },
-        });
-
-        expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/ausklammerung/gruende",
         );
       });
     });

@@ -9,11 +9,8 @@ export function findeInformationenZumMutterschutz(
 ): InformationenZumMutterschutz<Elternteil.Eins> | undefined {
   const elternteil = [...events]
     .reverse()
-    .find((event): event is ElternteilAllgemeineAngabenEvent => {
-      return (
-        isElternteilAllgemeineAngabenEvent(event) &&
-        event.params.elternteilIndex === 0
-      );
+    .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
+      return isElternteilEinsAllgemeineAngabenEvent(event);
     });
 
   if (!elternteil?.payload.istImMutterschutz) {
@@ -26,15 +23,15 @@ export function findeInformationenZumMutterschutz(
   };
 }
 
-type ElternteilAllgemeineAngabenEvent = Extract<
+type ElternteilEinsAllgemeineAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilAllgemeineAngaben }
+  { route: Route.ElternteilEinsAllgemeineAngaben }
 >;
 
-function isElternteilAllgemeineAngabenEvent(
+function isElternteilEinsAllgemeineAngabenEvent(
   event: FormEvent,
-): event is ElternteilAllgemeineAngabenEvent {
-  return event.route === Route.ElternteilAllgemeineAngaben;
+): event is ElternteilEinsAllgemeineAngabenEvent {
+  return event.route === Route.ElternteilEinsAllgemeineAngaben;
 }
 
 if (import.meta.vitest) {
@@ -42,8 +39,7 @@ if (import.meta.vitest) {
 
   describe("findeInformationenZumMutterschutz", () => {
     const elternteil1OhneMutterschutz: FormEvent = {
-      route: Route.ElternteilAllgemeineAngaben,
-      params: { elternteilIndex: 0 },
+      route: Route.ElternteilEinsAllgemeineAngaben,
       payload: {
         name: "Hanna",
         istAlleinerziehend: false,
@@ -52,8 +48,7 @@ if (import.meta.vitest) {
     };
 
     const elternteil1MitMutterschutz: FormEvent = {
-      route: Route.ElternteilAllgemeineAngaben,
-      params: { elternteilIndex: 0 },
+      route: Route.ElternteilEinsAllgemeineAngaben,
       payload: {
         name: "Hanna",
         istAlleinerziehend: false,

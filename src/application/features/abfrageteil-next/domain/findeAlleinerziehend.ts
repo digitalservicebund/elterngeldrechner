@@ -5,8 +5,8 @@ import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 export function findeAlleinerziehend(events: FormEvent[]): boolean {
   const event = [...events]
     .reverse()
-    .find((event): event is ElternteilAllgemeineAngabenEvent => {
-      return event.route === Route.ElternteilAllgemeineAngaben;
+    .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
+      return event.route === Route.ElternteilEinsAllgemeineAngaben;
     });
 
   if (!event) {
@@ -16,9 +16,9 @@ export function findeAlleinerziehend(events: FormEvent[]): boolean {
   return event.payload.istAlleinerziehend;
 }
 
-type ElternteilAllgemeineAngabenEvent = Extract<
+type ElternteilEinsAllgemeineAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilAllgemeineAngaben }
+  { route: Route.ElternteilEinsAllgemeineAngaben }
 >;
 
 if (import.meta.vitest) {
@@ -44,8 +44,7 @@ if (import.meta.vitest) {
     it("returns the istAlleinerziehend value", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: true,
@@ -60,8 +59,7 @@ if (import.meta.vitest) {
     it("returns the most recent istAlleinerziehend value", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: true,
@@ -69,8 +67,7 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,

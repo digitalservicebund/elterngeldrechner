@@ -58,8 +58,7 @@ export function Sidebar() {
   // TODO: Implement adapter that hides the raw events
 
   const person1Event = findeLetztesGueltigesEvent(
-    Route.ElternteilAllgemeineAngaben,
-    { elternteilIndex: 0 },
+    Route.ElternteilEinsAllgemeineAngaben,
   );
   const zweitePersonEvent = findeLetztesGueltigesEvent(
     Route.ElternteilZweitePersonAngaben,
@@ -90,9 +89,8 @@ export function Sidebar() {
       },
       {
         label: `Angaben ${person1Name ?? "Person 1"}`,
-        matchingPath: generatePath(
-          generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
-          { elternteilIndex: "0" },
+        matchingPath: generateAbfrageteilPath(
+          Route.ElternteilEinsAllgemeineAngaben,
         ),
       },
       {

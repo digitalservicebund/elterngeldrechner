@@ -90,8 +90,7 @@ if (import.meta.vitest) {
       it("passes geburtsdatum", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -124,8 +123,7 @@ if (import.meta.vitest) {
       it("passes Nicht-Selbstaendig as erwerbstaetigkeit", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -157,8 +155,7 @@ if (import.meta.vitest) {
       it("passes Selbstaendig as erwerbstaetigkeit", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -190,8 +187,7 @@ if (import.meta.vitest) {
       it("passes ausklammerungszeiten when present", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -243,8 +239,7 @@ if (import.meta.vitest) {
       it("passes errechneterEntbindungstermin from UngeborenesKindAngaben", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -275,8 +270,7 @@ if (import.meta.vitest) {
       it("prioritizes geburtsdatum from WahrscheinlichGeborenesKindAbfrage over errechneterEntbindungstermin from UngeborenesKindAngaben", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -311,8 +305,7 @@ if (import.meta.vitest) {
       it("passes ausklammerungszeiten only for the given elternteilIndex", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -375,8 +368,7 @@ if (import.meta.vitest) {
       it("passes geburtsdatum", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,
@@ -407,8 +399,7 @@ if (import.meta.vitest) {
       it("passes ausklammerungszeiten", () => {
         mockEventContext([
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Person 1",
               istAlleinerziehend: false,

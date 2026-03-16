@@ -143,11 +143,8 @@ function istImMutterschutz(
 function istErsterElternteilImMutterschutz(events: FormEvent[]): boolean {
   const allgemeineAngabenEvent = [...events]
     .reverse()
-    .find((event): event is ElternteilAllgemeineAngabenEvent => {
-      return (
-        event.route === Route.ElternteilAllgemeineAngaben &&
-        event.params.elternteilIndex === 0
-      );
+    .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
+      return event.route === Route.ElternteilEinsAllgemeineAngaben;
     });
 
   if (!allgemeineAngabenEvent) {
@@ -204,9 +201,9 @@ type AusklammerungZeitenEvent = Extract<
   { route: Route.ElternteilAusklammerungZeitenAngaben }
 >;
 
-type ElternteilAllgemeineAngabenEvent = Extract<
+type ElternteilEinsAllgemeineAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilAllgemeineAngaben }
+  { route: Route.ElternteilEinsAllgemeineAngaben }
 >;
 
 type ElternteilZweitePersonAngabenEvent = Extract<
@@ -228,8 +225,7 @@ if (import.meta.vitest) {
     it("returns empty array when no event exists for the elternteilIndex and Elternteil not in mutterschutz", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,
@@ -244,8 +240,7 @@ if (import.meta.vitest) {
     it("returns only Mutterschutz for this child when no other Ausklammerung given", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,
@@ -283,8 +278,7 @@ if (import.meta.vitest) {
     it("returns empty array when Mutterschutz and no other Ausklammerung given but person is beamtet", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,
@@ -330,8 +324,7 @@ if (import.meta.vitest) {
     it("returns empty array when no event exists for the given elternteilIndex", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,
@@ -360,8 +353,7 @@ if (import.meta.vitest) {
     it("flattens all Ausklammerungszeiträume with their Grund", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,
@@ -406,8 +398,7 @@ if (import.meta.vitest) {
     it("uses the most recent event for the given elternteilIndex", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Person 1",
             istAlleinerziehend: false,

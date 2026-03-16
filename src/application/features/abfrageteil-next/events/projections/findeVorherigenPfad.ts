@@ -129,8 +129,7 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilAllgemeineAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Anna",
               istAlleinerziehend: false,
@@ -138,8 +137,7 @@ if (import.meta.vitest) {
             },
           },
         ],
-        Route.ElternteilAllgemeineAngaben,
-        { elternteilIndex: 0 },
+        Route.ElternteilEinsAllgemeineAngaben,
       );
 
       expect(vorherigerPfad).toEqual("/abfrageteil/geschwisterkind/1");

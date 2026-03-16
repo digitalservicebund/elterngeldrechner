@@ -11,7 +11,8 @@ export enum Route {
   GeschwisterkindAbfrage = "/geschwisterkind",
   GeschwisterkindAngaben = "/geschwisterkind/:geschwisterIndex",
 
-  ElternteilAllgemeineAngaben = "/elternteil/:elternteilIndex",
+  ElternteilEinsAllgemeineAngaben = "/elternteil/0",
+
   ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/ausklammerung/gruende",
   ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/zeiten",
 

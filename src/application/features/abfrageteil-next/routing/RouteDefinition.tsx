@@ -5,9 +5,9 @@ import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath"
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
   AllgemeineAngabenPage,
-  ElternteilAllgemeineAngabenPage,
   ElternteilAusklammerungGruendePage,
   ElternteilAusklammerungZeitenPage,
+  ElternteilEinsAllgemeineAngabenPage,
   ElternteilTaetigkeitenAbfragePage,
   GeborenesKindPage,
   GeschwisterkindAbfragePage,
@@ -85,8 +85,10 @@ const RouteDefinition = [
             path: generateAbfrageteilPath(Route.GeschwisterkindAngaben),
           },
           {
-            element: <ElternteilAllgemeineAngabenPage />,
-            path: generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
+            element: <ElternteilEinsAllgemeineAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilEinsAllgemeineAngaben,
+            ),
           },
           {
             element: <ElternteilAusklammerungGruendePage />,

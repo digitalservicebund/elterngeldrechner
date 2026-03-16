@@ -75,8 +75,7 @@ if (import.meta.vitest) {
     it("it returns undefined when aktuelleRoute is next possible page", () => {
       const eventStream: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Hanna",
             istAlleinerziehend: false,
@@ -96,8 +95,7 @@ if (import.meta.vitest) {
     it("it returns undefined when aktuelleRoute is in valideEventHistorie", () => {
       const eventStream: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Hanna",
             istAlleinerziehend: false,
@@ -127,8 +125,7 @@ if (import.meta.vitest) {
     it("it returns '/abfrageteil/elternteil/0/finanzielles/ausklammerung/zeiten' when aktuelleRoute is neither in valideEventHistorie nor next possible page", () => {
       const eventStream: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Hanna",
             istAlleinerziehend: false,

@@ -9,8 +9,8 @@ export function findeVornamen(
   if (elternteilIndex === 0) {
     const event = [...events]
       .reverse()
-      .find((event): event is ElternteilAllgemeineAngabenEvent => {
-        return event.route === Route.ElternteilAllgemeineAngaben;
+      .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
+        return event.route === Route.ElternteilEinsAllgemeineAngaben;
       });
 
     return event?.payload.name ?? "Person 1";
@@ -25,9 +25,9 @@ export function findeVornamen(
   return event?.payload.name ?? "Person 2";
 }
 
-type ElternteilAllgemeineAngabenEvent = Extract<
+type ElternteilEinsAllgemeineAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilAllgemeineAngaben }
+  { route: Route.ElternteilEinsAllgemeineAngaben }
 >;
 
 type ElternteilZweitePersonAngabenEvent = Extract<
@@ -50,8 +50,7 @@ if (import.meta.vitest) {
     it("returns the name of the first person when elternteilIndex 0", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Britta",
             istAlleinerziehend: true,
@@ -66,8 +65,7 @@ if (import.meta.vitest) {
     it("returns the most recent name of the first person when elternteilIndex 0", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Anja",
             istAlleinerziehend: true,
@@ -75,8 +73,7 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Britta",
             istAlleinerziehend: false,
@@ -91,8 +88,7 @@ if (import.meta.vitest) {
     it("returns the name of the second person when elternteilIndex 1", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Anja",
             istAlleinerziehend: true,
@@ -115,8 +111,7 @@ if (import.meta.vitest) {
     it("returns the most recent name of the second person when elternteilIndex 1", () => {
       const events: FormEvent[] = [
         {
-          route: Route.ElternteilAllgemeineAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilEinsAllgemeineAngaben,
           payload: {
             name: "Anja",
             istAlleinerziehend: true,

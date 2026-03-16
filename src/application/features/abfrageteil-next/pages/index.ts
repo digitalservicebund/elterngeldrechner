@@ -11,8 +11,8 @@ export {
   GeschwisterkindAngabenPage,
 } from "./geschwister";
 export {
-  ElternteilAllgemeineAngabenPage,
   ElternteilAusklammerungGruendePage,
   ElternteilAusklammerungZeitenPage,
+  ElternteilEinsAllgemeineAngabenPage,
   ElternteilTaetigkeitenAbfragePage,
 } from "./elternteil";

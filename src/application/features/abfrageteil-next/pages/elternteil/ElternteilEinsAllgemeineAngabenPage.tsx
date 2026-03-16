@@ -4,15 +4,14 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
-  ElternteilAllgemeineAngaben,
-  ElternteilAllgemeineAngabenSchema,
+  ElternteilEinsAllgemeineAngaben,
+  ElternteilEinsAllgemeineAngabenSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
   Route,
@@ -20,7 +19,7 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 
-export function ElternteilAllgemeineAngabenPage() {
+export function ElternteilEinsAllgemeineAngabenPage() {
   const {
     dispatch,
     findeLetztesGueltigesEvent,
@@ -31,28 +30,23 @@ export function ElternteilAllgemeineAngabenPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilAllgemeineAngaben;
-  const routeParams = useRouteParams(currentRoute);
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    currentRoute,
-    routeParams,
-  );
+  const currentRoute = Route.ElternteilEinsAllgemeineAngaben;
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   const { register, handleSubmit, formState, watch } = useForm({
-    resolver: zodResolver(ElternteilAllgemeineAngabenSchema),
+    resolver: zodResolver(ElternteilEinsAllgemeineAngabenSchema),
     defaultValues: encodeSafely(
-      ElternteilAllgemeineAngabenSchema,
+      ElternteilEinsAllgemeineAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilAllgemeineAngaben) => {
+  const onSubmit = (values: ElternteilEinsAllgemeineAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: routeParams,
     };
 
     dispatch(event);
@@ -61,7 +55,7 @@ export function ElternteilAllgemeineAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+    void navigate(findeVorherigenPfad(currentRoute));
   };
 
   const nameInForm = watch("name");

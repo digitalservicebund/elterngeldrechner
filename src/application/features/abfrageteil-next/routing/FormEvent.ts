@@ -3,11 +3,11 @@ import { z } from "zod";
 import { Route } from "./Route";
 import { AllgemeineAngabenSchema } from "@/application/features/abfrageteil-next/pages/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
-  ElternteilAllgemeineAngabenSchema,
   ElternteilAusklammerungGruendeSchema,
   ElternteilAusklammerungZeitenSchema,
+  ElternteilEinsAllgemeineAngabenSchema,
   ElternteilTaetigkeitenAbfrageSchema,
-  ElternteilZweitePersonAngabenSchema,
+  ElternteilZweiAllgemeineAngabenSchema,
 } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import {
   GeschwisterkindAbfrageSchema,
@@ -72,9 +72,8 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: GeschwisterkindAngabenSchema,
   }),
   z.object({
-    route: z.literal(Route.ElternteilAllgemeineAngaben),
-    params: ElternteilParams,
-    payload: ElternteilAllgemeineAngabenSchema,
+    route: z.literal(Route.ElternteilEinsAllgemeineAngaben),
+    payload: ElternteilEinsAllgemeineAngabenSchema,
   }),
   z.object({
     route: z.literal(Route.ElternteilAusklammerungGruendeAngaben),
@@ -90,6 +89,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     route: z.literal(Route.ElternteilTaetigkeitenAbfrage),
     params: ElternteilParams,
     payload: ElternteilTaetigkeitenAbfrageSchema,
+    dependentValues: z.object({
+      istPersonAlleinerziehend: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitAngabenSelbststaendig),
@@ -137,8 +139,8 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: WeitereTaetigkeitArtAbfrageSchema,
   }),
   z.object({
-    route: z.literal(Route.ElternteilZweitePersonAngaben),
-    payload: ElternteilZweitePersonAngabenSchema,
+    route: z.literal(Route.ElternteilZweiAllgemeineAngaben),
+    payload: ElternteilZweiAllgemeineAngabenSchema,
   }),
 ]);
 

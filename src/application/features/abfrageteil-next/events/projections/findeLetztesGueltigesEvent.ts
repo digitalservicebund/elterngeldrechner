@@ -110,36 +110,29 @@ if (import.meta.vitest) {
         [
           { route: Route.Startseite },
           {
-            route: Route.ElternteilAllgemeineAngaben,
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Anna",
               istAlleinerziehend: false,
               istImMutterschutz: true,
             },
-            params: {
-              elternteilIndex: 0,
-            },
           },
           {
-            route: Route.ElternteilAllgemeineAngaben,
+            route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Ben",
               istAlleinerziehend: false,
               istImMutterschutz: false,
             },
-            params: {
-              elternteilIndex: 1,
-            },
           },
         ],
-        Route.ElternteilAllgemeineAngaben,
-        { elternteilIndex: 0 },
+        Route.ElternteilEinsAllgemeineAngaben,
       );
 
       expect(result).toEqual({
-        name: "Anna",
+        name: "Ben",
         istAlleinerziehend: false,
-        istImMutterschutz: true,
+        istImMutterschutz: false,
       });
     });
 

@@ -4,8 +4,8 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
-  ElternteilZweitePersonAngaben,
-  ElternteilZweitePersonAngabenSchema,
+  ElternteilZweiAllgemeineAngaben,
+  ElternteilZweiAllgemeineAngabenSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
@@ -22,7 +22,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import { Elternteil } from "@/monatsplaner";
 
-export function ElternteilZweitePersonAngabenPage() {
+export function ElternteilZweiAllgemeineAngabenPage() {
   const {
     dispatch,
     findeLetztesGueltigesEvent,
@@ -33,21 +33,21 @@ export function ElternteilZweitePersonAngabenPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilZweitePersonAngaben;
+  const currentRoute = Route.ElternteilZweiAllgemeineAngaben;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   const { register, handleSubmit, formState, watch } = useForm({
-    resolver: zodResolver(ElternteilZweitePersonAngabenSchema),
+    resolver: zodResolver(ElternteilZweiAllgemeineAngabenSchema),
     shouldUnregister: true,
     defaultValues: encodeSafely(
-      ElternteilZweitePersonAngabenSchema,
+      ElternteilZweiAllgemeineAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilZweitePersonAngaben) => {
+  const onSubmit = (values: ElternteilZweiAllgemeineAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,

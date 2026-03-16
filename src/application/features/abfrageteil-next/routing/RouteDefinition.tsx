@@ -5,9 +5,9 @@ import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath"
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
   AllgemeineAngabenPage,
-  ElternteilAllgemeineAngabenPage,
   ElternteilAusklammerungGruendePage,
   ElternteilAusklammerungZeitenPage,
+  ElternteilEinsAllgemeineAngabenPage,
   ElternteilTaetigkeitenAbfragePage,
   GeborenesKindPage,
   GeschwisterkindAbfragePage,
@@ -17,7 +17,7 @@ import {
   UngeborenesKindPage,
   WahrscheinlichGeborenesKindPage,
 } from "@/application/features/abfrageteil-next/pages";
-import { ElternteilZweitePersonAngabenPage } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilZweitePersonAngabenPage";
+import { ElternteilZweiAllgemeineAngabenPage } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilZweiAllgemeineAngabenPage";
 import { ElternteilTaetigkeitAngabenEinkommenDetailsPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenDetailsPage";
 import { ElternteilTaetigkeitAngabenEinkommenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenPage";
 import { ElternteilTaetigkeitAngabenMinijobPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMinijobPage";
@@ -85,8 +85,10 @@ const RouteDefinition = [
             path: generateAbfrageteilPath(Route.GeschwisterkindAngaben),
           },
           {
-            element: <ElternteilAllgemeineAngabenPage />,
-            path: generateAbfrageteilPath(Route.ElternteilAllgemeineAngaben),
+            element: <ElternteilEinsAllgemeineAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilEinsAllgemeineAngaben,
+            ),
           },
           {
             element: <ElternteilAusklammerungGruendePage />,
@@ -159,8 +161,10 @@ const RouteDefinition = [
             ),
           },
           {
-            element: <ElternteilZweitePersonAngabenPage />,
-            path: generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
+            element: <ElternteilZweiAllgemeineAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilZweiAllgemeineAngaben,
+            ),
           },
         ],
       },

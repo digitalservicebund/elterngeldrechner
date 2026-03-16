@@ -7,14 +7,14 @@ import {
 } from "@/application/features/abfrageteil-next/zod";
 import { OptionalBooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod/codecs/OptionalBooleanRadiobuttonCodec";
 
-export const ElternteilAllgemeineAngabenSchema = z.object({
+export const ElternteilEinsAllgemeineAngabenSchema = z.object({
   name: z.string().min(1, "Der Name darf nicht leer sein"),
   istAlleinerziehend: BooleanRadiobuttonCodec,
   istImMutterschutz: OptionalBooleanRadiobuttonCodec,
 });
 
-export type ElternteilAllgemeineAngaben = z.infer<
-  typeof ElternteilAllgemeineAngabenSchema
+export type ElternteilEinsAllgemeineAngaben = z.infer<
+  typeof ElternteilEinsAllgemeineAngabenSchema
 >;
 
 const AusklammerungGruendeSchema = z
@@ -101,8 +101,12 @@ export const taetigkeitenFelder = Object.keys(
 export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
   "hatKeinEinkommen",
   [
-    z.object({ hatKeinEinkommen: z.literal(true) }),
-    TaetigkeitenSchema.extend({ hatKeinEinkommen: z.literal(false) }),
+    z.object({
+      hatKeinEinkommen: z.literal(true),
+    }),
+    TaetigkeitenSchema.extend({
+      hatKeinEinkommen: z.literal(false),
+    }),
   ],
 );
 
@@ -110,7 +114,7 @@ export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
 >;
 
-export const ElternteilZweitePersonAngabenSchema = z
+export const ElternteilZweiAllgemeineAngabenSchema = z
   .object({
     wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
     name: z.string().optional(),
@@ -129,8 +133,8 @@ export const ElternteilZweitePersonAngabenSchema = z
     },
   );
 
-export type ElternteilZweitePersonAngaben = z.infer<
-  typeof ElternteilZweitePersonAngabenSchema
+export type ElternteilZweiAllgemeineAngaben = z.infer<
+  typeof ElternteilZweiAllgemeineAngabenSchema
 >;
 
 if (import.meta.vitest) {

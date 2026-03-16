@@ -1,3 +1,4 @@
+import CloseIcon from "@digitalservicebund/icons/Close";
 import { Control, FieldErrors, useFieldArray } from "react-hook-form";
 import { Button } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
@@ -39,39 +40,65 @@ export function ElternteilAusklammerungZeitenInput({
   control,
   errors,
 }: ElternteilAusklammerungZeitenInputProps) {
-  const { fields, append } = useFieldArray({ control, name: grund });
+  const { fields, append, remove } = useFieldArray({ control, name: grund });
 
   return (
     <div>
       <h5 className="pb-16 font-bold">{title}</h5>
 
-      {fields.map((field, index) => (
-        <div key={field.id} className="flex flex-col gap-16">
-          <div className="flex flex-wrap gap-56 *:grow *:basis-[22rem]">
-            <div>
-              <label className="mb-4 block text-16" htmlFor={`${field.id}-von`}>
-                Beginn (TT.MM.JJJJ)
-              </label>
-              <DateInput
-                id={`${field.id}-von`}
-                {...control.register(`${grund}.${index}.von`)}
-                error={errors[grund]?.[index]?.von?.message}
-              />
+      <div className="flex flex-col gap-16">
+        {fields.map((field, index) => (
+          <div
+            key={field.id}
+            className="grid grid-cols-[1fr_100px] items-center gap-16"
+          >
+            <div className="flex grow flex-wrap gap-x-24 gap-y-16 *:grow *:basis-[16rem]">
+              <div>
+                <label
+                  className="mb-4 block text-16"
+                  htmlFor={`${field.id}-von`}
+                >
+                  Beginn (TT.MM.JJJJ)
+                </label>
+                <DateInput
+                  id={`${field.id}-von`}
+                  {...control.register(`${grund}.${index}.von`)}
+                  error={errors[grund]?.[index]?.von?.message}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="mb-4 block text-16"
+                  htmlFor={`${field.id}-bis`}
+                >
+                  Ende (TT.MM.JJJJ)
+                </label>
+                <DateInput
+                  id={`${field.id}-bis`}
+                  {...control.register(`${grund}.${index}.bis`)}
+                  error={errors[grund]?.[index]?.bis?.message}
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="mb-4 block text-16" htmlFor={`${field.id}-bis`}>
-                Ende (TT.MM.JJJJ)
-              </label>
-              <DateInput
-                id={`${field.id}-bis`}
-                {...control.register(`${grund}.${index}.bis`)}
-                error={errors[grund]?.[index]?.bis?.message}
-              />
-            </div>
+            {index > 0 && (
+              <Button
+                type="button"
+                buttonStyle="link"
+                className="p-4"
+                onClick={() => remove(index)}
+                aria-label="Zeile löschen"
+              >
+                <span className="flex items-center gap-4 text-16">
+                  <CloseIcon className="mt-4" />
+                  <span>Löschen</span>
+                </span>
+              </Button>
+            )}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
 
       <Button
         type="button"

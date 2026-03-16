@@ -4,8 +4,8 @@ import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import {
-  ElternteilZweitePersonAngaben,
-  ElternteilZweitePersonAngabenSchema,
+  ElternteilZweiAllgemeineAngaben,
+  ElternteilZweiAllgemeineAngabenSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
@@ -14,7 +14,6 @@ import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domai
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
-import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
 import {
   type FormEvent,
   Route,
@@ -23,7 +22,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import { Elternteil } from "@/monatsplaner";
 
-export function ElternteilZweitePersonAngabenPage() {
+export function ElternteilZweiAllgemeineAngabenPage() {
   const {
     dispatch,
     findeLetztesGueltigesEvent,
@@ -34,29 +33,24 @@ export function ElternteilZweitePersonAngabenPage() {
   const formIdentifier = useId();
   const navigate = useNavigate();
 
-  const currentRoute = Route.ElternteilZweitePersonAngaben;
-  const routeParams = useRouteParams(currentRoute);
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    currentRoute,
-    routeParams,
-  );
+  const currentRoute = Route.ElternteilZweiAllgemeineAngaben;
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
   const { register, handleSubmit, formState, watch } = useForm({
-    resolver: zodResolver(ElternteilZweitePersonAngabenSchema),
+    resolver: zodResolver(ElternteilZweiAllgemeineAngabenSchema),
     shouldUnregister: true,
     defaultValues: encodeSafely(
-      ElternteilZweitePersonAngabenSchema,
+      ElternteilZweiAllgemeineAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilZweitePersonAngaben) => {
+  const onSubmit = (values: ElternteilZweiAllgemeineAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
-      params: routeParams,
     };
 
     dispatch(event);
@@ -65,7 +59,7 @@ export function ElternteilZweitePersonAngabenPage() {
   };
 
   const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+    void navigate(findeVorherigenPfad(currentRoute));
   };
 
   const wirdZweitePersonBeruecksichtigt = watch(

@@ -61,8 +61,7 @@ export function Sidebar() {
     Route.ElternteilEinsAllgemeineAngaben,
   );
   const zweitePersonEvent = findeLetztesGueltigesEvent(
-    Route.ElternteilZweitePersonAngaben,
-    { elternteilIndex: 1 },
+    Route.ElternteilZweiAllgemeineAngaben,
   );
 
   const person1Name = person1Event?.name;
@@ -109,9 +108,8 @@ export function Sidebar() {
     if (istNichtAlleinerziehend) {
       schritte.push({
         label: `Angaben ${person2Name ?? "Person 2"}`,
-        matchingPath: generatePath(
-          generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
-          { elternteilIndex: "1" },
+        matchingPath: generateAbfrageteilPath(
+          Route.ElternteilZweiAllgemeineAngaben,
         ),
       });
     }

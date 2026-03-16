@@ -5,7 +5,7 @@ export function sindBeideElternteile(events: FormEvent[]): boolean {
   const zweitePersonEvent = [...events]
     .reverse()
     .find((e): e is ZweitePersonAngabenEvent => {
-      return e.route === Route.ElternteilZweitePersonAngaben;
+      return e.route === Route.ElternteilZweiAllgemeineAngaben;
     });
 
   return zweitePersonEvent?.payload.wirdZweitePersonBeruecksichtigt === true;
@@ -13,7 +13,7 @@ export function sindBeideElternteile(events: FormEvent[]): boolean {
 
 type ZweitePersonAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilZweitePersonAngaben }
+  { route: Route.ElternteilZweiAllgemeineAngaben }
 >;
 
 if (import.meta.vitest) {
@@ -27,9 +27,8 @@ if (import.meta.vitest) {
     it("returns false when wirdZweitePersonBeruecksichtigt is false", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
-          params: { elternteilIndex: 1 },
         },
       ]);
 
@@ -39,9 +38,8 @@ if (import.meta.vitest) {
     it("returns true when wirdZweitePersonBeruecksichtigt is true", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-          params: { elternteilIndex: 1 },
         },
       ]);
 
@@ -51,14 +49,12 @@ if (import.meta.vitest) {
     it("uses the last ZweitePersonAngaben event when multiple exist", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-          params: { elternteilIndex: 1 },
         },
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
-          params: { elternteilIndex: 1 },
         },
       ]);
 

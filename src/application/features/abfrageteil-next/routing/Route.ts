@@ -12,6 +12,7 @@ export enum Route {
   GeschwisterkindAngaben = "/geschwisterkind/:geschwisterIndex",
 
   ElternteilEinsAllgemeineAngaben = "/elternteil/0",
+  ElternteilZweiAllgemeineAngaben = "/elternteil/1",
 
   ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/ausklammerung/gruende",
   ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/zeiten",
@@ -26,6 +27,4 @@ export enum Route {
   ElternteilTaetigkeitAngabenEinkommenDetails = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/nicht-selbststaendig/einkommen/detailliert",
   ElternteilWeitereTaetigkeitAbfrage = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/weitere-taetigkeit",
   ElternteilWeitereTaetigkeitAngaben = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/:taetigkeitIndex/weitere-taetigkeit-angaben",
-
-  ElternteilZweitePersonAngaben = "/elternteil/:elternteilIndex/abfrage-zweite-person",
 }

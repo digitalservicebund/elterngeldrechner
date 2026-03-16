@@ -17,7 +17,7 @@ import {
   UngeborenesKindPage,
   WahrscheinlichGeborenesKindPage,
 } from "@/application/features/abfrageteil-next/pages";
-import { ElternteilZweitePersonAngabenPage } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilZweitePersonAngabenPage";
+import { ElternteilZweiAllgemeineAngabenPage } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilZweiAllgemeineAngabenPage";
 import { ElternteilTaetigkeitAngabenEinkommenDetailsPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenDetailsPage";
 import { ElternteilTaetigkeitAngabenEinkommenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenPage";
 import { ElternteilTaetigkeitAngabenMinijobPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMinijobPage";
@@ -161,8 +161,10 @@ const RouteDefinition = [
             ),
           },
           {
-            element: <ElternteilZweitePersonAngabenPage />,
-            path: generateAbfrageteilPath(Route.ElternteilZweitePersonAngaben),
+            element: <ElternteilZweiAllgemeineAngabenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilZweiAllgemeineAngaben,
+            ),
           },
         ],
       },

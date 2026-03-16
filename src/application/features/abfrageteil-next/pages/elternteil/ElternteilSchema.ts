@@ -114,7 +114,7 @@ export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
 >;
 
-export const ElternteilZweitePersonAngabenSchema = z
+export const ElternteilZweiAllgemeineAngabenSchema = z
   .object({
     wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
     name: z.string().optional(),
@@ -133,8 +133,8 @@ export const ElternteilZweitePersonAngabenSchema = z
     },
   );
 
-export type ElternteilZweitePersonAngaben = z.infer<
-  typeof ElternteilZweitePersonAngabenSchema
+export type ElternteilZweiAllgemeineAngaben = z.infer<
+  typeof ElternteilZweiAllgemeineAngabenSchema
 >;
 
 if (import.meta.vitest) {

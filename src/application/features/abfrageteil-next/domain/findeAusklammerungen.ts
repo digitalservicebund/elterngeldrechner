@@ -159,8 +159,8 @@ function istErsterElternteilImMutterschutz(events: FormEvent[]): boolean {
 function istZweiterElternteilImMutterschutz(events: FormEvent[]): boolean {
   const zweitePersonAngabenEvent = [...events]
     .reverse()
-    .find((event): event is ElternteilZweitePersonAngabenEvent => {
-      return event.route === Route.ElternteilZweitePersonAngaben;
+    .find((event): event is ElternteilZweiAllgemeineAngabenEvent => {
+      return event.route === Route.ElternteilZweiAllgemeineAngaben;
     });
 
   if (!zweitePersonAngabenEvent) {
@@ -206,9 +206,9 @@ type ElternteilEinsAllgemeineAngabenEvent = Extract<
   { route: Route.ElternteilEinsAllgemeineAngaben }
 >;
 
-type ElternteilZweitePersonAngabenEvent = Extract<
+type ElternteilZweiAllgemeineAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilZweitePersonAngaben }
+  { route: Route.ElternteilZweiAllgemeineAngaben }
 >;
 
 type ElternteilTaetigkeitenAbfrageEvent = Extract<

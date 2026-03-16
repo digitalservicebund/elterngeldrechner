@@ -18,8 +18,8 @@ export function findeVornamen(
 
   const event = [...events]
     .reverse()
-    .find((event): event is ElternteilZweitePersonAngabenEvent => {
-      return event.route === Route.ElternteilZweitePersonAngaben;
+    .find((event): event is ElternteilZweiAllgemeineAngabenEvent => {
+      return event.route === Route.ElternteilZweiAllgemeineAngaben;
     });
 
   return event?.payload.name ?? "Person 2";
@@ -30,9 +30,9 @@ type ElternteilEinsAllgemeineAngabenEvent = Extract<
   { route: Route.ElternteilEinsAllgemeineAngaben }
 >;
 
-type ElternteilZweitePersonAngabenEvent = Extract<
+type ElternteilZweiAllgemeineAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilZweitePersonAngaben }
+  { route: Route.ElternteilZweiAllgemeineAngaben }
 >;
 
 if (import.meta.vitest) {
@@ -96,12 +96,11 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
-          params: { elternteilIndex: 1 },
         },
       ];
 
@@ -119,20 +118,18 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
-          params: { elternteilIndex: 1 },
         },
         {
-          route: Route.ElternteilZweitePersonAngaben,
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Daniel",
           },
-          params: { elternteilIndex: 1 },
         },
       ];
 

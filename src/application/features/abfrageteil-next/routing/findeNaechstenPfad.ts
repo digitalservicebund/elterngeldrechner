@@ -85,9 +85,7 @@ function getNextSubpath(event: FormEvent): string {
         return event.params.elternteilIndex === 1 ||
           dependentValues.istPersonAlleinerziehend
           ? "DONE"
-          : generateParametrizedPath(Route.ElternteilZweitePersonAngaben, {
-              elternteilIndex: "1",
-            });
+          : Route.ElternteilZweiAllgemeineAngaben;
       }
 
       const getZielRoute = (payload: {
@@ -163,9 +161,7 @@ function getNextSubpath(event: FormEvent): string {
       if (!istWeitereTaetigkeitVorhanden) {
         return istPersonAlleinerziehend || event.params.elternteilIndex === 1
           ? "DONE"
-          : generateParametrizedPath(Route.ElternteilZweitePersonAngaben, {
-              elternteilIndex: "1",
-            });
+          : Route.ElternteilZweiAllgemeineAngaben;
       }
       const zielRoute = istSelbststaendigeTaetigkeitMoeglich
         ? Route.ElternteilWeitereTaetigkeitAngaben
@@ -188,7 +184,7 @@ function getNextSubpath(event: FormEvent): string {
         taetigkeitIndex: (event.params.taetigkeitIndex + 1).toString(),
       });
     }
-    case Route.ElternteilZweitePersonAngaben: {
+    case Route.ElternteilZweiAllgemeineAngaben: {
       const { wirdZweitePersonBeruecksichtigt } = event.payload;
       if (wirdZweitePersonBeruecksichtigt === false) {
         return "DONE";
@@ -549,7 +545,7 @@ if (import.meta.vitest) {
     });
 
     describe("ElternteilTaetigkeitenAbfrage", () => {
-      it("returns ElternteilZweitePersonAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true and elternteilIndex 0", () => {
+      it("returns ElternteilZweiAllgemeineAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true and elternteilIndex 0", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
@@ -561,9 +557,7 @@ if (import.meta.vitest) {
           },
         });
 
-        expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/abfrage-zweite-person",
-        );
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
       });
 
       it("returns BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and hatKeinEinkommen true and elternteilIndex 0 and istPersonAlleinerziehend true", () => {
@@ -833,7 +827,7 @@ if (import.meta.vitest) {
     });
 
     describe("ElternteilWeitereTaetigkeitAbfrage", () => {
-      it("returns ElternteilZweitePersonAngaben given ElternteilWeitereTaetigkeitAbfrage as currentRoute and istWeitereTaetigkeitVorhanden false", () => {
+      it("returns ElternteilZweiAllgemeineAngaben given ElternteilWeitereTaetigkeitAbfrage as currentRoute and istWeitereTaetigkeitVorhanden false", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilWeitereTaetigkeitAbfrage,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
@@ -844,9 +838,7 @@ if (import.meta.vitest) {
           },
         });
 
-        expect(naechsterPfad).toEqual(
-          "/abfrageteil/elternteil/1/abfrage-zweite-person",
-        );
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
       });
 
       it("returns ElternteilWeitereTaetigkeitAngaben given ElternteilWeitereTaetigkeitAbfrage as currentRoute and both istWeitereTaetigkeitVorhanden and istSelbststaendigeTaetigkeitMoeglich true", () => {
@@ -956,11 +948,10 @@ if (import.meta.vitest) {
       });
     });
 
-    describe("ElternteilZweitePersonAngaben", () => {
-      it("returns ElternteilAusklammerungGruendeAngaben and elternteilIndex 1 given ElternteilZweitePersonAngaben as currentRoute and wirdZweitePersonBeruecksichtigt yes", () => {
+    describe("ElternteilZweiAllgemeineAngaben", () => {
+      it("returns ElternteilAusklammerungGruendeAngaben and elternteilIndex 1 given ElternteilZweiAllgemeineAngaben as currentRoute and wirdZweitePersonBeruecksichtigt yes", () => {
         const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilZweitePersonAngaben,
-          params: { elternteilIndex: 1 },
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Person 2",
@@ -972,10 +963,9 @@ if (import.meta.vitest) {
         );
       });
 
-      it("returns ElternteilAusklammerungGruendeAngaben and elternteilIndex 1 given ElternteilZweitePersonAngaben as currentRoute and wirdZweitePersonBeruecksichtigt unknown", () => {
+      it("returns ElternteilAusklammerungGruendeAngaben and elternteilIndex 1 given ElternteilZweiAllgemeineAngaben as currentRoute and wirdZweitePersonBeruecksichtigt unknown", () => {
         const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilZweitePersonAngaben,
-          params: { elternteilIndex: 1 },
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             wirdZweitePersonBeruecksichtigt: undefined,
             name: "Person 2",
@@ -987,10 +977,9 @@ if (import.meta.vitest) {
         );
       });
 
-      it("returns path for BeispielePage given ElternteilZweitePersonAngaben as currentRoute and wirdZweitePersonBeruecksichtigt no", () => {
+      it("returns path for BeispielePage given ElternteilZweiAllgemeineAngaben as currentRoute and wirdZweitePersonBeruecksichtigt no", () => {
         const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilZweitePersonAngaben,
-          params: { elternteilIndex: 1 },
+          route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             wirdZweitePersonBeruecksichtigt: false,
           },

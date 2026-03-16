@@ -336,13 +336,12 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilZweitePersonAngaben,
+            route: Route.ElternteilZweiAllgemeineAngaben,
             payload: {
               wirdZweitePersonBeruecksichtigt: true,
               name: "Person 2",
               istImMutterschutz: false,
             },
-            params: { elternteilIndex: 1 },
           },
         ]);
 

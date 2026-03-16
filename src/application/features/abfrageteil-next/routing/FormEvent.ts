@@ -7,7 +7,7 @@ import {
   ElternteilAusklammerungZeitenSchema,
   ElternteilEinsAllgemeineAngabenSchema,
   ElternteilTaetigkeitenAbfrageSchema,
-  ElternteilZweitePersonAngabenSchema,
+  ElternteilZweiAllgemeineAngabenSchema,
 } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import {
   GeschwisterkindAbfrageSchema,
@@ -139,9 +139,8 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: WeitereTaetigkeitArtAbfrageSchema,
   }),
   z.object({
-    route: z.literal(Route.ElternteilZweitePersonAngaben),
-    params: ElternteilParams,
-    payload: ElternteilZweitePersonAngabenSchema,
+    route: z.literal(Route.ElternteilZweiAllgemeineAngaben),
+    payload: ElternteilZweiAllgemeineAngabenSchema,
   }),
 ]);
 

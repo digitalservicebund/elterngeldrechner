@@ -69,14 +69,14 @@ export function erstelleAusgangslage(
 
 type ZweitePersonAngabenEvent = Extract<
   FormEvent,
-  { route: Route.ElternteilZweitePersonAngaben }
+  { route: Route.ElternteilZweiAllgemeineAngaben }
 >;
 
 function findeAngabenZurZweitenPerson(events: FormEvent[]) {
   const event = [...events]
     .reverse()
     .find((e): e is ZweitePersonAngabenEvent => {
-      return e.route === Route.ElternteilZweitePersonAngaben;
+      return e.route === Route.ElternteilZweiAllgemeineAngaben;
     });
 
   if (!event) {
@@ -126,9 +126,8 @@ if (import.meta.vitest) {
     const { Temporal } = await import("@js-temporal/polyfill");
 
     const zweitePersonNichtBeruecksichtigt: FormEvent = {
-      route: Route.ElternteilZweitePersonAngaben,
+      route: Route.ElternteilZweiAllgemeineAngaben,
       payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
-      params: { elternteilIndex: 1 },
     };
 
     describe("geburtsdatumDesKindes", () => {
@@ -223,7 +222,7 @@ if (import.meta.vitest) {
     });
 
     describe("anzahlElternteile", () => {
-      it("is 1 when Person 1 is alleinerziehend and no ElternteilZweitePersonAngaben event exists", () => {
+      it("is 1 when Person 1 is alleinerziehend and no ElternteilZweiAllgemeineAngaben event exists", () => {
         const events: FormEvent[] = [
           {
             route: Route.GeborenesKindAngaben,
@@ -249,7 +248,7 @@ if (import.meta.vitest) {
         expect(ausgangslage.anzahlElternteile).toEqual(1);
       });
 
-      it("throws when neither ElternteilZweitePersonAngaben nor ElternteilEinsAllgemeineAngaben for Elternteil 1 is present", () => {
+      it("throws when neither ElternteilZweiAllgemeineAngaben nor ElternteilEinsAllgemeineAngaben for Elternteil 1 is present", () => {
         const events: FormEvent[] = [
           {
             route: Route.GeborenesKindAngaben,
@@ -292,7 +291,7 @@ if (import.meta.vitest) {
         expect(ausgangslage.anzahlElternteile).toEqual(1);
       });
 
-      it("is 2 when ElternteilZweitePersonAngaben has wirdZweitePersonBeruecksichtigt true", () => {
+      it("is 2 when ElternteilZweiAllgemeineAngaben has wirdZweitePersonBeruecksichtigt true", () => {
         const events: FormEvent[] = [
           {
             route: Route.GeborenesKindAngaben,
@@ -312,9 +311,8 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilZweitePersonAngaben,
+            route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-            params: { elternteilIndex: 1 },
           },
         ];
 
@@ -593,9 +591,8 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilZweitePersonAngaben,
+            route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-            params: { elternteilIndex: 1 },
           },
         ];
 
@@ -628,9 +625,8 @@ if (import.meta.vitest) {
       };
 
       const zweitePersonEvent: FormEvent = {
-        route: Route.ElternteilZweitePersonAngaben,
+        route: Route.ElternteilZweiAllgemeineAngaben,
         payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-        params: { elternteilIndex: 1 },
       };
 
       it("is false when both Elternteile have hatKeinEinkommen", () => {

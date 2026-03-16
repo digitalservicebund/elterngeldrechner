@@ -179,10 +179,14 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: { hatKeinEinkommen: true },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
         {
           route: Route.ElternteilZweitePersonAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: false },
+          params: { elternteilIndex: 1 },
         },
       ];
 
@@ -201,15 +205,22 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: { hatKeinEinkommen: true },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
         {
           route: Route.ElternteilZweitePersonAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          params: { elternteilIndex: 1 },
         },
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 1 },
           payload: { hatKeinEinkommen: true },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
       ];
 
@@ -239,6 +250,9 @@ if (import.meta.vitest) {
       route: Route.ElternteilTaetigkeitenAbfrage,
       params: { elternteilIndex: 0 },
       payload: { hatKeinEinkommen: true },
+      dependentValues: {
+        istPersonAlleinerziehend: false,
+      },
     };
 
     describe("geburtstagDesKindes", () => {
@@ -322,6 +336,9 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
         ];
 
@@ -342,6 +359,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -374,6 +394,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -412,6 +435,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -437,6 +463,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -476,6 +505,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -513,6 +545,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -557,6 +592,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -594,11 +632,17 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
         ];
 

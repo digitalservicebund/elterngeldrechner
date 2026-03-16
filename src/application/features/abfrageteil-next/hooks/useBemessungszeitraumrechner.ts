@@ -349,6 +349,7 @@ if (import.meta.vitest) {
               name: "Person 2",
               istImMutterschutz: false,
             },
+            params: { elternteilIndex: 1 },
           },
         ]);
 

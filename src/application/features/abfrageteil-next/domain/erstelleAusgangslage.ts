@@ -129,6 +129,7 @@ if (import.meta.vitest) {
     const zweitePersonNichtBeruecksichtigt: FormEvent = {
       route: Route.ElternteilZweitePersonAngaben,
       payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
+      params: { elternteilIndex: 1 },
     };
 
     describe("geburtsdatumDesKindes", () => {
@@ -322,6 +323,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweitePersonAngaben,
             payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+            params: { elternteilIndex: 1 },
           },
         ];
 
@@ -610,6 +612,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweitePersonAngaben,
             payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+            params: { elternteilIndex: 1 },
           },
         ];
 
@@ -645,6 +648,7 @@ if (import.meta.vitest) {
       const zweitePersonEvent: FormEvent = {
         route: Route.ElternteilZweitePersonAngaben,
         payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+        params: { elternteilIndex: 1 },
       };
 
       it("is false when both Elternteile have hatKeinEinkommen", () => {
@@ -656,11 +660,17 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 1 },
             payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
         ];
 
@@ -680,6 +690,9 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitenAbfrage,
@@ -690,6 +703,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
         ];

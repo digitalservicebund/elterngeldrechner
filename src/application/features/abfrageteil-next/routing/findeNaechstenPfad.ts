@@ -83,11 +83,11 @@ function getNextSubpath(event: FormEvent): string {
         elternteilIndex: event.params.elternteilIndex.toString(),
       });
     case Route.ElternteilTaetigkeitenAbfrage: {
-      const { payload } = event;
+      const { payload, dependentValues } = event;
 
       if (payload.hatKeinEinkommen) {
-        return payload.istPersonAlleinerziehend ||
-          event.params.elternteilIndex === 1
+        return event.params.elternteilIndex === 1 ||
+          dependentValues.istPersonAlleinerziehend
           ? "DONE"
           : generateParametrizedPath(Route.ElternteilZweitePersonAngaben, {
               elternteilIndex: "1",
@@ -576,6 +576,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0 },
           payload: {
             hatKeinEinkommen: true,
+          },
+          dependentValues: {
             istPersonAlleinerziehend: false,
           },
         });
@@ -591,6 +593,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0 },
           payload: {
             hatKeinEinkommen: true,
+          },
+          dependentValues: {
             istPersonAlleinerziehend: true,
           },
         });
@@ -604,6 +608,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 1 },
           payload: {
             hatKeinEinkommen: true,
+          },
+          dependentValues: {
             istPersonAlleinerziehend: false,
           },
         });
@@ -621,6 +627,8 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
             hatKeinEinkommen: false,
+          },
+          dependentValues: {
             istPersonAlleinerziehend: false,
           },
         });
@@ -640,6 +648,8 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
             hatKeinEinkommen: false,
+          },
+          dependentValues: {
             istPersonAlleinerziehend: false,
           },
         });
@@ -649,7 +659,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig false and istNichtSelbststaendig true", () => {
+      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute, istSelbststaendig false and istNichtSelbststaendig true even when istPersonAlleinerziehend true", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
@@ -659,7 +669,9 @@ if (import.meta.vitest) {
             istVerbeamtet: true,
             hatAndereLeistungen: true,
             hatKeinEinkommen: false,
-            istPersonAlleinerziehend: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: true,
           },
         });
 

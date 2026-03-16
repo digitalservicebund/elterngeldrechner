@@ -29,6 +29,7 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweitePersonAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
+          params: { elternteilIndex: 1 },
         },
       ]);
 
@@ -40,6 +41,7 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweitePersonAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          params: { elternteilIndex: 1 },
         },
       ]);
 
@@ -51,10 +53,12 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweitePersonAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          params: { elternteilIndex: 1 },
         },
         {
           route: Route.ElternteilZweitePersonAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
+          params: { elternteilIndex: 1 },
         },
       ]);
 

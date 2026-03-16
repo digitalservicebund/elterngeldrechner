@@ -105,6 +105,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
+          params: { elternteilIndex: 1 },
         },
       ];
 
@@ -128,6 +129,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
+          params: { elternteilIndex: 1 },
         },
         {
           route: Route.ElternteilZweitePersonAngaben,
@@ -135,6 +137,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Daniel",
           },
+          params: { elternteilIndex: 1 },
         },
       ];
 

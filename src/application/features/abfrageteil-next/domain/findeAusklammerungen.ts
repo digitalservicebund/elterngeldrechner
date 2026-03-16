@@ -317,6 +317,8 @@ if (import.meta.vitest) {
             istVerbeamtet: true,
             hatAndereLeistungen: false,
             hatKeinEinkommen: false,
+          },
+          dependentValues: {
             istPersonAlleinerziehend: false,
           },
         },

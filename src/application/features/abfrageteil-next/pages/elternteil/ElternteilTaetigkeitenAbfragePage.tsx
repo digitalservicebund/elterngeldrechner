@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { z } from "zod";
 import {
   ElternteilTaetigkeitenAbfrage,
   ElternteilTaetigkeitenAbfrageSchema,
@@ -44,18 +43,8 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const eventStream = filtereValideEventHistorie();
   const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
 
-  const ElternteilTaetigkeitenAbfrageFormValuesSchema = z.discriminatedUnion(
-    "hatKeinEinkommen",
-    ElternteilTaetigkeitenAbfrageSchema.options.map((option) =>
-      option.omit({ istPersonAlleinerziehend: true }),
-    ),
-  );
-  type ElternteilTaetigkeitenAbfrageFormValues = z.infer<
-    typeof ElternteilTaetigkeitenAbfrageFormValuesSchema
-  >;
-
   const form = useForm<ElternteilTaetigkeitenAbfrage>({
-    resolver: zodResolver(ElternteilTaetigkeitenAbfrageFormValuesSchema),
+    resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
     defaultValues: encodeSafely(
       ElternteilTaetigkeitenAbfrageSchema,
       letztesGueltigesEvent,
@@ -64,14 +53,14 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const { register, handleSubmit, formState, setValue } = form;
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilTaetigkeitenAbfrageFormValues) => {
+  const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
-      payload: {
-        ...values,
+      payload: values,
+      params: routeParams,
+      dependentValues: {
         istPersonAlleinerziehend,
       },
-      params: routeParams,
     };
 
     dispatch(event);

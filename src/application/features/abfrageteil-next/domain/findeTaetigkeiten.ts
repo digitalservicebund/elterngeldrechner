@@ -43,6 +43,9 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 1 },
           payload: { hatKeinEinkommen: true },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
       ];
 
@@ -55,6 +58,9 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: { hatKeinEinkommen: true },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
       ];
 
@@ -69,6 +75,9 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: { hatKeinEinkommen: true },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
@@ -79,6 +88,9 @@ if (import.meta.vitest) {
             istNichtSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
           },
         },
       ];

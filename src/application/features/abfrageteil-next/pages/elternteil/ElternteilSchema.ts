@@ -103,11 +103,9 @@ export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
   [
     z.object({
       hatKeinEinkommen: z.literal(true),
-      istPersonAlleinerziehend: z.boolean(),
     }),
     TaetigkeitenSchema.extend({
       hatKeinEinkommen: z.literal(false),
-      istPersonAlleinerziehend: z.boolean(),
     }),
   ],
 );

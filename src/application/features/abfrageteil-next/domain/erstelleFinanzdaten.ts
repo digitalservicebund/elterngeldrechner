@@ -706,6 +706,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenSelbststaendig,

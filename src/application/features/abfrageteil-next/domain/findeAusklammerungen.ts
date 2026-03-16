@@ -131,10 +131,10 @@ function istImMutterschutz(
     });
 
   if (taetigkeitenAbfrageEvent) {
-    return !(
-      !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
+    return !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
       taetigkeitenAbfrageEvent.payload.istVerbeamtet
-    );
+      ? false
+      : istElternteilImMutterschutz;
   }
 
   return istElternteilImMutterschutz;
@@ -319,6 +319,73 @@ if (import.meta.vitest) {
       ];
 
       expect(findeAusklammerungen(events, 0)).toEqual([]);
+    });
+
+    it("returns empty array for second person when first person has mutterschutz", () => {
+      const events: FormEvent[] = [
+        {
+          route: Route.ElternteilEinsAllgemeineAngaben,
+          payload: {
+            name: "Person 1",
+            istAlleinerziehend: false,
+            istImMutterschutz: true,
+          },
+        },
+        {
+          route: Route.GeborenesKindAngaben,
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2026-03-03"),
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2026-03-03"),
+            anzahl: 1,
+          },
+        },
+        {
+          route: Route.ElternteilAusklammerungZeitenAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            mutterschutzGeschwisterkind: [],
+            elterngeldGeschwisterkind: [],
+            erkrankungSchwangerschaft: [],
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
+        },
+        {
+          route: Route.ElternteilZweiAllgemeineAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+            name: "Person 2",
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 1 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
+        },
+      ];
+
+      expect(findeAusklammerungen(events, 1)).toEqual([]);
     });
 
     it("returns empty array when no event exists for the given elternteilIndex", () => {

@@ -132,6 +132,10 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     route: z.literal(Route.ElternteilWeitereTaetigkeitAbfrage),
     params: TaetigkeitParams,
     payload: WeitereTaetigkeitAbfrageSchema,
+    dependentValues: z.object({
+      istSelbststaendigeTaetigkeitMoeglich: z.boolean(),
+      istPersonAlleinerziehend: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilWeitereTaetigkeitAngaben),

@@ -153,22 +153,20 @@ function getNextSubpath(event: FormEvent): string {
         },
       );
     case Route.ElternteilWeitereTaetigkeitAbfrage: {
-      const {
-        istWeitereTaetigkeitVorhanden,
-        istSelbststaendigeTaetigkeitMoeglich,
-        istPersonAlleinerziehend,
-      } = event.payload;
-      if (!istWeitereTaetigkeitVorhanden) {
-        return istPersonAlleinerziehend || event.params.elternteilIndex === 1
+      const { payload, dependentValues } = event;
+      if (!payload.istWeitereTaetigkeitVorhanden) {
+        return dependentValues.istPersonAlleinerziehend ||
+          event.params.elternteilIndex === 1
           ? "DONE"
           : Route.ElternteilZweiAllgemeineAngaben;
       }
-      const zielRoute = istSelbststaendigeTaetigkeitMoeglich
+      const zielRoute = dependentValues.istSelbststaendigeTaetigkeitMoeglich
         ? Route.ElternteilWeitereTaetigkeitAngaben
         : Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
-      const taetigkeitIndex = istSelbststaendigeTaetigkeitMoeglich
-        ? event.params.taetigkeitIndex
-        : event.params.taetigkeitIndex + 1;
+      const taetigkeitIndex =
+        dependentValues.istSelbststaendigeTaetigkeitMoeglich
+          ? event.params.taetigkeitIndex
+          : event.params.taetigkeitIndex + 1;
       return generateParametrizedPath(zielRoute, {
         elternteilIndex: event.params.elternteilIndex.toString(),
         taetigkeitIndex: taetigkeitIndex.toString(),
@@ -833,6 +831,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: {
             istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
             istSelbststaendigeTaetigkeitMoeglich: true,
             istPersonAlleinerziehend: false,
           },
@@ -847,6 +847,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: {
             istWeitereTaetigkeitVorhanden: true,
+          },
+          dependentValues: {
             istSelbststaendigeTaetigkeitMoeglich: true,
             istPersonAlleinerziehend: false,
           },
@@ -863,6 +865,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: {
             istWeitereTaetigkeitVorhanden: true,
+          },
+          dependentValues: {
             istSelbststaendigeTaetigkeitMoeglich: false,
             istPersonAlleinerziehend: false,
           },
@@ -879,6 +883,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: {
             istWeitereTaetigkeitVorhanden: true,
+          },
+          dependentValues: {
             istSelbststaendigeTaetigkeitMoeglich: true,
             istPersonAlleinerziehend: true,
           },
@@ -895,6 +901,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: {
             istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
             istSelbststaendigeTaetigkeitMoeglich: false,
             istPersonAlleinerziehend: true,
           },
@@ -909,6 +917,8 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 1, taetigkeitIndex: 0 },
           payload: {
             istWeitereTaetigkeitVorhanden: false,
+          },
+          dependentValues: {
             istSelbststaendigeTaetigkeitMoeglich: false,
             istPersonAlleinerziehend: false,
           },

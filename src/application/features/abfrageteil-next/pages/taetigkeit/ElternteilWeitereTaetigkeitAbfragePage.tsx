@@ -2,8 +2,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { z } from "zod";
-import { WeitereTaetigkeitAbfrageSchema } from "./TaetigkeitSchema";
+import {
+  WeitereTaetigkeitAbfrage,
+  WeitereTaetigkeitAbfrageSchema,
+} from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
@@ -49,17 +51,8 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     taetigkeiten.istSelbststaendig === true;
   const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
 
-  const WeitereTaetigkeitAbfrageFormValuesSchema =
-    WeitereTaetigkeitAbfrageSchema.omit({
-      istSelbststaendigeTaetigkeitMoeglich: true,
-      istPersonAlleinerziehend: true,
-    });
-  type WeitereTaetigkeitAbfrageFormValues = z.infer<
-    typeof WeitereTaetigkeitAbfrageFormValuesSchema
-  >;
-
   const { register, handleSubmit, formState } = useForm({
-    resolver: zodResolver(WeitereTaetigkeitAbfrageFormValuesSchema),
+    resolver: zodResolver(WeitereTaetigkeitAbfrageSchema),
     defaultValues: encodeSafely(
       WeitereTaetigkeitAbfrageSchema,
       letztesGueltigesEvent,
@@ -68,15 +61,15 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: WeitereTaetigkeitAbfrageFormValues) => {
+  const onSubmit = (values: WeitereTaetigkeitAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
-      payload: {
-        ...values,
+      payload: values,
+      params: routeParams,
+      dependentValues: {
         istSelbststaendigeTaetigkeitMoeglich,
         istPersonAlleinerziehend,
       },
-      params: routeParams,
     };
 
     dispatch(event);

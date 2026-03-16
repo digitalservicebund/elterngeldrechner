@@ -7,8 +7,7 @@ const BruttoJahresgewinn = z.coerce
   .max(
     175000,
     "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
-  )
-  .min(1, "Bitte geben Sie ein Einkommen an");
+  );
 
 export const TaetigkeitSelbststaendigAngabenSchema = z.object({
   istKirchensteuerpflichtig: BooleanRadiobuttonCodec,

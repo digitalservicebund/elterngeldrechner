@@ -181,7 +181,9 @@ function erstelleEinfacheFinanzDaten(
   ) {
     const { payload } = taetigkeitEvent;
     return {
-      bruttoEinkommen: new Einkommen(payload.bruttoJahresgewinn / 12),
+      bruttoEinkommen: new Einkommen(
+        Math.max(payload.bruttoJahresgewinn / 12, 0),
+      ),
       istKirchensteuerpflichtig: payload.istKirchensteuerpflichtig,
       steuerklasse: Steuerklasse.I,
       kassenArt: payload.istGesetzlichKrankenpflichtversichert
@@ -278,7 +280,8 @@ function erstelleAggregiertesSelbststaendigFinanzDaten(
   alleTaetigkeitEvents: NonEmpty<SelbststaendigEvent>,
 ): Omit<FinanzDaten, "kinderFreiBetrag"> {
   const gesamtMonatsbrutto = alleTaetigkeitEvents.reduce(
-    (summe, event) => summe + event.payload.bruttoJahresgewinn / 12,
+    (summe, event) =>
+      summe + Math.max(event.payload.bruttoJahresgewinn / 12, 0),
     0,
   );
 
@@ -352,7 +355,7 @@ function erstelleMischEkTaetigkeit(
     const { payload } = taetigkeitEvent;
     return {
       erwerbsTaetigkeit: ErwerbsTaetigkeit.SELBSTSTAENDIG,
-      bruttoEinkommenDurchschnitt: payload.bruttoJahresgewinn / 12,
+      bruttoEinkommenDurchschnitt: Math.max(payload.bruttoJahresgewinn / 12, 0),
       bruttoEinkommenDurchschnittMidi: 0,
       bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
       istRentenVersicherungsPflichtig: payload.istGesetzlichRentenversichert,
@@ -660,6 +663,46 @@ if (import.meta.vitest) {
 
         expect(finanzdaten).toEqual({
           bruttoEinkommen: new Einkommen(5000),
+          istKirchensteuerpflichtig: true,
+          steuerklasse: Steuerklasse.I,
+          kassenArt: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,
+          rentenVersicherung: RentenArt.KEINE_GESETZLICHE_RENTEN_VERSICHERUNG,
+          splittingFaktor: 1,
+          mischEinkommenTaetigkeiten: [],
+          erwerbsZeitraumLebensMonatList: [],
+        });
+      });
+
+      it("takes 0 as income if bruttoEinkommen is negative", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatKeinEinkommen: false,
+              istSelbststaendig: true,
+              istNichtSelbststaendig: false,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: {
+              istKirchensteuerpflichtig: true,
+              istGesetzlichKrankenpflichtversichert: false,
+              istGesetzlichRentenversichert: false,
+              istGesetzlichArbeitlosenversichert: false,
+              bruttoJahresgewinn: -60000,
+            },
+          },
+        ];
+
+        const finanzdaten = erstelleFinanzDaten(events, 0);
+
+        expect(finanzdaten).toEqual({
+          bruttoEinkommen: new Einkommen(0),
           istKirchensteuerpflichtig: true,
           steuerklasse: Steuerklasse.I,
           kassenArt: KassenArt.NICHT_GESETZLICH_PFLICHTVERSICHERT,

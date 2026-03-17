@@ -2,8 +2,8 @@ import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
-import { findeTaetigkeiten } from "./findeTaetigkeiten";
 import { sindBeideElternteile } from "./sindBeideElternteile";
+import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
@@ -69,13 +69,10 @@ function findeErwerbsartVorGeburt(
   events: FormEvent[],
   elternteilIndex: number,
 ): ErwerbsArt {
-  const taetigkeiten = findeTaetigkeiten(events, elternteilIndex);
-
-  const hatErwerbstaetigkeit =
-    !taetigkeiten.hatKeinEinkommen &&
-    (taetigkeiten.istNichtSelbststaendig ||
-      taetigkeiten.istSelbststaendig ||
-      taetigkeiten.istVerbeamtet);
+  const hatErwerbstaetigkeit = ueberpruefeErwerbstaetigkeit(
+    events,
+    elternteilIndex,
+  );
 
   if (!hatErwerbstaetigkeit) {
     return ErwerbsArt.NEIN;
@@ -329,10 +326,10 @@ if (import.meta.vitest) {
     });
 
     describe("etVorGeburt", () => {
-      it("throws when no Taetigkeiten event exists", () => {
-        expect(() =>
-          erstellePersoenlicheDaten([geborenesKindEvent], 0),
-        ).toThrow();
+      it("is NEIN when no Taetigkeiten event exists", () => {
+        const result = erstellePersoenlicheDaten([geborenesKindEvent], 0);
+
+        expect(result.etVorGeburt).toBe(ErwerbsArt.NEIN);
       });
 
       it("is NEIN when hatKeinEinkommen is true", () => {

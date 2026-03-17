@@ -3,7 +3,7 @@ import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "./findeInformationenZumMutterschutz";
-import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
+import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import type {
@@ -107,21 +107,19 @@ function findeNameDesErstenElternteils(events: FormEvent[]): string {
   return letztesGueltigesEvent.name;
 }
 
-type TaetigkeitenAbfrageEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitenAbfrage }
->;
-
 function warMindestensEinElternteilErwerbstaetig(events: FormEvent[]): boolean {
-  return events.some((e): e is TaetigkeitenAbfrageEvent => {
-    return (
-      e.route === Route.ElternteilTaetigkeitenAbfrage &&
-      !e.payload.hatKeinEinkommen &&
-      (e.payload.istNichtSelbststaendig ||
-        e.payload.istSelbststaendig ||
-        e.payload.istVerbeamtet)
-    );
-  });
+  const hatElternteilEinsErwerbstaetigkeit = ueberpruefeErwerbstaetigkeit(
+    events,
+    0,
+  );
+  const hatElternteilZweiErwerbstaetigkeit = ueberpruefeErwerbstaetigkeit(
+    events,
+    1,
+  );
+
+  return (
+    hatElternteilEinsErwerbstaetigkeit || hatElternteilZweiErwerbstaetigkeit
+  );
 }
 
 if (import.meta.vitest) {

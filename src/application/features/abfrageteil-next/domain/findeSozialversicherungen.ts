@@ -1,3 +1,4 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { TaetigkeitNichtSelbststaendigAngaben } from "@/application/features/abfrageteil-next/pages/taetigkeit/TaetigkeitSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -8,29 +9,20 @@ export function findeSozialversicherungen(
   elternteilIndex: number,
   taetigkeitIndex: number,
 ): TaetigkeitNichtSelbststaendigAngaben {
-  const event = [...events]
-    .reverse()
-    .find((event): event is SozialversicherungenEvent => {
-      return (
-        event.route === Route.ElternteilTaetigkeitAngabenSozialversicherungen &&
-        event.params.elternteilIndex === elternteilIndex &&
-        event.params.taetigkeitIndex === taetigkeitIndex
-      );
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+    { elternteilIndex, taetigkeitIndex },
+  );
 
-  if (!event) {
+  if (!letztesGueltigesEvent) {
     throw new Error(
       `No Sozialversicherungen event found for elternteil ${elternteilIndex}, taetigkeitIndex ${taetigkeitIndex}.`,
     );
   }
 
-  return event.payload;
+  return letztesGueltigesEvent;
 }
-
-type SozialversicherungenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitAngabenSozialversicherungen }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

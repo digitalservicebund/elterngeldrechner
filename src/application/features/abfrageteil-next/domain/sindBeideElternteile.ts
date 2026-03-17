@@ -1,20 +1,15 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 
 export function sindBeideElternteile(events: FormEvent[]): boolean {
-  const zweitePersonEvent = [...events]
-    .reverse()
-    .find((e): e is ZweitePersonAngabenEvent => {
-      return e.route === Route.ElternteilZweiAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilZweiAllgemeineAngaben,
+  );
 
-  return zweitePersonEvent?.payload.wirdZweitePersonBeruecksichtigt === true;
+  return letztesGueltigesEvent?.wirdZweitePersonBeruecksichtigt === true;
 }
-
-type ZweitePersonAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilZweiAllgemeineAngaben }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

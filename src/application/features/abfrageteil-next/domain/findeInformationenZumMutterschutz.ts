@@ -1,3 +1,4 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import { Elternteil } from "@/monatsplaner/Elternteil";
@@ -7,13 +8,12 @@ export function findeInformationenZumMutterschutz(
   events: FormEvent[],
   anzahlKinder: number,
 ): InformationenZumMutterschutz<Elternteil.Eins> | undefined {
-  const elternteil = [...events]
-    .reverse()
-    .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
-      return isElternteilEinsAllgemeineAngabenEvent(event);
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilEinsAllgemeineAngaben,
+  );
 
-  if (!elternteil?.payload.istImMutterschutz) {
+  if (!letztesGueltigesEvent?.istImMutterschutz) {
     return undefined;
   }
 
@@ -21,17 +21,6 @@ export function findeInformationenZumMutterschutz(
     empfaenger: Elternteil.Eins,
     letzterLebensmonatMitSchutz: anzahlKinder > 1 ? 3 : 2,
   };
-}
-
-type ElternteilEinsAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilEinsAllgemeineAngaben }
->;
-
-function isElternteilEinsAllgemeineAngabenEvent(
-  event: FormEvent,
-): event is ElternteilEinsAllgemeineAngabenEvent {
-  return event.route === Route.ElternteilEinsAllgemeineAngaben;
 }
 
 if (import.meta.vitest) {

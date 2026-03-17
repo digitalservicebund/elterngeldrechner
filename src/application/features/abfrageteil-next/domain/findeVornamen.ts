@@ -6,21 +6,19 @@ export function findeVornamen(
   events: FormEvent[],
   elternteilIndex: number,
 ): string {
+  const route = findeRouteByElternteilIndex(elternteilIndex);
+
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(events, route);
+
+  return letztesGueltigesEvent?.name ?? `Person ${elternteilIndex + 1}`;
+}
+
+function findeRouteByElternteilIndex(elternteilIndex: number) {
   if (elternteilIndex === 0) {
-    const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-      events,
-      Route.ElternteilEinsAllgemeineAngaben,
-    );
-
-    return letztesGueltigesEvent?.name ?? "Person 1";
+    return Route.ElternteilEinsAllgemeineAngaben;
+  } else {
+    return Route.ElternteilZweiAllgemeineAngaben;
   }
-
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    events,
-    Route.ElternteilZweiAllgemeineAngaben,
-  );
-
-  return letztesGueltigesEvent?.name ?? "Person 2";
 }
 
 if (import.meta.vitest) {

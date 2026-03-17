@@ -212,11 +212,11 @@ function erstelleEinfacheFinanzDaten(
     };
   }
 
-  const sozialversicherungen = findeSozialversicherungen(
+  const sozialversicherungen = findeLetztesGueltigesEvent(
     events,
-    elternteilIndex,
-    taetigkeitIndex,
-  );
+    Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+    { elternteilIndex, taetigkeitIndex },
+  )!;
 
   return {
     bruttoEinkommen: new Einkommen(durchschnittMonatsbrutto(monatsbrutto)),

@@ -1,25 +1,19 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
-
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 
 export function findeAlleinerziehend(events: FormEvent[]): boolean {
-  const event = [...events]
-    .reverse()
-    .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
-      return event.route === Route.ElternteilEinsAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilEinsAllgemeineAngaben,
+  );
 
-  if (!event) {
+  if (!letztesGueltigesEvent) {
     throw new Error(`No Allgemeine Angaben event found.`);
   }
 
-  return event.payload.istAlleinerziehend;
+  return letztesGueltigesEvent.istAlleinerziehend;
 }
-
-type ElternteilEinsAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilEinsAllgemeineAngaben }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

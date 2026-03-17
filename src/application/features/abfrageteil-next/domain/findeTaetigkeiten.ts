@@ -1,3 +1,4 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { ElternteilTaetigkeitenAbfrage } from "@/application/features/abfrageteil-next/pages/elternteil";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -6,28 +7,22 @@ export function findeTaetigkeiten(
   events: FormEvent[],
   elternteilIndex: number,
 ): ElternteilTaetigkeitenAbfrage {
-  const event = [...events]
-    .reverse()
-    .find((event): event is TaetigkeitenAbfrageEvent => {
-      return (
-        event.route === Route.ElternteilTaetigkeitenAbfrage &&
-        event.params.elternteilIndex === elternteilIndex
-      );
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitenAbfrage,
+    {
+      elternteilIndex,
+    },
+  );
 
-  if (!event) {
+  if (!letztesGueltigesEvent) {
     throw new Error(
       `No Taetigkeiten event found for elternteil ${elternteilIndex}.`,
     );
   }
 
-  return event.payload;
+  return letztesGueltigesEvent;
 }
-
-type TaetigkeitenAbfrageEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitenAbfrage }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

@@ -1,3 +1,4 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
 import type { TaetigkeitNichtSelbststaendigMinijobAbfrage } from "@/application/features/abfrageteil-next/pages/taetigkeit/TaetigkeitSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -7,29 +8,20 @@ export function findeMinijob(
   elternteilIndex: number,
   taetigkeitIndex: number,
 ): TaetigkeitNichtSelbststaendigMinijobAbfrage {
-  const event = [...events]
-    .reverse()
-    .find((event): event is MinijobAbfrageEvent => {
-      return (
-        event.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig &&
-        event.params.elternteilIndex === elternteilIndex &&
-        event.params.taetigkeitIndex === taetigkeitIndex
-      );
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+    { elternteilIndex, taetigkeitIndex },
+  );
 
-  if (!event) {
+  if (!letztesGueltigesEvent) {
     throw new Error(
       `No Minijob event found for elternteilIndex ${elternteilIndex}, taetigkeitIndex ${taetigkeitIndex}.`,
     );
   }
 
-  return event.payload;
+  return letztesGueltigesEvent;
 }
-
-type MinijobAbfrageEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

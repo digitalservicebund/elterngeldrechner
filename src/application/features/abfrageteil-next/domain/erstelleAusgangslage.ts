@@ -3,6 +3,7 @@ import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "./findeInformationenZumMutterschutz";
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import type {
@@ -67,42 +68,30 @@ export function erstelleAusgangslage(
   }
 }
 
-type ZweitePersonAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilZweiAllgemeineAngaben }
->;
-
 function findeAngabenZurZweitenPerson(events: FormEvent[]) {
-  const event = [...events]
-    .reverse()
-    .find((e): e is ZweitePersonAngabenEvent => {
-      return e.route === Route.ElternteilZweiAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilZweiAllgemeineAngaben,
+  );
 
-  if (!event) {
+  if (!letztesGueltigesEvent) {
     throw new Error(`Missing event for Angaben of Elternteil 2.`);
   }
 
-  return event.payload;
+  return letztesGueltigesEvent;
 }
 
-type ElternteilEinsAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilEinsAllgemeineAngaben }
->;
-
 function findeNameDesErstenElternteils(events: FormEvent[]): string {
-  const event = [...events]
-    .reverse()
-    .find((e): e is ElternteilEinsAllgemeineAngabenEvent => {
-      return e.route === Route.ElternteilEinsAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilEinsAllgemeineAngaben,
+  );
 
-  if (!event) {
+  if (!letztesGueltigesEvent) {
     throw new Error(`Missing event for Allgemein Angaben of Elternteil 1.`);
   }
 
-  return event.payload.name;
+  return letztesGueltigesEvent.name;
 }
 
 type TaetigkeitenAbfrageEvent = Extract<

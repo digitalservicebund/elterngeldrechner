@@ -1,5 +1,5 @@
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
-
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 
 export function findeVornamen(
@@ -7,33 +7,21 @@ export function findeVornamen(
   elternteilIndex: number,
 ): string {
   if (elternteilIndex === 0) {
-    const event = [...events]
-      .reverse()
-      .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
-        return event.route === Route.ElternteilEinsAllgemeineAngaben;
-      });
+    const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+      events,
+      Route.ElternteilEinsAllgemeineAngaben,
+    );
 
-    return event?.payload.name ?? "Person 1";
+    return letztesGueltigesEvent?.name ?? "Person 1";
   }
 
-  const event = [...events]
-    .reverse()
-    .find((event): event is ElternteilZweiAllgemeineAngabenEvent => {
-      return event.route === Route.ElternteilZweiAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilZweiAllgemeineAngaben,
+  );
 
-  return event?.payload.name ?? "Person 2";
+  return letztesGueltigesEvent?.name ?? "Person 2";
 }
-
-type ElternteilEinsAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilEinsAllgemeineAngaben }
->;
-
-type ElternteilZweiAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilZweiAllgemeineAngaben }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

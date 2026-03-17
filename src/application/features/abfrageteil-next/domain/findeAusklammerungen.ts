@@ -1,6 +1,7 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { differenceInDays } from "date-fns";
 import { findeAnzahlKinder } from "./findeAnzahlKinder";
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
 import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil-next/pages/elternteil/ElternteilSchema";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
@@ -17,7 +18,7 @@ export function findeAusklammerungen(
   );
 
   const eingegebeneAusklammerungen = ausklammerungszeitenEvent
-    ? flacheAusklammerungen(ausklammerungszeitenEvent.payload)
+    ? flacheAusklammerungen(ausklammerungszeitenEvent)
     : [];
 
   if (istImMutterschutz(events, elternteilIndex)) {
@@ -121,18 +122,15 @@ function istImMutterschutz(
       ? istErsterElternteilImMutterschutz(events)
       : istZweiterElternteilImMutterschutz(events);
 
-  const taetigkeitenAbfrageEvent = [...events]
-    .reverse()
-    .find((event): event is ElternteilTaetigkeitenAbfrageEvent => {
-      return (
-        event.route === Route.ElternteilTaetigkeitenAbfrage &&
-        event.params.elternteilIndex === elternteilIndex
-      );
-    });
+  const taetigkeitenAbfrage = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitenAbfrage,
+    { elternteilIndex },
+  );
 
-  if (taetigkeitenAbfrageEvent) {
-    return !taetigkeitenAbfrageEvent.payload.hatKeinEinkommen &&
-      taetigkeitenAbfrageEvent.payload.istVerbeamtet
+  if (taetigkeitenAbfrage) {
+    return !taetigkeitenAbfrage.hatKeinEinkommen &&
+      taetigkeitenAbfrage.istVerbeamtet
       ? false
       : istElternteilImMutterschutz;
   }
@@ -141,49 +139,44 @@ function istImMutterschutz(
 }
 
 function istErsterElternteilImMutterschutz(events: FormEvent[]): boolean {
-  const allgemeineAngabenEvent = [...events]
-    .reverse()
-    .find((event): event is ElternteilEinsAllgemeineAngabenEvent => {
-      return event.route === Route.ElternteilEinsAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilEinsAllgemeineAngaben,
+  );
 
-  if (!allgemeineAngabenEvent) {
+  if (!letztesGueltigesEvent) {
     throw new Error(
       "Elternteil Allgemeine Angaben Event is required for Elternteil 1.",
     );
   }
 
-  return allgemeineAngabenEvent.payload.istImMutterschutz ?? true;
+  return letztesGueltigesEvent.istImMutterschutz ?? true;
 }
 
 function istZweiterElternteilImMutterschutz(events: FormEvent[]): boolean {
-  const zweitePersonAngabenEvent = [...events]
-    .reverse()
-    .find((event): event is ElternteilZweiAllgemeineAngabenEvent => {
-      return event.route === Route.ElternteilZweiAllgemeineAngaben;
-    });
+  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilZweiAllgemeineAngaben,
+  );
 
-  if (!zweitePersonAngabenEvent) {
+  if (!letztesGueltigesEvent) {
     throw new Error(
       "Elternteil Zweite Person Angaben Event is required for Elternteil 2.",
     );
   }
 
-  return zweitePersonAngabenEvent.payload.istImMutterschutz ?? false;
+  return letztesGueltigesEvent.istImMutterschutz ?? false;
 }
 
 function findeAusklammerungszeiten(
   events: FormEvent[],
   elternteilIndex: number,
 ) {
-  return [...events]
-    .reverse()
-    .find((event): event is AusklammerungZeitenEvent => {
-      return (
-        event.route === Route.ElternteilAusklammerungZeitenAngaben &&
-        event.params.elternteilIndex === elternteilIndex
-      );
-    });
+  return findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilAusklammerungZeitenAngaben,
+    { elternteilIndex },
+  );
 }
 
 function flacheAusklammerungen(
@@ -195,26 +188,6 @@ function flacheAusklammerungen(
     ausklammerungszeiten[grund].map((zeitraum) => ({ ...zeitraum, grund })),
   );
 }
-
-type AusklammerungZeitenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilAusklammerungZeitenAngaben }
->;
-
-type ElternteilEinsAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilEinsAllgemeineAngaben }
->;
-
-type ElternteilZweiAllgemeineAngabenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilZweiAllgemeineAngaben }
->;
-
-type ElternteilTaetigkeitenAbfrageEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitenAbfrage }
->;
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

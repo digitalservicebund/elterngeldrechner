@@ -1,6 +1,7 @@
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
 import { findeTaetigkeiten } from "./findeTaetigkeiten";
 import { sindBeideElternteile } from "./sindBeideElternteile";
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
@@ -138,31 +139,25 @@ function findeMonatsbrutto(
   elternteilIndex: number,
   taetigkeitIndex: number,
 ): number[] {
-  const gleichEvent = [...events].reverse().find((e): e is EinkommenEvent => {
-    return (
-      e.route === Route.ElternteilTaetigkeitAngabenEinkommen &&
-      e.params.elternteilIndex === elternteilIndex &&
-      e.params.taetigkeitIndex === taetigkeitIndex
-    );
-  });
+  const gleichEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitAngabenEinkommen,
+    { elternteilIndex, taetigkeitIndex },
+  );
 
   if (gleichEvent) {
     return new Array<number>(12).fill(
-      gleichEvent.payload.durchschnittlichesMonatsbrutto,
+      gleichEvent.durchschnittlichesMonatsbrutto,
     );
   }
 
-  const detailEvent = [...events]
-    .reverse()
-    .find((e): e is EinkommenDetailsEvent => {
-      return (
-        e.route === Route.ElternteilTaetigkeitAngabenEinkommenDetails &&
-        e.params.elternteilIndex === elternteilIndex &&
-        e.params.taetigkeitIndex === taetigkeitIndex
-      );
-    });
+  const detailEvent = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitAngabenEinkommenDetails,
+    { elternteilIndex, taetigkeitIndex },
+  );
 
-  return detailEvent?.payload.monatsbrutto ?? new Array<number>(12).fill(0);
+  return detailEvent?.monatsbrutto ?? new Array<number>(12).fill(0);
 }
 
 function durchschnittMonatsbrutto(monatsbrutto: number[]): number {
@@ -414,16 +409,6 @@ type SelbststaendigEvent = Extract<
 type NichtSelbststaendigEvent = Extract<
   FormEvent,
   { route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig }
->;
-
-type EinkommenEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitAngabenEinkommen }
->;
-
-type EinkommenDetailsEvent = Extract<
-  FormEvent,
-  { route: Route.ElternteilTaetigkeitAngabenEinkommenDetails }
 >;
 
 type TaetigkeitEvent = SelbststaendigEvent | NichtSelbststaendigEvent;

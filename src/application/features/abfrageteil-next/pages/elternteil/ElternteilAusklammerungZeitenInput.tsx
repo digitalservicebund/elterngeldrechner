@@ -1,3 +1,4 @@
+import AddIcon from "@digitalservicebund/icons/AddCircleOutline";
 import CloseIcon from "@digitalservicebund/icons/Close";
 import { Control, FieldErrors, useFieldArray } from "react-hook-form";
 import { Button } from "@/application/components";
@@ -18,22 +19,6 @@ interface ElternteilAusklammerungZeitenInputProps {
   readonly errors: FieldErrors<ElternteilAusklammerungszeitenInput>;
 }
 
-const BUTTON_TEXT_MAPPING: Record<
-  keyof ElternteilAusklammerungszeitenInput,
-  string
-> = {
-  mutterschutzGeschwisterkind: "für Mutterschutz",
-  elterngeldGeschwisterkind: "für Elterngeld",
-  erkrankungSchwangerschaft: "für Krankheit in der Schwangerschaft",
-};
-
-const erstelleButtonText = (
-  grund: keyof ElternteilAusklammerungszeitenInput,
-): string => {
-  const zusatz = BUTTON_TEXT_MAPPING[grund];
-  return `+ Weiteren Zeitraum ${zusatz} hinzufügen`;
-};
-
 export function ElternteilAusklammerungZeitenInput({
   grund,
   title,
@@ -46,13 +31,10 @@ export function ElternteilAusklammerungZeitenInput({
     <div>
       <h5 className="pb-16 font-bold">{title}</h5>
 
-      <div className="flex flex-col gap-16">
+      <div className="mb-16 flex flex-col gap-20">
         {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className="grid grid-cols-[1fr_100px] items-center gap-16"
-          >
-            <div className="flex grow flex-wrap gap-x-24 gap-y-16 *:grow *:basis-[16rem]">
+          <div key={field.id} className="flex flex-col">
+            <div className="flex flex-wrap *:grow *:basis-[22rem]">
               <div>
                 <label
                   className="mb-4 block text-16"
@@ -86,13 +68,13 @@ export function ElternteilAusklammerungZeitenInput({
               <Button
                 type="button"
                 buttonStyle="link"
-                className="p-4"
+                className="-mt-16 p-4"
                 onClick={() => remove(index)}
                 aria-label="Zeile löschen"
               >
                 <span className="flex items-center gap-4 text-16">
                   <CloseIcon className="mt-4" />
-                  <span>Löschen</span>
+                  <span>Zeitraum löschen</span>
                 </span>
               </Button>
             )}
@@ -103,10 +85,13 @@ export function ElternteilAusklammerungZeitenInput({
       <Button
         type="button"
         buttonStyle="link"
-        className="self-start"
+        className="p-4"
         onClick={() => append({ von: "", bis: "" })}
       >
-        <span className="text-16">{erstelleButtonText(grund)}</span>
+        <span className="flex items-center gap-4 text-16">
+          <AddIcon className="mt-4" />
+          <span>Weiteren Zeitraum hinzufügen</span>
+        </span>
       </Button>
     </div>
   );

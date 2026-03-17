@@ -99,11 +99,6 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: TaetigkeitSelbststaendigAngabenSchema,
   }),
   z.object({
-    route: z.literal(Route.ElternteilTaetigkeitAngabenMischeinkunft),
-    params: TaetigkeitParams,
-    payload: TaetigkeitSelbststaendigAngabenSchema,
-  }),
-  z.object({
     route: z.literal(Route.ElternteilTaetigkeitAngabenNichtSelbststaendig),
     params: TaetigkeitParams,
     payload: TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
@@ -122,11 +117,17 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     route: z.literal(Route.ElternteilTaetigkeitAngabenEinkommen),
     params: TaetigkeitParams,
     payload: TaetigkeitGleichesEinkommenAngabenSchema,
+    dependentValues: z.object({
+      istMischeinkunft: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitAngabenEinkommenDetails),
     params: TaetigkeitParams,
     payload: TaetigkeitUnleichesEinkommenAngabenSchema,
+    dependentValues: z.object({
+      istMischeinkunft: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilWeitereTaetigkeitAbfrage),

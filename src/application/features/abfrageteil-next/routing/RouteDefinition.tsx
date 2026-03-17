@@ -21,7 +21,6 @@ import { ElternteilZweiAllgemeineAngabenPage } from "@/application/features/abfr
 import { ElternteilTaetigkeitAngabenEinkommenDetailsPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenDetailsPage";
 import { ElternteilTaetigkeitAngabenEinkommenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenEinkommenPage";
 import { ElternteilTaetigkeitAngabenMinijobPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMinijobPage";
-import { ElternteilTaetigkeitAngabenMischeinkunftPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenMischeinkunftPage";
 import { ElternteilTaetigkeitAngabenNichtSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenNichtSelbststaendigPage";
 import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSelbststaendigPage";
 import { ElternteilTaetigkeitAngabenSozialversicherungenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSozialversicherungenPage";
@@ -110,12 +109,6 @@ const RouteDefinition = [
             element: <ElternteilTaetigkeitAngabenSelbststaendigPage />,
             path: generateAbfrageteilPath(
               Route.ElternteilTaetigkeitAngabenSelbststaendig,
-            ),
-          },
-          {
-            element: <ElternteilTaetigkeitAngabenMischeinkunftPage />,
-            path: generateAbfrageteilPath(
-              Route.ElternteilTaetigkeitAngabenMischeinkunft,
             ),
           },
           {

@@ -71,7 +71,13 @@ function findeErwerbsartVorGeburt(
 ): ErwerbsArt {
   const taetigkeiten = findeTaetigkeiten(events, elternteilIndex);
 
-  if (taetigkeiten.hatKeinEinkommen) {
+  const hatErwerbstaetigkeit =
+    !taetigkeiten.hatKeinEinkommen &&
+    (taetigkeiten.istNichtSelbststaendig ||
+      taetigkeiten.istSelbststaendig ||
+      taetigkeiten.istVerbeamtet);
+
+  if (!hatErwerbstaetigkeit) {
     return ErwerbsArt.NEIN;
   }
 

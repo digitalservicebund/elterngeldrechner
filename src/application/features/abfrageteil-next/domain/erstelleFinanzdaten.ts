@@ -53,7 +53,13 @@ export function erstelleFinanzDaten(
 ): Omit<FinanzDaten, "kinderFreiBetrag"> {
   const taetigkeiten = findeTaetigkeiten(events, elternteilIndex);
 
-  if (taetigkeiten.hatKeinEinkommen) {
+  const hatErwerbstaetigkeit =
+    !taetigkeiten.hatKeinEinkommen &&
+    (taetigkeiten.istNichtSelbststaendig ||
+      taetigkeiten.istSelbststaendig ||
+      taetigkeiten.istVerbeamtet);
+
+  if (!hatErwerbstaetigkeit) {
     return {
       bruttoEinkommen: new Einkommen(0),
       istKirchensteuerpflichtig: false,
@@ -570,6 +576,9 @@ if (import.meta.vitest) {
                 4000, 3000,
               ],
             },
+            dependentValues: {
+              istMischeinkunft: false,
+            },
           },
         ];
 
@@ -619,6 +628,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { durchschnittlichesMonatsbrutto: 556 },
+            dependentValues: { istMischeinkunft: false },
           },
         ];
 
@@ -763,6 +773,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { durchschnittlichesMonatsbrutto: 3000 },
+            dependentValues: { istMischeinkunft: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -773,6 +784,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { durchschnittlichesMonatsbrutto: 400 },
+            dependentValues: { istMischeinkunft: false },
           },
         ];
 
@@ -850,6 +862,7 @@ if (import.meta.vitest) {
                 3000, 3000, 3000, 0, 0, 0, 3000, 3000, 3000, 3000, 3000, 3000,
               ],
             },
+            dependentValues: { istMischeinkunft: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -860,6 +873,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { durchschnittlichesMonatsbrutto: 400 },
+            dependentValues: { istMischeinkunft: false },
           },
         ];
 
@@ -939,6 +953,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { durchschnittlichesMonatsbrutto: 3000 },
+            dependentValues: { istMischeinkunft: true },
           },
         ];
 
@@ -1006,6 +1021,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { durchschnittlichesMonatsbrutto: 3000 },
+            dependentValues: { istMischeinkunft: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -1016,6 +1032,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { durchschnittlichesMonatsbrutto: 4000 },
+            dependentValues: { istMischeinkunft: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -1026,6 +1043,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 2 },
             payload: { durchschnittlichesMonatsbrutto: 3000 },
+            dependentValues: { istMischeinkunft: false },
           },
         ];
 

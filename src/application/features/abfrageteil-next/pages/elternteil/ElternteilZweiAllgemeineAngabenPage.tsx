@@ -58,14 +58,14 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
   const onSubmit = (values: ElternteilZweiAllgemeineAngaben) => {
     const geschwisterkinder = findeGeschwisterkinder(eventStream);
-    const hatGeschwister = geschwisterkinder.length > 0;
-    const keinMutterschutz = !istErsterElternteilImMutterschutz;
+    const hatGeschwisterkinder = geschwisterkinder.length > 0;
 
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       dependentValues: {
-        hatPotenzielleAusklammerungen: hatGeschwister || keinMutterschutz,
+        hatPotenzielleAusklammerungen:
+          hatGeschwisterkinder || !istErsterElternteilImMutterschutz,
       },
     };
 

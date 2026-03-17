@@ -116,7 +116,10 @@ function warMindestensEinElternteilErwerbstaetig(events: FormEvent[]): boolean {
   return events.some((e): e is TaetigkeitenAbfrageEvent => {
     return (
       e.route === Route.ElternteilTaetigkeitenAbfrage &&
-      !e.payload.hatKeinEinkommen
+      !e.payload.hatKeinEinkommen &&
+      (e.payload.istNichtSelbststaendig ||
+        e.payload.istSelbststaendig ||
+        e.payload.istVerbeamtet)
     );
   });
 }
@@ -686,6 +689,48 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 1 },
             payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toEqual(false);
+      });
+
+      it("is false when both Elternteile have only hatAndereLeistungen true", () => {
+        const events: FormEvent[] = [
+          kindEvent,
+          elternteil1Event,
+          zweitePersonEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatKeinEinkommen: false,
+              hatAndereLeistungen: true,
+              istNichtSelbststaendig: false,
+              istSelbststaendig: false,
+              istVerbeamtet: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 1 },
+            payload: {
+              hatKeinEinkommen: false,
+              hatAndereLeistungen: true,
+              istNichtSelbststaendig: false,
+              istSelbststaendig: false,
+              istVerbeamtet: false,
+            },
             dependentValues: {
               istPersonAlleinerziehend: false,
             },

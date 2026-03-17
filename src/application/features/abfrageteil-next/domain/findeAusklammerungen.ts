@@ -368,6 +368,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Person 2",
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
         {
           route: Route.ElternteilTaetigkeitenAbfrage,

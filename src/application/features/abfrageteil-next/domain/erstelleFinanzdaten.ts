@@ -445,6 +445,7 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: false },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
       ];
 
@@ -478,6 +479,7 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
         {
           route: Route.ElternteilTaetigkeitenAbfrage,

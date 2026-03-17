@@ -101,6 +101,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
       ];
 
@@ -123,6 +124,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
@@ -130,6 +132,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Daniel",
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
       ];
 

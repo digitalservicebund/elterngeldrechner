@@ -184,15 +184,23 @@ function getNextSubpath(event: FormEvent): string {
     }
     case Route.ElternteilZweiAllgemeineAngaben: {
       const { wirdZweitePersonBeruecksichtigt } = event.payload;
+
       if (wirdZweitePersonBeruecksichtigt === false) {
         return "DONE";
       }
-      return generateParametrizedPath(
-        Route.ElternteilAusklammerungGruendeAngaben,
-        {
-          elternteilIndex: "1",
-        },
-      );
+
+      if (event.dependentValues.hatPotenzielleAusklammerungen) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungGruendeAngaben,
+          {
+            elternteilIndex: "1",
+          },
+        );
+      }
+
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+        elternteilIndex: "1",
+      });
     }
   }
 }
@@ -966,6 +974,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: true,
             name: "Person 2",
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         });
 
         expect(naechsterPfad).toEqual(
@@ -980,6 +989,7 @@ if (import.meta.vitest) {
             wirdZweitePersonBeruecksichtigt: undefined,
             name: "Person 2",
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         });
 
         expect(naechsterPfad).toEqual(
@@ -993,9 +1003,25 @@ if (import.meta.vitest) {
           payload: {
             wirdZweitePersonBeruecksichtigt: false,
           },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
         });
 
         expect(naechsterPfad).toEqual("/beispiele");
+      });
+
+      it("returns ElternteilTaetigkeitenAbfrage for elternteilIndex 1 given hatAusklammerungsgruendeMoeglichkeiten false", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilZweiAllgemeineAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+            name: "Person 2",
+          },
+          dependentValues: { hatPotenzielleAusklammerungen: false },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/1/finanzielles/taetigkeit/abfrage",
+        );
       });
     });
   });

@@ -128,6 +128,7 @@ if (import.meta.vitest) {
     const zweitePersonNichtBeruecksichtigt: FormEvent = {
       route: Route.ElternteilZweiAllgemeineAngaben,
       payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
+      dependentValues: { hatPotenzielleAusklammerungen: true },
     };
 
     describe("geburtsdatumDesKindes", () => {
@@ -313,6 +314,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+            dependentValues: { hatPotenzielleAusklammerungen: true },
           },
         ];
 
@@ -593,6 +595,7 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+            dependentValues: { hatPotenzielleAusklammerungen: true },
           },
         ];
 
@@ -627,6 +630,7 @@ if (import.meta.vitest) {
       const zweitePersonEvent: FormEvent = {
         route: Route.ElternteilZweiAllgemeineAngaben,
         payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+        dependentValues: { hatPotenzielleAusklammerungen: true },
       };
 
       it("is false when both Elternteile have hatKeinEinkommen", () => {

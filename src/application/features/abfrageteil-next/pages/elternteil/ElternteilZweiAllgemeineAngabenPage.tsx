@@ -12,6 +12,7 @@ import { CustomRadioGroup } from "@/application/features/abfrageteil-next/compon
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
+import { findeGeschwisterkinder } from "@/application/features/abfrageteil-next/domain/findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -30,6 +31,8 @@ export function ElternteilZweiAllgemeineAngabenPage() {
     filtereValideEventHistorie,
   } = useEventContext();
 
+  const eventStream = filtereValideEventHistorie();
+
   const formIdentifier = useId();
   const navigate = useNavigate();
 
@@ -47,10 +50,23 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
   const { errors: formErrors } = formState;
 
+  const istErsterElternteilImMutterschutz =
+    findeInformationenZumMutterschutz(
+      eventStream,
+      findeAnzahlKinder(eventStream),
+    )?.empfaenger === Elternteil.Eins;
+
   const onSubmit = (values: ElternteilZweiAllgemeineAngaben) => {
+    const geschwisterkinder = findeGeschwisterkinder(eventStream);
+    const hatGeschwister = geschwisterkinder.length > 0;
+    const keinMutterschutz = !istErsterElternteilImMutterschutz;
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
+      dependentValues: {
+        hatPotenzielleAusklammerungen: hatGeschwister || keinMutterschutz,
+      },
     };
 
     dispatch(event);
@@ -69,16 +85,9 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   const nameInForm = watch("name");
   const vorname = nameInForm?.trim() || "Person 2";
 
-  const eventStream = filtereValideEventHistorie();
   const geburtstdatum = findeGeburtsdatum(eventStream);
   const heute = Temporal.Now.plainDateISO();
   const geburtIstErfolgt = Temporal.PlainDate.compare(heute, geburtstdatum) > 0;
-
-  const istErsterElternteilImMutterschutz =
-    findeInformationenZumMutterschutz(
-      eventStream,
-      findeAnzahlKinder(eventStream),
-    )?.empfaenger === Elternteil.Eins;
 
   const personNameInputIdentifier = useId();
 

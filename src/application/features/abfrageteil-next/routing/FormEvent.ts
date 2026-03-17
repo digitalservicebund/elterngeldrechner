@@ -145,6 +145,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   z.object({
     route: z.literal(Route.ElternteilZweiAllgemeineAngaben),
     payload: ElternteilZweiAllgemeineAngabenSchema,
+    dependentValues: z.object({
+      hatPotenzielleAusklammerungen: z.boolean(),
+    }),
   }),
 ]);
 

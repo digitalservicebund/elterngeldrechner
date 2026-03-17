@@ -133,21 +133,28 @@ function getNextSubpath(event: FormEvent): string {
     }
     case Route.ElternteilTaetigkeitAngabenEinkommen:
     case Route.ElternteilTaetigkeitAngabenEinkommenDetails: {
-      const { params, dependentValues } = event;
+      const {
+        params: { taetigkeitIndex, elternteilIndex },
+        dependentValues: { istMischeinkunft },
+      } = event;
 
-      const wirdDirektMischeinkunftAngezeigt =
-        dependentValues.istMischeinkunft && params.taetigkeitIndex === 0;
-
-      const zielRoute = wirdDirektMischeinkunftAngezeigt
-        ? Route.ElternteilTaetigkeitAngabenSelbststaendig
-        : Route.ElternteilWeitereTaetigkeitAbfrage;
-
-      return generateParametrizedPath(zielRoute, {
-        elternteilIndex: params.elternteilIndex.toString(),
-        taetigkeitIndex: wirdDirektMischeinkunftAngezeigt
-          ? (params.taetigkeitIndex + 1).toString()
-          : params.taetigkeitIndex.toString(),
-      });
+      if (istMischeinkunft && taetigkeitIndex === 0) {
+        return generateParametrizedPath(
+          Route.ElternteilTaetigkeitAngabenSelbststaendig,
+          {
+            elternteilIndex: elternteilIndex.toString(),
+            taetigkeitIndex: (taetigkeitIndex + 1).toString(),
+          },
+        );
+      } else {
+        return generateParametrizedPath(
+          Route.ElternteilWeitereTaetigkeitAbfrage,
+          {
+            elternteilIndex: elternteilIndex.toString(),
+            taetigkeitIndex: taetigkeitIndex.toString(),
+          },
+        );
+      }
     }
     case Route.ElternteilWeitereTaetigkeitAbfrage: {
       const { payload, dependentValues } = event;

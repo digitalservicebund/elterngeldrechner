@@ -1,7 +1,6 @@
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
-import { findeTaetigkeiten } from "./findeTaetigkeiten";
 import { sindBeideElternteile } from "./sindBeideElternteile";
-import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections/findeLetztesGueltigesEvent";
+import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {
@@ -51,13 +50,10 @@ export function erstelleFinanzDaten(
   events: FormEvent[],
   elternteilIndex: number,
 ): Omit<FinanzDaten, "kinderFreiBetrag"> {
-  const taetigkeiten = findeTaetigkeiten(events, elternteilIndex);
-
-  const hatErwerbstaetigkeit =
-    !taetigkeiten.hatKeinEinkommen &&
-    (taetigkeiten.istNichtSelbststaendig ||
-      taetigkeiten.istSelbststaendig ||
-      taetigkeiten.istVerbeamtet);
+  const hatErwerbstaetigkeit = ueberpruefeErwerbstaetigkeit(
+    events,
+    elternteilIndex,
+  );
 
   if (!hatErwerbstaetigkeit) {
     return {

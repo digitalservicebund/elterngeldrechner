@@ -11,6 +11,7 @@ import type {
   AusgangslageFuerZweiElternteile,
 } from "@/monatsplaner/Ausgangslage/Ausgangslage";
 import { Elternteil } from "@/monatsplaner/Elternteil";
+import { InformationenZumMutterschutz } from "@/monatsplaner/InformationenZumMutterschutz";
 
 export function erstelleAusgangslage(
   events: FormEvent[],
@@ -21,12 +22,13 @@ export function erstelleAusgangslage(
   const hatBehindertesGeschwisterkind = findeGeschwisterkinder(events).some(
     (geschwisterkind) => geschwisterkind.hatBehinderung,
   );
-  const informationenZumMutterschutz = findeInformationenZumMutterschutz(
-    events,
-    anzahlKinder,
-  );
 
   if (findeAlleinerziehend(events)) {
+    const informationenZumMutterschutz = findeInformationenZumMutterschutz(
+      events,
+      anzahlKinder,
+    ) as InformationenZumMutterschutz<Elternteil.Eins>;
+
     return {
       sindMehrlinge,
       anzahlElternteile: 1,
@@ -39,6 +41,11 @@ export function erstelleAusgangslage(
   const zweitePersonAngaben = findeAngabenZurZweitenPerson(events);
 
   if (zweitePersonAngaben.wirdZweitePersonBeruecksichtigt === true) {
+    const informationenZumMutterschutz = findeInformationenZumMutterschutz(
+      events,
+      anzahlKinder,
+    );
+
     const mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum =
       warMindestensEinElternteilErwerbstaetig(events);
 
@@ -58,6 +65,11 @@ export function erstelleAusgangslage(
       },
     };
   } else {
+    const informationenZumMutterschutz = findeInformationenZumMutterschutz(
+      events,
+      anzahlKinder,
+    ) as InformationenZumMutterschutz<Elternteil.Eins>;
+
     return {
       sindMehrlinge,
       anzahlElternteile: 1,

@@ -7,20 +7,28 @@ import type { InformationenZumMutterschutz } from "@/monatsplaner/InformationenZ
 export function findeInformationenZumMutterschutz(
   events: FormEvent[],
   anzahlKinder: number,
-): InformationenZumMutterschutz<Elternteil.Eins> | undefined {
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
+): InformationenZumMutterschutz<Elternteil.Eins | Elternteil.Zwei> | undefined {
+  const letzterLebensmonatMitSchutz = anzahlKinder > 1 ? 3 : 2;
+
+  const elternteil1 = findeLetztesGueltigesEvent(
     events,
     Route.ElternteilEinsAllgemeineAngaben,
   );
 
-  if (!letztesGueltigesEvent?.istImMutterschutz) {
-    return undefined;
+  if (elternteil1?.istImMutterschutz) {
+    return { empfaenger: Elternteil.Eins, letzterLebensmonatMitSchutz };
   }
 
-  return {
-    empfaenger: Elternteil.Eins,
-    letzterLebensmonatMitSchutz: anzahlKinder > 1 ? 3 : 2,
-  };
+  const elternteil2 = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilZweiAllgemeineAngaben,
+  );
+
+  if (elternteil2?.istImMutterschutz) {
+    return { empfaenger: Elternteil.Zwei, letzterLebensmonatMitSchutz };
+  }
+
+  return undefined;
 }
 
 if (import.meta.vitest) {
@@ -54,7 +62,7 @@ if (import.meta.vitest) {
       expect(result).toBeUndefined();
     });
 
-    it("sets Elternteil.Eins as Empfänger for one Elternteil in Mutterschutz", () => {
+    it("sets Elternteil.Eins as Empfänger when Elternteil 1 is in Mutterschutz", () => {
       const result = findeInformationenZumMutterschutz(
         [elternteil1MitMutterschutz],
         1,
@@ -75,6 +83,86 @@ if (import.meta.vitest) {
     it("sets letzterLebensmonatMitSchutz to 3 for Mehrlinge", () => {
       const result = findeInformationenZumMutterschutz(
         [elternteil1MitMutterschutz],
+        2,
+      );
+
+      expect(result?.letzterLebensmonatMitSchutz).toEqual(3);
+    });
+
+    it("is undefined when neither Elternteil is in Mutterschutz", () => {
+      const result = findeInformationenZumMutterschutz(
+        [
+          elternteil1OhneMutterschutz,
+          {
+            route: Route.ElternteilZweiAllgemeineAngaben,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
+              name: "Max",
+              istImMutterschutz: false,
+            },
+            dependentValues: { hatPotenzielleAusklammerungen: false },
+          },
+        ],
+        1,
+      );
+
+      expect(result).toBeUndefined();
+    });
+
+    it("sets Elternteil.Zwei as Empfänger when Elternteil 2 is in Mutterschutz", () => {
+      const result = findeInformationenZumMutterschutz(
+        [
+          elternteil1OhneMutterschutz,
+          {
+            route: Route.ElternteilZweiAllgemeineAngaben,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
+              name: "Max",
+              istImMutterschutz: true,
+            },
+            dependentValues: { hatPotenzielleAusklammerungen: false },
+          },
+        ],
+        1,
+      );
+
+      expect(result?.empfaenger).toEqual(Elternteil.Zwei);
+    });
+
+    it("sets letzterLebensmonatMitSchutz to 2 for a single child (Elternteil 2)", () => {
+      const result = findeInformationenZumMutterschutz(
+        [
+          elternteil1OhneMutterschutz,
+          {
+            route: Route.ElternteilZweiAllgemeineAngaben,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
+              name: "Max",
+              istImMutterschutz: true,
+            },
+            dependentValues: { hatPotenzielleAusklammerungen: false },
+          },
+        ],
+        1,
+      );
+
+      expect(result?.letzterLebensmonatMitSchutz).toEqual(2);
+    });
+
+    it("sets letzterLebensmonatMitSchutz to 3 for Mehrlinge (Elternteil 2)", () => {
+      const result = findeInformationenZumMutterschutz(
+        [
+          elternteil1OhneMutterschutz,
+          {
+            route: Route.ElternteilZweiAllgemeineAngaben,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
+              name: "Max",
+              istImMutterschutz: true,
+            },
+            dependentValues: { hatPotenzielleAusklammerungen: false },
+          },
+        ],
         2,
       );
 

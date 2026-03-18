@@ -4,6 +4,7 @@ import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "./findeInformationenZumMutterschutz";
 import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import type {

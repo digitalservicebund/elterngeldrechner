@@ -2,6 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router";
 import { Route } from "./Route";
 import { RouteGuardAbfrageteil } from "./RouteGuardAbfrageteil";
 import { RouteGuardBeispieleUndPlaner } from "./RouteGuardBeispieleUndPlaner";
+import { RouteGuardDatenuebernahme } from "./RouteGuardDatenuebernahme";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -176,8 +177,13 @@ const RouteDefinition = [
         ],
       },
       {
-        element: <DatenuebernahmeAntragPage />,
-        path: "/datenuebernahme-antrag",
+        element: <RouteGuardDatenuebernahme />,
+        children: [
+          {
+            element: <DatenuebernahmeAntragPage />,
+            path: "/datenuebernahme-antrag",
+          },
+        ],
       },
       {
         element: (

@@ -1,6 +1,7 @@
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
 import { sindBeideElternteile } from "./sindBeideElternteile";
 import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import {

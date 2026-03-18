@@ -8,7 +8,7 @@ import {
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
-import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
+import { CurrencyInput } from "@/application/features/abfrageteil-next/components/CurrencyInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
@@ -42,15 +42,13 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { handleSubmit, control } = useForm({
     resolver: zodResolver(TaetigkeitGleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitGleichesEinkommenAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
-
-  const { errors: formErrors } = formState;
 
   const onSubmit = (values: TaetigkeitGleichesEinkommenAngaben) => {
     const event: FormEvent = {
@@ -133,10 +131,10 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
             }
           />
 
-          <NumberInput
-            {...register("durchschnittlichesMonatsbrutto")}
+          <CurrencyInput
+            control={control}
+            name="durchschnittlichesMonatsbrutto"
             label="Monatliches Brutto-Einkommen"
-            errors={formErrors.durchschnittlichesMonatsbrutto?.message}
           />
         </div>
 

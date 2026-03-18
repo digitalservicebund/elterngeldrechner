@@ -9,7 +9,7 @@ import {
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
-import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
+import { CurrencyInput } from "@/application/features/abfrageteil-next/components/CurrencyInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
@@ -44,15 +44,13 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { handleSubmit, control } = useForm({
     resolver: zodResolver(TaetigkeitUnleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitUnleichesEinkommenAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
-
-  const { errors: formErrors } = formState;
 
   const onSubmit = (values: TaetigkeitUnleichesEinkommenAngaben) => {
     const event: FormEvent = {
@@ -217,21 +215,11 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
                     const label = `${month.toPlainDate({ day: 1 }).toLocaleString("de-DE", { month: "long", year: "numeric" })} Brutto-Einkommen`;
 
                     return (
-                      <NumberInput
+                      <CurrencyInput
+                        control={control}
+                        name={`monatsbrutto.${monatsIndex}`}
                         key={month.toString()}
-                        {...register(`monatsbrutto.${monatsIndex}`, {
-                          valueAsNumber: true,
-                          max: {
-                            value: 15000,
-                            message: "Maximaleinkommen überschritten",
-                          },
-                          min: {
-                            value: 0,
-                            message: "Bitte geben Sie ein Einkommen an",
-                          },
-                        })}
                         label={label}
-                        errors={formErrors.monatsbrutto?.[monatsIndex]?.message}
                       />
                     );
                   })}

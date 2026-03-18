@@ -59,7 +59,7 @@ const BruttoMonatseinkommen = z.coerce
     15000,
     "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
   )
-  .min(1, "Bitte geben Sie ein Einkommen an");
+  .min(0, "Bitte geben Sie ein Einkommen an");
 
 export const TaetigkeitGleichesEinkommenAngabenSchema = z.object({
   durchschnittlichesMonatsbrutto: BruttoMonatseinkommen,

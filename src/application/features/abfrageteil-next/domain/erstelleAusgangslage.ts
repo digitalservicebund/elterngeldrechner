@@ -33,6 +33,7 @@ export function erstelleAusgangslage(
       sindMehrlinge,
       anzahlElternteile: 1,
       geburtsdatumDesKindes,
+      istAlleinerziehend: true,
       hatBehindertesGeschwisterkind,
       informationenZumMutterschutz,
     };
@@ -698,6 +699,39 @@ if (import.meta.vitest) {
         expect(
           ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
         ).toEqual(true);
+      });
+    });
+
+    describe("istAlleinerziehend", () => {
+      it("is true if Elterteil Eins is alleinerziehend", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-12-20"),
+              anzahl: 1,
+            },
+          },
+          {
+            route: Route.ElternteilEinsAllgemeineAngaben,
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: true,
+              istImMutterschutz: false,
+            },
+          },
+          {
+            route: Route.ElternteilZweiAllgemeineAngaben,
+            payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
+            dependentValues: { hatPotenzielleAusklammerungen: true },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(ausgangslage.istAlleinerziehend).toEqual(true);
       });
     });
   });

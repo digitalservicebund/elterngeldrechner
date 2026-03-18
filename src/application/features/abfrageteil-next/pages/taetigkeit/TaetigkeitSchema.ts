@@ -2,7 +2,7 @@ import { z } from "zod";
 import { BooleanRadiobuttonCodec } from "@/application/features/abfrageteil-next/zod";
 import { Steuerklasse } from "@/elterngeldrechner";
 
-const BruttoJahresgewinn = z.coerce
+const BruttoJahresgewinn = z
   .number({ error: "Invalide Eingabe" })
   .max(
     175000,
@@ -53,7 +53,7 @@ export type TaetigkeitNichtSelbststaendigAngaben = z.infer<
   typeof TaetigkeitNichtSelbststaendigAngabenSchema
 >;
 
-const BruttoMonatseinkommen = z.coerce
+const BruttoMonatseinkommen = z
   .number({ error: "Invalide Eingabe" })
   .max(
     15000,

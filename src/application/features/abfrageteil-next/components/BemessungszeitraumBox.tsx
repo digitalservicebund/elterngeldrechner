@@ -33,10 +33,8 @@ export function BemessungszeitraumBox({
   return (
     <div className="mt-20">
       {bemessungszeitraum.length > 0 && (
-        <div className="rounded bg-grey-light py-10">
-          <span className="px-20 font-bold">
-            Bemessungszeitraum: {bemessungszeitraumUeberschrift()}
-          </span>
+        <div className="rounded bg-grey-light px-20 py-10 font-bold">
+          Bemessungszeitraum: {bemessungszeitraumUeberschrift()}
         </div>
       )}
 

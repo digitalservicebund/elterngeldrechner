@@ -17,7 +17,6 @@ import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil-next/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
-import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil-next/domain/formatiereBemessungszeitraum";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil-next/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil-next/hooks/useRouteParams";
@@ -90,10 +89,6 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   const ausklammerungen = findeAusklammerungen(
     eventStream,
     routeParams.elternteilIndex,
-  );
-  const formatierterBemessungszeitraum = formatiereBemessungszeitraum(
-    bemessungszeitraum,
-    true,
   );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
@@ -282,8 +277,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <CustomRadioGroup
           legend=<h5 className="mb-10">
-            Wie hat {vorname} von {formatierterBemessungszeitraum} im Monat
-            brutto verdient?
+            Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
+            verdient?
           </h5>
           errors={formErrors}
           register={register}
@@ -291,11 +286,11 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           options={[
             {
               value: "yes",
-              label: `${vorname} hat  jeden Monat gleich viel verdient`,
+              label: `Ja, ${vorname} hat jeden Monat gleich viel verdient`,
             },
             {
               value: "no",
-              label: `${vorname} hat  unterschiedlich viel verdient`,
+              label: `Nein, ${vorname} hat unterschiedlich viel verdient`,
             },
           ]}
         />

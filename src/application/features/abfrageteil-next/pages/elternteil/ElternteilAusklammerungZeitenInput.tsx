@@ -31,7 +31,7 @@ export function ElternteilAusklammerungZeitenInput({
     <div>
       <h5 className="pb-16 font-bold">{title}</h5>
 
-      <div className="mb-16 flex flex-col gap-20">
+      <div className="flex flex-col gap-20">
         {fields.map((field, index) => (
           <div key={field.id} className="flex flex-col">
             <div className="flex flex-wrap *:grow *:basis-[22rem]">
@@ -68,7 +68,7 @@ export function ElternteilAusklammerungZeitenInput({
               <Button
                 type="button"
                 buttonStyle="link"
-                className="-mt-16 p-4"
+                className="-mt-16 mb-16 p-4"
                 onClick={() => remove(index)}
                 aria-label="Zeile löschen"
               >

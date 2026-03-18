@@ -1,4 +1,4 @@
-import { findeTaetigkeiten } from "./findeTaetigkeiten";
+import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 
@@ -6,20 +6,20 @@ export function ueberpruefeErwerbstaetigkeit(
   events: FormEvent[],
   elternteilIndex: number,
 ): boolean {
-  try {
-    const taetigkeiten = findeTaetigkeiten(events, elternteilIndex);
+  const taetigkeiten = findeLetztesGueltigesEvent(
+    events,
+    Route.ElternteilTaetigkeitenAbfrage,
+    { elternteilIndex },
+  );
 
-    if (taetigkeiten.hatKeinEinkommen) {
-      return false;
-    }
-
-    const { istNichtSelbststaendig, istSelbststaendig, istVerbeamtet } =
-      taetigkeiten;
-
-    return istNichtSelbststaendig || istSelbststaendig || istVerbeamtet;
-  } catch {
+  if (taetigkeiten === undefined || taetigkeiten.hatKeinEinkommen) {
     return false;
   }
+
+  const { istNichtSelbststaendig, istSelbststaendig, istVerbeamtet } =
+    taetigkeiten;
+
+  return istNichtSelbststaendig || istSelbststaendig || istVerbeamtet;
 }
 
 if (import.meta.vitest) {

@@ -41,7 +41,7 @@ export function erstelleAusgangslage(
 
   const zweitePersonAngaben = findeAngabenZurZweitenPerson(events);
 
-  if (zweitePersonAngaben.wirdZweitePersonBeruecksichtigt === true) {
+  if (zweitePersonAngaben.wirdZweitePersonBeruecksichtigt !== false) {
     const informationenZumMutterschutz = findeInformationenZumMutterschutz(
       events,
       anzahlKinder,
@@ -292,6 +292,40 @@ if (import.meta.vitest) {
         const ausgangslage = erstelleAusgangslage(events);
 
         expect(ausgangslage.anzahlElternteile).toEqual(1);
+      });
+
+      it("is 2 when ElternteilZweiAllgemeineAngaben has wirdZweitePersonBeruecksichtigt unknown", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.GeborenesKindAngaben,
+            payload: {
+              geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
+              errechneterEntbindungstermin:
+                Temporal.PlainDate.from("2025-12-20"),
+              anzahl: 1,
+            },
+          },
+          {
+            route: Route.ElternteilEinsAllgemeineAngaben,
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: false,
+              istImMutterschutz: false,
+            },
+          },
+          {
+            route: Route.ElternteilZweiAllgemeineAngaben,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: undefined,
+              name: "Max",
+            },
+            dependentValues: { hatPotenzielleAusklammerungen: true },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(ausgangslage.anzahlElternteile).toEqual(2);
       });
 
       it("is 2 when ElternteilZweiAllgemeineAngaben has wirdZweitePersonBeruecksichtigt true", () => {

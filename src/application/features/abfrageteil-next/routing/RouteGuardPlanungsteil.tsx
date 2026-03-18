@@ -4,7 +4,7 @@ import { findeNaechstenPfad } from "./findeNaechstenPfad";
 import { generateAbfrageteilPath } from "./generatePath";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 
-export function RouteGuardBeispieleUndPlaner() {
+export function RouteGuardPlanungsteil() {
   const { filtereValideEventHistorie } = useEventContext();
 
   const allgemeineAngabenPfad = generateAbfrageteilPath(

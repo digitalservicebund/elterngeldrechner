@@ -1,8 +1,8 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { Route } from "./Route";
 import { RouteGuardAbfrageteil } from "./RouteGuardAbfrageteil";
-import { RouteGuardBeispieleUndPlaner } from "./RouteGuardBeispieleUndPlaner";
 import { RouteGuardDatenuebernahme } from "./RouteGuardDatenuebernahme";
+import { RouteGuardPlanungsteil } from "./RouteGuardPlanungsteil";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
@@ -164,7 +164,7 @@ const RouteDefinition = [
         ],
       },
       {
-        element: <RouteGuardBeispieleUndPlaner />,
+        element: <RouteGuardPlanungsteil />,
         children: [
           {
             element: <BeispielePage />,

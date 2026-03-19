@@ -81,7 +81,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
           className={classNames(
             "min-w-max appearance-none border border-solid border-grey-dark bg-white !px-16 py-8 !pr-56",
             "focus:!outline focus:!outline-2 focus:!outline-primary disabled:cursor-default",
-            error && "border-danger",
+            error && "!border-danger focus:!outline-danger",
           )}
           style={customArrows}
           id={name}
@@ -103,7 +103,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
           {options.map((option) => (
             <option
               key={option.value}
-              className="bg-white px-16 py-8"
+              className="bg-white px-16 py-8 text-black"
               value={option.value}
               hidden={option.hidden}
             >

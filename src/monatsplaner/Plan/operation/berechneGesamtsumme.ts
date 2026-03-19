@@ -39,7 +39,7 @@ function berrechneSummeFuerElternteil(
     .filter(isVariante).length;
 
   const elterngeldbezug = Object.values(lebensmonate)
-    .map((monat) => monat.elterngeldbezug ?? 0)
+    .map((monat) => Math.round(monat.elterngeldbezug ?? 0))
     .reduce((sum, elterngeldbezug) => sum + elterngeldbezug, 0);
 
   const bruttoeinkommen = Object.values(lebensmonate)
@@ -68,9 +68,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("berrechne Gesamtsumme", async () => {
-    const { Elternteil, Variante, KeinElterngeld } = await import(
-      "@/monatsplaner"
-    );
+    const { Elternteil, Variante, KeinElterngeld } =
+      await import("@/monatsplaner");
 
     it("can calculate a zero Gesamtsumme when nothing is planned yet", () => {
       const plan = { ...ANY_PLAN, lebensmonate: {} };
@@ -191,6 +190,56 @@ if (import.meta.vitest) {
       const gesamtsumme = berechneGesamtsumme(plan);
 
       expect(gesamtsumme.elterngeldbezug).toBe(11);
+    });
+
+    it("shows a Gesamtsumme consistent with the sum of individually rounded Monat values", () => {
+      const lebensmonate = {
+        1: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(Variante.Plus, 919.06),
+        },
+        2: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(Variante.Plus, 919.06),
+        },
+        3: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(Variante.Plus, 919.06),
+        },
+        4: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(Variante.Plus, 919.06),
+        },
+        5: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(undefined),
+        },
+        6: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(undefined),
+        },
+        7: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(undefined),
+        },
+        8: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(undefined),
+        },
+        9: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(undefined),
+        },
+        10: {
+          [Elternteil.Eins]: monat(Variante.Basis, 1839.06),
+          [Elternteil.Zwei]: monat(undefined),
+        },
+      };
+      const plan = { ...ANY_PLAN, lebensmonate };
+
+      const gesamtsumme = berechneGesamtsumme(plan);
+
+      expect(gesamtsumme.elterngeldbezug).toBe(22066);
     });
 
     it("just works for single Elternteile too", () => {

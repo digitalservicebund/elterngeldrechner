@@ -12,7 +12,7 @@ import { Description } from "@/application/features/abfrageteil/components/commo
 type Props<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
-> = UseControllerProps<TFieldValues, TName> & {
+> = UseControllerProps<TFieldValues, TName, unknown> & {
   readonly label: string;
   readonly className?: string;
   readonly ariaDescribedByIfNoError?: string;
@@ -52,7 +52,10 @@ export function CurrencyInput<
       </label>
 
       <IMaskInput
-        className="max-w-[17rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary"
+        className={classNames(
+          "max-w-[17rem] border border-solid border-grey-dark px-16 py-8 focus:!outline focus:!outline-2 focus:!outline-primary",
+          error && "!border-danger focus:!outline-danger",
+        )}
         inputRef={ref}
         mask="num Euro"
         unmask

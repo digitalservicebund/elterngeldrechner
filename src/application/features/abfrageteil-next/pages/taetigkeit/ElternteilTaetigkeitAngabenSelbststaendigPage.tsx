@@ -2,14 +2,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { z } from "zod";
 import {
   TaetigkeitSelbststaendigAngaben,
   TaetigkeitSelbststaendigAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
+import { CurrencyInput } from "@/application/features/abfrageteil-next/components/CurrencyInput";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
-import { NumberInput } from "@/application/features/abfrageteil-next/components/NumberInput";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
@@ -41,7 +42,11 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, control } = useForm<
+    z.input<typeof TaetigkeitSelbststaendigAngabenSchema>,
+    unknown,
+    z.output<typeof TaetigkeitSelbststaendigAngabenSchema>
+  >({
     resolver: zodResolver(TaetigkeitSelbststaendigAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitSelbststaendigAngabenSchema,
@@ -242,10 +247,10 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
             }
           />
 
-          <NumberInput
-            {...register("bruttoJahresgewinn")}
+          <CurrencyInput
+            control={control}
+            name="bruttoJahresgewinn"
             label="Gewinn im gesamten Kalenderjahr"
-            errors={formErrors.bruttoJahresgewinn?.message}
           />
         </div>
 

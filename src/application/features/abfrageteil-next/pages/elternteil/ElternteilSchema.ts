@@ -131,6 +131,18 @@ export const ElternteilZweiAllgemeineAngabenSchema = z
       message: "Bitte geben Sie einen Namen an.",
       path: ["name"],
     },
+  )
+  .refine(
+    (data) => {
+      if (data.wirdZweitePersonBeruecksichtigt !== false) {
+        return data.istImMutterschutz !== undefined;
+      }
+      return true;
+    },
+    {
+      message: "Wählen Sie bitte Ja oder Nein",
+      path: ["istImMutterschutz"],
+    },
   );
 
 export type ElternteilZweiAllgemeineAngaben = z.infer<
@@ -139,6 +151,56 @@ export type ElternteilZweiAllgemeineAngaben = z.infer<
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
+
+  describe("ElternteilZweiAllgemeineAngabenSchema", () => {
+    it("rejects when Person 2 is considered but istImMutterschutz is missing", () => {
+      const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
+        wirdZweitePersonBeruecksichtigt: "yes",
+        name: "Anna",
+      });
+
+      expect(result.success).toBeFalsy();
+
+      if (!result.success) {
+        expect(result.error.issues[0]).toMatchObject({
+          path: ["istImMutterschutz"],
+        });
+      }
+    });
+
+    it("rejects when Person 2 status is unknown but istImMutterschutz is missing", () => {
+      const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
+        wirdZweitePersonBeruecksichtigt: "unknown",
+        name: "Anna",
+      });
+
+      expect(result.success).toBeFalsy();
+
+      if (!result.success) {
+        expect(result.error.issues[0]).toMatchObject({
+          path: ["istImMutterschutz"],
+        });
+      }
+    });
+
+    it("accepts when Person 2 is considered and istImMutterschutz is provided", () => {
+      const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
+        wirdZweitePersonBeruecksichtigt: "yes",
+        name: "Anna",
+        istImMutterschutz: "no",
+      });
+
+      expect(result.success).toBeTruthy();
+    });
+
+    it("accepts when Person 2 is not considered even without istImMutterschutz", () => {
+      const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
+        wirdZweitePersonBeruecksichtigt: "no",
+      });
+
+      expect(result.success).toBeTruthy();
+    });
+  });
 
   describe("ElternteilTaetigkeitenAbfrageSchema", () => {
     const schema = ElternteilTaetigkeitenAbfrageSchema;

@@ -162,7 +162,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
               )}
             </div>
 
-            {!istErsterElternteilImMutterschutz && (
+            {!istErsterElternteilImMutterschutz ? (
               <CustomRadioGroup
                 className="mt-16"
                 legend=<h3 className="mb-10">
@@ -215,6 +215,12 @@ export function ElternteilZweiAllgemeineAngabenPage() {
                   }
                 />
               </CustomRadioGroup>
+            ) : (
+              <input
+                type="hidden"
+                value="no"
+                {...register("istImMutterschutz")}
+              />
             )}
           </>
         )}

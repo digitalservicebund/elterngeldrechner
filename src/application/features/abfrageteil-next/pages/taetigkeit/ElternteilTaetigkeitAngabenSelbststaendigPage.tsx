@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { z } from "zod";
 import {
   TaetigkeitSelbststaendigAngaben,
   TaetigkeitSelbststaendigAngabenSchema,
@@ -42,11 +41,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState, control } = useForm<
-    z.input<typeof TaetigkeitSelbststaendigAngabenSchema>,
-    unknown,
-    z.output<typeof TaetigkeitSelbststaendigAngabenSchema>
-  >({
+  const { register, handleSubmit, formState, control } = useForm({
     resolver: zodResolver(TaetigkeitSelbststaendigAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitSelbststaendigAngabenSchema,

@@ -12,7 +12,8 @@ import { Description } from "@/application/features/abfrageteil/components/commo
 type Props<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
-> = UseControllerProps<TFieldValues, TName, unknown> & {
+  TTransformedValues = TFieldValues,
+> = UseControllerProps<TFieldValues, TName, TTransformedValues> & {
   readonly label: string;
   readonly className?: string;
   readonly ariaDescribedByIfNoError?: string;
@@ -21,13 +22,14 @@ type Props<
 export function CurrencyInput<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
 >({
   control,
   name,
   label,
   className,
   ariaDescribedByIfNoError,
-}: Props<TFieldValues, TName>) {
+}: Props<TFieldValues, TName, TTransformedValues>) {
   const {
     field: { onChange, onBlur, value, ref },
     fieldState: { error },

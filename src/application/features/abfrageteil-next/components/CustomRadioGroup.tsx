@@ -99,7 +99,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         })}
 
         {!!hasError && (
-          <span id={errorIdentifier} className="mt-8 text-14 text-danger">
+          <span id={errorIdentifier} className="text-14 text-danger">
             {error.message}
           </span>
         )}

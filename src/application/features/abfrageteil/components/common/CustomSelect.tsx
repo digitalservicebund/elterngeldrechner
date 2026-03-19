@@ -67,7 +67,13 @@ export function CustomSelect<TFieldValues extends FieldValues>({
         className,
       )}
     >
-      <label className={slotBetweenLabelAndSelect ? "" : "mb-4"} htmlFor={name}>
+      <label
+        className={classNames({
+          "mb-4": slotBetweenLabelAndSelect,
+          "text-danger": error,
+        })}
+        htmlFor={name}
+      >
         {label}
       </label>
 

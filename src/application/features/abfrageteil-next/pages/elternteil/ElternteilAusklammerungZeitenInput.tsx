@@ -1,5 +1,6 @@
 import AddIcon from "@digitalservicebund/icons/AddCircleOutline";
 import CloseIcon from "@digitalservicebund/icons/Close";
+import classNames from "classnames";
 import { Control, FieldErrors, useFieldArray } from "react-hook-form";
 import { Button } from "@/application/components";
 import { DateInput } from "@/application/features/abfrageteil-next/components/DateInput";
@@ -37,7 +38,9 @@ export function ElternteilAusklammerungZeitenInput({
             <div className="flex flex-wrap *:grow *:basis-[22rem]">
               <div>
                 <label
-                  className="mb-4 block text-16"
+                  className={classNames("mb-4 block text-16", {
+                    "text-danger": errors[grund]?.[index]?.von,
+                  })}
                   htmlFor={`${field.id}-von`}
                 >
                   Beginn (TT.MM.JJJJ)
@@ -51,7 +54,9 @@ export function ElternteilAusklammerungZeitenInput({
 
               <div>
                 <label
-                  className="mb-4 block text-16"
+                  className={classNames("mb-4 block text-16", {
+                    "text-danger": errors[grund]?.[index]?.bis,
+                  })}
                   htmlFor={`${field.id}-bis`}
                 >
                   Ende (TT.MM.JJJJ)

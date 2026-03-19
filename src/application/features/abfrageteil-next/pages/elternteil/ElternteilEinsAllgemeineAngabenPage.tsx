@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Temporal } from "@js-temporal/polyfill";
+import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -94,7 +95,9 @@ export function ElternteilEinsAllgemeineAngabenPage() {
 
           <div className="mt-16">
             <label
-              className="mb-4 block text-16"
+              className={classNames("mb-4 block text-16", {
+                "!text-danger": formErrors.name,
+              })}
               htmlFor={personNameInputIdentifier}
             >
               Vorname Person 1
@@ -102,7 +105,12 @@ export function ElternteilEinsAllgemeineAngabenPage() {
 
             <input
               id={personNameInputIdentifier}
-              className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
+              className={classNames(
+                "border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary",
+                {
+                  "!border-danger focus-within:outline-danger": formErrors.name,
+                },
+              )}
               {...register("name")}
             />
 

@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -68,7 +69,9 @@ export function GeborenesKindPage() {
           />
 
           <label
-            className="mb-4 mt-20 block text-16"
+            className={classNames("mb-4 mt-20 block text-16", {
+              "text-danger": formErrors.errechneterEntbindungstermin,
+            })}
             htmlFor={entbindungsterminInputIdentifier}
           >
             Errechneter Entbindungstermin (TT.MM.JJJJ)
@@ -92,7 +95,9 @@ export function GeborenesKindPage() {
           />
 
           <label
-            className="mb-4 mt-20 block text-16"
+            className={classNames("mb-4 mt-20 block text-16", {
+              "text-danger": formErrors.geburtsdatum,
+            })}
             htmlFor={geburtsdatumInputIdentifier}
           >
             Geburtsdatum (TT.MM.JJJJ)

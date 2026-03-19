@@ -47,7 +47,12 @@ export function CurrencyInput<
         className,
       )}
     >
-      <label className="mb-8" htmlFor={name}>
+      <label
+        className={classNames("mb-8", {
+          "text-danger": error,
+        })}
+        htmlFor={name}
+      >
         {label}
       </label>
 

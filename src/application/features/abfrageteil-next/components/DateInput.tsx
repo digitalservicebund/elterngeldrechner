@@ -72,9 +72,9 @@ export const DateInput = forwardRef(function CustomDate(
     <div className={classNames("flex flex-col", className)}>
       <div
         className={classNames(
-          "mb-16 flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",
+          "flex max-w-[20rem] flex-col border border-solid border-grey-dark px-16 py-8",
           "focus-within:outline focus-within:outline-2 focus-within:outline-primary",
-          hasError && "mb-0 border-danger",
+          hasError && "mb-0 !border-danger focus-within:!outline-danger",
         )}
       >
         <input

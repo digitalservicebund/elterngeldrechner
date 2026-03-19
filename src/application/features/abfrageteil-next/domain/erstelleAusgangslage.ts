@@ -24,6 +24,9 @@ export function erstelleAusgangslage(
     (geschwisterkind) => geschwisterkind.hatBehinderung,
   );
 
+  const mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum =
+    warMindestensEinElternteilErwerbstaetig(events);
+
   if (findeAlleinerziehend(events)) {
     const informationenZumMutterschutz = findeInformationenZumMutterschutz(
       events,
@@ -37,6 +40,7 @@ export function erstelleAusgangslage(
       istAlleinerziehend: true,
       hatBehindertesGeschwisterkind,
       informationenZumMutterschutz,
+      mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
     };
   }
 
@@ -47,10 +51,6 @@ export function erstelleAusgangslage(
       events,
       anzahlKinder,
     );
-
-    const mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum =
-      warMindestensEinElternteilErwerbstaetig(events);
-
     const nameDesErstenElternteils = findeNameDesErstenElternteils(events);
 
     return {
@@ -78,6 +78,7 @@ export function erstelleAusgangslage(
       geburtsdatumDesKindes,
       hatBehindertesGeschwisterkind,
       informationenZumMutterschutz,
+      mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
     };
   }
 }
@@ -670,6 +671,68 @@ if (import.meta.vitest) {
         payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
         dependentValues: { hatPotenzielleAusklammerungen: true },
       };
+
+      it("is false when alleinerziehend Elternteil has hatKeinEinkommen", () => {
+        const events: FormEvent[] = [
+          kindEvent,
+          {
+            route: Route.ElternteilEinsAllgemeineAngaben,
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: true,
+              istImMutterschutz: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: { hatKeinEinkommen: true },
+            dependentValues: {
+              istPersonAlleinerziehend: true,
+            },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toEqual(false);
+      });
+
+      it("is true when alleinerziehend Elternteil is angestellt", () => {
+        const events: FormEvent[] = [
+          kindEvent,
+          {
+            route: Route.ElternteilEinsAllgemeineAngaben,
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: true,
+              istImMutterschutz: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              istNichtSelbststaendig: true,
+              istSelbststaendig: false,
+              istVerbeamtet: true,
+              hatAndereLeistungen: false,
+              hatKeinEinkommen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: true,
+            },
+          },
+        ];
+
+        const ausgangslage = erstelleAusgangslage(events);
+
+        expect(
+          ausgangslage.mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
+        ).toEqual(true);
+      });
 
       it("is false when both Elternteile have hatKeinEinkommen", () => {
         const events: FormEvent[] = [

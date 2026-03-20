@@ -154,7 +154,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             className="mt-20 font-bold"
             register={register}
             name="istVerbeamtet"
-            label={`${vorname} war oder ist Beamtin`}
+            label={`${vorname} war oder ist verbeamtet`}
             errors={showGeneralErrorMessage}
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined

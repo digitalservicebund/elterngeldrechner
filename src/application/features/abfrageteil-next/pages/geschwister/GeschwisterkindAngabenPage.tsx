@@ -106,7 +106,7 @@ export function GeschwisterkindAngabenPage() {
 
         <CustomRadioGroup
           legend=<h3 className="mb-10">
-            Gibt es noch ein weiteres Geschwisterkinder?
+            Gibt es noch ein weiteres Geschwisterkind?
           </h3>
           errors={formErrors}
           register={register}

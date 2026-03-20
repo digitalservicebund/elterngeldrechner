@@ -11,6 +11,7 @@ import { Alert } from "@/application/components/Alert";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
+import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil-next/domain/findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
 import { findeVornamen } from "@/application/features/abfrageteil-next/domain/findeVornamen";
@@ -64,8 +65,16 @@ export function ElternteilAusklammerungGruendePage() {
   const warErsterElternteilInMutterschutz =
     mutterschutzInformation?.empfaenger === Elternteil.Eins;
 
+  const warErsterElternteilSchwangerschaftsbedingtKrank =
+    routeParams.elternteilIndex === 1 &&
+    findeAusklammerungen(eventStream, 0).some(
+      (ausklammerung) => ausklammerung.grund === "erkrankungSchwangerschaft",
+    );
+
   const istSchwangerschaftserkrankungMoeglich =
-    istErsterElternteil || !warErsterElternteilInMutterschutz;
+    istErsterElternteil ||
+    !warErsterElternteilInMutterschutz ||
+    !warErsterElternteilSchwangerschaftsbedingtKrank;
 
   const defaultValues: ElternteilAusklammerungGruende = {
     ...letztesGueltigesEventData,

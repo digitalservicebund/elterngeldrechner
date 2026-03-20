@@ -12,6 +12,7 @@ import { Button, InfoText } from "@/application/components";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
+import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil-next/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil-next/domain/findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "@/application/features/abfrageteil-next/domain/findeInformationenZumMutterschutz";
@@ -61,12 +62,19 @@ export function ElternteilZweiAllgemeineAngabenPage() {
     const geschwisterkinder = findeGeschwisterkinder(eventStream);
     const hatGeschwisterkinder = geschwisterkinder.length > 0;
 
+    const warErsterElternteilSchwangerschaftsbedingtKrank =
+      findeAusklammerungen(eventStream, 0).some(
+        (ausklammerung) => ausklammerung.grund === "erkrankungSchwangerschaft",
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       dependentValues: {
         hatPotenzielleAusklammerungen:
-          hatGeschwisterkinder || !istErsterElternteilImMutterschutz,
+          hatGeschwisterkinder ||
+          !istErsterElternteilImMutterschutz ||
+          !warErsterElternteilSchwangerschaftsbedingtKrank,
       },
     };
 

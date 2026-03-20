@@ -1,17 +1,22 @@
+import { z } from "zod";
 import type { ElternteilAusklammerungszeitenInput } from "./ElternteilAusklammerungZeitenPage";
 import type {
   ElternteilAusklammerungGruende,
+  ElternteilAusklammerungGruendeSchema,
   ElternteilAusklammerungZeiten,
 } from "./ElternteilSchema";
 
-type AusklammerungGruendeAktiv = Extract<
-  ElternteilAusklammerungGruende,
-  { hatKeineAusklammerungsgruende: false }
+type AlleGruendeKeys = keyof z.infer<
+  typeof ElternteilAusklammerungGruendeSchema
+>;
+type AusklammerungGruendeAktiv = Exclude<
+  AlleGruendeKeys,
+  "hatKeineAusklammerungsgruende"
 >;
 
 const schemaMapping: Record<
   keyof ElternteilAusklammerungZeiten,
-  keyof AusklammerungGruendeAktiv
+  AusklammerungGruendeAktiv
 > = {
   mutterschutzGeschwisterkind: "hatMutterschutzAelteresKind",
   elterngeldGeschwisterkind: "hatElterngeldAelteresKind",
@@ -70,6 +75,9 @@ if (import.meta.vitest) {
   };
 
   const keineGruende: ElternteilAusklammerungGruende = {
+    hatMutterschutzAelteresKind: false,
+    hatElterngeldAelteresKind: false,
+    hatSchwangerschaftsbedingteErkrankung: false,
     hatKeineAusklammerungsgruende: true,
   };
 

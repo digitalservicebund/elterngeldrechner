@@ -17,8 +17,9 @@ export type ElternteilEinsAllgemeineAngaben = z.infer<
   typeof ElternteilEinsAllgemeineAngabenSchema
 >;
 
-const AusklammerungGruendeSchema = z
+export const ElternteilAusklammerungGruendeSchema = z
   .object({
+    hatKeineAusklammerungsgruende: z.boolean(),
     hatMutterschutzAelteresKind: z.boolean(),
     hatElterngeldAelteresKind: z.boolean(),
     hatSchwangerschaftsbedingteErkrankung: z.boolean(),
@@ -31,17 +32,24 @@ const AusklammerungGruendeSchema = z
       message: "Bitte treffen Sie eine Auswahl.",
       path: ["hatKeineAusklammerungsgruende"],
     },
+  )
+  .refine(
+    (data) => {
+      if (data.hatKeineAusklammerungsgruende) {
+        return !(
+          data.hatMutterschutzAelteresKind ||
+          data.hatElterngeldAelteresKind ||
+          data.hatSchwangerschaftsbedingteErkrankung
+        );
+      }
+      return true;
+    },
+    {
+      message:
+        "Widersprüchliche Auswahl: 'Keine Gründe' darf nicht mit anderen Optionen kombiniert werden.",
+      path: ["hatKeineAusklammerungsgruende"],
+    },
   );
-
-export const ElternteilAusklammerungGruendeSchema = z.discriminatedUnion(
-  "hatKeineAusklammerungsgruende",
-  [
-    z.object({ hatKeineAusklammerungsgruende: z.literal(true) }),
-    AusklammerungGruendeSchema.extend({
-      hatKeineAusklammerungsgruende: z.literal(false),
-    }),
-  ],
-);
 
 export type ElternteilAusklammerungGruende = z.infer<
   typeof ElternteilAusklammerungGruendeSchema

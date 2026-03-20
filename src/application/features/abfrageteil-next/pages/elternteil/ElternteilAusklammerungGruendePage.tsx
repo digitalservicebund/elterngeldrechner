@@ -67,22 +67,18 @@ export function ElternteilAusklammerungGruendePage() {
   const istSchwangerschaftserkrankungMoeglich =
     istErsterElternteil || !warErsterElternteilInMutterschutz;
 
-  const defaultValues =
-    !letztesGueltigesEventData ||
-    letztesGueltigesEventData.hatKeineAusklammerungsgruende !== false
-      ? letztesGueltigesEventData
-      : ({
-          ...letztesGueltigesEventData,
-          hatMutterschutzAelteresKind:
-            esGibtGeschwisterkinder &&
-            letztesGueltigesEventData.hatMutterschutzAelteresKind,
-          hatElterngeldAelteresKind:
-            esGibtGeschwisterkinder &&
-            letztesGueltigesEventData.hatElterngeldAelteresKind,
-          hatSchwangerschaftsbedingteErkrankung:
-            istSchwangerschaftserkrankungMoeglich &&
-            letztesGueltigesEventData.hatSchwangerschaftsbedingteErkrankung,
-        } satisfies ElternteilAusklammerungGruende);
+  const defaultValues: ElternteilAusklammerungGruende = {
+    ...letztesGueltigesEventData,
+    hatMutterschutzAelteresKind:
+      esGibtGeschwisterkinder &&
+      letztesGueltigesEventData.hatMutterschutzAelteresKind,
+    hatElterngeldAelteresKind:
+      esGibtGeschwisterkinder &&
+      letztesGueltigesEventData.hatElterngeldAelteresKind,
+    hatSchwangerschaftsbedingteErkrankung:
+      istSchwangerschaftserkrankungMoeglich &&
+      letztesGueltigesEventData.hatSchwangerschaftsbedingteErkrankung,
+  };
 
   const form = useForm<ElternteilAusklammerungGruende>({
     resolver: zodResolver(ElternteilAusklammerungGruendeSchema),

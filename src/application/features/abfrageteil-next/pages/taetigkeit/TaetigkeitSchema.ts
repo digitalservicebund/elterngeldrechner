@@ -7,6 +7,10 @@ const BruttoJahresgewinn = z
   .max(
     175000,
     "Sie überschreiten das Maximaleinkommen, um Elterngeld zu bekommen",
+  )
+  .min(
+    0,
+    "Bitte geben Sie 0 ein, selbst wenn Sie im Jahr Verlust gemacht haben",
   );
 
 export const TaetigkeitSelbststaendigAngabenSchema = z.object({

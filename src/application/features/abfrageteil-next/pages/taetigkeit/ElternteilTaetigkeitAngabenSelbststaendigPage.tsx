@@ -207,7 +207,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
           <InfoText
             className="mb-16"
-            question="Was bedeutet das?"
+            question="Wo finde ich Informationen zum Gewinn?"
             answer={
               <>
                 <p>
@@ -241,6 +241,10 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
               </>
             }
           />
+
+          <p className="mb-16">
+            Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben
+          </p>
 
           <CurrencyInput
             control={control}

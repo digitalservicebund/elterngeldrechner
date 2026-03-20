@@ -73,7 +73,7 @@ export function ElternteilAusklammerungZeitenInput({
               <Button
                 type="button"
                 buttonStyle="link"
-                className="-mt-16 mb-16 p-4"
+                className="mb-16 p-4"
                 onClick={() => remove(index)}
                 aria-label="Zeile löschen"
               >

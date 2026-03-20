@@ -125,7 +125,11 @@ export function ElternteilAusklammerungGruendePage() {
         noValidate
       >
         <div>
-          <h3>Treffen folgende Gründe auf {vorname} zu?</h3>
+          <h3>
+            {esGibtGeschwisterkinder
+              ? `Treffen folgende Gründe auf ${vorname} zu?`
+              : `Trifft folgender Grund auf ${vorname} zu?`}
+          </h3>
 
           <InfoText
             question="Warum fragen wir das?"
@@ -202,7 +206,11 @@ export function ElternteilAusklammerungGruendePage() {
             className="mt-20"
             register={register}
             name="hatKeineAusklammerungsgruende"
-            label="Keiner der genannten Gründe"
+            label={
+              esGibtGeschwisterkinder
+                ? "Keiner der genannten Gründe"
+                : "Grund trifft nicht zu"
+            }
             errors={showGeneralErrorMessage}
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined

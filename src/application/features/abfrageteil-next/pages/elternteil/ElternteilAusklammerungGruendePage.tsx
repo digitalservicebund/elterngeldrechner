@@ -200,7 +200,7 @@ export function ElternteilAusklammerungGruendePage() {
               onChange={(checked) => handleCheckboxChange(checked)}
             >
               <InfoText
-                question="Was bedeutet Krankheit wegen der Schwangerschaft?"
+                question="Was bedeutet Erkrankung wegen der Schwangerschaft?"
                 answer="Wenn Sie aufgrund Ihrer Schwangerschaft krank waren, können diese Monate übersprungen werden."
               />
             </CustomCheckbox>

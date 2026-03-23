@@ -218,7 +218,7 @@ export function ElternteilAusklammerungGruendePage() {
             label={
               esGibtGeschwisterkinder
                 ? "Keiner der genannten Gründe"
-                : "Grund trifft nicht zu"
+                : "Nein, es lag keine schwangerschaftsbedingte Erkrankung vor"
             }
             errors={showGeneralErrorMessage}
             aria-describedby={

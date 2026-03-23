@@ -205,6 +205,10 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
             {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
           </h5>
 
+          <p className="mb-16">
+            Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben
+          </p>
+
           <InfoText
             className="mb-16"
             question="Wo finde ich Informationen zum Gewinn?"
@@ -241,10 +245,6 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
               </>
             }
           />
-
-          <p className="mb-16">
-            Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben
-          </p>
 
           <CurrencyInput
             control={control}

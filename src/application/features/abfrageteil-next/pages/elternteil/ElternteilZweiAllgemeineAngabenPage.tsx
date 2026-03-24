@@ -73,8 +73,10 @@ export function ElternteilZweiAllgemeineAngabenPage() {
       dependentValues: {
         hatPotenzielleAusklammerungen:
           hatGeschwisterkinder ||
-          !istErsterElternteilImMutterschutz ||
-          !warErsterElternteilSchwangerschaftsbedingtKrank,
+          !(
+            istErsterElternteilImMutterschutz ||
+            warErsterElternteilSchwangerschaftsbedingtKrank
+          ),
       },
     };
 

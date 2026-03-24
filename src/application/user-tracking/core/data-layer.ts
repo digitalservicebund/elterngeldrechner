@@ -26,8 +26,17 @@ export function getTrackingVariableFrom<T>(
   return lastElementsProperty ? (lastElementsProperty as T) : null;
 }
 
-type PushOptions = Partial<{ unique: boolean }>;
+type PushOptions = Partial<{
+  unique: boolean;
+  data: Record<string, string>;
+}>;
 
+/**
+ * Pushes a custom event to the matomo data layer. The difference to setTrackingVariable
+ * is the presence for the event keyword, which marks it as custom event for matomo and
+ * makes it possible to directly trigger the creation of new tags. The data related to
+ * the event can be passed via the data property.
+ */
 export function pushTrackingEvent(name: string, options?: PushOptions): void {
   if (options?.unique) {
     if (window._mtm?.some((it) => it["event"] === name)) {
@@ -35,7 +44,7 @@ export function pushTrackingEvent(name: string, options?: PushOptions): void {
     }
   }
 
-  window._mtm?.push({ event: name });
+  window._mtm?.push({ event: name, ...options?.data });
 }
 
 declare global {

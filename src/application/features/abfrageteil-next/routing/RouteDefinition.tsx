@@ -28,6 +28,7 @@ import { ElternteilTaetigkeitAngabenSelbststaendigPage } from "@/application/fea
 import { ElternteilTaetigkeitAngabenSozialversicherungenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilTaetigkeitAngabenSozialversicherungenPage";
 import { ElternteilWeitereTaetigkeitAbfragePage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAbfragePage";
 import { ElternteilWeitereTaetigkeitAngabenPage } from "@/application/features/abfrageteil-next/pages/taetigkeit/ElternteilWeitereTaetigkeitAngabenPage";
+import { useFunnelTracking } from "@/application/features/abfrageteil-next/routing/useFunnelTracking";
 import {
   BeispielePage,
   DatenuebernahmeAntragPage,
@@ -36,6 +37,8 @@ import {
 
 function EventProviderLayout() {
   const location = useLocation();
+
+  useFunnelTracking();
 
   return (
     <EventProvider>

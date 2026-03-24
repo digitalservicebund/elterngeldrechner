@@ -3,7 +3,13 @@
 # 2. Create a new tag manager and import the backup json under the versions tab.
 # 3. Adjust the url (localhost) and idSite (1) in the matomo configuration variable.
 # 4. Create a new version of the tag manager and publish a release.
-# 4. Replace the matomo script sections in your local `index.html`.
+# 4. Set the tag manager source variable in .env.development.
+
+# If you do not see events in matomo that you'd expect to be there make sure that:
+# - Disable all ad blockers for this page.
+# - Check the browser network tab for failed matomo requests.
+# - Confirm that matomo.js and container_*.js are loading successfully.
+# - Accept the cookie consent banner (clear cookies to reset its state).
 
 services:
   db:

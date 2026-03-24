@@ -1,10 +1,19 @@
 import { addMonths, addWeeks, isBefore, subWeeks } from "date-fns";
-import { setTrackingVariable } from "@/application/user-tracking/core";
+import {
+  getTrackingVariable,
+  pushTrackingEvent,
+  setTrackingVariable,
+} from "@/application/user-tracking/core";
 
 export function trackNutzergruppe(birthdate: Date): void {
   const nutzergruppe = determineNutzergruppe(new Date(), birthdate);
+  const changed = getTrackingVariable("nutzergruppe") !== nutzergruppe;
 
   setTrackingVariable("nutzergruppe", nutzergruppe);
+
+  if (changed) {
+    pushTrackingEvent("nutzergruppe-bestimmt");
+  }
 }
 
 function determineNutzergruppe(today: Date, birthdate: Date) {
@@ -26,7 +35,7 @@ function determineNutzergruppe(today: Date, birthdate: Date) {
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi } = import.meta.vitest;
 
   describe("determineNutzergruppe", () => {
     it("returns 'nachbeantragende Eltern' 3 months past the birthdate", () => {
@@ -108,6 +117,60 @@ if (import.meta.vitest) {
       const nutzergruppe = determineNutzergruppe(today, birthdate);
 
       expect(nutzergruppe).toEqual("Kinderwunsch vor Schwangerschaft");
+    });
+  });
+
+  const { afterEach, beforeEach } = import.meta.vitest;
+
+  vi.mock(import("@/application/user-tracking/core"));
+
+  describe("trackNutzergruppe", async () => {
+    const userTracking = await import("@/application/user-tracking/core");
+
+    const { getTrackingVariable, setTrackingVariable } = userTracking;
+    const { pushTrackingEvent } = userTracking;
+
+    beforeEach(() => vi.clearAllMocks());
+
+    afterEach(() => vi.useRealTimers());
+
+    it("pushes nutzergruppe-bestimmt when no nutzergruppe was set before", () => {
+      vi.setSystemTime(new Date("2024-04-01"));
+      vi.mocked(getTrackingVariable).mockReturnValue(null);
+
+      trackNutzergruppe(new Date("2024-01-01"));
+
+      expect(pushTrackingEvent).toHaveBeenCalledWith("nutzergruppe-bestimmt");
+      expect(setTrackingVariable).toHaveBeenCalledWith(
+        "nutzergruppe",
+        "nachbeantragende Eltern",
+      );
+    });
+
+    it("pushes nutzergruppe-bestimmt when the nutzergruppe changes", () => {
+      vi.setSystemTime(new Date("2024-04-01"));
+      vi.mocked(getTrackingVariable).mockReturnValue("frische Eltern");
+
+      trackNutzergruppe(new Date("2024-01-01"));
+
+      expect(pushTrackingEvent).toHaveBeenCalledWith("nutzergruppe-bestimmt");
+      expect(setTrackingVariable).toHaveBeenCalledWith(
+        "nutzergruppe",
+        "nachbeantragende Eltern",
+      );
+    });
+
+    it("does not push an event when the nutzergruppe stays the same", () => {
+      vi.setSystemTime(new Date("2024-04-01"));
+      vi.mocked(getTrackingVariable).mockReturnValue("nachbeantragende Eltern");
+
+      trackNutzergruppe(new Date("2024-01-01"));
+
+      expect(pushTrackingEvent).not.toHaveBeenCalled();
+      expect(setTrackingVariable).toHaveBeenCalledWith(
+        "nutzergruppe",
+        "nachbeantragende Eltern",
+      );
     });
   });
 }

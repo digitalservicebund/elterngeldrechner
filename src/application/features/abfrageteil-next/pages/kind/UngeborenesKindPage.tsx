@@ -15,6 +15,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { trackNutzergruppe } from "@/application/user-tracking/metrics";
 
 export function UngeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -37,6 +38,13 @@ export function UngeborenesKindPage() {
     const event: FormEvent = { route: currentRoute, payload: values };
 
     dispatch(event);
+
+    trackNutzergruppe(
+      new Date(
+        values.errechneterEntbindungstermin.toZonedDateTime("UTC")
+          .epochMilliseconds,
+      ),
+    );
 
     void navigate(findeNaechstenPfad(event));
   };

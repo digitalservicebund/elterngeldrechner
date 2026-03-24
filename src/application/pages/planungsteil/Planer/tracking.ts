@@ -195,7 +195,7 @@ function zaehleMonate<A extends Ausgangslage>(
 }
 
 if (import.meta.vitest) {
-  const { vi, describe, it, expect } = import.meta.vitest;
+  const { vi, describe, it, expect, beforeEach } = import.meta.vitest;
 
   describe("track metrics for planer", () => {
     describe("evaluate and track geplante monate mit einkommen", async () => {
@@ -301,6 +301,8 @@ if (import.meta.vitest) {
     describe("evaluate and track geplante monate des partners der mutter", async () => {
       const { Variante, KeinElterngeld } = await import("@/monatsplaner");
       const trackingModule = await import("@/application/user-tracking");
+
+      beforeEach(() => vi.clearAllMocks());
 
       it("tracks nothing if given a Plan with single Elternteil, even it has Mutterschutz", () => {
         const trackingFunction = vi.spyOn(

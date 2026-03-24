@@ -561,6 +561,8 @@ if (import.meta.vitest) {
     describe("tracking", async () => {
       const trackingModule = await import("@/application/user-tracking");
 
+      beforeEach(() => vi.clearAllMocks());
+
       it("schreibt nach einer auswahl die option in eine tracking variable", () => {
         const trackingFunction = vi.spyOn(
           trackingModule,

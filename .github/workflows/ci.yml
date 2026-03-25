@@ -199,11 +199,30 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      - name: Run build specific for familienportal environment
+      - name: Run build (legacy) for familienportal environment
         run: npm run build:production
         env:
           VITE_BASE_PATH: /resource/
           VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
+
+      - name: Rename legacy bundle
+        run: |
+          for f in dist/assets/index-*.js dist/assets/index-*.css; do
+            mv "$f" "${f/\/index-/\/index-abfrageteil-legacy-}"
+          done
+
+      - name: Run build (next) for familienportal environment
+        run: npm run build:production
+        env:
+          VITE_BASE_PATH: /resource/
+          VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
+          VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
+
+      - name: Rename next bundle
+        run: |
+          for f in dist/assets/index-*.js dist/assets/index-*.css; do
+            mv "$f" "${f/\/index-/\/index-abfrageteil-next-}"
+          done
 
       - name: Upload familienportal build artifacts for release
         uses: actions/upload-artifact@v7

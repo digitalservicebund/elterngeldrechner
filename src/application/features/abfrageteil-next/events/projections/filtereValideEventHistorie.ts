@@ -33,7 +33,9 @@ export function filtereValideEventHistorie(
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("filtereValideEventHistorie", () => {
+  describe("filtereValideEventHistorie", async () => {
+    const { Steuerklasse } = await import("@/elterngeldrechner");
+
     it("returns empty array when no events are present", () => {
       const eventStream: FormEvent[] = [];
 
@@ -219,6 +221,155 @@ if (import.meta.vitest) {
             hatBehinderung: false,
             istWeiteresGeschwisterkindVorhanden: false,
           },
+        },
+      ]);
+    });
+
+    it("prunes old sibling events when user reduces sibling count by resubmitting index 0 with istWeiteresGeschwisterkindVorhanden false", () => {
+      const eventStream: FormEvent[] = [
+        {
+          route: Route.GeschwisterkindAbfrage,
+          payload: { istVorhanden: true },
+        },
+        {
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 0 },
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: true,
+          },
+        },
+        {
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 1 },
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: false,
+          },
+        },
+        {
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 0 },
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: false,
+          },
+        },
+      ];
+
+      const result = filtereValideEventHistorie(eventStream);
+
+      expect(result).toEqual([
+        {
+          route: Route.GeschwisterkindAbfrage,
+          payload: { istVorhanden: true },
+        },
+        {
+          route: Route.GeschwisterkindAngaben,
+          params: { geschwisterIndex: 0 },
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
+            hatBehinderung: false,
+            istWeiteresGeschwisterkindVorhanden: false,
+          },
+        },
+      ]);
+    });
+
+    it("prunes old income event and weiteTaetigkeitAbfrage when user resubmits with istMischeinkunft true", () => {
+      const eventStream: FormEvent[] = [
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatKeinEinkommen: false,
+            istSelbststaendig: false,
+            istNichtSelbststaendig: true,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+          },
+          dependentValues: { istPersonAlleinerziehend: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { istTaetigkeitMinijob: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: false,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            istEinkommenGleichVerteilt: true,
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenEinkommen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { durchschnittlichesMonatsbrutto: 3000 },
+          dependentValues: { istMischeinkunft: false },
+        },
+        {
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { istWeitereTaetigkeitVorhanden: false },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+            istSelbststaendigeTaetigkeitMoeglich: false,
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenEinkommen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { durchschnittlichesMonatsbrutto: 3000 },
+          dependentValues: { istMischeinkunft: true },
+        },
+      ];
+
+      const result = filtereValideEventHistorie(eventStream);
+
+      expect(result).toEqual([
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatKeinEinkommen: false,
+            istSelbststaendig: false,
+            istNichtSelbststaendig: true,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+          },
+          dependentValues: { istPersonAlleinerziehend: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { istTaetigkeitMinijob: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: false,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            istEinkommenGleichVerteilt: true,
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenEinkommen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { durchschnittlichesMonatsbrutto: 3000 },
+          dependentValues: { istMischeinkunft: true },
         },
       ]);
     });

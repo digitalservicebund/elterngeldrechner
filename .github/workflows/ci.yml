@@ -205,10 +205,11 @@ jobs:
           VITE_BASE_PATH: /resource/
           VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
 
-      - name: Rename legacy bundle
+      - name: Collect legacy bundle
         run: |
+          mkdir -p familienportal-build
           for f in dist/assets/index-*.js dist/assets/index-*.css; do
-            mv "$f" "${f/\/index-/\/index-abfrageteil-legacy-}"
+            mv "$f" "${f/dist\/assets\/index-/familienportal-build\/index-abfrageteil-legacy-}"
           done
 
       - name: Run build (next) for familienportal environment
@@ -218,17 +219,17 @@ jobs:
           VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
           VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
 
-      - name: Rename next bundle
+      - name: Collect next bundle
         run: |
           for f in dist/assets/index-*.js dist/assets/index-*.css; do
-            mv "$f" "${f/\/index-/\/index-abfrageteil-next-}"
+            mv "$f" "${f/dist\/assets\/index-/familienportal-build\/index-abfrageteil-next-}"
           done
 
       - name: Upload familienportal build artifacts for release
         uses: actions/upload-artifact@v7
         with:
           name: familienportal-build
-          path: dist/assets/index-*
+          path: familienportal-build/index-*
           retention-days: 1
 
   create-release:

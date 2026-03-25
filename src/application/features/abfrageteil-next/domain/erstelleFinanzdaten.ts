@@ -215,11 +215,11 @@ function erstelleEinfacheFinanzDaten(
     };
   }
 
-  const sozialversicherungen = findeLetztesGueltigesEvent(
+  const sozialversicherungen = findeSozialversicherungen(
     events,
-    Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-    { elternteilIndex, taetigkeitIndex },
-  )!;
+    elternteilIndex,
+    taetigkeitIndex,
+  );
 
   return {
     bruttoEinkommen: new Einkommen(durchschnittMonatsbrutto(monatsbrutto)),
@@ -591,6 +591,32 @@ if (import.meta.vitest) {
           mischEinkommenTaetigkeiten: [],
           erwerbsZeitraumLebensMonatList: [],
         });
+      });
+
+      it("throws a descriptive error when sozialversicherungen event is missing", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatKeinEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+            dependentValues: { istPersonAlleinerziehend: false },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: false },
+          },
+        ];
+
+        expect(() => erstelleFinanzDaten(events, 0)).toThrow(
+          "No Sozialversicherungen event found for elternteil 0, taetigkeitIndex 0.",
+        );
       });
     });
 

@@ -1,5 +1,6 @@
 import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
+import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
@@ -18,21 +19,6 @@ import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigat
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
-
-function download(data: Uint8Array, filename: string, mimeType: string) {
-  const blob = new Blob([data.buffer as ArrayBuffer], { type: mimeType });
-
-  const url = URL.createObjectURL(blob);
-
-  const anchorElement = Object.assign(document.createElement("a"), {
-    href: url,
-    download: filename,
-  });
-
-  anchorElement.click();
-
-  URL.revokeObjectURL(url);
-}
 
 function trackedDownloadOfAnlagen(
   event: React.MouseEvent<HTMLAnchorElement>,

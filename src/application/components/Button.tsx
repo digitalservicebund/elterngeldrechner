@@ -46,5 +46,5 @@ const CLASS_NAMES_PER_BUTTON_STYLE: Record<ButtonStyle, string> = {
     "bg-primary text-white px-24 py-16 [@media(hover:hover)]:hover:bg-white [@media(hover:hover)]:hover:text-primary active:focus:bg-white active:focus:text-primary",
   secondary:
     "bg-transparent text-primary px-24 py-16 [@media(hover:hover)]:hover:bg-primary [@media(hover:hover)]:hover:text-white active:focus:bg-primary active:focus:text-white",
-  link: "bg-transparent text-primary p-0 border-none [@media(hover:hover)]:hover:bg-transparent active:focus:outline-none underline",
+  link: "bg-transparent !text-base text-primary p-0 border-none [@media(hover:hover)]:hover:bg-transparent active:focus:outline-none underline",
 };

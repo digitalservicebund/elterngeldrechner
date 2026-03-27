@@ -34,7 +34,7 @@ export function Erklaerung({ onClose }: Props): ReactNode {
                 return (
                   <li key={content.id}>
                     <Button
-                      className="text-left !text-base !text-black"
+                      className="text-left !text-black"
                       type="button"
                       buttonStyle="link"
                       onClick={onClick}

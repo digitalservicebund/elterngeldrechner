@@ -123,7 +123,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                   <Button
                     type="button"
                     buttonStyle="link"
-                    className="!text-base font-bold !text-black"
+                    className="font-bold !text-black"
                     onClick={downloadGanzerAntrag}
                   >
                     <FileDownloadIcon className="mr-6" />
@@ -169,7 +169,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                 <Button
                   type="button"
                   buttonStyle="link"
-                  className="!text-base font-bold !text-black"
+                  className="font-bold !text-black"
                   onClick={downloadPlanungsseite}
                 >
                   <FileDownloadIcon className="mr-6" />

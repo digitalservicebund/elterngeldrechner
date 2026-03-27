@@ -26,7 +26,7 @@ export function Anleitung({
       {children}
 
       <Button
-        className="pt-20 text-left !text-base"
+        className="pt-20 text-left"
         type="button"
         buttonStyle="link"
         onClick={onOpenErklaerung}

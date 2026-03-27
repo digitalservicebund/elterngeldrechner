@@ -150,12 +150,7 @@ export function Pruefbuttonbox({
             )}
 
             <div className="flex flex-col text-center print:hidden">
-              <Button
-                className="text-base"
-                type="button"
-                buttonStyle="link"
-                onClick={planungDrucken}
-              >
+              <Button type="button" buttonStyle="link" onClick={planungDrucken}>
                 <SaveAltIcon className="mr-8" />
                 Planung als PDF drucken oder speichern
               </Button>

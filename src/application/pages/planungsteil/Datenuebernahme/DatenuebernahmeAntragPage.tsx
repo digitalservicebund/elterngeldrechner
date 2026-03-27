@@ -1,6 +1,5 @@
 import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
-import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
@@ -18,6 +17,7 @@ import { useAntragInformationen } from "@/application/pages/planungsteil/useAntr
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
+import { downloadPdf } from "@/application/utilities/downloadPdf";
 import { Elternteil } from "@/monatsplaner";
 
 function trackedDownloadOfAnlagen(
@@ -64,7 +64,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
         plan,
       });
 
-      download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
+      downloadPdf(pdfBytes, "Antrag_auf_Elterngeld.pdf");
 
       pushTrackingEvent("Ganzer-Antrag-wurde-heruntergeladen");
     } catch {
@@ -83,7 +83,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
         plan,
       });
 
-      download(pdfBytes, "Seite_Planung_Elterngeld.pdf", "application/pdf");
+      downloadPdf(pdfBytes, "Seite_Planung_Elterngeld.pdf");
 
       pushTrackingEvent("Planungsseite-wurde-heruntergeladen");
     } catch {

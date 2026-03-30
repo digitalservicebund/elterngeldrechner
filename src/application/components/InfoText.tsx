@@ -23,7 +23,7 @@ export function InfoText({
         <u>{question}</u>
       </summary>
 
-      <div className="mt-4 border-0 border-l-4 border-solid border-grey pl-10">
+      <div className="mt-4 border-0 border-l-4 border-solid border-grey pl-10 [&_ul]:ml-24 [&_ul]:list-disc">
         {typeof answer === "string" ? <p>{answer}</p> : answer}
       </div>
     </details>

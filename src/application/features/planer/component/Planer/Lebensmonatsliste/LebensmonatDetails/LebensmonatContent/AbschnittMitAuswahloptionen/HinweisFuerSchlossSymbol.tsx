@@ -24,7 +24,7 @@ export function HinweisFuerSchlossSymbol({ className }: Props): ReactNode {
             Monate des Mutterschutzes (in der Regel 8 Wochen nach Geburt) gelten
             als Monate mit Basiselterngeld und sind daher geblockt.
           </p>
-          <ul className="ml-32 list-disc">
+          <ul>
             <li>
               Die Mutterschaftsleistungen (von der Krankenkasse und vom
               Arbeitgeber) sind in der Regel so hoch, dass sie Ihr bisheriges

@@ -138,7 +138,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
                 </p>
 
                 <p>Diese Grenze liegt:</p>
-                <ul className="mb-16 ml-8 list-inside list-disc">
+                <ul className="mb-16">
                   <li>seit 2025 bei 556 Euro im Monat,</li>
                   <li>im Jahr 2024 bei 538 Euro im Monat,</li>
                   <li>von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,</li>

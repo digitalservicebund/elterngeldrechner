@@ -168,7 +168,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
                   Beispiel:
                 </p>
 
-                <ul className="list-inside list-disc">
+                <ul>
                   <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
                   <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
                   <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>

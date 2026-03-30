@@ -141,7 +141,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
                 </p>
 
                 <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="mb-16 ml-8 list-inside list-disc">
+                <ul className="mb-16">
                   <li>freiwillig gesetzlich versichert, </li>
                   <li>familienversichert,</li>
                   <li>privat versichert,</li>

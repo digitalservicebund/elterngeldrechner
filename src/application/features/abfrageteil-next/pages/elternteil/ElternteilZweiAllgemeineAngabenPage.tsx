@@ -205,7 +205,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
                         Sie Mutterschaftsleistungen, zum Beispiel:
                       </p>
 
-                      <ul className="list-inside list-disc">
+                      <ul>
                         <li>
                           das Mutterschaftsgeld der gesetzlichen Krankenkassen
                         </li>

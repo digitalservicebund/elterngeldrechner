@@ -137,7 +137,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
                 </p>
 
                 <p>Dazu zählen:</p>
-                <ul className="ml-8 list-inside list-disc">
+                <ul>
                   <li>
                     Weitere angestellten Tätigkeiten (auch Teilzeit oder
                     Minijobs)

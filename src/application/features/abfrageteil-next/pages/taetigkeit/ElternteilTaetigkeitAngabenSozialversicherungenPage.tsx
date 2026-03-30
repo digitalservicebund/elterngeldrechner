@@ -170,7 +170,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                 </p>
 
                 <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="mb-16 ml-8 list-inside list-disc">
+                <ul className="mb-16">
                   <li>freiwillig gesetzlich versichert,</li>
                   <li>familienversichert,</li>
                   <li>privat versichert, </li>
@@ -214,7 +214,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                   Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
                   Beispiel weil Sie:
                 </p>
-                <ul className="mb-16 ml-8 list-inside list-disc">
+                <ul className="mb-16">
                   <li>verbeamtet sind,</li>
                   <li>selbstständig tätig sind,</li>
                   <li>
@@ -258,7 +258,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                   Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
                   Beispiel weil Sie:
                 </p>
-                <ul className="mb-16 ml-8 list-inside list-disc">
+                <ul className="mb-16">
                   <li>verbeamtet sind,</li>
                   <li>selbstständig tätig sind,</li>
                   <li>

@@ -32,10 +32,10 @@ export function ElternteilAusklammerungZeitenInput({
     <div>
       <h5 className="pb-16 font-bold">{title}</h5>
 
-      <div className="flex flex-col gap-20">
+      <div className="flex flex-col gap-32">
         {fields.map((field, index) => (
           <div key={field.id} className="flex flex-col">
-            <div className="flex flex-wrap *:grow *:basis-[22rem]">
+            <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
               <div>
                 <label
                   className={classNames("mb-4 block text-16", {

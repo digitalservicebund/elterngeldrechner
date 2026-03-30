@@ -40,11 +40,14 @@ export function Page({ children, heading }: Props) {
 
       <section
         ref={sectionElement}
-        className="page-grid-content relative focus:outline-none"
+        className="page-grid-content relative focus:outline-none max-[1169px]:mt-20"
         aria-labelledby={headingIdentifier}
         tabIndex={-1}
       >
-        <h2 id={headingIdentifier} className="mb-10 print:m-0">
+        <h2
+          id={headingIdentifier}
+          className="mb-40 max-[1169px]:hidden print:m-0"
+        >
           {heading}
         </h2>
 

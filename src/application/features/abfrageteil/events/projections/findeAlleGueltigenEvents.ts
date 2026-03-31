@@ -32,12 +32,18 @@ if (import.meta.vitest) {
           payload: { istVorhanden: true },
         },
         {
+          route: Route.GeschwisterkindAnzahlAbfrage,
+          payload: { anzahlGeschwister: 2 },
+        },
+        {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterIndex: 0 },
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2020-01-01"),
             hatBehinderung: false,
-            istWeiteresGeschwisterkindVorhanden: true,
+          },
+          dependentValues: {
+            anzahlGeschwister: 2,
           },
         },
         {
@@ -46,7 +52,9 @@ if (import.meta.vitest) {
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2018-06-15"),
             hatBehinderung: true,
-            istWeiteresGeschwisterkindVorhanden: false,
+          },
+          dependentValues: {
+            anzahlGeschwister: 2,
           },
         },
       ];
@@ -60,12 +68,10 @@ if (import.meta.vitest) {
         {
           geburtsdatum: Temporal.PlainDate.from("2020-01-01"),
           hatBehinderung: false,
-          istWeiteresGeschwisterkindVorhanden: true,
         },
         {
           geburtsdatum: Temporal.PlainDate.from("2018-06-15"),
           hatBehinderung: true,
-          istWeiteresGeschwisterkindVorhanden: false,
         },
       ]);
     });

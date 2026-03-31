@@ -461,7 +461,9 @@ if (import.meta.vitest) {
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2022-05-10"),
               hatBehinderung: false,
-              istWeiteresGeschwisterkindVorhanden: false,
+            },
+            dependentValues: {
+              anzahlGeschwister: 1,
             },
           },
           {
@@ -489,7 +491,9 @@ if (import.meta.vitest) {
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2020-03-15"),
               hatBehinderung: false,
-              istWeiteresGeschwisterkindVorhanden: true,
+            },
+            dependentValues: {
+              anzahlGeschwister: 2,
             },
           },
           {
@@ -498,7 +502,9 @@ if (import.meta.vitest) {
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2022-07-01"),
               hatBehinderung: true,
-              istWeiteresGeschwisterkindVorhanden: false,
+            },
+            dependentValues: {
+              anzahlGeschwister: 2,
             },
           },
           {

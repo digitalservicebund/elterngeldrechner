@@ -9,6 +9,7 @@ export enum Route {
   WahrscheinlichGeborenesKindAbfrage = "/kind/ungeboren/validierung",
 
   GeschwisterkindAbfrage = "/geschwisterkind",
+  GeschwisterkindAnzahlAbfrage = "/geschwisterkind/anzahl",
   GeschwisterkindAngaben = "/geschwisterkind/:geschwisterIndex",
 
   ElternteilEinsAllgemeineAngaben = "/elternteil/0",

@@ -345,7 +345,9 @@ if (import.meta.vitest) {
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2021-03-10"),
               hatBehinderung: true,
-              istWeiteresGeschwisterkindVorhanden: false,
+            },
+            dependentValues: {
+              anzahlGeschwister: 1,
             },
           },
         ];

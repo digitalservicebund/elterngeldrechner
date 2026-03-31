@@ -7,6 +7,7 @@ export {
   WahrscheinlichGeborenesKindPage,
 } from "./kind";
 export {
+  GeschwisterbonusUebersichtPage,
   GeschwisterkindAbfragePage,
   GeschwisterkindAngabenPage,
   GeschwisterkindAnzahlAbfragePage,

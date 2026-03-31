@@ -80,6 +80,10 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     }),
   }),
   z.object({
+    route: z.literal(Route.GeschwisterbonusUebersicht),
+    payload: z.never().optional(),
+  }),
+  z.object({
     route: z.literal(Route.ElternteilEinsAllgemeineAngaben),
     payload: ElternteilEinsAllgemeineAngabenSchema,
   }),

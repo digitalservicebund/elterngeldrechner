@@ -1,3 +1,4 @@
+export { GeschwisterbonusUebersichtPage } from "./GeschwisterbonusUebersichtPage";
 export { GeschwisterkindAbfragePage } from "./GeschwisterkindAbfragePage";
 export { GeschwisterkindAngabenPage } from "./GeschwisterkindAngabenPage";
 export { GeschwisterkindAnzahlAbfragePage } from "./GeschwisterkindAnzahlAbfragePage";

@@ -13,6 +13,7 @@ import {
   ElternteilEinsAllgemeineAngabenPage,
   ElternteilTaetigkeitenAbfragePage,
   GeborenesKindPage,
+  GeschwisterbonusUebersichtPage,
   GeschwisterkindAbfragePage,
   GeschwisterkindAngabenPage,
   GeschwisterkindAnzahlAbfragePage,
@@ -106,6 +107,10 @@ const RouteDefinition = [
           {
             element: <GeschwisterkindAnzahlAbfragePage />,
             path: generateAbfrageteilPath(Route.GeschwisterkindAnzahlAbfrage),
+          },
+          {
+            element: <GeschwisterbonusUebersichtPage />,
+            path: generateAbfrageteilPath(Route.GeschwisterbonusUebersicht),
           },
           {
             element: <GeschwisterkindAngabenPage />,

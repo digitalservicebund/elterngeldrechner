@@ -55,7 +55,9 @@ function getNextSubpath(event: FormEvent): string {
         ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
             geschwisterIndex: (event.params.geschwisterIndex + 1).toString(),
           })
-        : Route.ElternteilEinsAllgemeineAngaben;
+        : Route.GeschwisterbonusUebersicht;
+    case Route.GeschwisterbonusUebersicht:
+      return Route.ElternteilEinsAllgemeineAngaben;
     case Route.ElternteilEinsAllgemeineAngaben:
       return generateParametrizedPath(
         Route.ElternteilAusklammerungGruendeAngaben,
@@ -403,7 +405,7 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/2");
       });
 
-      it("returns ElternteilEinsAllgemeineAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and anzahlGeschwister is 1", () => {
+      it("returns GeschwisterbonusUebersicht given GeschwisterkindAngaben as currentRoute, index equals zero and anzahlGeschwister is 1", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterIndex: 0 },
@@ -414,6 +416,16 @@ if (import.meta.vitest) {
           dependentValues: {
             anzahlGeschwister: 1,
           },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/bonus");
+      });
+    });
+
+    describe("GeschwisterbonusUebersicht", () => {
+      it("returns ElternteilEinsAllgemeineAngaben given GeschwisterbonusUebersicht as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterbonusUebersicht,
         });
 
         expect(naechsterPfad).toEqual("/abfrageteil/elternteil/0");

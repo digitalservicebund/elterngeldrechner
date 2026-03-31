@@ -85,7 +85,7 @@ if (import.meta.vitest) {
       expect(vorherigerPfad).toEqual("/abfrageteil/allgemeine-angaben");
     });
 
-    it("returns /abfrageteil/geschwisterkind/0 when called from elternteil/0 with geschwisterkind events", () => {
+    it("returns /abfrageteil/geschwisterkind/0 when called from /geschwisterkind/bonus with geschwisterkind events", () => {
       const vorherigerPfad = findeVorherigenPfad(
         [
           { route: Route.Startseite },
@@ -137,6 +137,9 @@ if (import.meta.vitest) {
             },
           },
           {
+            route: Route.GeschwisterbonusUebersicht,
+          },
+          {
             route: Route.ElternteilEinsAllgemeineAngaben,
             payload: {
               name: "Anna",
@@ -145,7 +148,7 @@ if (import.meta.vitest) {
             },
           },
         ],
-        Route.ElternteilEinsAllgemeineAngaben,
+        Route.GeschwisterbonusUebersicht,
       );
 
       expect(vorherigerPfad).toEqual("/abfrageteil/geschwisterkind/1");

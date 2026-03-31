@@ -15,6 +15,7 @@ import {
   GeborenesKindPage,
   GeschwisterkindAbfragePage,
   GeschwisterkindAngabenPage,
+  GeschwisterkindAnzahlAbfragePage,
   KindPage,
   Startseite,
   UngeborenesKindPage,
@@ -101,6 +102,10 @@ const RouteDefinition = [
           {
             element: <GeschwisterkindAbfragePage />,
             path: generateAbfrageteilPath(Route.GeschwisterkindAbfrage),
+          },
+          {
+            element: <GeschwisterkindAnzahlAbfragePage />,
+            path: generateAbfrageteilPath(Route.GeschwisterkindAnzahlAbfrage),
           },
           {
             element: <GeschwisterkindAngabenPage />,

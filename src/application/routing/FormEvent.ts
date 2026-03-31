@@ -12,6 +12,7 @@ import {
 import {
   GeschwisterkindAbfrageSchema,
   GeschwisterkindAngabenSchema,
+  GeschwisterkindAnzahlAbfrageSchema,
 } from "@/application/features/abfrageteil/pages/geschwister/GeschwisterSchema";
 import {
   GeborenesKindSchema,
@@ -67,9 +68,16 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: GeschwisterkindAbfrageSchema,
   }),
   z.object({
+    route: z.literal(Route.GeschwisterkindAnzahlAbfrage),
+    payload: GeschwisterkindAnzahlAbfrageSchema,
+  }),
+  z.object({
     route: z.literal(Route.GeschwisterkindAngaben),
     params: z.object({ geschwisterIndex: z.number() }),
     payload: GeschwisterkindAngabenSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilEinsAllgemeineAngaben),

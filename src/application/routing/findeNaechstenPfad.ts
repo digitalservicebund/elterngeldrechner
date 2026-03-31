@@ -43,12 +43,15 @@ function getNextSubpath(event: FormEvent): string {
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
       return event.payload.istVorhanden
-        ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
-            geschwisterIndex: "0",
-          })
+        ? Route.GeschwisterkindAnzahlAbfrage
         : Route.ElternteilEinsAllgemeineAngaben;
+    case Route.GeschwisterkindAnzahlAbfrage:
+      return generateParametrizedPath(Route.GeschwisterkindAngaben, {
+        geschwisterIndex: "0",
+      });
     case Route.GeschwisterkindAngaben:
-      return event.payload.istWeiteresGeschwisterkindVorhanden
+      return event.dependentValues.anzahlGeschwister >
+        event.params.geschwisterIndex + 1
         ? generateParametrizedPath(Route.GeschwisterkindAngaben, {
             geschwisterIndex: (event.params.geschwisterIndex + 1).toString(),
           })
@@ -331,7 +334,7 @@ if (import.meta.vitest) {
     });
 
     describe("GeschwisterkindAbfrage", () => {
-      it("returns GeschwisterkindAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals yes", () => {
+      it("returns GeschwisterkindAnzahlAbfrage given GeschwisterkindAbfrage as currentRoute and istVorhanden equals yes", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAbfrage,
           payload: {
@@ -339,7 +342,7 @@ if (import.meta.vitest) {
           },
         });
 
-        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/0");
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/anzahl");
       });
 
       it("returns ElternteilEinsAllgemeineAngaben given GeschwisterkindAbfrage as currentRoute and istVorhanden equals no", () => {
@@ -354,43 +357,62 @@ if (import.meta.vitest) {
       });
     });
 
+    describe("GeschwisterkindAnzahlAbfrage", () => {
+      it("returns GeschwisterkindAngaben given GeschwisterkindAnzahlAbfrage as currentRoute", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.GeschwisterkindAnzahlAbfrage,
+          payload: {
+            anzahlGeschwister: 1,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/0");
+      });
+    });
+
     describe("GeschwisterkindAngaben", () => {
-      it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+      it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and anzahlGeschwister is 2", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterIndex: 0 },
           payload: {
             geburtsdatum: Temporal.Now.plainDateISO(),
             hatBehinderung: false,
-            istWeiteresGeschwisterkindVorhanden: true,
+          },
+          dependentValues: {
+            anzahlGeschwister: 2,
           },
         });
 
         expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/1");
       });
 
-      it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals one and istWeiteresGeschwisterkindVorhanden equals yes", () => {
+      it("returns GeschwisterkindAngaben given GeschwisterkindAngaben as currentRoute, index equals one and anzahlGeschwister is 3", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterIndex: 1 },
           payload: {
             geburtsdatum: Temporal.Now.plainDateISO(),
             hatBehinderung: false,
-            istWeiteresGeschwisterkindVorhanden: true,
+          },
+          dependentValues: {
+            anzahlGeschwister: 3,
           },
         });
 
         expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind/2");
       });
 
-      it("returns ElternteilEinsAllgemeineAngaben given GeschwisterkindAngaben as currentRoute and istWeiteresGeschwisterkindVorhanden equals no", () => {
+      it("returns ElternteilEinsAllgemeineAngaben given GeschwisterkindAngaben as currentRoute, index equals zero and anzahlGeschwister is 1", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterIndex: 0 },
           payload: {
             geburtsdatum: Temporal.Now.plainDateISO(),
             hatBehinderung: false,
-            istWeiteresGeschwisterkindVorhanden: false,
+          },
+          dependentValues: {
+            anzahlGeschwister: 1,
           },
         });
 

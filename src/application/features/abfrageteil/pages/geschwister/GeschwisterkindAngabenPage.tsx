@@ -8,10 +8,11 @@ import {
   GeschwisterkindAngaben,
   GeschwisterkindAngabenSchema,
 } from "./GeschwisterSchema";
-import { Button } from "@/application/features/components";
+import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { Page } from "@/application/features/components/Page";
+import { findeAnzahlGeschwister } from "@/application/features/abfrageteil/domain/findeAnzahlGeschwister";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {
@@ -23,7 +24,11 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 
 export function GeschwisterkindAngabenPage() {
-  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
+  const {
+    dispatch,
+    findeLetztesGueltigesEvent,
+    filtereValideEventHistorie,
+  } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -36,7 +41,10 @@ export function GeschwisterkindAngabenPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const eventStream = filtereValideEventHistorie();
+  const anzahlGeschwister = findeAnzahlGeschwister(eventStream);
+
+  const { register, handleSubmit, formState, subscribe, watch } = useForm({
     resolver: zodResolver(GeschwisterkindAngabenSchema),
     defaultValues: encodeSafely(
       GeschwisterkindAngabenSchema,
@@ -53,6 +61,9 @@ export function GeschwisterkindAngabenPage() {
       route: currentRoute,
       payload: values,
       params: routeParams,
+      dependentValues: {
+        anzahlGeschwister,
+      },
     };
 
     dispatch(event);
@@ -61,6 +72,8 @@ export function GeschwisterkindAngabenPage() {
   };
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
+
+  const geburtsdatum = watch("geburtsdatum");
 
   const geburtsdatumInputIdentifier = useId();
 
@@ -73,7 +86,10 @@ export function GeschwisterkindAngabenPage() {
         noValidate
       >
         <div>
-          <h3 className="mb-10">Wann wurde das Geschwisterkind geboren?</h3>
+          <h3 className="mb-10">
+            Wann wurde das Geschwisterkind {routeParams.geschwisterIndex + 1}{" "}
+            geboren?
+          </h3>
 
           <label
             className={classNames("mb-4 mt-20 block text-16", {
@@ -94,7 +110,11 @@ export function GeschwisterkindAngabenPage() {
 
         <CustomRadioGroup
           legend=<h3 className="mb-10">
-            Hat das Geschwisterkind eine Behinderung?
+            Hat das Geschwisterkind{" "}
+            {geburtsdatum && geburtsdatum.length > 0
+              ? `(geb. ${geburtsdatum})`
+              : routeParams.geschwisterIndex + 1}{" "}
+            eine Behinderung?
           </h3>
           errors={formErrors}
           register={register}
@@ -103,20 +123,12 @@ export function GeschwisterkindAngabenPage() {
             { value: "yes", label: "Ja" },
             { value: "no", label: "Nein" },
           ]}
-        />
-
-        <CustomRadioGroup
-          legend=<h3 className="mb-10">
-            Gibt es noch ein weiteres Geschwisterkind?
-          </h3>
-          errors={formErrors}
-          register={register}
-          name="istWeiteresGeschwisterkindVorhanden"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        />
+        >
+          <InfoText
+            question="Warum fragen wir das?"
+            answer="Wenn Sie ein Kind mit Behinderung unter 14 Jahren haben, können Sie den Geschwisterbonus länger erhalten."
+          />
+        </CustomRadioGroup>
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

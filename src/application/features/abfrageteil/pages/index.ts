@@ -9,6 +9,7 @@ export {
 export {
   GeschwisterkindAbfragePage,
   GeschwisterkindAngabenPage,
+  GeschwisterkindAnzahlAbfragePage,
 } from "./geschwister";
 export {
   ElternteilAusklammerungGruendePage,

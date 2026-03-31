@@ -8,14 +8,23 @@ export const GeschwisterkindAbfrageSchema = z.object({
   istVorhanden: BooleanRadiobuttonCodec,
 });
 
+export const GeschwisterkindAnzahlAbfrageSchema = z.object({
+  anzahlGeschwister: z.coerce
+    .number({ error: "Invalide Eingabe" })
+    .min(1, "Mindestens 1 Kind"),
+});
+
 export const GeschwisterkindAngabenSchema = z.object({
   geburtsdatum: GermanDateInputCodec,
   hatBehinderung: BooleanRadiobuttonCodec,
-  istWeiteresGeschwisterkindVorhanden: BooleanRadiobuttonCodec,
 });
 
 export type GeschwisterkindAbfrage = z.infer<
   typeof GeschwisterkindAbfrageSchema
+>;
+
+export type GeschwisterkindAnzahlAbfrage = z.infer<
+  typeof GeschwisterkindAnzahlAbfrageSchema
 >;
 
 export type GeschwisterkindAngaben = z.infer<
@@ -74,28 +83,18 @@ if (import.meta.vitest) {
       expect({
         geburtsdatum: "10.02.2026",
         hatBehinderung: "no",
-        istWeiteresGeschwisterkindVorhanden: "no",
       }).toEqual(expect.schemaMatching(GeschwisterkindAngabenSchema));
     });
 
     it("is invalid if geburtsdatum is missing", () => {
       expect({
         hatBehinderung: "no",
-        istWeiteresGeschwisterkindVorhanden: "no",
       }).not.toEqual(expect.schemaMatching(GeschwisterkindAngabenSchema));
     });
 
     it("is invalid if hatBehinderung is missing", () => {
       expect({
         geburtsdatum: "10.02.2026",
-        istWeiteresGeschwisterkindVorhanden: "no",
-      }).not.toEqual(expect.schemaMatching(GeschwisterkindAngabenSchema));
-    });
-
-    it("is invalid if istWeiteresGeschwisterkindVorhanden is missing", () => {
-      expect({
-        geburtsdatum: "10.02.2026",
-        hatBehinderung: "no",
       }).not.toEqual(expect.schemaMatching(GeschwisterkindAngabenSchema));
     });
   });

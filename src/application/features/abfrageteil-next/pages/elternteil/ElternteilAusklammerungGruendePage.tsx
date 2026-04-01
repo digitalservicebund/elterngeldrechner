@@ -171,7 +171,7 @@ export function ElternteilAusklammerungGruendePage() {
               className="mt-20"
               register={register}
               name="hatElterngeldAelteresKind"
-              label={`${vorname} hat für ein älteres Kind Elterngeld bekommen`}
+              label={`${vorname} hat für ein älteres Kind Elterngeld bekommen (nur bis zum 14. Lebensmonat des Kindes)`}
               errors={showGeneralErrorMessage}
               aria-describedby={
                 showGeneralErrorMessage ? generalErrorId : undefined

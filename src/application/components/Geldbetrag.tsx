@@ -6,7 +6,7 @@ type Props = {
 };
 
 export function Geldbetrag({ betrag, className }: Props): ReactNode {
-  const gerundeterBetrag = Math.round(betrag);
+  const gerundeterBetrag = Math.ceil(betrag);
   const formattedBetrag = gerundeterBetrag.toLocaleString("de-DE", {
     style: "currency",
     currency: "EUR",

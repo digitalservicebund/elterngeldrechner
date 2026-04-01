@@ -39,7 +39,7 @@ function berrechneSummeFuerElternteil(
     .filter(isVariante).length;
 
   const elterngeldbezug = Object.values(lebensmonate)
-    .map((monat) => Math.round(monat.elterngeldbezug ?? 0))
+    .map((monat) => Math.ceil(monat.elterngeldbezug ?? 0))
     .reduce((sum, elterngeldbezug) => sum + elterngeldbezug, 0);
 
   const bruttoeinkommen = Object.values(lebensmonate)

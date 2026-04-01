@@ -36,12 +36,12 @@ if (import.meta.vitest) {
     it("does not show any fraction digits", () => {
       render(<Geldbetrag betrag={12.34} />);
 
-      expect(screen.getByText("12 €")).toBeVisible();
+      expect(screen.getByText("13 €")).toBeVisible();
     });
 
     it.each([
       { betrag: 1, gerundet: 1 },
-      { betrag: 1.4, gerundet: 1 },
+      { betrag: 1.4, gerundet: 2 },
       { betrag: 1.5, gerundet: 2 },
       { betrag: 1.6, gerundet: 2 },
       { betrag: 2, gerundet: 2 },

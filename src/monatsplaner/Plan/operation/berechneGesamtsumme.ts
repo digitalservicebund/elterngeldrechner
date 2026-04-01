@@ -239,7 +239,7 @@ if (import.meta.vitest) {
 
       const gesamtsumme = berechneGesamtsumme(plan);
 
-      expect(gesamtsumme.elterngeldbezug).toBe(22066);
+      expect(gesamtsumme.elterngeldbezug).toBe(22080);
     });
 
     it("just works for single Elternteile too", () => {

@@ -23,7 +23,10 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import { gruppiereBemessungszeitraum } from "@/bemessungszeitraumrechner";
+import {
+  Ausklammerung,
+  gruppiereBemessungszeitraum,
+} from "@/bemessungszeitraumrechner";
 
 export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const {
@@ -95,16 +98,52 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
+  function istGruppierterZeitabschnittAusklammerung(
+    zeitabschnitt: Temporal.PlainYearMonth[] | Ausklammerung[],
+  ): zeitabschnitt is Ausklammerung[] {
+    const ersterZeitabschnitt = zeitabschnitt[0];
+    return (
+      !!ersterZeitabschnitt &&
+      !Array.isArray(ersterZeitabschnitt) &&
+      "grund" in ersterZeitabschnitt
+    );
+  }
+
   const zeitabschnitte = gruppiereBemessungszeitraum({
     bemessungszeitraum,
     ausklammerungen,
   });
-  const alleEinkommensMonate = useMemo(() => {
-    return zeitabschnitte
-      .filter((zeitabschnitt): zeitabschnitt is Temporal.PlainYearMonth[] =>
-        Array.isArray(zeitabschnitt),
-      )
-      .flat();
+
+  const { gruppierteZeitabschnitte, alleEinkommensMonate } = useMemo(() => {
+    const initialAcc = {
+      gruppierteZeitabschnitte: [] as Array<
+        Temporal.PlainYearMonth[] | Ausklammerung[]
+      >,
+      alleEinkommensMonate: [] as Temporal.PlainYearMonth[],
+    };
+
+    const result = zeitabschnitte.reduce((acc, curr) => {
+      const lastGroup =
+        acc.gruppierteZeitabschnitte[acc.gruppierteZeitabschnitte.length - 1];
+
+      if (Array.isArray(curr)) {
+        acc.gruppierteZeitabschnitte.push(curr);
+        acc.alleEinkommensMonate.push(...curr);
+      } else {
+        if (lastGroup && istGruppierterZeitabschnittAusklammerung(lastGroup)) {
+          lastGroup.push(curr);
+        } else {
+          acc.gruppierteZeitabschnitte.push([curr]);
+        }
+      }
+
+      return acc;
+    }, initialAcc);
+
+    return {
+      gruppierteZeitabschnitte: result.gruppierteZeitabschnitte,
+      alleEinkommensMonate: result.alleEinkommensMonate,
+    };
   }, [zeitabschnitte]);
 
   const berechneMonatsindex = (
@@ -112,35 +151,6 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     alleMonate: Temporal.PlainYearMonth[],
   ): number => {
     return alleMonate.findIndex((monat) => monat.equals(aktuellerMonat));
-  };
-
-  const erstelleZeitabschnittUeberschrift = (
-    zeitabschnitt: Temporal.PlainYearMonth[],
-    blockNummer: number,
-  ): string => {
-    if (zeitabschnitt.length === 0) return `Zeitraum ${blockNummer}`;
-
-    const vonMonat = zeitabschnitt[0];
-    const bisMonat = zeitabschnitt.at(-1);
-
-    if (vonMonat && bisMonat) {
-      const von = vonMonat.toPlainDate({ day: 1 }).toLocaleString("de-DE", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-      const bis = bisMonat
-        .toPlainDate({ day: bisMonat.daysInMonth })
-        .toLocaleString("de-DE", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-
-      return `Zeitraum ${blockNummer}: ${von} – ${bis}`;
-    }
-
-    return `Zeitraum ${blockNummer}`;
   };
 
   return (
@@ -151,12 +161,6 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumBox
-          bemessungszeitraum={bemessungszeitraum}
-          ausklammerungen={ausklammerungen}
-          taetigkeitenFlow={taetigkeitenFlow}
-        />
-
         <div>
           <h5 className="mb-20">
             Wie viel hat {vorname} im Bemessungszeitraum pro Monat brutto
@@ -183,32 +187,22 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
             }
           />
 
-          {zeitabschnitte.map((zeitabschnitt, index) => {
-            if (!Array.isArray(zeitabschnitt)) {
+          {gruppierteZeitabschnitte.map((zeitabschnitt, index) => {
+            if (istGruppierterZeitabschnittAusklammerung(zeitabschnitt)) {
               return (
                 <div key={index}>
                   <BemessungszeitraumBox
                     bemessungszeitraum={[]}
-                    ausklammerungen={[zeitabschnitt]}
+                    ausklammerungen={zeitabschnitt}
                     taetigkeitenFlow={taetigkeitenFlow}
                   />
                 </div>
               );
             }
 
-            const einkommensBlockNummer = zeitabschnitte
-              .slice(0, index + 1)
-              .filter(Array.isArray).length;
-
             return (
               <div key={index} className="mt-20 bg-off-white p-40 pt-32">
                 <div className="flex flex-col gap-16 pl-8">
-                  <h5>
-                    {erstelleZeitabschnittUeberschrift(
-                      zeitabschnitt,
-                      einkommensBlockNummer,
-                    )}
-                  </h5>
                   {zeitabschnitt.map((month) => {
                     const monatsIndex = berechneMonatsindex(
                       month,

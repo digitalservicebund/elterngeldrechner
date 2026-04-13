@@ -15,11 +15,6 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 
-type Geschwisterbonus = {
-  zuBeruecksichtigendeGeschwisterkinder: Temporal.PlainDate[];
-  bonusGrund: string;
-};
-
 export function GeschwisterbonusUebersichtPage() {
   const { dispatch, findeVorherigenPfad, filtereValideEventHistorie } =
     useEventContext();
@@ -31,26 +26,10 @@ export function GeschwisterbonusUebersichtPage() {
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
   const geburtsdatum = findeGeburtsdatum(eventStream);
 
-  const geschwisterbonus = bestehtAnspruchAufGeschwisterbonus(
+  const geschwisterbonus = berechneEnddatumGeschwisterbonus(
     geschwisterkinder,
     geburtsdatum,
   );
-
-  const formatiereGeschwisterkinderFuerBonus = (
-    geburtsdatenGeschwisterkinder: Temporal.PlainDate[],
-  ): string => {
-    return geburtsdatenGeschwisterkinder
-      .map((date) => {
-        const geburtsdatum = date.toLocaleString("de-DE", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-
-        return `Geschwisterkind (geboren ${geburtsdatum})`;
-      })
-      .join(" und ");
-  };
 
   const navigateNextPage = () => {
     const event: FormEvent = {
@@ -74,21 +53,31 @@ export function GeschwisterbonusUebersichtPage() {
             <div className="flex rounded bg-success-background p-20 font-bold">
               <SuccessIcon className="mr-10 mt-8 shrink-0 text-success" />
 
-              <h3>
-                Super, voraussichtlich haben Sie Anspruch auf den
-                Geschwisterbonus
-              </h3>
+              <h3>Super, Sie können den Geschwisterbonus erhalten</h3>
             </div>
 
             <div className=" p-20">
               <ul className="ml-32 mt-4 list-disc">
                 <li>
-                  Berücksichtigt werden können die Angaben für{" "}
-                  {formatiereGeschwisterkinderFuerBonus(
-                    geschwisterbonus.zuBeruecksichtigendeGeschwisterkinder,
-                  )}
+                  Ihre Angaben haben ergeben, dass die Voraussetzungen für den
+                  Geschwisterbonus erfüllt sind
                 </li>
-                <li>{geschwisterbonus.bonusGrund}</li>
+                <li>
+                  Die Erhöhung wird bis{" "}
+                  <strong>
+                    zum Erreichen der Altersgrenze am{" "}
+                    {geschwisterbonus.toLocaleString("de-DE", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })}
+                  </strong>{" "}
+                  gezahlt
+                </li>
+                <li>
+                  Der Geschwisterbonus wird im Planer direkt auf ihr Elterngeld
+                  dazu gerechnet
+                </li>
               </ul>
             </div>
           </div>
@@ -103,9 +92,8 @@ export function GeschwisterbonusUebersichtPage() {
             <div className=" p-20">
               <ul className="ml-32 mt-4 list-disc">
                 <li>
-                  Die Angaben der älteren Geschwisterkinder / des älteren
-                  Geschwisterkindes hat ergeben, dass diese nicht für einen
-                  Geschwisterbonus berücksichtigt werden können.
+                  Ihre Angaben haben ergeben, dass die Altersgrenzen für den
+                  Geschwisterbonus derzeit überschritten sind.
                 </li>
               </ul>
             </div>
@@ -132,69 +120,99 @@ export function GeschwisterbonusUebersichtPage() {
   );
 }
 
-const bestehtAnspruchAufGeschwisterbonus = (
+const berechneEnddatumGeschwisterbonus = (
   geschwisterkinder: GeschwisterkindAngaben[],
-  bezugsdatum: Temporal.PlainDate,
-): Geschwisterbonus | false => {
-  const relevanteKinder = geschwisterkinder
-    .map((kind) => {
-      const diff = bezugsdatum.since(kind.geburtsdatum, {
-        largestUnit: "year",
-      });
-      return { ...kind, alter: diff.years };
-    })
-    .filter((kind) => (kind.hatBehinderung ? kind.alter < 14 : kind.alter < 6));
+  geburtsdatumNeugeborenes: Temporal.PlainDate,
+): Temporal.PlainDate | null => {
+  if (geschwisterkinder.length === 0) return null;
 
-  if (relevanteKinder.length === 0) return false;
+  const letzterTagDesMonats = (date: Temporal.PlainDate) =>
+    date.with({ day: date.daysInMonth });
 
-  if (relevanteKinder.some((k) => k.alter < 3)) {
-    return {
-      zuBeruecksichtigendeGeschwisterkinder: relevanteKinder.map(
-        (k) => k.geburtsdatum,
-      ),
-      bonusGrund:
-        "Sie haben ein Kind unter 3 Jahren - daher können Sie den Geschwisterbonus erhalten",
-    };
+  const geschwisterkinderMitGeburtsdaten = geschwisterkinder.map((kind) => ({
+    dritterGeburtstag: kind.geburtsdatum.add({ years: 3 }),
+    sechsterGeburtstag: kind.geburtsdatum.add({ years: 6 }),
+    vierzehnterGeburtstag: kind.geburtsdatum.add({ years: 14 }),
+    hatBehinderung: kind.hatBehinderung,
+  }));
+
+  const moeglicheEnddaten: Temporal.PlainDate[] = [];
+
+  const juengstesGeschwisterkindWirdDrei = geschwisterkinderMitGeburtsdaten
+    .filter(
+      (kind) =>
+        Temporal.PlainDate.compare(
+          kind.dritterGeburtstag,
+          geburtsdatumNeugeborenes,
+        ) > 0,
+    )
+    .map((kind) => letzterTagDesMonats(kind.dritterGeburtstag))
+    .sort(void Temporal.PlainDate.compare)
+    .at(-1);
+
+  if (juengstesGeschwisterkindWirdDrei) {
+    moeglicheEnddaten.push(juengstesGeschwisterkindWirdDrei);
   }
 
-  const anzahlKinderUnter6 = relevanteKinder.filter((k) => k.alter < 6).length;
-  if (anzahlKinderUnter6 >= 2) {
-    return {
-      zuBeruecksichtigendeGeschwisterkinder: relevanteKinder.map(
-        (k) => k.geburtsdatum,
-      ),
-      bonusGrund:
-        "Sie haben zwei Kinder unter 6 Jahren - daher können Sie den Geschwisterbonus erhalten",
-    };
+  const sechsteGeburtstage = geschwisterkinderMitGeburtsdaten
+    .filter(
+      (kind) =>
+        Temporal.PlainDate.compare(
+          kind.sechsterGeburtstag,
+          geburtsdatumNeugeborenes,
+        ) > 0,
+    )
+    .map((kind) => letzterTagDesMonats(kind.sechsterGeburtstag))
+    .sort(void Temporal.PlainDate.compare);
+
+  if (sechsteGeburtstage.length >= 2) {
+    const zweitJuengstesGeschwisterkindWirdSechs =
+      sechsteGeburtstage[sechsteGeburtstage.length - 2];
+
+    if (zweitJuengstesGeschwisterkindWirdSechs)
+      moeglicheEnddaten.push(zweitJuengstesGeschwisterkindWirdSechs);
   }
 
-  const hatKindMitBehinderungUnter14 = relevanteKinder.some(
-    (k) => k.hatBehinderung && k.alter < 14,
+  const juengstesGeschwisterkindMitBehinderungWirdVierzehn =
+    geschwisterkinderMitGeburtsdaten
+      .filter(
+        (kind) =>
+          kind.hatBehinderung &&
+          Temporal.PlainDate.compare(
+            kind.vierzehnterGeburtstag,
+            geburtsdatumNeugeborenes,
+          ) > 0,
+      )
+      .map((kind) => letzterTagDesMonats(kind.vierzehnterGeburtstag))
+      .sort(void Temporal.PlainDate.compare)
+      .at(-1);
+
+  if (juengstesGeschwisterkindMitBehinderungWirdVierzehn) {
+    moeglicheEnddaten.push(juengstesGeschwisterkindMitBehinderungWirdVierzehn);
+  }
+
+  if (moeglicheEnddaten.length === 0) return null;
+
+  return moeglicheEnddaten.reduce((max, aktuell) =>
+    Temporal.PlainDate.compare(aktuell, max) > 0 ? aktuell : max,
   );
-  if (hatKindMitBehinderungUnter14) {
-    return {
-      zuBeruecksichtigendeGeschwisterkinder: relevanteKinder.map(
-        (k) => k.geburtsdatum,
-      ),
-      bonusGrund:
-        "Sie haben ein Kind mit Behinderung unter 14 Jahren - daher können Sie den Geschwisterbonus erhalten",
-    };
-  }
-
-  return false;
 };
 
 if (import.meta.vitest) {
   const { it, expect, describe } = import.meta.vitest;
 
-  describe("bestehtAnspruchAufGeschwisterbonus", () => {
-    const geburtsdatum = Temporal.PlainDate.from("2024-05-02");
+  describe("berechneEnddatumGeschwisterbonus", () => {
+    const geburtsdatumNeugeborenes = Temporal.PlainDate.from("2024-05-02");
     const kindUnter3 = {
-      geburtsdatum: Temporal.PlainDate.from("2021-05-03"),
+      geburtsdatum: Temporal.PlainDate.from("2022-05-15"),
       hatBehinderung: false,
     };
     const kindUnter6 = {
-      geburtsdatum: Temporal.PlainDate.from("2018-05-03"),
+      geburtsdatum: Temporal.PlainDate.from("2019-08-10"),
+      hatBehinderung: false,
+    };
+    const zweitesKindUnter6 = {
+      geburtsdatum: Temporal.PlainDate.from("2020-11-20"),
       hatBehinderung: false,
     };
     const kindUeber6 = {
@@ -202,51 +220,64 @@ if (import.meta.vitest) {
       hatBehinderung: false,
     };
     const kindUnter14MitBehinderung = {
-      geburtsdatum: Temporal.PlainDate.from("2010-05-03"),
+      geburtsdatum: Temporal.PlainDate.from("2011-10-05"),
       hatBehinderung: true,
     };
 
-    it("sollte false zurückgeben, wenn keine Geschwisterkinder vorhanden sind", () => {
-      expect(bestehtAnspruchAufGeschwisterbonus([], geburtsdatum)).toBe(false);
+    it("sollte null zurückgeben, wenn keine Geschwisterkinder vorhanden sind", () => {
+      expect(
+        berechneEnddatumGeschwisterbonus([], geburtsdatumNeugeborenes),
+      ).toBe(null);
     });
 
-    it("sollte den Bonus für ein Kind unter 3 Jahren erkennen", () => {
-      const kinder = [kindUnter3, kindUnter6, kindUnter14MitBehinderung];
-      const result = bestehtAnspruchAufGeschwisterbonus(kinder, geburtsdatum);
-
-      expect(result).not.toBe(false);
-      if (result) {
-        expect(result.bonusGrund).toContain("ein Kind unter 3 Jahren");
-      }
-    });
-
-    it("sollte den Bonus für zwei Kinder unter 6 Jahren erkennen", () => {
-      const kinder = [kindUnter6, kindUnter6, kindUnter14MitBehinderung];
-      const result = bestehtAnspruchAufGeschwisterbonus(kinder, geburtsdatum);
-
-      expect(result).not.toBe(false);
-      if (result) {
-        expect(result.bonusGrund).toContain("zwei Kinder unter 6 Jahren");
-      }
-    });
-
-    it("sollte den Bonus für ein Kind mit Behinderung unter 14 Jahren erkennen", () => {
-      const kinder = [kindUeber6, kindUnter14MitBehinderung];
-      const result = bestehtAnspruchAufGeschwisterbonus(kinder, geburtsdatum);
-
-      expect(result).not.toBe(false);
-      if (result) {
-        expect(result.bonusGrund).toContain(
-          "Kind mit Behinderung unter 14 Jahren",
-        );
-      }
-    });
-
-    it("sollte false zurückgeben, wenn die Kinder zu alt sind", () => {
-      const kinder = [kindUeber6];
-      expect(bestehtAnspruchAufGeschwisterbonus(kinder, geburtsdatum)).toBe(
-        false,
+    it("sollte das Ende des Monats berechnen, in dem das einzige Geschwisterkind 3 Jahre alt wird", () => {
+      const kinder = [kindUnter3];
+      const result = berechneEnddatumGeschwisterbonus(
+        kinder,
+        geburtsdatumNeugeborenes,
       );
+
+      expect(result?.toString()).toBe("2025-05-31");
+    });
+
+    it("sollte bei zwei Geschwistern unter 6 das Ende des Monats berechnen, in dem eins der Geschwisterkinder 6 Jahre alt wird", () => {
+      const kinder = [kindUnter6, zweitesKindUnter6];
+      const result = berechneEnddatumGeschwisterbonus(
+        kinder,
+        geburtsdatumNeugeborenes,
+      );
+
+      expect(result?.toString()).toBe("2025-08-31");
+    });
+
+    it("sollte das Ende des Monats berechnen, in dem ein Geschwisterkind mit Behinderung 14 Jahre alt wird", () => {
+      const kinder = [kindUnter14MitBehinderung];
+      const result = berechneEnddatumGeschwisterbonus(
+        kinder,
+        geburtsdatumNeugeborenes,
+      );
+
+      expect(result?.toString()).toBe("2025-10-31");
+    });
+
+    it("sollte den spätestmöglichen Termin wählen bei mehreren Kindern, die für Bonus relevant sind", () => {
+      const kinder = [kindUnter3, kindUnter14MitBehinderung];
+      const result = berechneEnddatumGeschwisterbonus(
+        kinder,
+        geburtsdatumNeugeborenes,
+      );
+
+      expect(result?.toString()).toBe("2025-10-31");
+    });
+
+    it("sollte null zurückgeben, wenn alle Kinder bereits aus den Altersgrenzen gefallen sind", () => {
+      const kinder = [kindUeber6];
+      const result = berechneEnddatumGeschwisterbonus(
+        kinder,
+        geburtsdatumNeugeborenes,
+      );
+
+      expect(result).toBe(null);
     });
   });
 }

@@ -167,26 +167,36 @@ export function PlanerPage() {
                 className="mb-40"
                 onOpenErklaerung={() => setIsErklaerungOpen(true)}
               >
-                {initialPlanerInformation.beispiel ? (
+                <>
                   <p>
-                    Sie finden hier einen Vorschlag für eine Planung und die
-                    Höhe Ihres Elterngeldes. Zusätzlich können Sie angeben, ob
-                    und wie viel Einkommen Sie pro Monat haben werden. So
-                    erhalten Sie einen Überblick über Ihr voraussichtliches
-                    Haushaltseinkommen. Im nächsten Schritt können Sie Ihre
-                    Planung in den Antrag übernehmen.
+                    Planen Sie hier Ihr Elterngeld. Klicken Sie auf die
+                    Lebensmonate, um etwas auszwählen oder zu ändern. So finden
+                    Sie heraus, welche Planung für Sie am besten ist:
                   </p>
-                ) : (
-                  <p>
-                    Mit dem Rechner und Planer können Sie Ihr Elterngeld für
-                    jeden Monat planen. Zusätzlich können Sie angeben, ob und
-                    wie viel Einkommen Sie pro Monat haben werden. So erhalten
-                    Sie einen Überblick über Ihr voraussichtliches
-                    Haushaltseinkommen. Im nächsten Schritt können Sie Ihre
-                    Planung in den Antrag übernehmen.
-                  </p>
-                )}
+                  <ul className="ml-24 list-disc">
+                    <li>
+                      Die Beträge werden auf Basis Ihrer Angaben berechnet. Sie
+                      sind rechtlich nicht verbindlich.
+                    </li>
+                    <li>
+                      Mutterschaftsgeld ist in der Summe nicht eingerechnet.
+                    </li>
+                    <li>
+                      Das eingegebene Einkommen aus Ihrer Arbeit ist ein
+                      Brutto-Wert. Darauf müssen Sie noch Steuern zahlen.
+                    </li>
+                  </ul>
+                </>
               </Anleitung>
+
+              <p className="mb-40">
+                <strong>Tipp für Ihre Planung: </strong>
+                Sie können Elterngeld bekommen und dabei bis zu 32 Stunden pro
+                Woche arbeiten. Geben Sie in dem Fall Ihr Einkommen während des
+                Elterngeldes an. Das Einkommen wird mit dem Elterngeld
+                verrechnet. So sehen Sie, wie viel Geld Sie jeden Monat
+                insgesamt haben.
+              </p>
 
               <Button
                 type="button"

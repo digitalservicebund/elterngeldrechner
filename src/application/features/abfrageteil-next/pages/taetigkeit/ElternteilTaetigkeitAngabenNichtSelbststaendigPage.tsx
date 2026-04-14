@@ -112,6 +112,10 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
             Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
             anzugeben.
           </p>
+          <p>
+            Je genauer Ihre Angaben sind, desto besser kann der Rechner das
+            Elterngeld für Sie ausrechnen.
+          </p>
         </div>
 
         <CustomRadioGroup

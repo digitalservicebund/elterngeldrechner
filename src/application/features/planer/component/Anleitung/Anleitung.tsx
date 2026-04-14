@@ -26,13 +26,13 @@ export function Anleitung({
       {children}
 
       <Button
-        className="pt-20 text-left"
+        className="pt-10 text-left"
         type="button"
         buttonStyle="link"
         onClick={onOpenErklaerung}
       >
         <ReadMoreIcon className="mr-4" />
-        {description || "Hier finden Sie weitere Informationen zu Elterngeld"}
+        {description || "Hier erklären wir die verschiedenen Elterngeld-Arten"}
       </Button>
     </section>
   );
@@ -68,7 +68,7 @@ if (import.meta.vitest) {
 
       await userEvent.click(
         screen.getByRole("button", {
-          name: "Hier finden Sie weitere Informationen zu Elterngeld",
+          name: "Hier erklären wir die verschiedenen Elterngeld-Arten",
         }),
       );
 

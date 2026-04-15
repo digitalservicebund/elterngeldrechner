@@ -56,6 +56,9 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
       route: currentRoute,
       payload: values,
       params: routeParams,
+      dependentValues: {
+        kannDurchschnittAngegebenWerden,
+      },
     };
 
     dispatch(event);
@@ -77,6 +80,8 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
     taetigkeiten.istSelbststaendig === true
       ? "Selbstaendig"
       : "Nicht-Selbstaendig";
+  const kannDurchschnittAngegebenWerden =
+    !taetigkeiten.hatKeinEinkommen && !taetigkeiten.hatAndereLeistungen;
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

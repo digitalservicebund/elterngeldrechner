@@ -102,6 +102,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     route: z.literal(Route.ElternteilTaetigkeitAngabenNichtSelbststaendig),
     params: TaetigkeitParams,
     payload: TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
+    dependentValues: z.object({
+      kannDurchschnittAngegebenWerden: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitAngabenMinijob),

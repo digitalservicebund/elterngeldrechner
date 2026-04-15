@@ -129,8 +129,7 @@ function istImMutterschutz(
   );
 
   if (taetigkeitenAbfrage) {
-    return !taetigkeitenAbfrage.hatKeinEinkommen &&
-      taetigkeitenAbfrage.istVerbeamtet
+    return taetigkeitenAbfrage.istVerbeamtet
       ? false
       : istElternteilImMutterschutz;
   }
@@ -329,7 +328,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: false,
+            hatKeinEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,

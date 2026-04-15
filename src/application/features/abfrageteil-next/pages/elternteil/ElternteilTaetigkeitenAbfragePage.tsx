@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import {
   ElternteilTaetigkeitenAbfrage,
   ElternteilTaetigkeitenAbfrageSchema,
-  taetigkeitenFelder,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
@@ -50,7 +49,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
       letztesGueltigesEvent,
     ),
   });
-  const { register, handleSubmit, formState, setValue } = form;
+  const { register, handleSubmit, formState } = form;
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
@@ -87,14 +86,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const showGeneralErrorMessage = !!formErrors.hatKeinEinkommen?.message;
   const generalErrorId = "keine-auswahl-fehler";
 
-  const handleTaetigkeitChange = (checked: boolean) => {
-    if (checked) setValue("hatKeinEinkommen", false);
-  };
-
-  const handleKeinEinkommenChange = (checked: boolean) => {
-    if (checked) taetigkeitenFelder.forEach((feld) => setValue(feld, false));
-  };
-
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
@@ -124,7 +115,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined
             }
-            onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
               zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
@@ -141,7 +131,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined
             }
-            onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
               zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land- oder
@@ -159,7 +148,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined
             }
-            onChange={handleTaetigkeitChange}
           />
 
           <CustomCheckbox
@@ -171,7 +159,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined
             }
-            onChange={handleTaetigkeitChange}
           >
             <p className="font-regular">
               zum Beispiel Bürgergeld, Arbeitslosengeld, Krankengeld oder
@@ -188,7 +175,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined
             }
-            onChange={handleKeinEinkommenChange}
           >
             <p className="font-regular">
               zum Beispiel während eines Studiums, als Hausfrau oder Hausmann.

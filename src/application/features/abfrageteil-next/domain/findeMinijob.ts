@@ -37,6 +37,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 1, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: true },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
       ];
 
@@ -49,6 +50,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 0, taetigkeitIndex: 1 },
           payload: { istTaetigkeitMinijob: true },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
       ];
 
@@ -61,6 +63,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: true },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
       ];
 
@@ -75,11 +78,13 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: true },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
         {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: false },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
       ];
 

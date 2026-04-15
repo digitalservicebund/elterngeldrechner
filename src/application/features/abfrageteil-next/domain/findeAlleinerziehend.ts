@@ -29,6 +29,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 1, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: true },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
       ];
 

@@ -37,7 +37,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 1 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -52,7 +58,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -60,6 +72,10 @@ if (import.meta.vitest) {
       ];
 
       expect(findeTaetigkeiten(events, 0)).toEqual({
+        istNichtSelbststaendig: false,
+        istSelbststaendig: false,
+        istVerbeamtet: false,
+        hatAndereLeistungen: false,
         hatKeinEinkommen: true,
       });
     });
@@ -69,7 +85,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -78,7 +100,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatKeinEinkommen: true,
             istSelbststaendig: true,
             istNichtSelbststaendig: false,
             istVerbeamtet: false,
@@ -91,7 +113,7 @@ if (import.meta.vitest) {
       ];
 
       expect(findeTaetigkeiten(events, 0)).toEqual({
-        hatKeinEinkommen: false,
+        hatKeinEinkommen: true,
         istSelbststaendig: true,
         istNichtSelbststaendig: false,
         istVerbeamtet: false,

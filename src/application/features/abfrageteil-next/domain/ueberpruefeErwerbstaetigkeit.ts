@@ -12,7 +12,7 @@ export function ueberpruefeErwerbstaetigkeit(
     { elternteilIndex },
   );
 
-  if (taetigkeiten === undefined || taetigkeiten.hatKeinEinkommen) {
+  if (taetigkeiten === undefined) {
     return false;
   }
 
@@ -31,7 +31,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -41,12 +47,18 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 1)).toEqual(false);
     });
 
-    it("returns false if hatKeinEinkommen for given elternteil is true", () => {
+    it("returns false if only hatKeinEinkommen for given elternteil is true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -77,13 +89,13 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 0)).toEqual(false);
     });
 
-    it("returns true if hatKeinEinkommen for given elternteil is false and istSelbststaendig true", () => {
+    it("returns true no matter what value hatKeinEinkommen has for given elternteil and istSelbststaendig true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatKeinEinkommen: true,
             istSelbststaendig: true,
             istNichtSelbststaendig: false,
             istVerbeamtet: false,

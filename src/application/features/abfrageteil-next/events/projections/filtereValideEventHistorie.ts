@@ -297,6 +297,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: false },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
         {
           route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
@@ -352,6 +353,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: { istTaetigkeitMinijob: false },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
         },
         {
           route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,

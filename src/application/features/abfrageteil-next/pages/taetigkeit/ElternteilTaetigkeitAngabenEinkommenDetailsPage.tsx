@@ -162,10 +162,21 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
         noValidate
       >
         <div>
-          <h5 className="mb-20">
+          <h5 className="mb-10">
             Wie viel hat {vorname} im Bemessungszeitraum pro Monat brutto
             verdient?
           </h5>
+
+          <div className="mb-20">
+            <p>
+              Wir errechnen aufgrund Ihrer Angaben ein monatliches
+              Durchschnittsgehalt.
+            </p>
+            <p>
+              Für die Monate in denen Sie kein Einkommen, Sozialleistungen oder
+              Einkommensersatzleistungen erhalten haben geben Sie “0” ein.
+            </p>
+          </div>
 
           <InfoText
             className="mb-16"

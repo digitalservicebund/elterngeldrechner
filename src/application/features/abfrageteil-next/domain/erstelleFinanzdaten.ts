@@ -441,7 +441,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -475,7 +481,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -488,7 +500,13 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 1 },
-          payload: { hatKeinEinkommen: true },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatKeinEinkommen: true,
+          },
           dependentValues: {
             istPersonAlleinerziehend: false,
           },
@@ -518,13 +536,19 @@ if (import.meta.vitest) {
 
   describe("erstelleFinanzDaten", () => {
     describe("Kein Einkommen", () => {
-      it("returns Finanzdaten without Bruttoeinkommen if hatKeinEinkommen equals true", () => {
+      it("returns Finanzdaten without Bruttoeinkommen if only hatKeinEinkommen equals true", () => {
         const finanzdaten = erstelleFinanzDaten(
           [
             {
               route: Route.ElternteilTaetigkeitenAbfrage,
               params: { elternteilIndex: 0 },
-              payload: { hatKeinEinkommen: true },
+              payload: {
+                istNichtSelbststaendig: false,
+                istSelbststaendig: false,
+                istVerbeamtet: false,
+                hatAndereLeistungen: false,
+                hatKeinEinkommen: true,
+              },
               dependentValues: {
                 istPersonAlleinerziehend: false,
               },
@@ -553,7 +577,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatKeinEinkommen: true,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -567,6 +591,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
@@ -615,7 +640,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatKeinEinkommen: true,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -627,6 +652,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
           },
         ];
 
@@ -657,6 +683,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenMinijob,
@@ -693,7 +720,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatKeinEinkommen: true,
               istSelbststaendig: true,
               istNichtSelbststaendig: false,
               istVerbeamtet: false,
@@ -793,6 +820,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
@@ -820,6 +848,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
@@ -851,7 +880,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatKeinEinkommen: true,
               istSelbststaendig: true,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -876,6 +905,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
@@ -942,6 +972,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
@@ -965,6 +996,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
@@ -1010,6 +1042,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 0 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
@@ -1033,6 +1066,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
@@ -1044,6 +1078,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
             params: { elternteilIndex: 0, taetigkeitIndex: 2 },
             payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,

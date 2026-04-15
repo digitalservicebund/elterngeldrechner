@@ -85,12 +85,13 @@ export type ElternteilAusklammerungZeiten = z.infer<
   typeof ElternteilAusklammerungZeitenSchema
 >;
 
-const TaetigkeitenSchema = z
+export const ElternteilTaetigkeitenAbfrageSchema = z
   .object({
     istNichtSelbststaendig: z.boolean(),
     istSelbststaendig: z.boolean(),
     istVerbeamtet: z.boolean(),
     hatAndereLeistungen: z.boolean(),
+    hatKeinEinkommen: z.boolean(),
   })
   .refine(
     (data) => {
@@ -101,22 +102,6 @@ const TaetigkeitenSchema = z
       path: ["hatKeinEinkommen"],
     },
   );
-
-export const taetigkeitenFelder = Object.keys(
-  TaetigkeitenSchema.def.shape,
-) as Array<keyof z.infer<typeof TaetigkeitenSchema>>;
-
-export const ElternteilTaetigkeitenAbfrageSchema = z.discriminatedUnion(
-  "hatKeinEinkommen",
-  [
-    z.object({
-      hatKeinEinkommen: z.literal(true),
-    }),
-    TaetigkeitenSchema.extend({
-      hatKeinEinkommen: z.literal(false),
-    }),
-  ],
-);
 
 export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
@@ -213,10 +198,10 @@ if (import.meta.vitest) {
   describe("ElternteilTaetigkeitenAbfrageSchema", () => {
     const schema = ElternteilTaetigkeitenAbfrageSchema;
 
-    it("accepts hatKeinEinkommen: true alone", () => {
+    it("rejects hatKeinEinkommen: true alone", () => {
       const result = schema.safeParse({ hatKeinEinkommen: true });
 
-      expect(result.success).toBeTruthy();
+      expect(result.success).toBeFalsy();
     });
 
     it("rejects hatKeinEinkommen: false with no other field selected", () => {

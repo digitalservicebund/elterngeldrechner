@@ -59,7 +59,12 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   const onSubmit = (values: TaetigkeitNichtSelbststaendigAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
-      payload: values,
+      payload: {
+        ...values,
+        istEinkommenGleichVerteilt: kannDurchschnittAngegebenWerden
+          ? values.istEinkommenGleichVerteilt
+          : false,
+      },
       params: routeParams,
     };
 
@@ -82,6 +87,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
     taetigkeiten.istSelbststaendig === true
       ? "Selbstaendig"
       : "Nicht-Selbstaendig";
+  const kannDurchschnittAngegebenWerden =
+    !taetigkeiten.hatKeinEinkommen && !taetigkeiten.hatAndereLeistungen;
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );
@@ -134,9 +141,9 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         </div>
 
         <CustomRadioGroup
-          legend=<h5 className="mb-10">
-            Ist {vorname} kirchensteuerpflichtig?
-          </h5>
+          legend={
+            <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
+          }
           errors={formErrors}
           register={register}
           name="istKirchensteuerpflichtig"
@@ -148,10 +155,12 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Ist {vorname} über die gesetzliche Krankenversicherung
-            pflichtversichert?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Ist {vorname} über die gesetzliche Krankenversicherung
+              pflichtversichert?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istGesetzlichKrankenpflichtversichert"
@@ -189,10 +198,12 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-            Rentenversicherung?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+              Rentenversicherung?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istGesetzlichRentenversichert"
@@ -233,10 +244,12 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-            Arbeitslosenversicherung?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+              Arbeitslosenversicherung?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istGesetzlichArbeitlosenversichert"
@@ -275,25 +288,35 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           />
         </CustomRadioGroup>
 
-        <CustomRadioGroup
-          legend=<h5 className="mb-10">
-            Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
-            verdient?
-          </h5>
-          errors={formErrors}
-          register={register}
-          name="istEinkommenGleichVerteilt"
-          options={[
-            {
-              value: "yes",
-              label: `Ja, ${vorname} hat jeden Monat gleich viel verdient`,
-            },
-            {
-              value: "no",
-              label: `Nein, ${vorname} hat unterschiedlich viel verdient`,
-            },
-          ]}
-        />
+        {kannDurchschnittAngegebenWerden ? (
+          <CustomRadioGroup
+            legend={
+              <h5 className="mb-10">
+                Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
+                verdient?
+              </h5>
+            }
+            errors={formErrors}
+            register={register}
+            name="istEinkommenGleichVerteilt"
+            options={[
+              {
+                value: "yes",
+                label: `Ja, ${vorname} hat jeden Monat gleich viel verdient`,
+              },
+              {
+                value: "no",
+                label: `Nein, ${vorname} hat unterschiedlich viel verdient`,
+              },
+            ]}
+          />
+        ) : (
+          <input
+            type="hidden"
+            {...register("istEinkommenGleichVerteilt")}
+            value="no"
+          />
+        )}
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

@@ -235,20 +235,11 @@ export function PlanerPage() {
             <Button
               type="button"
               buttonStyle="secondary"
-              className="mt-16 justify-self-start print:hidden"
+              className="my-16 justify-self-start print:hidden"
               onClick={navigateToBeispielePage}
             >
               <ChevronLeft /> Zurück zur Auswahl
             </Button>
-
-            <p className="my-16 max-w-[70ch]">
-              Hinweis: Mutterschaftsleistungen werden nicht in der Summe
-              berücksichtigt.
-              <br />
-              Sie bekommen Elterngeld in der Höhe, die angegeben ist, ohne dass
-              etwas abgezogen wird. Auf das angezeigte Einkommen müssen noch
-              Steuern entrichtet werden.
-            </p>
 
             {!!showFeedbackForm && (
               <UserFeedbackForm

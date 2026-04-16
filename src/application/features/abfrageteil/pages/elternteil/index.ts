@@ -2,6 +2,7 @@ export { ElternteilEinsAllgemeineAngabenPage } from "./ElternteilEinsAllgemeineA
 export { ElternteilAusklammerungGruendePage } from "./ElternteilAusklammerungGruendePage";
 export { ElternteilAusklammerungZeitenPage } from "./ElternteilAusklammerungZeitenPage";
 export { ElternteilTaetigkeitenAbfragePage } from "./ElternteilTaetigkeitenAbfragePage";
+export { ElternteilBMZUebersichtPage } from "./ElternteilBMZUebersichtPage";
 
 export type {
   ElternteilAusklammerungGruende,

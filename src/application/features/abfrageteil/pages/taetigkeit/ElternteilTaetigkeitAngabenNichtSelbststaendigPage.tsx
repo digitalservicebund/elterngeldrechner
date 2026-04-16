@@ -8,10 +8,9 @@ import {
   TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
+import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
-import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -85,10 +84,6 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
     routeParams.elternteilIndex,
   );
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
-  const ausklammerungen = findeAusklammerungen(
-    eventStream,
-    routeParams.elternteilIndex,
-  );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
@@ -100,18 +95,17 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumBox
-          bemessungszeitraum={bemessungszeitraum}
-          ausklammerungen={ausklammerungen}
-          taetigkeitenFlow={taetigkeitenFlow}
-        />
-
         <div>
           <h3 className="mb-10">
             Details zur Tätigkeit als Angestellte oder Angestellter
           </h3>
 
-          <p>
+          <BemessungszeitraumKurzuebersicht
+            bemessungszeitraum={bemessungszeitraum}
+            taetigkeitenFlow={taetigkeitenFlow}
+          />
+
+          <p className="mt-32">
             Bitte geben Sie hier Details zur Tätigkeit von {vorname} an. Im
             Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
             anzugeben.
@@ -124,9 +118,11 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Handelt es sich um Einkommen aus einem Minijob?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Handelt es sich um Einkommen aus einem Minijob?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istTaetigkeitMinijob"

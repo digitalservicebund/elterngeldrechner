@@ -8,7 +8,7 @@ import {
   WeitereTaetigkeitAbfrageSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
+import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil/domain/findeAlleinerziehend";
@@ -97,9 +97,8 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumBox
+        <BemessungszeitraumKurzuebersicht
           bemessungszeitraum={bemessungszeitraum}
-          ausklammerungen={[]}
           taetigkeitenFlow={taetigkeitenFlow}
         />
 

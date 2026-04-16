@@ -9,7 +9,7 @@ import {
   TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
+import { AusklammerungsZeitraumBox } from "@/application/features/abfrageteil/components/AusklammerungsZeitraumBox";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
@@ -197,11 +197,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
             if (istGruppierterZeitabschnittAusklammerung(zeitabschnitt)) {
               return (
                 <div key={index}>
-                  <BemessungszeitraumBox
-                    bemessungszeitraum={[]}
-                    ausklammerungen={zeitabschnitt}
-                    taetigkeitenFlow={taetigkeitenFlow}
-                  />
+                  <AusklammerungsZeitraumBox ausklammerungen={zeitabschnitt} />
                 </div>
               );
             }

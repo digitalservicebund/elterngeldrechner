@@ -331,7 +331,20 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
           },
-          dependentValues: { istPersonAlleinerziehend: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenBMZUebersicht,
+          params: { elternteilIndex: 0 },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+            taetigkeiten: {
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+              hatPeriodenOhneEinkommen: false,
+            },
+          },
         },
         {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -387,7 +400,20 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
           },
-          dependentValues: { istPersonAlleinerziehend: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenBMZUebersicht,
+          params: { elternteilIndex: 0 },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+            taetigkeiten: {
+              hatPeriodenOhneEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+          },
         },
         {
           route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,

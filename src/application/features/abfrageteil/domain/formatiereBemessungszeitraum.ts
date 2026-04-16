@@ -2,19 +2,29 @@ import { Zeitraum } from "@/bemessungszeitraumrechner";
 
 export const formatiereBemessungszeitraum = (
   zeitraeume: Zeitraum[],
-): string => {
-  return zeitraeume
-    .map((time) => {
-      const von = time.von
-        .toPlainDate({ day: 1 })
-        .toLocaleString("de-DE", { month: "long", year: "numeric" });
-      const bis = time.bis
-        .toPlainDate({ day: 1 })
-        .toLocaleString("de-DE", { month: "long", year: "numeric" });
+): string[] => {
+  return zeitraeume.map(({ von, bis }) => {
+    if (von.equals(bis)) {
+      return von.toPlainDate({ day: 1 }).toLocaleString("de-DE", {
+        month: "long",
+        year: "numeric",
+      });
+    }
 
-      return von === bis ? von : `${von} bis ${bis}`;
-    })
-    .join(" und ");
+    const imGleichenJahr = von.year === bis.year;
+
+    const vonString = von.toPlainDate({ day: 1 }).toLocaleString("de-DE", {
+      month: "long",
+      year: imGleichenJahr ? undefined : "numeric",
+    });
+
+    const bisString = bis.toPlainDate({ day: 1 }).toLocaleString("de-DE", {
+      month: "long",
+      year: "numeric",
+    });
+
+    return `${vonString} bis ${bisString}`;
+  });
 };
 
 if (import.meta.vitest) {
@@ -23,11 +33,11 @@ if (import.meta.vitest) {
   describe("formatiereBemessungszeitraum", async () => {
     const { Temporal } = await import("@js-temporal/polyfill");
 
-    it("returns empty string when zeitraeume is an empty array", () => {
-      expect(formatiereBemessungszeitraum([])).toEqual("");
+    it("returns empty array when zeitraeume is an empty array", () => {
+      expect(formatiereBemessungszeitraum([])).toEqual([]);
     });
 
-    it("returns string of one von and bis when zeitraeume array has one zeitraum", () => {
+    it("returns array with one string of von and bis when zeitraeume array has one zeitraum", () => {
       const zeitraeume: Zeitraum[] = [
         {
           von: Temporal.PlainYearMonth.from("2024-11"),
@@ -35,25 +45,12 @@ if (import.meta.vitest) {
         },
       ];
 
-      expect(formatiereBemessungszeitraum(zeitraeume)).toEqual(
+      expect(formatiereBemessungszeitraum(zeitraeume)).toEqual([
         "November 2024 bis Oktober 2025",
-      );
+      ]);
     });
 
-    it("returns string of one von and bis with written bis when zeitraeume array has one zeitraum and trennstrichAusgeschrieben true", () => {
-      const zeitraeume: Zeitraum[] = [
-        {
-          von: Temporal.PlainYearMonth.from("2024-11"),
-          bis: Temporal.PlainYearMonth.from("2025-10"),
-        },
-      ];
-
-      expect(formatiereBemessungszeitraum(zeitraeume)).toEqual(
-        "November 2024 bis Oktober 2025",
-      );
-    });
-
-    it("returns string of two von and bis separated with & when zeitraeume array has two zeitraum", () => {
+    it("returns array with two strings of two von and bis when zeitraeume array has two zeitraum", () => {
       const zeitraeume: Zeitraum[] = [
         {
           von: Temporal.PlainYearMonth.from("2024-11"),
@@ -65,9 +62,28 @@ if (import.meta.vitest) {
         },
       ];
 
-      expect(formatiereBemessungszeitraum(zeitraeume)).toEqual(
-        "November 2024 bis Januar 2025 und März 2025 bis November 2025",
-      );
+      expect(formatiereBemessungszeitraum(zeitraeume)).toEqual([
+        "November 2024 bis Januar 2025",
+        "März bis November 2025",
+      ]);
+    });
+
+    it("returns array with one string of only von given one zeitraum is only one month and one of von and bis when zeitraeume array has two zeitraum", () => {
+      const zeitraeume: Zeitraum[] = [
+        {
+          von: Temporal.PlainYearMonth.from("2024-11"),
+          bis: Temporal.PlainYearMonth.from("2024-11"),
+        },
+        {
+          von: Temporal.PlainYearMonth.from("2025-01"),
+          bis: Temporal.PlainYearMonth.from("2025-11"),
+        },
+      ];
+
+      expect(formatiereBemessungszeitraum(zeitraeume)).toEqual([
+        "November 2024",
+        "Januar bis November 2025",
+      ]);
     });
   });
 }

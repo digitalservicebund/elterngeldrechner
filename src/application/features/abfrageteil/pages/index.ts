@@ -15,6 +15,7 @@ export {
 export {
   ElternteilAusklammerungGruendePage,
   ElternteilAusklammerungZeitenPage,
+  ElternteilBMZUebersichtPage,
   ElternteilEinsAllgemeineAngabenPage,
   ElternteilTaetigkeitenAbfragePage,
 } from "./elternteil";

@@ -8,10 +8,9 @@ import {
   TaetigkeitGleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
+import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";
-import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -81,10 +80,6 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
     routeParams.elternteilIndex,
   );
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
-  const ausklammerungen = findeAusklammerungen(
-    eventStream,
-    routeParams.elternteilIndex,
-  );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
@@ -96,9 +91,8 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumBox
+        <BemessungszeitraumKurzuebersicht
           bemessungszeitraum={bemessungszeitraum}
-          ausklammerungen={ausklammerungen}
           taetigkeitenFlow={taetigkeitenFlow}
         />
 

@@ -8,10 +8,9 @@ import {
   TaetigkeitMinijobEinkommendetailsAbfrageSchema,
 } from "./TaetigkeitSchema";
 import { Button } from "@/application/features/components";
-import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
+import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
-import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -77,10 +76,6 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
     routeParams.elternteilIndex,
   );
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
-  const ausklammerungen = findeAusklammerungen(
-    eventStream,
-    routeParams.elternteilIndex,
-  );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
@@ -92,21 +87,22 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumBox
-          bemessungszeitraum={bemessungszeitraum}
-          ausklammerungen={ausklammerungen}
-          taetigkeitenFlow={taetigkeitenFlow}
-        />
+        <div>
+          <h3>Details zur Tätigkeit als Angestellte oder Angestellter</h3>
 
-        <h3 className="mb-10">
-          Details zur Tätigkeit als Angestellte oder Angestellter
-        </h3>
+          <BemessungszeitraumKurzuebersicht
+            bemessungszeitraum={bemessungszeitraum}
+            taetigkeitenFlow={taetigkeitenFlow}
+          />
+        </div>
 
         <CustomRadioGroup
-          legend=<h5 className="mb-10">
-            Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
-            verdient?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
+              verdient?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istEinkommenGleichVerteilt"

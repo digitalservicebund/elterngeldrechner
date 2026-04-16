@@ -8,11 +8,10 @@ import {
   TaetigkeitSelbststaendigAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
+import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
-import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
@@ -69,11 +68,6 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
   const bemessungszeitraum = berechneBemessungszeitraum("Selbstaendig");
 
   const eventStream = filtereValideEventHistorie();
-  const ausklammerungen = findeAusklammerungen(
-    eventStream,
-    routeParams.elternteilIndex,
-  );
-
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   useValidierungsfehlerTracking(subscribe);
@@ -86,16 +80,14 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumBox
-          bemessungszeitraum={bemessungszeitraum}
-          ausklammerungen={ausklammerungen}
-          taetigkeitenFlow="Selbstaendig"
-        />
-
         <div>
           <h3 className="mb-10">Details zur selbstständigen Tätigkeit</h3>
 
-          <p>
+          <BemessungszeitraumKurzuebersicht
+            bemessungszeitraum={bemessungszeitraum}
+            taetigkeitenFlow="Selbstaendig"
+          />
+          <p className="mt-32">
             Bitte geben Sie hier Details zur Tätigkeit von {vorname} an. Im
             Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
             anzugeben.
@@ -107,9 +99,9 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         </div>
 
         <CustomRadioGroup
-          legend=<h5 className="mb-10">
-            Ist {vorname} kirchensteuerpflichtig?
-          </h5>
+          legend={
+            <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
+          }
           errors={formErrors}
           register={register}
           name="istKirchensteuerpflichtig"
@@ -121,10 +113,12 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Ist {vorname} über die gesetzliche Krankenversicherung
-            pflichtversichert?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Ist {vorname} über die gesetzliche Krankenversicherung
+              pflichtversichert?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istGesetzlichKrankenpflichtversichert"
@@ -163,10 +157,12 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-            Rentenversicherung?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+              Rentenversicherung?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istGesetzlichRentenversichert"
@@ -183,10 +179,12 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <CustomRadioGroup
           className="mt-16"
-          legend=<h5 className="mb-10">
-            Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-            Arbeitslosenversicherung?
-          </h5>
+          legend={
+            <h5 className="mb-10">
+              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+              Arbeitslosenversicherung?
+            </h5>
+          }
           errors={formErrors}
           register={register}
           name="istGesetzlichArbeitlosenversichert"

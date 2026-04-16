@@ -10,7 +10,6 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomCheckbox } from "@/application/features/abfrageteil/components/CustomCheckbox";
 import { Page } from "@/application/features/components/Page";
-import { findeAlleinerziehend } from "@/application/features/abfrageteil/domain/findeAlleinerziehend";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
@@ -39,9 +38,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
     routeParams,
   );
 
-  const eventStream = filtereValideEventHistorie();
-  const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
-
   const form = useForm<ElternteilTaetigkeitenAbfrage>({
     resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
     defaultValues: encodeSafely(
@@ -59,9 +55,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
       route: currentRoute,
       payload: values,
       params: routeParams,
-      dependentValues: {
-        istPersonAlleinerziehend,
-      },
     };
 
     dispatch(event);
@@ -85,6 +78,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
     year: "numeric",
   });
 
+  const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   const showGeneralErrorMessage =

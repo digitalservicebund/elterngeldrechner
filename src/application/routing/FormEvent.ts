@@ -3,8 +3,12 @@ import { z } from "zod";
 import { Route } from "./Route";
 import { AllgemeineAngabenSchema } from "@/application/features/abfrageteil/pages/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
-  ElternteilAusklammerungGruendeSchema,
-  ElternteilAusklammerungZeitenSchema,
+  ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema,
+  ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema,
+  ElternteilAusklammerungErkrankungAbfrageSchema,
+  ElternteilAusklammerungErkrankungZeitenSchema,
+  ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema,
+  ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema,
   ElternteilEinsAllgemeineAngabenSchema,
   ElternteilGemeinsamePlanungAbfrageSchema,
   ElternteilTaetigkeitenAbfrageSchema,
@@ -33,6 +37,11 @@ import {
 } from "@/application/features/abfrageteil/pages/taetigkeit/TaetigkeitSchema";
 
 const ElternteilParams = z.object({ elternteilIndex: z.number() });
+
+const AusklammerungParams = z.object({
+  elternteilIndex: z.number(),
+  geschwisterIndex: z.number(),
+});
 
 const TaetigkeitParams = z.object({
   elternteilIndex: z.number(),
@@ -93,14 +102,52 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: ElternteilGemeinsamePlanungAbfrageSchema,
   }),
   z.object({
-    route: z.literal(Route.ElternteilAusklammerungGruendeAngaben),
+    route: z.literal(Route.ElternteilAusklammerungErkrankungAbfrage),
     params: ElternteilParams,
-    payload: ElternteilAusklammerungGruendeSchema,
+    payload: ElternteilAusklammerungErkrankungAbfrageSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
   }),
   z.object({
-    route: z.literal(Route.ElternteilAusklammerungZeitenAngaben),
+    route: z.literal(Route.ElternteilAusklammerungErkrankungZeitenAngaben),
     params: ElternteilParams,
-    payload: ElternteilAusklammerungZeitenSchema,
+    payload: ElternteilAusklammerungErkrankungZeitenSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilAusklammerungElternzeitAbfrage),
+    params: AusklammerungParams,
+    payload: ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilAusklammerungElternzeitZeitenAngaben),
+    params: AusklammerungParams,
+    payload: ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilAusklammerungMutterschutzAbfrage),
+    params: AusklammerungParams,
+    payload: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
+  }),
+  z.object({
+    route: z.literal(Route.ElternteilAusklammerungMutterschutzZeitenAngaben),
+    params: AusklammerungParams,
+    payload: ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema,
+    dependentValues: z.object({
+      anzahlGeschwister: z.number(),
+    }),
   }),
   z.object({
     route: z.literal(Route.ElternteilTaetigkeitenAbfrage),
@@ -173,7 +220,8 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     route: z.literal(Route.ElternteilZweiAllgemeineAngaben),
     payload: ElternteilZweiAllgemeineAngabenSchema,
     dependentValues: z.object({
-      hatPotenzielleAusklammerungen: z.boolean(),
+      istSchwangerschaftsbedingteErkrankungMoeglich: z.boolean(),
+      anzahlGeschwister: z.number(),
     }),
   }),
 ]);

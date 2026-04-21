@@ -8,8 +8,12 @@ import { EventProvider } from "@/application/features/abfrageteil/events/EventCo
 import { UserFeedbackProvider } from "@/application/features/planungsteil/planer/component/user-feedback";
 import {
   AllgemeineAngabenPage,
-  ElternteilAusklammerungGruendePage,
-  ElternteilAusklammerungZeitenPage,
+  ElternteilAusklammerungElternzeitAbfragePage,
+  ElternteilAusklammerungElternzeitZeitenPage,
+  ElternteilAusklammerungErkrankungAbfragePage,
+  ElternteilAusklammerungErkrankungZeitenPage,
+  ElternteilAusklammerungMutterschutzAbfragePage,
+  ElternteilAusklammerungMutterschutzZeitenPage,
   ElternteilBMZUebersichtPage,
   ElternteilEinsAllgemeineAngabenPage,
   ElternteilGemeinsamePlanungAbfragePage,
@@ -131,15 +135,39 @@ const RouteDefinition = [
             ),
           },
           {
-            element: <ElternteilAusklammerungGruendePage />,
+            element: <ElternteilAusklammerungErkrankungAbfragePage />,
             path: generateAbfrageteilPath(
-              Route.ElternteilAusklammerungGruendeAngaben,
+              Route.ElternteilAusklammerungErkrankungAbfrage,
             ),
           },
           {
-            element: <ElternteilAusklammerungZeitenPage />,
+            element: <ElternteilAusklammerungErkrankungZeitenPage />,
             path: generateAbfrageteilPath(
-              Route.ElternteilAusklammerungZeitenAngaben,
+              Route.ElternteilAusklammerungErkrankungZeitenAngaben,
+            ),
+          },
+          {
+            element: <ElternteilAusklammerungElternzeitAbfragePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilAusklammerungElternzeitAbfrage,
+            ),
+          },
+          {
+            element: <ElternteilAusklammerungElternzeitZeitenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilAusklammerungElternzeitZeitenAngaben,
+            ),
+          },
+          {
+            element: <ElternteilAusklammerungMutterschutzAbfragePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilAusklammerungMutterschutzAbfrage,
+            ),
+          },
+          {
+            element: <ElternteilAusklammerungMutterschutzZeitenPage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilAusklammerungMutterschutzZeitenAngaben,
             ),
           },
           {

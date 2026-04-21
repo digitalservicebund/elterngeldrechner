@@ -1,19 +1,19 @@
 export { ElternteilEinsAllgemeineAngabenPage } from "./ElternteilEinsAllgemeineAngabenPage";
 export { ElternteilGemeinsamePlanungAbfragePage } from "./ElternteilGemeinsamePlanungAbfragePage";
-export { ElternteilAusklammerungGruendePage } from "./ElternteilAusklammerungGruendePage";
-export { ElternteilAusklammerungZeitenPage } from "./ElternteilAusklammerungZeitenPage";
+export { ElternteilAusklammerungElternzeitAbfragePage } from "./ElternteilAusklammerungElternzeitAbfragePage";
+export { ElternteilAusklammerungElternzeitZeitenPage } from "./ElternteilAusklammerungElternzeitZeitenPage";
+export { ElternteilAusklammerungErkrankungAbfragePage } from "./ElternteilAusklammerungErkrankungAbfragePage";
+export { ElternteilAusklammerungErkrankungZeitenPage } from "./ElternteilAusklammerungErkrankungZeitenPage";
+export { ElternteilAusklammerungMutterschutzAbfragePage } from "./ElternteilAusklammerungMutterschutzAbfragePage";
+export { ElternteilAusklammerungMutterschutzZeitenPage } from "./ElternteilAusklammerungMutterschutzZeitenPage";
 export { ElternteilTaetigkeitenAbfragePage } from "./ElternteilTaetigkeitenAbfragePage";
 export { ElternteilBMZUebersichtPage } from "./ElternteilBMZUebersichtPage";
 
 export type {
-  ElternteilAusklammerungGruende,
-  ElternteilAusklammerungZeiten,
   ElternteilEinsAllgemeineAngaben,
   ElternteilTaetigkeitenAbfrage,
 } from "./ElternteilSchema";
 export {
-  ElternteilAusklammerungGruendeSchema,
-  ElternteilAusklammerungZeitenSchema,
   ElternteilEinsAllgemeineAngabenSchema,
   ElternteilTaetigkeitenAbfrageSchema,
 } from "./ElternteilSchema";

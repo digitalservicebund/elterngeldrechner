@@ -31,8 +31,6 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
     useEventContext();
 
-  const eventStream = filtereValideEventHistorie();
-
   const formIdentifier = useId();
   const navigate = useNavigate();
 
@@ -51,21 +49,25 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
+  const eventStream = filtereValideEventHistorie();
   const istErsterElternteilImMutterschutz =
     findeInformationenZumMutterschutz(
       eventStream,
       findeAnzahlKinder(eventStream),
     )?.empfaenger === Elternteil.Eins;
+  const warErsterElternteilSchwangerschaftsbedingtKrank = findeAusklammerungen(
+    eventStream,
+    0,
+  ).some(
+    (ausklammerung) => ausklammerung.grund === "erkrankungSchwangerschaft",
+  );
+  const istSchwangerschaftsbedingteErkrankungMoeglich =
+    !istErsterElternteilImMutterschutz &&
+    !warErsterElternteilSchwangerschaftsbedingtKrank;
+
+  const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
   const onSubmit = async (values: ElternteilZweiAllgemeineAngaben) => {
-    const geschwisterkinder = findeGeschwisterkinder(eventStream);
-    const hatGeschwisterkinder = geschwisterkinder.length > 0;
-
-    const warErsterElternteilSchwangerschaftsbedingtKrank =
-      findeAusklammerungen(eventStream, 0).some(
-        (ausklammerung) => ausklammerung.grund === "erkrankungSchwangerschaft",
-      );
-
     const event: FormEvent = {
       route: currentRoute,
       payload: {
@@ -75,12 +77,8 @@ export function ElternteilZweiAllgemeineAngabenPage() {
           : values.istImMutterschutz,
       },
       dependentValues: {
-        hatPotenzielleAusklammerungen:
-          hatGeschwisterkinder ||
-          !(
-            istErsterElternteilImMutterschutz ||
-            warErsterElternteilSchwangerschaftsbedingtKrank
-          ),
+        istSchwangerschaftsbedingteErkrankungMoeglich,
+        anzahlGeschwister: geschwisterkinder.length,
       },
     };
 

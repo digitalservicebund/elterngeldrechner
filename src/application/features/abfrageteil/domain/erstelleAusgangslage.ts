@@ -328,7 +328,10 @@ if (import.meta.vitest) {
             payload: {
               name: "Max",
             },
-            dependentValues: { hatPotenzielleAusklammerungen: true },
+            dependentValues: {
+              istSchwangerschaftsbedingteErkrankungMoeglich: true,
+              anzahlGeschwister: 1,
+            },
           },
         ];
 
@@ -365,7 +368,10 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { name: "Max" },
-            dependentValues: { hatPotenzielleAusklammerungen: true },
+            dependentValues: {
+              istSchwangerschaftsbedingteErkrankungMoeglich: true,
+              anzahlGeschwister: 1,
+            },
           },
         ];
 
@@ -658,7 +664,10 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { name: "Max" },
-            dependentValues: { hatPotenzielleAusklammerungen: true },
+            dependentValues: {
+              istSchwangerschaftsbedingteErkrankungMoeglich: true,
+              anzahlGeschwister: 1,
+            },
           },
         ];
 
@@ -693,7 +702,10 @@ if (import.meta.vitest) {
       const zweitePersonEvent: FormEvent = {
         route: Route.ElternteilZweiAllgemeineAngaben,
         payload: { name: "Max" },
-        dependentValues: { hatPotenzielleAusklammerungen: true },
+        dependentValues: {
+          istSchwangerschaftsbedingteErkrankungMoeglich: true,
+          anzahlGeschwister: 1,
+        },
       };
 
       it("is false when alleinerziehend Elternteil has only hatPeriodenOhneEinkommen", () => {
@@ -896,7 +908,10 @@ if (import.meta.vitest) {
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
             payload: { name: "Max" },
-            dependentValues: { hatPotenzielleAusklammerungen: true },
+            dependentValues: {
+              istSchwangerschaftsbedingteErkrankungMoeglich: true,
+              anzahlGeschwister: 1,
+            },
           },
         ];
 

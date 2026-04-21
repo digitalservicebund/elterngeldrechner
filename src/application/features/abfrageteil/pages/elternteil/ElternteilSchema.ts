@@ -1,6 +1,5 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { z } from "zod";
-import { ElternteilAusklammerungszeitenInput } from "./ElternteilAusklammerungZeitenPage";
 import {
   BooleanRadiobuttonCodec,
   GermanDateInputCodec,
@@ -25,45 +24,50 @@ export type ElternteilGemeinsamePlanungAbfrage = z.infer<
   typeof ElternteilGemeinsamePlanungAbfrageSchema
 >;
 
-export const ElternteilAusklammerungGruendeSchema = z
+export const ElternteilZweiAllgemeineAngabenSchema = z
   .object({
-    hatKeineAusklammerungsgruende: z.boolean(),
-    hatMutterschutzAelteresKind: z.boolean(),
-    hatElterngeldAelteresKind: z.boolean(),
-    hatSchwangerschaftsbedingteErkrankung: z.boolean(),
+    name: z.string(),
+    istImMutterschutz: BooleanRadiobuttonCodec.optional(),
   })
   .refine(
     (data) => {
-      return Object.values(data).some((value) => value === true);
+      return data.istImMutterschutz !== undefined;
     },
     {
-      message: "Bitte treffen Sie eine Auswahl.",
-      path: ["hatKeineAusklammerungsgruende"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.hatKeineAusklammerungsgruende) {
-        return !(
-          data.hatMutterschutzAelteresKind ||
-          data.hatElterngeldAelteresKind ||
-          data.hatSchwangerschaftsbedingteErkrankung
-        );
-      }
-      return true;
-    },
-    {
-      message:
-        "Widersprüchliche Auswahl: 'Keine Gründe' darf nicht mit anderen Optionen kombiniert werden.",
-      path: ["hatKeineAusklammerungsgruende"],
+      message: "Wählen Sie bitte Ja oder Nein",
+      path: ["istImMutterschutz"],
     },
   );
 
-export type ElternteilAusklammerungGruende = z.infer<
-  typeof ElternteilAusklammerungGruendeSchema
+export type ElternteilZweiAllgemeineAngaben = z.infer<
+  typeof ElternteilZweiAllgemeineAngabenSchema
 >;
 
-// TODO: Make illegal state not representable between schemas hatSchwangerschaftsbedingteErkrankung: true and erkrankung.length > 0
+export const ElternteilAusklammerungErkrankungAbfrageSchema = z.object({
+  hatSchwangerschaftsbedingteErkrankung: OptionalBooleanRadiobuttonCodec,
+});
+
+export type ElternteilAusklammerungErkrankungAbfrage = z.infer<
+  typeof ElternteilAusklammerungErkrankungAbfrageSchema
+>;
+
+export const ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema =
+  z.object({
+    hatElterngeldGeschwisterkind: OptionalBooleanRadiobuttonCodec,
+  });
+
+export type ElternteilAusklammerungElternzeitGeschwisterkindAbfrage = z.infer<
+  typeof ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema
+>;
+
+export const ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema =
+  z.object({
+    hatMutterschutzGeschwisterkind: OptionalBooleanRadiobuttonCodec,
+  });
+
+export type ElternteilAusklammerungMutterschutzGeschwisterkindAbfrage = z.infer<
+  typeof ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema
+>;
 
 const Zeitspanne = z
   .object({
@@ -83,14 +87,30 @@ const Zeitspanne = z
     }
   });
 
-export const ElternteilAusklammerungZeitenSchema = z.object({
-  mutterschutzGeschwisterkind: z.array(Zeitspanne),
-  elterngeldGeschwisterkind: z.array(Zeitspanne),
+export const ElternteilAusklammerungErkrankungZeitenSchema = z.object({
   erkrankungSchwangerschaft: z.array(Zeitspanne),
 });
 
-export type ElternteilAusklammerungZeiten = z.infer<
-  typeof ElternteilAusklammerungZeitenSchema
+export type ElternteilAusklammerungErkrankungZeiten = z.infer<
+  typeof ElternteilAusklammerungErkrankungZeitenSchema
+>;
+
+export const ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema =
+  z.object({
+    elterngeldGeschwisterkind: z.array(Zeitspanne),
+  });
+
+export type ElternteilAusklammerungElterngeldGeschwisterkindZeiten = z.infer<
+  typeof ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema
+>;
+
+export const ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema =
+  z.object({
+    mutterschutzGeschwisterkind: z.array(Zeitspanne),
+  });
+
+export type ElternteilAusklammerungMutterschutzGeschwisterkindZeiten = z.infer<
+  typeof ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema
 >;
 
 export const ElternteilTaetigkeitenAbfrageSchema = z
@@ -113,25 +133,6 @@ export const ElternteilTaetigkeitenAbfrageSchema = z
 
 export type ElternteilTaetigkeitenAbfrage = z.infer<
   typeof ElternteilTaetigkeitenAbfrageSchema
->;
-
-export const ElternteilZweiAllgemeineAngabenSchema = z
-  .object({
-    name: z.string(),
-    istImMutterschutz: BooleanRadiobuttonCodec.optional(),
-  })
-  .refine(
-    (data) => {
-      return data.istImMutterschutz !== undefined;
-    },
-    {
-      message: "Wählen Sie bitte Ja oder Nein",
-      path: ["istImMutterschutz"],
-    },
-  );
-
-export type ElternteilZweiAllgemeineAngaben = z.infer<
-  typeof ElternteilZweiAllgemeineAngabenSchema
 >;
 
 if (import.meta.vitest) {
@@ -199,99 +200,6 @@ if (import.meta.vitest) {
         istVerbeamtet: false,
         hatAndereLeistungen: false,
       });
-
-      expect(result.success).toBeTruthy();
-    });
-  });
-
-  describe("ElternteilAusklammerungsZeiten", () => {
-    const schema = ElternteilAusklammerungZeitenSchema;
-
-    it("rejects mutterschutzGeschwisterkind if von > bis", () => {
-      const ausklammerungszeiten: ElternteilAusklammerungszeitenInput = {
-        mutterschutzGeschwisterkind: [
-          {
-            von: "04.01.2025",
-            bis: "01.01.2025",
-          },
-        ],
-        elterngeldGeschwisterkind: [
-          {
-            von: "01.04.2025",
-            bis: "01.05.2025",
-          },
-        ],
-        erkrankungSchwangerschaft: [
-          {
-            von: "01.06.2025",
-            bis: "01.07.2025",
-          },
-        ],
-      };
-
-      const result = schema.safeParse(ausklammerungszeiten);
-
-      expect(result.success).toBeFalsy();
-
-      if (!result.success) {
-        expect(result.error.issues[0]).toMatchObject({
-          code: "custom",
-          path: ["mutterschutzGeschwisterkind", 0, "von"],
-          message: "Der Start einer Ausklammerung muss vor dem Ende liegen.",
-        });
-      }
-    });
-
-    it("accepts mutterschutzGeschwisterkind if von === bis", () => {
-      const ausklammerungszeiten: ElternteilAusklammerungszeitenInput = {
-        mutterschutzGeschwisterkind: [
-          {
-            von: "01.01.2025",
-            bis: "01.01.2025",
-          },
-        ],
-        elterngeldGeschwisterkind: [
-          {
-            von: "01.04.2025",
-            bis: "01.05.2025",
-          },
-        ],
-        erkrankungSchwangerschaft: [
-          {
-            von: "01.06.2025",
-            bis: "01.07.2025",
-          },
-        ],
-      };
-
-      const result = schema.safeParse(ausklammerungszeiten);
-
-      expect(result.success).toBeTruthy();
-    });
-
-    it("accepts mutterschutzGeschwisterkind if von < bis", () => {
-      const ausklammerungszeiten: ElternteilAusklammerungszeitenInput = {
-        mutterschutzGeschwisterkind: [
-          {
-            von: "01.01.2025",
-            bis: "01.02.2025",
-          },
-        ],
-        elterngeldGeschwisterkind: [
-          {
-            von: "01.04.2025",
-            bis: "01.05.2025",
-          },
-        ],
-        erkrankungSchwangerschaft: [
-          {
-            von: "01.06.2025",
-            bis: "01.07.2025",
-          },
-        ],
-      };
-
-      const result = schema.safeParse(ausklammerungszeiten);
 
       expect(result.success).toBeTruthy();
     });

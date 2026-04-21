@@ -86,7 +86,10 @@ if (import.meta.vitest) {
           payload: {
             name: "Anton",
           },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          dependentValues: {
+            istSchwangerschaftsbedingteErkrankungMoeglich: true,
+            anzahlGeschwister: 1,
+          },
         },
       ];
 
@@ -108,14 +111,20 @@ if (import.meta.vitest) {
           payload: {
             name: "Anton",
           },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          dependentValues: {
+            istSchwangerschaftsbedingteErkrankungMoeglich: true,
+            anzahlGeschwister: 1,
+          },
         },
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
             name: "Daniel",
           },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          dependentValues: {
+            istSchwangerschaftsbedingteErkrankungMoeglich: true,
+            anzahlGeschwister: 1,
+          },
         },
       ];
 

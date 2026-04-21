@@ -496,7 +496,10 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { name: "Max" },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          dependentValues: {
+            istSchwangerschaftsbedingteErkrankungMoeglich: true,
+            anzahlGeschwister: 1,
+          },
         },
         {
           route: Route.ElternteilTaetigkeitenAbfrage,

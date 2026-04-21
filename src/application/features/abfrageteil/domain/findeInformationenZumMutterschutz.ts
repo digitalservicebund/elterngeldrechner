@@ -107,7 +107,10 @@ if (import.meta.vitest) {
         name: "Max",
         istImMutterschutz: false,
       },
-      dependentValues: { hatPotenzielleAusklammerungen: false },
+      dependentValues: {
+        istSchwangerschaftsbedingteErkrankungMoeglich: false,
+        anzahlGeschwister: 0,
+      },
     };
 
     const elternteil2MitMutterschutz: FormEvent = {
@@ -116,7 +119,10 @@ if (import.meta.vitest) {
         name: "Max",
         istImMutterschutz: true,
       },
-      dependentValues: { hatPotenzielleAusklammerungen: false },
+      dependentValues: {
+        istSchwangerschaftsbedingteErkrankungMoeglich: false,
+        anzahlGeschwister: 0,
+      },
     };
 
     it("is undefined when Elternteil 1 is alleinerziehend and not in Mutterschutz", () => {

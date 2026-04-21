@@ -13,8 +13,12 @@ export {
   GeschwisterkindAnzahlAbfragePage,
 } from "./geschwister";
 export {
-  ElternteilAusklammerungGruendePage,
-  ElternteilAusklammerungZeitenPage,
+  ElternteilAusklammerungElternzeitAbfragePage,
+  ElternteilAusklammerungElternzeitZeitenPage,
+  ElternteilAusklammerungErkrankungAbfragePage,
+  ElternteilAusklammerungErkrankungZeitenPage,
+  ElternteilAusklammerungMutterschutzAbfragePage,
+  ElternteilAusklammerungMutterschutzZeitenPage,
   ElternteilBMZUebersichtPage,
   ElternteilEinsAllgemeineAngabenPage,
   ElternteilGemeinsamePlanungAbfragePage,

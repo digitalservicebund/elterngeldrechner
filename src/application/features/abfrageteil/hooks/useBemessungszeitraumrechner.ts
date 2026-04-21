@@ -202,8 +202,11 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilAusklammerungZeitenAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilAusklammerungMutterschutzZeitenAngaben,
+            params: {
+              elternteilIndex: 0,
+              geschwisterIndex: 0,
+            },
             payload: {
               mutterschutzGeschwisterkind: [
                 {
@@ -211,8 +214,9 @@ if (import.meta.vitest) {
                   bis: Temporal.PlainDate.from("2025-02-15"),
                 },
               ],
-              elterngeldGeschwisterkind: [],
-              erkrankungSchwangerschaft: [],
+            },
+            dependentValues: {
+              anzahlGeschwister: 1,
             },
           },
         ]);
@@ -228,6 +232,7 @@ if (import.meta.vitest) {
                 grund: "mutterschutzGeschwisterkind",
                 von: Temporal.PlainDate.from("2024-11-01"),
                 bis: Temporal.PlainDate.from("2025-02-15"),
+                geschwisterIndex: 0,
               },
             ]) as Ausklammerung[],
           }),
@@ -326,8 +331,11 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilAusklammerungZeitenAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilAusklammerungMutterschutzZeitenAngaben,
+            params: {
+              elternteilIndex: 0,
+              geschwisterIndex: 0,
+            },
             payload: {
               mutterschutzGeschwisterkind: [
                 {
@@ -335,8 +343,9 @@ if (import.meta.vitest) {
                   bis: Temporal.PlainDate.from("2025-02-15"),
                 },
               ],
-              elterngeldGeschwisterkind: [],
-              erkrankungSchwangerschaft: [],
+            },
+            dependentValues: {
+              anzahlGeschwister: 1,
             },
           },
           {
@@ -345,7 +354,10 @@ if (import.meta.vitest) {
               name: "Person 2",
               istImMutterschutz: false,
             },
-            dependentValues: { hatPotenzielleAusklammerungen: true },
+            dependentValues: {
+              istSchwangerschaftsbedingteErkrankungMoeglich: true,
+              anzahlGeschwister: 1,
+            },
           },
         ]);
 
@@ -360,6 +372,7 @@ if (import.meta.vitest) {
                 grund: "mutterschutzGeschwisterkind",
                 von: Temporal.PlainDate.from("2024-11-01"),
                 bis: Temporal.PlainDate.from("2025-02-15"),
+                geschwisterIndex: 0,
               },
             ]) as Ausklammerung[],
           }),
@@ -419,8 +432,11 @@ if (import.meta.vitest) {
             },
           },
           {
-            route: Route.ElternteilAusklammerungZeitenAngaben,
-            params: { elternteilIndex: 0 },
+            route: Route.ElternteilAusklammerungMutterschutzZeitenAngaben,
+            params: {
+              elternteilIndex: 0,
+              geschwisterIndex: 0,
+            },
             payload: {
               mutterschutzGeschwisterkind: [
                 {
@@ -428,8 +444,9 @@ if (import.meta.vitest) {
                   bis: Temporal.PlainDate.from("2025-02-15"),
                 },
               ],
-              elterngeldGeschwisterkind: [],
-              erkrankungSchwangerschaft: [],
+            },
+            dependentValues: {
+              anzahlGeschwister: 1,
             },
           },
         ]);
@@ -445,6 +462,7 @@ if (import.meta.vitest) {
               grund: "mutterschutzGeschwisterkind",
               von: Temporal.PlainDate.from("2024-11-01"),
               bis: Temporal.PlainDate.from("2025-02-15"),
+              geschwisterIndex: 0,
             },
           ]),
         );

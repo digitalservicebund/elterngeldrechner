@@ -14,11 +14,15 @@ export enum Route {
   GeschwisterbonusUebersicht = "/geschwisterkind/bonus",
 
   ElternteilEinsAllgemeineAngaben = "/elternteil/0",
+  ElternteilGemeinsamePlanungAbfrage = "/elternteil/0/planung-abfrage",
   ElternteilZweiAllgemeineAngaben = "/elternteil/1",
 
-  ElternteilGemeinsamePlanungAbfrage = "/elternteil/0/planung-abfrage",
-  ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/ausklammerung/gruende",
-  ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/zeiten",
+  ElternteilAusklammerungErkrankungAbfrage = "/elternteil/:elternteilIndex/ausklammerung/erkrankung",
+  ElternteilAusklammerungErkrankungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/erkrankung-zeiten",
+  ElternteilAusklammerungElternzeitAbfrage = "/elternteil/:elternteilIndex/ausklammerung/:geschwisterIndex/elternzeit",
+  ElternteilAusklammerungElternzeitZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/:geschwisterIndex/elternzeit-zeiten",
+  ElternteilAusklammerungMutterschutzAbfrage = "/elternteil/:elternteilIndex/ausklammerung/:geschwisterIndex/mutterschutz",
+  ElternteilAusklammerungMutterschutzZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/:geschwisterIndex/mutterschutz-zeiten",
 
   ElternteilTaetigkeitenAbfrage = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/abfrage",
   ElternteilTaetigkeitenBMZUebersicht = "/elternteil/:elternteilIndex/finanzielles/taetigkeit/bmz",

@@ -94,13 +94,9 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilAusklammerungGruendeAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
           payload: {
-            hatKeineAusklammerungsgruende: false,
-            hatMutterschutzAelteresKind: true,
-            hatElterngeldAelteresKind: false,
-            hatSchwangerschaftsbedingteErkrankung: false,
+            wirdZweitePersonBeruecksichtigt: true,
           },
         },
       ];
@@ -124,13 +120,9 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilAusklammerungGruendeAngaben,
-          params: { elternteilIndex: 0 },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
           payload: {
-            hatKeineAusklammerungsgruende: false,
-            hatMutterschutzAelteresKind: true,
-            hatElterngeldAelteresKind: false,
-            hatSchwangerschaftsbedingteErkrankung: false,
+            wirdZweitePersonBeruecksichtigt: true,
           },
         },
       ];
@@ -140,7 +132,9 @@ if (import.meta.vitest) {
         "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
       );
 
-      expect(result).toEqual("/abfrageteil/elternteil/0/ausklammerung/zeiten");
+      expect(result).toEqual(
+        "/abfrageteil/elternteil/0/ausklammerung/erkrankung",
+      );
     });
   });
 }

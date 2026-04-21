@@ -12,19 +12,10 @@ export function RouteGuardAbfrageteil() {
   const { filtereValideEventHistorie } = useEventContext();
   const { pathname } = useLocation();
 
-  const startseitePfad = generateAbfrageteilPath(Route.Startseite);
-  const allgemeineAngabenPfad = generateAbfrageteilPath(
-    Route.AllgemeineAngaben,
-  );
-
-  if (pathname === startseitePfad || pathname === allgemeineAngabenPfad) {
-    return <Outlet />;
-  }
-
   const valideEventHistorie = filtereValideEventHistorie();
 
   if (valideEventHistorie.length === 0) {
-    return <Navigate to={allgemeineAngabenPfad} replace />;
+    return <Navigate to={generateAbfrageteilPath(Route.Startseite)} replace />;
   }
 
   const letzteErlaubteRoute = findeLetzteErlaubteRoute(

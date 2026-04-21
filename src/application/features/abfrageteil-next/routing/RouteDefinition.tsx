@@ -58,12 +58,12 @@ const RouteDefinition = [
         path: generateAbfrageteilPath(Route.Startseite),
       },
       {
-        element: <AllgemeineAngabenPage />,
-        path: generateAbfrageteilPath(Route.AllgemeineAngaben),
-      },
-      {
         element: <RouteGuardAbfrageteil />,
         children: [
+          {
+            element: <AllgemeineAngabenPage />,
+            path: generateAbfrageteilPath(Route.AllgemeineAngaben),
+          },
           {
             element: <KindPage />,
             path: generateAbfrageteilPath(Route.KindAbfrage),

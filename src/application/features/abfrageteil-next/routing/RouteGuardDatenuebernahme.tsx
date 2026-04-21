@@ -9,15 +9,13 @@ export function RouteGuardDatenuebernahme() {
   const { filtereValideEventHistorie } = useEventContext();
   const { navigationState } = useNavigateStateful();
 
-  const allgemeineAngabenPfad = generateAbfrageteilPath(
-    Route.AllgemeineAngaben,
-  );
+  const startseitePfad = generateAbfrageteilPath(Route.Startseite);
 
   const valideEventHistorie = filtereValideEventHistorie();
   const letztesValidesEvent = valideEventHistorie.at(-1);
 
   if (!letztesValidesEvent) {
-    return <Navigate to={allgemeineAngabenPfad} replace />;
+    return <Navigate to={startseitePfad} replace />;
   }
 
   const maximalErlaubterPfad = findeNaechstenPfad(letztesValidesEvent);

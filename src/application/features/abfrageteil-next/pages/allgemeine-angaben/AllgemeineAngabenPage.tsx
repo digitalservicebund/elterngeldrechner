@@ -57,7 +57,7 @@ export function AllgemeineAngabenPage() {
   };
 
   return (
-    <Page heading="Allgemeine Angaben">
+    <Page id="allgemeine-angaben-page" heading="Allgemeine Angaben">
       <form
         id={formIdentifier}
         className="flex flex-col gap-40"

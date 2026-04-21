@@ -70,7 +70,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
   const personNameInputIdentifier = useId();
 
   return (
-    <Page heading="Angaben Person 1">
+    <Page id="elternteil-eins-page" heading="Angaben Person 1">
       <form
         id={formIdentifier}
         className="flex flex-col gap-40"

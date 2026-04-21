@@ -6,11 +6,12 @@ import { Sidebar as SidebarNext } from "@/application/features/abfrageteil-next/
 import { FormStep } from "@/application/routing/formSteps";
 
 type Props = {
+  readonly id?: string;
   readonly step: FormStep;
   readonly children: ReactNode;
 };
 
-export function Page({ step, children }: Props) {
+export function Page({ id, step, children }: Props) {
   const sectionElement = useRef<HTMLElement>(null);
   useEffect(() => {
     sectionElement.current?.focus({ preventScroll: true });
@@ -19,7 +20,7 @@ export function Page({ step, children }: Props) {
   const headingIdentifier = useId();
 
   return (
-    <div className="page-grid-container print:block">
+    <div id={id} className="page-grid-container print:block">
       <ScrollRestoration />
 
       <div className="page-grid-sidebar relative min-[1170px]:mr-56 print:hidden">

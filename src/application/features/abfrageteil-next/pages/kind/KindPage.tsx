@@ -44,7 +44,7 @@ export function KindPage() {
   };
 
   return (
-    <Page heading="Angaben zur Geburt">
+    <Page id="kind-page" heading="Angaben zur Geburt">
       <form
         id={formIdentifier}
         className="flex flex-col gap-40"

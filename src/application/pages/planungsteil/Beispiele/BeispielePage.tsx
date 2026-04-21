@@ -173,7 +173,7 @@ export function BeispielePage() {
   }
 
   return (
-    <Page step={formSteps.beispiele}>
+    <Page id="beispiele-page" step={formSteps.beispiele}>
       {isErklaerungOpen ? (
         <Erklaerung onClose={hideErklaerung} />
       ) : (

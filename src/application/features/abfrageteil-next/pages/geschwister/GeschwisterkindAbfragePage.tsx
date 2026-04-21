@@ -53,7 +53,7 @@ export function GeschwisterkindAbfragePage() {
   };
 
   return (
-    <Page heading="Angaben zu Geschwistern">
+    <Page id="geschwister-page" heading="Angaben zu Geschwistern">
       <form
         id={formIdentifier}
         className="flex flex-col gap-40"

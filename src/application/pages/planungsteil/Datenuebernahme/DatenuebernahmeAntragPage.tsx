@@ -94,7 +94,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   }
 
   return (
-    <Page step={formSteps.datenuebernahmeAntrag}>
+    <Page id="datenuebernahme-page" step={formSteps.datenuebernahmeAntrag}>
       <div className="flex flex-col">
         <div className="mb-32 bg-off-white p-24">
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">

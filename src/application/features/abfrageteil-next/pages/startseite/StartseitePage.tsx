@@ -20,7 +20,10 @@ export function Startseite() {
   };
 
   return (
-    <Page heading="So nutzen Sie den Elterngeldrechner mit Planer">
+    <Page
+      id="startseite-page"
+      heading="So nutzen Sie den Elterngeldrechner mit Planer"
+    >
       <div className="mt-40 flex flex-col gap-40">
         <div>
           <h5>Voraussichtliche Höhe von Elterngeld</h5>

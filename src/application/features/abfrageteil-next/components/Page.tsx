@@ -8,11 +8,12 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 
 type Props = {
+  readonly id?: string;
   readonly children: ReactNode;
   readonly heading: string;
 };
 
-export function Page({ children, heading }: Props) {
+export function Page({ id, children, heading }: Props) {
   const { pathname } = useLocation();
 
   const sectionElement = useRef<HTMLElement>(null);
@@ -27,7 +28,7 @@ export function Page({ children, heading }: Props) {
   );
 
   return (
-    <div className="page-grid-container print:block">
+    <div id={id} className="page-grid-container print:block">
       <ScrollRestoration />
 
       <div

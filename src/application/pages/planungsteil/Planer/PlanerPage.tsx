@@ -147,7 +147,7 @@ export function PlanerPage() {
   const headingIdentifier = useId();
 
   return (
-    <Page step={formSteps.rechnerUndPlaner}>
+    <Page id="planer-page" step={formSteps.rechnerUndPlaner}>
       {!!plan && <Zusammenfassung plan={plan} className="hidden print:block" />}
 
       <div className="print:hidden">

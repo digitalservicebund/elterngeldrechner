@@ -9,11 +9,12 @@ import { z } from "zod";
 import {
   ElternteilAusklammerungErkrankungZeiten,
   ElternteilAusklammerungErkrankungZeitenSchema,
-  ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { Page } from "@/application/features/components";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -32,16 +33,6 @@ export type ElternteilAusklammerungErkrankungZeitenInput = z.input<
 export type ElternteilAusklammerungErkrankungZeitenOutput = z.output<
   typeof ElternteilAusklammerungErkrankungZeitenSchema
 >;
-
-export type ElternteilAusklammerungMutterschutzGeschwisterkindZeitenInput =
-  z.input<
-    typeof ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema
-  >;
-
-export type ElternteilAusklammerungMutterschutzGeschwisterkindZeitenOutput =
-  z.output<
-    typeof ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema
-  >;
 
 export function ElternteilAusklammerungErkrankungZeitenPage() {
   const {
@@ -80,7 +71,8 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
   }, [letztesGueltigesEvent]);
 
   const eventStream = filtereValideEventHistorie();
-  const anzahlGeschwister = findeGeschwisterkinder(eventStream).length;
+  const geburtsdatum = findeGeburtsdatum(eventStream);
+  const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
   const { handleSubmit, control, register, formState } = useForm<
     ElternteilAusklammerungErkrankungZeitenInput,
@@ -94,12 +86,19 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilAusklammerungErkrankungZeiten) => {
+    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
+        geburtsdatum,
+        geschwisterkinder,
+        [],
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       params: routeParams,
       dependentValues: {
-        anzahlGeschwister,
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

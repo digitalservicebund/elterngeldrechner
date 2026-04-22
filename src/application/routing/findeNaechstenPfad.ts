@@ -83,47 +83,121 @@ function getNextSubpath(event: FormEvent): string {
           },
         );
       }
-      const zielRoute =
-        dependentValues.anzahlGeschwister > 0
-          ? Route.ElternteilAusklammerungElternzeitAbfrage
-          : Route.ElternteilTaetigkeitenAbfrage;
-      return generateParametrizedPath(zielRoute, {
+      if (
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !==
+        undefined
+      ) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungElternzeitAbfrage,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex:
+              dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung?.toString(),
+          },
+        );
+      }
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
-        geschwisterIndex: "0",
       });
     }
     case Route.ElternteilAusklammerungErkrankungZeitenAngaben: {
       const { params, dependentValues } = event;
-      const zielRoute =
-        dependentValues.anzahlGeschwister > 0
-          ? Route.ElternteilAusklammerungElternzeitAbfrage
-          : Route.ElternteilTaetigkeitenAbfrage;
-      return generateParametrizedPath(zielRoute, {
+      if (
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !==
+        undefined
+      ) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungElternzeitAbfrage,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex:
+              dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung?.toString(),
+          },
+        );
+      }
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
-        geschwisterIndex: "0",
       });
     }
     case Route.ElternteilAusklammerungElternzeitAbfrage: {
-      const { payload, params } = event;
-      const zielRoute = payload.hatElterngeldGeschwisterkind
-        ? Route.ElternteilAusklammerungElternzeitZeitenAngaben
-        : Route.ElternteilAusklammerungMutterschutzAbfrage;
-      return generateParametrizedPath(zielRoute, {
+      const { payload, params, dependentValues } = event;
+
+      if (payload.hatElterngeldGeschwisterkind) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungElternzeitZeitenAngaben,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex: params.geschwisterIndex.toString(),
+          },
+        );
+      }
+
+      const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung;
+      if (
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !== undefined &&
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung ===
+          params.geschwisterIndex
+      ) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungMutterschutzAbfrage,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex: params.geschwisterIndex.toString(),
+          },
+        );
+      }
+      if (nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !== undefined) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungElternzeitAbfrage,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex:
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung.toString(),
+          },
+        );
+      }
+
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
-        geschwisterIndex: params.geschwisterIndex.toString(),
       });
     }
     case Route.ElternteilAusklammerungElternzeitZeitenAngaben: {
-      return generateParametrizedPath(
-        Route.ElternteilAusklammerungMutterschutzAbfrage,
-        {
-          elternteilIndex: event.params.elternteilIndex.toString(),
-          geschwisterIndex: event.params.geschwisterIndex.toString(),
-        },
-      );
+      const { params, dependentValues } = event;
+
+      const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung;
+      if (
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !== undefined &&
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung ===
+          params.geschwisterIndex
+      ) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungMutterschutzAbfrage,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex: params.geschwisterIndex.toString(),
+          },
+        );
+      }
+      if (nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !== undefined) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungElternzeitAbfrage,
+          {
+            elternteilIndex: params.elternteilIndex.toString(),
+            geschwisterIndex:
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung.toString(),
+          },
+        );
+      }
+
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
+        elternteilIndex: params.elternteilIndex.toString(),
+      });
     }
     case Route.ElternteilAusklammerungMutterschutzAbfrage: {
       const { payload, params, dependentValues } = event;
+
       if (payload.hatMutterschutzGeschwisterkind) {
         return generateParametrizedPath(
           Route.ElternteilAusklammerungMutterschutzZeitenAngaben,
@@ -133,30 +207,40 @@ function getNextSubpath(event: FormEvent): string {
           },
         );
       }
-      if (dependentValues.anzahlGeschwister > params.geschwisterIndex + 1) {
+
+      const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung;
+      if (nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !== undefined) {
         return generateParametrizedPath(
           Route.ElternteilAusklammerungElternzeitAbfrage,
           {
             elternteilIndex: params.elternteilIndex.toString(),
-            geschwisterIndex: (params.geschwisterIndex + 1).toString(),
+            geschwisterIndex:
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung.toString(),
           },
         );
       }
+
       return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
     case Route.ElternteilAusklammerungMutterschutzZeitenAngaben: {
       const { params, dependentValues } = event;
-      if (dependentValues.anzahlGeschwister > params.geschwisterIndex + 1) {
+
+      const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung;
+      if (nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !== undefined) {
         return generateParametrizedPath(
           Route.ElternteilAusklammerungElternzeitAbfrage,
           {
             elternteilIndex: params.elternteilIndex.toString(),
-            geschwisterIndex: (params.geschwisterIndex + 1).toString(),
+            geschwisterIndex:
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung.toString(),
           },
         );
       }
+
       return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: params.elternteilIndex.toString(),
       });
@@ -575,7 +659,7 @@ if (import.meta.vitest) {
             hatSchwangerschaftsbedingteErkrankung: true,
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -592,7 +676,7 @@ if (import.meta.vitest) {
             hatSchwangerschaftsbedingteErkrankung: false,
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -609,7 +693,7 @@ if (import.meta.vitest) {
             hatSchwangerschaftsbedingteErkrankung: false,
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         });
 
@@ -633,7 +717,7 @@ if (import.meta.vitest) {
             ],
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -655,7 +739,7 @@ if (import.meta.vitest) {
             ],
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         });
 
@@ -677,7 +761,7 @@ if (import.meta.vitest) {
             hatElterngeldGeschwisterkind: true,
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -697,7 +781,7 @@ if (import.meta.vitest) {
             hatElterngeldGeschwisterkind: false,
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -724,7 +808,7 @@ if (import.meta.vitest) {
             ],
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -746,7 +830,7 @@ if (import.meta.vitest) {
             hatMutterschutzGeschwisterkind: true,
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -766,7 +850,7 @@ if (import.meta.vitest) {
             hatMutterschutzGeschwisterkind: false,
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         });
 
@@ -786,7 +870,7 @@ if (import.meta.vitest) {
             hatMutterschutzGeschwisterkind: false,
           },
           dependentValues: {
-            anzahlGeschwister: 2,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 1,
           },
         });
 
@@ -805,15 +889,13 @@ if (import.meta.vitest) {
             geschwisterIndex: 0,
           },
           payload: {
-            mutterschutzGeschwisterkind: [
-              {
-                von: Temporal.PlainDate.from("2025-12-23"),
-                bis: Temporal.PlainDate.from("2026-02-05"),
-              },
-            ],
+            mutterschutzGeschwisterkind: {
+              von: Temporal.PlainDate.from("2025-12-23"),
+              bis: Temporal.PlainDate.from("2026-02-05"),
+            },
           },
           dependentValues: {
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         });
 
@@ -830,15 +912,13 @@ if (import.meta.vitest) {
             geschwisterIndex: 0,
           },
           payload: {
-            mutterschutzGeschwisterkind: [
-              {
-                von: Temporal.PlainDate.from("2025-12-23"),
-                bis: Temporal.PlainDate.from("2026-02-05"),
-              },
-            ],
+            mutterschutzGeschwisterkind: {
+              von: Temporal.PlainDate.from("2025-12-23"),
+              bis: Temporal.PlainDate.from("2026-02-05"),
+            },
           },
           dependentValues: {
-            anzahlGeschwister: 2,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 1,
           },
         });
 

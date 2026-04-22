@@ -106,7 +106,7 @@ export type ElternteilAusklammerungElterngeldGeschwisterkindZeiten = z.infer<
 
 export const ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema =
   z.object({
-    mutterschutzGeschwisterkind: z.array(Zeitspanne),
+    mutterschutzGeschwisterkind: Zeitspanne,
   });
 
 export type ElternteilAusklammerungMutterschutzGeschwisterkindZeiten = z.infer<

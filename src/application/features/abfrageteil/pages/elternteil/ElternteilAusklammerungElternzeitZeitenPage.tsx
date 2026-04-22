@@ -13,6 +13,9 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { Page } from "@/application/features/components";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
+import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -67,6 +70,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
   }, [letztesGueltigesEvent]);
 
   const eventStream = filtereValideEventHistorie();
+  const geburtsdatum = findeGeburtsdatum(eventStream);
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
   const geburtsdatumGeschwisterkind = geschwisterkinder[
     routeParams.geschwisterIndex
@@ -75,7 +79,10 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
     month: "2-digit",
     year: "numeric",
   });
-  const anzahlGeschwister = geschwisterkinder.length;
+  const bisherigeAusklammerungen = findeAusklammerungen(
+    eventStream,
+    routeParams.elternteilIndex,
+  );
 
   const { handleSubmit, control, register, formState } = useForm<
     ElternteilAusklammerungElterngeldGeschwisterkindZeitenInput,
@@ -93,12 +100,29 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
   const onSubmit = (
     values: ElternteilAusklammerungElterngeldGeschwisterkindZeiten,
   ) => {
+    const geschwisterIndex = routeParams.geschwisterIndex;
+    const neueAusklammerungen = values.elterngeldGeschwisterkind.map(
+      (zeit) => ({
+        ...zeit,
+        grund: "elterngeldGeschwisterkind",
+        geschwisterIndex,
+      }),
+    );
+    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
+        geburtsdatum,
+        geschwisterkinder,
+        [...bisherigeAusklammerungen, ...neueAusklammerungen],
+        geschwisterIndex,
+        true,
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       params: routeParams,
       dependentValues: {
-        anzahlGeschwister,
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

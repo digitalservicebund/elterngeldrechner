@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId, useMemo } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import {
@@ -11,6 +11,9 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { Page } from "@/application/features/components";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
+import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -21,6 +24,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
+import { berechneMutterschutz } from "@/mutterschutzrechner";
 
 export type ElternteilAusklammerungMutterschutzGeschwisterkindZeitenInput =
   z.input<
@@ -50,36 +54,64 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
     routeParams,
   );
 
+  const eventStream = filtereValideEventHistorie();
+  const geburtsdatum = findeGeburtsdatum(eventStream);
+  const geschwisterkinder = findeGeschwisterkinder(eventStream);
+  const geburtsdatumGeschwisterkind =
+    geschwisterkinder[routeParams.geschwisterIndex]?.geburtsdatum;
+  const mutterschutzGeschwisterkind = geburtsdatumGeschwisterkind
+    ? berechneMutterschutz(
+        new Date(
+          geburtsdatumGeschwisterkind.year,
+          geburtsdatumGeschwisterkind.month - 1,
+          geburtsdatumGeschwisterkind.day,
+        ),
+        undefined,
+        geschwisterkinder[routeParams.geschwisterIndex]?.hatBehinderung,
+      )
+    : undefined;
+  const geburtsdatumGeschwisterkindString =
+    geburtsdatumGeschwisterkind?.toLocaleString("de-DE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  const bisherigeAusklammerungen = findeAusklammerungen(
+    eventStream,
+    routeParams.elternteilIndex,
+  );
+
   const memoizedDefaultValues = useMemo(() => {
     const wiederverwendbareZeiten = encodeSafely(
       ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema,
       letztesGueltigesEvent,
     );
 
-    if (
-      wiederverwendbareZeiten &&
-      wiederverwendbareZeiten.mutterschutzGeschwisterkind.length > 0
-    ) {
+    if (wiederverwendbareZeiten) {
       return wiederverwendbareZeiten;
     }
 
+    if (mutterschutzGeschwisterkind) {
+      return {
+        mutterschutzGeschwisterkind: {
+          von: mutterschutzGeschwisterkind.startdatum.toLocaleDateString(
+            "de-DE",
+            { day: "2-digit", month: "2-digit", year: "numeric" },
+          ),
+          bis: mutterschutzGeschwisterkind.enddatum.toLocaleDateString(
+            "de-DE",
+            { day: "2-digit", month: "2-digit", year: "numeric" },
+          ),
+        },
+      };
+    }
+
     return {
-      mutterschutzGeschwisterkind: [{ von: "", bis: "" }],
+      mutterschutzGeschwisterkind: { von: "", bis: "" },
     };
-  }, [letztesGueltigesEvent]);
+  }, [letztesGueltigesEvent, mutterschutzGeschwisterkind]);
 
-  const eventStream = filtereValideEventHistorie();
-  const geschwisterkinder = findeGeschwisterkinder(eventStream);
-  const geburtsdatumGeschwisterkind = geschwisterkinder[
-    routeParams.geschwisterIndex
-  ]?.geburtsdatum.toLocaleString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
-  const anzahlGeschwister = geschwisterkinder.length;
-
-  const { handleSubmit, control, register, formState } = useForm<
+  const { handleSubmit, register, formState } = useForm<
     ElternteilAusklammerungMutterschutzGeschwisterkindZeitenInput,
     undefined,
     ElternteilAusklammerungMutterschutzGeschwisterkindZeitenOutput
@@ -95,12 +127,26 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
   const onSubmit = (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindZeiten,
   ) => {
+    const geschwisterIndex = routeParams.geschwisterIndex;
+    const neueAusklammerung = {
+      ...values.mutterschutzGeschwisterkind,
+      grund: "mutterschutzGeschwisterkind",
+      geschwisterIndex,
+    };
+    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
+        geburtsdatum,
+        geschwisterkinder,
+        [...bisherigeAusklammerungen, neueAusklammerung],
+        routeParams.geschwisterIndex,
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       params: routeParams,
       dependentValues: {
-        anzahlGeschwister,
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 
@@ -115,11 +161,6 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
-  const { fields } = useFieldArray({
-    control,
-    name: "mutterschutzGeschwisterkind",
-  });
-
   return (
     <Page heading={`Angaben ${vorname}`}>
       <form
@@ -131,60 +172,53 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
         <div>
           <h3>
             Von wann bis wann war {vorname} im Mutterschutz für das
-            Geschwisterkind (geb. {geburtsdatumGeschwisterkind})?
+            Geschwisterkind (geb. {geburtsdatumGeschwisterkindString})?
           </h3>
           <p>
             Der Mutterschutz gilt in der Regel 6 Wochen vor der dem errechneten
-            Geburtstermin und endet 8 Wochen danach.
+            Geburtstermin und endet 8 Wochen danach.{" "}
+            {geschwisterkinder[routeParams.geschwisterIndex]?.hatBehinderung
+              ? "Bei der Geburt eines Kindes mit Behinderung verlängert sich dieser Zeitraum auf 12 Wochen."
+              : ""}
           </p>
         </div>
 
         <div className="flex flex-col gap-32">
-          {fields.map((field, index) => (
-            <div key={field.id} className="flex flex-col">
-              <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
-                <div>
-                  <label
-                    className={classNames("mb-4 block text-16", {
-                      "text-danger":
-                        formErrors.mutterschutzGeschwisterkind?.[index]?.von,
-                    })}
-                    htmlFor={`${field.id}-von`}
-                  >
-                    Beginn des Mutterschutzes (TT.MM.JJJJ)
-                  </label>
-                  <DateInput
-                    id={`${field.id}-von`}
-                    {...register(`mutterschutzGeschwisterkind.${index}.von`)}
-                    error={
-                      formErrors.mutterschutzGeschwisterkind?.[index]?.von
-                        ?.message
-                    }
-                  />
-                </div>
+          <div className="flex flex-col">
+            <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
+              <div>
+                <label
+                  className={classNames("mb-4 block text-16", {
+                    "text-danger": formErrors.mutterschutzGeschwisterkind?.von,
+                  })}
+                  htmlFor="mutterschutz-von"
+                >
+                  Beginn des Mutterschutzes (TT.MM.JJJJ)
+                </label>
+                <DateInput
+                  id="mutterschutz-von"
+                  {...register("mutterschutzGeschwisterkind.von")}
+                  error={formErrors.mutterschutzGeschwisterkind?.von?.message}
+                />
+              </div>
 
-                <div>
-                  <label
-                    className={classNames("mb-4 block text-16", {
-                      "text-danger":
-                        formErrors.mutterschutzGeschwisterkind?.[index]?.bis,
-                    })}
-                    htmlFor={`${field.id}-bis`}
-                  >
-                    Ende des Mutterschutzes (TT.MM.JJJJ)
-                  </label>
-                  <DateInput
-                    id={`${field.id}-bis`}
-                    {...register(`mutterschutzGeschwisterkind.${index}.bis`)}
-                    error={
-                      formErrors.mutterschutzGeschwisterkind?.[index]?.bis
-                        ?.message
-                    }
-                  />
-                </div>
+              <div>
+                <label
+                  className={classNames("mb-4 block text-16", {
+                    "text-danger": formErrors.mutterschutzGeschwisterkind?.bis,
+                  })}
+                  htmlFor="mutterschutz-bis"
+                >
+                  Ende des Mutterschutzes (TT.MM.JJJJ)
+                </label>
+                <DateInput
+                  id="mutterschutz-bis"
+                  {...register("mutterschutzGeschwisterkind.bis")}
+                  error={formErrors.mutterschutzGeschwisterkind?.bis?.message}
+                />
               </div>
             </div>
-          ))}
+          </div>
         </div>
 
         <InfoText

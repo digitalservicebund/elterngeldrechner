@@ -1,3 +1,4 @@
+import DoubleArrowIcon from "~icons/material-symbols/double-arrow";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
@@ -9,6 +10,9 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
+import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -39,6 +43,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
   );
 
   const eventStream = filtereValideEventHistorie();
+  const geburtsdatum = findeGeburtsdatum(eventStream);
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
   const geburtsdatumGeschwisterkind = geschwisterkinder[
     routeParams.geschwisterIndex
@@ -47,7 +52,10 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
     month: "2-digit",
     year: "numeric",
   });
-  const anzahlGeschwister = geschwisterkinder.length;
+  const bisherigeAusklammerungen = findeAusklammerungen(
+    eventStream,
+    routeParams.elternteilIndex,
+  );
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(
@@ -64,12 +72,20 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
   const onSubmit = (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrage,
   ) => {
+    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
+        geburtsdatum,
+        geschwisterkinder,
+        [...bisherigeAusklammerungen],
+        routeParams.geschwisterIndex,
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       params: routeParams,
       dependentValues: {
-        anzahlGeschwister,
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 
@@ -80,6 +96,10 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
 
   const navigateBack = () => {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  };
+
+  const handleSkip = () => {
+    onSubmit({ hatMutterschutzGeschwisterkind: undefined });
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
@@ -190,6 +210,17 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
           <Button type="submit" form={formIdentifier}>
             Weiter
           </Button>
+
+          <button
+            type="button"
+            className="border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
+            onClick={handleSkip}
+          >
+            <div className="flex items-center">
+              <DoubleArrowIcon className="mr-4 mt-4" />
+              <span className="font-bold">Überspringen</span>
+            </div>
+          </button>
         </div>
       </form>
     </Page>

@@ -254,13 +254,12 @@ export function findeMutterschutzAusklammerungen(
   return Array.from(byIndex.entries())
     .sort(([a], [b]) => a - b)
     .flatMap(([geschwisterIndex, event]) => {
-      const zeiten = event.payload?.mutterschutzGeschwisterkind || [];
+      const zeit = event.payload?.mutterschutzGeschwisterkind;
+      if (!zeit) return [];
 
-      return zeiten.map((zeit) => ({
-        ...zeit,
-        grund: "mutterschutzGeschwisterkind",
-        geschwisterIndex,
-      }));
+      return [
+        { ...zeit, grund: "mutterschutzGeschwisterkind", geschwisterIndex },
+      ];
     });
 }
 
@@ -310,7 +309,7 @@ if (import.meta.vitest) {
             erkrankungSchwangerschaft: [],
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];
@@ -349,7 +348,7 @@ if (import.meta.vitest) {
             erkrankungSchwangerschaft: [],
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -399,7 +398,7 @@ if (import.meta.vitest) {
             erkrankungSchwangerschaft: [],
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -456,15 +455,13 @@ if (import.meta.vitest) {
             geschwisterIndex: 0,
           },
           payload: {
-            mutterschutzGeschwisterkind: [
-              {
-                von: Temporal.PlainDate.from("2024-11-01"),
-                bis: Temporal.PlainDate.from("2025-02-15"),
-              },
-            ],
+            mutterschutzGeschwisterkind: {
+              von: Temporal.PlainDate.from("2024-11-01"),
+              bis: Temporal.PlainDate.from("2025-02-15"),
+            },
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];
@@ -497,7 +494,7 @@ if (import.meta.vitest) {
             ],
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         },
         {
@@ -507,15 +504,13 @@ if (import.meta.vitest) {
             geschwisterIndex: 0,
           },
           payload: {
-            mutterschutzGeschwisterkind: [
-              {
-                von: Temporal.PlainDate.from("2024-11-01"),
-                bis: Temporal.PlainDate.from("2025-02-15"),
-              },
-            ],
+            mutterschutzGeschwisterkind: {
+              von: Temporal.PlainDate.from("2024-11-01"),
+              bis: Temporal.PlainDate.from("2025-02-15"),
+            },
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];
@@ -553,15 +548,13 @@ if (import.meta.vitest) {
             geschwisterIndex: 0,
           },
           payload: {
-            mutterschutzGeschwisterkind: [
-              {
-                von: Temporal.PlainDate.from("2023-01-01"),
-                bis: Temporal.PlainDate.from("2023-06-30"),
-              },
-            ],
+            mutterschutzGeschwisterkind: {
+              von: Temporal.PlainDate.from("2023-01-01"),
+              bis: Temporal.PlainDate.from("2023-06-30"),
+            },
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -571,15 +564,13 @@ if (import.meta.vitest) {
             geschwisterIndex: 0,
           },
           payload: {
-            mutterschutzGeschwisterkind: [
-              {
-                von: Temporal.PlainDate.from("2024-11-01"),
-                bis: Temporal.PlainDate.from("2025-02-15"),
-              },
-            ],
+            mutterschutzGeschwisterkind: {
+              von: Temporal.PlainDate.from("2024-11-01"),
+              bis: Temporal.PlainDate.from("2025-02-15"),
+            },
           },
           dependentValues: {
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];

@@ -1,3 +1,4 @@
+import DoubleArrowIcon from "~icons/material-symbols/double-arrow";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
@@ -9,6 +10,8 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -39,7 +42,8 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
   );
 
   const eventStream = filtereValideEventHistorie();
-  const anzahlGeschwister = findeGeschwisterkinder(eventStream).length;
+  const geburtsdatum = findeGeburtsdatum(eventStream);
+  const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(ElternteilAusklammerungErkrankungAbfrageSchema),
@@ -52,12 +56,19 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilAusklammerungErkrankungAbfrage) => {
+    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
+        geburtsdatum,
+        geschwisterkinder,
+        [],
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
       params: routeParams,
       dependentValues: {
-        anzahlGeschwister,
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 
@@ -68,6 +79,10 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
 
   const navigateBack = () => {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  };
+
+  const handleSkip = () => {
+    onSubmit({ hatSchwangerschaftsbedingteErkrankung: undefined });
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
@@ -163,6 +178,17 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
           <Button type="submit" form={formIdentifier}>
             Weiter
           </Button>
+
+          <button
+            type="button"
+            className="border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
+            onClick={handleSkip}
+          >
+            <div className="flex items-center">
+              <DoubleArrowIcon className="mr-4 mt-4" />
+              <span className="font-bold">Überspringen</span>
+            </div>
+          </button>
         </div>
       </form>
     </Page>

@@ -106,7 +106,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: ElternteilParams,
     payload: ElternteilAusklammerungErkrankungAbfrageSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
   z.object({
@@ -114,7 +116,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: ElternteilParams,
     payload: ElternteilAusklammerungErkrankungZeitenSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
   z.object({
@@ -122,7 +126,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
   z.object({
@@ -130,7 +136,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
   z.object({
@@ -138,7 +146,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
   z.object({
@@ -146,7 +156,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
   z.object({

@@ -208,15 +208,13 @@ if (import.meta.vitest) {
               geschwisterIndex: 0,
             },
             payload: {
-              mutterschutzGeschwisterkind: [
-                {
-                  von: Temporal.PlainDate.from("2024-11-01"),
-                  bis: Temporal.PlainDate.from("2025-02-15"),
-                },
-              ],
+              mutterschutzGeschwisterkind: {
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
             },
             dependentValues: {
-              anzahlGeschwister: 1,
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
             },
           },
         ]);
@@ -337,15 +335,13 @@ if (import.meta.vitest) {
               geschwisterIndex: 0,
             },
             payload: {
-              mutterschutzGeschwisterkind: [
-                {
-                  von: Temporal.PlainDate.from("2024-11-01"),
-                  bis: Temporal.PlainDate.from("2025-02-15"),
-                },
-              ],
+              mutterschutzGeschwisterkind: {
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
             },
             dependentValues: {
-              anzahlGeschwister: 1,
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
             },
           },
           {
@@ -438,15 +434,13 @@ if (import.meta.vitest) {
               geschwisterIndex: 0,
             },
             payload: {
-              mutterschutzGeschwisterkind: [
-                {
-                  von: Temporal.PlainDate.from("2024-11-01"),
-                  bis: Temporal.PlainDate.from("2025-02-15"),
-                },
-              ],
+              mutterschutzGeschwisterkind: {
+                von: Temporal.PlainDate.from("2024-11-01"),
+                bis: Temporal.PlainDate.from("2025-02-15"),
+              },
             },
             dependentValues: {
-              anzahlGeschwister: 1,
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
             },
           },
         ]);

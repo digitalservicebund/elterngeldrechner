@@ -1,45 +1,64 @@
-import { pdfVersionVorApril2024 } from "./pdfVersion/bis2024-03-31";
-import { pdfVersionZwischenApril2024UndApril2025 } from "./pdfVersion/von2024-04-01bis2025-03-31";
-import { pdfVersionVonApril2025 } from "./pdfVersion/von2025-04-01";
-import { Elternteil, Lebensmonatszahl, Variante } from "@/monatsplaner";
+import { Temporal } from "@js-temporal/polyfill";
+import { v1, v2, v3 } from "./configurations";
 
-const pdfVersions = [
-  pdfVersionVorApril2024,
-  pdfVersionZwischenApril2024UndApril2025,
-  pdfVersionVonApril2025,
-] as const;
+type Validity = {
+  readonly version: number;
+  readonly startFrom: Temporal.PlainDate;
+};
 
-export function getFieldName({
-  geburtsdatum,
-  variante,
-  elternteil,
-  lebensmonat,
-}: {
-  geburtsdatum: Date;
-  variante: Variante;
-  elternteil: Elternteil;
-  lebensmonat: Lebensmonatszahl;
-}) {
-  const fieldName =
-    getPdfVersion(geburtsdatum)?.fieldNames[variante][elternteil][
-      (lebensmonat as number) - 1
-    ];
-  if (!fieldName) {
-    throw Error("PDF Version not found");
-  }
-  return fieldName;
+const initialVersion = { version: 1 as const };
+
+// Ordered chronologically. Each node becomes active on its startFrom date.
+// initialVersion is valid from the beginning of time, the last node forever.
+const versionTimeline = [
+  {
+    version: 2 as const,
+    startFrom: Temporal.PlainDate.from("2024-04-01"),
+  },
+  {
+    version: 3 as const,
+    startFrom: Temporal.PlainDate.from("2025-04-01"),
+  },
+] satisfies Validity[];
+
+export type PdfVersionNumber =
+  | typeof initialVersion.version
+  | (typeof versionTimeline)[number]["version"];
+
+export const versionedConfigurations = {
+  1: v1,
+  2: v2,
+  3: v3,
+} as const satisfies Record<PdfVersionNumber, object>;
+
+export function findPdfVersion(date: Temporal.PlainDate): PdfVersionNumber {
+  return versionTimeline.reduce<PdfVersionNumber>((match, node) => {
+    return Temporal.PlainDate.compare(date, node.startFrom) >= 0
+      ? node.version
+      : match;
+  }, initialVersion.version);
 }
 
-export function getFieldNameForVornamen(geburtsdatum: Date) {
-  const fieldNames = getPdfVersion(geburtsdatum)?.fieldNames.vorname;
-  if (!fieldNames) {
-    throw Error("PDF Version not found");
-  }
-  return fieldNames;
-}
+if (import.meta.vitest) {
+  const { describe, it, expect } = import.meta.vitest;
 
-export function getPdfVersion(date: Date) {
-  return pdfVersions.find(
-    (pdfVersion) => date >= pdfVersion.start && date <= pdfVersion.end,
-  );
+  describe("findPdfVersion", () => {
+    it("returns the first version for a date before any boundary", () => {
+      expect(findPdfVersion(Temporal.PlainDate.from("2020-01-01"))).toBe(1);
+    });
+
+    it("returns the previous version on the day before a boundary", () => {
+      expect(findPdfVersion(Temporal.PlainDate.from("2024-03-31"))).toBe(1);
+      expect(findPdfVersion(Temporal.PlainDate.from("2025-03-31"))).toBe(2);
+    });
+
+    it("returns the next version on the startFrom date", () => {
+      expect(findPdfVersion(Temporal.PlainDate.from("2024-04-01"))).toBe(2);
+      expect(findPdfVersion(Temporal.PlainDate.from("2025-04-01"))).toBe(3);
+    });
+
+    it("returns the last version for a date far in the future", () => {
+      expect(findPdfVersion(Temporal.PlainDate.from("2099-12-31"))).toBe(3);
+    });
+  });
 }

@@ -69,29 +69,19 @@ export function GeschwisterkindAnzahlAbfragePage() {
 
           <InfoText
             className="mt-10 pb-20"
-            question="Was ist mit Haushalt gemeint?"
+            question="Was bedeutet „im Haushalt leben“?"
             answer={
               <>
-                <p>
-                  Geben Sie hier an, wie viele ältere Kinder fest bei Ihnen
-                  wohnen. Das ist wichtig, damit Sie den Geschwisterbonus
-                  bekommen.
-                </p>
-                <p className="mb-0 mt-20 font-bold">
-                  Was bedeutet „im Haushalt leben“?
-                </p>
-                <p className="mb-0">
-                  Ein Kind lebt in Ihrem Haushalt, wenn es:
-                </p>
+                <p className="mb-0">Ein Kind lebt in Ihrem Haushalt, wenn:</p>
                 <ul>
-                  <li>bei Ihnen gemeldet ist.</li>
+                  <li>es bei Ihnen gemeldet ist.</li>
                   <li>
-                    dauerhaft bei Ihnen wohnt und von Ihnen versorgt wird.
+                    es dauerhaft bei Ihnen wohnt und Sie das Kind versorgen.
                   </li>
                   <li>
-                    Auch Kinder Ihres Partners oder Ihrer Partnerin und
-                    Adoptivkinder zählen dazu.
+                    es das Kind von Ihrem Partner oder Ihrer Partnerin ist.
                   </li>
+                  <li>es Ihr Adoptiv-Kind ist.</li>
                 </ul>
               </>
             }

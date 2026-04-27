@@ -75,15 +75,9 @@ export function ElternteilEinsAllgemeineAngabenPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <p className="-mt-20">
-          Auf den folgenden Seiten fragen wir alle Informationen zu Person 1 ab.
-          Sollte es eine weitere Person geben, können hierzu Angaben im
-          Anschluss gemacht werden.
-        </p>
-
         <div>
           <h3 className="mb-10">
-            Wie heißt Person 1, die Elterngeld erhalten soll?
+            Wie heißt die Person 1, die Elterngeld plant?
           </h3>
 
           <InfoText
@@ -161,15 +155,27 @@ export function ElternteilEinsAllgemeineAngabenPage() {
                   Deutschland gesetzlichen Anspruch auf Mutterschutz. Nach dem
                   Mutterschutzgesetz gelten insbesondere Mutterschutzfristen,
                   die 6 Wochen vor der dem errechneten Geburtstermin beginnen
-                  und in der Regel 8 Wochen danach enden. Während der
-                  Schutzfristen erhalten Sie Mutterschaftsleistungen, zum
-                  Beispiel:
+                  und in der Regel 8 Wochen danach enden.
+                </p>
+
+                <p className="mb-0 mt-20">
+                  Während der Mutterschutzfrist bekommen Sie:
                 </p>
 
                 <ul>
-                  <li>das Mutterschaftsgeld der gesetzlichen Krankenkassen</li>
-                  <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
-                  <li>die Bezüge für Beamtinnen während des Mutterschutzes</li>
+                  <li>
+                    Mutterschaftsgeld Ihrer Krankenkasse, wenn Sie gesetzlich
+                    versichert sind.
+                  </li>
+                  <li>
+                    Mutterschaftsgeld des Bundesamtes für Soziale Sicherung,
+                    wenn Sie privat krankenversichert oder bei einer
+                    gesetzlichen Krankenkasse familienversichert sind.
+                  </li>
+                  <li>
+                    Arbeitgeber-Zuschuss zum Mutterschaftsgeld, wenn Ihr
+                    durchschnittlicher Nettolohn pro Tag höher als 13 Euro ist.
+                  </li>
                 </ul>
 
                 <p className="mt-20 font-bold">

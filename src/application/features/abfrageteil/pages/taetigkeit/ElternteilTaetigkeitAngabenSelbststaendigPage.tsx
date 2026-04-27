@@ -81,18 +81,21 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         noValidate
       >
         <div>
-          <h3 className="mb-10">Details zur selbstständigen Tätigkeit</h3>
+          <p className="-mt-40 mb-10 text-text-light">
+            Details zur selbstständigen Tätigkeit
+          </p>
+
+          <p className="mb-0 mt-20">
+            Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
+            den
+          </p>
 
           <BemessungszeitraumKurzuebersicht
             bemessungszeitraum={bemessungszeitraum}
             taetigkeitenFlow="Selbstaendig"
           />
-          <p className="mt-32">
-            Bitte geben Sie hier Details zur Tätigkeit von {vorname} an. Im
-            Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
-            anzugeben.
-          </p>
-          <p>
+
+          <p className="mt-20">
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>
@@ -136,8 +139,8 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
                   nicht automatisch gesetzlich pflichtversichert.
                 </p>
 
-                <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="mb-16">
+                <p className="mb-0">Sie wählen „Nein“, wenn Sie</p>
+                <ul>
                   <li>freiwillig gesetzlich versichert, </li>
                   <li>familienversichert,</li>
                   <li>privat versichert,</li>
@@ -146,9 +149,8 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
                 <p>
                   Hinweis: In diesem Fall müssen Sie entsprechende Beiträge für
-                  Ihre Krankenversicherung zusätzlich eigenständig einplanen, da
-                  sie im Elterngeldrechner nicht automatisch berücksichtigt
-                  werden.
+                  Ihre Krankenversicherung selber einplanen, da sie nicht
+                  automatisch berücksichtigt werden.
                 </p>
               </>
             }
@@ -173,7 +175,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         >
           <InfoText
             question="Was bedeutet das?"
-            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert. Pflichtbeiträge fallen nur in wenigen Fällen an, zum Beispiel für Künstler:innen oder Journalist:innen über die Künstlersozialkasse. Wenn Sie in ein berufsständisches Versorgungswerk eingezahlt haben, wird dies bei der Elterngeldberechnung berücksichtigt."
+            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert.Sie leisten nur dann Pflichtbeiträge, wenn Sie zu einer der wenigen Berufsgruppen gehören, die rentenversicherungspflichtig sind – zum Beispiel Lehrer:innen, Pflegepersonen, Künstler:innen oder Journalist:innen."
           />
         </CustomRadioGroup>
 
@@ -195,7 +197,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         >
           <InfoText
             question="Was bedeutet das?"
-            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Arbeitslosenversicherung abgeschlossen haben."
+            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Versicherung abgeschlossen haben – das ist jedoch eher die Ausnahme."
           />
         </CustomRadioGroup>
 
@@ -215,33 +217,50 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
             answer={
               <>
                 <p>
-                  Wenn der aktuelle Einkommensteuerbescheid noch nicht vorliegt,
-                  geben Sie einen geschätzten Gewinn an. Beachten Sie, dass die
-                  spätere Berechnung ihres Elterngeldes durch die
-                  Elterngeldstelle dadurch anders ausfallen kann.
+                  Für Selbstständige ist der Brutto-Gewinn der Betrag, der übrig
+                  bleibt, wenn Sie von Ihren gesamten Einnahmen alle Kosten und
+                  Ausgaben (Betriebsausgaben) abgezogen haben.
                 </p>
-                <div className="mt-16">
-                  <p>
-                    Für Selbstständige zählt der Gewinn aus der selbstständigen
-                    Tätigkeit. Der Gewinn ist der Betrag, der nach Abzug aller
-                    betrieblichen Ausgaben von Ihren Betriebseinnahmen übrig
-                    bleibt. Maßgeblich ist nicht Ihr gesamter Umsatz, sondern
-                    dieser Gewinn.
-                  </p>
-                  <p>
-                    Den maßgeblichen Gewinn finden Sie in Ihrem
-                    Einkommensteuerbescheid bei den Einkünften aus
-                    selbstständiger Arbeit oder aus Gewerbebetrieb oder aus
-                    Land- und Forstwirtschaft.
-                  </p>
-                  <p>
-                    Einnahmen aus Vermietung und Verpachtung oder aus
-                    Kapitalvermögen (zum Beispiel Zinsen) sind zwar im
-                    Steuerbescheid enthalten, zählen beim Elterngeld jedoch
-                    nicht als Erwerbseinkommen und bleiben daher
-                    unberücksichtigt.
-                  </p>
-                </div>
+                <ul>
+                  <li>Es ist nicht Ihr gesamter Umsatz (alle Einnahmen).</li>
+                  <li>
+                    Es ist Ihr tatsächlicher Gewinn, bevor Sie Ihre persönliche
+                    Einkommensteuer dafür bezahlen. Im Steuerrecht spricht man
+                    vom steuerpflichtigen Gewinn.
+                  </li>
+                  <li>
+                    Einkünfte aus Vermietung und Verpachtung oder aus
+                    Kapitalvermögen werden zwar im Steuerbescheid
+                    berücksichtigt, sind aber für die Berechnung des
+                    Elterngeldes nicht relevant und müssen von Ihnen
+                    rausgerechnet werden
+                  </li>
+                </ul>
+                <p className="mt-16">
+                  Sie finden diese Angabe in Ihren Unterlagen zur
+                  Steuererklärung:
+                </p>
+                <ul>
+                  <li>
+                    Im Einkommensteuerbescheid: Der Betrag ist dort als
+                    &quot;Gewinn aus selbstständiger Arbeit&quot; oder
+                    &quot;Summe der positiven Einkünfte&quot; aufgeführt.
+                  </li>
+                  <li>
+                    In der Einnahmen-Überschuss-Rechnung (EÜR): Es ist die
+                    Endsumme Ihrer EÜR.
+                  </li>
+                </ul>
+                <p>
+                  Bitte tragen Sie hier den endgültigen Wert ein, der auch Ihrem
+                  Finanzamt gemeldet wurde.
+                </p>
+                <p className="mt-16">
+                  Wenn der aktuelle Einkommensteuerbescheid noch nicht vorliegt,
+                  geben Sie einen geschätzten Brutto-Gewinn an. Beachten Sie,
+                  dass das Ergebnis der Elterngeldberechnung dadurch abweichen
+                  kann.
+                </p>
               </>
             }
           />
@@ -249,7 +268,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           <CurrencyInput
             control={control}
             name="bruttoJahresgewinn"
-            label="Gewinn im gesamten Kalenderjahr"
+            label="Brutto-Gewinn im gesamten Kalenderjahr"
           />
         </div>
 

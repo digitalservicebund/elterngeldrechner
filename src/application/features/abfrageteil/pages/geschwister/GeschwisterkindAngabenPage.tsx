@@ -87,7 +87,7 @@ export function GeschwisterkindAngabenPage() {
       >
         <div>
           <h3 className="mb-10">
-            Wann wurde das Geschwisterkind {routeParams.geschwisterIndex + 1}{" "}
+            Wann wurde Geschwisterkind {routeParams.geschwisterIndex + 1}{" "}
             geboren?
           </h3>
 

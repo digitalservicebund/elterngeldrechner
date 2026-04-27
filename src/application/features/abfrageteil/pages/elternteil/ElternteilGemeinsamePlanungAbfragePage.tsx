@@ -70,7 +70,6 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
         noValidate
       >
         <CustomRadioGroup
-          className="mt-16"
           legend={
             <h3 className="mb-10">
               Sollen beide Elternteile Elterngeld bekommen?

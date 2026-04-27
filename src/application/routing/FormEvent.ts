@@ -233,7 +233,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: ElternteilZweiAllgemeineAngabenSchema,
     dependentValues: z.object({
       istSchwangerschaftsbedingteErkrankungMoeglich: z.boolean(),
-      anzahlGeschwister: z.number(),
+      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+        .number()
+        .optional(),
     }),
   }),
 ]);

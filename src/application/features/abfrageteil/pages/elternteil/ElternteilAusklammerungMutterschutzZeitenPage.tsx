@@ -175,7 +175,7 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
             Geschwisterkind (geb. {geburtsdatumGeschwisterkindString})?
           </h3>
           <p>
-            Der Mutterschutz gilt in der Regel 6 Wochen vor der dem errechneten
+            Der Mutterschutz gilt in der Regel 6 Wochen vor dem errechneten
             Geburtstermin und endet 8 Wochen danach.{" "}
             {geschwisterkinder[routeParams.geschwisterIndex]?.hatBehinderung
               ? "Bei der Geburt eines Kindes mit Behinderung verlängert sich dieser Zeitraum auf 12 Wochen."
@@ -183,63 +183,70 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
           </p>
         </div>
 
-        <div className="flex flex-col gap-32">
-          <div className="flex flex-col">
-            <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
-              <div>
-                <label
-                  className={classNames("mb-4 block text-16", {
-                    "text-danger": formErrors.mutterschutzGeschwisterkind?.von,
-                  })}
-                  htmlFor="mutterschutz-von"
-                >
-                  Beginn des Mutterschutzes (TT.MM.JJJJ)
-                </label>
-                <DateInput
-                  id="mutterschutz-von"
-                  {...register("mutterschutzGeschwisterkind.von")}
-                  error={formErrors.mutterschutzGeschwisterkind?.von?.message}
-                />
-              </div>
+        <div className="flex flex-col">
+          <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
+            <div>
+              <label
+                className={classNames("mb-4 block text-16", {
+                  "text-danger": formErrors.mutterschutzGeschwisterkind?.von,
+                })}
+                htmlFor="mutterschutz-von"
+              >
+                Beginn des Mutterschutzes (TT.MM.JJJJ)
+              </label>
+              <DateInput
+                id="mutterschutz-von"
+                {...register("mutterschutzGeschwisterkind.von")}
+                error={formErrors.mutterschutzGeschwisterkind?.von?.message}
+              />
+            </div>
 
-              <div>
-                <label
-                  className={classNames("mb-4 block text-16", {
-                    "text-danger": formErrors.mutterschutzGeschwisterkind?.bis,
-                  })}
-                  htmlFor="mutterschutz-bis"
-                >
-                  Ende des Mutterschutzes (TT.MM.JJJJ)
-                </label>
-                <DateInput
-                  id="mutterschutz-bis"
-                  {...register("mutterschutzGeschwisterkind.bis")}
-                  error={formErrors.mutterschutzGeschwisterkind?.bis?.message}
-                />
-              </div>
+            <div>
+              <label
+                className={classNames("mb-4 block text-16", {
+                  "text-danger": formErrors.mutterschutzGeschwisterkind?.bis,
+                })}
+                htmlFor="mutterschutz-bis"
+              >
+                Ende des Mutterschutzes (TT.MM.JJJJ)
+              </label>
+              <DateInput
+                id="mutterschutz-bis"
+                {...register("mutterschutzGeschwisterkind.bis")}
+                error={formErrors.mutterschutzGeschwisterkind?.bis?.message}
+              />
             </div>
           </div>
-        </div>
 
-        <InfoText
-          question="Der vorausgefüllte Zeitraum stimmt nicht?"
-          answer={
-            <>
-              <p className="mb-20">
-                Schauen Sie auf Ihr ärztliches Attest. Dort stehen die genauen
-                Daten. Bitte tragen Sie diese hier ein.
-              </p>
-              <p>
-                <strong>Wichtig: </strong>Eine normale Krankmeldung (gelber
-                Zettel oder digitale Krankmeldung) reicht nicht aus. Sie
-                benötigen eine Bestätigung vom Arzt oder von der Ärztin, dass
-                die Krankheit direkt durch die Schwangerschaft verursacht wurde.
-                Dieses Attest müssen Sie später bei der Beantragung von
-                Elterngeld als Nachweis einreichen.
-              </p>
-            </>
-          }
-        />
+          <InfoText
+            className="mt-20"
+            question="Der vorausgefüllte Zeitraum stimmt nicht?"
+            answer={
+              <>
+                <p>
+                  Der Mutterschutz umfasst in der Regel 6 Wochen vor und 8
+                  Wochen nach der Geburt. Wir haben aufgrund des eingetragenen
+                  Geburtstdatums die Daten für den Mutterschutz automatisch
+                  berechnet.
+                </p>
+                <p>
+                  Wenn Sie wissen, dass diese Daten nicht stimmen, können Sie
+                  diese einfach ändern. Das ist meist der Fall, wenn:
+                </p>
+                <ul>
+                  <li>das Kind zu früh geboren wurde</li>
+                  <li>Mehrlinge (Zwillinge, Drillinge etc.) geboren werden</li>
+                  <li>das Kind eine Behinderung hat </li>
+                  <li>das Kind ein geringes Geburtsgewicht hat</li>
+                </ul>
+                <p>
+                  Sie finden diese Angaben beispielsweise im Mutterpass oder auf
+                  der Bescheinigung der Ärztin / des Arztes oder der Hebamme.
+                </p>
+              </>
+            }
+          />
+        </div>
 
         <div className="mt-40 flex gap-16">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>

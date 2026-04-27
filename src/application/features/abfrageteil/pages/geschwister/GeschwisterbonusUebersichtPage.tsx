@@ -63,9 +63,9 @@ export function GeschwisterbonusUebersichtPage() {
                   Geschwisterbonus erfüllt sind
                 </li>
                 <li>
-                  Die Erhöhung wird bis{" "}
+                  Der Geschwisterbonus wird bis zum Erreichen der{" "}
                   <strong>
-                    zum Erreichen der Altersgrenze am{" "}
+                    Altersgrenze am{" "}
                     {geschwisterbonus.toLocaleString("de-DE", {
                       day: "2-digit",
                       month: "2-digit",
@@ -75,8 +75,8 @@ export function GeschwisterbonusUebersichtPage() {
                   gezahlt
                 </li>
                 <li>
-                  Der Geschwisterbonus wird im Planer direkt auf ihr Elterngeld
-                  dazu gerechnet
+                  Die Erhöhung wird im Planer direkt bei ihrem Elterngeld
+                  berücksichtigt
                 </li>
               </ul>
             </div>
@@ -92,8 +92,8 @@ export function GeschwisterbonusUebersichtPage() {
             <div className=" p-20">
               <ul className="ml-32 mt-4 list-disc">
                 <li>
-                  Ihre Angaben haben ergeben, dass die Altersgrenzen für den
-                  Geschwisterbonus derzeit überschritten sind.
+                  Ihre Angaben haben ergeben, dass die Altersgrenze für den
+                  Geschwisterbonus überschritten ist.
                 </li>
               </ul>
             </div>

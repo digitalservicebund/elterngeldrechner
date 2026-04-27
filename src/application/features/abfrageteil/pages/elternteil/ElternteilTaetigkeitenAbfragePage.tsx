@@ -95,14 +95,14 @@ export function ElternteilTaetigkeitenAbfragePage() {
       >
         <div>
           <h3 className="mb-10">
-            Bitte wählen Sie alles aus, was auf {vorname} vom Kalenderjahr{" "}
+            Wählen Sie alles aus, was vom Kalenderjahr{" "}
             {betrachtungszeitraum.von.year} bis zum Geburtsdatum{" "}
-            {geburtsdatumString} zutrifft:
+            {geburtsdatumString} auf {vorname} zutrifft:
           </h3>
 
           <InfoText
             question="Warum fragen wir das?"
-            answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Das ist die Zeit vor der Geburt Ihres Kindes, aus der Ihr Einkommen für die Berechnung des Elterngeldes verwendet wird. Welche Zeit genau berücksichtigt wird, hängt von Ihrer persönlichen Situation ab."
+            answer="Ihre Angaben helfen uns, den Bemessungszeitraum für Ihr Elterngeld festzulegen. Der Bemessungszeitraum ist die Zeit vor der Geburt, in der Ihr Einkommen geprüft wird. Daraus wird die Höhe Ihres Elterngeldes berechnet."
           />
 
           <CustomCheckbox
@@ -135,7 +135,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           >
             <p className="font-regular">
               zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land- oder
-              Forstwirtschaft, Freiberuflichkeit, Selbstständig (GbR, GmbH,
+              Forstbetrieb, Freiberuflichkeit, Selbstständig (GbR, GmbH,
               Beteiligung).
             </p>
           </CustomCheckbox>
@@ -150,7 +150,12 @@ export function ElternteilTaetigkeitenAbfragePage() {
             aria-describedby={
               showGeneralErrorMessage ? generalErrorId : undefined
             }
-          />
+          >
+            <p className="font-regular">
+              zum Beispiel als Lehrer oder Lehrerin, im Polizeidienst, in der
+              Stadtverwaltung oder während des Referendariats.
+            </p>
+          </CustomCheckbox>
 
           <CustomCheckbox
             className="mt-20 font-bold"
@@ -164,7 +169,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
             }
           >
             <p className="font-regular">
-              zum Beispiel Bürgergeld, Arbeitslosengeld, Krankengeld oder
+              zum Beispiel BAföG, Bürgergeld, Arbeitslosengeld, Krankengeld oder
               Elterngeld.
             </p>
           </CustomCheckbox>
@@ -180,7 +185,8 @@ export function ElternteilTaetigkeitenAbfragePage() {
             }
           >
             <p className="font-regular">
-              zum Beispiel während eines Studiums, als Hausfrau oder Hausmann.
+              zum Beispiel während eines Studiums, unbezahlter Urlaub oder als
+              Hausfrau oder Hausmann.
             </p>
           </CustomCheckbox>
 

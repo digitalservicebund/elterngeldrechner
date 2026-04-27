@@ -352,7 +352,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istSchwangerschaftsbedingteErkrankungMoeglich: true,
-              anzahlGeschwister: 1,
+              nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
             },
           },
         ]);

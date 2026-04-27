@@ -96,21 +96,21 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
         noValidate
       >
         <div>
-          <h3 className="mb-10">
+          <p className="-mt-40 mb-10 text-text-light">
             Details zur Tätigkeit als Angestellte oder Angestellter
-          </h3>
+          </p>
+
+          <p className="mb-0 mt-20">
+            Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
+            den
+          </p>
 
           <BemessungszeitraumKurzuebersicht
             bemessungszeitraum={bemessungszeitraum}
             taetigkeitenFlow={taetigkeitenFlow}
           />
 
-          <p className="mt-32">
-            Bitte geben Sie hier Details zur Tätigkeit von {vorname} an. Im
-            Anschluss haben Sie die Möglichkeit, noch eine weitere Tätigkeit
-            anzugeben.
-          </p>
-          <p>
+          <p className="mt-20">
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>
@@ -141,9 +141,10 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
                   Grenze verdienen.
                 </p>
 
-                <p>Diese Grenze liegt:</p>
+                <p className="mb-0">Diese Grenze liegt:</p>
                 <ul className="mb-16">
-                  <li>seit 2025 bei 556 Euro im Monat,</li>
+                  <li>seit 2026 bei 603 Euro im Monat,</li>
+                  <li>im Jahr 2025 bei 556 Euro im Monat,</li>
                   <li>im Jahr 2024 bei 538 Euro im Monat,</li>
                   <li>von Oktober 2022 bis Ende 2023 bei 520 Euro im Monat,</li>
                   <li>davor bei 450 Euro im Monat.</li>

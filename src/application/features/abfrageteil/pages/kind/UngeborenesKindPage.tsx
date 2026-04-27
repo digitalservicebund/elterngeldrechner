@@ -75,7 +75,7 @@ export function UngeborenesKindPage() {
 
           <InfoText
             question="Was ist der errechnete Entbindungstermin?"
-            answer='Den errechneten Entbindungstermin finden Sie in Ihrem Mutterpass unter dem Abschnitt "Voraussichtlicher Entbindungstermin" oder auf den Ultraschallberichten.'
+            answer="Diesen Termin finden Sie in Ihrem Mutterpass unter „Voraussichtlicher Entbindungstermin“ oder auf Ihren Ultraschall-Berichten."
           />
 
           <label
@@ -103,6 +103,40 @@ export function UngeborenesKindPage() {
             Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
             Kinder an (zum Beispiel 2 bei Zwillingen).
           </p>
+
+          <InfoText
+            question="Was bedeutet es wenn ich mehr als ein Kind geboren wird?"
+            answer={
+              <>
+                <p>
+                  Wenn Sie mehr als ein Kind bekommen (zum Beispiel Zwillinge
+                  oder Drillinge), gibt es Besonderheiten beim Elterngeld:
+                </p>
+                <ul>
+                  <li>
+                    Sie bekommen für ein Kind ganz normal Elterngeld. Für jedes
+                    weitere Kind erhalten Sie einen Zuschlag.
+                  </li>
+                  <li>
+                    Beim Basiselterngeld sind das 300 € extra pro Monat und
+                    Kind.
+                  </li>
+                  <li>
+                    Beim ElterngeldPlus sind das 150 € extra pro Monat und Kind.
+                  </li>
+                  <li>
+                    Sie bekommen das Geld nicht länger ausgezahlt, aber der
+                    monatliche Betrag ist höher.
+                  </li>
+                  <li>
+                    Mutterschutz: Nach der Geburt von Mehrlingen haben Sie 12
+                    Wochen Mutterschutz (statt 8 Wochen).
+                  </li>
+                </ul>
+              </>
+            }
+            className="mb-20"
+          />
 
           <NumberInput
             {...register("anzahl")}

@@ -376,13 +376,22 @@ function getNextSubpath(event: FormEvent): string {
         );
       }
 
-      const zielRoute =
-        dependentValues.anzahlGeschwister > 0
-          ? Route.ElternteilAusklammerungElternzeitAbfrage
-          : Route.ElternteilTaetigkeitenAbfrage;
-      return generateParametrizedPath(zielRoute, {
+      if (
+        dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung !==
+        undefined
+      ) {
+        return generateParametrizedPath(
+          Route.ElternteilAusklammerungElternzeitAbfrage,
+          {
+            elternteilIndex: "1",
+            geschwisterIndex:
+              dependentValues.nächsterGeschwisterIndexMitRelevanzFuerAusklammerung?.toString(),
+          },
+        );
+      }
+
+      return generateParametrizedPath(Route.ElternteilTaetigkeitenAbfrage, {
         elternteilIndex: "1",
-        geschwisterIndex: "0",
       });
     }
   }
@@ -1565,7 +1574,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istSchwangerschaftsbedingteErkrankungMoeglich: true,
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -1582,7 +1591,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istSchwangerschaftsbedingteErkrankungMoeglich: false,
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         });
 
@@ -1599,7 +1608,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istSchwangerschaftsbedingteErkrankungMoeglich: false,
-            anzahlGeschwister: 0,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         });
 

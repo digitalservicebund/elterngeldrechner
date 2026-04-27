@@ -12,6 +12,7 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil/domain/findeAnzahlKinder";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
@@ -50,6 +51,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   useValidierungsfehlerTracking(subscribe);
 
   const eventStream = filtereValideEventHistorie();
+  const geburtsdatum = findeGeburtsdatum(eventStream);
   const istErsterElternteilImMutterschutz =
     findeInformationenZumMutterschutz(
       eventStream,
@@ -68,6 +70,13 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
   const onSubmit = async (values: ElternteilZweiAllgemeineAngaben) => {
+    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
+        geburtsdatum,
+        geschwisterkinder,
+        [],
+      );
+
     const event: FormEvent = {
       route: currentRoute,
       payload: {
@@ -78,7 +87,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
       },
       dependentValues: {
         istSchwangerschaftsbedingteErkrankungMoeglich,
-        anzahlGeschwister: geschwisterkinder.length,
+        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 
@@ -108,7 +117,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
       >
         <div className="mt-20">
           <h3 className="mb-10">
-            Wie heißt Person 2, die Elterngeld erhalten soll?
+            Wie heißt die Person 2, die Elterngeld plant?
           </h3>
 
           <InfoText

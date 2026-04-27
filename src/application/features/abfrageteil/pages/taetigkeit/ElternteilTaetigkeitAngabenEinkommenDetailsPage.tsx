@@ -8,8 +8,9 @@ import {
   TaetigkeitUnleichesEinkommenAngaben,
   TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button, InfoText } from "@/application/features/components";
+import { Button } from "@/application/features/components";
 import { AusklammerungsZeitraumBox } from "@/application/features/abfrageteil/components/AusklammerungsZeitraumBox";
+import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
@@ -149,7 +150,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   };
 
   return (
-    <Page heading="Details zur Tätigkeit als Angestellte oder Angestellter">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="flex flex-col gap-40"
@@ -157,41 +158,25 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
         noValidate
       >
         <div>
-          <h5 className="mb-10">
-            Wie viel hat {vorname} im Bemessungszeitraum pro Monat brutto
-            verdient?
-          </h5>
+          <p className="-mt-40 mb-20 font-bold text-text-light">
+            Details zur Tätigkeit als Angestellte oder Angestellter
+          </p>
 
-          <div className="mb-20">
-            <p>
-              Wir errechnen aufgrund Ihrer Angaben ein monatliches
-              Durchschnittsgehalt.
-            </p>
-            <p>
-              Für die Monate in denen Sie kein Einkommen, Sozialleistungen oder
-              Einkommensersatzleistungen erhalten haben geben Sie “0” ein.
-            </p>
-          </div>
-
-          <InfoText
-            className="mb-16"
-            question="Wo finde ich diese Information?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Am genauesten finden Sie Ihr monatliches Bruttogehalt auf
-                  Ihrer Gehaltsabrechnung (meist als „Brutto” oder
-                  „Gesamtbrutto” bezeichnet).
-                </p>
-                <p>
-                  Auf Ihrer Lohnsteuerbescheinigung steht das Jahresbrutto. Wenn
-                  Sie das ganze Jahr gleich viel verdient haben, können Sie
-                  diesen Betrag durch 12 teilen, um einen durchschnittlichen
-                  Monatswert zu berechnen.
-                </p>
-              </>
-            }
+          <BemessungszeitraumKurzuebersicht
+            bemessungszeitraum={bemessungszeitraum}
+            taetigkeitenFlow={taetigkeitenFlow}
           />
+
+          <p className="mt-20">
+            Je genauer Ihre Angaben sind, desto besser kann der Rechner das
+            Elterngeld für Sie ausrechnen.
+          </p>
+        </div>
+
+        <div>
+          <h5 className="mb-20">
+            Wie viel haben Sie im Monat brutto verdient?
+          </h5>
 
           {gruppierteZeitabschnitte.map((zeitabschnitt, index) => {
             if (istGruppierterZeitabschnittAusklammerung(zeitabschnitt)) {

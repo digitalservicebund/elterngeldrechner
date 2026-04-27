@@ -4,7 +4,11 @@ import { useNavigate } from "react-router";
 import { Button } from "@/application/features/components";
 import { Page } from "@/application/features/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil/domain/findeAlleinerziehend";
-import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
+import {
+  AusklammerungMitGeschwisterindex,
+  findeAusklammerungen,
+} from "@/application/features/abfrageteil/domain/findeAusklammerungen";
+import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil/domain/formatiereBemessungszeitraum";
@@ -82,6 +86,23 @@ export function ElternteilBMZUebersichtPage() {
     trenneAusklammerungsZeitraeume(relevanteZeitraeume).abDemBMZ;
   const nichtBeruecksichtigteAusklammerungen =
     trenneAusklammerungsZeitraeume(relevanteZeitraeume).vorDemBMZ;
+
+  const geschwisterkinder = findeGeschwisterkinder(eventStream);
+  const geburtsdatumGeschwisterkind = (index?: number) => {
+    if (index === undefined) return undefined;
+
+    const geburtsdatum = geschwisterkinder[index]?.geburtsdatum;
+
+    if (geburtsdatum) {
+      return geburtsdatum.toLocaleString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    }
+
+    return undefined;
+  };
 
   const bemessungszeitraumUeberschrift = () => {
     if (taetigkeitenFlow === "Selbstaendig") {
@@ -216,7 +237,7 @@ export function ElternteilBMZUebersichtPage() {
                 <p>
                   <strong>Berücksichtigte Schutzzeiten (Ausklammerung)</strong>
                 </p>
-                <p>
+                <p className="mb-0">
                   Folgende{" "}
                   {beruecksichtigteAusklammerungen.length === 1
                     ? "Zeit"
@@ -228,7 +249,13 @@ export function ElternteilBMZUebersichtPage() {
                   {beruecksichtigteAusklammerungen.map(
                     (ausklammerung, index) => (
                       <li key={index}>
-                        {mappeAusklammerungGrund(ausklammerung.grund)}:{" "}
+                        {mappeAusklammerungGrund(
+                          ausklammerung.grund,
+                          geburtsdatumGeschwisterkind(
+                            ausklammerung.geschwisterIndex,
+                          ),
+                        )}
+                        :{" "}
                         {ausklammerung.von.toLocaleString("de-DE", {
                           day: "2-digit",
                           month: "2-digit",
@@ -260,7 +287,13 @@ export function ElternteilBMZUebersichtPage() {
                   {nichtBeruecksichtigteAusklammerungen.map(
                     (ausklammerung, index) => (
                       <li key={index}>
-                        {mappeAusklammerungGrund(ausklammerung.grund)}:{" "}
+                        {mappeAusklammerungGrund(
+                          ausklammerung.grund,
+                          geburtsdatumGeschwisterkind(
+                            ausklammerung.geschwisterIndex,
+                          ),
+                        )}
+                        :{" "}
                         {ausklammerung.von.toLocaleString("de-DE", {
                           day: "2-digit",
                           month: "2-digit",
@@ -300,8 +333,13 @@ export function ElternteilBMZUebersichtPage() {
 }
 
 const trenneAusklammerungsZeitraeume = (
-  relevanteZeitraeume: Array<Temporal.PlainYearMonth[] | Ausklammerung>,
-): { vorDemBMZ: Ausklammerung[]; abDemBMZ: Ausklammerung[] } => {
+  relevanteZeitraeume: Array<
+    Temporal.PlainYearMonth[] | AusklammerungMitGeschwisterindex
+  >,
+): {
+  vorDemBMZ: AusklammerungMitGeschwisterindex[];
+  abDemBMZ: AusklammerungMitGeschwisterindex[];
+} => {
   const ersterArrayIndex = relevanteZeitraeume.findIndex((item) =>
     Array.isArray(item),
   );

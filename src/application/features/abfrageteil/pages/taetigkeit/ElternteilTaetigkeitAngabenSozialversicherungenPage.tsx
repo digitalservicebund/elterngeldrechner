@@ -108,16 +108,16 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         noValidate
       >
         <div>
-          <h3 className="mb-10">
+          <p className="-mt-40 mb-10 font-bold text-text-light">
             Details zur Tätigkeit als Angestellte oder Angestellter
-          </h3>
+          </p>
 
           <BemessungszeitraumKurzuebersicht
             bemessungszeitraum={bemessungszeitraum}
             taetigkeitenFlow={taetigkeitenFlow}
           />
 
-          <p className="mt-32">
+          <p className="mt-20">
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>

@@ -46,9 +46,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     eventStream,
     routeParams.elternteilIndex,
   );
-  const istSelbststaendigeTaetigkeitMoeglich =
-    taetigkeiten.hatKeinEinkommen === false &&
-    taetigkeiten.istSelbststaendig === true;
+  const istSelbststaendigeTaetigkeitMoeglich = taetigkeiten.istSelbststaendig;
   const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
 
   const { register, handleSubmit, formState } = useForm({
@@ -82,7 +80,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   };
 
   const taetigkeitenFlow =
-    taetigkeiten.hatKeinEinkommen === false &&
+    taetigkeiten.hatPeriodenOhneEinkommen === false &&
     taetigkeiten.istSelbststaendig === true
       ? "Selbstaendig"
       : "Nicht-Selbstaendig";

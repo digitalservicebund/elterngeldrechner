@@ -113,19 +113,13 @@ function getNextSubpath(event: FormEvent): string {
     case Route.ElternteilTaetigkeitAngabenNichtSelbststaendig: {
       const { payload, dependentValues, params } = event;
 
-      const bestimmeZielRoute = () => {
-        if (!payload.istTaetigkeitMinijob) {
-          return Route.ElternteilTaetigkeitAngabenSozialversicherungen;
-        }
+      const zielRoute = !payload.istTaetigkeitMinijob
+        ? Route.ElternteilTaetigkeitAngabenSozialversicherungen
+        : !dependentValues.kannDurchschnittAngegebenWerden
+          ? Route.ElternteilTaetigkeitAngabenEinkommenDetails
+          : Route.ElternteilTaetigkeitAngabenMinijob;
 
-        if (!dependentValues.kannDurchschnittAngegebenWerden) {
-          return Route.ElternteilTaetigkeitAngabenEinkommenDetails;
-        }
-
-        return Route.ElternteilTaetigkeitAngabenMinijob;
-      };
-
-      return generateParametrizedPath(bestimmeZielRoute(), {
+      return generateParametrizedPath(zielRoute, {
         elternteilIndex: params.elternteilIndex.toString(),
         taetigkeitIndex: params.taetigkeitIndex.toString(),
       });
@@ -570,7 +564,7 @@ if (import.meta.vitest) {
     });
 
     describe("ElternteilTaetigkeitenAbfrage", () => {
-      it("returns ElternteilZweiAllgemeineAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and only hatKeinEinkommen true and elternteilIndex 0", () => {
+      it("returns ElternteilZweiAllgemeineAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and only hatPeriodenOhneEinkommen true and elternteilIndex 0", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
@@ -579,7 +573,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -598,7 +592,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: true,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -608,7 +602,7 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
       });
 
-      it("returns BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and only hatKeinEinkommen true and elternteilIndex 0 and istPersonAlleinerziehend true", () => {
+      it("returns BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and only hatPeriodenOhneEinkommen true and elternteilIndex 0 and istPersonAlleinerziehend true", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
@@ -617,7 +611,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: true,
@@ -627,7 +621,7 @@ if (import.meta.vitest) {
         expect(naechsterPfad).toEqual("/beispiele");
       });
 
-      it("returns BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and only hatKeinEinkommen true and elternteilIndex 1", () => {
+      it("returns BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and only hatPeriodenOhneEinkommen true and elternteilIndex 1", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 1 },
@@ -636,7 +630,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -655,7 +649,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: true,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -674,7 +668,7 @@ if (import.meta.vitest) {
             istSelbststaendig: true,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -695,7 +689,7 @@ if (import.meta.vitest) {
             istSelbststaendig: true,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -716,7 +710,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: true,
             hatAndereLeistungen: true,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: true,
@@ -728,7 +722,7 @@ if (import.meta.vitest) {
         );
       });
 
-      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute and istNichtSelbststaendig, hatAndereLeistungen and hatKeinEinkommen true and ", () => {
+      it("returns ElternteilTaetigkeitAngabenNichtSelbststaendig given ElternteilTaetigkeitenAbfrage as currentRoute and istNichtSelbststaendig, hatAndereLeistungen and hatPeriodenOhneEinkommen true and ", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
@@ -737,7 +731,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: true,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -758,7 +752,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: true,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,

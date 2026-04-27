@@ -82,13 +82,11 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
     eventStream,
     routeParams.elternteilIndex,
   );
-  const taetigkeitenFlow =
-    taetigkeiten.hatKeinEinkommen === false &&
-    taetigkeiten.istSelbststaendig === true
-      ? "Selbstaendig"
-      : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = taetigkeiten.istSelbststaendig
+    ? "Selbstaendig"
+    : "Nicht-Selbstaendig";
   const kannDurchschnittAngegebenWerden =
-    !taetigkeiten.hatKeinEinkommen && !taetigkeiten.hatAndereLeistungen;
+    !taetigkeiten.hatPeriodenOhneEinkommen && !taetigkeiten.hatAndereLeistungen;
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

@@ -282,7 +282,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: true,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -328,7 +328,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -350,7 +350,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,

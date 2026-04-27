@@ -36,7 +36,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -47,7 +47,7 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 1)).toEqual(false);
     });
 
-    it("returns false if only hatKeinEinkommen for given elternteil is true", () => {
+    it("returns false if only hatPeriodenOhneEinkommen for given elternteil is true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
@@ -57,7 +57,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -68,13 +68,13 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 0)).toEqual(false);
     });
 
-    it("returns false if hatKeinEinkommen for given elternteil is false and only hatAndereLeistungen true", () => {
+    it("returns false if hatPeriodenOhneEinkommen for given elternteil is false and only hatAndereLeistungen true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
             istSelbststaendig: false,
             istNichtSelbststaendig: false,
             istVerbeamtet: false,
@@ -89,13 +89,13 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 0)).toEqual(false);
     });
 
-    it("returns true no matter what value hatKeinEinkommen has for given elternteil and istSelbststaendig true", () => {
+    it("returns true no matter what value hatPeriodenOhneEinkommen has for given elternteil and istSelbststaendig true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
             istSelbststaendig: true,
             istNichtSelbststaendig: false,
             istVerbeamtet: false,
@@ -110,13 +110,13 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 0)).toEqual(true);
     });
 
-    it("returns true if hatKeinEinkommen for given elternteil is false and istNichtSelbststaendig true even if also hatAndereLeistungen is true", () => {
+    it("returns true if hatPeriodenOhneEinkommen for given elternteil is false and istNichtSelbststaendig true even if also hatAndereLeistungen is true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
             istSelbststaendig: false,
             istNichtSelbststaendig: true,
             istVerbeamtet: false,
@@ -131,13 +131,13 @@ if (import.meta.vitest) {
       expect(ueberpruefeErwerbstaetigkeit(events, 0)).toEqual(true);
     });
 
-    it("returns true if hatKeinEinkommen for given elternteil is false and only istVerbeamtet true", () => {
+    it("returns true if hatPeriodenOhneEinkommen for given elternteil is false and only istVerbeamtet true", () => {
       const events: FormEvent[] = [
         {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
             istSelbststaendig: false,
             istNichtSelbststaendig: false,
             istVerbeamtet: true,

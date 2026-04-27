@@ -72,11 +72,9 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
     eventStream,
     routeParams.elternteilIndex,
   );
-  const taetigkeitenFlow =
-    taetigkeiten.hatKeinEinkommen === false &&
-    taetigkeiten.istSelbststaendig === true
-      ? "Selbstaendig"
-      : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = taetigkeiten.istSelbststaendig
+    ? "Selbstaendig"
+    : "Nicht-Selbstaendig";
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

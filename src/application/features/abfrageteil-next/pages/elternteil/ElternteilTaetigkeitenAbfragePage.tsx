@@ -83,7 +83,8 @@ export function ElternteilTaetigkeitenAbfragePage() {
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
-  const showGeneralErrorMessage = !!formErrors.hatKeinEinkommen?.message;
+  const showGeneralErrorMessage =
+    !!formErrors.hatPeriodenOhneEinkommen?.message;
   const generalErrorId = "keine-auswahl-fehler";
 
   return (
@@ -169,7 +170,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           <CustomCheckbox
             className="mt-20 font-bold"
             register={register}
-            name="hatKeinEinkommen"
+            name="hatPeriodenOhneEinkommen"
             label={`${vorname} hatte oder hat kein Einkommen`}
             errors={showGeneralErrorMessage}
             aria-describedby={
@@ -189,7 +190,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
               aria-live="assertive"
               aria-atomic
             >
-              {formErrors.hatKeinEinkommen?.message}
+              {formErrors.hatPeriodenOhneEinkommen?.message}
             </p>
           )}
         </div>

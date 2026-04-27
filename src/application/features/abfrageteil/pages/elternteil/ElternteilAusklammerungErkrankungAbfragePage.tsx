@@ -181,12 +181,12 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
 
           <button
             type="button"
-            className="border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
+            className="ml-56 border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
             onClick={handleSkip}
           >
             <div className="flex items-center">
               <DoubleArrowIcon className="mr-4 mt-4" />
-              <span className="font-bold">Überspringen</span>
+              <span className="font-bold">Frage überspringen</span>
             </div>
           </button>
         </div>

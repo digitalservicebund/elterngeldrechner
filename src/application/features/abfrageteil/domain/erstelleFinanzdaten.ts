@@ -498,7 +498,7 @@ if (import.meta.vitest) {
           payload: { name: "Max" },
           dependentValues: {
             istSchwangerschaftsbedingteErkrankungMoeglich: true,
-            anzahlGeschwister: 1,
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         },
         {

@@ -16,7 +16,7 @@ export function InfoTextGeschwisterbonus({ question }: Props): ReactNode {
             können Sie mehr Geld bekommen. Das nennt man Geschwisterbonus.
           </p>
           <p className="mb-0">
-            Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt
+            Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt:
           </p>
           <ul>
             <li>
@@ -40,29 +40,25 @@ export function InfoTextGeschwisterbonus({ question }: Props): ReactNode {
             <li>Sie bekommen aber mindestens:</li>
           </ul>
           <ul className="pl-32">
-            <li>75 € mehr im Monat beim Basis-Elterngeld</li>
+            <li>75 € mehr im Monat beim Basiselterngeld</li>
             <li>37,50 € mehr im Monat beim ElterngeldPlus</li>
             <li>
               Sie bekommen den Geschwisterbonus, bis das ältere Kind die
-              Alters-Grenze erreicht hat.
+              Altersgrenze erreicht hat.
             </li>
           </ul>
 
-          <p className="mt-20 font-bold">Haushaltszugehörigkeit:</p>
+          <p className="mt-20 font-bold">Wer zählt zum Haushalt?</p>
           <p>
-            Damit der Partner oder die Partnerin Elterngeld beziehen kann, muss
-            das Kind im gemeinsamen Haushalt angemeldet sein. In der
-            Patchwork-Familie zählen hierzu auch die leiblichen Kinder des
-            Partners/der Partnerin, sofern diese mit im gemeinsamen Haushalt
-            leben.
+            Das Kind muss in Ihrem gemeinsamen Haushalt angemeldet sein. In
+            Patchwork-Familien zählen auch die leiblichen Kinder Ihres Partners
+            oder Ihrer Partnerin dazu, wenn sie bei Ihnen wohnen.
           </p>
 
           <p className="mb-0 mt-20 font-bold">Besonderheit bei Adoption:</p>
           <p>
-            Bei Adoptiv-Kindern zählt nicht der Geburtstag, sondern der Tag, an
-            dem das Kind bei Ihnen eingezogen ist. Ab diesem Tag gilt das Kind
-            für die nächsten 3 Jahre als „unter 3“ (bzw. für 6 Jahre als „unter
-            6“), solange es bei Einzug noch keine 14 Jahre alt war.
+            Hier zählt nicht der Geburtstag, sondern der Tag, an dem das Kind
+            bei Ihnen eingezogen ist.
           </p>
         </>
       }

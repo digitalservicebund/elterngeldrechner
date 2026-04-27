@@ -71,6 +71,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
 
   const eventStream = filtereValideEventHistorie();
   const geburtsdatum = findeGeburtsdatum(eventStream);
+  const geschwisterIndex = routeParams.geschwisterIndex;
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
   const geburtsdatumGeschwisterkind = geschwisterkinder[
     routeParams.geschwisterIndex
@@ -83,6 +84,21 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
     eventStream,
     routeParams.elternteilIndex,
   );
+  const istMutterschutzFuerGeschwisterkindMoeglich = () => {
+    if (routeParams.elternteilIndex === 0) return true;
+
+    const ausklammerungenElternteil1 = findeAusklammerungen(eventStream, 0);
+    if (
+      ausklammerungenElternteil1.some(
+        (ausklammerung) =>
+          ausklammerung.grund === "mutterschutzGeschwisterkind" &&
+          ausklammerung.geschwisterIndex === geschwisterIndex,
+      )
+    )
+      return false;
+
+    return true;
+  };
 
   const { handleSubmit, control, register, formState } = useForm<
     ElternteilAusklammerungElterngeldGeschwisterkindZeitenInput,
@@ -100,7 +116,6 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
   const onSubmit = (
     values: ElternteilAusklammerungElterngeldGeschwisterkindZeiten,
   ) => {
-    const geschwisterIndex = routeParams.geschwisterIndex;
     const neueAusklammerungen = values.elterngeldGeschwisterkind.map(
       (zeit) => ({
         ...zeit,
@@ -114,7 +129,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
         geschwisterkinder,
         [...bisherigeAusklammerungen, ...neueAusklammerungen],
         geschwisterIndex,
-        true,
+        istMutterschutzFuerGeschwisterkindMoeglich(),
       );
 
     const event: FormEvent = {
@@ -157,7 +172,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
           </h3>
 
           <InfoText
-            question="Wo finde ich dieses Angaben?"
+            question="Wo finde ich diese Angaben?"
             answer={
               <>
                 <p className="mb-20">
@@ -252,7 +267,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
         <Button
           type="button"
           buttonStyle="link"
-          className="p-4"
+          className="-mt-20 p-4"
           onClick={() => append({ von: "", bis: "" })}
         >
           <span className="flex items-center gap-4 text-16">

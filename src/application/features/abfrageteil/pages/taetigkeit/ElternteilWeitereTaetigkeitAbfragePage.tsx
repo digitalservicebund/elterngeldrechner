@@ -132,13 +132,15 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
                   im Bemessungszeitraum Einkommen bezogen haben.
                 </p>
 
-                <p>Dazu zählen:</p>
+                <p className="mb-0">Dazu zählen:</p>
                 <ul>
                   <li>
                     Weitere angestellten Tätigkeiten (auch Teilzeit oder
                     Minijobs)
                   </li>
-                  <li>Weiteres Einkommen durch Selbstständigkeit</li>
+                  {!!istSelbststaendigeTaetigkeitMoeglich && (
+                    <li>Weiteres Einkommen durch Selbstständigkeit</li>
+                  )}
                 </ul>
               </>
             }

@@ -56,6 +56,21 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
     eventStream,
     routeParams.elternteilIndex,
   );
+  const istMutterschutzFuerGeschwisterkindMoeglich = () => {
+    if (routeParams.elternteilIndex === 0) return true;
+
+    const ausklammerungenElternteil1 = findeAusklammerungen(eventStream, 0);
+    if (
+      ausklammerungenElternteil1.some(
+        (ausklammerung) =>
+          ausklammerung.grund === "mutterschutzGeschwisterkind" &&
+          ausklammerung.geschwisterIndex === routeParams.geschwisterIndex,
+      )
+    )
+      return false;
+
+    return true;
+  };
 
   const { register, handleSubmit, formState } = useForm({
     resolver: zodResolver(
@@ -78,7 +93,7 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
         geschwisterkinder,
         [...bisherigeAusklammerungen],
         routeParams.geschwisterIndex,
-        true,
+        istMutterschutzFuerGeschwisterkindMoeglich(),
       );
 
     const event: FormEvent = {
@@ -186,12 +201,12 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
 
           <button
             type="button"
-            className="border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
+            className="ml-56 border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
             onClick={handleSkip}
           >
             <div className="flex items-center">
               <DoubleArrowIcon className="mr-4 mt-4" />
-              <span className="font-bold">Überspringen</span>
+              <span className="font-bold">Frage überspringen</span>
             </div>
           </button>
         </div>

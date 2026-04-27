@@ -134,7 +134,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
                   oder nach der Geburt Ihres Kindes nicht arbeiten dürfen. Es
                   zählt bei der Berechnung des Elterngeldes nicht als normales
                   Einkommen. Würden wir die Zeit, in der Sie Mutterschaftsgeld
-                  bekommen mitzählen, bekämen Sie für dieses Kind weniger
+                  bekommen, mitzählen, bekämen Sie für dieses Kind weniger
                   Elterngeld.
                 </p>
                 <p>
@@ -213,12 +213,12 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
 
           <button
             type="button"
-            className="border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
+            className="ml-56 border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
             onClick={handleSkip}
           >
             <div className="flex items-center">
               <DoubleArrowIcon className="mr-4 mt-4" />
-              <span className="font-bold">Überspringen</span>
+              <span className="font-bold">Frage überspringen</span>
             </div>
           </button>
         </div>

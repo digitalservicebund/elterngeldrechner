@@ -84,17 +84,28 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   return (
-    <Page heading="Details zur Tätigkeit als Angestellte oder Angestellter">
+    <Page heading={`Finanzielle Situation ${vorname}`}>
       <form
         id={formIdentifier}
         className="flex flex-col gap-40"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <BemessungszeitraumKurzuebersicht
-          bemessungszeitraum={bemessungszeitraum}
-          taetigkeitenFlow={taetigkeitenFlow}
-        />
+        <div>
+          <p className="-mt-40 mb-20 font-bold text-text-light">
+            Details zur Tätigkeit als Angestellte oder Angestellter
+          </p>
+
+          <BemessungszeitraumKurzuebersicht
+            bemessungszeitraum={bemessungszeitraum}
+            taetigkeitenFlow={taetigkeitenFlow}
+          />
+
+          <p className="mt-20">
+            Je genauer Ihre Angaben sind, desto besser kann der Rechner das
+            Elterngeld für Sie ausrechnen.
+          </p>
+        </div>
 
         <div>
           <h5 className="mb-10">
@@ -110,7 +121,9 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
                 <p className="mb-16">
                   Am genauesten finden Sie Ihr monatliches Bruttogehalt auf
                   Ihrer Gehaltsabrechnung (meist als „Brutto” oder
-                  „Gesamtbrutto” bezeichnet).
+                  „Gesamtbrutto” bezeichnet). Achten Sie darauf, einen Monat
+                  ohne Einmal- oder Sonderzahlungen zu wählen, um Ihr reguläres
+                  Gehalt zu bestimmen.
                 </p>
                 <p>
                   Auf Ihrer Lohnsteuerbescheinigung steht das Jahresbrutto. Wenn

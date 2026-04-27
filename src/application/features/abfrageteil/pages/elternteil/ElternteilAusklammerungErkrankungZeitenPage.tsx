@@ -128,11 +128,11 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
       >
         <div>
           <h3 className="mb-20">
-            Von wann bis wann war Sascha krank wegen dieser Schwangerschaft?
+            Von wann bis wann war {vorname} krank wegen dieser Schwangerschaft?
           </h3>
 
           <InfoText
-            question="Wo finde ich dieses Angaben?"
+            question="Wo finde ich diese Angaben?"
             answer={
               <>
                 <p className="mb-20">
@@ -218,7 +218,7 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
         <Button
           type="button"
           buttonStyle="link"
-          className="p-4"
+          className="-mt-20 p-4"
           onClick={() => append({ von: "", bis: "" })}
         >
           <span className="flex items-center gap-4 text-16">

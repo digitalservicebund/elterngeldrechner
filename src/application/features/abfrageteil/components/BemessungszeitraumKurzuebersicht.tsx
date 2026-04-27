@@ -11,19 +11,14 @@ export function BemessungszeitraumKurzuebersicht({
   taetigkeitenFlow,
 }: BemessungszeitraumKurzuebersichtProps) {
   return (
-    <div className="mt-20">
+    <div>
       {taetigkeitenFlow === "Selbstaendig" ? (
-        <p>
-          Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für den
-          Bemessungzeitraum{" "}
-          <strong>Kalenderjahr {bemessungszeitraum[0]?.von.year}</strong>.
+        <p className="font-bold">
+          Bemessungzeitraum Kalenderjahr {bemessungszeitraum[0]?.von.year}
         </p>
       ) : (
         <>
-          <p>
-            Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
-            den <strong>Bemessungszeitraum</strong>:
-          </p>
+          <p className="font-bold">Bemessungszeitraum:</p>
           <ul>
             {formatiereBemessungszeitraum(bemessungszeitraum).map(
               (zeitraum, index) => (

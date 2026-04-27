@@ -672,7 +672,7 @@ if (import.meta.vitest) {
         dependentValues: { hatPotenzielleAusklammerungen: true },
       };
 
-      it("is false when alleinerziehend Elternteil has only hatKeinEinkommen", () => {
+      it("is false when alleinerziehend Elternteil has only hatPeriodenOhneEinkommen", () => {
         const events: FormEvent[] = [
           kindEvent,
           {
@@ -691,7 +691,7 @@ if (import.meta.vitest) {
               istSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
             },
             dependentValues: {
               istPersonAlleinerziehend: true,
@@ -725,7 +725,7 @@ if (import.meta.vitest) {
               istSelbststaendig: false,
               istVerbeamtet: true,
               hatAndereLeistungen: false,
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
             },
             dependentValues: {
               istPersonAlleinerziehend: true,
@@ -740,7 +740,7 @@ if (import.meta.vitest) {
         ).toEqual(true);
       });
 
-      it("is false when both Elternteile have only hatKeinEinkommen", () => {
+      it("is false when both Elternteile have only hatPeriodenOhneEinkommen", () => {
         const events: FormEvent[] = [
           kindEvent,
           elternteil1Event,
@@ -753,7 +753,7 @@ if (import.meta.vitest) {
               istSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
@@ -767,7 +767,7 @@ if (import.meta.vitest) {
               istSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
@@ -791,7 +791,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               hatAndereLeistungen: true,
               istNichtSelbststaendig: false,
               istSelbststaendig: false,
@@ -805,7 +805,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 1 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               hatAndereLeistungen: true,
               istNichtSelbststaendig: false,
               istSelbststaendig: false,
@@ -824,7 +824,7 @@ if (import.meta.vitest) {
         ).toEqual(false);
       });
 
-      it("is true when any Elternteil does not have only hatKeinEinkommen", () => {
+      it("is true when any Elternteil does not have only hatPeriodenOhneEinkommen", () => {
         const events: FormEvent[] = [
           kindEvent,
           elternteil1Event,
@@ -837,7 +837,7 @@ if (import.meta.vitest) {
               istSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
@@ -847,7 +847,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 1 },
             payload: {
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
               istSelbststaendig: true,
               istNichtSelbststaendig: false,
               istVerbeamtet: false,

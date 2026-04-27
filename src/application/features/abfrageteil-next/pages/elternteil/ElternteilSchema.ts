@@ -91,7 +91,7 @@ export const ElternteilTaetigkeitenAbfrageSchema = z
     istSelbststaendig: z.boolean(),
     istVerbeamtet: z.boolean(),
     hatAndereLeistungen: z.boolean(),
-    hatKeinEinkommen: z.boolean(),
+    hatPeriodenOhneEinkommen: z.boolean(),
   })
   .refine(
     (data) => {
@@ -99,7 +99,7 @@ export const ElternteilTaetigkeitenAbfrageSchema = z
     },
     {
       message: "Bitte treffen Sie eine Auswahl.",
-      path: ["hatKeinEinkommen"],
+      path: ["hatPeriodenOhneEinkommen"],
     },
   );
 
@@ -198,15 +198,15 @@ if (import.meta.vitest) {
   describe("ElternteilTaetigkeitenAbfrageSchema", () => {
     const schema = ElternteilTaetigkeitenAbfrageSchema;
 
-    it("rejects hatKeinEinkommen: true alone", () => {
-      const result = schema.safeParse({ hatKeinEinkommen: true });
+    it("rejects hatPeriodenOhneEinkommen: true alone", () => {
+      const result = schema.safeParse({ hatPeriodenOhneEinkommen: true });
 
       expect(result.success).toBeFalsy();
     });
 
-    it("rejects hatKeinEinkommen: false with no other field selected", () => {
+    it("rejects hatPeriodenOhneEinkommen: false with no other field selected", () => {
       const result = schema.safeParse({
-        hatKeinEinkommen: false,
+        hatPeriodenOhneEinkommen: false,
         istNichtSelbststaendig: false,
         istSelbststaendig: false,
         istVerbeamtet: false,
@@ -218,15 +218,15 @@ if (import.meta.vitest) {
       if (!result.success) {
         expect(result.error.issues[0]).toMatchObject({
           code: "custom",
-          path: ["hatKeinEinkommen"],
+          path: ["hatPeriodenOhneEinkommen"],
           message: "Bitte treffen Sie eine Auswahl.",
         });
       }
     });
 
-    it("accepts hatKeinEinkommen: false with at least one other field selected", () => {
+    it("accepts hatPeriodenOhneEinkommen: false with at least one other field selected", () => {
       const result = schema.safeParse({
-        hatKeinEinkommen: false,
+        hatPeriodenOhneEinkommen: false,
         istNichtSelbststaendig: true,
         istSelbststaendig: false,
         istVerbeamtet: false,

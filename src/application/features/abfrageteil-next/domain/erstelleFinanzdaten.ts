@@ -446,7 +446,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -486,7 +486,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -505,7 +505,7 @@ if (import.meta.vitest) {
             istSelbststaendig: false,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
-            hatKeinEinkommen: true,
+            hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
@@ -536,7 +536,7 @@ if (import.meta.vitest) {
 
   describe("erstelleFinanzDaten", () => {
     describe("Kein Einkommen", () => {
-      it("returns Finanzdaten without Bruttoeinkommen if only hatKeinEinkommen equals true", () => {
+      it("returns Finanzdaten without Bruttoeinkommen if only hatPeriodenOhneEinkommen equals true", () => {
         const finanzdaten = erstelleFinanzDaten(
           [
             {
@@ -547,7 +547,7 @@ if (import.meta.vitest) {
                 istSelbststaendig: false,
                 istVerbeamtet: false,
                 hatAndereLeistungen: false,
-                hatKeinEinkommen: true,
+                hatPeriodenOhneEinkommen: true,
               },
               dependentValues: {
                 istPersonAlleinerziehend: false,
@@ -577,7 +577,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -640,7 +640,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -669,7 +669,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -720,7 +720,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
               istSelbststaendig: true,
               istNichtSelbststaendig: false,
               istVerbeamtet: false,
@@ -763,7 +763,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               istSelbststaendig: true,
               istNichtSelbststaendig: false,
               istVerbeamtet: false,
@@ -808,7 +808,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -880,7 +880,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: true,
+              hatPeriodenOhneEinkommen: true,
               istSelbststaendig: true,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -960,7 +960,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -1028,7 +1028,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               istSelbststaendig: false,
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
@@ -1109,7 +1109,7 @@ if (import.meta.vitest) {
             route: Route.ElternteilTaetigkeitenAbfrage,
             params: { elternteilIndex: 0 },
             payload: {
-              hatKeinEinkommen: false,
+              hatPeriodenOhneEinkommen: false,
               istSelbststaendig: true,
               istNichtSelbststaendig: false,
               istVerbeamtet: false,

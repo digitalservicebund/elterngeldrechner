@@ -285,7 +285,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
             istSelbststaendig: false,
             istNichtSelbststaendig: true,
             istVerbeamtet: false,
@@ -341,7 +341,7 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            hatKeinEinkommen: false,
+            hatPeriodenOhneEinkommen: false,
             istSelbststaendig: false,
             istNichtSelbststaendig: true,
             istVerbeamtet: false,

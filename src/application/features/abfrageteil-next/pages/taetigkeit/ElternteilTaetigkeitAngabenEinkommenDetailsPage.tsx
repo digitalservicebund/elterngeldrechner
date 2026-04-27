@@ -52,9 +52,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     routeParams.elternteilIndex,
   );
   const istMischeinkunft =
-    !taetigkeiten.hatKeinEinkommen &&
-    taetigkeiten.istSelbststaendig &&
-    taetigkeiten.istNichtSelbststaendig;
+    taetigkeiten.istSelbststaendig && taetigkeiten.istNichtSelbststaendig;
 
   const { handleSubmit, control } = useForm({
     resolver: zodResolver(TaetigkeitUnleichesEinkommenAngabenSchema),
@@ -83,10 +81,9 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
-  const taetigkeitenFlow =
-    !taetigkeiten.hatKeinEinkommen && taetigkeiten.istSelbststaendig
-      ? "Selbstaendig"
-      : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = taetigkeiten.istSelbststaendig
+    ? "Selbstaendig"
+    : "Nicht-Selbstaendig";
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

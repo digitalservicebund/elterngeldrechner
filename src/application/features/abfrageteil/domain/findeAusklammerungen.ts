@@ -361,6 +361,9 @@ if (import.meta.vitest) {
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: false,
           },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
       ];
 
@@ -411,6 +414,9 @@ if (import.meta.vitest) {
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: true,
           },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
@@ -431,6 +437,9 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
           },
         },
       ];

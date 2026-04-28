@@ -245,21 +245,14 @@ function getNextSubpath(event: FormEvent): string {
         elternteilIndex: params.elternteilIndex.toString(),
       });
     }
-    case Route.ElternteilTaetigkeitenAbfrage:
-      return generateParametrizedPath(
-        Route.ElternteilTaetigkeitenBMZUebersicht,
-        {
-          elternteilIndex: event.params.elternteilIndex.toString(),
-        },
-      );
-    case Route.ElternteilTaetigkeitenBMZUebersicht: {
-      const { params, dependentValues } = event;
-      const taetigkeiten = dependentValues.taetigkeiten;
+    case Route.ElternteilTaetigkeitenAbfrage: {
+      const { payload, dependentValues } = event;
 
       const hatErwerbstaetigkeit =
-        taetigkeiten.istNichtSelbststaendig ||
-        taetigkeiten.istSelbststaendig ||
-        taetigkeiten.istVerbeamtet;
+        !payload.hatPeriodenOhneEinkommen &&
+        (payload.istNichtSelbststaendig ||
+          payload.istSelbststaendig ||
+          payload.istVerbeamtet);
 
       if (!hatErwerbstaetigkeit) {
         return event.params.elternteilIndex === 1 ||
@@ -268,8 +261,20 @@ function getNextSubpath(event: FormEvent): string {
           : Route.ElternteilZweiAllgemeineAngaben;
       }
 
+      return generateParametrizedPath(
+        Route.ElternteilTaetigkeitenBMZUebersicht,
+        {
+          elternteilIndex: event.params.elternteilIndex.toString(),
+        },
+      );
+    }
+    case Route.ElternteilTaetigkeitenBMZUebersicht: {
+      const { params, dependentValues } = event;
+      const taetigkeiten = dependentValues.taetigkeiten;
+
       const zielRoute =
-        taetigkeiten.istNichtSelbststaendig || taetigkeiten.istVerbeamtet
+        !taetigkeiten.hatPeriodenOhneEinkommen &&
+        (taetigkeiten.istNichtSelbststaendig || taetigkeiten.istVerbeamtet)
           ? Route.ElternteilTaetigkeitAngabenNichtSelbststaendig
           : Route.ElternteilTaetigkeitAngabenSelbststaendig;
 
@@ -798,6 +803,46 @@ if (import.meta.vitest) {
           "/abfrageteil/elternteil/0/ausklammerung/0/mutterschutz",
         );
       });
+
+      it("returns ElternteilAusklammerungElternzeitAbfrage for next sibling given ElternteilAusklammerungElternzeitAbfrage as currentRoute, hatElterngeldGeschwisterkind false and nächsterGeschwisterIndex higher than current index", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungElternzeitAbfrage,
+          params: {
+            elternteilIndex: 0,
+            geschwisterIndex: 0,
+          },
+          payload: {
+            hatElterngeldGeschwisterkind: false,
+          },
+          dependentValues: {
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 1,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/ausklammerung/1/elternzeit",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungElternzeitAbfrage as currentRoute, hatElterngeldGeschwisterkind false and no further siblings", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungElternzeitAbfrage,
+          params: {
+            elternteilIndex: 0,
+            geschwisterIndex: 0,
+          },
+          payload: {
+            hatElterngeldGeschwisterkind: false,
+          },
+          dependentValues: {
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
+        );
+      });
     });
 
     describe("ElternteilAusklammerungElternzeitZeitenAngaben", () => {
@@ -823,6 +868,56 @@ if (import.meta.vitest) {
 
         expect(naechsterPfad).toEqual(
           "/abfrageteil/elternteil/0/ausklammerung/0/mutterschutz",
+        );
+      });
+
+      it("returns ElternteilAusklammerungElternzeitAbfrage for next sibling given ElternteilAusklammerungElternzeitZeitenAngaben as currentRoute and nächsterGeschwisterIndex higher than current index", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungElternzeitZeitenAngaben,
+          params: {
+            elternteilIndex: 0,
+            geschwisterIndex: 0,
+          },
+          payload: {
+            elterngeldGeschwisterkind: [
+              {
+                von: Temporal.PlainDate.from("2025-12-23"),
+                bis: Temporal.PlainDate.from("2026-02-05"),
+              },
+            ],
+          },
+          dependentValues: {
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 1,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/ausklammerung/1/elternzeit",
+        );
+      });
+
+      it("returns ElternteilTaetigkeitenAbfrage given ElternteilAusklammerungElternzeitZeitenAngaben as currentRoute and no further siblings", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilAusklammerungElternzeitZeitenAngaben,
+          params: {
+            elternteilIndex: 0,
+            geschwisterIndex: 0,
+          },
+          payload: {
+            elterngeldGeschwisterkind: [
+              {
+                von: Temporal.PlainDate.from("2025-12-23"),
+                bis: Temporal.PlainDate.from("2026-02-05"),
+              },
+            ],
+          },
+          dependentValues: {
+            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+          },
+        });
+
+        expect(naechsterPfad).toEqual(
+          "/abfrageteil/elternteil/0/finanzielles/taetigkeit/abfrage",
         );
       });
     });
@@ -943,11 +1038,14 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
-            istNichtSelbststaendig: false,
+            istNichtSelbststaendig: true,
             istSelbststaendig: false,
             istVerbeamtet: false,
-            hatAndereLeistungen: false,
-            hatPeriodenOhneEinkommen: true,
+            hatAndereLeistungen: true,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
           },
         });
 
@@ -961,11 +1059,14 @@ if (import.meta.vitest) {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 1 },
           payload: {
-            istNichtSelbststaendig: false,
+            istNichtSelbststaendig: true,
             istSelbststaendig: false,
             istVerbeamtet: false,
-            hatAndereLeistungen: false,
-            hatPeriodenOhneEinkommen: true,
+            hatAndereLeistungen: true,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
           },
         });
 
@@ -973,104 +1074,66 @@ if (import.meta.vitest) {
           "/abfrageteil/elternteil/1/finanzielles/taetigkeit/bmz",
         );
       });
+
+      it("returns ElternteilZweiAllgemeineAngaben given ElternteilTaetigkeitenAbfrage as currentRoute and only hatAndereLeistungen true and elternteilIndex 0", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: true,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
+      });
+
+      it("returns BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and only hatAndereLeistungen true and elternteilIndex 0 and istPersonAlleinerziehend true", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: true,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: true,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
+      });
+
+      it("returns path for BeispielePage given ElternteilTaetigkeitenAbfrage as currentRoute and hatPeriodenOhneEinkommen true and elternteilIndex 1", () => {
+        const naechsterPfad = findeNaechstenPfad({
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 1 },
+          payload: {
+            istNichtSelbststaendig: false,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatPeriodenOhneEinkommen: true,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
+        });
+
+        expect(naechsterPfad).toEqual("/beispiele");
+      });
     });
 
     describe("ElternteilTaetigkeitenBMZUebersicht", () => {
-      it("returns ElternteilZweiAllgemeineAngaben given ElternteilTaetigkeitenBMZUebersicht as currentRoute and hatKeinEinkommen true and elternteilIndex 0", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilTaetigkeitenBMZUebersicht,
-          params: { elternteilIndex: 0 },
-          dependentValues: {
-            istPersonAlleinerziehend: false,
-            taetigkeiten: {
-              istNichtSelbststaendig: false,
-              istSelbststaendig: false,
-              istVerbeamtet: false,
-              hatAndereLeistungen: false,
-              hatPeriodenOhneEinkommen: false,
-            },
-          },
-        });
-
-        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
-      });
-
-      it("returns ElternteilZweiAllgemeineAngaben given ElternteilTaetigkeitenBMZUebersicht as currentRoute and only hatAndereLeistungen true and elternteilIndex 0", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilTaetigkeitenBMZUebersicht,
-          params: { elternteilIndex: 0 },
-          dependentValues: {
-            istPersonAlleinerziehend: false,
-            taetigkeiten: {
-              istNichtSelbststaendig: false,
-              istSelbststaendig: false,
-              istVerbeamtet: false,
-              hatAndereLeistungen: true,
-              hatPeriodenOhneEinkommen: false,
-            },
-          },
-        });
-
-        expect(naechsterPfad).toEqual("/abfrageteil/elternteil/1");
-      });
-
-      it("returns BeispielePage given ElternteilTaetigkeitenBMZUebersicht as currentRoute and hatKeinEinkommen true and elternteilIndex 0 and istPersonAlleinerziehend true", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilTaetigkeitenBMZUebersicht,
-          params: { elternteilIndex: 0 },
-          dependentValues: {
-            istPersonAlleinerziehend: true,
-            taetigkeiten: {
-              istNichtSelbststaendig: false,
-              istSelbststaendig: false,
-              istVerbeamtet: false,
-              hatAndereLeistungen: false,
-              hatPeriodenOhneEinkommen: false,
-            },
-          },
-        });
-
-        expect(naechsterPfad).toEqual("/beispiele");
-      });
-
-      it("returns path for BeispielePage given ElternteilTaetigkeitenBMZUebersicht as currentRoute and hatKeinEinkommen true and elternteilIndex 1", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilTaetigkeitenBMZUebersicht,
-          params: { elternteilIndex: 1 },
-          dependentValues: {
-            istPersonAlleinerziehend: false,
-            taetigkeiten: {
-              istNichtSelbststaendig: false,
-              istSelbststaendig: false,
-              istVerbeamtet: false,
-              hatAndereLeistungen: false,
-              hatPeriodenOhneEinkommen: false,
-            },
-          },
-        });
-
-        expect(naechsterPfad).toEqual("/beispiele");
-      });
-
-      it("returns path for BeispielePage given ElternteilTaetigkeitenBMZUebersicht as currentRoute and only hatAndereLeistungen true and elternteilIndex 1", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.ElternteilTaetigkeitenBMZUebersicht,
-          params: { elternteilIndex: 1 },
-          dependentValues: {
-            istPersonAlleinerziehend: false,
-            taetigkeiten: {
-              istNichtSelbststaendig: false,
-              istSelbststaendig: false,
-              istVerbeamtet: false,
-              hatAndereLeistungen: true,
-              hatPeriodenOhneEinkommen: false,
-            },
-          },
-        });
-
-        expect(naechsterPfad).toEqual("/beispiele");
-      });
-
       it("returns ElternteilTaetigkeitAngabenSelbststaendig given ElternteilTaetigkeitenBMZUebersicht as currentRoute and only istSelbststaendig true", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.ElternteilTaetigkeitenBMZUebersicht,

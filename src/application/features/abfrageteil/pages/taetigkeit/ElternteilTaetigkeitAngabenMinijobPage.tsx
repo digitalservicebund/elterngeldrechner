@@ -92,6 +92,11 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
             Details zur Tätigkeit als Angestellte oder Angestellter
           </p>
 
+          <p className="mb-0 mt-20">
+            Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
+            den
+          </p>
+
           <BemessungszeitraumKurzuebersicht
             bemessungszeitraum={bemessungszeitraum}
             taetigkeitenFlow={taetigkeitenFlow}
@@ -104,6 +109,7 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
         </div>
 
         <CustomRadioGroup
+          className="mt-16"
           legend={
             <h5 className="mb-10">
               Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat

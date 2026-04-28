@@ -331,6 +331,9 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
           },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
         {
           route: Route.ElternteilTaetigkeitenBMZUebersicht,
@@ -399,6 +402,9 @@ if (import.meta.vitest) {
             istNichtSelbststaendig: true,
             istVerbeamtet: false,
             hatAndereLeistungen: false,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
           },
         },
         {

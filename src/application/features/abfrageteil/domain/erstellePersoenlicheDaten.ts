@@ -203,6 +203,9 @@ if (import.meta.vitest) {
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: true,
           },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
       ];
 
@@ -233,6 +236,9 @@ if (import.meta.vitest) {
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: true,
           },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
+          },
         },
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
@@ -251,6 +257,9 @@ if (import.meta.vitest) {
             istVerbeamtet: false,
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: true,
+          },
+          dependentValues: {
+            istPersonAlleinerziehend: false,
           },
         },
       ];
@@ -286,6 +295,9 @@ if (import.meta.vitest) {
         istVerbeamtet: false,
         hatAndereLeistungen: false,
         hatPeriodenOhneEinkommen: true,
+      },
+      dependentValues: {
+        istPersonAlleinerziehend: false,
       },
     };
 
@@ -378,6 +390,9 @@ if (import.meta.vitest) {
               hatAndereLeistungen: false,
               hatPeriodenOhneEinkommen: true,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
         ];
 
@@ -398,6 +413,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: false,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -430,6 +448,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -469,6 +490,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -495,6 +519,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -528,6 +555,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -574,6 +604,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -613,6 +646,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -651,6 +687,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -696,6 +735,9 @@ if (import.meta.vitest) {
               istNichtSelbststaendig: true,
               istVerbeamtet: false,
               hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
           {
@@ -754,6 +796,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
@@ -792,6 +837,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
             },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
           },
           {
             route: Route.ElternteilTaetigkeitenAbfrage,
@@ -802,6 +850,9 @@ if (import.meta.vitest) {
               istVerbeamtet: false,
               hatAndereLeistungen: false,
               hatPeriodenOhneEinkommen: true,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
             },
           },
         ];

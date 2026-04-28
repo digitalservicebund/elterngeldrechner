@@ -112,6 +112,11 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             Details zur Tätigkeit als Angestellte oder Angestellter
           </p>
 
+          <p className="mb-0 mt-20">
+            Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
+            den
+          </p>
+
           <BemessungszeitraumKurzuebersicht
             bemessungszeitraum={bemessungszeitraum}
             taetigkeitenFlow={taetigkeitenFlow}
@@ -123,7 +128,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           </p>
         </div>
 
-        <div>
+        <div className="mt-16">
           <h5 className="mb-10">Welche Steuerklasse hatte {vorname}?</h5>
 
           <CustomSelect

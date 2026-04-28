@@ -184,6 +184,10 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
                 <p className="mb-0 mt-20 font-bold">Was ist wichtig für Sie?</p>
                 <ul>
                   <li>
+                    Das gilt nur für Elterngeld, das Sie bis zum 14. Lebensmonat
+                    des Geschwisterkindes bezogen haben.
+                  </li>
+                  <li>
                     Geben Sie den gesamten Zeitraum an (den ersten und den
                     letzten Monat).
                   </li>

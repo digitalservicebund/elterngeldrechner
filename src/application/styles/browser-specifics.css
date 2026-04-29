@@ -14,3 +14,14 @@ details > summary.list-none::-webkit-details-marker,
 details > summary.list-none::marker {
   display: none;
 }
+
+/* Safari on iOS by default renders the closed arrow of an details summary  */
+/* element as an emoji. Using the text variation selector 15 forces the device */
+/* to use the text style instead. The open state has only been overwritten as */
+/* well to enforce consistent size and spacing. */
+details > summary {
+  list-style-type: "▶\FE0E  ";
+}
+details[open] > summary {
+  list-style-type: "▼\FE0E  ";
+}

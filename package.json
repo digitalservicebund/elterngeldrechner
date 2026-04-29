@@ -62,7 +62,7 @@
     "license-checker-rseidelsohn": "^4.4.2",
     "node-xlsx": "^0.24.0",
     "original-rechner": "file:original-rechner",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.12",
     "prettier": "^3.8.1",
     "stylelint": "^17.6.0",
     "stylelint-config-recommended": "^18.0.0",

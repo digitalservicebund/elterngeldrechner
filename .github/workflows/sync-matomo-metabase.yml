@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 4 * * *"
 
+permissions:
+  contents: read
+
 jobs:
   run-metrics:
     runs-on: ubuntu-24.04

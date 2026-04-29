@@ -84,6 +84,7 @@ jobs:
     uses: ./.github/workflows/preview-deploy.yml
     with:
       name: main
+      enable_new_abfrageteil: true
     secrets: inherit
 
   deploy-abfrageteil-preview:

@@ -8,7 +8,10 @@ export function sindBeideElternteile(events: FormEvent[]): boolean {
     Route.ElternteilZweiAllgemeineAngaben,
   );
 
-  return letztesGueltigesEvent?.wirdZweitePersonBeruecksichtigt === true;
+  return (
+    letztesGueltigesEvent !== undefined &&
+    letztesGueltigesEvent.wirdZweitePersonBeruecksichtigt !== false
+  );
 }
 
 if (import.meta.vitest) {
@@ -36,6 +39,21 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          dependentValues: { hatPotenzielleAusklammerungen: true },
+        },
+      ]);
+
+      expect(result).toBe(true);
+    });
+
+    it("returns true when wirdZweitePersonBeruecksichtigt is unknown", () => {
+      const result = sindBeideElternteile([
+        {
+          route: Route.ElternteilZweiAllgemeineAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: undefined,
+            name: "Person 2",
+          },
           dependentValues: { hatPotenzielleAusklammerungen: true },
         },
       ]);

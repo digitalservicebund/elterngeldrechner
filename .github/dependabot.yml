@@ -8,6 +8,10 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      oxlint:
+        patterns:
+          - "oxlint"
     cooldown:
       default-days: 5
       semver-major-days: 14

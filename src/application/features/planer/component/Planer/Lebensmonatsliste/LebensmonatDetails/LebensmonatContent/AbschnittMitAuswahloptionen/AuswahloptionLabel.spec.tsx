@@ -30,6 +30,7 @@ describe("Auswahloption Label", () => {
   it("shows formatted Elterngeldbezug when given", () => {
     render(<AuswahloptionLabel {...ANY_PROPS} elterngeldbezug={100} />);
 
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.getByText("100 €"));
   });
 });

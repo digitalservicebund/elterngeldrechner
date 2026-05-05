@@ -19,15 +19,18 @@ describe("Planer", () => {
       "usePlanerService",
     ).mockReturnValue(ANY_SERVICE_VALUES);
 
+    // oxlint-disable-next-line vitest/hoisted-apis-on-top
     vi.mock(import("@/monatsplaner"), async (importOriginal) => {
       const originalMonatsplaner = await importOriginal();
 
       return {
         ...originalMonatsplaner,
+        // oxlint-disable-next-line vitest/require-mock-type-parameters
         berechneGesamtsumme: vi.fn(),
       };
     });
 
+    // oxlint-disable-next-line vitest/hoisted-apis-on-top
     await vi.hoisted(async () => {});
 
     vi.mocked(berechneGesamtsumme).mockReturnValue({

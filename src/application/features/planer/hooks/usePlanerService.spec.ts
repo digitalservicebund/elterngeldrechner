@@ -263,6 +263,7 @@ describe("use Planer service", () => {
     });
 
     it("triggers the given callback function", () => {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onWaehleOption = vi.fn();
       const { result } = renderPlanerServiceHook({
         callbacks: { onWaehleOption },
@@ -397,6 +398,7 @@ describe("use Planer service", () => {
     });
 
     it("triggers the given callback function", () => {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onSetzePlanZurueck = vi.fn();
       const { result } = renderPlanerServiceHook({
         callbacks: { onSetzePlanZurueck },
@@ -411,6 +413,7 @@ describe("use Planer service", () => {
   describe("on Plan changed", () => {
     it("triggers the given callback when chosing an Option", () => {
       vi.mocked(waehleOption).mockReturnValue(Result.ok(ANY_PLAN));
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onChange = vi.fn();
       const { result } = renderPlanerServiceHook({
         callbacks: { onChange },
@@ -428,6 +431,7 @@ describe("use Planer service", () => {
         Result.error([{ message: "ungültig" }]),
       );
 
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onChange = vi.fn();
 
       const { result } = renderPlanerServiceHook({
@@ -444,6 +448,7 @@ describe("use Planer service", () => {
       vi.mocked(validierePlanFuerFinaleAbgabe).mockReturnValue(
         Result.error([{ message: "ungültig" }]),
       );
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onChange = vi.fn();
       renderPlanerServiceHook({ callbacks: { onChange } });
 
@@ -452,6 +457,7 @@ describe("use Planer service", () => {
 
     it("triggers the given callback when specifying an Einkommen", () => {
       vi.mocked(gebeEinkommenAn).mockReturnValue(ANY_PLAN);
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onChange = vi.fn();
       const { result } = renderPlanerServiceHook({
         callbacks: { onChange },
@@ -465,6 +471,7 @@ describe("use Planer service", () => {
 
     it("triggers the given callback when resetting the Plan", () => {
       vi.mocked(setzePlanZurueck).mockReturnValue(ANY_PLAN);
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onChange = vi.fn();
       const { result } = renderPlanerServiceHook({
         callbacks: { onChange },

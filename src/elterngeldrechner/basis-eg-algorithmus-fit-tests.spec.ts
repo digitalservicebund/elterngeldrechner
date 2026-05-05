@@ -71,10 +71,12 @@ describe("basis-eg-algorithmus", () => {
 
           // Die FIT Tests haben bei Minijobs die falschen Steuern und Abgaben
           if (mischEkZwischenErgebnis.brutto > 538) {
+            // oxlint-disable-next-line vitest/no-conditional-expect
             expect(mischEkZwischenErgebnis.abgaben).toBeCloseTo(
               sheet.ergebnisAbgaben(testCaseIndex),
               1,
             );
+            // oxlint-disable-next-line vitest/no-conditional-expect
             expect(mischEkZwischenErgebnis.steuern).toEqual(
               sheet.ergebnisSteuern(testCaseIndex),
             );

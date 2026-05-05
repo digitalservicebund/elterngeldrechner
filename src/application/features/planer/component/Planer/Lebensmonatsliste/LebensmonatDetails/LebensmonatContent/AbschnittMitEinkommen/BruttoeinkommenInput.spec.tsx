@@ -32,6 +32,7 @@ describe("Buttoeinkommen Input", () => {
   });
 
   it("triggers the callback when typing numbers", async () => {
+    // oxlint-disable-next-line vitest/require-mock-type-parameters
     const gebeEinkommenAn = vi.fn();
     render(
       <BruttoeinkommenInput {...ANY_PROPS} gebeEinkommenAn={gebeEinkommenAn} />,
@@ -45,6 +46,7 @@ describe("Buttoeinkommen Input", () => {
   });
 
   it("does not trigger the callback when typing a character or symbol", async () => {
+    // oxlint-disable-next-line vitest/require-mock-type-parameters
     const gebeEinkommenAn = vi.fn();
     render(
       <BruttoeinkommenInput {...ANY_PROPS} gebeEinkommenAn={gebeEinkommenAn} />,

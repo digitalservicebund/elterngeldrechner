@@ -138,7 +138,7 @@ if (import.meta.vitest) {
       );
     };
 
-    interface TestComponentHTMLElement extends HTMLDivElement {
+    interface TestComponentHTMLElement {
       openLebensmonatsSummary: (monat: number) => void;
       addLebensmonat: () => void;
     }
@@ -173,11 +173,7 @@ if (import.meta.vitest) {
           setLebensmonate(lebensmonate + 1);
         }
 
-        return {
-          ...container.current!,
-          openLebensmonatsSummary,
-          addLebensmonat,
-        };
+        return { openLebensmonatsSummary, addLebensmonat };
       });
 
       const monatsliste = Array.from({ length: lebensmonate }, (_, i) => i + 1);

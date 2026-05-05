@@ -95,6 +95,7 @@ describe("Abschnitt mit Einkommen", () => {
         screen.getByText("Arbeiten im Mutterschutz ist nicht erlaubt"),
       ).toBeVisible();
 
+      // oxlint-disable-next-line vitest/valid-expect
       expect(
         screen.getByRole("combobox", {
           name: "Bruttoeinkommen von John im 5. Lebensmonat",
@@ -125,6 +126,7 @@ describe("Abschnitt mit Einkommen", () => {
     });
 
     it("uses the provided callback to determine the Vorschläge for the Einkommen per Elternteil", () => {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const erstelleVorschlaegeFuerAngabeDesEinkommens = vi.fn(() => []);
       vi.mocked(useInformationenZumLebensmonat).mockReturnValue({
         ...ANY_INFORMATION_ZUM_LEBENSMONAT,

@@ -3,7 +3,9 @@ import { cleanup } from "@testing-library/react";
 import { afterEach, vi } from "vitest";
 import "./styles/index.css";
 
+// oxlint-disable-next-line vitest/require-mock-type-parameters
 window.scrollTo = vi.fn(() => undefined);
+// oxlint-disable-next-line vitest/require-mock-type-parameters
 window.HTMLElement.prototype.scrollIntoView = vi.fn();
 
 document.body.id = "egr-root"; // Imported styles are scope to the identifier.

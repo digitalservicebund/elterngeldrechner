@@ -54,6 +54,12 @@
 
     "import/first": "error"
   },
+  "overrides": [
+    {
+      "files": ["src/**/*.{ts,tsx}"],
+      "plugins": ["vitest"]
+    }
+  ],
   "ignorePatterns": [
     "original-rechner",
     "public",

@@ -75,6 +75,7 @@ describe("Abschnitt mit Auswahloptionen", () => {
   });
 
   it("uses the provided callback to determine the Auswahlmöglichkeiten per Elternteil", () => {
+    // oxlint-disable-next-line vitest/require-mock-type-parameters
     const bestimmeAuswahlmoeglichkeiten = vi
       .fn()
       .mockReturnValue(ANY_AUSWAHLMOEGLICHKEITEN);
@@ -91,6 +92,7 @@ describe("Abschnitt mit Auswahloptionen", () => {
   });
 
   it("shows a hint when any Auswahlmöglichkeit is not selectable", () => {
+    // oxlint-disable-next-line vitest/require-mock-type-parameters
     const bestimmeAuswahlmoeglichkeiten = vi.fn().mockReturnValue({
       ...ANY_AUSWAHLMOEGLICHKEITEN,
       [Variante.Basis]: ANY_DISABLED_AUSWAHLMOEGLICHKEIT,

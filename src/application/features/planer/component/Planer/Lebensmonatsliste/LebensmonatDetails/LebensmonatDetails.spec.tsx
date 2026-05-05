@@ -8,6 +8,7 @@ describe("LebensmonateDetails", () => {
   it("shows a details group for the Lebensmonatszahl", () => {
     render(<LebensmonatDetails {...ANY_PROPS} lebensmonatszahl={5} />);
 
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.queryByRole("group", { name: "5. Lebensmonat" }));
   });
 
@@ -36,6 +37,7 @@ describe("LebensmonateDetails", () => {
     });
 
     it("triggers the given event handler", async () => {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const onToggle = vi.fn();
       render(<LebensmonatDetails {...ANY_PROPS} onToggle={onToggle} />);
 

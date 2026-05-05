@@ -7,6 +7,7 @@ describe("Abschnitt mit Planungsübersicht", () => {
   it("shows a section for the Planungsübersicht", () => {
     render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} />);
 
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.getByLabelText("Planungsübersicht"));
   });
 
@@ -30,11 +31,15 @@ describe("Abschnitt mit Planungsübersicht", () => {
     render(<AbschnittMitPlanungsuebersicht {...ANY_PROPS} plan={plan} />);
 
     expect(screen.queryByText("Jane")).toBeVisible();
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.queryByText("15 Monate Elterngeld"));
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.queryByText("5.019 €"));
 
     expect(screen.queryByText("John")).toBeVisible();
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.queryByText("8 Monate Elterngeld"));
+    // oxlint-disable-next-line vitest/valid-expect
     expect(screen.queryByText("2.407 €"));
   });
 

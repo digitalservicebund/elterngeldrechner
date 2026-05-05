@@ -11,6 +11,7 @@ type Props = {
 };
 
 describe("Custom Number Field", () => {
+  // oxlint-disable-next-line vitest/require-mock-type-parameters
   const onSubmit = vi.fn();
 
   function TestComponent({ allowedDecimalPlaces, max }: Props) {
@@ -110,7 +111,9 @@ describe("Custom Number Field", () => {
     } as Selection);
 
     const clipboardData = {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       setData: vi.fn(),
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       getData: vi.fn(),
     };
 

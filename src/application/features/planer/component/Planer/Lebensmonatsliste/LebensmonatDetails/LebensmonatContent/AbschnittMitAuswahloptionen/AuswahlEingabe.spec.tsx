@@ -105,6 +105,7 @@ describe("AuswahlEingabe", () => {
   ])(
     "calls the callback with Option $option when checking the input for $label",
     async ({ label, option }) => {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const waehleOption = vi.fn();
       render(<AuswahlEingabe {...ANY_PROPS} waehleOption={waehleOption} />);
 
@@ -137,6 +138,7 @@ describe("AuswahlEingabe", () => {
     });
 
     it("does not call the callback when clicked", async () => {
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       const waehleOption = vi.fn();
       const auswahlmoeglichkeiten = {
         ...ANY_AUSWAHLMOEGLICHKEITEN,

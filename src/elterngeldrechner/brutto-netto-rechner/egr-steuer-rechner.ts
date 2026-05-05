@@ -90,10 +90,12 @@ export function ermittelRelevantesLohnsteuerjahr(
   geburtstagDesKindes: Geburtstag,
 ): Lohnsteuerjahr {
   const jahrVorDerGeburt = geburtstagDesKindes.getFullYear() - 1;
-  const aeltestesLohnsteuerjahr = UnterstuetzteLohnsteuerjahre.toSorted()[0]!;
+  const aeltestesLohnsteuerjahr = UnterstuetzteLohnsteuerjahre.toSorted(
+    (a, b) => a - b,
+  )[0]!;
 
   return (
-    UnterstuetzteLohnsteuerjahre.toSorted().findLast(
+    UnterstuetzteLohnsteuerjahre.toSorted((a, b) => a - b).findLast(
       (lohnsteuerjahr) => lohnsteuerjahr <= jahrVorDerGeburt,
     ) ?? aeltestesLohnsteuerjahr
   );

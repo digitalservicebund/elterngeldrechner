@@ -40,6 +40,7 @@
     "typescript/restrict-plus-operands": "error",
     "typescript/only-throw-error": "error",
     "typescript/prefer-promise-reject-errors": "error",
+    "typescript/require-array-sort-compare": "error",
     "react/no-unknown-property": "error",
     "react/button-has-type": "error",
     "react/hook-use-state": "error",

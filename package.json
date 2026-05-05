@@ -41,7 +41,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.2.0",
     "autoprefixer": "^10.4.27",
-    "commitlint": "^20.5.0",
+    "commitlint": "^20.5.3",
     "fast-check": "^4.6.0",
     "http-server": "^14.1.1",
     "immer": "^11.1.4",

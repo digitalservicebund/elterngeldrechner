@@ -16,8 +16,7 @@
     "postcss.config.js",
     "eslint.config.js",
     "eslint-plugin/**/*.js",
-    "stylelint.config.js",
-    ".github/actions/**/*.js"
+    "stylelint.config.js"
   ],
   "exclude": ["dist", "node_modules"]
 }

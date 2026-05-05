@@ -270,7 +270,7 @@ if (import.meta.vitest) {
 
     function monat(
       gewaehlteOption?: Auswahloption,
-      elterngeldbezug: number | null | undefined = undefined,
+      elterngeldbezug?: number | null,
       bruttoeinkommen?: number,
     ) {
       return {

@@ -58,11 +58,30 @@
     {
       "files": ["src/**/*.{ts,tsx}"],
       "plugins": ["vitest"]
+    },
+    {
+      "files": [
+        "src/monatsplaner/**",
+        "src/elterngeldrechner/**",
+        "src/bemessungszeitraumrechner/**",
+        "src/lebensmonatrechner/**",
+        "src/lohnsteuerrechner/**",
+        "src/mutterschutzrechner/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["@/application", "@/application/*"],
+                "message": "domain packages must not depend on the application layer."
+              }
+            ]
+          }
+        ]
+      }
     }
   ],
-  "ignorePatterns": [
-    "original-rechner",
-    "public",
-    "dist"
-  ]
+  "ignorePatterns": ["original-rechner", "public", "dist"]
 }

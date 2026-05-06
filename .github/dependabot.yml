@@ -39,6 +39,9 @@ updates:
         patterns:
           - "oxlint"
           - "oxlint-*"
+    ignore:
+      - dependency-name: "tailwindcss"
+      - dependency-name: "@tailwindcss/*"
     cooldown:
       default-days: 5
       semver-major-days: 14

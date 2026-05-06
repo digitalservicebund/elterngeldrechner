@@ -9,9 +9,36 @@ updates:
     schedule:
       interval: "daily"
     groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      commitlint:
+        patterns:
+          - "commitlint"
+          - "@commitlint/*"
+      testing-library:
+        patterns:
+          - "@testing-library/*"
+      hookform:
+        patterns:
+          - "react-hook-form"
+          - "@hookform/*"
+      date-fns:
+        patterns:
+          - "date-fns"
+          - "@date-fns/*"
+      vite:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "vitest"
       oxlint:
         patterns:
           - "oxlint"
+          - "oxlint-*"
     cooldown:
       default-days: 5
       semver-major-days: 14

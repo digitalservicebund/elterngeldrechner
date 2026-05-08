@@ -35,9 +35,9 @@ export default defineConfig({
     "import.meta.vitest": "undefined",
   },
   build: {
-    target: "es2015",
+    target: "es2022",
     sourcemap: true,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         hashCharacters: "hex",
       },

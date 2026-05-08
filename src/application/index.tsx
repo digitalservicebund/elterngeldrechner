@@ -3,8 +3,11 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from "./App";
 import store from "./redux";
+import posthog from "posthog-js";
 
 import { setupUserTracking } from "./user-tracking";
+
+import { PostHogProvider } from "@posthog/react";
 
 document.addEventListener("DOMContentLoaded", function () {
   const rootDiv = document.getElementById("egr-root");
@@ -12,9 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   createRoot(rootDiv).render(
     <StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <PostHogProvider client={posthog}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </PostHogProvider>
     </StrictMode>,
   );
 

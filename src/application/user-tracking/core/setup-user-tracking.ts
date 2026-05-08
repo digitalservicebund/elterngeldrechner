@@ -1,14 +1,30 @@
 import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
+import { isPosthogEnabled } from "@/application/feature-flags";
+
+import posthog from "posthog-js";
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
-  const isConfigured = !!tagMangerSourceUrl;
+  const isMatomoConfigured = !!tagMangerSourceUrl;
 
-  if (isConfigured && (await isTrackingAllowedByUser())) {
+  if (isMatomoConfigured && (await isTrackingAllowedByUser())) {
     establishDataLayer();
     setupTagManager(tagMangerSourceUrl);
+  }
+
+  if (isPosthogEnabled() && (await isPosthogTrackingAllowedByUser())) {
+    posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN, {
+      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+      capture_pageview: false,
+      capture_pageleave: false,
+      disable_session_recording: true,
+      capture_exceptions: false,
+      person_profiles: "never",
+      disable_surveys: true,
+      autocapture: false,
+    });
   }
 }
 
@@ -21,13 +37,34 @@ async function isTrackingAllowedByUser(): Promise<boolean> {
     ALLOW_TRACKING_COOKIE_NAME,
     COOKIE_POLLING_INTERVAL,
   );
-  return cookieValue === "1";
+
+  return (
+    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_MATOMO_ONLY ||
+    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG
+  );
+}
+
+async function isPosthogTrackingAllowedByUser(): Promise<boolean> {
+  const cookieValue = await waitForCookieValue(
+    ALLOW_TRACKING_COOKIE_NAME,
+    COOKIE_POLLING_INTERVAL,
+  );
+
+  return (
+    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_POSTHOG_ONLY ||
+    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG
+  );
 }
 
 const ALLOW_TRACKING_COOKIE_NAME = "cookie-allow-tracking"; // set by cookie banner of the Familienportal
 const COOKIE_POLLING_INTERVAL = 500;
 
-export { isTrackingAllowedByUser };
+// TODO: Change the following values once agreed with the hoster
+const ALLOW_TRACKING_COOKIE_VALUE_MATOMO_ONLY = "1";
+const ALLOW_TRACKING_COOKIE_VALUE_POSTHOG_ONLY = "1";
+const ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG = "1";
+
+export { isTrackingAllowedByUser, isPosthogTrackingAllowedByUser };
 
 if (import.meta.vitest) {
   const { describe, beforeEach, afterEach, it, expect, vi } = import.meta

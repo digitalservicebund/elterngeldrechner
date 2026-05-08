@@ -14,4 +14,12 @@ function isFamilienportalAssetStorage() {
   );
 }
 
-export { isAbfrageteilNextEnabled, isFamilienportalAssetStorage };
+function isPosthogEnabled() {
+  return import.meta.env.VITE_FEATURE_FLAG_POSTHOG === "true";
+}
+
+export {
+  isAbfrageteilNextEnabled,
+  isFamilienportalAssetStorage,
+  isPosthogEnabled,
+};

@@ -1,3 +1,4 @@
+import posthog from "posthog-js";
 import { addMonths, addWeeks, isBefore, subWeeks } from "date-fns";
 import {
   getTrackingVariable,
@@ -14,6 +15,8 @@ export function trackNutzergruppe(birthdate: Date): void {
   if (changed) {
     pushTrackingEvent("nutzergruppe-bestimmt");
   }
+
+  posthog.register({ nutzergruppe });
 }
 
 function determineNutzergruppe(today: Date, birthdate: Date) {

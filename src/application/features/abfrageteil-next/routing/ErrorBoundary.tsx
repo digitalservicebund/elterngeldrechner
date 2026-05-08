@@ -1,5 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { pushTrackingEvent } from "@/application/user-tracking/core";
+import posthog from "posthog-js";
 
 type Props = { readonly children: ReactNode };
 type State = { hasError: boolean };
@@ -15,6 +16,8 @@ export class ErrorBoundary extends Component<Props, State> {
     pushTrackingEvent("unbehandelter-fehler", {
       data: { fehlernachricht: error.message },
     });
+
+    posthog.captureException(error);
   }
 
   override render(): ReactNode {

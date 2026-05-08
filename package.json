@@ -20,7 +20,7 @@
     "lint": "f() { oxlint --no-error-on-unmatched-pattern ${@}; }; f",
     "lint-fix": "f() { oxlint --fix --no-error-on-unmatched-pattern ${@}; }; f",
     "stylelint": "f() { stylelint ${@:-.}; }; f",
-    "audit-licenses": "license-checker-rseidelsohn --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages=@egr/egr-app@1.1.2 --out /dev/null"
+    "audit-licenses": "license-checker-rseidelsohn --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages='@egr/egr-app@1.1.2;posthog-js@1.372.9' --out /dev/null"
   },
   "engines": {
     "node": "24",
@@ -67,10 +67,12 @@
     "@digitalservicebund/icons": "^2.1.0",
     "@hookform/resolvers": "^5.2.2",
     "@js-temporal/polyfill": "^0.5.1",
+    "@posthog/react": "^1.9.0",
     "@reduxjs/toolkit": "^2.11.2",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "downloadjs": "^1.4.7",
+    "posthog-js": "^1.372.9",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-hook-form": "^7.72.0",

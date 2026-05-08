@@ -34,9 +34,15 @@ import {
   DatenuebernahmeAntragPage,
   PlanerPage,
 } from "@/application/pages";
+import { useEffect } from "react";
+import posthog from "posthog-js";
 
 function EventProviderLayout() {
   const location = useLocation();
+
+  useEffect(() => {
+    posthog.capture("$pageview");
+  }, [location.pathname]);
 
   return (
     <EventProvider>

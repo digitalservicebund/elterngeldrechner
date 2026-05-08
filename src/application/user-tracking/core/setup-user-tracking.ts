@@ -25,6 +25,8 @@ export async function setupUserTracking(): Promise<void> {
       disable_surveys: true,
       autocapture: false,
     });
+
+    posthog.capture("$pageview");
   }
 }
 

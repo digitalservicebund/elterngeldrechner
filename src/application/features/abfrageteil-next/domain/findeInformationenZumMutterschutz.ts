@@ -1,30 +1,58 @@
-import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil-next/events/projections";
 import type { FormEvent } from "@/application/features/abfrageteil-next/routing/FormEvent";
 import { Route } from "@/application/features/abfrageteil-next/routing/Route";
 import { Elternteil } from "@/monatsplaner/Elternteil";
 import type { InformationenZumMutterschutz } from "@/monatsplaner/InformationenZumMutterschutz";
+import type { Lebensmonatszahl } from "@/monatsplaner/Lebensmonatszahl";
+import { findeGeburtsdatum } from "./findeGeburtsdatum";
+import { findeAusklammerungen } from "./findeAusklammerungen";
+import { findeLetztesGueltigesEvent } from "../events/projections";
 
 export function findeInformationenZumMutterschutz(
   events: FormEvent[],
   anzahlKinder: number,
 ): InformationenZumMutterschutz<Elternteil.Eins | Elternteil.Zwei> | undefined {
-  const letzterLebensmonatMitSchutz = anzahlKinder > 1 ? 3 : 2;
+  const geburtsdatum = findeGeburtsdatum(events);
+
+  const mutterschutzElternteil1 = findeAusklammerungen(events, 0).find(
+    (ausklammerung) => ausklammerung.grund === "mutterschutz",
+  );
+
+  if (mutterschutzElternteil1) {
+    const { months: mutterschutzMonateNachGeburt } = geburtsdatum.until(
+      mutterschutzElternteil1.bis,
+      {
+        smallestUnit: "months",
+        roundingMode: "ceil",
+      },
+    );
+    const letzterLebensmonatMitSchutz = (
+      anzahlKinder > 1 ? 3 : mutterschutzMonateNachGeburt
+    ) as Lebensmonatszahl;
+    return { empfaenger: Elternteil.Eins, letzterLebensmonatMitSchutz };
+  }
 
   const elternteil1 = findeLetztesGueltigesEvent(
     events,
     Route.ElternteilEinsAllgemeineAngaben,
   );
 
-  if (elternteil1?.istImMutterschutz) {
-    return { empfaenger: Elternteil.Eins, letzterLebensmonatMitSchutz };
-  }
+  if (elternteil1?.istAlleinerziehend) return undefined;
 
-  const elternteil2 = findeLetztesGueltigesEvent(
-    events,
-    Route.ElternteilZweiAllgemeineAngaben,
+  const mutterschutzElternteil2 = findeAusklammerungen(events, 1).find(
+    (ausklammerung) => ausklammerung.grund === "mutterschutz",
   );
 
-  if (elternteil2?.istImMutterschutz) {
+  if (mutterschutzElternteil2) {
+    const { months: mutterschutzMonateNachGeburt } = geburtsdatum.until(
+      mutterschutzElternteil2.bis,
+      {
+        smallestUnit: "months",
+        roundingMode: "ceil",
+      },
+    );
+    const letzterLebensmonatMitSchutz = (
+      anzahlKinder > 1 ? 3 : mutterschutzMonateNachGeburt
+    ) as Lebensmonatszahl;
     return { empfaenger: Elternteil.Zwei, letzterLebensmonatMitSchutz };
   }
 
@@ -34,7 +62,27 @@ export function findeInformationenZumMutterschutz(
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
-  describe("findeInformationenZumMutterschutz", () => {
+  describe("findeInformationenZumMutterschutz", async () => {
+    const { Temporal } = await import("@js-temporal/polyfill");
+
+    const geborenesKind: FormEvent = {
+      route: Route.GeborenesKindAngaben,
+      payload: {
+        geburtsdatum: Temporal.PlainDate.from("2026-03-03"),
+        errechneterEntbindungstermin: Temporal.PlainDate.from("2026-03-03"),
+        anzahl: 1,
+      },
+    };
+
+    const fruehGeborenesKind: FormEvent = {
+      route: Route.GeborenesKindAngaben,
+      payload: {
+        geburtsdatum: Temporal.PlainDate.from("2026-02-01"),
+        errechneterEntbindungstermin: Temporal.PlainDate.from("2026-03-03"),
+        anzahl: 1,
+      },
+    };
+
     const elternteil1OhneMutterschutz: FormEvent = {
       route: Route.ElternteilEinsAllgemeineAngaben,
       payload: {
@@ -53,9 +101,52 @@ if (import.meta.vitest) {
       },
     };
 
-    it("is undefined when Elternteil 1 is not in Mutterschutz", () => {
+    const elternteil2OhneMutterschutz: FormEvent = {
+      route: Route.ElternteilZweiAllgemeineAngaben,
+      payload: {
+        wirdZweitePersonBeruecksichtigt: true,
+        name: "Max",
+        istImMutterschutz: false,
+      },
+      dependentValues: { hatPotenzielleAusklammerungen: false },
+    };
+
+    const elternteil2MitMutterschutz: FormEvent = {
+      route: Route.ElternteilZweiAllgemeineAngaben,
+      payload: {
+        wirdZweitePersonBeruecksichtigt: true,
+        name: "Max",
+        istImMutterschutz: true,
+      },
+      dependentValues: { hatPotenzielleAusklammerungen: false },
+    };
+
+    it("is undefined when Elternteil 1 is alleinerziehend and not in Mutterschutz", () => {
       const result = findeInformationenZumMutterschutz(
-        [elternteil1OhneMutterschutz],
+        [
+          {
+            route: Route.ElternteilEinsAllgemeineAngaben,
+            payload: {
+              name: "Hanna",
+              istAlleinerziehend: true,
+              istImMutterschutz: false,
+            },
+          },
+          geborenesKind,
+        ],
+        1,
+      );
+
+      expect(result).toBeUndefined();
+    });
+
+    it("is undefined when neither Elternteil is in Mutterschutz", () => {
+      const result = findeInformationenZumMutterschutz(
+        [
+          elternteil1OhneMutterschutz,
+          elternteil2OhneMutterschutz,
+          geborenesKind,
+        ],
         1,
       );
 
@@ -64,7 +155,7 @@ if (import.meta.vitest) {
 
     it("sets Elternteil.Eins as Empfänger when Elternteil 1 is in Mutterschutz", () => {
       const result = findeInformationenZumMutterschutz(
-        [elternteil1MitMutterschutz],
+        [elternteil1MitMutterschutz, geborenesKind],
         1,
       );
 
@@ -73,7 +164,7 @@ if (import.meta.vitest) {
 
     it("sets letzterLebensmonatMitSchutz to 2 for a single child", () => {
       const result = findeInformationenZumMutterschutz(
-        [elternteil1MitMutterschutz],
+        [elternteil1MitMutterschutz, geborenesKind],
         1,
       );
 
@@ -82,46 +173,28 @@ if (import.meta.vitest) {
 
     it("sets letzterLebensmonatMitSchutz to 3 for Mehrlinge", () => {
       const result = findeInformationenZumMutterschutz(
-        [elternteil1MitMutterschutz],
+        [elternteil1MitMutterschutz, geborenesKind],
         2,
       );
 
       expect(result?.letzterLebensmonatMitSchutz).toEqual(3);
     });
 
-    it("is undefined when neither Elternteil is in Mutterschutz", () => {
+    it("sets letzterLebensmonatMitSchutz to 3 for a single child with early birth", () => {
       const result = findeInformationenZumMutterschutz(
-        [
-          elternteil1OhneMutterschutz,
-          {
-            route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: {
-              wirdZweitePersonBeruecksichtigt: true,
-              name: "Max",
-              istImMutterschutz: false,
-            },
-            dependentValues: { hatPotenzielleAusklammerungen: false },
-          },
-        ],
+        [elternteil1MitMutterschutz, fruehGeborenesKind],
         1,
       );
 
-      expect(result).toBeUndefined();
+      expect(result?.letzterLebensmonatMitSchutz).toEqual(3);
     });
 
     it("sets Elternteil.Zwei as Empfänger when Elternteil 2 is in Mutterschutz", () => {
       const result = findeInformationenZumMutterschutz(
         [
           elternteil1OhneMutterschutz,
-          {
-            route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: {
-              wirdZweitePersonBeruecksichtigt: true,
-              name: "Max",
-              istImMutterschutz: true,
-            },
-            dependentValues: { hatPotenzielleAusklammerungen: false },
-          },
+          elternteil2MitMutterschutz,
+          geborenesKind,
         ],
         1,
       );
@@ -133,15 +206,8 @@ if (import.meta.vitest) {
       const result = findeInformationenZumMutterschutz(
         [
           elternteil1OhneMutterschutz,
-          {
-            route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: {
-              wirdZweitePersonBeruecksichtigt: true,
-              name: "Max",
-              istImMutterschutz: true,
-            },
-            dependentValues: { hatPotenzielleAusklammerungen: false },
-          },
+          elternteil2MitMutterschutz,
+          geborenesKind,
         ],
         1,
       );
@@ -153,17 +219,23 @@ if (import.meta.vitest) {
       const result = findeInformationenZumMutterschutz(
         [
           elternteil1OhneMutterschutz,
-          {
-            route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: {
-              wirdZweitePersonBeruecksichtigt: true,
-              name: "Max",
-              istImMutterschutz: true,
-            },
-            dependentValues: { hatPotenzielleAusklammerungen: false },
-          },
+          elternteil2MitMutterschutz,
+          geborenesKind,
         ],
         2,
+      );
+
+      expect(result?.letzterLebensmonatMitSchutz).toEqual(3);
+    });
+
+    it("sets letzterLebensmonatMitSchutz to 3 for a single child with early birth (Elternteil 2)", () => {
+      const result = findeInformationenZumMutterschutz(
+        [
+          elternteil1OhneMutterschutz,
+          elternteil2MitMutterschutz,
+          fruehGeborenesKind,
+        ],
+        1,
       );
 
       expect(result?.letzterLebensmonatMitSchutz).toEqual(3);

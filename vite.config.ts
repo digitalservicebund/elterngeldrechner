@@ -35,7 +35,7 @@ export default defineConfig({
     "import.meta.vitest": "undefined",
   },
   build: {
-    target: "es2022",
+    target: "es2015",
     sourcemap: true,
     rolldownOptions: {
       output: {

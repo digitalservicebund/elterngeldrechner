@@ -1,5 +1,7 @@
 import { type CSSProperties, ReactNode } from "react";
 
+import posthog from "posthog-js";
+
 type Props = {
   readonly question: string;
   readonly answer: ReactNode;
@@ -7,18 +9,20 @@ type Props = {
   readonly style?: CSSProperties;
 };
 
-export function InfoText({
-  question,
-  answer,
-  className,
-  style,
-}: Props): ReactNode {
+export function InfoText(properties: Props): ReactNode {
+  const { question, answer, className, style } = properties;
+
+  const onToggle = (event: React.ToggleEvent) => {
+    // Avoid confusion for listeners on parent <details /> elements.
+    event.stopPropagation();
+
+    if (event.newState === "open") {
+      posthog.capture("info_text_opened", { question });
+    }
+  };
+
   return (
-    <details
-      className={className}
-      style={style}
-      onToggle={(event) => event.stopPropagation()} // Avoid confusion for listeners on parent <details /> elements.
-    >
+    <details className={className} style={style} onToggle={onToggle}>
       <summary className="text-primary">
         <u>{question}</u>
       </summary>

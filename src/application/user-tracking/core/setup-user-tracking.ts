@@ -66,7 +66,7 @@ const ALLOW_TRACKING_COOKIE_VALUE_MATOMO_ONLY = "1";
 const ALLOW_TRACKING_COOKIE_VALUE_POSTHOG_ONLY = "1";
 const ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG = "1";
 
-export { isTrackingAllowedByUser, isPosthogTrackingAllowedByUser };
+export { isTrackingAllowedByUser };
 
 if (import.meta.vitest) {
   const { describe, beforeEach, afterEach, it, expect, vi } = import.meta

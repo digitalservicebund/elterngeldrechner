@@ -7,7 +7,7 @@ import posthog from "posthog-js";
 
 import { setupUserTracking } from "./user-tracking";
 
-import { PostHogProvider } from "@posthog/react";
+import { PostHogErrorBoundary, PostHogProvider } from "@posthog/react";
 
 document.addEventListener("DOMContentLoaded", function () {
   const rootDiv = document.getElementById("egr-root");
@@ -16,9 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
   createRoot(rootDiv).render(
     <StrictMode>
       <PostHogProvider client={posthog}>
-        <Provider store={store}>
-          <App />
-        </Provider>
+        <PostHogErrorBoundary>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </PostHogErrorBoundary>
       </PostHogProvider>
     </StrictMode>,
   );

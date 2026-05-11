@@ -1,10 +1,10 @@
 # 10. Abfrageteil
 
-Date: 2026-03-14
+Date: 2026-05-11
 
 ## Status
 
-- Draft by Dennis
+- Accepted by: Dennis & Jakob
 
 ## Context
 
@@ -12,10 +12,10 @@ We have re-implemented the /abfrageteil in /abfrageteil-next and are at
 a point where the feature works as expected but carries some technical
 debt that is described in more detail later in this document.
 
-We cannot reduce the debt right now because we are now close to the
-release and the actual version is already tested by the team and our
-project partners. Rewriting larger parts of the feature would require
-to repeat the full testing process and thus delay the release further.
+The main reason for the re-implementation of the abfrageteil is not a
+technical one but a change in the way parents are guided through the
+forms, i.e. not linear but with multiple possible branches based on
+the entered data.
 
 ## History
 
@@ -82,28 +82,18 @@ the page and extend the schema by it, just for the routing.
 
 ## Ideas for improvements
 
-### Grouping forms into pages
-
-The Einkommen form, for example, collects input in different shapes
-beeing a single number as the average income or twelve exact numbers
-representing a month each.
-
-In this example my idea would be to merge both schemas into one that
-contains twelve numbers and group both forms in one page that emits
-either the twelve exact numbers or a fanned out version of the avg.
-
 ### Error handling in projections
 
 Instead of throwing runtime errors an incremental improvement could
 be to return an error type. The call side then could route back to
-the missing page on error. However I am not sure if that solves
-practical problems or just shifts the problem to the call side.
+the missing page on error. However, this might not solve the practical
+problems but possibly shift the problem simply to the call side.
 
 ### State as discriminated union
 
 We could rewrite the state modelling shifting from the append-only list
 of events to a strongly typed discriminated union that represents the
-phases allgemein, kind, antragstellerin and partnerin. However that
+phases allgemein, kind, antragstellerin and partnerin. However, that
 also means loosing the free prune stale branches feature and would
 require to implement all state changes explicitly.
 
@@ -120,7 +110,7 @@ the event context.
 
 Implementing the feature in the original pattern using redux and slices
 would mean that the state is always fully typed and available without
-projection. However in that case the history is discarded after each
+projection. However, in that case the history is discarded after each
 action and pruning stale branches would require explicit implementation.
 
 ### State machines
@@ -132,6 +122,8 @@ invariant assetion that currently throw at runtime.
 
 ## Future direction
 
-The current architecture should be seen as a first iteration that allowed us
-to ship the feature under time constraints. Future iterations may introduce
+The current architecture should be seen as the best possible compromise for
+the time being, that allowed us to ship the feature under time constraints
+and still introduce a new architecture, which is improves and simplifies
+the logic of the abfrageteil. Future iterations may introduce
 projections or a more strongly typed state model.

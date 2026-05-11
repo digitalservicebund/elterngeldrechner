@@ -94,7 +94,7 @@ export function ElternteilAusklammerungGruendePage() {
     defaultValues,
   });
 
-  const { register, handleSubmit, formState, setValue } = form;
+  const { register, handleSubmit, formState, setValue, setValues } = form;
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilAusklammerungGruende) => {
@@ -226,9 +226,11 @@ export function ElternteilAusklammerungGruendePage() {
             }
             onChange={(checked) => {
               if (checked) {
-                setValue("hatMutterschutzAelteresKind", false);
-                setValue("hatElterngeldAelteresKind", false);
-                setValue("hatSchwangerschaftsbedingteErkrankung", false);
+                setValues({
+                  hatMutterschutzAelteresKind: false,
+                  hatElterngeldAelteresKind: false,
+                  hatSchwangerschaftsbedingteErkrankung: false,
+                });
               }
             }}
           />

@@ -49,7 +49,7 @@
     "lefthook": "^2.1.4",
     "license-checker-rseidelsohn": "^4.4.2",
     "node-xlsx": "^0.24.0",
-    "original-rechner": "file:original-rechner",
+    "original-rechner": "github:digitalservicebund/elterngeldrechner-legacy#69ad27a02bb5105e10890338845cf21b727a0c27",
     "oxlint": "^1.62.0",
     "oxlint-tsgolint": "^0.22.1",
     "postcss": "^8.5.12",

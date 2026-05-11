@@ -34,8 +34,3 @@ runs:
       run: npm ci
       shell: bash
       working-directory: ${{ inputs.directory }}
-
-    - name: Prepare the original-rechner
-      run: npm run prepare
-      shell: bash
-      working-directory: original-rechner

@@ -17,7 +17,7 @@ export function InfoText(properties: Props): ReactNode {
     event.stopPropagation();
 
     if (event.newState === "open") {
-      posthog.capture("info_text_opened", { question });
+      posthog.capture("info_text_ausgeklappt", { question });
     }
   };
 

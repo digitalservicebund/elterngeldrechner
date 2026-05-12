@@ -13,7 +13,7 @@
     "tailwind.config.ts",
     "playwright.config.ts",
     "commitlint.config.ts",
-    "postcss.config.js",
+    "postcss.config.ts",
     "oxlint.config.ts",
     "stylelint.config.ts"
   ],

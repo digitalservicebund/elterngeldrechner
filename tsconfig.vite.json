@@ -15,7 +15,7 @@
     "commitlint.config.ts",
     "postcss.config.js",
     "oxlint.config.ts",
-    "stylelint.config.js"
+    "stylelint.config.ts"
   ],
   "exclude": ["dist", "node_modules"]
 }

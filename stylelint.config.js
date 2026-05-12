@@ -1,6 +1,5 @@
 /** @type {import('stylelint').Config} */
 export default {
-  ignoreFiles: ["!./src/**/*.css"],
   extends: ["stylelint-config-recommended"],
   rules: {
     "at-rule-no-deprecated": [true, { ignoreAtRules: ["apply"] }],

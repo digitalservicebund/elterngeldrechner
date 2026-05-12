@@ -14,6 +14,7 @@ pre-commit:
     lint:
       run: npm run lint {staged_files}
     stylelint:
+      glob: "src/**/*.css"
       run: npm run stylelint {staged_files}
     type-check:
       run: npm run type-check

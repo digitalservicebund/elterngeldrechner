@@ -19,7 +19,7 @@
     "type-check": "tsc",
     "lint": "f() { oxlint --no-error-on-unmatched-pattern ${@}; }; f",
     "lint-fix": "f() { oxlint --fix --no-error-on-unmatched-pattern ${@}; }; f",
-    "stylelint": "f() { stylelint ${@:-.}; }; f",
+    "stylelint": "f() { stylelint ${@:-\"src/**/*.css\"}; }; f",
     "audit-licenses": "license-checker-rseidelsohn --onlyAllow=$(tr '\n' ';' < ./allowed-licenses) --excludePackages='@egr/egr-app@1.1.2;posthog-js@1.372.9' --out /dev/null"
   },
   "engines": {

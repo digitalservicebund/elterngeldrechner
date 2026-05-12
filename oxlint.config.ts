@@ -1,35 +1,36 @@
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react", "jsx-a11y", "import"],
-  "options": {
-    "denyWarnings": true,
-    "typeAware": true
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  plugins: ["typescript", "react", "jsx-a11y", "import"],
+  options: {
+    denyWarnings: true,
+    typeAware: true,
   },
-  "categories": {
-    "correctness": "error"
+  categories: {
+    correctness: "error",
   },
-  "env": {
-    "builtin": true,
-    "browser": true,
-    "node": true
+  env: {
+    builtin: true,
+    browser: true,
+    node: true,
   },
-  "settings": {
+  settings: {
     "jsx-a11y": {
-      "components": {
-        "CustomDate": "input"
-      }
+      components: {
+        CustomDate: "input",
+      },
     },
-    "react": {
-      "version": "18.2"
-    }
+    react: {
+      version: "18.2",
+    },
   },
-  "rules": {
+  rules: {
     "no-console": "error",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "_" }],
+    "no-unused-vars": ["error", { argsIgnorePattern: "_" }],
 
     "typescript/no-misused-promises": [
       "error",
-      { "checksVoidReturn": { "attributes": false } }
+      { checksVoidReturn: { attributes: false } },
     ],
     "typescript/no-explicit-any": "error",
     "typescript/no-unsafe-argument": "error",
@@ -52,36 +53,37 @@
     "react/jsx-pascal-case": "error",
     "react/rules-of-hooks": "error",
 
-    "import/first": "error"
+    "import/first": "error",
   },
-  "overrides": [
+  overrides: [
     {
-      "files": ["src/**/*.{ts,tsx}"],
-      "plugins": ["vitest"]
+      files: ["src/**/*.{ts,tsx}"],
+      plugins: ["vitest"],
     },
     {
-      "files": [
+      files: [
         "src/monatsplaner/**",
         "src/elterngeldrechner/**",
         "src/bemessungszeitraumrechner/**",
         "src/lebensmonatrechner/**",
         "src/lohnsteuerrechner/**",
-        "src/mutterschutzrechner/**"
+        "src/mutterschutzrechner/**",
       ],
-      "rules": {
+      rules: {
         "no-restricted-imports": [
           "error",
           {
-            "patterns": [
+            patterns: [
               {
-                "group": ["@/application", "@/application/*"],
-                "message": "domain packages must not depend on the application layer."
-              }
-            ]
-          }
-        ]
-      }
-    }
+                group: ["@/application", "@/application/*"],
+                message:
+                  "domain packages must not depend on the application layer.",
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
-  "ignorePatterns": ["original-rechner", "public", "dist"]
-}
+  ignorePatterns: ["original-rechner", "public", "dist"],
+});

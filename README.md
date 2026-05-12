@@ -44,6 +44,19 @@ overhead when translated. This hybrid approach ensures clear communication with 
 specific context. While we acknowledge this might pose a barrier for non-German speaking contributors, we believe it's the most effective
 solution for our project. We encourage contributors to ask questions about any unfamiliar German terms.
 
+## Environment Variables
+
+All environment variables are declared in `vite-env.d.ts`. That file is
+the single source of truth for what the application can be configured with.
+
+The app runs without any of them set — unset variables simply disable the
+corresponding feature (tracking, feature flags, state). To enable specific
+integrations locally, create a `.env.development.local` in the project root.
+
+Sensitive values should be stored in a password manager, not in plain text
+files. For example, a `.env.development.local` entry can reference a
+1Password secret via the CLI: `MY_SECRET=op://vault/item/field`.
+
 ## Use of AI in Development
 
 To maximize our engineering focus on code quality and the delivery of production-ready enhancements and new features, this project

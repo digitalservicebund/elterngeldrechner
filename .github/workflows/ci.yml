@@ -128,8 +128,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: |
-          aws s3 cp dist/documents/ s3://egr-assets-staging/documents/ --recursive
-          aws s3 cp dist/images/ s3://egr-assets-staging/images/ --recursive
+          aws s3 sync dist/assets/ s3://egr-assets-staging/assets/ --exclude "index-*.js" --exclude "index-*.css"
 
           aws s3 cp dist/assets/index-*.js s3://egr-assets-staging/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-staging/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
@@ -167,8 +166,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_PRODUCTION_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: |
-          aws s3 cp dist/documents/ s3://egr-assets-production/documents/ --recursive
-          aws s3 cp dist/images/ s3://egr-assets-production/images/ --recursive
+          aws s3 sync dist/assets/ s3://egr-assets-production/assets/ --exclude "index-*.js" --exclude "index-*.css"
 
           aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
           aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"

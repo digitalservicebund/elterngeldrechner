@@ -1,12 +1,12 @@
 import { Elternteil, Variante } from "@/monatsplaner";
-
-const baseUrl = import.meta.env.BASE_URL;
+import antragPdf from "@/assets/documents/von2024-04-01bis2025-03-31_antrag.pdf?url";
+import seitePdf from "@/assets/documents/von2024-04-01bis2025-03-31_seite.pdf?url";
 
 export const pdfVersionZwischenApril2024UndApril2025 = {
   start: new Date("2024-04-01"),
   end: new Date("2025-03-31"),
-  pdfFileAntragPath: `${baseUrl}documents/von2024-04-01bis2025-03-31_antrag.pdf`,
-  pdfFileSeitePath: `${baseUrl}documents/von2024-04-01bis2025-03-31_seite.pdf`,
+  pdfFileAntragPath: antragPdf,
+  pdfFileSeitePath: seitePdf,
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "txt.vorname2b",

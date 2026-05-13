@@ -1,5 +1,7 @@
 import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
+import elterngeldantragPreview from "@/assets/images/elterngeldantrag.png";
+import planungsseitePreview from "@/assets/images/planungsseite.png";
 import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
@@ -96,7 +98,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
               <img
-                src={`${import.meta.env.BASE_URL}images/elterngeldantrag.png`}
+                src={elterngeldantragPreview}
                 alt=""
                 className="max-w-[200px]"
               />
@@ -155,7 +157,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
               <img
-                src={`${import.meta.env.BASE_URL}images/planungsseite.png`}
+                src={planungsseitePreview}
                 alt=""
                 className="max-w-[200px]"
               />

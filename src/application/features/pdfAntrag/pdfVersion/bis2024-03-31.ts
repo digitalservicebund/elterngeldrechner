@@ -5,7 +5,7 @@ const baseUrl = import.meta.env.BASE_URL;
 export const pdfVersionVorApril2024 = {
   start: new Date("2020-01-01"),
   end: new Date("2024-03-31"),
-  pdfFileAntragPath: `${baseUrl}documents/bis2024-03-31_seite.pdf`,
+  pdfFileAntragPath: `${baseUrl}documents/bis2024-03-31_antrag.pdf`,
   pdfFileSeitePath: `${baseUrl}documents/bis2024-03-31_seite.pdf`,
   fieldNames: {
     vorname: {

@@ -117,10 +117,14 @@ function istImMutterschutz(
   events: FormEvent[],
   elternteilIndex: number,
 ): boolean {
-  const istElternteilImMutterschutz =
+  const route =
     elternteilIndex === 0
-      ? istErsterElternteilImMutterschutz(events)
-      : istZweiterElternteilImMutterschutz(events);
+      ? Route.ElternteilEinsAllgemeineAngaben
+      : Route.ElternteilZweiAllgemeineAngaben;
+
+  const elternteilEvent = findeLetztesGueltigesEvent(events, route);
+  const istElternteilImMutterschutz =
+    elternteilEvent?.istImMutterschutz ?? false;
 
   const taetigkeitenAbfrage = findeLetztesGueltigesEvent(
     events,
@@ -135,36 +139,6 @@ function istImMutterschutz(
   }
 
   return istElternteilImMutterschutz;
-}
-
-function istErsterElternteilImMutterschutz(events: FormEvent[]): boolean {
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    events,
-    Route.ElternteilEinsAllgemeineAngaben,
-  );
-
-  if (!letztesGueltigesEvent) {
-    throw new Error(
-      "Elternteil Allgemeine Angaben Event is required for Elternteil 1.",
-    );
-  }
-
-  return letztesGueltigesEvent.istImMutterschutz ?? true;
-}
-
-function istZweiterElternteilImMutterschutz(events: FormEvent[]): boolean {
-  const letztesGueltigesEvent = findeLetztesGueltigesEvent(
-    events,
-    Route.ElternteilZweiAllgemeineAngaben,
-  );
-
-  if (!letztesGueltigesEvent) {
-    throw new Error(
-      "Elternteil Zweite Person Angaben Event is required for Elternteil 2.",
-    );
-  }
-
-  return letztesGueltigesEvent.istImMutterschutz ?? false;
 }
 
 function findeAusklammerungszeiten(

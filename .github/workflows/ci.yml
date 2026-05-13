@@ -188,57 +188,10 @@ jobs:
           metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
-  build-familienportal:
-    runs-on: ubuntu-24.04
-    if: startsWith(github.event.ref, 'refs/tags/')
-    needs:
-      - test-suite-vitest
-      - test-suite-playwright
-      - static-code-analysis
-      - audit-licenses
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-
-      - uses: ./.github/actions/cached-node-install
-
-      - name: Run build (legacy) for familienportal environment
-        run: npm run build:production
-        env:
-          VITE_BASE_PATH: /resource/
-          VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
-
-      - name: Collect legacy bundle
-        run: |
-          mkdir -p familienportal-build
-          for f in dist/assets/index-*.js dist/assets/index-*.css; do
-            mv "$f" "${f/dist\/assets\/index-/familienportal-build\/index-abfrageteil-legacy-}"
-          done
-
-      - name: Run build (next) for familienportal environment
-        run: npm run build:production
-        env:
-          VITE_BASE_PATH: /resource/
-          VITE_FEATURE_FLAG_FAMILIENPORTAL_ASSET_STORAGE: "true"
-          VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
-
-      - name: Collect next bundle
-        run: |
-          for f in dist/assets/index-*.js dist/assets/index-*.css; do
-            mv "$f" "${f/dist\/assets\/index-/familienportal-build\/index-abfrageteil-next-}"
-          done
-
-      - name: Upload familienportal build artifacts for release
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #v7.0.1
-        with:
-          name: familienportal-build
-          path: familienportal-build/index-*
-          retention-days: 1
-
   create-release:
     runs-on: ubuntu-24.04
     needs:
       - deploy-production
-      - build-familienportal
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2

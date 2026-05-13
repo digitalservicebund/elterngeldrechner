@@ -109,8 +109,8 @@ wget \
 mv egr.html index.html
 
 # Remove assets from live egr, will be replaced by new ones
-rm index-*.js
-rm index-*.css
+rm index.js
+rm index.css
 sed --in-place --expression "s#<script src=\"/resource/cm8_themes/familienportal/js/anton/egr-2022/new-version/index-.*\$##" index.html
 
 # Special handling of svg sprite

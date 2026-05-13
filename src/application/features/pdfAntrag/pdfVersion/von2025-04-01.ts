@@ -1,19 +1,12 @@
-import { generateLink } from "@/application/features/pdfAntrag/generate-link";
 import { Elternteil, Variante } from "@/monatsplaner";
+
+const baseUrl = import.meta.env.BASE_URL;
 
 export const pdfVersionVonApril2025 = {
   start: new Date("2025-04-01"),
   end: new Date("2100-03-31"),
-  pdfFileAntragPath: generateLink({
-    familienportalPath:
-      "blob/268180/d96895e36a42b1e6833845e094896f98/von2025-04-01-antrag-dugk8e8o-data.pdf",
-    publicPath: "documents/von2025-04-01_antrag.pdf",
-  }),
-  pdfFileSeitePath: generateLink({
-    familienportalPath:
-      "blob/268182/a4ff0ff5d87635c021db900ba935ac59/von2025-04-01-seite-cbtwmuh0-data.pdf",
-    publicPath: "documents/von2025-04-01_seite.pdf",
-  }),
+  pdfFileAntragPath: `${baseUrl}documents/von2025-04-01_antrag.pdf`,
+  pdfFileSeitePath: `${baseUrl}documents/von2025-04-01_seite.pdf`,
   fieldNames: {
     vorname: {
       [Elternteil.Eins]: "2b Vorname(n) AS",

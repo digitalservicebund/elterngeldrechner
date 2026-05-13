@@ -198,18 +198,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c #v8.0.1
-        with:
-          name: production-build
-          path: production-build
-
-      - name: Download familienportal build artifacts
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c #v8.0.1
-        with:
-          name: familienportal-build
-          path: familienportal-build
-
       - name: Generate Changelog
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5 #v4.8.0
         id: changelog
@@ -222,9 +210,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: "Release ${{ github.ref_name }}"
           body: ${{ steps.changelog.outputs.content }}
-          files: |
-            familienportal-build/index-*.js
-            familienportal-build/index-*.css
 
       - name: Send release notification to Slack
         uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0

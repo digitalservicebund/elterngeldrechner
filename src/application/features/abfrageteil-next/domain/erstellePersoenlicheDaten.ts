@@ -98,28 +98,37 @@ function findeErwerbsartVorGeburt(
     return ErwerbsArt.JA_SELBSTSTAENDIG;
   }
 
-  const erstesNichtSelbststaendigEvent = alleTaetigkeitEvents.find(
+  const alleNichtSelbststaendigEvents = alleTaetigkeitEvents.filter(
     (e): e is NichtSelbststaendigEvent =>
       e.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
   );
 
-  if (!erstesNichtSelbststaendigEvent) {
+  if (alleNichtSelbststaendigEvents.length === 0) {
     throw new Error(
       `No Taetigkeit events found for elternteil ${elternteilIndex}.`,
     );
   }
 
-  if (erstesNichtSelbststaendigEvent.payload.istTaetigkeitMinijob) {
+  const alleSozialversicherungspflichtigenJobEvents =
+    alleNichtSelbststaendigEvents.filter(
+      (e) => !e.payload.istTaetigkeitMinijob,
+    );
+
+  if (alleSozialversicherungspflichtigenJobEvents.length === 0) {
     return ErwerbsArt.JA_NICHT_SELBST_MINI;
   }
 
-  const sozialversicherungen = findeSozialversicherungen(
-    events,
-    elternteilIndex,
-    erstesNichtSelbststaendigEvent.params.taetigkeitIndex,
-  );
+  const hatRentenversicherung =
+    alleSozialversicherungspflichtigenJobEvents.some(
+      (e) =>
+        findeSozialversicherungen(
+          events,
+          elternteilIndex,
+          e.params.taetigkeitIndex,
+        ).istGesetzlichRentenversichert,
+    );
 
-  if (sozialversicherungen.istGesetzlichRentenversichert) {
+  if (hatRentenversicherung) {
     return ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI;
   }
 
@@ -486,6 +495,90 @@ if (import.meta.vitest) {
         expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MINI);
       });
 
+      it("is JA_NICHT_SELBST_MINI when all nicht-selbstständige Tätigkeiten are minijobs", () => {
+        const events: FormEvent[] = [
+          geborenesKindEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatPeriodenOhneEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
+          },
+        ];
+
+        const result = erstellePersoenlicheDaten(events, 0);
+
+        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MINI);
+      });
+
+      it("is JA_NICHT_SELBST_MIT_SOZI when minijob comes first but a sozialversicherungspflichtige Tätigkeit follows", () => {
+        const events: FormEvent[] = [
+          geborenesKindEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatPeriodenOhneEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: false },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: {
+              steuerklasse: Steuerklasse.I,
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: true,
+              istGesetzlichRentenversichert: true,
+              istGesetzlichArbeitlosenversichert: true,
+              istEinkommenGleichVerteilt: true,
+            },
+          },
+        ];
+
+        const result = erstellePersoenlicheDaten(events, 0);
+
+        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI);
+      });
+
       it("is JA_NICHT_SELBST_MIT_SOZI when sozialversicherungspflichtig", () => {
         const events: FormEvent[] = [
           geborenesKindEvent,
@@ -610,6 +703,66 @@ if (import.meta.vitest) {
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { istTaetigkeitMinijob: false },
             dependentValues: { kannDurchschnittAngegebenWerden: true },
+          },
+        ];
+
+        const result = erstellePersoenlicheDaten(events, 0);
+
+        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI);
+      });
+
+      it("is JA_NICHT_SELBST_MIT_SOZI when first nicht-selbstständige Tätigkeit has no Rentenversicherung but second does", () => {
+        const events: FormEvent[] = [
+          geborenesKindEvent,
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatPeriodenOhneEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: {
+              steuerklasse: Steuerklasse.I,
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: false,
+              istGesetzlichRentenversichert: false,
+              istGesetzlichArbeitlosenversichert: false,
+              istEinkommenGleichVerteilt: true,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: {
+              steuerklasse: Steuerklasse.I,
+              istKirchensteuerpflichtig: false,
+              istGesetzlichKrankenpflichtversichert: true,
+              istGesetzlichRentenversichert: true,
+              istGesetzlichArbeitlosenversichert: true,
+              istEinkommenGleichVerteilt: true,
+            },
           },
         ];
 

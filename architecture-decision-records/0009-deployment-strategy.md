@@ -109,8 +109,4 @@ release. The downside of this is that over time the content in the object storag
 
 The assets are hosted within a managed secure storage service. While we estimate the downtime risk as relatively low, the cloud
 provider has experienced incidents in the past. In order to ensure visibility and measure our availability, we have implemented
-proactive monitoring for both staging and production environments. We monitor both endpoints using Sentry uptime monitoring.
-
-Checks are configured to run every 60 seconds with a timeout threshold of 5 seconds and a failure tolerance of 3 consecutive
-failed checks before triggering an alert. When a downtime is detected, the team receives notifications via email. These
-parameters are tunable and may be adjusted based on operational experience and evolving requirements.
+proactive monitoring for both staging and production environments.

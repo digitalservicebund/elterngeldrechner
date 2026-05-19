@@ -31,9 +31,11 @@ import { ElternteilWeitereTaetigkeitAngabenPage } from "@/application/features/a
 import { ErrorBoundary } from "@/application/features/abfrageteil-next/routing/ErrorBoundary";
 import {
   BeispielePage,
+  DebugFehlerPage,
   DatenuebernahmeAntragPage,
   PlanerPage,
 } from "@/application/pages";
+import { isPosthogEnabled } from "@/application/feature-flags";
 import { useEffect } from "react";
 import posthog from "posthog-js";
 
@@ -196,6 +198,9 @@ const RouteDefinition = [
           },
         ],
       },
+      ...(isPosthogEnabled()
+        ? [{ element: <DebugFehlerPage />, path: "/debug-fehler" }]
+        : []),
       {
         element: (
           <Navigate to={generateAbfrageteilPath(Route.Startseite)} replace />

@@ -10,3 +10,5 @@ export {
   DatenuebernahmeAntragPage,
   PlanerPage,
 } from "./planungsteil";
+
+export { DebugFehlerPage } from "./DebugFehlerPage";

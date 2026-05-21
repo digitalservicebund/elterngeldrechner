@@ -121,8 +121,8 @@ describe("Lebensmonatsliste", () => {
       ...ANY_PLAN,
       lebensmonate: { 1: ANY_LEBENSMONAT, 3: ANY_LEBENSMONAT },
     };
-    // oxlint-disable-next-line vitest/require-mock-type-parameters
     const erstelleUngeplantenLebensmonat = vi
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       .fn()
       .mockReturnValue(ANY_LEBENSMONAT);
 

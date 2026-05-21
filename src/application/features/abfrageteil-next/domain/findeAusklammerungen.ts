@@ -11,6 +11,7 @@ import { berechneMutterschutz } from "@/mutterschutzrechner";
 export function findeAusklammerungen(
   events: FormEvent[],
   elternteilIndex: number,
+  ignoriereVerbeamtungsCheck?: boolean,
 ): Ausklammerung[] {
   const ausklammerungszeitenEvent = findeAusklammerungszeiten(
     events,
@@ -21,7 +22,7 @@ export function findeAusklammerungen(
     ? flacheAusklammerungen(ausklammerungszeitenEvent)
     : [];
 
-  if (istImMutterschutz(events, elternteilIndex)) {
+  if (istImMutterschutz(events, elternteilIndex, ignoriereVerbeamtungsCheck)) {
     const errechneteAusklammerungen = [
       errechneMutterschutzAusklammerung(events),
     ];
@@ -116,6 +117,7 @@ function ueberpruefeVerlaengerungsgrundMutterschutz(
 function istImMutterschutz(
   events: FormEvent[],
   elternteilIndex: number,
+  ignoriereVerbeamtungsCheck?: boolean,
 ): boolean {
   const route =
     elternteilIndex === 0
@@ -125,6 +127,10 @@ function istImMutterschutz(
   const elternteilEvent = findeLetztesGueltigesEvent(events, route);
   const istElternteilImMutterschutz =
     elternteilEvent?.istImMutterschutz ?? false;
+
+  if (ignoriereVerbeamtungsCheck) {
+    return istElternteilImMutterschutz;
+  }
 
   const taetigkeitenAbfrage = findeLetztesGueltigesEvent(
     events,

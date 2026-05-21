@@ -13,7 +13,7 @@ export function findeInformationenZumMutterschutz(
 ): InformationenZumMutterschutz<Elternteil.Eins | Elternteil.Zwei> | undefined {
   const geburtsdatum = findeGeburtsdatum(events);
 
-  const mutterschutzElternteil1 = findeAusklammerungen(events, 0).find(
+  const mutterschutzElternteil1 = findeAusklammerungen(events, 0, true).find(
     (ausklammerung) => ausklammerung.grund === "mutterschutz",
   );
 
@@ -38,7 +38,7 @@ export function findeInformationenZumMutterschutz(
 
   if (elternteil1?.istAlleinerziehend) return undefined;
 
-  const mutterschutzElternteil2 = findeAusklammerungen(events, 1).find(
+  const mutterschutzElternteil2 = findeAusklammerungen(events, 1, true).find(
     (ausklammerung) => ausklammerung.grund === "mutterschutz",
   );
 

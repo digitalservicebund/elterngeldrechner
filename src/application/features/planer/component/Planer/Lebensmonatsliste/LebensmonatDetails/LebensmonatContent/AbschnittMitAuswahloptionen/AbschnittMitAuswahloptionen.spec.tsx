@@ -12,9 +12,7 @@ import {
 describe("Abschnitt mit Auswahloptionen", () => {
   beforeEach(async () => {
     vi.spyOn(
-      await import(
-        "@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"
-      ),
+      await import("@/application/features/planer/component/Planer/Lebensmonatsliste/LebensmonatDetails/informationenZumLebensmonat"),
       "useInformationenZumLebensmonat",
     ).mockReturnValue(ANY_INFORMATION_ZUM_LEBENSMONAT);
   });
@@ -75,8 +73,8 @@ describe("Abschnitt mit Auswahloptionen", () => {
   });
 
   it("uses the provided callback to determine the Auswahlmöglichkeiten per Elternteil", () => {
-    // oxlint-disable-next-line vitest/require-mock-type-parameters
     const bestimmeAuswahlmoeglichkeiten = vi
+      // oxlint-disable-next-line vitest/require-mock-type-parameters
       .fn()
       .mockReturnValue(ANY_AUSWAHLMOEGLICHKEITEN);
 

@@ -27,12 +27,14 @@ afterEach(cleanup);
 class ToggleEvent extends Event {
   public readonly newState: string;
   public readonly oldState: string;
+  public readonly source: HTMLElement | null;
 
   constructor(type: string, eventInitDict: ToggleEventInit = {}) {
     const { newState, oldState, ...plainEventInitDict } = eventInitDict;
     super(type, plainEventInitDict);
     this.newState = newState ?? "";
     this.oldState = oldState ?? "";
+    this.source = null;
   }
 }
 

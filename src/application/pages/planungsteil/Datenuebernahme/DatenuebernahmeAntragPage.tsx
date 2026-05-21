@@ -17,6 +17,7 @@ import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigat
 import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
+import posthog from "posthog-js";
 
 function trackedDownloadOfAnlagen(
   event: React.MouseEvent<HTMLAnchorElement>,
@@ -24,11 +25,13 @@ function trackedDownloadOfAnlagen(
 ) {
   event.preventDefault();
   pushTrackingEvent("Anlagen-zu-Antrag-wurden-heruntergeladen");
+  posthog.capture("datenuebernahme_anlagen_zu_antrag_heruntergeladen");
   window.open(bundeslandAntragSupport.link, "_blank", "noreferrer");
 }
 
 function trackReferenzAufOnlinetool() {
   pushTrackingEvent("Referenz-auf-Onlinetool-wurde-geklickt");
+  posthog.capture("datenuebernahme_referenz_auf_onlinetool_geklickt");
 }
 
 export function DatenuebernahmeAntragPage(): ReactNode {
@@ -65,6 +68,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       download(pdfBytes, "Antrag_auf_Elterngeld.pdf", "application/pdf");
 
       pushTrackingEvent("Ganzer-Antrag-wurde-heruntergeladen");
+
+      posthog.capture("datenuebernahme_ganzer_antrag_heruntergeladen");
     } catch {
       setAntragDownloading(false);
     }
@@ -84,6 +89,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       download(pdfBytes, "Seite_Planung_Elterngeld.pdf", "application/pdf");
 
       pushTrackingEvent("Planungsseite-wurde-heruntergeladen");
+
+      posthog.capture("datenuebernahme_planung_seite_heruntergeladen");
     } catch {
       setSeiteDownloading(false);
     }

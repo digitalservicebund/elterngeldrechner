@@ -225,6 +225,14 @@ jobs:
           metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
+      - name: Create PostHog Release Annotation
+        uses: PostHog/posthog-annotate-merges-github-action@2a89e5da1131752bc7aac6861a61ba86ccf37c7f #0.2.0
+        with:
+          annotation-message: "Release ${{ github.ref_name }}"
+          posthog-token: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
+          posthog-project-id: ${{ secrets.POSTHOG_PROJECT_ID }}
+          posthog-api-host: ${{ secrets.POSTHOG_HOST }}
+
       - name: Create Metabase Release Event
         env:
           METABASE_API_KEY: ${{ secrets.EGR_METABASE_API_KEY }}

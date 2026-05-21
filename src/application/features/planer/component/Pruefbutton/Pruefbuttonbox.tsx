@@ -21,6 +21,7 @@ import {
   type Result,
 } from "@/monatsplaner";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
+import posthog from "posthog-js";
 
 type Props = {
   readonly className?: string;
@@ -32,10 +33,12 @@ type Props = {
 };
 
 function trackReferenzAufOnlinetool() {
+  posthog.capture("monatsplaner_referenz_auf_onlinetool_geklickt");
   pushTrackingEvent("Referenz-auf-Onlinetool-wurde-geklickt");
 }
 
 function trackReferenzAufLandesseite() {
+  posthog.capture("monatsplaner_referenz_auf_landesseite_geklickt");
   pushTrackingEvent("Referenz-auf-Landesseite-wurde-geklickt");
 }
 
@@ -51,6 +54,7 @@ export function Pruefbuttonbox({
   const planungDrucken = () => {
     window.print();
     onPlanungDrucken?.();
+    posthog.capture("monatsplaner_planung_gedruckt");
   };
 
   const [validierungsergebnis, setValidierungsergebnis] = useState<Result<

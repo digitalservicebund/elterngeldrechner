@@ -13,7 +13,7 @@ async function createElterngeldrechnerReferrerRecord(object: unknown) {
 async function createTableRecord(tableId: string, object: unknown) {
   const { config } = await import("../env");
 
-  const url = `https://${config.noco.domain}:${config.noco.port}/api/v2/tables/${tableId}/records`;
+  const url = `https://${config.noco.domain}/api/v2/tables/${tableId}/records`;
 
   const response = await fetch(url, {
     body: JSON.stringify(object),

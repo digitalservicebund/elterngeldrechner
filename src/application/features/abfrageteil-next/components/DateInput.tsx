@@ -8,7 +8,7 @@ import {
   useId,
 } from "react";
 import { IMask, useIMask } from "react-imask";
-import { Description } from "@/application/features/abfrageteil/components/common";
+import { Description } from "@/application/components/Description";
 
 type Props = Omit<
   InputHTMLAttributes<HTMLInputElement>,

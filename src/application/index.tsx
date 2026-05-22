@@ -1,12 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
 import { App } from "./App";
-import store from "./redux";
 import posthog from "posthog-js";
-
 import { setupUserTracking } from "./user-tracking";
-
 import { PostHogErrorBoundary, PostHogProvider } from "@posthog/react";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -22,9 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <StrictMode>
       <PostHogProvider client={posthog}>
         <PostHogErrorBoundary>
-          <Provider store={store}>
-            <App />
-          </Provider>
+          <App />
         </PostHogErrorBoundary>
       </PostHogProvider>
     </StrictMode>,

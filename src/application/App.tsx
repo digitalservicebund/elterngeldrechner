@@ -1,8 +1,6 @@
 import "@/application/styles/index.css";
 import { RouterProvider, createHashRouter } from "react-router";
-import { isAbfrageteilNextEnabled } from "./feature-flags";
 import routeDefinition from "@/application/features/abfrageteil-next/routing/RouteDefinition";
-import legacyRouteDefinition from "@/application/routing/RouteDefinition";
 
 // The hash router does not support the `hashType` property
 // at this point in time. This means that the routes look
@@ -18,9 +16,7 @@ import legacyRouteDefinition from "@/application/routing/RouteDefinition";
 // https://github.com/remix-run/react-router/pull/11310
 // https://reactrouter.com/api/declarative-routers/HashRouter
 
-const router = createHashRouter(
-  isAbfrageteilNextEnabled() ? routeDefinition : legacyRouteDefinition,
-);
+const router = createHashRouter(routeDefinition);
 
 export function App() {
   return <RouterProvider router={router} />;

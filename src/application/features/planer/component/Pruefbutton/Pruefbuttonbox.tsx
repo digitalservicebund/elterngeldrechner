@@ -205,20 +205,28 @@ export function Pruefbuttonbox({
 }
 
 if (import.meta.vitest) {
-  const { vi, describe, it, expect } = import.meta.vitest;
+  const { vi, beforeEach, describe, it, expect } = import.meta.vitest;
 
   describe("Pruefbuttonbox", async () => {
-    const { INITIAL_STATE, render, screen } =
-      await import("@/application/test-utils");
-    const { produce } = await import("immer");
+    const { render, screen } = await import("@/application/test-utils");
     const { Elternteil, Result } = await import("@/monatsplaner");
     const { userEvent } = await import("@testing-library/user-event");
+    const useAntragInformationenModule =
+      await import("@/application/pages/planungsteil/useAntragInformationen");
+    const pdfAntragModule = await import("@/application/features/pdfAntrag");
+
+    beforeEach(() => {
+      vi.spyOn(
+        useAntragInformationenModule,
+        "useAntragInformationen",
+      ).mockReturnValue(
+        pdfAntragModule.getBundeslandAntragSupportByName("Berlin"),
+      );
+    });
 
     describe("plan is not checked yet", () => {
       it("shows a button to check whether or not the selected plan is valid", () => {
-        render(<Pruefbuttonbox {...ANY_PROPS} />, {
-          preloadedState: supportedBundeslandTestState,
-        });
+        render(<Pruefbuttonbox {...ANY_PROPS} />);
 
         expect(
           screen.getByRole("button", { name: "Planung überprüfen" }),
@@ -240,9 +248,7 @@ if (import.meta.vitest) {
           ueberpruefePlanung: vi.fn().mockReturnValue(failureResult),
         };
 
-        render(<Pruefbuttonbox {...props} />, {
-          preloadedState: supportedBundeslandTestState,
-        });
+        render(<Pruefbuttonbox {...props} />);
 
         const checkButton = screen.getByRole("button", {
           name: "Planung überprüfen",
@@ -267,9 +273,7 @@ if (import.meta.vitest) {
           ueberpruefePlanung: vi.fn().mockReturnValue(successResult),
         };
 
-        render(<Pruefbuttonbox {...props} />, {
-          preloadedState: supportedBundeslandTestState,
-        });
+        render(<Pruefbuttonbox {...props} />);
 
         const checkButton = screen.getByRole("button", {
           name: "Planung überprüfen",
@@ -295,6 +299,13 @@ if (import.meta.vitest) {
       });
 
       it("shows a button to print and a link to the application page if bundesland is not supported", async () => {
+        vi.spyOn(
+          useAntragInformationenModule,
+          "useAntragInformationen",
+        ).mockReturnValue(
+          pdfAntragModule.getBundeslandAntragSupportByName("Baden-Württemberg"),
+        );
+
         const user = userEvent.setup();
 
         const successResult = Result.ok(undefined);
@@ -304,9 +315,7 @@ if (import.meta.vitest) {
           ueberpruefePlanung: vi.fn().mockReturnValue(successResult),
         };
 
-        render(<Pruefbuttonbox {...props} />, {
-          preloadedState: notSupportedBundeslandTestState,
-        });
+        render(<Pruefbuttonbox {...props} />);
 
         const checkButton = screen.getByRole("button", {
           name: "Planung überprüfen",
@@ -360,13 +369,5 @@ if (import.meta.vitest) {
       ueberpruefePlanung: vi.fn(),
       planInAntragUebernehmen: vi.fn(),
     };
-
-    const supportedBundeslandTestState = produce(INITIAL_STATE, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = "Berlin";
-    });
-
-    const notSupportedBundeslandTestState = produce(INITIAL_STATE, (draft) => {
-      draft.stepAllgemeineAngaben.bundesland = "Baden-Württemberg";
-    });
   });
 }

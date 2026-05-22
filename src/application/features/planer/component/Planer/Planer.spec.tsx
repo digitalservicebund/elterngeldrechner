@@ -1,15 +1,13 @@
-import { produce } from "immer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Planer } from "./Planer";
 import { usePlanerService } from "@/application/features/planer/hooks";
-import { INITIAL_STATE, render, screen } from "@/application/test-utils";
+import { render, screen } from "@/application/test-utils";
 import {
   Elternteil,
   KeinElterngeld,
   Lebensmonatszahl,
   Result,
   Variante,
-  berechneGesamtsumme,
 } from "@/monatsplaner";
 
 describe("Planer", () => {
@@ -19,21 +17,17 @@ describe("Planer", () => {
       "usePlanerService",
     ).mockReturnValue(ANY_SERVICE_VALUES);
 
-    // oxlint-disable-next-line vitest/hoisted-apis-on-top
-    vi.mock(import("@/monatsplaner"), async (importOriginal) => {
-      const originalMonatsplaner = await importOriginal();
+    const { getBundeslandAntragSupportByName } =
+      await import("@/application/features/pdfAntrag");
+    vi.spyOn(
+      await import("@/application/pages/planungsteil/useAntragInformationen"),
+      "useAntragInformationen",
+    ).mockReturnValue(getBundeslandAntragSupportByName("Berlin"));
 
-      return {
-        ...originalMonatsplaner,
-        // oxlint-disable-next-line vitest/require-mock-type-parameters
-        berechneGesamtsumme: vi.fn(),
-      };
-    });
-
-    // oxlint-disable-next-line vitest/hoisted-apis-on-top
-    await vi.hoisted(async () => {});
-
-    vi.mocked(berechneGesamtsumme).mockReturnValue({
+    vi.spyOn(
+      await import("@/monatsplaner"),
+      "berechneGesamtsumme",
+    ).mockReturnValue({
       elterngeldbezug: 7041,
       proElternteil: {
         [Elternteil.Eins]: {
@@ -51,9 +45,7 @@ describe("Planer", () => {
   });
 
   it("shows all relevant sections of the Planer", () => {
-    render(<Planer {...ANY_PROPS} />, {
-      preloadedState: initialTestState,
-    });
+    render(<Planer {...ANY_PROPS} />);
 
     expect(screen.getByLabelText("Lebensmonate")).toBeVisible();
     expect(screen.getByLabelText("Kontingentübersicht")).toBeVisible();
@@ -74,7 +66,6 @@ describe("Planer", () => {
         planInAntragUebernehmen={planInAntragUebernehmen}
         callbacks={{ onChange }}
       />,
-      { preloadedState: initialTestState },
     );
 
     expect(usePlanerService).toHaveBeenCalledOnce();
@@ -176,7 +167,3 @@ const ANY_SERVICE_VALUES = {
     return 1 as Lebensmonatszahl;
   },
 };
-
-const initialTestState = produce(INITIAL_STATE, (draft) => {
-  draft.stepAllgemeineAngaben.bundesland = "Berlin";
-});

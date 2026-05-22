@@ -1,18 +1,11 @@
-import { useCallback } from "react";
-import {
-  feedbackSlice,
-  selectIsFeedbackSubmitted,
-} from "@/application/features/user-feedback/state";
-import { useAppDispatch, useAppSelector } from "@/application/redux/hooks";
+import { useState } from "react";
 
 export function useUserFeedback() {
-  const isFeebackSubmitted = useAppSelector(selectIsFeedbackSubmitted);
+  const [isFeedbackSubmitted, setIsFeedbackSubmitted] = useState(false);
 
-  const dispatch = useAppDispatch();
-  const submitFeedback = useCallback(
-    () => dispatch(feedbackSlice.actions.submit()),
-    [dispatch],
-  );
+  function submitFeedback() {
+    setIsFeedbackSubmitted(true);
+  }
 
-  return { isFeebackSubmitted, submitFeedback };
+  return { isFeedbackSubmitted, submitFeedback };
 }

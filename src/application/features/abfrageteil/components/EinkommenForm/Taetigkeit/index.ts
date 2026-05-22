@@ -1,1 +1,0 @@
-export { Taetigkeit } from "./Taetigkeit";

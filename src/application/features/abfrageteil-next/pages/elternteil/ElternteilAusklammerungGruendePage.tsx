@@ -8,7 +8,7 @@ import {
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
-import { CustomCheckbox } from "@/application/features/abfrageteil/components/common";
+import { CustomCheckbox } from "@/application/components/CustomCheckbox";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil-next/domain/findeAnzahlKinder";
 import { findeAusklammerungen } from "@/application/features/abfrageteil-next/domain/findeAusklammerungen";

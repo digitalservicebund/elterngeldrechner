@@ -1,8 +1,3 @@
-// Reusable render function that sets up a Provider-Wrapper
-// See https://redux.js.org/usage/writing-tests#components
-// and https://stackoverflow.com/questions/61451631/react-testing-library-setup-for-redux-router-and-dynamic-modules-using-typescri
-
-import { Store, configureStore } from "@reduxjs/toolkit";
 import {
   RenderHookResult,
   RenderOptions,
@@ -10,119 +5,197 @@ import {
   renderHook,
 } from "@testing-library/react";
 import { ReactElement, ReactNode } from "react";
-import { Provider } from "react-redux";
+import { MemoryRouter } from "react-router";
+import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
 import {
-  type RouteObject,
-  RouterProvider,
-  createMemoryRouter,
-} from "react-router";
-import {
-  stepAllgemeineAngabenSlice,
-  stepEinkommenSlice,
-  stepErwerbstaetigkeitSlice,
-  stepNachwuchsSlice,
-} from "@/application/features/abfrageteil/state";
-import { feedbackSlice } from "@/application/features/user-feedback";
-import { AppStore, RootState, reducers } from "@/application/redux";
+  Route,
+  type FormEvent,
+} from "@/application/features/abfrageteil-next/routing";
+import { Steuerklasse } from "@/elterngeldrechner";
+import { Temporal } from "@js-temporal/polyfill";
 
-interface RenderOptionsWithRedux extends RenderOptions {
-  preloadedState?: Partial<RootState>;
-}
+type TestOptions = RenderOptions & { initialEvents?: FormEvent[] };
 
-type Props = {
-  readonly store: Store;
+function TestWrapper({
+  children,
+  initialEvents,
+}: {
   readonly children: ReactNode;
-};
-
-function TestWrapper({ store, children }: Props) {
-  const routes: RouteObject[] = [
-    { path: "/", element: <div>{children}</div> },
-    { path: "*", element: "404" },
-  ];
-  const router = createMemoryRouter(routes, { initialEntries: ["/"] });
-
+  readonly initialEvents?: FormEvent[];
+}) {
   return (
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <EventProvider initialEvents={initialEvents}>
+      <MemoryRouter initialEntries={["/"]}>{children}</MemoryRouter>
+    </EventProvider>
   );
 }
 
-const renderWithRedux = (
+const renderWithProviders = (
   ui: ReactElement,
-  { preloadedState, ...renderOptions }: RenderOptionsWithRedux = {},
+  { initialEvents, ...renderOptions }: TestOptions = {},
 ) => {
-  const store = configureStore({ reducer: reducers, preloadedState });
   function Wrapper({ children }: { readonly children?: ReactNode }) {
-    return <TestWrapper store={store}>{children}</TestWrapper>;
+    return <TestWrapper initialEvents={initialEvents}>{children}</TestWrapper>;
   }
 
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+  return render(ui, { wrapper: Wrapper, ...renderOptions });
 };
 
-function renderHookWithRedux<Result, Props>(
-  render: (props: Props) => Result,
-  { preloadedState, ...renderOptions }: RenderOptionsWithRedux = {},
-): RenderHookResult<Result, Props> & { store: AppStore } {
-  const store = configureStore({ reducer: reducers, preloadedState });
-
+function renderHookWithProviders<Result, Props>(
+  renderFn: (props: Props) => Result,
+  { initialEvents, ...renderOptions }: TestOptions = {},
+): RenderHookResult<Result, Props> {
   function Wrapper({ children }: { readonly children?: ReactNode }) {
-    return <TestWrapper store={store}>{children}</TestWrapper>;
+    return <TestWrapper initialEvents={initialEvents}>{children}</TestWrapper>;
   }
 
-  return {
-    ...renderHook(render, { wrapper: Wrapper, ...renderOptions }),
-    store,
-  };
+  return renderHook(renderFn, { wrapper: Wrapper, ...renderOptions });
 }
 
-type FormComponentType<P> = React.ComponentType<P & { id: string }>;
-
-/**
- * Renders an arbitrary form component, automatically adds an id,
- * and returns the HTMLFormElement.
- *
- * Throws an error if the element with the id is not found
- * or is not a <form> element.
- *
- * @param Component The form component (e.g., AllgemeineAngabenForm)
- * @param props The props for the component (e.g., { defaultValues: ... })
- * @returns The form element itself to be passed on to fireEvent.submit(...)
- */
-function renderForm<P>(Component: FormComponentType<P>, props: P) {
-  const formId = "form-under-test";
-
-  const { container } = render(<Component {...props} id={formId} />);
-
-  const formElement = container.querySelector(`#${formId}`);
-
-  if (!formElement) {
-    throw new Error(`Unable to locate form "${formId}" in the dom.`);
-  }
-
-  if (!(formElement instanceof HTMLFormElement)) {
-    throw new TypeError(
-      `Element with id "${formId}" is not of type HTMLFormElement, but <${formElement.tagName}>.`,
-    );
-  }
-
-  return formElement;
-}
+const INITIAL_EVENTS: FormEvent[] = [
+  { route: Route.Startseite },
+  {
+    route: Route.AllgemeineAngaben,
+    payload: {
+      bundesland: "Berlin",
+      gesamteinkommenGrenzeUeberschritten: false,
+    },
+  },
+  { route: Route.KindAbfrage, payload: { istGeboren: true } },
+  {
+    route: Route.GeborenesKindAngaben,
+    payload: {
+      geburtsdatum: Temporal.PlainDate.from("2025-01-01"),
+      errechneterEntbindungstermin: Temporal.PlainDate.from("2025-01-01"),
+      anzahl: 1,
+    },
+  },
+  { route: Route.GeschwisterkindAbfrage, payload: { istVorhanden: false } },
+  {
+    route: Route.ElternteilEinsAllgemeineAngaben,
+    payload: {
+      name: "Jane",
+      istAlleinerziehend: false,
+      istImMutterschutz: false,
+    },
+  },
+  {
+    route: Route.ElternteilAusklammerungGruendeAngaben,
+    params: { elternteilIndex: 0 },
+    payload: {
+      hatKeineAusklammerungsgruende: true,
+      hatMutterschutzAelteresKind: false,
+      hatElterngeldAelteresKind: false,
+      hatSchwangerschaftsbedingteErkrankung: false,
+    },
+  },
+  {
+    route: Route.ElternteilTaetigkeitenAbfrage,
+    params: { elternteilIndex: 0 },
+    payload: {
+      istNichtSelbststaendig: true,
+      istSelbststaendig: false,
+      istVerbeamtet: false,
+      hatAndereLeistungen: false,
+      hatPeriodenOhneEinkommen: false,
+    },
+    dependentValues: { istPersonAlleinerziehend: false },
+  },
+  {
+    route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+    params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+    payload: { istTaetigkeitMinijob: false },
+    dependentValues: { kannDurchschnittAngegebenWerden: true },
+  },
+  {
+    route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+    params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+    payload: {
+      steuerklasse: Steuerklasse.I,
+      istKirchensteuerpflichtig: false,
+      istGesetzlichKrankenpflichtversichert: true,
+      istGesetzlichRentenversichert: true,
+      istGesetzlichArbeitlosenversichert: true,
+      istEinkommenGleichVerteilt: true,
+    },
+  },
+  {
+    route: Route.ElternteilTaetigkeitAngabenEinkommen,
+    params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+    payload: { durchschnittlichesMonatsbrutto: 3000 },
+    dependentValues: { istMischeinkunft: false },
+  },
+  {
+    route: Route.ElternteilWeitereTaetigkeitAbfrage,
+    params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+    payload: { istWeitereTaetigkeitVorhanden: false },
+    dependentValues: {
+      istSelbststaendigeTaetigkeitMoeglich: false,
+      istPersonAlleinerziehend: false,
+    },
+  },
+  {
+    route: Route.ElternteilZweiAllgemeineAngaben,
+    payload: {
+      wirdZweitePersonBeruecksichtigt: true,
+      name: "John",
+      istImMutterschutz: false,
+    },
+    dependentValues: { hatPotenzielleAusklammerungen: false },
+  },
+  {
+    route: Route.ElternteilTaetigkeitenAbfrage,
+    params: { elternteilIndex: 1 },
+    payload: {
+      istNichtSelbststaendig: true,
+      istSelbststaendig: false,
+      istVerbeamtet: false,
+      hatAndereLeistungen: false,
+      hatPeriodenOhneEinkommen: false,
+    },
+    dependentValues: { istPersonAlleinerziehend: false },
+  },
+  {
+    route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+    params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+    payload: { istTaetigkeitMinijob: false },
+    dependentValues: { kannDurchschnittAngegebenWerden: true },
+  },
+  {
+    route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+    params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+    payload: {
+      steuerklasse: Steuerklasse.I,
+      istKirchensteuerpflichtig: false,
+      istGesetzlichKrankenpflichtversichert: true,
+      istGesetzlichRentenversichert: true,
+      istGesetzlichArbeitlosenversichert: true,
+      istEinkommenGleichVerteilt: true,
+    },
+  },
+  {
+    route: Route.ElternteilTaetigkeitAngabenEinkommen,
+    params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+    payload: { durchschnittlichesMonatsbrutto: 3000 },
+    dependentValues: { istMischeinkunft: false },
+  },
+  {
+    route: Route.ElternteilWeitereTaetigkeitAbfrage,
+    params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+    payload: { istWeitereTaetigkeitVorhanden: false },
+    dependentValues: {
+      istSelbststaendigeTaetigkeitMoeglich: false,
+      istPersonAlleinerziehend: false,
+    },
+  },
+];
 
 // re-export everything
 export * from "@testing-library/react";
 
-// override render method
+// override render and renderHook
 export {
-  renderForm,
-  renderHookWithRedux as renderHook,
-  renderWithRedux as render,
-};
-
-export const INITIAL_STATE: RootState = {
-  stepAllgemeineAngaben: stepAllgemeineAngabenSlice.getInitialState(),
-  stepNachwuchs: stepNachwuchsSlice.getInitialState(),
-  stepErwerbstaetigkeit: stepErwerbstaetigkeitSlice.getInitialState(),
-  stepEinkommen: stepEinkommenSlice.getInitialState(),
-  feedback: feedbackSlice.getInitialState(),
+  renderHookWithProviders as renderHook,
+  renderWithProviders as render,
+  INITIAL_EVENTS,
 };

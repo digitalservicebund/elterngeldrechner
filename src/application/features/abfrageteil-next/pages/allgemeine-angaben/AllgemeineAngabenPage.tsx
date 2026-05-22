@@ -11,7 +11,7 @@ import { Button, InfoText } from "@/application/components";
 import {
   CustomSelect,
   SelectOption,
-} from "@/application/features/abfrageteil/components/common";
+} from "@/application/components/CustomSelect";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";

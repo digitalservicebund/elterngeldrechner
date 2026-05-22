@@ -4,7 +4,7 @@ import {
   type InitialInformation,
   usePlanerService,
 } from "./usePlanerService";
-import { INITIAL_STATE, act, renderHook } from "@/application/test-utils";
+import { act, renderHook } from "@/application/test-utils";
 import {
   type Auswahloption,
   type BerechneElterngeldbezuegeCallback,
@@ -549,16 +549,12 @@ function renderPlanerServiceHook(options?: {
   const berechneElterngeldbezuege =
     options?.berechneElterngeldbezuege ?? (() => ({}));
 
-  return renderHook(
-    () =>
-      usePlanerService(
-        initialInformation,
-        berechneElterngeldbezuege,
-        options?.callbacks,
-      ),
-    {
-      preloadedState: INITIAL_STATE,
-    },
+  return renderHook(() =>
+    usePlanerService(
+      initialInformation,
+      berechneElterngeldbezuege,
+      options?.callbacks,
+    ),
   );
 }
 

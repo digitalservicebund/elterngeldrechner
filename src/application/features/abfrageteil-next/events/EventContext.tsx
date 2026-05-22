@@ -50,13 +50,16 @@ const isDevelopmentEnviornment = import.meta.env.DEV;
 
 export function EventProvider({
   children,
+  initialEvents,
 }: {
   readonly children: React.ReactNode;
+  readonly initialEvents?: FormEvent[];
 }) {
   const [eventStream, dispatchAction] = useReducer(
     (state: FormEvent[], action: FormEvent) => [...state, action],
     undefined,
-    () => (isDevelopmentEnviornment ? restoreEventstream() : []),
+    () =>
+      initialEvents ?? (isDevelopmentEnviornment ? restoreEventstream() : []),
   );
 
   useEffect(() => {

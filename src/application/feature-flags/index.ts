@@ -4,12 +4,8 @@
 // service. Centralizing all feature flags in one place improves cohesion and makes
 // future refactoring easier.
 
-function isAbfrageteilNextEnabled() {
-  return import.meta.env.VITE_FEATURE_FLAG_ABFRAGETEIL_V2 === "true";
-}
-
 function isPosthogEnabled() {
   return import.meta.env.VITE_FEATURE_FLAG_POSTHOG === "true";
 }
 
-export { isAbfrageteilNextEnabled, isPosthogEnabled };
+export { isPosthogEnabled };

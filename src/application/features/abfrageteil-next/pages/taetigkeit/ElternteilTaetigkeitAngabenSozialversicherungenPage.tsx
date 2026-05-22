@@ -10,7 +10,7 @@ import { Button, InfoText } from "@/application/components";
 import {
   CustomSelect,
   SelectOption,
-} from "@/application/features/abfrageteil/components/common";
+} from "@/application/components/CustomSelect";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil-next/components/BemessungszeitraumBox";
 import { CustomRadioGroup } from "@/application/features/abfrageteil-next/components/CustomRadioGroup";
 import { Page } from "@/application/features/abfrageteil-next/components/Page";

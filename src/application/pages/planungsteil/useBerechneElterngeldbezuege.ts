@@ -1,16 +1,8 @@
 import { useCallback, useRef } from "react";
-import { isAbfrageteilNextEnabled } from "@/application/feature-flags";
-import {
-  type ElternteilType,
-  finanzDatenOfUi,
-  persoenlicheDatenOfUi,
-} from "@/application/features/abfrageteil/state";
 import { erstelleFinanzdatenAllerElternteile } from "@/application/features/abfrageteil-next/domain/erstelleFinanzdaten";
 import { erstellePersoenlicheDatenAllerElternteile } from "@/application/features/abfrageteil-next/domain/erstellePersoenlicheDaten";
-import { useOptionalEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
+import { useEventContext } from "@/application/features/abfrageteil-next/events/EventContext";
 import { FormEvent } from "@/application/features/abfrageteil-next/routing";
-import type { RootState } from "@/application/redux";
-import { useAppStore } from "@/application/redux/hooks";
 import {
   Einkommen,
   ElternGeldArt,
@@ -41,15 +33,10 @@ import {
 } from "@/monatsplaner/Elterngeldbezug";
 
 export function useBerechneElterngeldbezuege() {
-  const store = useAppStore();
-  const eventContext = useOptionalEventContext();
+  const eventContext = useEventContext();
 
   const parameter = useRef(
-    isAbfrageteilNextEnabled() && eventContext
-      ? createStaticCalculationParameterNext(
-          eventContext.filtereValideEventHistorie(),
-        )
-      : createStaticCalculationParameter(store.getState()),
+    createStaticCalculationParameter(eventContext.filtereValideEventHistorie()),
   );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,21 +44,6 @@ export function useBerechneElterngeldbezuege() {
     berechneElterngeldbezuege.bind(null, parameter.current),
     [],
   );
-}
-
-function createStaticCalculationParameter(
-  state: RootState,
-): StaticCalculationParameter {
-  return {
-    [Elternteil.Eins]: createStaticCalculationParameterForElternteil(
-      state,
-      "ET1",
-    ),
-    [Elternteil.Zwei]: createStaticCalculationParameterForElternteil(
-      state,
-      "ET2",
-    ),
-  };
 }
 
 function berechneElterngeldbezuege(
@@ -199,19 +171,7 @@ function elterngeldartFrom(option?: Auswahloption): ElternGeldArt {
   }
 }
 
-function createStaticCalculationParameterForElternteil(
-  state: RootState,
-  elternteil: ElternteilType,
-): StaticCalculationParameterForElternteil {
-  const persoenlicheDaten = persoenlicheDatenOfUi(state, elternteil);
-  const finanzdaten = finanzDatenOfUi(state, elternteil, []);
-  return {
-    persoenlicheDaten,
-    finanzdaten,
-  };
-}
-
-function createStaticCalculationParameterNext(
+function createStaticCalculationParameter(
   events: FormEvent[],
 ): StaticCalculationParameter {
   const finanzdaten = erstelleFinanzdatenAllerElternteile(events);
@@ -287,7 +247,7 @@ if (import.meta.vitest) {
     beforeEach(async () => {
       vi.spyOn(
         await import("@/application/features/abfrageteil-next/events/EventContext"),
-        "useOptionalEventContext",
+        "useEventContext",
       ).mockReturnValue({
         findeVorherigenPfad: () => "/",
         filtereValideEventHistorie: () => [],
@@ -298,14 +258,20 @@ if (import.meta.vitest) {
       });
 
       vi.spyOn(
-        await import("@/application/features/abfrageteil/state"),
-        "persoenlicheDatenOfUi",
-      ).mockReturnValue(ANY_PERSOENLICHE_DATEN);
+        await import("@/application/features/abfrageteil-next/domain/erstellePersoenlicheDaten"),
+        "erstellePersoenlicheDatenAllerElternteile",
+      ).mockReturnValue({
+        anzahlElternteile: 1,
+        [Elternteil.Eins]: ANY_PERSOENLICHE_DATEN,
+      });
 
       vi.spyOn(
-        await import("@/application/features/abfrageteil/state"),
-        "finanzDatenOfUi",
-      ).mockReturnValue(ANY_FINANZDATEN);
+        await import("@/application/features/abfrageteil-next/domain/erstelleFinanzdaten"),
+        "erstelleFinanzdatenAllerElternteile",
+      ).mockReturnValue({
+        anzahlElternteile: 1,
+        [Elternteil.Eins]: ANY_FINANZDATEN,
+      });
 
       vi.spyOn(
         await import("@/elterngeldrechner"),
@@ -318,8 +284,8 @@ if (import.meta.vitest) {
 
       const berechneElterngeldbezuege = hook.result.current;
 
-      expect(persoenlicheDatenOfUi).toHaveBeenCalled();
-      expect(finanzDatenOfUi).toHaveBeenCalled();
+      expect(erstellePersoenlicheDatenAllerElternteile).toHaveBeenCalled();
+      expect(erstelleFinanzdatenAllerElternteile).toHaveBeenCalled();
 
       vi.clearAllMocks();
 
@@ -327,16 +293,22 @@ if (import.meta.vitest) {
 
       berechneElterngeldbezuege(ANY_ELTERNTEIL, ANY_MONATE);
 
-      expect(persoenlicheDatenOfUi).not.toHaveBeenCalled();
-      expect(finanzDatenOfUi).not.toHaveBeenCalled();
+      expect(erstellePersoenlicheDatenAllerElternteile).not.toHaveBeenCalled();
+      expect(erstelleFinanzdatenAllerElternteile).not.toHaveBeenCalled();
     });
 
     it("uses the initially created static calculation parameters for the calculation calls", () => {
       const persoenlicheDaten = ANY_PERSOENLICHE_DATEN;
-      vi.mocked(persoenlicheDatenOfUi).mockReturnValue(persoenlicheDaten);
+      vi.mocked(erstellePersoenlicheDatenAllerElternteile).mockReturnValue({
+        anzahlElternteile: 1,
+        [Elternteil.Eins]: persoenlicheDaten,
+      });
 
       const finanzDaten = ANY_FINANZDATEN;
-      vi.mocked(finanzDatenOfUi).mockReturnValue(finanzDaten);
+      vi.mocked(erstelleFinanzdatenAllerElternteile).mockReturnValue({
+        anzahlElternteile: 1,
+        [Elternteil.Eins]: finanzDaten,
+      });
 
       const hook = renderHook(() => useBerechneElterngeldbezuege());
 

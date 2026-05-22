@@ -334,7 +334,151 @@ if (import.meta.vitest) {
       },
     };
 
-    type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
+    const INITIAL_EVENTS: import("@/application/features/abfrageteil-next/routing").FormEvent[] =
+      [
+        { route: Route.Startseite },
+        {
+          route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
+        },
+        { route: Route.KindAbfrage, payload: { istGeboren: true } },
+        {
+          route: Route.GeborenesKindAngaben,
+          payload: {
+            geburtsdatum: Temporal.PlainDate.from("2025-01-01"),
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-01-01"),
+            anzahl: 1,
+          },
+        },
+        {
+          route: Route.GeschwisterkindAbfrage,
+          payload: { istVorhanden: false },
+        },
+        {
+          route: Route.ElternteilEinsAllgemeineAngaben,
+          payload: {
+            name: "Jane",
+            istAlleinerziehend: false,
+            istImMutterschutz: false,
+          },
+        },
+        {
+          route: Route.ElternteilAusklammerungGruendeAngaben,
+          params: { elternteilIndex: 0 },
+          payload: {
+            hatKeineAusklammerungsgruende: true,
+            hatMutterschutzAelteresKind: false,
+            hatElterngeldAelteresKind: false,
+            hatSchwangerschaftsbedingteErkrankung: false,
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 0 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: { istPersonAlleinerziehend: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { istTaetigkeitMinijob: false },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: false,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            istEinkommenGleichVerteilt: true,
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenEinkommen,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { durchschnittlichesMonatsbrutto: 3000 },
+          dependentValues: { istMischeinkunft: false },
+        },
+        {
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+          payload: { istWeitereTaetigkeitVorhanden: false },
+          dependentValues: {
+            istSelbststaendigeTaetigkeitMoeglich: false,
+            istPersonAlleinerziehend: false,
+          },
+        },
+        {
+          route: Route.ElternteilZweiAllgemeineAngaben,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+            name: "John",
+            istImMutterschutz: false,
+          },
+          dependentValues: { hatPotenzielleAusklammerungen: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitenAbfrage,
+          params: { elternteilIndex: 1 },
+          payload: {
+            istNichtSelbststaendig: true,
+            istSelbststaendig: false,
+            istVerbeamtet: false,
+            hatAndereLeistungen: false,
+            hatPeriodenOhneEinkommen: false,
+          },
+          dependentValues: { istPersonAlleinerziehend: false },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+          payload: { istTaetigkeitMinijob: false },
+          dependentValues: { kannDurchschnittAngegebenWerden: true },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+          payload: {
+            steuerklasse: Steuerklasse.I,
+            istKirchensteuerpflichtig: false,
+            istGesetzlichKrankenpflichtversichert: true,
+            istGesetzlichRentenversichert: true,
+            istGesetzlichArbeitlosenversichert: true,
+            istEinkommenGleichVerteilt: true,
+          },
+        },
+        {
+          route: Route.ElternteilTaetigkeitAngabenEinkommen,
+          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+          payload: { durchschnittlichesMonatsbrutto: 3000 },
+          dependentValues: { istMischeinkunft: false },
+        },
+        {
+          route: Route.ElternteilWeitereTaetigkeitAbfrage,
+          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
+          payload: { istWeitereTaetigkeitVorhanden: false },
+          dependentValues: {
+            istSelbststaendigeTaetigkeitMoeglich: false,
+            istPersonAlleinerziehend: false,
+          },
+        },
+      ];
+
+    type NavigateStatefulHook = ReturnType<
+      typeof useNavigateStatefulModule.useNavigateStateful
+    >;
     type NavigateStateful = NavigateStatefulHook["navigateStateful"];
     type NavigateState = Parameters<NavigateStateful>[1];
 
@@ -492,7 +636,9 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten übernimmt den initialen plan", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.mocked(
+          useNavigateStatefulModule.useNavigateStateful,
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: {

@@ -42,7 +42,6 @@ export default defineConfig({
         minify: {
           compress: false,
         },
-        hashCharacters: "hex",
       },
     },
   },

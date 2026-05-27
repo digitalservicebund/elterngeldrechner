@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Git tag des Releases (z.B. v1.2.3)"
         required: true
         type: string
 

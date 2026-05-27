@@ -9,12 +9,6 @@ on:
         options:
           - staging
           - production
-      ref_type:
-        required: true
-        type: choice
-        options:
-          - tag
-          - sha
       ref:
         required: true
         type: string

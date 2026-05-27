@@ -1,0 +1,60 @@
+name: Redeploy Staging by Commit SHA
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  redeploy-staging:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
+        with:
+          ref: ${{ inputs.commit_sha }}
+          fetch-depth: 0
+
+      - uses: ./.github/actions/cached-node-install
+
+      - name: Run build specific for stack it staging environment
+        run: npm run build:staging
+        env:
+          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/
+          VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
+
+      - name: Synchronize build output with object storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
+          AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
+        run: |
+          aws s3 sync dist/assets/ s3://egr-assets-staging/assets/ \
+            --exclude "index-*.js" \
+            --exclude "index-*.css"
+
+          aws s3 cp dist/assets/index-*.js s3://egr-assets-staging/index.js \
+            --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+          aws s3 cp dist/assets/index-*.css s3://egr-assets-staging/index.css \
+            --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+      - name: Report deployment for statistics
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a #v1.0.0
+        with:
+          project: elterngeldrechner
+          environment: staging
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}

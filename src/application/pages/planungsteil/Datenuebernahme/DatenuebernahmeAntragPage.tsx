@@ -2,7 +2,6 @@ import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
 import elterngeldantragPreview from "@/assets/images/elterngeldantrag.png";
 import planungsseitePreview from "@/assets/images/planungsseite.png";
-import download from "downloadjs";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";
@@ -18,6 +17,21 @@ import { formSteps } from "@/application/routing/formSteps";
 import { pushTrackingEvent } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
 import posthog from "posthog-js";
+
+function download(data: Uint8Array, filename: string, mimeType: string) {
+  const blob = new Blob([data.buffer as ArrayBuffer], { type: mimeType });
+
+  const url = URL.createObjectURL(blob);
+
+  const anchorElement = Object.assign(document.createElement("a"), {
+    href: url,
+    download: filename,
+  });
+
+  anchorElement.click();
+
+  URL.revokeObjectURL(url);
+}
 
 function trackedDownloadOfAnlagen(
   event: React.MouseEvent<HTMLAnchorElement>,

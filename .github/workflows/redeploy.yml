@@ -42,8 +42,6 @@ jobs:
             {
               echo "base_path=https://egr-assets-production.object.storage.eu01.onstackit.cloud/"
               echo "bucket=s3://egr-assets-production"
-              echo "aws_key=${{ secrets.STACKIT_PRODUCTION_ACCESS_KEY_ID }}"
-              echo "aws_secret=${{ secrets.STACKIT_PRODUCTION_SECRET_ACCESS_KEY }}"
               echo "track_env=production"
               echo "build_cmd=npm run build:production"
             } >> $GITHUB_OUTPUT
@@ -51,8 +49,6 @@ jobs:
             {
               echo "base_path=https://egr-assets-staging.object.storage.eu01.onstackit.cloud/"
               echo "bucket=s3://egr-assets-staging"
-              echo "aws_key=${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}"
-              echo "aws_secret=${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}"
               echo "track_env=staging"
               echo "build_cmd=npm run build:staging"
             } >> $GITHUB_OUTPUT
@@ -66,8 +62,8 @@ jobs:
 
       - name: Deploy to S3
         env:
-          AWS_ACCESS_KEY_ID: ${{ steps.config.outputs.aws_key }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.config.outputs.aws_secret }}
+          AWS_ACCESS_KEY_ID: ${{ inputs.environment == 'production' && secrets.STACKIT_PRODUCTION_ACCESS_KEY_ID || secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ inputs.environment == 'production' && secrets.STACKIT_PRODUCTION_SECRET_ACCESS_KEY || secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: |
           aws s3 sync dist/assets/ ${{ steps.config.outputs.bucket }}/assets/ \

@@ -39,6 +39,9 @@ export default defineConfig({
     sourcemap: true,
     rolldownOptions: {
       output: {
+        minify: {
+          compress: false,
+        },
         hashCharacters: "hex",
       },
     },

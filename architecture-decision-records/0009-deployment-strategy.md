@@ -62,7 +62,7 @@ the URI pointing to our bucket.
                                 │                                                  │
                                 ▼                                                  ▼
          ┌──────────────────────────────────────────────┐   ┌──────────────────────────────────────────────┐
-         │  CDN:    .dev.tech.digitalservice.dev        │   │  CDN:    .prod.tech.digitalservice.dev       │
+         │  CDN:    .dev.tech.digitalservice.dev *      │   │  CDN:    .prod.tech.digitalservice.dev *     │
          └──────────────────────┬───────────────────────┘   └──────────────────────┬───────────────────────┘
                                 │                                                  │
                                 ▼                                                  ▼
@@ -78,6 +78,9 @@ the URI pointing to our bucket.
          │  └────────────────────────────────────────┘  │   │  └────────────────────────────────────────┘  │
          └──────────────────────────────────────────────┘   └──────────────────────────────────────────────┘
 ```
+
+_\* After setting up uptime monitoring we observed that CDN response times were roughly double those of the
+direct bucket URLs. For this reason the CMS currently references bucket URLs directly, bypassing the CDN._
 
 ## Benefits
 

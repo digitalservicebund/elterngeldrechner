@@ -67,7 +67,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@js-temporal/polyfill": "^0.5.1",
     "@posthog/react": "^1.9.1",
-    "@reduxjs/toolkit": "^2.11.2",
+    "@reduxjs/toolkit": "^2.12.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.2.1",
     "posthog-js": "^1.373.5",

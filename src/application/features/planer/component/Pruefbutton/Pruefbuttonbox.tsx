@@ -87,8 +87,19 @@ export function Pruefbuttonbox({
   }
 
   const ueberpruefePlanungCallback = useCallback(() => {
-    setValidierungsergebnis(ueberpruefePlanung());
-    setTips(generateTips(plan));
+    const validierungsergebnis = ueberpruefePlanung();
+    const tips = generateTips(plan);
+
+    setValidierungsergebnis(validierungsergebnis);
+    setTips(tips);
+
+    posthog.capture("monatsplaner_pruefbutton_geklickt", {
+      tips: tips.normalTips.length + (tips.hasSpecialBonusTip ? 1 : 0),
+      gueltig: validierungsergebnis.mapOrElse(
+        () => true,
+        () => false,
+      ) as boolean,
+    });
   }, [ueberpruefePlanung, plan]);
 
   useEffect(() => {

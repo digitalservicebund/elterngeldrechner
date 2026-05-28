@@ -23,6 +23,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
 
 export function ElternteilAusklammerungGruendePage() {
@@ -96,6 +97,8 @@ export function ElternteilAusklammerungGruendePage() {
 
   const { register, handleSubmit, formState, setValue, setValues } = form;
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(form.subscribe);
 
   const onSubmit = (values: ElternteilAusklammerungGruende) => {
     const event: FormEvent = {

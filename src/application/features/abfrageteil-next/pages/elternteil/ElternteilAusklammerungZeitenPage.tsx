@@ -20,6 +20,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export type ElternteilAusklammerungszeitenInput = z.input<
   typeof ElternteilAusklammerungZeitenSchema
@@ -63,6 +64,7 @@ export function ElternteilAusklammerungZeitenPage() {
   const {
     handleSubmit,
     control,
+    subscribe,
     formState: { errors },
   } = useForm<
     ElternteilAusklammerungszeitenInput,
@@ -91,6 +93,8 @@ export function ElternteilAusklammerungZeitenPage() {
 
   const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
+  useValidierungsfehlerTracking(subscribe);
 
   return (
     <Page heading={`Angaben ${vorname}`}>

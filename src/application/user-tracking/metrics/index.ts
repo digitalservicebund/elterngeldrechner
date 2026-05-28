@@ -8,3 +8,4 @@ export { trackNutzergruppe } from "./nutzergruppe";
 export { trackUsageOfPlanungshilfen } from "./planungshilfen";
 export { trackPartnerschaftlicheVerteilung } from "./partnerschaftlichkeit";
 export { trackReachedConversionGoal } from "./conversionGoal";
+export { useValidierungsfehlerTracking } from "./useValidierungsfehlerTracking";

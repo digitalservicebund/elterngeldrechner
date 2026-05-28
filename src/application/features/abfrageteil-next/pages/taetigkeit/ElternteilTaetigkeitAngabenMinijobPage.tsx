@@ -22,6 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitAngabenMinijobPage() {
   const {
@@ -41,7 +42,7 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(TaetigkeitMinijobEinkommendetailsAbfrageSchema),
     defaultValues: encodeSafely(
       TaetigkeitMinijobEinkommendetailsAbfrageSchema,
@@ -50,6 +51,8 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: TaetigkeitMinijobEinkommendetailsAbfrage) => {
     const event: FormEvent = {

@@ -16,6 +16,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function GeschwisterkindAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -27,7 +28,7 @@ export function GeschwisterkindAbfragePage() {
   const currentRoute = Route.GeschwisterkindAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(GeschwisterkindAbfrageSchema),
     defaultValues: encodeSafely(
       GeschwisterkindAbfrageSchema,
@@ -36,6 +37,8 @@ export function GeschwisterkindAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: GeschwisterkindAbfrage) => {
     const event: FormEvent = {

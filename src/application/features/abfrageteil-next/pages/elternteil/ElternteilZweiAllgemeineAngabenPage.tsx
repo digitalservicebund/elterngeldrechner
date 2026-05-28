@@ -23,6 +23,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
 
 export function ElternteilZweiAllgemeineAngabenPage() {
@@ -41,7 +42,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   const currentRoute = Route.ElternteilZweiAllgemeineAngaben;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState, watch } = useForm({
+  const { register, handleSubmit, formState, watch, subscribe } = useForm({
     resolver: zodResolver(ElternteilZweiAllgemeineAngabenSchema),
     shouldUnregister: true,
     defaultValues: encodeSafely(
@@ -51,6 +52,8 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const istErsterElternteilImMutterschutz =
     findeInformationenZumMutterschutz(

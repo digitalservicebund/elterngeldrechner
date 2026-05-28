@@ -22,6 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitAngabenEinkommenPage() {
   const {
@@ -49,7 +50,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
   const istMischeinkunft =
     taetigkeiten.istSelbststaendig && taetigkeiten.istNichtSelbststaendig;
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, subscribe } = useForm({
     resolver: zodResolver(TaetigkeitGleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitGleichesEinkommenAngabenSchema,
@@ -75,6 +76,8 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
   const navigateBack = () => {
     void navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
+
+  useValidierungsfehlerTracking(subscribe);
 
   const taetigkeitenFlow = taetigkeiten.istSelbststaendig
     ? "Selbstaendig"

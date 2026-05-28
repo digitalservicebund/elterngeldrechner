@@ -27,6 +27,7 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import { Steuerklasse } from "@/elterngeldrechner";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   const {
@@ -46,13 +47,15 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(TaetigkeitNichtSelbststaendigAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitNichtSelbststaendigAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
+
+  useValidierungsfehlerTracking(subscribe);
 
   const { errors: formErrors } = formState;
 

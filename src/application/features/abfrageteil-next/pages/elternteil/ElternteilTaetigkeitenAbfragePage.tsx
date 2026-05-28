@@ -20,6 +20,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitenAbfragePage() {
   const {
@@ -51,6 +52,8 @@ export function ElternteilTaetigkeitenAbfragePage() {
   });
   const { register, handleSubmit, formState } = form;
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(form.subscribe);
 
   const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
     const event: FormEvent = {

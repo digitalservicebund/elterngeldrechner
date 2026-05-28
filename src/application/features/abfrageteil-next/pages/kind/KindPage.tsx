@@ -13,6 +13,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function KindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -24,10 +25,12 @@ export function KindPage() {
   const currentRoute = Route.KindAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(GeburtSchema),
     defaultValues: encodeSafely(GeburtSchema, letztesGueltigesEvent),
   });
+
+  useValidierungsfehlerTracking(subscribe);
 
   const { errors: formErrors } = formState;
 

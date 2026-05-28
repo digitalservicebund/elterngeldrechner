@@ -22,6 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
   const {
@@ -41,7 +42,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState, control } = useForm({
+  const { register, handleSubmit, formState, control, subscribe } = useForm({
     resolver: zodResolver(TaetigkeitSelbststaendigAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitSelbststaendigAngabenSchema,
@@ -79,6 +80,8 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
   );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
+  useValidierungsfehlerTracking(subscribe);
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>

@@ -22,6 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilWeitereTaetigkeitAbfragePage() {
   const {
@@ -49,7 +50,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   const istSelbststaendigeTaetigkeitMoeglich = taetigkeiten.istSelbststaendig;
   const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(WeitereTaetigkeitAbfrageSchema),
     defaultValues: encodeSafely(
       WeitereTaetigkeitAbfrageSchema,
@@ -58,6 +59,8 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: WeitereTaetigkeitAbfrage) => {
     const event: FormEvent = {

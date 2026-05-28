@@ -22,6 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
   const {
@@ -41,7 +42,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(TaetigkeitNichtSelbststaendigMinijobAbfrageSchema),
     defaultValues: encodeSafely(
       TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
@@ -50,6 +51,8 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: TaetigkeitNichtSelbststaendigMinijobAbfrage) => {
     const event: FormEvent = {

@@ -15,7 +15,10 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import { trackNutzergruppe } from "@/application/user-tracking/metrics";
+import {
+  trackNutzergruppe,
+  useValidierungsfehlerTracking,
+} from "@/application/user-tracking/metrics";
 
 export function UngeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -27,12 +30,14 @@ export function UngeborenesKindPage() {
   const currentRoute = Route.UngeborenesKindAngaben;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(UngeborenesKindSchema),
     defaultValues: encodeSafely(UngeborenesKindSchema, letztesGueltigesEvent),
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: UngeborenesKind) => {
     const event: FormEvent = { route: currentRoute, payload: values };

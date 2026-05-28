@@ -18,6 +18,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilWeitereTaetigkeitAngabenPage() {
   const {
@@ -37,7 +38,7 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(WeitereTaetigkeitArtAbfrageSchema),
     defaultValues: encodeSafely(
       WeitereTaetigkeitArtAbfrageSchema,
@@ -46,6 +47,8 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: WeitereTaetigkeitArtAbfrage) => {
     const event: FormEvent = {

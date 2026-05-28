@@ -17,6 +17,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function WahrscheinlichGeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -28,7 +29,7 @@ export function WahrscheinlichGeborenesKindPage() {
   const currentRoute = Route.WahrscheinlichGeborenesKindAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(WahrscheinlichGeborenesKindSchema),
     defaultValues: encodeSafely(
       WahrscheinlichGeborenesKindSchema,
@@ -37,6 +38,8 @@ export function WahrscheinlichGeborenesKindPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = (values: WahrscheinlichGeborenesKind) => {
     const event: FormEvent = { route: currentRoute, payload: values };

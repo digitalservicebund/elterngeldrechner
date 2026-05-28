@@ -27,6 +27,7 @@ import {
   Ausklammerung,
   gruppiereBemessungszeitraum,
 } from "@/bemessungszeitraumrechner";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const {
@@ -54,7 +55,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const istMischeinkunft =
     taetigkeiten.istSelbststaendig && taetigkeiten.istNichtSelbststaendig;
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, subscribe } = useForm({
     resolver: zodResolver(TaetigkeitUnleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitUnleichesEinkommenAngabenSchema,
@@ -94,6 +95,8 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
+
+  useValidierungsfehlerTracking(subscribe);
 
   function istGruppierterZeitabschnittAusklammerung(
     zeitabschnitt: Temporal.PlainYearMonth[] | Ausklammerung[],

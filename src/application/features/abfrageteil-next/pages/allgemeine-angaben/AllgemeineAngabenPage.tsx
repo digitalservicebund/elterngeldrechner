@@ -22,6 +22,7 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import posthog from "posthog-js";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking";
 
 export function AllgemeineAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -34,12 +35,14 @@ export function AllgemeineAngabenPage() {
 
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(AllgemeineAngabenSchema),
     defaultValues: encodeSafely(AllgemeineAngabenSchema, letztesGueltigesEvent),
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const bundeslandOptions: SelectOption<string>[] = bundeslaender.map(
     (name) => ({ value: name, label: name }),

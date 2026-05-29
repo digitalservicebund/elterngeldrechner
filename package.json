@@ -70,7 +70,7 @@
     "@reduxjs/toolkit": "^2.12.0",
     "classnames": "^2.5.1",
     "date-fns": "^4.2.1",
-    "posthog-js": "^1.373.5",
+    "posthog-js": "^1.375.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-hook-form": "^7.75.0",

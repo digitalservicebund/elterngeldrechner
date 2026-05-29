@@ -36,6 +36,7 @@ import type {
   PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
 import { sindLebensmonateGeplant } from "@/monatsplaner";
+import posthog from "posthog-js";
 
 export function BeispielePage() {
   // TODO: Ensure consistent use of the term planungshilfen rather than beispiele
@@ -69,6 +70,10 @@ export function BeispielePage() {
     if (beispiel) {
       trackReachedConversionGoal();
       trackUsageOfPlanungshilfen();
+
+      posthog.capture("beispiel_wurde_uebernommen", {
+        identifier: beispiel.identifier,
+      });
     }
 
     pushTrackingEvent("Planung-wurde-gestartet", { unique: true });
@@ -130,6 +135,10 @@ export function BeispielePage() {
       setPlan(neuesAktivesBeispiel.plan);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
+
+      posthog.capture("beispiel_wurde_angeklickt", {
+        identifier: neuesAktivesBeispiel.identifier,
+      });
     } else if (aktivierteOption === EigenePlanung) {
       setPlan(undefined);
 

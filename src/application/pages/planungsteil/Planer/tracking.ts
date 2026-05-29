@@ -17,6 +17,7 @@ import {
   listeLebensmonateAuf,
   listeMonateAuf,
 } from "@/monatsplaner";
+import posthog from "posthog-js";
 
 export function trackMetricsForAngabeEinesEinkommens(): void {
   pushTrackingEvent("einkommen-im-monat-angegeben", { unique: true });
@@ -53,11 +54,15 @@ export function trackMetricsForDerPlanHatSichGeaendert(
 
 export function trackMetricsForEineOptionWurdeGewaehlt(): void {
   pushTrackingEvent("Option-wurde-im-Planer-gewaehlt");
+
+  posthog.capture("monatsplaner_option_wurde_gewaehlt");
 }
 
 export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   pushTrackingEvent("Plan-wurde-zurückgesetzt");
   setTrackingVariable("Identifier-des-ausgewaehlten-Beispiels-im-Planer", null);
+
+  posthog.capture("monatsplaner_plan_wurde_zurueckgesetzt");
 }
 
 function trackPartnerschaftlicheVerteilungForPlan(

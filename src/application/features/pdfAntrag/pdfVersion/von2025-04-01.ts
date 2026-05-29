@@ -1,6 +1,6 @@
 import { Elternteil, Variante } from "@/monatsplaner";
-import antragPdf from "@/assets/documents/von2025-04-01_antrag.pdf?url";
-import seitePdf from "@/assets/documents/von2025-04-01_seite.pdf?url";
+import antragPdf from "@/application/assets/documents/von2025-04-01_antrag.pdf?url";
+import seitePdf from "@/application/assets/documents/von2025-04-01_seite.pdf?url";
 
 export const pdfVersionVonApril2025 = {
   start: new Date("2025-04-01"),

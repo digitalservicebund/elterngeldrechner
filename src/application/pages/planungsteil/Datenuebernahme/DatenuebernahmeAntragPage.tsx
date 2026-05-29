@@ -1,7 +1,7 @@
 import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
 import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
-import elterngeldantragPreview from "@/assets/images/elterngeldantrag.png";
-import planungsseitePreview from "@/assets/images/planungsseite.png";
+import elterngeldantragPreview from "@/application/assets/images/elterngeldantrag.png";
+import planungsseitePreview from "@/application/assets/images/planungsseite.png";
 import { type ReactNode, useState } from "react";
 import { Button } from "@/application/components";
 import { Alert } from "@/application/components/Alert";

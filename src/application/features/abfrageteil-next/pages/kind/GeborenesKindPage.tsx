@@ -19,6 +19,8 @@ import {
   trackNutzergruppe,
   useValidierungsfehlerTracking,
 } from "@/application/user-tracking/metrics";
+import posthog from "posthog-js";
+import { istFruehgeburt, sindMehrlinge } from "./tracking";
 
 export function GeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -47,6 +49,14 @@ export function GeborenesKindPage() {
     trackNutzergruppe(
       new Date(values.geburtsdatum.toZonedDateTime("UTC").epochMilliseconds),
     );
+
+    posthog.register({
+      fruehgeburt: istFruehgeburt(
+        values.geburtsdatum,
+        values.errechneterEntbindungstermin,
+      ),
+      mehrlinge: sindMehrlinge(values.anzahl),
+    });
 
     void navigate(findeNaechstenPfad(event));
   };

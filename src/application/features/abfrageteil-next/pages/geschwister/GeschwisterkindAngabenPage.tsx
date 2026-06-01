@@ -20,6 +20,8 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import { useValidierungsfehlerTracking } from "@/application/user-tracking";
+import posthog from "posthog-js";
+import { hatGeschwisterMitBehinderung } from "./tracking";
 
 export function GeschwisterkindAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -56,6 +58,17 @@ export function GeschwisterkindAngabenPage() {
     };
 
     dispatch(event);
+
+    const bisherMitBehinderung = posthog.get_property(
+      "geschwister_mit_behinderung",
+    ) as boolean | undefined;
+
+    posthog.register({
+      geschwister_mit_behinderung: hatGeschwisterMitBehinderung(
+        bisherMitBehinderung,
+        values.hatBehinderung,
+      ),
+    });
 
     void navigate(findeNaechstenPfad(event));
   };

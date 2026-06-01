@@ -19,6 +19,8 @@ import {
   trackNutzergruppe,
   useValidierungsfehlerTracking,
 } from "@/application/user-tracking/metrics";
+import posthog from "posthog-js";
+import { sindMehrlinge } from "./tracking";
 
 export function UngeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -50,6 +52,10 @@ export function UngeborenesKindPage() {
           .epochMilliseconds,
       ),
     );
+
+    posthog.register({
+      mehrlinge: sindMehrlinge(values.anzahl),
+    });
 
     void navigate(findeNaechstenPfad(event));
   };

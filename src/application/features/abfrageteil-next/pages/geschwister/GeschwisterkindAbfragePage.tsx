@@ -17,6 +17,7 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import { useValidierungsfehlerTracking } from "@/application/user-tracking";
+import posthog from "posthog-js";
 
 export function GeschwisterkindAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -47,6 +48,13 @@ export function GeschwisterkindAbfragePage() {
     };
 
     dispatch(event);
+
+    posthog.register({
+      // Reset the accumulated flag so re-answering the question starts a fresh
+      // count; GeschwisterkindAngabenPage re-accumulates it per sibling.
+      geschwister_mit_behinderung: false,
+      hat_geschwister: values.istVorhanden,
+    });
 
     void navigate(findeNaechstenPfad(event));
   };

@@ -85,5 +85,5 @@ export default defineConfig({
       },
     },
   ],
-  ignorePatterns: ["original-rechner", "public", "dist"],
+  ignorePatterns: ["original-rechner", "public", "dist", "posthog-typed.ts"],
 });

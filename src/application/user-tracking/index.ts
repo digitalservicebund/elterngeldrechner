@@ -5,3 +5,4 @@ export {
   setTrackingVariable,
   setupUserTracking,
 } from "./core";
+export * from "./posthog";

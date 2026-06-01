@@ -1,9 +1,8 @@
+import { posthog } from "../posthog";
 import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
 import { isPosthogEnabled } from "@/application/feature-flags";
-
-import posthog from "posthog-js";
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();

@@ -1,4 +1,5 @@
 import {
+  posthog,
   pushTrackingEvent,
   setTrackingVariable,
   trackPartnerschaftlicheVerteilung,
@@ -17,7 +18,6 @@ import {
   listeLebensmonateAuf,
   listeMonateAuf,
 } from "@/monatsplaner";
-import posthog from "posthog-js";
 
 export function trackMetricsForAngabeEinesEinkommens(): void {
   pushTrackingEvent("einkommen-im-monat-angegeben", { unique: true });

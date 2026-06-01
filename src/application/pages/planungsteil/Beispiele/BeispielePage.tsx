@@ -25,6 +25,7 @@ import { useBerechneElterngeldbezuege } from "@/application/pages/planungsteil/u
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { formSteps } from "@/application/routing/formSteps";
 import {
+  posthog,
   pushTrackingEvent,
   setTrackingVariable,
   trackReachedConversionGoal,
@@ -36,7 +37,6 @@ import type {
   PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
 import { sindLebensmonateGeplant } from "@/monatsplaner";
-import posthog from "posthog-js";
 
 export function BeispielePage() {
   // TODO: Ensure consistent use of the term planungshilfen rather than beispiele

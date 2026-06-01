@@ -15,13 +15,12 @@ import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { type Tips, generateTips } from "./generateTips";
 import { Button } from "@/application/components/Button";
 import { useAntragInformationen } from "@/application/pages/planungsteil/useAntragInformationen";
-import { pushTrackingEvent } from "@/application/user-tracking";
+import { posthog, pushTrackingEvent } from "@/application/user-tracking";
 import {
   type PlanMitBeliebigenElternteilen,
   type Result,
 } from "@/monatsplaner";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
-import posthog from "posthog-js";
 
 type Props = {
   readonly className?: string;

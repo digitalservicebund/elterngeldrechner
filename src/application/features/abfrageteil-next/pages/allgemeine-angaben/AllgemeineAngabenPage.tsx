@@ -21,8 +21,10 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import posthog from "posthog-js";
-import { useValidierungsfehlerTracking } from "@/application/user-tracking";
+import {
+  posthog,
+  useValidierungsfehlerTracking,
+} from "@/application/user-tracking";
 
 export function AllgemeineAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =

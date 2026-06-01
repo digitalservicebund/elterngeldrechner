@@ -16,8 +16,10 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import { useValidierungsfehlerTracking } from "@/application/user-tracking";
-import posthog from "posthog-js";
+import {
+  posthog,
+  useValidierungsfehlerTracking,
+} from "@/application/user-tracking";
 
 export function GeschwisterkindAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =

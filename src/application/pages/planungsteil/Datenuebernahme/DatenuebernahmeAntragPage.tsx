@@ -14,9 +14,8 @@ import { Page } from "@/application/pages/Page";
 import { useAntragInformationen } from "@/application/pages/planungsteil/useAntragInformationen";
 import { useNavigateStateful } from "@/application/pages/planungsteil/useNavigateStateful";
 import { formSteps } from "@/application/routing/formSteps";
-import { pushTrackingEvent } from "@/application/user-tracking";
+import { posthog, pushTrackingEvent } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
-import posthog from "posthog-js";
 
 function download(data: Uint8Array, filename: string, mimeType: string) {
   const blob = new Blob([data.buffer as ArrayBuffer], { type: mimeType });

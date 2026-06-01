@@ -1,6 +1,5 @@
 import { type CSSProperties, ReactNode } from "react";
-
-import posthog from "posthog-js";
+import { posthog } from "@/application/user-tracking";
 
 type Props = {
   readonly question: string;

@@ -17,8 +17,8 @@ import {
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
 import { useValidierungsfehlerTracking } from "@/application/user-tracking/metrics";
-import posthog from "posthog-js";
 import { bestimmeNutzergruppe, sindMehrlinge } from "./tracking";
+import { posthog } from "@/application/user-tracking";
 
 export function UngeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =

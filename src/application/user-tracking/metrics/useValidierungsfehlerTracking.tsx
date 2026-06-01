@@ -1,8 +1,11 @@
 import { useEffect } from "react";
-import posthog from "posthog-js";
 
 import { type FieldValues, type FieldErrors } from "react-hook-form";
 import { type UseFormSubscribe } from "react-hook-form";
+
+import { posthog } from "../posthog";
+
+// TODO: Move into feature scoped tracking.ts file
 
 export function useValidierungsfehlerTracking<
   TFieldValues extends FieldValues = FieldValues,
@@ -98,14 +101,12 @@ if (import.meta.vitest) {
     const { userEvent } = await import("@testing-library/user-event");
     const { useForm } = await import("react-hook-form");
 
-    const posthog = await import("posthog-js");
+    const { posthog } = await import("../posthog");
 
     let captureSpy: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
-      captureSpy = vi
-        .spyOn(posthog.default, "capture")
-        .mockReturnValue(undefined);
+      captureSpy = vi.spyOn(posthog, "capture").mockReturnValue(undefined);
     });
 
     afterEach(() => vi.restoreAllMocks());

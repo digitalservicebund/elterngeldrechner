@@ -1,6 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { pushTrackingEvent } from "@/application/user-tracking/core";
-import posthog from "posthog-js";
+import { posthog } from "@/application/user-tracking";
 
 type Props = { readonly children: ReactNode };
 type State = { hasError: boolean };

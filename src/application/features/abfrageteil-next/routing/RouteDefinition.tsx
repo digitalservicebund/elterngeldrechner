@@ -35,7 +35,7 @@ import {
   PlanerPage,
 } from "@/application/pages";
 import { useEffect } from "react";
-import posthog from "posthog-js";
+import { posthog } from "@/application/user-tracking/posthog";
 
 function EventProviderLayout() {
   const location = useLocation();

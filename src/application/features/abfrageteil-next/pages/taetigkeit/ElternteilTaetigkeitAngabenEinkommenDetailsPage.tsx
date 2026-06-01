@@ -27,7 +27,7 @@ import {
   Ausklammerung,
   gruppiereBemessungszeitraum,
 } from "@/bemessungszeitraumrechner";
-import { useValidierungsfehlerTracking } from "@/application/user-tracking";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil-next/hooks/useValidierungsfehlerTracking";
 
 export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const {

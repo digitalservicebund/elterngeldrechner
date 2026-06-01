@@ -13,7 +13,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import { useValidierungsfehlerTracking } from "@/application/user-tracking";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil-next/hooks/useValidierungsfehlerTracking";
 
 export function KindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =

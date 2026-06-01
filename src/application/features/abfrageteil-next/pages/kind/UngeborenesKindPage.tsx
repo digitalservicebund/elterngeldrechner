@@ -16,7 +16,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import { useValidierungsfehlerTracking } from "@/application/user-tracking/metrics";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil-next/hooks/useValidierungsfehlerTracking";
 import { bestimmeNutzergruppe, sindMehrlinge } from "./tracking";
 import { posthog } from "@/application/user-tracking";
 

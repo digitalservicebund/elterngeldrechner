@@ -19,10 +19,8 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import {
-  posthog,
-  useValidierungsfehlerTracking,
-} from "@/application/user-tracking";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil-next/hooks/useValidierungsfehlerTracking";
+import { posthog } from "@/application/user-tracking";
 import { hatGeschwisterMitBehinderung } from "./tracking";
 
 export function GeschwisterkindAngabenPage() {

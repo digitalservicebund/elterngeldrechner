@@ -3,9 +3,7 @@ import { useEffect } from "react";
 import { type FieldValues, type FieldErrors } from "react-hook-form";
 import { type UseFormSubscribe } from "react-hook-form";
 
-import { posthog } from "../posthog";
-
-// TODO: Move into feature scoped tracking.ts file
+import { posthog } from "@/application/user-tracking/posthog";
 
 export function useValidierungsfehlerTracking<
   TFieldValues extends FieldValues = FieldValues,
@@ -101,7 +99,7 @@ if (import.meta.vitest) {
     const { userEvent } = await import("@testing-library/user-event");
     const { useForm } = await import("react-hook-form");
 
-    const { posthog } = await import("../posthog");
+    const { posthog } = await import("@/application/user-tracking/posthog");
 
     let captureSpy: ReturnType<typeof vi.spyOn>;
 

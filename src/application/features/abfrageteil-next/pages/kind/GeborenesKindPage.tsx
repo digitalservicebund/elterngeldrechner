@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId } from "react";
@@ -15,12 +16,13 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import {
-  trackNutzergruppe,
-  useValidierungsfehlerTracking,
-} from "@/application/user-tracking/metrics";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking/metrics";
 import posthog from "posthog-js";
-import { istFruehgeburt, sindMehrlinge } from "./tracking";
+import {
+  bestimmeNutzergruppe,
+  istFruehgeburt,
+  sindMehrlinge,
+} from "./tracking";
 
 export function GeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -46,11 +48,11 @@ export function GeborenesKindPage() {
 
     dispatch(event);
 
-    trackNutzergruppe(
-      new Date(values.geburtsdatum.toZonedDateTime("UTC").epochMilliseconds),
-    );
-
     posthog.register({
+      nutzergruppe: bestimmeNutzergruppe(
+        Temporal.Now.plainDateISO(),
+        values.geburtsdatum,
+      ),
       fruehgeburt: istFruehgeburt(
         values.geburtsdatum,
         values.errechneterEntbindungstermin,

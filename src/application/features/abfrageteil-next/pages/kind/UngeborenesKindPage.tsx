@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId } from "react";
@@ -15,12 +16,9 @@ import {
   findeNaechstenPfad,
 } from "@/application/features/abfrageteil-next/routing";
 import { encodeSafely } from "@/application/features/abfrageteil-next/zod";
-import {
-  trackNutzergruppe,
-  useValidierungsfehlerTracking,
-} from "@/application/user-tracking/metrics";
+import { useValidierungsfehlerTracking } from "@/application/user-tracking/metrics";
 import posthog from "posthog-js";
-import { sindMehrlinge } from "./tracking";
+import { bestimmeNutzergruppe, sindMehrlinge } from "./tracking";
 
 export function UngeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
@@ -46,14 +44,11 @@ export function UngeborenesKindPage() {
 
     dispatch(event);
 
-    trackNutzergruppe(
-      new Date(
-        values.errechneterEntbindungstermin.toZonedDateTime("UTC")
-          .epochMilliseconds,
-      ),
-    );
-
     posthog.register({
+      nutzergruppe: bestimmeNutzergruppe(
+        Temporal.Now.plainDateISO(),
+        values.errechneterEntbindungstermin,
+      ),
       mehrlinge: sindMehrlinge(values.anzahl),
     });
 

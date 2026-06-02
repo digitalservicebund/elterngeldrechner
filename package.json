@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
-    "@commitlint/config-conventional": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.2",
     "@commitlint/types": "^21.0.0",
     "@playwright/test": "^1.60.0",
     "@posthog/cli": "^0.7.14",
@@ -43,7 +43,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
     "autoprefixer": "^10.5.0",
-    "commitlint": "^21.0.1",
+    "commitlint": "^21.0.2",
     "fast-check": "^4.8.0",
     "http-server": "^14.1.1",
     "immer": "^11.1.8",

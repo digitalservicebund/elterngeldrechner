@@ -204,6 +204,7 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud/
           VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
+          VITE_BUILD_VERSION: ${{ github.sha }}
 
       - name: Synchronize build output with object storage
         env:
@@ -231,10 +232,29 @@ jobs:
           metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
 
+  smoke-test-production:
+    if: startsWith(github.event.ref, 'refs/tags/')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    needs:
+      - deploy-production
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
+
+      - uses: ./.github/actions/cached-node-install
+
+      - uses: ./.github/actions/cached-playwright-setup
+
+      - name: Smoke test the deployed widget on production
+        run: npm run test-smoke
+        env:
+          ENVIRONMENT_URL: https://familienportal.de/familienportal/meta/
+          EXPECTED_BUILD: ${{ github.sha }}
+
   create-release:
     runs-on: ubuntu-24.04
     needs:
-      - deploy-production
+      - smoke-test-production
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2

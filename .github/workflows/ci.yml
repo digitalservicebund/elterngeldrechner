@@ -69,6 +69,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    environment: staging
     needs:
       - test-suite-vitest
       - test-suite-playwright
@@ -90,8 +91,8 @@ jobs:
 
       - name: Synchronize build output with object storage
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: aws s3 sync dist/ "s3://egr-assets-staging/preview/main" --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
@@ -106,6 +107,7 @@ jobs:
   deploy-staging:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
+    environment: staging
     needs:
       - test-suite-vitest
       - test-suite-playwright
@@ -125,8 +127,8 @@ jobs:
 
       - name: Synchronize build output with object storage
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: |
           aws s3 sync dist/assets/ s3://egr-assets-staging/assets/ --exclude "index-*.js" --exclude "index-*.css"
@@ -189,6 +191,7 @@ jobs:
   deploy-production:
     runs-on: ubuntu-24.04
     if: startsWith(github.event.ref, 'refs/tags/')
+    environment: production
     needs:
       - test-suite-vitest
       - test-suite-playwright
@@ -208,8 +211,8 @@ jobs:
 
       - name: Synchronize build output with object storage
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_PRODUCTION_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_PRODUCTION_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: |
           aws s3 sync dist/assets/ s3://egr-assets-production/assets/ --exclude "index-*.js" --exclude "index-*.css"

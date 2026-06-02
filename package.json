@@ -48,7 +48,7 @@
     "http-server": "^14.1.1",
     "immer": "^11.1.8",
     "jsdom": "^29.1.1",
-    "lefthook": "^2.1.8",
+    "lefthook": "^2.1.9",
     "license-checker-rseidelsohn": "^4.4.2",
     "node-xlsx": "^0.24.0",
     "original-rechner": "github:digitalservicebund/elterngeldrechner-legacy#69ad27a02bb5105e10890338845cf21b727a0c27",

@@ -121,6 +121,7 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/
           VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
+          VITE_BUILD_VERSION: ${{ github.sha }}
 
       - name: Synchronize build output with object storage
         env:
@@ -140,6 +141,50 @@ jobs:
           environment: staging
           metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
           metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}
+
+  smoke-test-staging:
+    if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
+    needs:
+      - deploy-staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: staging
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: ./.github/actions/cached-node-install
+
+      - uses: ./.github/actions/cached-playwright-setup
+
+      - name: Update package lists
+        run: sudo apt-get update
+
+      - name: Install WireGuard
+        run: sudo apt-get install -y wireguard-tools
+
+      - name: Write the tunnel config
+        run: printf '%s\n' "$WIREGUARD_CONFIG" > "$RUNNER_TEMP/wg0.conf"
+        env:
+          WIREGUARD_CONFIG: ${{ secrets.WIREGUARD_CONFIG }}
+
+      - name: Restrict the config permissions
+        run: chmod 600 "$RUNNER_TEMP/wg0.conf"
+
+      - name: Bring up the tunnel
+        run: sudo wg-quick up "$RUNNER_TEMP/wg0.conf"
+
+      - name: VPN connectivity check
+        run: curl -I --max-time 20 https://preview-stage.bmbfsfj.bund.de/familienportal/rechner-antraege/elterngeldrechner/egr
+
+      - name: Smoke test
+        run: npm run test-smoke
+        env:
+          ENVIRONMENT_URL: https://preview-stage.bmbfsfj.bund.de/familienportal/rechner-antraege/elterngeldrechner/
+          EXPECTED_BUILD: ${{ github.sha }}
+
+      - name: Disconnect VPN
+        if: always()
+        run: sudo wg-quick down wg0 || true
 
   deploy-production:
     runs-on: ubuntu-24.04

@@ -13,6 +13,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const rootDiv = document.getElementById("egr-root");
   if (!rootDiv) return;
 
+  // Stamp the deployed commit so the post-deployment smoke test can confirm
+  // the freshly built bundle is the one actually running (see ADR 0009 on
+  // why assets carry no content hash to distinguish versions by URL).
+  rootDiv.setAttribute("data-build", import.meta.env.VITE_BUILD_VERSION);
+
   createRoot(rootDiv).render(
     <StrictMode>
       <PostHogProvider client={posthog}>

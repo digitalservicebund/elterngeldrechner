@@ -16,6 +16,7 @@
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",
     "test-e2e": "playwright test",
+    "test-smoke": "playwright test --config playwright.smoke.config.ts",
     "type-check": "tsc",
     "lint": "f() { oxlint --no-error-on-unmatched-pattern ${@}; }; f",
     "lint-fix": "f() { oxlint --fix --no-error-on-unmatched-pattern ${@}; }; f",

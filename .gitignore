@@ -40,6 +40,9 @@ public/*.ico
 public/*.svg
 public/*.html
 
+# locally generated host-page snapshot (see scripts/generate-app-wrapper.sh)
+/.app-wrapper/
+
 # playwright
 /test-results/
 /playwright-report/

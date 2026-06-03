@@ -43,6 +43,17 @@ jobs:
 
       - uses: ./.github/actions/cached-playwright-setup
 
+      - name: Restore cached app-wrapper snapshot
+        id: app-wrapper-cache
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 #v5.0.4
+        with:
+          path: .app-wrapper
+          key: app-wrapper-snapshot
+
+      - name: Generate app-wrapper snapshot on cache miss
+        if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
+        run: scripts/generate-app-wrapper.sh
+
       - name: Run playwright e2e tests
         run: npm run test-e2e
 
@@ -79,6 +90,17 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
 
       - uses: ./.github/actions/cached-node-install
+
+      - name: Restore cached app-wrapper snapshot
+        id: app-wrapper-cache
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 #v5.0.4
+        with:
+          path: .app-wrapper
+          key: app-wrapper-snapshot
+
+      - name: Generate app-wrapper snapshot on cache miss
+        if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
+        run: scripts/generate-app-wrapper.sh || echo "::warning::app-wrapper fetch failed; preview will use the bare host page"
 
       - name: Run development build specific for stack it staging environment
         run: npm run build:staging

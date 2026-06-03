@@ -6,12 +6,12 @@
     "src/*"
   ],
   "scripts": {
-    "start": "scripts/setup-app-wrapper.sh --target public --use-cache && vite",
-    "build:development": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build --mode development",
-    "build:production": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build --mode production",
-    "build:staging": "scripts/setup-app-wrapper.sh --target public --include-additional-css --include-additional-js && vite build --mode staging",
+    "start": "scripts/generate-app-wrapper.sh && vite",
+    "build:development": "VITE_PREVIEW_BANNER=true vite build --mode development",
+    "build:production": "VITE_PREVIEW_BANNER=true vite build --mode production",
+    "build:staging": "VITE_PREVIEW_BANNER=true vite build --mode staging",
     "release": "scripts/create-new-tag.sh",
-    "serve-e2e": "scripts/setup-app-wrapper.sh --target public && vite build --mode development && http-server dist",
+    "serve-e2e": "scripts/generate-app-wrapper.sh && vite build --mode development && http-server dist",
     "test": "LC_ALL=de-DE.utf8 vitest",
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",
     "test-all": "npm run type-check && npm run lint && npm run stylelint && npm run test",

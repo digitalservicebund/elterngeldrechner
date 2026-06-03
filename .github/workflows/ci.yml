@@ -108,6 +108,9 @@ jobs:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     environment: staging
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: false
     needs:
       - test-suite-vitest
       - test-suite-playwright
@@ -151,6 +154,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     environment: staging
+    concurrency:
+      group: deploy-staging
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -192,6 +198,9 @@ jobs:
     runs-on: ubuntu-24.04
     if: startsWith(github.event.ref, 'refs/tags/')
     environment: production
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
     needs:
       - test-suite-vitest
       - test-suite-playwright
@@ -232,6 +241,9 @@ jobs:
     if: startsWith(github.event.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
     needs:
       - deploy-production
     steps:

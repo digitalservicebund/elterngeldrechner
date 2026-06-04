@@ -208,7 +208,7 @@ if (import.meta.vitest) {
   const { vi, beforeEach, describe, it, expect } = import.meta.vitest;
 
   describe("Pruefbuttonbox", async () => {
-    const { render, screen } = await import("@/application/test-utils");
+    const { render, screen } = await import("@testing-library/react");
     const { Elternteil, Result } = await import("@/monatsplaner");
     const { userEvent } = await import("@testing-library/user-event");
     const useAntragInformationenModule =

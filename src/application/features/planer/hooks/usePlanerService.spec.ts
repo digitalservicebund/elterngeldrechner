@@ -4,7 +4,7 @@ import {
   type InitialInformation,
   usePlanerService,
 } from "./usePlanerService";
-import { act, renderHook } from "@/application/test-utils";
+import { act, renderHook } from "@testing-library/react";
 import {
   type Auswahloption,
   type BerechneElterngeldbezuegeCallback,

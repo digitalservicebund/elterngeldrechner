@@ -254,31 +254,53 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
-  describe.skip("Datenuebernahme Antrag Page", async () => {
+  vi.mock("@/application/features/abfrageteil-next/components/Page", () => ({
+    Page: ({
+      children,
+      heading,
+      id,
+    }: {
+      readonly children: React.ReactNode;
+      readonly heading: string;
+      readonly id?: string;
+    }) => (
+      <div id={id}>
+        <section aria-label={heading}>{children}</section>
+      </div>
+    ),
+  }));
+  vi.mock("@/application/pages/planungsteil/useNavigateStateful", () => ({
+    useNavigateStateful: vi.fn(),
+  }));
+  vi.mock("@/application/pages/planungsteil/useAntragInformationen", () => ({
+    useAntragInformationen: vi.fn(),
+  }));
+
+  describe("Datenuebernahme Antrag Page", async () => {
     const { useNavigateStateful: useStatefulNavigate } =
       await import("@/application/pages/planungsteil/useNavigateStateful");
+    const { useAntragInformationen } =
+      await import("@/application/pages/planungsteil/useAntragInformationen");
+    const { getBundeslandAntragSupportByName } =
+      await import("@/application/features/pdfAntrag");
 
-    const { INITIAL_EVENTS, render, screen } =
-      await import("@/application/test-utils");
+    const { render, screen } = await import("@testing-library/react");
+
+    const navigateSpy = vi.fn();
 
     beforeEach(() => {
-      vi.mock(
-        import("@/application/pages/planungsteil/useNavigateStateful"),
-        () => ({
-          useNavigateStateful: vi.fn(),
-        }),
+      navigateSpy.mockClear();
+      vi.mocked(useAntragInformationen).mockReturnValue(
+        getBundeslandAntragSupportByName("Berlin"),
       );
+      vi.mocked(useStatefulNavigate).mockReturnValue({
+        navigationState: { plan: ANY_PLAN },
+        navigateStateful: navigateSpy,
+      });
     });
 
     it("shows a section for the Datenuebernahme Antrag with option to download pdf if a Plan was provided and Bundesland is supported", () => {
-      vi.mocked(useStatefulNavigate).mockReturnValue({
-        navigationState: { plan: ANY_PLAN },
-        navigateStateful: () => undefined,
-      });
-
-      render(<DatenuebernahmeAntragPage />, {
-        initialEvents: INITIAL_EVENTS,
-      });
+      render(<DatenuebernahmeAntragPage />);
 
       expect(
         screen.getByLabelText(
@@ -291,14 +313,7 @@ if (import.meta.vitest) {
     });
 
     it("shows a section for the Datenuebernahme Antrag with option to use the online tool instead", () => {
-      vi.mocked(useStatefulNavigate).mockReturnValue({
-        navigationState: { plan: ANY_PLAN },
-        navigateStateful: () => undefined,
-      });
-
-      render(<DatenuebernahmeAntragPage />, {
-        initialEvents: INITIAL_EVENTS,
-      });
+      render(<DatenuebernahmeAntragPage />);
 
       expect(
         screen.getByRole("link", { name: /das offizielle Tool/i }),
@@ -306,22 +321,13 @@ if (import.meta.vitest) {
     });
 
     it("uses the existing Plan when navigating back to the Rechner", () => {
-      const navigateStateful = vi.fn();
-
-      vi.mocked(useStatefulNavigate).mockReturnValue({
-        navigationState: { plan: ANY_PLAN },
-        navigateStateful,
-      });
-
-      render(<DatenuebernahmeAntragPage />, {
-        initialEvents: INITIAL_EVENTS,
-      });
+      render(<DatenuebernahmeAntragPage />);
 
       screen.getByRole("button", { name: "Zurück" }).click();
 
-      expect(navigateStateful).toHaveBeenCalledOnce();
+      expect(navigateSpy).toHaveBeenCalledOnce();
 
-      expect(navigateStateful).toHaveBeenLastCalledWith("/rechner-planer", {
+      expect(navigateSpy).toHaveBeenLastCalledWith("/rechner-planer", {
         plan: ANY_PLAN,
       });
     });

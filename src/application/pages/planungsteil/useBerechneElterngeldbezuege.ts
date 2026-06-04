@@ -241,7 +241,7 @@ if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
   describe("errechnete Elterngeldbezüge selector", async () => {
-    const { renderHook } = await import("@/application/test-utils");
+    const { renderHook } = await import("@testing-library/react");
     const { KeinElterngeld } = await import("@/monatsplaner");
 
     beforeEach(async () => {

@@ -275,40 +275,78 @@ export function PlanerPage() {
 if (import.meta.vitest) {
   const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
-  describe.skip("Planer Page", async () => {
-    const { Elternteil, Variante, berechneGesamtsumme } =
-      await import("@/monatsplaner");
+  vi.mock("@/application/features/abfrageteil-next/components/Page", () => ({
+    Page: ({ children }: { readonly children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+  }));
+  vi.mock("@/application/pages/planungsteil/useAusgangslage", () => ({
+    useAusgangslage: vi.fn(),
+  }));
+  vi.mock(
+    "@/application/pages/planungsteil/useBerechneElterngeldbezuege",
+    () => ({
+      useBerechneElterngeldbezuege: vi.fn(),
+    }),
+  );
+  vi.mock("@/application/pages/planungsteil/useEinkommenInformationen", () => ({
+    useEinkommenInformationen: vi.fn(),
+  }));
+  vi.mock("@/application/pages/planungsteil/useNavigateStateful", () => ({
+    useNavigateStateful: vi.fn(),
+  }));
+  vi.mock("@/application/pages/planungsteil/useAntragInformationen", () => ({
+    useAntragInformationen: vi.fn(),
+  }));
 
+  describe("Planer Page", async () => {
+    const monatsplanerModule = await import("@/monatsplaner");
+    const { Elternteil, Variante } = monatsplanerModule;
     const { useNavigateStateful } =
       await import("@/application/pages/planungsteil/useNavigateStateful");
+    const { useAusgangslage } =
+      await import("@/application/pages/planungsteil/useAusgangslage");
+    const { useBerechneElterngeldbezuege } =
+      await import("@/application/pages/planungsteil/useBerechneElterngeldbezuege");
+    const { useEinkommenInformationen } =
+      await import("@/application/pages/planungsteil/useEinkommenInformationen");
+    const { useAntragInformationen } =
+      await import("@/application/pages/planungsteil/useAntragInformationen");
+    const { getBundeslandAntragSupportByName } =
+      await import("@/application/features/pdfAntrag");
 
-    const { render, screen } = await import("@/application/test-utils");
-    const { INITIAL_EVENTS } = await import("@/application/test-utils");
+    const { render, screen } = await import("@testing-library/react");
+
+    const mockAusgangslage = {
+      anzahlElternteile: 2 as const,
+      geburtsdatumDesKindes: new Date(),
+      namenDerElternteile: {
+        [Elternteil.Eins]: "Jane",
+        [Elternteil.Zwei]: "John",
+      },
+    };
 
     type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
     type NavigateStateful = NavigateStatefulHook["navigateStateful"];
 
     const navigateSpy = vi.fn<NavigateStateful>();
 
-    beforeEach(async () => {
-      vi.spyOn(
-        await import("@/application/features/abfrageteil-next/events/EventContext"),
-        "useOptionalEventContext",
-      ).mockReturnValue({
-        filtereValideEventHistorie: () => [],
-        findeAlleGueltigenEvents: () => [],
-        findeLetztesEvent: () => undefined,
-        findeLetztesGueltigesEvent: () => undefined,
-        findeVorherigenPfad: () => "/",
-        dispatch: () => {},
-      });
-
-      vi.mock(
-        import("@/application/pages/planungsteil/useNavigateStateful"),
-        () => ({ useNavigateStateful: vi.fn() }),
+    beforeEach(() => {
+      vi.mocked(useAusgangslage).mockReturnValue(mockAusgangslage);
+      vi.mocked(useBerechneElterngeldbezuege).mockReturnValue(
+        vi.fn().mockReturnValue({}),
       );
-
-      vi.mocked(berechneGesamtsumme).mockReturnValue({
+      vi.mocked(useEinkommenInformationen).mockReturnValue({
+        gesamteinkommenGrenzeUeberschritten: false,
+      });
+      vi.mocked(useNavigateStateful).mockReturnValue({
+        navigationState: {},
+        navigateStateful: navigateSpy,
+      });
+      vi.mocked(useAntragInformationen).mockReturnValue(
+        getBundeslandAntragSupportByName("Berlin"),
+      );
+      vi.spyOn(monatsplanerModule, "berechneGesamtsumme").mockReturnValue({
         elterngeldbezug: 400,
         proElternteil: {
           [Elternteil.Eins]: {
@@ -323,34 +361,25 @@ if (import.meta.vitest) {
           },
         },
       });
-
-      vi.mocked(useNavigateStateful).mockReturnValue({
-        navigationState: {},
-        navigateStateful: navigateSpy,
-      });
     });
 
     describe("Neue leere Planung erstellen", async () => {
       const { erstelleInitialeLebensmonate } = await import("@/monatsplaner");
 
-      it("ist interaktiv wenn eine Änderung am Plan gemacht wurde", () => {
-        const ausgangslage: AusgangslageFuerZweiElternteile = {
-          anzahlElternteile: 2 as const,
-          geburtsdatumDesKindes: new Date(),
-          namenDerElternteile: {
-            [Elternteil.Eins]: "Jane",
-            [Elternteil.Zwei]: "John",
-          },
+      const mockAusgangslageWithMutterschutz: AusgangslageFuerZweiElternteile =
+        {
+          ...mockAusgangslage,
           informationenZumMutterschutz: {
             empfaenger: Elternteil.Eins,
             letzterLebensmonatMitSchutz: 2,
           },
         };
 
+      it("ist interaktiv wenn eine Änderung am Plan gemacht wurde", () => {
         vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
-              ausgangslage: ausgangslage,
+              ausgangslage: mockAusgangslageWithMutterschutz,
               lebensmonate: {
                 1: {
                   [Elternteil.Eins]: {
@@ -381,9 +410,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<PlanerPage />, {
-          initialEvents: INITIAL_EVENTS,
-        });
+        render(<PlanerPage />);
 
         const resetPlanButton = screen.queryByText(
           "Neue leere Planung erstellen",
@@ -393,32 +420,19 @@ if (import.meta.vitest) {
       });
 
       it("ist deaktiviert bei leerem Plan mit Mutterschutz", () => {
-        const ausgangslage: AusgangslageFuerZweiElternteile = {
-          anzahlElternteile: 2 as const,
-          geburtsdatumDesKindes: new Date(),
-          namenDerElternteile: {
-            [Elternteil.Eins]: "Jane",
-            [Elternteil.Zwei]: "John",
-          },
-          informationenZumMutterschutz: {
-            empfaenger: Elternteil.Eins,
-            letzterLebensmonatMitSchutz: 2,
-          },
-        };
-
         vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
-              ausgangslage: ausgangslage,
-              lebensmonate: erstelleInitialeLebensmonate(ausgangslage),
+              ausgangslage: mockAusgangslageWithMutterschutz,
+              lebensmonate: erstelleInitialeLebensmonate(
+                mockAusgangslageWithMutterschutz,
+              ),
             },
           },
           navigateStateful: navigateSpy,
         });
 
-        render(<PlanerPage />, {
-          initialEvents: INITIAL_EVENTS,
-        });
+        render(<PlanerPage />);
 
         const resetPlanButton = screen.queryByText(
           "Neue leere Planung erstellen",

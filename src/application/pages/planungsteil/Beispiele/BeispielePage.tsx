@@ -286,164 +286,55 @@ export function BeispielePage() {
 if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
-  describe.skip("Beispiele Page", async () => {
-    const useNavigateStatefulModule =
+  vi.mock("@/application/features/abfrageteil-next/components/Page", () => ({
+    Page: ({ children }: { readonly children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+  }));
+  vi.mock("@/application/pages/planungsteil/useAusgangslage", () => ({
+    useAusgangslage: vi.fn(),
+  }));
+  vi.mock(
+    "@/application/pages/planungsteil/useBerechneElterngeldbezuege",
+    () => ({
+      useBerechneElterngeldbezuege: vi.fn(),
+    }),
+  );
+  vi.mock("@/application/pages/planungsteil/useNavigateStateful", () => ({
+    useNavigateStateful: vi.fn(),
+  }));
+  vi.mock(
+    "@/application/features/abfrageteil-next/events/EventContext",
+    () => ({
+      useEventContext: () => ({
+        findeLetztesEvent: vi.fn(),
+        findeLetztesGueltigesEvent: vi.fn(),
+      }),
+    }),
+  );
+
+  describe("Beispiele Page", async () => {
+    const { useAusgangslage } =
+      await import("@/application/pages/planungsteil/useAusgangslage");
+    const { useBerechneElterngeldbezuege } =
+      await import("@/application/pages/planungsteil/useBerechneElterngeldbezuege");
+    const { useNavigateStateful } =
       await import("@/application/pages/planungsteil/useNavigateStateful");
     const reactRouterModule = await import("react-router");
-    const pageModule =
-      await import("@/application/features/abfrageteil-next/components/Page");
 
-    const { render, screen } = await import("@/application/test-utils");
-    const { Route } =
-      await import("@/application/features/abfrageteil-next/routing");
-    const { Temporal } = await import("@js-temporal/polyfill");
-    const { Steuerklasse } = await import("@/elterngeldrechner");
+    const { render, screen } = await import("@testing-library/react");
+    const { Elternteil } = await import("@/monatsplaner");
 
-    const INITIAL_EVENTS: import("@/application/features/abfrageteil-next/routing").FormEvent[] =
-      [
-        { route: Route.Startseite },
-        {
-          route: Route.AllgemeineAngaben,
-          payload: {
-            bundesland: "Berlin",
-            gesamteinkommenGrenzeUeberschritten: false,
-          },
-        },
-        { route: Route.KindAbfrage, payload: { istGeboren: true } },
-        {
-          route: Route.GeborenesKindAngaben,
-          payload: {
-            geburtsdatum: Temporal.PlainDate.from("2025-01-01"),
-            errechneterEntbindungstermin: Temporal.PlainDate.from("2025-01-01"),
-            anzahl: 1,
-          },
-        },
-        {
-          route: Route.GeschwisterkindAbfrage,
-          payload: { istVorhanden: false },
-        },
-        {
-          route: Route.ElternteilEinsAllgemeineAngaben,
-          payload: {
-            name: "Jane",
-            istAlleinerziehend: false,
-            istImMutterschutz: false,
-          },
-        },
-        {
-          route: Route.ElternteilAusklammerungGruendeAngaben,
-          params: { elternteilIndex: 0 },
-          payload: {
-            hatKeineAusklammerungsgruende: true,
-            hatMutterschutzAelteresKind: false,
-            hatElterngeldAelteresKind: false,
-            hatSchwangerschaftsbedingteErkrankung: false,
-          },
-        },
-        {
-          route: Route.ElternteilTaetigkeitenAbfrage,
-          params: { elternteilIndex: 0 },
-          payload: {
-            istNichtSelbststaendig: true,
-            istSelbststaendig: false,
-            istVerbeamtet: false,
-            hatAndereLeistungen: false,
-            hatPeriodenOhneEinkommen: false,
-          },
-          dependentValues: { istPersonAlleinerziehend: false },
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: { istTaetigkeitMinijob: false },
-          dependentValues: { kannDurchschnittAngegebenWerden: true },
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: {
-            steuerklasse: Steuerklasse.I,
-            istKirchensteuerpflichtig: false,
-            istGesetzlichKrankenpflichtversichert: true,
-            istGesetzlichRentenversichert: true,
-            istGesetzlichArbeitlosenversichert: true,
-            istEinkommenGleichVerteilt: true,
-          },
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenEinkommen,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: { durchschnittlichesMonatsbrutto: 3000 },
-          dependentValues: { istMischeinkunft: false },
-        },
-        {
-          route: Route.ElternteilWeitereTaetigkeitAbfrage,
-          params: { elternteilIndex: 0, taetigkeitIndex: 0 },
-          payload: { istWeitereTaetigkeitVorhanden: false },
-          dependentValues: {
-            istSelbststaendigeTaetigkeitMoeglich: false,
-            istPersonAlleinerziehend: false,
-          },
-        },
-        {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: {
-            wirdZweitePersonBeruecksichtigt: true,
-            name: "John",
-            istImMutterschutz: false,
-          },
-          dependentValues: { hatPotenzielleAusklammerungen: false },
-        },
-        {
-          route: Route.ElternteilTaetigkeitenAbfrage,
-          params: { elternteilIndex: 1 },
-          payload: {
-            istNichtSelbststaendig: true,
-            istSelbststaendig: false,
-            istVerbeamtet: false,
-            hatAndereLeistungen: false,
-            hatPeriodenOhneEinkommen: false,
-          },
-          dependentValues: { istPersonAlleinerziehend: false },
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
-          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
-          payload: { istTaetigkeitMinijob: false },
-          dependentValues: { kannDurchschnittAngegebenWerden: true },
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
-          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
-          payload: {
-            steuerklasse: Steuerklasse.I,
-            istKirchensteuerpflichtig: false,
-            istGesetzlichKrankenpflichtversichert: true,
-            istGesetzlichRentenversichert: true,
-            istGesetzlichArbeitlosenversichert: true,
-            istEinkommenGleichVerteilt: true,
-          },
-        },
-        {
-          route: Route.ElternteilTaetigkeitAngabenEinkommen,
-          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
-          payload: { durchschnittlichesMonatsbrutto: 3000 },
-          dependentValues: { istMischeinkunft: false },
-        },
-        {
-          route: Route.ElternteilWeitereTaetigkeitAbfrage,
-          params: { elternteilIndex: 1, taetigkeitIndex: 0 },
-          payload: { istWeitereTaetigkeitVorhanden: false },
-          dependentValues: {
-            istSelbststaendigeTaetigkeitMoeglich: false,
-            istPersonAlleinerziehend: false,
-          },
-        },
-      ];
+    const mockAusgangslage = {
+      anzahlElternteile: 2 as const,
+      geburtsdatumDesKindes: new Date(),
+      namenDerElternteile: {
+        [Elternteil.Eins]: "Jasper Darwin Artus",
+        [Elternteil.Zwei]: "Salomé Loreley Zoe",
+      },
+    };
 
-    type NavigateStatefulHook = ReturnType<
-      typeof useNavigateStatefulModule.useNavigateStateful
-    >;
+    type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
     type NavigateStateful = NavigateStatefulHook["navigateStateful"];
     type NavigateState = Parameters<NavigateStateful>[1];
 
@@ -451,32 +342,37 @@ if (import.meta.vitest) {
 
     beforeEach(() => {
       vi.spyOn(reactRouterModule, "useNavigate").mockReturnValue(vi.fn());
-
-      vi.spyOn(pageModule, "Page").mockImplementation(({ children }) => (
-        <>{children}</>
-      ));
-
-      vi.spyOn(
-        useNavigateStatefulModule,
-        "useNavigateStateful",
-      ).mockReturnValue({
+      vi.mocked(useAusgangslage).mockReturnValue(mockAusgangslage);
+      vi.mocked(useBerechneElterngeldbezuege).mockReturnValue(
+        vi.fn().mockReturnValue({}),
+      );
+      vi.mocked(useNavigateStateful).mockReturnValue({
         navigationState: {},
         navigateStateful: navigateSpy,
       });
     });
 
     describe("selection", async () => {
-      const { Elternteil, Variante, erstelleInitialeLebensmonate } =
+      const { Variante, erstelleInitialeLebensmonate } =
         await import("@/monatsplaner");
 
+      const mockAusgangslageWithMutterschutz: AusgangslageFuerZweiElternteile =
+        {
+          ...mockAusgangslage,
+          informationenZumMutterschutz: {
+            empfaenger: Elternteil.Eins,
+            letzterLebensmonatMitSchutz: 2,
+          },
+        };
+
       it("zeigt eine kachel pro beispiel und eine option für eigene planung", () => {
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         expect(screen.getAllByRole("radio")).toHaveLength(3);
       });
 
       it("navigiert mit beispiel und plan nachdem eine beispiel selektiert wurde", () => {
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -497,7 +393,7 @@ if (import.meta.vitest) {
       });
 
       it("eigene planung überschreibt ein vorher selektiertes beispiel", () => {
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -516,28 +412,17 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten ist nicht sichtbar bei leerem plan", () => {
-        const ausgangslage: AusgangslageFuerZweiElternteile = {
-          anzahlElternteile: 2 as const,
-          geburtsdatumDesKindes: new Date(),
-          namenDerElternteile: {
-            [Elternteil.Eins]: "Jane",
-            [Elternteil.Zwei]: "John",
-          },
-        };
-
-        vi.mocked(
-          useNavigateStatefulModule.useNavigateStateful,
-        ).mockReturnValue({
+        vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
-              ausgangslage: ausgangslage,
+              ausgangslage: mockAusgangslage,
               lebensmonate: {},
             },
           },
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         expect(
           screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
@@ -545,25 +430,10 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten ist sichtbar wenn ein plan erstellt wurde", () => {
-        const ausgangslage: AusgangslageFuerZweiElternteile = {
-          anzahlElternteile: 2 as const,
-          geburtsdatumDesKindes: new Date(),
-          namenDerElternteile: {
-            [Elternteil.Eins]: "Jane",
-            [Elternteil.Zwei]: "John",
-          },
-          informationenZumMutterschutz: {
-            empfaenger: Elternteil.Eins,
-            letzterLebensmonatMitSchutz: 2,
-          },
-        };
-
-        vi.mocked(
-          useNavigateStatefulModule.useNavigateStateful,
-        ).mockReturnValue({
+        vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
-              ausgangslage: ausgangslage,
+              ausgangslage: mockAusgangslageWithMutterschutz,
               lebensmonate: {
                 1: {
                   [Elternteil.Eins]: {
@@ -594,7 +464,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         expect(
           screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
@@ -602,32 +472,19 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten ist nicht sichtbar bei leerem plan mit mutterschutz", () => {
-        const ausgangslage: AusgangslageFuerZweiElternteile = {
-          anzahlElternteile: 2 as const,
-          geburtsdatumDesKindes: new Date(),
-          namenDerElternteile: {
-            [Elternteil.Eins]: "Jane",
-            [Elternteil.Zwei]: "John",
-          },
-          informationenZumMutterschutz: {
-            empfaenger: Elternteil.Eins,
-            letzterLebensmonatMitSchutz: 2,
-          },
-        };
-
-        vi.mocked(
-          useNavigateStatefulModule.useNavigateStateful,
-        ).mockReturnValue({
+        vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
-              ausgangslage: ausgangslage,
-              lebensmonate: erstelleInitialeLebensmonate(ausgangslage),
+              ausgangslage: mockAusgangslageWithMutterschutz,
+              lebensmonate: erstelleInitialeLebensmonate(
+                mockAusgangslageWithMutterschutz,
+              ),
             },
           },
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         expect(
           screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
@@ -635,9 +492,7 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten übernimmt den initialen plan", () => {
-        vi.mocked(
-          useNavigateStatefulModule.useNavigateStateful,
-        ).mockReturnValue({
+        vi.mocked(useNavigateStateful).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: {
@@ -671,7 +526,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -699,7 +554,7 @@ if (import.meta.vitest) {
           "setTrackingVariable",
         );
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -715,7 +570,7 @@ if (import.meta.vitest) {
           "setTrackingVariable",
         );
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -730,7 +585,7 @@ if (import.meta.vitest) {
       it("trackt Beispiel-wurde-ausgewählt nach Auswahl eines Beispiels", () => {
         const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -742,7 +597,7 @@ if (import.meta.vitest) {
       it("trackt Beispiel-wurde-ausgewählt auch bei der Option Eigene Planung", () => {
         const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Eigene Planung").click();
 
@@ -757,7 +612,7 @@ if (import.meta.vitest) {
           "trackReachedConversionGoal",
         );
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -772,7 +627,7 @@ if (import.meta.vitest) {
           "trackReachedConversionGoal",
         );
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Eigene Planung").click();
 
@@ -787,7 +642,7 @@ if (import.meta.vitest) {
           "trackUsageOfPlanungshilfen",
         );
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
@@ -802,7 +657,7 @@ if (import.meta.vitest) {
           "trackUsageOfPlanungshilfen",
         );
 
-        render(<BeispielePage />, { initialEvents: INITIAL_EVENTS });
+        render(<BeispielePage />);
 
         screen.getByText("Eigene Planung").click();
 

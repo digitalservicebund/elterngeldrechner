@@ -298,6 +298,15 @@ if (import.meta.vitest) {
   vi.mock("@/application/pages/planungsteil/useAntragInformationen", () => ({
     useAntragInformationen: vi.fn(),
   }));
+  vi.mock("@/application/features/user-feedback", async (importOriginal) => ({
+    ...(await importOriginal<
+      typeof import("@/application/features/user-feedback")
+    >()),
+    useUserFeedback: () => ({
+      isFeedbackSubmitted: false,
+      submitFeedback: vi.fn(),
+    }),
+  }));
 
   describe("Planer Page", async () => {
     const monatsplanerModule = await import("@/monatsplaner");

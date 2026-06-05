@@ -100,7 +100,7 @@ export function ElternteilAusklammerungGruendePage() {
 
   useValidierungsfehlerTracking(form.subscribe);
 
-  const onSubmit = (values: ElternteilAusklammerungGruende) => {
+  const onSubmit = async (values: ElternteilAusklammerungGruende) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -109,11 +109,11 @@ export function ElternteilAusklammerungGruendePage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const handleCheckboxChange = (checked: boolean) => {

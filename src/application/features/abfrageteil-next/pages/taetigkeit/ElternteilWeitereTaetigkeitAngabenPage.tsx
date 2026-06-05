@@ -50,7 +50,7 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: WeitereTaetigkeitArtAbfrage) => {
+  const onSubmit = async (values: WeitereTaetigkeitArtAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -59,11 +59,11 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const eventStream = filtereValideEventHistorie();

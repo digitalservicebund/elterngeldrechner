@@ -39,7 +39,7 @@ export function UngeborenesKindPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: UngeborenesKind) => {
+  const onSubmit = async (values: UngeborenesKind) => {
     const event: FormEvent = { route: currentRoute, payload: values };
 
     dispatch(event);
@@ -52,11 +52,11 @@ export function UngeborenesKindPage() {
       mehrlinge: sindMehrlinge(values.anzahl),
     });
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   const entbindungsterminInputIdentifier = useId();

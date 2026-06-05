@@ -52,7 +52,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: TaetigkeitSelbststaendigAngaben) => {
+  const onSubmit = async (values: TaetigkeitSelbststaendigAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -61,11 +61,11 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(

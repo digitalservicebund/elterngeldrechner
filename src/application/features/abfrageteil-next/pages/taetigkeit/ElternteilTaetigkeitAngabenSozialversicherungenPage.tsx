@@ -59,7 +59,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: TaetigkeitNichtSelbststaendigAngaben) => {
+  const onSubmit = async (values: TaetigkeitNichtSelbststaendigAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: {
@@ -73,11 +73,11 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const eventStream = filtereValideEventHistorie();

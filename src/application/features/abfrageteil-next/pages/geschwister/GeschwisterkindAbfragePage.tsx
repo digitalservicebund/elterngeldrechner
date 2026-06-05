@@ -41,7 +41,7 @@ export function GeschwisterkindAbfragePage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: GeschwisterkindAbfrage) => {
+  const onSubmit = async (values: GeschwisterkindAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -56,11 +56,11 @@ export function GeschwisterkindAbfragePage() {
       hat_geschwister: values.istVorhanden,
     });
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   return (

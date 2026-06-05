@@ -58,7 +58,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
     ),
   });
 
-  const onSubmit = (values: TaetigkeitGleichesEinkommenAngaben) => {
+  const onSubmit = async (values: TaetigkeitGleichesEinkommenAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -70,11 +70,11 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   useValidierungsfehlerTracking(subscribe);

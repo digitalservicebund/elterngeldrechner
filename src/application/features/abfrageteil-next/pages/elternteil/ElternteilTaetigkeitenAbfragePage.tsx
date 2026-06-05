@@ -55,7 +55,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
 
   useValidierungsfehlerTracking(form.subscribe);
 
-  const onSubmit = (values: ElternteilTaetigkeitenAbfrage) => {
+  const onSubmit = async (values: ElternteilTaetigkeitenAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -67,11 +67,11 @@ export function ElternteilTaetigkeitenAbfragePage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const { berechneBetrachtungszeitraum } = useBemessungszeitraumrechner(

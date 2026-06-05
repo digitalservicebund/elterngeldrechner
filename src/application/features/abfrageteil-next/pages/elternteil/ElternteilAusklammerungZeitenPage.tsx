@@ -75,7 +75,7 @@ export function ElternteilAusklammerungZeitenPage() {
     defaultValues,
   });
 
-  const onSubmit = (values: ElternteilAusklammerungZeiten) => {
+  const onSubmit = async (values: ElternteilAusklammerungZeiten) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -84,11 +84,11 @@ export function ElternteilAusklammerungZeitenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const eventStream = filtereValideEventHistorie();

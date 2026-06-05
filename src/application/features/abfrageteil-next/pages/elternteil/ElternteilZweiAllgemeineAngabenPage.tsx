@@ -61,7 +61,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
       findeAnzahlKinder(eventStream),
     )?.empfaenger === Elternteil.Eins;
 
-  const onSubmit = (values: ElternteilZweiAllgemeineAngaben) => {
+  const onSubmit = async (values: ElternteilZweiAllgemeineAngaben) => {
     const geschwisterkinder = findeGeschwisterkinder(eventStream);
     const hatGeschwisterkinder = geschwisterkinder.length > 0;
 
@@ -85,11 +85,11 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   const wirdZweitePersonBeruecksichtigt = watch(

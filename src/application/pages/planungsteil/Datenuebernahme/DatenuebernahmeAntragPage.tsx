@@ -50,8 +50,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan } = navigationState;
 
-  const navigateToRechnerUndPlanerPage = () => {
-    void navigateStateful("/rechner-planer", navigationState);
+  const navigateToRechnerUndPlanerPage = async () => {
+    await navigateStateful("/rechner-planer", navigationState);
   };
 
   const [antragDownloading, setAntragDownloading] = useState(false);

@@ -5,6 +5,7 @@ import { RouteGuardDatenuebernahme } from "./RouteGuardDatenuebernahme";
 import { RouteGuardPlanungsteil } from "./RouteGuardPlanungsteil";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { EventProvider } from "@/application/features/abfrageteil-next/events/EventContext";
+import { UserFeedbackProvider } from "@/application/features/user-feedback";
 import {
   AllgemeineAngabenPage,
   ElternteilAusklammerungGruendePage,
@@ -45,9 +46,11 @@ function EventProviderLayout() {
   }, [location.pathname]);
 
   return (
-    <EventProvider>
-      <Outlet key={location.pathname} />
-    </EventProvider>
+    <UserFeedbackProvider>
+      <EventProvider>
+        <Outlet key={location.pathname} />
+      </EventProvider>
+    </UserFeedbackProvider>
   );
 }
 

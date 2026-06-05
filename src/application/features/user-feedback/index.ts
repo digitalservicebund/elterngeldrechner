@@ -1,2 +1,2 @@
 export { UserFeedbackForm } from "./components";
-export { useUserFeedback } from "./hooks";
+export { UserFeedbackProvider, useUserFeedback } from "./UserFeedbackContext";

@@ -50,16 +50,13 @@ const isDevelopmentEnviornment = import.meta.env.DEV;
 
 export function EventProvider({
   children,
-  initialEvents,
 }: {
   readonly children: React.ReactNode;
-  readonly initialEvents?: FormEvent[];
 }) {
   const [eventStream, dispatchAction] = useReducer(
     (state: FormEvent[], action: FormEvent) => [...state, action],
     undefined,
-    () =>
-      initialEvents ?? (isDevelopmentEnviornment ? restoreEventstream() : []),
+    () => (isDevelopmentEnviornment ? restoreEventstream() : []),
   );
 
   useEffect(() => {
@@ -148,5 +145,3 @@ export const useEventContext = () => {
     throw new Error("useEventContext must be used within EventProvider");
   return context;
 };
-
-export const useOptionalEventContext = () => useContext(EventContext);

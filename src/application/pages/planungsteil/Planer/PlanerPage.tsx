@@ -120,22 +120,22 @@ export function PlanerPage() {
     trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
   }
 
-  const navigateToBeispielePage = () => {
+  const navigateToBeispielePage = async () => {
     if (rememberSubmit.current) submitFeedback();
 
     if (hasChanges) {
-      void navigateStateful("/beispiele", { plan });
+      await navigateStateful("/beispiele", { plan });
     } else {
-      void navigateStateful("/beispiele", { beispiel });
+      await navigateStateful("/beispiele", { beispiel });
     }
   };
 
-  function navigateToDatenuebernahmeAntragPage(
+  async function navigateToDatenuebernahmeAntragPage(
     plan: PlanMitBeliebigenElternteilen,
-  ): void {
+  ): Promise<void> {
     if (rememberSubmit.current) submitFeedback();
 
-    void navigateStateful("/datenuebernahme-antrag", { plan });
+    await navigateStateful("/datenuebernahme-antrag", { plan });
   }
 
   // TODO: Consider implementing erklaerung as a new layer that

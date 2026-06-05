@@ -41,16 +41,16 @@ export function WahrscheinlichGeborenesKindPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: WahrscheinlichGeborenesKind) => {
+  const onSubmit = async (values: WahrscheinlichGeborenesKind) => {
     const event: FormEvent = { route: currentRoute, payload: values };
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   const geburtsdatumInputIdentifier = useId();

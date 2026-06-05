@@ -47,7 +47,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: ElternteilEinsAllgemeineAngaben) => {
+  const onSubmit = async (values: ElternteilEinsAllgemeineAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -55,11 +55,11 @@ export function ElternteilEinsAllgemeineAngabenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   const nameInForm = watch("name");

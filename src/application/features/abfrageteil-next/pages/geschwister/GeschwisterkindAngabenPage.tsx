@@ -50,7 +50,7 @@ export function GeschwisterkindAngabenPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: GeschwisterkindAngaben) => {
+  const onSubmit = async (values: GeschwisterkindAngaben) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -70,11 +70,11 @@ export function GeschwisterkindAngabenPage() {
       ),
     });
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const geburtsdatumInputIdentifier = useId();

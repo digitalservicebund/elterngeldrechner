@@ -54,7 +54,9 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: TaetigkeitNichtSelbststaendigMinijobAbfrage) => {
+  const onSubmit = async (
+    values: TaetigkeitNichtSelbststaendigMinijobAbfrage,
+  ) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -66,11 +68,11 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const eventStream = filtereValideEventHistorie();

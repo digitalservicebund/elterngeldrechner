@@ -54,7 +54,7 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
 
   useValidierungsfehlerTracking(subscribe);
 
-  const onSubmit = (values: TaetigkeitMinijobEinkommendetailsAbfrage) => {
+  const onSubmit = async (values: TaetigkeitMinijobEinkommendetailsAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -63,11 +63,11 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const eventStream = filtereValideEventHistorie();

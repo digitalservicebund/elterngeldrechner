@@ -48,18 +48,18 @@ export function AllgemeineAngabenPage() {
     (name) => ({ value: name, label: name }),
   );
 
-  const onSubmit = (values: AllgemeineAngaben) => {
+  const onSubmit = async (values: AllgemeineAngaben) => {
     const event: FormEvent = { route: currentRoute, payload: values };
 
     dispatch(event);
 
     posthog.register({ bundesland: event.payload.bundesland });
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   return (

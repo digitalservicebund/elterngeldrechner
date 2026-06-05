@@ -13,10 +13,10 @@ export function Startseite() {
 
   const navigate = useNavigate();
 
-  const navigateNextPage = () => {
+  const navigateNextPage = async () => {
     dispatch({ route: Route.Startseite });
 
-    void navigate(generateAbfrageteilPath(Route.AllgemeineAngaben));
+    await navigate(generateAbfrageteilPath(Route.AllgemeineAngaben));
   };
 
   return (

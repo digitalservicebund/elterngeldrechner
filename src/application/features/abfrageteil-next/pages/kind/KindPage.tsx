@@ -34,16 +34,16 @@ export function KindPage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: Geburt) => {
+  const onSubmit = async (values: Geburt) => {
     const event: FormEvent = { route: currentRoute, payload: values };
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   return (

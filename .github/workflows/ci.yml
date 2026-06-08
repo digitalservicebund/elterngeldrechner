@@ -50,11 +50,13 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
+        with:
+          fetch-depth: 0
 
       - uses: ./.github/actions/cached-node-install
 
       - name: Fallow audit
-        run: npx fallow audit --base main
+        run: npx fallow audit --base origin/main
 
   deploy-development:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')

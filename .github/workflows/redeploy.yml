@@ -58,7 +58,6 @@ jobs:
         run: ${{ steps.config.outputs.build_cmd }}
         env:
           VITE_BASE_PATH: ${{ steps.config.outputs.base_path }}
-          VITE_FEATURE_FLAG_ABFRAGETEIL_V2: "true"
 
       - name: Deploy to S3
         env:

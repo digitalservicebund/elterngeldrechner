@@ -6,7 +6,6 @@ interface ImportMetaEnv {
   readonly VITE_APP_PRELOAD_STATE: string;
 
   readonly VITE_FEATURE_FLAG_POSTHOG: string;
-  readonly VITE_FEATURE_FLAG_ABFRAGETEIL_V2: string;
 
   readonly VITE_BUILD_VERSION: string;
   readonly VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: string;

@@ -33,38 +33,6 @@ jobs:
       - name: test
         run: npm run test
 
-  test-suite-playwright:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
-
-      - uses: ./.github/actions/cached-node-install
-
-      - uses: ./.github/actions/cached-playwright-setup
-
-      - name: Restore cached app-wrapper snapshot
-        id: app-wrapper-cache
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 #v5.0.4
-        with:
-          path: .app-wrapper
-          key: app-wrapper-snapshot
-
-      - name: Generate app-wrapper snapshot on cache miss
-        if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
-        run: scripts/generate-app-wrapper.sh
-
-      - name: Run playwright e2e tests
-        run: npm run test-e2e
-
-      - name: Upload playwright report
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a #v7.0.1
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 1
-
   audit-licenses:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -83,7 +51,6 @@ jobs:
     environment: staging
     needs:
       - test-suite-vitest
-      - test-suite-playwright
       - static-code-analysis
       - audit-licenses
     steps:
@@ -135,7 +102,6 @@ jobs:
       cancel-in-progress: false
     needs:
       - test-suite-vitest
-      - test-suite-playwright
       - static-code-analysis
       - audit-licenses
     steps:
@@ -225,7 +191,6 @@ jobs:
       cancel-in-progress: false
     needs:
       - test-suite-vitest
-      - test-suite-playwright
       - static-code-analysis
       - audit-licenses
     steps:

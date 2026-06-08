@@ -47,7 +47,6 @@ jobs:
   audit-fallow:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    continue-on-error: true
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd #v6.0.2
         with:
@@ -55,8 +54,17 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
+      # Fallow runs as an advisory audit: a non-zero exit must not fail the
+      # check, but the failure is surfaced as a warning annotation so it
+      # stays visible rather than passing silently green.
       - name: Fallow audit
+        id: fallow
+        continue-on-error: true
         run: npx fallow audit --base origin/main
+
+      - name: Flag fallow findings
+        if: steps.fallow.outcome == 'failure'
+        run: echo "::warning title=Fallow audit::Fallow reported findings; see the audit step logs above."
 
   deploy-development:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')

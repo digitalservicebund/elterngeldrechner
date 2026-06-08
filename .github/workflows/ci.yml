@@ -54,17 +54,15 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      # Fallow runs as an advisory audit: a non-zero exit must not fail the
-      # check, but the failure is surfaced as a warning annotation so it
-      # stays visible rather than passing silently green.
+      # Fallow runs as an advisory audit: findings must not fail the check,
+      # so the step always exits zero. A non-zero audit surfaces fallow's
+      # own output as a warning annotation, keeping the findings visible
+      # rather than either failing the build or passing silently green.
       - name: Fallow audit
-        id: fallow
-        continue-on-error: true
-        run: npx fallow audit --base origin/main
-
-      - name: Flag fallow findings
-        if: steps.fallow.outcome == 'failure'
-        run: echo "::warning title=Fallow audit::Fallow reported findings; see the audit step logs above."
+        run: |
+          if ! npx fallow audit --base origin/main; then
+            echo "::warning title=Fallow audit::Fallow reported findings; see the audit step logs for more details."
+          fi
 
   deploy-development:
     if: github.ref == 'refs/heads/main' && !startsWith(github.ref, 'refs/tags/')

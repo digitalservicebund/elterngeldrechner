@@ -1,6 +1,6 @@
 import "@/application/styles/index.css";
 import { RouterProvider, createHashRouter } from "react-router";
-import routeDefinition from "@/application/features/abfrageteil-next/routing/RouteDefinition";
+import routeDefinition from "@/application/routing/RouteDefinition";
 
 // The hash router does not support the `hashType` property
 // at this point in time. This means that the routes look

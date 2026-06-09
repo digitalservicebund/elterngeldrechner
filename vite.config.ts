@@ -41,9 +41,7 @@ export default defineConfig({
     sourcemap: true,
     rolldownOptions: {
       output: {
-        minify: {
-          compress: false,
-        },
+        minify: "dce-only",
       },
     },
   },

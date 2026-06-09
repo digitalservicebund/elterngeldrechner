@@ -1,1 +1,0 @@
-export { BeispielePage } from "./BeispielePage";

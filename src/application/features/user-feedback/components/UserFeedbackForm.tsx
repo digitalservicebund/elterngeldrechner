@@ -4,7 +4,7 @@ import {
   Button,
   CustomRadioGroup,
   CustomRadioGroupOption,
-} from "@/application/components";
+} from "@/application/features/components";
 
 type Props = {
   readonly className?: string;

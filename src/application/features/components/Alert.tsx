@@ -1,5 +1,5 @@
-import Icon from "@digitalservicebund/icons/EmojiObjectsOutlined";
 import classNames from "classnames";
+import Icon from "~icons/material-symbols/emoji-objects-outline";
 
 type Props = {
   readonly headline: string;

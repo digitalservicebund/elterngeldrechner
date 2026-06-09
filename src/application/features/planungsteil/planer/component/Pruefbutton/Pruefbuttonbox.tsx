@@ -1,6 +1,3 @@
-import ArrowOutward from "@digitalservicebund/icons/ArrowOutward";
-import CheckIcon from "@digitalservicebund/icons/Check";
-import SaveAltIcon from "@digitalservicebund/icons/SaveAlt";
 import classNames from "classnames";
 import {
   type ReactNode,
@@ -21,6 +18,9 @@ import {
   type Result,
 } from "@/monatsplaner";
 import type { SpecificationViolation } from "@/monatsplaner/common/specification";
+import ArrowOutward from "~icons/material-symbols/arrow-outward";
+import CheckIcon from "~icons/material-symbols/check";
+import DownloadIcon from "~icons/material-symbols/download";
 
 type Props = {
   readonly className?: string;
@@ -165,7 +165,7 @@ export function Pruefbuttonbox({
 
             <div className="flex flex-col text-center print:hidden">
               <Button type="button" buttonStyle="link" onClick={planungDrucken}>
-                <SaveAltIcon className="mr-8" />
+                <DownloadIcon className="mr-8" />
                 Planung als PDF drucken oder speichern
               </Button>
 

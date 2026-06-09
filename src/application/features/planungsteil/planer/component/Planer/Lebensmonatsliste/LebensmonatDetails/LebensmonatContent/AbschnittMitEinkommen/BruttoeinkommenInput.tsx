@@ -1,4 +1,3 @@
-import BusinessCenterIcon from "@digitalservicebund/icons/BusinessCenterOutlined";
 import classNames from "classnames";
 import {
   type CSSProperties,
@@ -8,6 +7,7 @@ import {
   useId,
 } from "react";
 import type { Einkommen } from "@/monatsplaner";
+import BusinessCenterIcon from "~icons/material-symbols/business-center-outline";
 
 type Props = {
   readonly imMutterschutz: boolean;

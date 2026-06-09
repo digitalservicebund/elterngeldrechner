@@ -1,8 +1,8 @@
-import AddIcon from "@digitalservicebund/icons/Add";
-import LightbulbIcon from "@digitalservicebund/icons/LightbulbOutlined";
 import { ReactNode, SyntheticEvent } from "react";
 import { Tips } from "./generateTips";
 import { Button } from "@/application/features/components/Button";
+import AddIcon from "~icons/material-symbols/add";
+import LightbulbIcon from "~icons/material-symbols/lightbulb-outline";
 
 type Props = {
   readonly tips: Tips;

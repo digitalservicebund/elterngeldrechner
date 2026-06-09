@@ -1,5 +1,3 @@
-import AddIcon from "@digitalservicebund/icons/Add";
-import RemoveIcon from "@digitalservicebund/icons/Remove";
 import classNames from "classnames";
 import {
   type ForwardedRef,
@@ -27,6 +25,8 @@ import {
   LetzteLebensmonatszahl,
   type Plan,
 } from "@/monatsplaner";
+import AddIcon from "~icons/material-symbols/add";
+import RemoveIcon from "~icons/material-symbols/remove";
 
 export interface LebensmonatslisteHTMLElement extends HTMLElement {
   openLebensmonatsSummary: (monat: Lebensmonatszahl) => void;

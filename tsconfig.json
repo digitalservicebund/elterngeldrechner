@@ -8,7 +8,7 @@
     "strict": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "types": ["vitest/importMeta", "node"],
+    "types": ["vitest/importMeta", "node", "unplugin-icons/types/react"],
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
@@ -18,10 +18,7 @@
     "noImplicitReturns": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "@/*": ["./src/*"],
-      "@digitalservicebund/icons/*": [
-        "./node_modules/@digitalservicebund/icons/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src", "tests"],

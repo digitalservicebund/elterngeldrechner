@@ -1,6 +1,6 @@
-import ReadMoreIcon from "@digitalservicebund/icons/ReadMore";
 import { type ReactNode, useId } from "react";
 import { Button } from "@/application/features/components";
+import ReadMoreIcon from "~icons/material-symbols/read-more";
 
 type Props = {
   readonly className?: string;

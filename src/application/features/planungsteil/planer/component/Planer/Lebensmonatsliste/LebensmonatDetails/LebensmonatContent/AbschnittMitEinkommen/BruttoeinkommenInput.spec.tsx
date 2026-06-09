@@ -11,7 +11,7 @@ describe("Buttoeinkommen Input", () => {
       screen.getByRole("combobox", { name: "test aria label" }),
     ).toBeVisible();
     expect(screen.getByLabelText("Einkommen in € (brutto)")).toBeVisible();
-    expect(screen.getByTestId("BusinessCenterOutlinedIcon")).toBeVisible();
+    expect(screen.getByTestId("business-center-outline-icon")).toBeVisible();
   });
 
   it("uses the given Bruttoeinkommen as input value", () => {

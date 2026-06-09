@@ -7,14 +7,14 @@ describe("GewaehlteOption", () => {
   it("shows im Mutterschutz with a lock icon", () => {
     render(<GewaehlteOption {...ANY_PROPS} imMutterschutz />);
 
-    expect(screen.getByTestId("LockIcon")).toBeVisible();
+    expect(screen.getByTestId("lock-icon")).toBeVisible();
   });
 
   it("shows hinzufügen with a plus icon if no Option chosen yet", () => {
     render(<GewaehlteOption {...ANY_PROPS} option={undefined} />);
 
     expect(screen.getByText("hinzufügen")).toBeInTheDocument();
-    expect(screen.getByTestId("AddCircleOutlineIcon")).toBeVisible();
+    expect(screen.getByTestId("add-circle-outline-icon")).toBeVisible();
   });
 
   it.each([

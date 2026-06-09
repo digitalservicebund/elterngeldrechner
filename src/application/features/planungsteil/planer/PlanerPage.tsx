@@ -1,4 +1,3 @@
-import { ChevronLeft, RestartAlt } from "@digitalservicebund/icons/index";
 import { useEffect, useId, useRef, useState } from "react";
 import {
   trackMetricsForDerPlanHatSichGeaendert,
@@ -38,6 +37,8 @@ import type {
   PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
 import { sindLebensmonateGeplant } from "@/monatsplaner";
+import ChevronLeftIcon from "~icons/material-symbols/chevron-left";
+import RestartAltIcon from "~icons/material-symbols/restart-alt";
 
 export function PlanerPage() {
   const mainElement = useRef<HTMLDivElement>(null);
@@ -203,7 +204,7 @@ export function PlanerPage() {
                 className="mr-20 justify-self-start print:hidden"
                 onClick={navigateToBeispielePage}
               >
-                <ChevronLeft /> Zurück zur Auswahl
+                <ChevronLeftIcon /> Zurück zur Auswahl
               </Button>
 
               <Button
@@ -213,7 +214,7 @@ export function PlanerPage() {
                 onClick={() => planerRef.current?.setzePlanZurueck()}
                 disabled={!mindestensEinLebensmonatGeplant}
               >
-                <RestartAlt /> Neue leere Planung erstellen
+                <RestartAltIcon /> Neue leere Planung erstellen
               </Button>
 
               <Planer
@@ -237,7 +238,7 @@ export function PlanerPage() {
               className="my-16 justify-self-start print:hidden"
               onClick={navigateToBeispielePage}
             >
-              <ChevronLeft /> Zurück zur Auswahl
+              <ChevronLeftIcon /> Zurück zur Auswahl
             </Button>
 
             {!!showFeedbackForm && (

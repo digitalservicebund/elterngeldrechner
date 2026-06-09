@@ -23,7 +23,7 @@ describe("Auswahloption Label", () => {
     );
 
     expect(screen.getByText("Mutterschutz")).toBeVisible();
-    expect(screen.queryByTestId("LockIcon")).toBeVisible();
+    expect(screen.queryByTestId("lock-icon")).toBeVisible();
     expect(screen.queryByText("Basis")).toBeVisible();
   });
 

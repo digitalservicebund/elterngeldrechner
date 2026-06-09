@@ -18,7 +18,7 @@ describe("Elterngeldbezugsanzeige", () => {
   it("shows a warning icon when Bruttoeinkommen is missing", () => {
     render(<Haushaltseinkommen bruttoeinkommenIsMissing />);
 
-    expect(screen.getByTestId("ErrorIcon")).toBeVisible();
+    expect(screen.getByTestId("error-icon")).toBeVisible();
   });
 
   it("shows an information if being im Mutterschutz", () => {

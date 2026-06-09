@@ -1,4 +1,3 @@
-import LockIcon from "@digitalservicebund/icons/Lock";
 import classNames from "classnames";
 import { ReactNode } from "react";
 import { Geldbetrag } from "@/application/features/components";
@@ -8,6 +7,7 @@ import {
   KeinElterngeld,
   Variante,
 } from "@/monatsplaner";
+import LockIcon from "~icons/material-symbols/lock";
 
 type Props = {
   readonly option: Auswahloption;

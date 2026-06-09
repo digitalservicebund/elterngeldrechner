@@ -1,7 +1,7 @@
-import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
 import type { CSSProperties, ReactNode } from "react";
 import { Auswahloption, KeinElterngeld, Variante } from "@/monatsplaner";
+import CloseIcon from "~icons/material-symbols/close";
 
 type Props = {
   readonly auswahloption: Auswahloption;

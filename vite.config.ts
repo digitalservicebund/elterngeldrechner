@@ -1,12 +1,25 @@
 import fs from "fs";
 import path from "path";
 import react from "@vitejs/plugin-react";
+import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vitest/config";
 import type { Plugin, ResolvedConfig } from "vite";
 
 export default defineConfig({
   base: process.env.VITE_BASE_PATH || "/",
-  plugins: [react(), appWrapper()],
+  plugins: [
+    react(),
+    Icons({
+      jsx: "react",
+      compiler: "jsx",
+      iconCustomizer(collection, icon, props) {
+        props.focusable = "false";
+        props["aria-hidden"] = "true";
+        props["data-testid"] = `${icon}-icon`;
+      },
+    }),
+    appWrapper(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

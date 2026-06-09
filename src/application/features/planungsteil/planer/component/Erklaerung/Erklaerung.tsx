@@ -1,10 +1,10 @@
-import CloseIcon from "@digitalservicebund/icons/Close";
-import EastIcon from "@digitalservicebund/icons/East";
-import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import { ReactNode } from "react";
 import { Example } from "./Example";
 import { Button } from "@/application/features/components";
 import { Legende } from "@/application/features/planungsteil/planer/component/common";
+import CloseIcon from "~icons/material-symbols/close";
+import EastIcon from "~icons/material-symbols/east";
+import ExpandMoreIcon from "~icons/material-symbols/expand-more";
 
 type Props = {
   readonly onClose: () => void;

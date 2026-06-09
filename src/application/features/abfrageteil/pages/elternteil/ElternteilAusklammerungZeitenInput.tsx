@@ -1,5 +1,3 @@
-import AddIcon from "@digitalservicebund/icons/AddCircleOutline";
-import CloseIcon from "@digitalservicebund/icons/Close";
 import classNames from "classnames";
 import { Control, FieldErrors, useFieldArray } from "react-hook-form";
 import { Button } from "@/application/features/components";
@@ -8,6 +6,8 @@ import {
   ElternteilAusklammerungszeitenInput,
   ElternteilAusklammerungszeitenOutput,
 } from "@/application/features/abfrageteil/pages/elternteil/ElternteilAusklammerungZeitenPage";
+import AddIcon from "~icons/material-symbols/add-circle-outline";
+import CloseIcon from "~icons/material-symbols/close";
 
 interface ElternteilAusklammerungZeitenInputProps {
   readonly grund: keyof ElternteilAusklammerungszeitenInput;

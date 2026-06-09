@@ -1,5 +1,5 @@
-import LightbulbIcon from "@digitalservicebund/icons/LightbulbOutlined";
 import { ReactNode, useId } from "react";
+import LightbulbIcon from "~icons/material-symbols/lightbulb-outline";
 
 type Props = {
   readonly validierungsfehler: string[];

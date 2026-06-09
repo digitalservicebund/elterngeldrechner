@@ -1,11 +1,11 @@
-import ExpandLessIcon from "@digitalservicebund/icons/ExpandLess";
-import ExpandMoreIcon from "@digitalservicebund/icons/ExpandMore";
 import classNames from "classnames";
 import { useCallback, useId, useMemo, useRef, useState } from "react";
 import { generatePath, useLocation, useNavigate } from "react-router";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { Route, generateAbfrageteilPath } from "@/application/routing";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
+import ExpandLessIcon from "~icons/material-symbols/expand-less";
+import ExpandMoreIcon from "~icons/material-symbols/expand-more";
 
 type NavigationItem = NavigationStep & {
   readonly navigatable: boolean;

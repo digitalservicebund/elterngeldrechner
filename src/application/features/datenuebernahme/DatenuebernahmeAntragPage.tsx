@@ -1,5 +1,3 @@
-import FileDownloadIcon from "@digitalservicebund/icons/FileDownload";
-import OpenInNewIcon from "@digitalservicebund/icons/OpenInNew";
 import elterngeldantragPreview from "@/application/assets/images/elterngeldantrag.png";
 import planungsseitePreview from "@/application/assets/images/planungsseite.png";
 import { type ReactNode, useState } from "react";
@@ -15,6 +13,8 @@ import { useAntragInformationen } from "@/application/features/planungsteil/plan
 import { useNavigateStateful } from "@/application/features/planungsteil/planer/hooks/useNavigateStateful";
 import { posthog, pushTrackingEvent } from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
+import FileDownloadIcon from "~icons/material-symbols/file-download";
+import OpenInNewIcon from "~icons/material-symbols/open-in-new";
 
 function download(data: Uint8Array, filename: string, mimeType: string) {
   const blob = new Blob([data.buffer as ArrayBuffer], { type: mimeType });

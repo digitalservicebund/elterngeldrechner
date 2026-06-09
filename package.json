@@ -66,7 +66,7 @@
     "@cantoo/pdf-lib": "^2.7.1",
     "@date-fns/utc": "^2.1.1",
     "@digitalservicebund/icons": "^2.1.0",
-    "@hookform/resolvers": "^5.2.2",
+    "@hookform/resolvers": "^5.4.0",
     "@js-temporal/polyfill": "^0.5.1",
     "@posthog/react": "^1.9.1",
     "classnames": "^2.5.1",
@@ -74,7 +74,7 @@
     "posthog-js": "^1.378.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-hook-form": "^7.75.0",
+    "react-hook-form": "^7.77.0",
     "react-imask": "^7.6.1",
     "react-router": "^7.15.1",
     "zod": "^4.4.3"

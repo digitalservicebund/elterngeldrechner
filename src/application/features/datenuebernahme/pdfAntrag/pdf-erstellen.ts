@@ -1,4 +1,4 @@
-import { PDFDocument, PDFForm, rgb } from "@cantoo/pdf-lib";
+import type { PDFForm } from "@cantoo/pdf-lib";
 import {
   getFieldName,
   getFieldNameForVornamen,
@@ -23,10 +23,17 @@ export async function prepareGanzerAntrag({
   informationForPdfAntrag: InformationForPdfAntrag;
   plan: PlanMitBeliebigenElternteilen | undefined;
 }) {
-  const pdfDoc = await getPdfDocument({
-    completeForm: true,
-    geburtsdatum: informationForPdfAntrag.geburtsdatum,
-  });
+  const pdfVersion = getPdfVersion(informationForPdfAntrag.geburtsdatum);
+
+  if (!pdfVersion) throw new Error("PDF Version not found");
+
+  const [pdfLib, formPdfBytes] = await Promise.all([
+    import("@cantoo/pdf-lib"),
+    fetch(pdfVersion.pdfFileAntragPath).then((res) => res.arrayBuffer()),
+  ]);
+
+  const pdfDoc = await pdfLib.PDFDocument.load(formPdfBytes);
+
   const form = pdfDoc.getForm();
 
   fillCheckboxes({
@@ -70,16 +77,21 @@ export async function preparePlanungsseite({
   informationForPdfAntrag: InformationForPdfAntrag;
   plan: PlanMitBeliebigenElternteilen | undefined;
 }) {
-  const pdfDoc = await getPdfDocument({
-    completeForm: false,
-    geburtsdatum: informationForPdfAntrag.geburtsdatum,
-  });
-  const form = pdfDoc.getForm();
+  const pdfVersion = getPdfVersion(informationForPdfAntrag.geburtsdatum);
+
+  if (!pdfVersion) throw new Error("PDF Version not found");
+
+  const [pdfLib, formPdfBytes] = await Promise.all([
+    import("@cantoo/pdf-lib"),
+    fetch(pdfVersion.pdfFileSeitePath).then((res) => res.arrayBuffer()),
+  ]);
+
+  const pdfDoc = await pdfLib.PDFDocument.load(formPdfBytes);
 
   fillCheckboxes({
     elternteil: Elternteil.Eins,
     geburtsdatum: informationForPdfAntrag.geburtsdatum,
-    form,
+    form: pdfDoc.getForm(),
     plan,
   });
 
@@ -87,7 +99,7 @@ export async function preparePlanungsseite({
     fillCheckboxes({
       elternteil: Elternteil.Zwei,
       geburtsdatum: informationForPdfAntrag.geburtsdatum,
-      form,
+      form: pdfDoc.getForm(),
       plan,
     });
 
@@ -101,40 +113,18 @@ export async function preparePlanungsseite({
         x: 65,
         y: 825,
         size: 10,
-        color: rgb(0, 0, 0),
+        color: pdfLib.rgb(0, 0, 0),
       });
       page.drawText(informationForPdfAntrag.nameET2, {
         x: 325,
         y: 825,
         size: 10,
-        color: rgb(0, 0, 0),
+        color: pdfLib.rgb(0, 0, 0),
       });
     }
   }
 
   return await pdfDoc.save();
-}
-
-async function getPdfDocument({
-  completeForm,
-  geburtsdatum,
-}: {
-  completeForm: boolean;
-  geburtsdatum: Date;
-}) {
-  const pdfVersion = getPdfVersion(geburtsdatum);
-  if (!pdfVersion) {
-    throw Error("PDF Version not found");
-  }
-
-  const formUrl = completeForm
-    ? pdfVersion.pdfFileAntragPath
-    : pdfVersion.pdfFileSeitePath;
-
-  const formPdfBytes = await fetch(formUrl).then((res) => res.arrayBuffer());
-  const pdfDoc = await PDFDocument.load(formPdfBytes);
-
-  return pdfDoc;
 }
 
 function fillCheckboxes({

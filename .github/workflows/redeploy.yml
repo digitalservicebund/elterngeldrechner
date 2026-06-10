@@ -59,6 +59,9 @@ jobs:
         env:
           VITE_BASE_PATH: ${{ steps.config.outputs.base_path }}
 
+      - name: Check build artifact structure
+        run: scripts/check-build-artifacts.sh
+
       - name: Deploy to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ inputs.environment == 'production' && secrets.STACKIT_PRODUCTION_ACCESS_KEY_ID || secrets.STACKIT_STAGING_ACCESS_KEY_ID }}

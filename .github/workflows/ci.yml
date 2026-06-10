@@ -97,6 +97,9 @@ jobs:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/main/
           VITE_FEATURE_FLAG_POSTHOG: "true"
 
+      - name: Check build artifact structure
+        run: scripts/check-build-artifacts.sh
+
       - name: Synchronize build output with object storage
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
@@ -133,6 +136,9 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/
           VITE_BUILD_VERSION: ${{ github.sha }}
+
+      - name: Check build artifact structure
+        run: scripts/check-build-artifacts.sh
 
       - name: Synchronize build output with object storage
         env:
@@ -221,6 +227,9 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud/
           VITE_BUILD_VERSION: ${{ github.sha }}
+
+      - name: Check build artifact structure
+        run: scripts/check-build-artifacts.sh
 
       - name: Synchronize build output with object storage
         env:

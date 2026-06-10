@@ -159,7 +159,9 @@ const FALLBACK_HOST_PAGE = `<!DOCTYPE html>
     <script type="module" src="src/application/index.tsx"></script>
   </head>
   <body>
-    <div id="egr-root"></div>
+    <main>
+      <div id="egr-root"></div>
+    </main>
   </body>
 </html>
 `;

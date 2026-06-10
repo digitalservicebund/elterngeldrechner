@@ -1,4 +1,4 @@
-import type { PDFForm } from "@cantoo/pdf-lib";
+import { PDFDocument, PDFForm, rgb } from "@cantoo/pdf-lib";
 import {
   getFieldName,
   getFieldNameForVornamen,
@@ -27,12 +27,11 @@ export async function prepareGanzerAntrag({
 
   if (!pdfVersion) throw new Error("PDF Version not found");
 
-  const [pdfLib, formPdfBytes] = await Promise.all([
-    import("@cantoo/pdf-lib"),
-    fetch(pdfVersion.pdfFileAntragPath).then((res) => res.arrayBuffer()),
-  ]);
+  const formPdfBytes = await fetch(pdfVersion.pdfFileAntragPath).then((res) =>
+    res.arrayBuffer(),
+  );
 
-  const pdfDoc = await pdfLib.PDFDocument.load(formPdfBytes);
+  const pdfDoc = await PDFDocument.load(formPdfBytes);
 
   const form = pdfDoc.getForm();
 
@@ -81,12 +80,11 @@ export async function preparePlanungsseite({
 
   if (!pdfVersion) throw new Error("PDF Version not found");
 
-  const [pdfLib, formPdfBytes] = await Promise.all([
-    import("@cantoo/pdf-lib"),
-    fetch(pdfVersion.pdfFileSeitePath).then((res) => res.arrayBuffer()),
-  ]);
+  const formPdfBytes = await fetch(pdfVersion.pdfFileSeitePath).then((res) =>
+    res.arrayBuffer(),
+  );
 
-  const pdfDoc = await pdfLib.PDFDocument.load(formPdfBytes);
+  const pdfDoc = await PDFDocument.load(formPdfBytes);
 
   fillCheckboxes({
     elternteil: Elternteil.Eins,
@@ -113,13 +111,13 @@ export async function preparePlanungsseite({
         x: 65,
         y: 825,
         size: 10,
-        color: pdfLib.rgb(0, 0, 0),
+        color: rgb(0, 0, 0),
       });
       page.drawText(informationForPdfAntrag.nameET2, {
         x: 325,
         y: 825,
         size: 10,
-        color: pdfLib.rgb(0, 0, 0),
+        color: rgb(0, 0, 0),
       });
     }
   }

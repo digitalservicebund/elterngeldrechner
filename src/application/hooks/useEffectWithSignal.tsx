@@ -46,9 +46,8 @@ if (import.meta.vitest) {
 
   describe("useEffectWithSignal", async () => {
     const { act, render, renderHook } = await import("@testing-library/react");
-    const { createRef, useImperativeHandle, forwardRef } = await import(
-      "react"
-    );
+    const { createRef, useImperativeHandle, forwardRef } =
+      await import("react");
 
     it("accepts undefined as an argument", () => {
       const deferredAction = vi.fn();
@@ -189,7 +188,7 @@ if (import.meta.vitest) {
             >
               <summary>Lebensmonat mit Einkommenseingabe</summary>
 
-              <input></input>
+              <input aria-label="Einkommen" />
             </details>
           ))}
         </div>

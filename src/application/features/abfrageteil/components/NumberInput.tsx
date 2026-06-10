@@ -26,6 +26,7 @@ export function NumberInput({
       className={classNames("egr-input-group", errors && "egr-input--error")}
     >
       <label
+        id={`${name}-label`}
         className={classNames(
           "mb-4 block text-16",
           errors ? "text-danger" : null,
@@ -46,6 +47,7 @@ export function NumberInput({
         )}
         type="string"
         id={name}
+        aria-labelledby={`${name}-label`}
         aria-describedby={errors ? `${name}-error` : undefined}
         aria-invalid={!!errors}
       />

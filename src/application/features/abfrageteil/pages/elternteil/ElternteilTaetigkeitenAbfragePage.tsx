@@ -113,6 +113,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           <CustomCheckbox
             className="mt-20 font-bold"
             register={register}
+            registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="istNichtSelbststaendig"
             label={`${vorname} war oder ist angestellt`}
             errors={showGeneralErrorMessage}
@@ -129,6 +130,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           <CustomCheckbox
             className="mt-20 font-bold"
             register={register}
+            registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="istSelbststaendig"
             label={`${vorname} war oder ist selbstständig`}
             errors={showGeneralErrorMessage}
@@ -146,6 +148,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           <CustomCheckbox
             className="mt-20 font-bold"
             register={register}
+            registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="istVerbeamtet"
             label={`${vorname} war oder ist verbeamtet`}
             errors={showGeneralErrorMessage}
@@ -157,6 +160,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           <CustomCheckbox
             className="mt-20 font-bold"
             register={register}
+            registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="hatAndereLeistungen"
             label={`${vorname} erhielt oder erhält Sozialleistungen oder Lohnersatzleistungen`}
             errors={showGeneralErrorMessage}

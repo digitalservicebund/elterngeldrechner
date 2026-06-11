@@ -152,6 +152,7 @@ export function ElternteilAusklammerungGruendePage() {
             <CustomCheckbox
               className="mt-20"
               register={register}
+              registerOptions={{ deps: ["hatKeineAusklammerungsgruende"] }}
               name="hatMutterschutzAelteresKind"
               label={`${vorname} war für ein älteres Kind im Mutterschutz`}
               errors={showGeneralErrorMessage}
@@ -173,6 +174,7 @@ export function ElternteilAusklammerungGruendePage() {
             <CustomCheckbox
               className="mt-20"
               register={register}
+              registerOptions={{ deps: ["hatKeineAusklammerungsgruende"] }}
               name="hatElterngeldAelteresKind"
               label={`${vorname} hat für ein älteres Kind Elterngeld bekommen (nur bis zum 14. Lebensmonat des Kindes)`}
               errors={showGeneralErrorMessage}
@@ -194,6 +196,7 @@ export function ElternteilAusklammerungGruendePage() {
             <CustomCheckbox
               className="mt-20"
               register={register}
+              registerOptions={{ deps: ["hatKeineAusklammerungsgruende"] }}
               name="hatSchwangerschaftsbedingteErkrankung"
               label={`${vorname} hatte eine Erkrankung wegen der Schwangerschaft und hatte weniger Einkommen`}
               errors={showGeneralErrorMessage}
@@ -230,6 +233,7 @@ export function ElternteilAusklammerungGruendePage() {
             onChange={(checked) => {
               if (checked) {
                 setValues({
+                  hatKeineAusklammerungsgruende: true,
                   hatMutterschutzAelteresKind: false,
                   hatElterngeldAelteresKind: false,
                   hatSchwangerschaftsbedingteErkrankung: false,

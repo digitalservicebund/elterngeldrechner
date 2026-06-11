@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
 import type { Bezug } from "./erstellePlanungsuebersicht";
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import { Variantenplakette } from "@/application/features/planungsteil/planer/component/common";
 import { Variante, compareVarianten } from "@/monatsplaner";
 

@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { ReactNode } from "react";
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import {
   type Auswahloption,
   type Elterngeldbezug,

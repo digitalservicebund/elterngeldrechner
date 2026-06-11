@@ -9,8 +9,8 @@ import {
   ElternteilZweiAllgemeineAngabenSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { CustomRadioGroup } from "@/application/features/abfrageteil/components/CustomRadioGroup";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
+import { Page } from "@/application/features/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil/domain/findeAnzahlKinder";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import { Variantenplakette } from "@/application/features/planungsteil/planer/component/common";
 import { type Auswahloption, KeinElterngeld, type Monat } from "@/monatsplaner";
 import BusinessCenterOutlined from "~icons/material-symbols/business-center-outline";

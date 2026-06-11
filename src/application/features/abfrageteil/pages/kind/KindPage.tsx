@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { Geburt, GeburtSchema } from "./KindSchema";
 import { Button } from "@/application/features/components";
-import { CustomRadioGroup } from "@/application/features/abfrageteil/components/CustomRadioGroup";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
+import { Page } from "@/application/features/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import {
   type FormEvent,

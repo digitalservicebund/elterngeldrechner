@@ -1,4 +1,4 @@
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import { Beispiel } from "@/application/features/planungsteil/beispiele";
 import {
   type Ausgangslage,

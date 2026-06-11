@@ -8,9 +8,9 @@ import {
   GeschwisterkindAngabenSchema,
 } from "./GeschwisterSchema";
 import { Button } from "@/application/features/components";
-import { CustomRadioGroup } from "@/application/features/abfrageteil/components/CustomRadioGroup";
+import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {

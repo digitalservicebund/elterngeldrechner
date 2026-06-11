@@ -25,13 +25,13 @@ type Props<TFieldValues extends FieldValues> = {
   readonly registerOptions?: RegisterOptions<TFieldValues>;
   readonly name: Path<TFieldValues>;
   readonly legend: string | ReactNode;
-  readonly slotBetweenLegendAndOptions?: ReactNode;
   readonly options: CustomRadioGroupOption[];
   readonly errors?: FieldErrors<TFieldValues>;
   readonly required?: boolean;
   readonly horizontal?: boolean;
   readonly disabled?: boolean;
   readonly className?: string;
+  readonly children?: ReactNode;
 };
 
 export function CustomRadioGroup<TFieldValues extends FieldValues>({
@@ -39,13 +39,13 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
   registerOptions,
   name,
   legend,
-  slotBetweenLegendAndOptions,
   options,
   errors,
   required,
   horizontal = false,
   disabled = false,
   className,
+  children,
 }: Props<TFieldValues>) {
   const error = get(errors, name) as FieldError | undefined;
   const hasError = error !== undefined;
@@ -69,13 +69,9 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
         aria-describedby={hasError ? errorIdentifier : undefined}
       >
-        <legend className={slotBetweenLegendAndOptions ? "" : "mb-8"}>
-          {legend}
-        </legend>
+        <legend className={children ? "" : "mb-8"}>{legend}</legend>
 
-        {!!slotBetweenLegendAndOptions && (
-          <div className="mb-8">{slotBetweenLegendAndOptions}</div>
-        )}
+        {!!children && <div className="mb-8">{children}</div>}
 
         {options.map((option, i) => {
           const descriptionId = `${baseId}-${option.label}`;
@@ -103,7 +99,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         })}
 
         {!!hasError && (
-          <span id={errorIdentifier} className="mt-8 text-14 text-danger">
+          <span id={errorIdentifier} className="text-14 text-danger">
             {error.message}
           </span>
         )}

@@ -8,8 +8,8 @@ import {
 } from "./TaetigkeitSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
-import { CustomRadioGroup } from "@/application/features/abfrageteil/components/CustomRadioGroup";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
+import { Page } from "@/application/features/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil/domain/findeAlleinerziehend";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";

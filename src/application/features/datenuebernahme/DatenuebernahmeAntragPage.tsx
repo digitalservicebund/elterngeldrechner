@@ -8,7 +8,7 @@ import {
   prepareGanzerAntrag,
   preparePlanungsseite,
 } from "@/application/features/datenuebernahme/pdfAntrag/pdf-erstellen";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { useAntragInformationen } from "@/application/features/planungsteil/planer/hooks/useAntragInformationen";
 import { useNavigateStateful } from "@/application/features/planungsteil/planer/hooks/useNavigateStateful";
 import { posthog, pushTrackingEvent } from "@/application/user-tracking";
@@ -254,7 +254,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
-  vi.mock("@/application/features/abfrageteil/components/Page", () => ({
+  vi.mock("@/application/features/components/Page", () => ({
     Page: ({
       children,
       heading,

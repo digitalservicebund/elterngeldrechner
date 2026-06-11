@@ -7,7 +7,7 @@ import {
   useController,
 } from "react-hook-form";
 import { IMaskInput } from "react-imask";
-import { Description } from "@/application/features/components/Description";
+import { Description } from "@/application/features/abfrageteil/components/Description";
 
 type Props<
   TFieldValues extends FieldValues,

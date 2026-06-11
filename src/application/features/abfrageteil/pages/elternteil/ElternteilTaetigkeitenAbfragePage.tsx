@@ -7,8 +7,8 @@ import {
   ElternteilTaetigkeitenAbfrageSchema,
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/features/components";
-import { CustomCheckbox } from "@/application/features/components/CustomCheckbox";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { CustomCheckbox } from "@/application/features/abfrageteil/components/CustomCheckbox";
+import { Page } from "@/application/features/components/Page";
 import { findeAlleinerziehend } from "@/application/features/abfrageteil/domain/findeAlleinerziehend";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";

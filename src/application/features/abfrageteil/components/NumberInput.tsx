@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { RegisterOptions } from "react-hook-form";
-import { Description } from "@/application/features/components/Description";
+import { Description } from "@/application/features/abfrageteil/components/Description";
 
 type Props = {
   readonly label: string;

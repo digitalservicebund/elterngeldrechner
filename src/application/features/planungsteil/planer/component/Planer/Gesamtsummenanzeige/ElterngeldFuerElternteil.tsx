@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import type { ReactNode } from "react";
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import type { SummeFuerElternteil } from "@/monatsplaner";
 import PersonIcon from "~icons/material-symbols/person-outline";
 

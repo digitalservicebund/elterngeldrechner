@@ -8,7 +8,7 @@ import { GeborenesKind, GeborenesKindSchema } from "./KindSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { NumberInput } from "@/application/features/abfrageteil/components/NumberInput";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import {
   type FormEvent,

@@ -8,8 +8,8 @@ import {
 } from "./ElternteilSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { Alert } from "@/application/features/components/Alert";
-import { CustomCheckbox } from "@/application/features/components/CustomCheckbox";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { CustomCheckbox } from "@/application/features/abfrageteil/components/CustomCheckbox";
+import { Page } from "@/application/features/components/Page";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil/domain/findeAnzahlKinder";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";

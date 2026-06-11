@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { type CSSProperties, ReactNode } from "react";
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import type { Einkommen, Elterngeldbezug } from "@/monatsplaner";
 import BusinessCenterIcon from "~icons/material-symbols/business-center-outline";
 import ErrorIcon from "~icons/material-symbols/error";

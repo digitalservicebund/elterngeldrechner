@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { Button } from "@/application/features/components";
 import { Alert } from "@/application/features/components/Alert";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { Route, generateAbfrageteilPath } from "@/application/routing";
 

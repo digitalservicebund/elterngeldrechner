@@ -10,7 +10,7 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { BemessungszeitraumBox } from "@/application/features/abfrageteil/components/BemessungszeitraumBox";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";

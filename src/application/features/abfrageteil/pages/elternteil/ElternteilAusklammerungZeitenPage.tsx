@@ -9,7 +9,7 @@ import {
 } from "./ElternteilSchema";
 import { erstelleAusklammerungZeitenDefaultValues } from "./erstelleAusklammerungZeitenDefaultValues";
 import { Button } from "@/application/features/components";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";

@@ -18,7 +18,7 @@ import {
   UserFeedbackForm,
   useUserFeedback,
 } from "@/application/features/user-feedback";
-import { Page } from "@/application/features/abfrageteil/components/Page";
+import { Page } from "@/application/features/components/Page";
 import { useAusgangslage } from "@/application/features/planungsteil/planer/hooks/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
 import { useEinkommenInformationen } from "@/application/features/planungsteil/planer/hooks/useEinkommenInformationen";
@@ -276,7 +276,7 @@ export function PlanerPage() {
 if (import.meta.vitest) {
   const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
-  vi.mock("@/application/features/abfrageteil/components/Page", () => ({
+  vi.mock("@/application/features/components/Page", () => ({
     Page: ({ children }: { readonly children: React.ReactNode }) => (
       <>{children}</>
     ),

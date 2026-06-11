@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { ReactNode } from "react";
 import { EinkommenFuerElternteil } from "./EinkommenFuerElternteil";
 import { ElterngeldFuerElternteil } from "./ElterngeldFuerElternteil";
-import { Geldbetrag } from "@/application/features/components";
+import { Geldbetrag } from "@/application/features/planungsteil/components";
 import {
   type GridColumnDefinitionPerElternteil,
   useGridColumnPerElternteil,

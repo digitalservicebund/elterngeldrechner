@@ -1,6 +1,6 @@
 {
   "posthog-js@>=1": {
     "licenses": "Apache-2.0",
-    "checksum": "cca1cfff1da6fb80722d4ebc5a1d71827d93a35ef5b21af1070af7a2bb17d59a"
+    "checksum": "6f90c8985371611adca26aae493b31f4e944009323e400e7ed1d1c735577e6a0"
   }
 }

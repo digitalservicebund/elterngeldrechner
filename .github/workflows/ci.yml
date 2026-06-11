@@ -92,7 +92,7 @@ jobs:
       - name: Run development build specific for stack it staging environment
         run: npm run build:staging
         env:
-          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_HOST }}
+          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_PROXY_HOST }}
           VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.POSTHOG_PROJECT_TOKEN }}
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/main/
           VITE_FEATURE_FLAG_POSTHOG: "true"

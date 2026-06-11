@@ -17,7 +17,7 @@ import {
 import {
   UserFeedbackForm,
   useUserFeedback,
-} from "@/application/features/user-feedback";
+} from "@/application/features/planungsteil/planer/component/user-feedback";
 import { Page } from "@/application/features/components/Page";
 import { useAusgangslage } from "@/application/features/planungsteil/planer/hooks/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
@@ -311,15 +311,18 @@ if (import.meta.vitest) {
       useAntragInformationen: vi.fn(),
     }),
   );
-  vi.mock("@/application/features/user-feedback", async (importOriginal) => ({
-    ...(await importOriginal<
-      typeof import("@/application/features/user-feedback")
-    >()),
-    useUserFeedback: () => ({
-      isFeedbackSubmitted: false,
-      submitFeedback: vi.fn(),
+  vi.mock(
+    "@/application/features/planungsteil/planer/component/user-feedback",
+    async (importOriginal) => ({
+      ...(await importOriginal<
+        typeof import("@/application/features/planungsteil/planer/component/user-feedback")
+      >()),
+      useUserFeedback: () => ({
+        isFeedbackSubmitted: false,
+        submitFeedback: vi.fn(),
+      }),
     }),
-  }));
+  );
 
   describe("Planer Page", async () => {
     const monatsplanerModule = await import("@/monatsplaner");

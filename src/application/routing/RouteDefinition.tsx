@@ -5,7 +5,7 @@ import { RouteGuardDatenuebernahme } from "./RouteGuardDatenuebernahme";
 import { RouteGuardPlanungsteil } from "./RouteGuardPlanungsteil";
 import { generateAbfrageteilPath } from "./generatePath/generateAbfrageteilPath";
 import { EventProvider } from "@/application/features/abfrageteil/events/EventContext";
-import { UserFeedbackProvider } from "@/application/features/user-feedback";
+import { UserFeedbackProvider } from "@/application/features/planungsteil/planer/component/user-feedback";
 import {
   AllgemeineAngabenPage,
   ElternteilAusklammerungGruendePage,

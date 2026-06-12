@@ -1,8 +1,12 @@
+import type { PostHogConfig } from "posthog-js";
 import { posthog } from "../posthog";
 import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
-import { isPosthogEnabled } from "@/application/feature-flags";
+import {
+  isPosthogEnabled,
+  isTesterIdentificationEnabled,
+} from "@/application/feature-flags";
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
@@ -14,7 +18,7 @@ export async function setupUserTracking(): Promise<void> {
   }
 
   if (isPosthogEnabled() && (await isPosthogTrackingAllowedByUser())) {
-    posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN, {
+    const standardConfig: Partial<PostHogConfig> = {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       capture_pageview: false,
       capture_pageleave: false,
@@ -23,7 +27,33 @@ export async function setupUserTracking(): Promise<void> {
       person_profiles: "never",
       disable_surveys: true,
       autocapture: false,
-    });
+    };
+
+    // Internal testers can identify themselves so it allows person
+    // profiles but keeps the config state in sessionStorage so the
+    // identity is not kept longer than the lifecycle of the tab.
+    const testingConfig: Partial<PostHogConfig> = {
+      ...standardConfig,
+      person_profiles: "identified_only",
+      persistence: "sessionStorage",
+    };
+
+    posthog.init(
+      import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN,
+      isTesterIdentificationEnabled() ? testingConfig : standardConfig,
+    );
+
+    if (isTesterIdentificationEnabled()) {
+      const testingIdentifier = getTestingIdentifier();
+
+      if (testingIdentifier) {
+        removeTestingIdentifierFromUrl();
+
+        // The only identify in the codebase. Lets the team filter dashboards by
+        // colleague while reviewing new insights; real users are never identified.
+        posthog.identify(testingIdentifier, { email: testingIdentifier });
+      }
+    }
 
     posthog.capture("$pageview");
   }
@@ -31,6 +61,22 @@ export async function setupUserTracking(): Promise<void> {
 
 function getTagMangerSourceUrl(): string {
   return import.meta.env.VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE;
+}
+
+const TESTER_PARAM = "tester";
+
+function getTestingIdentifier(): string | undefined {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(TESTER_PARAM)?.trim().toLowerCase() || undefined;
+}
+
+function removeTestingIdentifierFromUrl(): void {
+  const url = new URL(window.location.href);
+
+  if (url.searchParams.has(TESTER_PARAM)) {
+    url.searchParams.delete(TESTER_PARAM);
+    window.history.replaceState({}, "", url);
+  }
 }
 
 async function isTrackingAllowedByUser(): Promise<boolean> {
@@ -173,6 +219,87 @@ if (import.meta.vitest) {
         );
 
         expect(tagMangerScripts).toHaveLength(1);
+      });
+    });
+
+    describe("internal tester identification", () => {
+      beforeEach(() => {
+        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG", "true");
+        vi.stubEnv("VITE_FEATURE_FLAG_TESTER_IDENTIFICATION", "true");
+
+        vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
+        vi.spyOn(posthog, "capture").mockReturnValue(undefined);
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          "cookie-allow-tracking=1",
+        );
+      });
+
+      afterEach(() => {
+        window.history.replaceState({}, "", "/");
+      });
+
+      it("identifies the tester by the email from the ?tester query param", async () => {
+        window.history.replaceState({}, "", "/?tester=Bob@example.de");
+        const identify = vi.spyOn(posthog, "identify");
+
+        await setupUserTracking();
+
+        expect(identify).toHaveBeenCalledWith("bob@example.de", {
+          email: "bob@example.de",
+        });
+      });
+
+      it("does not identify anyone when no tester query param is present", async () => {
+        const identify = vi.spyOn(posthog, "identify");
+
+        await setupUserTracking();
+
+        expect(identify).not.toHaveBeenCalled();
+      });
+
+      it("does not identify outside the preview environment, even with the param", async () => {
+        vi.stubEnv("VITE_FEATURE_FLAG_TESTER_IDENTIFICATION", "false");
+        window.history.replaceState({}, "", "/?tester=bob@example.de");
+        const identify = vi.spyOn(posthog, "identify");
+
+        await setupUserTracking();
+
+        expect(identify).not.toHaveBeenCalled();
+      });
+
+      it("strips the tester param from the URL so the email never reaches $current_url", async () => {
+        window.history.replaceState({}, "", "/?tester=bob@example.de&foo=bar");
+
+        await setupUserTracking();
+
+        expect(window.location.search).toEqual("?foo=bar");
+      });
+
+      it("scopes preview to sessionStorage so a tester's identity resets between sessions", async () => {
+        const init = vi
+          .spyOn(posthog, "init")
+          .mockReturnValue(posthog as never);
+
+        await setupUserTracking();
+
+        expect(init.mock.lastCall?.[1]).toMatchObject({
+          person_profiles: "identified_only",
+          persistence: "sessionStorage",
+        });
+      });
+
+      it("never creates person profiles and keeps default storage outside preview", async () => {
+        vi.stubEnv("VITE_FEATURE_FLAG_TESTER_IDENTIFICATION", "false");
+        const init = vi
+          .spyOn(posthog, "init")
+          .mockReturnValue(posthog as never);
+
+        await setupUserTracking();
+
+        expect(init.mock.lastCall?.[1]).toMatchObject({
+          person_profiles: "never",
+        });
+        expect(init.mock.lastCall?.[1]?.persistence).toBeUndefined();
       });
     });
 

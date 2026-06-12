@@ -8,4 +8,10 @@ function isPosthogEnabled() {
   return import.meta.env.VITE_FEATURE_FLAG_POSTHOG === "true";
 }
 
-export { isPosthogEnabled };
+// Kept separate from isPosthogEnabled so that letting testers identify themselves
+// stays confined to the preview environment even once posthog is enabled in production.
+function isTesterIdentificationEnabled() {
+  return import.meta.env.VITE_FEATURE_FLAG_TESTER_IDENTIFICATION === "true";
+}
+
+export { isPosthogEnabled, isTesterIdentificationEnabled };

@@ -71,7 +71,7 @@
     "@date-fns/utc": "^2.1.1",
     "@hookform/resolvers": "^5.4.0",
     "@js-temporal/polyfill": "^0.5.1",
-    "@posthog/react": "^1.10.0",
+    "@posthog/react": "^1.10.1",
     "classnames": "^2.5.1",
     "date-fns": "^4.4.0",
     "posthog-js": "^1.379.2",

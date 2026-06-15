@@ -1,5 +1,6 @@
 import type { PostHogConfig } from "posthog-js";
 import { posthog } from "../posthog";
+import { parseTrackingConsent } from "./consent";
 import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
@@ -10,14 +11,22 @@ import {
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
-  const isMatomoConfigured = !!tagMangerSourceUrl;
 
-  if (isMatomoConfigured && (await isTrackingAllowedByUser())) {
+  const isMatomoConfigured = !!tagMangerSourceUrl;
+  const isPosthogConfigured = isPosthogEnabled();
+
+  if (!isMatomoConfigured && !isPosthogConfigured) {
+    return;
+  }
+
+  const consent = await getTrackingConsent();
+
+  if (isMatomoConfigured && consent.matomo) {
     establishDataLayer();
     setupTagManager(tagMangerSourceUrl);
   }
 
-  if (isPosthogEnabled() && (await isPosthogTrackingAllowedByUser())) {
+  if (isPosthogConfigured && consent.posthog) {
     const standardConfig: Partial<PostHogConfig> = {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       capture_pageview: false,
@@ -79,37 +88,32 @@ function removeTestingIdentifierFromUrl(): void {
   }
 }
 
-async function isTrackingAllowedByUser(): Promise<boolean> {
+async function getTrackingConsent() {
   const cookieValue = await waitForCookieValue(
     ALLOW_TRACKING_COOKIE_NAME,
     COOKIE_POLLING_INTERVAL,
   );
 
-  return (
-    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_MATOMO_ONLY ||
-    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG
-  );
+  return parseTrackingConsent(decodeCookieValue(cookieValue));
 }
 
-async function isPosthogTrackingAllowedByUser(): Promise<boolean> {
-  const cookieValue = await waitForCookieValue(
-    ALLOW_TRACKING_COOKIE_NAME,
-    COOKIE_POLLING_INTERVAL,
-  );
+// A per-tool value such as "matomo=1;posthog=0" can only travel in a cookie
+// URL-encoded, since an unencoded ";" would be read as a cookie delimiter.
+// Decoding is a no-op for the legacy single-number value.
+function decodeCookieValue(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
 
-  return (
-    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_POSTHOG_ONLY ||
-    cookieValue === ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG
-  );
+async function isTrackingAllowedByUser(): Promise<boolean> {
+  return (await getTrackingConsent()).matomo;
 }
 
 const ALLOW_TRACKING_COOKIE_NAME = "cookie-allow-tracking"; // set by cookie banner of the Familienportal
 const COOKIE_POLLING_INTERVAL = 500;
-
-// TODO: Change the following values once agreed with the hoster
-const ALLOW_TRACKING_COOKIE_VALUE_MATOMO_ONLY = "1";
-const ALLOW_TRACKING_COOKIE_VALUE_POSTHOG_ONLY = "1";
-const ALLOW_TRACKING_COOKIE_VALUE_MATOMO_AND_POSTHOG = "1";
 
 export { isTrackingAllowedByUser };
 
@@ -230,7 +234,7 @@ if (import.meta.vitest) {
         vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
         vi.spyOn(posthog, "capture").mockReturnValue(undefined);
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          "cookie-allow-tracking=1",
+          COOKIES_WITH_POSTHOG_ALLOWANCE,
         );
       });
 
@@ -328,6 +332,48 @@ if (import.meta.vitest) {
     }
 
     const COOKIES_WITH_ALLOWANCE = "cookie-allow-tracking=1";
+    // The per-tool value is URL-encoded so its ";" survives as part of the
+    // value instead of being read as a cookie delimiter.
+    const COOKIES_WITH_POSTHOG_ALLOWANCE = `cookie-allow-tracking=${encodeURIComponent("matomo=1;posthog=1")}`;
     const ANY_SOURCE_URL = "test-url";
+
+    describe("posthog consent gating", () => {
+      beforeEach(() => {
+        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG", "true");
+
+        vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
+        vi.spyOn(posthog, "capture").mockReturnValue(undefined);
+      });
+
+      it("does not initialise PostHog on the legacy value, which only grants Matomo", async () => {
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          "cookie-allow-tracking=1",
+        );
+
+        await setupUserTracking();
+
+        expect(posthog.init).not.toHaveBeenCalled();
+      });
+
+      it("initialises PostHog when the per-tool value grants it", async () => {
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0;posthog=1")}`,
+        );
+
+        await setupUserTracking();
+
+        expect(posthog.init).toHaveBeenCalledTimes(1);
+      });
+
+      it("does not initialise PostHog when the per-tool value denies it", async () => {
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          `cookie-allow-tracking=${encodeURIComponent("matomo=1;posthog=0")}`,
+        );
+
+        await setupUserTracking();
+
+        expect(posthog.init).not.toHaveBeenCalled();
+      });
+    });
   });
 }

@@ -232,6 +232,9 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud/
           VITE_BUILD_VERSION: ${{ github.sha }}
+          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_PROXY_HOST }}
+          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.POSTHOG_PROJECT_TOKEN }}
+          VITE_FEATURE_FLAG_POSTHOG: "true"
 
       - name: Check build artifact structure
         run: scripts/check-build-artifacts.sh

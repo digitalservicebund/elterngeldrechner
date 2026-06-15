@@ -6,7 +6,7 @@ import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
 import {
   isPosthogEnabled,
-  isTesterIdentificationEnabled,
+  isPosthogTestingEnabled,
 } from "@/application/feature-flags";
 
 export async function setupUserTracking(): Promise<void> {
@@ -26,7 +26,12 @@ export async function setupUserTracking(): Promise<void> {
     setupTagManager(tagMangerSourceUrl);
   }
 
-  if (isPosthogConfigured && consent.posthog) {
+  // On preview we track every session so the team can exercise posthog while
+  // the current banner is live; that banner never asks about posthog, so real
+  // users stay gated on explicit per-tool consent in production.
+  const posthogConsented = consent.posthog || isPosthogTestingEnabled();
+
+  if (isPosthogConfigured && posthogConsented) {
     const standardConfig: Partial<PostHogConfig> = {
       api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
       capture_pageview: false,
@@ -49,10 +54,10 @@ export async function setupUserTracking(): Promise<void> {
 
     posthog.init(
       import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN,
-      isTesterIdentificationEnabled() ? testingConfig : standardConfig,
+      isPosthogTestingEnabled() ? testingConfig : standardConfig,
     );
 
-    if (isTesterIdentificationEnabled()) {
+    if (isPosthogTestingEnabled()) {
       const testingIdentifier = getTestingIdentifier();
 
       if (testingIdentifier) {
@@ -229,7 +234,7 @@ if (import.meta.vitest) {
     describe("internal tester identification", () => {
       beforeEach(() => {
         vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG", "true");
-        vi.stubEnv("VITE_FEATURE_FLAG_TESTER_IDENTIFICATION", "true");
+        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG_TESTING", "true");
 
         vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
         vi.spyOn(posthog, "capture").mockReturnValue(undefined);
@@ -262,7 +267,7 @@ if (import.meta.vitest) {
       });
 
       it("does not identify outside the preview environment, even with the param", async () => {
-        vi.stubEnv("VITE_FEATURE_FLAG_TESTER_IDENTIFICATION", "false");
+        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG_TESTING", "false");
         window.history.replaceState({}, "", "/?tester=bob@example.de");
         const identify = vi.spyOn(posthog, "identify");
 
@@ -293,7 +298,7 @@ if (import.meta.vitest) {
       });
 
       it("never creates person profiles and keeps default storage outside preview", async () => {
-        vi.stubEnv("VITE_FEATURE_FLAG_TESTER_IDENTIFICATION", "false");
+        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG_TESTING", "false");
         const init = vi
           .spyOn(posthog, "init")
           .mockReturnValue(posthog as never);
@@ -373,6 +378,17 @@ if (import.meta.vitest) {
         await setupUserTracking();
 
         expect(posthog.init).not.toHaveBeenCalled();
+      });
+
+      it("tracks every session on preview, even on the legacy value that does not grant PostHog", async () => {
+        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG_TESTING", "true");
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          "cookie-allow-tracking=1",
+        );
+
+        await setupUserTracking();
+
+        expect(posthog.init).toHaveBeenCalledTimes(1);
       });
     });
   });

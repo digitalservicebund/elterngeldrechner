@@ -8,10 +8,12 @@ function isPosthogEnabled() {
   return import.meta.env.VITE_FEATURE_FLAG_POSTHOG === "true";
 }
 
-// Kept separate from isPosthogEnabled so that letting testers identify themselves
-// stays confined to the preview environment even once posthog is enabled in production.
-function isTesterIdentificationEnabled() {
-  return import.meta.env.VITE_FEATURE_FLAG_TESTER_IDENTIFICATION === "true";
+// Lets the team exercise posthog on the preview deploy while the new banner is
+// still rolling out. Confines two behaviors to preview that must never reach real
+// users: testers identifying themselves, and tracking every session regardless of
+// the cookie banner (the current banner predates posthog and never asks about it).
+function isPosthogTestingEnabled() {
+  return import.meta.env.VITE_FEATURE_FLAG_POSTHOG_TESTING === "true";
 }
 
-export { isPosthogEnabled, isTesterIdentificationEnabled };
+export { isPosthogEnabled, isPosthogTestingEnabled };

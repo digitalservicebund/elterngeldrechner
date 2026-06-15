@@ -21,6 +21,8 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { bestimmeEinkommensarten } from "./tracking";
+import { posthog } from "@/application/user-tracking";
 
 export function ElternteilTaetigkeitenAbfragePage() {
   const {
@@ -66,6 +68,10 @@ export function ElternteilTaetigkeitenAbfragePage() {
     };
 
     dispatch(event);
+
+    const superProperty = `einkommensarten_elternteil_${routeParams.elternteilIndex + 1}`;
+
+    posthog.register({ [superProperty]: bestimmeEinkommensarten(values) });
 
     await navigate(findeNaechstenPfad(event));
   };

@@ -1,0 +1,63 @@
+name: Staging Redeploy (Tag or SHA)
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-24.04
+    environment: staging
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout ref
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 #v6.0.3
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - uses: ./.github/actions/cached-node-install
+
+      - name: Run build specific for stack it staging environment
+        run: npm run build:staging
+        env:
+          VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/
+          VITE_BUILD_VERSION: ${{ github.sha }}
+          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_PROXY_HOST }}
+          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.POSTHOG_PROJECT_TOKEN }}
+          VITE_FEATURE_FLAG_POSTHOG: "true"
+          VITE_FEATURE_FLAG_POSTHOG_TESTING: "true"
+
+      - name: Check build artifact structure
+        run: scripts/check-build-artifacts.sh
+
+      - name: Synchronize build output with object storage
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
+          AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
+        run: |
+          aws s3 sync dist/assets/ s3://egr-assets-production/assets/ --exclude "index-*.js" --exclude "index-*.css"
+
+          aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+          aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
+
+      - name: Track deployment
+        uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a
+        with:
+          project: elterngeldrechner
+          environment: staging
+          metrics_deployment_webhook_url: ${{ secrets.METRICS_DEPLOYMENT_WEBHOOK_URL }}
+          metrics_webhook_token: ${{ secrets.METRICS_WEBHOOK_TOKEN }}

@@ -30,6 +30,7 @@ jobs:
   deploy:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    environment: staging
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 #v6.0.3
 
@@ -42,8 +43,8 @@ jobs:
 
       - name: Synchronize build output with object storage
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
           PREVIEW_NAME: ${{ inputs.name }}
         run: aws s3 sync dist/ "s3://egr-assets-staging/preview/${PREVIEW_NAME}" --cache-control "max-age=0, no-cache, no-store, must-revalidate"

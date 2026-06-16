@@ -20,12 +20,12 @@ on:
 jobs:
   undeploy:
     runs-on: ubuntu-24.04
-
+    environment: staging
     steps:
       - name: Remove preview deployment from object storage
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_STAGING_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_STAGING_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
           PREVIEW_NAME: ${{ inputs.name }}
         run: aws s3 rm "s3://egr-assets-staging/preview/${PREVIEW_NAME}" --recursive

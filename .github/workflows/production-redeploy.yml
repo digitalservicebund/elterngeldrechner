@@ -48,10 +48,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
           AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
         run: |
-          aws s3 sync dist/assets/ s3://egr-assets-production/assets/ --exclude "index-*.js" --exclude "index-*.css"
-
+          aws s3 sync dist/assets/ s3://egr-assets-production/assets/ --exclude "index-*.js"
           aws s3 cp dist/assets/index-*.js s3://egr-assets-production/index.js --cache-control "max-age=0, no-cache, no-store, must-revalidate"
-          aws s3 cp dist/assets/index-*.css s3://egr-assets-production/index.css --cache-control "max-age=0, no-cache, no-store, must-revalidate"
 
       - name: Track deployment
         uses: digitalservicebund/track-deployment@5a2815e150e1268983aac5ca04c8c046ed1b614a

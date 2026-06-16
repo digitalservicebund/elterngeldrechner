@@ -55,7 +55,7 @@ export default defineConfig({
     sourcemap: true,
     rolldownOptions: {
       output: {
-        minify: false,
+        format: "iife",
       },
     },
   },
@@ -90,6 +90,17 @@ function appWrapper(): Plugin {
       if (config.command !== "build" && config.command !== "serve") return;
 
       generateAppWrapper(config, process.env.VITE_PREVIEW_BANNER === "true");
+    },
+    transformIndexHtml: {
+      order: "post",
+      handler(html, ctx) {
+        if (ctx.server) return html;
+
+        return html.replace(
+          /<script type="module"(?: crossorigin)? src="([^"]+)"><\/script>/,
+          '<script src="$1"></script>',
+        );
+      },
     },
   };
 }

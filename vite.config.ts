@@ -55,7 +55,7 @@ export default defineConfig({
     sourcemap: true,
     rolldownOptions: {
       output: {
-        minify: "dce-only",
+        minify: false,
       },
     },
   },

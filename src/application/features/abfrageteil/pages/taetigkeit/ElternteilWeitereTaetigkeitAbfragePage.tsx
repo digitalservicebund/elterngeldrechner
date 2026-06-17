@@ -11,9 +11,9 @@ import { Button, InfoText } from "@/application/features/components";
 import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
-import { findeAlleinerziehend } from "@/application/features/abfrageteil/domain/findeAlleinerziehend";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
+import { sindBeideElternteile } from "@/application/features/abfrageteil/domain/sindBeideElternteile";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
@@ -44,8 +44,9 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     eventStream,
     routeParams.elternteilIndex,
   );
-  const istSelbststaendigeTaetigkeitMoeglich = taetigkeiten.istSelbststaendig;
-  const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
+  const istSelbststaendigeTaetigkeitMoeglich =
+    taetigkeiten.istSelbststaendig === true;
+  const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(eventStream);
 
   const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(WeitereTaetigkeitAbfrageSchema),
@@ -66,7 +67,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
       params: routeParams,
       dependentValues: {
         istSelbststaendigeTaetigkeitMoeglich,
-        istPersonAlleinerziehend,
+        wirdZweitePersonBeruecksichtigt,
       },
     };
 

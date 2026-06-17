@@ -188,6 +188,12 @@ if (import.meta.vitest) {
       const events: FormEvent[] = [
         kindEvent,
         {
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: false,
+          },
+        },
+        {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
@@ -197,11 +203,6 @@ if (import.meta.vitest) {
             hatAndereLeistungen: false,
             hatPeriodenOhneEinkommen: true,
           },
-        },
-        {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: false },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
       ];
 
@@ -217,6 +218,12 @@ if (import.meta.vitest) {
       const events: FormEvent[] = [
         kindEvent,
         {
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        },
+        {
           route: Route.ElternteilTaetigkeitenAbfrage,
           params: { elternteilIndex: 0 },
           payload: {
@@ -229,7 +236,7 @@ if (import.meta.vitest) {
         },
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          payload: { name: "Max" },
           dependentValues: { hatPotenzielleAusklammerungen: true },
         },
         {

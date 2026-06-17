@@ -450,9 +450,10 @@ if (import.meta.vitest) {
           },
         },
         {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: false },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: false,
+          },
         },
       ];
 
@@ -487,8 +488,14 @@ if (import.meta.vitest) {
           },
         },
         {
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        },
+        {
           route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+          payload: { name: "Max" },
           dependentValues: { hatPotenzielleAusklammerungen: true },
         },
         {

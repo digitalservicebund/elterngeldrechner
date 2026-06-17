@@ -288,6 +288,12 @@ if (import.meta.vitest) {
           },
         },
         {
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: {
+            wirdZweitePersonBeruecksichtigt: true,
+          },
+        },
+        {
           route: Route.GeborenesKindAngaben,
           payload: {
             geburtsdatum: Temporal.PlainDate.from("2026-03-03"),
@@ -318,7 +324,6 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
-            wirdZweitePersonBeruecksichtigt: true,
             name: "Person 2",
           },
           dependentValues: { hatPotenzielleAusklammerungen: true },

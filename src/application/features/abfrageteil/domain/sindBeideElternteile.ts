@@ -5,13 +5,14 @@ import { Route } from "@/application/routing/Route";
 export function sindBeideElternteile(events: FormEvent[]): boolean {
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(
     events,
-    Route.ElternteilZweiAllgemeineAngaben,
+    Route.ElternteilGemeinsamePlanungAbfrage,
   );
 
-  return (
-    letztesGueltigesEvent !== undefined &&
-    letztesGueltigesEvent.wirdZweitePersonBeruecksichtigt !== false
-  );
+  if (!letztesGueltigesEvent) {
+    return false;
+  }
+
+  return letztesGueltigesEvent.wirdZweitePersonBeruecksichtigt !== false;
 }
 
 if (import.meta.vitest) {
@@ -25,9 +26,8 @@ if (import.meta.vitest) {
     it("returns false when wirdZweitePersonBeruecksichtigt is false", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: { wirdZweitePersonBeruecksichtigt: false },
         },
       ]);
 
@@ -37,9 +37,8 @@ if (import.meta.vitest) {
     it("returns true when wirdZweitePersonBeruecksichtigt is true", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: { wirdZweitePersonBeruecksichtigt: true },
         },
       ]);
 
@@ -49,12 +48,10 @@ if (import.meta.vitest) {
     it("returns true when wirdZweitePersonBeruecksichtigt is unknown", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweiAllgemeineAngaben,
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
           payload: {
             wirdZweitePersonBeruecksichtigt: undefined,
-            name: "Person 2",
           },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
         },
       ]);
 
@@ -64,14 +61,12 @@ if (import.meta.vitest) {
     it("uses the last ZweitePersonAngaben event when multiple exist", () => {
       const result = sindBeideElternteile([
         {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: { wirdZweitePersonBeruecksichtigt: true },
         },
         {
-          route: Route.ElternteilZweiAllgemeineAngaben,
-          payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
-          dependentValues: { hatPotenzielleAusklammerungen: true },
+          route: Route.ElternteilGemeinsamePlanungAbfrage,
+          payload: { wirdZweitePersonBeruecksichtigt: false },
         },
       ]);
 

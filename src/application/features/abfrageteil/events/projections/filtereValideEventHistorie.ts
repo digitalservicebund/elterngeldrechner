@@ -375,7 +375,7 @@ if (import.meta.vitest) {
           params: { elternteilIndex: 0, taetigkeitIndex: 0 },
           payload: { istWeitereTaetigkeitVorhanden: false },
           dependentValues: {
-            istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: true,
             istSelbststaendigeTaetigkeitMoeglich: false,
           },
         },

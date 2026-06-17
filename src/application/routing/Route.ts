@@ -16,6 +16,7 @@ export enum Route {
   ElternteilEinsAllgemeineAngaben = "/elternteil/0",
   ElternteilZweiAllgemeineAngaben = "/elternteil/1",
 
+  ElternteilGemeinsamePlanungAbfrage = "/elternteil/0/planung-abfrage",
   ElternteilAusklammerungGruendeAngaben = "/elternteil/:elternteilIndex/ausklammerung/gruende",
   ElternteilAusklammerungZeitenAngaben = "/elternteil/:elternteilIndex/ausklammerung/zeiten",
 

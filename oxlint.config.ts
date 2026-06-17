@@ -59,6 +59,12 @@ export default defineConfig({
     {
       files: ["src/**/*.{ts,tsx}"],
       plugins: ["vitest"],
+      rules: {
+        "vitest/expect-expect": [
+          "error",
+          { assertFunctionNames: ["expect", "assertProperty"] },
+        ],
+      },
     },
     {
       files: [

@@ -39,6 +39,7 @@ import type {
 import { sindLebensmonateGeplant } from "@/monatsplaner";
 import ChevronLeftIcon from "~icons/material-symbols/chevron-left";
 import RestartAltIcon from "~icons/material-symbols/restart-alt";
+import posthog from "posthog-js";
 
 export function PlanerPage() {
   const mainElement = useRef<HTMLDivElement>(null);
@@ -111,6 +112,11 @@ export function PlanerPage() {
     window.scrollTo(0, 0);
   }
 
+  function openErklaerung(): void {
+    setIsErklaerungOpen(true);
+    posthog.capture("erklaerung_geoeffnet");
+  }
+
   function handlePlanChanges(
     nextPlan: PlanMitBeliebigenElternteilen,
     istPlanGueltig: boolean,
@@ -163,10 +169,7 @@ export function PlanerPage() {
                 Planer Anwendung
               </h3>
 
-              <Anleitung
-                className="mb-40"
-                onOpenErklaerung={() => setIsErklaerungOpen(true)}
-              >
+              <Anleitung className="mb-40" onOpenErklaerung={openErklaerung}>
                 <>
                   <p>
                     Planen Sie hier Ihr Elterngeld. Klicken Sie auf die

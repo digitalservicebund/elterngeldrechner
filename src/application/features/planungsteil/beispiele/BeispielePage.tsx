@@ -160,6 +160,7 @@ export function BeispielePage() {
   function showErklaerung(): void {
     setIsErklaerungOpen(true);
     trackMetricsForErklaerungenWurdenGeoeffnet();
+    posthog.capture("erklaerung_geoeffnet");
   }
 
   function hideErklaerung(): void {

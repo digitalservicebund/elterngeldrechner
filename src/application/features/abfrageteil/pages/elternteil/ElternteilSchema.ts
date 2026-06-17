@@ -17,6 +17,14 @@ export type ElternteilEinsAllgemeineAngaben = z.infer<
   typeof ElternteilEinsAllgemeineAngabenSchema
 >;
 
+export const ElternteilGemeinsamePlanungAbfrageSchema = z.object({
+  wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
+});
+
+export type ElternteilGemeinsamePlanungAbfrage = z.infer<
+  typeof ElternteilGemeinsamePlanungAbfrageSchema
+>;
+
 export const ElternteilAusklammerungGruendeSchema = z
   .object({
     hatKeineAusklammerungsgruende: z.boolean(),
@@ -109,28 +117,12 @@ export type ElternteilTaetigkeitenAbfrage = z.infer<
 
 export const ElternteilZweiAllgemeineAngabenSchema = z
   .object({
-    wirdZweitePersonBeruecksichtigt: OptionalBooleanRadiobuttonCodec,
-    name: z.string().optional(),
+    name: z.string(),
     istImMutterschutz: BooleanRadiobuttonCodec.optional(),
   })
   .refine(
     (data) => {
-      if (data.wirdZweitePersonBeruecksichtigt !== false) {
-        return !!data.name && data.name.trim().length > 0;
-      }
-      return true;
-    },
-    {
-      message: "Bitte geben Sie einen Namen an.",
-      path: ["name"],
-    },
-  )
-  .refine(
-    (data) => {
-      if (data.wirdZweitePersonBeruecksichtigt !== false) {
-        return data.istImMutterschutz !== undefined;
-      }
-      return true;
+      return data.istImMutterschutz !== undefined;
     },
     {
       message: "Wählen Sie bitte Ja oder Nein",
@@ -146,24 +138,8 @@ if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("ElternteilZweiAllgemeineAngabenSchema", () => {
-    it("rejects when Person 2 is considered but istImMutterschutz is missing", () => {
+    it("rejects when istImMutterschutz is missing", () => {
       const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
-        wirdZweitePersonBeruecksichtigt: "yes",
-        name: "Anna",
-      });
-
-      expect(result.success).toBeFalsy();
-
-      if (!result.success) {
-        expect(result.error.issues[0]).toMatchObject({
-          path: ["istImMutterschutz"],
-        });
-      }
-    });
-
-    it("rejects when Person 2 status is unknown but istImMutterschutz is missing", () => {
-      const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
-        wirdZweitePersonBeruecksichtigt: "unknown",
         name: "Anna",
       });
 
@@ -178,17 +154,8 @@ if (import.meta.vitest) {
 
     it("accepts when Person 2 is considered and istImMutterschutz is provided", () => {
       const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
-        wirdZweitePersonBeruecksichtigt: "yes",
         name: "Anna",
         istImMutterschutz: "no",
-      });
-
-      expect(result.success).toBeTruthy();
-    });
-
-    it("accepts when Person 2 is not considered even without istImMutterschutz", () => {
-      const result = ElternteilZweiAllgemeineAngabenSchema.safeParse({
-        wirdZweitePersonBeruecksichtigt: "no",
       });
 
       expect(result.success).toBeTruthy();

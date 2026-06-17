@@ -3,6 +3,7 @@ import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeInformationenZumMutterschutz } from "./findeInformationenZumMutterschutz";
+import { sindBeideElternteile } from "./sindBeideElternteile";
 import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections";
 import type { FormEvent } from "@/application/routing/FormEvent";
@@ -44,9 +45,10 @@ export function erstelleAusgangslage(
     };
   }
 
-  const zweitePersonAngaben = findeAngabenZurZweitenPerson(events);
+  const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(events);
 
-  if (zweitePersonAngaben.wirdZweitePersonBeruecksichtigt !== false) {
+  if (wirdZweitePersonBeruecksichtigt) {
+    const zweitePersonAngaben = findeAngabenZurZweitenPerson(events);
     const informationenZumMutterschutz = findeInformationenZumMutterschutz(
       events,
       anzahlKinder,
@@ -63,7 +65,7 @@ export function erstelleAusgangslage(
       mindestensEinElternteilWarErwerbstaetigImBemessungszeitraum,
       namenDerElternteile: {
         [Elternteil.Eins]: nameDesErstenElternteils,
-        [Elternteil.Zwei]: zweitePersonAngaben.name!,
+        [Elternteil.Zwei]: zweitePersonAngaben.name,
       },
     };
   } else {
@@ -131,9 +133,8 @@ if (import.meta.vitest) {
     const { Temporal } = await import("@js-temporal/polyfill");
 
     const zweitePersonNichtBeruecksichtigt: FormEvent = {
-      route: Route.ElternteilZweiAllgemeineAngaben,
-      payload: { wirdZweitePersonBeruecksichtigt: false, name: "" },
-      dependentValues: { hatPotenzielleAusklammerungen: true },
+      route: Route.ElternteilGemeinsamePlanungAbfrage,
+      payload: { wirdZweitePersonBeruecksichtigt: false },
     };
 
     describe("geburtsdatumDesKindes", () => {
@@ -313,13 +314,18 @@ if (import.meta.vitest) {
             payload: {
               name: "Hanna",
               istAlleinerziehend: false,
-              istImMutterschutz: false,
+              istImMutterschutz: true,
+            },
+          },
+          {
+            route: Route.ElternteilGemeinsamePlanungAbfrage,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
             },
           },
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
             payload: {
-              wirdZweitePersonBeruecksichtigt: undefined,
               name: "Max",
             },
             dependentValues: { hatPotenzielleAusklammerungen: true },
@@ -347,12 +353,18 @@ if (import.meta.vitest) {
             payload: {
               name: "Hanna",
               istAlleinerziehend: false,
-              istImMutterschutz: false,
+              istImMutterschutz: true,
+            },
+          },
+          {
+            route: Route.ElternteilGemeinsamePlanungAbfrage,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
             },
           },
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+            payload: { name: "Max" },
             dependentValues: { hatPotenzielleAusklammerungen: true },
           },
         ];
@@ -634,12 +646,18 @@ if (import.meta.vitest) {
             payload: {
               name: "Hanna",
               istAlleinerziehend: false,
-              istImMutterschutz: false,
+              istImMutterschutz: true,
+            },
+          },
+          {
+            route: Route.ElternteilGemeinsamePlanungAbfrage,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
             },
           },
           {
             route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+            payload: { name: "Max" },
             dependentValues: { hatPotenzielleAusklammerungen: true },
           },
         ];
@@ -668,13 +686,13 @@ if (import.meta.vitest) {
         payload: {
           name: "Hanna",
           istAlleinerziehend: false,
-          istImMutterschutz: false,
+          istImMutterschutz: true,
         },
       };
 
       const zweitePersonEvent: FormEvent = {
         route: Route.ElternteilZweiAllgemeineAngaben,
-        payload: { wirdZweitePersonBeruecksichtigt: true, name: "Max" },
+        payload: { name: "Max" },
         dependentValues: { hatPotenzielleAusklammerungen: true },
       };
 
@@ -870,8 +888,14 @@ if (import.meta.vitest) {
             },
           },
           {
+            route: Route.ElternteilGemeinsamePlanungAbfrage,
+            payload: {
+              wirdZweitePersonBeruecksichtigt: true,
+            },
+          },
+          {
             route: Route.ElternteilZweiAllgemeineAngaben,
-            payload: { wirdZweitePersonBeruecksichtigt: false, name: "Max" },
+            payload: { name: "Max" },
             dependentValues: { hatPotenzielleAusklammerungen: true },
           },
         ];

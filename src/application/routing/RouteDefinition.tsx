@@ -12,6 +12,7 @@ import {
   ElternteilAusklammerungZeitenPage,
   ElternteilBMZUebersichtPage,
   ElternteilEinsAllgemeineAngabenPage,
+  ElternteilGemeinsamePlanungAbfragePage,
   ElternteilTaetigkeitenAbfragePage,
   GeborenesKindPage,
   GeschwisterbonusUebersichtPage,
@@ -121,6 +122,12 @@ const RouteDefinition = [
             element: <ElternteilEinsAllgemeineAngabenPage />,
             path: generateAbfrageteilPath(
               Route.ElternteilEinsAllgemeineAngaben,
+            ),
+          },
+          {
+            element: <ElternteilGemeinsamePlanungAbfragePage />,
+            path: generateAbfrageteilPath(
+              Route.ElternteilGemeinsamePlanungAbfrage,
             ),
           },
           {

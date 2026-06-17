@@ -6,6 +6,7 @@ import {
   ElternteilAusklammerungGruendeSchema,
   ElternteilAusklammerungZeitenSchema,
   ElternteilEinsAllgemeineAngabenSchema,
+  ElternteilGemeinsamePlanungAbfrageSchema,
   ElternteilTaetigkeitenAbfrageSchema,
   ElternteilZweiAllgemeineAngabenSchema,
 } from "@/application/features/abfrageteil/pages/elternteil/ElternteilSchema";
@@ -88,6 +89,10 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: ElternteilEinsAllgemeineAngabenSchema,
   }),
   z.object({
+    route: z.literal(Route.ElternteilGemeinsamePlanungAbfrage),
+    payload: ElternteilGemeinsamePlanungAbfrageSchema,
+  }),
+  z.object({
     route: z.literal(Route.ElternteilAusklammerungGruendeAngaben),
     params: ElternteilParams,
     payload: ElternteilAusklammerungGruendeSchema,
@@ -156,7 +161,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: WeitereTaetigkeitAbfrageSchema,
     dependentValues: z.object({
       istSelbststaendigeTaetigkeitMoeglich: z.boolean(),
-      istPersonAlleinerziehend: z.boolean(),
+      wirdZweitePersonBeruecksichtigt: z.boolean(),
     }),
   }),
   z.object({

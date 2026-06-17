@@ -77,7 +77,7 @@ if (import.meta.vitest) {
 
       const result = findeLetzteErlaubteRoute(
         eventStream,
-        "/abfrageteil/elternteil/0/ausklammerung/gruende",
+        "/abfrageteil/elternteil/0/planung-abfrage",
       );
 
       expect(result).toBeUndefined();

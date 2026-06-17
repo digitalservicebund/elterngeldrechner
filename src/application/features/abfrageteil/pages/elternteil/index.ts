@@ -1,4 +1,5 @@
 export { ElternteilEinsAllgemeineAngabenPage } from "./ElternteilEinsAllgemeineAngabenPage";
+export { ElternteilGemeinsamePlanungAbfragePage } from "./ElternteilGemeinsamePlanungAbfragePage";
 export { ElternteilAusklammerungGruendePage } from "./ElternteilAusklammerungGruendePage";
 export { ElternteilAusklammerungZeitenPage } from "./ElternteilAusklammerungZeitenPage";
 export { ElternteilTaetigkeitenAbfragePage } from "./ElternteilTaetigkeitenAbfragePage";

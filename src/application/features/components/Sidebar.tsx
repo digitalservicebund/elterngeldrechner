@@ -70,17 +70,18 @@ export function Sidebar() {
   const person1Event = findeLetztesGueltigesEvent(
     Route.ElternteilEinsAllgemeineAngaben,
   );
+  const gemeinsamPlanenEvent = findeLetztesGueltigesEvent(
+    Route.ElternteilGemeinsamePlanungAbfrage,
+  );
   const zweitePersonEvent = findeLetztesGueltigesEvent(
     Route.ElternteilZweiAllgemeineAngaben,
   );
 
   const person1Name = person1Event?.name;
+  const wirdZweitePersonBeruecksichtigt =
+    gemeinsamPlanenEvent &&
+    gemeinsamPlanenEvent.wirdZweitePersonBeruecksichtigt !== false;
   const person2Name = zweitePersonEvent?.name;
-  const istNichtAlleinerziehend = person1Event?.istAlleinerziehend === false;
-
-  const zeigePerson2Finanzielle =
-    zweitePersonEvent !== undefined &&
-    zweitePersonEvent.wirdZweitePersonBeruecksichtigt !== false;
 
   const navigationSteps = useMemo<NavigationStep[]>(() => {
     const schritte: NavigationStep[] = [
@@ -119,7 +120,7 @@ export function Sidebar() {
       },
     ];
 
-    if (istNichtAlleinerziehend) {
+    if (wirdZweitePersonBeruecksichtigt) {
       schritte.push({
         label: "Angaben",
         placeholder: "Person 2",
@@ -128,9 +129,7 @@ export function Sidebar() {
           Route.ElternteilZweiAllgemeineAngaben,
         ),
       });
-    }
 
-    if (zeigePerson2Finanzielle) {
       schritte.push({
         label: "Finanzielle Situation",
         placeholder: "Person 2",
@@ -156,12 +155,7 @@ export function Sidebar() {
     );
 
     return schritte;
-  }, [
-    person1Name,
-    person2Name,
-    istNichtAlleinerziehend,
-    zeigePerson2Finanzielle,
-  ]);
+  }, [person1Name, person2Name, wirdZweitePersonBeruecksichtigt]);
 
   const navigationItems: NavigationItem[] = useMemo(() => {
     return erstelleNavigationsItems(navigationSteps, pathname);

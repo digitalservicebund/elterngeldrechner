@@ -104,7 +104,6 @@ if (import.meta.vitest) {
     const elternteil2OhneMutterschutz: FormEvent = {
       route: Route.ElternteilZweiAllgemeineAngaben,
       payload: {
-        wirdZweitePersonBeruecksichtigt: true,
         name: "Max",
         istImMutterschutz: false,
       },
@@ -114,7 +113,6 @@ if (import.meta.vitest) {
     const elternteil2MitMutterschutz: FormEvent = {
       route: Route.ElternteilZweiAllgemeineAngaben,
       payload: {
-        wirdZweitePersonBeruecksichtigt: true,
         name: "Max",
         istImMutterschutz: true,
       },

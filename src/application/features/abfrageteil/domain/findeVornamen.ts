@@ -84,7 +84,6 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
-            wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
           dependentValues: { hatPotenzielleAusklammerungen: true },
@@ -107,7 +106,6 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
-            wirdZweitePersonBeruecksichtigt: true,
             name: "Anton",
           },
           dependentValues: { hatPotenzielleAusklammerungen: true },
@@ -115,7 +113,6 @@ if (import.meta.vitest) {
         {
           route: Route.ElternteilZweiAllgemeineAngaben,
           payload: {
-            wirdZweitePersonBeruecksichtigt: true,
             name: "Daniel",
           },
           dependentValues: { hatPotenzielleAusklammerungen: true },

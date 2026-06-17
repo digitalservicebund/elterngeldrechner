@@ -41,7 +41,6 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
   const { register, handleSubmit, formState, watch, subscribe } = useForm({
     resolver: zodResolver(ElternteilZweiAllgemeineAngabenSchema),
-    shouldUnregister: true,
     defaultValues: encodeSafely(
       ElternteilZweiAllgemeineAngabenSchema,
       letztesGueltigesEvent,
@@ -69,7 +68,12 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
     const event: FormEvent = {
       route: currentRoute,
-      payload: values,
+      payload: {
+        ...values,
+        istImMutterschutz: istErsterElternteilImMutterschutz
+          ? false
+          : values.istImMutterschutz,
+      },
       dependentValues: {
         hatPotenzielleAusklammerungen:
           hatGeschwisterkinder ||
@@ -86,10 +90,6 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   };
 
   const navigateBack = useNavigateBack(currentRoute);
-
-  const wirdZweitePersonBeruecksichtigt = watch(
-    "wirdZweitePersonBeruecksichtigt",
-  );
 
   const nameInForm = watch("name");
   const vorname = nameInForm?.trim() || "Person 2";
@@ -108,132 +108,94 @@ export function ElternteilZweiAllgemeineAngabenPage() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <CustomRadioGroup
-          className="mt-16"
-          legend=<h3 className="mb-10">
-            Sollen beide Elternteile Elterngeld bekommen?
+        <div className="mt-20">
+          <h3 className="mb-10">
+            Wie heißt Person 2, die Elterngeld erhalten soll?
           </h3>
-          errors={formErrors}
-          register={register}
-          name="wirdZweitePersonBeruecksichtigt"
-          options={[
-            {
-              value: "yes",
-              label: "Ja, beide Elternteile sollen Elterngeld bekommen",
-            },
-            {
-              value: "no",
-              label:
-                "Nein, ein Elternteil kann oder möchte kein Elterngeld bekommen",
-            },
-            {
-              value: "unknown",
-              label: "Wir wissen es noch nicht: Ein Elternteil überlegt noch",
-            },
-          ]}
-        >
+
           <InfoText
-            question="Warum fragen wir das?"
-            answer="Planen Sie Ihr Elterngeld gemeinsam – wenn das für Sie möglich ist. Manchmal möchte ein Elternteil kein Elterngeld bekommen, zum Beispiel weil das zweite Einkommen gebraucht wird."
+            question="Warum soll ich einen Vornamen angeben?"
+            answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
           />
-        </CustomRadioGroup>
 
-        {(wirdZweitePersonBeruecksichtigt === "yes" ||
-          wirdZweitePersonBeruecksichtigt === "unknown") && (
-          <>
-            <div className="mt-20">
+          <label
+            className={classNames("mb-4 mt-20 block text-16", {
+              "text-danger": formErrors.name,
+            })}
+            htmlFor={personNameInputIdentifier}
+          >
+            Vorname Person 2
+          </label>
+
+          <input
+            id={personNameInputIdentifier}
+            className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
+            {...register("name")}
+          />
+
+          {"name" in formErrors && (
+            <p className="mt-8 text-14 text-danger">
+              {formErrors.name?.message}
+            </p>
+          )}
+        </div>
+
+        {!istErsterElternteilImMutterschutz ? (
+          <CustomRadioGroup
+            className="mt-16"
+            legend={
               <h3 className="mb-10">
-                Wie heißt Person 2, die Elterngeld erhalten soll?
+                {geburtIstErfolgt
+                  ? `War ${vorname} im Mutterschutz?`
+                  : `Wird ${vorname} im Mutterschutz sein?`}
               </h3>
+            }
+            errors={formErrors}
+            register={register}
+            name="istImMutterschutz"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was ist Mutterschutz?"
+              answer={
+                <>
+                  <p>
+                    Jede angestellte oder verbeamtete Schwangere hat in
+                    Deutschland gesetzlichen Anspruch auf Mutterschutz. Nach dem
+                    Mutterschutzgesetz gelten insbesondere Mutterschutzfristen,
+                    die 6 Wochen vor der dem errechneten Geburtstermin beginnen
+                    und in der Regel 8 Wochen danach enden. Während der
+                    Schutzfristen erhalten Sie Mutterschaftsleistungen, zum
+                    Beispiel:
+                  </p>
 
-              <InfoText
-                question="Warum soll ich einen Vornamen angeben?"
-                answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
-              />
+                  <ul>
+                    <li>
+                      das Mutterschaftsgeld der gesetzlichen Krankenkassen
+                    </li>
+                    <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
+                    <li>
+                      die Bezüge für Beamtinnen während des Mutterschutzes
+                    </li>
+                  </ul>
 
-              <label
-                className={classNames("mb-4 mt-20 block text-16", {
-                  "text-danger": formErrors.name,
-                })}
-                htmlFor={personNameInputIdentifier}
-              >
-                Vorname Person 2
-              </label>
-
-              <input
-                id={personNameInputIdentifier}
-                className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
-                {...register("name")}
-              />
-
-              {"name" in formErrors && (
-                <p className="mt-8 text-14 text-danger">
-                  {formErrors.name?.message}
-                </p>
-              )}
-            </div>
-
-            {!istErsterElternteilImMutterschutz ? (
-              <CustomRadioGroup
-                className="mt-16"
-                legend=<h3 className="mb-10">
-                  {geburtIstErfolgt
-                    ? `War ${vorname} im Mutterschutz?`
-                    : `Wird ${vorname} im Mutterschutz sein?`}
-                </h3>
-                errors={formErrors}
-                register={register}
-                name="istImMutterschutz"
-                options={[
-                  { value: "yes", label: "Ja" },
-                  { value: "no", label: "Nein" },
-                ]}
-              >
-                <InfoText
-                  question="Was ist Mutterschutz?"
-                  answer={
-                    <>
-                      <p>
-                        Jede angestellte oder verbeamtete Schwangere hat in
-                        Deutschland gesetzlichen Anspruch auf Mutterschutz. Nach
-                        dem Mutterschutzgesetz gelten insbesondere
-                        Mutterschutzfristen, die 6 Wochen vor der dem
-                        errechneten Geburtstermin beginnen und in der Regel 8
-                        Wochen danach enden. Während der Schutzfristen erhalten
-                        Sie Mutterschaftsleistungen, zum Beispiel:
-                      </p>
-
-                      <ul>
-                        <li>
-                          das Mutterschaftsgeld der gesetzlichen Krankenkassen
-                        </li>
-                        <li>den Arbeitgeber-Zuschuss zum Mutterschaftsgeld</li>
-                        <li>
-                          die Bezüge für Beamtinnen während des Mutterschutzes
-                        </li>
-                      </ul>
-
-                      <p className="mt-20 font-bold">
-                        Sie sind noch ganz am Anfang Ihrer Schwangerschaft?
-                      </p>
-                      <p>
-                        Auch wenn der Termin noch weit weg ist: Wählen Sie “Ja”,
-                        wenn Sie zum Zeitpunkt der Geburt angestellt oder
-                        verbeamtet sind. Dann steht Ihnen der Mutterschutz
-                        gesetzlich zu.
-                      </p>
-                    </>
-                  }
-                />
-              </CustomRadioGroup>
-            ) : (
-              <input
-                type="hidden"
-                value="no"
-                {...register("istImMutterschutz")}
-              />
-            )}
-          </>
+                  <p className="mt-20 font-bold">
+                    Sie sind noch ganz am Anfang Ihrer Schwangerschaft?
+                  </p>
+                  <p>
+                    Auch wenn der Termin noch weit weg ist: Wählen Sie “Ja”,
+                    wenn Sie zum Zeitpunkt der Geburt angestellt oder verbeamtet
+                    sind. Dann steht Ihnen der Mutterschutz gesetzlich zu.
+                  </p>
+                </>
+              }
+            />
+          </CustomRadioGroup>
+        ) : (
+          <input type="hidden" value="no" {...register("istImMutterschutz")} />
         )}
 
         <div className="mt-40 flex gap-16">

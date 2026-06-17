@@ -6,6 +6,7 @@ import { Route, generateAbfrageteilPath } from "@/application/routing";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
 import ExpandLessIcon from "~icons/material-symbols/expand-less";
 import ExpandMoreIcon from "~icons/material-symbols/expand-more";
+import posthog from "posthog-js";
 
 type NavigationItem = NavigationStep & {
   readonly navigatable: boolean;
@@ -178,6 +179,14 @@ export function Sidebar() {
       "appearance-none border-none bg-transparent text-16 text-black",
   };
 
+  function navigiereZuAbschnitt(item: NavigationItem) {
+    posthog.capture("navigationspunkt_wurde_geklickt", {
+      abschnitt: item.label,
+    });
+
+    return navigate(item.navigatePath ?? item.matchingPath);
+  }
+
   return (
     <nav
       ref={navigationElement}
@@ -230,7 +239,7 @@ export function Sidebar() {
                   "cursor-default": isDisabled,
                 })}
                 type="button"
-                onClick={() => navigate(item.navigatePath ?? item.matchingPath)}
+                onClick={() => navigiereZuAbschnitt(item)}
                 aria-current={isCurrent ? "step" : undefined}
                 disabled={isDisabled}
               >

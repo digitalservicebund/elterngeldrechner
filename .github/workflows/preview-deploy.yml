@@ -36,10 +36,24 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
+      - name: Restore cached app-wrapper snapshot
+        id: app-wrapper-cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae #v5.0.5
+        with:
+          path: .app-wrapper
+          key: app-wrapper-snapshot
+
+      - name: Generate app-wrapper snapshot on cache miss
+        if: steps.app-wrapper-cache.outputs.cache-hit != 'true'
+        run: scripts/generate-app-wrapper.sh || echo "::warning::app-wrapper fetch failed; preview will use the bare host page"
+
       - name: Run preview build specific for stack it staging environment
         run: npm run build:staging
         env:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/${{ inputs.name }}/
+
+      - name: Check build artifact structure
+        run: scripts/check-build-artifacts.sh
 
       - name: Synchronize build output with object storage
         env:

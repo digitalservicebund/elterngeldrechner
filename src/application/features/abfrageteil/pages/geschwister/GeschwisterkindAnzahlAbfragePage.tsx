@@ -37,7 +37,7 @@ export function GeschwisterkindAnzahlAbfragePage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: GeschwisterkindAnzahlAbfrage) => {
+  const onSubmit = async (values: GeschwisterkindAnzahlAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -45,11 +45,11 @@ export function GeschwisterkindAnzahlAbfragePage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   const anzahlGeschwisterInputIdentifier = useId();

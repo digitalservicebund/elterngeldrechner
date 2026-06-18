@@ -85,7 +85,7 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilAusklammerungErkrankungZeiten) => {
+  const onSubmit = async (values: ElternteilAusklammerungErkrankungZeiten) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
       berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatum,
@@ -104,11 +104,11 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);

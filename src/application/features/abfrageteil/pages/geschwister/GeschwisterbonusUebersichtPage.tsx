@@ -31,18 +31,18 @@ export function GeschwisterbonusUebersichtPage() {
     geburtsdatum,
   );
 
-  const navigateNextPage = () => {
+  const navigateNextPage = async () => {
     const event: FormEvent = {
       route: currentRoute,
     };
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   return (
@@ -191,10 +191,12 @@ const berechneEnddatumGeschwisterbonus = (
     moeglicheEnddaten.push(juengstesGeschwisterkindMitBehinderungWirdVierzehn);
   }
 
-  if (moeglicheEnddaten.length === 0) return null;
-
-  return moeglicheEnddaten.reduce((max, aktuell) =>
-    Temporal.PlainDate.compare(aktuell, max) > 0 ? aktuell : max,
+  return moeglicheEnddaten.reduce<Temporal.PlainDate | null>(
+    (max, aktuell) =>
+      max === null || Temporal.PlainDate.compare(aktuell, max) > 0
+        ? aktuell
+        : max,
+    null,
   );
 };
 

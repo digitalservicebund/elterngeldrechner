@@ -57,10 +57,8 @@ mv egr.html index.html
 
 # Remove the live widget assets and their references; the build injects its
 # own freshly built bundle in their place via the Vite plugin.
-rm index.js index.css
-edit_html \
-  -e 's#<script src="index.js" ></script>##' \
-  -e 's#<link rel="stylesheet" href="index.css" >##'
+rm index.js
+edit_html -e 's#<script src="index.js" ></script>##'
 
 # Make the SVG sprite self-contained by fetching it next to the page.
 sprite_path=$(grep -o "/resource/crblob/.*/sprite-svg-data.svg" index.html)

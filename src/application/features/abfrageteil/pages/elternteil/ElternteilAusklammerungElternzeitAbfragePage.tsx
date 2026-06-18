@@ -1,4 +1,3 @@
-import DoubleArrowIcon from "~icons/material-symbols/double-arrow";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
@@ -114,10 +113,6 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
     await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
-  const handleSkip = async () => {
-    await onSubmit({ hatElterngeldGeschwisterkind: undefined });
-  };
-
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 
   return (
@@ -198,17 +193,6 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
           <Button type="submit" form={formIdentifier}>
             Weiter
           </Button>
-
-          <button
-            type="button"
-            className="ml-56 border-none bg-transparent p-0 !text-base text-primary active:focus:outline-none [@media(hover:hover)]:hover:bg-transparent"
-            onClick={handleSkip}
-          >
-            <div className="flex items-center">
-              <DoubleArrowIcon className="mr-4 mt-4" />
-              <span className="font-bold">Frage überspringen</span>
-            </div>
-          </button>
         </div>
       </form>
     </Page>

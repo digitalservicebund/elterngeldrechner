@@ -504,7 +504,7 @@ if (import.meta.vitest) {
           payload: { name: "Max" },
           dependentValues: {
             istSchwangerschaftsbedingteErkrankungMoeglich: true,
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         },
         {

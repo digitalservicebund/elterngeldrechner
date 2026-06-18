@@ -133,7 +133,7 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
       grund: "mutterschutzGeschwisterkind",
       geschwisterIndex,
     };
-    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+    const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
       berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatum,
         geschwisterkinder,
@@ -146,7 +146,7 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
       payload: values,
       params: routeParams,
       dependentValues: {
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

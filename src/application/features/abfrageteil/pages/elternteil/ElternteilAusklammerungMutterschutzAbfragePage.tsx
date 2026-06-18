@@ -72,7 +72,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
   const onSubmit = (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrage,
   ) => {
-    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+    const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
       berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatum,
         geschwisterkinder,
@@ -85,7 +85,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
       payload: values,
       params: routeParams,
       dependentValues: {
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

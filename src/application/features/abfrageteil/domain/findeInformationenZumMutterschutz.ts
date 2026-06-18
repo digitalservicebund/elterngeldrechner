@@ -109,7 +109,7 @@ if (import.meta.vitest) {
       },
       dependentValues: {
         istSchwangerschaftsbedingteErkrankungMoeglich: false,
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
       },
     };
 
@@ -121,7 +121,7 @@ if (import.meta.vitest) {
       },
       dependentValues: {
         istSchwangerschaftsbedingteErkrankungMoeglich: false,
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
       },
     };
 

@@ -309,7 +309,7 @@ if (import.meta.vitest) {
             erkrankungSchwangerschaft: [],
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];
@@ -348,7 +348,7 @@ if (import.meta.vitest) {
             erkrankungSchwangerschaft: [],
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -401,7 +401,7 @@ if (import.meta.vitest) {
             erkrankungSchwangerschaft: [],
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -425,7 +425,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istSchwangerschaftsbedingteErkrankungMoeglich: true,
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -470,7 +470,7 @@ if (import.meta.vitest) {
             },
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];
@@ -503,7 +503,7 @@ if (import.meta.vitest) {
             ],
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: 0,
           },
         },
         {
@@ -519,7 +519,7 @@ if (import.meta.vitest) {
             },
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];
@@ -563,7 +563,7 @@ if (import.meta.vitest) {
             },
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
         {
@@ -579,7 +579,7 @@ if (import.meta.vitest) {
             },
           },
           dependentValues: {
-            nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
+            naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: undefined,
           },
         },
       ];

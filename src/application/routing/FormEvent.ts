@@ -1,5 +1,4 @@
 import { z } from "zod";
-
 import { Route } from "./Route";
 import { AllgemeineAngabenSchema } from "@/application/features/abfrageteil/pages/allgemeine-angaben/AllgemeineAngabenSchema";
 import {
@@ -106,7 +105,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: ElternteilParams,
     payload: ElternteilAusklammerungErkrankungAbfrageSchema,
     dependentValues: z.object({
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),
@@ -116,7 +115,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: ElternteilParams,
     payload: ElternteilAusklammerungErkrankungZeitenSchema,
     dependentValues: z.object({
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),
@@ -126,7 +125,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema,
     dependentValues: z.object({
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),
@@ -136,7 +135,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema,
     dependentValues: z.object({
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),
@@ -146,7 +145,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema,
     dependentValues: z.object({
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),
@@ -156,7 +155,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     params: AusklammerungParams,
     payload: ElternteilAusklammerungMutterschutzGeschwisterkindZeitenSchema,
     dependentValues: z.object({
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),
@@ -236,7 +235,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: ElternteilZweiAllgemeineAngabenSchema,
     dependentValues: z.object({
       istSchwangerschaftsbedingteErkrankungMoeglich: z.boolean(),
-      nächsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
+      naechsterGeschwisterIndexMitRelevanzFuerAusklammerung: z
         .number()
         .optional(),
     }),

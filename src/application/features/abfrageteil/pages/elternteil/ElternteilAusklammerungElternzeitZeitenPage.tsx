@@ -123,7 +123,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
         geschwisterIndex,
       }),
     );
-    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+    const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
       berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatum,
         geschwisterkinder,
@@ -137,7 +137,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
       payload: values,
       params: routeParams,
       dependentValues: {
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

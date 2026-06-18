@@ -70,7 +70,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
   const onSubmit = async (values: ElternteilZweiAllgemeineAngaben) => {
-    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+    const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
       berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatum,
         geschwisterkinder,
@@ -87,7 +87,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
       },
       dependentValues: {
         istSchwangerschaftsbedingteErkrankungMoeglich,
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

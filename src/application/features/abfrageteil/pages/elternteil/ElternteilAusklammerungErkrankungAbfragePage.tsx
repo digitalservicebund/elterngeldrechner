@@ -56,7 +56,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
   const { errors: formErrors } = formState;
 
   const onSubmit = (values: ElternteilAusklammerungErkrankungAbfrage) => {
-    const nächsterGeschwisterIndexMitRelevanzFuerAusklammerung =
+    const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
       berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatum,
         geschwisterkinder,
@@ -68,7 +68,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
       payload: values,
       params: routeParams,
       dependentValues: {
-        nächsterGeschwisterIndexMitRelevanzFuerAusklammerung,
+        naechsterGeschwisterIndexMitRelevanzFuerAusklammerung,
       },
     };
 

@@ -150,6 +150,10 @@ export function BeispielePage() {
       };
 
       setIdentifierTrackingVariable(`${elternStatus()} - Eigene Planung`);
+
+      posthog.capture("beispiel_wurde_angeklickt", {
+        identifier: `${elternStatus()} - Eigene Planung`,
+      });
     }
 
     pushTrackingEvent("Beispiel-wurde-ausgewählt");

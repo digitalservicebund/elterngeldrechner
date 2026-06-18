@@ -175,9 +175,18 @@ export function BeispielePage() {
 
   const [areAllBeispieleVisible, setAreAllBeispieleVisible] = useState(false);
 
-  const listeMitBeispielen = areAllBeispieleVisible
-    ? beispiele
-    : beispiele.slice(0, 2);
+  const sichtbareBeispiele = useMemo(
+    () => (areAllBeispieleVisible ? beispiele : beispiele.slice(0, 2)),
+    [areAllBeispieleVisible, beispiele],
+  );
+
+  useEffect(() => {
+    sichtbareBeispiele.forEach((beispiel) => {
+      posthog.capture("beispiel_angezeigt", {
+        identifier: beispiel.identifier,
+      });
+    });
+  }, [sichtbareBeispiele]);
 
   function showAllBeispiele(): void {
     setAreAllBeispieleVisible(true);
@@ -211,7 +220,7 @@ export function BeispielePage() {
             <legend className="sr-only">Beispielauswahl</legend>
 
             <div className="grid grid-cols-1 gap-24 sm:grid-cols-2 md:grid-cols-3">
-              {listeMitBeispielen.map((beispiel) => (
+              {sichtbareBeispiele.map((beispiel) => (
                 <BeispielRadiobutton
                   titel={beispiel.titel}
                   key={beispiel.identifier}
@@ -556,6 +565,9 @@ if (import.meta.vitest) {
 
     describe("tracking", async () => {
       const trackingModule = await import("@/application/user-tracking");
+      const { act } = await import("@testing-library/react");
+      const { erstelleBeispiele } =
+        await import("@/application/features/planungsteil/beispiele");
 
       beforeEach(() => vi.clearAllMocks());
 
@@ -675,6 +687,49 @@ if (import.meta.vitest) {
         screen.getByText("Weiter").click();
 
         expect(trackingFunction).not.toHaveBeenCalled();
+      });
+
+      it("feuert beispiel_angezeigt nicht erneut wenn die Seite neu rendert", () => {
+        const captureSpy = vi
+          .spyOn(trackingModule.posthog, "capture")
+          .mockReturnValue(undefined);
+
+        render(<BeispielePage />);
+
+        const angezeigtNachMount = captureSpy.mock.calls.filter(
+          ([event]) => event === "beispiel_angezeigt",
+        );
+
+        act(() => screen.getByText("Vorschlag 1").click());
+
+        const angezeigtNachAuswahl = captureSpy.mock.calls.filter(
+          ([event]) => event === "beispiel_angezeigt",
+        );
+
+        expect(angezeigtNachAuswahl).toEqual(angezeigtNachMount);
+      });
+
+      it("feuert beispiel_angezeigt für ein Beispiel sobald es zusätzlich eingeblendet wird", () => {
+        const [zusaetzlichesBeispiel] = erstelleBeispiele(
+          mockAusgangslage,
+          vi.fn().mockReturnValue({}),
+        ).slice(2);
+
+        const captureSpy = vi
+          .spyOn(trackingModule.posthog, "capture")
+          .mockReturnValue(undefined);
+
+        render(<BeispielePage />);
+
+        expect(captureSpy).not.toHaveBeenCalledWith("beispiel_angezeigt", {
+          identifier: zusaetzlichesBeispiel!.identifier,
+        });
+
+        act(() => screen.getByText("Noch mehr Vorschläge anzeigen").click());
+
+        expect(captureSpy).toHaveBeenCalledWith("beispiel_angezeigt", {
+          identifier: zusaetzlichesBeispiel!.identifier,
+        });
       });
     });
   });

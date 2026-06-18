@@ -69,7 +69,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (
+  const onSubmit = async (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrage,
   ) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
@@ -91,15 +91,15 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
-  const handleSkip = () => {
-    onSubmit({ hatMutterschutzGeschwisterkind: undefined });
+  const handleSkip = async () => {
+    await onSubmit({ hatMutterschutzGeschwisterkind: undefined });
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);

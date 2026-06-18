@@ -42,7 +42,7 @@ export function ElternteilBMZUebersichtPage() {
     routeParams.elternteilIndex,
   );
 
-  const navigateNextPage = () => {
+  const navigateNextPage = async () => {
     const event: FormEvent = {
       route: currentRoute,
       params: routeParams,
@@ -54,11 +54,11 @@ export function ElternteilBMZUebersichtPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);

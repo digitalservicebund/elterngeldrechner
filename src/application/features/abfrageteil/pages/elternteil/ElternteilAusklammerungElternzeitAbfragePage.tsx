@@ -84,7 +84,7 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (
+  const onSubmit = async (
     values: ElternteilAusklammerungElternzeitGeschwisterkindAbfrage,
   ) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
@@ -107,15 +107,15 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
-  const handleSkip = () => {
-    onSubmit({ hatElterngeldGeschwisterkind: undefined });
+  const handleSkip = async () => {
+    await onSubmit({ hatElterngeldGeschwisterkind: undefined });
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);

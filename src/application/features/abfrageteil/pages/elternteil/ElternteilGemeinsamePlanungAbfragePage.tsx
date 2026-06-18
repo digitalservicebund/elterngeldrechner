@@ -43,7 +43,7 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (values: ElternteilGemeinsamePlanungAbfrage) => {
+  const onSubmit = async (values: ElternteilGemeinsamePlanungAbfrage) => {
     const event: FormEvent = {
       route: currentRoute,
       payload: values,
@@ -51,11 +51,11 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute));
   };
 
   const eventStream = filtereValideEventHistorie();

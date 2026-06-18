@@ -113,7 +113,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (
+  const onSubmit = async (
     values: ElternteilAusklammerungElterngeldGeschwisterkindZeiten,
   ) => {
     const neueAusklammerungen = values.elterngeldGeschwisterkind.map(
@@ -143,11 +143,11 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);

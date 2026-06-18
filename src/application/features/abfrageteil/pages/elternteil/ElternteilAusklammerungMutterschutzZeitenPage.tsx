@@ -124,7 +124,7 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
 
   const { errors: formErrors } = formState;
 
-  const onSubmit = (
+  const onSubmit = async (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindZeiten,
   ) => {
     const geschwisterIndex = routeParams.geschwisterIndex;
@@ -152,11 +152,11 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
 
     dispatch(event);
 
-    void navigate(findeNaechstenPfad(event));
+    await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = () => {
-    void navigate(findeVorherigenPfad(currentRoute, routeParams));
+  const navigateBack = async () => {
+    await navigate(findeVorherigenPfad(currentRoute, routeParams));
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);

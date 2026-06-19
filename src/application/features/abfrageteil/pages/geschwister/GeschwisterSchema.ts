@@ -9,9 +9,9 @@ export const GeschwisterkindAbfrageSchema = z.object({
 });
 
 export const GeschwisterkindAnzahlAbfrageSchema = z.object({
-  anzahlGeschwister: z.coerce
+  anzahlGeschwisterkinder: z.coerce
     .number({ error: "Invalide Eingabe" })
-    .min(1, "Mindestens 1 Kind"),
+    .min(1, "Mindestens 1 Geschwisterkind"),
 });
 
 export const GeschwisterkindAngabenSchema = z.object({

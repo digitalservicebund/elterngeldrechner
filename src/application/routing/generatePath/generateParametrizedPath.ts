@@ -41,7 +41,7 @@ if (import.meta.vitest) {
 
     it("can be used to render dyanmic routes with params", () => {
       const path = generateParametrizedPath(Route.GeschwisterkindAngaben, {
-        geschwisterIndex: "0",
+        geschwisterkindIndex: "0",
       });
 
       expect(path).toEqual("/geschwisterkind/0");

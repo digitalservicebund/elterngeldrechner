@@ -68,7 +68,7 @@ if (import.meta.vitest) {
           { route: Route.Startseite },
           {
             route: Route.GeschwisterkindAnzahlAbfrage,
-            payload: { anzahlGeschwister: 2 },
+            payload: { anzahlGeschwisterkinder: 2 },
           },
           {
             route: Route.GeschwisterkindAngaben,
@@ -77,10 +77,10 @@ if (import.meta.vitest) {
               hatBehinderung: false,
             },
             params: {
-              geschwisterIndex: 0,
+              geschwisterkindIndex: 0,
             },
             dependentValues: {
-              anzahlGeschwister: 2,
+              anzahlGeschwisterkinder: 2,
             },
           },
           {
@@ -90,15 +90,15 @@ if (import.meta.vitest) {
               hatBehinderung: false,
             },
             params: {
-              geschwisterIndex: 1,
+              geschwisterkindIndex: 1,
             },
             dependentValues: {
-              anzahlGeschwister: 2,
+              anzahlGeschwisterkinder: 2,
             },
           },
         ],
         Route.GeschwisterkindAngaben,
-        { geschwisterIndex: 0 },
+        { geschwisterkindIndex: 0 },
       );
 
       expect(result).toEqual({

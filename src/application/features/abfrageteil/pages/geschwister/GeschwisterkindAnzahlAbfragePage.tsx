@@ -88,9 +88,9 @@ export function GeschwisterkindAnzahlAbfragePage() {
           />
 
           <NumberInput
-            {...register("anzahlGeschwister")}
+            {...register("anzahlGeschwisterkinder")}
             label="Anzahl Geschwister"
-            errors={formErrors.anzahlGeschwister?.message}
+            errors={formErrors.anzahlGeschwisterkinder?.message}
           />
         </div>
 

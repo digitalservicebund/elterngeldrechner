@@ -82,10 +82,10 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   }),
   z.object({
     route: z.literal(Route.GeschwisterkindAngaben),
-    params: z.object({ geschwisterIndex: z.number() }),
+    params: z.object({ geschwisterkindIndex: z.number() }),
     payload: GeschwisterkindAngabenSchema,
     dependentValues: z.object({
-      anzahlGeschwister: z.number(),
+      anzahlGeschwisterkinder: z.number(),
     }),
   }),
   z.object({

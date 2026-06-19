@@ -12,7 +12,7 @@ export function findeAnzahlGeschwister(events: FormEvent[]): number {
     throw new Error(`No Geschwisterkind Anzahl Abfrage event found.`);
   }
 
-  return letztesGueltigesEvent.anzahlGeschwister;
+  return letztesGueltigesEvent.anzahlGeschwisterkinder;
 }
 
 if (import.meta.vitest) {
@@ -43,7 +43,7 @@ if (import.meta.vitest) {
         {
           route: Route.GeschwisterkindAnzahlAbfrage,
           payload: {
-            anzahlGeschwister: 2,
+            anzahlGeschwisterkinder: 2,
           },
         },
       ];
@@ -56,13 +56,13 @@ if (import.meta.vitest) {
         {
           route: Route.GeschwisterkindAnzahlAbfrage,
           payload: {
-            anzahlGeschwister: 2,
+            anzahlGeschwisterkinder: 2,
           },
         },
         {
           route: Route.GeschwisterkindAnzahlAbfrage,
           payload: {
-            anzahlGeschwister: 3,
+            anzahlGeschwisterkinder: 3,
           },
         },
       ];

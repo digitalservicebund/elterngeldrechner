@@ -10,7 +10,7 @@ export enum Route {
 
   GeschwisterkindAbfrage = "/geschwisterkind",
   GeschwisterkindAnzahlAbfrage = "/geschwisterkind/anzahl",
-  GeschwisterkindAngaben = "/geschwisterkind/:geschwisterIndex",
+  GeschwisterkindAngaben = "/geschwisterkind/:geschwisterkindIndex",
   GeschwisterbonusUebersicht = "/geschwisterkind/bonus",
 
   ElternteilEinsAllgemeineAngaben = "/elternteil/0",

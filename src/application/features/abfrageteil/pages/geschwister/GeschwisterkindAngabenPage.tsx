@@ -62,7 +62,7 @@ export function GeschwisterkindAngabenPage() {
       payload: values,
       params: routeParams,
       dependentValues: {
-        anzahlGeschwister,
+        anzahlGeschwisterkinder: anzahlGeschwister,
       },
     };
 
@@ -87,7 +87,7 @@ export function GeschwisterkindAngabenPage() {
       >
         <div>
           <h3 className="mb-10">
-            Wann wurde Geschwisterkind {routeParams.geschwisterIndex + 1}{" "}
+            Wann wurde Geschwisterkind {routeParams.geschwisterkindIndex + 1}{" "}
             geboren?
           </h3>
 
@@ -113,7 +113,7 @@ export function GeschwisterkindAngabenPage() {
             Hat das Geschwisterkind{" "}
             {geburtsdatum && geburtsdatum.length > 0
               ? `(geb. ${geburtsdatum})`
-              : routeParams.geschwisterIndex + 1}{" "}
+              : routeParams.geschwisterkindIndex + 1}{" "}
             eine Behinderung?
           </h3>
           errors={formErrors}

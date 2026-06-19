@@ -351,13 +351,13 @@ if (import.meta.vitest) {
           taetigkeitenEvent,
           {
             route: Route.GeschwisterkindAngaben,
-            params: { geschwisterIndex: 0 },
+            params: { geschwisterkindIndex: 0 },
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2021-03-10"),
               hatBehinderung: true,
             },
             dependentValues: {
-              anzahlGeschwister: 1,
+              anzahlGeschwisterkinder: 1,
             },
           },
         ];

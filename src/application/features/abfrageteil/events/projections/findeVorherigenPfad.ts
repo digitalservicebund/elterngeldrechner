@@ -112,28 +112,28 @@ if (import.meta.vitest) {
           },
           {
             route: Route.GeschwisterkindAnzahlAbfrage,
-            payload: { anzahlGeschwister: 2 },
+            payload: { anzahlGeschwisterkinder: 2 },
           },
           {
             route: Route.GeschwisterkindAngaben,
-            params: { geschwisterIndex: 0 },
+            params: { geschwisterkindIndex: 0 },
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
               hatBehinderung: false,
             },
             dependentValues: {
-              anzahlGeschwister: 2,
+              anzahlGeschwisterkinder: 2,
             },
           },
           {
             route: Route.GeschwisterkindAngaben,
-            params: { geschwisterIndex: 1 },
+            params: { geschwisterkindIndex: 1 },
             payload: {
               geburtsdatum: Temporal.PlainDate.from("2017-12-23"),
               hatBehinderung: false,
             },
             dependentValues: {
-              anzahlGeschwister: 2,
+              anzahlGeschwisterkinder: 2,
             },
           },
           {

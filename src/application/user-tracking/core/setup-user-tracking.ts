@@ -1,39 +1,44 @@
 import type { PostHogConfig } from "posthog-js";
 import { posthog } from "../posthog";
-import { parseTrackingConsent } from "./consent";
+import { parseTrackingConsent, TrackingConsent } from "./consent";
 import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
-import {
-  isPosthogEnabled,
-  isPosthogTestingEnabled,
-} from "@/application/feature-flags";
+import { isPosthogTestingEnabled } from "@/application/feature-flags";
 
 export async function setupUserTracking(): Promise<void> {
   const tagMangerSourceUrl = getTagMangerSourceUrl();
-
   const isMatomoConfigured = !!tagMangerSourceUrl;
-  const isPosthogConfigured = isPosthogEnabled();
 
+  const posthogEnvironmentVariables = getPosthogEnvironmentVariables();
+  const isPosthogConfigured = !!posthogEnvironmentVariables;
+
+  // Nothing to set up: skip the consent cookie poll, which otherwise waits
+  // forever for a value that no enabled tool would ever read.
   if (!isMatomoConfigured && !isPosthogConfigured) {
     return;
   }
 
-  const consent = await getTrackingConsent();
+  const trackingConsent = await getTrackingConsent();
 
-  if (isMatomoConfigured && consent.matomo) {
+  // We overwrite the trackingConsent until the new cookie banner
+  // lands on staging so that posthog is enabled for all users if
+  // the flag is set. Otherwise we couldn't test the metrics on
+  // preview and staging. The flag should be changed to tester
+  // identification only once the banner is in place.
+  const intermediateTrackingConsent: TrackingConsent = {
+    posthog: trackingConsent.posthog || isPosthogTestingEnabled(),
+    matomo: trackingConsent.matomo,
+  };
+
+  if (isMatomoConfigured && intermediateTrackingConsent.matomo) {
     establishDataLayer();
     setupTagManager(tagMangerSourceUrl);
   }
 
-  // On preview we track every session so the team can exercise posthog while
-  // the current banner is live; that banner never asks about posthog, so real
-  // users stay gated on explicit per-tool consent in production.
-  const posthogConsented = consent.posthog || isPosthogTestingEnabled();
-
-  if (isPosthogConfigured && posthogConsented) {
+  if (isPosthogConfigured && intermediateTrackingConsent.posthog) {
     const standardConfig: Partial<PostHogConfig> = {
-      api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
+      api_host: posthogEnvironmentVariables.host,
       capture_pageview: false,
       capture_pageleave: false,
       disable_session_recording: true,
@@ -52,10 +57,9 @@ export async function setupUserTracking(): Promise<void> {
       persistence: "sessionStorage",
     };
 
-    posthog.init(
-      import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN,
-      isPosthogTestingEnabled() ? testingConfig : standardConfig,
-    );
+    const config = isPosthogTestingEnabled() ? testingConfig : standardConfig;
+
+    posthog.init(posthogEnvironmentVariables.token, config);
 
     if (isPosthogTestingEnabled()) {
       const testingIdentifier = getTestingIdentifier();
@@ -75,6 +79,13 @@ export async function setupUserTracking(): Promise<void> {
 
 function getTagMangerSourceUrl(): string {
   return import.meta.env.VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE;
+}
+
+function getPosthogEnvironmentVariables() {
+  const token = import.meta.env.VITE_PUBLIC_POSTHOG_PROJECT_TOKEN;
+  const host = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
+
+  return !!token && !!host ? { token, host } : undefined;
 }
 
 const TESTER_PARAM = "tester";
@@ -233,7 +244,8 @@ if (import.meta.vitest) {
 
     describe("internal tester identification", () => {
       beforeEach(() => {
-        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG", "true");
+        vi.stubEnv("VITE_PUBLIC_POSTHOG_PROJECT_TOKEN", "phc_test_token");
+        vi.stubEnv("VITE_PUBLIC_POSTHOG_HOST", "https://ph-proxy.test");
         vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG_TESTING", "true");
 
         vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
@@ -344,7 +356,8 @@ if (import.meta.vitest) {
 
     describe("posthog consent gating", () => {
       beforeEach(() => {
-        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG", "true");
+        vi.stubEnv("VITE_PUBLIC_POSTHOG_PROJECT_TOKEN", "phc_test_token");
+        vi.stubEnv("VITE_PUBLIC_POSTHOG_HOST", "https://ph-proxy.test");
 
         vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
         vi.spyOn(posthog, "capture").mockReturnValue(undefined);
@@ -373,6 +386,28 @@ if (import.meta.vitest) {
       it("does not initialise PostHog when the per-tool value denies it", async () => {
         vi.spyOn(document, "cookie", "get").mockReturnValue(
           `cookie-allow-tracking=${encodeURIComponent("matomo=1;posthog=0")}`,
+        );
+
+        await setupUserTracking();
+
+        expect(posthog.init).not.toHaveBeenCalled();
+      });
+
+      it("does not initialise PostHog when no project token is configured, even with consent", async () => {
+        vi.stubEnv("VITE_PUBLIC_POSTHOG_PROJECT_TOKEN", "");
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0;posthog=1")}`,
+        );
+
+        await setupUserTracking();
+
+        expect(posthog.init).not.toHaveBeenCalled();
+      });
+
+      it("does not initialise PostHog when no host is configured, so events never fall back to the default cloud", async () => {
+        vi.stubEnv("VITE_PUBLIC_POSTHOG_HOST", "");
+        vi.spyOn(document, "cookie", "get").mockReturnValue(
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0;posthog=1")}`,
         );
 
         await setupUserTracking();

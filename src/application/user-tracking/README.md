@@ -19,7 +19,6 @@ For the concrete steps, see below.
 
 1. Request access to the PostHog project from a team member.
 2. Add the required environment variables to your `.env.development.local`:
-   - `VITE_FEATURE_FLAG_POSTHOG` and set it to true
    - `VITE_PUBLIC_POSTHOG_HOST`
    - `VITE_PUBLIC_POSTHOG_PROJECT_TOKEN`
 3. Run the app and click through some of the pages.

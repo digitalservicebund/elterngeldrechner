@@ -4,10 +4,6 @@
 // service. Centralizing all feature flags in one place improves cohesion and makes
 // future refactoring easier.
 
-function isPosthogEnabled() {
-  return import.meta.env.VITE_FEATURE_FLAG_POSTHOG === "true";
-}
-
 // Lets the team exercise posthog on the preview deploy while the new banner is
 // still rolling out. Confines two behaviors to preview that must never reach real
 // users: testers identifying themselves, and tracking every session regardless of
@@ -16,4 +12,4 @@ function isPosthogTestingEnabled() {
   return import.meta.env.VITE_FEATURE_FLAG_POSTHOG_TESTING === "true";
 }
 
-export { isPosthogEnabled, isPosthogTestingEnabled };
+export { isPosthogTestingEnabled };

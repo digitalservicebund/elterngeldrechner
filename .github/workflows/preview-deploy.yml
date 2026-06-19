@@ -14,10 +14,6 @@ on:
         description: The name used to publish the feature. The preview will be accessible at $domain/preview/$name.
         required: true
         type: string
-      enable_new_abfrageteil:
-        required: false
-        type: boolean
-        default: false
 
 permissions:
   contents: read

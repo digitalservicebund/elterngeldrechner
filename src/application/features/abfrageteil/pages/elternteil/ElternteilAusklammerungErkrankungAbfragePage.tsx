@@ -93,7 +93,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
         <div>
           <h3>War {vorname} wegen dieser Schwangerschaft krank?</h3>
 
-          <p className="mb-32">
+          <p className="mb-16">
             Wenn Sie wegen dieser Schwangerschaft krank waren und weniger
             verdient haben, können wir diese Zeit bei der Berechnung
             überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren

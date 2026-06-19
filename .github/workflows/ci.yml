@@ -185,6 +185,9 @@ jobs:
       - name: Install WireGuard
         run: sudo apt-get install -y wireguard-tools
 
+      - name: Refresh CA trust store
+        run: sudo apt-get update && sudo apt-get install -y --reinstall ca-certificates && sudo update-ca-certificates
+
       - name: Write the tunnel config
         run: printf '%s\n' "$WIREGUARD_CONFIG" > "$RUNNER_TEMP/wg0.conf"
         env:

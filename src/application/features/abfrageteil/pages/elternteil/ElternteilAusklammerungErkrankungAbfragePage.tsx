@@ -101,7 +101,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
           </p>
 
           <InfoText
-            question="Warum wird das gefragt?"
+            question="Warum fragen wir das?"
             answer={
               <>
                 <p>

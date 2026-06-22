@@ -1,5 +1,5 @@
 import { utc } from "@date-fns/utc";
-import { addYears, differenceInYears } from "date-fns";
+import { addYears, differenceInYears, subDays } from "date-fns";
 import type { Arbitrary, DateConstraints } from "fast-check";
 import { aufDenCentRunden } from "./common/math-util";
 import { Geburtstag, type Kind } from "./model";
@@ -78,52 +78,6 @@ function mindestens<Instance>(
   );
 }
 
-/**
- * Bestimmt das Enddatum des Geschwisterbonusanspruchs nach § 2a BEEG.
- *
- * Das Enddatum ist der Tag, an dem die maßgebliche Altersgrenze eines
- * anspruchsbegründenden Geschwisterkindes erreicht wird.
- *
- * @return null wenn keine Geschwisterkinder die Voraussetzungen erfüllen.
- */
-export function berechneEnddatumDesGeschwisterbonus(
-  geschwister: Kind[],
-  zeitpunkt: Date,
-): Date | null {
-  const istJuengerAls = istJuengerAlsZumZeitpunkt.bind(null, zeitpunkt);
-  const errechneAltersgrenze = errechneAltersgrenzeZumZeitpunkt.bind(
-    null,
-    zeitpunkt,
-  );
-
-  const kandidaten = [
-    errechneAltersgrenze(1, geschwister, 3, istJuengerAls(3)),
-    errechneAltersgrenze(2, geschwister, 6, istJuengerAls(6)),
-    errechneAltersgrenze(1, geschwister, 14, istJuengerAls(14), istBehindert()),
-  ].filter((d): d is Date => d !== null);
-
-  return kandidaten.reduce<Date | null>(
-    (max, aktuell) => (max === null || aktuell > max ? aktuell : max),
-    null,
-  );
-}
-
-function errechneAltersgrenzeZumZeitpunkt(
-  zeitpunkt: Date,
-  minimumAnzahl: number,
-  geschwister: readonly Kind[],
-  alter: number,
-  ...predicates: Array<(kind: Kind) => boolean>
-): Date | null {
-  const altersgrenzen = Array.from(geschwister)
-    .filter((kind) => predicates.every((predicate) => predicate(kind)))
-    .map((kind) => addYears(kind.geburtstag, alter, { in: utc }))
-    .filter((grenze) => grenze > zeitpunkt)
-    .sort((a, b) => a.getTime() - b.getTime());
-
-  return altersgrenzen[altersgrenzen.length - minimumAnzahl] ?? null;
-}
-
 function istJuengerAlsZumZeitpunkt(
   zeitpunkt: Date,
   jahre: number,
@@ -134,6 +88,68 @@ function istJuengerAlsZumZeitpunkt(
 
 function istBehindert(): (kind: Kind) => boolean {
   return (kind: Kind) => kind.istBehindert === true;
+}
+
+/**
+ * Bestimmt das Enddatum des Geschwisterbonusanspruchs nach § 2a BEEG.
+ *
+ * Der Anspruch endet an einem Geburtstag eines Geschwisterkindes und nimmt mit
+ * der Zeit nur ab. Für jedes Kind werden die Altersgrenzen ab dem Zeitpunkt
+ * durchlaufen, solange an ihrem Vortag noch Anspruch besteht; zurückgegeben
+ * wird der späteste dieser Tage. Welche Konstellation den Anspruch trägt,
+ * entscheidet allein {@link bestehtAnspruchAufGeschwisterbonus}.
+ *
+ * @return null wenn zum Zeitpunkt kein Anspruch (mehr) besteht.
+ */
+export function berechneEnddatumDesGeschwisterbonus(
+  geschwister: readonly Kind[],
+  zeitpunkt: Date,
+): Date | null {
+  return geschwister
+    .flatMap((kind) =>
+      Array.from(
+        berechneAltersgrenzenInnerhalbAnspruch(kind, geschwister, zeitpunkt),
+      ),
+    )
+    .reduce<Date | null>((spaetestes, grenze) => {
+      return spaetestes === null || grenze > spaetestes ? grenze : spaetestes;
+    }, null);
+}
+
+/**
+ * Die Altersgrenzen eines Geschwisterkindes ab dem Zeitpunkt, an deren Vortag
+ * noch Anspruch auf den Geschwisterbonus besteht. Da der Anspruch mit der Zeit
+ * nur abnimmt, endet die Folge, sobald er erstmals entfällt.
+ */
+function* berechneAltersgrenzenInnerhalbAnspruch(
+  kind: Kind,
+  geschwister: readonly Kind[],
+  zeitpunkt: Date,
+): Generator<Date> {
+  let alter = 1;
+  while (berechneAltersgrenze(kind, alter) <= zeitpunkt) {
+    alter += 1;
+  }
+
+  let grenze = berechneAltersgrenze(kind, alter);
+  while (bestehtAnspruchAufGeschwisterbonus(geschwister, vortag(grenze))) {
+    yield grenze;
+
+    alter += 1;
+    grenze = berechneAltersgrenze(kind, alter);
+  }
+}
+
+/**
+ * Die Altersgrenze nach § 2a BEEG: der Tag, an dem ein Kind ein bestimmtes
+ * Alter erreicht.
+ */
+function berechneAltersgrenze(kind: Kind, jahre: number): Date {
+  return addYears(kind.geburtstag, jahre, { in: utc });
+}
+
+function vortag(datum: Date): Date {
+  return subDays(datum, 1, { in: utc });
 }
 
 if (import.meta.vitest) {

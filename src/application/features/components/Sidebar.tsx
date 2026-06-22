@@ -8,6 +8,21 @@ import ExpandLessIcon from "~icons/material-symbols/expand-less";
 import ExpandMoreIcon from "~icons/material-symbols/expand-more";
 import posthog from "posthog-js";
 
+const generischeAbschnittsLabel: Record<string, string> = {
+  [generateAbfrageteilPath(Route.ElternteilEinsAllgemeineAngaben)]:
+    "Angaben Person 1",
+  [generatePath(
+    generateAbfrageteilPath("/elternteil/:elternteilIndex/finanzielles/"),
+    { elternteilIndex: "0" },
+  )]: "Finanzielle Situation Person 1",
+  [generateAbfrageteilPath(Route.ElternteilZweiAllgemeineAngaben)]:
+    "Angaben Person 2",
+  [generatePath(
+    generateAbfrageteilPath("/elternteil/:elternteilIndex/finanzielles/"),
+    { elternteilIndex: "1" },
+  )]: "Finanzielle Situation Person 2",
+};
+
 type NavigationItem = NavigationStep & {
   readonly navigatable: boolean;
 };
@@ -181,7 +196,7 @@ export function Sidebar() {
 
   function navigiereZuAbschnitt(item: NavigationItem) {
     posthog.capture("navigationspunkt_wurde_geklickt", {
-      abschnitt: item.label,
+      abschnitt: generischeAbschnittsLabel[item.matchingPath] ?? item.label,
     });
 
     return navigate(item.navigatePath ?? item.matchingPath);

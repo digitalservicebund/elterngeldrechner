@@ -1,5 +1,5 @@
 import { utc } from "@date-fns/utc";
-import { differenceInYears } from "date-fns";
+import { addYears, differenceInYears } from "date-fns";
 import type { Arbitrary, DateConstraints } from "fast-check";
 import { aufDenCentRunden } from "./common/math-util";
 import { Geburtstag, type Kind } from "./model";
@@ -59,7 +59,7 @@ export function bestehtAnspruchAufGeschwisterbonus(
   return (
     mindestens(1, geschwister, istJuengerAls(3)) ||
     mindestens(2, geschwister, istJuengerAls(6)) ||
-    mindestens(1, geschwister, istBehindert, istJuengerAls(14))
+    mindestens(1, geschwister, istJuengerAls(14), istBehindert())
   );
 }
 
@@ -78,6 +78,52 @@ function mindestens<Instance>(
   );
 }
 
+/**
+ * Bestimmt das Enddatum des Geschwisterbonusanspruchs nach § 2a BEEG.
+ *
+ * Das Enddatum ist der Tag, an dem die maßgebliche Altersgrenze eines
+ * anspruchsbegründenden Geschwisterkindes erreicht wird.
+ *
+ * @return null wenn keine Geschwisterkinder die Voraussetzungen erfüllen.
+ */
+export function berechneEnddatumDesGeschwisterbonus(
+  geschwister: Kind[],
+  zeitpunkt: Date,
+): Date | null {
+  const istJuengerAls = istJuengerAlsZumZeitpunkt.bind(null, zeitpunkt);
+  const errechneAltersgrenze = errechneAltersgrenzeZumZeitpunkt.bind(
+    null,
+    zeitpunkt,
+  );
+
+  const kandidaten = [
+    errechneAltersgrenze(1, geschwister, 3, istJuengerAls(3)),
+    errechneAltersgrenze(2, geschwister, 6, istJuengerAls(6)),
+    errechneAltersgrenze(1, geschwister, 14, istJuengerAls(14), istBehindert()),
+  ].filter((d): d is Date => d !== null);
+
+  return kandidaten.reduce<Date | null>(
+    (max, aktuell) => (max === null || aktuell > max ? aktuell : max),
+    null,
+  );
+}
+
+function errechneAltersgrenzeZumZeitpunkt(
+  zeitpunkt: Date,
+  minimumAnzahl: number,
+  geschwister: readonly Kind[],
+  alter: number,
+  ...predicates: Array<(kind: Kind) => boolean>
+): Date | null {
+  const altersgrenzen = Array.from(geschwister)
+    .filter((kind) => predicates.every((predicate) => predicate(kind)))
+    .map((kind) => addYears(kind.geburtstag, alter, { in: utc }))
+    .filter((grenze) => grenze > zeitpunkt)
+    .sort((a, b) => a.getTime() - b.getTime());
+
+  return altersgrenzen[altersgrenzen.length - minimumAnzahl] ?? null;
+}
+
 function istJuengerAlsZumZeitpunkt(
   zeitpunkt: Date,
   jahre: number,
@@ -86,17 +132,17 @@ function istJuengerAlsZumZeitpunkt(
     differenceInYears(zeitpunkt, kind.geburtstag, { in: utc }) < jahre;
 }
 
-function istBehindert(kind: Kind): boolean {
-  return kind.istBehindert === true;
+function istBehindert(): (kind: Kind) => boolean {
+  return (kind: Kind) => kind.istBehindert === true;
 }
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
 
   describe("Geschwisterbonus", async () => {
-    const { addYears, subDays, isBefore, isAfter, isLeapYear } = await import(
-      "date-fns"
-    );
+    const { addYears, subDays } = await import("date-fns");
+    const { isBefore, isAfter, isLeapYear } = await import("date-fns");
+
     const {
       assert,
       property,
@@ -589,6 +635,60 @@ if (import.meta.vitest) {
       ]): boolean {
         return bestehtAnspruchAufGeschwisterbonus(geschwister, zeitpunkt);
       }
+    });
+
+    describe("berechneEnddatumDesGeschwisterbonus", () => {
+      it.each([
+        {
+          description: "returns the day the Geschwisterkind turns 3",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2022-05-15"), istBehindert: false },
+          ],
+          zeitpunkt: new Geburtstag("2024-05-02"),
+          expected: "2025-05-15T00:00:00.000Z",
+        },
+        {
+          description: "returns the day the older one turns 6",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2019-08-10"), istBehindert: false },
+            { geburtstag: new Geburtstag("2020-11-20"), istBehindert: false },
+          ],
+          zeitpunkt: new Geburtstag("2024-05-02"),
+          expected: "2025-08-10T00:00:00.000Z",
+        },
+        {
+          description: "returns the day a disabled Geschwisterkind turns 14",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2011-10-05"), istBehindert: true },
+          ],
+          zeitpunkt: new Geburtstag("2024-05-02"),
+          expected: "2025-10-05T00:00:00.000Z",
+        },
+        {
+          description: "returns the latest Altersgrenze when multiple qualify",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2022-05-15"), istBehindert: false },
+            { geburtstag: new Geburtstag("2011-10-05"), istBehindert: true },
+          ],
+          zeitpunkt: new Geburtstag("2024-05-02"),
+          expected: "2025-10-05T00:00:00.000Z",
+        },
+        {
+          description: "returns null when all have exceeded their Altersgrenze",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2018-05-01"), istBehindert: false },
+          ],
+          zeitpunkt: new Geburtstag("2024-05-02"),
+          expected: null,
+        },
+      ])("$description", ({ geschwisterkinder, zeitpunkt, expected }) => {
+        const enddatum = berechneEnddatumDesGeschwisterbonus(
+          geschwisterkinder,
+          zeitpunkt,
+        );
+
+        expect(enddatum?.toISOString() ?? null).toBe(expected);
+      });
     });
 
     /**

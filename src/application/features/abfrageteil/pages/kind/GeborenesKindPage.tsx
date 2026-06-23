@@ -17,11 +17,8 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
-import {
-  bestimmeNutzergruppe,
-  istFruehgeburt,
-  sindMehrlinge,
-} from "./tracking";
+import { istFruehgeburt } from "@/application/features/abfrageteil/domain/istFruehgeburt";
+import { bestimmeNutzergruppe, sindMehrlinge } from "./tracking";
 import { posthog } from "@/application/user-tracking";
 
 export function GeborenesKindPage() {

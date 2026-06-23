@@ -1,6 +1,6 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { differenceInDays } from "date-fns";
 import { findeAnzahlKinder } from "./findeAnzahlKinder";
+import { istFruehgeburt } from "./istFruehgeburt";
 import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections/findeLetztesGueltigesEvent";
 import type { ElternteilAusklammerungZeiten } from "@/application/features/abfrageteil/pages/elternteil/ElternteilSchema";
 import type { FormEvent } from "@/application/routing/FormEvent";
@@ -104,11 +104,18 @@ function ueberpruefeVerlaengerungsgrundMutterschutz(
   if (anzahlKinder > 1) return true;
 
   if (geburtsdatum) {
-    const differenzZwischenGeburtUndET = differenceInDays(
-      errechneterEntbindungstermin,
-      geburtsdatum,
+    return istFruehgeburt(
+      Temporal.PlainDate.from({
+        year: geburtsdatum.getFullYear(),
+        month: geburtsdatum.getMonth() + 1,
+        day: geburtsdatum.getDate(),
+      }),
+      Temporal.PlainDate.from({
+        year: errechneterEntbindungstermin.getFullYear(),
+        month: errechneterEntbindungstermin.getMonth() + 1,
+        day: errechneterEntbindungstermin.getDate(),
+      }),
     );
-    return differenzZwischenGeburtUndET > 42;
   }
 
   return undefined;

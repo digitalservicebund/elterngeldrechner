@@ -52,7 +52,6 @@ export function GeschwisterkindAbfragePage() {
     posthog.register({
       // Reset the accumulated flag so re-answering the question starts a fresh
       // count; GeschwisterkindAngabenPage re-accumulates it per sibling.
-      geschwister_mit_behinderung: false,
       hat_geschwister: values.istVorhanden,
     });
 

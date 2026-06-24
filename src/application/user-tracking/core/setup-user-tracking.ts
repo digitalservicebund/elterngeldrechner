@@ -381,6 +381,36 @@ if (import.meta.vitest) {
         expect(posthog.init).toHaveBeenCalledTimes(1);
       });
 
+      describe("value encoding", () => {
+        // The banner's first version writes the consent value unencoded,
+        // even though RFC 6265 (section 4.1.1) recommends encoding arbitrary
+        // cookie data.
+
+        // We intend to propose switching to the encoded form. Until then
+        // these two tests pin down that decodeCookieValue accepts either
+        // way, so that switch would need no code change here.
+
+        it("initialises PostHog from the unencoded value", async () => {
+          vi.spyOn(document, "cookie", "get").mockReturnValue(
+            "cookie-allow-tracking=matomo=1,posthog=1",
+          );
+
+          await setupUserTracking();
+
+          expect(posthog.init).toHaveBeenCalledTimes(1);
+        });
+
+        it("initialises PostHog from the URL-encoded value", async () => {
+          vi.spyOn(document, "cookie", "get").mockReturnValue(
+            `cookie-allow-tracking=${encodeURIComponent("matomo=1,posthog=1")}`,
+          );
+
+          await setupUserTracking();
+
+          expect(posthog.init).toHaveBeenCalledTimes(1);
+        });
+      });
+
       it("does not initialise PostHog when the per-tool value denies it", async () => {
         vi.spyOn(document, "cookie", "get").mockReturnValue(
           `cookie-allow-tracking=${encodeURIComponent("matomo=1;posthog=0")}`,

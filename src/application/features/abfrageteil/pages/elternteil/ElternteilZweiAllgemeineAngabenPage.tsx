@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   ElternteilZweiAllgemeineAngaben,
   ElternteilZweiAllgemeineAngabenSchema,
@@ -27,12 +28,8 @@ import { useValidierungsfehlerTracking } from "@/application/features/abfragetei
 import { Elternteil } from "@/monatsplaner";
 
 export function ElternteilZweiAllgemeineAngabenPage() {
-  const {
-    dispatch,
-    findeLetztesGueltigesEvent,
-    findeVorherigenPfad,
-    filtereValideEventHistorie,
-  } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
+    useEventContext();
 
   const eventStream = filtereValideEventHistorie();
 
@@ -88,9 +85,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   const wirdZweitePersonBeruecksichtigt = watch(
     "wirdZweitePersonBeruecksichtigt",

@@ -51,6 +51,9 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const { plan } = navigationState;
 
   const navigateToRechnerUndPlanerPage = async () => {
+    posthog.capture("zurueck_button_geklickt", {
+      route: "/datenuebernahme-antrag",
+    });
     await navigateStateful("/rechner-planer", navigationState);
   };
 

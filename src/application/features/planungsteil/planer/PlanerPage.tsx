@@ -128,6 +128,8 @@ export function PlanerPage() {
   }
 
   const navigateToBeispielePage = async () => {
+    posthog.capture("zurueck_button_geklickt", { route: "/rechner-planer" });
+
     if (rememberSubmit.current) submitFeedback();
 
     if (hasChanges) {

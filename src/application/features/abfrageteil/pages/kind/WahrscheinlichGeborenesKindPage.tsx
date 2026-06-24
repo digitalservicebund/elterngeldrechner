@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   WahrscheinlichGeborenesKind,
   WahrscheinlichGeborenesKindSchema,
@@ -20,8 +21,7 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 
 export function WahrscheinlichGeborenesKindPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -49,9 +49,7 @@ export function WahrscheinlichGeborenesKindPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   const geburtsdatumInputIdentifier = useId();
 

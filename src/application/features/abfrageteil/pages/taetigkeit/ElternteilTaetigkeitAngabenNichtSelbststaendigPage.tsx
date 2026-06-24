@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   TaetigkeitNichtSelbststaendigMinijobAbfrage,
   TaetigkeitNichtSelbststaendigMinijobAbfrageSchema,
@@ -25,12 +26,8 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 
 export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
-  const {
-    dispatch,
-    findeLetztesGueltigesEvent,
-    findeVorherigenPfad,
-    filtereValideEventHistorie,
-  } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -71,9 +68,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute, routeParams));
-  };
+  const navigateBack = useNavigateBack(currentRoute, routeParams);
 
   const eventStream = filtereValideEventHistorie();
   const taetigkeiten = findeTaetigkeiten(

@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   GeschwisterkindAbfrage,
   GeschwisterkindAbfrageSchema,
@@ -20,8 +21,7 @@ import { useValidierungsfehlerTracking } from "@/application/features/abfragetei
 import { posthog } from "@/application/user-tracking";
 
 export function GeschwisterkindAbfragePage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -58,9 +58,7 @@ export function GeschwisterkindAbfragePage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   return (
     <Page id="geschwister-page" heading="Angaben zu Geschwistern">

@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   ElternteilEinsAllgemeineAngaben,
   ElternteilEinsAllgemeineAngabenSchema,
@@ -22,12 +23,8 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 
 export function ElternteilEinsAllgemeineAngabenPage() {
-  const {
-    dispatch,
-    findeLetztesGueltigesEvent,
-    findeVorherigenPfad,
-    filtereValideEventHistorie,
-  } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -58,9 +55,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   const nameInForm = watch("name");
   const vorname = nameInForm?.trim() || "Person 1";

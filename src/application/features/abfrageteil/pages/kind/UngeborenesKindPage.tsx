@@ -4,6 +4,7 @@ import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import { UngeborenesKind, UngeborenesKindSchema } from "./KindSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
@@ -21,8 +22,7 @@ import { bestimmeNutzergruppe, sindMehrlinge } from "./tracking";
 import { posthog } from "@/application/user-tracking";
 
 export function UngeborenesKindPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -55,9 +55,7 @@ export function UngeborenesKindPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   const entbindungsterminInputIdentifier = useId();
   const anzahlKinderInputIdentifier = useId();

@@ -54,6 +54,8 @@ export function BeispielePage() {
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
   const navigiereZuEinkommen = async () => {
+    posthog.capture("zurueck_button_geklickt", { route: "/beispiele" });
+
     const letztesEvent = eventContext.findeLetztesEvent();
 
     await navigate(generatePathFromEvent(letztesEvent!));

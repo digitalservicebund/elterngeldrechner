@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   GeschwisterkindAngaben,
   GeschwisterkindAngabenSchema,
@@ -22,8 +23,7 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 
 export function GeschwisterkindAngabenPage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -60,9 +60,7 @@ export function GeschwisterkindAngabenPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute, routeParams));
-  };
+  const navigateBack = useNavigateBack(currentRoute, routeParams);
 
   const geburtsdatumInputIdentifier = useId();
 

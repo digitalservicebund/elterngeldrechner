@@ -8,30 +8,27 @@ import ExpandLessIcon from "~icons/material-symbols/expand-less";
 import ExpandMoreIcon from "~icons/material-symbols/expand-more";
 import posthog from "posthog-js";
 
-const generischeAbschnittsLabel: Record<string, string> = {
-  [generateAbfrageteilPath(Route.ElternteilEinsAllgemeineAngaben)]:
-    "Angaben Person 1",
-  [generatePath(
-    generateAbfrageteilPath("/elternteil/:elternteilIndex/finanzielles/"),
-    { elternteilIndex: "0" },
-  )]: "Finanzielle Situation Person 1",
-  [generateAbfrageteilPath(Route.ElternteilZweiAllgemeineAngaben)]:
-    "Angaben Person 2",
-  [generatePath(
-    generateAbfrageteilPath("/elternteil/:elternteilIndex/finanzielles/"),
-    { elternteilIndex: "1" },
-  )]: "Finanzielle Situation Person 2",
-};
-
 type NavigationItem = NavigationStep & {
   readonly navigatable: boolean;
 };
 
 type NavigationStep = {
   readonly label: string;
+  readonly placeholder?: string;
+  readonly personName?: () => string | undefined;
   readonly matchingPath: string;
   readonly navigatePath?: string;
 };
+
+function displayLabel(step: NavigationStep): string {
+  return step.placeholder
+    ? `${step.label} ${step.personName?.() ?? step.placeholder}`
+    : step.label;
+}
+
+function analyticsLabel(step: NavigationStep): string {
+  return step.placeholder ? `${step.label} ${step.placeholder}` : step.label;
+}
 
 function erstelleNavigationsItems(
   navigationSteps: NavigationStep[],
@@ -100,13 +97,17 @@ export function Sidebar() {
         matchingPath: generateAbfrageteilPath(Route.GeschwisterkindAbfrage),
       },
       {
-        label: `Angaben ${person1Name ?? "Person 1"}`,
+        label: "Angaben",
+        placeholder: "Person 1",
+        personName: () => person1Name,
         matchingPath: generateAbfrageteilPath(
           Route.ElternteilEinsAllgemeineAngaben,
         ),
       },
       {
-        label: `Finanzielle Situation ${person1Name ?? "Person 1"}`,
+        label: "Finanzielle Situation",
+        placeholder: "Person 1",
+        personName: () => person1Name,
         matchingPath: generatePath(
           generateAbfrageteilPath("/elternteil/:elternteilIndex/finanzielles/"),
           { elternteilIndex: "0" },
@@ -120,7 +121,9 @@ export function Sidebar() {
 
     if (istNichtAlleinerziehend) {
       schritte.push({
-        label: `Angaben ${person2Name ?? "Person 2"}`,
+        label: "Angaben",
+        placeholder: "Person 2",
+        personName: () => person2Name,
         matchingPath: generateAbfrageteilPath(
           Route.ElternteilZweiAllgemeineAngaben,
         ),
@@ -129,7 +132,9 @@ export function Sidebar() {
 
     if (zeigePerson2Finanzielle) {
       schritte.push({
-        label: `Finanzielle Situation ${person2Name ?? "Person 2"}`,
+        label: "Finanzielle Situation",
+        placeholder: "Person 2",
+        personName: () => person2Name,
         matchingPath: generatePath(
           generateAbfrageteilPath("/elternteil/:elternteilIndex/finanzielles/"),
           { elternteilIndex: "1" },
@@ -165,7 +170,8 @@ export function Sidebar() {
   const currentStepIndex = navigationItems.findLastIndex((item) => {
     return pathname.startsWith(item.matchingPath);
   });
-  const currentLabel = navigationItems[currentStepIndex]?.label ?? "";
+  const currentItem = navigationItems[currentStepIndex];
+  const currentLabel = currentItem ? displayLabel(currentItem) : "";
 
   const toggleButtonIdentifier = useId();
   const toggleButtonAriaLabel = `Aktueller Schritt: ${currentLabel}`;
@@ -196,7 +202,7 @@ export function Sidebar() {
 
   function navigiereZuAbschnitt(item: NavigationItem) {
     posthog.capture("navigationspunkt_wurde_geklickt", {
-      abschnitt: generischeAbschnittsLabel[item.matchingPath] ?? item.label,
+      abschnitt: analyticsLabel(item),
     });
 
     return navigate(item.navigatePath ?? item.matchingPath);
@@ -258,7 +264,7 @@ export function Sidebar() {
                 aria-current={isCurrent ? "step" : undefined}
                 disabled={isDisabled}
               >
-                {item.label}
+                {displayLabel(item)}
               </button>
             </li>
           );

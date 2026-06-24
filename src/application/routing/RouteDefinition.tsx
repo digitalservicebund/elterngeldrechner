@@ -33,15 +33,24 @@ import { ErrorBoundary } from "@/application/routing/ErrorBoundary";
 import { BeispielePage } from "@/application/features/planungsteil/beispiele/BeispielePage";
 import { DatenuebernahmeAntragPage } from "@/application/features/datenuebernahme/DatenuebernahmeAntragPage";
 import { PlanerPage } from "@/application/features/planungsteil/planer/PlanerPage";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useNavigationType } from "react-router";
 import { posthog } from "@/application/user-tracking/posthog";
 
 function EventProviderLayout() {
   const location = useLocation();
+  const navigationType = useNavigationType();
+  const prevPathname = useRef(location.pathname);
 
   useEffect(() => {
     posthog.capture("$pageview");
-  }, [location.pathname]);
+    if (navigationType === "POP") {
+      posthog.capture("browser_zurueck_button_geklickt", {
+        route: prevPathname.current.replace("/abfrageteil", ""),
+      });
+    }
+    prevPathname.current = location.pathname;
+  }, [location.pathname, navigationType]);
 
   return (
     <UserFeedbackProvider>

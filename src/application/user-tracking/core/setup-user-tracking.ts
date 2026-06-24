@@ -349,9 +349,7 @@ if (import.meta.vitest) {
     }
 
     const COOKIES_WITH_ALLOWANCE = "cookie-allow-tracking=1";
-    // The per-tool value is URL-encoded so its ";" survives as part of the
-    // value instead of being read as a cookie delimiter.
-    const COOKIES_WITH_POSTHOG_ALLOWANCE = `cookie-allow-tracking=${encodeURIComponent("matomo=1;posthog=1")}`;
+    const COOKIES_WITH_POSTHOG_ALLOWANCE = `cookie-allow-tracking=${encodeURIComponent("matomo=1,posthog=1")}`;
     const ANY_SOURCE_URL = "test-url";
 
     describe("posthog consent gating", () => {
@@ -375,7 +373,7 @@ if (import.meta.vitest) {
 
       it("initialises PostHog when the per-tool value grants it", async () => {
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          `cookie-allow-tracking=${encodeURIComponent("matomo=0;posthog=1")}`,
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0,posthog=1")}`,
         );
 
         await setupUserTracking();

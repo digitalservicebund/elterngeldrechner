@@ -8,6 +8,7 @@ import {
 } from "react";
 import type { Einkommen } from "@/monatsplaner";
 import BusinessCenterIcon from "~icons/material-symbols/business-center-outline";
+import { trackMetricsForAngabeEinesEinkommens } from "@/application/features/planungsteil/planer/tracking";
 
 type Props = {
   readonly imMutterschutz: boolean;
@@ -43,6 +44,7 @@ export function BruttoeinkommenInput({
   }
 
   function gebeBruttoeinkommenAn(event: ChangeEvent<HTMLInputElement>) {
+    trackMetricsForAngabeEinesEinkommens();
     const bruttoeinkommen = Number.parseInt(event.target.value);
     gebeEinkommenAn(bruttoeinkommen);
   }

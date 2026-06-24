@@ -94,6 +94,7 @@ export function Pruefbuttonbox({
 
     posthog.capture("monatsplaner_pruefbutton_geklickt", {
       tips: tips.normalTips.length + (tips.hasSpecialBonusTip ? 1 : 0),
+      bonustip: tips.hasSpecialBonusTip,
       gueltig: validierungsergebnis.mapOrElse(
         () => true,
         () => false,

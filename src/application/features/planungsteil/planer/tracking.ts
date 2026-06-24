@@ -21,6 +21,7 @@ import {
 
 export function trackMetricsForAngabeEinesEinkommens(): void {
   pushTrackingEvent("einkommen-im-monat-angegeben", { unique: true });
+  posthog.capture("monatsplaner_einkommen_angegeben");
 }
 
 export function trackMetricsForPlanungDrucken(): void {
@@ -37,6 +38,7 @@ export function trackMetricsForErklaerungenWurdenGeschlossen(): void {
 
 export function trackMetricsForLebensmonatWurdeGeoeffnet(): void {
   pushTrackingEvent("Lebensmonat-wurde-im-Planer-geöffnet");
+  posthog.capture("monatsplaner_lebensmonat_wurde_geoeffnet");
 }
 
 export function trackMetricsForDerPlanHatSichGeaendert(

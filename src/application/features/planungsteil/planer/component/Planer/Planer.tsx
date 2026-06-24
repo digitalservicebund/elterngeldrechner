@@ -23,6 +23,7 @@ import {
   type BerechneElterngeldbezuegeCallback,
   PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
+import posthog from "posthog-js";
 
 type Props = {
   readonly initialInformation: InitialInformation;
@@ -107,6 +108,8 @@ export function Planer({
     event.stopPropagation();
 
     const ersterBonusMonat = schalteBonusFrei();
+
+    posthog.capture("monatsplaner_bonus_freischalten_geklickt");
 
     if (ersterBonusMonat) {
       openLebensmonatsSummary(ersterBonusMonat);

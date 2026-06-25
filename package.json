@@ -33,7 +33,7 @@
     "@commitlint/types": "^21.0.0",
     "@iconify-json/material-symbols": "^1.2.79",
     "@playwright/test": "^1.61.0",
-    "@posthog/cli": "^0.7.29",
+    "@posthog/cli": "^0.7.30",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@tailwindcss/container-queries": "^0.1.1",

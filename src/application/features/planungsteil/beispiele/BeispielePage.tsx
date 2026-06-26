@@ -19,7 +19,6 @@ import { Page } from "@/application/features/components/Page";
 import {
   trackMetricsForErklaerungenWurdenGeoeffnet,
   trackMetricsForErklaerungenWurdenGeschlossen,
-  trackPartnerschaftlicheVerteilungForPlan,
 } from "@/application/features/planungsteil/planer/tracking";
 import { useAusgangslage } from "@/application/features/planungsteil/planer/hooks/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
@@ -133,7 +132,6 @@ export function BeispielePage() {
 
     if (neuesAktivesBeispiel) {
       setPlan(neuesAktivesBeispiel.plan);
-      trackPartnerschaftlicheVerteilungForPlan(neuesAktivesBeispiel.plan);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
 

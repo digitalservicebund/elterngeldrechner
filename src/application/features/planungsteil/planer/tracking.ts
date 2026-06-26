@@ -67,7 +67,7 @@ export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   posthog.capture("monatsplaner_plan_wurde_zurueckgesetzt");
 }
 
-export function trackPartnerschaftlicheVerteilungForPlan(
+function trackPartnerschaftlicheVerteilungForPlan(
   plan: PlanMitBeliebigenElternteilen,
 ): void {
   const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);

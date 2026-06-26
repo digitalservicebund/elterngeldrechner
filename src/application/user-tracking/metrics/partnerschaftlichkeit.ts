@@ -1,5 +1,4 @@
 import { setTrackingVariable } from "@/application/user-tracking/core";
-import { posthog } from "@/application/user-tracking";
 
 export function trackPartnerschaftlicheVerteilung(
   auswahlProMonatProElternteil: Auswahl[][],
@@ -12,7 +11,6 @@ export function trackPartnerschaftlicheVerteilung(
       auswahlProMonatProElternteil,
     );
     setTrackingVariable(TRACKING_VARIABLE_NAME, verteilung);
-    posthog.register({ partnerschaftliche_verteilung: verteilung });
   }
 }
 

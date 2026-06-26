@@ -39,7 +39,7 @@ import type {
 import { sindLebensmonateGeplant } from "@/monatsplaner";
 import ChevronLeftIcon from "~icons/material-symbols/chevron-left";
 import RestartAltIcon from "~icons/material-symbols/restart-alt";
-import posthog from "posthog-js";
+import { posthog } from "@/application/user-tracking";
 
 export function PlanerPage() {
   const mainElement = useRef<HTMLDivElement>(null);

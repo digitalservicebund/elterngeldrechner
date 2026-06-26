@@ -6,7 +6,7 @@ import { Route, generateAbfrageteilPath } from "@/application/routing";
 import { useOnFocusMovedOut } from "@/application/hooks/useOnFocusMovedOut";
 import ExpandLessIcon from "~icons/material-symbols/expand-less";
 import ExpandMoreIcon from "~icons/material-symbols/expand-more";
-import posthog from "posthog-js";
+import { posthog } from "@/application/user-tracking";
 
 type NavigationItem = NavigationStep & {
   readonly navigatable: boolean;

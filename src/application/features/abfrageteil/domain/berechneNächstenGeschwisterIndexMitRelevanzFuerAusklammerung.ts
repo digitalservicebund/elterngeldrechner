@@ -12,18 +12,16 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 ): number | undefined {
   if (geschwisterkinder.length === 0) return undefined;
 
-  const sorted = geschwisterkinder
-    .map((kind, index) => ({ kind, index }))
-    .sort((a, b) =>
-      Temporal.PlainDate.compare(b.kind.geburtsdatum, a.kind.geburtsdatum),
-    );
+  const geschwisterkinderNachGeburtsdatumSortiert =
+    sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
   const betrachtungszeitraum = berechneBetrachtungszeitraum(
     geburtsdatum,
     ausklammerungen,
   );
 
   if (geschwisterIndex === undefined) {
-    const geburtsdatumJuengstesGeschwisterkind = sorted[0]?.kind.geburtsdatum;
+    const geburtsdatumJuengstesGeschwisterkind =
+      geschwisterkinderNachGeburtsdatumSortiert[0]?.kind.geburtsdatum;
     const geburtsdatumPlus14Monate = geburtsdatumJuengstesGeschwisterkind?.add({
       months: 14,
     });
@@ -32,11 +30,11 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         geburtsdatumPlus14Monate,
         betrachtungszeitraum.von,
       ) > 0
-      ? sorted[0]?.index
+      ? geschwisterkinderNachGeburtsdatumSortiert[0]?.index
       : undefined;
   }
 
-  const currentPosition = sorted.findIndex(
+  const currentPosition = geschwisterkinderNachGeburtsdatumSortiert.findIndex(
     ({ index }) => index === geschwisterIndex,
   );
 
@@ -44,7 +42,8 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 
   if (istAbfrageMutterschutzGleichesGeschwisterkind) {
     const geburtsdatumDiesesGeschwisterkind =
-      sorted[currentPosition]?.kind.geburtsdatum;
+      geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.kind
+        .geburtsdatum;
     const geburtsdatumPlus12Wochen = geburtsdatumDiesesGeschwisterkind?.add({
       weeks: 12,
     });
@@ -56,12 +55,13 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         betrachtungszeitraum.von,
       ) > 0
     ) {
-      return sorted[currentPosition]?.index;
+      return geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.index;
     }
   }
 
   const geburtsdatumNaechstesGeschwisterkind =
-    sorted[currentPosition + 1]?.kind.geburtsdatum;
+    geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]?.kind
+      .geburtsdatum;
   const geburtsdatumPlus14Monate = geburtsdatumNaechstesGeschwisterkind?.add({
     months: 14,
   });
@@ -70,6 +70,16 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
       geburtsdatumPlus14Monate,
       betrachtungszeitraum.von,
     ) > 0
-    ? sorted[currentPosition + 1]?.index
+    ? geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]?.index
     : undefined;
+}
+
+function sortiereGeschwisterkinderNachGeburtsdatum(
+  geschwisterkinder: GeschwisterkindAngaben[],
+) {
+  return geschwisterkinder
+    .map((kind, index) => ({ kind, index }))
+    .sort((a, b) =>
+      Temporal.PlainDate.compare(b.kind.geburtsdatum, a.kind.geburtsdatum),
+    );
 }

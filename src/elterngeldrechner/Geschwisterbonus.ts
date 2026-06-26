@@ -1,5 +1,11 @@
 import { utc } from "@date-fns/utc";
-import { addYears, differenceInYears, subDays } from "date-fns";
+import {
+  addDays,
+  addYears,
+  differenceInYears,
+  isLeapYear,
+  subDays,
+} from "date-fns";
 import type { Arbitrary, DateConstraints } from "fast-check";
 import { aufDenCentRunden } from "./common/math-util";
 import { Geburtstag, type Kind } from "./model";
@@ -132,7 +138,7 @@ function* berechneAltersgrenzenInnerhalbAnspruch(
   }
 
   let grenze = berechneAltersgrenze(kind, alter);
-  while (bestehtAnspruchAufGeschwisterbonus(geschwister, vortag(grenze))) {
+  while (bestehtAnspruchAufGeschwisterbonus(geschwister, dayBefore(grenze))) {
     yield grenze;
 
     alter += 1;
@@ -145,11 +151,23 @@ function* berechneAltersgrenzenInnerhalbAnspruch(
  * Alter erreicht.
  */
 function berechneAltersgrenze(kind: Kind, jahre: number): Date {
-  return addYears(kind.geburtstag, jahre, { in: utc });
+  const altersgrenze = addYears(kind.geburtstag, jahre, { in: utc });
+
+  return isLeapDay(kind.geburtstag) && !isLeapYear(altersgrenze)
+    ? dayAfter(altersgrenze)
+    : altersgrenze;
 }
 
-function vortag(datum: Date): Date {
+function isLeapDay(geburtstag: Geburtstag): boolean {
+  return geburtstag.getUTCMonth() === 1 && geburtstag.getUTCDate() === 29;
+}
+
+function dayBefore(datum: Date): Date {
   return subDays(datum, 1, { in: utc });
+}
+
+function dayAfter(datum: Date): Date {
+  return addDays(datum, 1, { in: utc });
 }
 
 if (import.meta.vitest) {
@@ -163,13 +181,36 @@ if (import.meta.vitest) {
       assert,
       property,
       constant,
+      constantFrom,
       option,
+      oneof,
       tuple,
+      array,
       boolean: arbitraryBoolean,
       float: arbitraryFloat,
       date: arbitraryDate,
       record: arbitraryRecord,
     } = await import("fast-check");
+
+    function arbitraryGeburtstag(
+      constraints?: DateConstraints,
+    ): Arbitrary<Geburtstag> {
+      let { min, max } = {
+        min: new Date("1900-01-01"), // Leave room/time for arithmetic operations. Like adding a...
+        max: new Date("3000-01-01"), // ...day to the latest possible date would make it become invalid.
+        ...constraints,
+      };
+
+      min = isBefore(min, max) ? min : max;
+      max = isAfter(max, min) ? max : min;
+
+      return arbitraryDate({
+        min,
+        max,
+        ...constraints,
+        noInvalidDate: true,
+      }).map((date) => new Geburtstag(date));
+    }
 
     describe("berechne den Geschwisterbonus für Basiselterngeld", () => {
       it("is always at least 75€", () =>
@@ -580,26 +621,6 @@ if (import.meta.vitest) {
         geburtstag?: DateConstraints;
       };
 
-      function arbitraryGeburtstag(
-        constraints?: DateConstraints,
-      ): Arbitrary<Geburtstag> {
-        let { min, max } = {
-          min: new Date("1900-01-01"), // Leave room/time for arithmetic operations. Like adding a...
-          max: new Date("3000-01-01"), // ...day to the latest possible date would make it become invalid.
-          ...constraints,
-        };
-
-        min = isBefore(min, max) ? min : max;
-        max = isAfter(max, min) ? max : min;
-
-        return arbitraryDate({
-          min,
-          max,
-          ...constraints,
-          noInvalidDate: true,
-        }).map((date) => new Geburtstag(date));
-      }
-
       /**
        * Altersgrenze is a domain term used in the law and related documents. It
        * basically describes the day a child turns a specific age. The
@@ -697,6 +718,24 @@ if (import.meta.vitest) {
           zeitpunkt: new Geburtstag("2024-05-02"),
           expected: null,
         },
+        {
+          description:
+            "returns the 1st of March when a Geschwisterkind born on 29 February turns 3 in a non-leap year",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2020-02-29"), istBehindert: false },
+          ],
+          zeitpunkt: new Geburtstag("2022-06-01"),
+          expected: "2023-03-01T00:00:00.000Z",
+        },
+        {
+          description:
+            "returns the 1st of March when a disabled Geschwisterkind born on 29 February turns 14 in a non-leap year",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2008-02-29"), istBehindert: true },
+          ],
+          zeitpunkt: new Geburtstag("2020-06-01"),
+          expected: "2022-03-01T00:00:00.000Z",
+        },
       ])("$description", ({ geschwisterkinder, zeitpunkt, expected }) => {
         const enddatum = berechneEnddatumDesGeschwisterbonus(
           geschwisterkinder,
@@ -704,6 +743,72 @@ if (import.meta.vitest) {
         );
 
         expect(enddatum?.toISOString() ?? null).toBe(expected);
+      });
+
+      it("never contradicts bestehtAnspruchAufGeschwisterbonus", () => {
+        /*
+         * Das Enddatum ist der Tag, an dem der Anspruch endet: an seinem Vortag
+         * muss noch Anspruch bestehen, am Enddatum selbst nicht mehr. Besteht
+         * gar kein Anspruch, gibt es kein Enddatum. Genau diese Verzahnung hat
+         * der 29.-Februar-Fehler verletzt, weil dort die Altersgrenze einen Tag
+         * vor dem Wechsel von bestehtAnspruchAufGeschwisterbonus lag.
+         *
+         * Die Geburtstage stammen aus einem Fenster, das Schalttage bewusst
+         * einschließt, damit der Sonderfall regelmäßig statt nur etwa jedes
+         * 1500. Mal getroffen wird.
+         */
+        const schalttag = constantFrom(
+          "2004-02-29",
+          "2008-02-29",
+          "2012-02-29",
+          "2016-02-29",
+          "2020-02-29",
+        ).map((tag) => new Geburtstag(tag));
+
+        const arbitraryGeschwisterkind = oneof(
+          arbitraryGeburtstag({
+            min: new Date("2000-01-01"),
+            max: new Date("2021-12-31"),
+          }),
+          schalttag,
+        ).chain((geburtstag) =>
+          arbitraryBoolean().map((istBehindert) => ({
+            geburtstag,
+            istBehindert,
+          })),
+        );
+
+        assertProperty(
+          array(arbitraryGeschwisterkind, { maxLength: 3 }),
+          arbitraryDate({
+            min: new Date("2000-01-01"),
+            max: new Date("2040-12-31"),
+            noInvalidDate: true,
+          }),
+          (geschwister, zeitpunkt) => {
+            const enddatum = berechneEnddatumDesGeschwisterbonus(
+              geschwister,
+              zeitpunkt,
+            );
+
+            if (bestehtAnspruchAufGeschwisterbonus(geschwister, zeitpunkt)) {
+              expect(enddatum).not.toBe(null);
+
+              expect(
+                bestehtAnspruchAufGeschwisterbonus(
+                  geschwister,
+                  dayBefore(enddatum!),
+                ),
+              ).toBe(true);
+
+              expect(
+                bestehtAnspruchAufGeschwisterbonus(geschwister, enddatum!),
+              ).toBe(false);
+            } else {
+              expect(enddatum).toBe(null);
+            }
+          },
+        );
       });
     });
 

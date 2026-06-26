@@ -257,7 +257,8 @@ function getNextSubpath(event: FormEvent): string {
 
       if (!hatErwerbstaetigkeit) {
         return event.params.elternteilIndex === 1 ||
-          dependentValues.istPersonAlleinerziehend
+          dependentValues.istPersonAlleinerziehend ||
+          !dependentValues.wirdZweitePersonBeruecksichtigt
           ? "DONE"
           : Route.ElternteilZweiAllgemeineAngaben;
       }
@@ -1046,6 +1047,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         });
 
@@ -1067,6 +1069,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         });
 
@@ -1088,6 +1091,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: true,
           },
         });
 
@@ -1107,6 +1111,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: true,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         });
 
@@ -1126,6 +1131,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         });
 

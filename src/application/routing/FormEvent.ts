@@ -166,6 +166,7 @@ export const FormEventSchema = z.discriminatedUnion("route", [
     payload: ElternteilTaetigkeitenAbfrageSchema,
     dependentValues: z.object({
       istPersonAlleinerziehend: z.boolean(),
+      wirdZweitePersonBeruecksichtigt: z.boolean(),
     }),
   }),
   z.object({

@@ -24,6 +24,7 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { bestimmeEinkommensarten } from "./tracking";
 import { posthog } from "@/application/user-tracking";
+import { sindBeideElternteile } from "../../domain/sindBeideElternteile";
 
 export function ElternteilTaetigkeitenAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -41,6 +42,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
 
   const eventStream = filtereValideEventHistorie();
   const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
+  const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(eventStream);
 
   const form = useForm<ElternteilTaetigkeitenAbfrage>({
     resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
@@ -61,6 +63,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
       params: routeParams,
       dependentValues: {
         istPersonAlleinerziehend,
+        wirdZweitePersonBeruecksichtigt,
       },
     };
 

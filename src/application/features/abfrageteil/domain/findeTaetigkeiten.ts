@@ -46,6 +46,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         },
       ];
@@ -67,6 +68,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         },
       ];
@@ -94,6 +96,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         },
         {
@@ -108,6 +111,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         },
       ];

@@ -205,6 +205,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: false,
           },
         },
       ];
@@ -237,7 +238,8 @@ if (import.meta.vitest) {
             hatPeriodenOhneEinkommen: true,
           },
           dependentValues: {
-            istPersonAlleinerziehend: false,
+            istPersonAlleinerziehend: true,
+            wirdZweitePersonBeruecksichtigt: true,
           },
         },
         {
@@ -260,6 +262,7 @@ if (import.meta.vitest) {
           },
           dependentValues: {
             istPersonAlleinerziehend: false,
+            wirdZweitePersonBeruecksichtigt: true,
           },
         },
       ];
@@ -298,6 +301,7 @@ if (import.meta.vitest) {
       },
       dependentValues: {
         istPersonAlleinerziehend: false,
+        wirdZweitePersonBeruecksichtigt: false,
       },
     };
 
@@ -392,6 +396,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
         ];
@@ -416,6 +421,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -451,6 +457,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -492,6 +499,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -522,6 +530,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -558,6 +567,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -606,6 +616,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -648,6 +659,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -690,6 +702,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -738,6 +751,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -798,6 +812,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -839,6 +854,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
           {
@@ -853,6 +869,7 @@ if (import.meta.vitest) {
             },
             dependentValues: {
               istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
             },
           },
         ];

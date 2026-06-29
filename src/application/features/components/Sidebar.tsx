@@ -79,7 +79,8 @@ export function Sidebar() {
 
   const person1Name = person1Event?.name;
   const wirdZweitePersonBeruecksichtigt =
-    gemeinsamPlanenEvent &&
+    person1Event?.istAlleinerziehend !== true &&
+    !!gemeinsamPlanenEvent &&
     gemeinsamPlanenEvent.wirdZweitePersonBeruecksichtigt !== false;
   const person2Name = zweitePersonEvent?.name;
 

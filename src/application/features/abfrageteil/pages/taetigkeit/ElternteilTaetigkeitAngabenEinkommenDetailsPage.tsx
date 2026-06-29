@@ -9,7 +9,7 @@ import {
   TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
 import { Button } from "@/application/features/components";
-import { AusklammerungsZeitraumBox } from "@/application/features/abfrageteil/components/AusklammerungsZeitraumBox";
+import { AusklammerungsZeitraumBox } from "@/application/features/abfrageteil/pages/taetigkeit/AusklammerungsZeitraumBox";
 import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
 import { Page } from "@/application/features/components/Page";

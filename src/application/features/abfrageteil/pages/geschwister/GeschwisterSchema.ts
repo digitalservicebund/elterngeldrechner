@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { z } from "zod";
 import {
   BooleanRadiobuttonCodec,
@@ -30,6 +31,22 @@ export type GeschwisterkindAnzahlAbfrage = z.infer<
 export type GeschwisterkindAngaben = z.infer<
   typeof GeschwisterkindAngabenSchema
 >;
+
+export function erstelleGeschwisterkindAngabenSchema(
+  kindGeburtsdatum: Temporal.PlainDate,
+) {
+  return GeschwisterkindAngabenSchema.superRefine(({ geburtsdatum }, ctx) => {
+    if (!(geburtsdatum instanceof Temporal.PlainDate)) return;
+    if (Temporal.PlainDate.compare(geburtsdatum, kindGeburtsdatum) >= 0) {
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "Das Geburtsdatum des Geschwisterkindes muss vor dem Geburtsdatum des Kindes liegen, für das Elterngeld beantragt werden soll.",
+        path: ["geburtsdatum"],
+      });
+    }
+  });
+}
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;
@@ -96,6 +113,64 @@ if (import.meta.vitest) {
       expect({
         geburtsdatum: "10.02.2026",
       }).not.toEqual(expect.schemaMatching(GeschwisterkindAngabenSchema));
+    });
+  });
+
+  describe("erstelleGeschwisterkindAngabenSchema", () => {
+    const schema = erstelleGeschwisterkindAngabenSchema(
+      Temporal.PlainDate.from("2025-06-01"),
+    );
+
+    it("accepts a sibling birthdate strictly before the child's birthdate", () => {
+      const result = schema.safeParse({
+        geburtsdatum: "31.05.2025",
+        hatBehinderung: "no",
+      });
+
+      expect(result.success).toBeTruthy();
+    });
+
+    it("rejects a sibling birthdate equal to the child's birthdate", () => {
+      const result = schema.safeParse({
+        geburtsdatum: "01.06.2025",
+        hatBehinderung: "no",
+      });
+
+      expect(result.success).toBeFalsy();
+      if (!result.success) {
+        const issue = result.error.issues[0];
+        expect(issue).toMatchObject({ code: "custom", path: ["geburtsdatum"] });
+        expect(issue?.message).toContain("muss vor dem Geburtsdatum");
+      }
+    });
+
+    it("rejects a sibling birthdate after the child's birthdate", () => {
+      const result = schema.safeParse({
+        geburtsdatum: "15.07.2025",
+        hatBehinderung: "no",
+      });
+
+      expect(result.success).toBeFalsy();
+      if (!result.success) {
+        const issue = result.error.issues[0];
+        expect(issue).toMatchObject({ code: "custom", path: ["geburtsdatum"] });
+        expect(issue?.message).toContain("muss vor dem Geburtsdatum");
+      }
+    });
+
+    it("skips the date comparison when geburtsdatum is not a valid date string", () => {
+      const result = schema.safeParse({
+        geburtsdatum: "kein-datum",
+        hatBehinderung: "no",
+      });
+
+      expect(result.success).toBeFalsy();
+      if (!result.success) {
+        const hasDateComparisonError = result.error.issues.some((issue) =>
+          issue.message.includes("muss vor dem Geburtsdatum"),
+        );
+        expect(hasDateComparisonError).toBeFalsy();
+      }
     });
   });
 }

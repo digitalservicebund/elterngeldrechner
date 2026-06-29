@@ -7,12 +7,14 @@ import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNav
 import {
   GeschwisterkindAngaben,
   GeschwisterkindAngabenSchema,
+  erstelleGeschwisterkindAngabenSchema,
 } from "./GeschwisterSchema";
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { Page } from "@/application/features/components/Page";
 import { findeAnzahlGeschwister } from "@/application/features/abfrageteil/domain/findeAnzahlGeschwister";
+import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {
@@ -24,11 +26,8 @@ import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 
 export function GeschwisterkindAngabenPage() {
-  const {
-    dispatch,
-    findeLetztesGueltigesEvent,
-    filtereValideEventHistorie,
-  } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -43,9 +42,12 @@ export function GeschwisterkindAngabenPage() {
 
   const eventStream = filtereValideEventHistorie();
   const anzahlGeschwister = findeAnzahlGeschwister(eventStream);
+  const kindGeburtsdatum = findeGeburtsdatum(eventStream);
+
+  const schema = erstelleGeschwisterkindAngabenSchema(kindGeburtsdatum);
 
   const { register, handleSubmit, formState, subscribe, watch } = useForm({
-    resolver: zodResolver(GeschwisterkindAngabenSchema),
+    resolver: zodResolver(schema),
     defaultValues: encodeSafely(
       GeschwisterkindAngabenSchema,
       letztesGueltigesEvent,
@@ -74,7 +76,6 @@ export function GeschwisterkindAngabenPage() {
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
   const geburtsdatum = watch("geburtsdatum");
-
   const geburtsdatumInputIdentifier = useId();
 
   return (

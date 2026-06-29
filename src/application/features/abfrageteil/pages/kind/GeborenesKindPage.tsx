@@ -123,7 +123,6 @@ export function GeborenesKindPage() {
           <DateInput
             id={geburtsdatumInputIdentifier}
             error={formErrors.geburtsdatum?.message}
-            aria-describedby={anzahlKinderInputIdentifier}
             {...register("geburtsdatum")}
           />
         </div>

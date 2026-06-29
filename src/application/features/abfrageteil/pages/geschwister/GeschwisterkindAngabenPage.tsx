@@ -104,7 +104,6 @@ export function GeschwisterkindAngabenPage() {
           <DateInput
             id={geburtsdatumInputIdentifier}
             error={formErrors.geburtsdatum?.message}
-            aria-describedby={geburtsdatumInputIdentifier}
             {...register("geburtsdatum")}
           />
         </div>

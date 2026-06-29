@@ -108,7 +108,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
         noValidate
       >
         <div>
-          <p className="-mt-40 mb-10 font-bold text-text-light">
+          <p className="-mt-40 mb-20 font-bold text-text-light">
             Details zur Tätigkeit als Angestellte oder Angestellter
           </p>
 

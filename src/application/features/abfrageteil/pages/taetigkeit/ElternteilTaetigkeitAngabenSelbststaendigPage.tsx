@@ -81,7 +81,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
         noValidate
       >
         <div>
-          <p className="-mt-40 mb-10 text-text-light">
+          <p className="-mt-40 mb-20 font-bold text-text-light">
             Details zur selbstständigen Tätigkeit
           </p>
 

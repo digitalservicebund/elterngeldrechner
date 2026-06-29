@@ -12,6 +12,7 @@ import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrage
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
@@ -74,10 +75,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
     eventStream,
     routeParams.elternteilIndex,
   );
-  const taetigkeitenFlow =
-    taetigkeiten.istSelbststaendig === true
-      ? "Selbstaendig"
-      : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   const kannDurchschnittAngegebenWerden =
     !taetigkeiten.hatPeriodenOhneEinkommen && !taetigkeiten.hatAndereLeistungen;
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(

@@ -10,6 +10,7 @@ import {
 } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil/domain/formatiereBemessungszeitraum";
 import { mappeAusklammerungGrund } from "@/application/features/abfrageteil/domain/mappeAusklammerungGrund";
@@ -62,13 +63,7 @@ export function ElternteilBMZUebersichtPage() {
   };
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
-
-  const taetigkeitenFlow =
-    taetigkeiten.istSelbststaendig &&
-    !taetigkeiten.istNichtSelbststaendig &&
-    !taetigkeiten.istVerbeamtet
-      ? "Selbstaendig"
-      : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
 
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
@@ -187,9 +182,13 @@ export function ElternteilBMZUebersichtPage() {
                   {uebersprungeneJahreSelbststaendig() ? (
                     <>
                       <p>
-                        Sie arbeiten selbstständig. Deshalb wird normalerweise
-                        das letzte Kalenderjahr vor der Geburt für die
-                        Berechnung von Elterngeld berücksichtigt.
+                        Sie arbeiten{" "}
+                        {(taetigkeiten.istNichtSelbststaendig ||
+                          taetigkeiten.istVerbeamtet) &&
+                          "angestellt und"}{" "}
+                        selbstständig. Deshalb wird normalerweise das letzte
+                        Kalenderjahr vor der Geburt für die Berechnung von
+                        Elterngeld berücksichtigt.
                       </p>
                       <p>
                         Wir haben Ihre Daten geprüft: Wir überspringen{" "}
@@ -201,9 +200,13 @@ export function ElternteilBMZUebersichtPage() {
                     </>
                   ) : (
                     <p>
-                      Sie arbeiten selbstständig. Deshalb wird das letzte
-                      Kalenderjahr vor der Geburt für die Berechnung von
-                      Elterngeld berücksichtigt.
+                      Sie arbeiten{" "}
+                      {(taetigkeiten.istNichtSelbststaendig ||
+                        taetigkeiten.istVerbeamtet) &&
+                        "angestellt und"}{" "}
+                      selbstständig. Deshalb wird das letzte Kalenderjahr vor
+                      der Geburt für die Berechnung von Elterngeld
+                      berücksichtigt.
                     </p>
                   )}
                 </>

@@ -12,6 +12,7 @@ import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrage
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { sindBeideElternteile } from "@/application/features/abfrageteil/domain/sindBeideElternteile";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
@@ -78,11 +79,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  const taetigkeitenFlow =
-    taetigkeiten.hatPeriodenOhneEinkommen === false &&
-    taetigkeiten.istSelbststaendig === true
-      ? "Selbstaendig"
-      : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

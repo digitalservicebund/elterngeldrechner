@@ -15,6 +15,7 @@ import { CurrencyInput } from "@/application/features/abfrageteil/components/Cur
 import { Page } from "@/application/features/components/Page";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
+import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
@@ -78,9 +79,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  const taetigkeitenFlow = taetigkeiten.istSelbststaendig
-    ? "Selbstaendig"
-    : "Nicht-Selbstaendig";
+  const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
     routeParams.elternteilIndex,
   );

@@ -16,6 +16,7 @@ import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil
 import { mappeAusklammerungGrund } from "@/application/features/abfrageteil/domain/mappeAusklammerungGrund";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {
   type FormEvent,
@@ -28,8 +29,7 @@ import {
 } from "@/bemessungszeitraumrechner";
 
 export function ElternteilBMZUebersichtPage() {
-  const { dispatch, findeVorherigenPfad, filtereValideEventHistorie } =
-    useEventContext();
+  const { dispatch, filtereValideEventHistorie } = useEventContext();
   const navigate = useNavigate();
 
   const currentRoute = Route.ElternteilTaetigkeitenBMZUebersicht;
@@ -58,9 +58,7 @@ export function ElternteilBMZUebersichtPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute, routeParams));
-  };
+  const navigateBack = useNavigateBack(currentRoute, routeParams);
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
   const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);

@@ -10,6 +10,7 @@ import { Button, InfoText } from "@/application/features/components";
 import { NumberInput } from "@/application/features/abfrageteil/components";
 import { Page } from "@/application/features/components";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   type FormEvent,
   Route,
@@ -18,8 +19,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 
 export function GeschwisterkindAnzahlAbfragePage() {
-  const { dispatch, findeLetztesGueltigesEvent, findeVorherigenPfad } =
-    useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -48,9 +48,7 @@ export function GeschwisterkindAnzahlAbfragePage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   const anzahlGeschwisterInputIdentifier = useId();
 

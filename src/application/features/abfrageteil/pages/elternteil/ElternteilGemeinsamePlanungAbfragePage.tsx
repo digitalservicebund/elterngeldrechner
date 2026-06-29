@@ -11,6 +11,7 @@ import { CustomRadioGroup } from "@/application/features/components/CustomRadioG
 import { Page } from "@/application/features/components/Page";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   type FormEvent,
   Route,
@@ -19,12 +20,8 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 
 export function ElternteilGemeinsamePlanungAbfragePage() {
-  const {
-    dispatch,
-    findeLetztesGueltigesEvent,
-    findeVorherigenPfad,
-    filtereValideEventHistorie,
-  } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -54,9 +51,7 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, 0);

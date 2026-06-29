@@ -17,6 +17,7 @@ import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/fin
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import { useRouteParams } from "@/application/features/abfrageteil/hooks/useRouteParams";
 import {
   type FormEvent,
@@ -37,12 +38,8 @@ export type ElternteilAusklammerungMutterschutzGeschwisterkindZeitenOutput =
   >;
 
 export function ElternteilAusklammerungMutterschutzZeitenPage() {
-  const {
-    dispatch,
-    findeLetztesGueltigesEvent,
-    findeVorherigenPfad,
-    filtereValideEventHistorie,
-  } = useEventContext();
+  const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
+    useEventContext();
 
   const formIdentifier = useId();
   const navigate = useNavigate();
@@ -155,9 +152,7 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute, routeParams));
-  };
+  const navigateBack = useNavigateBack(currentRoute, routeParams);
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
 

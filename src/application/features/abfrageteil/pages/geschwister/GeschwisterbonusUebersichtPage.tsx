@@ -7,6 +7,7 @@ import { Page } from "@/application/features/components";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
+import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
   type FormEvent,
   Route,
@@ -16,8 +17,7 @@ import { berechneEnddatumDesGeschwisterbonus } from "@/elterngeldrechner/Geschwi
 import { Geburtstag } from "@/elterngeldrechner";
 
 export function GeschwisterbonusUebersichtPage() {
-  const { dispatch, findeVorherigenPfad, filtereValideEventHistorie } =
-    useEventContext();
+  const { dispatch, filtereValideEventHistorie } = useEventContext();
   const navigate = useNavigate();
 
   const currentRoute = Route.GeschwisterbonusUebersicht;
@@ -44,9 +44,7 @@ export function GeschwisterbonusUebersichtPage() {
     await navigate(findeNaechstenPfad(event));
   };
 
-  const navigateBack = async () => {
-    await navigate(findeVorherigenPfad(currentRoute));
-  };
+  const navigateBack = useNavigateBack(currentRoute);
 
   return (
     <Page heading="Angaben zu Geschwistern">

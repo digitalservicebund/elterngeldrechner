@@ -11,7 +11,11 @@ import {
 import { Page } from "@/application/features/components/Page";
 import { useAntragInformationen } from "@/application/features/planungsteil/planer/hooks/useAntragInformationen";
 import { useNavigateStateful } from "@/application/features/planungsteil/planer/hooks/useNavigateStateful";
-import { posthog, pushTrackingEvent } from "@/application/user-tracking";
+import {
+  createTrackedNavigationFunction,
+  posthog,
+  pushTrackingEvent,
+} from "@/application/user-tracking";
 import { Elternteil } from "@/monatsplaner";
 import FileDownloadIcon from "~icons/material-symbols/file-download";
 import OpenInNewIcon from "~icons/material-symbols/open-in-new";
@@ -50,12 +54,12 @@ export function DatenuebernahmeAntragPage(): ReactNode {
   const { navigationState, navigateStateful } = useNavigateStateful();
   const { plan } = navigationState;
 
-  const navigateToRechnerUndPlanerPage = async () => {
-    posthog.capture("zurueck_button_geklickt", {
-      route: "/datenuebernahme-antrag",
-    });
-    await navigateStateful("/rechner-planer", navigationState);
-  };
+  const navigateToRechnerUndPlanerPage = createTrackedNavigationFunction(
+    "/datenuebernahme-antrag",
+    async () => {
+      await navigateStateful("/rechner-planer", navigationState);
+    },
+  );
 
   const [antragDownloading, setAntragDownloading] = useState(false);
   const [seiteDownloading, setSeiteDownloading] = useState(false);

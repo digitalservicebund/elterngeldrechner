@@ -24,6 +24,7 @@ import { useAusgangslage } from "@/application/features/planungsteil/planer/hook
 import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
 import { useNavigateStateful } from "@/application/features/planungsteil/planer/hooks/useNavigateStateful";
 import {
+  createTrackedNavigationFunction,
   posthog,
   pushTrackingEvent,
   setTrackingVariable,
@@ -53,13 +54,13 @@ export function BeispielePage() {
   const eventContext = useEventContext();
   const [plan, setPlan] = useState<PlanMitBeliebigenElternteilen>();
 
-  const navigiereZuEinkommen = async () => {
-    posthog.capture("zurueck_button_geklickt", { route: "/beispiele" });
-
-    const letztesEvent = eventContext.findeLetztesEvent();
-
-    await navigate(generatePathFromEvent(letztesEvent!));
-  };
+  const navigiereZuEinkommen = createTrackedNavigationFunction(
+    "/beispiele",
+    async () => {
+      const letztesEvent = eventContext.findeLetztesEvent();
+      await navigate(generatePathFromEvent(letztesEvent!));
+    },
+  );
 
   const navigiereZuPlaner = async () => {
     const beispiel = beispiele.find((beispiel) => {

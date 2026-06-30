@@ -24,9 +24,11 @@ import { useBerechneElterngeldbezuege } from "@/application/features/planungstei
 import { useEinkommenInformationen } from "@/application/features/planungsteil/planer/hooks/useEinkommenInformationen";
 import { useNavigateStateful } from "@/application/features/planungsteil/planer/hooks/useNavigateStateful";
 import {
+  createTrackedNavigationFunction,
   getTrackedEase,
   getTrackedObstacle,
   isTrackingAllowedByUser,
+  posthog,
   trackEase,
   trackObstacle,
   trackReachedConversionGoal,
@@ -39,7 +41,6 @@ import type {
 import { sindLebensmonateGeplant } from "@/monatsplaner";
 import ChevronLeftIcon from "~icons/material-symbols/chevron-left";
 import RestartAltIcon from "~icons/material-symbols/restart-alt";
-import posthog from "posthog-js";
 
 export function PlanerPage() {
   const mainElement = useRef<HTMLDivElement>(null);
@@ -127,17 +128,18 @@ export function PlanerPage() {
     trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
   }
 
-  const navigateToBeispielePage = async () => {
-    posthog.capture("zurueck_button_geklickt", { route: "/rechner-planer" });
+  const navigateToBeispielePage = createTrackedNavigationFunction(
+    "/rechner-planer",
+    async () => {
+      if (rememberSubmit.current) submitFeedback();
 
-    if (rememberSubmit.current) submitFeedback();
-
-    if (hasChanges) {
-      await navigateStateful("/beispiele", { plan });
-    } else {
-      await navigateStateful("/beispiele", { beispiel });
-    }
-  };
+      if (hasChanges) {
+        await navigateStateful("/beispiele", { plan });
+      } else {
+        await navigateStateful("/beispiele", { beispiel });
+      }
+    },
+  );
 
   async function navigateToDatenuebernahmeAntragPage(
     plan: PlanMitBeliebigenElternteilen,

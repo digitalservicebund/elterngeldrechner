@@ -6,3 +6,4 @@ export {
   setupUserTracking,
 } from "./core";
 export * from "./posthog";
+export * from "./utilities";

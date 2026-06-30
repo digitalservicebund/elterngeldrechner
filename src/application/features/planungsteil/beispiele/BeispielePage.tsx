@@ -194,6 +194,8 @@ export function BeispielePage() {
   }, [sichtbareBeispiele]);
 
   function showAllBeispiele(): void {
+    posthog.capture("weitere_vorschlaege_angezeigt_geklickt");
+
     setAreAllBeispieleVisible(true);
   }
 

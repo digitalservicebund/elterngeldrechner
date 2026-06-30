@@ -2,9 +2,9 @@
   "languages": {
     "typescript": {
       "output_path": "src/application/user-tracking/posthog/posthog-typed.ts",
-      "schema_hash": "3a732a74f24c67bcd227eb4d502a59e1",
-      "updated_at": "2026-06-24T15:15:56.948299+00:00",
-      "event_count": 15
+      "schema_hash": "e6c5db3a18923079f3f2d17da0fc84a3",
+      "updated_at": "2026-06-30T12:24:15.625900+00:00",
+      "event_count": 16
     }
   }
 }

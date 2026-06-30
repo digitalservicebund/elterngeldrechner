@@ -17,7 +17,11 @@ import {
   Route,
   findeNaechstenPfad,
 } from "@/application/routing";
-import { encodeSafely } from "@/application/features/abfrageteil/zod";
+import {
+  encodeSafely,
+  OptionalBooleanRadiobuttonCodec,
+} from "@/application/features/abfrageteil/zod";
+import { posthog } from "@/application/user-tracking";
 
 export function ElternteilGemeinsamePlanungAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -47,6 +51,12 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
     };
 
     dispatch(event);
+
+    const planen_gemeinsam = OptionalBooleanRadiobuttonCodec.encode(
+      values.wirdZweitePersonBeruecksichtigt,
+    );
+    posthog.register({ planen_gemeinsam });
+    posthog.capture("angaben_gemeinsame_planung_gemacht", { planen_gemeinsam });
 
     await navigate(findeNaechstenPfad(event));
   };

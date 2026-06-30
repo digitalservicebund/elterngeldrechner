@@ -23,7 +23,7 @@ import {
   type BerechneElterngeldbezuegeCallback,
   PlanMitBeliebigenElternteilen,
 } from "@/monatsplaner";
-import posthog from "posthog-js";
+import { posthog } from "@/application/user-tracking";
 
 type Props = {
   readonly initialInformation: InitialInformation;

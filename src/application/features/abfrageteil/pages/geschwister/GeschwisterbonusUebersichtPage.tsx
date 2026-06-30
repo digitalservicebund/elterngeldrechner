@@ -15,6 +15,7 @@ import {
 } from "@/application/routing";
 import { berechneEnddatumDesGeschwisterbonus } from "@/elterngeldrechner/Geschwisterbonus";
 import { Geburtstag } from "@/elterngeldrechner";
+import { posthog } from "@/application/user-tracking";
 
 export function GeschwisterbonusUebersichtPage() {
   const { dispatch, filtereValideEventHistorie } = useEventContext();
@@ -40,6 +41,8 @@ export function GeschwisterbonusUebersichtPage() {
     };
 
     dispatch(event);
+
+    posthog.register({ geschwisterbonus: geschwisterbonusEnddatum !== null });
 
     await navigate(findeNaechstenPfad(event));
   };

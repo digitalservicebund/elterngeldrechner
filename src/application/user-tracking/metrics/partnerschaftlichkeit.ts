@@ -1,4 +1,5 @@
 import { setTrackingVariable } from "@/application/user-tracking/core";
+import { posthog } from "@/application/user-tracking";
 
 export function trackPartnerschaftlicheVerteilung(
   auswahlProMonatProElternteil: Auswahl[][],
@@ -11,6 +12,7 @@ export function trackPartnerschaftlicheVerteilung(
       auswahlProMonatProElternteil,
     );
     setTrackingVariable(TRACKING_VARIABLE_NAME, verteilung);
+    posthog.register({ partnerschaftliche_verteilung: verteilung });
   }
 }
 
@@ -69,12 +71,12 @@ type Variante = "Basis" | "Plus" | "Bonus";
 if (import.meta.vitest) {
   const { describe, beforeEach, it, expect, vi } = import.meta.vitest;
 
+  vi.mock(import("@/application/user-tracking/core"));
+
   describe("partnerschaftlichkeit", () => {
-    beforeEach(async () => {
-      vi.spyOn(
-        await import("@/application/user-tracking/core"),
-        "setTrackingVariable",
-      );
+    beforeEach(() => {
+      vi.clearAllMocks();
+      vi.spyOn(posthog, "register");
     });
 
     it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {
@@ -85,12 +87,17 @@ if (import.meta.vitest) {
         "partnerschaftlicheverteilung",
         expect.anything(),
       );
+      expect(posthog.register).toHaveBeenCalledTimes(1);
+      expect(posthog.register).toHaveBeenLastCalledWith({
+        partnerschaftliche_verteilung: 0,
+      });
     });
 
     it("should not track anything if there is only one Elternteil", () => {
       trackPartnerschaftlicheVerteilung([[]]);
 
       expect(setTrackingVariable).not.toHaveBeenCalled();
+      expect(posthog.register).not.toHaveBeenCalled();
     });
 
     it.each<{
@@ -172,6 +179,9 @@ if (import.meta.vitest) {
           expect.anything(),
           expectedQuotient,
         );
+        expect(posthog.register).toHaveBeenLastCalledWith({
+          partnerschaftliche_verteilung: expectedQuotient,
+        });
       },
     );
   });

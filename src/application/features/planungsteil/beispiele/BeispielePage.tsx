@@ -19,6 +19,7 @@ import { Page } from "@/application/features/components/Page";
 import {
   trackMetricsForErklaerungenWurdenGeoeffnet,
   trackMetricsForErklaerungenWurdenGeschlossen,
+  trackPartnerschaftlicheVerteilungForPlan,
 } from "@/application/features/planungsteil/planer/tracking";
 import { useAusgangslage } from "@/application/features/planungsteil/planer/hooks/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
@@ -133,6 +134,7 @@ export function BeispielePage() {
 
     if (neuesAktivesBeispiel) {
       setPlan(neuesAktivesBeispiel.plan);
+      trackPartnerschaftlicheVerteilungForPlan(neuesAktivesBeispiel.plan);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
 
@@ -335,6 +337,8 @@ if (import.meta.vitest) {
       findeLetztesGueltigesEvent: vi.fn(),
     }),
   }));
+  vi.mock(import("@/application/user-tracking"));
+  vi.mock(import("@/application/features/planungsteil/planer/tracking"));
 
   describe("Beispiele Page", async () => {
     const { useAusgangslage } =
@@ -568,128 +572,113 @@ if (import.meta.vitest) {
 
     describe("tracking", async () => {
       const trackingModule = await import("@/application/user-tracking");
+      const plannerTrackingModule =
+        await import("@/application/features/planungsteil/planer/tracking");
       const { act } = await import("@testing-library/react");
       const { erstelleBeispiele } =
         await import("@/application/features/planungsteil/beispiele");
 
+      const {
+        setTrackingVariable,
+        pushTrackingEvent,
+        trackReachedConversionGoal,
+        trackUsageOfPlanungshilfen,
+      } = trackingModule;
+      const { trackPartnerschaftlicheVerteilungForPlan } =
+        plannerTrackingModule;
+
       beforeEach(() => vi.clearAllMocks());
 
       it("schreibt nach einer auswahl die option in eine tracking variable", () => {
-        const trackingFunction = vi.spyOn(
-          trackingModule,
-          "setTrackingVariable",
-        );
-
         render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
-        expect(trackingFunction).toHaveBeenCalledExactlyOnceWith(
+        expect(setTrackingVariable).toHaveBeenCalledExactlyOnceWith(
           "Identifier-des-ausgewaehlten-Beispiels",
           "Gemeinsame Planung - Ein Jahr mit Begleitung",
         );
       });
 
-      it("schreibt bei eigener planung diese in die tracking variable", () => {
-        const trackingFunction = vi.spyOn(
-          trackingModule,
-          "setTrackingVariable",
-        );
+      it("trackt die partnerschaftliche verteilung nach Auswahl eines Beispiels", () => {
+        render(<BeispielePage />);
 
+        screen.getByText("Vorschlag 1").click();
+
+        expect(trackPartnerschaftlicheVerteilungForPlan).toHaveBeenCalledOnce();
+      });
+
+      it("schreibt bei eigener planung diese in die tracking variable", () => {
         render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Eigene Planung").click();
 
-        expect(trackingFunction).toHaveBeenLastCalledWith(
+        expect(setTrackingVariable).toHaveBeenLastCalledWith(
           "Identifier-des-ausgewaehlten-Beispiels",
           "Gemeinsame Planung - Eigene Planung",
         );
       });
 
       it("trackt Beispiel-wurde-ausgewählt nach Auswahl eines Beispiels", () => {
-        const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
-
         render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
-        expect(trackingFunction).toHaveBeenLastCalledWith(
+        expect(pushTrackingEvent).toHaveBeenLastCalledWith(
           "Beispiel-wurde-ausgewählt",
         );
       });
 
       it("trackt Beispiel-wurde-ausgewählt auch bei der Option Eigene Planung", () => {
-        const trackingFunction = vi.spyOn(trackingModule, "pushTrackingEvent");
-
         render(<BeispielePage />);
 
         screen.getByText("Eigene Planung").click();
 
-        expect(trackingFunction).toHaveBeenLastCalledWith(
+        expect(pushTrackingEvent).toHaveBeenLastCalledWith(
           "Beispiel-wurde-ausgewählt",
         );
       });
 
       it("erreicht conversion goal wenn mit einem Beispiel weiter navigiert wird", () => {
-        const trackingFunction = vi.spyOn(
-          trackingModule,
-          "trackReachedConversionGoal",
-        );
-
         render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Weiter").click();
 
-        expect(trackingFunction).toHaveBeenCalledOnce();
+        expect(trackReachedConversionGoal).toHaveBeenCalledOnce();
       });
 
       it("erreicht conversion goal nicht wenn mit eigener Planung weiter navigiert wird", () => {
-        const trackingFunction = vi.spyOn(
-          trackingModule,
-          "trackReachedConversionGoal",
-        );
-
         render(<BeispielePage />);
 
         screen.getByText("Eigene Planung").click();
 
         screen.getByText("Weiter").click();
 
-        expect(trackingFunction).not.toHaveBeenCalled();
+        expect(trackReachedConversionGoal).not.toHaveBeenCalled();
       });
 
       it("trackt zu dem conversion goal auch noch dass es durch die planungshilfen erreicht wurde", () => {
-        const trackingFunction = vi.spyOn(
-          trackingModule,
-          "trackUsageOfPlanungshilfen",
-        );
-
         render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
         screen.getByText("Weiter").click();
 
-        expect(trackingFunction).toHaveBeenCalled();
+        expect(trackUsageOfPlanungshilfen).toHaveBeenCalled();
       });
 
       it("trackt nicht die nutzung der planungshilfen wenn eigene planung verwendet wird", () => {
-        const trackingFunction = vi.spyOn(
-          trackingModule,
-          "trackUsageOfPlanungshilfen",
-        );
-
         render(<BeispielePage />);
 
         screen.getByText("Eigene Planung").click();
 
         screen.getByText("Weiter").click();
 
-        expect(trackingFunction).not.toHaveBeenCalled();
+        expect(trackUsageOfPlanungshilfen).not.toHaveBeenCalled();
       });
 
       it("feuert beispiel_angezeigt nicht erneut wenn die Seite neu rendert", () => {

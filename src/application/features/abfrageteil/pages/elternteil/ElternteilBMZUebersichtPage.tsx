@@ -268,6 +268,15 @@ export function ElternteilBMZUebersichtPage() {
                           month: "2-digit",
                           year: "numeric",
                         })}
+                        {ausklammerung.grund ===
+                          "elterngeldGeschwisterkind" && (
+                          <p className="italic">
+                            Beachten Sie, dass Elterngeld bis maximal zum 14.
+                            Lebensmonat berücksichtigt werden kann. Sollten Sie
+                            einen längeren Zeitraum eingetragen haben,
+                            korrigieren Sie Ihr Enddatum bitte manuell.
+                          </p>
+                        )}
                       </li>
                     ),
                   )}

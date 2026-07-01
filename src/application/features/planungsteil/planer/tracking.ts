@@ -52,6 +52,7 @@ export function trackMetricsForDerPlanHatSichGeaendert(
   trackGeplanteMonate(plan);
   trackGeplanteMonateMitEinkommen(plan);
   trackGeplanteMonateDesPartnersDerMutter(plan);
+  trackBonusVariante(plan);
 }
 
 export function trackMetricsForEineOptionWurdeGewaehlt(): void {
@@ -159,6 +160,15 @@ function bestimmePartnerDerMutter<A extends Ausgangslage>(
         return null;
     }
   }
+}
+
+function trackBonusVariante(plan: PlanMitBeliebigenElternteilen): void {
+  const filterOptions = {
+    monatPredicate: (monat: Monat) => monat.gewaehlteOption === Variante.Bonus,
+  };
+
+  const hatBonus = zaehleMonate(plan, filterOptions) > 0;
+  posthog.register({ plan_enthaelt_bonus_variante: hatBonus });
 }
 
 function istGeplanterMonat(monat: Monat) {
@@ -417,6 +427,65 @@ if (import.meta.vitest) {
       };
 
       const ANY_MONAT_MIT_ELTERNGELDBEZUG = monat(Variante.Basis);
+    });
+
+    describe("track bonus variante", async () => {
+      const trackingModule = await import("@/application/user-tracking");
+
+      beforeEach(() => vi.clearAllMocks());
+
+      function monat(gewaehlteOption: Auswahloption | undefined) {
+        return { gewaehlteOption, imMutterschutz: false as const };
+      }
+
+      const ausgangslage = {
+        anzahlElternteile: 2 as const,
+        namenDerElternteile: {
+          [Elternteil.Eins]: "Jane",
+          [Elternteil.Zwei]: "John",
+        },
+        geburtsdatumDesKindes: new Date(),
+      };
+
+      it("registers true when plan contains at least one Bonus monat", () => {
+        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
+
+        const plan = {
+          ausgangslage,
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: monat(Variante.Bonus),
+              [Elternteil.Zwei]: monat(Variante.Basis),
+            },
+          },
+        };
+
+        trackBonusVariante(plan);
+
+        expect(registerSpy).toHaveBeenCalledWith({
+          plan_enthaelt_bonus_variante: true,
+        });
+      });
+
+      it("registers false when plan contains no Bonus monat", () => {
+        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
+
+        const plan = {
+          ausgangslage,
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: monat(Variante.Basis),
+              [Elternteil.Zwei]: monat(Variante.Plus),
+            },
+          },
+        };
+
+        trackBonusVariante(plan);
+
+        expect(registerSpy).toHaveBeenCalledWith({
+          plan_enthaelt_bonus_variante: false,
+        });
+      });
     });
   });
 }

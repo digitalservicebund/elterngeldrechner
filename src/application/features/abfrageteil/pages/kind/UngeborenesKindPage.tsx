@@ -105,7 +105,7 @@ export function UngeborenesKindPage() {
           </p>
 
           <InfoText
-            question="Was bedeutet es wenn ich mehr als ein Kind geboren wird?"
+            question="Was bedeutet es wenn mehr als ein Kind geboren wird?"
             answer={
               <>
                 <p>

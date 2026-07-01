@@ -5,7 +5,7 @@ export const mappeAusklammerungGrund = (
   const texte: Record<string, string> = {
     mutterschutz: "Mutterschutz für dieses Kind",
     mutterschutzGeschwisterkind: `Mutterschutz für Geschwisterkind ${geburtsdatumGeschwisterkind ? `(geb. ${geburtsdatumGeschwisterkind})` : ""}`,
-    elterngeldGeschwisterkind: `Elternzeit für Geschwisterkind ${geburtsdatumGeschwisterkind ? `(geb. ${geburtsdatumGeschwisterkind})` : ""}`,
+    elterngeldGeschwisterkind: `Elterngeld für Geschwisterkind ${geburtsdatumGeschwisterkind ? `(geb. ${geburtsdatumGeschwisterkind})` : ""}`,
     erkrankungSchwangerschaft: "Krankheit wegen der Schwangerschaft",
   };
 

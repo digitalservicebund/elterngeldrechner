@@ -161,10 +161,16 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
         noValidate
       >
         <div>
-          <h3 className="mb-20">
+          <h3 className="mb-10">
             Von wann bis wann hat {vorname} Elterngeld für das Geschwisterkind
             (geb. {geburtsdatumGeschwisterkind}) erhalten?
           </h3>
+
+          <p className="mb-20">
+            <strong>Wichtig: </strong>Beachten Sie, dass Elterngeld bis maximal
+            zum 14. Lebensmonat berücksichtigt werden kann. Tragen Sie den
+            zulässigen Zeitraum entsprechend ein.
+          </p>
 
           <InfoText
             question="Wo finde ich diese Angaben?"

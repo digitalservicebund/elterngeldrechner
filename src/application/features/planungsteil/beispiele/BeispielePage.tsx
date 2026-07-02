@@ -17,9 +17,9 @@ import {
 } from "@/application/features/planungsteil/planer";
 import { Page } from "@/application/features/components/Page";
 import {
+  trackMetricsForDerPlanHatSichGeaendert,
   trackMetricsForErklaerungenWurdenGeoeffnet,
   trackMetricsForErklaerungenWurdenGeschlossen,
-  trackPartnerschaftlicheVerteilungForPlan,
 } from "@/application/features/planungsteil/planer/tracking";
 import { useAusgangslage } from "@/application/features/planungsteil/planer/hooks/useAusgangslage";
 import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
@@ -134,7 +134,7 @@ export function BeispielePage() {
 
     if (neuesAktivesBeispiel) {
       setPlan(neuesAktivesBeispiel.plan);
-      trackPartnerschaftlicheVerteilungForPlan(neuesAktivesBeispiel.plan);
+      trackMetricsForDerPlanHatSichGeaendert(neuesAktivesBeispiel.plan, true);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
 
@@ -586,8 +586,7 @@ if (import.meta.vitest) {
         trackReachedConversionGoal,
         trackUsageOfPlanungshilfen,
       } = trackingModule;
-      const { trackPartnerschaftlicheVerteilungForPlan } =
-        plannerTrackingModule;
+      const { trackMetricsForDerPlanHatSichGeaendert } = plannerTrackingModule;
 
       beforeEach(() => vi.clearAllMocks());
 
@@ -602,12 +601,14 @@ if (import.meta.vitest) {
         );
       });
 
-      it("trackt die partnerschaftliche verteilung nach Auswahl eines Beispiels", () => {
+      it("trackt die plan-metriken nach Auswahl eines Beispiels als gueltigen Plan", () => {
         render(<BeispielePage />);
 
         screen.getByText("Vorschlag 1").click();
 
-        expect(trackPartnerschaftlicheVerteilungForPlan).toHaveBeenCalledOnce();
+        expect(
+          trackMetricsForDerPlanHatSichGeaendert,
+        ).toHaveBeenCalledExactlyOnceWith(expect.anything(), true);
       });
 
       it("schreibt bei eigener planung diese in die tracking variable", () => {

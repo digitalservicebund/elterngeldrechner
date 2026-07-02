@@ -68,7 +68,7 @@ export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   posthog.capture("monatsplaner_plan_wurde_zurueckgesetzt");
 }
 
-export function trackPartnerschaftlicheVerteilungForPlan(
+function trackPartnerschaftlicheVerteilungForPlan(
   plan: PlanMitBeliebigenElternteilen,
 ): void {
   const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);
@@ -102,6 +102,7 @@ function trackGeplanteMonate(plan: PlanMitBeliebigenElternteilen) {
   const geplanteMonate = zaehleMonate(plan, filterOptions);
 
   setTrackingVariable("geplante-monate", geplanteMonate);
+  posthog.register({ geplante_monate: geplanteMonate });
 }
 
 function trackGeplanteMonateMitEinkommen(plan: PlanMitBeliebigenElternteilen) {
@@ -140,6 +141,9 @@ function trackGeplanteMonateDesPartnersDerMutter<A extends Ausgangslage>(
     const trackingKey = "geplante-monate-des-partners-der-mutter";
 
     setTrackingVariable(trackingKey, anzahlGeplanterMonate);
+    posthog.register({
+      geplante_monate_des_partners_der_mutter: anzahlGeplanterMonate,
+    });
   }
 }
 
@@ -275,6 +279,7 @@ if (import.meta.vitest) {
           trackingModule,
           "setTrackingVariable",
         );
+        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
 
         const plan = {
           ausgangslage: {
@@ -312,6 +317,7 @@ if (import.meta.vitest) {
         trackGeplanteMonate(plan);
 
         expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
+        expect(registerSpy).toHaveBeenCalledWith({ geplante_monate: 2 });
       });
     });
 
@@ -379,6 +385,7 @@ if (import.meta.vitest) {
           trackingModule,
           "setTrackingVariable",
         );
+        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
 
         const plan = {
           ausgangslage: {
@@ -414,6 +421,9 @@ if (import.meta.vitest) {
 
         expect(trackingFunction).toHaveBeenCalledOnce();
         expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
+        expect(registerSpy).toHaveBeenCalledWith({
+          geplante_monate_des_partners_der_mutter: 2,
+        });
       });
 
       function monat(gewaehlteOption: Auswahloption | undefined) {

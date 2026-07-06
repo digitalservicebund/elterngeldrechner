@@ -21,9 +21,7 @@ export default defineConfig({
     appWrapper(),
   ],
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "src"),
-    },
+    tsconfigPaths: true,
   },
   css: {
     modules: {

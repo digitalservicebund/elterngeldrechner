@@ -16,10 +16,14 @@ export function Validierungsfehlerbox({
       aria-live="polite"
       aria-labelledby={headingIdentifier}
     >
-      <h5 id={headingIdentifier} aria-label="Validierungsfehler">
+      <p
+        id={headingIdentifier}
+        className="font-bold"
+        aria-label="Validierungsfehler"
+      >
         <LightbulbIcon className="text-primary" /> Ihre Planung ist noch nicht
         gültig.
-      </h5>
+      </p>
 
       <p className="text-center" aria-label="Liste mit Validierungsfehler">
         {validierungsfehler.map((fehler) => (

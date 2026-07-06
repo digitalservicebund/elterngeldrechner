@@ -165,7 +165,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               <p>
                 Hier finden Sie eine
                 <a
-                  className="mx-4 text-primary underline"
+                  className="mx-4"
                   href={bundesland.link}
                   target="_blank"
                   rel="noreferrer"
@@ -232,7 +232,6 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           werden. Wenn Sie den Antrag digital einreichen möchten, können Sie
           Ihre Planungsdaten manuell in{" "}
           <a
-            className="text-primary underline"
             href={bundesland.linkOnlinetool}
             target="_blank"
             rel="noreferrer"

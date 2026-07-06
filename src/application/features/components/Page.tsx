@@ -42,12 +42,9 @@ export function Page({ id, children, heading }: Props) {
         aria-labelledby={headingIdentifier}
         tabIndex={-1}
       >
-        <h2
-          id={headingIdentifier}
-          className="mb-40 max-[1169px]:hidden print:m-0"
-        >
+        <p id={headingIdentifier} className="preline-default">
           {heading}
-        </h2>
+        </p>
 
         {children}
       </section>

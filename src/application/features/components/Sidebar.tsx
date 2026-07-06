@@ -175,12 +175,12 @@ export function Sidebar() {
     navbar: "m-0 list-none p-0 max-[1169px]:mb-10",
     navbarActivatorLarge: "hidden text-nowrap px-24 py-16",
     navbarActivatorSmall:
-      "max-[1169px]:text-16 max-[1169px]:flex max-[1169px]:w-full max-[1169px]:items-center max-[1169px]:justify-between max-[1169px]:border-none max-[1169px]:bg-primary-light max-[1169px]:text-black",
+      "label-small max-[1169px]:flex max-[1169px]:w-full max-[1169px]:items-center max-[1169px]:justify-between max-[1169px]:border-none max-[1169px]:bg-primary-light max-[1169px]:text-black",
 
     menuBase: "m-0 list-none p-0",
     menuClosed: "max-[1169px]:invisible max-[1169px]:absolute",
     menuOpen:
-      "transition-height visible absolute left-0 top-56 z-[1] min-h-[25rem] w-full border-0 border-b-2 border-solid border-white bg-primary-light px-24 py-16 text-16 opacity-100 transition-opacity duration-500",
+      "transition-height visible absolute left-0 top-56 z-[1] min-h-[25rem] w-full border-0 border-b-2 border-solid border-white bg-primary-light px-24 py-16 opacity-100 transition-opacity duration-500",
 
     stepBase: "relative flex items-center",
     stepDivider:
@@ -192,7 +192,7 @@ export function Sidebar() {
       "before:content-['']  before:mr-16 before:inline-flex before:size-32 before:items-center before:justify-center before:rounded-full before:border before:border-solid before:border-grey-dark",
 
     stepHeading:
-      "appearance-none border-none bg-transparent text-16 text-black",
+      "label-small appearance-none border-none bg-transparent text-black",
   };
 
   function navigiereZuAbschnitt(item: NavigationItem) {

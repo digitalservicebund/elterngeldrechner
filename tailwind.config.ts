@@ -83,6 +83,17 @@ export default {
       6: "0.375rem",
     },
     spacing: {
+      /*
+       * KERN spacing tokens (see typo.css). New and touched code uses these;
+       * the numeric values below remain for not-yet-migrated code.
+       * We use KERN for the naming here as migrating to KERN is already
+       * planned in the future.
+       */
+      "kern-default": "var(--kern-metric-space-default)",
+      "kern-large": "var(--kern-metric-space-large)",
+      "kern-x-large": "var(--kern-metric-space-x-large)",
+      /* Container-level spacing, responsive: 32px mobile / 64px desktop. */
+      container: "var(--egr-space-container)",
       0: "0",
       1: "0.0625rem",
       2: "0.125rem",

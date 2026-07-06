@@ -122,9 +122,9 @@ export function Pruefbuttonbox({
       ) : istPlanungGueltig ? (
         <>
           <div className="flex w-full flex-col items-center gap-16 bg-Bonus-light p-32">
-            <h5>
+            <p className="font-bold">
               <CheckIcon /> Super. Ihre Planung ist gültig.
-            </h5>
+            </p>
 
             <Prueftippbox
               tips={tips}
@@ -149,7 +149,6 @@ export function Pruefbuttonbox({
                     Um den Antrag digital einzureichen, übertragen Sie Ihre
                     Daten bitte manuell in das{" "}
                     <a
-                      className="text-primary underline"
                       href={bundeslandAntragSupport.linkOnlinetool}
                       target="_blank"
                       rel="noreferrer"
@@ -184,7 +183,6 @@ export function Pruefbuttonbox({
                   Zugang zum Online-Antrag finden Sie auf folgender Seite:
                 </p>
                 <a
-                  className="text-primary underline"
                   href={bundeslandAntragSupport.link}
                   target="_blank"
                   rel="noreferrer"

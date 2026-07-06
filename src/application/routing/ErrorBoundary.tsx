@@ -32,16 +32,14 @@ function ErrorFallback() {
   return (
     <div className="page-grid-container">
       <div className="page-grid-content">
-        <h2 className="mb-10">Es tut uns leid</h2>
+        <h3 className="mb-10">Es tut uns leid</h3>
 
         <p className="mb-10">
           Im Elterngeldrechner ist ein Fehler aufgetreten. Bitte starten Sie den
           Rechner neu.
         </p>
 
-        <a href={window.location.pathname} className="text-primary underline">
-          Neu starten
-        </a>
+        <a href={window.location.pathname}>Neu starten</a>
       </div>
     </div>
   );

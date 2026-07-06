@@ -1,5 +1,64 @@
+/*
+ * Typography and spacing system following the KERN UX standard
+ * (https://www.kern-ux.de), adapted to this project:
+ *
+ * - Token and class names match KERN, so the planned migration to KERN UX
+ *   later only replaces the definitions here, not the markup.
+ * - The font stays BundesSans, which only ships weights 400 and 700:
+ *   KERN's weights 500 and 600 are substituted by 400 and 700.
+ * - Values follow the Figma frame; the public KERN documentation is the
+ *   fallback. This file is the single place to adjust values.
+ */
+
 #egr-root {
   @apply text-base;
+
+  /* Used spacing (KERN metric space) */
+  --kern-metric-space-default: 1rem; /* 16px */
+  --kern-metric-space-large: 1.5rem; /* 24px */
+  --kern-metric-space-x-large: 2rem; /* 32px */
+
+  /*
+   * Semantic spacing rules (Figma):
+   * - Between containers, Text-Container to Content-Container, between
+   *   Input-Containern, Button to Content-Container: x-large on mobile,
+   *   2x x-large on desktop  -> --egr-space-container
+   * - Preline to container: large (both breakpoints)
+   * - Between/within Inputs in Input-Containern: default (both breakpoints)
+   */
+  --egr-space-container: var(--kern-metric-space-x-large);
+}
+
+/* Desktop: container-level spacing doubles (same breakpoint as the
+ * sidebar/content layout switch in page-grid.css). */
+@media (min-width: 1170px) {
+  #egr-root {
+    --egr-space-container: calc(2 * var(--kern-metric-space-x-large));
+  }
+}
+
+/*
+ * Semantic containers from the Abstände Übersicht in Figma. 
+ + Forms are the standard page container and get the container gap directly; 
+ * the other containers only establish a flex column, their gap is chosen at 
+ * the usage site via the spacing utilities from tailwind.config.ts (gap-container,
+ * gap-kern-default, ...).
+ */
+#egr-root form,
+#egr-root .text-container,
+#egr-root .content-container,
+#egr-root .input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#egr-root form {
+  gap: var(--egr-space-container);
+}
+
+#egr-root .button-group {
+  display: flex;
+  gap: var(--kern-metric-space-default);
 }
 
 #egr-root button,
@@ -10,20 +69,57 @@
   line-height: inherit;
 }
 
-#egr-root h2 {
-  @apply text-40;
-}
-
-#egr-root h3 {
-  @apply text-28 font-bold leading-tight;
+#egr-root h3,
+#egr-root .title-large {
+  font-size: 1.75rem; /* 28px */
+  line-height: 2.75rem; /* 44px */
+  font-weight: 700;
 }
 
 #egr-root h4 {
   @apply text-24;
 }
 
-#egr-root h5 {
-  @apply text-22;
+#egr-root .body-default {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.556;
+  font-weight: 400;
+}
+
+#egr-root .body-small {
+  font-size: 1rem; /* 16px */
+  line-height: 1.375;
+}
+
+#egr-root .preline-default {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.556;
+  margin-bottom: var(--kern-metric-space-large);
+  @apply font-bold text-text-light;
+}
+
+@media (max-width: 1169px) {
+  #egr-root .preline-default {
+    display: none;
+  }
+}
+
+@media print {
+  #egr-root .preline-default {
+    margin: 0;
+  }
+}
+
+#egr-root a,
+#egr-root .link-default {
+  @apply text-primary underline;
+}
+
+#egr-root nav,
+#egr-root .label-small {
+  font-size: 1rem; /* 16px; KERN weight 500 substituted by 400 */
+  line-height: 1.375;
+  font-weight: 400;
 }
 
 #egr-root p {

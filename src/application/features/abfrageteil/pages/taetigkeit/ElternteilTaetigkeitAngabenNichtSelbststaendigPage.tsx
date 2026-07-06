@@ -84,18 +84,11 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <p className="-mt-40 mb-20 font-bold text-text-light">
-            Details zur Tätigkeit als Angestellte oder Angestellter
-          </p>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="text-container">
+          <h3>Details zur Tätigkeit als Angestellte oder Angestellter</h3>
 
-          <p className="mb-0 mt-20">
+          <p>
             Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
             den
           </p>
@@ -105,18 +98,17 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
             taetigkeitenFlow={taetigkeitenFlow}
           />
 
-          <p className="mt-20">
+          <p>
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>
         </div>
 
         <CustomRadioGroup
-          className="mt-16"
           legend={
-            <h5 className="mb-10">
+            <h3 className="mb-10">
               Handelt es sich um Einkommen aus einem Minijob?
-            </h5>
+            </h3>
           }
           errors={formErrors}
           register={register}
@@ -156,7 +148,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
           />
         </CustomRadioGroup>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

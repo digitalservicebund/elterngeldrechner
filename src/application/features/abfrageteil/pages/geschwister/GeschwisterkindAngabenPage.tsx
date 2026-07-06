@@ -78,20 +78,15 @@ export function GeschwisterkindAngabenPage() {
 
   return (
     <Page heading="Angaben zu Geschwistern">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <h3 className="mb-10">
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
+          <h3>
             Wann wurde Geschwisterkind {routeParams.geschwisterkindIndex + 1}{" "}
             geboren?
           </h3>
 
           <label
-            className={classNames("mb-4 mt-20 block text-16", {
+            className={classNames("mb-4 block text-16", {
               "text-danger": formErrors.geburtsdatum,
             })}
             htmlFor={geburtsdatumInputIdentifier}
@@ -107,7 +102,7 @@ export function GeschwisterkindAngabenPage() {
         </div>
 
         <CustomRadioGroup
-          legend=<h3 className="mb-10">
+          legend=<h3>
             Hat das Geschwisterkind{" "}
             {geburtsdatum && geburtsdatum.length > 0
               ? `(geb. ${geburtsdatum})`
@@ -128,7 +123,7 @@ export function GeschwisterkindAngabenPage() {
           />
         </CustomRadioGroup>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

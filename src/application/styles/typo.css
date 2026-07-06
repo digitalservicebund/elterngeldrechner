@@ -38,11 +38,14 @@
 }
 
 /*
- * Semantic containers from the Abstände Übersicht in Figma. 
- + Forms are the standard page container and get the container gap directly; 
- * the other containers only establish a flex column, their gap is chosen at 
- * the usage site via the spacing utilities from tailwind.config.ts (gap-container,
- * gap-kern-default, ...).
+ * Semantic containers from the Abstände Übersicht in Figma. Each carries its
+ * own default gap, so usage sites don't need to remember (or can't get
+ * wrong) which spacing utility pairs with which container:
+ * - form / content-container: container gap (32px mobile / 64px desktop),
+ *   spacing between Input-Containern / Text-Container to Content-Container.
+ * - input-container: default (16px), between/within Inputs.
+ * - text-container: no gap of its own; spacing between its children comes
+ *   from the text components themselves (see e.g. `p + p`).
  */
 #egr-root form,
 #egr-root .text-container,
@@ -52,8 +55,13 @@
   flex-direction: column;
 }
 
-#egr-root form {
+#egr-root form,
+#egr-root .content-container {
   gap: var(--egr-space-container);
+}
+
+#egr-root .input-container {
+  gap: var(--kern-metric-space-default);
 }
 
 #egr-root .button-group {

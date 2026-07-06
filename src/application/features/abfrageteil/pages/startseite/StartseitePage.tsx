@@ -21,8 +21,8 @@ export function Startseite() {
       id="startseite-page"
       heading="So nutzen Sie den Elterngeldrechner mit Planer"
     >
-      <div className="mt-40 flex flex-col gap-40">
-        <div>
+      <div className="content-container">
+        <div className="text-container">
           <p className="font-bold">Voraussichtliche Höhe von Elterngeld</p>
           <ul className="list ml-32 list-disc pt-10">
             <li>
@@ -79,7 +79,7 @@ export function Startseite() {
           </span>
         </Alert>
 
-        <div className="mt-40">
+        <div className="button-group">
           <Button
             type="button"
             buttonStyle="primary"

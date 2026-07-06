@@ -112,13 +112,8 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
 
   return (
     <Page heading={`Angaben ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
           <h3>
             Hat {vorname} Elterngeld für das Geschwisterkind (geb.{" "}
             {geburtsdatumGeschwisterkind}) erhalten?
@@ -130,7 +125,7 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
             überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
             Einkünfte berechnet.
           </p>
-          <p className="mb-32">
+          <p>
             <strong>Wichtig: </strong>Das gilt nur für Elterngeld, das Sie bis
             zum 14. Lebensmonat des Geschwisterkindes bezogen haben.
           </p>
@@ -167,20 +162,20 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
               </>
             }
           />
+
+          <CustomRadioGroup
+            legend=""
+            errors={formErrors}
+            register={register}
+            name="hatElterngeldGeschwisterkind"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          />
         </div>
 
-        <CustomRadioGroup
-          legend=""
-          errors={formErrors}
-          register={register}
-          name="hatElterngeldGeschwisterkind"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        />
-
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

@@ -93,14 +93,9 @@ export function ElternteilTaetigkeitenAbfragePage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <h3 className="mb-10">
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
+          <h3>
             Wählen Sie alles aus, was vom Kalenderjahr{" "}
             {betrachtungszeitraum.von.year} bis zum Geburtsdatum{" "}
             {geburtsdatumString} auf {vorname} zutrifft:
@@ -112,7 +107,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           />
 
           <CustomCheckbox
-            className="mt-20 font-bold"
+            className="font-bold"
             register={register}
             registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="istNichtSelbststaendig"
@@ -129,7 +124,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           </CustomCheckbox>
 
           <CustomCheckbox
-            className="mt-20 font-bold"
+            className="font-bold"
             register={register}
             registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="istSelbststaendig"
@@ -147,7 +142,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           </CustomCheckbox>
 
           <CustomCheckbox
-            className="mt-20 font-bold"
+            className="font-bold"
             register={register}
             registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="istVerbeamtet"
@@ -164,7 +159,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           </CustomCheckbox>
 
           <CustomCheckbox
-            className="mt-20 font-bold"
+            className="font-bold"
             register={register}
             registerOptions={{ deps: ["hatPeriodenOhneEinkommen"] }}
             name="hatAndereLeistungen"
@@ -181,7 +176,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           </CustomCheckbox>
 
           <CustomCheckbox
-            className="mt-20 font-bold"
+            className="font-bold"
             register={register}
             name="hatPeriodenOhneEinkommen"
             label={`${vorname} hatte oder hat kein Einkommen`}
@@ -209,7 +204,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
           )}
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

@@ -102,19 +102,13 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <BemessungszeitraumKurzuebersicht
           bemessungszeitraum={bemessungszeitraum}
           taetigkeitenFlow={taetigkeitenFlow}
         />
 
         <CustomRadioGroup
-          className="mt-16"
           legend=<h3 className="mb-10">
             Hatte {vorname} noch weitere Tätigkeiten im Bemessungszeitraum?
           </h3>
@@ -157,7 +151,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
           />
         </CustomRadioGroup>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

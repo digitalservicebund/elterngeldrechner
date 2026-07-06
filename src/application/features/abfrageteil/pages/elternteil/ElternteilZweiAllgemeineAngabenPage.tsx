@@ -107,49 +107,43 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
   return (
     <Page heading="Angaben Person 2">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div className="mt-20">
-          <h3 className="mb-10">
-            Wie heißt die Person 2, die Elterngeld plant?
-          </h3>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
+          <h3>Wie heißt die Person 2, die Elterngeld plant?</h3>
 
           <InfoText
             question="Warum soll ich einen Vornamen angeben?"
             answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
           />
 
-          <label
-            className={classNames("mb-4 mt-20 block text-16", {
-              "text-danger": formErrors.name,
-            })}
-            htmlFor={personNameInputIdentifier}
-          >
-            Vorname Person 2
-          </label>
+          <div>
+            <label
+              className={classNames("mb-4 block text-16", {
+                "text-danger": formErrors.name,
+              })}
+              htmlFor={personNameInputIdentifier}
+            >
+              Vorname Person 2
+            </label>
 
-          <input
-            id={personNameInputIdentifier}
-            className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
-            {...register("name")}
-          />
+            <input
+              id={personNameInputIdentifier}
+              className="border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary"
+              {...register("name")}
+            />
 
-          {"name" in formErrors && (
-            <p className="mt-8 text-14 text-danger">
-              {formErrors.name?.message}
-            </p>
-          )}
+            {"name" in formErrors && (
+              <p className="mt-8 text-14 text-danger">
+                {formErrors.name?.message}
+              </p>
+            )}
+          </div>
         </div>
 
         {!istErsterElternteilImMutterschutz ? (
           <CustomRadioGroup
-            className="mt-16"
             legend={
-              <h3 className="mb-10">
+              <h3 className="mb-16">
                 {geburtIstErfolgt
                   ? `War ${vorname} im Mutterschutz?`
                   : `Wird ${vorname} im Mutterschutz sein?`}
@@ -203,7 +197,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
           <input type="hidden" value="no" {...register("istImMutterschutz")} />
         )}
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

@@ -97,18 +97,11 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <p className="-mt-40 mb-20 font-bold text-text-light">
-            Details zur Tätigkeit als Angestellte oder Angestellter
-          </p>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="text-container">
+          <h3>Details zur Tätigkeit als Angestellte oder Angestellter</h3>
 
-          <p className="mb-0 mt-20">
+          <p>
             Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
             den
           </p>
@@ -118,204 +111,205 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
             taetigkeitenFlow={taetigkeitenFlow}
           />
 
-          <p className="mt-20">
+          <p>
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>
         </div>
 
-        <div className="mt-16">
-          <h5 className="mb-10">Welche Steuerklasse hatte {vorname}?</h5>
+        <div className="content-container">
+          <div className="input-container">
+            <h3>Welche Steuerklasse hatte {vorname}?</h3>
 
-          <CustomSelect
-            autoWidth
-            label="Steuerklasse"
-            errors={formErrors}
-            register={register}
-            options={steuerklasseOptions}
-            {...register("steuerklasse")}
-          />
-        </div>
+            <CustomSelect
+              autoWidth
+              label="Steuerklasse"
+              errors={formErrors}
+              register={register}
+              options={steuerklasseOptions}
+              {...register("steuerklasse")}
+            />
+          </div>
 
-        <CustomRadioGroup
-          legend={
-            <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istKirchensteuerpflichtig"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        />
-
-        <CustomRadioGroup
-          className="mt-16"
-          legend={
-            <h5 className="mb-10">
-              Ist {vorname} über die gesetzliche Krankenversicherung
-              pflichtversichert?
-            </h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istGesetzlichKrankenpflichtversichert"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        >
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
-                  die gesetzliche Pflichtversicherung.
-                </p>
-
-                <p>Sie wählen „Nein“, wenn Sie</p>
-                <ul className="mb-16">
-                  <li>freiwillig gesetzlich versichert,</li>
-                  <li>familienversichert,</li>
-                  <li>privat versichert, </li>
-                  <li>nicht (in Deutschland) krankenversichert sind.</li>
-                </ul>
-
-                <p>
-                  Wenn Ihr regelmäßiges Jahresbrutto über der gesetzlich
-                  festgelegten Einkommensgrenze liegt, sind Sie in der Regel
-                  nicht mehr gesetzlich pflichtversichert.
-                </p>
-              </>
-            }
-          />
-        </CustomRadioGroup>
-
-        <CustomRadioGroup
-          className="mt-16"
-          legend={
-            <h5 className="mb-10">
-              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-              Rentenversicherung?
-            </h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istGesetzlichRentenversichert"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        >
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Wenn Sie angestellt sind, zahlen Sie in der Regel automatisch
-                  Pflichtbeiträge zur gesetzlichen Rentenversicherung.
-                </p>
-
-                <p>
-                  Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
-                  Beispiel weil Sie:
-                </p>
-                <ul className="mb-16">
-                  <li>verbeamtet sind,</li>
-                  <li>selbstständig tätig sind,</li>
-                  <li>
-                    geringfügig beschäftigt (Minijob ohne
-                    Rentenversicherungspflicht) sind,
-                  </li>
-                  <li>
-                    oder aus anderen Gründen von der Versicherungspflicht
-                    befreit wurden.
-                  </li>
-                </ul>
-              </>
-            }
-          />
-        </CustomRadioGroup>
-
-        <CustomRadioGroup
-          className="mt-16"
-          legend={
-            <h5 className="mb-10">
-              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-              Arbeitslosenversicherung?
-            </h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istGesetzlichArbeitlosenversichert"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        >
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Wenn Sie angestellt sind, zahlen Sie in der Regel automatisch
-                  Pflichtbeiträge zur gesetzlichen Arbeitslosenversicherung.
-                </p>
-
-                <p>
-                  Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen, zum
-                  Beispiel weil Sie:
-                </p>
-                <ul className="mb-16">
-                  <li>verbeamtet sind,</li>
-                  <li>selbstständig tätig sind,</li>
-                  <li>
-                    geringfügig beschäftigt (Minijob ohne
-                    Rentenversicherungspflicht) sind,
-                  </li>
-                  <li>
-                    oder aus anderen Gründen von der Versicherungspflicht
-                    befreit wurden.
-                  </li>
-                </ul>
-              </>
-            }
-          />
-        </CustomRadioGroup>
-
-        {kannDurchschnittAngegebenWerden ? (
           <CustomRadioGroup
             legend={
-              <h5 className="mb-10">
-                Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
-                verdient?
-              </h5>
+              <h3 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h3>
             }
             errors={formErrors}
             register={register}
-            name="istEinkommenGleichVerteilt"
+            name="istKirchensteuerpflichtig"
             options={[
-              {
-                value: "yes",
-                label: `Ja, ${vorname} hat jeden Monat gleich viel verdient`,
-              },
-              {
-                value: "no",
-                label: `Nein, ${vorname} hat unterschiedlich viel verdient`,
-              },
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
             ]}
           />
-        ) : (
-          <input
-            type="hidden"
-            {...register("istEinkommenGleichVerteilt")}
-            value="no"
-          />
-        )}
 
-        <div className="mt-40 flex gap-16">
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">
+                Ist {vorname} über die gesetzliche Krankenversicherung
+                pflichtversichert?
+              </h3>
+            }
+            errors={formErrors}
+            register={register}
+            name="istGesetzlichKrankenpflichtversichert"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p className="mb-16">
+                    Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
+                    die gesetzliche Pflichtversicherung.
+                  </p>
+
+                  <p>Sie wählen „Nein“, wenn Sie</p>
+                  <ul className="mb-16">
+                    <li>freiwillig gesetzlich versichert,</li>
+                    <li>familienversichert,</li>
+                    <li>privat versichert, </li>
+                    <li>nicht (in Deutschland) krankenversichert sind.</li>
+                  </ul>
+
+                  <p>
+                    Wenn Ihr regelmäßiges Jahresbrutto über der gesetzlich
+                    festgelegten Einkommensgrenze liegt, sind Sie in der Regel
+                    nicht mehr gesetzlich pflichtversichert.
+                  </p>
+                </>
+              }
+            />
+          </CustomRadioGroup>
+
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">
+                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+                Rentenversicherung?
+              </h3>
+            }
+            errors={formErrors}
+            register={register}
+            name="istGesetzlichRentenversichert"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p className="mb-16">
+                    Wenn Sie angestellt sind, zahlen Sie in der Regel
+                    automatisch Pflichtbeiträge zur gesetzlichen
+                    Rentenversicherung.
+                  </p>
+
+                  <p>
+                    Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
+                    zum Beispiel weil Sie:
+                  </p>
+                  <ul className="mb-16">
+                    <li>verbeamtet sind,</li>
+                    <li>selbstständig tätig sind,</li>
+                    <li>
+                      geringfügig beschäftigt (Minijob ohne
+                      Rentenversicherungspflicht) sind,
+                    </li>
+                    <li>
+                      oder aus anderen Gründen von der Versicherungspflicht
+                      befreit wurden.
+                    </li>
+                  </ul>
+                </>
+              }
+            />
+          </CustomRadioGroup>
+
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">
+                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+                Arbeitslosenversicherung?
+              </h3>
+            }
+            errors={formErrors}
+            register={register}
+            name="istGesetzlichArbeitlosenversichert"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p className="mb-16">
+                    Wenn Sie angestellt sind, zahlen Sie in der Regel
+                    automatisch Pflichtbeiträge zur gesetzlichen
+                    Arbeitslosenversicherung.
+                  </p>
+
+                  <p>
+                    Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
+                    zum Beispiel weil Sie:
+                  </p>
+                  <ul className="mb-16">
+                    <li>verbeamtet sind,</li>
+                    <li>selbstständig tätig sind,</li>
+                    <li>
+                      geringfügig beschäftigt (Minijob ohne
+                      Rentenversicherungspflicht) sind,
+                    </li>
+                    <li>
+                      oder aus anderen Gründen von der Versicherungspflicht
+                      befreit wurden.
+                    </li>
+                  </ul>
+                </>
+              }
+            />
+          </CustomRadioGroup>
+
+          {kannDurchschnittAngegebenWerden ? (
+            <CustomRadioGroup
+              legend={
+                <h3 className="mb-10">
+                  Hat {vorname} im Bemessungszeitraum immer gleich viel pro
+                  Monat verdient?
+                </h3>
+              }
+              errors={formErrors}
+              register={register}
+              name="istEinkommenGleichVerteilt"
+              options={[
+                {
+                  value: "yes",
+                  label: `Ja, ${vorname} hat jeden Monat gleich viel verdient`,
+                },
+                {
+                  value: "no",
+                  label: `Nein, ${vorname} hat unterschiedlich viel verdient`,
+                },
+              ]}
+            />
+          ) : (
+            <input
+              type="hidden"
+              {...register("istEinkommenGleichVerteilt")}
+              value="no"
+            />
+          )}
+        </div>
+
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

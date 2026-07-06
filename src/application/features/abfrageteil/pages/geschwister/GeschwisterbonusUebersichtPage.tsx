@@ -51,7 +51,7 @@ export function GeschwisterbonusUebersichtPage() {
 
   return (
     <Page heading="Angaben zu Geschwistern">
-      <div className="mt-40 flex flex-col gap-40">
+      <div className="content-container">
         {geschwisterbonusEnddatum ? (
           <div className="rounded border-solid border-success">
             <div className="flex rounded bg-success-background p-20 font-bold">
@@ -60,7 +60,7 @@ export function GeschwisterbonusUebersichtPage() {
               <h3>Super, Sie können den Geschwisterbonus erhalten</h3>
             </div>
 
-            <div className=" p-20">
+            <div className="p-20">
               <ul className="ml-32 mt-4 list-disc">
                 <li>
                   Ihre Angaben haben ergeben, dass die Voraussetzungen für den
@@ -107,7 +107,7 @@ export function GeschwisterbonusUebersichtPage() {
 
         <InfoTextGeschwisterbonus question="Was ist der Geschwisterbonus?" />
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

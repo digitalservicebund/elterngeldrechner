@@ -67,23 +67,16 @@ export function ElternteilEinsAllgemeineAngabenPage() {
 
   return (
     <Page id="elternteil-eins-page" heading="Angaben Person 1">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <h3 className="mb-10">
-            Wie heißt die Person 1, die Elterngeld plant?
-          </h3>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
+          <h3>Wie heißt die Person 1, die Elterngeld plant?</h3>
 
           <InfoText
             question="Warum soll ich einen Vornamen angeben?"
             answer="Wir fragen nach einem Vornamen, damit Sie bei der Planung einen guten Überblick haben. Falls Sie sich entscheiden, Ihre Daten in den Antrag zu übertragen, können wir Sie dort eindeutig zuordnen."
           />
 
-          <div className="mt-16">
+          <div>
             <label
               className={classNames("mb-4 block text-16", {
                 "!text-danger": formErrors.name,
@@ -113,7 +106,6 @@ export function ElternteilEinsAllgemeineAngabenPage() {
         </div>
 
         <CustomRadioGroup
-          className="mt-16"
           legend=<h3 className="mb-10">Ist {vorname} alleinerziehend?</h3>
           errors={formErrors}
           register={register}
@@ -130,7 +122,6 @@ export function ElternteilEinsAllgemeineAngabenPage() {
         </CustomRadioGroup>
 
         <CustomRadioGroup
-          className="mt-16"
           legend=<h3 className="mb-10">
             {geburtIstErfolgt
               ? `War ${vorname} im Mutterschutz?`
@@ -189,7 +180,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
           />
         </CustomRadioGroup>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

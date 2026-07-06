@@ -147,32 +147,23 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <p className="-mt-40 mb-20 font-bold text-text-light">
-            Details zur Tätigkeit als Angestellte oder Angestellter
-          </p>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="text-container">
+          <h3>Details zur Tätigkeit als Angestellte oder Angestellter</h3>
 
           <BemessungszeitraumKurzuebersicht
             bemessungszeitraum={bemessungszeitraum}
             taetigkeitenFlow={taetigkeitenFlow}
           />
 
-          <p className="mt-20">
+          <p>
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>
         </div>
 
-        <div>
-          <h5 className="mb-20">
-            Wie viel haben Sie im Monat brutto verdient?
-          </h5>
+        <div className="input-container">
+          <h3>Wie viel haben Sie im Monat brutto verdient?</h3>
 
           {gruppierteZeitabschnitte.map((zeitabschnitt, index) => {
             if (istGruppierterZeitabschnittAusklammerung(zeitabschnitt)) {
@@ -208,7 +199,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
           })}
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

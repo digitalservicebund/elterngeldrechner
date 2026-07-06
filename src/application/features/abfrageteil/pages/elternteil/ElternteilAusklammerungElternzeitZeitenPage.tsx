@@ -156,19 +156,14 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
 
   return (
     <Page heading={`Angaben ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <h3 className="mb-10">
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
+          <h3>
             Von wann bis wann hat {vorname} Elterngeld für das Geschwisterkind
             (geb. {geburtsdatumGeschwisterkind}) erhalten?
           </h3>
 
-          <p className="mb-20">
+          <p>
             <strong>Wichtig: </strong>Beachten Sie, dass Elterngeld bis maximal
             zum 14. Lebensmonat berücksichtigt werden kann. Tragen Sie den
             zulässigen Zeitraum entsprechend ein.
@@ -206,84 +201,84 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
               </>
             }
           />
-        </div>
 
-        <div className="flex flex-col gap-32">
-          {fields.map((field, index) => (
-            <div key={field.id} className="flex flex-col">
-              <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
-                <div>
-                  <label
-                    className={classNames("mb-4 block text-16", {
-                      "text-danger":
-                        formErrors.elterngeldGeschwisterkind?.[index]?.von,
-                    })}
-                    htmlFor={`${field.id}-von`}
-                  >
-                    Von (TT.MM.JJJJ)
-                  </label>
-                  <DateInput
-                    id={`${field.id}-von`}
-                    {...register(`elterngeldGeschwisterkind.${index}.von`)}
-                    error={
-                      formErrors.elterngeldGeschwisterkind?.[index]?.von
-                        ?.message
-                    }
-                  />
+          <div className="flex flex-col gap-kern-default">
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex flex-col">
+                <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
+                  <div>
+                    <label
+                      className={classNames("mb-4 block text-16", {
+                        "text-danger":
+                          formErrors.elterngeldGeschwisterkind?.[index]?.von,
+                      })}
+                      htmlFor={`${field.id}-von`}
+                    >
+                      Von (TT.MM.JJJJ)
+                    </label>
+                    <DateInput
+                      id={`${field.id}-von`}
+                      {...register(`elterngeldGeschwisterkind.${index}.von`)}
+                      error={
+                        formErrors.elterngeldGeschwisterkind?.[index]?.von
+                          ?.message
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      className={classNames("mb-4 block text-16", {
+                        "text-danger":
+                          formErrors.elterngeldGeschwisterkind?.[index]?.bis,
+                      })}
+                      htmlFor={`${field.id}-bis`}
+                    >
+                      Bis (TT.MM.JJJJ)
+                    </label>
+                    <DateInput
+                      id={`${field.id}-bis`}
+                      {...register(`elterngeldGeschwisterkind.${index}.bis`)}
+                      error={
+                        formErrors.elterngeldGeschwisterkind?.[index]?.bis
+                          ?.message
+                      }
+                    />
+                  </div>
                 </div>
 
-                <div>
-                  <label
-                    className={classNames("mb-4 block text-16", {
-                      "text-danger":
-                        formErrors.elterngeldGeschwisterkind?.[index]?.bis,
-                    })}
-                    htmlFor={`${field.id}-bis`}
+                {index > 0 && (
+                  <Button
+                    type="button"
+                    buttonStyle="link"
+                    className="mb-16 p-4"
+                    onClick={() => remove(index)}
+                    aria-label="Zeile löschen"
                   >
-                    Bis (TT.MM.JJJJ)
-                  </label>
-                  <DateInput
-                    id={`${field.id}-bis`}
-                    {...register(`elterngeldGeschwisterkind.${index}.bis`)}
-                    error={
-                      formErrors.elterngeldGeschwisterkind?.[index]?.bis
-                        ?.message
-                    }
-                  />
-                </div>
+                    <span className="flex items-center gap-4 text-16">
+                      <CloseIcon className="mt-4" />
+                      <span>Zeitraum löschen</span>
+                    </span>
+                  </Button>
+                )}
               </div>
+            ))}
+          </div>
 
-              {index > 0 && (
-                <Button
-                  type="button"
-                  buttonStyle="link"
-                  className="mb-16 p-4"
-                  onClick={() => remove(index)}
-                  aria-label="Zeile löschen"
-                >
-                  <span className="flex items-center gap-4 text-16">
-                    <CloseIcon className="mt-4" />
-                    <span>Zeitraum löschen</span>
-                  </span>
-                </Button>
-              )}
-            </div>
-          ))}
+          <Button
+            type="button"
+            buttonStyle="link"
+            className="p-4"
+            onClick={() => append({ von: "", bis: "" })}
+          >
+            <span className="flex items-center gap-4 text-16">
+              <AddIcon className="mt-4" />
+              <span>Weiteren Zeitraum hinzufügen</span>
+            </span>
+          </Button>
         </div>
 
-        <Button
-          type="button"
-          buttonStyle="link"
-          className="-mt-20 p-4"
-          onClick={() => append({ von: "", bis: "" })}
-        >
-          <span className="flex items-center gap-4 text-16">
-            <AddIcon className="mt-4" />
-            <span>Weiteren Zeitraum hinzufügen</span>
-          </span>
-        </Button>
-
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

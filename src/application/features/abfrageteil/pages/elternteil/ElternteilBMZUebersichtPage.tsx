@@ -165,7 +165,7 @@ export function ElternteilBMZUebersichtPage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <div className="mt-40 flex flex-col gap-40">
+      <div className="content-container">
         <div className="rounded border-solid border-success">
           <div className="flex rounded bg-success-background p-20 font-bold">
             <SuccessIcon className="mr-10 mt-8 shrink-0 text-success" />
@@ -324,7 +324,7 @@ export function ElternteilBMZUebersichtPage() {
           </div>
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

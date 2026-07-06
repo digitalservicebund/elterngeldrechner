@@ -72,18 +72,11 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
-          <p className="-mt-40 mb-20 font-bold text-text-light">
-            Details zur selbstständigen Tätigkeit
-          </p>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="text-container">
+          <h3>Details zur selbstständigen Tätigkeit</h3>
 
-          <p className="mb-0 mt-20">
+          <p>
             Wir fragen nun nacheinander Ihre Tätigkeit oder Tätigkeiten ab für
             den
           </p>
@@ -93,184 +86,180 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
             taetigkeitenFlow="Selbstaendig"
           />
 
-          <p className="mt-20">
+          <p>
             Je genauer Ihre Angaben sind, desto besser kann der Rechner das
             Elterngeld für Sie ausrechnen.
           </p>
         </div>
 
-        <CustomRadioGroup
-          legend={
-            <h5 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istKirchensteuerpflichtig"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        />
-
-        <CustomRadioGroup
-          className="mt-16"
-          legend={
-            <h5 className="mb-10">
-              Ist {vorname} über die gesetzliche Krankenversicherung
-              pflichtversichert?
-            </h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istGesetzlichKrankenpflichtversichert"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        >
-          <InfoText
-            question="Was bedeutet das?"
-            answer={
-              <>
-                <p className="mb-16">
-                  Mit einer selbstständigen Tätigkeit sind Sie in der Regel
-                  nicht automatisch gesetzlich pflichtversichert.
-                </p>
-
-                <p className="mb-0">Sie wählen „Nein“, wenn Sie</p>
-                <ul>
-                  <li>freiwillig gesetzlich versichert, </li>
-                  <li>familienversichert,</li>
-                  <li>privat versichert,</li>
-                  <li>nicht (in Deutschland) krankenversichert sind.</li>
-                </ul>
-
-                <p>
-                  Hinweis: In diesem Fall müssen Sie entsprechende Beiträge für
-                  Ihre Krankenversicherung selber einplanen, da sie nicht
-                  automatisch berücksichtigt werden.
-                </p>
-              </>
+        <div className="content-container">
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h3>
             }
+            errors={formErrors}
+            register={register}
+            name="istKirchensteuerpflichtig"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
           />
-        </CustomRadioGroup>
 
-        <CustomRadioGroup
-          className="mt-16"
-          legend={
-            <h5 className="mb-10">
-              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-              Rentenversicherung?
-            </h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istGesetzlichRentenversichert"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        >
-          <InfoText
-            question="Was bedeutet das?"
-            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert.Sie leisten nur dann Pflichtbeiträge, wenn Sie zu einer der wenigen Berufsgruppen gehören, die rentenversicherungspflichtig sind – zum Beispiel Lehrer:innen, Pflegepersonen, Künstler:innen oder Journalist:innen."
-          />
-        </CustomRadioGroup>
-
-        <CustomRadioGroup
-          className="mt-16"
-          legend={
-            <h5 className="mb-10">
-              Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-              Arbeitslosenversicherung?
-            </h5>
-          }
-          errors={formErrors}
-          register={register}
-          name="istGesetzlichArbeitlosenversichert"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        >
-          <InfoText
-            question="Was bedeutet das?"
-            answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Versicherung abgeschlossen haben – das ist jedoch eher die Ausnahme."
-          />
-        </CustomRadioGroup>
-
-        <div>
-          <h5 className="mb-10">
-            Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von{" "}
-            {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
-          </h5>
-
-          <p className="mb-16">
-            Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben
-          </p>
-
-          <InfoText
-            className="mb-16"
-            question="Wo finde ich Informationen zum Gewinn?"
-            answer={
-              <>
-                <p>
-                  Für Selbstständige ist der Brutto-Gewinn der Betrag, der übrig
-                  bleibt, wenn Sie von Ihren gesamten Einnahmen alle Kosten und
-                  Ausgaben (Betriebsausgaben) abgezogen haben.
-                </p>
-                <ul>
-                  <li>Es ist nicht Ihr gesamter Umsatz (alle Einnahmen).</li>
-                  <li>
-                    Es ist Ihr tatsächlicher Gewinn, bevor Sie Ihre persönliche
-                    Einkommensteuer dafür bezahlen. Im Steuerrecht spricht man
-                    vom steuerpflichtigen Gewinn.
-                  </li>
-                  <li>
-                    Einkünfte aus Vermietung und Verpachtung oder aus
-                    Kapitalvermögen werden zwar im Steuerbescheid
-                    berücksichtigt, sind aber für die Berechnung des
-                    Elterngeldes nicht relevant und müssen von Ihnen
-                    rausgerechnet werden
-                  </li>
-                </ul>
-                <p className="mt-16">
-                  Sie finden diese Angabe in Ihren Unterlagen zur
-                  Steuererklärung:
-                </p>
-                <ul>
-                  <li>
-                    Im Einkommensteuerbescheid: Der Betrag ist dort als
-                    &quot;Gewinn aus selbstständiger Arbeit&quot; oder
-                    &quot;Summe der positiven Einkünfte&quot; aufgeführt.
-                  </li>
-                  <li>
-                    In der Einnahmen-Überschuss-Rechnung (EÜR): Es ist die
-                    Endsumme Ihrer EÜR.
-                  </li>
-                </ul>
-                <p>
-                  Bitte tragen Sie hier den endgültigen Wert ein, der auch Ihrem
-                  Finanzamt gemeldet wurde.
-                </p>
-                <p className="mt-16">
-                  Wenn der aktuelle Einkommensteuerbescheid noch nicht vorliegt,
-                  geben Sie einen geschätzten Brutto-Gewinn an. Beachten Sie,
-                  dass das Ergebnis der Elterngeldberechnung dadurch abweichen
-                  kann.
-                </p>
-              </>
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">
+                Ist {vorname} über die gesetzliche Krankenversicherung
+                pflichtversichert?
+              </h3>
             }
-          />
+            errors={formErrors}
+            register={register}
+            name="istGesetzlichKrankenpflichtversichert"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer={
+                <>
+                  <p className="mb-16">
+                    Mit einer selbstständigen Tätigkeit sind Sie in der Regel
+                    nicht automatisch gesetzlich pflichtversichert.
+                  </p>
 
-          <CurrencyInput
-            control={control}
-            name="bruttoJahresgewinn"
-            label="Brutto-Gewinn im gesamten Kalenderjahr"
-          />
+                  <p className="mb-0">Sie wählen „Nein“, wenn Sie</p>
+                  <ul>
+                    <li>freiwillig gesetzlich versichert, </li>
+                    <li>familienversichert,</li>
+                    <li>privat versichert,</li>
+                    <li>nicht (in Deutschland) krankenversichert sind.</li>
+                  </ul>
+
+                  <p>
+                    Hinweis: In diesem Fall müssen Sie entsprechende Beiträge
+                    für Ihre Krankenversicherung selber einplanen, da sie nicht
+                    automatisch berücksichtigt werden.
+                  </p>
+                </>
+              }
+            />
+          </CustomRadioGroup>
+
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">
+                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+                Rentenversicherung?
+              </h3>
+            }
+            errors={formErrors}
+            register={register}
+            name="istGesetzlichRentenversichert"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Rentenversicherung pflichtversichert.Sie leisten nur dann Pflichtbeiträge, wenn Sie zu einer der wenigen Berufsgruppen gehören, die rentenversicherungspflichtig sind – zum Beispiel Lehrer:innen, Pflegepersonen, Künstler:innen oder Journalist:innen."
+            />
+          </CustomRadioGroup>
+
+          <CustomRadioGroup
+            legend={
+              <h3 className="mb-10">
+                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+                Arbeitslosenversicherung?
+              </h3>
+            }
+            errors={formErrors}
+            register={register}
+            name="istGesetzlichArbeitlosenversichert"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          >
+            <InfoText
+              question="Was bedeutet das?"
+              answer="Mit einer selbstständigen Tätigkeit sind Sie in der Regel nicht in der gesetzlichen Arbeitslosenversicherung pflichtversichert. Sie zahlen keine Pflichtbeiträge und sind nur dann versichert, wenn Sie eine freiwillige Versicherung abgeschlossen haben – das ist jedoch eher die Ausnahme."
+            />
+          </CustomRadioGroup>
+
+          <div className="input-container">
+            <h3>
+              Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von{" "}
+              {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
+            </h3>
+
+            <p>Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben</p>
+
+            <InfoText
+              question="Wo finde ich Informationen zum Gewinn?"
+              answer={
+                <>
+                  <p>
+                    Für Selbstständige ist der Brutto-Gewinn der Betrag, der
+                    übrig bleibt, wenn Sie von Ihren gesamten Einnahmen alle
+                    Kosten und Ausgaben (Betriebsausgaben) abgezogen haben.
+                  </p>
+                  <ul>
+                    <li>Es ist nicht Ihr gesamter Umsatz (alle Einnahmen).</li>
+                    <li>
+                      Es ist Ihr tatsächlicher Gewinn, bevor Sie Ihre
+                      persönliche Einkommensteuer dafür bezahlen. Im Steuerrecht
+                      spricht man vom steuerpflichtigen Gewinn.
+                    </li>
+                    <li>
+                      Einkünfte aus Vermietung und Verpachtung oder aus
+                      Kapitalvermögen werden zwar im Steuerbescheid
+                      berücksichtigt, sind aber für die Berechnung des
+                      Elterngeldes nicht relevant und müssen von Ihnen
+                      rausgerechnet werden
+                    </li>
+                  </ul>
+                  <p className="mt-16">
+                    Sie finden diese Angabe in Ihren Unterlagen zur
+                    Steuererklärung:
+                  </p>
+                  <ul>
+                    <li>
+                      Im Einkommensteuerbescheid: Der Betrag ist dort als
+                      &quot;Gewinn aus selbstständiger Arbeit&quot; oder
+                      &quot;Summe der positiven Einkünfte&quot; aufgeführt.
+                    </li>
+                    <li>
+                      In der Einnahmen-Überschuss-Rechnung (EÜR): Es ist die
+                      Endsumme Ihrer EÜR.
+                    </li>
+                  </ul>
+                  <p>
+                    Bitte tragen Sie hier den endgültigen Wert ein, der auch
+                    Ihrem Finanzamt gemeldet wurde.
+                  </p>
+                  <p className="mt-16">
+                    Wenn der aktuelle Einkommensteuerbescheid noch nicht
+                    vorliegt, geben Sie einen geschätzten Brutto-Gewinn an.
+                    Beachten Sie, dass das Ergebnis der Elterngeldberechnung
+                    dadurch abweichen kann.
+                  </p>
+                </>
+              }
+            />
+
+            <CurrencyInput
+              control={control}
+              name="bruttoJahresgewinn"
+              label="Brutto-Gewinn im gesamten Kalenderjahr"
+            />
+          </div>
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

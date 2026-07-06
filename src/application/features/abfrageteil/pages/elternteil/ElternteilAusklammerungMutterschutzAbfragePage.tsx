@@ -96,19 +96,14 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
 
   return (
     <Page heading={`Angaben ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
           <h3>
             Hat {vorname} Mutterschaftsgeld für das Geschwisterkind (geb.{" "}
             {geburtsdatumGeschwisterkind}) erhalten?
           </h3>
 
-          <p className="mb-32">
+          <p>
             Wenn Sie Mutterschaftsgeld für ein Geschwisterkind erhalten haben,
             können wir diese Zeit bei der Berechnung überspringen. So wird Ihr
             Elterngeld auf Basis Ihrer höheren Einkünfte berechnet.
@@ -179,20 +174,20 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
               </>
             }
           />
+
+          <CustomRadioGroup
+            legend=""
+            errors={formErrors}
+            register={register}
+            name="hatMutterschutzGeschwisterkind"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          />
         </div>
 
-        <CustomRadioGroup
-          legend=""
-          errors={formErrors}
-          register={register}
-          name="hatMutterschutzGeschwisterkind"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        />
-
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

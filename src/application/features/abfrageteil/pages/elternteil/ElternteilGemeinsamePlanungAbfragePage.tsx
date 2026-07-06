@@ -68,12 +68,7 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
 
   return (
     <Page heading={`Angaben ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
           legend={
             <h3 className="mb-10">
@@ -105,7 +100,7 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
           />
         </CustomRadioGroup>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

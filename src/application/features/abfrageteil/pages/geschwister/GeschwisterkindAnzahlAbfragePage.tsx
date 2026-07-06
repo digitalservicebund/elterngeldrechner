@@ -54,19 +54,13 @@ export function GeschwisterkindAnzahlAbfragePage() {
 
   return (
     <Page heading="Angaben zu Geschwistern">
-      <form
-        id={formIdentifier}
-        className="mt-40 flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
           <h3 id={anzahlGeschwisterInputIdentifier}>
             Wie viele ältere Geschwisterkinder leben in Ihrem Haushalt?
           </h3>
 
           <InfoText
-            className="mt-10 pb-20"
             question="Was bedeutet „im Haushalt leben“?"
             answer={
               <>
@@ -92,7 +86,7 @@ export function GeschwisterkindAnzahlAbfragePage() {
           />
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

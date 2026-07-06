@@ -65,15 +65,10 @@ export function GeborenesKindPage() {
 
   return (
     <Page heading="Angaben zur Geburt">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <h3>Herzlichen Glückwunsch!</h3>
-        <div>
-          <h3 className="mb-10">
+        <div className="input-container">
+          <h3>
             Welcher errechnete Entbindungstermin wird im Mutterpass angegeben?
           </h3>
 
@@ -83,7 +78,7 @@ export function GeborenesKindPage() {
           />
 
           <label
-            className={classNames("mb-4 mt-20 block text-16", {
+            className={classNames("mb-4 block text-16", {
               "text-danger": formErrors.errechneterEntbindungstermin,
             })}
             htmlFor={entbindungsterminInputIdentifier}
@@ -98,10 +93,8 @@ export function GeborenesKindPage() {
           />
         </div>
 
-        <div>
-          <h3 className="mb-10">
-            Wann war das tatsächliche Geburtsdatum Ihres Kindes?
-          </h3>
+        <div className="input-container">
+          <h3>Wann war das tatsächliche Geburtsdatum Ihres Kindes?</h3>
 
           <InfoText
             question="Was ist das tatsächliche Geburtsdatum?"
@@ -109,7 +102,7 @@ export function GeborenesKindPage() {
           />
 
           <label
-            className={classNames("mb-4 mt-20 block text-16", {
+            className={classNames("mb-4 block text-16", {
               "text-danger": formErrors.geburtsdatum,
             })}
             htmlFor={geburtsdatumInputIdentifier}
@@ -124,12 +117,12 @@ export function GeborenesKindPage() {
           />
         </div>
 
-        <div>
+        <div className="input-container">
           <h3 id={anzahlKinderInputIdentifier}>
             Wie viele Kinder wurden geboren?
           </h3>
 
-          <p className="mt-10 pb-20">
+          <p>
             Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
             Kinder an (zum Beispiel 2 bei Zwillingen).
           </p>
@@ -141,7 +134,7 @@ export function GeborenesKindPage() {
           />
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

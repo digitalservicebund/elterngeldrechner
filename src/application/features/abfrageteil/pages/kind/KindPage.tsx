@@ -43,12 +43,7 @@ export function KindPage() {
 
   return (
     <Page id="kind-page" heading="Angaben zur Geburt">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
           legend=<h3 className="mb-10">Ist Ihr Kind schon geboren?</h3>
           errors={formErrors}
@@ -60,7 +55,7 @@ export function KindPage() {
           ]}
         />
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

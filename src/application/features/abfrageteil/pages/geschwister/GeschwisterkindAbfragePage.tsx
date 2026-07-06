@@ -56,12 +56,7 @@ export function GeschwisterkindAbfragePage() {
 
   return (
     <Page id="geschwister-page" heading="Angaben zu Geschwistern">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
           legend=<h3 className="mb-10">
             Leben bereits ältere Geschwisterkinder in Ihrem Haushalt?
@@ -77,7 +72,7 @@ export function GeschwisterkindAbfragePage() {
           <InfoTextGeschwisterbonus question="Wann kann ich einen Geschwisterbonus erhalten?" />
         </CustomRadioGroup>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

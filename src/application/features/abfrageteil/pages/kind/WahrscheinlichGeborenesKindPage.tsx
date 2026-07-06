@@ -62,43 +62,39 @@ export function WahrscheinlichGeborenesKindPage() {
 
   return (
     <Page heading="Angaben zur Geburt">
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <h3>
           Der Entbindungstermin liegt mehr als 2 Wochen in der Vergangenheit.
           Wir gehen davon aus, dass Ihr Kind schon geboren wurde.
         </h3>
-        <div>
-          <h3 className="mb-10">
-            Wann war das tatsächliche Geburtsdatum Ihres Kindes?
-          </h3>
+
+        <div className="input-container">
+          <h3>Wann war das tatsächliche Geburtsdatum Ihres Kindes?</h3>
 
           <InfoText
             question="Was ist das tatsächliche Geburtsdatum?"
             answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, das in die Geburtsurkunde eingetragen ist. "
           />
 
-          <label
-            className={classNames("mb-4 mt-20 block text-16", {
-              "text-danger": formErrors.geburtsdatum,
-            })}
-            htmlFor={geburtsdatumInputIdentifier}
-          >
-            Geburtsdatum (TT.MM.JJJJ)
-          </label>
+          <div>
+            <label
+              className={classNames("mb-4 block text-16", {
+                "text-danger": formErrors.geburtsdatum,
+              })}
+              htmlFor={geburtsdatumInputIdentifier}
+            >
+              Geburtsdatum (TT.MM.JJJJ)
+            </label>
 
-          <DateInput
-            id={geburtsdatumInputIdentifier}
-            error={formErrors.geburtsdatum?.message}
-            {...register("geburtsdatum")}
-          />
+            <DateInput
+              id={geburtsdatumInputIdentifier}
+              error={formErrors.geburtsdatum?.message}
+              {...register("geburtsdatum")}
+            />
+          </div>
         </div>
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

@@ -79,16 +79,11 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
 
   return (
     <Page heading={`Angaben ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
-        <div>
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="input-container">
           <h3>War {vorname} wegen dieser Schwangerschaft krank?</h3>
 
-          <p className="mb-16">
+          <p>
             Wenn Sie wegen dieser Schwangerschaft krank waren und weniger
             verdient haben, können wir diese Zeit bei der Berechnung
             überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
@@ -147,20 +142,20 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
               </>
             }
           />
+
+          <CustomRadioGroup
+            legend=""
+            errors={formErrors}
+            register={register}
+            name="hatSchwangerschaftsbedingteErkrankung"
+            options={[
+              { value: "yes", label: "Ja" },
+              { value: "no", label: "Nein" },
+            ]}
+          />
         </div>
 
-        <CustomRadioGroup
-          legend=""
-          errors={formErrors}
-          register={register}
-          name="hatSchwangerschaftsbedingteErkrankung"
-          options={[
-            { value: "yes", label: "Ja" },
-            { value: "no", label: "Nein" },
-          ]}
-        />
-
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

@@ -63,12 +63,7 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
-      <form
-        id={formIdentifier}
-        className="flex flex-col gap-40"
-        onSubmit={handleSubmit(onSubmit)}
-        noValidate
-      >
+      <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
           legend=<h3 className="mb-10">
             Um was handelt oder handelte es sich bei der weiteren Tätigkeit?
@@ -109,7 +104,7 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
           ]}
         />
 
-        <div className="mt-40 flex gap-16">
+        <div className="button-group">
           <Button type="button" buttonStyle="secondary" onClick={navigateBack}>
             Zurück
           </Button>

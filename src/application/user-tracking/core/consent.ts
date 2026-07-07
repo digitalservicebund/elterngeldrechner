@@ -25,7 +25,7 @@ function isPerToolFormat(value: string): boolean {
 
 function parsePerToolGrants(value: string): TrackingConsent {
   const grants = new Map(
-    value.split(/[,|]/).map((pair): [string, string] => {
+    value.split("|").map((pair): [string, string] => {
       const [tool, grant] = pair.split("=");
 
       return [tool?.trim() ?? "", grant?.trim() ?? ""];
@@ -69,19 +69,19 @@ if (import.meta.vitest) {
 
     describe("per-tool format", () => {
       it("grants each tool the value it received", () => {
-        expect(parseTrackingConsent("matomo=1,posthog=0")).toEqual({
+        expect(parseTrackingConsent("matomo=1|posthog=0")).toEqual({
           matomo: true,
           posthog: false,
         });
-        expect(parseTrackingConsent("matomo=0,posthog=1")).toEqual({
+        expect(parseTrackingConsent("matomo=0|posthog=1")).toEqual({
           matomo: false,
           posthog: true,
         });
-        expect(parseTrackingConsent("matomo=1,posthog=1")).toEqual({
+        expect(parseTrackingConsent("matomo=1|posthog=1")).toEqual({
           matomo: true,
           posthog: true,
         });
-        expect(parseTrackingConsent("matomo=0,posthog=0")).toEqual({
+        expect(parseTrackingConsent("matomo=0|posthog=0")).toEqual({
           matomo: false,
           posthog: false,
         });
@@ -95,19 +95,8 @@ if (import.meta.vitest) {
       });
 
       it("tolerates whitespace around tools and grants", () => {
-        expect(parseTrackingConsent("matomo=1, posthog=1")).toEqual({
+        expect(parseTrackingConsent("matomo=1| posthog=1")).toEqual({
           matomo: true,
-          posthog: true,
-        });
-      });
-
-      it("accepts | as separator for the upcoming banner format", () => {
-        expect(parseTrackingConsent("matomo=1|posthog=0")).toEqual({
-          matomo: true,
-          posthog: false,
-        });
-        expect(parseTrackingConsent("matomo=0|posthog=1")).toEqual({
-          matomo: false,
           posthog: true,
         });
       });

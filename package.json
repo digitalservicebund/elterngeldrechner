@@ -31,7 +31,7 @@
     "@axe-core/playwright": "^4.11.3",
     "@commitlint/config-conventional": "^21.0.2",
     "@commitlint/types": "^21.0.0",
-    "@iconify-json/material-symbols": "^1.2.79",
+    "@iconify-json/material-symbols": "^1.2.82",
     "@playwright/test": "^1.61.0",
     "@posthog/cli": "^0.7.30",
     "@svgr/core": "^8.1.0",

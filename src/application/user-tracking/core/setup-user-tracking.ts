@@ -158,7 +158,7 @@ if (import.meta.vitest) {
       it("does not setup the tag manager if no source URL was configured, even user allowed tracking", async () => {
         vi.stubEnv("VITE_APP_USER_TRACKING_TAG_MANAGER_SOURCE", "");
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          COOKIES_WITH_ALLOWANCE,
+          "cookie-allow-tracking=1",
         );
 
         await setupUserTracking();
@@ -251,7 +251,7 @@ if (import.meta.vitest) {
         vi.spyOn(posthog, "init").mockReturnValue(posthog as never);
         vi.spyOn(posthog, "capture").mockReturnValue(undefined);
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          COOKIES_WITH_POSTHOG_ALLOWANCE,
+          `cookie-allow-tracking=${encodeURIComponent("matomo=1|posthog=1")}`,
         );
       });
 
@@ -348,8 +348,6 @@ if (import.meta.vitest) {
       );
     }
 
-    const COOKIES_WITH_ALLOWANCE = "cookie-allow-tracking=1";
-    const COOKIES_WITH_POSTHOG_ALLOWANCE = `cookie-allow-tracking=${encodeURIComponent("matomo=1,posthog=1")}`;
     const ANY_SOURCE_URL = "test-url";
 
     describe("posthog consent gating", () => {
@@ -373,7 +371,7 @@ if (import.meta.vitest) {
 
       it("initialises PostHog when the per-tool value grants it", async () => {
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          `cookie-allow-tracking=${encodeURIComponent("matomo=0,posthog=1")}`,
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0|posthog=1")}`,
         );
 
         await setupUserTracking();
@@ -392,7 +390,7 @@ if (import.meta.vitest) {
 
         it("initialises PostHog from the unencoded value", async () => {
           vi.spyOn(document, "cookie", "get").mockReturnValue(
-            "cookie-allow-tracking=matomo=1,posthog=1",
+            "cookie-allow-tracking=matomo=1|posthog=1",
           );
 
           await setupUserTracking();
@@ -402,7 +400,7 @@ if (import.meta.vitest) {
 
         it("initialises PostHog from the URL-encoded value", async () => {
           vi.spyOn(document, "cookie", "get").mockReturnValue(
-            `cookie-allow-tracking=${encodeURIComponent("matomo=1,posthog=1")}`,
+            `cookie-allow-tracking=${encodeURIComponent("matomo=1|posthog=1")}`,
           );
 
           await setupUserTracking();
@@ -413,7 +411,7 @@ if (import.meta.vitest) {
 
       it("does not initialise PostHog when the per-tool value denies it", async () => {
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          `cookie-allow-tracking=${encodeURIComponent("matomo=1;posthog=0")}`,
+          `cookie-allow-tracking=${encodeURIComponent("matomo=1|posthog=0")}`,
         );
 
         await setupUserTracking();
@@ -424,7 +422,7 @@ if (import.meta.vitest) {
       it("does not initialise PostHog when no project token is configured, even with consent", async () => {
         vi.stubEnv("VITE_PUBLIC_POSTHOG_PROJECT_TOKEN", "");
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          `cookie-allow-tracking=${encodeURIComponent("matomo=0;posthog=1")}`,
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0|posthog=1")}`,
         );
 
         await setupUserTracking();
@@ -435,7 +433,7 @@ if (import.meta.vitest) {
       it("does not initialise PostHog when no host is configured, so events never fall back to the default cloud", async () => {
         vi.stubEnv("VITE_PUBLIC_POSTHOG_HOST", "");
         vi.spyOn(document, "cookie", "get").mockReturnValue(
-          `cookie-allow-tracking=${encodeURIComponent("matomo=0;posthog=1")}`,
+          `cookie-allow-tracking=${encodeURIComponent("matomo=0|posthog=1")}`,
         );
 
         await setupUserTracking();

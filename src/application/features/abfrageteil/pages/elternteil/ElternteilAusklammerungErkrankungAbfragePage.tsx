@@ -81,14 +81,16 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
-          <h3>War {vorname} wegen dieser Schwangerschaft krank?</h3>
+          <div className="text-container">
+            <h3>War {vorname} wegen dieser Schwangerschaft krank?</h3>
 
-          <p>
-            Wenn Sie wegen dieser Schwangerschaft krank waren und weniger
-            verdient haben, können wir diese Zeit bei der Berechnung
-            überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
-            Einkünfte berechnet.
-          </p>
+            <p>
+              Wenn Sie wegen dieser Schwangerschaft krank waren und weniger
+              verdient haben, können wir diese Zeit bei der Berechnung
+              überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
+              Einkünfte berechnet.
+            </p>
+          </div>
 
           <InfoText
             question="Warum fragen wir das?"

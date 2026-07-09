@@ -114,21 +114,23 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
-          <h3>
-            Hat {vorname} Elterngeld für das Geschwisterkind (geb.{" "}
-            {geburtsdatumGeschwisterkind}) erhalten?
-          </h3>
+          <div className="text-container">
+            <h3>
+              Hat {vorname} Elterngeld für das Geschwisterkind (geb.{" "}
+              {geburtsdatumGeschwisterkind}) erhalten?
+            </h3>
 
-          <p>
-            Wenn Sie Elterngeld für ein Geschwisterkind erhalten und weniger
-            verdient haben, können wir diese Zeit bei der Berechnung
-            überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
-            Einkünfte berechnet.
-          </p>
-          <p>
-            <strong>Wichtig: </strong>Das gilt nur für Elterngeld, das Sie bis
-            zum 14. Lebensmonat des Geschwisterkindes bezogen haben.
-          </p>
+            <p>
+              Wenn Sie Elterngeld für ein Geschwisterkind erhalten und weniger
+              verdient haben, können wir diese Zeit bei der Berechnung
+              überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
+              Einkünfte berechnet.
+            </p>
+            <p>
+              <strong>Wichtig: </strong>Das gilt nur für Elterngeld, das Sie bis
+              zum 14. Lebensmonat des Geschwisterkindes bezogen haben.
+            </p>
+          </div>
 
           <InfoText
             question="Warum wird das gefragt?"

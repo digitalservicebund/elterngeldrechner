@@ -97,14 +97,16 @@ export function UngeborenesKindPage() {
         </div>
 
         <div className="input-container">
-          <h3 id={anzahlKinderInputIdentifier}>
-            Wie viele Kinder werden geboren?
-          </h3>
+          <div className="text-container">
+            <h3 id={anzahlKinderInputIdentifier}>
+              Wie viele Kinder werden geboren?
+            </h3>
 
-          <p>
-            Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
-            Kinder an (zum Beispiel 2 bei Zwillingen).
-          </p>
+            <p>
+              Bei der Geburt von mehreren Kindern geben Sie bitte die Anzahl der
+              Kinder an (zum Beispiel 2 bei Zwillingen).
+            </p>
+          </div>
 
           <InfoText
             question="Was bedeutet es wenn mehr als ein Kind geboren wird?"

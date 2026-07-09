@@ -160,17 +160,19 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
-          <h3>
-            Von wann bis wann war {vorname} im Mutterschutz für das
-            Geschwisterkind (geb. {geburtsdatumGeschwisterkindString})?
-          </h3>
-          <p>
-            Der Mutterschutz gilt in der Regel 6 Wochen vor dem errechneten
-            Geburtstermin und endet 8 Wochen danach.{" "}
-            {geschwisterkinder[routeParams.geschwisterIndex]?.hatBehinderung
-              ? "Bei der Geburt eines Kindes mit Behinderung verlängert sich dieser Zeitraum auf 12 Wochen."
-              : ""}
-          </p>
+          <div className="text-container">
+            <h3>
+              Von wann bis wann war {vorname} im Mutterschutz für das
+              Geschwisterkind (geb. {geburtsdatumGeschwisterkindString})?
+            </h3>
+            <p>
+              Der Mutterschutz gilt in der Regel 6 Wochen vor dem errechneten
+              Geburtstermin und endet 8 Wochen danach.{" "}
+              {geschwisterkinder[routeParams.geschwisterIndex]?.hatBehinderung
+                ? "Bei der Geburt eines Kindes mit Behinderung verlängert sich dieser Zeitraum auf 12 Wochen."
+                : ""}
+            </p>
+          </div>
 
           <div className="flex flex-col">
             <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">

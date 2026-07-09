@@ -98,16 +98,18 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
-          <h3>
-            Hat {vorname} Mutterschaftsgeld für das Geschwisterkind (geb.{" "}
-            {geburtsdatumGeschwisterkind}) erhalten?
-          </h3>
+          <div className="text-container">
+            <h3>
+              Hat {vorname} Mutterschaftsgeld für das Geschwisterkind (geb.{" "}
+              {geburtsdatumGeschwisterkind}) erhalten?
+            </h3>
 
-          <p>
-            Wenn Sie Mutterschaftsgeld für ein Geschwisterkind erhalten haben,
-            können wir diese Zeit bei der Berechnung überspringen. So wird Ihr
-            Elterngeld auf Basis Ihrer höheren Einkünfte berechnet.
-          </p>
+            <p>
+              Wenn Sie Mutterschaftsgeld für ein Geschwisterkind erhalten haben,
+              können wir diese Zeit bei der Berechnung überspringen. So wird Ihr
+              Elterngeld auf Basis Ihrer höheren Einkünfte berechnet.
+            </p>
+          </div>
 
           <InfoText
             question="Warum wird das gefragt?"

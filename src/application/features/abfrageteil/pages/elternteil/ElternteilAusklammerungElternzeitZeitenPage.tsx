@@ -158,16 +158,18 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
-          <h3>
-            Von wann bis wann hat {vorname} Elterngeld für das Geschwisterkind
-            (geb. {geburtsdatumGeschwisterkind}) erhalten?
-          </h3>
+          <div className="text-container">
+            <h3>
+              Von wann bis wann hat {vorname} Elterngeld für das Geschwisterkind
+              (geb. {geburtsdatumGeschwisterkind}) erhalten?
+            </h3>
 
-          <p>
-            <strong>Wichtig: </strong>Beachten Sie, dass Elterngeld bis maximal
-            zum 14. Lebensmonat berücksichtigt werden kann. Tragen Sie den
-            zulässigen Zeitraum entsprechend ein.
-          </p>
+            <p>
+              <strong>Wichtig: </strong>Beachten Sie, dass Elterngeld bis
+              maximal zum 14. Lebensmonat berücksichtigt werden kann. Tragen Sie
+              den zulässigen Zeitraum entsprechend ein.
+            </p>
+          </div>
 
           <InfoText
             question="Wo finde ich diese Angaben?"

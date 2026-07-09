@@ -253,6 +253,7 @@ export function Sidebar() {
               <button
                 className={classNames(twClasses.stepHeading, {
                   "cursor-default": isDisabled,
+                  "label-small-selected": isCurrent,
                 })}
                 type="button"
                 onClick={() => navigiereZuAbschnitt(item)}

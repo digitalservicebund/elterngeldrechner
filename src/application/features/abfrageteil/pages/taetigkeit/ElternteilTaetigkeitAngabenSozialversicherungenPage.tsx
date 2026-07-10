@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -28,7 +27,7 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { Steuerklasse } from "@/elterngeldrechner";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -44,15 +43,13 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const { register, handleSubmit, formState } = useFormWithValidationTracking({
     resolver: zodResolver(TaetigkeitNichtSelbststaendigAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitNichtSelbststaendigAngabenSchema,
       letztesGueltigesEvent,
     ),
   });
-
-  useValidierungsfehlerTracking(subscribe);
 
   const { errors: formErrors } = formState;
 

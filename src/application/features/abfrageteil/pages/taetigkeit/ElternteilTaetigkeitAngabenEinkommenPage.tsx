@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -23,7 +22,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilTaetigkeitAngabenEinkommenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -47,7 +46,7 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
   const istMischeinkunft =
     taetigkeiten.istSelbststaendig && taetigkeiten.istNichtSelbststaendig;
 
-  const { handleSubmit, control, subscribe } = useForm({
+  const { handleSubmit, control } = useFormWithValidationTracking({
     resolver: zodResolver(TaetigkeitGleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitGleichesEinkommenAngabenSchema,
@@ -71,8 +70,6 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
   };
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
-
-  useValidierungsfehlerTracking(subscribe);
 
   const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
   const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(

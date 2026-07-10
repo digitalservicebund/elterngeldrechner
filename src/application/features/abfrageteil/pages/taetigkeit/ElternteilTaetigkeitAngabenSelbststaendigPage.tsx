@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -22,7 +21,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -38,13 +37,14 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
     routeParams,
   );
 
-  const { register, handleSubmit, formState, control, subscribe } = useForm({
-    resolver: zodResolver(TaetigkeitSelbststaendigAngabenSchema),
-    defaultValues: encodeSafely(
-      TaetigkeitSelbststaendigAngabenSchema,
-      letztesGueltigesEvent,
-    ),
-  });
+  const { register, handleSubmit, formState, control } =
+    useFormWithValidationTracking({
+      resolver: zodResolver(TaetigkeitSelbststaendigAngabenSchema),
+      defaultValues: encodeSafely(
+        TaetigkeitSelbststaendigAngabenSchema,
+        letztesGueltigesEvent,
+      ),
+    });
 
   const { errors: formErrors } = formState;
 
@@ -69,8 +69,6 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
   const eventStream = filtereValideEventHistorie();
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
-
-  useValidierungsfehlerTracking(subscribe);
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>

@@ -3,8 +3,7 @@ import CloseIcon from "~icons/material-symbols/close";
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId, useMemo } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import {
@@ -28,6 +27,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export type ElternteilAusklammerungElterngeldGeschwisterkindZeitenInput =
   z.input<typeof ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema>;
@@ -98,20 +98,19 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
     return true;
   };
 
-  const { handleSubmit, control, register, formState, subscribe } = useForm<
-    ElternteilAusklammerungElterngeldGeschwisterkindZeitenInput,
-    undefined,
-    ElternteilAusklammerungElterngeldGeschwisterkindZeitenOput
-  >({
-    resolver: zodResolver(
-      ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema,
-    ),
-    defaultValues: memoizedDefaultValues,
-  });
+  const { handleSubmit, control, register, formState } =
+    useFormWithValidationTracking<
+      ElternteilAusklammerungElterngeldGeschwisterkindZeitenInput,
+      undefined,
+      ElternteilAusklammerungElterngeldGeschwisterkindZeitenOput
+    >({
+      resolver: zodResolver(
+        ElternteilAusklammerungElterngeldGeschwisterkindZeitenSchema,
+      ),
+      defaultValues: memoizedDefaultValues,
+    });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (
     values: ElternteilAusklammerungElterngeldGeschwisterkindZeiten,

@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -24,7 +23,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilWeitereTaetigkeitAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -49,7 +48,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     taetigkeiten.istSelbststaendig === true;
   const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(eventStream);
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const { register, handleSubmit, formState } = useFormWithValidationTracking({
     resolver: zodResolver(WeitereTaetigkeitAbfrageSchema),
     defaultValues: encodeSafely(
       WeitereTaetigkeitAbfrageSchema,
@@ -58,8 +57,6 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: WeitereTaetigkeitAbfrage) => {
     const event: FormEvent = {

@@ -1,7 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { useNavigate } from "react-router";
 import {
   ElternteilAusklammerungErkrankungAbfrage,
@@ -23,6 +21,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilAusklammerungErkrankungAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -42,7 +41,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
   const geburtsdatum = findeGeburtsdatum(eventStream);
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const { register, handleSubmit, formState } = useFormWithValidationTracking({
     resolver: zodResolver(ElternteilAusklammerungErkrankungAbfrageSchema),
     defaultValues: encodeSafely(
       ElternteilAusklammerungErkrankungAbfrageSchema,
@@ -51,8 +50,6 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: ElternteilAusklammerungErkrankungAbfrage) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =

@@ -2,7 +2,6 @@ import { Temporal } from "@js-temporal/polyfill";
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import { GeborenesKind, GeborenesKindSchema } from "./KindSchema";
@@ -17,10 +16,10 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { istFruehgeburt } from "@/application/features/abfrageteil/domain/istFruehgeburt";
 import { bestimmeNutzergruppe, sindMehrlinge } from "./tracking";
 import { posthog } from "@/application/user-tracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function GeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
@@ -31,14 +30,12 @@ export function GeborenesKindPage() {
   const currentRoute = Route.GeborenesKindAngaben;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const { register, handleSubmit, formState } = useFormWithValidationTracking({
     resolver: zodResolver(GeborenesKindSchema),
     defaultValues: encodeSafely(GeborenesKindSchema, letztesGueltigesEvent),
   });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: GeborenesKind) => {
     const event: FormEvent = { route: currentRoute, payload: values };

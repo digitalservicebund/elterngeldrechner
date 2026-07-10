@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import { Geburt, GeburtSchema } from "./KindSchema";
@@ -14,7 +13,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function KindPage() {
   const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
@@ -25,12 +24,10 @@ export function KindPage() {
   const currentRoute = Route.KindAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const { register, handleSubmit, formState } = useFormWithValidationTracking({
     resolver: zodResolver(GeburtSchema),
     defaultValues: encodeSafely(GeburtSchema, letztesGueltigesEvent),
   });
-
-  useValidierungsfehlerTracking(subscribe);
 
   const { errors: formErrors } = formState;
 

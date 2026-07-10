@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Temporal } from "@js-temporal/polyfill";
 import { useId, useMemo } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -30,7 +29,7 @@ import {
   Ausklammerung,
   gruppiereBemessungszeitraum,
 } from "@/bemessungszeitraumrechner";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -54,7 +53,7 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   const istMischeinkunft =
     taetigkeiten.istSelbststaendig && taetigkeiten.istNichtSelbststaendig;
 
-  const { handleSubmit, control, subscribe } = useForm({
+  const { handleSubmit, control } = useFormWithValidationTracking({
     resolver: zodResolver(TaetigkeitUnleichesEinkommenAngabenSchema),
     defaultValues: encodeSafely(
       TaetigkeitUnleichesEinkommenAngabenSchema,
@@ -90,8 +89,6 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
   );
 
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
-
-  useValidierungsfehlerTracking(subscribe);
 
   function istGruppierterZeitabschnittAusklammerung(
     zeitabschnitt: Temporal.PlainYearMonth[] | Ausklammerung[],

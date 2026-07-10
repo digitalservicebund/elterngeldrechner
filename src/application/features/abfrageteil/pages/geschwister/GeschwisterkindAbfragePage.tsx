@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -18,8 +17,8 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { posthog } from "@/application/user-tracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function GeschwisterkindAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
@@ -30,7 +29,7 @@ export function GeschwisterkindAbfragePage() {
   const currentRoute = Route.GeschwisterkindAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState, subscribe } = useForm({
+  const { register, handleSubmit, formState } = useFormWithValidationTracking({
     resolver: zodResolver(GeschwisterkindAbfrageSchema),
     defaultValues: encodeSafely(
       GeschwisterkindAbfrageSchema,
@@ -39,8 +38,6 @@ export function GeschwisterkindAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: GeschwisterkindAbfrage) => {
     const event: FormEvent = {

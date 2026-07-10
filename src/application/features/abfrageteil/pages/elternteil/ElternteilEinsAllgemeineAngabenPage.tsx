@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Temporal } from "@js-temporal/polyfill";
 import classNames from "classnames";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -20,7 +19,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilEinsAllgemeineAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -32,17 +31,16 @@ export function ElternteilEinsAllgemeineAngabenPage() {
   const currentRoute = Route.ElternteilEinsAllgemeineAngaben;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState, watch, subscribe } = useForm({
-    resolver: zodResolver(ElternteilEinsAllgemeineAngabenSchema),
-    defaultValues: encodeSafely(
-      ElternteilEinsAllgemeineAngabenSchema,
-      letztesGueltigesEvent,
-    ),
-  });
+  const { register, handleSubmit, formState, watch } =
+    useFormWithValidationTracking({
+      resolver: zodResolver(ElternteilEinsAllgemeineAngabenSchema),
+      defaultValues: encodeSafely(
+        ElternteilEinsAllgemeineAngabenSchema,
+        letztesGueltigesEvent,
+      ),
+    });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: ElternteilEinsAllgemeineAngaben) => {
     const event: FormEvent = {

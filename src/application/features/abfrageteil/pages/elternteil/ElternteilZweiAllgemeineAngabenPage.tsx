@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Temporal } from "@js-temporal/polyfill";
 import classNames from "classnames";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -25,8 +24,8 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { Elternteil } from "@/monatsplaner";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilZweiAllgemeineAngabenPage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -38,17 +37,16 @@ export function ElternteilZweiAllgemeineAngabenPage() {
   const currentRoute = Route.ElternteilZweiAllgemeineAngaben;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState, watch, subscribe } = useForm({
-    resolver: zodResolver(ElternteilZweiAllgemeineAngabenSchema),
-    defaultValues: encodeSafely(
-      ElternteilZweiAllgemeineAngabenSchema,
-      letztesGueltigesEvent,
-    ),
-  });
+  const { register, handleSubmit, formState, watch } =
+    useFormWithValidationTracking({
+      resolver: zodResolver(ElternteilZweiAllgemeineAngabenSchema),
+      defaultValues: encodeSafely(
+        ElternteilZweiAllgemeineAngabenSchema,
+        letztesGueltigesEvent,
+      ),
+    });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const eventStream = filtereValideEventHistorie();
   const geburtsdatum = findeGeburtsdatum(eventStream);

@@ -45,6 +45,7 @@ if (import.meta.vitest) {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2025-09-01"),
             anzahl: 3,
           },
+          dependentValues: { istGeburtWahrscheinlich: false },
         },
       ];
 
@@ -59,6 +60,7 @@ if (import.meta.vitest) {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2025-03-01"),
             anzahl: 1,
           },
+          dependentValues: { istGeburtWahrscheinlich: false },
         },
         {
           route: Route.GeborenesKindAngaben,

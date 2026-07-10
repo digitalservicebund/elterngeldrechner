@@ -67,6 +67,9 @@ export const FormEventSchema = z.discriminatedUnion("route", [
   z.object({
     route: z.literal(Route.UngeborenesKindAngaben),
     payload: UngeborenesKindSchema,
+    dependentValues: z.object({
+      istGeburtWahrscheinlich: z.boolean(),
+    }),
   }),
   z.object({
     route: z.literal(Route.WahrscheinlichGeborenesKindAbfrage),

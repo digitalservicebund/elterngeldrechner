@@ -22,23 +22,10 @@ function getNextSubpath(event: FormEvent): string {
         : Route.UngeborenesKindAngaben;
     case Route.GeborenesKindAngaben:
       return Route.GeschwisterkindAbfrage;
-    case Route.UngeborenesKindAngaben: {
-      const { errechneterEntbindungstermin } = event.payload;
-      const heuteVorZweiWochenPlusZweiTagen =
-        Temporal.Now.plainDateISO().subtract({
-          days: 16,
-        });
-
-      const istGeburtWahrscheinlich =
-        Temporal.PlainDateTime.compare(
-          errechneterEntbindungstermin,
-          heuteVorZweiWochenPlusZweiTagen,
-        ) < 0;
-
-      return istGeburtWahrscheinlich
+    case Route.UngeborenesKindAngaben:
+      return event.dependentValues.istGeburtWahrscheinlich
         ? Route.WahrscheinlichGeborenesKindAbfrage
         : Route.GeschwisterkindAbfrage;
-    }
     case Route.WahrscheinlichGeborenesKindAbfrage:
       return Route.GeschwisterkindAbfrage;
     case Route.GeschwisterkindAbfrage:
@@ -463,41 +450,27 @@ if (import.meta.vitest) {
     });
 
     describe("UngeborenesKindAngaben", () => {
-      it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date under threshold", () => {
-        const naechsterPfad = findeNaechstenPfad({
-          route: Route.UngeborenesKindAngaben,
-          payload: {
-            errechneterEntbindungstermin: Temporal.Now.plainDateISO(),
-            anzahl: 1,
-          },
-        });
-
-        expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
-      });
-
-      it("returns GeschwisterkindAbfrage given UngeborenesKindAngaben as currentRoute and date exactly at threshold", () => {
-        vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
-
+      it("returns GeschwisterkindAbfrage when the birth is not yet likely", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.UngeborenesKindAngaben,
           payload: {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-18"),
             anzahl: 1,
           },
+          dependentValues: { istGeburtWahrscheinlich: false },
         });
 
         expect(naechsterPfad).toEqual("/abfrageteil/geschwisterkind");
       });
 
-      it("returns WahrscheinlichGeborenesKindAbfrage given UngeborenesKindAngaben as currentRoute and date before threshold", () => {
-        vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
-
+      it("returns WahrscheinlichGeborenesKindAbfrage when the birth is likely", () => {
         const naechsterPfad = findeNaechstenPfad({
           route: Route.UngeborenesKindAngaben,
           payload: {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-15"),
             anzahl: 1,
           },
+          dependentValues: { istGeburtWahrscheinlich: true },
         });
 
         expect(naechsterPfad).toEqual(

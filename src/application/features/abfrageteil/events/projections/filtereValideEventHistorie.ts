@@ -31,10 +31,48 @@ export function filtereValideEventHistorie(
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, it, expect, vi, afterEach } = import.meta.vitest;
 
   describe("filtereValideEventHistorie", async () => {
     const { Steuerklasse } = await import("@/elterngeldrechner");
+
+    afterEach(() => vi.useRealTimers());
+
+    it("keeps an ungeborenes-Kind history intact when the clock advances past the birth-likelihood boundary", () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2024-02-01T12:00:00Z"));
+
+      const eventStream: FormEvent[] = [
+        { route: Route.Startseite },
+        {
+          route: Route.AllgemeineAngaben,
+          payload: {
+            bundesland: "Berlin",
+            gesamteinkommenGrenzeUeberschritten: false,
+          },
+        },
+        { route: Route.KindAbfrage, payload: { istGeboren: false } },
+        {
+          route: Route.UngeborenesKindAngaben,
+          payload: {
+            errechneterEntbindungstermin: Temporal.PlainDate.from("2024-01-25"),
+            anzahl: 1,
+          },
+          dependentValues: { istGeburtWahrscheinlich: false },
+        },
+        {
+          route: Route.GeschwisterkindAbfrage,
+          payload: { istVorhanden: false },
+        },
+      ];
+
+      // Long-lived session: months later the due date now lies far in the
+      // past. Routing must not reinterpret the recorded step and prune the
+      // history the user already completed.
+      vi.setSystemTime(new Date("2024-06-01T12:00:00Z"));
+
+      expect(filtereValideEventHistorie(eventStream)).toEqual(eventStream);
+    });
 
     it("returns empty array when no events are present", () => {
       const eventStream: FormEvent[] = [];
@@ -84,6 +122,7 @@ if (import.meta.vitest) {
             errechneterEntbindungstermin: Temporal.PlainDate.from("2025-12-23"),
             anzahl: 1,
           },
+          dependentValues: { istGeburtWahrscheinlich: false },
         },
         { route: Route.KindAbfrage, payload: { istGeboren: true } },
         {

@@ -10,6 +10,7 @@ import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { NumberInput } from "@/application/features/abfrageteil/components/NumberInput";
 import { Page } from "@/application/features/components/Page";
+import { istGeburtWahrscheinlich } from "@/application/features/abfrageteil/domain/istGeburtWahrscheinlich";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import {
   type FormEvent,
@@ -40,7 +41,16 @@ export function UngeborenesKindPage() {
   useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: UngeborenesKind) => {
-    const event: FormEvent = { route: currentRoute, payload: values };
+    const event: FormEvent = {
+      route: currentRoute,
+      payload: values,
+      dependentValues: {
+        istGeburtWahrscheinlich: istGeburtWahrscheinlich(
+          values.errechneterEntbindungstermin,
+          Temporal.Now.plainDateISO(),
+        ),
+      },
+    };
 
     dispatch(event);
 

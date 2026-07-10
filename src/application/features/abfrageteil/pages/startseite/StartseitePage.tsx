@@ -24,7 +24,7 @@ export function Startseite() {
       <div className="content-container">
         <div className="text-container">
           <p className="font-bold">Voraussichtliche Höhe von Elterngeld</p>
-          <ul className="list ml-32 list-disc pt-10">
+          <ul className="list ml-32 list-disc">
             <li>
               Der Rechner gibt einen Überblick, wie viel Elterngeld Sie
               voraussichtlich bekommen.
@@ -35,8 +35,8 @@ export function Startseite() {
             </li>
           </ul>
 
-          <p className="mt-32 font-bold">Monate aufteilen</p>
-          <ul className="list ml-32 list-disc pt-10">
+          <p className="mt-kern-x-large font-bold">Monate aufteilen</p>
+          <ul className="list ml-32 list-disc">
             <li>
               Sie können die Monate für sich und den anderen Elternteil nach
               Wunsch aufteilen.
@@ -47,18 +47,18 @@ export function Startseite() {
             </li>
           </ul>
 
-          <p className="mt-32 font-bold">
+          <p className="mt-kern-x-large font-bold">
             Arbeiten während Sie Elterngeld bekommen
           </p>
-          <ul className="list ml-32 list-disc pt-10">
+          <ul className="list ml-32 list-disc">
             <li>
               Tragen Sie ein, ob Sie oder der andere Elternteil in Teilzeit
               arbeiten möchten.
             </li>
           </ul>
 
-          <p className="mt-32 font-bold">Übersicht bekommen</p>
-          <ul className="list ml-32 list-disc pt-10">
+          <p className="mt-kern-x-large font-bold">Übersicht bekommen</p>
+          <ul className="list ml-32 list-disc">
             <li>
               Ergänzen Sie neben dem Elterngeld auch Ihr Einkommen, um einen
               vollständigen Überblick über Ihre Finanzen während des

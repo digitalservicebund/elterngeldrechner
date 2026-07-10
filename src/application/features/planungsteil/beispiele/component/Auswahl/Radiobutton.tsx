@@ -51,7 +51,7 @@ export function Radiobutton({
 
       <p
         id={`${radioId}-titel`}
-        className="min-w-0 self-center break-words text-[19px] font-bold leading-[1.4]"
+        className="min-w-0 self-center break-words text-[19px] font-bold leading-[1.4] mt-0"
       >
         {titel}
       </p>

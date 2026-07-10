@@ -11,7 +11,7 @@ export function AusklammerungsZeitraumBox({
   return (
     <div className="mt-20">
       {ausklammerungen.length > 0 && (
-        <div className="rounded-b border border-dashed border-grey p-20">
+        <div className="rounded-b border border-dashed border-grey p-20 pt-0">
           <p className="font-bold">
             {ausklammerungen.length > 1
               ? "Übersprungene Zeiträume"

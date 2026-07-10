@@ -89,7 +89,7 @@ export function GeschwisterbonusUebersichtPage() {
         ) : (
           <div className="rounded border-solid border-info">
             <div className="flex rounded bg-info-background p-20 font-bold">
-              <InfoIcon className="mr-10 mt-8 shrink-0 text-info" />
+              <InfoIcon className="mr-10 mt-6 shrink-0 text-info" />
 
               <h3>Sie erhalten keinen Geschwisterbonus</h3>
             </div>

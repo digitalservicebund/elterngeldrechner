@@ -18,7 +18,7 @@ export function AuswahloptionenLegende({ beispiele }: Props): ReactNode {
   const auswahloptionen = findeVerwendeteAuswahloptionen(beispiele);
 
   return (
-    <div className="rounded border border-solid border-grey p-20 pt-10">
+    <div className="rounded border border-solid border-grey p-20 pt-0">
       <p className="pb-10">Erklärung Abbildung:</p>
       <ul className="flex flex-wrap gap-16 md:gap-56" aria-hidden="true">
         {auswahloptionen.map((option) => (

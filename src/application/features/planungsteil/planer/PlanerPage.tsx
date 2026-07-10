@@ -173,7 +173,7 @@ export function PlanerPage() {
                 Planer Anwendung
               </h3>
 
-              <Anleitung className="mb-40" onOpenErklaerung={openErklaerung}>
+              <Anleitung onOpenErklaerung={openErklaerung}>
                 <>
                   <p>
                     Planen Sie hier Ihr Elterngeld. Klicken Sie auf die

@@ -81,7 +81,7 @@
 #egr-root .title-large {
   font-size: 1.625rem; /* 26px */
   line-height: 2rem; /* 32px */
-  font-weight: 400; /* weight 500 from design not supported by BundesSans */
+  font-weight: 700; /* weight 500 from design not supported by BundesSans */
 }
 
 #egr-root .body-default {
@@ -136,6 +136,10 @@
 
 #egr-root p {
   @apply mt-16 max-w-[70ch];
+}
+
+#egr-root ul {
+  @apply list-disc ml-kern-x-large;
 }
 
 #egr-root li {

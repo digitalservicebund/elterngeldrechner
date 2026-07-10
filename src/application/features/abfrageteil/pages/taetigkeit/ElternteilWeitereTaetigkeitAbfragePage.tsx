@@ -109,9 +109,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
         />
 
         <CustomRadioGroup
-          legend=<h3 className="mb-10">
-            Hatte {vorname} noch weitere Tätigkeiten im Bemessungszeitraum?
-          </h3>
+          legend={`Hatte ${vorname} noch weitere Tätigkeiten im Bemessungszeitraum?`}
           errors={formErrors}
           register={register}
           name="istWeitereTaetigkeitVorhanden"
@@ -127,7 +125,6 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
           ]}
         >
           <InfoText
-            className="mb-16"
             question="Was sind weitere Tätigkeiten?"
             answer={
               <>
@@ -136,7 +133,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
                   im Bemessungszeitraum Einkommen bezogen haben.
                 </p>
 
-                <p className="mb-0">Dazu zählen:</p>
+                <p>Dazu zählen:</p>
                 <ul>
                   <li>
                     Weitere angestellten Tätigkeiten (auch Teilzeit oder

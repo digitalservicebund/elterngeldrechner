@@ -98,12 +98,8 @@ export function ElternteilTaetigkeitAngabenMinijobPage() {
         </div>
 
         <CustomRadioGroup
-          legend={
-            <h3 className="mb-10">
-              Hat {vorname} im Bemessungszeitraum immer gleich viel pro Monat
-              verdient?
-            </h3>
-          }
+          legend={`Hat ${vorname} im Bemessungszeitraum immer gleich viel pro Monat
+              verdient?`}
           errors={formErrors}
           register={register}
           name="istEinkommenGleichVerteilt"

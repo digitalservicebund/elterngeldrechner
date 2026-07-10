@@ -175,8 +175,8 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
             }
 
             return (
-              <div key={index} className="mt-20 bg-off-white p-40 pt-32">
-                <div className="flex flex-col gap-16 pl-8">
+              <div key={index} className="bg-off-white p-40 pt-32">
+                <div className="input-container pl-8">
                   {zeitabschnitt.map((month) => {
                     const monatsIndex = berechneMonatsindex(
                       month,

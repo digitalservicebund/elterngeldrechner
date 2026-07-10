@@ -105,11 +105,7 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
         </div>
 
         <CustomRadioGroup
-          legend={
-            <h3 className="mb-10">
-              Handelt es sich um Einkommen aus einem Minijob?
-            </h3>
-          }
+          legend="Handelt es sich um Einkommen aus einem Minijob?"
           errors={formErrors}
           register={register}
           name="istTaetigkeitMinijob"
@@ -122,14 +118,14 @@ export function ElternteilTaetigkeitAngabenNichtSelbststaendigPage() {
             question="Was ist ein Minijob?"
             answer={
               <>
-                <p className="mb-16">
+                <p>
                   Ein Minijob ist eine Arbeit, bei der man nur wenig verdient.
                   Man darf im Monat nicht mehr als die gesetzlich festgelegte
                   Grenze verdienen.
                 </p>
 
-                <p className="mb-0">Diese Grenze liegt:</p>
-                <ul className="mb-16">
+                <p>Diese Grenze liegt:</p>
+                <ul>
                   <li>seit 2026 bei 603 Euro im Monat,</li>
                   <li>im Jahr 2025 bei 556 Euro im Monat,</li>
                   <li>im Jahr 2024 bei 538 Euro im Monat,</li>

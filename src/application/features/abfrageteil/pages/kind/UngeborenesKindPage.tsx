@@ -80,20 +80,22 @@ export function UngeborenesKindPage() {
             answer="Diesen Termin finden Sie in Ihrem Mutterpass unter „Voraussichtlicher Entbindungstermin“ oder auf Ihren Ultraschall-Berichten."
           />
 
-          <label
-            className={classNames("mb-4 block text-16", {
-              "text-danger": formErrors.errechneterEntbindungstermin,
-            })}
-            htmlFor={entbindungsterminInputIdentifier}
-          >
-            Errechneter Entbindungstermin (TT.MM.JJJJ)
-          </label>
+          <div>
+            <label
+              className={classNames("label-small", {
+                "text-danger": formErrors.errechneterEntbindungstermin,
+              })}
+              htmlFor={entbindungsterminInputIdentifier}
+            >
+              Errechneter Entbindungstermin (TT.MM.JJJJ)
+            </label>
 
-          <DateInput
-            id={entbindungsterminInputIdentifier}
-            error={formErrors.errechneterEntbindungstermin?.message}
-            {...register("errechneterEntbindungstermin")}
-          />
+            <DateInput
+              id={entbindungsterminInputIdentifier}
+              error={formErrors.errechneterEntbindungstermin?.message}
+              {...register("errechneterEntbindungstermin")}
+            />
+          </div>
         </div>
 
         <div className="input-container">

@@ -28,7 +28,7 @@ export function NumberInput({
       <label
         id={`${name}-label`}
         className={classNames(
-          "mb-4 block text-16",
+          "block label-small",
           errors ? "text-danger" : null,
         )}
         htmlFor={name}

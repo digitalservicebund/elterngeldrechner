@@ -65,9 +65,7 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend=<h3 className="mb-10">
-            Um was handelt oder handelte es sich bei der weiteren Tätigkeit?
-          </h3>
+          legend="Um was handelt oder handelte es sich bei der weiteren Tätigkeit?"
           errors={formErrors}
           register={register}
           name="istWeitereTaetigkeitSelbststaendigeTaetigkeit"
@@ -77,8 +75,10 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
               label: "",
               description: (id) => (
                 <div id={id}>
-                  <p className="font-bold">{vorname} war oder ist angestellt</p>
-                  <p>
+                  <p className="mt-0 font-bold">
+                    {vorname} war oder ist angestellt
+                  </p>
+                  <p className="mt-0">
                     zum Beispiel in Vollzeit, Teilzeit, als Minijob, in
                     Ausbildung, Freiwilligendienst.
                   </p>
@@ -90,10 +90,10 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
               label: "",
               description: (id) => (
                 <div id={id}>
-                  <p className="font-bold">
+                  <p className="mt-0 font-bold">
                     {vorname} war oder ist selbstständig
                   </p>
-                  <p>
+                  <p className="mt-0">
                     zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land-
                     oder Forstwirtschaft, Freiberuflichkeit, Selbstständig (GbR,
                     GmbH, Beteiligung).

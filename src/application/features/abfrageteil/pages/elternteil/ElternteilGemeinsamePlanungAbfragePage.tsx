@@ -70,11 +70,7 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend={
-            <h3 className="mb-10">
-              Sollen beide Elternteile Elterngeld bekommen?
-            </h3>
-          }
+          legend="Sollen beide Elternteile Elterngeld bekommen?"
           errors={formErrors}
           register={register}
           name="wirdZweitePersonBeruecksichtigt"

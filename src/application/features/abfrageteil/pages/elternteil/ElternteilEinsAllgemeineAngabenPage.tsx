@@ -78,7 +78,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
 
           <div>
             <label
-              className={classNames("mb-4 block text-16", {
+              className={classNames("block label-small", {
                 "!text-danger": formErrors.name,
               })}
               htmlFor={personNameInputIdentifier}
@@ -106,7 +106,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
         </div>
 
         <CustomRadioGroup
-          legend=<h3 className="mb-10">Ist {vorname} alleinerziehend?</h3>
+          legend={`Ist ${vorname} alleinerziehend?`}
           errors={formErrors}
           register={register}
           name="istAlleinerziehend"
@@ -122,11 +122,13 @@ export function ElternteilEinsAllgemeineAngabenPage() {
         </CustomRadioGroup>
 
         <CustomRadioGroup
-          legend=<h3 className="mb-10">
-            {geburtIstErfolgt
-              ? `War ${vorname} im Mutterschutz?`
-              : `Wird ${vorname} im Mutterschutz sein?`}
-          </h3>
+          legend={`
+            ${
+              geburtIstErfolgt
+                ? `War ${vorname} im Mutterschutz?`
+                : `Wird ${vorname} im Mutterschutz sein?`
+            }
+          `}
           errors={formErrors}
           register={register}
           name="istImMutterschutz"
@@ -147,9 +149,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
                   und in der Regel 8 Wochen danach enden.
                 </p>
 
-                <p className="mb-0 mt-20">
-                  Während der Mutterschutzfrist bekommen Sie:
-                </p>
+                <p>Während der Mutterschutzfrist bekommen Sie:</p>
 
                 <ul>
                   <li>
@@ -167,7 +167,7 @@ export function ElternteilEinsAllgemeineAngabenPage() {
                   </li>
                 </ul>
 
-                <p className="mt-20 font-bold">
+                <p className="font-bold">
                   Sie sind noch ganz am Anfang Ihrer Schwangerschaft?
                 </p>
                 <p>

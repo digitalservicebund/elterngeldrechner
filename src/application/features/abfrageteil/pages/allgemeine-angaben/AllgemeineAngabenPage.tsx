@@ -74,10 +74,8 @@ export function AllgemeineAngabenPage() {
         </div>
 
         <CustomRadioGroup
-          legend=<h3 className="mb-10">
-            Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von
-            mehr als 175.000 Euro?
-          </h3>
+          legend="Hatten Sie im Kalenderjahr vor der Geburt ein Gesamteinkommen von
+            mehr als 175.000 Euro?"
           errors={formErrors}
           register={register}
           options={[
@@ -96,7 +94,7 @@ export function AllgemeineAngabenPage() {
                   versteuernden Jahreseinkommen von mehr als 175.000 Euro bei
                   Alleinerziehenden, Paaren und getrennt Erziehenden.
                 </p>
-                <p className="mb-0">
+                <p>
                   Diese Angabe finden Sie beispielsweise auf Ihrem
                   Steuerbescheid.
                 </p>

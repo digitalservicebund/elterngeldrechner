@@ -173,7 +173,7 @@ export function ElternteilBMZUebersichtPage() {
             <h3>Ihr Bemessungszeitraum: {bemessungszeitraumUeberschrift()}</h3>
           </div>
 
-          <div className="pl-20 pb-32">
+          <div className="px-20 pb-32">
             <div>
               {taetigkeitenFlow === "Selbstaendig" ? (
                 <>
@@ -234,11 +234,11 @@ export function ElternteilBMZUebersichtPage() {
             </div>
 
             {beruecksichtigteAusklammerungen.length > 0 && (
-              <div className="mt-32">
+              <div>
                 <p>
                   <strong>Berücksichtigte Schutzzeiten (Ausklammerung)</strong>
                 </p>
-                <p className="mb-0">
+                <p>
                   Folgende{" "}
                   {beruecksichtigteAusklammerungen.length === 1
                     ? "Zeit"
@@ -246,7 +246,7 @@ export function ElternteilBMZUebersichtPage() {
                   haben wir übersprungen, damit Ihr Elterngeld nicht durch
                   geringeres Einkommen gemindert wird:
                 </p>
-                <ul className="ml-32 list-disc">
+                <ul>
                   {beruecksichtigteAusklammerungen.map(
                     (ausklammerung, index) => (
                       <li key={index}>
@@ -285,7 +285,7 @@ export function ElternteilBMZUebersichtPage() {
             )}
 
             {nichtBeruecksichtigteAusklammerungen.length > 0 && (
-              <div className="mt-32">
+              <div>
                 <p>
                   <strong>Was wurde nicht berücksichtigt?</strong>
                 </p>
@@ -293,7 +293,7 @@ export function ElternteilBMZUebersichtPage() {
                   Diese Angaben haben keinen Einfluss auf den gewählten
                   Zeitraum:
                 </p>
-                <ul className="ml-32 list-disc">
+                <ul>
                   {nichtBeruecksichtigteAusklammerungen.map(
                     (ausklammerung, index) => (
                       <li key={index}>

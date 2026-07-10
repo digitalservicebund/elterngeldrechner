@@ -94,9 +94,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
 
         <div className="content-container">
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h3>
-            }
+            legend={`Ist ${vorname} kirchensteuerpflichtig?`}
             errors={formErrors}
             register={register}
             name="istKirchensteuerpflichtig"
@@ -107,12 +105,8 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           />
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">
-                Ist {vorname} über die gesetzliche Krankenversicherung
-                pflichtversichert?
-              </h3>
-            }
+            legend={`Ist ${vorname} über die gesetzliche Krankenversicherung
+                pflichtversichert?`}
             errors={formErrors}
             register={register}
             name="istGesetzlichKrankenpflichtversichert"
@@ -125,12 +119,12 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p className="mb-16">
+                  <p>
                     Mit einer selbstständigen Tätigkeit sind Sie in der Regel
                     nicht automatisch gesetzlich pflichtversichert.
                   </p>
 
-                  <p className="mb-0">Sie wählen „Nein“, wenn Sie</p>
+                  <p>Sie wählen „Nein“, wenn Sie</p>
                   <ul>
                     <li>freiwillig gesetzlich versichert, </li>
                     <li>familienversichert,</li>
@@ -149,12 +143,8 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           </CustomRadioGroup>
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">
-                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-                Rentenversicherung?
-              </h3>
-            }
+            legend={`Zahlt ${vorname} Pflichtbeiträge in die gesetzliche
+                Rentenversicherung?`}
             errors={formErrors}
             register={register}
             name="istGesetzlichRentenversichert"
@@ -170,12 +160,8 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           </CustomRadioGroup>
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">
-                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-                Arbeitslosenversicherung?
-              </h3>
-            }
+            legend={`Zahlt ${vorname} Pflichtbeiträge in die gesetzliche
+                Arbeitslosenversicherung?`}
             errors={formErrors}
             register={register}
             name="istGesetzlichArbeitlosenversichert"
@@ -191,12 +177,14 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
           </CustomRadioGroup>
 
           <div className="input-container">
-            <h3>
-              Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von{" "}
-              {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
-            </h3>
+            <div className="text-container">
+              <h3>
+                Wie hoch war der Gewinn aus der selbstständigen Tätigkeit von{" "}
+                {vorname} im Jahr {bemessungszeitraum[0]?.von.year}?
+              </h3>
 
-            <p>Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben</p>
+              <p>Geben Sie 0 ein, wenn Sie im Jahr Verlust gemacht haben</p>
+            </div>
 
             <InfoText
               question="Wo finde ich Informationen zum Gewinn?"
@@ -222,7 +210,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
                       rausgerechnet werden
                     </li>
                   </ul>
-                  <p className="mt-16">
+                  <p>
                     Sie finden diese Angabe in Ihren Unterlagen zur
                     Steuererklärung:
                   </p>
@@ -241,7 +229,7 @@ export function ElternteilTaetigkeitAngabenSelbststaendigPage() {
                     Bitte tragen Sie hier den endgültigen Wert ein, der auch
                     Ihrem Finanzamt gemeldet wurde.
                   </p>
-                  <p className="mt-16">
+                  <p>
                     Wenn der aktuelle Einkommensteuerbescheid noch nicht
                     vorliegt, geben Sie einen geschätzten Brutto-Gewinn an.
                     Beachten Sie, dass das Ergebnis der Elterngeldberechnung

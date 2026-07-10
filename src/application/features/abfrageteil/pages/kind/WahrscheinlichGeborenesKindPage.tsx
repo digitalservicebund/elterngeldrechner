@@ -73,12 +73,12 @@ export function WahrscheinlichGeborenesKindPage() {
 
           <InfoText
             question="Was ist das tatsächliche Geburtsdatum?"
-            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, das in die Geburtsurkunde eingetragen ist. "
+            answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, das in die Geburtsurkunde eingetragen ist."
           />
 
           <div>
             <label
-              className={classNames("mb-4 block text-16", {
+              className={classNames("label-small", {
                 "text-danger": formErrors.geburtsdatum,
               })}
               htmlFor={geburtsdatumInputIdentifier}

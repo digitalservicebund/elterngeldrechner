@@ -130,17 +130,13 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
                   denen Sie mehr Einkommen hatten.
                 </p>
 
-                <p className="mb-0 mt-20 font-bold">
-                  Was ist Mutterschaftsgeld?
-                </p>
-                <p className="mb-0">
+                <p className="font-bold">Was ist Mutterschaftsgeld?</p>
+                <p>
                   Der Anspruch auf Mutterschaftsleistungen besteht grundsätzlich
                   in den letzten 6 Wochen vor der Geburt, am Tag der Entbindung
                   und 8 Wochen nach der Geburt (Schutzfristen).
                 </p>
-                <p className="mb-0">
-                  Während der Mutterschutzfrist bekommen Sie:
-                </p>
+                <p>Während der Mutterschutzfrist bekommen Sie:</p>
                 <ul>
                   <li>
                     Mutterschaftsgeld Ihrer Krankenkasse, wenn Sie gesetzlich
@@ -157,7 +153,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
                   </li>
                 </ul>
 
-                <p className="mb-0 mt-20 font-bold">
+                <p className="font-bold">
                   Was muss ich später für den Antrag beachten?
                 </p>
                 <ul>

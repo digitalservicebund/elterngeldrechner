@@ -20,7 +20,7 @@ export function AuswahloptionenLegende({ beispiele }: Props): ReactNode {
   return (
     <div className="rounded border border-solid border-grey p-20 pt-0">
       <p className="pb-10">Erklärung Abbildung:</p>
-      <ul className="flex flex-wrap gap-16 md:gap-56" aria-hidden="true">
+      <ul className="flex flex-wrap gap-16 ml-0 md:gap-56" aria-hidden="true">
         {auswahloptionen.map((option) => (
           <li key={option} className="flex items-center gap-10">
             <AuswahloptionPlakette

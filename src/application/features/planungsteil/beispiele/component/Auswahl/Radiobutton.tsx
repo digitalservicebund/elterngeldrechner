@@ -56,14 +56,15 @@ export function Radiobutton({
         {titel}
       </p>
 
-      <p id={`${radioId}-beschreibung`} className="col-span-full break-words">
+      <p
+        id={`${radioId}-beschreibung`}
+        className="mt-0 col-span-full break-words"
+      >
         {beschreibung}
       </p>
 
       {!!body && (
-        <div className="col-span-full flex flex-col justify-center gap-4 py-10">
-          {body}
-        </div>
+        <div className="col-span-full flex flex-col justify-center">{body}</div>
       )}
 
       {!!footer && (

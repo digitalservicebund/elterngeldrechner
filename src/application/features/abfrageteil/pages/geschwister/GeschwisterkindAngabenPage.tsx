@@ -85,30 +85,32 @@ export function GeschwisterkindAngabenPage() {
             geboren?
           </h3>
 
-          <label
-            className={classNames("mb-4 block text-16", {
-              "text-danger": formErrors.geburtsdatum,
-            })}
-            htmlFor={geburtsdatumInputIdentifier}
-          >
-            Geburtsdatum (TT.MM.JJJJ)
-          </label>
+          <div>
+            <label
+              className={classNames("label-small", {
+                "text-danger": formErrors.geburtsdatum,
+              })}
+              htmlFor={geburtsdatumInputIdentifier}
+            >
+              Geburtsdatum (TT.MM.JJJJ)
+            </label>
 
-          <DateInput
-            id={geburtsdatumInputIdentifier}
-            error={formErrors.geburtsdatum?.message}
-            {...register("geburtsdatum")}
-          />
+            <DateInput
+              id={geburtsdatumInputIdentifier}
+              error={formErrors.geburtsdatum?.message}
+              {...register("geburtsdatum")}
+            />
+          </div>
         </div>
 
         <CustomRadioGroup
-          legend=<h3>
-            Hat das Geschwisterkind{" "}
-            {geburtsdatum && geburtsdatum.length > 0
-              ? `(geb. ${geburtsdatum})`
-              : routeParams.geschwisterkindIndex + 1}{" "}
-            eine Behinderung?
-          </h3>
+          legend={`Hat das Geschwisterkind
+            ${
+              geburtsdatum && geburtsdatum.length > 0
+                ? `(geb. ${geburtsdatum})`
+                : routeParams.geschwisterkindIndex + 1
+            }
+            eine Behinderung?`}
           errors={formErrors}
           register={register}
           name="hatBehinderung"

@@ -175,13 +175,13 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
             question="Wo finde ich diese Angaben?"
             answer={
               <>
-                <p className="mb-20">
+                <p>
                   Den Zeitraum können Sie auf Ihrem Elterngeld-Bescheid für das
                   Geschwisterkind ablesen. Falls Sie den Bescheid nicht
                   griffbereit haben, helfen Ihnen auch Ihre Kontoauszüge: Suchen
                   Sie zum Beispiel nach Zahlungen von der Elterngeldstelle.
                 </p>
-                <p className="mb-0 mt-20 font-bold">Was ist wichtig für Sie?</p>
+                <p className="font-bold">Was ist wichtig für Sie?</p>
                 <ul>
                   <li>
                     Das gilt nur für Elterngeld, das Sie bis zum 14. Lebensmonat
@@ -210,7 +210,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
                 <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
                   <div>
                     <label
-                      className={classNames("mb-4 block text-16", {
+                      className={classNames("block label-small", {
                         "text-danger":
                           formErrors.elterngeldGeschwisterkind?.[index]?.von,
                       })}
@@ -230,7 +230,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
 
                   <div>
                     <label
-                      className={classNames("mb-4 block text-16", {
+                      className={classNames("block label-small", {
                         "text-danger":
                           formErrors.elterngeldGeschwisterkind?.[index]?.bis,
                       })}
@@ -253,11 +253,11 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
                   <Button
                     type="button"
                     buttonStyle="link"
-                    className="mb-16 p-4"
+                    className="mb-kern-default p-4"
                     onClick={() => remove(index)}
                     aria-label="Zeile löschen"
                   >
-                    <span className="flex items-center gap-4 text-16">
+                    <span className="flex items-center gap-4 label-small">
                       <CloseIcon className="mt-4" />
                       <span>Zeitraum löschen</span>
                     </span>
@@ -273,7 +273,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
             className="p-4"
             onClick={() => append({ von: "", bis: "" })}
           >
-            <span className="flex items-center gap-4 text-16">
+            <span className="flex items-center gap-4 label-small">
               <AddIcon className="mt-4" />
               <span>Weiteren Zeitraum hinzufügen</span>
             </span>

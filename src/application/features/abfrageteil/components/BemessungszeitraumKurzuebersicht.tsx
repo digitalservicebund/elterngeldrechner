@@ -22,7 +22,7 @@ export function BemessungszeitraumKurzuebersicht({
           <ul>
             {formatiereBemessungszeitraum(bemessungszeitraum).map(
               (zeitraum, index) => (
-                <li key={index} className="list ml-32 list-disc font-bold">
+                <li key={index} className="font-bold">
                   {zeitraum}
                 </li>
               ),

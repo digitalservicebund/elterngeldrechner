@@ -50,7 +50,7 @@ export function CurrencyInput<
       )}
     >
       <label
-        className={classNames("mb-8", {
+        className={classNames("label-small", {
           "text-danger": error,
         })}
         htmlFor={name}

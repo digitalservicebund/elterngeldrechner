@@ -9,7 +9,7 @@ export function AusklammerungsZeitraumBox({
   ausklammerungen,
 }: AusklammerungsZeitraumBoxProps) {
   return (
-    <div className="mt-20">
+    <div>
       {ausklammerungen.length > 0 && (
         <div className="rounded-b border border-dashed border-grey p-20 pt-0">
           <p className="font-bold">
@@ -18,12 +18,9 @@ export function AusklammerungsZeitraumBox({
               : "Übersprungener Zeitraum"}
             :
           </p>
-          <ul className="ml-32 mt-4 list-disc">
+          <ul>
             {ausklammerungen.map((ausklammerung, index) => (
-              <li
-                key={`${ausklammerung.von.toString()}-${index}`}
-                className="m-0"
-              >
+              <li key={`${ausklammerung.von.toString()}-${index}`}>
                 {mappeAusklammerungGrund(ausklammerung.grund)}{" "}
                 {ausklammerung.von.toLocaleString("de-DE", {
                   day: "2-digit",

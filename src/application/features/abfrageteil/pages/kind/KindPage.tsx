@@ -45,7 +45,7 @@ export function KindPage() {
     <Page id="kind-page" heading="Angaben zur Geburt">
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend=<h3 className="mb-10">Ist Ihr Kind schon geboren?</h3>
+          legend="Ist Ihr Kind schon geboren?"
           errors={formErrors}
           register={register}
           name="istGeboren"

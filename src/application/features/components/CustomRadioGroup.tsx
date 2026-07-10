@@ -60,7 +60,7 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
       <fieldset
         role="radiogroup"
         className={classNames(
-          "flex gap-16",
+          "flex gap-kern-default",
           {
             "flex-col": vertical,
             "justify-around": horizontal,
@@ -69,9 +69,9 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         )}
         aria-describedby={hasError ? errorIdentifier : undefined}
       >
-        <legend className={children ? "" : "mb-8"}>{legend}</legend>
+        <legend className="title-large mb-kern-default">{legend}</legend>
 
-        {!!children && <div className="mb-8">{children}</div>}
+        {!!children && <div>{children}</div>}
 
         {options.map((option, i) => {
           const descriptionId = `${baseId}-${option.label}`;

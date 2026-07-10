@@ -18,9 +18,9 @@ export function Prueftippbox({
   return (
     <>
       {tips.hasSpecialBonusTip === true && (
-        <div className="my-10 flex flex-col items-center gap-24 bg-white p-20">
+        <div className="input-container my-10 items-center bg-white p-20 pt-10">
           <div className="flex gap-10">
-            <LightbulbIcon className="-mt-8 text-[2.3rem]" />
+            <LightbulbIcon className="mt-8 text-[2.3rem]" />
             <p>
               Tipp: Wenn Sie im Anschluss an Ihre Planung{" "}
               {!alleinerziehend && <strong>beide </strong>}
@@ -50,7 +50,7 @@ export function Prueftippbox({
             <LightbulbIcon className="mr-10 text-primary" />
             Tipp:&nbsp;
           </p>
-          <ul className="ml-40 mt-10 list-disc pl-24">
+          <ul className="pl-24">
             {tips.normalTips.map((tip) => (
               <li key={tip}>{tip}</li>
             ))}

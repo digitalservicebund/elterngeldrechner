@@ -145,7 +145,7 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
                   verdient haben (meist die Zeit vor der Geburt des Kindes).
                 </p>
 
-                <p className="mb-0 mt-20 font-bold">
+                <p className="font-bold">
                   Was muss ich später für den Antrag beachten?
                 </p>
                 <ul>

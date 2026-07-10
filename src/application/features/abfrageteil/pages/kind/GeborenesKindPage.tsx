@@ -77,20 +77,22 @@ export function GeborenesKindPage() {
             answer='Den errechneten Entbindungstermin finden Sie in Ihrem Mutterpass unter dem Abschnitt "Voraussichtlicher Entbindungstermin" oder auf den Ultraschallberichten.'
           />
 
-          <label
-            className={classNames("mb-4 block text-16", {
-              "text-danger": formErrors.errechneterEntbindungstermin,
-            })}
-            htmlFor={entbindungsterminInputIdentifier}
-          >
-            Errechneter Entbindungstermin (TT.MM.JJJJ)
-          </label>
+          <div>
+            <label
+              className={classNames("label-small", {
+                "text-danger": formErrors.errechneterEntbindungstermin,
+              })}
+              htmlFor={entbindungsterminInputIdentifier}
+            >
+              Errechneter Entbindungstermin (TT.MM.JJJJ)
+            </label>
 
-          <DateInput
-            id={entbindungsterminInputIdentifier}
-            error={formErrors.errechneterEntbindungstermin?.message}
-            {...register("errechneterEntbindungstermin")}
-          />
+            <DateInput
+              id={entbindungsterminInputIdentifier}
+              error={formErrors.errechneterEntbindungstermin?.message}
+              {...register("errechneterEntbindungstermin")}
+            />
+          </div>
         </div>
 
         <div className="input-container">
@@ -101,20 +103,22 @@ export function GeborenesKindPage() {
             answer="Das tatsächliche Geburtsdatum Ihres Kindes ist das Datum, das in die Geburtsurkunde eingetragen ist. Wenn Ihr Kind besonders früh, das heißt mindestens sechs Wochen vor dem errechneten Termin geboren wurde, können Sie länger Elterngeld bekommen."
           />
 
-          <label
-            className={classNames("mb-4 block text-16", {
-              "text-danger": formErrors.geburtsdatum,
-            })}
-            htmlFor={geburtsdatumInputIdentifier}
-          >
-            Geburtsdatum (TT.MM.JJJJ)
-          </label>
+          <div>
+            <label
+              className={classNames("label-small", {
+                "text-danger": formErrors.geburtsdatum,
+              })}
+              htmlFor={geburtsdatumInputIdentifier}
+            >
+              Geburtsdatum (TT.MM.JJJJ)
+            </label>
 
-          <DateInput
-            id={geburtsdatumInputIdentifier}
-            error={formErrors.geburtsdatum?.message}
-            {...register("geburtsdatum")}
-          />
+            <DateInput
+              id={geburtsdatumInputIdentifier}
+              error={formErrors.geburtsdatum?.message}
+              {...register("geburtsdatum")}
+            />
+          </div>
         </div>
 
         <div className="input-container">

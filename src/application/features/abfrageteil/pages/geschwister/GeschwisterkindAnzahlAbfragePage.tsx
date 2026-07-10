@@ -64,7 +64,7 @@ export function GeschwisterkindAnzahlAbfragePage() {
             question="Was bedeutet „im Haushalt leben“?"
             answer={
               <>
-                <p className="mb-0">Ein Kind lebt in Ihrem Haushalt, wenn:</p>
+                <p>Ein Kind lebt in Ihrem Haushalt, wenn:</p>
                 <ul>
                   <li>es bei Ihnen gemeldet ist.</li>
                   <li>

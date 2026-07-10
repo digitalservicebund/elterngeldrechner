@@ -132,9 +132,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           </div>
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">Ist {vorname} kirchensteuerpflichtig?</h3>
-            }
+            legend={`Ist ${vorname} kirchensteuerpflichtig?`}
             errors={formErrors}
             register={register}
             name="istKirchensteuerpflichtig"
@@ -145,12 +143,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           />
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">
-                Ist {vorname} über die gesetzliche Krankenversicherung
-                pflichtversichert?
-              </h3>
-            }
+            legend={`Ist ${vorname} über die gesetzliche Krankenversicherung
+                pflichtversichert?`}
             errors={formErrors}
             register={register}
             name="istGesetzlichKrankenpflichtversichert"
@@ -163,13 +157,13 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p className="mb-16">
+                  <p>
                     Wenn Sie angestellt sind, gilt für Sie in den meisten Fällen
                     die gesetzliche Pflichtversicherung.
                   </p>
 
                   <p>Sie wählen „Nein“, wenn Sie</p>
-                  <ul className="mb-16">
+                  <ul>
                     <li>freiwillig gesetzlich versichert,</li>
                     <li>familienversichert,</li>
                     <li>privat versichert, </li>
@@ -187,12 +181,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           </CustomRadioGroup>
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">
-                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-                Rentenversicherung?
-              </h3>
-            }
+            legend={`Zahlt ${vorname} Pflichtbeiträge in die gesetzliche
+                Rentenversicherung?`}
             errors={formErrors}
             register={register}
             name="istGesetzlichRentenversichert"
@@ -205,7 +195,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p className="mb-16">
+                  <p>
                     Wenn Sie angestellt sind, zahlen Sie in der Regel
                     automatisch Pflichtbeiträge zur gesetzlichen
                     Rentenversicherung.
@@ -215,7 +205,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                     Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
                     zum Beispiel weil Sie:
                   </p>
-                  <ul className="mb-16">
+                  <ul>
                     <li>verbeamtet sind,</li>
                     <li>selbstständig tätig sind,</li>
                     <li>
@@ -233,12 +223,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           </CustomRadioGroup>
 
           <CustomRadioGroup
-            legend={
-              <h3 className="mb-10">
-                Zahlt {vorname} Pflichtbeiträge in die gesetzliche
-                Arbeitslosenversicherung?
-              </h3>
-            }
+            legend={`Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+                Arbeitslosenversicherung?`}
             errors={formErrors}
             register={register}
             name="istGesetzlichArbeitlosenversichert"
@@ -251,7 +237,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
               question="Was bedeutet das?"
               answer={
                 <>
-                  <p className="mb-16">
+                  <p>
                     Wenn Sie angestellt sind, zahlen Sie in der Regel
                     automatisch Pflichtbeiträge zur gesetzlichen
                     Arbeitslosenversicherung.
@@ -261,7 +247,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                     Sie wählen „Nein“, wenn Sie keine Pflichtbeiträge zahlen,
                     zum Beispiel weil Sie:
                   </p>
-                  <ul className="mb-16">
+                  <ul>
                     <li>verbeamtet sind,</li>
                     <li>selbstständig tätig sind,</li>
                     <li>
@@ -280,12 +266,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
           {kannDurchschnittAngegebenWerden ? (
             <CustomRadioGroup
-              legend={
-                <h3 className="mb-10">
-                  Hat {vorname} im Bemessungszeitraum immer gleich viel pro
-                  Monat verdient?
-                </h3>
-              }
+              legend={`Hat ${vorname} im Bemessungszeitraum immer gleich viel pro
+                  Monat verdient?`}
               errors={formErrors}
               register={register}
               name="istEinkommenGleichVerteilt"

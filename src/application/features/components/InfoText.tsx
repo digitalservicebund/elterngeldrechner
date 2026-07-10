@@ -26,7 +26,7 @@ export function InfoText(properties: Props): ReactNode {
         <u>{question}</u>
       </summary>
 
-      <div className="mt-4 border-0 border-l-4 border-solid border-grey pl-10 [&_ul]:ml-24 [&_ul]:list-disc">
+      <div className="border-0 border-l-4 border-solid border-grey pl-10">
         {typeof answer === "string" ? <p>{answer}</p> : answer}
       </div>
     </details>

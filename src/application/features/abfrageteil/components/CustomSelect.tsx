@@ -68,7 +68,7 @@ export function CustomSelect<TFieldValues extends FieldValues>({
       )}
     >
       <label
-        className={classNames({
+        className={classNames("label-small", {
           "mb-4": slotBetweenLabelAndSelect,
           "text-danger": error,
         })}

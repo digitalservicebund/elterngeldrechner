@@ -174,73 +174,67 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
             </p>
           </div>
 
-          <div className="flex flex-col">
-            <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
-              <div>
-                <label
-                  className={classNames("mb-4 block text-16", {
-                    "text-danger": formErrors.mutterschutzGeschwisterkind?.von,
-                  })}
-                  htmlFor="mutterschutz-von"
-                >
-                  Beginn des Mutterschutzes (TT.MM.JJJJ)
-                </label>
-                <DateInput
-                  id="mutterschutz-von"
-                  {...register("mutterschutzGeschwisterkind.von")}
-                  error={formErrors.mutterschutzGeschwisterkind?.von?.message}
-                />
-              </div>
-
-              <div>
-                <label
-                  className={classNames("mb-4 block text-16", {
-                    "text-danger": formErrors.mutterschutzGeschwisterkind?.bis,
-                  })}
-                  htmlFor="mutterschutz-bis"
-                >
-                  Ende des Mutterschutzes (TT.MM.JJJJ)
-                </label>
-                <DateInput
-                  id="mutterschutz-bis"
-                  {...register("mutterschutzGeschwisterkind.bis")}
-                  error={formErrors.mutterschutzGeschwisterkind?.bis?.message}
-                />
-              </div>
+          <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
+            <div>
+              <label
+                className={classNames("block label-small", {
+                  "text-danger": formErrors.mutterschutzGeschwisterkind?.von,
+                })}
+                htmlFor="mutterschutz-von"
+              >
+                Beginn des Mutterschutzes (TT.MM.JJJJ)
+              </label>
+              <DateInput
+                id="mutterschutz-von"
+                {...register("mutterschutzGeschwisterkind.von")}
+                error={formErrors.mutterschutzGeschwisterkind?.von?.message}
+              />
             </div>
 
-            <InfoText
-              className="mt-20"
-              question="Der vorausgefüllte Zeitraum stimmt nicht?"
-              answer={
-                <>
-                  <p>
-                    Der Mutterschutz umfasst in der Regel 6 Wochen vor und 8
-                    Wochen nach der Geburt. Wir haben aufgrund des eingetragenen
-                    Geburtstdatums die Daten für den Mutterschutz automatisch
-                    berechnet.
-                  </p>
-                  <p>
-                    Wenn Sie wissen, dass diese Daten nicht stimmen, können Sie
-                    diese einfach ändern. Das ist meist der Fall, wenn:
-                  </p>
-                  <ul>
-                    <li>das Kind zu früh geboren wurde</li>
-                    <li>
-                      Mehrlinge (Zwillinge, Drillinge etc.) geboren werden
-                    </li>
-                    <li>das Kind eine Behinderung hat </li>
-                    <li>das Kind ein geringes Geburtsgewicht hat</li>
-                  </ul>
-                  <p>
-                    Sie finden diese Angaben beispielsweise im Mutterpass oder
-                    auf der Bescheinigung der Ärztin / des Arztes oder der
-                    Hebamme.
-                  </p>
-                </>
-              }
-            />
+            <div>
+              <label
+                className={classNames("block label-small", {
+                  "text-danger": formErrors.mutterschutzGeschwisterkind?.bis,
+                })}
+                htmlFor="mutterschutz-bis"
+              >
+                Ende des Mutterschutzes (TT.MM.JJJJ)
+              </label>
+              <DateInput
+                id="mutterschutz-bis"
+                {...register("mutterschutzGeschwisterkind.bis")}
+                error={formErrors.mutterschutzGeschwisterkind?.bis?.message}
+              />
+            </div>
           </div>
+
+          <InfoText
+            question="Der vorausgefüllte Zeitraum stimmt nicht?"
+            answer={
+              <>
+                <p>
+                  Der Mutterschutz umfasst in der Regel 6 Wochen vor und 8
+                  Wochen nach der Geburt. Wir haben aufgrund des eingetragenen
+                  Geburtstdatums die Daten für den Mutterschutz automatisch
+                  berechnet.
+                </p>
+                <p>
+                  Wenn Sie wissen, dass diese Daten nicht stimmen, können Sie
+                  diese einfach ändern. Das ist meist der Fall, wenn:
+                </p>
+                <ul>
+                  <li>das Kind zu früh geboren wurde</li>
+                  <li>Mehrlinge (Zwillinge, Drillinge etc.) geboren werden</li>
+                  <li>das Kind eine Behinderung hat </li>
+                  <li>das Kind ein geringes Geburtsgewicht hat</li>
+                </ul>
+                <p>
+                  Sie finden diese Angaben beispielsweise im Mutterpass oder auf
+                  der Bescheinigung der Ärztin / des Arztes oder der Hebamme.
+                </p>
+              </>
+            }
+          />
         </div>
 
         <div className="button-group">

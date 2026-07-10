@@ -122,8 +122,8 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       id="datenuebernahme-page"
       heading="Übernahme Planung in den Papierantrag auf Elterngeld"
     >
-      <div className="flex flex-col">
-        <div className="mb-32 bg-off-white p-24">
+      <div className="content-container">
+        <div className="bg-off-white p-24">
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
               <img
@@ -227,7 +227,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
           )}
         </div>
 
-        <p className="my-40">
+        <p>
           Ihre Daten können nicht direkt in den digitalen Antrag übertragen
           werden. Wenn Sie den Antrag digital einreichen möchten, können Sie
           Ihre Planungsdaten manuell in{" "}

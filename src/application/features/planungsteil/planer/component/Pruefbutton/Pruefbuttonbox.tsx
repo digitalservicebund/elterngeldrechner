@@ -121,10 +121,10 @@ export function Pruefbuttonbox({
         </Button>
       ) : istPlanungGueltig ? (
         <>
-          <div className="flex w-full flex-col items-center gap-16 bg-Bonus-light p-32">
-            <p className="font-bold">
+          <div className="input-container w-full items-center bg-Bonus-light p-32">
+            <h3 className="font-bold">
               <CheckIcon /> Super. Ihre Planung ist gültig.
-            </p>
+            </h3>
 
             <Prueftippbox
               tips={tips}
@@ -133,16 +133,12 @@ export function Pruefbuttonbox({
             />
 
             {!!bundeslandAntragSupport.isSupported && (
-              <div className="flex flex-col items-center">
-                <Button
-                  type="button"
-                  onClick={planInAntragUebernehmen}
-                  className="my-20"
-                >
+              <div className="input-container items-center mt-20">
+                <Button type="button" onClick={planInAntragUebernehmen}>
                   Planung in den Papierantrag übernehmen
                 </Button>
 
-                <div className="mb-40 text-center">
+                <div className="mb-kern-large text-center">
                   <p className="max-w-none">
                     Bitte beachten Sie: Eine automatische Übermittlung Ihrer
                     Planung in den digitalen Antrag ist derzeit nicht möglich.
@@ -163,13 +159,13 @@ export function Pruefbuttonbox({
               </div>
             )}
 
-            <div className="flex flex-col text-center print:hidden">
+            <div className="text-container text-center print:hidden">
               <Button type="button" buttonStyle="link" onClick={planungDrucken}>
                 <DownloadIcon className="mr-8" />
                 Planung als PDF drucken oder speichern
               </Button>
 
-              <p className="mt-8">Sie können Ihre Planung ausdrucken.</p>
+              <p>Sie können Ihre Planung ausdrucken.</p>
               <p className="max-w-none">
                 Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
                 „Als PDF speichern“ aus.
@@ -177,7 +173,7 @@ export function Pruefbuttonbox({
             </div>
 
             {!bundeslandAntragSupport.isSupported && (
-              <div className="mt-40 text-center">
+              <div className="text-center">
                 <p className="max-w-none">
                   Den PDF-Antrag für {bundeslandAntragSupport.name} sowie den
                   Zugang zum Online-Antrag finden Sie auf folgender Seite:

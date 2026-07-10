@@ -127,7 +127,7 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
             question="Wo finde ich diese Angaben?"
             answer={
               <>
-                <p className="mb-20">
+                <p>
                   Schauen Sie auf Ihr ärztliches Attest. Dort stehen die genauen
                   Daten. Bitte tragen Sie diese hier ein.
                 </p>
@@ -149,7 +149,7 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
                 <div className="flex flex-wrap gap-10 *:grow *:basis-[22rem]">
                   <div>
                     <label
-                      className={classNames("mb-4 block text-16", {
+                      className={classNames("block label-small", {
                         "text-danger":
                           formErrors.erkrankungSchwangerschaft?.[index]?.von,
                       })}
@@ -169,7 +169,7 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
 
                   <div>
                     <label
-                      className={classNames("mb-4 block text-16", {
+                      className={classNames("block label-small", {
                         "text-danger":
                           formErrors.erkrankungSchwangerschaft?.[index]?.bis,
                       })}
@@ -192,11 +192,11 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
                   <Button
                     type="button"
                     buttonStyle="link"
-                    className="mb-16 p-4"
+                    className="mb-kern-default p-4"
                     onClick={() => remove(index)}
                     aria-label="Zeile löschen"
                   >
-                    <span className="flex items-center gap-4 text-16">
+                    <span className="flex items-center gap-4 label-small">
                       <CloseIcon className="mt-4" />
                       <span>Zeitraum löschen</span>
                     </span>
@@ -212,7 +212,7 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
             className="p-4"
             onClick={() => append({ von: "", bis: "" })}
           >
-            <span className="flex items-center gap-4 text-16">
+            <span className="flex items-center gap-4 label-small">
               <AddIcon className="mt-4" />
               <span>Weiteren Zeitraum hinzufügen</span>
             </span>

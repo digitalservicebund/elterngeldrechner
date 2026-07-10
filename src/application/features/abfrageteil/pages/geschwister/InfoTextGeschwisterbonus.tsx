@@ -15,9 +15,7 @@ export function InfoTextGeschwisterbonus({ question }: Props): ReactNode {
             Wenn schon ein oder mehrere ältere Kinder in Ihrem Haushalt leben,
             können Sie mehr Geld bekommen. Das nennt man Geschwisterbonus.
           </p>
-          <p className="mb-0">
-            Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt:
-          </p>
+          <p>Den Geschwisterbonus bekommen Sie, wenn in Ihrem Haushalt:</p>
           <ul>
             <li>
               mindestens <strong>ein weiteres Kind unter 3 Jahren</strong> lebt
@@ -34,12 +32,12 @@ export function InfoTextGeschwisterbonus({ question }: Props): ReactNode {
             </li>
           </ul>
 
-          <p className="mt-20 font-bold">Wie viel Geld ist das?</p>
+          <p className="font-bold">Wie viel Geld ist das?</p>
           <ul>
             <li>Ihr Elterngeld wird um 10 Prozent erhöht.</li>
             <li>Sie bekommen aber mindestens:</li>
           </ul>
-          <ul className="pl-32">
+          <ul>
             <li>75 € mehr im Monat beim Basiselterngeld</li>
             <li>37,50 € mehr im Monat beim ElterngeldPlus</li>
             <li>
@@ -48,14 +46,14 @@ export function InfoTextGeschwisterbonus({ question }: Props): ReactNode {
             </li>
           </ul>
 
-          <p className="mt-20 font-bold">Wer zählt zum Haushalt?</p>
+          <p className="font-bold">Wer zählt zum Haushalt?</p>
           <p>
             Das Kind muss in Ihrem gemeinsamen Haushalt angemeldet sein. In
             Patchwork-Familien zählen auch die leiblichen Kinder Ihres Partners
             oder Ihrer Partnerin dazu, wenn sie bei Ihnen wohnen.
           </p>
 
-          <p className="mb-0 mt-20 font-bold">Besonderheit bei Adoption:</p>
+          <p className="font-bold">Besonderheit bei Adoption:</p>
           <p>
             Hier zählt nicht der Geburtstag, sondern der Tag, an dem das Kind
             bei Ihnen eingezogen ist.

@@ -118,7 +118,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
 
           <div>
             <label
-              className={classNames("mb-4 block text-16", {
+              className={classNames("block label-small", {
                 "text-danger": formErrors.name,
               })}
               htmlFor={personNameInputIdentifier}
@@ -143,11 +143,9 @@ export function ElternteilZweiAllgemeineAngabenPage() {
         {!istErsterElternteilImMutterschutz ? (
           <CustomRadioGroup
             legend={
-              <h3 className="mb-16">
-                {geburtIstErfolgt
-                  ? `War ${vorname} im Mutterschutz?`
-                  : `Wird ${vorname} im Mutterschutz sein?`}
-              </h3>
+              geburtIstErfolgt
+                ? `War ${vorname} im Mutterschutz?`
+                : `Wird ${vorname} im Mutterschutz sein?`
             }
             errors={formErrors}
             register={register}
@@ -181,7 +179,7 @@ export function ElternteilZweiAllgemeineAngabenPage() {
                     </li>
                   </ul>
 
-                  <p className="mt-20 font-bold">
+                  <p className="font-bold">
                     Sie sind noch ganz am Anfang Ihrer Schwangerschaft?
                   </p>
                   <p>

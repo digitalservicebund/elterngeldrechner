@@ -180,7 +180,7 @@ export function PlanerPage() {
                     Lebensmonate, um etwas auszwählen oder zu ändern. So finden
                     Sie heraus, welche Planung für Sie am besten ist:
                   </p>
-                  <ul className="ml-24 list-disc">
+                  <ul>
                     <li>
                       Die Beträge werden auf Basis Ihrer Angaben berechnet. Sie
                       sind rechtlich nicht verbindlich.
@@ -265,7 +265,7 @@ export function PlanerPage() {
         ref={dialogElement}
         className="flex-col items-center gap-10 bg-primary-light open:flex"
       >
-        <p>
+        <p className="mt-0">
           Wenn Sie besonders viel Einkommen haben, können Sie kein Elterngeld
           bekommen. Falls noch nicht feststeht, ob Sie die Grenze von{" "}
           {MAX_EINKOMMEN.toLocaleString("de-DE")} Euro überschreiten, können Sie

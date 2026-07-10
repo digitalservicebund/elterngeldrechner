@@ -19,15 +19,13 @@ export function Beschreibung({ beispiel }: Props) {
   return (
     <>
       <div className="col-span-2">
-        <p className="mb-8">
+        <p>
           <Geldbetrag betrag={gesamtbezug} /> Elterngeld
         </p>
       </div>
 
       <div className="col-span-2">
-        <p className="mb-8 truncate">
-          {letzterLebensmonat} Lebensmonate Elterngeld
-        </p>
+        <p className="truncate">{letzterLebensmonat} Lebensmonate Elterngeld</p>
       </div>
     </>
   );

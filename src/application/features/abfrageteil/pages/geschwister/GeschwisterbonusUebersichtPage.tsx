@@ -60,8 +60,8 @@ export function GeschwisterbonusUebersichtPage() {
               <h3>Super, Sie können den Geschwisterbonus erhalten</h3>
             </div>
 
-            <div className="p-20">
-              <ul className="ml-32 mt-4 list-disc">
+            <div className="p-20 pt-10">
+              <ul>
                 <li>
                   Ihre Angaben haben ergeben, dass die Voraussetzungen für den
                   Geschwisterbonus erfüllt sind
@@ -94,8 +94,8 @@ export function GeschwisterbonusUebersichtPage() {
               <h3>Sie erhalten keinen Geschwisterbonus</h3>
             </div>
 
-            <div className=" p-20">
-              <ul className="ml-32 mt-4 list-disc">
+            <div className="p-20 pt-10">
+              <ul>
                 <li>
                   Ihre Angaben haben ergeben, dass die Altersgrenze für den
                   Geschwisterbonus überschritten ist.

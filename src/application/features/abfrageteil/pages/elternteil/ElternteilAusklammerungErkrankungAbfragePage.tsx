@@ -103,7 +103,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
                   das Ihr Elterngeld verringern.
                 </p>
 
-                <p className="mb-0 mt-20">
+                <p>
                   Wenn Sie aber aufgrund der Schwangerschaft krank waren, ist
                   das anders:
                 </p>
@@ -115,7 +115,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
                   </li>
                 </ul>
 
-                <p className="mt-20">
+                <p>
                   <strong>Wichtig: </strong>Das gilt nur bei Krankheit aufgrund
                   der Schwangerschaft. Wenn Sie aus anderen Gründen krank waren
                   (zum Beispiel wegen eines gebrochenen Beins), dürfen wir den
@@ -124,7 +124,7 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
                   währenddessen keine finanziellen Einbußen haben.
                 </p>
 
-                <p className="mb-0 mt-20 font-bold">
+                <p className="font-bold">
                   Was muss ich später für den Antrag beachten?
                 </p>
                 <ul>

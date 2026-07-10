@@ -28,7 +28,7 @@ export function Visualisierung({ beispiel, className }: Props): ReactNode {
       } = erstelleMonatsverteilung(lebensmonate, elternteil);
 
       return (
-        <div key={elternteil} className="pt-10 ">
+        <div key={elternteil}>
           <div className="flex items-center gap-[6px] pb-8">
             {ausgangslage.anzahlElternteile === 2 && (
               <p className="truncate">

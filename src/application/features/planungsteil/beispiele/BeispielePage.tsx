@@ -284,7 +284,7 @@ export function BeispielePage() {
             </div>
           )}
 
-          <div className="flex gap-16">
+          <div className="button-group">
             <Button
               type="button"
               buttonStyle="secondary"

@@ -67,6 +67,23 @@ export default defineConfig({
       },
     },
     {
+      files: ["src/application/**"],
+      rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            paths: [
+              {
+                name: "react-hook-form",
+                importNames: ["useForm"],
+                message: "Please use useFormWithValidationTracking instead.",
+              },
+            ],
+          },
+        ],
+      },
+    },
+    {
       files: [
         "src/monatsplaner/**",
         "src/elterngeldrechner/**",

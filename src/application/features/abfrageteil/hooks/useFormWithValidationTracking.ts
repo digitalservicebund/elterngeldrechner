@@ -1,4 +1,5 @@
 import {
+  // oxlint-disable no-restricted-imports -- useForm is restricted to enforce this as a replacement
   useForm,
   UseFormProps,
   UseFormReturn,

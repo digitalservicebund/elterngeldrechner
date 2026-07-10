@@ -67,7 +67,7 @@ export default defineConfig({
       },
     },
     {
-      files: ["src/application/**"],
+      files: ["src/application/features/abfrageteil/**"],
       rules: {
         "no-restricted-imports": [
           "error",

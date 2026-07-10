@@ -117,7 +117,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
               showGeneralErrorMessage ? generalErrorId : undefined
             }
           >
-            <p className="font-regular">
+            <p className="mt-0 font-regular">
               zum Beispiel in Vollzeit, Teilzeit, als Minijob, in Ausbildung,
               Freiwilligendienst.
             </p>
@@ -134,7 +134,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
               showGeneralErrorMessage ? generalErrorId : undefined
             }
           >
-            <p className="font-regular">
+            <p className="mt-0 font-regular">
               zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land- oder
               Forstbetrieb, Freiberuflichkeit, Selbstständig (GbR, GmbH,
               Beteiligung).
@@ -152,7 +152,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
               showGeneralErrorMessage ? generalErrorId : undefined
             }
           >
-            <p className="font-regular">
+            <p className="mt-0 font-regular">
               zum Beispiel als Lehrer oder Lehrerin, im Polizeidienst, in der
               Stadtverwaltung oder während des Referendariats.
             </p>
@@ -169,7 +169,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
               showGeneralErrorMessage ? generalErrorId : undefined
             }
           >
-            <p className="font-regular">
+            <p className="mt-0 font-regular">
               zum Beispiel BAföG, Bürgergeld, Arbeitslosengeld, Krankengeld oder
               Elterngeld.
             </p>
@@ -185,7 +185,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
               showGeneralErrorMessage ? generalErrorId : undefined
             }
           >
-            <p className="font-regular">
+            <p className="mt-0 font-regular">
               zum Beispiel während eines Studiums, unbezahlter Urlaub oder als
               Hausfrau oder Hausmann.
             </p>

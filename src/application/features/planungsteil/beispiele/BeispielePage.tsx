@@ -204,10 +204,10 @@ export function BeispielePage() {
       {isErklaerungOpen ? (
         <Erklaerung onClose={hideErklaerung} />
       ) : (
-        <div className="flex flex-col gap-32">
-          <h3>Wollen Sie einen Vorschlag für Ihre Planung?</h3>
+        <div className="content-container">
+          <div className="text-container">
+            <h3>Wollen Sie einen Vorschlag für Ihre Planung?</h3>
 
-          <div className="mb-20">
             <p>
               Wählen Sie einen Vorschlag aus und passen Sie ihn im Planer auf
               der nächsten Seite an. Alternativ können Sie auch eine eigene
@@ -217,7 +217,7 @@ export function BeispielePage() {
             <Anleitung
               description="Erfahren Sie mehr über das Elterngeld"
               onOpenErklaerung={showErklaerung}
-              className="-mt-10 mb-16"
+              className="mb-16"
             />
 
             <BeispielAuswahloptionenLegende beispiele={beispiele} />

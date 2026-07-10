@@ -173,7 +173,7 @@ export function ElternteilBMZUebersichtPage() {
             <h3>Ihr Bemessungszeitraum: {bemessungszeitraumUeberschrift()}</h3>
           </div>
 
-          <div className="p-20 pb-32">
+          <div className="pl-20 pb-32">
             <div>
               {taetigkeitenFlow === "Selbstaendig" ? (
                 <>
@@ -270,7 +270,7 @@ export function ElternteilBMZUebersichtPage() {
                         })}
                         {ausklammerung.grund ===
                           "elterngeldGeschwisterkind" && (
-                          <p className="italic">
+                          <p className="mt-0 italic">
                             Beachten Sie, dass Elterngeld bis maximal zum 14.
                             Lebensmonat berücksichtigt werden kann. Sollten Sie
                             einen längeren Zeitraum eingetragen haben,

@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
 import {
@@ -21,10 +20,10 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { bestimmeEinkommensarten } from "./tracking";
 import { posthog } from "@/application/user-tracking";
 import { sindBeideElternteile } from "../../domain/sindBeideElternteile";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export function ElternteilTaetigkeitenAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -44,7 +43,7 @@ export function ElternteilTaetigkeitenAbfragePage() {
   const istPersonAlleinerziehend = findeAlleinerziehend(eventStream);
   const wirdZweitePersonBeruecksichtigt = sindBeideElternteile(eventStream);
 
-  const form = useForm<ElternteilTaetigkeitenAbfrage>({
+  const form = useFormWithValidationTracking<ElternteilTaetigkeitenAbfrage>({
     resolver: zodResolver(ElternteilTaetigkeitenAbfrageSchema),
     defaultValues: encodeSafely(
       ElternteilTaetigkeitenAbfrageSchema,
@@ -53,8 +52,6 @@ export function ElternteilTaetigkeitenAbfragePage() {
   });
   const { register, handleSubmit, formState } = form;
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(form.subscribe);
 
   const onSubmit = async (values: ElternteilTaetigkeitenAbfrage) => {
     const event: FormEvent = {

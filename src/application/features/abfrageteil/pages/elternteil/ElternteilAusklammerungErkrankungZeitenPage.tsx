@@ -3,8 +3,7 @@ import CloseIcon from "~icons/material-symbols/close";
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId, useMemo } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
+import { useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import {
@@ -27,6 +26,7 @@ import {
   findeNaechstenPfad,
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
+import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 
 export type ElternteilAusklammerungErkrankungZeitenInput = z.input<
   typeof ElternteilAusklammerungErkrankungZeitenSchema
@@ -72,18 +72,17 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
   const geburtsdatum = findeGeburtsdatum(eventStream);
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
 
-  const { handleSubmit, control, register, formState, subscribe } = useForm<
-    ElternteilAusklammerungErkrankungZeitenInput,
-    undefined,
-    ElternteilAusklammerungErkrankungZeitenOutput
-  >({
-    resolver: zodResolver(ElternteilAusklammerungErkrankungZeitenSchema),
-    defaultValues: memoizedDefaultValues,
-  });
+  const { handleSubmit, control, register, formState } =
+    useFormWithValidationTracking<
+      ElternteilAusklammerungErkrankungZeitenInput,
+      undefined,
+      ElternteilAusklammerungErkrankungZeitenOutput
+    >({
+      resolver: zodResolver(ElternteilAusklammerungErkrankungZeitenSchema),
+      defaultValues: memoizedDefaultValues,
+    });
 
   const { errors: formErrors } = formState;
-
-  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: ElternteilAusklammerungErkrankungZeiten) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =

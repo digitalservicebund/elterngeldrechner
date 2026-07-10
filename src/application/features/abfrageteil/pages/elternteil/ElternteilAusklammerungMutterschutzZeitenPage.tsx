@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import {
@@ -108,7 +109,7 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
     };
   }, [letztesGueltigesEvent, mutterschutzGeschwisterkind]);
 
-  const { handleSubmit, register, formState } = useForm<
+  const { handleSubmit, register, formState, subscribe } = useForm<
     ElternteilAusklammerungMutterschutzGeschwisterkindZeitenInput,
     undefined,
     ElternteilAusklammerungMutterschutzGeschwisterkindZeitenOutput
@@ -120,6 +121,8 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindZeiten,

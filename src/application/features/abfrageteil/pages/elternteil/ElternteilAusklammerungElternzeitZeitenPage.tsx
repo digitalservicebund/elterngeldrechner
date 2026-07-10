@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId, useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import {
@@ -97,7 +98,7 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
     return true;
   };
 
-  const { handleSubmit, control, register, formState } = useForm<
+  const { handleSubmit, control, register, formState, subscribe } = useForm<
     ElternteilAusklammerungElterngeldGeschwisterkindZeitenInput,
     undefined,
     ElternteilAusklammerungElterngeldGeschwisterkindZeitenOput
@@ -109,6 +110,8 @@ export function ElternteilAusklammerungElternzeitZeitenPage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (
     values: ElternteilAusklammerungElterngeldGeschwisterkindZeiten,

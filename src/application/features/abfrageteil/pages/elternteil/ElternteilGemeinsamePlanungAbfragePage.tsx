@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { useNavigate } from "react-router";
 import {
   ElternteilGemeinsamePlanungAbfrage,
@@ -33,7 +34,7 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
   const currentRoute = Route.ElternteilGemeinsamePlanungAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(ElternteilGemeinsamePlanungAbfrageSchema),
     shouldUnregister: true,
     defaultValues: encodeSafely(
@@ -43,6 +44,8 @@ export function ElternteilGemeinsamePlanungAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: ElternteilGemeinsamePlanungAbfrage) => {
     const event: FormEvent = {

@@ -11,6 +11,7 @@ import { NumberInput } from "@/application/features/abfrageteil/components";
 import { Page } from "@/application/features/components";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useNavigateBack } from "@/application/features/abfrageteil/hooks/useNavigateBack";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import {
   type FormEvent,
   Route,
@@ -27,7 +28,7 @@ export function GeschwisterkindAnzahlAbfragePage() {
   const currentRoute = Route.GeschwisterkindAnzahlAbfrage;
   const letztesGueltigesEvent = findeLetztesGueltigesEvent(currentRoute);
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(GeschwisterkindAnzahlAbfrageSchema),
     defaultValues: encodeSafely(
       GeschwisterkindAnzahlAbfrageSchema,
@@ -36,6 +37,8 @@ export function GeschwisterkindAnzahlAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (values: GeschwisterkindAnzahlAbfrage) => {
     const event: FormEvent = {

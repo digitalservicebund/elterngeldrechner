@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { useNavigate } from "react-router";
 import {
   ElternteilAusklammerungElternzeitGeschwisterkindAbfrage,
@@ -68,7 +69,7 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
     return true;
   };
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(
       ElternteilAusklammerungElternzeitGeschwisterkindAbfrageSchema,
     ),
@@ -79,6 +80,8 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (
     values: ElternteilAusklammerungElternzeitGeschwisterkindAbfrage,

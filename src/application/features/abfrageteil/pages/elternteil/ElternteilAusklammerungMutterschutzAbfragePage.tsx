@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useId } from "react";
 import { useForm } from "react-hook-form";
+import { useValidierungsfehlerTracking } from "@/application/features/abfrageteil/hooks/useValidierungsfehlerTracking";
 import { useNavigate } from "react-router";
 import {
   ElternteilAusklammerungMutterschutzGeschwisterkindAbfrage,
@@ -53,7 +54,7 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
     routeParams.elternteilIndex,
   );
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, subscribe } = useForm({
     resolver: zodResolver(
       ElternteilAusklammerungMutterschutzGeschwisterkindAbfrageSchema,
     ),
@@ -64,6 +65,8 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
   });
 
   const { errors: formErrors } = formState;
+
+  useValidierungsfehlerTracking(subscribe);
 
   const onSubmit = async (
     values: ElternteilAusklammerungMutterschutzGeschwisterkindAbfrage,

@@ -6,14 +6,12 @@ export { WahrscheinlichGeborenesKindPage } from "./WahrscheinlichGeborenesKindPa
 export type {
   GeborenesKind,
   Geburt,
-  Kind,
   UngeborenesKind,
   WahrscheinlichGeborenesKind,
 } from "./KindSchema";
 export {
   GeborenesKindSchema,
   GeburtSchema,
-  KindSchema,
   UngeborenesKindSchema,
   WahrscheinlichGeborenesKindSchema,
 } from "./KindSchema";

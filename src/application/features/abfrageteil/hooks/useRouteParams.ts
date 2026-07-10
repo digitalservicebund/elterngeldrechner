@@ -11,7 +11,3 @@ export function useRouteParams<R extends Route>(
     Object.entries(params).map(([k, v]) => [k, Number(v)]),
   ) as Record<ExtractParams<R>, number>;
 }
-
-export type NumericRouteParams<R extends Route> = {
-  [K in keyof RouteParams<R>]: number;
-};

@@ -299,7 +299,7 @@ jobs:
           body: ${{ steps.changelog.outputs.content }}
 
       - name: Send release notification to Slack
-        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c
+        uses: slackapi/slack-github-action@0d95c9a7becc1e6e297d76df9bc735c44f4cbcbc
         with:
           payload: '{ "text": "<${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ github.ref_name }}|Release ${{ github.ref_name }}> has been published <https://familienportal.de/familienportal/meta/egr|on the Familienportal>. :rocket:" }'
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}

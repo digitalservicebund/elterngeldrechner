@@ -24,6 +24,10 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
+import {
+  trackMinijobAnteil,
+  ueberpruefeTrackingEinkommensarten,
+} from "./tracking";
 
 export function ElternteilWeitereTaetigkeitAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -70,6 +74,21 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     };
 
     dispatch(event);
+
+    if (!values.istWeitereTaetigkeitVorhanden) {
+      trackMinijobAnteil(eventStream, routeParams.elternteilIndex);
+
+      if (
+        taetigkeitenFlow === "Selbstaendig" &&
+        !taetigkeiten.istNichtSelbststaendig
+      ) {
+        ueberpruefeTrackingEinkommensarten(
+          eventStream,
+          routeParams.elternteilIndex,
+          taetigkeiten,
+        );
+      }
+    }
 
     await navigate(findeNaechstenPfad(event));
   };

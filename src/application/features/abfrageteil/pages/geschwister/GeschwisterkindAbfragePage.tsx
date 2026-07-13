@@ -47,11 +47,7 @@ export function GeschwisterkindAbfragePage() {
 
     dispatch(event);
 
-    posthog.register({
-      // Reset the accumulated flag so re-answering the question starts a fresh
-      // count; GeschwisterkindAngabenPage re-accumulates it per sibling.
-      hat_geschwister: values.istVorhanden,
-    });
+    posthog.register({ hat_geschwister: values.istVorhanden });
 
     await navigate(findeNaechstenPfad(event));
   };

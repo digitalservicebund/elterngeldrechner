@@ -1,3 +1,4 @@
+import { Temporal } from "@js-temporal/polyfill";
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useId } from "react";
@@ -18,6 +19,8 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
+import { posthog } from "@/application/user-tracking";
+import { bestimmeNutzergruppe } from "./tracking";
 
 export function WahrscheinlichGeborenesKindPage() {
   const { dispatch, findeLetztesGueltigesEvent } = useEventContext();
@@ -42,6 +45,13 @@ export function WahrscheinlichGeborenesKindPage() {
     const event: FormEvent = { route: currentRoute, payload: values };
 
     dispatch(event);
+
+    posthog.register({
+      nutzergruppe: bestimmeNutzergruppe(
+        Temporal.Now.plainDateISO(),
+        values.geburtsdatum,
+      ),
+    });
 
     await navigate(findeNaechstenPfad(event));
   };

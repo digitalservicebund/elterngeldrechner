@@ -25,7 +25,7 @@ import {
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
 import {
-  trackMinijobAnteil,
+  trackTaetigkeitenAngaben,
   ueberpruefeTrackingEinkommensarten,
 } from "./tracking";
 
@@ -76,7 +76,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
     dispatch(event);
 
     if (!values.istWeitereTaetigkeitVorhanden) {
-      trackMinijobAnteil(eventStream, routeParams.elternteilIndex);
+      trackTaetigkeitenAngaben(eventStream, routeParams.elternteilIndex);
 
       if (
         taetigkeitenFlow === "Selbstaendig" &&

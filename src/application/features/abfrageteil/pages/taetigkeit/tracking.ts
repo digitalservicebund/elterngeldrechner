@@ -2,16 +2,34 @@ import { FormEvent, Route } from "@/application/routing";
 import { posthog } from "@/application/user-tracking";
 import { ElternteilTaetigkeitenAbfrage } from "@/application/features/abfrageteil/pages/elternteil";
 import { bestimmeEinkommensarten } from "@/application/features/abfrageteil/pages/elternteil/tracking";
+import { Steuerklasse } from "@/elterngeldrechner";
 
 type NichtSelbststaendigEvent = Extract<
   FormEvent,
   { route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig }
 >;
 
-export function trackMinijobAnteil(
+type SozialversicherungenEvent = Extract<
+  FormEvent,
+  { route: Route.ElternteilTaetigkeitAngabenSozialversicherungen }
+>;
+
+export function trackTaetigkeitenAngaben(
   events: FormEvent[],
   elternteilIndex: number,
 ) {
+  const anteilMinijobs = bestimmeAnteilMinijobs(events, elternteilIndex);
+  const anteilOhneSV = bestimmeAnteilOhneSV(events, elternteilIndex);
+
+  if (anteilMinijobs !== undefined || anteilOhneSV !== undefined) {
+    posthog.capture("taetigkeiten_angaben_abgeschlossen", {
+      anteil_minijobs: anteilMinijobs,
+      anteil_ohne_sozialversicherungen: anteilOhneSV,
+    });
+  }
+}
+
+function bestimmeAnteilMinijobs(events: FormEvent[], elternteilIndex: number) {
   const relevanteNichtSelbststaendigEvents = events.filter(
     (e): e is NichtSelbststaendigEvent => {
       return (
@@ -21,20 +39,42 @@ export function trackMinijobAnteil(
     },
   );
 
-  if (relevanteNichtSelbststaendigEvents.length > 0) {
-    const nichtSelbststaendigMinijobEvents =
-      relevanteNichtSelbststaendigEvents.filter(
-        (e) => e.payload.istTaetigkeitMinijob === true,
+  return berechneAnteil(
+    relevanteNichtSelbststaendigEvents,
+    (e) => e.payload.istTaetigkeitMinijob === true,
+  );
+}
+
+function bestimmeAnteilOhneSV(events: FormEvent[], elternteilIndex: number) {
+  const relevanteSozialversicherungenEvents = events.filter(
+    (e): e is SozialversicherungenEvent => {
+      return (
+        e.route === Route.ElternteilTaetigkeitAngabenSozialversicherungen &&
+        e.params.elternteilIndex === elternteilIndex
       );
+    },
+  );
 
-    const anteilMinijobs =
-      nichtSelbststaendigMinijobEvents.length /
-      relevanteNichtSelbststaendigEvents.length;
+  return berechneAnteil(
+    relevanteSozialversicherungenEvents,
+    (e) =>
+      e.payload.istGesetzlichKrankenpflichtversichert === false &&
+      e.payload.istGesetzlichRentenversichert === false &&
+      e.payload.istGesetzlichArbeitlosenversichert === false,
+  );
+}
 
-    posthog.capture("taetigkeiten_angaben_abgeschlossen", {
-      anteil_minijobs: anteilMinijobs,
-    });
-  }
+function berechneAnteil<T>(
+  events: T[],
+  istZuBeruecksichtigen: (event: T) => boolean,
+) {
+  const anzahlEvents = events.length;
+
+  if (anzahlEvents === 0) return undefined;
+
+  const anzahlGefilterterEvents = events.filter(istZuBeruecksichtigen).length;
+
+  return anzahlGefilterterEvents / anzahlEvents;
 }
 
 export function ueberpruefeTrackingEinkommensarten(
@@ -81,9 +121,42 @@ if (import.meta.vitest) {
     };
   }
 
+  function sozialversicherungenEvent(
+    elternteilIndex: number,
+    taetigkeitIndex: number,
+    sv: {
+      istGesetzlichKrankenpflichtversichert: boolean;
+      istGesetzlichRentenversichert: boolean;
+      istGesetzlichArbeitlosenversichert: boolean;
+    },
+  ): SozialversicherungenEvent {
+    return {
+      route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+      params: { elternteilIndex, taetigkeitIndex },
+      payload: {
+        steuerklasse: Steuerklasse.I,
+        istKirchensteuerpflichtig: false,
+        istEinkommenGleichVerteilt: false,
+        ...sv,
+      },
+    };
+  }
+
+  const MIT_SV = {
+    istGesetzlichKrankenpflichtversichert: true,
+    istGesetzlichRentenversichert: true,
+    istGesetzlichArbeitlosenversichert: true,
+  };
+
+  const OHNE_SV = {
+    istGesetzlichKrankenpflichtversichert: false,
+    istGesetzlichRentenversichert: false,
+    istGesetzlichArbeitlosenversichert: false,
+  };
+
   afterEach(() => vi.restoreAllMocks());
 
-  describe("trackMinijobAnteil", () => {
+  describe("trackTaetigkeitenAngaben", () => {
     let captureSpy: ReturnType<typeof vi.spyOn>;
 
     beforeEach(() => {
@@ -91,22 +164,35 @@ if (import.meta.vitest) {
     });
 
     it("does not capture anything when there are no relevant Tätigkeiten", () => {
-      trackMinijobAnteil([], 0);
+      trackTaetigkeitenAngaben([], 0);
 
       expect(captureSpy).not.toHaveBeenCalled();
+    });
+
+    it("captures anteil_minijobs alone when no Sozialversicherungen data exists yet", () => {
+      const events = [nichtSelbststaendigEvent(0, 0, false)];
+
+      trackTaetigkeitenAngaben(events, 0);
+
+      expect(captureSpy).toHaveBeenCalledWith(
+        "taetigkeiten_angaben_abgeschlossen",
+        { anteil_minijobs: 0, anteil_ohne_sozialversicherungen: undefined },
+      );
     });
 
     it("captures anteil_minijobs as 0 when none of the Tätigkeiten are Minijobs", () => {
       const events = [
         nichtSelbststaendigEvent(0, 0, false),
         nichtSelbststaendigEvent(0, 1, false),
+        sozialversicherungenEvent(0, 0, MIT_SV),
+        sozialversicherungenEvent(0, 1, MIT_SV),
       ];
 
-      trackMinijobAnteil(events, 0);
+      trackTaetigkeitenAngaben(events, 0);
 
       expect(captureSpy).toHaveBeenCalledWith(
         "taetigkeiten_angaben_abgeschlossen",
-        { anteil_minijobs: 0 },
+        { anteil_minijobs: 0, anteil_ohne_sozialversicherungen: 0 },
       );
     });
 
@@ -116,11 +202,11 @@ if (import.meta.vitest) {
         nichtSelbststaendigEvent(0, 1, true),
       ];
 
-      trackMinijobAnteil(events, 0);
+      trackTaetigkeitenAngaben(events, 0);
 
       expect(captureSpy).toHaveBeenCalledWith(
         "taetigkeiten_angaben_abgeschlossen",
-        { anteil_minijobs: 1 },
+        { anteil_minijobs: 1, anteil_ohne_sozialversicherungen: undefined },
       );
     });
 
@@ -128,20 +214,55 @@ if (import.meta.vitest) {
       const events = [
         nichtSelbststaendigEvent(0, 0, true),
         nichtSelbststaendigEvent(0, 1, false),
+        sozialversicherungenEvent(0, 1, MIT_SV),
       ];
 
-      trackMinijobAnteil(events, 0);
+      trackTaetigkeitenAngaben(events, 0);
 
       expect(captureSpy).toHaveBeenCalledWith(
         "taetigkeiten_angaben_abgeschlossen",
-        { anteil_minijobs: 0.5 },
+        { anteil_minijobs: 0.5, anteil_ohne_sozialversicherungen: 0 },
+      );
+    });
+
+    it("captures anteil_ohne_sozialversicherungen as 1 when no Sozialversicherung applies at all", () => {
+      const events = [
+        nichtSelbststaendigEvent(0, 0, false),
+        sozialversicherungenEvent(0, 0, OHNE_SV),
+      ];
+
+      trackTaetigkeitenAngaben(events, 0);
+
+      expect(captureSpy).toHaveBeenCalledWith(
+        "taetigkeiten_angaben_abgeschlossen",
+        { anteil_minijobs: 0, anteil_ohne_sozialversicherungen: 1 },
+      );
+    });
+
+    it("only counts a Sozialversicherungen event as 'ohne SV' when all three Versicherungsarten are false", () => {
+      const events = [
+        nichtSelbststaendigEvent(0, 0, false),
+        sozialversicherungenEvent(0, 0, {
+          ...OHNE_SV,
+          istGesetzlichRentenversichert: true,
+        }),
+      ];
+
+      trackTaetigkeitenAngaben(events, 0);
+
+      expect(captureSpy).toHaveBeenCalledWith(
+        "taetigkeiten_angaben_abgeschlossen",
+        { anteil_minijobs: 0, anteil_ohne_sozialversicherungen: 0 },
       );
     });
 
     it("ignores Tätigkeiten belonging to a different Elternteil", () => {
-      const events = [nichtSelbststaendigEvent(1, 0, true)];
+      const events = [
+        nichtSelbststaendigEvent(1, 0, true),
+        sozialversicherungenEvent(1, 0, MIT_SV),
+      ];
 
-      trackMinijobAnteil(events, 0);
+      trackTaetigkeitenAngaben(events, 0);
 
       expect(captureSpy).not.toHaveBeenCalled();
     });

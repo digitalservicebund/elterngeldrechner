@@ -24,10 +24,7 @@ import {
 } from "@/application/routing";
 import { encodeSafely } from "@/application/features/abfrageteil/zod";
 import { useFormWithValidationTracking } from "../../hooks/useFormWithValidationTracking";
-import {
-  trackTaetigkeitenAngaben,
-  ueberpruefeTrackingEinkommensarten,
-} from "./tracking";
+import { trackTaetigkeitenAngaben, trackEinkommensarten } from "./tracking";
 
 export function ElternteilWeitereTaetigkeitAbfragePage() {
   const { dispatch, findeLetztesGueltigesEvent, filtereValideEventHistorie } =
@@ -82,7 +79,7 @@ export function ElternteilWeitereTaetigkeitAbfragePage() {
         taetigkeitenFlow === "Selbstaendig" &&
         !taetigkeiten.istNichtSelbststaendig
       ) {
-        ueberpruefeTrackingEinkommensarten(
+        trackEinkommensarten(
           eventStream,
           routeParams.elternteilIndex,
           taetigkeiten,

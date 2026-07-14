@@ -349,10 +349,14 @@ if (import.meta.vitest) {
       await import("@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege");
     const { useNavigateStateful } =
       await import("@/application/features/planungsteil/planer/hooks/useNavigateStateful");
-    const reactRouterModule = await import("react-router");
+    const { MemoryRouter } = await import("react-router");
 
     const { render, screen } = await import("@testing-library/react");
     const { Elternteil } = await import("@/monatsplaner");
+
+    const renderPageWithMemoryRouter = () => {
+      return render(<BeispielePage />, { wrapper: MemoryRouter });
+    };
 
     const mockAusgangslage = {
       anzahlElternteile: 2 as const,
@@ -370,7 +374,6 @@ if (import.meta.vitest) {
     const navigateSpy = vi.fn<NavigateStateful>();
 
     beforeEach(() => {
-      vi.spyOn(reactRouterModule, "useNavigate").mockReturnValue(vi.fn());
       vi.mocked(useAusgangslage).mockReturnValue(mockAusgangslage);
       vi.mocked(useBerechneElterngeldbezuege).mockReturnValue(
         vi.fn().mockReturnValue({}),
@@ -395,13 +398,13 @@ if (import.meta.vitest) {
         };
 
       it("zeigt eine kachel pro beispiel und eine option für eigene planung", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         expect(screen.getAllByRole("radio")).toHaveLength(3);
       });
 
       it("navigiert mit beispiel und plan nachdem eine beispiel selektiert wurde", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -422,7 +425,7 @@ if (import.meta.vitest) {
       });
 
       it("eigene planung überschreibt ein vorher selektiertes beispiel", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -451,7 +454,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         expect(
           screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
@@ -493,7 +496,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         expect(
           screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
@@ -513,7 +516,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         expect(
           screen.queryByText("Planungs-Entwurf weiter bearbeiten"),
@@ -555,7 +558,7 @@ if (import.meta.vitest) {
           navigateStateful: navigateSpy,
         });
 
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -591,7 +594,7 @@ if (import.meta.vitest) {
       beforeEach(() => vi.clearAllMocks());
 
       it("schreibt nach einer auswahl die option in eine tracking variable", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -602,7 +605,7 @@ if (import.meta.vitest) {
       });
 
       it("trackt die plan-metriken nach Auswahl eines Beispiels als gueltigen Plan", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -612,7 +615,7 @@ if (import.meta.vitest) {
       });
 
       it("schreibt bei eigener planung diese in die tracking variable", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -625,7 +628,7 @@ if (import.meta.vitest) {
       });
 
       it("trackt Beispiel-wurde-ausgewählt nach Auswahl eines Beispiels", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -635,7 +638,7 @@ if (import.meta.vitest) {
       });
 
       it("trackt Beispiel-wurde-ausgewählt auch bei der Option Eigene Planung", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Eigene Planung").click();
 
@@ -645,7 +648,7 @@ if (import.meta.vitest) {
       });
 
       it("erreicht conversion goal wenn mit einem Beispiel weiter navigiert wird", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -655,7 +658,7 @@ if (import.meta.vitest) {
       });
 
       it("erreicht conversion goal nicht wenn mit eigener Planung weiter navigiert wird", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Eigene Planung").click();
 
@@ -665,7 +668,7 @@ if (import.meta.vitest) {
       });
 
       it("trackt zu dem conversion goal auch noch dass es durch die planungshilfen erreicht wurde", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Vorschlag 1").click();
 
@@ -675,7 +678,7 @@ if (import.meta.vitest) {
       });
 
       it("trackt nicht die nutzung der planungshilfen wenn eigene planung verwendet wird", () => {
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         screen.getByText("Eigene Planung").click();
 
@@ -689,7 +692,7 @@ if (import.meta.vitest) {
           .spyOn(trackingModule.posthog, "capture")
           .mockReturnValue(undefined);
 
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         const angezeigtNachMount = captureSpy.mock.calls.filter(
           ([event]) => event === "beispiel_angezeigt",
@@ -714,7 +717,7 @@ if (import.meta.vitest) {
           .spyOn(trackingModule.posthog, "capture")
           .mockReturnValue(undefined);
 
-        render(<BeispielePage />);
+        renderPageWithMemoryRouter();
 
         expect(captureSpy).not.toHaveBeenCalledWith("beispiel_angezeigt", {
           identifier: zusaetzlichesBeispiel!.identifier,

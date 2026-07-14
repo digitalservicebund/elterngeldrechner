@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { type ReactNode, useCallback } from "react";
 import { type To, useLocation, useNavigate } from "react-router";
 import type { Beispiel } from "@/application/features/planungsteil/beispiele";
 import type {
@@ -26,21 +26,26 @@ type NavigationState = {
 };
 
 if (import.meta.vitest) {
-  const { vi, describe, it, expect } = import.meta.vitest;
-
-  vi.mock("react-router");
+  const { describe, it, expect } = import.meta.vitest;
 
   describe("use stateful navigation", async () => {
-    const { renderHook } = await import("@testing-library/react");
+    const { act, renderHook } = await import("@testing-library/react");
+    const { createElement } = await import("react");
+    const { MemoryRouter } = await import("react-router");
+
+    function memoryRouterWithHistoryState(state: unknown) {
+      return ({ children }: { readonly children: ReactNode }) => {
+        const historyState = { initialEntries: [{ pathname: "/", state }] };
+
+        return createElement(MemoryRouter, historyState, children);
+      };
+    }
 
     describe("plan state", () => {
       it("takes the plan property from the history state when defined", () => {
-        vi.mocked(useLocation).mockReturnValue({
-          ...ANY_LOCATION,
-          state: { plan: "untyped fake plan" },
+        const { result } = renderHook(() => useNavigateStateful(), {
+          wrapper: memoryRouterWithHistoryState({ plan: "untyped fake plan" }),
         });
-
-        const { result } = renderHook(() => useNavigateStateful());
 
         expect(result.current.navigationState.plan).toEqual(
           "untyped fake plan",
@@ -48,42 +53,42 @@ if (import.meta.vitest) {
       });
 
       it("returns and undefined Plan if the history state is null", () => {
-        vi.mocked(useLocation).mockReturnValue({
-          ...ANY_LOCATION,
-          state: null,
+        const { result } = renderHook(() => useNavigateStateful(), {
+          wrapper: memoryRouterWithHistoryState(null),
         });
-
-        const { result } = renderHook(() => useNavigateStateful());
 
         expect(result.current.navigationState.plan).toBeUndefined();
       });
     });
 
     describe("navigate with plan state", () => {
-      it("sets the given plan as history state", () => {
-        const navigate = vi.fn();
-        vi.mocked(useNavigate).mockReturnValue(navigate);
+      it("sets the given plan as history state", async () => {
+        const { result } = renderHook(
+          () => ({
+            stateful: useNavigateStateful(),
+            location: useLocation(),
+          }),
+          { wrapper: memoryRouterWithHistoryState(null) },
+        );
 
-        const { result } = renderHook(() => useNavigateStateful());
-        void result.current.navigateStateful("anywhere", {
-          plan: ANY_PLAN,
-        });
+        await act(() =>
+          result.current.stateful.navigateStateful("/anywhere", {
+            plan: ANY_PLAN,
+          }),
+        );
 
-        expect(navigate).toHaveBeenCalledOnce();
-        expect(navigate).toHaveBeenLastCalledWith(expect.anything(), {
-          state: { plan: ANY_PLAN },
-        });
+        expect(result.current.location.pathname).toEqual("/anywhere");
+        expect(result.current.location.state).toEqual({ plan: ANY_PLAN });
       });
     });
 
     describe("beispiel state", () => {
       it("takes the beispiel property from the history state when defined", () => {
-        vi.mocked(useLocation).mockReturnValue({
-          ...ANY_LOCATION,
-          state: { beispiel: "untyped fake beispiel" },
+        const { result } = renderHook(() => useNavigateStateful(), {
+          wrapper: memoryRouterWithHistoryState({
+            beispiel: "untyped fake beispiel",
+          }),
         });
-
-        const { result } = renderHook(() => useNavigateStateful());
 
         expect(result.current.navigationState.beispiel).toEqual(
           "untyped fake beispiel",
@@ -91,26 +96,14 @@ if (import.meta.vitest) {
       });
 
       it("returns and undefined Plan if the history state is null", () => {
-        vi.mocked(useLocation).mockReturnValue({
-          ...ANY_LOCATION,
-          state: null,
+        const { result } = renderHook(() => useNavigateStateful(), {
+          wrapper: memoryRouterWithHistoryState(null),
         });
-
-        const { result } = renderHook(() => useNavigateStateful());
 
         expect(result.current.navigationState.plan).toBeUndefined();
       });
     });
   });
-
-  const ANY_LOCATION = {
-    pathname: "pathname",
-    state: null,
-    key: "",
-    search: "",
-    hash: "",
-    unstable_mask: undefined,
-  };
 
   const ANY_PLAN = {
     ausgangslage: {

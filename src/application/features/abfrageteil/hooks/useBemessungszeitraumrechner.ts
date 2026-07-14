@@ -40,26 +40,23 @@ export function useBemessungszeitraumrechner(elternteilIndex: number) {
 if (import.meta.vitest) {
   const { describe, it, expect, beforeEach, vi } = import.meta.vitest;
 
-  vi.mock(
-    import("@/application/features/abfrageteil/events/EventContext"),
-    () => ({ useEventContext: vi.fn() }),
-  );
-
   describe("useBemessungszeitraumrechner", async () => {
     const { Temporal } = await import("@js-temporal/polyfill");
     const { renderHook } = await import("@testing-library/react");
 
     const { Route } = await import("@/application/routing/Route");
-    const { useEventContext } =
+
+    const eventContext =
       await import("@/application/features/abfrageteil/events/EventContext");
+
     type FormEvent = import("@/application/routing/FormEvent").FormEvent;
 
     const bmzRechnerPaket = await import("@/bemessungszeitraumrechner");
 
-    type EventContextType = ReturnType<typeof useEventContext>;
+    type EventContextType = ReturnType<typeof eventContext.useEventContext>;
 
     function mockEventContext(events: FormEvent[]) {
-      vi.mocked(useEventContext).mockReturnValue({
+      vi.spyOn(eventContext, "useEventContext").mockReturnValue({
         dispatch: vi.fn(),
         filtereValideEventHistorie: vi.fn().mockReturnValue(events),
         findeAlleGueltigenEvents: vi.fn(),

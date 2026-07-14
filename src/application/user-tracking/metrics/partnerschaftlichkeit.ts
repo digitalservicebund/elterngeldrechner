@@ -1,18 +1,24 @@
 import { setTrackingVariable } from "@/application/user-tracking/core";
-import { posthog } from "@/application/user-tracking";
+
+export function berechnePartnerschaftlicheVerteilung(
+  auswahlProMonatProElternteil: Auswahl[][],
+): number | undefined {
+  const hasMultipleElternteile = auswahlProMonatProElternteil.length > 1;
+
+  return hasMultipleElternteile
+    ? calculatePartnerschaftlichkeiteVerteilung(auswahlProMonatProElternteil)
+    : undefined;
+}
 
 export function trackPartnerschaftlicheVerteilung(
   auswahlProMonatProElternteil: Auswahl[][],
 ): void {
-  const numberOfElternteile = auswahlProMonatProElternteil.length;
-  const hasMultipleElternteile = numberOfElternteile > 1;
+  const verteilung = berechnePartnerschaftlicheVerteilung(
+    auswahlProMonatProElternteil,
+  );
 
-  if (hasMultipleElternteile) {
-    const verteilung = calculatePartnerschaftlichkeiteVerteilung(
-      auswahlProMonatProElternteil,
-    );
+  if (verteilung !== undefined) {
     setTrackingVariable(TRACKING_VARIABLE_NAME, verteilung);
-    posthog.register({ partnerschaftliche_verteilung: verteilung });
   }
 }
 
@@ -76,7 +82,6 @@ if (import.meta.vitest) {
   describe("partnerschaftlichkeit", () => {
     beforeEach(() => {
       vi.clearAllMocks();
-      vi.spyOn(posthog, "register");
     });
 
     it("sets the tracking variable 'partnerschaftlicheverteilung'", () => {
@@ -87,17 +92,16 @@ if (import.meta.vitest) {
         "partnerschaftlicheverteilung",
         expect.anything(),
       );
-      expect(posthog.register).toHaveBeenCalledTimes(1);
-      expect(posthog.register).toHaveBeenLastCalledWith({
-        partnerschaftliche_verteilung: 0,
-      });
     });
 
     it("should not track anything if there is only one Elternteil", () => {
       trackPartnerschaftlicheVerteilung([[]]);
 
       expect(setTrackingVariable).not.toHaveBeenCalled();
-      expect(posthog.register).not.toHaveBeenCalled();
+    });
+
+    it("returns undefined from berechnePartnerschaftlicheVerteilung if there is only one Elternteil", () => {
+      expect(berechnePartnerschaftlicheVerteilung([[]])).toBeUndefined();
     });
 
     it.each<{
@@ -179,9 +183,9 @@ if (import.meta.vitest) {
           expect.anything(),
           expectedQuotient,
         );
-        expect(posthog.register).toHaveBeenLastCalledWith({
-          partnerschaftliche_verteilung: expectedQuotient,
-        });
+        expect(
+          berechnePartnerschaftlicheVerteilung(auswahlProMonatProElternteil),
+        ).toBe(expectedQuotient);
       },
     );
   });

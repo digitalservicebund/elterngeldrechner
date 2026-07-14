@@ -1,4 +1,5 @@
 import {
+  berechnePartnerschaftlicheVerteilung,
   posthog,
   pushTrackingEvent,
   setTrackingVariable,
@@ -52,7 +53,31 @@ export function trackMetricsForDerPlanHatSichGeaendert(
   trackGeplanteMonate(plan);
   trackGeplanteMonateMitEinkommen(plan);
   trackGeplanteMonateDesPartnersDerMutter(plan);
-  trackBonusVariante(plan);
+}
+
+export function berechnePruefbuttonMetriken(
+  plan: PlanMitBeliebigenElternteilen,
+  istPlanGueltig: boolean,
+): {
+  geplante_monate: number;
+  geplante_monate_des_partners_der_mutter?: number;
+  plan_enthaelt_bonus_variante: boolean;
+  partnerschaftliche_verteilung?: number;
+} {
+  return {
+    geplante_monate: zaehleMonate(plan, { monatPredicate: istGeplanterMonat }),
+    geplante_monate_des_partners_der_mutter:
+      berechneGeplanteMonateDesPartnersDerMutter(plan),
+    plan_enthaelt_bonus_variante:
+      zaehleMonate(plan, {
+        monatPredicate: (monat) => monat.gewaehlteOption === Variante.Bonus,
+      }) > 0,
+    partnerschaftliche_verteilung: istPlanGueltig
+      ? berechnePartnerschaftlicheVerteilung(
+          ermittleAuswahlProMonatProElternteil(plan),
+        )
+      : undefined,
+  };
 }
 
 export function trackMetricsForEineOptionWurdeGewaehlt(): void {
@@ -71,27 +96,7 @@ export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
 function trackPartnerschaftlicheVerteilungForPlan(
   plan: PlanMitBeliebigenElternteilen,
 ): void {
-  const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);
-
-  const auswahlProMonatProElternteil = elternteile.map((elternteil) =>
-    Object.values(plan.lebensmonate)
-      .map((lebensmonat) => lebensmonat[elternteil])
-      .map((monat) => monat.gewaehlteOption)
-      .map((option) => {
-        switch (option) {
-          case Variante.Basis:
-            return "Basis";
-          case Variante.Plus:
-            return "Plus";
-          case Variante.Bonus:
-            return "Bonus";
-          default:
-            return null;
-        }
-      }),
-  );
-
-  trackPartnerschaftlicheVerteilung(auswahlProMonatProElternteil);
+  trackPartnerschaftlicheVerteilung(ermittleAuswahlProMonatProElternteil(plan));
 }
 
 function trackGeplanteMonate(plan: PlanMitBeliebigenElternteilen) {
@@ -102,7 +107,6 @@ function trackGeplanteMonate(plan: PlanMitBeliebigenElternteilen) {
   const geplanteMonate = zaehleMonate(plan, filterOptions);
 
   setTrackingVariable("geplante-monate", geplanteMonate);
-  posthog.register({ geplante_monate: geplanteMonate });
 }
 
 function trackGeplanteMonateMitEinkommen(plan: PlanMitBeliebigenElternteilen) {
@@ -128,23 +132,54 @@ function trackGeplanteMonateMitEinkommen(plan: PlanMitBeliebigenElternteilen) {
 function trackGeplanteMonateDesPartnersDerMutter<A extends Ausgangslage>(
   plan: Plan<A>,
 ): void {
+  const anzahlGeplanterMonate =
+    berechneGeplanteMonateDesPartnersDerMutter(plan);
+
+  if (anzahlGeplanterMonate !== undefined) {
+    setTrackingVariable(
+      "geplante-monate-des-partners-der-mutter",
+      anzahlGeplanterMonate,
+    );
+  }
+}
+
+function berechneGeplanteMonateDesPartnersDerMutter<A extends Ausgangslage>(
+  plan: Plan<A>,
+): number | undefined {
   const partnerDerMutter = bestimmePartnerDerMutter(plan.ausgangslage);
 
-  if (partnerDerMutter !== null) {
-    const filterOptions = {
-      monatPredicate: istGeplanterMonat,
-      elternteilPredicate: partnerDerMutter,
-    };
-
-    const anzahlGeplanterMonate = zaehleMonate(plan, filterOptions);
-
-    const trackingKey = "geplante-monate-des-partners-der-mutter";
-
-    setTrackingVariable(trackingKey, anzahlGeplanterMonate);
-    posthog.register({
-      geplante_monate_des_partners_der_mutter: anzahlGeplanterMonate,
-    });
+  if (partnerDerMutter === null) {
+    return undefined;
   }
+
+  return zaehleMonate(plan, {
+    monatPredicate: istGeplanterMonat,
+    elternteilPredicate: partnerDerMutter,
+  });
+}
+
+function ermittleAuswahlProMonatProElternteil(
+  plan: PlanMitBeliebigenElternteilen,
+) {
+  const elternteile = listeElternteileFuerAusgangslageAuf(plan.ausgangslage);
+
+  return elternteile.map((elternteil) =>
+    Object.values(plan.lebensmonate)
+      .map((lebensmonat) => lebensmonat[elternteil])
+      .map((monat) => monat.gewaehlteOption)
+      .map((option) => {
+        switch (option) {
+          case Variante.Basis:
+            return "Basis";
+          case Variante.Plus:
+            return "Plus";
+          case Variante.Bonus:
+            return "Bonus";
+          default:
+            return null;
+        }
+      }),
+  );
 }
 
 function bestimmePartnerDerMutter<A extends Ausgangslage>(
@@ -164,15 +199,6 @@ function bestimmePartnerDerMutter<A extends Ausgangslage>(
         return null;
     }
   }
-}
-
-function trackBonusVariante(plan: PlanMitBeliebigenElternteilen): void {
-  const filterOptions = {
-    monatPredicate: (monat: Monat) => monat.gewaehlteOption === Variante.Bonus,
-  };
-
-  const hatBonus = zaehleMonate(plan, filterOptions) > 0;
-  posthog.register({ plan_enthaelt_bonus_variante: hatBonus });
 }
 
 function istGeplanterMonat(monat: Monat) {
@@ -279,7 +305,6 @@ if (import.meta.vitest) {
           trackingModule,
           "setTrackingVariable",
         );
-        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
 
         const plan = {
           ausgangslage: {
@@ -317,7 +342,7 @@ if (import.meta.vitest) {
         trackGeplanteMonate(plan);
 
         expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
-        expect(registerSpy).toHaveBeenCalledWith({ geplante_monate: 2 });
+        expect(berechnePruefbuttonMetriken(plan, true).geplante_monate).toBe(2);
       });
     });
 
@@ -385,7 +410,6 @@ if (import.meta.vitest) {
           trackingModule,
           "setTrackingVariable",
         );
-        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
 
         const plan = {
           ausgangslage: {
@@ -421,9 +445,10 @@ if (import.meta.vitest) {
 
         expect(trackingFunction).toHaveBeenCalledOnce();
         expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
-        expect(registerSpy).toHaveBeenCalledWith({
-          geplante_monate_des_partners_der_mutter: 2,
-        });
+        expect(
+          berechnePruefbuttonMetriken(plan, true)
+            .geplante_monate_des_partners_der_mutter,
+        ).toBe(2);
       });
 
       function monat(gewaehlteOption: Auswahloption | undefined) {
@@ -439,11 +464,7 @@ if (import.meta.vitest) {
       const ANY_MONAT_MIT_ELTERNGELDBEZUG = monat(Variante.Basis);
     });
 
-    describe("track bonus variante", async () => {
-      const trackingModule = await import("@/application/user-tracking");
-
-      beforeEach(() => vi.clearAllMocks());
-
+    describe("berechnePruefbuttonMetriken - plan_enthaelt_bonus_variante", () => {
       function monat(gewaehlteOption: Auswahloption | undefined) {
         return { gewaehlteOption, imMutterschutz: false as const };
       }
@@ -457,9 +478,7 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: new Date(),
       };
 
-      it("registers true when plan contains at least one Bonus monat", () => {
-        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
-
+      it("is true when plan contains at least one Bonus monat", () => {
         const plan = {
           ausgangslage,
           lebensmonate: {
@@ -470,16 +489,12 @@ if (import.meta.vitest) {
           },
         };
 
-        trackBonusVariante(plan);
-
-        expect(registerSpy).toHaveBeenCalledWith({
-          plan_enthaelt_bonus_variante: true,
-        });
+        expect(
+          berechnePruefbuttonMetriken(plan, true).plan_enthaelt_bonus_variante,
+        ).toBe(true);
       });
 
-      it("registers false when plan contains no Bonus monat", () => {
-        const registerSpy = vi.spyOn(trackingModule.posthog, "register");
-
+      it("is false when plan contains no Bonus monat", () => {
         const plan = {
           ausgangslage,
           lebensmonate: {
@@ -490,11 +505,29 @@ if (import.meta.vitest) {
           },
         };
 
-        trackBonusVariante(plan);
+        expect(
+          berechnePruefbuttonMetriken(plan, true).plan_enthaelt_bonus_variante,
+        ).toBe(false);
+      });
 
-        expect(registerSpy).toHaveBeenCalledWith({
-          plan_enthaelt_bonus_variante: false,
-        });
+      it("does not include partnerschaftliche_verteilung when the plan is invalid", () => {
+        const plan = {
+          ausgangslage,
+          lebensmonate: {
+            1: {
+              [Elternteil.Eins]: monat(Variante.Bonus),
+              [Elternteil.Zwei]: monat(Variante.Bonus),
+            },
+          },
+        };
+
+        expect(
+          berechnePruefbuttonMetriken(plan, false)
+            .partnerschaftliche_verteilung,
+        ).toBeUndefined();
+        expect(
+          berechnePruefbuttonMetriken(plan, true).partnerschaftliche_verteilung,
+        ).not.toBeUndefined();
       });
     });
   });

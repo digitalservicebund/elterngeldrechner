@@ -12,6 +12,7 @@ import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { type Tips, generateTips } from "./generateTips";
 import { Button } from "@/application/features/components/Button";
 import { useAntragInformationen } from "@/application/features/planungsteil/planer/hooks/useAntragInformationen";
+import { berechnePruefbuttonMetriken } from "@/application/features/planungsteil/planer/tracking";
 import { posthog, pushTrackingEvent } from "@/application/user-tracking";
 import {
   type PlanMitBeliebigenElternteilen,
@@ -92,13 +93,16 @@ export function Pruefbuttonbox({
     setValidierungsergebnis(validierungsergebnis);
     setTips(tips);
 
+    const istPlanGueltig = validierungsergebnis.mapOrElse(
+      () => true,
+      () => false,
+    ) as boolean;
+
     posthog.capture("monatsplaner_pruefbutton_geklickt", {
       tips: tips.normalTips.length + (tips.hasSpecialBonusTip ? 1 : 0),
       bonustip: tips.hasSpecialBonusTip,
-      gueltig: validierungsergebnis.mapOrElse(
-        () => true,
-        () => false,
-      ) as boolean,
+      gueltig: istPlanGueltig,
+      ...berechnePruefbuttonMetriken(plan, istPlanGueltig),
     });
   }, [ueberpruefePlanung, plan]);
 

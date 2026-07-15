@@ -212,6 +212,67 @@ if (import.meta.vitest) {
         expect(ergebnis.elternGeldEtPlus).toBe(0);
         expect(ergebnis.elternGeldKeineEtPlus).toBe(451.56);
       });
+
+      it("charges no Steuer or Sozialabgaben on a Minijob accompanying a reguläre Tätigkeit", () => {
+        const planungsDaten = {
+          mutterschaftsLeistung:
+            MutterschaftsLeistung.MUTTERSCHAFTS_LEISTUNG_NEIN,
+          planung: new Array(PLANUNG_ANZAHL_MONATE).fill(
+            ElternGeldArt.BASIS_ELTERNGELD,
+          ),
+        };
+
+        const persoenlicheDaten = {
+          geburtstagDesKindes: new Geburtstag("2022-11-25"),
+          anzahlKuenftigerKinder: 1,
+          etVorGeburt: ErwerbsArt.JA_MISCHEINKOMMEN,
+          hasEtNachGeburt: false,
+        };
+
+        const mitMinijobAlsMischeinkommen = calculateElternGeld({
+          persoenlicheDaten,
+          finanzDaten: {
+            ...ANY_FINANZDATEN,
+            mischEinkommenTaetigkeiten: [
+              {
+                erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+                bruttoEinkommenDurchschnitt: 3000,
+                bruttoEinkommenDurchschnittMidi: 0,
+                bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
+                istRentenVersicherungsPflichtig: true,
+                istKrankenVersicherungsPflichtig: true,
+                istArbeitslosenVersicherungsPflichtig: true,
+              },
+              {
+                erwerbsTaetigkeit: ErwerbsTaetigkeit.MINIJOB,
+                bruttoEinkommenDurchschnitt: 400,
+                bruttoEinkommenDurchschnittMidi: 0,
+                bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
+                istRentenVersicherungsPflichtig: false,
+                istKrankenVersicherungsPflichtig: false,
+                istArbeitslosenVersicherungsPflichtig: false,
+              },
+            ],
+          },
+          planungsDaten,
+        });
+
+        const mitMinijobVollVersteuert = calculateElternGeld({
+          persoenlicheDaten: {
+            ...persoenlicheDaten,
+            etVorGeburt: ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI,
+          },
+          finanzDaten: {
+            ...ANY_FINANZDATEN,
+            bruttoEinkommen: new Einkommen(3400),
+          },
+          planungsDaten,
+        });
+
+        expect(
+          mitMinijobAlsMischeinkommen.elternGeldKeineEtPlus,
+        ).toBeGreaterThan(mitMinijobVollVersteuert.elternGeldKeineEtPlus);
+      });
     });
 
     it("should always calculate the same result for the same inputs with Mischeinkommen", () => {

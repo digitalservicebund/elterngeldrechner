@@ -30,8 +30,11 @@ jobs:
 
       - uses: ./.github/actions/cached-node-install
 
-      - name: test
-        run: npm run test
+      - name: unit test
+        run: npm run test:unit
+
+      - name: integration test
+        run: npm run test:integration
 
   audit-licenses:
     runs-on: ubuntu-24.04
@@ -200,7 +203,7 @@ jobs:
         run: curl -I --max-time 20 https://preview-stage.bmbfsfj.bund.de/familienportal/rechner-antraege/elterngeldrechner/egr
 
       - name: Smoke test
-        run: npm run test-smoke
+        run: npm run test:smoke
         env:
           ENVIRONMENT_URL: https://preview-stage.bmbfsfj.bund.de/familienportal/rechner-antraege/elterngeldrechner/
           EXPECTED_BUILD: ${{ github.sha }}
@@ -270,7 +273,7 @@ jobs:
       - uses: ./.github/actions/cached-playwright-setup
 
       - name: Smoke test the deployed widget on production
-        run: npm run test-smoke
+        run: npm run test:smoke
         env:
           ENVIRONMENT_URL: https://familienportal.de/familienportal/meta/
           EXPECTED_BUILD: ${{ github.sha }}

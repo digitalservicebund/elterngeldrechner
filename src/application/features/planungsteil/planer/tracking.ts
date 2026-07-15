@@ -38,7 +38,7 @@ export function trackMetricsForErklaerungenWurdenGeschlossen(): void {
 
 export function trackMetricsForLebensmonatWurdeGeoeffnet(): void {
   pushTrackingEvent("Lebensmonat-wurde-im-Planer-geöffnet");
-  posthog.capture("monatsplaner_lebensmonat_wurde_geoeffnet");
+  posthog.capture("monatsplaner_lebensmonat_geoeffnet");
 }
 
 export function trackMetricsForDerPlanHatSichGeaendert(
@@ -58,14 +58,14 @@ export function trackMetricsForDerPlanHatSichGeaendert(
 export function trackMetricsForEineOptionWurdeGewaehlt(): void {
   pushTrackingEvent("Option-wurde-im-Planer-gewaehlt");
 
-  posthog.capture("monatsplaner_option_wurde_gewaehlt");
+  posthog.capture("monatsplaner_option_gewaehlt");
 }
 
 export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   pushTrackingEvent("Plan-wurde-zurückgesetzt");
   setTrackingVariable("Identifier-des-ausgewaehlten-Beispiels-im-Planer", null);
 
-  posthog.capture("monatsplaner_plan_wurde_zurueckgesetzt");
+  posthog.capture("monatsplaner_plan_zurueckgesetzt");
 }
 
 function trackPartnerschaftlicheVerteilungForPlan(

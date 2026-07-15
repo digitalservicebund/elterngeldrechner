@@ -72,7 +72,7 @@ export function BeispielePage() {
       trackReachedConversionGoal();
       trackUsageOfPlanungshilfen();
 
-      posthog.capture("beispiel_wurde_uebernommen", {
+      posthog.capture("beispiel_uebernommen", {
         identifier: beispiel.identifier,
       });
     }
@@ -138,7 +138,7 @@ export function BeispielePage() {
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
 
-      posthog.capture("beispiel_wurde_angeklickt", {
+      posthog.capture("beispiel_geklickt", {
         identifier: neuesAktivesBeispiel.identifier,
       });
     } else if (aktivierteOption === EigenePlanung) {
@@ -156,7 +156,7 @@ export function BeispielePage() {
 
       setIdentifierTrackingVariable(`${elternStatus()} - Eigene Planung`);
 
-      posthog.capture("beispiel_wurde_angeklickt", {
+      posthog.capture("beispiel_geklickt", {
         identifier: `${elternStatus()} - Eigene Planung`,
       });
     }

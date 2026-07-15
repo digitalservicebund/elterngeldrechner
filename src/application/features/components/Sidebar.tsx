@@ -196,7 +196,7 @@ export function Sidebar() {
   };
 
   function navigiereZuAbschnitt(item: NavigationItem) {
-    posthog.capture("navigationspunkt_wurde_geklickt", {
+    posthog.capture("navigationspunkt_geklickt", {
       abschnitt: analyticsLabel(item),
     });
 

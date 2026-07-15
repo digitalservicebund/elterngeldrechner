@@ -105,9 +105,7 @@ export function ElternteilBMZUebersichtPage() {
       <ul>
         {formatiereBemessungszeitraum(bemessungszeitraum).map(
           (zeitraum, index) => (
-            <li key={index} className="list ml-40 list-disc pt-8">
-              {zeitraum}
-            </li>
+            <li key={index}>{zeitraum}</li>
           ),
         )}
       </ul>

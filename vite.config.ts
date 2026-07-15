@@ -32,18 +32,28 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["src/application/tests/setupTests.ts"],
     restoreMocks: true,
-    include: ["src/**/*.spec.{ts,tsx}"],
-    exclude: [],
-    includeSource: ["src/**/*.{ts,tsx}"],
     watch: false,
     resolveSnapshotPath: snapshotPathNextToTestFile,
-    snapshotFormat: {
-      indent: 0,
-      min: true,
-    },
-    chaiConfig: {
-      truncateThreshold: 0,
-    },
+    snapshotFormat: { indent: 0, min: true },
+    chaiConfig: { truncateThreshold: 0 },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          include: ["src/**/*.spec.{ts,tsx}"],
+          includeSource: ["src/**/*.{ts,tsx}"],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "integration",
+          include: ["src/**/*.integration.spec.{ts,tsx}"],
+          fileParallelism: false,
+        },
+      },
+    ],
   },
   define: {
     "import.meta.vitest": "undefined",

@@ -2,6 +2,7 @@ import { findeAnzahlKinder } from "./findeAnzahlKinder";
 import { findeGeburtsdatum } from "./findeGeburtsdatum";
 import { findeGeschwisterkinder } from "./findeGeschwisterkinder";
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
+import { sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt } from "./sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt";
 import { sindBeideElternteile } from "./sindBeideElternteile";
 import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import type { FormEvent } from "@/application/routing/FormEvent";
@@ -107,6 +108,14 @@ function findeErwerbsartVorGeburt(
     throw new Error(
       `No Taetigkeit events found for elternteil ${elternteilIndex}.`,
     );
+  }
+
+  if (
+    sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt(
+      alleNichtSelbststaendigEvents,
+    )
+  ) {
+    return ErwerbsArt.JA_MISCHEINKOMMEN;
   }
 
   const alleSozialversicherungspflichtigenJobEvents =
@@ -484,7 +493,7 @@ if (import.meta.vitest) {
         expect(result.etVorGeburt).toBe(ErwerbsArt.JA_MISCHEINKOMMEN);
       });
 
-      it("is JA_NICHT_SELBST_MINI when minijob", () => {
+      it("is JA_NICHT_SELBST_MINI when only minijob", () => {
         const events: FormEvent[] = [
           geborenesKindEvent,
           {
@@ -552,7 +561,7 @@ if (import.meta.vitest) {
         expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MINI);
       });
 
-      it("is JA_NICHT_SELBST_MIT_SOZI when minijob comes first but a sozialversicherungspflichtige Tätigkeit follows", () => {
+      it("is JA_MISCHEINKOMMEN when a Minijob is combined with a sozialversicherungspflichtige Tätigkeit", () => {
         const events: FormEvent[] = [
           geborenesKindEvent,
           {
@@ -598,10 +607,10 @@ if (import.meta.vitest) {
 
         const result = erstellePersoenlicheDaten(events, 0);
 
-        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_NICHT_SELBST_MIT_SOZI);
+        expect(result.etVorGeburt).toBe(ErwerbsArt.JA_MISCHEINKOMMEN);
       });
 
-      it("is JA_NICHT_SELBST_MIT_SOZI when sozialversicherungspflichtig", () => {
+      it("is JA_NICHT_SELBST_MIT_SOZI when only sozialversicherungspflichtig", () => {
         const events: FormEvent[] = [
           geborenesKindEvent,
           {

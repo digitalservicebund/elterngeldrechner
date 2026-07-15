@@ -245,10 +245,10 @@ test("Minijob neben sozialversicherungspflichtiger Angestelltentätigkeit: Minij
 
   // Person 1: 3.000 € brutto versteuert (Netto ca. 1.960 €) plus 400 €
   // Minijob unversteuert
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1421);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(710);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(710);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(710);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1535);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(767);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(767);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(767);
 
   // Person 2: 2.500 € brutto
   expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);

@@ -1,4 +1,5 @@
 import { findeSozialversicherungen } from "./findeSozialversicherungen";
+import { sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt } from "./sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt";
 import { sindBeideElternteile } from "./sindBeideElternteile";
 import { ueberpruefeErwerbstaetigkeit } from "./ueberpruefeErwerbstaetigkeit";
 import { findeLetztesGueltigesEvent } from "@/application/features/abfrageteil/events/projections";
@@ -78,10 +79,25 @@ export function erstelleFinanzDaten(
     );
 
     if (alleNichtSelbststaendig) {
+      const nichtSelbststaendigEvents =
+        alleTaetigkeitEvents as NonEmpty<NichtSelbststaendigEvent>;
+
+      if (
+        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt(
+          nichtSelbststaendigEvents,
+        )
+      ) {
+        return erstelleMischeinkommenFinanzDaten(
+          events,
+          elternteilIndex,
+          nichtSelbststaendigEvents,
+        );
+      }
+
       return erstelleAggregierteNichtSelbststaendigFinanzDaten(
         events,
         elternteilIndex,
-        alleTaetigkeitEvents as NonEmpty<NichtSelbststaendigEvent>,
+        nichtSelbststaendigEvents,
       );
     }
 
@@ -327,19 +343,21 @@ function erstelleMischeinkommenFinanzDaten(
     .map((event) => erstelleMischEkTaetigkeit(events, elternteilIndex, event))
     .filter((taetigkeit) => taetigkeit.bemessungsZeitraumMonate.some(Boolean));
 
-  const erstesNichtSelbststaendigEvent = alleTaetigkeitEvents.find(
-    (e): e is NichtSelbststaendigEvent => {
-      return e.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig;
-    },
-  );
+  const erstesSozialversicherungspflichtigeTaetigkeitEvent =
+    alleTaetigkeitEvents.find((e): e is NichtSelbststaendigEvent => {
+      return (
+        e.route === Route.ElternteilTaetigkeitAngabenNichtSelbststaendig &&
+        !e.payload.istTaetigkeitMinijob
+      );
+    });
 
   const sozialversicherungen =
-    erstesNichtSelbststaendigEvent !== undefined &&
-    !erstesNichtSelbststaendigEvent.payload.istTaetigkeitMinijob
+    erstesSozialversicherungspflichtigeTaetigkeitEvent
       ? findeSozialversicherungen(
           events,
           elternteilIndex,
-          erstesNichtSelbststaendigEvent.params.taetigkeitIndex,
+          erstesSozialversicherungspflichtigeTaetigkeitEvent.params
+            .taetigkeitIndex,
         )
       : undefined;
 
@@ -823,7 +841,7 @@ if (import.meta.vitest) {
     });
 
     describe("Nicht-selbstständig mit variablem Monatseinkommen und Minijob", () => {
-      it("aggregates average brutto across all months from both activities", () => {
+      it("routes through Mischeinkommen so the Minijob stays free of Steuer und Sozialversicherung", () => {
         const events: FormEvent[] = [
           {
             route: Route.ElternteilTaetigkeitenAbfrage,
@@ -884,16 +902,40 @@ if (import.meta.vitest) {
 
         const finanzdaten = erstelleFinanzDaten(events, 0);
 
-        expect(finanzdaten).toEqual({
-          bruttoEinkommen: new Einkommen(2650),
-          istKirchensteuerpflichtig: false,
-          steuerklasse: Steuerklasse.I,
-          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1,
-          mischEinkommenTaetigkeiten: [],
-          erwerbsZeitraumLebensMonatList: [],
-        });
+        expect(finanzdaten.bruttoEinkommen).toEqual(new Einkommen(0));
+        expect(finanzdaten.mischEinkommenTaetigkeiten).toEqual([
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+            bruttoEinkommenDurchschnitt: 2250,
+            bruttoEinkommenDurchschnittMidi: 0,
+            bemessungsZeitraumMonate: [
+              true,
+              true,
+              true,
+              false,
+              false,
+              false,
+              true,
+              true,
+              true,
+              true,
+              true,
+              true,
+            ],
+            istRentenVersicherungsPflichtig: true,
+            istKrankenVersicherungsPflichtig: true,
+            istArbeitslosenVersicherungsPflichtig: true,
+          },
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.MINIJOB,
+            bruttoEinkommenDurchschnitt: 400,
+            bruttoEinkommenDurchschnittMidi: 0,
+            bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
+            istRentenVersicherungsPflichtig: false,
+            istKrankenVersicherungsPflichtig: false,
+            istArbeitslosenVersicherungsPflichtig: false,
+          },
+        ]);
       });
     });
 
@@ -979,7 +1021,7 @@ if (import.meta.vitest) {
     });
 
     describe("Nicht-selbstständig mit Minijob", () => {
-      it("aggregates brutto from Angestelltentätigkeit and Minijob into bruttoEinkommen", () => {
+      it("keeps Minijob and reguläre Tätigkeit as separate Mischeinkommen entries", () => {
         const events: FormEvent[] = [
           {
             route: Route.ElternteilTaetigkeitenAbfrage,
@@ -1027,6 +1069,11 @@ if (import.meta.vitest) {
             dependentValues: { kannDurchschnittAngegebenWerden: true },
           },
           {
+            route: Route.ElternteilTaetigkeitAngabenMinijob,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istEinkommenGleichVerteilt: true },
+          },
+          {
             route: Route.ElternteilTaetigkeitAngabenEinkommen,
             params: { elternteilIndex: 0, taetigkeitIndex: 1 },
             payload: { durchschnittlichesMonatsbrutto: 400 },
@@ -1036,16 +1083,88 @@ if (import.meta.vitest) {
 
         const finanzdaten = erstelleFinanzDaten(events, 0);
 
-        expect(finanzdaten).toEqual({
-          bruttoEinkommen: new Einkommen(3400),
-          istKirchensteuerpflichtig: false,
-          steuerklasse: Steuerklasse.I,
-          kassenArt: KassenArt.GESETZLICH_PFLICHTVERSICHERT,
-          rentenVersicherung: RentenArt.GESETZLICHE_RENTEN_VERSICHERUNG,
-          splittingFaktor: 1,
-          mischEinkommenTaetigkeiten: [],
-          erwerbsZeitraumLebensMonatList: [],
-        });
+        expect(finanzdaten.bruttoEinkommen).toEqual(new Einkommen(0));
+        expect(finanzdaten.mischEinkommenTaetigkeiten).toEqual([
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.NICHT_SELBSTSTAENDIG,
+            bruttoEinkommenDurchschnitt: 3000,
+            bruttoEinkommenDurchschnittMidi: 0,
+            bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
+            istRentenVersicherungsPflichtig: true,
+            istKrankenVersicherungsPflichtig: true,
+            istArbeitslosenVersicherungsPflichtig: true,
+          },
+          {
+            erwerbsTaetigkeit: ErwerbsTaetigkeit.MINIJOB,
+            bruttoEinkommenDurchschnitt: 400,
+            bruttoEinkommenDurchschnittMidi: 0,
+            bemessungsZeitraumMonate: new Array<boolean>(12).fill(true),
+            istRentenVersicherungsPflichtig: false,
+            istKrankenVersicherungsPflichtig: false,
+            istArbeitslosenVersicherungsPflichtig: false,
+          },
+        ]);
+      });
+
+      it("uses Steuerklasse and Kirchensteuerpflicht of the sozialversicherungspflichtige Tätigkeit even when the Minijob comes first", () => {
+        const events: FormEvent[] = [
+          {
+            route: Route.ElternteilTaetigkeitenAbfrage,
+            params: { elternteilIndex: 0 },
+            payload: {
+              hatPeriodenOhneEinkommen: false,
+              istSelbststaendig: false,
+              istNichtSelbststaendig: true,
+              istVerbeamtet: false,
+              hatAndereLeistungen: false,
+            },
+            dependentValues: {
+              istPersonAlleinerziehend: false,
+              wirdZweitePersonBeruecksichtigt: false,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { istTaetigkeitMinijob: true },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenEinkommen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 0 },
+            payload: { durchschnittlichesMonatsbrutto: 400 },
+            dependentValues: { istMischeinkunft: false },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenNichtSelbststaendig,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { istTaetigkeitMinijob: false },
+            dependentValues: { kannDurchschnittAngegebenWerden: true },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenSozialversicherungen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: {
+              steuerklasse: Steuerklasse.III,
+              istKirchensteuerpflichtig: true,
+              istGesetzlichKrankenpflichtversichert: true,
+              istGesetzlichRentenversichert: true,
+              istGesetzlichArbeitlosenversichert: true,
+              istEinkommenGleichVerteilt: true,
+            },
+          },
+          {
+            route: Route.ElternteilTaetigkeitAngabenEinkommen,
+            params: { elternteilIndex: 0, taetigkeitIndex: 1 },
+            payload: { durchschnittlichesMonatsbrutto: 3000 },
+            dependentValues: { istMischeinkunft: false },
+          },
+        ];
+
+        const finanzdaten = erstelleFinanzDaten(events, 0);
+
+        expect(finanzdaten.steuerklasse).toBe(Steuerklasse.III);
+        expect(finanzdaten.istKirchensteuerpflichtig).toBe(true);
       });
     });
 

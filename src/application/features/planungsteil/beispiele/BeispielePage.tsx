@@ -310,45 +310,16 @@ export function BeispielePage() {
 if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
-  vi.mock("@/application/features/components/Page", () => ({
-    Page: ({ children }: { readonly children: React.ReactNode }) => (
-      <>{children}</>
-    ),
-  }));
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useAusgangslage",
-    () => ({
-      useAusgangslage: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege",
-    () => ({
-      useBerechneElterngeldbezuege: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useNavigateStateful",
-    () => ({
-      useNavigateStateful: vi.fn(),
-    }),
-  );
-  vi.mock("@/application/features/abfrageteil/events/EventContext", () => ({
-    useEventContext: () => ({
-      findeLetztesEvent: vi.fn(),
-      findeLetztesGueltigesEvent: vi.fn(),
-    }),
-  }));
-  vi.mock(import("@/application/user-tracking"));
-  vi.mock(import("@/application/features/planungsteil/planer/tracking"));
-
   describe("Beispiele Page", async () => {
-    const { useAusgangslage } =
+    const useAusgangslageModule =
       await import("@/application/features/planungsteil/planer/hooks/useAusgangslage");
-    const { useBerechneElterngeldbezuege } =
+    const useBerechneElterngeldbezuegeModule =
       await import("@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege");
-    const { useNavigateStateful } =
+    const eventContextModule =
+      await import("@/application/features/abfrageteil/events/EventContext");
+    const useNavigateStatefulModule =
       await import("@/application/features/planungsteil/planer/hooks/useNavigateStateful");
+
     const { MemoryRouter } = await import("react-router");
 
     const { render, screen } = await import("@testing-library/react");
@@ -374,14 +345,40 @@ if (import.meta.vitest) {
     const navigateSpy = vi.fn<NavigateStateful>();
 
     beforeEach(() => {
-      vi.mocked(useAusgangslage).mockReturnValue(mockAusgangslage);
-      vi.mocked(useBerechneElterngeldbezuege).mockReturnValue(
-        vi.fn().mockReturnValue({}),
+      vi.spyOn(
+        useBerechneElterngeldbezuegeModule,
+        "useBerechneElterngeldbezuege",
+      ).mockReturnValue(vi.fn().mockReturnValue({}));
+
+      vi.spyOn(eventContextModule, "useEventContext").mockReturnValue({
+        findeLetztesGueltigesEvent: vi.fn(),
+        filtereValideEventHistorie: vi.fn(),
+        findeAlleGueltigenEvents: vi.fn(),
+        findeVorherigenPfad: vi.fn(),
+        findeLetztesEvent: vi.fn(),
+        dispatch: vi.fn(),
+      });
+
+      vi.spyOn(useAusgangslageModule, "useAusgangslage").mockReturnValue(
+        mockAusgangslage,
       );
-      vi.mocked(useNavigateStateful).mockReturnValue({
+
+      vi.spyOn(
+        useNavigateStatefulModule,
+        "useNavigateStateful",
+      ).mockReturnValue({
         navigationState: {},
         navigateStateful: navigateSpy,
       });
+
+      vi.mock("@/application/features/components/Page", () => ({
+        Page: ({ children }: { readonly children: React.ReactNode }) => (
+          <>{children}</>
+        ),
+      }));
+
+      vi.mock(import("@/application/user-tracking"));
+      vi.mock(import("@/application/features/planungsteil/planer/tracking"));
     });
 
     describe("selection", async () => {
@@ -444,7 +441,10 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten ist nicht sichtbar bei leerem plan", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.spyOn(
+          useNavigateStatefulModule,
+          "useNavigateStateful",
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: mockAusgangslage,
@@ -462,7 +462,10 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten ist sichtbar wenn ein plan erstellt wurde", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.spyOn(
+          useNavigateStatefulModule,
+          "useNavigateStateful",
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: mockAusgangslageWithMutterschutz,
@@ -504,7 +507,10 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten ist nicht sichtbar bei leerem plan mit mutterschutz", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.spyOn(
+          useNavigateStatefulModule,
+          "useNavigateStateful",
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: mockAusgangslageWithMutterschutz,
@@ -524,7 +530,10 @@ if (import.meta.vitest) {
       });
 
       it("planungs-entwurf weiter bearbeiten übernimmt den initialen plan", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.spyOn(
+          useNavigateStatefulModule,
+          "useNavigateStateful",
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: {

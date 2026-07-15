@@ -1,0 +1,279 @@
+import { render, renderHook, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createMemoryRouter, RouterProvider } from "react-router";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import {
+  EventProvider,
+  useEventContext,
+} from "@/application/features/abfrageteil/events/EventContext";
+import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
+import routeDefinition from "@/application/routing/RouteDefinition";
+import {
+  BerechneElterngeldbezuegeCallback,
+  Elternteil,
+  Variante,
+} from "@/monatsplaner";
+
+beforeEach(() => {
+  sessionStorage.clear();
+
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-01-15"));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+/*
+ * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind
+ * (geboren am 09.01.2026, keine Geschwister), Wohnsitz Mecklenburg-Vorpommern.
+ *
+ * Person 1 ist angestellt (3.000 € brutto im Monat, Steuerklasse IV,
+ * gesetzlich kranken-, renten- und arbeitslosenversichert, nicht
+ * kirchensteuerpflichtig, vor der Geburt im Mutterschutz) und hat zusätzlich
+ * einen Minijob mit 400 € im Monat. Person 2 ist angestellt und verdient
+ * 2.500 € brutto.
+ *
+ * Der Minijob ist für Arbeitnehmende steuer- und sozialabgabenfrei
+ * (Pauschalbesteuerung durch den Arbeitgeber, § 40a EStG). Er zählt deshalb
+ * voll zum Elterngeld-relevanten Einkommen, mindert das Netto aber nicht:
+ * Nur die Angestelltentätigkeit wird versteuert, die 400 € fließen
+ * ungeschmälert in das Elterngeld-Netto ein.
+ */
+test("Minijob neben sozialversicherungspflichtiger Angestelltentätigkeit: Minijob-Einkommen bleibt frei von Steuer und Sozialabgaben", async () => {
+  const user = userEvent.setup();
+
+  const router = createMemoryRouter(routeDefinition, {
+    initialEntries: ["/abfrageteil/startseite"],
+  });
+  const { unmount } = render(<RouterProvider router={router} />);
+
+  // Startseite
+  await user.click(
+    await screen.findByRole("button", { name: "Verstanden und weiter" }),
+  );
+
+  // Allgemeine Angaben
+  await user.selectOptions(
+    await screen.findByLabelText("Bundesland"),
+    "Mecklenburg-Vorpommern",
+  );
+  await user.click(
+    screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Kind
+  await user.click(await screen.findByTestId("istGeboren_option_0")); // Ja
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Angaben zur Geburt
+  await user.type(
+    await screen.findByLabelText("Errechneter Entbindungstermin (TT.MM.JJJJ)"),
+    "30.12.2025",
+  );
+  await user.type(
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    "09.01.2026",
+  );
+  await user.type(screen.getByLabelText("Anzahl der Kinder"), "1");
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Geschwisterkinder
+  await user.click(await screen.findByTestId("istVorhanden_option_1")); // Nein
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Angaben Person 1
+  await user.type(await screen.findByLabelText("Vorname Person 1"), "Person 1");
+  await user.click(screen.getByTestId("istAlleinerziehend_option_1")); // Nein
+  await user.click(screen.getByTestId("istImMutterschutz_option_0")); // Ja
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Gemeinsame Planung
+  await user.click(
+    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"), // Ja, beide
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Ausklammerung: Erkrankung wegen Schwangerschaft (Person 1)
+  await user.click(
+    await screen.findByTestId("hatSchwangerschaftsbedingteErkrankung_option_1"), // Nein
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Finanzielle Situation Person 1: Tätigkeiten
+  await user.click(
+    await screen.findByRole("checkbox", {
+      name: "Person 1 war oder ist angestellt",
+    }),
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Bemessungszeitraum-Übersicht Person 1
+  await user.click(
+    await screen.findByRole("button", { name: "Verstanden und weiter" }),
+  );
+
+  // Tätigkeit 1 Person 1: Minijob?
+  await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 1 Person 1: Sozialversicherungen + Steuerklasse
+  await user.selectOptions(
+    await screen.findByLabelText("Steuerklasse"),
+    screen.getByRole("option", { name: "4" }),
+  );
+  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
+  await user.click(
+    screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
+  );
+  await user.click(
+    screen.getByTestId("istGesetzlichRentenversichert_option_0"),
+  ); // Ja
+  await user.click(
+    screen.getByTestId("istGesetzlichArbeitlosenversichert_option_0"), // Ja
+  );
+  await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 1 Person 1: Einkommen
+  await user.type(
+    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
+    "3000",
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Weitere Tätigkeiten Person 1?
+  await user.click(
+    await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_0"), // Ja
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 1: Minijob?
+  await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_0")); // Ja
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 1: Einkommen gleich verteilt?
+  await user.click(
+    await screen.findByTestId("istEinkommenGleichVerteilt_option_0"), // Ja
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 1: Einkommen
+  await user.type(
+    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
+    "400",
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Weitere Tätigkeiten Person 1?
+  await user.click(
+    await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Angaben Person 2 (kein Mutterschutz-Feld, da Person 1 im Mutterschutz war)
+  await user.type(await screen.findByLabelText("Vorname Person 2"), "Person 2");
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Finanzielle Situation Person 2: Tätigkeiten
+  await user.click(
+    await screen.findByRole("checkbox", {
+      name: "Person 2 war oder ist angestellt",
+    }),
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Bemessungszeitraum-Übersicht Person 2
+  await user.click(
+    await screen.findByRole("button", { name: "Verstanden und weiter" }),
+  );
+
+  // Tätigkeit Person 2: Minijob?
+  await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
+  await user.selectOptions(
+    await screen.findByLabelText("Steuerklasse"),
+    screen.getByRole("option", { name: "4" }),
+  );
+  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
+  await user.click(
+    screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
+  );
+  await user.click(
+    screen.getByTestId("istGesetzlichRentenversichert_option_0"),
+  ); // Ja
+  await user.click(
+    screen.getByTestId("istGesetzlichArbeitlosenversichert_option_0"), // Ja
+  );
+  await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit Person 2: Einkommen
+  await user.type(
+    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
+    "2500",
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Weitere Tätigkeiten Person 2? -> DONE, Abfrageteil ist durchlaufen
+  await user.click(
+    await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  expect(router.state.location.pathname).toBe("/beispiele");
+
+  unmount();
+
+  const hook = renderHook(
+    () => ({
+      berechneElterngeldbezuege: useBerechneElterngeldbezuege(),
+      eventHistorie: useEventContext().filtereValideEventHistorie(),
+    }),
+    { wrapper: EventProvider },
+  );
+  const { berechneElterngeldbezuege } = hook.result.current;
+
+  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
+    null,
+    berechneElterngeldbezuege,
+  );
+
+  // Person 1: 3.000 € brutto versteuert (Netto ca. 1.960 €) plus 400 €
+  // Minijob unversteuert
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1421);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(710);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(710);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(710);
+
+  // Person 2: 2.500 € brutto
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+});
+
+function monatsbetragAusBerechneElterngeldbezuege(
+  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
+  elternteil: Elternteil,
+  variante: Variante,
+  bruttoeinkommen?: number,
+) {
+  const lebensmonat = {
+    gewaehlteOption: variante,
+    imMutterschutz: false,
+    bruttoeinkommen,
+  };
+
+  const lebensmonate = Object.fromEntries(
+    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
+  );
+
+  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
+
+  return Math.round(bezuege[6] ?? Number.NaN);
+}

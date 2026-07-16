@@ -57,7 +57,8 @@ export function GeschwisterkindAnzahlAbfragePage() {
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
           <h3 id={anzahlGeschwisterInputIdentifier}>
-            Wie viele ältere Geschwisterkinder leben in Ihrem Haushalt?
+            Wie viele ältere Geschwisterkinder unter 14 Jahren leben in Ihrem
+            Haushalt?
           </h3>
 
           <InfoText

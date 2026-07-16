@@ -94,6 +94,7 @@ if (import.meta.vitest) {
   const geschwisterkind = (
     geburtsdatumStr: string,
   ): GeschwisterkindAngaben => ({
+    name: "Luise",
     geburtsdatum: Temporal.PlainDate.from(geburtsdatumStr),
     hatBehinderung: false,
   });

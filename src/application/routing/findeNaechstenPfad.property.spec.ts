@@ -117,18 +117,20 @@ const formEventArbitraries: Arbitrary<FormEvent>[] = [
   arbitraryRecord({
     geschwisterkindIndex: arbitraryIndex,
     anzahlGeschwisterkinder: arbitraryAnzahlKinder,
+    name: arbitraryString({ minLength: 1 }),
     geburtsdatum: arbitraryGeburtsdatum,
     hatBehinderung: arbitraryBoolean(),
   }).map(
     ({
       geschwisterkindIndex,
       anzahlGeschwisterkinder,
+      name,
       geburtsdatum,
       hatBehinderung,
     }) => ({
       route: Route.GeschwisterkindAngaben,
       params: { geschwisterkindIndex },
-      payload: { geburtsdatum, hatBehinderung },
+      payload: { name, geburtsdatum, hatBehinderung },
       dependentValues: { anzahlGeschwisterkinder },
     }),
   ),

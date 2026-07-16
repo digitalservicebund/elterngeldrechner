@@ -73,7 +73,12 @@ export function GeschwisterkindAngabenPage() {
 
   const navigateBack = useNavigateBack(currentRoute, routeParams);
 
-  const geburtsdatum = watch("geburtsdatum");
+  const personNameInputIdentifier = useId();
+  const nameInForm = watch("name");
+  const vorname =
+    nameInForm?.trim() ||
+    `Geschwisterkind ${routeParams.geschwisterkindIndex + 1}`;
+
   const geburtsdatumInputIdentifier = useId();
 
   return (
@@ -81,9 +86,55 @@ export function GeschwisterkindAngabenPage() {
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
           <h3>
-            Wann wurde Geschwisterkind {routeParams.geschwisterkindIndex + 1}{" "}
-            geboren?
+            Wie heißt Geschwisterkind {routeParams.geschwisterkindIndex + 1} mit
+            Vornamen?
           </h3>
+
+          <InfoText
+            question="Warum soll ich einen Vornamen angeben?"
+            answer="Der Vorname hilft Ihnen, in der Planung den Überblick zu behalten. Wenn Sie Ihre Daten später in den Antrag auf Elterngeld übertragen wollen, können wir die Planungsdaten direkt dem richtigen Kind zuordnen."
+          />
+
+          <div>
+            <label
+              className={classNames("block label-small", {
+                "!text-danger": formErrors.name,
+              })}
+              htmlFor={personNameInputIdentifier}
+            >
+              Vorname
+            </label>
+
+            <input
+              id={personNameInputIdentifier}
+              className={classNames(
+                "border border-solid border-grey-dark px-16 py-8 focus-within:outline focus-within:outline-2 focus-within:outline-primary",
+                {
+                  "!border-danger focus-within:outline-danger": formErrors.name,
+                },
+              )}
+              aria-invalid={!!formErrors.name}
+              aria-describedby={
+                formErrors.name
+                  ? `${personNameInputIdentifier}-error`
+                  : undefined
+              }
+              {...register("name")}
+            />
+
+            {!!formErrors.name && (
+              <p
+                id={`${personNameInputIdentifier}-error`}
+                className="mt-8 text-14 text-danger"
+              >
+                {formErrors.name.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="input-container">
+          <h3>Wann wurde {vorname} geboren?</h3>
 
           <div>
             <label
@@ -104,13 +155,7 @@ export function GeschwisterkindAngabenPage() {
         </div>
 
         <CustomRadioGroup
-          legend={`Hat das Geschwisterkind
-            ${
-              geburtsdatum && geburtsdatum.length > 0
-                ? `(geb. ${geburtsdatum})`
-                : routeParams.geschwisterkindIndex + 1
-            }
-            eine Behinderung?`}
+          legend={`Hat ${vorname} eine Behinderung?`}
           errors={formErrors}
           register={register}
           name="hatBehinderung"
@@ -120,8 +165,8 @@ export function GeschwisterkindAngabenPage() {
           ]}
         >
           <InfoText
-            question="Warum fragen wir das?"
-            answer="Wenn Sie ein Kind mit Behinderung unter 14 Jahren haben, können Sie den Geschwisterbonus länger erhalten."
+            question="Was bedeutet Behinderung?"
+            answer="Wenn Sie ein Kind mit Behinderung unter 14 Jahren haben, können Sie den Geschwisterbonus länger erhalten. Der Grad der Behinderung (GdB) muss mindestens 20 betragen und später bei der Beantragung von Elterngeld als Nachweis eingereicht werden."
           />
         </CustomRadioGroup>
 

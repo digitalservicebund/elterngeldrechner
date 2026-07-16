@@ -16,6 +16,7 @@ export const GeschwisterkindAnzahlAbfrageSchema = z.object({
 });
 
 export const GeschwisterkindAngabenSchema = z.object({
+  name: z.string().min(1, "Der Name darf nicht leer sein"),
   geburtsdatum: GermanDateInputCodec,
   hatBehinderung: BooleanRadiobuttonCodec,
 });
@@ -98,6 +99,7 @@ if (import.meta.vitest) {
   describe("GeschwisterkindAngabenSchema", () => {
     it("is valid if all required fields are included", () => {
       expect({
+        name: "Luise",
         geburtsdatum: "10.02.2026",
         hatBehinderung: "no",
       }).toEqual(expect.schemaMatching(GeschwisterkindAngabenSchema));
@@ -123,6 +125,7 @@ if (import.meta.vitest) {
 
     it("accepts a sibling birthdate strictly before the child's birthdate", () => {
       const result = schema.safeParse({
+        name: "Luise",
         geburtsdatum: "31.05.2025",
         hatBehinderung: "no",
       });
@@ -132,6 +135,7 @@ if (import.meta.vitest) {
 
     it("rejects a sibling birthdate equal to the child's birthdate", () => {
       const result = schema.safeParse({
+        name: "Luise",
         geburtsdatum: "01.06.2025",
         hatBehinderung: "no",
       });
@@ -146,6 +150,7 @@ if (import.meta.vitest) {
 
     it("rejects a sibling birthdate after the child's birthdate", () => {
       const result = schema.safeParse({
+        name: "Luise",
         geburtsdatum: "15.07.2025",
         hatBehinderung: "no",
       });

@@ -118,6 +118,7 @@ if (import.meta.vitest) {
             route: Route.GeschwisterkindAngaben,
             params: { geschwisterkindIndex: 0 },
             payload: {
+              name: "Luise",
               geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
               hatBehinderung: false,
             },
@@ -129,6 +130,7 @@ if (import.meta.vitest) {
             route: Route.GeschwisterkindAngaben,
             params: { geschwisterkindIndex: 1 },
             payload: {
+              name: "Luise",
               geburtsdatum: Temporal.PlainDate.from("2017-12-23"),
               hatBehinderung: false,
             },

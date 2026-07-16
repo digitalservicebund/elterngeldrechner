@@ -73,6 +73,7 @@ if (import.meta.vitest) {
           {
             route: Route.GeschwisterkindAngaben,
             payload: {
+              name: "Luise",
               geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
               hatBehinderung: false,
             },
@@ -86,6 +87,7 @@ if (import.meta.vitest) {
           {
             route: Route.GeschwisterkindAngaben,
             payload: {
+              name: "Luise",
               geburtsdatum: Temporal.PlainDate.from("2023-12-23"),
               hatBehinderung: false,
             },
@@ -102,6 +104,7 @@ if (import.meta.vitest) {
       );
 
       expect(result).toEqual({
+        name: "Luise",
         geburtsdatum: Temporal.PlainDate.from("2025-12-23"),
         hatBehinderung: false,
       });

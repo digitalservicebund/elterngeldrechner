@@ -537,6 +537,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.Now.plainDateISO(),
             hatBehinderung: false,
           },
@@ -553,6 +554,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.Now.plainDateISO(),
             hatBehinderung: false,
           },
@@ -569,6 +571,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.Now.plainDateISO(),
             hatBehinderung: false,
           },

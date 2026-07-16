@@ -189,6 +189,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2020-12-23"),
             hatBehinderung: false,
           },
@@ -200,6 +201,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2018-12-23"),
             hatBehinderung: false,
           },
@@ -211,6 +213,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
           },
@@ -222,6 +225,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Johann",
             geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,
           },
@@ -263,6 +267,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
           },
@@ -274,6 +279,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Johann",
             geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,
           },
@@ -298,6 +304,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
           },
@@ -309,6 +316,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2010-12-23"),
             hatBehinderung: false,
           },
@@ -324,6 +332,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
           },
@@ -348,6 +357,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2013-12-23"),
             hatBehinderung: false,
           },

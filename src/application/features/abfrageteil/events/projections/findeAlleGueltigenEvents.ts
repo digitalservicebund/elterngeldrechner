@@ -39,6 +39,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2020-01-01"),
             hatBehinderung: false,
           },
@@ -50,6 +51,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Johann",
             geburtsdatum: Temporal.PlainDate.from("2018-06-15"),
             hatBehinderung: true,
           },
@@ -66,10 +68,12 @@ if (import.meta.vitest) {
 
       expect(result).toEqual([
         {
+          name: "Luise",
           geburtsdatum: Temporal.PlainDate.from("2020-01-01"),
           hatBehinderung: false,
         },
         {
+          name: "Johann",
           geburtsdatum: Temporal.PlainDate.from("2018-06-15"),
           hatBehinderung: true,
         },

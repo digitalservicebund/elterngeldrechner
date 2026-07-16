@@ -357,6 +357,7 @@ if (import.meta.vitest) {
             route: Route.GeschwisterkindAngaben,
             params: { geschwisterkindIndex: 0 },
             payload: {
+              name: "Luise",
               geburtsdatum: Temporal.PlainDate.from("2021-03-10"),
               hatBehinderung: true,
             },

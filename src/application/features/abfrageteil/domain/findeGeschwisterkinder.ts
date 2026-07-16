@@ -45,6 +45,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2022-05-10"),
             hatBehinderung: false,
           },
@@ -56,6 +57,7 @@ if (import.meta.vitest) {
 
       expect(findeGeschwisterkinder(events)).toEqual([
         {
+          name: "Luise",
           geburtsdatum: Temporal.PlainDate.from("2022-05-10"),
           hatBehinderung: false,
         },
@@ -68,6 +70,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 1 },
           payload: {
+            name: "Johann",
             geburtsdatum: Temporal.PlainDate.from("2022-07-01"),
             hatBehinderung: true,
           },
@@ -79,6 +82,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2020-03-15"),
             hatBehinderung: false,
           },
@@ -90,10 +94,12 @@ if (import.meta.vitest) {
 
       expect(findeGeschwisterkinder(events)).toEqual([
         {
+          name: "Luise",
           geburtsdatum: Temporal.PlainDate.from("2020-03-15"),
           hatBehinderung: false,
         },
         {
+          name: "Johann",
           geburtsdatum: Temporal.PlainDate.from("2022-07-01"),
           hatBehinderung: true,
         },
@@ -106,6 +112,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2020-01-01"),
             hatBehinderung: false,
           },
@@ -117,6 +124,7 @@ if (import.meta.vitest) {
           route: Route.GeschwisterkindAngaben,
           params: { geschwisterkindIndex: 0 },
           payload: {
+            name: "Luise",
             geburtsdatum: Temporal.PlainDate.from("2020-03-15"),
             hatBehinderung: true,
           },
@@ -128,6 +136,7 @@ if (import.meta.vitest) {
 
       expect(findeGeschwisterkinder(events)).toEqual([
         {
+          name: "Luise",
           geburtsdatum: Temporal.PlainDate.from("2020-03-15"),
           hatBehinderung: true,
         },

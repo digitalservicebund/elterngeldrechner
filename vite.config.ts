@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import react from "@vitejs/plugin-react";
 import Icons from "unplugin-icons/vite";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 import type { Plugin, ResolvedConfig } from "vite";
 
 export default defineConfig({
@@ -42,7 +42,10 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["src/**/*.spec.{ts,tsx}"],
-          exclude: ["src/**/*.integration.spec.{ts,tsx}"],
+          exclude: [
+            ...configDefaults.exclude,
+            "src/**/*.integration.spec.{ts,tsx}",
+          ],
           includeSource: ["src/**/*.{ts,tsx}"],
         },
       },

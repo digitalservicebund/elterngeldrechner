@@ -72,33 +72,23 @@ export function ElternteilWeitereTaetigkeitAngabenPage() {
           options={[
             {
               value: "no",
-              label: "",
+              label: `${vorname} war oder ist angestellt`,
               description: (id) => (
-                <div id={id}>
-                  <p className="mt-0 font-bold">
-                    {vorname} war oder ist angestellt
-                  </p>
-                  <p className="mt-0">
-                    zum Beispiel in Vollzeit, Teilzeit, als Minijob, in
-                    Ausbildung, Freiwilligendienst.
-                  </p>
-                </div>
+                <p id={id} className="mt-0">
+                  zum Beispiel in Vollzeit, Teilzeit, als Minijob, in
+                  Ausbildung, Freiwilligendienst.
+                </p>
               ),
             },
             {
               value: "yes",
-              label: "",
+              label: `${vorname} war oder ist selbstständig`,
               description: (id) => (
-                <div id={id}>
-                  <p className="mt-0 font-bold">
-                    {vorname} war oder ist selbstständig
-                  </p>
-                  <p className="mt-0">
-                    zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land-
-                    oder Forstwirtschaft, Freiberuflichkeit, Selbstständig (GbR,
-                    GmbH, Beteiligung).
-                  </p>
-                </div>
+                <p id={id} className="mt-0">
+                  zum Beispiel Gewerbe (Online-Shop, Handwerk, Handel), Land-
+                  oder Forstwirtschaft, Freiberuflichkeit, Selbstständig (GbR,
+                  GmbH, Beteiligung).
+                </p>
               ),
             },
           ]}

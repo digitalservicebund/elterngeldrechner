@@ -74,11 +74,11 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
         {!!children && <div>{children}</div>}
 
         {options.map((option, i) => {
-          const descriptionId = `${baseId}-${option.label}`;
+          const descriptionId = `${baseId}-${option.value}`;
 
           return (
             <label
-              key={option.label}
+              key={option.value}
               className={getLabelClassName(hasError, horizontal, disabled)}
             >
               <input
@@ -91,9 +91,17 @@ export function CustomRadioGroup<TFieldValues extends FieldValues>({
                 required={required}
                 disabled={disabled}
               />
-              {option.label}
-
-              {!!option.description && option.description(descriptionId)}
+              {vertical && option.description ? (
+                <span className="flex flex-col gap-y-4">
+                  <span className="font-bold">{option.label}</span>
+                  {option.description(descriptionId)}
+                </span>
+              ) : (
+                <>
+                  {option.label}
+                  {!!option.description && option.description(descriptionId)}
+                </>
+              )}
             </label>
           );
         })}
@@ -131,5 +139,51 @@ function getLabelClassName(
     "items-center": horizontal,
     "flex-col": horizontal,
     "cursor-default": disabled,
+  });
+}
+
+if (import.meta.vitest) {
+  const { describe, expect, it } = import.meta.vitest;
+
+  describe("Custom Radio Group", async () => {
+    const { render, screen } = await import("@testing-library/react");
+    const { useForm } = await import("react-hook-form");
+
+    // Options are distinguished by their value, not their label: two options
+    // may share a label but must still get distinct description ids so their
+    // descriptions are addressed individually.
+    it("gives each option a unique description id even with identical labels", () => {
+      function TestComponent() {
+        const { register } = useForm<{ art: string }>();
+
+        return (
+          <CustomRadioGroup
+            register={register}
+            name="art"
+            legend="Art der weiteren Tätigkeit?"
+            options={[
+              {
+                value: "no",
+                label: "Weitere Tätigkeit",
+                description: (id) => <span id={id}>angestellt</span>,
+              },
+              {
+                value: "yes",
+                label: "Weitere Tätigkeit",
+                description: (id) => <span id={id}>selbstständig</span>,
+              },
+            ]}
+          />
+        );
+      }
+
+      render(<TestComponent />);
+
+      const beschreibungsIds = screen
+        .getAllByRole("radio")
+        .map((radio) => radio.getAttribute("aria-describedby"));
+
+      expect(new Set(beschreibungsIds).size).toBe(beschreibungsIds.length);
+    });
   });
 }

@@ -45,7 +45,7 @@ export function KindPage() {
     <Page id="kind-page" heading="Angaben zur Geburt">
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend="Ist Ihr Kind schon geboren?"
+          legend="Ist das Kind, für das Sie Elterngeld planen, schon geboren? "
           errors={formErrors}
           register={register}
           name="istGeboren"

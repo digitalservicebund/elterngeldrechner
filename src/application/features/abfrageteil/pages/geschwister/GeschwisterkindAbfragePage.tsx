@@ -58,7 +58,7 @@ export function GeschwisterkindAbfragePage() {
     <Page id="geschwister-page" heading="Angaben zu Geschwistern">
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <CustomRadioGroup
-          legend="Leben bereits ältere Geschwisterkinder in Ihrem Haushalt?"
+          legend="Leben bereits ältere Geschwisterkinder unter 14 Jahren in Ihrem Haushalt?"
           errors={formErrors}
           register={register}
           name="istVorhanden"

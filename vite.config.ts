@@ -42,6 +42,7 @@ export default defineConfig({
         test: {
           name: "unit",
           include: ["src/**/*.spec.{ts,tsx}"],
+          exclude: ["src/**/*.integration.spec.{ts,tsx}"],
           includeSource: ["src/**/*.{ts,tsx}"],
         },
       },

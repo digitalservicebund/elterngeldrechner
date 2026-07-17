@@ -82,47 +82,83 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
           <div className="text-container">
-            <h3>War {vorname} wegen dieser Schwangerschaft krank?</h3>
+            <h3>
+              War {vorname} wegen dieser Schwangerschaft krankgeschrieben?
+            </h3>
 
             <p>
-              Wenn Sie wegen dieser Schwangerschaft krank waren und weniger
-              verdient haben, können wir diese Zeit bei der Berechnung
-              überspringen. So wird Ihr Elterngeld auf Basis Ihrer höheren
-              Einkünfte berechnet.
+              Wenn Sie deswegen Krankengeld statt Gehalt erhalten haben, können
+              wir diese Monate bei der Berechnung überspringen – Ihr Elterngeld
+              basiert dann auf den Monaten mit Ihrem vollen Gehalt. Gemeint ist
+              hier nicht das Beschäftigungsverbot.
             </p>
           </div>
 
           <InfoText
-            question="Warum fragen wir das?"
+            question="Was heißt krank wegen der Schwangerschaft?"
             answer={
               <>
+                <p className="font-bold">Wann ist das wichtig für Sie?</p>
                 <p>
-                  Wir berechnen Ihr Elterngeld nach Ihrem Einkommen. Geld von
-                  der Krankenkasse (Krankengeld) zählt nicht als Einkommen.
-                  Würde man dieses bei der Berechnung berücksichtigen, könnte
-                  das Ihr Elterngeld verringern.
+                  Eine normale Krankschreibung ändert nichts an Ihrem
+                  Elterngeld, solange Ihr Arbeitgeber Ihr volles Gehalt
+                  weiterzahlt. Das ist meistens in den ersten 6 Wochen einer
+                  Krankheit so.
                 </p>
 
+                <p>Diese Frage betrifft Sie nur, wenn:</p>
+                <ul>
+                  <li>Sie wegen der Schwangerschaft krank waren und</li>
+                  <li>
+                    Sie in dieser Zeit Krankengeld (und dadurch weniger
+                    Einkommen) bekommen haben.
+                  </li>
+                </ul>
+                <p className="italic">
+                  Hinweis: Für diese Zeit brauchen Sie später ein ärztliches
+                  Attest.
+                </p>
+
+                <p className="font-bold">
+                  Was heißt krank wegen der Schwangerschaft?
+                </p>
                 <p>
-                  Wenn Sie aber aufgrund der Schwangerschaft krank waren, ist
-                  das anders:
+                  Es zählen nur Krankheiten, bei denen Ihre Frauenärztin oder
+                  Ihr Frauenarzt Sie{" "}
+                  <strong>
+                    wegen Schwangerschafts-Beschwerden krankgeschrieben
+                  </strong>{" "}
+                  hat.
                 </p>
                 <ul>
-                  <li>Wir lassen diese Monate bei der Berechnung weg.</li>
                   <li>
-                    Wir nehmen stattdessen Monate von davor, in denen Sie Ihr
-                    normales Gehalt bekommen haben.
+                    <strong>Wichtig: </strong>Sie müssen weniger Einkommen
+                    haben. Wenn Sie trotz der Beschwerden Ihr volles Gehalt
+                    weiter bekommen haben (z. B. durch ein
+                    Beschäftigungsverbot), tragen Sie hier „Nein“ ein.
+                  </li>
+                  <li>
+                    <strong>Andere Krankheiten zählen nicht: </strong>Wenn Sie
+                    aus anderen Gründen krankgeschrieben waren (zum Beispiel
+                    wegen einer Grippe oder einem gebrochenen Bein), zählen
+                    diese Monate gesetzlich nicht als Schwangerschaftsbedingte
+                    Erkrankung. Diese Monate dürfen wir nicht verschieben.
                   </li>
                 </ul>
 
-                <p>
-                  <strong>Wichtig: </strong>Das gilt nur bei Krankheit aufgrund
-                  der Schwangerschaft. Wenn Sie aus anderen Gründen krank waren
-                  (zum Beispiel wegen eines gebrochenen Beins), dürfen wir den
-                  Zeitraum nicht verschieben. Ein Beschäftigungsverbot in der
-                  Schwangerschaft zählt auch nicht als Krankheit, weil Sie
-                  währenddessen keine finanziellen Einbußen haben.
+                <p className="font-bold">
+                  Was bedeutet das für die Berechnung?
                 </p>
+                <ul>
+                  <li>
+                    Wenn Sie aufgrund der Schwangerschaft krank waren, lassen
+                    wir diese Monate bei der Berechnung weg.
+                  </li>
+                  <li>
+                    Wir nehmen stattdessen Monate davor, in denen Sie Ihr
+                    normales Gehalt bekommen haben.
+                  </li>
+                </ul>
 
                 <p className="font-bold">
                   Was muss ich später für den Antrag beachten?

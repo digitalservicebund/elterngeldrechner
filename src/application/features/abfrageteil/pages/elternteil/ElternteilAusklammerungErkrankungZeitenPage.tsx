@@ -119,17 +119,25 @@ export function ElternteilAusklammerungErkrankungZeitenPage() {
     <Page heading={`Angaben ${vorname}`}>
       <form id={formIdentifier} onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="input-container">
-          <h3>
-            Von wann bis wann war {vorname} krank wegen dieser Schwangerschaft?
-          </h3>
+          <div className="text-container">
+            <h3>
+              Von wann bis wann war {vorname} wegen dieser Schwangerschaft
+              krankgeschrieben?
+            </h3>
+
+            <p>
+              Tragen Sie den Zeitraum ein, in dem {vorname} Krankengeld bezogen
+              hat. Wir überspringen diese Monate dann bei der Berechnung.
+            </p>
+          </div>
 
           <InfoText
-            question="Wo finde ich diese Angaben?"
+            question="Wo finde ich die Angaben zur Krankheit wegen der Schwangerschaft?"
             answer={
               <>
                 <p>
                   Schauen Sie auf Ihr ärztliches Attest. Dort stehen die genauen
-                  Daten. Bitte tragen Sie diese hier ein.
+                  Daten. Tragen Sie diese hier ein.
                 </p>
                 <p>
                   <strong>Wichtig: </strong>Eine normale Krankmeldung (gelber

@@ -143,7 +143,7 @@
 }
 
 #egr-root li {
-  @apply mt-8;
+  @apply mt-8 max-w-[70ch];
 }
 
 #egr-root button {

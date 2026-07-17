@@ -1,75 +1,52 @@
 export function sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt(
   taetigkeiten: readonly { payload: { istTaetigkeitMinijob: boolean } }[],
 ): boolean {
-  const hatMinijob = taetigkeiten.some((t) => t.payload.istTaetigkeitMinijob);
-  const hatSozialversicherung = taetigkeiten.some(
-    (t) => !t.payload.istTaetigkeitMinijob,
-  );
-  return hatMinijob && hatSozialversicherung;
+  const minijobs = taetigkeiten.filter((t) => t.payload.istTaetigkeitMinijob);
+
+  return minijobs.length > 0 && taetigkeiten.length > minijobs.length;
 }
 
 if (import.meta.vitest) {
-  const { describe, it, expect } = import.meta.vitest;
+  const { describe, expect, test } = import.meta.vitest;
 
   describe("sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt", () => {
-    const minijob = { payload: { istTaetigkeitMinijob: true } };
-    const sozialversicherungspflichtig = {
-      payload: { istTaetigkeitMinijob: false },
-    };
+    const minijob = true;
+    const sozialversicherungspflichtig = false;
 
-    it("is false for an empty list", () => {
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([]),
-      ).toBe(false);
-    });
-
-    it("is false for a single Minijob", () => {
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([
-          minijob,
-        ]),
-      ).toBe(false);
-    });
-
-    it("is false for a single sozialversicherungspflichtige Taetigkeit", () => {
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([
-          sozialversicherungspflichtig,
-        ]),
-      ).toBe(false);
-    });
-
-    it("is false when all Taetigkeiten are Minijobs", () => {
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([
-          minijob,
-          minijob,
-        ]),
-      ).toBe(false);
-    });
-
-    it("is false when all Taetigkeiten are sozialversicherungspflichtig", () => {
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([
+    test.for([
+      { taetigkeiten: [], sindGemischt: false },
+      { taetigkeiten: [minijob], sindGemischt: false },
+      { taetigkeiten: [sozialversicherungspflichtig], sindGemischt: false },
+      { taetigkeiten: [minijob, minijob], sindGemischt: false },
+      {
+        taetigkeiten: [
           sozialversicherungspflichtig,
           sozialversicherungspflichtig,
-        ]),
-      ).toBe(false);
-    });
+        ],
+        sindGemischt: false,
+      },
+      {
+        taetigkeiten: [minijob, sozialversicherungspflichtig],
+        sindGemischt: true,
+      },
+      {
+        taetigkeiten: [sozialversicherungspflichtig, minijob],
+        sindGemischt: true,
+      },
+    ])(
+      "Taetigkeiten sind Minijob: $taetigkeiten -> Sind gemischt = $sindGemischt",
+      ({ taetigkeiten, sindGemischt: expected }) => {
+        const payload = taetigkeiten.map((istTaetigkeitMinijob) => {
+          return { payload: { istTaetigkeitMinijob } };
+        });
 
-    it("is true for a mix of Minijob and sozialversicherungspflichtiger Taetigkeit, in either order", () => {
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([
-          minijob,
-          sozialversicherungspflichtig,
-        ]),
-      ).toBe(true);
-      expect(
-        sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt([
-          sozialversicherungspflichtig,
-          minijob,
-        ]),
-      ).toBe(true);
-    });
+        const result =
+          sindMinijobUndSozialversicherungspflichtigeTaetigkeitGemischt(
+            payload,
+          );
+
+        expect(result).toBe(expected);
+      },
+    );
   });
 }

@@ -85,24 +85,64 @@ export function AllgemeineAngabenPage() {
           name="gesamteinkommenGrenzeUeberschritten"
         >
           <InfoText
-            question="Was bedeutet Gesamteinkommen?"
+            question="Was bedeutet zu versteuerndes Gesamteinkommen?"
             answer={
               <>
                 <p>
-                  Wenn Sie besonders viel Einkommen haben, können Sie kein
-                  Elterngeld bekommen. Elterngeld ist ausgeschlossen ab einem zu
-                  versteuernden Jahreseinkommen von mehr als 175.000 Euro bei
-                  Alleinerziehenden, Paaren und getrennt Erziehenden.
+                  Wenn Ihr Einkommen zu hoch ist, haben Sie keinen Anspruch auf
+                  Elterngeld.
+                </p>
+                <ul>
+                  <li>Die Grenze beträgt 175.000 Euro.</li>
+                  <li>
+                    Sie gilt einheitlich für Paare (gemeinsames Einkommen) und
+                    für Alleinerziehende.
+                  </li>
+                  <li>
+                    Entscheidend ist das Einkommen aus dem Kalenderjahr direkt
+                    vor der Geburt.
+                  </li>
+                </ul>
+
+                <p className="font-bold">Welches Einkommen zählt?</p>
+                <p>
+                  Es zählt nicht das Brutto-Einkommen, sondern das sogenannte zu
+                  versteuernde Einkommen. Dieser Wert ist fast immer deutlich
+                  niedriger als Ihr eigentliches Gehalt, da viele Beträge
+                  abgezogen werden.
+                </p>
+
+                <p className="font-bold">Wo finde ich diesen Wert?</p>
+                <p>
+                  Schauen Sie auf Ihren Einkommensteuerbescheid nach dem Begriff
+                  „Zu versteuerndes Einkommen“. Wenn dieser noch nicht vorliegt,
+                  können Sie den Wert anhand Ihrer letzten
+                  Dezember-Gehaltsabrechnung oder Lohnsteuerbescheinigung
+                  schätzen.
+                </p>
+
+                <p className="font-bold">
+                  Was wird vom Brutto-Einkommen abgezogen?
                 </p>
                 <p>
-                  Diese Angabe finden Sie beispielsweise auf Ihrem
-                  Steuerbescheid.
+                  Ihr zu versteuerndes Einkommen verringert sich vor allem
+                  durch:
                 </p>
-                <p>
-                  Wenn Sie Ihr Kind alleine erziehen, geben Sie nur Ihr eigenes
-                  Einkommen an. Als Paar oder getrennt erziehende Eltern rechnen
-                  Sie das Einkommen beider Elternteile zusammen.
-                </p>
+                <ul>
+                  <li>
+                    Werbungskosten: Automatisch mindestens 1.230 Euro für
+                    berufliche Ausgaben (oder mehr, wenn Sie höhere Kosten
+                    nachweisen, zum Beispiel Fahrtkosten).
+                  </li>
+                  <li>
+                    Vorsorgeaufwendungen: Ihre Beiträge zur Renten-, Kranken-
+                    und Pflegeversicherung.
+                  </li>
+                  <li>
+                    Kinderfreibeträge / Betreuungskosten: Falls Sie bereits
+                    Kinder haben.
+                  </li>
+                </ul>
               </>
             }
           ></InfoText>

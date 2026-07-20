@@ -16,6 +16,7 @@ import {
 import { berechneEnddatumDesGeschwisterbonus } from "@/elterngeldrechner/Geschwisterbonus";
 import { Geburtstag } from "@/elterngeldrechner";
 import { posthog } from "@/application/user-tracking";
+import { formatiereGeschwisterbonusErklaerung } from "./formatiereGeschwisterbonusErklaerung";
 
 export function GeschwisterbonusUebersichtPage() {
   const { dispatch, filtereValideEventHistorie } = useEventContext();
@@ -26,6 +27,14 @@ export function GeschwisterbonusUebersichtPage() {
   const eventStream = filtereValideEventHistorie();
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
   const geburtsdatum = findeGeburtsdatum(eventStream);
+
+  const nameFormatter = new Intl.ListFormat("de", {
+    style: "long",
+    type: "conjunction",
+  });
+  const geschwisterkinderNamen = nameFormatter.format(
+    geschwisterkinder.map((geschwisterkind) => geschwisterkind.name),
+  );
 
   const geschwisterbonusEnddatum = berechneEnddatumDesGeschwisterbonus(
     geschwisterkinder.map((it) => ({
@@ -60,28 +69,33 @@ export function GeschwisterbonusUebersichtPage() {
               <h3>Super, Sie können den Geschwisterbonus erhalten</h3>
             </div>
 
-            <div className="p-20 pt-10">
+            <div className="p-20 pt-0">
+              <p>
+                Wir haben die Geburtstdaten von {geschwisterkinderNamen}{" "}
+                überprüft. Die Angaben haben ergeben, dass die Voraussetzungen
+                für den Geschwisterbonus erfüllt sind.
+              </p>
+              <p className="font-bold">Das bedeutet für Sie:</p>
               <ul>
                 <li>
-                  Ihre Angaben haben ergeben, dass die Voraussetzungen für den
-                  Geschwisterbonus erfüllt sind
+                  Ihr monatlicher Elterngeldbetrag erhöht sich automatisch um 10
+                  % (mindestens um 75 Euro pro Monat).
+                </li>
+                {geschwisterbonusEnddatum !== null && (
+                  <li>
+                    {formatiereGeschwisterbonusErklaerung(
+                      geschwisterkinder,
+                      geschwisterbonusEnddatum,
+                    )}
+                  </li>
+                )}
+                <li>
+                  Der Bonus gilt für beide Eltern, wenn Sie in dieser Zeit
+                  Elterngeld beziehen.
                 </li>
                 <li>
-                  Der Geschwisterbonus wird bis zum Erreichen der{" "}
-                  <strong>
-                    Altersgrenze am{" "}
-                    {geschwisterbonusEnddatum.toLocaleString("de-DE", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                      timeZone: "UTC",
-                    })}
-                  </strong>{" "}
-                  gezahlt
-                </li>
-                <li>
-                  Die Erhöhung wird im Planer direkt bei ihrem Elterngeld
-                  berücksichtigt
+                  Der Geschwisterbonus wird automatisch erfasst und später in
+                  Ihrer Elterngeld-Planung angezeigt.
                 </li>
               </ul>
             </div>

@@ -54,6 +54,7 @@ export default defineConfig({
         test: {
           name: "subcutaneous",
           include: ["src/application/tests/subcutaneous/*.spec.{ts,tsx}"],
+          setupFiles: ["src/application/tests/subcutaneous/setupTests.ts"],
           fileParallelism: false,
         },
       },

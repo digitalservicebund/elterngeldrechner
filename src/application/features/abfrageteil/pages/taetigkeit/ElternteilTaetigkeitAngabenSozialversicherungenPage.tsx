@@ -121,6 +121,39 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           <div className="input-container">
             <h3>Welche Steuerklasse hatte {vorname}?</h3>
 
+            <InfoText
+              question="Welche Steuerklasse gebe ich an?"
+              answer={
+                <>
+                  <p>
+                    Ihre Steuerklasse finden Sie auf Ihrer monatlichen
+                    Gehaltsabrechnung. In der Regel teilt sie sich so auf:
+                  </p>
+                  <ul>
+                    <li>
+                      Steuerklasse 1: Wenn Sie nicht verheiratet oder geschieden
+                      sind.
+                    </li>
+                    <li>Steuerklasse 2: Wenn Sie alleinerziehend sind.</li>
+                    <li>
+                      Steuerklasse 3, 4 oder 5: Wenn Sie verheiratet sind oder
+                      in einer eingetragenen Lebenspartnerschaft leben (als
+                      Kombination 3 und 5 oder 4 und 4).
+                    </li>
+                  </ul>
+                  <p className="font-bold">
+                    Haben Sie Ihre Steuerklasse gewechselt?
+                  </p>
+                  <p>
+                    Wenn Sie oder Ihr Partner im Zeitraum vor der Geburt (im
+                    sogenannten Bemessungszeitraum) die Steuerklasse gewechselt
+                    haben, gilt eine einfache Regel: Geben Sie die Steuerklasse
+                    an, die Sie in diesem Zeitraum am längsten hatten.
+                  </p>
+                </>
+              }
+            />
+
             <CustomSelect
               autoWidth
               label="Steuerklasse"

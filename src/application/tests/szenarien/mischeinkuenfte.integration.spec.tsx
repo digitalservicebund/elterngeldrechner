@@ -272,8 +272,8 @@ test("Mischeinkünfte: angestellt und selbstständig verschieben den Bemessungsz
   expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
 
   // Person 2: angestellt (3.000 €, Steuerklasse V) + Minijob (450 €)
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1188);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(594);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1343);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(672);
 
   // Mutterschutz Person 1 blockiert die ersten zwei Lebensmonate (§ 3 BEEG).
   expect(

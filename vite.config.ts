@@ -44,7 +44,7 @@ export default defineConfig({
           include: ["src/**/*.spec.{ts,tsx}"],
           exclude: [
             ...configDefaults.exclude,
-            "src/**/*.integration.spec.{ts,tsx}",
+            "src/application/tests/subcutaneous/*.spec.{ts,tsx}",
           ],
           includeSource: ["src/**/*.{ts,tsx}"],
         },
@@ -52,8 +52,8 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: "integration",
-          include: ["src/**/*.integration.spec.{ts,tsx}"],
+          name: "subcutaneous",
+          include: ["src/application/tests/subcutaneous/*.spec.{ts,tsx}"],
           fileParallelism: false,
         },
       },

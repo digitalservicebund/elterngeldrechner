@@ -108,17 +108,11 @@ if (import.meta.vitest) {
   describe("Gesamtsummenanzeige", async () => {
     const { render, screen } = await import("@testing-library/react");
     const { Gesamtsummenanzeige } = await import("./Gesamtsummenanzeige");
-    const { Elternteil, berechneGesamtsumme } = await import("@/monatsplaner");
+    const monatsplanerModule = await import("@/monatsplaner");
+    const { Elternteil } = monatsplanerModule;
 
     beforeEach(() => {
-      vi.mock(import("@/monatsplaner"), async (importOriginal) => {
-        const originalMonatsplaner = await importOriginal();
-
-        return {
-          ...originalMonatsplaner,
-          berechneGesamtsumme: vi.fn(),
-        };
-      });
+      vi.spyOn(monatsplanerModule, "berechneGesamtsumme");
     });
 
     describe("final Summe", () => {

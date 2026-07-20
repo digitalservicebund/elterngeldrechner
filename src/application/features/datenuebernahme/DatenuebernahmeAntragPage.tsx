@@ -260,38 +260,11 @@ export function DatenuebernahmeAntragPage(): ReactNode {
 if (import.meta.vitest) {
   const { beforeEach, vi, describe, it, expect } = import.meta.vitest;
 
-  vi.mock("@/application/features/components/Page", () => ({
-    Page: ({
-      children,
-      heading,
-      id,
-    }: {
-      readonly children: React.ReactNode;
-      readonly heading: string;
-      readonly id?: string;
-    }) => (
-      <div id={id}>
-        <section aria-label={heading}>{children}</section>
-      </div>
-    ),
-  }));
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useNavigateStateful",
-    () => ({
-      useNavigateStateful: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useAntragInformationen",
-    () => ({
-      useAntragInformationen: vi.fn(),
-    }),
-  );
-
   describe("Datenuebernahme Antrag Page", async () => {
-    const { useNavigateStateful: useStatefulNavigate } =
+    const pageModule = await import("@/application/features/components/Page");
+    const useNavigateStatefulModule =
       await import("@/application/features/planungsteil/planer/hooks/useNavigateStateful");
-    const { useAntragInformationen } =
+    const useAntragInformationenModule =
       await import("@/application/features/planungsteil/planer/hooks/useAntragInformationen");
     const { getBundeslandAntragSupportByName } =
       await import("@/application/features/datenuebernahme/pdfAntrag");
@@ -302,10 +275,29 @@ if (import.meta.vitest) {
 
     beforeEach(() => {
       navigateSpy.mockClear();
-      vi.mocked(useAntragInformationen).mockReturnValue(
-        getBundeslandAntragSupportByName("Berlin"),
+      vi.spyOn(pageModule, "Page").mockImplementation(
+        ({
+          children,
+          heading,
+          id,
+        }: {
+          readonly children: React.ReactNode;
+          readonly heading: string;
+          readonly id?: string;
+        }) => (
+          <div id={id}>
+            <section aria-label={heading}>{children}</section>
+          </div>
+        ),
       );
-      vi.mocked(useStatefulNavigate).mockReturnValue({
+      vi.spyOn(
+        useAntragInformationenModule,
+        "useAntragInformationen",
+      ).mockReturnValue(getBundeslandAntragSupportByName("Berlin"));
+      vi.spyOn(
+        useNavigateStatefulModule,
+        "useNavigateStateful",
+      ).mockReturnValue({
         navigationState: { plan: ANY_PLAN },
         navigateStateful: navigateSpy,
       });

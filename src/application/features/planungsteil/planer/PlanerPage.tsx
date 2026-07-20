@@ -283,67 +283,22 @@ export function PlanerPage() {
 if (import.meta.vitest) {
   const { describe, it, expect, vi, beforeEach } = import.meta.vitest;
 
-  vi.mock("@/application/features/components/Page", () => ({
-    Page: ({ children }: { readonly children: React.ReactNode }) => (
-      <>{children}</>
-    ),
-  }));
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useAusgangslage",
-    () => ({
-      useAusgangslage: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege",
-    () => ({
-      useBerechneElterngeldbezuege: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useEinkommenInformationen",
-    () => ({
-      useEinkommenInformationen: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useNavigateStateful",
-    () => ({
-      useNavigateStateful: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/hooks/useAntragInformationen",
-    () => ({
-      useAntragInformationen: vi.fn(),
-    }),
-  );
-  vi.mock(
-    "@/application/features/planungsteil/planer/component/user-feedback",
-    async (importOriginal) => ({
-      ...(await importOriginal<
-        typeof import("@/application/features/planungsteil/planer/component/user-feedback")
-      >()),
-      useUserFeedback: () => ({
-        isFeedbackSubmitted: false,
-        submitFeedback: vi.fn(),
-      }),
-    }),
-  );
-
   describe("Planer Page", async () => {
     const monatsplanerModule = await import("@/monatsplaner");
     const { Elternteil, Variante } = monatsplanerModule;
-    const { useNavigateStateful } =
+    const pageModule = await import("@/application/features/components/Page");
+    const useNavigateStatefulModule =
       await import("@/application/features/planungsteil/planer/hooks/useNavigateStateful");
-    const { useAusgangslage } =
+    const useAusgangslageModule =
       await import("@/application/features/planungsteil/planer/hooks/useAusgangslage");
-    const { useBerechneElterngeldbezuege } =
+    const useBerechneElterngeldbezuegeModule =
       await import("@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege");
-    const { useEinkommenInformationen } =
+    const useEinkommenInformationenModule =
       await import("@/application/features/planungsteil/planer/hooks/useEinkommenInformationen");
-    const { useAntragInformationen } =
+    const useAntragInformationenModule =
       await import("@/application/features/planungsteil/planer/hooks/useAntragInformationen");
+    const userFeedbackModule =
+      await import("@/application/features/planungsteil/planer/component/user-feedback");
     const { getBundeslandAntragSupportByName } =
       await import("@/application/features/datenuebernahme/pdfAntrag");
 
@@ -358,26 +313,47 @@ if (import.meta.vitest) {
       },
     };
 
-    type NavigateStatefulHook = ReturnType<typeof useNavigateStateful>;
+    type NavigateStatefulHook = ReturnType<
+      typeof useNavigateStatefulModule.useNavigateStateful
+    >;
     type NavigateStateful = NavigateStatefulHook["navigateStateful"];
 
     const navigateSpy = vi.fn<NavigateStateful>();
 
     beforeEach(() => {
-      vi.mocked(useAusgangslage).mockReturnValue(mockAusgangslage);
-      vi.mocked(useBerechneElterngeldbezuege).mockReturnValue(
-        vi.fn().mockReturnValue({}),
+      vi.spyOn(pageModule, "Page").mockImplementation(
+        ({ children }: { readonly children: React.ReactNode }) => (
+          <>{children}</>
+        ),
       );
-      vi.mocked(useEinkommenInformationen).mockReturnValue({
+      vi.spyOn(useAusgangslageModule, "useAusgangslage").mockReturnValue(
+        mockAusgangslage,
+      );
+      vi.spyOn(
+        useBerechneElterngeldbezuegeModule,
+        "useBerechneElterngeldbezuege",
+      ).mockReturnValue(vi.fn().mockReturnValue({}));
+      vi.spyOn(
+        useEinkommenInformationenModule,
+        "useEinkommenInformationen",
+      ).mockReturnValue({
         gesamteinkommenGrenzeUeberschritten: false,
       });
-      vi.mocked(useNavigateStateful).mockReturnValue({
+      vi.spyOn(
+        useNavigateStatefulModule,
+        "useNavigateStateful",
+      ).mockReturnValue({
         navigationState: {},
         navigateStateful: navigateSpy,
       });
-      vi.mocked(useAntragInformationen).mockReturnValue(
-        getBundeslandAntragSupportByName("Berlin"),
-      );
+      vi.spyOn(
+        useAntragInformationenModule,
+        "useAntragInformationen",
+      ).mockReturnValue(getBundeslandAntragSupportByName("Berlin"));
+      vi.spyOn(userFeedbackModule, "useUserFeedback").mockReturnValue({
+        isFeedbackSubmitted: false,
+        submitFeedback: vi.fn(),
+      });
       vi.spyOn(monatsplanerModule, "berechneGesamtsumme").mockReturnValue({
         elterngeldbezug: 400,
         proElternteil: {
@@ -408,7 +384,10 @@ if (import.meta.vitest) {
         };
 
       it("ist interaktiv wenn eine Änderung am Plan gemacht wurde", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.spyOn(
+          useNavigateStatefulModule,
+          "useNavigateStateful",
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: mockAusgangslageWithMutterschutz,
@@ -452,7 +431,10 @@ if (import.meta.vitest) {
       });
 
       it("ist deaktiviert bei leerem Plan mit Mutterschutz", () => {
-        vi.mocked(useNavigateStateful).mockReturnValue({
+        vi.spyOn(
+          useNavigateStatefulModule,
+          "useNavigateStateful",
+        ).mockReturnValue({
           navigationState: {
             plan: {
               ausgangslage: mockAusgangslageWithMutterschutz,

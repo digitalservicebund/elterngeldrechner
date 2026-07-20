@@ -2,6 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
 import {
   EventProvider,
   useEventContext,
@@ -18,7 +19,7 @@ beforeEach(() => {
   sessionStorage.clear();
 
   vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-01-15"));
+  vi.setSystemTime(new Date("2026-03-10"));
 });
 
 afterEach(() => {
@@ -26,18 +27,18 @@ afterEach(() => {
 });
 
 /*
- * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
- * Beide sind angestellt (Steuerklasse IV, gesetzlich sozialversichert, nicht
- * kirchensteuerpflichtig). Person 1 verdient 4.600 € brutto im Monat und war
- * vor der Geburt im Mutterschutz, Person 2 verdient 2.500 € brutto.
+ * Ausgangslage: Nur eine Person plant Elterngeld für das erste Kind.
+ * Person 1 ist angestellt (Steuerklasse III, gesetzlich sozialversichert,
+ * kirchensteuerpflichtig) und war vor der Geburt im Mutterschutz. Das
+ * Einkommen schwankte im Bemessungszeitraum: es begann bei 2.000 € brutto
+ * und stieg Monat für Monat um 100 € auf zuletzt 3.100 €.
  *
- * Bei 4.600 € brutto wird das Basiselterngeld von Person 1 auf den
- * Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 Satz 1 BEEG); ElterngeldPlus
- * beträgt höchstens die Hälfte, also 900 € (§ 4a BEEG). Die ersten zwei
- * Lebensmonate von Person 1 sind wegen des Mutterschutzes blockiert
- * (§ 3 BEEG).
+ * Das Elterngeld bemisst sich am Durchschnitt der monatlichen Nettoeinkommen
+ * des Bemessungszeitraums (§ 2 Abs. 1, § 2b BEEG); ElterngeldPlus ist die
+ * Hälfte des Basisbetrags (§ 4a BEEG). Die ersten zwei Lebensmonate sind
+ * wegen des Mutterschutzes blockiert (§ 3 BEEG).
  */
-test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 BEEG)", async () => {
+test("Schwankendes Einkommen: Elterngeld aus dem Durchschnitt schwankender Monatseinkommen (§ 2b BEEG)", async () => {
   const user = userEvent.setup();
 
   const router = createMemoryRouter(routeDefinition, {
@@ -53,7 +54,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Allgemeine Angaben
   await user.selectOptions(
     await screen.findByLabelText("Bundesland"),
-    "Mecklenburg-Vorpommern",
+    "Bayern",
   );
   await user.click(
     screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
@@ -67,11 +68,11 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Angaben zur Geburt
   await user.type(
     await screen.findByLabelText("Errechneter Entbindungstermin (TT.MM.JJJJ)"),
-    "30.12.2025",
+    "01.03.2026",
   );
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
-    "09.01.2026",
+    "06.03.2026",
   );
   await user.type(screen.getByLabelText("Anzahl der Kinder"), "1");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
@@ -88,7 +89,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
 
   // Gemeinsame Planung
   await user.click(
-    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"), // Ja, beide
+    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_1"), // Nein, ein Elternteil
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -115,12 +116,13 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse
+  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse III,
+  // Einkommen NICHT gleich verteilt (schwankend)
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
-  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
+  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_0")); // Ja
   await user.click(
     screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
   );
@@ -130,69 +132,18 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(
     screen.getByTestId("istGesetzlichArbeitlosenversichert_option_0"), // Ja
   );
-  await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
+  await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 1: Einkommen
-  await user.type(
-    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "4600",
-  );
+  // Tätigkeit Person 1: Einkommen pro Monat, beginnend bei 2.000 €,
+  // Monat für Monat um 100 € steigend.
+  const monatsfelder = await screen.findAllByLabelText(/Brutto-Einkommen$/);
+  for (const [index, feld] of monatsfelder.entries()) {
+    await user.type(feld, String(2000 + index * 100));
+  }
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Weitere Tätigkeiten Person 1?
-  await user.click(
-    await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
-  );
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Angaben Person 2 (kein Mutterschutz-Feld, da Person 1 im Mutterschutz war)
-  await user.type(await screen.findByLabelText("Vorname Person 2"), "Person 2");
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Finanzielle Situation Person 2: Tätigkeiten
-  await user.click(
-    await screen.findByRole("checkbox", {
-      name: "Person 2 war oder ist angestellt",
-    }),
-  );
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Bemessungszeitraum-Übersicht Person 2
-  await user.click(
-    await screen.findByRole("button", { name: "Verstanden und weiter" }),
-  );
-
-  // Tätigkeit Person 2: Minijob?
-  await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
-  await user.selectOptions(
-    await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
-  );
-  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
-  await user.click(
-    screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
-  );
-  await user.click(
-    screen.getByTestId("istGesetzlichRentenversichert_option_0"),
-  ); // Ja
-  await user.click(
-    screen.getByTestId("istGesetzlichArbeitlosenversichert_option_0"), // Ja
-  );
-  await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Tätigkeit Person 2: Einkommen
-  await user.type(
-    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "2500",
-  );
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Weitere Tätigkeiten Person 2? -> DONE, Abfrageteil ist durchlaufen
+  // Weitere Tätigkeiten Person 1? -> DONE, Abfrageteil ist durchlaufen
   await user.click(
     await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
   );
@@ -209,24 +160,24 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     }),
     { wrapper: EventProvider },
   );
-  const { berechneElterngeldbezuege } = hook.result.current;
+  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,
   );
 
-  // Person 1: 4.600 € brutto -> auf 1.800 € Basiselterngeld gedeckelt
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1800);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(900);
+  // Person 1: schwankendes Einkommen (Ø ~2.550 € brutto), Steuerklasse III
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1243);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(621);
 
-  // Person 2: 2.500 € brutto
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+  // Die ersten zwei Lebensmonate sind wegen Mutterschutz blockiert
+  expect(
+    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
+  ).toEqual({
+    empfaenger: Elternteil.Eins,
+    letzterLebensmonatMitSchutz: 2,
+  });
 });
 
 function monatsbetragAusBerechneElterngeldbezuege(

@@ -2,6 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import {
   EventProvider,
   useEventContext,
@@ -18,7 +19,7 @@ beforeEach(() => {
   sessionStorage.clear();
 
   vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-01-15"));
+  vi.setSystemTime(new Date("2026-03-10"));
 });
 
 afterEach(() => {
@@ -26,18 +27,20 @@ afterEach(() => {
 });
 
 /*
- * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
- * Beide sind angestellt (Steuerklasse IV, gesetzlich sozialversichert, nicht
- * kirchensteuerpflichtig). Person 1 verdient 4.600 € brutto im Monat und war
- * vor der Geburt im Mutterschutz, Person 2 verdient 2.500 € brutto.
+ * Ausgangslage: Nur eine Person plant Elterngeld für das erste Kind
+ * (geboren am 06.03.2026). Person 1 ist angestellt mit durchgängig 3.000 €
+ * brutto im Monat (Steuerklasse III, kirchensteuerpflichtig, gesetzlich
+ * sozialversichert) und war vom 01.09.2025 bis 31.10.2025
+ * schwangerschaftsbedingt erkrankt.
  *
- * Bei 4.600 € brutto wird das Basiselterngeld von Person 1 auf den
- * Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 Satz 1 BEEG); ElterngeldPlus
- * beträgt höchstens die Hälfte, also 900 € (§ 4a BEEG). Die ersten zwei
- * Lebensmonate von Person 1 sind wegen des Mutterschutzes blockiert
- * (§ 3 BEEG).
+ * Die Krankheitsmonate werden aus dem Bemessungszeitraum ausgeklammert
+ * (§ 2b Abs. 1 Satz 2 Nr. 3 BEEG); der Zeitraum verschiebt sich entsprechend
+ * nach hinten. Bei konstantem Einkommen bleibt das Basiselterngeld dadurch
+ * unverändert (65 % des wegfallenden Nettoeinkommens, § 2 Abs. 1 BEEG);
+ * ElterngeldPlus ist die Hälfte (§ 4a BEEG). Die Ausklammerung wird trotzdem
+ * erfasst und im Ergebnis geführt.
  */
-test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 BEEG)", async () => {
+test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert (§ 2b Abs. 1 Satz 2 Nr. 3 BEEG)", async () => {
   const user = userEvent.setup();
 
   const router = createMemoryRouter(routeDefinition, {
@@ -53,7 +56,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Allgemeine Angaben
   await user.selectOptions(
     await screen.findByLabelText("Bundesland"),
-    "Mecklenburg-Vorpommern",
+    "Bayern",
   );
   await user.click(
     screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
@@ -67,35 +70,43 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Angaben zur Geburt
   await user.type(
     await screen.findByLabelText("Errechneter Entbindungstermin (TT.MM.JJJJ)"),
-    "30.12.2025",
+    "01.03.2026",
   );
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
-    "09.01.2026",
+    "06.03.2026",
   );
   await user.type(screen.getByLabelText("Anzahl der Kinder"), "1");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Geschwisterkinder
+  // Geschwisterkinder: keine
   await user.click(await screen.findByTestId("istVorhanden_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Angaben Person 1
   await user.type(await screen.findByLabelText("Vorname Person 1"), "Person 1");
   await user.click(screen.getByTestId("istAlleinerziehend_option_1")); // Nein
-  await user.click(screen.getByTestId("istImMutterschutz_option_0")); // Ja
+  await user.click(screen.getByTestId("istImMutterschutz_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Gemeinsame Planung
+  // Gemeinsame Planung: nur eine Person
   await user.click(
-    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"), // Ja, beide
+    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_1"),
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Ausklammerung: Erkrankung wegen Schwangerschaft (Person 1)
+  // Ausklammerung: Erkrankung wegen Schwangerschaft -> Ja
   await user.click(
-    await screen.findByTestId("hatSchwangerschaftsbedingteErkrankung_option_1"), // Nein
+    await screen.findByTestId("hatSchwangerschaftsbedingteErkrankung_option_0"),
   );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Erkrankungs-Zeitraum: 01.09.2025 - 31.10.2025
+  await user.type(
+    await screen.findByLabelText("Von (TT.MM.JJJJ)"),
+    "01.09.2025",
+  );
+  await user.type(screen.getByLabelText("Bis (TT.MM.JJJJ)"), "31.10.2025");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Finanzielle Situation Person 1: Tätigkeiten
@@ -115,12 +126,12 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse
+  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse III
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
-  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
+  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_0")); // Ja
   await user.click(
     screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
   );
@@ -136,63 +147,11 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 1: Einkommen
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "4600",
+    "3000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Weitere Tätigkeiten Person 1?
-  await user.click(
-    await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
-  );
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Angaben Person 2 (kein Mutterschutz-Feld, da Person 1 im Mutterschutz war)
-  await user.type(await screen.findByLabelText("Vorname Person 2"), "Person 2");
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Finanzielle Situation Person 2: Tätigkeiten
-  await user.click(
-    await screen.findByRole("checkbox", {
-      name: "Person 2 war oder ist angestellt",
-    }),
-  );
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Bemessungszeitraum-Übersicht Person 2
-  await user.click(
-    await screen.findByRole("button", { name: "Verstanden und weiter" }),
-  );
-
-  // Tätigkeit Person 2: Minijob?
-  await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
-  await user.selectOptions(
-    await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
-  );
-  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
-  await user.click(
-    screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
-  );
-  await user.click(
-    screen.getByTestId("istGesetzlichRentenversichert_option_0"),
-  ); // Ja
-  await user.click(
-    screen.getByTestId("istGesetzlichArbeitlosenversichert_option_0"), // Ja
-  );
-  await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Tätigkeit Person 2: Einkommen
-  await user.type(
-    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "2500",
-  );
-  await user.click(screen.getByRole("button", { name: "Weiter" }));
-
-  // Weitere Tätigkeiten Person 2? -> DONE, Abfrageteil ist durchlaufen
+  // Weitere Tätigkeiten Person 1? -> DONE
   await user.click(
     await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
   );
@@ -209,24 +168,24 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     }),
     { wrapper: EventProvider },
   );
-  const { berechneElterngeldbezuege } = hook.result.current;
+  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,
   );
 
-  // Person 1: 4.600 € brutto -> auf 1.800 € Basiselterngeld gedeckelt
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1800);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(900);
+  // Konstantes Einkommen: die Ausklammerung verschiebt den Zeitraum, ändert
+  // aber den Betrag nicht -> identisch zum Standard-Angestellten (1.441 €).
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1441);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(721);
 
-  // Person 2: 2.500 € brutto
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+  // Der Krankheitszeitraum ist als Ausklammerung erfasst.
+  expect(
+    findeAusklammerungen(eventHistorie, 0).map((ausklammerung) => ({
+      grund: ausklammerung.grund,
+    })),
+  ).toEqual([{ grund: "erkrankungSchwangerschaft" }]);
 });
 
 function monatsbetragAusBerechneElterngeldbezuege(

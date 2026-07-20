@@ -26,20 +26,16 @@ afterEach(() => {
 });
 
 /*
- * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind
- * (geboren am 09.01.2026, keine Geschwister), Wohnsitz Mecklenburg-Vorpommern.
- *
+ * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
  * Person 1 ist angestellt (3.000 € brutto im Monat, Steuerklasse IV,
- * gesetzlich kranken-, renten- und arbeitslosenversichert, nicht
- * kirchensteuerpflichtig, vor der Geburt im Mutterschutz) und hat zusätzlich
- * einen Minijob mit 400 € im Monat. Person 2 ist angestellt und verdient
- * 2.500 € brutto.
+ * gesetzlich sozialversichert, nicht kirchensteuerpflichtig, vor der Geburt
+ * im Mutterschutz) und hat zusätzlich einen Minijob mit 400 € im Monat.
+ * Person 2 ist angestellt und verdient 2.500 € brutto.
  *
  * Der Minijob ist für Arbeitnehmende steuer- und sozialabgabenfrei
- * (Pauschalbesteuerung durch den Arbeitgeber, § 40a EStG). Er zählt deshalb
- * voll zum Elterngeld-relevanten Einkommen, mindert das Netto aber nicht:
- * Nur die Angestelltentätigkeit wird versteuert, die 400 € fließen
- * ungeschmälert in das Elterngeld-Netto ein.
+ * (Pauschalbesteuerung durch den Arbeitgeber, § 40a EStG): Nur die
+ * Angestelltentätigkeit wird versteuert, die 400 € fließen ohne Abzüge in
+ * das Elterngeld-Netto ein.
  */
 test("Minijob neben sozialversicherungspflichtiger Angestelltentätigkeit: Minijob-Einkommen bleibt frei von Steuer und Sozialabgaben", async () => {
   const user = userEvent.setup();

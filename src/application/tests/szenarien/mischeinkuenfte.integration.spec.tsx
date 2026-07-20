@@ -2,6 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
 import {
   EventProvider,
   useEventContext,
@@ -18,7 +19,7 @@ beforeEach(() => {
   sessionStorage.clear();
 
   vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-01-15"));
+  vi.setSystemTime(new Date("2025-12-20"));
 });
 
 afterEach(() => {
@@ -26,18 +27,21 @@ afterEach(() => {
 });
 
 /*
- * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
- * Beide sind angestellt (Steuerklasse IV, gesetzlich sozialversichert, nicht
- * kirchensteuerpflichtig). Person 1 verdient 4.600 € brutto im Monat und war
- * vor der Geburt im Mutterschutz, Person 2 verdient 2.500 € brutto.
+ * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für ein Kind (geboren am
+ * 24.12.2025); beide haben Mischeinkünfte aus je zwei Tätigkeiten. Person 1
+ * (Steuerklasse III, im Mutterschutz) ist angestellt mit 3.000 € brutto im
+ * Monat und selbstständig mit 20.000 € Jahresgewinn. Person 2
+ * (Steuerklasse V) ist angestellt mit 3.000 € brutto im Monat und hat einen
+ * Minijob mit 450 € im Monat.
  *
- * Bei 4.600 € brutto wird das Basiselterngeld von Person 1 auf den
- * Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 Satz 1 BEEG); ElterngeldPlus
- * beträgt höchstens die Hälfte, also 900 € (§ 4a BEEG). Die ersten zwei
- * Lebensmonate von Person 1 sind wegen des Mutterschutzes blockiert
- * (§ 3 BEEG).
+ * Wegen des selbstständigen Einkommens verschiebt sich der Bemessungszeitraum
+ * für Person 1 auf das letzte abgeschlossene Kalenderjahr (§ 2b Abs. 2, 3
+ * BEEG). Aus der Summe der Einkünfte ergibt sich für Person 1 der
+ * Höchstbetrag von 1.800 € (§ 2 Abs. 1 Satz 2 BEEG); ElterngeldPlus ist die
+ * Hälfte davon (§ 4a BEEG). Die ersten zwei Lebensmonate von Person 1 sind
+ * wegen des Mutterschutzes blockiert (§ 3 BEEG).
  */
-test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 BEEG)", async () => {
+test("Mischeinkünfte: angestellt und selbstständig verschieben den Bemessungszeitraum aufs Vorjahr (§ 2b BEEG)", async () => {
   const user = userEvent.setup();
 
   const router = createMemoryRouter(routeDefinition, {
@@ -53,7 +57,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Allgemeine Angaben
   await user.selectOptions(
     await screen.findByLabelText("Bundesland"),
-    "Mecklenburg-Vorpommern",
+    "Berlin",
   );
   await user.click(
     screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
@@ -67,16 +71,16 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Angaben zur Geburt
   await user.type(
     await screen.findByLabelText("Errechneter Entbindungstermin (TT.MM.JJJJ)"),
-    "30.12.2025",
+    "24.12.2025",
   );
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
-    "09.01.2026",
+    "24.12.2025",
   );
   await user.type(screen.getByLabelText("Anzahl der Kinder"), "1");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Geschwisterkinder
+  // Geschwisterkinder: keine
   await user.click(await screen.findByTestId("istVorhanden_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -86,9 +90,9 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(screen.getByTestId("istImMutterschutz_option_0")); // Ja
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Gemeinsame Planung
+  // Gemeinsame Planung: beide
   await user.click(
-    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"), // Ja, beide
+    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"),
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -98,10 +102,15 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Finanzielle Situation Person 1: Tätigkeiten
+  // Finanzielle Situation Person 1: Tätigkeiten (angestellt + selbstständig)
   await user.click(
     await screen.findByRole("checkbox", {
       name: "Person 1 war oder ist angestellt",
+    }),
+  );
+  await user.click(
+    screen.getByRole("checkbox", {
+      name: "Person 1 war oder ist selbstständig",
     }),
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
@@ -111,14 +120,14 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     await screen.findByRole("button", { name: "Verstanden und weiter" }),
   );
 
-  // Tätigkeit Person 1: Minijob?
+  // Tätigkeit 1 Person 1 (angestellt): Minijob?
   await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse
+  // Tätigkeit 1 Person 1: Sozialversicherungen + Steuerklasse III
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
   await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
   await user.click(
@@ -133,10 +142,29 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 1: Einkommen
+  // Tätigkeit 1 Person 1: Einkommen angestellt
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "4600",
+    "3000",
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 1: selbstständig (Mischeinkunft, 20.000 € Jahresgewinn)
+  await user.click(
+    await screen.findByTestId("istKirchensteuerpflichtig_option_1"), // Nein
+  );
+  await user.click(
+    screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
+  );
+  await user.click(
+    screen.getByTestId("istGesetzlichRentenversichert_option_1"),
+  ); // Nein
+  await user.click(
+    screen.getByTestId("istGesetzlichArbeitlosenversichert_option_1"), // Nein
+  );
+  await user.type(
+    screen.getByLabelText("Brutto-Gewinn im gesamten Kalenderjahr"),
+    "20000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -146,11 +174,11 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Angaben Person 2 (kein Mutterschutz-Feld, da Person 1 im Mutterschutz war)
+  // Angaben Person 2
   await user.type(await screen.findByLabelText("Vorname Person 2"), "Person 2");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Finanzielle Situation Person 2: Tätigkeiten
+  // Finanzielle Situation Person 2: Tätigkeiten (nur angestellt)
   await user.click(
     await screen.findByRole("checkbox", {
       name: "Person 2 war oder ist angestellt",
@@ -163,14 +191,14 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     await screen.findByRole("button", { name: "Verstanden und weiter" }),
   );
 
-  // Tätigkeit Person 2: Minijob?
+  // Tätigkeit 1 Person 2 (angestellt): Minijob?
   await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
+  // Tätigkeit 1 Person 2: Sozialversicherungen + Steuerklasse V
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "5" }),
   );
   await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
   await user.click(
@@ -185,14 +213,37 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(screen.getByTestId("istEinkommenGleichVerteilt_option_0")); // Ja
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 2: Einkommen
+  // Tätigkeit 1 Person 2: Einkommen angestellt
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "2500",
+    "3000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Weitere Tätigkeiten Person 2? -> DONE, Abfrageteil ist durchlaufen
+  // Weitere Tätigkeiten Person 2? Ja (Minijob)
+  await user.click(
+    await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_0"), // Ja
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 2 (angestellt): Minijob?
+  await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_0")); // Ja
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 2 (Minijob): gleich verteilt?
+  await user.click(
+    await screen.findByTestId("istEinkommenGleichVerteilt_option_0"), // Ja
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Tätigkeit 2 Person 2: Einkommen Minijob
+  await user.type(
+    await screen.findByLabelText("Monatliches Brutto-Einkommen"),
+    "450",
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Weitere Tätigkeiten Person 2? -> DONE
   await user.click(
     await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
   );
@@ -209,24 +260,28 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     }),
     { wrapper: EventProvider },
   );
-  const { berechneElterngeldbezuege } = hook.result.current;
+  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,
   );
 
-  // Person 1: 4.600 € brutto -> auf 1.800 € Basiselterngeld gedeckelt
+  // Person 1: angestellt (3.000 €) + selbstständig (20.000 €/Jahr) -> Höchstsatz
   expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1800);
   expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(900);
 
-  // Person 2: 2.500 € brutto
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+  // Person 2: angestellt (3.000 €, Steuerklasse V) + Minijob (450 €)
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1188);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(594);
+
+  // Mutterschutz Person 1 blockiert die ersten zwei Lebensmonate (§ 3 BEEG).
+  expect(
+    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
+  ).toEqual({
+    empfaenger: Elternteil.Eins,
+    letzterLebensmonatMitSchutz: 2,
+  });
 });
 
 function monatsbetragAusBerechneElterngeldbezuege(

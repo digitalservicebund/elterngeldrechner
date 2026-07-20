@@ -2,6 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
 import {
   EventProvider,
   useEventContext,
@@ -18,7 +19,7 @@ beforeEach(() => {
   sessionStorage.clear();
 
   vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-01-15"));
+  vi.setSystemTime(new Date("2025-12-30"));
 });
 
 afterEach(() => {
@@ -26,18 +27,16 @@ afterEach(() => {
 });
 
 /*
- * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
- * Beide sind angestellt (Steuerklasse IV, gesetzlich sozialversichert, nicht
- * kirchensteuerpflichtig). Person 1 verdient 4.600 € brutto im Monat und war
- * vor der Geburt im Mutterschutz, Person 2 verdient 2.500 € brutto.
+ * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für Zwillinge. Beide
+ * sind angestellt mit je 3.000 € brutto im Monat (Steuerklasse III,
+ * gesetzlich sozialversichert, nicht kirchensteuerpflichtig). Person 1 war
+ * vor der Geburt im Mutterschutz.
  *
- * Bei 4.600 € brutto wird das Basiselterngeld von Person 1 auf den
- * Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 Satz 1 BEEG); ElterngeldPlus
- * beträgt höchstens die Hälfte, also 900 € (§ 4a BEEG). Die ersten zwei
- * Lebensmonate von Person 1 sind wegen des Mutterschutzes blockiert
- * (§ 3 BEEG).
+ * Der Mehrlingszuschlag erhöht das Basiselterngeld um 300 € je weiterem Kind
+ * (§ 2a Abs. 4 BEEG). Der bei Mehrlingen verlängerte Mutterschutz blockiert
+ * die ersten drei Lebensmonate von Person 1 (§ 3 BEEG).
  */
-test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 BEEG)", async () => {
+test("Zwillinge: Mehrlingszuschlag erhöht das Elterngeld (§ 2a Abs. 4 BEEG)", async () => {
   const user = userEvent.setup();
 
   const router = createMemoryRouter(routeDefinition, {
@@ -53,7 +52,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Allgemeine Angaben
   await user.selectOptions(
     await screen.findByLabelText("Bundesland"),
-    "Mecklenburg-Vorpommern",
+    "Berlin",
   );
   await user.click(
     screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
@@ -67,13 +66,13 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Angaben zur Geburt
   await user.type(
     await screen.findByLabelText("Errechneter Entbindungstermin (TT.MM.JJJJ)"),
-    "30.12.2025",
+    "24.12.2025",
   );
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
-    "09.01.2026",
+    "24.12.2025",
   );
-  await user.type(screen.getByLabelText("Anzahl der Kinder"), "1");
+  await user.type(screen.getByLabelText("Anzahl der Kinder"), "2");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Geschwisterkinder
@@ -118,7 +117,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
   await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
   await user.click(
@@ -136,7 +135,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 1: Einkommen
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "4600",
+    "3000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -170,7 +169,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
   await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
   await user.click(
@@ -188,7 +187,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 2: Einkommen
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "2500",
+    "3000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -209,24 +208,32 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     }),
     { wrapper: EventProvider },
   );
-  const { berechneElterngeldbezuege } = hook.result.current;
+  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,
   );
 
-  // Person 1: 4.600 € brutto -> auf 1.800 € Basiselterngeld gedeckelt
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1800);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(900);
+  // Person 1: 3.000 € brutto, Steuerklasse III, mit Mehrlingszuschlag
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1732);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(866);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(866);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(866);
 
-  // Person 2: 2.500 € brutto
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+  // Die ersten drei Lebensmonate von Person 1 sind wegen Mutterschutz blockiert
+  expect(
+    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
+  ).toEqual({
+    empfaenger: Elternteil.Eins,
+    letzterLebensmonatMitSchutz: 3,
+  });
+
+  // Person 2: 3.000 € brutto, Steuerklasse III, mit Mehrlingszuschlag
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1732);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(866);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(866);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(866);
 });
 
 function monatsbetragAusBerechneElterngeldbezuege(

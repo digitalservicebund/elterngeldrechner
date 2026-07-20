@@ -2,6 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
 import {
   EventProvider,
   useEventContext,
@@ -27,17 +28,17 @@ afterEach(() => {
 
 /*
  * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
- * Beide sind angestellt (Steuerklasse IV, gesetzlich sozialversichert, nicht
- * kirchensteuerpflichtig). Person 1 verdient 4.600 € brutto im Monat und war
- * vor der Geburt im Mutterschutz, Person 2 verdient 2.500 € brutto.
+ * Beide sind angestellt, gesetzlich sozialversichert und
+ * kirchensteuerpflichtig. Person 1 (Steuerklasse III) verdient 540 € brutto
+ * im Monat und war vor der Geburt im Mutterschutz; Person 2 (Steuerklasse V)
+ * verdient 2.500 € brutto.
  *
- * Bei 4.600 € brutto wird das Basiselterngeld von Person 1 auf den
- * Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 Satz 1 BEEG); ElterngeldPlus
- * beträgt höchstens die Hälfte, also 900 € (§ 4a BEEG). Die ersten zwei
- * Lebensmonate von Person 1 sind wegen des Mutterschutzes blockiert
- * (§ 3 BEEG).
+ * Für Bezugswerte unter 1.000 € erhöht sich die Ersatzrate schrittweise von
+ * 67 % auf bis zu 100 % (§ 2 Abs. 2 BEEG). ElterngeldPlus beträgt die Hälfte
+ * des Basisbetrags (§ 4a BEEG). Die ersten zwei Lebensmonate von Person 1
+ * sind wegen des Mutterschutzes blockiert (§ 3 BEEG).
  */
-test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 BEEG)", async () => {
+test("Erhöhte Ersatzrate: Bezugswert unter 1.000 € (§ 2 Abs. 2 BEEG)", async () => {
   const user = userEvent.setup();
 
   const router = createMemoryRouter(routeDefinition, {
@@ -53,7 +54,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Allgemeine Angaben
   await user.selectOptions(
     await screen.findByLabelText("Bundesland"),
-    "Mecklenburg-Vorpommern",
+    "Hamburg",
   );
   await user.click(
     screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
@@ -118,9 +119,9 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
-  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
+  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_0")); // Ja
   await user.click(
     screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
   );
@@ -136,7 +137,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 1: Einkommen
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "4600",
+    "540",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -170,9 +171,9 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "5" }),
   );
-  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
+  await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_0")); // Ja
   await user.click(
     screen.getByTestId("istGesetzlichKrankenpflichtversichert_option_0"), // Ja
   );
@@ -209,24 +210,28 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     }),
     { wrapper: EventProvider },
   );
-  const { berechneElterngeldbezuege } = hook.result.current;
+  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,
   );
 
-  // Person 1: 4.600 € brutto -> auf 1.800 € Basiselterngeld gedeckelt
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1800);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(900);
+  // Person 1: 540 € brutto, erhöhte Ersatzrate (§ 2 Abs. 2 BEEG)
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(358);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(179);
 
-  // Person 2: 2.500 € brutto
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+  // Die ersten zwei Lebensmonate von Person 1 sind wegen Mutterschutz blockiert
+  expect(
+    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
+  ).toEqual({
+    empfaenger: Elternteil.Eins,
+    letzterLebensmonatMitSchutz: 2,
+  });
+
+  // Person 2: 2.500 € brutto, Steuerklasse V
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(880);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(440);
 });
 
 function monatsbetragAusBerechneElterngeldbezuege(

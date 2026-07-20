@@ -2,6 +2,7 @@ import { render, renderHook, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
 import {
   EventProvider,
   useEventContext,
@@ -18,7 +19,7 @@ beforeEach(() => {
   sessionStorage.clear();
 
   vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-01-15"));
+  vi.setSystemTime(new Date("2026-02-20"));
 });
 
 afterEach(() => {
@@ -26,18 +27,25 @@ afterEach(() => {
 });
 
 /*
- * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für das erste Kind.
- * Beide sind angestellt (Steuerklasse IV, gesetzlich sozialversichert, nicht
- * kirchensteuerpflichtig). Person 1 verdient 4.600 € brutto im Monat und war
- * vor der Geburt im Mutterschutz, Person 2 verdient 2.500 € brutto.
+ * Ausgangslage: Ein Paar plant gemeinsam Elterngeld für ein Kind (geboren
+ * am 13.02.2026). Ein älteres Geschwisterkind (geboren am 24.05.2024, ohne
+ * Behinderung) begründet den Anspruch auf den Geschwisterbonus
+ * (§ 2a Abs. 1 Satz 1 Nr. 1 BEEG).
  *
- * Bei 4.600 € brutto wird das Basiselterngeld von Person 1 auf den
- * Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 Satz 1 BEEG); ElterngeldPlus
- * beträgt höchstens die Hälfte, also 900 € (§ 4a BEEG). Die ersten zwei
- * Lebensmonate von Person 1 sind wegen des Mutterschutzes blockiert
- * (§ 3 BEEG).
+ * Beide Personen sind angestellt mit je 3.000 € brutto im Monat, gesetzlich
+ * sozialversichert, nicht kirchensteuerpflichtig. Person 1 (Steuerklasse III)
+ * war vor der Geburt im Mutterschutz, Person 2 (Steuerklasse V) nicht.
+ *
+ * Für das ältere Geschwisterkind war Person 1 vom 24.03.2024 bis 23.07.2024
+ * im Mutterschutz. Dieser Zeitraum überschneidet sich mit dem
+ * Bemessungszeitraum und wird ausgeklammert (§ 2b Abs. 1 Satz 2 BEEG),
+ * sodass das Einkommen aus früheren Monaten herangezogen wird.
+ *
+ * Der Geschwisterbonus erhöht das Elterngeld um 10 %, mindestens 75 €
+ * (§ 2a Abs. 1 BEEG). Die ersten zwei Lebensmonate von Person 1 sind
+ * wegen des Mutterschutzes blockiert (§ 3 BEEG).
  */
-test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.800 € gedeckelt (§ 2 Abs. 1 BEEG)", async () => {
+test("Ausklammerung Mutterschutz älteres Kind: Geschwisterbonus bei ausgeklammertem Mutterschutz-Zeitraum (§§ 2a, 2b BEEG)", async () => {
   const user = userEvent.setup();
 
   const router = createMemoryRouter(routeDefinition, {
@@ -53,7 +61,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Allgemeine Angaben
   await user.selectOptions(
     await screen.findByLabelText("Bundesland"),
-    "Mecklenburg-Vorpommern",
+    "Sachsen",
   );
   await user.click(
     screen.getByTestId("gesamteinkommenGrenzeUeberschritten_option_1"), // Nein
@@ -67,18 +75,33 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Angaben zur Geburt
   await user.type(
     await screen.findByLabelText("Errechneter Entbindungstermin (TT.MM.JJJJ)"),
-    "30.12.2025",
+    "07.02.2026",
   );
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
-    "09.01.2026",
+    "13.02.2026",
   );
   await user.type(screen.getByLabelText("Anzahl der Kinder"), "1");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Geschwisterkinder
-  await user.click(await screen.findByTestId("istVorhanden_option_1")); // Nein
+  // Geschwisterkinder: eins vorhanden
+  await user.click(await screen.findByTestId("istVorhanden_option_0")); // Ja
   await user.click(screen.getByRole("button", { name: "Weiter" }));
+  await user.type(await screen.findByLabelText("Anzahl Geschwister"), "1");
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Geschwisterkind 1: geboren 24.05.2024, keine Behinderung
+  await user.type(
+    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    "24.05.2024",
+  );
+  await user.click(screen.getByTestId("hatBehinderung_option_1")); // Nein
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Geschwisterbonus-Übersicht
+  await user.click(
+    await screen.findByRole("button", { name: "Verstanden und weiter" }),
+  );
 
   // Angaben Person 1
   await user.type(await screen.findByLabelText("Vorname Person 1"), "Person 1");
@@ -88,13 +111,39 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
 
   // Gemeinsame Planung
   await user.click(
-    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"), // Ja, beide
+    await screen.findByTestId("wirdZweitePersonBeruecksichtigt_option_0"), // beide
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Ausklammerung: Erkrankung wegen Schwangerschaft (Person 1)
+  // Ausklammerungs-Sequenz Person 1 (im Mutterschutz, ein relevantes
+  // Geschwisterkind): Erkrankung -> Elternzeit -> Mutterschutz -> Zeiten.
+
+  // Erkrankung wegen Schwangerschaft: Nein
   await user.click(
-    await screen.findByTestId("hatSchwangerschaftsbedingteErkrankung_option_1"), // Nein
+    await screen.findByTestId("hatSchwangerschaftsbedingteErkrankung_option_1"),
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Elterngeld älteres Kind (Elternzeit): Nein
+  await user.click(
+    await screen.findByTestId("hatElterngeldGeschwisterkind_option_1"),
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Mutterschutz älteres Kind: Ja
+  await user.click(
+    await screen.findByTestId("hatMutterschutzGeschwisterkind_option_0"),
+  );
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Mutterschutz-Zeiten: 24.03.2024 bis 23.07.2024
+  await user.type(
+    await screen.findByLabelText("Beginn des Mutterschutzes (TT.MM.JJJJ)"),
+    "24.03.2024",
+  );
+  await user.type(
+    screen.getByLabelText("Ende des Mutterschutzes (TT.MM.JJJJ)"),
+    "23.07.2024",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -115,10 +164,10 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse
+  // Tätigkeit Person 1: Sozialversicherungen + Steuerklasse III
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "3" }),
   );
   await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
   await user.click(
@@ -136,7 +185,7 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 1: Einkommen
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "4600",
+    "3000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
@@ -148,6 +197,14 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
 
   // Angaben Person 2 (kein Mutterschutz-Feld, da Person 1 im Mutterschutz war)
   await user.type(await screen.findByLabelText("Vorname Person 2"), "Person 2");
+  await user.click(screen.getByRole("button", { name: "Weiter" }));
+
+  // Person 2 war nicht im Mutterschutz, daher entfällt die Erkrankungs- und
+  // die Mutterschutz-Abfrage. Es bleibt nur die Elternzeit-Abfrage für das
+  // relevante Geschwisterkind: Nein.
+  await user.click(
+    await screen.findByTestId("hatElterngeldGeschwisterkind_option_1"),
+  );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Finanzielle Situation Person 2: Tätigkeiten
@@ -167,10 +224,10 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   await user.click(await screen.findByTestId("istTaetigkeitMinijob_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse
+  // Tätigkeit Person 2: Sozialversicherungen + Steuerklasse V
   await user.selectOptions(
     await screen.findByLabelText("Steuerklasse"),
-    screen.getByRole("option", { name: "4" }),
+    screen.getByRole("option", { name: "5" }),
   );
   await user.click(screen.getByTestId("istKirchensteuerpflichtig_option_1")); // Nein
   await user.click(
@@ -188,11 +245,11 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
   // Tätigkeit Person 2: Einkommen
   await user.type(
     await screen.findByLabelText("Monatliches Brutto-Einkommen"),
-    "2500",
+    "3000",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Weitere Tätigkeiten Person 2? -> DONE, Abfrageteil ist durchlaufen
+  // Weitere Tätigkeiten Person 2? -> DONE
   await user.click(
     await screen.findByTestId("istWeitereTaetigkeitVorhanden_option_1"), // Nein
   );
@@ -209,24 +266,31 @@ test("Höchstsatz-Deckelung: Basiselterngeld wird auf den Höchstbetrag von 1.80
     }),
     { wrapper: EventProvider },
   );
-  const { berechneElterngeldbezuege } = hook.result.current;
+  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,
   );
 
-  // Person 1: 4.600 € brutto -> auf 1.800 € Basiselterngeld gedeckelt
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1800);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(900);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(900);
+  // Person 1: 3.000 € brutto + Geschwisterbonus
+  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1588);
+  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(794);
 
-  // Person 2: 2.500 € brutto
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1088);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(544);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus, 1000)).toBe(544);
+  // Person 2: 3.000 € brutto + Geschwisterbonus (1.059 € × 1,1 = 1.164 €).
+  // Das Testfall-Sheet enthält eine zweite, widersprüchliche "neu"-Zeile mit
+  // 1.538 / 769 € für identische Eingaben; 1.164 € ist der konsistente Wert
+  // (Geschwisterbonus auf 1.059 €). Divergenz mit PM (Amira) zu klären.
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1164);
+  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(582);
+
+  // Mutterschutz Person 1 blockiert die ersten zwei Lebensmonate (§ 3 BEEG).
+  expect(
+    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
+  ).toEqual({
+    empfaenger: Elternteil.Eins,
+    letzterLebensmonatMitSchutz: 2,
+  });
 });
 
 function monatsbetragAusBerechneElterngeldbezuege(

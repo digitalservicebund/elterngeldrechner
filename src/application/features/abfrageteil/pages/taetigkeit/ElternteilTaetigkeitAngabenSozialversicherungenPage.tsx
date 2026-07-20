@@ -223,7 +223,7 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
           </CustomRadioGroup>
 
           <CustomRadioGroup
-            legend={`Zahlt {vorname} Pflichtbeiträge in die gesetzliche
+            legend={`Zahlt ${vorname} Pflichtbeiträge in die gesetzliche
                 Arbeitslosenversicherung?`}
             errors={formErrors}
             register={register}

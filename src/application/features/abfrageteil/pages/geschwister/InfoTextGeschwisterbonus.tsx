@@ -37,7 +37,7 @@ export function InfoTextGeschwisterbonus({ question }: Props): ReactNode {
             <li>Ihr Elterngeld wird um 10 Prozent erhöht.</li>
             <li>Sie bekommen aber mindestens:</li>
           </ul>
-          <ul>
+          <ul className="pl-32">
             <li>75 € mehr im Monat beim Basiselterngeld</li>
             <li>37,50 € mehr im Monat beim ElterngeldPlus</li>
             <li>

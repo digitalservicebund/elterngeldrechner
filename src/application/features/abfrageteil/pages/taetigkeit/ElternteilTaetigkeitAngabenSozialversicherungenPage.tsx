@@ -299,8 +299,8 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
 
           {kannDurchschnittAngegebenWerden ? (
             <CustomRadioGroup
-              legend={`Hat ${vorname} im Bemessungszeitraum immer gleich viel pro
-                  Monat verdient?`}
+              legend={`Hat ${vorname} immer gleich viel pro Monat
+                  verdient?`}
               errors={formErrors}
               register={register}
               name="istEinkommenGleichVerteilt"
@@ -314,7 +314,57 @@ export function ElternteilTaetigkeitAngabenSozialversicherungenPage() {
                   label: `Nein, ${vorname} hat unterschiedlich viel verdient`,
                 },
               ]}
-            />
+            >
+              <div className="input-container">
+                <div className="text-container">
+                  <p className="mt-0">
+                    Einmalzahlungen (wie Weihnachtsgeld) zählen hier nicht als
+                    unterschiedlich. Es geht nur um das regelmäßige, laufende
+                    Gehalt.
+                  </p>
+                  <p>
+                    Beachten Sie: Je genauer Ihre Angaben sind, desto besser
+                    kann der Rechner das Elterngeld für Sie berechnen.
+                  </p>
+                </div>
+
+                <InfoText
+                  question="Was bedeutet immer gleich viel verdient?"
+                  answer={
+                    <>
+                      <p>
+                        Wählen Sie gleich viel verdient, wenn Sie immer das
+                        gleiche feste Bruttogehalt oder den gleichen Stundenlohn
+                        hatten.
+                      </p>
+                      <p>
+                        Wählen Sie unterschiedlich viel verdient, wenn sich das
+                        monatliche Gehalt verändert hat (zum Beispiel durch eine
+                        Gehaltserhöhung oder einen Jobwechsel).
+                      </p>
+                      <p className="font-bold">
+                        Wichtig – Sonderzahlungen zählen nicht mit.
+                      </p>
+                      <p>
+                        Für die Berechnung des Elterngeldes werden keine
+                        Einmalzahlungen berücksichtigt. Bitte lassen Sie
+                        folgende Zahlungen außer Acht, zum Beispiel:
+                      </p>
+                      <ul>
+                        <li>
+                          Weihnachtsgeld, Urlaubsgeld oder ein 13. oder 14.
+                          Monatsgehalt
+                        </li>
+                        <li>
+                          Einmalige Boni, Provisionen, Tantiemen oder
+                          Abfindungen
+                        </li>
+                      </ul>
+                    </>
+                  }
+                />
+              </div>
+            </CustomRadioGroup>
           ) : (
             <input
               type="hidden"

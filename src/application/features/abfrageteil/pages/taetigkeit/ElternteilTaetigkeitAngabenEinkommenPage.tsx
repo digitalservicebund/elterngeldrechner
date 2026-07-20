@@ -97,28 +97,41 @@ export function ElternteilTaetigkeitAngabenEinkommenPage() {
         </div>
 
         <div className="input-container">
-          <h3>
-            Wie viel hat {vorname} im Bemessungszeitraum pro Monat brutto
-            verdient?
-          </h3>
+          <h3>Wie viel hat {vorname} im Monat brutto verdient?</h3>
 
           <InfoText
             question="Wo finde ich diese Information?"
             answer={
               <>
                 <p>
-                  Am genauesten finden Sie Ihr monatliches Bruttogehalt auf
-                  Ihrer Gehaltsabrechnung (meist als „Brutto” oder
-                  „Gesamtbrutto” bezeichnet). Achten Sie darauf, einen Monat
-                  ohne Einmal- oder Sonderzahlungen zu wählen, um Ihr reguläres
-                  Gehalt zu bestimmen.
+                  Sie finden Ihr monatliches Bruttogehalt auf Ihrer
+                  Gehaltsabrechnung (meist als „Brutto“ oder „Gesamtbrutto“
+                  bezeichnet).
                 </p>
                 <p>
                   Auf Ihrer Lohnsteuerbescheinigung steht das Jahresbrutto. Wenn
                   Sie das ganze Jahr gleich viel verdient haben, können Sie
-                  diesen Betrag durch 12 teilen, um einen durchschnittlichen
+                  diesen Betrag durch 12 teilen, um einen durchschnittlichen
                   Monatswert zu berechnen.
                 </p>
+                <p className="font-bold">
+                  Wichtig – Sonderzahlungen zählen nicht mit.
+                </p>
+                <p>
+                  Für die Berechnung des Elterngeldes werden keine
+                  Einmalzahlungen berücksichtigt. Bitte lassen Sie folgende
+                  Zahlungen außer Acht, zum Beispiel:
+                </p>
+                <ul>
+                  <li>
+                    Weihnachtsgeld, Urlaubsgeld oder ein 13. oder 14.
+                    Monatsgehalt
+                  </li>
+                  <li>
+                    Einmalige Boni, Provisionen, Tantiemen oder Abfindungen
+                  </li>
+                </ul>
+                <p>Tragen Sie nur das feste, monatliche Gehalt ein.</p>
               </>
             }
           />

@@ -7,7 +7,7 @@ import {
   TaetigkeitUnleichesEinkommenAngaben,
   TaetigkeitUnleichesEinkommenAngabenSchema,
 } from "./TaetigkeitSchema";
-import { Button } from "@/application/features/components";
+import { Button, InfoText } from "@/application/features/components";
 import { AusklammerungsZeitraumBox } from "@/application/features/abfrageteil/pages/taetigkeit/AusklammerungsZeitraumBox";
 import { BemessungszeitraumKurzuebersicht } from "@/application/features/abfrageteil/components/BemessungszeitraumKurzuebersicht";
 import { CurrencyInput } from "@/application/features/abfrageteil/components/CurrencyInput";
@@ -163,7 +163,53 @@ export function ElternteilTaetigkeitAngabenEinkommenDetailsPage() {
         </div>
 
         <div className="input-container">
-          <h3>Wie viel haben Sie im Monat brutto verdient?</h3>
+          <div className="text-container">
+            <h3>Wie viel hat {vorname} pro Monat brutto verdient?</h3>
+            <p>
+              Wir errechnen aufgrund Ihrer Angaben ein monatliches
+              Durchschnittsgehalt.
+            </p>
+            <p>
+              Für die Monate, in denen Sie kein Einkommen, Sozialleistungen oder
+              Einkommensersatzleistungen erhalten haben, geben Sie “0” ein.
+            </p>
+          </div>
+
+          <InfoText
+            question="Wo finde ich das monatliche Brutto?"
+            answer={
+              <>
+                <p>
+                  Sie finden Ihr monatliches Bruttogehalt auf Ihrer
+                  Gehaltsabrechnung (meist als „Brutto“ oder „Gesamtbrutto“
+                  bezeichnet).
+                </p>
+                <p className="font-bold">
+                  Wichtig – Sonderzahlungen zählen nicht mit.
+                </p>
+                <p>
+                  Für die Berechnung des Elterngeldes werden keine
+                  Einmalzahlungen berücksichtigt. Bitte lassen Sie folgende
+                  Zahlungen außer Acht, zum Beispiel:
+                </p>
+                <ul>
+                  <li>
+                    Weihnachtsgeld, Urlaubsgeld oder ein 13. oder 14.
+                    Monatsgehalt
+                  </li>
+                  <li>
+                    Einmalige Boni, Provisionen, Tantiemen oder Abfindungen
+                  </li>
+                </ul>
+                <p>
+                  Da die Monate einzeln eingetragen werden, müssen Sie
+                  Sonderzahlungen in den betroffenen Monaten selbst
+                  herausrechnen. Tragen Sie nur das feste, monatliche Gehalt
+                  ein.
+                </p>
+              </>
+            }
+          />
 
           {gruppierteZeitabschnitte.map((zeitabschnitt, index) => {
             if (istGruppierterZeitabschnittAusklammerung(zeitabschnitt)) {

@@ -1,5 +1,6 @@
 import SuccessIcon from "~icons/material-symbols/check-circle-outline";
 import { Temporal } from "@js-temporal/polyfill";
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/features/components";
 import { Page } from "@/application/features/components/Page";
@@ -27,6 +28,7 @@ import {
   Ausklammerung,
   gruppiereBemessungszeitraum,
 } from "@/bemessungszeitraumrechner";
+import { findeGeburtsdatum } from "../../domain/findeGeburtsdatum";
 
 export function ElternteilBMZUebersichtPage() {
   const { dispatch, filtereValideEventHistorie } = useEventContext();
@@ -63,10 +65,17 @@ export function ElternteilBMZUebersichtPage() {
   const vorname = findeVornamen(eventStream, routeParams.elternteilIndex);
   const taetigkeitenFlow = bestimmeTaetigkeitenFlow(taetigkeiten);
 
-  const { berechneBemessungszeitraum } = useBemessungszeitraumrechner(
-    routeParams.elternteilIndex,
-  );
+  const {
+    berechneBemessungszeitraum,
+    berechneBemessungszeitraumOhneAusklammerungen,
+  } = useBemessungszeitraumrechner(routeParams.elternteilIndex);
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
+  const bemessungszeitraumOhneAusklammerungen =
+    taetigkeitenFlow === "Selbstaendig"
+      ? []
+      : berechneBemessungszeitraumOhneAusklammerungen(taetigkeitenFlow);
+  const formatierterBemessungszeitraum =
+    formatiereBemessungszeitraum(bemessungszeitraum);
   const ausklammerungen = findeAusklammerungen(
     eventStream,
     routeParams.elternteilIndex,
@@ -75,44 +84,59 @@ export function ElternteilBMZUebersichtPage() {
     bemessungszeitraum,
     ausklammerungen,
   });
-  const beruecksichtigteAusklammerungen =
-    trenneAusklammerungsZeitraeume(relevanteZeitraeume).abDemBMZ;
-  const nichtBeruecksichtigteAusklammerungen =
-    trenneAusklammerungsZeitraeume(relevanteZeitraeume).vorDemBMZ;
+  const {
+    abDemBMZ: beruecksichtigteAusklammerungen,
+    vorDemBMZ: nichtBeruecksichtigteAusklammerungen,
+  } = trenneAusklammerungsZeitraeume(relevanteZeitraeume);
+
+  const geburtsdatum = findeGeburtsdatum(eventStream);
+  const berechnungsjahr =
+    bemessungszeitraum[0]?.bis.year ?? geburtsdatum.year - 1;
 
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
-  const geburtsdatumGeschwisterkind = (index?: number) => {
-    if (index === undefined) return undefined;
+  const vornameGeschwisterkind = (
+    geschwisterIndex?: number,
+  ): string | undefined => {
+    if (geschwisterIndex === undefined) return undefined;
 
-    const geburtsdatum = geschwisterkinder[index]?.geburtsdatum;
-
-    if (geburtsdatum) {
-      return geburtsdatum.toLocaleString("de-DE", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      });
-    }
-
-    return undefined;
+    return geschwisterkinder[geschwisterIndex]?.name;
   };
 
-  const bemessungszeitraumUeberschrift = () => {
+  const bemessungszeitraumUeberschrift = (): ReactNode => {
+    const anfangUeberschrift =
+      beruecksichtigteAusklammerungen.length > 0
+        ? `Bemessungszeitraum von ${vorname}:`
+        : "Ihr Bemessungszeitraum";
+
     if (taetigkeitenFlow === "Selbstaendig") {
-      return `Kalenderjahr ${bemessungszeitraum[0]?.von.year}`;
+      return (
+        <>
+          {anfangUeberschrift} Kalenderjahr {bemessungszeitraum[0]?.von.year}
+        </>
+      );
     }
+
+    if (beruecksichtigteAusklammerungen.length === 0) {
+      return (
+        <>
+          {anfangUeberschrift}: {formatierterBemessungszeitraum}
+        </>
+      );
+    }
+
     return (
-      <ul>
-        {formatiereBemessungszeitraum(bemessungszeitraum).map(
-          (zeitraum, index) => (
+      <>
+        <>{anfangUeberschrift}</>
+        <ul>
+          {formatierterBemessungszeitraum.map((zeitraum, index) => (
             <li key={index}>{zeitraum}</li>
-          ),
-        )}
-      </ul>
+          ))}
+        </ul>
+      </>
     );
   };
 
-  const uebersprungeneJahreSelbststaendig = (): string | undefined => {
+  const uebersprungeneJahreSelbststaendig = ((): string | undefined => {
     const currentYear = Temporal.Now.plainDateISO().year;
     const bmzYear = bemessungszeitraum[0]?.von.year;
 
@@ -121,21 +145,21 @@ export function ElternteilBMZUebersichtPage() {
     const jahreZwischenHeuteUndBMZ = currentYear - bmzYear;
 
     if (jahreZwischenHeuteUndBMZ === 2) {
-      return `das Jahr ${currentYear - 1}`;
+      return `Im Jahr ${currentYear - 1} lagen Gründe für ein Überspringen vor. Dieses Jahr wird komplett ausgelassen.`;
     }
     if (jahreZwischenHeuteUndBMZ === 3) {
-      return `die Jahre ${currentYear - 2} und ${currentYear - 1}`;
+      return `In den Jahren ${currentYear - 2} und ${currentYear - 1} lagen Gründe für ein Überspringen vor. Diese Jahre werden komplett ausgelassen.`;
     }
     if (jahreZwischenHeuteUndBMZ > 3) {
       const startLuecke = bmzYear + 1;
       const endeLuecke = currentYear - 1;
-      return `die Jahre ${startLuecke} bis ${endeLuecke}`;
+      return `In den Jahren ${startLuecke} bis ${endeLuecke} lagen Gründe für ein Überspringen vor. Diese Jahre werden komplett ausgelassen.`;
     }
 
     return undefined;
-  };
+  })();
 
-  const uebersprungeneJahreNichtSelbststaendig = (): string | undefined => {
+  const uebersprungeneJahreNichtSelbststaendig = ((): string | undefined => {
     if (beruecksichtigteAusklammerungen.length === 0) return undefined;
 
     const jahre = [
@@ -145,21 +169,49 @@ export function ElternteilBMZUebersichtPage() {
           a.bis.year,
         ]),
       ),
-    ].sort((a, b) => a - b);
+    ]
+      .sort((a, b) => a - b)
+      .filter((year) => year <= geburtsdatum.year);
     const anzahlJahre = jahre.length;
+    const enthaeltJahrInZukunft = jahre.includes(
+      Temporal.Now.plainDateISO().year + 1,
+    );
 
     if (anzahlJahre === 1) {
-      return `Im Jahr ${jahre[0]} hatten Sie aber Schutzzeiten.`;
+      return `Im Jahr ${jahre[0]} lagen ${enthaeltJahrInZukunft ? "bzw. liegen" : ""} Gründe für ein Überspringen vor. Die Monate mit Gründen für ein Überspringen werden komplett ausgelassen.`;
     }
     if (anzahlJahre === 2) {
-      return `In den Jahren ${jahre[0]} und ${jahre[1]} hatten Sie aber Schutzzeiten.`;
+      return `In den Jahren ${jahre[0]} und ${jahre[1]} lagen ${enthaeltJahrInZukunft ? "bzw. liegen" : ""} Gründe für ein Überspringen vor. Die Monate mit Gründen für ein Überspringen werden komplett ausgelassen.`;
     }
     if (anzahlJahre > 2) {
-      return `In den Jahren ${jahre[0]} bis ${jahre[jahre.length - 1]} hatten Sie aber Schutzzeiten.`;
+      return `In den Jahren ${jahre[0]} bis ${jahre[jahre.length - 1]} lagen ${enthaeltJahrInZukunft ? "bzw. liegen" : ""} Gründe für ein Überspringen vor. Die Monate mit Gründen für ein Überspringen werden komplett ausgelassen.`;
     }
 
     return undefined;
-  };
+  })();
+
+  const bemessungszeitraumZusammensetzung:
+    | {
+        regulaereGrundlage: string;
+        pruefungsergebnis: string;
+        neuesBerechnungsjahr: string;
+      }
+    | undefined =
+    taetigkeitenFlow === "Selbstaendig"
+      ? uebersprungeneJahreSelbststaendig
+        ? {
+            regulaereGrundlage: "Wäre das Kalenderjahr vor der Geburt gewesen.",
+            pruefungsergebnis: uebersprungeneJahreSelbststaendig,
+            neuesBerechnungsjahr: `Das Elterngeld wird auf Basis des Einkommens aus ${berechnungsjahr} berechnet.`,
+          }
+        : undefined
+      : uebersprungeneJahreNichtSelbststaendig
+        ? {
+            regulaereGrundlage: `Wäre der Zeitraum ${formatiereBemessungszeitraum(bemessungszeitraumOhneAusklammerungen).join(" und ")}.`,
+            pruefungsergebnis: uebersprungeneJahreNichtSelbststaendig,
+            neuesBerechnungsjahr: `Das Elterngeld wird auf Basis des Einkommens von ${formatierterBemessungszeitraum.join(" und ")} berechnet.`,
+          }
+        : undefined;
 
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
@@ -168,93 +220,89 @@ export function ElternteilBMZUebersichtPage() {
           <div className="flex rounded bg-success-background p-20 font-bold">
             <SuccessIcon className="mr-10 mt-6 shrink-0 text-success" />
 
-            <h3>Ihr Bemessungszeitraum: {bemessungszeitraumUeberschrift()}</h3>
+            <h3>{bemessungszeitraumUeberschrift()}</h3>
           </div>
 
           <div className="px-20 pb-32">
+            <p className="font-bold">
+              Der hier angezeigte Zeitraum ist die Grundlage für die Berechnung
+              Ihres Elterngeldes.
+            </p>
+
             <div>
-              {taetigkeitenFlow === "Selbstaendig" ? (
-                <>
-                  {uebersprungeneJahreSelbststaendig() ? (
-                    <>
-                      <p>
-                        Sie arbeiten{" "}
-                        {(taetigkeiten.istNichtSelbststaendig ||
-                          taetigkeiten.istVerbeamtet) &&
-                          "angestellt und"}{" "}
-                        selbstständig. Deshalb wird normalerweise das letzte
-                        Kalenderjahr vor der Geburt für die Berechnung von
-                        Elterngeld berücksichtigt.
-                      </p>
-                      <p>
-                        Wir haben Ihre Daten geprüft: Wir überspringen{" "}
-                        {uebersprungeneJahreSelbststaendig()}. Wir berechnen Ihr
-                        Elterngeld stattdessen mit dem Einkommen aus{" "}
-                        {bemessungszeitraum[0]?.von.year}. So fällt Ihr
-                        Elterngeld höher aus.
-                      </p>
-                    </>
-                  ) : (
+              <p className="font-bold">Wie setzt sich der Zeitraum zusammen?</p>
+              <p>
+                {taetigkeitenFlow === "Selbstaendig" ? (
+                  <>
+                    Da {vorname} selbstständig{" "}
+                    {taetigkeiten.istNichtSelbststaendig ||
+                    taetigkeiten.istVerbeamtet
+                      ? "und angestellt arbeitet"
+                      : "ist"}
+                    , gilt als Grundlage normalerweise das letzte Kalenderjahr
+                    vor der Geburt.
+                  </>
+                ) : (
+                  <>
+                    Da {vorname} angestellt ist, gilt als Grundlage
+                    normalerweise die letzten 12 Monate vor dem Monat der
+                    Geburt.
+                  </>
+                )}{" "}
+                {bemessungszeitraumZusammensetzung && (
+                  <>
+                    <span>
+                      {taetigkeitenFlow === "Selbstaendig"
+                        ? "Wenn in diesem Zeitraum jedoch bestimmte Gründe für ein Überspringen (sogenannte Ausklammerungen) vorliegen, wird das gesamte betroffene Kalenderjahr ausgelassen. Das passiert, damit das Elterngeld nicht durch den Verdienstausfall sinkt."
+                        : "Wenn in diesem Zeitraum bestimmte Gründe für ein Überspringen (sogenannte Ausklammerungen) vorliegen, werden bestimmte Monate nicht mitgezählt. Das passiert, damit das Elterngeld nicht durch den Verdienstausfall sinkt."}
+                    </span>
                     <p>
-                      Sie arbeiten{" "}
-                      {(taetigkeiten.istNichtSelbststaendig ||
-                        taetigkeiten.istVerbeamtet) &&
-                        "angestellt und"}{" "}
-                      selbstständig. Deshalb wird das letzte Kalenderjahr vor
-                      der Geburt für die Berechnung von Elterngeld
-                      berücksichtigt.
+                      Basierend auf den Angaben haben wir die
+                      Berechnungsgrundlage geprüft:
                     </p>
-                  )}
-                </>
-              ) : (
-                <>
-                  <p>
-                    Sie arbeiten angestellt. Deshalb werden normalerweise die
-                    letzten 12 Monate vor der Geburt für die Berechnung von
-                    Elterngeld berücksichtigt.
-                  </p>
-                  {uebersprungeneJahreNichtSelbststaendig() && (
-                    <p>
-                      {uebersprungeneJahreNichtSelbststaendig()} In dieser Zeit
-                      haben Sie wahrscheinlich weniger Geld verdient. Damit Sie
-                      mehr Elterngeld bekommen, werden die Zeiträume
-                      übersprungen. Deshalb wird Ihr Einkommen aus dem
-                      Berechnungszeitraum{" "}
-                      {formatiereBemessungszeitraum(bemessungszeitraum).join(
-                        " und ",
-                      )}{" "}
-                      als Grundlage für die Berechnung betrachtet. Das ist Ihr
-                      sogenannter Bemessungszeitraum.
-                    </p>
-                  )}
-                </>
-              )}
+                    <ul>
+                      <li>
+                        <strong>Reguläre Grundlage: </strong>
+                        {bemessungszeitraumZusammensetzung.regulaereGrundlage}
+                      </li>
+                      <li>
+                        <strong>Die Prüfung ergab: </strong>
+                        {bemessungszeitraumZusammensetzung.pruefungsergebnis}
+                      </li>
+                      <li>
+                        <strong>Neues Berechnungsjahr: </strong>
+                        {bemessungszeitraumZusammensetzung.neuesBerechnungsjahr}
+                      </li>
+                    </ul>
+                  </>
+                )}
+              </p>
             </div>
 
             {beruecksichtigteAusklammerungen.length > 0 && (
               <div>
-                <p>
-                  <strong>Berücksichtigte Schutzzeiten (Ausklammerung)</strong>
+                <p className="font-bold">
+                  Übersprungene Zeiten (Ausklammerung)
                 </p>
                 <p>
-                  Folgende{" "}
                   {beruecksichtigteAusklammerungen.length === 1
-                    ? "Zeit"
-                    : "Zeiten"}{" "}
-                  haben wir übersprungen, damit Ihr Elterngeld nicht durch
-                  geringeres Einkommen gemindert wird:
+                    ? "Folgender Zeitraum wurde"
+                    : "Folgende Zeiträume wurden"}{" "}
+                  übersprungen, damit das Elterngeld höher ausfällt:
                 </p>
                 <ul>
                   {beruecksichtigteAusklammerungen.map(
                     (ausklammerung, index) => (
                       <li key={index}>
-                        {mappeAusklammerungGrund(
-                          ausklammerung.grund,
-                          geburtsdatumGeschwisterkind(
-                            ausklammerung.geschwisterIndex,
-                          ),
-                        )}
-                        :{" "}
+                        <strong>
+                          {mappeAusklammerungGrund(
+                            ausklammerung.grund,
+                            vornameGeschwisterkind(
+                              ausklammerung.geschwisterIndex,
+                            ),
+                          )}
+                          :{" "}
+                        </strong>
                         {ausklammerung.von.toLocaleString("de-DE", {
                           day: "2-digit",
                           month: "2-digit",
@@ -266,6 +314,13 @@ export function ElternteilBMZUebersichtPage() {
                           month: "2-digit",
                           year: "numeric",
                         })}
+                        {ausklammerung.grund === "mutterschutz" && (
+                          <span>
+                            {" "}
+                            (in der Regel 6 Wochen vor und 8 Wochen nach dem
+                            Geburtstermin)
+                          </span>
+                        )}
                         {ausklammerung.grund ===
                           "elterngeldGeschwisterkind" && (
                           <p className="mt-0 italic">
@@ -284,20 +339,49 @@ export function ElternteilBMZUebersichtPage() {
 
             {nichtBeruecksichtigteAusklammerungen.length > 0 && (
               <div>
-                <p>
-                  <strong>Was wurde nicht berücksichtigt?</strong>
-                </p>
-                <p>
-                  Diese Angaben haben keinen Einfluss auf den gewählten
-                  Zeitraum:
-                </p>
+                <p className="font-bold">Was wurde nicht berücksichtigt?</p>
+                {beruecksichtigteAusklammerungen.length === 0 && (
+                  <p>
+                    Wenn in diesem Zeitraum bestimmte Gründe für ein
+                    Überspringen (sogenannte Ausklammerungen) vorliegen, werden{" "}
+                    {taetigkeitenFlow === "Selbstaendig"
+                      ? "betroffene Jahre"
+                      : "bestimmte Monate"}{" "}
+                    nicht mitgezählt. Die Überprüfung hat jedoch ergeben, dass
+                    für {vorname} keine Gründe für ein Überspringen vorliegen.{" "}
+                    {taetigkeitenFlow === "Selbstaendig" ? (
+                      <span>
+                        Daher bleibt es bei dem regulären Zeitraum: dem Jahr
+                        direkt vor der Geburt ({berechnungsjahr}).
+                      </span>
+                    ) : (
+                      <span>
+                        Daher bleibt es bei dem regulären Zeitraum direkt vor
+                        der Geburt.
+                      </span>
+                    )}
+                  </p>
+                )}
+                {nichtBeruecksichtigteAusklammerungen.length === 1 ? (
+                  <p>
+                    Folgende Angabe hat keinen Einfluss auf den gewählten
+                    Zeitraum, da sie zu weit in der Vergangenheit liegt oder
+                    rechtlich nicht zu einer weiteren Verschiebung führt:
+                  </p>
+                ) : (
+                  <p>
+                    Folgende Angaben haben keinen Einfluss auf den gewählten
+                    Zeitraum, da sie zu weit in der Vergangenheit liegen oder
+                    rechtlich nicht zu einer weiteren Verschiebung führen:
+                  </p>
+                )}
                 <ul>
                   {nichtBeruecksichtigteAusklammerungen.map(
                     (ausklammerung, index) => (
                       <li key={index}>
                         {mappeAusklammerungGrund(
                           ausklammerung.grund,
-                          geburtsdatumGeschwisterkind(
+                          vornameGeschwisterkind(
                             ausklammerung.geschwisterIndex,
                           ),
                         )}
@@ -318,6 +402,23 @@ export function ElternteilBMZUebersichtPage() {
                   )}
                 </ul>
               </div>
+            )}
+
+            <p className="font-bold">
+              Was bedeutet das für den weiteren Verlauf?
+            </p>
+            {taetigkeitenFlow === "Selbstaendig" ? (
+              <p>
+                Bitte halten Sie für die nächsten Schritte die
+                Einkommensnachweise (zum Beispiel den Steuerbescheid) aus dem
+                Jahr {berechnungsjahr} bereit.
+              </p>
+            ) : (
+              <p>
+                Bitte halten Sie für die nächsten Schritte die monatlichen
+                Gehaltsabrechnungen aus dem oben genannten 12-Monats-Zeitraum
+                bereit.
+              </p>
             )}
           </div>
         </div>

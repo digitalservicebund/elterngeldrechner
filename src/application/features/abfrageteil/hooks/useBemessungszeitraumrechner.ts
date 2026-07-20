@@ -24,6 +24,16 @@ export function useBemessungszeitraumrechner(elternteilIndex: number) {
       });
     },
 
+    berechneBemessungszeitraumOhneAusklammerungen: (
+      erwerbstaetigkeit: Erwerbstaetigkeit,
+    ) => {
+      return berechneBemessungszeitraum({
+        geburtsdatum,
+        erwerbstaetigkeit,
+        ausklammerungen: [],
+      });
+    },
+
     berechneBetrachtungszeitraum: () => {
       return berechneBetrachtungszeitraum(geburtsdatum, ausklammerungen);
     },

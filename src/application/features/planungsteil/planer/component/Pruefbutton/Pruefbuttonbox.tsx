@@ -12,7 +12,7 @@ import { Validierungsfehlerbox } from "./Validierungsfehlerbox";
 import { type Tips, generateTips } from "./generateTips";
 import { Button } from "@/application/features/components/Button";
 import { useAntragInformationen } from "@/application/features/planungsteil/planer/hooks/useAntragInformationen";
-import { berechnePruefbuttonMetriken } from "@/application/features/planungsteil/planer/tracking";
+import { berechneMetrikenPlanung } from "@/application/features/planungsteil/planer/tracking";
 import { posthog, pushTrackingEvent } from "@/application/user-tracking";
 import {
   type PlanMitBeliebigenElternteilen,
@@ -102,7 +102,7 @@ export function Pruefbuttonbox({
       tips: tips.normalTips.length + (tips.hasSpecialBonusTip ? 1 : 0),
       bonustip: tips.hasSpecialBonusTip,
       gueltig: istPlanGueltig,
-      ...berechnePruefbuttonMetriken(plan, istPlanGueltig),
+      ...berechneMetrikenPlanung(plan),
     });
   }, [ueberpruefePlanung, plan]);
 

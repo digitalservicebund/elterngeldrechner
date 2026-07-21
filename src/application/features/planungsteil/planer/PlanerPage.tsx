@@ -118,14 +118,11 @@ export function PlanerPage() {
     posthog.capture("erklaerung_geoeffnet");
   }
 
-  function handlePlanChanges(
-    nextPlan: PlanMitBeliebigenElternteilen,
-    istPlanGueltig: boolean,
-  ): void {
+  function handlePlanChanges(nextPlan: PlanMitBeliebigenElternteilen): void {
     updateStateForChangedPlan(nextPlan);
 
     trackReachedConversionGoal();
-    trackMetricsForDerPlanHatSichGeaendert(nextPlan, istPlanGueltig);
+    trackMetricsForDerPlanHatSichGeaendert(nextPlan);
   }
 
   const navigateToBeispielePage = createTrackedNavigationFunction(

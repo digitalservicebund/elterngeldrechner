@@ -40,8 +40,8 @@ export function usePlanerService(
 
   const updateStatesAndTriggerCallbacks = useCallback(
     (nextPlan: PlanMitBeliebigenElternteilen) => {
-      const nextValidierungsfehler = updateValidierungsfehler(nextPlan);
-      callbacks?.onChange?.(nextPlan, nextValidierungsfehler.length === 0);
+      updateValidierungsfehler(nextPlan);
+      callbacks?.onChange?.(nextPlan);
     },
     [updateValidierungsfehler, callbacks],
   );
@@ -256,10 +256,7 @@ export type InitialInformation =
     };
 
 export type Callbacks = Partial<{
-  onChange: (
-    plan: PlanMitBeliebigenElternteilen,
-    isPlanGueltig: boolean,
-  ) => void;
+  onChange: (plan: PlanMitBeliebigenElternteilen) => void;
   onWaehleOption: () => void;
   onSetzePlanZurueck: () => void;
   onPlanungDrucken: () => void;

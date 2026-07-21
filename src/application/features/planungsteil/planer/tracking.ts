@@ -18,6 +18,7 @@ import {
   listeElternteileFuerAusgangslageAuf,
   listeLebensmonateAuf,
   listeMonateAuf,
+  validierePlanFuerFinaleAbgabe,
 } from "@/monatsplaner";
 
 export function trackMetricsForAngabeEinesEinkommens(): void {
@@ -44,8 +45,9 @@ export function trackMetricsForLebensmonatWurdeGeoeffnet(): void {
 
 export function trackMetricsForDerPlanHatSichGeaendert(
   plan: PlanMitBeliebigenElternteilen,
-  istPlanGueltig: boolean,
 ): void {
+  const istPlanGueltig = ueberpruefePlanung(plan);
+
   if (istPlanGueltig) {
     trackPartnerschaftlicheVerteilungForPlan(plan);
   }
@@ -55,23 +57,20 @@ export function trackMetricsForDerPlanHatSichGeaendert(
   trackGeplanteMonateDesPartnersDerMutter(plan);
 }
 
-export function berechnePruefbuttonMetriken(
-  plan: PlanMitBeliebigenElternteilen,
-  istPlanGueltig: boolean,
-): {
+export function berechneMetrikenPlanung(plan: PlanMitBeliebigenElternteilen): {
   geplante_monate: number;
   geplante_monate_des_partners_der_mutter?: number;
   plan_enthaelt_bonus_variante: boolean;
   partnerschaftliche_verteilung?: number;
 } {
+  const istPlanGueltig = ueberpruefePlanung(plan);
+
   return {
     geplante_monate: zaehleMonate(plan, { monatPredicate: istGeplanterMonat }),
     geplante_monate_des_partners_der_mutter:
       berechneGeplanteMonateDesPartnersDerMutter(plan),
     plan_enthaelt_bonus_variante:
-      zaehleMonate(plan, {
-        monatPredicate: (monat) => monat.gewaehlteOption === Variante.Bonus,
-      }) > 0,
+      zaehleMonate(plan, { monatPredicate: istBonusMonat }) > 0,
     partnerschaftliche_verteilung: istPlanGueltig
       ? berechnePartnerschaftlicheVerteilung(
           ermittleAuswahlProMonatProElternteil(plan),
@@ -91,6 +90,15 @@ export function trackMetricsForPlanWurdeZurueckgesetzt(): void {
   setTrackingVariable("Identifier-des-ausgewaehlten-Beispiels-im-Planer", null);
 
   posthog.capture("monatsplaner_plan_wurde_zurueckgesetzt");
+}
+
+function ueberpruefePlanung(plan: PlanMitBeliebigenElternteilen) {
+  const validierungsergebnis = validierePlanFuerFinaleAbgabe(plan);
+
+  return validierungsergebnis.mapOrElse(
+    () => true,
+    () => false,
+  ) as boolean;
 }
 
 function trackPartnerschaftlicheVerteilungForPlan(
@@ -203,6 +211,10 @@ function bestimmePartnerDerMutter<A extends Ausgangslage>(
 
 function istGeplanterMonat(monat: Monat) {
   return isVariante(monat.gewaehlteOption);
+}
+
+function istBonusMonat(monat: Monat) {
+  return monat.gewaehlteOption === Variante.Bonus;
 }
 
 function istMonatMitEinkommen(monat: Monat) {
@@ -342,7 +354,7 @@ if (import.meta.vitest) {
         trackGeplanteMonate(plan);
 
         expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
-        expect(berechnePruefbuttonMetriken(plan, true).geplante_monate).toBe(2);
+        expect(berechneMetrikenPlanung(plan).geplante_monate).toBe(2);
       });
     });
 
@@ -446,8 +458,7 @@ if (import.meta.vitest) {
         expect(trackingFunction).toHaveBeenCalledOnce();
         expect(trackingFunction).toHaveBeenCalledWith(expect.anything(), 2);
         expect(
-          berechnePruefbuttonMetriken(plan, true)
-            .geplante_monate_des_partners_der_mutter,
+          berechneMetrikenPlanung(plan).geplante_monate_des_partners_der_mutter,
         ).toBe(2);
       });
 
@@ -464,7 +475,7 @@ if (import.meta.vitest) {
       const ANY_MONAT_MIT_ELTERNGELDBEZUG = monat(Variante.Basis);
     });
 
-    describe("berechnePruefbuttonMetriken - plan_enthaelt_bonus_variante", () => {
+    describe("berechneMetrikenPlanung", () => {
       function monat(gewaehlteOption: Auswahloption | undefined) {
         return { gewaehlteOption, imMutterschutz: false as const };
       }
@@ -478,56 +489,80 @@ if (import.meta.vitest) {
         geburtsdatumDesKindes: new Date(),
       };
 
-      it("is true when plan contains at least one Bonus monat", () => {
-        const plan = {
-          ausgangslage,
-          lebensmonate: {
-            1: {
-              [Elternteil.Eins]: monat(Variante.Bonus),
-              [Elternteil.Zwei]: monat(Variante.Basis),
+      describe("plan_enthaelt_bonus_variante", () => {
+        it("is true when plan contains at least one Bonus monat", () => {
+          const plan = {
+            ausgangslage,
+            lebensmonate: {
+              1: {
+                [Elternteil.Eins]: monat(Variante.Bonus),
+                [Elternteil.Zwei]: monat(Variante.Basis),
+              },
             },
-          },
-        };
+          };
 
-        expect(
-          berechnePruefbuttonMetriken(plan, true).plan_enthaelt_bonus_variante,
-        ).toBe(true);
+          expect(
+            berechneMetrikenPlanung(plan).plan_enthaelt_bonus_variante,
+          ).toBe(true);
+        });
+
+        it("is false when plan contains no Bonus monat", () => {
+          const plan = {
+            ausgangslage,
+            lebensmonate: {
+              1: {
+                [Elternteil.Eins]: monat(Variante.Basis),
+                [Elternteil.Zwei]: monat(Variante.Plus),
+              },
+            },
+          };
+
+          expect(
+            berechneMetrikenPlanung(plan).plan_enthaelt_bonus_variante,
+          ).toBe(false);
+        });
       });
 
-      it("is false when plan contains no Bonus monat", () => {
-        const plan = {
-          ausgangslage,
-          lebensmonate: {
-            1: {
-              [Elternteil.Eins]: monat(Variante.Basis),
-              [Elternteil.Zwei]: monat(Variante.Plus),
+      describe("partnerschaftliche_verteilung", () => {
+        it("includes partnerschaftliche_verteilung when the plan is valid", () => {
+          const plan = {
+            ausgangslage,
+            lebensmonate: {
+              1: {
+                [Elternteil.Eins]: monat(Variante.Basis),
+                [Elternteil.Zwei]: monat(Variante.Basis),
+              },
+              2: {
+                [Elternteil.Eins]: monat(Variante.Basis),
+                [Elternteil.Zwei]: monat("kein Elterngeld"),
+              },
+              3: {
+                [Elternteil.Eins]: monat("kein Elterngeld"),
+                [Elternteil.Zwei]: monat(Variante.Basis),
+              },
             },
-          },
-        };
+          };
 
-        expect(
-          berechnePruefbuttonMetriken(plan, true).plan_enthaelt_bonus_variante,
-        ).toBe(false);
-      });
+          expect(
+            berechneMetrikenPlanung(plan).partnerschaftliche_verteilung,
+          ).not.toBeUndefined();
+        });
 
-      it("does not include partnerschaftliche_verteilung when the plan is invalid", () => {
-        const plan = {
-          ausgangslage,
-          lebensmonate: {
-            1: {
-              [Elternteil.Eins]: monat(Variante.Bonus),
-              [Elternteil.Zwei]: monat(Variante.Bonus),
+        it("does not include partnerschaftliche_verteilung when the plan is invalid", () => {
+          const plan = {
+            ausgangslage,
+            lebensmonate: {
+              1: {
+                [Elternteil.Eins]: monat(Variante.Bonus),
+                [Elternteil.Zwei]: monat(Variante.Bonus),
+              },
             },
-          },
-        };
+          };
 
-        expect(
-          berechnePruefbuttonMetriken(plan, false)
-            .partnerschaftliche_verteilung,
-        ).toBeUndefined();
-        expect(
-          berechnePruefbuttonMetriken(plan, true).partnerschaftliche_verteilung,
-        ).not.toBeUndefined();
+          expect(
+            berechneMetrikenPlanung(plan).partnerschaftliche_verteilung,
+          ).toBeUndefined();
+        });
       });
     });
   });

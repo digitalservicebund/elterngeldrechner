@@ -15,19 +15,6 @@ to only track what we really need and keeping dashboard
 and code in sync.
 For the concrete steps, see below.
 
-## Module Structure
-
-- `core/` — consent handling, cookie/tag-manager integration, and the
-  `data-layer` used to read/write tracking variables.
-- `metrics/` — the actual tracked metrics (e.g. `feedback`, `nutzergruppe`,
-  `partnerschaftlichkeit`, `planungshilfen`, `conversionGoal`). Each file wraps
-  its own `posthog.capture`/`posthog.register` calls behind a small,
-  purpose-named function so callers don't touch PostHog directly.
-- `posthog/posthog-typed.ts` — **generated file, do not edit by hand**. It is
-  overwritten by `npm run posthog:schema:pull` (see step 7 below) and provides
-  the typed `capture()`.
-- `utilities/` — helpers built on top of the above.
-
 ## Onboarding
 
 1. Request access to the PostHog project from a team member.

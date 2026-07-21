@@ -91,17 +91,23 @@ test("Geschwisterbonus: zwei Geschwisterkinder unter sechs Jahren (§ 2a BEEG)",
   await user.type(await screen.findByLabelText("Anzahl Geschwister"), "2");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Geschwisterkind 1: geboren 24.12.2024, mit Behinderung
+  // Geschwisterkind 1: geboren 24.12.2024, mit Behinderung.
+  await screen.findByRole("heading", {
+    name: "Wann wurde Geschwisterkind 1 geboren?",
+  });
   await user.type(
-    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.12.2024",
   );
   await user.click(screen.getByTestId("hatBehinderung_option_0")); // Ja
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Geschwisterkind 2: geboren 01.06.2023, keine Behinderung
+  await screen.findByRole("heading", {
+    name: "Wann wurde Geschwisterkind 2 geboren?",
+  });
   await user.type(
-    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "01.06.2023",
   );
   await user.click(screen.getByTestId("hatBehinderung_option_1")); // Nein

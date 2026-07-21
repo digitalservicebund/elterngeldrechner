@@ -80,17 +80,23 @@ test("Ausklammerung ohne Mutterschutz: selbstständige Person 2 wird eingebunden
   await user.type(await screen.findByLabelText("Anzahl Geschwister"), "2");
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  // Geschwisterkind 0: geboren 24.12.2024, keine Behinderung
+  // Geschwisterkind 0: geboren 24.12.2024, keine Behinderung.
+  await screen.findByRole("heading", {
+    name: "Wann wurde Geschwisterkind 1 geboren?",
+  });
   await user.type(
-    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.12.2024",
   );
   await user.click(screen.getByTestId("hatBehinderung_option_1")); // Nein
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Geschwisterkind 1: geboren 24.12.2023, keine Behinderung
+  await screen.findByRole("heading", {
+    name: "Wann wurde Geschwisterkind 2 geboren?",
+  });
   await user.type(
-    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.12.2023",
   );
   await user.click(screen.getByTestId("hatBehinderung_option_1")); // Nein

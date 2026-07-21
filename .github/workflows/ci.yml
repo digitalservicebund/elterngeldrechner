@@ -31,10 +31,7 @@ jobs:
       - uses: ./.github/actions/cached-node-install
 
       - name: unit test
-        run: npm run test:unit
-
-      - name: subcutaneous tests
-        run: npm run test:subcutaneous
+        run: npm run test
 
   audit-licenses:
     runs-on: ubuntu-24.04

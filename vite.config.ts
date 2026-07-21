@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import react from "@vitejs/plugin-react";
 import Icons from "unplugin-icons/vite";
-import { configDefaults, defineConfig } from "vitest/config";
+import { defineConfig } from "vitest/config";
 import type { Plugin, ResolvedConfig } from "vite";
 
 export default defineConfig({
@@ -36,28 +36,8 @@ export default defineConfig({
     resolveSnapshotPath: snapshotPathNextToTestFile,
     snapshotFormat: { indent: 0, min: true },
     chaiConfig: { truncateThreshold: 0 },
-    projects: [
-      {
-        extends: true,
-        test: {
-          name: "unit",
-          include: ["src/**/*.spec.{ts,tsx}"],
-          exclude: [
-            ...configDefaults.exclude,
-            "src/application/tests/subcutaneous/*.spec.{ts,tsx}",
-          ],
-          includeSource: ["src/**/*.{ts,tsx}"],
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: "subcutaneous",
-          include: ["src/application/tests/subcutaneous/*.spec.{ts,tsx}"],
-          fileParallelism: false,
-        },
-      },
-    ],
+    includeSource: ["src/**/*.{ts,tsx}"],
+    include: ["src/**/*.spec.{ts,tsx}"],
   },
   define: {
     "import.meta.vitest": "undefined",

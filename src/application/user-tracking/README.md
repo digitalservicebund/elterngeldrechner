@@ -15,6 +15,19 @@ to only track what we really need and keeping dashboard
 and code in sync.
 For the concrete steps, see below.
 
+## Module Structure
+
+- `core/` — consent handling, cookie/tag-manager integration, and the
+  `data-layer` used to read/write tracking variables.
+- `metrics/` — the actual tracked metrics (e.g. `feedback`, `nutzergruppe`,
+  `partnerschaftlichkeit`, `planungshilfen`, `conversionGoal`). Each file wraps
+  its own `posthog.capture`/`posthog.register` calls behind a small,
+  purpose-named function so callers don't touch PostHog directly.
+- `posthog/posthog-typed.ts` — **generated file, do not edit by hand**. It is
+  overwritten by `npm run posthog:schema:pull` (see step 7 below) and provides
+  the typed `capture()`.
+- `utilities/` — helpers built on top of the above.
+
 ## Onboarding
 
 1. Request access to the PostHog project from a team member.
@@ -45,8 +58,12 @@ For the concrete steps, see below.
    (As a convention we start the naming with a lowercase letter.)
    b. Check "required" as a default.
 4. Run `op run --env-file=./.env.development.local -- npm run posthog:schema:pull` to get compiler support.
+   a. This regenerates `posthog/posthog-typed.ts` — never edit that file directly.
+   b. For the compiler support import from `@/application/user-tracking`.
 5. Add the necessary `posthog.capture` part to the code.
-   a. Use the exact event and property names.
+   a. Use the exact event and property names, e.g.
+   `posthog.capture("info_text_ausgeklappt", { frage: "..." })`.
+   b. Use `posthog.register` instead only when needed.
 6. Check locally if events arrive at "Activity" -> "Events" or "Live".
 7. Commit and push changes.
 8. Add metric to dashboard.

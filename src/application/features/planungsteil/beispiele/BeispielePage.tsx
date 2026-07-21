@@ -134,7 +134,7 @@ export function BeispielePage() {
 
     if (neuesAktivesBeispiel) {
       setPlan(neuesAktivesBeispiel.plan);
-      trackMetricsForDerPlanHatSichGeaendert(neuesAktivesBeispiel.plan, true);
+      trackMetricsForDerPlanHatSichGeaendert(neuesAktivesBeispiel.plan);
 
       setIdentifierTrackingVariable(neuesAktivesBeispiel.identifier);
 
@@ -620,7 +620,7 @@ if (import.meta.vitest) {
 
         expect(
           trackMetricsForDerPlanHatSichGeaendert,
-        ).toHaveBeenCalledExactlyOnceWith(expect.anything(), true);
+        ).toHaveBeenCalledExactlyOnceWith(expect.anything());
       });
 
       it("schreibt bei eigener planung diese in die tracking variable", () => {

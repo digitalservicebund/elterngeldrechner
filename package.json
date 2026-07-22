@@ -56,7 +56,7 @@
     "original-rechner": "github:digitalservicebund/elterngeldrechner-legacy#69ad27a02bb5105e10890338845cf21b727a0c27",
     "oxlint": "^1.74.0",
     "oxlint-tsgolint": "^0.24.0",
-    "postcss": "^8.5.19",
+    "postcss": "^8.5.20",
     "prettier": "^3.9.5",
     "stylelint": "^17.14.0",
     "stylelint-config-recommended": "^18.0.0",

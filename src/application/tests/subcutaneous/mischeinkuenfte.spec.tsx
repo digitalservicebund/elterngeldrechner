@@ -13,8 +13,6 @@ import {
 } from "./testHooks";
 
 beforeEach(() => {
-  sessionStorage.clear();
-
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(new Date("2025-12-20"));
 });

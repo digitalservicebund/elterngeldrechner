@@ -9,8 +9,6 @@ import {
 import { useBerechneElterngeldbezuege, useRender } from "./testHooks";
 
 beforeEach(() => {
-  sessionStorage.clear();
-
   vi.useFakeTimers({ toFake: ["Date"] });
   vi.setSystemTime(new Date("2026-03-10"));
 });

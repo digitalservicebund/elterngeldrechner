@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Lebensmonatszahl, Monat, Variante } from "@/monatsplaner";
 import {
   useBerechneElterngeldbezuege,
   useErstelleAusgangslage,
@@ -201,14 +197,26 @@ test("Erhöhte Ersatzrate: Bezugswert unter 1.000 € (§ 2 Abs. 2 BEEG)", async
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
+  const plan: Readonly<Partial<Record<Lebensmonatszahl, Monat>>> = {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
+  };
 
   // Person 1: 540 € brutto, erhöhte Ersatzrate (§ 2 Abs. 2 BEEG)
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(358);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(179);
+  expect(berechneElterngeldbezuege(Elternteil.Eins, plan)).toEqual(
+    expect.objectContaining({
+      "2": 357.72,
+      "4": 178.86,
+    }),
+  );
+
+  // Person 2: 2.500 € brutto, Steuerklasse V
+  expect(berechneElterngeldbezuege(Elternteil.Zwei, plan)).toEqual(
+    expect.objectContaining({
+      "2": 879.64,
+      "4": 439.82,
+    }),
+  );
 
   const erstelleAusgangslage = useErstelleAusgangslage();
 
@@ -217,29 +225,4 @@ test("Erhöhte Ersatzrate: Bezugswert unter 1.000 € (§ 2 Abs. 2 BEEG)", async
     empfaenger: Elternteil.Eins,
     letzterLebensmonatMitSchutz: 2,
   });
-
-  // Person 2: 2.500 € brutto, Steuerklasse V
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(880);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(440);
 });
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
-  };
-
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
-  );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}

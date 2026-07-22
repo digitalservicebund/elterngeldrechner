@@ -2,11 +2,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Lebensmonatszahl, Monat, Variante } from "@/monatsplaner";
 import {
   useBerechneElterngeldbezuege,
   useEventHistorie,
@@ -160,15 +156,19 @@ test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
+  const plan: Readonly<Partial<Record<Lebensmonatszahl, Monat>>> = {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
+  };
 
   // Konstantes Einkommen: die Ausklammerung verschiebt den Zeitraum, ändert
   // aber den Betrag nicht -> identisch zum Standard-Angestellten (1.441 €).
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1441);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(721);
+  expect(berechneElterngeldbezuege(Elternteil.Eins, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1441.12,
+      "4": 720.56,
+    }),
+  );
 
   const eventHistorie = useEventHistorie();
 
@@ -179,24 +179,3 @@ test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert
     })),
   ).toEqual([{ grund: "erkrankungSchwangerschaft" }]);
 });
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
-  };
-
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
-  );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}

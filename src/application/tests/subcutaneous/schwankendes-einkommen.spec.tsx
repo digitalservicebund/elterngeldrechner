@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Lebensmonatszahl, Monat, Variante } from "@/monatsplaner";
 import {
   useBerechneElterngeldbezuege,
   useErstelleAusgangslage,
@@ -151,14 +147,18 @@ test("Schwankendes Einkommen: Elterngeld aus dem Durchschnitt schwankender Monat
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
+  const plan: Readonly<Partial<Record<Lebensmonatszahl, Monat>>> = {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
+  };
 
   // Person 1: schwankendes Einkommen (Ø ~2.550 € brutto), Steuerklasse III
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1243);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(621);
+  expect(berechneElterngeldbezuege(Elternteil.Eins, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1242.8,
+      "4": 621.4,
+    }),
+  );
 
   const erstelleAusgangslage = useErstelleAusgangslage();
 
@@ -168,24 +168,3 @@ test("Schwankendes Einkommen: Elterngeld aus dem Durchschnitt schwankender Monat
     letzterLebensmonatMitSchutz: 2,
   });
 });
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
-  };
-
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
-  );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}

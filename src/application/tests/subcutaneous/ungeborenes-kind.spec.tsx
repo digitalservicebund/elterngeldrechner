@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Lebensmonatszahl, Monat, Variante } from "@/monatsplaner";
 import { useBerechneElterngeldbezuege, useRender } from "./testHooks";
 
 beforeEach(() => {
@@ -147,33 +143,17 @@ test("Ungeborenes Kind: bei überschrittenem Entbindungstermin wird das Geburtsd
   unmount();
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
 
-  // Person 1: 3.000 € brutto, Steuerklasse III (wie Standard-Angestellte)
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1441);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(721);
-});
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
+  const plan: Readonly<Partial<Record<Lebensmonatszahl, Monat>>> = {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
   };
 
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
+  // Person 1: 3.000 € brutto, Steuerklasse III (wie Standard-Angestellte)
+  expect(berechneElterngeldbezuege(Elternteil.Eins, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1441.12,
+      "4": 720.56,
+    }),
   );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}
+});

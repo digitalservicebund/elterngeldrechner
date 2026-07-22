@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Variante } from "@/monatsplaner";
 import {
   useBerechneElterngeldbezuege,
   useErstelleAusgangslage,
@@ -142,14 +138,23 @@ test("Alleinerziehend: mittleres Einkommen, Steuerklasse I (§ 2 Abs. 1 BEEG)", 
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
+  const elterngeldbezuege = berechneElterngeldbezuege(Elternteil.Eins, {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
+    6: {
+      gewaehlteOption: Variante.Bonus,
+      imMutterschutz: false,
+      bruttoeinkommen: 1_500,
+    },
+  });
 
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1259);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(629);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1_500)).toBe(556);
+  expect(elterngeldbezuege).toEqual(
+    expect.objectContaining({
+      "2": 1258.71,
+      "4": 629.36,
+      "6": 556.02,
+    }),
+  );
 
   const erstelleAusgangslage = useErstelleAusgangslage();
 
@@ -158,24 +163,3 @@ test("Alleinerziehend: mittleres Einkommen, Steuerklasse I (§ 2 Abs. 1 BEEG)", 
     letzterLebensmonatMitSchutz: 2,
   });
 });
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
-  };
-
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
-  );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}

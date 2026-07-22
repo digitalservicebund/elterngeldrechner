@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Lebensmonatszahl, Monat, Variante } from "@/monatsplaner";
 import {
   useBerechneElterngeldbezuege,
   useErstelleAusgangslage,
@@ -203,17 +199,29 @@ test("Mutterschutz bei Frühgeburt: der Monatsbetrag bleibt unverändert (§ 2 B
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
+  const plan: Readonly<Partial<Record<Lebensmonatszahl, Monat>>> = {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
+    6: { gewaehlteOption: Variante.Bonus, imMutterschutz: false },
+  };
 
   // Person 1: 3.000 € brutto, Steuerklasse III
-  // (Bonus+1000-€-Einkommen aus dem Orakel — 978 € — ist über diesen Seam
-  // nicht prüfbar, siehe Partnerschaftsbonus-Hinweis; daher hier ausgelassen.)
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1441);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(721);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(721);
+  expect(berechneElterngeldbezuege(Elternteil.Eins, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1441.12,
+      "4": 720.56,
+      "6": 720.56,
+    }),
+  );
+
+  // Person 2: 3.000 € brutto, Steuerklasse III
+  expect(berechneElterngeldbezuege(Elternteil.Zwei, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1441.12,
+      "4": 720.56,
+      "6": 720.56,
+    }),
+  );
 
   const erstelleAusgangslage = useErstelleAusgangslage();
 
@@ -222,30 +230,4 @@ test("Mutterschutz bei Frühgeburt: der Monatsbetrag bleibt unverändert (§ 2 B
     empfaenger: Elternteil.Eins,
     letzterLebensmonatMitSchutz: 5,
   });
-
-  // Person 2: 3.000 € brutto, Steuerklasse III
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1441);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(721);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Bonus)).toBe(721);
 });
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
-  };
-
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
-  );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}

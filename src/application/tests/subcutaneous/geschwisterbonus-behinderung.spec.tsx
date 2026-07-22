@@ -1,11 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import {
-  BerechneElterngeldbezuegeCallback,
-  Elternteil,
-  Variante,
-} from "@/monatsplaner";
+import { Elternteil, Lebensmonatszahl, Monat, Variante } from "@/monatsplaner";
 import {
   useBerechneElterngeldbezuege,
   useErstelleAusgangslage,
@@ -221,14 +217,26 @@ test("Geschwisterbonus bei Geschwisterkind mit Behinderung: Altersgrenze 14 Jahr
 
   const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
-  const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
-    null,
-    berechneElterngeldbezuege,
-  );
+  const plan: Readonly<Partial<Record<Lebensmonatszahl, Monat>>> = {
+    2: { gewaehlteOption: Variante.Basis, imMutterschutz: false },
+    4: { gewaehlteOption: Variante.Plus, imMutterschutz: false },
+  };
 
   // Person 1: 3.000 € brutto, Steuerklasse III, mit Geschwisterbonus (+10 %)
-  expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1576);
-  expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(788);
+  expect(berechneElterngeldbezuege(Elternteil.Eins, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1575.63,
+      "4": 787.82,
+    }),
+  );
+
+  // Person 2: 3.000 € brutto, Steuerklasse V, mit Geschwisterbonus (+10 %)
+  expect(berechneElterngeldbezuege(Elternteil.Zwei, plan)).toEqual(
+    expect.objectContaining({
+      "2": 1156.05,
+      "4": 578.03,
+    }),
+  );
 
   const erstelleAusgangslage = useErstelleAusgangslage();
 
@@ -237,29 +245,4 @@ test("Geschwisterbonus bei Geschwisterkind mit Behinderung: Altersgrenze 14 Jahr
     empfaenger: Elternteil.Eins,
     letzterLebensmonatMitSchutz: 2,
   });
-
-  // Person 2: 3.000 € brutto, Steuerklasse V, mit Geschwisterbonus (+10 %)
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Basis)).toBe(1156);
-  expect(monatsbetrag(Elternteil.Zwei, Variante.Plus)).toBe(578);
 });
-
-function monatsbetragAusBerechneElterngeldbezuege(
-  berechneElterngeldbezuege: BerechneElterngeldbezuegeCallback,
-  elternteil: Elternteil,
-  variante: Variante,
-  bruttoeinkommen?: number,
-) {
-  const lebensmonat = {
-    gewaehlteOption: variante,
-    imMutterschutz: false,
-    bruttoeinkommen,
-  };
-
-  const lebensmonate = Object.fromEntries(
-    Array.from({ length: 12 }, (_, index) => [index + 1, lebensmonat]),
-  );
-
-  const bezuege = berechneElterngeldbezuege(elternteil, lebensmonate);
-
-  return Math.round(bezuege[6] ?? Number.NaN);
-}

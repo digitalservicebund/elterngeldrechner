@@ -67,7 +67,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@cantoo/pdf-lib": "^2.7.1",
+    "@cantoo/pdf-lib": "^2.7.4",
     "@date-fns/utc": "^2.1.1",
     "@hookform/resolvers": "^5.4.0",
     "@js-temporal/polyfill": "^0.5.1",

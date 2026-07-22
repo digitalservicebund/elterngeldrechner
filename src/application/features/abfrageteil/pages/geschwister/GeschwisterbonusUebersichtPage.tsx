@@ -36,12 +36,26 @@ export function GeschwisterbonusUebersichtPage() {
     geschwisterkinder.map((geschwisterkind) => geschwisterkind.name),
   );
 
-  const geschwisterbonusEnddatum = berechneEnddatumDesGeschwisterbonus(
+  const geschwisterbonusErgebnis = berechneEnddatumDesGeschwisterbonus(
     geschwisterkinder.map((it) => ({
       geburtstag: new Geburtstag(it.geburtsdatum.toString()),
       istBehindert: it.hatBehinderung,
     })),
     new Geburtstag(geburtsdatum.toString()),
+  );
+
+  const geschwisterbonusEnddatum = geschwisterbonusErgebnis?.datum ?? null;
+
+  const ausschlaggebendeGeburtstage = new Set(
+    geschwisterbonusErgebnis?.ausschlaggebendeGeschwister.map((kind) =>
+      kind.geburtstag.getTime(),
+    ),
+  );
+
+  const ausschlaggebendeGeschwisterkinder = geschwisterkinder.filter((it) =>
+    ausschlaggebendeGeburtstage.has(
+      new Geburtstag(it.geburtsdatum.toString()).getTime(),
+    ),
   );
 
   const navigateNextPage = async () => {
@@ -71,7 +85,7 @@ export function GeschwisterbonusUebersichtPage() {
 
             <div className="p-20 pt-0">
               <p>
-                Wir haben die Geburtstdaten von {geschwisterkinderNamen}{" "}
+                Wir haben die Geburtsdaten von {geschwisterkinderNamen}{" "}
                 überprüft. Die Angaben haben ergeben, dass die Voraussetzungen
                 für den Geschwisterbonus erfüllt sind.
               </p>
@@ -81,17 +95,15 @@ export function GeschwisterbonusUebersichtPage() {
                   Ihr monatlicher Elterngeldbetrag erhöht sich automatisch um 10
                   % (mindestens um 75 Euro pro Monat).
                 </li>
-                {geschwisterbonusEnddatum !== null && (
-                  <li>
-                    {formatiereGeschwisterbonusErklaerung(
-                      geschwisterkinder,
-                      geschwisterbonusEnddatum,
-                    )}
-                  </li>
-                )}
                 <li>
-                  Der Bonus gilt für beide Eltern, wenn Sie in dieser Zeit
-                  Elterngeld beziehen.
+                  Der Geschwisterbonus gilt für beide Eltern, wenn Sie in dieser
+                  Zeit Elterngeld beziehen.
+                </li>
+                <li>
+                  {formatiereGeschwisterbonusErklaerung(
+                    ausschlaggebendeGeschwisterkinder,
+                    geschwisterbonusEnddatum,
+                  )}
                 </li>
                 <li>
                   Der Geschwisterbonus wird automatisch erfasst und später in

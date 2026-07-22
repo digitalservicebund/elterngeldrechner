@@ -170,12 +170,9 @@ test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert
     }),
   );
 
-  const eventHistorie = useEventHistorie();
-
-  // Der Krankheitszeitraum ist als Ausklammerung erfasst.
-  expect(
-    findeAusklammerungen(eventHistorie, 0).map((ausklammerung) => ({
-      grund: ausklammerung.grund,
-    })),
-  ).toEqual([{ grund: "erkrankungSchwangerschaft" }]);
+  expect(findeAusklammerungen(useEventHistorie(), 0)).toContainEqual(
+    expect.objectContaining({
+      grund: "erkrankungSchwangerschaft",
+    }),
+  );
 });

@@ -33,7 +33,13 @@ function useEventHistorie() {
 }
 
 function useErstelleAusgangslage() {
-  return () => erstelleAusgangslage(useEventHistorie());
+  const { result } = renderHook(useEventContext, {
+    wrapper: EventProvider,
+  });
+
+  const { filtereValideEventHistorie } = result.current;
+
+  return () => erstelleAusgangslage(filtereValideEventHistorie());
 }
 
 export {

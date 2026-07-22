@@ -1,19 +1,17 @@
-import { render, renderHook, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
-import {
-  EventProvider,
-  useEventContext,
-} from "@/application/features/abfrageteil/events/EventContext";
-import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
-import routeDefinition from "@/application/routing/RouteDefinition";
 import {
   BerechneElterngeldbezuegeCallback,
   Elternteil,
   Variante,
 } from "@/monatsplaner";
+import {
+  useBerechneElterngeldbezuege,
+  useEventHistorie,
+  useRender,
+} from "./testHooks";
 
 beforeEach(() => {
   sessionStorage.clear();
@@ -43,10 +41,9 @@ afterEach(() => {
 test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert (§ 2b Abs. 1 Satz 2 Nr. 3 BEEG)", async () => {
   const user = userEvent.setup();
 
-  const router = createMemoryRouter(routeDefinition, {
-    initialEntries: ["/abfrageteil/startseite"],
-  });
-  const { unmount } = render(<RouterProvider router={router} />);
+  const render = useRender();
+
+  const { unmount } = render();
 
   // Startseite
   await user.click(
@@ -157,18 +154,13 @@ test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  expect(router.state.location.pathname).toBe("/beispiele");
+  expect(
+    await screen.findByText("Wollen Sie einen Vorschlag für Ihre Planung?"),
+  ).toBeVisible();
 
   unmount();
 
-  const hook = renderHook(
-    () => ({
-      berechneElterngeldbezuege: useBerechneElterngeldbezuege(),
-      eventHistorie: useEventContext().filtereValideEventHistorie(),
-    }),
-    { wrapper: EventProvider },
-  );
-  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
+  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
@@ -179,6 +171,8 @@ test("Schwangerschaftsbedingte Erkrankung: Krankheitsmonate werden ausgeklammert
   // aber den Betrag nicht -> identisch zum Standard-Angestellten (1.441 €).
   expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1441);
   expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(721);
+
+  const eventHistorie = useEventHistorie();
 
   // Der Krankheitszeitraum ist als Ausklammerung erfasst.
   expect(

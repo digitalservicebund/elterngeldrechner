@@ -3,3 +3,4 @@ export {
   type InitialInformation,
   usePlanerService,
 } from "./usePlanerService";
+export { useBerechneElterngeldbezuege } from "./useBerechneElterngeldbezuege";

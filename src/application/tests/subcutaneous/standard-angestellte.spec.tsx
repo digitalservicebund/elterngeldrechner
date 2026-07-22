@@ -1,19 +1,16 @@
-import { render, renderHook, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
-import {
-  EventProvider,
-  useEventContext,
-} from "@/application/features/abfrageteil/events/EventContext";
-import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
-import routeDefinition from "@/application/routing/RouteDefinition";
 import {
   BerechneElterngeldbezuegeCallback,
   Elternteil,
   Variante,
 } from "@/monatsplaner";
+import {
+  useBerechneElterngeldbezuege,
+  useErstelleAusgangslage,
+  useRender,
+} from "./testHooks";
 
 beforeEach(() => {
   sessionStorage.clear();
@@ -41,10 +38,9 @@ afterEach(() => {
 test("Standard-Angestellte: eine planende Person mit mittlerem Einkommen (§ 2 Abs. 1 BEEG)", async () => {
   const user = userEvent.setup();
 
-  const router = createMemoryRouter(routeDefinition, {
-    initialEntries: ["/abfrageteil/startseite"],
-  });
-  const { unmount } = render(<RouterProvider router={router} />);
+  const render = useRender();
+
+  const { unmount } = render();
 
   // Startseite
   await user.click(
@@ -147,18 +143,13 @@ test("Standard-Angestellte: eine planende Person mit mittlerem Einkommen (§ 2 A
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  expect(router.state.location.pathname).toBe("/beispiele");
+  expect(
+    await screen.findByText("Wollen Sie einen Vorschlag für Ihre Planung?"),
+  ).toBeVisible();
 
   unmount();
 
-  const hook = renderHook(
-    () => ({
-      berechneElterngeldbezuege: useBerechneElterngeldbezuege(),
-      eventHistorie: useEventContext().filtereValideEventHistorie(),
-    }),
-    { wrapper: EventProvider },
-  );
-  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
+  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
@@ -169,10 +160,10 @@ test("Standard-Angestellte: eine planende Person mit mittlerem Einkommen (§ 2 A
   expect(monatsbetrag(Elternteil.Eins, Variante.Basis)).toBe(1441);
   expect(monatsbetrag(Elternteil.Eins, Variante.Plus)).toBe(721);
 
+  const erstelleAusgangslage = useErstelleAusgangslage();
+
   // Die ersten zwei Lebensmonate sind wegen Mutterschutz blockiert
-  expect(
-    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
-  ).toEqual({
+  expect(erstelleAusgangslage().informationenZumMutterschutz).toEqual({
     empfaenger: Elternteil.Eins,
     letzterLebensmonatMitSchutz: 2,
   });

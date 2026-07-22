@@ -1,19 +1,16 @@
-import { render, renderHook, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { erstelleAusgangslage } from "@/application/features/abfrageteil/domain/erstelleAusgangslage";
-import {
-  EventProvider,
-  useEventContext,
-} from "@/application/features/abfrageteil/events/EventContext";
-import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
-import routeDefinition from "@/application/routing/RouteDefinition";
 import {
   BerechneElterngeldbezuegeCallback,
   Elternteil,
   Variante,
 } from "@/monatsplaner";
+import {
+  useBerechneElterngeldbezuege,
+  useErstelleAusgangslage,
+  useRender,
+} from "./testHooks";
 
 beforeEach(() => {
   sessionStorage.clear();
@@ -42,10 +39,9 @@ afterEach(() => {
 test("Mutterschaftsgeld-Anrechnung: Mutterschutzmonate zählen als verbrauchte Basismonate (§ 3 BEEG)", async () => {
   const user = userEvent.setup();
 
-  const router = createMemoryRouter(routeDefinition, {
-    initialEntries: ["/abfrageteil/startseite"],
-  });
-  const { unmount } = render(<RouterProvider router={router} />);
+  const render = useRender();
+
+  const { unmount } = render();
 
   // Startseite
   await user.click(
@@ -200,18 +196,13 @@ test("Mutterschaftsgeld-Anrechnung: Mutterschutzmonate zählen als verbrauchte B
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  expect(router.state.location.pathname).toBe("/beispiele");
+  expect(
+    await screen.findByText("Wollen Sie einen Vorschlag für Ihre Planung?"),
+  ).toBeVisible();
 
   unmount();
 
-  const hook = renderHook(
-    () => ({
-      berechneElterngeldbezuege: useBerechneElterngeldbezuege(),
-      eventHistorie: useEventContext().filtereValideEventHistorie(),
-    }),
-    { wrapper: EventProvider },
-  );
-  const { berechneElterngeldbezuege, eventHistorie } = hook.result.current;
+  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
 
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
@@ -224,10 +215,10 @@ test("Mutterschaftsgeld-Anrechnung: Mutterschutzmonate zählen als verbrauchte B
   expect(monatsbetrag(Elternteil.Eins, Variante.Bonus)).toBe(872);
   expect(monatsbetrag(Elternteil.Eins, Variante.Bonus, 1000)).toBe(872);
 
+  const erstelleAusgangslage = useErstelleAusgangslage();
+
   // Mutterschaftsgeld: die ersten drei Lebensmonate von Person 1 sind blockiert
-  expect(
-    erstelleAusgangslage(eventHistorie).informationenZumMutterschutz,
-  ).toEqual({
+  expect(erstelleAusgangslage().informationenZumMutterschutz).toEqual({
     empfaenger: Elternteil.Eins,
     letzterLebensmonatMitSchutz: 3,
   });

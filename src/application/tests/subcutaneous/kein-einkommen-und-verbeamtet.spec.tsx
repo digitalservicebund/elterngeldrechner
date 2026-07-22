@@ -1,15 +1,12 @@
-import { render, renderHook, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import { EventProvider } from "@/application/features/abfrageteil/events/EventContext";
-import { useBerechneElterngeldbezuege } from "@/application/features/planungsteil/planer/hooks/useBerechneElterngeldbezuege";
-import routeDefinition from "@/application/routing/RouteDefinition";
 import {
   BerechneElterngeldbezuegeCallback,
   Elternteil,
   Variante,
 } from "@/monatsplaner";
+import { useBerechneElterngeldbezuege, useRender } from "./testHooks";
 
 beforeEach(() => {
   sessionStorage.clear();
@@ -36,10 +33,9 @@ afterEach(() => {
 test("Kein Einkommen und Beamtin: Mindestbetrag für Person 1, Beamtenbezüge für Person 2 (§ 2 Abs. 4 BEEG)", async () => {
   const user = userEvent.setup();
 
-  const router = createMemoryRouter(routeDefinition, {
-    initialEntries: ["/abfrageteil/startseite"],
-  });
-  const { unmount } = render(<RouterProvider router={router} />);
+  const render = useRender();
+
+  const { unmount } = render();
 
   // Startseite
   await user.click(
@@ -162,14 +158,13 @@ test("Kein Einkommen und Beamtin: Mindestbetrag für Person 1, Beamtenbezüge f�
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  expect(router.state.location.pathname).toBe("/beispiele");
+  expect(
+    await screen.findByText("Wollen Sie einen Vorschlag für Ihre Planung?"),
+  ).toBeVisible();
 
   unmount();
 
-  const hook = renderHook(() => useBerechneElterngeldbezuege(), {
-    wrapper: EventProvider,
-  });
-  const berechneElterngeldbezuege = hook.result.current;
+  const berechneElterngeldbezuege = useBerechneElterngeldbezuege();
   const monatsbetrag = monatsbetragAusBerechneElterngeldbezuege.bind(
     null,
     berechneElterngeldbezuege,

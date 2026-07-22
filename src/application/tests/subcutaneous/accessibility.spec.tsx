@@ -1,9 +1,8 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { createMemoryRouter, RouterProvider } from "react-router";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
-import routeDefinition from "@/application/routing/RouteDefinition";
 import axe from "axe-core";
+import { useRender } from "./testHooks";
 
 beforeEach(() => {
   sessionStorage.clear();
@@ -19,10 +18,9 @@ afterEach(() => {
 test("Barrierefreiheit: Beispielhafter Nutzenden Flow hat keine Axe Verstöße", async () => {
   const user = userEvent.setup();
 
-  const router = createMemoryRouter(routeDefinition, {
-    initialEntries: ["/abfrageteil/startseite"],
-  });
-  const { container } = render(<RouterProvider router={router} />);
+  const render = useRender();
+
+  const { container } = render();
 
   // Startseite
   await screen.findByRole("button", { name: "Verstanden und weiter" });
@@ -218,7 +216,9 @@ test("Barrierefreiheit: Beispielhafter Nutzenden Flow hat keine Axe Verstöße",
   );
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
-  expect(router.state.location.pathname).toBe("/beispiele");
+  expect(
+    await screen.findByText("Wollen Sie einen Vorschlag für Ihre Planung?"),
+  ).toBeVisible();
 
   // Beispiele: pick the first suggested plan (a valid, complete plan so the
   // Planer can be applied afterwards).
@@ -243,7 +243,7 @@ test("Barrierefreiheit: Beispielhafter Nutzenden Flow hat keine Axe Verstöße",
   await screen.findByRole("button", { name: /Antrag_auf_Elterngeld\.pdf/ });
   expect(await collectAccessibilityViolations(container)).toEqual([]);
 
-  expect(router.state.location.pathname).toBe("/datenuebernahme-antrag");
+  expect(await screen.findByText("Gesamter Antrag:")).toBeVisible();
 });
 
 export async function collectAccessibilityViolations(

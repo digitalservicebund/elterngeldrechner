@@ -96,30 +96,69 @@ function istBehindert(): (kind: Kind) => boolean {
   return (kind: Kind) => kind.istBehindert === true;
 }
 
+export type GeschwisterbonusEnddatum = {
+  datum: Date;
+  ausschlaggebendeGeschwister: readonly Kind[];
+};
+
 /**
  * Bestimmt das Enddatum des Geschwisterbonusanspruchs nach § 2a BEEG.
  *
  * Der Anspruch endet an einem Geburtstag eines Geschwisterkindes und nimmt mit
  * der Zeit nur ab. Für jedes Kind werden die Altersgrenzen ab dem Zeitpunkt
  * durchlaufen, solange an ihrem Vortag noch Anspruch besteht; zurückgegeben
- * wird der späteste dieser Tage. Welche Konstellation den Anspruch trägt,
- * entscheidet allein {@link bestehtAnspruchAufGeschwisterbonus}.
+ * wird der späteste dieser Tage sowie das oder die Geschwisterkinder, deren
+ * eigene gesetzliche Altersgrenze (3, 6 oder bei Behinderung 14) an diesem Tag
+ * liegt (mehrere bei gleichem Datum, z. B. bei Zwillingen). Ein Geschwisterkind
+ * dessen Geburtstag rein zufällig auf denselben Tag fällt, ohne selbst eine
+ * gesetzliche Altersgrenze zu erreichen, gilt nicht als ausschlaggebend.
+ * Welche Konstellation den Anspruch trägt, entscheidet allein
+ * {@link bestehtAnspruchAufGeschwisterbonus}.
  *
  * @return null wenn zum Zeitpunkt kein Anspruch (mehr) besteht.
  */
 export function berechneEnddatumDesGeschwisterbonus(
   geschwister: readonly Kind[],
   zeitpunkt: Date,
-): Date | null {
-  return geschwister
-    .flatMap((kind) =>
-      Array.from(
-        berechneAltersgrenzenInnerhalbAnspruch(kind, geschwister, zeitpunkt),
-      ),
-    )
-    .reduce<Date | null>((spaetestes, grenze) => {
-      return spaetestes === null || grenze > spaetestes ? grenze : spaetestes;
-    }, null);
+): GeschwisterbonusEnddatum | null {
+  const altersgrenzenProKind = geschwister.flatMap((kind) =>
+    Array.from(
+      berechneAltersgrenzenInnerhalbAnspruch(kind, geschwister, zeitpunkt),
+    ).map(({ grenze, alter }) => ({ kind, grenze, alter })),
+  );
+
+  const spaeteste = altersgrenzenProKind.reduce<Date | null>(
+    (spaetestes, { grenze }) =>
+      spaetestes === null || grenze > spaetestes ? grenze : spaetestes,
+    null,
+  );
+
+  if (spaeteste === null) {
+    return null;
+  }
+
+  return {
+    datum: spaeteste,
+    ausschlaggebendeGeschwister: altersgrenzenProKind
+      .filter(
+        ({ grenze, kind, alter }) =>
+          grenze.getTime() === spaeteste.getTime() &&
+          istGesetzlicheAltersgrenze(kind, alter),
+      )
+      .map(({ kind }) => kind),
+  };
+}
+
+/**
+ * Ob `alter` für `kind` eine der Altersgrenzen aus
+ * {@link bestehtAnspruchAufGeschwisterbonus} ist (3, 6 oder bei Behinderung
+ * 14), im Unterschied zu einem Geburtstag, der nur zufällig auf denselben Tag
+ * wie eine solche Altersgrenze eines anderen Kindes fällt.
+ */
+function istGesetzlicheAltersgrenze(kind: Kind, alter: number): boolean {
+  return (
+    alter === 3 || alter === 6 || (alter === 14 && kind.istBehindert === true)
+  );
 }
 
 /**
@@ -131,7 +170,7 @@ function* berechneAltersgrenzenInnerhalbAnspruch(
   kind: Kind,
   geschwister: readonly Kind[],
   zeitpunkt: Date,
-): Generator<Date> {
+): Generator<{ grenze: Date; alter: number }> {
   let alter = 1;
   while (berechneAltersgrenze(kind, alter) <= zeitpunkt) {
     alter += 1;
@@ -139,7 +178,7 @@ function* berechneAltersgrenzenInnerhalbAnspruch(
 
   let grenze = berechneAltersgrenze(kind, alter);
   while (bestehtAnspruchAufGeschwisterbonus(geschwister, dayBefore(grenze))) {
-    yield grenze;
+    yield { grenze, alter };
 
     alter += 1;
     grenze = berechneAltersgrenze(kind, alter);
@@ -683,6 +722,7 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2024-05-02"),
           expected: "2025-05-15T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2022-05-15T00:00:00.000Z"],
         },
         {
           description: "returns the day the older one turns 6",
@@ -692,6 +732,7 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2024-05-02"),
           expected: "2025-08-10T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2019-08-10T00:00:00.000Z"],
         },
         {
           description: "returns the day a disabled Geschwisterkind turns 14",
@@ -700,6 +741,7 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2024-05-02"),
           expected: "2025-10-05T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2011-10-05T00:00:00.000Z"],
         },
         {
           description: "returns the latest Altersgrenze when multiple qualify",
@@ -709,6 +751,7 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2024-05-02"),
           expected: "2025-10-05T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2011-10-05T00:00:00.000Z"],
         },
         {
           description: "returns null when all have exceeded their Altersgrenze",
@@ -717,6 +760,18 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2024-05-02"),
           expected: null,
+          ausschlaggebendeGeburtstage: [],
+        },
+        {
+          description:
+            "ignores a Geschwisterkind whose birthday coincidentally falls on the Enddatum without itself reaching an Altersgrenze",
+          geschwisterkinder: [
+            { geburtstag: new Geburtstag("2011-05-15"), istBehindert: true },
+            { geburtstag: new Geburtstag("2017-05-15"), istBehindert: false },
+          ],
+          zeitpunkt: new Geburtstag("2020-01-01"),
+          expected: "2025-05-15T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2011-05-15T00:00:00.000Z"],
         },
         {
           description:
@@ -726,6 +781,7 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2022-06-01"),
           expected: "2023-03-01T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2020-02-29T00:00:00.000Z"],
         },
         {
           description:
@@ -735,15 +791,29 @@ if (import.meta.vitest) {
           ],
           zeitpunkt: new Geburtstag("2020-06-01"),
           expected: "2022-03-01T00:00:00.000Z",
+          ausschlaggebendeGeburtstage: ["2008-02-29T00:00:00.000Z"],
         },
-      ])("$description", ({ geschwisterkinder, zeitpunkt, expected }) => {
-        const enddatum = berechneEnddatumDesGeschwisterbonus(
+      ])(
+        "$description",
+        ({
           geschwisterkinder,
           zeitpunkt,
-        );
+          expected,
+          ausschlaggebendeGeburtstage,
+        }) => {
+          const ergebnis = berechneEnddatumDesGeschwisterbonus(
+            geschwisterkinder,
+            zeitpunkt,
+          );
 
-        expect(enddatum?.toISOString() ?? null).toBe(expected);
-      });
+          expect(ergebnis?.datum.toISOString() ?? null).toBe(expected);
+          expect(
+            ergebnis?.ausschlaggebendeGeschwister.map((kind) =>
+              kind.geburtstag.toISOString(),
+            ) ?? [],
+          ).toStrictEqual(ausschlaggebendeGeburtstage);
+        },
+      );
 
       it("never contradicts bestehtAnspruchAufGeschwisterbonus", () => {
         /*
@@ -786,26 +856,32 @@ if (import.meta.vitest) {
             noInvalidDate: true,
           }),
           (geschwister, zeitpunkt) => {
-            const enddatum = berechneEnddatumDesGeschwisterbonus(
+            const ergebnis = berechneEnddatumDesGeschwisterbonus(
               geschwister,
               zeitpunkt,
             );
 
             if (bestehtAnspruchAufGeschwisterbonus(geschwister, zeitpunkt)) {
-              expect(enddatum).not.toBe(null);
+              expect(ergebnis).not.toBe(null);
+              expect(
+                ergebnis!.ausschlaggebendeGeschwister.length,
+              ).toBeGreaterThan(0);
 
               expect(
                 bestehtAnspruchAufGeschwisterbonus(
                   geschwister,
-                  dayBefore(enddatum!),
+                  dayBefore(ergebnis!.datum),
                 ),
               ).toBe(true);
 
               expect(
-                bestehtAnspruchAufGeschwisterbonus(geschwister, enddatum!),
+                bestehtAnspruchAufGeschwisterbonus(
+                  geschwister,
+                  ergebnis!.datum,
+                ),
               ).toBe(false);
             } else {
-              expect(enddatum).toBe(null);
+              expect(ergebnis).toBe(null);
             }
           },
         );

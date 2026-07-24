@@ -1,6 +1,5 @@
 import SuccessIcon from "~icons/material-symbols/check-circle-outline";
 import { Temporal } from "@js-temporal/polyfill";
-import type { ReactNode } from "react";
 import { useNavigate } from "react-router";
 import { Button } from "@/application/features/components";
 import { Page } from "@/application/features/components/Page";
@@ -13,7 +12,6 @@ import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domai
 import { findeTaetigkeiten } from "@/application/features/abfrageteil/domain/findeTaetigkeiten";
 import { bestimmeTaetigkeitenFlow } from "@/application/features/abfrageteil/domain/bestimmeTaetigkeitenFlow";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
-import { formatiereBemessungszeitraum } from "@/application/features/abfrageteil/domain/formatiereBemessungszeitraum";
 import { mappeAusklammerungGrund } from "@/application/features/abfrageteil/domain/mappeAusklammerungGrund";
 import { useEventContext } from "@/application/features/abfrageteil/events/EventContext";
 import { useBemessungszeitraumrechner } from "@/application/features/abfrageteil/hooks/useBemessungszeitraumrechner";
@@ -29,6 +27,9 @@ import {
   gruppiereBemessungszeitraum,
 } from "@/bemessungszeitraumrechner";
 import { findeGeburtsdatum } from "../../domain/findeGeburtsdatum";
+import { BMZZusammensetzungSelbststaendig } from "./BMZZusammensetzungSelbststaendig";
+import { BMZUeberschrift } from "./BMZUeberschrift";
+import { BMZZusammensetzungNichtSelbststaendig } from "./BMZZusammensetzungNichtSelbststaendig";
 
 export function ElternteilBMZUebersichtPage() {
   const { dispatch, filtereValideEventHistorie } = useEventContext();
@@ -70,12 +71,8 @@ export function ElternteilBMZUebersichtPage() {
     berechneBemessungszeitraumOhneAusklammerungen,
   } = useBemessungszeitraumrechner(routeParams.elternteilIndex);
   const bemessungszeitraum = berechneBemessungszeitraum(taetigkeitenFlow);
-  const bemessungszeitraumOhneAusklammerungen =
-    taetigkeitenFlow === "Selbstaendig"
-      ? []
-      : berechneBemessungszeitraumOhneAusklammerungen(taetigkeitenFlow);
-  const formatierterBemessungszeitraum =
-    formatiereBemessungszeitraum(bemessungszeitraum);
+  const bemessungszeitraumNichtselbstaendigOhneAusklammerungen =
+    berechneBemessungszeitraumOhneAusklammerungen("Nicht-Selbstaendig");
   const ausklammerungen = findeAusklammerungen(
     eventStream,
     routeParams.elternteilIndex,
@@ -102,117 +99,6 @@ export function ElternteilBMZUebersichtPage() {
     return geschwisterkinder[geschwisterIndex]?.name;
   };
 
-  const bemessungszeitraumUeberschrift = (): ReactNode => {
-    const anfangUeberschrift =
-      beruecksichtigteAusklammerungen.length > 0
-        ? `Bemessungszeitraum von ${vorname}:`
-        : "Ihr Bemessungszeitraum";
-
-    if (taetigkeitenFlow === "Selbstaendig") {
-      return (
-        <>
-          {anfangUeberschrift} Kalenderjahr {bemessungszeitraum[0]?.von.year}
-        </>
-      );
-    }
-
-    if (beruecksichtigteAusklammerungen.length === 0) {
-      return (
-        <>
-          {anfangUeberschrift}: {formatierterBemessungszeitraum}
-        </>
-      );
-    }
-
-    return (
-      <>
-        <>{anfangUeberschrift}</>
-        <ul>
-          {formatierterBemessungszeitraum.map((zeitraum, index) => (
-            <li key={index}>{zeitraum}</li>
-          ))}
-        </ul>
-      </>
-    );
-  };
-
-  const uebersprungeneJahreSelbststaendig = ((): string | undefined => {
-    const currentYear = Temporal.Now.plainDateISO().year;
-    const bmzYear = bemessungszeitraum[0]?.von.year;
-
-    if (!bmzYear) return undefined;
-
-    const jahreZwischenHeuteUndBMZ = currentYear - bmzYear;
-
-    if (jahreZwischenHeuteUndBMZ === 2) {
-      return `Im Jahr ${currentYear - 1} lagen Gründe für ein Überspringen vor. Dieses Jahr wird komplett ausgelassen.`;
-    }
-    if (jahreZwischenHeuteUndBMZ === 3) {
-      return `In den Jahren ${currentYear - 2} und ${currentYear - 1} lagen Gründe für ein Überspringen vor. Diese Jahre werden komplett ausgelassen.`;
-    }
-    if (jahreZwischenHeuteUndBMZ > 3) {
-      const startLuecke = bmzYear + 1;
-      const endeLuecke = currentYear - 1;
-      return `In den Jahren ${startLuecke} bis ${endeLuecke} lagen Gründe für ein Überspringen vor. Diese Jahre werden komplett ausgelassen.`;
-    }
-
-    return undefined;
-  })();
-
-  const uebersprungeneJahreNichtSelbststaendig = ((): string | undefined => {
-    if (beruecksichtigteAusklammerungen.length === 0) return undefined;
-
-    const jahre = [
-      ...new Set(
-        beruecksichtigteAusklammerungen.flatMap((a) => [
-          a.von.year,
-          a.bis.year,
-        ]),
-      ),
-    ]
-      .sort((a, b) => a - b)
-      .filter((year) => year <= geburtsdatum.year);
-    const anzahlJahre = jahre.length;
-    const enthaeltJahrInZukunft = jahre.includes(
-      Temporal.Now.plainDateISO().year + 1,
-    );
-
-    if (anzahlJahre === 1) {
-      return `Im Jahr ${jahre[0]} lagen ${enthaeltJahrInZukunft ? "bzw. liegen" : ""} Gründe für ein Überspringen vor. Die Monate mit Gründen für ein Überspringen werden komplett ausgelassen.`;
-    }
-    if (anzahlJahre === 2) {
-      return `In den Jahren ${jahre[0]} und ${jahre[1]} lagen ${enthaeltJahrInZukunft ? "bzw. liegen" : ""} Gründe für ein Überspringen vor. Die Monate mit Gründen für ein Überspringen werden komplett ausgelassen.`;
-    }
-    if (anzahlJahre > 2) {
-      return `In den Jahren ${jahre[0]} bis ${jahre[jahre.length - 1]} lagen ${enthaeltJahrInZukunft ? "bzw. liegen" : ""} Gründe für ein Überspringen vor. Die Monate mit Gründen für ein Überspringen werden komplett ausgelassen.`;
-    }
-
-    return undefined;
-  })();
-
-  const bemessungszeitraumZusammensetzung:
-    | {
-        regulaereGrundlage: string;
-        pruefungsergebnis: string;
-        neuesBerechnungsjahr: string;
-      }
-    | undefined =
-    taetigkeitenFlow === "Selbstaendig"
-      ? uebersprungeneJahreSelbststaendig
-        ? {
-            regulaereGrundlage: "Wäre das Kalenderjahr vor der Geburt gewesen.",
-            pruefungsergebnis: uebersprungeneJahreSelbststaendig,
-            neuesBerechnungsjahr: `Das Elterngeld wird auf Basis des Einkommens aus ${berechnungsjahr} berechnet.`,
-          }
-        : undefined
-      : uebersprungeneJahreNichtSelbststaendig
-        ? {
-            regulaereGrundlage: `Wäre der Zeitraum ${formatiereBemessungszeitraum(bemessungszeitraumOhneAusklammerungen).join(" und ")}.`,
-            pruefungsergebnis: uebersprungeneJahreNichtSelbststaendig,
-            neuesBerechnungsjahr: `Das Elterngeld wird auf Basis des Einkommens von ${formatierterBemessungszeitraum.join(" und ")} berechnet.`,
-          }
-        : undefined;
-
   return (
     <Page heading={`Finanzielle Situation ${vorname}`}>
       <div className="content-container">
@@ -220,7 +106,14 @@ export function ElternteilBMZUebersichtPage() {
           <div className="flex rounded bg-success-background p-20 font-bold">
             <SuccessIcon className="mr-10 mt-6 shrink-0 text-success" />
 
-            <h3>{bemessungszeitraumUeberschrift()}</h3>
+            <BMZUeberschrift
+              taetigkeitenFlow={taetigkeitenFlow}
+              vorname={vorname}
+              bemessungszeitraum={bemessungszeitraum}
+              anzahlBeruecksichtigteAusklammerungen={
+                beruecksichtigteAusklammerungen.length
+              }
+            />
           </div>
 
           <div className="px-20 pb-32">
@@ -231,52 +124,29 @@ export function ElternteilBMZUebersichtPage() {
 
             <div>
               <p className="font-bold">Wie setzt sich der Zeitraum zusammen?</p>
-              <p>
-                {taetigkeitenFlow === "Selbstaendig" ? (
-                  <>
-                    Da {vorname} selbstständig{" "}
-                    {taetigkeiten.istNichtSelbststaendig ||
+              {taetigkeitenFlow === "Selbstaendig" ? (
+                <BMZZusammensetzungSelbststaendig
+                  istMischeinkunft={
+                    taetigkeiten.istNichtSelbststaendig ||
                     taetigkeiten.istVerbeamtet
-                      ? "und angestellt arbeitet"
-                      : "ist"}
-                    , gilt als Grundlage normalerweise das letzte Kalenderjahr
-                    vor der Geburt.
-                  </>
-                ) : (
-                  <>
-                    Da {vorname} angestellt ist, gilt als Grundlage
-                    normalerweise die letzten 12 Monate vor dem Monat der
-                    Geburt.
-                  </>
-                )}{" "}
-                {bemessungszeitraumZusammensetzung && (
-                  <>
-                    <span>
-                      {taetigkeitenFlow === "Selbstaendig"
-                        ? "Wenn in diesem Zeitraum jedoch bestimmte Gründe für ein Überspringen (sogenannte Ausklammerungen) vorliegen, wird das gesamte betroffene Kalenderjahr ausgelassen. Das passiert, damit das Elterngeld nicht durch den Verdienstausfall sinkt."
-                        : "Wenn in diesem Zeitraum bestimmte Gründe für ein Überspringen (sogenannte Ausklammerungen) vorliegen, werden bestimmte Monate nicht mitgezählt. Das passiert, damit das Elterngeld nicht durch den Verdienstausfall sinkt."}
-                    </span>
-                    <p>
-                      Basierend auf den Angaben haben wir die
-                      Berechnungsgrundlage geprüft:
-                    </p>
-                    <ul>
-                      <li>
-                        <strong>Reguläre Grundlage: </strong>
-                        {bemessungszeitraumZusammensetzung.regulaereGrundlage}
-                      </li>
-                      <li>
-                        <strong>Die Prüfung ergab: </strong>
-                        {bemessungszeitraumZusammensetzung.pruefungsergebnis}
-                      </li>
-                      <li>
-                        <strong>Neues Berechnungsjahr: </strong>
-                        {bemessungszeitraumZusammensetzung.neuesBerechnungsjahr}
-                      </li>
-                    </ul>
-                  </>
-                )}
-              </p>
+                  }
+                  vorname={vorname}
+                  bemessungszeitraum={bemessungszeitraum}
+                  geburtsdatum={geburtsdatum}
+                />
+              ) : (
+                <BMZZusammensetzungNichtSelbststaendig
+                  vorname={vorname}
+                  bemessungszeitraum={bemessungszeitraum}
+                  bemessungszeitraumOhneAusklammerungen={
+                    bemessungszeitraumNichtselbstaendigOhneAusklammerungen
+                  }
+                  beruecksichtigteAusklammerungen={
+                    beruecksichtigteAusklammerungen
+                  }
+                  geburtsdatum={geburtsdatum}
+                />
+              )}
             </div>
 
             {beruecksichtigteAusklammerungen.length > 0 && (
@@ -407,19 +277,13 @@ export function ElternteilBMZUebersichtPage() {
             <p className="font-bold">
               Was bedeutet das für den weiteren Verlauf?
             </p>
-            {taetigkeitenFlow === "Selbstaendig" ? (
-              <p>
-                Bitte halten Sie für die nächsten Schritte die
-                Einkommensnachweise (zum Beispiel den Steuerbescheid) aus dem
-                Jahr {berechnungsjahr} bereit.
-              </p>
-            ) : (
-              <p>
-                Bitte halten Sie für die nächsten Schritte die monatlichen
-                Gehaltsabrechnungen aus dem oben genannten 12-Monats-Zeitraum
-                bereit.
-              </p>
-            )}
+            <p>
+              Bitte halten Sie für die nächsten Schritte die{" "}
+              {taetigkeitenFlow === "Selbstaendig"
+                ? `Einkommensnachweise (zum Beispiel den Steuerbescheid) aus dem Jahr ${berechnungsjahr}`
+                : "monatlichen Gehaltsabrechnungen aus dem oben genannten 12-Monats-Zeitraum"}{" "}
+              bereit.
+            </p>
           </div>
         </div>
 

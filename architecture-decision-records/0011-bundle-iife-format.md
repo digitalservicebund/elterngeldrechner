@@ -8,7 +8,7 @@ Accepted by Engineering (Dennis)
 
 ## History
 
-- [Bundle Architecture from 31.07.2025](0005-bundle-architecture.md)
+- [Bundle Architecture from 31.07.2025](0005-bundle-hosting-assets.md)
 
 ## Context
 

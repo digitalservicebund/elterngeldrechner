@@ -8,8 +8,8 @@ Proposed by Engineering (Dennis)
 
 ## History
 
-- [Refactoring of the Test Suite from 04.08.2025](0006-e2e-tests-refactoring.md)
-- [Testing Strategy for Elterngeld Calculation from 04.03.2025](0003-testing-strategy-for-elterngeld-calculation.md)
+- [Refactoring of the Test Suite from 04.08.2025](0006-testing-e2e-screenshots.md)
+- [Testing Strategy for Elterngeld Calculation from 04.03.2025](0003-testing-strategy-calculation.md)
 
 ## Context
 

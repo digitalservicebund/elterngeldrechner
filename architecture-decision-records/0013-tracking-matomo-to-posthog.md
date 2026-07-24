@@ -8,7 +8,7 @@ Accepted by the Team, Project Partners & Data Protection Officer
 
 ## History
 
-- [Matomo API Access from 20.01.2025](0002-matomo-api-access.md)
+- [Matomo API Access from 20.01.2025](0002-tracking-matomo-api-access.md)
 
 ## Context
 

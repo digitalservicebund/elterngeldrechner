@@ -6,7 +6,9 @@ Date: 2026-06-16
 
 Accepted by Engineering (Dennis)
 
-Amends [0005](0005-bundle-architecture.md).
+## History
+
+- [Bundle Architecture from 31.07.2025](0005-bundle-architecture.md)
 
 ## Context
 

@@ -1,4 +1,4 @@
-# 1. Bundle Architecture
+# 5. Bundle Architecture
 
 Date: 2025-07-31
 

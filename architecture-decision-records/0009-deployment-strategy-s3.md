@@ -8,7 +8,7 @@ Date: 2026-01-14
 
 ## History
 
-- [Deployment Strategy from 24.09.2025](architecture-decision-records/0007-deployment-strategy-cms.md)
+- [Deployment Strategy from 24.09.2025](0007-deployment-strategy-cms.md)
 
 ## Context
 

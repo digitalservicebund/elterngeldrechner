@@ -1,4 +1,4 @@
-# 1. E2E Tests Refactoring: Visual Regression Test Replacement
+# 6. E2E Tests Refactoring: Visual Regression Test Replacement
 
 Date: 2025-08-04
 

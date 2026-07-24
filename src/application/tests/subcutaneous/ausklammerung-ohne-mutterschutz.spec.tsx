@@ -74,6 +74,7 @@ test("Ausklammerung ohne Mutterschutz: selbstständige Person 2 wird eingebunden
   await screen.findByRole("heading", {
     name: "Wann wurde Geschwisterkind 1 geboren?",
   });
+  await user.type(screen.getByLabelText("Vorname"), "Mia");
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.12.2024",
@@ -85,6 +86,7 @@ test("Ausklammerung ohne Mutterschutz: selbstständige Person 2 wird eingebunden
   await screen.findByRole("heading", {
     name: "Wann wurde Geschwisterkind 2 geboren?",
   });
+  await user.type(screen.getByLabelText("Vorname"), "Noah");
   await user.type(
     screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.12.2023",

@@ -78,8 +78,9 @@ test("Geschwisterbonus: älteres Kind unter drei Jahren erhöht das Elterngeld u
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Geschwisterkind 1: geboren 24.05.2024, keine Behinderung
+  await user.type(await screen.findByLabelText("Vorname"), "Mia");
   await user.type(
-    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.05.2024",
   );
   await user.click(screen.getByTestId("hatBehinderung_option_1")); // Nein

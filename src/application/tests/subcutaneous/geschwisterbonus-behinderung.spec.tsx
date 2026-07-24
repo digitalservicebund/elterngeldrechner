@@ -79,8 +79,9 @@ test("Geschwisterbonus bei Geschwisterkind mit Behinderung: Altersgrenze 14 Jahr
   await user.click(screen.getByRole("button", { name: "Weiter" }));
 
   // Angaben zum Geschwisterkind
+  await user.type(await screen.findByLabelText("Vorname"), "Mia");
   await user.type(
-    await screen.findByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
+    screen.getByLabelText("Geburtsdatum (TT.MM.JJJJ)"),
     "24.12.2014",
   );
   await user.click(screen.getByTestId("hatBehinderung_option_0")); // Ja

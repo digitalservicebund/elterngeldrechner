@@ -48,7 +48,7 @@ export function formatiereGeschwisterbonusErklaerung(
     relevanteGeschwisterkinder.map((kind) => kind.geschwisterkind.name),
   );
 
-  return `Sie können den Geschwisterbonus so lange erhalten, bis ${namen} im ${monatUndJahr} ${formatiereAlterAlsWort(ausschlaggebendesAlter)} Jahre alt ${relevanteGeschwisterkinder.length === 1 ? "wird" : "werden"}.`;
+  return `Sie können den Geschwisterbonus so lange erhalten, bis ${namen} ${formatiereAlterAlsWort(ausschlaggebendesAlter)} Jahre alt ${relevanteGeschwisterkinder.length === 1 ? "wird" : "werden"} (im ${monatUndJahr}).`;
 }
 
 const namesFormatter = new Intl.ListFormat("de", {
@@ -92,19 +92,19 @@ if (import.meta.vitest) {
       {
         ausschlaggebendeGeschwisterkinder: [geschwisterkindUnter3],
         expected:
-          "Sie können den Geschwisterbonus so lange erhalten, bis Luise im Juli 2028 drei Jahre alt wird.",
+          "Sie können den Geschwisterbonus so lange erhalten, bis Luise drei Jahre alt wird (im Juli 2028).",
       },
       {
         ausschlaggebendeGeschwisterkinder: [
           geschwisterkindUnter14MitBehinderung,
         ],
         expected:
-          "Sie können den Geschwisterbonus so lange erhalten, bis Ben im Juli 2028 14 Jahre alt wird.",
+          "Sie können den Geschwisterbonus so lange erhalten, bis Ben 14 Jahre alt wird (im Juli 2028).",
       },
       {
         ausschlaggebendeGeschwisterkinder: [zwillingEins, zwillingZwei],
         expected:
-          "Sie können den Geschwisterbonus so lange erhalten, bis Emma und Ida im Juli 2028 sechs Jahre alt werden.",
+          "Sie können den Geschwisterbonus so lange erhalten, bis Emma und Ida sechs Jahre alt werden (im Juli 2028).",
       },
       {
         // Luise (geboren 2025-07-17) wird drei, Emma (geboren 2022-07-17)
@@ -117,7 +117,7 @@ if (import.meta.vitest) {
           zwillingEins,
         ],
         expected:
-          "Sie können den Geschwisterbonus so lange erhalten, bis Luise im Juli 2028 drei Jahre alt wird.",
+          "Sie können den Geschwisterbonus so lange erhalten, bis Luise drei Jahre alt wird (im Juli 2028).",
       },
       {
         ausschlaggebendeGeschwisterkinder: [],

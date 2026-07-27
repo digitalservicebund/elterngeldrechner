@@ -41,13 +41,8 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
   const eventStream = filtereValideEventHistorie();
   const geburtsdatum = findeGeburtsdatum(eventStream);
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
-  const geburtsdatumGeschwisterkind = geschwisterkinder[
-    routeParams.geschwisterIndex
-  ]?.geburtsdatum.toLocaleString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const vornameGeschwisterkind =
+    geschwisterkinder[routeParams.geschwisterIndex]?.name;
   const bisherigeAusklammerungen = findeAusklammerungen(
     eventStream,
     routeParams.elternteilIndex,
@@ -100,8 +95,8 @@ export function ElternteilAusklammerungMutterschutzAbfragePage() {
         <div className="input-container">
           <div className="text-container">
             <h3>
-              Hat {vorname} Mutterschaftsgeld für das Geschwisterkind (geb.{" "}
-              {geburtsdatumGeschwisterkind}) erhalten?
+              Hat {vorname} Mutterschaftsgeld für {vornameGeschwisterkind}{" "}
+              erhalten?
             </h3>
 
             <p>

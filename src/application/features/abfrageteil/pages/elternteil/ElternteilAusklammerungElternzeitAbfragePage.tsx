@@ -41,13 +41,8 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
   const eventStream = filtereValideEventHistorie();
   const geburtsdatum = findeGeburtsdatum(eventStream);
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
-  const geburtsdatumGeschwisterkind = geschwisterkinder[
-    routeParams.geschwisterIndex
-  ]?.geburtsdatum.toLocaleString("de-DE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  const vornameGeschwisterkind =
+    geschwisterkinder[routeParams.geschwisterIndex]?.name;
   const bisherigeAusklammerungen = findeAusklammerungen(
     eventStream,
     routeParams.elternteilIndex,
@@ -116,8 +111,7 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
         <div className="input-container">
           <div className="text-container">
             <h3>
-              Hat {vorname} Elterngeld für das Geschwisterkind (geb.{" "}
-              {geburtsdatumGeschwisterkind}) erhalten?
+              Hat {vorname} Elterngeld für {vornameGeschwisterkind} erhalten?
             </h3>
 
             <p>

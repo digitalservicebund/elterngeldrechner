@@ -56,6 +56,8 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
   const geschwisterkinder = findeGeschwisterkinder(eventStream);
   const geburtsdatumGeschwisterkind =
     geschwisterkinder[routeParams.geschwisterIndex]?.geburtsdatum;
+  const vornameGeschwisterkind =
+    geschwisterkinder[routeParams.geschwisterIndex]?.name;
   const mutterschutzGeschwisterkind = geburtsdatumGeschwisterkind
     ? berechneMutterschutz(
         new Date(
@@ -67,12 +69,6 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
         geschwisterkinder[routeParams.geschwisterIndex]?.hatBehinderung,
       )
     : undefined;
-  const geburtsdatumGeschwisterkindString =
-    geburtsdatumGeschwisterkind?.toLocaleString("de-DE", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
   const bisherigeAusklammerungen = findeAusklammerungen(
     eventStream,
     routeParams.elternteilIndex,
@@ -162,8 +158,8 @@ export function ElternteilAusklammerungMutterschutzZeitenPage() {
         <div className="input-container">
           <div className="text-container">
             <h3>
-              Von wann bis wann war {vorname} im Mutterschutz für das
-              Geschwisterkind (geb. {geburtsdatumGeschwisterkindString})?
+              Von wann bis wann war {vorname} im Mutterschutz für{" "}
+              {vornameGeschwisterkind}?
             </h3>
             <p>
               Der Mutterschutz gilt in der Regel 6 Wochen vor dem errechneten

@@ -327,6 +327,35 @@ if (import.meta.vitest) {
           fn(geburtsdatum, geschwisterkinder, keineAusklammerungen, 1, false),
         ).toBeUndefined();
       });
+
+      it("Ausklammerung verschiebt von zurück, sodass die 12-Wochen-Mutterschutzfrist des gleichen Geschwisterkinds wieder relvant wird", () => {
+        // Das Geburtsdatum ist der 15.10.2025 und resultiert damit in
+        // einem Betrachtungszeitraum der am 01.01.2024 startet. Das ist
+        // der frühste Anfang aus der Kombination von nicht-selbständigen
+        // und selbständigen.
+        const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
+
+        // Ein Geschwisterkind ist geboren am 01.06.2023 und somit endet
+        // die Muttschutzfrist 12 Wochen später am 24.08.2023.
+        const geschwisterkinder = [geschwisterkind("2023-06-01")];
+
+        // In diesem Fall, ohne Ausklammerungen, wäre der 24.08.2023
+        // vor dem 01.01.2024 und so greift die 12 Wochen Regel nicht.
+        // Da es auch kein älteres Kind zum durchfallen gibt ist der
+        // Wert undefined.
+        expect(
+          fn(geburtsdatum, geschwisterkinder, keineAusklammerungen, 0, true),
+        ).toBeUndefined();
+
+        // Durch eine Ausklammerung in 2024 verschiebt sich der Start des
+        // Betrachtungszeitraum jedoch auf den 01.01.2023 und somit ist der
+        // Mutterschutz des gleichen Kindes wieder relevant. Dadurch ist der
+        // Return Wert 0 also das gleiche Geschwisterkind.
+        const ausklammerungen = [ausklammerung("2024-03-01", "2024-09-30")];
+        expect(
+          fn(geburtsdatum, geschwisterkinder, ausklammerungen, 0, true),
+        ).toBe(0);
+      });
     });
 
     describe("Ausklammerungen verschieben Betrachtungszeitraum.von", () => {

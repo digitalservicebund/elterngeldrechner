@@ -4,7 +4,7 @@ Date: 2026-07-23
 
 ## Status
 
-Proposed by Engineering (Dennis)
+Proposed by Engineering (Dennis & Jakob)
 
 ## History
 
@@ -22,7 +22,7 @@ The end-to-end tests, however, have not been in good shape. They were
 reduced in scope and eventually dropped after we launched a new feature
 that would have required refactoring them.
 
-To my knowledge the legacy implementation had two known problems. One
+The legacy implementation had two known problems. One
 was the runtime, which was quite slow because a real browser was run
 through `playwright`. The other, and heavier one, was that they used
 visual comparison to assert the results of `berechneElterngeldbezuege`.

@@ -131,25 +131,6 @@ function sortiereNachGeburtsdatum(geschwisterkinder: Geschwisterkinder) {
     ) satisfies SortierteGeschwisterkinder;
 }
 
-type Geschwisterkind = { geburtsdatum: Temporal.PlainDate };
-
-type Geschwisterkinder = Geschwisterkind[];
-
-type SortiertesGeschwisterkind = Geschwisterkind & {
-  eingabeposition: number; // Die Position in der Eingabereihenfolge
-};
-
-type SortierteGeschwisterkinder = SortiertesGeschwisterkind[];
-
-// § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.
-const ELTERNGELDBEZUG = { months: 14 } as const;
-
-// Mutterschutzfrist nach der Geburt (§ 3 Abs. 2 MuSchG) ist im Regelfall 8 Wochen,
-// kann jedoch auf 12 Wochen verlängert werden im Fall von Frühgeburten, Mehrlingsgeburten
-// oder wenn vor Ablauf von 8 Wochen nach der Entbindung bei dem Kind eine Behinderung
-// festgestellt wird.
-const MUTTERSCHUTZFRIST = { weeks: 12 } as const;
-
 function betrifftBetrachtungszeitraum(
   geburtsdatumGeschwisterkind: Temporal.PlainDate,
   betrachtungszeitraum: Zeitraum<Temporal.PlainDate>,
@@ -162,6 +143,25 @@ function betrifftBetrachtungszeitraum(
     ) > 0
   );
 }
+
+// § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.
+const ELTERNGELDBEZUG = { months: 14 } as const;
+
+// Mutterschutzfrist nach der Geburt (§ 3 Abs. 2 MuSchG) ist im Regelfall 8 Wochen,
+// kann jedoch auf 12 Wochen verlängert werden im Fall von Frühgeburten, Mehrlingsgeburten
+// oder wenn vor Ablauf von 8 Wochen nach der Entbindung bei dem Kind eine Behinderung
+// festgestellt wird.
+const MUTTERSCHUTZFRIST = { weeks: 12 } as const;
+
+type Geschwisterkind = { geburtsdatum: Temporal.PlainDate };
+
+type Geschwisterkinder = Geschwisterkind[];
+
+type SortiertesGeschwisterkind = Geschwisterkind & {
+  eingabeposition: number; // Die Position in der Eingabereihenfolge
+};
+
+type SortierteGeschwisterkinder = SortiertesGeschwisterkind[];
 
 if (import.meta.vitest) {
   const { describe, it, expect } = import.meta.vitest;

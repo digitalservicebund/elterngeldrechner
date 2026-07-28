@@ -8,8 +8,8 @@ import type { Ausklammerung } from "@/bemessungszeitraumrechner";
  * Erstaufruf: Sucht das jüngste Geschwisterkind, für das eine Ausklammerung
  * überhaupt noch in den Betrachtungszeitraum reichen könnte.
  */
-function findeJuengstesRelevantesGeschwisterkind(
-  geschwisterkinder: SortierteGeschwisterkinder,
+export function findeJuengstesRelevantesGeschwisterkind(
+  geschwisterkinder: Geschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
   ausklammerungen: readonly Ausklammerung[],
 ): number | undefined {
@@ -18,7 +18,9 @@ function findeJuengstesRelevantesGeschwisterkind(
     ausklammerungen,
   );
 
-  const juengstesGeschwisterkind = geschwisterkinder[0];
+  // prettier-ignore
+  const sortierteGeschwisterkinder = sortiereNachGeburtsdatum(geschwisterkinder);
+  const juengstesGeschwisterkind = sortierteGeschwisterkinder[0];
 
   if (!juengstesGeschwisterkind) return undefined;
 
@@ -37,8 +39,8 @@ function findeJuengstesRelevantesGeschwisterkind(
  * Folgeaufruf: Sucht ausgehend von einem bereits abgefragten Geschwisterkind
  * das nächstältere, für das eine Ausklammerung noch relevant sein könnte.
  */
-function findeNaechstAelteresRelevantesGeschwisterkind(
-  geschwisterkinder: SortierteGeschwisterkinder,
+export function findeNaechstAelteresRelevantesGeschwisterkind(
+  geschwisterkinder: Geschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
   ausklammerungen: readonly Ausklammerung[],
   geschwisterIndex: number,
@@ -48,14 +50,18 @@ function findeNaechstAelteresRelevantesGeschwisterkind(
     ausklammerungen,
   );
 
-  const position = geschwisterkinder.findIndex(
+  // prettier-ignore
+  const sortierteGeschwisterkinder = sortiereNachGeburtsdatum(geschwisterkinder);
+
+  const position = sortierteGeschwisterkinder.findIndex(
     (geschwisterkind) => geschwisterkind.eingabeposition === geschwisterIndex,
   );
 
   // Ohne diesen Guard würde -1 + 1 = 0 das jüngste Geschwisterkind liefern.
   if (position === -1) return undefined;
 
-  const naechstAelteresGeschwisterkind = geschwisterkinder[position + 1];
+  // prettier-ignore
+  const naechstAelteresGeschwisterkind = sortierteGeschwisterkinder[position + 1];
 
   if (!naechstAelteresGeschwisterkind) return undefined;
 
@@ -76,8 +82,8 @@ function findeNaechstAelteresRelevantesGeschwisterkind(
  * statt des Elterngeld-Bezugsfensters. Trifft sie nicht mehr zu, gilt die
  * normale Regel für das nächstältere Geschwisterkind.
  */
-function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
-  geschwisterkinder: SortierteGeschwisterkinder,
+export function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
+  geschwisterkinder: Geschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
   ausklammerungen: readonly Ausklammerung[],
   geschwisterIndex: number,
@@ -87,7 +93,10 @@ function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
     ausklammerungen,
   );
 
-  const gleichesGeschwisterkind = geschwisterkinder.find(
+  // prettier-ignore
+  const sortierteGeschwisterkinder = sortiereNachGeburtsdatum(geschwisterkinder);
+
+  const gleichesGeschwisterkind = sortierteGeschwisterkinder.find(
     (geschwisterkind) => geschwisterkind.eingabeposition === geschwisterIndex,
   );
 
@@ -124,7 +133,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 ): number | undefined {
   if (geschwisterIndex === undefined) {
     return findeJuengstesRelevantesGeschwisterkind(
-      sortiereNachGeburtsdatum(geschwisterkinder),
+      geschwisterkinder,
       geburtsdatum,
       ausklammerungen,
     );
@@ -132,7 +141,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 
   if (istAbfrageMutterschutzGleichesGeschwisterkind) {
     return findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
-      sortiereNachGeburtsdatum(geschwisterkinder),
+      geschwisterkinder,
       geburtsdatum,
       ausklammerungen,
       geschwisterIndex,
@@ -140,7 +149,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   }
 
   return findeNaechstAelteresRelevantesGeschwisterkind(
-    sortiereNachGeburtsdatum(geschwisterkinder),
+    geschwisterkinder,
     geburtsdatum,
     ausklammerungen,
     geschwisterIndex,
@@ -270,9 +279,9 @@ if (import.meta.vitest) {
       // Geburt am 15.10.2025 ergibt einen Betrachtungszeitraum ab 01.01.2024.
       // 01.12.2022 + 14 Monate = 01.02.2024 und liegt danach, also relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-12-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -287,9 +296,9 @@ if (import.meta.vitest) {
       // 01.11.2022 + 14 Monate = 01.01.2024 und damit genau der Start.
       // Verlangt wird eine strikte Überschreitung, also nicht relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-11-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -303,9 +312,9 @@ if (import.meta.vitest) {
     it("gibt undefined zurück wenn das jüngste Geschwisterkind zu alt ist", () => {
       // 01.10.2022 + 14 Monate = 01.12.2023 und liegt vor dem 01.01.2024.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-10-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -320,10 +329,10 @@ if (import.meta.vitest) {
       // Das jüngere Kind steht an Eingabeposition 1, nach dem Sortieren aber
       // an Sortierposition 0. Zurückgegeben wird die Eingabeposition.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2021-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -336,10 +345,10 @@ if (import.meta.vitest) {
 
     it("gibt 0 zurück wenn das jüngste Geschwisterkind an erster Eingabeposition steht", () => {
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
         { geburtsdatum: Temporal.PlainDate.from("2021-01-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -352,10 +361,10 @@ if (import.meta.vitest) {
 
     it("gibt undefined zurück wenn alle Geschwisterkinder zu alt sind", () => {
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2018-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2020-01-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -370,9 +379,9 @@ if (import.meta.vitest) {
       // Ohne Ausklammerung startet der Betrachtungszeitraum am 01.01.2024 und
       // 01.12.2021 + 14 Monate = 01.02.2023 liegt davor, also nicht relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2021-12-01") },
-      ]);
+      ];
 
       const resultOhneAusklammerung = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -403,9 +412,9 @@ if (import.meta.vitest) {
       // Ausklammerungen in 2024 und 2023 ergeben einen Start am 01.01.2022.
       // 01.12.2020 + 14 Monate = 01.02.2022 liegt danach, also relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2020-12-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -431,9 +440,9 @@ if (import.meta.vitest) {
       // Eine Ausklammerung in 2020 berührt 2024 nicht, der Start bleibt der
       // 01.01.2024. 01.01.2021 + 14 Monate = 01.03.2022 liegt davor.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2021-01-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -454,9 +463,9 @@ if (import.meta.vitest) {
       // Ein einziger Tag in 2024 macht das Jahr betroffen, Start am 01.01.2023.
       // 01.12.2021 + 14 Monate = 01.02.2023 liegt danach, also relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2021-12-01") },
-      ]);
+      ];
 
       const result = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -490,9 +499,9 @@ if (import.meta.vitest) {
 
     it("gibt undefined zurück wenn die Eingabeposition nicht vorkommt", () => {
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2023-01-01") },
-      ]);
+      ];
 
       const result = findeNaechstAelteresRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -506,9 +515,9 @@ if (import.meta.vitest) {
 
     it("gibt undefined zurück wenn es kein älteres Geschwisterkind gibt", () => {
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2023-01-01") },
-      ]);
+      ];
 
       const result = findeNaechstAelteresRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -524,10 +533,10 @@ if (import.meta.vitest) {
       // Ausgehend von Eingabeposition 1 ist Eingabeposition 0 das nächstältere
       // Kind. 01.12.2022 + 14 Monate = 01.02.2024 liegt nach dem 01.01.2024.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-12-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
-      ]);
+      ];
 
       const result = findeNaechstAelteresRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -542,10 +551,10 @@ if (import.meta.vitest) {
     it("gibt undefined zurück wenn das nächstältere Geschwisterkind zu alt ist", () => {
       // 01.01.2021 + 14 Monate = 01.03.2022 liegt vor dem 01.01.2024.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2021-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
-      ]);
+      ];
 
       const result = findeNaechstAelteresRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -559,10 +568,10 @@ if (import.meta.vitest) {
 
     it("gibt undefined zurück wenn nach dem ältesten Geschwisterkind gefragt wird", () => {
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-12-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
-      ]);
+      ];
 
       const result = findeNaechstAelteresRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -579,11 +588,11 @@ if (import.meta.vitest) {
       // = 01.03.2023 nicht mehr relevant. Eingabeposition 1 ist mit
       // 01.12.2022 + 14 Monate = 01.02.2024 relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2022-12-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
-      ]);
+      ];
 
       const erstaufruf = findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -617,10 +626,10 @@ if (import.meta.vitest) {
       // wäre relevant. Diese Funktion prüft sie nicht, sondern nur das
       // nächstältere Kind an Eingabeposition 0, das zu alt ist.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2019-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-10-10") },
-      ]);
+      ];
 
       const result = findeNaechstAelteresRelevantesGeschwisterkind(
         geschwisterkinder,
@@ -637,9 +646,9 @@ if (import.meta.vitest) {
     it("gibt die Eingabeposition des gleichen Geschwisterkinds zurück wenn die Mutterschutzfrist nach dem Start des Betrachtungszeitraums endet", () => {
       // 10.10.2023 + 12 Wochen = 02.01.2024 und liegt nach dem 01.01.2024.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2023-10-10") },
-      ]);
+      ];
 
       const result = findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
         geschwisterkinder,
@@ -655,9 +664,9 @@ if (import.meta.vitest) {
       // 09.10.2023 + 12 Wochen = 01.01.2024 und damit genau der Start. Verlangt
       // wird eine strikte Überschreitung, und es gibt kein älteres Kind.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2023-10-09") },
-      ]);
+      ];
 
       const result = findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
         geschwisterkinder,
@@ -674,10 +683,10 @@ if (import.meta.vitest) {
       // 01.01.2024. Eingabeposition 0: 01.12.2022 + 14 Monate = 01.02.2024
       // liegt danach und ist damit relevant.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2022-12-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-05-01") },
-      ]);
+      ];
 
       const result = findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
         geschwisterkinder,
@@ -694,10 +703,10 @@ if (import.meta.vitest) {
       // nächstältere Kind an Eingabeposition 0 ist viel zu alt und würde
       // undefined ergeben, wird also gar nicht geprüft.
       const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2019-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2023-10-10") },
-      ]);
+      ];
 
       const result = findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
         geschwisterkinder,
@@ -718,9 +727,9 @@ if (import.meta.vitest) {
 
       // Ein Geschwisterkind ist geboren am 01.06.2023 und somit endet
       // die Muttschutzfrist 12 Wochen später am 24.08.2023.
-      const geschwisterkinder = sortiereNachGeburtsdatum([
+      const geschwisterkinder = [
         { geburtsdatum: Temporal.PlainDate.from("2023-06-01") },
-      ]);
+      ];
 
       // In diesem Fall, ohne Ausklammerungen, wäre der 24.08.2023
       // vor dem 01.01.2024 und so greift die 12 Wochen Regel nicht.

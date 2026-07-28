@@ -16,73 +16,53 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
     ausklammerungen,
   );
 
-  if (geschwisterIndex === undefined) {
-    const juengstesGeschwisterkind = getJuengstesGeschwisterkind(
-      sortierteGeschwisterkinder,
-    );
+  const eingabepositionWennRelevant = (
+    geschwisterkind: SortiertesGeschwisterkind | undefined,
+    relevanzfenster: Temporal.DurationLike,
+  ) => {
+    if (!geschwisterkind) return undefined;
 
-    if (juengstesGeschwisterkind) {
-      const betrifftJuengstesBetrachtungszeitraum =
-        betrifftBetrachtungszeitraum(
-          juengstesGeschwisterkind.geburtsdatum,
-          ELTERNGELD_BEZUGSFENSTER,
-          betrachtungszeitraum.von,
-        );
-
-      if (betrifftJuengstesBetrachtungszeitraum) {
-        return juengstesGeschwisterkind.eingabeposition;
-      }
-    }
-
-    return undefined;
-  }
-
-  if (istAbfrageMutterschutzGleichesGeschwisterkind) {
-    const gleichesGeschwisterkind = getGleichesGeschwisterkind(
-      sortierteGeschwisterkinder,
-      geschwisterIndex,
-    );
-
-    if (gleichesGeschwisterkind) {
-      const betrifftGleichesBetrachtungszeitraum = betrifftBetrachtungszeitraum(
-        gleichesGeschwisterkind.geburtsdatum,
-        MUTTERSCHUTZFRIST,
-        betrachtungszeitraum.von,
-      );
-
-      if (betrifftGleichesBetrachtungszeitraum) {
-        return gleichesGeschwisterkind.eingabeposition;
-      }
-    }
-  }
-
-  const naechstesGeschwisterkind = getNaechstAelteresGeschwisterkind(
-    sortierteGeschwisterkinder,
-    geschwisterIndex,
-  );
-
-  if (naechstesGeschwisterkind) {
-    const betrifftNaechstesBetrachtungszeitraum = betrifftBetrachtungszeitraum(
-      naechstesGeschwisterkind.geburtsdatum,
-      ELTERNGELD_BEZUGSFENSTER,
+    const istRelevant = betrifftBetrachtungszeitraum(
+      geschwisterkind.geburtsdatum,
+      relevanzfenster,
       betrachtungszeitraum.von,
     );
 
-    if (betrifftNaechstesBetrachtungszeitraum) {
-      return naechstesGeschwisterkind.eingabeposition;
-    }
+    return istRelevant ? geschwisterkind.eingabeposition : undefined;
+  };
+
+  if (geschwisterIndex === undefined) {
+    return eingabepositionWennRelevant(
+      juengstesGeschwisterkind(sortierteGeschwisterkinder),
+      ELTERNGELD_BEZUGSFENSTER,
+    );
   }
 
-  return undefined;
+  if (istAbfrageMutterschutzGleichesGeschwisterkind) {
+    const gleiches = eingabepositionWennRelevant(
+      gleichesGeschwisterkind(sortierteGeschwisterkinder, geschwisterIndex),
+      MUTTERSCHUTZFRIST,
+    );
+
+    if (gleiches !== undefined) return gleiches;
+  }
+
+  return eingabepositionWennRelevant(
+    naechstAelteresGeschwisterkind(
+      sortierteGeschwisterkinder,
+      geschwisterIndex,
+    ),
+    ELTERNGELD_BEZUGSFENSTER,
+  );
 }
 
-function getJuengstesGeschwisterkind(
+function juengstesGeschwisterkind(
   sortierteGeschwisterkinder: SortierteGeschwisterkinder,
 ) {
   return sortierteGeschwisterkinder[0];
 }
 
-function getGleichesGeschwisterkind(
+function gleichesGeschwisterkind(
   sortierteGeschwisterkinder: SortierteGeschwisterkinder,
   eingabeposition: number,
 ): SortiertesGeschwisterkind | undefined {
@@ -91,7 +71,7 @@ function getGleichesGeschwisterkind(
   );
 }
 
-function getNaechstAelteresGeschwisterkind(
+function naechstAelteresGeschwisterkind(
   sortierteGeschwisterkinder: SortierteGeschwisterkinder,
   eingabeposition: number,
 ): SortiertesGeschwisterkind | undefined {

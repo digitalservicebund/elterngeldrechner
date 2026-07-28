@@ -11,7 +11,7 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components/Page";
-import { findeJuengstesRelevantesGeschwisterkind } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
+import { findeJuengstesRelevantesGeschwisterkind } from "@/application/features/abfrageteil/domain/findeAusklammerungsrelevantesGeschwisterkind";
 import { findeAnzahlKinder } from "@/application/features/abfrageteil/domain/findeAnzahlKinder";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";

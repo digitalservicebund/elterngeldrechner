@@ -11,7 +11,7 @@ import { Page } from "@/application/features/components";
 import {
   findeNaechstAelteresRelevantesGeschwisterkind,
   findeRelevantesGeschwisterkindFuerMutterschutzAbfrage,
-} from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
+} from "@/application/features/abfrageteil/domain/findeAusklammerungsrelevantesGeschwisterkind";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";

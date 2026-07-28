@@ -10,7 +10,7 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { DateInput } from "@/application/features/abfrageteil/components/DateInput";
 import { Page } from "@/application/features/components";
-import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung";
+import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";

@@ -120,42 +120,6 @@ export function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
   );
 }
 
-/**
- * Fassade auf die alte Signatur, solange die Aufrufstellen noch nicht auf die
- * drei expliziten Funktionen umgestellt sind.
- */
-export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
-  geburtsdatum: Temporal.PlainDate,
-  geschwisterkinder: Geschwisterkinder,
-  ausklammerungen: Ausklammerung[],
-  geschwisterIndex?: number,
-  istAbfrageMutterschutzGleichesGeschwisterkind?: boolean,
-): number | undefined {
-  if (geschwisterIndex === undefined) {
-    return findeJuengstesRelevantesGeschwisterkind(
-      geschwisterkinder,
-      geburtsdatum,
-      ausklammerungen,
-    );
-  }
-
-  if (istAbfrageMutterschutzGleichesGeschwisterkind) {
-    return findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
-      geschwisterkinder,
-      geburtsdatum,
-      ausklammerungen,
-      geschwisterIndex,
-    );
-  }
-
-  return findeNaechstAelteresRelevantesGeschwisterkind(
-    geschwisterkinder,
-    geburtsdatum,
-    ausklammerungen,
-    geschwisterIndex,
-  );
-}
-
 function sortiereNachGeburtsdatum(geschwisterkinder: Geschwisterkinder) {
   return geschwisterkinder
     .map((geschwisterkind, index) => ({

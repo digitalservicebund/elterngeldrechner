@@ -9,8 +9,6 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   geschwisterIndex?: number,
   istAbfrageMutterschutzGleichesGeschwisterkind?: boolean,
 ): number | undefined {
-  if (geschwisterkinder.length === 0) return undefined;
-
   const sortierteGeschwisterkinder =
     sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
   const betrachtungszeitraum = berechneBetrachtungszeitraum(

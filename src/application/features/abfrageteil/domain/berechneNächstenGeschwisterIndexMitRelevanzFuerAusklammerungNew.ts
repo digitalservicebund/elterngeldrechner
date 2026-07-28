@@ -1,6 +1,8 @@
 import { Temporal } from "@js-temporal/polyfill";
-import { AusklammerungMitGeschwisterindex } from "./findeAusklammerungen";
+
 import { berechneBetrachtungszeitraum } from "@/bemessungszeitraumrechner";
+
+import type { Ausklammerung } from "@/bemessungszeitraumrechner";
 
 /**
  * Erstaufruf: Sucht das jüngste Geschwisterkind, für das eine Ausklammerung
@@ -9,7 +11,7 @@ import { berechneBetrachtungszeitraum } from "@/bemessungszeitraumrechner";
 function findeJuengstesRelevantesGeschwisterkind(
   geschwisterkinder: SortierteGeschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: AusklammerungMitGeschwisterindex[],
+  ausklammerungen: Ausklammerung[],
 ): number | undefined {
   const betrachtungszeitraum = berechneBetrachtungszeitraum(
     geburtsdatum,
@@ -38,7 +40,7 @@ function findeJuengstesRelevantesGeschwisterkind(
 function findeNaechstAelteresRelevantesGeschwisterkind(
   geschwisterkinder: SortierteGeschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: AusklammerungMitGeschwisterindex[],
+  ausklammerungen: Ausklammerung[],
   geschwisterIndex: number,
 ): number | undefined {
   const betrachtungszeitraum = berechneBetrachtungszeitraum(
@@ -77,7 +79,7 @@ function findeNaechstAelteresRelevantesGeschwisterkind(
 function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
   geschwisterkinder: SortierteGeschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: AusklammerungMitGeschwisterindex[],
+  ausklammerungen: Ausklammerung[],
   geschwisterIndex: number,
 ): number | undefined {
   const betrachtungszeitraum = berechneBetrachtungszeitraum(
@@ -116,7 +118,7 @@ function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
 export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   geburtsdatum: Temporal.PlainDate,
   geschwisterkinder: Geschwisterkinder,
-  ausklammerungen: AusklammerungMitGeschwisterindex[],
+  ausklammerungen: Ausklammerung[],
   geschwisterIndex?: number,
   istAbfrageMutterschutzGleichesGeschwisterkind?: boolean,
 ): number | undefined {
@@ -193,16 +195,13 @@ if (import.meta.vitest) {
 
   // geburtsdatum of the new child → betrachtungszeitraum.von = 2024-01-01 (no Ausklammerungen)
   const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
-  const keineAusklammerungen: AusklammerungMitGeschwisterindex[] = [];
+  const keineAusklammerungen: Ausklammerung[] = [];
 
   const geschwisterkind = (geburtsdatumStr: string): Geschwisterkind => ({
     geburtsdatum: Temporal.PlainDate.from(geburtsdatumStr),
   });
 
-  const ausklammerung = (
-    von: string,
-    bis: string,
-  ): AusklammerungMitGeschwisterindex => ({
+  const ausklammerung = (von: string, bis: string): Ausklammerung => ({
     von: Temporal.PlainDate.from(von),
     bis: Temporal.PlainDate.from(bis),
     grund: "test",
@@ -562,23 +561,6 @@ if (import.meta.vitest) {
         expect(
           fn(geburtsdatum, [geschwisterkind("2021-01-01")], ausklammerungen),
         ).toBeUndefined();
-      });
-
-      it("Ausklammerungen mit geschwisterIndex werden korrekt an berechneBetrachtungszeitraum weitergegeben", () => {
-        // AusklammerungMitGeschwisterindex erweitert Ausklammerung → kompatibel
-        const ausklammerungMitIndex: AusklammerungMitGeschwisterindex = {
-          ...ausklammerung("2024-03-01", "2024-09-30"),
-          geschwisterIndex: 0,
-        };
-        // Gleiche Wirkung wie ohne geschwisterIndex: von = 2023-01-01
-        // 2021-12-01 + 14M = 2023-02-01 > 2023-01-01 → relevant
-        expect(
-          fn(
-            geburtsdatum,
-            [geschwisterkind("2021-12-01")],
-            [ausklammerungMitIndex],
-          ),
-        ).toBe(0);
       });
 
       it("Ausklammerung genau im Januar des Vorjahres verschiebt von auf das Jahr davor", () => {

@@ -124,7 +124,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 ): number | undefined {
   if (geschwisterIndex === undefined) {
     return findeJuengstesRelevantesGeschwisterkind(
-      sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder),
+      sortiereNachGeburtsdatum(geschwisterkinder),
       geburtsdatum,
       ausklammerungen,
     );
@@ -132,7 +132,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 
   if (istAbfrageMutterschutzGleichesGeschwisterkind) {
     return findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
-      sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder),
+      sortiereNachGeburtsdatum(geschwisterkinder),
       geburtsdatum,
       ausklammerungen,
       geschwisterIndex,
@@ -140,22 +140,22 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   }
 
   return findeNaechstAelteresRelevantesGeschwisterkind(
-    sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder),
+    sortiereNachGeburtsdatum(geschwisterkinder),
     geburtsdatum,
     ausklammerungen,
     geschwisterIndex,
   );
 }
 
-function sortiereGeschwisterkinderNachGeburtsdatum(
-  geschwisterkinder: Geschwisterkinder,
-): SortierteGeschwisterkinder {
+function sortiereNachGeburtsdatum(geschwisterkinder: Geschwisterkinder) {
   return geschwisterkinder
     .map((geschwisterkind, index) => ({
       geburtsdatum: geschwisterkind.geburtsdatum,
       eingabeposition: index,
     }))
-    .sort((a, b) => Temporal.PlainDate.compare(b.geburtsdatum, a.geburtsdatum));
+    .sort((a, b) =>
+      Temporal.PlainDate.compare(b.geburtsdatum, a.geburtsdatum),
+    ) satisfies SortierteGeschwisterkinder;
 }
 
 type Geschwisterkind = { geburtsdatum: Temporal.PlainDate };
@@ -247,10 +247,7 @@ if (import.meta.vitest) {
         { geburtsdatum: Temporal.PlainDate.from("2024-01-01") },
       ];
 
-      const result =
-        sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
-
-      expect(result).toMatchObject([
+      expect(sortiereNachGeburtsdatum(geschwisterkinder)).toMatchObject([
         { geburtsdatum: Temporal.PlainDate.from("2026-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2025-01-01") },
         { geburtsdatum: Temporal.PlainDate.from("2024-01-01") },
@@ -264,10 +261,7 @@ if (import.meta.vitest) {
         { geburtsdatum: Temporal.PlainDate.from("2024-01-01") },
       ];
 
-      const result =
-        sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
-
-      expect(result).toMatchObject([
+      expect(sortiereNachGeburtsdatum(geschwisterkinder)).toMatchObject([
         { eingabeposition: 1 },
         { eingabeposition: 0 },
         { eingabeposition: 2 },

@@ -39,12 +39,6 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
     return undefined;
   }
 
-  const currentPosition = sortierteGeschwisterkinder.findIndex(
-    ({ eingabeposition }) => eingabeposition === geschwisterIndex,
-  );
-
-  if (currentPosition === -1) return undefined;
-
   if (istAbfrageMutterschutzGleichesGeschwisterkind) {
     const gleichesGeschwisterkind = getGleichesGeschwisterkind(
       sortierteGeschwisterkinder,

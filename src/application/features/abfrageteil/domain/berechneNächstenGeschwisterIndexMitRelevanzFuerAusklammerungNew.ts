@@ -22,14 +22,13 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   if (geschwisterIndex === undefined) {
     const geburtsdatumJuengstesGeschwisterkind =
       geschwisterkinderNachGeburtsdatumSortiert[0]?.kind.geburtsdatum;
-    const geburtsdatumPlus14Monate = geburtsdatumJuengstesGeschwisterkind?.add({
-      months: 14,
-    });
-    return geburtsdatumPlus14Monate &&
-      Temporal.PlainDate.compare(
-        geburtsdatumPlus14Monate,
+
+    return geburtsdatumJuengstesGeschwisterkind &&
+      betrifftBetrachtungszeitraum(
+        geburtsdatumJuengstesGeschwisterkind,
+        ELTERNGELD_BEZUGSFENSTER,
         betrachtungszeitraum.von,
-      ) > 0
+      )
       ? geschwisterkinderNachGeburtsdatumSortiert[0]?.index
       : undefined;
   }
@@ -44,16 +43,13 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
     const geburtsdatumDiesesGeschwisterkind =
       geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.kind
         .geburtsdatum;
-    const geburtsdatumPlus12Wochen = geburtsdatumDiesesGeschwisterkind?.add({
-      weeks: 12,
-    });
-
     if (
-      geburtsdatumPlus12Wochen &&
-      Temporal.PlainDate.compare(
-        geburtsdatumPlus12Wochen,
+      geburtsdatumDiesesGeschwisterkind &&
+      betrifftBetrachtungszeitraum(
+        geburtsdatumDiesesGeschwisterkind,
+        MUTTERSCHUTZFRIST,
         betrachtungszeitraum.von,
-      ) > 0
+      )
     ) {
       return geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.index;
     }
@@ -62,14 +58,13 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   const geburtsdatumNaechstesGeschwisterkind =
     geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]?.kind
       .geburtsdatum;
-  const geburtsdatumPlus14Monate = geburtsdatumNaechstesGeschwisterkind?.add({
-    months: 14,
-  });
-  return geburtsdatumPlus14Monate &&
-    Temporal.PlainDate.compare(
-      geburtsdatumPlus14Monate,
+
+  return geburtsdatumNaechstesGeschwisterkind &&
+    betrifftBetrachtungszeitraum(
+      geburtsdatumNaechstesGeschwisterkind,
+      ELTERNGELD_BEZUGSFENSTER,
       betrachtungszeitraum.von,
-    ) > 0
+    )
     ? geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]?.index
     : undefined;
 }
@@ -82,6 +77,28 @@ function sortiereGeschwisterkinderNachGeburtsdatum(
     .sort((a, b) =>
       Temporal.PlainDate.compare(b.kind.geburtsdatum, a.kind.geburtsdatum),
     );
+}
+
+// § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.
+const ELTERNGELD_BEZUGSFENSTER = { months: 14 } as const;
+
+// Mutterschutzfrist nach der Geburt (§ 3 Abs. 2 MuSchG) ist im Regelfall 8 Wochen,
+// kann jedoch auf 12 Wochen verlängert werden im Fall von Frühgeburten, Mehrlingsgeburten
+// oder wenn vor Ablauf von 8 Wochen nach der Entbindung bei dem Kind eine Behinderung
+// festgestellt wird.
+const MUTTERSCHUTZFRIST = { weeks: 12 } as const;
+
+function betrifftBetrachtungszeitraum(
+  geburtsdatum: Temporal.PlainDate,
+  relevanzfenster: Temporal.DurationLike,
+  betrachtungszeitraumStart: Temporal.PlainDate,
+): boolean {
+  return (
+    Temporal.PlainDate.compare(
+      geburtsdatum.add(relevanzfenster),
+      betrachtungszeitraumStart,
+    ) > 0
+  );
 }
 
 if (import.meta.vitest) {
@@ -109,6 +126,36 @@ if (import.meta.vitest) {
   });
 
   const fn = berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung;
+
+  describe("betrifftBetrachtungszeitraum", () => {
+    it("returns true if start of Betrachtungszeitraum is last day of Relevanzfenster for Elterngeld", () => {
+      const geburtsdatumGeschwisterkind = Temporal.PlainDate.from("2025-10-01");
+      const relevanzfensterElterngeld = Temporal.Duration.from({ months: 14 });
+      const betrachtungszeitraumStart = Temporal.PlainDate.from("2026-11-30");
+
+      const result = betrifftBetrachtungszeitraum(
+        geburtsdatumGeschwisterkind,
+        relevanzfensterElterngeld,
+        betrachtungszeitraumStart,
+      );
+
+      expect(result).toEqual(true);
+    });
+
+    it("returns false if start of Betrachtungszeitraum is one day after last day of Relevanzfenster for Elterngeld", () => {
+      const geburtsdatumGeschwisterkind = Temporal.PlainDate.from("2025-10-01");
+      const relevanzfensterElterngeld = Temporal.Duration.from({ months: 14 });
+      const betrachtungszeitraumStart = Temporal.PlainDate.from("2026-12-01");
+
+      const result = betrifftBetrachtungszeitraum(
+        geburtsdatumGeschwisterkind,
+        relevanzfensterElterngeld,
+        betrachtungszeitraumStart,
+      );
+
+      expect(result).toEqual(false);
+    });
+  });
 
   describe("berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung", () => {
     describe("keine Geschwisterkinder", () => {

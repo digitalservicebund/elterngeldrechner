@@ -8,7 +8,7 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components";
-import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
+import { findeJuengstesRelevantesGeschwisterkind } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
 import { findeVornamen } from "@/application/features/abfrageteil/domain/findeVornamen";
@@ -53,9 +53,9 @@ export function ElternteilAusklammerungErkrankungAbfragePage() {
 
   const onSubmit = async (values: ElternteilAusklammerungErkrankungAbfrage) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
-      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
-        geburtsdatum,
+      findeJuengstesRelevantesGeschwisterkind(
         geschwisterkinder,
+        geburtsdatum,
         [],
       );
 

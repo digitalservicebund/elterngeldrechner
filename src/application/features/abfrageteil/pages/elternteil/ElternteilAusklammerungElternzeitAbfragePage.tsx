@@ -8,7 +8,10 @@ import {
 import { Button, InfoText } from "@/application/features/components";
 import { CustomRadioGroup } from "@/application/features/components/CustomRadioGroup";
 import { Page } from "@/application/features/components";
-import { berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung } from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
+import {
+  findeNaechstAelteresRelevantesGeschwisterkind,
+  findeRelevantesGeschwisterkindFuerMutterschutzAbfrage,
+} from "@/application/features/abfrageteil/domain/berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerungNew";
 import { findeAusklammerungen } from "@/application/features/abfrageteil/domain/findeAusklammerungen";
 import { findeGeburtsdatum } from "@/application/features/abfrageteil/domain/findeGeburtsdatum";
 import { findeGeschwisterkinder } from "@/application/features/abfrageteil/domain/findeGeschwisterkinder";
@@ -79,13 +82,19 @@ export function ElternteilAusklammerungElternzeitAbfragePage() {
     values: ElternteilAusklammerungElternzeitGeschwisterkindAbfrage,
   ) => {
     const naechsterGeschwisterIndexMitRelevanzFuerAusklammerung =
-      berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
-        geburtsdatum,
-        geschwisterkinder,
-        [...bisherigeAusklammerungen],
-        routeParams.geschwisterIndex,
-        istMutterschutzFuerGeschwisterkindMoeglich(),
-      );
+      istMutterschutzFuerGeschwisterkindMoeglich()
+        ? findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
+            geschwisterkinder,
+            geburtsdatum,
+            [...bisherigeAusklammerungen],
+            routeParams.geschwisterIndex,
+          )
+        : findeNaechstAelteresRelevantesGeschwisterkind(
+            geschwisterkinder,
+            geburtsdatum,
+            [...bisherigeAusklammerungen],
+            routeParams.geschwisterIndex,
+          );
 
     const event: FormEvent = {
       route: currentRoute,

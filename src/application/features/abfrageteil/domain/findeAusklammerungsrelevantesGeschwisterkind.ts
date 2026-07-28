@@ -2,7 +2,7 @@ import { Temporal } from "@js-temporal/polyfill";
 
 import { berechneBetrachtungszeitraum } from "@/bemessungszeitraumrechner";
 
-import type { Ausklammerung } from "@/bemessungszeitraumrechner";
+import type { Ausklammerung, Zeitraum } from "@/bemessungszeitraumrechner";
 
 /**
  * Erstaufruf: Sucht das jüngste Geschwisterkind, für das eine Ausklammerung
@@ -26,8 +26,8 @@ export function findeJuengstesRelevantesGeschwisterkind(
 
   const istAusklammerungsrelevant = betrifftBetrachtungszeitraum(
     juengstesGeschwisterkind.geburtsdatum,
-    ELTERNGELD_BEZUGSFENSTER,
-    betrachtungszeitraum.von,
+    betrachtungszeitraum,
+    ELTERNGELDBEZUG,
   );
 
   return istAusklammerungsrelevant
@@ -67,8 +67,8 @@ export function findeNaechstAelteresRelevantesGeschwisterkind(
 
   const istAusklammerungsrelevant = betrifftBetrachtungszeitraum(
     naechstAelteresGeschwisterkind.geburtsdatum,
-    ELTERNGELD_BEZUGSFENSTER,
-    betrachtungszeitraum.von,
+    betrachtungszeitraum,
+    ELTERNGELDBEZUG,
   );
 
   return istAusklammerungsrelevant
@@ -104,8 +104,8 @@ export function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
 
   const istAusklammerungsrelevant = betrifftBetrachtungszeitraum(
     gleichesGeschwisterkind.geburtsdatum,
+    betrachtungszeitraum,
     MUTTERSCHUTZFRIST,
-    betrachtungszeitraum.von,
   );
 
   if (istAusklammerungsrelevant) {
@@ -142,7 +142,7 @@ type SortiertesGeschwisterkind = Geschwisterkind & {
 type SortierteGeschwisterkinder = SortiertesGeschwisterkind[];
 
 // § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.
-const ELTERNGELD_BEZUGSFENSTER = { months: 14 } as const;
+const ELTERNGELDBEZUG = { months: 14 } as const;
 
 // Mutterschutzfrist nach der Geburt (§ 3 Abs. 2 MuSchG) ist im Regelfall 8 Wochen,
 // kann jedoch auf 12 Wochen verlängert werden im Fall von Frühgeburten, Mehrlingsgeburten
@@ -151,14 +151,14 @@ const ELTERNGELD_BEZUGSFENSTER = { months: 14 } as const;
 const MUTTERSCHUTZFRIST = { weeks: 12 } as const;
 
 function betrifftBetrachtungszeitraum(
-  geburtsdatum: Temporal.PlainDate,
+  geburtsdatumGeschwisterkind: Temporal.PlainDate,
+  betrachtungszeitraum: Zeitraum<Temporal.PlainDate>,
   relevanzfenster: Temporal.DurationLike,
-  betrachtungszeitraumStart: Temporal.PlainDate,
 ): boolean {
   return (
     Temporal.PlainDate.compare(
-      geburtsdatum.add(relevanzfenster),
-      betrachtungszeitraumStart,
+      geburtsdatumGeschwisterkind.add(relevanzfenster),
+      betrachtungszeitraum.von,
     ) > 0
   );
 }
@@ -170,12 +170,15 @@ if (import.meta.vitest) {
     it("returns true if start of Betrachtungszeitraum is last day of Relevanzfenster for Elterngeld", () => {
       const geburtsdatumGeschwisterkind = Temporal.PlainDate.from("2025-10-01");
       const relevanzfensterElterngeld = Temporal.Duration.from({ months: 14 });
-      const betrachtungszeitraumStart = Temporal.PlainDate.from("2026-11-30");
+      const betrachtungszeitraum = {
+        von: Temporal.PlainDate.from("2026-11-30"),
+        bis: Temporal.PlainDate.from("2027-11-30"),
+      };
 
       const result = betrifftBetrachtungszeitraum(
         geburtsdatumGeschwisterkind,
+        betrachtungszeitraum,
         relevanzfensterElterngeld,
-        betrachtungszeitraumStart,
       );
 
       expect(result).toEqual(true);
@@ -184,12 +187,15 @@ if (import.meta.vitest) {
     it("returns false if start of Betrachtungszeitraum is one day after last day of Relevanzfenster for Elterngeld", () => {
       const geburtsdatumGeschwisterkind = Temporal.PlainDate.from("2025-10-01");
       const relevanzfensterElterngeld = Temporal.Duration.from({ months: 14 });
-      const betrachtungszeitraumStart = Temporal.PlainDate.from("2026-12-01");
+      const betrachtungszeitraum = {
+        von: Temporal.PlainDate.from("2026-12-01"),
+        bis: Temporal.PlainDate.from("2027-12-01"),
+      };
 
       const result = betrifftBetrachtungszeitraum(
         geburtsdatumGeschwisterkind,
+        betrachtungszeitraum,
         relevanzfensterElterngeld,
-        betrachtungszeitraumStart,
       );
 
       expect(result).toEqual(false);

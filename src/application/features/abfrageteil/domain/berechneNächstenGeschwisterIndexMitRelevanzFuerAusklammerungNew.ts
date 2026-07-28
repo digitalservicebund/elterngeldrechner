@@ -1,11 +1,10 @@
 import { Temporal } from "@js-temporal/polyfill";
 import { AusklammerungMitGeschwisterindex } from "./findeAusklammerungen";
-import { GeschwisterkindAngaben } from "@/application/features/abfrageteil/pages/geschwister";
 import { berechneBetrachtungszeitraum } from "@/bemessungszeitraumrechner";
 
 export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   geburtsdatum: Temporal.PlainDate,
-  geschwisterkinder: GeschwisterkindAngaben[],
+  geschwisterkinder: Geschwisterkinder,
   ausklammerungen: AusklammerungMitGeschwisterindex[],
   geschwisterIndex?: number,
   istAbfrageMutterschutzGleichesGeschwisterkind?: boolean,
@@ -71,7 +70,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 }
 
 function sortiereGeschwisterkinderNachGeburtsdatum(
-  geschwisterkinder: GeschwisterkindAngaben[],
+  geschwisterkinder: Geschwisterkinder,
 ): SortierteGeschwisterkinder {
   return geschwisterkinder
     .map((kind, index) => ({
@@ -81,6 +80,10 @@ function sortiereGeschwisterkinderNachGeburtsdatum(
     .sort((a, b) => Temporal.PlainDate.compare(b.geburtsdatum, a.geburtsdatum));
 }
 
+type Geschwisterkind = { geburtsdatum: Temporal.PlainDate };
+
+type Geschwisterkinder = Geschwisterkind[];
+
 /**
  * Eine Menge an Geschwisterkindern in der Reihenfolge, in der die
  * Relevanz geprüft wird also jüngstes zuerst und ältestes zuletzt.
@@ -88,10 +91,9 @@ function sortiereGeschwisterkinderNachGeburtsdatum(
  * Die `eingabeposition` ist die Position in der Eingabereihenfolge der
  * Eltern. Sie ist nicht die Position innerhalb einer sortierten Sequenz.
  */
-type SortierteGeschwisterkinder = {
-  geburtsdatum: Temporal.PlainDate;
+type SortierteGeschwisterkinder = (Geschwisterkind & {
   eingabeposition: number;
-}[];
+})[];
 
 // § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.
 const ELTERNGELD_BEZUGSFENSTER = { months: 14 } as const;
@@ -122,12 +124,8 @@ if (import.meta.vitest) {
   const geburtsdatum = Temporal.PlainDate.from("2025-10-15");
   const keineAusklammerungen: AusklammerungMitGeschwisterindex[] = [];
 
-  const geschwisterkind = (
-    geburtsdatumStr: string,
-  ): GeschwisterkindAngaben => ({
-    name: "Luise",
+  const geschwisterkind = (geburtsdatumStr: string): Geschwisterkind => ({
     geburtsdatum: Temporal.PlainDate.from(geburtsdatumStr),
-    hatBehinderung: false,
   });
 
   const ausklammerung = (

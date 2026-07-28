@@ -73,8 +73,8 @@ function sortiereGeschwisterkinderNachGeburtsdatum(
   geschwisterkinder: Geschwisterkinder,
 ): SortierteGeschwisterkinder {
   return geschwisterkinder
-    .map((kind, index) => ({
-      geburtsdatum: kind.geburtsdatum,
+    .map((geschwisterkind, index) => ({
+      geburtsdatum: geschwisterkind.geburtsdatum,
       eingabeposition: index,
     }))
     .sort((a, b) => Temporal.PlainDate.compare(b.geburtsdatum, a.geburtsdatum));

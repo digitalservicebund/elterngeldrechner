@@ -13,7 +13,7 @@ import { findeJahrOhneAusklammerung } from "./vergleicheAusklammerung";
  */
 export function berechneBetrachtungszeitraum(
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: Ausklammerung[],
+  ausklammerungen: readonly Ausklammerung[],
 ): Zeitraum<Temporal.PlainDate> {
   const startJahr = findeJahrOhneAusklammerung(
     geburtsdatum.subtract({ years: 1 }).toPlainYearMonth(),

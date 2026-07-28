@@ -2,6 +2,86 @@ import { Temporal } from "@js-temporal/polyfill";
 import { AusklammerungMitGeschwisterindex } from "./findeAusklammerungen";
 import { berechneBetrachtungszeitraum } from "@/bemessungszeitraumrechner";
 
+/**
+ * Erstaufruf: Sucht das jüngste Geschwisterkind, für das eine Ausklammerung
+ * überhaupt noch in den Betrachtungszeitraum reichen könnte.
+ */
+function findeJuengstesRelevantesGeschwisterkind(
+  geschwisterkinder: SortierteGeschwisterkinder,
+  geburtsdatum: Temporal.PlainDate,
+  ausklammerungen: AusklammerungMitGeschwisterindex[],
+): number | undefined {
+  const betrachtungszeitraum = berechneBetrachtungszeitraum(
+    geburtsdatum,
+    ausklammerungen,
+  );
+
+  return eingabepositionWennRelevant(
+    juengstesGeschwisterkind(geschwisterkinder),
+    ELTERNGELD_BEZUGSFENSTER,
+    betrachtungszeitraum.von,
+  );
+}
+
+/**
+ * Folgeaufruf: Sucht ausgehend von einem bereits abgefragten Geschwisterkind
+ * das nächstältere, für das eine Ausklammerung noch relevant sein könnte.
+ */
+function findeNaechstAelteresRelevantesGeschwisterkind(
+  geschwisterkinder: SortierteGeschwisterkinder,
+  geburtsdatum: Temporal.PlainDate,
+  ausklammerungen: AusklammerungMitGeschwisterindex[],
+  geschwisterIndex: number,
+): number | undefined {
+  const betrachtungszeitraum = berechneBetrachtungszeitraum(
+    geburtsdatum,
+    ausklammerungen,
+  );
+
+  return eingabepositionWennRelevant(
+    naechstAelteresGeschwisterkind(geschwisterkinder, geschwisterIndex),
+    ELTERNGELD_BEZUGSFENSTER,
+    betrachtungszeitraum.von,
+  );
+}
+
+/**
+ * Folgeaufruf im Elternzeit-Zweig: Für dasselbe Geschwisterkind kann noch ein
+ * Mutterschutz abgefragt werden, dafür gilt aber die kürzere Mutterschutzfrist
+ * statt des Elterngeld-Bezugsfensters. Trifft sie nicht mehr zu, gilt die
+ * normale Regel für das nächstältere Geschwisterkind.
+ */
+function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
+  geschwisterkinder: SortierteGeschwisterkinder,
+  geburtsdatum: Temporal.PlainDate,
+  ausklammerungen: AusklammerungMitGeschwisterindex[],
+  geschwisterIndex: number,
+): number | undefined {
+  const betrachtungszeitraum = berechneBetrachtungszeitraum(
+    geburtsdatum,
+    ausklammerungen,
+  );
+
+  const gleiches = eingabepositionWennRelevant(
+    gleichesGeschwisterkind(geschwisterkinder, geschwisterIndex),
+    MUTTERSCHUTZFRIST,
+    betrachtungszeitraum.von,
+  );
+
+  if (gleiches !== undefined) return gleiches;
+
+  return findeNaechstAelteresRelevantesGeschwisterkind(
+    geschwisterkinder,
+    geburtsdatum,
+    ausklammerungen,
+    geschwisterIndex,
+  );
+}
+
+/**
+ * Fassade auf die alte Signatur, solange die Aufrufstellen noch nicht auf die
+ * drei expliziten Funktionen umgestellt sind.
+ */
 export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   geburtsdatum: Temporal.PlainDate,
   geschwisterkinder: Geschwisterkinder,
@@ -9,56 +89,50 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   geschwisterIndex?: number,
   istAbfrageMutterschutzGleichesGeschwisterkind?: boolean,
 ): number | undefined {
-  const sortierteGeschwisterkinder =
-    sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
-  const betrachtungszeitraum = berechneBetrachtungszeitraum(
-    geburtsdatum,
-    ausklammerungen,
-  );
-
-  const eingabepositionWennRelevant = (
-    geschwisterkind: SortiertesGeschwisterkind | undefined,
-    relevanzfenster: Temporal.DurationLike,
-  ) => {
-    if (!geschwisterkind) return undefined;
-
-    const istRelevant = betrifftBetrachtungszeitraum(
-      geschwisterkind.geburtsdatum,
-      relevanzfenster,
-      betrachtungszeitraum.von,
-    );
-
-    return istRelevant ? geschwisterkind.eingabeposition : undefined;
-  };
-
   if (geschwisterIndex === undefined) {
-    return eingabepositionWennRelevant(
-      juengstesGeschwisterkind(sortierteGeschwisterkinder),
-      ELTERNGELD_BEZUGSFENSTER,
+    return findeJuengstesRelevantesGeschwisterkind(
+      sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder),
+      geburtsdatum,
+      ausklammerungen,
     );
   }
 
   if (istAbfrageMutterschutzGleichesGeschwisterkind) {
-    const gleiches = eingabepositionWennRelevant(
-      gleichesGeschwisterkind(sortierteGeschwisterkinder, geschwisterIndex),
-      MUTTERSCHUTZFRIST,
+    return findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
+      sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder),
+      geburtsdatum,
+      ausklammerungen,
+      geschwisterIndex,
     );
-
-    if (gleiches !== undefined) return gleiches;
   }
 
-  return eingabepositionWennRelevant(
-    naechstAelteresGeschwisterkind(
-      sortierteGeschwisterkinder,
-      geschwisterIndex,
-    ),
-    ELTERNGELD_BEZUGSFENSTER,
+  return findeNaechstAelteresRelevantesGeschwisterkind(
+    sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder),
+    geburtsdatum,
+    ausklammerungen,
+    geschwisterIndex,
   );
+}
+
+function eingabepositionWennRelevant(
+  geschwisterkind: SortiertesGeschwisterkind | undefined,
+  relevanzfenster: Temporal.DurationLike,
+  betrachtungszeitraumStart: Temporal.PlainDate,
+): number | undefined {
+  if (!geschwisterkind) return undefined;
+
+  const istRelevant = betrifftBetrachtungszeitraum(
+    geschwisterkind.geburtsdatum,
+    relevanzfenster,
+    betrachtungszeitraumStart,
+  );
+
+  return istRelevant ? geschwisterkind.eingabeposition : undefined;
 }
 
 function juengstesGeschwisterkind(
   sortierteGeschwisterkinder: SortierteGeschwisterkinder,
-) {
+): SortiertesGeschwisterkind | undefined {
   return sortierteGeschwisterkinder[0];
 }
 

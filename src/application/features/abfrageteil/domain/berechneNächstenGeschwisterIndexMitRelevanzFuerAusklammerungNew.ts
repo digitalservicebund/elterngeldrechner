@@ -21,7 +21,7 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
 
   if (geschwisterIndex === undefined) {
     const geburtsdatumJuengstesGeschwisterkind =
-      geschwisterkinderNachGeburtsdatumSortiert[0]?.kind.geburtsdatum;
+      geschwisterkinderNachGeburtsdatumSortiert[0]?.geburtsdatum;
 
     return geburtsdatumJuengstesGeschwisterkind &&
       betrifftBetrachtungszeitraum(
@@ -29,20 +29,19 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         ELTERNGELD_BEZUGSFENSTER,
         betrachtungszeitraum.von,
       )
-      ? geschwisterkinderNachGeburtsdatumSortiert[0]?.index
+      ? geschwisterkinderNachGeburtsdatumSortiert[0]?.eingabeposition
       : undefined;
   }
 
   const currentPosition = geschwisterkinderNachGeburtsdatumSortiert.findIndex(
-    ({ index }) => index === geschwisterIndex,
+    ({ eingabeposition }) => eingabeposition === geschwisterIndex,
   );
 
   if (currentPosition === -1) return undefined;
 
   if (istAbfrageMutterschutzGleichesGeschwisterkind) {
     const geburtsdatumDiesesGeschwisterkind =
-      geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.kind
-        .geburtsdatum;
+      geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.geburtsdatum;
     if (
       geburtsdatumDiesesGeschwisterkind &&
       betrifftBetrachtungszeitraum(
@@ -51,13 +50,14 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
         betrachtungszeitraum.von,
       )
     ) {
-      return geschwisterkinderNachGeburtsdatumSortiert[currentPosition]?.index;
+      return geschwisterkinderNachGeburtsdatumSortiert[currentPosition]
+        ?.eingabeposition;
     }
   }
 
   const geburtsdatumNaechstesGeschwisterkind =
-    geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]?.kind
-      .geburtsdatum;
+    geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]
+      ?.geburtsdatum;
 
   return geburtsdatumNaechstesGeschwisterkind &&
     betrifftBetrachtungszeitraum(
@@ -65,19 +65,33 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
       ELTERNGELD_BEZUGSFENSTER,
       betrachtungszeitraum.von,
     )
-    ? geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]?.index
+    ? geschwisterkinderNachGeburtsdatumSortiert[currentPosition + 1]
+        ?.eingabeposition
     : undefined;
 }
 
 function sortiereGeschwisterkinderNachGeburtsdatum(
   geschwisterkinder: GeschwisterkindAngaben[],
-) {
+): SortierteGeschwisterkinder {
   return geschwisterkinder
-    .map((kind, index) => ({ kind, index }))
-    .sort((a, b) =>
-      Temporal.PlainDate.compare(b.kind.geburtsdatum, a.kind.geburtsdatum),
-    );
+    .map((kind, index) => ({
+      geburtsdatum: kind.geburtsdatum,
+      eingabeposition: index,
+    }))
+    .sort((a, b) => Temporal.PlainDate.compare(b.geburtsdatum, a.geburtsdatum));
 }
+
+/**
+ * Eine Menge an Geschwisterkindern in der Reihenfolge, in der die
+ * Relevanz geprüft wird also jüngstes zuerst und ältestes zuletzt.
+ *
+ * Die `eingabeposition` ist die Position in der Eingabereihenfolge der
+ * Eltern. Sie ist nicht die Position innerhalb einer sortierten Sequenz.
+ */
+type SortierteGeschwisterkinder = {
+  geburtsdatum: Temporal.PlainDate;
+  eingabeposition: number;
+}[];
 
 // § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.
 const ELTERNGELD_BEZUGSFENSTER = { months: 14 } as const;

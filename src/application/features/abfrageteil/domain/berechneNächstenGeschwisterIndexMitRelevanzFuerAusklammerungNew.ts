@@ -169,6 +169,42 @@ if (import.meta.vitest) {
     });
   });
 
+  describe("sortiereGeschwisterkinderNachGeburtsdatum", () => {
+    it("sorts Geschwisterkinder from youngest to eldest", () => {
+      const geschwisterkinder = [
+        { geburtsdatum: Temporal.PlainDate.from("2025-01-01") },
+        { geburtsdatum: Temporal.PlainDate.from("2026-01-01") },
+        { geburtsdatum: Temporal.PlainDate.from("2024-01-01") },
+      ];
+
+      const result =
+        sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
+
+      expect(result).toMatchObject([
+        { geburtsdatum: Temporal.PlainDate.from("2026-01-01") },
+        { geburtsdatum: Temporal.PlainDate.from("2025-01-01") },
+        { geburtsdatum: Temporal.PlainDate.from("2024-01-01") },
+      ]);
+    });
+
+    it("keeps the original index as eingabeposition", () => {
+      const geschwisterkinder = [
+        { geburtsdatum: Temporal.PlainDate.from("2025-01-01") },
+        { geburtsdatum: Temporal.PlainDate.from("2026-01-01") },
+        { geburtsdatum: Temporal.PlainDate.from("2024-01-01") },
+      ];
+
+      const result =
+        sortiereGeschwisterkinderNachGeburtsdatum(geschwisterkinder);
+
+      expect(result).toMatchObject([
+        { eingabeposition: 1 },
+        { eingabeposition: 0 },
+        { eingabeposition: 2 },
+      ]);
+    });
+  });
+
   describe("berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung", () => {
     describe("keine Geschwisterkinder", () => {
       it("gibt undefined zurück wenn keine Geschwisterkinder vorhanden", () => {

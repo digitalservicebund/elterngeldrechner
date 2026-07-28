@@ -16,11 +16,19 @@ function findeJuengstesRelevantesGeschwisterkind(
     ausklammerungen,
   );
 
-  return eingabepositionWennRelevant(
-    juengstesGeschwisterkind(geschwisterkinder),
+  const juengstesGeschwisterkind = geschwisterkinder[0];
+
+  if (!juengstesGeschwisterkind) return undefined;
+
+  const istAusklammerungsrelevant = betrifftBetrachtungszeitraum(
+    juengstesGeschwisterkind.geburtsdatum,
     ELTERNGELD_BEZUGSFENSTER,
     betrachtungszeitraum.von,
   );
+
+  return istAusklammerungsrelevant
+    ? juengstesGeschwisterkind.eingabeposition
+    : undefined;
 }
 
 /**
@@ -38,11 +46,26 @@ function findeNaechstAelteresRelevantesGeschwisterkind(
     ausklammerungen,
   );
 
-  return eingabepositionWennRelevant(
-    naechstAelteresGeschwisterkind(geschwisterkinder, geschwisterIndex),
+  const position = geschwisterkinder.findIndex(
+    (geschwisterkind) => geschwisterkind.eingabeposition === geschwisterIndex,
+  );
+
+  // Ohne diesen Guard würde -1 + 1 = 0 das jüngste Geschwisterkind liefern.
+  if (position === -1) return undefined;
+
+  const naechstAelteresGeschwisterkind = geschwisterkinder[position + 1];
+
+  if (!naechstAelteresGeschwisterkind) return undefined;
+
+  const istAusklammerungsrelevant = betrifftBetrachtungszeitraum(
+    naechstAelteresGeschwisterkind.geburtsdatum,
     ELTERNGELD_BEZUGSFENSTER,
     betrachtungszeitraum.von,
   );
+
+  return istAusklammerungsrelevant
+    ? naechstAelteresGeschwisterkind.eingabeposition
+    : undefined;
 }
 
 /**
@@ -62,13 +85,21 @@ function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
     ausklammerungen,
   );
 
-  const gleiches = eingabepositionWennRelevant(
-    gleichesGeschwisterkind(geschwisterkinder, geschwisterIndex),
+  const gleichesGeschwisterkind = geschwisterkinder.find(
+    (geschwisterkind) => geschwisterkind.eingabeposition === geschwisterIndex,
+  );
+
+  if (!gleichesGeschwisterkind) return undefined;
+
+  const istAusklammerungsrelevant = betrifftBetrachtungszeitraum(
+    gleichesGeschwisterkind.geburtsdatum,
     MUTTERSCHUTZFRIST,
     betrachtungszeitraum.von,
   );
 
-  if (gleiches !== undefined) return gleiches;
+  if (istAusklammerungsrelevant) {
+    return gleichesGeschwisterkind.eingabeposition;
+  }
 
   return findeNaechstAelteresRelevantesGeschwisterkind(
     geschwisterkinder,
@@ -114,50 +145,6 @@ export function berechneNächstenGeschwisterIndexMitRelevanzFuerAusklammerung(
   );
 }
 
-function eingabepositionWennRelevant(
-  geschwisterkind: SortiertesGeschwisterkind | undefined,
-  relevanzfenster: Temporal.DurationLike,
-  betrachtungszeitraumStart: Temporal.PlainDate,
-): number | undefined {
-  if (!geschwisterkind) return undefined;
-
-  const istRelevant = betrifftBetrachtungszeitraum(
-    geschwisterkind.geburtsdatum,
-    relevanzfenster,
-    betrachtungszeitraumStart,
-  );
-
-  return istRelevant ? geschwisterkind.eingabeposition : undefined;
-}
-
-function juengstesGeschwisterkind(
-  sortierteGeschwisterkinder: SortierteGeschwisterkinder,
-): SortiertesGeschwisterkind | undefined {
-  return sortierteGeschwisterkinder[0];
-}
-
-function gleichesGeschwisterkind(
-  sortierteGeschwisterkinder: SortierteGeschwisterkinder,
-  eingabeposition: number,
-): SortiertesGeschwisterkind | undefined {
-  return sortierteGeschwisterkinder.find(
-    (geschwisterkind) => geschwisterkind.eingabeposition === eingabeposition,
-  );
-}
-
-function naechstAelteresGeschwisterkind(
-  sortierteGeschwisterkinder: SortierteGeschwisterkinder,
-  eingabeposition: number,
-): SortiertesGeschwisterkind | undefined {
-  const position = sortierteGeschwisterkinder.findIndex(
-    (geschwisterkind) => geschwisterkind.eingabeposition === eingabeposition,
-  );
-
-  if (position === -1) return undefined;
-
-  return sortierteGeschwisterkinder[position + 1];
-}
-
 function sortiereGeschwisterkinderNachGeburtsdatum(
   geschwisterkinder: Geschwisterkinder,
 ): SortierteGeschwisterkinder {
@@ -174,16 +161,9 @@ type Geschwisterkind = { geburtsdatum: Temporal.PlainDate };
 type Geschwisterkinder = Geschwisterkind[];
 
 type SortiertesGeschwisterkind = Geschwisterkind & {
-  eingabeposition: number;
+  eingabeposition: number; // Die Position in der Eingabereihenfolge
 };
 
-/**
- * Eine Menge an Geschwisterkindern in der Reihenfolge, in der die
- * Relevanz geprüft wird also jüngstes zuerst und ältestes zuletzt.
- *
- * Die `eingabeposition` ist die Position in der Eingabereihenfolge der
- * Eltern. Sie ist nicht die Position innerhalb einer sortierten Sequenz.
- */
 type SortierteGeschwisterkinder = SortiertesGeschwisterkind[];
 
 // § 2b BEEG: Basiselterngeld läuft bis zum 14. Lebensmonat des Kindes.

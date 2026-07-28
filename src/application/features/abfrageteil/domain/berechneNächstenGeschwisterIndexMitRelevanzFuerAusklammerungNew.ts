@@ -11,7 +11,7 @@ import type { Ausklammerung } from "@/bemessungszeitraumrechner";
 function findeJuengstesRelevantesGeschwisterkind(
   geschwisterkinder: SortierteGeschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: Ausklammerung[],
+  ausklammerungen: readonly Ausklammerung[],
 ): number | undefined {
   const betrachtungszeitraum = berechneBetrachtungszeitraum(
     geburtsdatum,
@@ -40,7 +40,7 @@ function findeJuengstesRelevantesGeschwisterkind(
 function findeNaechstAelteresRelevantesGeschwisterkind(
   geschwisterkinder: SortierteGeschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: Ausklammerung[],
+  ausklammerungen: readonly Ausklammerung[],
   geschwisterIndex: number,
 ): number | undefined {
   const betrachtungszeitraum = berechneBetrachtungszeitraum(
@@ -79,7 +79,7 @@ function findeNaechstAelteresRelevantesGeschwisterkind(
 function findeRelevantesGeschwisterkindFuerMutterschutzAbfrage(
   geschwisterkinder: SortierteGeschwisterkinder,
   geburtsdatum: Temporal.PlainDate,
-  ausklammerungen: Ausklammerung[],
+  ausklammerungen: readonly Ausklammerung[],
   geschwisterIndex: number,
 ): number | undefined {
   const betrachtungszeitraum = berechneBetrachtungszeitraum(

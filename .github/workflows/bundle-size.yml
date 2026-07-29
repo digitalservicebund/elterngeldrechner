@@ -35,11 +35,18 @@ jobs:
       - name: Record current bundle size
         run: find dist/assets -name 'index-*.js' -exec wc -c {} + | awk 'END{print "CURRENT_SIZE=" $1}' >> "$GITHUB_ENV"
 
+      - name: Switch to previous commit
+        run: git checkout HEAD~1
+
       - name: Build previous commit
         run: npm ci --ignore-scripts && npm run build:production
 
       - name: Record baseline bundle size
         run: find dist/assets -name 'index-*.js' -exec wc -c {} + | awk 'END{print "BASELINE_SIZE=" $1}' >> "$GITHUB_ENV"
+
+      - name: Return to the pushed commit
+        if: always()
+        run: git checkout "$GITHUB_SHA"
 
       - name: Compare and notify
         run: |

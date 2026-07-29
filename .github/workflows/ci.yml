@@ -77,8 +77,8 @@ jobs:
         run: npm run build:staging
         env:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/preview/main/
-          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_PROXY_HOST }}
-          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.POSTHOG_PROJECT_TOKEN }}
+          VITE_PUBLIC_POSTHOG_HOST: https://ph-proxy.dev.tech.digitalservice.dev
+          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: phc_rUbW5TOq15FHTu5PoKh3g4uCJNNN7MvHu2WJPUIjEpa
           VITE_FEATURE_FLAG_POSTHOG_TESTING: "true"
 
       - name: Check build artifact structure
@@ -117,8 +117,8 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-staging.object.storage.eu01.onstackit.cloud/
           VITE_BUILD_VERSION: ${{ github.sha }}
-          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_PROXY_HOST }}
-          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.POSTHOG_PROJECT_TOKEN }}
+          VITE_PUBLIC_POSTHOG_HOST: https://ph-proxy.dev.tech.digitalservice.dev
+          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: phc_rUbW5TOq15FHTu5PoKh3g4uCJNNN7MvHu2WJPUIjEpa
 
       - name: Check build artifact structure
         run: scripts/check-build-artifacts.sh
@@ -205,8 +205,8 @@ jobs:
         env:
           VITE_BASE_PATH: https://egr-assets-production.object.storage.eu01.onstackit.cloud/
           VITE_BUILD_VERSION: ${{ github.sha }}
-          VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.POSTHOG_PROXY_HOST }}
-          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: ${{ secrets.POSTHOG_PROJECT_TOKEN }}
+          VITE_PUBLIC_POSTHOG_HOST: https://ph-proxy.prod.tech.digitalservice.dev
+          VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: phc_rUbW5TOq15FHTu5PoKh3g4uCJNNN7MvHu2WJPUIjEpa
 
       - name: Check build artifact structure
         run: scripts/check-build-artifacts.sh
@@ -290,8 +290,8 @@ jobs:
         with:
           annotation-message: "Release ${{ github.ref_name }}"
           posthog-token: ${{ secrets.POSTHOG_PERSONAL_API_KEY }}
-          posthog-project-id: ${{ secrets.POSTHOG_PROJECT_ID }}
-          posthog-api-host: ${{ secrets.POSTHOG_HOST }}
+          posthog-project-id: 118340
+          posthog-api-host: eu.posthog.com
 
   generate-sbom:
     runs-on: ubuntu-24.04

@@ -122,14 +122,14 @@ export function DatenuebernahmeAntragPage(): ReactNode {
       id="datenuebernahme-page"
       heading="Übernahme Planung in den Papierantrag auf Elterngeld"
     >
-      <div className="content-container">
+      <div className="content-container max-w-[70ch]">
         <div className="bg-off-white p-24">
           <div className="flex flex-wrap gap-24 sm:flex-nowrap">
             <div>
               <img
                 src={elterngeldantragPreview}
                 alt=""
-                className="max-w-[200px]"
+                className="max-w-[150px]"
               />
             </div>
             <div>
@@ -154,7 +154,6 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                   <Button
                     type="button"
                     buttonStyle="link"
-                    className="font-bold !text-black"
                     onClick={downloadGanzerAntrag}
                   >
                     <FileDownloadIcon className="mr-6" />
@@ -188,7 +187,7 @@ export function DatenuebernahmeAntragPage(): ReactNode {
               <img
                 src={planungsseitePreview}
                 alt=""
-                className="max-w-[200px]"
+                className="max-w-[150px]"
               />
             </div>
             <div>
@@ -204,7 +203,6 @@ export function DatenuebernahmeAntragPage(): ReactNode {
                 <Button
                   type="button"
                   buttonStyle="link"
-                  className="font-bold !text-black"
                   onClick={downloadPlanungsseite}
                 >
                   <FileDownloadIcon className="mr-6" />

@@ -10,7 +10,6 @@
     "build:development": "VITE_PREVIEW_BANNER=true vite build --mode development",
     "build:production": "VITE_PREVIEW_BANNER=true vite build --mode production",
     "build:staging": "VITE_PREVIEW_BANNER=true vite build --mode staging",
-    "release": "scripts/create-new-tag.sh",
     "test": "LC_ALL=de-DE.utf8 vitest run",
     "test:smoke": "playwright test --config playwright.smoke.config.ts",
     "format": "f() { prettier --ignore-unknown --write ${@:-.}; }; f",

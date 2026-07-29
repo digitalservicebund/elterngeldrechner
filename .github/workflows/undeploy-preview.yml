@@ -26,6 +26,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STACKIT_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STACKIT_SECRET_ACCESS_KEY }}
-          AWS_ENDPOINT_URL: ${{ secrets.STACKIT_S3_ENDPOINT_URL }}
+          AWS_ENDPOINT_URL: https://object.storage.eu01.onstackit.cloud
           PREVIEW_NAME: ${{ inputs.name }}
         run: aws s3 rm "s3://egr-assets-staging/preview/${PREVIEW_NAME}" --recursive

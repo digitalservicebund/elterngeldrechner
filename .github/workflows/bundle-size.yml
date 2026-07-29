@@ -30,16 +30,13 @@ jobs:
         run: printf '<!doctype html><html><body><script type="module" src="/src/application/index.tsx"></script></body></html>' > index.html
 
       - name: Build current commit
-        run: npx vite build --mode production
+        run: npm run build:production
 
       - name: Record current bundle size
         run: find dist/assets -name 'index-*.js' -exec wc -c {} + | awk 'END{print "CURRENT_SIZE=" $1}' >> "$GITHUB_ENV"
 
-      - name: Switch to previous commit
-        run: git checkout HEAD~1
-
       - name: Build previous commit
-        run: npm ci && npx vite build --mode production
+        run: npm ci --ignore-scripts && npm run build:production
 
       - name: Record baseline bundle size
         run: find dist/assets -name 'index-*.js' -exec wc -c {} + | awk 'END{print "BASELINE_SIZE=" $1}' >> "$GITHUB_ENV"

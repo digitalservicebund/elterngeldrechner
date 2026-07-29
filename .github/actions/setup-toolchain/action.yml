@@ -15,5 +15,5 @@ runs:
         restore-keys: ${{ runner.os }}-npm-
 
     - name: Install dependencies
-      run: npm ci
+      run: npm ci --ignore-scripts
       shell: bash

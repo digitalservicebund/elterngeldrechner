@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: lint
         run: npm run type-check && npm run lint && npm run stylelint
@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: unit test
         run: npm run test
@@ -43,7 +43,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: Audit Licenses
         run: npm run audit-licenses
@@ -60,7 +60,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: Restore cached app-wrapper snapshot
         id: app-wrapper-cache
@@ -110,7 +110,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: Run build specific for stack it staging environment
         run: npm run build:staging
@@ -150,7 +150,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - uses: ./.github/actions/cached-playwright-setup
 
@@ -198,7 +198,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: Run build specific for stack it production environment
         run: npm run build:production
@@ -237,7 +237,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 #v7.0.1
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - uses: ./.github/actions/cached-playwright-setup
 

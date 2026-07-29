@@ -28,7 +28,7 @@ jobs:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
 
-      - uses: ./.github/actions/cached-node-install
+      - uses: ./.github/actions/setup-toolchain
 
       - name: Run build specific for stack it production environment
         run: npm run build:production

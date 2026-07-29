@@ -1,0 +1,19 @@
+name: "Setup Toolchain"
+description: "Installs the tools pinned in mise.lock and the project's npm dependencies."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install the tools pinned in mise.lock
+      uses: jdx/mise-action@9e7f7633ff6f6d6048a9418a68d48f288f50eb14 #v4.2.3
+
+    - name: Cache the npm download cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 #v6.1.0
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+        restore-keys: ${{ runner.os }}-npm-
+
+    - name: Install dependencies
+      run: npm ci
+      shell: bash

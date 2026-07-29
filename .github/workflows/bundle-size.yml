@@ -24,16 +24,13 @@ jobs:
         with:
           fetch-depth: 2
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 #v7.0.0
-        with:
-          node-version-file: package.json
-          cache: npm
+      - uses: ./.github/actions/setup-toolchain
 
       - name: Create Vite entry point
         run: printf '<!doctype html><html><body><script type="module" src="/src/application/index.tsx"></script></body></html>' > index.html
 
       - name: Build current commit
-        run: npm ci && npx vite build --mode production
+        run: npx vite build --mode production
 
       - name: Record current bundle size
         run: find dist/assets -name 'index-*.js' -exec wc -c {} + | awk 'END{print "CURRENT_SIZE=" $1}' >> "$GITHUB_ENV"

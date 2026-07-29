@@ -125,8 +125,8 @@ export function Pruefbuttonbox({
         </Button>
       ) : istPlanungGueltig ? (
         <>
-          <div className="input-container w-full items-center bg-Bonus-light p-32">
-            <h3 className="font-bold">
+          <div className="input-container w-full bg-Bonus-light p-32">
+            <h3>
               <CheckIcon /> Super. Ihre Planung ist gültig.
             </h3>
 
@@ -137,17 +137,19 @@ export function Pruefbuttonbox({
             />
 
             {!!bundeslandAntragSupport.isSupported && (
-              <div className="input-container items-center mt-20">
-                <Button type="button" onClick={planInAntragUebernehmen}>
-                  Planung in den Papierantrag übernehmen
-                </Button>
+              <>
+                <div className="input-container items-center mt-20">
+                  <Button type="button" onClick={planInAntragUebernehmen}>
+                    Planung in den Papierantrag übernehmen
+                  </Button>
+                </div>
 
-                <div className="mb-kern-large text-center">
-                  <p className="max-w-none">
+                <div className="ml-kern-large">
+                  <p>
                     Bitte beachten Sie: Eine automatische Übermittlung Ihrer
                     Planung in den digitalen Antrag ist derzeit nicht möglich.
                     Um den Antrag digital einzureichen, übertragen Sie Ihre
-                    Daten bitte manuell in das{" "}
+                    Daten bitte manuell in{" "}
                     <a
                       href={bundeslandAntragSupport.linkOnlinetool}
                       target="_blank"
@@ -156,44 +158,49 @@ export function Pruefbuttonbox({
                     >
                       das offizielle Tool
                       <span className="sr-only">(öffnet in neuem Fenster)</span>
-                    </a>{" "}
-                    .
+                    </a>
+                    {" ."}
                   </p>
                 </div>
-              </div>
+              </>
             )}
 
-            <div className="text-container text-center print:hidden">
-              <Button type="button" buttonStyle="link" onClick={planungDrucken}>
-                <DownloadIcon className="mr-8" />
-                Planung als PDF drucken oder speichern
-              </Button>
-
-              <p>Sie können Ihre Planung ausdrucken.</p>
-              <p className="max-w-none">
-                Um Ihre Planung zu speichern, wählen Sie in der Druckvorschau
-                „Als PDF speichern“ aus.
-              </p>
-            </div>
-
-            {!bundeslandAntragSupport.isSupported && (
-              <div className="text-center">
-                <p className="max-w-none">
-                  Den PDF-Antrag für {bundeslandAntragSupport.name} sowie den
-                  Zugang zum Online-Antrag finden Sie auf folgender Seite:
-                </p>
-                <a
-                  href={bundeslandAntragSupport.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => trackReferenzAufLandesseite()}
+            <div className="text-container print:hidden ml-kern-large mt-kern-x-large">
+              <div>
+                <Button
+                  type="button"
+                  buttonStyle="link"
+                  onClick={planungDrucken}
                 >
-                  <ArrowOutward aria-hidden="true" /> Zum Antrag auf Elterngeld
-                  in {bundeslandAntragSupport.name}
-                  <span className="sr-only">(öffnet in neuem Fenster)</span>
-                </a>
+                  <DownloadIcon className="mr-8" />
+                  Planung als PDF drucken oder speichern
+                </Button>
+                <p>
+                  Sie können Ihre Planung ausdrucken. Um Ihre Planung zu
+                  speichern, wählen Sie in der Druckvorschau „Als PDF speichern“
+                  aus.
+                </p>
               </div>
-            )}
+
+              {!bundeslandAntragSupport.isSupported && (
+                <>
+                  <p className="mt-kern-x-large">
+                    Den PDF-Antrag für {bundeslandAntragSupport.name} sowie den
+                    Zugang zum Online-Antrag finden Sie auf folgender Seite:
+                  </p>
+                  <a
+                    href={bundeslandAntragSupport.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => trackReferenzAufLandesseite()}
+                  >
+                    <ArrowOutward aria-hidden="true" /> Zum Antrag auf
+                    Elterngeld in {bundeslandAntragSupport.name}
+                    <span className="sr-only">(öffnet in neuem Fenster)</span>
+                  </a>
+                </>
+              )}
+            </div>
           </div>
         </>
       ) : (

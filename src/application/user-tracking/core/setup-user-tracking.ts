@@ -1,6 +1,6 @@
 import type { PostHogConfig } from "posthog-js";
 import { posthog } from "../posthog";
-import { parseTrackingConsent, TrackingConsent } from "./consent";
+import { parseTrackingConsent } from "./consent";
 import { waitForCookieValue } from "./cookies";
 import { establishDataLayer } from "./data-layer";
 import { setupTagManager } from "./tag-manager";
@@ -21,22 +21,12 @@ export async function setupUserTracking(): Promise<void> {
 
   const trackingConsent = await getTrackingConsent();
 
-  // We overwrite the trackingConsent until the new cookie banner
-  // lands on staging so that posthog is enabled for all users if
-  // the flag is set. Otherwise we couldn't test the metrics on
-  // preview and staging. The flag should be changed to tester
-  // identification only once the banner is in place.
-  const intermediateTrackingConsent: TrackingConsent = {
-    posthog: trackingConsent.posthog || isPosthogTestingEnabled(),
-    matomo: trackingConsent.matomo,
-  };
-
-  if (isMatomoConfigured && intermediateTrackingConsent.matomo) {
+  if (isMatomoConfigured && trackingConsent.matomo) {
     establishDataLayer();
     setupTagManager(tagMangerSourceUrl);
   }
 
-  if (isPosthogConfigured && intermediateTrackingConsent.posthog) {
+  if (isPosthogConfigured && trackingConsent.posthog) {
     const standardConfig: Partial<PostHogConfig> = {
       api_host: posthogEnvironmentVariables.host,
       capture_pageview: false,
@@ -439,17 +429,6 @@ if (import.meta.vitest) {
         await setupUserTracking();
 
         expect(posthog.init).not.toHaveBeenCalled();
-      });
-
-      it("tracks every session on preview, even on the legacy value that does not grant PostHog", async () => {
-        vi.stubEnv("VITE_FEATURE_FLAG_POSTHOG_TESTING", "true");
-        vi.spyOn(document, "cookie", "get").mockReturnValue(
-          "cookie-allow-tracking=1",
-        );
-
-        await setupUserTracking();
-
-        expect(posthog.init).toHaveBeenCalledTimes(1);
       });
     });
   });

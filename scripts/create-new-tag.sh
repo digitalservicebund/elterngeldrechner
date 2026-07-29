@@ -1,4 +1,7 @@
 #!/bin/bash
+#MISE description="Tag the next release and push it"
+#MISE alias="release"
+#MISE raw=true
 
 set -e
 

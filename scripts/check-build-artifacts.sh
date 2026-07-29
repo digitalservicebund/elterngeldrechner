@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#MISE description="Verify dist/ holds exactly one JS file and no CSS file"
 
 # Enforce the single-artifact constraint from ADR 0005 & ADR 0011.
 #

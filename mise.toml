@@ -1,0 +1,39 @@
+[settings]
+lockfile = true
+
+[tools]
+node = "24.18.0"
+
+actionlint = "1.7.12"
+lychee = "0.24.2"
+
+[task_config]
+includes = ["scripts"]
+
+[tasks.check]
+description = "Every check that has to pass before a commit"
+depends = ["type-check", "lint", "stylelint", "test"]
+
+[tasks.type-check]
+description = "Type-check the project with tsc"
+run = "npm run --silent type-check"
+
+[tasks.lint]
+description = "Lint TypeScript sources with oxlint"
+run = "npm run --silent lint"
+
+[tasks.stylelint]
+description = "Lint CSS sources with stylelint"
+run = "npm run --silent stylelint"
+
+[tasks.test]
+description = "Run the vitest suite"
+run = "npm run --silent test -- --reporter=minimal"
+
+[tasks.start]
+description = "Serve the widget inside the Familienportal host page snapshot"
+run = "npm start"
+
+[tasks.audit-licenses]
+description = "Check dependency licences against ./allowed-licenses"
+run = "npm run audit-licenses"

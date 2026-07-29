@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#MISE description="Refresh the Familienportal host page snapshot (--force to refetch)"
 
 # Generate the Familienportal host page (the "app wrapper") snapshot.
 #
